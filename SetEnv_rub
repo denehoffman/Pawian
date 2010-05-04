@@ -1,0 +1,5 @@
+setenv ROOTSYS /data/pegasus1/PANDA/package/root/5.14-00e/Linux26SL5_x86_64_gcc412
+
+echo -e "\n ROOTSYS"
+echo  $ROOTSYS  
+
