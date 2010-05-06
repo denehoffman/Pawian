@@ -6,6 +6,7 @@
 #include "Parity.hh"
 
 enum ParticleType {parton, lepton, boson, meson, baryon, nucleus, special};
+enum DynamicFunction {BW, relBW, relBWBlattWK, undefined};
 
 struct ParticleData {
   ParticleType type;
