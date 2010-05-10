@@ -1,5 +1,6 @@
 #include "Particle/Particle.hh"
 
+#include <cstdlib>
 #include <iostream>
 #include <string>
 
@@ -58,10 +59,30 @@ int Particle::charge()
   return 0;
 }
 
-double Particle::mass()
+const ErrValue& Particle::massErr() const
 {
   if (0 != pdata)
     return pdata->mass;
+  else {
+    std::cerr << "Error::Particle: accessing uninitialized data" << std::endl;
+    exit(1);
+  }
+}
+
+const ErrValue& Particle::widthErr() const
+{
+  if (0 != pdata)
+    return pdata->width;
+  else {
+    std::cerr << "Error::Particle: accessing uninitialized data" << std::endl;
+    exit(1);
+  }
+}
+
+double Particle::mass()
+{
+  if (0 != pdata)
+    return (pdata->mass).mean();
   else {
     std::cerr << "Error::Particle: accessing uninitialized data" << std::endl;
     exit(1);
@@ -72,7 +93,7 @@ double Particle::mass()
 double Particle::width()
 {
   if (0 != pdata)
-    return pdata->width;
+    return (pdata->width).mean();
   else {
     std::cerr << "Error::Particle: accessing uninitialized data" << std::endl;
     exit(1);
@@ -173,6 +194,16 @@ int Particle::charm()
   }
 }
 
+DynFunctionType Particle::dynFctType()
+{
+  if (0 != pdata)
+    return pdata->dynamicFunction;
+  else {
+    std::cerr << "Error::Particle: accessing uninitialized data" << std::endl;
+    exit(1);
+  }
+}
+
 
 ParticleData* Particle::data()
 {
@@ -181,7 +212,7 @@ ParticleData* Particle::data()
 
 void Particle::print(std::ostream& out)
 {
-  out << name() << "\tmass=" << mass() << "\twidth=" << width() << "\t3*q=" << charge()
+  out << name() << "\tmass=" << massErr() << "\twidth=" << widthErr() << "\t3*q=" << charge()
       << "\t2*J=" << twoJ() << "\tP=" << parity().parity() << "\tC=" << chargeParity().parity() 
       << "\tG=" << gParity().parity() << "\tI=" << iso() << "\tI3=" << iso3() 
       << "\tcharm=" << charm() << "\tstrange=" << strange() << std::endl;

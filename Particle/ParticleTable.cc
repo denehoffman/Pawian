@@ -51,7 +51,7 @@ bool ParticleTable::modifyMass(std::string name, double newMass)
 {
   Particle* thisParticle = particle(name);
   if (0 != thisParticle) {
-    thisParticle->data()->mass = newMass;
+    thisParticle->data()->mass.mean(newMass);
     return true; // success
   }
   std::cerr << "ParticleTable::modifyMass: " << name << " not found!" << std::endl;
@@ -62,7 +62,7 @@ bool ParticleTable::modifyWidth(std::string name, double newWidth)
 {
   Particle* thisParticle = particle(name);
   if (0 != thisParticle) {
-    thisParticle->data()->width = newWidth;
+    thisParticle->data()->width.mean(newWidth);
     return true; // success
   }
   std::cerr << "ParticleTable::modifyWidth: " << name << " not found!" << std::endl;

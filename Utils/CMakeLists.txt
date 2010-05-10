@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
 
-set(PACKAGE_NAME Particle)
+set(PACKAGE_NAME Utils)
 
 MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
@@ -35,12 +35,11 @@ if(COMMAND cmake_policy)
    cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-SET (EXECUTABLENAME PdtTestApp)
-ADD_EXECUTABLE( ${EXECUTABLENAME}
-   PdtTestApp.cc
-)
+# SET (EXECUTABLENAME PdtTestApp)
+# ADD_EXECUTABLE( ${EXECUTABLENAME}
+#   PdtTestApp.cc
+# )
 
-target_link_libraries(${EXECUTABLENAME} Particle)
 target_link_libraries(${EXECUTABLENAME} Utils)
 
 INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})

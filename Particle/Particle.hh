@@ -3,18 +3,19 @@
 
 #include <string>
 #include <iostream>
-#include "Parity.hh"
+#include "Particle/Parity.hh"
+#include "Utils/ErrValue.hh"
 
 enum ParticleType {parton, lepton, boson, meson, baryon, nucleus, special};
-enum DynamicFunction {BW, relBW, relBWBlattWK, undefined};
+enum DynFunctionType {BW, relBW, relBWBlattWK, undefined};
 
 struct ParticleData {
   ParticleType type;
   std::string name;
   std::string texName;
   int charge;
-  double mass;
-  double width;
+  ErrValue mass;
+  ErrValue width;
   int twoJ;
   int iso;
   int isoThree;
@@ -23,6 +24,7 @@ struct ParticleData {
   Parity parity;
   Parity chargeParity;
   Parity gParity;
+  DynFunctionType dynamicFunction;
   ParticleData(){}
   ParticleData(ParticleData* other):
     type(other->type),
@@ -53,6 +55,8 @@ public:
   const std::string& texName();
   ParticleType type();
   int charge();
+  const ErrValue& massErr() const;
+  const ErrValue& widthErr() const;
   double mass();
   double width();
   int twoJ();
@@ -64,6 +68,7 @@ public:
   int iso3();
   int strange();
   int charm();
+  DynFunctionType dynFctType();
 
   ParticleData* data();
 

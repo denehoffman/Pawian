@@ -43,6 +43,21 @@ namespace client
     } types;
  
 
+    struct functions_ : qi::symbols<char, DynFunctionType>
+    {
+        functions_()
+        {
+            add
+	      ("BW", BW)
+	      ("relBW", relBW)
+	      ("relBWBlattWK", relBWBlattWK)
+	      ("undefined", undefined)
+            ;
+        }
+
+    } functions;
+ 
+
     template <typename Iterator>
     bool parse_particle(Iterator first, Iterator last, ParticleData& pData)
     {
@@ -56,6 +71,8 @@ namespace client
 	using qi::lexeme;
 
 	bool wasComment = false;
+	double mass=0.0, plusDm=0.0, minusDm=0.0;
+	double width=0.0, plusDw=0.0, minusDw=0.0;
 
         bool r = phrase_parse(first, last,
 
@@ -86,8 +103,11 @@ namespace client
 	     int_[ref(pData.isoThree) = _1] >>
 	     int_[ref(pData.strange) = _1] >>
 	     int_[ref(pData.charm) = _1] >>
-	     double_[ref(pData.mass) = _1] >>
-	     double_[ref(pData.width) = _1] >>
+	     double_[ref(mass) = _1] >> -(char_('(') >> double_[ref(plusDm) = _1] >> double_[ref(minusDm) = _1] >> char_(')')) >>
+	     double_[ref(width) = _1] >> -(char_('(') >> double_[ref(plusDw) = _1] >> double_[ref(minusDw) = _1] >> char_(')')) >>
+	     //	     double_[ref(pData.mass) = _1] >>
+	     //	     double_[ref(pData.width).mean(_1)] >>
+	     functions[ref(pData.dynamicFunction) = _1] >>
 	     lexeme[+char_]
             ),
             //  End grammar
@@ -95,8 +115,15 @@ namespace client
 	}
 
 	if (wasComment) return false;
-        if (!r || first != last) // fail if we did not get a full match
-            return false;
+        if (!r || first != last) { // fail if we did not get a full match
+	  std::string rest(first, last);
+	  std::cerr << "failed parsing at: " << rest << std::endl;
+	  return false;
+	}
+
+	// looks like success
+	pData.mass.mean(mass); pData.mass.plusErr(plusDm); pData.mass.minusErr(fabs(minusDm));
+	pData.width.mean(width); pData.width.plusErr(plusDw); pData.width.minusErr(fabs(minusDw));
 
         return r;
     }
