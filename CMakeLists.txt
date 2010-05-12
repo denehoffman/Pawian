@@ -20,6 +20,36 @@ include(WriteConfigFile)
 # mandatory
 find_package(ROOT REQUIRED)
 
+SET (Boost_USE_MULTITHREAD ON)
+
+SET (Boost_ADDITIONAL_VERSIONS "1.42" "1.43.0")
+
+FIND_PACKAGE(Boost 1.42 REQUIRED COMPONENTS
+        date_time
+        filesystem
+        program_options
+        regex
+        serialization
+        system
+        thread
+)
+
+
+# The test component is not necessary for the library, but needed for the tests
+FIND_PACKAGE(Boost 1.42 COMPONENTS
+        test_exec_monitor
+)
+
+MESSAGE("Boost_INCLUDE_DIRS: "  ${Boost_INCLUDE_DIRS})
+MESSAGE("Boost_LIBRARIES: "  ${Boost_LIBRARIES})
+MESSAGE("Boost_LIBRARY_DIRS: "  ${Boost_LIBRARY_DIRS})
+
+
+FIND_PACKAGE(Minuit2 REQUIRED)
+MESSAGE("Minuit2_INCLUDE_DIRS: " ${Minuit2_INCLUDE_DIRS})
+MESSAGE("Minuit2_LIBRARY_DIRS: " ${Minuit2_LIBRARY_DIRS})
+MESSAGE("Minuit2_LIBRARIES: " ${Minuit2_LIBRARIES})
+
 # Set the library type to static by default
 IF( NOT PAWIAN_STATIC )
         SET( PAWIAN_STATIC TRUE )

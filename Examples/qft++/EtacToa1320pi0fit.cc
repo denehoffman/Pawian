@@ -191,18 +191,18 @@ Tensor<complex<double> > EtacToa1320pi0fit::calcSpin2Amp(Vector4<double>& pi_cm,
 
   Tensor<complex<double> > result(0); //rank-0 Tensor for the amplitude
 
-  Vector4<double> a1320_cm=eta_cm + pi_cm;
+  Vector4<double> inter_cm=eta_cm + pi_cm;
   
-  PolVector a1320_Pol_cm(2);
-  a1320_Pol_cm.SetP4(a1320_cm,a1320_cm.M());
+  PolVector inter_Pol_cm(2);
+  inter_Pol_cm.SetP4(inter_cm,inter_cm.M());
 
   OrbitalTensor orb_eta_To_a2_piRecoil(2);
-  orb_eta_To_a2_piRecoil.SetP4(a1320_cm, pi_recoil_cm);
+  orb_eta_To_a2_piRecoil.SetP4(inter_cm, pi_recoil_cm);
   
   OrbitalTensor orb_a2_To_pieta(2);
   orb_a2_To_pieta.SetP4(pi_cm, eta_cm);
 
-  result = (orb_a2_To_pieta) | ( a1320_Pol_cm.Projector() | orb_eta_To_a2_piRecoil );
+  result = (orb_a2_To_pieta) | ( inter_Pol_cm.Projector() | orb_eta_To_a2_piRecoil );
  
   return result;
 }
@@ -213,18 +213,18 @@ Tensor<complex<double> > EtacToa1320pi0fit::calcSpin1Amp(Vector4<double>& pi_cm,
 
   Tensor<complex<double> > result(0); // rank-0 Tensor for the amplitude
 
-  Vector4<double> a1320_cm=eta_cm + pi_cm;
+  Vector4<double> inter_cm=eta_cm + pi_cm;
   
-  PolVector a1320_Pol_cm(1);
-  a1320_Pol_cm.SetP4(a1320_cm,a1320_cm.M());
+  PolVector inter_Pol_cm(1);
+  inter_Pol_cm.SetP4(inter_cm,inter_cm.M());
 
   OrbitalTensor orb_eta_To_a2_piRecoil(1);
-  orb_eta_To_a2_piRecoil.SetP4(a1320_cm, pi_recoil_cm);
+  orb_eta_To_a2_piRecoil.SetP4(inter_cm, pi_recoil_cm);
   
   OrbitalTensor orb_a2_To_pieta(1);
   orb_a2_To_pieta.SetP4(pi_cm, eta_cm);
 
-  result = (orb_a2_To_pieta) | ( a1320_Pol_cm.Projector() | orb_eta_To_a2_piRecoil );
+  result = (orb_a2_To_pieta) | ( inter_Pol_cm.Projector() | orb_eta_To_a2_piRecoil );
  
   return result;
 }
