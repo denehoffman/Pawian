@@ -6,18 +6,46 @@ if(COMMAND cmake_policy)
       cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-SET (EXECUTABLENAME compton_scatteringApp)
-SET (EXECUTABLENAME1 SeqDecayHeliAmpsApp)
-
-SET (INCLUDE_DIRECTORIES 
+SET (INCLUDE_DIRECTORIES
      ${ROOT_INCLUDE_DIR}
+     ${Minuit2_INCLUDE_DIRS}
      ${CMAKE_SOURCE_DIR} )
+
+INCLUDE_DIRECTORIES (AFTER
+ ${ROOT_INCLUDE_DIR}
+ ${Minuit2_INCLUDE_DIRS}
+ ${CMAKE_SOURCE_DIR}
+)
+
+LINK_DIRECTORIES(
+   ${Minuit2_LIBRARY_DIRS}
+   ${ROOT_LIBRARY_DIR})
+
+######## Linking "compton_scatteringApp ###########################
+
+SET (EXECUTABLENAME compton_scatteringApp)
 
 SET (${EXECUTABLENAME}_SRCS 
 	compton_scattering.cc
 )
 
-SET (${EXECUTABLENAME1}_SRCS 
+ADD_EXECUTABLE(${EXECUTABLENAME}
+	${${EXECUTABLENAME}_SRCS}
+)
+
+TARGET_LINK_LIBRARIES (${EXECUTABLENAME}
+        qft++
+)
+
+INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
+
+######## End: Linking "compton_scatteringApp ###########################
+
+######## Linking "SeqDecayHeliAmpsApp ###########################
+SET (EXECUTABLENAME SeqDecayHeliAmpsApp)
+
+
+SET (${EXECUTABLENAME}_SRCS 
 	SeqDecHeliAmps.cc
 	SeqDecayHeliAmpsMain.cc
 )
@@ -26,27 +54,35 @@ ADD_EXECUTABLE(${EXECUTABLENAME}
 	${${EXECUTABLENAME}_SRCS}
 )
 
-ADD_EXECUTABLE(${EXECUTABLENAME1}
-	${${EXECUTABLENAME1}_SRCS}
-)
-
-INCLUDE_DIRECTORIES (AFTER
-#	${PROJECT_SOURCE_DIR}/examples/SampleIndividuals
- ${ROOT_INCLUDE_DIR}
- ${CMAKE_SOURCE_DIR}
-)
-
 TARGET_LINK_LIBRARIES (${EXECUTABLENAME}
-        qft++
-)
-
-
-#LINK_DIRECTORIES(${ROOT_LIBRARY_DIR})
-TARGET_LINK_LIBRARIES (${EXECUTABLENAME1}
         qft++
 	${ROOT_LIBRARIES}
 )
 
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
-INSTALL ( TARGETS ${EXECUTABLENAME1} DESTINATION bin/${EXECUTABLENAME1})
+INSTALL ( TARGETS ${EXECUTABLENAME1} DESTINATION bin/${EXECUTABLENAME})
 
+######## End of Linking "SeqDecayHeliAmpsApp ###########################
+
+######## Linking "EtacToa1320pi0fit" ###########################
+
+SET (EXECUTABLENAME EtacToa1320pi0fitApp)
+
+SET (${EXECUTABLENAME}_SRCS
+        EtacToa1320pi0Fcn.cc 
+	EtacToa1320pi0fit.cc
+	EtacToa1320pi0fitMain.cc
+)
+
+ADD_EXECUTABLE(${EXECUTABLENAME}
+	${${EXECUTABLENAME}_SRCS}
+)
+MESSAGE("ROOT_LIBRARIES: " ${ROOT_LIBRARIES})
+TARGET_LINK_LIBRARIES (${EXECUTABLENAME}
+        ${Minuit2_LIBRARIES}
+        ${ROOT_LIBRARIES}
+        qft++
+)
+
+INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
+
+######## End of Linking "EtacToa1320pi0fit" ###########################

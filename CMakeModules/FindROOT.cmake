@@ -116,8 +116,11 @@ IF (ROOT_FOUND)
 #  STRING(REGEX MATCHALL "-L([^ ])+"  root_library ${root_flags})
 #  REMOVE_FROM_LIST(root_flags "${root_libs_all}" "${root_library}")
 
+  SET(root_flags ${root_flags})
   SET(ROOT_LIBRARIES ${root_flags})
 
+#  MESSAGE("ROOT_LIBRARIES: " ${ROOT_LIBRARIES})
+  
   # Make variables changeble to the advanced user
   MARK_AS_ADVANCED( ROOT_LIBRARY_DIR ROOT_INCLUDE_DIR ROOT_DEFINITIONS)
 
