@@ -2,12 +2,17 @@
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
 
+#include "ErrLogger/ErrLineLog.hh"
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
 
 int main()
 {
+
+  ErrLineLog thisLogger(ErrLog::debugging);
+
   ParticleTable pTable;
   PdtParser parser;
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
@@ -21,14 +26,14 @@ int main()
     if (0 != omega)
       omega->print(std::cout);
     else
-      std::cout << name << " not found" << std::endl;
+      ErrMsg(warning) << name << " not found" << endmsg;
 
     name = std::string("oohps");
     Particle* dummy = pTable.particle(name);
     if (0 != dummy)
       dummy->print(std::cout);
     else
-      std::cout << name << " not found" << std::endl;
+      ErrMsg(warning) << name << " not found" << endmsg;
 
     // try clone error handling
     pTable.clone(std::string("omegaNew"), std::string("omeGa")); // syntax here is clone(new, old);
@@ -43,7 +48,7 @@ int main()
     pTable.particle(std::string("omegaNew"))->print(std::cout);
 
   } else {
-    std::cout << "Error: could not parse " << pdtFile << std::endl;
+    ErrMsg(error) << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
   }
 

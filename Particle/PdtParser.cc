@@ -3,6 +3,8 @@
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 
+#include "ErrLogger/ErrLineLog.hh"
+
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
@@ -117,7 +119,7 @@ namespace client
 	if (wasComment) return false;
         if (!r || first != last) { // fail if we did not get a full match
 	  std::string rest(first, last);
-	  std::cerr << "failed parsing at: " << rest << std::endl;
+	  ErrMsg(error) << "failed parsing at: " << rest << endmsg;
 	  return false;
 	}
 
