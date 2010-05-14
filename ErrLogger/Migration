@@ -1,0 +1,283 @@
+$Id: Migration,v 1.1.1.1 2005/03/29 17:04:19 steinke Exp $
+
+This document describes migration to ErrLogger for new users ( see
+"MIGRATING FROM cerr/cout TO ErrLogger") and recent interface changes
+for older users ( see "INTERFACE CHANGES IN 7.4 (FOR OLD USERS)").
+
+MIGRATING FROM cerr/cout TO ErrLogger
+
+Overview
+--------
+
+ErrLogger provides users with the ability to send messages to a central 
+logging system, with the choice of system made at application level.  
+ErrLogger supplies an abstract interface for receiving these error messages.
+The specific interface is defined in ErrLogger/ErrLog.hh, which provides
+both a public, static-function front end for use in message-reporting code,
+and a base class for use in building implementations of the message-recording
+system.
+
+A user specifies a severity code when submitting a message.  The severity
+code is used by a concrete implementation of ErrLog to determine how to
+handle the message.
+
+ErrLogger supplements the old method of using an AbsParm parameter called
+verbose to control output.  In the new system, you can simply specify the
+severity and the logging system will do the logic to determine the
+routing.
+
+This file will give a migration recipe for converting from the use of
+cerr/cout to ErrLogger.
+
+Message Syntax
+--------------
+
+Error messages are originated with the use of the ErrMsg(severity) macro.  
+It is BaBar policy that users interface with ErrLogger only through the 
+ErrMsg macro.  You are NOT to call the ErrLog static methods directly,
+except in certain special cases of applications whose principal function
+includes logging messages and which need to control their format more
+precisely.
+
+The macro gives the user a reference to an ostream (just like cerr/cout) 
+which typically is used directly.  For example
+
+	Foo aFoo;
+	if ( _verbose.value() ) {
+	   cout << "Oh no.  Foo value is " << aFoo << endl;
+	}
+
+might become
+
+	Foo aFoo;
+	ErrMsg( routine ) << "Oh no.  Foo value is " << aFoo << endmsg;
+
+Error messages must be terminated with the endmsg token.  This is used to
+notify the logger of the end of a particular error message, and is essential
+in delivering messages to logging systems that deal only with whole messages
+(like CMLOG) -- as opposed to cout/cerr where each insertion operator (<<)
+may cause output.  
+
+Failing to use endmsg causes a highly verbose warning at run-time when
+the _next_ call to the logger is made.
+
+Multiple-line messages should call ErrMsg(XXX) and endmsg only once.  
+Lines within a message should be separated with '\n' in preference to the
+use of "endl".  When writing to a standard console device or file, the
+endmsg manipulator includes an implicit call to endl, so you needn't insert
+an explicit newline/endl in addition to endmsg at the end of your text.
+
+If the output to be generated involves expensive object-to-ASCII conversions
+(e.g., for the class Foo above), ErrLog's conditional decision on whether to
+actually log the message can be tested without actually logging:
+
+	Foo aFoo;
+	if ( ErrLogging( routine ) ) {
+	  ErrMsg( routine ) << "Oh no.  Foo value is " << aFoo << endmsg;
+	}
+
+See below for more detail.
+
+Severity Levels
+---------------
+
+Several levels of error severity are available.  Their definitions are
+available in ErrLogger/ErrLog.hh, but are reproduced here for
+convenience.  To repeat an earlier point, the programmer specifies the
+category of message.  An external agent decides the appropriate response
+to such a message.
+
+  //	fatal:		A condition exists that casts doubt on the integrity
+  //                    of processing and the reliability of any results.
+  //                    No recovery strategy can be attempted, because the
+  //                    state of the program may be indeterminate.
+  //
+  //                    It is intended that "fatal" errors be reported
+  //                    primarily when it is likely that the condition was
+  //                    caused by incorrect code, or when the root cause cannot
+  //                    be determined.  Dealing with the error is likely to
+  //                    require debugging or other expert investigation.
+  // 
+  //                    In most implementations, this will be configured to
+  //                    result in application termination with ::abort() 
+  //                    immediately after the error message is completed with
+  //                    "endmsg", producing a core dump usable to obtain a
+  //                    traceback.
+  //
+  //			Programmers should generally not call ::abort() or
+  //                    ::exit() themselves following the message.
+
+  //    severe:         A condition exists such that the general ability of
+  //                    the program to continue work is compromised: the
+  //                    present computation and most or all subsequent ones
+  //                    are likely to fail or produce erroneous results.
+  //
+  //                    It is intended that "severe" errors be reported 
+  //                    primarily when external conditions (command line
+  //                    arguments, control files, data files, the contents of
+  //                    databases) are identified to be incompatible with
+  //                    proceeding.  The programmer should ensure that the
+  //                    message written is as informative as possible.
+  //
+  //                    In most implementations, this will be configured to
+  //                    result in application termination immediately after
+  //                    the error message is completed with "endmsg" and
+  //                    delivered, with a non-zero exit status.  The ErrLog
+  //                    implementation is free to determine the exit status
+  //                    to use, from the range 1-126.  It may take the "code"
+  //                    value from the ErrLog::msg( , , code ) into account.
+  //
+  //			Programmers should generally not call ::abort() or
+  //                    ::exit() themselves following the message.
+
+  //	error:		A condition exists such that requested result or
+  //			action can not be produced.  However, future 
+  //                    processing may be able to succeed.
+
+  //	warning:	The result is produced, but may not be
+  //			what's desired due to an unexpected condition
+
+  //	routine:	Nothing known to be wrong with the result;
+  //			messages that are always produced in normal
+  //			operation
+
+  //	trace:		Messages about the flow of program control
+  //			and which optional operations took place.
+  //			(This is the default if nothing is defined)
+  
+  //	debugging:	Information in addition to the above
+
+ 
+Examples
+--------
+
+old code:
+	if ( _verbose.value() ) {
+	  cerr << "line 1" << endl;
+	  cerr << "line 2" << endl;
+	  cerr << "line 3" << endl;
+	}
+new code:
+	  ErrMsg(warning) << "line 1\n"
+                          << "line 2\n"
+	                  << "line 3" << endmsg;
+
+Note: this example is not trying to say that messages that
+used to be triggered by verbose are to have "warning" level severity.
+Choose appropriately.  Most verbose.value() gated messages will
+probably be level "routine" in severity.
+
+Note that
+	  ErrMsg(routine) << "line 1" << endl;
+	  ErrMsg(routine) << "line 2" << endmsg;
+
+will cause a runtime warning because the first message was not
+terminated with endmsg;.  If you need to do many, distributed things
+and then close off the message, you may do one of the following:
+
+1) Build a string
+
+	std::string myErrorMessage( "base yak " );
+        if ( this ) {
+          myErrorMessage += "yak1";
+        } else if ( tha t) {
+          myErrorMessage += "yak2";
+        }
+	ErrMsg(routine) << myErrorMessage << endmsg;
+
+2) Extract the ostream
+
+	ostream& err = ErrMsg(routine);
+        err << "base yak ";
+	if ( this ) {
+	  err << "yak1";
+	} else if ( that ) {
+	  err << "yak2";
+	}
+	err << endmsg;
+
+In using method 2), please recall that it's desirable to avoid nested
+errors.  You don't want any code calling ErrMsg again between a first
+ErrMsg call and its corresponding endmsg.
+
+
+Advanced Usage-  ErrLogging macro:
+----------------------------------
+
+If you have a message that is expensive to build, you may not
+want to spend time building it if the associated severity is such that
+the message will be ignored.  You may test if a severity level will
+cause output and act on it by using the ErrLogging() macro:
+	if (ErrLogging(warning)) {
+       		ErrMsg(warning) << "The flayrods are out of skew "
+			<< "on treadle number "
+			<< treadle.giveIDslowly() 
+			<< endmsg;
+	}
+
+
+Standalone Programs
+-------------------
+	If you have a standalone program, you will want to install a
+concrete error logger into the AppUserbuild.  The recipe is as
+follows.  Note that regression test script outputs will likely need to
+be adjusted.
+
+1) add the following lines to your AppUserBuild.cc:
+	  #include "FrameLogger/AppActionErrLogger.hh"
+	  theFramework->actions()->append(new AppActionErrLogger);
+
+2) Add the following line to your package's GNUmakefile, near the
+similar lines:
+	  override LINK_FrameLogger       += $(PACKAGE)GNUmakefile
+ 
+3) You don't need to modify any TCL _unless_ you've turned off actions for
+some reason.  In that case, you might need to do one or both of
+	  module actions enable all
+	  action on "ErrLogger Action"
+
+
+
+Rest of file unchanged since 1998.10.20:
+
+
+INTERFACE CHANGES IN 7.4 (FOR OLD USERS)
+
+The interface for ErrLogger has been changed in 7.4.
+The changes will not, as far
+as I know, cause compilation errors at this time.
+Users should read ErrLogger/ErrLog.hh for the interface
+and description.  There are two basic changes to the interface: 
+
+1) ErrLogger now returns an (ostream&) instead of an
+(ErrStream&). This allows for the normal use of HepString,
+RW String and other classes that define both (const char*)
+conversion operators and operator<<(ostream&) operators.
+Note that a class that defined only one would work with
+ErrStream, but, if a class defines both, there is an
+ambiguity that the compiler cannot resolve. 
+
+Further, the use of ErrStream::Stream is no longer needed.
+This was previously necessary to convert an ostream back to
+an ErrStream so that the end of the message could be trapped.
+ErrStream::Stream still remains part of the interface, but
+will be removed next week so that its use can be tracked
+through the nightly builds and removed. 
+
+Lastly, other features of ostream, such as format
+manipulators, are available now. 
+
+2) Error messages must now be terminated by the "endmsg" tag.
+The basic structure is 
+
+ErrMsg(warning) << "some warning" << endmsg; 
+
+Unfortunately, there is no way to enforce getting this correct
+through compilation. However, ErrLogger keeps track of the
+locations that call it and if endmsg has been used. It will
+post warnings describing the correction that is needed in the
+code. The warning will not be printed until the next
+ErrLog::msg is encountered. If you notice such a warning, it
+would be beneficial to notify the maintainer of that code,
+since this problem can be observed only under the error
+condition. 

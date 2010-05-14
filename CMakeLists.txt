@@ -44,6 +44,7 @@ ENDIF()
 ADD_SUBDIRECTORY (CMakeModules)
 add_subdirectory (qft++)
 add_subdirectory (Utils)
+add_subdirectory (ErrLogger)
 add_subdirectory (Particle)
 add_subdirectory (Examples/qft++)
 

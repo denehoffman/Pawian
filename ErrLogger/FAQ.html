@@ -1,0 +1,98 @@
+<HTML>
+<TITLE>
+ErrLogger FAQ
+</TITLE>
+<BODY BGCOLOR="white">
+<CENTER>
+<H1>ErrLogger Frequently Asked Questions</H1>
+</CENTER>
+<H2>Questions</H2>
+<UL>
+  <LI><B>Question 1</B><BR>
+      Some of my classes have methods<BR>
+      <BR>
+      <em>
+      print(ostream& o)<BR>
+      printAll(ostream& o)<BR>
+      </em>
+      <BR>
+      Should also these functions be migrated to ErrLoggers?<BR>
+      <a href="#question1"><B>Answer</B></a>
+  </LI>
+  <BR>
+  <BR>
+  <LI><B>Question 2</B><BR>
+      How can I talk to ErrLogger?  How can I turn debugging on/off for a given module?<BR>
+      <a href="#question2"><B>Answer</B></a>
+  </LI>
+</UL>
+
+<H2>Answers</H2>
+<UL>
+  <LI>
+    <a name="question1"><B>Answer 1</B></a><BR>
+      <font color="blue">
+      Some of my classes have methods<BR>
+      <BR>
+      <em>
+      print(ostream& o)<BR>
+      printAll(ostream& o)<BR>
+      </em>
+      <BR>
+      Should also these functions be migrated to ErrLoggers?<BR>
+      </font>
+      <B>
+      <font color="black">
+      If these functions may be called during the execution of
+      a production executable, such as a framework job, they
+      should be called using the error logger.  One elegant
+      solution to this problem that does not tie your class to
+      the error logger for only this print method is to define
+      operator<< as a friend to this class.  Then the syntax
+      for printing your object using the error logger would
+      be:<BR>
+      <BR>
+      <em>
+      yourClass theObj;<BR>
+      ErrMsg(severity) << theObj << endmsg;<BR>
+      </em>
+      <BR>
+      Your class could be printed using the error logger without
+      operator<<, but this is by far the simplest, most natural,
+      and most elegant way of doing this.
+      </font>
+      </B>
+  </LI>
+  <BR>
+  <BR>
+  <LI>
+    <a name="question2"><B>Answer 2</B></a><BR>
+    <font color="blue">
+      How can I talk to ErrLogger?  How can I turn debugging on/off for a given module?<BR>
+    </font>
+    <P>
+    For stand-alone jobs, the minimum severity of messages can be set at the construction
+    time of ErrStdLog.  ErrStdLog needs only to be instantiated somewhere before the first
+    ErrMsg command is encountered.  Presumably, this would happen at the very beginning of
+    the program.</P>
+
+    <P>
+    For framework applications, the minimum severity to be printed can be determined on the
+    module level.  The module parameters verbose and production determine the minimum
+    severity.  The minimum severity for the possible configurations is shown below.
+    </P>
+
+    <CENTER>
+    <TABLE BORDER=5>
+    <tr><td></td><td></td><td colspan=2 align=center>Verbose</td></tr>
+    <tr><td></td><td></td><td align=center>true</td><td align=center>false</td></tr>
+    <tr><td rowspan=2 align=center>Production</td><td align=center>true</td><td align=center>debugging</td>
+        <td align=center>warning</td></tr>
+    <tr><td align=center>false</td><td align=center>debugging</td>
+        <td align=center>routine</td></tr>
+
+    </TABLE>
+    </CENTER>
+</UL>
+</BODY>
+</HTML>

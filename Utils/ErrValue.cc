@@ -5,8 +5,6 @@
 #include "Utils/ErrValue.hh"
 #include <math.h>
 
-bla
-
 #define sqr(x) (x*x)
 
 ErrValue::ErrValue():
