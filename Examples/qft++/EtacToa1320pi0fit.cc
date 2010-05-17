@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Examples/qft++/EtacToa1320pi0fit.hh"
+#include "ErrLogger/ErrLineLog.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -30,10 +31,9 @@ EtacToa1320pi0fit::EtacToa1320pi0fit(int kindOfData) :
   if (kindOfData==0) _dataPath=theSourcePath+std::string("/Examples/qft++/data/dataEtacToA0Pi_100Mgev.dat");
   else if (kindOfData==2)   _dataPath=theSourcePath+std::string("/Examples/qft++/data/dataSpin2100MgevNew.dat");
   else{
-    std::cout <<"this kind of data: " << kindOfData << "  is not supported!!!!\n"
+    ErrMsg(fatal) <<"this kind of data: " << kindOfData << "  is not supported!!!!\n"
 	      <<"initialze EtacToa1320pi0fit either with 0 or with 2 !!!!"
-	      << std::endl;
-    assert(0);    
+	      << endmsg; 
   }
 
   initRootStuff();
@@ -93,7 +93,7 @@ void EtacToa1320pi0fit::initRootStuff()
 
 void EtacToa1320pi0fit::read4Vecs(std::string& path,  int nEvts, std::vector<evt4Vec>& the4Vecs)
 {
-  std::cout << "calculate 4Vecs and amplitudes for " << path << std::endl;
+  ErrMsg(routine) << "calculate 4Vecs and amplitudes for " << path << endmsg;
   std::ifstream inputStream(path.c_str(), std::ios::in);
 
    if (!inputStream.good()) 
@@ -105,7 +105,7 @@ void EtacToa1320pi0fit::read4Vecs(std::string& path,  int nEvts, std::vector<evt
    int counter=0; 
    while (!inputStream.eof() && counter<nEvts )
      {
-       if ( counter%1000 == 0 ) std::cout << "event " << counter << std::endl;
+       if ( counter%1000 == 0 ) ErrMsg(routine) << "event " << counter << endmsg;
        Vector4<double> pi14V,pi24V,eta4V; // 4-momenta
        get4Vecs(inputStream, pi14V);
        get4Vecs(inputStream, pi24V);
@@ -274,7 +274,7 @@ double EtacToa1320pi0fit::calcLogLh(const fitParamVal& theParamVal)
       if (intensity>0.) logLH_data+=log10(intensity);
     }
 
-  std::cout << "logLH_data= " << logLH_data << std::endl;
+  ErrMsg(debugging) << "logLH_data= " << logLH_data << endmsg;
 
 
   double LH_mc=0.;
@@ -283,7 +283,7 @@ double EtacToa1320pi0fit::calcLogLh(const fitParamVal& theParamVal)
       double intensity=calcIntensityCache(_mc4Vecs[it], theParamVal);
       LH_mc+=intensity;
     }
-  std::cout << "LH_mc= " << LH_mc << std::endl;
+  ErrMsg(debugging) << "LH_mc= " << LH_mc << endmsg;
 
   double logLH_mc_Norm=0.;
   if (LH_mc>0.) logLH_mc_Norm=log10(LH_mc/_mc4Vecs.size());
@@ -334,9 +334,9 @@ bool  EtacToa1320pi0fit::fillFitHists(const fitParamVal& fitParamVal)
 {
   if(_fitHistsFilled)
     {
-      std::cout <<"Not possible to fill the histos with fit results!!!!\n"
-		<<"They are already filled!!!!"
-		<<std::endl;
+      ErrMsg(warning) <<"Not possible to fill the histos with fit results!!!!\n"
+		      <<"They are already filled!!!!"
+		      <<endmsg;
       return false;
     }
 
@@ -350,9 +350,11 @@ bool  EtacToa1320pi0fit::fillFitHists(const fitParamVal& fitParamVal)
   //normalize fitted histos
 
   double integralData=_invpipiDataHist->Integral();
-  std::cout << "integralData= " << integralData << std::endl;
+  ErrMsg(debugging) << "integralData= " << integralData << endmsg;
+
   double integralFittedMc=_invpipiFittedHist->Integral();  
-  std::cout << "integralFittedMc= " << integralFittedMc << std::endl;
+  ErrMsg(debugging) << "integralFittedMc= " << integralFittedMc << endmsg;
+
   _invpipiFittedHist->Scale(integralData/integralFittedMc);
   _invpietaFittedHist->Scale(integralData/integralFittedMc);
   _dalitzFittedHist->Scale(integralData/integralFittedMc);
