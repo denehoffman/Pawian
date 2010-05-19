@@ -6,6 +6,7 @@
 #include "Examples/qft++/EtacToa1320pi0Data.hh"
 #include "Examples/qft++/EtacToa1320pi0fit.hh"
 #include "Examples/qft++/EtacToa1320pi0Fcn.hh"
+#include "ErrLogger/ErrLineLog.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
 #include "Minuit2/FunctionMinimum.h"
@@ -27,12 +28,16 @@ int main(int __argc,char *__argv[]){
 	      << "In addition the mass and width of the intermediate resonance will be fitted with a simple Breit-Wigner\n"
               << "To start the application with data containing  an intermediate resonance with Spin=0 and mass 0.98 GeV, type: ./EtacToa1320pi0fitApp -d 0\n"
               << "To start the application with data containing  an intermediate resonance with Spin=2 and mass 1.32 GeV, type: ./EtacToa1320pi0fitApp -d 2\n"
+              << "with the flag -msg <errorLogMode> you can choose the mode for the error logger\n"
+	      << "i.e. with './EtacToa1320pi0fitApp -d 2 -msg debugging' you start the fit with Spin=2 in the debugging mode for the error logger\n"  
 	      << std::endl;
     return 0;
   }
 
+  
   int optind=1;
   std::string dataSpinStr="";
+  std::string msgModeStr="default";
   // decode arguments
   while ((optind < __argc) && (__argv[optind][0]=='-')) {
 
@@ -41,37 +46,55 @@ int main(int __argc,char *__argv[]){
       optind++;
       dataSpinStr = __argv[optind];
     }
+    if (sw=="-msg"){
+      optind++;
+      msgModeStr = __argv[optind];
+    }
     else{
-      cout << "Unknown switch: " 
-           << __argv[optind] << endl;
+      ErrMsg(warning) << "Unknown switch: " 
+            << __argv[optind] << endmsg;
       optind++;
     }
   }
+
+  ErrLineLog* myLogger=0;
+  if(msgModeStr == "debugging") myLogger= new ErrLineLog(ErrLog::debugging);
+  else if(msgModeStr == "trace") myLogger= new ErrLineLog(ErrLog::trace);
+  else if(msgModeStr == "routine") myLogger= new ErrLineLog(ErrLog::routine);
+  else if(msgModeStr == "warning")  myLogger= new ErrLineLog(ErrLog::warning);
+  else if(msgModeStr == "error")    myLogger= new ErrLineLog(ErrLog::error); 
+  else {
+    myLogger= new ErrLineLog(ErrLog::debugging);
+    ErrMsg(warning) << "ErrorLogger not (properly) set -> Use mode 'ErrLog::debugging' " << endmsg;  
+  }
+
+
 
  std::stringstream dataSpinStrStr(dataSpinStr);
  int dataSpin=2;
  dataSpinStrStr >> dataSpin ;
 
-  std::cout << "dataSpin: " << dataSpin << std::endl;
+ ErrMsg(routine) << "dataSpin: " << dataSpin << endmsg;
 
  EtacToa1320pi0fit* etacToa1320pi0fit=new EtacToa1320pi0fit(dataSpin);
  EtacToa1320pi0Fcn fcn(etacToa1320pi0fit);
  MnUserParameters upar;
- if (! etacToa1320pi0fit->initFitParameters(upar)) assert(0);
+ if (! etacToa1320pi0fit->initFitParameters(upar)){
+   ErrMsg(fatal) << "initialization of the MnUserParameters failed in etacToa1320pi0fit->initFitParameters(upar)" << endmsg; 
+ } 
 
  MnMigrad migrad(fcn, upar);
- std::cout<<"start migrad "<<std::endl;
+ ErrMsg(routine) <<"start migrad "<< endmsg;
  FunctionMinimum min = migrad();
 
  if(!min.IsValid()) {
    //try with higher strategy
-   std::cout<<"FM is invalid, try with strategy = 2."<<std::endl;
+   ErrMsg(routine) <<"FM is invalid, try with strategy = 2."<< endmsg;
    MnMigrad migrad2(fcn, min.UserState(), MnStrategy(2));
    min = migrad2();
  }
 
-//  std::cout << "minimum: " << min << std::endl;
- std::cout << "migrad.Fval(): " << min.Fval() << std::endl;
+ ErrMsg(routine) << "migrad.Fval(): " << min.Fval() << endmsg;
  
 //   std::cout<<"start Minos"<<std::endl;
 //   MnMinos Minos(fcn, min);
@@ -95,7 +118,7 @@ int main(int __argc,char *__argv[]){
   theFitResult.cont2spin=min.UserState().Value("spin2");
   etacToa1320pi0fit->fillFitHists(theFitResult);
   delete etacToa1320pi0fit;
-
+  if (0!=myLogger) delete myLogger;
   return 0;
 }
 
