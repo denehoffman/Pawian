@@ -6,7 +6,7 @@
 #include "Particle/ParticleTable.hh"
 
 // SetupData.hh has all the boost includes
-#include "Setup/SetupData.hh"
+#include "SetupData.hh"
 
 #include "ErrLogger/ErrLineLog.hh"
 

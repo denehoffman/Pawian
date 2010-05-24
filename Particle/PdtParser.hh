@@ -2,7 +2,7 @@
 #define PDTPARSER_HH
 
 #include <string>
-#include "ParticleTable.hh"
+#include "Particle/ParticleTable.hh"
 
 
 class PdtParser

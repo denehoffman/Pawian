@@ -55,6 +55,8 @@ IF( NOT PAWIAN_STATIC )
         SET( PAWIAN_STATIC TRUE )
 ENDIF()
 
+SET (CMAKE_BUILD_TYPE Debug)
+
 IF( PAWIAN_STATIC )
 #        SET (CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -lpthread")
 #        SET (LINK_FLAGS "-static-libgcc -lpthread")
@@ -76,6 +78,7 @@ add_subdirectory (qft++)
 add_subdirectory (Utils)
 add_subdirectory (ErrLogger)
 add_subdirectory (Particle)
+add_subdirectory (Event)
 add_subdirectory (Setup)
 add_subdirectory (Examples/qft++)
 

@@ -17,6 +17,7 @@ public:
   ~ParticleTable();
 
   Particle* particle(std::string name);
+  Particle* particle(double mass);
 
   bool addParticle(Particle* newParticle);
   bool clone(std::string newName, std::string oldName);

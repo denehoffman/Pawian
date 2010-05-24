@@ -2,6 +2,7 @@
 #include "Particle/Particle.hh"
 
 #include "ErrLogger/ErrLineLog.hh"
+#include <math.h>
 
 ParticleTable::ParticleTable()
 {
@@ -21,6 +22,19 @@ bool ParticleTable::addParticle(Particle* newParticle)
 Particle* ParticleTable::particle(std::string name)
 {
   std::map<const std::string, Particle*>::const_iterator iter = particles.find(name);
+  if (iter != particles.end())
+    return iter->second;
+  else
+    return 0;
+}
+
+Particle* ParticleTable::particle(double mass)
+{
+  std::map<const std::string, Particle*>::const_iterator iter = particles.begin();
+
+  while (iter != particles.end() && fabs((iter->second->mass() - mass) / mass) < 0.02)
+    ++iter;
+  
   if (iter != particles.end())
     return iter->second;
   else
