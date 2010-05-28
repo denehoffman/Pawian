@@ -80,8 +80,9 @@ add_subdirectory (ErrLogger)
 add_subdirectory (Particle)
 add_subdirectory (Event)
 add_subdirectory (Setup)
+add_subdirectory (PwaUtils)
 add_subdirectory (Examples/qft++)
-
+add_subdirectory (Examples/pbarp)
 
 EXECUTE_PROCESS(COMMAND ps OUTPUT_VARIABLE PSOUTPUT)
 
