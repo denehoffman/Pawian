@@ -5,8 +5,8 @@
 
 #include "Particle/ParticleTable.hh"
 
-// SetupData.hh has all the boost includes
-#include "Setup/SetupData.hh"
+// SetupGrammar.hh has all the boost includes
+#include "Setup/SetupGrammar.hh"
 
 #include "ErrLogger/ErrLineLog.hh"
 
@@ -42,9 +42,9 @@ bool SetupParser::parse(std::string& fileName)
 	    std::istream_iterator<char>(),
 	    std::back_inserter(storage));
   
-  typedef setupData::setup_file_grammar<std::string::const_iterator> setup_file_grammar;
+  typedef setupGrammar::setup_file_grammar<std::string::const_iterator> setup_file_grammar;
   setup_file_grammar setupGrammar; // Our grammar
-  setupData::decay_tree ast; // Our setup
+  setupGrammar::decay_tree ast; // Our setup
   
   using boost::spirit::ascii::space;
   std::string::const_iterator iter = storage.begin();
@@ -56,7 +56,7 @@ bool SetupParser::parse(std::string& fileName)
 		  << "-------------------------\n"
 		  << "Parsing succeeded\n"
 		  << "-------------------------\n" << endmsg;
-    setupData::decay_tree_printer printer;
+    setupGrammar::decay_tree_printer printer;
     printer(ast);
     return true; // true means success
   }

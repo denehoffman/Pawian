@@ -1,5 +1,5 @@
-#ifndef SETUPDATA_HH
-#define SETUPDATA_HH
+#ifndef SETUPGRAMMAR_HH
+#define SETUPGRAMMAR_HH
 
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -18,7 +18,7 @@
 #include <vector>
 
 
-namespace setupData
+namespace setupGrammar
 {
   namespace fusion = boost::fusion;
   namespace phoenix = boost::phoenix;
@@ -57,9 +57,9 @@ namespace setupData
 // to make it a first-class fusion citizen
 
 BOOST_FUSION_ADAPT_STRUCT(
-    setupData::decay_tree,
+    setupGrammar::decay_tree,
     (std::string, name)
-    (std::vector<setupData::decay_node>, children)
+    (std::vector<setupGrammar::decay_node>, children)
     (std::vector<std::string>, addParticle)
     (std::vector<std::string>, cloneParticle)
     (std::vector<std::string>, modParticle)
@@ -70,7 +70,7 @@ BOOST_FUSION_ADAPT_STRUCT(
     (std::vector<std::string>, initialProps)
 )
 
-namespace setupData
+namespace setupGrammar
 {
     ///////////////////////////////////////////////////////////////////////////
     //  Print out the mini decay tree
