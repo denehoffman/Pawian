@@ -1,6 +1,7 @@
 #include "PwaUtils/pbarpStates.hh"
-#include "ErrLogger/ErrLineLog.hh"
 
+#include "Utils/MathUtils.hh"
+#include "ErrLogger/ErrLineLog.hh"
 
  
 
@@ -40,7 +41,7 @@ bool pbarpStates::calcJPCs(){
        for(int ls = 0; ls < num_ls; ls++){
 	 Spin L= motherLSs[ls].L;
 	 Spin S= motherLSs[ls].S;
-	 int cparity(pow(-1,L+S));
+	 int cparity(pow(-1,int(L+S)));
          ErrMsg(debugging) << "L=" << L <<" S=" << S << " ==> C=" << cparity << endmsg;
          for(Spin M = -S; M <= S; M++){
            double Clebschg=Clebsch(L,0,S,M, j,M);
