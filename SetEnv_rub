@@ -1,5 +1,5 @@
-setenv ROOTSYS /data/pegasus1/PANDA/package/root/5.14-00e/Linux26SL5_x86_64_gcc412
-setenv Minuit2_ROOT /data/pegasus1/PANDA/PWA/Minuit2
+setenv ROOTSYS /opt/root/5.24-00/Linux26SL5_x86_64_gcc412
+setenv Minuit2_ROOT /data/pegasus1/PANDA/PWA
 
 echo "\n ROOTSYS"
 echo  $ROOTSYS  
