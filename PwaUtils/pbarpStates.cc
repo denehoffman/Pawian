@@ -23,7 +23,7 @@ pbarpStates::pbarpStates(int jmax):
 
 pbarpStates::~pbarpStates(){
   std::vector<PbarP*>::iterator it;
-  for ( it=_theStates.begin(); it!=_theStates.end(); ++it){
+  for ( it=_allStates.begin(); it!=_allStates.end(); ++it){
     if (0!= (*it)){
       delete (*it);
       (*it)=0;
@@ -49,7 +49,18 @@ bool pbarpStates::calcJPCs(){
            if (fabs(Clebschg)>1e-8){
              jpcRes theJPC(j,p,cparity);
              LSM theLSM(L,S,M);
-	     _theStates.push_back(new PbarP(theJPC, theLSM, Clebschg));
+             PbarP* tmpPbarP = new PbarP(theJPC, theLSM, Clebschg);
+
+	     //and now fill the vectors
+	     _allStates.push_back(tmpPbarP);
+             if (S==0) _singletStates.push_back(tmpPbarP);
+	     else if (S==1){
+	       if (M==0) _tripletM0States.push_back(tmpPbarP);
+               else if (M==1) _tripletMp1States.push_back(tmpPbarP);
+               else if (M==-1) _tripletMm1States.push_back(tmpPbarP);
+	       else ErrMsg(fatal) << "pbar p state with S=" << S << " and M="<< M <<" cannot exitst!!!" << cparity << endmsg;
+	     }
+	     else ErrMsg(fatal) << "pbar p state with S=" << S << " cannot exitst!!!" << cparity << endmsg;
 	   }
 	 }
        }
@@ -62,11 +73,11 @@ void pbarpStates::print(std::ostream& os) const{
   os << "initital states of the pbar p annihilation for Jmax = " << _jmax << " are: " << std::endl; 
 
   std::vector<PbarP*>::const_iterator it;
-   for ( it=_theStates.begin(); it!=_theStates.end(); ++it){
+   for ( it=_allStates.begin(); it!=_allStates.end(); ++it){
     if (0!= (*it)){
-	os <<"J=" << (*it)->jpc.J << " P=" << (*it)->jpc.P << " C=" << (*it)->jpc.C 
-	   <<" L=" << (*it)->lsm.L <<" S=" << (*it)->lsm.S <<" lambda=" << (*it)->lsm.M
-	   <<" ClebschGordan=" << (*it)->ClebschG 
+	os <<"J=" << (*it)->jpc.J << "\tP=" << (*it)->jpc.P << "\tC=" << (*it)->jpc.C 
+	   <<"\tL=" << (*it)->lsm.L <<"\tS=" << (*it)->lsm.S <<"\tlambda=" << (*it)->lsm.M
+	   <<"\tClebschGordan=" << (*it)->ClebschG 
 	   << std::endl;
       
     }

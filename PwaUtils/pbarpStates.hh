@@ -23,16 +23,22 @@ public:
 
   void print(std::ostream& os) const;
 
-//   std::vector<jpcRes*> allStates();
-//   std::vector<jpcRes*> lrange(int lmin; int lmax);
-//   std::vector<jpcRes*> jrange(Spin jmin; Spin jmax);
+  std::vector<PbarP*>& allStates(){return _allStates;};
+  std::vector<PbarP*>& singletStates(){return _singletStates;};
+  std::vector<PbarP*>& tripletM0States(){return _tripletM0States;};
+  std::vector<PbarP*>& tripletMp1States(){return _tripletMp1States;};
+  std::vector<PbarP*>& tripletMm1States(){return _tripletMm1States;};
+
 
  protected:
 
  private:
   int _jmax;
-//   std::vector<jpcRes*> _theStates;
-  std::vector<PbarP*> _theStates;
+  std::vector<PbarP*> _allStates;
+  std::vector<PbarP*> _singletStates;
+  std::vector<PbarP*> _tripletM0States;
+  std::vector<PbarP*> _tripletMp1States;
+  std::vector<PbarP*> _tripletMm1States;
   jpcRes _pbarJPC;
   jpcRes _pJPC;  
   bool calcJPCs();

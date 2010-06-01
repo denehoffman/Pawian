@@ -5,6 +5,7 @@
 #include <vector>
 #include "ErrLogger/ErrLineLog.hh"
 #include "PwaUtils/pbarpStates.hh"
+#include "PwaUtils/DataUtils.hh"
 
 int main(int __argc,char *__argv[]){
 
@@ -69,6 +70,31 @@ int main(int __argc,char *__argv[]){
 
   pbarpStates thepbarpState(jmax);
   thepbarpState.print(std::cout);
+
+  std::vector<PbarP*> theSingletStates=thepbarpState.singletStates();
+  ErrMsg(routine) << "The pbarp singlet states are: " << endmsg;
+  std::vector<PbarP*>::const_iterator it;
+  for ( it=theSingletStates.begin(); it!=theSingletStates.end(); ++it){
+    if (0!= (*it))(*it)->print(std::cout);
+  }
+
+  std::vector<PbarP*> theTripletM0States=thepbarpState.tripletM0States();
+  ErrMsg(routine) << "The pbarp triplet states with helicity=0 are: " << endmsg;
+  for ( it=theTripletM0States.begin(); it!=theTripletM0States.end(); ++it){
+    if (0!= (*it))(*it)->print(std::cout);
+  }
+
+  std::vector<PbarP*> theTripletMp1States=thepbarpState.tripletMp1States();
+  ErrMsg(routine) << "The pbarp triplet states with helicity=1 are: " << endmsg;
+  for ( it=theTripletMp1States.begin(); it!=theTripletMp1States.end(); ++it){
+    if (0!= (*it))(*it)->print(std::cout);
+  }
+
+  std::vector<PbarP*> theTripletMm1States=thepbarpState.tripletMm1States();
+  ErrMsg(routine) << "The pbarp triplet states with helicity=-1 are: " << endmsg;
+  for ( it=theTripletMm1States.begin(); it!=theTripletMm1States.end(); ++it){
+    if (0!= (*it))(*it)->print(std::cout);
+  }
 
   if (0!=myLogger) delete myLogger;
   return 0;
