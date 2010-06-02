@@ -50,6 +50,11 @@ MESSAGE("Minuit2_INCLUDE_DIRS: " ${Minuit2_INCLUDE_DIRS})
 MESSAGE("Minuit2_LIBRARY_DIRS: " ${Minuit2_LIBRARY_DIRS})
 MESSAGE("Minuit2_LIBRARIES: " ${Minuit2_LIBRARIES})
 
+FIND_PACKAGE(Geneva REQUIRED)
+MESSAGE("GENEVA_INCLUDE_DIRS: " ${GENEVA_INCLUDE_DIRS})
+MESSAGE("GENEVA_LIBRARY_DIRS: " ${GENEVA_LIBRARY_DIRS})
+MESSAGE("GENEVA_LIBRARIES: " ${GENEVA_LIBRARIES})
+
 # Set the library type to static by default
 IF( NOT PAWIAN_STATIC )
         SET( PAWIAN_STATIC TRUE )
@@ -83,6 +88,7 @@ add_subdirectory (Setup)
 add_subdirectory (PwaUtils)
 add_subdirectory (Examples/qft++)
 add_subdirectory (Examples/pbarp)
+add_subdirectory (Examples/geneva/GMultiPopulation)
 
 EXECUTE_PROCESS(COMMAND ps OUTPUT_VARIABLE PSOUTPUT)
 
