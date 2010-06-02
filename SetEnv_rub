@@ -1,7 +1,8 @@
 setenv ROOTSYS /opt/root/5.24-00/Linux26SL5_x86_64_gcc412
 setenv Minuit2_ROOT /data/pegasus1/PANDA/PWA
+setenv GENEVA_ROOT /data/pegasus1/PANDA/PWA/geneva
 
-echo "\n ROOTSYS"
-echo  $ROOTSYS  
-echo "\n Minuit2_ROOT"
-echo  $Minuit2_ROOT
+echo "\n ROOTSYS: " $ROOTSYS  
+echo "\n Minuit2_ROOT: " $Minuit2_ROOT
+echo "\n GENEVA_ROOT: " $GENEVA_ROOT
+echo "\n"

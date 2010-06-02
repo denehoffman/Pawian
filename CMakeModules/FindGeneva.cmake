@@ -19,7 +19,7 @@ endif()
 find_path(GENEVA_INCLUDE_DIRS GBoolean.hpp
     HINTS ${_GENEVA_INCLUDE_SEARCH_DIRS})
 
-set(GENEVA_LIBRARIES geneva-opt libgeneva-extcomm)
+set(GENEVA_LIBRARIES geneva-opt)
 find_library(GENEVA_LIBRARY ${GENEVA_LIBRARIES}
     HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
 

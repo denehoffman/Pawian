@@ -57,6 +57,10 @@ MACRO (WRITE_CONFIG_FILE filename)
    WRITE_TO_FILE(${filename} BOOST_ROOT ${BOOST_ROOT} APPEND) 
   endif(BOOST_ROOT)
 
+  if(Minuit2_ROOT)
+   WRITE_TO_FILE(${filename} Minuit2_ROOT ${Minuit2_ROOT} APPEND) 
+  endif(Minuit2_ROOT)
+
   WRITE_TO_FILE(${filename} ROOTSYS ${ROOTSYS} APPEND)  
 
   CONVERT_LIST_TO_STRING(${LD_LIBRARY_PATH})
