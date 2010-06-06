@@ -36,6 +36,13 @@ struct PbarP{
     lsm=theLSM;
     ClebschG=theClebschG;
   }
+
+  void print(std::ostream& os) const{
+    os <<"J=" << jpc.J << "\tP=" << jpc.P << "\tC=" << jpc.C 
+       <<"\tL=" << lsm.L <<"\tS=" << lsm.S <<"\tlambda=" << lsm.M
+       <<"\tClebschGordan=" << ClebschG
+       << std::endl;   
+  }
 };
 
 #endif /* _DataUtils_H */

@@ -1,3 +1,4 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
 # - Try to find Boost include dirs and libraries
 # Usage of this module as follows:
 #
