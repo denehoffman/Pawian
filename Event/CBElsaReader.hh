@@ -16,7 +16,7 @@ class CBElsaReader : public EventReader
 {
 public:
   CBElsaReader();
-  CBElsaReader(std::vector<std::string>& files, int particles, int skip);
+  CBElsaReader(const std::vector<std::string>& files, int particles, int skip);
   virtual ~CBElsaReader();
 
   virtual bool fillAll(EventList& evtList);

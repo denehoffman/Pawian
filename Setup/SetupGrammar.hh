@@ -31,26 +31,7 @@ namespace setupGrammar
 
   struct decay_tree;
   
-  typedef
-  boost::variant<
-    boost::recursive_wrapper<decay_tree>
-    , std::string
-    >
-  decay_node;
   
-  struct decay_tree
-  {
-    std::string name;                        // mother particle name
-    std::vector<decay_node> children;        // children
-    std::vector<std::string> addParticle;
-    std::vector<std::string> cloneParticle;
-    std::vector<std::string> modParticle;
-    std::vector<std::string> beamInput;
-    std::vector<std::string> mcInput;
-    std::vector<std::string> defineTuple;
-    std::vector<std::string> fitVars;
-    std::vector<std::string> initialProps;
-  };
 }
 
 // We need to tell fusion about our setup struct

@@ -1,6 +1,7 @@
 #ifndef EVENT_HH
 #define EVENT_HH
 
+#include "qft++/topincludes/tensor.hh"
 #include "qft++/tensor/Vector4.hh"
 #include "ErrLogger/ErrLineLog.hh"
 #include <vector>

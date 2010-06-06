@@ -1,12 +1,10 @@
 #include "Setup/SetupParser.hh"
+#include "Setup/SetupGrammar.hh"
 
 // Particle.hh defines ParticleData struct
 #include "Particle/Particle.hh"
-
 #include "Particle/ParticleTable.hh"
-
-// SetupGrammar.hh has all the boost includes
-#include "Setup/SetupGrammar.hh"
+#include "Particle/PdtParser.hh"
 
 #include "ErrLogger/ErrLineLog.hh"
 
@@ -24,8 +22,12 @@ SetupParser::~SetupParser()
 }
 
 
+const setupGrammar::decay_tree* SetupParser::setup() const
+{
+  return thisDecay;
+}
 
-bool SetupParser::parse(std::string& fileName)
+bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
 {
 
   std::ifstream in(fileName.c_str(), std::ios_base::in);
@@ -44,12 +46,12 @@ bool SetupParser::parse(std::string& fileName)
   
   typedef setupGrammar::setup_file_grammar<std::string::const_iterator> setup_file_grammar;
   setup_file_grammar setupGrammar; // Our grammar
-  setupGrammar::decay_tree ast; // Our setup
+  thisDecay = new setupGrammar::decay_tree(); // Our setup
   
   using boost::spirit::ascii::space;
   std::string::const_iterator iter = storage.begin();
   std::string::const_iterator end = storage.end();
-  bool r = phrase_parse(iter, end, setupGrammar, space, ast);
+  bool r = phrase_parse(iter, end, setupGrammar, space, *thisDecay);
   
   if (r && iter == end) {
     ErrMsg(trace) << "\n\n"
@@ -57,7 +59,24 @@ bool SetupParser::parse(std::string& fileName)
 		  << "Parsing succeeded\n"
 		  << "-------------------------\n" << endmsg;
     setupGrammar::decay_tree_printer printer;
-    printer(ast);
+    printer(*thisDecay);
+
+    std::vector<std::string>::iterator cmdLine;
+    ParticleData* pData;
+    PdtParser pdtParser;
+    for (cmdLine = thisDecay->addParticle.begin(); cmdLine != thisDecay->addParticle.end(); ++cmdLine) {
+      std::cout << "add: " << *cmdLine << std::endl;
+      pData = new ParticleData;
+      if (pdtParser.parse(cmdLine->begin(), cmdLine->end(), *pData)) { // success
+	Particle* newParticle = new Particle(*pData);
+	newParticle->print(std::cout);
+	if (0 != pdtTable)
+	  pdtTable->addParticle(newParticle);
+      }
+    }
+    if (0 != pdtTable)
+      pdtTable->print(std::cout);
+
     return true; // true means success
   }
   

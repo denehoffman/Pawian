@@ -7,13 +7,13 @@
 CBElsaReader::CBElsaReader()
 {}
 
-CBElsaReader::CBElsaReader(std::vector<std::string>& files, int particles, int skip):
+CBElsaReader::CBElsaReader(const std::vector<std::string>& files, int particles, int skip):
   numParticles(particles),
   linesToSkip(skip)
 {
   if (0 == files.size())
     ErrMsg(fatal) << "empty list of event files" << endmsg;
-  std::vector<std::string>::iterator iter = files.begin();
+  std::vector<std::string>::const_iterator iter = files.begin();
   for (; iter != files.end(); ++iter)
     fileNames.push_back(*iter);
   currentFile = fileNames.begin();

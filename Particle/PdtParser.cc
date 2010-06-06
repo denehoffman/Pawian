@@ -1,7 +1,8 @@
 #include "Particle/PdtParser.hh"
 
-#include "Particle/ParticleGrammar.hh"
 #include "ErrLogger/ErrLineLog.hh"
+
+#include "Particle/ParticleGrammar.hh"
 
 
 PdtParser::PdtParser()
@@ -41,3 +42,9 @@ bool PdtParser::parse(std::string& fileName, ParticleTable& table)
     return false;
 }
 
+bool PdtParser::parse(std::string::const_iterator begin,
+		      std::string::const_iterator end,
+		      ParticleData& pData)
+{
+  return particleGrammar::parse_particle(begin, end, pData);
+}

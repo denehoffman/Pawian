@@ -42,9 +42,11 @@ ADD_EXECUTABLE( ${EXECUTABLENAME}
 )
 
 target_link_libraries(${EXECUTABLENAME} Setup)
+target_link_libraries(${EXECUTABLENAME} Event)
 target_link_libraries(${EXECUTABLENAME} Particle)
 target_link_libraries(${EXECUTABLENAME} ErrLogger)
 target_link_libraries(${EXECUTABLENAME} Utils)
+target_link_libraries(${EXECUTABLENAME} qft++)
 
 INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
 
