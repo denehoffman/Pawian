@@ -19,9 +19,11 @@ endif()
 find_path(Minuit2_INCLUDE_DIRS Minuit2/FCNBase.h
     HINTS ${_Minuit2_INCLUDE_SEARCH_DIRS})
 
-set(Minuit2_LIBRARIES Minuit2)
-find_library(Minuit2_LIBRARY ${Minuit2_LIBRARIES}
+set(Minuit2_LIBR Minuit2)
+find_library(Minuit2_LIBRARY Minuit2
     HINTS ${_Minuit2_LIBRARIES_SEARCH_DIRS})
+
+set(Minuit2_LIBRARIES ${Minuit2_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Minuit2 DEFAULT_MSG
