@@ -1,10 +1,6 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
 
 MESSAGE("cmake installation for package: Examples/qft++")
-
-if(COMMAND cmake_policy)
-      cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
 
 SET (INCLUDE_DIRECTORIES
      ${ROOT_INCLUDE_DIR}
@@ -63,28 +59,4 @@ INSTALL ( TARGETS ${EXECUTABLENAME1} DESTINATION bin/${EXECUTABLENAME})
 
 ######## End of Linking "SeqDecayHeliAmpsApp ###########################
 
-######## Linking "EtacToa1320pi0fit" ###########################
-
-SET (EXECUTABLENAME EtacToa1320pi0fitApp)
-
-SET (${EXECUTABLENAME}_SRCS
-        EtacToa1320pi0Fcn.cc 
-	EtacToa1320pi0fit.cc
-	EtacToa1320pi0fitMain.cc
-)
-
-ADD_EXECUTABLE(${EXECUTABLENAME}
-	${${EXECUTABLENAME}_SRCS}
-)
-MESSAGE("ROOT_LIBRARIES: " ${ROOT_LIBRARIES})
-TARGET_LINK_LIBRARIES (${EXECUTABLENAME}
-        ${Minuit2_LIBRARIES}
-        ${ROOT_LIBRARIES}
-        qft++
-        ErrLogger
-)
-
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
-
-######## End of Linking "EtacToa1320pi0fit" ###########################
 

@@ -1,5 +1,5 @@
-#ifndef _etacToa1320pi0fcn_H
-#define _etacToa1320pi0fcn_H
+#ifndef _metacToapi0fcn_H
+#define _metacToapi0fcn_H
 
 #include <iostream>
 #include <fstream>
@@ -10,29 +10,29 @@
 #include "Minuit2/FCNBase.h"
 
 
-class EtacToa1320pi0fit;
+class EtacToapi0Lh;
 
 
 namespace ROOT {
 
    namespace Minuit2 {
-class EtacToa1320pi0Fcn : public FCNBase {
+class MEtacToapi0Fcn : public FCNBase {
 
 public:
 
-  EtacToa1320pi0Fcn(EtacToa1320pi0fit* etacToa1320pi0fit);
-  virtual ~EtacToa1320pi0Fcn();
+  MEtacToapi0Fcn(EtacToapi0Lh* etacToapi0Lh);
+  virtual ~MEtacToapi0Fcn();
 
   double operator()(const std::vector<double>& par) const;
 
   double Up() const;
 
 private:
-  EtacToa1320pi0fit* _etacToa1320pi0fit;
+  EtacToapi0Lh* _etacToapi0Lh;
 };
   }  // namespace Minuit2
 
 }  // namespace ROOT
 
 
-#endif /* _etacToa1320pi0fcn_H */
+#endif /* _etacToapi0fcn_H */

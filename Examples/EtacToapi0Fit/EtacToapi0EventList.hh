@@ -1,0 +1,56 @@
+#ifndef _etacToapi0eventlist_H
+#define _etacToapi0eventlist_H
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+#include <cassert>
+#include "TROOT.h"
+// #include <TSystem.h>
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include "Examples/EtacToapi0Fit/EtacToapi0Data.hh"
+
+class EtacToapi0EventList {
+
+public:
+
+  // create/copy/destroy:
+
+  ///Constructor 
+  EtacToapi0EventList(int);
+
+
+
+  /** Destructor */
+  virtual ~EtacToapi0EventList();
+
+  // Getters:
+  const std::vector<evt4Vec>& getDataVecs() const {return _data4Vecs;}
+  const std::vector<evt4Vec>& getMcVecs() const {return _mc4Vecs;}
+  int kindOfData() const {return _kindOfData;}
+
+protected:
+
+
+private:
+  std::string _dataPath;
+  std::string _mcPath;
+  int _kindOfData;
+  int _nOfData;
+  int _nOfMc;
+
+  std::vector<evt4Vec> _data4Vecs;
+  std::vector<evt4Vec> _mc4Vecs;
+
+  void read4Vecs(std::string& path,  int nEvts, std::vector<evt4Vec>& the4Vecs);
+  
+  void get4Vecs (std::ifstream& inStream, Vector4<double>& the4Vec);
+
+  Tensor<complex<double> > calcSpin2Amp(Vector4<double>& pi_cm, Vector4<double>& eta_cm, Vector4<double>& pi_recoil_cm);
+  Tensor<complex<double> > calcSpin1Amp(Vector4<double>& pi_cm, Vector4<double>& eta_cm, Vector4<double>& pi_recoil_cm);
+
+};
+
+#endif /* _EtacToapi0EventList_H */

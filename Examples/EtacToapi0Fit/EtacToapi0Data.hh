@@ -1,12 +1,12 @@
-#ifndef _etacToa1320pi0Data_H
-#define _etacToa1320pi0Data_H
+#ifndef _etacToapi0Data_H
+#define _etacToapi0Data_H
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 struct fitParamVal
 {
-  double a1320Mass;
-  double a1320Width;
+  double aMass;
+  double aWidth;
   double cont0spin;
   double cont1spin;
   double cont2spin;
@@ -26,4 +26,4 @@ struct evt4Vec
   Tensor<complex<double> > spin1_1_amp;  
 };
 
-#endif /* _etacToa1320pi0Data_H */
+#endif /* _etacToapi0Data_H */

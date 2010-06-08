@@ -3,9 +3,11 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "Examples/qft++/EtacToa1320pi0Data.hh"
-#include "Examples/qft++/EtacToa1320pi0fit.hh"
-#include "Examples/qft++/EtacToa1320pi0Fcn.hh"
+#include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
+#include "Examples/EtacToapi0Fit/EtacToapi0Hist.hh"
+#include "Examples/EtacToapi0Fit/MEtacToapi0Fcn.hh"
+#include "Examples/EtacToapi0Fit/EtacToapi0Data.hh"
+#include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
 #include "ErrLogger/ErrLineLog.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
@@ -26,10 +28,10 @@ int main(int __argc,char *__argv[]){
 	      << "It makes use of the Covariant Tensor Formalism\n"
 	      << "The fit determines whether the intermediate resonance is a spin 0,1 or 2 particle\n"
 	      << "In addition the mass and width of the intermediate resonance will be fitted with a simple Breit-Wigner\n"
-              << "To start the application with data containing  an intermediate resonance with Spin=0 and mass 0.98 GeV, type: ./EtacToa1320pi0fitApp -d 0\n"
-              << "To start the application with data containing  an intermediate resonance with Spin=2 and mass 1.32 GeV, type: ./EtacToa1320pi0fitApp -d 2\n"
+              << "To start the application with data containing  an intermediate resonance with Spin=0 and mass 0.98 GeV, type: ./MEtacToapi0FitApp -d 0\n"
+              << "To start the application with data containing  an intermediate resonance with Spin=2 and mass 1.32 GeV, type: ./MEtacToapi0FitApp -d 2\n"
               << "with the flag -msg <errorLogMode> you can choose the mode for the error logger\n"
-	      << "i.e. with './EtacToa1320pi0fitApp -d 2 -msg debugging' you start the fit with Spin=2 in the debugging mode for the error logger\n"  
+	      << "i.e. with './MEtacToapi0FitApp -d 2 -msg debugging' you start the fit with Spin=2 in the debugging mode for the error logger\n"  
 	      << std::endl;
     return 0;
   }
@@ -39,22 +41,26 @@ int main(int __argc,char *__argv[]){
   std::string dataSpinStr="";
   std::string msgModeStr="default";
   // decode arguments
-  while ((optind < __argc) && (__argv[optind][0]=='-')) {
-
+  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
+    bool found=false;
     std::string sw = __argv[optind];
     if (sw=="-d") {
       optind++;
       dataSpinStr = __argv[optind];
+      found=true;
     }
     if (sw=="-msg"){
       optind++;
       msgModeStr = __argv[optind];
+      found=true;
     }
-    else{
+    if (!found){
       ErrMsg(warning) << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
+    
+    while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
   }
 
   ErrLineLog* myLogger=0;
@@ -76,12 +82,31 @@ int main(int __argc,char *__argv[]){
 
  ErrMsg(routine) << "dataSpin: " << dataSpin << endmsg;
 
- EtacToa1320pi0fit* etacToa1320pi0fit=new EtacToa1320pi0fit(dataSpin);
- EtacToa1320pi0Fcn fcn(etacToa1320pi0fit);
+ EtacToapi0EventList* theEvtList=new EtacToapi0EventList(dataSpin);
+ EtacToapi0Lh* theEtacToapi0Lh=new EtacToapi0Lh(theEvtList);
+ MEtacToapi0Fcn fcn(theEtacToapi0Lh);
+
  MnUserParameters upar;
- if (! etacToa1320pi0fit->initFitParameters(upar)){
-   ErrMsg(fatal) << "initialization of the MnUserParameters failed in etacToa1320pi0fit->initFitParameters(upar)" << endmsg; 
- } 
+ if (dataSpin==2)
+    {  
+      upar.Add("InterMass", 1.6, .1, 2.3, 0.7);
+      upar.Add("InterWidth", 0.04, .01, 0.8, 0.01);
+      upar.Add("spin0", 0.3, .1, 1., 0.);
+      upar.Add("spin1", 0.3, .1, 1., 0.);
+      upar.Add("spin2", 0.3, .1, 1., 0.);
+    }
+ else if (dataSpin==0)
+    {
+     upar.Add("InterMass", 1.1, .1, 2.3, 0.6);
+     upar.Add("InterWidth", 0.04, .01, 0.8, 0.01);
+     upar.Add("spin0", 0.3, .1, 1., 0.);
+     upar.Add("spin1", 0.3, .1, 1., 0.);
+     upar.Add("spin2", 0.3, .1, 1., 0.);
+    }
+ else 
+   {
+     ErrMsg(fatal) << "initialization of the MnUserParameters failed" << endmsg;
+   }
 
  MnMigrad migrad(fcn, upar);
  ErrMsg(routine) <<"start migrad "<< endmsg;
@@ -96,29 +121,18 @@ int main(int __argc,char *__argv[]){
 
  ErrMsg(routine) << "migrad.Fval(): " << min.Fval() << endmsg;
  
-//   std::cout<<"start Minos"<<std::endl;
-//   MnMinos Minos(fcn, min);
-//   std::pair<double,double> e0 = Minos(0);
-//   std::pair<double,double> e1 = Minos(1);
-//   std::pair<double,double> e2 = Minos(2);
-//   std::pair<double,double> e3 = Minos(3);
-//   std::pair<double,double> e4 = Minos(4);
+ fitParamVal theFitResult;
+ theFitResult.aMass=min.UserState().Value("InterMass");
+ theFitResult.aWidth=min.UserState().Value("InterWidth");
+ theFitResult.cont0spin=min.UserState().Value("spin0");
+ theFitResult.cont1spin=min.UserState().Value("spin1");
+ theFitResult.cont2spin=min.UserState().Value("spin2");
 
-//   std::cout<<"a1320mass: "<<min.UserState().Value("a1320mass")<<" "<<e0.first<<" "<<e0.second<<std::endl;
-//   std::cout<<"a1320width: "<<min.UserState().Value("a1320width")<<" "<<e1.first<<" "<<e1.second<<std::endl;
-//   std::cout<<"spin0 content: "<<min.UserState().Value("spin0")<<" "<<e2.first<<" "<<e2.second<<std::endl;
-//   std::cout<<"spin1 content: "<<min.UserState().Value("spin1")<<" "<<e3.first<<" "<<e3.second<<std::endl;
-//   std::cout<<"spin2 content: "<<min.UserState().Value("spin2")<<" "<<e4.first<<" "<<e4.second<<std::endl; 
+ EtacToapi0Hist theHistogrammer(theEvtList,theFitResult);
 
-  fitParamVal theFitResult;
-  theFitResult.a1320Mass=min.UserState().Value("InterMass");
-  theFitResult.a1320Width=min.UserState().Value("InterWidth");
-  theFitResult.cont0spin=min.UserState().Value("spin0");
-  theFitResult.cont1spin=min.UserState().Value("spin1");
-  theFitResult.cont2spin=min.UserState().Value("spin2");
-  etacToa1320pi0fit->fillFitHists(theFitResult);
-  delete etacToa1320pi0fit;
-  if (0!=myLogger) delete myLogger;
-  return 0;
+ delete theEtacToapi0Lh;
+ delete theEvtList;
+ if (0!=myLogger) delete myLogger;
+ return 0;
 }
 
