@@ -8,8 +8,8 @@
 
 EtacToapi0EventList::EtacToapi0EventList(int kindOfData) :
   _kindOfData(kindOfData),
-  _nOfData(3000),
-  _nOfMc(10000)
+  _nOfData(20000),
+  _nOfMc(50000)
 {
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
   _mcPath=theSourcePath+std::string("/Examples/qft++/data/mc100Mgev.dat");

@@ -56,10 +56,16 @@ EtacToapi0Hist::EtacToapi0Hist(const EtacToapi0EventList* theEvtList, const fitP
   
   double integralFittedMc=_invpipiFittedHist->Integral();  
   ErrMsg(debugging) << "integralFittedMc= " << integralFittedMc << endmsg;
+
+  double integralMc=_invpipiMcHist->Integral();   
+  ErrMsg(debugging) << "integralMc= " << integralMc << endmsg;
   
   _invpipiFittedHist->Scale(integralData/integralFittedMc);
   _invpietaFittedHist->Scale(integralData/integralFittedMc);
-  _dalitzFittedHist->Scale(integralData/integralFittedMc); 
+  _dalitzFittedHist->Scale(integralData/integralFittedMc);
+  _dalitzMcHist->Scale(integralData/integralMc);
+  _invpietaMcHist->Scale(integralData/integralMc);
+  _invpipiMcHist->Scale(integralData/integralMc); 
   delete theEtacLh;
 }
 
