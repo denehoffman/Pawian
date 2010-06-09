@@ -66,19 +66,19 @@ double EtacToapi0Lh::calcLogLh(const fitParamVal& theParamVal)
   double logLH=0.;
   double logLH_data=0.;
 
-  ErrMsg(debugging) << "theParamVal.aMass= " << theParamVal.aMass << "\n"
-		    << "theParamVal.aWidth= " << theParamVal.aWidth << "\n"
-		    << "theParamVal.cont0spin= " << theParamVal.cont0spin << "\n"
-		    << "theParamVal.cont1spin= " << theParamVal.cont1spin << "\n"
-		    << "theParamVal.cont2spin= " << theParamVal.cont2spin << endmsg;
+  ErrMsg(debugging) << "theParamVal.aMass= " << theParamVal.aMass << endmsg;
+  ErrMsg(debugging) << "theParamVal.aWidth= " << theParamVal.aWidth << endmsg;
+  ErrMsg(debugging) << "theParamVal.cont0spin= " << theParamVal.cont0spin << endmsg;
+  ErrMsg(debugging) << "theParamVal.cont1spin= " << theParamVal.cont1spin << endmsg;
+  ErrMsg(debugging) << "theParamVal.cont2spin= " << theParamVal.cont2spin << endmsg;
 
   const std::vector<evt4Vec> data4Vecs=_etacToapi0EventList->getDataVecs();
 
-  std::vector<evt4Vec>::const_iterator iterd=data4Vecs.begin();
-  while (iterd!=data4Vecs.end()){
+
+  std::vector<evt4Vec>::const_iterator iterd;
+  for (iterd=data4Vecs.begin(); iterd!=data4Vecs.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
     if (intensity>0.) logLH_data+=log10(intensity);
-    ++iterd;
   }  
 
   ErrMsg(debugging) << "logLH_data= " << logLH_data << endmsg;
@@ -87,11 +87,10 @@ double EtacToapi0Lh::calcLogLh(const fitParamVal& theParamVal)
   double LH_mc=0.;
   const std::vector<evt4Vec> mc4Vecs=_etacToapi0EventList->getMcVecs();
   
-  std::vector<evt4Vec>::const_iterator iterm=mc4Vecs.begin();
-  while (iterm!=mc4Vecs.end()){
+  std::vector<evt4Vec>::const_iterator iterm;
+  for (iterm=mc4Vecs.begin(); iterm!=mc4Vecs.end(); ++iterm){
 	   double intensity=calcEvtIntensity((*iterm), theParamVal);
 	   LH_mc+=intensity;
-	   ++iterm;
 	 }
   
   ErrMsg(debugging) << "LH_mc= " << LH_mc << endmsg;
