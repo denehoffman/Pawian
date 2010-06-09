@@ -187,14 +187,14 @@ public:
     // Extract the GDoubleCollection object. In a realistic scenario, you might want
     // to add error checks here upon first invocation.
     boost::shared_ptr<GBoundedDoubleCollection> vC = pc_at<GBoundedDoubleCollection>(0);
-    
+
     for(std::size_t i=0; i<vC->size(); i++){
       double value = vC->at(i)->value();
       theParms.push_back(value);
     }
-
-      return _etacLhPtr->setFitParamVal(fitParmVal, theParms);
-    }
+    
+    return _etacLhPtr->setFitParamVal(fitParmVal, theParms);
+  }
   
   /*******************************************************************************************/
   /**

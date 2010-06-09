@@ -28,25 +28,28 @@ EtacToapi0Hist::EtacToapi0Hist(const EtacToapi0EventList* theEvtList, const fitP
   EtacToapi0Lh* theEtacLh=new EtacToapi0Lh(theEvtList);
   const std::vector<evt4Vec> data4Vecs=theEvtList->getDataVecs();
 
-  for (size_t it=0; it<data4Vecs.size(); it++)
-    { 
-      plotDalitz(_dalitzDataHist, data4Vecs[it], 1.);
-      plotInvPiEta(_invpietaDataHist, data4Vecs[it], 1.);
-      plotInvPiPi(_invpipiDataHist, data4Vecs[it], 1.);
-    } 
-
+  std::vector<evt4Vec>::const_iterator iter=data4Vecs.begin();
+  while(iter!=data4Vecs.end())
+    {
+      plotDalitz(_dalitzDataHist, (*iter), 1.);
+      plotInvPiEta(_invpietaDataHist, (*iter), 1.);
+      plotInvPiPi(_invpipiDataHist, (*iter), 1.);
+      ++iter;
+    }
 
   const std::vector<evt4Vec> mc4Vecs=theEvtList->getMcVecs();
-  for (size_t it=0; it<mc4Vecs.size(); it++)
-    { 
-      plotDalitz(_dalitzMcHist, mc4Vecs[it], 1.);
-      plotInvPiEta(_invpietaMcHist, mc4Vecs[it], 1.);
-      plotInvPiPi(_invpipiMcHist, mc4Vecs[it], 1.);
+  iter=mc4Vecs.begin();
+  while(iter!=mc4Vecs.end())
+    {
+      plotDalitz(_dalitzMcHist, (*iter), 1.);
+      plotInvPiEta(_invpietaMcHist, (*iter), 1.);
+      plotInvPiPi(_invpipiMcHist, (*iter), 1.);
       
-      double evtWeight=theEtacLh->calcEvtIntensity(mc4Vecs[it], theParamVal);
-      plotDalitz(_dalitzFittedHist, mc4Vecs[it], evtWeight);
-      plotInvPiEta(_invpietaFittedHist, mc4Vecs[it], evtWeight);
-      plotInvPiPi(_invpipiFittedHist, mc4Vecs[it], evtWeight);
+      double evtWeight=theEtacLh->calcEvtIntensity((*iter), theParamVal);
+      plotDalitz(_dalitzFittedHist, (*iter), evtWeight);
+      plotInvPiEta(_invpietaFittedHist, (*iter), evtWeight);
+      plotInvPiPi(_invpipiFittedHist, (*iter), evtWeight);
+      ++iter;
     }
 
   //normalize fitted histos

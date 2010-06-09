@@ -84,7 +84,7 @@ void EtacToapi0EventList::read4Vecs(std::string& path,  int nEvts, std::vector<e
        theEvt4Vec.spin1_1_amp = calcSpin1Amp(theEvt4Vec.pi0_1_4Vec, theEvt4Vec.eta_4Vec, theEvt4Vec.pi0_0_4Vec);
 
        the4Vecs.push_back(theEvt4Vec);
-       counter++;
+       ++counter;
      } 
 }
 
