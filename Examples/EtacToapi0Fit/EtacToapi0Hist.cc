@@ -9,7 +9,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 
-EtacToapi0Hist::EtacToapi0Hist(const EtacToapi0EventList* theEvtList, const fitParamVal& theParamVal) :
+EtacToapi0Hist::EtacToapi0Hist(boost::shared_ptr<const EtacToapi0EventList> theEvtList, const fitParamVal& theParamVal) :
   _theTFile(0),
   _dalitzDataHist(0),
   _dalitzMcHist(0),

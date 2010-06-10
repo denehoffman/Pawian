@@ -7,6 +7,9 @@
 #include <vector>
 
 #include <cassert>
+
+#include <boost/shared_ptr.hpp>
+
 #include "TROOT.h"
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -25,7 +28,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  EtacToapi0Hist(const EtacToapi0EventList*, const fitParamVal& theParamVal);
+  EtacToapi0Hist(boost::shared_ptr<const EtacToapi0EventList>, const fitParamVal& theParamVal);
 
 
   /** Destructor */

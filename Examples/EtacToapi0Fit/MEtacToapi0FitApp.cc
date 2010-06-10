@@ -3,6 +3,9 @@
 #include <string>
 #include <sstream>
 #include <vector>
+
+#include <boost/shared_ptr.hpp>
+
 #include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Hist.hh"
 #include "Examples/EtacToapi0Fit/MEtacToapi0Fcn.hh"
@@ -82,9 +85,10 @@ int main(int __argc,char *__argv[]){
 
  ErrMsg(routine) << "dataSpin: " << dataSpin << endmsg;
 
- EtacToapi0EventList* theEvtList=new EtacToapi0EventList(dataSpin);
- EtacToapi0Lh* theEtacToapi0Lh=new EtacToapi0Lh(theEvtList);
- MEtacToapi0Fcn fcn(theEtacToapi0Lh);
+ boost::shared_ptr<const EtacToapi0EventList> theEvtListPtr(new EtacToapi0EventList(dataSpin));
+ 
+ boost::shared_ptr<EtacToapi0Lh> theEtacToapi0LhPtr(new EtacToapi0Lh(theEvtListPtr));
+ MEtacToapi0Fcn fcn(theEtacToapi0LhPtr);
 
  MnUserParameters upar;
  if (dataSpin==2)
@@ -128,10 +132,8 @@ int main(int __argc,char *__argv[]){
  theFitResult.cont1spin=min.UserState().Value("spin1");
  theFitResult.cont2spin=min.UserState().Value("spin2");
 
- EtacToapi0Hist theHistogrammer(theEvtList,theFitResult);
+ EtacToapi0Hist theHistogrammer(theEvtListPtr,theFitResult);
 
- delete theEtacToapi0Lh;
- delete theEvtList;
  if (0!=myLogger) delete myLogger;
  return 0;
 }

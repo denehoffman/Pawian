@@ -27,9 +27,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  EtacToapi0Lh(const EtacToapi0EventList*);
-
-  EtacToapi0Lh(const EtacToapi0Lh*);
+  EtacToapi0Lh(boost::shared_ptr<const EtacToapi0EventList>);
   EtacToapi0Lh(boost::shared_ptr<EtacToapi0Lh>);
 
   /** Destructor */
@@ -43,13 +41,13 @@ public:
   double calcLogLh(const fitParamVal& theParamVal);
   double calcEvtIntensity(const evt4Vec& theEvtVec, const fitParamVal& theParamVal);
   bool setFitParamVal(fitParamVal& fitParamVal, const std::vector<double>& par);
-  const EtacToapi0EventList* getEventList() const {return _etacToapi0EventList;}
+  boost::shared_ptr<const EtacToapi0EventList> getEventList() const {return _etacToapi0EventListPtr;}
 
 protected:
 
 
 private:
-  const EtacToapi0EventList* _etacToapi0EventList;
+  boost::shared_ptr<const EtacToapi0EventList> _etacToapi0EventListPtr;
 
 };
 

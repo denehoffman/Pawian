@@ -48,6 +48,7 @@
 
 // The individual that should be optimized
 #include "Examples/EtacToapi0Fit/GEtacToapi0Individual.hh"
+#include "Examples/EtacToapi0Fit/EtacToapi0Data.hh"
 
 namespace Gem {
 namespace GenEvA {
@@ -121,9 +122,17 @@ public:
 				// Retrieve the fitness of this individual
 				currentEvaluation = gdii_ptr->getCurrentFitness(isDirty);
 
-				// Let the audience know about the best result
+				// Let the audience know about the best result and fit parameters
 				if(p==0) {
-					std::cout << generation << ": " << currentEvaluation << std::endl;
+				  fitParamVal theParamVal;
+				  assert(gdii_ptr->getFitParams(theParamVal));
+				  std::cout << generation << ": " << currentEvaluation << "\n"
+					    << "aMass= " << theParamVal.aMass << "\n"  
+					    << "aWidth= " << theParamVal.aWidth << "\n" 
+					    << "cont0spin= " << theParamVal.cont0spin << "\n"
+					    << "cont1spin= " << theParamVal.cont1spin << "\n" 
+					    << "cont2spin= " << theParamVal.cont2spin << "\n" 
+					    << std::endl;
 				}
 
 				// Write information to the output stream

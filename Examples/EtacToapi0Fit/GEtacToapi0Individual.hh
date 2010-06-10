@@ -80,7 +80,7 @@ public:
 	 * @param min The lower boundary of the variables
 	 * @param max The upper boundary of the variables
 	 */
-	GEtacToapi0Individual(const EtacToapi0EventList* theEvtList)
+	GEtacToapi0Individual(boost::shared_ptr<const EtacToapi0EventList> theEvtList)
 	  : GParameterSet()
 	  ,_etacLhPtr( new EtacToapi0Lh(theEvtList) )
 	  {

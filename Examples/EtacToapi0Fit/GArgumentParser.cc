@@ -147,7 +147,8 @@ namespace Gem
 			 , double& maxSpin1Cont
 			 , double& minSpin2Cont
 			 , double& maxSpin2Cont
-			 ,int& dataSpin
+			 , int& dataSpin
+			 , int& errLogMode
 
 	) {
       boost::uint16_t recombinationScheme=0;
@@ -213,6 +214,8 @@ namespace Gem
 	   "Upper boundary for the content of spin 2 resonance")
 	  ("dataSpin", po::value<int>(&dataSpin)->default_value(DEFAULTDATASPIN),
 	   "choose of the data file by spin of the resonance")
+	  ("errLogMode", po::value<int>(&errLogMode)->default_value(DEFAULTERRLOGMODE),
+	   "choose mode for Error logger")
 	  ;
 	
 	po::variables_map vm;
@@ -278,6 +281,7 @@ namespace Gem
 		    << "minSpin2Cont = " << minSpin2Cont << std::endl
 		    << "maxSpin2Cont = " << maxSpin2Cont << std::endl
 		    << "dataSpin = " << dataSpin << std::endl
+		    << "errLogMode = " << errLogMode << std::endl
 		    << std::endl;
 	}
       }

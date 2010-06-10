@@ -5,7 +5,7 @@
 #include <fstream>
 //#include <string>
 #include <vector>
-
+#include <boost/shared_ptr.hpp>
 //#include <cassert>
 #include "Minuit2/FCNBase.h"
 
@@ -20,7 +20,7 @@ class MEtacToapi0Fcn : public FCNBase {
 
 public:
 
-  MEtacToapi0Fcn(EtacToapi0Lh* etacToapi0Lh);
+  MEtacToapi0Fcn(boost::shared_ptr<EtacToapi0Lh> etacToapi0Lh);
   virtual ~MEtacToapi0Fcn();
 
   double operator()(const std::vector<double>& par) const;
@@ -28,7 +28,7 @@ public:
   double Up() const;
 
 private:
-  EtacToapi0Lh* _etacToapi0Lh;
+  boost::shared_ptr<EtacToapi0Lh> _etacToapi0LhPtr;
 };
   }  // namespace Minuit2
 

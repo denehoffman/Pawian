@@ -78,7 +78,7 @@ namespace Gem
     const bool DEFAULTUSECOMMONADAPTOR=false; // whether to use a common adaptor for all GParameterT objects
     const unsigned short DEFAULTPORT=10000;
     const std::string DEFAULTIP="localhost";
-    const std::string DEFAULTCONFIGFILE="./GStartProject.cfg";
+    const std::string DEFAULTCONFIGFILE="./GEtacToapi0FitProject.cfg";
     const sortingMode DEFAULTSORTINGSCHEME=MUPLUSNU;
     const boost::uint32_t DEFAULTSTARTITERATION=0;
     const boost::uint32_t DEFAULTPROCESSINGCYCLES=1;
@@ -96,8 +96,8 @@ namespace Gem
     const double DEFAULTMINSPIN2CONT=0.;
     const double DEFAULTMAXSPIN2CONT=1.;
     const int DEFAULTDATASPIN=2;
-
-     const serializationMode DEFAULTSERMODE=Gem::GenEvA::TEXTSERIALIZATION;
+    const int DEFAULTERRLOGMODE=0; // debugging=-1, trace=0, routine=1, warning=2, etc. 
+    const serializationMode DEFAULTSERMODE=Gem::GenEvA::TEXTSERIALIZATION;
     namespace po = boost::program_options;
 
     bool parseCommandLine(
@@ -112,8 +112,8 @@ namespace Gem
 	);
 
     bool parseConfigFile(
-			 const std::string& configFile,
-			 boost::uint16_t& nProducerThreads
+			 const std::string& configFile
+			 , boost::uint16_t& nProducerThreads
 			 , boost::uint16_t& nEvaluationThreads
 			 , std::size_t& populationSize
 			 , std::size_t& nParents
@@ -137,6 +137,7 @@ namespace Gem
 			 , double& minSpin2Cont
 			 , double& maxSpin2Cont
 			 , int& dataSpin
+			 , int& errLogMode
 			 );
 
   } /* namespace GenEvA */

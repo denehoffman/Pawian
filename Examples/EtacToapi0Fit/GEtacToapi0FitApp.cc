@@ -98,6 +98,7 @@ int main(int argc, char **argv){
   double minSpin2Cont;
   double maxSpin2Cont;
   int dataSpin;
+  int errLogMode;
 
   serializationMode serMode;
 
@@ -133,14 +134,15 @@ int main(int argc, char **argv){
 		      maxSpin1Cont,
 		      minSpin2Cont,
 		      maxSpin2Cont,
-		      dataSpin))
+		      dataSpin,
+		      errLogMode))
     { exit(1); }
 
   // Random numbers are our most valuable good. Set the number of threads
   GRANDOMFACTORY->setNProducerThreads(nProducerThreads);
   GRANDOMFACTORY->setArraySize(arraySize);
 
-  ErrLineLog* myLogger= new ErrLineLog(ErrLog::debugging);  
+  ErrLineLog* myLogger=new ErrLineLog(ErrLog::Severity(errLogMode));  
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and
   // return when it has finished
@@ -159,11 +161,11 @@ int main(int argc, char **argv){
     return 0;
   }
   //***************************************************************************
-      EtacToapi0EventList* theEvtList=new EtacToapi0EventList(dataSpin);
+      boost::shared_ptr<const EtacToapi0EventList> theEvtListPtr(new EtacToapi0EventList(dataSpin));
   // Create the first set of parent individuals. Initialization of parameters is done randomly.
   std::vector<boost::shared_ptr<GEtacToapi0Individual> > parentIndividuals;
   for(std::size_t p = 0 ; p<nParents; p++) {
-    boost::shared_ptr<GEtacToapi0Individual> gdii_ptr(new GEtacToapi0Individual(theEvtList));
+    boost::shared_ptr<GEtacToapi0Individual> gdii_ptr(new GEtacToapi0Individual(theEvtListPtr));
     gdii_ptr->setProcessingCycles(processingCycles);
 
     parentIndividuals.push_back(gdii_ptr);
@@ -250,8 +252,10 @@ int main(int argc, char **argv){
   boost::shared_ptr<GEtacToapi0Individual> bestIndividual_ptr=pop_ptr->getBestIndividual<GEtacToapi0Individual>();
   fitParamVal finalFitParm;
   assert(bestIndividual_ptr->getFitParams(finalFitParm));
-  EtacToapi0Hist theHistogrammer(theEvtList,finalFitParm);
+  EtacToapi0Hist theHistogrammer(theEvtListPtr,finalFitParm);
 
   std::cout << "Done ..." << std::endl;
+
+  delete myLogger;
   return 0;
 }
