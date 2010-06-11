@@ -4,7 +4,6 @@
 
 #include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
-#include "ErrLogger/ErrLineLog.hh"
 
 
 EtacToapi0Lh::EtacToapi0Lh(boost::shared_ptr<const EtacToapi0EventList> theEvtList) :
@@ -89,14 +88,6 @@ double EtacToapi0Lh::calcLogLh(const fitParamVal& theParamVal)
     -logLH_data
     +data4Vecs.size()*logLH_mc_Norm;
 
-  ErrMsg(debugging) << "theParamVal.aMass= " << theParamVal.aMass << "\n"
-		    << "theParamVal.aWidth= " << theParamVal.aWidth << "\n"
-		    << "theParamVal.cont0spin= " << theParamVal.cont0spin << "\n"
-		    << "theParamVal.cont1spin= " << theParamVal.cont1spin << "\n"
-		    << "theParamVal.cont2spin= " << theParamVal.cont2spin << "\n"
-		    << "logLH_data= " << logLH_data << "\n"  
-		    << "LH_mc= " << LH_mc << "\n"
-		    << "lgLh= " << logLH << endmsg;
  return logLH;
 }
 

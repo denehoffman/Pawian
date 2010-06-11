@@ -37,8 +37,6 @@
 #include "GEnums.hpp"
 #include "GUnitTestFrameworkT.hpp"
 
-#include "ErrLogger/ErrLineLog.hh"
-
 #include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
 namespace Gem
@@ -336,7 +334,6 @@ protected:
     fitParamVal theFitParmValTmp;
     assert(getFitParams(theFitParmValTmp));   
     result=_etacLhPtr->calcLogLh(theFitParmValTmp);
-    ErrMsg(debugging) << "current LH= " << result << endmsg;    
     return result;
   }
   

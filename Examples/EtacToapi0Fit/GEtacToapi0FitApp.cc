@@ -142,7 +142,8 @@ int main(int argc, char **argv){
   GRANDOMFACTORY->setNProducerThreads(nProducerThreads);
   GRANDOMFACTORY->setArraySize(arraySize);
 
-  ErrLineLog* myLogger=new ErrLineLog(ErrLog::Severity(errLogMode));  
+  boost::shared_ptr<ErrLineLog> myLoggerPtr(new ErrLineLog(ErrLog::Severity(errLogMode)));  
+
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and
   // return when it has finished
@@ -256,6 +257,5 @@ int main(int argc, char **argv){
 
   std::cout << "Done ..." << std::endl;
 
-  delete myLogger;
   return 0;
 }
