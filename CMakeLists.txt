@@ -92,6 +92,8 @@ add_subdirectory (Examples/pbarp)
 add_subdirectory (Examples/EtacToapi0Fit)
 add_subdirectory (Examples/geneva/GMultiPopulation)
 add_subdirectory (Examples/geneva/GStartProject)
+add_subdirectory (Examples/pbarpToOmegaPi)
+
 
 EXECUTE_PROCESS(COMMAND ps OUTPUT_VARIABLE PSOUTPUT)
 

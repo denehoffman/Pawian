@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include "ErrLogger/ErrLineLog.hh"
+#include "PwaUtils/AbsStates.hh"
 #include "PwaUtils/pbarpStates.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -69,28 +70,58 @@ int main(int __argc,char *__argv[]){
   ErrMsg(routine) << "jmax: " << jmax << endmsg;
 
   pbarpStates thepbarpState(jmax);
+
+  std::vector< boost::shared_ptr<const jpcRes> > jpcStatesRequest;
+  
+  std::vector< boost::shared_ptr<const jpcRes> > theJPCStates=thepbarpState.jpcStates();
+  ErrMsg(routine) << "The pbarp JPC states are: " << endmsg;
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it1;
+  for ( it1=theJPCStates.begin(); it1!=theJPCStates.end(); ++it1){
+    if (0!= (*it1))(*it1)->print(std::cout);
+    std::cout << std::endl;
+
+    if ( (*it1)->J==1 ||  (*it1)->J==4) jpcStatesRequest.push_back(*it1);
+  }
+
+  std::vector< boost::shared_ptr<const JPCSML> >::const_iterator it;
+
+  std::vector< boost::shared_ptr<const JPCSML> > pbarpExtract=thepbarpState.extractJPCSMLStates(jpcStatesRequest);
+
+  ErrMsg(routine) << "The requested pbarp states (JPCSML) are: " << endmsg;
+  for ( it=pbarpExtract.begin(); it!=pbarpExtract.end(); ++it){
+    if (0!= (*it))(*it)->print(std::cout);
+  }
+
+  std::vector< boost::shared_ptr<const JPCSM> >::const_iterator itJPCSM;
+
+  std::vector< boost::shared_ptr<const JPCSM> > pbarpJPCSMExtract=thepbarpState.extractJPCSMStates(jpcStatesRequest);
+
+  ErrMsg(routine) << "The requested pbarp states (JPCSM) are: " << endmsg;
+  for ( itJPCSM=pbarpJPCSMExtract.begin(); itJPCSM!=pbarpJPCSMExtract.end(); ++itJPCSM){
+    if (0!= (*itJPCSM))(*itJPCSM)->print(std::cout);
+  }
+
   thepbarpState.print(std::cout);
 
-  std::vector<PbarP*> theSingletStates=thepbarpState.singletStates();
+  std::vector< boost::shared_ptr<const JPCSML> > theSingletStates=thepbarpState.singletStates();
   ErrMsg(routine) << "The pbarp singlet states are: " << endmsg;
-  std::vector<PbarP*>::const_iterator it;
   for ( it=theSingletStates.begin(); it!=theSingletStates.end(); ++it){
     if (0!= (*it))(*it)->print(std::cout);
   }
 
-  std::vector<PbarP*> theTripletM0States=thepbarpState.tripletM0States();
+  std::vector< boost::shared_ptr<const JPCSML> > theTripletM0States=thepbarpState.tripletM0States();
   ErrMsg(routine) << "The pbarp triplet states with helicity=0 are: " << endmsg;
   for ( it=theTripletM0States.begin(); it!=theTripletM0States.end(); ++it){
     if (0!= (*it))(*it)->print(std::cout);
   }
 
-  std::vector<PbarP*> theTripletMp1States=thepbarpState.tripletMp1States();
+  std::vector< boost::shared_ptr<const JPCSML> > theTripletMp1States=thepbarpState.tripletMp1States();
   ErrMsg(routine) << "The pbarp triplet states with helicity=1 are: " << endmsg;
   for ( it=theTripletMp1States.begin(); it!=theTripletMp1States.end(); ++it){
     if (0!= (*it))(*it)->print(std::cout);
   }
 
-  std::vector<PbarP*> theTripletMm1States=thepbarpState.tripletMm1States();
+  std::vector< boost::shared_ptr<const JPCSML> > theTripletMm1States=thepbarpState.tripletMm1States();
   ErrMsg(routine) << "The pbarp triplet states with helicity=-1 are: " << endmsg;
   for ( it=theTripletMm1States.begin(); it!=theTripletMm1States.end(); ++it){
     if (0!= (*it))(*it)->print(std::cout);

@@ -6,11 +6,14 @@
 #include <vector>
 #include <fstream>
 
+#include <boost/shared_ptr.hpp>
+
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include "PwaUtils/AbsStates.hh"
 #include "PwaUtils/DataUtils.hh"
 
 
-class pbarpStates {
+class pbarpStates : public AbsStates {
 
 public:
 
@@ -21,27 +24,15 @@ public:
   /** Destructor */
   virtual ~pbarpStates();
 
-  void print(std::ostream& os) const;
-
-  std::vector<PbarP*>& allStates(){return _allStates;};
-  std::vector<PbarP*>& singletStates(){return _singletStates;};
-  std::vector<PbarP*>& tripletM0States(){return _tripletM0States;};
-  std::vector<PbarP*>& tripletMp1States(){return _tripletMp1States;};
-  std::vector<PbarP*>& tripletMm1States(){return _tripletMm1States;};
-
+  virtual void print(std::ostream& os) const;
 
  protected:
+  virtual bool calcJPCs();
 
  private:
   int _jmax;
-  std::vector<PbarP*> _allStates;
-  std::vector<PbarP*> _singletStates;
-  std::vector<PbarP*> _tripletM0States;
-  std::vector<PbarP*> _tripletMp1States;
-  std::vector<PbarP*> _tripletMm1States;
   jpcRes _pbarJPC;
   jpcRes _pJPC;  
-  bool calcJPCs();
 };
 
 
