@@ -26,13 +26,23 @@ public:
 
   virtual void print(std::ostream& os) const;
 
+  virtual std::vector< boost::shared_ptr<const JPCSML> > singletStates() {return _singletStates;};
+  virtual std::vector< boost::shared_ptr<const JPCSML> > tripletM0States() {return _tripletM0States;};
+  virtual std::vector< boost::shared_ptr<const JPCSML> > tripletMp1States() {return _tripletMp1States;};
+  virtual std::vector< boost::shared_ptr<const JPCSML> > tripletMm1States() {return _tripletMm1States;};
+
  protected:
   virtual bool calcJPCs();
 
  private:
   int _jmax;
   jpcRes _pbarJPC;
-  jpcRes _pJPC;  
+  jpcRes _pJPC;
+
+  std::vector< boost::shared_ptr<const JPCSML> > _singletStates;
+  std::vector< boost::shared_ptr<const JPCSML> > _tripletM0States;
+  std::vector< boost::shared_ptr<const JPCSML> > _tripletMp1States;
+  std::vector< boost::shared_ptr<const JPCSML> > _tripletMm1States;  
 };
 
 
