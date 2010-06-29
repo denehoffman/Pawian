@@ -7,6 +7,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
+#include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -90,7 +91,8 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNames;
 
-  std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat"); 
+//   std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat"); 
+  std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_1940.dat"); 
 
   fileNames.push_back(piomegaDatFile);
   CBElsaReader eventReader(fileNames, 3, 0); 
@@ -125,7 +127,8 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNamesMc;
 
-  std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat"); 
+//   std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat"); 
+  std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat"); 
 
   fileNamesMc.push_back(piomegaMcFile);
   CBElsaReader eventReaderMc(fileNamesMc, 3, 0); 
@@ -134,6 +137,9 @@ int main(int __argc,char *__argv[]){
   piOmegaEventsMc.rewind();
 
   boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc));
+
+
+  OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 
 //   OmegaPiEventList 
 //  PwaEnv::instance().setup(setupFile);

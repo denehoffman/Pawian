@@ -8,6 +8,7 @@
 
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
+#include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -24,6 +25,8 @@
 #include "Minuit2/FunctionMinimum.h"
 #include "Minuit2/MnMinos.h"
 #include "Minuit2/MnStrategy.h"
+
+#include "PwaUtils/pbarpStates.hh"
 
 //#include "Minuit2/MnUserTransformation.h"
 using namespace ROOT::Minuit2;
@@ -137,6 +140,10 @@ int main(int __argc,char *__argv[]){
   piOmegaEventsMc.rewind();
 
   boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc));
+
+
+  boost::shared_ptr<pbarpStates> thepbarpStates(new pbarpStates(5));
+  boost::shared_ptr<pbarpToOmegaPi0States> theOmegaPi0States(new pbarpToOmegaPi0States(thepbarpStates));
 
 
   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);

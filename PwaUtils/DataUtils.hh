@@ -15,82 +15,106 @@ struct jpcRes
     C=c;
   }
 
-  bool operator==(const jpcRes& compare) const{
+  jpcRes(boost::shared_ptr<const jpcRes> theJPC){
+    J=theJPC->J;
+    P=theJPC->P;
+    C=theJPC->C;
+  }
+
+  virtual bool operator==(const jpcRes& compare) const{
     bool result=false;
     if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C) result=true;
     return result;
   }
 
-  bool operator<(const jpcRes& compare){
+
+  virtual bool operator<(const jpcRes& compare){
     if ( J < compare.J) return true;
     else if ( P < compare.P) return true;
     else if ( C < compare.C) return true;
     return false; 
   }
 
-  void print(std::ostream& os) const{
+  virtual void print(std::ostream& os) const{
     os <<"J=" << J << "\tP=" << P << "\tC=" << C;   
   }
 };
 
-/// L,S,M  combination
-struct LSM{
+
+struct JPCLS : public jpcRes{
   Spin L;
   Spin S;
-  Spin M;
-  LSM(int l=0, Spin s=0, int m=0){
-    L=l;
-    S=s;
-    M=m;
+  JPCLS(boost::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS): jpcRes(theJPC){
+    L=theL;
+    S=theS;
   }
 
-  void print(std::ostream& os) const{
-    os <<"L=" << L << "\tS=" << S << "\tM=" << M;   
+  JPCLS(boost::shared_ptr<const JPCLS> theJPCLS): jpcRes(theJPCLS->J, theJPCLS->P, theJPCLS->C){
+    L=theJPCLS->L;
+    S=theJPCLS->S;
+  }
+
+  virtual bool operator==(const jpcRes& compare) const{
+    return jpcRes::operator==(compare);
+  }
+
+  virtual bool operator==(const JPCLS& compare) const{
+    bool result=false;
+    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C && fabs(L-compare.L)<1e-8 && fabs(S-compare.S)<1e-8 ) result=true;
+    return result;
+  }
+  
+  virtual void print(std::ostream& os) const{
+    jpcRes::print(os);
+    os <<"\tL=" << L << "\tS=" << S;   
   }
 };
 
 
-struct JPCSM{
-  boost::shared_ptr<const jpcRes> jpc;
+struct JPCSM : public jpcRes{
   Spin S;
   Spin M;
-  JPCSM(boost::shared_ptr<const jpcRes> theJPC, const Spin& theS, const Spin& theM){
-    jpc=theJPC;
+  JPCSM(boost::shared_ptr<const jpcRes> theJPC, const Spin& theS, const Spin& theM): jpcRes(theJPC){
     S=theS;
     M=theM;
   }
 
-  bool operator==(const JPCSM& compare) const{
-    bool result=false;
-    const jpcRes* jpcRequest=compare.jpc.get();
-    const jpcRes* jpcThis=jpc.get();
-    if ( (*jpcThis) == (*jpcRequest) && fabs(S-compare.S)<1e-8 && fabs(M-compare.M)<1e-8 ) result=true;
+  virtual bool operator==(const jpcRes& compare) const{
+    return jpcRes::operator==(compare);
+  }
+
+  virtual bool operator==(const JPCSM& compare) const{
+    bool result=jpcRes::operator==(compare);;
+    if ( fabs(S-compare.S)>1e-8 || fabs(M-compare.M)>1e-8 ) result=false;
     return result;
   }
 
   void print(std::ostream& os) const{
-    jpc->print(os);
+    jpcRes::print(os);
     os <<"\tS=" << S << "\tM=" << M
        << std::endl;   
   }
 };
 
 
-struct JPCSML{
+struct JPCLSM : public JPCLS{
   boost::shared_ptr<const jpcRes> jpc;
-  LSM lsm;
+  Spin M;
   double ClebschG;
-  JPCSML(boost::shared_ptr<const jpcRes> theJPC, const LSM& theLSM, const double theClebschG){
-    jpc=theJPC;
-    lsm=theLSM;
+
+  JPCLSM(boost::shared_ptr<const JPCLS> theJPCLS, const Spin theM, const double theClebschG) : JPCLS(theJPCLS){
+    M=theM;
     ClebschG=theClebschG;
   }
 
-  void print(std::ostream& os) const{
-    jpc->print(os);
-    os <<"\t";
-    lsm.print(os);
-    os <<"\tClebschGordan=" << ClebschG
+  virtual bool operator==(const jpcRes& compare) const{
+    return jpcRes::operator==(compare);
+  }
+
+  virtual void print(std::ostream& os) const{
+    JPCLS::print(os);
+    os <<"\tM=" << M 
+       <<"\tClebschGordan=" << ClebschG
        << std::endl;   
   }
 };

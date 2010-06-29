@@ -26,10 +26,10 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  virtual std::vector< boost::shared_ptr<const JPCSML> > singletStates() {return _singletStates;};
-  virtual std::vector< boost::shared_ptr<const JPCSML> > tripletM0States() {return _tripletM0States;};
-  virtual std::vector< boost::shared_ptr<const JPCSML> > tripletMp1States() {return _tripletMp1States;};
-  virtual std::vector< boost::shared_ptr<const JPCSML> > tripletMm1States() {return _tripletMm1States;};
+  virtual std::vector< boost::shared_ptr<const JPCLSM> > singletStates() {return _singletStates;};
+  virtual std::vector< boost::shared_ptr<const JPCLSM> > tripletM0States() {return _tripletM0States;};
+  virtual std::vector< boost::shared_ptr<const JPCLSM> > tripletMp1States() {return _tripletMp1States;};
+  virtual std::vector< boost::shared_ptr<const JPCLSM> > tripletMm1States() {return _tripletMm1States;};
 
  protected:
   virtual bool calcJPCs();
@@ -39,10 +39,10 @@ public:
   jpcRes _pbarJPC;
   jpcRes _pJPC;
 
-  std::vector< boost::shared_ptr<const JPCSML> > _singletStates;
-  std::vector< boost::shared_ptr<const JPCSML> > _tripletM0States;
-  std::vector< boost::shared_ptr<const JPCSML> > _tripletMp1States;
-  std::vector< boost::shared_ptr<const JPCSML> > _tripletMm1States;  
+  std::vector< boost::shared_ptr<const JPCLSM> > _singletStates;
+  std::vector< boost::shared_ptr<const JPCLSM> > _tripletM0States;
+  std::vector< boost::shared_ptr<const JPCLSM> > _tripletMp1States;
+  std::vector< boost::shared_ptr<const JPCLSM> > _tripletMm1States;  
 };
 
 
