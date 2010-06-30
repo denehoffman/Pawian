@@ -3,12 +3,15 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
+#include "Examples/pbarpToOmegaPi/OmegaPiData.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
+#include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -142,115 +145,36 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc));
 
 
-  boost::shared_ptr<pbarpStates> thepbarpStates(new pbarpStates(5));
-  boost::shared_ptr<pbarpToOmegaPi0States> theOmegaPi0States(new pbarpToOmegaPi0States(thepbarpStates));
+  boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(theOmegaPiEventPtr, 5));
+  theOmegaLhPtr->print(std::cout);
+
+
+  std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaLhPtr->omegaProdStates();
+  OmegaPiData::fitParamVal theFitParameter; 
+
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  double counter=0.;
+  for ( itJPCLS=allJPCLSStates.begin(); itJPCLS!=allJPCLSStates.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    complex<double> tmpParameter(counter,counter+0.5);
+    theFitParameter.omegaProd[(*itJPCLS)]=tmpParameter;
+    counter++; 
+  }
+
+
+  //now print the fitparameter
+  std::cout << "\n The fit parameter for omega production are:" << std::endl;
+  for ( itJPCLS=allJPCLSStates.begin(); itJPCLS!=allJPCLSStates.end(); ++itJPCLS){
+    (*itJPCLS)->print(std::cout);
+    complex<double> tmpParam=theFitParameter.omegaProd[(*itJPCLS)];
+      std::cout <<"\t" << tmpParam << std::endl;
+  }
 
 
   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 
-//   OmegaPiEventList 
-//  PwaEnv::instance().setup(setupFile);
 
-//   ParticleTable* pTable = PwaEnv::instance().particleTable();
-//   if (0 == pTable)
-//     ErrMsg(fatal) << "getting ParticleTable failed" << endmsg;
-//   pTable->print(std::cout);
-
-//   EventList* eventList = PwaEnv::instance().beamEventList();
-//   if (0 == eventList)
-//     ErrMsg(fatal) << "getting beam EventList failed" << endmsg;
-
-//   ErrMsg(routine) << "Input file has " << eventList->size() << " events. Each event has "
-//                   <<  eventList->nextEvent()->size() << " final state particles.\n" << endmsg;
-//   eventList->rewind();
-
-//   EventList* mcEventList = PwaEnv::instance().mcEventList();
-//   if (0 == mcEventList)
-//     ErrMsg(fatal) << "getting MC EventList failed" << endmsg;
-
-//   ErrMsg(routine) << "MC Input file has " << mcEventList->size() << " events. Each event has "
-//                   <<  mcEventList->nextEvent()->size() << " final state particles.\n" << endmsg;
-//   mcEventList->rewind();
-
-//   Event* anEvent;
-//   int evtCount = 0;
-//   ErrMsg(routine) << "======== beam events ========" << endmsg;
-//   while ((anEvent = eventList->nextEvent()) != 0 && evtCount < 20) {
-//     ErrMsg(routine) << "\n" 
-//                     << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
-//                     << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
-//                     << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
-//                     << endmsg;
-//     ++evtCount;
-//   }
-
-//   evtCount = 0;
-//   ErrMsg(routine) << "======== MC events ========" << endmsg;
-//   while ((anEvent = mcEventList->nextEvent()) != 0 && evtCount < 20) {
-//     ErrMsg(routine) << "\n" 
-//                     << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
-//                     << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
-//                     << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
-//                     << endmsg;
-//     ++evtCount;
-//   }
-
-
-
-//  std::stringstream dataSpinStrStr(dataSpinStr);
-//  int dataSpin=2;
-//  dataSpinStrStr >> dataSpin ;
-
-//  ErrMsg(routine) << "dataSpin: " << dataSpin << endmsg;
-
-//  boost::shared_ptr<const EtacToapi0EventList> theEvtListPtr(new EtacToapi0EventList(dataSpin));
- 
-//  boost::shared_ptr<EtacToapi0Lh> theEtacToapi0LhPtr(new EtacToapi0Lh(theEvtListPtr));
-//  MEtacToapi0Fcn fcn(theEtacToapi0LhPtr);
-
-//  MnUserParameters upar;
-//  if (dataSpin==2)
-//     {  
-//       upar.Add("InterMass", 1.6, .1, 2.3, 0.7);
-//       upar.Add("InterWidth", 0.04, .01, 0.8, 0.01);
-//       upar.Add("spin0", 0.3, .1, 1., 0.);
-//       upar.Add("spin1", 0.3, .1, 1., 0.);
-//       upar.Add("spin2", 0.3, .1, 1., 0.);
-//     }
-//  else if (dataSpin==0)
-//     {
-//      upar.Add("InterMass", 1.1, .1, 2.3, 0.6);
-//      upar.Add("InterWidth", 0.04, .01, 0.8, 0.01);
-//      upar.Add("spin0", 0.3, .1, 1., 0.);
-//      upar.Add("spin1", 0.3, .1, 1., 0.);
-//      upar.Add("spin2", 0.3, .1, 1., 0.);
-//     }
-//  else 
-//    {
-//      ErrMsg(fatal) << "initialization of the MnUserParameters failed" << endmsg;
-//    }
-
-//  MnMigrad migrad(fcn, upar);
-//  ErrMsg(routine) <<"start migrad "<< endmsg;
-//  FunctionMinimum min = migrad();
-
-//  if(!min.IsValid()) {
-//    //try with higher strategy
-//    ErrMsg(routine) <<"FM is invalid, try with strategy = 2."<< endmsg;
-//    MnMigrad migrad2(fcn, min.UserState(), MnStrategy(2));
-//    min = migrad2();
-//  }
-
-//  ErrMsg(routine) << "migrad.Fval(): " << min.Fval() << endmsg;
- 
-//  fitParamVal theFitResult;
-//  theFitResult.aMass=min.UserState().Value("InterMass");
-//  theFitResult.aWidth=min.UserState().Value("InterWidth");
-//  theFitResult.cont0spin=min.UserState().Value("spin0");
-//  theFitResult.cont1spin=min.UserState().Value("spin1");
-//  theFitResult.cont2spin=min.UserState().Value("spin2");
-
-//  EtacToapi0Hist theHistogrammer(theEvtListPtr,theFitResult);
 
  if (0!=myLogger) delete myLogger;
  return 0;

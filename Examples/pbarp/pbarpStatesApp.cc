@@ -103,28 +103,33 @@ int main(int __argc,char *__argv[]){
 
   thepbarpState.print(std::cout);
 
-  std::vector< boost::shared_ptr<const JPCLSM> > theSingletStates=thepbarpState.singletStates();
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itjpc;
+  std::vector< boost::shared_ptr<const jpcRes> > theSingletStates=thepbarpState.singletStates();
   ErrMsg(routine) << "The pbarp singlet states are: " << endmsg;
-  for ( it=theSingletStates.begin(); it!=theSingletStates.end(); ++it){
-    if (0!= (*it))(*it)->print(std::cout);
+  for ( itjpc=theSingletStates.begin(); itjpc!=theSingletStates.end(); ++itjpc){
+    if (0!= (*itjpc))(*itjpc)->print(std::cout);
+    std::cout << std::endl;
   }
 
-  std::vector< boost::shared_ptr<const JPCLSM> > theTripletM0States=thepbarpState.tripletM0States();
+  std::vector< boost::shared_ptr<const jpcRes> > theTripletM0States=thepbarpState.tripletM0States();
   ErrMsg(routine) << "The pbarp triplet states with helicity=0 are: " << endmsg;
-  for ( it=theTripletM0States.begin(); it!=theTripletM0States.end(); ++it){
-    if (0!= (*it))(*it)->print(std::cout);
+  for ( itjpc=theTripletM0States.begin(); itjpc!=theTripletM0States.end(); ++itjpc){
+    if (0!= (*itjpc))(*itjpc)->print(std::cout);
+    std::cout << std::endl;
   }
 
-  std::vector< boost::shared_ptr<const JPCLSM> > theTripletMp1States=thepbarpState.tripletMp1States();
+  std::vector< boost::shared_ptr<const jpcRes> > theTripletMp1States=thepbarpState.tripletMp1States();
   ErrMsg(routine) << "The pbarp triplet states with helicity=1 are: " << endmsg;
-  for ( it=theTripletMp1States.begin(); it!=theTripletMp1States.end(); ++it){
-    if (0!= (*it))(*it)->print(std::cout);
+  for ( itjpc=theTripletMp1States.begin(); itjpc!=theTripletMp1States.end(); ++itjpc){
+    if (0!= (*itjpc))(*itjpc)->print(std::cout);
+    std::cout << std::endl;
   }
 
-  std::vector< boost::shared_ptr<const JPCLSM> > theTripletMm1States=thepbarpState.tripletMm1States();
+  std::vector< boost::shared_ptr<const jpcRes> > theTripletMm1States=thepbarpState.tripletMm1States();
   ErrMsg(routine) << "The pbarp triplet states with helicity=-1 are: " << endmsg;
-  for ( it=theTripletMm1States.begin(); it!=theTripletMm1States.end(); ++it){
-    if (0!= (*it))(*it)->print(std::cout);
+  for ( itjpc=theTripletMm1States.begin(); itjpc!=theTripletMm1States.end(); ++itjpc){
+    if (0!= (*itjpc))(*itjpc)->print(std::cout); 
+    std::cout << std::endl;
   }
 
   if (0!=myLogger) delete myLogger;

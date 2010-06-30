@@ -1,7 +1,9 @@
 #include "PwaUtils/pbarpStates.hh"
 
 #include "Utils/MathUtils.hh"
+
 #include "ErrLogger/ErrLineLog.hh"
+
 
  
 
@@ -53,21 +55,8 @@ bool pbarpStates::calcJPCs(){
 
 
 	 if (theMs.size()>0){
-	   
-	   bool found=false;
-	   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it;
-	   for (it=_jpcStates.begin(); it!=_jpcStates.end(); ++it){
-	     const jpcRes* jpcCurrent=jpcPtr.get();
-	     const jpcRes* jpcIt=(*it).get();
-	     if ( (*jpcIt) == (*jpcCurrent) ){
-	       found=true;
-	       jpcPtr.reset(); 
-	       jpcPtr=(*it);
-	       continue;
-	     }
-	   }
-	   if (!found)  _jpcStates.push_back(jpcPtr);
-	   
+	   fillVec(jpcPtr, _jpcStates);	   
+
 	   boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(jpcPtr, L, S) );
 	   _allJPCLS.push_back(tmpJPCLS);
 	   
@@ -79,11 +68,11 @@ bool pbarpStates::calcJPCs(){
 	     double Clebschg1=Clebsch(L,0,S,(*itM), j, (*itM));
 	     boost::shared_ptr<const JPCLSM> tmpJPCLSM(new JPCLSM(tmpJPCLS, (*itM), Clebschg1) );
 	     _allStates.push_back(tmpJPCLSM);
-             if (S==0) _singletStates.push_back(tmpJPCLSM);
+             if (S==0) fillVec(jpcPtr, _singletStates);
 	     else if (S==1){
-	       if ((*itM)==0) _tripletM0States.push_back(tmpJPCLSM);
-               else if ((*itM)==1) _tripletMp1States.push_back(tmpJPCLSM);
-               else if ((*itM)==-1) _tripletMm1States.push_back(tmpJPCLSM);
+	       if ((*itM)==0) fillVec(jpcPtr, _tripletM0States);
+               else if ((*itM)==1) fillVec(jpcPtr, _tripletMp1States);
+               else if ((*itM)==-1) fillVec(jpcPtr, _tripletMm1States);
 	       else ErrMsg(fatal) << "pbar p state with S=" << S << " and M="<< (*itM) <<" cannot exitst!!!" << cparity << endmsg;
 	     }
 	     else ErrMsg(fatal) << "pbar p state with S=" << S << " cannot exitst!!!" << cparity << endmsg;
@@ -96,6 +85,42 @@ bool pbarpStates::calcJPCs(){
     }
 }
 
+void pbarpStates::fillVec(boost::shared_ptr<const jpcRes> currentRes, std::vector< boost::shared_ptr<const jpcRes> >& theVec){
+  const jpcRes* jpcCurrent=currentRes.get();
+  if (0==jpcCurrent) ErrMsg(fatal) << "shared object containss 0 pointer!!!" << endmsg;
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it;
+  bool found=false;
+  for (it=theVec.begin(); it!=theVec.end(); ++it){
+    const jpcRes* jpcIt=(*it).get();
+    if (0==jpcIt) ErrMsg(fatal) << "shared object containss 0 pointer!!!" << endmsg;
+    if ( (*jpcIt) == (*jpcCurrent) ){
+      found=true;
+      continue;
+    }
+  }
+  if (!found) theVec.push_back(currentRes);  
+
+}
+
+std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractSingletStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates){
+  std::vector< boost::shared_ptr<const jpcRes> > result;
+
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itAllStates;
+
+  for ( itJPC=theJPCStates.begin(); itJPC!=theJPCStates.end(); ++itJPC){
+    const jpcRes* jpcRequest=(*itJPC).get();
+
+    for ( itAllStates=_singletStates.begin(); itAllStates!=_singletStates.end(); ++itAllStates){
+      const jpcRes* jpcCurrent=(*itAllStates).get();
+      if (( *jpcCurrent) ==  (*jpcRequest)){
+	result.push_back(*itAllStates);
+	continue;
+      } 
+    }
+  }
+  return result;
+}
 
 
 void pbarpStates::print(std::ostream& os) const{

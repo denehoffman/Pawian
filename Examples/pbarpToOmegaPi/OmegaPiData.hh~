@@ -1,5 +1,5 @@
-#ifndef _pbarpToOmegaData_H
-#define _pbarpToOmegaData_H
+#ifndef _OmegaPiData_H
+#define _OmegaPiData_H
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
@@ -14,10 +14,10 @@
 
 struct OmPiEvtData
 {
-  Vector4<double> cm_4Vec;
-  Vector4<double> omegaHeliCm4Vec;
-  Vector4<double> pi0RecHeliCm4Vec;
-  Vector4<double> pi0HeliOmega4Vec;
+  Vector4<float> cm_4Vec;
+  Vector4<float> omegaHeliCm4Vec;
+  Vector4<float> pi0RecHeliCm4Vec;
+  Vector4<float> pi0HeliOmega4Vec;
 //   Tensor<complex<double> > spin2_0_amp;
 //   Tensor<complex<double> > spin2_1_amp;
 //   Tensor<complex<double> > spin1_0_amp;

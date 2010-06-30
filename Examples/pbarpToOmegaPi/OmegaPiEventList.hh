@@ -9,6 +9,7 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiData.hh"
 
+using OmegaPiData::OmPiEvtData;
 
 class EventList;
 

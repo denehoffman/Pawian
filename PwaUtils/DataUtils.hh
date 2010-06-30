@@ -28,11 +28,16 @@ struct jpcRes
   }
 
 
-  virtual bool operator<(const jpcRes& compare){
-    if ( J < compare.J) return true;
-    else if ( P < compare.P) return true;
-    else if ( C < compare.C) return true;
-    return false; 
+  virtual bool operator<(const jpcRes& compare) const{
+    bool result=false;
+    if ( J < compare.J) result=true;
+    else if (J == compare.J){
+      if ( P < compare.P) result=true;
+      else if (P == compare.P){
+	if ( C < compare.C) result=true;
+      }
+    }
+    return result; 
   }
 
   virtual void print(std::ostream& os) const{
@@ -63,7 +68,27 @@ struct JPCLS : public jpcRes{
     if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C && fabs(L-compare.L)<1e-8 && fabs(S-compare.S)<1e-8 ) result=true;
     return result;
   }
+
+  virtual bool operator<(const JPCLS& compare) const{
+    bool result=false;
+
+    if ( J < compare.J) result=true;
+    else if (J == compare.J){
+      if ( P < compare.P) result=true;
+      else if (P == compare.P){
+	if ( C < compare.C) result=true;
+	else if (C == compare.C){
+	  if ( L < compare.L) result=true;
+	  else if (L == compare.L){
+	    if ( S < compare.S) result=true;
+	  }
+	}
+      }
+    }
   
+    return result; 
+}  
+
   virtual void print(std::ostream& os) const{
     jpcRes::print(os);
     os <<"\tL=" << L << "\tS=" << S;   
@@ -89,6 +114,25 @@ struct JPCSM : public jpcRes{
     return result;
   }
 
+  virtual bool operator<(const JPCSM& compare) const{
+    bool result=false;
+    if ( J < compare.J) result=true;
+    else if (J == compare.J){
+      if ( P < compare.P) result=true;
+      else if (P == compare.P){
+	if ( C < compare.C) result=true;
+	else if (C == compare.C){
+	  if ( S < compare.S) result=true;
+	  else if (S == compare.S){
+	    if ( M < compare.M) result=true;
+	  }
+	}
+      }
+    }
+
+    return result; 
+  }
+
   void print(std::ostream& os) const{
     jpcRes::print(os);
     os <<"\tS=" << S << "\tM=" << M
@@ -110,6 +154,34 @@ struct JPCLSM : public JPCLS{
   virtual bool operator==(const jpcRes& compare) const{
     return jpcRes::operator==(compare);
   }
+
+  virtual bool operator==(const JPCLSM& compare) const{
+    bool result=jpcRes::operator==(compare);;
+    if ( fabs(L-compare.L)>1e-8 || fabs(S-compare.S)>1e-8 || fabs(M-compare.M)>1e-8 ) result=false;
+    return result;
+  }
+
+  virtual bool operator<(const JPCLSM& compare) const{
+    bool result=false;
+    if ( J < compare.J) result=true;
+    else if (J == compare.J){
+      if ( P < compare.P) result=true;
+      else if (P == compare.P){
+	if ( C < compare.C) result=true;
+	else if (C == compare.C){
+	  if ( L < compare.L) result=true;
+	  else if (L == compare.L){
+	    if ( S < compare.S) result=true;
+	    else if (S == compare.S){
+	      if ( M < compare.M) result=true;
+	    }
+	  }
+	}
+      }
+    } 
+    return result; 
+  } 
+
 
   virtual void print(std::ostream& os) const{
     JPCLS::print(os);
