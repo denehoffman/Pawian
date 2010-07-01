@@ -60,8 +60,30 @@ bool pbarpToOmegaPi0States::calcJPCs(){
   _pbarpSingletToOmegaPi=_pbarpStatesAll->extractSingletStates(_jpcStates);
   _pbarpTripletM0ToOmegaPi=_pbarpStatesAll->extractTripletM0States(_jpcStates);
   _pbarpTripletM1ToOmegaPi=_pbarpStatesAll->extractTripletM1States(_jpcStates);
+  _JPCLSomegaProdSinglet=extractJPCLSStates(_pbarpSingletToOmegaPi, _allJPCLS);
+  _JPCLSomegaProdTripletM0=extractJPCLSStates(_pbarpTripletM0ToOmegaPi, _allJPCLS);
+  _JPCLSomegaProdTripletM1=extractJPCLSStates(_pbarpTripletM1ToOmegaPi, _allJPCLS);
 }
 
+std::vector< boost::shared_ptr<const JPCLS> > pbarpToOmegaPi0States::extractJPCLSStates(std::vector< boost::shared_ptr<const jpcRes> > theJPCRequests, std::vector< boost::shared_ptr<const JPCLS> > jpclsStatesAll) const{
+
+  std::vector< boost::shared_ptr<const JPCLS> > result;
+
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itAllStates;
+  for ( itJPC=theJPCRequests.begin(); itJPC!=theJPCRequests.end(); ++itJPC){
+    const jpcRes* jpcRequest=(*itJPC).get();
+
+    for ( itAllStates=jpclsStatesAll.begin(); itAllStates!=jpclsStatesAll.end(); ++itAllStates){
+      const JPCLS* jpclsCurrent=(*itAllStates).get();
+      if (( *jpclsCurrent) ==  (*jpcRequest)){
+        result.push_back(*itAllStates);
+        continue;
+      } 
+    }
+  }
+  return result;
+}
 
 void pbarpToOmegaPi0States::print(std::ostream& os) const{
   os << "pbarpToOmegaPi0States::print\n"
@@ -98,5 +120,22 @@ void pbarpToOmegaPi0States::print(std::ostream& os) const{
     os << std::endl;
   }
 
+  os << "The fit parameter for the pbarp singet states are:" << std::endl;
+  for ( itJPCLS=_JPCLSomegaProdSinglet.begin(); itJPCLS!=_JPCLSomegaProdSinglet.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << std::endl;
+  }
+
+  os << "The fit parameter for the pbarp triplet M=0 states are:" << std::endl;
+  for ( itJPCLS=_JPCLSomegaProdTripletM0.begin(); itJPCLS!=_JPCLSomegaProdTripletM0.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << std::endl;
+  }
+
+  os << "The fit parameter for the pbarp triplet M=+-1 states are:" << std::endl;
+  for ( itJPCLS=_JPCLSomegaProdTripletM1.begin(); itJPCLS!=_JPCLSomegaProdTripletM1.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << std::endl;
+  }
 }
 

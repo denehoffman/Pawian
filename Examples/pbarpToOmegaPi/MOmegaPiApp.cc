@@ -154,29 +154,58 @@ int main(int __argc,char *__argv[]){
   
   theOmegaPi0StatesPtr->print(std::cout);
 
-
-  std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaPi0StatesPtr->jpclsStates();
+  // now fill the fir parameter
   OmegaPiData::fitParamVal theFitParameter; 
-
+ 
+  std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaPi0StatesPtr->jpclsStates();
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
   double counter=0.;
-  for ( itJPCLS=allJPCLSStates.begin(); itJPCLS!=allJPCLSStates.end(); ++itJPCLS){
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theOmegaPi0StatesPtr->jpclsSinglet();
+  for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
     //now fill the fitParameterMap
     complex<double> tmpParameter(counter,counter+0.5);
-    theFitParameter.omegaProd[(*itJPCLS)]=tmpParameter;
+    theFitParameter.omegaProdSinglet[(*itJPCLS)]=tmpParameter;
     counter++; 
   }
 
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theOmegaPi0StatesPtr->jpclsTriplet0();
+  for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    complex<double> tmpParameter(counter,counter+0.5);
+    theFitParameter.omegaProdTriplet0[(*itJPCLS)]=tmpParameter;
+    counter++; 
+  }
+
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theOmegaPi0StatesPtr->jpclsTriplet1();
+  for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    complex<double> tmpParameter(counter,counter+0.5);
+    theFitParameter.omegaProdTriplet1[(*itJPCLS)]=tmpParameter;
+    counter++; 
+  }
 
   //now print the fitparameter
-  std::cout << "\n The fit parameter for omega production are:" << std::endl;
-  for ( itJPCLS=allJPCLSStates.begin(); itJPCLS!=allJPCLSStates.end(); ++itJPCLS){
+  std::cout << "\n The fit parameter for omega production are (singlet states):" << std::endl;
+  for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
     (*itJPCLS)->print(std::cout);
-    complex<double> tmpParam=theFitParameter.omegaProd[(*itJPCLS)];
+    complex<double> tmpParam=theFitParameter.omegaProdSinglet[(*itJPCLS)];
       std::cout <<"\t" << tmpParam << std::endl;
   }
 
+  std::cout << "\n The fit parameter for omega production are (triplet0 states):" << std::endl;
+  for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+    (*itJPCLS)->print(std::cout);
+    complex<double> tmpParam=theFitParameter.omegaProdTriplet0[(*itJPCLS)];
+      std::cout <<"\t" << tmpParam << std::endl;
+  }
+
+  std::cout << "\n The fit parameter for omega production are (triplet1 states):" << std::endl;
+  for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+    (*itJPCLS)->print(std::cout);
+    complex<double> tmpParam=theFitParameter.omegaProdTriplet1[(*itJPCLS)];
+      std::cout <<"\t" << tmpParam << std::endl;
+  }
 
   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 

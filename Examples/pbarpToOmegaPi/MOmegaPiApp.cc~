@@ -142,7 +142,7 @@ int main(int __argc,char *__argv[]){
   eventReaderMc.fillAll(piOmegaEventsMc);
   piOmegaEventsMc.rewind();
 
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc));
+  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 5));
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(5));
   boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
