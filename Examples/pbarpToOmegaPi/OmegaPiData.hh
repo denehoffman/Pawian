@@ -24,6 +24,8 @@ namespace OmegaPiData {
     Vector4<float> omegaHeliCm4Vec;
     Vector4<float> pi0RecHeliCm4Vec;
     Vector4<float> pi0HeliOmega4Vec;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dfp; //Wigner D functions for omega pi0 production
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dfd; //Wigner D functions for omega decay to pi0 gamma
     //   Tensor<complex<double> > spin2_0_amp;
     //   Tensor<complex<double> > spin2_1_amp;
     //   Tensor<complex<double> > spin1_0_amp;

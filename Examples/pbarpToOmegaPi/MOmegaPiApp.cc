@@ -142,14 +142,20 @@ int main(int __argc,char *__argv[]){
   eventReaderMc.fillAll(piOmegaEventsMc);
   piOmegaEventsMc.rewind();
 
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc));
+  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 5));
+
+  boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(5));
+  boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+
+  boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+
+  // get pbarpToOmegaPi0States pointer back
+  boost::shared_ptr<const pbarpToOmegaPi0States> theOmegaPi0StatesPtr=theOmegaLhPtr->omegaPi0States();  
+  
+  theOmegaPi0StatesPtr->print(std::cout);
 
 
-  boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(theOmegaPiEventPtr, 5));
-  theOmegaLhPtr->print(std::cout);
-
-
-  std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaLhPtr->omegaProdStates();
+  std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaPi0StatesPtr->jpclsStates();
   OmegaPiData::fitParamVal theFitParameter; 
 
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;

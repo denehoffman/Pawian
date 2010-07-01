@@ -25,12 +25,12 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  virtual std::vector< boost::shared_ptr<const JPCLSM> > allStates() {return _allStates;};
-  virtual std::vector< boost::shared_ptr<const jpcRes> > jpcStates() {return _jpcStates;}; 
-  virtual std::vector< boost::shared_ptr<const JPCLS> > jpclsStates() {return _allJPCLS;}; 
-  virtual std::vector< boost::shared_ptr<const JPCLSM> > extractJPCLSMStates(std::vector< boost::shared_ptr<const jpcRes> >&);
-  virtual std::vector< boost::shared_ptr<const JPCSM> > extractJPCSMStates(std::vector< boost::shared_ptr<const jpcRes> >&);
-  virtual std::vector< boost::shared_ptr<const JPCLS> > extractJPCLSStates(boost::shared_ptr<const jpcRes>);
+  virtual std::vector< boost::shared_ptr<const JPCLSM> > allStates() const {return _allStates;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > jpcStates() const {return _jpcStates;}; 
+  virtual std::vector< boost::shared_ptr<const JPCLS> > jpclsStates() const {return _allJPCLS;}; 
+  virtual std::vector< boost::shared_ptr<const JPCLSM> > extractJPCLSMStates(std::vector< boost::shared_ptr<const jpcRes> >&) const ;
+  virtual std::vector< boost::shared_ptr<const JPCSM> > extractJPCSMStates(std::vector< boost::shared_ptr<const jpcRes> >&) const ;
+  virtual std::vector< boost::shared_ptr<const JPCLS> > extractJPCLSStates(boost::shared_ptr<const jpcRes>) const;
 
  protected:
   std::vector< boost::shared_ptr<const JPCLSM> > _allStates;

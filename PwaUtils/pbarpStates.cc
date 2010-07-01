@@ -102,16 +102,28 @@ void pbarpStates::fillVec(boost::shared_ptr<const jpcRes> currentRes, std::vecto
 
 }
 
-std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractSingletStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates){
+std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractSingletStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+  return extractJPCStates(theJPCStates,_singletStates);
+}
+
+std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractTripletM0States(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+   return extractJPCStates(theJPCStates, _tripletM0States);
+}
+
+std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractTripletM1States(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+   return extractJPCStates(theJPCStates, _tripletMp1States);
+}
+
+std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractJPCStates(std::vector< boost::shared_ptr<const jpcRes> > theJPCRequests, std::vector< boost::shared_ptr<const jpcRes> > jpcStatesAll) const{
+
   std::vector< boost::shared_ptr<const jpcRes> > result;
 
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itAllStates;
-
-  for ( itJPC=theJPCStates.begin(); itJPC!=theJPCStates.end(); ++itJPC){
+  for ( itJPC=theJPCRequests.begin(); itJPC!=theJPCRequests.end(); ++itJPC){
     const jpcRes* jpcRequest=(*itJPC).get();
 
-    for ( itAllStates=_singletStates.begin(); itAllStates!=_singletStates.end(); ++itAllStates){
+    for ( itAllStates=jpcStatesAll.begin(); itAllStates!=jpcStatesAll.end(); ++itAllStates){
       const jpcRes* jpcCurrent=(*itAllStates).get();
       if (( *jpcCurrent) ==  (*jpcRequest)){
 	result.push_back(*itAllStates);
@@ -120,6 +132,7 @@ std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractSingletStates
     }
   }
   return result;
+
 }
 
 

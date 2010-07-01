@@ -19,7 +19,7 @@
 
 
 class OmegaPiEventList;
-
+class pbarpToOmegaPi0States;
 
 class OmegaPiLh {
 
@@ -28,7 +28,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  OmegaPiLh(boost::shared_ptr<const OmegaPiEventList>, int);
+  OmegaPiLh(boost::shared_ptr<const OmegaPiEventList>, boost::shared_ptr<const pbarpToOmegaPi0States>);
   OmegaPiLh(boost::shared_ptr<OmegaPiLh>);
 
   /** Destructor */
@@ -45,8 +45,7 @@ public:
   //   double calcEvtIntensity(const OmegaPiData::OmPiEvtData& theEvtData, const fitParamVal& theParamVal);
   //   bool setFitParamVal(OmegaPiData::fitParamVal& fitParamVal, const std::vector<double>& par);
   boost::shared_ptr<const OmegaPiEventList> getEventList() const {return _omegaPiEventListPtr;}
-  std::vector< boost::shared_ptr<const JPCLS> > omegaProdStates() const {return _JPCLSomegaProd;}
-  int jmax() const {return _jmax;}
+  boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
   void print(std::ostream& os) const;
 
 protected:
@@ -54,13 +53,7 @@ protected:
 
 private:
   boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
-  int _jmax;
-
-  std::vector< boost::shared_ptr<const jpcRes> > _pbarpJPC;
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSomegaProd;
-  std::vector< boost::shared_ptr<const jpcRes> > _pbarpSinglett;
-
-  void init();
+  boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
 
 };
 

@@ -26,11 +26,14 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  virtual std::vector< boost::shared_ptr<const jpcRes> > singletStates() {return _singletStates;};
-  virtual std::vector< boost::shared_ptr<const jpcRes> > tripletM0States() {return _tripletM0States;};
-  virtual std::vector< boost::shared_ptr<const jpcRes> > tripletMp1States() {return _tripletMp1States;};
-  virtual std::vector< boost::shared_ptr<const jpcRes> > tripletMm1States() {return _tripletMm1States;};
-  virtual std::vector< boost::shared_ptr<const jpcRes> > extractSingletStates(std::vector< boost::shared_ptr<const jpcRes> >&);
+  virtual std::vector< boost::shared_ptr<const jpcRes> > singletStates() const {return _singletStates;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > tripletM0States() const {return _tripletM0States;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > tripletMp1States() const {return _tripletMp1States;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > tripletMm1States() const {return _tripletMm1States;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > extractSingletStates(std::vector< boost::shared_ptr<const jpcRes> >&) const; 
+  virtual std::vector< boost::shared_ptr<const jpcRes> > extractTripletM0States(std::vector< boost::shared_ptr<const jpcRes> >&) const;
+  virtual std::vector< boost::shared_ptr<const jpcRes> > extractTripletM1States(std::vector< boost::shared_ptr<const jpcRes> >&) const;
+
  protected:
   virtual bool calcJPCs();
 
@@ -43,7 +46,8 @@ public:
   std::vector< boost::shared_ptr<const jpcRes> > _tripletM0States;
   std::vector< boost::shared_ptr<const jpcRes> > _tripletMp1States;
   std::vector< boost::shared_ptr<const jpcRes> > _tripletMm1States;
-  void fillVec(boost::shared_ptr<const jpcRes>, std::vector< boost::shared_ptr<const jpcRes> >&);  
+  void fillVec(boost::shared_ptr<const jpcRes>, std::vector< boost::shared_ptr<const jpcRes> >&);
+  std::vector< boost::shared_ptr<const jpcRes> > extractJPCStates(std::vector< boost::shared_ptr<const jpcRes> > , std::vector< boost::shared_ptr<const jpcRes> > ) const;  
 };
 
 

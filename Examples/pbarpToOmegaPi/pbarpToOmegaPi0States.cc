@@ -9,9 +9,9 @@ pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbar
   AbsStates(),
   _omegaJPC(1, -1, -1),
   _piJPC(0, -1, 1),
-  _pbarpStates(pbarpStates)
+  _pbarpStatesAll(pbarpStates)
 {
-  if (0==_pbarpStates) ErrMsg(fatal) << "_pbarpStates==0 !!!" << endmsg;
+  if (0==_pbarpStatesAll) ErrMsg(fatal) << "_pbarpStatesAll==0 !!!" << endmsg;
   calcJPCs();
 }
 
@@ -22,8 +22,8 @@ pbarpToOmegaPi0States::~pbarpToOmegaPi0States(){
 bool pbarpToOmegaPi0States::calcJPCs(){
   
 
-  std::vector< boost::shared_ptr<const jpcRes> > thepbarJPCs=_pbarpStates->jpcStates();
-  //  if (0==thepbarJPCs) ErrMsg(fatal) << "_pbarpStates->jpcStates()==0 !!!" << endmsg;
+  std::vector< boost::shared_ptr<const jpcRes> > thepbarJPCs=_pbarpStatesAll->jpcStates();
+  //  if (0==thepbarJPCs) ErrMsg(fatal) << "_pbarpStatesAll->jpcStates()==0 !!!" << endmsg;
 
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it;
 
@@ -57,11 +57,46 @@ bool pbarpToOmegaPi0States::calcJPCs(){
     }
   }
 
+  _pbarpSingletToOmegaPi=_pbarpStatesAll->extractSingletStates(_jpcStates);
+  _pbarpTripletM0ToOmegaPi=_pbarpStatesAll->extractTripletM0States(_jpcStates);
+  _pbarpTripletM1ToOmegaPi=_pbarpStatesAll->extractTripletM1States(_jpcStates);
 }
 
 
 void pbarpToOmegaPi0States::print(std::ostream& os) const{
-  AbsStates::print(os);
+  os << "pbarpToOmegaPi0States::print\n"
+     << "The contributed JPC initial states are:" << std::endl;
+  
+  std::vector< boost::shared_ptr<const jpcRes > >::const_iterator itJPC;
+  for ( itJPC=_jpcStates.begin(); itJPC!=_jpcStates.end(); ++itJPC){
+    (*itJPC)->print(os);
+    os << std::endl;
+  }
+
+  os << "The initial JPC singlet states are:" << std::endl;
+  for ( itJPC=_pbarpSingletToOmegaPi.begin(); itJPC!=_pbarpSingletToOmegaPi.end(); ++itJPC){
+    (*itJPC)->print(os);
+    os << std::endl;
+  }
+
+  os << "The initial JPC triplet M=0 states are:" << std::endl;
+  for ( itJPC=_pbarpTripletM0ToOmegaPi.begin(); itJPC!=_pbarpTripletM0ToOmegaPi.end(); ++itJPC){
+    (*itJPC)->print(os);
+    os << std::endl;
+  }
+
+  os << "The initial JPC triplet M=1 states are:" << std::endl;
+  for ( itJPC=_pbarpTripletM1ToOmegaPi.begin(); itJPC!=_pbarpTripletM1ToOmegaPi.end(); ++itJPC){
+    (*itJPC)->print(os);
+    os << std::endl;
+  }
+
+  os << "The contributed JPC LS combinations for the omega production are:" << std::endl;
+  std::vector< boost::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
+  for ( itJPCLS=_allJPCLS.begin(); itJPCLS!=_allJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << std::endl;
+  }
 
 }
 

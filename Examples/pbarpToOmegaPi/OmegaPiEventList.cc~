@@ -4,7 +4,7 @@
 
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Event/EventList.hh"
-#include "Utils/PwaUtils.hh"
+#include "PwaUtils/KinUtils.hh"
 
 #include "Event/Event.hh"
 #include "ErrLogger/ErrLineLog.hh"

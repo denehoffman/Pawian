@@ -19,11 +19,13 @@ class pbarpToOmegaPi0States : public AbsStates {
 public:
 
   /// Default Constructor
-  pbarpToOmegaPi0States( boost::shared_ptr<pbarpStates> pbarpStates);
+  pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbarpStates);
 
   /** Destructor */
   virtual ~pbarpToOmegaPi0States();
 
+  virtual std::vector< boost::shared_ptr<const jpcRes> > pbarpSingletStates() const {return _pbarpSingletToOmegaPi;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > pbarpTripletM0States() const {return _pbarpTripletM0ToOmegaPi;};
   virtual void print(std::ostream& os) const;
 
 
@@ -34,7 +36,11 @@ public:
   jpcRes _omegaJPC;
   jpcRes _piJPC;
 
-  boost::shared_ptr<pbarpStates> _pbarpStates;
+  boost::shared_ptr<pbarpStates> _pbarpStatesAll;
+  std::vector< boost::shared_ptr<const jpcRes> > _pbarpSingletToOmegaPi;
+  std::vector< boost::shared_ptr<const jpcRes> > _pbarpTripletM0ToOmegaPi;
+  std::vector< boost::shared_ptr<const jpcRes> > _pbarpTripletM1ToOmegaPi;
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSomegaProd;
 };
 
 
