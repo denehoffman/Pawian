@@ -12,6 +12,7 @@
 #include "Examples/pbarpToOmegaPi/OmegaPiData.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
+#include "Examples/pbarpToOmegaPi/MOmegaPiFcn.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -155,28 +156,74 @@ int main(int __argc,char *__argv[]){
   theOmegaPi0StatesPtr->print(std::cout);
 
 
-  std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaPi0StatesPtr->jpclsStates();
-  OmegaPiData::fitParamVal theFitParameter; 
+  MOmegaPiFcn mOmegaPiFcn(theOmegaLhPtr);
+  
+  MnUserParameters upar;
+  mOmegaPiFcn.setMnUsrParams(upar);
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  MnMigrad migrad(mOmegaPiFcn, upar);
+  ErrMsg(routine) <<"start migrad "<< endmsg;
+  FunctionMinimum min = migrad();
 
-  double counter=0.;
-  for ( itJPCLS=allJPCLSStates.begin(); itJPCLS!=allJPCLSStates.end(); ++itJPCLS){
-    //now fill the fitParameterMap
-    complex<double> tmpParameter(counter,counter+0.5);
-    theFitParameter.omegaProd[(*itJPCLS)]=tmpParameter;
-    counter++; 
-  }
+ if(!min.IsValid()) {
+   //try with higher strategy
+   ErrMsg(routine) <<"FM is invalid, try with strategy = 2."<< endmsg;
+   MnMigrad migrad2(mOmegaPiFcn, min.UserState(), MnStrategy(2));
+   min = migrad2();
+ }
 
+//   // now fill the fir parameter
+//   OmegaPiData::fitParamVal theFitParameter; 
+ 
+//   std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaPi0StatesPtr->jpclsStates();
+//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
-  //now print the fitparameter
-  std::cout << "\n The fit parameter for omega production are:" << std::endl;
-  for ( itJPCLS=allJPCLSStates.begin(); itJPCLS!=allJPCLSStates.end(); ++itJPCLS){
-    (*itJPCLS)->print(std::cout);
-    complex<double> tmpParam=theFitParameter.omegaProd[(*itJPCLS)];
-      std::cout <<"\t" << tmpParam << std::endl;
-  }
+//   double counter=0.;
+//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theOmegaPi0StatesPtr->jpclsSinglet();
+//   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
+//     //now fill the fitParameterMap
+//     std::pair <double,double> tmpParameter=make_pair(counter,0.0);
+//     theFitParameter.omegaProdSinglet[(*itJPCLS)]=tmpParameter;
+//     counter++; 
+//   }
 
+//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theOmegaPi0StatesPtr->jpclsTriplet0();
+//   for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+//     //now fill the fitParameterMap
+//     std::pair <double,double> tmpParameter=make_pair(counter,0.0);
+//     theFitParameter.omegaProdTriplet0[(*itJPCLS)]=tmpParameter;
+//     counter++; 
+//   }
+
+//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theOmegaPi0StatesPtr->jpclsTriplet1();
+//   for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+//     //now fill the fitParameterMap
+//     std::pair <double,double> tmpParameter=make_pair(counter,0.0);
+//     theFitParameter.omegaProdTriplet1[(*itJPCLS)]=tmpParameter;
+//     counter++; 
+//   }
+
+//   //now print the fitparameter
+//   std::cout << "\n The fit parameter for omega production are (singlet states):" << std::endl;
+//   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
+//     std::cout << (*itJPCLS)->name();
+//     std::pair<double, double> tmpParam=theFitParameter.omegaProdSinglet[(*itJPCLS)];
+//     std::cout <<"\t" << tmpParam.first <<"\t" << tmpParam.second  << std::endl;
+//   }
+
+//   std::cout << "\n The fit parameter for omega production are (triplet0 states):" << std::endl;
+//   for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+//     std::cout << (*itJPCLS)->name();
+//     std::pair<double, double> tmpParam=theFitParameter.omegaProdTriplet0[(*itJPCLS)];
+//     std::cout <<"\t" << tmpParam.first <<"\t" << tmpParam.second  << std::endl;
+//   }
+
+//   std::cout << "\n The fit parameter for omega production are (triplet1 states):" << std::endl;
+//   for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+//     std::cout << (*itJPCLS)->name();
+//     std::pair<double, double> tmpParam=theFitParameter.omegaProdTriplet1[(*itJPCLS)];
+//     std::cout <<"\t" << tmpParam.first <<"\t" << tmpParam.second  << std::endl;
+//   }
 
   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 

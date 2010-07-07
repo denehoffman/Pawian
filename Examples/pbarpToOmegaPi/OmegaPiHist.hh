@@ -18,6 +18,7 @@
 using OmegaPiData::OmPiEvtData;
 
 class OmegaPiEventList;
+class OmegaPiLh;
 class TFile;
 class TH2F;
 class TH1F;
@@ -31,7 +32,7 @@ public:
 
   ///Constructor 
   OmegaPiHist(boost::shared_ptr<const OmegaPiEventList>);
-
+  OmegaPiHist(boost::shared_ptr<OmegaPiLh>, OmegaPiData::fitParamVal&);
 
   /** Destructor */
   virtual ~OmegaPiHist();
@@ -45,12 +46,16 @@ private:
   TFile* _theTFile;
   TH1F* _cosOmegaHeliDataHist;
   TH1F* _cosOmegaHeliMcHist;
+  TH1F* _cosOmegaHeliFittedHist;
   TH1F* _cosOmegaAccCorHist;
   TH1F* _cosPi0FromOmegaDataHeli;
   TH1F* _cosPi0FromOmegaMcHeli;
+  TH1F* _cosPi0FromOmegaFittedHeli;
   TH1F* _cosPi0FromOmegaAccCorHeli;
   TH1F* _treimanYangDataHist;
   TH1F* _treimanYangMcHist;
+  TH1F* _treimanYangFittedHist;
+
 
   void initRootStuff();
   void plotCosOmegaHeli(TH1F* theHisto, const OmPiEvtData& theEvtData, double weight);

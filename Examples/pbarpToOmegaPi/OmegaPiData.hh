@@ -12,9 +12,9 @@ namespace OmegaPiData {
 
   struct fitParamVal
   {
-    std::map< boost::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > omegaProdSinglet;
-    std::map< boost::shared_ptr<const jpcRes>, complex<double>, pawian::Collection::SharedPtrLess > omegaProdTriplet0;
-    std::map< boost::shared_ptr<const jpcRes>, complex<double>, pawian::Collection::SharedPtrLess > omegaProdTriplet1;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > omegaProdSinglet;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > omegaProdTriplet0;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > omegaProdTriplet1;
   };
   
   struct OmPiEvtData

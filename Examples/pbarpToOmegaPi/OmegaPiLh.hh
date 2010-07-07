@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <complex>
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
@@ -41,9 +42,9 @@ public:
 
   // Getters:
   
-  //   double calcLogLh(const OmegaPiData::fitParamVal& theParamVal);
-  //   double calcEvtIntensity(const OmegaPiData::OmPiEvtData& theEvtData, const fitParamVal& theParamVal);
-  //   bool setFitParamVal(OmegaPiData::fitParamVal& fitParamVal, const std::vector<double>& par);
+  double calcLogLh(const OmegaPiData::fitParamVal& theParamVal);
+  double calcEvtIntensity(OmegaPiData::OmPiEvtData& theData, const OmegaPiData::fitParamVal& theParamVal);
+
   boost::shared_ptr<const OmegaPiEventList> getEventList() const {return _omegaPiEventListPtr;}
   boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
   void print(std::ostream& os) const;
@@ -54,6 +55,8 @@ protected:
 private:
   boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
   boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
+
+  complex<double> calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiData::OmPiEvtData& theData);
 
 };
 

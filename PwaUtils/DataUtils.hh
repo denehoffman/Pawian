@@ -2,6 +2,8 @@
 #define _DataUtils_H
 
 #include <boost/shared_ptr.hpp>
+#include <string>
+#include <sstream>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 struct jpcRes
@@ -9,6 +11,7 @@ struct jpcRes
   Spin J;
   int P;
   int C;
+
   jpcRes(Spin j=0, int p=1, int c=1){
     J=j;
     P=p;
@@ -38,6 +41,17 @@ struct jpcRes
       }
     }
     return result; 
+  }
+
+  virtual std::string name() const{
+    std::stringstream tmpStrStreamJ;
+    tmpStrStreamJ << J;
+    std::stringstream tmpStrStreamP;
+    tmpStrStreamP << P;   
+    std::stringstream tmpStrStreamC;
+    tmpStrStreamC << C;   
+    std::string result="J"+tmpStrStreamJ.str()+"P"+tmpStrStreamP.str()+"C"+tmpStrStreamC.str();
+    return result;
   }
 
   virtual void print(std::ostream& os) const{
@@ -89,6 +103,18 @@ struct JPCLS : public jpcRes{
     return result; 
 }  
 
+  virtual std::string name() const{
+    std::string result=jpcRes::name();
+    std::stringstream tmpStrStreamL;
+    tmpStrStreamL << L;
+    std::stringstream tmpStrStreamS;
+    tmpStrStreamS << S;   
+
+    result+="L"+tmpStrStreamL.str()+"S"+tmpStrStreamS.str();
+    return result;
+  }
+
+
   virtual void print(std::ostream& os) const{
     jpcRes::print(os);
     os <<"\tL=" << L << "\tS=" << S;   
@@ -133,6 +159,17 @@ struct JPCSM : public jpcRes{
     return result; 
   }
 
+  virtual std::string name() const{
+    std::string result=jpcRes::name();
+    std::stringstream tmpStrStreamS;
+    tmpStrStreamS << S;
+    std::stringstream tmpStrStreamM;
+    tmpStrStreamM << M;   
+    
+    result+="S"+tmpStrStreamS.str()+"M"+tmpStrStreamM.str();
+    return result;
+  }
+  
   void print(std::ostream& os) const{
     jpcRes::print(os);
     os <<"\tS=" << S << "\tM=" << M
@@ -181,6 +218,20 @@ struct JPCLSM : public JPCLS{
     } 
     return result; 
   } 
+
+
+  virtual std::string name() const{
+    std::string result=jpcRes::name();
+    std::stringstream tmpStrStreamL;
+    tmpStrStreamL << L;
+    std::stringstream tmpStrStreamS;
+    tmpStrStreamS << S;
+    std::stringstream tmpStrStreamM;
+    tmpStrStreamS << M;   
+    
+    result+="L"+tmpStrStreamL.str()+"S"+tmpStrStreamS.str()+"M"+tmpStrStreamM.str();
+    return result;
+  }
 
 
   virtual void print(std::ostream& os) const{
