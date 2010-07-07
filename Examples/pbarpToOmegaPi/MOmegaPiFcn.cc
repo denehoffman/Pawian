@@ -69,34 +69,34 @@ void  MOmegaPiFcn::setMnUsrParams(MnUserParameters& upar){
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=_barpToOmegaPi0States->jpclsSinglet();
 
-  double counter=0.;
+  int counter=0;
   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
     //now fill the fitParameterMap
     std::string magStr=(*itJPCLS)->name()+"S"+"mag";
     std::string phiStr=(*itJPCLS)->name()+"S"+"phi";
-    upar.Add(magStr, 0.5, .1, -1., 1.);
+    upar.Add(magStr, 0.5, .1, -10., 10.);
     if (counter>0) upar.Add(phiStr, 0., .1, -M_PI, M_PI);
     counter++; 
   }
 
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=_barpToOmegaPi0States->jpclsTriplet0();
-  counter=0.;
+  counter=0;
   for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
     //now fill the fitParameterMap
     std::string magStr=(*itJPCLS)->name()+"T0"+"mag";
     std::string phiStr=(*itJPCLS)->name()+"T0"+"phi";
-    upar.Add(magStr, 0.5, .1, -1., 1.);
+    upar.Add(magStr, 0.5, .1, -10., 10.);
     if (counter>0) upar.Add(phiStr, 0., .1, -M_PI, M_PI);
     counter++; 
   }
 
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
-  counter=0.;
+  counter=0;
   for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
     //now fill the fitParameterMap
     std::string magStr=(*itJPCLS)->name()+"T1"+"mag";
     std::string phiStr=(*itJPCLS)->name()+"T1"+"phi";
-    upar.Add(magStr, 0.5, .1, -1., 1.);
+    upar.Add(magStr, 0.5, .1, -10., 10.);
     if (counter>0) upar.Add(phiStr, 0., .1, -M_PI, M_PI);
     counter++; 
   }
@@ -114,7 +114,7 @@ void MOmegaPiFcn::setFitParamVal(OmegaPiData::fitParamVal& theParamVal, const st
 
   if (par.size()!= JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3) ErrMsg(fatal) << "size of parameters wrong!!! par.size()=" << par.size() << "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" << JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 << endmsg;
 
-  double counter=0.;
+  int counter=0;
   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
     //now fill the fitParameterMap
     double mag=par[counter];

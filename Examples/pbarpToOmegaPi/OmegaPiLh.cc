@@ -90,6 +90,7 @@ complex<double> OmegaPiLh::calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< 
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
     for ( it=fitParm.begin(); it!=fitParm.end(); ++it){
       boost::shared_ptr<const JPCLS> theJPCLS=it->first;
+      if (fabs(lamomega)>theJPCLS->J) continue;
       double theMag=it->second.first;
       double thePhi=it->second.second;
       complex<double> expiphi(cos(thePhi), sin(thePhi));
