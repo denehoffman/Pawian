@@ -55,7 +55,9 @@ private:
   TH1F* _treimanYangDataHist;
   TH1F* _treimanYangMcHist;
   TH1F* _treimanYangFittedHist;
-
+ 
+  unsigned _jmax;
+  unsigned _pbarmom;
 
   void initRootStuff();
   void plotCosOmegaHeli(TH1F* theHisto, const OmPiEvtData& theEvtData, double weight);

@@ -20,7 +20,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  OmegaPiEventList(EventList& evtListData, EventList& evtListMc);
+  OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax);
 
 
 
@@ -36,9 +36,7 @@ protected:
 
 
 private:
-//   int _nOfData;
-//   int _nOfMc;
-
+  unsigned _jmax;
   std::vector<OmPiEvtData> _dataList;
   std::vector<OmPiEvtData> _mcList;
 

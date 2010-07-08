@@ -10,8 +10,10 @@
 #include "ErrLogger/ErrLineLog.hh"
 
 
-OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc)
+OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax):
+  _jmax(jmax)
 {
+  if (_jmax<0) ErrMsg(fatal) << "_jmax < 0 is not allowed!!!" << endmsg;
   read4Vecs(evtListData, _dataList);
   read4Vecs(evtListMc, _mcList);
 }
@@ -52,14 +54,27 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& o
     if ( fabs(pi0FromOmega4V.M()-0.13497)>0.01 ) 
       ErrMsg(fatal) <<"the third particle is not the pi0 from the omega decay" << endmsg;
 
-    Vector4<float> pi0HeliOmega4 = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
+    Vector4<float> pi0HeliOmega4V = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
 
     OmPiEvtData theOmPiEvtData;
     theOmPiEvtData.cm_4Vec=cm_4V;
     theOmPiEvtData.omegaHeliCm4Vec=omega_cm_4V;
     theOmPiEvtData.pi0RecHeliCm4Vec=piRec_cm_4V;
-    theOmPiEvtData.pi0HeliOmega4Vec=pi0HeliOmega4;
+    theOmPiEvtData.pi0HeliOmega4Vec=pi0HeliOmega4V;
 
+    for (Spin j=0; j<=_jmax; j++){
+      for (Spin M=-1; M<=1; M++){
+	if (fabs(M)>j) continue;
+	for (Spin lam=-1; lam<=1; lam++){
+ 	  if (fabs(lam)>j) continue;
+	  theOmPiEvtData.Dfp[j][M][lam]=Wigner_D(omega_cm_4V.Phi(),omega_cm_4V.Theta(),0,j,M,lam);
+	}
+      }
+    }
+
+    Spin omegaSpin=1;
+    Wigner_D(omegaSpin, pi0HeliOmega4V.Phi(), pi0HeliOmega4V.Theta(),0, theOmPiEvtData.Dfd);
+    
     omPiEvtList.push_back(theOmPiEvtData);
 
     ++evtCount;

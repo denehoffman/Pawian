@@ -40,21 +40,24 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
 		    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    std::cout << "This application is a simple PWA fit for the decay chain\n"
-	      << "eta_c -> intermediate + pi0  ; intermediate -> pi0 + eta\n"
-	      << "It makes use of the Covariant Tensor Formalism\n"
-	      << "The fit determines whether the intermediate resonance is a spin 0,1 or 2 particle\n"
-	      << "In addition the mass and width of the intermediate resonance will be fitted with a simple Breit-Wigner\n"
-              << "To start the application with data containing  an intermediate resonance with Spin=0 and mass 0.98 GeV, type: ./MEtacToapi0FitApp -d 0\n"
-              << "To start the application with data containing  an intermediate resonance with Spin=2 and mass 1.32 GeV, type: ./MEtacToapi0FitApp -d 2\n"
-              << "with the flag -msg <errorLogMode> you can choose the mode for the error logger\n"
-	      << "i.e. with './MEtacToapi0FitApp -d 2 -msg debugging' you start the fit with Spin=2 in the debugging mode for the error logger\n"  
+    std::cout << "This application is a PWA fit for the reaction\n\n"
+	      << "pbar p -> omega + pi0  ; omega -> pi0 + gamma\n\n"
+	      << "It makes use of the Helicity Formalism\n"
+	      << "The fit determines the content of the initial states formed via the pbar p reaction "
+	      << "and the content of the LS combinations for the dacay to omega pi0\n\n"
+              << "For the steering of the application one can use the following flags\n"
+              << "-jmax: maximum spin concidering in the fit (default 3)\n"
+              << "-pbarmom: pbar momentum of the input data (available so far: 600, 1940) (default 600)\n" 
+              << "-msg <errorLogMode> you can choose the mode for the error logger\n\n"
+	      << "i.e. with './MpbarpToOmegaPiApp -jmax 5 -pbarmom 1940 -msg debugging' you start the fit with jmax=3, reconstructed data and MCs at 1940 MeV/c in the debugging mode for the error logger\n"  
 	      << std::endl;
     return 0;
   }
 
   
   std::string msgModeStr="default";
+  std::string jmaxStr="3";
+  std::string pbarmomStr="600";
 
   // decode arguments
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -63,6 +66,16 @@ int main(int __argc,char *__argv[]){
     if (sw=="-msg"){
       optind++;
       msgModeStr = __argv[optind];
+      found=true;
+    }
+    if (sw=="-jmax"){
+      optind++;
+      jmaxStr = __argv[optind];
+      found=true;
+    }
+    if (sw=="-pbarmom"){
+      optind++;
+      pbarmomStr = __argv[optind];
       found=true;
     }
     if (!found){
@@ -85,7 +98,38 @@ int main(int __argc,char *__argv[]){
     ErrMsg(warning) << "ErrorLogger not (properly) set -> Use mode 'ErrLog::debugging' " << endmsg;  
   }
 
+
+  std::stringstream jmaxStrStr(jmaxStr);
+  std::stringstream pbarmomStrStr(pbarmomStr);
+
+  unsigned jMax=3;
+  jmaxStrStr >> jMax;
+
+  unsigned pbarMom=600;
+  pbarmomStrStr >> pbarMom; 
+  
+  ErrMsg(routine) << "Maximum spin content: " << jMax << endmsg;
+  ErrMsg(routine) << "pbar momentum: " << pbarMom   << endmsg;
+
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
+
+  std::string piomegaDatFile;
+  std::string piomegaMcFile; 
+  if(pbarMom==600){
+    piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat";
+    piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat";
+  }
+  else if (pbarMom==1940){
+    piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
+    piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
+  }
+  else{
+    ErrMsg(fatal) <<"data for pbarMom= " << pbarMom << "not available; use 600 or 1940!!!" << endmsg;
+  }
+
+  ErrMsg(routine) << "data file: " << piomegaDatFile << endmsg;
+  ErrMsg(routine) << "mc file: " << piomegaMcFile << endmsg;
+  
   
   ParticleTable pTable;
   PdtParser parser;
@@ -97,9 +141,6 @@ int main(int __argc,char *__argv[]){
   
 
   std::vector<std::string> fileNames;
-
-  std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat"); 
-//   std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_1940.dat"); 
 
   fileNames.push_back(piomegaDatFile);
   CBElsaReader eventReader(fileNames, 3, 0); 
@@ -116,12 +157,6 @@ int main(int __argc,char *__argv[]){
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = piOmegaEventsData.nextEvent()) != 0 && evtCount < 20) {
-//     double gammaE=anEvent->p4(1)->E()- anEvent->p4(2)->E();
-//     double gammaPx=anEvent->p4(1)->Px()- anEvent->p4(2)->Px();
-//     double gammaPy=anEvent->p4(1)->Py()- anEvent->p4(2)->Py();
-//     double gammaPz=anEvent->p4(1)->Pz()- anEvent->p4(2)->Pz();
-//     anEvent->addParticle(gammaE, gammaPx, gammaPy, gammaPz);
-    
     ErrMsg(routine) << "\n" 
                     << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
                     << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
@@ -134,16 +169,13 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNamesMc;
 
-  std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat"); 
-//   std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat"); 
-
   fileNamesMc.push_back(piomegaMcFile);
   CBElsaReader eventReaderMc(fileNamesMc, 3, 0); 
   EventList piOmegaEventsMc;
   eventReaderMc.fillAll(piOmegaEventsMc);
   piOmegaEventsMc.rewind();
 
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 3));
+  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(3));
   boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
@@ -180,58 +212,6 @@ int main(int __argc,char *__argv[]){
 
 
  OmegaPiHist theHistogrammer(theOmegaLhPtr, finalFitParams);
-//   // now fill the fir parameter
-//   OmegaPiData::fitParamVal theFitParameter; 
- 
-//   std::vector< boost::shared_ptr<const JPCLS> > allJPCLSStates=theOmegaPi0StatesPtr->jpclsStates();
-//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-
-//   double counter=0.;
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theOmegaPi0StatesPtr->jpclsSinglet();
-//   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
-//     //now fill the fitParameterMap
-//     std::pair <double,double> tmpParameter=make_pair(counter,0.0);
-//     theFitParameter.omegaProdSinglet[(*itJPCLS)]=tmpParameter;
-//     counter++; 
-//   }
-
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theOmegaPi0StatesPtr->jpclsTriplet0();
-//   for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
-//     //now fill the fitParameterMap
-//     std::pair <double,double> tmpParameter=make_pair(counter,0.0);
-//     theFitParameter.omegaProdTriplet0[(*itJPCLS)]=tmpParameter;
-//     counter++; 
-//   }
-
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theOmegaPi0StatesPtr->jpclsTriplet1();
-//   for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
-//     //now fill the fitParameterMap
-//     std::pair <double,double> tmpParameter=make_pair(counter,0.0);
-//     theFitParameter.omegaProdTriplet1[(*itJPCLS)]=tmpParameter;
-//     counter++; 
-//   }
-
-//   //now print the fitparameter
-//   std::cout << "\n The fit parameter for omega production are (singlet states):" << std::endl;
-//   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
-//     std::cout << (*itJPCLS)->name();
-//     std::pair<double, double> tmpParam=theFitParameter.omegaProdSinglet[(*itJPCLS)];
-//     std::cout <<"\t" << tmpParam.first <<"\t" << tmpParam.second  << std::endl;
-//   }
-
-//   std::cout << "\n The fit parameter for omega production are (triplet0 states):" << std::endl;
-//   for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
-//     std::cout << (*itJPCLS)->name();
-//     std::pair<double, double> tmpParam=theFitParameter.omegaProdTriplet0[(*itJPCLS)];
-//     std::cout <<"\t" << tmpParam.first <<"\t" << tmpParam.second  << std::endl;
-//   }
-
-//   std::cout << "\n The fit parameter for omega production are (triplet1 states):" << std::endl;
-//   for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
-//     std::cout << (*itJPCLS)->name();
-//     std::pair<double, double> tmpParam=theFitParameter.omegaProdTriplet1[(*itJPCLS)];
-//     std::cout <<"\t" << tmpParam.first <<"\t" << tmpParam.second  << std::endl;
-//   }
 
 //   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 

@@ -20,7 +20,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax);
+  OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
 
 
 
@@ -30,6 +30,9 @@ public:
   // Getters:
   const std::vector<OmPiEvtData>& getDataVecs() const {return _dataList;}
   const std::vector<OmPiEvtData>& getMcVecs() const {return _mcList;}
+  const unsigned jMax() const {return _jmax;}
+  const unsigned pbarMom() const {return _pbarmom;}
+
 //   int kindOfData() const {return _kindOfData;}
 
 protected:
@@ -37,6 +40,7 @@ protected:
 
 private:
   unsigned _jmax;
+  unsigned _pbarmom;
   std::vector<OmPiEvtData> _dataList;
   std::vector<OmPiEvtData> _mcList;
 

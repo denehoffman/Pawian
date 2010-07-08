@@ -10,8 +10,9 @@
 #include "ErrLogger/ErrLineLog.hh"
 
 
-OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax):
-  _jmax(jmax)
+OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom):
+  _jmax(jmax),
+  _pbarmom(pbarmom)
 {
   if (_jmax<0) ErrMsg(fatal) << "_jmax < 0 is not allowed!!!" << endmsg;
   read4Vecs(evtListData, _dataList);

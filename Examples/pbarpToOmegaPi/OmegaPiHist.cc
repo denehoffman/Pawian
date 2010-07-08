@@ -1,5 +1,6 @@
 #include <getopt.h>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
@@ -27,6 +28,10 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   if(0==theEvtList){
     ErrMsg(fatal) <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
   }
+
+  _jmax=theEvtList->jMax();
+  _pbarmom=theEvtList->pbarMom();
+
   initRootStuff();
 
   const std::vector<OmPiEvtData> dataList=theEvtList->getDataVecs();
@@ -86,6 +91,10 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
   if(0==theEvtList){
     ErrMsg(fatal) <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
   }
+
+  _jmax=theEvtList->jMax();
+  _pbarmom=theEvtList->pbarMom();
+
   initRootStuff();
 
   std::vector<OmPiEvtData> dataList=theEvtList->getDataVecs();
@@ -146,7 +155,15 @@ OmegaPiHist::~OmegaPiHist()
 
 void OmegaPiHist::initRootStuff()
 {
-  _theTFile=new TFile("./OmegaPi0Fit.root","recreate");
+  std::stringstream jmaxStrStr;
+  std::stringstream pbarMomStrStr;
+
+  jmaxStrStr << _jmax;
+  pbarMomStrStr << _pbarmom;
+
+  std::string rootFileName="./OmegaPi0Fit_jmax"+jmaxStrStr.str()+"_mom"+pbarMomStrStr.str()+".root";
+
+  _theTFile=new TFile(rootFileName.c_str(),"recreate");
   _cosOmegaHeliDataHist= new TH1F("_cosOmegaHeliDataHist","cos(#Theta) #omega heli data",101, -1.0, 1.0);
   _cosOmegaHeliMcHist= new TH1F("_cosOmegaHeliMcHist","cos(#Theta) #omega heli MC",101, -1.0, 1.0);
   _cosOmegaHeliFittedHist= new TH1F("_cosOmegaHeliFittedHist","cos(#Theta) #omega heli fit result",101, -1.0, 1.0);
