@@ -120,7 +120,7 @@ int main(int __argc,char *__argv[]){
     piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat";
   }
   else if (pbarMom==1940){
-    piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
+    piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/510_1940.dat";
     piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
   }
   else{
