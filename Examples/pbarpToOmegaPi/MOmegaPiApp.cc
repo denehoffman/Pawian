@@ -177,7 +177,7 @@ int main(int __argc,char *__argv[]){
 
   boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
 
-  boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(3));
+  boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(jMax));
   boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
 
   boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
