@@ -98,8 +98,8 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNames;
 
-//   std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat"); 
-  std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_1940.dat"); 
+  std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat"); 
+//   std::string piomegaDatFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/510_1940.dat"); 
 
   fileNames.push_back(piomegaDatFile);
   CBElsaReader eventReader(fileNames, 3, 0); 
@@ -134,8 +134,8 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNamesMc;
 
-//   std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat"); 
-  std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat"); 
+  std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat"); 
+//   std::string piomegaMcFile(theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat"); 
 
   fileNamesMc.push_back(piomegaMcFile);
   CBElsaReader eventReaderMc(fileNamesMc, 3, 0); 
@@ -143,9 +143,9 @@ int main(int __argc,char *__argv[]){
   eventReaderMc.fillAll(piOmegaEventsMc);
   piOmegaEventsMc.rewind();
 
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 5));
+  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 3));
 
-  boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(5));
+  boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(3));
   boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
 
   boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));

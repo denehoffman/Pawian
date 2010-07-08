@@ -85,19 +85,19 @@ complex<double> OmegaPiLh::calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< 
   complex<double> result(0.,0.);
   for (Spin lamomega=-1; lamomega<=1; lamomega++){
 
-    complex<double> omegaDecAmp=Clebsch(1,0,1,lamgamma,1, lamgamma)*Clebsch(1,lamgamma,0,0,1, lamgamma)*theData.Dfp[1][0][lamgamma];
 
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
     for ( it=fitParm.begin(); it!=fitParm.end(); ++it){
       boost::shared_ptr<const JPCLS> theJPCLS=it->first;
       if (fabs(lamomega)>theJPCLS->J) continue;
+      complex<double> omegaDecAmp=Clebsch(1,0,1,lamgamma,1, lamgamma)*Clebsch(1,lamgamma,0,0,1, lamgamma)*theData.Dfp[1][lamomega][lamgamma];
       double theMag=it->second.first;
       double thePhi=it->second.second;
       complex<double> expiphi(cos(thePhi), sin(thePhi));
-      complex<double> tmpResult=theMag*expiphi*Clebsch(theJPCLS->L,0,1, lamomega,theJPCLS->J, lamomega)*Clebsch(1,lamomega,0,0,1,lamomega)*theData.Dfp[theJPCLS->J][Minit][lamomega];     
-      result+=tmpResult;                         
+      result+=theMag*expiphi*Clebsch(theJPCLS->L,0,1, lamomega,theJPCLS->J, lamomega)*Clebsch(1,lamomega,0,0,1,lamomega)*theData.Dfp[theJPCLS->J][Minit][lamomega];     
+      result*=omegaDecAmp;                         
     } 
-    result*=omegaDecAmp;   
+
   }
 
   return result;
