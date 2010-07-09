@@ -36,7 +36,7 @@ public:
   virtual ~OmegaPiLh();
 
   OmegaPiLh* clone_() const {
-                return new OmegaPiLh(*this);
+    return new OmegaPiLh(_omegaPiEventListPtr, _omegaPi0StatesPtr);
         }
 
 
