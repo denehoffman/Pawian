@@ -90,7 +90,7 @@ complex<double> OmegaPiLh::calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< 
     for ( it=fitParm.begin(); it!=fitParm.end(); ++it){
       boost::shared_ptr<const JPCLS> theJPCLS=it->first;
       if (fabs(lamomega)>theJPCLS->J) continue;
-      complex<double> omegaDecAmp=Clebsch(1,0,1,lamgamma,1, lamgamma)*Clebsch(1,lamgamma,0,0,1, lamgamma)*theData.Dfp[1][lamomega][lamgamma];
+      complex<double> omegaDecAmp=Clebsch(1,0,1,lamgamma,1, lamgamma)*Clebsch(1,lamgamma,0,0,1, lamgamma)*theData.Dfd[1][lamomega][lamgamma];
       double theMag=it->second.first;
       double thePhi=it->second.second;
       complex<double> expiphi(cos(thePhi), sin(thePhi));
