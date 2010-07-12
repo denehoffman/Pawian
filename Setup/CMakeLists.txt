@@ -8,6 +8,7 @@ MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 set(INCLUDE_DIRECTORIES
 ${Boost_INCLUDE_DIRS}
 ${CMAKE_SOURCE_DIR}
+${log4cpp_INCLUDE_DIRS}
 )
 
 include_directories( ${INCLUDE_DIRECTORIES})
@@ -48,7 +49,7 @@ target_link_libraries(${EXECUTABLENAME} Particle)
 target_link_libraries(${EXECUTABLENAME} ErrLogger)
 target_link_libraries(${EXECUTABLENAME} Utils)
 target_link_libraries(${EXECUTABLENAME} qft++)
-target_link_libraries(${EXECUTABLENAME} log4cpp)
+target_link_libraries(${EXECUTABLENAME} ${log4cpp_LIBRARIES})
 
 INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
 

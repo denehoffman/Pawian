@@ -7,6 +7,7 @@ MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
 set(INCLUDE_DIRECTORIES 
 ${Boost_INCLUDE_DIRS}
+${log4cpp_INCLUDE_DIRS}
 ${CMAKE_SOURCE_DIR}
 )
 
@@ -29,7 +30,7 @@ ELSE()
         ADD_LIBRARY ( ${PACKAGE_NAME} SHARED ${CCSRC} )
 ENDIF( PAWIAN_STATIC )
 
-target_link_libraries(${PACKAGE_NAME} log4cpp)
+target_link_libraries(${PACKAGE_NAME} ${log4cpp_LIBRARIES})
 
 INSTALL (TARGETS ${PACKAGE_NAME} DESTINATION ${CMAKE_BINARY_DIR}/lib)
 
