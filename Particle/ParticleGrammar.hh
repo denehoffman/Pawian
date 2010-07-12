@@ -3,7 +3,7 @@
 
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -119,7 +119,7 @@ namespace particleGrammar
 	if (wasComment) return false;
         if (!r || first != last) { // fail if we did not get a full match
 	  std::string rest(first, last);
-	  ErrMsg(error) << "failed parsing at: " << rest << endmsg;
+	  ErrMsg << "failed parsing at: " << rest << endmsg;
 	  return false;
 	}
 

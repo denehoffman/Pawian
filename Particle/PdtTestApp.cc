@@ -2,7 +2,7 @@
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
 
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 #include <iostream>
 #include <string>
@@ -11,7 +11,7 @@
 int main()
 {
 
-  ErrLineLog thisLogger(ErrLog::debugging);
+  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
 
   ParticleTable pTable;
   PdtParser parser;
@@ -26,14 +26,14 @@ int main()
     if (0 != omega)
       omega->print(std::cout);
     else
-      ErrMsg(warning) << name << " not found" << endmsg;
+      Warning << name << " not found" << endmsg;
 
     name = std::string("oohps");
     Particle* dummy = pTable.particle(name);
     if (0 != dummy)
       dummy->print(std::cout);
     else
-      ErrMsg(warning) << name << " not found" << endmsg;
+      Warning << name << " not found" << endmsg;
 
     // try clone error handling
     pTable.clone(std::string("omegaNew"), std::string("omeGa")); // syntax here is clone(new, old);
@@ -48,7 +48,7 @@ int main()
     pTable.particle(std::string("omegaNew"))->print(std::cout);
 
   } else {
-    ErrMsg(error) << "Error: could not parse " << pdtFile << endmsg;
+    ErrMsg << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
   }
 

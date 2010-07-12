@@ -1,7 +1,7 @@
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include <math.h>
 
 ParticleTable::ParticleTable()
@@ -46,13 +46,13 @@ bool ParticleTable::clone(std::string newName, std::string oldName)
 {
   std::map<const std::string, Particle*>::const_iterator iter = particles.find(newName);
   if (iter != particles.end()) {
-    ErrMsg(warning) << "ParticleTable: can not clone to already existing particle " << newName << endmsg;
+    Warning << "ParticleTable: can not clone to already existing particle " << newName << endmsg;
     return false; // cannot clone to an existing particle
   }
   
   Particle* oldParticle = particle(oldName);
   if (0 == oldParticle) {
-    ErrMsg(warning) << "ParticleTable: cannot clone, " << oldName << " does not exist!" << endmsg;
+    Warning << "ParticleTable: cannot clone, " << oldName << " does not exist!" << endmsg;
     return false;
   }
 
@@ -70,7 +70,7 @@ bool ParticleTable::modifyMass(std::string name, double newMass)
     thisParticle->data()->mass.mean(newMass);
     return true; // success
   }
-  ErrMsg(warning) << "ParticleTable::modifyMass: " << name << " not found!" << endmsg;
+  Warning << "ParticleTable::modifyMass: " << name << " not found!" << endmsg;
   return false; // error
 }
 
@@ -81,7 +81,7 @@ bool ParticleTable::modifyWidth(std::string name, double newWidth)
     thisParticle->data()->width.mean(newWidth);
     return true; // success
   }
-  ErrMsg(warning) << "ParticleTable::modifyWidth: " << name << " not found!" << endmsg;
+  Warning << "ParticleTable::modifyWidth: " << name << " not found!" << endmsg;
   return false; // error
 }
 

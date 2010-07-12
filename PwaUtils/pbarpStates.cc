@@ -1,11 +1,6 @@
 #include "PwaUtils/pbarpStates.hh"
-
 #include "Utils/MathUtils.hh"
-
-#include "ErrLogger/ErrLineLog.hh"
-
-
- 
+#include "ErrLogger/ErrLogger.hh"
 
 pbarpStates::pbarpStates():
   _jmax(10),
@@ -35,21 +30,21 @@ bool pbarpStates::calcJPCs(){
       for (int p=-1; p<=1; p+=2){
        vector<LS> motherLSs=GetValidLS(j, p, _pbarJPC.J,_pbarJPC.P, _pJPC.J, _pJPC.P);
        int num_ls = (int) motherLSs.size();
-       ErrMsg(debugging) << "valid LS combinations for JP(pbar p)=" << j <<" " << p << endmsg;
+       DebugMsg << "valid LS combinations for JP(pbar p)=" << j <<" " << p << endmsg;
        
        for(int ls = 0; ls < num_ls; ls++){
 
 	 Spin L= motherLSs[ls].L;
 	 Spin S= motherLSs[ls].S;
 	 int cparity(pow(-1,int(L+S)));
-         ErrMsg(debugging) << "L=" << L <<" S=" << S << " ==> C=" << cparity << endmsg;
+         DebugMsg << "L=" << L <<" S=" << S << " ==> C=" << cparity << endmsg;
 	 boost::shared_ptr<const jpcRes> jpcPtr(new jpcRes(j,p,cparity));
  
 	 std::vector<Spin> theMs;
         
 	 for(Spin M = -S; M <= S; M++){
            double Clebschg=Clebsch(L,0,S,M, j,M);
-	   ErrMsg(debugging) << "Clebsch(L,0,S,M=" << M << ", j,M=" << M << "): " << Clebschg << endmsg;
+	   DebugMsg << "Clebsch(L,0,S,M=" << M << ", j,M=" << M << "): " << Clebschg << endmsg;
            if (fabs(Clebschg)>1e-8) theMs.push_back(M);
 	 }
 
@@ -73,26 +68,40 @@ bool pbarpStates::calcJPCs(){
 	       if ((*itM)==0) fillVec(jpcPtr, _tripletM0States);
                else if ((*itM)==1) fillVec(jpcPtr, _tripletMp1States);
                else if ((*itM)==-1) fillVec(jpcPtr, _tripletMm1States);
-	       else ErrMsg(fatal) << "pbar p state with S=" << S << " and M="<< (*itM) <<" cannot exitst!!!" << cparity << endmsg;
+	       else {
+		 Alert << "pbar p state with S=" << S << " and M="<< (*itM) <<" cannot exitst!!!" 
+		       << cparity << endmsg;
+		 exit(1);
+	       }
 	     }
-	     else ErrMsg(fatal) << "pbar p state with S=" << S << " cannot exitst!!!" << cparity << endmsg;
+	     else {
+	       Alert << "pbar p state with S=" << S << " cannot exitst!!!" << cparity << endmsg;
+	       exit(1);
+	     }
 	   }             
 	 }
         
        }
       }
-       ErrMsg(debugging) << "\n" << endmsg;
+       DebugMsg << "\n" << endmsg;
     }
 }
 
-void pbarpStates::fillVec(boost::shared_ptr<const jpcRes> currentRes, std::vector< boost::shared_ptr<const jpcRes> >& theVec){
+void pbarpStates::fillVec(boost::shared_ptr<const jpcRes> currentRes, 
+			  std::vector< boost::shared_ptr<const jpcRes> >& theVec){
   const jpcRes* jpcCurrent=currentRes.get();
-  if (0==jpcCurrent) ErrMsg(fatal) << "shared object containss 0 pointer!!!" << endmsg;
+  if (0==jpcCurrent) {
+    Alert << "shared object containss 0 pointer!!!" << endmsg;
+    exit(1);
+  }
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it;
   bool found=false;
   for (it=theVec.begin(); it!=theVec.end(); ++it){
     const jpcRes* jpcIt=(*it).get();
-    if (0==jpcIt) ErrMsg(fatal) << "shared object containss 0 pointer!!!" << endmsg;
+    if (0==jpcIt) {
+      Alert << "shared object containss 0 pointer!!!" << endmsg;
+      exit(1);
+    }
     if ( (*jpcIt) == (*jpcCurrent) ){
       found=true;
       continue;

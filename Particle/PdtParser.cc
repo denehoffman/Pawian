@@ -1,9 +1,6 @@
 #include "Particle/PdtParser.hh"
 
-#include "ErrLogger/ErrLineLog.hh"
-
 #include "Particle/ParticleGrammar.hh"
-
 
 PdtParser::PdtParser()
 {
@@ -30,9 +27,6 @@ bool PdtParser::parse(std::string& fileName, ParticleTable& table)
 	  Particle* newParticle = new Particle(*pData);
 	  table.addParticle(newParticle);
 	}
-// 	else {
-// 	  std::cout << "failed: " << str << std::endl;
-// 	}
       }
     }
     file.close();

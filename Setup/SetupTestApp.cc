@@ -13,7 +13,7 @@
 
 int main()
 {
-  //  ErrLineLog myLogger(ErrLog::debugging);
+  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
   
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
   std::string setupFile(theSourcePath + "/Setup/test.setup");
