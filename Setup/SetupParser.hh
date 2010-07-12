@@ -3,9 +3,15 @@
 
 #include <vector>
 #include <string>
+
+#include <boost/config.hpp> // put this first to suppress some VC++ warnings
 #include <boost/variant/recursive_variant.hpp>
 
 class ParticleTable;
+namespace decayGraph
+{
+  struct EdgeList;
+}
 
 namespace setupGrammar
 {
@@ -44,6 +50,7 @@ public:
 
   bool parse(std::string& fileName, ParticleTable* pdtTable = 0);
   const setupGrammar::decay_tree* setup() const;
+  const decayGraph::EdgeList* edgeList() const;
 
 private:
   

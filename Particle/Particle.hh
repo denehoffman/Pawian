@@ -47,8 +47,10 @@ struct ParticleData {
 class Particle
 {
 public:
-  Particle(ParticleData& data);
-  Particle(Particle& other);
+
+  Particle();
+  Particle(const ParticleData& data);
+  Particle(const Particle& other);
   ~Particle();
 
   const std::string& name();
@@ -70,15 +72,14 @@ public:
   int charm();
   DynFunctionType dynFctType();
 
-  ParticleData* data();
+  ParticleData* data() const;
 
   void print(std::ostream& out);
 
 private:
-  Particle();
-
   ParticleData* pdata;
 
+friend std::ostream &operator<<(std::ostream &o, Particle &p);
 };
 
 #endif

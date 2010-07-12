@@ -5,9 +5,9 @@
 
 # {} marks a decay chain
 { ppbar -> {partB -> myPi+, pi-} , {partC -> partD, partE} }
-{ ppbar -> {partB -> myPi+, pi-} , {partX -> partD, partE} }
-{ ppbar -> {partB -> myPi+, pi-} , {partY -> partD, partE} }
-{ ppbar -> {partB -> myPi+, pi-} , {partZ -> partD, partE} }
+# { ppbar -> {partB -> myPi+, pi-} , {partX -> partD, partE} }
+# { ppbar -> {partB -> myPi+, pi-} , {partY -> partD, partE} }
+# { ppbar -> {partB -> myPi+, pi-} , {partZ -> partD, partE} }
 
 
 # set properties of initial state: L, M = Lz, 

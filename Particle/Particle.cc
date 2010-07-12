@@ -7,12 +7,12 @@
 #include <string>
 #include <cstdlib>
 
-Particle::Particle(ParticleData& data)
+Particle::Particle(const ParticleData& data)
 {
-  pdata = &data;
+  pdata = const_cast<ParticleData*>(&data);
 }
 
-Particle::Particle(Particle& other)
+Particle::Particle(const Particle& other)
 {
   pdata = other.data();
 }
@@ -208,7 +208,7 @@ DynFunctionType Particle::dynFctType()
 }
 
 
-ParticleData* Particle::data()
+ParticleData* Particle::data() const
 {
   return pdata;
 }
@@ -227,3 +227,13 @@ Particle::Particle()
 {
 }
 
+
+std::ostream &operator<<(std::ostream &o, Particle &p)
+{
+  o << p.name() << "\tmass=" << p.massErr() << "\twidth=" << p.widthErr() << "\t3*q=" << p.charge()
+    << "\t2*J=" << p.twoJ() << "\tP=" << p.parity().parity() << "\tC=" << p.chargeParity().parity() 
+    << "\tG=" << p.gParity().parity() << "\tI=" << p.iso() << "\tI3=" << p.iso3() 
+    << "\tcharm=" << p.charm() << "\tstrange=" << p.strange() << std::endl;
+
+  return o;
+}

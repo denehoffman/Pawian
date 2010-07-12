@@ -5,6 +5,7 @@
 
 class ParticleTable;
 class EventList;
+class DecayTree;
 
 class PwaEnv
 {
@@ -23,6 +24,7 @@ private:
   PwaEnv();
 
   ParticleTable* theParticleTable;
+  DecayTree* theDecayTree;
   EventList* theBeamEventList;
   EventList* theMcEventList;
 

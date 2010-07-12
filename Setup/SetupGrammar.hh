@@ -11,6 +11,8 @@
 #include <boost/variant/recursive_variant.hpp>
 #include <boost/foreach.hpp>
 
+#include "DecayTree/DecayTree.hh"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -30,8 +32,6 @@ namespace setupGrammar
   ///////////////////////////////////////////////////////////////////////////
 
   struct decay_tree;
-  
-  
 }
 
 // We need to tell fusion about our setup struct
@@ -53,142 +53,164 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace setupGrammar
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //  Print out the mini decay tree
-    ///////////////////////////////////////////////////////////////////////////
-    int const tabsize = 4;
+  ///////////////////////////////////////////////////////////////////////////
+  //  Print out the mini decay tree
+  ///////////////////////////////////////////////////////////////////////////
+  int const tabsize = 4;
+  decayGraph::EdgeList edgeList;
+  
+  void tab(int indent)
+  {
+    for (int i = 0; i < indent; ++i)
+      std::cout << ' ';
+  }
 
-    void tab(int indent)
+  void vertexToEdgeList(const std::string& name)
+  {
+    edgeList.lastVertexNumber++;
+    edgeList.particleNames.insert(std::pair<int, std::string>(edgeList.lastVertexNumber, name));
+    if (edgeList.decays.size() > 0) {
+      (*edgeList.lastVertex)->daughters.push_back(edgeList.lastVertexNumber);
+    }
+    edgeList.decays.push_back(new decayGraph::Decay(edgeList.lastVertexNumber));
+    edgeList.lastVertex = edgeList.decays.rbegin();
+  }
+
+  void finalToEdgeList(const std::string& name)
+  {
+    edgeList.lastVertexNumber++;
+    edgeList.particleNames.insert(std::pair<int, std::string>(edgeList.lastVertexNumber, name));
+    (*edgeList.lastVertex)->daughters.push_back(edgeList.lastVertexNumber);
+    while(edgeList.lastVertex != edgeList.decays.rend() && 
+	  (*edgeList.lastVertex)->daughters.size() == 2 )
+      edgeList.lastVertex++;
+  }
+
+
+  struct decay_tree_printer
+  {
+    decay_tree_printer(int indent = 0)
+      : indent(indent)
     {
-        for (int i = 0; i < indent; ++i)
-            std::cout << ' ';
+    }
+      
+    void operator()(decay_tree const& decay) const;
+    
+    int indent;
+  };
+  
+  struct decay_node_printer : boost::static_visitor<>
+  {
+    decay_node_printer(int indent = 0)
+      : indent(indent)
+    {
+    }
+      
+    void operator()(decay_tree const& decay) const
+    {
+      decay_tree_printer(indent+tabsize)(decay);
+    }
+    
+    void operator()(std::string const& text) const
+    {
+      tab(indent+tabsize);
+      std::cout << "final state particle " << text << std::endl;
+      finalToEdgeList(text);
+    }
+    
+    int indent;
+  };
+  
+  void decay_tree_printer::operator()(decay_tree const& decay) const
+  {
+    tab(indent);
+    std::cout << decay.name << " -> " << std::endl;
+    vertexToEdgeList(decay.name);
+    
+    BOOST_FOREACH(decay_node const& node, decay.children) {
+      boost::apply_visitor(decay_node_printer(indent), node);
+    }
+    
+    tab(indent);
+
+    std::vector<std::string>::const_iterator iter;
+        
+    iter = decay.addParticle.begin();
+    while (iter != decay.addParticle.end()) {
+      std::cout << "new particle: " << *iter << std::endl;
+      ++iter;
     }
 
-    struct decay_tree_printer
-    {
-        decay_tree_printer(int indent = 0)
-          : indent(indent)
-        {
-        }
-
-        void operator()(decay_tree const& decay) const;
-
-        int indent;
-    };
-
-    struct decay_node_printer : boost::static_visitor<>
-    {
-        decay_node_printer(int indent = 0)
-          : indent(indent)
-        {
-        }
-
-        void operator()(decay_tree const& decay) const
-        {
-            decay_tree_printer(indent+tabsize)(decay);
-        }
-
-        void operator()(std::string const& text) const
-        {
-            tab(indent+tabsize);
-            std::cout << "text: \"" << text << '"' << std::endl;
-        }
-
-        int indent;
-    };
-
-    void decay_tree_printer::operator()(decay_tree const& decay) const
-    {
-        tab(indent);
-        std::cout << "tag: " << decay.name << std::endl;
-        tab(indent);
-        std::cout << '{' << std::endl;
-
-        BOOST_FOREACH(decay_node const& node, decay.children)
-        {
-            boost::apply_visitor(decay_node_printer(indent), node);
-        }
-
-        tab(indent);
-
-        std::vector<std::string>::const_iterator iter;
-        
-        iter = decay.addParticle.begin();
-        while (iter != decay.addParticle.end()) {
-          std::cout << "new particle: " << *iter << std::endl;
-          ++iter;
-        }
-
-        iter = decay.cloneParticle.begin();
-        while (iter != decay.cloneParticle.end()) {
-          std::cout << "cloned particle: " << *iter << std::endl;
-          ++iter;
-        }
-
-        iter = decay.modParticle.begin();
-        while (iter != decay.modParticle.end()) {
-          std::cout << "modified particle: " << *iter << std::endl;
-          ++iter;
-        }
-
-        std::cout << '}' << std::endl;
+    iter = decay.cloneParticle.begin();
+    while (iter != decay.cloneParticle.end()) {
+      std::cout << "cloned particle: " << *iter << std::endl;
+      ++iter;
+    }
+    
+    iter = decay.modParticle.begin();
+    while (iter != decay.modParticle.end()) {
+      std::cout << "modified particle: " << *iter << std::endl;
+      ++iter;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    //  Our mini DECAY grammar definition
-    ///////////////////////////////////////////////////////////////////////////
-    //[tutorial_decay1_grammar
-    template <typename Iterator>
-    struct setup_file_grammar : qi::grammar<Iterator, decay_tree(), ascii::space_type>
-    {
-      setup_file_grammar() : setup_file_grammar::base_type(decay)
-        {
-          using qi::lit;
-          using qi::lexeme;
-          using ascii::char_;
-          using ascii::string;
-          using namespace qi::labels;
-          
-          using phoenix::at_c;
-          using phoenix::push_back;
-          using boost::phoenix::ref;
+    std::cout << std::endl;
+  }
 
-          restOfLine = lexeme[*(char_ -'\n') [_val += _1]];
-          comment = (char_('#') >> lexeme[*(char_ -'\n')]);
-
-          particleName = lexeme[+(char_('!','z') -',') [_val += _1]];
-          decNode = (decay | particleName);
-          goesTo = char_('-') >> char_('>');
-          
-          decay = +( comment ||
-                     "addParticle"        >> restOfLine[push_back(at_c<2>(_val), _1)] || 
-                     "cloneParticle"      >> restOfLine[push_back(at_c<3>(_val), _1)] || 
-                     "modParticle"        >> restOfLine[push_back(at_c<4>(_val), _1)] || 
-                     "beamInput"          >> restOfLine[push_back(at_c<5>(_val), _1)] || 
-                     "mcInput"            >> restOfLine[push_back(at_c<6>(_val), _1)] || 
-                     "defineTuple"        >> restOfLine[push_back(at_c<7>(_val), _1)] || 
-                     "fitVariables"       >> restOfLine[push_back(at_c<8>(_val), _1)] || 
-                     "initialProperties"  >> restOfLine[push_back(at_c<9>(_val), _1)] || 
-                    ( char_('{')
-                      >> (decay[push_back(at_c<1>(_val), _1)] || particleName[at_c<0>(_val) = _1])
-                      >> goesTo
-                      >> decNode   [push_back(at_c<1>(_val), _1)]
-                      >> ','
-                      >> decNode   [push_back(at_c<1>(_val), _1)]
-                      >> char_('}') )
-                    );
-          
-        }
-
+  ///////////////////////////////////////////////////////////////////////////
+  //  Our mini DECAY grammar definition
+  ///////////////////////////////////////////////////////////////////////////
+  //[tutorial_decay1_grammar
+  template <typename Iterator>
+  struct setup_file_grammar : qi::grammar<Iterator, decay_tree(), ascii::space_type>
+  {
+    setup_file_grammar() : setup_file_grammar::base_type(decay)
+      {
+	using qi::lit;
+	using qi::lexeme;
+	using ascii::char_;
+	using ascii::string;
+	using namespace qi::labels;
         
-        qi::rule<Iterator, decay_tree(), ascii::space_type> decay;
-        qi::rule<Iterator, decay_node(), ascii::space_type> decNode;
-        qi::rule<Iterator, std::string(), ascii::space_type> goesTo;
-        qi::rule<Iterator, std::string(), ascii::space_type> comment;
-        qi::rule<Iterator, std::string(), ascii::space_type> restOfLine;
-        qi::rule<Iterator, std::string(), ascii::space_type> particleName;
-    };
-
+	using phoenix::at_c;
+	using phoenix::push_back;
+	using boost::phoenix::ref;
+	
+	restOfLine = lexeme[*(char_ -'\n') [_val += _1]];
+	comment = (char_('#') >> lexeme[*(char_ -'\n')]);
+	
+	particleName = lexeme[+(char_('!','z') -',') [_val += _1]];
+	decNode = (decay | particleName);
+	goesTo = char_('-') >> char_('>');
+        
+	decay = +( comment ||
+		   "addParticle"        >> restOfLine[push_back(at_c<2>(_val), _1)] || 
+		   "cloneParticle"      >> restOfLine[push_back(at_c<3>(_val), _1)] || 
+		   "modParticle"        >> restOfLine[push_back(at_c<4>(_val), _1)] || 
+		   "beamInput"          >> restOfLine[push_back(at_c<5>(_val), _1)] || 
+		   "mcInput"            >> restOfLine[push_back(at_c<6>(_val), _1)] || 
+		   "defineTuple"        >> restOfLine[push_back(at_c<7>(_val), _1)] || 
+		   "fitVariables"       >> restOfLine[push_back(at_c<8>(_val), _1)] || 
+		   "initialProperties"  >> restOfLine[push_back(at_c<9>(_val), _1)] || 
+		   ( char_('{')
+		     >> (decay[push_back(at_c<1>(_val), _1)] || particleName[at_c<0>(_val) = _1])
+		     >> goesTo
+		     >> decNode   [push_back(at_c<1>(_val), _1)]
+		     >> ','
+		     >> decNode   [push_back(at_c<1>(_val), _1)]
+		     >> char_('}') )
+		   );
+	
+      }
+      
+      
+      qi::rule<Iterator, decay_tree(), ascii::space_type> decay;
+      qi::rule<Iterator, decay_node(), ascii::space_type> decNode;
+      qi::rule<Iterator, std::string(), ascii::space_type> goesTo;
+      qi::rule<Iterator, std::string(), ascii::space_type> comment;
+      qi::rule<Iterator, std::string(), ascii::space_type> restOfLine;
+      qi::rule<Iterator, std::string(), ascii::space_type> particleName;
+  };
+  
 }
 
 #endif

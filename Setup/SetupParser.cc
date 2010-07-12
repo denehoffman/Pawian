@@ -5,8 +5,9 @@
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/PdtParser.hh"
+#include "DecayTree/DecayTree.hh"
 
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 #include <iostream>
 #include <fstream>
@@ -27,14 +28,21 @@ const setupGrammar::decay_tree* SetupParser::setup() const
   return thisDecay;
 }
 
+using namespace decayGraph;
+
+const decayGraph::EdgeList* SetupParser::edgeList() const
+{
+  return &setupGrammar::edgeList;
+}
+
 bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
 {
 
   std::ifstream in(fileName.c_str(), std::ios_base::in);
 
   if (!in) {
-    ErrMsg(fatal) << "Error: Could not open input file: "
-		  << fileName << endmsg;
+    Alert << "Error: Could not open input file: "
+	  << fileName << endmsg;
     return 1;
   }
 
@@ -54,12 +62,13 @@ bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
   bool r = phrase_parse(iter, end, setupGrammar, space, *thisDecay);
   
   if (r && iter == end) {
-    ErrMsg(trace) << "\n\n"
-		  << "-------------------------\n"
-		  << "Parsing succeeded\n"
-		  << "-------------------------\n" << endmsg;
+    Info << "\n\n"
+	 << "-------------------------\n"
+	 << "Parsing succeeded\n"
+	 << "-------------------------\n" << endmsg;
     setupGrammar::decay_tree_printer printer;
     printer(*thisDecay);
+    setupGrammar::edgeList.print(std::cout);
 
     std::vector<std::string>::iterator cmdLine;
     ParticleData* pData;
@@ -83,11 +92,11 @@ bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
   else {
     std::string::const_iterator some = iter+30;
     std::string context(iter, (some>end)?end:some);
-    ErrMsg(error) << "\n\n"
-		  << "-------------------------\n"
-		  << "Parsing failed\n"
-		  << "stopped at: \": " << context << "...\"\n"
-		  << "-------------------------\n" << endmsg;
+    ErrMsg << "\n\n"
+	   << "-------------------------\n"
+	   << "Parsing failed\n"
+	   << "stopped at: \": " << context << "...\"\n"
+	   << "-------------------------\n" << endmsg;
     return false;
   }
   

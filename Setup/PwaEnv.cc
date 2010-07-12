@@ -4,8 +4,9 @@
 #include "Particle/PdtParser.hh"
 #include "Setup/SetupParser.hh"
 #include "Event/EventList.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "Event/CBElsaReader.hh"
+#include "DecayTree/DecayTree.hh"
 
 PwaEnv& PwaEnv::instance()
 {
@@ -21,28 +22,40 @@ bool PwaEnv::setup(std::string& setupFileName)
   theParticleTable = new ParticleTable;
 
   if (!pdtParser.parse(pdtFile, *theParticleTable)) {
-    ErrMsg(fatal) << "can not parse particle table " << pdtFile << endmsg;
+    Alert << "can not parse particle table " << pdtFile << endmsg;
+    exit(1);
   }
 
   SetupParser setupParser;
   if (!setupParser.parse(setupFileName, theParticleTable)) {
-    ErrMsg(fatal) << "can not parse setup " << setupFileName << endmsg;
+    Alert << "can not parse setup " << setupFileName << endmsg;
+    exit(1);
   }
 
-  if (setupParser.setup()->beamInput.size() == 0)
-    ErrMsg(fatal) << "no beam data defined in setup" << endmsg;
+  theDecayTree = new DecayTree(setupParser.edgeList());
+  if (0 == theDecayTree) {
+    Alert << "can not build decay tree" << endmsg;
+    exit(1);
+  }
+
+  if (setupParser.setup()->beamInput.size() == 0) {
+    Alert << "no beam data defined in setup" << endmsg;
+    exit(1);
+  }
 
   CBElsaReader eventReader(setupParser.setup()->beamInput, 3, 1);
   theBeamEventList = new EventList();
   eventReader.fillAll(*theBeamEventList);
 
-  if (setupParser.setup()->mcInput.size() == 0)
-    ErrMsg(fatal) << "no MC data defined in setup" << endmsg;
+  if (setupParser.setup()->mcInput.size() == 0) {
+    Alert << "no MC data defined in setup" << endmsg;
+    exit(1);
+  }
 
   CBElsaReader mcEventReader(setupParser.setup()->mcInput, 3, 1);
   theMcEventList = new EventList();
   mcEventReader.fillAll(*theMcEventList);
-
+  
 }
 
 ParticleTable* PwaEnv::particleTable()
