@@ -7,14 +7,14 @@
 #include "PwaUtils/KinUtils.hh"
 
 #include "Event/Event.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 
 OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom):
   _jmax(jmax),
   _pbarmom(pbarmom)
 {
-  if (_jmax<0) ErrMsg(fatal) << "_jmax < 0 is not allowed!!!" << endmsg;
+  if (_jmax<0) { Alert << "_jmax < 0 is not allowed!!!" << endmsg; exit(1); }
   read4Vecs(evtListData, _dataList);
   read4Vecs(evtListMc, _mcList);
 }
@@ -31,7 +31,7 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& o
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent()) != 0){
-    if ( evtCount%1000 == 0 ) ErrMsg(routine) << "4vec calculation for event " << evtCount << endmsg;
+    if ( evtCount%1000 == 0 ) Info << "4vec calculation for event " << evtCount << endmsg;
     Vector4<float>  cm_4V(*(anEvent->p4(0))+*(anEvent->p4(1)));
 
     Vector4<float> omega_4V;
@@ -41,7 +41,8 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& o
       if ( fabs(anEvent->p4(i)->Mass()-0.78195)<0.01 ) omega_4V=*(anEvent->p4(i));
       else if ( fabs(anEvent->p4(i)->Mass()-0.13497)<0.01 ) piRec_4V=*(anEvent->p4(i));
       else {
-	ErrMsg(fatal) <<"this is neither an omega nor a pi0 particle!!!" << endmsg;
+	Alert <<"this is neither an omega nor a pi0 particle!!!" << endmsg;
+	exit(1);
       }
     }
 
@@ -52,8 +53,10 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& o
     piRec_cm_4V.Boost(cm_4V);
 
     Vector4<float> pi0FromOmega4V=*(anEvent->p4(2));
-    if ( fabs(pi0FromOmega4V.M()-0.13497)>0.01 ) 
-      ErrMsg(fatal) <<"the third particle is not the pi0 from the omega decay" << endmsg;
+    if ( fabs(pi0FromOmega4V.M()-0.13497)>0.01 ) {
+      Alert <<"the third particle is not the pi0 from the omega decay" << endmsg;
+      exit(1);
+    }
 
     Vector4<float> pi0HeliOmega4V = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
 

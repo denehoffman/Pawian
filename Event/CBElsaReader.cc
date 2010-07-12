@@ -2,7 +2,7 @@
 
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 CBElsaReader::CBElsaReader()
 {}
@@ -11,8 +11,10 @@ CBElsaReader::CBElsaReader(const std::vector<std::string>& files, int particles,
   numParticles(particles),
   linesToSkip(skip)
 {
-  if (0 == files.size())
-    ErrMsg(fatal) << "empty list of event files" << endmsg;
+  if (0 == files.size()) {
+    Alert << "empty list of event files" << endmsg;
+    exit(1);
+  }
   std::vector<std::string>::const_iterator iter = files.begin();
   for (; iter != files.end(); ++iter)
     fileNames.push_back(*iter);
@@ -27,8 +29,10 @@ bool CBElsaReader::fillAll(EventList& evtList)
   
   while (currentFile != fileNames.end()) {
     currentStream.open(currentFile->c_str());
-    if (!currentStream)
-      ErrMsg(fatal) << "can not open " << *currentFile << endmsg;
+    if (!currentStream) {
+      Alert << "can not open " << *currentFile << endmsg;
+      exit(1);
+    }
 
     while (!currentStream.eof()) {
       double e,px,py,pz;

@@ -87,7 +87,7 @@ namespace Gem
     const boost::uint32_t DEFAULTGBTCWAITFACTOR=5;
     const unsigned DEFAULTJMAX=3;
     const unsigned DEFAULTPBARMOM=600;
-    const int DEFAULTERRLOGMODE=0; // debugging=-1, trace=0, routine=1, warning=2, etc. 
+    const int DEFAULTERRLOGMODE=-1; // debugging=-1, trace=0, routine=1, warning=2, etc. 
     const serializationMode DEFAULTSERMODE=Gem::GenEvA::TEXTSERIALIZATION;
     namespace po = boost::program_options;
 

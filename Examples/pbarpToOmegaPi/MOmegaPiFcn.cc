@@ -8,7 +8,7 @@
 
 #include "Examples/pbarpToOmegaPi/MOmegaPiFcn.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
@@ -16,7 +16,7 @@ MOmegaPiFcn::MOmegaPiFcn(boost::shared_ptr<OmegaPiLh> omegaPiLh) :
   _omegaPiLhPtr(omegaPiLh),
   _barpToOmegaPi0States(omegaPiLh->omegaPi0States())
 {
-  if (0==_omegaPiLhPtr) ErrMsg(fatal) << "OmegaPiLh pointer is 0 !!!!" << endmsg; 
+  if (0==_omegaPiLhPtr) { Alert << "OmegaPiLh pointer is 0 !!!!" << endmsg; exit(1); }
   
 }
 
@@ -37,26 +37,26 @@ double MOmegaPiFcn::operator()(const std::vector<double>& par) const
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
-  ErrMsg(debugging) << "logLh= " << result <<endmsg;   
-  ErrMsg(debugging) << "***fit parameter singlet states*** " <<endmsg;  
+  DebugMsg << "logLh= " << result <<endmsg;   
+  DebugMsg << "***fit parameter singlet states*** " <<endmsg;  
   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
-    ErrMsg(debugging)<< (*itJPCLS)->name()<< endmsg;
+    DebugMsg<< (*itJPCLS)->name()<< endmsg;
     std::pair<double, double> tmpParam=theFitParmValTmp.omegaProdSinglet[(*itJPCLS)];
-    ErrMsg(debugging) <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
+    DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
   }
-  ErrMsg(debugging) << "***fit parameter triplet m=0 states*** " <<endmsg;  
+  DebugMsg << "***fit parameter triplet m=0 states*** " <<endmsg;  
   for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
-    ErrMsg(debugging)<< (*itJPCLS)->name()<< endmsg;
+    DebugMsg<< (*itJPCLS)->name()<< endmsg;
     std::pair<double, double> tmpParam=theFitParmValTmp.omegaProdTriplet0[(*itJPCLS)];
-    ErrMsg(debugging) <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
+    DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
   }
-  ErrMsg(debugging) << "***fit parameter triplet m=1 states*** " <<endmsg;  
+  DebugMsg << "***fit parameter triplet m=1 states*** " <<endmsg;  
   for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
-    ErrMsg(debugging)<< (*itJPCLS)->name()<< endmsg;
+    DebugMsg<< (*itJPCLS)->name()<< endmsg;
     std::pair<double, double> tmpParam=theFitParmValTmp.omegaProdTriplet1[(*itJPCLS)];
-    ErrMsg(debugging) <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
+    DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
   }
-    ErrMsg(debugging) << endmsg;  
+    DebugMsg << endmsg;  
   return result;
 }
 
@@ -112,7 +112,12 @@ void MOmegaPiFcn::setFitParamVal(OmegaPiData::fitParamVal& theParamVal, const st
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=_barpToOmegaPi0States->jpclsTriplet0();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
 
-  if (par.size()!= JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3) ErrMsg(fatal) << "size of parameters wrong!!! par.size()=" << par.size() << "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" << JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 << endmsg;
+  if (par.size()!= JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3) {
+    Alert << "size of parameters wrong!!! par.size()=" << par.size() << 
+      "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" << 
+      JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 << endmsg;
+    exit(1);
+  }
 
   int counter=0;
   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){

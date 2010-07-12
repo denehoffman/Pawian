@@ -3,7 +3,7 @@
 #include "Event/Event.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/PdtParser.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 #include "qft++/topincludes/tensor.hh"
 #include <vector>
@@ -11,7 +11,7 @@
 
 main()
 {
-  ErrLineLog thisLogger(ErrLog::routine);
+  ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
   std::vector<std::string> fileNames;
 
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
@@ -20,7 +20,7 @@ main()
   PdtParser parser;
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
   if (!parser.parse(pdtFile, pTable)) {
-    ErrMsg(fatal) << "Error: could not parse " << pdtFile << endmsg;
+    Alert << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
   }
 
@@ -32,20 +32,20 @@ main()
   eventReader.fillAll(pipiomegaEvents);
 
   if (!pipiomegaEvents.findParticleTypes(pTable))
-    ErrMsg(warning) << "could not find all particles" << endmsg;
+    Warning << "could not find all particles" << endmsg;
 
-  ErrMsg(routine) << "\nFile has " << pipiomegaEvents.size() << " events. Each event has "
-		  <<  pipiomegaEvents.nextEvent()->size() << " final state particles.\n" << endmsg;
+  Info << "\nFile has " << pipiomegaEvents.size() << " events. Each event has "
+       <<  pipiomegaEvents.nextEvent()->size() << " final state particles.\n" << endmsg;
   pipiomegaEvents.rewind();
 
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = pipiomegaEvents.nextEvent()) != 0 && evtCount < 20) {
-    ErrMsg(routine) << "\n" 
-		    << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
-		    << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
-		    << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
-		    << endmsg;
+    Info << "\n" 
+	 << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
+	 << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
+	 << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
+	 << endmsg;
     ++evtCount;
   }
 

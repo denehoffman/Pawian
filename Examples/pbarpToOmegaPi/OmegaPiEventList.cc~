@@ -10,8 +10,9 @@
 #include "ErrLogger/ErrLineLog.hh"
 
 
-OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax):
-  _jmax(jmax)
+OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom):
+  _jmax(jmax),
+  _pbarmom(pbarmom)
 {
   if (_jmax<0) ErrMsg(fatal) << "_jmax < 0 is not allowed!!!" << endmsg;
   read4Vecs(evtListData, _dataList);
@@ -30,7 +31,7 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& o
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent()) != 0){
-    if ( evtCount%1000 == 0 ) ErrMsg(routine) << "4vec calculation for event " << evtCount << endmsg;
+    if ( evtCount%1000 == 0 ) Info << "4vec calculation for event " << evtCount << endmsg;
     Vector4<float>  cm_4V(*(anEvent->p4(0))+*(anEvent->p4(1)));
 
     Vector4<float> omega_4V;

@@ -15,9 +15,11 @@ Vector4<float>* Event::p4(int i)
 {
   if (particles.size() > i)
     return particles[i]->vector4;
-  else
-    ErrMsg(fatal) << "accessing " << i << "th of " 
-		  << particles.size() << " particles" << endmsg;
+  else {
+    Alert << "accessing " << i << "th of " 
+	  << particles.size() << " particles" << endmsg;
+    exit(1);
+  }
   return 0;
 }
 
@@ -26,9 +28,11 @@ float* Event::pid(int i)
 {
   if (particles.size() > i)
     return particles[i]->pidVector;
-  else
-    ErrMsg(fatal) << "accessing pid of " << i << "th of " 
-		  << particles.size() << " particles" << endmsg;
+  else {
+    Alert << "accessing pid of " << i << "th of " 
+	  << particles.size() << " particles" << endmsg;
+    exit(1);
+  }
 }
 
 

@@ -3,7 +3,7 @@
 #include "Event/Event.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "qft++/topincludes/tensor.hh"
 
 EventList::EventList()
@@ -22,8 +22,10 @@ void EventList::add(Event* newEvent)
 {
   if (0 != newEvent)
     eventList.push_back(newEvent);
-  else
-    ErrMsg(fatal) << "can not add 0 pointer to event list" << endmsg;
+  else {
+    Alert << "can not add 0 pointer to event list" << endmsg;
+    exit(1);
+  }
 
   return;
 }
@@ -65,8 +67,10 @@ int EventList::size()
 
 bool EventList::findParticleTypes(ParticleTable& pdtTable)
 {
-  if (eventList.size() == 0)
-    ErrMsg(fatal) << "eventList is empty" << endmsg;
+  if (eventList.size() == 0) {
+    Alert << "eventList is empty" << endmsg;
+    exit(1);
+  }
 
   bool result = true;
   int partsPerEvent = eventList[0]->size();
@@ -76,8 +80,8 @@ bool EventList::findParticleTypes(ParticleTable& pdtTable)
     thisParticle = pdtTable.particle(eventList[0]->p4(i)->Mass());
     particleRefs.push_back(thisParticle);
     if (0 == thisParticle) {
-      ErrMsg(warning) << "did not find a particle with mass " 
-		      << eventList[0]->p4(i)->Mass() << endmsg;
+      Warning << "did not find a particle with mass " 
+	      << eventList[0]->p4(i)->Mass() << endmsg;
       result = false;
     }
   }

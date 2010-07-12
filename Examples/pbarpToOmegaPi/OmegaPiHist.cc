@@ -5,11 +5,11 @@
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
-#include "ErrLogger/ErrLineLog.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
+#include "ErrLogger/ErrLogger.hh"
 
 OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   _theTFile(0),
@@ -26,7 +26,8 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   _treimanYangFittedHist(0)
 {
   if(0==theEvtList){
-    ErrMsg(fatal) <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    Alert <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
 
   _jmax=theEvtList->jMax();
@@ -84,12 +85,14 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
   _treimanYangFittedHist(0)
 {
   if(0==omegaPiLh){
-    ErrMsg(fatal) <<"OmegaPiLh* omegaPiLh is a 0 pointer !!!!" << endmsg;
+    Alert <<"OmegaPiLh* omegaPiLh is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
 
   boost::shared_ptr<const OmegaPiEventList> theEvtList=omegaPiLh->getEventList();  
   if(0==theEvtList){
-    ErrMsg(fatal) <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    Alert <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
 
   _jmax=theEvtList->jMax();
@@ -137,10 +140,10 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
 
 
   double integralData=_cosOmegaHeliDataHist->Integral();
-  ErrMsg(debugging) << "integralData= " << integralData << endmsg;
+  DebugMsg << "integralData= " << integralData << endmsg;
 
   double integralFitted=_cosOmegaHeliFittedHist->Integral();  
-  ErrMsg(debugging) << "integralFittedHists= " << integralFitted << endmsg;
+  DebugMsg << "integralFittedHists= " << integralFitted << endmsg;
 
   _cosOmegaHeliFittedHist->Scale(integralData/integralFitted);
   _cosPi0FromOmegaFittedHeli->Scale(integralData/integralFitted);

@@ -29,6 +29,7 @@
 
 
 #include "Examples/pbarpToOmegaPi/GArgumentParser.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 namespace Gem
 {
@@ -70,16 +71,16 @@ namespace Gem
 
 		// Emit a help message, if necessary
 		if (vm.count("help")) {
-			std::cerr << desc << std::endl;
-			return false;
+		  ErrMsg << desc;
+		  return false;
 		}
 
 		serverMode=false;
 		if (vm.count("parallelizationMode")) {
 			if(parallelizationMode > 2) {
-				std::cout << "Error: the \"-p\" or \"--parallelizationMode\" option may only assume the"<< std::endl
-						<< "values 0 (serial), 1 (multi-threaded) or 2 (networked). Leaving ..." << std::endl;
-				return false;
+			  ErrMsg << "Error: the \"-p\" or \"--parallelizationMode\" option may only assume the\n"
+				 << "values 0 (serial), 1 (multi-threaded) or 2 (networked). Leaving ..." << endmsg;
+			  return false;
 			}
 
 			if(parallelizationMode == 2) if(vm.count("serverMode")) serverMode = true;
@@ -99,19 +100,18 @@ namespace Gem
 				break;
 			};
 
-			std::cout << std::endl
-					<< "Running with the following command line options:" << std::endl
-					<< "configFile = " << configFile << std::endl
-					<< "parallelizationMode = " << parModeString << std::endl
-					<< "serverMode = " << (serverMode?"true":"false") << std::endl
-					<< "ip = " << ip << std::endl
-					<< "port = " << port << std::endl
-					<< "serMode = " << serMode << std::endl
-					<< std::endl;
+			Info << "\nRunning with the following command line options:\n"
+			     << "configFile = " << configFile << "\n"
+			     << "parallelizationMode = " << parModeString << "\n"
+			     << "serverMode = " << (serverMode?"true":"false") << "\n"
+			     << "ip = " << ip << "\n"
+			     << "port = " << port << "\n"
+			     << "serMode = " << serMode << "\n"
+			     << endmsg;
 		}
       }
       catch(...){
-    	  std::cout << "Error parsing the command line" << std::endl;
+    	  ErrMsg << "Error parsing the command line" << endmsg;
     	  return false;
       }
 
@@ -147,7 +147,7 @@ namespace Gem
 
       // Check the name of the configuation file
       if(configFile.empty() || configFile == "empty" || configFile == "unknown") {
-	std::cerr << "Error: Invalid configuration file name given: \"" << configFile << "\"" << std::endl;
+	ErrMsg << "Error: Invalid configuration file name given: \"" << configFile << "\"" << endmsg;
 	return false;
       }
 
@@ -192,7 +192,7 @@ namespace Gem
 	po::variables_map vm;
 	std::ifstream ifs(configFile.c_str());
 	if(!ifs.good()) {
-	  std::cerr << "Error accessing configuration file " << configFile;
+	  ErrMsg << "Error accessing configuration file " << configFile << endmsg;
 	  return false;
 	}
 
@@ -201,15 +201,15 @@ namespace Gem
 
 	// Emit a help message, if necessary
 	if (vm.count("help")) {
-	  std::cout << config << std::endl;
+	  Info << config << endmsg;
 	  return false;
 	}
 	
 	// Check the number of parents in the super-population
 	if(2*nParents > populationSize){
-	  std::cout << "Error: Invalid number of parents inpopulation" << std::endl
-		    << "nParents       = " << nParents << std::endl
-		    << "populationSize = " << populationSize << std::endl;
+	  ErrMsg << "Error: Invalid number of parents inpopulation\n"
+		 << "nParents       = " << nParents << "\n"
+		 << "populationSize = " << populationSize << endmsg;
 
 	  return false;
 	}
@@ -222,32 +222,31 @@ namespace Gem
 	else if(recombinationScheme==(boost::uint16_t)DEFAULTRECOMBINE)
 	  rScheme=DEFAULTRECOMBINE;
 	else {
-	  std::cout << "Error: Invalid recombination scheme in population: " << recombinationScheme << std::endl;
+	  ErrMsg << "Error: Invalid recombination scheme in population: " << recombinationScheme << endmsg;
 	  return false;
 	}
 
 	if(verbose){
-	  std::cout << std::endl
-		    << "Running with the following options from " << configFile << ":" << std::endl
-		    << "nProducerThreads = " << (boost::uint16_t)nProducerThreads << std::endl // boost::uint8_t not printable on gcc ???
-		    << "populationSize = " << populationSize << std::endl
-		    << "nParents = " << nParents << std::endl
-		    << "maxIterations = " << maxIterations << std::endl
-		    << "maxMinutes = " << maxMinutes << std::endl
-		    << "reportIteration = " << reportIteration << std::endl
-		    << "rScheme = " << (boost::uint16_t)rScheme << std::endl
-		    << "sortingScheme = " << smode << std::endl
-		    << "arraySize = " << arraySize << std::endl
-		    << "processingCycles = " << processingCycles << std::endl
-		    << "returnRegardless = " << (returnRegardless?"true":"false") << std::endl
-		    << "jMax = " << jMax << std::endl
-		    << "pbarMom = " << pbarMom << std::endl
-		    << "errLogMode = " << errLogMode << std::endl
-		    << std::endl;
+	  Info << "\nRunning with the following options from " << configFile << ":\n"
+	       << "nProducerThreads = " << (boost::uint16_t)nProducerThreads << "\n" // boost::uint8_t not printable on gcc ???
+	       << "populationSize = " << populationSize << "\n"
+	       << "nParents = " << nParents << "\n"
+	       << "maxIterations = " << maxIterations << "\n"
+	       << "maxMinutes = " << maxMinutes << "\n"
+	       << "reportIteration = " << reportIteration << "\n"
+	       << "rScheme = " << (boost::uint16_t)rScheme << "\n"
+	       << "sortingScheme = " << smode << "\n"
+	       << "arraySize = " << arraySize << "\n"
+	       << "processingCycles = " << processingCycles << "\n"
+	       << "returnRegardless = " << (returnRegardless?"true":"false") << "\n"
+	       << "jMax = " << jMax << "\n"
+	       << "pbarMom = " << pbarMom << "\n"
+	       << "errLogMode = " << errLogMode << "\n"
+	       << endmsg;
 	}
       }
       catch(...){
-	std::cout << "Error parsing the configuration file " << configFile << std::endl;
+	ErrMsg << "Error parsing the configuration file " << configFile << endmsg;
 	return false;
       }
 

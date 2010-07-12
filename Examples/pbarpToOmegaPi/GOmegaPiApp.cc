@@ -45,17 +45,6 @@
 #include "GAsioTCPClient.hpp"
 #include "GAsioHelperFunctions.hpp"
 
-#include "ErrLogger/ErrLineLog.hh"
-
-
-#include "Setup/PwaEnv.hh"
-#include "Particle/ParticleTable.hh"
-#include "Particle/Particle.hh"
-#include "Event/EventList.hh"
-#include "Event/Event.hh"
-#include "Event/CBElsaReader.hh"
-#include "Particle/PdtParser.hh"
-
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 // The individual that should be optimized
@@ -72,6 +61,16 @@
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 
 #include "Examples/pbarpToOmegaPi/OmegaPiData.hh"
+
+#include "Setup/PwaEnv.hh"
+#include "Particle/ParticleTable.hh"
+#include "Particle/Particle.hh"
+#include "Event/EventList.hh"
+#include "Event/Event.hh"
+#include "Event/CBElsaReader.hh"
+#include "Particle/PdtParser.hh"
+
+#include "ErrLogger/ErrLogger.hh"
 
 using namespace Gem::GenEvA;
 using namespace Gem::Util;
@@ -136,7 +135,31 @@ int main(int argc, char **argv){
   GRANDOMFACTORY->setNProducerThreads(nProducerThreads);
   GRANDOMFACTORY->setArraySize(arraySize);
 
-  boost::shared_ptr<ErrLineLog> myLoggerPtr(new ErrLineLog(ErrLog::Severity(errLogMode)));  
+  switch(errLogMode) {
+  case -1:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+    break;
+  case 0:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    break;
+  case 1:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    break;
+  case 2:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+    break;
+  case 3:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+    break;
+  case 4:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+    break;
+  case 5:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ALERT);
+    break;
+  default: 
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  }
 
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and
@@ -157,8 +180,8 @@ int main(int argc, char **argv){
   }
   //***************************************************************************
 
-  ErrMsg(routine) << "Maximum spin content: " << jMax << endmsg;
-  ErrMsg(routine) << "pbar momentum: " << pbarMom   << endmsg;
+  Info << "Maximum spin content: " << jMax << endmsg;
+  Info << "pbar momentum: " << pbarMom   << endmsg;
 
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
   
@@ -173,14 +196,15 @@ int main(int argc, char **argv){
     piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
   }
   else{
-    ErrMsg(fatal) <<"data for pbarMom= " << pbarMom << "not available; use 600 or 1940!!!" << endmsg;
+    Alert <<"data for pbarMom= " << pbarMom << "not available; use 600 or 1940!!!" << endmsg;
+    exit(1);
   }
 
   ParticleTable pTable;
   PdtParser parser;
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
   if (!parser.parse(pdtFile, pTable)) {
-    ErrMsg(fatal) << "Error: could not parse " << pdtFile << endmsg;
+    Alert << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
   }
 
@@ -192,9 +216,9 @@ int main(int argc, char **argv){
   eventReader.fillAll(piOmegaEventsData);
 
   if (!piOmegaEventsData.findParticleTypes(pTable))
-    ErrMsg(warning) << "could not find all particles" << endmsg;
+    Warning << "could not find all particles" << endmsg;
 
-  ErrMsg(routine) << "\nFile has " << piOmegaEventsData.size() << " events. Each event has "
+  Info << "\nFile has " << piOmegaEventsData.size() << " events. Each event has "
                   <<  piOmegaEventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
   piOmegaEventsData.rewind();
 
@@ -202,7 +226,7 @@ int main(int argc, char **argv){
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = piOmegaEventsData.nextEvent()) != 0 && evtCount < 20) {
-    ErrMsg(routine) << "\n" 
+    Info << "\n" 
                     << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
                     << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
                     << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
@@ -316,7 +340,7 @@ int main(int argc, char **argv){
   boost::shared_ptr<OmegaPiLh> finalOmegaPiLh=bestIndividual_ptr->getOmegaPiLhPtr();
   OmegaPiHist theHistogrammer(finalOmegaPiLh,finalFitParm);
 
-  std::cout << "Done ..." << std::endl;
+  Info << "Done ...\n";
 
   return 0;
 }

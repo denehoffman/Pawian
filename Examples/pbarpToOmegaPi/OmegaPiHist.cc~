@@ -1,10 +1,11 @@
 #include <getopt.h>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
-#include "ErrLogger/ErrLineLog.hh"
+// #include "ErrLogger/ErrLogger.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -25,8 +26,13 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   _treimanYangFittedHist(0)
 {
   if(0==theEvtList){
-    ErrMsg(fatal) <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    //    Alert <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
+
+  _jmax=theEvtList->jMax();
+  _pbarmom=theEvtList->pbarMom();
+
   initRootStuff();
 
   const std::vector<OmPiEvtData> dataList=theEvtList->getDataVecs();
@@ -79,13 +85,19 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
   _treimanYangFittedHist(0)
 {
   if(0==omegaPiLh){
-    ErrMsg(fatal) <<"OmegaPiLh* omegaPiLh is a 0 pointer !!!!" << endmsg;
+    //    Alert <<"OmegaPiLh* omegaPiLh is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
 
   boost::shared_ptr<const OmegaPiEventList> theEvtList=omegaPiLh->getEventList();  
   if(0==theEvtList){
-    ErrMsg(fatal) <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    //    Alert <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
+
+  _jmax=theEvtList->jMax();
+  _pbarmom=theEvtList->pbarMom();
+
   initRootStuff();
 
   std::vector<OmPiEvtData> dataList=theEvtList->getDataVecs();
@@ -128,10 +140,10 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
 
 
   double integralData=_cosOmegaHeliDataHist->Integral();
-  ErrMsg(debugging) << "integralData= " << integralData << endmsg;
+  //  DebugMsg << "integralData= " << integralData << endmsg;
 
   double integralFitted=_cosOmegaHeliFittedHist->Integral();  
-  ErrMsg(debugging) << "integralFittedHists= " << integralFitted << endmsg;
+  //  DebugMsg << "integralFittedHists= " << integralFitted << endmsg;
 
   _cosOmegaHeliFittedHist->Scale(integralData/integralFitted);
   _cosPi0FromOmegaFittedHeli->Scale(integralData/integralFitted);
@@ -146,7 +158,15 @@ OmegaPiHist::~OmegaPiHist()
 
 void OmegaPiHist::initRootStuff()
 {
-  _theTFile=new TFile("./OmegaPi0Fit.root","recreate");
+  std::stringstream jmaxStrStr;
+  std::stringstream pbarMomStrStr;
+
+  jmaxStrStr << _jmax;
+  pbarMomStrStr << _pbarmom;
+
+  std::string rootFileName="./OmegaPi0Fit_jmax"+jmaxStrStr.str()+"_mom"+pbarMomStrStr.str()+".root";
+
+  _theTFile=new TFile(rootFileName.c_str(),"recreate");
   _cosOmegaHeliDataHist= new TH1F("_cosOmegaHeliDataHist","cos(#Theta) #omega heli data",101, -1.0, 1.0);
   _cosOmegaHeliMcHist= new TH1F("_cosOmegaHeliMcHist","cos(#Theta) #omega heli MC",101, -1.0, 1.0);
   _cosOmegaHeliFittedHist= new TH1F("_cosOmegaHeliFittedHist","cos(#Theta) #omega heli fit result",101, -1.0, 1.0);

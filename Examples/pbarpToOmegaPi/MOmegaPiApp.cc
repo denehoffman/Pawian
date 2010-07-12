@@ -23,7 +23,7 @@
 #include "Particle/PdtParser.hh"
 #include "qft++/topincludes/tensor.hh"
 
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
 #include "Minuit2/FunctionMinimum.h"
@@ -40,17 +40,17 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
 		    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    std::cout << "This application is a PWA fit for the reaction\n\n"
-	      << "pbar p -> omega + pi0  ; omega -> pi0 + gamma\n\n"
-	      << "It makes use of the Helicity Formalism\n"
-	      << "The fit determines the content of the initial states formed via the pbar p reaction "
-	      << "and the content of the LS combinations for the dacay to omega pi0\n\n"
-              << "For the steering of the application one can use the following flags\n"
-              << "-jmax: maximum spin concidering in the fit (default 3)\n"
-              << "-pbarmom: pbar momentum of the input data (available so far: 600, 1940) (default 600)\n" 
-              << "-msg <errorLogMode> you can choose the mode for the error logger\n\n"
-	      << "i.e. with './MpbarpToOmegaPiApp -jmax 5 -pbarmom 1940 -msg debugging' you start the fit with jmax=3, reconstructed data and MCs at 1940 MeV/c in the debugging mode for the error logger\n"  
-	      << std::endl;
+    Info << "This application is a PWA fit for the reaction\n\n"
+	 << "pbar p -> omega + pi0  ; omega -> pi0 + gamma\n\n"
+	 << "It makes use of the Helicity Formalism\n"
+	 << "The fit determines the content of the initial states formed via the pbar p reaction "
+	 << "and the content of the LS combinations for the dacay to omega pi0\n\n"
+	 << "For the steering of the application one can use the following flags\n"
+	 << "-jmax: maximum spin concidering in the fit (default 3)\n"
+	 << "-pbarmom: pbar momentum of the input data (available so far: 600, 1940) (default 600)\n" 
+	 << "-msg <errorLogMode> you can choose the mode for the error logger\n\n"
+	 << "i.e. with './MpbarpToOmegaPiApp -jmax 5 -pbarmom 1940 -msg debugging' you start the fit with jmax=3, reconstructed data and MCs at 1940 MeV/c in the debugging mode for the error logger\n"  
+	 << endmsg;
     return 0;
   }
 
@@ -79,7 +79,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      ErrMsg(warning) << "Unknown switch: " 
+      Warning << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
@@ -87,15 +87,14 @@ int main(int __argc,char *__argv[]){
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
   }
 
-  ErrLineLog* myLogger=0;
-  if(msgModeStr == "debugging") myLogger= new ErrLineLog(ErrLog::debugging);
-  else if(msgModeStr == "trace") myLogger= new ErrLineLog(ErrLog::trace);
-  else if(msgModeStr == "routine") myLogger= new ErrLineLog(ErrLog::routine);
-  else if(msgModeStr == "warning")  myLogger= new ErrLineLog(ErrLog::warning);
-  else if(msgModeStr == "error")    myLogger= new ErrLineLog(ErrLog::error); 
+  if(msgModeStr == "debugging") ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  else if(msgModeStr == "trace") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  else if(msgModeStr == "routine") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  else if(msgModeStr == "warning") ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+  else if(msgModeStr == "error")   ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR); 
   else {
-    myLogger= new ErrLineLog(ErrLog::debugging);
-    ErrMsg(warning) << "ErrorLogger not (properly) set -> Use mode 'ErrLog::debugging' " << endmsg;  
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+    Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " << endmsg;  
   }
 
 
@@ -108,8 +107,8 @@ int main(int __argc,char *__argv[]){
   unsigned pbarMom=600;
   pbarmomStrStr >> pbarMom; 
   
-  ErrMsg(routine) << "Maximum spin content: " << jMax << endmsg;
-  ErrMsg(routine) << "pbar momentum: " << pbarMom   << endmsg;
+  Info << "Maximum spin content: " << jMax << endmsg;
+  Info << "pbar momentum: " << pbarMom   << endmsg;
 
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
 
@@ -124,18 +123,19 @@ int main(int __argc,char *__argv[]){
     piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
   }
   else{
-    ErrMsg(fatal) <<"data for pbarMom= " << pbarMom << "not available; use 600 or 1940!!!" << endmsg;
+    Alert <<"data for pbarMom= " << pbarMom << "not available; use 600 or 1940!!!" << endmsg;
+    exit(1);
   }
 
-  ErrMsg(routine) << "data file: " << piomegaDatFile << endmsg;
-  ErrMsg(routine) << "mc file: " << piomegaMcFile << endmsg;
+  Info << "data file: " << piomegaDatFile << endmsg;
+  Info << "mc file: " << piomegaMcFile << endmsg;
   
   
   ParticleTable pTable;
   PdtParser parser;
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
   if (!parser.parse(pdtFile, pTable)) {
-    ErrMsg(fatal) << "Error: could not parse " << pdtFile << endmsg;
+    Alert << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
   }
   
@@ -148,16 +148,16 @@ int main(int __argc,char *__argv[]){
   eventReader.fillAll(piOmegaEventsData);
 
   if (!piOmegaEventsData.findParticleTypes(pTable))
-    ErrMsg(warning) << "could not find all particles" << endmsg;
+    Warning << "could not find all particles" << endmsg;
 
-  ErrMsg(routine) << "\nFile has " << piOmegaEventsData.size() << " events. Each event has "
+  Info << "\nFile has " << piOmegaEventsData.size() << " events. Each event has "
                   <<  piOmegaEventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
   piOmegaEventsData.rewind();
 
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = piOmegaEventsData.nextEvent()) != 0 && evtCount < 20) {
-    ErrMsg(routine) << "\n" 
+    Info << "\n" 
                     << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
                     << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
                     << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
@@ -194,12 +194,12 @@ int main(int __argc,char *__argv[]){
   mOmegaPiFcn.setMnUsrParams(upar);
 
   MnMigrad migrad(mOmegaPiFcn, upar);
-  ErrMsg(routine) <<"start migrad "<< endmsg;
+  Info <<"start migrad "<< endmsg;
   FunctionMinimum min = migrad();
 
  if(!min.IsValid()) {
    //try with higher strategy
-   ErrMsg(routine) <<"FM is invalid, try with strategy = 2."<< endmsg;
+   Info <<"FM is invalid, try with strategy = 2."<< endmsg;
    MnMigrad migrad2(mOmegaPiFcn, min.UserState(), MnStrategy(2));
    min = migrad2();
  }
@@ -216,8 +216,6 @@ int main(int __argc,char *__argv[]){
 //   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 
 
-
- if (0!=myLogger) delete myLogger;
  return 0;
 }
 

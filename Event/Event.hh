@@ -3,7 +3,7 @@
 
 #include "qft++/topincludes/tensor.hh"
 #include "qft++/tensor/Vector4.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include <vector>
 
 enum pidType {proton, pion, kaon, muon, electron, photon, resonance, maxPid};

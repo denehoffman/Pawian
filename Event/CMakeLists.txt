@@ -45,6 +45,7 @@ target_link_libraries(${EXECUTABLENAME} Particle)
 target_link_libraries(${EXECUTABLENAME} ErrLogger)
 target_link_libraries(${EXECUTABLENAME} Utils)
 target_link_libraries(${EXECUTABLENAME} qft++)
+target_link_libraries(${EXECUTABLENAME} log4cpp)
 
 INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
 

@@ -6,7 +6,7 @@
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
-
+#include "ErrLogger/ErrLogger.hh"
 
 OmegaPiLh::OmegaPiLh(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates) :
   _omegaPiEventListPtr(theEvtList),
@@ -51,6 +51,8 @@ double OmegaPiLh::calcLogLh(const OmegaPiData::fitParamVal& theParamVal){
   logLH=theData.size()/2.*(LH_mc/theMCs.size()-1)*(LH_mc/theMCs.size()-1)
     -logLH_data
     +theData.size()*logLH_mc_Norm;
+
+  Info << "current LH = " << logLH << endmsg;
 
  return logLH;
 

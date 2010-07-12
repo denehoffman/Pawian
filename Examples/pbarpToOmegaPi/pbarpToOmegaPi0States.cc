@@ -1,7 +1,7 @@
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 
 #include "Utils/MathUtils.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/pbarpStates.hh"
  
 
@@ -11,7 +11,7 @@ pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbar
   _piJPC(0, -1, 1),
   _pbarpStatesAll(pbarpStates)
 {
-  if (0==_pbarpStatesAll) ErrMsg(fatal) << "_pbarpStatesAll==0 !!!" << endmsg;
+  if (0==_pbarpStatesAll) { Alert << "_pbarpStatesAll==0 !!!" << endmsg; exit(1); }
   calcJPCs();
 }
 
@@ -23,7 +23,7 @@ bool pbarpToOmegaPi0States::calcJPCs(){
   
 
   std::vector< boost::shared_ptr<const jpcRes> > thepbarJPCs=_pbarpStatesAll->jpcStates();
-  //  if (0==thepbarJPCs) ErrMsg(fatal) << "_pbarpStatesAll->jpcStates()==0 !!!" << endmsg;
+  //  if (0==thepbarJPCs) { Alert << "_pbarpStatesAll->jpcStates()==0 !!!" << endmsg; exit(1); }
 
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it;
 
@@ -36,7 +36,7 @@ bool pbarpToOmegaPi0States::calcJPCs(){
     int num_ls = (int) motherLSs.size();
     if (num_ls==0) continue;
     
-    ErrMsg(debugging) << "valid LS combinations for JP(pbar p -> omega pi0)=" << (*it)->J <<" " << (*it)->P << endmsg;
+    DebugMsg << "valid LS combinations for JP(pbar p -> omega pi0)=" << (*it)->J <<" " << (*it)->P << endmsg;
 
     boost::shared_ptr<const jpcRes> jpcPtr=(*it);
     _jpcStates.push_back(jpcPtr);
@@ -44,7 +44,7 @@ bool pbarpToOmegaPi0States::calcJPCs(){
     for(int ls = 0; ls < num_ls; ls++){
 	 Spin L= motherLSs[ls].L;
 	 Spin S= motherLSs[ls].S;
-	 ErrMsg(debugging) << "L=" << L <<" S=" << S << endmsg;
+	 DebugMsg << "L=" << L <<" S=" << S << endmsg;
 
 	 boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(jpcPtr, L, S) );
 	 _allJPCLS.push_back(tmpJPCLS);
