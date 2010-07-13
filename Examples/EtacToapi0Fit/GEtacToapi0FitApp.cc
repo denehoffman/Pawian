@@ -45,7 +45,6 @@
 #include "GAsioTCPClient.hpp"
 #include "GAsioHelperFunctions.hpp"
 
-#include "ErrLogger/ErrLineLog.hh"
 // The individual that should be optimized
 #include "Examples/EtacToapi0Fit/GEtacToapi0Individual.hh"
 
@@ -60,6 +59,8 @@
 #include "Examples/EtacToapi0Fit/EtacToapi0Hist.hh"
 #include "Examples/EtacToapi0Fit/GEtacToapi0Individual.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Data.hh"
+
+#include "ErrLogger/ErrLogger.hh"
 
 using namespace Gem::GenEvA;
 using namespace Gem::Util;
@@ -142,7 +143,31 @@ int main(int argc, char **argv){
   GRANDOMFACTORY->setNProducerThreads(nProducerThreads);
   GRANDOMFACTORY->setArraySize(arraySize);
 
-  boost::shared_ptr<ErrLineLog> myLoggerPtr(new ErrLineLog(ErrLog::Severity(errLogMode)));  
+  switch(errLogMode) {
+  case -1:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+    break;
+  case 0:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    break;
+  case 1:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    break;
+  case 2:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+    break;
+  case 3:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+    break;
+  case 4:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+    break;
+  case 5:
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ALERT);
+    break;
+  default: 
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  }
 
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and

@@ -3,7 +3,7 @@
 #include <string>
 
 #include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 
 EtacToapi0EventList::EtacToapi0EventList(int kindOfData) :
@@ -17,9 +17,10 @@ EtacToapi0EventList::EtacToapi0EventList(int kindOfData) :
   if (kindOfData==0) _dataPath=theSourcePath+std::string("/Examples/qft++/data/dataEtacToA0Pi_100Mgev.dat");
   else if (kindOfData==2)   _dataPath=theSourcePath+std::string("/Examples/qft++/data/dataSpin2100MgevNew.dat");
   else{
-    ErrMsg(fatal) <<"this kind of data: " << kindOfData << "  is not supported!!!!\n"
-	      <<"initialze EtacToapi0EventList either with 0 or with 2 !!!!"
-	      << endmsg; 
+    Alert <<"this kind of data: " << kindOfData << "  is not supported!!!!\n"
+	  <<"initialze EtacToapi0EventList either with 0 or with 2 !!!!"
+	  << endmsg; 
+    exit(1);
   }
 
   read4Vecs(_dataPath, _nOfData, _data4Vecs);
@@ -35,7 +36,7 @@ EtacToapi0EventList::~EtacToapi0EventList()
 
 void EtacToapi0EventList::read4Vecs(std::string& path,  int nEvts, std::vector<evt4Vec>& the4Vecs)
 {
-  ErrMsg(routine) << "calculate 4Vecs and amplitudes for " << path << endmsg;
+  Info << "calculate 4Vecs and amplitudes for " << path << endmsg;
   std::ifstream inputStream(path.c_str(), std::ios::in);
 
    if (!inputStream.good()) 
@@ -47,7 +48,7 @@ void EtacToapi0EventList::read4Vecs(std::string& path,  int nEvts, std::vector<e
    int counter=0; 
    while (!inputStream.eof() && counter<nEvts )
      {
-       if ( counter%1000 == 0 ) ErrMsg(routine) << "event " << counter << endmsg;
+       if ( counter%1000 == 0 ) Info << "event " << counter << endmsg;
        Vector4<double> pi14V,pi24V,eta4V; // 4-momenta
        get4Vecs(inputStream, pi14V);
        get4Vecs(inputStream, pi24V);

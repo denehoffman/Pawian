@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/AbsStates.hh"
 #include "PwaUtils/pbarpStates.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -42,23 +42,22 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      ErrMsg(warning) << "Unknown switch: " 
-            << __argv[optind] << endmsg;
+      Warning << "Unknown switch: " 
+	      << __argv[optind] << endmsg;
       optind++;
     }
     
    while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
   }
 
-  ErrLineLog* myLogger=0;  
-  if(msgModeStr == "debugging") myLogger= new ErrLineLog(ErrLog::debugging);
-  else if(msgModeStr == "trace") myLogger= new ErrLineLog(ErrLog::trace);
-  else if(msgModeStr == "routine") myLogger= new ErrLineLog(ErrLog::routine);
-  else if(msgModeStr == "warning")  myLogger= new ErrLineLog(ErrLog::warning);
-  else if(msgModeStr == "error")    myLogger= new ErrLineLog(ErrLog::error); 
+  if(msgModeStr == "debugging") ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  else if(msgModeStr == "trace") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  else if(msgModeStr == "routine") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  else if(msgModeStr == "warning") ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+  else if(msgModeStr == "error")   ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
   else {
-    myLogger= new ErrLineLog(ErrLog::routine);
-    ErrMsg(warning) << "ErrorLogger not (properly) set -> Use mode 'ErrLog::routine' " << endmsg;  
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    Warning << "ErrorLogger not (properly) set -> Use mode 'WARN' " << endmsg;  
   }
 
 
@@ -67,14 +66,14 @@ int main(int __argc,char *__argv[]){
  int jmax=0;
  jmaxStrStr >> jmax;
 
-  ErrMsg(routine) << "jmax: " << jmax << endmsg;
+  Info << "jmax: " << jmax << endmsg;
 
   pbarpStates thepbarpState(jmax);
 
   std::vector< boost::shared_ptr<const jpcRes> > jpcStatesRequest;
   
   std::vector< boost::shared_ptr<const jpcRes> > theJPCStates=thepbarpState.jpcStates();
-  ErrMsg(routine) << "The pbarp JPC states are: " << endmsg;
+  Info << "The pbarp JPC states are: " << endmsg;
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it1;
   for ( it1=theJPCStates.begin(); it1!=theJPCStates.end(); ++it1){
     if (0!= (*it1))(*it1)->print(std::cout);
@@ -87,7 +86,7 @@ int main(int __argc,char *__argv[]){
 
   std::vector< boost::shared_ptr<const JPCLSM> > pbarpExtract=thepbarpState.extractJPCLSMStates(jpcStatesRequest);
 
-  ErrMsg(routine) << "The requested pbarp states (JPCSML) are: " << endmsg;
+  Info << "The requested pbarp states (JPCSML) are: " << endmsg;
   for ( it=pbarpExtract.begin(); it!=pbarpExtract.end(); ++it){
     if (0!= (*it))(*it)->print(std::cout);
   }
@@ -96,7 +95,7 @@ int main(int __argc,char *__argv[]){
 
   std::vector< boost::shared_ptr<const JPCSM> > pbarpJPCSMExtract=thepbarpState.extractJPCSMStates(jpcStatesRequest);
 
-  ErrMsg(routine) << "The requested pbarp states (JPCSM) are: " << endmsg;
+  Info << "The requested pbarp states (JPCSM) are: " << endmsg;
   for ( itJPCSM=pbarpJPCSMExtract.begin(); itJPCSM!=pbarpJPCSMExtract.end(); ++itJPCSM){
     if (0!= (*itJPCSM))(*itJPCSM)->print(std::cout);
   }
@@ -105,34 +104,33 @@ int main(int __argc,char *__argv[]){
 
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itjpc;
   std::vector< boost::shared_ptr<const jpcRes> > theSingletStates=thepbarpState.singletStates();
-  ErrMsg(routine) << "The pbarp singlet states are: " << endmsg;
+  Info << "The pbarp singlet states are: " << endmsg;
   for ( itjpc=theSingletStates.begin(); itjpc!=theSingletStates.end(); ++itjpc){
     if (0!= (*itjpc))(*itjpc)->print(std::cout);
     std::cout << std::endl;
   }
 
   std::vector< boost::shared_ptr<const jpcRes> > theTripletM0States=thepbarpState.tripletM0States();
-  ErrMsg(routine) << "The pbarp triplet states with helicity=0 are: " << endmsg;
+  Info << "The pbarp triplet states with helicity=0 are: " << endmsg;
   for ( itjpc=theTripletM0States.begin(); itjpc!=theTripletM0States.end(); ++itjpc){
     if (0!= (*itjpc))(*itjpc)->print(std::cout);
     std::cout << std::endl;
   }
 
   std::vector< boost::shared_ptr<const jpcRes> > theTripletMp1States=thepbarpState.tripletMp1States();
-  ErrMsg(routine) << "The pbarp triplet states with helicity=1 are: " << endmsg;
+  Info << "The pbarp triplet states with helicity=1 are: " << endmsg;
   for ( itjpc=theTripletMp1States.begin(); itjpc!=theTripletMp1States.end(); ++itjpc){
     if (0!= (*itjpc))(*itjpc)->print(std::cout);
     std::cout << std::endl;
   }
 
   std::vector< boost::shared_ptr<const jpcRes> > theTripletMm1States=thepbarpState.tripletMm1States();
-  ErrMsg(routine) << "The pbarp triplet states with helicity=-1 are: " << endmsg;
+  Info << "The pbarp triplet states with helicity=-1 are: " << endmsg;
   for ( itjpc=theTripletMm1States.begin(); itjpc!=theTripletMm1States.end(); ++itjpc){
     if (0!= (*itjpc))(*itjpc)->print(std::cout); 
     std::cout << std::endl;
   }
 
-  if (0!=myLogger) delete myLogger;
   return 0;
 }
 

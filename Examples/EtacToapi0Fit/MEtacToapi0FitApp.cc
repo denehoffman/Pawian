@@ -11,7 +11,7 @@
 #include "Examples/EtacToapi0Fit/MEtacToapi0Fcn.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Data.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
 #include "Minuit2/FunctionMinimum.h"
@@ -58,7 +58,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      ErrMsg(warning) << "Unknown switch: " 
+      Warning << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
@@ -66,15 +66,14 @@ int main(int __argc,char *__argv[]){
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
   }
 
-  ErrLineLog* myLogger=0;
-  if(msgModeStr == "debugging") myLogger= new ErrLineLog(ErrLog::debugging);
-  else if(msgModeStr == "trace") myLogger= new ErrLineLog(ErrLog::trace);
-  else if(msgModeStr == "routine") myLogger= new ErrLineLog(ErrLog::routine);
-  else if(msgModeStr == "warning")  myLogger= new ErrLineLog(ErrLog::warning);
-  else if(msgModeStr == "error")    myLogger= new ErrLineLog(ErrLog::error); 
+  if(msgModeStr == "debugging") ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  else if(msgModeStr == "trace") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  else if(msgModeStr == "routine") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  else if(msgModeStr == "warning") ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+  else if(msgModeStr == "error")   ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
   else {
-    myLogger= new ErrLineLog(ErrLog::debugging);
-    ErrMsg(warning) << "ErrorLogger not (properly) set -> Use mode 'ErrLog::debugging' " << endmsg;  
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+    Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " << endmsg;  
   }
 
 
@@ -83,7 +82,7 @@ int main(int __argc,char *__argv[]){
  int dataSpin=2;
  dataSpinStrStr >> dataSpin ;
 
- ErrMsg(routine) << "dataSpin: " << dataSpin << endmsg;
+ Info << "dataSpin: " << dataSpin << endmsg;
 
  boost::shared_ptr<const EtacToapi0EventList> theEvtListPtr(new EtacToapi0EventList(dataSpin));
  
@@ -109,21 +108,22 @@ int main(int __argc,char *__argv[]){
     }
  else 
    {
-     ErrMsg(fatal) << "initialization of the MnUserParameters failed" << endmsg;
+     Alert << "initialization of the MnUserParameters failed" << endmsg;
+     exit(1);
    }
 
  MnMigrad migrad(fcn, upar);
- ErrMsg(routine) <<"start migrad "<< endmsg;
+ Info <<"start migrad "<< endmsg;
  FunctionMinimum min = migrad();
 
  if(!min.IsValid()) {
    //try with higher strategy
-   ErrMsg(routine) <<"FM is invalid, try with strategy = 2."<< endmsg;
+   Info <<"FM is invalid, try with strategy = 2."<< endmsg;
    MnMigrad migrad2(fcn, min.UserState(), MnStrategy(2));
    min = migrad2();
  }
 
- ErrMsg(routine) << "migrad.Fval(): " << min.Fval() << endmsg;
+ Info << "migrad.Fval(): " << min.Fval() << endmsg;
  
  fitParamVal theFitResult;
  theFitResult.aMass=min.UserState().Value("InterMass");
@@ -134,7 +134,6 @@ int main(int __argc,char *__argv[]){
 
  EtacToapi0Hist theHistogrammer(theEvtListPtr,theFitResult);
 
- if (0!=myLogger) delete myLogger;
  return 0;
 }
 
