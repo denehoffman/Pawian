@@ -96,7 +96,7 @@ complex<double> OmegaPiLh::calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< 
       double theMag=it->second.first;
       double thePhi=it->second.second;
       complex<double> expiphi(cos(thePhi), sin(thePhi));
-      result+=theMag*expiphi*omegaDecAmp*Clebsch(theJPCLS->L,0,1, lamomega,theJPCLS->J, lamomega)*conj(theData.Dfp[theJPCLS->J][Minit][lamomega]); //Clebsch(1,lamomega,0,0,1,lamomega)=1    
+      result+=sqrt(2*theJPCLS->L+1)*sqrt(3)*theMag*expiphi*omegaDecAmp*Clebsch(theJPCLS->L,0,1, lamomega,theJPCLS->J, lamomega)*conj(theData.Dfp[theJPCLS->J][Minit][lamomega]); //Clebsch(1,lamomega,0,0,1,lamomega)=1    
     } 
 
   }

@@ -74,7 +74,7 @@ void  MOmegaPiFcn::setMnUsrParams(MnUserParameters& upar){
     //now fill the fitParameterMap
     std::string magStr=(*itJPCLS)->name()+"S"+"mag";
     std::string phiStr=(*itJPCLS)->name()+"S"+"phi";
-    upar.Add(magStr, 0.5, .1, -10., 10.);
+    upar.Add(magStr, 0.5, .1, 0., 1.);
     if (counter>0) upar.Add(phiStr, 0., .1, -M_PI, M_PI);
     counter++; 
   }
@@ -85,7 +85,7 @@ void  MOmegaPiFcn::setMnUsrParams(MnUserParameters& upar){
     //now fill the fitParameterMap
     std::string magStr=(*itJPCLS)->name()+"T0"+"mag";
     std::string phiStr=(*itJPCLS)->name()+"T0"+"phi";
-    upar.Add(magStr, 0.5, .1, -10., 10.);
+    upar.Add(magStr, 0.5, .1, 0., 1.);
     if (counter>0) upar.Add(phiStr, 0., .1, -M_PI, M_PI);
     counter++; 
   }
@@ -96,7 +96,7 @@ void  MOmegaPiFcn::setMnUsrParams(MnUserParameters& upar){
     //now fill the fitParameterMap
     std::string magStr=(*itJPCLS)->name()+"T1"+"mag";
     std::string phiStr=(*itJPCLS)->name()+"T1"+"phi";
-    upar.Add(magStr, 0.5, .1, -10., 10.);
+    upar.Add(magStr, 0.5, .1, 0., 1.);
     if (counter>0) upar.Add(phiStr, 0., .1, -M_PI, M_PI);
     counter++; 
   }

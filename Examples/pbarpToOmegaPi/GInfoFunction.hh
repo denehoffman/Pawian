@@ -126,7 +126,7 @@ public:
 				if(p==0) {
 				  OmegaPiData::fitParamVal theParamVal;
 				  assert(gdii_ptr->getFitParams(theParamVal));
-				  std::cout << generation << ": " << currentEvaluation << std::endl;
+				  std::cout << generation << ": logLh = " << currentEvaluation << std::endl;
 
 				  gdii_ptr->printFitParams(theParamVal);
 				}

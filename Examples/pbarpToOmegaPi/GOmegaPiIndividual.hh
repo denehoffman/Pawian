@@ -426,9 +426,6 @@ protected:
     assert(getFitParams(theFitParmValTmp));   
     result=_omegaPiLhPtr->calcLogLh(theFitParmValTmp);
 
-    std::cout << "logLh="<< result << std::endl;
-    printFitParams(theFitParmValTmp);
-    
     return result;
   }
   
@@ -454,7 +451,7 @@ private:
     for ( itJPCLS=theJPCLSs.begin(); itJPCLS!=theJPCLSs.end(); ++itJPCLS){
       //now fill the fitParameterMap
       
-      boost::shared_ptr<GBoundedDouble> gbd_ptr(new GBoundedDouble(-10., 10.) ); //JPCLS magnitude
+      boost::shared_ptr<GBoundedDouble> gbd_ptr(new GBoundedDouble(0., 1.) ); //JPCLS magnitude
       theGbdc_ptr->push_back(gbd_ptr);
 
       if (counter>0){ 
