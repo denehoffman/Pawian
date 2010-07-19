@@ -36,13 +36,6 @@ if(COMMAND cmake_policy)
    cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-SET (EXECUTABLENAME ErrLineLogTestApp)
-ADD_EXECUTABLE( ${EXECUTABLENAME}
-   ErrLineLogTestApp.cc
-)
-target_link_libraries(${EXECUTABLENAME} ErrLogger)
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
-
 SET (EXECUTABLENAME Log4CppTestApp)
 ADD_EXECUTABLE( ${EXECUTABLENAME}
    Log4CppTestApp.cc
