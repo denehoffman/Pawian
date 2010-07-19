@@ -55,7 +55,8 @@ bool PwaEnv::setup(std::string& setupFileName)
   CBElsaReader mcEventReader(setupParser.setup()->mcInput, 3, 1);
   theMcEventList = new EventList();
   mcEventReader.fillAll(*theMcEventList);
-  
+
+  return 1;
 }
 
 ParticleTable* PwaEnv::particleTable()

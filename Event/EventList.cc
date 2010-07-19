@@ -52,7 +52,7 @@ void EventList::setParticleType(int num, Particle* partRef)
   return;
 }
 
-Particle* EventList::particle(int num)
+Particle* EventList::particle(unsigned int num)
 {
   if (num >= 0 && num < particleRefs.size())
     return particleRefs[num];

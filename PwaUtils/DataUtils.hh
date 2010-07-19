@@ -57,6 +57,8 @@ struct jpcRes
   virtual void print(std::ostream& os) const{
     os <<"J=" << J << "\tP=" << P << "\tC=" << C;   
   }
+
+  virtual ~jpcRes(){};
 };
 
 

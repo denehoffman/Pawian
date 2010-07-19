@@ -27,8 +27,8 @@ public:
 
   void addParticle(double e, double px, double py, double pz);
   
-  Vector4<float>* p4(int i);
-  float* pid(int i);
+  Vector4<float>* p4(unsigned int i);
+  float* pid(unsigned int i);
 
   int size();
   

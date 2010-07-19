@@ -21,7 +21,7 @@ public:
   void setParticleType(int num, Particle* partRef);
   bool findParticleTypes(ParticleTable& pdtTable);
 
-  Particle* particle(int num);
+  Particle* particle(unsigned int num);
 
   int size();
 

@@ -11,7 +11,7 @@ Event::~Event()
     delete *iter;
 }
   
-Vector4<float>* Event::p4(int i)
+Vector4<float>* Event::p4(unsigned int i)
 {
   if (particles.size() > i)
     return particles[i]->vector4;
@@ -24,7 +24,7 @@ Vector4<float>* Event::p4(int i)
 }
 
 
-float* Event::pid(int i)
+float* Event::pid(unsigned int i)
 {
   if (particles.size() > i)
     return particles[i]->pidVector;

@@ -32,8 +32,9 @@ DecayTree::DecayTree(const EdgeList* edgeList)
   theDecayTree = new Graph(edges, edges+nedges, edgeList->lastVertexNumber);
 
   nameMap = &(const_cast<EdgeList*>(edgeList)->particleNames);
-  std::cout << "name 0 " << nameMap->find(0)->second << 
-    " name 1 " << nameMap->find(1)->second << std::endl;
+  for (counter = 1; counter <= nameMap->size(); ++counter)
+    std::cout << 
+      " name " << counter << " " << nameMap->find(counter)->second << std::endl;
 }
 
 bool DecayTree::fillParticleRefs(ParticleTable& ptable)

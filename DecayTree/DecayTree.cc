@@ -20,7 +20,7 @@ DecayTree::~DecayTree()
 DecayTree::DecayTree(const EdgeList* edgeList)
 {
   Edge edges[edgeList->decays.size() * 2];
-  int counter;
+  unsigned int counter;
   for (counter = 0; counter < edgeList->decays.size(); counter++) {
     edges[2*counter]   = std::pair<int,int>(edgeList->decays[counter]->mother,
 					    edgeList->decays[counter]->daughters[0]);

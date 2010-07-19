@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-main()
+int main()
 {
   ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
   std::vector<std::string> fileNames;

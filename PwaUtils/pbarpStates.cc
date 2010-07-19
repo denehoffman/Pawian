@@ -3,20 +3,20 @@
 #include "ErrLogger/ErrLogger.hh"
 
 pbarpStates::pbarpStates():
+  AbsStates(),
   _jmax(10),
   _pbarJPC(0.5, -1),
-  _pJPC(0.5, 1),
-  AbsStates()
+  _pJPC(0.5, 1)
 {
   calcJPCs();
 }
 
 
 pbarpStates::pbarpStates(int jmax):
+  AbsStates(),
   _jmax(jmax),
   _pbarJPC(0.5, -1),
-  _pJPC(0.5, 1),
-  AbsStates()
+  _pJPC(0.5, 1)
 {
   calcJPCs();
 }
@@ -85,6 +85,8 @@ bool pbarpStates::calcJPCs(){
       }
        DebugMsg << "\n" << endmsg;
     }
+
+  return true;
 }
 
 void pbarpStates::fillVec(boost::shared_ptr<const jpcRes> currentRes, 
