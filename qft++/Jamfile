@@ -1,0 +1,9 @@
+project :
+	requirements
+	<include>./topincludes 
+	;
+
+lib qft++ : 
+	[ glob relativistic-quantum-mechanics/*.cc 
+	  tensor/*.cc : ] 
+	: : : ;
