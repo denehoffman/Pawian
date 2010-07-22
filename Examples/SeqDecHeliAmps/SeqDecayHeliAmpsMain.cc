@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "Examples/qft++/SeqDecHeliAmps.hh"
+#include "Examples/SeqDecHeliAmps/SeqDecHeliAmps.hh"
 
 int findParityAndRemove(std::string& theString){
   int result=0;

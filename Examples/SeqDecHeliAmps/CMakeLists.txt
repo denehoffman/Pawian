@@ -1,6 +1,9 @@
+
+
+
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
 
-MESSAGE("cmake installation for package: Examples/qft++")
+MESSAGE("cmake installation for package: Examples/SeqDecHeliAmps")
 
 SET (INCLUDE_DIRECTORIES
      ${ROOT_INCLUDE_DIR}
@@ -37,7 +40,7 @@ INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
 
 ######## End: Linking "compton_scatteringApp ###########################
 
-######## Linking "SeqDecayHeliAmpsApp ###########################
+######## Linking "SeqDecHeliAmpsApp ###########################
 SET (EXECUTABLENAME SeqDecayHeliAmpsApp)
 
 
@@ -57,6 +60,6 @@ TARGET_LINK_LIBRARIES (${EXECUTABLENAME}
 
 INSTALL ( TARGETS ${EXECUTABLENAME1} DESTINATION bin/${EXECUTABLENAME})
 
-######## End of Linking "SeqDecayHeliAmpsApp ###########################
+######## End of Linking "SeqDecHeliAmpsApp ###########################
 
 

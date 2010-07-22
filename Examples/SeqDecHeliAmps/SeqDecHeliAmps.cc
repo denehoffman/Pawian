@@ -1,7 +1,7 @@
 // 
 //
 //_____________________________________________________________________________
-#include "Examples/qft++/SeqDecHeliAmps.hh"
+#include "Examples/SeqDecHeliAmps/SeqDecHeliAmps.hh"
 #include <getopt.h>
 #include <cassert>
 
