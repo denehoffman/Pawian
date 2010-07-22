@@ -12,10 +12,10 @@ EtacToapi0EventList::EtacToapi0EventList(int kindOfData) :
   _nOfMc(50000)
 {
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
-  _mcPath=theSourcePath+std::string("/Examples/qft++/data/mc100Mgev.dat");
+  _mcPath=theSourcePath+std::string("/Examples/SeqDecHeliAmps/data/mc100Mgev.dat");
 
-  if (kindOfData==0) _dataPath=theSourcePath+std::string("/Examples/qft++/data/dataEtacToA0Pi_100Mgev.dat");
-  else if (kindOfData==2)   _dataPath=theSourcePath+std::string("/Examples/qft++/data/dataSpin2100MgevNew.dat");
+  if (kindOfData==0) _dataPath=theSourcePath+std::string("/Examples/SeqDecHeliAmps/data/dataEtacToA0Pi_100Mgev.dat");
+  else if (kindOfData==2)   _dataPath=theSourcePath+std::string("/Examples/SeqDecHeliAmps/data/dataSpin2100MgevNew.dat");
   else{
     Alert <<"this kind of data: " << kindOfData << "  is not supported!!!!\n"
 	  <<"initialze EtacToapi0EventList either with 0 or with 2 !!!!"
