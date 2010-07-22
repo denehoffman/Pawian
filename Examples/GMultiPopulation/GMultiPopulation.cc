@@ -50,7 +50,7 @@
 #include "GFunctionIndividualDefines.hpp"
 
 // Declares a function to parse the command line
-#include "GArgumentParser.hpp"
+#include "Examples/GMultiPopulation/GArgumentParser.hh"
 
 using namespace Gem::GenEvA;
 using namespace Gem::Util;

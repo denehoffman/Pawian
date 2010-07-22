@@ -97,8 +97,8 @@ add_subdirectory (PwaUtils)
 add_subdirectory (Examples/qft++)
 add_subdirectory (Examples/pbarp)
 add_subdirectory (Examples/EtacToapi0Fit)
-add_subdirectory (Examples/geneva/GMultiPopulation)
-add_subdirectory (Examples/geneva/GStartProject)
+add_subdirectory (Examples/GMultiPopulation)
+add_subdirectory (Examples/GStartProject)
 add_subdirectory (Examples/pbarpToOmegaPi)
 
 
