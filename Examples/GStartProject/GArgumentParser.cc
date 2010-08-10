@@ -28,7 +28,7 @@
  */
 
 
-#include "Examples/geneva/GStartProject/GArgumentParser.hh"
+#include "Examples/GStartProject/GArgumentParser.hh"
 
 namespace Gem
 {

@@ -1,0 +1,4 @@
+project : 
+        ;
+
+exe pbarpStatesApp : [ glob *.cc ] $(TOP)/PwaUtils//PwaUtils : ;

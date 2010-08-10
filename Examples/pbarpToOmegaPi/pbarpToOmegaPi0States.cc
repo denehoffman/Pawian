@@ -42,18 +42,18 @@ bool pbarpToOmegaPi0States::calcJPCs(){
     _jpcStates.push_back(jpcPtr);
 
     for(int ls = 0; ls < num_ls; ls++){
-	 Spin L= motherLSs[ls].L;
-	 Spin S= motherLSs[ls].S;
-	 DebugMsg << "L=" << L <<" S=" << S << endmsg;
-
-	 boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(jpcPtr, L, S) );
-	 _allJPCLS.push_back(tmpJPCLS);
-
-	 for(Spin M = -S; M <= S; M++){
-          double Clebschg=Clebsch(L,0,S,M, (*it)->J,M);
-	  boost::shared_ptr<const JPCLSM> tmpJPCLSM(new JPCLSM(tmpJPCLS, M, Clebschg) );
-          _allStates.push_back(tmpJPCLSM);   
-	 }
+      Spin L= motherLSs[ls].L;
+      Spin S= motherLSs[ls].S;
+      DebugMsg << "L=" << L <<" S=" << S << endmsg;
+      
+      boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(jpcPtr, L, S) );
+      _allJPCLS.push_back(tmpJPCLS);
+      
+      for(Spin M = -S; M <= S; M++){
+	double Clebschg=Clebsch(L,0,S,M, (*it)->J,M);
+	boost::shared_ptr<const JPCLSM> tmpJPCLSM(new JPCLSM(tmpJPCLS, M, Clebschg) );
+	_allStates.push_back(tmpJPCLSM);   
+      }
     }
   }
 
@@ -63,6 +63,8 @@ bool pbarpToOmegaPi0States::calcJPCs(){
   _JPCLSomegaProdSinglet=extractJPCLSStates(_pbarpSingletToOmegaPi, _allJPCLS);
   _JPCLSomegaProdTripletM0=extractJPCLSStates(_pbarpTripletM0ToOmegaPi, _allJPCLS);
   _JPCLSomegaProdTripletM1=extractJPCLSStates(_pbarpTripletM1ToOmegaPi, _allJPCLS);
+
+  return true;
 }
 
 std::vector< boost::shared_ptr<const JPCLS> > pbarpToOmegaPi0States::extractJPCLSStates(std::vector< boost::shared_ptr<const jpcRes> > theJPCRequests, std::vector< boost::shared_ptr<const JPCLS> > jpclsStatesAll) const{

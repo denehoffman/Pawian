@@ -1,0 +1,7 @@
+project : 
+	;
+
+lib ErrLogger : [ glob *.cc : *App.cc ] : <use>$(TOP)//log4cpp : : <library>$(TOP)//log4cpp  ;
+
+exe ErrLoggerTestApp : ErrLoggerTestApp.cc ErrLogger : ;
+exe Log4CppTestApp : Log4CppTestApp.cc ErrLogger : ;

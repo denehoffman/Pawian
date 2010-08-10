@@ -119,7 +119,7 @@ void MOmegaPiFcn::setFitParamVal(OmegaPiData::fitParamVal& theParamVal, const st
     exit(1);
   }
 
-  int counter=0;
+  unsigned int counter=0;
   for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
     //now fill the fitParameterMap
     double mag=par[counter];

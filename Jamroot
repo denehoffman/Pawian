@@ -1,0 +1,38 @@
+path-constant TOP : . ;
+local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
+ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
+BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor ;
+
+project :
+	requirements <include>./  
+	<include>$(extern)/log4cpp/include
+	<include>$(ROOTSYS)/include
+	<include>$(GENEVA)/include
+	<include>$(MINUIT2)/include
+	<link>static
+	<cxxflags>-pthread
+	<linkflags>$(ROOTLIBS)
+	<linkflags>$(BOOSTLIBS)
+	<linkflags>-lgomp
+	<linkflags>-pthread
+	;
+
+actions rootlibs
+{
+	$(ROOTSYS)/bin/root-config --libs
+}
+
+lib log4cpp : : <file>$(extern)/lib/liblog4cpp.a : : ;
+lib Minuit2 : : <file>$(MINUIT2)/lib/libMinuit2.a : : ;
+lib Geneva  : : <file>$(GENEVA)/lib/libgeneva-opt.so : : ;
+
+build-project qft++ ;
+build-project Utils ;
+build-project ErrLogger ;
+build-project PwaUtils ;
+build-project Particle ;
+build-project Event ;
+build-project DecayTree ;
+build-project Setup ;
+build-project Examples ;
+

@@ -1,7 +1,7 @@
 // 
 //
 //_____________________________________________________________________________
-#include "Examples/qft++/SeqDecHeliAmps.hh"
+#include "Examples/SeqDecHeliAmps/SeqDecHeliAmps.hh"
 #include <getopt.h>
 #include <cassert>
 
@@ -32,7 +32,7 @@ SeqDecHeliAmps::SeqDecHeliAmps(jpChain& motherChain, jpChain& daughterChain, std
   /*______________________________Set 4-Momenta______________________________*/
 
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
-  std::string inputFile(theSourcePath+"/Examples/qft++/data/mc100Mgev.dat");
+  std::string inputFile(theSourcePath+"/Examples/SeqDecHeliAmps/data/mc100Mgev.dat");
   std::ifstream inputStream(inputFile.c_str(), std::ios::in);
 
    if (!inputStream.good()) 

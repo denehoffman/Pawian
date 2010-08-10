@@ -1,0 +1,6 @@
+project : 
+	;
+
+lib Particle : [ glob *.cc : *App.cc ] $(TOP)/Utils//Utils $(TOP)/ErrLogger//ErrLogger : : : ;
+
+exe PdtTestApp : PdtTestApp.cc Particle : ;

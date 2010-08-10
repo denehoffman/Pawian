@@ -46,13 +46,13 @@
 #include "GAsioHelperFunctions.hpp"
 
 // The individual that should be optimized
-#include "Examples/geneva/GStartProject/GStartIndividual.hh"
+#include "Examples/GStartProject/GStartIndividual.hh"
 
 // Declares a function to parse the command line
-#include "Examples/geneva/GStartProject/GArgumentParser.hh"
+#include "Examples/GStartProject/GArgumentParser.hh"
 
 // Information retrieval and printing
-#include "Examples/geneva/GStartProject/GInfoFunction.hh"
+#include "Examples/GStartProject/GInfoFunction.hh"
 
 using namespace Gem::GenEvA;
 using namespace Gem::Util;

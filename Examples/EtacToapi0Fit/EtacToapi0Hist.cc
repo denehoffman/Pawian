@@ -4,7 +4,7 @@
 #include "Examples/EtacToapi0Fit/EtacToapi0Hist.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
-#include "ErrLogger/ErrLineLog.hh"
+#include "ErrLogger/ErrLogger.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -22,7 +22,8 @@ EtacToapi0Hist::EtacToapi0Hist(boost::shared_ptr<const EtacToapi0EventList> theE
   _invpipiFittedHist(0)
 {
   if(0==theEvtList){
-    ErrMsg(fatal) <<" EtacToapi0EventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    Alert <<" EtacToapi0EventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    exit(1);
   }
   initRootStuff();
   EtacToapi0Lh* theEtacLh=new EtacToapi0Lh(theEvtList);
@@ -55,13 +56,13 @@ EtacToapi0Hist::EtacToapi0Hist(boost::shared_ptr<const EtacToapi0EventList> theE
   //normalize fitted histos
 
   double integralData=_invpipiDataHist->Integral();
-  ErrMsg(debugging) << "integralData= " << integralData << endmsg;
+  DebugMsg << "integralData= " << integralData << endmsg;
   
   double integralFittedMc=_invpipiFittedHist->Integral();  
-  ErrMsg(debugging) << "integralFittedMc= " << integralFittedMc << endmsg;
+  DebugMsg << "integralFittedMc= " << integralFittedMc << endmsg;
 
   double integralMc=_invpipiMcHist->Integral();   
-  ErrMsg(debugging) << "integralMc= " << integralMc << endmsg;
+  DebugMsg << "integralMc= " << integralMc << endmsg;
   
   _invpipiFittedHist->Scale(integralData/integralFittedMc);
   _invpietaFittedHist->Scale(integralData/integralFittedMc);

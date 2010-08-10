@@ -47,7 +47,7 @@
 #include "GAsioHelperFunctions.hpp"
 
 // The individual that should be optimized
-#include "Examples/geneva/GStartProject/GStartIndividual.hh"
+#include "Examples/GStartProject/GStartIndividual.hh"
 
 namespace Gem {
 namespace GenEvA {
