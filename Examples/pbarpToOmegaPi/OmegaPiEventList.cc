@@ -25,7 +25,7 @@ OmegaPiEventList::~OmegaPiEventList()
 {
 }
 
-void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& omPiEvtList)
+void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData*>& omPiEvtList)
 {
 
   Event* anEvent;
@@ -60,24 +60,24 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& o
 
     Vector4<float> pi0HeliOmega4V = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
 
-    OmPiEvtData theOmPiEvtData;
-    theOmPiEvtData.cm_4Vec=cm_4V;
-    theOmPiEvtData.omegaHeliCm4Vec=omega_cm_4V;
-    theOmPiEvtData.pi0RecHeliCm4Vec=piRec_cm_4V;
-    theOmPiEvtData.pi0HeliOmega4Vec=pi0HeliOmega4V;
+    OmPiEvtData* theOmPiEvtData=new OmPiEvtData();
+    theOmPiEvtData->cm_4Vec=cm_4V;
+    theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
+    theOmPiEvtData->pi0RecHeliCm4Vec=piRec_cm_4V;
+    theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
 
     for (Spin j=0; j<=_jmax; j++){
       for (Spin M=-1; M<=1; M++){
 	if (fabs(M)>j) continue;
 	for (Spin lam=-1; lam<=1; lam++){
  	  if (fabs(lam)>j) continue;
-	  theOmPiEvtData.Dfp[j][M][lam]=Wigner_D(omega_cm_4V.Phi(),omega_cm_4V.Theta(),0,j,M,lam);
+	  theOmPiEvtData->Dfp[j][M][lam]=Wigner_D(omega_cm_4V.Phi(),omega_cm_4V.Theta(),0,j,M,lam);
 	}
       }
     }
 
     Spin omegaSpin=1;
-    Wigner_D(omegaSpin, pi0HeliOmega4V.Phi(), pi0HeliOmega4V.Theta(),0, theOmPiEvtData.Dfd);
+    Wigner_D(omegaSpin, pi0HeliOmega4V.Phi(), pi0HeliOmega4V.Theta(),0, theOmPiEvtData->Dfd);
     
     omPiEvtList.push_back(theOmPiEvtData);
 

@@ -43,7 +43,7 @@ public:
   // Getters:
   
   double calcLogLh(const OmegaPiData::fitParamVal& theParamVal);
-  double calcEvtIntensity(OmegaPiData::OmPiEvtData& theData, const OmegaPiData::fitParamVal& theParamVal);
+  double calcEvtIntensity(OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal);
 
   boost::shared_ptr<const OmegaPiEventList> getEventList() const {return _omegaPiEventListPtr;}
   boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
@@ -55,8 +55,10 @@ protected:
 private:
   boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
   boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
+  std::vector<OmegaPiData::OmPiEvtData*> _evtDataVec;
+  std::vector<OmegaPiData::OmPiEvtData*> _evtMCVec;
 
-  complex<double> calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiData::OmPiEvtData& theData);
+  complex<double> calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiData::OmPiEvtData* theData);
 
 };
 
