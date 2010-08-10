@@ -6,6 +6,7 @@ MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
 
 set(INCLUDE_DIRECTORIES
+${BOOST_ROOT}
 ${CMAKE_SOURCE_DIR}
 ${log4cpp_INCLUDE_DIRS}
 )

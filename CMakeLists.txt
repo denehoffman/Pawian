@@ -96,10 +96,11 @@ add_subdirectory (Setup)
 add_subdirectory (PwaUtils)
 add_subdirectory (Examples/qft++)
 add_subdirectory (Examples/pbarp)
-add_subdirectory (Examples/EtacToapi0Fit)
+#add_subdirectory (Examples/EtacToapi0Fit)
 add_subdirectory (Examples/geneva/GMultiPopulation)
 add_subdirectory (Examples/geneva/GStartProject)
-add_subdirectory (Examples/pbarpToOmegaPi)
+#add_subdirectory (Examples/pbarpToOmegaPi)
+add_subdirectory (Examples/MATpbarpToOmegaPi)
 
 
 EXECUTE_PROCESS(COMMAND ps OUTPUT_VARIABLE PSOUTPUT)

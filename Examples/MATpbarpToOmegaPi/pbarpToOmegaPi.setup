@@ -1,0 +1,38 @@
+
+# 
+# a comment in a sample setup file
+#
+
+# {} marks a decay chain
+{ ppbar -> {partB -> myPi+, pi-} , {partC -> partD, partE} }
+{ ppbar -> {partB -> myPi+, pi-} , {partX -> partD, partE} }
+{ ppbar -> {partB -> myPi+, pi-} , {partY -> partD, partE} }
+{ ppbar -> {partB -> myPi+, pi-} , {partZ -> partD, partE} }
+
+
+# set properties of initial state: L, M = Lz, 
+initialProperties L=0,5 M=1,-1 
+
+# define what should be varied in the fit: width, mass, amplitude, phase
+fitVariables partB(amplitude, phase, mass) partC(amplitude, phase, width, mass)
+
+# define a new particle in the syntax used in our pdt table
+#            type name          texName    3*Q 2*J P  C  G   I  I3 S  C  mass   width dynFuntion      [comment]  
+addParticle Meson partC(1270) 	partC(1270)  0  2 -1 -1  1   1  0  0  0  1.270  0.300 relBW           [glueball? hybrid?]
+
+# derive a new particle from an existing one and modify it: mass, width, JPC, dynFunction
+cloneParticle myPi+ pi+
+modParticle myPi+ mass=142.3+0.5-0.4
+
+# define the columns in the input tuples
+defineTuple myPi+ pi- partD partE
+
+# set one or more input files for beam and mc data
+#beamInput /home/bertram/PawianGit/Pawian/Examples/pbarpToOmegaPi/data/510_0600.dat
+beamInput /home/bertram/PawianGit/Pawian/Examples/pbarpToOmegaPi/data/510_1940.dat
+
+# beamInput beam2.root
+# beamInput beam3.root beam4.root
+
+#mcInput /home/bertram/PawianGit/Pawian/Examples/pbarpToOmegaPi/data/mc510_0600.dat
+mcInput /home/bertram/PawianGit/Pawian/Examples/pbarpToOmegaPi/data/mc510_1940.dat
