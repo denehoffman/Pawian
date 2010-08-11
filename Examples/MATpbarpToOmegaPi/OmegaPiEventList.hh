@@ -54,8 +54,8 @@ public:
   virtual ~OmegaPiEventList();
 
   // Getters:
-  const std::vector<OmPiEvtData>& getDataVecs() const {return _dataList;}
-  const std::vector<OmPiEvtData>& getMcVecs() const {return _mcList;}
+  const std::vector<OmPiEvtData*>& getDataVecs() const {return _dataList;}
+  const std::vector<OmPiEvtData*>& getMcVecs() const {return _mcList;}
   const unsigned jMax() const {return _jmax;}
   const unsigned pbarMom() const {return _pbarmom;}
 
@@ -70,10 +70,10 @@ private:
 
   unsigned _jmax;
   unsigned _pbarmom;
-  std::vector<OmPiEvtData> _dataList;
-  std::vector<OmPiEvtData> _mcList;
+  std::vector<OmPiEvtData*> _dataList;
+  std::vector<OmPiEvtData*> _mcList;
 
-  void read4Vecs(EventList& evtList, std::vector<OmPiEvtData>& omPiEvtList);
+  void read4Vecs(EventList& evtList, std::vector<OmPiEvtData*>& omPiEvtList);
   void myWigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
 	      map<serSpin,map<serSpin,map<serSpin,complex<double> > > > &__D);
   

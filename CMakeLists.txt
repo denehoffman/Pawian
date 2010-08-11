@@ -99,8 +99,8 @@ add_subdirectory (Examples/pbarp)
 add_subdirectory (Examples/EtacToapi0Fit)
 add_subdirectory (Examples/GMultiPopulation)
 add_subdirectory (Examples/GStartProject)
-add_subdirectory (Examples/pbarpToOmegaPi)
-#add_subdirectory (Examples/MATpbarpToOmegaPi)
+#add_subdirectory (Examples/pbarpToOmegaPi)
+add_subdirectory (Examples/MATpbarpToOmegaPi)
 
 
 EXECUTE_PROCESS(COMMAND ps OUTPUT_VARIABLE PSOUTPUT)

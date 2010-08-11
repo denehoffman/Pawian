@@ -9,7 +9,3 @@
 
   std::vector<double> evaluation1;
 
-  generation.push_back(0);
-  evaluation0.push_back(1040.77);
-  evaluation1.push_back(2781.61);
-

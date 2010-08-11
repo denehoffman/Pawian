@@ -60,9 +60,9 @@ private:
   unsigned _pbarmom;
 
   void initRootStuff();
-  void plotCosOmegaHeli(TH1F* theHisto, const OmPiEvtData& theEvtData, double weight);
-  void plotCosPi0FromOmegaHeli(TH1F* theHisto, const OmPiEvtData& theEvtData, double weight);
-  void plotTreimanYang(TH1F* theHisto, const OmPiEvtData& theEvtData, double weight);
+  void plotCosOmegaHeli(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight);
+  void plotCosPi0FromOmegaHeli(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight);
+  void plotTreimanYang(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight);
 };
 
 #endif
