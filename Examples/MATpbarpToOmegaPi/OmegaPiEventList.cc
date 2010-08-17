@@ -65,10 +65,12 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData*>& 
     serVec4<float> pi0HeliOmega4V = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
 
     OmPiEvtData* theOmPiEvtData=new OmPiEvtData();
-    theOmPiEvtData->cm_4Vec=cm_4V;
-    theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
-    theOmPiEvtData->pi0RecHeliCm4Vec=piRec_cm_4V;
-    theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
+    for(int i=0; i<4; i++){
+      theOmPiEvtData->cm_4Vec.push_back(cm_4V[i]);  //theOmPiEvtData->cm_4Vec=cm_4V;
+      theOmPiEvtData->omegaHeliCm4Vec.push_back(omega_cm_4V[i]);  //theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
+      theOmPiEvtData->pi0RecHeliCm4Vec.push_back(piRec_cm_4V[i]);  //theOmPiEvtData->pi0RecHeliCm4Vec=piRec_cm_4V;
+      theOmPiEvtData->pi0HeliOmega4Vec.push_back(pi0HeliOmega4V[i]);  //theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
+    }
 
     for (Spin j=0; j<=_jmax; j++){
       for (Spin M=-1; M<=1; M++){

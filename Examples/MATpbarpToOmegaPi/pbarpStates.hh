@@ -9,6 +9,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/archive/text_oarchive.hpp> 
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/MATpbarpToOmegaPi/AbsStates.hh"
@@ -25,13 +26,15 @@ class pbarpStates : public AbsStates {
   void serialize(Archive & ar, const unsigned int) {
     using boost::serialization::make_nvp;
 
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(AbsStates);
+
     ar & BOOST_SERIALIZATION_NVP(_jmax);
     ar & BOOST_SERIALIZATION_NVP(_pbarJPC);
     ar & BOOST_SERIALIZATION_NVP(_pJPC);
-    ar & BOOST_SERIALIZATION_NVP(_singletStates);
-    ar & BOOST_SERIALIZATION_NVP(_tripletM0States);
-    ar & BOOST_SERIALIZATION_NVP(_tripletMp1States);
-    ar & BOOST_SERIALIZATION_NVP(_tripletMm1States);
+    ar & make_nvp("singletStates",_singletStates);
+    ar & make_nvp("tripletM0States",_tripletM0States);
+    ar & make_nvp("tripletMp1States",_tripletMp1States);
+    ar & make_nvp("tripletMm1States",_tripletMm1States);
 
     /* Add your own class-variables here in the following way:
       ar & BOOST_SERIALIZATION_NVP(myVar);

@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/archive/text_oarchive.hpp> 
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "TROOT.h"
 // #include <TSystem.h>
@@ -35,8 +36,10 @@ class OmegaPiLh {
    // boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
    // boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
 
-    ar & BOOST_SERIALIZATION_NVP(_omegaPiEventListPtr);
-    ar & BOOST_SERIALIZATION_NVP(_omegaPi0StatesPtr);
+    ar & make_nvp("omegaPiEventListPtr",_omegaPiEventListPtr);
+    ar & make_nvp("omegaPi0StatesPtr",_omegaPi0StatesPtr);
+    ar & make_nvp("evtDataVec",_evtDataVec);
+    ar & make_nvp("evtMCVec",_evtMCVec);
 
     /* Add your own class-variables here in the following way:
       ar & BOOST_SERIALIZATION_NVP(myVar);

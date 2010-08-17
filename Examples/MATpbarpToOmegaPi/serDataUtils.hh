@@ -24,12 +24,6 @@ struct jpcRes
     ar & BOOST_SERIALIZATION_NVP(J);
     ar & BOOST_SERIALIZATION_NVP(P);
     ar & BOOST_SERIALIZATION_NVP(C);
-
-    /* Add your own class-variables here in the following way:
-      ar & BOOST_SERIALIZATION_NVP(myVar);
-      or
-      ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
-    */
   }
 
   jpcRes(){
@@ -98,14 +92,10 @@ struct JPCLS : public jpcRes{
   void serialize(Archive & ar, const unsigned int) {
     using boost::serialization::make_nvp;
 
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(jpcRes);
+
     ar & BOOST_SERIALIZATION_NVP(L);
     ar & BOOST_SERIALIZATION_NVP(S);
-
-    /* Add your own class-variables here in the following way:
-      ar & BOOST_SERIALIZATION_NVP(myVar);
-      or
-      ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
-    */
   }
 
   JPCLS(){
@@ -178,14 +168,10 @@ struct JPCSM : public jpcRes{
   void serialize(Archive & ar, const unsigned int) {
     using boost::serialization::make_nvp;
 
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(jpcRes);
+
     ar & BOOST_SERIALIZATION_NVP(S);
     ar & BOOST_SERIALIZATION_NVP(M);
-
-    /* Add your own class-variables here in the following way:
-      ar & BOOST_SERIALIZATION_NVP(myVar);
-      or
-      ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
-    */
   }
 
   JPCSM(){
@@ -253,15 +239,11 @@ struct JPCLSM : public JPCLS{
   void serialize(Archive & ar, const unsigned int) {
     using boost::serialization::make_nvp;
 
-    ar & BOOST_SERIALIZATION_NVP(jpc);
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(JPCLS);
+
+    ar & make_nvp("jpc",jpc);
     ar & BOOST_SERIALIZATION_NVP(M);
     ar & BOOST_SERIALIZATION_NVP(ClebschG);
-
-    /* Add your own class-variables here in the following way:
-      ar & BOOST_SERIALIZATION_NVP(myVar);
-      or
-      ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
-    */
   }
 
   JPCLSM(){

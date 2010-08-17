@@ -9,6 +9,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/archive/text_oarchive.hpp> 
 #include <boost/archive/text_iarchive.hpp> 
+#include <boost/serialization/vector.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/MATpbarpToOmegaPi/AbsStates.hh"
@@ -24,7 +25,7 @@ class pbarpToOmegaPi0States : public AbsStates {
   void serialize(Archive & ar, const unsigned int) {
     using boost::serialization::make_nvp;
 
-    //ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(GParameterSet);
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(AbsStates);
 
     /*jpcRes _omegaJPC;
     jpcRes _piJPC;
@@ -39,13 +40,13 @@ class pbarpToOmegaPi0States : public AbsStates {
 
     ar & BOOST_SERIALIZATION_NVP(_omegaJPC);
     ar & BOOST_SERIALIZATION_NVP(_piJPC);
-    ar & BOOST_SERIALIZATION_NVP(_pbarpStatesAll);
-    ar & BOOST_SERIALIZATION_NVP(_pbarpSingletToOmegaPi);
-    ar & BOOST_SERIALIZATION_NVP(_pbarpTripletM0ToOmegaPi);
-    ar & BOOST_SERIALIZATION_NVP(_pbarpTripletM1ToOmegaPi);
-    ar & BOOST_SERIALIZATION_NVP(_JPCLSomegaProdSinglet);
-    ar & BOOST_SERIALIZATION_NVP(_JPCLSomegaProdTripletM0);
-    ar & BOOST_SERIALIZATION_NVP(_JPCLSomegaProdTripletM1);
+    ar & make_nvp("pbarpStatesAll",_pbarpStatesAll);
+    ar & make_nvp("pbarpSingletToOmegaPi",_pbarpSingletToOmegaPi);
+    ar & make_nvp("pbarpTripletM0ToOmegaPi",_pbarpTripletM0ToOmegaPi);
+    ar & make_nvp("pbarpTripletM1ToOmegaPi",_pbarpTripletM1ToOmegaPi);
+    ar & make_nvp("JPCLSomegaProdSinglet",_JPCLSomegaProdSinglet);
+    ar & make_nvp("JPCLSomegaProdTripletM0",_JPCLSomegaProdTripletM0);
+    ar & make_nvp("JPCLSomegaProdTripletM1",_JPCLSomegaProdTripletM1);
 
     /* Add your own class-variables here in the following way:
       ar & BOOST_SERIALIZATION_NVP(myVar);

@@ -31,8 +31,8 @@ class OmegaPiEventList {
 
     ar & BOOST_SERIALIZATION_NVP(_jmax);
     ar & BOOST_SERIALIZATION_NVP(_pbarmom);
-    ar & BOOST_SERIALIZATION_NVP(_dataList);
-    ar & BOOST_SERIALIZATION_NVP(_mcList);
+    ar & make_nvp("dataList",_dataList);
+    ar & make_nvp("mcList",_mcList);
 
     /* Add your own class-variables here in the following way:
       ar & BOOST_SERIALIZATION_NVP(myVar);
