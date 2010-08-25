@@ -34,10 +34,10 @@ namespace OmegaPiData {
     void serialize(Archive & ar, const unsigned int) {
       using boost::serialization::make_nvp;
 
-      ar & make_nvp("cm_4Vec",cm_4Vec);
-      ar & make_nvp("omegaHeliCm4Vec",omegaHeliCm4Vec);
-      ar & make_nvp("pi0RecHeliCm4Vec",pi0RecHeliCm4Vec);
-      ar & make_nvp("pi0HeliOmega4Vec",pi0HeliOmega4Vec);
+     // ar & make_nvp("cm_4Vec",cm_4Vec);
+     // ar & make_nvp("omegaHeliCm4Vec",omegaHeliCm4Vec);
+     // ar & make_nvp("pi0RecHeliCm4Vec",pi0RecHeliCm4Vec);
+     // ar & make_nvp("pi0HeliOmega4Vec",pi0HeliOmega4Vec);
       ar & make_nvp("Dfp",Dfp);
       ar & make_nvp("Dfd",Dfd);
     }
@@ -46,10 +46,10 @@ namespace OmegaPiData {
     Vector4<float> omegaHeliCm4Vec;
     Vector4<float> pi0RecHeliCm4Vec;
     Vector4<float> pi0HeliOmega4Vec;*/
-    std::vector<float> cm_4Vec;
-    std::vector<float> omegaHeliCm4Vec;
-    std::vector<float> pi0RecHeliCm4Vec;
-    std::vector<float> pi0HeliOmega4Vec;
+    //std::vector<float> cm_4Vec;
+    //std::vector<float> omegaHeliCm4Vec;
+    //std::vector<float> pi0RecHeliCm4Vec;
+    //std::vector<float> pi0HeliOmega4Vec;
     map<serSpin,map<serSpin,map<serSpin,complex<double> > > > Dfp; //Wigner D functions for omega pi0 production
     map<serSpin,map<serSpin,map<serSpin,complex<double> > > > Dfd; //Wigner D functions for omega decay to pi0 gamma
   };

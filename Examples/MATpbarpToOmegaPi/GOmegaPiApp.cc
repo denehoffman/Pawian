@@ -188,12 +188,12 @@ int main(int argc, char **argv){
   std::string piomegaDatFile;
   std::string piomegaMcFile; 
   if(pbarMom==600){
-    piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat";
-    piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat";
+    piomegaDatFile=theSourcePath+"/Examples/MATpbarpToOmegaPi/data/510_0600_sample.dat";
+    piomegaMcFile=theSourcePath+"/Examples/MATpbarpToOmegaPi/data/mc510_0600_sample.dat";
   }
   else if (pbarMom==1940){
-    piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/510_1940.dat";
-    piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_1940.dat";
+    piomegaDatFile=theSourcePath+"/Examples/MATpbarpToOmegaPi/data/510_1940.dat";
+    piomegaMcFile=theSourcePath+"/Examples/MATpbarpToOmegaPi/data/mc510_1940.dat";
   }
   else{
     Alert <<"data for pbarMom= " << pbarMom << "not available; use 600 or 1940!!!" << endmsg;

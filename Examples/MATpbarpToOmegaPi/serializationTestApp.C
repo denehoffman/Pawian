@@ -158,8 +158,8 @@ int main() {
   
   std::string piomegaDatFile;
   std::string piomegaMcFile; 
-  piomegaDatFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/510_0600.dat";
-  piomegaMcFile=theSourcePath+"/Examples/pbarpToOmegaPi/data/mc510_0600.dat";
+  piomegaDatFile=theSourcePath+"/Examples/MATpbarpToOmegaPi/data/510_0600.dat";
+  piomegaMcFile=theSourcePath+"/Examples/MATpbarpToOmegaPi/data/mc510_0600.dat";
   ParticleTable pTable;
   PdtParser parser;
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
@@ -344,13 +344,13 @@ int main() {
 	    << "Before: " << p_base->getSecret() << " After: " << p_base_reconstructed->getSecret() << std::endl;
 
 
-  Destructor correct?
-  while(true) {
-    boost::shared_ptr<pbarpStates> pbarpStatesPtr_test(new pbarpStates(2));
-    boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr_test(new pbarpToOmegaPi0States(pbarpStatesPtr_test));
-    boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_test(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 2,  600));
-    boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_test(new GOmegaPiIndividual(theOmegaPiEventPtr_test, pbarpToOmegaPi0StatesPtr_test));
-  }
+//  Destructor's correct?
+ // while(true) {
+ //  boost::shared_ptr<pbarpStates> pbarpStatesPtr_test(new pbarpStates(2));
+ //   boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr_test(new pbarpToOmegaPi0States(pbarpStatesPtr_test));
+ //   boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_test(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 2,  600));
+ //   boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_test(new GOmegaPiIndividual(theOmegaPiEventPtr_test, pbarpToOmegaPi0StatesPtr_test));
+ // }
 
 
 }
