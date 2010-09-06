@@ -176,12 +176,14 @@ int main(int __argc,char *__argv[]){
   eventReaderMc.fillAll(piOmegaEventsMc);
   piOmegaEventsMc.rewind();
 
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
+  //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList();
+  theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(jMax));
   boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
 
-  boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+  boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(pbarpToOmegaPi0StatesPtr));
 
   // get pbarpToOmegaPi0States pointer back
   boost::shared_ptr<const pbarpToOmegaPi0States> theOmegaPi0StatesPtr=theOmegaLhPtr->omegaPi0States();  

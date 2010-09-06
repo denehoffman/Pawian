@@ -205,10 +205,12 @@ int main() {
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(1));
   boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 1,  600));
+  //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 1,  600));
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList();
+  theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, 1,  600);
   //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_reco1;
  // boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_reco2;
-  boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_init(new GOmegaPiIndividual(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+  boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_init(new GOmegaPiIndividual(pbarpToOmegaPi0StatesPtr));
   boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_reco1;
   boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_reco2;
 
@@ -239,10 +241,12 @@ int main() {
   } // note: explicit scope here is essential so the ia-destructor gets called
 
   //make changes (pretend being network client)
-  boost::shared_ptr<pbarpStates> pbarpStatesPtr_new(new pbarpStates(2));
+  boost::shared_ptr<pbarpStates> pbarpStatesPtr_new(new pbarpStates(1));
   boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr_new(new pbarpToOmegaPi0States(pbarpStatesPtr_new));
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_new(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 2,  600));
-  boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_new(new GOmegaPiIndividual(theOmegaPiEventPtr_new, pbarpToOmegaPi0StatesPtr_new));
+  //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_new(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 2,  600));
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr_new = OmegaPiEventList::getList();
+  //theOmegaPiEventPtr_new->initList(piOmegaEventsData, piOmegaEventsMc, 2,  600);
+  boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_new(new GOmegaPiIndividual(pbarpToOmegaPi0StatesPtr_new));
   gdii_ptr_reco1=gdii_ptr_new;
 
   std::ostringstream oarchive_stream_pwa2;

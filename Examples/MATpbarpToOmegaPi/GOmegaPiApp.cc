@@ -161,25 +161,6 @@ int main(int argc, char **argv){
     ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
   }
 
-  //***************************************************************************
-  // If this is a client in networked mode, we can just start the listener and
-  // return when it has finished
-  if(parallelizationMode==2 && !serverMode) {
-    boost::shared_ptr<GAsioTCPClient> p(new GAsioTCPClient(ip, boost::lexical_cast<std::string>(port)));
-
-    p->setMaxStalls(0); // An infinite number of stalled data retrievals
-    p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
-
-    // Prevent return of unsuccessful mutation attempts to the server
-    p->returnResultIfUnsuccessful(returnRegardless);
-
-    // Start the actual processing loop
-    p->run();
-
-    return 0;
-  }
-  //***************************************************************************
-
   Info << "Maximum spin content: " << jMax << endmsg;
   Info << "pbar momentum: " << pbarMom   << endmsg;
 
@@ -243,15 +224,36 @@ int main(int argc, char **argv){
   eventReaderMc.fillAll(piOmegaEventsMc);
   piOmegaEventsMc.rewind();
 
-  boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
+  //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList();
+  theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(jMax));
   boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
 
+  //***************************************************************************
+  // If this is a client in networked mode, we can just start the listener and
+  // return when it has finished
+  if(parallelizationMode==2 && !serverMode) {
+    boost::shared_ptr<GAsioTCPClient> p(new GAsioTCPClient(ip, boost::lexical_cast<std::string>(port)));
+
+    p->setMaxStalls(0); // An infinite number of stalled data retrievals
+    p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
+
+    // Prevent return of unsuccessful mutation attempts to the server
+    p->returnResultIfUnsuccessful(returnRegardless);
+
+    // Start the actual processing loop
+    p->run();
+
+    return 0;
+  }
+  //***************************************************************************
+
   // Create the first set of parent individuals. Initialization of parameters is done randomly.
   std::vector<boost::shared_ptr<GOmegaPiIndividual> > parentIndividuals;
   for(std::size_t p = 0 ; p<nParents; p++) {
-    boost::shared_ptr<GOmegaPiIndividual> gdii_ptr(new GOmegaPiIndividual(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+    boost::shared_ptr<GOmegaPiIndividual> gdii_ptr(new GOmegaPiIndividual(pbarpToOmegaPi0StatesPtr));
     gdii_ptr->setProcessingCycles(processingCycles);
 
     parentIndividuals.push_back(gdii_ptr);

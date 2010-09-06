@@ -92,11 +92,13 @@ public:
 	 * @param min The lower boundary of the variables
 	 * @param max The upper boundary of the variables
 	 */
-	GOmegaPiIndividual(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates)
+	GOmegaPiIndividual(boost::shared_ptr<const pbarpToOmegaPi0States> theStates)
 	  : GParameterSet()
-	  ,_omegaPiLhPtr( new OmegaPiLh(theEvtList, theStates) )
+          , _omegaPiLhPtr(new OmegaPiLh(theStates))
 	  , _barpToOmegaPi0States(theStates)
 	  {
+		//_omegaPiLhPtr( new OmegaPiLh(theStates) );
+
 		// Set up a GBoundedDoubleCollection
 		boost::shared_ptr<GBoundedDoubleCollection> gbdc_ptr(new GBoundedDoubleCollection());
 

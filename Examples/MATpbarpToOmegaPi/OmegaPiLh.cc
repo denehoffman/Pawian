@@ -9,24 +9,27 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Examples/MATpbarpToOmegaPi/serSpin.hh"
 
-OmegaPiLh::OmegaPiLh(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates) :
-  _omegaPiEventListPtr(theEvtList),
+OmegaPiLh::OmegaPiLh(boost::shared_ptr<const pbarpToOmegaPi0States> theStates) :
   _omegaPi0StatesPtr(theStates)
 {
+  _omegaPiEventListPtr = OmegaPiEventList::getList();
   _evtDataVec=_omegaPiEventListPtr->getDataVecs();
   _evtMCVec=_omegaPiEventListPtr->getMcVecs();
 }
 
 OmegaPiLh::OmegaPiLh(boost::shared_ptr<OmegaPiLh> theOmegaPiLhPtr):
-  _omegaPiEventListPtr(theOmegaPiLhPtr->getEventList()),
   _omegaPi0StatesPtr(theOmegaPiLhPtr->omegaPi0States())
 {
+  _omegaPiEventListPtr = OmegaPiEventList::getList();
   _evtDataVec=_omegaPiEventListPtr->getDataVecs();
   _evtMCVec=_omegaPiEventListPtr->getMcVecs();
 }
 
 OmegaPiLh::OmegaPiLh()
 {
+  _omegaPiEventListPtr = OmegaPiEventList::getList();
+  _evtDataVec=_omegaPiEventListPtr->getDataVecs();
+  _evtMCVec=_omegaPiEventListPtr->getMcVecs();
 }
 
 OmegaPiLh::~OmegaPiLh()

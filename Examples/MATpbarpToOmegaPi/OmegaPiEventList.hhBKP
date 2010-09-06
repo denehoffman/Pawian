@@ -4,6 +4,10 @@
 #include <iostream>
 #include <vector>
 
+#include <boost/archive/text_oarchive.hpp> 
+#include <boost/archive/text_iarchive.hpp> 
+#include <boost/serialization/vector.hpp>
+
 #include <cassert>
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -15,12 +19,37 @@ class EventList;
 
 class OmegaPiEventList {
 
+  friend class boost::serialization::access; 
+
+  template <typename Archive> 
+  void serialize(Archive & ar, const unsigned int) {
+    using boost::serialization::make_nvp;
+
+   // unsigned _jmax;
+   // unsigned _pbarmom;
+   // std::vector<OmPiEvtData> _dataList;
+   // std::vector<OmPiEvtData> _mcList;
+
+    ar & BOOST_SERIALIZATION_NVP(_jmax);
+    ar & BOOST_SERIALIZATION_NVP(_pbarmom);
+    ar & make_nvp("dataList",_dataList);
+    ar & make_nvp("mcList",_mcList);
+
+    /* Add your own class-variables here in the following way:
+      ar & BOOST_SERIALIZATION_NVP(myVar);
+      or
+      ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
+    */
+  }
+
 public:
 
-  static boost::shared_ptr<OmegaPiEventList> getList();
   // create/copy/destroy:
- 
-  bool initList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
+
+  ///Constructor 
+  OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
+
+
 
   /** Destructor */
   virtual ~OmegaPiEventList();
@@ -35,13 +64,11 @@ public:
 
 protected:
 
-  OmegaPiEventList();
 
 private:
 
-  static boost::shared_ptr<OmegaPiEventList> theList;
+  OmegaPiEventList();
 
-  bool initialized;
   unsigned _jmax;
   unsigned _pbarmom;
   std::vector<OmPiEvtData*> _dataList;

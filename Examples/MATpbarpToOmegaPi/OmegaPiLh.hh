@@ -17,6 +17,7 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/MATpbarpToOmegaPi/OmegaPiData.hh"
+#include "Examples/MATpbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/MATpbarpToOmegaPi/serDataUtils.hh"
 
 // using namespace std;
@@ -36,10 +37,10 @@ class OmegaPiLh {
    // boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
    // boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
 
-    ar & make_nvp("omegaPiEventListPtr",_omegaPiEventListPtr);
+    //ar & make_nvp("omegaPiEventListPtr",_omegaPiEventListPtr);
     ar & make_nvp("omegaPi0StatesPtr",_omegaPi0StatesPtr);
-    ar & make_nvp("evtDataVec",_evtDataVec);
-    ar & make_nvp("evtMCVec",_evtMCVec);
+    //ar & make_nvp("evtDataVec",_evtDataVec);
+    //ar & make_nvp("evtMCVec",_evtMCVec);
 
     /* Add your own class-variables here in the following way:
       ar & BOOST_SERIALIZATION_NVP(myVar);
@@ -53,14 +54,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  OmegaPiLh(boost::shared_ptr<const OmegaPiEventList>, boost::shared_ptr<const pbarpToOmegaPi0States>);
+  OmegaPiLh(boost::shared_ptr<const pbarpToOmegaPi0States>);
   OmegaPiLh(boost::shared_ptr<OmegaPiLh>);
 
   /** Destructor */
   virtual ~OmegaPiLh();
 
   OmegaPiLh* clone_() const {
-    return new OmegaPiLh(_omegaPiEventListPtr, _omegaPi0StatesPtr);
+    return new OmegaPiLh(_omegaPi0StatesPtr);
         }
 
 
@@ -69,7 +70,7 @@ public:
   double calcLogLh(const OmegaPiData::fitParamVal& theParamVal);
   double calcEvtIntensity(OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal);
 
-  boost::shared_ptr<const OmegaPiEventList> getEventList() const {return _omegaPiEventListPtr;}
+  boost::shared_ptr<OmegaPiEventList> getEventList() const {return OmegaPiEventList::getList();}
   boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
   void print(std::ostream& os) const;
 

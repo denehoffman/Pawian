@@ -12,31 +12,17 @@
 #include "Examples/MATpbarpToOmegaPi/serSpin.hh"
 #include "Examples/MATpbarpToOmegaPi/serVec4.hh"
 
-boost::shared_ptr<OmegaPiEventList> OmegaPiEventList::theList = boost::shared_ptr<OmegaPiEventList>();
-
-boost::shared_ptr<OmegaPiEventList> OmegaPiEventList::getList()
+OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom):
+  _jmax(jmax),
+  _pbarmom(pbarmom)
 {
-  if( theList == 0 ){
-    boost::shared_ptr<OmegaPiEventList> newList(new OmegaPiEventList());
-    theList = newList;
-  }
-  return theList;
-}
-
-bool OmegaPiEventList::initList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom)
-{
-  if(initialized) return false;
-  if (jmax<0) { Alert << "jmax < 0 is not allowed!!!" << endmsg; exit(1); }
-  _jmax = jmax; _pbarmom = pbarmom;
+  if (_jmax<0) { Alert << "_jmax < 0 is not allowed!!!" << endmsg; exit(1); }
   read4Vecs(evtListData, _dataList);
   read4Vecs(evtListMc, _mcList);
-  initialized = true;
-  return true;
 }
 
 OmegaPiEventList::OmegaPiEventList()
 {
-  initialized = false;
 }
 
 OmegaPiEventList::~OmegaPiEventList()
