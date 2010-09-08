@@ -18,9 +18,10 @@ class OmegaPiEventList {
 public:
 
   static boost::shared_ptr<OmegaPiEventList> getList();
+  static boost::shared_ptr<OmegaPiEventList> getList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
   // create/copy/destroy:
  
-  bool initList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
+  //bool initList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
 
   /** Destructor */
   virtual ~OmegaPiEventList();
@@ -35,21 +36,19 @@ public:
 
 protected:
 
-  OmegaPiEventList();
+  OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
 
 private:
 
   static boost::shared_ptr<OmegaPiEventList> theList;
 
-  bool initialized;
+  //bool initialized;
   unsigned _jmax;
   unsigned _pbarmom;
   std::vector<OmPiEvtData*> _dataList;
   std::vector<OmPiEvtData*> _mcList;
 
   void read4Vecs(EventList& evtList, std::vector<OmPiEvtData*>& omPiEvtList);
-  void myWigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
-	      map<serSpin,map<serSpin,map<serSpin,complex<double> > > > &__D);
   
 //   void get4Vecs (std::ifstream& inStream, Vector4<double>& the4Vec);
 

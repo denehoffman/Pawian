@@ -2,8 +2,23 @@
 
 #include "Utils/MathUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
-#include "Examples/MATpbarpToOmegaPi/pbarpStates.hh"
+#include "PwaUtils/AbsStates.hh"
  
+boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0States::theStates = boost::shared_ptr<pbarpToOmegaPi0States>();
+
+boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0States::getStates()
+{
+  return theStates;
+}
+
+boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0States::getStates(boost::shared_ptr<pbarpStates> pbarpStates)
+{
+  if( theStates == 0 ){
+    boost::shared_ptr<pbarpToOmegaPi0States> newStates(new pbarpToOmegaPi0States(pbarpStates));
+    theStates = newStates;
+  }
+  return theStates;
+}
 
 pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbarpStates):
   AbsStates(),
@@ -15,19 +30,16 @@ pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbar
   calcJPCs();
 }
 
-pbarpToOmegaPi0States::pbarpToOmegaPi0States(){
-}
-
 pbarpToOmegaPi0States::~pbarpToOmegaPi0States(){
 }
 
-vector<LS> pbarpToOmegaPi0States::myGetValidLS(const serSpin &__j,int __parity,const serSpin &__s1,int __p1,
-		      const serSpin &__s2,int __p2){
+vector<LS> pbarpToOmegaPi0States::myGetValidLS(const Spin &__j,int __parity,const Spin &__s1,int __p1,
+		      const Spin &__s2,int __p2){
 
   vector<LS> valid_ls;
   LS ls;
 
-  for(serSpin S = abs(__s1 - __s2); S <= (__s1 + __s2); S++){
+  for(Spin S = abs(__s1 - __s2); S <= (__s1 + __s2); S++){
     for(int L = (int)abs(__j - S); L <= (int)(__j + S); L++){
       // check the parity
       if(abs(__p1*__p2*std::pow(-1.,(int)L) - __parity) < 1.e-5) {

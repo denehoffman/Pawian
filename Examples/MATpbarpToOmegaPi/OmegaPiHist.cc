@@ -180,24 +180,18 @@ void OmegaPiHist::initRootStuff()
 
 void OmegaPiHist::plotCosOmegaHeli(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight)
 {
-  //Vector4<float> omegaHeli4V=theEvtData->omegaHeliCm4Vec;
-  //Vector4<float> omegaHeli4V;
-  //omegaHeli4V.SetV4(theEvtData->omegaHeliCm4Vec[0],theEvtData->omegaHeliCm4Vec[1],theEvtData->omegaHeliCm4Vec[2],theEvtData->omegaHeliCm4Vec[3]);
-  //theHisto->Fill(omegaHeli4V.CosTheta(), weight);  
+  Vector4<float> omegaHeli4V=theEvtData->omegaHeliCm4Vec;
+  theHisto->Fill(omegaHeli4V.CosTheta(), weight);  
 }
 
 void OmegaPiHist::plotCosPi0FromOmegaHeli(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight)
 {
-  //Vector4<float> piFromOmegaHeli4V=theEvtData->pi0HeliOmega4Vec;
-  //Vector4<float> piFromOmegaHeli4V;
-  //piFromOmegaHeli4V.SetV4(theEvtData->pi0HeliOmega4Vec[0],theEvtData->pi0HeliOmega4Vec[1],theEvtData->pi0HeliOmega4Vec[2],theEvtData->pi0HeliOmega4Vec[3]);
-  //theHisto->Fill(piFromOmegaHeli4V.CosTheta(), weight);  
+  Vector4<float> piFromOmegaHeli4V=theEvtData->pi0HeliOmega4Vec;
+  theHisto->Fill(piFromOmegaHeli4V.CosTheta(), weight);  
 }
 
 void OmegaPiHist::plotTreimanYang(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight)
 {
-  //Vector4<float> piFromOmegaHeli4V=theEvtData->pi0HeliOmega4Vec;
-  //Vector4<float> piFromOmegaHeli4V;
-  //piFromOmegaHeli4V.SetV4(theEvtData->pi0HeliOmega4Vec[0],theEvtData->pi0HeliOmega4Vec[1],theEvtData->pi0HeliOmega4Vec[2],theEvtData->pi0HeliOmega4Vec[3]);
-  //theHisto->Fill(piFromOmegaHeli4V.Phi(), weight);  
+  Vector4<float> piFromOmegaHeli4V=theEvtData->pi0HeliOmega4Vec;
+  theHisto->Fill(piFromOmegaHeli4V.Phi(), weight);  
 }

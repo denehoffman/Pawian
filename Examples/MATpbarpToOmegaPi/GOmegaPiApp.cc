@@ -45,7 +45,7 @@
 #include "GAsioTCPClient.hpp"
 #include "GAsioHelperFunctions.hpp"
 
-#include "Examples/MATpbarpToOmegaPi/pbarpStates.hh"
+#include "PwaUtils/pbarpStates.hh"
 #include "Examples/MATpbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 // The individual that should be optimized
 #include "Examples/MATpbarpToOmegaPi/GOmegaPiIndividual.hh"
@@ -225,11 +225,12 @@ int main(int argc, char **argv){
   piOmegaEventsMc.rewind();
 
   //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
-  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList();
-  theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
+  //theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(jMax));
-  boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+  //boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+  boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr = pbarpToOmegaPi0States::getStates(pbarpStatesPtr);
 
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and

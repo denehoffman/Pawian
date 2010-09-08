@@ -31,7 +31,7 @@
 //#include "Minuit2/MnStrategy.h"
 #include "Examples/MATpbarpToOmegaPi/PwaIntMinuit.hh"
 
-#include "Examples/MATpbarpToOmegaPi/pbarpStates.hh"
+#include "PwaUtils/pbarpStates.hh"
 
 //#include "Minuit2/MnUserTransformation.h"
 using namespace ROOT::Minuit2;
@@ -177,11 +177,11 @@ int main(int __argc,char *__argv[]){
   piOmegaEventsMc.rewind();
 
   //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom));
-  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList();
-  theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList(piOmegaEventsData, piOmegaEventsMc, jMax,  pbarMom);
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(jMax));
-  boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+  //boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+  boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr = pbarpToOmegaPi0States::getStates(pbarpStatesPtr);
 
   boost::shared_ptr<OmegaPiLh> theOmegaLhPtr(new OmegaPiLh(pbarpToOmegaPi0StatesPtr));
 

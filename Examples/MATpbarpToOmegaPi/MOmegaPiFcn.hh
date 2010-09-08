@@ -9,7 +9,8 @@
 //#include <cassert>
 #include "Minuit2/FCNBase.h"
 #include "Examples/MATpbarpToOmegaPi/OmegaPiData.hh"
-#include "Examples/MATpbarpToOmegaPi/serDataUtils.hh"
+//#include "Examples/MATpbarpToOmegaPi/serDataUtils.hh"
+#include "PwaUtils/DataUtils.hh"
 #include "Examples/MATpbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 #include "Minuit2/MnUserParameters.h"
 

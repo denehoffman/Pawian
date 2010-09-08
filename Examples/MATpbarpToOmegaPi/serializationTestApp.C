@@ -30,8 +30,8 @@
 #include <boost/serialization/export.hpp>
 
 // PWA test includes
-#include "Examples/MATpbarpToOmegaPi/serSpin.hh"
-#include "Examples/MATpbarpToOmegaPi/pbarpStates.hh"
+//#include "Examples/MATpbarpToOmegaPi/serSpin.hh"
+#include "PwaUtils/pbarpStates.hh"
 #include "Examples/MATpbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 
 #include "Examples/MATpbarpToOmegaPi/GOmegaPiIndividual.hh"
@@ -142,17 +142,17 @@ int main() {
 
   // The PWA-objects that should be (de-)serialized and changed inbetween
   //Spin
-  boost::shared_ptr<serSpin> mySpin_init(new serSpin());
-  boost::shared_ptr<serSpin> mySpin_reco1;
-  boost::shared_ptr<serSpin> mySpin_reco2;
+ // boost::shared_ptr<serSpin> mySpin_init(new serSpin());
+ // boost::shared_ptr<serSpin> mySpin_reco1;
+ // boost::shared_ptr<serSpin> mySpin_reco2;
   //pbarpStates
-  boost::shared_ptr<pbarpStates> myStates_init(new pbarpStates(2));
-  boost::shared_ptr<pbarpStates> myStates_reco1;
-  boost::shared_ptr<pbarpStates> myStates_reco2;
+ // boost::shared_ptr<pbarpStates> myStates_init(new pbarpStates(2));
+ // boost::shared_ptr<pbarpStates> myStates_reco1;
+ // boost::shared_ptr<pbarpStates> myStates_reco2;
   //pbarpToOmegaStates
-  boost::shared_ptr<pbarpToOmegaPi0States> myOmStates_init(new pbarpToOmegaPi0States(myStates_init));
-  boost::shared_ptr<pbarpToOmegaPi0States> myOmStates_reco1;
-  boost::shared_ptr<pbarpToOmegaPi0States> myOmStates_reco2;
+//  boost::shared_ptr<pbarpToOmegaPi0States> myOmStates_init(new pbarpToOmegaPi0States(myStates_init));
+//  boost::shared_ptr<pbarpToOmegaPi0States> myOmStates_reco1;
+//  boost::shared_ptr<pbarpToOmegaPi0States> myOmStates_reco2;
   //OmegaPiEvent List / GOmegaPiIndividual
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
   
@@ -204,10 +204,11 @@ int main() {
 
 
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(1));
-  boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+  //boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
+  boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr = pbarpToOmegaPi0States::getStates(pbarpStatesPtr);
   //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 1,  600));
-  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList();
-  theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, 1,  600);
+  boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr = OmegaPiEventList::getList(piOmegaEventsData, piOmegaEventsMc, 1,  600);
+  //theOmegaPiEventPtr->initList(piOmegaEventsData, piOmegaEventsMc, 1,  600);
   //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_reco1;
  // boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_reco2;
   boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_init(new GOmegaPiIndividual(pbarpToOmegaPi0StatesPtr));
@@ -241,12 +242,12 @@ int main() {
   } // note: explicit scope here is essential so the ia-destructor gets called
 
   //make changes (pretend being network client)
-  boost::shared_ptr<pbarpStates> pbarpStatesPtr_new(new pbarpStates(1));
-  boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr_new(new pbarpToOmegaPi0States(pbarpStatesPtr_new));
+  //boost::shared_ptr<pbarpStates> pbarpStatesPtr_new(new pbarpStates(1));
+  //boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr_new(new pbarpToOmegaPi0States(pbarpStatesPtr_new));
   //boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr_new(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, 2,  600));
   boost::shared_ptr<OmegaPiEventList> theOmegaPiEventPtr_new = OmegaPiEventList::getList();
   //theOmegaPiEventPtr_new->initList(piOmegaEventsData, piOmegaEventsMc, 2,  600);
-  boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_new(new GOmegaPiIndividual(pbarpToOmegaPi0StatesPtr_new));
+  boost::shared_ptr<GOmegaPiIndividual> gdii_ptr_new(new GOmegaPiIndividual(pbarpToOmegaPi0StatesPtr));
   gdii_ptr_reco1=gdii_ptr_new;
 
   std::ostringstream oarchive_stream_pwa2;

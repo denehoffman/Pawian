@@ -4,12 +4,12 @@
 
 #include "Examples/MATpbarpToOmegaPi/OmegaPiLh.hh"
 #include "Examples/MATpbarpToOmegaPi/OmegaPiEventList.hh"
-#include "Examples/MATpbarpToOmegaPi/pbarpStates.hh"
+#include "PwaUtils/pbarpStates.hh"
 #include "Examples/MATpbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 #include "ErrLogger/ErrLogger.hh"
-#include "Examples/MATpbarpToOmegaPi/serSpin.hh"
+//#include "Examples/MATpbarpToOmegaPi/serSpin.hh"
 
-OmegaPiLh::OmegaPiLh(boost::shared_ptr<const pbarpToOmegaPi0States> theStates) :
+OmegaPiLh::OmegaPiLh(boost::shared_ptr<pbarpToOmegaPi0States> theStates) :
   _omegaPi0StatesPtr(theStates)
 {
   _omegaPiEventListPtr = OmegaPiEventList::getList();
@@ -27,6 +27,7 @@ OmegaPiLh::OmegaPiLh(boost::shared_ptr<OmegaPiLh> theOmegaPiLhPtr):
 
 OmegaPiLh::OmegaPiLh()
 {
+  _omegaPi0StatesPtr = pbarpToOmegaPi0States::getStates();
   _omegaPiEventListPtr = OmegaPiEventList::getList();
   _evtDataVec=_omegaPiEventListPtr->getDataVecs();
   _evtMCVec=_omegaPiEventListPtr->getMcVecs();
@@ -102,13 +103,13 @@ complex<double> OmegaPiLh::calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< 
     for ( it=fitParm.begin(); it!=fitParm.end(); ++it){
       boost::shared_ptr<const JPCLS> theJPCLS=it->first;
       if (fabs(lamomega)>theJPCLS->J) continue;
-      complex<double> omegaDecAmp=Clebsch(1,0,1,lamgamma,1, lamgamma)*conj(theData->Dfd[1][serSpin(lamomega)][serSpin(lamgamma)]);// Clebsch(1,lamgamma,0,0,1, lamgamma)=1
+      complex<double> omegaDecAmp=Clebsch(1,0,1,lamgamma,1, lamgamma)*conj(theData->Dfd[1][lamomega][lamgamma]);// Clebsch(1,lamgamma,0,0,1, lamgamma)=1
       double theMag=it->second.first;
       double thePhi=it->second.second;
       complex<double> expiphi(cos(thePhi), sin(thePhi));
       Spin myJ(theJPCLS->J.Numerator(),theJPCLS->J.Denominator());
       Spin myL(theJPCLS->L.Numerator(),theJPCLS->L.Denominator());
-      result+=sqrt(2*theJPCLS->L+1)*sqrt(3)*theMag*expiphi*omegaDecAmp*Clebsch(myL,0,1, lamomega,myJ, lamomega)*conj(theData->Dfp[theJPCLS->J][serSpin(Minit)][serSpin(lamomega)]); //Clebsch(1,lamomega,0,0,1,lamomega)=1  
+      result+=sqrt(2*theJPCLS->L+1)*sqrt(3)*theMag*expiphi*omegaDecAmp*Clebsch(myL,0,1, lamomega,myJ, lamomega)*conj(theData->Dfp[theJPCLS->J][Minit][lamomega]); //Clebsch(1,lamomega,0,0,1,lamomega)=1  
     } 
 
   }

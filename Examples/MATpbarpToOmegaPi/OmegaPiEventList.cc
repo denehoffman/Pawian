@@ -9,34 +9,28 @@
 #include "Event/Event.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-#include "Examples/MATpbarpToOmegaPi/serSpin.hh"
-#include "Examples/MATpbarpToOmegaPi/serVec4.hh"
-
 boost::shared_ptr<OmegaPiEventList> OmegaPiEventList::theList = boost::shared_ptr<OmegaPiEventList>();
 
 boost::shared_ptr<OmegaPiEventList> OmegaPiEventList::getList()
 {
+  return theList;
+}
+
+boost::shared_ptr<OmegaPiEventList> OmegaPiEventList::getList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom)
+{
+  if (jmax<0) { Alert << "jmax < 0 is not allowed!!!" << endmsg; exit(1); }
   if( theList == 0 ){
-    boost::shared_ptr<OmegaPiEventList> newList(new OmegaPiEventList());
+    boost::shared_ptr<OmegaPiEventList> newList(new OmegaPiEventList(evtListData, evtListMc, jmax, pbarmom));
     theList = newList;
   }
   return theList;
 }
 
-bool OmegaPiEventList::initList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom)
+OmegaPiEventList::OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom)
 {
-  if(initialized) return false;
-  if (jmax<0) { Alert << "jmax < 0 is not allowed!!!" << endmsg; exit(1); }
-  _jmax = jmax; _pbarmom = pbarmom;
-  read4Vecs(evtListData, _dataList);
-  read4Vecs(evtListMc, _mcList);
-  initialized = true;
-  return true;
-}
-
-OmegaPiEventList::OmegaPiEventList()
-{
-  initialized = false;
+    _jmax = jmax; _pbarmom = pbarmom;
+    read4Vecs(evtListData, _dataList);
+    read4Vecs(evtListMc, _mcList);
 }
 
 OmegaPiEventList::~OmegaPiEventList()
@@ -64,40 +58,38 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData*>& 
       }
     }
 
-    serVec4<float> omega_cm_4V(omega_4V);
+    Vector4<float> omega_cm_4V(omega_4V);
     omega_cm_4V.Boost(cm_4V);
 
-    serVec4<float> piRec_cm_4V(piRec_4V);
+    Vector4<float> piRec_cm_4V(piRec_4V);
     piRec_cm_4V.Boost(cm_4V);
 
-    serVec4<float> pi0FromOmega4V=*(anEvent->p4(2));
+    Vector4<float> pi0FromOmega4V=*(anEvent->p4(2));
     if ( fabs(pi0FromOmega4V.M()-0.13497)>0.01 ) {
       Alert <<"the third particle is not the pi0 from the omega decay" << endmsg;
       exit(1);
     }
 
-    serVec4<float> pi0HeliOmega4V = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
+    Vector4<float> pi0HeliOmega4V = helicityVec(cm_4V, omega_4V, pi0FromOmega4V);
 
     OmPiEvtData* theOmPiEvtData=new OmPiEvtData();
-   // for(int i=0; i<4; i++){
-   //   theOmPiEvtData->cm_4Vec.push_back(cm_4V[i]);  //theOmPiEvtData->cm_4Vec=cm_4V;
-   //   theOmPiEvtData->omegaHeliCm4Vec.push_back(omega_cm_4V[i]);  //theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
-   //   theOmPiEvtData->pi0RecHeliCm4Vec.push_back(piRec_cm_4V[i]);  //theOmPiEvtData->pi0RecHeliCm4Vec=piRec_cm_4V;
-   //   theOmPiEvtData->pi0HeliOmega4Vec.push_back(pi0HeliOmega4V[i]);  //theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
-   // }
+    theOmPiEvtData->cm_4Vec=cm_4V;
+    theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
+    theOmPiEvtData->pi0RecHeliCm4Vec=piRec_cm_4V;
+    theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
 
     for (Spin j=0; j<=_jmax; j++){
       for (Spin M=-1; M<=1; M++){
 	if (fabs(M)>j) continue;
 	for (Spin lam=-1; lam<=1; lam++){
  	  if (fabs(lam)>j) continue;
-	  theOmPiEvtData->Dfp[serSpin(j)][serSpin(M)][serSpin(lam)]=Wigner_D(omega_cm_4V.Phi(),omega_cm_4V.Theta(),0,j,M,lam);
+	  theOmPiEvtData->Dfp[j][M][lam]=Wigner_D(omega_cm_4V.Phi(),omega_cm_4V.Theta(),0,j,M,lam);
 	}
       }
     }
 
     Spin omegaSpin=1;
-    myWigner_D(omegaSpin, pi0HeliOmega4V.Phi(), pi0HeliOmega4V.Theta(),0, theOmPiEvtData->Dfd);
+    Wigner_D(omegaSpin, pi0HeliOmega4V.Phi(), pi0HeliOmega4V.Theta(),0, theOmPiEvtData->Dfd);
     
     omPiEvtList.push_back(theOmPiEvtData);
 
@@ -106,7 +98,7 @@ void OmegaPiEventList::read4Vecs(EventList& evtList, std::vector<OmPiEvtData*>& 
  
 }
 
-void OmegaPiEventList::myWigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
+/*void OmegaPiEventList::myWigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
 	      map<serSpin,map<serSpin,map<serSpin,complex<double> > > > &__D){
 
   complex<double> i(0.,1.);
@@ -122,5 +114,5 @@ void OmegaPiEventList::myWigner_D(const Spin &__jmax,double __alpha,double __bet
 	__D[serSpin(j)][serSpin(m)][serSpin(n)] = exp(-i*(m*__alpha + n*__gamma))*d[j][m][n];
     }
   }
-}
+}*/
 

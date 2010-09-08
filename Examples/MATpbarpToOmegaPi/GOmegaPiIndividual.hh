@@ -39,8 +39,8 @@
 #include "GEnums.hpp"
 #include "GUnitTestFrameworkT.hpp"
 
-#include "Examples/MATpbarpToOmegaPi/AbsStates.hh"
-#include "Examples/MATpbarpToOmegaPi/serDataUtils.hh"
+#include "PwaUtils/AbsStates.hh"
+#include "PwaUtils/DataUtils.hh"
 
 #include "Examples/MATpbarpToOmegaPi/OmegaPiData.hh"
 #include "Examples/MATpbarpToOmegaPi/OmegaPiEventList.hh"
@@ -68,17 +68,9 @@ class GOmegaPiIndividual :public GParameterSet
 
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(GParameterSet);
 
-  //boost::shared_ptr<OmegaPiLh> _omegaPiLhPtr;
-  //boost::shared_ptr<const pbarpToOmegaPi0States> _barpToOmegaPi0States;
-
                 ar & BOOST_SERIALIZATION_NVP(_omegaPiLhPtr);
-                ar & BOOST_SERIALIZATION_NVP(_barpToOmegaPi0States);
+                //ar & BOOST_SERIALIZATION_NVP(_barpToOmegaPi0States);
 
-		/* Add your own class-variables here in the following way:
-			ar & BOOST_SERIALIZATION_NVP(myVar);
-			or
-			ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
-		 */
 	}
 	///////////////////////////////////////////////////////////////////////
 
@@ -92,7 +84,7 @@ public:
 	 * @param min The lower boundary of the variables
 	 * @param max The upper boundary of the variables
 	 */
-	GOmegaPiIndividual(boost::shared_ptr<const pbarpToOmegaPi0States> theStates)
+	GOmegaPiIndividual(boost::shared_ptr<pbarpToOmegaPi0States> theStates)
 	  : GParameterSet()
           , _omegaPiLhPtr(new OmegaPiLh(theStates))
 	  , _barpToOmegaPi0States(theStates)
@@ -444,10 +436,12 @@ private:
    * serialization purposes.
    */
   boost::shared_ptr<OmegaPiLh> _omegaPiLhPtr;
-  boost::shared_ptr<const pbarpToOmegaPi0States> _barpToOmegaPi0States;
+  boost::shared_ptr<pbarpToOmegaPi0States> _barpToOmegaPi0States;
 
   GOmegaPiIndividual() :GParameterSet()
-  {	/* nothing */ }
+  {	
+    _barpToOmegaPi0States = pbarpToOmegaPi0States::getStates();
+  }
 
 
   void setFitParamVal(std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs, boost::shared_ptr<GBoundedDoubleCollection> theGbdc_ptr){

@@ -18,7 +18,7 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/MATpbarpToOmegaPi/OmegaPiData.hh"
 #include "Examples/MATpbarpToOmegaPi/OmegaPiEventList.hh"
-#include "Examples/MATpbarpToOmegaPi/serDataUtils.hh"
+#include "PwaUtils/DataUtils.hh"
 
 // using namespace std;
 
@@ -34,19 +34,12 @@ class OmegaPiLh {
   void serialize(Archive & ar, const unsigned int) {
     using boost::serialization::make_nvp;
 
-   // boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
-   // boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
 
     //ar & make_nvp("omegaPiEventListPtr",_omegaPiEventListPtr);
-    ar & make_nvp("omegaPi0StatesPtr",_omegaPi0StatesPtr);
+    //ar & make_nvp("omegaPi0StatesPtr",_omegaPi0StatesPtr);
     //ar & make_nvp("evtDataVec",_evtDataVec);
     //ar & make_nvp("evtMCVec",_evtMCVec);
 
-    /* Add your own class-variables here in the following way:
-      ar & BOOST_SERIALIZATION_NVP(myVar);
-      or
-      ar & make_nvp("myVar", myVar); // The latter form can be necessary when dealing with templates
-    */
   }
 
 public:
@@ -54,7 +47,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  OmegaPiLh(boost::shared_ptr<const pbarpToOmegaPi0States>);
+  OmegaPiLh(boost::shared_ptr<pbarpToOmegaPi0States>);
   OmegaPiLh(boost::shared_ptr<OmegaPiLh>);
 
   /** Destructor */
@@ -71,7 +64,7 @@ public:
   double calcEvtIntensity(OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal);
 
   boost::shared_ptr<OmegaPiEventList> getEventList() const {return OmegaPiEventList::getList();}
-  boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
+  boost::shared_ptr<pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
   void print(std::ostream& os) const;
 
 protected:
@@ -82,7 +75,7 @@ private:
   OmegaPiLh(); //for serialization only
 
   boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
-  boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
+  boost::shared_ptr<pbarpToOmegaPi0States> _omegaPi0StatesPtr;
   std::vector<OmegaPiData::OmPiEvtData*> _evtDataVec;
   std::vector<OmegaPiData::OmPiEvtData*> _evtMCVec;
 
