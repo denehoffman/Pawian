@@ -100,16 +100,23 @@ void Wigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
 	      map<Spin,map<Spin,map<Spin,complex<double> > > > &__D);
 //_____________________________________________________________________________
 /// Returns \f$ \frac{m\Gamma}{p^2 - m^2 + i m \Gamma} \f$
-inline complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,
-				   double __width){
-  complex<double> i(0.,1.);
-  return __mass*__width/(__p4*__p4 - __mass*__mass + i*__mass*__width);
-}
+complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,
+				   double __width);
+
+//
+complex<double> BreitWignerBlattW(const Vector4<double> &__p4, double __massA, 
+                                  double __massB, double __mass0, double __width, int __LL);
+
+//
+
+complex<double> FlatteA980(const Vector4<double> &__p4, double __mass0, double g_KK, double g_EtaPi);
+
 //_____________________________________________________________________________
 /// Returns \f$ \frac{\Lambda^2 - m^2}{\Lambda^2 - p^2} \f$
 inline double MonopoleFormFactor(double __lambda,double __mass,double __p2){
   return (__lambda*__lambda - __mass*__mass)/(__lambda*__lambda - __p2);
 }
+
 //_____________________________________________________________________________
 /** @brief Calculate the Regge trajectory propagator.
  *

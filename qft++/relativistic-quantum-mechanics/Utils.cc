@@ -1,4 +1,6 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++/relativistic-quantum-mechanics/BlattWeisskopf.hh"
+
 /* Copyright 2008 Mike Williams (mwill@jlab.org)
  *
  * This file is part of qft++.
@@ -201,6 +203,101 @@ double Wigner_d(const Spin &__j,const Spin &__m,const Spin &__n,double __beta){
   d = const_term * sum_term;
   return d;
 }
+//_____________________________________________________________________________
+
+complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,
+				   double __width){
+  complex<double> i(0.,1.);
+  return __mass*__width/(__mass*__mass - __p4*__p4- i*__mass*__width);
+}
+//
+complex<double> BreitWignerBlattW(const Vector4<double> &__p4, double __massA, 
+                                  double __massB, double __mass0, double __width, int __LL){
+
+  if( (__massA < 0.) || (__massB < 0.) ||  __mass0<0.) {
+    
+    std::cout << "Invalid mass values " << __massA << "\t" << __massB << "\t" << __mass0 <<std::endl;
+    assert(0);
+  }
+
+   if (__LL==0) return BreitWigner(__p4,__mass0,__width);
+
+
+  complex<double> i(0.,1.);
+
+  double massAB=__p4.Mass();
+   if ( (__massA+__massB) > __mass0) return BreitWigner(__p4,__mass0,__width);
+   if ( (__massA+__massB) > massAB) return BreitWigner(__p4,__mass0,__width);
+
+  // break up momentum q0
+  double q0=sqrt( (__mass0*__mass0-(__massA+__massB)*(__massA+__massB))
+                  * (__mass0*__mass0-(__massA-__massB)*(__massA-__massB)) )
+    /(2*__mass0);
+
+
+  // break up momentum qab
+  double qab=sqrt( (massAB*massAB-(__massA+__massB)*(__massA+__massB))
+                   * (massAB*massAB-(__massA-__massB)*(__massA-__massB)) )
+    /(2*massAB);
+
+
+  // phase space factor rhoM0
+  double  rhoM0=2*q0/__mass0;
+
+  // phase space factor rhoMab
+  double  rhoMab=2*qab/massAB;
+ 
+  // R=1.5 GeV-1 for intermediate resonances
+  BlattWeisskopf blattWk(__LL, 1.5, q0);
+
+  double blattWqq0=blattWk(qab);
+
+  complex<double>  result=__mass0*__width*blattWqq0/
+    (__mass0*__mass0 - massAB*massAB - i*(__mass0*__width* blattWqq0* blattWqq0* rhoMab/rhoM0));
+
+  return result;
+}
+//
+
+complex<double> FlatteA980(const Vector4<double> &__p4, double __mass0, double g_KK, double g_EtaPi){
+
+  complex<double> i(0.,1.);
+
+  const double mPipm=0.13957018;
+  const double mEta=0.547853;
+  const double mKpm=0.493677;
+  const double mK0=0.497614;
+  
+  double mAB=__p4.Mass();
+  
+  if( (mAB < 1e-8)){
+    std::cout << "Invalid KK mass  " << mAB << " < 1e-8" <<std::endl;
+    assert(0);
+  }
+
+  //calculate phase-space factors
+
+  double mPiMmEtaSqr=((mPipm-mEta)/mAB)*((mPipm-mEta)/mAB);
+  if (mPiMmEtaSqr>1.) mPiMmEtaSqr=1.;
+
+  double mPiMpEtaSqr=((mPipm+mEta)/mAB)*((mPipm+mEta)/mAB);
+  if (mPiMpEtaSqr>1.) mPiMpEtaSqr=1.;
+
+  double mKpmmK0Sqr=((mKpm-mK0)/mAB)*((mKpm-mK0)/mAB);
+  if (mKpmmK0Sqr>1.) mKpmmK0Sqr=1.;
+
+  double mKpmpK0Sqr=((mKpm+mK0)/mAB)*((mKpm+mK0)/mAB);
+  if (mKpmpK0Sqr>1.) mKpmpK0Sqr=1.;
+  
+  double rho1=sqrt( (1-mPiMmEtaSqr)* (1-mPiMpEtaSqr) );
+  double rho2=sqrt( (1-mKpmmK0Sqr)* (1-mKpmpK0Sqr) );
+
+  complex<double>  result=g_KK*g_KK/( __mass0*__mass0 - mAB*mAB - i * (rho1*g_EtaPi*g_EtaPi+rho2*g_KK*g_KK) );
+ 
+  return result; 
+}
+
+
 //_____________________________________________________________________________
 
 complex<double> ReggePropagator(double __t,double __s,double __a,double __b,

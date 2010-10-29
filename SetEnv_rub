@@ -1,10 +1,12 @@
 setenv ROOTSYS /opt/root/5.26-00b/Linux26SL5_x86_64_gcc412
-setenv Minuit2_ROOT /data/pegasus1/PANDA/PWA
-setenv GENEVA_ROOT /data/pegasus1/PANDA/PWA/geneva
-setenv log4cpp_ROOT /data/pegasus1/PANDA/PWA
 
-echo "\n ROOTSYS: " $ROOTSYS  
-echo "\n Minuit2_ROOT: " $Minuit2_ROOT
-echo "\n GENEVA_ROOT: " $GENEVA_ROOT
-echo "\n log4cpp_ROOT: " $log4cpp_ROOT
+#setenv CMAKE_SOURCE_DIR /data/pegasus2/bertram/PawianPsi2S_V2/Pawian
+setenv CMAKE_SOURCE_DIR `pwd`
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
+setenv PATH ${PATH}:${ROOTSYS}/bin
+setenv BOOST_BUILD_PATH /data/pegasus1/PANDA/PWA/boost-build/
+
+echo "\n ROOTSYS: " $ROOTSYS 
+echo "\n CMAKE_SOURCE_DIR: " $CMAKE_SOURCE_DIR  
+echo "\n BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
 echo "\n"

@@ -1,6 +1,7 @@
 
 build-project pbarpToOmegaPi ;
 build-project EtacToapi0Fit ;
+build-project Psi2SToKpKmPiGam ; 
 build-project GMultiPopulation ;
 build-project GStartProject ;
 build-project pbarp ;
