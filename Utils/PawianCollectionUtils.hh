@@ -1,3 +1,6 @@
+#ifndef _PawianCollectionUtils_H
+#define _PawianCollectionUtils_H
+
 #include <algorithm>
 #include <boost/shared_ptr.hpp>
 
@@ -24,3 +27,5 @@ namespace pawian {
     }
 
   }
+
+#endif

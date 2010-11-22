@@ -298,6 +298,42 @@ complex<double> FlatteA980(const Vector4<double> &__p4, double __mass0, double g
 }
 
 
+complex<double> Flatte(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
+		       , const double>& decPair2, double __mass0, double g1, double g2){
+
+  complex<double> i(0.,1.);
+  const double m1a=decPair1.first;
+  const double m1b=decPair1.second;
+  const double m2a=decPair2.first;
+  const double m2b=decPair2.second;
+
+  double mAB=__p4.Mass();
+
+  //calculate phase-space factors 
+
+  double ph1Sqr=mAB*mAB/4-m1a*m1b;
+
+  complex<double> gamma11(0.,0.);
+  if (ph1Sqr>=0.) gamma11=complex<double>( g1*sqrt(ph1Sqr), 0.);
+  else gamma11=complex<double>(0., g1*sqrt(-ph1Sqr));
+
+
+  double ph2Sqr=mAB*mAB/4-m2a*m2b;
+
+  complex<double> gamma22(0.,0.);
+  if (ph2Sqr>=0.) gamma22=complex<double>(g2*sqrt(ph2Sqr), 0.);
+  else gamma22=complex<double>(0., g2*sqrt(-ph2Sqr));
+
+  complex<double> gammaLow(0.,0.);
+  if( (m1a+m1b) < (m2a+m2b) ) gammaLow=gamma11;
+  else gammaLow=gamma22;
+
+  complex<double>  result=__mass0*sqrt(gammaLow*gamma11)/( __mass0*__mass0 - mAB*mAB - i * __mass0 * (gamma11+gamma22) );
+
+  return result;
+
+}
+
 //_____________________________________________________________________________
 
 complex<double> ReggePropagator(double __t,double __s,double __a,double __b,
