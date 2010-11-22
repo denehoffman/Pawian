@@ -1,0 +1,14 @@
+project : 
+        ;
+
+lib Psi2STo2K2PiGam : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/PwaUtils//PwaUtils 
+        $(TOP)/Event//Event 
+        $(TOP)/qft++//qft++ 
+	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: 
+	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+
+exe Mpsi2STo2K2PiGamApp : Mpsi2STo2K2PiGamApp.cc Psi2STo2K2PiGam : ;
+

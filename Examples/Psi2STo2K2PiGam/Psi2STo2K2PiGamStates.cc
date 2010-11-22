@@ -1,0 +1,170 @@
+#include <getopt.h>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
+#include "ErrLogger/ErrLogger.hh"
+
+Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
+  _psiJPC(new jpcRes(1, -1, -1)),
+  _chic0JPC(new jpcRes(0, 1, 1)),
+  _Kst0JPC(new jpcRes(0, 1, 0)),
+  _Kst1JPC(new jpcRes(1, -1, 0)),
+  _Kst2JPC(new jpcRes(2, 1, 0)),
+  _K1400JPC(new jpcRes(1, 1, 0)),
+  _f0JPC(new jpcRes(0, 1, 1)),
+  _f2JPC(new jpcRes(2, 1, 1)),
+  _pi0JPC(new jpcRes(0, -1, 1)),
+  _kJPC(new jpcRes(0, -1, 0)),
+  _gamJPC(new jpcRes(1, -1, -1))
+{
+  //LS combinations for Psi(2S) decay to Chi_c0 gamma
+  fillJPCLS(_psiJPC, _chic0JPC, _gamJPC, _PsiJPCLS);
+
+  //LS combinations for the Chi_c0 decay to K1(1400) K
+  fillJPCLS(_chic0JPC, _K1400JPC, _kJPC, _ChiToK1400ToK892piJPCLS);
+
+  //LS combinations for the Chi_c0 decay to K*(892) K*(892)
+  fillJPCLS(_chic0JPC, _Kst1JPC, _Kst1JPC,_ChiTo2K892JPCLS);
+
+  //LS combinations for the Chi_c0 decay to K*2(1430) K*2(1430)
+  fillJPCLS(_chic0JPC, _Kst2JPC, _Kst2JPC, _ChiTo2K_2_1430JPCLS);
+
+  //LS combinations for the Chi_c0 decay to K*0(1430) K*0(1430)
+  fillJPCLS(_chic0JPC, _Kst0JPC, _Kst0JPC, _ChiTo2K_0_JPCLS);
+
+  //LS combinations for the Chi_c0 decay to f0 f0
+  fillJPCLS(_chic0JPC, _f0JPC, _f0JPC,_ChiTof0f0JPCLS);
+
+  //LS combinations for the Chi_c0 decay to K0 K0
+  fillJPCLS(_chic0JPC, _kJPC, _kJPC, _ChiToK0K0JPCLS);
+
+  //LS combinations for the K*+- decay to K+- Pi0
+  fillJPCLS(_Kst1JPC, _kJPC, _pi0JPC, _Kst1JPCLS);
+
+  //LS combinations for the K*2+- decay to K+- Pi0
+  fillJPCLS(_Kst2JPC, _kJPC, _pi0JPC, _Kst2JPCLS);
+
+  //LS combinations for the K*+- decay to K+- Pi0
+  fillJPCLS(_K1400JPC, _Kst1JPC, _pi0JPC, _K1400ToKst1PiJPCLS);
+
+  //LS combinations for the K1- decay to K0 Pi0
+  fillJPCLS(_K1400JPC, _Kst0JPC, _pi0JPC, _K1ToK0PiJPCLS);
+
+  //LS combinations for the f2 decay to K+ K-
+  fillJPCLS(_f2JPC, _kJPC, _kJPC, _f2JPCLS);
+
+}
+
+Psi2STo2K2PiGamStates::~Psi2STo2K2PiGamStates()
+{
+}
+
+void Psi2STo2K2PiGamStates::fillJPCLS(boost::shared_ptr<jpcRes> motherRes, boost::shared_ptr<jpcRes> daughterRes1, boost::shared_ptr<jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)
+{
+  // first: check C-parity
+  if ( motherRes->C != daughterRes1->C*daughterRes2->C){
+    Warning << "C-Parity not valid for the reaction: JPC= " 
+	    << motherRes->J << " " << motherRes->P << " " << motherRes->C
+	    << " --> "
+	    << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
+	    << " and "
+	    << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C
+	    << endmsg; 
+  }
+  
+  vector<LS> LSs=GetValidLS(motherRes->J, motherRes->P, daughterRes1->J, daughterRes1->P, daughterRes2->J, daughterRes2->P);
+
+  int num_LS = (int) LSs.size();
+
+  for(int ls = 0; ls < num_LS; ls++){
+    Spin L= LSs[ls].L;
+    Spin S= LSs[ls].S;
+    boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
+    theJPCLSVec.push_back(tmpJPCLS);
+  }
+} 
+
+
+void Psi2STo2K2PiGamStates::print(std::ostream& os) const
+{
+  os << "*** Psi(2S):  LS combinations for the decay to Psi(2S) gamma*** "<< std::endl;
+  
+  std::vector< boost::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
+  
+  for ( itJPCLS=_PsiJPCLS.begin(); itJPCLS!=_PsiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to K1(1400)*+- K-+ *** "<< std::endl;
+  for ( itJPCLS=_ChiToK1400ToK892piJPCLS.begin(); itJPCLS!=_ChiToK1400ToK892piJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to K*(892) K*(892) *** "<< std::endl;
+  for ( itJPCLS=_ChiTo2K892JPCLS.begin(); itJPCLS!=_ChiTo2K892JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+
+  os << "*** Chi_c0:  LS combinations for the decay to K*2(1430) K*2(1430) *** "<< std::endl;
+  for ( itJPCLS=_ChiTo2K_2_1430JPCLS.begin(); itJPCLS!=_ChiTo2K_2_1430JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to K*0(1430) K*0(1430) *** "<< std::endl;
+  for ( itJPCLS=_ChiTo2K_0_JPCLS.begin(); itJPCLS!=_ChiTo2K_0_JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to f0 f0 *** "<< std::endl;
+  for ( itJPCLS=_ChiTof0f0JPCLS.begin(); itJPCLS!=_ChiTof0f0JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** K*2+-:   LS combinations for the decay to K*2+- -> K+- pi0 *** "<< std::endl;
+  for ( itJPCLS=_Kst2JPCLS.begin(); itJPCLS!=_Kst2JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** K1(1400):   LS combinations for the decay to K1(1400)+- -> K*1+- pi0 *** "<< std::endl;
+  for ( itJPCLS=_K1400ToKst1PiJPCLS.begin(); itJPCLS!=_K1400ToKst1PiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** K1(1270):   LS combinations for the decay to K1(1270) -> K0(1430) pi0 *** "<< std::endl;
+  for ( itJPCLS=_K1ToK0PiJPCLS.begin(); itJPCLS!=_K1ToK0PiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** f2:  LS combinations for the decay to K K *** "<< std::endl;
+  for ( itJPCLS=_f2JPCLS.begin(); itJPCLS!=_f2JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** f2:  LS combinations for the decay to K0 K0 *** "<< std::endl;
+  for ( itJPCLS=_ChiToK0K0JPCLS.begin(); itJPCLS!=_ChiToK0K0JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** K+- *** "<< std::endl;
+  _kJPC->print(os);
+
+  os << "\n *** pi0 *** "<< std::endl;
+  _pi0JPC->print(os);
+
+  os << "\n *** gamma *** "<< std::endl;
+  _gamJPC->print(os);
+  os << "\n"<< std::endl;
+}
