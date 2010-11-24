@@ -27,9 +27,7 @@ Hyp1Lh::~Hyp1Lh()
 }
 
 
-complex<double> Hyp1Lh::calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
-  complex<double> result(0.,0.);
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToChiGam=theParamVal.PsiToChiGam;
+complex<double> Hyp1Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K892=theParamVal.ChiTo2K892;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_2_1430=theParamVal.ChiTo2K_2_1430;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_0_1430=theParamVal.ChiTo2K_0_1430;
@@ -59,26 +57,8 @@ complex<double> Hyp1Lh::calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K
 
   double f1710_kMass=theParamVal.Bwf1710_k.first;
   double f1710_kWidth=theParamVal.Bwf1710_k.second;
-  double f1710PiPiWidth=theParamVal.f1710PiPiWidth;
 
 
-
-  complex<double> PsiDecAmpTmpls(0.,0.);
-
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itPsi;
-  for ( itPsi=PsiToChiGam.begin(); itPsi!=PsiToChiGam.end(); ++itPsi){
-    
-    boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
-
-    double thePsiMag=itPsi->second.first;
-    double thePsiPhi=itPsi->second.second;
-    complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
-
-
-    PsiDecAmpTmpls+=thePsiMag*expiphiPsi*sqrt(2*PsiState->L+1)
-      *Clebsch(PsiState->L,0,PsiState->S, -lamGam, PsiState->J, -lamGam)
-      *Clebsch(0, 0, 1, -lamGam, PsiState->S, -lamGam);
-  }
 
   //Chi_c0 decay to K*(892) K*(892)
   complex<double> ChiTo2K892Amp=chiTo2K892Amp(theData, ChiTo2K892, K892Mass, K892Width);
@@ -102,17 +82,16 @@ complex<double> Hyp1Lh::calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K
   complex<double> ChiTof980_pif1710_kAmp=chiTof980_pif0_kAmp(theData, ChiTof980_pif1710_k, f980_Mass, f980_gPiPi,  f980_gKK, f1710_kMass, f1710_kWidth);
 
   //Chi_c0 decay to f0(980) f0(1710) -> (K K) (pi0 pi0) 
-  complex<double> ChiTof980_kf1710_piAmp=chiTof980_pif0_kAmp(theData, ChiTof980_kf1710_pi, f980_Mass, f980_gKK,  f980_gPiPi, f1710_kMass, f1710PiPiWidth);
+  complex<double> ChiTof980_kf1710_piAmp=chiTof980_kf0_piAmp(theData, ChiTof980_kf1710_pi, f980_Mass, f980_gKK,  f980_gPiPi, f1710_kMass, f1710_kWidth);
 
   //Chi_c0 decay to f0(980) f0(980) -> (pi0 pi0) (K K) 
   complex<double> ChiTof980f980Amp=chiTof980f980Amp(theData, ChiTof980f980, f980_Mass, f980_gPiPi,  f980_gKK);
 
-  result+=conj(theData->DfPsi[1][Minit][-lamGam])*PsiDecAmpTmpls*(ChiTo2K892Amp+ChiTo2K_1430Amp+ChiToK_1_1400Amp+ChiTof980_pif1710_kAmp+ChiTof980_kf1710_piAmp+ChiTof980f980Amp);
+  complex<double> result=ChiTo2K892Amp+ChiTo2K_1430Amp+ChiToK_1_1400Amp+ChiTof980_pif1710_kAmp+ChiTof980_kf1710_piAmp+ChiTof980f980Amp;
 
   return result; 
+
 }
-
-
 
 
 
@@ -156,7 +135,6 @@ void Hyp1Lh::setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitPara
 //   setMnUsrParamsMass(upar, startVal, errVal, "f980_pi");
   setMnUsrParamsFlatteMass(upar, startVal, errVal, "f980");
   setMnUsrParamsMass(upar, startVal, errVal, "f1710_k");
-  setMnUsrParamsFlatteMass(upar, startVal, errVal, "f1710PiPiWidth");
 }
 
 
@@ -238,7 +216,6 @@ int Hyp1Lh::setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const 
   counter=setFitParamFlatteMass(theParamVal, par, counter, "f980");
 
   counter=setFitParamValMass(theParamVal, par, counter, "f1710_k");
-  counter=setFitParamFlatteMass(theParamVal, par, counter, "f1710PiPiWidth");
 
   return counter;
 }
@@ -363,8 +340,7 @@ void Hyp1Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal
 
     DebugMsg<< "f1710_k:" << endmsg;
     std::pair<double, double> tmpParamf1710_k=theParamVal.Bwf1710_k;
-    double tmpParamf1710PiPiWidth=theParamVal.f1710PiPiWidth;
-    DebugMsg <<"\t mass:" << tmpParamf1710_k.first <<"\t widthKK:" << tmpParamf1710_k.second  <<"\t widthPiPi:" << tmpParamf1710PiPiWidth << endmsg;
+    DebugMsg <<"\t mass:" << tmpParamf1710_k.first <<"\t widthKK:" << tmpParamf1710_k.second << endmsg;
 
 
 
@@ -499,7 +475,4 @@ void Hyp1Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
   tmpParamRes=theParamVal.Bwf1710_k;
   os << tmpStringRes << "\t" << tmpParamRes.first <<"\t" << tmpParamRes.second  << std::endl;
 
-  tmpStringRes="f1710PiPiWidth"+suffix;
-  double f1710PiPiWidth=theParamVal.f1710PiPiWidth;
-  os << tmpStringRes << "\t" << f1710PiPiWidth  <<"\t" << 0.  << std::endl;
 }

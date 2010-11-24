@@ -70,7 +70,7 @@ int main(int __argc,char *__argv[]){
   std::string paramFilePathStr="default";
   std::string qaModeStr="no";
   std::string K1_1270HypStr="yes";
-  std::string K0_1430_K0_1430HypStr="false";
+  std::string K0_1430_K0_1430HypStr="no";
 
   // decode arguments
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -188,7 +188,7 @@ int main(int __argc,char *__argv[]){
   if (K1_1270HypStr=="yes") K1_1270Hyp=true;
 
   bool K0_1430_K0_1430Hyp=false; 
-  if (K0_1430_K0_1430HypStr=="yes") K0_1430_K0_1430Hyp=false;
+  if (K0_1430_K0_1430HypStr=="yes") K0_1430_K0_1430Hyp=true;
 
   bool disableHyp3=true; 
 

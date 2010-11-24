@@ -46,8 +46,6 @@ namespace Psi2STo2K2PiGamData {
     double Flatf980gPiPi;
     double Flatf980gKK;
 
-    double f1710PiPiWidth;
-
     double phaseSpace;
   };
   

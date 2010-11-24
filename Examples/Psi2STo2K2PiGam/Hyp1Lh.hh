@@ -53,9 +53,10 @@ protected:
   bool _K1_1270Hyp;
   bool _K0_1430_K0_1430Hyp;
 
+  virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+
 private:
 
-  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);  
 };
 
 #endif

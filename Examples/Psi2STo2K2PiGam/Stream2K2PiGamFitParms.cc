@@ -188,12 +188,6 @@ void Stream2K2PiGamFitParms::fillParamMap(){
   theKey="f1370_kmassErr";
   fillParamMapMass(theKey, _paramErr.Bwf1370_k);
 
-  theKey="f1710PiPiWidthVal";
-  fillParamFlatte(theKey, _paramVal.f1710PiPiWidth);
-  theKey="f1710PiPiWidthErr";
-  fillParamFlatte(theKey, _paramErr.f1710PiPiWidth);
-
-
   theKey="K_0_2400Val";
   fillParamMapMass(theKey, _paramVal.BwK_0_2400);
   theKey="K_0_2400Err";

@@ -36,6 +36,12 @@ double PsiToChic0GamProdLh::calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGa
   return result;  
 }
 
+complex<double> PsiToChic0GamProdLh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
+  complex<double> result(0.,0.);
+  return result;  //dummy !!!
+}
+
+
 complex<double> PsiToChic0GamProdLh::calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
   complex<double> dummyresult(0.,0.);
   return dummyresult; 

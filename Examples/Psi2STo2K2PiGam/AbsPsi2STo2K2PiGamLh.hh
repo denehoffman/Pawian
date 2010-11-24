@@ -64,6 +64,10 @@ protected:
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtDataVec;
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtMCVec;
 
+  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+
+  virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData)=0;
+
   virtual int setFitParamValDec(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const; 
 
   virtual int setFitParamValMass(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const; 
@@ -103,7 +107,6 @@ protected:
 
 private:
   
-  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData)=0;
 
 };
 

@@ -62,22 +62,24 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const Psi2STo2K2PiGamData::fitParamVal& t
 
 double AbsPsi2STo2K2PiGamLh::calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, const Psi2STo2K2PiGamData::fitParamVal& theParamVal){
   double phaseSpaceVal=theParamVal.phaseSpace;
+  
+  complex<double> theDecAmp=chi0DecAmps(theParamVal, theData);
 
   Spin Psi2SM=1;
   Spin GamM=1;
-  complex<double> AmpPsi2SMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  complex<double> AmpPsi2SMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
 
   Psi2SM=1;
   GamM=-1;
-  complex<double> AmpPsi2SMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  complex<double> AmpPsi2SMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
 
   Psi2SM=-1;
   GamM=1; 
-  complex<double> AmpPsi2SMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  complex<double> AmpPsi2SMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
 
   Psi2SM=-1;
   GamM=-1; 
-  complex<double> AmpPsi2SMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  complex<double> AmpPsi2SMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
 
 //   DebugMsg << "AmpPsi2SMp " << AmpPsi2SMp << endmsg;
   
@@ -85,6 +87,33 @@ double AbsPsi2STo2K2PiGamLh::calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiG
 
   return result;  
 }
+  
+complex<double> AbsPsi2STo2K2PiGamLh::calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToChiGam=theParamVal.PsiToChiGam;
+
+  complex<double> PsiDecAmpTmpls(0.,0.);
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itPsi;
+  for ( itPsi=PsiToChiGam.begin(); itPsi!=PsiToChiGam.end(); ++itPsi){
+    
+    boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
+
+    double thePsiMag=itPsi->second.first;
+    double thePsiPhi=itPsi->second.second;
+    complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
+
+
+    PsiDecAmpTmpls+=thePsiMag*expiphiPsi*sqrt(2*PsiState->L+1)
+      *Clebsch(PsiState->L,0,PsiState->S, -lamGam, PsiState->J, -lamGam)
+      *Clebsch(0, 0, 1, -lamGam, PsiState->S, -lamGam);
+  }
+
+  complex<double> result=conj(theData->DfPsi[1][Minit][-lamGam])*PsiDecAmpTmpls;
+  return result; 
+}
+
+
 
 void AbsPsi2STo2K2PiGamLh::setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal){
   double phaseSpaceVal=startVal.phaseSpace;
@@ -251,10 +280,6 @@ int AbsPsi2STo2K2PiGamLh::setFitParamFlatteMass(Psi2STo2K2PiGamData::fitParamVal
     theParamVal.Flatf980gPiPi=par[resultCount];
     resultCount++;
     theParamVal.Flatf980gKK=par[resultCount];
-    resultCount++;
-  }
-  else if (key=="f1710PiPiWidth"){
-    theParamVal.f1710PiPiWidth=par[resultCount];
     resultCount++;
   }
   else { Alert << "Key: " << key << " not supported for setting up the Flatte mass parameters!!!" << endmsg;
@@ -458,17 +483,6 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsFlatteMass(MnUserParameters& upar, Psi2
 
   upar.Add(f980gPiPiStr, start_FlatgPiPi, err_FlatgPiPi, 0., start_FlatgPiPi+3*err_FlatgPiPi);
   upar.Add(f980gKKStr, start_FlatgKK, err_FlatgKK, 0., start_FlatgKK+3*err_FlatgKK);
-  }
-
-  else if (key=="f1710PiPiWidth"){
-    double start_f1710PiPiWidth=startVal.f1710PiPiWidth;
-    double err_f1710PiPiWidth=errVal.f1710PiPiWidth;
-    std::string theStr="f1710PiPiWidth";
-    double widthMin=start_f1710PiPiWidth-3.*err_f1710PiPiWidth;
-    if ( widthMin<0.03) widthMin=0.03; 
-    double widthMax=start_f1710PiPiWidth+3.*err_f1710PiPiWidth;
-
-    upar.Add(theStr, start_f1710PiPiWidth, err_f1710PiPiWidth, widthMin, widthMax);
   }
 
   else { Alert << "Key: " << key << " not supported for setting up the MINUIT start mass parameters!!!" << endmsg;
