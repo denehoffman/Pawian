@@ -30,9 +30,9 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGam
   _invPiPiDataHist(0),
   _invPiPiMcHist(0),
   _invPiPiFittedHist(0),
-  _invKPiPiViaK982DataHist(0),
-  _invKPiPiViaK982McHist(0),
-  _invKPiPiViaK982FittedHist(0),
+  _invKPiPiViaK892DataHist(0),
+  _invKPiPiViaK892McHist(0),
+  _invKPiPiViaK892FittedHist(0),
   _KPivsKPiDataHist2d(0),
   _KPivsKPiMcHist2d(0),
   _KPivsKPiFittedHist2d(0),
@@ -44,7 +44,9 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGam
   _KPiPivsPiPiFittedHist2d(0),  
   _KKPivsKPiDataHist2d(0),
   _KKPivsKPiMcHist2d(0),
-  _KKPivsKPiFittedHist2d(0)
+  _KKPivsKPiFittedHist2d(0),
+  _dataTuple(0),
+  _mcTuple(0)
 {
   if(0==theEvtList){
     Alert <<"Psi2SToKpKmPiGamEventList* theEvtList is a 0 pointer !!!!" << endmsg;
@@ -62,7 +64,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGam
       plotInvKK(_invKKDataHist, (*it), 1.);
       plotInvKPi(_invKPiDataHist, (*it), 1.);
       plotInvPiPi(_invPiPiDataHist, (*it), 1.);
-      plotInvKPiPi(_invKPiPiViaK982DataHist, (*it), 1., 0.892, 0.03);
+      plotInvKPiPi(_invKPiPiViaK892DataHist, (*it), 1., 0.892, 0.03);
       plotKPivsKPi(_KPivsKPiDataHist2d, (*it), 1.);
       plotKKvsPiPi(_KKvsPiPiDataHist2d, (*it), 1.);
       plotCosKst(_cosK892DataHist, (*it), 1., 0.892, 0.03);
@@ -70,6 +72,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGam
       plotCosKstViaK892(_cosK1430ViaK892DataHist, (*it), 1., 1.430, 0.06);
       plotKPiPivsPiPi(_KPiPivsPiPiDataHist2d, (*it), 1.);
       plotKKPivsKPi(_KKPivsKPiDataHist2d, (*it), 1.);
+      writeNTuple(_dataTuple, (*it), 1.);
       ++it;
     }
 
@@ -81,7 +84,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGam
       plotInvKK(_invKKMcHist, (*it), 1.);
       plotInvKPi(_invKPiMcHist, (*it), 1.);
       plotInvPiPi(_invPiPiMcHist, (*it), 1.);
-      plotInvKPiPi(_invKPiPiViaK982McHist, (*it), 1., 0.892, 0.03);
+      plotInvKPiPi(_invKPiPiViaK892McHist, (*it), 1., 0.892, 0.03);
       plotKPivsKPi(_KPivsKPiMcHist2d, (*it), 1.);
       plotKKvsPiPi(_KKvsPiPiMcHist2d, (*it), 1.);
       plotCosKst(_cosK892McHist, (*it), 1., 0.892, 0.02);
@@ -89,6 +92,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGam
       plotCosKstViaK892(_cosK1430ViaK892McHist, (*it), 1., 1.430, 0.08);
       plotKPiPivsPiPi(_KPiPivsPiPiMcHist2d, (*it), 1.);
       plotKKPivsKPi(_KKPivsKPiMcHist2d, (*it), 1.);
+      writeNTuple(_mcTuple, (*it), 1.);
       ++it;
     }
 }
@@ -110,9 +114,9 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
   _invPiPiDataHist(0),
   _invPiPiMcHist(0),
   _invPiPiFittedHist(0),
-  _invKPiPiViaK982DataHist(0),
-  _invKPiPiViaK982McHist(0),
-  _invKPiPiViaK982FittedHist(0),
+  _invKPiPiViaK892DataHist(0),
+  _invKPiPiViaK892McHist(0),
+  _invKPiPiViaK892FittedHist(0),
   _KPivsKPiDataHist2d(0),
   _KPivsKPiMcHist2d(0),
   _KPivsKPiFittedHist2d(0),
@@ -124,7 +128,9 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
   _KPiPivsPiPiFittedHist2d(0),
   _KKPivsKPiDataHist2d(0),
   _KKPivsKPiMcHist2d(0),
-  _KKPivsKPiFittedHist2d(0)
+  _KKPivsKPiFittedHist2d(0),
+  _dataTuple(0),
+  _mcTuple(0)
 {
 
   if(0==thePsi2STo2K2PiGamLh){
@@ -144,7 +150,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
       plotInvKK(_invKKDataHist, (*it), 1.);
       plotInvKPi(_invKPiDataHist, (*it), 1.);
       plotInvPiPi(_invPiPiDataHist, (*it), 1.);
-      plotInvKPiPi(_invKPiPiViaK982DataHist, (*it), 1., 0.892, 0.03);
+      plotInvKPiPi(_invKPiPiViaK892DataHist, (*it), 1., 0.892, 0.03);
       plotKPivsKPi(_KPivsKPiDataHist2d, (*it), 1.);
       plotKKvsPiPi(_KKvsPiPiDataHist2d, (*it), 1.);
       plotCosKst(_cosK892DataHist, (*it), 1., 0.892, 0.03);
@@ -152,6 +158,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
       plotCosKstViaK892(_cosK1430ViaK892DataHist, (*it), 1., 1.430, 0.06);
       plotKPiPivsPiPi(_KPiPivsPiPiDataHist2d, (*it), 1.);
       plotKKPivsKPi(_KKPivsKPiDataHist2d, (*it), 1.);
+      writeNTuple(_dataTuple, (*it), 1.);
       ++it;
     }
 
@@ -163,7 +170,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
       plotInvKK(_invKKMcHist, (*it), 1.);
       plotInvKPi(_invKPiMcHist, (*it), 1.);
       plotInvPiPi(_invPiPiMcHist, (*it), 1.);
-      plotInvKPiPi(_invKPiPiViaK982McHist, (*it), 1., 0.892, 0.03);
+      plotInvKPiPi(_invKPiPiViaK892McHist, (*it), 1., 0.892, 0.03);
       plotKPivsKPi(_KPivsKPiMcHist2d, (*it), 1.);
       plotKKvsPiPi(_KKvsPiPiMcHist2d, (*it), 1.);
       plotCosKst(_cosK892McHist, (*it), 1., 0.892, 0.02);
@@ -178,7 +185,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
       plotInvKK(_invKKFittedHist, (*it), evtWeight);
       plotInvKPi(_invKPiFittedHist, (*it), evtWeight);
       plotInvPiPi(_invPiPiFittedHist, (*it), evtWeight);
-      plotInvKPiPi(_invKPiPiViaK982FittedHist, (*it), evtWeight, 0.892, 0.03);
+      plotInvKPiPi(_invKPiPiViaK892FittedHist, (*it), evtWeight, 0.892, 0.03);
       plotKPivsKPi(_KPivsKPiFittedHist2d, (*it), evtWeight);
       plotKKvsPiPi(_KKvsPiPiFittedHist2d, (*it), evtWeight);
       plotCosKst(_cosK892FittedHist, (*it), evtWeight, 0.892, 0.02);
@@ -186,7 +193,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
       plotCosKstViaK892(_cosK1430ViaK892FittedHist, (*it), evtWeight, 1.430, 0.08);
       plotKPiPivsPiPi(_KPiPivsPiPiFittedHist2d, (*it), evtWeight);
       plotKKPivsKPi(_KKPivsKPiFittedHist2d, (*it), evtWeight);
-
+      writeNTuple(_mcTuple, (*it), evtWeight);
       ++it;
     }
 
@@ -207,7 +214,7 @@ Psi2STo2K2PiGamHist::Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>
   _invKKFittedHist->Scale(integralData/integralFitted);
   _invKPiFittedHist->Scale(integralData/integralFitted);
   _invPiPiFittedHist->Scale(integralData/integralFitted);
-  _invKPiPiViaK982FittedHist->Scale(integralData/integralFitted);
+  _invKPiPiViaK892FittedHist->Scale(integralData/integralFitted);
   _KPivsKPiFittedHist2d->Scale(integralData/integralFitted);
   _KKvsPiPiFittedHist2d->Scale(integralData/integralFitted);
   _cosK892FittedHist->Scale(integralData/integralFitted);
@@ -250,9 +257,9 @@ void Psi2STo2K2PiGamHist::initRootStuff()
   _invPiPiDataHist= new TH1F("_invPiPiDataHist","M_{#pi #pi} data",130, 0.2, 2.5);
   _invPiPiMcHist= new TH1F("_invPiPiMcHist","M_{#pi #pi} MC",130, 0.2, 2.5);
   _invPiPiFittedHist= new TH1F("_invPiPiFittedHist","M_{#pi #pi} fit",130, 0.2, 2.5);
-  _invKPiPiViaK982DataHist= new TH1F("_invKPiPiViaK982DataHist","M_{K #pi #pi} (via K*(982)) data",90, 0.9, 3.1);
-  _invKPiPiViaK982McHist= new TH1F("_invKPiPiViaK982McHist","M_{K #pi #pi} (via K*(982)) MC",90, 0.9, 3.1);
-  _invKPiPiViaK982FittedHist= new TH1F("_invKPiPiViaK982FittedHist","M_{K #pi #pi} (via K*(982)) fit",90, 0.9, 3.1);
+  _invKPiPiViaK892DataHist= new TH1F("_invKPiPiViaK892DataHist","M_{K #pi #pi} (via K*(892)) data",90, 0.9, 3.1);
+  _invKPiPiViaK892McHist= new TH1F("_invKPiPiViaK892McHist","M_{K #pi #pi} (via K*(892)) MC",90, 0.9, 3.1);
+  _invKPiPiViaK892FittedHist= new TH1F("_invKPiPiViaK892FittedHist","M_{K #pi #pi} (via K*(892)) fit",90, 0.9, 3.1);
   _KPivsKPiDataHist2d= new TH2F("_KPivsKPiDataHist2d","M_{K #pi} vs.M_{K #pi} data", 65, 0.5, 2.8, 65, 0.5, 2.8);
   _KPivsKPiMcHist2d= new TH2F("_KPivsKPiMcHist2d","M_{K #pi} vs.M_{K #pi} MC", 65, 0.5, 2.8, 65, 0.5, 2.8);
   _KPivsKPiFittedHist2d= new TH2F("_KPivsKPiFittedHist2d","M_{K #pi} vs.M_{K #pi} fit", 65, 0.5, 2.8, 65, 0.5, 2.8);
@@ -265,6 +272,70 @@ void Psi2STo2K2PiGamHist::initRootStuff()
   _KKPivsKPiDataHist2d = new TH2F("_KKPivsKPiDataHist2d","M_{K K #pi} vs.M_{K #pi} data", 60, 1.1, 3.3, 60, 0.5, 2.8);
   _KKPivsKPiMcHist2d = new TH2F("_KKPivsKPiMcHist2d","M_{K K #pi} vs.M_{K #pi} MC", 60, 1.1, 3.3, 60, 0.5, 2.8);
   _KKPivsKPiFittedHist2d = new TH2F("_KKPivsKPiFittedHist2d","M_{K K #pi} vs.M_{K #pi} fit", 60, 1.1, 3.3, 60, 0.5, 2.8);
+
+  _dataTuple = new TNtuple("dataTuple","dataTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:weight");
+  _mcTuple = new TNtuple("mcTuple","mcTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:weight");
+
+}
+
+void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEvtData* theData, double weight)
+{
+  float Phichic0_HeliPsi2S      = theData->chic0_HeliPsi2S_4V.Phi();
+  float CosThetachic0_HeliPsi2S = theData->chic0_HeliPsi2S_4V.CosTheta();
+  float PhiK1pi1pi2             = theData->KpPiPi_HeliChic0_4V.Phi();
+  float CosThetaK1pi1pi2        = theData->KpPiPi_HeliChic0_4V.CosTheta();
+  float PhiK2pi1pi2             = theData->KmPiPi_HeliChic0_4V.Phi();
+  float CosThetaK2pi1pi2        = theData->KmPiPi_HeliChic0_4V.CosTheta();
+  float PhiK1pi1                = theData->KpPi0_HeliKpPi0Pi0_4V.Phi();
+  float CosThetaK1pi1           = theData->KpPi0_HeliKpPi0Pi0_4V.CosTheta();
+  float PhiK1pi2                = theData->KpPi1_HeliKpPi0Pi0_4V.Phi();
+  float CosThetaK1pi2           = theData->KpPi1_HeliKpPi0Pi0_4V.CosTheta();
+  float PhiK2pi1                = theData->KmPi0_HeliKmPi0Pi0_4V.Phi();
+  float CosThetaK2pi1           = theData->KmPi0_HeliKmPi0Pi0_4V.CosTheta();
+  float PhiK2pi2                = theData->KmPi1_HeliKmPi0Pi0_4V.Phi();
+  float CosThetaK2pi2           = theData->KmPi1_HeliKmPi0Pi0_4V.CosTheta();
+  float Phipi1                  = -theData->Kp_HeliKpPi0_4V.Phi();
+  float CosThetapi1             = -theData->Kp_HeliKpPi0_4V.CosTheta();
+  float Phipi2                  = -theData->Km_HeliKmPi0_4V.Phi();
+  float CosThetapi2             = -theData->Km_HeliKmPi0_4V.CosTheta();
+  float mK1pi1pi2               = theData->KpPiPi_HeliChic0_4V.M();
+  float mK2pi1pi2               = theData->KmPiPi_HeliChic0_4V.M();
+  float mK1pi1                  = theData->KpPi0_HeliChic0_4V.M();
+  float mK1pi2                  = theData->KpPi1_HeliChic0_4V.M();
+  float MK2pi1                  = theData->KmPi0_HeliChic0_4V.M();
+  float MK2pi2                  = theData->KmPi1_HeliChic0_4V.M();
+  float evtweight               = weight;
+
+  float fourVectors[50];
+  for(int i=0;i<50;i++) {fourVectors[i] = 0;}
+  fourVectors[0]  = Phichic0_HeliPsi2S;
+  fourVectors[1]  = CosThetachic0_HeliPsi2S;
+  fourVectors[2]  = PhiK1pi1pi2;
+  fourVectors[3]  = CosThetaK1pi1pi2;
+  fourVectors[4]  = PhiK2pi1pi2;
+  fourVectors[5]  = CosThetaK2pi1pi2;
+  fourVectors[6]  = PhiK1pi1;
+  fourVectors[7]  = CosThetaK1pi1;
+  fourVectors[8]  = PhiK1pi2;
+  fourVectors[9]  = CosThetaK1pi2;
+  fourVectors[10] = PhiK2pi1;
+  fourVectors[11] = CosThetaK2pi1;
+  fourVectors[12] = PhiK2pi2;
+  fourVectors[13] = CosThetaK2pi2;
+  fourVectors[14] = Phipi1;
+  fourVectors[15] = CosThetapi1;
+  fourVectors[16] = Phipi2;
+  fourVectors[17] = CosThetapi2;
+  fourVectors[18] = mK1pi1pi2;
+  fourVectors[19] = mK2pi1pi2;
+  fourVectors[20] = mK1pi1;
+  fourVectors[21] = mK1pi2;
+  fourVectors[22] = MK2pi1;
+  fourVectors[23] = MK2pi2;
+  fourVectors[24] = evtweight;
+  //  cout << evtweight << endl;
+
+  theTuple->Fill(fourVectors);
 }
 
 

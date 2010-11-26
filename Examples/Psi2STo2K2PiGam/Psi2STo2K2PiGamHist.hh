@@ -66,9 +66,9 @@ private:
   TH1F* _invPiPiMcHist;
   TH1F* _invPiPiFittedHist;
 
-  TH1F* _invKPiPiViaK982DataHist;
-  TH1F* _invKPiPiViaK982McHist;
-  TH1F* _invKPiPiViaK982FittedHist;
+  TH1F* _invKPiPiViaK892DataHist;
+  TH1F* _invKPiPiViaK892McHist;
+  TH1F* _invKPiPiViaK892FittedHist;
 
   TH2F* _KPivsKPiDataHist2d;
   TH2F* _KPivsKPiMcHist2d;
@@ -83,12 +83,11 @@ private:
   TH2F* _KKPivsKPiMcHist2d;
   TH2F* _KKPivsKPiFittedHist2d;
 
-//   TNtuple* _dataTuple;
-//   TNtuple* _mcTuple;
-
-
+  TNtuple* _dataTuple;
+  TNtuple* _mcTuple;
 
   void initRootStuff();
+  void writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEvtData* theData, double weight);
   void plotCosPsi(TH1F* theHisto, const Psi2STo2K2PiGamEvtData* theData, double weight);
   void plotCosKst(TH1F* theHisto, const Psi2STo2K2PiGamEvtData* theData, double weight, double mass, double width);
   void plotCosKstViaK892(TH1F* theHisto, const Psi2STo2K2PiGamEvtData* theData, double weight, double mass, double width);

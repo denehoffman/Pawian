@@ -195,15 +195,11 @@ int main(int __argc,char *__argv[]){
   if (K0_1430_K0_1430HypStr=="yes") K0_1430_K0_1430Hyp=true;
 
 
-  std::string disableHypStr="disableHyp3";
-  bool disableHyp3=false; 
-
-
 
   std::map<const std::string, bool> hypMap;
   hypMap["K1_1270Hyp"]=K1_1270Hyp;
   hypMap["K0_1430_K0_1430Hyp"]=K0_1430_K0_1430Hyp;
-  hypMap["disableHyp3"]=disableHyp3;  
+  hypMap["disableHyp3"]=false;  
   hypMap["disableHyp5"]=true;
   hypMap["disableHyp6"]=false;
   
