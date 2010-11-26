@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <complex>
+//#include <map>
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
@@ -29,14 +30,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp);
-  Hyp1Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp);
+  Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>, const std::map<const std::string, bool>& hypMap);
+  Hyp1Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
   virtual ~Hyp1Lh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const {
-    return new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _Psi2STo2K2PiGamStatesPtr, _K1_1270Hyp, _K0_1430_K0_1430Hyp);
+  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
+    return new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _Psi2STo2K2PiGamStatesPtr, _hypMap);
   }
 
 
@@ -48,10 +49,12 @@ public:
   virtual void printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal) const;
   virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
 
+
 protected:
 
   bool _K1_1270Hyp;
   bool _K0_1430_K0_1430Hyp;
+  std::map<const std::string, bool> _hypMap;
 
   virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

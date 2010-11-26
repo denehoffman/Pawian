@@ -29,14 +29,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp, bool disableHyp3);
-  Hyp5Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp, bool disableHyp3);
+  Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>, const std::map<const std::string, bool>& hypMap);
+  Hyp5Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
   virtual ~Hyp5Lh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const {
-    return new Hyp5Lh(_Psi2STo2K2PiGamEvtListPtr, _Psi2STo2K2PiGamStatesPtr, _K1_1270Hyp, _K0_1430_K0_1430Hyp, _disableHyp3);
+  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
+    return new Hyp5Lh(_Psi2STo2K2PiGamEvtListPtr, _Psi2STo2K2PiGamStatesPtr, _hypMap);
   }
 
 
@@ -49,6 +49,9 @@ public:
   virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
 
 protected:
+
+  bool _disableHyp5;
+
   virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
 private:

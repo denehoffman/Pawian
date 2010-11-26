@@ -201,6 +201,10 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValDec(Psi2STo2K2PiGamData::fitParamVal& th
     currentStates=_Psi2STo2K2PiGamStatesPtr->ChiToK0K0States();
     currentMap= &theParamVal.ChiToK_0_2400ToKf980;
   }
+  else if (key=="K_0_1430K_0_1950"){ 
+    currentStates=_Psi2STo2K2PiGamStatesPtr->ChiToK0K0States();
+    currentMap= &theParamVal.ChiToK_0_1430K_0_1950;
+  }
   else { Alert << "Key: " << key << " not supported for setting up the fit amplitude parameters!!!" << endmsg;
     exit(1);
   }
@@ -261,6 +265,9 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValMass(Psi2STo2K2PiGamData::fitParamVal& t
   }
   else if (key=="K_0_2400"){
     theParamVal.BwK_0_2400=thePair;
+  }
+  else if (key=="K_0_1950"){
+    theParamVal.BwK_0_1950=thePair;
   }
   else{
     Alert << "Key: " << key << " not supported for setting up the fit parameter for masses!!!" << endmsg;
@@ -354,6 +361,10 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsDec(MnUserParameters& upar, Psi2STo2K2P
     startParams=startVal.ChiToK_0_2400ToKf980;
     errParams=errVal.ChiToK_0_2400ToKf980;
   }
+  else if (key=="K_0_1430K_0_1950"){
+    startParams=startVal.ChiToK_0_1430K_0_1950;
+    errParams=errVal.ChiToK_0_1430K_0_1950;
+  }
 
   else { Alert << "Key: " << key << " not supported for setting up the MINUIT start amplitude parameters!!!" << endmsg;
     exit(1);
@@ -432,6 +443,10 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsMass(MnUserParameters& upar, Psi2STo2K2
   else if (key=="K_0_2400"){
     startParams=startVal.BwK_0_2400;
     errParams=errVal.BwK_0_2400;
+  }
+  else if (key=="K_0_1950"){
+    startParams=startVal.BwK_0_1950;
+    errParams=errVal.BwK_0_1950;
   }
   else { Alert << "Key: " << key << " not supported for setting up the MINUIT start mass parameters!!!" << endmsg;
     exit(1);
@@ -616,7 +631,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiTo2K_2_Amp(Psi2STo2K2PiGamData::Psi2STo
 }
  
 
-complex<double> AbsPsi2STo2K2PiGamLh::chiTo2K_0_Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K_0, double K_0_Mass, double K_0_Width){
+complex<double> AbsPsi2STo2K2PiGamLh::chiTo2K_0_Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K_0, double K_0_Mass0, double K_0_Width0, double K_0_Mass1, double K_0_Width1){
 
   complex<double> result(0.,0.);
   
@@ -640,8 +655,10 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiTo2K_0_Amp(Psi2STo2K2PiGamData::Psi2STo
     complex<double> expiphi(cos(thePhi), sin(thePhi));
     
     result+=theMag*expiphi*
-      ( BreitWigner(KpPi0, K_0_Mass, K_0_Width) * BreitWigner(KmPi1, K_0_Mass, K_0_Width)
-	+ BreitWigner(KpPi1, K_0_Mass, K_0_Width) * BreitWigner(KmPi0, K_0_Mass, K_0_Width) );
+      ( BreitWigner(KpPi0, K_0_Mass0, K_0_Width0) * BreitWigner(KmPi1, K_0_Mass1, K_0_Width1)
+	+ BreitWigner(KpPi0, K_0_Mass1, K_0_Width1) * BreitWigner(KmPi1, K_0_Mass0, K_0_Width0)
+	+ BreitWigner(KpPi1, K_0_Mass0, K_0_Width0) * BreitWigner(KmPi0, K_0_Mass1, K_0_Width1)
+	+ BreitWigner(KpPi1, K_0_Mass1, K_0_Width1) * BreitWigner(KmPi0, K_0_Mass0, K_0_Width0) );
     
   } 
  

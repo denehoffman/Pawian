@@ -37,7 +37,7 @@ public:
   /** Destructor */
   virtual ~AbsPsi2STo2K2PiGamLh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const =0;
+  virtual AbsPsi2STo2K2PiGamLh* clone_() const=0;
 
 
   // Getters:
@@ -55,6 +55,7 @@ public:
   virtual void print(std::ostream& os) const;
   virtual void printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal) const;
   virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
+
 
 protected:
 
@@ -90,7 +91,7 @@ protected:
 
   virtual  complex<double> chiToK1ToK0piAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1ToK0Pi, double K1Mass, double K1Width, double K0Mass, double K0Width);
 
-  virtual  complex<double> chiTo2K_0_Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K_0, double K_0_Mass, double K_0_Width);  
+  virtual  complex<double> chiTo2K_0_Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K_0, double K_0_Mass0, double K_0_Width0, double K_0_Mass1, double K_0_Width1);  
 
   virtual complex<double> chiTof980_pif0_kAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTof980_pif1710_k, double f980_piMass, double f980_piWidth, double f0_kMass, double f0_kWidth);
 

@@ -19,6 +19,7 @@
 #include "Examples/Psi2STo2K2PiGam/Hyp3Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp4Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp5Lh.hh"
+#include "Examples/Psi2STo2K2PiGam/Hyp6Lh.hh"
 
 #include "Examples/Psi2STo2K2PiGam/MPsi2STo2K2PiGamFcn.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
@@ -140,8 +141,11 @@ int main(int __argc,char *__argv[]){
    Psi2STo2K2PiGamData::fitParamVal theStartparams=theParamStreamer.getFitParamVal();
    Psi2STo2K2PiGamData::fitParamVal theErrorparams=theParamStreamer.getFitParamErr();
 
-   std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/chic0_data_pwasample.dat";
-   std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/chic0_signalmc_pwasample.dat"; 
+//    std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/chic0_data_pwasample.dat";
+//    std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/chic0_signalmc_pwasample.dat"; 
+
+   std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_data_pwasample.dat";
+   std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_signalmc_pwasample.dat"; 
    
    Info << "data file: " << datFile << endmsg;
    Info << "mc file: " << mcFile << endmsg;
@@ -190,14 +194,26 @@ int main(int __argc,char *__argv[]){
   bool K0_1430_K0_1430Hyp=false; 
   if (K0_1430_K0_1430HypStr=="yes") K0_1430_K0_1430Hyp=true;
 
-  bool disableHyp3=true; 
 
+  std::string disableHypStr="disableHyp3";
+  bool disableHyp3=false; 
+
+
+
+  std::map<const std::string, bool> hypMap;
+  hypMap["K1_1270Hyp"]=K1_1270Hyp;
+  hypMap["K0_1430_K0_1430Hyp"]=K0_1430_K0_1430Hyp;
+  hypMap["disableHyp3"]=disableHyp3;  
+  hypMap["disableHyp5"]=true;
+  hypMap["disableHyp6"]=false;
+  
   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr));
-  else if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, K1_1270Hyp, K0_1430_K0_1430Hyp));
-  else if (K1400SpinStr=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, K1_1270Hyp, K0_1430_K0_1430Hyp));
-  else if (K1400SpinStr=="hyp3") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp3Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, K1_1270Hyp, K0_1430_K0_1430Hyp, disableHyp3));
-  else if (K1400SpinStr=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, K1_1270Hyp, K0_1430_K0_1430Hyp, disableHyp3));
-  else if (K1400SpinStr=="hyp5") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp5Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, K1_1270Hyp, K0_1430_K0_1430Hyp, disableHyp3));
+  else if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
+  else if (K1400SpinStr=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
+  else if (K1400SpinStr=="hyp3") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp3Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
+  else if (K1400SpinStr=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
+  else if (K1400SpinStr=="hyp5") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp5Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap)); 
+  else if (K1400SpinStr=="hyp6") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp6Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
   else { Alert << "K1400 resonance with spin " << K1400SpinStr << " not supported!!!!" << endmsg;
     exit(1);
   }

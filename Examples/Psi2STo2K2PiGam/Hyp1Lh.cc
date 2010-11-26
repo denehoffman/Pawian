@@ -1,25 +1,57 @@
 #include <getopt.h>
 #include <fstream>
-#include <string>
 
 #include "Examples/Psi2STo2K2PiGam/Hyp1Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<const Psi2STo2K2PiGamStates> theStates, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp) :
+Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<const Psi2STo2K2PiGamStates> theStates, const std::map<const std::string, bool>& hypMap ) :
   AbsPsi2STo2K2PiGamLh(theEvtList,theStates)
-  ,_K1_1270Hyp(K1_1270Hyp)
-  ,_K0_1430_K0_1430Hyp(K0_1430_K0_1430Hyp)
-
+  ,_K1_1270Hyp(true)
+  ,_K0_1430_K0_1430Hyp(true)
 {
+ 
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("K1_1270Hyp");
+
+  if (iter !=hypMap.end()){
+    _K1_1270Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis K1_1270Hyp not set!!!" <<endmsg;
+
+  iter= hypMap.find("K0_1430_K0_1430Hyp");
+  if (iter !=hypMap.end()){
+    _K0_1430_K0_1430Hyp= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K0_1430_K0_1430Hyp not set!!!" <<endmsg;
+
 }
 
-Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp ) :
+Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList(), theLhPtr->getPsi2STo2K2PiGamStates())
-  ,_K1_1270Hyp(K1_1270Hyp)
-  ,_K0_1430_K0_1430Hyp(K0_1430_K0_1430Hyp)
+  ,_K1_1270Hyp(true)
+  ,_K0_1430_K0_1430Hyp(true)
 {
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("K1_1270Hyp");
+
+  if (iter !=hypMap.end()){
+    _K1_1270Hyp= iter->second;
+   _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K1_1270Hyp not set!!!" <<endmsg;
+
+  iter= hypMap.find("K0_1430_K0_1430Hyp");
+  if (iter !=hypMap.end()){
+    _K0_1430_K0_1430Hyp= iter->second;
+   _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K0_1430_K0_1430Hyp not set!!!" <<endmsg;
 }
 
 Hyp1Lh::~Hyp1Lh()
@@ -65,7 +97,7 @@ complex<double> Hyp1Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theP
 
   //Chi_c0 decay to K2*(1430) K2*(1430)
   complex <double> ChiTo2K_1430Amp(0.,0.);
-  if (_K0_1430_K0_1430Hyp) ChiTo2K_1430Amp=chiTo2K_0_Amp(theData, ChiTo2K_0_1430, K_0_1430Mass, K_0_1430Width);
+  if (_K0_1430_K0_1430Hyp) ChiTo2K_1430Amp=chiTo2K_0_Amp(theData, ChiTo2K_0_1430, K_0_1430Mass, K_0_1430Width, K_0_1430Mass, K_0_1430Width);
   else ChiTo2K_1430Amp=chiTo2K_2_Amp(theData, ChiTo2K_2_1430, K_2_1430Mass, K_2_1430Width);
 
 

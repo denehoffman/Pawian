@@ -29,6 +29,7 @@ namespace Psi2STo2K2PiGamData {
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_pif1370_k;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf1370_pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430K_0_1950;
 
     pair<double, double> BwK892;
     pair<double, double> BwK_2_1430;
@@ -41,6 +42,8 @@ namespace Psi2STo2K2PiGamData {
     pair<double, double> BwSigma;
     pair<double, double> Bwf1370_k;
     pair<double, double> BwK_0_2400;
+    pair<double, double> BwK_2_1950;
+    pair<double, double> BwK_0_1950;
 
     double Flatf980;
     double Flatf980gPiPi;

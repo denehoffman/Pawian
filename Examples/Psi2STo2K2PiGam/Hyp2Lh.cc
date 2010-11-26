@@ -7,13 +7,13 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<const Psi2STo2K2PiGamStates> theStates, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp) :
-  Hyp1Lh(theEvtList,theStates, K1_1270Hyp, K0_1430_K0_1430Hyp)  
+Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<const Psi2STo2K2PiGamStates> theStates, const std::map<const std::string, bool>& hypMap ) :
+  Hyp1Lh(theEvtList, theStates, hypMap )
 {
 }
 
-Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, bool K1_1270Hyp, bool K0_1430_K0_1430Hyp ) :
-  Hyp1Lh(theLhPtr->getEventList(), theLhPtr->getPsi2STo2K2PiGamStates(), K1_1270Hyp, K0_1430_K0_1430Hyp)
+Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
+  Hyp1Lh(theLhPtr->getEventList(), theLhPtr->getPsi2STo2K2PiGamStates(), hypMap)
 {
 }
 
