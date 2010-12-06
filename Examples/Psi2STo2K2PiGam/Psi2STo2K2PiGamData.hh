@@ -30,6 +30,10 @@ namespace Psi2STo2K2PiGamData {
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf1370_pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430K_0_1950;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680;
+
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi;
 
     pair<double, double> BwK892;
     pair<double, double> BwK_2_1430;
@@ -44,6 +48,9 @@ namespace Psi2STo2K2PiGamData {
     pair<double, double> BwK_0_2400;
     pair<double, double> BwK_2_1950;
     pair<double, double> BwK_0_1950;
+    pair<double, double> BwK_1_1680;
+    pair<double, double> BwK_0_1460;
+
 
     double Flatf980;
     double Flatf980gPiPi;
@@ -73,6 +80,12 @@ namespace Psi2STo2K2PiGamData {
     Vector4<float> KpPi1_HeliKpPi0Pi0_4V;
     Vector4<float> KmPi0_HeliKmPi0Pi0_4V;    
     Vector4<float> KmPi1_HeliKmPi0Pi0_4V;
+
+    Vector4<float> PiPi_HeliKpPi0Pi0_4V;    
+    Vector4<float> PiPi_HeliKmPi0Pi0_4V;
+
+    Vector4<float> Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V;
+    Vector4<float> Pi0_HeliPi0Pi0_ViaKmPi0Pi0_4V;
 
     Vector4<float> Kp_HeliKpPi0_4V;
     Vector4<float> Kp_HeliKpPi1_4V;

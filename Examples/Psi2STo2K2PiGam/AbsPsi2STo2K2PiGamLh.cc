@@ -205,6 +205,19 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValDec(Psi2STo2K2PiGamData::fitParamVal& th
     currentStates=_Psi2STo2K2PiGamStatesPtr->ChiToK0K0States();
     currentMap= &theParamVal.ChiToK_0_1430K_0_1950;
   }
+  else if (key=="K892K_1_1680"){ 
+    currentStates=_Psi2STo2K2PiGamStatesPtr->ChiTo2K892States();
+    currentMap= &theParamVal.ChiToK892K1680;
+  }
+  else if (key=="K_0_1460ToK892Pi"){ 
+    currentStates=_Psi2STo2K2PiGamStatesPtr->ChiToK0K0States();
+    currentMap= &theParamVal.K_0_1460ToK892Pi;
+  }
+  else if (key=="K_0_1460ToK_0_1430Pi"){ 
+    currentStates=_Psi2STo2K2PiGamStatesPtr->ChiToK0K0States();
+    currentMap= &theParamVal.K_0_1460ToK_0_1430Pi;
+  }
+
   else { Alert << "Key: " << key << " not supported for setting up the fit amplitude parameters!!!" << endmsg;
     exit(1);
   }
@@ -268,6 +281,12 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValMass(Psi2STo2K2PiGamData::fitParamVal& t
   }
   else if (key=="K_0_1950"){
     theParamVal.BwK_0_1950=thePair;
+  }
+  else if (key=="K_1_1680"){
+    theParamVal.BwK_1_1680=thePair;
+  }
+  else if (key=="K_0_1460"){
+    theParamVal.BwK_0_1460=thePair;
   }
   else{
     Alert << "Key: " << key << " not supported for setting up the fit parameter for masses!!!" << endmsg;
@@ -365,7 +384,18 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsDec(MnUserParameters& upar, Psi2STo2K2P
     startParams=startVal.ChiToK_0_1430K_0_1950;
     errParams=errVal.ChiToK_0_1430K_0_1950;
   }
-
+  else if (key=="K892K_1_1680"){
+    startParams=startVal.ChiToK892K1680;
+    errParams=errVal.ChiToK892K1680;
+  }
+  else if (key=="K_0_1460ToK892Pi"){
+    startParams=startVal.K_0_1460ToK892Pi;
+    errParams=errVal.K_0_1460ToK892Pi;
+  }
+  else if (key=="K_0_1460ToK_0_1430Pi"){
+    startParams=startVal.K_0_1460ToK_0_1430Pi;
+    errParams=errVal.K_0_1460ToK_0_1430Pi;
+  }
   else { Alert << "Key: " << key << " not supported for setting up the MINUIT start amplitude parameters!!!" << endmsg;
     exit(1);
   }
@@ -448,6 +478,14 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsMass(MnUserParameters& upar, Psi2STo2K2
     startParams=startVal.BwK_0_1950;
     errParams=errVal.BwK_0_1950;
   }
+  else if (key=="K_1_1680"){
+    startParams=startVal.BwK_1_1680;
+    errParams=errVal.BwK_1_1680;
+  }
+  else if (key=="K_0_1460"){
+    startParams=startVal.BwK_0_1460;
+    errParams=errVal.BwK_0_1460;
+  }
   else { Alert << "Key: " << key << " not supported for setting up the MINUIT start mass parameters!!!" << endmsg;
     exit(1);
   }
@@ -492,7 +530,7 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsFlatteMass(MnUserParameters& upar, Psi2
   std::string f980gPiPiStr="f980gPiPi";
   std::string f980gKKStr="f980gKK";
 
-  double massMin=0.89;
+  double massMin=0.85;
   double massMax=1.2;
   upar.Add(massStr, start_f980M, err_f980M, massMin, massMax);
 
@@ -575,6 +613,83 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiTo2K892Amp(Psi2STo2K2PiGamData::Psi2STo
 
   return result;
 }
+
+
+
+
+
+
+complex<double> AbsPsi2STo2K2PiGamLh::chiToK1K1Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK1K1, double K1Mass0, double K1Width0,  double K1Mass1, double K1Width1){
+
+  complex<double> result(0.,0.);
+  
+  Vector4<double> KpPi0(theData->KpPi0_HeliChic0_4V.E(), theData->KpPi0_HeliChic0_4V.Px(), 
+			 theData->KpPi0_HeliChic0_4V.Py(), theData->KpPi0_HeliChic0_4V.Pz());
+
+  Vector4<double> KpPi1(theData->KpPi1_HeliChic0_4V.E(), theData->KpPi1_HeliChic0_4V.Px(), 
+			theData->KpPi1_HeliChic0_4V.Py(), theData->KpPi1_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPi0(theData->KmPi0_HeliChic0_4V.E(), theData->KmPi0_HeliChic0_4V.Px(), 
+			theData->KmPi0_HeliChic0_4V.Py(), theData->KmPi0_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPi1(theData->KmPi1_HeliChic0_4V.E(), theData->KmPi1_HeliChic0_4V.Px(), 
+			theData->KmPi1_HeliChic0_4V.Py(), theData->KmPi1_HeliChic0_4V.Pz());
+
+  for (Spin lamK1=-1; lamK1<=1; lamK1++){
+
+    complex<double> amp_K10_KpPi0= 
+      sqrt(3)*( conj(theData->DfKst1pToKpPi0[1][lamK1][0])*BreitWignerBlattW(KpPi0, 0.493677, 0.1349766, K1Mass0, K1Width0, 1));
+    complex<double> amp_K11_KpPi0= 
+      sqrt(3)*( conj(theData->DfKst1pToKpPi0[1][lamK1][0])*BreitWignerBlattW(KpPi0, 0.493677, 0.1349766, K1Mass1, K1Width1, 1));    
+
+
+    complex<double> amp_K10_KpPi1= 
+      sqrt(3)*( conj(theData->DfKst1pToKpPi1[1][lamK1][0])*BreitWignerBlattW(KpPi1, 0.493677, 0.1349766, K1Mass0, K1Width0, 1));
+    complex<double> amp_K11_KpPi1= 
+      sqrt(3)*( conj(theData->DfKst1pToKpPi1[1][lamK1][0])*BreitWignerBlattW(KpPi1, 0.493677, 0.1349766, K1Mass1, K1Width1, 1));
+
+
+    complex<double> amp_K10_KmPi0= 
+      sqrt(3)*( conj(theData->DfKst1mToKmPi0[1][lamK1][0])*BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K1Mass0, K1Width0, 1));
+    complex<double> amp_K11_KmPi0= 
+      sqrt(3)*( conj(theData->DfKst1mToKmPi0[1][lamK1][0])*BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K1Mass1, K1Width1, 1));
+
+
+    complex<double> amp_K10_KmPi1= 
+      sqrt(3)*( conj(theData->DfKst1mToKmPi1[1][lamK1][0])*BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K1Mass0, K1Width0, 1));
+    complex<double> amp_K11_KmPi1= 
+      sqrt(3)*( conj(theData->DfKst1mToKmPi1[1][lamK1][0])*BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K1Mass1, K1Width1, 1));
+    
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+    for ( it=ChiToK1K1.begin(); it!=ChiToK1K1.end(); ++it){
+
+      boost::shared_ptr<const JPCLS> ChiToK1K1State=it->first;      
+      double theMag=it->second.first;
+      double thePhi=it->second.second;
+      complex<double> expiphi(cos(thePhi), sin(thePhi));
+
+      complex<double> ChiToK1K1Tmpls=amp_K10_KpPi0*amp_K11_KmPi1;
+      ChiToK1K1Tmpls+=amp_K10_KpPi1*amp_K11_KmPi0;      
+      ChiToK1K1Tmpls+=amp_K10_KmPi0*amp_K11_KpPi1;
+      ChiToK1K1Tmpls+=amp_K10_KmPi1*amp_K11_KpPi0;
+
+      result+=theMag*expiphi*ChiToK1K1Tmpls*sqrt(2*ChiToK1K1State->L+1)
+	 *Clebsch(ChiToK1K1State->L,0,ChiToK1K1State->S, 0, 0, 0)
+	 *Clebsch(1, lamK1, 1, -lamK1, ChiToK1K1State->S, 0);
+
+    }
+  }
+
+  return result;
+}
+
+
+
+
+
+
+
+
 
 complex<double> AbsPsi2STo2K2PiGamLh::chiTo2K_2_Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K_2, double K_2_Mass, double K_2_Width){
 
@@ -701,10 +816,9 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1ToK1piAmp(Psi2STo2K2PiGamData::Psi2
     double thePhi=itK1ToK1dPi->second.second;
     complex<double> expiphi(cos(thePhi), sin(thePhi));
 
-    double K1prodClebsch=sqrt(3.);         
-    double K1decClebsch=sqrt(2*K1ToK1PiState->L+1)*Clebsch(K1ToK1PiState->L,0, K1ToK1PiState->S, 0, K1ToK1PiState->J, 0)
-      *Clebsch(1, 0, 0, 0,K1ToK1PiState->S, 0)  //K1 decay
-      *sqrt(3.);  //K1d decay
+    double K1prodClebsch=sqrt(5.);         
+    double K1decClebsch=sqrt(2.*K1ToK1PiState->L+1)*Clebsch(K1ToK1PiState->L,0, K1ToK1PiState->S, 0, K1ToK1PiState->J, 0)
+      *sqrt(5.);  //K1d decay
 
     complex<double> ampKp1ToKp1dPi0=
       conj(theData->DfK1400pToKstpPi0[1][0][0])*BreitWignerBlattW(KpPiPi, K1dMass, 0.1349766, K1Mass, K1Width, K1ToK1PiState->L)//K1dec
@@ -718,12 +832,27 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1ToK1piAmp(Psi2STo2K2PiGamData::Psi2
       conj(theData->DfK1400mToKstmPi0[1][0][0])*BreitWignerBlattW(KmPiPi, K1dMass, 0.1349766, K1Mass, K1Width, K1ToK1PiState->L) //K1dec
       *conj(theData->DfKst1mToKmPi1ViaKmPiPi[1][0][0])*BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K1dMass, K1dWidth, 1); //K1ddec
     
-    complex<double> ampKm1ToKp1dPi1=
+    complex<double> ampKm1ToKm1dPi1=
       conj(theData->DfK1400mToKstmPi1[1][0][0])*BreitWignerBlattW(KmPiPi, K1dMass, 0.1349766, K1Mass, K1Width, K1ToK1PiState->L) //K1dec
       *conj(theData->DfKst1mToKmPi0ViaKmPiPi[1][0][0])*BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K1dMass, K1dWidth, 1);
 
+//     complex<double> ampKp1ToKp1dPi0=
+//       conj(theData->DfK1400pToKstpPi0[1][0][0])*BreitWigner(KpPiPi, K1Mass, K1Width)//K1dec
+//       *conj(theData->DfKst1pToKpPi1ViaKpPiPi[1][0][0])*BreitWignerBlattW(KpPi1, 0.493677, 0.1349766, K1dMass, K1dWidth, 1); //K1ddec
 
-    resultTmpLoop+=theMag*expiphi*K1prodClebsch*K1decClebsch*(ampKp1ToKp1dPi0+ampKp1ToKp1dPi1+ampKm1ToKm1dPi0+ampKm1ToKp1dPi1);
+//     complex<double> ampKp1ToKp1dPi1=
+//       conj(theData->DfK1400pToKstpPi1[1][0][0])*BreitWigner(KpPiPi, K1Mass, K1Width) //K1dec
+//       *conj(theData->DfKst1pToKpPi0ViaKpPiPi[1][0][0])*BreitWignerBlattW(KpPi0, 0.493677, 0.1349766, K1dMass, K1dWidth, 1);
+    
+//     complex<double> ampKm1ToKm1dPi0=
+//       conj(theData->DfK1400mToKstmPi0[1][0][0])*BreitWigner(KmPiPi, K1Mass, K1Width) //K1dec
+//       *conj(theData->DfKst1mToKmPi1ViaKmPiPi[1][0][0])*BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K1dMass, K1dWidth, 1); //K1ddec
+    
+//     complex<double> ampKm1ToKm1dPi1=
+//       conj(theData->DfK1400mToKstmPi1[1][0][0])*BreitWigner(KmPiPi, K1Mass, K1Width) //K1dec
+//       *conj(theData->DfKst1mToKmPi0ViaKmPiPi[1][0][0])*BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K1dMass, K1dWidth, 1);
+
+    resultTmpLoop+=theMag*expiphi*K1prodClebsch*K1decClebsch*(ampKp1ToKp1dPi0+ampKp1ToKp1dPi1+ampKm1ToKm1dPi0+ampKm1ToKm1dPi1);
   }
   result=resultTmpLoop;
   return result;
@@ -784,6 +913,108 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1ToK0piAmp(Psi2STo2K2PiGamData::Psi2
   return result;
 }
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiToK0KT0KpipiKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K0ToK0Pi, double K0pMass, double K0pWidth, double K0dMass, double K0dWidth){
+  Vector4<double> KpPiPi(theData->KpPiPi_HeliChic0_4V.E(), theData->KpPiPi_HeliChic0_4V.Px(), 
+			 theData->KpPiPi_HeliChic0_4V.Py(), theData->KpPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPiPi(theData->KmPiPi_HeliChic0_4V.E(), theData->KmPiPi_HeliChic0_4V.Px(), 
+			 theData->KmPiPi_HeliChic0_4V.Py(), theData->KmPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KpPi0(theData->KpPi0_HeliKpPi0Pi0_4V.E(), theData->KpPi0_HeliKpPi0Pi0_4V.Px(), 
+			 theData->KpPi0_HeliKpPi0Pi0_4V.Py(), theData->KpPi0_HeliKpPi0Pi0_4V.Pz());
+
+  Vector4<double> KpPi1(theData->KpPi1_HeliKpPi0Pi0_4V.E(), theData->KpPi1_HeliKpPi0Pi0_4V.Px(), 
+			theData->KpPi1_HeliKpPi0Pi0_4V.Py(), theData->KpPi1_HeliKpPi0Pi0_4V.Pz());
+
+  Vector4<double> KmPi0(theData->KmPi0_HeliKmPi0Pi0_4V.E(), theData->KmPi0_HeliKmPi0Pi0_4V.Px(), 
+			theData->KmPi0_HeliKmPi0Pi0_4V.Py(), theData->KmPi0_HeliKmPi0Pi0_4V.Pz());
+
+  Vector4<double> KmPi1(theData->KmPi1_HeliKmPi0Pi0_4V.E(), theData->KmPi1_HeliKmPi0Pi0_4V.Px(), 
+			theData->KmPi1_HeliKmPi0Pi0_4V.Py(), theData->KmPi1_HeliKmPi0Pi0_4V.Pz());
+
+
+  complex<double> result(0.,0.);
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=K0ToK0Pi.begin(); it!=K0ToK0Pi.end(); ++it){
+    
+    boost::shared_ptr<const JPCLS> K0ToK0PiState=it->first;
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+
+    double K1prodClebsch=sqrt(3.);         
+    double K1decClebsch=sqrt(3.);  //K1d decay   
+
+    complex<double> ampKpToKp0Pi0=BreitWigner(KpPiPi, K0pMass, K0pWidth)//K0prod
+      *BreitWigner(KpPi1, K0dMass, K0dWidth); 
+
+    complex<double> ampKpToKp1dPi1=BreitWigner(KpPiPi, K0pMass, K0pWidth) //K0prod
+      *BreitWigner(KpPi0, K0dMass, K0dWidth);
+
+    complex<double> ampKmToKm0Pi0=BreitWigner(KmPiPi, K0pMass, K0pWidth)//K0prod
+      *BreitWigner(KmPi1, K0dMass, K0dWidth);     
+
+    complex<double> ampKmToKm1Pi1=BreitWigner(KmPiPi, K0pMass, K0pWidth)//K0prod
+      *BreitWigner(KmPi0, K0dMass, K0dWidth);
+
+    result+=theMag*expiphi*K1prodClebsch*K1decClebsch*(ampKpToKp0Pi0+ampKpToKp1dPi1+ampKmToKm0Pi0+ampKmToKm1Pi1);
+  }
+
+  return result;
+}
+
+complex<double> AbsPsi2STo2K2PiGamLh::chiToK0KT0K1piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K0ToK0Pi, double K0pMass, double K0pWidth, double K1dMass, double K1dWidth){
+  Vector4<double> KpPiPi(theData->KpPiPi_HeliChic0_4V.E(), theData->KpPiPi_HeliChic0_4V.Px(), 
+			 theData->KpPiPi_HeliChic0_4V.Py(), theData->KpPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPiPi(theData->KmPiPi_HeliChic0_4V.E(), theData->KmPiPi_HeliChic0_4V.Px(), 
+			 theData->KmPiPi_HeliChic0_4V.Py(), theData->KmPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KpPi0(theData->KpPi0_HeliKpPi0Pi0_4V.E(), theData->KpPi0_HeliKpPi0Pi0_4V.Px(), 
+			 theData->KpPi0_HeliKpPi0Pi0_4V.Py(), theData->KpPi0_HeliKpPi0Pi0_4V.Pz());
+
+  Vector4<double> KpPi1(theData->KpPi1_HeliKpPi0Pi0_4V.E(), theData->KpPi1_HeliKpPi0Pi0_4V.Px(), 
+			theData->KpPi1_HeliKpPi0Pi0_4V.Py(), theData->KpPi1_HeliKpPi0Pi0_4V.Pz());
+
+  Vector4<double> KmPi0(theData->KmPi0_HeliKmPi0Pi0_4V.E(), theData->KmPi0_HeliKmPi0Pi0_4V.Px(), 
+			theData->KmPi0_HeliKmPi0Pi0_4V.Py(), theData->KmPi0_HeliKmPi0Pi0_4V.Pz());
+
+  Vector4<double> KmPi1(theData->KmPi1_HeliKmPi0Pi0_4V.E(), theData->KmPi1_HeliKmPi0Pi0_4V.Px(), 
+			theData->KmPi1_HeliKmPi0Pi0_4V.Py(), theData->KmPi1_HeliKmPi0Pi0_4V.Pz());
+
+
+  complex<double> result(0.,0.);
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=K0ToK0Pi.begin(); it!=K0ToK0Pi.end(); ++it){
+    
+    boost::shared_ptr<const JPCLS> K0ToK0PiState=it->first;
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+
+    double K0proddecClebsch=2.*sqrt(3.);         
+    double K1decClebsch=sqrt(5.);  //K1d decay   
+
+    complex<double> ampKpToK1pPi0=BreitWigner(KpPiPi, K0pMass, K0pWidth)//K0prod
+      *conj(theData->DfKst1pToKpPi1ViaKpPiPi[1][0][0])*BreitWignerBlattW(KpPi1, 0.493677, 0.1349766, K1dMass, K1dWidth, 1); 
+
+
+    complex<double> ampKpToK1pPi1=BreitWigner(KpPiPi, K0pMass, K0pWidth)//K0prod
+      *conj(theData->DfKst1pToKpPi0ViaKpPiPi[1][0][0])*BreitWignerBlattW(KpPi0, 0.493677, 0.1349766, K1dMass, K1dWidth, 1);
+
+
+    complex<double> ampKmToK1mPi0=BreitWigner(KmPiPi, K0pMass, K0pWidth)//K0prod
+      *conj(theData->DfKst1mToKmPi1ViaKmPiPi[1][0][0])*BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K1dMass, K1dWidth, 1);
+
+    complex<double> ampKmToK1mPi1=BreitWigner(KmPiPi, K0pMass, K0pWidth)//K0prod
+      *conj(theData->DfKst1mToKmPi0ViaKmPiPi[1][0][0])*BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K1dMass, K1dWidth, 1);
+
+
+    result+=theMag*expiphi*K0proddecClebsch*K1decClebsch*(ampKpToK1pPi0+ampKpToK1pPi1+ampKmToK1mPi0+ampKmToK1mPi1);
+  }
+
+  return result;
+}
 
 
 

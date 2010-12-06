@@ -123,11 +123,34 @@ void Stream2K2PiGamFitParms::fillParamMap(){
   fillParamMapAmps(JPCLSChiToK0K0States, theSuffix, _paramErr.ChiToK_0_2400ToKf980);
 
 
+  theSuffix="K892K_1_1680Val";
+  fillParamMapAmps(JPCLSChiTo2K892States, theSuffix, _paramVal.ChiToK892K1680);
+
+  theSuffix="K892K_1_1680Err";
+  fillParamMapAmps(JPCLSChiTo2K892States, theSuffix, _paramErr.ChiToK892K1680);
+
+
   theSuffix="sigmaf1710Val";
   fillParamMapAmps(JPCLSChiTof0f0States, theSuffix, _paramVal.ChiToSigmaf1710);
 
   theSuffix="sigmaf1710Err";
   fillParamMapAmps(JPCLSChiTof0f0States, theSuffix, _paramErr.ChiToSigmaf1710);
+
+
+  theSuffix="K_0_1460ToK892PiVal";
+  fillParamMapAmps(JPCLSChiToK0K0States, theSuffix, _paramVal.K_0_1460ToK892Pi);
+
+  theSuffix="K_0_1460ToK892PiErr";
+  fillParamMapAmps(JPCLSChiToK0K0States, theSuffix, _paramErr.K_0_1460ToK892Pi);
+
+
+
+  theSuffix="K_0_1460ToK_0_1430PiVal";
+  fillParamMapAmps(JPCLSChiToK0K0States, theSuffix, _paramVal.K_0_1460ToK_0_1430Pi);
+
+  theSuffix="K_0_1460ToK_0_1430PiErr";
+  fillParamMapAmps(JPCLSChiToK0K0States, theSuffix, _paramErr.K_0_1460ToK_0_1430Pi);
+
 
   std::string theKey("K892massVal");
   fillParamMapMass(theKey, _paramVal.BwK892);
@@ -204,6 +227,17 @@ void Stream2K2PiGamFitParms::fillParamMap(){
   fillParamMapMass(theKey, _paramVal.BwK_0_1950);
   theKey="K_0_1950Err";
   fillParamMapMass(theKey, _paramErr.BwK_0_1950);
+
+  theKey="K_1_1680Val";
+  fillParamMapMass(theKey, _paramVal.BwK_1_1680);
+  theKey="K_1_1680Err";
+  fillParamMapMass(theKey, _paramErr.BwK_1_1680);
+
+
+  theKey="K_0_1460Val";
+  fillParamMapMass(theKey, _paramVal.BwK_0_1460);
+  theKey="K_0_1460Err";
+  fillParamMapMass(theKey, _paramErr.BwK_0_1460);
 
 
   theKey="PhaseSpaceVal";

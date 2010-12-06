@@ -20,6 +20,8 @@
 #include "Examples/Psi2STo2K2PiGam/Hyp4Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp5Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp6Lh.hh"
+#include "Examples/Psi2STo2K2PiGam/Hyp7Lh.hh"
+#include "Examples/Psi2STo2K2PiGam/Hyp8Lh.hh"
 
 #include "Examples/Psi2STo2K2PiGam/MPsi2STo2K2PiGamFcn.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
@@ -198,9 +200,10 @@ int main(int __argc,char *__argv[]){
 
   std::map<const std::string, bool> hypMap;
   hypMap["K1_1270Hyp"]=K1_1270Hyp;
+  hypMap["K1_1400Hyp"]=true;
   hypMap["K0_1430_K0_1430Hyp"]=K0_1430_K0_1430Hyp;
   hypMap["disableHyp3"]=false;  
-  hypMap["disableHyp5"]=true;
+  hypMap["disableHyp5"]=false;
   hypMap["disableHyp6"]=false;
   
   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr));
@@ -210,6 +213,8 @@ int main(int __argc,char *__argv[]){
   else if (K1400SpinStr=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
   else if (K1400SpinStr=="hyp5") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp5Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap)); 
   else if (K1400SpinStr=="hyp6") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp6Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
+  else if (K1400SpinStr=="hyp7") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp7Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap))
+;  else if (K1400SpinStr=="hyp8") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp8Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
   else { Alert << "K1400 resonance with spin " << K1400SpinStr << " not supported!!!!" << endmsg;
     exit(1);
   }

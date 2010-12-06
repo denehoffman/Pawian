@@ -379,6 +379,7 @@ private:
 
 		  if (it->IsFixed()){
 		    _fixedParams[tmpCounter]=it->Value();
+                    tmpCounter++;
 		    continue;
 		  }
 
