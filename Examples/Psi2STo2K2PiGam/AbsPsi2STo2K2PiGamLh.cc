@@ -209,6 +209,10 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValDec(Psi2STo2K2PiGamData::fitParamVal& th
     currentStates=_Psi2STo2K2PiGamStatesPtr->ChiTo2K892States();
     currentMap= &theParamVal.ChiToK892K1680;
   }
+  else if (key=="K892K_1_2300"){ 
+    currentStates=_Psi2STo2K2PiGamStatesPtr->ChiTo2K892States();
+    currentMap= &theParamVal.ChiToK892K2300;
+  }
   else if (key=="K_0_1460ToK892Pi"){ 
     currentStates=_Psi2STo2K2PiGamStatesPtr->ChiToK0K0States();
     currentMap= &theParamVal.K_0_1460ToK892Pi;
@@ -284,6 +288,9 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValMass(Psi2STo2K2PiGamData::fitParamVal& t
   }
   else if (key=="K_1_1680"){
     theParamVal.BwK_1_1680=thePair;
+  }
+  else if (key=="K_1_2300"){
+    theParamVal.BwK_1_2300=thePair;
   }
   else if (key=="K_0_1460"){
     theParamVal.BwK_0_1460=thePair;
@@ -388,6 +395,10 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsDec(MnUserParameters& upar, Psi2STo2K2P
     startParams=startVal.ChiToK892K1680;
     errParams=errVal.ChiToK892K1680;
   }
+  else if (key=="K892K_1_2300"){
+    startParams=startVal.ChiToK892K2300;
+    errParams=errVal.ChiToK892K2300;
+  }
   else if (key=="K_0_1460ToK892Pi"){
     startParams=startVal.K_0_1460ToK892Pi;
     errParams=errVal.K_0_1460ToK892Pi;
@@ -481,6 +492,10 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsMass(MnUserParameters& upar, Psi2STo2K2
   else if (key=="K_1_1680"){
     startParams=startVal.BwK_1_1680;
     errParams=errVal.BwK_1_1680;
+  }
+  else if (key=="K_1_2300"){
+    startParams=startVal.BwK_1_2300;
+    errParams=errVal.BwK_1_2300;
   }
   else if (key=="K_0_1460"){
     startParams=startVal.BwK_0_1460;

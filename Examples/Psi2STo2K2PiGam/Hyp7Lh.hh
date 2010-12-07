@@ -50,6 +50,8 @@ public:
 
 protected:
 
+  bool _K1_1680Hyp;
+  bool _K1_2300Hyp;
 
   virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

@@ -69,11 +69,9 @@ int main(int __argc,char *__argv[]){
 
   
   std::string msgModeStr="default";
-  std::string K1400SpinStr="spin1";
   std::string paramFilePathStr="default";
   std::string qaModeStr="no";
-  std::string K1_1270HypStr="yes";
-  std::string K0_1430_K0_1430HypStr="no";
+  std::string K1400SpinStr="spin1";
 
   // decode arguments
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -84,29 +82,19 @@ int main(int __argc,char *__argv[]){
       msgModeStr = __argv[optind];
       found=true;
     }
-    if (sw=="-K1400"){
-      optind++;
-      K1400SpinStr = __argv[optind];
-      found=true;
-    }
     if (sw=="-paramFile"){
       optind++;
       paramFilePathStr = __argv[optind];
       found=true;
     }
+    if (sw=="-K1400"){
+      optind++;
+      K1400SpinStr = __argv[optind];
+      found=true;
+    }
     if (sw=="-qaMode"){
       optind++;
       qaModeStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-K1_1270Hyp"){
-      optind++;
-      K1_1270HypStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-K0_1430_K0_1430Hyp"){
-      optind++;
-      K0_1430_K0_1430HypStr = __argv[optind];
       found=true;
     }
     if (!found){
@@ -190,22 +178,17 @@ int main(int __argc,char *__argv[]){
 
   boost::shared_ptr<AbsPsi2STo2K2PiGamLh> thePsi2STo2K2PiGamLhPtr;
 
-  bool K1_1270Hyp=false; 
-  if (K1_1270HypStr=="yes") K1_1270Hyp=true;
-
-  bool K0_1430_K0_1430Hyp=false; 
-  if (K0_1430_K0_1430HypStr=="yes") K0_1430_K0_1430Hyp=true;
-
-
 
   std::map<const std::string, bool> hypMap;
-  hypMap["K1_1270Hyp"]=K1_1270Hyp;
-  hypMap["K1_1400Hyp"]=true;
-  hypMap["K0_1430_K0_1430Hyp"]=K0_1430_K0_1430Hyp;
+  hypMap["K1_1270Hyp"]=true;
+  hypMap["K1_1400Hyp"]=false;
+  hypMap["K0_1430_K0_1430Hyp"]=true;
   hypMap["disableHyp3"]=false;  
   hypMap["disableHyp5"]=false;
   hypMap["disableHyp6"]=false;
-  
+  hypMap["K1_1680Hyp"]=true;
+  hypMap["K1_2300Hyp"]=true; 
+
   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr));
   else if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
   else if (K1400SpinStr=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
