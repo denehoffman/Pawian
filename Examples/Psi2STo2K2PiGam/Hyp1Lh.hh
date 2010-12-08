@@ -55,6 +55,8 @@ protected:
   bool _K1_1270Hyp;
   bool _K1_1400Hyp;
   bool _K0_1430_K0_1430Hyp;
+  bool _K2_1430_K2_1430Hyp;
+  bool _K0_1430_K2_1430Hyp;
   std::map<const std::string, bool> _hypMap;
 
   virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);

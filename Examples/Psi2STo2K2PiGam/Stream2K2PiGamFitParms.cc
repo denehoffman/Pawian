@@ -22,6 +22,7 @@ void Stream2K2PiGamFitParms::fillParamMap(){
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K892States=_states->ChiTo2K892States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_2_1430States=_states->ChiTo2K_2_1430States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_0_1430States=_states->ChiTo2K_0_States();
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiToK_0_1430_K_2_1430States=_states->ChiToK0K2_States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSK1400ToKst1PiStates=_states->K1400ToKst1PiStates();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTof0f0States=_states->ChiTof0f0States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiToK0K0States=_states->ChiToK0K0States();
@@ -49,6 +50,12 @@ void Stream2K2PiGamFitParms::fillParamMap(){
 
   theSuffix="K_2_1430K_2_1430Err";
   fillParamMapAmps(JPCLSChiTo2K_2_1430States, theSuffix, _paramErr.ChiTo2K_2_1430);
+
+  theSuffix="K_0_1430K_2_1430Val";
+  fillParamMapAmps(JPCLSChiToK_0_1430_K_2_1430States, theSuffix, _paramVal.ChiToK_0_1430_K_2_1430);
+
+  theSuffix="K_0_1430K_2_1430Err";
+  fillParamMapAmps(JPCLSChiToK_0_1430_K_2_1430States, theSuffix, _paramErr.ChiToK_0_1430_K_2_1430);
 
   theSuffix="K_1_1400KVal";
   fillParamMapAmps(JPCLSK1400ToKst1PiStates, theSuffix, _paramVal.K1400ToK892Pi);

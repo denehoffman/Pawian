@@ -11,6 +11,8 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost
   ,_K1_1270Hyp(true)
   ,_K1_1400Hyp(false)
   ,_K0_1430_K0_1430Hyp(true)
+  ,_K2_1430_K2_1430Hyp(false)
+  ,_K0_1430_K2_1430Hyp(false)
 {
  
   std::map<const std::string, bool>::const_iterator iter= hypMap.find("K1_1270Hyp");
@@ -34,9 +36,25 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost
   if (iter !=hypMap.end()){
     _K0_1430_K0_1430Hyp= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
+    Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K0_1430Hyp <<endmsg;
   }
   else Alert << "hypothesis K0_1430_K0_1430Hyp not set!!!" <<endmsg;
+
+  iter= hypMap.find("K2_1430_K2_1430Hyp");
+  if (iter !=hypMap.end()){
+    _K2_1430_K2_1430Hyp= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K2_1430_K2_1430Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K2_1430_K2_1430Hyp not set!!!" <<endmsg;
+
+  iter= hypMap.find("K0_1430_K2_1430Hyp");
+  if (iter !=hypMap.end()){
+    _K0_1430_K2_1430Hyp= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K2_1430Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K0_1430_K2_1430Hyp not set!!!" <<endmsg;
 
 }
 
@@ -45,6 +63,8 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K1_1270Hyp(true)
   ,_K1_1400Hyp(false)
   ,_K0_1430_K0_1430Hyp(true)
+  ,_K2_1430_K2_1430Hyp(false)
+  ,_K0_1430_K2_1430Hyp(false)
 {
   std::map<const std::string, bool>::const_iterator iter= hypMap.find("K1_1270Hyp");
 
@@ -70,6 +90,22 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
     Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
   }
   else Alert << "hypothesis K0_1430_K0_1430Hyp not set!!!" <<endmsg;
+
+  iter= hypMap.find("K2_1430_K2_1430Hyp");
+  if (iter !=hypMap.end()){
+    _K2_1430_K2_1430Hyp= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K2_1430_K2_1430Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K0_1430_K2_1430Hyp not set!!!" <<endmsg;
+
+  iter= hypMap.find("K0_1430_K2_1430Hyp");
+  if (iter !=hypMap.end()){
+    _K0_1430_K2_1430Hyp= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K2_1430Hyp <<endmsg;
+  }
+  else Alert << "hypothesis K0_1430_K2_1430Hyp not set!!!" <<endmsg;
 }
 
 Hyp1Lh::~Hyp1Lh()
@@ -81,6 +117,8 @@ complex<double> Hyp1Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theP
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K892=theParamVal.ChiTo2K892;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_2_1430=theParamVal.ChiTo2K_2_1430;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_0_1430=theParamVal.ChiTo2K_0_1430;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K_2_1430=theParamVal.ChiToK_0_1430_K_2_1430;
+
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400ToK892pi=theParamVal.ChiToK1400ToK892pi;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K1400ToK892Pi=theParamVal.K1400ToK892Pi;
 
@@ -115,9 +153,9 @@ complex<double> Hyp1Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theP
 
   //Chi_c0 decay to K2*(1430) K2*(1430)
   complex <double> ChiTo2K_1430Amp(0.,0.);
-  if (_K0_1430_K0_1430Hyp) ChiTo2K_1430Amp=chiTo2K_0_Amp(theData, ChiTo2K_0_1430, K_0_1430Mass, K_0_1430Width, K_0_1430Mass, K_0_1430Width);
-  else ChiTo2K_1430Amp=chiTo2K_2_Amp(theData, ChiTo2K_2_1430, K_2_1430Mass, K_2_1430Width);
-
+  if (_K0_1430_K0_1430Hyp) ChiTo2K_1430Amp+=chiTo2K_0_Amp(theData, ChiTo2K_0_1430, K_0_1430Mass, K_0_1430Width, K_0_1430Mass, K_0_1430Width);
+  if (_K2_1430_K2_1430Hyp) ChiTo2K_1430Amp+=chiTo2K_2_Amp(theData, ChiTo2K_2_1430, K_2_1430Mass, K_2_1430Width);
+  if (_K0_1430_K2_1430Hyp) ChiTo2K_1430Amp+=chiToK0K2Amp(theData, ChiToK_0_1430_K_2_1430, K_0_1430Mass, K_0_1430Width, K_2_1430Mass, K_2_1430Width);
 
   //Chi_c0 decay to K1*(1400) -> K1*(892) pi0 -> (K pi0) pi0
   complex<double> ChiToK_1_1400Amp(0.,0.);
@@ -156,8 +194,15 @@ void Hyp1Lh::setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitPara
   setMnUsrParamsDec(upar, startVal, errVal,"ChiGam");
   setMnUsrParamsDec(upar, startVal, errVal,"K892K892");
 
-  if (_K0_1430_K0_1430Hyp) setMnUsrParamsDec(upar, startVal, errVal,"K_0_1430K_0_1430");
-  else setMnUsrParamsDec(upar, startVal, errVal,"K_2_1430K_2_1430");
+  if (_K0_1430_K0_1430Hyp){
+    setMnUsrParamsDec(upar, startVal, errVal,"K_0_1430K_0_1430");
+  }
+  if (_K2_1430_K2_1430Hyp){
+    setMnUsrParamsDec(upar, startVal, errVal,"K_2_1430K_2_1430");
+  }
+  if (_K0_1430_K2_1430Hyp){
+    setMnUsrParamsDec(upar, startVal, errVal,"K_0_1430K_2_1430");
+  }
 
   if (_K1_1270Hyp){ 
     setMnUsrParamsDec(upar, startVal, errVal,"K_1_1270ToK892Pi");
@@ -175,14 +220,18 @@ void Hyp1Lh::setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitPara
   //K*(892) BW
   setMnUsrParamsMass(upar, startVal, errVal, "K892");
 
-  //K2*(1430) BW
-  if (_K0_1430_K0_1430Hyp) setMnUsrParamsMass(upar, startVal, errVal, "K_0_1430"); 
-  else setMnUsrParamsMass(upar, startVal, errVal, "K_2_1430");
+  if (_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp){
+    setMnUsrParamsMass(upar, startVal, errVal, "K_0_1430");
+  }
+
+  if (_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp){
+    setMnUsrParamsMass(upar, startVal, errVal, "K_2_1430");
+  }
 
   //K1(1400) BW
   if (_K1_1270Hyp){ 
     setMnUsrParamsMass(upar, startVal, errVal, "K_1_1270");
-    if (!_K0_1430_K0_1430Hyp) setMnUsrParamsMass(upar, startVal, errVal, "K_0_1430"); 
+    if (!_K0_1430_K0_1430Hyp && !_K0_1430_K2_1430Hyp) setMnUsrParamsMass(upar, startVal, errVal, "K_0_1430"); 
   }
 
   if (_K1_1400Hyp){ 
@@ -239,9 +288,16 @@ int Hyp1Lh::setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const 
   counter=setFitParamValDec(theParamVal, par, counter, "K892K892");
 
   //K2*(1430) K2*(1430)    amplitude params
-  if (_K0_1430_K0_1430Hyp) counter=setFitParamValDec(theParamVal, par, counter, "K_0_1430K_0_1430");
-  else counter=setFitParamValDec(theParamVal, par, counter, "K_2_1430K_2_1430");
+  if (_K0_1430_K0_1430Hyp){
+    counter=setFitParamValDec(theParamVal, par, counter, "K_0_1430K_0_1430");
+  }
+ if (_K2_1430_K2_1430Hyp){  
+   counter=setFitParamValDec(theParamVal, par, counter, "K_2_1430K_2_1430");
+ }
 
+ if (_K0_1430_K2_1430Hyp){  
+   counter=setFitParamValDec(theParamVal, par, counter, "K_0_1430K_2_1430");
+ }
   //K1(1400) K    amplitude params
   if (_K1_1270Hyp){
     counter=setFitParamValDec(theParamVal, par, counter, "K_1_1270ToK892Pi");
@@ -262,14 +318,18 @@ int Hyp1Lh::setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const 
   // K*892 mass 
   counter=setFitParamValMass(theParamVal, par, counter, "K892");
 
-  //K2*(1430) mass
-  if (_K0_1430_K0_1430Hyp)  counter=setFitParamValMass(theParamVal, par, counter, "K_0_1430");
-  else counter=setFitParamValMass(theParamVal, par, counter, "K_2_1430");
+  if (_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp){
+    counter=setFitParamValMass(theParamVal, par, counter, "K_0_1430");
+  }
+
+  if (_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp){  
+    counter=setFitParamValMass(theParamVal, par, counter, "K_2_1430");
+  }
 
   //K1(1400) mass
   if (_K1_1270Hyp){
     counter=setFitParamValMass(theParamVal, par, counter, "K_1_1270");
-    if (!_K0_1430_K0_1430Hyp) counter=setFitParamValMass(theParamVal, par, counter, "K_0_1430");
+    if (!_K0_1430_K0_1430Hyp && !_K0_1430_K2_1430Hyp) counter=setFitParamValMass(theParamVal, par, counter, "K_0_1430");
   }
   if (_K1_1400Hyp){
     counter=setFitParamValMass(theParamVal, par, counter, "K_1_1400");
@@ -297,6 +357,7 @@ void Hyp1Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K892States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K892States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_2_1430States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K_2_1430States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_0_1430States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K_0_States();
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiToK_0_1430_K_2_1430States=_Psi2STo2K2PiGamStatesPtr->ChiToK0K2_States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSK1400ToKst1PiStates=_Psi2STo2K2PiGamStatesPtr->K1400ToKst1PiStates();
 
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSK1270ToK0PiStates=_Psi2STo2K2PiGamStatesPtr->K1ToK0PiStates();
@@ -315,14 +376,26 @@ void Hyp1Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal
       std::pair<double, double> tmpParam=theParamVal.ChiTo2K_0_1430[(*itJPCLS)];
       DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
     }
+
   }
-  else {
+  
+  if (_K2_1430_K2_1430Hyp) {
     for ( itJPCLS=JPCLSChiTo2K_2_1430States.begin(); itJPCLS!=JPCLSChiTo2K_2_1430States.end(); ++itJPCLS){
       DebugMsg<< (*itJPCLS)->name()<< "K_2_1430K_2_1430" << endmsg;
       std::pair<double, double> tmpParam=theParamVal.ChiTo2K_2_1430[(*itJPCLS)];
       DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-    }
+    } 
   }
+
+  if (_K0_1430_K2_1430Hyp) {
+    for ( itJPCLS=JPCLSChiToK_0_1430_K_2_1430States.begin(); itJPCLS!=JPCLSChiToK_0_1430_K_2_1430States.end(); ++itJPCLS){
+      DebugMsg<< (*itJPCLS)->name()<< "K_0_1430K_2_1430" << endmsg;
+      std::pair<double, double> tmpParam=theParamVal.ChiToK_0_1430_K_2_1430[(*itJPCLS)];
+      DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
+    } 
+  }
+
+
   if (_K1_1270Hyp){
     for ( itJPCLS=JPCLSK1400ToKst1PiStates.begin(); itJPCLS!=JPCLSK1400ToKst1PiStates.end(); ++itJPCLS){
       DebugMsg<< (*itJPCLS)->name()<< "K_1_1270ToK892Pi" << endmsg;
@@ -365,23 +438,25 @@ void Hyp1Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal
   DebugMsg<< "K892:" << endmsg;
   std::pair<double, double> tmpParamK892=theParamVal.BwK892;
   DebugMsg <<"\t mass:" << tmpParamK892.first <<"\t width:" << tmpParamK892.second  << endmsg;
-  
-  if (_K0_1430_K0_1430Hyp){
+
+  if (_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp) {
     DebugMsg<< "K_0_1430:" << endmsg;
     std::pair<double, double> tmpParamK_0_1430=theParamVal.BwK_0_1430;
     DebugMsg <<"\t mass:" << tmpParamK_0_1430.first <<"\t width:" << tmpParamK_0_1430.second  << endmsg;
   }
-  else{
+
+  if (_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp) {
     DebugMsg<< "K_2_1430:" << endmsg;
     std::pair<double, double> tmpParamK_2_1430=theParamVal.BwK_2_1430;
     DebugMsg <<"\t mass:" << tmpParamK_2_1430.first <<"\t width:" << tmpParamK_2_1430.second  << endmsg;
   }
 
+  
   if ( _K1_1270Hyp){
     DebugMsg<< "K_1_1270:" << endmsg;
     std::pair<double, double> tmpParamK_1_1270=theParamVal.BwK_1_1270;
     DebugMsg <<"\t mass:" << tmpParamK_1_1270.first <<"\t width:" << tmpParamK_1_1270.second  << endmsg;
-    if(!_K0_1430_K0_1430Hyp){
+    if(!_K0_1430_K0_1430Hyp && !_K0_1430_K2_1430Hyp){
       DebugMsg<< "K_0_1430:" << endmsg;
       std::pair<double, double> tmpParamK_0_1430=theParamVal.BwK_0_1430;
       DebugMsg <<"\t mass:" << tmpParamK_0_1430.first <<"\t width:" << tmpParamK_0_1430.second  << endmsg;
@@ -393,9 +468,7 @@ void Hyp1Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal
     std::pair<double, double> tmpParamK_1_1400=theParamVal.BwK1400;
     DebugMsg <<"\t mass:" << tmpParamK_1_1400.first <<"\t width:" << tmpParamK_1_1400.second  << endmsg;
   }
-//     DebugMsg<< "f980_pi:" << endmsg;
-//     std::pair<double, double> tmpParamf980_pi=theParamVal.Bwf980_pi;
-//     DebugMsg <<"\t mass:" << tmpParamf980_pi.first <<"\t width:" << tmpParamf980_pi.second  << endmsg;
+
 
     DebugMsg<< "f980:" << endmsg;
     double tmpParamf980Mass=theParamVal.Flatf980;
@@ -425,6 +498,7 @@ void Hyp1Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K892States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K892States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_2_1430States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K_2_1430States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_0_1430States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K_0_States();
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiToK_0_1430_K_2_1430States=_Psi2STo2K2PiGamStatesPtr->ChiToK0K2_States();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSK1400ToKst1PiStates=_Psi2STo2K2PiGamStatesPtr->K1400ToKst1PiStates();
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSK1270ToK0PiStates=_Psi2STo2K2PiGamStatesPtr->K1ToK0PiStates();
 
@@ -445,13 +519,23 @@ void Hyp1Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
       os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
     }
   }
-  else {
+
+  if (_K2_1430_K2_1430Hyp) {
     for ( itJPCLS=JPCLSChiTo2K_2_1430States.begin(); itJPCLS!=JPCLSChiTo2K_2_1430States.end(); ++itJPCLS){
       tmpStringDec=(*itJPCLS)->name()+"K_2_1430K_2_1430"+suffix;
       std::pair<double, double> tmpParam=theParamVal.ChiTo2K_2_1430[(*itJPCLS)];
       os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
     }
   }
+
+  if (_K0_1430_K2_1430Hyp) {
+    for ( itJPCLS=JPCLSChiToK_0_1430_K_2_1430States.begin(); itJPCLS!=JPCLSChiToK_0_1430_K_2_1430States.end(); ++itJPCLS){
+      tmpStringDec=(*itJPCLS)->name()+"K_0_1430K_2_1430"+suffix;
+      std::pair<double, double> tmpParam=theParamVal.ChiToK_0_1430_K_2_1430[(*itJPCLS)];
+      os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
+    }
+  }
+
 
   if (_K1_1270Hyp){
 
@@ -499,12 +583,13 @@ void Hyp1Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
   std::pair<double, double> tmpParamRes=theParamVal.BwK892;
   os << tmpStringRes << "\t" << tmpParamRes.first <<"\t" << tmpParamRes.second  << std::endl;
 
-  if (_K0_1430_K0_1430Hyp){
+  if (_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp){
     tmpStringRes="K_0_1430mass"+suffix;
     tmpParamRes=theParamVal.BwK_0_1430;
     os << tmpStringRes << "\t" << tmpParamRes.first <<"\t" << tmpParamRes.second  << std::endl;
   }
-  else{
+  
+  if (_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp){
     tmpStringRes="K_2_1430mass"+suffix;
     tmpParamRes=theParamVal.BwK_2_1430;
     os << tmpStringRes << "\t" << tmpParamRes.first <<"\t" << tmpParamRes.second  << std::endl;
@@ -515,7 +600,7 @@ void Hyp1Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
     tmpParamRes=theParamVal.BwK_1_1270;
     os << tmpStringRes << "\t" << tmpParamRes.first <<"\t" << tmpParamRes.second  << std::endl;
 
-    if (!_K0_1430_K0_1430Hyp){
+    if (!_K0_1430_K0_1430Hyp && !_K0_1430_K2_1430Hyp){
       tmpStringRes="K_0_1430mass"+suffix;
       tmpParamRes=theParamVal.BwK_0_1430;
       os << tmpStringRes << "\t" << tmpParamRes.first <<"\t" << tmpParamRes.second  << std::endl;
