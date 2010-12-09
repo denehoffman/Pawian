@@ -27,6 +27,7 @@ namespace Psi2STo2K2PiGamData {
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf1710_pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980f980;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980f2200;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf980;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf1710;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_pif1370_k;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf1370_pi;
@@ -66,7 +67,7 @@ namespace Psi2STo2K2PiGamData {
   struct Psi2STo2K2PiGamEvtData
   {
     Vector4<float> psi2S_4V;
-    Vector4<float>  chic0_HeliPsi2S_4V;
+    Vector4<float> chic0_HeliPsi2S_4V;
     Vector4<float> KpKm_HeliChic0_4V;
     Vector4<float> KpPi0_HeliChic0_4V;
     Vector4<float> KpPi1_HeliChic0_4V;

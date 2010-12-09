@@ -143,13 +143,17 @@ void Stream2K2PiGamFitParms::fillParamMap(){
   theSuffix="K892K_1_2300Err";
   fillParamMapAmps(JPCLSChiTo2K892States, theSuffix, _paramErr.ChiToK892K2300);
 
+  theSuffix="sigmaf980Val";
+  fillParamMapAmps(JPCLSChiTof0f0States, theSuffix, _paramVal.ChiToSigmaf980);
+
+  theSuffix="sigmaf980Err";
+  fillParamMapAmps(JPCLSChiTof0f0States, theSuffix, _paramErr.ChiToSigmaf980);
 
   theSuffix="sigmaf1710Val";
   fillParamMapAmps(JPCLSChiTof0f0States, theSuffix, _paramVal.ChiToSigmaf1710);
 
   theSuffix="sigmaf1710Err";
   fillParamMapAmps(JPCLSChiTof0f0States, theSuffix, _paramErr.ChiToSigmaf1710);
-
 
   theSuffix="K_0_1460ToK892PiVal";
   fillParamMapAmps(JPCLSChiToK0K0States, theSuffix, _paramVal.K_0_1460ToK892Pi);
