@@ -9,58 +9,79 @@
 
 Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<const Psi2STo2K2PiGamStates> theStates, const std::map<const std::string, bool>& hypMap ) :
   Hyp2Lh(theEvtList,theStates, hypMap)
-  ,_sigmaf1710Hyp(true)
   ,_sigmaf980Hyp(true)
+  ,_sigmaf1710Hyp(true)
+  ,_sigmaf2200Hyp(true)  
   ,_disableHyp3(false)
 {
  
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf1710Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf1710Hyp= iter->second;
-   _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
-  }
-  else Alert << "hypothesis sigmaf1710Hyp3 not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf980Hyp3");
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf980Hyp3");
 
   if (iter !=hypMap.end()){
     _sigmaf980Hyp= iter->second;
+   _hypMap[iter->first]= iter->second;
     Info<< "hypothesis " << iter->first << "\t" << _sigmaf980Hyp <<endmsg;
+  }
+  else Alert << "hypothesis sigmaf980Hyp3 not set!!!" <<endmsg;
+
+ iter= hypMap.find("sigmaf1710Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf1710Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
-  else Alert << "hypothesis sigmaf980Hyp not set!!!" <<endmsg;
+  else Alert << "hypothesis sigmaf1710Hyp not set!!!" <<endmsg;
 
-  if (!_sigmaf980Hyp && !_sigmaf1710Hyp) _disableHyp3=true; 
+ iter= hypMap.find("sigmaf2200Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf2200Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf2200Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
+
+  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _disableHyp3=true; 
 }
 
 Hyp3Lh::Hyp3Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   Hyp2Lh(theLhPtr->getEventList(), theLhPtr->getPsi2STo2K2PiGamStates(), hypMap)
-  ,_sigmaf1710Hyp(true)
   ,_sigmaf980Hyp(true)
+  ,_sigmaf1710Hyp(true)
+  ,_sigmaf2200Hyp(true)
   ,_disableHyp3(false)
 {
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf1710Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf1710Hyp= iter->second;
-   _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
-  }
-  else Alert << "hypothesis sigmaf1710Hyp3 not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf980Hyp3");
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf980Hyp3");
 
   if (iter !=hypMap.end()){
     _sigmaf980Hyp= iter->second;
+   _hypMap[iter->first]= iter->second;
     Info<< "hypothesis " << iter->first << "\t" << _sigmaf980Hyp <<endmsg;
+  }
+  else Alert << "hypothesis sigmaf980Hyp3 not set!!!" <<endmsg;
+
+ iter= hypMap.find("sigmaf1710Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf1710Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
-  else Alert << "hypothesis sigmaf980Hyp not set!!!" <<endmsg;
+  else Alert << "hypothesis sigmaf1710Hyp not set!!!" <<endmsg;
 
-  if (!_sigmaf980Hyp && !_sigmaf1710Hyp) _disableHyp3=true; 
+ iter= hypMap.find("sigmaf2200Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf2200Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf2200Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
+
+  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _disableHyp3=true; 
+
 }
 
 Hyp3Lh::~Hyp3Lh()
@@ -93,6 +114,12 @@ complex<double> Hyp3Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theP
     result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1710, sigmaMass, sigmaWidth,  f1710_kMass, f1710_kWidth);
   }  
 
+  if (_sigmaf2200Hyp){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf2200=theParamVal.ChiToSigmaf2200;
+    double f2200_Mass=theParamVal.Bwf2200.first;
+    double f2200_Width=theParamVal.Bwf2200.second;
+    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf2200, sigmaMass, sigmaWidth,  f2200_Mass, f2200_Width);
+  }  
 
   return result;
 }
@@ -108,6 +135,7 @@ void Hyp3Lh::setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitPara
 
   if(_sigmaf980Hyp) setMnUsrParamsDec(upar, startVal, errVal,"sigmaf980");
   if(_sigmaf1710Hyp) setMnUsrParamsDec(upar, startVal, errVal,"sigmaf1710");
+  if(_sigmaf2200Hyp) setMnUsrParamsDec(upar, startVal, errVal,"sigmaf2200");
 
   setMnUsrParamsMass(upar, startVal, errVal, "sigma");   
 }
@@ -141,6 +169,7 @@ int Hyp3Lh::setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const 
   //sigma f1710    amplitude params
   if(_sigmaf980Hyp) counter=setFitParamValDec(theParamVal, par, counter, "sigmaf980");
   if(_sigmaf1710Hyp) counter=setFitParamValDec(theParamVal, par, counter, "sigmaf1710");
+  if(_sigmaf2200Hyp) counter=setFitParamValDec(theParamVal, par, counter, "sigmaf2200");
   
   counter=setFitParamValMass(theParamVal, par, counter, "sigma");  
   
@@ -171,6 +200,15 @@ void Hyp3Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal
       for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
 	DebugMsg<< (*itJPCLS)->name()<< "sigmaf1710" << endmsg;
 	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf1710[(*itJPCLS)];
+	DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
+	
+      }
+    }
+
+    if(_sigmaf2200Hyp){
+      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
+	DebugMsg<< (*itJPCLS)->name()<< "sigmaf2200" << endmsg;
+	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf2200[(*itJPCLS)];
 	DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
 	
       }
@@ -210,6 +248,15 @@ void Hyp3Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
 	std::string tmpStringDec=(*itJPCLS)->name()+"sigmaf1710"+suffix;
 	
 	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf1710[(*itJPCLS)];
+	os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
+      }
+    }
+
+    if(_sigmaf2200Hyp){    
+      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
+	std::string tmpStringDec=(*itJPCLS)->name()+"sigmaf2200"+suffix;
+	
+	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf2200[(*itJPCLS)];
 	os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
       }
     }

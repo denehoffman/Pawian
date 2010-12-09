@@ -49,8 +49,9 @@ public:
   virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
 
 protected:  
-  bool _sigmaf1710Hyp;
   bool _sigmaf980Hyp;
+  bool _sigmaf1710Hyp;
+  bool _sigmaf2200Hyp;
   bool _disableHyp3;
   virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 private:

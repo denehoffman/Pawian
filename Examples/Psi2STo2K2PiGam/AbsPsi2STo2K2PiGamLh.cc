@@ -197,6 +197,10 @@ int AbsPsi2STo2K2PiGamLh::setFitParamValDec(Psi2STo2K2PiGamData::fitParamVal& th
     currentStates=_Psi2STo2K2PiGamStatesPtr->ChiTof0f0States();
     currentMap= &theParamVal.ChiToSigmaf1710;
   }
+  else if (key=="sigmaf2200"){ 
+    currentStates=_Psi2STo2K2PiGamStatesPtr->ChiTof0f0States();
+    currentMap= &theParamVal.ChiToSigmaf2200;
+  }
   else if (key=="f980_pif1370_k"){ 
     currentStates=_Psi2STo2K2PiGamStatesPtr->ChiTof0f0States();
     currentMap= &theParamVal.ChiTof980_pif1370_k;
@@ -390,6 +394,10 @@ void AbsPsi2STo2K2PiGamLh::setMnUsrParamsDec(MnUserParameters& upar, Psi2STo2K2P
   else if (key=="sigmaf1710"){
     startParams=startVal.ChiToSigmaf1710;
     errParams=errVal.ChiToSigmaf1710;
+  }
+  else if (key=="sigmaf2200"){
+    startParams=startVal.ChiToSigmaf2200;
+    errParams=errVal.ChiToSigmaf2200;
   }
   else if (key=="f980_pif1370_k"){
     startParams=startVal.ChiTof980_pif1370_k;
