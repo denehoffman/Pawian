@@ -71,6 +71,7 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
     cmain2d->cd(i+1);
     histVectData2d[i]->Draw("colz");
     cmain2d->cd(i+1+histVectData2d.size());
+    histVectMc2d[i]->SetMaximum(histVectData2d[i]->GetMaximum());
     histVectMc2d[i]->Draw("colz");
     } 
   
