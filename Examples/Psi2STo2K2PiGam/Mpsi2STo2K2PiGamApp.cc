@@ -192,7 +192,7 @@ int main(int __argc,char *__argv[]){
   hypMap["disableHyp6"]=false;
   hypMap["K1_1680Hyp"]=true;
   hypMap["K1_2300Hyp"]=true; 
-
+  hypMap["KappaHyp7"]=true;
 
   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr));
   else if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));

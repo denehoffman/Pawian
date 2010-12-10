@@ -49,7 +49,7 @@ public:
   virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
 
 protected:
-
+  bool _KappaHyp;
   bool _K1_1680Hyp;
   bool _K1_2300Hyp;
 

@@ -39,7 +39,7 @@ TH1F* mcinvMassKpi;
 
 
 
-void histograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root"){
+void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root"){
 
   using namespace std;
   gROOT->SetStyle("Plain");
@@ -316,8 +316,8 @@ void histograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.r
 
 //    float constraints = 52;
 //    float constraints = 54;
-   float constraints = 58;
-//    float constraints = 62;
+//    float constraints = 58;
+    float constraints = 72;
   float ndf;
   float conflevel = 0;
   int numberofbins = 0;
