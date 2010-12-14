@@ -10,26 +10,6 @@
 
 namespace Psi2SToKpKmPiGamData {
 
-  struct fitParamVal
-  {
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToChiGam;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK890K;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400_0_K;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400_1_K;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400_2_K;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToa0Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToa2Pi;
-    pair<double, double> BwK890;
-    pair<double, double> BwK1400_0;
-    pair<double, double> BwK1400_1;
-    pair<double, double> BwK1400_2;
-    pair<double, double> Bwa980;
-    pair<double, double> Bwa2;
-    double FlatMa980;
-    double FlatgKK;
-    double FlatgEtaPi;
-  };
-  
   struct Psi2SToKpKmPiGamEvtData
   {
     Vector4<float> psi2S_4V;

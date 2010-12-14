@@ -96,7 +96,7 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
     }
 }
 
-Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> thePsi2SToKpKmPiGamLh, Psi2SToKpKmPiGamData::fitParamVal& fitParam) :
+Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> thePsi2SToKpKmPiGamLh, paramKpKmPiGam& fitParam) :
   _theTFile(0),
   _dalitzDataHist(0),
   _dalitzMcHist(0),

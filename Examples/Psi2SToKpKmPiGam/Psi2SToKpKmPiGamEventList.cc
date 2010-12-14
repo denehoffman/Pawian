@@ -31,6 +31,9 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
 //    while ((anEvent = evtList.nextEvent())){
      if ( evtCount%1000 == 0 ) Info << "4vec calculation for event " << evtCount << endmsg;
      Vector4<float> psi2S_4V(*(anEvent->p4(0))+*(anEvent->p4(1))+*(anEvent->p4(2))+*(anEvent->p4(3)));
+     Vector4<float> chic1_4V(*(anEvent->p4(0))+*(anEvent->p4(1))+*(anEvent->p4(2)));     
+
+     if ( evtCount%1000 == 0 ){
      Info << "Psi(2S) 4vec" << "\n"
 	  << " px: " << psi2S_4V.Px() <<"\t"
 	  << " py: " << psi2S_4V.Py() <<"\t"
@@ -38,13 +41,13 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
 	  << " e : " << psi2S_4V.E() << "\t"
 	  << " m : " << psi2S_4V.M() << endmsg;
 
-     Vector4<float> chic1_4V(*(anEvent->p4(0))+*(anEvent->p4(1))+*(anEvent->p4(2)));
      Info << "Chic1 4vec" << "\n"
 	  << " px: " << chic1_4V.Px() <<"\t"
 	  << " py: " << chic1_4V.Py() <<"\t"
 	  << " pz: " << chic1_4V.Pz() <<"\t" 
 	  << " e : " << chic1_4V.E() <<"\t"
  	  << " m : " << chic1_4V.M() << endmsg;
+     }
 
      Vector4<float>  chic1_HeliPsi2S_4V(chic1_4V);
      chic1_HeliPsi2S_4V.Boost(psi2S_4V);   
@@ -65,7 +68,7 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
      Vector4<float> Km_4V(*(anEvent->p4(1)));
      Vector4<float> Km_HeliKmPi_4V=helicityVec(chic1_4V, KmPi_4V, Km_4V);
 
-       if (KpKm_4V.M()>3.12 && KpKm_4V.M()<3.22) continue;
+//        if (KpKm_4V.M()>3.12 && KpKm_4V.M()<3.22) continue;
 
 
 

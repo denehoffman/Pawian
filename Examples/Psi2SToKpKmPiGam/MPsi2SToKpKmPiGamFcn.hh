@@ -32,6 +32,7 @@ public:
 
 private:
   boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> _psi2SToKpKmPiGamLhPtr;
+  unsigned int *_fcnCounter;
 };
   }  // namespace Minuit2
 

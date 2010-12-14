@@ -35,6 +35,7 @@ AbsFitParamStreamer::AbsFitParamStreamer(std::string& filePath)
 	}
     }
 
+
 }
 
 AbsFitParamStreamer::~AbsFitParamStreamer(){;}
@@ -60,9 +61,10 @@ void AbsFitParamStreamer::fillParamMapAmps(std::vector< boost::shared_ptr<const 
     if ( stringPairIter != _stringPairMap.end() ){
     std::pair<double, double> theValPair=_stringPairMap[theKey];  
     toFill[*itJPCLS]=theValPair;
+    DebugMsg << theKey << " filled with values: "  << theValPair.first <<"\t" << theValPair.second  << endmsg;
     }
     else{
-      Warning <<"parameter " << theKey <<" not available in fitVal input file!!!!"  << endmsg;
+      Warning << theKey <<" not available in fitVal input file!!!!"  << endmsg;
       std::pair <double,double> theValPair=make_pair(-10000., -10000.);
       toFill[*itJPCLS]=theValPair;      
     }
@@ -74,12 +76,14 @@ void AbsFitParamStreamer::fillParamMapMass(std::string& name, pair<double, doubl
 
   StringPairMap::const_iterator stringPairIter;
   stringPairIter=_stringPairMap.find(name);
+
     if ( stringPairIter != _stringPairMap.end() ){
     std::pair<double, double> theValPair=_stringPairMap[name];  
     toFill=theValPair;
+    DebugMsg << name << " filled with values: "  << theValPair.first <<"\t" << theValPair.second  << endmsg;
     }
     else{
-      Warning <<"parameter " << name <<" not available in fitVal input file!!!!"  << endmsg;
+      Warning << name <<" not available in fitVal input file!!!!"  << endmsg;
       std::pair <double,double> theValPair=make_pair(-10000., -10000.);
       toFill=theValPair;
     }
@@ -92,9 +96,10 @@ void AbsFitParamStreamer::fillParamFlatte(std::string& name, double& toFill){
   if ( stringPairIter != _stringPairMap.end() ){
     std::pair<double, double> theValPair=_stringPairMap[name];
     toFill=theValPair.first;
+    DebugMsg << name << " filled with value: "  << theValPair.first <<"\t" << endmsg;
   }
   else{
-    Warning <<"parameter " << name <<" not available in fitVal input file!!!!"  << endmsg;
+    Warning << name <<" not available in fitVal input file!!!!"  << endmsg;
     toFill=-10000.;
   }  
 }

@@ -4,13 +4,12 @@
 
 #include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamStates.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsPsi2SToKpKmPiGamLh::AbsPsi2SToKpKmPiGamLh(boost::shared_ptr<const Psi2SToKpKmPiGamEventList> theEvtList, boost::shared_ptr<const Psi2SToKpKmPiGamStates> theStates) :
+AbsPsi2SToKpKmPiGamLh::AbsPsi2SToKpKmPiGamLh(boost::shared_ptr<const Psi2SToKpKmPiGamEventList> theEvtList) :
   _Psi2SToKpKmPiGamEvtListPtr(theEvtList),
-  _Psi2SToKpKmPiGamStatesPtr(theStates)
+  _fitParamsKpKmPiGam()
 {
   _evtDataVec=_Psi2SToKpKmPiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2SToKpKmPiGamEvtListPtr->getMcVecs();
@@ -18,7 +17,7 @@ AbsPsi2SToKpKmPiGamLh::AbsPsi2SToKpKmPiGamLh(boost::shared_ptr<const Psi2SToKpKm
 
 AbsPsi2SToKpKmPiGamLh::AbsPsi2SToKpKmPiGamLh(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> theAbsPsi2SToKpKmPiGamLhPtr):
   _Psi2SToKpKmPiGamEvtListPtr(theAbsPsi2SToKpKmPiGamLhPtr->getEventList()),
-  _Psi2SToKpKmPiGamStatesPtr(theAbsPsi2SToKpKmPiGamLhPtr->getPsi2SToKpKmPiGamStates())
+  _fitParamsKpKmPiGam()
 {
   _evtDataVec=_Psi2SToKpKmPiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2SToKpKmPiGamEvtListPtr->getMcVecs();
@@ -28,7 +27,7 @@ AbsPsi2SToKpKmPiGamLh::~AbsPsi2SToKpKmPiGamLh()
 {
 }
 
-double AbsPsi2SToKpKmPiGamLh::calcLogLh(const Psi2SToKpKmPiGamData::fitParamVal& theParamVal){
+double AbsPsi2SToKpKmPiGamLh::calcLogLh(const paramKpKmPiGam& theParamVal){
  
   double logLH=0.;
   double logLH_data=0.;
@@ -60,8 +59,10 @@ double AbsPsi2SToKpKmPiGamLh::calcLogLh(const Psi2SToKpKmPiGamData::fitParamVal&
 
 }
 
-double AbsPsi2SToKpKmPiGamLh::calcEvtIntensity(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, const Psi2SToKpKmPiGamData::fitParamVal& theParamVal){
+double AbsPsi2SToKpKmPiGamLh::calcEvtIntensity(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, const paramKpKmPiGam& theParamVal){
 
+  double phaseSpaceVal=theParamVal.phaseSpace;
+  
   Spin Psi2SM=1;
   Spin GamM=1;
   complex<double> AmpPsi2SMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
@@ -80,137 +81,9 @@ double AbsPsi2SToKpKmPiGamLh::calcEvtIntensity(Psi2SToKpKmPiGamData::Psi2SToKpKm
 
 //   DebugMsg << "AmpPsi2SMp " << AmpPsi2SMp << endmsg;
   
-  double result=norm(AmpPsi2SMpGp)+norm(AmpPsi2SMpGm)+norm(AmpPsi2SMmGp)+norm(AmpPsi2SMmGm);
+  double result=norm(AmpPsi2SMpGp)+norm(AmpPsi2SMpGm)+norm(AmpPsi2SMmGp)+norm(AmpPsi2SMmGm)+phaseSpaceVal;
 
   return result;  
-}
-
-
-
-int AbsPsi2SToKpKmPiGamLh::setFitParamValDec(Psi2SToKpKmPiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const{
-
-  int resultCount=counter;
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-  std::vector< boost::shared_ptr<const JPCLS> > currentStates;
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >* currentMap=0;
-
-
-  if (key=="ChiGam"){ 
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->PsiToChiGamStates();
-    currentMap= &theParamVal.PsiToChiGam;
-  }
-  else if (key=="K890Pi"){
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->ChiToKst1KStates();
-    currentMap= &theParamVal.ChiToK890K;
-  }
-  else if (key=="K_0_1400Pi"){
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->ChiToKst0KStates();
-    currentMap= &theParamVal.ChiToK1400_0_K;
-  }
-  else if (key=="K_1_1400Pi"){
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->ChiToKst1KStates();
-    currentMap= &theParamVal.ChiToK1400_1_K;
-  }
-  else if (key=="K_2_1400Pi"){
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->ChiToKst2KStates();
-    currentMap= &theParamVal.ChiToK1400_2_K;
-  }
-  else if (key=="a980Pi"){
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->ChiToa0PiStates();
-    currentMap= &theParamVal.ChiToa0Pi;
-  }
-  else if (key=="a2Pi"){
-    currentStates=_Psi2SToKpKmPiGamStatesPtr->ChiToa2PiStates();
-    currentMap= &theParamVal.ChiToa2Pi;
-  }
-  else { Alert << "Key: " << key << " not supported for setting up the fit amplitude parameters!!!" << endmsg;
-    exit(1);
-  }
-
-  for ( itJPCLS=currentStates.begin(); itJPCLS!=currentStates.end(); ++itJPCLS){
-    double mag=par[resultCount];
-    resultCount++;
-    double phi=0.;
-    if (resultCount>1 || key != "ChiGam"){ phi=par[resultCount];
-      resultCount++;
-    }
-    std::pair <double,double> tmpParameter=make_pair(mag,phi);
-    (*currentMap)[(*itJPCLS)]=tmpParameter;
-  }
-
-  return resultCount;
-}
-
-
-int AbsPsi2SToKpKmPiGamLh::setFitParamValMass(Psi2SToKpKmPiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const{
-
-  int resultCount=counter;
-
-  pair<double, double>* currentPair=0;
-
-  if (key=="K890"){
-    currentPair= &theParamVal.BwK890;
-  }
-  else if (key=="K_0_1400"){
-   currentPair= &theParamVal.BwK1400_0;
-  }
-  else if (key=="K_1_1400"){
-    currentPair= &theParamVal.BwK1400_1;
-  }
-  else if (key=="K_2_1400"){
-    currentPair= &theParamVal.BwK1400_2;
-  }
-  else if (key=="a980"){
-    currentPair= &theParamVal.Bwa980;
-  }
-  else if (key=="a2"){
-    currentPair= &theParamVal.Bwa2;
-  }
-  else { Alert << "Key: " << key << " not supported for setting up the fit mass parameters!!!" << endmsg;
-    exit(1);
-  }
-
-  double currentMass=par[resultCount];
-  resultCount++;
-  double currentWidth=par[resultCount];
-  resultCount++;
-
-  std::pair <double,double> thePair=make_pair(currentMass, currentWidth);
-
-  (*currentPair)=thePair;
-
-  return resultCount;
-}
-
-int AbsPsi2SToKpKmPiGamLh::setFitParamFlattea980Mass(Psi2SToKpKmPiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const{
-
-  double* resultFlatMa980=0;
-  double* resultFlatgKK=0;
-  double* resultFlatgEtaPi=0;
-  int resultCount=counter;
-
-  if (key=="Flattea980"){
-    resultFlatMa980= &theParamVal.FlatMa980;
-    resultFlatgKK= &theParamVal.FlatgKK;
-    resultFlatgEtaPi= &theParamVal.FlatgEtaPi;
-  }
-  else { Alert << "Key: " << key << " not supported for setting up the Flatte mass parameters!!!" << endmsg;
-    exit(1);
-  }
-
-  double currentMass=par[resultCount];
-  resultCount++;
-  (*resultFlatMa980)=currentMass;
-
-  double currentFlatgKK=par[resultCount];
-  resultCount++;
-  (*resultFlatgKK)=currentFlatgKK;
-
-  double currentFlatgEtaPi=par[resultCount];
-  resultCount++;
-  (*resultFlatgEtaPi)=currentFlatgEtaPi;
-
-  return resultCount;
 }
 
 
@@ -451,183 +324,9 @@ complex<double> AbsPsi2SToKpKmPiGamLh::K2_1400Amp(Psi2SToKpKmPiGamData::Psi2SToK
   return result;
 }
 
-void AbsPsi2SToKpKmPiGamLh::setMnUsrParamsDec(MnUserParameters& upar, Psi2SToKpKmPiGamData::fitParamVal& startVal,  Psi2SToKpKmPiGamData::fitParamVal& errVal, std::string key){
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > startParams;
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > errParams;
 
-  if (key=="ChiGam"){
-    startParams=startVal.PsiToChiGam;
-    errParams=errVal.PsiToChiGam;
-  }
-  else if (key=="K890Pi"){
-    startParams=startVal.ChiToK890K;
-    errParams=errVal.ChiToK890K;
-  }
-  else if (key=="K_0_1400Pi"){
-    startParams=startVal.ChiToK1400_0_K;
-    errParams=errVal.ChiToK1400_0_K;
-  }
-  else if (key=="K_1_1400Pi"){
-    startParams=startVal.ChiToK1400_1_K;
-    errParams=errVal.ChiToK1400_1_K;
-  }
-  else if (key=="K_2_1400Pi"){
-    startParams=startVal.ChiToK1400_2_K;
-    errParams=errVal.ChiToK1400_2_K;
-  }
-  else if (key=="a980Pi"){
-    startParams=startVal.ChiToa0Pi;
-    errParams=errVal.ChiToa0Pi;
-  }
-  else if (key=="a2Pi"){
-    startParams=startVal.ChiToa2Pi;
-    errParams=errVal.ChiToa2Pi;
-  }
-  else { Alert << "Key: " << key << " not supported for setting up the MINUIT start amplitude parameters!!!" << endmsg;
-    exit(1);
-  }
-
-  int counter=0;
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
-  for (it=startParams.begin(); it!=startParams.end(); ++it){
-    boost::shared_ptr<const JPCLS> theJPCLS=it->first;   
-    std::pair <double,double> startPair=it->second;
-    std::pair <double,double> errPair=errParams.find(theJPCLS)->second;
-
-    //now fill the fitParameterMap
-    std::string magStr=theJPCLS->name()+key+"Mag";
-    std::string phiStr=theJPCLS->name()+key+"phi";
-
-    double magVal=startPair.first;
-    double phiVal=startPair.second;
-    
-    double magErr=errPair.first;
-    double phiErr=errPair.second;
-    
-    double magMin=magVal-magErr;
-    if (magMin<0.) magMin=0.;
-    
-    upar.Add(magStr, magVal, magErr, magMin, magVal+magErr);
-    if (counter>0 || key != "ChiGam") upar.Add(phiStr, phiVal, phiErr, -2*M_PI, 2*M_PI);
-
-    counter++;
-  }
-
-}
-
-void AbsPsi2SToKpKmPiGamLh::setMnUsrParamsMass(MnUserParameters& upar, Psi2SToKpKmPiGamData::fitParamVal& startVal,  Psi2SToKpKmPiGamData::fitParamVal& errVal, std::string key){
-  pair<double, double> startParams;
-  pair<double, double> errParams;
-
-  if (key=="K890"){
-    startParams=startVal.BwK890;
-    errParams=errVal.BwK890;
-  }
-  else if (key=="K_0_1400"){
-    startParams=startVal.BwK1400_0;
-    errParams=errVal.BwK1400_0;
-  }
-  else if (key=="K_1_1400"){
-    startParams=startVal.BwK1400_1;
-    errParams=errVal.BwK1400_1;
-  }
-  else if (key=="K_2_1400"){
-    startParams=startVal.BwK1400_2;
-    errParams=errVal.BwK1400_2;
-  }
-  else if (key=="a980"){
-    startParams=startVal.Bwa980;
-    errParams=errVal.Bwa980;
-  }
-  else if (key=="a2"){
-    startParams=startVal.Bwa2;
-    errParams=errVal.Bwa2;
-  }
-  else { Alert << "Key: " << key << " not supported for setting up the MINUIT start mass parameters!!!" << endmsg;
-    exit(1);
-  }
-
-  //now fill the fitParameterMap
-  std::string massStr=key+"Mag";
-  std::string widthStr=key+"Width";
-  
-  double massVal=startParams.first;
-  double widthVal=startParams.second;
-  
-  double massErr=errParams.first;
-  double widthErr=errParams.second;
-
-  double massMin=massVal-widthVal;
-  if (massMin<0.) massMin=0.;
-
-  double massMax=massVal+widthVal;
-
-  double widthMin=0.; 
-  double widthMax=2*widthVal;
- 
-  upar.Add(massStr, massVal, massErr, massMin, massMax);
-  upar.Add(widthStr, widthVal, widthErr, widthMin, widthMax);
-}
-
-
-void AbsPsi2SToKpKmPiGamLh::setMnUsrParamsFlattea980Mass(MnUserParameters& upar, Psi2SToKpKmPiGamData::fitParamVal& startVal,  Psi2SToKpKmPiGamData::fitParamVal& errVal, std::string key){
-  double start_a980M;
-  double start_FlatgKK;
-  double start_FlatgEtaPi;
-  double err_a980M;
-  double err_FlatgKK;
-  double err_FlatgEtaPi;
-
-  start_a980M=startVal.FlatMa980;
-  start_FlatgKK=startVal.FlatgKK;
-  start_FlatgEtaPi=startVal.FlatgEtaPi;
-
-  err_a980M=errVal.FlatMa980;
-  err_FlatgKK=errVal.FlatgKK;
-  err_FlatgEtaPi=errVal.FlatgEtaPi;
- 
-  //now fill the fitParameterMap
-  std::string massStr="a980Mass";
-  std::string gKKStr="gKK";
-  std::string gEtaPiStr="gEtaPi";
-
-  double massMin=0.97;
-  double massMax=1.2;
-  upar.Add(massStr, start_a980M, err_a980M, massMin, massMax);
-
-  upar.Add(gKKStr, start_FlatgKK, err_FlatgKK, 0., start_FlatgKK+3*err_FlatgKK);
-  upar.Add(gEtaPiStr, start_FlatgEtaPi, err_FlatgEtaPi, 0., start_FlatgEtaPi+3*err_FlatgEtaPi);
-}
-
-
-
-void AbsPsi2SToKpKmPiGamLh::checkFitParamVal(Psi2SToKpKmPiGamData::fitParamVal& fitVal){
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-  std::vector< boost::shared_ptr<const JPCLS> >  JPCLSPsiToChiGam=_Psi2SToKpKmPiGamStatesPtr->PsiToChiGamStates();
-
-  for ( itJPCLS=JPCLSPsiToChiGam.begin(); itJPCLS!=JPCLSPsiToChiGam.end(); ++itJPCLS){
-    std::pair<double, double> tmpParam=fitVal.PsiToChiGam[(*itJPCLS)];
-    if ( tmpParam.first<-100. || tmpParam.second <-100.)
-      {
-	Alert << "Fit values for" << (*itJPCLS)->name() << "out of range" << endmsg;
-      exit(1);
-      }
-  }
-}
 
 void AbsPsi2SToKpKmPiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2SToKpKmPiGamLh::print\n";
 }
 
-void AbsPsi2SToKpKmPiGamLh::printCurrentFitResult(Psi2SToKpKmPiGamData::fitParamVal& theParamVal) const{
-  //  print fit paramss
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-  std::vector< boost::shared_ptr<const JPCLS> > JPCLSPsiToChiGam=_Psi2SToKpKmPiGamStatesPtr->PsiToChiGamStates();
-
-  for ( itJPCLS=JPCLSPsiToChiGam.begin(); itJPCLS!=JPCLSPsiToChiGam.end(); ++itJPCLS){
-    DebugMsg<< (*itJPCLS)->name()<< "ChiGam" << endmsg;
-    std::pair<double, double> tmpParam=theParamVal.PsiToChiGam[(*itJPCLS)];
-    DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-  }  
-
-}

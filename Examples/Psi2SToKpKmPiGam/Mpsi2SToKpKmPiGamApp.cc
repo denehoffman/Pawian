@@ -8,25 +8,19 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamStates.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHist.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamReader.hh"
 
 #include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin0Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin1Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin2Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin12Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin01Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin02Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin012Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/K1400Spin02a2Lh.hh"
+#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamBaseLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/PsiToChic1GamProdLh.hh"
+#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHyp1Lh.hh"
 
 #include "Examples/Psi2SToKpKmPiGam/MPsi2SToKpKmPiGamFcn.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
 
-#include "Examples/Psi2SToKpKmPiGam/StreamFitParams.hh"
+// #include "Examples/Psi2SToKpKmPiGam/StreamFitParams.hh"
+#include "Examples/Psi2SToKpKmPiGam/StreamKpKmPiGamFitParms.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -44,7 +38,6 @@
 #include "Minuit2/MnMinos.h"
 #include "Minuit2/MnStrategy.h"
 
-#include "PwaUtils/pbarpStates.hh"
 
 //#include "Minuit2/MnUserTransformation.h"
 using namespace ROOT::Minuit2;
@@ -69,6 +62,8 @@ int main(int __argc,char *__argv[]){
   std::string msgModeStr="default";
   std::string K1400SpinStr="spin1";
   std::string paramFilePathStr="default";
+  std::string qaModeStr="no";
+  std::string hypStr="base";
 
   // decode arguments
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -87,6 +82,16 @@ int main(int __argc,char *__argv[]){
     if (sw=="-paramFile"){
       optind++;
       paramFilePathStr = __argv[optind];
+      found=true;
+    }
+    if (sw=="-qaMode"){
+      optind++;
+      qaModeStr = __argv[optind];
+      found=true;
+    }
+    if (sw=="-hyp"){
+      optind++;
+      hypStr = __argv[optind];
       found=true;
     }
     if (!found){
@@ -108,9 +113,38 @@ int main(int __argc,char *__argv[]){
     Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " << endmsg;  
   }
 
-  boost::shared_ptr<const Psi2SToKpKmPiGamStates> thePsi2SToKpKmPiGamStatesPtr(new Psi2SToKpKmPiGamStates());
+  std::map<const std::string, bool> hypMap;
+  hypMap["K0_1430HypBase"]=false;
+  hypMap["K1_1410HypBase"]=false;
+  hypMap["K2_1430HypBase"]=false;
 
-  thePsi2SToKpKmPiGamStatesPtr->print(std::cout);
+  if (K1400SpinStr=="spin012"){
+    hypMap["K0_1430HypBase"]=true;
+    hypMap["K1_1410HypBase"]=true;
+    hypMap["K2_1430HypBase"]=true;
+  }
+  else if (K1400SpinStr=="spin01"){
+    hypMap["K0_1430HypBase"]=true;
+    hypMap["K1_1410HypBase"]=true;
+  }
+  else if (K1400SpinStr=="spin02"){
+    hypMap["K0_1430HypBase"]=true;
+    hypMap["K2_1430HypBase"]=true;
+  }
+  else if (K1400SpinStr=="spin12"){
+    hypMap["K1_1410HypBase"]=true;
+    hypMap["K2_1430HypBase"]=true;
+  }
+  else if (K1400SpinStr=="spin0"){
+    hypMap["K0_1430HypBase"]=true;
+  }
+  else if (K1400SpinStr=="spin1"){
+    hypMap["K1_1410HypBase"]=true;
+  }
+  else if (K1400SpinStr=="spin2"){
+    hypMap["K2_1430HypBase"]=true;
+  }
+
 
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
 
@@ -118,9 +152,9 @@ int main(int __argc,char *__argv[]){
 
   if ( paramFilePathStr != "default") paramStreamerPath=paramFilePathStr;  
 
-  StreamFitParams theParamStreamer(paramStreamerPath, thePsi2SToKpKmPiGamStatesPtr);
-  Psi2SToKpKmPiGamData::fitParamVal theStartparams=theParamStreamer.getFitParamVal();
-  Psi2SToKpKmPiGamData::fitParamVal theErrorparams=theParamStreamer.getFitParamErr();
+  StreamKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
+  paramKpKmPiGam theStartparams=theParamStreamer.getFitParamVal();
+  paramKpKmPiGam theErrorparams=theParamStreamer.getFitParamErr();
 
   std::string datFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorDATA_kkpi0.dat";
   std::string mcFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorMC_chic1_kkpi0.dat"; 
@@ -179,26 +213,33 @@ int main(int __argc,char *__argv[]){
 
   boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> thePsi2SToKpKmPiGamLhPtr;
 
-  if (K1400SpinStr=="spin0") thePsi2SToKpKmPiGamLhPtr = boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin0Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));  
-  else if (K1400SpinStr=="spin1") thePsi2SToKpKmPiGamLhPtr = boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin1Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="spin2")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin2Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="spin01")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin01Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="spin02")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin02Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="spin12")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin12Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="spin012")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin012Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="spin02a2") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new K1400Spin02a2Lh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else if (K1400SpinStr=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr, thePsi2SToKpKmPiGamStatesPtr));
-  else { Alert << "K1400 resonance with spin " << K1400SpinStr << " not supported!!!!" << endmsg;
+
+  if (hypStr=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr));
+  else if (hypStr=="base") thePsi2SToKpKmPiGamLhPtr=boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new Psi2SToKpKmPiGamBaseLh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
+  else if (hypStr=="hyp1") thePsi2SToKpKmPiGamLhPtr=boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new Psi2SToKpKmPiGamHyp1Lh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
+  else {
+    Alert << "hypothesis " << hypStr << " not supported!!!" << endmsg;
     exit(1);
   }
 
+  std::cout << "qaModeStr: " << qaModeStr << std::endl;
+
+  if (qaModeStr=="yes"){
+    thePsi2SToKpKmPiGamLhPtr->printCurrentFitResult(theStartparams);
+    double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(theStartparams);
+    Info <<"theLh = "<< theLh << endmsg;
+
+    Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(thePsi2SToKpKmPiGamLhPtr, theStartparams);
+    return 0;
+  }
 
    MPsi2SToKpKmPiGamFcn mPsi2SToKpKmPiGamFcn(thePsi2SToKpKmPiGamLhPtr);
 
    MnUserParameters upar;
 //   thePsi2SToKpKmPiGamLhPtr->setMnUsrParams(upar);
    thePsi2SToKpKmPiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams); 
-   upar.Fix(0);
+   upar.Fix(1);
+   upar.Fix(2);
 // //   for (unsigned int i=0; i<5; i++) upar.Fix(i);
 
 // //   unsigned int uparSize=upar.Params().size();
@@ -219,7 +260,7 @@ int main(int __argc,char *__argv[]){
   MnUserParameters finalUsrParameters=min.UserParameters();
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
  
-  Psi2SToKpKmPiGamData::fitParamVal finalFitParams;
+  paramKpKmPiGam finalFitParams;
   thePsi2SToKpKmPiGamLhPtr->setFitParamVal(finalFitParams, finalParamVec);
 
 
