@@ -14,6 +14,7 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
+#include "Examples/Psi2STo2K2PiGam/FitParams2K2PiGam.hh"
 
 using Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData;
 
@@ -32,7 +33,7 @@ public:
 
   ///Constructor 
   Psi2STo2K2PiGamHist(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
-  Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, Psi2STo2K2PiGamData::fitParamVal&);
+  Psi2STo2K2PiGamHist(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, param2K2PiGam&);
 
   /** Destructor */
   virtual ~Psi2STo2K2PiGamHist();

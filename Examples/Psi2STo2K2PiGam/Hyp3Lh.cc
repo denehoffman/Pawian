@@ -4,84 +4,28 @@
 
 #include "Examples/Psi2STo2K2PiGam/Hyp3Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
-#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<const Psi2STo2K2PiGamStates> theStates, const std::map<const std::string, bool>& hypMap ) :
-  Hyp2Lh(theEvtList,theStates, hypMap)
+Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
+  Hyp2Lh(theEvtList, hypMap)
   ,_sigmaf980Hyp(true)
   ,_sigmaf1710Hyp(true)
   ,_sigmaf2200Hyp(true)  
   ,_disableHyp3(false)
+  ,_nFitParams(0)
 {
- 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf980Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf980Hyp= iter->second;
-   _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf980Hyp <<endmsg;
-  }
-  else Alert << "hypothesis sigmaf980Hyp3 not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf1710Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf1710Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis sigmaf1710Hyp not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf2200Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf2200Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf2200Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
-
-  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _disableHyp3=true; 
+  setUp(hypMap); 
 }
 
 Hyp3Lh::Hyp3Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp2Lh(theLhPtr->getEventList(), theLhPtr->getPsi2STo2K2PiGamStates(), hypMap)
+  Hyp2Lh(theLhPtr->getEventList(), hypMap)
   ,_sigmaf980Hyp(true)
   ,_sigmaf1710Hyp(true)
   ,_sigmaf2200Hyp(true)
   ,_disableHyp3(false)
+  ,_nFitParams(0)
 {
-
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf980Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf980Hyp= iter->second;
-   _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf980Hyp <<endmsg;
-  }
-  else Alert << "hypothesis sigmaf980Hyp3 not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf1710Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf1710Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis sigmaf1710Hyp not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf2200Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf2200Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf2200Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
-
-  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _disableHyp3=true; 
-
+  setUp(hypMap); 
 }
 
 Hyp3Lh::~Hyp3Lh()
@@ -89,7 +33,7 @@ Hyp3Lh::~Hyp3Lh()
 }
 
 
-complex<double> Hyp3Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
+complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 
   complex<double> result=Hyp2Lh::chi0DecAmps(theParamVal, theData);
 
@@ -109,9 +53,9 @@ complex<double> Hyp3Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theP
 
   if (_sigmaf1710Hyp){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf1710=theParamVal.ChiToSigmaf1710;
-    double f1710_kMass=theParamVal.Bwf1710_k.first;
-    double f1710_kWidth=theParamVal.Bwf1710_k.second;
-    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1710, sigmaMass, sigmaWidth,  f1710_kMass, f1710_kWidth);
+    double f1710Mass=theParamVal.Bwf1710.first;
+    double f1710Width=theParamVal.Bwf1710.second;
+    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1710, sigmaMass, sigmaWidth,  f1710Mass, f1710Width);
   }  
 
   if (_sigmaf2200Hyp){
@@ -125,104 +69,81 @@ complex<double> Hyp3Lh::chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theP
 }
 
 
-void Hyp3Lh::setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal){
-  checkFitParamVal(startVal);
-  checkFitParamVal(errVal);
+void Hyp3Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal){
 
   Hyp2Lh::setMnUsrParams(upar, startVal, errVal);
   if(_disableHyp3) return;
 
 
-  if(_sigmaf980Hyp) setMnUsrParamsDec(upar, startVal, errVal,"sigmaf980");
-  if(_sigmaf1710Hyp) setMnUsrParamsDec(upar, startVal, errVal,"sigmaf1710");
-  if(_sigmaf2200Hyp) setMnUsrParamsDec(upar, startVal, errVal,"sigmaf2200");
+  if(_sigmaf980Hyp)  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::sigmaf980);
+  if(_sigmaf1710Hyp) _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::sigmaf1710);
+  if(_sigmaf2200Hyp) _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::sigmaf2200);
 
-  setMnUsrParamsMass(upar, startVal, errVal, "sigma");   
+  _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::sigma);
+
+  if(_sigmaf2200Hyp && _disableHyp2)  _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::f2200);   
 }
 
 
 
-int Hyp3Lh::setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par) const{
+int Hyp3Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par){
 
-//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSPsiToChiGam=_Psi2STo2K2PiGamStatesPtr->PsiToChiGamStates();
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K892States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K892States();
-
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTo2K_1430States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K_2_1430States();
-//   if(_K0_1430_K0_1430Hyp) JPCLSChiTo2K_1430States=_Psi2STo2K2PiGamStatesPtr->ChiTo2K_0_States();
-
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSK1400ToKst1PiStates=_Psi2STo2K2PiGamStatesPtr->K1400ToKst1PiStates();
-//   std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTof0f0States=_Psi2STo2K2PiGamStatesPtr->ChiTof0f0States();
-  
-//   if (par.size()< JPCLSPsiToChiGam.size()*2-1+JPCLSChiTo2K892States.size()*2+JPCLSChiTo2K_1430States.size()*2
-//       +JPCLSK1400ToKst1PiStates.size()*2+JPCLSChiTof0f0States.size()*10+17) {
-//     Alert << "size of parameters wrong!!! par.size()=" << par.size() << 
-//       "\t it should be more than" << JPCLSPsiToChiGam.size()*2-1+JPCLSChiTo2K892States.size()*2+JPCLSChiTo2K_1430States.size()*2+JPCLSK1400ToKst1PiStates.size()*2+JPCLSChiTof0f0States.size()*10+17 << endmsg;
-//     exit(1);
-//   } 
-  
+  if (par.size() != nFitParams() ) {
+    Alert << "size of parameters wrong!!! par.size()=" << par.size() << 
+      "\t it should be" << nFitParams() << endmsg;
+    exit(1);
+  }  
 
   int counter=Hyp2Lh::setFitParamVal(theParamVal, par);
   if(_disableHyp3) return counter;
 
 
   //sigma f1710    amplitude params
-  if(_sigmaf980Hyp) counter=setFitParamValDec(theParamVal, par, counter, "sigmaf980");
-  if(_sigmaf1710Hyp) counter=setFitParamValDec(theParamVal, par, counter, "sigmaf1710");
-  if(_sigmaf2200Hyp) counter=setFitParamValDec(theParamVal, par, counter, "sigmaf2200");
+  if(_sigmaf980Hyp) counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::sigmaf980);
+  if(_sigmaf1710Hyp) counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::sigmaf1710);
+  if(_sigmaf2200Hyp) counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::sigmaf2200);
   
-  counter=setFitParamValMass(theParamVal, par, counter, "sigma");  
-  
+  counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::sigma);  
+  if(_sigmaf2200Hyp && _disableHyp2)  counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::f2200);
+     
   return counter;
+}
+
+unsigned int  Hyp3Lh::nFitParams(){
+  unsigned int remainingFitParams=Hyp2Lh::nFitParams();
+  return _nFitParams+remainingFitParams;
 }
 
 void Hyp3Lh::print(std::ostream& os) const{
   os << "Hyp3Lh::print\n";
 }
 
-void Hyp3Lh::printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal) const{
+void Hyp3Lh::printCurrentFitResult(param2K2PiGam& theParamVal){
   Hyp2Lh::printCurrentFitResult(theParamVal);
 
-  if(!_disableHyp3){
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTof0f0States=_Psi2STo2K2PiGamStatesPtr->ChiTof0f0States();
-    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
 
-    if(_sigmaf980Hyp){
-      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
-	DebugMsg<< (*itJPCLS)->name()<< "sigmaf980" << endmsg;
-	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf980[(*itJPCLS)];
-	DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-	
-      }
-    }
-
-    if(_sigmaf1710Hyp){
-      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
-	DebugMsg<< (*itJPCLS)->name()<< "sigmaf1710" << endmsg;
-	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf1710[(*itJPCLS)];
-	DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-	
-      }
-    }
-
-    if(_sigmaf2200Hyp){
-      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
-	DebugMsg<< (*itJPCLS)->name()<< "sigmaf2200" << endmsg;
-	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf2200[(*itJPCLS)];
-	DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-	
-      }
-    }
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;    
     
-    DebugMsg<< "sigma:" << endmsg;
-    std::pair<double, double> tmpParamSigma=theParamVal.BwSigma;
-    DebugMsg <<"\t mass:" << tmpParamSigma.first <<"\t width:" << tmpParamSigma.second  << endmsg;
-
-
+    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
+      DebugMsg<< (*itJPCLS)->name()<< paramEnum2K2PiGam::name(*itAmps) << endmsg;
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMap=_fitParams2K2PiGam.ampMap(theParamVal, *itAmps);
+      std::pair<double, double> tmpParam=currentMap[(*itJPCLS)];
+      DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
+    }  
+  }
+  
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    DebugMsg<< paramEnum2K2PiGam::name(*itMasses) << endmsg;
+    std::pair<double, double> tmpParam=_fitParams2K2PiGam.massPair(theParamVal, *itMasses);
+    DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
   }
 }
 
-void Hyp3Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const{
+void Hyp3Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix){
  
   if ( suffix.compare("Val") != 0 && suffix.compare("Err") !=0 ){
     Warning << "suffix " << suffix << " not supported!!! Use Val or Err" << endmsg;
@@ -230,39 +151,85 @@ void Hyp3Lh::dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVa
   }
   Hyp2Lh::dumpCurrentResult(os, theParamVal, suffix);
 
-  if(!_disableHyp3){
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSChiTof0f0States=_Psi2STo2K2PiGamStatesPtr->ChiTof0f0States();
-    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
 
-    if(_sigmaf980Hyp){    
-      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
-	std::string tmpStringDec=(*itJPCLS)->name()+"sigmaf980"+suffix;
-	
-	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf980[(*itJPCLS)];
-	os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
-      }
-    }
-
-    if(_sigmaf1710Hyp){    
-      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
-	std::string tmpStringDec=(*itJPCLS)->name()+"sigmaf1710"+suffix;
-	
-	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf1710[(*itJPCLS)];
-	os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
-      }
-    }
-
-    if(_sigmaf2200Hyp){    
-      for ( itJPCLS=JPCLSChiTof0f0States.begin(); itJPCLS!=JPCLSChiTof0f0States.end(); ++itJPCLS){
-	std::string tmpStringDec=(*itJPCLS)->name()+"sigmaf2200"+suffix;
-	
-	std::pair<double, double> tmpParam=theParamVal.ChiToSigmaf2200[(*itJPCLS)];
-	os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
-      }
-    }
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;    
     
-    std::string tmpStringRes="sigmamass"+suffix;
-    std::pair<double, double> tmpParamSigma=theParamVal.BwSigma;
-    os << tmpStringRes << "\t" << tmpParamSigma.first <<"\t" << tmpParamSigma.second  << std::endl;
+    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMap=_fitParams2K2PiGam.ampMap(theParamVal, *itAmps);
+      std::pair<double, double> tmpParam=currentMap[(*itJPCLS)];
+
+      std::string tmpStringDec=(*itJPCLS)->name()+paramEnum2K2PiGam::name(*itAmps)+suffix;
+      os << tmpStringDec << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
+    }  
+  }
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    std::string tmpStringMass=paramEnum2K2PiGam::name(*itMasses)+suffix;
+
+    std::pair<double, double> tmpParam=_fitParams2K2PiGam.massPair(theParamVal, *itMasses);
+    os << tmpStringMass << "\t" << tmpParam.first  << "\t" << tmpParam.second << std::endl;
+  }
+
+}
+
+void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
+
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf980Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf980Hyp= iter->second;
+   _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf980Hyp <<endmsg;
+  }
+  else Alert << "hypothesis sigmaf980Hyp3 not set!!!" <<endmsg;
+
+ iter= hypMap.find("sigmaf1710Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf1710Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis sigmaf1710Hyp not set!!!" <<endmsg;
+
+ iter= hypMap.find("sigmaf2200Hyp3");
+
+  if (iter !=hypMap.end()){
+    _sigmaf2200Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf2200Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
+
+  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _disableHyp3=true;
+
+  if (!_disableHyp3) _massVec.push_back(paramEnum2K2PiGam::sigma); 
+
+  if (_sigmaf980Hyp){ 
+    _ampVec.push_back(paramEnum2K2PiGam::sigmaf980);
+  }
+
+  if (_sigmaf1710Hyp){ 
+    _ampVec.push_back(paramEnum2K2PiGam::sigmaf1710);
+  }
+
+  if (_sigmaf2200Hyp){ 
+    _ampVec.push_back(paramEnum2K2PiGam::sigmaf2200);
+    if (_disableHyp2) _massVec.push_back(paramEnum2K2PiGam::f2200);  
+  }
+
+  std::vector<unsigned int>::iterator ampIt;
+  for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*ampIt);
+    _nFitParams+=2*JPCLSs.size();
+  }
+
+  std::vector<unsigned int>::iterator massIt; 
+  for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
+    _nFitParams+=2;
   }
 }

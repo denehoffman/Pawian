@@ -13,7 +13,7 @@
 //#include "Examples/Psi2STo2K2PiGam/GPODExpectationChecksT.hpp"
 
 #include "Examples/Psi2STo2K2PiGam/AbsPsi2STo2K2PiGamLh.hh"
-#include "Examples/Psi2STo2K2PiGam/PsiToChic0GamProdLh.hh"
+// #include "Examples/Psi2STo2K2PiGam/PsiToChic0GamProdLh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp1Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp2Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp3Lh.hh"
@@ -116,10 +116,6 @@ int main(int __argc,char *__argv[]){
     Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " << endmsg;  
   }
 
-  boost::shared_ptr<const Psi2STo2K2PiGamStates> thePsi2STo2K2PiGamStatesPtr(new Psi2STo2K2PiGamStates());
-
-  thePsi2STo2K2PiGamStatesPtr->print(std::cout);
-
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
 
 
@@ -127,15 +123,18 @@ int main(int __argc,char *__argv[]){
    if ( paramFilePathStr != "default") paramStreamerPath=paramFilePathStr;
   
 
-   Stream2K2PiGamFitParms theParamStreamer(paramStreamerPath, thePsi2STo2K2PiGamStatesPtr);
-   Psi2STo2K2PiGamData::fitParamVal theStartparams=theParamStreamer.getFitParamVal();
-   Psi2STo2K2PiGamData::fitParamVal theErrorparams=theParamStreamer.getFitParamErr();
+   Stream2K2PiGamFitParms theParamStreamer(paramStreamerPath);
+   param2K2PiGam theStartparams=theParamStreamer.getFitParamVal();
+   param2K2PiGam theErrorparams=theParamStreamer.getFitParamErr();
 
 //    std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/chic0_data_pwasample.dat";
 //    std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/chic0_signalmc_pwasample.dat"; 
 
-   std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_data_pwasample.dat";
-   std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_signalmc_pwasample.dat"; 
+//    std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_data_pwasample.dat";
+//    std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_signalmc_pwasample.dat";
+   
+   std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101213_chic0_data_pwasample.dat";
+   std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101213_chic0_signalmc_pwasample.dat";
    
    Info << "data file: " << datFile << endmsg;
    Info << "mc file: " << mcFile << endmsg;
@@ -185,24 +184,28 @@ int main(int __argc,char *__argv[]){
   hypMap["K0_1430_K0_1430Hyp"]=true;
   hypMap["K2_1430_K2_1430Hyp"]=true;
   hypMap["K0_1430_K2_1430Hyp"]=false;
+  hypMap["disableHyp2"]=false;
   hypMap["sigmaf980Hyp3"]=true;
   hypMap["sigmaf1710Hyp3"]=true;
   hypMap["sigmaf2200Hyp3"]=true;
+  hypMap["f980f1370Hyp4"]=true;
+  hypMap["f1710f1370Hyp4"]=true;
   hypMap["disableHyp5"]=true;
-  hypMap["disableHyp6"]=false;
-  hypMap["K1_1680Hyp"]=true;
-  hypMap["K1_2300Hyp"]=true; 
+  hypMap["K_0_1430K_0_1950Hyp6"]=true;
+  hypMap["KappaK_0_1950Hyp6"]=false;
+  hypMap["K1_1680Hyp7"]=true;
+  hypMap["K1_2300Hyp7"]=true; 
   hypMap["KappaHyp7"]=true;
 
-  if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr));
-  else if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
-  else if (K1400SpinStr=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
-  else if (K1400SpinStr=="hyp3") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp3Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
-  else if (K1400SpinStr=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
-  else if (K1400SpinStr=="hyp5") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp5Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap)); 
-  else if (K1400SpinStr=="hyp6") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp6Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
-  else if (K1400SpinStr=="hyp7") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp7Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap))
-;  else if (K1400SpinStr=="hyp8") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp8Lh(thePsi2STo2K2PiGamEvtListPtr, thePsi2STo2K2PiGamStatesPtr, hypMap));
+//   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr));
+  if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (K1400SpinStr=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (K1400SpinStr=="hyp3") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp3Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (K1400SpinStr=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (K1400SpinStr=="hyp5") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp5Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap)); 
+  else if (K1400SpinStr=="hyp6") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp6Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (K1400SpinStr=="hyp7") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp7Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (K1400SpinStr=="hyp8") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp8Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else { Alert << "K1400 resonance with spin " << K1400SpinStr << " not supported!!!!" << endmsg;
     exit(1);
   }
@@ -220,8 +223,6 @@ int main(int __argc,char *__argv[]){
 
 
 
-
-
   bool prefit=false;
   if (prefit){
     MnUserParameters uparPre;
@@ -236,8 +237,34 @@ int main(int __argc,char *__argv[]){
 
   MnUserParameters upar;
   thePsi2STo2K2PiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
-  upar.Fix(1);
-  upar.Fix(2);
+  upar.Fix("J1P-1C-1L0S1ChiGamMag");
+  upar.Fix("J1P-1C-1L0S1ChiGamphi");
+  upar.Fix("J0P1C1L2S2K892K892Mag");
+  upar.Fix("J0P1C1L2S2K892K892phi");
+  
+  if (hypMap["K1_1270Hyp"]==true){
+    upar.Fix("J1P1C0L2S1K_1_1270ToK892PiMag");
+    upar.Fix("J1P1C0L2S1K_1_1270ToK892Piphi");
+  }
+  
+  if (hypMap["K2_1430_K2_1430Hyp"]==true || hypMap["K0_1430_K2_1430Hyp"]==true){
+    upar.Fix("J0P1C1L2S2K_2_1430K_2_1430Mag");
+    upar.Fix("J0P1C1L2S2K_2_1430K_2_1430phi");
+    upar.Fix("J0P1C1L4S4K_2_1430K_2_1430Mag");
+    upar.Fix("J0P1C1L4S4K_2_1430K_2_1430phi");
+  }
+
+  if (hypMap["K1_1680Hyp7"]==true){
+    upar.Fix("J0P1C1L2S2K892K_1_1680Mag");
+    upar.Fix("J0P1C1L2S2K892K_1_1680phi");
+  }
+
+  if (hypMap["K1_2300Hyp7"]==true){
+    upar.Fix("J0P1C1L2S2K892K_1_2300Mag");
+    upar.Fix("J0P1C1L2S2K892K_1_2300phi");
+  }
+
+
   MPsi2STo2K2PiGamFcn mPsi2STo2K2PiGamFcn(thePsi2STo2K2PiGamLhPtr);
   
   MnMigrad migrad(mPsi2STo2K2PiGamFcn, upar);
@@ -255,7 +282,7 @@ int main(int __argc,char *__argv[]){
     MnUserParameters finalUsrParameters=min.UserParameters();
     const std::vector<double> finalParamVec=finalUsrParameters.Params();
     
-    Psi2STo2K2PiGamData::fitParamVal finalFitParams;
+    param2K2PiGam finalFitParams;
     thePsi2STo2K2PiGamLhPtr->setFitParamVal(finalFitParams, finalParamVec);
     
     Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, finalFitParams);
@@ -268,7 +295,7 @@ int main(int __argc,char *__argv[]){
     const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
     
     
-    Psi2STo2K2PiGamData::fitParamVal finalErrParams;
+    param2K2PiGam finalErrParams;
     thePsi2STo2K2PiGamLhPtr->setFitParamVal(finalErrParams, finalParamErrorVec);
     
     std::ofstream theStream ( "finalResult.dat");

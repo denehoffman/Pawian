@@ -29,33 +29,40 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  PsiToChic0GamProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>);
+  PsiToChic0GamProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
   PsiToChic0GamProdLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>);
 
   /** Destructor */
   virtual ~PsiToChic0GamProdLh();
 
   virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new PsiToChic0GamProdLh(_Psi2STo2K2PiGamEvtListPtr, _Psi2STo2K2PiGamStatesPtr);
+    return new PsiToChic0GamProdLh(_Psi2STo2K2PiGamEvtListPtr);
   }
 
 
   // Getters:
-  virtual double calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, const Psi2STo2K2PiGamData::fitParamVal& theParamVal);
+  virtual double calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, const param2K2PiGam& theParamVal);
   
-  virtual void setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal);
-  virtual int setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par) const;
+  virtual void setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal);
+  virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par);
+  virtual unsigned int nFitParams();
 
   virtual void print(std::ostream& os) const;
-  //  virtual void printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal) const;
+  virtual void printCurrentFitResult(param2K2PiGam& theParamVal);
+  virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix);
+
 
 protected:
 
-  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);  virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);  
+  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);  
+
+  virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);  
 
 private:
+  unsigned int _nFitParams;
+  std::vector<unsigned int> _ampVec;
 
-  complex<double> calcCoherentAmp(Spin Minit, Spin MChi, Spin MGamma, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  complex<double> calcCoherentAmp(Spin Minit, Spin MChi, Spin MGamma, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
 };
 

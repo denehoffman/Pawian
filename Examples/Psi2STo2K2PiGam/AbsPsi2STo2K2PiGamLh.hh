@@ -15,6 +15,7 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
+#include "Examples/Psi2STo2K2PiGam/FitParams2K2PiGam.hh"
 #include "PwaUtils/DataUtils.hh"
 
 #include "Minuit2/MnUserParameters.h"
@@ -31,7 +32,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>);
+  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
   AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>);
 
   /** Destructor */
@@ -42,46 +43,31 @@ public:
 
   // Getters:
   
-  double calcLogLh(const Psi2STo2K2PiGamData::fitParamVal& theParamVal);
-  virtual double calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, const Psi2STo2K2PiGamData::fitParamVal& theParamVal);
+  double calcLogLh(const param2K2PiGam& theParamVal);
+  virtual double calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, const param2K2PiGam& theParamVal);
 
   virtual boost::shared_ptr<const Psi2STo2K2PiGamEvtList> getEventList() const {return _Psi2STo2K2PiGamEvtListPtr;}
-  virtual boost::shared_ptr<const Psi2STo2K2PiGamStates> getPsi2STo2K2PiGamStates() const {return _Psi2STo2K2PiGamStatesPtr;}
 
-  virtual void setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal);
-
-  virtual int setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par) const;
+  virtual void setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal)=0;
+  virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par)=0;
+  virtual unsigned int nFitParams() =0;
 
   virtual void print(std::ostream& os) const;
-  virtual void printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal) const;
-  virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
+  virtual void printCurrentFitResult(param2K2PiGam& theParamVal)=0;
+  virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix)=0;
 
 
 protected:
 
   boost::shared_ptr<const Psi2STo2K2PiGamEvtList> _Psi2STo2K2PiGamEvtListPtr;
-  boost::shared_ptr<const Psi2STo2K2PiGamStates> _Psi2STo2K2PiGamStatesPtr;
+  FitParams2K2PiGam _fitParams2K2PiGam; 
   
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtDataVec;
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtMCVec;
 
-  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
-  virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData)=0;
-
-  virtual int setFitParamValDec(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const; 
-
-  virtual int setFitParamValMass(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const; 
-  
-  virtual int setFitParamFlatteMass(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par, int counter, std::string key) const;
-  
-    virtual void setMnUsrParamsDec(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal, std::string key);
-
-  virtual void setMnUsrParamsMass(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal, std::string key);
-
-  virtual void setMnUsrParamsFlatteMass(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal, std::string key);
-
-  virtual void checkFitParamVal(Psi2STo2K2PiGamData::fitParamVal& fitVal);
+  virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData)=0;
 
   virtual complex<double> chiTo2K892Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K892, double K892Mass, double K892Width);
 

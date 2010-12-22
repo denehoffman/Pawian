@@ -8,27 +8,26 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include "PwaUtils/AbsFitParamStreamer.hh"
-#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
-#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
+#include "Examples/Psi2STo2K2PiGam/FitParams2K2PiGam.hh"
 
 
 class Stream2K2PiGamFitParms : public AbsFitParamStreamer{
   
 public:
-  Stream2K2PiGamFitParms(std::string& , boost::shared_ptr<const Psi2STo2K2PiGamStates>);
+  Stream2K2PiGamFitParms(std::string&);
   virtual ~Stream2K2PiGamFitParms();
   
-  Psi2STo2K2PiGamData::fitParamVal getFitParamVal() { return _paramVal;}
-  Psi2STo2K2PiGamData::fitParamVal getFitParamErr() { return _paramErr;}
+  param2K2PiGam getFitParamVal() { return _paramVal;}
+  param2K2PiGam getFitParamErr() { return _paramErr;}
   
 protected:
   virtual void fillParamMap();
 
 private:
-  Psi2STo2K2PiGamData::fitParamVal _paramVal;
-  Psi2STo2K2PiGamData::fitParamVal _paramErr;
-  boost::shared_ptr<const Psi2STo2K2PiGamStates> _states;
+  param2K2PiGam _paramVal;
+  param2K2PiGam _paramErr;
 
+  FitParams2K2PiGam _fitParams2K2PiGam;
 };
 
 #endif 

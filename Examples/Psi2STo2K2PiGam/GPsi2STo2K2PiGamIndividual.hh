@@ -264,7 +264,7 @@ public:
     GParameterSet::specificTestsFailuresExpected_GUnitTests();
   }
 
-  bool getFitParams(Psi2STo2K2PiGamData::fitParamVal& fitParmVal)
+  bool getFitParams(param2K2PiGam& fitParmVal)
   { 
     boost::shared_ptr<GBoundedDoubleCollection> vC = pc_at<GBoundedDoubleCollection>(0);
 
@@ -287,7 +287,7 @@ public:
     return true;
   }
   
-  void printFitParams(Psi2STo2K2PiGamData::fitParamVal& theParamVal){
+  void printFitParams(param2K2PiGam& theParamVal){
     _psi2STo2K2PiGamLhPtr->printCurrentFitResult(theParamVal);
   }  
 
@@ -331,7 +331,7 @@ protected:
   virtual double fitnessCalculation(){
     double result = 0.;
 
-    Psi2STo2K2PiGamData::fitParamVal currentFitParms;
+    param2K2PiGam currentFitParms;
     getFitParams(currentFitParms);
     result=_psi2STo2K2PiGamLhPtr->calcLogLh(currentFitParms);
 

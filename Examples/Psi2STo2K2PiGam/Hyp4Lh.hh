@@ -29,33 +29,38 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<const Psi2STo2K2PiGamStates>, const std::map<const std::string, bool>& hypMap);
+  Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
   Hyp4Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
   virtual ~Hyp4Lh();
 
   virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp4Lh(_Psi2STo2K2PiGamEvtListPtr, _Psi2STo2K2PiGamStatesPtr, _hypMap);
+    return new Hyp4Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
   }
 
 
   // Getters:
-  virtual void setMnUsrParams(MnUserParameters& upar, Psi2STo2K2PiGamData::fitParamVal& startVal,  Psi2STo2K2PiGamData::fitParamVal& errVal);
-  virtual int setFitParamVal(Psi2STo2K2PiGamData::fitParamVal& theParamVal, const std::vector<double>& par) const;
+  virtual void setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal);
+  virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par);
+  virtual unsigned int nFitParams();
 
   virtual void print(std::ostream& os) const;
-  virtual void printCurrentFitResult(Psi2STo2K2PiGamData::fitParamVal& theParamVal) const;
-  virtual void dumpCurrentResult(std::ostream& os, Psi2STo2K2PiGamData::fitParamVal& theParamVal, std::string& suffix) const;
+  virtual void printCurrentFitResult(param2K2PiGam& theParamVal);
+  virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix);
 
 protected:
-
-  virtual complex<double> chi0DecAmps(const Psi2STo2K2PiGamData::fitParamVal& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  bool _f980f1370Hyp4;
+  bool _f1710f1370Hyp4;
+  bool _disableHyp4;
+  virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
 private:
+  unsigned int _nFitParams;
+  std::vector<unsigned int> _ampVec;
+  std::vector<unsigned int> _massVec;
 
-
-
+  void setUp(const std::map<const std::string, bool>& hypMap);
 };
 
 #endif

@@ -126,7 +126,7 @@ public:
 
 				// Let the audience know about the best result and fit parameters
 				if(p==0) {
-				  Psi2STo2K2PiGamData::fitParamVal theParamVal;
+				  param2K2PiGam theParamVal;
 				  gdii_ptr->getFitParams(theParamVal);
 				  std::cout << generation << ": logLh = " << currentEvaluation << std::endl;
 

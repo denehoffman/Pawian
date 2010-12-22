@@ -27,8 +27,9 @@ MPsi2STo2K2PiGamFcn::~MPsi2STo2K2PiGamFcn()
 
 double MPsi2STo2K2PiGamFcn::operator()(const std::vector<double>& par) const
 {
+
   (*_fcnCounter)++;
-  Psi2STo2K2PiGamData::fitParamVal theFitParmValTmp;
+  param2K2PiGam theFitParmValTmp;
   _psi2STo2K2PiGamLhPtr->setFitParamVal(theFitParmValTmp, par);
  
   double result=_psi2STo2K2PiGamLhPtr->calcLogLh(theFitParmValTmp);
