@@ -46,6 +46,10 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f980_kf1370_pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f1710_pif1370_k;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f1710_kf1370_pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f980_pif_2_1430_k;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f980_kf_2_1430_pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f1710_pif_2_1430_k;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f1710_kf_2_1430_pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430K_0_1950;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1950;
@@ -53,6 +57,8 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K2300;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK892Pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK_0_1430Pi;
 
     pair<double, double> BwK892;
     pair<double, double> BwKappa;
@@ -64,12 +70,14 @@ struct param2K2PiGam
     pair<double, double> Bwf2200;
     pair<double, double> BwSigma;
     pair<double, double> Bwf1370;
+    pair<double, double> Bwf_2_1430;
     pair<double, double> BwK_0_2400;
     pair<double, double> BwK_2_1950;
     pair<double, double> BwK_0_1950;
     pair<double, double> BwK_1_1680;
     pair<double, double> BwK_1_2300;
     pair<double, double> BwK_0_1460;
+    pair<double, double> BwK_0_1830;
 
     double Flatf980;
     double Flatf980gPiPi;
@@ -83,10 +91,12 @@ struct paramEnum2K2PiGam{
 	K_1_1400ToK892Pi, K_1_1270ToK892Pi, K_1_1270ToK_0_1430Pi, K_0_1430K_0_1950, KappaK_0_1950,
 	f980_pif1710_k, f980_kf1710_pi, f980f980, f980f2200, f980_pif1370_k, f980_kf1370_pi, f1710_pif1370_k, f1710_kf1370_pi,
 	K_0_2400KToKf980, K892K_1_1680, K892K_1_2300, 
-	sigmaf980, sigmaf1710, sigmaf2200, K_0_1460ToK892Pi, K_0_1460ToK_0_1430Pi, nAmps,         
+	sigmaf980, sigmaf1710, sigmaf2200, K_0_1460ToK892Pi, K_0_1460ToK_0_1430Pi, K_0_1830ToK892Pi, K_0_1830ToK_0_1430Pi, 
+	f980_pif_2_1430_k, f980_kf_2_1430_pi, f1710_pif_2_1430_k, f1710_kf_2_1430_pi, nAmps,         
 
 	K892=nAmps,Kappa, K_0_1430, K_1_1400, K_2_1430, K_1_1270, 
-	f1710, f2200, sigma, f1370, K_0_2400, K_0_1950, K_1_1680, K_1_2300, K_0_1460, nMasses,
+	f1710, f2200, sigma, f1370, K_0_2400, K_0_1950, K_1_1680, K_1_2300, K_0_1460, K_0_1830, 
+	f_2_1430, nMasses,
 
 	f980=nMasses,f980gpipi, f980gKK, nFlatte,
 
@@ -99,10 +109,12 @@ struct paramEnum2K2PiGam{
 	"K_1_1400ToK892Pi", "K_1_1270ToK892Pi", "K_1_1270ToK_0_1430Pi", "K_0_1430K_0_1950", "KappaK_0_1950",
 	"f980_pif1710_k", "f980_kf1710_pi", "f980f980", "f980f2200", "f980_pif1370_k", "f980_kf1370_pi","f1710_pif1370_k", "f1710_kf1370_pi",
 	"K_0_2400KToKf980", "K892K_1_1680", "K892K_1_2300", 
-	"sigmaf980", "sigmaf1710", "sigmaf2200", "K_0_1460ToK892Pi", "K_0_1460ToK_0_1430Pi",
+	"sigmaf980", "sigmaf1710", "sigmaf2200", "K_0_1460ToK892Pi", "K_0_1460ToK_0_1430Pi","K_0_1830ToK892Pi", "K_0_1830ToK_0_1430Pi",
+	"f980_pif_2_1430_k", "f980_kf_2_1430_pi", "f1710_pif_2_1430_k", "f1710_kf_2_1430_pi",
 
 	"K892", "Kappa", "K_0_1430", "K_1_1400", "K_2_1430", "K_1_1270", 
-	"f1710", "f2200", "sigma", "f1370", "K_0_2400", "K_0_1950", "K_1_1680", "K_1_2300", "K_0_1460",
+	"f1710", "f2200", "sigma", "f1370", "K_0_2400", "K_0_1950", "K_1_1680", "K_1_2300", "K_0_1460", "K_0_1830",
+	"f_2_1430",
 
 	"f980","f980gpipi", "f980gKK",
 	

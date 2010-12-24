@@ -52,6 +52,8 @@ public:
 protected:
   bool _f980f1370Hyp4;
   bool _f1710f1370Hyp4;
+  bool _f980f_2_14300Hyp4;
+  bool _f1710f_2_14300Hyp4;
   bool _disableHyp4;
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

@@ -190,12 +190,16 @@ int main(int __argc,char *__argv[]){
   hypMap["sigmaf2200Hyp3"]=true;
   hypMap["f980f1370Hyp4"]=true;
   hypMap["f1710f1370Hyp4"]=true;
+  hypMap["f980f_2_14300Hyp4"]=true;
+  hypMap["f1710f_2_14300Hyp4"]=true;
   hypMap["disableHyp5"]=true;
   hypMap["K_0_1430K_0_1950Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=false;
   hypMap["K1_1680Hyp7"]=true;
   hypMap["K1_2300Hyp7"]=true; 
   hypMap["KappaHyp7"]=true;
+  hypMap["K_0_1460ToKstPiHyp8"]=true;
+  hypMap["K_0_1830ToKstPiHyp8"]=true;
 
 //   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr));
   if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
@@ -247,7 +251,7 @@ int main(int __argc,char *__argv[]){
     upar.Fix("J1P1C0L2S1K_1_1270ToK892Piphi");
   }
   
-  if (hypMap["K2_1430_K2_1430Hyp"]==true || hypMap["K0_1430_K2_1430Hyp"]==true){
+  if (hypMap["K2_1430_K2_1430Hyp"]==true){
     upar.Fix("J0P1C1L2S2K_2_1430K_2_1430Mag");
     upar.Fix("J0P1C1L2S2K_2_1430K_2_1430phi");
     upar.Fix("J0P1C1L4S4K_2_1430K_2_1430Mag");

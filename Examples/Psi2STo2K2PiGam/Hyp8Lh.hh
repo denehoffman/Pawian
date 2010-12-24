@@ -50,7 +50,9 @@ public:
   virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix);
 
 protected:
-
+  bool _K_0_1460ToKstPiHyp8;
+  bool _K_0_1830ToKstPiHyp8;
+  bool _disableHyp8;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

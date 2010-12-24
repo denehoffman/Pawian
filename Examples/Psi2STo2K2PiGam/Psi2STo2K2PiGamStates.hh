@@ -32,6 +32,7 @@ public:
   std::vector< boost::shared_ptr<const JPCLS> > ChiTo2K_0_States() const {return _ChiTo2K_0_JPCLS;}
   std::vector< boost::shared_ptr<const JPCLS> > ChiToK0K2_States() const {return _ChiToK0K2_JPCLS;}
   std::vector< boost::shared_ptr<const JPCLS> > ChiTof0f0States() const {return _ChiTof0f0JPCLS;}
+  std::vector< boost::shared_ptr<const JPCLS> > ChiTof0f2States() const {return _ChiTof0f2JPCLS;}
   std::vector< boost::shared_ptr<const JPCLS> > K1400ToKst1PiStates() const {return _K1400ToKst1PiJPCLS;}
   std::vector< boost::shared_ptr<const JPCLS> > ChiToK0K0States() const {return _ChiToK0K0JPCLS;}
   std::vector< boost::shared_ptr<const JPCLS> > K1ToK0PiStates() const {return _K1ToK0PiJPCLS;}
@@ -61,9 +62,10 @@ private:
   std::vector< boost::shared_ptr<const JPCLS> > _ChiTo2K_0_JPCLS;
   std::vector< boost::shared_ptr<const JPCLS> > _ChiToK0K2_JPCLS;
   std::vector< boost::shared_ptr<const JPCLS> > _ChiTof0f0JPCLS;
+  std::vector< boost::shared_ptr<const JPCLS> > _ChiTof0f2JPCLS;
   std::vector< boost::shared_ptr<const JPCLS> > _ChiToK0K0JPCLS;
   std::vector< boost::shared_ptr<const JPCLS> > _K1ToK0PiJPCLS;
- std::vector< boost::shared_ptr<const JPCLS> >  _K1400ToKst1PiJPCLS;
+  std::vector< boost::shared_ptr<const JPCLS> >  _K1400ToKst1PiJPCLS;
 
   std::vector< boost::shared_ptr<const JPCLS> > _Kst1JPCLS;
   std::vector< boost::shared_ptr<const JPCLS> > _Kst2JPCLS;

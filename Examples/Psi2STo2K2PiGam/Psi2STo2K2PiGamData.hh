@@ -11,62 +11,6 @@
 
 namespace Psi2STo2K2PiGamData {
 
-  struct fitParamVal
-  {
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToChiGam;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K892;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2Kappa;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_2_1430;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_0_1430;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K_2_1430;
-
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400ToK892pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K1400ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1270ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1270ToK_0_1430Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_pif1710_k;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf1710_pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980f980;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980f2200;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf980;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf1710;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf2200;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_pif1370_k;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf1370_pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430K_0_1950;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K2300;
-
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi;
-
-    pair<double, double> BwK892;
-    pair<double, double> BwKappa;
-    pair<double, double> BwK_2_1430;
-    pair<double, double> BwK_0_1430;
-    pair<double, double> BwK1400;
-    pair<double, double> BwK_1_1270;
-    pair<double, double> Bwf980_pi;
-    pair<double, double> Bwf1710_k;
-    pair<double, double> Bwf2200;
-    pair<double, double> BwSigma;
-    pair<double, double> Bwf1370_k;
-    pair<double, double> BwK_0_2400;
-    pair<double, double> BwK_2_1950;
-    pair<double, double> BwK_0_1950;
-    pair<double, double> BwK_1_1680;
-    pair<double, double> BwK_1_2300;
-    pair<double, double> BwK_0_1460;
-
-
-    double Flatf980;
-    double Flatf980gPiPi;
-    double Flatf980gKK;
-
-    double phaseSpace;
-  };
-  
   struct Psi2STo2K2PiGamEvtData
   {
     Vector4<float> psi2S_4V;
@@ -100,6 +44,9 @@ namespace Psi2STo2K2PiGamData {
     Vector4<float> Km_HeliKmPi0_4V;
     Vector4<float> Km_HeliKmPi1_4V;
 
+    Vector4<float> Km_HeliKmKp_4V;
+    Vector4<float> Pi0_HeliPi0Pi0_4V;
+
     Vector4<float> Kp_HeliKpPi0_ViaKpPiPi_4V;
     Vector4<float> Kp_HeliKpPi1_ViaKpPiPi_4V;
     Vector4<float> Km_HeliKmPi0_ViaKmPiPi_4V;
@@ -127,6 +74,8 @@ namespace Psi2STo2K2PiGamData {
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfKst2mToKmPi0; //Wigner D functions for K*2-->K- pi0
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfKst2mToKmPi1; //Wigner D functions for K*2-->K- pi1
 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKK; //Wigner D functions for f_2->K+ K-
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToPiPi; //Wigner D functions for f_2->pi pi
 //     map<Spin,map<Spin,map<Spin,complex<double> > > > DfChiToKmPi; //Wigner D functions for Chi_c1 -> (K- pi) K+
 //     map<Spin,map<Spin,map<Spin,complex<double> > > > DfChiToa0Pi; //Wigner D functions for Chi_c1 ->  a(980) pi
 //     map<Spin,map<Spin,map<Spin,complex<double> > > > DfChiToa2Pi; //Wigner D functions for Chi_c1 ->  a2 pi

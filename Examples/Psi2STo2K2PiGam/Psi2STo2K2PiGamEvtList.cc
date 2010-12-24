@@ -132,6 +132,11 @@ void Psi2STo2K2PiGamEvtList::read4Vecs(EventList& evtList, std::vector<Psi2STo2K
       Vector4<float> Pi0_4V(*(anEvent->p4(3)));
       Vector4<float> Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V=helicityVec(KpPiPi_4V, PiPi_4V, Pi0_4V);
       Vector4<float> Pi0_HeliPi0Pi0_ViaKmPi0Pi0_4V=helicityVec(KmPiPi_4V, PiPi_4V, Pi0_4V);
+
+      Vector4<float> Pi0_HeliPi0Pi0_4V=helicityVec(chic0_4V, PiPi_4V, Pi0_4V);
+      Vector4<float> Km_HeliKmKp_4V=helicityVec(chic0_4V, KpKm_4V, Km_4V);
+
+
 //       Vector4<float> Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V=helicityVec(psi2S_4V, PiPi_4V, Pi0_4V);
 //       Vector4<float> Pi0_HeliPi0Pi0_ViaKmPi0Pi0_4V=helicityVec(psi2S_4V, PiPi_4V, Pi0_4V);
 
@@ -165,6 +170,9 @@ void Psi2STo2K2PiGamEvtList::read4Vecs(EventList& evtList, std::vector<Psi2STo2K
       thePsi2STo2K2PiGamEvtData->Kp_HeliKpPi1_ViaKpPiPi_4V=Kp_HeliKpPi1_ViaKpPiPi_4V;
       thePsi2STo2K2PiGamEvtData->Km_HeliKmPi0_ViaKmPiPi_4V=Km_HeliKmPi0_ViaKmPiPi_4V;
       thePsi2STo2K2PiGamEvtData->Km_HeliKmPi1_ViaKmPiPi_4V=Km_HeliKmPi1_ViaKmPiPi_4V;
+
+      thePsi2STo2K2PiGamEvtData->Km_HeliKmKp_4V=Km_HeliKmKp_4V;
+      thePsi2STo2K2PiGamEvtData->Pi0_HeliPi0Pi0_4V=Pi0_HeliPi0Pi0_4V;
 
       thePsi2STo2K2PiGamEvtData->PiPi_HeliKpPi0Pi0_4V=PiPi_HeliKpPi0Pi0_4V;
       thePsi2STo2K2PiGamEvtData->PiPi_HeliKmPi0Pi0_4V=PiPi_HeliKmPi0Pi0_4V;
@@ -222,7 +230,12 @@ void Psi2STo2K2PiGamEvtList::read4Vecs(EventList& evtList, std::vector<Psi2STo2K
        thePsi2STo2K2PiGamEvtData->DfKst2mToKmPi1[jKst_2_1430][M][0]=Wigner_D(Km_HeliKmPi1_4V.Phi(),Km_HeliKmPi1_4V.Theta(),0,jKst_2_1430,M,0);
      }
 
- 
+ // calculate and store WignerD functions for f_2->K+K- and f_2-> pi pi 
+     Spin jf2=2;
+     for (Spin M=-2; M<=2; M++){
+       thePsi2STo2K2PiGamEvtData->Dff2ToKK[jf2][M][0]=Wigner_D(Km_HeliKmKp_4V.Phi(), Km_HeliKmKp_4V.Theta(),0, jf2,M,0);
+       thePsi2STo2K2PiGamEvtData->Dff2ToPiPi[jf2][M][0]=Wigner_D(Pi0_HeliPi0Pi0_4V.Phi(), Pi0_HeliPi0Pi0_4V.Theta(),0, jf2,M,0);
+     } 
 
      theEvtList.push_back(thePsi2STo2K2PiGamEvtData);
 
