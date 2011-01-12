@@ -30,6 +30,18 @@ void EventList::add(Event* newEvent)
   return;
 }
 
+void EventList::removeEvents(unsigned int nBegin, unsigned int nEnd)
+{
+  if ( nBegin < nEnd || eventList.size()>nEnd) {
+    Alert << "can not remove event no " << nBegin << " - " << nEnd 
+	  << " from list" << endmsg; 
+    exit(1);  
+  }
+
+  eventList.erase(eventList.begin()+nBegin, eventList.begin()+nEnd);
+}
+
+
 Event* EventList::nextEvent()
 {
   if (currentEvent != eventList.end()) {

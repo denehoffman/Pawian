@@ -91,6 +91,7 @@ namespace Gem
     const serializationMode DEFAULTSERMODE=Gem::GenEvA::TEXTSERIALIZATION;
     namespace po = boost::program_options;
 
+    
     bool parseCommandLine(
     		int argc, 
 		char **argv,
@@ -100,7 +101,7 @@ namespace Gem
 		, std::string& ip
 		, unsigned short& port
 		, serializationMode& serMode
-	);
+		);
 
     bool parseConfigFile(
 			 const std::string& configFile

@@ -32,8 +32,15 @@ inline double dfact(double __x){
 //_____________________________________________________________________________
 /// Returns i!
 inline int factorial(int __i) {
+  if (__i<0){
+    cerr << endl;
+    cerr << "factoral value " << __i << " must be >=0 !!! "  
+	 << endl;
+
+     exit(1);
+  }
   int f = 1;
-  if((__i == 0)||(__i == 1)) f = 1;  
+  if((__i == 0) || (__i == 1)) f = 1;  
   else{
     while(__i > 0){
       f = f*__i;
@@ -174,6 +181,7 @@ double Wigner_d(const Spin &__j,const Spin &__m,const Spin &__n,double __beta){
     N = temp_M;
   }
 
+
   m_p_n = (M + N) / 2;
   j_p_m = (J + M) / 2;
   j_m_m = (J - M) / 2;
@@ -198,11 +206,99 @@ double Wigner_d(const Spin &__j,const Spin &__m,const Spin &__n,double __beta){
     sum_term += pow ((-1.0), (k)) *
       ((pow (cos (__beta / 2.0), kmn1)) * (pow (sin (__beta / 2.0), jmnk))) /
       (factorial (k) * factorial (jmk) * factorial (jnk) * factorial (kmn2));
+
   }
 
   d = const_term * sum_term;
   return d;
 }
+
+
+// double Wigner_d_new(const Spin &__j,const Spin &__m,const Spin &__n,double __beta){
+
+//   int J = (int)(2.*__j);
+//   int M = (int)(2.*__m);
+//   int N = (int)(2.*__n);
+//   int temp_M, k, k_low, k_hi;
+//   double const_term = 0.0, sum_term = 0.0, d = 1.0;
+//   int m_p_n, j_p_m, j_p_n, j_m_m, j_m_n, m_n_n;
+//   int kmn2, jmnk, jmk, jnk;
+//   double kk;
+
+//   if (J < 0 || abs (M) > J || abs (N) > J) {
+//     cerr << endl;
+//     cerr << "d: you have entered an illegal number for J, M, N." << endl;
+//     cerr << "Must follow these rules: J >= 0, abs(M) <= J, and abs(N) <= J." 
+// 	 << endl;
+//    cerr << "J = " << J <<  " M = " << M <<  " N = " << N << endl;
+//     return 0.;
+//   }
+  
+//   double preFactor=1.;
+
+//   if (M<0 && N<0){ 
+//     preFactor=pow(-1.,M-N);
+//     M=-M;
+//     N=-N;
+//   }
+
+//   if (M < N){
+//     __beta = -__beta;
+//     temp_M = M;
+//     M = N;
+//     N = temp_M;
+//   }
+
+
+  
+//   m_p_n = (M + N) / 2;
+//   j_p_m = (J + M) / 2;
+//   j_m_m = (J - M) / 2;
+//   j_p_n = (J + N) / 2;
+//   j_m_n = (J - N) / 2;
+//   m_n_n = (M - N) / 2; 
+ 
+//   kk = (double)factorial(j_p_m)*(double)factorial(j_m_m)
+//     *(double)factorial(j_p_n) * (double)factorial(j_m_n) ;
+// //   const_term = pow((-1.0),(m_n_n)) * sqrt(kk);
+  
+//   const_term = sqrt(kk);
+  
+
+// //   k_low = MAX(0, 0);
+//   k_low = 0;
+
+//   k_hi = MIN(j_p_n, j_m_m);
+
+
+
+//   for (k = k_low; k <= k_hi; k++) {
+    
+//     //    kmn1 = 2 * k - (M - N) / 2;
+//     jmnk = J + (N - M) / 2 - 2 * k;
+//     jmk = (J - M) / 2 - k;
+//     jnk = (J + N) / 2 - k;
+//     kmn2 = k + (M - N) / 2;
+
+//     int mmn2k=(M - N)/2  + 2 * k;
+
+// //     std::cout << "kmn1=\t" << kmn1 <<"\n"
+// // 	      << "jmnk=\t" << jmnk <<"\n"
+// // 	      << "jmk=\t" << jmk <<"\n"
+// // 	      << "jnk=\t" << jnk <<"\n"
+// // 	      << "kmn2=\t" << kmn2 <<"\n"
+// // 	      << "mmn2k=\t" << mmn2k <<"\n"
+// // 	      << std::endl;
+    	
+//     sum_term += pow ((-1.0), (k)) *
+//       ((pow (cos (__beta / 2.0), jmnk)) * (pow (sin (__beta / 2.0), mmn2k))) /
+//       (factorial (k) * factorial (jmk) * factorial (jnk) * factorial (kmn2));
+
+//   }
+
+//   d = preFactor*const_term * sum_term;
+//   return d;
+// }
 //_____________________________________________________________________________
 
 complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,

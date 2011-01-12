@@ -14,6 +14,7 @@ public:
   ~EventList();
 
   void add(Event*);
+  void removeEvents(unsigned int nBegin, unsigned int nEnd);
 
   Event* nextEvent();
   void rewind();

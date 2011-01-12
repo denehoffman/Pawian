@@ -109,6 +109,8 @@ namespace Gem
 			     << "serMode = " << serMode << "\n"
 			     << endmsg;
 		}
+		
+		
       }
       catch(...){
     	  ErrMsg << "Error parsing the command line" << endmsg;

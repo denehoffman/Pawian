@@ -4,14 +4,14 @@
 #include <string>
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
-#include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
+#include "Examples/pbarpToOmegaPi/AbsOmegaPiLh.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
 #include "ErrLogger/ErrLogger.hh"
 
-OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
+OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList, const std::string &thePathToRootFile) :
   _theTFile(0),
   _cosOmegaHeliDataHist(0),
   _cosOmegaHeliMcHist(0),
@@ -23,7 +23,8 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   _cosPi0FromOmegaAccCorHeli(0),
   _treimanYangDataHist(0),
   _treimanYangMcHist(0),
-  _treimanYangFittedHist(0)
+  _treimanYangFittedHist(0),
+  _cosPi0FromOmegaDataHeli1(0)
 {
   if(0==theEvtList){
     Alert <<"OmegaPiEventList* theEvtList is a 0 pointer !!!!" << endmsg;
@@ -33,7 +34,7 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   _jmax=theEvtList->jMax();
   _pbarmom=theEvtList->pbarMom();
 
-  initRootStuff();
+  initRootStuff(thePathToRootFile);
 
   const std::vector<OmPiEvtData*> dataList=theEvtList->getDataVecs();
 
@@ -43,6 +44,7 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
       plotCosOmegaHeli(_cosOmegaHeliDataHist, (*it), 1.);
       plotCosPi0FromOmegaHeli(_cosPi0FromOmegaDataHeli, (*it), 1.);
       plotTreimanYang(_treimanYangDataHist, (*it), 1.);
+      plotCosPi0FromOmegaHeli1(_cosPi0FromOmegaDataHeli1, (*it), 1.);
       ++it;
     }
 
@@ -70,7 +72,7 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<const OmegaPiEventList> theEvtList) :
   _cosPi0FromOmegaAccCorHeli->SetTitle("cos(#Theta) #pi^0 heli (#omega decay) acc cor");
 }
 
-OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fitParamVal& fitParam) :
+OmegaPiHist::OmegaPiHist(boost::shared_ptr<AbsOmegaPiLh> omegaPiLh, OmegaPiData::fitParamVal& fitParam, const std::string &thePathToRootFile) :
   _theTFile(0),
   _cosOmegaHeliDataHist(0),
   _cosOmegaHeliMcHist(0),
@@ -82,7 +84,8 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
   _cosPi0FromOmegaAccCorHeli(0),
   _treimanYangDataHist(0),
   _treimanYangMcHist(0),
-  _treimanYangFittedHist(0)
+  _treimanYangFittedHist(0),
+  _cosPi0FromOmegaDataHeli1(0)
 {
   if(0==omegaPiLh){
     Alert <<"OmegaPiLh* omegaPiLh is a 0 pointer !!!!" << endmsg;
@@ -98,7 +101,7 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
   _jmax=theEvtList->jMax();
   _pbarmom=theEvtList->pbarMom();
 
-  initRootStuff();
+  initRootStuff(thePathToRootFile);
 
   std::vector<OmPiEvtData*> dataList=theEvtList->getDataVecs();
 
@@ -108,6 +111,7 @@ OmegaPiHist::OmegaPiHist(boost::shared_ptr<OmegaPiLh> omegaPiLh, OmegaPiData::fi
       plotCosOmegaHeli(_cosOmegaHeliDataHist, (*it), 1.);
       plotCosPi0FromOmegaHeli(_cosPi0FromOmegaDataHeli, (*it), 1.);
       plotTreimanYang(_treimanYangDataHist, (*it), 1.);
+      plotCosPi0FromOmegaHeli1(_cosPi0FromOmegaDataHeli1, (*it), 1.);
       ++it;
     }
 
@@ -156,7 +160,7 @@ OmegaPiHist::~OmegaPiHist()
   _theTFile->Close();
 }
 
-void OmegaPiHist::initRootStuff()
+void OmegaPiHist::initRootStuff(const std::string &thePathToRootFile)
 {
   std::stringstream jmaxStrStr;
   std::stringstream pbarMomStrStr;
@@ -164,7 +168,7 @@ void OmegaPiHist::initRootStuff()
   jmaxStrStr << _jmax;
   pbarMomStrStr << _pbarmom;
 
-  std::string rootFileName="./OmegaPi0Fit_jmax"+jmaxStrStr.str()+"_mom"+pbarMomStrStr.str()+".root";
+  std::string rootFileName= thePathToRootFile; //"./OmegaPi0Fit_jmax"+jmaxStrStr.str()+"_mom"+pbarMomStrStr.str()+".root";
 
   _theTFile=new TFile(rootFileName.c_str(),"recreate");
   _cosOmegaHeliDataHist= new TH1F("_cosOmegaHeliDataHist","cos(#Theta) #omega heli data",101, -1.0, 1.0);
@@ -175,7 +179,8 @@ void OmegaPiHist::initRootStuff()
   _cosPi0FromOmegaFittedHeli= new TH1F("_cosPi0FromOmegaFittedHeli","cos(#Theta) #pi^0 heli (#omega decay) fit result",101, -1.0, 1.0);
   _treimanYangDataHist= new TH1F("_treimanYangDataHist","Treiman Yang angle data",101, -TMath::Pi(), TMath::Pi());
   _treimanYangMcHist= new TH1F("_treimanYangMcHist","Treiman Yang angle MC",101, -TMath::Pi(), TMath::Pi());
-  _treimanYangFittedHist= new TH1F("_treimanYangFittedHist","Treiman Yang angle fit result",101, -TMath::Pi(), TMath::Pi());
+  _treimanYangFittedHist= new TH1F("_treimanYangFittedHist","Treiman Yang angle fit result",101, -TMath::Pi(), TMath::Pi()); 
+  _cosPi0FromOmegaDataHeli1= new TH1F("_cosPi0FromOmegaDataHeli1","cos(#Theta) #pi^{0} heli (#omega decay) data 1",101, -1.0, 1.0);
 }
 
 void OmegaPiHist::plotCosOmegaHeli(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight)
@@ -188,6 +193,11 @@ void OmegaPiHist::plotCosPi0FromOmegaHeli(TH1F* theHisto, const OmPiEvtData* the
 {
   Vector4<float> piFromOmegaHeli4V=theEvtData->pi0HeliOmega4Vec;
   theHisto->Fill(piFromOmegaHeli4V.CosTheta(), weight);  
+}
+
+void OmegaPiHist::plotCosPi0FromOmegaHeli1(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight)
+{
+  theHisto->Fill(theEvtData->cosPi0HeliOmega4Vec, weight);  
 }
 
 void OmegaPiHist::plotTreimanYang(TH1F* theHisto, const OmPiEvtData* theEvtData, double weight)

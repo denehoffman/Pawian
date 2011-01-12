@@ -73,6 +73,7 @@ double Clebsch(const Spin &__j1,const Spin &__m1,const Spin &__j2,
  *  used for spins higher than about 11/2 or 8.
  */
 double Wigner_d(const Spin &__j,const Spin &__m,const Spin &__n,double __beta);
+// double Wigner_d_new(const Spin &__j,const Spin &__m,const Spin &__n,double __beta);
 //_____________________________________________________________________________
 /** Returns the Wigner D-function \f$D^{j}_{m,n}(\alpha,\beta,\gamma)\f$.
  *  This function uses the single spin Wigner_d function, thus it shares its

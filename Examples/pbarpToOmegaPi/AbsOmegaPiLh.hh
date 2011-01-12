@@ -1,5 +1,5 @@
-#ifndef _OmegaPiLh_H
-#define _OmegaPiLh_H
+#ifndef _AbsOmegaPiLh_H
+#define _AbsOmegaPiLh_H
 
 #include <iostream>
 #include <fstream>
@@ -22,43 +22,40 @@
 class OmegaPiEventList;
 class pbarpToOmegaPi0States;
 
-class OmegaPiLh {
+class AbsOmegaPiLh {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  OmegaPiLh(boost::shared_ptr<const OmegaPiEventList>, boost::shared_ptr<const pbarpToOmegaPi0States>);
-  OmegaPiLh(boost::shared_ptr<OmegaPiLh>);
+  AbsOmegaPiLh(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates);
+  AbsOmegaPiLh(boost::shared_ptr<AbsOmegaPiLh> theOmegaPiLhPtr);
 
   /** Destructor */
-  virtual ~OmegaPiLh();
+  virtual ~AbsOmegaPiLh();
 
-  OmegaPiLh* clone_() const {
-    return new OmegaPiLh(_omegaPiEventListPtr, _omegaPi0StatesPtr);
-        }
+  virtual AbsOmegaPiLh* clone_() const=0;
 
 
   // Getters:
   
   double calcLogLh(const OmegaPiData::fitParamVal& theParamVal);
-  double calcEvtIntensity(OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal);
-
+  virtual double calcEvtIntensity(OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal)=0;
   boost::shared_ptr<const OmegaPiEventList> getEventList() const {return _omegaPiEventListPtr;}
   boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
-  void print(std::ostream& os) const;
+  virtual void print(std::ostream& os) const;
 
 protected:
 
-
-private:
   boost::shared_ptr<const OmegaPiEventList> _omegaPiEventListPtr;
   boost::shared_ptr<const pbarpToOmegaPi0States> _omegaPi0StatesPtr;
   std::vector<OmegaPiData::OmPiEvtData*> _evtDataVec;
   std::vector<OmegaPiData::OmPiEvtData*> _evtMCVec;
 
-  complex<double> calcCoherentAmp(Spin lamgamma, Spin Minit, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiData::OmPiEvtData* theData);
+  virtual complex<double> calcCoherentAmp(Spin lam, Spin Minit, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiData::OmPiEvtData* theData) = 0;
+
+private:
 
 };
 

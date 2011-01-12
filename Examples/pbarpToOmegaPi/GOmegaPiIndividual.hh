@@ -45,7 +45,7 @@
 #include "Examples/pbarpToOmegaPi/OmegaPiData.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
-#include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
+#include "Examples/pbarpToOmegaPi/AbsOmegaPiLh.hh"
 
 namespace Gem
 {
@@ -86,10 +86,9 @@ public:
 	 * @param min The lower boundary of the variables
 	 * @param max The upper boundary of the variables
 	 */
-	GOmegaPiIndividual(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates)
+	GOmegaPiIndividual(boost::shared_ptr<AbsOmegaPiLh> theLh)
 	  : GParameterSet()
-	  ,_omegaPiLhPtr( new OmegaPiLh(theEvtList, theStates) )
-	  , _barpToOmegaPi0States(theStates)
+	  ,_omegaPiLhPtr( theLh->clone_() )
 	  {
 		// Set up a GBoundedDoubleCollection
 		boost::shared_ptr<GBoundedDoubleCollection> gbdc_ptr(new GBoundedDoubleCollection());
@@ -99,19 +98,22 @@ public:
 		gdga_ptr->setAdaptionThreshold(1); // Mutation parameters are adapted after each mutation
 		gdga_ptr->setRnrGenerationMode(Gem::Util::RNRFACTORY); // Random number generation in the factory
 // 		gdga_ptr->setMutationProbability(0.05); // The likelihood for a parameter to be mutated
-		gdga_ptr->setMutationProbability(0.2); // The likelihood for a parameter to be mutated
+		gdga_ptr->setMutationProbability(0.1); // The likelihood for a parameter to be mutated
 
 		// Register the adaptor with the collection. You could also add individual adaptors
 		// to the GBoundedDouble objects below.
 		gbdc_ptr->addAdaptor(gdga_ptr);
 
-		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=_barpToOmegaPi0States->jpclsSinglet();
+                
+		boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
+
+		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
 		setFitParamVal(JPCLSOmegaSinglet, gbdc_ptr);
 
-		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=_barpToOmegaPi0States->jpclsTriplet0();
+		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theStates->jpclsTriplet0();
 		setFitParamVal(JPCLSOmegaTriplet0, gbdc_ptr);
 
-		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
+		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
 		setFitParamVal(JPCLSOmegaTriplet1, gbdc_ptr);
 
 		// Add the collection to this object
@@ -126,9 +128,8 @@ public:
    */
   GOmegaPiIndividual(const GOmegaPiIndividual& cp)
     : GParameterSet(cp)
-    ,_omegaPiLhPtr( new OmegaPiLh(cp.omegaPiLhPtr()) )
+    ,_omegaPiLhPtr( cp.omegaPiLhPtr()->clone_() )
   { 
-    _barpToOmegaPi0States=_omegaPiLhPtr->omegaPi0States();
   }
   
   /********************************************************************************************/
@@ -141,7 +142,7 @@ public:
   
   /********************************************************************************************/
   
-  boost::shared_ptr<OmegaPiLh> omegaPiLhPtr() const {return _omegaPiLhPtr;}
+  boost::shared_ptr<AbsOmegaPiLh> omegaPiLhPtr() const {return _omegaPiLhPtr;}
   /**
    * A standard assignment operator
    *
@@ -195,9 +196,11 @@ public:
     
     std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=_barpToOmegaPi0States->jpclsSinglet();
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=_barpToOmegaPi0States->jpclsTriplet0();
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
+    boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
+
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theStates->jpclsTriplet0();
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
     
     
     std::vector<double> par;
@@ -212,7 +215,7 @@ public:
     }
 
     
-    int counter=0;
+    unsigned int counter=0;
     for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
       //now fill the fitParameterMap
       double mag=par[counter];
@@ -230,7 +233,7 @@ public:
       double mag=par[counter];
       counter++;
       double phi=0.;
-      if (counter>JPCLSOmegaSinglet.size()*2){ phi=par[counter];
+      if ( counter > JPCLSOmegaSinglet.size()*2){ phi=par[counter];
 	counter++;
       }
       std::pair <double,double> tmpParameter=make_pair(mag,phi);
@@ -254,9 +257,12 @@ public:
 
  void printFitParams(OmegaPiData::fitParamVal& fitParmVal)
   {
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=_barpToOmegaPi0States->jpclsSinglet();
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=_barpToOmegaPi0States->jpclsTriplet0();
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
+
+    boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
+
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theStates->jpclsTriplet0();
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
     std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
     std::cout << "***fit parameter singlet states*** " <<std::endl;  
@@ -284,7 +290,7 @@ public:
     return;
   }
 
-  boost::shared_ptr<OmegaPiLh> getOmegaPiLhPtr() {return _omegaPiLhPtr;}
+  boost::shared_ptr<AbsOmegaPiLh> getOmegaPiLhPtr() {return _omegaPiLhPtr;}
   /*******************************************************************************************/
   /**
    * Checks whether a given expectation for the relationship between this object and another object
@@ -435,8 +441,7 @@ private:
    * The default constructor. Intentionally private and empty, as it is only needed for
    * serialization purposes.
    */
-  boost::shared_ptr<OmegaPiLh> _omegaPiLhPtr;
-  boost::shared_ptr<const pbarpToOmegaPi0States> _barpToOmegaPi0States;
+  boost::shared_ptr<AbsOmegaPiLh> _omegaPiLhPtr;
 
   GOmegaPiIndividual() :GParameterSet()
   {	/* nothing */ }

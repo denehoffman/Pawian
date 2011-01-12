@@ -10,5 +10,5 @@ lib pbarpToOmegaPi :
 	: 
 	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
 
-exe GOmegaPiApp        : GOmegaPiApp.cc pbarpToOmegaPi : ;
-exe MpbarpToOmegaPiApp : MOmegaPiApp.cc pbarpToOmegaPi : ;
+exe GMOmegaPiApp        : GMOmegaPiApp.cc pbarpToOmegaPi : ;
+
