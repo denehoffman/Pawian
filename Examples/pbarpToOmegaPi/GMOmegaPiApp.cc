@@ -694,7 +694,7 @@ int main(int argc, char **argv)
       OmegaPiData::fitParamVal finalFitParm;
 
 
-      boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh= boost::shared_ptr<AbsOmegaPiLh>(new OmegaPiLhGamma(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+       boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh= boost::shared_ptr<AbsOmegaPiLh>(new OmegaPiLhGamma(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
 
       ApplicationParameter::enExecMode theExecMode = theAppParams.getAppExecMode();
       bool bExecFinish=false;      
