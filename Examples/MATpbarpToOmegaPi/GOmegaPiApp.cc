@@ -2,14 +2,16 @@
  * @file GStartProject.cpp
  */
 
-/* Copyright (C) Dr. Ruediger Berlich and Karlsruhe Institute of Technology
- * (University of the State of Baden-Wuerttemberg and National Laboratory
- * of the Helmholtz Association)
+/*
+ * Copyright (C) Authors of the Geneva library collection and Karlsruhe
+ * Institute of Technology (University of the State of Baden-Wuerttemberg
+ * and National Laboratory of the Helmholtz Association).
+ *
+ * See the AUTHORS file in the top-level directory for a list of authors.
  *
  * Contact: info [at] gemfony (dot) com
  *
- * This file is part of the Geneva library, Gemfony scientific's optimization
- * library.
+ * This file is part of the Geneva library collection
  *
  * Geneva is free software: you can redistribute it and/or modify
  * it under the terms of version 3 of the GNU Affero General Public License
@@ -27,23 +29,26 @@
  * http://www.gemfony.com .
  */
 
+
 // Standard header files go here
 #include <iostream>
 #include <cmath>
 #include <sstream>
 
+//Root header files go here
+#include <TStopwatch.h>
+
 // Boost header files go here
 #include <boost/lexical_cast.hpp>
 
-// GenEvA header files go here
-#include "GRandom.hpp"
-#include "GEvolutionaryAlgorithm.hpp"
-#include "GMultiThreadedEA.hpp"
-#include "GBrokerEA.hpp"
-#include "GIndividualBroker.hpp"
-#include "GAsioTCPConsumer.hpp"
-#include "GAsioTCPClient.hpp"
-#include "GAsioHelperFunctions.hpp"
+// Geneva header files go here
+#include <courtier/GAsioHelperFunctions.hpp>
+#include <courtier/GAsioTCPClientT.hpp>
+#include <courtier/GAsioTCPConsumerT.hpp>
+#include <geneva/GBrokerEA.hpp>
+#include <geneva/GEvolutionaryAlgorithm.hpp>
+#include <geneva/GIndividual.hpp>
+#include <geneva/GMultiThreadedEA.hpp>
 
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/MATpbarpToOmegaPi/pbarpToOmegaPi0States.hh"
@@ -72,8 +77,19 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-using namespace Gem::GenEvA;
-using namespace Gem::Util;
+// The individual that should be optimized
+//#include "GStartIndividual.hpp"
+
+// Declares a function to parse the command line
+//#include "GArgumentParser.hpp"
+
+// Information retrieval and printing
+//#include "GInfoFunction.hpp"
+
+using namespace Gem::Geneva;
+using namespace Gem::Courtier;
+using namespace Gem::Hap;
+//using namespace Gem::Util;
 
 /************************************************************************************************/
 /**
@@ -102,7 +118,10 @@ int main(int argc, char **argv){
   unsigned pbarMom;
   int errLogMode;
 
-  serializationMode serMode;
+  Gem::Common::serializationMode serMode;
+
+  TStopwatch timer;
+  timer.Start();
 
   if(!parseCommandLine(argc, argv,
 		       configFile,			  
@@ -231,17 +250,17 @@ int main(int argc, char **argv){
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(jMax));
   //boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
   boost::shared_ptr<pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr = pbarpToOmegaPi0States::getStates(pbarpStatesPtr);
-
+  
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and
   // return when it has finished
   if(parallelizationMode==2 && !serverMode) {
-    boost::shared_ptr<GAsioTCPClient> p(new GAsioTCPClient(ip, boost::lexical_cast<std::string>(port)));
+    boost::shared_ptr<GAsioTCPClientT<GIndividual> > p(new GAsioTCPClientT<GIndividual>(ip, boost::lexical_cast<std::string>(port)));
 
     p->setMaxStalls(0); // An infinite number of stalled data retrievals
     p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
 
-    // Prevent return of unsuccessful mutation attempts to the server
+    // Prevent return of unsuccessful adaption attempts to the server
     p->returnResultIfUnsuccessful(returnRegardless);
 
     // Start the actual processing loop
@@ -297,7 +316,7 @@ int main(int argc, char **argv){
   case 2: // Networked execution (server-side)
     {
       // Create a network consumer and enrol it with the broker
-      boost::shared_ptr<GAsioTCPConsumer> gatc(new GAsioTCPConsumer(port));
+      boost::shared_ptr<GAsioTCPConsumerT<GIndividual> > gatc(new GAsioTCPConsumerT<GIndividual>(port));
       gatc->setSerializationMode(serMode);
       GINDIVIDUALBROKER->enrol(gatc);
 
@@ -321,7 +340,7 @@ int main(int argc, char **argv){
   }
  
   // Specify some general population settings
-  pop_ptr->setPopulationSize(populationSize,nParents);
+  pop_ptr->setDefaultPopulationSize(populationSize,nParents);
   pop_ptr->setMaxIteration(maxIterations);
   pop_ptr->setMaxTime(boost::posix_time::minutes(maxMinutes));
   pop_ptr->setReportIteration(reportIteration);
@@ -343,7 +362,14 @@ int main(int argc, char **argv){
   boost::shared_ptr<OmegaPiLh> finalOmegaPiLh=bestIndividual_ptr->getOmegaPiLhPtr();
   OmegaPiHist theHistogrammer(finalOmegaPiLh,finalFitParm);
 
+  Info << "Final LH:\n\n";
+
+  bestIndividual_ptr->printFitParams(finalFitParm);
+
   Info << "Done ...\n";
+
+  timer.Stop();
+  Info << "Real time: " << (double)timer.RealTime() << " s, CPU time: " << (double)timer.CpuTime() << " s\a\a\n";
 
   return 0;
 }

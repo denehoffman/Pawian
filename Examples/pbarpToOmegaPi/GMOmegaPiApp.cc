@@ -36,14 +36,13 @@
 #include <boost/lexical_cast.hpp>
 
 // GenEvA header files go here
-#include "GRandom.hpp"
-#include "GEvolutionaryAlgorithm.hpp"
-#include "GMultiThreadedEA.hpp"
-#include "GBrokerEA.hpp"
-#include "GIndividualBroker.hpp"
-#include "GAsioTCPConsumer.hpp"
-#include "GAsioTCPClient.hpp"
-#include "GAsioHelperFunctions.hpp"
+#include <courtier/GAsioHelperFunctions.hpp>
+#include <courtier/GAsioTCPClientT.hpp>
+#include <courtier/GAsioTCPConsumerT.hpp>
+#include <geneva/GBrokerEA.hpp>
+#include <geneva/GEvolutionaryAlgorithm.hpp>
+#include <geneva/GIndividual.hpp>
+#include <geneva/GMultiThreadedEA.hpp>
 
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/pbarpToOmegaPi/AbsOmegaPiLh.hh"
@@ -93,8 +92,10 @@
 
 #include "Examples/pbarpToOmegaPi/spindensityhist.hh"
 
-using namespace Gem::GenEvA;
-using namespace Gem::Util;
+using namespace Gem::Geneva;
+using namespace Gem::Courtier;
+using namespace Gem::Hap;
+//using namespace Gem::Util;
 using namespace ROOT::Minuit2;
 using namespace std;
 using namespace boost::posix_time;
@@ -239,7 +240,7 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   case 2: // Networked execution (server-side)
     {
       // Create a network consumer and enrol it with the broker
-      boost::shared_ptr<GAsioTCPConsumer> gatc(new GAsioTCPConsumer(theAppParams.getPort()));
+      boost::shared_ptr<GAsioTCPConsumerT<GIndividual> > gatc(new GAsioTCPConsumerT<GIndividual>(theAppParams.getPort()));
       gatc->setSerializationMode(theAppParams.getSerMode());
       GINDIVIDUALBROKER->enrol(gatc);
 
@@ -263,7 +264,7 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   }
 
   // Specify some general population settings
-  pop_ptr->setPopulationSize(theAppParams.getPopulationSize(),theAppParams.getNParents());
+  pop_ptr->setDefaultPopulationSize(theAppParams.getPopulationSize(),theAppParams.getNParents());
   pop_ptr->setMaxIteration(theAppParams.getMaxIterations());
   pop_ptr->setMaxTime(boost::posix_time::minutes(theAppParams.getMaxMinutes()));
   pop_ptr->setReportIteration(theAppParams.getReportIteration());
@@ -565,7 +566,8 @@ int main(int argc, char **argv)
       // If this is a client in networked mode, we can just start the listener and
       // return when it has finished
     if(theAppParams.getParallelizationMode()==2 && !theAppParams.getServerMode()) {
-	boost::shared_ptr<GAsioTCPClient> p(new GAsioTCPClient(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
+        boost::shared_ptr<GAsioTCPClientT<GIndividual> > p(new GAsioTCPClientT<GIndividual>(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
+	//boost::shared_ptr<GAsioTCPClient> p(new GAsioTCPClient(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
 
 	p->setMaxStalls(0); // An infinite number of stalled data retrievals
 	p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts

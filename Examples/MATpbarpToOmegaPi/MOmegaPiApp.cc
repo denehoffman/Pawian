@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 
+#include <TStopwatch.h>
+
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/MATpbarpToOmegaPi/OmegaPiEventList.hh"
@@ -37,6 +39,9 @@
 using namespace ROOT::Minuit2;
 
 int main(int __argc,char *__argv[]){
+
+  TStopwatch timer;
+  timer.Start();
 
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
 		    || strcmp( __argv[1], "--help" ) == 0 ) ){
@@ -222,6 +227,8 @@ int main(int __argc,char *__argv[]){
 
 //   OmegaPiHist theHistogrammer(theOmegaPiEventPtr);
 
+  timer.Stop();
+  Info << "Real time: " << timer.RealTime() << " s, CPU time: " << timer.CpuTime() << " s\a\a\n";
 
  return 0;
 }

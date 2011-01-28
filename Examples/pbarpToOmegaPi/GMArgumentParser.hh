@@ -55,11 +55,12 @@
 #endif
 
 // GenEvA headers go here
-#include "GEnums.hpp"
-#include "GSerializationHelperFunctions.hpp"
+#include <common/GCommonEnums.hpp>
+#include <common/GSerializationHelperFunctionsT.hpp>
+#include <geneva/GOptimizationEnums.hpp>
 
 namespace po = boost::program_options;
-using namespace Gem::GenEvA;
+using namespace Gem::Geneva;
 
 class ApplicationParameter
 {
@@ -72,7 +73,7 @@ class ApplicationParameter
 					       parallelizationMode(1),
                                                ip("localhost"),
 					       port(10000),
-					       serMode(Gem::GenEvA::TEXTSERIALIZATION),
+					       serMode(Gem::Common::SERIALIZATIONMODE_TEXT),
 					       enAppExecMode(GenEvA),
 					       nProducerThreads(10),
 					       nEvaluationThreads(4),
@@ -122,7 +123,7 @@ class ApplicationParameter
     inline const unsigned& getJMax() { return jMax; }
     inline const unsigned& getPbarMom() { return pbarMom; }
     inline const enErrLogMode& getErrLogMode() { return errLogMode; }
-    inline const serializationMode& getSerMode() { return serMode; }
+    inline const Gem::Common::serializationMode& getSerMode() { return serMode; }
     inline const enExecMode& getAppExecMode() { return enAppExecMode; }
     inline const std::string& getSourcePath() { return theSourcePath; }
     inline const std::string& getPathStartParamFile() { return strPathStartParamFile; }
@@ -146,7 +147,7 @@ class ApplicationParameter
   bool serverMode;
   std::string ip;
   unsigned short port;
-  serializationMode serMode;
+  Gem::Common::serializationMode serMode;
   enExecMode enAppExecMode;
   boost::uint16_t nProducerThreads;
   boost::uint16_t nEvaluationThreads;

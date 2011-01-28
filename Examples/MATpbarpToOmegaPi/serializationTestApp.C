@@ -51,7 +51,7 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-using namespace Gem::GenEvA;
+using namespace Gem::Geneva;
 
 /****************************************************************/
 

@@ -11,7 +11,8 @@
 
 
 // Includes check for correct Boost version(s)
-#include "GGlobalDefines.hpp"
+#include <common/GGlobalDefines.hpp>
+//#include "GGlobalDefines.hpp"
 
 // Boost header files go here
 #include <boost/shared_ptr.hpp>
@@ -28,16 +29,20 @@
 #pragma once
 #endif
 
-// GenEvA header files go here
-#include "GParameterSet.hpp"
-#include "GDoubleGaussAdaptor.hpp"
-#include "GBoundedDoubleCollection.hpp"
-#include "GBoundedDouble.hpp"
-#include "GenevaExceptions.hpp"
-#include "GGlobalOptionsT.hpp"
-#include "GPODExpectationChecksT.hpp"
-#include "GEnums.hpp"
-#include "GUnitTestFrameworkT.hpp"
+// Geneva header files go here
+#include <hap/GRandomT.hpp>
+#include <common/GCommonEnums.hpp>
+#include <common/GExceptions.hpp>
+#include <geneva/GConstrainedDoubleObject.hpp>
+#include <geneva/GConstrainedDoubleObjectCollection.hpp>
+#include <geneva/GDoubleGaussAdaptor.hpp>
+#include <geneva/GObjectExpectationChecksT.hpp>
+#include <geneva/GParameterObjectCollection.hpp>
+#include <geneva/GParameterSet.hpp>
+
+#ifdef GENEVATESTING
+#include <common/GUnitTestFrameworkT.hpp>
+#endif /* GENEVATESTING */
 
 #include "PwaUtils/AbsStates.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -49,7 +54,7 @@
 
 namespace Gem
 {
-namespace GenEvA
+namespace Geneva
 {
 /************************************************************************************************/
 /**
@@ -91,19 +96,18 @@ public:
 	  {
 		//_omegaPiLhPtr( new OmegaPiLh(theStates) );
 
-		// Set up a GBoundedDoubleCollection
-		boost::shared_ptr<GBoundedDoubleCollection> gbdc_ptr(new GBoundedDoubleCollection());
+		// Set up a GConstrainedDoubleObjectCollection
+		boost::shared_ptr<GConstrainedDoubleObjectCollection> gbdc_ptr(new GConstrainedDoubleObjectCollection());
 
 		// Create a suitable adaptor (sigma=0.1, sigma-adaption=0.5, min sigma=0, max sigma=0,5)
 		boost::shared_ptr<GDoubleGaussAdaptor> gdga_ptr(new GDoubleGaussAdaptor(0.1, 0.5, 0., 0.5));
-		gdga_ptr->setAdaptionThreshold(1); // Mutation parameters are adapted after each mutation
-		gdga_ptr->setRnrGenerationMode(Gem::Util::RNRFACTORY); // Random number generation in the factory
-// 		gdga_ptr->setMutationProbability(0.05); // The likelihood for a parameter to be mutated
-		gdga_ptr->setMutationProbability(0.2); // The likelihood for a parameter to be mutated
 
-		// Register the adaptor with the collection. You could also add individual adaptors
-		// to the GBoundedDouble objects below.
-		gbdc_ptr->addAdaptor(gdga_ptr);
+		gdga_ptr->setAdaptionThreshold(1); // Adaption parameters are modified after each adaption
+		gdga_ptr->setAdaptionProbability(0.05); // The likelihood for a parameter to be adapted
+
+		// Add a GConstrainedDoubleObject object to the collection
+		// gbdc_ptr->push_back(gbd_ptr);
+		// gpoc_ptr->push_back(gbd_ptr);
 
 		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=_barpToOmegaPi0States->jpclsSinglet();
 		setFitParamVal(JPCLSOmegaSinglet, gbdc_ptr);
@@ -113,6 +117,11 @@ public:
 
 		std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_barpToOmegaPi0States->jpclsTriplet1();
 		setFitParamVal(JPCLSOmegaTriplet1, gbdc_ptr);
+
+		for(std::size_t i=0; i<gbdc_ptr->size(); i++) {
+			// Register the adaptor with GConstrainedDoubleObject objects
+			gbdc_ptr->at(i)->addAdaptor(gdga_ptr);
+		}
 
 		// Add the collection to this object
 		this->push_back(gbdc_ptr);
@@ -164,7 +173,7 @@ public:
    * @return A boolean indicating whether both objects are equal
    */
   bool operator==(const GOmegaPiIndividual& cp) const {
-    using namespace Gem::Util;
+    using namespace Gem::Common;
     // Means: The expectation of equality was fulfilled, if no error text was emitted (which converts to "true")
     return !checkRelationshipWith(cp, CE_EQUALITY, 0.,"GOmegaPiIndividual::operator==","cp", CE_SILENT);
   }
@@ -180,7 +189,7 @@ public:
    * @return A boolean indicating whether both objects are inequal
    */
   bool operator!=(const GOmegaPiIndividual& cp) const {
-    using namespace Gem::Util;
+    using namespace Gem::Common;
     // Means: The expectation of inequality was fulfilled, if no error text was emitted (which converts to "true")
     return !checkRelationshipWith(cp, CE_INEQUALITY, 0.,"GOmegaPiIndividual::operator!=","cp", CE_SILENT);
   }
@@ -191,7 +200,7 @@ public:
     std::vector<double> theParms;
     // Extract the GDoubleCollection object. In a realistic scenario, you might want
     // to add error checks here upon first invocation.
-    boost::shared_ptr<GBoundedDoubleCollection> vC = pc_at<GBoundedDoubleCollection>(0);
+    boost::shared_ptr<GConstrainedDoubleObjectCollection> vC = at<GConstrainedDoubleObjectCollection>(0);
     
     std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
@@ -302,14 +311,13 @@ public:
    * @return A boost::optional<std::string> object that holds a descriptive string if expectations were not met
    */
   boost::optional<std::string> checkRelationshipWith(const GObject& cp,
-						     const Gem::Util::expectation& e,
+						     const Gem::Common::expectation& e,
 						     const double& limit,
 						     const std::string& caller,
 						     const std::string& y_name,
 						     const bool& withMessages) const
   {
-    using namespace Gem::Util;
-    using namespace Gem::Util::POD;
+	    using namespace Gem::Common;
     
     // Check that we are not accidently assigning this object to itself
     selfAssignmentCheck<GOmegaPiIndividual>(&cp);
@@ -328,59 +336,63 @@ public:
     return evaluateDiscrepancies("GOmegaPiIndividual", caller, deviations, e);
   }
   
-  /*******************************************************************************************/
-  /**
-   * Applies modifications to this object. This is needed for testing purposes
-   *
-   * @return A boolean which indicates whether modifications were made
-   */
-  virtual bool modify_GUnitTests() {
-    bool result;
-    
-    // Call the parent class'es function
-    if(GParameterSet::modify_GUnitTests()) result = true;
-    
-    // Check that this individual actually contains data to be modified
-    if(this->size() != 0) {
-      mutate(); // Perform modifications
-      result = true;
-    }
-    
-    return result;
-  }
-  
-  /*******************************************************************************************/
-  /**
-   * Performs self tests that are expected to succeed. This is needed for testing purposes
-   */
-  virtual void specificTestsNoFailureExpected_GUnitTests() {
-    const boost::uint32_t NITERATIONS=100;
-    
-    // Call the parent class'es function
-    GParameterSet::specificTestsNoFailureExpected_GUnitTests();
-    
-    // Create an individual
-    boost::shared_ptr<Gem::GenEvA::GOmegaPiIndividual> p
-      = boost::shared_ptr<Gem::GenEvA::GOmegaPiIndividual>(new GOmegaPiIndividual(*this));
-    
-    // Mutate a number of times and check that there were changes
-    double oldfitness = p->fitness();
-    for(boost::uint32_t i=0; i<NITERATIONS; i++) {
-      p->mutate();
-      double newfitness = p->fitness();
-      BOOST_CHECK_MESSAGE(newfitness != oldfitness, "Rare failures are normal for this test / " << i << "/" << NITERATIONS);
-      oldfitness = newfitness;
-    }
-  }
-  
-  /*******************************************************************************************/
-  /**
-   * Performs self tests that are expected to fail. This is needed for testing purposes
-   */
-  virtual void specificTestsFailuresExpected_GUnitTests() {
-    // Call the parent class'es function
-    GParameterSet::specificTestsFailuresExpected_GUnitTests();
-  }
+#ifdef GENEVATESTING
+
+	/*******************************************************************************************/
+	/**
+	 * Applies modifications to this object. This is needed for testing purposes
+	 *
+	 * @return A boolean which indicates whether modifications were made
+	 */
+	virtual bool modify_GUnitTests() {
+		bool result;
+
+		// Call the parent class'es function
+		if(GParameterSet::modify_GUnitTests()) result = true;
+
+		// Check that this individual actually contains data to be modified
+		if(this->size() != 0) {
+			adapt(); // Perform modifications
+			result = true;
+		}
+
+		return result;
+	}
+
+	/*******************************************************************************************/
+	/**
+	 * Performs self tests that are expected to succeed. This is needed for testing purposes
+	 */
+	virtual void specificTestsNoFailureExpected_GUnitTests() {
+		const boost::uint32_t NITERATIONS=100;
+
+		// Call the parent class'es function
+		GParameterSet::specificTestsNoFailureExpected_GUnitTests();
+
+		// Create an individual
+		boost::shared_ptr<Gem::Geneva::GStartIndividual> p
+			= boost::shared_ptr<Gem::Geneva::GStartIndividual>(new GStartIndividual(1000, -10, 10));
+
+		// Adapt a number of times and check that there were changes
+		double oldfitness = p->fitness();
+		for(boost::uint32_t i=0; i<NITERATIONS; i++) {
+			p->adapt();
+			double newfitness = p->fitness();
+			BOOST_CHECK_MESSAGE(newfitness != oldfitness, "Rare failures are normal for this test / " << i << "/" << NITERATIONS);
+			oldfitness = newfitness;
+		}
+	}
+
+	/*******************************************************************************************/
+	/**
+	 * Performs self tests that are expected to fail. This is needed for testing purposes
+	 */
+	virtual void specificTestsFailuresExpected_GUnitTests() {
+		// Call the parent class'es function
+		GParameterSet::specificTestsFailuresExpected_GUnitTests();
+	}
+
+#endif /* GENEVATESTING */
   
 protected:
   /********************************************************************************************/
@@ -444,7 +456,7 @@ private:
   }
 
 
-  void setFitParamVal(std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs, boost::shared_ptr<GBoundedDoubleCollection> theGbdc_ptr){
+  void setFitParamVal(std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs, boost::shared_ptr<GConstrainedDoubleObjectCollection> theGbdc_ptr){
     
     std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
     
@@ -452,11 +464,11 @@ private:
     for ( itJPCLS=theJPCLSs.begin(); itJPCLS!=theJPCLSs.end(); ++itJPCLS){
       //now fill the fitParameterMap
       
-      boost::shared_ptr<GBoundedDouble> gbd_ptr(new GBoundedDouble(0., 1.) ); //JPCLS magnitude
+      boost::shared_ptr<GConstrainedDoubleObject> gbd_ptr(new GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
       theGbdc_ptr->push_back(gbd_ptr);
 
       if (counter>0){ 
-      boost::shared_ptr<GBoundedDouble>  gbd_ptr(new GBoundedDouble(-M_PI, M_PI) ); //JPCLS phi
+      boost::shared_ptr<GConstrainedDoubleObject>  gbd_ptr(new GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
 	theGbdc_ptr->push_back(gbd_ptr);
       }
       counter++; 
@@ -471,24 +483,24 @@ private:
   
   /*************************************************************************************************/
   
-} /* namespace GenEvA */
+} /* namespace Geneva */
 } /* namespace Gem */
 
 // Needed for serialization purposes
 #include <boost/serialization/export.hpp>
-BOOST_CLASS_EXPORT(Gem::GenEvA::GOmegaPiIndividual)
+BOOST_CLASS_EXPORT(Gem::Geneva::GOmegaPiIndividual)
   
 // Needed for testing purposes
 /*************************************************************************************************/
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /*************************************************************************************************/
 /**
- * As the Gem::GenEvA::Gem::GenEvA::GOmegaPiIndividual has a private default constructor, we need to provide a
+ * As the Gem::Geneva::Gem::Geneva::GOmegaPiIndividual has a private default constructor, we need to provide a
  * specialization of the factory function that creates GStartProjectIndividual objects
  */
  //template <>
- //boost::shared_ptr<Gem::GenEvA::GOmegaPiIndividual> TFactory_GUnitTests<Gem::GenEvA::GOmegaPiIndividual>() {
- //	return boost::shared_ptr<Gem::GenEvA::GOmegaPiIndividual>(new Gem::GenEvA::GOmegaPiIndividual(1000,-10.,10.));
+ //boost::shared_ptr<Gem::Geneva::GOmegaPiIndividual> TFactory_GUnitTests<Gem::Geneva::GOmegaPiIndividual>() {
+ //	return boost::shared_ptr<Gem::Geneva::GOmegaPiIndividual>(new Gem::Geneva::GOmegaPiIndividual(1000,-10.,10.));
  //}
 
 /*************************************************************************************************/

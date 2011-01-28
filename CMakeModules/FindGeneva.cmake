@@ -16,12 +16,27 @@ if(GENEVA_ROOT)
         ${GENEVA_ROOT})
 endif()
 
-find_path(GENEVA_INCLUDE_DIRS GBoolean.hpp
+find_path(GENEVA_INCLUDE_DIRS geneva/GIndividual.hpp
     HINTS ${_GENEVA_INCLUDE_SEARCH_DIRS})
 
-set(GENEVA_LIBRARIES geneva-opt)
-find_library(GENEVA_LIBRARY ${GENEVA_LIBRARIES}
+find_library(GENEVA_LIBRARY gemfony-geneva
     HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
+find_library(GENEVA_COM_LIBRARY gemfony-common
+    HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
+find_library(GENEVA_HAP_LIBRARY gemfony-hap
+    HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
+find_library(GENEVA_DATA_LIBRARY gemfony-dataexchange
+    HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
+find_library(GENEVA_COU_LIBRARY gemfony-courtier
+    HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
+
+set(GENEVA_LIBRARIES 
+  ${GENEVA_LIBRARY}
+  ${GENEVA_COM_LIBRARY} 
+  ${GENEVA_HAP_LIBRARY} 
+  ${GENEVA_DATA_LIBRARY} 
+  ${GENEVA_COU_LIBRARY} 
+)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GENEVA DEFAULT_MSG

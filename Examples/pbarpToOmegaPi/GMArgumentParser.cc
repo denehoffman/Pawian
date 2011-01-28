@@ -65,7 +65,7 @@ bool ApplicationParameter::parseCommandLine(int argc, char **argv)
       ("serverMode,s","Whether to run networked execution in server or client mode. The option only gets evaluated if \"--parallelizationMode=2\"")
       ("ip",po::value<std::string>(&ip)->default_value(ip), "The ip of the server")
       ("port",po::value<unsigned short>(&port)->default_value(port), "The port of the server")
-      ("serMode", po::value<Gem::GenEvA::serializationMode>(&serMode)->default_value(serMode),
+      ("serMode", po::value<Gem::Common::serializationMode>(&serMode)->default_value(serMode),
 	    "Specifies whether serialization shall be done in TEXTMODE (0), XMLMODE (1) or BINARYMODE (2)")
       ("spf", po::value<string>(&strPathStartParamFile),"Path to the start parameter file.")
       ("M1", "Spin M for calculation of spin density.")
