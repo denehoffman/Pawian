@@ -18,9 +18,12 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1430]=theStates.ChiTo2K_0_States();
   _jpclsMap[paramEnum2K2PiGam::K_2_1430K_2_1430]=theStates.ChiTo2K_2_1430States();
   _jpclsMap[paramEnum2K2PiGam::K_0_1430K_2_1430]=theStates.ChiToK0K2_States();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1400K_1_1400]=theStates.ChiTo2K892States();;
   _jpclsMap[paramEnum2K2PiGam::K_1_1400ToK892Pi]=theStates.K1400ToKst1PiStates();
   _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK892Pi]=theStates.K1400ToKst1PiStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi]=theStates.K1ToK0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi]=theStates.K1ToK0PiStates(); 
+  _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK892Pi]=theStates.K1400ToKst1PiStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK_0_1430Pi]=theStates.K1ToK0PiStates();
   _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1950]=theStates.ChiTo2K_0_States();
   _jpclsMap[paramEnum2K2PiGam::KappaK_0_1950]=theStates.ChiTo2K_0_States();
   _jpclsMap[paramEnum2K2PiGam::f980_pif1710_k]=theStates.ChiTof0f0States();
@@ -73,9 +76,12 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::K_0_1430K_0_1430) return params.ChiTo2K_0_1430;
   else if (index==paramEnum2K2PiGam::K_2_1430K_2_1430) return params.ChiTo2K_2_1430;
   else if (index==paramEnum2K2PiGam::K_0_1430K_2_1430) return params.ChiToK_0_1430_K_2_1430;
+  else if (index==paramEnum2K2PiGam::K_1_1400K_1_1400) return params.ChiToK_1_1400_K_1_1400;
   else if (index==paramEnum2K2PiGam::K_1_1400ToK892Pi) return params.K1400ToK892Pi;
   else if (index==paramEnum2K2PiGam::K_1_1270ToK892Pi) return params.K_1_1270ToK892Pi;
   else if (index==paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi) return params.K_1_1270ToK_0_1430Pi;
+  else if (index==paramEnum2K2PiGam::K_1_1650ToK892Pi) return params.K_1_1650ToK892Pi;
+  else if (index==paramEnum2K2PiGam::K_1_1650ToK_0_1430Pi) return params.K_1_1650ToK_0_1430Pi;
   else if (index==paramEnum2K2PiGam::K_0_1430K_0_1950) return params.ChiToK_0_1430K_0_1950; 
   else if (index==paramEnum2K2PiGam::KappaK_0_1950) return params.ChiToKappaK_0_1950;  
   else if (index==paramEnum2K2PiGam::f980_pif1710_k) return params.f980_pif1710_k;
@@ -120,6 +126,7 @@ pair<double, double>& FitParams2K2PiGam::massPair(param2K2PiGam& params, unsigne
   else if (index==paramEnum2K2PiGam::K_1_1400) return params.BwK_1_1400;
   else if (index==paramEnum2K2PiGam::K_2_1430) return params.BwK_2_1430;
   else if (index==paramEnum2K2PiGam::K_1_1270) return params.BwK_1_1270;
+  else if (index==paramEnum2K2PiGam::K_1_1650) return params.BwK_1_1650;
   else if (index==paramEnum2K2PiGam::f1710) return params.Bwf1710;
   else if (index==paramEnum2K2PiGam::f2200) return params.Bwf2200;
   else if (index==paramEnum2K2PiGam::sigma) return params.BwSigma;

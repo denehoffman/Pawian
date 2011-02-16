@@ -1,5 +1,5 @@
 
-build-project pbarpToOmegaPi ;
+# build-project pbarpToOmegaPi ;
 build-project EtacToapi0Fit ;
 build-project Psi2SToKpKmPiGam ;
 build-project Psi2STo2K2PiGam ; 

@@ -12,6 +12,7 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K0_1430_K0_1430Hyp(true)
   ,_K2_1430_K2_1430Hyp(false)
   ,_K0_1430_K2_1430Hyp(false)
+  ,_K1_1400_K1_1400Hyp(false)
   ,_nFitParams(0) 
 {
   setUp(hypMap); 
@@ -24,6 +25,7 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K0_1430_K0_1430Hyp(true)
   ,_K2_1430_K2_1430Hyp(false)
   ,_K0_1430_K2_1430Hyp(false)
+  ,_K1_1400_K1_1400Hyp(false)
   ,_nFitParams(0) 
 {
   setUp(hypMap);
@@ -43,6 +45,7 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_2_1430=theParamVal.ChiTo2K_2_1430;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_0_1430=theParamVal.ChiTo2K_0_1430;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K_2_1430=theParamVal.ChiToK_0_1430_K_2_1430;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1400_K_1_1400=theParamVal.ChiToK_1_1400_K_1_1400;
 
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400ToK892pi=theParamVal.ChiToK1400ToK892pi;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K1400ToK892Pi=theParamVal.K1400ToK892Pi;
@@ -80,6 +83,7 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   if (_K0_1430_K0_1430Hyp) result+=chiTo2K_0_Amp(theData, ChiTo2K_0_1430, K_0_1430Mass, K_0_1430Width, K_0_1430Mass, K_0_1430Width);
   if (_K2_1430_K2_1430Hyp) result+=chiTo2K_2_Amp(theData, ChiTo2K_2_1430, K_2_1430Mass, K_2_1430Width);
   if (_K0_1430_K2_1430Hyp) result+=chiToK0K2Amp(theData, ChiToK_0_1430_K_2_1430, K_0_1430Mass, K_0_1430Width, K_2_1430Mass, K_2_1430Width);
+  if (_K1_1400_K1_1400Hyp) result+=chiToK1K1Amp(theData, ChiToK_1_1400_K_1_1400, K1400Mass, K1400Width, K1400Mass, K1400Width);
 
   //Chi_c0 decay to K1*(1400) -> K1*(892) pi0 -> (K pi0) pi0
   if (_K1_1270Hyp){
@@ -109,55 +113,16 @@ void Hyp1Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  pa
 
   _fitParams2K2PiGam.setMnUsrParamsFlatteMass(upar, startVal, errVal, paramEnum2K2PiGam::name(paramEnum2K2PiGam::phaseSpace));
 
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
 
-  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::ChiGam);
-  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K892K892);
-
-  if (_K0_1430_K0_1430Hyp){
-    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_0_1430K_0_1430);
-  }
-  if (_K2_1430_K2_1430Hyp){
-    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_2_1430K_2_1430);
-  }
-  if (_K0_1430_K2_1430Hyp){
-    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_0_1430K_2_1430);
+    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, (*itAmps));
   }
 
-  if (_K1_1270Hyp){ 
-    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_1_1270ToK892Pi);
-    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi);
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, (*itMasses) );  
   }
-
-  if (_K1_1400Hyp){ 
-    _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_1_1400ToK892Pi);
-  }
-
-  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::f980_pif1710_k);
-  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::f980_kf1710_pi);
-  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::f980f980);
-
-  //K*(892) BW
-  _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K892);
-
-  if (_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp){
-    _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K_0_1430);
-  }
-
-  if (_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp){
-    _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K_2_1430);
-  }
-
-  //K1(1400) BW
-  if (_K1_1270Hyp){ 
-    _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K_1_1270);
-    if (!_K0_1430_K0_1430Hyp && !_K0_1430_K2_1430Hyp) _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K_0_1430); 
-  }
-
-  if (_K1_1400Hyp){ 
-    _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K_1_1400);
-  }
-
-  _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::f1710);
 
 //   setMnUsrParamsMass(upar, startVal, errVal, "f980_pi");
   _fitParams2K2PiGam.setMnUsrParamsFlatteMass(upar, startVal, errVal, paramEnum2K2PiGam::name(paramEnum2K2PiGam::f980));
@@ -178,62 +143,15 @@ int Hyp1Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
   int counter=0;
   counter=_fitParams2K2PiGam.setFitParamFlatteMass(theParamVal, par, counter, paramEnum2K2PiGam::name(paramEnum2K2PiGam::phaseSpace));
 
-
-  //Psi(2S) ->Chi_c1 gamma amplitude params
-  counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::ChiGam);
-
-  //K*(982) K*(982)    amplitude params
-  counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K892K892);
-
-  //K2*(1430) K2*(1430)    amplitude params
-  if (_K0_1430_K0_1430Hyp){
-    counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_0_1430K_0_1430);
-  }
- if (_K2_1430_K2_1430Hyp){  
-   counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_2_1430K_2_1430);
- }
-
- if (_K0_1430_K2_1430Hyp){  
-   counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_0_1430K_2_1430);
- }
-  //K1(1400) K    amplitude params
-  if (_K1_1270Hyp){
-    counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_1_1270ToK892Pi);
-    counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi);
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+    counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, (*itAmps));
   }
 
-  if (_K1_1400Hyp){
-    counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_1_1400ToK892Pi);
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, (*itMasses) ); 
   }
-
-  //f980 f1710    amplitude params
-  counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::f980_pif1710_k);
-  counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::f980_kf1710_pi);
-
-  //f980 f980    amplitude params
-  counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::f980f980);
-
-  // K*892 mass 
-  counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::K892);
-
-  if (_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp){
-    counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::K_0_1430);
-  }
-
-  if (_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp){  
-    counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::K_2_1430);
-  }
-
-  //K1(1400) mass
-  if (_K1_1270Hyp){
-    counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::K_1_1270);
-    if (!_K0_1430_K0_1430Hyp && !_K0_1430_K2_1430Hyp) counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::K_0_1430);
-  }
-  if (_K1_1400Hyp){
-    counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::K_1_1400);
-  }
-
-  counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::f1710);
 
   counter=_fitParams2K2PiGam.setFitParamFlatteMass(theParamVal, par, counter, paramEnum2K2PiGam::name(paramEnum2K2PiGam::f980));
 
@@ -376,6 +294,14 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _hypMap[iter->first]= iter->second;
     Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K2_1430Hyp <<endmsg;
   }
+
+  iter= hypMap.find("K1_1400_K1_1400Hyp");
+  if (iter !=hypMap.end()){
+    _K1_1400_K1_1400Hyp= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K1_1400_K1_1400Hyp <<endmsg;
+  }
+
   else Alert << "hypothesis K0_1430_K2_1430Hyp not set!!!" <<endmsg;
 
   _ampVec.push_back(paramEnum2K2PiGam::ChiGam);
@@ -391,11 +317,12 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if(_K2_1430_K2_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_2_1430K_2_1430);
   if(_K0_1430_K0_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_0_1430K_0_1430);
   if(_K0_1430_K2_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_0_1430K_2_1430);
+  if(_K1_1400_K1_1400Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_1_1400K_1_1400);
 
   _massVec.push_back(paramEnum2K2PiGam::K892);
   _massVec.push_back(paramEnum2K2PiGam::f1710);
   if(_K1_1270Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1270);
-  if(_K1_1400Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1400);
+  if(_K1_1400Hyp || _K1_1400_K1_1400Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1400);
   if(_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp) _massVec.push_back(paramEnum2K2PiGam::K_2_1430);
   if(_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp || _K1_1270Hyp) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
 

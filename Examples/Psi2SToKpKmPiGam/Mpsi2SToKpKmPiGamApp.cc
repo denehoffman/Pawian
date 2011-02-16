@@ -157,7 +157,10 @@ int main(int __argc,char *__argv[]){
   paramKpKmPiGam theErrorparams=theParamStreamer.getFitParamErr();
 
   std::string datFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorDATA_kkpi0.dat";
-  std::string mcFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorMC_chic1_kkpi0.dat"; 
+  std::string mcFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorMC_chic1_kkpi0.dat";
+  
+//   std::string datFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorDATAUnS_OptSel_kkpi0_101222.dat";
+//   std::string mcFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorMC_chic1_OptSel_kkpi0_101222.dat";
 
   Info << "data file: " << datFile << endmsg;
   Info << "mc file: " << mcFile << endmsg;
