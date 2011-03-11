@@ -100,8 +100,10 @@ namespace Gem
       GOmegaPiIndividual();
 
       /** @brief Allows to set the fit parameters */
-      void setFitParamVal(std::vector< boost::shared_ptr<const JPCLS> >, boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection>);
-    
+      void setFitParamVal(
+         std::vector< boost::shared_ptr<const JPCLS> >
+	 , boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection>
+      );
       
       boost::shared_ptr<AbsOmegaPiLh> _omegaPiLhPtr; ///< Holds the likelihood calculator
     };

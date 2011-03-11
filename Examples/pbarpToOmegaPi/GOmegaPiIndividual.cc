@@ -108,7 +108,10 @@ namespace Gem
       }
     
       if (par.size()!= JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3){
-	std::cout << "size of parameters wrong!!! par.size()=" << par.size() << "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" << JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 << std::endl;
+	std::cout << "size of parameters wrong!!! par.size()=" 
+		  << par.size() << "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" 
+		  << JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 
+		  << std::endl;
 	assert(0);
       }
 
@@ -240,8 +243,7 @@ namespace Gem
      * The default constructor. Intentionally private and empty, as it is only needed for
      * serialization purposes.
      */
-    GOmegaPiIndividual::GOmegaPiIndividual() 
-      :GParameterSet()
+    GOmegaPiIndividual::GOmegaPiIndividual() :GParameterSet()
     {	/* nothing */ }
 
 
