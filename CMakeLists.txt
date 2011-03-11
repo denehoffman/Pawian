@@ -21,7 +21,7 @@ find_package(ROOT REQUIRED)
 
 # Configure Boost
 SET (Boost_USE_MULTITHREAD ON)
-SET (Boost_ADDITIONAL_VERSIONS "1.42" "1.43.0" "1.44" "1.44.0" "1.45" "1.45.0" "1.46" "1.46.0")
+SET (Boost_ADDITIONAL_VERSIONS "1.42" "1.43.0" "1.44" "1.44.0" "1.45" "1.45.0" "1.46" "1.46.0" "1.46.1")
 
 IF(DEFINED PAWIAN_BOOSTROOT)
 	MESSAGE ("Using custom Boost installation")

@@ -85,7 +85,9 @@ namespace Gem
     }
   
     /********************************************************************************************/
-
+    /**
+     * Retrieval of fit parameters
+     */
     bool GOmegaPiIndividual::getFitParams(OmegaPiData::fitParamVal& fitParmVal) { 
       std::vector<double> theParms;
       // Extract the GDoubleCollection object. In a realistic scenario, you might want
@@ -157,7 +159,9 @@ namespace Gem
     }
 
     /********************************************************************************************/
-
+    /*
+     * Printing of fit-parameters
+     */
     void GOmegaPiIndividual::printFitParams(OmegaPiData::fitParamVal& fitParmVal) {
 
       boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
@@ -249,10 +253,9 @@ namespace Gem
 
     /********************************************************************************************/
     void GOmegaPiIndividual::setFitParamVal(
-					    std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs
-					    , boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr
-					    ){
-    
+	 std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs
+	 , boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr
+    ){
       std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
     
       int counter=0;
