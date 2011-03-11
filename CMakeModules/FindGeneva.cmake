@@ -21,20 +21,20 @@ find_path(GENEVA_INCLUDE_DIRS geneva/GIndividual.hpp
 
 find_library(GENEVA_LIBRARY gemfony-geneva
     HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
+find_library(GENEVA_IND_LIBRARY gemfony-geneva-individuals
+    HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
 find_library(GENEVA_COM_LIBRARY gemfony-common
     HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
 find_library(GENEVA_HAP_LIBRARY gemfony-hap
-    HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
-find_library(GENEVA_DATA_LIBRARY gemfony-dataexchange
     HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
 find_library(GENEVA_COU_LIBRARY gemfony-courtier
     HINTS ${_GENEVA_LIBRARIES_SEARCH_DIRS})
 
 set(GENEVA_LIBRARIES 
   ${GENEVA_LIBRARY}
+  ${GENEVA_IND_LIBRARY}
   ${GENEVA_COM_LIBRARY} 
   ${GENEVA_HAP_LIBRARY} 
-  ${GENEVA_DATA_LIBRARY} 
   ${GENEVA_COU_LIBRARY} 
 )
 

@@ -4,7 +4,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
 # Set name of our project to "PAWIAN" (= PArtial Wave Interactive ANalysis)                  
 project(PAWIAN)
 
-
 set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
 
@@ -20,9 +19,18 @@ include(WriteConfigFile)
 # mandatory
 find_package(ROOT REQUIRED)
 
+# Configure Boost
 SET (Boost_USE_MULTITHREAD ON)
+SET (Boost_ADDITIONAL_VERSIONS "1.42" "1.43.0" "1.44" "1.44.0" "1.45" "1.45.0" "1.46" "1.46.0")
 
-SET (Boost_ADDITIONAL_VERSIONS "1.42" "1.43.0")
+IF(DEFINED PAWIAN_BOOSTROOT)
+	MESSAGE ("Using custom Boost installation")
+	SET(BOOST_ROOT ${PAWIAN_BOOSTROOT})
+	SET(BOOST_INCLUDEDIR ${PAWIAN_BOOSTROOT}/include)
+	SET(BOOST_LIBRARYDIR ${PAWIAN_BOOSTROOT}/lib)
+	SET(Boost_NO_SYSTEM_PATHS true)
+ENDIF()
+
 
 FIND_PACKAGE(Boost 1.42 REQUIRED COMPONENTS
         date_time
@@ -32,12 +40,6 @@ FIND_PACKAGE(Boost 1.42 REQUIRED COMPONENTS
         serialization
         system
         thread
-)
-
-
-# The test component is not necessary for the library, but needed for the tests
-FIND_PACKAGE(Boost 1.42 COMPONENTS
-        test_exec_monitor
 )
 
 MESSAGE("Boost_INCLUDE_DIRS: "  ${Boost_INCLUDE_DIRS})
@@ -61,13 +63,24 @@ FIND_PACKAGE(Geneva REQUIRED)
 MESSAGE("GENEVA_INCLUDE_DIRS: " ${GENEVA_INCLUDE_DIRS})
 MESSAGE("GENEVA_LIBRARY_DIRS: " ${GENEVA_LIBRARY_DIRS})
 MESSAGE("GENEVA_LIBRARIES: " ${GENEVA_LIBRARIES})
-#MESSAGE("GENEVA_LIBRARY: " ${GENEVA_LIBRARY})
+
 # Set the library type to static by default
 IF( NOT PAWIAN_STATIC )
         SET( PAWIAN_STATIC TRUE )
 ENDIF()
 
-SET (CMAKE_BUILD_TYPE Debug)
+# Set the build type to Debug by default or in case PAWIAN_BUILD_TYPE
+# was not set. Set it to Release if PAWIAN_BUILD_TYPE was set
+# accordingly. Complain in all other cases.
+IF(NOT DEFINED PAWIAN_BUILD_TYPE OR PAWIAN_BUILD_TYPE STREQUAL "Debug")
+	MESSAGE ("Setting the build type to default value Debug")
+	SET(CMAKE_BUILD_TYPE Debug)
+ELSEIF(GENEVA_BUILD_TYPE STREQUAL "Release")
+	MESSAGE ("Setting the build type to Release")
+	SET(CMAKE_BUILD_TYPE Release)
+ELSE()
+	MESSAGE (FATAL_ERROR "Unknown compilation mode " ${PAWIAN_BUILD_TYPE})
+ENDIF()
 
 IF( PAWIAN_STATIC )
 #        SET (CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -lpthread")
@@ -94,14 +107,7 @@ add_subdirectory (DecayTree)
 add_subdirectory (Event)
 add_subdirectory (Setup)
 add_subdirectory (PwaUtils)
-add_subdirectory (Examples/SeqDecHeliAmps)
-add_subdirectory (Examples/pbarp)
-#add_subdirectory (Examples/EtacToapi0Fit)
-#add_subdirectory (Examples/GMultiPopulation)
-#add_subdirectory (Examples/GStartProject)
-add_subdirectory (Examples/pbarpToOmegaPi)
-#add_subdirectory (Examples/MATpbarpToOmegaPi)
-
+add_subdirectory (Examples)
 
 EXECUTE_PROCESS(COMMAND ps OUTPUT_VARIABLE PSOUTPUT)
 

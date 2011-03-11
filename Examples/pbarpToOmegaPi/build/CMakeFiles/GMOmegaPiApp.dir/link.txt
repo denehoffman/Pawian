@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/GMOmegaPiApp.dir/GMOmegaPiApp.cc.o  -o GMOmegaPiApp -rdynamic libpbarpToOmegaPi.so -lSetup -lParticle -lEvent -lUtils -lPwaUtils -lErrLogger -lqft++ -Wl,-rpath,/home/rberlich/Pawian/Examples/pbarpToOmegaPi/build: 
