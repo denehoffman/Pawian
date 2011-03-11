@@ -2,11 +2,11 @@
 
 #include "GOmegaPiIndividual.hh"
 
-BOOST_CLASS_EXPORT_IMPLEMENT(Gem::Geneva::GOmegaPiIndividual)
+BOOST_CLASS_EXPORT_IMPLEMENT(Gem::Pawian::GOmegaPiIndividual)
 
 namespace Gem
 {
-  namespace Geneva
+  namespace Pawian
   {
     /********************************************************************************************/
     /**
@@ -19,10 +19,10 @@ namespace Gem
       ,_omegaPiLhPtr( theLh->clone_() )
     {
       // Set up a GConstrainedDoubleObjectCollection
-      boost::shared_ptr<GConstrainedDoubleObjectCollection> gbdc_ptr(new GConstrainedDoubleObjectCollection());
+      boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> gbdc_ptr(new Gem::Geneva::GConstrainedDoubleObjectCollection());
 
       // Create a suitable adaptor (sigma=0.1, sigma-adaption=0.5, min sigma=0, max sigma=0,5)
-      boost::shared_ptr<GDoubleGaussAdaptor> gdga_ptr(new GDoubleGaussAdaptor(0.1, 0.5, 0., 0.5));
+      boost::shared_ptr<Gem::Geneva::GDoubleGaussAdaptor> gdga_ptr(new Gem::Geneva::GDoubleGaussAdaptor(0.1, 0.5, 0., 0.5));
 
       gdga_ptr->setAdaptionThreshold(1); // Adaption parameters are modified after each adaption
       gdga_ptr->setAdaptionProbability(0.05); // The likelihood for a parameter to be adapted
@@ -90,7 +90,7 @@ namespace Gem
       std::vector<double> theParms;
       // Extract the GDoubleCollection object. In a realistic scenario, you might want
       // to add error checks here upon first invocation.
-      boost::shared_ptr<GConstrainedDoubleObjectCollection> vC = at<GConstrainedDoubleObjectCollection>(0);
+      boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> vC = at<Gem::Geneva::GConstrainedDoubleObjectCollection>(0);
     
       std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
@@ -188,12 +188,6 @@ namespace Gem
       std::cout << std::endl;
       return;
     }
-
-    /********************************************************************************************/
-
-    boost::shared_ptr<AbsOmegaPiLh> GOmegaPiIndividual::getOmegaPiLhPtr() {
-      return _omegaPiLhPtr;
-    }
   
     /********************************************************************************************/
     /**
@@ -201,7 +195,7 @@ namespace Gem
      *
      * @param cp A copy of another GOmegaPiIndividual, camouflaged as a GObject
      */
-    void GOmegaPiIndividual::load_(const GObject* cp)
+    void GOmegaPiIndividual::load_(const Gem::Geneva::GObject* cp)
     {
       // Check that we are not accidently assigning this object to itself
       selfAssignmentCheck<GOmegaPiIndividual>(cp);
@@ -221,7 +215,7 @@ namespace Gem
      *
      * @return A deep clone of this object, camouflaged as a GObject
      */
-    GObject* GOmegaPiIndividual::clone_() const {
+    Gem::Geneva::GObject* GOmegaPiIndividual::clone_() const {
       return new GOmegaPiIndividual(*this);
     }
   
@@ -254,7 +248,7 @@ namespace Gem
     /********************************************************************************************/
     void GOmegaPiIndividual::setFitParamVal(
 					    std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs
-					    , boost::shared_ptr<GConstrainedDoubleObjectCollection> theGbdc_ptr
+					    , boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr
 					    ){
     
       std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
@@ -263,11 +257,11 @@ namespace Gem
       for ( itJPCLS=theJPCLSs.begin(); itJPCLS!=theJPCLSs.end(); ++itJPCLS){
 	//now fill the fitParameterMap
       
-	boost::shared_ptr<GConstrainedDoubleObject> gbd_ptr(new GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
+	boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject> gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
 	theGbdc_ptr->push_back(gbd_ptr);
 
 	if (counter>0){ 
-	  boost::shared_ptr<GConstrainedDoubleObject>  gbd_ptr(new GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
+	  boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject>  gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
 	  theGbdc_ptr->push_back(gbd_ptr);
 	}
 	counter++; 
@@ -276,5 +270,5 @@ namespace Gem
   
     /*************************************************************************************************/
   
-  } /* namespace Geneva */
+  } /* namespace Pawian */
 } /* namespace Gem */

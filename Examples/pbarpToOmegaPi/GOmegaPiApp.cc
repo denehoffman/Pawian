@@ -1,14 +1,6 @@
 /**
- * @file GMOmegaPiApp.cc
+ * @file GOmegaPiApp.cc
  */
-
-// Standard header files go here
-#include <iostream>
-#include <cmath>
-#include <sstream>
-
-// Boost header files go here
-#include <boost/lexical_cast.hpp>
 
 // GenEvA header files go here
 #include <courtier/GAsioHelperFunctions.hpp>
@@ -28,8 +20,6 @@
 #include "Examples/pbarpToOmegaPi/GOmegaPiIndividual.hh"
 
 // Declares a function to parse the command line
-#include "Examples/pbarpToOmegaPi/GMArgumentParser.hh"
-
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
 
@@ -44,7 +34,7 @@
 #include "Particle/PdtParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
-#include "Examples/pbarpToOmegaPi/GMArgumentParser.hh"
+#include "Examples/pbarpToOmegaPi/GArgumentParser.hh"
 
 #include "Examples/pbarpToOmegaPi/MOmegaPiFcn.hh"
 
@@ -64,13 +54,11 @@
 
 #include "Examples/pbarpToOmegaPi/spindensityhist.hh"
 
-using namespace Gem::Geneva;
-using namespace Gem::Courtier;
-using namespace Gem::Hap;
-//using namespace Gem::Util;
-using namespace ROOT::Minuit2;
-using namespace std;
-using namespace boost::posix_time;
+namespace gg = Gem::Geneva;
+namespace gp = Gem::Pawian;
+namespace gc = Gem::Courtier;
+namespace rm = ROOT::Minuit2;
+namespace bp = boost::posix_time;
 
 inline void printFitParameters(boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr,
                                OmegaPiData::fitParamVal &theParamVal)
@@ -103,9 +91,9 @@ inline void printFitParameters(boost::shared_ptr<const pbarpToOmegaPi0States> pb
 }
 
 //This function constructs the path to the file.
-inline void constructPath(const string &thePrefix, const unsigned pbarMom, string &outFilePath)
+inline void constructPath(const std::string &thePrefix, const unsigned pbarMom, std::string &outFilePath)
 {
-  stringstream sstrDatFile; //String Stream for die construction of the path to the parameter File;
+  std::stringstream sstrDatFile; //String Stream for die construction of the path to the parameter File;
   sstrDatFile << thePrefix; 
   sstrDatFile.width(4);
   sstrDatFile.fill('0');
@@ -114,24 +102,26 @@ inline void constructPath(const string &thePrefix, const unsigned pbarMom, strin
 }
 
 //This function checks if the file in the path theFilePath exists
-inline bool checkFileExist(const string &theFilePath)
+inline bool checkFileExist(const std::string &theFilePath)
 {
   ifstream datChk(theFilePath.c_str());
   if (datChk) { return true; } 
   else { return false; }
 }
 
-inline const string PrintJPLCS(std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmS,
-			       const string &theSuffix
-			       )
-{   
+inline const std::string PrintJPLCS(
+       std::map< boost::shared_ptr<const JPCLS>
+       , pair<double, double>
+       , pawian::Collection::SharedPtrLess > fitParmS
+       , const std::string &theSuffix
+){   
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
 
-  ostringstream theOutStream;    
+  std::ostringstream theOutStream;    
   for ( it=fitParmS.begin(); it!=fitParmS.end(); ++it)
     {
       boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-      string strName = theJPCLS->name()+theSuffix;
+      std::string strName = theJPCLS->name()+theSuffix;
       double theMag=it->second.first;
       double thePhi=it->second.second;
       theOutStream << strName << " " << theMag << " " << thePhi << endl;
@@ -139,14 +129,14 @@ inline const string PrintJPLCS(std::map< boost::shared_ptr<const JPCLS>, pair<do
   return theOutStream.str(); 
 }
 
-inline const string  PrintFinalFitParam(OmegaPiData::fitParamVal &finalFitParm)
+inline const std::string  PrintFinalFitParam(OmegaPiData::fitParamVal &finalFitParm)
 {
 
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=finalFitParm.omegaProdSinglet;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=finalFitParm.omegaProdTriplet0;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet1=finalFitParm.omegaProdTriplet1;
   
-  ostringstream theOutStream;
+  std::ostringstream theOutStream;
   
   theOutStream << PrintJPLCS(fitParmSinglet,"S")
                << PrintJPLCS(fitParmTriplet0,"T0")
@@ -164,9 +154,9 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
 {
   Info << "GenEvA fit start.\n" << endmsg;
   // Create the first set of parent individuals. Initialization of parameters is done randomly.
-  std::vector<boost::shared_ptr<GOmegaPiIndividual> > parentIndividuals;
+  std::vector<boost::shared_ptr<gp::GOmegaPiIndividual> > parentIndividuals;
   for(std::size_t p = 0 ; p<theAppParams.getNParents(); p++) {
-    boost::shared_ptr<GOmegaPiIndividual> gdii_ptr( new GOmegaPiIndividual(finalOmegaPiLh) );
+    boost::shared_ptr<gp::GOmegaPiIndividual> gdii_ptr( new gp::GOmegaPiIndividual(finalOmegaPiLh) );
     gdii_ptr->setProcessingCycles(theAppParams.getProcessingCycles());
 
     parentIndividuals.push_back(gdii_ptr);
@@ -204,7 +194,7 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   case 2: // Networked execution (server-side)
     {
       // Create a network consumer and enrol it with the broker
-      boost::shared_ptr<GAsioTCPConsumerT<GIndividual> > gatc(new GAsioTCPConsumerT<GIndividual>(theAppParams.getPort()));
+      boost::shared_ptr<gc::GAsioTCPConsumerT<gg::GIndividual> > gatc(new gc::GAsioTCPConsumerT<gg::GIndividual>(theAppParams.getPort()));
       gatc->setSerializationMode(theAppParams.getSerMode());
       GINDIVIDUALBROKER->enrol(gatc);
 
@@ -240,9 +230,9 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
 
   //--------------------------------------------------------------------------------------------
 
-  boost::shared_ptr<GOmegaPiIndividual> bestIndividual_ptr=pop_ptr->getBestIndividual<GOmegaPiIndividual>();
+  boost::shared_ptr<gp::GOmegaPiIndividual> bestIndividual_ptr=pop_ptr->getBestIndividual<gp::GOmegaPiIndividual>();
   assert(bestIndividual_ptr->getFitParams(finalFitParm));
-  finalOmegaPiLh=bestIndividual_ptr->getOmegaPiLhPtr();
+  finalOmegaPiLh=bestIndividual_ptr->omegaPiLhPtr();
 
   Info << "GenEvA done.\n" << endmsg;
 
@@ -268,9 +258,9 @@ inline bool Minuit(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   theOmegaPi0StatesPtr->print(std::cout);
 
 
-  MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
+  rm::MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
 
-  MnUserParameters upar;
+  rm::MnUserParameters upar;
   minuitStartParam theUserPar;
 
   if(theAppParams.getAppExecMode() == ApplicationParameter::Minuit)
@@ -295,18 +285,18 @@ inline bool Minuit(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   else if(theAppParams.getAppExecMode() == ApplicationParameter::GenToMinuit) mOmegaPiFcn.setMnUsrParams(upar,finalFitParm);
    
   
-  MnMigrad migrad(mOmegaPiFcn, upar);
+  rm::MnMigrad migrad(mOmegaPiFcn, upar);
   Info <<"start migrad "<< endmsg;
-  FunctionMinimum min = migrad();
+  rm::FunctionMinimum min = migrad();
 
   if(!min.IsValid()) {
     //try with higher strategy
     Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2(mOmegaPiFcn, min.UserState(), MnStrategy(2));
+    rm::MnMigrad migrad2(mOmegaPiFcn, min.UserState(), rm::MnStrategy(2));
     min = migrad2();
   }
 
-  MnUserParameters finalUsrParameters=min.UserParameters();
+  rm::MnUserParameters finalUsrParameters=min.UserParameters();
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
 
   cout << endl << "Errors:" << endl;
@@ -316,7 +306,7 @@ inline bool Minuit(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   int i;
   for (it = finalParamErrors.begin(), i=0; it < finalParamErrors.end(); it++,i++) 
     {
-      string strName =finalUsrParameters.GetName(i);
+      std::string strName =finalUsrParameters.GetName(i);
       cout << "Name:" << strName << " ";
       cout << "Index:" << finalUsrParameters.Index(strName) << " ";
       cout << *it << endl;
@@ -345,9 +335,9 @@ inline bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   theOmegaPi0StatesPtr->print(std::cout);
 
 
-  MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
+  rm::MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
 
-  MnUserParameters upar;
+  rm::MnUserParameters upar;
   minuitStartParam theUserPar;
     
 
@@ -439,7 +429,7 @@ inline void removeEvents(EventList &piOmegaEventsData, int nEventsToRemove, bool
 {
   if (nEventsToRemove != 0)
     {
-      stringstream strMsg;
+      std::stringstream strMsg;
       strMsg << "Removing " << nEventsToRemove << " events";
       if (bRemoveFromEnd)
 	{
@@ -467,7 +457,7 @@ int main(int argc, char **argv)
 
   static ApplicationParameter theAppParams(argc, argv);
     
-  ptime startTime = second_clock::local_time();
+  bp::ptime startTime = bp::second_clock::local_time();
   cout << "Start time : " << startTime << endl;
     
   // Random numbers are our most valuable good. Set the number of threads
@@ -517,15 +507,13 @@ int main(int argc, char **argv)
 
     }
 
-  string theCfgFile = theAppParams.getConfigFile();
+  std::string theCfgFile = theAppParams.getConfigFile();
   Info << "The path to config file is " << theCfgFile << "\n" << endmsg;
   //***************************************************************************
   // If this is a client in networked mode, we can just start the listener and
   // return when it has finished
   if(theAppParams.getParallelizationMode()==2 && !theAppParams.getServerMode()) {
-    boost::shared_ptr<GAsioTCPClientT<GIndividual> > p(new GAsioTCPClientT<GIndividual>(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
-    //boost::shared_ptr<GAsioTCPClient> p(new GAsioTCPClient(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
-
+    boost::shared_ptr<gc::GAsioTCPClientT<gg::GIndividual> > p(new gc::GAsioTCPClientT<gg::GIndividual>(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
     p->setMaxStalls(0); // An infinite number of stalled data retrievals
     p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
 
@@ -695,7 +683,7 @@ int main(int argc, char **argv)
       OmegaPiHist theHistogrammer(finalOmegaPiLh,finalFitParm,theRootFilePath.str());
   }
 
-  ptime endTime = second_clock::local_time();
+  bp::ptime endTime = bp::second_clock::local_time();
 
   cout << "All done." << endl;
   cout << "End time : " << endTime << endl;

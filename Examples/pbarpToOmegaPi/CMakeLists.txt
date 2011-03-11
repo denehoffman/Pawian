@@ -37,9 +37,9 @@ ENDIF( PAWIAN_STATIC )
 INSTALL (TARGETS ${PACKAGE_NAME} DESTINATION ${CMAKE_BINARY_DIR}/lib)
 
 ######## Linking Geneva app GMOmegaPiApp ###########################
-SET (EXECUTABLENAME GMOmegaPiApp)
+SET (EXECUTABLENAME GOmegaPiApp)
 ADD_EXECUTABLE( ${EXECUTABLENAME}
-   GMOmegaPiApp.cc
+   GOmegaPiApp.cc
 )
 
 TARGET_LINK_LIBRARIES (${EXECUTABLENAME} pbarpToOmegaPi )

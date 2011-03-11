@@ -28,7 +28,7 @@
  */
 
 
-#include "Examples/pbarpToOmegaPi/GMArgumentParser.hh"
+#include "Examples/pbarpToOmegaPi/GArgumentParser.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace std;
