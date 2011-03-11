@@ -1,5 +1,0 @@
-project : requirements
-	<include>$(GENEVA)/examples/include
-        ;
-
-exe GMultiPopulation : [ glob *.cc ] $(TOP)//Geneva : ;
