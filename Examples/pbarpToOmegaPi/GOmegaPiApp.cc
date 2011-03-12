@@ -2,6 +2,11 @@
  * @file GOmegaPiApp.cc
  */
 
+/************************************************************************************************/
+// Boost header files go here
+#include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/logic/tribool.hpp"
+
 // GenEvA header files go here
 #include <courtier/GAsioHelperFunctions.hpp>
 #include <courtier/GAsioTCPClientT.hpp>
@@ -46,21 +51,24 @@
 #include "Minuit2/MnMinos.h"
 #include "Minuit2/MnStrategy.h"
 
-#include "boost/date_time/posix_time/posix_time.hpp"
-
 #include <complex>
 
 #include "Examples/pbarpToOmegaPi/spindensityfitparameter.hh"
 
 #include "Examples/pbarpToOmegaPi/spindensityhist.hh"
 
+/************************************************************************************************/
+// Namespace aliases, so we do not need to quote the entire namespace name
 namespace gg = Gem::Geneva;
 namespace gp = Gem::Pawian;
 namespace gc = Gem::Courtier;
 namespace rm = ROOT::Minuit2;
 namespace bp = boost::posix_time;
+namespace bl = boost::logic;
 
-inline void printFitParameters(boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr,
+/************************************************************************************************/
+
+void printFitParameters(boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr,
                                OmegaPiData::fitParamVal &theParamVal)
 {
   //  print fit paramss
@@ -90,8 +98,11 @@ inline void printFitParameters(boost::shared_ptr<const pbarpToOmegaPi0States> pb
   Info << endmsg;  
 }
 
-//This function constructs the path to the file.
-inline void constructPath(const std::string &thePrefix, const unsigned pbarMom, std::string &outFilePath)
+/************************************************************************************************/
+/**
+ * This function constructs the path to the file.
+ */
+void constructPath(const std::string &thePrefix, const unsigned pbarMom, std::string &outFilePath)
 {
   std::stringstream sstrDatFile; //String Stream for die construction of the path to the parameter File;
   sstrDatFile << thePrefix; 
@@ -101,15 +112,21 @@ inline void constructPath(const std::string &thePrefix, const unsigned pbarMom, 
   outFilePath = sstrDatFile.str();
 }
 
-//This function checks if the file in the path theFilePath exists
-inline bool checkFileExist(const std::string &theFilePath)
+
+/************************************************************************************************/
+/**
+ * This function checks if the file in the path theFilePath exists
+ */
+bool checkFileExist(const std::string &theFilePath)
 {
   ifstream datChk(theFilePath.c_str());
   if (datChk) { return true; } 
   else { return false; }
 }
 
-inline const std::string PrintJPLCS(
+/************************************************************************************************/
+
+const std::string PrintJPLCS(
        std::map< boost::shared_ptr<const JPCLS>
        , pair<double, double>
        , pawian::Collection::SharedPtrLess > fitParmS
@@ -129,7 +146,11 @@ inline const std::string PrintJPLCS(
   return theOutStream.str(); 
 }
 
-inline const std::string  PrintFinalFitParam(OmegaPiData::fitParamVal &finalFitParm)
+/************************************************************************************************/
+/**
+ *
+ */
+const std::string  PrintFinalFitParam(OmegaPiData::fitParamVal &finalFitParm)
 {
 
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=finalFitParm.omegaProdSinglet;
@@ -145,24 +166,55 @@ inline const std::string  PrintFinalFitParam(OmegaPiData::fitParamVal &finalFitP
   return theOutStream.str();
 }
 
-inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
-		   boost::shared_ptr<const pbarpToOmegaPi0States> &pbarpToOmegaPi0StatesPtr,
-		   ApplicationParameter &theAppParams,
-		   OmegaPiData::fitParamVal &finalFitParm,
-		   boost::shared_ptr<AbsOmegaPiLh> &finalOmegaPiLh
-		   )
-{
+/************************************************************************************************/
+/**
+ * The actual optimization procedure using the Geneva library collection. Note that this function
+ * will return a boost::logic::indeterminate value if this is a Geneva client in networked mode
+ *
+ * @return A boost::logic::tribool indicating whether the fit was successful or this is a client in networked mode
+ */
+bl::tribool GenEvA(
+      boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
+      , boost::shared_ptr<const pbarpToOmegaPi0States> &pbarpToOmegaPi0StatesPtr
+      , ApplicationParameter &theAppParams
+      , OmegaPiData::fitParamVal &finalFitParm
+      , boost::shared_ptr<AbsOmegaPiLh> &finalOmegaPiLh
+) {
+  //--------------------------------------------------------------------------------------------
+  // First check whether this is a client in networked mode. We then just start the listener and
+  // return when it has finished.
+  if(theAppParams.getParallelizationMode()==2 && !theAppParams.getServerMode()) {
+    boost::shared_ptr<gc::GAsioTCPClientT<gg::GIndividual> > p(
+	  new gc::GAsioTCPClientT<gg::GIndividual>(
+             theAppParams.getIp()
+             , boost::lexical_cast<std::string>(theAppParams.getPort())
+          )
+    );
+    p->setMaxStalls(0); // An infinite number of stalled data retrievals
+    p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
+
+    // Prevent return of unsuccessful mutation attempts to the server
+    p->returnResultIfUnsuccessful(theAppParams.getReturnRegardless());
+
+    // Start the actual processing loop
+    p->run();
+
+    return bl::indeterminate;
+  }
+
+  //--------------------------------------------------------------------------------------------
   Info << "GenEvA fit start.\n" << endmsg;
+
   // Create the first set of parent individuals. Initialization of parameters is done randomly.
   std::vector<boost::shared_ptr<gp::GOmegaPiIndividual> > parentIndividuals;
   for(std::size_t p = 0 ; p<theAppParams.getNParents(); p++) {
     boost::shared_ptr<gp::GOmegaPiIndividual> gdii_ptr( new gp::GOmegaPiIndividual(finalOmegaPiLh) );
     gdii_ptr->setProcessingCycles(theAppParams.getProcessingCycles());
-
+    
     parentIndividuals.push_back(gdii_ptr);
   }
 
-  //***************************************************************************
+  //----------------------------------------------------------------------------------------------
   // We can now start creating populations. We refer to them through the base class
 
   // This smart pointer will hold the different population types
@@ -170,13 +222,13 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
 
   // Create the actual populations
   switch (theAppParams.getParallelizationMode()) {
-    //-----------------------------------------------------------------------------------------------------
   case 0: // Serial execution
-    // Create an empty population
-    pop_ptr = boost::shared_ptr<GEvolutionaryAlgorithm>(new GEvolutionaryAlgorithm());
+    {
+      // Create an empty population
+      pop_ptr = boost::shared_ptr<GEvolutionaryAlgorithm>(new GEvolutionaryAlgorithm());
+    }
     break;
 
-    //-----------------------------------------------------------------------------------------------------
   case 1: // Multi-threaded execution
     {
       // Create the multi-threaded population
@@ -190,7 +242,6 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
     }
     break;
 
-    //-----------------------------------------------------------------------------------------------------
   case 2: // Networked execution (server-side)
     {
       // Create a network consumer and enrol it with the broker
@@ -208,8 +259,7 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
     break;
   }
 
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //----------------------------------------------------------------------------------------------
   // Now we have suitable populations and can fill them with data
 
   // Add individuals to the population
@@ -228,7 +278,7 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   // Do the actual optimization
   pop_ptr->optimize();
 
-  //--------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------
 
   boost::shared_ptr<gp::GOmegaPiIndividual> bestIndividual_ptr=pop_ptr->getBestIndividual<gp::GOmegaPiIndividual>();
   assert(bestIndividual_ptr->getFitParams(finalFitParm));
@@ -236,30 +286,30 @@ inline bool GenEvA(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
 
   Info << "GenEvA done.\n" << endmsg;
 
-  return true;
-
-
+  return bl::tribool(true);
 }
 
-
-inline bool Minuit(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
-		   boost::shared_ptr<const pbarpToOmegaPi0States> &pbarpToOmegaPi0StatesPtr,
-		   ApplicationParameter &theAppParams,
-		   OmegaPiData::fitParamVal &finalFitParm,
-		   boost::shared_ptr<AbsOmegaPiLh> &finalOmegaPiLh
-		   )
-{
-  Info << "Minuit fit start.\n" << endmsg;
-    
+/************************************************************************************************/
+/**
+ * Starts the actual optimization process, using the Minuit library
+ *
+ * @return A boost::logic::tribool indicating whether the optimization has succeeded
+ */
+bl::tribool Minuit(
+     boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
+     , boost::shared_ptr<const pbarpToOmegaPi0States> &pbarpToOmegaPi0StatesPtr
+     , ApplicationParameter &theAppParams
+     , OmegaPiData::fitParamVal &finalFitParm
+     , boost::shared_ptr<AbsOmegaPiLh> &finalOmegaPiLh
+) {
+  Info << "Minuit fit starts.\n" << endmsg;  
 
   // get pbarpToOmegaPi0States pointer back
   boost::shared_ptr<const pbarpToOmegaPi0States> theOmegaPi0StatesPtr=finalOmegaPiLh->omegaPi0States();  
     
   theOmegaPi0StatesPtr->print(std::cout);
 
-
   rm::MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
-
   rm::MnUserParameters upar;
   minuitStartParam theUserPar;
 
@@ -284,7 +334,6 @@ inline bool Minuit(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
     }
   else if(theAppParams.getAppExecMode() == ApplicationParameter::GenToMinuit) mOmegaPiFcn.setMnUsrParams(upar,finalFitParm);
    
-  
   rm::MnMigrad migrad(mOmegaPiFcn, upar);
   Info <<"start migrad "<< endmsg;
   rm::FunctionMinimum min = migrad();
@@ -316,10 +365,14 @@ inline bool Minuit(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   
   Info << "Minuit done.\n" << endmsg;
 
-  return true;
+  return bl::tribool(true);
 }
 
-inline bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
+/************************************************************************************************/
+/**
+ *
+ */
+bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
 		   boost::shared_ptr<const pbarpToOmegaPi0States> &pbarpToOmegaPi0StatesPtr,
 		   ApplicationParameter &theAppParams,
 		   OmegaPiData::fitParamVal &finalFitParm,
@@ -369,7 +422,11 @@ inline bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
   return true;
 }
 
-inline bool calcSpinDensity(ApplicationParameter &theAppParams, 
+/************************************************************************************************/
+/**
+ *
+ */
+bool calcSpinDensity(ApplicationParameter &theAppParams, 
                             boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh, 
                             boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr,
                             boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr)
@@ -425,7 +482,11 @@ inline bool calcSpinDensity(ApplicationParameter &theAppParams,
   return true;
 }
 
-inline void removeEvents(EventList &piOmegaEventsData, int nEventsToRemove, bool bRemoveFromEnd)
+/************************************************************************************************/
+/**
+ *
+ */
+void removeEvents(EventList &piOmegaEventsData, int nEventsToRemove, bool bRemoveFromEnd)
 {
   if (nEventsToRemove != 0)
     {
@@ -449,22 +510,12 @@ inline void removeEvents(EventList &piOmegaEventsData, int nEventsToRemove, bool
 
 /************************************************************************************************/
 /**
- * The main function.
+ * Sets the error logging mode
+ * 
+ * @param erlMode The desired error logging mode
  */
-int main(int argc, char **argv)
-{
-  cout << "Combined GenEvA and Minuit fit program " << argv[0] << endl << endl;
-
-  static ApplicationParameter theAppParams(argc, argv);
-    
-  bp::ptime startTime = bp::second_clock::local_time();
-  cout << "Start time : " << startTime << endl;
-    
-  // Random numbers are our most valuable good. Set the number of threads
-  GRANDOMFACTORY->setNProducerThreads(theAppParams.getNProducerThreads());
-  GRANDOMFACTORY->setArraySize(theAppParams.getArraySize());
-
-  switch(theAppParams.getErrLogMode()) {
+void setErrLogMode( const ApplicationParameter::enErrLogMode& erlMode ) {
+  switch(erlMode) {
   case ApplicationParameter::debug :
     ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
     break;
@@ -486,9 +537,16 @@ int main(int argc, char **argv)
   default: 
     ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
   }
+}
 
-  switch(theAppParams.getAppExecMode())
-    {
+/************************************************************************************************/
+/**
+ * Inform the audience about the execution mode
+ *
+ * @param execMode The chosen execution mode
+ */
+void emitExecutionMode( const ApplicationParameter::enExecMode& execMode ) {
+  switch(execMode) {
     case ApplicationParameter::GenEvA:
       Info << "Using minimization algorithm: " << "GenEvA" << "\n" << endmsg;
       break;
@@ -504,29 +562,32 @@ int main(int argc, char **argv)
     case ApplicationParameter::QAmode:
       Info << "using QA mode" << "\n" << endmsg;
       break;
+  }
+}
 
-    }
+/************************************************************************************************/
+/**
+ * The main function.
+ */
+int main(int argc, char **argv)
+{
+  cout << "Combined GenEvA and Minuit fit program " << argv[0] << endl << endl;
+
+  // Parse the command line
+  static ApplicationParameter theAppParams(argc, argv);
+    
+  // Random numbers are our most valuable good. Set the number of threads
+  GRANDOMFACTORY->setNProducerThreads(theAppParams.getNProducerThreads());
+  GRANDOMFACTORY->setArraySize(theAppParams.getArraySize());
+
+  // Set the desired error logging mode
+  setErrLogMode(theAppParams.getErrLogMode());
+
+  // Inform the audience about the execution mode
+  emitExecutionMode(theAppParams.getAppExecMode());
 
   std::string theCfgFile = theAppParams.getConfigFile();
   Info << "The path to config file is " << theCfgFile << "\n" << endmsg;
-  //***************************************************************************
-  // If this is a client in networked mode, we can just start the listener and
-  // return when it has finished
-  if(theAppParams.getParallelizationMode()==2 && !theAppParams.getServerMode()) {
-    boost::shared_ptr<gc::GAsioTCPClientT<gg::GIndividual> > p(new gc::GAsioTCPClientT<gg::GIndividual>(theAppParams.getIp(), boost::lexical_cast<std::string>(theAppParams.getPort())));
-    p->setMaxStalls(0); // An infinite number of stalled data retrievals
-    p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
-
-    // Prevent return of unsuccessful mutation attempts to the server
-    p->returnResultIfUnsuccessful(theAppParams.getReturnRegardless());
-
-    // Start the actual processing loop
-    p->run();
-
-    return 0;
-  }
-  //***************************************************************************
-
   Info << "Maximum spin content: " << theAppParams.getJMax() << endmsg;
   Info << "pbar momentum: " << theAppParams.getPbarMom()   << endmsg;
       
@@ -569,7 +630,6 @@ int main(int argc, char **argv)
   }
 
   std::vector<std::string> fileNames;
-
   fileNames.push_back(piomegaDatFile);
   CBElsaReader eventReader(fileNames, 3, 0); 
   EventList piOmegaEventsData;
@@ -578,36 +638,33 @@ int main(int argc, char **argv)
   Info << "\nFile has " << piOmegaEventsData.size() << " events. Each event has "
        <<  piOmegaEventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
 
-  if(theAppParams.getNumEventsRemove() > 0) 
-    {
-      removeEvents(piOmegaEventsData,theAppParams.getNumEventsRemove(),theAppParams.getRemoveEventsFromEnd());
+  if(theAppParams.getNumEventsRemove() > 0) {
+    removeEvents(piOmegaEventsData,theAppParams.getNumEventsRemove(),theAppParams.getRemoveEventsFromEnd());
+  }
+  else if(theAppParams.getNumEventsRed() > 0) {
+    int nEventsRed = theAppParams.getNumEventsRed();
+    int nEventListSize = piOmegaEventsData.size();
+    
+    Info << "Reducing number of the events in the event list to " 
+	 << nEventsRed << " events." << endmsg;
+    
+    int nNewSize = nEventListSize-nEventsRed;
+    
+    if (nNewSize > 0 && nNewSize != nEventListSize) {
+      removeEvents(piOmegaEventsData, nNewSize, theAppParams.getRemoveEventsFromEnd());
     }
-  else if(theAppParams.getNumEventsRed() > 0)
-    {
-      int nEventsRed = theAppParams.getNumEventsRed();
-      int nEventListSize = piOmegaEventsData.size();
-        
-      Info << "Reducing number of the events in the event list to " 
-	   << nEventsRed << " events." << endmsg;
-        
-      int nNewSize = nEventListSize-nEventsRed;
-        
-      if (nNewSize > 0 && nNewSize != nEventListSize)
-        {
-          removeEvents(piOmegaEventsData, nNewSize, theAppParams.getRemoveEventsFromEnd());
-        }
-      else
-        {
-          Alert << "Could not reduce number of the parameters because number to which they should be"
-		<< " reduced " << "(" << nEventsRed << ")" 
-		<<" to is to great or same as the actual number of events in the list.\n" 
-		<< endmsg;
-          exit(-1);
-        }
+    else {
+      Alert << "Could not reduce number of the parameters because number to which they should be"
+	    << " reduced " << "(" << nEventsRed << ")" 
+	    <<" to is to great or same as the actual number of events in the list.\n" 
+	    << endmsg;
+      exit(-1);
     }
+  }
       
-  if (!piOmegaEventsData.findParticleTypes(pTable))	Warning << "could not find all particles" << endmsg;
-
+  if (!piOmegaEventsData.findParticleTypes(pTable)) {
+    Warning << "could not find all particles" << endmsg;
+  }
   piOmegaEventsData.rewind();
 
 
@@ -632,45 +689,62 @@ int main(int argc, char **argv)
   piOmegaEventsMc.rewind();
 
   boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr(new OmegaPiEventList(piOmegaEventsData, piOmegaEventsMc, theAppParams.getJMax(),  theAppParams.getPbarMom()));
-
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(theAppParams.getJMax()));
-
   boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
-    
-
   OmegaPiData::fitParamVal finalFitParm;
-
-
   boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh= boost::shared_ptr<AbsOmegaPiLh>(new OmegaPiLhGamma(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
 
-  ApplicationParameter::enExecMode theExecMode = theAppParams.getAppExecMode();
-  bool bExecFinish=false;      
-  if(theExecMode == ApplicationParameter::GenEvA) {
+  //---------------------------------------------------------------------------
+  // The actual optimization
+  bl::tribool bExecFinish=bl::tribool(false);
+  switch(theAppParams.getAppExecMode()) {
+  case ApplicationParameter::GenEvA:
+    {
       bExecFinish = GenEvA(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
-          
+      if(bl::indeterminate(bExecFinish)) return 0; // Simply terminate -- this is a client in networked mode that has done its job
+
       std::ostringstream theParamFilePath;
       theParamFilePath << "./" << theAppParams.getName() << "LastFitParamOmegaPi0Fit_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".txt";
       ofstream outfile (theParamFilePath.str().c_str());
       outfile << PrintFinalFitParam(finalFitParm);
       outfile.close();
-  }
-  else if(theExecMode == ApplicationParameter::Minuit) {
+    }
+    break;
+
+  case ApplicationParameter::Minuit:
+    {
       bExecFinish = Minuit(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
-  }
-  else if(theExecMode == ApplicationParameter::GenToMinuit) {
+    }
+    break;
+
+  case ApplicationParameter::GenToMinuit:
+    {
       bExecFinish = GenEvA(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
+      if(bl::indeterminate(bExecFinish)) return 0; // Simply terminate -- this is a client in networked mode that has done its job
       bExecFinish = Minuit(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
-  }
-  else if(theExecMode == ApplicationParameter::SpinDensity) {
+    }
+    break;
+
+  case ApplicationParameter::SpinDensity:
+    {
       if (!calcSpinDensity(theAppParams, finalOmegaPiLh, pbarpToOmegaPi0StatesPtr,theOmegaPiEventPtr)) exit(1);
-  }
-  else if(theExecMode == ApplicationParameter::QAmode) {
+    }
+    break;
+
+  case ApplicationParameter::QAmode:
+    {
       bExecFinish = QAmode(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
-  }
-  else {
-    cerr << "Error unknown execution mode selected!" << endl;
+    }
+    break;
+
+  default:
+    {
+      cerr << "Error unknown execution mode selected!" << endl;
+    }
   }
 
+  //---------------------------------------------------------------------------
+  // Let the audience know
   if (bExecFinish) {
       cout << endl;
       Info << "Fit results:\n" << endmsg;
@@ -683,11 +757,9 @@ int main(int argc, char **argv)
       OmegaPiHist theHistogrammer(finalOmegaPiLh,finalFitParm,theRootFilePath.str());
   }
 
-  bp::ptime endTime = bp::second_clock::local_time();
-
-  cout << "All done." << endl;
-  cout << "End time : " << endTime << endl;
-  cout << "Duration : " << (endTime - startTime) << endl;
+  //---------------------------------------------------------------------------
 
   return 0;
 }
+
+/************************************************************************************************/

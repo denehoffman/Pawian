@@ -69,76 +69,76 @@ class ApplicationParameter
     typedef enum tagerrLogMode {debug,trace,routine,warning,error,alert} enErrLogMode;
 
   public:
-    ApplicationParameter(int argc,char **argv):configFile("./GOmegaPiProject.cfg"),
-					       parallelizationMode(1),
-                                               ip("localhost"),
-					       port(10000),
-					       serMode(Gem::Common::SERIALIZATIONMODE_TEXT),
-					       enAppExecMode(GenEvA),
-					       nProducerThreads(10),
-					       nEvaluationThreads(4),
-					       populationSize(100),
-					       nParents(5),
-					       maxIterations(2000),
-					       maxMinutes(10),
-					       reportIteration(1),
-					       smode(MUPLUSNU),
-					       arraySize(1000),
-					       iM(0),
-                                               iM_(0),
-                                               bCalcAllSpindensity(false),
-                                               bRemoveEventsFromEnd(true),
-                                               nNumEventsRemove(0),
-                                               nNumEventsRed(0),
-					       processingCycles(1),
-					       returnRegardless(true),
-					       waitFactor(5),
-					       jMax(3),
-					       pbarMom(600),
-					       errLogMode(debug),
-					       theSourcePath("./")
+    ApplicationParameter(int argc,char **argv)
+      : configFile("./GOmegaPiProject.cfg")
+      ,	parallelizationMode(1)
+      , ip("localhost")
+      , port(10000)
+      , serMode(Gem::Common::SERIALIZATIONMODE_TEXT)
+      , enAppExecMode(GenEvA)
+      , nProducerThreads(10)
+      , nEvaluationThreads(4)
+      , populationSize(100)
+      , nParents(5)
+      , maxIterations(2000)
+      , maxMinutes(10)
+      , reportIteration(1)
+      , smode(MUPLUSNU)
+      , arraySize(1000)
+      , iM(0)
+      , iM_(0)
+      , bCalcAllSpindensity(false)
+      , bRemoveEventsFromEnd(true)
+      , nNumEventsRemove(0)
+      , nNumEventsRed(0)
+      , processingCycles(1)
+      , returnRegardless(true)
+      , waitFactor(5)
+      , jMax(3)
+      , pbarMom(600)
+      , errLogMode(debug)
+      , theSourcePath("./")
   {
     if (!parseCommandLine(argc, argv)) throw false;
   }
   
-
-    inline const std::string& getConfigFile() { return configFile;}
-    inline const boost::uint16_t& getParallelizationMode() {return parallelizationMode;}
-    inline const bool& getServerMode() { return serverMode; }
-    inline const std::string& getIp() { return ip; }
-    inline const unsigned short& getPort() { return port; }
-    inline const boost::uint16_t& getNProducerThreads() { return nProducerThreads; }
-    inline const boost::uint16_t& getNEvaluationThreads() { return nEvaluationThreads; }
-    inline const std::size_t& getPopulationSize() { return populationSize; }
-    inline const std::size_t& getNParents() { return nParents; }
-    inline const boost::uint32_t& getMaxIterations() { return maxIterations; }
-    inline const long& getMaxMinutes() { return maxMinutes; }
-    inline const boost::uint32_t& getReportIteration() { return reportIteration; }
-    inline const recoScheme& getRScheme() { return rScheme; }
-    inline const std::size_t& getArraySize() { return arraySize; }
-    inline const sortingMode& getSmode() { return smode; }
-    inline const boost::uint32_t& getProcessingCycles() { return processingCycles; }
-    inline const bool& getReturnRegardless() { return returnRegardless; }
-    inline const boost::uint32_t& getWaitFactor() { return waitFactor; }
-    inline const unsigned& getJMax() { return jMax; }
-    inline const unsigned& getPbarMom() { return pbarMom; }
-    inline const enErrLogMode& getErrLogMode() { return errLogMode; }
-    inline const Gem::Common::serializationMode& getSerMode() { return serMode; }
-    inline const enExecMode& getAppExecMode() { return enAppExecMode; }
-    inline const std::string& getSourcePath() { return theSourcePath; }
-    inline const std::string& getPathStartParamFile() { return strPathStartParamFile; }
-    inline const std::string& getName() { return strName; }
-    inline const int getM() { return iM; }
-    inline const int getM_() { return iM_; }
-    inline const bool getCalcAllSpindensity() { return bCalcAllSpindensity; }
-    inline const bool getRemoveEventsFromEnd() { return bRemoveEventsFromEnd; }
-    inline const int getNumEventsRemove() { return nNumEventsRemove; }
-    inline const int getNumEventsRed() { return nNumEventsRed; }
+  const std::string& getConfigFile() const { return configFile;}
+  const boost::uint16_t& getParallelizationMode() const {return parallelizationMode;}
+  const bool& getServerMode() const { return serverMode; }
+  const std::string& getIp() const { return ip; }
+  const unsigned short& getPort() const { return port; }
+  const boost::uint16_t& getNProducerThreads() const { return nProducerThreads; }
+  const boost::uint16_t& getNEvaluationThreads() const { return nEvaluationThreads; }
+  const std::size_t& getPopulationSize() const { return populationSize; }
+  const std::size_t& getNParents() const { return nParents; }
+  const boost::uint32_t& getMaxIterations() const { return maxIterations; }
+  const long& getMaxMinutes() const { return maxMinutes; }
+  const boost::uint32_t& getReportIteration() const { return reportIteration; }
+  const recoScheme& getRScheme() const { return rScheme; }
+  const std::size_t& getArraySize() const { return arraySize; }
+  const sortingMode& getSmode() const { return smode; }
+  const boost::uint32_t& getProcessingCycles() const { return processingCycles; }
+  const bool& getReturnRegardless() const { return returnRegardless; }
+  const boost::uint32_t& getWaitFactor() const { return waitFactor; }
+  const unsigned& getJMax() const { return jMax; }
+  const unsigned& getPbarMom() const { return pbarMom; }
+  const enErrLogMode& getErrLogMode() const { return errLogMode; }
+  const Gem::Common::serializationMode& getSerMode() const { return serMode; }
+  const enExecMode& getAppExecMode() const { return enAppExecMode; }
+  const std::string& getSourcePath() const { return theSourcePath; }
+  const std::string& getPathStartParamFile() const { return strPathStartParamFile; }
+  const std::string& getName() const { return strName; }
+  const int getM() const { return iM; }
+  const int getM_() const { return iM_; }
+  const bool getCalcAllSpindensity() const { return bCalcAllSpindensity; }
+  const bool getRemoveEventsFromEnd() const { return bRemoveEventsFromEnd; }
+  const int getNumEventsRemove() const { return nNumEventsRemove; }
+  const int getNumEventsRed() const { return nNumEventsRed; }
     
-  protected:
-    bool parseCommandLine(int argc,char **argv);
+protected:
+  bool parseCommandLine(int argc,char **argv);
 
-  protected:
+protected:
   //Actual parsed settings
   std::string strName;
   std::string strPathStartParamFile;
@@ -174,4 +174,5 @@ class ApplicationParameter
   enErrLogMode errLogMode;
   std::string theSourcePath;
 };
+
 #endif /* GARGUMENTPARSER_HPP_ */

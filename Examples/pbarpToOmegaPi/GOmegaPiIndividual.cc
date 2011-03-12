@@ -206,14 +206,12 @@ namespace Gem
     {
       // Check that we are not accidently assigning this object to itself
       selfAssignmentCheck<GOmegaPiIndividual>(cp);
-      // Use this call instead when local data needs to be loaded:
-      // const GOmegaPiIndividual *p_load = GObject::conversion_cast<GOmegaPiIndividual>(cp);
     
       // Load our parent's data
       GParameterSet::load_(cp);
     
-      // Load local data here like this:
-      // myVar = p_load->myVar;
+      // Note: We do not need to load _omegaPiLhPtr here, as it has been initialized during
+      // the construction of this object already.
     }
   
     /********************************************************************************************/
