@@ -21,12 +21,6 @@ namespace Gem
       // Set up a GConstrainedDoubleObjectCollection
       boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> gbdc_ptr(new Gem::Geneva::GConstrainedDoubleObjectCollection());
 
-      // Create a suitable adaptor (sigma=0.1, sigma-adaption=0.5, min sigma=0, max sigma=0,5)
-      boost::shared_ptr<Gem::Geneva::GDoubleGaussAdaptor> gdga_ptr(new Gem::Geneva::GDoubleGaussAdaptor(0.1, 0.5, 0., 0.5));
-
-      gdga_ptr->setAdaptionThreshold(1); // Adaption parameters are modified after each adaption
-      gdga_ptr->setAdaptionProbability(0.05); // The likelihood for a parameter to be adapted
-
       boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
 
       std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
@@ -38,8 +32,12 @@ namespace Gem
       std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
       setFitParamVal(JPCLSOmegaTriplet1, gbdc_ptr);
 
-
       for(std::size_t i=0; i<gbdc_ptr->size(); i++) {
+	// Create a suitable adaptor (sigma=0.1, sigma-adaption=0.5, min sigma=0, max sigma=0,5)
+	boost::shared_ptr<Gem::Geneva::GDoubleGaussAdaptor> gdga_ptr(new Gem::Geneva::GDoubleGaussAdaptor(0.1, 0.5, 0., 0.5));
+	gdga_ptr->setAdaptionThreshold(1); // Adaption parameters are modified after each adaption
+	gdga_ptr->setAdaptionProbability(0.2); // The likelihood for a parameter to be adapted
+	
 	// Register the adaptor with GConstrainedDoubleObject objects
 	gbdc_ptr->at(i)->addAdaptor(gdga_ptr);
       }
@@ -66,6 +64,18 @@ namespace Gem
     GOmegaPiIndividual::~GOmegaPiIndividual()
     { /* nothing */ }
   
+    /********************************************************************************************/
+    /** 
+     * Loads user-specified data 
+     */
+    void GOmegaPiIndividual::loadConstantData(boost::shared_ptr<GObject> cD_ptr) {
+      // Convert GObject smart pointer to local format
+      boost::shared_ptr<GOmegaPiIndividual> p_load = GObject::conversion_cast<GOmegaPiIndividual>(cD_ptr);
+
+      // Load the static data from the data model
+      _omegaPiLhPtr = boost::shared_ptr<AbsOmegaPiLh>(p_load->omegaPiLhPtr()->clone_());
+    }
+
     /********************************************************************************************/
   
     boost::shared_ptr<AbsOmegaPiLh> GOmegaPiIndividual::omegaPiLhPtr() const {
@@ -247,7 +257,6 @@ namespace Gem
      */
     GOmegaPiIndividual::GOmegaPiIndividual() :GParameterSet()
     {	/* nothing */ }
-
 
     /********************************************************************************************/
     void GOmegaPiIndividual::setFitParamVal(

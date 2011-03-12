@@ -184,10 +184,14 @@ bl::tribool GenEvA(
   // First check whether this is a client in networked mode. We then just start the listener and
   // return when it has finished.
   if(theAppParams.getParallelizationMode()==2 && !theAppParams.getServerMode()) {
+    // Create a model that holds the static data needed for processing
+    boost::shared_ptr<gp::GOmegaPiIndividual> gopi_ptr( new gp::GOmegaPiIndividual(finalOmegaPiLh) );
+
     boost::shared_ptr<gc::GAsioTCPClientT<gg::GIndividual> > p(
 	  new gc::GAsioTCPClientT<gg::GIndividual>(
              theAppParams.getIp()
              , boost::lexical_cast<std::string>(theAppParams.getPort())
+	     , gopi_ptr
           )
     );
     p->setMaxStalls(0); // An infinite number of stalled data retrievals
@@ -208,10 +212,12 @@ bl::tribool GenEvA(
   // Create the first set of parent individuals. Initialization of parameters is done randomly.
   std::vector<boost::shared_ptr<gp::GOmegaPiIndividual> > parentIndividuals;
   for(std::size_t p = 0 ; p<theAppParams.getNParents(); p++) {
-    boost::shared_ptr<gp::GOmegaPiIndividual> gdii_ptr( new gp::GOmegaPiIndividual(finalOmegaPiLh) );
-    gdii_ptr->setProcessingCycles(theAppParams.getProcessingCycles());
+    boost::shared_ptr<gp::GOmegaPiIndividual> gopi_ptr( new gp::GOmegaPiIndividual(finalOmegaPiLh) );
+    gopi_ptr->setProcessingCycles(theAppParams.getProcessingCycles());
+    // Make sure we start with a unique individual
+    gopi_ptr->randomInit();
     
-    parentIndividuals.push_back(gdii_ptr);
+    parentIndividuals.push_back(gopi_ptr);
   }
 
   //----------------------------------------------------------------------------------------------
@@ -277,6 +283,10 @@ bl::tribool GenEvA(
   
   // Do the actual optimization
   pop_ptr->optimize();
+
+  for(std::size_t i=0; i<pop_ptr->size(); i++) {
+    std::cout << i << ": " << pop_ptr->at(i)->fitness() << std::endl;
+  }
 
   //----------------------------------------------------------------------------------------------
 

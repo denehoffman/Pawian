@@ -76,6 +76,9 @@ namespace Gem
       /** @brief The destructor */
       virtual ~GOmegaPiIndividual();
 
+      /** @brief Loads user-specified data */
+      virtual void loadConstantData(boost::shared_ptr<GObject>);
+      
       /** @brief A standard assignment operator */
       const GOmegaPiIndividual& operator=(const GOmegaPiIndividual&);
 
