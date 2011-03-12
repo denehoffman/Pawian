@@ -84,7 +84,7 @@ bool ApplicationParameter::parseCommandLine(int argc, char **argv)
       "choose mode for Error logger.")	  
       ("appMode,a", po::value<int>(&iAppMode)->default_value(enAppExecMode), 
        "Specifies which minimization algorithm should be used for fitting GenEvA (0) or Minuit (1) or Minuit after GenEvA (2) or spin density calculation (3) or QA mode (4).")
-      ("name,n", po::value<string>(&strName),
+      ("name,n", po::value<string>(&strName)->default_value("myApp"),
         "Name that is attached to all otuput file names to be able to run multiple fits in parallel.")
       ;
 
