@@ -54,7 +54,7 @@ namespace Gem
      */
     GOmegaPiIndividual::GOmegaPiIndividual(const GOmegaPiIndividual& cp)
       : GParameterSet(cp)
-      ,_omegaPiLhPtr( cp.omegaPiLhPtr()->clone_() )
+      , _omegaPiLhPtr( cp._omegaPiLhPtr?boost::shared_ptr<AbsOmegaPiLh>((cp._omegaPiLhPtr)->clone_()):boost::shared_ptr<AbsOmegaPiLh>() )
     { /* nothing */ }
   
     /********************************************************************************************/
@@ -73,7 +73,9 @@ namespace Gem
       boost::shared_ptr<GOmegaPiIndividual> p_load = GObject::conversion_cast<GOmegaPiIndividual>(cD_ptr);
 
       // Load the static data from the data model
-      _omegaPiLhPtr = boost::shared_ptr<AbsOmegaPiLh>(p_load->omegaPiLhPtr()->clone_());
+      if(p_load->omegaPiLhPtr()) {
+	_omegaPiLhPtr = boost::shared_ptr<AbsOmegaPiLh>(p_load->omegaPiLhPtr()->clone_());
+      }
     }
 
     /********************************************************************************************/

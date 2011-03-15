@@ -59,7 +59,7 @@
 #include "Examples/MATpbarpToOmegaPi/GArgumentParser.hh"
 
 // Information retrieval and printing
-#include "Examples/MATpbarpToOmegaPi/GInfoFunction.hh"
+// #include "Examples/MATpbarpToOmegaPi/GInfoFunction.hh"
 
 #include "Examples/MATpbarpToOmegaPi/OmegaPiEventList.hh"
 //#include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
@@ -281,8 +281,8 @@ int main(int argc, char **argv){
 
   //***************************************************************************
   // Create an instance of our optimization monitor, telling it to output information in given intervals
-  std::ofstream resultSummary("./result.C");
-  boost::shared_ptr<optimizationMonitor> om(new optimizationMonitor(nParents, resultSummary));
+  // std::ofstream resultSummary("./result.C");
+  // boost::shared_ptr<optimizationMonitor> om(new optimizationMonitor(nParents, resultSummary));
 
   //***************************************************************************
   // We can now start creating populations. We refer to them through the base class
@@ -346,7 +346,7 @@ int main(int argc, char **argv){
   pop_ptr->setReportIteration(reportIteration);
   pop_ptr->setRecombinationMethod(rScheme);
   pop_ptr->setSortingScheme(smode);
-  pop_ptr->registerInfoFunction(boost::bind(&optimizationMonitor::informationFunction, om, _1, _2));
+  // pop_ptr->registerInfoFunction(boost::bind(&optimizationMonitor::informationFunction, om, _1, _2));
   
   // Do the actual optimization
   pop_ptr->optimize();
@@ -354,7 +354,7 @@ int main(int argc, char **argv){
   //--------------------------------------------------------------------------------------------
 
   // Make sure we close the result file
-  resultSummary.close();
+  // resultSummary.close();
 
   boost::shared_ptr<GOmegaPiIndividual> bestIndividual_ptr=pop_ptr->getBestIndividual<GOmegaPiIndividual>();
   OmegaPiData::fitParamVal finalFitParm;

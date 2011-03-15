@@ -4,7 +4,7 @@
 #include "log4cpp/Category.hh"
 #include "log4cpp/OstreamAppender.hh"
 #include "log4cpp/PatternLayout.hh"
-#include <boost/shared_ptr.hpp>
+#include "boost/shared_ptr.hpp"
 
 #include <string.h>
 

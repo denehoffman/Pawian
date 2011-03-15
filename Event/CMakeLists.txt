@@ -4,14 +4,12 @@ set(PACKAGE_NAME Event)
 
 MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
-
-set(INCLUDE_DIRECTORIES
-${BOOST_ROOT}
-${log4cpp_INCLUDE_DIRS}
-${CMAKE_SOURCE_DIR}
+include_directories (
+                    ${CMAKE_SOURCE_DIR}
+                    ${log4cpp_INCLUDE_DIRS}
+                    ${Boost_INCLUDE_DIRS}
 )
 
-include_directories( ${INCLUDE_DIRECTORIES})
 
 
 AUX_SOURCE_DIRECTORY("." SRC)

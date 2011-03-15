@@ -4,15 +4,11 @@ set(PACKAGE_NAME ErrLogger)
 
 MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
-
-set(INCLUDE_DIRECTORIES
-${BOOST_ROOT}
-${CMAKE_SOURCE_DIR}
-${log4cpp_INCLUDE_DIRS}
+include_directories (
+                    ${CMAKE_SOURCE_DIR}
+                    ${log4cpp_INCLUDE_DIRS}
+                    ${Boost_INCLUDE_DIRS}
 )
-
-include_directories( ${INCLUDE_DIRECTORIES})
-
 
 AUX_SOURCE_DIRECTORY("." SRC)
 Set(CCSRC "")
