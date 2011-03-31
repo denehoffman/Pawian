@@ -187,21 +187,21 @@ bl::tribool GenEvA(
     // Create a model that holds the static data needed for processing
     boost::shared_ptr<gp::GOmegaPiIndividual> gopi_ptr( new gp::GOmegaPiIndividual(finalOmegaPiLh) );
 
-    boost::shared_ptr<gc::GAsioTCPClientT<gg::GIndividual> > p(
-	  new gc::GAsioTCPClientT<gg::GIndividual>(
-             theAppParams.getIp()
-             , boost::lexical_cast<std::string>(theAppParams.getPort())
-	     , gopi_ptr
-          )
-    );
-    p->setMaxStalls(0); // An infinite number of stalled data retrievals
-    p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
+//     boost::shared_ptr<gc::GAsioTCPClientT<gg::GIndividual> > p(
+// 	  new gc::GAsioTCPClientT<gg::GIndividual>(
+//              theAppParams.getIp()
+//              , boost::lexical_cast<std::string>(theAppParams.getPort())
+// 	     , gopi_ptr
+//           )
+//     );
+//     p->setMaxStalls(0); // An infinite number of stalled data retrievals
+//     p->setMaxConnectionAttempts(100); // Up to 100 failed connection attempts
 
-    // Prevent return of unsuccessful mutation attempts to the server
-    p->returnResultIfUnsuccessful(theAppParams.getReturnRegardless());
+//     // Prevent return of unsuccessful mutation attempts to the server
+//     p->returnResultIfUnsuccessful(theAppParams.getReturnRegardless());
 
-    // Start the actual processing loop
-    p->run();
+//     // Start the actual processing loop
+//     p->run();
 
     return bl::indeterminate;
   }

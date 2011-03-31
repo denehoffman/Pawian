@@ -24,8 +24,14 @@ actions rootlibs
 
 lib log4cpp : : <file>$(extern)/lib/liblog4cpp.a : : ;
 lib Minuit2 : : <file>$(MINUIT2)/lib/libMinuit2.a : : ;
-lib Geneva  : : <file>$(GENEVA)/lib/libgeneva-opt.so : : ;
-
+#lib Geneva  : : <file>$(GENEVA)/lib/libgeneva-opt.so : : ;
+#lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-common.so : : ;
+#lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-courtier.so : : ;
+#lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-geneva-individuals.so : : ;
+# lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-geneva.so : : ;
+#lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-hap.so : : <file>$(GENEVA)/lib/libgemfony-common.so : : ;
+ lib Geneva : :  <file>$(GENEVA)/lib/libgeneva-all.so : : ;
+ 
 build-project qft++ ;
 build-project Utils ;
 build-project ErrLogger ;

@@ -26,8 +26,8 @@
 #include "Examples/Psi2STo2K2PiGam/MPsi2STo2K2PiGamFcn.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
 #include "Examples/Psi2STo2K2PiGam/Stream2K2PiGamFitParms.hh"
-#include "Examples/Psi2STo2K2PiGam/GPsi2STo2K2PiGamFit.hh"
-#include "Examples/Psi2STo2K2PiGam/GPsi2STo2K2PiGamIndividual.hh"
+//#include "Examples/Psi2STo2K2PiGam/GPsi2STo2K2PiGamFit.hh"
+//#include "Examples/Psi2STo2K2PiGam/GPsi2STo2K2PiGamIndividual.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -231,14 +231,16 @@ int main(int __argc,char *__argv[]){
 
   bool prefit=false;
   if (prefit){
-    MnUserParameters uparPre;
-    thePsi2STo2K2PiGamLhPtr->setMnUsrParams(uparPre, theStartparams, theErrorparams);
-    uparPre.Fix(1);
-    uparPre.Fix(2); 
-    GPsi2STo2K2PiGamFit preFit(thePsi2STo2K2PiGamLhPtr, uparPre);
-    preFit.doFit();
-    boost::shared_ptr<GPsi2STo2K2PiGamIndividual> bestIndividual=preFit.bestIndividual();
-    bestIndividual->getFitParams(theStartparams);
+//     MnUserParameters uparPre;
+//     thePsi2STo2K2PiGamLhPtr->setMnUsrParams(uparPre, theStartparams, theErrorparams);
+//     uparPre.Fix(1);
+//     uparPre.Fix(2); 
+//     GPsi2STo2K2PiGamFit preFit(thePsi2STo2K2PiGamLhPtr, uparPre);
+//     preFit.doFit();
+//     boost::shared_ptr<GPsi2STo2K2PiGamIndividual> bestIndividual=preFit.bestIndividual();
+//     bestIndividual->getFitParams(theStartparams);
+    Alert << "Geneva prefit is currently not implemented " << pdtFile << endmsg;
+    exit(0);
   }
 
   MnUserParameters upar;

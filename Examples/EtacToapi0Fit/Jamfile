@@ -10,5 +10,5 @@ lib EtacToapi0Fit :
 	: 
 	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
 
-exe GEtacToapi0FitApp : GEtacToapi0FitApp.cc EtacToapi0Fit : ;
+#exe GEtacToapi0FitApp : GEtacToapi0FitApp.cc EtacToapi0Fit : ;
 exe MEtacToapi0FitApp : MEtacToapi0FitApp.cc EtacToapi0Fit : ;
