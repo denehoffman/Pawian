@@ -485,8 +485,7 @@ bool calcSpinDensity(ApplicationParameter &theAppParams,
       theSpinDensityRootFile << "./" << theAppParams.getName() << "SpinDensity_M1" << theAppParams.getM() << "_M2" << theAppParams.getM_() << "_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".root";
        
       SpinDensityHist theSpinDensityHist(theSpinDensityRootFile.str(),theOmegaPiEventPtr->getMcVecs(),theParamVal);
-      theSpinDensityHist.createHistogram(theAppParams.getM(),theAppParams.getM_(), true);
-      theSpinDensityHist.createHistogram(theAppParams.getM(),theAppParams.getM_(), false);
+      theSpinDensityHist.createHistogram(theAppParams.getM(),theAppParams.getM_());
     }
   Info << "Spin density calculation done." << "\n" << endmsg;
   return true;

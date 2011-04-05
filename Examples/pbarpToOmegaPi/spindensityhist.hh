@@ -46,7 +46,7 @@ class SpinDensityHist
     
     SpinDensityHist(const std::string &thePathToRootFile, const std::vector<OmegaPiData::OmPiEvtData*> &theEventData,
                     OmegaPiData::fitParamVal &theParamVal);
-    void createHistogram(int M, int M_, bool bIncoherent);
+    void createHistogram(int M, int M_);
     void createHistograms();
 
   protected:
@@ -56,7 +56,7 @@ class SpinDensityHist
     TFile* _theTFile;
     TH1F* _cosOmegaHeliMcHist;
     std::string m_PathToRootFile;
-    void createSpinDensityHist(TH1F* theHisto, int M, int M_, bool bIncoherent,bool bReal=true);
+    void createSpinDensityHist(TH1F* theHisto, int M, int M_,bool bReal=true);
 
     void AddData(TH1F* theHisto, const OmPiEvtData& theEvtData, double dSpinDensity);
 };

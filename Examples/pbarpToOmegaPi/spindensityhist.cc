@@ -44,7 +44,7 @@ SpinDensityHist::~SpinDensityHist()
   _theTFile->Close();
 }
 
-void SpinDensityHist::createHistogram(int M, int M_, bool bIncoherent)
+void SpinDensityHist::createHistogram(int M, int M_)
 {
 
   std::stringstream strstreamTitle;
@@ -68,19 +68,18 @@ void SpinDensityHist::createHistogram(int M, int M_, bool bIncoherent)
   else Mn_=M_;
   
   string strCohIncoh;
-  
-  if (bIncoherent) strCohIncoh="Incoh";
-  else strCohIncoh="Coh";
+  strCohIncoh="Incoh";
+
   //Create spin density histogram with real part
   strstreamName << "_" << strCohIncoh << "spinDensityDataHist_M1" << strPrefixM1 << Mn << "M2" << strPrefixM2 << Mn_;
   TH1F* _spinDensityDataHist= new TH1F(strstreamName.str().c_str(),strstreamTitle.str().c_str(),101, -1.0, 1.0);
-  createSpinDensityHist(_spinDensityDataHist,  M, M_, bIncoherent);
+  createSpinDensityHist(_spinDensityDataHist,  M, M_);
   
   //Create spin density histogram with imaginary part
   strstreamName.str("");
   strstreamName << "_" << "Imag" << strCohIncoh << "spinDensityDataHist_M1" << strPrefixM1 << Mn << "M2" << strPrefixM2 << Mn_;
   TH1F* _spinDensityDataHistImag= new TH1F(strstreamName.str().c_str(),strstreamTitle.str().c_str(),101, -1.0, 1.0);
-  createSpinDensityHist(_spinDensityDataHistImag,  M, M_, bIncoherent, false);
+  createSpinDensityHist(_spinDensityDataHistImag,  M, M_);
 
   _spinDensityDataHist->Divide(_cosOmegaHeliMcHist);
   _spinDensityDataHistImag->Divide(_cosOmegaHeliMcHist);
@@ -90,28 +89,16 @@ void SpinDensityHist::createHistogram(int M, int M_, bool bIncoherent)
 
 void SpinDensityHist::createHistograms()
 {
-  //Incoherent Amplitudes
-  createHistogram(0,0,true);
-  createHistogram(1,0,true);
-  createHistogram(0,1,true);
-  createHistogram(-1,0,true);
-  createHistogram(0,-1,true);
-  createHistogram(1,1,true);
-  createHistogram(1,-1,true);
-  createHistogram(-1,1,true);
-  createHistogram(-1,-1,true);
+  createHistogram(0,0);
+  createHistogram(1,0);
+  createHistogram(0,1);
+  createHistogram(-1,0);
+  createHistogram(0,-1);
+  createHistogram(1,1);
+  createHistogram(1,-1);
+  createHistogram(-1,1);
+  createHistogram(-1,-1);
   
-  //Coherent Amplitudes
-  createHistogram(0,0,false);
-  createHistogram(1,0,false);
-  createHistogram(0,1,false);
-  createHistogram(-1,0,false);
-  createHistogram(0,-1,false);
-  createHistogram(1,1,false);
-  createHistogram(1,-1,false);
-  createHistogram(-1,1,false);
-  createHistogram(-1,-1,false);
-
 }
 
 void SpinDensityHist::AddData(TH1F* theHisto, const OmPiEvtData& theEvtData, double dSpinDensity)
@@ -126,7 +113,7 @@ void SpinDensityHist::AddData(TH1F* theHisto, const OmPiEvtData& theEvtData, dou
 /*!
     \fn SpinDensityHist::createSpinDensityHist()
  */
-void SpinDensityHist::createSpinDensityHist(TH1F* theHisto, int M, int M_, bool bIncoherent,bool bReal)
+void SpinDensityHist::createSpinDensityHist(TH1F* theHisto, int M, int M_,bool bReal)
 {
         
   std::vector<OmegaPiData::OmPiEvtData*>::const_iterator iterd;
@@ -136,8 +123,8 @@ void SpinDensityHist::createSpinDensityHist(TH1F* theHisto, int M, int M_, bool 
   for (iterd=m_EventData.begin(); iterd!=m_EventData.end(); ++iterd)
   {
     if (counter>_numOfEvts) continue;
-    if (bIncoherent) SpinDensity=spinDensity::calcSpinDensityIncoherent(M, M_ , (*iterd), (*m_pfitParamVal));
-    else SpinDensity=spinDensity::calcSpinDensityCoherent(M, M_ , (*iterd), (*m_pfitParamVal));
+    SpinDensity=spinDensity::calcSpinDensityIncoherent(M, M_ , (*iterd), (*m_pfitParamVal));
+    //    else SpinDensity=spinDensity::calcSpinDensityCoherent(M, M_ , (*iterd), (*m_pfitParamVal));
 
 //     if (bIncoherent) SpinDensity=spinDensity::calcSpinDensityOmegaFrame(M, M_ , (*iterd), (*m_pfitParamVal));
 //     else SpinDensity=spinDensity::calcSpinDensityCoherent(M, M_ , (*iterd), (*m_pfitParamVal)); 

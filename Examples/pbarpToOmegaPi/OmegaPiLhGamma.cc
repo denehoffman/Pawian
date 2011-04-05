@@ -63,11 +63,19 @@ complex<double> OmegaPiLhGamma::calcCoherentAmp(Spin lamgamma, Spin Minit, std::
       double theMag=it->second.first;
       double thePhi=it->second.second;
       complex<double> expiphi(cos(thePhi), sin(thePhi));
-      result+=sqrt(2*theJPCLS->L+1)*sqrt(3)*theMag*expiphi*omegaDecAmp*Clebsch(theJPCLS->L,0,1, lamomega,theJPCLS->J, lamomega)*conj(theData->Dfp[theJPCLS->J][Minit][lamomega]); //Clebsch(1,lamomega,0,0,1,lamomega)=1    
-    } 
 
+      complex<double> tmpResult=sqrt(2*theJPCLS->L+1)*sqrt(3)*theMag*expiphi*omegaDecAmp*Clebsch(theJPCLS->L,0,1, lamomega,theJPCLS->J, lamomega)*conj(theData->Dfp[theJPCLS->J][Minit][lamomega]); //Clebsch(1,lamomega,0,0,1,lamomega)=1 
+
+      if (Minit==-1 && theJPCLS->P==-1 && theJPCLS->C==-1){
+	int theJ=theJPCLS->J;
+	if( theJ!=0 && (theJ%2==0 ) ){ //J=even => negativ sign, due to CGs of the pbar p production
+	  tmpResult=-tmpResult;
+	}
+      }
+
+    result+=tmpResult;
+    }
   }
-
   return result;
 }
 
