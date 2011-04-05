@@ -73,13 +73,13 @@ void SpinDensityHist::createHistogram(int M, int M_)
   //Create spin density histogram with real part
   strstreamName << "_" << strCohIncoh << "spinDensityDataHist_M1" << strPrefixM1 << Mn << "M2" << strPrefixM2 << Mn_;
   TH1F* _spinDensityDataHist= new TH1F(strstreamName.str().c_str(),strstreamTitle.str().c_str(),101, -1.0, 1.0);
-  createSpinDensityHist(_spinDensityDataHist,  M, M_);
+  createSpinDensityHist(_spinDensityDataHist,  M, M_, true);
   
   //Create spin density histogram with imaginary part
   strstreamName.str("");
   strstreamName << "_" << "Imag" << strCohIncoh << "spinDensityDataHist_M1" << strPrefixM1 << Mn << "M2" << strPrefixM2 << Mn_;
   TH1F* _spinDensityDataHistImag= new TH1F(strstreamName.str().c_str(),strstreamTitle.str().c_str(),101, -1.0, 1.0);
-  createSpinDensityHist(_spinDensityDataHistImag,  M, M_);
+  createSpinDensityHist(_spinDensityDataHistImag,  M, M_, false);
 
   _spinDensityDataHist->Divide(_cosOmegaHeliMcHist);
   _spinDensityDataHistImag->Divide(_cosOmegaHeliMcHist);

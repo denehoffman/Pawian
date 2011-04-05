@@ -21,7 +21,7 @@ spinDensity::~spinDensity()
 
 complex<double> spinDensity::calcSpinDensityIncoherent(Spin M, Spin M_, OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal)
 {
-//   double thephi=theData->omegaHeliCm4Vec.Phi();spindensity.cc
+//   double thephi=theData->omegaHeliCm4Vec.Phi();
 //   double thetheta=theData->omegaHeliCm4Vec.Theta();
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=theParamVal.omegaProdSinglet;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=theParamVal.omegaProdTriplet0;
