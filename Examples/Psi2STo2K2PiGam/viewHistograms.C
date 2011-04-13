@@ -47,8 +47,10 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
   cmain->Divide(4,2);
   for(int i=0; i<histVectData.size(); i++) {
     cmain->cd(i+1);
+    histVectData[i]->SetLineWidth(3);
     histVectData[i]->SetLineColor(2);
     histVectData[i]->Draw("E");
+    histVectMc[i]->SetLineWidth(3);
     histVectMc[i]->Draw("same");
     } 
   
@@ -78,6 +80,24 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
     cout << endl;
 
 
+  TCanvas* c1 = new TCanvas("c1","c1",1200,800);
+  TCanvas* c2 = new TCanvas("c2","c2",1200,800);
+  TCanvas* c3 = new TCanvas("c3","c3",1200,800);
+  TCanvas* c4 = new TCanvas("c4","c4",1200,800);
+
+  for(int i=0; i<4; i++) {
+    if(i==0) c1->cd();
+    if(i==1) c2->cd();
+    if(i==2) c3->cd();
+    if(i==3) c4->cd();
+    histVectData[i]->SetLineWidth(4);
+    histVectData[i]->SetLineColor(2);
+    histVectData[i]->Draw("E");
+    histVectMc[i]->SetLineWidth(4);
+    histVectData[i]->GetXaxis()->SetTitle("invariante Masse / GeV/c^{2}");
+    histVectData[i]->GetYaxis()->SetTitle("Ereignisse / 20 MeV/c^{2}");
+    histVectMc[i]->Draw("same");
+    } 
 
 
 }

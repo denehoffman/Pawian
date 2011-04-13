@@ -133,9 +133,12 @@ int main(int __argc,char *__argv[]){
 //    std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_data_pwasample.dat";
 //    std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101123_chic0_signalmc_pwasample.dat";
    
-   std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101213_chic0_data_pwasample.dat";
-   std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101213_chic0_signalmc_pwasample.dat";
+   //std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101213_chic0_data_pwasample.dat";
+   //std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/101213_chic0_signalmc_pwasample.dat";
    
+   std::string datFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/110310_chic0_data_pwasample.dat";
+   std::string mcFile=theSourcePath+"/Examples/Psi2STo2K2PiGam/data/110310_chic0_signalmc_pwasample.dat";
+
    Info << "data file: " << datFile << endmsg;
    Info << "mc file: " << mcFile << endmsg;
    
@@ -182,18 +185,21 @@ int main(int __argc,char *__argv[]){
   hypMap["K1_1270Hyp"]=true;
   hypMap["K1_1400Hyp"]=false;
   hypMap["K0_1430_K0_1430Hyp"]=true;
-  hypMap["K2_1430_K2_1430Hyp"]=false;
+  hypMap["K2_1430_K2_1430Hyp"]=true;
   hypMap["K0_1430_K2_1430Hyp"]=true;
-  hypMap["K1_1400_K1_1400Hyp"]=false;
+  hypMap["K1_1400_K1_1400Hyp"]=true;
   hypMap["disableHyp2"]=false;
   hypMap["sigmaf980Hyp3"]=true;
   hypMap["sigmaf1710Hyp3"]=true;
   hypMap["sigmaf2200Hyp3"]=true;
   hypMap["f980f1370Hyp4"]=true;
+  hypMap["f980f1500Hyp4"]=true;
   hypMap["f1710f1370Hyp4"]=true;
-  hypMap["f980f_2_14300Hyp4"]=true;
-  hypMap["f1710f_2_14300Hyp4"]=true;
-  hypMap["disableHyp5"]=true;
+  hypMap["f980f_2_1430Hyp4"]=true;
+  hypMap["f980f_2_1525Hyp4"]=true;
+  hypMap["f1500f_2_1525Hyp4"]=true;
+  hypMap["f1710f_2_1430Hyp4"]=true;
+  hypMap["disableHyp5"]=false;
   hypMap["K_0_1430K_0_1950Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=false;
   hypMap["K1_1680Hyp7"]=true;

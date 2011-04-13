@@ -87,19 +87,13 @@ void Psi2STo2K2PiGamEvtList::read4Vecs(EventList& evtList, std::vector<Psi2STo2K
       Vector4<float> KKPi1_4V(*(anEvent->p4(1))+*(anEvent->p4(2))+*(anEvent->p4(4)));
       Vector4<float> KKPi1_HeliChic0_4V = helicityVec(psi2S_4V, chic0_4V, KKPi1_4V);
 
-      Vector4<float> Kp_4V(*(anEvent->p4(1)));
 
-//       Vector4<float> Kp_HeliKpPi0_4V=helicityVec(psi2S_4V, KpPi0_4V, Kp_4V);
-//       Vector4<float> Kp_HeliKpPi1_4V=helicityVec(psi2S_4V, KpPi1_4V, Kp_4V);
-//       Vector4<float> Kp_HeliKpPi0_ViaKpPiPi_4V=helicityVec(psi2S_4V, KpPi0_4V, Kp_4V);
-//       Vector4<float> Kp_HeliKpPi1_ViaKpPiPi_4V=helicityVec(psi2S_4V, KpPi1_4V, Kp_4V);
+      Vector4<float> Kp_4V(*(anEvent->p4(1)));
 
       Vector4<float> Kp_HeliKpPi0_4V=helicityVec(chic0_4V, KpPi0_4V, Kp_4V);
       Vector4<float> Kp_HeliKpPi1_4V=helicityVec(chic0_4V, KpPi1_4V, Kp_4V);
       Vector4<float> Kp_HeliKpPi0_ViaKpPiPi_4V=helicityVec(KpPiPi_4V, KpPi0_4V, Kp_4V);
       Vector4<float> Kp_HeliKpPi1_ViaKpPiPi_4V=helicityVec(KpPiPi_4V, KpPi1_4V, Kp_4V);
-
-
 
 
       Vector4<float> Km_4V(*(anEvent->p4(2)));
@@ -108,26 +102,14 @@ void Psi2STo2K2PiGamEvtList::read4Vecs(EventList& evtList, std::vector<Psi2STo2K
       Vector4<float> Km_HeliKmPi0_ViaKmPiPi_4V=helicityVec(KmPiPi_4V, KmPi0_4V, Km_4V);
       Vector4<float> Km_HeliKmPi1_ViaKmPiPi_4V=helicityVec(KmPiPi_4V, KmPi1_4V, Km_4V);
 
-//       Vector4<float> Km_HeliKmPi0_4V=helicityVec(psi2S_4V, KmPi0_4V, Km_4V);
-//       Vector4<float> Km_HeliKmPi1_4V=helicityVec(psi2S_4V, KmPi1_4V, Km_4V);
-//       Vector4<float> Km_HeliKmPi0_ViaKmPiPi_4V=helicityVec(psi2S_4V, KmPi0_4V, Km_4V);
-//       Vector4<float> Km_HeliKmPi1_ViaKmPiPi_4V=helicityVec(psi2S_4V, KmPi1_4V, Km_4V);
-
-
-
       Vector4<float> KpPi0_HeliKpPi0Pi0_4V=helicityVec(chic0_4V, KpPiPi_4V, KpPi0_4V);
       Vector4<float> KpPi1_HeliKpPi0Pi0_4V=helicityVec(chic0_4V, KpPiPi_4V, KpPi1_4V);
       Vector4<float> KmPi0_HeliKmPi0Pi0_4V=helicityVec(chic0_4V, KmPiPi_4V, KmPi0_4V);
       Vector4<float> KmPi1_HeliKmPi0Pi0_4V=helicityVec(chic0_4V, KmPiPi_4V, KmPi1_4V);
 
-//       Vector4<float> KpPi0_HeliKpPi0Pi0_4V=helicityVec(psi2S_4V, KpPiPi_4V, KpPi0_4V);
-//       Vector4<float> KpPi1_HeliKpPi0Pi0_4V=helicityVec(psi2S_4V, KpPiPi_4V, KpPi1_4V);
-//       Vector4<float> KmPi0_HeliKmPi0Pi0_4V=helicityVec(psi2S_4V, KmPiPi_4V, KmPi0_4V);
-//       Vector4<float> KmPi1_HeliKmPi0Pi0_4V=helicityVec(psi2S_4V, KmPiPi_4V, KmPi1_4V);
+      Vector4<float> PiPi_HeliKpPi0Pi0_4V=helicityVec(chic0_4V, KpPiPi_4V, PiPi_4V);
+      Vector4<float> PiPi_HeliKmPi0Pi0_4V=helicityVec(chic0_4V, KmPiPi_4V, PiPi_4V);
 
-
-      Vector4<float> PiPi_HeliKpPi0Pi0_4V=helicityVec(psi2S_4V, KpPiPi_4V, PiPi_4V);
-      Vector4<float> PiPi_HeliKmPi0Pi0_4V=helicityVec(psi2S_4V, KmPiPi_4V, PiPi_4V);
 
       Vector4<float> Pi0_4V(*(anEvent->p4(3)));
       Vector4<float> Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V=helicityVec(KpPiPi_4V, PiPi_4V, Pi0_4V);
@@ -135,10 +117,6 @@ void Psi2STo2K2PiGamEvtList::read4Vecs(EventList& evtList, std::vector<Psi2STo2K
 
       Vector4<float> Pi0_HeliPi0Pi0_4V=helicityVec(chic0_4V, PiPi_4V, Pi0_4V);
       Vector4<float> Km_HeliKmKp_4V=helicityVec(chic0_4V, KpKm_4V, Km_4V);
-
-
-//       Vector4<float> Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V=helicityVec(psi2S_4V, PiPi_4V, Pi0_4V);
-//       Vector4<float> Pi0_HeliPi0Pi0_ViaKmPi0Pi0_4V=helicityVec(psi2S_4V, PiPi_4V, Pi0_4V);
 
 
       Psi2STo2K2PiGamEvtData* thePsi2STo2K2PiGamEvtData=new Psi2STo2K2PiGamEvtData();

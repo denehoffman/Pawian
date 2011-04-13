@@ -248,6 +248,7 @@ void Psi2STo2K2PiGamHist::initRootStuff()
   _cosK1430ViaK892DataHist= new TH1F("_cosK1430ViaK892DataHist","cos(#Theta) K1430 dec (via K*(892)) data",60, -1., 1.);
   _cosK1430ViaK892McHist= new TH1F("_cosK1430ViaK892McHist","cos(#Theta) K1430 dec (via K*(892)) MC",60, -1., 1.);
   _cosK1430ViaK892FittedHist= new TH1F("_cosK1430ViaK892FittedHist","cos(#Theta) K1430 dec (via K*(892)) fit",60, -1., 1.);
+  /*
   _invKKDataHist= new TH1F("_invKKDataHist","M_{K+K-} data",120, 0.8, 3.0);
   _invKKMcHist= new TH1F("_invKKMcHist","M_{K+K-} MC",120, 0.8, 3.0);
   _invKKFittedHist= new TH1F("_invKKFittedHist","M_{K+K-} fit",120, 0.8, 3.0);
@@ -260,6 +261,22 @@ void Psi2STo2K2PiGamHist::initRootStuff()
   _invKPiPiViaK892DataHist= new TH1F("_invKPiPiViaK892DataHist","M_{K #pi #pi} (via K*(892)) data",90, 0.9, 3.1);
   _invKPiPiViaK892McHist= new TH1F("_invKPiPiViaK892McHist","M_{K #pi #pi} (via K*(892)) MC",90, 0.9, 3.1);
   _invKPiPiViaK892FittedHist= new TH1F("_invKPiPiViaK892FittedHist","M_{K #pi #pi} (via K*(892)) fit",90, 0.9, 3.1);
+  */
+
+  _invKKDataHist= new TH1F("_invKKDataHist","M_{K+K-} data",120, 0.9, 3.3);
+  _invKKMcHist= new TH1F("_invKKMcHist","M_{K+K-} MC",120, 0.9, 3.3);
+  _invKKFittedHist= new TH1F("_invKKFittedHist","M_{K+K-} fit",120, 0.9, 3.3);
+  _invKPiDataHist= new TH1F("_invKPiDataHist","M_{K+ #pi} data",120, 0.5, 2.9);
+  _invKPiMcHist= new TH1F("_invKPiMcHist","M_{K+ #pi} MC",120, 0.5, 2.9);
+  _invKPiFittedHist= new TH1F("_invKPiFittedHist","M_{K+ #pi} MC",120, 0.5, 2.9);
+  _invPiPiDataHist= new TH1F("_invPiPiDataHist","M_{#pi #pi} data",115, 0.2, 2.5);
+  _invPiPiMcHist= new TH1F("_invPiPiMcHist","M_{#pi #pi} MC",115, 0.2, 2.5);
+  _invPiPiFittedHist= new TH1F("_invPiPiFittedHist","M_{#pi #pi} fit",115, 0.2, 2.5);
+  _invKPiPiViaK892DataHist= new TH1F("_invKPiPiViaK892DataHist","M_{K #pi #pi} (via K*(892)) data",120, 0.8, 3.2);
+  _invKPiPiViaK892McHist= new TH1F("_invKPiPiViaK892McHist","M_{K #pi #pi} (via K*(892)) MC",120, 0.8, 3.2);
+  _invKPiPiViaK892FittedHist= new TH1F("_invKPiPiViaK892FittedHist","M_{K #pi #pi} (via K*(892)) fit",120, 0.8, 3.2);
+
+  /*
   _KPivsKPiDataHist2d= new TH2F("_KPivsKPiDataHist2d","M_{K #pi} vs.M_{K #pi} data", 65, 0.5, 2.8, 65, 0.5, 2.8);
   _KPivsKPiMcHist2d= new TH2F("_KPivsKPiMcHist2d","M_{K #pi} vs.M_{K #pi} MC", 65, 0.5, 2.8, 65, 0.5, 2.8);
   _KPivsKPiFittedHist2d= new TH2F("_KPivsKPiFittedHist2d","M_{K #pi} vs.M_{K #pi} fit", 65, 0.5, 2.8, 65, 0.5, 2.8);
@@ -272,6 +289,20 @@ void Psi2STo2K2PiGamHist::initRootStuff()
   _KKPivsKPiDataHist2d = new TH2F("_KKPivsKPiDataHist2d","M_{K K #pi} vs.M_{K #pi} data", 60, 1.1, 3.3, 60, 0.5, 2.8);
   _KKPivsKPiMcHist2d = new TH2F("_KKPivsKPiMcHist2d","M_{K K #pi} vs.M_{K #pi} MC", 60, 1.1, 3.3, 60, 0.5, 2.8);
   _KKPivsKPiFittedHist2d = new TH2F("_KKPivsKPiFittedHist2d","M_{K K #pi} vs.M_{K #pi} fit", 60, 1.1, 3.3, 60, 0.5, 2.8);
+  */
+
+  _KPivsKPiDataHist2d= new TH2F("_KPivsKPiDataHist2d","M_{K #pi} vs.M_{K #pi} data", 48, 0.5, 2.9, 48, 0.5, 2.9);
+  _KPivsKPiMcHist2d= new TH2F("_KPivsKPiMcHist2d","M_{K #pi} vs.M_{K #pi} MC", 48, 0.5, 2.9, 48, 0.5, 2.9);
+  _KPivsKPiFittedHist2d= new TH2F("_KPivsKPiFittedHist2d","M_{K #pi} vs.M_{K #pi} fit", 48, 0.5, 2.9, 48, 0.5, 2.9);
+  _KKvsPiPiDataHist2d= new TH2F("_KKvsPiPiDataHist2d","M_{K K} vs.M_{#pi #pi} data", 48, 0.9, 3.3, 46, 0.2, 2.5);
+  _KKvsPiPiMcHist2d = new TH2F("_KKvsPiPiMcHist2d","M_{K K} vs.M_{#pi #pi} MC", 48, 0.9, 3.3, 46, 0.2, 2.5);
+  _KKvsPiPiFittedHist2d = new TH2F("_KKvsPiPiFittedHist2d","M_{K K} vs.M_{#pi #pi} fit", 48, 0.9, 3.3, 46, 0.2, 2.5);
+  _KPiPivsPiPiDataHist2d = new TH2F("_KPiPivsPiPiDataHist2d","M_{K #pi #pi} vs.M_{#pi #pi} data", 46, 0.2, 2.5, 48, 0.8, 3.2);
+  _KPiPivsPiPiMcHist2d = new TH2F("_KPiPivsPiPiMcHist2d","M_{K #pi #pi} vs.M_{#pi #pi} MC", 46, 0.2, 2.5, 48, 0.8, 3.2);
+  _KPiPivsPiPiFittedHist2d = new TH2F("_KPiPivsPiPiFittedHist2d","M_{K #pi #pi} vs.M_{#pi #pi} fit", 46, 0.2, 2.5, 48, 0.8, 3.2);
+  _KKPivsKPiDataHist2d = new TH2F("_KKPivsKPiDataHist2d","M_{K K #pi} vs.M_{K #pi} data", 48, 0.5, 2.9, 48, 1.1, 3.5);
+  _KKPivsKPiMcHist2d = new TH2F("_KKPivsKPiMcHist2d","M_{K K #pi} vs.M_{K #pi} MC", 48, 0.5, 2.9, 48, 1.1, 3.5);
+  _KKPivsKPiFittedHist2d = new TH2F("_KKPivsKPiFittedHist2d","M_{K K #pi} vs.M_{K #pi} fit", 48, 0.5, 2.9, 48, 1.1, 3.5);
 
   _dataTuple = new TNtuple("dataTuple","dataTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipi:phipipi:costhetapiViapipi:phipiViapipi:weight");
 
@@ -463,9 +494,13 @@ void Psi2STo2K2PiGamHist::plotKPiPivsPiPi(TH2F* theHisto, const Psi2STo2K2PiGamE
   Vector4<float> KpPiPi_HeliChic0_4V=theData->KpPiPi_HeliChic0_4V;
   Vector4<float> KmPiPi_HeliChic0_4V=theData->KmPiPi_HeliChic0_4V;
   Vector4<float> PiPi_HeliChic0_4V=theData->PiPi_HeliChic0_4V;
-  
+
+  /*  
   theHisto->Fill(KpPiPi_HeliChic0_4V.M(), PiPi_HeliChic0_4V.M(),weight);
   theHisto->Fill(KmPiPi_HeliChic0_4V.M(), PiPi_HeliChic0_4V.M(),weight);
+  */
+  theHisto->Fill(PiPi_HeliChic0_4V.M(), KpPiPi_HeliChic0_4V.M(), weight);
+  theHisto->Fill(PiPi_HeliChic0_4V.M(), KmPiPi_HeliChic0_4V.M(), weight);
 }
 
 void Psi2STo2K2PiGamHist::plotKKPivsKPi(TH2F* theHisto, const Psi2STo2K2PiGamEvtData* theData, double weight){
@@ -477,10 +512,15 @@ void Psi2STo2K2PiGamHist::plotKKPivsKPi(TH2F* theHisto, const Psi2STo2K2PiGamEvt
   Vector4<float> KpPi1_HeliChic0_4V=theData->KpPi1_HeliChic0_4V;
   Vector4<float> KmPi0_HeliChic0_4V=theData->KmPi0_HeliChic0_4V;
   Vector4<float> KmPi1_HeliChic0_4V=theData->KmPi1_HeliChic0_4V;  
-
+  /*
   theHisto->Fill(KKPi0_HeliChic0_4V.M(), KpPi0_HeliChic0_4V.M(),weight);
   theHisto->Fill(KKPi0_HeliChic0_4V.M(), KmPi0_HeliChic0_4V.M(),weight);
   theHisto->Fill(KKPi1_HeliChic0_4V.M(), KpPi1_HeliChic0_4V.M(),weight);
   theHisto->Fill(KKPi1_HeliChic0_4V.M(), KmPi1_HeliChic0_4V.M(),weight);
+  */
+  theHisto->Fill(KpPi0_HeliChic0_4V.M(), KKPi0_HeliChic0_4V.M(), weight);
+  theHisto->Fill(KmPi0_HeliChic0_4V.M(), KKPi0_HeliChic0_4V.M(), weight);
+  theHisto->Fill(KpPi1_HeliChic0_4V.M(), KKPi1_HeliChic0_4V.M(), weight);
+  theHisto->Fill(KmPi1_HeliChic0_4V.M(), KKPi1_HeliChic0_4V.M(), weight);
 
 }
