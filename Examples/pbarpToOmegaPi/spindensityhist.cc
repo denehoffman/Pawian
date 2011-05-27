@@ -3,24 +3,24 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-//#include "Examples/pbarpToOmegaPi/OmegaPiHist.hh"
+#include "Examples/pbarpToOmegaPi/AbsOmegaPiLh.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
-//#include "Examples/pbarpToOmegaPi/OmegaPiLh.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
 #include "ErrLogger/ErrLogger.hh"
-#include "Examples/pbarpToOmegaPi/spindensity.hh"
 #include <cstdlib>
 
 SpinDensityHist::SpinDensityHist(const std::string &thePathToRootFile, 
-                                 const std::vector<OmegaPiData::OmPiEvtData*> &theEventData,
+                                 boost::shared_ptr<AbsOmegaPiLh> absOmegaPiLh,
                                  OmegaPiData::fitParamVal &theParamVal):
   _numOfEvts(1000),
-  m_EventData(theEventData),
+  _omegaPiLh(absOmegaPiLh),
   m_PathToRootFile(thePathToRootFile)
 {
+  boost::shared_ptr<const OmegaPiEventList> theEvtList=_omegaPiLh->getEventList();
+  m_EventData=theEvtList->getMcVecs();
   m_pfitParamVal = &theParamVal;
   _theTFile=new TFile(m_PathToRootFile.c_str(),"recreate");
   
@@ -120,14 +120,16 @@ void SpinDensityHist::createSpinDensityHist(TH1F* theHisto, int M, int M_,bool b
   complex<double> SpinDensity;
   unsigned int counter=0;
 
-  for (iterd=m_EventData.begin(); iterd!=m_EventData.end(); ++iterd)
+  boost::shared_ptr<const OmegaPiEventList> theEvtList=_omegaPiLh->getEventList();
+  std::vector<OmegaPiData::OmPiEvtData*> theData=theEvtList->getMcVecs();
+
+
+//   for (iterd=m_EventData.begin(); iterd!=m_EventData.end(); ++iterd)
+   for (iterd=theData.begin(); iterd!=theData.end(); ++iterd)
   {
     if (counter>_numOfEvts) continue;
-    SpinDensity=spinDensity::calcSpinDensityIncoherent(M, M_ , (*iterd), (*m_pfitParamVal));
-    //    else SpinDensity=spinDensity::calcSpinDensityCoherent(M, M_ , (*iterd), (*m_pfitParamVal));
-
-//     if (bIncoherent) SpinDensity=spinDensity::calcSpinDensityOmegaFrame(M, M_ , (*iterd), (*m_pfitParamVal));
-//     else SpinDensity=spinDensity::calcSpinDensityCoherent(M, M_ , (*iterd), (*m_pfitParamVal)); 
+    SpinDensity=_omegaPiLh->spinDensity(M, M_ , (*iterd), (*m_pfitParamVal));
+//     SpinDensity=_omegaPiLh->spinDensityOmegaFrame(M, M_ , (*iterd), (*m_pfitParamVal));
     
     
     if (bReal) AddData(theHisto, *(*iterd), SpinDensity.real());

@@ -18,7 +18,7 @@ class pbarpToOmegaPi0States : public AbsStates {
 
 public:
 
-  /// Default Constructor
+  /// Default Constructor  
   pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbarpStates);
 
   /** Destructor */

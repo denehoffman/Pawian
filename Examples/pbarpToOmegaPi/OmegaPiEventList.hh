@@ -23,7 +23,6 @@ public:
   OmegaPiEventList(EventList& evtListData, EventList& evtListMc, unsigned jmax, unsigned pbarmom);
 
 
-
   /** Destructor */
   virtual ~OmegaPiEventList();
 

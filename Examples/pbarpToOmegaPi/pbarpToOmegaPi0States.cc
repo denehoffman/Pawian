@@ -16,6 +16,7 @@ pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbar
 }
 
 
+
 pbarpToOmegaPi0States::~pbarpToOmegaPi0States(){
 }
 

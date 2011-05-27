@@ -28,7 +28,7 @@
 using OmegaPiData::OmPiEvtData;
 
 class OmegaPiEventList;
-class OmegaPiLh;
+class AbsOmegaPiLh;
 class TFile;
 class TH2F;
 class TH1F;
@@ -44,21 +44,23 @@ class SpinDensityHist
   public:
     ~SpinDensityHist();
     
-    SpinDensityHist(const std::string &thePathToRootFile, const std::vector<OmegaPiData::OmPiEvtData*> &theEventData,
-                    OmegaPiData::fitParamVal &theParamVal);
+  SpinDensityHist(const std::string &thePathToRootFile, boost::shared_ptr<AbsOmegaPiLh> absOmegaPiLh,
+		  OmegaPiData::fitParamVal &theParamVal);
     void createHistogram(int M, int M_);
     void createHistograms();
 
-  protected:
-    unsigned int _numOfEvts;
-    const std::vector<OmegaPiData::OmPiEvtData*> m_EventData;
-    OmegaPiData::fitParamVal *m_pfitParamVal;
-    TFile* _theTFile;
-    TH1F* _cosOmegaHeliMcHist;
-    std::string m_PathToRootFile;
-    void createSpinDensityHist(TH1F* theHisto, int M, int M_,bool bReal=true);
+ protected:
+  unsigned int _numOfEvts;
+  boost::shared_ptr<AbsOmegaPiLh> _omegaPiLh;
+  std::vector<OmegaPiData::OmPiEvtData*> m_EventData;
+  OmegaPiData::fitParamVal *m_pfitParamVal;
+  TFile* _theTFile;
+  TH1F* _cosOmegaHeliMcHist;
+  std::string m_PathToRootFile;
+  void createSpinDensityHist(TH1F* theHisto, int M, int M_,bool bReal=true);
+  
+  void AddData(TH1F* theHisto, const OmPiEvtData& theEvtData, double dSpinDensity);
 
-    void AddData(TH1F* theHisto, const OmPiEvtData& theEvtData, double dSpinDensity);
 };
 
 #endif

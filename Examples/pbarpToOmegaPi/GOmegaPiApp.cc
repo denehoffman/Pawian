@@ -19,7 +19,7 @@
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/pbarpToOmegaPi/AbsOmegaPiLh.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiLhGamma.hh"
-#include "Examples/pbarpToOmegaPi/OmegaPiLhOmega.hh"
+//#include "Examples/pbarpToOmegaPi/OmegaPiLhOmega.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 // The individual that should be optimized
 #include "Examples/pbarpToOmegaPi/GOmegaPiIndividual.hh"
@@ -52,8 +52,6 @@
 #include "Minuit2/MnStrategy.h"
 
 #include <complex>
-
-#include "Examples/pbarpToOmegaPi/spindensityfitparameter.hh"
 
 #include "Examples/pbarpToOmegaPi/spindensityhist.hh"
 
@@ -437,14 +435,16 @@ bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
  *
  */
 bool calcSpinDensity(ApplicationParameter &theAppParams, 
-                            boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh, 
-                            boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr,
-                            boost::shared_ptr<const OmegaPiEventList> theOmegaPiEventPtr)
+		     boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh,
+		     OmegaPiData::fitParamVal &finalFitParm)
 {
   Info << "Starting spin density calculation." << "\n" << endmsg;
-  SpinDensityFitParameter theUserPar;
   OmegaPiData::fitParamVal theParamVal;
         
+  rm::MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
+  rm::MnUserParameters upar;
+  minuitStartParam theUserPar;
+
   if (!theAppParams.getPathStartParamFile().empty())
     {
       ifstream theFile(theAppParams.getPathStartParamFile().c_str());   
@@ -452,23 +452,24 @@ bool calcSpinDensity(ApplicationParameter &theAppParams,
 	{
 	  Info << "Using start parameters from file " << theAppParams.getPathStartParamFile() << "\n" << endmsg;
 	  theUserPar.ParseStream(theFile);
-	  theUserPar.getFitParamVal(theParamVal,finalOmegaPiLh->omegaPi0States());
+	  mOmegaPiFcn.setMnUsrParams(upar,theUserPar);
 	}
       else 
 	{
-	  cerr << "Fehler" << endl;
 	  Info << "Start parameter file " << theAppParams.getPathStartParamFile() << " not found!" << endmsg;
 	  return false;
 	}
     }
   else 
     {
-      cerr << "Start parameter file not specified!" << endl;
+      Info << "Start parameter file has to be set!" << endmsg;
       return false;
     }
+
+  mOmegaPiFcn.setFitParamVal(theParamVal, upar.Params());
         
   Info << "Using following fit parameter:\n" << endmsg;
-  printFitParameters(pbarpToOmegaPi0StatesPtr, theParamVal);
+  printFitParameters(finalOmegaPiLh->omegaPi0States(), theParamVal);
   std::ostringstream theSpinDensityRootFile;
         
   if (theAppParams.getCalcAllSpindensity())
@@ -476,7 +477,7 @@ bool calcSpinDensity(ApplicationParameter &theAppParams,
       Info << "Calculating all spin density elements.\n" << endmsg;
       theSpinDensityRootFile << "./" << theAppParams.getName() << "SpinDensity" << "_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".root";
 
-      SpinDensityHist theSpinDensityHist(theSpinDensityRootFile.str(),theOmegaPiEventPtr->getMcVecs(),theParamVal);
+      SpinDensityHist theSpinDensityHist(theSpinDensityRootFile.str(), finalOmegaPiLh, theParamVal);
       theSpinDensityHist.createHistograms();
     }
   else
@@ -484,7 +485,7 @@ bool calcSpinDensity(ApplicationParameter &theAppParams,
       Info << "Calculating spin density elements for M=" << theAppParams.getM() << " M'=" << theAppParams.getM_() << ".\n" << endmsg;
       theSpinDensityRootFile << "./" << theAppParams.getName() << "SpinDensity_M1" << theAppParams.getM() << "_M2" << theAppParams.getM_() << "_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".root";
        
-      SpinDensityHist theSpinDensityHist(theSpinDensityRootFile.str(),theOmegaPiEventPtr->getMcVecs(),theParamVal);
+      SpinDensityHist theSpinDensityHist(theSpinDensityRootFile.str(), finalOmegaPiLh, theParamVal);
       theSpinDensityHist.createHistogram(theAppParams.getM(),theAppParams.getM_());
     }
   Info << "Spin density calculation done." << "\n" << endmsg;
@@ -736,7 +737,7 @@ int main(int argc, char **argv)
 
   case ApplicationParameter::SpinDensity:
     {
-      if (!calcSpinDensity(theAppParams, finalOmegaPiLh, pbarpToOmegaPi0StatesPtr,theOmegaPiEventPtr)) exit(1);
+      if (!calcSpinDensity(theAppParams, finalOmegaPiLh, finalFitParm)) exit(1);
     }
     break;
 

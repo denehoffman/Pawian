@@ -42,6 +42,8 @@ public:
   
   double calcLogLh(const OmegaPiData::fitParamVal& theParamVal);
   virtual double calcEvtIntensity(OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal)=0;
+  virtual complex<double> spinDensity(Spin M, Spin M_, OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal)=0;
+  virtual complex<double> spinDensityOmegaFrame(Spin M, Spin M_, OmegaPiData::OmPiEvtData* theData, const OmegaPiData::fitParamVal& theParamVal)=0;
   boost::shared_ptr<const OmegaPiEventList> getEventList() const {return _omegaPiEventListPtr;}
   boost::shared_ptr<const pbarpToOmegaPi0States> omegaPi0States() const {return _omegaPi0StatesPtr;}
   virtual void print(std::ostream& os) const;
