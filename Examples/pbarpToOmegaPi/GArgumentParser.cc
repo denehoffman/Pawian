@@ -86,6 +86,8 @@ bool ApplicationParameter::parseCommandLine(int argc, char **argv)
        "Specifies which minimization algorithm should be used for fitting GenEvA (0) or Minuit (1) or Minuit after GenEvA (2) or spin density calculation (3) or QA mode (4).")
       ("name,n", po::value<string>(&strName)->default_value("myApp"),
         "Name that is attached to all otuput file names to be able to run multiple fits in parallel.")
+      ("LhMode", po::value<std::string>(&theLhMode)->default_value(theLhMode),
+       "Specifies the likelihood mode")
       ;
 
     po::options_description config("Configuration file options");
@@ -337,6 +339,7 @@ bool ApplicationParameter::parseCommandLine(int argc, char **argv)
 	    << "pbarMom = " << pbarMom << "\n"
 	    << "errLogMode = " << strErrLogMode << "\n"
 	    << "SourcePath = " << theSourcePath << "\n"
+	    << "LhMode = " << theLhMode << "\n"
 	    << endl;
     }
 

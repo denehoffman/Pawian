@@ -2,11 +2,17 @@
 #include <fstream>
 #include <string>
 
+
 #include "Examples/pbarpToOmegaPi/OmegaPiLhGamma.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiEventList.hh"
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 #include "ErrLogger/ErrLogger.hh"
+
+#include <geneva/GConstrainedDoubleObject.hpp>
+// #include <geneva/GConstrainedDoubleObjectCollection.hpp>
+// #include <geneva/GDoubleGaussAdaptor.hpp>
+// #include <geneva/GObjectExpectationChecksT.hpp>
 
 OmegaPiLhGamma::OmegaPiLhGamma(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates) :
   AbsOmegaPiLh(theEvtList, theStates)
@@ -20,6 +26,20 @@ OmegaPiLhGamma::OmegaPiLhGamma(boost::shared_ptr<OmegaPiLhGamma> theOmegaPiLhGam
 
 OmegaPiLhGamma::~OmegaPiLhGamma()
 {
+}
+
+double OmegaPiLhGamma::calcLogLh(const OmegaPiData::fitParamVal& theParamVal){
+
+  double result=AbsOmegaPiLh::calcLogLh(theParamVal);
+  if (_globalItCounter%100 == 0) printFitParams(std::cout, theParamVal);
+
+//   if (_globalItCounter%1000 == 0){
+//     std::ofstream theStream ("currentResult.dat");
+//     dumpCurrentResult(theStream, theParamVal);
+//     theStream.close();
+//   }
+
+  return result; 
 }
 
 
@@ -168,7 +188,305 @@ complex<double> OmegaPiLhGamma::spinDensityOmegaFrame(Spin M, Spin M_, OmegaPiDa
 }
 
 
+void OmegaPiLhGamma::getFitParamVal(OmegaPiData::fitParamVal& theParamVal, const std::vector<double>& par) const{
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet = _omegaPi0StatesPtr->jpclsSinglet();
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0 = _omegaPi0StatesPtr->jpclsTriplet0();
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1 = _omegaPi0StatesPtr->jpclsTriplet1();
+
+  if (par.size()< JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3) {
+    Alert << "size of parameters wrong!!! par.size()=" << par.size() << 
+      "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" << 
+      JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 << endmsg;
+    exit(1);
+  }
+
+  unsigned int counter=0;
+  for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    double mag=par[counter];
+    counter++;
+    double phi=0.;
+    if (counter>1){ phi=par[counter];
+    counter++;
+    }
+    std::pair <double,double> tmpParameter=make_pair(mag,phi);
+    theParamVal.omegaProdSinglet[(*itJPCLS)]=tmpParameter; 
+  }
+
+  for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    double mag=par[counter];
+    counter++;
+    double phi=0.;
+    if (counter>JPCLSOmegaSinglet.size()*2){ phi=par[counter];
+    counter++;
+    }
+    std::pair <double,double> tmpParameter=make_pair(mag,phi);
+    theParamVal.omegaProdTriplet0[(*itJPCLS)]=tmpParameter; 
+  }
+
+  for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    double mag=par[counter];
+    counter++;
+    double phi=0.;
+    if (counter>JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2-1){ phi=par[counter];
+    counter++;
+    }
+    std::pair <double,double> tmpParameter=make_pair(mag,phi);
+    theParamVal.omegaProdTriplet1[(*itJPCLS)]=tmpParameter; 
+  }
+
+
+}
+
+void OmegaPiLhGamma::setGenevaFitParamVal( boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr ){
+
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet= _omegaPi0StatesPtr->jpclsSinglet();
+
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  
+  int counter=0;
+  for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    
+    boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject> gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
+    theGbdc_ptr->push_back(gbd_ptr);
+    
+    if (counter>0){ 
+      boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject>  gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
+      theGbdc_ptr->push_back(gbd_ptr);
+    }
+    counter++; 
+  }
+
+
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0= _omegaPi0StatesPtr->jpclsTriplet0();
+  counter=0;
+  for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    
+    boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject> gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
+    theGbdc_ptr->push_back(gbd_ptr);
+    
+    if (counter>0){ 
+      boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject>  gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
+      theGbdc_ptr->push_back(gbd_ptr);
+    }
+    counter++; 
+  }
+
+ 
+ std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1= _omegaPi0StatesPtr->jpclsTriplet1();
+  counter=0;
+  for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    
+    boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject> gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
+    theGbdc_ptr->push_back(gbd_ptr);
+    
+    if (counter>0){ 
+      boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject>  gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
+      theGbdc_ptr->push_back(gbd_ptr);
+    }
+    counter++; 
+  }
+
+
+}
+
+
+void OmegaPiLhGamma::setMnUsrParams(MnUserParameters& upar){
+
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=_omegaPi0StatesPtr->jpclsSinglet();
+
+  int counter=0;
+  for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    std::string magStr=(*itJPCLS)->name()+"S"+"mag";
+    std::string phiStr=(*itJPCLS)->name()+"S"+"phi";
+
+    upar.Add(magStr, 0.5, .1, 0., 2.);
+    if (counter>0) upar.Add(phiStr, 0., .1, -3.*M_PI, 3.*M_PI);
+    counter++; 
+  }
+
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=_omegaPi0StatesPtr->jpclsTriplet0();
+  counter=0;
+  for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    std::string magStr=(*itJPCLS)->name()+"T0"+"mag";
+    std::string phiStr=(*itJPCLS)->name()+"T0"+"phi";
+
+    upar.Add(magStr, 0.5, .1, 0., 2.);
+    if (counter>0) upar.Add(phiStr, 0., .1, -3.*M_PI, 3.*M_PI);
+    counter++; 
+  }
+
+  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=_omegaPi0StatesPtr->jpclsTriplet1();
+  counter=0;
+  for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
+    //now fill the fitParameterMap
+    std::string magStr=(*itJPCLS)->name()+"T1"+"mag";
+    std::string phiStr=(*itJPCLS)->name()+"T1"+"phi";
+
+    upar.Add(magStr, 0.5, .1, 0., 2.);
+    if (counter>0) upar.Add(phiStr, 0., .1, -3.*M_PI, 3.*M_PI);
+    counter++; 
+  }
+
+}
+
+void OmegaPiLhGamma::setMnUsrParams(MnUserParameters& upar, OmegaPiData::fitParamVal &finalFitParm){
+
+   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=finalFitParm.omegaProdSinglet;
+   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=finalFitParm.omegaProdTriplet0;
+   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet1=finalFitParm.omegaProdTriplet1;
+   FillUpars(upar,fitParmSinglet,"S");
+   FillUpars(upar,fitParmTriplet0,"T0");
+   FillUpars(upar,fitParmTriplet1,"T1");
+}
+
+void OmegaPiLhGamma::FillUpars(MnUserParameters& upar, 
+			       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParmS,
+			       const string &theSuffix)
+{   
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+    bool bFirst=true;
+    
+    for ( it=fitParmS.begin(); it!=fitParmS.end(); ++it)
+      {
+	boost::shared_ptr<const JPCLS> theJPCLS=it->first;
+	string strName = theJPCLS->name()+theSuffix;
+	double theMag=it->second.first;
+	double thePhi=it->second.second;
+	
+	//now fill the fitParameterMap
+	std::string magStr=strName+"mag";
+	std::string phiStr=strName+"phi";
+	
+	upar.Add(magStr, theMag, .1, 0., 2.);
+	if (!bFirst) upar.Add(phiStr, thePhi, .1, -3.*M_PI, 3.*M_PI);
+	if(bFirst) bFirst=false;
+      } 
+}
+
+void  OmegaPiLhGamma::setMnUsrParams(MnUserParameters& upar, minuitStartParam &theStartParam)
+{
+  FillUpars(upar,theStartParam,_omegaPi0StatesPtr->jpclsSinglet(),"S");
+  FillUpars(upar,theStartParam,_omegaPi0StatesPtr->jpclsTriplet0(),"T0");
+  FillUpars(upar,theStartParam,_omegaPi0StatesPtr->jpclsTriplet1(),"T1");
+}
+
+//This Method fills the Minuit User Parameters with parameters for given state and if supllied initializes
+//the parameter with start parameters given by user in theStartParam map.
+void OmegaPiLhGamma::FillUpars(MnUserParameters& upar, 
+		      minuitStartParam &theStartParam,
+		      const std::vector< boost::shared_ptr<const JPCLS> > &theJPCLS,
+		      const string &theSuffix
+		      )
+{   //now fill the fitParameterMap
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+    bool bFirst=true;
+    
+    for ( itJPCLS=theJPCLS.begin(); itJPCLS!=theJPCLS.end(); ++itJPCLS)
+    {
+      string strName = (*itJPCLS)->name()+theSuffix;
+      std::string magStr=strName+"mag";
+      std::string phiStr=strName+"phi";
+      ParameterMap::iterator it;
+
+      it = theStartParam.getParamMap().find(strName);
+      if (it != theStartParam.getParamMap().end()) 
+      {
+	upar.Add(magStr, it->second[0], .1, 0., 1.);
+	if (!bFirst) upar.Add(phiStr, it->second[1], .1, -3.*M_PI, 3.*M_PI);
+	DebugMsg << "\nUsing user start Parameter for the state " << strName << " with mag= " << it->second[0] 
+	     << " and phi=" << it->second[1] << "\n"; 
+      }
+      else
+      {
+	upar.Add(magStr, 0.5, .1, 0., 1.);
+	if (!bFirst) upar.Add(phiStr, 0., .1, -3.*M_PI, 3.*M_PI);
+      }
+      if (bFirst) bFirst=false;
+    }
+}
+
+void OmegaPiLhGamma::dumpCurrentResult(std::ostream& os, const OmegaPiData::fitParamVal& fitParmVal) const{
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=fitParmVal.omegaProdSinglet;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=fitParmVal.omegaProdTriplet0;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet1=fitParmVal.omegaProdTriplet1;
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::const_iterator iter;
+
+  // singlet
+  for ( iter=fitParmSinglet.begin(); iter!=fitParmSinglet.end(); ++iter){
+    boost::shared_ptr<const JPCLS> theJPCLS=iter->first;
+    double theMag=iter->second.first;
+    double thePhi=iter->second.second;
+    std::string strName = theJPCLS->name()+"S";
+    os << strName << "\t" << theMag << "\t" << thePhi << "\n"; 
+  }
+
+  // triplet0
+  for ( iter=fitParmTriplet0.begin(); iter!=fitParmTriplet0.end(); ++iter){
+    boost::shared_ptr<const JPCLS> theJPCLS=iter->first;
+    double theMag=iter->second.first;
+    double thePhi=iter->second.second;
+    std::string strName = theJPCLS->name()+"T0";
+    os << strName << "\t" << theMag << "\t" << thePhi << "\n"; 
+  }
+
+
+  // triplet1
+  for ( iter=fitParmTriplet1.begin(); iter!=fitParmTriplet1.end(); ++iter){
+    boost::shared_ptr<const JPCLS> theJPCLS=iter->first;
+    double theMag=iter->second.first;
+    double thePhi=iter->second.second;
+    std::string strName = theJPCLS->name()+"T1";
+    os << strName << "\t" << theMag << "\t" << thePhi << "\n"; 
+  }
+
+}
+
+
+
+void OmegaPiLhGamma::printFitParams(std::ostream& os, const OmegaPiData::fitParamVal& fitParmVal){
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=fitParmVal.omegaProdSinglet;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=fitParmVal.omegaProdTriplet0;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet1=fitParmVal.omegaProdTriplet1;
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::const_iterator iter;
+
+  os << "***fit parameter singlet states*** " << "\n";  
+  for ( iter=fitParmSinglet.begin(); iter!=fitParmSinglet.end(); ++iter){
+    os << iter->first->name()<< "\t";
+    std::pair<double, double> tmpParam= iter->second;
+    os <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << "\n";
+  }
+  
+  os << "***fit parameter triplet m=0 states*** " << "\n";  
+  for ( iter=fitParmTriplet0.begin(); iter!=fitParmTriplet0.end(); ++iter){
+    os << iter->first->name()<< "\t";
+    std::pair<double, double> tmpParam= iter->second;
+    os <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << "\n";
+  }
+  
+  os << "***fit parameter triplet m=1 states*** " << "\n";  
+  for ( iter=fitParmTriplet1.begin(); iter!=fitParmTriplet1.end(); ++iter){
+    os << iter->first->name()<< "\t";
+    std::pair<double, double> tmpParam= iter->second;
+    os <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << "\n";
+  }
+  
+  
+}
 
 void OmegaPiLhGamma::print(std::ostream& os) const{
-  os << "OmegaPiLhGamma::print\n";
+  os << "OmegaPiLhGamma\n";
 }

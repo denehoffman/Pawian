@@ -15,19 +15,25 @@ namespace OmegaPiData {
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > omegaProdSinglet;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > omegaProdTriplet0;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > omegaProdTriplet1;
+    pair<double, double>  omegaMass;
   };
   
   struct OmPiEvtData
   {
     Vector4<float> cm_4Vec;
     Vector4<float> omegaHeliCm4Vec;
+    Vector4<float> omegaHeliCm4Vec2;
     Vector4<float> pi0RecHeliCm4Vec;
     Vector4<float> pi0DecHeliCm4Vec;
     Vector4<float> pi0HeliOmega4Vec;
+    Vector4<float> pi0HeliOmega4Vec2;
     float cosPi0HeliOmega4Vec;
+
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dfp; //Wigner D functions for omega pi0 production
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dfd; //Wigner D functions for omega decay to pi0 gamma
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dfp2; //Wigner D functions for omega pi0 production
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dfd2; //Wigner D functions for omega decay to pi0 gamma
   };
   
 }

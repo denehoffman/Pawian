@@ -9,6 +9,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 AbsOmegaPiLh::AbsOmegaPiLh(boost::shared_ptr<const OmegaPiEventList> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0States> theStates) :
+  _globalItCounter(0),
   _omegaPiEventListPtr(theEvtList),
   _omegaPi0StatesPtr(theStates)
 {
@@ -29,6 +30,8 @@ AbsOmegaPiLh::~AbsOmegaPiLh()
 }
 
 double AbsOmegaPiLh::calcLogLh(const OmegaPiData::fitParamVal& theParamVal){
+
+  _globalItCounter++;
  
   double logLH=0.;
   double logLH_data=0.;

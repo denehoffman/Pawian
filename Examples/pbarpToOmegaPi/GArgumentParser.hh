@@ -98,6 +98,7 @@ class ApplicationParameter
       , pbarMom(600)
       , errLogMode(debug)
       , theSourcePath("./")
+      , theLhMode("OmegaPiLhGammaBw")
   {
     if (!parseCommandLine(argc, argv)) throw false;
   }
@@ -126,6 +127,7 @@ class ApplicationParameter
   const Gem::Common::serializationMode& getSerMode() const { return serMode; }
   const enExecMode& getAppExecMode() const { return enAppExecMode; }
   const std::string& getSourcePath() const { return theSourcePath; }
+  const std::string& getLhMode() const { return theLhMode; }
   const std::string& getPathStartParamFile() const { return strPathStartParamFile; }
   const std::string& getName() const { return strName; }
   const int getM() const { return iM; }
@@ -173,6 +175,7 @@ protected:
   unsigned pbarMom;
   enErrLogMode errLogMode;
   std::string theSourcePath;
+  std::string theLhMode;
 };
 
 #endif /* GARGUMENTPARSER_HPP_ */

@@ -21,16 +21,7 @@ namespace Gem
       // Set up a GConstrainedDoubleObjectCollection
       boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> gbdc_ptr(new Gem::Geneva::GConstrainedDoubleObjectCollection());
 
-      boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
-
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
-      setFitParamVal(JPCLSOmegaSinglet, gbdc_ptr);
-
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theStates->jpclsTriplet0();
-      setFitParamVal(JPCLSOmegaTriplet0, gbdc_ptr);
-
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
-      setFitParamVal(JPCLSOmegaTriplet1, gbdc_ptr);
+      _omegaPiLhPtr->setGenevaFitParamVal( gbdc_ptr );
 
       for(std::size_t i=0; i<gbdc_ptr->size(); i++) {
 	// Create a suitable adaptor (sigma=0.1, sigma-adaption=0.5, min sigma=0, max sigma=0,5)
@@ -106,66 +97,15 @@ namespace Gem
       // to add error checks here upon first invocation.
       boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> vC = at<Gem::Geneva::GConstrainedDoubleObjectCollection>(0);
     
-      std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-
-      boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
-
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theStates->jpclsTriplet0();
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
-    
     
       std::vector<double> par;
       for(std::size_t i=0; i<vC->size(); i++){
 	double value = vC->at(i)->value();
 	par.push_back(value);
       }
-    
-      if (par.size()!= JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3){
-	std::cout << "size of parameters wrong!!! par.size()=" 
-		  << par.size() << "\tJPCLSOmegaSinglet.size()+JPCLSOmegaTriplet0.size()+JPCLSOmegaTriplet1.size()-3=" 
-		  << JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2+JPCLSOmegaTriplet1.size()*2-3 
-		  << std::endl;
-	assert(0);
-      }
 
+      _omegaPiLhPtr->getFitParamVal(fitParmVal, par);
     
-      unsigned int counter=0;
-      for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS) {
-	//now fill the fitParameterMap
-	double mag=par[counter];
-	counter++;
-	double phi=0.;
-	if (counter>1){ phi=par[counter];
-	  counter++;
-	}
-	std::pair <double,double> tmpParameter=make_pair(mag,phi);
-	fitParmVal.omegaProdSinglet[(*itJPCLS)]=tmpParameter; 
-      }
-    
-      for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS) {
-	//now fill the fitParameterMap
-	double mag=par[counter];
-	counter++;
-	double phi=0.;
-	if ( counter > JPCLSOmegaSinglet.size()*2){ phi=par[counter];
-	  counter++;
-	}
-	std::pair <double,double> tmpParameter=make_pair(mag,phi);
-	fitParmVal.omegaProdTriplet0[(*itJPCLS)]=tmpParameter; 
-      }
-    
-      for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS) {
-	//now fill the fitParameterMap
-	double mag=par[counter];
-	counter++;
-	double phi=0.;
-	if (counter>JPCLSOmegaSinglet.size()*2+JPCLSOmegaTriplet0.size()*2-1){ phi=par[counter];
-	  counter++;
-	}
-	std::pair <double,double> tmpParameter=make_pair(mag,phi);
-	fitParmVal.omegaProdTriplet1[(*itJPCLS)]=tmpParameter; 
-      }
     
       return true;
     }
@@ -176,34 +116,7 @@ namespace Gem
      */
     void GOmegaPiIndividual::printFitParams(OmegaPiData::fitParamVal& fitParmVal) {
 
-      boost::shared_ptr<const pbarpToOmegaPi0States> theStates=_omegaPiLhPtr->omegaPi0States();
-
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=theStates->jpclsSinglet();
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=theStates->jpclsTriplet0();
-      std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=theStates->jpclsTriplet1();
-      std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-
-      std::cout << "***fit parameter singlet states*** " <<std::endl;  
-      for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
-	std::cout << (*itJPCLS)->name()<< "\t";
-	std::pair<double, double> tmpParam=fitParmVal.omegaProdSinglet[(*itJPCLS)];
-	std::cout <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << std::endl;
-      }
-
-      std::cout << "***fit parameter triplet m=0 states*** " <<std::endl;  
-      for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
-	std::cout<< (*itJPCLS)->name()<< "\t";
-	std::pair<double, double> tmpParam=fitParmVal.omegaProdTriplet0[(*itJPCLS)];
-	std::cout <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << std::endl;
-      }
-    
-      std::cout << "***fit parameter triplet m=1 states*** " <<std::endl;  
-      for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
-	std::cout<< (*itJPCLS)->name()<< "\t";
-	std::pair<double, double> tmpParam=fitParmVal.omegaProdTriplet1[(*itJPCLS)];
-	std::cout <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << std::endl;
-      }
- 
+      _omegaPiLhPtr->printFitParams(std::cout, fitParmVal);
       std::cout << std::endl;
       return;
     }
@@ -248,7 +161,9 @@ namespace Gem
       OmegaPiData::fitParamVal theFitParmValTmp;
       assert(getFitParams(theFitParmValTmp));   
       result=_omegaPiLhPtr->calcLogLh(theFitParmValTmp);
-
+//       std::cout << "**** current fit params ***** " << std::endl;
+//       printFitParams(theFitParmValTmp);
+//       std::cout << std::endl;
       return result;
     }
   
@@ -261,28 +176,6 @@ namespace Gem
     {	/* nothing */ }
 
     /********************************************************************************************/
-    void GOmegaPiIndividual::setFitParamVal(
-	 std::vector< boost::shared_ptr<const JPCLS> > theJPCLSs
-	 , boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr
-    ){
-      std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-    
-      int counter=0;
-      for ( itJPCLS=theJPCLSs.begin(); itJPCLS!=theJPCLSs.end(); ++itJPCLS){
-	//now fill the fitParameterMap
-      
-	boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject> gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(0., 1.) ); //JPCLS magnitude
-	theGbdc_ptr->push_back(gbd_ptr);
-
-	if (counter>0){ 
-	  boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObject>  gbd_ptr(new Gem::Geneva::GConstrainedDoubleObject(-M_PI, M_PI) ); //JPCLS phi
-	  theGbdc_ptr->push_back(gbd_ptr);
-	}
-	counter++; 
-      }
-    }
-  
-    /*************************************************************************************************/
   
   } /* namespace Pawian */
 } /* namespace Gem */

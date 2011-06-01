@@ -19,7 +19,9 @@
 #include "PwaUtils/pbarpStates.hh"
 #include "Examples/pbarpToOmegaPi/AbsOmegaPiLh.hh"
 #include "Examples/pbarpToOmegaPi/OmegaPiLhGamma.hh"
+#include "Examples/pbarpToOmegaPi/OmegaPiLhGammaBw.hh"
 //#include "Examples/pbarpToOmegaPi/OmegaPiLhOmega.hh"
+
 #include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
 // The individual that should be optimized
 #include "Examples/pbarpToOmegaPi/GOmegaPiIndividual.hh"
@@ -65,38 +67,6 @@ namespace bp = boost::posix_time;
 namespace bl = boost::logic;
 
 /************************************************************************************************/
-
-void printFitParameters(boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr,
-                               OmegaPiData::fitParamVal &theParamVal)
-{
-  //  print fit paramss
-  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaSinglet=pbarpToOmegaPi0StatesPtr->jpclsSinglet();
-  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet0=pbarpToOmegaPi0StatesPtr->jpclsTriplet0();
-  std::vector< boost::shared_ptr<const JPCLS> > JPCLSOmegaTriplet1=pbarpToOmegaPi0StatesPtr->jpclsTriplet1();
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-
-  Info << "***fit parameter singlet states*** " <<endmsg;  
-  for ( itJPCLS=JPCLSOmegaSinglet.begin(); itJPCLS!=JPCLSOmegaSinglet.end(); ++itJPCLS){
-    Info << (*itJPCLS)->name()<< endmsg;
-    std::pair<double, double> tmpParam=theParamVal.omegaProdSinglet[(*itJPCLS)];
-    Info <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-  }
-  Info << "***fit parameter triplet m=0 states*** " <<endmsg;  
-  for ( itJPCLS=JPCLSOmegaTriplet0.begin(); itJPCLS!=JPCLSOmegaTriplet0.end(); ++itJPCLS){
-    Info << (*itJPCLS)->name()<< endmsg;
-    std::pair<double, double> tmpParam=theParamVal.omegaProdTriplet0[(*itJPCLS)];
-    Info <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-  }
-  Info << "***fit parameter triplet m=1 states*** " <<endmsg;  
-  for ( itJPCLS=JPCLSOmegaTriplet1.begin(); itJPCLS!=JPCLSOmegaTriplet1.end(); ++itJPCLS){
-    Info << (*itJPCLS)->name()<< endmsg;
-    std::pair<double, double> tmpParam=theParamVal.omegaProdTriplet1[(*itJPCLS)];
-    Info <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
-  }
-  Info << endmsg;  
-}
-
-/************************************************************************************************/
 /**
  * This function constructs the path to the file.
  */
@@ -120,48 +90,6 @@ bool checkFileExist(const std::string &theFilePath)
   ifstream datChk(theFilePath.c_str());
   if (datChk) { return true; } 
   else { return false; }
-}
-
-/************************************************************************************************/
-
-const std::string PrintJPLCS(
-       std::map< boost::shared_ptr<const JPCLS>
-       , pair<double, double>
-       , pawian::Collection::SharedPtrLess > fitParmS
-       , const std::string &theSuffix
-){   
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
-
-  std::ostringstream theOutStream;    
-  for ( it=fitParmS.begin(); it!=fitParmS.end(); ++it)
-    {
-      boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-      std::string strName = theJPCLS->name()+theSuffix;
-      double theMag=it->second.first;
-      double thePhi=it->second.second;
-      theOutStream << strName << " " << theMag << " " << thePhi << endl;
-    }
-  return theOutStream.str(); 
-}
-
-/************************************************************************************************/
-/**
- *
- */
-const std::string  PrintFinalFitParam(OmegaPiData::fitParamVal &finalFitParm)
-{
-
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=finalFitParm.omegaProdSinglet;
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=finalFitParm.omegaProdTriplet0;
-  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet1=finalFitParm.omegaProdTriplet1;
-  
-  std::ostringstream theOutStream;
-  
-  theOutStream << PrintJPLCS(fitParmSinglet,"S")
-               << PrintJPLCS(fitParmTriplet0,"T0")
-               << PrintJPLCS(fitParmTriplet1,"T1");
-  
-  return theOutStream.str();
 }
 
 /************************************************************************************************/
@@ -304,17 +232,16 @@ bl::tribool GenEvA(
  * @return A boost::logic::tribool indicating whether the optimization has succeeded
  */
 bl::tribool Minuit(
-     boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr
-     , boost::shared_ptr<const pbarpToOmegaPi0States> &pbarpToOmegaPi0StatesPtr
-     , ApplicationParameter &theAppParams
+     ApplicationParameter &theAppParams
      , OmegaPiData::fitParamVal &finalFitParm
      , boost::shared_ptr<AbsOmegaPiLh> &finalOmegaPiLh
 ) {
   Info << "Minuit fit starts.\n" << endmsg;  
 
   // get pbarpToOmegaPi0States pointer back
-  boost::shared_ptr<const pbarpToOmegaPi0States> theOmegaPi0StatesPtr=finalOmegaPiLh->omegaPi0States();  
-    
+
+  boost::shared_ptr<const pbarpToOmegaPi0States> theOmegaPi0StatesPtr=finalOmegaPiLh->omegaPi0States();
+
   theOmegaPi0StatesPtr->print(std::cout);
 
   rm::MOmegaPiFcn mOmegaPiFcn(finalOmegaPiLh);
@@ -330,7 +257,7 @@ bl::tribool Minuit(
 	    {
 	      Info << "Using start parameters from file " << theAppParams.getPathStartParamFile() << "\n" << endmsg;
 	      theUserPar.ParseStream(theFile);
-	      mOmegaPiFcn.setMnUsrParams(upar,theUserPar);
+	      finalOmegaPiLh->setMnUsrParams(upar,theUserPar);
 	    }
 	  else 
 	    {
@@ -338,9 +265,9 @@ bl::tribool Minuit(
 	      return false;
 	    }
 	}
-      else mOmegaPiFcn.setMnUsrParams(upar);
+      else finalOmegaPiLh->setMnUsrParams(upar);
     }
-  else if(theAppParams.getAppExecMode() == ApplicationParameter::GenToMinuit) mOmegaPiFcn.setMnUsrParams(upar,finalFitParm);
+  else if(theAppParams.getAppExecMode() == ApplicationParameter::GenToMinuit) finalOmegaPiLh->setMnUsrParams(upar,finalFitParm);
    
   rm::MnMigrad migrad(mOmegaPiFcn, upar);
   Info <<"start migrad "<< endmsg;
@@ -369,7 +296,7 @@ bl::tribool Minuit(
       cout << *it << endl;
     }
   
-  mOmegaPiFcn.setFitParamVal(finalFitParm, finalParamVec);
+  finalOmegaPiLh->getFitParamVal(finalFitParm, finalParamVec); 
   
   Info << "Minuit done.\n" << endmsg;
 
@@ -409,7 +336,7 @@ bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
 	{
 	  Info << "Using start parameters from file " << theAppParams.getPathStartParamFile() << "\n" << endmsg;
 	  theUserPar.ParseStream(theFile);
-	  mOmegaPiFcn.setMnUsrParams(upar,theUserPar);
+	  finalOmegaPiLh->setMnUsrParams(upar,theUserPar);
 	}
       else 
 	{
@@ -423,8 +350,9 @@ bool QAmode(boost::shared_ptr<const OmegaPiEventList> &theOmegaPiEventPtr,
       return false;
     }
       
-  mOmegaPiFcn.setFitParamVal(finalFitParm, upar.Params());
-	
+//   mOmegaPiFcn.setFitParamVal(finalFitParm, upar.Params());
+  finalOmegaPiLh->getFitParamVal(finalFitParm, upar.Params());	
+  
   Info << "QA mode done.\n" << endmsg;
 	
   return true;
@@ -452,7 +380,7 @@ bool calcSpinDensity(ApplicationParameter &theAppParams,
 	{
 	  Info << "Using start parameters from file " << theAppParams.getPathStartParamFile() << "\n" << endmsg;
 	  theUserPar.ParseStream(theFile);
-	  mOmegaPiFcn.setMnUsrParams(upar,theUserPar);
+	  finalOmegaPiLh->setMnUsrParams(upar,theUserPar);
 	}
       else 
 	{
@@ -466,10 +394,11 @@ bool calcSpinDensity(ApplicationParameter &theAppParams,
       return false;
     }
 
-  mOmegaPiFcn.setFitParamVal(theParamVal, upar.Params());
-        
+  finalOmegaPiLh->getFitParamVal(theParamVal, upar.Params());       
+  
   Info << "Using following fit parameter:\n" << endmsg;
-  printFitParameters(finalOmegaPiLh->omegaPi0States(), theParamVal);
+  finalOmegaPiLh->printFitParams(std::cout, theParamVal);
+
   std::ostringstream theSpinDensityRootFile;
         
   if (theAppParams.getCalcAllSpindensity())
@@ -702,7 +631,22 @@ int main(int argc, char **argv)
   boost::shared_ptr<pbarpStates> pbarpStatesPtr(new pbarpStates(theAppParams.getJMax()));
   boost::shared_ptr<const pbarpToOmegaPi0States> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0States(pbarpStatesPtr));
   OmegaPiData::fitParamVal finalFitParm;
-  boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh= boost::shared_ptr<AbsOmegaPiLh>(new OmegaPiLhGamma(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+
+
+  boost::shared_ptr<AbsOmegaPiLh> finalOmegaPiLh;
+  if (theAppParams.getLhMode()=="OmegaPiLhGamma"){
+    finalOmegaPiLh = boost::shared_ptr<AbsOmegaPiLh>(new OmegaPiLhGamma(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));  
+  }
+  else if (theAppParams.getLhMode()=="OmegaPiLhGammaBw"){
+    finalOmegaPiLh = boost::shared_ptr<AbsOmegaPiLh>(new OmegaPiLhGammaBw(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));  
+  }
+  else{
+    Alert <<"LhMode " << theAppParams.getLhMode() << " doesn't exist !!! " << endmsg;
+    exit(1);
+  }
+
+  Info << "\n using Lh mode:"; 
+  finalOmegaPiLh->print(std::cout);
 
   //---------------------------------------------------------------------------
   // The actual optimization
@@ -716,22 +660,40 @@ int main(int argc, char **argv)
       std::ostringstream theParamFilePath;
       theParamFilePath << "./" << theAppParams.getName() << "LastFitParamOmegaPi0Fit_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".txt";
       ofstream outfile (theParamFilePath.str().c_str());
-      outfile << PrintFinalFitParam(finalFitParm);
+      //       outfile << PrintFinalFitParam(finalFitParm);
+      finalOmegaPiLh->dumpCurrentResult(outfile, finalFitParm);
       outfile.close();
     }
     break;
 
   case ApplicationParameter::Minuit:
     {
-      bExecFinish = Minuit(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
+      bExecFinish = Minuit(theAppParams,finalFitParm,finalOmegaPiLh);
+      std::ostringstream theParamFilePathMin;
+      theParamFilePathMin << "./" << theAppParams.getName() << "LastFitParamOmegaPi0Fit_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".txt";
+      ofstream outfileMin (theParamFilePathMin.str().c_str());
     }
     break;
 
   case ApplicationParameter::GenToMinuit:
     {
       bExecFinish = GenEvA(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
+      Info << "Obtained NLL with GenEvA:\n" << finalOmegaPiLh->calcLogLh(finalFitParm) << endmsg;
+      Info << "\n and fit parameters are:\n" << endmsg;
+      finalOmegaPiLh->printFitParams(std::cout, finalFitParm);
+      std::ostringstream theParamFilePathGen;
+      theParamFilePathGen << "./" << theAppParams.getName() << "GenevaLastFitParamOmegaPi0Fit_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".txt";
+      ofstream outfileGen (theParamFilePathGen.str().c_str());
+      finalOmegaPiLh->dumpCurrentResult(outfileGen, finalFitParm);
+      outfileGen.close();
+      
       if(bl::indeterminate(bExecFinish)) return 0; // Simply terminate -- this is a client in networked mode that has done its job
-      bExecFinish = Minuit(theOmegaPiEventPtr,pbarpToOmegaPi0StatesPtr,theAppParams,finalFitParm,finalOmegaPiLh);
+      bExecFinish = Minuit(theAppParams,finalFitParm,finalOmegaPiLh);
+      std::ostringstream theParamFilePathMin;
+      theParamFilePathMin << "./" << theAppParams.getName() << "LastFitParamOmegaPi0Fit_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".txt";
+      ofstream outfileMin (theParamFilePathMin.str().c_str());
+      finalOmegaPiLh->dumpCurrentResult(outfileMin, finalFitParm);
+      outfileMin.close();
     }
     break;
 
@@ -760,8 +722,8 @@ int main(int argc, char **argv)
       Info << "Fit results:\n" << endmsg;
       Info << "Final logLH=" << finalOmegaPiLh->calcLogLh(finalFitParm) << "\n" << endmsg;
       Info << "Final fit parameters:\n" << endmsg;
-      printFitParameters(pbarpToOmegaPi0StatesPtr, finalFitParm);
-
+//       printFitParameters(pbarpToOmegaPi0StatesPtr, finalFitParm);
+      finalOmegaPiLh->printFitParams(std::cout, finalFitParm);
       std::ostringstream theRootFilePath;
       theRootFilePath << "./" << theAppParams.getName() << "OmegaPi0Fit_jmax" << theAppParams.getJMax() << "_mom" << theAppParams.getPbarMom() << ".root";
       OmegaPiHist theHistogrammer(finalOmegaPiLh,finalFitParm,theRootFilePath.str());

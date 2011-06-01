@@ -12,10 +12,7 @@
 
 //#include <cassert>
 #include "Minuit2/FCNBase.h"
-#include "Examples/pbarpToOmegaPi/OmegaPiData.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "Examples/pbarpToOmegaPi/pbarpToOmegaPi0States.hh"
-#include "Minuit2/MnUserParameters.h"
+
 using namespace std;
 
 class AbsOmegaPiLh;
@@ -34,14 +31,9 @@ public:
 
   double Up() const;
 
-  void setMnUsrParams(MnUserParameters& upar);
-  void setMnUsrParams(MnUserParameters& upar, minuitStartParam &theStartParam);
-  void setMnUsrParams(MnUserParameters& upar, OmegaPiData::fitParamVal &finalFitParm);
-  void setFitParamVal(OmegaPiData::fitParamVal& theParamVal, const std::vector<double>& par) const;
 
 private:
   boost::shared_ptr<AbsOmegaPiLh> _omegaPiLhPtr;
-  boost::shared_ptr<const pbarpToOmegaPi0States> _barpToOmegaPi0States;
 };
   }  // namespace Minuit2
 
