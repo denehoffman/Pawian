@@ -8,7 +8,7 @@ pbarpStates::pbarpStates():
   _pbarJPC(0.5, -1),
   _pJPC(0.5, 1)
 {
-  calcJPCs();
+  calcStates();
 }
 
 
@@ -18,13 +18,13 @@ pbarpStates::pbarpStates(int jmax):
   _pbarJPC(0.5, -1),
   _pJPC(0.5, 1)
 {
-  calcJPCs();
+  calcStates();
 }
 
 pbarpStates::~pbarpStates(){
 }
 
-bool pbarpStates::calcJPCs(){
+bool pbarpStates::calcStates(){
   for (int j=0; j<=_jmax; j++)
     {
       for (int p=-1; p<=1; p+=2){
@@ -146,6 +146,63 @@ std::vector< boost::shared_ptr<const jpcRes> > pbarpStates::extractJPCStates(std
 
 }
 
+std::vector< boost::shared_ptr<const JPCLSM> > pbarpStates::extractJPCLSMStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+
+  std::vector< boost::shared_ptr<const JPCLSM> > result;
+
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
+  std::vector< boost::shared_ptr<const JPCLSM> >::const_iterator itAllStates;
+
+  for ( itJPC=theJPCStates.begin(); itJPC!=theJPCStates.end(); ++itJPC){
+    const jpcRes* jpcRequest=(*itJPC).get();
+
+    for ( itAllStates=_allStates.begin(); itAllStates!=_allStates.end(); ++itAllStates){
+      const JPCLSM* jpcsmCurrent=(*itAllStates).get(); 
+      if (( *jpcsmCurrent) ==  (*jpcRequest)){
+	result.push_back(*itAllStates);
+	continue;
+      }
+    }
+  }
+  return result;
+}
+
+std::vector< boost::shared_ptr<const JPCSM> > pbarpStates::extractJPCSMStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+
+  std::vector< boost::shared_ptr<const JPCSM> > result;
+
+  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
+  std::vector< boost::shared_ptr<const JPCSM> >::const_iterator itAllStates;
+
+  for ( itJPC=theJPCStates.begin(); itJPC!=theJPCStates.end(); ++itJPC){
+    const jpcRes* jpcRequest=(*itJPC).get();
+
+    for ( itAllStates=_allJPCSM.begin(); itAllStates!=_allJPCSM.end(); ++itAllStates){
+      const JPCSM* jpcsmCurrent=(*itAllStates).get(); 
+      if (( *jpcsmCurrent) ==  (*jpcRequest)){
+	result.push_back(*itAllStates);
+	continue;
+      }
+    }
+  }
+  return result;
+
+}
+
+std::vector< boost::shared_ptr<const JPCLS> > pbarpStates::extractJPCLSStates(boost::shared_ptr<const jpcRes> theJPCState) const{
+  std::vector< boost::shared_ptr<const JPCLS> > result;
+
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator it;
+  for ( it=_allJPCLS.begin(); it!=_allJPCLS.end(); ++it){
+//     const jpcRes* currentJPC= (jpcRes*) (*it).get(); 
+//     const jpcRes* currentJPC=dynamic_cast<const jpcRes*> ((*it).get());
+
+//     if ( *(currentJPC) == *(theJPCState.get())) result.push_back( (*it) );
+    if (*((*it).get())==*(theJPCState.get())) result.push_back( (*it) );
+  }
+ 
+  return result;
+}
 
 void pbarpStates::print(std::ostream& os) const{
   os << "initital states of the pbar p annihilation for Jmax = " << _jmax << " are: " << std::endl; 

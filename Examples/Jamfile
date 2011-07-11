@@ -5,3 +5,4 @@ build-project Psi2SToKpKmPiGam ;
 build-project Psi2STo2K2PiGam ; 
 build-project pbarp ;
 build-project SeqDecHeliAmps ; 
+build-project pbarpToOmegaPiLS ;

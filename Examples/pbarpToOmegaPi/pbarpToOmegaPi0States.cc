@@ -5,14 +5,13 @@
 #include "PwaUtils/pbarpStates.hh"
  
 
-pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbarpStates):
-  AbsStates(),
+pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbarpStatesPtr):
   _omegaJPC(1, -1, -1),
   _piJPC(0, -1, 1),
-  _pbarpStatesAll(pbarpStates)
+  _pbarpStatesAll(pbarpStatesPtr)
 {
   if (0==_pbarpStatesAll) { Alert << "_pbarpStatesAll==0 !!!" << endmsg; exit(1); }
-  calcJPCs();
+  calcStates();
 }
 
 
@@ -20,7 +19,7 @@ pbarpToOmegaPi0States::pbarpToOmegaPi0States(boost::shared_ptr<pbarpStates> pbar
 pbarpToOmegaPi0States::~pbarpToOmegaPi0States(){
 }
 
-bool pbarpToOmegaPi0States::calcJPCs(){
+bool pbarpToOmegaPi0States::calcStates(){
   
 
   std::vector< boost::shared_ptr<const jpcRes> > thepbarJPCs=_pbarpStatesAll->jpcStates();

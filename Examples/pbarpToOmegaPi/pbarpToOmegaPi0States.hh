@@ -10,7 +10,8 @@
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaUtils/AbsStates.hh"
-#include "PwaUtils/DataUtils.hh"
+
+
 
 class pbarpStates;
 
@@ -35,7 +36,11 @@ public:
 
 
  protected:
-  virtual bool calcJPCs();
+  virtual bool calcStates();
+  std::vector< boost::shared_ptr<const JPCLSM> > _allStates;
+  std::vector< boost::shared_ptr<const JPCSM> > _allJPCSM;
+  std::vector< boost::shared_ptr<const JPCLS> > _allJPCLS;
+  std::vector< boost::shared_ptr<const jpcRes> >  _jpcStates;
 
  private:
   jpcRes _omegaJPC;
