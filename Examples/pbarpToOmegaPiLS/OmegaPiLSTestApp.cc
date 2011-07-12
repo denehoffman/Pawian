@@ -17,6 +17,8 @@
 #include "Examples/pbarpToOmegaPiLS/AbsOmegaPiLhLS.hh"
 #include "Examples/pbarpToOmegaPiLS/OmegaPiLhPi0GammaLS.hh"
 #include "Examples/pbarpToOmegaPiLS/MOmegaPiFcnLS.hh"
+#include "Examples/pbarpToOmegaPiLS/SpinDensityHistLS.hh"
+
 // The individual that should be optimized
 #include "Examples/pbarpToOmegaPiLS/GOmegaPiIndividualLS.hh"
 
@@ -145,7 +147,7 @@ void emitExecutionMode( const ApplicationParameterLS::enExecMode& execMode ) {
 
 bool streamFitParam(ApplicationParameterLS& appParam, MinuitStartParamLS& theUserPar){
 
-  bool result=false;
+  bool result=true;
   
   if ( !appParam.getPathStartParamFile().empty() )
     {
@@ -237,8 +239,9 @@ void paramStreamTest(ApplicationParameterLS& appParam, boost::shared_ptr<AbsOmeg
 
 bl::tribool Minuit(
      ApplicationParameterLS &theAppParams
-     , OmegaPiDataLS::fitParamVal &finalFitParm
+     , OmegaPiDataLS::fitParamVal &fitParam
      , boost::shared_ptr<AbsOmegaPiLhLS> &omegaPiLh
+     , bool streamParams
 ) {
   Info << "Minuit fit starts.\n" << endmsg;  
 
@@ -248,12 +251,18 @@ bl::tribool Minuit(
   rm::MOmegaPiFcnLS mOmegaPiFcn(omegaPiLh);
 
   rm::MnUserParameters upar;
-  MinuitStartParamLS theUserPar;
 
-  bool setFitParam=streamFitParam(theAppParams, theUserPar);  
-  if (!setFitParam) Warning << "using default start parameter" << endmsg;
+  if (streamParams){
+    MinuitStartParamLS theUserPar;
 
-  omegaPiLh->setMnUsrParams(upar, theUserPar);
+    bool setFitParam=streamFitParam(theAppParams, theUserPar);  
+    if (!setFitParam) Warning << "using default start parameter" << endmsg;
+    
+    omegaPiLh->setMnUsrParams(upar, theUserPar);
+  }
+  else{
+    omegaPiLh->setMnUsrParams(upar, fitParam);
+  }
 
   rm::MnMigrad migrad(mOmegaPiFcn, upar);
   Info <<"start migrad "<< endmsg;
@@ -267,7 +276,13 @@ bl::tribool Minuit(
   }
 
   rm::MnUserParameters finalUsrParameters=min.UserParameters();
+
+  // fill fitParam with the final fit result
+
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
+  omegaPiLh->getFitParamVal(fitParam, finalParamVec);
+  cout << endl << "Final fit parameters:" << endl;
+  omegaPiLh->printFitParams(cout, fitParam);
 
   cout << endl << "Errors:" << endl;
   const vector<double> finalParamErrors=finalUsrParameters.Errors();
@@ -284,6 +299,9 @@ bl::tribool Minuit(
 
   return bl::tribool(true);
 }
+
+
+
 
 
 
@@ -425,8 +443,82 @@ bl::tribool GenEvA(
 
 }
 
+bl::tribool QAmode(ApplicationParameterLS &theAppParams,
+                   OmegaPiDataLS::fitParamVal &finalFitParm,
+                   boost::shared_ptr<AbsOmegaPiLhLS> &finalOmegaPiLh
+                   )
+{
+  Info << "QA mode start.\n" << endmsg;
+    
+  rm::MOmegaPiFcnLS mOmegaPiFcn(finalOmegaPiLh);
+
+  rm::MnUserParameters upar;
+
+  MinuitStartParamLS theUserPar;
+
+  bool setFitParam=streamFitParam(theAppParams, theUserPar);  
+  if (!setFitParam){
+    Alert << "parameter file not found" << endmsg;
+    exit(0);
+  }
+  
+  finalOmegaPiLh->setMnUsrParams(upar, theUserPar);
+ 
+  const std::vector<double> finalParamVec=upar.Params();
+  finalOmegaPiLh->getFitParamVal(finalFitParm, finalParamVec);
+  cout << endl << " fit parameters:" << endl;
+  finalOmegaPiLh->printFitParams(cout, finalFitParm);
+
+  return bl::tribool(true);
+}
 
 
+bl::tribool calcSpinDensity(ApplicationParameterLS &theAppParams, 
+                     boost::shared_ptr<AbsOmegaPiLhLS> finalOmegaPiLh,
+                     OmegaPiDataLS::fitParamVal &finalFitParm)
+{
+  Info << "Starting spin density calculation." << "\n" << endmsg;
+  OmegaPiDataLS::fitParamVal theParamVal;
+        
+  rm::MOmegaPiFcnLS mOmegaPiFcn(finalOmegaPiLh);
+  rm::MnUserParameters upar;
+
+  MinuitStartParamLS theUserPar;
+
+  bool setFitParam=streamFitParam(theAppParams, theUserPar);  
+  if (!setFitParam){
+    Alert << "parameter file not found" << endmsg;
+    exit(0);
+  }
+
+  finalOmegaPiLh->setMnUsrParams(upar, theUserPar);
+  finalOmegaPiLh->getFitParamVal(theParamVal, upar.Params());       
+  
+  Info << "Using following fit parameter:\n" << endmsg;
+  finalOmegaPiLh->printFitParams(std::cout, theParamVal);
+
+  std::ostringstream theSpinDensityRootFile;
+
+  if (theAppParams.getCalcAllSpindensity())
+    {
+      Info << "Calculating all spin density elements.\n" << endmsg;
+      theSpinDensityRootFile << "./" << theAppParams.getName() << "SpinDensity" << "_Lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+
+      SpinDensityHistLS theSpinDensityHist(theSpinDensityRootFile.str(), finalOmegaPiLh, theParamVal);
+      theSpinDensityHist.createHistograms();
+    }
+  else
+    {
+      Info << "Calculating spin density elements for M=" << theAppParams.getM() << " M'=" << theAppParams.getM_() << ".\n" << endmsg;
+      theSpinDensityRootFile << "./" << theAppParams.getName() << "SpinDensity_M1" << theAppParams.getM() << "_M2" << theAppParams.getM_() << "_Lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+       
+      SpinDensityHistLS theSpinDensityHist(theSpinDensityRootFile.str(), finalOmegaPiLh, theParamVal);
+      theSpinDensityHist.createHistogram(theAppParams.getM(),theAppParams.getM_());
+    }
+  Info << "Spin density calculation done." << "\n" << endmsg;
+
+  return bl::tribool(false);
+}
 
 int main(int __argc,char *__argv[]){
 
@@ -571,7 +663,8 @@ int main(int __argc,char *__argv[]){
 
   case ApplicationParameterLS::Minuit:
     {
-      bExecFinish = Minuit(theAppParams, theParamVal, theOmegaPiLh);
+      bExecFinish = Minuit(theAppParams, theParamVal, theOmegaPiLh, true);
+      break;
     }
 
   case ApplicationParameterLS::GenEvA:
@@ -597,7 +690,7 @@ int main(int __argc,char *__argv[]){
 
       //now fit with minuit
 
-      bExecFinish = Minuit(theAppParams, theParamVal, theOmegaPiLh);
+      bExecFinish = Minuit(theAppParams, theParamVal, theOmegaPiLh, false);
 
       //now dump the final fit result
       std::ostringstream theParamFilePathMin;
@@ -607,9 +700,20 @@ int main(int __argc,char *__argv[]){
       outfileMin.close();
 
       if(bl::indeterminate(bExecFinish)) return 0; // Simply terminate -- this is a client in networked mode that has done its job
-
+      break;
     }
 
+  case ApplicationParameterLS::SpinDensity:
+    {
+      bExecFinish = calcSpinDensity(theAppParams, theOmegaPiLh, theParamVal);
+      break;
+    }
+
+  case ApplicationParameterLS::QAmode:
+    {
+      bExecFinish = QAmode(theAppParams, theParamVal, theOmegaPiLh);
+      break;
+    }
   default:
     {
       cerr << "Error unknown execution mode selected!" << endl;

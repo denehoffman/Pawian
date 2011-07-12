@@ -61,7 +61,7 @@ public:
   virtual void print(std::ostream& os) const;
 
 protected:
-  virtual complex<double> calcCoherentAmp(Spin lamgamma, Spin Minit, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> > theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData);
+  virtual complex<double> calcCoherentAmp(Spin lamgamma, Spin Minit, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> >& theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData);
 
 protected:
 
@@ -69,7 +69,7 @@ protected:
 private:
   complex<double>  calcOmegaProdPartAmp(Spin Minit, Spin lamomega, boost::shared_ptr<const JPCLSls> theJPCLSls, pair<double, double> fitVal, OmegaPiDataLS::OmPiEvtDataLS* theData);
 
-  complex<double> calcOmegaProdAmp(Spin Minit, Spin lamomega, std::map< boost::shared_ptr<const JPCLSls>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiDataLS::OmPiEvtDataLS* theData);
+  complex<double> calcOmegaProdAmp(Spin Minit, Spin lamomega, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> >& theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData);
 
 
 };

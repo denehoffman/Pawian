@@ -63,7 +63,7 @@ double OmegaPiLhPi0GammaLS::calcEvtIntensity(OmegaPiDataLS::OmPiEvtDataLS* theDa
 }
 
 
-complex<double> OmegaPiLhPi0GammaLS::calcCoherentAmp(Spin lamgamma, Spin Minit, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> > theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData){
+complex<double> OmegaPiLhPi0GammaLS::calcCoherentAmp(Spin lamgamma, Spin Minit, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> >& theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData){
 
   complex<double> result(0.,0.);
 
@@ -109,75 +109,76 @@ complex<double>  OmegaPiLhPi0GammaLS::calcOmegaProdPartAmp(Spin Minit, Spin lamo
 }
 
 
-complex<double>  OmegaPiLhPi0GammaLS::calcOmegaProdAmp(Spin Minit, Spin lamomega, std::map< boost::shared_ptr<const JPCLSls>, pair<double, double>, pawian::Collection::SharedPtrLess >& fitParm, OmegaPiDataLS::OmPiEvtDataLS* theData){
+complex<double>  OmegaPiLhPi0GammaLS::calcOmegaProdAmp(Spin Minit, Spin lamomega, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> >& theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData){
 
   complex<double> result(0.,0.);
 
-//   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
-//   for ( it=fitParm.begin(); it!=fitParm.end(); ++it){
+  std::vector< boost::shared_ptr<const JPCLSls> >::const_iterator it;
+  for ( it=theJPCLSlsStates.begin(); it!=theJPCLSlsStates.end(); ++it){
 
-//     boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-//     pair<double, double> fitPair=it->second;
-//     result+=calcOmegaProdPartAmp(Minit, lamomega, theJPCLS, fitPair, theData);
-//   }
+    std::map< boost::shared_ptr<const JPCLSls>, pair<double, double>, pawian::Collection::SharedPtrLess >::const_iterator itmap;
+    itmap = theParamVal.lsParam.find((*it));
+    pair<double, double> fitPair= (*itmap).second; 
+      
+    if (fabs(lamomega)> (*it)->J ) continue;
+
+    result+=calcOmegaProdPartAmp(Minit, lamomega, (*it), fitPair, theData);
+  }
     
   return result;
 }
 
 complex<double> OmegaPiLhPi0GammaLS::spinDensity(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal){
 
- //  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmSinglet=theParamVal.omegaProdSinglet;
-//   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet0=theParamVal.omegaProdTriplet0;
-//   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > fitParmTriplet1=theParamVal.omegaProdTriplet1;
+ 
+  complex<double> MsingletAmpGM1=calcOmegaProdAmp(0, M, theParamVal, _singlet_JPCLS_States, theData);  
+  complex<double> Mtriplet0AmpGM1=calcOmegaProdAmp(0, M, theParamVal, _triplet0_JPCLS_States, theData);
+  complex<double> MtripletP1AmpGM1=calcOmegaProdAmp(1, M, theParamVal, _tripletp1_JPCLS_States, theData);
+  complex<double> MtripletM1AmpGM1=calcOmegaProdAmp(-1, M, theParamVal, _tripletm1_JPCLS_States, theData);
 
-//   complex<double> MsingletAmpGM1=calcOmegaProdAmp(0, M, fitParmSinglet, theData);  
-//   complex<double> Mtriplet0AmpGM1=calcOmegaProdAmp(0, M, fitParmTriplet0, theData);
-//   complex<double> MtripletP1AmpGM1=calcOmegaProdAmp(1, M, fitParmTriplet1, theData);
-//   complex<double> MtripletM1AmpGM1=calcOmegaProdAmp(-1, M, fitParmTriplet1, theData);
-
-//   complex<double> M_singletAmpGM1=calcOmegaProdAmp(0, M_, fitParmSinglet, theData);  
-//   complex<double> M_triplet0AmpGM1=calcOmegaProdAmp(0, M_, fitParmTriplet0, theData);
-//   complex<double> M_tripletP1AmpGM1=calcOmegaProdAmp(1, M_, fitParmTriplet1, theData);
-//   complex<double> M_tripletM1AmpGM1=calcOmegaProdAmp(-1, M_, fitParmTriplet1, theData);
+  complex<double> M_singletAmpGM1=calcOmegaProdAmp(0, M_, theParamVal, _singlet_JPCLS_States, theData);  
+  complex<double> M_triplet0AmpGM1=calcOmegaProdAmp(0, M_, theParamVal, _triplet0_JPCLS_States, theData);
+  complex<double> M_tripletP1AmpGM1=calcOmegaProdAmp(1, M_, theParamVal, _tripletp1_JPCLS_States, theData);
+  complex<double> M_tripletM1AmpGM1=calcOmegaProdAmp(-1, M_, theParamVal, _tripletm1_JPCLS_States, theData);
 
   complex<double> result(0.,0.);
-//    result=MsingletAmpGM1*conj(M_singletAmpGM1)
-//      +Mtriplet0AmpGM1*conj(M_triplet0AmpGM1)
-//      +MtripletP1AmpGM1*conj(M_tripletP1AmpGM1)
-//      +MtripletM1AmpGM1*conj(M_tripletM1AmpGM1);
 
-//     double theNorm = norm(MsingletAmpGM1)+norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1);
-
-
-//     for (Spin M1=-1; M1<=1; M1++)
-//   {
-//     if(M1!=M)
-//     {
-//       MsingletAmpGM1=calcOmegaProdAmp(0,M1, fitParmSinglet, theData);  
-//       Mtriplet0AmpGM1=calcOmegaProdAmp(0,M1, fitParmTriplet0, theData);
-//       MtripletP1AmpGM1=calcOmegaProdAmp(1,M1, fitParmTriplet1, theData);
-//       MtripletM1AmpGM1=calcOmegaProdAmp(-1,M1, fitParmTriplet1, theData);
-//       theNorm += (norm(MsingletAmpGM1)+norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1));
-//     }
-//   }
+  result=2.*MsingletAmpGM1*conj(M_singletAmpGM1)
+    +2.*Mtriplet0AmpGM1*conj(M_triplet0AmpGM1)
+    +MtripletP1AmpGM1*conj(M_tripletP1AmpGM1)
+    +MtripletM1AmpGM1*conj(M_tripletM1AmpGM1);
+  
+    double theNorm = 2.*norm(MsingletAmpGM1)+2.*norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1);
 
 
-//  return (result/theNorm);
-  return 0.;
+    for (Spin M1=-1; M1<=1; M1++)
+  {
+    if(M1!=M)
+    {
+      MsingletAmpGM1=calcOmegaProdAmp(0,M1, theParamVal, _singlet_JPCLS_States, theData);  
+      Mtriplet0AmpGM1=calcOmegaProdAmp(0,M1, theParamVal, _triplet0_JPCLS_States, theData);
+      MtripletP1AmpGM1=calcOmegaProdAmp(1,M1, theParamVal, _tripletp1_JPCLS_States, theData);
+      MtripletM1AmpGM1=calcOmegaProdAmp(-1,M1, theParamVal, _tripletm1_JPCLS_States, theData);
+      theNorm += (2.*norm(MsingletAmpGM1)+2.*norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1));
+    }
+  }
+
+
+ return (result/theNorm);
 
 }
 
 complex<double> OmegaPiLhPi0GammaLS::spinDensityOmegaFrame(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal){
 
-//   double thetaOmegaCms=theData->omegaHeliCm4Vec.Theta();
+  double thetaOmegaCms=theData->omegaHeliCm4Vec.Theta();
   complex<double> result(0.,0.);
 
-//   for (Spin i=-1; i<=1; i++){
-//     for (Spin j=-1; j<=1; j++){
-//       complex<double> rhoAdair=spinDensity(i, j, theData, theParamVal);
-//       result+=Wigner_d(1,M,i,-thetaOmegaCms)*rhoAdair*Wigner_d(1,j,M_,thetaOmegaCms);
-//     }
-//   }
+  for (Spin i=-1; i<=1; i++){
+    for (Spin j=-1; j<=1; j++){
+      complex<double> rhoAdair=spinDensity(i, j, theData, theParamVal);
+      result+=Wigner_d(1,M,i,-thetaOmegaCms)*rhoAdair*Wigner_d(1,j,M_,thetaOmegaCms);
+    }
+  }
 
   return result;
 
