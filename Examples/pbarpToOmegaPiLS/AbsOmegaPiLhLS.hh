@@ -47,19 +47,22 @@ public:
   
   virtual double calcLogLh(const OmegaPiDataLS::fitParamVal& theParamVal);
   virtual double calcEvtIntensity(OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal)=0;
-  virtual complex<double> spinDensity(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal)=0;
-  virtual complex<double> spinDensityOmegaFrame(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal)=0;
   boost::shared_ptr<const AbsOmegaPiEventListLS> getEventList() const {return _omegaPiEventListPtr;}
   boost::shared_ptr<const pbarpToOmegaPi0StatesLS> omegaPi0States() const {return _omegaPi0StatesPtr;}
 
-  virtual void getFitParamVal(OmegaPiDataLS::fitParamVal& theParamVal, const std::vector<double>& par) const=0;
-  virtual void setGenevaFitParamVal( boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr )=0;
-  virtual void setMnUsrParams(MnUserParameters& upar)=0;
-  virtual void setMnUsrParams(MnUserParameters& upar, OmegaPiDataLS::fitParamVal &finalFitParm)=0;
-  virtual void setMnUsrParams(MnUserParameters& upar, MinuitStartParamLS &theStartParam)=0;
+  virtual void getFitParamVal(OmegaPiDataLS::fitParamVal& theParamVal, const std::vector<double>& par) const;
+  virtual void setGenevaFitParamVal( boost::shared_ptr<Gem::Geneva::GConstrainedDoubleObjectCollection> theGbdc_ptr );
+  virtual void setMnUsrParams(MnUserParameters& upar);
+  virtual void setMnUsrParams(MnUserParameters& upar, OmegaPiDataLS::fitParamVal &finalFitParm);
+  virtual void setMnUsrParams(MnUserParameters& upar, MinuitStartParamLS &theStartParam);
+  virtual void fixMnUsrParams(MnUserParameters& upar, std::vector<std::string>& fixedParams);
 
-  virtual void dumpCurrentResult(std::ostream& os, const OmegaPiDataLS::fitParamVal& fitParmVal) const =0;
-  virtual void printFitParams(std::ostream& os, const OmegaPiDataLS::fitParamVal& fitParmVal)=0;
+  virtual complex<double> spinDensity(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal);
+  virtual complex<double> spinDensityOmegaFrame(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal);
+
+
+  virtual void dumpCurrentResult(std::ostream& os, const OmegaPiDataLS::fitParamVal& fitParmVal) const;
+  virtual void printFitParams(std::ostream& os, const OmegaPiDataLS::fitParamVal& fitParmVal);
   virtual void print(std::ostream& os) const;
 
 protected:
@@ -76,7 +79,9 @@ protected:
   std::vector< boost::shared_ptr<const JPCLSls> > _tripletp1_JPCLS_States;
   std::vector< boost::shared_ptr<const JPCLSls> > _tripletm1_JPCLS_States;
 
+  virtual complex<double>  calcOmegaProdPartAmp(Spin Minit, Spin lamomega, boost::shared_ptr<const JPCLSls> theJPCLSls, pair<double, double> fitVal, OmegaPiDataLS::OmPiEvtDataLS* theData);
 
+  virtual complex<double> calcOmegaProdAmp(Spin Minit, Spin lamomega, const OmegaPiDataLS::fitParamVal& theParamVal, std::vector< boost::shared_ptr<const JPCLSls> >& theJPCLSlsStates, OmegaPiDataLS::OmPiEvtDataLS* theData);
 private:
 
 };

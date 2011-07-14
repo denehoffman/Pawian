@@ -68,6 +68,7 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
       ("serMode", po::value<Gem::Common::serializationMode>(&serMode)->default_value(serMode),
 	    "Specifies whether serialization shall be done in TEXTMODE (0), XMLMODE (1) or BINARYMODE (2)")
       ("spf", po::value<string>(&strPathStartParamFile),"Path to the start parameter file.")
+      ("mFixParFile", po::value<string>(&strMinuitFixParamFile),"Path to file for fixing parmeters in MINUIT.")
       ("M1", "Spin M for calculation of spin density.")
       ("M2", "Spin M' for calculation of spin density.")
       ("allSpin","Calculate all possible spin density elements of the spin density matrix.")
@@ -83,11 +84,11 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
       ("errLogMode,e", po::value<string>(&strErrLogMode)->default_value(strErrLogMode),
       "choose mode for Error logger.")	  
       ("appMode,a", po::value<int>(&iAppMode)->default_value(enAppExecMode), 
-       "Specifies which application should be used: for fitting GenEvA (0); for Minuit (1); Minuit after GenEvA (2); spin density calculation (3); QA mode (4); test mode for calculating pbarp-> omega pi states (5); test mode for histogramming (6); test mode for streaming fit parameter .")
+       "Specifies which application should be used: for fitting GenEvA (0); for Minuit (1); Minuit after GenEvA (2); spin density calculation (3); QA mode (4); test mode for calculating pbarp-> omega pi states (5); test mode for histogramming (6); test mode for streaming fit parameter (7) .")
       ("name,n", po::value<string>(&strName)->default_value("myApp"),
         "Name that is attached to all otuput file names to be able to run multiple fits in parallel.")
       ("LhMode", po::value<std::string>(&theLhMode)->default_value(theLhMode),
-       "Specifies the likelihood mode")
+       "Specifies the likelihood mode: OmegaPiLhGamma or OmegaTo3PiLhGamma")
       ;
 
     po::options_description config("Configuration file options");
@@ -219,6 +220,16 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
      {
        stringstream strError;
        strError << "start parameter file must be specified when using --spf";
+       throw runtime_error(strError.str());
+     }
+   }
+
+   if (vm.count("mFixParFile"))
+   {
+     if (strMinuitFixParamFile.empty()) 
+     {
+       stringstream strError;
+       strError << "file to fix parameters with MINUIT must be specified when using --mFixParFile";
        throw runtime_error(strError.str());
      }
    }

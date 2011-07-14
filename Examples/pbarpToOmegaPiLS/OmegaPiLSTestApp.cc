@@ -10,12 +10,14 @@
 
 #include "Examples/pbarpToOmegaPiLS/AbsOmegaPiEventListLS.hh"
 #include "Examples/pbarpToOmegaPiLS/OmegaPiEventListLS.hh"
+#include "Examples/pbarpToOmegaPiLS/OmegaTo3PiEventListLS.hh"
 #include "Examples/pbarpToOmegaPiLS/OmegaPiHistLS.hh"
 #include "Examples/pbarpToOmegaPiLS/pbarpToOmegaPi0StatesLS.hh"
 #include "Examples/pbarpToOmegaPiLS/GArgumentParserLS.hh"
 #include "Examples/pbarpToOmegaPiLS/MinuitstartparamLS.hh"
 #include "Examples/pbarpToOmegaPiLS/AbsOmegaPiLhLS.hh"
 #include "Examples/pbarpToOmegaPiLS/OmegaPiLhPi0GammaLS.hh"
+#include "Examples/pbarpToOmegaPiLS/OmegaTo3PiLhPi0GammaLS.hh"
 #include "Examples/pbarpToOmegaPiLS/MOmegaPiFcnLS.hh"
 #include "Examples/pbarpToOmegaPiLS/SpinDensityHistLS.hh"
 
@@ -176,10 +178,66 @@ bool streamFitParam(ApplicationParameterLS& appParam, MinuitStartParamLS& theUse
   return result;
 }
 
+bool streamFixMinuitParam(ApplicationParameterLS& appParam, std::vector<std::string>& paramNameVec){
+
+  bool result=true;
+  
+  if ( !appParam.getMinuitFixParamFile().empty() )
+    {
+      ifstream theFile(appParam.getMinuitFixParamFile().c_str());   
+      if (theFile)
+        {
+          Info << "Using file for fixing MINUIT paameters" << appParam.getMinuitFixParamFile() << "\n" << endmsg;
+
+	  std::string strTmp;          
+          
+	  while (!theFile.eof()){
+	    theFile >> strTmp;
+	    if(theFile.eof()) break;
+	    paramNameVec.push_back(strTmp); 
+	  }
+
+          Info << "The parameters fixed in MINUIT are as follows: " << "\n" << endmsg;
+
+	  std::vector<std::string>::const_iterator it;
+	  for (it=paramNameVec.begin(); it != paramNameVec.end(); ++it){
+	    Info << (*it) << endmsg;
+	  }
+        }
+      else 
+        {
+          Warning << "file for fixing MINUIT paameters " << appParam.getMinuitFixParamFile() << " not found!" << endmsg;
+          result=false;
+        }
+    }
+  else 
+    {
+      Info << "file for fixing MINUIT paameters has to be set!" << endmsg;
+      result=false;
+    }
+
+  return result;
+}
 
 void states(boost::shared_ptr<const pbarpToOmegaPi0StatesLS> &theStates){
   theStates->print(std::cout);
 }
+
+void printEvents(EventList& theEvtList, unsigned int nEvtParticles, unsigned int nEvents){
+  theEvtList.rewind();
+  Event* anEvent;
+  unsigned int evtCount = 0;
+  while ((anEvent = theEvtList.nextEvent()) != 0 && evtCount < nEvents) {
+    Info << "\n" << endmsg;
+    for (unsigned int i=0; i<nEvtParticles;++i){
+      Info << *(anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n" << endmsg;
+    }
+    ++evtCount;
+  }
+  theEvtList.rewind();
+
+}
+
 
 void histTest(boost::shared_ptr<const AbsOmegaPiEventListLS>& theEvtList, const std::string &thePathToRootFile){
   OmegaPiHistLS(theEvtList, thePathToRootFile);
@@ -263,6 +321,14 @@ bl::tribool Minuit(
   else{
     omegaPiLh->setMnUsrParams(upar, fitParam);
   }
+
+  //now look if some parameters have to be fixed
+  std::vector<std::string> fixedParams;
+
+  if(streamFixMinuitParam(theAppParams, fixedParams)){
+    omegaPiLh->fixMnUsrParams(upar, fixedParams);
+  }
+
 
   rm::MnMigrad migrad(mOmegaPiFcn, upar);
   Info <<"start migrad "<< endmsg;
@@ -536,6 +602,9 @@ int main(int __argc,char *__argv[]){
   Info << "Maximum orbital momentum content: " << theAppParams.getLMax() << endmsg;
   Info << "pbar momentum: " << theAppParams.getPbarMom()   << endmsg;
 
+  std::string theFixParamMinuitFile = theAppParams.getMinuitFixParamFile();
+  Info << "\n" << "The path to file for fixing MINUIT parameters is " << theFixParamMinuitFile << "\n" << endmsg;
+
 
   int lmax=theAppParams.getLMax();
   boost::shared_ptr<const pbarpToOmegaPi0StatesLS> pbarpToOmegaPi0StatesPtr(new pbarpToOmegaPi0StatesLS(lmax));
@@ -547,8 +616,27 @@ int main(int __argc,char *__argv[]){
 
   std::string piomegaDatFile;
   std::string piomegaMcFile; 
+  int nParticlesPerEvt=0;
+
+  if (theAppParams.getLhMode()=="OmegaPiLhGamma" || (theAppParams.getLhMode()=="OmegaPiLhGammaBw") ){
+    nParticlesPerEvt=3;
+    constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
+    constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
+  }
+
+  else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
+    nParticlesPerEvt=4;
+    constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/om3pi_",theAppParams.getPbarMom(),piomegaDatFile);
+    constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mcom3pi_",theAppParams.getPbarMom(),piomegaMcFile);
+  }
+
+  else {
+    Alert << "LhMode: " << theAppParams.getLhMode() << " does not exist!!!" << endmsg;
+    exit(0);
+  }
+
   
-  constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
+//   constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
   if (checkFileExist(piomegaDatFile))
     {
       Info << "Using Data file " << piomegaDatFile << endmsg;
@@ -560,7 +648,7 @@ int main(int __argc,char *__argv[]){
       exit(1);
     }
 
-  constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPi/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
+//   constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
   if (checkFileExist(piomegaMcFile))
     {
       Info << "Using Monte Carlo file " << piomegaMcFile << endmsg;
@@ -585,9 +673,19 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNames;
   fileNames.push_back(piomegaDatFile);
-  CBElsaReader eventReader(fileNames, 3, 0); 
+//   CBElsaReader eventReader(fileNames, 3, 0); 
   EventList theDataEventList;
-  eventReader.fillAll(theDataEventList);
+
+  boost::shared_ptr<CBElsaReader> eventReaderPtr;
+
+  std::vector<std::string> fileNamesMc;
+
+  fileNamesMc.push_back(piomegaMcFile);
+  boost::shared_ptr<CBElsaReader> eventReaderMCPtr;
+  EventList theMcEventList;
+
+  eventReaderPtr = boost::shared_ptr<CBElsaReader>(new CBElsaReader(fileNames,nParticlesPerEvt , 0));
+  eventReaderPtr->fillAll(theDataEventList);
 
   Info << "\nFile has " << theDataEventList.size() << " events. Each event has "
        <<  theDataEventList.nextEvent()->size() << " final state particles.\n" << endmsg;
@@ -595,36 +693,31 @@ int main(int __argc,char *__argv[]){
   if (!theDataEventList.findParticleTypes(pTable)) {
     Warning << "could not find all particles" << endmsg;
   }
-
-
   theDataEventList.rewind();
 
-
-  Event* anEvent;
-  int evtCount = 0;
-  while ((anEvent = theDataEventList.nextEvent()) != 0 && evtCount < 20) {
-    Info << "\n" 
-         << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
-         << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
-         << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
-         << endmsg;
-    ++evtCount;
-  }
-  theDataEventList.rewind();
+  Info << "\nThe first data events are: " << endmsg;
+  printEvents(theDataEventList,nParticlesPerEvt , 20);
 
 
-  std::vector<std::string> fileNamesMc;
-
-  fileNamesMc.push_back(piomegaMcFile);
-  CBElsaReader eventReaderMc(fileNamesMc, 3, 0); 
-  EventList theMcEventList;
-  eventReaderMc.fillAll(theMcEventList);
+  eventReaderMCPtr= boost::shared_ptr<CBElsaReader>(new CBElsaReader(fileNamesMc, nParticlesPerEvt, 0));
+  eventReaderMCPtr->fillAll(theMcEventList);
   theMcEventList.rewind();
 
+  Info << "\nThe first MC events are: " << endmsg;
+  printEvents(theMcEventList,nParticlesPerEvt , 20);
 
-  boost::shared_ptr<const AbsOmegaPiEventListLS> theOmegaPiEventPtr( new OmegaPiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) );
+
   std::ostringstream theRootFilePath;
-  theRootFilePath << "./" << theAppParams.getName() << "OmegaPi0Fit_lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+  boost::shared_ptr<const AbsOmegaPiEventListLS> theOmegaPiEventPtr;
+
+  if (theAppParams.getLhMode()=="OmegaPiLhGamma" || (theAppParams.getLhMode()=="OmegaPiLhGammaBw") ){
+    theOmegaPiEventPtr = boost::shared_ptr<const AbsOmegaPiEventListLS>(new OmegaPiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) ); 
+    theRootFilePath << "./" << theAppParams.getName() << "OmegaPi0Fit_lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+  }
+  else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
+    theOmegaPiEventPtr = boost::shared_ptr<const AbsOmegaPiEventListLS>(new OmegaTo3PiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) );
+   theRootFilePath << "./" << theAppParams.getName() << "OmegaTo3PiFit_lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+  }
 
   if (theAppParams.getAppExecMode()==ApplicationParameterLS::HistTest){
     histTest(theOmegaPiEventPtr, theRootFilePath.str());
@@ -645,6 +738,9 @@ int main(int __argc,char *__argv[]){
   else if (theAppParams.getLhMode()=="OmegaPiLhGammaBw"){
 //     theOmegaPiLh = boost::shared_ptr<AbsOmegaPiLhLS>(new OmegaPiLhPi0GammaLS(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
     Alert << "LhMode OmegaPiLhGammaBw not implemented so far!!!" << endmsg; 
+  }
+  else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma"){
+    theOmegaPiLh = boost::shared_ptr<AbsOmegaPiLhLS>(new OmegaTo3PiLhPi0GammaLS(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
   }
   else{
     Alert <<"LhMode " << theAppParams.getLhMode() << " doesn't exist !!! " << endmsg;

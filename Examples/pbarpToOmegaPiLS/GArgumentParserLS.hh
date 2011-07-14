@@ -98,7 +98,7 @@ class ApplicationParameterLS
       , pbarMom(600)
       , errLogMode(debug)
       , theSourcePath("./")
-      , theLhMode("OmegaPiLhGammaBw")
+      , theLhMode("OmegaPiLhGamma")
   {
     if (!parseCommandLine(argc, argv)) throw false;
   }
@@ -129,6 +129,7 @@ class ApplicationParameterLS
   const std::string& getSourcePath() const { return theSourcePath; }
   const std::string& getLhMode() const { return theLhMode; }
   const std::string& getPathStartParamFile() const { return strPathStartParamFile; }
+  const std::string& getMinuitFixParamFile() const { return strMinuitFixParamFile; }
   const std::string& getName() const { return strName; }
   const int getM() const { return iM; }
   const int getM_() const { return iM_; }
@@ -144,6 +145,7 @@ protected:
   //Actual parsed settings
   std::string strName;
   std::string strPathStartParamFile;
+  std::string strMinuitFixParamFile;
   std::string configFile;		  
   boost::uint16_t parallelizationMode;
   bool serverMode;
