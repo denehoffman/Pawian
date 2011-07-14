@@ -83,7 +83,7 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
 					    pimHeliOmega4V.Z()*pipHeliOmega4V.X()-pimHeliOmega4V.X()*pipHeliOmega4V.Z(),		
 					    pimHeliOmega4V.X()*pipHeliOmega4V.Y()-pimHeliOmega4V.Y()*pipHeliOmega4V.X());			
 
-    Vector4<float> normOmegaDecHeliOmega_4V2(0.5*(pi0HeliOmega4V.T()+pipHeliOmega4V2.T()+pimHeliOmega4V2.T()),
+    Vector4<float> normOmegaDecHeliOmega_4V2(0.5*(pi0HeliOmega4V2.T()+pipHeliOmega4V2.T()+pimHeliOmega4V2.T()),
 					    pimHeliOmega4V2.Y()*pipHeliOmega4V2.Z()-pimHeliOmega4V2.Z()*pipHeliOmega4V2.Y(),
 					    pimHeliOmega4V2.Z()*pipHeliOmega4V2.X()-pimHeliOmega4V2.X()*pipHeliOmega4V2.Z(),		
 					    pimHeliOmega4V2.X()*pipHeliOmega4V2.Y()-pimHeliOmega4V2.Y()*pipHeliOmega4V2.X());		    
@@ -107,15 +107,17 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
 	if (fabs(M)>j) continue;
         for (Spin lam=-1; lam<=1; lam++){
           if (fabs(lam)>j) continue;
-	  theOmPiEvtData->Dfp[j][M][0]=Wigner_D(0.,omega_cm_4V.Theta(),0,j,M,0);
-	  theOmPiEvtData->Dfp2[j][M][0]=Wigner_D(0.,omega_cm_4V2.Theta(),0,j,M,0);
+	  theOmPiEvtData->Dfp[j][M][0]=Wigner_D(0.,omega_cm_4V.Theta(),0,j,M,lam);
+	  theOmPiEvtData->Dfp2[j][M][0]=Wigner_D(0.,omega_cm_4V2.Theta(),0,j,M,lam);
 	}
       }
     }
 
     Spin omegaSpin=1;
     Wigner_D(omegaSpin, normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, theOmPiEvtData->Dfd);
-    Wigner_D(omegaSpin, normOmegaDecHeliOmega_4V2.Phi(), normOmegaDecHeliOmega_4V2.Theta(),0, theOmPiEvtData->Dfd2); 
+    Wigner_D(omegaSpin, normOmegaDecHeliOmega_4V2.Phi(), normOmegaDecHeliOmega_4V2.Theta(),0, theOmPiEvtData->Dfd2);
+    
+  
    
     omPiEvtList.push_back(theOmPiEvtData);
 

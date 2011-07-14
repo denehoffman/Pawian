@@ -59,7 +59,7 @@ complex<double> OmegaTo3PiLhPi0GammaLS::calcCoherentAmp(Spin lamOmDec, Spin Mini
 
   for (Spin lamomega=-1; lamomega<=1; lamomega++){
 
-    complex<double> omegaDecAmp=conj(theData->Dfd[1][lamomega][0]);// Clebsch(1, 0,0,0,1, 0)=1;Clebsch(1, 0,  0, 0, 1, 0)=1
+    complex<double> omegaDecAmp=conj(theData->Dfd[1][lamomega][0]);// Clebsch(1, 0,0,0,1, 0)=1;Clebsch(0, 0,  0, 0, 0, 0)=1
 
     std::vector< boost::shared_ptr<const JPCLSls> >::const_iterator it;
      for ( it=theJPCLSlsStates.begin(); it!=theJPCLSlsStates.end(); ++it){
