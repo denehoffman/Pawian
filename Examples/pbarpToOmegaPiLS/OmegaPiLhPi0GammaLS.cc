@@ -41,7 +41,7 @@ double OmegaPiLhPi0GammaLS::calcLogLh(const OmegaPiDataLS::fitParamVal& theParam
 double OmegaPiLhPi0GammaLS::calcEvtIntensity(OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal){
 
   Spin lamgamma=-1;
-  complex<double> singletAmpGM1=calcCoherentAmp(lamgamma,0, theParamVal, _singlet_JPCLS_States, theData);  
+  complex<double> singletAmpGM1=calcCoherentAmp(lamgamma,0, theParamVal, _singlet_JPCLS_States, theData);
   complex<double> triplet0AmpGM1=calcCoherentAmp(lamgamma,0, theParamVal, _triplet0_JPCLS_States, theData);
   complex<double> tripletP1AmpGM1=calcCoherentAmp(lamgamma,1, theParamVal, _tripletp1_JPCLS_States, theData);
   complex<double> tripletM1AmpGM1=calcCoherentAmp(lamgamma,-1, theParamVal, _tripletm1_JPCLS_States, theData);
@@ -52,9 +52,9 @@ double OmegaPiLhPi0GammaLS::calcEvtIntensity(OmegaPiDataLS::OmPiEvtDataLS* theDa
   complex<double> tripletP1AmpGP1=calcCoherentAmp(lamgamma,1, theParamVal, _tripletp1_JPCLS_States, theData);
   complex<double> tripletM1AmpGP1=calcCoherentAmp(lamgamma,-1, theParamVal, _tripletm1_JPCLS_States, theData);
 
-  double result=2.*norm(singletAmpGM1)+2.*norm(triplet0AmpGM1)+norm(tripletP1AmpGM1)+norm(tripletM1AmpGM1);
+  double result=norm(singletAmpGM1)+norm(triplet0AmpGM1)+norm(tripletP1AmpGM1)+norm(tripletM1AmpGM1);
   
-  result+=2.*norm(singletAmpGP1)+2.*norm(triplet0AmpGP1)+norm(tripletP1AmpGP1)+norm(tripletM1AmpGP1);
+  result+=norm(singletAmpGP1)+norm(triplet0AmpGP1)+norm(tripletP1AmpGP1)+norm(tripletM1AmpGP1);
 
   return result;  
 }

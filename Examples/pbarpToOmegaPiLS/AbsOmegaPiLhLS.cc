@@ -266,8 +266,7 @@ complex<double>  AbsOmegaPiLhLS::calcOmegaProdPartAmp(Spin Minit, Spin lamomega,
  double thePhi=fitVal.second;
  complex<double> expiphi(cos(thePhi), sin(thePhi));
  
- result=sqrt(0.5)*theJPCLSls->preFactor*sqrt(2.*theJPCLSls->l+1)*Clebsch(theJPCLSls->l, 0, 1, lamomega, theJPCLSls->J, lamomega)*theMag*expiphi*conj(theData->Dfp[theJPCLSls->J][Minit][lamomega]);  //Clebsch(1, lamomega, 0, 0, theJPCLSls->s, lamomega)=1
-
+ result=theJPCLSls->preFactor*sqrt(2.*theJPCLSls->l+1)*Clebsch(theJPCLSls->l, 0, 1, lamomega, theJPCLSls->J, lamomega)*theMag*expiphi*theData->Dfp[theJPCLSls->J][Minit][lamomega];  //Clebsch(1, lamomega, 0, 0, theJPCLSls->s, lamomega)=1
  return result;
 }
 
@@ -308,12 +307,12 @@ complex<double> AbsOmegaPiLhLS::spinDensity(Spin M, Spin M_, OmegaPiDataLS::OmPi
 
   complex<double> result(0.,0.);
 
-  result=2.*MsingletAmpGM1*conj(M_singletAmpGM1)
-    +2.*Mtriplet0AmpGM1*conj(M_triplet0AmpGM1)
+  result=MsingletAmpGM1*conj(M_singletAmpGM1)
+    +Mtriplet0AmpGM1*conj(M_triplet0AmpGM1)
     +MtripletP1AmpGM1*conj(M_tripletP1AmpGM1)
     +MtripletM1AmpGM1*conj(M_tripletM1AmpGM1);
   
-    double theNorm = 2.*norm(MsingletAmpGM1)+2.*norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1);
+    double theNorm = norm(MsingletAmpGM1)+norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1);
 
 
     for (Spin M1=-1; M1<=1; M1++)
@@ -324,7 +323,7 @@ complex<double> AbsOmegaPiLhLS::spinDensity(Spin M, Spin M_, OmegaPiDataLS::OmPi
       Mtriplet0AmpGM1=calcOmegaProdAmp(0,M1, theParamVal, _triplet0_JPCLS_States, theData);
       MtripletP1AmpGM1=calcOmegaProdAmp(1,M1, theParamVal, _tripletp1_JPCLS_States, theData);
       MtripletM1AmpGM1=calcOmegaProdAmp(-1,M1, theParamVal, _tripletm1_JPCLS_States, theData);
-      theNorm += (2.*norm(MsingletAmpGM1)+2.*norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1));
+      theNorm += (norm(MsingletAmpGM1)+norm(Mtriplet0AmpGM1)+norm(MtripletP1AmpGM1)+norm(MtripletM1AmpGM1));
     }
   }
 

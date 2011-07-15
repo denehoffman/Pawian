@@ -107,8 +107,8 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
 	if (fabs(M)>j) continue;
         for (Spin lam=-1; lam<=1; lam++){
           if (fabs(lam)>j) continue;
-	  theOmPiEvtData->Dfp[j][M][0]=Wigner_D(0.,omega_cm_4V.Theta(),0,j,M,lam);
-	  theOmPiEvtData->Dfp2[j][M][0]=Wigner_D(0.,omega_cm_4V2.Theta(),0,j,M,lam);
+	  theOmPiEvtData->Dfp[j][M][lam]=Wigner_D(0.,omega_cm_4V.Theta(),0,j,M,lam);
+	  theOmPiEvtData->Dfp2[j][M][lam]=Wigner_D(0.,omega_cm_4V2.Theta(),0,j,M,lam);
 	}
       }
     }
