@@ -1,0 +1,13 @@
+project : 
+        ;
+
+lib LineShapes : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: 
+	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+
+exe FlatteShapeApp : FlatteShapeApp.cc LineShapes : ;
+exe BwShapeApp : BwShapeApp.cc LineShapes : ;

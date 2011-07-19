@@ -79,10 +79,12 @@ double BlattWeisskopf::compute(double p) const
       if(1 == _LL) return sqrt(x/(1.0+x));
       else
 	if(2 == _LL) return sqrt((13.*x*x)/((x-3.)*(x-3.)+9.*x));
-	else {
-	  std::cout << "Angular momentum " << _LL << " not implemented" << std::endl;
-	  assert(0);
-	}
+	else
+	  if(3 == _LL) return sqrt((277.*x*x*x)/(x*(x-15.)*(x-15.)+9.*(2.*x-5)*(2.*x-5)));
+	  else {
+	    std::cout << "Angular momentum " << _LL << " not implemented" << std::endl;
+	    assert(0);
+	  }
   }
 
 }
