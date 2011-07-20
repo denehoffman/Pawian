@@ -40,6 +40,7 @@ BwShape::BwShape(double MassRes, double MassWidth, double MassDec1, double MassD
     TH2F* currentArgandHist=new TH2F(histName.c_str(),histName.c_str(),301, -1., 1., 301, 0., 1.3);
     currentArgandHist->SetXTitle("Re(Bw)");
     currentArgandHist->SetYTitle("Im(Bw)");
+    currentArgandHist->SetMarkerStyle(6);
     _argandHistMap[i]=currentArgandHist;
     
     

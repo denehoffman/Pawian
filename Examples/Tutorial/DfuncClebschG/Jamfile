@@ -7,7 +7,8 @@ lib DfuncClebschG :
         $(TOP)/ErrLogger//ErrLogger
 	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
 	: 
-	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva  ;
 
 exe ClebschGApp : ClebschGApp.cc DfuncClebschG : ;
 exe JPCdecaysApp : JPCdecaysApp.cc DfuncClebschG : ;
+exe DfuncApp : DfuncApp.cc DfuncClebschG : ;
