@@ -35,8 +35,8 @@ JPCdecays::JPCdecays(boost::shared_ptr<const jpcRes> motherJPC, boost::shared_pt
       Spin theS=itLS->S;
       int cparity=0;
 
-      if (bosons) cparity=pow(-1,int(theL));
-      else cparity=pow(-1,int(theL+theS)); //daughters are fermions	
+      if (bosons) cparity=int(pow(-1,theL));
+      else cparity=int(pow(-1,(theL+theS))); //daughters are fermions	
 
       if(_motherJPC->C != cparity ) allowedC=false;
     }
