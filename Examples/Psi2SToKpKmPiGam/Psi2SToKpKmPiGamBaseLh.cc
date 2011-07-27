@@ -11,6 +11,7 @@ Psi2SToKpKmPiGamBaseLh::Psi2SToKpKmPiGamBaseLh(boost::shared_ptr<const Psi2SToKp
   ,_K0_1430Hyp(true)
   ,_K1_1410Hyp(true)
   ,_K2_1430Hyp(true)
+  ,_KKPi_Hyp(false)
   ,_nFitParams(0)  
 {
 
@@ -39,13 +40,20 @@ Psi2SToKpKmPiGamBaseLh::Psi2SToKpKmPiGamBaseLh(boost::shared_ptr<const Psi2SToKp
   }
   else Alert << "hypothesis K2_1430HypBase not set!!!" <<endmsg;
 
-
+  iter= hypMap.find("KKPi_HypBase");
+  if (iter !=hypMap.end()){
+    _KKPi_Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _KKPi_Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis KKPi_HypBase not set!!!" <<endmsg;
 
   _ampVec.push_back(paramEnumKpKmPiGam::ChiGam);
   _ampVec.push_back(paramEnumKpKmPiGam::K890K);
   if(_K0_1430Hyp) _ampVec.push_back(paramEnumKpKmPiGam::K_0_1400K);
   if(_K1_1410Hyp) _ampVec.push_back(paramEnumKpKmPiGam::K_1_1400K);
   if(_K2_1430Hyp) _ampVec.push_back(paramEnumKpKmPiGam::K_2_1400K);
+  if(_KKPi_Hyp) _ampVec.push_back(paramEnumKpKmPiGam::KKPi);
   _ampVec.push_back(paramEnumKpKmPiGam::a980Pi);
 
   _massVec.push_back(paramEnumKpKmPiGam::K890);
@@ -73,6 +81,7 @@ Psi2SToKpKmPiGamBaseLh::Psi2SToKpKmPiGamBaseLh( boost::shared_ptr<AbsPsi2SToKpKm
   ,_K0_1430Hyp(true)
   ,_K1_1410Hyp(true)
   ,_K2_1430Hyp(true)
+  ,_KKPi_Hyp(false)
   ,_nFitParams(0)
 {
   std::map<const std::string, bool>::const_iterator iter= hypMap.find("K0_1430HypBase");
@@ -100,13 +109,20 @@ Psi2SToKpKmPiGamBaseLh::Psi2SToKpKmPiGamBaseLh( boost::shared_ptr<AbsPsi2SToKpKm
   }
   else Alert << "hypothesis K2_1430HypBase not set!!!" <<endmsg;
 
-
+  iter= hypMap.find("KKPi_HypBase");
+  if (iter !=hypMap.end()){
+    _KKPi_Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _KKPi_Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis KKPi_HypBase not set!!!" <<endmsg;
 
   _ampVec.push_back(paramEnumKpKmPiGam::ChiGam);
   _ampVec.push_back(paramEnumKpKmPiGam::K890K);
   if(_K0_1430Hyp) _ampVec.push_back(paramEnumKpKmPiGam::K_0_1400K);
   if(_K1_1410Hyp) _ampVec.push_back(paramEnumKpKmPiGam::K_1_1400K);
   if(_K2_1430Hyp) _ampVec.push_back(paramEnumKpKmPiGam::K_2_1400K);
+  if(_KKPi_Hyp) _ampVec.push_back(paramEnumKpKmPiGam::KKPi);
   _ampVec.push_back(paramEnumKpKmPiGam::a980Pi);
 
   _massVec.push_back(paramEnumKpKmPiGam::K890);
@@ -133,6 +149,7 @@ Psi2SToKpKmPiGamBaseLh::~Psi2SToKpKmPiGamBaseLh()
 {;
 }
 
+
 complex<double> Psi2SToKpKmPiGamBaseLh::calcCoherentAmp(Spin Minit, Spin lamGam, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData){
 
   complex<double> result(0.,0.);
@@ -143,7 +160,7 @@ complex<double> Psi2SToKpKmPiGamBaseLh::calcCoherentAmp(Spin Minit, Spin lamGam,
 
       Spin lamChiGam=lamChi-lamGam;
 
-      complex<double> PsiDecAmp=conj(theData->DfPsi[1][Minit][lamChiGam]);
+      complex<double> PsiDecAmp=conj(theData->dfPsi[1][Minit][lamChiGam]);
       complex<double> PsiDecAmpTmpls(0.,0.);  
       
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itPsi;
@@ -177,6 +194,7 @@ complex<double> Psi2SToKpKmPiGamBaseLh::calcDecAmp(complex<double>& inAmp,Spin l
   complex<double> result=inAmp;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK890K=theParamVal.ChiToK890K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToa0Pi=theParamVal.ChiToa0Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKKPi=theParamVal.ChiToKKPi;
 
   double K890Mass=theParamVal.BwK890.first;
   double K890Width=theParamVal.BwK890.second;
@@ -213,6 +231,12 @@ complex<double> Psi2SToKpKmPiGamBaseLh::calcDecAmp(complex<double>& inAmp,Spin l
     double K_2_1400Width=theParamVal.BwK1400_2.second;
     result+=K2_1400Amp(theData, ChiToK_2_1400K, K_2_1400Mass, K_2_1400Width, lamChi);
   }
+
+  //Chi -> K+ K- pi0
+  if(_KKPi_Hyp){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKKPi=theParamVal.ChiToKKPi;
+    result+=KKPi_Amp(theData, ChiToKKPi, lamChi);
+  }
   
   return result;
 }
@@ -228,7 +252,8 @@ void Psi2SToKpKmPiGamBaseLh::setMnUsrParams(MnUserParameters& upar, paramKpKmPiG
   if(_K0_1430Hyp) _fitParamsKpKmPiGam.setMnUsrParamsDec(upar,startVal,errVal, paramEnumKpKmPiGam::K_0_1400K);
   if(_K1_1410Hyp) _fitParamsKpKmPiGam.setMnUsrParamsDec(upar,startVal,errVal, paramEnumKpKmPiGam::K_1_1400K);
   if(_K2_1430Hyp) _fitParamsKpKmPiGam.setMnUsrParamsDec(upar,startVal,errVal, paramEnumKpKmPiGam::K_2_1400K);
-  
+  if(_KKPi_Hyp) _fitParamsKpKmPiGam.setMnUsrParamsDec(upar,startVal,errVal, paramEnumKpKmPiGam::KKPi); 
+ 
   _fitParamsKpKmPiGam.setMnUsrParamsDec(upar,startVal,errVal, paramEnumKpKmPiGam::a980Pi);
 
 //K*(982) BW
@@ -269,6 +294,7 @@ int Psi2SToKpKmPiGamBaseLh::setFitParamVal(paramKpKmPiGam& theParamVal, const st
   if(_K0_1430Hyp) counter=_fitParamsKpKmPiGam.setFitParamValDec(theParamVal, par, counter, paramEnumKpKmPiGam::K_0_1400K);
   if(_K1_1410Hyp) counter=_fitParamsKpKmPiGam.setFitParamValDec(theParamVal, par, counter, paramEnumKpKmPiGam::K_1_1400K);
   if(_K2_1430Hyp) counter=_fitParamsKpKmPiGam.setFitParamValDec(theParamVal, par, counter, paramEnumKpKmPiGam::K_2_1400K);
+  if(_KKPi_Hyp) counter=_fitParamsKpKmPiGam.setFitParamValDec(theParamVal, par, counter, paramEnumKpKmPiGam::KKPi);
 
   //a(980) amplitude params
   counter=_fitParamsKpKmPiGam.setFitParamValDec(theParamVal, par, counter, paramEnumKpKmPiGam::a980Pi);
@@ -297,7 +323,7 @@ void Psi2SToKpKmPiGamBaseLh::print(std::ostream& os) const{
   os << "Psi2SToKpKmPiGamBaseLh::print\n";
 }
 
-void Psi2SToKpKmPiGamBaseLh::printCurrentFitResult(paramKpKmPiGam& theParamVal){
+void Psi2SToKpKmPiGamBaseLh::printCurrentFitResult(paramKpKmPiGam& theParamVal) {
 
   DebugMsg<< "phaseSpace: " << theParamVal.phaseSpace << endmsg;
 

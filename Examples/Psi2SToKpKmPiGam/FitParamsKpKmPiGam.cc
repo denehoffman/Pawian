@@ -19,6 +19,7 @@ FitParamsKpKmPiGam::FitParamsKpKmPiGam()
   _jpclsMap[paramEnumKpKmPiGam::K_2_1400K]=theStates.ChiToKst2KStates();
   _jpclsMap[paramEnumKpKmPiGam::a980Pi]=theStates.ChiToa0PiStates();
   _jpclsMap[paramEnumKpKmPiGam::KappaK]=theStates.ChiToKst0KStates();
+  _jpclsMap[paramEnumKpKmPiGam::KKPi]=theStates.ChiToa0PiStates();
 }
 
 FitParamsKpKmPiGam::~FitParamsKpKmPiGam()
@@ -48,6 +49,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnumKpKmPiGam::K_2_1400K) return params.ChiToK1400_2_K;
   else if (index==paramEnumKpKmPiGam::a980Pi) return params.ChiToa0Pi;
   else if (index==paramEnumKpKmPiGam::KappaK) return params.ChiToKappa_K;
+  else if (index==paramEnumKpKmPiGam::KKPi) return params.ChiToKKPi;
   else Alert << "index " << index << " not supported !!!" << endmsg;
 
   return params.PsiToChiGam; //makes the compiler happy
@@ -181,7 +183,7 @@ void FitParamsKpKmPiGam::setMnUsrParamsDec(MnUserParameters& upar, paramKpKmPiGa
     if (magMin<0.) magMin=0.;
     
     upar.Add(magStr, magVal, magErr, magMin, magVal+magErr);
-    upar.Add(phiStr, phiVal, phiErr, -2*M_PI, 2*M_PI);
+    upar.Add(phiStr, phiVal, phiErr, -3.*M_PI, 3.*M_PI);
 
     counter++;
   }

@@ -60,6 +60,19 @@ private:
   TH1F* _cosChic1ToK1400KDataHist;
   TH1F* _cosChic1ToK1400KMcHist;
   TH1F* _cosChic1ToK1400KFittedHist;
+
+  TH1F* _phiChic1ToK1400KDataHist;
+  TH1F* _phiChic1ToK1400KMcHist;
+  TH1F* _phiChic1ToK1400KFittedHist;
+
+  TH1F* _cosChic1ToKKPiDataHist;
+  TH1F* _cosChic1ToKKPiMcHist;
+  TH1F* _cosChic1ToKKPiFittedHist;
+
+  TH1F* _phiChic1ToKKPiDataHist;
+  TH1F* _phiChic1ToKKPiMcHist;
+  TH1F* _phiChic1ToKKPiFittedHist;
+
   TH1F* _cosK890DataHist;
   TH1F* _cosK890McHist;
   TH1F* _cosK890FittedHist;
@@ -85,8 +98,11 @@ private:
   void plotCosPsi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
   void plotChic1Toa0Pi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
   void plotChic1ToK890K(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotChic1ToK1400K(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotCosK1400(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
+  void plotChic1ToK1400K(TH1F* costHist, TH1F* phiHist,const Psi2SToKpKmPiGamEvtData* theData, double weight);
+
+  void plotAnglesChic1ToKKPi(TH1F* costHist, TH1F* phiHist, const Psi2SToKpKmPiGamEvtData* theData, double weight);
+
+  void plotCosK1400(TH1F* costHist, const Psi2SToKpKmPiGamEvtData* theData, double weight);
   void plotCosK890(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
   void plotCosa980(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
   void plotMKpKm(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);

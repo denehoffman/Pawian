@@ -50,10 +50,13 @@ int main(int __argc,char *__argv[]){
     Info << "This application is a PWA fit for the reaction\n\n"
 	 << "Psi(2S) -> Chi_c1 + gamma  ; Chi_c1 -> K+ K- pi0\n\n"
 	 << "It makes use of the Helicity Formalism\n"
-	 << "-K1400: spin hypothesis for K*1400 resonance (available so far: spin1, spin2, prod) (default spin1)\n" 
+	 << "-K1400: spin hypothesis for K*1400 resonance (available so far: spin0, spin1, spin2, spin01, spin 02, spin12, spin012, prod) (default spin1)\n" 
 	 << "-msg <errorLogMode> you can choose the mode for the error logger\n\n"
 	 << "-paramFile <path>\n"
-	 << "i.e. with './Mpsi2SToKpKmPiGamApp -K1400 spin02 -paramFile ./fitParamSpin02.dat -msg debugging' \n"  
+	 << "-hyp <base> or <hyp1> default: base\n"
+	 << "-KKPi <yes> or <no> default: no\n"
+	 << "-qaMode <no> or <yes> default: no\n"
+ 	 << "i.e. with './Mpsi2SToKpKmPiGamApp -K1400 spin02 -paramFile ./fitParamSpin02.dat -msg debugging' \n"  
 	 << endmsg;
     return 0;
   }
@@ -61,6 +64,7 @@ int main(int __argc,char *__argv[]){
   
   std::string msgModeStr="default";
   std::string K1400SpinStr="spin1";
+  std::string KKPiStr="no";
   std::string paramFilePathStr="default";
   std::string qaModeStr="no";
   std::string hypStr="base";
@@ -94,6 +98,11 @@ int main(int __argc,char *__argv[]){
       hypStr = __argv[optind];
       found=true;
     }
+    if (sw=="-KKPi"){
+      optind++;
+      KKPiStr = __argv[optind];
+      found=true;
+    }
     if (!found){
       Warning << "Unknown switch: " 
             << __argv[optind] << endmsg;
@@ -117,6 +126,7 @@ int main(int __argc,char *__argv[]){
   hypMap["K0_1430HypBase"]=false;
   hypMap["K1_1410HypBase"]=false;
   hypMap["K2_1430HypBase"]=false;
+
 
   if (K1400SpinStr=="spin012"){
     hypMap["K0_1430HypBase"]=true;
@@ -145,6 +155,10 @@ int main(int __argc,char *__argv[]){
     hypMap["K2_1430HypBase"]=true;
   }
 
+  hypMap["KKPi_HypBase"]=false; 
+  if(KKPiStr=="yes"){
+    hypMap["KKPi_HypBase"]=true;
+  }
 
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
 

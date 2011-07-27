@@ -55,6 +55,7 @@ Psi2SToKpKmPiGamHyp1Lh::~Psi2SToKpKmPiGamHyp1Lh()
 {;
 }
 
+
 complex<double> Psi2SToKpKmPiGamHyp1Lh::calcDecAmp(complex<double>& inAmp,Spin lamChi, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData){
 
 
@@ -121,11 +122,12 @@ void Psi2SToKpKmPiGamHyp1Lh::printCurrentFitResult(paramKpKmPiGam& theParamVal){
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParamsKpKmPiGam.jpclsVec(*itAmps);
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs = _fitParamsKpKmPiGam.jpclsVec(*itAmps);
     
     for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
       DebugMsg<< (*itJPCLS)->name()<< paramEnumKpKmPiGam::name(*itAmps) << endmsg;
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMap=_fitParamsKpKmPiGam.ampMap(theParamVal, *itAmps);
+
       std::pair<double, double> tmpParam=currentMap[(*itJPCLS)];
       DebugMsg <<"\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second  << endmsg;
     }  

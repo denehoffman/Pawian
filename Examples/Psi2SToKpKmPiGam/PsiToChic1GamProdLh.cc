@@ -36,6 +36,8 @@ PsiToChic1GamProdLh::~PsiToChic1GamProdLh()
 {;
 }
 
+
+
 double PsiToChic1GamProdLh::calcEvtIntensity(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, const paramKpKmPiGam& theParamVal){
 
   double result=0.;
@@ -75,7 +77,7 @@ complex<double> PsiToChic1GamProdLh::calcCoherentAmp(Spin Minit, Spin MChi, Spin
     complex<double> PsiDecAmp=thePsiMag*expiphiPsi*sqrt(2*PsiState->L+1)
       *Clebsch(PsiState->L,0,PsiState->S,lamChiGam,PsiState->J,lamChiGam)
       *Clebsch(1, MChi, 1, -MGamma, PsiState->S,lamChiGam)
-      *conj(theData->DfPsi[PsiState->J][Minit][lamChiGam]);
+      *conj(theData->dfPsi[PsiState->J][Minit][lamChiGam]);
     
     result+=PsiDecAmp;
   }      

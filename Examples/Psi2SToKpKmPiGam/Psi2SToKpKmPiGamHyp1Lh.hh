@@ -41,7 +41,6 @@ public:
 
 
   // Getters:
-  
   virtual void setMnUsrParams(MnUserParameters& upar, paramKpKmPiGam& startVal,  paramKpKmPiGam& errVal);
   virtual int setFitParamVal(paramKpKmPiGam& theParamVal, const std::vector<double>& par);
 

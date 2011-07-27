@@ -42,7 +42,7 @@ public:
 
   // Getters:
   
-  double calcLogLh(const paramKpKmPiGam& theParamVal);
+  virtual double calcLogLh(const paramKpKmPiGam& theParamVal);
   virtual double calcEvtIntensity(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, const paramKpKmPiGam& theParamVal);
 
   virtual boost::shared_ptr<const Psi2SToKpKmPiGamEventList> getEventList() const {return _Psi2SToKpKmPiGamEvtListPtr;}
@@ -53,7 +53,7 @@ public:
   virtual unsigned int nFitParams() =0;
 
   virtual void print(std::ostream& os) const;
-  virtual void printCurrentFitResult(paramKpKmPiGam& theParamVal)=0;
+  virtual void printCurrentFitResult(paramKpKmPiGam& theParamVal) =0;
   virtual void dumpCurrentResult(std::ostream& os, paramKpKmPiGam& theParamVal, std::string& suffix)=0;
 protected:
 
@@ -78,6 +78,8 @@ protected:
   virtual complex<double> K1_1400Amp(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400_1_K, double K1_1400Mass, double K1_1400Width, Spin& lamChi);
 
   virtual complex<double> K2_1400Amp(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400_2_K, double K2_1400Mass, double K2_1400Width, Spin& lamChi);
+
+  virtual complex<double> KKPi_Amp(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKKPi, Spin& lamChi);
 
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData)=0;
 private:

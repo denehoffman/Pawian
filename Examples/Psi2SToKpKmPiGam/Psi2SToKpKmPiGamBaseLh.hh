@@ -41,7 +41,6 @@ public:
 
 
   // Getters:
-  
   virtual void setMnUsrParams(MnUserParameters& upar, paramKpKmPiGam& startVal,  paramKpKmPiGam& errVal);
   virtual int setFitParamVal(paramKpKmPiGam& theParamVal, const std::vector<double>& par);
 
@@ -53,6 +52,7 @@ protected:
   bool _K0_1430Hyp;
   bool _K1_1410Hyp;
   bool _K2_1430Hyp;
+  bool _KKPi_Hyp;
   std::map<const std::string, bool> _hypMap;
   virtual  complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
 

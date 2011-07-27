@@ -324,7 +324,29 @@ complex<double> AbsPsi2SToKpKmPiGamLh::K2_1400Amp(Psi2SToKpKmPiGamData::Psi2SToK
   return result;
 }
 
+complex<double> AbsPsi2SToKpKmPiGamLh::KKPi_Amp(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKKPi, Spin& lamChi){
 
+  complex<double> result=conj(theData->DfChiToKKPi[1][lamChi][0]);   
+
+  complex<double> ChiToKKPiAmpTmpls(0.,0.);
+  
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itChiToKKPi;
+  
+  for ( itChiToKKPi=ChiToKKPi.begin(); itChiToKKPi!=ChiToKKPi.end(); ++itChiToKKPi){
+    boost::shared_ptr<const JPCLS> ChiToKKPiState=itChiToKKPi->first;
+    double theChiToKKPiMag=itChiToKKPi->second.first;
+    double theChiToKKPiPhi=itChiToKKPi->second.second;
+    complex<double> expiphiChiToKKPi(cos(theChiToKKPiPhi), sin(theChiToKKPiPhi));
+    
+    ChiToKKPiAmpTmpls+=theChiToKKPiMag*expiphiChiToKKPi*sqrt(2.*ChiToKKPiState->L+1); 
+    //Clebsch(ChiToKKPiState->L=1,0,ChiToKKPiState->S=0, lam=0, ChiToKKPiState->J=1, 0)=1  
+    //Clebsch(0, 0, 0, 0, ChiToKKPiState->S=0, 0)=1
+  }
+  
+  result*=ChiToKKPiAmpTmpls;
+
+  return result;
+}
 
 void AbsPsi2SToKpKmPiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2SToKpKmPiGamLh::print\n";

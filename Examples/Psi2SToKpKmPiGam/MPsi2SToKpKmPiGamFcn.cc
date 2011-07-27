@@ -33,8 +33,11 @@ double MPsi2SToKpKmPiGamFcn::operator()(const std::vector<double>& par) const
  
   double result=_psi2SToKpKmPiGamLhPtr->calcLogLh(theFitParmValTmp);
 
-  DebugMsg << "logLh= " << result <<endmsg;  
+  DebugMsg << "logLh= " << result <<endmsg;
+
+  if (  (*_fcnCounter)%20 == 0) {  
   _psi2SToKpKmPiGamLhPtr->printCurrentFitResult(theFitParmValTmp);
+  }
 
   if (  (*_fcnCounter)%100 == 0) {
     std::ofstream theStream ( "currentResult.dat");

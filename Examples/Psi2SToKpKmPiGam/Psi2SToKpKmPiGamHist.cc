@@ -29,6 +29,15 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
   _cosChic1ToK1400KDataHist(0),
   _cosChic1ToK1400KMcHist(0),
   _cosChic1ToK1400KFittedHist(0),
+  _phiChic1ToK1400KDataHist(0),
+  _phiChic1ToK1400KMcHist(0),
+  _phiChic1ToK1400KFittedHist(0),
+  _cosChic1ToKKPiDataHist(0),
+  _cosChic1ToKKPiMcHist(0),
+  _cosChic1ToKKPiFittedHist(0),
+  _phiChic1ToKKPiDataHist(0),
+  _phiChic1ToKKPiMcHist(0),
+  _phiChic1ToKKPiFittedHist(0),
   _cosK890DataHist(0),
   _cosK890McHist(0),
   _cosK890FittedHist(0),
@@ -63,7 +72,8 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
       plotCosPsi(_cosPsiDataHist, (*it), 1.);
       plotChic1Toa0Pi(_cosChic1Toa0PiDataHist, (*it), 1.);
       plotChic1ToK890K(_cosChic1ToK890KDataHist, (*it), 1.);
-      plotChic1ToK1400K(_cosChic1ToK1400KDataHist, (*it), 1.);
+      plotChic1ToK1400K(_cosChic1ToK1400KDataHist,  _phiChic1ToK1400KDataHist, (*it), 1.);
+      plotAnglesChic1ToKKPi(_cosChic1ToKKPiDataHist, _phiChic1ToKKPiDataHist, (*it), 1.);
       plotMKpKm(_invKpKmDataHist, (*it), 1.);
       plotMKPi(_invKPiDataHist, (*it), 1.);
       plotCosK890(_cosK890DataHist, (*it), 1.);
@@ -83,7 +93,8 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
       plotCosPsi(_cosPsiMcHist, (*it), 1.);
       plotChic1Toa0Pi(_cosChic1Toa0PiMcHist, (*it), 1.);
       plotChic1ToK890K(_cosChic1ToK890KMcHist, (*it), 1.);
-      plotChic1ToK1400K(_cosChic1ToK1400KMcHist, (*it), 1.);
+      plotChic1ToK1400K(_cosChic1ToK1400KMcHist,  _phiChic1ToK1400KMcHist, (*it), 1.);
+      plotAnglesChic1ToKKPi(_cosChic1ToKKPiMcHist, _phiChic1ToKKPiMcHist, (*it), 1.);
       plotMKpKm(_invKpKmMcHist, (*it), 1.);
       plotMKPi(_invKPiMcHist, (*it), 1.);
       plotCosK890(_cosK890McHist, (*it), 1.);
@@ -113,6 +124,15 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
   _cosChic1ToK1400KDataHist(0),
   _cosChic1ToK1400KMcHist(0),
   _cosChic1ToK1400KFittedHist(0),
+  _phiChic1ToK1400KDataHist(0),
+  _phiChic1ToK1400KMcHist(0),
+  _phiChic1ToK1400KFittedHist(0),
+  _cosChic1ToKKPiDataHist(0),
+  _cosChic1ToKKPiMcHist(0),
+  _cosChic1ToKKPiFittedHist(0),
+  _phiChic1ToKKPiDataHist(0),
+  _phiChic1ToKKPiMcHist(0),
+  _phiChic1ToKKPiFittedHist(0),
   _cosK890DataHist(0),
   _cosK890McHist(0),
   _cosK890FittedHist(0),
@@ -148,7 +168,8 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
       plotCosPsi(_cosPsiDataHist, (*it), 1.);
       plotChic1Toa0Pi(_cosChic1Toa0PiDataHist, (*it), 1.);
       plotChic1ToK890K(_cosChic1ToK890KDataHist, (*it), 1.);
-      plotChic1ToK1400K(_cosChic1ToK1400KDataHist, (*it), 1.);
+      plotChic1ToK1400K(_cosChic1ToK1400KDataHist,  _phiChic1ToK1400KDataHist, (*it), 1.);
+      plotAnglesChic1ToKKPi(_cosChic1ToKKPiDataHist, _phiChic1ToKKPiDataHist, (*it), 1.);
       plotMKpKm(_invKpKmDataHist, (*it), 1.);
       plotMKPi(_invKPiDataHist, (*it), 1.);
       plotCosK890(_cosK890DataHist, (*it), 1.);
@@ -168,7 +189,8 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
       plotCosPsi(_cosPsiMcHist, (*it), 1.);
       plotChic1Toa0Pi(_cosChic1Toa0PiMcHist, (*it), 1.);
       plotChic1ToK890K(_cosChic1ToK890KMcHist, (*it), 1.);
-      plotChic1ToK1400K(_cosChic1ToK1400KMcHist, (*it), 1.);
+      plotChic1ToK1400K(_cosChic1ToK1400KMcHist,  _phiChic1ToK1400KMcHist, (*it), 1.);
+      plotAnglesChic1ToKKPi(_cosChic1ToKKPiMcHist, _phiChic1ToKKPiMcHist, (*it), 1.);
       plotMKpKm(_invKpKmMcHist, (*it), 1.);
       plotMKPi(_invKPiMcHist, (*it), 1.);
       plotCosK890(_cosK890McHist, (*it), 1.);
@@ -180,7 +202,8 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
       plotCosPsi(_cosPsiFittedHist, (*it), evtWeight);
       plotChic1Toa0Pi(_cosChic1Toa0PiFittedHist, (*it), evtWeight);
       plotChic1ToK890K(_cosChic1ToK890KFittedHist, (*it), evtWeight);
-      plotChic1ToK1400K(_cosChic1ToK1400KFittedHist, (*it), evtWeight);
+      plotChic1ToK1400K(_cosChic1ToK1400KFittedHist,  _phiChic1ToK1400KFittedHist, (*it), evtWeight);
+      plotAnglesChic1ToKKPi(_cosChic1ToKKPiFittedHist, _phiChic1ToKKPiFittedHist, (*it), evtWeight);
       plotCosK890(_cosK890FittedHist, (*it), evtWeight);
       plotCosK1400(_cosK1400FittedHist, (*it), evtWeight);
       plotCosa980(_cosa980FittedHist, (*it), evtWeight);
@@ -211,8 +234,11 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
   _cosChic1Toa0PiFittedHist->Scale(integralData/integralFitted);
   _cosChic1ToK890KFittedHist->Scale(integralData/integralFitted);
   _cosChic1ToK1400KFittedHist->Scale(integralData/integralFitted);
+  _cosChic1ToKKPiFittedHist->Scale(integralData/integralFitted);
+  _phiChic1ToKKPiFittedHist->Scale(integralData/integralFitted);
   _cosK890FittedHist->Scale(integralData/integralFitted);
   _cosK1400FittedHist->Scale(integralData/integralFitted);
+  _phiChic1ToK1400KFittedHist->Scale(integralData/integralFitted);
   _cosa980FittedHist->Scale(integralData/integralFitted);
   _invKpKmFittedHist->Scale(integralData/integralFitted);
   _invKPiFittedHist->Scale(integralData/integralFitted);
@@ -244,12 +270,29 @@ void Psi2SToKpKmPiGamHist::initRootStuff()
   _cosChic1ToK1400KDataHist= new TH1F("_cosChic1ToK1400KDataHist","cos(#Theta) #chi_{c1} #rightarrow K(1400) K data",60, -1., 1.);
   _cosChic1ToK1400KMcHist= new TH1F("_cosChic1ToK1400KMcHist","cos(#Theta) #chi_{c1} #rightarrow K(1400) K Mc",60, -1., 1.);
   _cosChic1ToK1400KFittedHist= new TH1F("_cosChic1ToK1400KFittedHist","cos(#Theta) #chi_{c1} #rightarrow K(1400) K fit",60, -1., 1.);
+
+  _cosChic1ToKKPiDataHist= new TH1F("_cosChic1ToKKPiDataHist","cos(#Theta) #chi_{c1} #rightarrow K K #pi data",101, -1., 1.);
+  _cosChic1ToKKPiMcHist= new TH1F("_cosChic1ToKKPiMcHist","cos(#Theta) #chi_{c1} #rightarrow K K #pi Mc",101, -1., 1.);
+  _cosChic1ToKKPiFittedHist= new TH1F("_cosChic1ToKKPiFittedHist","cos(#Theta) #chi_{c1} #rightarrow K K #pi fit",101, -1., 1.);
+  _phiChic1ToKKPiDataHist= new TH1F("_phiChic1ToKKPiDataHist","#Phi #chi_{c1} #rightarrow K K #pi data",101, -TMath::Pi(), TMath::Pi());
+  _phiChic1ToKKPiMcHist= new TH1F("_phiChic1ToKKPiMcHist","#Phi #chi_{c1} #rightarrow K K #pi Mc",101, -TMath::Pi(), TMath::Pi());
+  _phiChic1ToKKPiFittedHist= new TH1F("_phiChic1ToKKPiFittedHist","#Phi #chi_{c1} #rightarrow K K #pi fit",101, -TMath::Pi(), TMath::Pi());
+
+
+
+
   _cosK890DataHist= new TH1F("_cosK890DataHist","cos(#Theta) K*(890) data",60, -1., 1.);
   _cosK890McHist= new TH1F("_cosK890McHist","cos(#Theta) K*(890) MC",60, -1., 1.);
   _cosK890FittedHist= new TH1F("_cosK890FittedHist","cos(#Theta) K*(890) fit",60, -1., 1.);
+
   _cosK1400DataHist= new TH1F("_cosK1400DataHist","cos(#Theta) K*(1400) data",60, -1., 1.);
   _cosK1400McHist= new TH1F("_cosK1400McHist","cos(#Theta) K*(1400) MC",60, -1., 1.);
   _cosK1400FittedHist= new TH1F("_cosK1400FittedHist","cos(#Theta) K*(1400) fit",60, -1., 1.);
+  _phiChic1ToK1400KDataHist= new TH1F("_phiChic1ToK1400KDataHist","#phi K*(1400) data",60, -TMath::Pi(), TMath::Pi());
+  _phiChic1ToK1400KMcHist= new TH1F("_phiChic1ToK1400KMcHist","#phi K*(1400) MC",60, -TMath::Pi(), TMath::Pi());
+  _phiChic1ToK1400KFittedHist= new TH1F("_phiChic1ToK1400KFittedHist","#phi K*(1400) fit",60, -TMath::Pi(), TMath::Pi());
+
+
   _cosa980DataHist= new TH1F("_cosa980DataHist","cos(#Theta) a(980) data",60, -1., 1.);
   _cosa980McHist= new TH1F("_cosa980McHist","cos(#Theta) a(980) MC",60, -1., 1.);
   _cosa980FittedHist= new TH1F("_cosa980FittedHist","cos(#Theta) a(980) fit",60, -1., 1.);
@@ -292,14 +335,27 @@ void Psi2SToKpKmPiGamHist::plotChic1ToK890K(TH1F* theHisto, const Psi2SToKpKmPiG
   if (KmPi_HeliChic1_4V.M()>0.85 && KmPi_HeliChic1_4V.M()<0.95) theHisto->Fill(KmPi_HeliChic1_4V.CosTheta(), weight); 
 }
 
-void Psi2SToKpKmPiGamHist::plotChic1ToK1400K(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotChic1ToK1400K(TH1F* costHist, TH1F* phiHist, const Psi2SToKpKmPiGamEvtData* theData, double weight)
 {
   Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
-  if (KpPi_HeliChic1_4V.M()>1.36 && KpPi_HeliChic1_4V.M()<1.48) theHisto->Fill(KpPi_HeliChic1_4V.CosTheta(), weight); 
+  if (KpPi_HeliChic1_4V.M()>1.36 && KpPi_HeliChic1_4V.M()<1.48){
+    costHist->Fill(KpPi_HeliChic1_4V.CosTheta(), weight);
+    phiHist->Fill(KpPi_HeliChic1_4V.Phi(), weight);
+  } 
 
   Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
-  if (KmPi_HeliChic1_4V.M()>1.36 && KmPi_HeliChic1_4V.M()<1.48) theHisto->Fill(KmPi_HeliChic1_4V.CosTheta(), weight); 
+  if (KmPi_HeliChic1_4V.M()>1.36 && KmPi_HeliChic1_4V.M()<1.48){
+    costHist->Fill(KmPi_HeliChic1_4V.CosTheta(), weight);
+    phiHist->Fill(KmPi_HeliChic1_4V.Phi(), weight);
+  } 
 }
+
+void Psi2SToKpKmPiGamHist::plotAnglesChic1ToKKPi(TH1F* costHist, TH1F* phiHist, const Psi2SToKpKmPiGamEvtData* theData, double weight){
+  Vector4<float> KpKmPi0_HeliChic1_4V=theData->KpKmPi0_HeliChic1_4V;
+  costHist->Fill(KpKmPi0_HeliChic1_4V.CosTheta(), weight);
+  phiHist->Fill(KpKmPi0_HeliChic1_4V.Phi(), weight);
+}
+
 
 void Psi2SToKpKmPiGamHist::plotMKpKm(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
 {
@@ -326,15 +382,21 @@ void Psi2SToKpKmPiGamHist::plotCosK890(TH1F* theHisto, const Psi2SToKpKmPiGamEvt
   if (KmPi_HeliChic1_4V.M()>0.85 && KmPi_HeliChic1_4V.M()<0.95) theHisto->Fill(Km_HeliKmPi_4V.CosTheta(), weight);
 }
 
-void Psi2SToKpKmPiGamHist::plotCosK1400(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotCosK1400(TH1F* costHist, const Psi2SToKpKmPiGamEvtData* theData, double weight)
 {
   Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
   Vector4<float> Kp_HeliKpPi_4V=theData->Kp_HeliKpPi_4V;
-  if (KpPi_HeliChic1_4V.M()>1.36 && KpPi_HeliChic1_4V.M()<1.48) theHisto->Fill(Kp_HeliKpPi_4V.CosTheta(), weight); 
+  if (KpPi_HeliChic1_4V.M()>1.36 && KpPi_HeliChic1_4V.M()<1.48){
+    costHist->Fill(Kp_HeliKpPi_4V.CosTheta(), weight);
+//     phiHist->Fill(Kp_HeliKpPi_4V.Phi(), weight);
+  } 
 
   Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
   Vector4<float> Km_HeliKmPi_4V=theData->Km_HeliKmPi_4V;
-  if (KmPi_HeliChic1_4V.M()>1.36 && KmPi_HeliChic1_4V.M()<1.48) theHisto->Fill(Km_HeliKmPi_4V.CosTheta(), weight);
+  if (KmPi_HeliChic1_4V.M()>1.36 && KmPi_HeliChic1_4V.M()<1.48){
+    costHist->Fill(Km_HeliKmPi_4V.CosTheta(), weight);
+//     phiHist->Fill(Km_HeliKpPi_4V.Phi(), weight);
+  }
 }
 
 void Psi2SToKpKmPiGamHist::plotCosa980(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)

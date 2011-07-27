@@ -50,6 +50,7 @@ public:
   virtual void print(std::ostream& os) const;
   virtual void printCurrentFitResult(paramKpKmPiGam& theParamVal);
   virtual void dumpCurrentResult(std::ostream& os, paramKpKmPiGam& theParamVal, std::string& suffix);
+
 protected:
 
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);  

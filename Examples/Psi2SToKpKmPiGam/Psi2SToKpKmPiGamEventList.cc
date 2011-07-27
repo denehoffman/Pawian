@@ -68,6 +68,16 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
      Vector4<float> Km_4V(*(anEvent->p4(1)));
      Vector4<float> Km_HeliKmPi_4V=helicityVec(chic1_4V, KmPi_4V, Km_4V);
 
+     Vector4<float> Pi0_4V(*(anEvent->p4(2)));
+     Vector4<float> Pi0_HeliChic1_4V = helicityVec(psi2S_4V, chic1_4V, Pi0_4V);
+     Vector4<float> Kp_HeliChic1_4V = helicityVec(psi2S_4V, chic1_4V, Kp_4V);
+     Vector4<float> Km_HeliChic1_4V = helicityVec(psi2S_4V, chic1_4V, Km_4V);
+
+     Vector4<float> KpKmPi0_HeliChic1_4V(0.5*(Pi0_HeliChic1_4V.T()+Kp_HeliChic1_4V.T()+Km_HeliChic1_4V.T()),
+                                            Pi0_HeliChic1_4V.Y()*Kp_HeliChic1_4V.Z()-Pi0_HeliChic1_4V.Z()*Kp_HeliChic1_4V.Y(),
+                                            Pi0_HeliChic1_4V.Z()*Kp_HeliChic1_4V.X()-Pi0_HeliChic1_4V.X()*Kp_HeliChic1_4V.Z(),
+                                            Pi0_HeliChic1_4V.X()*Kp_HeliChic1_4V.Y()-Pi0_HeliChic1_4V.Y()*Kp_HeliChic1_4V.X());  
+
 //        if (KpKm_4V.M()>3.12 && KpKm_4V.M()<3.22) continue;
 
 
@@ -78,6 +88,7 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
      thePsi2SToKpKmPiGamEvtData->KpKm_HeliChic1_4V=KpKm_HeliChic1_4V;
      thePsi2SToKpKmPiGamEvtData->KpPi_HeliChic1_4V=KpPi_HeliChic1_4V;
      thePsi2SToKpKmPiGamEvtData->KmPi_HeliChic1_4V=KmPi_HeliChic1_4V;
+     thePsi2SToKpKmPiGamEvtData->KpKmPi0_HeliChic1_4V=KpKmPi0_HeliChic1_4V;
      thePsi2SToKpKmPiGamEvtData->Kp_HeliKpKm_4V=Kp_HeliKpKm_4V;
      thePsi2SToKpKmPiGamEvtData->Kp_HeliKpPi_4V=Kp_HeliKpPi_4V;
      thePsi2SToKpKmPiGamEvtData->Km_HeliKmPi_4V=Km_HeliKmPi_4V;
@@ -86,7 +97,7 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
      Spin jPsi=1;
      for (Spin M=-1; M<=1; M=M+2){
  	for (Spin lam=-1; lam<=1; lam++){
-	  thePsi2SToKpKmPiGamEvtData->DfPsi[jPsi][M][lam]=Wigner_D(chic1_HeliPsi2S_4V.Phi(),chic1_HeliPsi2S_4V.Theta(),0,jPsi,M,lam);
+	  thePsi2SToKpKmPiGamEvtData->dfPsi[jPsi][M][lam]=Wigner_D(0.,chic1_HeliPsi2S_4V.Theta(),0,jPsi,M,lam);
 	}
       }
 
@@ -96,7 +107,10 @@ void Psi2SToKpKmPiGamEventList::read4Vecs(EventList& evtList, std::vector<Psi2ST
  	for (Spin lam=-1; lam<=1; lam++){
 	  thePsi2SToKpKmPiGamEvtData->DfChiToKpPi[jChi_c1][M][lam]=Wigner_D(KpPi_HeliChic1_4V.Phi(),KpPi_HeliChic1_4V.Theta(),0,jChi_c1,M,lam);
 	  thePsi2SToKpKmPiGamEvtData->DfChiToKmPi[jChi_c1][M][lam]=Wigner_D(KmPi_HeliChic1_4V.Phi(),KmPi_HeliChic1_4V.Theta(),0,jChi_c1,M,lam);
-	  if (lam==0) thePsi2SToKpKmPiGamEvtData->DfChiToa0Pi[jChi_c1][M][lam]=Wigner_D(KpKm_HeliChic1_4V.Phi(),KpKm_HeliChic1_4V.Theta(),0,jChi_c1,M,lam);
+	  if (lam==0){
+	    thePsi2SToKpKmPiGamEvtData->DfChiToa0Pi[jChi_c1][M][lam]=Wigner_D(KpKm_HeliChic1_4V.Phi(),KpKm_HeliChic1_4V.Theta(),0,jChi_c1,M,lam);
+	    thePsi2SToKpKmPiGamEvtData->DfChiToKKPi[jChi_c1][M][lam]=Wigner_D(KpKmPi0_HeliChic1_4V.Phi(), KpKmPi0_HeliChic1_4V.Theta(),0,jChi_c1,M,lam);
+	  }
 	  thePsi2SToKpKmPiGamEvtData->DfChiToa2Pi[jChi_c1][M][lam]=Wigner_D(KpKm_HeliChic1_4V.Phi(),KpKm_HeliChic1_4V.Theta(),0,jChi_c1,M,lam);
 	}
       }
