@@ -8,7 +8,7 @@
 
 Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
   Hyp1Lh(theEvtList, hypMap )
-  ,_disableHyp2(false)
+  ,_doHyp2(false)
   ,_nFitParams(0)
 {
   setUp(hypMap);
@@ -16,7 +16,7 @@ Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
 
 Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   Hyp1Lh(theLhPtr->getEventList(), hypMap)
-  ,_disableHyp2(false)
+  ,_doHyp2(true)
   ,_nFitParams(0)
 {
   setUp(hypMap);
@@ -29,6 +29,8 @@ Hyp2Lh::~Hyp2Lh()
 
 complex<double> Hyp2Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
   complex<double> result=Hyp1Lh::chi0DecAmps(theParamVal, theData);
+
+  if(!_doHyp2) return result;
 
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980f2200=theParamVal.ChiTof980f2200;
   double f2200Mass=theParamVal.Bwf2200.first;
@@ -47,9 +49,9 @@ complex<double> Hyp2Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 void Hyp2Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal, param2K2PiGam& errVal){
 
   Hyp1Lh::setMnUsrParams(upar, startVal,  errVal);
+  if(!_doHyp2) return;
 
   _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::f980f2200);
-
   _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::f2200);
 }
 
@@ -65,6 +67,8 @@ int Hyp2Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
 
   int counter=Hyp1Lh::setFitParamVal(theParamVal, par);
 
+  if(!_doHyp2) return counter;
+
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
   //f980 f2200    amplitude params
@@ -77,7 +81,7 @@ int Hyp2Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
 
 
 unsigned int  Hyp2Lh::nFitParams(){
-  unsigned int remainingFitParams=Hyp1Lh::nFitParams();
+  unsigned int remainingFitParams=Hyp1Lh::nFitParams(); 
   return _nFitParams+remainingFitParams;
 }
 
@@ -89,6 +93,9 @@ void Hyp2Lh::print(std::ostream& os) const{
 void Hyp2Lh::printCurrentFitResult(param2K2PiGam& theParamVal){
 
   Hyp1Lh::printCurrentFitResult(theParamVal);
+
+  if(!_doHyp2) return;
+
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
@@ -121,6 +128,8 @@ void Hyp2Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
   Hyp1Lh::dumpCurrentResult(os, theParamVal, suffix);
 
+  if(!_doHyp2) return;
+
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
@@ -151,27 +160,30 @@ void Hyp2Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp2Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("disableHyp2");
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("doHyp2");
 
   if (iter !=hypMap.end()){
-    _disableHyp2= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _disableHyp2 <<endmsg;
+    _doHyp2= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _doHyp2 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
-  else Alert << "hypothesis disableHyp2 not set!!!" <<endmsg; 
+  else Alert << "hypothesis doHyp2 not set!!!" <<endmsg; 
+
+  if (!_doHyp2) return;
 
   _ampVec.push_back(paramEnum2K2PiGam::f980f2200);
-
+  
   _massVec.push_back(paramEnum2K2PiGam::f2200);
-
+  
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*ampIt);
     _nFitParams+=2*JPCLSs.size();
   }
-
+  
   std::vector<unsigned int>::iterator massIt; 
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   }
+  
 }

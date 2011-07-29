@@ -9,7 +9,7 @@
 
 Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
   Hyp5Lh(theEvtList, hypMap )
-  ,_disableHyp6(false)
+  ,_doHyp6(true)
   ,_K_0_1430K_0_1950Hyp6(true)
   ,_KappaK_0_1950Hyp6(true) 
   ,_nFitParams(0) 
@@ -19,7 +19,7 @@ Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
 
 Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   Hyp5Lh(theLhPtr->getEventList(), hypMap)
-  ,_disableHyp6(false)
+  ,_doHyp6(true)
   ,_K_0_1430K_0_1950Hyp6(true)
   ,_KappaK_0_1950Hyp6(true)  
   ,_nFitParams(0) 
@@ -37,7 +37,7 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   complex<double> result=Hyp5Lh::chi0DecAmps(theParamVal, theData);
 
-  if(_disableHyp6) return result;
+  if(!_doHyp6) return result;
   double K_0_1950Mass=theParamVal.BwK_0_1950.first;
   double K_0_1950Width=theParamVal.BwK_0_1950.second;
 
@@ -67,7 +67,7 @@ void Hyp6Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal, par
 
   Hyp5Lh::setMnUsrParams(upar, startVal, errVal);
 
-  if(_disableHyp6) return;
+  if(!_doHyp6) return;
 
   if (_K_0_1430K_0_1950Hyp6){  
     _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_0_1430K_0_1950);
@@ -96,7 +96,7 @@ int Hyp6Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
   
   int counter=Hyp5Lh::setFitParamVal(theParamVal, par);
 
-  if(_disableHyp6) return counter;
+  if(!_doHyp6) return counter;
 
   if (_K_0_1430K_0_1950Hyp6){ 
     counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_0_1430K_0_1950);
@@ -127,7 +127,7 @@ void Hyp6Lh::print(std::ostream& os) const{
 void Hyp6Lh::printCurrentFitResult(param2K2PiGam& theParamVal){
 
   Hyp5Lh::printCurrentFitResult(theParamVal);
-  if(_disableHyp6) return;
+  if(!_doHyp6) return;
   
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -161,7 +161,7 @@ void Hyp6Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
   Hyp5Lh::dumpCurrentResult(os, theParamVal, suffix);
 
-  if(_disableHyp6) return;
+  if(!_doHyp6) return;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -210,7 +210,7 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
   else Alert << "hypothesis KappaK_0_1950Hyp6 not set!!!" <<endmsg; 
 
   if(!_K_0_1430K_0_1950Hyp6 && !_KappaK_0_1950Hyp6){
-    _disableHyp6=true;
+    _doHyp6=false;
     return;
   }
 

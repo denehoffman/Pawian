@@ -12,7 +12,7 @@ Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_0_1460ToKstPiHyp8(true)
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
-  ,_disableHyp8(false)
+  ,_doHyp8(true)
 {
   setUp(hypMap); 
 }
@@ -22,7 +22,7 @@ Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_0_1460ToKstPiHyp8(true)
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
-  ,_disableHyp8(false)
+  ,_doHyp8(true)
 {
   setUp(hypMap); 
 }
@@ -37,7 +37,7 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   complex<double> result=Hyp7Lh::chi0DecAmps(theParamVal, theData);
 
-  if (_disableHyp8) return result;
+  if (!_doHyp8) return result;
   double K892Mass=theParamVal.BwK892.first;
   double K892Width=theParamVal.BwK892.second;
   double K_0_1430Mass=theParamVal.BwK_0_1430.first;
@@ -87,7 +87,7 @@ void Hyp8Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  pa
 
   Hyp7Lh::setMnUsrParams(upar, startVal, errVal);
 
-  if (_disableHyp8) return;
+  if (!_doHyp8) return;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -114,7 +114,7 @@ int Hyp8Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
 
   int counter=Hyp7Lh::setFitParamVal(theParamVal, par);
 
-  if (_disableHyp8) return counter;
+  if (!_doHyp8) return counter;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -143,10 +143,12 @@ void Hyp8Lh::printCurrentFitResult(param2K2PiGam& theParamVal){
 
   Hyp7Lh::printCurrentFitResult(theParamVal);
 
-    std::vector<unsigned int>::const_iterator itAmps;
+  if (!_doHyp8) return;
+
+  std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
-
+    
     std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;    
     
     for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
@@ -174,6 +176,8 @@ void Hyp8Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
   }
 
   Hyp7Lh::dumpCurrentResult(os, theParamVal, suffix);
+
+  if (!_doHyp8) return;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -237,9 +241,9 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
     exit(0);
   }
  
-  if(!_K_0_1460ToKstPiHyp8 && !_K_0_1830ToKstPiHyp8 && !_K_1_1650Hyp8) _disableHyp8=true; 
+  if(!_K_0_1460ToKstPiHyp8 && !_K_0_1830ToKstPiHyp8 && !_K_1_1650Hyp8) _doHyp8=false; 
 
-  if (_disableHyp8) return;
+  if (!_doHyp8) return;
 
   if (_K_0_1460ToKstPiHyp8){
     _ampVec.push_back(paramEnum2K2PiGam::K_0_1460ToK892Pi);

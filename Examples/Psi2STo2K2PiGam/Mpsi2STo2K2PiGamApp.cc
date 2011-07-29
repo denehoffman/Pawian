@@ -186,20 +186,20 @@ int main(int __argc,char *__argv[]){
   hypMap["K1_1400Hyp"]=false;
   hypMap["K0_1430_K0_1430Hyp"]=true;
   hypMap["K2_1430_K2_1430Hyp"]=true;
-  hypMap["K0_1430_K2_1430Hyp"]=true;
-  hypMap["K1_1400_K1_1400Hyp"]=true;
-  hypMap["disableHyp2"]=false;
+  hypMap["K0_1430_K2_1430Hyp"]=false;
+  hypMap["K1_1400_K1_1400Hyp"]=false;
+  hypMap["doHyp2"]=true;
   hypMap["sigmaf980Hyp3"]=true;
   hypMap["sigmaf1710Hyp3"]=true;
   hypMap["sigmaf2200Hyp3"]=true;
   hypMap["f980f1370Hyp4"]=true;
-  hypMap["f980f1500Hyp4"]=true;
+  hypMap["f980f1500Hyp4"]=false;
   hypMap["f1710f1370Hyp4"]=true;
   hypMap["f980f_2_1430Hyp4"]=true;
-  hypMap["f980f_2_1525Hyp4"]=true;
-  hypMap["f1500f_2_1525Hyp4"]=true;
+  hypMap["f980f_2_1525Hyp4"]=false;
+  hypMap["f1500f_2_1525Hyp4"]=false;
   hypMap["f1710f_2_1430Hyp4"]=true;
-  hypMap["disableHyp5"]=false;
+  hypMap["doHyp5"]=false;
   hypMap["K_0_1430K_0_1950Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=false;
   hypMap["K1_1680Hyp7"]=true;
@@ -207,7 +207,7 @@ int main(int __argc,char *__argv[]){
   hypMap["KappaHyp7"]=true;
   hypMap["K_0_1460ToKstPiHyp8"]=true;
   hypMap["K_0_1830ToKstPiHyp8"]=true;
-  hypMap["K_1_1650Hyp8"]=true;
+  hypMap["K_1_1650Hyp8"]=false;
 
 //   if (K1400SpinStr=="prod")  thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new PsiToChic0GamProdLh(thePsi2STo2K2PiGamEvtListPtr));
   if (K1400SpinStr=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));

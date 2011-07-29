@@ -51,7 +51,7 @@ public:
 
 protected:
 
-  bool _disableHyp5;
+  bool _doHyp5;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

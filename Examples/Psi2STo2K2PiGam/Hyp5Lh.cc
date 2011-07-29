@@ -9,7 +9,7 @@
 
 Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
   Hyp4Lh(theEvtList, hypMap )
-  , _disableHyp5(false)
+  , _doHyp5(true)
   , _nFitParams(0)
 {
   setUp(hypMap); 
@@ -17,7 +17,7 @@ Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
 
 Hyp5Lh::Hyp5Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   Hyp4Lh(theLhPtr->getEventList(), hypMap)
-  , _disableHyp5(false)
+  , _doHyp5(true)
   , _nFitParams(0)
 {
   setUp(hypMap); 
@@ -32,7 +32,7 @@ Hyp5Lh::~Hyp5Lh()
 complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 
   complex<double> result=Hyp4Lh::chi0DecAmps(theParamVal, theData);
-  if (_disableHyp5) return result;
+  if (!_doHyp5) return result;
 
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980=theParamVal.ChiToK_0_2400ToKf980;
   double K_0_2400Mass=theParamVal.BwK_0_2400.first;
@@ -53,7 +53,7 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 void Hyp5Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal){
 
   Hyp4Lh::setMnUsrParams(upar, startVal, errVal);
-  if(_disableHyp5) return;
+  if(!_doHyp5) return;
 
   _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::K_0_2400KToKf980);
   _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::K_0_2400);
@@ -72,7 +72,7 @@ int Hyp5Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
   
   int counter=Hyp4Lh::setFitParamVal(theParamVal, par);
 
-  if (_disableHyp5) return counter;
+  if (!_doHyp5) return counter;
 
   counter= _fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::K_0_2400KToKf980);
 
@@ -94,7 +94,7 @@ void Hyp5Lh::printCurrentFitResult(param2K2PiGam& theParamVal){
 
   Hyp4Lh::printCurrentFitResult(theParamVal);
 
-  if (_disableHyp5) return;
+  if (!_doHyp5) return;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -128,7 +128,7 @@ void Hyp5Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
   Hyp4Lh::dumpCurrentResult(os, theParamVal, suffix);
 
-  if (_disableHyp5) return;
+  if (!_doHyp5) return;
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
@@ -156,22 +156,21 @@ void Hyp5Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp5Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("disableHyp5");
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("doHyp5");
 
   if (iter !=hypMap.end()){
-    _disableHyp5= iter->second;
+    _doHyp5= iter->second;
    _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _disableHyp5 <<endmsg;
+    Info<< "hypothesis " << iter->first << "\t" << _doHyp5 <<endmsg;
   }
   else { Alert << "hypothesis disableHyp5 not set!!!" <<endmsg;
     exit(0);
   }
 
-  if (!_disableHyp5){
-    _ampVec.push_back(paramEnum2K2PiGam::K_0_2400KToKf980);
-    _massVec.push_back(paramEnum2K2PiGam::K_0_2400);
-  }
+  if (!_doHyp5) return;
 
+  _ampVec.push_back(paramEnum2K2PiGam::K_0_2400KToKf980);
+  _massVec.push_back(paramEnum2K2PiGam::K_0_2400);
 
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){

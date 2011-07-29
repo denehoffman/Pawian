@@ -53,7 +53,7 @@ protected:
   bool _sigmaf980Hyp;
   bool _sigmaf1710Hyp;
   bool _sigmaf2200Hyp;
-  bool _disableHyp3;
+  bool _doHyp3;
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 private:
 

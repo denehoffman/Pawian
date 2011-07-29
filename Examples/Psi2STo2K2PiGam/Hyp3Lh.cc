@@ -11,7 +11,7 @@ Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_sigmaf980Hyp(true)
   ,_sigmaf1710Hyp(true)
   ,_sigmaf2200Hyp(true)  
-  ,_disableHyp3(false)
+  ,_doHyp3(true)
   ,_nFitParams(0)
 {
   setUp(hypMap); 
@@ -22,7 +22,7 @@ Hyp3Lh::Hyp3Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_sigmaf980Hyp(true)
   ,_sigmaf1710Hyp(true)
   ,_sigmaf2200Hyp(true)
-  ,_disableHyp3(false)
+  ,_doHyp3(true)
   ,_nFitParams(0)
 {
   setUp(hypMap); 
@@ -37,7 +37,7 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   complex<double> result=Hyp2Lh::chi0DecAmps(theParamVal, theData);
 
-  if(_disableHyp3) return result;
+  if(!_doHyp3) return result;
  
   double sigmaMass=theParamVal.BwSigma.first;
   double sigmaWidth=theParamVal.BwSigma.second;
@@ -72,7 +72,7 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 void Hyp3Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal){
 
   Hyp2Lh::setMnUsrParams(upar, startVal, errVal);
-  if(_disableHyp3) return;
+  if(!_doHyp3) return;
 
 
   if(_sigmaf980Hyp)  _fitParams2K2PiGam.setMnUsrParamsDec(upar, startVal, errVal, paramEnum2K2PiGam::sigmaf980);
@@ -81,7 +81,7 @@ void Hyp3Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  pa
 
   _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::sigma);
 
-  if(_sigmaf2200Hyp && _disableHyp2)  _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::f2200);   
+  if(_sigmaf2200Hyp && !_doHyp2)  _fitParams2K2PiGam.setMnUsrParamsMass(upar, startVal, errVal, paramEnum2K2PiGam::f2200);   
 }
 
 
@@ -95,7 +95,7 @@ int Hyp3Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
   }  
 
   int counter=Hyp2Lh::setFitParamVal(theParamVal, par);
-  if(_disableHyp3) return counter;
+  if(!_doHyp3) return counter;
 
 
   //sigma f1710    amplitude params
@@ -104,7 +104,7 @@ int Hyp3Lh::setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>
   if(_sigmaf2200Hyp) counter=_fitParams2K2PiGam.setFitParamValDec(theParamVal, par, counter, paramEnum2K2PiGam::sigmaf2200);
   
   counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::sigma);  
-  if(_sigmaf2200Hyp && _disableHyp2)  counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::f2200);
+  if(_sigmaf2200Hyp && !_doHyp2)  counter=_fitParams2K2PiGam.setFitParamValMass(theParamVal, par, counter, paramEnum2K2PiGam::f2200);
      
   return counter;
 }
@@ -120,6 +120,8 @@ void Hyp3Lh::print(std::ostream& os) const{
 
 void Hyp3Lh::printCurrentFitResult(param2K2PiGam& theParamVal){
   Hyp2Lh::printCurrentFitResult(theParamVal);
+
+  if(!_doHyp3) return;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -150,6 +152,8 @@ void Hyp3Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
     return;
   }
   Hyp2Lh::dumpCurrentResult(os, theParamVal, suffix);
+
+  if(!_doHyp3) return;
 
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
@@ -205,9 +209,11 @@ void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
   else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
 
-  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _disableHyp3=true;
+  if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _doHyp3=false;
 
-  if (!_disableHyp3) _massVec.push_back(paramEnum2K2PiGam::sigma); 
+  if (!_doHyp3) return;
+
+  _massVec.push_back(paramEnum2K2PiGam::sigma); 
 
   if (_sigmaf980Hyp){ 
     _ampVec.push_back(paramEnum2K2PiGam::sigmaf980);
@@ -219,7 +225,7 @@ void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
   if (_sigmaf2200Hyp){ 
     _ampVec.push_back(paramEnum2K2PiGam::sigmaf2200);
-    if (_disableHyp2) _massVec.push_back(paramEnum2K2PiGam::f2200);  
+    if (!_doHyp2) _massVec.push_back(paramEnum2K2PiGam::f2200);  
   }
 
   std::vector<unsigned int>::iterator ampIt;
