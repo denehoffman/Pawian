@@ -13,6 +13,7 @@ Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
+  ,_nFitParams(0)
 {
   setUp(hypMap); 
 }
@@ -23,6 +24,7 @@ Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
+  ,_nFitParams(0)
 {
   setUp(hypMap); 
 }
