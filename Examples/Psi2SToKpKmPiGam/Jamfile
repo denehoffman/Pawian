@@ -11,3 +11,4 @@ lib Psi2SToKpKmPiGam :
 	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
 
 exe Mpsi2SToKpKmPiGamApp : Mpsi2SToKpKmPiGamApp.cc Psi2SToKpKmPiGam : ;
+exe Psi2SToKpKmPiGamParserTestApp : Psi2SToKpKmPiGamParserTestApp.cc Psi2SToKpKmPiGam : ;

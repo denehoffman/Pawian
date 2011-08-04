@@ -7,6 +7,9 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamParser.hh"
+#include "Examples/Psi2SToKpKmPiGam/StreamKpKmPiGamFitParms.hh"
+
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHist.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamReader.hh"
@@ -42,152 +45,67 @@
 //#include "Minuit2/MnUserTransformation.h"
 using namespace ROOT::Minuit2;
 
+
+void setErrLogMode( const Psi2SToKpKmPiGamParser::enErrLogMode& erlMode ) {
+  switch(erlMode) {
+  case Psi2SToKpKmPiGamParser::debug :
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+    break;
+  case Psi2SToKpKmPiGamParser::trace :
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    break;
+  case Psi2SToKpKmPiGamParser::routine :
+    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    break;
+  case Psi2SToKpKmPiGamParser::warning :
+    ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+    break;
+  case Psi2SToKpKmPiGamParser::error :
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+    break;
+  case Psi2SToKpKmPiGamParser::alert :
+    ErrLogger::instance()->setLevel(log4cpp::Priority::ALERT);
+    break;
+  default: 
+    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  }
+}
+
+
+
+
 int main(int __argc,char *__argv[]){
 
-  if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-		    || strcmp( __argv[1], "--help" ) == 0 ) ){
+  // Parse the command line
+  static Psi2SToKpKmPiGamParser theAppParams(__argc, __argv);
 
-    Info << "This application is a PWA fit for the reaction\n\n"
-	 << "Psi(2S) -> Chi_c1 + gamma  ; Chi_c1 -> K+ K- pi0\n\n"
-	 << "It makes use of the Helicity Formalism\n"
-	 << "-K1400: spin hypothesis for K*1400 resonance (available so far: spin0, spin1, spin2, spin01, spin 02, spin12, spin012, prod) (default spin1)\n" 
-	 << "-msg <errorLogMode> you can choose the mode for the error logger\n\n"
-	 << "-paramFile <path>\n"
-	 << "-hyp <base> or <hyp1> default: base\n"
-	 << "-KKPi <yes> or <no> default: no\n"
-	 << "-qaMode <no> or <yes> default: no\n"
- 	 << "i.e. with './Mpsi2SToKpKmPiGamApp -K1400 spin02 -paramFile ./fitParamSpin02.dat -msg debugging' \n"  
-	 << endmsg;
-    return 0;
-  }
+   // Set the desired error logging mode
+  setErrLogMode(theAppParams.getErrLogMode());
 
-  
-  std::string msgModeStr="default";
-  std::string K1400SpinStr="spin1";
-  std::string KKPiStr="no";
-  std::string paramFilePathStr="default";
-  std::string qaModeStr="no";
-  std::string hypStr="base";
+  std::string theCfgFile = theAppParams.getConfigFile();
+  Info << "The path to config file is " << theCfgFile << "\n" << endmsg;    
 
-  // decode arguments
-  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
-    bool found=false;
-    std::string sw = __argv[optind];
-    if (sw=="-msg"){
-      optind++;
-      msgModeStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-K1400"){
-      optind++;
-      K1400SpinStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-paramFile"){
-      optind++;
-      paramFilePathStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-qaMode"){
-      optind++;
-      qaModeStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-hyp"){
-      optind++;
-      hypStr = __argv[optind];
-      found=true;
-    }
-    if (sw=="-KKPi"){
-      optind++;
-      KKPiStr = __argv[optind];
-      found=true;
-    }
-    if (!found){
-      Warning << "Unknown switch: " 
-            << __argv[optind] << endmsg;
-      optind++;
-    }
-    
-    while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
-  }
-
-  if(msgModeStr == "debugging") ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-  else if(msgModeStr == "trace") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-  else if(msgModeStr == "routine") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-  else if(msgModeStr == "warning") ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
-  else if(msgModeStr == "error")   ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR); 
-  else {
-    ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-    Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " << endmsg;  
-  }
-
-  std::map<const std::string, bool> hypMap;
-  hypMap["K0_1430HypBase"]=false;
-  hypMap["K1_1410HypBase"]=false;
-  hypMap["K2_1430HypBase"]=false;
-
-
-  if (K1400SpinStr=="spin012"){
-    hypMap["K0_1430HypBase"]=true;
-    hypMap["K1_1410HypBase"]=true;
-    hypMap["K2_1430HypBase"]=true;
-  }
-  else if (K1400SpinStr=="spin01"){
-    hypMap["K0_1430HypBase"]=true;
-    hypMap["K1_1410HypBase"]=true;
-  }
-  else if (K1400SpinStr=="spin02"){
-    hypMap["K0_1430HypBase"]=true;
-    hypMap["K2_1430HypBase"]=true;
-  }
-  else if (K1400SpinStr=="spin12"){
-    hypMap["K1_1410HypBase"]=true;
-    hypMap["K2_1430HypBase"]=true;
-  }
-  else if (K1400SpinStr=="spin0"){
-    hypMap["K0_1430HypBase"]=true;
-  }
-  else if (K1400SpinStr=="spin1"){
-    hypMap["K1_1410HypBase"]=true;
-  }
-  else if (K1400SpinStr=="spin2"){
-    hypMap["K2_1430HypBase"]=true;
-  }
-
-  hypMap["KKPi_HypBase"]=false; 
-  if(KKPiStr=="yes"){
-    hypMap["KKPi_HypBase"]=true;
-  }
-
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
-
-  std::string paramStreamerPath=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/testStream.dat";
-
-  if ( paramFilePathStr != "default") paramStreamerPath=paramFilePathStr;  
+  std::string paramStreamerPath=theAppParams.fitParamFile();
 
   StreamKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
   paramKpKmPiGam theStartparams=theParamStreamer.getFitParamVal();
   paramKpKmPiGam theErrorparams=theParamStreamer.getFitParamErr();
 
-  std::string datFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorDATA_kkpi0.dat";
-  std::string mcFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorMC_chic1_kkpi0.dat";
-  
-//   std::string datFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorDATAUnS_OptSel_kkpi0_101222.dat";
-//   std::string mcFile=theSourcePath+"/Examples/Psi2SToKpKmPiGam/data/fitvectorMC_chic1_OptSel_kkpi0_101222.dat";
-
+  const std::string datFile=theAppParams.dataFile();
+  const std::string mcFile=theAppParams.mcFile();
   Info << "data file: " << datFile << endmsg;
   Info << "mc file: " << mcFile << endmsg;
-  
-  
+
   ParticleTable pTable;
   PdtParser parser;
+  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
   if (!parser.parse(pdtFile, pTable)) {
     Alert << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
   }
-  
+
+
 
   std::vector<std::string> fileNames;
 
@@ -203,6 +121,8 @@ int main(int __argc,char *__argv[]){
                   <<  eventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
   eventsData.rewind();
 
+
+
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = eventsData.nextEvent()) != 0 && evtCount < 20) {
@@ -216,9 +136,7 @@ int main(int __argc,char *__argv[]){
   }
   eventsData.rewind();
 
-
   std::vector<std::string> fileNamesMc;
-
   fileNamesMc.push_back(mcFile);
   Psi2SToKpKmPiGamReader eventReaderMc(fileNamesMc, 4, 0); 
   EventList eventsMc;
@@ -228,20 +146,46 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<const Psi2SToKpKmPiGamEventList> thePsi2SToKpKmPiGamEventListPtr(new Psi2SToKpKmPiGamEventList(eventsData, eventsMc));
 
 
+  std::map<const std::string, bool> hypMap;
+  hypMap["K0_1430HypBase"]=true;
+  hypMap["K1_1410HypBase"]=true;
+  hypMap["K2_1430HypBase"]=true;
+  hypMap["K1_1680_HypBase"]=true;
+  hypMap["KKPi_HypBase"]=true;
+
+  const std::vector<std::string> disabledHyps=theAppParams.disabledHyps();
+  std::vector<std::string>::const_iterator itStr;
+ 
+  for (itStr=disabledHyps.begin(); itStr!=disabledHyps.end(); ++itStr){
+    
+    std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
+    if (iter !=hypMap.end()){
+      hypMap[iter->first]= false;
+      Info<< "hypothesis " << iter->first << " disabed" <<endmsg;
+    }
+    else { Alert << "hypothesis " << (*itStr) << " can not be disabled"<<endmsg;
+      exit(0);
+    }
+  }
+
   boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> thePsi2SToKpKmPiGamLhPtr;
 
+  std::string startWithHyp=theAppParams.startHypo();
 
-  if (hypStr=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr));
-  else if (hypStr=="base") thePsi2SToKpKmPiGamLhPtr=boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new Psi2SToKpKmPiGamBaseLh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
-  else if (hypStr=="hyp1") thePsi2SToKpKmPiGamLhPtr=boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new Psi2SToKpKmPiGamHyp1Lh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
-  else {
-    Alert << "hypothesis " << hypStr << " not supported!!!" << endmsg;
+  if (startWithHyp=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr));
+  else if (startWithHyp=="hyp1") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>
+(new Psi2SToKpKmPiGamHyp1Lh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
+  else if (startWithHyp=="base") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> (new Psi2SToKpKmPiGamBaseLh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
+  else { 
+    Alert << "start with hypthesis " << startWithHyp << " not supported!!!!" << endmsg;
     exit(1);
   }
 
-  std::cout << "qaModeStr: " << qaModeStr << std::endl;
 
-  if (qaModeStr=="yes"){
+  bool qaMode=theAppParams.qaMode();
+  std::cout << "qaMode: " << qaMode << std::endl;
+
+  if (qaMode){
     thePsi2SToKpKmPiGamLhPtr->printCurrentFitResult(theStartparams);
     double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
@@ -250,17 +194,19 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
+
    MPsi2SToKpKmPiGamFcn mPsi2SToKpKmPiGamFcn(thePsi2SToKpKmPiGamLhPtr);
 
    MnUserParameters upar;
-//   thePsi2SToKpKmPiGamLhPtr->setMnUsrParams(upar);
-   thePsi2SToKpKmPiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams); 
-   upar.Fix(1);
-   upar.Fix(2);
-// //   for (unsigned int i=0; i<5; i++) upar.Fix(i);
+   thePsi2SToKpKmPiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
 
-// //   unsigned int uparSize=upar.Params().size();
-// //   for (unsigned int i=5; i< uparSize; i++) upar.Fix(i);;  
+  const std::vector<std::string> fixedParams=theAppParams.fixedParams();
+
+  std::vector<std::string>::const_iterator itFix;
+  for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+    upar.Fix( (*itFix) );
+  }
+
 
   MnMigrad migrad(mPsi2SToKpKmPiGamFcn, upar);
   
@@ -293,7 +239,8 @@ int main(int __argc,char *__argv[]){
   for (size_t i=0; i<finalParamVec.size(); i++)
     {
       Info << "Value: " << finalParamVec[i] << "\t Error: " << finalParamErrorVec[i] << endmsg;
-    }  
+    }
+
 
 
     return 0;

@@ -324,6 +324,40 @@ complex<double> AbsPsi2SToKpKmPiGamLh::K2_1400Amp(Psi2SToKpKmPiGamData::Psi2SToK
   return result;
 }
 
+
+  complex<double> AbsPsi2SToKpKmPiGamLh::KappaPole_Amp(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappa_K, double KappaMass, double KappaWidth, Spin& lamChi){
+
+    Vector4<double> KpPi4V(theData->KpPi_HeliChic1_4V.E(), theData->KpPi_HeliChic1_4V.Px(), theData->KpPi_HeliChic1_4V.Py(),  theData->KpPi_HeliChic1_4V.Pz());
+    Vector4<double> KmPi4V(theData->KmPi_HeliChic1_4V.E(), theData->KmPi_HeliChic1_4V.Px(), theData->KmPi_HeliChic1_4V.Py(),  theData->KmPi_HeliChic1_4V.Pz());
+
+    complex<double> i(0.,1.);    
+    
+    complex<double> result=conj(theData->DfChiToKpPi[1][lamChi][0])
+      *KappaMass*KappaWidth/((KappaMass-i*KappaWidth)*(KappaMass-i*KappaWidth)-KpPi4V*KpPi4V)
+      +conj(theData->DfChiToKmPi[1][lamChi][0])
+      *KappaMass*KappaWidth/((KappaMass-i*KappaWidth)*(KappaMass-i*KappaWidth)-KmPi4V*KmPi4V);
+
+  complex<double> ChiToKappa_KAmpTmpls(0.,0.);
+  
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itChiToKappa_K;
+  for ( itChiToKappa_K=ChiToKappa_K.begin(); itChiToKappa_K!=ChiToKappa_K.end(); ++itChiToKappa_K){
+    boost::shared_ptr<const JPCLS> ChiToKappa_KState=itChiToKappa_K->first;
+    double theChiToKappa_KMag=itChiToKappa_K->second.first;
+    double theChiToKappa_KPhi=itChiToKappa_K->second.second;
+    complex<double> expiphiChiToKappa_K(cos(theChiToKappa_KPhi), sin(theChiToKappa_KPhi));
+    
+    ChiToKappa_KAmpTmpls+=theChiToKappa_KMag*expiphiChiToKappa_K*sqrt(2*ChiToKappa_KState->L+1);
+    //      *Clebsch(ChiToK1400_0_KState->L,0,ChiToK1400_0_KState->S, 0, ChiToK1400_0_KState->J, 0)
+    //      *Clebsch(0, 0, 0, 0, 0, 0)
+  }
+
+  result*=ChiToKappa_KAmpTmpls;
+  return result;
+
+}
+
+
+
 complex<double> AbsPsi2SToKpKmPiGamLh::KKPi_Amp(Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKKPi, Spin& lamChi){
 
   complex<double> result=conj(theData->DfChiToKKPi[1][lamChi][0]);   

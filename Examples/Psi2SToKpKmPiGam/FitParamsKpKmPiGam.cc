@@ -17,6 +17,7 @@ FitParamsKpKmPiGam::FitParamsKpKmPiGam()
   _jpclsMap[paramEnumKpKmPiGam::K_0_1400K]=theStates.ChiToKst0KStates();
   _jpclsMap[paramEnumKpKmPiGam::K_1_1400K]=theStates.ChiToKst1KStates();
   _jpclsMap[paramEnumKpKmPiGam::K_2_1400K]=theStates.ChiToKst2KStates();
+  _jpclsMap[paramEnumKpKmPiGam::K_1_1680K]=theStates.ChiToKst1KStates();
   _jpclsMap[paramEnumKpKmPiGam::a980Pi]=theStates.ChiToa0PiStates();
   _jpclsMap[paramEnumKpKmPiGam::KappaK]=theStates.ChiToKst0KStates();
   _jpclsMap[paramEnumKpKmPiGam::KKPi]=theStates.ChiToa0PiStates();
@@ -47,6 +48,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnumKpKmPiGam::K_0_1400K) return params.ChiToK1400_0_K;
   else if (index==paramEnumKpKmPiGam::K_1_1400K) return params.ChiToK1400_1_K;
   else if (index==paramEnumKpKmPiGam::K_2_1400K) return params.ChiToK1400_2_K;
+  else if (index==paramEnumKpKmPiGam::K_1_1680K) return params.ChiToK1680_1_K;
   else if (index==paramEnumKpKmPiGam::a980Pi) return params.ChiToa0Pi;
   else if (index==paramEnumKpKmPiGam::KappaK) return params.ChiToKappa_K;
   else if (index==paramEnumKpKmPiGam::KKPi) return params.ChiToKKPi;
@@ -65,6 +67,7 @@ pair<double, double>& FitParamsKpKmPiGam::massPair(paramKpKmPiGam& params, unsig
   else if (index==paramEnumKpKmPiGam::K_0_1400) return params.BwK1400_0;
   else if (index==paramEnumKpKmPiGam::K_1_1400) return params.BwK1400_1;
   else if (index==paramEnumKpKmPiGam::K_2_1400) return params.BwK1400_2;
+  else if (index==paramEnumKpKmPiGam::K_1_1680) return params.BwK1680_1;
   else if (index==paramEnumKpKmPiGam::Kappa) return params.BwKappa;
   else Alert << "index " << index << " not supported !!!" << endmsg;
 
@@ -179,10 +182,10 @@ void FitParamsKpKmPiGam::setMnUsrParamsDec(MnUserParameters& upar, paramKpKmPiGa
     double magErr=errPair.first;
     double phiErr=errPair.second;
     
-    double magMin=magVal-magErr;
+    double magMin=magVal-3.*magErr;
     if (magMin<0.) magMin=0.;
     
-    upar.Add(magStr, magVal, magErr, magMin, magVal+magErr);
+    upar.Add(magStr, magVal, magErr, magMin, magVal+3.*magErr);
     upar.Add(phiStr, phiVal, phiErr, -3.*M_PI, 3.*M_PI);
 
     counter++;
@@ -207,13 +210,13 @@ void FitParamsKpKmPiGam::setMnUsrParamsMass(MnUserParameters& upar, paramKpKmPiG
   double massErr=errParams.first;
   double widthErr=errParams.second;
 
-  double massMin=massVal-widthVal;
+  double massMin=massVal-3.*widthVal;
   if (massMin<0.) massMin=0.;
 
-  double massMax=massVal+widthVal;
+  double massMax=massVal+3.*widthVal;
 
   double widthMin=0.; 
-  double widthMax=2*widthVal;
+  double widthMax=2.*widthVal;
  
   upar.Add(massStr, massVal, massErr, massMin, massMax);
   upar.Add(widthStr, widthVal, widthErr, widthMin, widthMax);

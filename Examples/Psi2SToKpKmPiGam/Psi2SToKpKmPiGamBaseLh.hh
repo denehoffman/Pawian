@@ -52,6 +52,7 @@ protected:
   bool _K0_1430Hyp;
   bool _K1_1410Hyp;
   bool _K2_1430Hyp;
+  bool _K1_1680Hyp;
   bool _KKPi_Hyp;
   std::map<const std::string, bool> _hypMap;
   virtual  complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);

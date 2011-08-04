@@ -68,7 +68,8 @@ complex<double> Psi2SToKpKmPiGamHyp1Lh::calcDecAmp(complex<double>& inAmp,Spin l
   double KappaWidth=theParamVal.BwKappa.second;
 
   //Chi to a0(980) pi0 and a0(980)->K+K-
-  result+=K0_1400Amp(theData, ChiToKappaK, KappaMass, KappaWidth, lamChi);
+   result+=K0_1400Amp(theData, ChiToKappaK, KappaMass, KappaWidth, lamChi);
+//   result+=KappaPole_Amp(theData, ChiToKappaK, KappaMass, KappaWidth, lamChi);
   return result;
 }
 
