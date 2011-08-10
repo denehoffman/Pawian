@@ -1,3 +1,4 @@
 
 build-project DfuncClebschG ;
 build-project MinuitFit ;
+build-project FitIF ;
