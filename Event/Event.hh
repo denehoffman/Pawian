@@ -26,12 +26,14 @@ public:
   ~Event();
 
   void addParticle(double e, double px, double py, double pz);
-  
+  void addWeight(double);
+
   Vector4<float>* p4(unsigned int i);
   float* pid(unsigned int i);
 
   int size();
-  
+  double Weight(){ return weight; }
+
 private:
   std::vector<EvtPartData*> particles;
   double weight;

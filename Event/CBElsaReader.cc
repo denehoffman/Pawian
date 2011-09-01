@@ -7,9 +7,10 @@
 CBElsaReader::CBElsaReader()
 {}
 
-CBElsaReader::CBElsaReader(const std::vector<std::string>& files, int particles, int skip):
+CBElsaReader::CBElsaReader(const std::vector<std::string>& files, int particles, int skip, bool useWeight): 
   numParticles(particles),
-  linesToSkip(skip)
+  linesToSkip(skip),
+  _useWeight(useWeight)
 {
   if (0 == files.size()) {
     Alert << "empty list of event files" << endmsg;
@@ -38,10 +39,19 @@ bool CBElsaReader::fillAll(EventList& evtList)
       double e,px,py,pz;
       Event* newEvent = new Event();
       int parts;
+
+      if(_useWeight)
+      {
+         double weight;
+         currentStream >> weight;
+         newEvent->addWeight(weight);
+      }
+
       for (parts = 0; parts < numParticles; parts++) {
 	currentStream >> e >> px >> py >> pz;
 	newEvent->addParticle(e*1.e-3,px*1.e-3,py*1.e-3,pz*1.e-3);
       }
+
       if (!currentStream.fail()) {
 	evtList.add(newEvent);
 	for (parts = 0; parts < linesToSkip; parts++)

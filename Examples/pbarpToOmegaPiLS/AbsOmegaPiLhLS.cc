@@ -50,11 +50,13 @@ double AbsOmegaPiLhLS::calcLogLh(const OmegaPiDataLS::fitParamVal& theParamVal){
  
   double logLH=0.;
   double logLH_data=0.;
+  double weightSum=0.;
 
   std::vector<OmegaPiDataLS::OmPiEvtDataLS*>::iterator iterd;
   for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
-    if (intensity>0.) logLH_data+=log10(intensity);
+    if (intensity>0.) logLH_data+= ((*iterd)->eventWeight) * log10(intensity);
+    weightSum+= (*iterd)->eventWeight;
   } 
 
   double LH_mc=0.;
@@ -68,9 +70,9 @@ double AbsOmegaPiLhLS::calcLogLh(const OmegaPiDataLS::fitParamVal& theParamVal){
   double logLH_mc_Norm=0.;
   if (LH_mc>0.) logLH_mc_Norm=log10(LH_mc/_evtMCVec.size());
 
-  logLH=_evtDataVec.size()/2.*(LH_mc/_evtMCVec.size()-1)*(LH_mc/_evtMCVec.size()-1)
-    -logLH_data
-    +_evtDataVec.size()*logLH_mc_Norm;
+  logLH= weightSum *(LH_mc/_evtMCVec.size()-1.)*(LH_mc/_evtMCVec.size()-1.)
+    -2.*logLH_data
+    +2.*weightSum*logLH_mc_Norm;
 
   Info << "current LH = " << logLH << endmsg;
 

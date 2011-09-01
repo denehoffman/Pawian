@@ -41,8 +41,8 @@ void OmegaPiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDataLS
 
 
     for(int i=0; i<2; ++i){
-      if ( fabs(anEvent->p4(i)->Mass()-0.78195)<0.01 ) omega_4V=*(anEvent->p4(i));
-      else if ( fabs(anEvent->p4(i)->Mass()-0.13497)<0.01 ) piRec_4V=*(anEvent->p4(i));
+      if ( fabs(anEvent->p4(i)->Mass()-0.78195)<0.041 ) omega_4V=*(anEvent->p4(i));
+      else if ( fabs(anEvent->p4(i)->Mass()-0.13497)<0.041 ) piRec_4V=*(anEvent->p4(i));
       else {
 	Alert <<"this is neither an omega nor a pi0 particle!!!" << endmsg;
 	exit(1);
@@ -68,7 +68,7 @@ void OmegaPiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDataLS
    }
     
     Vector4<float> pi0FromOmega4V=*(anEvent->p4(2));
-    if ( fabs(pi0FromOmega4V.M()-0.13497)>0.01 ) {
+    if ( fabs(pi0FromOmega4V.M()-0.13497)>0.041 ) {
       Alert <<"the third particle is not the pi0 from the omega decay" << endmsg;
       exit(1);
     }
@@ -95,6 +95,8 @@ void OmegaPiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDataLS
     theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
     theOmPiEvtData->pi0HeliOmega4Vec2=pi0HeliOmega4V2;
     theOmPiEvtData->cosPi0HeliOmega4Vec=costDecHeli(cm_4V, omega_4V, pi0FromOmega4V);
+    theOmPiEvtData->eventWeight = anEvent->Weight();
+
 
     for (Spin j=0; j<=_jmax; j++){
       for (Spin M=-1; M<=1; M++){

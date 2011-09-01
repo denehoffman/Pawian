@@ -41,7 +41,7 @@ namespace OmegaPiDataLS {
     Vector4<float> pi0HeliOmega4Vec;
     Vector4<float> pi0HeliOmega4Vec2;
     float cosPi0HeliOmega4Vec;
-
+    float eventWeight;
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dfp; //Wigner D functions for omega pi0 production
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dfd; //Wigner D functions for omega decay to pi0 gamma

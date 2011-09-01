@@ -1,7 +1,7 @@
 #include "Event/Event.hh"
 #include <vector>
 
-Event::Event()
+Event::Event() : weight(1.)
 {}
 
 Event::~Event()
@@ -41,6 +41,11 @@ void Event::addParticle(double e, double px, double py, double pz)
   EvtPartData* evtData = new EvtPartData(e,px,py,pz);
   particles.push_back(evtData);
   return;
+}
+
+void Event::addWeight(double theWeight)
+{
+  weight = theWeight;
 }
 
 int Event::size()

@@ -617,13 +617,20 @@ int main(int __argc,char *__argv[]){
   std::string piomegaDatFile;
   std::string piomegaMcFile; 
   int nParticlesPerEvt=0;
+  bool readWeightData=true;
 
   if (theAppParams.getLhMode()=="OmegaPiLhGamma" || (theAppParams.getLhMode()=="OmegaPiLhGammaBw") ){
     nParticlesPerEvt=3;
-    constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
-    constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
+    if(theAppParams.getAppExecMode() == 3){                                   // Alternative EvtGen-Input for spin density calculation
+       readWeightData=false;
+       constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/SDM/SDM_",theAppParams.getPbarMom(),piomegaDatFile);
+       constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/SDM/SDM_",theAppParams.getPbarMom(),piomegaMcFile);
+    }
+    else{
+       constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/newselection/510_",theAppParams.getPbarMom(),piomegaDatFile);
+       constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/newselection/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
+    }
   }
-
   else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
     nParticlesPerEvt=4;
     constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/om3pi_",theAppParams.getPbarMom(),piomegaDatFile);
@@ -636,29 +643,25 @@ int main(int __argc,char *__argv[]){
   }
 
   
-//   constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
-  if (checkFileExist(piomegaDatFile))
-    {
+  //   constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
+  if (checkFileExist(piomegaDatFile)){
       Info << "Using Data file " << piomegaDatFile << endmsg;
-    }
-  else
-    {
+  }
+  else{
       Alert <<"Data file for pbarMom= " << theAppParams.getPbarMom() << " not available !"  << endmsg;
       Alert << "File " << piomegaDatFile << " is missing !" << endmsg;
       exit(1);
-    }
+  }
 
-//   constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
-  if (checkFileExist(piomegaMcFile))
-    {
+  //   constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
+  if (checkFileExist(piomegaMcFile)){
       Info << "Using Monte Carlo file " << piomegaMcFile << endmsg;
-    }
-  else
-    {
+  }
+  else{
       Alert <<"Monte Carlo file for pbarMom= " << theAppParams.getPbarMom() << "not available !" << endmsg;
       Alert << "File " << piomegaMcFile << " is missing !" << endmsg;
       exit(1);
-    }
+  }
   
   Info << "data file: " << piomegaDatFile << endmsg;
   Info << "mc file: " << piomegaMcFile << endmsg;
@@ -673,7 +676,6 @@ int main(int __argc,char *__argv[]){
 
   std::vector<std::string> fileNames;
   fileNames.push_back(piomegaDatFile);
-//   CBElsaReader eventReader(fileNames, 3, 0); 
   EventList theDataEventList;
 
   boost::shared_ptr<CBElsaReader> eventReaderPtr;
@@ -684,7 +686,7 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<CBElsaReader> eventReaderMCPtr;
   EventList theMcEventList;
 
-  eventReaderPtr = boost::shared_ptr<CBElsaReader>(new CBElsaReader(fileNames,nParticlesPerEvt , 0));
+  eventReaderPtr = boost::shared_ptr<CBElsaReader>(new CBElsaReader(fileNames,nParticlesPerEvt, 0, readWeightData));
   eventReaderPtr->fillAll(theDataEventList);
 
   Info << "\nFile has " << theDataEventList.size() << " events. Each event has "
@@ -712,11 +714,11 @@ int main(int __argc,char *__argv[]){
 
   if (theAppParams.getLhMode()=="OmegaPiLhGamma" || (theAppParams.getLhMode()=="OmegaPiLhGammaBw") ){
     theOmegaPiEventPtr = boost::shared_ptr<const AbsOmegaPiEventListLS>(new OmegaPiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) ); 
-    theRootFilePath << "./" << theAppParams.getName() << "OmegaPi0Fit_lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+    theRootFilePath << "./" << theAppParams.getName() << "OmegaPi0Fit_Lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
   }
   else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
     theOmegaPiEventPtr = boost::shared_ptr<const AbsOmegaPiEventListLS>(new OmegaTo3PiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) );
-   theRootFilePath << "./" << theAppParams.getName() << "OmegaTo3PiFit_lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
+   theRootFilePath << "./" << theAppParams.getName() << "OmegaTo3PiFit_Lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
   }
 
   if (theAppParams.getAppExecMode()==ApplicationParameterLS::HistTest){
@@ -760,6 +762,13 @@ int main(int __argc,char *__argv[]){
   case ApplicationParameterLS::Minuit:
     {
       bExecFinish = Minuit(theAppParams, theParamVal, theOmegaPiLh, true);
+
+      //now dump the final fit result
+      std::ostringstream theParamFilePathMin;
+      theParamFilePathMin << "./" << theAppParams.getName() << "LastFitParamOmegaPi0Fit_Mmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".txt";
+      ofstream outfileMin (theParamFilePathMin.str().c_str());
+      theOmegaPiLh->dumpCurrentResult(outfileMin, theParamVal);
+      outfileMin.close();
       break;
     }
 
