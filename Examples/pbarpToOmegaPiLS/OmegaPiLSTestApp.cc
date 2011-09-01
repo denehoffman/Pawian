@@ -621,15 +621,8 @@ int main(int __argc,char *__argv[]){
 
   if (theAppParams.getLhMode()=="OmegaPiLhGamma" || (theAppParams.getLhMode()=="OmegaPiLhGammaBw") ){
     nParticlesPerEvt=3;
-    if(theAppParams.getAppExecMode() == 3){                                   // Alternative EvtGen-Input for spin density calculation
-       readWeightData=false;
-       constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/SDM/SDM_",theAppParams.getPbarMom(),piomegaDatFile);
-       constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/SDM/SDM_",theAppParams.getPbarMom(),piomegaMcFile);
-    }
-    else{
-       constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/newselection/510_",theAppParams.getPbarMom(),piomegaDatFile);
-       constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/newselection/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
-    }
+    constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
+    constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
   }
   else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
     nParticlesPerEvt=4;
