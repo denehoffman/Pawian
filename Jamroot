@@ -40,5 +40,5 @@ build-project Particle ;
 build-project Event ;
 build-project DecayTree ;
 build-project Setup ;
+build-project PspGen ;
 build-project Examples ;
-
