@@ -1,0 +1,7 @@
+project : 
+	;
+
+lib PspGen : [ glob *.cc : *App.cc ] $(TOP)/ErrLogger//ErrLogger : : : ;
+
+exe PspGenTestApp : PspGenTestApp.cc PspGen : ;
+
