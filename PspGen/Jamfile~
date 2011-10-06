@@ -1,7 +1,0 @@
-project : 
-	;
-
-lib Event : [ glob *.cc : *App.cc ] $(TOP)/ErrLogger//ErrLogger $(TOP)/Particle//Particle : : : ;
-
-exe EvtReaderTestApp : EvtReaderTestApp.cc Event : ;
-

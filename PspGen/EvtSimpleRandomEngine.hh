@@ -23,24 +23,34 @@
 #ifndef EVTSIMPLERANDOMENGINE_HH
 #define EVTSIMPLERANDOMENGINE_HH
 
-class EvtSimpleRandomEngine{
+#include "PspGen/EvtRandomEngine.hh"
+
+class EvtSimpleRandomEngine : public EvtRandomEngine
+{
 
 public:
 
-    EvtSimpleRandomEngine(){
-	_next=1;
-    }
-
-    void reset() {
-	_next=1;
-    }
-
-    virtual double random();
-
+  EvtSimpleRandomEngine(){
+    _next = 1;
+    _seed = 1;
+  }
+  
+  EvtSimpleRandomEngine(unsigned long int seed){
+    _next = seed;
+    _seed = seed;
+  }
+  
+  virtual void reset() {
+    _next = _seed;
+  }
+  
+  virtual double random();
+  
 private:
-
+  
   unsigned long int _next;
-
+  unsigned long int _seed;
+  
 };
 
 #endif

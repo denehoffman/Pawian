@@ -14,8 +14,8 @@
 
 int main(int argc, char* argv[])
 {
-  EvtSimpleRandomEngine myRandom;
-  EvtRandom::setRandomEngine((EvtRandomEngine*)(&myRandom));
+  EvtSimpleRandomEngine myRandom(4711);
+  EvtRandom::setRandomEngine(&myRandom);
 
   // variables for the first decay Psi2s->Chi_c0+gamma
   int firstNdaug = 2;

@@ -28,7 +28,8 @@ class EvtRandomEngine{
 
 public:
 
-  virtual double random()=0;
+  virtual double random() = 0;
+  virtual void reset() = 0;
 
 private:
 
