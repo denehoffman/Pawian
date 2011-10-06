@@ -1,7 +1,12 @@
 project : 
 	;
 
-lib PspGen : [ glob *.cc : *App.cc ] $(TOP)/ErrLogger//ErrLogger : : : ;
+lib PspGen : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/ErrLogger//ErrLogger 
+	: <use>$(TOP)//HepMc
+	: 
+	: <library>$(TOP)//HepMc ;
 
 exe PspGenTestApp : PspGenTestApp.cc PspGen : ;
 

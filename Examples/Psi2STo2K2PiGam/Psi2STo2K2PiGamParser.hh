@@ -73,9 +73,11 @@ class Psi2STo2K2PiGamParser
       , _errLogMode(debug)
       , _dataFile("/home/bertram/PawianGit110728/Pawian/Examples/Psi2STo2K2PiGam/data/110310_chic0_data_pwasample.dat")
       , _mcFile("/home/bertram/PawianGit110728/Pawian/Examples/Psi2STo2K2PiGam/data/110310_chic0_signalmc_pwasample.dat")
+      , _hepMCinFile("/home/bertram/PawianGit110926/Pawian/Examples/Psi2STo2K2PiGam/HepMCEvt.in")
       , _paramFile("/Examples/Psi2STo2K2PiGam/data/startParamHyp8_2K0_2K2_K1_1270_woHyp5_KappaK1950V1.dat")
       , _startHypo("hyp8")
       , _qaMode(false)
+      , _genMode(false)
     {
     _disabledHyps.push_back("blainit");
     if (!parseCommandLine(argc, argv)) throw false;
@@ -85,10 +87,12 @@ class Psi2STo2K2PiGamParser
   const enErrLogMode& getErrLogMode() const { return _errLogMode; }
   const std::string dataFile() const {return _dataFile;}
   const std::string mcFile() const {return _mcFile;}
+  const std::string hepMCinFile() const {return _hepMCinFile;}
   const std::string fitParamFile() const {return _paramFile;}
   const std::vector<std::string>& disabledHyps() const { return _disabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const bool qaMode() const {return _qaMode;}
+  const bool generatorMode() const {return _genMode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
 protected:
   bool parseCommandLine(int argc,char **argv);
@@ -98,9 +102,11 @@ protected:
   enErrLogMode _errLogMode;
   std::string _dataFile;
   std::string _mcFile;
+  std::string _hepMCinFile;
   std::string _paramFile;
   std::string _startHypo;
-  bool _qaMode;		  
+  bool _qaMode;	
+  bool _genMode;	  
   std::vector<std::string> _disabledHyps;
   std::vector<std::string> _mnParFixs;
 };

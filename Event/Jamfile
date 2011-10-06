@@ -1,7 +1,12 @@
 project : 
 	;
 
-lib Event : [ glob *.cc : *App.cc ] $(TOP)/ErrLogger//ErrLogger $(TOP)/Particle//Particle : : : ;
+lib Event : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/ErrLogger//ErrLogger $(TOP)/Particle//Particle 
+	: <use>$(TOP)//HepMc
+	: 
+	: <library>$(TOP)//HepMc ;
 
 exe EvtReaderTestApp : EvtReaderTestApp.cc Event : ;
-
+exe HepMCEvtReaderTestApp : HepMCEvtReaderTestApp.cc Event : ;

@@ -12,6 +12,7 @@
 using Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData;
 
 class EventList;
+class Event;
 
 class Psi2STo2K2PiGamEvtList {
 
@@ -19,7 +20,8 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
+  ///Constructor  
+  Psi2STo2K2PiGamEvtList(); 
   Psi2STo2K2PiGamEvtList(EventList& evtListData, EventList& evtListMc);
 
 
@@ -27,7 +29,8 @@ public:
   /** Destructor */
   virtual ~Psi2STo2K2PiGamEvtList();
 
-  // Getters:
+  Psi2STo2K2PiGamEvtData* fillEvtData(Event* anEvent, int evtNo=0);
+  // Getters (not working for Psi2STo2K2PiGamEvtList() constructor:
   const std::vector<Psi2STo2K2PiGamEvtData*> getDataVecs() const {return _dataList;}
   const std::vector<Psi2STo2K2PiGamEvtData*> getMcVecs() const {return _mcList;}
 

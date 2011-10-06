@@ -24,8 +24,9 @@
 #include "Examples/Psi2STo2K2PiGam/MPsi2STo2K2PiGamFcn.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
 #include "Examples/Psi2STo2K2PiGam/Stream2K2PiGamFitParms.hh"
-//#include "Examples/Psi2STo2K2PiGam/GPsi2STo2K2PiGamFit.hh"
-//#include "Examples/Psi2STo2K2PiGam/GPsi2STo2K2PiGamIndividual.hh"
+#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtGenConverter.hh"
+#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamHitAndMiss.hh"
+
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -33,7 +34,7 @@
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
 #include "Event/BesEvtReader.hh"
-// #include "Event/CBElsaReader.hh"
+#include "Event/HepMCEventList.hh"
 #include "Particle/PdtParser.hh"
 #include "qft++/topincludes/tensor.hh"
 
@@ -46,6 +47,8 @@
 
 #include "PwaUtils/pbarpStates.hh"
 #include "ErrLogger/ErrLogger.hh"
+
+//#include "HepMC/GenEvent.h"
 
 using namespace ROOT::Minuit2;
 
@@ -91,42 +94,46 @@ int main(int __argc,char *__argv[]){
   param2K2PiGam theStartparams=theParamStreamer.getFitParamVal();
   param2K2PiGam theErrorparams=theParamStreamer.getFitParamErr();
 
-  const std::string datFile=theAppParams.dataFile();
-  const std::string mcFile=theAppParams.mcFile();
-  Info << "data file: " << datFile << endmsg;
-  Info << "mc file: " << mcFile << endmsg;
-  
-  ParticleTable pTable;
-  PdtParser parser;
+  bool genMode=theAppParams.generatorMode();
 
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
-  std::string pdtFile(theSourcePath+"/Particle/pdt.table");
-  if (!parser.parse(pdtFile, pTable)) {
-    Alert << "Error: could not parse " << pdtFile << endmsg;
-    exit(1);
-  }
-
-  std::vector<std::string> fileNames;
-
-  fileNames.push_back(datFile);
-  BesEvtReader eventReader(fileNames, 5, 0); 
   EventList eventsData;
-  eventReader.fillAll(eventsData);
-
-  if (!eventsData.findParticleTypes(pTable))
-    Warning << "could not find all particles" << endmsg;
-
-  Info << "\nFile has " << eventsData.size() << " events. Each event has "
-                  <<  eventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
-  eventsData.rewind();
-
-  std::vector<std::string> fileNamesMc;
-  fileNamesMc.push_back(mcFile);
-  BesEvtReader eventReaderMc(fileNamesMc, 5, 0); 
   EventList eventsMc;
-  eventReaderMc.fillAll(eventsMc);
-  eventsMc.rewind();
 
+  if (!genMode){
+    const std::string datFile=theAppParams.dataFile();
+    const std::string mcFile=theAppParams.mcFile();
+    Info << "data file: " << datFile << endmsg;
+    Info << "mc file: " << mcFile << endmsg;
+    
+    ParticleTable pTable;
+    PdtParser parser;
+    
+    std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
+    std::string pdtFile(theSourcePath+"/Particle/pdt.table");
+    if (!parser.parse(pdtFile, pTable)) {
+      Alert << "Error: could not parse " << pdtFile << endmsg;
+      exit(1);
+    }
+    
+    std::vector<std::string> fileNames;
+    
+    fileNames.push_back(datFile);
+    BesEvtReader eventReader(fileNames, 5, 0); 
+    eventReader.fillAll(eventsData);
+    
+    if (!eventsData.findParticleTypes(pTable))
+      Warning << "could not find all particles" << endmsg;
+    
+    Info << "\nFile has " << eventsData.size() << " events. Each event has "
+	 <<  eventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
+    eventsData.rewind();
+    
+    std::vector<std::string> fileNamesMc;
+    fileNamesMc.push_back(mcFile);
+    BesEvtReader eventReaderMc(fileNamesMc, 5, 0); 
+    eventReaderMc.fillAll(eventsMc);
+    eventsMc.rewind();
+  }
 
   boost::shared_ptr<const Psi2STo2K2PiGamEvtList> thePsi2STo2K2PiGamEvtListPtr(new Psi2STo2K2PiGamEvtList(eventsData, eventsMc));
 
@@ -192,6 +199,20 @@ int main(int __argc,char *__argv[]){
   }
 
 
+
+  if (genMode){
+    const std::string hepMCinFile=theAppParams.hepMCinFile();
+    Info << "HepMCin file: " << hepMCinFile << endmsg;
+    boost::shared_ptr<HepMCEventList> hepMCEvtListPtr(new HepMCEventList(hepMCinFile));
+
+    hepMCEvtListPtr->rewind();
+
+    Psi2STo2K2PiGamHitAndMiss theHitAndMiss(thePsi2STo2K2PiGamLhPtr, theStartparams, hepMCEvtListPtr, "Psi2STo2K2PiGamGen.root");     
+ 
+    theHitAndMiss.dumpToHepMCAscii("HepMCAscii.out");
+    return 0;
+  }
+
   bool qaMode=theAppParams.qaMode();
   std::cout << "qaMode: " << qaMode << std::endl;
 
@@ -203,6 +224,7 @@ int main(int __argc,char *__argv[]){
     Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, theStartparams);
     return 0;
   }
+
 
   MnUserParameters upar;
   thePsi2STo2K2PiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);

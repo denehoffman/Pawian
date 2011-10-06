@@ -4,11 +4,12 @@ project :
 lib Psi2STo2K2PiGam : 
         [ glob *.cc : *App.cc ]  
         $(TOP)/PwaUtils//PwaUtils 
-        $(TOP)/Event//Event 
+        $(TOP)/Event//Event
+        $(TOP)/PspGen//PspGen
         $(TOP)/qft++//qft++ 
-	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva <use>$(TOP)//HepMc 
 	: 
-	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva <library>$(TOP)//HepMc ;
 
 exe Mpsi2STo2K2PiGamApp : Mpsi2STo2K2PiGamApp.cc Psi2STo2K2PiGam : ;
 exe ParserTestApp : ParserTestApp.cc Psi2STo2K2PiGam : ;

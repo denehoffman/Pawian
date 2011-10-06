@@ -1,9 +1,13 @@
 #include "Event/Event.hh"
 #include <vector>
 
-Event::Event() : weight(1.)
+Event::Event() : weight(1.),
+  evtNo(0)
 {}
-
+Event::Event(int evtNumber) : 
+  weight(1.),
+  evtNo(evtNumber)
+{}
 Event::~Event()
 {
   std::vector<EvtPartData*>::iterator iter;
@@ -51,4 +55,10 @@ void Event::addWeight(double theWeight)
 int Event::size()
 {
   return particles.size();
+}
+
+bool Event::operator<(const Event& compare) const{
+  bool result=false;
+  if ( evtNo < compare.eventNo()) result=true;
+  return result;
 }

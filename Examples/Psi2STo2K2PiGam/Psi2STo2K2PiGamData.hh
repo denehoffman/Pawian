@@ -13,6 +13,7 @@ namespace Psi2STo2K2PiGamData {
 
   struct Psi2STo2K2PiGamEvtData
   {
+    int evtNo;
     Vector4<float> psi2S_4V;
     Vector4<float> chic0_HeliPsi2S_4V;
     Vector4<float> KpKm_HeliChic0_4V;
@@ -76,15 +77,15 @@ namespace Psi2STo2K2PiGamData {
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKK; //Wigner D functions for f_2->K+ K-
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToPiPi; //Wigner D functions for f_2->pi pi
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfChiToKmPi; //Wigner D functions for Chi_c1 -> (K- pi) K+
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfChiToa0Pi; //Wigner D functions for Chi_c1 ->  a(980) pi
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfChiToa2Pi; //Wigner D functions for Chi_c1 ->  a2 pi
 
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfKp1; //Wigner D functions for K*1+ decay
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfKp2; //Wigner D functions for K*2+ decay
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfKm1; //Wigner D functions for K*1- decay
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > DfKm2; //Wigner D functions for K*2- decay
-//     map<Spin,map<Spin,map<Spin,complex<double> > > > Dfa2; //Wigner D functions for a2 decay
+
+    bool operator<(const Psi2STo2K2PiGamEvtData& compare) const{
+      bool result=false;
+      if ( evtNo < compare.evtNo) result=true;
+      return result;
+    }  
+
+
   };
   
 }

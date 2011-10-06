@@ -23,6 +23,7 @@ class Event
 {
 public:
   Event();
+  Event(int evtNumber);
   ~Event();
 
   void addParticle(double e, double px, double py, double pz);
@@ -33,10 +34,15 @@ public:
 
   int size();
   double Weight(){ return weight; }
+  int eventNo() const {return evtNo; }
+  
+  bool operator<(const Event& compare) const;
+
 
 private:
   std::vector<EvtPartData*> particles;
   double weight;
+  int evtNo;
 };
 
 #endif

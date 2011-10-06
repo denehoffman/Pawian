@@ -36,10 +36,12 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
       ("errLogMode,e", po::value<string>(&strErrLogMode)->default_value(strErrLogMode),"choose mode for Error logger.")
       ("datFile",po::value<string>(&_dataFile), "full path of data file")
       ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
+      ("hepMCinFile",po::value<string>(&_hepMCinFile), "full path of HepMC input file for event generation")
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
       ("disableHyp",po::value< vector<string> >(&_disabledHyps), "disable hypotheses")
       ("qaMode",po::value<bool>(&_qaMode), "enable/diable QA mode")
+      ("genMode",po::value<bool>(&_genMode), "enable/diable event generator mode")
       ;
 
     po::options_description config("Configuration file options");
@@ -106,9 +108,11 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
 		<< "Error log mode: " << _errLogMode <<"\n\n"
 		<< "data file: " << _dataFile <<"\n\n"
 		<< "mc file: " << _mcFile <<"\n\n"
+		<< "hepMC in file: " << _hepMCinFile <<"\n\n"
 		<< "file with start parameters for fit or qa: " << _paramFile << "\n\n"
 		<< "startHypo: " << _startHypo << "\n\n"
 		<< "qaMode: " << _qaMode << "\n\n"
+		<< "genMode: " << _genMode << "\n\n"
 	    << endl;
 
 
