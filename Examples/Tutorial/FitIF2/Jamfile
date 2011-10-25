@@ -1,0 +1,16 @@
+build-project MinimizerInterface ;
+
+project : 
+        ;
+
+lib FitIF : 
+        [ glob *.cc : *App.cc ]
+        MinimizerInterface//MinimizerInterface  
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+	: <use>$(TOP)//GemCom <use>$(TOP)//GemCou <use>$(TOP)//GemInd <use>$(TOP)//GemGen <use>$(TOP)//GemHap <use>$(TOP)//Minuit2
+	: 
+	: <library>$(TOP)//GemCom <library>$(TOP)//GemCou <library>$(TOP)//GemInd <library>$(TOP)//GemGen <library>$(TOP)//GemHap <library>$(TOP)//Minuit2 ;
+
+exe ToyFitApp : ToyFitApp.cc FitIF : ;
+
