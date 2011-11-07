@@ -1,7 +1,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <sstream>
-#include <string>
 #include "Examples/pbarpToOmegaPiLS/OmegaPiHistLS.hh"
 #include "Examples/pbarpToOmegaPiLS/AbsOmegaPiEventListLS.hh"
 #include "Examples/pbarpToOmegaPiLS/AbsOmegaPiLhLS.hh"
@@ -241,21 +240,21 @@ void OmegaPiHistLS::initRootStuff(const std::string &thePathToRootFile)
   
 }
 
-TH1F* OmegaPiHistLS::doAccCor(TH1F* dataHist, TH1F* mcHist, char* name, char* title)
+TH1F* OmegaPiHistLS::doAccCor(TH1F* dataHist, TH1F* mcHist, const std::string& name, const std::string& title)
 {
   TH1F* accCorHist = (TH1F*)(dataHist->Clone());
   accCorHist->Divide(mcHist);
-  accCorHist->SetName(name);
-  accCorHist->SetTitle(title);
+  accCorHist->SetName(name.c_str());
+  accCorHist->SetTitle(title.c_str());
   return accCorHist;
 }
 
-TH2F* OmegaPiHistLS::doAccCor(TH2F* dataHist, TH2F* mcHist, char* name, char* title)
+TH2F* OmegaPiHistLS::doAccCor(TH2F* dataHist, TH2F* mcHist, const std::string& name, const std::string& title)
 {
   TH2F* accCorHist = (TH2F*)(dataHist->Clone());
   accCorHist->Divide(mcHist);
-  accCorHist->SetName(name);
-  accCorHist->SetTitle(title);
+  accCorHist->SetName(name.c_str());
+  accCorHist->SetTitle(title.c_str());
   return accCorHist;
 }
 

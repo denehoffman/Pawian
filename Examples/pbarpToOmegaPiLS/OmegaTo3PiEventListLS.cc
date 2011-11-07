@@ -101,6 +101,7 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
     theOmPiEvtData->pi0HeliOmega4Vec2=normOmegaDecHeliOmega_4V2;
 
     theOmPiEvtData->cosPi0HeliOmega4Vec=normOmegaDecHeliOmega_4V.CosTheta();
+    theOmPiEvtData->eventWeight = anEvent->Weight();
 
     for (Spin j=0; j<=_jmax; j++){
       for (Spin M=-1; M<=1; M++){
