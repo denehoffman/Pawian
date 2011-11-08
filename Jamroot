@@ -5,12 +5,11 @@ BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboos
 
 project :
 	requirements <include>./  
-	<include>$(extern)/log4cpp/include
-#	<include>$(extern)/include
+#	<include>$(extern)/log4cpp/include
+	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
 	<include>$(GENEVA)/include
-	<include>$(MINUIT2)/include
-	<include>$(HEPMC)/include
+#	<include>$(MINUIT2)/include
 	<link>static
 	<cxxflags>-pthread
 	<linkflags>$(ROOTLIBS)
@@ -27,7 +26,7 @@ actions rootlibs
 lib log4cpp : : <file>$(extern)/lib/liblog4cpp.a : : ;
 lib Minuit2 : : <file>$(MINUIT2)/lib/libMinuit2.a : : ;
 lib Geneva : :  <file>$(GENEVA)/lib/libgeneva-all.so : : ;
-lib HepMc : : <file>$(HEPMC)/lib/libHepMC.so : : ;
+lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
  
 build-project qft++ ;
 build-project Utils ;
