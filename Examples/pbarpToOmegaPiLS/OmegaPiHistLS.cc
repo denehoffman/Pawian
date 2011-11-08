@@ -27,6 +27,9 @@ OmegaPiHistLS::OmegaPiHistLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theE
   _treimanYangFittedHist(0),
   _treimanYangAccCorHist(0),
   _cosPi0FromOmegaDataHeli1(0),
+  _lambdaOmegaTo3PiData(0),
+  _lambdaOmegaTo3PiMc(0),
+  _lambdaOmegaTo3PiFitted(0), 
   _thetaPhiPi0FromOmegaDataHeli(0),
   _thetaPhiPi0FromOmegaMcHeli(0),
   _thetaPhiPi0FromOmegaFittedHeli(0),
@@ -66,7 +69,7 @@ OmegaPiHistLS::OmegaPiHistLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theE
       plotTreimanYang(_treimanYangDataHist, (*it), dataEventWeight);
       plotCosPi0FromOmegaHeli1(_cosPi0FromOmegaDataHeli1, (*it), 1.);
       plotThetaPhiPi0FromOmegaHeli(_thetaPhiPi0FromOmegaDataHeli,(*it), dataEventWeight);                                
-      plotProdDecThetaPhiPi0FromOmegaHeli(_prodDecThetaPhiPi0FromOmegaDataHeli, (*it), dataEventWeight); 
+      plotProdDecThetaPhiPi0FromOmegaHeli(_prodDecThetaPhiPi0FromOmegaDataHeli, (*it), dataEventWeight);
       ++it;
   }
 
@@ -106,6 +109,9 @@ OmegaPiHistLS::OmegaPiHistLS(boost::shared_ptr<AbsOmegaPiLhLS> omegaPiLh, OmegaP
   _treimanYangFittedHist(0),
   _treimanYangAccCorHist(0),
   _cosPi0FromOmegaDataHeli1(0),
+  _lambdaOmegaTo3PiData(0),
+  _lambdaOmegaTo3PiMc(0),
+  _lambdaOmegaTo3PiFitted(0), 
   _thetaPhiPi0FromOmegaDataHeli(0),
   _thetaPhiPi0FromOmegaMcHeli(0),
   _thetaPhiPi0FromOmegaFittedHeli(0),
@@ -152,7 +158,9 @@ OmegaPiHistLS::OmegaPiHistLS(boost::shared_ptr<AbsOmegaPiLhLS> omegaPiLh, OmegaP
       plotTreimanYang(_treimanYangDataHist, (*it), dataEventWeight);
       plotCosPi0FromOmegaHeli1(_cosPi0FromOmegaDataHeli1, (*it), 1.);
       plotThetaPhiPi0FromOmegaHeli(_thetaPhiPi0FromOmegaDataHeli,(*it), dataEventWeight);                                
-      plotProdDecThetaPhiPi0FromOmegaHeli(_prodDecThetaPhiPi0FromOmegaDataHeli, (*it), dataEventWeight); 
+      plotProdDecThetaPhiPi0FromOmegaHeli(_prodDecThetaPhiPi0FromOmegaDataHeli, (*it), dataEventWeight);
+
+      if (omegaPiLh->name()=="OmegaTo3PiLhGamma") plotLambdaOmegaTo3Pi(_lambdaOmegaTo3PiData, (*it), dataEventWeight); 
 
       ++it;
     }
@@ -166,12 +174,14 @@ OmegaPiHistLS::OmegaPiHistLS(boost::shared_ptr<AbsOmegaPiLhLS> omegaPiLh, OmegaP
       plotTreimanYang(_treimanYangMcHist, (*it), 1.);
       plotThetaPhiPi0FromOmegaHeli(_thetaPhiPi0FromOmegaMcHeli,(*it),1.);
       plotProdDecThetaPhiPi0FromOmegaHeli(_prodDecThetaPhiPi0FromOmegaMcHeli, (*it), 1.);
+      if (omegaPiLh->name()=="OmegaTo3PiLhGamma") plotLambdaOmegaTo3Pi(_lambdaOmegaTo3PiMc, (*it), 1.);
       double evtWeight= omegaPiLh->calcEvtIntensity((*it), fitParam);
       plotCosOmegaHeli(_cosOmegaHeliFittedHist, (*it), evtWeight);
       plotCosPi0FromOmegaHeli(_cosPi0FromOmegaFittedHeli, (*it), evtWeight);
       plotTreimanYang(_treimanYangFittedHist, (*it), evtWeight);
       plotThetaPhiPi0FromOmegaHeli(_thetaPhiPi0FromOmegaFittedHeli, (*it), evtWeight);
       plotProdDecThetaPhiPi0FromOmegaHeli(_prodDecThetaPhiPi0FromOmegaFittedHeli, (*it), evtWeight);
+      if (omegaPiLh->name()=="OmegaTo3PiLhGamma") plotLambdaOmegaTo3Pi(_lambdaOmegaTo3PiFitted, (*it), evtWeight);
       ++it;
     }
 
@@ -192,6 +202,8 @@ OmegaPiHistLS::OmegaPiHistLS(boost::shared_ptr<AbsOmegaPiLhLS> omegaPiLh, OmegaP
   _treimanYangFittedHist->Scale(integralData/integralFitted);
   _thetaPhiPi0FromOmegaFittedHeli->Scale(integralData/integralFitted);
   _prodDecThetaPhiPi0FromOmegaFittedHeli->Scale(integralData/integralFitted);
+
+  if (omegaPiLh->name()=="OmegaTo3PiLhGamma") _lambdaOmegaTo3PiFitted->Scale(integralData/integralFitted);
 
   _cosOmegaFittedAccCorHist=doAccCor(_cosOmegaHeliFittedHist, _cosOmegaHeliMcHist, "_cosOmegaFittedAccCorHist", "cos(#Theta) #omega heli fitted acc cor");
   _cosPi0FromOmegaFittedAccCorHeli=doAccCor(_cosPi0FromOmegaFittedHeli, _cosPi0FromOmegaMcHeli, "_cosPi0FromOmegaFittedAccCorHeli", "cos(#Theta) #pi^0 heli (#omega decay) fitted acc cor");
@@ -226,6 +238,10 @@ void OmegaPiHistLS::initRootStuff(const std::string &thePathToRootFile)
   _treimanYangMcHist= new TH1F("_treimanYangMcHist","Treiman Yang angle MC",101, -TMath::Pi(), TMath::Pi());
   _treimanYangFittedHist= new TH1F("_treimanYangFittedHist","Treiman Yang angle fit result",101, -TMath::Pi(), TMath::Pi()); 
   _cosPi0FromOmegaDataHeli1= new TH1F("_cosPi0FromOmegaDataHeli1","cos(#Theta) #pi^{0} heli (#omega decay) data 1",101, -1.0, 1.0);
+
+  _lambdaOmegaTo3PiData= new TH1F("_lambdaOmegaTo3PiData","#lambda #omega #rightarrow 3#pi^{0} data",101, 0., 1.);
+  _lambdaOmegaTo3PiMc= new TH1F("_lambdaOmegaTo3PiMc","#lambda #omega #rightarrow 3#pi^{0} Mc",101, 0., 1.);
+  _lambdaOmegaTo3PiFitted= new TH1F("_lambdaOmegaTo3PiFitted","#lambda #omega #rightarrow 3#pi^{0} fit",101, 0., 1.);
 
   _thetaPhiPi0FromOmegaDataHeli = new TH2F("_thetaPhiPi0FromOmegaDataHeli","_thetaPhiPi0FromOmegaDataHeli",11,-1,1,11,-TMath::Pi(),TMath::Pi());
   _thetaPhiPi0FromOmegaMcHeli = new TH2F("_thetaPhiPi0FromOmegaMcHeli","_thetaPhiPi0FromOmegaMcHeli",11,-1,1,11,-TMath::Pi(),TMath::Pi());
@@ -292,4 +308,8 @@ void OmegaPiHistLS::plotProdDecThetaPhiPi0FromOmegaHeli(TH3F* theHisto, const Om
   Vector4<float> piFromOmegaHeli4V=theEvtData->pi0HeliOmega4Vec;
   Vector4<float> omegaHeli4V=theEvtData->omegaHeliCm4Vec;
   theHisto->Fill(omegaHeli4V.CosTheta(),piFromOmegaHeli4V.CosTheta(), piFromOmegaHeli4V.Phi(), weight);  
+}
+
+void OmegaPiHistLS::plotLambdaOmegaTo3Pi(TH1F* theHisto, const OmPiEvtDataLS* theEvtData, double weight){
+  theHisto->Fill( theEvtData->lambda , weight);
 }

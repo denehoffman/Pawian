@@ -40,7 +40,13 @@ namespace OmegaPiDataLS {
     Vector4<float> pi0DecHeliCm4Vec;
     Vector4<float> pi0HeliOmega4Vec;
     Vector4<float> pi0HeliOmega4Vec2;
+
+    Vector4<float> pipHeliOmega4Vec;  //for omega -> 3pi only
+    Vector4<float> pimHeliOmega4Vec;  //for omega -> 3pi only
+    Vector4<float> pippimCrossHeliOmega4Vec; //for omega -> 3pi only
+    
     float cosPi0HeliOmega4Vec;
+    float lambda; //for omega -> 3pi only
     float eventWeight;
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dfp; //Wigner D functions for omega pi0 production

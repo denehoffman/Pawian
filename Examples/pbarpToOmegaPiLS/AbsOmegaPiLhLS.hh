@@ -34,8 +34,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  AbsOmegaPiLhLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0StatesLS> theStates);
-  AbsOmegaPiLhLS(boost::shared_ptr<AbsOmegaPiLhLS> theOmegaPiLhPtr);
+  AbsOmegaPiLhLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0StatesLS> theStates, const std::string& name);
+  AbsOmegaPiLhLS(boost::shared_ptr<AbsOmegaPiLhLS> theOmegaPiLhPtr, const std::string& name);
 
   /** Destructor */
   virtual ~AbsOmegaPiLhLS();
@@ -60,13 +60,13 @@ public:
   virtual complex<double> spinDensity(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal);
   virtual complex<double> spinDensityOmegaFrame(Spin M, Spin M_, OmegaPiDataLS::OmPiEvtDataLS* theData, const OmegaPiDataLS::fitParamVal& theParamVal);
 
-
+  virtual const std::string name() {return _name;}
   virtual void dumpCurrentResult(std::ostream& os, const OmegaPiDataLS::fitParamVal& fitParmVal) const;
   virtual void printFitParams(std::ostream& os, const OmegaPiDataLS::fitParamVal& fitParmVal);
   virtual void print(std::ostream& os) const;
 
 protected:
-
+  std::string _name;
   unsigned int _globalItCounter;
   boost::shared_ptr<const AbsOmegaPiEventListLS> _omegaPiEventListPtr;
   boost::shared_ptr<const pbarpToOmegaPi0StatesLS> _omegaPi0StatesPtr;

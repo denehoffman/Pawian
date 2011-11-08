@@ -11,7 +11,8 @@
 
 
 
-AbsOmegaPiLhLS::AbsOmegaPiLhLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0StatesLS> theStates) :
+AbsOmegaPiLhLS::AbsOmegaPiLhLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0StatesLS> theStates, const std::string& name) :
+  _name(name),
   _globalItCounter(0),
   _omegaPiEventListPtr(theEvtList),
   _omegaPi0StatesPtr(theStates)
@@ -26,7 +27,8 @@ AbsOmegaPiLhLS::AbsOmegaPiLhLS(boost::shared_ptr<const AbsOmegaPiEventListLS> th
   _tripletm1_JPCLS_States=theStates->tripletm1_JPCLSls_States();
 }
 
-AbsOmegaPiLhLS::AbsOmegaPiLhLS(boost::shared_ptr<AbsOmegaPiLhLS> theAbsOmegaPiLhLSPtr):
+AbsOmegaPiLhLS::AbsOmegaPiLhLS(boost::shared_ptr<AbsOmegaPiLhLS> theAbsOmegaPiLhLSPtr, const std::string& name):
+  _name(name),
   _omegaPiEventListPtr(theAbsOmegaPiLhLSPtr->getEventList()),
   _omegaPi0StatesPtr(theAbsOmegaPiLhLSPtr->omegaPi0States())
 {
@@ -55,7 +57,7 @@ double AbsOmegaPiLhLS::calcLogLh(const OmegaPiDataLS::fitParamVal& theParamVal){
   std::vector<OmegaPiDataLS::OmPiEvtDataLS*>::iterator iterd;
   for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
-    if (intensity>0.) logLH_data+= ((*iterd)->eventWeight) * log10(intensity);
+    if (intensity>0.) logLH_data+= ((*iterd)->eventWeight) * log(intensity);
     weightSum+= (*iterd)->eventWeight;
   } 
 
@@ -68,7 +70,7 @@ double AbsOmegaPiLhLS::calcLogLh(const OmegaPiDataLS::fitParamVal& theParamVal){
          }
 
   double logLH_mc_Norm=0.;
-  if (LH_mc>0.) logLH_mc_Norm=log10(LH_mc/_evtMCVec.size());
+  if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/_evtMCVec.size());
 
   logLH= weightSum *(LH_mc/_evtMCVec.size()-1.)*(LH_mc/_evtMCVec.size()-1.)
     -2.*logLH_data

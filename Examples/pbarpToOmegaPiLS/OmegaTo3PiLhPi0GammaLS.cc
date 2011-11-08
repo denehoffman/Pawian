@@ -10,12 +10,12 @@
 
 
 OmegaTo3PiLhPi0GammaLS::OmegaTo3PiLhPi0GammaLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0StatesLS> theStates) :
-  AbsOmegaPiLhLS(theEvtList, theStates)
+  AbsOmegaPiLhLS(theEvtList, theStates, "OmegaTo3PiLhGamma")
 {
 }
 
 OmegaTo3PiLhPi0GammaLS::OmegaTo3PiLhPi0GammaLS(boost::shared_ptr<OmegaTo3PiLhPi0GammaLS> theOmegaTo3PiLhPi0GammaLSPtr):
-  AbsOmegaPiLhLS(theOmegaTo3PiLhPi0GammaLSPtr)
+  AbsOmegaPiLhLS(theOmegaTo3PiLhPi0GammaLSPtr, "OmegaTo3PiLhGamma")
 {
 }
 
@@ -57,8 +57,8 @@ complex<double> OmegaTo3PiLhPi0GammaLS::calcCoherentAmp(Spin lamOmDec, Spin Mini
   complex<double> result(0.,0.);
 
   for (Spin lamomega=-1; lamomega<=1; lamomega++){
-
-    complex<double> omegaDecAmp=conj(theData->Dfd[1][lamomega][0]);// Clebsch(1, 0,0,0,1,0)=1;Clebsch(0, 0,  0, 0, 0, 0)=1
+    double theLambda=theData->lambda;
+    complex<double> omegaDecAmp=conj(theData->Dfd[1][lamomega][0])*sqrt(theLambda);// Clebsch(1, 0,0,0,1,0)=1;Clebsch(0, 0,  0, 0, 0, 0)=1
 
     std::vector< boost::shared_ptr<const JPCLSls> >::const_iterator it;
      for ( it=theJPCLSlsStates.begin(); it!=theJPCLSlsStates.end(); ++it){

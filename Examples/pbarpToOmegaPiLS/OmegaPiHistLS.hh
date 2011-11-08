@@ -66,6 +66,10 @@ private:
 
   TH1F* _cosPi0FromOmegaDataHeli1; 
 
+  TH1F* _lambdaOmegaTo3PiData;
+  TH1F* _lambdaOmegaTo3PiMc;
+  TH1F* _lambdaOmegaTo3PiFitted; 
+
   TH2F* _thetaPhiPi0FromOmegaDataHeli;
   TH2F* _thetaPhiPi0FromOmegaMcHeli;
   TH2F* _thetaPhiPi0FromOmegaFittedHeli;
@@ -86,6 +90,7 @@ private:
   void plotTreimanYang(TH1F* theHisto, const OmPiEvtDataLS* theEvtData, double weight);
   void plotThetaPhiPi0FromOmegaHeli(TH2F* theHisto, const OmPiEvtDataLS* theEvtData, double weight);
   void plotProdDecThetaPhiPi0FromOmegaHeli(TH3F* theHisto, const OmPiEvtDataLS* theEvtData, double weight);
+  void plotLambdaOmegaTo3Pi(TH1F* theHisto, const OmPiEvtDataLS* theEvtData, double weight);
   TH1F* doAccCor(TH1F* dataHist, TH1F* mcHist, const std::string& name, const std::string& title);
   TH2F* doAccCor(TH2F* dataHist, TH2F* mcHist, const std::string& name, const std::string& title);
 };

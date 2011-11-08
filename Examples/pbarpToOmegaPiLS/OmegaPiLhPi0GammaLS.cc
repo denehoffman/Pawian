@@ -10,12 +10,12 @@
 
 
 OmegaPiLhPi0GammaLS::OmegaPiLhPi0GammaLS(boost::shared_ptr<const AbsOmegaPiEventListLS> theEvtList, boost::shared_ptr<const pbarpToOmegaPi0StatesLS> theStates) :
-  AbsOmegaPiLhLS(theEvtList, theStates)
+  AbsOmegaPiLhLS(theEvtList, theStates, "OmegaPiLhGamma")
 {
 }
 
 OmegaPiLhPi0GammaLS::OmegaPiLhPi0GammaLS(boost::shared_ptr<OmegaPiLhPi0GammaLS> theOmegaPiLhPi0GammaLSPtr):
-  AbsOmegaPiLhLS(theOmegaPiLhPi0GammaLSPtr)
+  AbsOmegaPiLhLS(theOmegaPiLhPi0GammaLSPtr, "OmegaPiLhGamma")
 {
 }
 

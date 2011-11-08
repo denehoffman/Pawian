@@ -89,6 +89,10 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
 					    pimHeliOmega4V2.X()*pipHeliOmega4V2.Y()-pimHeliOmega4V2.Y()*pipHeliOmega4V2.X());		    
 
 
+    float theQ=pipHeliOmega4V.E()-pipHeliOmega4V.M()+pimHeliOmega4V.E()-pimHeliOmega4V.M()+pi0HeliOmega4V.E()-pi0HeliOmega4V.M();
+    float lambdaNorm=theQ*theQ*(theQ*theQ/108.+pimHeliOmega4V.M()*theQ/9.+pimHeliOmega4V.M()*pimHeliOmega4V.M()/3.);
+    float lambda=normOmegaDecHeliOmega_4V.P()*normOmegaDecHeliOmega_4V.P()/lambdaNorm;
+
     OmPiEvtDataLS* theOmPiEvtData=new OmPiEvtDataLS();
     theOmPiEvtData->cm_4Vec=cm_4V;
     theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
@@ -101,6 +105,11 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
     theOmPiEvtData->pi0HeliOmega4Vec2=normOmegaDecHeliOmega_4V2;
 
     theOmPiEvtData->cosPi0HeliOmega4Vec=normOmegaDecHeliOmega_4V.CosTheta();
+
+    theOmPiEvtData->pipHeliOmega4Vec=pipHeliOmega4V;
+    theOmPiEvtData->pimHeliOmega4Vec=pimHeliOmega4V;
+    theOmPiEvtData->pippimCrossHeliOmega4Vec=normOmegaDecHeliOmega_4V;
+    theOmPiEvtData->lambda=lambda;
     theOmPiEvtData->eventWeight = anEvent->Weight();
 
     for (Spin j=0; j<=_jmax; j++){
