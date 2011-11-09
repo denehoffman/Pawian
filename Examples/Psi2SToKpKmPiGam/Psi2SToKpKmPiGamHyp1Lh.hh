@@ -41,23 +41,13 @@ public:
 
 
   // Getters:
-  virtual void setMnUsrParams(MnUserParameters& upar, paramKpKmPiGam& startVal,  paramKpKmPiGam& errVal);
-  virtual int setFitParamVal(paramKpKmPiGam& theParamVal, const std::vector<double>& par);
-
-  virtual unsigned int nFitParams();
   virtual void print(std::ostream& os) const;
-  virtual void printCurrentFitResult(paramKpKmPiGam& theParamVal);
-  virtual void dumpCurrentResult(std::ostream& os, paramKpKmPiGam& theParamVal, std::string& suffix);
+
 protected:
 
-  complex<double> calcDecAmp(complex<double>& inAmp,Spin lamChi, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
+  complex<double> calcDecAmp(complex<double>& inAmp,Spin lamChi, fitParams& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
 
 private:
-  unsigned int _nFitParams;
-  std::vector<unsigned int> _ampVec;
-  std::vector<unsigned int> _massVec;
-
-
 };
 
 #endif

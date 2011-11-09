@@ -8,13 +8,15 @@
 
 #include "Examples/Psi2SToKpKmPiGam/MPsi2SToKpKmPiGamFcn.hh"
 #include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
+#include "PwaUtils/FitParamsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-MPsi2SToKpKmPiGamFcn::MPsi2SToKpKmPiGamFcn(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> psi2SToKpKmPiGamLh) :
+MPsi2SToKpKmPiGamFcn::MPsi2SToKpKmPiGamFcn(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> psi2SToKpKmPiGamLh, boost::shared_ptr<FitParamsBase> fitParamsBase) :
   _psi2SToKpKmPiGamLhPtr(psi2SToKpKmPiGamLh)
-  ,_fcnCounter(new unsigned int (0))
+  , _fitParamsBasePtr(fitParamsBase)
+  , _fcnCounter(new unsigned int (0))
 {
    if (0==_psi2SToKpKmPiGamLhPtr) { Alert << "AbsPsi2SToKpKmPiGamLh* _psi2SToKpKmPiGamLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
   
@@ -28,21 +30,20 @@ MPsi2SToKpKmPiGamFcn::~MPsi2SToKpKmPiGamFcn()
 double MPsi2SToKpKmPiGamFcn::operator()(const std::vector<double>& par) const
 {
   (*_fcnCounter)++;
-  paramKpKmPiGam theFitParmValTmp;
-  _psi2SToKpKmPiGamLhPtr->setFitParamVal(theFitParmValTmp, par);
+//   paramKpKmPiGam theFitParmValTmp;
+  fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);
  
   double result=_psi2SToKpKmPiGamLhPtr->calcLogLh(theFitParmValTmp);
 
   DebugMsg << "logLh= " << result <<endmsg;
-
-  if (  (*_fcnCounter)%20 == 0) {  
-  _psi2SToKpKmPiGamLhPtr->printCurrentFitResult(theFitParmValTmp);
+ 
+  if (  (*_fcnCounter)%10 == 0) {  
+  _fitParamsBasePtr->printParams(theFitParmValTmp);
   }
 
   if (  (*_fcnCounter)%100 == 0) {
     std::ofstream theStream ( "currentResult.dat");
-    std::string theSuffix="Val"; 
-    _psi2SToKpKmPiGamLhPtr->dumpCurrentResult(theStream, theFitParmValTmp, theSuffix);
+    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
   }
 
   return result;

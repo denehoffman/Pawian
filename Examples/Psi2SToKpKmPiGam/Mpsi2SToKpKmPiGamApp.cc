@@ -4,11 +4,11 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <time.h>
 
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamParser.hh"
-#include "Examples/Psi2SToKpKmPiGam/StreamKpKmPiGamFitParms.hh"
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHist.hh"
@@ -16,14 +16,16 @@
 
 #include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamBaseLh.hh"
-#include "Examples/Psi2SToKpKmPiGam/PsiToChic1GamProdLh.hh"
+//#include "Examples/Psi2SToKpKmPiGam/PsiToChic1GamProdLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHyp1Lh.hh"
 
 #include "Examples/Psi2SToKpKmPiGam/MPsi2SToKpKmPiGamFcn.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
 
-// #include "Examples/Psi2SToKpKmPiGam/StreamFitParams.hh"
-#include "Examples/Psi2SToKpKmPiGam/StreamKpKmPiGamFitParms.hh"
+
+#include "Examples/Psi2SToKpKmPiGam/StreamChic1ToKpKmPiGamFitParms.hh"
+#include "Examples/Psi2SToKpKmPiGam/FitParamsChic1ToKpKmPiGam.hh"
+#include "PwaUtils/FitParamsBase.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -75,6 +77,8 @@ void setErrLogMode( const Psi2SToKpKmPiGamParser::enErrLogMode& erlMode ) {
 
 
 int main(int __argc,char *__argv[]){
+  clock_t start, end;
+  start= clock();
 
   // Parse the command line
   static Psi2SToKpKmPiGamParser theAppParams(__argc, __argv);
@@ -87,9 +91,17 @@ int main(int __argc,char *__argv[]){
 
   std::string paramStreamerPath=theAppParams.fitParamFile();
 
-  StreamKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
-  paramKpKmPiGam theStartparams=theParamStreamer.getFitParamVal();
-  paramKpKmPiGam theErrorparams=theParamStreamer.getFitParamErr();
+//   StreamKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
+//   paramKpKmPiGam theStartparams=theParamStreamer.getFitParamVal();
+//   paramKpKmPiGam theErrorparams=theParamStreamer.getFitParamErr();
+
+  StreamChic1ToKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
+
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();    
+
+  boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsChic1ToKpKmPiGam(theStartparams, theErrorparams));
+
 
   const std::string datFile=theAppParams.dataFile();
   const std::string mcFile=theAppParams.mcFile();
@@ -172,8 +184,8 @@ int main(int __argc,char *__argv[]){
 
   std::string startWithHyp=theAppParams.startHypo();
 
-  if (startWithHyp=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr));
-  else if (startWithHyp=="hyp1") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>
+ //  if (startWithHyp=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr));
+  if (startWithHyp=="hyp1") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>
 (new Psi2SToKpKmPiGamHyp1Lh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
   else if (startWithHyp=="base") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> (new Psi2SToKpKmPiGamBaseLh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
   else { 
@@ -183,22 +195,36 @@ int main(int __argc,char *__argv[]){
 
 
   bool qaMode=theAppParams.qaMode();
-  std::cout << "qaMode: " << qaMode << std::endl;
+  Info << "qaMode: " << qaMode << endmsg;
 
   if (qaMode){
-    thePsi2SToKpKmPiGamLhPtr->printCurrentFitResult(theStartparams);
+    Info << "\nThe parameter values are: " << "\n" << endmsg;
+    theFitParamBase->printParams(theStartparams);
+
+    Info << "\nThe parameter errors are: " << "\n" << endmsg;
+    theFitParamBase->printParams(theErrorparams);
+
     double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
     Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(thePsi2SToKpKmPiGamLhPtr, theStartparams);
+    
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     return 0;
   }
+  
+  
+  MPsi2SToKpKmPiGamFcn mPsi2SToKpKmPiGamFcn(thePsi2SToKpKmPiGamLhPtr, theFitParamBase);
+  
+  MnUserParameters upar;
+  theFitParamBase->setMnUsrParams(upar);
 
-
-   MPsi2SToKpKmPiGamFcn mPsi2SToKpKmPiGamFcn(thePsi2SToKpKmPiGamLhPtr);
-
-   MnUserParameters upar;
-   thePsi2SToKpKmPiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
+  std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl; 
+  for (int i=0; i<int(upar.Params().size()); ++i){
+    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  }
 
   const std::vector<std::string> fixedParams=theAppParams.fixedParams();
 
@@ -223,26 +249,27 @@ int main(int __argc,char *__argv[]){
   MnUserParameters finalUsrParameters=min.UserParameters();
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
  
-  paramKpKmPiGam finalFitParams;
-  thePsi2SToKpKmPiGamLhPtr->setFitParamVal(finalFitParams, finalParamVec);
+  fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
 
 
   
   Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(thePsi2SToKpKmPiGamLhPtr, finalFitParams);
 
-  thePsi2SToKpKmPiGamLhPtr->printCurrentFitResult(finalFitParams);
+  theFitParamBase->printParams(finalFitParams);
   double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(finalFitParams);
   Info <<"theLh = "<< theLh << endmsg;
   
-  // print final fit result
-  const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-  for (size_t i=0; i<finalParamVec.size(); i++)
-    {
-      Info << "Value: " << finalParamVec[i] << "\t Error: " << finalParamErrorVec[i] << endmsg;
-    }
+// print and dump final fit result
+   const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+   for (size_t i=0; i<finalParamVec.size(); i++)
+     {
+       Info << "Value: " << finalParamVec[i] << "\t Error: " << finalParamErrorVec[i] << endmsg;
+     }
+ 
+   fitParams finalFitErrs=theFitParamBase->getFitParamVal(finalParamErrorVec);
+   std::ofstream theStream ( "finalResult.dat");
+   theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
 
-
-
-    return 0;
+   return 0;
 }
 

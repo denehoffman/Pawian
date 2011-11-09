@@ -13,7 +13,7 @@
 #include "Minuit2/MnUserParameters.h"
 
 class AbsPsi2SToKpKmPiGamLh;
-
+class FitParamsBase;
 
 namespace ROOT {
 
@@ -22,7 +22,7 @@ class MPsi2SToKpKmPiGamFcn : public FCNBase {
 
 public:
 
-  MPsi2SToKpKmPiGamFcn(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> psi2SToKpKmPiGamLh);
+  MPsi2SToKpKmPiGamFcn(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> psi2SToKpKmPiGamLh, boost::shared_ptr<FitParamsBase> fitParamsBase);
   virtual ~MPsi2SToKpKmPiGamFcn();
 
   double operator()(const std::vector<double>& par) const;
@@ -32,6 +32,7 @@ public:
 
 private:
   boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> _psi2SToKpKmPiGamLhPtr;
+  boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
   unsigned int *_fcnCounter;
 };
   }  // namespace Minuit2

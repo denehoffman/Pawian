@@ -41,13 +41,10 @@ public:
 
 
   // Getters:
-  virtual void setMnUsrParams(MnUserParameters& upar, paramKpKmPiGam& startVal,  paramKpKmPiGam& errVal);
-  virtual int setFitParamVal(paramKpKmPiGam& theParamVal, const std::vector<double>& par);
 
-  virtual unsigned int nFitParams();
+
   virtual void print(std::ostream& os) const;
-  virtual void printCurrentFitResult(paramKpKmPiGam& theParamVal);
-  virtual void dumpCurrentResult(std::ostream& os, paramKpKmPiGam& theParamVal, std::string& suffix);
+
 protected:
   bool _K0_1430Hyp;
   bool _K1_1410Hyp;
@@ -55,14 +52,10 @@ protected:
   bool _K1_1680Hyp;
   bool _KKPi_Hyp;
   std::map<const std::string, bool> _hypMap;
-  virtual  complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
+  virtual  complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, fitParams& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
 
-  virtual  complex<double> calcDecAmp(complex<double>& inAmp, Spin lamChi, const paramKpKmPiGam& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
+  virtual  complex<double> calcDecAmp(complex<double>& inAmp, Spin lamChi, fitParams& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
 private:
-  unsigned int _nFitParams;
-  std::vector<unsigned int> _ampVec;
-  std::vector<unsigned int> _massVec;
-
 
 };
 
