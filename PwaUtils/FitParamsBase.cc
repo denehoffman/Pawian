@@ -241,8 +241,12 @@ void FitParamsBase::printParams(fitParams& theParams){
 
   for (itAmps=theParams.Phis.begin(); itAmps!=theParams.Phis.end(); ++itAmps){
 
+    std::string currentAmpName=ampName(itAmps->first);
+    std::string currentPhiName=currentAmpName+"Phi";
+
     for (itJPCLSMap=itAmps->second.begin(); itJPCLSMap!=itAmps->second.end(); ++itJPCLSMap){
-      Info<< itJPCLSMap->first->name() <<"Phi\t" << itJPCLSMap->second << endmsg;
+       std::string currentName=itJPCLSMap->first->name()+currentPhiName;
+      Info<< currentName <<"\t" << itJPCLSMap->second << endmsg;
     }
   }
 
@@ -309,20 +313,33 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
    }
 
   std::map<int, double>::const_iterator itSinglePar;
-  if (theVals.Masses.size()>0 && theErrs.Masses.size()){
+  if (theVals.Masses.size()>0 && theErrs.Masses.size()==theVals.Masses.size()){
     for (itSinglePar=theVals.Masses.begin(); itSinglePar!=theVals.Masses.end(); ++itSinglePar){
       std::string currentName=massName(itSinglePar->first)+"Mass";
       os << currentName << "\t" << itSinglePar->second << "\t" << theErrs.Masses[itSinglePar->first] << std::endl;
     }
   }
 
-  if (theVals.Widths.size()>0 && theErrs.Widths.size()){
+  if (theVals.Widths.size()>0 && theErrs.Widths.size()==theVals.Widths.size()){
     for (itSinglePar=theVals.Widths.begin(); itSinglePar!=theVals.Widths.end(); ++itSinglePar){
-      std::string currentName=massName(itSinglePar->first)+"Width";
+      std::string currentName=widthName(itSinglePar->first)+"Width";
       os << currentName << "\t" << itSinglePar->second << "\t" << theErrs.Widths[itSinglePar->first] << std::endl;
     }
   }
 
+  if (theVals.gFactors.size()>0 && theErrs.gFactors.size()==theVals.gFactors.size()){
+    for (itSinglePar=theVals.gFactors.begin(); itSinglePar!=theVals.gFactors.end(); ++itSinglePar){
+      std::string currentName=gFactorName(itSinglePar->first)+"gFactor";
+      os << currentName << "\t" << itSinglePar->second << std::endl;
+    }
+  }
+
+  if (theVals.otherParams.size()>0 && theErrs.otherParams.size()==theVals.otherParams.size()){
+    for (itSinglePar=theVals.otherParams.begin(); itSinglePar!=theVals.otherParams.end(); ++itSinglePar){
+      std::string currentName=otherName(itSinglePar->first)+"Other";
+      os << currentName << "\t" << itSinglePar->second;
+    }
+  }
 }
 
 fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
