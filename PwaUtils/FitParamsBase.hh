@@ -45,12 +45,14 @@ public:
   virtual const std::string gFactorName(int index)=0;
   virtual const std::string otherName(int index)=0;
 
-//   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampMagMap(fitParams& theParamVal, int index);
-//   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampPhiMap(fitParams& theParamVal, int index);
-//   double massPar(fitParams& theParamVal, int index);
-//   double widthPar(fitParams& theParamVal, int index);
-//   double gFactorPar(fitParams& theParamVal, int index);
-//   double otherPar(fitParams& theParamVal, unsigned int index);
+  virtual int ampIdxMin()=0;
+  virtual int ampIdxMax()=0;
+  virtual int massIdxMin()=0;
+  virtual int massIdxMax()=0;
+  virtual int gFactorIdxMin()=0;
+  virtual int gFactorIdxMax()=0;
+  virtual int otherIdxMin()=0;
+  virtual int otherIdxMax()=0;
 
   virtual void setMnUsrParams(MnUserParameters& upar);
   virtual fitParams getFitParamVal(const std::vector<double>& par);

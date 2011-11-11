@@ -3,8 +3,9 @@
 #include <sstream>
 #include <string>
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHist.hh"
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
-#include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
+// #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
+// #include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
+#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -12,7 +13,7 @@
 #include "TNtuple.h"
 #include "ErrLogger/ErrLogger.hh"
 
-Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPiGamEventList> theEvtList) :
+Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
   _theTFile(0),
   _dalitzDataHist(0),
   _dalitzMcHist(0),
@@ -57,15 +58,15 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
   _mcTuple(0)
 {
   if(0==theEvtList){
-    Alert <<"Psi2SToKpKmPiGamEventList* theEvtList is a 0 pointer !!!!" << endmsg;
+    Alert <<"EvtList* theEvtList is a 0 pointer !!!!" << endmsg;
     exit(1);
   }
 
   initRootStuff();
 
-  const std::vector<Psi2SToKpKmPiGamEvtData*> dataList=theEvtList->getDataVecs();
+  const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
 
-  std::vector<Psi2SToKpKmPiGamEvtData*>::const_iterator it=dataList.begin();
+  std::vector<EvtData*>::const_iterator it=dataList.begin();
   while(it!=dataList.end())
     {
       plotDalitz(_dalitzDataHist, (*it), 1.);
@@ -80,12 +81,12 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
       plotCosK1400(_cosK1400DataHist, (*it), 1.);
       plotCosa980(_cosa980DataHist, (*it), 1.);
 
-     fillTuple(_dataTuple, (*it), 1.);
+      //     fillTuple(_dataTuple, (*it), 1.);
 
       ++it;
     }
 
-  const std::vector<Psi2SToKpKmPiGamEvtData*> mcList=theEvtList->getMcVecs();
+  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
   it=mcList.begin();
   while(it!=mcList.end())
     { 
@@ -101,13 +102,13 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPi
       plotCosK1400(_cosK1400McHist, (*it), 1.);
       plotCosa980(_cosa980McHist, (*it), 1.);
 
-     fillTuple(_mcTuple, (*it), 1.);
+//      fillTuple(_mcTuple, (*it), 1.);
 
       ++it;
     }
 }
 
-Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> thePsi2SToKpKmPiGamLh, fitParams& fitParam) :
+Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsLh> thePsi2SToKpKmPiGamLh, fitParams& fitParam) :
   _theTFile(0),
   _dalitzDataHist(0),
   _dalitzMcHist(0),
@@ -158,10 +159,10 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
 
   initRootStuff();
 
-  boost::shared_ptr<const Psi2SToKpKmPiGamEventList> theEvtList=thePsi2SToKpKmPiGamLh->getEventList();
-  const std::vector<Psi2SToKpKmPiGamEvtData*> dataList=theEvtList->getDataVecs();
+  boost::shared_ptr<const EvtDataBaseList> theEvtList=thePsi2SToKpKmPiGamLh->getEventList();
+  const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
 
-  std::vector<Psi2SToKpKmPiGamEvtData*>::const_iterator it=dataList.begin();
+  std::vector<EvtData*>::const_iterator it=dataList.begin();
   while(it!=dataList.end())
     {
       plotDalitz(_dalitzDataHist, (*it), 1.);
@@ -176,12 +177,12 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
       plotCosK1400(_cosK1400DataHist, (*it), 1.);
       plotCosa980(_cosa980DataHist, (*it), 1.); 
 
-     fillTuple(_dataTuple, (*it), 1.);
+      //     fillTuple(_dataTuple, (*it), 1.);
 
       ++it;
     }
 
-  const std::vector<Psi2SToKpKmPiGamEvtData*> mcList=theEvtList->getMcVecs();
+  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
   it=mcList.begin();
   while(it!=mcList.end())
     { 
@@ -210,7 +211,7 @@ Psi2SToKpKmPiGamHist::Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGam
       plotMKpKm(_invKpKmFittedHist, (*it), evtWeight);
       plotMKPi(_invKPiFittedHist, (*it), evtWeight);
 
-      fillTuple(_mcTuple, (*it), evtWeight);
+ //      fillTuple(_mcTuple, (*it), evtWeight);
       ++it;
     }
 
@@ -307,125 +308,125 @@ void Psi2SToKpKmPiGamHist::initRootStuff()
   _mcTuple=new TNtuple("_mcTuple", "mc ntuple", "mKpKm:mKpPi:mKmPi:cosChiGam:cosKstpK:cosKstmK:cosa0Pi:cosKK:cosKpPi:cosKmPi:weight");
 }
 
-void Psi2SToKpKmPiGamHist::plotDalitz(TH2F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotDalitz(TH2F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> KpKm_HeliChic1_4V=theData->KpKm_HeliChic1_4V;
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
+  Vector4<double>& KpKm_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpKm_HeliChic1];
+  Vector4<double>& KpPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpPi_HeliChic1];
   theHisto->Fill(KpKm_HeliChic1_4V.M()*KpKm_HeliChic1_4V.M(), KpPi_HeliChic1_4V.M()*KpPi_HeliChic1_4V.M(),weight);  
 }
 
-void Psi2SToKpKmPiGamHist::plotCosPsi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotCosPsi(TH1F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> chic1_HeliPsi2S_4V=theData->chic1_HeliPsi2S_4V;
+  Vector4<double>& chic1_HeliPsi2S_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::Chic1_HeliPsi2S];
   theHisto->Fill(chic1_HeliPsi2S_4V.CosTheta(), weight);
 }
 
-void Psi2SToKpKmPiGamHist::plotChic1Toa0Pi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotChic1Toa0Pi(TH1F* theHisto, EvtData* theData, double weight)
 { 
- Vector4<float> KpKm_HeliChic1_4V=theData->KpKm_HeliChic1_4V;
+ Vector4<double>& KpKm_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpKm_HeliChic1];
  if (KpKm_HeliChic1_4V.M()<1.35) theHisto->Fill(KpKm_HeliChic1_4V.CosTheta(), weight); 
 }
 
-void Psi2SToKpKmPiGamHist::plotChic1ToK890K(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotChic1ToK890K(TH1F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
+  Vector4<double>& KpPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpPi_HeliChic1];
   if (KpPi_HeliChic1_4V.M()>0.85 && KpPi_HeliChic1_4V.M()<0.95) theHisto->Fill(KpPi_HeliChic1_4V.CosTheta(), weight); 
 
-  Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
+  Vector4<double>& KmPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KmPi_HeliChic1];
   if (KmPi_HeliChic1_4V.M()>0.85 && KmPi_HeliChic1_4V.M()<0.95) theHisto->Fill(KmPi_HeliChic1_4V.CosTheta(), weight); 
 }
 
-void Psi2SToKpKmPiGamHist::plotChic1ToK1400K(TH1F* costHist, TH1F* phiHist, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotChic1ToK1400K(TH1F* costHist, TH1F* phiHist, EvtData* theData, double weight)
 {
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
+  Vector4<double> KpPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpPi_HeliChic1];
   if (KpPi_HeliChic1_4V.M()>1.36 && KpPi_HeliChic1_4V.M()<1.48){
     costHist->Fill(KpPi_HeliChic1_4V.CosTheta(), weight);
     phiHist->Fill(KpPi_HeliChic1_4V.Phi(), weight);
   } 
 
-  Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
+  Vector4<double> KmPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KmPi_HeliChic1];
   if (KmPi_HeliChic1_4V.M()>1.36 && KmPi_HeliChic1_4V.M()<1.48){
     costHist->Fill(KmPi_HeliChic1_4V.CosTheta(), weight);
     phiHist->Fill(KmPi_HeliChic1_4V.Phi(), weight);
   } 
 }
 
-void Psi2SToKpKmPiGamHist::plotAnglesChic1ToKKPi(TH1F* costHist, TH1F* phiHist, const Psi2SToKpKmPiGamEvtData* theData, double weight){
-  Vector4<float> KpKmPi0_HeliChic1_4V=theData->KpKmPi0_HeliChic1_4V;
+void Psi2SToKpKmPiGamHist::plotAnglesChic1ToKKPi(TH1F* costHist, TH1F* phiHist, EvtData* theData, double weight){
+  Vector4<double>& KpKmPi0_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpKmPi0_HeliChic1];
   costHist->Fill(KpKmPi0_HeliChic1_4V.CosTheta(), weight);
   phiHist->Fill(KpKmPi0_HeliChic1_4V.Phi(), weight);
 }
 
 
-void Psi2SToKpKmPiGamHist::plotMKpKm(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotMKpKm(TH1F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> KpKm_HeliChic1_4V=theData->KpKm_HeliChic1_4V;
+  Vector4<double>& KpKm_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpKm_HeliChic1];
   theHisto->Fill(KpKm_HeliChic1_4V.M(), weight);
 }
 
-void Psi2SToKpKmPiGamHist::plotMKPi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotMKPi(TH1F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
+  Vector4<double>& KpPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpPi_HeliChic1];
   theHisto->Fill(KpPi_HeliChic1_4V.M(), weight); 
-  Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V; 
+  Vector4<double>& KmPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KmPi_HeliChic1]; 
   theHisto->Fill(KmPi_HeliChic1_4V.M(), weight); 
 }
 
-void Psi2SToKpKmPiGamHist::plotCosK890(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotCosK890(TH1F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
-  Vector4<float> Kp_HeliKpPi_4V=theData->Kp_HeliKpPi_4V;
+  Vector4<double>& KpPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpPi_HeliChic1];
+  Vector4<double>& Kp_HeliKpPi_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::Kp_HeliKpPi];
   if (KpPi_HeliChic1_4V.M()>0.85 && KpPi_HeliChic1_4V.M()<0.95) theHisto->Fill(Kp_HeliKpPi_4V.CosTheta(), weight); 
 
-  Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
-  Vector4<float> Km_HeliKmPi_4V=theData->Km_HeliKmPi_4V;
+  Vector4<double>& KmPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KmPi_HeliChic1];
+  Vector4<double>& Km_HeliKmPi_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::Km_HeliKmPi];
   if (KmPi_HeliChic1_4V.M()>0.85 && KmPi_HeliChic1_4V.M()<0.95) theHisto->Fill(Km_HeliKmPi_4V.CosTheta(), weight);
 }
 
-void Psi2SToKpKmPiGamHist::plotCosK1400(TH1F* costHist, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotCosK1400(TH1F* costHist, EvtData* theData, double weight)
 {
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
-  Vector4<float> Kp_HeliKpPi_4V=theData->Kp_HeliKpPi_4V;
+  Vector4<double>& KpPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpPi_HeliChic1];
+  Vector4<double>& Kp_HeliKpPi_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::Kp_HeliKpPi];
   if (KpPi_HeliChic1_4V.M()>1.36 && KpPi_HeliChic1_4V.M()<1.48){
     costHist->Fill(Kp_HeliKpPi_4V.CosTheta(), weight);
 //     phiHist->Fill(Kp_HeliKpPi_4V.Phi(), weight);
   } 
 
-  Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
-  Vector4<float> Km_HeliKmPi_4V=theData->Km_HeliKmPi_4V;
+  Vector4<double>& KmPi_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KmPi_HeliChic1];
+  Vector4<double>& Km_HeliKmPi_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::Km_HeliKmPi];
   if (KmPi_HeliChic1_4V.M()>1.36 && KmPi_HeliChic1_4V.M()<1.48){
     costHist->Fill(Km_HeliKmPi_4V.CosTheta(), weight);
 //     phiHist->Fill(Km_HeliKpPi_4V.Phi(), weight);
   }
 }
 
-void Psi2SToKpKmPiGamHist::plotCosa980(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+void Psi2SToKpKmPiGamHist::plotCosa980(TH1F* theHisto, EvtData* theData, double weight)
 {
-  Vector4<float> KpKm_HeliChic1_4V=theData->KpKm_HeliChic1_4V;
-  Vector4<float> Kp_HeliKpKm_4V=theData->Kp_HeliKpKm_4V;
+  Vector4<double>& KpKm_HeliChic1_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::KpKm_HeliChic1];
+  Vector4<double>& Kp_HeliKpKm_4V=theData->FourVecs[enumChic1ToKpKmPiGamData::Kp_HeliKpKm];
   if (KpKm_HeliChic1_4V.M()<1.35) theHisto->Fill(Kp_HeliKpKm_4V.CosTheta(), weight); 
 
 }
 
-void  Psi2SToKpKmPiGamHist::fillTuple( TNtuple* theTuple, const Psi2SToKpKmPiGamEvtData* theData, double weight)
-{
-  Vector4<float> KpKm_HeliChic1_4V=theData->KpKm_HeliChic1_4V;
-  Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
-  Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
-  Vector4<float> chic1_HeliPsi2S_4V=theData->chic1_HeliPsi2S_4V;
-  Vector4<float> Kp_HeliKpKm_4V=theData->Kp_HeliKpKm_4V;
-  Vector4<float> Kp_HeliKpPi_4V=theData->Kp_HeliKpPi_4V;
-  Vector4<float> Km_HeliKmPi_4V=theData->Km_HeliKmPi_4V;
+// void  Psi2SToKpKmPiGamHist::fillTuple( TNtuple* theTuple, const Psi2SToKpKmPiGamEvtData* theData, double weight)
+// {
+//   Vector4<float> KpKm_HeliChic1_4V=theData->KpKm_HeliChic1_4V;
+//   Vector4<float> KpPi_HeliChic1_4V=theData->KpPi_HeliChic1_4V;
+//   Vector4<float> KmPi_HeliChic1_4V=theData->KmPi_HeliChic1_4V;
+//   Vector4<float> chic1_HeliPsi2S_4V=theData->chic1_HeliPsi2S_4V;
+//   Vector4<float> Kp_HeliKpKm_4V=theData->Kp_HeliKpKm_4V;
+//   Vector4<float> Kp_HeliKpPi_4V=theData->Kp_HeliKpPi_4V;
+//   Vector4<float> Km_HeliKmPi_4V=theData->Km_HeliKmPi_4V;
 
-  float mKpKm=KpKm_HeliChic1_4V.M();
-  float mKpPi=KpPi_HeliChic1_4V.M();
-  float mKmPi=KmPi_HeliChic1_4V.M();
-  float cosChiGam=chic1_HeliPsi2S_4V.CosTheta();
-  float cosKstpK=KpPi_HeliChic1_4V.CosTheta();
-  float cosKstmK=KmPi_HeliChic1_4V.CosTheta();
-  float cosa0Pi=KpKm_HeliChic1_4V.CosTheta();
-  float cosKK=Kp_HeliKpKm_4V.CosTheta();
-  float cosKpPi=Kp_HeliKpPi_4V.CosTheta();
-  float cosKmPi=Km_HeliKmPi_4V.CosTheta();
-  theTuple->Fill(mKpKm,mKpPi,mKmPi,cosChiGam,cosKstpK,cosKstmK,cosa0Pi, cosKK, cosKpPi, cosKmPi, weight);
-}
+//   float mKpKm=KpKm_HeliChic1_4V.M();
+//   float mKpPi=KpPi_HeliChic1_4V.M();
+//   float mKmPi=KmPi_HeliChic1_4V.M();
+//   float cosChiGam=chic1_HeliPsi2S_4V.CosTheta();
+//   float cosKstpK=KpPi_HeliChic1_4V.CosTheta();
+//   float cosKstmK=KmPi_HeliChic1_4V.CosTheta();
+//   float cosa0Pi=KpKm_HeliChic1_4V.CosTheta();
+//   float cosKK=Kp_HeliKpKm_4V.CosTheta();
+//   float cosKpPi=Kp_HeliKpPi_4V.CosTheta();
+//   float cosKmPi=Km_HeliKmPi_4V.CosTheta();
+//   theTuple->Fill(mKpKm,mKpPi,mKmPi,cosChiGam,cosKstpK,cosKstmK,cosa0Pi, cosKK, cosKpPi, cosKmPi, weight);
+// }

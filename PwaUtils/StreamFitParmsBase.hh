@@ -1,5 +1,5 @@
-#ifndef StreamChic1ToKpKmPiGamFitParms_H
-#define StreamChic1ToKpKmPiGamFitParms_H
+#ifndef StreamFitParmsBase_H
+#define StreamFitParmsBase_H
 
 #include <iostream>
 #include <vector>
@@ -8,14 +8,14 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include "PwaUtils/AbsFitParamStreamer.hh"
-#include "Examples/Psi2SToKpKmPiGam/FitParamsChic1ToKpKmPiGam.hh"
+#include "PwaUtils/FitParamsBase.hh"
 
 
-class StreamChic1ToKpKmPiGamFitParms : public AbsFitParamStreamer{
+class StreamFitParmsBase : public AbsFitParamStreamer{
   
 public:
-  StreamChic1ToKpKmPiGamFitParms(std::string&);
-  virtual ~StreamChic1ToKpKmPiGamFitParms();
+  StreamFitParmsBase(std::string&, boost::shared_ptr<FitParamsBase> fitParamsBasePtr);
+  virtual ~StreamFitParmsBase();
   
   fitParams getFitParamVal() { return _paramVal;}
   fitParams getFitParamErr() { return _paramErr;}
@@ -29,7 +29,7 @@ private:
   fitParams _paramVal;
   fitParams _paramErr;
 
-  FitParamsChic1ToKpKmPiGam _fitParamsKpKmPiGam;
+  boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
 
   void fillAmps(std::string& suffix, std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& theAmpMapVal, std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& theAmpMapErr);
   void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap, std::string& suffix, int index);

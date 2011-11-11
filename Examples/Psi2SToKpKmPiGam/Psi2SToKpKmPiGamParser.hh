@@ -46,7 +46,6 @@ class Psi2SToKpKmPiGamParser
       , _startHypo("base")
       , _qaMode(false)
     {
-    _disabledHyps.push_back("blainit");
     if (!parseCommandLine(argc, argv)) throw false;
   }
   

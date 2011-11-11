@@ -65,6 +65,15 @@ public:
   virtual const std::string gFactorName(int index) {return paramEnumChic1ToKpKmPiGam::name(index);}
   virtual const std::string otherName(int index) {return paramEnumChic1ToKpKmPiGam::name(index);}
 
+  virtual int ampIdxMin() {return paramEnumChic1ToKpKmPiGam::ChiGam;}
+  virtual int ampIdxMax() {return paramEnumChic1ToKpKmPiGam::nAmps-1;}
+  virtual int massIdxMin() {return paramEnumChic1ToKpKmPiGam::nAmps;}
+  virtual int massIdxMax() {return paramEnumChic1ToKpKmPiGam::nMasses-1;}
+  virtual int gFactorIdxMin() {return paramEnumChic1ToKpKmPiGam::nMasses;}
+  virtual int gFactorIdxMax() {return paramEnumChic1ToKpKmPiGam::ngFactors-1;}
+  virtual int otherIdxMin() {return paramEnumChic1ToKpKmPiGam::ngFactors;}
+  virtual int otherIdxMax() {return paramEnumChic1ToKpKmPiGam::nOthers-1;}
+
 protected:
 
 private:

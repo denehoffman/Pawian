@@ -15,6 +15,8 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamBaseLh.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/AbsLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -29,14 +31,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Psi2SToKpKmPiGamHyp1Lh(boost::shared_ptr<const Psi2SToKpKmPiGamEventList>, const std::map<const std::string, bool>& hypMap);
-  Psi2SToKpKmPiGamHyp1Lh(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Psi2SToKpKmPiGamHyp1Lh(boost::shared_ptr<const EvtDataBaseList>, const std::map<const std::string, bool>& hypMap);
+  Psi2SToKpKmPiGamHyp1Lh(boost::shared_ptr<AbsLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
   virtual ~Psi2SToKpKmPiGamHyp1Lh();
 
-  virtual AbsPsi2SToKpKmPiGamLh* clone_() const {
-    return new Psi2SToKpKmPiGamHyp1Lh(_Psi2SToKpKmPiGamEvtListPtr, _hypMap);
+  virtual AbsLh* clone_() const {
+    return new Psi2SToKpKmPiGamHyp1Lh(_evtListPtr, _hypMap);
   }
 
 
@@ -45,7 +47,7 @@ public:
 
 protected:
 
-  complex<double> calcDecAmp(complex<double>& inAmp,Spin lamChi, fitParams& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData);
+  complex<double> calcDecAmp(complex<double>& inAmp,Spin lamChi, fitParams& theParamVal, EvtData* theData);
 
 private:
 };

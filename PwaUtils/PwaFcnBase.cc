@@ -6,34 +6,33 @@
 
 #include "Minuit2/MnUserParameters.h"
 
-#include "Examples/Psi2SToKpKmPiGam/MPsi2SToKpKmPiGamFcn.hh"
-#include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
+#include "PwaUtils/PwaFcnBase.hh"
+#include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-MPsi2SToKpKmPiGamFcn::MPsi2SToKpKmPiGamFcn(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> psi2SToKpKmPiGamLh, boost::shared_ptr<FitParamsBase> fitParamsBase) :
-  _psi2SToKpKmPiGamLhPtr(psi2SToKpKmPiGamLh)
+PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase) :
+  _absLhPtr(absLh)
   , _fitParamsBasePtr(fitParamsBase)
   , _fcnCounter(new unsigned int (0))
 {
-   if (0==_psi2SToKpKmPiGamLhPtr) { Alert << "AbsPsi2SToKpKmPiGamLh* _psi2SToKpKmPiGamLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
+   if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
   
 }
 
-MPsi2SToKpKmPiGamFcn::~MPsi2SToKpKmPiGamFcn()
+PwaFcnBase::~PwaFcnBase()
 {
   delete _fcnCounter;
 }
 
-double MPsi2SToKpKmPiGamFcn::operator()(const std::vector<double>& par) const
+double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   (*_fcnCounter)++;
-//   paramKpKmPiGam theFitParmValTmp;
   fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);
  
-  double result=_psi2SToKpKmPiGamLhPtr->calcLogLh(theFitParmValTmp);
+  double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
   DebugMsg << "logLh= " << result <<endmsg;
  
@@ -49,7 +48,7 @@ double MPsi2SToKpKmPiGamFcn::operator()(const std::vector<double>& par) const
   return result;
 }
 
-double MPsi2SToKpKmPiGamFcn::Up() const 
+double PwaFcnBase::Up() const 
 {
 return .5;
 }

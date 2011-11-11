@@ -3,15 +3,16 @@
 #include <string>
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHyp1Lh.hh"
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
+#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEvtList.hh"
+#include "Examples/Psi2SToKpKmPiGam/FitParamsChic1ToKpKmPiGam.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Psi2SToKpKmPiGamHyp1Lh::Psi2SToKpKmPiGamHyp1Lh(boost::shared_ptr<const Psi2SToKpKmPiGamEventList> theEvtList, const std::map<const std::string, bool>& hypMap) :
+Psi2SToKpKmPiGamHyp1Lh::Psi2SToKpKmPiGamHyp1Lh(boost::shared_ptr<const EvtDataBaseList> theEvtList, const std::map<const std::string, bool>& hypMap) :
   Psi2SToKpKmPiGamBaseLh(theEvtList,  hypMap)
 {
 }
 
-Psi2SToKpKmPiGamHyp1Lh::Psi2SToKpKmPiGamHyp1Lh( boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
+Psi2SToKpKmPiGamHyp1Lh::Psi2SToKpKmPiGamHyp1Lh( boost::shared_ptr<AbsLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   Psi2SToKpKmPiGamBaseLh(theLhPtr->getEventList(), hypMap)
 {
 }
@@ -21,7 +22,7 @@ Psi2SToKpKmPiGamHyp1Lh::~Psi2SToKpKmPiGamHyp1Lh()
 }
 
 
-complex<double> Psi2SToKpKmPiGamHyp1Lh::calcDecAmp(complex<double>& inAmp,Spin lamChi, fitParams& theParamVal, Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData* theData){
+complex<double> Psi2SToKpKmPiGamHyp1Lh::calcDecAmp(complex<double>& inAmp,Spin lamChi, fitParams& theParamVal, EvtData* theData){
 
   
    complex<double> result=Psi2SToKpKmPiGamBaseLh::calcDecAmp(inAmp, lamChi, theParamVal, theData);

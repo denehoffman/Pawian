@@ -10,29 +10,30 @@
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamParser.hh"
 
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEventList.hh"
+#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamEvtList.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHist.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamReader.hh"
 
-#include "Examples/Psi2SToKpKmPiGam/AbsPsi2SToKpKmPiGamLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamBaseLh.hh"
-//#include "Examples/Psi2SToKpKmPiGam/PsiToChic1GamProdLh.hh"
+#include "Examples/Psi2SToKpKmPiGam/PsiToChic1GamProdLh.hh"
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamHyp1Lh.hh"
 
-#include "Examples/Psi2SToKpKmPiGam/MPsi2SToKpKmPiGamFcn.hh"
+#include "PwaUtils/PwaFcnBase.hh"
+
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
 
 
-#include "Examples/Psi2SToKpKmPiGam/StreamChic1ToKpKmPiGamFitParms.hh"
+#include "PwaUtils/StreamFitParmsBase.hh"
 #include "Examples/Psi2SToKpKmPiGam/FitParamsChic1ToKpKmPiGam.hh"
 #include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/AbsLh.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
-// #include "Event/CBElsaReader.hh"
+
 #include "Particle/PdtParser.hh"
 #include "qft++/topincludes/tensor.hh"
 
@@ -91,12 +92,7 @@ int main(int __argc,char *__argv[]){
 
   std::string paramStreamerPath=theAppParams.fitParamFile();
 
-//   StreamKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
-//   paramKpKmPiGam theStartparams=theParamStreamer.getFitParamVal();
-//   paramKpKmPiGam theErrorparams=theParamStreamer.getFitParamErr();
-
-  StreamChic1ToKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
-
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new FitParamsChic1ToKpKmPiGam()));
   fitParams theStartparams=theParamStreamer.getFitParamVal();
   fitParams theErrorparams=theParamStreamer.getFitParamErr();    
 
@@ -155,8 +151,7 @@ int main(int __argc,char *__argv[]){
   eventReaderMc.fillAll(eventsMc);
   eventsMc.rewind();
 
-  boost::shared_ptr<const Psi2SToKpKmPiGamEventList> thePsi2SToKpKmPiGamEventListPtr(new Psi2SToKpKmPiGamEventList(eventsData, eventsMc));
-
+  boost::shared_ptr<const Psi2SToKpKmPiGamEvtList> thePsi2SToKpKmPiGamEvtListPtr(new Psi2SToKpKmPiGamEvtList(eventsData, eventsMc));
 
   std::map<const std::string, bool> hypMap;
   hypMap["K0_1430HypBase"]=true;
@@ -180,20 +175,17 @@ int main(int __argc,char *__argv[]){
     }
   }
 
-  boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> thePsi2SToKpKmPiGamLhPtr;
-
   std::string startWithHyp=theAppParams.startHypo();
 
- //  if (startWithHyp=="prod")  thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEventListPtr));
-  if (startWithHyp=="hyp1") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>
-(new Psi2SToKpKmPiGamHyp1Lh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
-  else if (startWithHyp=="base") thePsi2SToKpKmPiGamLhPtr= boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> (new Psi2SToKpKmPiGamBaseLh(thePsi2SToKpKmPiGamEventListPtr, hypMap));
+
+  boost::shared_ptr<AbsLh> theLhPtr;
+  if (startWithHyp=="prod")  theLhPtr= boost::shared_ptr<AbsLh>(new PsiToChic1GamProdLh(thePsi2SToKpKmPiGamEvtListPtr));
+  else if (startWithHyp=="hyp1") theLhPtr= boost::shared_ptr<AbsLh> (new Psi2SToKpKmPiGamHyp1Lh(thePsi2SToKpKmPiGamEvtListPtr, hypMap));
+  else if (startWithHyp=="base") theLhPtr= boost::shared_ptr<AbsLh> (new Psi2SToKpKmPiGamBaseLh(thePsi2SToKpKmPiGamEvtListPtr, hypMap));
   else { 
     Alert << "start with hypthesis " << startWithHyp << " not supported!!!!" << endmsg;
     exit(1);
   }
-
-
   bool qaMode=theAppParams.qaMode();
   Info << "qaMode: " << qaMode << endmsg;
 
@@ -204,10 +196,11 @@ int main(int __argc,char *__argv[]){
     Info << "\nThe parameter errors are: " << "\n" << endmsg;
     theFitParamBase->printParams(theErrorparams);
 
-    double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(theStartparams);
+//     double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(theStartparams);
+    double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(thePsi2SToKpKmPiGamLhPtr, theStartparams);
+    Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(theLhPtr, theStartparams);
     
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
@@ -216,8 +209,7 @@ int main(int __argc,char *__argv[]){
   }
   
   
-  MPsi2SToKpKmPiGamFcn mPsi2SToKpKmPiGamFcn(thePsi2SToKpKmPiGamLhPtr, theFitParamBase);
-  
+  PwaFcnBase theFcn(theLhPtr, theFitParamBase); 
   MnUserParameters upar;
   theFitParamBase->setMnUsrParams(upar);
 
@@ -234,15 +226,14 @@ int main(int __argc,char *__argv[]){
   }
 
 
-  MnMigrad migrad(mPsi2SToKpKmPiGamFcn, upar);
-  
+  MnMigrad migrad(theFcn, upar);  
   Info <<"start migrad "<< endmsg;
   FunctionMinimum min = migrad();
 
   if(!min.IsValid()) {
     //try with higher strategy
     Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2(mPsi2SToKpKmPiGamFcn, min.UserState(), MnStrategy(2));
+    MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
     min = migrad2();
   }
 
@@ -253,10 +244,10 @@ int main(int __argc,char *__argv[]){
 
 
   
-  Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(thePsi2SToKpKmPiGamLhPtr, finalFitParams);
+  Psi2SToKpKmPiGamHist thePsi2SToKpKmPiGamHist(theLhPtr, finalFitParams);
 
   theFitParamBase->printParams(finalFitParams);
-  double theLh=thePsi2SToKpKmPiGamLhPtr->calcLogLh(finalFitParams);
+  double theLh=theLhPtr->calcLogLh(finalFitParams);
   Info <<"theLh = "<< theLh << endmsg;
   
 // print and dump final fit result

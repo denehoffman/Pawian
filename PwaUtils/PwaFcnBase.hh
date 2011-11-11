@@ -1,5 +1,5 @@
-#ifndef _MPsi2SToKpKmPiGamFcn_H
-#define _MPsi2SToKpKmPiGamFcn_H
+#ifndef _PwaFcnBase_H
+#define _PwaFcnBase_H
 
 #include <iostream>
 #include <fstream>
@@ -8,22 +8,22 @@
 #include <boost/shared_ptr.hpp>
 //#include <cassert>
 #include "Minuit2/FCNBase.h"
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "Minuit2/MnUserParameters.h"
 
-class AbsPsi2SToKpKmPiGamLh;
+class AbsLh;
 class FitParamsBase;
 
 namespace ROOT {
 
    namespace Minuit2 {
-class MPsi2SToKpKmPiGamFcn : public FCNBase {
+class PwaFcnBase : public FCNBase {
 
 public:
 
-  MPsi2SToKpKmPiGamFcn(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> psi2SToKpKmPiGamLh, boost::shared_ptr<FitParamsBase> fitParamsBase);
-  virtual ~MPsi2SToKpKmPiGamFcn();
+  PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase);
+  virtual ~PwaFcnBase();
 
   double operator()(const std::vector<double>& par) const;
 
@@ -31,7 +31,7 @@ public:
 
 
 private:
-  boost::shared_ptr<AbsPsi2SToKpKmPiGamLh> _psi2SToKpKmPiGamLhPtr;
+  boost::shared_ptr<AbsLh> _absLhPtr;
   boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
   unsigned int *_fcnCounter;
 };

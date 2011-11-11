@@ -52,8 +52,15 @@ public:
     this->SetV4(__t,__x,__y,__z);
   }
 
+  /// copy Constructor to convert float to _Tp
+  Vector4(const Vector4<float>* __v4)
+    : Tensor<_Tp>::Tensor(1) {
+    this->SetV4(__v4->T(),__v4->X(),__v4->Y(),__v4->Z());
+  }
+
   /// Copy Constructor
   Vector4(const Vector4<_Tp> &__v4) : Tensor<_Tp>::Tensor(__v4) {}
+
 
   virtual ~Vector4(){/** Destructor */}
 

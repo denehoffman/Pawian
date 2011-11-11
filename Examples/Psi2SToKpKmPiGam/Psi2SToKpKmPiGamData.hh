@@ -8,6 +8,26 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
+struct enumChic1ToKpKmPiGamData{
+  enum {Psi2S=0, Chic1_HeliPsi2S, KpKm_HeliChic1, KpPi_HeliChic1, KmPi_HeliChic1, KpKmPi0_HeliChic1,
+	Kp_HeliKpKm, Kp_HeliKpPi, Km_HeliKmPi, n4Vecs,
+	dfPsi=n4Vecs, DfChiToKpPi, DfChiToKmPi, DfChiToa0Pi, DfChiToa2Pi, DfChiToKKPi, 
+	DfKp1, DfKp2, DfKm1, DfKm2, Dfa2, nDfuncts};
+
+  static const std::string& name(unsigned int t)
+  {
+    static std::string fitName[enumChic1ToKpKmPiGamData::nDfuncts]
+      ={"Psi2S", "Chic1_HeliPsi2S", "KpKm_HeliChic1", "KpPi_HeliChic1", "KmPi_HeliChic1", "KpKmPi0_HeliChic1",
+	"Kp_HeliKpKm", "Kp_HeliKpPi", "Km_HeliKmPi",
+	"dfPsi", "DfChiToKpPi", "DfChiToKmPi", "DfChiToa0Pi", "DfChiToa2Pi", "DfChiToKKPi", 
+	"DfKp1", "DfKp2", "DfKm1", "DfKm2", "Dfa2"};
+    if (t<0 || t>=enumChic1ToKpKmPiGamData::nDfuncts) assert(0);
+    return fitName[t];
+  }
+};
+
+
+
 namespace Psi2SToKpKmPiGamData {
 
   struct Psi2SToKpKmPiGamEvtData

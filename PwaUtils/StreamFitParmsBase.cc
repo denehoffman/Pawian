@@ -1,29 +1,29 @@
 #include <fstream>
 
-#include "Examples/Psi2SToKpKmPiGam/StreamChic1ToKpKmPiGamFitParms.hh"
+#include "PwaUtils/StreamFitParmsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-StreamChic1ToKpKmPiGamFitParms::StreamChic1ToKpKmPiGamFitParms(std::string& filePath) :
+StreamFitParmsBase::StreamFitParmsBase(std::string& filePath, boost::shared_ptr<FitParamsBase> fitParamsBasePtr) :
   AbsFitParamStreamer(filePath),
-  _fitParamsKpKmPiGam()
+  _fitParamsBasePtr(fitParamsBasePtr)
 {
   fillParams();
 
 }
 
-StreamChic1ToKpKmPiGamFitParms::~StreamChic1ToKpKmPiGamFitParms(){;}
+StreamFitParmsBase::~StreamFitParmsBase(){;}
 
-void StreamChic1ToKpKmPiGamFitParms::fillParams(){
+void StreamFitParmsBase::fillParams(){
   
 //   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 //   StringPairMap::const_iterator stringPairIter;
 
 //  1. fill magnitudes and phases 
-   for (int ui=paramEnumChic1ToKpKmPiGam::ChiGam; ui<paramEnumChic1ToKpKmPiGam::nAmps; ui++){
+   for (int ui=_fitParamsBasePtr->ampIdxMin(); ui<=_fitParamsBasePtr->ampIdxMax(); ui++){
 
-     std::string theAmpString=paramEnumChic1ToKpKmPiGam::name(ui);
+     std::string theAmpString=_fitParamsBasePtr->ampName(ui);
      std::string theMagSuffix=theAmpString+"Mag";
-     std::vector< boost::shared_ptr<const JPCLS> >  theJPCLSs=_fitParamsKpKmPiGam.jpclsVec(ui);
+     std::vector< boost::shared_ptr<const JPCLS> >  theJPCLSs=_fitParamsBasePtr->jpclsVec(ui);
 
      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagVal;
      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErr;
@@ -46,8 +46,8 @@ void StreamChic1ToKpKmPiGamFitParms::fillParams(){
    }
 
 //  2. fill masses and width 
-   for (int ui=paramEnumChic1ToKpKmPiGam::nAmps; ui<paramEnumChic1ToKpKmPiGam::nMasses; ui++){
-     std::string massName=paramEnumChic1ToKpKmPiGam::name(ui);
+   for (int ui=_fitParamsBasePtr->massIdxMin(); ui<=_fitParamsBasePtr->massIdxMax(); ui++){
+     std::string massName=_fitParamsBasePtr->massName(ui);
      std::string theMassSuffix=massName+"Mass";
 
      fillParameter(_paramVal.Masses, _paramErr.Masses, theMassSuffix, ui);
@@ -57,8 +57,8 @@ void StreamChic1ToKpKmPiGamFitParms::fillParams(){
    }
 
 //  3. fill gFactors
-   for (int ui=paramEnumChic1ToKpKmPiGam::nMasses; ui<paramEnumChic1ToKpKmPiGam::ngFactors; ui++){
-     std::string gFactorName=paramEnumChic1ToKpKmPiGam::name(ui);
+   for (int ui=_fitParamsBasePtr->gFactorIdxMin(); ui<=_fitParamsBasePtr->gFactorIdxMax(); ui++){
+     std::string gFactorName=_fitParamsBasePtr->gFactorName(ui);
      std::string thegFactorSuffix=gFactorName+"gFactor";
 
      fillParameter(_paramVal.gFactors, _paramErr.gFactors, thegFactorSuffix, ui);
@@ -66,8 +66,8 @@ void StreamChic1ToKpKmPiGamFitParms::fillParams(){
    }
 
 //  3. fill other parameter
-   for (int ui=paramEnumChic1ToKpKmPiGam::ngFactors; ui<paramEnumChic1ToKpKmPiGam::nOthers; ui++){
-     std::string otherName=paramEnumChic1ToKpKmPiGam::name(ui);
+   for (int ui=_fitParamsBasePtr->otherIdxMin(); ui<=_fitParamsBasePtr->otherIdxMax(); ui++){
+     std::string otherName=_fitParamsBasePtr->otherName(ui);
      std::string theOtherSuffix=otherName+"Other";
 
      fillParameter(_paramVal.otherParams, _paramErr.otherParams, theOtherSuffix, ui);
@@ -76,7 +76,7 @@ void StreamChic1ToKpKmPiGamFitParms::fillParams(){
 
 
 
-void StreamChic1ToKpKmPiGamFitParms::fillAmps(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSs, std::string& suffix, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& valMap , std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& errMap){
+void StreamFitParmsBase::fillAmps(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSs, std::string& suffix, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& valMap , std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& errMap){
 
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   StringPairMap::const_iterator stringPairIter;
@@ -97,7 +97,7 @@ void StreamChic1ToKpKmPiGamFitParms::fillAmps(std::vector< boost::shared_ptr<con
 }
 
 
-void StreamChic1ToKpKmPiGamFitParms::fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap, std::string& suffix, int index){
+void StreamFitParmsBase::fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap, std::string& suffix, int index){
 
   StringPairMap::const_iterator stringPairIter=_stringPairMap.find(suffix);
   if ( stringPairIter != _stringPairMap.end() ){

@@ -8,7 +8,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamParser.hh"
-#include "Examples/Psi2SToKpKmPiGam/StreamChic1ToKpKmPiGamFitParms.hh"
+#include "PwaUtils/StreamFitParmsBase.hh"
 #include "Examples/Psi2SToKpKmPiGam/FitParamsChic1ToKpKmPiGam.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -55,7 +55,7 @@ int main(int __argc,char *__argv[]){
 
   std::string paramStreamerPath=theAppParams.fitParamFile();
 
-  StreamChic1ToKpKmPiGamFitParms theParamStreamer(paramStreamerPath);
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new FitParamsChic1ToKpKmPiGam()));
 
   fitParams theStartparams=theParamStreamer.getFitParamVal();
   fitParams theErrorparams=theParamStreamer.getFitParamErr();    

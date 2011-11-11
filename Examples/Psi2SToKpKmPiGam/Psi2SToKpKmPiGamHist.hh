@@ -13,13 +13,11 @@
 #include "TROOT.h"
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include "Examples/Psi2SToKpKmPiGam/Psi2SToKpKmPiGamData.hh"
-#include "Examples/Psi2SToKpKmPiGam/FitParamsChic1ToKpKmPiGam.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/AbsLh.hh"
 
-using Psi2SToKpKmPiGamData::Psi2SToKpKmPiGamEvtData;
-
-class Psi2SToKpKmPiGamEventList;
-class AbsPsi2SToKpKmPiGamLh;
+//class EvtList;
 class TFile;
 class TH2F;
 class TH1F;
@@ -32,8 +30,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Psi2SToKpKmPiGamHist(boost::shared_ptr<const Psi2SToKpKmPiGamEventList>);
-  Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsPsi2SToKpKmPiGamLh>, fitParams&);
+  Psi2SToKpKmPiGamHist(boost::shared_ptr<const EvtDataBaseList>);
+  Psi2SToKpKmPiGamHist(boost::shared_ptr<AbsLh>, fitParams&);
 
   /** Destructor */
   virtual ~Psi2SToKpKmPiGamHist();
@@ -94,20 +92,20 @@ private:
 
 
   void initRootStuff();
-  void plotDalitz(TH2F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotCosPsi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotChic1Toa0Pi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotChic1ToK890K(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotChic1ToK1400K(TH1F* costHist, TH1F* phiHist,const Psi2SToKpKmPiGamEvtData* theData, double weight);
+  void plotDalitz(TH2F* theHisto, EvtData* theData, double weight);
+  void plotCosPsi(TH1F* theHisto,  EvtData* theData, double weight);
+  void plotChic1Toa0Pi(TH1F* theHisto,  EvtData* theData, double weight);
+  void plotChic1ToK890K(TH1F* theHisto,  EvtData* theData, double weight);
+  void plotChic1ToK1400K(TH1F* costHist, TH1F* phiHist, EvtData* theData, double weight);
 
-  void plotAnglesChic1ToKKPi(TH1F* costHist, TH1F* phiHist, const Psi2SToKpKmPiGamEvtData* theData, double weight);
+  void plotAnglesChic1ToKKPi(TH1F* costHist, TH1F* phiHist,  EvtData* theData, double weight);
 
-  void plotCosK1400(TH1F* costHist, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotCosK890(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotCosa980(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotMKpKm(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void plotMKPi(TH1F* theHisto, const Psi2SToKpKmPiGamEvtData* theData, double weight);
-  void fillTuple( TNtuple* theTuple, const Psi2SToKpKmPiGamEvtData* theData, double weight);
+  void plotCosK1400(TH1F* costHist,  EvtData* theData, double weight);
+  void plotCosK890(TH1F* theHisto,  EvtData* theData, double weight);
+  void plotCosa980(TH1F* theHisto,  EvtData* theData, double weight);
+  void plotMKpKm(TH1F* theHisto,  EvtData* theData, double weight);
+  void plotMKPi(TH1F* theHisto,  EvtData* theData, double weight);
+//   void fillTuple( TNtuple* theTuple,  EvtData* theData, double weight);
 
 };
 
