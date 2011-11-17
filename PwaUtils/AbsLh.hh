@@ -36,7 +36,8 @@ public:
 
   virtual boost::shared_ptr<const EvtDataBaseList> getEventList() const {return _evtListPtr;}
 
-   virtual void print(std::ostream& os) const=0;
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
+  virtual void print(std::ostream& os) const=0;
 
 protected:
 

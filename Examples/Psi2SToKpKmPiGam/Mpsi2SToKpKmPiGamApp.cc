@@ -88,15 +88,15 @@ int main(int __argc,char *__argv[]){
   setErrLogMode(theAppParams.getErrLogMode());
 
   std::string theCfgFile = theAppParams.getConfigFile();
-  Info << "The path to config file is " << theCfgFile << "\n" << endmsg;    
+//   Info << "The path to config file is " << theCfgFile << "\n" << endmsg;    
 
-  std::string paramStreamerPath=theAppParams.fitParamFile();
+//   std::string paramStreamerPath=theAppParams.fitParamFile();
 
-  StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new FitParamsChic1ToKpKmPiGam()));
-  fitParams theStartparams=theParamStreamer.getFitParamVal();
-  fitParams theErrorparams=theParamStreamer.getFitParamErr();    
+//   StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new FitParamsChic1ToKpKmPiGam()));
+//   fitParams theStartparams=theParamStreamer.getFitParamVal();
+//   fitParams theErrorparams=theParamStreamer.getFitParamErr();    
 
-  boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsChic1ToKpKmPiGam(theStartparams, theErrorparams));
+//   boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsChic1ToKpKmPiGam(theStartparams, theErrorparams));
 
 
   const std::string datFile=theAppParams.dataFile();
@@ -186,10 +186,30 @@ int main(int __argc,char *__argv[]){
     Alert << "start with hypthesis " << startWithHyp << " not supported!!!!" << endmsg;
     exit(1);
   }
-  bool qaMode=theAppParams.qaMode();
-  Info << "qaMode: " << qaMode << endmsg;
 
-  if (qaMode){
+
+  std::string mode=theAppParams.mode();
+  if (mode=="dumpDefaultParams"){
+    fitParams defaultVal;
+    fitParams defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+    std::ofstream theStreamDefault ( "defaultparams.dat");
+    boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsChic1ToKpKmPiGam(defaultVal, defaultErr));
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    return 0;      
+  }
+
+
+
+  std::string paramStreamerPath=theAppParams.fitParamFile();
+
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new FitParamsChic1ToKpKmPiGam()));
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();    
+
+  boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsChic1ToKpKmPiGam(theStartparams, theErrorparams));
+
+  if (mode=="qaMode"){
     Info << "\nThe parameter values are: " << "\n" << endmsg;
     theFitParamBase->printParams(theStartparams);
 
@@ -208,7 +228,7 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
   
-  
+  if (mode=="pwa"){  
   PwaFcnBase theFcn(theLhPtr, theFitParamBase); 
   MnUserParameters upar;
   theFitParamBase->setMnUsrParams(upar);
@@ -260,7 +280,8 @@ int main(int __argc,char *__argv[]){
    fitParams finalFitErrs=theFitParamBase->getFitParamVal(finalParamErrorVec);
    std::ofstream theStream ( "finalResult.dat");
    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
-
+   return 0;
+  }
    return 0;
 }
 

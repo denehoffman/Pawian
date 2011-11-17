@@ -330,14 +330,14 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
   if (theVals.gFactors.size()>0 && theErrs.gFactors.size()==theVals.gFactors.size()){
     for (itSinglePar=theVals.gFactors.begin(); itSinglePar!=theVals.gFactors.end(); ++itSinglePar){
       std::string currentName=gFactorName(itSinglePar->first)+"gFactor";
-      os << currentName << "\t" << itSinglePar->second << std::endl;
+      os << currentName << "\t" << itSinglePar->second << "\t" << theErrs.gFactors[itSinglePar->first] << std::endl;
     }
   }
 
   if (theVals.otherParams.size()>0 && theErrs.otherParams.size()==theVals.otherParams.size()){
     for (itSinglePar=theVals.otherParams.begin(); itSinglePar!=theVals.otherParams.end(); ++itSinglePar){
       std::string currentName=otherName(itSinglePar->first)+"Other";
-      os << currentName << "\t" << itSinglePar->second;
+      os << currentName << "\t" << itSinglePar->second << "\t" << theErrs.otherParams[itSinglePar->first] << std::endl;
     }
   }
 }

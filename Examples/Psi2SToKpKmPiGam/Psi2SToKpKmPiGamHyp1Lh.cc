@@ -41,6 +41,50 @@ complex<double> Psi2SToKpKmPiGamHyp1Lh::calcDecAmp(complex<double>& inAmp,Spin l
 
 
 
+void Psi2SToKpKmPiGamHyp1Lh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+
+  Psi2SToKpKmPiGamBaseLh::getDefaultParams(fitVal, fitErr);
+
+  FitParamsChic1ToKpKmPiGam fitParamChic1;
+  std::map<int, std::vector< boost::shared_ptr<const JPCLS> > > theAmpMap;
+
+  theAmpMap[paramEnumChic1ToKpKmPiGam::KappaK]=fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::KappaK);
+
+  std::map<int, std::vector< boost::shared_ptr<const JPCLS> > >::iterator itAmpMap;
+  for (itAmpMap=theAmpMap.begin(); itAmpMap!=theAmpMap.end(); ++itAmpMap){
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valMagMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errMagMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valPhiMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errPhiMap;
+    
+    std::vector< boost::shared_ptr<const JPCLS> >::iterator itAmp;
+    for (itAmp=itAmpMap->second.begin(); itAmp!=itAmpMap->second.end(); ++itAmp){
+        valMagMap[(*itAmp)]=0.5;
+        errMagMap[(*itAmp)]=0.2; 
+        valPhiMap[(*itAmp)]=0.;
+        errPhiMap[(*itAmp)]=0.2;      
+      }
+
+    fitVal.Mags[itAmpMap->first]=valMagMap;
+    fitVal.Phis[itAmpMap->first]=valPhiMap;  
+    fitErr.Mags[itAmpMap->first]=errMagMap;
+    fitErr.Phis[itAmpMap->first]=errPhiMap;  
+  }
+
+  //fill masses and widths
+  fitVal.Masses[paramEnumChic1ToKpKmPiGam::Kappa]=0.6;    
+  fitErr.Masses[paramEnumChic1ToKpKmPiGam::Kappa]=0.1;
+  fitVal.Widths[paramEnumChic1ToKpKmPiGam::Kappa]=0.6;
+  fitErr.Widths[paramEnumChic1ToKpKmPiGam::Kappa]=0.1;
+
+  //fill gFactors
+
+  //fill others
+}
+
+
+
 void Psi2SToKpKmPiGamHyp1Lh::print(std::ostream& os) const{
   os << "Psi2SToKpKmPiGamHyp1Lh::print\n";
 }

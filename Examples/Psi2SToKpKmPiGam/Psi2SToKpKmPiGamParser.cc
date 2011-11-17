@@ -39,7 +39,7 @@ bool Psi2SToKpKmPiGamParser::parseCommandLine(int argc, char **argv)
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
       ("disableHyp",po::value< vector<string> >(&_disabledHyps), "disable hypotheses")
-      ("qaMode",po::value<bool>(&_qaMode), "enable/diable QA mode")
+      ("mode",po::value<string>(&_mode), "choose the application mode: dumpDefaultParams, qaMode or pwa")
       ;
 
     po::options_description config("Configuration file options");
@@ -106,9 +106,9 @@ bool Psi2SToKpKmPiGamParser::parseCommandLine(int argc, char **argv)
 		<< "Error log mode: " << _errLogMode <<"\n\n"
 		<< "data file: " << _dataFile <<"\n\n"
 		<< "mc file: " << _mcFile <<"\n\n"
-		<< "file with start parameters for fit or qa: " << _paramFile << "\n\n"
+		<< "application mode: " << _mode << "\n\n"
 		<< "startHypo: " << _startHypo << "\n\n"
-		<< "qaMode: " << _qaMode << "\n\n"
+		<< "mode: " << _mode << "\n\n"
 	    << endl;
 
 

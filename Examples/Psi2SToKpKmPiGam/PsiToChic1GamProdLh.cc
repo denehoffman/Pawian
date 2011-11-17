@@ -70,6 +70,37 @@ complex<double> PsiToChic1GamProdLh::calcCoherentAmp(Spin Minit, Spin MChi, Spin
   return result; 
 }
 
+void PsiToChic1GamProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+
+  FitParamsChic1ToKpKmPiGam fitParamChic1;
+
+
+  std::map<int, std::vector< boost::shared_ptr<const JPCLS> > > theAmpMap;
+  theAmpMap[paramEnumChic1ToKpKmPiGam::ChiGam] = fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::ChiGam);
+  std::map<int, std::vector< boost::shared_ptr<const JPCLS> > >::iterator itAmpMap;
+
+  for (itAmpMap=theAmpMap.begin(); itAmpMap!=theAmpMap.end(); ++itAmpMap){
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valMagMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errMagMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valPhiMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errPhiMap;
+    
+    std::vector< boost::shared_ptr<const JPCLS> >::iterator itAmp;
+    for (itAmp=itAmpMap->second.begin(); itAmp!=itAmpMap->second.end(); ++itAmp){
+        valMagMap[(*itAmp)]=0.5;
+        errMagMap[(*itAmp)]=0.2; 
+        valPhiMap[(*itAmp)]=0.;
+        errPhiMap[(*itAmp)]=0.2;      
+      }
+
+    fitVal.Mags[itAmpMap->first]=valMagMap;
+    fitVal.Phis[itAmpMap->first]=valPhiMap;  
+    fitErr.Mags[itAmpMap->first]=errMagMap;
+    fitErr.Phis[itAmpMap->first]=errPhiMap;  
+  }
+
+}
 
 void PsiToChic1GamProdLh::print(std::ostream& os) const{
   os << "PsiToChic1GamProdLh::print\n";

@@ -43,7 +43,7 @@ public:
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal);
   // Getters:
 
-
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
 
 protected:

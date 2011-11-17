@@ -245,6 +245,80 @@ complex<double> Psi2SToKpKmPiGamBaseLh::calcDecAmp(complex<double>& inAmp,Spin l
   return result;
 }
 
+void Psi2SToKpKmPiGamBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+
+  FitParamsChic1ToKpKmPiGam fitParamChic1;
+
+
+  std::map<int, std::vector< boost::shared_ptr<const JPCLS> > > theAmpMap;
+  theAmpMap[paramEnumChic1ToKpKmPiGam::ChiGam] = fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::ChiGam);
+  theAmpMap[paramEnumChic1ToKpKmPiGam::K890K]=fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::K890K);
+  theAmpMap[paramEnumChic1ToKpKmPiGam::a980Pi]=fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::a980Pi);
+  if(_K0_1430Hyp) theAmpMap[paramEnumChic1ToKpKmPiGam::K_0_1400K]=fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::K_0_1400K);
+  if(_K1_1410Hyp) theAmpMap[paramEnumChic1ToKpKmPiGam::K_1_1400K]=fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::K_1_1400K);
+  if(_K2_1430Hyp) theAmpMap[paramEnumChic1ToKpKmPiGam::K_2_1400K]=fitParamChic1.jpclsVec(paramEnumChic1ToKpKmPiGam::K_2_1400K);
+
+  std::map<int, std::vector< boost::shared_ptr<const JPCLS> > >::iterator itAmpMap;
+  for (itAmpMap=theAmpMap.begin(); itAmpMap!=theAmpMap.end(); ++itAmpMap){
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valMagMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errMagMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valPhiMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errPhiMap;
+    
+    std::vector< boost::shared_ptr<const JPCLS> >::iterator itAmp;
+    for (itAmp=itAmpMap->second.begin(); itAmp!=itAmpMap->second.end(); ++itAmp){
+	valMagMap[(*itAmp)]=0.5;
+	errMagMap[(*itAmp)]=0.2; 
+	valPhiMap[(*itAmp)]=0.;
+	errPhiMap[(*itAmp)]=0.2;      
+      }
+
+    fitVal.Mags[itAmpMap->first]=valMagMap;
+    fitVal.Phis[itAmpMap->first]=valPhiMap;  
+    fitErr.Mags[itAmpMap->first]=errMagMap;
+    fitErr.Phis[itAmpMap->first]=errPhiMap;  
+  }
+
+
+  //fill masses and wisths
+  fitVal.Masses[paramEnumChic1ToKpKmPiGam::K890]=0.892;
+  fitErr.Masses[paramEnumChic1ToKpKmPiGam::K890]=0.01;
+  fitVal.Widths[paramEnumChic1ToKpKmPiGam::K890]=0.07;
+  fitErr.Widths[paramEnumChic1ToKpKmPiGam::K890]=0.02;
+  fitVal.Masses[paramEnumChic1ToKpKmPiGam::a980]=0.982;
+  fitErr.Masses[paramEnumChic1ToKpKmPiGam::a980]=0.03;
+  if(_K0_1430Hyp){
+    fitVal.Masses[paramEnumChic1ToKpKmPiGam::K_0_1400]=1.420;
+    fitErr.Masses[paramEnumChic1ToKpKmPiGam::K_0_1400]=0.03;
+    fitVal.Widths[paramEnumChic1ToKpKmPiGam::K_0_1400]=0.15;
+    fitErr.Widths[paramEnumChic1ToKpKmPiGam::K_0_1400]=0.15;
+  }
+  if(_K1_1410Hyp){
+    fitVal.Masses[paramEnumChic1ToKpKmPiGam::K_1_1400]=1.430;
+    fitErr.Masses[paramEnumChic1ToKpKmPiGam::K_1_1400]=0.03;
+    fitVal.Widths[paramEnumChic1ToKpKmPiGam::K_1_1400]=0.15;
+    fitErr.Widths[paramEnumChic1ToKpKmPiGam::K_1_1400]=0.15;
+  }
+  if(_K2_1430Hyp){
+    fitVal.Masses[paramEnumChic1ToKpKmPiGam::K_2_1400]=1.430;
+    fitErr.Masses[paramEnumChic1ToKpKmPiGam::K_2_1400]=0.03;
+    fitVal.Widths[paramEnumChic1ToKpKmPiGam::K_2_1400]=0.15;
+    fitErr.Widths[paramEnumChic1ToKpKmPiGam::K_2_1400]=0.15;
+  } 
+
+  //fill gFactors
+  fitVal.gFactors[paramEnumChic1ToKpKmPiGam::a980gKK]=0.7;
+  fitErr.gFactors[paramEnumChic1ToKpKmPiGam::a980gKK]=0.02;
+  fitVal.gFactors[paramEnumChic1ToKpKmPiGam::a980gEtaPi]=0.6;
+  fitErr.gFactors[paramEnumChic1ToKpKmPiGam::a980gEtaPi]=0.02;
+
+  //fill others
+  fitVal.otherParams[paramEnumChic1ToKpKmPiGam::phaseSpace]=0.02;
+  fitErr.otherParams[paramEnumChic1ToKpKmPiGam::phaseSpace]=0.05; 
+  return;
+}
+
 
 void Psi2SToKpKmPiGamBaseLh::print(std::ostream& os) const{
   os << "Psi2SToKpKmPiGamBaseLh::print\n";
