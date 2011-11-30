@@ -57,6 +57,7 @@ protected:
   /// Assert that @a tbase and @a this have the same rank
   inline bool RankAssert(const Tensor_Base &__tbase) {
     assert(this->_rank == __tbase._rank);
+    return true;
   }
 
 public:

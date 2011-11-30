@@ -54,6 +54,8 @@ double BlattWeisskopf::operator()(double p) const
 
 double BlattWeisskopf::compute(double p) const
 {
+
+  double result=1.;
   if(p < 0) {
     
     std::cout << "Momentum " << p << " negative in form factor calculation" << std::endl;
@@ -74,18 +76,19 @@ double BlattWeisskopf::compute(double p) const
 // 	}
 //   }
 
-    if(0 == _LL) return 1.;
+    if(0 == _LL) result=1.;
     else
-      if(1 == _LL) return sqrt(x/(1.0+x));
+      if(1 == _LL) result=sqrt(x/(1.0+x));
       else
-	if(2 == _LL) return sqrt((13.*x*x)/((x-3.)*(x-3.)+9.*x));
+	if(2 == _LL) result=sqrt((13.*x*x)/((x-3.)*(x-3.)+9.*x));
 	else
-	  if(3 == _LL) return sqrt((277.*x*x*x)/(x*(x-15.)*(x-15.)+9.*(2.*x-5)*(2.*x-5)));
+	  if(3 == _LL) result=sqrt((277.*x*x*x)/(x*(x-15.)*(x-15.)+9.*(2.*x-5)*(2.*x-5)));
 	  else {
 	    std::cout << "Angular momentum " << _LL << " not implemented" << std::endl;
 	    assert(0);
 	  }
   }
 
+  return result;
 }
 
