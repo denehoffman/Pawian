@@ -5,5 +5,6 @@ project :
 
 lib qft++ : 
 	[ glob relativistic-quantum-mechanics/*.cc 
-	  tensor/*.cc : ] 
+	  tensor/*.cc 
+          matrix/*.cc : ] 
 	: : : ;

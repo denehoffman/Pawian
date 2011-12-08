@@ -150,4 +150,8 @@ complex<double> ReggePropagator(double __t,double __s,double __a,double __b,
 Spin GetSpin(const string &__spin);
 //_____________________________________________________________________________
 
+complex<double> phaseSpaceFac(double mass, double massDec1, double massDec2);
+complex<double> breakupMomQ(double mass, double massDec1, double massDec2);
+
+
 #endif /* _Utils_H */

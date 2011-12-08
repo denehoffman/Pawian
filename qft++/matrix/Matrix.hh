@@ -382,6 +382,72 @@ public:
     for(int i = 0; i < this->Size(); i++) _data[i] = zero(_data[i]);
   }
 
+  void invert(){  
+
+    if(_num_rows != _num_cols){
+    cout << "Error! invert() matrix must be diagonal."
+         << endl;
+    }
+    assert(_num_rows == _num_cols);
+   
+    if (_num_rows <= 0) return;  // sanity check
+    if (_num_rows == 1){
+      _data[0] = unity(_data[0])/_data[0];
+      return;
+    }  
+    // must be of dimension >= 2
+    for (int i=1; i < _num_rows; i++) _data[i] /= _data[0]; // normalize row 0
+
+    for (int i=1; i < _num_rows; i++)  { 
+      for (int j=i; j < _num_rows; j++)  { // do a column of L
+        _Tp sum = 0.0;
+        for (int k = 0; k < i; k++)  
+//             sum += _data[j*Size()+k] * _data[k*Size()+i];
+//         _data[j*Size()+i] -= sum;
+            sum += _data[j*_num_rows+k] * _data[k*_num_rows+i];
+        _data[j*_num_rows+i] -= sum;
+        }
+      if (i == _num_rows-1) continue;
+      for (int j=i+1; j < _num_rows; j++)  {  // do a row of U
+        _Tp sum = zero( _data[0] );
+        for (int k = 0; k < i; k++)
+//        sum += _data[i*Size()+k]*_data[k*Size()+j];
+//         _data[i*Size()+j] = 
+//        (_data[i*Size()+j]-sum) / _data[i*Size()+i];
+          sum += _data[i*_num_rows+k]*_data[k*_num_rows+j];
+        _data[i*_num_rows+j] = 
+          (_data[i*_num_rows+j]-sum) / _data[i*_num_rows+i];
+      }
+    }
+
+  for ( int i = 0; i < _num_rows; i++ )  // invert L
+    for ( int j = i; j < _num_rows; j++ )  {
+      _Tp x = unity(_data[0]);
+      if ( i != j ) {
+        x = 0.0;
+        for ( int k = i; k < j; k++ ) 
+          x -= _data[j*_num_cols+k]*_data[k*_num_cols+i];
+      }
+      _data[j*_num_cols+i] = x / _data[j*_num_cols+j];
+    }
+  for ( int i = 0; i < _num_rows; i++ )   // invert U
+    for ( int j = i; j < _num_rows; j++ )  {
+      if ( i == j ) continue;
+      _Tp sum = zero(_data[0]);
+      for ( int k = i; k < j; k++ )
+        sum += _data[k*_num_cols+j]*( (i==k) ? 1.0 : _data[i*_num_cols+k] );
+      _data[i*_num_cols+j] = -sum;
+    }
+  for ( int i = 0; i < _num_rows; i++ )   // final inversion
+    for ( int j = 0; j < _num_rows; j++ )  {
+      _Tp sum = zero(_data[0]);
+      for ( int k = ((i>j)?i:j); k < _num_rows; k++ )  
+        sum += ((j==k)?1.0:_data[j*_num_cols+k])*_data[k*_num_cols+i];
+      _data[j*_num_cols+i] = sum;
+    }
+  }
+
+
   /// Removes all elements from the matrix
   void Clear() {
     if(!_data.empty()) _data.clear();

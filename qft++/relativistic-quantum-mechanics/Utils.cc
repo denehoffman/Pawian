@@ -405,20 +405,22 @@ complex<double> Flatte(const Vector4<double> &__p4, std::pair<const double, cons
 
   double mAB=__p4.Mass();
 
-  //calculate phase-space factors 
+  //calculate gammas with phase-space factors 
+  complex<double> gamma11=g1*phaseSpaceFac(mAB, m1a, m1b);
+  complex<double> gamma22=g2*phaseSpaceFac(mAB, m2a, m2b);
 
-  double ph1Sqr=mAB*mAB/4-m1a*m1b;
+//   double ph1Sqr=mAB*mAB/4-m1a*m1b;
 
-  complex<double> gamma11(0.,0.);
-  if (ph1Sqr>=0.) gamma11=complex<double>( g1*sqrt(ph1Sqr), 0.);
-  else gamma11=complex<double>(0., g1*sqrt(-ph1Sqr));
+//   complex<double> gamma11(0.,0.);
+//   if (ph1Sqr>=0.) gamma11=complex<double>( g1*sqrt(ph1Sqr), 0.);
+//   else gamma11=complex<double>(0., g1*sqrt(-ph1Sqr));
 
 
-  double ph2Sqr=mAB*mAB/4-m2a*m2b;
+//   double ph2Sqr=mAB*mAB/4-m2a*m2b;
 
-  complex<double> gamma22(0.,0.);
-  if (ph2Sqr>=0.) gamma22=complex<double>(g2*sqrt(ph2Sqr), 0.);
-  else gamma22=complex<double>(0., g2*sqrt(-ph2Sqr));
+//   complex<double> gamma22(0.,0.);
+//   if (ph2Sqr>=0.) gamma22=complex<double>(g2*sqrt(ph2Sqr), 0.);
+//   else gamma22=complex<double>(0., g2*sqrt(-ph2Sqr));
 
   complex<double> gammaLow(0.,0.);
   if( (m1a+m1b) < (m2a+m2b) ) gammaLow=gamma11;
@@ -550,3 +552,29 @@ void Wigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
   }
 }
 //_____________________________________________________________________________
+
+complex<double> phaseSpaceFac(double mass, double massDec1, double massDec2){  
+
+  complex<double> result(0.,0.);
+  if(mass < 1e-8) {
+    
+    std::cout << "mass " << mass << " very close to 0 or negative; not possible to calculate phasespace factor " <<std::endl;
+    assert(0);
+  }
+
+  double termPlus=(massDec1+massDec2)/mass;
+  double termMinus=(massDec1-massDec2)/mass;   
+  double tmpVal=(1.-termPlus*termPlus) * (1.-termMinus*termMinus);
+
+//    double tmpVal=mass*mass/4-massDec1*massDec2; 
+  
+  if (tmpVal>=0.)  result = complex<double> (sqrt(tmpVal), 0. );
+  else   result = complex<double> (0., sqrt(-tmpVal));
+  return result;
+}
+
+complex<double> breakupMomQ(double mass, double massDec1, double massDec2){
+
+  complex<double> result=phaseSpaceFac(mass, massDec1, massDec2)*mass/2.;
+  return result;  
+}

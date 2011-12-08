@@ -16,6 +16,7 @@
 
 class TFile;
 class TH1F;
+class TH2F;
 
 class FlatteShape {
 
@@ -39,6 +40,19 @@ private:
   TFile* _theTFile;
   TH1F* _histShapeLow;
   TH1F* _histShapeHigh;
+  TH1F* _histShapeLowTest;
+  TH1F* _histShapeHighTest;
+  TH1F* _histShapeLowKmatr;
+  TH1F* _histShapeHighKmatr;
+  TH2F* _argandKmatrFlatteLowHist;
+  TH2F* _argandKmatrLowHist;
+  TH2F* _argandKmatrHighHist;
+
+  TH1F* _histShapeLowKmatrRel;
+  TH1F* _histShapeHighKmatrRel;
+  TH2F* _argandKmatrLowRelHist;
+  TH2F* _argandKmatrHighRelHist;
+
 
   std::string _pType;
 
