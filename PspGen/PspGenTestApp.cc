@@ -18,12 +18,15 @@
 #include <TApplication.h>
 
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
-  HepMC::IO_GenEvent hepMC_out("HepMCEvt.out",std::ios::out);
+  HepMC::IO_GenEvent hepMC_out("phspEvents_1mio_RndSeed4703.out",std::ios::out);
 
-  EvtSimpleRandomEngine myRandom(4711);
+  EvtSimpleRandomEngine myRandom(4703);
   EvtRandom::setRandomEngine(&myRandom);
 
   // variables for the production e+ e- Psi2s
@@ -75,6 +78,7 @@ int main(int argc, char* argv[])
   TH1F cosThetaKpi("cosThetaKpi", "cosThetaKpi", 512, -1.2, 1.2);
 
   for (int count = 0; count < 1000000; count++) {
+    if(count % 100000 == 0) cout << "Event " << count << " generated." << endl;
 
     EvtGenKine::PhaseSpace(firstNdaug, firstMass, firstP4, firstMp);
     EvtGenKine::PhaseSpace(ndaug, mass, p4, firstP4[0].mass());
@@ -84,7 +88,7 @@ int main(int argc, char* argv[])
 
     //    dalitz.Fill((p4[0]+p4[1])*(p4[0]+p4[1]), (p4[1]+p4[2])*(p4[1]+p4[2]));
 
-     HepMC::GenEvent* evt = new HepMC::GenEvent( 20, count );
+    HepMC::GenEvent* evt = new HepMC::GenEvent( 20, count );
     evt->use_units(HepMC::Units::GEV, HepMC::Units::MM);
 
     // create production vertex
@@ -117,7 +121,7 @@ int main(int argc, char* argv[])
     vtx_chi_c0->add_particle_out( new HepMC::GenParticle( HepMC::FourVector(p4[3].get(1),p4[3].get(2),p4[3].get(3), p4[3].get(0)), 111, 2 ) );
 
     
-    evt->print(std::cout);
+    // evt->print(std::cout);
     hepMC_out << evt;
     delete evt;
 
@@ -138,9 +142,9 @@ int main(int argc, char* argv[])
 			  (p4[0]+p4[2]).get(2)*(p4[0]+p4[2]).get(2) + 
 			  (p4[0]+p4[2]).get(3)*(p4[0]+p4[2]).get(3)), 
 		     1.);
-
   }
 
+  cout << "Finished!" << endl;
 //   massKpipi.Draw();
 //   rootapp->Run();
 
