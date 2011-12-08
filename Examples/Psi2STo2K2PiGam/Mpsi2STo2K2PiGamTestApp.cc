@@ -202,14 +202,17 @@ int main(int __argc,char *__argv[]){
 
   if (genMode){
     const std::string hepMCinFile=theAppParams.hepMCinFile();
+    const std::string addSuffix="f";
+    const std::string hepMCoutFile=theAppParams.hepMCinFile()+addSuffix;
     Info << "HepMCin file: " << hepMCinFile << endmsg;
+    Info << "HepMCout file: " << hepMCoutFile << endmsg;
     boost::shared_ptr<HepMCEventList> hepMCEvtListPtr(new HepMCEventList(hepMCinFile));
 
     hepMCEvtListPtr->rewind();
 
     Psi2STo2K2PiGamHitAndMiss theHitAndMiss(thePsi2STo2K2PiGamLhPtr, theStartparams, hepMCEvtListPtr, "Psi2STo2K2PiGamGen.root");     
  
-    theHitAndMiss.dumpToHepMCAscii("HepMCAscii.out");
+    theHitAndMiss.dumpToHepMCAscii(hepMCoutFile);
     return 0;
   }
 
