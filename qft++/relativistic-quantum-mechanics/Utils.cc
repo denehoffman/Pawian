@@ -406,8 +406,8 @@ complex<double> Flatte(const Vector4<double> &__p4, std::pair<const double, cons
   double mAB=__p4.Mass();
 
   //calculate gammas with phase-space factors 
-  complex<double> gamma11=g1*phaseSpaceFac(mAB, m1a, m1b);
-  complex<double> gamma22=g2*phaseSpaceFac(mAB, m2a, m2b);
+  complex<double> gamma11=g1*breakupMomQ(mAB, m1a, m1b);
+  complex<double> gamma22=g2*breakupMomQ(mAB, m2a, m2b);
 
 //   double ph1Sqr=mAB*mAB/4-m1a*m1b;
 
