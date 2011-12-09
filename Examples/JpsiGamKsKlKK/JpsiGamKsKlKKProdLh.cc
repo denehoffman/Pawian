@@ -45,6 +45,7 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsJpsiGamKsKlKKLh> 
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitparamsGamKsKlKK.jpclsVec(*ampIt);
     _nFitParams+=2*JPCLSs.size();
   }
+  _nFitParams+=4; //2 masses+ 2 widths
 }
 
 JpsiGamKsKlKKProdLh::~JpsiGamKsKlKKProdLh()
@@ -249,10 +250,6 @@ void JpsiGamKsKlKKProdLh::setMnUsrParams(MnUserParameters& upar, paramGamKsKlKK&
 
 int JpsiGamKsKlKKProdLh::setFitParamVal(paramGamKsKlKK& theParamVal, const std::vector<double>& par){  
 
-  std::vector<double>::const_iterator it;
-  for (it=par.begin(); it!=par.end(); ++it){
-    std::cout << "par: " << *it << std::endl;
-  }
   
   if (par.size()!= nFitParams() ) {
     Alert  << "size of parameters wrong!!! par.size()=" << par.size() << 
@@ -267,7 +264,7 @@ int JpsiGamKsKlKKProdLh::setFitParamVal(paramGamKsKlKK& theParamVal, const std::
   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::etacGamma);
   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225Gamma);
    counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter,  paramEnumGamKsKlKK::etac);
-  counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225);
+  counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225);
 //   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::f22010Gamma);
 //   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::f22300Gamma);
 //   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::f22340Gamma);
