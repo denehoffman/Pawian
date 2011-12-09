@@ -1,0 +1,15 @@
+project : 
+        ;
+
+lib JpsiGamKlKsKK : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/PwaUtils//PwaUtils 
+        $(TOP)/Event//Event 
+        $(TOP)/qft++//qft++ 
+	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: 
+	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+
+exe MJpsiGamKlKsKKApp : MJpsiGamKlKsKKApp.cc JpsiGamKlKsKK : ;
+exe MJpsiGamKsKlKKParserTestApp : JpsiGamKsKlKKParserTestApp.cc JpsiGamKlKsKK : ;
+
