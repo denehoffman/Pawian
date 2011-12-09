@@ -15,7 +15,7 @@
 
 #include "Examples/JpsiGamKsKlKK/AbsJpsiGamKsKlKKLh.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKProdLh.hh"
-#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKBaseLh.hh"
+//#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKBaseLh.hh"
 
 
 #include "Examples/JpsiGamKsKlKK/MJpsiGamKsKlKKFcn.hh"
@@ -177,8 +177,8 @@ int main(int __argc,char *__argv[]){
   if (startWithHyp=="production"){
     theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr) );
   }
-  else if (startWithHyp=="base") 
-    theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKBaseLh(theJpsiGamKsKlKKEventListPtr, hypMap));
+//   else if (startWithHyp=="base") 
+//     theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKBaseLh(theJpsiGamKsKlKKEventListPtr, hypMap));
   
   else { 
     Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
