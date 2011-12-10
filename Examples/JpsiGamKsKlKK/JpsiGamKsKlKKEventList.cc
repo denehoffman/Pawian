@@ -80,6 +80,8 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<JpsiGamKs
      Vector4<float>  V4_Ks_HeliKsKl=helicityVec(V4_KsKlKpKm_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
      Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_KsKlKpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
 
+//      Vector4<float>  V4_Ks_HeliKsKl=helicityVec(V4_all_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
+//      Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_all_Lab, V4_KpKm_Lab, V4_Kp_Lab);
 
      JpsiGamKsKlKKEvtData* theJpsiGamKsKlKKEvtData=new JpsiGamKsKlKKEvtData();
      theJpsiGamKsKlKKEvtData->V4_Psi=V4_psi;

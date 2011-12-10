@@ -60,6 +60,7 @@ protected:
   complex<double> f22340GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
   complex<double> f22300GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
   complex<double> f22010GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
+  complex<double> etaToPhiPhiTo4KAmp(JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
 
 private:
   unsigned int _nFitParams;

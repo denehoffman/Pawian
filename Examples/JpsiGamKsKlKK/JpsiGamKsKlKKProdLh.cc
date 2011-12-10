@@ -108,6 +108,7 @@ complex<double> JpsiGamKsKlKKProdLh::etacGammaCoherentAmp(Spin Minit, Spin Metac
    //cout << "Parm etac " << theParamVal.BwEtac.first << " " << theParamVal.BwEtac.second << endl;
 
    result*=BreitWigner( fv, theParamVal.BwEtac.first, theParamVal.BwEtac.second);
+   result*=etaToPhiPhiTo4KAmp(theData);
    //result*=BreitWigner( fv,2.98 , 0.027);
 return result;
 }   
@@ -135,6 +136,8 @@ complex<double> JpsiGamKsKlKKProdLh::eta2225GammaCoherentAmp(Spin Minit, Spin Me
    Vector4<double> fv( theData->V4_KsKlKpKm_HeliPsi.E(), theData->V4_KsKlKpKm_HeliPsi.X(), theData->V4_KsKlKpKm_HeliPsi.Y(), theData->V4_KsKlKpKm_HeliPsi.Z() );
    result*=BreitWigner( fv, theParamVal.BwEta2225.first, theParamVal.BwEta2225.second);
    //result*=BreitWigner( fv, 2.226, 0.185);
+
+   result*=etaToPhiPhiTo4KAmp(theData);
    return result;
 }   
 
@@ -224,6 +227,17 @@ complex<double> JpsiGamKsKlKKProdLh::f22340GammaCoherentAmp(Spin Minit, Spin Met
    return result;
 }   
 
+
+complex<double> JpsiGamKsKlKKProdLh::etaToPhiPhiTo4KAmp(JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData){
+
+  complex<double> result(0.,0.);
+
+    for (Spin lambdaPhi=-1; lambdaPhi<1; lambdaPhi++){
+      result+=Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0)*3.*conj(theData->Df_KsKl[1][lambdaPhi][0])*conj(theData->Df_KpKm[1][lambdaPhi][0]); //Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0): jj-coupling eta->phi phi; 3=sqrt(2L+1)*sqrt(2L+1) Cls=1
+      }
+
+    return result;
+}
 
 
 void JpsiGamKsKlKKProdLh::setMnUsrParams(MnUserParameters& upar, paramGamKsKlKK& startVal,  paramGamKsKlKK& errVal){
