@@ -47,6 +47,13 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<JpsiGamKs
 	  << " e : " << V4_psi.E() << "\t"
 	  << " m : " << V4_psi.M() ;  // << endmsg;
      }
+
+     Vector4<float>  V4_all_Lab( ks+kl+kp+km+gam   );
+     Vector4<float>  V4_KsKlKpKm_Lab( ks+kl+kp+km   );
+     Vector4<float>  V4_KsKl_Lab( ks+kl   );
+     Vector4<float>  V4_Ks_Lab( ks   );
+     Vector4<float>  V4_KpKm_Lab( kp+km   );
+     Vector4<float>  V4_Kp_Lab( kp   );
      
      Vector4<float>  V4_KsKlKpKm_HeliPsi( ks+kl+kp+km   );
      V4_KsKlKpKm_HeliPsi.Boost(V4_psi);
@@ -64,13 +71,15 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<JpsiGamKs
      Vector4<float>  V4_KpKm_HeliKsKlKpKm( kp+km   );
      V4_KpKm_HeliKsKlKpKm.Boost( ks+kl+kp+km  );
      
-     Vector4<float>  V4_Ks_HeliKsKl( ks );
-     V4_Ks_HeliKsKl.Boost( ks+kl );
+ //     Vector4<float>  V4_Ks_HeliKsKl( ks );
+//      V4_Ks_HeliKsKl.Boost( ks+kl );
      
-     Vector4<float>  V4_Kp_HeliKpKm( kp );
-     V4_Kp_HeliKpKm.Boost( kp+km );
+//      Vector4<float>  V4_Kp_HeliKpKm( kp );
+//      V4_Kp_HeliKpKm.Boost( kp+km );
      
-     
+     Vector4<float>  V4_Ks_HeliKsKl=helicityVec(V4_KsKlKpKm_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
+     Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_KsKlKpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
+
 
      JpsiGamKsKlKKEvtData* theJpsiGamKsKlKKEvtData=new JpsiGamKsKlKKEvtData();
      theJpsiGamKsKlKKEvtData->V4_Psi=V4_psi;

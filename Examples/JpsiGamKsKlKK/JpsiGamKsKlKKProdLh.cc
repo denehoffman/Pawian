@@ -12,18 +12,21 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEv
 {
   _ampVec.push_back(paramEnumGamKsKlKK::etacGamma);
   _ampVec.push_back(paramEnumGamKsKlKK::eta2225Gamma);
+  _massVec.push_back(paramEnumGamKsKlKK::etac);
+  _massVec.push_back(paramEnumGamKsKlKK::eta2225);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22010Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22300Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22340Gamma);
  
   
-  std::vector<unsigned int>::iterator ampIt;
-  for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitparamsGamKsKlKK.jpclsVec(*ampIt);
-    _nFitParams+=2*JPCLSs.size();
-  }
+//   std::vector<unsigned int>::iterator ampIt;
+//   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
+//     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitparamsGamKsKlKK.jpclsVec(*ampIt);
+// //     _nFitParams+=2*JPCLSs.size();
+//   }
 
-  _nFitParams+=4; //2 masses+ 2 widths
+ //  _nFitParams+=4; //2 masses+ 2 widths
+  _nFitParams= int(_ampVec.size())*2+int(_massVec.size())*2;
   
 }
 
@@ -33,6 +36,8 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsJpsiGamKsKlKKLh> 
 {
   _ampVec.push_back(paramEnumGamKsKlKK::etacGamma);
   _ampVec.push_back(paramEnumGamKsKlKK::eta2225Gamma);
+  _massVec.push_back(paramEnumGamKsKlKK::etac);
+  _massVec.push_back(paramEnumGamKsKlKK::eta2225);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22010Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22300Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22340Gamma);
@@ -40,12 +45,13 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsJpsiGamKsKlKKLh> 
 
   
 
-  std::vector<unsigned int>::iterator ampIt;
-  for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitparamsGamKsKlKK.jpclsVec(*ampIt);
-    _nFitParams+=2*JPCLSs.size();
-  }
-  _nFitParams+=4; //2 masses+ 2 widths
+//   std::vector<unsigned int>::iterator ampIt;
+//   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
+//     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitparamsGamKsKlKK.jpclsVec(*ampIt);
+//     _nFitParams+=2*JPCLSs.size();
+//   }
+//   _nFitParams+=4; //2 masses+ 2 widths
+  _nFitParams= int(_ampVec.size())*2+int(_massVec.size())*2;
 }
 
 JpsiGamKsKlKKProdLh::~JpsiGamKsKlKKProdLh()
@@ -64,21 +70,6 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(JpsiGamKsKlKKData::JpsiGamKsKlKKEvt
   complex<double> JmmGmm=etacGammaCoherentAmp(-1, 0, -1, theParamVal, theData)+eta2225GammaCoherentAmp(-1, 0, -1, theParamVal, theData);
 
   
-//   for (Spin PsiM=-1; PsiM<=1; PsiM=PsiM+2){
-//     for (Spin GamM=-1; GamM<=1; GamM=GamM+2){
-//       complex<double> tmp(0.,0.);
-//       //tmp+=(eta2225GammaCoherentAmp(PsiM, 0, GamM, theParamVal, theData));
-//       tmp+=(etacGammaCoherentAmp(PsiM, 0, GamM, theParamVal, theData));
-      
-//       for(Spin f2M=-2; f2M<=2; f2M++){
-// 	//      tmp+=(f22340GammaCoherentAmp(PsiM, f2M, GamM, theParamVal, theData));
-// 	//	tmp+=(f22300GammaCoherentAmp(PsiM, f2M, GamM, theParamVal, theData));
-// 	tmp+=(f22010GammaCoherentAmp(PsiM, f2M, GamM, theParamVal, theData));
-//       }
-      
-//       result+=tmp;
-//     }
-//   }
   result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm); 
   return result;  
 }
@@ -237,10 +228,22 @@ complex<double> JpsiGamKsKlKKProdLh::f22340GammaCoherentAmp(Spin Minit, Spin Met
 
 void JpsiGamKsKlKKProdLh::setMnUsrParams(MnUserParameters& upar, paramGamKsKlKK& startVal,  paramGamKsKlKK& errVal){
 
-  _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::etacGamma);
-  _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::eta2225Gamma);
-  _fitparamsGamKsKlKK.setMnUsrParamsMass(upar,startVal,errVal,paramEnumGamKsKlKK::etac);
-  _fitparamsGamKsKlKK.setMnUsrParamsMass(upar,startVal,errVal,paramEnumGamKsKlKK::eta2225);
+//   _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::etacGamma);
+//   _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::eta2225Gamma);
+//   _fitparamsGamKsKlKK.setMnUsrParamsMass(upar,startVal,errVal,paramEnumGamKsKlKK::etac);
+//   _fitparamsGamKsKlKK.setMnUsrParamsMass(upar,startVal,errVal,paramEnumGamKsKlKK::eta2225);
+
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+
+    _fitparamsGamKsKlKK.setMnUsrParamsDec(upar, startVal, errVal, (*itAmps));
+  }
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    _fitparamsGamKsKlKK.setMnUsrParamsMass(upar, startVal, errVal, (*itMasses) );  
+  }
+
 //   _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::f22010Gamma);
 //   _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::f22300Gamma);
 //   _fitparamsGamKsKlKK.setMnUsrParamsDec(upar,startVal,errVal,paramEnumGamKsKlKK::f22340Gamma);
@@ -259,16 +262,26 @@ int JpsiGamKsKlKKProdLh::setFitParamVal(paramGamKsKlKK& theParamVal, const std::
   
   int counter=0;
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-  //Psi(2S) ->Chi_c1 gamma amplitude params
-  counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::etacGamma);
-  counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225Gamma);
-   counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter,  paramEnumGamKsKlKK::etac);
-  counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225);
+//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+//   //Psi(2S) ->Chi_c1 gamma amplitude params
+//   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::etacGamma);
+//   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225Gamma);
+//    counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter,  paramEnumGamKsKlKK::etac);
+//   counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter, paramEnumGamKsKlKK::eta2225);
 //   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::f22010Gamma);
 //   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::f22300Gamma);
 //   counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, paramEnumGamKsKlKK::f22340Gamma);
 
+
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+    counter=_fitparamsGamKsKlKK.setFitParamValDec(theParamVal, par, counter, (*itAmps));
+  }
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    counter=_fitparamsGamKsKlKK.setFitParamValMass(theParamVal, par, counter, (*itMasses) ); 
+  }
 
 
   return counter;
@@ -296,6 +309,13 @@ void JpsiGamKsKlKKProdLh::printCurrentFitResult(paramGamKsKlKK& theParamVal){
       std::pair<double, double> tmpParam=currentMap[(*itJPCLS)];
       Info <<"(debug)\t mag:" << tmpParam.first <<"\t phi:" << tmpParam.second;//  ;  // << endmsg;
     }  
+  }
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    DebugMsg<< paramEnumGamKsKlKK::name(*itMasses) << endmsg;
+    std::pair<double, double> tmpParam=_fitparamsGamKsKlKK.massPair(theParamVal, *itMasses);
+    DebugMsg <<"\t Mass:" << tmpParam.first <<"\t Width:" << tmpParam.second  << endmsg;
   }
 
 }

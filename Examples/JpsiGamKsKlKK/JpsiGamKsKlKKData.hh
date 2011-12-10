@@ -25,8 +25,10 @@ namespace JpsiGamKsKlKKData {
     Vector4<float> V4_KpKm_HeliKsKlKpKm;
     Vector4<float> V4_Ks_HeliKsKl;
     Vector4<float> V4_Kp_HeliKpKm;
-    
+
+
     map<Spin,map<Spin,map<Spin,complex<double> > > > df_Psi;
+
     map<Spin,map<Spin,map<Spin,complex<double> > > > Df_Spin0;
     map<Spin,map<Spin,map<Spin,complex<double> > > > Df_Spin2;
     map<Spin,map<Spin,map<Spin,complex<double> > > > Df_KsKl;

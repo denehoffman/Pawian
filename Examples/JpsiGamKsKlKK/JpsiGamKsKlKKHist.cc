@@ -43,6 +43,8 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const JpsiGamKsKlKKEventL
       plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
       plotKsKl( _KsKlMassDataHist, (*it), 1. );
       plotKpKm( _KpKmMassDataHist, (*it), 1. );
+      plotCostPhiKs( _costKs_KsKlHeliDataHist, _phiKs_KsKlHeliDataHist,(*it), 1. );
+      plotCostPhiKs( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
       
       fillTuple(_dataTuple, (*it), 1.);
 
@@ -58,6 +60,9 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const JpsiGamKsKlKKEventL
       plotPhiPhi(_PhiPhiMassMcHist, (*it), 1.  );
       plotKsKl( _KsKlMassMcHist, (*it), 1. );
       plotKpKm( _KpKmMassMcHist, (*it), 1. );
+      plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist,(*it), 1. );
+      plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist, (*it), 1. );
+
      fillTuple(_mcTuple, (*it), 1.);
 
       ++it;
@@ -99,7 +104,8 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
       plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
       plotKsKl( _KsKlMassDataHist, (*it), 1. );
       plotKpKm( _KpKmMassDataHist, (*it), 1. );
-      
+      plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), 1. );
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. );      
       fillTuple(_dataTuple, (*it), 1.);
       
       ++it;
@@ -113,12 +119,16 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
       plotPhiPhi(_PhiPhiMassMcHist, (*it), 1.  );
       plotKsKl( _KsKlMassMcHist, (*it), 1. );
       plotKpKm( _KpKmMassMcHist, (*it), 1. );
+      plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist, (*it), 1. );
+      plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. );
       
       double evtWeight= theJpsiGamKsKlKKLh->calcEvtIntensity((*it), fitParam);
       plotDalitz(_dalitzFittedHist, (*it),evtWeight );
       plotPhiPhi(_PhiPhiMassFittedHist, (*it), evtWeight  );
       plotKsKl( _KsKlMassFittedHist, (*it), evtWeight );
       plotKpKm( _KpKmMassFittedHist, (*it), evtWeight );
+      plotCostPhiKs( _costKs_KsKlHeliFittedHist, _phiKs_KsKlHeliFittedHist,(*it), evtWeight );
+      plotCostPhiKp( _costKp_KpKmHeliFittedHist, _phiKp_KpKmHeliFittedHist,(*it), evtWeight );
       
       fillTuple(_mcTuple, (*it), evtWeight);
       ++it;
@@ -135,11 +145,14 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
 
   double scaleFactor = integralData/integralFitted;
   
-  _dalitzMcHist->Scale(scaleFactor);
+  _dalitzFittedHist->Scale(scaleFactor);
   _PhiPhiMassFittedHist->Scale(scaleFactor);
   _KsKlMassFittedHist->Scale(scaleFactor);
   _KpKmMassFittedHist->Scale(scaleFactor);
-  
+  _costKs_KsKlHeliFittedHist->Scale(scaleFactor);
+  _phiKs_KsKlHeliFittedHist->Scale(scaleFactor);
+  _costKp_KpKmHeliFittedHist->Scale(scaleFactor);
+  _phiKp_KpKmHeliFittedHist->Scale(scaleFactor);  
 }
 
 JpsiGamKsKlKKHist::~JpsiGamKsKlKKHist()
@@ -163,6 +176,7 @@ void JpsiGamKsKlKKHist::initRootStuff()
   _dalitzDataHist= new TH2F("_dalitzDataHist","Dpl K+K- K+#pi^{0} data",xbins, xmin, xmax, ybins, ymin, ymax );
   _dalitzMcHist= new TH2F("_dalitzMcHist","Dpl K+K- K+#pi^{0} MC",xbins, xmin, xmax, ybins, ymin, ymax);
   _dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl K+K- K+#pi^{0} fit",xbins, xmin, xmax, ybins, ymin, ymax );
+
   
   int nbins=50;
    xmin=2;
@@ -181,7 +195,20 @@ void JpsiGamKsKlKKHist::initRootStuff()
   _KpKmMassMcHist = new TH1F("_KpKmMassMcHist", "_KpKmMassMcHist", nbins, xmin, xmax);
   _KpKmMassFittedHist = new TH1F("_KpKmMassFittedHist", "_KpKmMassFittedHist", nbins, xmin, xmax);
   
-  
+  _costKs_KsKlHeliDataHist= new TH1F("_costKs_KsKlHeliDataHist", "cos(#Theta_{Ks}) KsKlHeli data", 100, -1., 1.); 
+  _costKs_KsKlHeliMcHist= new TH1F("_costKs_KsKlHeliMcHist", "cos(#Theta_{Ks}) KsKlHeli Mc", 100, -1., 1.); 
+  _costKs_KsKlHeliFittedHist= new TH1F("_costKs_KsKlHeliFittedHist", "cos(#Theta_{Ks}) KsKlHeli Fit", 100, -1, 1);
+  _phiKs_KsKlHeliDataHist= new TH1F("_phiKs_KsKlHeliDataHist", "#Phi_{Ks} KsKlHeli data", 100, -1., 1.); 
+  _phiKs_KsKlHeliMcHist= new TH1F("_phiKs_KsKlHeliMcHist", "#Phi_{Ks} KsKlHeli Mc", 100, -1., 1.); 
+  _phiKs_KsKlHeliFittedHist= new TH1F("_phiKs_KsKlHeliFittedHist", "#Phi_{Ks} KsKlHeli Fit", 100, -1, 1);
+
+  _costKp_KpKmHeliDataHist= new TH1F("_costKp_KpKmHeliDataHist", "cos(#Theta_{K+}) KsKlHeli data", 100, -1., 1.); 
+  _costKp_KpKmHeliMcHist= new TH1F("_costKp_KpKmHeliMcHist", "cos(#Theta_{K+}) KsKlHeli Mc", 100, -1., 1.); 
+  _costKp_KpKmHeliFittedHist= new TH1F("_costKp_KpKmHeliFittedHist", "cos(#Theta_{K+}) KsKlHeli Fit", 100, -1, 1);
+  _phiKp_KpKmHeliDataHist= new TH1F("_phiKp_KpKmHeliDataHist", "#Phi_{K+} KsKlHeli data", 100, -1., 1.); 
+  _phiKp_KpKmHeliMcHist= new TH1F("_phiKp_KpKmHeliMcHist", "#Phi_{K+} KsKlHeli Mc", 100, -1., 1.); 
+  _phiKp_KpKmHeliFittedHist= new TH1F("_phiKp_KpKmHeliFittedHist", "#Phi_{K+} KsKlHeli Fit", 100, -1, 1);
+ 
    std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:weight";
    
   
@@ -203,14 +230,28 @@ void JpsiGamKsKlKKHist::plotDalitz(TH2F* theHisto, const JpsiGamKsKlKKEvtData* t
 
 void JpsiGamKsKlKKHist::plotPhiPhi(TH1F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight){
   Vector4<float> v4 = theData->V4_KsKlKpKm_HeliPsi;
-  theHisto->Fill( v4.M() );
+  theHisto->Fill( v4.M(), weight );
 }
 
 void JpsiGamKsKlKKHist::plotKsKl(TH1F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight){
-  
+  Vector4<float> v4 = theData->V4_KsKl_HeliPsi; 
+  theHisto->Fill( v4.M(), weight ); 
 }
 void JpsiGamKsKlKKHist::plotKpKm(TH1F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight){
-  
+  Vector4<float> v4 = theData->V4_Kp_HeliKpKm; 
+  theHisto->Fill( v4.M(), weight );   
+}
+
+void JpsiGamKsKlKKHist::plotCostPhiKs(TH1F* theCostHisto,  TH1F* thePhiHisto, const JpsiGamKsKlKKEvtData* theData, double weight){
+  Vector4<float> v4 = theData->V4_Ks_HeliKsKl; 
+  theCostHisto->Fill( v4.CosTheta(), weight );
+  thePhiHisto->Fill( v4.Phi(), weight );
+}
+
+void JpsiGamKsKlKKHist::plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, const JpsiGamKsKlKKEvtData* theData, double weight){
+  Vector4<float> v4 = theData->V4_Kp_HeliKpKm; 
+  theCostHisto->Fill( v4.CosTheta(), weight );
+  thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, const JpsiGamKsKlKKEvtData* theData, double weight)

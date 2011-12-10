@@ -64,7 +64,7 @@ protected:
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
-
+  std::vector<unsigned int> _massVec;
 
 };
 
