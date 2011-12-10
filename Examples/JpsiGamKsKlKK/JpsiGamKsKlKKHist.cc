@@ -45,7 +45,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const JpsiGamKsKlKKEventL
       plotKpKm( _KpKmMassDataHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliDataHist, _phiKs_KsKlHeliDataHist,(*it), 1. );
       plotCostPhiKs( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
-      
+      plotCostGam( _costGamCmDataHist,(*it), 1. );      
       fillTuple(_dataTuple, (*it), 1.);
 
       ++it;
@@ -62,6 +62,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const JpsiGamKsKlKKEventL
       plotKpKm( _KpKmMassMcHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist,(*it), 1. );
       plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist, (*it), 1. );
+      plotCostGam( _costGamCmMcHist, (*it), 1. );
 
      fillTuple(_mcTuple, (*it), 1.);
 
@@ -105,7 +106,9 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
       plotKsKl( _KsKlMassDataHist, (*it), 1. );
       plotKpKm( _KpKmMassDataHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. );      
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. ); 
+      plotCostGam( _costGamCmDataHist, (*it), 1. ); 
+     
       fillTuple(_dataTuple, (*it), 1.);
       
       ++it;
@@ -121,6 +124,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
       plotKpKm( _KpKmMassMcHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist, (*it), 1. );
       plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. );
+      plotCostGam( _costGamCmMcHist,(*it), 1. );
       
       double evtWeight= theJpsiGamKsKlKKLh->calcEvtIntensity((*it), fitParam);
       plotDalitz(_dalitzFittedHist, (*it),evtWeight );
@@ -129,6 +133,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
       plotKpKm( _KpKmMassFittedHist, (*it), evtWeight );
       plotCostPhiKs( _costKs_KsKlHeliFittedHist, _phiKs_KsKlHeliFittedHist,(*it), evtWeight );
       plotCostPhiKp( _costKp_KpKmHeliFittedHist, _phiKp_KpKmHeliFittedHist,(*it), evtWeight );
+      plotCostGam( _costGamCmFittedHist,(*it), evtWeight );
       
       fillTuple(_mcTuple, (*it), evtWeight);
       ++it;
@@ -152,7 +157,8 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJp
   _costKs_KsKlHeliFittedHist->Scale(scaleFactor);
   _phiKs_KsKlHeliFittedHist->Scale(scaleFactor);
   _costKp_KpKmHeliFittedHist->Scale(scaleFactor);
-  _phiKp_KpKmHeliFittedHist->Scale(scaleFactor);  
+  _phiKp_KpKmHeliFittedHist->Scale(scaleFactor);
+  _costGamCmFittedHist->Scale(scaleFactor);  
 }
 
 JpsiGamKsKlKKHist::~JpsiGamKsKlKKHist()
@@ -208,6 +214,11 @@ void JpsiGamKsKlKKHist::initRootStuff()
   _phiKp_KpKmHeliDataHist= new TH1F("_phiKp_KpKmHeliDataHist", "#Phi_{K+} KsKlHeli data", 100, -1., 1.); 
   _phiKp_KpKmHeliMcHist= new TH1F("_phiKp_KpKmHeliMcHist", "#Phi_{K+} KsKlHeli Mc", 100, -1., 1.); 
   _phiKp_KpKmHeliFittedHist= new TH1F("_phiKp_KpKmHeliFittedHist", "#Phi_{K+} KsKlHeli Fit", 100, -1, 1);
+
+
+  _costGamCmDataHist= new TH1F("_costGamCmDataHist", "cos(#Theta_{#gamma}) CM data", 100, -1., 1.); 
+  _costGamCmMcHist= new TH1F("_costGamCmMcHist", "cos(#Theta_{#gamma}) CM Mc", 100, -1., 1.); 
+  _costGamCmFittedHist= new TH1F("_costGamCmFittedHist", "cos(#Theta_{#gamma}) CM Fit", 100, -1, 1);
  
    std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:weight";
    
@@ -253,6 +264,12 @@ void JpsiGamKsKlKKHist::plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, co
   theCostHisto->Fill( v4.CosTheta(), weight );
   thePhiHisto->Fill( v4.Phi(), weight );
 }
+
+void JpsiGamKsKlKKHist::plotCostGam(TH1F* theCostHisto, const JpsiGamKsKlKKEvtData* theData, double weight){
+  Vector4<float> v4 = theData->V4_gamma_HeliPsi; 
+  theCostHisto->Fill( v4.CosTheta(), weight );
+}
+
 
 void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, const JpsiGamKsKlKKEvtData* theData, double weight)
 {
