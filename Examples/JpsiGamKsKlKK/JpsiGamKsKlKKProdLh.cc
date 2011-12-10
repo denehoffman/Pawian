@@ -6,14 +6,30 @@
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKEventList.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEventList> theEvtList) :
+JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEventList> theEvtList, const std::map<const std::string, bool>& hypMap) :
   AbsJpsiGamKsKlKKLh(theEvtList)
+  ,_eta2225Hyp(true)
   ,_nFitParams(0)    
 {
+
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("eta2225Hyp");
+
+  if (iter !=hypMap.end()){
+    _eta2225Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _eta2225Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis eta2225Hyp not set!!!" <<endmsg;
+
   _ampVec.push_back(paramEnumGamKsKlKK::etacGamma);
-  _ampVec.push_back(paramEnumGamKsKlKK::eta2225Gamma);
   _massVec.push_back(paramEnumGamKsKlKK::etac);
-  _massVec.push_back(paramEnumGamKsKlKK::eta2225);
+  _nFitParams+=4;
+
+  if(_eta2225Hyp){
+    _ampVec.push_back(paramEnumGamKsKlKK::eta2225Gamma); 
+    _massVec.push_back(paramEnumGamKsKlKK::eta2225);
+    _nFitParams+=4;
+  }
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22010Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22300Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22340Gamma);
@@ -26,18 +42,35 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEv
 //   }
 
  //  _nFitParams+=4; //2 masses+ 2 widths
-  _nFitParams= int(_ampVec.size())*2+int(_massVec.size())*2;
+//   _nFitParams= int(_ampVec.size())*2+int(_massVec.size())*2;
   
 }
 
-JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsJpsiGamKsKlKKLh> theLhPtr ) :
+JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsJpsiGamKsKlKKLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   AbsJpsiGamKsKlKKLh(theLhPtr->getEventList())
+  ,_eta2225Hyp(true)
   ,_nFitParams(0) 
 {
+
+  std::map<const std::string, bool>::const_iterator iter= hypMap.find("eta2225Hyp");
+
+  if (iter !=hypMap.end()){
+    _eta2225Hyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _eta2225Hyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis eta2225Hyp not set!!!" <<endmsg;
+
   _ampVec.push_back(paramEnumGamKsKlKK::etacGamma);
-  _ampVec.push_back(paramEnumGamKsKlKK::eta2225Gamma);
   _massVec.push_back(paramEnumGamKsKlKK::etac);
-  _massVec.push_back(paramEnumGamKsKlKK::eta2225);
+  _nFitParams=4;
+
+  if(_eta2225Hyp){
+    _ampVec.push_back(paramEnumGamKsKlKK::eta2225Gamma);
+    _massVec.push_back(paramEnumGamKsKlKK::eta2225);
+    _nFitParams+=4;
+  }
+
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22010Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22300Gamma);
 //   _ampVec.push_back(paramEnumGamKsKlKK::f22340Gamma);
@@ -50,8 +83,7 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsJpsiGamKsKlKKLh> 
 //     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitparamsGamKsKlKK.jpclsVec(*ampIt);
 //     _nFitParams+=2*JPCLSs.size();
 //   }
-//   _nFitParams+=4; //2 masses+ 2 widths
-  _nFitParams= int(_ampVec.size())*2+int(_massVec.size())*2;
+
 }
 
 JpsiGamKsKlKKProdLh::~JpsiGamKsKlKKProdLh()
@@ -64,11 +96,17 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(JpsiGamKsKlKKData::JpsiGamKsKlKKEvt
 
   double result=0.;
 
-  complex<double> JmpGmp=etacGammaCoherentAmp(1, 0, 1, theParamVal, theData)+eta2225GammaCoherentAmp(1, 0, 1, theParamVal, theData);
-  complex<double> JmpGmm=etacGammaCoherentAmp(1, 0, -1, theParamVal, theData)+eta2225GammaCoherentAmp(1, 0, -1, theParamVal, theData);
-  complex<double> JmmGmp=etacGammaCoherentAmp(-1, 0, 1, theParamVal, theData)+eta2225GammaCoherentAmp(-1, 0, 1, theParamVal, theData);
-  complex<double> JmmGmm=etacGammaCoherentAmp(-1, 0, -1, theParamVal, theData)+eta2225GammaCoherentAmp(-1, 0, -1, theParamVal, theData);
+  complex<double> JmpGmp=etacGammaCoherentAmp(1, 0, 1, theParamVal, theData);
+  complex<double> JmpGmm=etacGammaCoherentAmp(1, 0, -1, theParamVal, theData);
+  complex<double> JmmGmp=etacGammaCoherentAmp(-1, 0, 1, theParamVal, theData);
+  complex<double> JmmGmm=etacGammaCoherentAmp(-1, 0, -1, theParamVal, theData);
 
+  if (_eta2225Hyp){
+    JmpGmp+=eta2225GammaCoherentAmp(1, 0, 1, theParamVal, theData);
+    JmpGmm+=eta2225GammaCoherentAmp(1, 0, -1, theParamVal, theData);
+    JmmGmp+=eta2225GammaCoherentAmp(-1, 0, 1, theParamVal, theData);
+    JmmGmm+=eta2225GammaCoherentAmp(-1, 0, -1, theParamVal, theData);
+  }
   
   result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm); 
   return result;  
@@ -233,7 +271,9 @@ complex<double> JpsiGamKsKlKKProdLh::etaToPhiPhiTo4KAmp(JpsiGamKsKlKKData::JpsiG
   complex<double> result(0.,0.);
 
     for (Spin lambdaPhi=-1; lambdaPhi<1; lambdaPhi++){
-      result+=Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0)*3.*conj(theData->Df_KsKl[1][lambdaPhi][0])*conj(theData->Df_KpKm[1][lambdaPhi][0]); //Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0): jj-coupling eta->phi phi; 3=sqrt(2L+1)*sqrt(2L+1) Cls=1
+       result+=Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0)*3.*conj(theData->Df_KsKl[1][lambdaPhi][0])*conj(theData->Df_KpKm[1][lambdaPhi][0]); //Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0): jj-coupling mother->phi phi; 3=sqrt(2L+1)*sqrt(2L+1) Cls=1
+
+
       }
 
     return result;

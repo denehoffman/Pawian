@@ -150,11 +150,11 @@ int main(int __argc,char *__argv[]){
   //disable hypotheses, currently not in use
   //
   std::map<const std::string, bool> hypMap;
-  hypMap["K0_1430HypBase"]=true;
-  hypMap["K1_1410HypBase"]=true;
-  hypMap["K2_1430HypBase"]=true;
-  hypMap["K1_1680_HypBase"]=true;
-  hypMap["KKPi_HypBase"]=true;
+  hypMap["eta2225Hyp"]=true;
+//   hypMap["K1_1410HypBase"]=true;
+//   hypMap["K2_1430HypBase"]=true;
+//   hypMap["K1_1680_HypBase"]=true;
+//   hypMap["KKPi_HypBase"]=true;
 
   const std::vector<std::string> disabledHyps=theAppParams.disabledHyps();
   std::vector<std::string>::const_iterator itStr;
@@ -175,7 +175,7 @@ int main(int __argc,char *__argv[]){
   std::string startWithHyp=theAppParams.startHypo();
   
   if (startWithHyp=="production"){
-    theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr) );
+    theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap ));
   }
 //   else if (startWithHyp=="base") 
 //     theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKBaseLh(theJpsiGamKsKlKKEventListPtr, hypMap));

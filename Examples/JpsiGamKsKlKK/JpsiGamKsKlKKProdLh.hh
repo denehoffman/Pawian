@@ -29,14 +29,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEventList>);
-  JpsiGamKsKlKKProdLh(boost::shared_ptr<AbsJpsiGamKsKlKKLh>);
+  JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEventList>, const std::map<const std::string, bool>& hypMap);
+  JpsiGamKsKlKKProdLh(boost::shared_ptr<AbsJpsiGamKsKlKKLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
   virtual ~JpsiGamKsKlKKProdLh();
 
   virtual AbsJpsiGamKsKlKKLh* clone_() const {
-    return new JpsiGamKsKlKKProdLh(_JpsiGamKsKlKKEvtListPtr);
+    return new JpsiGamKsKlKKProdLh(_JpsiGamKsKlKKEvtListPtr, _hypMap);
   }
 
 
@@ -62,6 +62,8 @@ protected:
   complex<double> f22010GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
   complex<double> etaToPhiPhiTo4KAmp(JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
 
+  bool _eta2225Hyp;
+  std::map<const std::string, bool> _hypMap;
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
