@@ -9,11 +9,11 @@ project :
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
 	<include>$(GENEVA)/include
-#	<include>$(MINUIT2)/include
 	<link>static
 	<cxxflags>-pthread
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
+	<linkflags>-lMinuit2
 	<linkflags>-lgomp
 	<linkflags>-pthread
 	;
@@ -24,8 +24,12 @@ actions rootlibs
 }
 
 lib log4cpp : : <file>$(extern)/lib/liblog4cpp.a : : ;
-lib Minuit2 : : <file>$(MINUIT2)/lib/libMinuit2.a : : ;
-lib Geneva : :  <file>$(GENEVA)/lib/libgeneva-all.so : : ;
+lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-common.so 
+		<file>$(GENEVA)/lib/libgemfony-geneva.so
+		<file>$(GENEVA)/lib/libgemfony-courtier.so
+		<file>$(GENEVA)/lib/libgemfony-hap.so
+		<file>$(GENEVA)/lib/libgemfony-geneva-individuals.so
+ : : ;
 lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
  
 build-project qft++ ;
@@ -35,6 +39,6 @@ build-project PwaUtils ;
 build-project Particle ;
 build-project Event ;
 build-project DecayTree ;
-build-project Setup ;
+# build-project Setup ;
 build-project PspGen ;
 build-project Examples ;

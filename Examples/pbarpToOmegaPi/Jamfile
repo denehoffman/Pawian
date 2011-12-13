@@ -6,9 +6,9 @@ lib pbarpToOmegaPi :
         $(TOP)/PwaUtils//PwaUtils 
         $(TOP)/Event//Event 
         $(TOP)/qft++//qft++ 
-	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: <use>$(TOP)//Geneva 
 	: 
-	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+	: <library>$(TOP)//Geneva ;
 
 exe GOmegaPiApp        : GOmegaPiApp.cc pbarpToOmegaPi : ;
 

@@ -6,9 +6,9 @@ lib EtacToapi0Fit :
         $(TOP)/PwaUtils//PwaUtils 
         $(TOP)/Event//Event 
         $(TOP)/qft++//qft++ 
-	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: <use>$(TOP)//Geneva 
 	: 
-	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+	: <library>$(TOP)//Geneva ;
 
 #exe GEtacToapi0FitApp : GEtacToapi0FitApp.cc EtacToapi0Fit : ;
 exe MEtacToapi0FitApp : MEtacToapi0FitApp.cc EtacToapi0Fit : ;

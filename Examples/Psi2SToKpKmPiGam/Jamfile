@@ -6,9 +6,9 @@ lib Psi2SToKpKmPiGam :
         $(TOP)/PwaUtils//PwaUtils 
         $(TOP)/Event//Event 
         $(TOP)/qft++//qft++ 
-	: <use>$(TOP)//Minuit2 <use>$(TOP)//Geneva 
+	: <use>$(TOP)//Geneva 
 	: 
-	: <library>$(TOP)//Minuit2 <library>$(TOP)//Geneva ;
+	: <library>$(TOP)//Geneva ;
 
 exe Mpsi2SToKpKmPiGamApp : Mpsi2SToKpKmPiGamApp.cc Psi2SToKpKmPiGam : ;
 exe Psi2SToKpKmPiGamParserTestApp : Psi2SToKpKmPiGamParserTestApp.cc Psi2SToKpKmPiGam : ;
