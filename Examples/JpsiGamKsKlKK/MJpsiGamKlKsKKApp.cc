@@ -151,6 +151,7 @@ int main(int __argc,char *__argv[]){
   //
   std::map<const std::string, bool> hypMap;
   hypMap["eta2225Hyp"]=true;
+  hypMap["f02020Hyp"]=true;
 //   hypMap["K1_1410HypBase"]=true;
 //   hypMap["K2_1430HypBase"]=true;
 //   hypMap["K1_1680_HypBase"]=true;

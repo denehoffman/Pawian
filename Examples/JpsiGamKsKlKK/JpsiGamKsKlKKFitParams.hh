@@ -27,12 +27,16 @@ struct paramGamKsKlKK
 {
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToEtacGamma;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToEta2225Gamma;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToF02020Gamma;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > F02020ToPhiPhi;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToF22010Gamma;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToF22300Gamma;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > PsiToF22340Gamma;
+
   
   pair<double, double> BwEtac;
   pair<double, double> BwEta2225;
+  pair<double, double> BwF02020;
   pair<double, double> BwF22010;
   pair<double, double> BwF22300;
   pair<double, double> BwF22340;
@@ -40,14 +44,16 @@ struct paramGamKsKlKK
 };
 
 struct paramEnumGamKsKlKK{
-  enum { etacGamma=0, eta2225Gamma, f22010Gamma, f22300Gamma,  f22340Gamma, nAmps,
-	 etac=nAmps, eta2225, f22010, f22300 ,f22340, nMasses };
+  enum { etacGamma=0, eta2225Gamma, f02020Gamma, f22010Gamma, f22300Gamma,  f22340Gamma, 
+	 f02020ToPhiPhi, nAmps,
+	 etac=nAmps, eta2225, f02020, f22010, f22300 ,f22340, nMasses };
   
   static const std::string& name(unsigned int t)
   {
     static std::string fitName[paramEnumGamKsKlKK::nMasses]
-      ={"etacGam", "eta2225Gamma", "f22010Gamma", "f22300Gamma", "f2340Gamma",  
-	"etac", "eta2250", "f22010", "f22340", "f22340" };
+      ={"etacGam", "eta2225Gamma", "f02020Gamma", "f22010Gamma", "f22300Gamma", "f2340Gamma",
+	"f02020ToPhiPhi",           
+	"etac", "eta2250", "f02020", "f22010", "f22340", "f22340" };
     if (t<0 || t>=paramEnumGamKsKlKK::nMasses) assert(0);
     return fitName[t];
   } 

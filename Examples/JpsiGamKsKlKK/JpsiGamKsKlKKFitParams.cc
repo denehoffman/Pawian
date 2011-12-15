@@ -14,9 +14,12 @@ JpsiGamKsKlKKFitParams::JpsiGamKsKlKKFitParams()
   
   _jpclsMap[paramEnumGamKsKlKK::etacGamma]=theStates.PsiToEtaGammaStates();
   _jpclsMap[paramEnumGamKsKlKK::eta2225Gamma]=theStates.PsiToEtaGammaStates();
+  _jpclsMap[paramEnumGamKsKlKK::f02020Gamma]=theStates.PsiToF0GammaStates();
   _jpclsMap[paramEnumGamKsKlKK::f22010Gamma]=theStates.PsiToF2GammaStates();
   _jpclsMap[paramEnumGamKsKlKK::f22300Gamma]=theStates.PsiToF2GammaStates();
-  _jpclsMap[paramEnumGamKsKlKK::f22340Gamma]=theStates.PsiToF2GammaStates();
+  _jpclsMap[paramEnumGamKsKlKK::f22340Gamma]=theStates.PsiToF2GammaStates(); 
+  _jpclsMap[paramEnumGamKsKlKK::f02020ToPhiPhi]=theStates.F0ToPhiPhiStates();
+
 
 }
 
@@ -42,9 +45,11 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
 
   if (index==paramEnumGamKsKlKK::etacGamma) return params.PsiToEtacGamma;
   else if (index==paramEnumGamKsKlKK::eta2225Gamma) return params.PsiToEta2225Gamma;
+  else if (index==paramEnumGamKsKlKK::f02020Gamma) return params.PsiToF02020Gamma;
   else if (index==paramEnumGamKsKlKK::f22010Gamma) return params.PsiToF22010Gamma;
   else if (index==paramEnumGamKsKlKK::f22300Gamma) return params.PsiToF22300Gamma;
   else if (index==paramEnumGamKsKlKK::f22340Gamma) return params.PsiToF22340Gamma;
+  else if (index==paramEnumGamKsKlKK::f02020ToPhiPhi) return params.F02020ToPhiPhi;
   else Info << "index " << index << " not supported !!!" ;  // << endmsg;
 
   return params.PsiToEtacGamma; //makes the compiler happy
@@ -58,6 +63,7 @@ pair<double, double>& JpsiGamKsKlKKFitParams::massPair(paramGamKsKlKK& params, u
 										      << " and " << nOfMasses ;  // << endmsg;
   if (index==paramEnumGamKsKlKK::etac) return params.BwEtac;
   else if (index==paramEnumGamKsKlKK::eta2225) return params.BwEta2225;
+  else if (index==paramEnumGamKsKlKK::f02020) return params.BwF02020;
   else if (index==paramEnumGamKsKlKK::f22010) return params.BwF22010;
   else if (index==paramEnumGamKsKlKK::f22300) return params.BwF22300;
   else if (index==paramEnumGamKsKlKK::f22340) return params.BwF22340;
