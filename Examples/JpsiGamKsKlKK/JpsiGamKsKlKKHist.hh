@@ -13,13 +13,11 @@
 #include "TROOT.h"
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
-#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKFitParams.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/AbsLh.hh"
 
-using JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData;
 
-class JpsiGamKsKlKKEventList;
-class AbsJpsiGamKsKlKKLh;
 class TFile;
 class TH2F;
 class TH1F;
@@ -32,8 +30,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiGamKsKlKKHist(boost::shared_ptr<const JpsiGamKsKlKKEventList>);
-  JpsiGamKsKlKKHist(boost::shared_ptr<AbsJpsiGamKsKlKKLh>, paramGamKsKlKK&);
+  JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList>);
+  JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh>, fitParams&);
 
   /** Destructor */
   virtual ~JpsiGamKsKlKKHist();
@@ -85,16 +83,16 @@ private:
 
 
   void initRootStuff();
-  void plotDalitz(TH2F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
-  void plotPhiPhi(TH1F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
-  void plotKsKl(TH1F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
-  void plotKpKm(TH1F* theHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
-  void plotCostPhiKs(TH1F* theCostHisto, TH1F* thePhiHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
-  void plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
-  void plotCostGam(TH1F* theCostHisto, const JpsiGamKsKlKKEvtData* theData, double weight);
+  void plotDalitz(TH2F* theHisto, EvtData* theData, double weight);
+  void plotPhiPhi(TH1F* theHisto, EvtData* theData, double weight);
+  void plotKsKl(TH1F* theHisto, EvtData* theData, double weight);
+  void plotKpKm(TH1F* theHisto, EvtData* theData, double weight);
+  void plotCostPhiKs(TH1F* theCostHisto, TH1F* thePhiHisto, EvtData* theData, double weight);
+  void plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtData* theData, double weight);
+  void plotCostGam(TH1F* theCostHisto, EvtData* theData, double weight);
 
 
-  void fillTuple( TNtuple* theTuple, const JpsiGamKsKlKKEvtData* theData, double weight);
+  void fillTuple( TNtuple* theTuple, EvtData* theData, double weight);
 
 };
 

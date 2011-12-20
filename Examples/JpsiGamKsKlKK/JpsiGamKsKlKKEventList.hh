@@ -7,13 +7,13 @@
 #include <cassert>
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 
-using JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData;
+
 
 class EventList;
 
-class JpsiGamKsKlKKEventList {
+class JpsiGamKsKlKKEventList : public EvtDataBaseList {
 
 public:
 
@@ -28,19 +28,15 @@ public:
   virtual ~JpsiGamKsKlKKEventList();
 
   // Getters:
-  const std::vector<JpsiGamKsKlKKEvtData*> getDataVecs() const {return _dataList;}
-  const std::vector<JpsiGamKsKlKKEvtData*> getMcVecs() const {return _mcList;}
-
+  
 
 protected:
 
 
-private:
-  std::vector<JpsiGamKsKlKKEvtData*> _dataList;
-  std::vector<JpsiGamKsKlKKEvtData*> _mcList;
-
-  void read4Vecs(EventList& evtList, std::vector<JpsiGamKsKlKKEvtData*>& theEvtList);
+  void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList);
   
+private:
+
 
 };
 

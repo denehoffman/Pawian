@@ -13,22 +13,21 @@
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKHist.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKReader.hh"
 
-#include "Examples/JpsiGamKsKlKK/AbsJpsiGamKsKlKKLh.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKProdLh.hh"
-//#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKBaseLh.hh"
 
-
-#include "Examples/JpsiGamKsKlKK/MJpsiGamKsKlKKFcn.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
+#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKFitParams.hh"
 
-#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKStreamFitParams.hh"
+
+#include "PwaUtils/StreamFitParmsBase.hh"
+#include "PwaUtils/PwaFcnBase.hh"
+#include "PwaUtils/AbsLh.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
-// #include "Event/CBElsaReader.hh"
 #include "Particle/PdtParser.hh"
 #include "qft++/topincludes/tensor.hh"
 
@@ -40,7 +39,6 @@
 #include "Minuit2/MnStrategy.h"
 
 
-//#include "Minuit2/MnUserTransformation.h"
 using namespace ROOT::Minuit2;
 
 
@@ -73,7 +71,9 @@ void setErrLogMode( const JpsiGamKsKlKKParser::enErrLogMode& erlMode ) {
 
 
 int main(int __argc,char *__argv[]){
-
+  clock_t start, end;
+  start= clock();
+  
   // Parse the command line
   static JpsiGamKsKlKKParser theAppParams(__argc, __argv);
 
@@ -81,13 +81,7 @@ int main(int __argc,char *__argv[]){
   setErrLogMode(theAppParams.getErrLogMode());
 
   std::string theCfgFile = theAppParams.getConfigFile();
-  Info << "The path to config file is " << theCfgFile << "\n" ;  // << endmsg;    
-
-  std::string paramStreamerPath=theAppParams.fitParamFile();
-
-  JpsiGamKsKlKKStreamFitParams theParamStreamer(paramStreamerPath);
-  paramGamKsKlKK theStartparams=theParamStreamer.getFitParamVal();
-  paramGamKsKlKK theErrorparams=theParamStreamer.getFitParamErr();
+  
 
   const std::string datFile=theAppParams.dataFile();
   const std::string mcFile=theAppParams.mcFile();
@@ -172,38 +166,72 @@ int main(int __argc,char *__argv[]){
     }
   }
 
-  boost::shared_ptr<AbsJpsiGamKsKlKKLh> theJpsiGamKsKlKKLhPtr;
+  boost::shared_ptr<AbsLh> theLhPtr;
   std::string startWithHyp=theAppParams.startHypo();
   
   if (startWithHyp=="production"){
-    theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap ));
+    theLhPtr = boost::shared_ptr<AbsLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap ));
   }
-//   else if (startWithHyp=="base") 
-//     theJpsiGamKsKlKKLhPtr = boost::shared_ptr<AbsJpsiGamKsKlKKLh> (new JpsiGamKsKlKKBaseLh(theJpsiGamKsKlKKEventListPtr, hypMap));
-  
   else { 
     Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
     exit(1);
   }
   
 
-  bool qaMode=theAppParams.qaMode();
-  std::cout << "qaMode: " << qaMode << std::endl;
+  
 
-  if (qaMode){
-    theJpsiGamKsKlKKLhPtr->printCurrentFitResult(theStartparams);
-    double theLh=theJpsiGamKsKlKKLhPtr->calcLogLh(theStartparams);
-    Info <<"theLh = "<< theLh ;  // << endmsg;
 
-    JpsiGamKsKlKKHist theJpsiGamKsKlKKHist(theJpsiGamKsKlKKLhPtr, theStartparams);
+
+  std::string mode=theAppParams.mode();
+  if (mode=="dumpDefaultParams"){
+    fitParams defaultVal;
+    fitParams defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+    std::ofstream theStreamDefault ( "defaultparams.dat");
+    boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new JpsiGamKsKlKKFitParams(defaultVal, defaultErr));
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    return 0;      
+  }
+
+
+
+  std::string paramStreamerPath=theAppParams.fitParamFile();
+
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new JpsiGamKsKlKKFitParams()));
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();    
+
+  boost::shared_ptr<FitParamsBase> theFitParamBase
+    =boost::shared_ptr<FitParamsBase>(new JpsiGamKsKlKKFitParams(theStartparams, theErrorparams));
+  
+  if (mode=="qaMode"){
+    Info << "\nThe parameter values are: " << "\n" << endmsg;
+    theFitParamBase->printParams(theStartparams);
+
+    Info << "\nThe parameter errors are: " << "\n" << endmsg;
+    theFitParamBase->printParams(theErrorparams);
+
+    double theLh=theLhPtr->calcLogLh(theStartparams);
+    Info <<"theLh = "<< theLh << endmsg;
+
+    JpsiGamKsKlKKHist theHist(theLhPtr, theStartparams);
+    
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     return 0;
   }
   
+  
+   if (mode=="pwa"){  
+  PwaFcnBase theFcn(theLhPtr, theFitParamBase); 
+  MnUserParameters upar;
+  theFitParamBase->setMnUsrParams(upar);
 
-   MJpsiGamKsKlKKFcn mJpsiGamKsKlKKFcn(theJpsiGamKsKlKKLhPtr);
-
-   MnUserParameters upar;
-   theJpsiGamKsKlKKLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
+  std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl; 
+  for (int i=0; i<int(upar.Params().size()); ++i){
+    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  }
 
   const std::vector<std::string> fixedParams=theAppParams.fixedParams();
 
@@ -212,52 +240,43 @@ int main(int __argc,char *__argv[]){
     upar.Fix( (*itFix) );
   }
 
-  
-  MnMigrad migrad(mJpsiGamKsKlKKFcn, upar);
-  vector<ROOT::Minuit2::MinuitParameter> vec = migrad.MinuitParameters();
-  vector<ROOT::Minuit2::MinuitParameter>::iterator iter;
-  for(iter=vec.begin(); iter!=vec.end();++iter){
-    Info << "Parameter " << (*iter).Name() << " " << (*iter).Value() ;  // << endmsg;
-  } 
-  theJpsiGamKsKlKKLhPtr->printCurrentFitResult(theStartparams);
-  
 
-
-  Info <<"start migrad ";  // << endmsg;
+  MnMigrad migrad(theFcn, upar);  
+  Info <<"start migrad "<< endmsg;
   FunctionMinimum min = migrad();
 
   if(!min.IsValid()) {
     //try with higher strategy
-    Info <<"FM is invalid, try with strategy = 2.";  // << endmsg;
-    MnMigrad migrad2(mJpsiGamKsKlKKFcn, min.UserState(), MnStrategy(2));
+    Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+    MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
     min = migrad2();
   }
 
   MnUserParameters finalUsrParameters=min.UserParameters();
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
  
-  paramGamKsKlKK finalFitParams;
-  theJpsiGamKsKlKKLhPtr->setFitParamVal(finalFitParams, finalParamVec);
+  fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
 
 
   
-  JpsiGamKsKlKKHist theJpsiGamKsKlKKHist(theJpsiGamKsKlKKLhPtr, finalFitParams);
-  
-  Info << "Final fit results: ------------------------------------------";
-  theJpsiGamKsKlKKLhPtr->printCurrentFitResult(finalFitParams);
-  double theLh=theJpsiGamKsKlKKLhPtr->calcLogLh(finalFitParams);
-  Info <<"theLh = "<< theLh ;  // << endmsg;
-  
-  // print final fit result
-  
-  const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-  for (size_t i=0; i<finalParamVec.size(); i++)
-    {
-      Info << "Value: " << finalParamVec[i] << "\t Error: " << finalParamErrorVec[i] ;  // << endmsg;
-    }
+  JpsiGamKsKlKKHist theHist(theLhPtr, finalFitParams);
 
-
-
-    return 0;
+  theFitParamBase->printParams(finalFitParams);
+  double theLh=theLhPtr->calcLogLh(finalFitParams);
+  Info <<"theLh = "<< theLh << endmsg;
+  
+// print and dump final fit result
+   const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+   for (size_t i=0; i<finalParamVec.size(); i++)
+     {
+       Info << "Value: " << finalParamVec[i] << "\t Error: " << finalParamErrorVec[i] << endmsg;
+     }
+   fitParams finalFitErrs=theFitParamBase->getFitParamVal(finalParamErrorVec);
+   std::ofstream theStream ( "finalResult.dat");
+   theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+   return 0;
+   }
+   
+  return 0;
 }
 

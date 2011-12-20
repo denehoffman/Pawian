@@ -44,7 +44,7 @@ class JpsiGamKsKlKKParser
       , _mcFile("/data/sleipnir1/bertram/JpsiGamKsKlKKData/fitvectorMC_chic1_kkpi0.dat")
       , _paramFile("/data/sleipnir1/bertram/JpsiGamKsKlKKData/startParamSpin02.dat")
       , _startHypo("base")
-      , _qaMode(false)
+      , _mode("qaMode")
     {
     if (!parseCommandLine(argc, argv)) throw false;
   }
@@ -56,7 +56,7 @@ class JpsiGamKsKlKKParser
   const std::string fitParamFile() const {return _paramFile;}
   const std::vector<std::string>& disabledHyps() const { return _disabledHyps; }
   const std::string startHypo() const {return _startHypo;}
-  const bool qaMode() const {return _qaMode;}
+  const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
 protected:
   bool parseCommandLine(int argc,char **argv);
@@ -68,7 +68,7 @@ protected:
   std::string _mcFile;
   std::string _paramFile;
   std::string _startHypo;
-  bool _qaMode;		  
+  std::string _mode;		  
   std::vector<std::string> _disabledHyps;
   std::vector<std::string> _mnParFixs;
 };

@@ -32,14 +32,19 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
   (*_fcnCounter)++;
   fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);
  
+ 
+  
   double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
   DebugMsg << "logLh= " << result <<endmsg;
  
   if (  (*_fcnCounter)%10 == 0) {  
-  _fitParamsBasePtr->printParams(theFitParmValTmp);
+    _fitParamsBasePtr->printParams(theFitParmValTmp);
+    for(int i=0;i<par.size();i++){
+      Info << "Fit parameter " << i << " " << par[i] << endmsg;
+    }
   }
-
+  
   if (  (*_fcnCounter)%100 == 0) {
     std::ofstream theStream ( "currentResult.dat");
     _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);

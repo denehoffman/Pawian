@@ -8,35 +8,21 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
-namespace JpsiGamKsKlKKData {
 
-  struct JpsiGamKsKlKKEvtData
-  {
-    
-
-    Vector4<float> V4_Psi;
-    
-    Vector4<float> V4_KsKlKpKm_HeliPsi;
-    Vector4<float> V4_KsKl_HeliPsi;
-    Vector4<float> V4_KpKm_HeliPsi;
-    Vector4<float> V4_gamma_HeliPsi;
-    
-    Vector4<float> V4_KsKl_HeliKsKlKpKm;
-    Vector4<float> V4_KpKm_HeliKsKlKpKm;
-    Vector4<float> V4_Ks_HeliKsKl;
-    Vector4<float> V4_Kp_HeliKpKm;
-
-
-    map<Spin,map<Spin,map<Spin,complex<double> > > > df_Psi;
-
-    map<Spin,map<Spin,map<Spin,complex<double> > > > Df_Spin0;
-    map<Spin,map<Spin,map<Spin,complex<double> > > > Df_Spin2;
-    map<Spin,map<Spin,map<Spin,complex<double> > > > Df_KsKl;
-    map<Spin,map<Spin,map<Spin,complex<double> > > > Df_KpKm;
-    
-    
-
-  };
+struct enumJpsiGamKsKlKKData{
+  enum {V4_Psi=0, V4_KsKlKpKm_HeliPsi, V4_KsKl_HeliPsi,V4_KpKm_HeliPsi, V4_gamma_HeliPsi,
+	V4_KsKl_HeliKsKlKpKm,V4_KpKm_HeliKsKlKpKm ,V4_Ks_HeliKsKl,V4_Kp_HeliKpKm,
+	n4Vecs, Df_Psi=n4Vecs, Df_Spin0,Df_Spin2, Df_KsKl,Df_KpKm, nDfuncts};
   
-}
+  static const std::string& name(unsigned int t)
+  {
+    static std::string fitName[enumJpsiGamKsKlKKData::nDfuncts]
+      ={"Psi", "KsKlKpKm_HeliPsi", "KsKl_HeliPsi","KpKm_HeliPsi","gamma_HeliPsi",
+	"KsKl_HeliKsKlKpKm","KpKm_HeliKsKlKpKm" ,"Ks_HeliKsKl","Kp_HeliKpKm",
+	"Df_Psi","Df_Spin0","Df_Spin2", "Df_KsKl","Df_KpKm"};
+    if (t<0 || t>=enumJpsiGamKsKlKKData::nDfuncts) assert(0);
+    return fitName[t];
+  }
+};
+
 #endif /* _JpsiGamKsKlKKData_H */

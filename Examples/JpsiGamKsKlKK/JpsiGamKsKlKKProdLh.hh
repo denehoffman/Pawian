@@ -14,7 +14,7 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-#include "Examples/JpsiGamKsKlKK/AbsJpsiGamKsKlKKLh.hh"
+#include "PwaUtils/AbsLh.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -22,60 +22,59 @@
 
 
 
-class JpsiGamKsKlKKProdLh : public AbsJpsiGamKsKlKKLh{
+class JpsiGamKsKlKKProdLh : public AbsLh{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiGamKsKlKKProdLh(boost::shared_ptr<const JpsiGamKsKlKKEventList>, const std::map<const std::string, bool>& hypMap);
-  JpsiGamKsKlKKProdLh(boost::shared_ptr<AbsJpsiGamKsKlKKLh>, const std::map<const std::string, bool>& hypMap);
+  JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList>, const std::map<const std::string, bool>& hypMap);
+  JpsiGamKsKlKKProdLh(boost::shared_ptr<AbsLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
   virtual ~JpsiGamKsKlKKProdLh();
 
-  virtual AbsJpsiGamKsKlKKLh* clone_() const {
-    return new JpsiGamKsKlKKProdLh(_JpsiGamKsKlKKEvtListPtr, _hypMap);
+  virtual AbsLh* clone_() const {
+    return new JpsiGamKsKlKKProdLh(_evtListPtr, _hypMap);
   }
-
-
-  // Getters:
-  virtual double calcEvtIntensity(JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData, const paramGamKsKlKK& theParamVal);
   
-  virtual void setMnUsrParams(MnUserParameters& upar, paramGamKsKlKK& startVal,  paramGamKsKlKK& errVal);
-  virtual int setFitParamVal(paramGamKsKlKK& theParamVal, const std::vector<double>& par);
 
-  virtual unsigned int  nFitParams();
+  
+  virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
+  
+  //Getters:
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
-  virtual void printCurrentFitResult(paramGamKsKlKK& theParamVal);
-  virtual void dumpCurrentResult(std::ostream& os, paramGamKsKlKK& theParamVal, std::string& suffix);
+  
 
 protected:
 
-  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);  
+  virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, fitParams&  theParamVal, EvtData* theData);  
 
-  complex<double> etaGammaAmp(Spin Minit, Spin Metac, Spin Mgamma, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ampParam, pair<double, double>& massParam);
-
-  complex<double> f0GammaAmp(Spin Minit, Spin Mgamma, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ampf0Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ampf0Dec, pair<double, double>& massParam);
-
-
-
-  complex<double> f22340GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
-  complex<double> f22300GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
-  complex<double> f22010GammaCoherentAmp(Spin Minit, Spin Metac, Spin Mgamma, const paramGamKsKlKK& theParamVal, JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
-  complex<double> etaToPhiPhiTo4KAmp(JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData);
-  complex<double> f0ToPhiPhiTo4KAmp(JpsiGamKsKlKKData::JpsiGamKsKlKKEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ampf0Dec);
-
-
+  
+  virtual complex<double> etaGammaAmp(Spin Minit, Spin Metac, Spin Mgamma, EvtData* theData, 
+				      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToEtaMag, 
+				      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToEtaPhi,
+				      double mass, double width);
+  
+  virtual complex<double> f0GammaAmp(Spin Minit, Spin Mgamma, EvtData* theData, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdMag, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdPhi,
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag,  
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi,
+				     double mass, double width );
+  
+  virtual complex<double> etaToPhiPhiTo4KAmp(EvtData* theData);
+  
+  virtual complex<double> f0ToPhiPhiTo4KAmp( EvtData* theData, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag, 
+					     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi    );
+  
   bool _eta2225Hyp;
   bool _f02020Hyp;
   std::map<const std::string, bool> _hypMap;
 private:
-  unsigned int _nFitParams;
-  std::vector<unsigned int> _ampVec;
-  std::vector<unsigned int> _massVec;
-
+  
 };
 
 #endif
