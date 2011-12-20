@@ -30,9 +30,8 @@ PwaFcnBase::~PwaFcnBase()
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   (*_fcnCounter)++;
-  fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);
- 
- 
+
+  fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);  
   
   double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
@@ -40,9 +39,6 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
  
   if (  (*_fcnCounter)%10 == 0) {  
     _fitParamsBasePtr->printParams(theFitParmValTmp);
-    for(int i=0;i<par.size();i++){
-      Info << "Fit parameter " << i << " " << par[i] << endmsg;
-    }
   }
   
   if (  (*_fcnCounter)%100 == 0) {

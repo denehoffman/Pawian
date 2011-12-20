@@ -249,7 +249,7 @@ void JpsiGamKsKlKKHist::plotKsKl(TH1F* theHisto, EvtData* theData, double weight
   theHisto->Fill( v4.M(), weight ); 
 }
 void JpsiGamKsKlKKHist::plotKpKm(TH1F* theHisto, EvtData* theData, double weight){
-  Vector4<double>& v4 = theData->FourVecs[enumJpsiGamKsKlKKData::V4_Kp_HeliKpKm]; 
+  Vector4<double>& v4 = theData->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm]; 
   theHisto->Fill( v4.M(), weight );   
 }
 

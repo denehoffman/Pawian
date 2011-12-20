@@ -85,8 +85,8 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEta2225GamMag=theParamVal.Mags[paramEnumJpsiGamKsKlKK::PsiToEta2225Gamma];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEta2225GamPhi=theParamVal.Phis[paramEnumJpsiGamKsKlKK::PsiToEta2225Gamma];
     
-    double mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::eta2225];
-    double width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::eta2225];
+    mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::eta2225];
+    width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::eta2225];
     
     JmpGmp+=etaGammaAmp(1, 0, 1, theData, PsiToEta2225GamMag, PsiToEta2225GamPhi, mass, width );
     JmpGmm+=etaGammaAmp(1, 0, -1, theData, PsiToEta2225GamMag, PsiToEta2225GamPhi, mass, width );
@@ -101,8 +101,8 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiMag=theParamVal.Mags[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiPhi=theParamVal.Phis[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
     
-    double mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::f02020];
-    double width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020];
+    mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::f02020];
+    width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020];
     
     JmpGmp+=f0GammaAmp(1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,mass,width );
     JmpGmm+=f0GammaAmp(1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,mass,width );
@@ -269,8 +269,8 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
     
     std::vector< boost::shared_ptr<const JPCLS> >::iterator itAmp;
     for (itAmp=itAmpMap->second.begin(); itAmp!=itAmpMap->second.end(); ++itAmp){
-      valMagMap[(*itAmp)]=0.5;
-      errMagMap[(*itAmp)]=0.2; 
+      valMagMap[(*itAmp)]=0.6;
+      errMagMap[(*itAmp)]=0.3; 
       valPhiMap[(*itAmp)]=0.;
       errPhiMap[(*itAmp)]=0.2;      
     }
@@ -285,21 +285,21 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
   //fill masses and wisths
   fitVal.Masses[paramEnumJpsiGamKsKlKK::etac]=2.95;
   fitErr.Masses[paramEnumJpsiGamKsKlKK::etac]=0.05;
-  fitVal.Widths[paramEnumJpsiGamKsKlKK::etac]=.05;
-  fitErr.Widths[paramEnumJpsiGamKsKlKK::etac]=0.2;
+  fitVal.Widths[paramEnumJpsiGamKsKlKK::etac]=.06;
+  fitErr.Widths[paramEnumJpsiGamKsKlKK::etac]=0.03;
   
   if(_eta2225Hyp){
     fitVal.Masses[paramEnumJpsiGamKsKlKK::eta2225]=2.225;
     fitErr.Masses[paramEnumJpsiGamKsKlKK::eta2225]=0.3;
-    fitVal.Widths[paramEnumJpsiGamKsKlKK::eta2225]=.2;
-    fitErr.Widths[paramEnumJpsiGamKsKlKK::eta2225]=0.2;
+    fitVal.Widths[paramEnumJpsiGamKsKlKK::eta2225]=.3;
+    fitErr.Widths[paramEnumJpsiGamKsKlKK::eta2225]=0.1;
   }
   
   if(_f02020Hyp){
     fitVal.Masses[paramEnumJpsiGamKsKlKK::f02020]=2.020;
     fitErr.Masses[paramEnumJpsiGamKsKlKK::f02020]=0.3;
-    fitVal.Widths[paramEnumJpsiGamKsKlKK::f02020]=.20;
-    fitErr.Widths[paramEnumJpsiGamKsKlKK::f02020]=0.2;
+    fitVal.Widths[paramEnumJpsiGamKsKlKK::f02020]=.30;
+    fitErr.Widths[paramEnumJpsiGamKsKlKK::f02020]=0.1;
   }
   
   
