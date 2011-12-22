@@ -51,11 +51,12 @@ public:
 
   void updateMatrix(const double mass);
   void updateMatrixRel(const double mass);
+  vector< complex<double> > currentRhoFactors() {return _currentRhoFactors;}
 
 protected:
 
   vector<KpoleMatrix> _Kpoles;
-
+  vector< complex<double> > _currentRhoFactors;
 };
 //_____________________________________________________________________________
 

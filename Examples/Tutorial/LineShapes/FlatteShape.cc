@@ -145,11 +145,14 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      cout << "currentValLowRel= " << currentValLowRel << "  norm: " <<  norm(currentValLowRel) << endl;
      complex<double> currentValHighRel=theTMatrix(0,1); 
      cout << "currentValHighRel= " << currentValHighRel << "  norm: " <<  norm(currentValHighRel) << endl;
-     
-     _histShapeLowKmatrRel->Fill(mass4Vec.M(), norm(currentValLowRel) );
-     _argandKmatrLowRelHist->Fill(currentValLowRel.real(),currentValLowRel.imag());
-     _histShapeHighKmatrRel->Fill(mass4Vec.M(), norm(currentValHighRel) );
-     _argandKmatrHighRelHist->Fill(currentValHighRel.real(),currentValHighRel.imag());
+
+     vector< complex<double> > rhoFactors=theTMatrix.currentRhoFactors(); 
+     complex<double> rhoDiv=rhoFactors[1]/rhoFactors[0];     
+
+     if(rhoFactors[0].real()>0.) _histShapeLowKmatrRel->Fill(mass4Vec.M(), norm(currentValLowRel)*rhoFactors[0].real() );
+     if(rhoFactors[0].real()>0.) _argandKmatrLowRelHist->Fill(sqrt(rhoFactors[0].real())*currentValLowRel.real(),sqrt(rhoFactors[0].real())*currentValLowRel.imag());
+     if(rhoFactors[1].real()>0.) _histShapeHighKmatrRel->Fill(mass4Vec.M(), norm(currentValHighRel)*rhoFactors[1].real() );
+     if(rhoFactors[1].real()>0.) _argandKmatrHighRelHist->Fill(currentValHighRel.real()*rhoFactors[1].real(),currentValHighRel.imag()*rhoFactors[1].real());
 
      complex<double> rhoPoleFactor1=phaseSpaceFac(mass4Vec.M(),decPairLow.first, decPairLow.second); 
      complex<double> rhoPoleFactor2=phaseSpaceFac(mass4Vec.M(),decPairHigh.first, decPairHigh.second);
