@@ -51,7 +51,7 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
   std::pair <const double, const double> decPairHigh=make_pair(KplusMass,K0Mass);
 
 
-  int size=700;
+  int size=2000;
   double massMin=.5;
   double massMax=1.85;
 
@@ -130,7 +130,7 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      complex<double> currentValLow=theTMatrix(0,0);
      cout << "currentMass= " << mass4Vec.M() << endl;
      cout << "currentValLow= " << currentValLow << "  norm: " <<  norm(currentValLow) << endl;
-     complex<double> currentValHigh=theTMatrix(1,1); 
+     complex<double> currentValHigh=theTMatrix(0,1); 
      cout << "currentValHigh= " << currentValHigh << "  norm: " <<  norm(currentValHigh) << endl;
  
      _histShapeLowKmatr->Fill(mass4Vec.M(), norm(currentValLow) );
@@ -149,10 +149,10 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      vector< complex<double> > rhoFactors=theTMatrix.currentRhoFactors(); 
      complex<double> rhoDiv=rhoFactors[1]/rhoFactors[0];     
 
-     if(rhoFactors[0].real()>0.) _histShapeLowKmatrRel->Fill(mass4Vec.M(), norm(currentValLowRel)*rhoFactors[0].real() );
-     if(rhoFactors[0].real()>0.) _argandKmatrLowRelHist->Fill(sqrt(rhoFactors[0].real())*currentValLowRel.real(),sqrt(rhoFactors[0].real())*currentValLowRel.imag());
-     if(rhoFactors[1].real()>0.) _histShapeHighKmatrRel->Fill(mass4Vec.M(), norm(currentValHighRel)*rhoFactors[1].real() );
-     if(rhoFactors[1].real()>0.) _argandKmatrHighRelHist->Fill(currentValHighRel.real()*rhoFactors[1].real(),currentValHighRel.imag()*rhoFactors[1].real());
+     _histShapeLowKmatrRel->Fill(mass4Vec.M(), norm(currentValLowRel)*norm(rhoFactors[0]) );
+     _argandKmatrLowRelHist->Fill(sqrt(norm(rhoFactors[0]))*currentValLowRel.real(),sqrt(norm(rhoFactors[0]))*currentValLowRel.imag());
+     _histShapeHighKmatrRel->Fill(mass4Vec.M(), norm(currentValHighRel)*norm(sqrt(rhoFactors[0]*rhoFactors[1])) );
+     _argandKmatrHighRelHist->Fill(currentValHighRel.real()*sqrt(abs(rhoFactors[0]*rhoFactors[1])),currentValHighRel.imag()*sqrt(abs(rhoFactors[0]*rhoFactors[1])));
 
      complex<double> rhoPoleFactor1=phaseSpaceFac(mass4Vec.M(),decPairLow.first, decPairLow.second); 
      complex<double> rhoPoleFactor2=phaseSpaceFac(mass4Vec.M(),decPairHigh.first, decPairHigh.second);

@@ -9,6 +9,7 @@ TMatrix::TMatrix(const vector<KpoleMatrix>& theKpoles):
    _currentRhoFactors.resize(theKpoles[0].NumRows());
  }
 
+
 TMatrix::~TMatrix(){
 
 }
@@ -36,7 +37,7 @@ void TMatrix::updateMatrix(const double mass){
   tmpDenomMatrInv.invert();
   
   
-  Matrix< complex< double > > testMatr=tmpDenomMatrCompl*tmpDenomMatrInv;
+  //  Matrix< complex< double > > testMatr=tmpDenomMatrCompl*tmpDenomMatrInv;
 //   cout << "testMatr: " << testMatr << endl;
   
   
@@ -60,11 +61,10 @@ void TMatrix::updateMatrixRel(const double mass){
 
   for (it =_Kpoles.begin(); it != _Kpoles.end(); ++it){
      it->updateMatrixRel(mass);
-//      it->updateMatrix(mass);
      theKMatrix += (*it);
   }
 
-  cout << "theKMatrixRel: " << theKMatrix << endl;
+  //  cout << "theKMatrixRel: " << theKMatrix << endl;
 
   Matrix< complex<double> > theRhoMatrix(NumRows(),NumRows());
 

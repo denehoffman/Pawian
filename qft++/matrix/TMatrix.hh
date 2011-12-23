@@ -19,11 +19,6 @@ class TMatrix : public Matrix< complex<double> > {
 
 public:
 
-  // create/copy/destroy:
-
-  /// Default Constructor (rank 0)
-  //   TMatrix() : Matrix<double>::Matrix() {}
-
   /// Constructor 
   TMatrix(const vector<KpoleMatrix>& theKpoles); 
 
@@ -57,6 +52,7 @@ protected:
 
   vector<KpoleMatrix> _Kpoles;
   vector< complex<double> > _currentRhoFactors;
+
 };
 //_____________________________________________________________________________
 

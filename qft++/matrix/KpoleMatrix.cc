@@ -20,6 +20,8 @@ KpoleMatrix::KpoleMatrix(const vector<double>& g_i, const double mass_0, const v
   }  
 }
 
+
+
 KpoleMatrix::KpoleMatrix(const KpoleMatrix &theCopy):
   Matrix< complex<double> >::Matrix(int(theCopy._g_i.size()), int(theCopy._g_i.size()))
   , _orbMom(theCopy._orbMom)
@@ -62,10 +64,7 @@ void KpoleMatrix::updateMatrix(const double mass){
 
   for (int i=0; i< int(_g_i.size()); ++i){
     for (int j=0; j< int(_g_i.size()); ++j){
-      //      this->operator()(i,j)= ( _g_i[i]*sqrt(conj(rhoFactors[i]))*barrierFactors[i]*_g_i[j]*sqrt(rhoFactors[j])*barrierFactors[j])/(_poleMass*_poleMass-mass*mass);
       this->operator()(i,j)= ( _g_i[i]*_g_i[j]*sqrt(rhoFactors[i]*barrierFactors[i]*rhoFactors[j]*barrierFactors[j]))/(_poleMass*_poleMass-mass*mass);
-//       this->operator()(i,j)= ( _g_i[i]*sqrt(rhoFactors[i]*rhoFactors[j])*_g_i[j])/(_poleMass*_poleMass-mass*mass);
-//       this->operator()(i,j)= (( _g_i[i]*_g_i[j])/(_poleMass*_poleMass-mass*mass))*sqrt(rhoFactors[i]*rhoFactors[j]);
     }
   }
   
@@ -83,7 +82,6 @@ void KpoleMatrix::updateMatrixRel(const double mass){
 
   for (int i=0; i< int(_g_i.size()); ++i){
     for (int j=0; j< int(_g_i.size()); ++j){
-//       this->operator()(i,j) /= sqrt(_rhoPoleFactors[i]*_rhoPoleFactors[j]);
       this->operator()(i,j) /= sqrt(rhoFactors[i]*rhoFactors[j]);
      }
    }
