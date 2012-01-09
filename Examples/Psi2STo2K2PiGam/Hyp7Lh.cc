@@ -40,8 +40,6 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   double K892Mass=theParamVal.BwK892.first;
   double K892Width=theParamVal.BwK892.second;
 
-  //Chi_c0 decay to K_0_2400 K  -> (K f0(980) ) K -> (K pi0 pi0 ) K
-
   if(_KappaHyp){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2Kappa=theParamVal.ChiTo2Kappa;
     double KappaMass=theParamVal.BwKappa.first;

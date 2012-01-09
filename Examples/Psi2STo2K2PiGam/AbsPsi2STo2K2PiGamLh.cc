@@ -333,9 +333,12 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK0K2Amp(Psi2STo2K2PiGamData::Psi2STo2
 
 
 
-    result+=theMag*expiphi*
-      (ampK0ToKpPi0*ampK2ToKmPi1+ampK0ToKpPi1*ampK2ToKmPi0+ampK0ToKmPi0+ampK2ToKpPi1+ampK0ToKmPi1*ampK2ToKpPi0);
+    //    result+=theMag*expiphi*
+    //  (ampK0ToKpPi0*ampK2ToKmPi1+ampK0ToKpPi1*ampK2ToKmPi0+ampK0ToKmPi0+ampK2ToKpPi1+ampK0ToKmPi1*ampK2ToKpPi0);
     
+    result+=theMag*expiphi*
+      (ampK0ToKpPi0*ampK2ToKmPi1+ampK0ToKpPi1*ampK2ToKmPi0+ampK0ToKmPi0*ampK2ToKpPi1+ampK0ToKmPi1*ampK2ToKpPi0); 
+
   } 
  
   return result;
