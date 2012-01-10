@@ -56,6 +56,8 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::K_0_1460ToK_0_1430Pi]=theStates.ChiToK0K0States();
   _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK892Pi]=theStates.ChiToK0K0States();
   _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK_0_1430Pi]=theStates.ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_1670Pi]=theStates.ChiToPi_2PiStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi]=theStates.Pi_2Tof_2PiStates();
 }
 
 FitParams2K2PiGam::~FitParams2K2PiGam()
@@ -124,6 +126,8 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::K_0_1460ToK_0_1430Pi) return params.K_0_1460ToK_0_1430Pi;
   else if (index==paramEnum2K2PiGam::K_0_1830ToK892Pi) return params.K_0_1830ToK892Pi;
   else if (index==paramEnum2K2PiGam::K_0_1830ToK_0_1430Pi) return params.K_0_1830ToK_0_1430Pi;
+  else if (index==paramEnum2K2PiGam::ChiToPi_2_1670Pi) return params.ChiToPi_2_1670Pi;
+  else if (index==paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi) return params.Pi_2_1670Tof_2_1270Pi;
   else{
     Alert << "index " << index << " not supported !!!" << endmsg;
     exit(0);
@@ -150,6 +154,7 @@ pair<double, double>& FitParams2K2PiGam::massPair(param2K2PiGam& params, unsigne
   else if (index==paramEnum2K2PiGam::f2200) return params.Bwf2200;
   else if (index==paramEnum2K2PiGam::sigma) return params.BwSigma;
   else if (index==paramEnum2K2PiGam::f1370) return params.Bwf1370;
+  else if (index==paramEnum2K2PiGam::f_2_1270) return params.Bwf_2_1270;
   else if (index==paramEnum2K2PiGam::f_2_1430) return params.Bwf_2_1430;
   else if (index==paramEnum2K2PiGam::f_2_1525) return params.Bwf_2_1525;
   else if (index==paramEnum2K2PiGam::f_2_1950) return params.Bwf_2_1950;
@@ -159,7 +164,7 @@ pair<double, double>& FitParams2K2PiGam::massPair(param2K2PiGam& params, unsigne
   else if (index==paramEnum2K2PiGam::K_1_2300) return params.BwK_1_2300;
   else if (index==paramEnum2K2PiGam::K_0_1460) return params.BwK_0_1460;
   else if (index==paramEnum2K2PiGam::K_0_1830) return params.BwK_0_1830;
-
+  else if (index==paramEnum2K2PiGam::Pi_2_1670) return params.BwPi_2_1670;
   else{ Alert << "index " << index << " not supported !!!" << endmsg;
     exit(0);
   }
@@ -279,7 +284,7 @@ void FitParams2K2PiGam::setMnUsrParamsDec(MnUserParameters& upar, param2K2PiGam&
     if (magMin<0.) magMin=0.;
     
     upar.Add(magStr, magVal, magErr, magMin, magVal+magErr);
-    upar.Add(phiStr, phiVal, phiErr, -2*M_PI, 2*M_PI);
+    upar.Add(phiStr, phiVal, phiErr, -3*M_PI, 3*M_PI);
 
     counter++;
   }
