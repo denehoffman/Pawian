@@ -13,8 +13,10 @@ Hyp4Lh::Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_f1710f1370Hyp4(true)
   ,_f980f_2_1430Hyp4(true)
   ,_f980f_2_1525Hyp4(true)
+  ,_f980f_2_1950Hyp4(true)
   ,_f1500f_2_1525Hyp4(true)
   ,_f1710f_2_1430Hyp4(true)
+  ,_f1710f_2_1950Hyp4(true)
   ,_doHyp4(true)
   ,_nFitParams(0)
 {
@@ -28,8 +30,10 @@ Hyp4Lh::Hyp4Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_f1710f1370Hyp4(true)
   ,_f980f_2_1430Hyp4(true)
   ,_f980f_2_1525Hyp4(true)
+  ,_f980f_2_1950Hyp4(true)
   ,_f1500f_2_1525Hyp4(true)
   ,_f1710f_2_1430Hyp4(true)
+  ,_f1710f_2_1950Hyp4(true)
   ,_doHyp4(true)
   ,_nFitParams(0)
 {
@@ -56,6 +60,9 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   double f_2_1525Mass=theParamVal.Bwf_2_1525.first;
   double f_2_1525Width=theParamVal.Bwf_2_1525.second;
+
+  double f_2_1950Mass=theParamVal.Bwf_2_1950.first;
+  double f_2_1950Width=theParamVal.Bwf_2_1950.second;
 
   if (_f980f1370Hyp4){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_pif1370_k=theParamVal.f980_pif1370_k;
@@ -117,6 +124,17 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     result+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1525Mass, f_2_1525Width);
   }
 
+  if (_f980f_2_1950Hyp4){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_pif2_k=theParamVal.f980_pif_2_1950_k;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980_kf2_pi=theParamVal.f980_kf_2_1950_pi;
+
+    double f980_Mass=theParamVal.Flatf980;
+    double f980_gPiPi=theParamVal.Flatf980gPiPi;
+    double f980_gKK=theParamVal.Flatf980gKK;
+    result+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1950Mass, f_2_1950Width);
+    result+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1950Mass, f_2_1950Width);
+  }
+
   if (_f1500f_2_1525Hyp4){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1500_pif2_k=theParamVal.f1500_pif_2_1525_k;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1500_kf2_pi=theParamVal.f1500_kf_2_1525_pi;
@@ -134,6 +152,17 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   result+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1430Mass, f_2_1430Width);
   result+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1430Mass, f_2_1430Width, f1710Mass, f1710Width);
+  }
+
+  if (_f1710f_2_1950Hyp4){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1710_pif2_k=theParamVal.f1710_pif_2_1950_k;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1710_kf2_pi=theParamVal.f1710_kf_2_1950_pi;
+
+  double f1710Mass=theParamVal.Bwf1710.first;
+  double f1710Width=theParamVal.Bwf1710.second;
+
+  result+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1950Mass, f_2_1950Width);
+  result+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1950Mass, f_2_1950Width, f1710Mass, f1710Width);
   }
   return result;
 }
@@ -318,6 +347,17 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     exit(0);
   }
 
+  iter= hypMap.find("f980f_2_1950Hyp4");
+  if (iter !=hypMap.end()){
+    _f980f_2_1950Hyp4= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_1950Hyp4 <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << "hypothesis f980f_2_1950Hyp4 not set!!!" <<endmsg;
+    exit(0);
+  }
+
   iter= hypMap.find("f980f1500Hyp4");
 
   if (iter !=hypMap.end()){
@@ -354,7 +394,20 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     exit(0);
   }
 
-  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4) _doHyp4=false; 
+  iter= hypMap.find("f1710f_2_1950Hyp4");
+
+  if (iter !=hypMap.end()){
+    _f1710f_2_1950Hyp4= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _f1710f_2_1950Hyp4 <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << "hypothesis f1710f_2_1950Hyp4 not set!!!" <<endmsg;
+    exit(0);
+  }
+
+
+  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f1710f_2_1950Hyp4) _doHyp4=false; 
 
   if (!_doHyp4) return;
 
@@ -380,6 +433,10 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::f980_pif_2_1525_k);
     _ampVec.push_back(paramEnum2K2PiGam::f980_kf_2_1525_pi);
   }
+  if (_f980f_2_1950Hyp4){
+    _ampVec.push_back(paramEnum2K2PiGam::f980_pif_2_1950_k);
+    _ampVec.push_back(paramEnum2K2PiGam::f980_kf_2_1950_pi);
+  }
   if (_f1500f_2_1525Hyp4){
     _ampVec.push_back(paramEnum2K2PiGam::f1500_pif_2_1525_k);
     _ampVec.push_back(paramEnum2K2PiGam::f1500_kf_2_1525_pi);
@@ -388,10 +445,15 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::f1710_pif_2_1430_k);
     _ampVec.push_back(paramEnum2K2PiGam::f1710_kf_2_1430_pi);
   }
+  if (_f1710f_2_1950Hyp4){
+    _ampVec.push_back(paramEnum2K2PiGam::f1710_pif_2_1950_k);
+    _ampVec.push_back(paramEnum2K2PiGam::f1710_kf_2_1950_pi);
+  }
 
   if (_f980f1370Hyp4 || _f1710f1370Hyp4) _massVec.push_back(paramEnum2K2PiGam::f1370);
   if (_f980f1500Hyp4 || _f1500f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f1500);
   if (_f980f_2_1430Hyp4 || _f1710f_2_1430Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1430);
+  if (_f980f_2_1950Hyp4 || _f1710f_2_1950Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1950);
   if (_f980f_2_1525Hyp4 || _f1500f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1525);
 
   std::vector<unsigned int>::iterator ampIt;
