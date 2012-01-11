@@ -55,6 +55,11 @@ namespace Psi2STo2K2PiGamData {
 
     Vector4<float> KK_HeliKKPi0_4V;
     Vector4<float> KK_HeliKKPi1_4V;
+ 
+    Vector4<float> KpPi0_HeliKKPi0_4V;    
+    Vector4<float> KpPi1_HeliKKPi1_4V;
+    Vector4<float> KmPi0_HeliKKPi0_4V;    
+    Vector4<float> KmPi1_HeliKKPi1_4V;
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfPsi; //Wigner D functions for Psi(2S) decay
 
@@ -80,6 +85,11 @@ namespace Psi2STo2K2PiGamData {
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2Tof2Pi0; //Wigner D functions 
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2Tof2Pi1; //Wigner D functions 
+
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2ToKstarpK_pi0; //Wigner D functions 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2ToKstarpK_pi1; //Wigner D functions 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2ToKstarmK_pi0; //Wigner D functions 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2ToKstarmK_pi1; //Wigner D functions 
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKK; //Wigner D functions for f_2->K+ K-
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToPiPi; //Wigner D functions for f_2->pi pi
