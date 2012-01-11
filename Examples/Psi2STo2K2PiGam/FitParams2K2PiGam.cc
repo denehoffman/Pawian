@@ -58,6 +58,7 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK_0_1430Pi]=theStates.ChiToK0K0States();
   _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_1670Pi]=theStates.ChiToPi_2PiStates();
   _jpclsMap[paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi]=theStates.Pi_2Tof_2PiStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_1670ToK892K]=theStates.Pi_2ToKst1KStates();
 }
 
 FitParams2K2PiGam::~FitParams2K2PiGam()
@@ -128,6 +129,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::K_0_1830ToK_0_1430Pi) return params.K_0_1830ToK_0_1430Pi;
   else if (index==paramEnum2K2PiGam::ChiToPi_2_1670Pi) return params.ChiToPi_2_1670Pi;
   else if (index==paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi) return params.Pi_2_1670Tof_2_1270Pi;
+  else if (index==paramEnum2K2PiGam::Pi_2_1670ToK892K) return params.Pi_2_1670ToK892K;
   else{
     Alert << "index " << index << " not supported !!!" << endmsg;
     exit(0);

@@ -951,7 +951,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToPi2Pi0Tof2PiAmp(Psi2STo2K2PiGamData::
       complex<double> expiphiDec(cos(thePhiDec), sin(thePhiDec));
       complex<double> tmpDec(0.,0.);
       for (Spin lamf2=-2; lamf2<=2; ++lamf2){
-	tmpDec+=sqrt(2.*theDecState->L+1)*Clebsch(theDecState->L, 0., theDecState->S, lamf2, theDecState->J, lamf2)*Clebsch(2,lamf2, 0, 0, theDecState->S, lamf2)*sqrt(5.)
+	tmpDec+=sqrt(2.*theDecState->L+1)*Clebsch(theDecState->L, 0., theDecState->S, lamf2, theDecState->J, lamf2)*Clebsch(2,lamf2, 0, 0, theDecState->S, lamf2)
 	  *(BreitWigner(KKPi0, Pi_2_Mass, Pi_2_Width)*theData->DfPi2Tof2Pi0[theDecState->J][lamPi2][lamf2]
 	    + BreitWigner(KKPi1, Pi_2_Mass, Pi_2_Width)*theData->DfPi2Tof2Pi1[theDecState->J][lamPi2][lamf2]);      
       }
@@ -961,7 +961,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToPi2Pi0Tof2PiAmp(Psi2STo2K2PiGamData::
     result+=theMagProd*expiphiProd*currentResultDec;
   }
 
-  result*=BreitWignerBlattW(KK, 0.493677, 0.493677, f_2_Mass, f_2_Width, 2);
+  result*=BreitWignerBlattW(KK, 0.493677, 0.493677, f_2_Mass, f_2_Width, 2)*sqrt(5.)*theData->Dff2ToKK[2][0][0];
   return result;
 }
 
