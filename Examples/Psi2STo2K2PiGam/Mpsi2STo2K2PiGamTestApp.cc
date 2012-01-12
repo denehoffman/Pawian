@@ -174,6 +174,7 @@ int main(int __argc,char *__argv[]){
   hypMap["Pi_2_1670ToK892KHyp9"]=true;
   hypMap["Pi1800Tof980PiHyp9"]=true;
   hypMap["Pi1800Tof1370PiHyp9"]=true;
+  hypMap["Pi_2_2285Tof1710PiHyp9"]=true;
   std::vector<std::string>::const_iterator itStr;
  
   for (itStr=disabledHyps.begin(); itStr!=disabledHyps.end(); ++itStr){

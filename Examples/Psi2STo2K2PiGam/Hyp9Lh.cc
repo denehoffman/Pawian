@@ -13,6 +13,7 @@ Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_Pi_2_1670ToK892KHyp9(true)
   ,_Pi1800Tof980PiHyp9(true)
   ,_Pi1800Tof1370PiHyp9(true)
+  ,_Pi_2_2285Tof1710PiHyp9(true)
   ,_doHyp9(true)
   ,_nFitParams(0)
 {
@@ -25,6 +26,7 @@ Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_Pi_2_1670ToK892KHyp9(true)
   ,_Pi1800Tof980PiHyp9(true)
   ,_Pi1800Tof1370PiHyp9(true)
+  ,_Pi_2_2285Tof1710PiHyp9(true)
   ,_doHyp9(true)
   ,_nFitParams(0)
 {
@@ -87,6 +89,18 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f1360Width=theParamVal.Bwf1360.second;
     
     result+=chiToPi0Pi0Tof0Amp(theData, ChiToPi1800Pi0Tof1370, Pi1800Mass, Pi1800Width, f1360Mass, f1360Width);
+  }
+
+
+  if (_Pi_2_2285Tof1710PiHyp9){
+    double Pi_2_2285Mass=theParamVal.BwPi_2_2285.first;
+    double Pi_2_2285Width=theParamVal.BwPi_2_2285.second;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi_2_2285Pi=theParamVal.ChiToPi_2_2285Pi;
+    double f1710Mass=theParamVal.Bwf1710.first;
+    double f1710Width=theParamVal.Bwf1710.second;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285Tof1700Pi=theParamVal.Pi_2_2285Tof1700Pi;
+
+    result+=chiToPi2Pi0Tof0PiAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285Tof1700Pi, Pi_2_2285Mass, Pi_2_2285Width, f1710Mass, f1710Width);    
   }
   return result;
 }
@@ -267,6 +281,19 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
     exit(0);
   } 
 
+  iter= hypMap.find("Pi_2_2285Tof1710PiHyp9");
+  
+  if (iter !=hypMap.end()){
+    _Pi_2_2285Tof1710PiHyp9= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_2285Tof1710PiHyp9 <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << "Pi_2_2285Tof1710PiHyp9 not set!!!" <<endmsg;
+    exit(0);
+  }
+
+
   if (_Pi_2_1670Tof_2_1270PiHyp9 || _Pi_2_1670ToK892KHyp9){
     _ampVec.push_back(paramEnum2K2PiGam::ChiToPi_2_1670Pi);
     _massVec.push_back(paramEnum2K2PiGam::Pi_2_1670);
@@ -289,6 +316,12 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (_Pi1800Tof1370PiHyp9){
     _ampVec.push_back(paramEnum2K2PiGam::ChiToPi1800Pi0Tof1370);
     _massVec.push_back(paramEnum2K2PiGam::f1360);
+  }
+
+  if (_Pi_2_2285Tof1710PiHyp9){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiToPi_2_2285Pi);
+    _ampVec.push_back(paramEnum2K2PiGam::Pi_2_2285Tof1700Pi);
+    _massVec.push_back(paramEnum2K2PiGam::Pi_2_2285);
   }
 
   std::vector<unsigned int>::iterator ampIt;

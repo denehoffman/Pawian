@@ -77,6 +77,8 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670ToK892K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi1800Pi0Tof980;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi1800Pi0Tof1370;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi_2_2285Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285Tof1700Pi;
 
     pair<double, double> BwK892;
     pair<double, double> BwKappa;
@@ -103,7 +105,8 @@ struct param2K2PiGam
     pair<double, double> BwK_0_1830;
     pair<double, double> BwK_1_1650;
     pair<double, double> BwPi_2_1670;
-    pair<double, double> BwPi1800;
+  pair<double, double> BwPi1800;
+  pair<double, double> BwPi_2_2285;
 
     double Flatf980;
     double Flatf980gPiPi;
@@ -120,12 +123,13 @@ struct paramEnum2K2PiGam{
 	sigmaf980, sigmaf1710, sigmaf2200, K_0_1460ToK892Pi, K_0_1460ToK_0_1430Pi, K_0_1830ToK892Pi, K_0_1830ToK_0_1430Pi, 
 	f980_pif_2_1430_k, f980_kf_2_1430_pi, f980_pif_2_1525_k, f980_kf_2_1525_pi, f980_pif_2_1950_k, f980_kf_2_1950_pi,
 	f1500_pif_2_1525_k, f1500_kf_2_1525_pi, f1710_pif_2_1430_k, f1710_kf_2_1430_pi, f1710_pif_2_1950_k, f1710_kf_2_1950_pi, 
-	ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670ToK892K, ChiToPi1800Pi0Tof980, ChiToPi1800Pi0Tof1370, nAmps,         
+	ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670ToK892K, ChiToPi1800Pi0Tof980, ChiToPi1800Pi0Tof1370, 
+	ChiToPi_2_2285Pi,Pi_2_2285Tof1700Pi, nAmps,         
 
 	K892=nAmps,Kappa, K_0_1430, K_1_1400, K_2_1430, K_1_1270,K_1_1650, 
 	f1500, f1710, f2200, sigma, f1360, f1370, K_0_2400, K_0_1950, K_1_1680, K_1_2300, K_0_1460, K_0_1830, 
 	f_2_1270, f_2_1430, f_2_1525, f_2_1950, 
-	Pi_2_1670, Pi1800, nMasses,
+	Pi_2_1670, Pi1800, Pi_2_2285, nMasses,
 
 	f980=nMasses,f980gpipi, f980gKK, nFlatte,
 
@@ -142,11 +146,12 @@ struct paramEnum2K2PiGam{
 	"f980_pif_2_1430_k", "f980_kf_2_1430_pi","f980_pif_2_1525_k", "f980_kf_2_1525_pi", "f980_pif_2_1950_k", "f980_kf_2_1950_pi",  
 	"f1500_pif_2_1525_k", "f1500_kf_2_1525_pi", "f1710_pif_2_1430_k", "f1710_kf_2_1430_pi", "f1710_pif_2_1950_k", "f1710_kf_2_1950_pi",
 	"ChiToPi_2_1670Pi","Pi_2_1670Tof_2_1270Pi","Pi_2_1670ToK892K","ChiToPi1800Pi0Tof980","ChiToPi1800Pi0Tof1370",
+	"ChiToPi_2_2285Pi","Pi_2_2285Tof1700Pi",
 
 	"K892", "Kappa", "K_0_1430", "K_1_1400", "K_2_1430", "K_1_1270", "K_1_1650", 
         "f1500", "f1710", "f2200", "sigma", "f1360", "f1370", "K_0_2400", "K_0_1950", "K_1_1680", "K_1_2300", "K_0_1460", "K_0_1830",
 	"f_2_1270", "f_2_1430", "f_2_1525","f_2_1950",
-	"Pi_2_1670","Pi1800",
+	"Pi_2_1670","Pi1800","Pi_2_2285",
 
 	"f980","f980gpipi", "f980gKK",
 	
