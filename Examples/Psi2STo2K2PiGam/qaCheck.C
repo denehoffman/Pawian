@@ -239,25 +239,40 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
 	
         dataPhiKpipi->Fill(dataphiK1pi1pi2, dataweight);	
 
-        dataCosThetaKpi->Fill(datacosThetaK1pi1, dataweight/2.);
-	dataCosThetaKpi->Fill(datacosThetaK1pi2, dataweight/2.);  
-	
+        // dataCosThetaKpi->Fill(datacosThetaK1pi1, dataweight/2.);
+	// dataCosThetaKpi->Fill(datacosThetaK1pi2, dataweight/2.);  
+	dataCosThetaKpi->Fill(datacosThetaK1pi1, dataweight);
+	dataCosThetaKpi->Fill(datacosThetaK1pi2, dataweight);  
         
-	dataPhiKpi->Fill(dataphiK1pi1, dataweight/2.);                                              	
-        dataPhiKpi->Fill(dataphiK1pi2, dataweight/2.);        
+// 	dataPhiKpi->Fill(dataphiK1pi1, dataweight/2.);                                              	
+//         dataPhiKpi->Fill(dataphiK1pi2, dataweight/2.);        
         
 
-        dataCosThetapi->Fill(datacosThetapi1, dataweight/2.);                                              	
-        dataCosThetapi->Fill(datacosThetapi2, dataweight/2.); 
+//         dataCosThetapi->Fill(datacosThetapi1, dataweight/2.);                                              	
+//         dataCosThetapi->Fill(datacosThetapi2, dataweight/2.); 
 
-        dataPhipi->Fill(dataphipi1, dataweight/2.);                                              	
-        dataPhipi->Fill(dataphipi2, dataweight/2.);
+//         dataPhipi->Fill(dataphipi1, dataweight/2.);                                              	
+//         dataPhipi->Fill(dataphipi2, dataweight/2.);
+
+	dataPhiKpi->Fill(dataphiK1pi1, dataweight);                                              	
+        dataPhiKpi->Fill(dataphiK1pi2, dataweight);        
+        
+
+        dataCosThetapi->Fill(datacosThetapi1, dataweight);                                              	
+        dataCosThetapi->Fill(datacosThetapi2, dataweight); 
+
+        dataPhipi->Fill(dataphipi1, dataweight);                                              	
+        dataPhipi->Fill(dataphipi2, dataweight);
  
         datainvMassKpipi->Fill(datainvmassK1pi1pi2, dataweight);
 
 
-        datainvMassKpi->Fill(datainvmassK1pi1, dataweight/2.);
-        datainvMassKpi->Fill(datainvmassK1pi2, dataweight/2.);
+	//      datainvMassKpi->Fill(datainvmassK1pi1, dataweight/2.);
+        // datainvMassKpi->Fill(datainvmassK1pi2, dataweight/2.);
+
+        datainvMassKpi->Fill(datainvmassK1pi1, dataweight);
+        datainvMassKpi->Fill(datainvmassK1pi2, dataweight);
+
       }
 
       ntmc->GetEntry(i);
@@ -270,24 +285,39 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
 
       mcPhiKpipi->Fill(mcphiK1pi1pi2, mcweight);	
 
-      mcCosThetaKpi->Fill(mccosThetaK1pi1, mcweight/2.);                                              	
-      mcCosThetaKpi->Fill(mccosThetaK1pi2, mcweight/2.);                                              	
+//       mcCosThetaKpi->Fill(mccosThetaK1pi1, mcweight/2.);                                              	
+//       mcCosThetaKpi->Fill(mccosThetaK1pi2, mcweight/2.);                                              	
 
-      mcPhiKpi->Fill(mcphiK1pi1, mcweight/2.);                                              	
-      mcPhiKpi->Fill(mcphiK1pi2, mcweight/2.);                                              	
+//       mcPhiKpi->Fill(mcphiK1pi1, mcweight/2.);                                              	
+//       mcPhiKpi->Fill(mcphiK1pi2, mcweight/2.);                                              	
 
       
-      mcCosThetapi->Fill(mccosThetapi1, mcweight/2.);                                              	
-      mcCosThetapi->Fill(mccosThetapi2, mcweight/2.); 
+//       mcCosThetapi->Fill(mccosThetapi1, mcweight/2.);                                              	
+//       mcCosThetapi->Fill(mccosThetapi2, mcweight/2.); 
 
-      mcPhipi->Fill(mcphipi1, mcweight/2.);                                              	
-      mcPhipi->Fill(mcphipi2, mcweight/2.);
- 
+//       mcPhipi->Fill(mcphipi1, mcweight/2.);                                              	
+//       mcPhipi->Fill(mcphipi2, mcweight/2.);
+
+
+ mcCosThetaKpi->Fill(mccosThetaK1pi1, mcweight);                                              	
+      mcCosThetaKpi->Fill(mccosThetaK1pi2, mcweight);                                              	
+
+      mcPhiKpi->Fill(mcphiK1pi1, mcweight);                                              	
+      mcPhiKpi->Fill(mcphiK1pi2, mcweight);                                              	
+
+      
+      mcCosThetapi->Fill(mccosThetapi1, mcweight);                                              	
+      mcCosThetapi->Fill(mccosThetapi2, mcweight); 
+
+      mcPhipi->Fill(mcphipi1, mcweight);                                              	
+      mcPhipi->Fill(mcphipi2, mcweight);
       mcinvMassKpipi->Fill(mcinvmassK1pi1pi2, mcweight);
 
-      mcinvMassKpi->Fill(mcinvmassK1pi1, mcweight/2.);
-      mcinvMassKpi->Fill(mcinvmassK1pi2, mcweight/2.);
+      //      mcinvMassKpi->Fill(mcinvmassK1pi1, mcweight/2.);
+      // mcinvMassKpi->Fill(mcinvmassK1pi2, mcweight/2.);
 
+      mcinvMassKpi->Fill(mcinvmassK1pi1, mcweight);
+      mcinvMassKpi->Fill(mcinvmassK1pi2, mcweight);
 
       if(maxEvtNo<evtNo) maxEvtNo=evtNo;
     }
@@ -296,28 +326,27 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
   double integralMc=mcCosThetaKKpipi->Integral();
 //   double scalefactor = integralData/integralMc;
 
-  double scalefactor =2458./50000.; 
+  double scalefactor =2874./50000.; 
 //   double scalefactor = 3278./50000.;
 
   TCanvas* cmain = new TCanvas("cmain","cmain",1400,600);
   cmain->Divide(5,2);
   for(int i=0; i<histVectData.size(); i++) {
     cmain->cd(i+1);
+    histVectData[i]->Rebin(2);
     histVectData[i]->SetLineColor(2);
     histVectData[i]->Draw("E");
+    histVectMc[i]->Rebin(2);
     histVectMc[i]->Scale(scalefactor);
     histVectMc[i]->Draw("same");
     } 
 
 
   float chisq = 0;
-//   float constraints = 56;
-//   float constraints = 48;
-
-//    float constraints = 52;
-//    float constraints = 54;
-//    float constraints = 58;
-    float constraints = 72;
+  //  float constraints = 102;
+  float constraints = 98; // 12-01-06_FitParamHyp8_base_K0K2_Hyp5/rerun_correctedampK0K2/Psi2STo2K2PiGamPWA_noK1_1680Hyp7.root
+  // float constraints = 94;   // 12-01-06_FitParamHyp8_base_K0K2_Hyp5/rerun_correctedampK0K2/Psi2STo2K2PiGamPWA_noK1_1680Hyp7_noK1_2300Hyp7.root
+  
   float ndf;
   float conflevel = 0;
   int numberofbins = 0;
