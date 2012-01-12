@@ -1063,6 +1063,34 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToPi0Pi0Tof980kkAmp(Psi2STo2K2PiGamData
   return result;
 }
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiToPi0Pi0Tof0Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToPi0Pi0Amp, double Pi_0_Mass, double Pi_0_Width, double f0Mass, double f0Width){
+
+  Vector4<double> KKPi0(theData->KKPi0_HeliChic0_4V.E(), theData->KKPi0_HeliChic0_4V.Px(), 
+		     theData->KKPi0_HeliChic0_4V.Py(), theData->KKPi0_HeliChic0_4V.Pz());
+
+  Vector4<double> KKPi1(theData->KKPi1_HeliChic0_4V.E(), theData->KKPi1_HeliChic0_4V.Px(), 
+		     theData->KKPi1_HeliChic0_4V.Py(), theData->KKPi1_HeliChic0_4V.Pz());
+
+  Vector4<double> KK(theData->KpKm_HeliChic0_4V.E(), theData->KpKm_HeliChic0_4V.Px(), 
+		     theData->KpKm_HeliChic0_4V.Py(), theData->KpKm_HeliChic0_4V.Pz());
+
+  complex<double> result(0.,0.);
+
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=ChiToPi0Pi0Amp.begin(); it!=ChiToPi0Pi0Amp.end(); ++it){
+
+    boost::shared_ptr<const JPCLS> theState=it->first;
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+    
+    result+=theMag*expiphi*BreitWigner(KK, f0Mass, f0Width)
+      *(BreitWigner(KKPi0, Pi_0_Mass, Pi_0_Width)+BreitWigner(KKPi1, Pi_0_Mass, Pi_0_Width));
+  }
+
+  return result;
+}
 
 void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2STo2K2PiGamLh::print\n";
