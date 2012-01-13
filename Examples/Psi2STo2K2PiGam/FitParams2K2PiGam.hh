@@ -32,8 +32,9 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_0_1430;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K_2_1430;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1400_K_1_1400;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1400ToK892pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1400K;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K1400ToK892Pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1270_K;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1270ToK892Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1270ToK_0_1430Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > f980_pif1710_k;
@@ -70,6 +71,7 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK892Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK_0_1430Pi;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1650K;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1650ToK892Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1650ToK_0_1430Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi_2_1670Pi;
@@ -117,7 +119,8 @@ struct param2K2PiGam
 
 struct paramEnum2K2PiGam{
   enum {ChiGam=0, K892K892, KappaKappa, K_0_1430K_0_1430, K_2_1430K_2_1430, K_0_1430K_2_1430, K_1_1400K_1_1400,
-	K_1_1400ToK892Pi, K_1_1270ToK892Pi, K_1_1270ToK_0_1430Pi, K_1_1650ToK892Pi, K_1_1650ToK_0_1430Pi, K_0_1430K_0_1950, KappaK_0_1950,
+	ChiToK_1_1400K, K_1_1400ToK892Pi, ChiToK_1_1270_K, K_1_1270ToK892Pi, K_1_1270ToK_0_1430Pi, 
+	ChiToK_1_1650K, K_1_1650ToK892Pi, K_1_1650ToK_0_1430Pi, K_0_1430K_0_1950, KappaK_0_1950,
 	f980_pif1710_k, f980_kf1710_pi, f980f980, f980f2200, f980_pif1370_k, f980_kf1370_pi, f980_pif1500_k, f980_kf1500_pi, f1710_pif1370_k, f1710_kf1370_pi,
 	K_0_2400KToKf980, K892K_1_1680, K892K_1_2300, 
 	sigmaf980, sigmaf1710, sigmaf2200, K_0_1460ToK892Pi, K_0_1460ToK_0_1430Pi, K_0_1830ToK892Pi, K_0_1830ToK_0_1430Pi, 
@@ -139,7 +142,8 @@ struct paramEnum2K2PiGam{
   {
     static std::string fitName[paramEnum2K2PiGam::nPhaseSpace]
       ={"ChiGam", "K892K892", "KappaKappa", "K_0_1430K_0_1430", "K_2_1430K_2_1430", "K_0_1430K_2_1430", "K_1_1400K_1_1400",
-	"K_1_1400ToK892Pi", "K_1_1270ToK892Pi", "K_1_1270ToK_0_1430Pi", "K_1_1650ToK892Pi", "K_1_1650ToK_0_1430Pi","K_0_1430K_0_1950", "KappaK_0_1950",
+	"ChiToK_1_1400K", "K_1_1400ToK892Pi", "ChiToK_1_1270_K", "K_1_1270ToK892Pi", "K_1_1270ToK_0_1430Pi", 
+	"ChiToK_1_1650K", "K_1_1650ToK892Pi", "K_1_1650ToK_0_1430Pi","K_0_1430K_0_1950", "KappaK_0_1950",
 	"f980_pif1710_k", "f980_kf1710_pi", "f980f980", "f980f2200", "f980_pif1370_k", "f980_kf1370_pi", "f980_pif1500_k", "f980_kf1500_pi", "f1710_pif1370_k", "f1710_kf1370_pi",
 	"K_0_2400KToKf980", "K892K_1_1680", "K892K_1_2300", 
 	"sigmaf980", "sigmaf1710", "sigmaf2200", "K_0_1460ToK892Pi", "K_0_1460ToK_0_1430Pi","K_0_1830ToK892Pi", "K_0_1830ToK_0_1430Pi",

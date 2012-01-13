@@ -183,11 +183,19 @@ Psi2STo2K2PiGamEvtData* Psi2STo2K2PiGamEvtList::fillEvtData(Event* anEvent, int 
 
  // calculate and store WignerD functions for K*1+->K+ pi0, K*1+->K+ pi1+ cc Via K+ pi0 pi0
      for (Spin M=-1; M<=1; M++){
-       thePsi2STo2K2PiGamEvtData->DfKst1pToKpPi0ViaKpPiPi[jKst892][M][0]=Wigner_D(Kp_HeliKpPi0_ViaKpPiPi_4V.Phi(), Kp_HeliKpPi0_ViaKpPiPi_4V.Theta(),0,jKst892,M,0);
-       thePsi2STo2K2PiGamEvtData->DfKst1pToKpPi1ViaKpPiPi[jKst892][M][0]=Wigner_D(Kp_HeliKpPi1_ViaKpPiPi_4V.Phi(),Kp_HeliKpPi1_ViaKpPiPi_4V.Theta(),0,jKst892,M,0);
+       for (Spin lam2=-1; lam2<=1; lam2++){
+       thePsi2STo2K2PiGamEvtData->DfKst1pToKpPi0ViaKpPiPi[jKst892][M][lam2]=Wigner_D(Kp_HeliKpPi0_ViaKpPiPi_4V.Phi(), Kp_HeliKpPi0_ViaKpPiPi_4V.Theta(),0,jKst892,M,lam2);
+       thePsi2STo2K2PiGamEvtData->DfKst1pToKpPi1ViaKpPiPi[jKst892][M][lam2]=Wigner_D(Kp_HeliKpPi1_ViaKpPiPi_4V.Phi(),Kp_HeliKpPi1_ViaKpPiPi_4V.Theta(),0,jKst892,M,lam2);
 
-       thePsi2STo2K2PiGamEvtData->DfKst1mToKmPi0ViaKmPiPi[jKst892][M][0]=Wigner_D(Km_HeliKmPi0_ViaKmPiPi_4V.Phi(),Km_HeliKmPi0_ViaKmPiPi_4V.Theta(),0,jKst892,M,0);
-       thePsi2STo2K2PiGamEvtData->DfKst1mToKmPi1ViaKmPiPi[jKst892][M][0]=Wigner_D(Km_HeliKmPi1_ViaKmPiPi_4V.Phi(),Km_HeliKmPi1_ViaKmPiPi_4V.Theta(),0,jKst892,M,0);
+       thePsi2STo2K2PiGamEvtData->DfKst1mToKmPi0ViaKmPiPi[jKst892][M][lam2]=Wigner_D(Km_HeliKmPi0_ViaKmPiPi_4V.Phi(),Km_HeliKmPi0_ViaKmPiPi_4V.Theta(),0,jKst892,M,lam2);
+       thePsi2STo2K2PiGamEvtData->DfKst1mToKmPi1ViaKmPiPi[jKst892][M][lam2]=Wigner_D(Km_HeliKmPi1_ViaKmPiPi_4V.Phi(),Km_HeliKmPi1_ViaKmPiPi_4V.Theta(),0,jKst892,M,lam2);
+
+// 	 thePsi2STo2K2PiGamEvtData->DfKst1pToKpPi0ViaKpPiPi[jKst892][M][lam2]=Wigner_D(Kp_HeliKpPi0_4V.Phi(), Kp_HeliKpPi0_4V.Theta(),0,jKst892,M,lam2);
+// 	 thePsi2STo2K2PiGamEvtData->DfKst1pToKpPi1ViaKpPiPi[jKst892][M][lam2]=Wigner_D(Kp_HeliKpPi1_4V.Phi(), Kp_HeliKpPi1_4V.Theta(),0,jKst892,M,lam2);
+	 
+// 	 thePsi2STo2K2PiGamEvtData->DfKst1mToKmPi0ViaKmPiPi[jKst892][M][lam2]=Wigner_D(Km_HeliKmPi0_4V.Phi(), Km_HeliKmPi0_4V.Theta(),0,jKst892,M,lam2);
+// 	 thePsi2STo2K2PiGamEvtData->DfKst1mToKmPi1ViaKmPiPi[jKst892][M][lam2]=Wigner_D(Km_HeliKmPi1_4V.Phi(), Km_HeliKmPi1_4V.Theta(),0,jKst892,M,lam2);
+       }
      }
 
 
