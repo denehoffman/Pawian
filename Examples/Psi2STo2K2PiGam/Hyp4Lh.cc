@@ -10,6 +10,7 @@ Hyp4Lh::Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   Hyp3Lh(theEvtList, hypMap )
   ,_f980f1370Hyp4(true)
   ,_f980f1500Hyp4(true)
+  ,_sigmaf1370Hyp4(true)
   ,_f1710f1370Hyp4(true)
   ,_f980f_2_1430Hyp4(true)
   ,_f980f_2_1525Hyp4(true)
@@ -27,6 +28,7 @@ Hyp4Lh::Hyp4Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   Hyp3Lh(theLhPtr->getEventList(), hypMap)
   ,_f980f1370Hyp4(true)
   ,_f980f1500Hyp4(true)
+  ,_sigmaf1370Hyp4(true)
   ,_f1710f1370Hyp4(true)
   ,_f980f_2_1430Hyp4(true)
   ,_f980f_2_1525Hyp4(true)
@@ -164,9 +166,19 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   result+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1950Mass, f_2_1950Width);
   result+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1950Mass, f_2_1950Width, f1710Mass, f1710Width);
   }
+
+  if (_sigmaf1370Hyp4){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf1370=theParamVal.ChiToSigmaf1370;
+    
+    double sigmaMass=theParamVal.BwSigma.first;
+    double sigmaWidth=theParamVal.BwSigma.second;
+    
+    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1370, sigmaMass, sigmaWidth,  f1370Mass, f1370Width);
+    
+  }
+
   return result;
 }
-
 
 void Hyp4Lh::setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal, param2K2PiGam& errVal){
 
@@ -406,8 +418,19 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     exit(0);
   }
 
+ iter= hypMap.find("sigmaf1370Hyp4");
 
-  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f1710f_2_1950Hyp4) _doHyp4=false; 
+  if (iter !=hypMap.end()){
+    _sigmaf1370Hyp4= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1370Hyp4 <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << "hypothesis sigmaf1370Hyp4 not set!!!" <<endmsg;
+    exit(0);
+  }
+
+  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f1710f_2_1950Hyp4 && !_sigmaf1370Hyp4) _doHyp4=false; 
 
   if (!_doHyp4) return;
 
@@ -449,8 +472,10 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::f1710_pif_2_1950_k);
     _ampVec.push_back(paramEnum2K2PiGam::f1710_kf_2_1950_pi);
   }
-
-  if (_f980f1370Hyp4 || _f1710f1370Hyp4) _massVec.push_back(paramEnum2K2PiGam::f1370);
+  if(_sigmaf1370Hyp4){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiToSigmaf1370);
+  }
+  if (_f980f1370Hyp4 || _f1710f1370Hyp4 || _sigmaf1370Hyp4) _massVec.push_back(paramEnum2K2PiGam::f1370);
   if (_f980f1500Hyp4 || _f1500f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f1500);
   if (_f980f_2_1430Hyp4 || _f1710f_2_1430Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1430);
   if (_f980f_2_1950Hyp4 || _f1710f_2_1950Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1950);
