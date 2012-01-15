@@ -55,7 +55,8 @@ protected:
   bool _Pi1800Tof980PiHyp9;
   bool _Pi1800Tof1370PiHyp9;
   bool _Pi_2_2285Tof1710PiHyp9;
-  bool _f980f_2_2200Hyp9;
+  bool _f980f_2_2300Hyp9;
+  bool _f_2_2300sigmaHyp9;
   bool _doHyp9;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
