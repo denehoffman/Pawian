@@ -91,6 +91,17 @@ namespace Psi2STo2K2PiGamData {
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2ToKstarmK_pi0; //Wigner D functions 
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfPi2ToKstarmK_pi1; //Wigner D functions 
 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKp2ToKppi0; //Wigner D functions 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKp2ToKppi1; //Wigner D functions
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKm2ToKmpi0; //Wigner D functions 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKm2ToKmpi1; //Wigner D functions
+
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfK2pToKpPi0ViaKpPiPi;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfK2pToKpPi1ViaKpPiPi;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfK2mToKmPi0ViaKmPiPi;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfK2mToKmPi1ViaKmPiPi;
+
+
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKK; //Wigner D functions for f_2->K+ K-
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToPiPi; //Wigner D functions for f_2->pi pi
 

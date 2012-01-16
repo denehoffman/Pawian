@@ -5,10 +5,11 @@ BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboos
 
 project :
 	requirements <include>./  
-#	<include>$(extern)/log4cpp/include
+	<include>$(extern)/log4cpp/include
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
 	<include>$(GENEVA)/include
+	<include>$(HEPMC)/include
 	<link>static
 	<cxxflags>-pthread
 	<linkflags>$(ROOTLIBS)
@@ -30,7 +31,7 @@ lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-common.so
 		<file>$(GENEVA)/lib/libgemfony-hap.so
 		<file>$(GENEVA)/lib/libgemfony-geneva-individuals.so
  : : ;
-lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
+lib HepMc : : <file>$(HEPMC)/lib/libHepMC.so : : ;
  
 build-project qft++ ;
 build-project Utils ;

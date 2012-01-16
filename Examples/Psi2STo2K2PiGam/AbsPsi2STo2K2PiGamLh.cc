@@ -1221,7 +1221,86 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToPi2Pi0Tof0PiAmp(Psi2STo2K2PiGamData::
 
 }
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiToK2KToK2PiAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_2_Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K_2_Dec, double K_2prod_Mass, double K_2prod_Width, double K_2decMass, double K_2decWidth){
 
+  Vector4<double> KpPiPi(theData->KpPiPi_HeliChic0_4V.E(), theData->KpPiPi_HeliChic0_4V.Px(), 
+		     theData->KpPiPi_HeliChic0_4V.Py(), theData->KpPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPiPi(theData->KmPiPi_HeliChic0_4V.E(), theData->KmPiPi_HeliChic0_4V.Px(), 
+		     theData->KmPiPi_HeliChic0_4V.Py(), theData->KmPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KpPi0(theData->KpPi0_HeliChic0_4V.E(), theData->KpPi0_HeliChic0_4V.Px(), 
+		     theData->KpPi0_HeliChic0_4V.Py(), theData->KpPi0_HeliChic0_4V.Pz());
+
+  Vector4<double> KpPi1(theData->KpPi1_HeliChic0_4V.E(), theData->KpPi1_HeliChic0_4V.Px(), 
+		     theData->KpPi1_HeliChic0_4V.Py(), theData->KpPi1_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPi0(theData->KmPi0_HeliChic0_4V.E(), theData->KmPi0_HeliChic0_4V.Px(), 
+		     theData->KmPi0_HeliChic0_4V.Py(), theData->KmPi0_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPi1(theData->KmPi1_HeliChic0_4V.E(), theData->KmPi1_HeliChic0_4V.Px(), 
+		     theData->KmPi1_HeliChic0_4V.Py(), theData->KmPi1_HeliChic0_4V.Pz());
+
+  complex<double> result(0.,0.);
+  
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itProd;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itDec;
+
+  for ( itProd=ChiToK_2_Prod.begin(); itProd!=ChiToK_2_Prod.end(); ++itProd){
+
+    boost::shared_ptr<const JPCLS> theState=itProd->first;
+    double theMagProd=itProd->second.first;
+    double thePhiProd=itProd->second.second;
+    complex<double> expiphiProd(cos(thePhiProd), sin(thePhiProd));
+
+    complex<double> currentResultDec(0.,0.);
+
+    Spin lamK2prod=0;
+
+    for ( itDec=K_2_Dec.begin(); itDec!=K_2_Dec.end(); ++itDec){
+
+      boost::shared_ptr<const JPCLS> theDecState=itDec->first;
+      double theMagDec=itDec->second.first;
+      double thePhiDec=itDec->second.second;
+      complex<double> expiphiDec(cos(thePhiDec), sin(thePhiDec));
+      complex<double> tmpDecKpPiPi(0.,0.);
+      complex<double> tmpDecKmPiPi(0.,0.);
+
+      for (Spin lamK2dec=-2; lamK2dec<=2; ++lamK2dec){
+	tmpDecKpPiPi+=sqrt(2.*theDecState->L+1.)*Clebsch(theDecState->L, 0., theDecState->S, lamK2dec, theDecState->J, lamK2dec)
+	  *Clebsch(2,lamK2dec, 0, 0, theDecState->S, lamK2dec)*sqrt(5.)
+	  * BreitWigner(KpPiPi, K_2prod_Mass, K_2prod_Width)
+	      *( BreitWignerBlattW(KpPi0, 0.493677, 0.1349766, K_2decMass, K_2decWidth,2)
+		 *theData->DfKp2ToKppi1[theDecState->J][lamK2prod][lamK2dec]
+		 *theData->DfK2pToKpPi0ViaKpPiPi[2][lamK2dec][0]
+		 +
+		 BreitWignerBlattW(KpPi1, 0.493677, 0.1349766, K_2decMass, K_2decWidth,2)
+		 *theData->DfKp2ToKppi0[theDecState->J][lamK2prod][lamK2dec]
+		 *theData->DfK2pToKpPi1ViaKpPiPi[2][lamK2dec][0] 
+		 ); 
+
+	tmpDecKmPiPi+=sqrt(2.*theDecState->L+1.)*Clebsch(theDecState->L, 0., theDecState->S, lamK2dec, theDecState->J, lamK2dec)
+	  *Clebsch(2,lamK2dec, 0, 0, theDecState->S, lamK2dec)*sqrt(5.)
+	  * BreitWigner(KmPiPi, K_2prod_Mass, K_2prod_Width)
+	      *( BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K_2decMass, K_2decWidth,2)
+		 *theData->DfKm2ToKmpi1[theDecState->J][lamK2prod][lamK2dec]
+		 *theData->DfK2mToKmPi0ViaKmPiPi[2][lamK2dec][0]
+		 +
+		 BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K_2decMass, K_2decWidth,2)
+		 *theData->DfKm2ToKmpi0[theDecState->J][lamK2prod][lamK2dec]
+		 *theData->DfK2mToKmPi1ViaKmPiPi[2][lamK2dec][0] 
+		 );
+
+
+      }
+      currentResultDec+=theMagDec*expiphiDec*(tmpDecKpPiPi+tmpDecKmPiPi);
+    }
+
+    result+=theMagProd*expiphiProd*currentResultDec;
+  }
+
+  return result;
+}
 
 void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2STo2K2PiGamLh::print\n";

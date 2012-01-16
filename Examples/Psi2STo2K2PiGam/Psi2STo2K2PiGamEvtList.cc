@@ -171,6 +171,25 @@ Psi2STo2K2PiGamEvtData* Psi2STo2K2PiGamEvtList::fillEvtData(Event* anEvent, int 
        }
      }
 
+ // calculate and store WignerD functions for K2->K*2 pi;
+     Spin jK2=2;
+     for (Spin M=-2; M<=2; M++){
+       for (Spin lam=-2; lam<=2; lam++){
+	 thePsi2STo2K2PiGamEvtData->DfKp2ToKppi0[jK2][M][lam]=Wigner_D(KpPi1_HeliKpPi0Pi0_4V.Phi(),KpPi1_HeliKpPi0Pi0_4V.Theta(),0,jK2,M,lam);
+	 thePsi2STo2K2PiGamEvtData->DfKp2ToKppi1[jK2][M][lam]=Wigner_D(KpPi0_HeliKpPi0Pi0_4V.Phi(),KpPi0_HeliKpPi0Pi0_4V.Theta(),0,jK2,M,lam); 
+	 thePsi2STo2K2PiGamEvtData->DfKm2ToKmpi0[jK2][M][lam]=Wigner_D(KmPi1_HeliKmPi0Pi0_4V.Phi(),KmPi1_HeliKmPi0Pi0_4V.Theta(),0,jK2,M,lam);
+	 thePsi2STo2K2PiGamEvtData->DfKm2ToKmpi1[jK2][M][lam]=Wigner_D(KmPi0_HeliKmPi0Pi0_4V.Phi(),KmPi0_HeliKmPi0Pi0_4V.Theta(),0,jK2,M,lam); 
+       }
+     }
+ // calculate and store WignerD functions for K*2->K pi0 via K pi0 pi0
+     for (Spin M=-2; M<=2; M++){
+       for (Spin lam2=-2; lam2<=2; lam2++){
+       thePsi2STo2K2PiGamEvtData->DfK2pToKpPi0ViaKpPiPi[jK2][M][lam2]=Wigner_D(Kp_HeliKpPi0_ViaKpPiPi_4V.Phi(), Kp_HeliKpPi0_ViaKpPiPi_4V.Theta(),0,jK2,M,lam2);
+       thePsi2STo2K2PiGamEvtData->DfK2pToKpPi1ViaKpPiPi[jK2][M][lam2]=Wigner_D(Kp_HeliKpPi1_ViaKpPiPi_4V.Phi(),Kp_HeliKpPi1_ViaKpPiPi_4V.Theta(),0,jK2,M,lam2);
+       thePsi2STo2K2PiGamEvtData->DfK2mToKmPi0ViaKmPiPi[jK2][M][lam2]=Wigner_D(Km_HeliKmPi0_ViaKmPiPi_4V.Phi(),Km_HeliKmPi0_ViaKmPiPi_4V.Theta(),0,jK2,M,lam2);
+       thePsi2STo2K2PiGamEvtData->DfK2mToKmPi1ViaKmPiPi[jK2][M][lam2]=Wigner_D(Km_HeliKmPi1_ViaKmPiPi_4V.Phi(),Km_HeliKmPi1_ViaKmPiPi_4V.Theta(),0,jK2,M,lam2);
+       }
+     }
  // calculate and store WignerD functions for K*1+->K+ pi0, K*1+->K+ pi1+ cc
      Spin jKst892=1;
      for (Spin M=-1; M<=1; M++){
