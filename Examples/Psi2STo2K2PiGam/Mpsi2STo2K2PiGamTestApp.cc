@@ -179,6 +179,7 @@ int main(int __argc,char *__argv[]){
   hypMap["f980f_2_2300Hyp9"]=true;
   hypMap["f_2_2300sigmaHyp9"]=true;
   hypMap["K_2_1770ToK_2_1430PiHyp9"]=true;
+  hypMap["Pi1800ToKappaKHyp9"]=true;
 
   std::vector<std::string>::const_iterator itStr;
  
