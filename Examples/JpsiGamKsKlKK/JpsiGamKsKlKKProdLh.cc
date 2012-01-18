@@ -403,10 +403,10 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
   }
   
   if(_f22300Hyp){
-    fitVal.Masses[paramEnumJpsiGamKsKlKK::f22300]=2.02;
+    fitVal.Masses[paramEnumJpsiGamKsKlKK::f22300]=2.186;
     fitErr.Masses[paramEnumJpsiGamKsKlKK::f22300]=0.3;
-    fitVal.Widths[paramEnumJpsiGamKsKlKK::f22300]=.30;
-    fitErr.Widths[paramEnumJpsiGamKsKlKK::f22300]=0.1;
+    fitVal.Widths[paramEnumJpsiGamKsKlKK::f22300]=.55;
+    fitErr.Widths[paramEnumJpsiGamKsKlKK::f22300]=0.4;
   }
   
 }
