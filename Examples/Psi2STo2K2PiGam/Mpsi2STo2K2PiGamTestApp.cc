@@ -21,6 +21,7 @@
 #include "Examples/Psi2STo2K2PiGam/Hyp6Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp7Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp8Lh.hh"
+#include "Examples/Psi2STo2K2PiGam/Hyp9Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/MPsi2STo2K2PiGamFcn.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
 #include "Examples/Psi2STo2K2PiGam/Stream2K2PiGamFitParms.hh"
@@ -154,10 +155,14 @@ int main(int __argc,char *__argv[]){
   hypMap["f980f1370Hyp4"]=true;
   hypMap["f980f1500Hyp4"]=true;
   hypMap["f1710f1370Hyp4"]=true;
+  hypMap["f980f_2_1270Hyp4"]=true;
   hypMap["f980f_2_1430Hyp4"]=true;
   hypMap["f980f_2_1525Hyp4"]=true;
+  hypMap["f980f_2_1950Hyp4"]=true;
   hypMap["f1500f_2_1525Hyp4"]=true;
   hypMap["f1710f_2_1430Hyp4"]=true;
+  hypMap["f1710f_2_1950Hyp4"]=true;
+  hypMap["sigmaf1370Hyp4"]=true;
   hypMap["doHyp5"]=true;
   hypMap["K_0_1430K_0_1950Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=true;
@@ -167,6 +172,15 @@ int main(int __argc,char *__argv[]){
   hypMap["K_0_1460ToKstPiHyp8"]=true;
   hypMap["K_0_1830ToKstPiHyp8"]=true;
   hypMap["K_1_1650Hyp8"]=true;
+  hypMap["Pi_2_1670Tof_2_1270PiHyp9"]=true;
+  hypMap["Pi_2_1670ToK892KHyp9"]=true;
+  hypMap["Pi1800Tof980PiHyp9"]=true;
+  hypMap["Pi1800Tof1370PiHyp9"]=true;
+  hypMap["Pi_2_2285Tof1710PiHyp9"]=true;
+  hypMap["f980f_2_2300Hyp9"]=true;
+  hypMap["f_2_2300sigmaHyp9"]=true;
+  hypMap["K_2_1770ToK_2_1430PiHyp9"]=true;
+  hypMap["Pi1800ToKappaKHyp9"]=true;
 
   std::vector<std::string>::const_iterator itStr;
  
@@ -194,6 +208,7 @@ int main(int __argc,char *__argv[]){
   else if (startWithHyp=="hyp6") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp6Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp7") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp7Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp8") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp8Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  else if (startWithHyp=="hyp9") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp9Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else { Alert << "start with hypthesis " << startWithHyp << " not supported!!!!" << endmsg;
     exit(1);
   }

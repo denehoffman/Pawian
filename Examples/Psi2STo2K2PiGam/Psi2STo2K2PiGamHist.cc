@@ -312,10 +312,10 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   float CosThetaK2pi1           = theData->KmPi0_HeliKmPi0Pi0_4V.CosTheta();
   float PhiK2pi2                = theData->KmPi1_HeliKmPi0Pi0_4V.Phi();
   float CosThetaK2pi2           = theData->KmPi1_HeliKmPi0Pi0_4V.CosTheta();
-  float Phipi1                  = -theData->Kp_HeliKpPi0_ViaKpPiPi_4V.Phi();
-  float CosThetapi1             = -theData->Kp_HeliKpPi0_ViaKpPiPi_4V.CosTheta();
-  float Phipi2                  = -theData->Kp_HeliKpPi1_ViaKpPiPi_4V.Phi();
-  float CosThetapi2             = -theData->Kp_HeliKpPi1_ViaKpPiPi_4V.CosTheta();
+  float Phipi1                  = -theData->Kp_HeliKpPi0_4V.Phi();
+  float CosThetapi1             = -theData->Kp_HeliKpPi0_4V.CosTheta();
+  float Phipi2                  = -theData->Kp_HeliKpPi1_4V.Phi();
+  float CosThetapi2             = -theData->Kp_HeliKpPi1_4V.CosTheta();
   float mK1pi1pi2               = theData->KpPiPi_HeliChic0_4V.M();
   float mK2pi1pi2               = theData->KmPiPi_HeliChic0_4V.M();
   float mK1pi1                  = theData->KpPi0_HeliChic0_4V.M();
@@ -327,8 +327,8 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   float CosThetaPiPiFromK1PiPi  = theData->PiPi_HeliKpPi0Pi0_4V.CosTheta();
   float PhiPiPiFromK1PiPi  = theData->PiPi_HeliKpPi0Pi0_4V.Phi();
 
-  float CosThetaPiFromPiPi      = theData->Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V.CosTheta();
-  float PhiPiFromPiPi      = theData->Pi0_HeliPi0Pi0_ViaKpPi0Pi0_4V.Phi();
+  float CosThetaPiFromPiPi      = theData->Pi0_HeliPi0Pi0_4V.CosTheta();
+  float PhiPiFromPiPi      = theData->Pi0_HeliPi0Pi0_4V.Phi();
 
   float evtweight               = weight;
 

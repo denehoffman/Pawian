@@ -39,6 +39,8 @@ public:
 
   void updateMatrix(const double mass);
   void updateMatrixRel(const double mass);
+
+
   double poleMass() {return _poleMass;}
   vector<double> gFactors() {return _g_i;}
   vector< complex<double> > rhoFactors() {return _rhoPoleFactors;}

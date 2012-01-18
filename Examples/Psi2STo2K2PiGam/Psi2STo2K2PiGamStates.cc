@@ -16,7 +16,9 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
   _f2JPC(new jpcRes(2, 1, 1)),
   _pi0JPC(new jpcRes(0, -1, 1)),
   _kJPC(new jpcRes(0, -1, 0)),
-  _gamJPC(new jpcRes(1, -1, -1))
+  _gamJPC(new jpcRes(1, -1, -1)),
+  _pi2JPC(new jpcRes(2, -1, 1)),
+  _K2mJPC(new jpcRes(2, -1, 0))
 {
   //LS combinations for Psi(2S) decay to Chi_c0 gamma
   fillJPCLS(_psiJPC, _chic0JPC, _gamJPC, _PsiJPCLS);
@@ -45,6 +47,9 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
   //LS combinations for the Chi_c0 decay to K0 K0
   fillJPCLS(_chic0JPC, _kJPC, _kJPC, _ChiToK0K0JPCLS);
 
+  //LS combinations for the Chi_c0 decay to Pi2 Pi
+  fillJPCLS(_chic0JPC, _pi0JPC, _pi2JPC, _ChiToPi_2PiJPCLS);
+
   //LS combinations for the K*+- decay to K+- Pi0
   fillJPCLS(_Kst1JPC, _kJPC, _pi0JPC, _Kst1JPCLS);
 
@@ -58,8 +63,25 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
   fillJPCLS(_K1400JPC, _Kst0JPC, _pi0JPC, _K1ToK0PiJPCLS);
 
   //LS combinations for the f2 decay to K+ K-
-  fillJPCLS(_f2JPC, _kJPC, _kJPC, _f2JPCLS);
+  fillJPCLS(_f2JPC, _kJPC, _kJPC, _f2JPCLS); 
 
+ //LS combinations for the pi_2 decay to f2 Pi
+  fillJPCLS(_pi2JPC, _pi0JPC, _f2JPC, _Pi_2Tof_2PiJPCLS);
+
+ //LS combinations for the pi_2 decay to K*1 K
+  fillJPCLS(_pi2JPC, _kJPC, _Kst1JPC,_Pi_2ToKst1KJPCLS);
+
+ //LS combinations for the chi_c0 to pi0 pi0
+  fillJPCLS(_chic0JPC, _pi0JPC, _pi0JPC, _ChiToPi0Pi0JPCLS);
+
+ //LS combinations for the pi_2 decay to f0 Pi
+  fillJPCLS(_pi2JPC, _pi0JPC, _f0JPC, _Pi_2Tof0PiJPCLS);
+
+ //LS combinations for the decay chi_c0 to K2- K0-
+  fillJPCLS(_chic0JPC, _kJPC, _K2mJPC, _ChiToK2mK0mJPCLS);
+
+ //LS combinations for the decay K2- pi0
+  fillJPCLS(_K2mJPC, _pi0JPC, _Kst2JPC,_K2mToK2pPiJPCLS);
 }
 
 Psi2STo2K2PiGamStates::~Psi2STo2K2PiGamStates()
@@ -146,6 +168,12 @@ void Psi2STo2K2PiGamStates::print(std::ostream& os) const
     os << "\n" << std::endl;
   }
 
+  os << "*** Chi_c0:  LS combinations for the decay to pi2 pi0 *** "<< std::endl;
+  for ( itJPCLS=_ChiToPi_2PiJPCLS.begin(); itJPCLS!=_ChiToPi_2PiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
   os << "\n *** K*2+-:   LS combinations for the decay to K*2+- -> K+- pi0 *** "<< std::endl;
   for ( itJPCLS=_Kst2JPCLS.begin(); itJPCLS!=_Kst2JPCLS.end(); ++itJPCLS){
     (*itJPCLS)->print(os);
@@ -170,11 +198,49 @@ void Psi2STo2K2PiGamStates::print(std::ostream& os) const
     os << "\n" << std::endl;
   }
 
-  os << "\n *** f2:  LS combinations for the decay to K0 K0 *** "<< std::endl;
+  os << "\n *** pi2:  LS combinations for the decay to K0 K0 *** "<< std::endl;
   for ( itJPCLS=_ChiToK0K0JPCLS.begin(); itJPCLS!=_ChiToK0K0JPCLS.end(); ++itJPCLS){
     (*itJPCLS)->print(os);
     os << "\n" << std::endl;
   }
+
+  os << "\n *** pi2:  LS combinations for the pi2 decay to pi0 f2 *** "<< std::endl;
+  for ( itJPCLS=_Pi_2Tof_2PiJPCLS.begin(); itJPCLS!=_Pi_2Tof_2PiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** pi2:  LS combinations for the pi2 decay to K*1 K *** "<< std::endl;
+  for ( itJPCLS=_Pi_2ToKst1KJPCLS.begin(); itJPCLS!=_Pi_2ToKst1KJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** pi2:  LS combinations for the chi_c0 decay to pi0 pi0 *** "<< std::endl;
+  for ( itJPCLS=_ChiToPi0Pi0JPCLS.begin(); itJPCLS!=_ChiToPi0Pi0JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+
+  os << "\n *** pi2:  LS combinations for the pi2 decay to f0 pi0 *** "<< std::endl;
+  for ( itJPCLS=_Pi_2Tof0PiJPCLS.begin(); itJPCLS!=_Pi_2Tof0PiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** pi2:  LS combinations for the chi_c0 decay to K2- K0- *** "<< std::endl;
+  for ( itJPCLS=_ChiToK2mK0mJPCLS.begin(); itJPCLS!=_ChiToK2mK0mJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "\n *** pi2:  LS combinations for the decay K2- to K*20+ pi0 *** "<< std::endl;
+  for ( itJPCLS=_K2mToK2pPiJPCLS.begin(); itJPCLS!=_K2mToK2pPiJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
 
   os << "\n *** K+- *** "<< std::endl;
   _kJPC->print(os);

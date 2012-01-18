@@ -46,7 +46,7 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1430Mass=theParamVal.BwK_0_1430.first;
     double K_0_1430Width=theParamVal.BwK_0_1430.second;
     
-    //Chi_c0 decay to K_0_2400 K  -> (K f0(980) ) K -> (K pi0 pi0 ) K 
+    //Chi_c0 decay to K_0_1950 K_0_1430 
     result+=chiTo2K_0_Amp(theData, ChiToK_0_1430K_0_1950, K_0_1430Mass, K_0_1430Width, K_0_1950Mass, K_0_1950Width); 
   }
 

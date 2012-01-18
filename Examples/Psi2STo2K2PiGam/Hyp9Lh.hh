@@ -1,5 +1,5 @@
-#ifndef _Hyp4Lh_H
-#define _Hyp4Lh_H
+#ifndef _Hyp9Lh_H
+#define _Hyp9Lh_H
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +14,7 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-#include "Examples/Psi2STo2K2PiGam/Hyp3Lh.hh"
+#include "Examples/Psi2STo2K2PiGam/Hyp8Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -22,21 +22,21 @@
 
 
 
-class Hyp4Lh : public Hyp3Lh{
+class Hyp9Lh : public Hyp8Lh{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp4Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
+  Hyp9Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
 
   /** Destructor */
-  virtual ~Hyp4Lh();
+  virtual ~Hyp9Lh();
 
   virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp4Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+    return new Hyp9Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
   }
 
 
@@ -50,21 +50,21 @@ public:
   virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix);
 
 protected:
-  bool _f980f1370Hyp4;
-  bool _f980f1500Hyp4;
-  bool _sigmaf1370Hyp4;
-  bool _f1710f1370Hyp4;
-  bool _f980f_2_1270Hyp4;
-  bool _f980f_2_1430Hyp4;
-  bool _f980f_2_1525Hyp4;
-  bool _f980f_2_1950Hyp4;
-  bool _f1500f_2_1525Hyp4;
-  bool _f1710f_2_1430Hyp4;
-  bool _f1710f_2_1950Hyp4;
-  bool _doHyp4;
+  bool _Pi_2_1670Tof_2_1270PiHyp9;
+  bool _Pi_2_1670ToK892KHyp9;
+  bool _Pi1800Tof980PiHyp9;
+  bool _Pi1800Tof1370PiHyp9;
+  bool _Pi1800ToKappaKHyp9;
+  bool _Pi_2_2285Tof1710PiHyp9;
+  bool _f980f_2_2300Hyp9;
+  bool _f_2_2300sigmaHyp9;
+  bool _K_2_1770ToK_2_1430PiHyp9;
+  bool _doHyp9;
+
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
 private:
+
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
