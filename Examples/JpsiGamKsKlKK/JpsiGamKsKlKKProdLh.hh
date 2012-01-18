@@ -70,11 +70,30 @@ protected:
   virtual complex<double> f0ToPhiPhiTo4KAmp( EvtData* theData, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag, 
 					     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi    );
   
+  
+  virtual complex<double> f2GammaAmp(Spin Minit, Spin Mgamma, EvtData* theData, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2ProdMag, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2ProdPhi,
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2DecMag,  
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2DecPhi,
+				     double mass, double width );
+  complex<double> f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f2Lambda, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecMag , 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecPhi  );
+  
+  complex<double> phiphiTo4KAmp(  EvtData* theData, Spin lambdaPhi1, Spin lambdaPhi2  );
+
+
+  
   bool _eta2225Hyp;
   bool _f02020Hyp;
+  bool _f22300Hyp;
+  
+  
   std::map<const std::string, bool> _hypMap;
 private:
   
+  bool initializeHypothesisMap( const std::map<const std::string, bool>& hypMap   );
 };
 
 #endif
