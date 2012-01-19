@@ -197,7 +197,7 @@ complex<double> JpsiGamKsKlKKProdLh::f0GammaAmp(Spin Minit, Spin Mgamma, EvtData
    }
 
    //result*=BreitWigner( fv2Phi, mass, width)*f0ToPhiPhiTo4KAmp(theData, ampf0DecMag,ampf0DecPhi );
-   result*f0ToPhiPhiTo4KAmp(theData, ampf0DecMag,ampf0DecPhi );
+   result*=f0ToPhiPhiTo4KAmp(theData, ampf0DecMag,ampf0DecPhi );
    
    
 return result;
