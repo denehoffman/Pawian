@@ -399,7 +399,9 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
     
     if (_Pi_2_1670Tof_2_1270PiHyp9){
       _ampVec.push_back(paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi);
-      //       _massVec.push_back(paramEnum2K2PiGam::f_2_1270);
+      if (!_f980f_2_1270Hyp4){
+	_massVec.push_back(paramEnum2K2PiGam::f_2_1270);
+      }
     }
     
     if (_Pi_2_1670ToK892KHyp9){
