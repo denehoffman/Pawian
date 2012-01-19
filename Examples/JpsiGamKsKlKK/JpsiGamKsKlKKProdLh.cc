@@ -83,8 +83,9 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     Vector4<double> fv2Phi = theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
     mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::f02020];
     if( _f02020FlatteHyp  ){
-      double gKK =  theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020gKK];
-      double gPhiPhi =  theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020gPhiPhi];
+      double gKK =  theParamVal.gFactors[paramEnumJpsiGamKsKlKK::f02020gKK];
+      double gPhiPhi =  theParamVal.gFactors[paramEnumJpsiGamKsKlKK::f02020gPhiPhi];
+
       const double phiMass = 1.019455;
       const double kaonMass = 0.493677;
       std::pair <const double, const double> kkPair=make_pair(kaonMass, kaonMass);
