@@ -262,7 +262,7 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, EvtData
   for ( itPsi=ampf2ProdMag.begin(); itPsi!=ampf2ProdMag.end(); ++itPsi){
     boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
     double thePsiMag=itPsi->second;
-    double thePsiPhi=ampf2ProdMag[PsiState];
+    double thePsiPhi=ampf2ProdPhi[PsiState];
     complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
     
     for(Spin f2Lambda=-2;f2Lambda<=2; f2Lambda++){
