@@ -183,7 +183,7 @@ complex<double> JpsiGamKsKlKKProdLh::f0GammaAmp(Spin Minit, Spin Mgamma, EvtData
    for ( itPsi=ampf0ProdMag.begin(); itPsi!=ampf0ProdMag.end(); ++itPsi){
      boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
      double thePsiMag=itPsi->second;
-     double thePsiPhi=ampf0ProdMag[PsiState];
+     double thePsiPhi=ampf0ProdPhi[PsiState];
      complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
      Spin lambda = f0Spin-Mgamma;
      if( fabs(lambda)>PsiState->J || fabs(lambda)>PsiState->S) continue;
@@ -295,7 +295,7 @@ complex<double> JpsiGamKsKlKKProdLh::f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f
   for ( itf2=ampf2DecMag.begin(); itf2!=ampf2DecMag.end(); ++itf2){
     boost::shared_ptr<const JPCLS> f2State=itf2->first;
     double theMag=itf2->second;
-    double thePhi=ampf2DecMag[f2State];
+    double thePhi=ampf2DecPhi[f2State];
     complex<double> expiphi(cos(thePhi), sin(thePhi));
     
     for(Spin lambdaPhi1=-1; lambdaPhi1<=1; lambdaPhi1++){
