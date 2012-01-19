@@ -146,11 +146,10 @@ int main(int __argc,char *__argv[]){
   std::map<const std::string, bool> hypMap;
   hypMap["eta2225Hyp"]=true;
   hypMap["f02020Hyp"]=true;
-//   hypMap["K1_1410HypBase"]=true;
-//   hypMap["K2_1430HypBase"]=true;
-//   hypMap["K1_1680_HypBase"]=true;
-//   hypMap["KKPi_HypBase"]=true;
-
+  hypMap["f02020FlatteHyp"]=true;
+  hypMap["f22300Hyp"]=true;
+  
+  
   const std::vector<std::string> disabledHyps=theAppParams.disabledHyps();
   std::vector<std::string>::const_iterator itStr;
  

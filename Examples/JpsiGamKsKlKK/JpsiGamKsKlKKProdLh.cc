@@ -11,6 +11,7 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList
   AbsLh(theEvtList)
   ,_eta2225Hyp(true)
   ,_f02020Hyp(true)
+  ,_f02020FlatteHyp(true)
   ,_f22300Hyp(true)
 {
   
@@ -26,29 +27,12 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsLh> theLhPtr, con
   AbsLh(theLhPtr->getEventList())
   ,_eta2225Hyp(true)
   ,_f02020Hyp(true)
+  ,_f02020FlatteHyp(true)
   ,_f22300Hyp(true)
 {
   
   initializeHypothesisMap( hypMap);
   
-
-//   std::map<const std::string, bool>::const_iterator iter= hypMap.find("eta2225Hyp");
-
-//   if (iter !=hypMap.end()){
-//     _eta2225Hyp= iter->second;
-//     Info<< "hypothesis " << iter->first << "\t" << _eta2225Hyp <<endmsg;
-//     _hypMap[iter->first]= iter->second;
-//   }
-//   else Alert << "hypothesis eta2225Hyp not set!!!" <<endmsg;
-
-//   iter= hypMap.find("f02020Hyp");
-//   if (iter !=hypMap.end()){
-//     _f02020Hyp= iter->second;
-//     Info<< "hypothesis " << iter->first << "\t" << _f02020Hyp <<endmsg;
-//     _hypMap[iter->first]= iter->second;
-//   }
-//   else Alert << "hypothesis f02020Hyp not set!!!" <<endmsg;
-
 }
 
 JpsiGamKsKlKKProdLh::~JpsiGamKsKlKKProdLh()
@@ -87,20 +71,35 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     JmmGmm+=etaGammaAmp(-1, 0, -1, theData, PsiToEta2225GamMag, PsiToEta2225GamPhi, mass, width );
   }
 
-  if (_f02020Hyp){
+  if (_f02020Hyp || _f02020FlatteHyp ){
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof02020GamMag=theParamVal.Mags[paramEnumJpsiGamKsKlKK::PsiToF02020Gamma];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof02020GamPhi=theParamVal.Phis[paramEnumJpsiGamKsKlKK::PsiToF02020Gamma];
     
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiMag=theParamVal.Mags[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiPhi=theParamVal.Phis[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiMag=theParamVal.Mags[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiPhi=theParamVal.Phis[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
     
+    
+    complex<double> dynamicPart(0.,0.);
+    Vector4<double> fv2Phi = theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
     mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::f02020];
-    width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020];
+    if( _f02020FlatteHyp  ){
+      double gKK =  theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020gKK];
+      double gPhiPhi =  theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020gPhiPhi];
+      const double phiMass = 1.019455;
+      const double kaonMass = 0.493677;
+      std::pair <const double, const double> kkPair=make_pair(kaonMass, kaonMass);
+      std::pair <const double, const double> phiphiPair=make_pair(phiMass, phiMass);
+      dynamicPart = Flatte( fv2Phi , phiphiPair, kkPair,   mass, gPhiPhi, gKK  );
+      
+    } else{
+      width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020];
+      dynamicPart = BreitWigner( fv2Phi, mass, width);
+    }
     
-    JmpGmp+=f0GammaAmp(1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,mass,width );
-    JmpGmm+=f0GammaAmp(1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,mass,width );
-    JmmGmp+=f0GammaAmp(-1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,mass,width );
-    JmmGmm+=f0GammaAmp(-1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,mass,width );
+    JmpGmp+=f0GammaAmp(1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
+    JmpGmm+=f0GammaAmp(1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
+    JmmGmp+=f0GammaAmp(-1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
+    JmmGmm+=f0GammaAmp(-1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
   } 
   
   if (_f22300Hyp){
@@ -173,12 +172,11 @@ complex<double> JpsiGamKsKlKKProdLh::f0GammaAmp(Spin Minit, Spin Mgamma, EvtData
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdMag, 
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdPhi,
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag,  
-						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi,
-						double mass, double width ){
+						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi ){
   
    complex<double> result(0.,0.);
    Spin f0Spin=0;
-   Vector4<double> fv2Phi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
+   //Vector4<double> fv2Phi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
    
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itPsi;
    for ( itPsi=ampf0ProdMag.begin(); itPsi!=ampf0ProdMag.end(); ++itPsi){
@@ -197,8 +195,10 @@ complex<double> JpsiGamKsKlKKProdLh::f0GammaAmp(Spin Minit, Spin Mgamma, EvtData
      result+= amp;
    }
 
-   result*=BreitWigner( fv2Phi, mass, width)*f0ToPhiPhiTo4KAmp(theData, ampf0DecMag,ampf0DecPhi );
-
+   //result*=BreitWigner( fv2Phi, mass, width)*f0ToPhiPhiTo4KAmp(theData, ampf0DecMag,ampf0DecPhi );
+   result*f0ToPhiPhiTo4KAmp(theData, ampf0DecMag,ampf0DecPhi );
+   
+   
 return result;
 }
 
@@ -346,7 +346,7 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
     theAmpMap[paramEnumJpsiGamKsKlKK::PsiToEta2225Gamma] = theFitParams.jpclsVec(paramEnumJpsiGamKsKlKK::PsiToEta2225Gamma);
   }
   
-  if(_f02020Hyp){
+  if(_f02020Hyp || _f02020FlatteHyp ){
     theAmpMap[paramEnumJpsiGamKsKlKK::PsiToF02020Gamma] = theFitParams.jpclsVec(paramEnumJpsiGamKsKlKK::PsiToF02020Gamma);
     theAmpMap[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi] = theFitParams.jpclsVec(paramEnumJpsiGamKsKlKK::F02020ToPhiPhi);
   }
@@ -401,6 +401,16 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
     fitVal.Widths[paramEnumJpsiGamKsKlKK::f02020]=.30;
     fitErr.Widths[paramEnumJpsiGamKsKlKK::f02020]=0.1;
   }
+
+  if(_f02020FlatteHyp){
+    fitVal.Masses[paramEnumJpsiGamKsKlKK::f02020]=2.020;
+    fitErr.Masses[paramEnumJpsiGamKsKlKK::f02020]=0.3;
+    fitVal.gFactors[paramEnumJpsiGamKsKlKK::f02020gKK]=.30;
+    fitErr.gFactors[paramEnumJpsiGamKsKlKK::f02020gKK]=0.1;
+    fitVal.gFactors[paramEnumJpsiGamKsKlKK::f02020gPhiPhi]=.7;
+    fitErr.gFactors[paramEnumJpsiGamKsKlKK::f02020gPhiPhi]=0.3;
+  }
+  
   
   if(_f22300Hyp){
     fitVal.Masses[paramEnumJpsiGamKsKlKK::f22300]=2.186;
@@ -434,6 +444,14 @@ JpsiGamKsKlKKProdLh::initializeHypothesisMap( const std::map<const std::string, 
   }
   else Alert << "hypothesis f02020Hyp not set!!!" <<endmsg;
 
+  iter= hypMap.find("f02020FlatteHyp");  
+  if (iter !=hypMap.end()){
+    _f02020FlatteHyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _f02020FlatteHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis f02020FlatteHyp not set!!!" <<endmsg;
+  
   
   iter= hypMap.find("f22300Hyp");  
   if (iter !=hypMap.end()){

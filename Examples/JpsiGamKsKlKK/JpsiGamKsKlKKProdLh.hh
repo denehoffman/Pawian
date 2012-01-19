@@ -62,8 +62,7 @@ protected:
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdMag, 
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdPhi,
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag,  
-				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi,
-				     double mass, double width );
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi );
   
   virtual complex<double> etaToPhiPhiTo4KAmp(EvtData* theData);
   
@@ -87,6 +86,8 @@ protected:
   
   bool _eta2225Hyp;
   bool _f02020Hyp;
+  bool _f02020FlatteHyp;
+  
   bool _f22300Hyp;
   
   
