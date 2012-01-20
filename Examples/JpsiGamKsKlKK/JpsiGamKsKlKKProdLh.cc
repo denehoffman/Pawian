@@ -256,7 +256,12 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, EvtData
   
   complex<double> result(0.,0.);
   Vector4<double> fv2Phi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
-  
+
+  std::map<Spin, complex<double> > decAmp;  
+  for (Spin lambdaf2=-2; lambdaf2<=2; ++lambdaf2){
+    decAmp[lambdaf2]=f2ToPhiPhiTo4KAmp(theData, lambdaf2,  ampf2DecMag,ampf2DecPhi );
+  }
+
   
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itPsi;
   for ( itPsi=ampf2ProdMag.begin(); itPsi!=ampf2ProdMag.end(); ++itPsi){
@@ -274,7 +279,7 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, EvtData
 	*Clebsch(2, f2Lambda, 1, -Mgamma, PsiState->S, lambda  )
 	*conj( theData->WignerDs[enumJpsiGamKsKlKKData::Df_Psi][PsiState->J][Minit][lambda]  );
       
-      amp=amp*f2ToPhiPhiTo4KAmp(theData, f2Lambda,  ampf2DecMag,ampf2DecPhi );
+      amp=amp*decAmp[f2Lambda];
       
       result+= amp;
     }
@@ -291,6 +296,8 @@ complex<double> JpsiGamKsKlKKProdLh::f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f
 							std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecPhi  ){
   
   complex<double> result(0.,0.);
+
+
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itf2;
   for ( itf2=ampf2DecMag.begin(); itf2!=ampf2DecMag.end(); ++itf2){
     boost::shared_ptr<const JPCLS> f2State=itf2->first;
@@ -308,7 +315,8 @@ complex<double> JpsiGamKsKlKKProdLh::f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f
 	  *Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, f2State->S, lambda  )
 	  *conj( theData->WignerDs[enumJpsiGamKsKlKKData::Df_Spin2][f2State->J][f2Lambda][lambda]  );
 	
-	amp = amp * phiphiTo4KAmp( theData, lambdaPhi1, lambdaPhi2 );
+ 	amp = amp * phiphiTo4KAmp( theData, lambdaPhi1, lambdaPhi2 );
+
 	result +=amp;
       }
     }
@@ -323,7 +331,7 @@ complex<double> JpsiGamKsKlKKProdLh::phiphiTo4KAmp( EvtData* theData, Spin lambd
   complex<double> result(0.,0.);
   
   result = 3. * conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KsKl][1][lambdaPhi1][0])
-    * conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KpKm][1][lambdaPhi2][0]);
+    * 3.* conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KpKm][1][lambdaPhi2][0]);
   
   return result;
 }
