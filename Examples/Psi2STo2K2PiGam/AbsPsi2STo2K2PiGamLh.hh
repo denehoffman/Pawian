@@ -122,7 +122,7 @@ protected:
 
   virtual complex<double> chiToK2KToK2PiAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_2_Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K_2_Dec, double K_2prod_Mass, double K_2prod_Width, double K_2decMass, double K_2decWidth);
 
-
+  virtual complex<double> chiToPi0Pi0ToK0KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToPi0Pi0Amp, double Pi_0_Mass, double Pi_0_Width, double K0Mass, double K0Width);
 private:
   
 

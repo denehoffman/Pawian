@@ -54,6 +54,7 @@ protected:
   bool _Pi_2_1670ToK892KHyp9;
   bool _Pi1800Tof980PiHyp9;
   bool _Pi1800Tof1370PiHyp9;
+  bool _Pi1800ToKappaKHyp9;
   bool _Pi_2_2285Tof1710PiHyp9;
   bool _f980f_2_2300Hyp9;
   bool _f_2_2300sigmaHyp9;

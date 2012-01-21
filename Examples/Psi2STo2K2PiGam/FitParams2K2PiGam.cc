@@ -27,6 +27,7 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1650K]=theStates.ChiToK1400ToK892piStates(); 
   _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK892Pi]=theStates.K1400ToKst1PiStates();
   _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK_0_1430Pi]=theStates.K1ToK0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToKappaK_0_1430]=theStates.ChiTo2K_0_States();
   _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1950]=theStates.ChiTo2K_0_States();
   _jpclsMap[paramEnum2K2PiGam::KappaK_0_1950]=theStates.ChiTo2K_0_States();
   _jpclsMap[paramEnum2K2PiGam::f980_pif1710_k]=theStates.ChiTof0f0States();
@@ -41,6 +42,8 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::f980_kf1500_pi]=theStates.ChiTof0f0States();
   _jpclsMap[paramEnum2K2PiGam::f1710_pif1370_k]=theStates.ChiTof0f0States();
   _jpclsMap[paramEnum2K2PiGam::f1710_kf1370_pi]=theStates.ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1270_k]=theStates.ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1270_pi]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1430_k]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1430_pi]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1950_k]=theStates.ChiTof0f2States();
@@ -67,6 +70,7 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::Pi_2_1670ToK892K]=theStates.Pi_2ToKst1KStates();
   _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0Tof980]=theStates.ChiToPi0Pi0States();
   _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0Tof1370]=theStates.ChiToPi0Pi0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0ToKappa]=theStates.ChiToPi0Pi0States();
   _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_2285Pi]=theStates.ChiToPi_2PiStates();
   _jpclsMap[paramEnum2K2PiGam::Pi_2_2285Tof1700Pi]=theStates.Pi_2Tof0PiStates();
   _jpclsMap[paramEnum2K2PiGam::ChiToK_2_1770K]=theStates.ChiToK2mK0mStates();
@@ -108,6 +112,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::ChiToK_1_1650K) return params.ChiToK_1_1650K;
   else if (index==paramEnum2K2PiGam::K_1_1650ToK892Pi) return params.K_1_1650ToK892Pi;
   else if (index==paramEnum2K2PiGam::K_1_1650ToK_0_1430Pi) return params.K_1_1650ToK_0_1430Pi;
+  else if (index==paramEnum2K2PiGam::ChiToKappaK_0_1430) return params.ChiToKappaK_0_1430;
   else if (index==paramEnum2K2PiGam::K_0_1430K_0_1950) return params.ChiToK_0_1430K_0_1950; 
   else if (index==paramEnum2K2PiGam::KappaK_0_1950) return params.ChiToKappaK_0_1950;  
   else if (index==paramEnum2K2PiGam::f980_pif1710_k) return params.f980_pif1710_k;
@@ -122,6 +127,8 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::f980_kf1500_pi) return params.f980_kf1500_pi;
   else if (index==paramEnum2K2PiGam::f1710_pif1370_k) return params.f1710_pif1370_k;
   else if (index==paramEnum2K2PiGam::f1710_kf1370_pi) return params.f1710_kf1370_pi;
+  else if (index==paramEnum2K2PiGam::f980_pif_2_1270_k) return params.f980_pif_2_1270_k;
+  else if (index==paramEnum2K2PiGam::f980_kf_2_1270_pi) return params.f980_kf_2_1270_pi;
   else if (index==paramEnum2K2PiGam::f980_pif_2_1430_k) return params.f980_pif_2_1430_k;
   else if (index==paramEnum2K2PiGam::f980_kf_2_1430_pi) return params.f980_kf_2_1430_pi;
   else if (index==paramEnum2K2PiGam::f980_pif_2_1525_k) return params.f980_pif_2_1525_k;
@@ -150,6 +157,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::Pi_2_1670ToK892K) return params.Pi_2_1670ToK892K;
   else if (index==paramEnum2K2PiGam::ChiToPi1800Pi0Tof980) return params.ChiToPi1800Pi0Tof980;
   else if (index==paramEnum2K2PiGam::ChiToPi1800Pi0Tof1370) return params.ChiToPi1800Pi0Tof1370;
+  else if (index==paramEnum2K2PiGam::ChiToPi1800Pi0ToKappa) return params.ChiToPi1800Pi0ToKappa;
   else if (index==paramEnum2K2PiGam::ChiToPi_2_2285Pi) return params.ChiToPi_2_2285Pi; 
   else if (index==paramEnum2K2PiGam::Pi_2_2285Tof1700Pi) return params.Pi_2_2285Tof1700Pi;
   else if (index==paramEnum2K2PiGam::ChiToK_2_1770K) return params.ChiToK_2_1770K;

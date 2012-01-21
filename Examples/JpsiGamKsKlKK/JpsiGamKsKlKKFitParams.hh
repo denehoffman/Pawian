@@ -28,7 +28,7 @@ using namespace ROOT::Minuit2;
 
 struct paramEnumJpsiGamKsKlKK{
   enum { PsiToEtacGamma=0, PsiToEta2225Gamma, PsiToF02020Gamma, PsiToF22010Gamma, PsiToF22300Gamma,  PsiToF22340Gamma, 
-	 F02020ToPhiPhi, nAmps,
+	 F02020ToPhiPhi, F22300ToPhiPhi, nAmps,
 	 etac=nAmps, eta2225, f02020, f22010, f22300 ,f22340, nMasses, f02020gKK=nMasses, f02020gPhiPhi, ngFactors,
         phaseSpace=ngFactors, nOthers };
   
@@ -36,8 +36,8 @@ struct paramEnumJpsiGamKsKlKK{
   {
     static std::string fitName[paramEnumJpsiGamKsKlKK::nOthers]
       ={"PsiToEtacGam", "PsiToEta2225Gamma", "PsiToF02020Gamma", "PsiToF22010Gamma", "PsiToF22300Gamma", "PsiToF2340Gamma",
-	"PsiToF02020ToPhiPhi",           
-	"etac", "eta2250", "f02020", "f22010", "f22340", "f22340", "f02020gKK","f02020gPhiPhi", "phaseSpace"  };
+	"F02020ToPhiPhi", "F22300ToPhiPhi",          
+	"etac", "eta2250", "f02020", "f22010", "f22300", "f22340", "f02020gKK","f02020gPhiPhi", "phaseSpace"  };
     if (t<0 || t>=paramEnumJpsiGamKsKlKK::nOthers) assert(0);
     return fitName[t];
   } 

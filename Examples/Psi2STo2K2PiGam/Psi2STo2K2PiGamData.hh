@@ -101,10 +101,16 @@ namespace Psi2STo2K2PiGamData {
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfK2mToKmPi0ViaKmPiPi;
     map<Spin,map<Spin,map<Spin,complex<double> > > > DfK2mToKmPi1ViaKmPiPi;
 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKst1pToKpPi0ViaKKPi0;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKst1pToKpPi1ViaKKPi1;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKst1mToKmPi0ViaKKPi0;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfKst1mToKmPi1ViaKKPi1;
 
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKK; //Wigner D functions for f_2->K+ K-
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToPiPi; //Wigner D functions for f_2->pi pi
 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKKviaKKpi0;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKKviaKKpi1;
 
     bool operator<(const Psi2STo2K2PiGamEvtData& compare) const{
       bool result=false;

@@ -13,6 +13,7 @@ Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_Pi_2_1670ToK892KHyp9(true)
   ,_Pi1800Tof980PiHyp9(true)
   ,_Pi1800Tof1370PiHyp9(true)
+  ,_Pi1800ToKappaKHyp9(true)
   ,_Pi_2_2285Tof1710PiHyp9(true)
   ,_f980f_2_2300Hyp9(true)
   ,_f_2_2300sigmaHyp9(true)
@@ -29,6 +30,7 @@ Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_Pi_2_1670ToK892KHyp9(true)
   ,_Pi1800Tof980PiHyp9(true)
   ,_Pi1800Tof1370PiHyp9(true)
+  ,_Pi1800ToKappaKHyp9(true)
   ,_Pi_2_2285Tof1710PiHyp9(true)
   ,_f980f_2_2300Hyp9(true)
   ,_f_2_2300sigmaHyp9(true)
@@ -97,6 +99,15 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     result+=chiToPi0Pi0Tof0Amp(theData, ChiToPi1800Pi0Tof1370, Pi1800Mass, Pi1800Width, f1360Mass, f1360Width);
   }
 
+  if(_Pi1800ToKappaKHyp9){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi1800Pi0ToKappa=theParamVal.ChiToPi1800Pi0ToKappa;
+    double Pi1800Mass=theParamVal.BwPi1800.first;
+    double Pi1800Width=theParamVal.BwPi1800.second;
+    double KappaMass=theParamVal.BwKappa.first;
+    double KappaWidth=theParamVal.BwKappa.second;
+    
+    result+=chiToPi0Pi0ToK0KAmp(theData, ChiToPi1800Pi0ToKappa, Pi1800Mass, Pi1800Width, KappaMass, KappaWidth);
+  }
 
   if (_Pi_2_2285Tof1710PiHyp9){
     double Pi_2_2285Mass=theParamVal.BwPi_2_2285.first;
@@ -310,8 +321,19 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
     exit(0);
   }  
 
+  iter= hypMap.find("Pi1800ToKappaKHyp9");
+    if (iter !=hypMap.end()){
+    _Pi1800ToKappaKHyp9= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _Pi1800ToKappaKHyp9 <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << "Pi1800ToKappaKHyp9 not set!!!" <<endmsg;
+    exit(0);
+  } 
+
+
   iter= hypMap.find("Pi1800Tof1370PiHyp9");
-  
   if (iter !=hypMap.end()){
     _Pi1800Tof1370PiHyp9= iter->second;
     Info<< "hypothesis " << iter->first << "\t" << _Pi1800Tof1370PiHyp9 <<endmsg;
@@ -377,7 +399,9 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
     
     if (_Pi_2_1670Tof_2_1270PiHyp9){
       _ampVec.push_back(paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi);
-      _massVec.push_back(paramEnum2K2PiGam::f_2_1270);
+      if (!_f980f_2_1270Hyp4){
+	_massVec.push_back(paramEnum2K2PiGam::f_2_1270);
+      }
     }
     
     if (_Pi_2_1670ToK892KHyp9){
@@ -393,6 +417,10 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (_Pi1800Tof1370PiHyp9){
     _ampVec.push_back(paramEnum2K2PiGam::ChiToPi1800Pi0Tof1370);
     _massVec.push_back(paramEnum2K2PiGam::f1360);
+  }
+
+  if(_Pi1800ToKappaKHyp9){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiToPi1800Pi0ToKappa);
   }
 
   if (_Pi_2_2285Tof1710PiHyp9){

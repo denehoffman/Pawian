@@ -155,6 +155,7 @@ int main(int __argc,char *__argv[]){
   hypMap["f980f1370Hyp4"]=true;
   hypMap["f980f1500Hyp4"]=true;
   hypMap["f1710f1370Hyp4"]=true;
+  hypMap["f980f_2_1270Hyp4"]=true;
   hypMap["f980f_2_1430Hyp4"]=true;
   hypMap["f980f_2_1525Hyp4"]=true;
   hypMap["f980f_2_1950Hyp4"]=true;
@@ -164,6 +165,7 @@ int main(int __argc,char *__argv[]){
   hypMap["sigmaf1370Hyp4"]=true;
   hypMap["doHyp5"]=true;
   hypMap["K_0_1430K_0_1950Hyp6"]=true;
+  hypMap["KappaK_0_1430Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=true;
   hypMap["K1_1680Hyp7"]=true;
   hypMap["K1_2300Hyp7"]=true; 
@@ -179,6 +181,7 @@ int main(int __argc,char *__argv[]){
   hypMap["f980f_2_2300Hyp9"]=true;
   hypMap["f_2_2300sigmaHyp9"]=true;
   hypMap["K_2_1770ToK_2_1430PiHyp9"]=true;
+  hypMap["Pi1800ToKappaKHyp9"]=true;
 
   std::vector<std::string>::const_iterator itStr;
  
