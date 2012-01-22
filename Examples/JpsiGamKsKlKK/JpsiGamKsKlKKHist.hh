@@ -13,6 +13,7 @@
 #include "TROOT.h"
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include "qft++/topincludes/tensor.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsLh.hh"
@@ -23,6 +24,7 @@ class TH2F;
 class TH1F;
 class TNtuple;
 
+
 class JpsiGamKsKlKKHist {
 
 public:
@@ -32,7 +34,7 @@ public:
   ///Constructor 
   JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList>);
   JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh>, fitParams&);
-
+  
   /** Destructor */
   virtual ~JpsiGamKsKlKKHist();
 
@@ -42,6 +44,10 @@ protected:
 
 
 private:
+  
+  
+
+
   TFile* _theTFile;
   TH2F* _dalitzDataHist;
   TH2F* _dalitzMcHist;
@@ -93,6 +99,11 @@ private:
 
 
   void fillTuple( TNtuple* theTuple, EvtData* theData, double weight);
+
+  double decayAngleChi(const Vector4<double>& v4_p,const Vector4<double>& v4_d1,
+		       const Vector4<double>& v4_d2,const Vector4<double>& v4_h1,
+		       const Vector4<double>& v4_h2 ) ;
+
 
 };
 
