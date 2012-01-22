@@ -180,27 +180,27 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
   Int_t numOfEntriesData = ntdata->GetEntries();
   Int_t numOfEntriesMc = ntmc->GetEntries();
 
-  dataCosThetaKKpipi = new TH1F("dataCosThetaKKpipi","dataCosThetaKKpipi",50,-1.,1.);
-  dataPhiKKpipi = new TH1F("dataPhiKKpipi","dataPhiKKpipi",50,-4.,4.);
-  dataCosThetaKpipi = new TH1F("dataCosThetaKpipi","dataCosThetaKpipi",50,-1.,1.);
-  dataPhiKpipi = new TH1F("dataPhiKpipi","dataPhiKpipi",50,-4.,4.);
-  dataCosThetaKpi = new TH1F("dataCosThetaKpi","dataCosThetaKpi",50,-1.,1.);
-  dataPhiKpi = new TH1F("dataPhiKpi","dataPhiKpi",50,-4.,4.);
-  dataCosThetapi = new TH1F("dataCosThetapi","dataCosThetapi",50,-1.,1.);
-  dataPhipi = new TH1F("dataPhipi","dataPhipi",50,-4.,4.);
-  datainvMassKpipi = new TH1F("datainvMassKpipi", "datainvMassKpipi", 44, 0.8, 3.0);
-  datainvMassKpi = new TH1F("datainvMassKpi", "datainvMassKpi", 69, 0.5, 2.8);
+  dataCosThetaKKpipi = new TH1F("dataCosThetaKKpipi","dataCosThetaKKpipi",200,-1.,1.);
+  dataPhiKKpipi = new TH1F("dataPhiKKpipi","dataPhiKKpipi",200,-4.,4.);
+  dataCosThetaKpipi = new TH1F("dataCosThetaKpipi","dataCosThetaKpipi",200,-1.,1.);
+  dataPhiKpipi = new TH1F("dataPhiKpipi","dataPhiKpipi",200,-4.,4.);
+  dataCosThetaKpi = new TH1F("dataCosThetaKpi","dataCosThetaKpi",200,-1.,1.);
+  dataPhiKpi = new TH1F("dataPhiKpi","dataPhiKpi",200,-4.,4.);
+  dataCosThetapi = new TH1F("dataCosThetapi","dataCosThetapi",200,-1.,1.);
+  dataPhipi = new TH1F("dataPhipi","dataPhipi",200,-4.,4.);
+  datainvMassKpipi = new TH1F("datainvMassKpipi", "datainvMassKpipi", 176, 0.8, 3.0);
+  datainvMassKpi = new TH1F("datainvMassKpi", "datainvMassKpi", 276, 0.5, 2.8);
    
-  mcCosThetaKKpipi = new TH1F("mcCosThetaKKpipi","mcCosThetaKKpipi",50,-1.,1.);
-  mcPhiKKpipi = new TH1F("mcPhiKKpipi","mcPhiKKpipi",50,-4.,4.);
-  mcCosThetaKpipi = new TH1F("mcCosThetaKpipi","mcCosThetaKpipi",50,-1.,1.);
-  mcPhiKpipi = new TH1F("mcPhiKpipi","mcPhiKpipi",50,-4.,4.);
-  mcCosThetaKpi = new TH1F("mcCosThetaKpi","mcCosThetaKpi",50,-1.,1.);
-  mcPhiKpi = new TH1F("mcPhiKpi","mcPhiKpi",50,-4.,4.);
-  mcCosThetapi = new TH1F("mcCosThetapi","mcCosThetapi",50,-1.,1.);
-  mcPhipi = new TH1F("mcPhipi","mcPhipi",50,-4.,4.);
-  mcinvMassKpipi = new TH1F("mcinvMassKpipi", "mcinvMassKpipi", 44, 0.8, 3.0);
-  mcinvMassKpi = new TH1F("mcinvMassKpi", "mcinvMassKpi", 69, 0.5, 2.8);
+  mcCosThetaKKpipi = new TH1F("mcCosThetaKKpipi","mcCosThetaKKpipi",200,-1.,1.);
+  mcPhiKKpipi = new TH1F("mcPhiKKpipi","mcPhiKKpipi",200,-4.,4.);
+  mcCosThetaKpipi = new TH1F("mcCosThetaKpipi","mcCosThetaKpipi",200,-1.,1.);
+  mcPhiKpipi = new TH1F("mcPhiKpipi","mcPhiKpipi",200,-4.,4.);
+  mcCosThetaKpi = new TH1F("mcCosThetaKpi","mcCosThetaKpi",200,-1.,1.);
+  mcPhiKpi = new TH1F("mcPhiKpi","mcPhiKpi",200,-4.,4.);
+  mcCosThetapi = new TH1F("mcCosThetapi","mcCosThetapi",200,-1.,1.);
+  mcPhipi = new TH1F("mcPhipi","mcPhipi",200,-4.,4.);
+  mcinvMassKpipi = new TH1F("mcinvMassKpipi", "mcinvMassKpipi", 176, 0.8, 3.0);
+  mcinvMassKpi = new TH1F("mcinvMassKpi", "mcinvMassKpi", 276, 0.5, 2.8);
 
   histVectData.push_back(dataCosThetaKKpipi);
   histVectData.push_back(dataPhiKKpipi);
@@ -236,28 +236,14 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
 
         dataCosThetaKpipi->Fill(datacosThetaK1pi1pi2, dataweight);	
 
-	
         dataPhiKpipi->Fill(dataphiK1pi1pi2, dataweight);	
 
-        // dataCosThetaKpi->Fill(datacosThetaK1pi1, dataweight/2.);
-	// dataCosThetaKpi->Fill(datacosThetaK1pi2, dataweight/2.);  
 	dataCosThetaKpi->Fill(datacosThetaK1pi1, dataweight);
 	dataCosThetaKpi->Fill(datacosThetaK1pi2, dataweight);  
         
-// 	dataPhiKpi->Fill(dataphiK1pi1, dataweight/2.);                                              	
-//         dataPhiKpi->Fill(dataphiK1pi2, dataweight/2.);        
-        
-
-//         dataCosThetapi->Fill(datacosThetapi1, dataweight/2.);                                              	
-//         dataCosThetapi->Fill(datacosThetapi2, dataweight/2.); 
-
-//         dataPhipi->Fill(dataphipi1, dataweight/2.);                                              	
-//         dataPhipi->Fill(dataphipi2, dataweight/2.);
-
 	dataPhiKpi->Fill(dataphiK1pi1, dataweight);                                              	
         dataPhiKpi->Fill(dataphiK1pi2, dataweight);        
         
-
         dataCosThetapi->Fill(datacosThetapi1, dataweight);                                              	
         dataCosThetapi->Fill(datacosThetapi2, dataweight); 
 
@@ -265,10 +251,6 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
         dataPhipi->Fill(dataphipi2, dataweight);
  
         datainvMassKpipi->Fill(datainvmassK1pi1pi2, dataweight);
-
-
-	//      datainvMassKpi->Fill(datainvmassK1pi1, dataweight/2.);
-        // datainvMassKpi->Fill(datainvmassK1pi2, dataweight/2.);
 
         datainvMassKpi->Fill(datainvmassK1pi1, dataweight);
         datainvMassKpi->Fill(datainvmassK1pi2, dataweight);
@@ -285,27 +267,12 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
 
       mcPhiKpipi->Fill(mcphiK1pi1pi2, mcweight);	
 
-//       mcCosThetaKpi->Fill(mccosThetaK1pi1, mcweight/2.);                                              	
-//       mcCosThetaKpi->Fill(mccosThetaK1pi2, mcweight/2.);                                              	
-
-//       mcPhiKpi->Fill(mcphiK1pi1, mcweight/2.);                                              	
-//       mcPhiKpi->Fill(mcphiK1pi2, mcweight/2.);                                              	
-
-      
-//       mcCosThetapi->Fill(mccosThetapi1, mcweight/2.);                                              	
-//       mcCosThetapi->Fill(mccosThetapi2, mcweight/2.); 
-
-//       mcPhipi->Fill(mcphipi1, mcweight/2.);                                              	
-//       mcPhipi->Fill(mcphipi2, mcweight/2.);
-
-
- mcCosThetaKpi->Fill(mccosThetaK1pi1, mcweight);                                              	
+      mcCosThetaKpi->Fill(mccosThetaK1pi1, mcweight);                                              	
       mcCosThetaKpi->Fill(mccosThetaK1pi2, mcweight);                                              	
 
       mcPhiKpi->Fill(mcphiK1pi1, mcweight);                                              	
       mcPhiKpi->Fill(mcphiK1pi2, mcweight);                                              	
 
-      
       mcCosThetapi->Fill(mccosThetapi1, mcweight);                                              	
       mcCosThetapi->Fill(mccosThetapi2, mcweight); 
 
@@ -313,40 +280,34 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
       mcPhipi->Fill(mcphipi2, mcweight);
       mcinvMassKpipi->Fill(mcinvmassK1pi1pi2, mcweight);
 
-      //      mcinvMassKpi->Fill(mcinvmassK1pi1, mcweight/2.);
-      // mcinvMassKpi->Fill(mcinvmassK1pi2, mcweight/2.);
-
       mcinvMassKpi->Fill(mcinvmassK1pi1, mcweight);
       mcinvMassKpi->Fill(mcinvmassK1pi2, mcweight);
 
       if(maxEvtNo<evtNo) maxEvtNo=evtNo;
     }
 
-  double integralData=dataCosThetaKKpipi->Integral();
-  double integralMc=mcCosThetaKKpipi->Integral();
-//   double scalefactor = integralData/integralMc;
 
-  double scalefactor =2874./50000.; 
-//   double scalefactor = 3278./50000.;
+  double scalefactor = double(ntdata->GetEntries())/double(ntmc->GetEntries()); 
+
+  Int_t rebin = 4;
 
   TCanvas* cmain = new TCanvas("cmain","cmain",1400,600);
   cmain->Divide(5,2);
   for(int i=0; i<histVectData.size(); i++) {
     cmain->cd(i+1);
-    histVectData[i]->Rebin(2);
+    histVectData[i]->Rebin(rebin);
     histVectData[i]->SetLineColor(2);
     histVectData[i]->Draw("E");
-    histVectMc[i]->Rebin(2);
+    histVectMc[i]->Rebin(rebin);
     histVectMc[i]->Scale(scalefactor);
     histVectMc[i]->Draw("same");
     } 
 
 
   float chisq = 0;
-  //  float constraints = 102;
+
   float constraints = 98; // 12-01-06_FitParamHyp8_base_K0K2_Hyp5/rerun_correctedampK0K2/Psi2STo2K2PiGamPWA_noK1_1680Hyp7.root
   // float constraints = 94;   // 12-01-06_FitParamHyp8_base_K0K2_Hyp5/rerun_correctedampK0K2/Psi2STo2K2PiGamPWA_noK1_1680Hyp7_noK1_2300Hyp7.root
-  
   float ndf;
   float conflevel = 0;
   int numberofbins = 0;
@@ -375,42 +336,7 @@ void qaCheck(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root
     cout << "Degrees of freedom:\t" << ndf << endl;
     cout << "chi^2/ndf:\t" << chisq/ndf << endl;
     cout << "CL:\t" << TMath::Prob(chisq, ndf) << endl;
-//     cout << "CL:\t" << TMath::Prob(2.19719999999999999e+02, 185) << endl;
-
-/*
-   double rebin = 2;
-   for(int i=0;i<histVectData.size(); i++) {
-   histVectData[i]->Rebin(rebin);
-   histVectMc[i]->Rebin(rebin);
-   }
-
-   cout << endl;
-   cout << "...Histograms rebinned with a rebin factor of " << rebin << endl;
-   cout << endl;
-
-  TCanvas* cmain2 = new TCanvas("cmain2","cmain2",1400,600);
-  cmain2->Divide(5,2);
-  for(int i=0; i<histVectData.size(); i++) {
-    cmain2->cd(i+1);
-    histVectData[i]->SetLineColor(2);
-    histVectData[i]->Draw("E");
-    histVectMc[i]->Draw("same");
-    } 
-
-  chisq = 0;
-
-  for(int i=0; i<histVectData.size(); i++) {
-    for (int j=0; j<(histVectData[i]->GetSize())-2; j++) {
-      chisq = chisq + pow((histVectData[i]->GetBinContent(j+1)) - (histVectMc[i]->GetBinContent(j+1)),2);
-      cout << "chi^2 after bin " << j+1 << " of histogram " << histVectData[i]->GetName() << ": " << chisq << endl;
-      }
-      cout << "chi^2 for " << histVectData[i]->GetName() << ": " << chisq << endl;
-  }   
-
-    cout << "Total chi^2: " << chisq << endl;  
-*/
     cout << endl;
-
 
 }
 
