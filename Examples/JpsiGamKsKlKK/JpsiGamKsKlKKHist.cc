@@ -5,12 +5,14 @@
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKHist.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKEventList.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
+#include "PwaUtils/KinUtils.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
 #include "TNtuple.h"
+#include "TLorentzVector.h"
 #include "ErrLogger/ErrLogger.hh"
 
 JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
@@ -48,7 +50,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> th
       plotCostPhiKs( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
       plotCostGam( _costGamCmDataHist,(*it), 1. );      
       fillTuple(_dataTuple, (*it), 1.);
-
+      
       ++it;
     }
 
@@ -221,7 +223,7 @@ void JpsiGamKsKlKKHist::initRootStuff()
   _costGamCmMcHist= new TH1F("_costGamCmMcHist", "cos(#Theta_{#gamma}) CM Mc", 100, -1., 1.); 
   _costGamCmFittedHist= new TH1F("_costGamCmFittedHist", "cos(#Theta_{#gamma}) CM Fit", 100, -1, 1);
  
-   std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:weight";
+   std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:decPlaneChi:weight";
    
   
    _dataTuple=new TNtuple("_dataTuple", "data ntuple", tupleVariables.data());
@@ -284,6 +286,12 @@ void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, EvtData* theData, double 
   Vector4<double>& V4_Ks_HeliKsKl= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Ks_HeliKsKl] ;
   Vector4<double>& V4_Kp_HeliKpKm= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Kp_HeliKpKm] ;
   
+  Vector4<double>& V4_Ks_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Ks_HeliPsi] ;
+  Vector4<double>& V4_Kl_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Kl_HeliPsi] ;
+  Vector4<double>& V4_Kp_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Kp_HeliPsi] ;
+  Vector4<double>& V4_Km_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Km_HeliPsi] ;
+  
+  double thePhiPhiDecayPlaneAngle = decayAngleChi( V4_KsKlKpKm_HeliPsi, V4_Kp_HeliPsi, V4_Km_HeliPsi, V4_Ks_HeliPsi, V4_Kl_HeliPsi   );
   
   theTuple->Fill( V4_KsKlKpKm_HeliPsi.M(),
 		  V4_KsKl_HeliPsi.M(),
@@ -294,5 +302,55 @@ void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, EvtData* theData, double 
 		  V4_KpKm_HeliKsKlKpKm.CosTheta(),
 		  V4_Ks_HeliKsKl.CosTheta(),
 		  V4_Kp_HeliKpKm.CosTheta(),
+		  thePhiPhiDecayPlaneAngle,		  
 		  weight);
 }
+
+
+double JpsiGamKsKlKKHist::decayAngleChi(const Vector4<double>& v4_p,const Vector4<double>& v4_d1,
+		const Vector4<double>& v4_d2,const Vector4<double>& v4_h1,
+		const Vector4<double>& v4_h2 ) {
+  
+  TLorentzVector p4_p(  v4_p.Px(), v4_p.Py(), v4_p.Pz(), v4_p.E() );
+  TLorentzVector p4_d1p( v4_d1.Px(), v4_d1.Py(), v4_d1.Pz(), v4_d1.E() );
+  TLorentzVector p4_d2p( v4_d2.Px(), v4_d2.Py(), v4_d2.Pz(), v4_d2.E() );
+  TLorentzVector p4_h1p( v4_h1.Px(), v4_h1.Py(), v4_h1.Pz(), v4_h1.E() );
+  TLorentzVector p4_h2p( v4_h2.Px(), v4_h2.Py(), v4_h2.Pz(), v4_h2.E() );
+  
+  
+  // boost all vectors parent restframe
+  
+  p4_d1p.Boost( -p4_p.BoostVector() );
+  p4_d2p.Boost( -p4_p.BoostVector() );
+  p4_h1p.Boost( -p4_p.BoostVector() );
+  p4_h2p.Boost( -p4_p.BoostVector() );
+  
+  
+  TVector3 d1_perp,d1_prime,h1_perp;
+  TVector3 D;
+  
+  D=(p4_d1p+p4_d2p).Vect();
+  
+  d1_perp=p4_d1p.Vect()-(D.Dot(p4_d1p.Vect())/D.Dot(D))*D;
+  h1_perp=p4_h1p.Vect()-(D.Dot(p4_h1p.Vect())/D.Dot(D))*D;
+  
+  // orthogonal to both D and d1_perp
+  
+  d1_prime=D.Cross(d1_perp);
+  
+  d1_perp= d1_perp* (1./d1_perp.Mag());
+  d1_prime= d1_prime * (1./d1_prime.Mag());
+  
+  double x,y;
+ 
+ x=d1_perp.Dot(h1_perp);
+ y=d1_prime.Dot(h1_perp);
+ 
+ double chi=atan2(y,x);
+ 
+ if (chi<0.0) chi+=2*TMath::Pi();
+ 
+ return chi;
+ 
+}
+
