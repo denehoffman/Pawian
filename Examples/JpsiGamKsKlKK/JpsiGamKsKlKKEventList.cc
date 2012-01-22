@@ -56,7 +56,7 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
      Vector4<float>  V4_Ks_Lab( ks   );
      Vector4<float>  V4_KpKm_Lab( kp+km   );
      Vector4<float>  V4_Kp_Lab( kp   );
-     
+          
      Vector4<float>  V4_KsKlKpKm_HeliPsi( ks+kl+kp+km   );
      V4_KsKlKpKm_HeliPsi.Boost(V4_psi);
      
@@ -67,15 +67,18 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
      Vector4<float>  V4_KsKl_HeliPsi( ks+kl  );
      V4_KsKl_HeliPsi.Boost(V4_psi);
      
-//      Vector4<float>  V4_KsKl_HeliKsKlKpKm( ks+kl   );
-//      V4_KsKl_HeliKsKlKpKm.Boost( ks+kl+kp+km  );
-
+     Vector4<float>  V4_Kl_HeliPsi( kl   );
+     V4_Kl_HeliPsi.Boost( V4_psi );
+     Vector4<float>  V4_Ks_HeliPsi( ks   );
+     V4_Ks_HeliPsi.Boost( V4_psi );
+     Vector4<float>  V4_Kp_HeliPsi( kp   );
+     V4_Kp_HeliPsi.Boost( V4_psi );
+     Vector4<float>  V4_Km_HeliPsi( km   );
+     V4_Km_HeliPsi.Boost( V4_psi );
+     
+     
      Vector4<float>  V4_KsKl_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_KsKl_Lab);
-     
-//      Vector4<float>  V4_KpKm_HeliKsKlKpKm( kp+km   );
-//      V4_KpKm_HeliKsKlKpKm.Boost( ks+kl+kp+km  );
      Vector4<float>  V4_KpKm_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_KpKm_Lab);     
-     
      Vector4<float>  V4_Ks_HeliKsKl=helicityVec(V4_KsKlKpKm_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
      Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_KsKlKpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
 
@@ -84,10 +87,13 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Psi] = V4_psi;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi] = V4_KsKlKpKm_HeliPsi;
      
-//      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi] = V4_KsKlKpKm_HeliPsi;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKl_HeliPsi] = V4_KsKl_HeliPsi;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliPsi] = V4_KpKm_HeliPsi;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_gamma_HeliPsi] = V4_gamma_HeliPsi;
+     evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Ks_HeliPsi] = V4_Ks_HeliPsi;
+     evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Kl_HeliPsi] = V4_Kl_HeliPsi;
+     evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Kp_HeliPsi] = V4_Kp_HeliPsi;
+     evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Km_HeliPsi] = V4_Km_HeliPsi;
      
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKl_HeliKsKlKpKm] = V4_KsKl_HeliKsKlKpKm;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm] = V4_KpKm_HeliKsKlKpKm;
