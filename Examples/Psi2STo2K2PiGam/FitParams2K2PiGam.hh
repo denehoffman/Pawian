@@ -31,7 +31,7 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_2_1430;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_0_1430;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K_2_1430;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1400_K_1_1400;
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1410_K_1_1410;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1400K;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K1400ToK892Pi;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1270_K;
@@ -96,6 +96,7 @@ struct param2K2PiGam
     pair<double, double> BwK_2_1430;
     pair<double, double> BwK_0_1430;
     pair<double, double> BwK_1_1400;
+    pair<double, double> BwK_1_1410;
     pair<double, double> BwK_1_1270;
     pair<double, double> Bwf1500;
     pair<double, double> Bwf1710;
@@ -129,7 +130,7 @@ struct param2K2PiGam
 };
 
 struct paramEnum2K2PiGam{
-  enum {ChiGam=0, K892K892, KappaKappa, K_0_1430K_0_1430, K_2_1430K_2_1430, K_0_1430K_2_1430, K_1_1400K_1_1400,
+  enum {ChiGam=0, K892K892, KappaKappa, K_0_1430K_0_1430, K_2_1430K_2_1430, K_0_1430K_2_1430, K_1_1410K_1_1410,
 	ChiToK_1_1400K, K_1_1400ToK892Pi, ChiToK_1_1270_K, K_1_1270ToK892Pi, K_1_1270ToK_0_1430Pi, 
 	ChiToK_1_1650K, K_1_1650ToK892Pi, K_1_1650ToK_0_1430Pi, K_0_1430K_0_1950, KappaK_0_1950, ChiToKappaK_0_1430,
 	f980_pif1710_k, f980_kf1710_pi, f980f980, f980f2200, ChiTof980f_2_2300, ChiTof_2_2300sigma, 
@@ -141,7 +142,7 @@ struct paramEnum2K2PiGam{
 	ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670ToK892K, ChiToPi1800Pi0Tof980, ChiToPi1800Pi0Tof1370, ChiToPi1800Pi0ToKappa, 
 	ChiToPi_2_2285Pi,Pi_2_2285Tof1700Pi, ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, nAmps,         
 
-	K892=nAmps,Kappa, K_0_1430, K_1_1400, K_2_1430, K_1_1270,K_1_1650, 
+	K892=nAmps,Kappa, K_0_1430, K_1_1400,  K_1_1410, K_2_1430, K_1_1270,K_1_1650, 
 	f1500, f1710, f2200, sigma, f1360, f1370, K_0_2400, K_0_1950, K_1_1680, K_1_2300, K_0_1460, K_0_1830, 
 	f_2_1270, f_2_1430, f_2_1525, f_2_1950, f_2_2300, 
 	Pi_2_1670, Pi1800, Pi_2_2285, K_2_1770, nMasses,
@@ -153,7 +154,7 @@ struct paramEnum2K2PiGam{
   static const std::string& name(unsigned int t)
   {
     static std::string fitName[paramEnum2K2PiGam::nPhaseSpace]
-      ={"ChiGam", "K892K892", "KappaKappa", "K_0_1430K_0_1430", "K_2_1430K_2_1430", "K_0_1430K_2_1430", "K_1_1400K_1_1400",
+      ={"ChiGam", "K892K892", "KappaKappa", "K_0_1430K_0_1430", "K_2_1430K_2_1430", "K_0_1430K_2_1430", "K_1_1410K_1_1410",
 	"ChiToK_1_1400K", "K_1_1400ToK892Pi", "ChiToK_1_1270_K", "K_1_1270ToK892Pi", "K_1_1270ToK_0_1430Pi", 
 	"ChiToK_1_1650K", "K_1_1650ToK892Pi", "K_1_1650ToK_0_1430Pi","K_0_1430K_0_1950", "KappaK_0_1950","ChiToKappaK_0_1430",
 	"f980_pif1710_k", "f980_kf1710_pi", "f980f980", "f980f2200", "ChiTof980f_2_2300","ChiTof_2_2300sigma",
@@ -165,7 +166,7 @@ struct paramEnum2K2PiGam{
 	"ChiToPi_2_1670Pi","Pi_2_1670Tof_2_1270Pi","Pi_2_1670ToK892K","ChiToPi1800Pi0Tof980","ChiToPi1800Pi0Tof1370","ChiToPi1800Pi0ToKappa",
 	"ChiToPi_2_2285Pi","Pi_2_2285Tof1700Pi","ChiToK_2_1770K","K_2_1770ToK_2_1430Pi",
 
-	"K892", "Kappa", "K_0_1430", "K_1_1400", "K_2_1430", "K_1_1270", "K_1_1650", 
+	"K892", "Kappa", "K_0_1430", "K_1_1400", "K_1_1410", "K_2_1430", "K_1_1270", "K_1_1650", 
         "f1500", "f1710", "f2200", "sigma", "f1360", "f1370", "K_0_2400", "K_0_1950", "K_1_1680", "K_1_2300", "K_0_1460", "K_0_1830",
 	"f_2_1270", "f_2_1430", "f_2_1525","f_2_1950","f_2_2300",
 	"Pi_2_1670","Pi1800","Pi_2_2285","K_2_1770",

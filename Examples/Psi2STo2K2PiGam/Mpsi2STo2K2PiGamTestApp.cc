@@ -147,7 +147,7 @@ int main(int __argc,char *__argv[]){
   hypMap["K0_1430_K0_1430Hyp"]=true;
   hypMap["K2_1430_K2_1430Hyp"]=true;
   hypMap["K0_1430_K2_1430Hyp"]=true;
-  hypMap["K1_1400_K1_1400Hyp"]=true;
+  hypMap["K1_1410_K1_1410Hyp"]=true;
   hypMap["doHyp2"]=true;
   hypMap["sigmaf980Hyp3"]=true;
   hypMap["sigmaf1710Hyp3"]=true;
