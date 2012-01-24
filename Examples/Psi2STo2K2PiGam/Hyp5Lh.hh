@@ -52,6 +52,8 @@ public:
 protected:
 
   bool _doHyp5;
+  bool _K_0_2400KHyp5;
+  bool _K_1_2400KHyp5;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

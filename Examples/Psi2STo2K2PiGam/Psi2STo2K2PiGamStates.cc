@@ -82,6 +82,9 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
 
  //LS combinations for the decay K2- pi0
   fillJPCLS(_K2mJPC, _pi0JPC, _Kst2JPC,_K2mToK2pPiJPCLS);
+
+ //LS combinations for the K1+ decay to f0 K
+  fillJPCLS(_K1400JPC, _f0JPC, _kJPC, _K1pTof0KJPCLS);
 }
 
 Psi2STo2K2PiGamStates::~Psi2STo2K2PiGamStates()
@@ -241,6 +244,11 @@ void Psi2STo2K2PiGamStates::print(std::ostream& os) const
     os << "\n" << std::endl;
   }
 
+  os << "\n *** K1+:  LS combinations for the decay K1+ to f0 K *** "<< std::endl;
+  for ( itJPCLS=_K1pTof0KJPCLS.begin(); itJPCLS!=_K1pTof0KJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
 
   os << "\n *** K+- *** "<< std::endl;
   _kJPC->print(os);

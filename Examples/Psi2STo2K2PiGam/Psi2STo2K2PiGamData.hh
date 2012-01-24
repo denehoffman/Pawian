@@ -112,6 +112,10 @@ namespace Psi2STo2K2PiGamData {
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKKviaKKpi0;
     map<Spin,map<Spin,map<Spin,complex<double> > > > Dff2ToKKviaKKpi1;
 
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfK1pTof0Kp;
+    map<Spin,map<Spin,map<Spin,complex<double> > > > DfK1mTof0Km;
+
+
     bool operator<(const Psi2STo2K2PiGamEvtData& compare) const{
       bool result=false;
       if ( evtNo < compare.evtNo) result=true;
