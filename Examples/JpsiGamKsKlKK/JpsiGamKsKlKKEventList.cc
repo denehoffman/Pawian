@@ -56,6 +56,8 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
      Vector4<float>  V4_Ks_Lab( ks   );
      Vector4<float>  V4_KpKm_Lab( kp+km   );
      Vector4<float>  V4_Kp_Lab( kp   );
+     Vector4<float>  V4_Km_Lab( km   );
+     Vector4<float>  V4_Kl_Lab( kl   );
           
      Vector4<float>  V4_KsKlKpKm_HeliPsi( ks+kl+kp+km   );
      V4_KsKlKpKm_HeliPsi.Boost(V4_psi);
@@ -82,6 +84,26 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
      Vector4<float>  V4_Ks_HeliKsKl=helicityVec(V4_KsKlKpKm_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
      Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_KsKlKpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
 
+      Vector4<float>  V4_Kp_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Kp_Lab);
+      Vector4<float>  V4_Km_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Km_Lab);
+
+      Vector4<float> V4_normKpKmDecHeliKsKlKpKm(0.5*(V4_Kp_HeliKsKlKpKm.T()+V4_Km_HeliKsKlKpKm.T()),
+					     V4_Km_HeliKsKlKpKm.Y()*V4_Kp_HeliKsKlKpKm.Z()-V4_Km_HeliKsKlKpKm.Z()*V4_Kp_HeliKsKlKpKm.Y(),
+					     V4_Km_HeliKsKlKpKm.Z()*V4_Kp_HeliKsKlKpKm.X()-V4_Km_HeliKsKlKpKm.X()*V4_Kp_HeliKsKlKpKm.Z(),        
+   					     V4_Km_HeliKsKlKpKm.X()*V4_Kp_HeliKsKlKpKm.Y()-V4_Km_HeliKsKlKpKm.Y()*V4_Kp_HeliKsKlKpKm.X());
+
+
+      Vector4<float>  V4_Kl_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Kl_Lab);
+      Vector4<float>  V4_Ks_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Ks_Lab);
+
+      Vector4<float> V4_normKsKlDecHeliKsKlKpKm(0.5*(V4_Kl_HeliKsKlKpKm.T()+V4_Ks_HeliKsKlKpKm.T()),
+					     V4_Ks_HeliKsKlKpKm.Y()*V4_Kl_HeliKsKlKpKm.Z()-V4_Ks_HeliKsKlKpKm.Z()*V4_Kl_HeliKsKlKpKm.Y(),
+					     V4_Ks_HeliKsKlKpKm.Z()*V4_Kl_HeliKsKlKpKm.X()-V4_Ks_HeliKsKlKpKm.X()*V4_Kl_HeliKsKlKpKm.Z(),        
+   					     V4_Ks_HeliKsKlKpKm.X()*V4_Kl_HeliKsKlKpKm.Y()-V4_Ks_HeliKsKlKpKm.Y()*V4_Kl_HeliKsKlKpKm.X());
+
+
+
+
 
      EvtData* evtData=new EvtData();
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Psi] = V4_psi;
@@ -99,8 +121,9 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm] = V4_KpKm_HeliKsKlKpKm;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Ks_HeliKsKl] = V4_Ks_HeliKsKl;
      evtData->FourVecs[enumJpsiGamKsKlKKData::V4_Kp_HeliKpKm] = V4_Kp_HeliKpKm;
-     
 
+     evtData->FourVecs[enumJpsiGamKsKlKKData::V4_normKpKmDecHeliKsKlKpKm] = V4_normKpKmDecHeliKsKlKpKm;     
+     evtData->FourVecs[enumJpsiGamKsKlKKData::V4_normKsKlDecHeliKsKlKpKm] = V4_normKsKlDecHeliKsKlKpKm;  
 
      // calculate and store WignerD functions for Psi -> X gamma (JPC =0-=, 0++, 2++)
      Spin jPsi=1;
