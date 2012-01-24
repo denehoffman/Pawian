@@ -26,8 +26,16 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> th
   _KsKlMassDataHist(0),
   _KsKlMassMcHist(0),
   _KsKlMassFittedHist(0),
-  
-  _dataTuple(0),
+  _costPhi_KpKmDataHist(0), 
+  _costPhi_KpKmMcHist(0), 
+  _costPhi_KpKmFittedHist(0),
+  _phiPhi_KpKmDataHist(0), 
+  _phiPhi_KpKmMcHist(0), 
+  _phiPhi_KpKmFittedHist(0), 
+  _chiDataHist(0), 
+  _chiMcHist(0), 
+  _chiFittedHist(0),
+   _dataTuple(0),
   _mcTuple(0)
 {
   if(0==theEvtList){
@@ -47,8 +55,9 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> th
       plotKsKl( _KsKlMassDataHist, (*it), 1. );
       plotKpKm( _KpKmMassDataHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliDataHist, _phiKs_KsKlHeliDataHist,(*it), 1. );
-      plotCostPhiKs( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
-      plotCostGam( _costGamCmDataHist,(*it), 1. );      
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
+      plotCostGam( _costGamCmDataHist,(*it), 1. );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);        
       fillTuple(_dataTuple, (*it), 1.);
       
       ++it;
@@ -66,7 +75,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> th
       plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist,(*it), 1. );
       plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist, (*it), 1. );
       plotCostGam( _costGamCmMcHist, (*it), 1. );
-
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);  
      fillTuple(_mcTuple, (*it), 1.);
 
       ++it;
@@ -87,7 +96,15 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
   _KsKlMassDataHist(0),
   _KsKlMassMcHist(0),
   _KsKlMassFittedHist(0),
-  
+  _costPhi_KpKmDataHist(0), 
+  _costPhi_KpKmMcHist(0), 
+  _costPhi_KpKmFittedHist(0),
+  _phiPhi_KpKmDataHist(0), 
+  _phiPhi_KpKmMcHist(0), 
+  _phiPhi_KpKmFittedHist(0), 
+  _chiDataHist(0), 
+  _chiMcHist(0), 
+  _chiFittedHist(0),  
   _dataTuple(0),
   _mcTuple(0)
 {
@@ -109,9 +126,10 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
       plotKsKl( _KsKlMassDataHist, (*it), 1. );
       plotKpKm( _KpKmMassDataHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. ); 
-      plotCostGam( _costGamCmDataHist, (*it), 1. ); 
-     
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. );
+      plotCostGam( _costGamCmDataHist, (*it), 1. );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);  
+       plotChi(_chiDataHist, (*it), 1. );      
       fillTuple(_dataTuple, (*it), 1.);
       
       ++it;
@@ -126,8 +144,10 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
       plotKsKl( _KsKlMassMcHist, (*it), 1. );
       plotKpKm( _KpKmMassMcHist, (*it), 1. );
       plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist, (*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. );
+      plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. ); 
       plotCostGam( _costGamCmMcHist,(*it), 1. );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);  
+      plotChi(_chiMcHist, (*it), 1. );   
       
       double evtWeight= theJpsiGamKsKlKKLh->calcEvtIntensity((*it), fitParam);
       plotDalitz(_dalitzFittedHist, (*it),evtWeight );
@@ -137,7 +157,9 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
       plotCostPhiKs( _costKs_KsKlHeliFittedHist, _phiKs_KsKlHeliFittedHist,(*it), evtWeight );
       plotCostPhiKp( _costKp_KpKmHeliFittedHist, _phiKp_KpKmHeliFittedHist,(*it), evtWeight );
       plotCostGam( _costGamCmFittedHist,(*it), evtWeight );
-      
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmFittedHist, _phiPhi_KpKmFittedHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], evtWeight); 
+      plotChi(_chiFittedHist, (*it), evtWeight  );
+        
       fillTuple(_mcTuple, (*it), evtWeight);
       ++it;
     }
@@ -161,7 +183,10 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
   _phiKs_KsKlHeliFittedHist->Scale(scaleFactor);
   _costKp_KpKmHeliFittedHist->Scale(scaleFactor);
   _phiKp_KpKmHeliFittedHist->Scale(scaleFactor);
-  _costGamCmFittedHist->Scale(scaleFactor);  
+  _costGamCmFittedHist->Scale(scaleFactor);
+  _costPhi_KpKmFittedHist->Scale(scaleFactor);
+  _phiPhi_KpKmFittedHist->Scale(scaleFactor);
+  _chiFittedHist->Scale(scaleFactor);  
 }
 
 JpsiGamKsKlKKHist::~JpsiGamKsKlKKHist()
@@ -207,22 +232,34 @@ void JpsiGamKsKlKKHist::initRootStuff()
   _costKs_KsKlHeliDataHist= new TH1F("_costKs_KsKlHeliDataHist", "cos(#Theta_{Ks}) KsKlHeli data", 100, -1., 1.); 
   _costKs_KsKlHeliMcHist= new TH1F("_costKs_KsKlHeliMcHist", "cos(#Theta_{Ks}) KsKlHeli Mc", 100, -1., 1.); 
   _costKs_KsKlHeliFittedHist= new TH1F("_costKs_KsKlHeliFittedHist", "cos(#Theta_{Ks}) KsKlHeli Fit", 100, -1, 1);
-  _phiKs_KsKlHeliDataHist= new TH1F("_phiKs_KsKlHeliDataHist", "#Phi_{Ks} KsKlHeli data", 100, -1., 1.); 
-  _phiKs_KsKlHeliMcHist= new TH1F("_phiKs_KsKlHeliMcHist", "#Phi_{Ks} KsKlHeli Mc", 100, -1., 1.); 
-  _phiKs_KsKlHeliFittedHist= new TH1F("_phiKs_KsKlHeliFittedHist", "#Phi_{Ks} KsKlHeli Fit", 100, -1, 1);
+  _phiKs_KsKlHeliDataHist= new TH1F("_phiKs_KsKlHeliDataHist", "#Phi_{Ks} KsKlHeli data", 100, -TMath::Pi(), TMath::Pi()); 
+  _phiKs_KsKlHeliMcHist= new TH1F("_phiKs_KsKlHeliMcHist", "#Phi_{Ks} KsKlHeli Mc", 100, -TMath::Pi(), TMath::Pi()); 
+  _phiKs_KsKlHeliFittedHist= new TH1F("_phiKs_KsKlHeliFittedHist", "#Phi_{Ks} KsKlHeli Fit", 100, -TMath::Pi(), TMath::Pi());
 
   _costKp_KpKmHeliDataHist= new TH1F("_costKp_KpKmHeliDataHist", "cos(#Theta_{K+}) KsKlHeli data", 100, -1., 1.); 
   _costKp_KpKmHeliMcHist= new TH1F("_costKp_KpKmHeliMcHist", "cos(#Theta_{K+}) KsKlHeli Mc", 100, -1., 1.); 
   _costKp_KpKmHeliFittedHist= new TH1F("_costKp_KpKmHeliFittedHist", "cos(#Theta_{K+}) KsKlHeli Fit", 100, -1, 1);
-  _phiKp_KpKmHeliDataHist= new TH1F("_phiKp_KpKmHeliDataHist", "#Phi_{K+} KsKlHeli data", 100, -1., 1.); 
-  _phiKp_KpKmHeliMcHist= new TH1F("_phiKp_KpKmHeliMcHist", "#Phi_{K+} KsKlHeli Mc", 100, -1., 1.); 
-  _phiKp_KpKmHeliFittedHist= new TH1F("_phiKp_KpKmHeliFittedHist", "#Phi_{K+} KsKlHeli Fit", 100, -1, 1);
+  _phiKp_KpKmHeliDataHist= new TH1F("_phiKp_KpKmHeliDataHist", "#Phi_{K+} KsKlHeli data", 100, -TMath::Pi(), TMath::Pi()); 
+  _phiKp_KpKmHeliMcHist= new TH1F("_phiKp_KpKmHeliMcHist", "#Phi_{K+} KsKlHeli Mc", 100, -TMath::Pi(), TMath::Pi()); 
+  _phiKp_KpKmHeliFittedHist= new TH1F("_phiKp_KpKmHeliFittedHist", "#Phi_{K+} KsKlHeli Fit", 100, -TMath::Pi(), TMath::Pi());
 
 
   _costGamCmDataHist= new TH1F("_costGamCmDataHist", "cos(#Theta_{#gamma}) CM data", 100, -1., 1.); 
   _costGamCmMcHist= new TH1F("_costGamCmMcHist", "cos(#Theta_{#gamma}) CM Mc", 100, -1., 1.); 
   _costGamCmFittedHist= new TH1F("_costGamCmFittedHist", "cos(#Theta_{#gamma}) CM Fit", 100, -1, 1);
- 
+
+  _costPhi_KpKmDataHist= new TH1F("_costPhi_KpKmDataHist", "cos(#Theta_{#phi}) K+ K- data", 100, -1., 1.);  
+  _costPhi_KpKmMcHist= new TH1F("_costPhi_KpKmMcHist", "cos(#Theta_{#phi}) K+ K- Mc", 100, -1., 1.);   
+  _costPhi_KpKmFittedHist= new TH1F("_costPhi_KpKmFittedHist", "cos(#Theta_{#phi}) K+ K- Fit", 100, -1., 1.);   
+
+  _phiPhi_KpKmDataHist= new TH1F("_phiPhi_KpKmDataHist", "cos(#Phi_{#phi}) K+ K- data", 100, -TMath::Pi(), TMath::Pi());  
+  _phiPhi_KpKmMcHist= new TH1F("_phiPhi_KpKmMcHist", "cos(#Phi_{#phi}) K+ K- Mc", 100, -TMath::Pi(), TMath::Pi());  
+  _phiPhi_KpKmFittedHist= new TH1F("_phiPhi_KpKmFittedHist", "cos(#Phi_{#phi}) K+ K- Fit", 100, -TMath::Pi(), TMath::Pi());
+
+  _chiDataHist= new TH1F("_chiDataHist", "#chi data", 100, 0., 2.*TMath::Pi());
+  _chiMcHist= new TH1F("_chiMcHist", "#chi Mc", 100, 0., 2.*TMath::Pi()); 
+  _chiFittedHist= new TH1F("_chiFittedHist", "#chi Fit", 100, 0., 2.*TMath::Pi());  
+
    std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:decPlaneChi:testHeli:weight";
    
   
@@ -272,6 +309,22 @@ void JpsiGamKsKlKKHist::plotCostGam(TH1F* theCostHisto, EvtData* theData, double
   theCostHisto->Fill( v4.CosTheta(), weight );
 }
 
+void JpsiGamKsKlKKHist::plotCostPhi_PhiPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight){
+  theCostHisto->Fill( the4Vec.CosTheta(), weight);
+  thePhiHisto->Fill( the4Vec.Phi(), weight);
+}
+
+void JpsiGamKsKlKKHist::plotChi(TH1F* theChiHisto, EvtData* theData, double weight){
+  Vector4<double>& V4_KsKlKpKm_HeliPsi = theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi]  ;
+  Vector4<double>& V4_Ks_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Ks_HeliPsi] ;
+  Vector4<double>& V4_Kl_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Kl_HeliPsi] ;
+  Vector4<double>& V4_Kp_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Kp_HeliPsi] ;
+  Vector4<double>& V4_Km_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Km_HeliPsi] ;
+
+  double thePhiPhiDecayPlaneAngle = decayAngleChi( V4_KsKlKpKm_HeliPsi, V4_Kp_HeliPsi, V4_Km_HeliPsi, V4_Ks_HeliPsi, V4_Kl_HeliPsi   );
+
+  theChiHisto->Fill(thePhiPhiDecayPlaneAngle,weight);   
+}
 
 void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, EvtData* theData, double weight)
 {
@@ -350,7 +403,7 @@ double JpsiGamKsKlKKHist::decayAngleChi(const Vector4<double>& v4_p,const Vector
  
  double chi=atan2(y,x);
  
- if (chi<0.0) chi+=2*TMath::Pi();
+ if (chi<0.0) chi+=2.*TMath::Pi();
  
  return chi;
  

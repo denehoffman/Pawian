@@ -98,11 +98,13 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
       width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020];
       dynamicPart = BreitWigner( fv2Phi, mass, width);
     }
-    
+
     JmpGmp+=f0GammaAmp(1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
     JmpGmm+=f0GammaAmp(1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
     JmmGmp+=f0GammaAmp(-1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
     JmmGmm+=f0GammaAmp(-1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
+
+
   } 
   
   if (_f22300Hyp){
@@ -116,9 +118,9 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f22300];
     
     JmpGmp+=f2GammaAmp(1, 1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
-    JmpGmp+=f2GammaAmp(1, -1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
-    JmpGmp+=f2GammaAmp(-1, 1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
-    JmpGmp+=f2GammaAmp(-1, -1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
+    JmpGmm+=f2GammaAmp(1, -1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
+    JmmGmp+=f2GammaAmp(-1, 1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
+    JmmGmm+=f2GammaAmp(-1, -1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
   } 
   
 

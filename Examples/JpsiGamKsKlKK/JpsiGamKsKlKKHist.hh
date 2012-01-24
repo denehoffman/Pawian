@@ -82,6 +82,17 @@ private:
   TH1F*  _costGamCmMcHist; 
   TH1F*  _costGamCmFittedHist;
 
+  TH1F*  _costPhi_KpKmDataHist; 
+  TH1F*  _costPhi_KpKmMcHist; 
+  TH1F*  _costPhi_KpKmFittedHist; 
+
+  TH1F*  _phiPhi_KpKmDataHist; 
+  TH1F*  _phiPhi_KpKmMcHist; 
+  TH1F*  _phiPhi_KpKmFittedHist;
+
+  TH1F*  _chiDataHist; 
+  TH1F*  _chiMcHist; 
+  TH1F*  _chiFittedHist;
  
   TNtuple* _dataTuple;
   TNtuple* _mcTuple;
@@ -95,8 +106,10 @@ private:
   void plotKpKm(TH1F* theHisto, EvtData* theData, double weight);
   void plotCostPhiKs(TH1F* theCostHisto, TH1F* thePhiHisto, EvtData* theData, double weight);
   void plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtData* theData, double weight);
+  void plotCostPhi_PhiPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight);
   void plotCostGam(TH1F* theCostHisto, EvtData* theData, double weight);
 
+  void plotChi(TH1F* theChiHisto, EvtData* theData, double weight);
 
   void fillTuple( TNtuple* theTuple, EvtData* theData, double weight);
 
