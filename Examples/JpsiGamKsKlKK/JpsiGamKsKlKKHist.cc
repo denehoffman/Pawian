@@ -223,7 +223,7 @@ void JpsiGamKsKlKKHist::initRootStuff()
   _costGamCmMcHist= new TH1F("_costGamCmMcHist", "cos(#Theta_{#gamma}) CM Mc", 100, -1., 1.); 
   _costGamCmFittedHist= new TH1F("_costGamCmFittedHist", "cos(#Theta_{#gamma}) CM Fit", 100, -1, 1);
  
-   std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:decPlaneChi:weight";
+   std::string tupleVariables = "mKsKlKpKm:mKsKl:mKpKm:KsKlKpKmCostTheta:gamCosTheta:KsKlCosTheta:KpKmCosTheta:KsCosTheta:KpCosTheta:decPlaneChi:testHeli:weight";
    
   
    _dataTuple=new TNtuple("_dataTuple", "data ntuple", tupleVariables.data());
@@ -292,6 +292,7 @@ void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, EvtData* theData, double 
   Vector4<double>& V4_Km_HeliPsi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_Km_HeliPsi] ;
   
   double thePhiPhiDecayPlaneAngle = decayAngleChi( V4_KsKlKpKm_HeliPsi, V4_Kp_HeliPsi, V4_Km_HeliPsi, V4_Ks_HeliPsi, V4_Kl_HeliPsi   );
+  double testHeli = costDecHeli( V4_KsKlKpKm_HeliPsi+V4_gamma_HeliPsi, V4_Ks_HeliPsi+V4_Kl_HeliPsi+V4_Km_HeliPsi+V4_Kp_HeliPsi, V4_Ks_HeliPsi+V4_Kl_HeliPsi );
   
   theTuple->Fill( V4_KsKlKpKm_HeliPsi.M(),
 		  V4_KsKl_HeliPsi.M(),
@@ -303,6 +304,7 @@ void  JpsiGamKsKlKKHist::fillTuple( TNtuple* theTuple, EvtData* theData, double 
 		  V4_Ks_HeliKsKl.CosTheta(),
 		  V4_Kp_HeliKpKm.CosTheta(),
 		  thePhiPhiDecayPlaneAngle,		  
+		  testHeli,
 		  weight);
 }
 

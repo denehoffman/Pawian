@@ -13,6 +13,7 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList
   ,_f02020Hyp(true)
   ,_f02020FlatteHyp(true)
   ,_f22300Hyp(true)
+  ,_usePhasespace(true)
 {
   
   
@@ -29,6 +30,7 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsLh> theLhPtr, con
   ,_f02020Hyp(true)
   ,_f02020FlatteHyp(true)
   ,_f22300Hyp(true)
+  ,_usePhasespace(true)
 {
   
   initializeHypothesisMap( hypMap);
@@ -119,8 +121,13 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     JmpGmp+=f2GammaAmp(-1, -1, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
   } 
   
+
+  result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   
-  result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm); 
+  if(_usePhasespace){
+    result = result + theParamVal.otherParams[paramEnumJpsiGamKsKlKK::phaseSpace];
+  }
+  
   return result;  
 }
 
@@ -210,7 +217,7 @@ complex<double> JpsiGamKsKlKKProdLh::etaToPhiPhiTo4KAmp(EvtData* theData){
 
   complex<double> result(0.,0.);
 
-    for (Spin lambdaPhi=-1; lambdaPhi<1; lambdaPhi++){
+    for (Spin lambdaPhi=-1; lambdaPhi<=1; lambdaPhi++){
        result+=Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0)*3.*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KsKl][1][lambdaPhi][0])*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KpKm][1][lambdaPhi][0]); //Clebsch(1, lambdaPhi, 1, -lambdaPhi, 1, 0): jj-coupling mother->phi phi; 3=sqrt(2L+1)*sqrt(2L+1) Cls=1
 
 
@@ -232,7 +239,7 @@ complex<double> JpsiGamKsKlKKProdLh::f0ToPhiPhiTo4KAmp(EvtData* theData,
      complex<double> expiphi(cos(thePhi), sin(thePhi));
 
      complex<double> tmp2PhiDecAmp(0.,0.);
-     for (Spin lambdaPhi1=-1; lambdaPhi1<1; lambdaPhi1++){
+     for (Spin lambdaPhi1=-1; lambdaPhi1<=1; lambdaPhi1++){
        Spin lambdaPhi2=lambdaPhi1;
        tmp2PhiDecAmp+=Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, f0ToPhiPhiState->S, lambdaPhi1-lambdaPhi2)
 	 *3.*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KsKl][1][lambdaPhi1][0])*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KpKm][1][lambdaPhi2][0]); //3=sqrt(2L+1)*sqrt(2L+1) Cls=1    
@@ -428,6 +435,11 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
     fitErr.Widths[paramEnumJpsiGamKsKlKK::f22300]=0.4;
   }
   
+  if(_usePhasespace){
+    fitVal.otherParams[paramEnumJpsiGamKsKlKK::phaseSpace]=0.2;
+    fitErr.otherParams[paramEnumJpsiGamKsKlKK::phaseSpace]=0.4;
+  }
+
 }
   
 
@@ -469,6 +481,18 @@ JpsiGamKsKlKKProdLh::initializeHypothesisMap( const std::map<const std::string, 
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis f22300Hyp not set!!!" <<endmsg;
+  
+
+  iter= hypMap.find("usePhasespace");  
+  if (iter !=hypMap.end()){
+    _usePhasespace= iter->second;
+    Info<< "Using phasespace for bg parameterization " << iter->first << "\t" << _usePhasespace <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "using phasespace not set!!!" <<endmsg;
+  
+
+
   
   return true;
 }

@@ -89,7 +89,7 @@ protected:
   bool _f02020FlatteHyp;
   
   bool _f22300Hyp;
-  
+  bool _usePhasespace;
   
   std::map<const std::string, bool> _hypMap;
 private:
