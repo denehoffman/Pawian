@@ -46,6 +46,8 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1270_pi]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1430_k]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1430_pi]=theStates.ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1525_k]=theStates.ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1525_pi]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1950_k]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1950_pi]=theStates.ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::f1500_pif_2_1525_k]=theStates.ChiTof0f2States();
