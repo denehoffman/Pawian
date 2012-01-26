@@ -12,18 +12,24 @@ JpsiGamKsKlKKStates::JpsiGamKsKlKKStates() :
   _phiJPC(new jpcRes(1, -1, -1)),
   _etaJPC(new jpcRes(0, -1, 1)),
   _f0JPC(new jpcRes(0, 1, 1)),
-  _f2JPC(new jpcRes(2, 1, 1))
+  _f1JPC(new jpcRes(1, 1, 1)),
+  _f2JPC(new jpcRes(2, 1, 1)),
+  _eta2JPC(new jpcRes(2,-1,1) )
 {
   //LS combinations for Psi decays to X gamma
   fillJPCLS(_psiJPC, _etaJPC, _gammaJPC, _JPCLS_PsiToEtaGamma);
   fillJPCLS(_psiJPC, _f0JPC, _gammaJPC, _JPCLS_PsiToF0Gamma);
+  fillJPCLS(_psiJPC, _f1JPC, _gammaJPC, _JPCLS_PsiToF1Gamma);
   fillJPCLS(_psiJPC, _f2JPC, _gammaJPC, _JPCLS_PsiToF2Gamma);
+  fillJPCLS(_psiJPC, _eta2JPC, _gammaJPC, _JPCLS_PsiToEta2Gamma);
   
   //X decays to phi phi
   fillJPCLS(_etaJPC, _phiJPC, _phiJPC, _JPCLS_EtaToPhiPhi);
   fillJPCLS(_f0JPC, _phiJPC, _phiJPC, _JPCLS_F0ToPhiPhi);
+  fillJPCLS(_f1JPC, _phiJPC, _phiJPC, _JPCLS_F1ToPhiPhi);
   fillJPCLS(_f2JPC, _phiJPC, _phiJPC, _JPCLS_F2ToPhiPhi);
-
+  fillJPCLS(_eta2JPC, _phiJPC, _phiJPC, _JPCLS_Eta2ToPhiPhi);
+  
   //phi to kk
   fillJPCLS(_phiJPC, _kJPC, _kJPC, _JPCLS_PhiToKK);
   
@@ -67,8 +73,14 @@ void JpsiGamKsKlKKStates::print(std::ostream& os) const
   os << "*** Psi -> f0 gamma:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_PsiToF0Gamma );
   
+  os << "*** Psi -> f1 gamma:  LS combinations for the decay *** "<< std::endl;
+  printDecayJPCLS(os, _JPCLS_PsiToF1Gamma );
+
   os << "*** Psi -> f2 gamma:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_PsiToF2Gamma );
+  
+  os << "*** Psi -> eta2 gamma:  LS combinations for the decay *** "<< std::endl;
+  printDecayJPCLS(os, _JPCLS_PsiToEta2Gamma );
   
   os << "*** eta -> phi phi:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_EtaToPhiPhi );
@@ -76,8 +88,14 @@ void JpsiGamKsKlKKStates::print(std::ostream& os) const
   os << "*** f0 -> phi phi:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_F0ToPhiPhi );
   
+  os << "*** f1 -> phi phi:  LS combinations for the decay *** "<< std::endl;
+  printDecayJPCLS(os, _JPCLS_F1ToPhiPhi );
+
   os << "*** f2 -> phi phi:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_F2ToPhiPhi );
+  
+  os << "*** eta2 -> phi phi:  LS combinations for the decay *** "<< std::endl;
+  printDecayJPCLS(os, _JPCLS_Eta2ToPhiPhi );
   
   os << "*** phi -> KK:   LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_PhiToKK );

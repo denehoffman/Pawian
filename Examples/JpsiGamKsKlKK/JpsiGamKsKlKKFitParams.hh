@@ -13,7 +13,7 @@
 
 #include "TROOT.h"
 
-//#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
+
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/FitParamsBase.hh"
@@ -27,17 +27,17 @@ using namespace ROOT::Minuit2;
 
 
 struct paramEnumJpsiGamKsKlKK{
-  enum { PsiToEtacGamma=0, PsiToEta2225Gamma, PsiToF02020Gamma, PsiToF22010Gamma, PsiToF22300Gamma,  PsiToF22340Gamma, 
-	 F02020ToPhiPhi, F22300ToPhiPhi, nAmps,
-	 etac=nAmps, eta2225, f02020, f22010, f22300 ,f22340, nMasses, f02020gKK=nMasses, f02020gPhiPhi, ngFactors,
+  enum { PsiToEtacGamma=0, PsiToEta2225Gamma, PsiToF02020Gamma, PsiToF22010Gamma, PsiToF22300Gamma,  PsiToF22340Gamma, PsiToEta21870Gamma, PsiToF1Gamma, 
+	 F02020ToPhiPhi, F22300ToPhiPhi, Eta21870ToPhiPhi, F1ToPhiPhi, nAmps,
+	 etac=nAmps, eta2225, f02020, f22010, f22300 ,f22340, eta21870, f1, nMasses, f02020gKK=nMasses, f02020gPhiPhi, ngFactors,
         phaseSpace=ngFactors, nOthers };
   
   static const std::string& name(unsigned int t)
   {
     static std::string fitName[paramEnumJpsiGamKsKlKK::nOthers]
-      ={"PsiToEtacGam", "PsiToEta2225Gamma", "PsiToF02020Gamma", "PsiToF22010Gamma", "PsiToF22300Gamma", "PsiToF2340Gamma",
-	"F02020ToPhiPhi", "F22300ToPhiPhi",          
-	"etac", "eta2250", "f02020", "f22010", "f22300", "f22340", "f02020gKK","f02020gPhiPhi", "phaseSpace"  };
+      ={"PsiToEtacGam", "PsiToEta2225Gamma", "PsiToF02020Gamma", "PsiToF22010Gamma", "PsiToF22300Gamma", "PsiToF2340Gamma", "PsiToEta21870Gamma", "PsiToF1Gamma",
+	"F02020ToPhiPhi", "F22300ToPhiPhi", "Eta21870ToPhiPhi", "F1ToPhiPhi",         
+	"etac", "eta2250", "f02020", "f22010", "f22300", "f22340", "eta21870", "f1", "f02020gKK","f02020gPhiPhi", "phaseSpace"  };
     if (t<0 || t>=paramEnumJpsiGamKsKlKK::nOthers) assert(0);
     return fitName[t];
   } 

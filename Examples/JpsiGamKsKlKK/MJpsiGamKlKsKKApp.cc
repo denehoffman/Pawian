@@ -148,6 +148,8 @@ int main(int __argc,char *__argv[]){
   hypMap["f02020Hyp"]=true;
   hypMap["f02020FlatteHyp"]=true;
   hypMap["f22300Hyp"]=true;
+  hypMap["eta21870Hyp"]=true;
+  hypMap["f1Hyp"]=true;
   hypMap["usePhasespace"]=true;
   
   const std::vector<std::string> disabledHyps=theAppParams.disabledHyps();
