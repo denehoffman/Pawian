@@ -504,8 +504,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1ToK1piAmp(Psi2STo2K2PiGamData::Psi2
       complex<double> ampKm1ToKm1dPi1(0.,0.);
 
       for (Spin lamKdec=-1; lamKdec<=1; ++lamKdec){
-	double tmpVal=sqrt(3.)*Clebsch(theDecState->L, 0., theDecState->S, lamKdec, theDecState->J, lamKdec)*Clebsch(1,lamKdec, 0, 0, theDecState->S, lamKdec)
-*Clebsch(theDecState->L, 0., theDecState->S, lamKdec, theDecState->J, lamKdec);	
+	double tmpVal=sqrt(3.)*Clebsch(theDecState->L, 0., theDecState->S, lamKdec, theDecState->J, lamKdec)*Clebsch(1,lamKdec, 0, 0, theDecState->S, lamKdec);	
 	ampKp1ToKp1dPi0+=tmpVal*conj(theData->DfK1400pToKstpPi0[1][0][lamKdec])*conj(theData->DfKst1pToKpPi1ViaKpPiPi[1][lamKdec][0]);
 	ampKp1ToKp1dPi1+=tmpVal*conj(theData->DfK1400pToKstpPi1[1][0][lamKdec])*conj(theData->DfKst1pToKpPi0ViaKpPiPi[1][lamKdec][0]);
 	ampKm1ToKm1dPi0+=tmpVal*conj(theData->DfK1400mToKstmPi0[1][0][lamKdec])*conj(theData->DfKst1mToKmPi1ViaKmPiPi[1][lamKdec][0]);
@@ -1395,7 +1394,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1Tof980_piKAmp(Psi2STo2K2PiGamData::
       double thePhiDec=itDec->second.second;
       complex<double> expiphiDec(cos(thePhiDec), sin(thePhiDec));
 
-      complex<double> ampKpPiPi=conj(theData->DfK1pTof0Kp[1][0][0])*BreitWigner(KpPiPi, K1Mass, K1Width)*Flatte(PiPi, decPair1, decPair2, f980_Mass, f980_gPiPi, f980_gKK);
+      complex<double> ampKpPiPi=conj(theData->DfK1pTof0Kp[1][0][0])*BreitWigner(KpPiPi, K1Mass, K1Width);
       complex<double> ampKmPiPi=conj(theData->DfK1mTof0Km[1][0][0])*BreitWigner(KmPiPi, K1Mass, K1Width);
 
 
