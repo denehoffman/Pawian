@@ -998,6 +998,37 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK_0_KToKf980KAmp(Psi2STo2K2PiGamData:
 }
 
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiToK_0_KToKf0KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_0_KToKf0K, double f0_Mass, double f0_Width, double K_0_Mass, double K_0_Width){
+
+  Vector4<double> PiPi(theData->PiPi_HeliChic0_4V.E(), theData->PiPi_HeliChic0_4V.Px(), 
+		       theData->PiPi_HeliChic0_4V.Py(), theData->PiPi_HeliChic0_4V.Pz());
+
+
+  Vector4<double> KpPiPi(theData->KpPiPi_HeliChic0_4V.E(), theData->KpPiPi_HeliChic0_4V.Px(), 
+			 theData->KpPiPi_HeliChic0_4V.Py(), theData->KpPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> KmPiPi(theData->KmPiPi_HeliChic0_4V.E(), theData->KmPiPi_HeliChic0_4V.Px(), 
+			 theData->KmPiPi_HeliChic0_4V.Py(), theData->KmPiPi_HeliChic0_4V.Pz());
+
+  complex<double> result(0.,0.);
+
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=ChiToK_0_KToKf0K.begin(); it!=ChiToK_0_KToKf0K.end(); ++it){
+
+    boost::shared_ptr<const JPCLS> theState=it->first;
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+
+    result+=theMag*expiphi*BreitWigner(PiPi, f0_Mass, f0_Width)*(BreitWigner(KpPiPi, K_0_Mass, K_0_Width)+BreitWigner(KmPiPi, K_0_Mass, K_0_Width));
+  }
+
+  return result;
+
+}
+
+
 complex<double> AbsPsi2STo2K2PiGamLh::chiToPi2Pi0Tof2PiAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToPi_2_Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& Pi_2_Dec, double Pi_2_Mass, double Pi_2_Width, double f_2_Mass, double f_2_Width){
 
   Vector4<double> KKPi0(theData->KKPi0_HeliChic0_4V.E(), theData->KKPi0_HeliChic0_4V.Px(), 
@@ -1038,7 +1069,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToPi2Pi0Tof2PiAmp(Psi2STo2K2PiGamData::
       currentResultDec+=tmpDec*theMagDec*expiphiDec;
     }
 
-    result+=theMagProd*expiphiProd*currentResultDec;
+    result+=theMagProd*expiphiProd*currentResultDec*sqrt(2.*theState->L+1)*Clebsch(theState->L, 0., theState->S, 0, theState->J, 0);
   }
 
   result*=BreitWignerBlattW(KK, 0.493677, 0.493677, f_2_Mass, f_2_Width, 2);
@@ -1100,7 +1131,7 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi2Pi0ToKstarKAmp(Psi2STo2K2PiGamDat
 	    );
 
       }
-      currentResultDec+=tmpDec*theMagDec*expiphiDec;
+      currentResultDec+=tmpDec*theMagDec*expiphiDec*sqrt(2.*theState->L+1)*Clebsch(theState->L, 0., theState->S, 0, theState->J, 0);
     }
 
     result+=theMagProd*expiphiProd*currentResultDec;
