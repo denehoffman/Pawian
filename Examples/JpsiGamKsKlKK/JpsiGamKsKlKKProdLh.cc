@@ -31,7 +31,7 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsLh> theLhPtr, con
   ,_eta2225Hyp(true)
   ,_f02020Hyp(true)
   ,_f02020FlatteHyp(true)
-  ,_f22300Hyp(true)
+  ,_f22300Hyp(true) 
   ,_eta21870Hyp(true)
   ,_f1Hyp(true)
   ,_usePhasespace(true)
@@ -84,7 +84,7 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiMag=theParamVal.Mags[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > F02020ToPhiPhiPhi=theParamVal.Phis[paramEnumJpsiGamKsKlKK::F02020ToPhiPhi];
     
-    
+     
     complex<double> dynamicPart(0.,0.);
     Vector4<double> fv2Phi = theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
     mass = theParamVal.Masses[paramEnumJpsiGamKsKlKK::f02020];
@@ -102,11 +102,13 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
       width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f02020];
       dynamicPart = BreitWigner( fv2Phi, mass, width);
     }
-
-    JmpGmp+=f0GammaAmp(1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
-    JmpGmm+=f0GammaAmp(1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
-    JmmGmp+=f0GammaAmp(-1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
-    JmmGmm+=f0GammaAmp(-1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi ) * dynamicPart;
+    
+    bool useCommonProductionPhase=true;
+    
+    JmpGmp+=f0GammaAmp(1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,useCommonProductionPhase ) * dynamicPart;
+    JmpGmm+=f0GammaAmp(1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,useCommonProductionPhase ) * dynamicPart;
+    JmmGmp+=f0GammaAmp(-1, 1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,useCommonProductionPhase ) * dynamicPart;
+    JmmGmm+=f0GammaAmp(-1, -1, theData,  PsiTof02020GamMag, PsiTof02020GamPhi,F02020ToPhiPhiMag,F02020ToPhiPhiPhi,useCommonProductionPhase ) * dynamicPart;
 
 
   } 
@@ -122,10 +124,11 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f22300];
     
     Spin f2Spin=2;
-    JmpGmp+=f2GammaAmp(1, 1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
-    JmpGmm+=f2GammaAmp(1, -1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
-    JmmGmp+=f2GammaAmp(-1, 1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
-    JmmGmm+=f2GammaAmp(-1, -1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width );
+    bool useCommonProductionPhase=true;
+    JmpGmp+=f2GammaAmp(1, 1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+    JmpGmm+=f2GammaAmp(1, -1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+    JmmGmp+=f2GammaAmp(-1, 1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+    JmmGmm+=f2GammaAmp(-1, -1, f2Spin, theData,  PsiTof2GamMag, PsiTof2GamPhi,F2ToPhiPhiMag,F2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
   } 
   
 
@@ -140,10 +143,12 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
     width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::eta21870];
     
     Spin eta2Spin=2;
-    JmpGmp+=f2GammaAmp(1, 1, eta2Spin, theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width );
-    JmpGmm+=f2GammaAmp(1, -1, eta2Spin,theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width );
-    JmmGmp+=f2GammaAmp(-1, 1, eta2Spin,theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width );
-    JmmGmm+=f2GammaAmp(-1, -1, eta2Spin, theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width );
+    bool useCommonProductionPhase=true;
+    
+    JmpGmp+=f2GammaAmp(1, 1, eta2Spin, theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+    JmpGmm+=f2GammaAmp(1, -1, eta2Spin,theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+    JmmGmp+=f2GammaAmp(-1, 1, eta2Spin,theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+    JmmGmm+=f2GammaAmp(-1, -1, eta2Spin, theData,  PsiToEta2GamMag, PsiToEta2GamPhi,Eta2ToPhiPhiMag,Eta2ToPhiPhiPhi,mass,width , useCommonProductionPhase);
     }     
     
     
@@ -159,10 +164,11 @@ double JpsiGamKsKlKKProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePar
       width = theParamVal.Widths[paramEnumJpsiGamKsKlKK::f1];
       
       Spin f1Spin=1;
-      JmpGmp+=f2GammaAmp(1, 1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width );
-      JmpGmm+=f2GammaAmp(1, -1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width );
-      JmmGmp+=f2GammaAmp(-1, 1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width );
-      JmmGmm+=f2GammaAmp(-1, -1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width );
+      bool useCommonProductionPhase=true;
+      JmpGmp+=f2GammaAmp(1, 1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+      JmpGmm+=f2GammaAmp(1, -1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+      JmmGmp+=f2GammaAmp(-1, 1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width, useCommonProductionPhase );
+      JmmGmm+=f2GammaAmp(-1, -1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width, useCommonProductionPhase );
     }
     
 
@@ -197,6 +203,7 @@ complex<double> JpsiGamKsKlKKProdLh::etaGammaAmp(Spin Minit, Spin Metac, Spin Mg
      boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
      double thePsiMag=itPsi->second;
      double thePsiPhi=PsiToEtaPhi[PsiState];
+     
      complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
      Spin lambda = Metac-Mgamma;
      if( fabs(lambda)>PsiState->J || fabs(lambda)>PsiState->S) continue;
@@ -224,17 +231,31 @@ complex<double> JpsiGamKsKlKKProdLh::f0GammaAmp(Spin Minit, Spin Mgamma, EvtData
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdMag, 
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdPhi,
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag,  
-						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi ){
+						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi,
+						bool useCommonProductionPhase){
   
    complex<double> result(0.,0.);
    Spin f0Spin=0;
    //Vector4<double> fv2Phi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
+   
+   double theCommonPhasePhi=999.;
+   bool setCommonPhase = false;
    
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itPsi;
    for ( itPsi=ampf0ProdMag.begin(); itPsi!=ampf0ProdMag.end(); ++itPsi){
      boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
      double thePsiMag=itPsi->second;
      double thePsiPhi=ampf0ProdPhi[PsiState];
+     
+     if(useCommonProductionPhase){
+       if(!setCommonPhase){
+	 theCommonPhasePhi=thePsiPhi;
+	 setCommonPhase=true;
+       }else{
+	 thePsiPhi = theCommonPhasePhi;
+       }
+     }
+     
      complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
      Spin lambda = f0Spin-Mgamma;
      if( fabs(lambda)>PsiState->J || fabs(lambda)>PsiState->S) continue;
@@ -303,7 +324,7 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, Spin fJ
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2ProdPhi,
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2DecMag,  
 						std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2DecPhi,
-						double mass, double width ){
+						double mass, double width, bool useCommonProductionPhase ){
   
   complex<double> result(0.,0.);
   Vector4<double> fv2Phi= theData->FourVecs[enumJpsiGamKsKlKKData::V4_KsKlKpKm_HeliPsi];
@@ -312,13 +333,25 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, Spin fJ
   for (Spin lambdaf2=-fJSpin; lambdaf2<=fJSpin; ++lambdaf2){
     decAmp[lambdaf2]=f2ToPhiPhiTo4KAmp(theData, lambdaf2,  ampf2DecMag,ampf2DecPhi );
   }
-
+  
+  double theCommonPhasePhi=999.;
+  bool setCommonPhase=false;
   
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itPsi;
   for ( itPsi=ampf2ProdMag.begin(); itPsi!=ampf2ProdMag.end(); ++itPsi){
     boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
     double thePsiMag=itPsi->second;
     double thePsiPhi=ampf2ProdPhi[PsiState];
+    
+    if(useCommonProductionPhase){
+      if(!setCommonPhase){
+	theCommonPhasePhi=thePsiPhi;
+	setCommonPhase=true;
+      }else{
+	thePsiPhi = theCommonPhasePhi;
+      }
+    }
+    
     complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
     
     for(Spin f2Lambda=-fJSpin;f2Lambda<=fJSpin; f2Lambda++){
