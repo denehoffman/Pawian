@@ -192,9 +192,10 @@ void Psi2STo2K2PiGamHist::initRootStuff(const std::string& fileName)
 
   initHistMap();
 
-  _dataTuple = new TNtuple("dataTuple","dataTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipi:phipipi:costhetapiViapipi:phipiViapipi:weight");
+  _dataTuple = new TNtuple("dataTuple","dataTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipiViaK1pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
 
-  _mcTuple = new TNtuple("mcTuple","mcTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipi:phipipi:costhetapiViapipi:phipiViapipi:weight");
+  _mcTuple = new TNtuple("mcTuple","mcTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipiViaK1pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
+
 
 }
 
@@ -298,6 +299,8 @@ void Psi2STo2K2PiGamHist::fillHistos(const std::string& theKey, const Psi2STo2K2
 
 void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEvtData* theData, double weight)
 {
+  float datatype = 1.;  // 1 = real data, 2 = pwamc
+
   float Phichic0_HeliPsi2S      = theData->chic0_HeliPsi2S_4V.Phi();
   float CosThetachic0_HeliPsi2S = theData->chic0_HeliPsi2S_4V.CosTheta();
   float PhiK1pi1pi2             = theData->KpPiPi_HeliChic0_4V.Phi();
@@ -320,10 +323,10 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   float mK2pi1pi2               = theData->KmPiPi_HeliChic0_4V.M();
   float mK1pi1                  = theData->KpPi0_HeliChic0_4V.M();
   float mK1pi2                  = theData->KpPi1_HeliChic0_4V.M();
-  float MK2pi1                  = theData->KmPi0_HeliChic0_4V.M();
-  float MK2pi2                  = theData->KmPi1_HeliChic0_4V.M();
+  float mK2pi1                  = theData->KmPi0_HeliChic0_4V.M();
+  float mK2pi2                  = theData->KmPi1_HeliChic0_4V.M();
 
-  float Mpipi                   = theData->PiPi_HeliChic0_4V.M();
+  float mpipi                   = theData->PiPi_HeliChic0_4V.M();
   float CosThetaPiPiFromK1PiPi  = theData->PiPi_HeliKpPi0Pi0_4V.CosTheta();
   float PhiPiPiFromK1PiPi  = theData->PiPi_HeliKpPi0Pi0_4V.Phi();
 
@@ -356,21 +359,21 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   fourVectors[19] = mK2pi1pi2;
   fourVectors[20] = mK1pi1;
   fourVectors[21] = mK1pi2;
-  fourVectors[22] = MK2pi1;
-  fourVectors[23] = MK2pi2;
+  fourVectors[22] = mK2pi1;
+  fourVectors[23] = mK2pi2;
   
-  fourVectors[24] = Mpipi;
+  fourVectors[24] = mpipi;
   fourVectors[25] = CosThetaPiPiFromK1PiPi;
   fourVectors[26] = PhiPiPiFromK1PiPi;
   fourVectors[27] = CosThetaPiFromPiPi;
   fourVectors[28] = PhiPiFromPiPi;
 
   fourVectors[29] = evtweight;
+  fourVectors[30] = datatype;
   //  cout << evtweight << endl;
 
   theTuple->Fill(fourVectors);
 }
-
 
 
 void Psi2STo2K2PiGamHist::plotCosPsi(const std::string& theKey, const Psi2STo2K2PiGamEvtData* theData, double weight){ 
