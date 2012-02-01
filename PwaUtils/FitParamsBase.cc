@@ -361,10 +361,10 @@ fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
 
   // 2.: phases of all amplitudes
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& phiMap=result.Phis;
-
+  
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >::iterator itPhiMap;
   for (itPhiMap=phiMap.begin(); itPhiMap!=phiMap.end(); ++itPhiMap){
-
+    
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itPhi;
     for (itPhi=itPhiMap->second.begin(); itPhi!=itPhiMap->second.end(); ++itPhi){
       itPhi->second=par[counter];

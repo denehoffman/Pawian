@@ -144,29 +144,30 @@ int main(int __argc,char *__argv[]){
   //disable hypotheses, currently not in use
   //
   std::map<const std::string, bool> hypMap;
-  hypMap["eta2225Hyp"]=true;
-  hypMap["f02020Hyp"]=true;
-  hypMap["f02020FlatteHyp"]=true;
-  hypMap["f22300Hyp"]=true;
-  hypMap["eta21870Hyp"]=true;
-  hypMap["f1Hyp"]=true;
-  hypMap["usePhasespace"]=true;
+  hypMap["etacHyp"] =false;
+  hypMap["eta2225Hyp"]=false;
+  hypMap["f02020Hyp"]=false;
+  hypMap["f02020FlatteHyp"]=false;
+  hypMap["f22300Hyp"]=false;
+  hypMap["eta21870Hyp"]=false;
+  hypMap["f1Hyp"]=false;
+  hypMap["usePhasespace"]=false;
   
-  const std::vector<std::string> disabledHyps=theAppParams.disabledHyps();
+  const std::vector<std::string> enabledHyps=theAppParams.enabledHyps();
   std::vector<std::string>::const_iterator itStr;
  
-  for (itStr=disabledHyps.begin(); itStr!=disabledHyps.end(); ++itStr){
+  for (itStr=enabledHyps.begin(); itStr!=enabledHyps.end(); ++itStr){
     
     std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
     if (iter !=hypMap.end()){
-      hypMap[iter->first]= false;
-      Info<< "hypothesis " << iter->first << " disabed" ;  // << endmsg;
+      hypMap[iter->first]= true;
+      Info<< "hypothesis " << iter->first << " enabed" ;  // << endmsg;
     }
-    else { Alert << "hypothesis " << (*itStr) << " can not be disabled";  // << endmsg;
+    else { Alert << "hypothesis " << (*itStr) << " can not be enabled";  // << endmsg;
       exit(0);
     }
   }
-
+  
   boost::shared_ptr<AbsLh> theLhPtr;
   std::string startWithHyp=theAppParams.startHypo();
   

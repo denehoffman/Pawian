@@ -86,6 +86,7 @@ protected:
 
 
   
+  bool _etacHyp;
   bool _eta2225Hyp;
   bool _f02020Hyp;
   bool _f02020FlatteHyp;

@@ -9,13 +9,14 @@
 
 JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList> theEvtList, const std::map<const std::string, bool>& hypMap) :
   AbsLh(theEvtList)
-  ,_eta2225Hyp(true)
-  ,_f02020Hyp(true)
-  ,_f02020FlatteHyp(true)
-  ,_f22300Hyp(true)
-  ,_eta21870Hyp(true)
-  ,_f1Hyp(true)
-  ,_usePhasespace(true)
+  ,_etacHyp(false)
+  ,_eta2225Hyp(false)
+  ,_f02020Hyp(false)
+  ,_f02020FlatteHyp(false)
+  ,_f22300Hyp(false)
+  ,_eta21870Hyp(false)
+  ,_f1Hyp(false)
+  ,_usePhasespace(false)
 {
   
   
@@ -28,13 +29,14 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList
 
 JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
   AbsLh(theLhPtr->getEventList())
-  ,_eta2225Hyp(true)
-  ,_f02020Hyp(true)
-  ,_f02020FlatteHyp(true)
-  ,_f22300Hyp(true) 
-  ,_eta21870Hyp(true)
-  ,_f1Hyp(true)
-  ,_usePhasespace(true)
+  ,_etacHyp(false)
+  ,_eta2225Hyp(false)
+  ,_f02020Hyp(false)
+  ,_f02020FlatteHyp(false)
+  ,_f22300Hyp(false) 
+  ,_eta21870Hyp(false)
+  ,_f1Hyp(false)
+  ,_usePhasespace(false)
 {
   
   initializeHypothesisMap( hypMap);
@@ -431,7 +433,10 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
   JpsiGamKsKlKKFitParams theFitParams;
   
   std::map<int, std::vector< boost::shared_ptr<const JPCLS> > > theAmpMap;
-  theAmpMap[paramEnumJpsiGamKsKlKK::PsiToEtacGamma] = theFitParams.jpclsVec(paramEnumJpsiGamKsKlKK::PsiToEtacGamma);
+  
+  if(_etacHyp){
+    theAmpMap[paramEnumJpsiGamKsKlKK::PsiToEtacGamma] = theFitParams.jpclsVec(paramEnumJpsiGamKsKlKK::PsiToEtacGamma);
+  }
   
   if(_eta2225Hyp){
     theAmpMap[paramEnumJpsiGamKsKlKK::PsiToEta2225Gamma] = theFitParams.jpclsVec(paramEnumJpsiGamKsKlKK::PsiToEta2225Gamma);
@@ -484,10 +489,12 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
 
   
   //fill masses and wisths
-  fitVal.Masses[paramEnumJpsiGamKsKlKK::etac]=2.98;
-  fitErr.Masses[paramEnumJpsiGamKsKlKK::etac]=0.03;
-  fitVal.Widths[paramEnumJpsiGamKsKlKK::etac]=.06;
-  fitErr.Widths[paramEnumJpsiGamKsKlKK::etac]=0.03;
+  if(_etacHyp){
+    fitVal.Masses[paramEnumJpsiGamKsKlKK::etac]=2.98;
+    fitErr.Masses[paramEnumJpsiGamKsKlKK::etac]=0.03;
+    fitVal.Widths[paramEnumJpsiGamKsKlKK::etac]=.06;
+    fitErr.Widths[paramEnumJpsiGamKsKlKK::etac]=0.03;
+  }
   
   if(_eta2225Hyp){
     fitVal.Masses[paramEnumJpsiGamKsKlKK::eta2225]=2.225;
@@ -556,6 +563,16 @@ JpsiGamKsKlKKProdLh::initializeHypothesisMap( const std::map<const std::string, 
   }
   else Alert << "hypothesis eta2225Hyp not set!!!" <<endmsg;
   
+  
+  iter= hypMap.find("etacHyp");
+  if (iter !=hypMap.end()){
+    _etacHyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _etacHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis etacHyp not set!!!" <<endmsg;
+  
+
   iter= hypMap.find("f02020Hyp");  
   if (iter !=hypMap.end()){
     _f02020Hyp= iter->second;

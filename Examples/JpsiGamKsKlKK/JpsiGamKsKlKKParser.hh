@@ -54,7 +54,7 @@ class JpsiGamKsKlKKParser
   const std::string dataFile() const {return _dataFile;}
   const std::string mcFile() const {return _mcFile;}
   const std::string fitParamFile() const {return _paramFile;}
-  const std::vector<std::string>& disabledHyps() const { return _disabledHyps; }
+  const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
@@ -69,7 +69,7 @@ protected:
   std::string _paramFile;
   std::string _startHypo;
   std::string _mode;		  
-  std::vector<std::string> _disabledHyps;
+  std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
 };
 

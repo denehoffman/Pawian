@@ -38,7 +38,7 @@ bool JpsiGamKsKlKKParser::parseCommandLine(int argc, char **argv)
       ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
-      ("disableHyp",po::value< vector<string> >(&_disabledHyps), "disable hypotheses")
+      ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("mode",po::value<string>(&_mode), "enable/diable QA mode")
       ;
 
@@ -114,8 +114,8 @@ bool JpsiGamKsKlKKParser::parseCommandLine(int argc, char **argv)
 
       std::vector<std::string>::const_iterator it;
 
-      for (it=_disabledHyps.begin(); it!=_disabledHyps.end();++it){
-	std::cout << "hypothesis\t" << (*it) << "\t disabled\n";
+      for (it=_enabledHyps.begin(); it!=_enabledHyps.end();++it){
+	std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
       }
       std::cout << std::endl;
     
