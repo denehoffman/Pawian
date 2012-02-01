@@ -1170,7 +1170,7 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi0PiToKstarKAmp(Psi2STo2K2PiGamData
 }
 
 
-complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi2Pi0ToKstarKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToPi_2_Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& Pi_2_Dec, double Pi_2_Mass, double Pi_2_Width, double Kstar_Mass, double Kstar_Width){
+complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi2Pi0ToKstarKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToPi_2_Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& Pi_2_Dec, double Pi_2_Mass, double Pi_2_Width, double Kstar_Mass, double Kstar_Width, Spin Kstar_Spin){
 
   Vector4<double> KKPi0(theData->KKPi0_HeliChic0_4V.E(), theData->KKPi0_HeliChic0_4V.Px(), 
 		     theData->KKPi0_HeliChic0_4V.Py(), theData->KKPi0_HeliChic0_4V.Pz());
@@ -1194,6 +1194,8 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi2Pi0ToKstarKAmp(Psi2STo2K2PiGamDat
   
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itDec;
+  
+  int L_KstarDec=int(Kstar_Spin);
 
   for ( it=ChiToPi_2_Prod.begin(); it!=ChiToPi_2_Prod.end(); ++it){
 
@@ -1210,18 +1212,22 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi2Pi0ToKstarKAmp(Psi2STo2K2PiGamDat
       double thePhiDec=itDec->second.second;
       complex<double> expiphiDec(cos(thePhiDec), sin(thePhiDec));
       complex<double> tmpDec(0.,0.);
-      for (Spin lamKstar=-1; lamKstar<=1; ++lamKstar){
-	tmpDec+=sqrt(2.*theDecState->L+1)*Clebsch(theDecState->L, 0., theDecState->S, lamKstar, theDecState->J, lamKstar)*Clebsch(1,lamKstar, 0, 0, theDecState->S, lamKstar)*sqrt(3.)
+
+      for (Spin lamKstar=-Kstar_Spin; lamKstar<=Kstar_Spin; ++lamKstar){
+      
+	if( fabs(lamKstar)>theDecState->J || fabs(lamKstar)>theDecState->S) continue;
+	
+	tmpDec+=sqrt(2.*theDecState->L+1)*Clebsch(theDecState->L, 0., theDecState->S, lamKstar, theDecState->J, lamKstar)*Clebsch(Kstar_Spin,lamKstar, 0, 0, theDecState->S, lamKstar)*sqrt(2.*L_KstarDec+1.)
 	  *(( BreitWigner(KKPi0, Pi_2_Mass, Pi_2_Width)
-	      *( BreitWignerBlattW(Kstarp_pi0, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,1)
-		 *theData->DfPi2ToKstarpK_pi0[theDecState->J][lamPi2][lamKstar]*theData->DfKst1pToKpPi0ViaKKPi0[1][lamKstar][0]
-		 +BreitWignerBlattW(Kstarm_pi0, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,1)
-		 *theData->DfPi2ToKstarmK_pi0[theDecState->J][lamPi2][lamKstar]*theData->DfKst1mToKmPi0ViaKKPi0[1][lamKstar][0]))
+	      *( BreitWignerBlattW(Kstarp_pi0, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,L_KstarDec)
+		 *theData->DfPi2ToKstarpK_pi0[theDecState->J][lamPi2][lamKstar]*theData->DfKst1pToKpPi0ViaKKPi0[Kstar_Spin][lamKstar][0]
+		 +BreitWignerBlattW(Kstarm_pi0, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,L_KstarDec)
+		 *theData->DfPi2ToKstarmK_pi0[theDecState->J][lamPi2][lamKstar]*theData->DfKst1mToKmPi0ViaKKPi0[Kstar_Spin][lamKstar][0]))
 	    +( BreitWigner(KKPi1, Pi_2_Mass, Pi_2_Width)
-	       *( BreitWignerBlattW(Kstarp_pi1, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,1)
-		  *theData->DfPi2ToKstarpK_pi1[theDecState->J][lamPi2][lamKstar]*theData->DfKst1pToKpPi1ViaKKPi1[1][lamKstar][0] 
-		  +BreitWignerBlattW(Kstarm_pi1, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,1)
-		  *theData->DfPi2ToKstarmK_pi1[theDecState->J][lamPi2][lamKstar]*theData->DfKst1mToKmPi1ViaKKPi1[1][lamKstar][0] ))
+	       *( BreitWignerBlattW(Kstarp_pi1, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,L_KstarDec)
+		  *theData->DfPi2ToKstarpK_pi1[theDecState->J][lamPi2][lamKstar]*theData->DfKst1pToKpPi1ViaKKPi1[Kstar_Spin][lamKstar][0] 
+		  +BreitWignerBlattW(Kstarm_pi1, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,L_KstarDec)
+		  *theData->DfPi2ToKstarmK_pi1[theDecState->J][lamPi2][lamKstar]*theData->DfKst1mToKmPi1ViaKKPi1[Kstar_Spin][lamKstar][0] ))
 	    );
 
       }
