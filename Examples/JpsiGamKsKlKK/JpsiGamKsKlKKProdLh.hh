@@ -62,7 +62,8 @@ protected:
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdMag, 
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0ProdPhi,
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecMag,  
-				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi );
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf0DecPhi,
+				     bool useCommonProductionPhase );
   
   virtual complex<double> etaToPhiPhiTo4KAmp(EvtData* theData);
   
@@ -75,7 +76,7 @@ protected:
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2ProdPhi,
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2DecMag,  
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& ampf2DecPhi,
-				     double mass, double width );
+				     double mass, double width, bool useCommonProductionPhase );
   complex<double> f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f2Lambda, 
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecMag , 
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecPhi  );
