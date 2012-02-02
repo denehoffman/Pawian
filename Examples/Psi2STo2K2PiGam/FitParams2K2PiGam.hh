@@ -72,20 +72,20 @@ struct param2K2PiGam
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf_0_1710;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430K_0_1950;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1430;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1950;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K2300;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK_0_1430Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1650K;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1650ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1650ToK_0_1430Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi_2_1670Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670Tof_2_1270Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670ToK892K;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1430;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1950;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K2300;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK892Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1830ToK_0_1430Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_1_1650K;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1650ToK892Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1650ToK_0_1430Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi_2_1670Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670Tof_2_1270Pi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670ToK892K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi1800Pi0Tof980;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi1800Pi0Tof1370;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi1800Pi0ToKappa;
@@ -93,6 +93,7 @@ struct param2K2PiGam
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToPi_2_2285Pi;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285Tof1700Pi;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285ToK892KPi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285ToK_0_1430K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285ToK_2_1430K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_2_1770K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_2_1770ToK_2_1430Pi;
@@ -149,7 +150,7 @@ struct paramEnum2K2PiGam{
 	f980_pif_2_1270_k, f980_kf_2_1270_pi, f980_pif_2_1430_k, f980_kf_2_1430_pi, f980_pif_2_1525_k, f980_kf_2_1525_pi, f980_pif_2_1950_k, f980_kf_2_1950_pi,
 	f1500_pif_2_1525_k, f1500_kf_2_1525_pi, f1710_pif_2_1430_k, f1710_kf_2_1430_pi, f1710_pif_2_1950_k, f1710_kf_2_1950_pi, 
 	ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670ToK892K, ChiToPi1800Pi0Tof980, ChiToPi1800Pi0Tof1370, ChiToPi1800Pi0ToKappa, ChiToPi1800Pi0ToK892K, 
-	ChiToPi_2_2285Pi,Pi_2_2285Tof1700Pi, Pi_2_2285ToK892KPi, Pi_2_2285ToK_2_1430K, 
+	ChiToPi_2_2285Pi,Pi_2_2285Tof1700Pi, Pi_2_2285ToK892KPi, Pi_2_2285ToK_0_1430K, Pi_2_2285ToK_2_1430K, 
 	ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, ChiToK_0_1430KPi, nAmps,         
 
 	K892=nAmps,Kappa, K_0_1430, K_1_1400,  K_1_1410, K_2_1430, K_1_1270,K_1_1650, 
@@ -175,7 +176,7 @@ struct paramEnum2K2PiGam{
 	"f980_pif_2_1270_k", "f980_kf_2_1270_pi","f980_pif_2_1430_k", "f980_kf_2_1430_pi","f980_pif_2_1525_k", "f980_kf_2_1525_pi", "f980_pif_2_1950_k", "f980_kf_2_1950_pi",  
 	"f1500_pif_2_1525_k", "f1500_kf_2_1525_pi", "f1710_pif_2_1430_k", "f1710_kf_2_1430_pi", "f1710_pif_2_1950_k", "f1710_kf_2_1950_pi",
 	"ChiToPi_2_1670Pi","Pi_2_1670Tof_2_1270Pi","Pi_2_1670ToK892K","ChiToPi1800Pi0Tof980","ChiToPi1800Pi0Tof1370","ChiToPi1800Pi0ToKappa","ChiToPi1800Pi0ToK892K",
-	"ChiToPi_2_2285Pi","Pi_2_2285Tof1700Pi","Pi_2_2285ToK892KPi","Pi_2_2285ToK_2_1430K", 
+	"ChiToPi_2_2285Pi","Pi_2_2285Tof1700Pi","Pi_2_2285ToK892KPi","Pi_2_2285ToK_0_1430K","Pi_2_2285ToK_2_1430K", 
 	"ChiToK_2_1770K","K_2_1770ToK_2_1430Pi","ChiToK_0_1430KPi",
 
 	"K892", "Kappa", "K_0_1430", "K_1_1400", "K_1_1410", "K_2_1430", "K_1_1270", "K_1_1650", 

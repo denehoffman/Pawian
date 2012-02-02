@@ -1217,7 +1217,7 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiToPi2Pi0ToKstarKAmp(Psi2STo2K2PiGamDat
       
 	if( fabs(lamKstar)>theDecState->J || fabs(lamKstar)>theDecState->S) continue;
 	
-	tmpDec+=sqrt(2.*theDecState->L+1)*Clebsch(theDecState->L, 0., theDecState->S, lamKstar, theDecState->J, lamKstar)*Clebsch(Kstar_Spin,lamKstar, 0, 0, theDecState->S, lamKstar)*sqrt(2.*L_KstarDec+1.)
+	tmpDec+=sqrt(2.*theDecState->L+1)*Clebsch(theDecState->L, 0, theDecState->S, lamKstar, theDecState->J, lamKstar)*Clebsch(Kstar_Spin,lamKstar, 0, 0, theDecState->S, lamKstar)*sqrt(2.*L_KstarDec+1.)
 	  *(( BreitWigner(KKPi0, Pi_2_Mass, Pi_2_Width)
 	      *( BreitWignerBlattW(Kstarp_pi0, 0.493677, 0.1349766, Kstar_Mass, Kstar_Width,L_KstarDec)
 		 *theData->DfPi2ToKstarpK_pi0[theDecState->J][lamPi2][lamKstar]*theData->DfKst1pToKpPi0ViaKKPi0[Kstar_Spin][lamKstar][0]
