@@ -133,9 +133,11 @@ bool Compare(const nextneighbours a, const nextneighbours b);
 
 int main(){
   
-  TString fileData="./Psi2STo2K2PiGamPWA_data.root"; 
+  //TString fileData="./Psi2STo2K2PiGamPWA_data.root"; 
   //TString fileData="./Psi2STo2K2PiGamPWA_pwamc__FitParamHyp8_base_K0K2_newflatte__10000events.root";
-  TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc__FitParamHyp8_base_K0K2_newflatte__10000events.root"; 
+  //TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc__FitParamHyp8_base_K0K2_newflatte__10000events.root"; 
+  TString fileData="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root";
+  TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root"; 
   TString option="mixedsample,pwamc,nodraw,silent";
 
   cout << "--- ENTERING QAMIXEDSAMPLE" << endl;
@@ -316,12 +318,12 @@ void mixed_sample() {
   if(!silent) cout << "Entering mixed-sample method" << endl;
   if(!silent) cout << endl;
 
-  unsigned int limit_runs_lower = 0;
-  unsigned int limit_runs_upper = 3;
+  unsigned int limit_runs_lower = 1;
+  unsigned int limit_runs_upper = 8;
   cout << "Performing " << limit_runs_upper - limit_runs_lower << " runs." << endl;
   std::vector<float> fpullvector;
-  unsigned int limit_data = 2874;   // numOfEntriesData;
-  unsigned int limit_pwamc = 2874;  // numOfEntriesPwaMc;
+  unsigned int limit_data = 1000;   // numOfEntriesData;
+  unsigned int limit_pwamc = 5000;  // numOfEntriesPwaMc;
   unsigned int numberofneighbours = 10;
 
 
