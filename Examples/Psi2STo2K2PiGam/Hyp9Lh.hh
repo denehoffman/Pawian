@@ -56,6 +56,8 @@ protected:
   bool _Pi1800Tof1370PiHyp9;
   bool _Pi1800ToKappaKHyp9;
   bool _Pi1800Pi0ToK892KHyp9;
+  bool _Pi3000Pi0ToK892KHyp9;
+  bool _Pi3000Pi0ToK_0_1950KHyp9;
   bool _Pi_2_2285Tof1710PiHyp9;
   bool _Pi_2_2285ToK892KHyp9;
   bool _Pi_2_2285ToK_0_1430KHyp9;
