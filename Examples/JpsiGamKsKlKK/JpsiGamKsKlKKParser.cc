@@ -39,15 +39,19 @@ bool JpsiGamKsKlKKParser::parseCommandLine(int argc, char **argv)
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
-      ("mode",po::value<string>(&_mode), "enable/diable QA mode")
+      ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaulParams, qaMode")
+      ("massIndependentFit", po::value<bool>(&_massIndependentFit), "enable/disable mass independence in fit")
+      ("commonProdPhases",po::value<bool>(&_useCommonProductionPhases), "enable/disable common production phases")
       ;
-
+    
     po::options_description config("Configuration file options");
     config.add_options()
       ("verbose",po::value<bool>(&verbose)->default_value(true), "Determines whether additional information should be emitted")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
+      ("massRangeMin",po::value<double>(&_massMin), "min of phi phi mass range for mass indep. fit")
+      ("massRangeMax",po::value<double>(&_massMax), "max of phi phi mass range for mass indep. fit")
       ;
-
+    
     po::options_description cmdline_options;
     cmdline_options.add(desc).add(common);
 

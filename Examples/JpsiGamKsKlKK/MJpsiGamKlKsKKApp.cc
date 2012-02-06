@@ -82,7 +82,7 @@ int main(int __argc,char *__argv[]){
 
   std::string theCfgFile = theAppParams.getConfigFile();
   
-
+  
   const std::string datFile=theAppParams.dataFile();
   const std::string mcFile=theAppParams.mcFile();
   Info << "data file: " << datFile ;  // << endmsg;
@@ -96,13 +96,15 @@ int main(int __argc,char *__argv[]){
     Alert << "Error: could not parse " << pdtFile ;  // << endmsg;
     exit(1);
   }
-
+  
+  std::pair<double, double> massRange = theAppParams.massRange();
+  Info  << "Mass range: " << massRange.first << " " << massRange.second ;
+  
   std::vector<std::string> fileNames;
-
   fileNames.push_back(datFile);
   JpsiGamKsKlKKReader eventReader(fileNames, 5, 0); 
   EventList eventsData;
-  eventReader.fillAll(eventsData);
+  eventReader.fillMassRange(eventsData, massRange );
 
   if (!eventsData.findParticleTypes(pTable))
     Warning << "could not find all particles" ;  // << endmsg;
@@ -131,7 +133,7 @@ int main(int __argc,char *__argv[]){
   fileNamesMc.push_back(mcFile);
   JpsiGamKsKlKKReader eventReaderMc(fileNamesMc, 5, 0); 
   EventList eventsMc;
-  eventReaderMc.fillAll(eventsMc);
+  eventReaderMc.fillMassRange(eventsMc, massRange);
   eventsMc.rewind();
 
   //
@@ -141,7 +143,7 @@ int main(int __argc,char *__argv[]){
   
   
   //
-  //disable hypotheses, currently not in use
+  //disable hypotheses
   //
   std::map<const std::string, bool> hypMap;
   hypMap["etacHyp"] =false;
@@ -172,16 +174,18 @@ int main(int __argc,char *__argv[]){
   std::string startWithHyp=theAppParams.startHypo();
   
   if (startWithHyp=="production"){
-    theLhPtr = boost::shared_ptr<AbsLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap ));
+    JpsiGamKsKlKKProdLh* tmplh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
+    tmplh->massIndependentFit( theAppParams.massIndependentFit() );
+    tmplh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
+    theLhPtr = boost::shared_ptr<AbsLh> (tmplh);
+    //theLhPtr = boost::shared_ptr<AbsLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap ));
   }
   else { 
     Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
     exit(1);
   }
   
-
-  
-
+ 
 
 
   std::string mode=theAppParams.mode();
@@ -259,7 +263,13 @@ int main(int __argc,char *__argv[]){
  
   fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
 
+  
+  //calculate intensity contributions
+  //EvtData* evtdata = eventsData.getDataVecs();
+  //theLhPtr->calcEvtIntensity( evtdata    , finalFitParams );
+  
 
+  
   
   JpsiGamKsKlKKHist theHist(theLhPtr, finalFitParams);
 

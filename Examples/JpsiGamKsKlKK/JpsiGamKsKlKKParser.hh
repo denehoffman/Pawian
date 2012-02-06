@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <utility>
 
 // Boost headers go here
 
@@ -45,7 +46,11 @@ class JpsiGamKsKlKKParser
       , _paramFile("/data/sleipnir1/bertram/JpsiGamKsKlKKData/startParamSpin02.dat")
       , _startHypo("base")
       , _mode("qaMode")
-    {
+      , _massIndependentFit(false)
+      , _useCommonProductionPhases(false)
+      , _massMin(0.0)
+      , _massMax(10.)
+  {
     if (!parseCommandLine(argc, argv)) throw false;
   }
   
@@ -57,7 +62,12 @@ class JpsiGamKsKlKKParser
   const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
-  const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
+  const std::vector<std::string>& fixedParams() const { return _mnParFixs; } 
+  const bool massIndependentFit() const {return _massIndependentFit; }
+  const bool useCommonProductionPhases() const {return _useCommonProductionPhases; }
+  const std::pair<double, double> massRange() const { return std::make_pair( _massMin, _massMax  ) ; }
+  
+  
 protected:
   bool parseCommandLine(int argc,char **argv);
 
@@ -71,6 +81,12 @@ protected:
   std::string _mode;		  
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
+  bool _massIndependentFit;
+  bool _useCommonProductionPhases;
+  
+  double _massMin;
+  double _massMax;
+
 };
 
 
