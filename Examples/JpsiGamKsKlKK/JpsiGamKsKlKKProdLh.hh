@@ -52,6 +52,10 @@ public:
   void useCommonProductionPhase( bool commonPhase ){_useCommonProductionPhase=commonPhase;}
   void massIndependentFit( bool massIndep){ _massIndependentFit=massIndep;  }
   
+  double calcComponentIntensity(  EvtData* theData, fitParams& theParamVal,  std::string component  );
+
+
+  
 protected:
 
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, fitParams&  theParamVal, EvtData* theData);  
@@ -90,6 +94,25 @@ protected:
 
   bool  initializeFlatteModel( dynamicModelParams &theDynModel, const Vector4<double> &fv2Phi, double mass, double gPhiPhi, double gKK );
   bool  initializeBreitWignerModel(dynamicModelParams &theDynModel,const Vector4<double> &fv2Phi, double mass, double width, dynamicModelParams::enumDynamicModel theModel  );
+  
+  
+  void calcEtacGammaAmp( EvtData* theData, fitParams& theParamVal, complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm, 
+			dynamicModelParams::enumDynamicModel theModel);
+  void calcEta2225Amp(EvtData* theData, fitParams& theParamVal, complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm,
+		      dynamicModelParams::enumDynamicModel theModel);
+  
+  void calcF02020Amp(EvtData* theData, fitParams& theParamVal, complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm, 
+		     dynamicModelParams::enumDynamicModel theModel);
+
+  void calcF22300Amp(EvtData* theData, fitParams& theParamVal,complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm, 
+		     dynamicModelParams::enumDynamicModel theModel);
+  
+  void calcE21870Amp(EvtData* theData, fitParams& theParamVal, complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm, 
+		     dynamicModelParams::enumDynamicModel theModel);
+  
+  void calcF1Amp(EvtData* theData, fitParams& theParamVal, complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm, 
+		 dynamicModelParams::enumDynamicModel theModel);
+  
   
   bool _etacHyp;
   bool _eta2225Hyp;

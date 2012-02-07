@@ -265,10 +265,28 @@ int main(int __argc,char *__argv[]){
 
   
   //calculate intensity contributions
-  //EvtData* evtdata = eventsData.getDataVecs();
-  //theLhPtr->calcEvtIntensity( evtdata    , finalFitParams );
+  JpsiGamKsKlKKProdLh* contrLh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
+  contrLh->massIndependentFit( theAppParams.massIndependentFit() );
+  contrLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
   
-
+  boost::shared_ptr<const EvtDataBaseList> theEvtList=contrLh->getEventList();
+  const std::vector<EvtData*> mcList=theEvtList->getDataVecs();
+  
+  std::map<const std::string, bool>::const_iterator hypo= hypMap.begin();
+  while(hypo !=hypMap.end()){
+    if( hypo->second ){
+      
+      std::vector<EvtData*>::const_iterator it=mcList.begin();
+      double integral=0.0;
+      while(it!=mcList.end()){
+	integral+=contrLh->calcComponentIntensity( *it, finalFitParams, hypo->first );
+	//integral+= theLhPtr->calcComponentIntensity( *it, finalFitParams, "etacHyp" );
+	it++;
+      }
+      Info << "Events for component " << hypo->first << ": " << integral << endmsg;
+    }
+    hypo++;
+  }
   
   
   JpsiGamKsKlKKHist theHist(theLhPtr, finalFitParams);

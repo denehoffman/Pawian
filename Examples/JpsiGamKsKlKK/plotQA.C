@@ -46,8 +46,8 @@ void plotQA(TString fName="./JpsiGamKsKlKK.root"){
   c2->cd(ipad);
   plotHist("_chi");
   
-  c1->Print("qaPlots.pdf(");
-  c2->Print("qaPlots.pdf)");
+  c1->Print("qaPlots.ps(");
+  c2->Print("qaPlots.ps)");
   
 }
 
