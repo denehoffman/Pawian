@@ -677,6 +677,50 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK0KpiAmp(Psi2STo2K2PiGamData::Psi2STo
   return result;
 }
 
+
+
+
+
+complex<double> AbsPsi2STo2K2PiGamLh::chiToKst1KpiAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToKst1KPi, double Kst1Mass, double Kst1Width){
+
+  Vector4<double> KpPi0(theData->KpPi0_HeliKpPi0Pi0_4V.E(), theData->KpPi0_HeliKpPi0Pi0_4V.Px(), 
+			 theData->KpPi0_HeliKpPi0Pi0_4V.Py(), theData->KpPi0_HeliKpPi0Pi0_4V.Pz());
+
+  Vector4<double> KpPi1(theData->KpPi1_HeliKpPi0Pi0_4V.E(), theData->KpPi1_HeliKpPi0Pi0_4V.Px(), 
+			theData->KpPi1_HeliKpPi0Pi0_4V.Py(), theData->KpPi1_HeliKpPi0Pi0_4V.Pz());
+
+  Vector4<double> KmPi0(theData->KmPi0_HeliKmPi0Pi0_4V.E(), theData->KmPi0_HeliKmPi0Pi0_4V.Px(), 
+			theData->KmPi0_HeliKmPi0Pi0_4V.Py(), theData->KmPi0_HeliKmPi0Pi0_4V.Pz());
+
+  Vector4<double> KmPi1(theData->KmPi1_HeliKmPi0Pi0_4V.E(), theData->KmPi1_HeliKmPi0Pi0_4V.Px(), 
+			theData->KmPi1_HeliKmPi0Pi0_4V.Py(), theData->KmPi1_HeliKmPi0Pi0_4V.Pz());
+
+
+  complex<double> result(0.,0.);
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=ChiToKst1KPi.begin(); it!=ChiToKst1KPi.end(); ++it){
+    
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+
+    complex<double> ampKpToKpPi0=BreitWigner(KpPi0, Kst1Mass, Kst1Width)*conj(theData->DfKst1pToKpPi0[1][0][0]); 
+    complex<double> ampKpToKpPi1=BreitWigner(KpPi1, Kst1Mass, Kst1Width)*conj(theData->DfKst1pToKpPi1[1][0][0]); 
+    complex<double> ampKmToKmPi0=BreitWigner(KmPi0, Kst1Mass, Kst1Width)*conj(theData->DfKst1mToKmPi0[1][0][0]); 
+    complex<double> ampKmToKmPi1=BreitWigner(KmPi1, Kst1Mass, Kst1Width)*conj(theData->DfKst1mToKmPi1[1][0][0]); 
+
+
+    result+=theMag*expiphi*3.*(ampKpToKpPi0+ampKpToKpPi1+ampKmToKmPi0+ampKmToKmPi1);
+  }
+
+  return result;
+}
+
+
+
+
+
+
 complex<double> AbsPsi2STo2K2PiGamLh::chiToK0KT0K1piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K0ToK0Pi, double K0pMass, double K0pWidth, double K1dMass, double K1dWidth){
   Vector4<double> KpPiPi(theData->KpPiPi_HeliChic0_4V.E(), theData->KpPiPi_HeliChic0_4V.Px(), 
 			 theData->KpPiPi_HeliChic0_4V.Py(), theData->KpPiPi_HeliChic0_4V.Pz());

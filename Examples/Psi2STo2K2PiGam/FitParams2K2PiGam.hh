@@ -100,6 +100,7 @@ struct param2K2PiGam
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_2_1770K;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_2_1770ToK_2_1430Pi;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430KPi;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892KPi;
 
     pair<double, double> BwK892;
     pair<double, double> BwKappa;
@@ -155,7 +156,7 @@ struct paramEnum2K2PiGam{
 	ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670ToK892K, 
 	ChiToPi1800Pi0Tof980, ChiToPi1800Pi0Tof1370, ChiToPi1800Pi0ToKappa, ChiToPi1800Pi0ToK892K, ChiToPi3000Pi0ToK892K, ChiToPi3000Pi0ToK_0_1950K, 
 	ChiToPi_2_2285Pi,Pi_2_2285Tof1700Pi, Pi_2_2285ToK892KPi, Pi_2_2285ToK_0_1430K, Pi_2_2285ToK_2_1430K, 
-	ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, ChiToK_0_1430KPi, nAmps,         
+	ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, ChiToK_0_1430KPi, ChiToK892KPi, nAmps,         
 
 	K892=nAmps,Kappa, K_0_1430, K_1_1400,  K_1_1410, K_2_1430, K_1_1270,K_1_1650, 
 	f1500, f1710, f2200, sigma, f1360, f1370, K_0_2400, K_1_2400, K_0_1950, K_1_1680, K_1_2300, K_0_1460, K_0_1830, 
@@ -182,7 +183,7 @@ struct paramEnum2K2PiGam{
 	"ChiToPi_2_1670Pi","Pi_2_1670Tof_2_1270Pi","Pi_2_1670ToK892K",
 	"ChiToPi1800Pi0Tof980","ChiToPi1800Pi0Tof1370","ChiToPi1800Pi0ToKappa","ChiToPi1800Pi0ToK892K","ChiToPi3000Pi0ToK892K","ChiToPi3000Pi0ToK_0_1950K",
 	"ChiToPi_2_2285Pi","Pi_2_2285Tof1700Pi","Pi_2_2285ToK892KPi","Pi_2_2285ToK_0_1430K","Pi_2_2285ToK_2_1430K", 
-	"ChiToK_2_1770K","K_2_1770ToK_2_1430Pi","ChiToK_0_1430KPi",
+	"ChiToK_2_1770K","K_2_1770ToK_2_1430Pi","ChiToK_0_1430KPi","ChiToK892KPi",
 
 	"K892", "Kappa", "K_0_1430", "K_1_1400", "K_1_1410", "K_2_1430", "K_1_1270", "K_1_1650", 
         "f1500", "f1710", "f2200", "sigma", "f1360", "f1370", "K_0_2400", "K_1_2400", "K_0_1950", "K_1_1680", "K_1_2300", "K_0_1460", "K_0_1830",
