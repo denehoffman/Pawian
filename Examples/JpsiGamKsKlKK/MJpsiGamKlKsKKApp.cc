@@ -222,6 +222,35 @@ int main(int __argc,char *__argv[]){
 
     JpsiGamKsKlKKHist theHist(theLhPtr, theStartparams);
     
+    if(theAppParams.massIndependentFit()){
+      //calculate intensity contributions
+      JpsiGamKsKlKKProdLh* contrLh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
+      contrLh->massIndependentFit( theAppParams.massIndependentFit() );
+      contrLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
+      
+      boost::shared_ptr<const EvtDataBaseList> theEvtList=contrLh->getEventList();
+      const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
+      const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
+
+      std::map<const std::string, bool>::const_iterator hypo= hypMap.begin();
+      while(hypo !=hypMap.end()){
+	if( hypo->second ){
+	  
+	  std::vector<EvtData*>::const_iterator it=mcList.begin();
+	  double integral=0.0;
+	  while(it!=mcList.end()){
+	    integral+=contrLh->calcComponentIntensity( *it, theStartparams, hypo->first );
+	    it++;
+	  }
+	  double scale = (1.*dataList.size()) / (1.*mcList.size()) ;
+	  Info << "Scale factor: " << scale << endmsg;
+	  integral*=scale;
+	  Info << "Events for component " << hypo->first << ": " << integral << endmsg;
+	}
+	hypo++;
+      }
+    }
+        
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
@@ -262,32 +291,6 @@ int main(int __argc,char *__argv[]){
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
  
   fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
-
-  
-  //calculate intensity contributions
-  JpsiGamKsKlKKProdLh* contrLh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
-  contrLh->massIndependentFit( theAppParams.massIndependentFit() );
-  contrLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
-  
-  boost::shared_ptr<const EvtDataBaseList> theEvtList=contrLh->getEventList();
-  const std::vector<EvtData*> mcList=theEvtList->getDataVecs();
-  
-  std::map<const std::string, bool>::const_iterator hypo= hypMap.begin();
-  while(hypo !=hypMap.end()){
-    if( hypo->second ){
-      
-      std::vector<EvtData*>::const_iterator it=mcList.begin();
-      double integral=0.0;
-      while(it!=mcList.end()){
-	integral+=contrLh->calcComponentIntensity( *it, finalFitParams, hypo->first );
-	//integral+= theLhPtr->calcComponentIntensity( *it, finalFitParams, "etacHyp" );
-	it++;
-      }
-      Info << "Events for component " << hypo->first << ": " << integral << endmsg;
-    }
-    hypo++;
-  }
-  
   
   JpsiGamKsKlKKHist theHist(theLhPtr, finalFitParams);
 
