@@ -14,6 +14,7 @@ Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_0_2400KTof_0_1710Hyp5(true)
   ,_K_1_2400KHyp5(true)
   ,_ChiToK_0_1430KPiHyp5(true)
+  ,_ChiToK892KPiHyp5(true)
   , _nFitParams(0)
 {
   setUp(hypMap); 
@@ -26,6 +27,7 @@ Hyp5Lh::Hyp5Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_0_2400KTof_0_1710Hyp5(true)
   ,_K_1_2400KHyp5(true)
   ,_ChiToK_0_1430KPiHyp5(true)
+  ,_ChiToK892KPiHyp5(true)
   , _nFitParams(0)
 {
   setUp(hypMap); 
@@ -80,6 +82,13 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1430Width=theParamVal.BwK_0_1430.second;
     result+=chiToK0KpiAmp(theData, ChiToK_0_1430KPi, K_0_1430Mass, K_0_1430Width); 
 
+  }
+
+  if(_ChiToK892KPiHyp5){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892KPi=theParamVal.ChiToK892KPi;
+    double K892Mass=theParamVal.BwK892.first;
+    double K892Width=theParamVal.BwK892.second;
+    result+=chiToKst1KpiAmp(theData, ChiToK892KPi, K892Mass, K892Width);
   }
   return result;
 }
@@ -260,7 +269,13 @@ void Hyp5Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
   else Alert << "hypothesis ChiToK_0_1430KPiHyp5 not set!!!" <<endmsg;
 
-
+  iter= hypMap.find("ChiToK892KPiHyp5");
+  if (iter !=hypMap.end()){
+    _ChiToK892KPiHyp5= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _ChiToK892KPiHyp5 <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis ChiToK892KPiHyp5 not set!!!" <<endmsg;
 
   if(_K_0_2400KHyp5 || _K_0_2400KTof_0_1710Hyp5){
 
@@ -284,6 +299,10 @@ void Hyp5Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
   if(_ChiToK_0_1430KPiHyp5){
     _ampVec.push_back(paramEnum2K2PiGam::ChiToK_0_1430KPi);
+  }
+
+  if (_ChiToK892KPiHyp5){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiToK892KPi);
   }
 
   std::vector<unsigned int>::iterator ampIt;
