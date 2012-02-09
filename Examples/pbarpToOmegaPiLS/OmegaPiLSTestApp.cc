@@ -18,6 +18,7 @@
 #include "Examples/pbarpToOmegaPiLS/AbsOmegaPiLhLS.hh"
 #include "Examples/pbarpToOmegaPiLS/OmegaPiLhPi0GammaLS.hh"
 #include "Examples/pbarpToOmegaPiLS/OmegaTo3PiLhPi0GammaLS.hh"
+#include "Examples/pbarpToOmegaPiLS/OmegaTo3PiLhProdLS.hh"
 #include "Examples/pbarpToOmegaPiLS/MOmegaPiFcnLS.hh"
 #include "Examples/pbarpToOmegaPiLS/SpinDensityHistLS.hh"
 
@@ -614,21 +615,20 @@ int main(int __argc,char *__argv[]){
      exit(1);
    }
 
-  std::string piomegaDatFile;
-  std::string piomegaMcFile; 
+  std::string piomegaDatFile=theAppParams.dataFile();
+  std::string piomegaMcFile=theAppParams.mcFile(); 
+  Info << "data file: " << piomegaDatFile << endmsg;
+  Info << "mc file: " << piomegaMcFile << endmsg;
+  
   int nParticlesPerEvt=0;
   bool readWeightData=true;
 
   if (theAppParams.getLhMode()=="OmegaPiLhGamma" || (theAppParams.getLhMode()=="OmegaPiLhGammaBw") ){
-    nParticlesPerEvt=3;
-    constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
-    constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
-  }
-  else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
-    nParticlesPerEvt=4;
-    constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/om3pi_",theAppParams.getPbarMom(),piomegaDatFile);
-    constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mcom3pi_",theAppParams.getPbarMom(),piomegaMcFile);
-  }
+     nParticlesPerEvt=3;
+   }
+   else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhProd") || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
+     nParticlesPerEvt=4;
+   }
 
   else {
     Alert << "LhMode: " << theAppParams.getLhMode() << " does not exist!!!" << endmsg;
@@ -636,7 +636,6 @@ int main(int __argc,char *__argv[]){
   }
 
   
-  //   constructPath(theAppParams.getSourcePath()+"/Examples/pbarpToOmegaPiLS/data/510_",theAppParams.getPbarMom(),piomegaDatFile);
   if (checkFileExist(piomegaDatFile)){
       Info << "Using Data file " << piomegaDatFile << endmsg;
   }
@@ -646,7 +645,6 @@ int main(int __argc,char *__argv[]){
       exit(1);
   }
 
-  //   constructPath(theAppParams.getSourcePath()+ "/Examples/pbarpToOmegaPiLS/data/mc510_",theAppParams.getPbarMom(),piomegaMcFile);
   if (checkFileExist(piomegaMcFile)){
       Info << "Using Monte Carlo file " << piomegaMcFile << endmsg;
   }
@@ -661,7 +659,9 @@ int main(int __argc,char *__argv[]){
 
   ParticleTable pTable;
   PdtParser parser;
-  std::string pdtFile(theAppParams.getSourcePath()+"/Particle/pdt.table");
+
+  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
+  std::string pdtFile(theSourcePath+"/Particle/pdt.table");
   if (!parser.parse(pdtFile, pTable)) {
     Alert << "Error: could not parse " << pdtFile << endmsg;
     exit(1);
@@ -709,11 +709,10 @@ int main(int __argc,char *__argv[]){
     theOmegaPiEventPtr = boost::shared_ptr<const AbsOmegaPiEventListLS>(new OmegaPiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) ); 
     theRootFilePath << "./" << theAppParams.getName() << "OmegaPi0Fit_Lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
   }
-  else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma" || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw")){
+  else if ( (theAppParams.getLhMode()=="OmegaTo3PiLhGamma") || (theAppParams.getLhMode()=="OmegaTo3PiLhProd") || (theAppParams.getLhMode()=="OmegaTo3PiLhGammaBw") ){
     theOmegaPiEventPtr = boost::shared_ptr<const AbsOmegaPiEventListLS>(new OmegaTo3PiEventListLS (theDataEventList, theMcEventList, theAppParams.getLMax()+1,  theAppParams.getPbarMom() ) );
    theRootFilePath << "./" << theAppParams.getName() << "OmegaTo3PiFit_Lmax" << theAppParams.getLMax() << "_mom" << theAppParams.getPbarMom() << ".root";
   }
-
   if (theAppParams.getAppExecMode()==ApplicationParameterLS::HistTest){
     histTest(theOmegaPiEventPtr, theRootFilePath.str());
     exit(1);
@@ -736,6 +735,9 @@ int main(int __argc,char *__argv[]){
   }
   else if (theAppParams.getLhMode()=="OmegaTo3PiLhGamma"){
     theOmegaPiLh = boost::shared_ptr<AbsOmegaPiLhLS>(new OmegaTo3PiLhPi0GammaLS(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
+  }
+  else if (theAppParams.getLhMode()=="OmegaTo3PiLhProd"){
+    theOmegaPiLh = boost::shared_ptr<AbsOmegaPiLhLS>(new OmegaTo3PiLhProdLS(theOmegaPiEventPtr, pbarpToOmegaPi0StatesPtr));
   }
   else{
     Alert <<"LhMode " << theAppParams.getLhMode() << " doesn't exist !!! " << endmsg;
