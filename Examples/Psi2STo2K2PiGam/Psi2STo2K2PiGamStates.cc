@@ -38,6 +38,9 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
   //LS combinations for the Chi_c0 decay to K*0(1430) K*2(1430)
   fillJPCLS(_chic0JPC, _Kst0JPC, _Kst2JPC, _ChiToK0K2_JPCLS);
 
+  //LS combinations for the Chi_c0 decay to K*0 K*1
+  fillJPCLS(_chic0JPC, _Kst0JPC, _Kst1JPC, _ChiToKst0Kst1JPCLS);
+
   //LS combinations for the Chi_c0 decay to f0 f0
   fillJPCLS(_chic0JPC, _f0JPC, _f0JPC,_ChiTof0f0JPCLS);
 
@@ -164,6 +167,12 @@ void Psi2STo2K2PiGamStates::print(std::ostream& os) const
 
   os << "*** Chi_c0:  LS combinations for the decay to K*0(1430) K*2(1430) *** "<< std::endl;
   for ( itJPCLS=_ChiToK0K2_JPCLS.begin(); itJPCLS!=_ChiToK0K2_JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to K*0 K*1 *** "<< std::endl;
+  for ( itJPCLS=_ChiToKst0Kst1JPCLS.begin(); itJPCLS!=_ChiToKst0Kst1JPCLS.end(); ++itJPCLS){
     (*itJPCLS)->print(os);
     os << "\n" << std::endl;
   }
