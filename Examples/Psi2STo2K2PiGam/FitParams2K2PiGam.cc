@@ -61,6 +61,7 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::ChiToK_1_2400K]=theStates.ChiToK1400ToK892piStates();
   _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof980K]=theStates.K1pTof0KStates();
   _jpclsMap[paramEnum2K2PiGam::K892K_1_1680]=theStates.ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK1680K1680]=theStates.ChiTo2K892States();
   _jpclsMap[paramEnum2K2PiGam::K892K_1_2300]=theStates.ChiTo2K892States();
   _jpclsMap[paramEnum2K2PiGam::sigmaf980]=theStates.ChiTof0f0States();
   _jpclsMap[paramEnum2K2PiGam::ChiToSigmaf1370]=theStates.ChiTof0f0States();
@@ -159,6 +160,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::ChiToK_1_2400K) return params.ChiToK_1_2400K;
   else if (index==paramEnum2K2PiGam::K_1_2400Tof980K) return params.K_1_2400Tof980K;
   else if (index==paramEnum2K2PiGam::K892K_1_1680) return params.ChiToK892K1680;
+  else if (index==paramEnum2K2PiGam::ChiToK1680K1680) return params.ChiToK1680K1680;
   else if (index==paramEnum2K2PiGam::K892K_1_2300) return params.ChiToK892K2300;
   else if (index==paramEnum2K2PiGam::sigmaf980) return params.ChiToSigmaf980;
   else if (index==paramEnum2K2PiGam::ChiToSigmaf1370) return params.ChiToSigmaf1370;

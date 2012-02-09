@@ -173,6 +173,7 @@ int main(int __argc,char *__argv[]){
   hypMap["KappaK_0_1430Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=true;
   hypMap["K1_1680Hyp7"]=true;
+  hypMap["K1_1680K1_1680Hyp7"]=true;
   hypMap["K1_2300Hyp7"]=true; 
   hypMap["KappaHyp7"]=true;
   hypMap["K_0_1460ToKstPiHyp8"]=true;
