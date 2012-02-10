@@ -15,6 +15,7 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K0_1430_K892Hyp1(true)
   ,_K1_1410_K1_1410Hyp(false)
   ,_K1_1410_K892Hyp1(true)
+  ,_f1710_f1710Hyp1(true)
   ,_nFitParams(0) 
 {
   setUp(hypMap); 
@@ -30,6 +31,7 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K0_1430_K892Hyp1(true)
   ,_K1_1410_K1_1410Hyp(false)
   ,_K1_1410_K892Hyp1(true)
+  ,_f1710_f1710Hyp1(true)
   ,_nFitParams(0) 
 {
   setUp(hypMap);
@@ -128,6 +130,11 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   //Chi_c0 decay to f0(980) f0(980) -> (pi0 pi0) (K K) 
   result+=chiTof980f980Amp(theData, ChiTof980f980, f980_Mass, f980_gPiPi,  f980_gKK);
+
+  if(_f1710_f1710Hyp1){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1710f1710=theParamVal.ChiTof1710f1710;
+    result+=chiTof0_pif0_kAmp(theData, ChiTof1710f1710, f1710Mass, f1710Width,  f1710Mass, f1710Width);
+  }
 
   return result; 
 
@@ -348,6 +355,14 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
   else Alert << "hypothesis K1_1410_K892Hyp1 not set!!!" <<endmsg;
 
+  iter= hypMap.find("f1710_f1710Hyp1");
+  if (iter !=hypMap.end()){
+    _f1710_f1710Hyp1= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _f1710_f1710Hyp1 <<endmsg;
+  }
+  else Alert << "hypothesis f1710_f1710Hyp1 not set!!!" <<endmsg;
+
 
   _ampVec.push_back(paramEnum2K2PiGam::ChiGam);
   _ampVec.push_back(paramEnum2K2PiGam::K892K892);
@@ -381,12 +396,16 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
     }
   }
 
+  if(_f1710_f1710Hyp1) _ampVec.push_back(paramEnum2K2PiGam::ChiTof1710f1710); 
+
   _massVec.push_back(paramEnum2K2PiGam::K892);
   _massVec.push_back(paramEnum2K2PiGam::f1710);
   if(_K1_1270Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1270);
   if(_K1_1400Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1400);
   if(_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp) _massVec.push_back(paramEnum2K2PiGam::K_2_1430);
   if(_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp || _K1_1270Hyp || _K0_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
+
+
 
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
