@@ -21,6 +21,7 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::ChiToK_0_1430_K892]=theStates.ChiToKst0Kst1States();
   _jpclsMap[paramEnum2K2PiGam::K_1_1410K_1_1410]=theStates.ChiTo2K892States();
   _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1410_K892]=theStates.ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_1430_K892]=theStates.ChiToKst1Kst2States();
   _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1400K]=theStates.ChiToK1400ToK892piStates();
   _jpclsMap[paramEnum2K2PiGam::K_1_1400ToK892Pi]=theStates.K1400ToKst1PiStates();
   _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1270_K]=theStates.ChiToK1400ToK892piStates();
@@ -124,6 +125,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::ChiToK_0_1430_K892) return params.ChiToK_0_1430_K892;
   else if (index==paramEnum2K2PiGam::K_1_1410K_1_1410) return params.ChiToK_1_1410_K_1_1410;
   else if (index==paramEnum2K2PiGam::ChiToK_1_1410_K892) return params.ChiToK_1_1410_K892;
+  else if (index==paramEnum2K2PiGam::ChiToK_2_1430_K892) return params.ChiToK_2_1430_K892;
   else if (index==paramEnum2K2PiGam::ChiToK_1_1400K) return params.ChiToK_1_1400K;
   else if (index==paramEnum2K2PiGam::K_1_1400ToK892Pi) return params.K1400ToK892Pi;
   else if (index==paramEnum2K2PiGam::ChiToK_1_1270_K) return params.ChiToK_1_1270_K;
@@ -356,11 +358,11 @@ void FitParams2K2PiGam::setMnUsrParamsDec(MnUserParameters& upar, param2K2PiGam&
     double magErr=errPair.first;
     double phiErr=errPair.second;
     
-    double magMin=magVal-magErr;
+    double magMin=magVal-2.*magErr;
     if (magMin<0.) magMin=0.;
     
-    upar.Add(magStr, magVal, magErr, magMin, magVal+magErr);
-    upar.Add(phiStr, phiVal, phiErr, -3*M_PI, 3*M_PI);
+    upar.Add(magStr, magVal, magErr, magMin, magVal+2.*magErr);
+    upar.Add(phiStr, phiVal, phiErr, -3.*M_PI, 3.*M_PI);
 
     counter++;
   }

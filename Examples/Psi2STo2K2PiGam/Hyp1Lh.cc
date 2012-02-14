@@ -13,6 +13,7 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K2_1430_K2_1430Hyp(false)
   ,_K0_1430_K2_1430Hyp(false)
   ,_K0_1430_K892Hyp1(true)
+  ,_K2_1430_K892Hyp1(true)
   ,_K1_1410_K1_1410Hyp(false)
   ,_K1_1410_K892Hyp1(true)
   ,_f1710_f1710Hyp1(true)
@@ -29,6 +30,7 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K2_1430_K2_1430Hyp(false)
   ,_K0_1430_K2_1430Hyp(false)
   ,_K0_1430_K892Hyp1(true)
+  ,_K2_1430_K892Hyp1(true)
   ,_K1_1410_K1_1410Hyp(false)
   ,_K1_1410_K892Hyp1(true)
   ,_f1710_f1710Hyp1(true)
@@ -89,6 +91,12 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K892=theParamVal.ChiToK_0_1430_K892;
     result+=chiToK0K1Amp(theData, ChiToK_0_1430_K892, K_0_1430Mass, K_0_1430Width,  K892Mass, K892Width);
   }
+
+  if(_K2_1430_K892Hyp1){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_2_1430_K892=theParamVal.ChiToK_2_1430_K892;
+    result+=chiToK1K2Amp(theData, ChiToK_2_1430_K892, K892Mass, K892Width, K_2_1430Mass, K_2_1430Width);
+  }
+
   if (_K1_1410_K1_1410Hyp || _K1_1410_K892Hyp1){
     double K_1_1410Mass=theParamVal.BwK_1_1410.first;
     double K_1_1410Width=theParamVal.BwK_1_1410.second;
@@ -338,6 +346,13 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
   else Alert << "hypothesis K0_1430_K892Hyp1 not set!!!" <<endmsg;
 
+  iter= hypMap.find("K2_1430_K892Hyp1");
+  if (iter !=hypMap.end()){
+    _K2_1430_K892Hyp1= iter->second;
+    _hypMap[iter->first]= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _K2_1430_K892Hyp1 <<endmsg;
+  }
+  else Alert << "hypothesis K2_1430_K892Hyp1 not set!!!" <<endmsg;
 
   iter= hypMap.find("K1_1410_K1_1410Hyp");
   if (iter !=hypMap.end()){
@@ -383,6 +398,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if(_K0_1430_K0_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_0_1430K_0_1430);
   if(_K0_1430_K2_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_0_1430K_2_1430);
   if(_K0_1430_K892Hyp1) _ampVec.push_back(paramEnum2K2PiGam::ChiToK_0_1430_K892);
+  if(_K2_1430_K892Hyp1) _ampVec.push_back(paramEnum2K2PiGam::ChiToK_2_1430_K892);
 
   if(_K1_1410_K1_1410Hyp || _K1_1410_K892Hyp1){
     _massVec.push_back(paramEnum2K2PiGam::K_1_1410);
@@ -402,7 +418,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   _massVec.push_back(paramEnum2K2PiGam::f1710);
   if(_K1_1270Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1270);
   if(_K1_1400Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1400);
-  if(_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp) _massVec.push_back(paramEnum2K2PiGam::K_2_1430);
+  if(_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp || _K2_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_2_1430);
   if(_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp || _K1_1270Hyp || _K0_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
 
 
