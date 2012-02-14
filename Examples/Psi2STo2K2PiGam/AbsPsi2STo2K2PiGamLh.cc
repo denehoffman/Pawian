@@ -1678,7 +1678,51 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1Tof980_piKAmp(Psi2STo2K2PiGamData::
   return result;
 }
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiToK1Tof0_piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1Dec, double K1Mass, double K1Width, double f0Mass, double f0Width){
+  Vector4<double> KpPiPi(theData->KpPiPi_HeliChic0_4V.E(), theData->KpPiPi_HeliChic0_4V.Px(), 
+			 theData->KpPiPi_HeliChic0_4V.Py(), theData->KpPiPi_HeliChic0_4V.Pz());
 
+  Vector4<double> KmPiPi(theData->KmPiPi_HeliChic0_4V.E(), theData->KmPiPi_HeliChic0_4V.Px(), 
+			 theData->KmPiPi_HeliChic0_4V.Py(), theData->KmPiPi_HeliChic0_4V.Pz());
+
+  Vector4<double> PiPi(theData->PiPi_HeliChic0_4V.E(), theData->PiPi_HeliChic0_4V.Px(), 
+		       theData->PiPi_HeliChic0_4V.Py(), theData->PiPi_HeliChic0_4V.Pz());
+
+
+  Spin lamK1=0;
+  complex<double> result(0.,0.);
+  
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itProd;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator itDec;
+
+  for ( itProd=K1Prod.begin(); itProd!=K1Prod.end(); ++itProd){
+
+    boost::shared_ptr<const JPCLS> theState=itProd->first;
+    double theMagProd=itProd->second.first;
+    double thePhiProd=itProd->second.second;
+    complex<double> expiphiProd(cos(thePhiProd), sin(thePhiProd));
+
+    complex<double> currentResultDec(0.,0.);
+
+    for ( itDec=K1Dec.begin(); itDec!=K1Dec.end(); ++itDec){
+      
+      boost::shared_ptr<const JPCLS> theDecState=itDec->first;
+      double theMagDec=itDec->second.first;
+      double thePhiDec=itDec->second.second;
+      complex<double> expiphiDec(cos(thePhiDec), sin(thePhiDec));
+
+      complex<double> ampKpPiPi=conj(theData->DfK1pTof0Kp[1][0][0])*BreitWigner(KpPiPi, K1Mass, K1Width);
+      complex<double> ampKmPiPi=conj(theData->DfK1mTof0Km[1][0][0])*BreitWigner(KmPiPi, K1Mass, K1Width);
+
+
+      currentResultDec+=theMagDec*expiphiDec*sqrt(2.*theState->L+1.)*Clebsch(theState->L, 0., theState->S, 0, theState->J, 0)*Clebsch(1,0, 0, 0, theState->S, 0)*BreitWigner(PiPi, f0Mass, f0Width)*(ampKpPiPi+ampKmPiPi);
+    }
+
+    result+=theMagProd*expiphiProd*currentResultDec;
+  }
+  return result;
+
+}
 
 void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2STo2K2PiGamLh::print\n";
