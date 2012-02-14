@@ -410,7 +410,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1K2Amp(Psi2STo2K2PiGamData::Psi2STo2
     double thePhi=it->second.second;
     complex<double> expiphi(cos(thePhi), sin(thePhi));
     
-    complex<double> tmpResult=theMag*expiphi*sqrt(2.*ChiToK1K2_State->L+1.)*sqrt(3.)*sqrt(5.);
+    complex<double> tmpResult(0.,0.);
     for (Spin lamK1=-1; lamK1<=1; ++lamK1){
       Spin lamK2=lamK1;
       Spin lamKK=lamK2-lamK1;
@@ -425,7 +425,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1K2Amp(Psi2STo2K2PiGamData::Psi2STo2
       complex<double> ampK2ToKmPi0= conj(theData->DfKst2mToKmPi0[2][lamK2][0])*BreitWignerBlattW(KmPi0, 0.493677, 0.1349766, K2Mass, K2Width, 2);
       complex<double> ampK2ToKmPi1= conj(theData->DfKst2mToKmPi1[2][lamK2][0])*BreitWignerBlattW(KmPi1, 0.493677, 0.1349766, K2Mass, K2Width, 2);
       
-      tmpResult*=Clebsch(ChiToK1K2_State->L, 0, ChiToK1K2_State->S, lamKK, ChiToK1K2_State->J, lamKK)*Clebsch(2,lamK2, 1, -lamK1, ChiToK1K2_State->S, lamKK)*
+      tmpResult+=Clebsch(ChiToK1K2_State->L, 0, ChiToK1K2_State->S, lamKK, ChiToK1K2_State->J, lamKK)*Clebsch(2,lamK2, 1, -lamK1, ChiToK1K2_State->S, lamKK)*
 	(
 	 ampK1ToKpPi0*ampK2ToKmPi1
 	 +ampK1ToKpPi1*ampK2ToKmPi0
@@ -433,7 +433,7 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiToK1K2Amp(Psi2STo2K2PiGamData::Psi2STo2
 	 +ampK1ToKmPi1*ampK2ToKpPi0 ); 
 
     }
-    result+=tmpResult;
+    result+=theMag*expiphi*sqrt(2.*ChiToK1K2_State->L+1.)*sqrt(3.)*sqrt(5.)*tmpResult;
   } 
   
   return result;
