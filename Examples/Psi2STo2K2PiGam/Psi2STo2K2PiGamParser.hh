@@ -79,7 +79,7 @@ class Psi2STo2K2PiGamParser
       , _qaMode(false)
       , _genMode(false)
     {
-    _disabledHyps.push_back("blainit");
+//     _disabledHyps.push_back("blainit");
     if (!parseCommandLine(argc, argv)) throw false;
   }
   

@@ -13,6 +13,7 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamHist.hh"
 #include "Examples/Psi2STo2K2PiGam/AbsPsi2STo2K2PiGamLh.hh"
+#include "Examples/Psi2STo2K2PiGam/HypProdLh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp1Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp2Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp3Lh.hh"
@@ -219,8 +220,8 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<AbsPsi2STo2K2PiGamLh> thePsi2STo2K2PiGamLhPtr;
 
   std::string startWithHyp=theAppParams.startHypo();
-
-  if (startWithHyp=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  if (startWithHyp=="prod") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new HypProdLh(thePsi2STo2K2PiGamEvtListPtr));
+  else if (startWithHyp=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp3") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp3Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
