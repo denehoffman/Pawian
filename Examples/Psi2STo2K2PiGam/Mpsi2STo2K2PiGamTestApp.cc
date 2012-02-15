@@ -210,7 +210,7 @@ int main(int __argc,char *__argv[]){
     std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
     if (iter !=hypMap.end()){
       hypMap[iter->first]= false;
-      Info<< "hypothesis " << iter->first << " disabed" <<endmsg;
+      Info<< "hypothesis " << iter->first << " disabled" <<endmsg;
     }
     else { Alert << "hypothesis " << (*itStr) << " can not be disabled"<<endmsg;
       exit(0);
@@ -230,7 +230,7 @@ int main(int __argc,char *__argv[]){
   else if (startWithHyp=="hyp7") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp7Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp8") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp8Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp9") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp9Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
-  else { Alert << "start with hypthesis " << startWithHyp << " not supported!!!!" << endmsg;
+  else { Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" << endmsg;
     exit(1);
   }
 
@@ -258,7 +258,7 @@ int main(int __argc,char *__argv[]){
   if (qaMode){
     thePsi2STo2K2PiGamLhPtr->printCurrentFitResult(theStartparams);
     double theLh=thePsi2STo2K2PiGamLhPtr->calcLogLh(theStartparams);
-    Info <<"theLh = "<< theLh << endmsg;
+    Info << "theLh = " << theLh << endmsg;
 
     Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, theStartparams);
     return 0;

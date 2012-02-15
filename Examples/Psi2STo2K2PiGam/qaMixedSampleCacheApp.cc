@@ -10,6 +10,8 @@
 #include <iostream>
 #include "TCanvas.h"
 #include "TF1.h"
+#include <sstream>
+
 
 TFile* fdata;
 TNtuple* ntdata;
@@ -134,10 +136,10 @@ bool Compare(const nextneighbours a, const nextneighbours b);
 int main(){
   
   //TString fileData="./Psi2STo2K2PiGamPWA_data.root"; 
-  //TString fileData="./Psi2STo2K2PiGamPWA_pwamc__FitParamHyp8_base_K0K2_newflatte__10000events.root";
-  //TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc__FitParamHyp8_base_K0K2_newflatte__10000events.root"; 
+  //TString fileData="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_76695events.root";
   TString fileData="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root";
-  TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root"; 
+  TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_76695events.root";
+  //TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root"; 
   TString option="mixedsample,pwamc,nodraw,silent";
 
   cout << "--- ENTERING QAMIXEDSAMPLE" << endl;
@@ -254,8 +256,6 @@ int main(){
   pwamcinvMassKpipi = new TH1F("pwamcinvMassKpipi", "pwamcinvMassKpipi", 60, 0.7, 3.0);
   pwamcinvMasspipi = new TH1F("pwamcinvMasspipi", "pwamcinvMasspipi", 60, 0.2, 2.8);
   
-  histofpull = new TH1F("histofpull", "histofpull", 100, -10, 10);
-
   histVectData.push_back(dataCosThetaKKpipi);
   histVectData.push_back(dataPhiKKpipi);
   histVectData.push_back(dataCosThetaKpipi);
@@ -318,218 +318,265 @@ void mixed_sample() {
   if(!silent) cout << "Entering mixed-sample method" << endl;
   if(!silent) cout << endl;
 
-  unsigned int limit_runs_lower = 1;
-  unsigned int limit_runs_upper = 8;
-  cout << "Performing " << limit_runs_upper - limit_runs_lower << " runs." << endl;
-  std::vector<float> fpullvector;
-  unsigned int limit_data = 1000;   // numOfEntriesData;
-  unsigned int limit_pwamc = 5000;  // numOfEntriesPwaMc;
-  unsigned int numberofneighbours = 10;
-
-
-  for(unsigned int run = limit_runs_lower; run < limit_runs_upper; ++run) {
-
-    std::vector<struct nextneighbours> neighbourList;
-    cout << "Starting run " << run+1 << endl;
-
-    if(!silent) cout << endl;
-
-    float distance = 1E6;
-    float T=0;
-    unsigned int pwaoffset = 100000;
-
-    if(!silent) cout << "--- Calculating distances DATA <-> DATA" << endl;
-    for(unsigned int i = 0; i<limit_data; i++) {
-      for(unsigned int j = i; j<limit_data; j++) {
-	if(i!=j) {
-	  distance = GetDistanceDataToData(i,j);
-          nextneighbours tmpNeighbours(i,j,distance,true);
-	  neighbourList.push_back(tmpNeighbours);
-	  if(neighbourList.size() % 500000 == 0) cout << neighbourList.size() << "th distance has been calculated." << endl;
-	}
-      }
-    }
-    
-    if(!silent)  cout << "--- Calculating distances DATA <-> PWAMC" << endl;
-    for(unsigned int i = 0; i<limit_data; i++) {
-      for(unsigned int j = 0; j<limit_pwamc; j++) {
-  	distance = GetDistanceDataToPwaMc(i,j+run*limit_pwamc);
-	nextneighbours tmpNeighbours(i,j+pwaoffset,distance,false);
-	neighbourList.push_back(tmpNeighbours);
-	// neighbourList.push_back((struct nextneighbours) {i,j+pwaoffset,distance,false});
-        if(neighbourList.size() % 500000 == 0) cout << neighbourList.size() << "th distance has been calculated." << endl;
-      }
-    }
-    
-    if(!silent) cout << "--- Calculating distances PWAMC <-> PWAMC" << endl;
-    for(unsigned int i = 0; i<limit_pwamc; i++) {
-      for(unsigned int j = i; j<limit_pwamc; j++) {
-	if(i!=j) {
-	  distance = GetDistancePwaMcToPwaMc(i+run*limit_pwamc,j+run*limit_pwamc);
-	  nextneighbours tmpNeighbours(i+pwaoffset,j+pwaoffset,distance,true);
-	  neighbourList.push_back(tmpNeighbours);
-	  // neighbourList.push_back((struct nextneighbours) {i+pwaoffset,j+pwaoffset,distance,true});
-	  if(neighbourList.size() % 500000 == 0) cout << neighbourList.size() << "th distance has been calculated." << endl;
-	}
-      }
-    }
-    
-    if(!silent) {
-      cout << endl;
-      cout << "How many distances have been calculated?\t" << neighbourList.size() << endl;
-      cout << endl;
-      cout << endl;
-    }
-    
-    if(longoutput) {
-      cout << "--- Distances:" << endl;
-      for(unsigned int i = 0; i < neighbourList.size(); i++) {
-	cout << neighbourList[i].evtnumber1 << "\t" << neighbourList[i].evtnumber2 << "\t" << neighbourList[i].distance << " \t\t" << neighbourList[i].datatype << endl;
-      }
-    }
-    if(!silent) cout << endl;
-    
-    std::sort(neighbourList.begin(),neighbourList.end(), Compare);
-    if(!silent) cout << "neighbourList has been sorted!" << endl;
-    if(!silent) cout << endl;
-    
-    if(longoutput) {
-      cout << "--- Distances after sorting:" << endl;
-      for(unsigned int i = 0; i < neighbourList.size(); i++) {
-	cout << neighbourList[i].evtnumber1 << "\t" << neighbourList[i].evtnumber2 << "\t" << neighbourList[i].distance << " \t\t" << neighbourList[i].datatype << endl;
-      }
-    }
-    if(!silent)  cout << endl;
-    
-    float numOfEntriesTotal = float(limit_data + limit_pwamc);
-    
-    unsigned int m;
-    
-    for(unsigned int i = 0; i < limit_data; i++) {
-      if(output) cout << "--- Checking neighbours of event " << i << endl;
-      m = 0;
-      for(unsigned int j = 0; j < neighbourList.size(); j++) 
-	{
-	  if (m >= numberofneighbours) continue;
-	  if(longoutput) cout << "Checking Event in neighbourList for data: " << j << endl;
-	  if(neighbourList[j].evtnumber1 == i || neighbourList[j].evtnumber2 == i) 
-	    {
-	      m++;
-	      if(longoutput) cout << j << "th event is the " << m << "th neighbour of event " << i;
-	      if(neighbourList[j].datatype==true) 
-		{
-		  if(longoutput) cout << " and belongs to the same sample! Adding +1 to T" << endl;
-		  T=T+1.;
-		}
-	      else 
-		{
-		  if(longoutput) cout << ", but doesn't belong to the same sample." << endl;
-		}
-	    }
-	  else 
-	    {
-	      if(longoutput) cout << "Not a neighbour of event " << i << endl;
-	    }
-	}
-      if(output) cout << "Event " << i << " has been analysed with " << m << " neighbours."  << endl;
-      if(output) cout << "T: " << T << endl;
-      if(output) cout << endl;
-    }
-
-    for(unsigned int i = 0; i < limit_pwamc; i++) {
-      if(output) cout << "--- Checking neighbours of event " << i+pwaoffset << endl;
-      m = 0;
-      
-      for(unsigned int j = 0; j < neighbourList.size(); j++) 
-	{
-	  if (m >= numberofneighbours) continue;
-	  if(longoutput) cout << "Checking Event in neighbourList for pwamc: " << j << endl;
-	  if(neighbourList[j].evtnumber1 == i+pwaoffset || neighbourList[j].evtnumber2 == i+pwaoffset) 
-	    {
-	      m++;
-	      if(longoutput) cout << j << "th event is the " << m << "th neighbour of event " << i+pwaoffset;
-	      if(neighbourList[j].datatype==true) 
-		{
-		  if(longoutput) cout << " and belongs to the same sample! Adding +1 to T" << endl;
-		  T=T+1;
-		}
-	      else 
-		{
-		  if(longoutput) cout << ", but doesn't belong to the same sample." << endl;
-		}
-	    }
-	  else 
-	    {
-	      if(longoutput) cout << "Not a neighbour of event " << i+pwaoffset << endl;
-	    }
-
-	}
-
-      if(output) cout << "Event " << i+pwaoffset << " has been analysed." << endl;
-      if(output) cout << "T: " << T << endl;
-      if(output) cout << endl;
-    }
-
-
-    if(!silent) {
-      cout << endl;
-      cout << "Number of Entries in DATA: " << numOfEntriesData << " events available (used " << limit_data << ")"<< endl;
-      cout << "Number of Entries in PWAMC: " << numOfEntriesPwaMc << " events available (used " << limit_pwamc << ")"<< endl;
-      cout << "Total Number of Entries: " << numOfEntriesTotal << endl;
-      cout << endl;
-    }
-    
-    numOfEntriesData = limit_data;
-    numOfEntriesPwaMc = limit_pwamc;
-    
-    float Tnorm = 0;
-    Tnorm = T/(float(numberofneighbours)*float(numOfEntriesTotal));
-    if(!silent) cout << "Tnorm: " << Tnorm << endl;
-    
-    
-    float mu = ((float(numOfEntriesData)*(float(numOfEntriesData)-1)) + (float(numOfEntriesPwaMc)*(float(numOfEntriesPwaMc)-1))) / (float(numOfEntriesTotal)*(float(numOfEntriesTotal)-1));
-    if(!silent) cout << "Erwartungswert mu: " << mu << endl;
-    
-    
-    float variancesquared = 
-      1 / (float(numOfEntriesTotal)*float(numberofneighbours)) 
-      * 
-      ( 
-       (float(numOfEntriesData)*float(numOfEntriesPwaMc))/(pow(float(numOfEntriesTotal), 2)) 
-       + 
-       4*(pow(float(numOfEntriesData), 2)*pow(float(numOfEntriesPwaMc), 2))/(pow(float(numOfEntriesTotal),4)) 
-       );
-
-    float fpull = (Tnorm-mu)/sqrt(variancesquared);
-    
-    if(!silent) {
-      cout << "Varianz: " << variancesquared << endl;
-      cout << endl; 
-      cout << "Differenz zwischen Resultat und Erwartungswert: " << Tnorm-mu << endl;
-    }
-    cout << "f_pull in run " << run+1 << ": " << fpull << endl;
-    cout << endl;
-    fpullvector.push_back(fpull);
-  }
+  std::vector<int> vec_limit_data;
+  vec_limit_data.push_back(100);
+  vec_limit_data.push_back(200);
+  vec_limit_data.push_back(500);
+  vec_limit_data.push_back(1000);
+  vec_limit_data.push_back(2000);
+  vec_limit_data.push_back(3000);
+  vec_limit_data.push_back(5000);
+  vec_limit_data.push_back(7500);
+  //vec_limit_data.push_back(10000);
   
-  cout << "--------------------------" << endl;
-  cout << fpullvector.size() << endl;
-  for(unsigned int i = 0; i < fpullvector.size(); i++) {
-    cout << "Calculated fpull:\t" << fpullvector[i] << endl;
-    histofpull->Fill( fpullvector[i] );
+
+  for(unsigned int i = 0; i<vec_limit_data.size(); i++) {
+    cout << "Run " << i << " will have " << vec_limit_data[i] << " data events." << endl;
+  }
+
+  for(unsigned int k = 0; k<vec_limit_data.size(); k++) {
+    cout << "Cycle: " << k << endl;
+    //unsigned int limit_data = 2874;   // numOfEntriesData (usually 2874);
+    unsigned int limit_data = vec_limit_data[k];
+    unsigned int limit_pwamc = 10*limit_data;  // numOfEntriesPwaMc;
+    unsigned int total_events_in_pwamc = 76695;
+    string sourcename1 = "Hyp9pwamc";
+    string sourcename2 = "Hyp1pwamc";
+    cout << "Using " << limit_data << " DATA events." << endl;
+    cout << "Using " << limit_pwamc << " PWAMC events." << endl;
+    
+    unsigned int limit_runs_lower = 0;
+    unsigned int limit_runs_upper = total_events_in_pwamc/limit_pwamc;
+    cout << "Performing " << limit_runs_upper - limit_runs_lower << " runs." << endl;
+    unsigned int numberofneighbours = 10;
+    
+    std::vector<float> fpullvector;
+    
+    for(unsigned int run = limit_runs_lower; run < limit_runs_upper; ++run) {
+
+      std::vector<struct nextneighbours> neighbourList;
+      cout << "Starting run " << run+1 << endl;
+      
+      if(!silent) cout << endl;
+      
+      float distance = 1E6;
+      float T=0;
+      unsigned int pwaoffset = 100000;
+      
+      if(!silent) cout << "--- Calculating distances DATA <-> DATA" << endl;
+      for(unsigned int i = 0; i<limit_data; i++) {
+	for(unsigned int j = i; j<limit_data; j++) {
+	  if(i!=j) {
+	    distance = GetDistanceDataToData(i,j);
+	    nextneighbours tmpNeighbours(i,j,distance,true);
+	    neighbourList.push_back(tmpNeighbours);
+	    if(neighbourList.size() % 500000 == 0 && !silent) cout << neighbourList.size() << "th distance has been calculated." << endl;
+	  }
+	}
+      }
+      
+      if(!silent)  cout << "--- Calculating distances DATA <-> PWAMC" << endl;
+      for(unsigned int i = 0; i<limit_data; i++) {
+	for(unsigned int j = 0; j<limit_pwamc; j++) {
+	  distance = GetDistanceDataToPwaMc(i,j+run*limit_pwamc);
+	  nextneighbours tmpNeighbours(i,j+pwaoffset,distance,false);
+	  neighbourList.push_back(tmpNeighbours);
+	  // neighbourList.push_back((struct nextneighbours) {i,j+pwaoffset,distance,false});
+	  if(neighbourList.size() % 500000 == 0 && !silent) cout << neighbourList.size() << "th distance has been calculated." << endl;
+	}
+      }
+      
+      if(!silent) cout << "--- Calculating distances PWAMC <-> PWAMC" << endl;
+      for(unsigned int i = 0; i<limit_pwamc; i++) {
+	for(unsigned int j = i; j<limit_pwamc; j++) {
+	  if(i!=j) {
+	    distance = GetDistancePwaMcToPwaMc(i+run*limit_pwamc,j+run*limit_pwamc);
+	    nextneighbours tmpNeighbours(i+pwaoffset,j+pwaoffset,distance,true);
+	    neighbourList.push_back(tmpNeighbours);
+	    // neighbourList.push_back((struct nextneighbours) {i+pwaoffset,j+pwaoffset,distance,true});
+	    if(neighbourList.size() % 500000 == 0 && !silent) cout << neighbourList.size() << "th distance has been calculated." << endl;
+	  }
+	}
+      }
+      
+      if(!silent) {
+	cout << endl;
+	cout << "How many distances have been calculated?\t" << neighbourList.size() << endl;
+	cout << endl;
+	cout << endl;
+      }
+      
+      if(longoutput) {
+	cout << "--- Distances:" << endl;
+	for(unsigned int i = 0; i < neighbourList.size(); i++) {
+	  cout << neighbourList[i].evtnumber1 << "\t" << neighbourList[i].evtnumber2 << "\t" << neighbourList[i].distance << " \t\t" << neighbourList[i].datatype << endl;
+	}
+      }
+      if(!silent) cout << endl;
+      
+      std::sort(neighbourList.begin(),neighbourList.end(), Compare);
+      if(!silent) cout << "neighbourList has been sorted!" << endl;
+      if(!silent) cout << endl;
+      
+      if(longoutput) {
+	cout << "--- Distances after sorting:" << endl;
+	for(unsigned int i = 0; i < neighbourList.size(); i++) {
+	  cout << neighbourList[i].evtnumber1 << "\t" << neighbourList[i].evtnumber2 << "\t" << neighbourList[i].distance << " \t\t" << neighbourList[i].datatype << endl;
+	}
+      }
+      if(!silent)  cout << endl;
+      
+      float numOfEntriesTotal = float(limit_data + limit_pwamc);
+      
+      unsigned int m;
+      
+      for(unsigned int i = 0; i < limit_data; i++) {
+	if(output) cout << "--- Checking neighbours of event " << i << endl;
+	m = 0;
+	for(unsigned int j = 0; j < neighbourList.size(); j++) 
+	  {
+	    if (m >= numberofneighbours) continue;
+	    if(longoutput) cout << "Checking Event in neighbourList for data: " << j << endl;
+	    if(neighbourList[j].evtnumber1 == i || neighbourList[j].evtnumber2 == i) 
+	      {
+		m++;
+		if(longoutput) cout << j << "th event is the " << m << "th neighbour of event " << i;
+		if(neighbourList[j].datatype==true) 
+		  {
+		    if(longoutput) cout << " and belongs to the same sample! Adding +1 to T" << endl;
+		    T=T+1.;
+		  }
+		else 
+		  {
+		    if(longoutput) cout << ", but doesn't belong to the same sample." << endl;
+		  }
+	      }
+	    else 
+	      {
+		if(longoutput) cout << "Not a neighbour of event " << i << endl;
+	      }
+	  }
+	if(output) cout << "Event " << i << " has been analysed with " << m << " neighbours."  << endl;
+	if(output) cout << "T: " << T << endl;
+	if(output) cout << endl;
+      }
+      
+      for(unsigned int i = 0; i < limit_pwamc; i++) {
+	if(output) cout << "--- Checking neighbours of event " << i+pwaoffset << endl;
+	m = 0;
+	
+	for(unsigned int j = 0; j < neighbourList.size(); j++) 
+	  {
+	    if (m >= numberofneighbours) continue;
+	    if(longoutput) cout << "Checking Event in neighbourList for pwamc: " << j << endl;
+	    if(neighbourList[j].evtnumber1 == i+pwaoffset || neighbourList[j].evtnumber2 == i+pwaoffset) 
+	      {
+		m++;
+		if(longoutput) cout << j << "th event is the " << m << "th neighbour of event " << i+pwaoffset;
+		if(neighbourList[j].datatype==true) 
+		  {
+		    if(longoutput) cout << " and belongs to the same sample! Adding +1 to T" << endl;
+		    T=T+1;
+		  }
+		else 
+		  {
+		    if(longoutput) cout << ", but doesn't belong to the same sample." << endl;
+		  }
+	      }
+	    else 
+	      {
+		if(longoutput) cout << "Not a neighbour of event " << i+pwaoffset << endl;
+	      }
+	    
+	  }
+	
+	if(output) cout << "Event " << i+pwaoffset << " has been analysed." << endl;
+	if(output) cout << "T: " << T << endl;
+	if(output) cout << endl;
+      }
+      
+      
+      if(!silent) {
+	cout << endl;
+	cout << "Number of Entries in DATA: " << numOfEntriesData << " events available (used " << limit_data << ")"<< endl;
+	cout << "Number of Entries in PWAMC: " << numOfEntriesPwaMc << " events available (used " << limit_pwamc << ")"<< endl;
+	cout << "Total Number of Entries: " << numOfEntriesTotal << endl;
+	cout << endl;
+      }
+      
+      numOfEntriesData = limit_data;
+      numOfEntriesPwaMc = limit_pwamc;
+      
+      float Tnorm = 0;
+      Tnorm = T/(float(numberofneighbours)*float(numOfEntriesTotal));
+      if(!silent) cout << "Tnorm: " << Tnorm << endl;
+      
+      
+      float mu = ((float(numOfEntriesData)*(float(numOfEntriesData)-1)) + (float(numOfEntriesPwaMc)*(float(numOfEntriesPwaMc)-1))) / (float(numOfEntriesTotal)*(float(numOfEntriesTotal)-1));
+      if(!silent) cout << "Erwartungswert mu: " << mu << endl;
+      
+      
+      float variancesquared = 
+	1 / (float(numOfEntriesTotal)*float(numberofneighbours)) 
+	* 
+	( 
+	 (float(numOfEntriesData)*float(numOfEntriesPwaMc))/(pow(float(numOfEntriesTotal), 2)) 
+	 + 
+	 4*(pow(float(numOfEntriesData), 2)*pow(float(numOfEntriesPwaMc), 2))/(pow(float(numOfEntriesTotal),4)) 
+	 );
+      
+      float fpull = (Tnorm-mu)/sqrt(variancesquared);
+      
+      if(!silent) {
+	cout << "Varianz: " << variancesquared << endl;
+	cout << endl; 
+	cout << "Differenz zwischen Resultat und Erwartungswert: " << Tnorm-mu << endl;
+      }
+      cout << "f_pull in run " << run+1 << ": " << fpull << endl;
+      cout << endl;
+      fpullvector.push_back(fpull);
+    }
+
+    std::stringstream out;
+    out << limit_data;
+    string limit_data_string = out.str();
+    out.str("");
+    out.clear();
+    out << limit_pwamc;
+    string limit_pwamc_string = out.str();
+    out.str("");
+    out.clear();
+    out << limit_runs_upper - limit_runs_lower;
+    string runs_string = out.str();
+    
+    TString histname = "histofpull_"+limit_data_string+sourcename1+"_"+limit_pwamc_string+sourcename2+"_"+runs_string+"runs.pdf";
+    cout << histname << endl;
+    histofpull = new TH1F("histofpull", histname, 100, -10, 10);
+
+    cout << "--------------------------" << endl;
+    cout << fpullvector.size() << " fpulls have been calculated." << endl;
+    for(unsigned int i = 0; i < fpullvector.size(); i++) {
+      cout << "Calculated fpull:\t" << fpullvector[i] << endl;
+      histofpull->Fill( fpullvector[i] );
+    }
+        
+    TCanvas* chist1 = new TCanvas("chist1","chist1",1200,800);
+    histofpull->SetLineColor(2);
+    histofpull->Draw();
+    
+    TF1* fit1 = new TF1("fit1","gaus(0)",-10.,10.);
+    fit1->SetParameters(5,histofpull->GetMean(),histofpull->GetRMS());
+    fit1->SetLineColor(4);
+    fit1->SetLineWidth(3);
+    histofpull->Fit("fit1","LMRS","",-10.,10.);
+
+    chist1->Print(histname);
+    histofpull->Reset();
+    fpullvector.clear();
+    
   }
 
 
-  TCanvas* chist1 = new TCanvas("chist1","chist1",1200,800);
-  histofpull->SetLineColor(2);
-  histofpull->Draw();
-
-  TF1* fit1 = new TF1("fit1","gaus(0)",-10.,10.);
-  fit1->SetParameters(5,histofpull->GetMean(),histofpull->GetRMS());
-  fit1->SetLineColor(4);
-  fit1->SetLineWidth(3);
-  histofpull->Fit("fit1","LMRS","",-10.,10.);
-  chist1->Print("histofpull.pdf");
 
 }
 
