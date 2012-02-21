@@ -320,14 +320,14 @@ void mixed_sample() {
 
   std::vector<int> vec_limit_data;
   vec_limit_data.push_back(100);
-  vec_limit_data.push_back(200);
-  vec_limit_data.push_back(500);
-  vec_limit_data.push_back(1000);
-  vec_limit_data.push_back(2000);
-  vec_limit_data.push_back(3000);
-  vec_limit_data.push_back(5000);
-  vec_limit_data.push_back(7500);
-  //vec_limit_data.push_back(10000);
+  // vec_limit_data.push_back(200);
+  // vec_limit_data.push_back(500);
+  // vec_limit_data.push_back(1000);
+  // vec_limit_data.push_back(2000);
+  // vec_limit_data.push_back(3000);
+  // vec_limit_data.push_back(5000);
+  // vec_limit_data.push_back(7500);
+  // vec_limit_data.push_back(10000);
   
 
   for(unsigned int i = 0; i<vec_limit_data.size(); i++) {
