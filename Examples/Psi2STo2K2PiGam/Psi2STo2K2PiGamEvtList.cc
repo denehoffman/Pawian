@@ -309,6 +309,12 @@ Psi2STo2K2PiGamEvtData* Psi2STo2K2PiGamEvtList::fillEvtData(Event* anEvent, int 
 	 thePsi2STo2K2PiGamEvtData->DfK1mTof0Km[1][lam1][lam2]=Wigner_D(PiPi_HeliKmPi0Pi0_4V.Phi(), PiPi_HeliKmPi0Pi0_4V.Theta(),0, 1, lam1,lam2);
        }
      }
+
+    for (Spin Kj=0; Kj<=3; Kj++){
+ 	 thePsi2STo2K2PiGamEvtData->DfKjpTof0Kp[Kj][0][0]=Wigner_D(PiPi_HeliKpPi0Pi0_4V.Phi(), PiPi_HeliKpPi0Pi0_4V.Theta(),0, Kj, 0,0);
+	 thePsi2STo2K2PiGamEvtData->DfKjmTof0Km[Kj][0][0]=Wigner_D(PiPi_HeliKmPi0Pi0_4V.Phi(), PiPi_HeliKmPi0Pi0_4V.Theta(),0, Kj, 0,0);
+     }
+
   return thePsi2STo2K2PiGamEvtData;
 }
 

@@ -66,6 +66,9 @@ FitParams2K2PiGam::FitParams2K2PiGam()
   _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof980K]=theStates.K1pTof0KStates();
   _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof1710K]=theStates.K1pTof0KStates();
   _jpclsMap[paramEnum2K2PiGam::K_1_2400ToK_0_1430Pi]=theStates.K1ToK0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_2400K]=theStates.ChiToK0K2_States();
+  _jpclsMap[paramEnum2K2PiGam::K_2_2400Tof980K]=theStates.K2Tof0KStates();
+  _jpclsMap[paramEnum2K2PiGam::K_2_2400Tof1710K]=theStates.K2Tof0KStates();
   _jpclsMap[paramEnum2K2PiGam::K892K_1_1680]=theStates.ChiTo2K892States();
   _jpclsMap[paramEnum2K2PiGam::ChiToK1680K1680]=theStates.ChiTo2K892States();
   _jpclsMap[paramEnum2K2PiGam::ChiToK1680K_0_1430]=theStates.ChiToKst0Kst1States();
@@ -172,6 +175,9 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::K_1_2400Tof980K) return params.K_1_2400Tof980K;
   else if (index==paramEnum2K2PiGam::K_1_2400Tof1710K) return params.K_1_2400Tof1710K;
   else if (index==paramEnum2K2PiGam::K_1_2400ToK_0_1430Pi) return params.K_1_2400ToK_0_1430Pi;
+  else if (index==paramEnum2K2PiGam::ChiToK_2_2400K) return params.ChiToK_2_2400K;
+  else if (index==paramEnum2K2PiGam::K_2_2400Tof980K) return params.K_2_2400Tof980K;
+  else if (index==paramEnum2K2PiGam::K_2_2400Tof1710K) return params.K_2_2400Tof1710K;
   else if (index==paramEnum2K2PiGam::K892K_1_1680) return params.ChiToK892K1680;
   else if (index==paramEnum2K2PiGam::ChiToK1680K1680) return params.ChiToK1680K1680;
   else if (index==paramEnum2K2PiGam::ChiToK1680K_0_1430) return params.ChiToK1680K_0_1430;
@@ -237,6 +243,7 @@ pair<double, double>& FitParams2K2PiGam::massPair(param2K2PiGam& params, unsigne
   else if (index==paramEnum2K2PiGam::f_2_2300) return params.Bwf_2_2300;
   else if (index==paramEnum2K2PiGam::K_0_2400) return params.BwK_0_2400;
   else if (index==paramEnum2K2PiGam::K_1_2400) return params.BwK_1_2400;
+  else if (index==paramEnum2K2PiGam::K_2_2400) return params.BwK_2_2400;
   else if (index==paramEnum2K2PiGam::K_0_1950) return params.BwK_0_1950;
   else if (index==paramEnum2K2PiGam::K_1_1680) return params.BwK_1_1680;
   else if (index==paramEnum2K2PiGam::K_1_2300) return params.BwK_1_2300;
