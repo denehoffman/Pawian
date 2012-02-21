@@ -19,11 +19,16 @@ float datainvmassK2pi2;
 float datainvmassK1pi1pi2;
 float datainvmassK2pi1pi2;
 float datainvmasspi1pi2;
+float datainvmassK1K2pi1;
+float datainvmassK1K2pi2;
+float datainvmassK1K2;
 
 float datacosthetapi1;
 float datacosthetapi2;
 float datacosthetapipiViaK1pi1pi2;
 float datacosthetapipiViaK2pi1pi2;
+float datacosthetaK1K2ViaK1K2pi1;
+float datacosthetaK1K2ViaK1K2pi2;
 
 std::vector<float> vecdatainvmassK1pi1;
 std::vector<float> vecdatainvmassK1pi2;
@@ -37,6 +42,12 @@ std::vector<float> vecdatainvmassK2pi1pi2;
 std::vector<float> vecdatainvmasspi1pi2;
 std::vector<float> vecdatacosthetapipiViaK1pi1pi2;
 std::vector<float> vecdatacosthetapipiViaK2pi1pi2;
+
+std::vector<float> vecdatainvmassK1K2pi1;
+std::vector<float> vecdatainvmassK1K2pi2;
+std::vector<float> vecdatainvmassK1K2;
+std::vector<float> vecdatacosthetaK1K2ViaK1K2pi1;
+std::vector<float> vecdatacosthetaK1K2ViaK1K2pi2;
 
 float datacosThetapi1;
 float datacosThetapi2;

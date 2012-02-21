@@ -78,7 +78,7 @@ double BlattWeisskopf::compute(double p) const
 
     if(0 == _LL) result=1.;
     else
-      if(1 == _LL) result=sqrt(x/(1.0+x));
+      if(1 == _LL) result=sqrt(2.*x/(1.0+x));
       else
 	if(2 == _LL) result=sqrt((13.*x*x)/((x-3.)*(x-3.)+9.*x));
 	else
