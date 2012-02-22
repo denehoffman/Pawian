@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <utility>
+
 
 #include <cassert>
 
@@ -17,13 +19,15 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsLh.hh"
-
+#include  "Examples/JpsiGamKsKlKK/FitParamErrorMatrix.hh"
 
 class TFile;
 class TH2F;
 class TH1F;
 class TNtuple;
-
+class JpsiGamKsKlKKProdLh;
+class EvtDataBaseList;
+class FitParamErrorMatrix;
 
 class JpsiGamKsKlKKHist {
 
@@ -33,7 +37,11 @@ public:
 
   ///Constructor 
   JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList>);
-  JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh>, fitParams&);
+  //JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh>, fitParams&);
+  JpsiGamKsKlKKHist(JpsiGamKsKlKKProdLh* theJpsiGamKsKlKKLh, fitParams& fitParam,  FitParamErrorMatrix* theErrorMatrix );
+  void fill();
+  void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
+  
   
   /** Destructor */
   virtual ~JpsiGamKsKlKKHist();
@@ -45,7 +53,7 @@ protected:
 
 private:
   
-  
+ 
 
 
   TFile* _theTFile;
@@ -97,7 +105,8 @@ private:
   TNtuple* _dataTuple;
   TNtuple* _mcTuple;
 
-
+  TNtuple* _massIndepTuple;
+  std::pair<double, double> _massRange;
 
   void initRootStuff();
   void plotDalitz(TH2F* theHisto, EvtData* theData, double weight);
@@ -117,6 +126,10 @@ private:
 		       const Vector4<double>& v4_d2,const Vector4<double>& v4_h1,
 		       const Vector4<double>& v4_h2 ) ;
 
+
+  JpsiGamKsKlKKProdLh* _theJpsiGamKsKlKKLh;
+  fitParams _fitParam;
+  FitParamErrorMatrix* _errMatrix;
 
 };
 

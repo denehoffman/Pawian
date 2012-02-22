@@ -9,6 +9,7 @@
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 #include "TROOT.h"
 // #include <TSystem.h>
@@ -22,7 +23,7 @@
 #include "Minuit2/MnUserParameters.h"
 
 
-
+class FitParamErrorMatrix;
 
 class JpsiGamKsKlKKProdLh : public AbsLh{
 
@@ -41,8 +42,6 @@ public:
     return new JpsiGamKsKlKKProdLh(_evtListPtr, _hypMap);
   }
   
-
-  
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   
   //Getters:
@@ -52,8 +51,9 @@ public:
   void useCommonProductionPhase( bool commonPhase ){_useCommonProductionPhase=commonPhase;}
   void massIndependentFit( bool massIndep){ _massIndependentFit=massIndep;  }
   
-  double calcComponentIntensity(  EvtData* theData, fitParams& theParamVal,  std::string component  );
-
+  bool calcComponentIntensity(  EvtData* theData, fitParams& theParamVal,  FitParamErrorMatrix& theErrMatrix, std::string component, std::pair<double, double> &intensity  );
+  void dumpComponentIntensity( std::ostream &os, fitParams& theParams, FitParamErrorMatrix& theErrMatrix  );
+  
 
   
 protected:
@@ -113,6 +113,8 @@ protected:
   void calcF1Amp(EvtData* theData, fitParams& theParamVal, complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm, 
 		 dynamicModelParams::enumDynamicModel theModel);
   
+
+  
   
   bool _etacHyp;
   bool _eta2225Hyp;
@@ -134,6 +136,13 @@ protected:
 
 private:
   
+  void calcAmpError( EvtData* theData, fitParams& theParamVal, FitParamErrorMatrix& theErrMatrix,  
+ 		       dynamicModelParams::enumDynamicModel theModel, 
+		     boost::function<void(EvtData* , fitParams&, complex<double>&, 
+					  complex<double>&, complex<double>&, complex<double>&, dynamicModelParams::enumDynamicModel)>, 
+		     std::vector< int >, double& );
+
+  
   bool initializeHypothesisMap( const std::map<const std::string, bool>& hypMap   );
 
   const double _phiMass;// = 1.019455;
@@ -143,3 +152,5 @@ private:
 };
 
 #endif
+
+

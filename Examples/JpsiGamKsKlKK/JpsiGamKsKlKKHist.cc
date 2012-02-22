@@ -2,10 +2,13 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKHist.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKEventList.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKData.hh"
+#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKProdLh.hh"
 #include "PwaUtils/KinUtils.hh"
+#include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKFitParams.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -15,74 +18,79 @@
 #include "TLorentzVector.h"
 #include "ErrLogger/ErrLogger.hh"
 
-JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  _theTFile(0),
-  _PhiPhiMassDataHist(0),
-  _PhiPhiMassMcHist(0),
-  _PhiPhiMassFittedHist(0),
-  _KpKmMassDataHist(0),
-  _KpKmMassMcHist(0),
-  _KpKmMassFittedHist(0),
-  _KsKlMassDataHist(0),
-  _KsKlMassMcHist(0),
-  _KsKlMassFittedHist(0),
-  _costPhi_KpKmDataHist(0), 
-  _costPhi_KpKmMcHist(0), 
-  _costPhi_KpKmFittedHist(0),
-  _phiPhi_KpKmDataHist(0), 
-  _phiPhi_KpKmMcHist(0), 
-  _phiPhi_KpKmFittedHist(0), 
-  _chiDataHist(0), 
-  _chiMcHist(0), 
-  _chiFittedHist(0),
-   _dataTuple(0),
-  _mcTuple(0)
-{
-  if(0==theEvtList){
-    Alert <<"JpsiGamKsKlKKEventList* theEvtList is a 0 pointer !!!!" ;  // << endmsg;
-    exit(1);
-  }
 
-  initRootStuff();
+// JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+//    _theTFile(0),
+//    _PhiPhiMassDataHist(0),
+//    _PhiPhiMassMcHist(0),
+//   _PhiPhiMassFittedHist(0),
+//   _KpKmMassDataHist(0),
+//   _KpKmMassMcHist(0),
+//   _KpKmMassFittedHist(0),
+//   _KsKlMassDataHist(0),
+//   _KsKlMassMcHist(0),
+//   _KsKlMassFittedHist(0),
+//   _costPhi_KpKmDataHist(0), 
+//   _costPhi_KpKmMcHist(0), 
+//   _costPhi_KpKmFittedHist(0),
+//   _phiPhi_KpKmDataHist(0), 
+//   _phiPhi_KpKmMcHist(0), 
+//   _phiPhi_KpKmFittedHist(0), 
+//   _chiDataHist(0), 
+//   _chiMcHist(0), 
+//   _chiFittedHist(0),
+//    _dataTuple(0),
+//   _mcTuple(0),
+//   _massIndepTuple(0),
+//   _massRange(make_pair(0,100))
+// {
+//   if(0==theEvtList){
+//     Alert <<"JpsiGamKsKlKKEventList* theEvtList is a 0 pointer !!!!" ;  // << endmsg;
+//     exit(1);
+//   }
 
-  const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
+//   initRootStuff();
+  
+//   const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
 
-  std::vector<EvtData*>::const_iterator it=dataList.begin();
-  while(it!=dataList.end())
-    {
-      plotDalitz(_dalitzDataHist, (*it), 1.);
-      plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
-      plotKsKl( _KsKlMassDataHist, (*it), 1. );
-      plotKpKm( _KpKmMassDataHist, (*it), 1. );
-      plotCostPhiKs( _costKs_KsKlHeliDataHist, _phiKs_KsKlHeliDataHist,(*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
-      plotCostGam( _costGamCmDataHist,(*it), 1. );
-      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);        
-      fillTuple(_dataTuple, (*it), 1.);
+//   std::vector<EvtData*>::const_iterator it=dataList.begin();
+//   while(it!=dataList.end())
+//     {
+//       plotDalitz(_dalitzDataHist, (*it), 1.);
+//       plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
+//       plotKsKl( _KsKlMassDataHist, (*it), 1. );
+//       plotKpKm( _KpKmMassDataHist, (*it), 1. );
+//       plotCostPhiKs( _costKs_KsKlHeliDataHist, _phiKs_KsKlHeliDataHist,(*it), 1. );
+//       plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
+//       plotCostGam( _costGamCmDataHist,(*it), 1. );
+//       plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);        
+//       fillTuple(_dataTuple, (*it), 1.);
       
-      ++it;
-    }
+//       ++it;
+//     }
+  
+//   const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
+//   it=mcList.begin();
+//   while(it!=mcList.end())
+//     { 
+//       plotDalitz(_dalitzMcHist, (*it), 1.);
+//       plotDalitz(_dalitzMcHist, (*it), 1.);
+//       plotPhiPhi(_PhiPhiMassMcHist, (*it), 1.  );
+//       plotKsKl( _KsKlMassMcHist, (*it), 1. );
+//       plotKpKm( _KpKmMassMcHist, (*it), 1. );
+//       plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist,(*it), 1. );
+//       plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist, (*it), 1. );
+//       plotCostGam( _costGamCmMcHist, (*it), 1. );
+//       plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);  
+//      fillTuple(_mcTuple, (*it), 1.);
+     
+//       ++it;
+//     }
 
-  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
-  it=mcList.begin();
-  while(it!=mcList.end())
-    { 
-      plotDalitz(_dalitzMcHist, (*it), 1.);
-      plotDalitz(_dalitzMcHist, (*it), 1.);
-      plotPhiPhi(_PhiPhiMassMcHist, (*it), 1.  );
-      plotKsKl( _KsKlMassMcHist, (*it), 1. );
-      plotKpKm( _KpKmMassMcHist, (*it), 1. );
-      plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist,(*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist, (*it), 1. );
-      plotCostGam( _costGamCmMcHist, (*it), 1. );
-      plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);  
-     fillTuple(_mcTuple, (*it), 1.);
+// }
 
-      ++it;
-    }
-}
 
-JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh, fitParams& fitParam) :
+JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(JpsiGamKsKlKKProdLh* theJpsiGamKsKlKKLh, fitParams& fitParam, FitParamErrorMatrix* theErrorMatrix) :
   _theTFile(0),
   _dalitzDataHist(0),
   _dalitzMcHist(0),
@@ -106,16 +114,27 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
   _chiMcHist(0), 
   _chiFittedHist(0),  
   _dataTuple(0),
-  _mcTuple(0)
+  _mcTuple(0),
+  _massIndepTuple(0),
+  _massRange(make_pair(0.,0.) )
 {
   if(0==theJpsiGamKsKlKKLh){
     Alert <<"JpsiGamKsKlKKLh* theJpsiGamKsKlKKLh is a 0 pointer !!!!" ;  // << endmsg;
     exit(1);
   }
-
+  
   initRootStuff();
+  _theJpsiGamKsKlKKLh = theJpsiGamKsKlKKLh;
+  _fitParam = fitParam;
+  std::vector<double> data;
+  _errMatrix = theErrorMatrix;
+  
+}
+  
 
-  boost::shared_ptr<const EvtDataBaseList> theEvtList=theJpsiGamKsKlKKLh->getEventList();
+void JpsiGamKsKlKKHist::fill(){
+
+  boost::shared_ptr<const EvtDataBaseList> theEvtList=_theJpsiGamKsKlKKLh->getEventList();
   const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
 
   std::vector<EvtData*>::const_iterator it=dataList.begin();
@@ -149,7 +168,7 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
       plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamKsKlKKData::V4_KpKm_HeliKsKlKpKm], 1.);  
       plotChi(_chiMcHist, (*it), 1. );   
       
-      double evtWeight= theJpsiGamKsKlKKLh->calcEvtIntensity((*it), fitParam);
+      double evtWeight= _theJpsiGamKsKlKKLh->calcEvtIntensity((*it), _fitParam);
       plotDalitz(_dalitzFittedHist, (*it),evtWeight );
       plotPhiPhi(_PhiPhiMassFittedHist, (*it), evtWeight  );
       plotKsKl( _KsKlMassFittedHist, (*it), evtWeight );
@@ -187,6 +206,50 @@ JpsiGamKsKlKKHist::JpsiGamKsKlKKHist(boost::shared_ptr<AbsLh> theJpsiGamKsKlKKLh
   _costPhi_KpKmFittedHist->Scale(scaleFactor);
   _phiPhi_KpKmFittedHist->Scale(scaleFactor);
   _chiFittedHist->Scale(scaleFactor);  
+
+  
+  double iEta(0.), iEtaErr(0.), iF0(0.), iF0Err(0.), iEta2(0.), iEta2Err(0.), iF1(0.), iF1Err(0.), iF2(0.), iF2Err(0.);
+  
+  
+  it=mcList.begin();
+  while(it!=mcList.end()){
+    
+    std::pair<double, double> intensityEvent = make_pair(0.,0.);
+    _theJpsiGamKsKlKKLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "etacHyp", intensityEvent);
+    iEta+= intensityEvent.first*scaleFactor;
+    iEtaErr+= intensityEvent.second*scaleFactor;
+    
+    _theJpsiGamKsKlKKLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "f02020Hyp",intensityEvent);
+    iF0 += intensityEvent.first*scaleFactor;
+    iF0Err += intensityEvent.second*scaleFactor;
+    
+    _theJpsiGamKsKlKKLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "f1Hyp", intensityEvent);
+    iF1 += intensityEvent.first*scaleFactor;
+    iF1Err += intensityEvent.second*scaleFactor;
+    
+     _theJpsiGamKsKlKKLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "f22300Hyp",intensityEvent);
+    iF2 += intensityEvent.first*scaleFactor;
+    iF2Err += intensityEvent.second*scaleFactor;
+    
+     _theJpsiGamKsKlKKLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "eta21870Hyp",intensityEvent);
+    iEta2+= intensityEvent.first*scaleFactor;
+    iEta2Err += intensityEvent.second*scaleFactor;
+    
+    it++;
+  }
+  double meanMassRange = _massRange.first + 0.5*(_massRange.second-_massRange.first);
+  
+  
+  Info << "Events for component eta : " << iEta << " +/- " << iEtaErr ;
+  Info << "Events for component f0:   " << iF0 << " +/- " << iF0Err ;
+  Info << "Events for component f1:   " << iF1 << " +/- " << iF1Err ;
+  Info << "Events for component f2:   " << iF2 << " +/- " << iF2Err ;
+  Info << "Events for component eta2: " << iEta2 << " +/- " << iEta2Err ;
+  
+
+  
+  _massIndepTuple->Fill(meanMassRange, iEta, iEtaErr, iF0, iF0Err, iF1, iF1Err, iF2, iF2Err, iEta2, iEta2Err );
+  
 }
 
 JpsiGamKsKlKKHist::~JpsiGamKsKlKKHist()
@@ -265,6 +328,8 @@ void JpsiGamKsKlKKHist::initRootStuff()
   
    _dataTuple=new TNtuple("_dataTuple", "data ntuple", tupleVariables.data());
    _mcTuple=new TNtuple("_mcTuple", "mc ntuple", tupleVariables.data());
+
+   _massIndepTuple = new TNtuple("_massIndepTuple","results from mass indep. fits", ("mass:eta:etaErr:f0:f0Err:f1:f1Err:f2:f2Err:eta2:eta2Err")   );
 }
 
 void JpsiGamKsKlKKHist::plotDalitz(TH2F* theHisto,  EvtData* theData, double weight)
@@ -429,4 +494,6 @@ double JpsiGamKsKlKKHist::decayAngleChi(const Vector4<double>& v4_p,const Vector
  return chi;
  
 }
+
+
 

@@ -141,6 +141,16 @@ void JpsiGamKsKlKKEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>
        }
      }
      
+     //WignerD function for 1+ -> phi phi
+     Spin jAxialVec =1;
+     for(Spin M=-jAxialVec; M<=jAxialVec; M++){
+       for (Spin lam=-1; lam<=1; lam++){
+	 evtData->WignerDs[enumJpsiGamKsKlKKData::Df_Spin2][jAxialVec][M][lam] = Wigner_D(V4_KsKl_HeliKsKlKpKm.Phi(),V4_KsKl_HeliKsKlKpKm.Theta(), 0,jAxialVec,M,lam); //use Df_Spin2 (!) to be able to use same function for fJ(J=1,2) decay amplitudes
+       }
+     }
+
+     
+     
      //WignerD function for 0-/0+ -> phi phi
      Spin jScalar =0;
      Spin M =0;

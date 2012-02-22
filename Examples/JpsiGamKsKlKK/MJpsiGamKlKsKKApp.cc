@@ -37,7 +37,12 @@
 #include "Minuit2/FunctionMinimum.h"
 #include "Minuit2/MnMinos.h"
 #include "Minuit2/MnStrategy.h"
+#include "Minuit2/MnPrint.h"
+#include "Minuit2/MnScan.h"
 
+#include "Examples/JpsiGamKsKlKK/FitParamErrorMatrix.hh"
+#include "Examples/JpsiGamKsKlKK/FitParamIndex.hh"
+#include "Examples/JpsiGamKsKlKK/FitParamErrorMatrixStreamer.hh"
 
 using namespace ROOT::Minuit2;
 
@@ -171,23 +176,21 @@ int main(int __argc,char *__argv[]){
   }
   
   boost::shared_ptr<AbsLh> theLhPtr;
+  JpsiGamKsKlKKProdLh* theProdLh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
+  theProdLh->massIndependentFit( theAppParams.massIndependentFit() );
+  theProdLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
+
   std::string startWithHyp=theAppParams.startHypo();
   
   if (startWithHyp=="production"){
-    JpsiGamKsKlKKProdLh* tmplh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
-    tmplh->massIndependentFit( theAppParams.massIndependentFit() );
-    tmplh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
-    theLhPtr = boost::shared_ptr<AbsLh> (tmplh);
-    //theLhPtr = boost::shared_ptr<AbsLh> (new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap ));
+    theLhPtr = boost::shared_ptr<AbsLh> (theProdLh);
   }
   else { 
     Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
     exit(1);
   }
   
- 
-
-
+  
   std::string mode=theAppParams.mode();
   if (mode=="dumpDefaultParams"){
     fitParams defaultVal;
@@ -220,37 +223,25 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    JpsiGamKsKlKKHist theHist(theLhPtr, theStartparams);
+    
+    std::string errFile = "finalErrorMatrix.dat";
+    FitParamErrorMatrixStreamer theErrStreamer( errFile  );
+    std::vector<double> theErrData;
+    int ncols(0);
+    theErrStreamer.matrixData( theErrData, ncols  );
+    FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
+    
+    JpsiGamKsKlKKHist theHist(theProdLh, theStartparams, &theErrorMatrix);
+    theHist.setMassRange(theAppParams.massRange() );
+    theHist.fill();
     
     if(theAppParams.massIndependentFit()){
       //calculate intensity contributions
-      JpsiGamKsKlKKProdLh* contrLh = new JpsiGamKsKlKKProdLh(theJpsiGamKsKlKKEventListPtr, hypMap);
-      contrLh->massIndependentFit( theAppParams.massIndependentFit() );
-      contrLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
-      
-      boost::shared_ptr<const EvtDataBaseList> theEvtList=contrLh->getEventList();
-      const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
-      const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
-
-      std::map<const std::string, bool>::const_iterator hypo= hypMap.begin();
-      while(hypo !=hypMap.end()){
-	if( hypo->second ){
-	  
-	  std::vector<EvtData*>::const_iterator it=mcList.begin();
-	  double integral=0.0;
-	  while(it!=mcList.end()){
-	    integral+=contrLh->calcComponentIntensity( *it, theStartparams, hypo->first );
-	    it++;
-	  }
-	  double scale = (1.*dataList.size()) / (1.*mcList.size()) ;
-	  Info << "Scale factor: " << scale << endmsg;
-	  integral*=scale;
-	  Info << "Events for component " << hypo->first << ": " << integral << endmsg;
-	}
-	hypo++;
-      }
+      //std::ofstream theStream ( "componentIntensity.dat");
+      //theProdLh->dumpComponentIntensity( theStream, theStartparams, theErrorMatrix );
     }
-        
+    
+
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
@@ -274,12 +265,15 @@ int main(int __argc,char *__argv[]){
   for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
     upar.Fix( (*itFix) );
   }
-
+  
+  //MnScan theScan(theFcn, upar);
+  //theScan();
+  //cout << upar << endl;
 
   MnMigrad migrad(theFcn, upar);  
   Info <<"start migrad "<< endmsg;
   FunctionMinimum min = migrad();
-
+  
   if(!min.IsValid()) {
     //try with higher strategy
     Info <<"FM is invalid, try with strategy = 2."<< endmsg;
@@ -289,11 +283,20 @@ int main(int __argc,char *__argv[]){
 
   MnUserParameters finalUsrParameters=min.UserParameters();
   const std::vector<double> finalParamVec=finalUsrParameters.Params();
- 
+    
   fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
   
-  JpsiGamKsKlKKHist theHist(theLhPtr, finalFitParams);
+  //MnUserCovariance theCov = min.UserCovariance() ;
+  //cout << "User vov : "<< endl;
+  //cout << theCov << endl;  
+  
+  MnUserParameterState theState = min.UserState();
+  cout << "User state " << theState << endl;
+  
+  
 
+  
+  
   theFitParamBase->printParams(finalFitParams);
   double theLh=theLhPtr->calcLogLh(finalFitParams);
   Info <<"theLh = "<< theLh << endmsg;
@@ -307,9 +310,23 @@ int main(int __argc,char *__argv[]){
    fitParams finalFitErrs=theFitParamBase->getFitParamVal(finalParamErrorVec);
    std::ofstream theStream ( "finalResult.dat");
    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+   
+ 
+   
+   MnUserCovariance theCovMatrix = min.UserCovariance();
+   std::cout  << min << std::endl;
+   std::ofstream theErrMatStream ( "finalErrorMatrix.dat");
+   FitParamErrorMatrix theErrMatrix(theCovMatrix, finalUsrParameters );
+   theErrMatrix.Write(theErrMatStream);
+   
+   //std::ofstream theCompStream ( "componentIntensity.dat");
+   //theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
+   JpsiGamKsKlKKHist theHist(theProdLh, theStartparams, &theErrMatrix);
+   theHist.fill();
+   
    return 0;
    }
    
-  return 0;
+   return 0;
 }
 

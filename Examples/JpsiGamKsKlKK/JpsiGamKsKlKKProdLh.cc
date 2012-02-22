@@ -5,7 +5,15 @@
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKProdLh.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKEventList.hh"
 #include "Examples/JpsiGamKsKlKK/JpsiGamKsKlKKFitParams.hh"
+#include "Examples/JpsiGamKsKlKK/FitParamErrorMatrix.hh"
+#include "Examples/JpsiGamKsKlKK/FitParamIndex.hh"
+
 #include "ErrLogger/ErrLogger.hh"
+
+#include <boost/bind.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
+
 
 JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList> theEvtList, const std::map<const std::string, bool>& hypMap) :
   AbsLh(theEvtList)
@@ -22,13 +30,8 @@ JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh(boost::shared_ptr<const EvtDataBaseList
   ,_phiMass( 1.019455)
   ,_kaonMass(0.493677)
 {
-  
-  
   initializeHypothesisMap( hypMap);
-  
-
-
-  
+ 
 }
 
 JpsiGamKsKlKKProdLh::JpsiGamKsKlKKProdLh( boost::shared_ptr<AbsLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
@@ -118,7 +121,6 @@ complex<double> JpsiGamKsKlKKProdLh::etaGammaAmp(Spin Minit, Spin Metac, Spin Mg
      boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
      double thePsiMag=itPsi->second;
      double thePsiPhi=PsiToEtaPhi[PsiState];
-     
      complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
      Spin lambda = Metac-Mgamma;
      if( fabs(lambda)>PsiState->J || fabs(lambda)>PsiState->S) continue;
@@ -602,24 +604,29 @@ JpsiGamKsKlKKProdLh::initializeHypothesisMap( const std::map<const std::string, 
 }
 
 
-
-double 
-JpsiGamKsKlKKProdLh::calcComponentIntensity(  EvtData* theData, fitParams& theParamVal, std::string component  ){
+bool 
+JpsiGamKsKlKKProdLh::calcComponentIntensity(  EvtData* theData, fitParams& theParamVal, FitParamErrorMatrix& theErrMatrix, std::string component, std::pair<double, double> &intensity    ){
   
-  double result=0.0;
   complex<double> JmpGmp(0.0,0.0);
   complex<double> JmpGmm(0.0,0.0);
   complex<double> JmmGmp(0.0,0.0);
   complex<double> JmmGmm(0.0,0.0);
   
+  intensity = make_pair(0.,0.);
+  
+  
   std::map<const std::string, bool>::const_iterator iter= _hypMap.find(component);
   if (iter ==_hypMap.end()){
-    Alert << "Component " << component << " was not included in fit hypothesis" <<endmsg ;
-    return 0;
+    static int alerts=0;
+    if(alerts<5) Alert << "Component " << component << " was not included in fit hypothesis";
+    alerts++;
+    return true;
   }
   if (iter !=_hypMap.end() && !iter->second ){
-    Alert << "Component " << component << " was disabled in fit hypothesis"  <<endmsg ;
-    return 0;
+    static int alerts=0;
+    if(alerts<5) Alert << "Component " << component << " was disabled in fit hypothesis" ;
+    alerts++;
+    return true;
   }
   
   
@@ -627,22 +634,69 @@ JpsiGamKsKlKKProdLh::calcComponentIntensity(  EvtData* theData, fitParams& thePa
     
     if(component == "etacHyp" ){
       calcEtacGammaAmp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm,dynamicModelParams::MassIndependent  );
-    }
-    else if( component == "f02020Hyp" ){
-      calcF02020Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent );
-    }
-    else if(component == "f22300Hyp"){
-      calcF22300Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent);
-    }
-    else if(component == "eta21870Hyp"){
-      calcE21870Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent);
-    }
-    else if(component == "f1Hyp"){
-      calcF1Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent);
+      intensity.first =norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      
+      boost::function<void(EvtData* , fitParams&, complex<double>&, complex<double>&, complex<double>&, complex<double>&, dynamicModelParams::enumDynamicModel) > ampFunction = boost::bind(&JpsiGamKsKlKKProdLh::calcEtacGammaAmp, this, _1, _2, _3, _4, _5, _6,_7  );
+      double intensityError=0.0;
+      std::vector< int > theAmps;
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::PsiToEtacGamma );
+      calcAmpError(  theData, theParamVal, theErrMatrix, dynamicModelParams::MassIndependent, ampFunction, theAmps, intensityError  );
+      intensity.second=intensityError;
     }
     
-    result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
-    return result;
+    
+    else if( component == "f02020Hyp" ){
+      calcF02020Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent );
+      intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      boost::function<void(EvtData* , fitParams&, complex<double>&, complex<double>&, complex<double>&, complex<double>&, dynamicModelParams::enumDynamicModel) > ampFunction = boost::bind(&JpsiGamKsKlKKProdLh::calcF02020Amp, this, _1, _2, _3, _4, _5, _6,_7  );
+      double intensityError=0.0;
+      std::vector< int > theAmps;
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::PsiToF02020Gamma );
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::F02020ToPhiPhi );
+      calcAmpError(  theData, theParamVal, theErrMatrix, dynamicModelParams::MassIndependent, ampFunction, theAmps, intensityError  );
+      intensity.second=intensityError;
+    }
+    
+    else if(component == "f22300Hyp"){
+      calcF22300Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent);
+      intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      boost::function<void(EvtData* , fitParams&, complex<double>&, complex<double>&, complex<double>&, complex<double>&, dynamicModelParams::enumDynamicModel) > ampFunction = boost::bind(&JpsiGamKsKlKKProdLh::calcF22300Amp, this, _1, _2, _3, _4, _5, _6,_7  );
+      double intensityError=0.0;
+      std::vector< int > theAmps;
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::PsiToF22300Gamma );
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::F22300ToPhiPhi );
+      calcAmpError(  theData, theParamVal, theErrMatrix, dynamicModelParams::MassIndependent, ampFunction, theAmps, intensityError  );
+      intensity.second=intensityError;
+    }
+    
+    else if(component == "eta21870Hyp"){
+      calcE21870Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent);
+      intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      boost::function<void(EvtData* , fitParams&, complex<double>&, complex<double>&, complex<double>&, complex<double>&, dynamicModelParams::enumDynamicModel) > ampFunction = boost::bind(&JpsiGamKsKlKKProdLh::calcE21870Amp, this, _1, _2, _3, _4, _5, _6,_7  );
+      double intensityError=0.0;
+      std::vector< int > theAmps;
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::PsiToEta21870Gamma );
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::Eta21870ToPhiPhi );
+      calcAmpError(  theData, theParamVal, theErrMatrix, dynamicModelParams::MassIndependent, ampFunction, theAmps, intensityError  );
+      intensity.second=intensityError;
+      
+    }
+    
+    else if(component == "f1Hyp"){
+      calcF1Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::MassIndependent);
+      intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+    
+      boost::function<void(EvtData* , fitParams&, complex<double>&, complex<double>&, complex<double>&, complex<double>&, dynamicModelParams::enumDynamicModel) > ampFunction = boost::bind(&JpsiGamKsKlKKProdLh::calcF1Amp, this, _1, _2, _3, _4, _5, _6,_7  );
+      double intensityError=0.0;
+      std::vector< int > theAmps;
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::PsiToF1Gamma );
+      theAmps.push_back( paramEnumJpsiGamKsKlKK::F1ToPhiPhi );
+      calcAmpError(  theData, theParamVal, theErrMatrix, dynamicModelParams::MassIndependent, ampFunction, theAmps, intensityError  );
+      intensity.second=intensityError;
+
+
+    }
+    return true;
   }
   
   
@@ -653,39 +707,41 @@ JpsiGamKsKlKKProdLh::calcComponentIntensity(  EvtData* theData, fitParams& thePa
   
   if(component == "etacHyp" ){
     calcEtacGammaAmp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::BreitWigner    );
+    intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   }
   
   else if(component == "eta2225Hyp"){
     calcEta2225Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm,dynamicModelParams::BreitWigner );
+  intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   }
 
 
   else if( component == "f02020Hyp" ){
     calcF02020Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::BreitWigner );
+  intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   }
   
   else if(component == "f02020FlatteHyp"){
     calcF02020Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::Flatte );
+  intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   }
   
   else if(component == "f22300Hyp"){
     calcF22300Amp( theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::BreitWigner);
+    intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   }
   
   else if(component == "eta21870Hyp"){
     calcE21870Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::BreitWigner);
-  }
+    intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);  
+}
   
   else if(component == "f1Hyp"){
     calcF1Amp(theData, theParamVal, JmpGmp,JmpGmm, JmmGmp,JmmGmm, dynamicModelParams::BreitWigner);
+    intensity.first=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
   }
   
-  return  norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
-
-
-
-  
-  return 0.0;
+  return  true;
 }
 
 
@@ -870,3 +926,111 @@ JpsiGamKsKlKKProdLh::calcE21870Amp(EvtData* theData, fitParams& theParamVal,
    JmmGmp+=f2GammaAmp(-1, 1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width, _useCommonProductionPhase, theDynModel );
    JmmGmm+=f2GammaAmp(-1, -1, f1Spin, theData,  PsiTof1GamMag, PsiTof1GamPhi,F1ToPhiPhiMag,F1ToPhiPhiPhi,mass,width, _useCommonProductionPhase, theDynModel );
  }
+
+
+
+ void
+ JpsiGamKsKlKKProdLh::dumpComponentIntensity( std::ostream &os, fitParams& theParams, FitParamErrorMatrix &theErrMatrix  ){
+   
+   const std::vector<EvtData*> mcList=getEventList()->getMcVecs();
+   const std::vector<EvtData*> dataList=getEventList()->getDataVecs();
+   
+   std::map<const std::string, bool>::const_iterator hypo= _hypMap.begin();
+   while(hypo !=_hypMap.end()){
+     if( hypo->second ){
+       
+       std::vector<EvtData*>::const_iterator it=mcList.begin();
+       double integral=0.0;
+       double integralError=0.0;
+       while(it!=mcList.end()){
+	 
+	 std::pair<double, double> intensityEvent=make_pair(0.,0.);
+	 calcComponentIntensity( *it, theParams, theErrMatrix, hypo->first, intensityEvent );
+	 integral+=intensityEvent.first;
+	 integralError+=intensityEvent.second;
+	 it++;
+       }
+       Info << "Unscaled intensity for component " << hypo->first << ": " << integral << " +/- " << integralError << endmsg;
+       double scale = (1.*dataList.size()) / (1.*mcList.size()) ;
+       Info << "Scale factor: " << scale << endmsg;
+       integral*=scale;
+       integralError*=scale;
+       Info << "Events for component " << hypo->first << ": " << integral << " +/- " << integralError << endmsg;
+       
+       os  << hypo->first << "\t" << integral << endl;
+     }
+     hypo++;
+   }
+ }
+
+
+
+
+
+void JpsiGamKsKlKKProdLh::calcAmpError( EvtData* theData, fitParams& theParamVal, FitParamErrorMatrix& theErrMatrix,  
+					dynamicModelParams::enumDynamicModel theModel, 
+					boost::function<void(EvtData* , fitParams&, complex<double>&, 
+							     complex<double>&, complex<double>&, complex<double>&, 
+							     dynamicModelParams::enumDynamicModel)> calcAmp, 
+					std::vector< int > theAmpsEnum,
+					double& theAmpError)
+{
+  
+  double epsilon=0.5e-5;
+  double error(0.);
+  std::vector<double> derivatives;
+  std::vector<int> parameterIndices;
+  
+  std::vector<int>::iterator ampIter;
+  for( ampIter=theAmpsEnum.begin(); ampIter!=theAmpsEnum.end(); ampIter++){
+    
+    
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMag = theParamVal.Mags[*ampIter];
+    
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator it;
+    for ( it=theMag.begin(); it!=theMag.end(); ++it){
+      
+      fitParams newParamsPlus = theParamVal;
+      fitParams newParamsMinus = theParamVal;
+      boost::shared_ptr<const JPCLS> theState=it->first;
+      newParamsPlus.Mags[*ampIter][theState]=theParamVal.Mags[*ampIter][theState]+epsilon;
+      newParamsMinus.Mags[*ampIter][theState]=theParamVal.Mags[*ampIter][theState]-epsilon;
+      
+      complex<double> JmpGmp(0.0,0.0);
+      complex<double> JmpGmm(0.0,0.0);
+      complex<double> JmmGmp(0.0,0.0);
+      complex<double> JmmGmm(0.0,0.0);
+    
+      calcAmp( theData, newParamsPlus, JmpGmp,JmpGmm, JmmGmp,JmmGmm,dynamicModelParams::MassIndependent  );
+      double resultPlus=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      
+      JmpGmp = complex<double>(0.0,0.0);
+      JmpGmm =  complex<double>(0.0,0.0);
+      JmmGmp =  complex<double>(0.0,0.0);
+      JmmGmm =  complex<double>(0.0,0.0);
+      
+      calcAmp( theData, newParamsMinus, JmpGmp,JmpGmm, JmmGmp,JmmGmm,dynamicModelParams::MassIndependent  );
+      double resultMinus=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      
+      derivatives.push_back((resultPlus-resultMinus)/(2*epsilon));
+      static FitParamIndex theParamIndex(theParamVal);
+      parameterIndices.push_back( theParamIndex.Mag(*ampIter, theState ) );
+    }
+    
+    int elements = derivatives.size();
+    for(int i=0; i<elements; i++){
+      for(int j=i;j<elements;j++){
+	if(i==j){
+	  error+=derivatives[i]*derivatives[j]*theErrMatrix(parameterIndices[i],parameterIndices[j] );
+	}else{
+	  error+=derivatives[i]*derivatives[j]*theErrMatrix(parameterIndices[i],parameterIndices[j] );
+	}
+      }
+    }
+  }    
+  theAmpError=sqrt(error);
+  
+}
+
+
+

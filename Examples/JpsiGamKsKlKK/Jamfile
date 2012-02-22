@@ -12,5 +12,6 @@ lib JpsiGamKlKsKK :
 
 exe MJpsiGamKlKsKKApp : MJpsiGamKlKsKKApp.cc JpsiGamKlKsKK : ;
 exe MJpsiGamKsKlKKParserTestApp : JpsiGamKsKlKKParserTestApp.cc JpsiGamKlKsKK : ;
-
+exe MMassIndepResultApp : MMassIndepResultApp.cc JpsiGamKlKsKK : ;
+exe MTestFcnApp : MTestFcnApp.cc JpsiGamKlKsKK : ;
 
