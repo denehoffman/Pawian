@@ -192,11 +192,11 @@ void Psi2STo2K2PiGamHist::initRootStuff(const std::string& fileName)
 
   initHistMap();
 
-  _dataTuple = new TNtuple("dataTuple","dataTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipiViaK1pipi:costhetapipiViaK2pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
+  _dataTuple = new TNtuple("dataTuple","dataTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1k2pi1:mk1k2pi2:mk1k2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetaK1ViaK1K2:costhetaKKViaK1K2pi1:costhetaKKViaK1K2pi2:costhetapipiViaK1pipi:costhetapipiViaK2pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
 
-  _mcTuple = new TNtuple("mcTuple","mcTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipiViaK1pipi:costhetapipiViaK2pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
+  //  _mcTuple = new TNtuple("mcTuple","mcTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mK1K2pi1:mK1K2pi2:mK1K2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetapipiViaK1pipi:costhetapipiViaK2pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
 
-
+  _mcTuple = new TNtuple("mcTuple","mcTuple","phiKKpipi:costhetaKKpipi:phiK1pi1pi2:costhetaK1pi1pi2:phiK2pi1pi2:costhetaK2pi1pi2:phiK1pi1:costhetaK1pi1:phiK1pi2:costhetaK1pi2:phiK2pi1:costhetaK2pi1:phiK2pi2:costhetaK2pi2:phipi1:costhetapi1:phipi2:costhetapi2:mk1k2pi1:mk1k2pi2:mk1k2:mk1pi1pi2:mk2pi1pi2:mk1pi1:mk1pi2:mk2pi1:mk2pi2:mpipi:costhetaK1ViaK1K2:costhetaKKFromK1K2pi1:costhetaKKFromK1K2pi2:costhetapipiViaK1pipi:costhetapipiViaK2pipi:phipipiViaK1pipi:costhetapiViapipi:phipiViapipi:weight:datatype");
 }
 
 void Psi2STo2K2PiGamHist::initHistMap(){
@@ -319,6 +319,9 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   float CosThetapi1             = -theData->Kp_HeliKpPi0_4V.CosTheta();
   float Phipi2                  = -theData->Kp_HeliKpPi1_4V.Phi();
   float CosThetapi2             = -theData->Kp_HeliKpPi1_4V.CosTheta();
+  float mK1K2pi1                = theData->KKPi0_HeliChic0_4V.M(); 
+  float mK1K2pi2                = theData->KKPi1_HeliChic0_4V.M();  
+  float mK1K2                   = theData->KpKm_HeliChic0_4V.M(); 
   float mK1pi1pi2               = theData->KpPiPi_HeliChic0_4V.M();
   float mK2pi1pi2               = theData->KmPiPi_HeliChic0_4V.M();
   float mK1pi1                  = theData->KpPi0_HeliChic0_4V.M();
@@ -327,6 +330,9 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   float mK2pi2                  = theData->KmPi1_HeliChic0_4V.M();
 
   float mpipi                   = theData->PiPi_HeliChic0_4V.M();
+  float CosThetaK1FromK1K2      = theData->Km_HeliKmKp_4V.CosTheta();
+  float CosThetaKKFromK1K2Pi1   = theData->KK_HeliKKPi0_4V.CosTheta(); 
+  float CosThetaKKFromK1K2Pi2   = theData->KK_HeliKKPi1_4V.CosTheta(); 
   float CosThetaPiPiFromK1PiPi  = theData->PiPi_HeliKpPi0Pi0_4V.CosTheta();
   float CosThetaPiPiFromK2PiPi  = theData->PiPi_HeliKmPi0Pi0_4V.CosTheta();
   float PhiPiPiFromK1PiPi  = theData->PiPi_HeliKpPi0Pi0_4V.Phi();
@@ -356,22 +362,27 @@ void Psi2STo2K2PiGamHist::writeNTuple(TNtuple* theTuple, const Psi2STo2K2PiGamEv
   fourVectors[15] = CosThetapi1;
   fourVectors[16] = Phipi2;
   fourVectors[17] = CosThetapi2;
-  fourVectors[18] = mK1pi1pi2;
-  fourVectors[19] = mK2pi1pi2;
-  fourVectors[20] = mK1pi1;
-  fourVectors[21] = mK1pi2;
-  fourVectors[22] = mK2pi1;
-  fourVectors[23] = mK2pi2;
-  
-  fourVectors[24] = mpipi;
-  fourVectors[25] = CosThetaPiPiFromK1PiPi;
-  fourVectors[26] = CosThetaPiPiFromK2PiPi;
-  fourVectors[27] = PhiPiPiFromK1PiPi;
-  fourVectors[28] = CosThetaPiFromPiPi;
-  fourVectors[29] = PhiPiFromPiPi;
+  fourVectors[18] = mK1K2pi1;
+  fourVectors[19] = mK1K2pi2;
+  fourVectors[20] = mK1K2;
+  fourVectors[21] = mK1pi1pi2;
+  fourVectors[22] = mK2pi1pi2;
+  fourVectors[23] = mK1pi1;
+  fourVectors[24] = mK1pi2;
+  fourVectors[25] = mK2pi1;
+  fourVectors[26] = mK2pi2;
+  fourVectors[27] = mpipi;
+  fourVectors[28] = CosThetaK1FromK1K2;
+  fourVectors[29] = CosThetaKKFromK1K2Pi1;
+  fourVectors[30] = CosThetaKKFromK1K2Pi2;
+  fourVectors[31] = CosThetaPiPiFromK1PiPi;
+  fourVectors[32] = CosThetaPiPiFromK2PiPi;
+  fourVectors[33] = PhiPiPiFromK1PiPi;
+  fourVectors[34] = CosThetaPiFromPiPi;
+  fourVectors[35] = PhiPiFromPiPi;
 
-  fourVectors[30] = evtweight;
-  fourVectors[31] = datatype;
+  fourVectors[36] = evtweight;
+  fourVectors[37] = datatype;
 
   //  cout << evtweight << endl;
 
