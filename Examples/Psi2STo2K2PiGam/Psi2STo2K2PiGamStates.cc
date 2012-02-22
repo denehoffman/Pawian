@@ -38,6 +38,12 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
   //LS combinations for the Chi_c0 decay to K*0(1430) K*2(1430)
   fillJPCLS(_chic0JPC, _Kst0JPC, _Kst2JPC, _ChiToK0K2_JPCLS);
 
+  //LS combinations for the Chi_c0 decay to K*0 K*1
+  fillJPCLS(_chic0JPC, _Kst0JPC, _Kst1JPC, _ChiToKst0Kst1JPCLS);
+
+  //LS combinations for the Chi_c0 decay to K*1 K*2
+  fillJPCLS(_chic0JPC, _Kst1JPC, _Kst2JPC, _ChiToKst1Kst2JPCLS);
+
   //LS combinations for the Chi_c0 decay to f0 f0
   fillJPCLS(_chic0JPC, _f0JPC, _f0JPC,_ChiTof0f0JPCLS);
 
@@ -93,6 +99,9 @@ Psi2STo2K2PiGamStates::Psi2STo2K2PiGamStates() :
   fillJPCLS(_K1400JPC, _f0JPC, _kJPC, _K1pTof0KJPCLS);
 
   fillJPCLS(_pi0JPC, _Kst1JPC, _pi0JPC, _Pi0pToKstKJPCLS);
+
+
+  fillJPCLS(_K2mJPC, _f0JPC, _kJPC, _K2Tof0KJPCLS);
 
 }
 
@@ -164,6 +173,18 @@ void Psi2STo2K2PiGamStates::print(std::ostream& os) const
 
   os << "*** Chi_c0:  LS combinations for the decay to K*0(1430) K*2(1430) *** "<< std::endl;
   for ( itJPCLS=_ChiToK0K2_JPCLS.begin(); itJPCLS!=_ChiToK0K2_JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to K*0 K*1 *** "<< std::endl;
+  for ( itJPCLS=_ChiToKst0Kst1JPCLS.begin(); itJPCLS!=_ChiToKst0Kst1JPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
+  os << "*** Chi_c0:  LS combinations for the decay to K*1 K*2 *** "<< std::endl;
+  for ( itJPCLS=_ChiToKst1Kst2JPCLS.begin(); itJPCLS!=_ChiToKst1Kst2JPCLS.end(); ++itJPCLS){
     (*itJPCLS)->print(os);
     os << "\n" << std::endl;
   }
@@ -276,6 +297,13 @@ void Psi2STo2K2PiGamStates::print(std::ostream& os) const
     (*itJPCLS)->print(os);
     os << "\n" << std::endl;
   }
+
+  os << "\n ***  LS combinations for the decay K2 to f0 K *** "<< std::endl;
+  for ( itJPCLS=_K2Tof0KJPCLS.begin(); itJPCLS!=_K2Tof0KJPCLS.end(); ++itJPCLS){
+    (*itJPCLS)->print(os);
+    os << "\n" << std::endl;
+  }
+
 
   os << "\n *** K+- *** "<< std::endl;
   _kJPC->print(os);

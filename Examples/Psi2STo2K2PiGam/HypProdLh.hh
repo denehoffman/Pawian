@@ -1,11 +1,12 @@
-#ifndef _Hyp7Lh_H
-#define _Hyp7Lh_H
+#ifndef _HypProdLh_H
+#define _HypProdLh_H
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <complex>
+//#include <map>
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
@@ -14,7 +15,7 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-#include "Examples/Psi2STo2K2PiGam/Hyp6Lh.hh"
+#include "Examples/Psi2STo2K2PiGam/AbsPsi2STo2K2PiGamLh.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -22,21 +23,21 @@
 
 
 
-class Hyp7Lh : public Hyp6Lh{
+class HypProdLh : public AbsPsi2STo2K2PiGamLh{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp7Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  HypProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
+  HypProdLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>);
 
   /** Destructor */
-  virtual ~Hyp7Lh();
+  virtual ~HypProdLh();
 
   virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp7Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+    return new HypProdLh(_Psi2STo2K2PiGamEvtListPtr);
   }
 
 
@@ -49,22 +50,15 @@ public:
   virtual void printCurrentFitResult(param2K2PiGam& theParamVal);
   virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix);
 
+
 protected:
-  bool _KappaHyp;
-  bool _K1_1680Hyp;
-  bool _K1_1680K1_1680Hyp7;
-  bool _K1_1680K0_1430Hyp7;
-  bool _K1_2300Hyp;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
 private:
-
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
-  std::vector<unsigned int> _massVec;
-
-  void setUp(const std::map<const std::string, bool>& hypMap);
+  void setUp();
 };
 
 #endif

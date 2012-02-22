@@ -71,6 +71,8 @@ class ApplicationParameterLS
   public:
     ApplicationParameterLS(int argc,char **argv)
       : configFile("./GOmegaPiProject.cfg")
+      , _dataFile("/data/puru2/julian/Pawian_0811/Pawian/Examples/pbarpToOmegaPiLS/data/PWA_0900.dat")
+      , _mcFile("/data/puru2/julian/Pawian_0811/Pawian/Examples/pbarpToOmegaPiLS/data/mcPWA_0900.dat")
       ,	parallelizationMode(1)
       , ip("localhost")
       , port(10000)
@@ -97,13 +99,14 @@ class ApplicationParameterLS
       , lMax(3)
       , pbarMom(600)
       , errLogMode(debug)
-      , theSourcePath("./")
-      , theLhMode("OmegaPiLhGamma")
+      , theLhMode("OmegaTo3PiLhGamma")
   {
     if (!parseCommandLine(argc, argv)) throw false;
   }
   
   const std::string& getConfigFile() const { return configFile;}
+  const std::string dataFile() const {return _dataFile;}
+  const std::string mcFile() const {return _mcFile;}
   const boost::uint16_t& getParallelizationMode() const {return parallelizationMode;}
   const bool& getServerMode() const { return serverMode; }
   const std::string& getIp() const { return ip; }
@@ -126,7 +129,6 @@ class ApplicationParameterLS
   const enErrLogMode& getErrLogMode() const { return errLogMode; }
   const Gem::Common::serializationMode& getSerMode() const { return serMode; }
   const enExecMode& getAppExecMode() const { return enAppExecMode; }
-  const std::string& getSourcePath() const { return theSourcePath; }
   const std::string& getLhMode() const { return theLhMode; }
   const std::string& getPathStartParamFile() const { return strPathStartParamFile; }
   const std::string& getMinuitFixParamFile() const { return strMinuitFixParamFile; }
@@ -146,7 +148,9 @@ protected:
   std::string strName;
   std::string strPathStartParamFile;
   std::string strMinuitFixParamFile;
-  std::string configFile;		  
+  std::string configFile;
+  std::string _dataFile;
+  std::string _mcFile;		  
   boost::uint16_t parallelizationMode;
   bool serverMode;
   std::string ip;
@@ -176,7 +180,6 @@ protected:
   unsigned lMax;
   unsigned pbarMom;
   enErrLogMode errLogMode;
-  std::string theSourcePath;
   std::string theLhMode;
 };
 

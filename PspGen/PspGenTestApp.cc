@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
   int eventsperset = 500000;
   bool silent = true;
 
-  for(int set=100; set < set_limit; set++) {
+  for(int set=0; set < set_limit; set++) {
   
     std::stringstream out;
     out << set+1001;

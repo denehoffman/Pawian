@@ -13,5 +13,5 @@ lib Psi2STo2K2PiGam :
 
 exe ParserTestApp : ParserTestApp.cc Psi2STo2K2PiGam : ;
 exe Mpsi2STo2K2PiGamTestApp : Mpsi2STo2K2PiGamTestApp.cc Psi2STo2K2PiGam : ;
-exe qaMixedSampleApp : qaMixedSampleApp.cc Psi2STo2K2PiGam : ;
 exe qaMixedSampleCacheApp : qaMixedSampleCacheApp.cc Psi2STo2K2PiGam : ;
+exe qaMixedSampleFastApp : qaMixedSampleFastApp.cc Psi2STo2K2PiGam : ;

@@ -267,7 +267,7 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _massVec.push_back(paramEnum2K2PiGam::K_1_1650);
   }
 
-  if(!_K0_1430_K0_1430Hyp && !_K0_1430_K0_1430Hyp && !_K1_1270Hyp) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
+  if(!_K0_1430_K0_1430Hyp && !_K0_1430_K0_1430Hyp && !_K1_1270Hyp && !_K0_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
 
 
   std::vector<unsigned int>::iterator ampIt;

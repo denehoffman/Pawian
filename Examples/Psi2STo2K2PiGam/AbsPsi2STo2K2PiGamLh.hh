@@ -77,7 +77,9 @@ protected:
 
  virtual complex<double> chiToK0K2Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK0K2, double K0Mass, double K0Width,  double K2Mass, double K2Width);
 
-//   virtual  complex<double> chiToK1ToK1piAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1ToK1dPi, double K1Mass, double K1Width, double K1dMass, double K1dWidth);
+ virtual complex<double> chiToK0K1Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK0K1, double K0Mass, double K0Width,  double K1Mass, double K1Width);
+
+ virtual complex<double> chiToK1K2Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK1K2, double K1Mass, double K1Width,  double K2Mass, double K2Width);
 
   virtual  complex<double> chiToK1ToK1piAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1Dec, double K1Mass, double K1Width, double K1dMass, double K1dWidth);
 
@@ -133,7 +135,10 @@ protected:
 
   virtual complex<double> chiToPi0Pi0ToK0KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToPi0Pi0Amp, double Pi_0_Mass, double Pi_0_Width, double K0Mass, double K0Width); 
 
- virtual  complex<double> chiToK1Tof980_piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1Prod, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& K1Dec, double K1Mass, double K1Width, double f980_Mass, double f980_gKK, double f980_gPiPi);
+  virtual  complex<double> chiToKjTof980_piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjProd, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjDec, Spin Kj, double KjMass, double KjWidth, double f980_Mass, double f980_gKK, double f980_gPiPi);
+
+  virtual  complex<double> chiToKjTof0_piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjProd, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjDec, Spin Kj, double KjMass, double KjWidth, double f0Mass, double f0Width);
+
 private:
   
 

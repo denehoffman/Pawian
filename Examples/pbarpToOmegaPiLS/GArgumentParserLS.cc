@@ -79,6 +79,8 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
 
     po::options_description common("Common Options");
     common.add_options()
+      ("datFile",po::value<string>(&_dataFile), "full path of data file")
+      ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
       ("lmax", po::value<unsigned>(&lMax)->default_value(lMax),"choose lmax.")
       ("pbarmom", po::value<unsigned>(&pbarMom)->default_value(pbarMom),"choose pbar momentum.")
       ("errLogMode,e", po::value<string>(&strErrLogMode)->default_value(strErrLogMode),
@@ -88,7 +90,7 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
       ("name,n", po::value<string>(&strName)->default_value("myApp"),
         "Name that is attached to all otuput file names to be able to run multiple fits in parallel.")
       ("LhMode", po::value<std::string>(&theLhMode)->default_value(theLhMode),
-       "Specifies the likelihood mode: OmegaPiLhGamma or OmegaTo3PiLhGamma")
+       "Specifies the likelihood mode: OmegaPiLhGamma, OmegaTo3PiLhGamma or OmegaTo3PiLhProd")
       ;
 
     po::options_description config("Configuration file options");
@@ -121,8 +123,6 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
       "Specifies whether results should be returned even if they are not better than before")
       ("waitFactor", po::value<boost::uint32_t>(&waitFactor)->default_value(waitFactor),
       "Influences the maximum waiting time of the GBrokerEA after the arrival of the first evaluated individuum")
-      ("SourcePath", po::value<std::string>(&theSourcePath)->default_value(theSourcePath),
-       "Specifies the path to root directory of the source")
       ;
 
     po::options_description cmdline_options;
@@ -334,23 +334,24 @@ bool ApplicationParameterLS::parseCommandLine(int argc, char **argv)
     
     
     if(verbose){
-      std::cout << "\nRunning with the following options using " << configFile << ":\n"
-	    << "nProducerThreads = " << (boost::uint16_t)nProducerThreads << "\n" // boost::uint8_t not printable on gcc ???
-	    << "populationSize = " << populationSize << "\n"
-	    << "nParents = " << nParents << "\n"
-	    << "maxIterations = " << maxIterations << "\n"
-	    << "maxMinutes = " << maxMinutes << "\n"
-	    << "reportIteration = " << reportIteration << "\n"
-	    << "rScheme = " << (boost::uint16_t)rScheme << "\n"
-	    << "sortingScheme = " << smode << "\n"
-	    << "arraySize = " << arraySize << "\n"
-	    << "processingCycles = " << processingCycles << "\n"
-	    << "returnRegardless = " << (returnRegardless?"true":"false") << "\n"
-	    << "lMax = " << lMax << "\n"
-	    << "pbarMom = " << pbarMom << "\n"
-	    << "errLogMode = " << strErrLogMode << "\n"
-	    << "SourcePath = " << theSourcePath << "\n"
-	    << "LhMode = " << theLhMode << "\n"
+      std::cout << "\nRunning with the following options using " << configFile << ":\n" 
+		<< "data file: " << _dataFile <<"\n"
+                << "mc file: " << _mcFile <<"\n"
+		<< "nProducerThreads = " << (boost::uint16_t)nProducerThreads << "\n" // boost::uint8_t not printable on gcc ???
+		<< "populationSize = " << populationSize << "\n"
+		<< "nParents = " << nParents << "\n"
+		<< "maxIterations = " << maxIterations << "\n"
+		<< "maxMinutes = " << maxMinutes << "\n"
+		<< "reportIteration = " << reportIteration << "\n"
+		<< "rScheme = " << (boost::uint16_t)rScheme << "\n"
+		<< "sortingScheme = " << smode << "\n"
+		<< "arraySize = " << arraySize << "\n"
+		<< "processingCycles = " << processingCycles << "\n"
+		<< "returnRegardless = " << (returnRegardless?"true":"false") << "\n"
+		<< "lMax = " << lMax << "\n"
+		<< "pbarMom = " << pbarMom << "\n"
+		<< "errLogMode = " << strErrLogMode << "\n"
+		<< "LhMode = " << theLhMode << "\n"
 	    << endl;
     }
 

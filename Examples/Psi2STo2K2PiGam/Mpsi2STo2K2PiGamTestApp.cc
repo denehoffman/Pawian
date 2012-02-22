@@ -13,6 +13,7 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamHist.hh"
 #include "Examples/Psi2STo2K2PiGam/AbsPsi2STo2K2PiGamLh.hh"
+#include "Examples/Psi2STo2K2PiGam/HypProdLh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp1Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp2Lh.hh"
 #include "Examples/Psi2STo2K2PiGam/Hyp3Lh.hh"
@@ -147,7 +148,11 @@ int main(int __argc,char *__argv[]){
   hypMap["K0_1430_K0_1430Hyp"]=true;
   hypMap["K2_1430_K2_1430Hyp"]=true;
   hypMap["K0_1430_K2_1430Hyp"]=true;
+  hypMap["K0_1430_K892Hyp1"]=true;
+  hypMap["K2_1430_K892Hyp1"]=true;
   hypMap["K1_1410_K1_1410Hyp"]=true;
+  hypMap["K1_1410_K892Hyp1"]=true;
+  hypMap["f1710_f1710Hyp1"]=true;
   hypMap["doHyp2"]=true;
   hypMap["sigmaf980Hyp3"]=true;
   hypMap["sigmaf1710Hyp3"]=true;
@@ -167,12 +172,18 @@ int main(int __argc,char *__argv[]){
   hypMap["K_0_2400KHyp5"]=true;
   hypMap["K_0_2400KTof_0_1710Hyp5"]=true;
   hypMap["K_1_2400KHyp5"]=true;
+  hypMap["K_1_2400KTof_0_1710Hyp5"]=true;
+  hypMap["K_1_2400KToK_0_1430Hyp5"]=true;
+  hypMap["K_2_2400KTof980Hyp5"]=true;
+  hypMap["K_2_2400KTof_0_1710Hyp5"]=true;
   hypMap["ChiToK_0_1430KPiHyp5"]=true;
   hypMap["ChiToK892KPiHyp5"]=true;
   hypMap["K_0_1430K_0_1950Hyp6"]=true;
   hypMap["KappaK_0_1430Hyp6"]=true;
   hypMap["KappaK_0_1950Hyp6"]=true;
   hypMap["K1_1680Hyp7"]=true;
+  hypMap["K1_1680K1_1680Hyp7"]=true;
+  hypMap["K1_1680K0_1430Hyp7"]=true;
   hypMap["K1_2300Hyp7"]=true; 
   hypMap["KappaHyp7"]=true;
   hypMap["K_0_1460ToKstPiHyp8"]=true;
@@ -201,7 +212,7 @@ int main(int __argc,char *__argv[]){
     std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
     if (iter !=hypMap.end()){
       hypMap[iter->first]= false;
-      Info<< "hypothesis " << iter->first << " disabed" <<endmsg;
+      Info<< "hypothesis " << iter->first << " disabled" <<endmsg;
     }
     else { Alert << "hypothesis " << (*itStr) << " can not be disabled"<<endmsg;
       exit(0);
@@ -211,8 +222,8 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<AbsPsi2STo2K2PiGamLh> thePsi2STo2K2PiGamLhPtr;
 
   std::string startWithHyp=theAppParams.startHypo();
-
-  if (startWithHyp=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
+  if (startWithHyp=="prod") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new HypProdLh(thePsi2STo2K2PiGamEvtListPtr));
+  else if (startWithHyp=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp2") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp2Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp3") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp3Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp4") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp4Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
@@ -221,7 +232,7 @@ int main(int __argc,char *__argv[]){
   else if (startWithHyp=="hyp7") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp7Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp8") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp8Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
   else if (startWithHyp=="hyp9") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp9Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap));
-  else { Alert << "start with hypthesis " << startWithHyp << " not supported!!!!" << endmsg;
+  else { Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" << endmsg;
     exit(1);
   }
 
@@ -249,7 +260,7 @@ int main(int __argc,char *__argv[]){
   if (qaMode){
     thePsi2STo2K2PiGamLhPtr->printCurrentFitResult(theStartparams);
     double theLh=thePsi2STo2K2PiGamLhPtr->calcLogLh(theStartparams);
-    Info <<"theLh = "<< theLh << endmsg;
+    Info << "theLh = " << theLh << endmsg;
 
     Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, theStartparams);
     return 0;

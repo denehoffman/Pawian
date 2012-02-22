@@ -55,6 +55,10 @@ protected:
   bool _K_0_2400KHyp5;
   bool _K_0_2400KTof_0_1710Hyp5;
   bool _K_1_2400KHyp5;
+  bool _K_1_2400KTof_0_1710Hyp5;
+  bool _K_1_2400KToK_0_1430Hyp5;
+  bool _K_2_2400KTof980Hyp5;
+  bool _K_2_2400KTof_0_1710Hyp5;
   bool _ChiToK_0_1430KPiHyp5;
   bool _ChiToK892KPiHyp5;
 
