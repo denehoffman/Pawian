@@ -441,7 +441,11 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
   if(_f1710_f1710Hyp1) _ampVec.push_back(paramEnum2K2PiGam::ChiTof1710f1710); 
 
-  _massVec.push_back(paramEnum2K2PiGam::K892);
+  _ampVecComp=_ampVec;
+  _ampVecComp.erase(_ampVecComp.begin());
+
+  
+    _massVec.push_back(paramEnum2K2PiGam::K892);
   _massVec.push_back(paramEnum2K2PiGam::f1710);
   if(_K1_1270Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1270);
   if(_K1_1400Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1400);
@@ -482,7 +486,7 @@ bool Hyp1Lh::equalParams(){
   bool result=true;
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
-  if (!compAmpParms( _ampVec )) return false;
+  if (!compAmpParms( _ampVecComp )) return false;
   if (!compMassParms(_massVec)) return false;
   if (!compFlatteParms()) return false;
 

@@ -75,6 +75,7 @@ private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
+  std::vector<unsigned int> _ampVecComp;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
   unsigned int _evtCounter;
