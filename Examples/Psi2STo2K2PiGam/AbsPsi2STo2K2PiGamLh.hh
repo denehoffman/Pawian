@@ -142,6 +142,11 @@ protected:
 //   virtual void copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh)=0;
 
   void copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh);
+  bool compAmpParms( std::vector<unsigned int>& ampVec);
+  bool compMassParms( std::vector<unsigned int>& massVec);
+  bool compFlatteParms();
+
+  param2K2PiGam _cashedFitParms;
   param2K2PiGam _currentFitParms;
 private:
 

@@ -80,7 +80,7 @@ private:
   unsigned int _evtCounter;
   bool _equalParameter;
 
-  bool equalParams(param2K2PiGam& theParamValOld, param2K2PiGam theParamValNew);
+  bool equalParams();
   
 };
 

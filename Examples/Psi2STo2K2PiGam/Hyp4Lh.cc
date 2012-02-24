@@ -21,6 +21,9 @@ Hyp4Lh::Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_f1710f_2_1950Hyp4(true)
   ,_doHyp4(true)
   ,_nFitParams(0)
+  ,_f980FlatteRemain(false)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap);
 }
@@ -40,6 +43,9 @@ Hyp4Lh::Hyp4Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_f1710f_2_1950Hyp4(true)
   ,_doHyp4(true)
   ,_nFitParams(0)
+  ,_f980FlatteRemain(false)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap);
 }
@@ -56,6 +62,22 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if(!_doHyp4) return result;
 
+  if (_evtCounter==0){
+    _equalParameter=equalParams();
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  } 
+
+  if(_equalParameter){
+    result+=_currentResultHyp4[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
+
+
+  complex<double> currentResult(0.,0.);
+  
   double f1370Mass=theParamVal.Bwf1370.first;
   double f1370Width=theParamVal.Bwf1370.second;
 
@@ -76,8 +98,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_gKK=theParamVal.Flatf980gKK;
     
     //Chi_c0 decay to f0(980) f0(1370) -> (pi0 pi0) (K K) 
-    result+=chiTof980_pif0_kAmp(theData, ChiTof980_pif1370_k, f980_Mass, f980_gPiPi,  f980_gKK, f1370Mass, f1370Width);
-    result+=chiTof980_kf0_piAmp(theData, ChiTof980_kf1370_pi, f980_Mass, f980_gKK,  f980_gPiPi, f1370Mass, f1370Width);
+    currentResult+=chiTof980_pif0_kAmp(theData, ChiTof980_pif1370_k, f980_Mass, f980_gPiPi,  f980_gKK, f1370Mass, f1370Width);
+    currentResult+=chiTof980_kf0_piAmp(theData, ChiTof980_kf1370_pi, f980_Mass, f980_gKK,  f980_gPiPi, f1370Mass, f1370Width);
   }
 
   double f1500Mass=theParamVal.Bwf1500.first;
@@ -91,9 +113,9 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_gKK=theParamVal.Flatf980gKK;
     
     //Chi_c0 decay to f0(980) f0(1500) -> (pi0 pi0) (K K) 
-    result+=chiTof980_pif0_kAmp(theData, ChiTof980_pif1500_k, f980_Mass, f980_gPiPi,  f980_gKK, f1500Mass, f1500Width);
+    currentResult+=chiTof980_pif0_kAmp(theData, ChiTof980_pif1500_k, f980_Mass, f980_gPiPi,  f980_gKK, f1500Mass, f1500Width);
     //Chi_c0 decay to f0(980) f0(1500) -> (K K) (pi0 pi0) 
-    result+=chiTof980_kf0_piAmp(theData, ChiTof980_kf1500_pi, f980_Mass, f980_gKK,  f980_gPiPi, f1500Mass, f1500Width);
+    currentResult+=chiTof980_kf0_piAmp(theData, ChiTof980_kf1500_pi, f980_Mass, f980_gKK,  f980_gPiPi, f1500Mass, f1500Width);
   }
 
   if (_f1710f1370Hyp4){
@@ -102,8 +124,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f1710Mass=theParamVal.Bwf1710.first;
     double f1710Width=theParamVal.Bwf1710.second;
 
-    result+=chiTof0_pif0_kAmp(theData, ChiTof1710_pif1370_k, f1710Mass, f1710Width,  f1370Mass, f1370Width);
-    result+=chiTof0_pif0_kAmp(theData, ChiTof1710_kf1370_pi, f1370Mass, f1370Width,  f1710Mass, f1710Width);
+    currentResult+=chiTof0_pif0_kAmp(theData, ChiTof1710_pif1370_k, f1710Mass, f1710Width,  f1370Mass, f1370Width);
+    currentResult+=chiTof0_pif0_kAmp(theData, ChiTof1710_kf1370_pi, f1370Mass, f1370Width,  f1710Mass, f1710Width);
   }
 
   if(_f980f_2_1270Hyp4){
@@ -115,8 +137,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_gKK=theParamVal.Flatf980gKK;
     double f_2_1270Mass=theParamVal.Bwf_2_1270.first;
     double f_2_1270Width=theParamVal.Bwf_2_1270.second;
-    result+=chiTof980_pif2_kAmp(theData, f980_pif_2_1270_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1270Mass, f_2_1270Width);
-    result+=chiTof980_kf2_piAmp(theData, f980_kf_2_1270_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1270Mass, f_2_1270Width);
+    currentResult+=chiTof980_pif2_kAmp(theData, f980_pif_2_1270_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1270Mass, f_2_1270Width);
+    currentResult+=chiTof980_kf2_piAmp(theData, f980_kf_2_1270_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1270Mass, f_2_1270Width);
   }
 
   if (_f980f_2_1430Hyp4){
@@ -126,8 +148,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_Mass=theParamVal.Flatf980;
     double f980_gPiPi=theParamVal.Flatf980gPiPi;
     double f980_gKK=theParamVal.Flatf980gKK;
-    result+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1430Mass, f_2_1430Width);
-    result+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1430Mass, f_2_1430Width);
+    currentResult+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1430Mass, f_2_1430Width);
+    currentResult+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1430Mass, f_2_1430Width);
   }
 
   if (_f980f_2_1525Hyp4){
@@ -137,8 +159,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_Mass=theParamVal.Flatf980;
     double f980_gPiPi=theParamVal.Flatf980gPiPi;
     double f980_gKK=theParamVal.Flatf980gKK;
-    result+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1525Mass, f_2_1525Width);
-    result+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1525Mass, f_2_1525Width);
+    currentResult+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1525Mass, f_2_1525Width);
+    currentResult+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1525Mass, f_2_1525Width);
   }
 
   if (_f980f_2_1950Hyp4){
@@ -148,16 +170,16 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_Mass=theParamVal.Flatf980;
     double f980_gPiPi=theParamVal.Flatf980gPiPi;
     double f980_gKK=theParamVal.Flatf980gKK;
-    result+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1950Mass, f_2_1950Width);
-    result+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1950Mass, f_2_1950Width);
+    currentResult+=chiTof980_pif2_kAmp(theData, ChiTof980_pif2_k, f980_Mass, f980_gPiPi, f980_gKK, f_2_1950Mass, f_2_1950Width);
+    currentResult+=chiTof980_kf2_piAmp(theData, ChiTof980_kf2_pi, f980_Mass, f980_gKK, f980_gPiPi, f_2_1950Mass, f_2_1950Width);
   }
 
   if (_f1500f_2_1525Hyp4){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1500_pif2_k=theParamVal.f1500_pif_2_1525_k;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof1500_kf2_pi=theParamVal.f1500_kf_2_1525_pi;
 
-  result+=chiTof0_pif2_kAmp(theData, ChiTof1500_pif2_k, f1500Mass, f1500Width, f_2_1525Mass, f_2_1525Width);
-  result+=chiTof2_pif0_kAmp(theData, ChiTof1500_kf2_pi, f_2_1525Mass, f_2_1525Width, f1500Mass, f1500Width);
+  currentResult+=chiTof0_pif2_kAmp(theData, ChiTof1500_pif2_k, f1500Mass, f1500Width, f_2_1525Mass, f_2_1525Width);
+  currentResult+=chiTof2_pif0_kAmp(theData, ChiTof1500_kf2_pi, f_2_1525Mass, f_2_1525Width, f1500Mass, f1500Width);
   }
 
   if (_f1710f_2_1430Hyp4){
@@ -167,8 +189,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   double f1710Mass=theParamVal.Bwf1710.first;
   double f1710Width=theParamVal.Bwf1710.second;
 
-  result+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1430Mass, f_2_1430Width);
-  result+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1430Mass, f_2_1430Width, f1710Mass, f1710Width);
+  currentResult+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1430Mass, f_2_1430Width);
+  currentResult+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1430Mass, f_2_1430Width, f1710Mass, f1710Width);
   }
 
   if (_f1710f_2_1950Hyp4){
@@ -178,8 +200,8 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   double f1710Mass=theParamVal.Bwf1710.first;
   double f1710Width=theParamVal.Bwf1710.second;
 
-  result+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1950Mass, f_2_1950Width);
-  result+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1950Mass, f_2_1950Width, f1710Mass, f1710Width);
+  currentResult+=chiTof0_pif2_kAmp(theData, ChiTof1710_pif2_k, f1710Mass, f1710Width, f_2_1950Mass, f_2_1950Width);
+  currentResult+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1950Mass, f_2_1950Width, f1710Mass, f1710Width);
   }
 
   if (_sigmaf1370Hyp4){
@@ -188,10 +210,13 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double sigmaMass=theParamVal.BwSigma.first;
     double sigmaWidth=theParamVal.BwSigma.second;
     
-    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1370, sigmaMass, sigmaWidth,  f1370Mass, f1370Width);
+    currentResult+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1370, sigmaMass, sigmaWidth,  f1370Mass, f1370Width);
     
   }
 
+  _currentResultHyp4[_evtCounter]=currentResult; 
+  _evtCounter++;
+  result+=currentResult;
   return result;
 }
 
@@ -515,6 +540,20 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (_f980f_2_1950Hyp4 || _f1710f_2_1950Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1950);
   if (_f980f_2_1525Hyp4 || _f1500f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1525);
 
+  // fill all other resonances
+  if (_sigmaf1370Hyp4){
+    _massVecRemain.push_back(paramEnum2K2PiGam::sigma);
+  }
+
+  if (_f1710f1370Hyp4 || _f1710f_2_1430Hyp4 || _f1710f_2_1950Hyp4){
+      _massVecRemain.push_back(paramEnum2K2PiGam::f1710);
+  }
+
+  if(_f980f1370Hyp4 || _f980f1500Hyp4 || _f980f_2_1270Hyp4 || _f980f_2_1430Hyp4 || _f980f_2_1525Hyp4 || _f980f_2_1950Hyp4){
+    _f980FlatteRemain=true;
+  }
+
+
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*ampIt);
@@ -525,4 +564,34 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   }
+}
+
+
+
+void Hyp4Lh::copyCurrentVals(Hyp4Lh* theLh){
+  Hyp1Lh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp4.begin(); it!= _currentResultHyp4.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp4=newResult;
+  
+}
+
+
+
+bool Hyp4Lh::equalParams(){
+
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compMassParms(_massVecRemain)) return false;
+  if(_f980FlatteRemain){
+    if (!compFlatteParms()) return false;
+  }
+  return result;
+
 }

@@ -39,16 +39,16 @@ double MPsi2STo2K2PiGamFcn::operator()(const std::vector<double>& par) const
 
 
   if (   _fcnCounter==1 || _fcnCounter%10 == 0) {
-    mutex1.lock();
     DebugMsg << "logLh= " << result <<endmsg;  
-    tmpAbsLh->printCurrentFitResult(theFitParmValTmp); 
+    tmpAbsLh->printCurrentFitResult(theFitParmValTmp);
+    mutex1.lock();
     _psi2STo2K2PiGamLhPtr.reset();
     _psi2STo2K2PiGamLhPtr=tmpAbsLh;
     mutex1.unlock();  
   }
 
-  if (  _fcnCounter%100 == 0) { 
-   mutex1.lock(); 
+  if (  _fcnCounter%100 == 0) {
+    mutex1.lock(); 
     std::ofstream theStream ( "currentResult.dat");
     std::string theSuffix="Val"; 
     tmpAbsLh->dumpCurrentResult(theStream, theFitParmValTmp, theSuffix);

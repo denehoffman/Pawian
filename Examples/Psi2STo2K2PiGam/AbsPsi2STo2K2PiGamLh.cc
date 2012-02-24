@@ -30,6 +30,8 @@ AbsPsi2STo2K2PiGamLh::~AbsPsi2STo2K2PiGamLh()
 
 double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
 
+  _currentFitParms=theParamVal;
+
   double logLH=0.;
   double logLH_data=0.;
 
@@ -56,7 +58,7 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
 
   Info << "current LH = " << logLH << endmsg;
 
-  _currentFitParms=theParamVal;
+  _cashedFitParms=theParamVal;
  return logLH;
 
 }
@@ -1732,5 +1734,83 @@ void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
 
 void AbsPsi2STo2K2PiGamLh::copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh){
 
-  theLh->_currentFitParms=_currentFitParms;
+  theLh->_cashedFitParms=_cashedFitParms;
+}
+
+bool  AbsPsi2STo2K2PiGamLh::compAmpParms( std::vector<unsigned int>& ampVec){
+
+  bool result=false;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=ampVec.begin(); itAmps!=ampVec.end(); ++itAmps){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
+    
+    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapNew=_fitParams2K2PiGam.ampMap(_currentFitParms, *itAmps);
+      std::pair<double, double> tmpParamNew=currentMapNew[(*itJPCLS)];
+
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapOld=_fitParams2K2PiGam.ampMap(_cashedFitParms, *itAmps);
+      std::pair<double, double> tmpParamOld=currentMapOld[(*itJPCLS)];
+
+    if(fabs(tmpParamNew.first-tmpParamOld.first)>1e-10){
+      DebugMsg <<"\t Amplitude of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.first <<" != " << tmpParamOld.first  << endmsg;
+      return result;
+    }
+    if(fabs(tmpParamNew.second-tmpParamOld.second)>1e-10){
+      DebugMsg <<"\t Phase of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.second <<" != " << tmpParamOld.second  << endmsg;
+      return result;
+    }
+
+    }  
+  }
+  result=true;
+  return result;
+}
+
+
+bool AbsPsi2STo2K2PiGamLh::compMassParms( std::vector<unsigned int>& massVec){
+
+  bool result=false;
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=massVec.begin(); itMasses!=massVec.end(); ++itMasses){
+    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(_cashedFitParms, *itMasses);
+    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(_currentFitParms, *itMasses);
+
+    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
+      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
+      return result;
+    }
+
+    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
+      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
+      return result;
+    }
+  }
+
+  result=true;
+  return result;
+}
+
+bool AbsPsi2STo2K2PiGamLh::compFlatteParms(){
+  bool result=false;
+
+  if(fabs(_cashedFitParms.Flatf980-_currentFitParms.Flatf980)>1e-10){
+      DebugMsg <<"\t Flatf980 " << " are not equal\t" << _cashedFitParms.Flatf980 <<" != " << _currentFitParms.Flatf980  << endmsg;
+      return result;
+  }
+
+  if(fabs(_cashedFitParms.Flatf980gPiPi-_currentFitParms.Flatf980gPiPi)>1e-10){
+      DebugMsg <<"\t Flatf980gPiPi " << " are not equal\t" << _cashedFitParms.Flatf980gPiPi <<" != " << _currentFitParms.Flatf980gPiPi  << endmsg;
+      return result;
+  }
+
+  if(fabs(_cashedFitParms.Flatf980gKK-_currentFitParms.Flatf980gKK)>1e-10){
+      DebugMsg <<"\t Flatf980gKK " << " are not equal\t" << _cashedFitParms.Flatf980gKK <<" != " << _currentFitParms.Flatf980gKK  << endmsg;
+      return result;
+  }
+
+  result=true;
+  return result;
 }

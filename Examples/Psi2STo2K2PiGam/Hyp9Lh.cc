@@ -72,7 +72,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   if (!_doHyp9) return result;
 
   if (_evtCounter==0){
-    _equalParameter=equalParams(_currentFitParms, theParamVal);
+    _equalParameter=equalParams();
 
     DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
 
@@ -720,85 +720,15 @@ void Hyp9Lh::copyCurrentVals(Hyp9Lh* theLh){
   
 }
 
-bool Hyp9Lh::equalParams(param2K2PiGam& theParamValOld, param2K2PiGam theParamValNew){
-  bool result=false;
+bool Hyp9Lh::equalParams(){
+  bool result=true;
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
-  std::vector<unsigned int>::const_iterator itAmps;
-  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
-    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
-    
-    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
-      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapNew=_fitParams2K2PiGam.ampMap(theParamValNew, *itAmps);
-      std::pair<double, double> tmpParamNew=currentMapNew[(*itJPCLS)];
-
-      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapOld=_fitParams2K2PiGam.ampMap(theParamValOld, *itAmps);
-      std::pair<double, double> tmpParamOld=currentMapOld[(*itJPCLS)];
-
-    if(fabs(tmpParamNew.first-tmpParamOld.first)>1e-10){
-      DebugMsg <<"\t Amplitude of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.first <<" != " << tmpParamOld.first  << endmsg;
-      return result;
-    }
-    if(fabs(tmpParamNew.second-tmpParamOld.second)>1e-10){
-      DebugMsg <<"\t Phase of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.second <<" != " << tmpParamOld.second  << endmsg;
-      return result;
-    }
-
-    }  
-  }
-
-  std::vector<unsigned int>::const_iterator itMasses;
-  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
-    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(theParamValOld, *itMasses);
-    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(theParamValNew, *itMasses);
-
-    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
-      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
-      return result;
-    }
-
-    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
-      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
-      return result;
-    }
-  }
-
-
-  for ( itMasses=_massVecRemain.begin(); itMasses!=_massVecRemain.end(); ++itMasses){
-    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(theParamValOld, *itMasses);
-    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(theParamValNew, *itMasses);
-
-    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
-      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
-      return result;
-    }
-
-    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
-      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
-      return result;
-    }
-  }
-
-
-
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compMassParms(_massVecRemain)) return false;
   if(_f980FlatteRemain){
-  if(fabs(theParamValOld.Flatf980-theParamValNew.Flatf980)>1e-10){
-      DebugMsg <<"\t Flatf980 " << " are not equal\t" << theParamValOld.Flatf980 <<" != " << theParamValNew.Flatf980  << endmsg;
-      return result;
+    if (!compFlatteParms()) return false;
   }
-
-  if(fabs(theParamValOld.Flatf980gPiPi-theParamValNew.Flatf980gPiPi)>1e-10){
-      DebugMsg <<"\t Flatf980gPiPi " << " are not equal\t" << theParamValOld.Flatf980gPiPi <<" != " << theParamValNew.Flatf980gPiPi  << endmsg;
-      return result;
-  }
-
-  if(fabs(theParamValOld.Flatf980gKK-theParamValNew.Flatf980gKK)>1e-10){
-      DebugMsg <<"\t Flatf980gKK " << " are not equal\t" << theParamValOld.Flatf980gKK <<" != " << theParamValNew.Flatf980gKK  << endmsg;
-      return result;
-  }
-
-  }
-
-  result=true;
   return result;
 }
