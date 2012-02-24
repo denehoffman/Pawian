@@ -15,6 +15,8 @@ Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K1_1680K0_1430Hyp7(true)
   ,_K1_2300Hyp(true)
   ,_nFitParams(0)
+ ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -27,6 +29,8 @@ Hyp7Lh::Hyp7Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K1_1680K0_1430Hyp7(true)
   ,_K1_2300Hyp(true)
   ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -41,6 +45,23 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   complex<double> result=Hyp6Lh::chi0DecAmps(theParamVal, theData);
 
+  if (_evtCounter==0){
+    _equalParameter=equalParams();
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  } 
+
+  if(_equalParameter){
+    result+=_currentResultHyp7[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
+
+  complex<double> currentResult(0.,0.);
+
+
+
   double K892Mass=theParamVal.BwK892.first;
   double K892Width=theParamVal.BwK892.second;
 
@@ -48,7 +69,7 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2Kappa=theParamVal.ChiTo2Kappa;
     double KappaMass=theParamVal.BwKappa.first;
     double KappaWidth=theParamVal.BwKappa.second;
-    result+=chiTo2K_0_Amp(theData, ChiTo2Kappa, KappaMass, KappaWidth,  KappaMass, KappaWidth);
+    currentResult+=chiTo2K_0_Amp(theData, ChiTo2Kappa, KappaMass, KappaWidth,  KappaMass, KappaWidth);
   }
 
   if(_K1_1680Hyp || _K1_1680K1_1680Hyp7 || _K1_1680K0_1430Hyp7){ 
@@ -58,12 +79,12 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
     if (_K1_1680Hyp){
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680=theParamVal.ChiToK892K1680;
-      result+=chiToK1K1Amp(theData, ChiToK892K1680, K892Mass, K892Width,  K_1_1680Mass, K_1_1680Width);
+      currentResult+=chiToK1K1Amp(theData, ChiToK892K1680, K892Mass, K892Width,  K_1_1680Mass, K_1_1680Width);
     } 
 
     if (_K1_1680K1_1680Hyp7){
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1680K1680=theParamVal.ChiToK1680K1680;
-      result+=chiToK1K1Amp(theData, ChiToK1680K1680, K_1_1680Mass, K_1_1680Width,  K_1_1680Mass, K_1_1680Width);
+      currentResult+=chiToK1K1Amp(theData, ChiToK1680K1680, K_1_1680Mass, K_1_1680Width,  K_1_1680Mass, K_1_1680Width);
     } 
 
     if(_K1_1680K0_1430Hyp7){
@@ -71,7 +92,7 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
       double K_0_1430Mass=theParamVal.BwK_0_1430.first;
       double K_0_1430Width=theParamVal.BwK_0_1430.second;
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK1680K_0_1430=theParamVal.ChiToK1680K_0_1430;
-      result+=chiToK0K1Amp(theData, ChiToK1680K_0_1430, K_0_1430Mass, K_0_1430Width,  K_1_1680Mass, K_1_1680Width);
+      currentResult+=chiToK0K1Amp(theData, ChiToK1680K_0_1430, K_0_1430Mass, K_0_1430Width,  K_1_1680Mass, K_1_1680Width);
     }
 
   }
@@ -80,9 +101,12 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K2300=theParamVal.ChiToK892K2300;
     double K_1_2300Mass=theParamVal.BwK_1_2300.first;
     double K_1_2300Width=theParamVal.BwK_1_2300.second;
-    result+=chiToK1K1Amp(theData, ChiToK892K2300, K892Mass, K892Width,  K_1_2300Mass, K_1_2300Width); 
+    currentResult+=chiToK1K1Amp(theData, ChiToK892K2300, K892Mass, K892Width,  K_1_2300Mass, K_1_2300Width); 
   }
 
+  _currentResultHyp7[_evtCounter]=currentResult; 
+  _evtCounter++;
+  result+=currentResult;
   return result;
 }
 
@@ -277,6 +301,19 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _massVec.push_back(paramEnum2K2PiGam::K_1_2300);
   }
 
+  // fill all other resonances
+  if(_KappaK_0_1950Hyp6){
+    _massVecRemain.push_back(paramEnum2K2PiGam::Kappa);
+  }
+
+  if(_K1_1680Hyp || _K1_2300Hyp){
+    _massVecRemain.push_back(paramEnum2K2PiGam::K892);
+  }
+
+  if(_K1_1680K0_1430Hyp7){
+    _massVecRemain.push_back(paramEnum2K2PiGam::K_0_1430);
+  }
+
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*ampIt);
@@ -287,5 +324,33 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   }
+
+}
+
+
+
+void Hyp7Lh::copyCurrentVals(Hyp7Lh* theLh){
+  Hyp6Lh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp7.begin(); it!= _currentResultHyp7.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp7=newResult;
+  
+}
+
+
+
+bool Hyp7Lh::equalParams(){
+
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compMassParms(_massVecRemain)) return false;
+
+  return result;
 
 }

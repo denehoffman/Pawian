@@ -569,7 +569,7 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 
 void Hyp4Lh::copyCurrentVals(Hyp4Lh* theLh){
-  Hyp1Lh::copyCurrentVals(theLh);
+  Hyp3Lh::copyCurrentVals(theLh);
   std::map<unsigned int, complex<double> > newResult; 
   std::map<unsigned int, complex<double> >::iterator it;
   for (it= _currentResultHyp4.begin(); it!= _currentResultHyp4.end(); ++it){

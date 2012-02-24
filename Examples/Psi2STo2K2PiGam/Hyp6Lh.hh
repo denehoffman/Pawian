@@ -56,14 +56,21 @@ protected:
   bool _KappaK_0_1950Hyp6;
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
+  virtual void copyCurrentVals(Hyp6Lh* theLh);
+  std::map<unsigned int, complex<double> > _currentResultHyp6;
 private:
 
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
+  std::vector<unsigned int> _massVecRemain;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
 
+  unsigned int _evtCounter;
+  bool _equalParameter;
+
+  bool equalParams();
 };
 
 #endif

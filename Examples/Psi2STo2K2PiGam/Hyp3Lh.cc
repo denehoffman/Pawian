@@ -13,6 +13,9 @@ Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_sigmaf2200Hyp(true)  
   ,_doHyp3(true)
   ,_nFitParams(0)
+  ,_f980FlatteRemain(false)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -24,6 +27,9 @@ Hyp3Lh::Hyp3Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_sigmaf2200Hyp(true)
   ,_doHyp3(true)
   ,_nFitParams(0)
+  ,_f980FlatteRemain(false)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -38,6 +44,21 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp2Lh::chi0DecAmps(theParamVal, theData);
 
   if(!_doHyp3) return result;
+
+  if (_evtCounter==0){
+    _equalParameter=equalParams();
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  } 
+
+  if(_equalParameter){
+    result+=_currentResultHyp3[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
+
+  complex<double> currentResult(0.,0.);
  
   double sigmaMass=theParamVal.BwSigma.first;
   double sigmaWidth=theParamVal.BwSigma.second;
@@ -48,23 +69,26 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980_Mass=theParamVal.Flatf980;
     double f980_gPiPi=theParamVal.Flatf980gPiPi;
     double f980_gKK=theParamVal.Flatf980gKK;
-    result+= chiTof980_kf0_piAmp(theData, ChiToSigmaf980, f980_Mass, f980_gKK,  f980_gPiPi, sigmaMass, sigmaWidth);
+    currentResult+= chiTof980_kf0_piAmp(theData, ChiToSigmaf980, f980_Mass, f980_gKK,  f980_gPiPi, sigmaMass, sigmaWidth);
   }
 
   if (_sigmaf1710Hyp){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf1710=theParamVal.ChiToSigmaf1710;
     double f1710Mass=theParamVal.Bwf1710.first;
     double f1710Width=theParamVal.Bwf1710.second;
-    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1710, sigmaMass, sigmaWidth,  f1710Mass, f1710Width);
+    currentResult+=chiTof0_pif0_kAmp(theData, ChiToSigmaf1710, sigmaMass, sigmaWidth,  f1710Mass, f1710Width);
   }  
 
   if (_sigmaf2200Hyp){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf2200=theParamVal.ChiToSigmaf2200;
     double f2200_Mass=theParamVal.Bwf2200.first;
     double f2200_Width=theParamVal.Bwf2200.second;
-    result+=chiTof0_pif0_kAmp(theData, ChiToSigmaf2200, sigmaMass, sigmaWidth,  f2200_Mass, f2200_Width);
+    currentResult+=chiTof0_pif0_kAmp(theData, ChiToSigmaf2200, sigmaMass, sigmaWidth,  f2200_Mass, f2200_Width);
   }  
 
+  _currentResultHyp3[_evtCounter]=currentResult; 
+  _evtCounter++;
+  result+=currentResult;
   return result;
 }
 
@@ -228,6 +252,20 @@ void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
     if (!_doHyp2) _massVec.push_back(paramEnum2K2PiGam::f2200);  
   }
 
+  // fill all other resonances
+
+  if(_sigmaf980Hyp){
+    _f980FlatteRemain=true;
+  }
+  
+  if (_sigmaf1710Hyp){ 
+    _massVecRemain.push_back(paramEnum2K2PiGam::f1710);
+ }
+  
+  if (_sigmaf2200Hyp && _doHyp2){ 
+    _massVecRemain.push_back(paramEnum2K2PiGam::f2200);
+  }
+
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*ampIt);
@@ -238,4 +276,30 @@ void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   }
+}
+
+
+
+void Hyp3Lh::copyCurrentVals(Hyp3Lh* theLh){
+  Hyp1Lh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp3.begin(); it!= _currentResultHyp3.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp3=newResult;
+  
+}
+
+bool Hyp3Lh::equalParams(){
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compMassParms(_massVecRemain)) return false;
+  if(_f980FlatteRemain){
+    if (!compFlatteParms()) return false;
+  }
+  return result;
 }

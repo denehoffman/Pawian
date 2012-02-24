@@ -13,7 +13,9 @@ Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_0_1430K_0_1950Hyp6(true)
   ,_KappaK_0_1430Hyp6(true)
   ,_KappaK_0_1950Hyp6(true) 
-  ,_nFitParams(0) 
+  ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false) 
 {
   setUp(hypMap); 
 }
@@ -24,7 +26,9 @@ Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_0_1430K_0_1950Hyp6(true)
   ,_KappaK_0_1430Hyp6(true)
   ,_KappaK_0_1950Hyp6(true)  
-  ,_nFitParams(0) 
+  ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false) 
 {
   setUp(hypMap); 
 }
@@ -40,6 +44,23 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp5Lh::chi0DecAmps(theParamVal, theData);
 
   if(!_doHyp6) return result;
+
+  if (_evtCounter==0){
+    _equalParameter=equalParams();
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  } 
+
+  if(_equalParameter){
+    result+=_currentResultHyp6[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
+
+  complex<double> currentResult(0.,0.);
+
+
   double K_0_1950Mass=theParamVal.BwK_0_1950.first;
   double K_0_1950Width=theParamVal.BwK_0_1950.second;
 
@@ -49,7 +70,7 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1430Width=theParamVal.BwK_0_1430.second;
     
     //Chi_c0 decay to K_0_1950 K_0_1430 
-    result+=chiTo2K_0_Amp(theData, ChiToK_0_1430K_0_1950, K_0_1430Mass, K_0_1430Width, K_0_1950Mass, K_0_1950Width); 
+    currentResult+=chiTo2K_0_Amp(theData, ChiToK_0_1430K_0_1950, K_0_1430Mass, K_0_1430Width, K_0_1950Mass, K_0_1950Width); 
   }
 
   if (_KappaK_0_1430Hyp6){
@@ -58,17 +79,19 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1430Width=theParamVal.BwK_0_1430.second;
     double KappaMass=theParamVal.BwKappa.first;
     double KappaWidth=theParamVal.BwKappa.second;
-    result+=chiTo2K_0_Amp(theData, ChiToKappaK_0_1430, KappaMass, KappaWidth, K_0_1430Mass, K_0_1430Width); 
+    currentResult+=chiTo2K_0_Amp(theData, ChiToKappaK_0_1430, KappaMass, KappaWidth, K_0_1430Mass, K_0_1430Width); 
   }
 
   if (_KappaK_0_1950Hyp6){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1950=theParamVal.ChiToKappaK_0_1950;
     double KappaMass=theParamVal.BwKappa.first;
     double KappaWidth=theParamVal.BwKappa.second;
-    result+=chiTo2K_0_Amp(theData, ChiToKappaK_0_1950, KappaMass, KappaWidth, K_0_1950Mass, K_0_1950Width); 
+    currentResult+=chiTo2K_0_Amp(theData, ChiToKappaK_0_1950, KappaMass, KappaWidth, K_0_1950Mass, K_0_1950Width); 
   }
 
-
+  _currentResultHyp6[_evtCounter]=currentResult; 
+  _evtCounter++;
+  result+=currentResult;
   return result;
 }
 
@@ -254,6 +277,15 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if(!_K_0_1430K_0_1950Hyp6) _massVec.push_back(paramEnum2K2PiGam::K_0_1950);
   }
 
+  // fill all other resonances
+  if (_K_0_1430K_0_1950Hyp6 || _KappaK_0_1430Hyp6){
+    if (_K0_1430_K0_1430Hyp || _K0_1430_K0_1430Hyp || _K1_1270Hyp || _K0_1430_K892Hyp1){
+      _massVecRemain.push_back(paramEnum2K2PiGam::K_0_1430);
+    }
+  }
+  if(_KappaK_0_1430Hyp6 || _KappaK_0_1950Hyp6){
+    _massVecRemain.push_back(paramEnum2K2PiGam::Kappa);
+  }
 
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
@@ -265,4 +297,26 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   }
+}
+
+void Hyp6Lh::copyCurrentVals(Hyp6Lh* theLh){
+  Hyp5Lh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp6.begin(); it!= _currentResultHyp6.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp6=newResult;
+  
+}
+
+bool Hyp6Lh::equalParams(){
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compMassParms(_massVecRemain)) return false;
+
+  return result;
 }

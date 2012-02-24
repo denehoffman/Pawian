@@ -14,6 +14,8 @@ Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
   ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -25,6 +27,8 @@ Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
   ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -40,6 +44,22 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp7Lh::chi0DecAmps(theParamVal, theData);
 
   if (!_doHyp8) return result;
+
+  if (_evtCounter==0){
+    _equalParameter=equalParams();
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  } 
+
+  if(_equalParameter){
+    result+=_currentResultHyp8[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
+
+  complex<double> currentResult(0.,0.);
+
   double K892Mass=theParamVal.BwK892.first;
   double K892Width=theParamVal.BwK892.second;
   double K_0_1430Mass=theParamVal.BwK_0_1430.first;
@@ -52,8 +72,8 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1460Mass=theParamVal.BwK_0_1460.first;
     double K_0_1460Width=theParamVal.BwK_0_1460.second;
     
-    result+=chiToK0KT0K1piKAmp(theData, K_0_1460ToK892Pi, K_0_1460Mass, K_0_1460Width, K892Mass, K892Width);
-    result+=chiToK0KT0KpipiKAmp(theData, K_0_1460ToK_0_1430Pi, K_0_1460Mass, K_0_1460Width, K_0_1430Mass, K_0_1430Width); 
+    currentResult+=chiToK0KT0K1piKAmp(theData, K_0_1460ToK892Pi, K_0_1460Mass, K_0_1460Width, K892Mass, K892Width);
+    currentResult+=chiToK0KT0KpipiKAmp(theData, K_0_1460ToK_0_1430Pi, K_0_1460Mass, K_0_1460Width, K_0_1430Mass, K_0_1430Width); 
   }
 
   if (_K_0_1830ToKstPiHyp8){
@@ -63,8 +83,8 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1830Mass=theParamVal.BwK_0_1830.first;
     double K_0_1830Width=theParamVal.BwK_0_1830.second;
     
-    result+=chiToK0KT0K1piKAmp(theData, K_0_1830ToK892Pi, K_0_1830Mass, K_0_1830Width, K892Mass, K892Width);
-    result+=chiToK0KT0KpipiKAmp(theData, K_0_1830ToK_0_1430Pi, K_0_1830Mass, K_0_1830Width, K_0_1430Mass, K_0_1430Width); 
+    currentResult+=chiToK0KT0K1piKAmp(theData, K_0_1830ToK892Pi, K_0_1830Mass, K_0_1830Width, K892Mass, K892Width);
+    currentResult+=chiToK0KT0KpipiKAmp(theData, K_0_1830ToK_0_1430Pi, K_0_1830Mass, K_0_1830Width, K_0_1430Mass, K_0_1430Width); 
   }
 
   if (_K_1_1650Hyp8){
@@ -75,11 +95,14 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_1_1650Mass=theParamVal.BwK_1_1650.first;
     double K_1_1650Width=theParamVal.BwK_1_1650.second;
 
-    result+=chiToK1ToK1piAmp(theData, ChiToK_1_1650K, K_1_1650ToK892Pi, K_1_1650Mass, K_1_1650Width, K892Mass, K892Width);
-    result+=chiToK1ToK0piAmp(theData, K_1_1650ToK_0_1430Pi, K_1_1650ToK_0_1430Pi, K_1_1650Mass, K_1_1650Width, K_0_1430Mass, K_0_1430Width);
+    currentResult+=chiToK1ToK1piAmp(theData, ChiToK_1_1650K, K_1_1650ToK892Pi, K_1_1650Mass, K_1_1650Width, K892Mass, K892Width);
+    currentResult+=chiToK1ToK0piAmp(theData, K_1_1650ToK_0_1430Pi, K_1_1650ToK_0_1430Pi, K_1_1650Mass, K_1_1650Width, K_0_1430Mass, K_0_1430Width);
 
   }
 
+  _currentResultHyp8[_evtCounter]=currentResult; 
+  _evtCounter++;
+  result+=currentResult;
   return result;
 }
 
@@ -269,6 +292,12 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
   if(!_K0_1430_K0_1430Hyp && !_K0_1430_K0_1430Hyp && !_K1_1270Hyp && !_K0_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
 
+  // fill all other resonances
+  if (_K0_1430_K0_1430Hyp || _K0_1430_K0_1430Hyp || _K1_1270Hyp || _K0_1430_K892Hyp1){
+  _massVecRemain.push_back(paramEnum2K2PiGam::K_0_1430);
+  }
+
+  _massVecRemain.push_back(paramEnum2K2PiGam::K892);
 
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
@@ -280,4 +309,29 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   } 
+}
+
+
+
+
+void Hyp8Lh::copyCurrentVals(Hyp8Lh* theLh){
+  Hyp7Lh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp8.begin(); it!= _currentResultHyp8.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp8=newResult;
+  
+}
+
+bool Hyp8Lh::equalParams(){
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compMassParms(_massVecRemain)) return false;
+
+  return result;
 }
