@@ -17,7 +17,9 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K1_1410_K1_1410Hyp(false)
   ,_K1_1410_K892Hyp1(true)
   ,_f1710_f1710Hyp1(true)
-  ,_nFitParams(0) 
+  ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false) 
 {
   setUp(hypMap); 
 }
@@ -34,7 +36,9 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K1_1410_K1_1410Hyp(false)
   ,_K1_1410_K892Hyp1(true)
   ,_f1710_f1710Hyp1(true)
-  ,_nFitParams(0) 
+  ,_nFitParams(0)
+  ,_evtCounter(0)
+  ,_equalParameter(false)    
 {
   setUp(hypMap);
 }
@@ -46,8 +50,24 @@ Hyp1Lh::~Hyp1Lh()
 
 complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 
+  if (_evtCounter==0){
+    _equalParameter=equalParams(_currentFitParms, theParamVal);
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+//     if (!_equalParameter){
+//       DebugMsg <<"************** old fit Params ********************" << endmsg;
+//       printCurrentFitResult(_currentFitParms);
+//     } 
+  }
+
   complex<double> result(0.,0.);
 
+  if(_equalParameter){
+    result=_currentResultHyp1[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
 
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K892=theParamVal.ChiTo2K892;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTo2K_2_1430=theParamVal.ChiTo2K_2_1430;
@@ -144,6 +164,13 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     result+=chiTof0_pif0_kAmp(theData, ChiTof1710f1710, f1710Mass, f1710Width,  f1710Mass, f1710Width);
   }
 
+//   if(_currentResultHyp1.size() > _evtCounter){
+//     Info<<"old result:\t" << _currentResultHyp1[_evtCounter] << endmsg;
+//   }
+//   Info<<"new result:\t" << result << endmsg; 
+ 
+  _currentResultHyp1[_evtCounter]=result; 
+  _evtCounter++;
   return result; 
 
 }
@@ -437,4 +464,78 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   _nFitParams+=3; //f(980) Flatte parameters
   _nFitParams+=1; //phase space
 
+}
+
+void Hyp1Lh::copyCurrentVals(Hyp1Lh* theLh){
+  AbsPsi2STo2K2PiGamLh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp1.begin(); it!= _currentResultHyp1.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp1=newResult;
+  
+}
+
+bool Hyp1Lh::equalParams(param2K2PiGam& theParamValOld, param2K2PiGam theParamValNew){
+  bool result=false;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
+    
+    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapNew=_fitParams2K2PiGam.ampMap(theParamValNew, *itAmps);
+      std::pair<double, double> tmpParamNew=currentMapNew[(*itJPCLS)];
+
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapOld=_fitParams2K2PiGam.ampMap(theParamValOld, *itAmps);
+      std::pair<double, double> tmpParamOld=currentMapOld[(*itJPCLS)];
+
+    if(fabs(tmpParamNew.first-tmpParamOld.first)>1e-10){
+      DebugMsg <<"\t Amplitude of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.first <<" != " << tmpParamOld.first  << endmsg;
+      return result;
+    }
+
+    if(fabs(tmpParamNew.second-tmpParamOld.second)>1e-10){
+      DebugMsg <<"\t Phase of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.second <<" != " << tmpParamOld.second  << endmsg;
+      return result;
+    }
+
+    }  
+  }
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(theParamValOld, *itMasses);
+    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(theParamValNew, *itMasses);
+
+    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
+      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
+      return result;
+    }
+
+    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
+      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
+      return result;
+    }
+  }
+
+  if(fabs(theParamValOld.Flatf980-theParamValNew.Flatf980)>1e-10){
+      DebugMsg <<"\t Flatf980 " << " are not equal\t" << theParamValOld.Flatf980 <<" != " << theParamValNew.Flatf980  << endmsg;
+      return result;
+  }
+
+  if(fabs(theParamValOld.Flatf980gPiPi-theParamValNew.Flatf980gPiPi)>1e-10){
+      DebugMsg <<"\t Flatf980gPiPi " << " are not equal\t" << theParamValOld.Flatf980gPiPi <<" != " << theParamValNew.Flatf980gPiPi  << endmsg;
+      return result;
+  }
+
+  if(fabs(theParamValOld.Flatf980gKK-theParamValNew.Flatf980gKK)>1e-10){
+      DebugMsg <<"\t Flatf980gKK " << " are not equal\t" << theParamValOld.Flatf980gKK <<" != " << theParamValNew.Flatf980gKK  << endmsg;
+      return result;
+  }
+
+  result=true;
+  return result;
 }

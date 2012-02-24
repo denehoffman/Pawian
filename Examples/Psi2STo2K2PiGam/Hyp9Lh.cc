@@ -26,6 +26,9 @@ Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_2_1770ToK_2_1430PiHyp9(true)
   ,_doHyp9(true)
   ,_nFitParams(0)
+  ,_f980FlatteRemain(false)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -49,6 +52,9 @@ Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_2_1770ToK_2_1430PiHyp9(true)
   ,_doHyp9(true)
   ,_nFitParams(0)
+  ,_f980FlatteRemain(false)
+  ,_evtCounter(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap); 
 }
@@ -64,7 +70,22 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp8Lh::chi0DecAmps(theParamVal, theData);
 
   if (!_doHyp9) return result;
-  
+
+  if (_evtCounter==0){
+    _equalParameter=equalParams(_currentFitParms, theParamVal);
+
+    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  } 
+
+  if(_equalParameter){
+    result+=_currentResultHyp9[_evtCounter];
+    _evtCounter++;
+    return result;
+  }
+
+  complex<double> currentResult(0.,0.);
+
   if(_Pi_2_1670Tof_2_1270PiHyp9 || _Pi_2_1670ToK892KHyp9){
     double Pi_2_1670Mass=theParamVal.BwPi_2_1670.first;
     double Pi_2_1670Width=theParamVal.BwPi_2_1670.second;
@@ -76,7 +97,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
       
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670Tof_2_1270Pi=theParamVal.Pi_2_1670Tof_2_1270Pi;
       
-      result+=chiToPi2Pi0Tof2PiAmp(theData, ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670Mass, Pi_2_1670Width, f_2_1270Mass, f_2_1270Width);
+      currentResult+=chiToPi2Pi0Tof2PiAmp(theData, ChiToPi_2_1670Pi, Pi_2_1670Tof_2_1270Pi, Pi_2_1670Mass, Pi_2_1670Width, f_2_1270Mass, f_2_1270Width);
       
     }
     
@@ -85,7 +106,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
       double K892Width=theParamVal.BwK892.second;
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_1670ToK892K=theParamVal.Pi_2_1670ToK892K;
       
-      result+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_1670Pi, Pi_2_1670ToK892K, Pi_2_1670Mass, Pi_2_1670Width, K892Mass, K892Width);
+      currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_1670Pi, Pi_2_1670ToK892K, Pi_2_1670Mass, Pi_2_1670Width, K892Mass, K892Width);
       
     }
   }
@@ -98,7 +119,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f980gPiPi=theParamVal.Flatf980gPiPi;
     double f980gKK=theParamVal.Flatf980gKK;
 
-    result+=chiToPi0Pi0Tof980kkAmp(theData, ChiToPi1800Pi0Tof980, f980Mass, f980gKK, f980gPiPi, Pi1800Mass, Pi1800Width);
+    currentResult+=chiToPi0Pi0Tof980kkAmp(theData, ChiToPi1800Pi0Tof980, f980Mass, f980gKK, f980gPiPi, Pi1800Mass, Pi1800Width);
   }
 
   if(_Pi1800Tof1370PiHyp9){
@@ -108,7 +129,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double f1360Mass=theParamVal.Bwf1360.first;
     double f1360Width=theParamVal.Bwf1360.second;
     
-    result+=chiToPi0Pi0Tof0Amp(theData, ChiToPi1800Pi0Tof1370, Pi1800Mass, Pi1800Width, f1360Mass, f1360Width);
+    currentResult+=chiToPi0Pi0Tof0Amp(theData, ChiToPi1800Pi0Tof1370, Pi1800Mass, Pi1800Width, f1360Mass, f1360Width);
   }
 
   if(_Pi1800ToKappaKHyp9){
@@ -118,7 +139,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double KappaMass=theParamVal.BwKappa.first;
     double KappaWidth=theParamVal.BwKappa.second;
     
-    result+=chiToPi0Pi0ToK0KAmp(theData, ChiToPi1800Pi0ToKappa, Pi1800Mass, Pi1800Width, KappaMass, KappaWidth);
+    currentResult+=chiToPi0Pi0ToK0KAmp(theData, ChiToPi1800Pi0ToKappa, Pi1800Mass, Pi1800Width, KappaMass, KappaWidth);
   }
 
   if(_Pi1800Pi0ToK892KHyp9){
@@ -128,7 +149,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K892Mass=theParamVal.BwK892.first;
     double K892Width=theParamVal.BwK892.second;
     
-    result+=chiToPi0PiToKstarKAmp(theData, ChiToPi1800Pi0ToK892K, Pi1800Mass, Pi1800Width, K892Mass, K892Width);
+    currentResult+=chiToPi0PiToKstarKAmp(theData, ChiToPi1800Pi0ToK892K, Pi1800Mass, Pi1800Width, K892Mass, K892Width);
 
   }
 
@@ -139,7 +160,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K892Mass=theParamVal.BwK892.first;
     double K892Width=theParamVal.BwK892.second;
     
-    result+=chiToPi0PiToKstarKAmp(theData, ChiToPi3000Pi0ToK892K, Pi3000Mass, Pi3000Width, K892Mass, K892Width);
+    currentResult+=chiToPi0PiToKstarKAmp(theData, ChiToPi3000Pi0ToK892K, Pi3000Mass, Pi3000Width, K892Mass, K892Width);
 
   }
 
@@ -150,7 +171,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_0_1950Mass=theParamVal.BwK_0_1950.first;
     double K_0_1950Width=theParamVal.BwK_0_1950.second;
 
-    result+=chiToPi0Pi0ToK0KAmp(theData, ChiToPi3000Pi0ToK_0_1950K, Pi3000Mass, Pi3000Width, K_0_1950Mass, K_0_1950Width);
+    currentResult+=chiToPi0Pi0ToK0KAmp(theData, ChiToPi3000Pi0ToK_0_1950K, Pi3000Mass, Pi3000Width, K_0_1950Mass, K_0_1950Width);
   }
 
   if (_Pi_2_2285Tof1710PiHyp9 || _Pi_2_2285ToK892KHyp9 || _Pi_2_2285ToK_0_1430KHyp9 || _Pi_2_2285ToK_2_1430KHyp9){
@@ -163,7 +184,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double f1710Width=theParamVal.Bwf1710.second;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285Tof1700Pi=theParamVal.Pi_2_2285Tof1700Pi;
 
-    result+=chiToPi2Pi0Tof0PiAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285Tof1700Pi, Pi_2_2285Mass, Pi_2_2285Width, f1710Mass, f1710Width);
+    currentResult+=chiToPi2Pi0Tof0PiAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285Tof1700Pi, Pi_2_2285Mass, Pi_2_2285Width, f1710Mass, f1710Width);
     }
 
     if(_Pi_2_2285ToK892KHyp9){
@@ -171,7 +192,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double K892Mass=theParamVal.BwK892.first;
     double K892Width=theParamVal.BwK892.second;
 
-    result+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK892KPi, Pi_2_2285Mass, Pi_2_2285Width, K892Mass, K892Width);
+    currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK892KPi, Pi_2_2285Mass, Pi_2_2285Width, K892Mass, K892Width);
     }
 
     if(_Pi_2_2285ToK_0_1430KHyp9){
@@ -179,7 +200,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double K_0_1430Mass=theParamVal.BwK_0_1430.first;
     double K_0_1430Width=theParamVal.BwK_0_1430.second;
 
-    result+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK_0_1430K, Pi_2_2285Mass, Pi_2_2285Width, K_0_1430Mass, K_0_1430Width,0 );
+    currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK_0_1430K, Pi_2_2285Mass, Pi_2_2285Width, K_0_1430Mass, K_0_1430Width,0 );
     }
 
     if(_Pi_2_2285ToK_2_1430KHyp9){
@@ -187,7 +208,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double K_2_1430Mass=theParamVal.BwK_2_1430.first;
     double K_2_1430Width=theParamVal.BwK_2_1430.second;
 
-    result+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK_2_1430K, Pi_2_2285Mass, Pi_2_2285Width, K_2_1430Mass, K_2_1430Width,2 );
+    currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK_2_1430K, Pi_2_2285Mass, Pi_2_2285Width, K_2_1430Mass, K_2_1430Width,2 );
     }
   }
 
@@ -201,7 +222,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double f980gKK=theParamVal.Flatf980gKK;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof980f_2_2300=theParamVal.ChiTof980f_2_2300;
 
-    result+=chiTof980_pif2_kAmp(theData, ChiTof980f_2_2300, f980Mass, f980gPiPi, f980gKK, f_2_2300Mass, f_2_2300Width);
+    currentResult+=chiTof980_pif2_kAmp(theData, ChiTof980f_2_2300, f980Mass, f980gPiPi, f980gKK, f_2_2300Mass, f_2_2300Width);
     }
 
     if (_f_2_2300sigmaHyp9){
@@ -209,7 +230,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double sigmaWidth=theParamVal.BwSigma.second;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof_2_2300sigma=theParamVal.ChiTof_2_2300sigma;
 
-    result+=chiTof0_pif2_kAmp(theData, ChiTof_2_2300sigma, sigmaMass, sigmaWidth, f_2_2300Mass, f_2_2300Width);
+    currentResult+=chiTof0_pif2_kAmp(theData, ChiTof_2_2300sigma, sigmaMass, sigmaWidth, f_2_2300Mass, f_2_2300Width);
     }
   }
 
@@ -223,8 +244,12 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_2_1770K=theParamVal.ChiToK_2_1770K;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_2_1770ToK_2_1430Pi=theParamVal.K_2_1770ToK_2_1430Pi;
 
-    result+=chiToK2KToK2PiAmp(theData, ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, K_2_1770Mass, K_2_1770Width, K_2_1430Mass, K_2_1430Width);
+    currentResult+=chiToK2KToK2PiAmp(theData, ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, K_2_1770Mass, K_2_1770Width, K_2_1430Mass, K_2_1430Width);
   }
+
+  _currentResultHyp9[_evtCounter]=currentResult; 
+  _evtCounter++;
+  result+=currentResult;
   return result;
 }
 
@@ -634,6 +659,43 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
 
 
+  // fill all other resonances
+  if (_Pi_2_2285Tof1710PiHyp9){
+      _massVecRemain.push_back(paramEnum2K2PiGam::f1710);
+  }
+
+  if (_Pi_2_1670Tof_2_1270PiHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::f_2_1270);
+  }
+
+  if (_Pi_2_1670ToK892KHyp9 || _Pi1800Pi0ToK892KHyp9 || _Pi3000Pi0ToK892KHyp9 || _Pi_2_2285ToK892KHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::K892);
+  }
+
+  if (_Pi_2_2285ToK_0_1430KHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::K_0_1430);
+  }
+
+  if (_Pi_2_2285ToK_2_1430KHyp9 || _K_2_1770ToK_2_1430PiHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::K_2_1430);
+  }
+
+  if (_f_2_2300sigmaHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::sigma);
+  }
+
+  if(_Pi1800ToKappaKHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::Kappa);
+  }
+
+  if(_Pi3000Pi0ToK_0_1950KHyp9){
+    _massVecRemain.push_back(paramEnum2K2PiGam::K_0_1950);
+  }
+
+  if(_Pi1800Tof980PiHyp9 || _f980f_2_2300Hyp9){
+    _f980FlatteRemain=true;
+  }
+
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*ampIt);
@@ -644,4 +706,99 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   for (massIt=_massVec.begin(); massIt!=_massVec.end(); ++massIt){
     _nFitParams+=2;
   } 
+}
+
+
+void Hyp9Lh::copyCurrentVals(Hyp9Lh* theLh){
+  Hyp5Lh::copyCurrentVals(theLh);
+  std::map<unsigned int, complex<double> > newResult; 
+  std::map<unsigned int, complex<double> >::iterator it;
+  for (it= _currentResultHyp9.begin(); it!= _currentResultHyp9.end(); ++it){
+    newResult[it->first]=it->second;
+  }
+  theLh->_currentResultHyp9=newResult;
+  
+}
+
+bool Hyp9Lh::equalParams(param2K2PiGam& theParamValOld, param2K2PiGam theParamValNew){
+  bool result=false;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
+    
+    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapNew=_fitParams2K2PiGam.ampMap(theParamValNew, *itAmps);
+      std::pair<double, double> tmpParamNew=currentMapNew[(*itJPCLS)];
+
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapOld=_fitParams2K2PiGam.ampMap(theParamValOld, *itAmps);
+      std::pair<double, double> tmpParamOld=currentMapOld[(*itJPCLS)];
+
+    if(fabs(tmpParamNew.first-tmpParamOld.first)>1e-10){
+      DebugMsg <<"\t Amplitude of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.first <<" != " << tmpParamOld.first  << endmsg;
+      return result;
+    }
+    if(fabs(tmpParamNew.second-tmpParamOld.second)>1e-10){
+      DebugMsg <<"\t Phase of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.second <<" != " << tmpParamOld.second  << endmsg;
+      return result;
+    }
+
+    }  
+  }
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=_massVec.begin(); itMasses!=_massVec.end(); ++itMasses){
+    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(theParamValOld, *itMasses);
+    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(theParamValNew, *itMasses);
+
+    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
+      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
+      return result;
+    }
+
+    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
+      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
+      return result;
+    }
+  }
+
+
+  for ( itMasses=_massVecRemain.begin(); itMasses!=_massVecRemain.end(); ++itMasses){
+    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(theParamValOld, *itMasses);
+    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(theParamValNew, *itMasses);
+
+    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
+      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
+      return result;
+    }
+
+    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
+      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
+      return result;
+    }
+  }
+
+
+
+  if(_f980FlatteRemain){
+  if(fabs(theParamValOld.Flatf980-theParamValNew.Flatf980)>1e-10){
+      DebugMsg <<"\t Flatf980 " << " are not equal\t" << theParamValOld.Flatf980 <<" != " << theParamValNew.Flatf980  << endmsg;
+      return result;
+  }
+
+  if(fabs(theParamValOld.Flatf980gPiPi-theParamValNew.Flatf980gPiPi)>1e-10){
+      DebugMsg <<"\t Flatf980gPiPi " << " are not equal\t" << theParamValOld.Flatf980gPiPi <<" != " << theParamValNew.Flatf980gPiPi  << endmsg;
+      return result;
+  }
+
+  if(fabs(theParamValOld.Flatf980gKK-theParamValNew.Flatf980gKK)>1e-10){
+      DebugMsg <<"\t Flatf980gKK " << " are not equal\t" << theParamValOld.Flatf980gKK <<" != " << theParamValNew.Flatf980gKK  << endmsg;
+      return result;
+  }
+
+  }
+
+  result=true;
+  return result;
 }

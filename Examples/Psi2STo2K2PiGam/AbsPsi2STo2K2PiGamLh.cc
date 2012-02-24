@@ -29,7 +29,7 @@ AbsPsi2STo2K2PiGamLh::~AbsPsi2STo2K2PiGamLh()
 }
 
 double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
- 
+
   double logLH=0.;
   double logLH_data=0.;
 
@@ -56,6 +56,7 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
 
   Info << "current LH = " << logLH << endmsg;
 
+  _currentFitParms=theParamVal;
  return logLH;
 
 }
@@ -1729,3 +1730,7 @@ void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2STo2K2PiGamLh::print\n";
 }
 
+void AbsPsi2STo2K2PiGamLh::copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh){
+
+  theLh->_currentFitParms=_currentFitParms;
+}

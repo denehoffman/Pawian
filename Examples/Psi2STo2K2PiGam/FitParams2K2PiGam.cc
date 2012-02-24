@@ -10,7 +10,7 @@
 FitParams2K2PiGam::FitParams2K2PiGam() 
 {
   Psi2STo2K2PiGamStates theStates;
-  theStates.print(std::cout);
+//  theStates.print(std::cout);
 
   _jpclsMap[paramEnum2K2PiGam::ChiGam]=theStates.PsiToChiGamStates();
   _jpclsMap[paramEnum2K2PiGam::K892K892]=theStates.ChiTo2K892States();

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <complex>
-//#include <map>
+#include <map>
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
@@ -36,8 +36,10 @@ public:
   /** Destructor */
   virtual ~Hyp1Lh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+  virtual AbsPsi2STo2K2PiGamLh* clone_(){
+    Hyp1Lh* result = new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+    copyCurrentVals(result);
+    return result;
   }
 
 
@@ -67,12 +69,19 @@ protected:
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
+  virtual void copyCurrentVals(Hyp1Lh* theLh);
+  std::map<unsigned int, complex<double> > _currentResultHyp1;
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
+  unsigned int _evtCounter;
+  bool _equalParameter;
+
+  bool equalParams(param2K2PiGam& theParamValOld, param2K2PiGam theParamValNew);
+  
 };
 
 #endif

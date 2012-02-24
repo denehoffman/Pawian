@@ -52,6 +52,7 @@
 
 //#include "HepMC/GenEvent.h"
 
+
 using namespace ROOT::Minuit2;
 
 void setErrLogMode( const Psi2STo2K2PiGamParser::enErrLogMode& erlMode ) {
@@ -80,6 +81,9 @@ void setErrLogMode( const Psi2STo2K2PiGamParser::enErrLogMode& erlMode ) {
 }
 
 int main(int __argc,char *__argv[]){
+
+  clock_t start, end;
+  start= clock();
 
   // Parse the command line
   static Psi2STo2K2PiGamParser theAppParams(__argc, __argv);
@@ -251,6 +255,10 @@ int main(int __argc,char *__argv[]){
     Psi2STo2K2PiGamHitAndMiss theHitAndMiss(thePsi2STo2K2PiGamLhPtr, theStartparams, hepMCEvtListPtr, "Psi2STo2K2PiGamGen.root");     
  
     theHitAndMiss.dumpToHepMCAscii(hepMCoutFile);
+
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     return 0;
   }
 
@@ -263,6 +271,10 @@ int main(int __argc,char *__argv[]){
     Info << "theLh = " << theLh << endmsg;
 
     Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, theStartparams);
+
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     return 0;
   }
 
@@ -316,6 +328,9 @@ int main(int __argc,char *__argv[]){
     theSuffix="Err"; 
     thePsi2STo2K2PiGamLhPtr->dumpCurrentResult(theStream, finalErrParams, theSuffix);
 
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
   return 0;
 }
 

@@ -36,7 +36,7 @@ public:
   /** Destructor */
   virtual ~HypProdLh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
+  virtual AbsPsi2STo2K2PiGamLh* clone_(){
     return new HypProdLh(_Psi2STo2K2PiGamEvtListPtr);
   }
 

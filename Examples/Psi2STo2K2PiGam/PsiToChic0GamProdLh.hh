@@ -35,7 +35,7 @@ public:
   /** Destructor */
   virtual ~PsiToChic0GamProdLh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
+  virtual AbsPsi2STo2K2PiGamLh* clone_() {
     return new PsiToChic0GamProdLh(_Psi2STo2K2PiGamEvtListPtr);
   }
 

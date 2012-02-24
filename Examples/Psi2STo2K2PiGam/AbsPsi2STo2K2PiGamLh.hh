@@ -38,7 +38,7 @@ public:
   /** Destructor */
   virtual ~AbsPsi2STo2K2PiGamLh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const=0;
+  virtual AbsPsi2STo2K2PiGamLh* clone_()=0;
 
 
   // Getters:
@@ -60,7 +60,7 @@ public:
 protected:
 
   boost::shared_ptr<const Psi2STo2K2PiGamEvtList> _Psi2STo2K2PiGamEvtListPtr;
-  FitParams2K2PiGam _fitParams2K2PiGam; 
+  mutable FitParams2K2PiGam _fitParams2K2PiGam; 
   
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtDataVec;
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtMCVec;
@@ -139,8 +139,12 @@ protected:
 
   virtual  complex<double> chiToKjTof0_piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjProd, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjDec, Spin Kj, double KjMass, double KjWidth, double f0Mass, double f0Width);
 
+//   virtual void copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh)=0;
+
+  void copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh);
+  param2K2PiGam _currentFitParms;
 private:
-  
+
 
 };
 
