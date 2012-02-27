@@ -168,6 +168,7 @@ int main(int __argc,char *__argv[]){
   hypMap["f980f_2_1430Hyp4"]=true;
   hypMap["f980f_2_1525Hyp4"]=true;
   hypMap["f980f_2_1950Hyp4"]=true;
+  hypMap["f980f_2_2010Hyp4"]=true;
   hypMap["f1500f_2_1525Hyp4"]=true;
   hypMap["f1710f_2_1430Hyp4"]=true;
   hypMap["f1710f_2_1950Hyp4"]=true;

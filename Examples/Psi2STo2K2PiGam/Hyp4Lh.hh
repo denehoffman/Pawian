@@ -58,6 +58,7 @@ protected:
   bool _f980f_2_1430Hyp4;
   bool _f980f_2_1525Hyp4;
   bool _f980f_2_1950Hyp4;
+  bool _f980f_2_2010Hyp4;
   bool _f1500f_2_1525Hyp4;
   bool _f1710f_2_1430Hyp4;
   bool _f1710f_2_1950Hyp4;
