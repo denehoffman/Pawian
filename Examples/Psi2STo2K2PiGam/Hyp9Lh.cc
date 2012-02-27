@@ -29,6 +29,7 @@ Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_f980FlatteRemain(false)
   ,_evtCounter(0)
   ,_equalParameter(false)
+  ,_equalPi_2_2285ToK_2_1430Params(false)
 {
   setUp(hypMap); 
 }
@@ -55,6 +56,7 @@ Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_f980FlatteRemain(false)
   ,_evtCounter(0)
   ,_equalParameter(false)
+  ,_equalPi_2_2285ToK_2_1430Params(false)
 {
   setUp(hypMap); 
 }
@@ -73,7 +75,7 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if (_evtCounter==0){
     _equalParameter=equalParams();
-
+    if (compAmpParms(_ampVecPi_2_2285ToK_2_1430) && compMassParms(_massVecPi_2_2285ToK_2_1430)) _equalPi_2_2285ToK_2_1430Params=true;
     DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
 
   } 
@@ -192,7 +194,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     double K892Mass=theParamVal.BwK892.first;
     double K892Width=theParamVal.BwK892.second;
 
-    currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK892KPi, Pi_2_2285Mass, Pi_2_2285Width, K892Mass, K892Width);
+    currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK892KPi, Pi_2_2285Mass, Pi_2_2285Width, K892Mass, K892Width, 1);
     }
 
     if(_Pi_2_2285ToK_0_1430KHyp9){
@@ -204,11 +206,17 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     }
 
     if(_Pi_2_2285ToK_2_1430KHyp9){
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285ToK_2_1430K=theParamVal.Pi_2_2285ToK_2_1430K;
-    double K_2_1430Mass=theParamVal.BwK_2_1430.first;
-    double K_2_1430Width=theParamVal.BwK_2_1430.second;
-
-    currentResult+=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK_2_1430K, Pi_2_2285Mass, Pi_2_2285Width, K_2_1430Mass, K_2_1430Width,2 );
+      
+      if(_equalPi_2_2285ToK_2_1430Params)  currentResult+=_currentResultPi_2_2285ToK_2_1430Hyp9[_evtCounter];
+      else{
+	std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > Pi_2_2285ToK_2_1430K=theParamVal.Pi_2_2285ToK_2_1430K;
+	double K_2_1430Mass=theParamVal.BwK_2_1430.first;
+	double K_2_1430Width=theParamVal.BwK_2_1430.second;
+	
+	complex<double> tmpPi_2_2285ToK_2_1430Amp=chiToPi2Pi0ToKstarKAmp(theData, ChiToPi_2_2285Pi, Pi_2_2285ToK_2_1430K, Pi_2_2285Mass, Pi_2_2285Width, K_2_1430Mass, K_2_1430Width,2 );
+	_currentResultPi_2_2285ToK_2_1430Hyp9[_evtCounter]=tmpPi_2_2285ToK_2_1430Amp;
+	currentResult+=tmpPi_2_2285ToK_2_1430Amp;
+      }
     }
   }
 
@@ -385,7 +393,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi_2_1670Tof_2_1270PiHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_1670Tof_2_1270PiHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_1670Tof_2_1270PiHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -397,7 +405,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi_2_1670ToK892KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_1670ToK892KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_1670ToK892KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -409,7 +417,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi1800Tof980PiHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi1800Tof980PiHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800Tof980PiHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -420,7 +428,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("Pi1800ToKappaKHyp9");
     if (iter !=hypMap.end()){
     _Pi1800ToKappaKHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi1800ToKappaKHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800ToKappaKHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -432,7 +440,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("Pi1800Tof1370PiHyp9");
   if (iter !=hypMap.end()){
     _Pi1800Tof1370PiHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi1800Tof1370PiHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800Tof1370PiHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -443,7 +451,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("Pi1800Pi0ToK892KHyp9");
   if (iter !=hypMap.end()){
     _Pi1800Pi0ToK892KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi1800Pi0ToK892KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800Pi0ToK892KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -454,7 +462,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("Pi3000Pi0ToK892KHyp9");
   if (iter !=hypMap.end()){
     _Pi3000Pi0ToK892KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi3000Pi0ToK892KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi3000Pi0ToK892KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -465,7 +473,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("Pi3000Pi0ToK_0_1950KHyp9");
   if (iter !=hypMap.end()){
     _Pi3000Pi0ToK_0_1950KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi3000Pi0ToK892KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi3000Pi0ToK892KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -477,7 +485,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi_2_2285Tof1710PiHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_2285Tof1710PiHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285Tof1710PiHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -490,7 +498,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi_2_2285ToK892KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK892KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK892KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -502,7 +510,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi_2_2285ToK_0_1430KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK_0_1430KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK_0_1430KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -517,7 +525,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _Pi_2_2285ToK_2_1430KHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK_2_1430KHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK_2_1430KHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -531,7 +539,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _f980f_2_2300Hyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_2300Hyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _f980f_2_2300Hyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -543,7 +551,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _f_2_2300sigmaHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f_2_2300sigmaHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _f_2_2300sigmaHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -555,7 +563,7 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _K_2_1770ToK_2_1430PiHyp9= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_2_1770ToK_2_1430PiHyp9 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K_2_1770ToK_2_1430PiHyp9 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else{
@@ -638,6 +646,11 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
     if(_Pi_2_2285ToK_2_1430KHyp9){
       _ampVec.push_back(paramEnum2K2PiGam::Pi_2_2285ToK_2_1430K);
       if(!_K2_1430_K2_1430Hyp && !_K0_1430_K2_1430Hyp) _massVec.push_back(paramEnum2K2PiGam::K_2_1430);
+
+      _ampVecPi_2_2285ToK_2_1430.push_back(paramEnum2K2PiGam::ChiToPi_2_2285Pi);
+      _ampVecPi_2_2285ToK_2_1430.push_back(paramEnum2K2PiGam::Pi_2_2285ToK_2_1430K);
+      _massVecPi_2_2285ToK_2_1430.push_back(paramEnum2K2PiGam::Pi_2_2285);
+      _massVecPi_2_2285ToK_2_1430.push_back(paramEnum2K2PiGam::K_2_1430);
     }
   }
 
@@ -715,9 +728,14 @@ void Hyp9Lh::copyCurrentVals(Hyp9Lh* theLh){
   std::map<unsigned int, complex<double> >::iterator it;
   for (it= _currentResultHyp9.begin(); it!= _currentResultHyp9.end(); ++it){
     newResult[it->first]=it->second;
+  } 
+
+ std::map<unsigned int, complex<double> > newResultPi_2_2285ToK_2_1430; 
+  for (it= _currentResultPi_2_2285ToK_2_1430Hyp9.begin(); it!= _currentResultPi_2_2285ToK_2_1430Hyp9.end(); ++it){
+    newResultPi_2_2285ToK_2_1430[it->first]=it->second;
   }
   theLh->_currentResultHyp9=newResult;
-  
+  theLh->_currentResultPi_2_2285ToK_2_1430Hyp9=newResultPi_2_2285ToK_2_1430;  
 }
 
 bool Hyp9Lh::equalParams(){

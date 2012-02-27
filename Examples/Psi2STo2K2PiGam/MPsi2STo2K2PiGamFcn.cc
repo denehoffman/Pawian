@@ -39,7 +39,7 @@ double MPsi2STo2K2PiGamFcn::operator()(const std::vector<double>& par) const
 
 
   if (   _fcnCounter==1 || _fcnCounter%10 == 0) {
-    DebugMsg << "logLh= " << result <<endmsg;  
+    Info << "logLh= " << result <<endmsg;  
     tmpAbsLh->printCurrentFitResult(theFitParmValTmp);
     mutex1.lock();
     _psi2STo2K2PiGamLhPtr.reset();
