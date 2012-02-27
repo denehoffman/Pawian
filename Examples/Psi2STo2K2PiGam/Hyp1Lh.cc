@@ -19,7 +19,8 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_f1710_f1710Hyp1(true)
   ,_nFitParams(0)
   ,_evtCounter(0)
-  ,_equalParameter(false) 
+  ,_equalParameter(false)
+  ,_equalK2_1430_K2_1430Params(false)
 {
   setUp(hypMap); 
 }
@@ -38,7 +39,8 @@ Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_f1710_f1710Hyp1(true)
   ,_nFitParams(0)
   ,_evtCounter(0)
-  ,_equalParameter(false)    
+  ,_equalParameter(false)
+  ,_equalK2_1430_K2_1430Params(false)
 {
   setUp(hypMap);
 }
@@ -53,6 +55,8 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   if (_evtCounter==0){
     _equalParameter=equalParams();
 
+    //compare K_2_1430_K_2_1430 parameter
+    if (compAmpParms( _ampVecK2_1430_K2_1430) && compMassParms(_massVecK2_1430_K2_1430)) _equalK2_1430_K2_1430Params=true;
     DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
 
 //     if (!_equalParameter){
@@ -105,7 +109,14 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   //Chi_c0 decay to K2*(1430) K2*(1430)
   if (_K0_1430_K0_1430Hyp) result+=chiTo2K_0_Amp(theData, ChiTo2K_0_1430, K_0_1430Mass, K_0_1430Width, K_0_1430Mass, K_0_1430Width);
-  if (_K2_1430_K2_1430Hyp) result+=chiTo2K_2_Amp(theData, ChiTo2K_2_1430, K_2_1430Mass, K_2_1430Width);
+  if (_K2_1430_K2_1430Hyp){
+    if(_equalK2_1430_K2_1430Params)  result+=_currentResultlK2_1430_K2_1430Hyp1[_evtCounter];
+    else{
+      complex<double> tmp2K_2_Amp=chiTo2K_2_Amp(theData, ChiTo2K_2_1430, K_2_1430Mass, K_2_1430Width);
+      _currentResultlK2_1430_K2_1430Hyp1[_evtCounter]=tmp2K_2_Amp;
+      result+=tmp2K_2_Amp;
+    }
+  }
   if (_K0_1430_K2_1430Hyp) result+=chiToK0K2Amp(theData, ChiToK_0_1430_K_2_1430, K_0_1430Mass, K_0_1430Width, K_2_1430Mass, K_2_1430Width);
   if(_K0_1430_K892Hyp1){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430_K892=theParamVal.ChiToK_0_1430_K892;
@@ -139,14 +150,12 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_1_1270ToK_0_1430Pi=theParamVal.K_1_1270ToK_0_1430Pi;
     double K_1_1270Mass=theParamVal.BwK_1_1270.first;
     double K_1_1270Width=theParamVal.BwK_1_1270.second;
-
     result+=chiToK1ToK1piAmp(theData, ChiToK_1_1270_K, K_1_1270ToK892Pi, K_1_1270Mass, K_1_1270Width, K892Mass, K892Width);
     result+=chiToK1ToK0piAmp(theData, ChiToK_1_1270_K, K_1_1270ToK_0_1430Pi, K_1_1270Mass, K_1_1270Width, K_0_1430Mass, K_0_1430Width);
+
   }
 
   if (_K1_1400Hyp){
-//     result+=chiToK1ToK1piAmp(theData, K1400ToK892Pi, K1400Mass, K1400Width, K892Mass, K892Width);
-
       result+=chiToK1ToK1piAmp(theData, ChiToK1400K, K1400ToK892Pi, K1400Mass, K1400Width, K892Mass, K892Width);
   }
   
@@ -327,7 +336,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
   if (iter !=hypMap.end()){
     _K1_1270Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis K1_1270Hyp not set!!!" <<endmsg;
@@ -335,7 +344,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("K1_1400Hyp");
   if (iter !=hypMap.end()){
     _K1_1400Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1400Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1400Hyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis K1_1400Hyp not set!!!" <<endmsg;
@@ -344,7 +353,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _K0_1430_K0_1430Hyp= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K0_1430Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K0_1430_K0_1430Hyp <<endmsg;
   }
   else Alert << "hypothesis K0_1430_K0_1430Hyp not set!!!" <<endmsg;
 
@@ -360,7 +369,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _K0_1430_K2_1430Hyp= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K2_1430Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K0_1430_K2_1430Hyp <<endmsg;
   }
   else Alert << "hypothesis K0_1430_K2_1430Hyp not set!!!" <<endmsg;
 
@@ -369,7 +378,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _K0_1430_K892Hyp1= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K0_1430_K892Hyp1 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K0_1430_K892Hyp1 <<endmsg;
   }
   else Alert << "hypothesis K0_1430_K892Hyp1 not set!!!" <<endmsg;
 
@@ -377,7 +386,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _K2_1430_K892Hyp1= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K2_1430_K892Hyp1 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K2_1430_K892Hyp1 <<endmsg;
   }
   else Alert << "hypothesis K2_1430_K892Hyp1 not set!!!" <<endmsg;
 
@@ -385,7 +394,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _K1_1410_K1_1410Hyp= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1410_K1_1410Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1410_K1_1410Hyp <<endmsg;
   }
   else Alert << "hypothesis K1_1410_K1_1410Hyp not set!!!" <<endmsg;
 
@@ -393,7 +402,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _K1_1410_K892Hyp1= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1410_K892Hyp1 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1410_K892Hyp1 <<endmsg;
   }
   else Alert << "hypothesis K1_1410_K892Hyp1 not set!!!" <<endmsg;
 
@@ -401,7 +410,7 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (iter !=hypMap.end()){
     _f1710_f1710Hyp1= iter->second;
     _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1710_f1710Hyp1 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _f1710_f1710Hyp1 <<endmsg;
   }
   else Alert << "hypothesis f1710_f1710Hyp1 not set!!!" <<endmsg;
 
@@ -421,7 +430,11 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::K_1_1400ToK892Pi);
   }
 
-  if(_K2_1430_K2_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_2_1430K_2_1430);
+  if(_K2_1430_K2_1430Hyp){ 
+    _ampVec.push_back(paramEnum2K2PiGam::K_2_1430K_2_1430);
+    _ampVecK2_1430_K2_1430.push_back(paramEnum2K2PiGam::K_2_1430K_2_1430);
+    _massVecK2_1430_K2_1430.push_back(paramEnum2K2PiGam::K_2_1430);
+  }
   if(_K0_1430_K0_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_0_1430K_0_1430);
   if(_K0_1430_K2_1430Hyp) _ampVec.push_back(paramEnum2K2PiGam::K_0_1430K_2_1430);
   if(_K0_1430_K892Hyp1) _ampVec.push_back(paramEnum2K2PiGam::ChiToK_0_1430_K892);
@@ -445,9 +458,11 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
   _ampVecComp.erase(_ampVecComp.begin());
 
   
-    _massVec.push_back(paramEnum2K2PiGam::K892);
+  _massVec.push_back(paramEnum2K2PiGam::K892);
   _massVec.push_back(paramEnum2K2PiGam::f1710);
-  if(_K1_1270Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1270);
+  if(_K1_1270Hyp){
+    _massVec.push_back(paramEnum2K2PiGam::K_1_1270);
+  }
   if(_K1_1400Hyp)  _massVec.push_back(paramEnum2K2PiGam::K_1_1400);
   if(_K2_1430_K2_1430Hyp || _K0_1430_K2_1430Hyp || _K2_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_2_1430);
   if(_K0_1430_K0_1430Hyp || _K0_1430_K2_1430Hyp || _K1_1270Hyp || _K0_1430_K892Hyp1) _massVec.push_back(paramEnum2K2PiGam::K_0_1430);
@@ -477,8 +492,14 @@ void Hyp1Lh::copyCurrentVals(Hyp1Lh* theLh){
   for (it= _currentResultHyp1.begin(); it!= _currentResultHyp1.end(); ++it){
     newResult[it->first]=it->second;
   }
+
+  std::map<unsigned int, complex<double> > newResultK2_1430_K2_1430; 
+  for (it= _currentResultlK2_1430_K2_1430Hyp1.begin(); it!= _currentResultlK2_1430_K2_1430Hyp1.end(); ++it){
+    newResultK2_1430_K2_1430[it->first]=it->second;
+  }
+
   theLh->_currentResultHyp1=newResult;
-  
+  theLh->_currentResultlK2_1430_K2_1430Hyp1=newResultK2_1430_K2_1430;
 }
 
 bool Hyp1Lh::equalParams(){
