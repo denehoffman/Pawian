@@ -91,7 +91,7 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     currentResult+=chiTo2K_0_Amp(theData, ChiToKappaK_0_1950, KappaMass, KappaWidth, K_0_1950Mass, K_0_1950Width); 
   }
 
-  _currentResultHyp6[_evtCounter]=currentResult; 
+  if(_cacheAmps) _currentResultHyp6[_evtCounter]=currentResult; 
   _evtCounter++;
   result+=currentResult;
   return result;
@@ -303,12 +303,9 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp6Lh::copyCurrentVals(Hyp6Lh* theLh){
   Hyp5Lh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp6.begin(); it!= _currentResultHyp6.end(); ++it){
-    newResult[it->first]=it->second;
+  if(_cacheAmps){
+    theLh->_currentResultHyp6=_currentResultHyp6;
   }
-  theLh->_currentResultHyp6=newResult;
   
 }
 

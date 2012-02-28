@@ -506,31 +506,12 @@ void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp1Lh::copyCurrentVals(Hyp1Lh* theLh){
   AbsPsi2STo2K2PiGamLh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp1.begin(); it!= _currentResultHyp1.end(); ++it){
-    newResult[it->first]=it->second;
+  if(_cacheAmps){
+    theLh->_currentResultHyp1=_currentResultHyp1;
+    theLh->_currentResultlK2_1430_K2_1430Hyp1=_currentResultlK2_1430_K2_1430Hyp1;
+    theLh->_currentResultlK892K892Hyp1=_currentResultlK892K892Hyp1;
+    theLh->_currentResultlK2_1430_K892Hyp1=_currentResultlK2_1430_K892Hyp1;
   }
-
-  std::map<unsigned int, complex<double> > newResultK2_1430_K2_1430; 
-  for (it= _currentResultlK2_1430_K2_1430Hyp1.begin(); it!= _currentResultlK2_1430_K2_1430Hyp1.end(); ++it){
-    newResultK2_1430_K2_1430[it->first]=it->second;
-  }
-
-  std::map<unsigned int, complex<double> > newResultK892K892; 
-  for (it= _currentResultlK892K892Hyp1.begin(); it!= _currentResultlK892K892Hyp1.end(); ++it){
-    newResultK892K892[it->first]=it->second;
-  }
-
-  std::map<unsigned int, complex<double> > newResultK2_1430_K892; 
-  for (it= _currentResultlK2_1430_K892Hyp1.begin(); it!= _currentResultlK2_1430_K892Hyp1.end(); ++it){
-    newResultK2_1430_K892[it->first]=it->second;
-  }
-
-  theLh->_currentResultHyp1=newResult;
-  theLh->_currentResultlK2_1430_K2_1430Hyp1=newResultK2_1430_K2_1430;
-  theLh->_currentResultlK892K892Hyp1=newResultK892K892;
-  theLh->_currentResultlK2_1430_K892Hyp1=newResultK2_1430_K892;
 }
 
 bool Hyp1Lh::equalParams(){

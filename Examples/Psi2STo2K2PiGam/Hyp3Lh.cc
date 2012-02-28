@@ -89,7 +89,7 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     currentResult+=chiTof0_pif0_kAmp(theData, ChiToSigmaf2200, sigmaMass, sigmaWidth,  f2200_Mass, f2200_Width);
   }  
 
-  _currentResultHyp3[_evtCounter]=currentResult; 
+  if(_cacheAmps) _currentResultHyp3[_evtCounter]=currentResult; 
   _evtCounter++;
   result+=currentResult;
   return result;
@@ -285,13 +285,9 @@ void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp3Lh::copyCurrentVals(Hyp3Lh* theLh){
   Hyp1Lh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp3.begin(); it!= _currentResultHyp3.end(); ++it){
-    newResult[it->first]=it->second;
-  }
-  theLh->_currentResultHyp3=newResult;
-  
+  if(_cacheAmps){
+    theLh->_currentResultHyp3=_currentResultHyp3;
+  }  
 }
 
 bool Hyp3Lh::equalParams(){

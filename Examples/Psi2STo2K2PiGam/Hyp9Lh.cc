@@ -264,7 +264,7 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
     currentResult+=chiToK2KToK2PiAmp(theData, ChiToK_2_1770K, K_2_1770ToK_2_1430Pi, K_2_1770Mass, K_2_1770Width, K_2_1430Mass, K_2_1430Width);
   }
 
-  _currentResultHyp9[_evtCounter]=currentResult; 
+  if(_cacheAmps) _currentResultHyp9[_evtCounter]=currentResult; 
   _evtCounter++;
   result+=currentResult;
   return result;
@@ -599,25 +599,11 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp9Lh::copyCurrentVals(Hyp9Lh* theLh){
   Hyp8Lh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp9.begin(); it!= _currentResultHyp9.end(); ++it){
-    newResult[it->first]=it->second;
-  } 
-
- std::map<unsigned int, complex<double> > newResultPi_2_2285ToK_2_1430; 
-  for (it= _currentResultPi_2_2285ToK_2_1430Hyp9.begin(); it!= _currentResultPi_2_2285ToK_2_1430Hyp9.end(); ++it){
-    newResultPi_2_2285ToK_2_1430[it->first]=it->second;
+  if(_cacheAmps){
+    theLh->_currentResultHyp9=_currentResultHyp9;
+    theLh->_currentResultPi_2_2285ToK_2_1430Hyp9=_currentResultPi_2_2285ToK_2_1430Hyp9; 
+    theLh->_currentResultPi_2_2285ToK892KHyp9=_currentResultPi_2_2285ToK892KHyp9; 
   }
-
- std::map<unsigned int, complex<double> > newResultPi_2_2285ToK892K; 
-  for (it= _currentResultPi_2_2285ToK892KHyp9.begin(); it!= _currentResultPi_2_2285ToK892KHyp9.end(); ++it){
-    newResultPi_2_2285ToK892K[it->first]=it->second;
-  }
-
-  theLh->_currentResultHyp9=newResult;
-  theLh->_currentResultPi_2_2285ToK_2_1430Hyp9=newResultPi_2_2285ToK_2_1430; 
-  theLh->_currentResultPi_2_2285ToK892KHyp9=newResultPi_2_2285ToK892K; 
 }
 
 bool Hyp9Lh::equalParams(){

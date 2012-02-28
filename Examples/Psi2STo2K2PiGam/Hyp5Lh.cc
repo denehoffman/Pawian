@@ -165,7 +165,7 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     currentResult+=chiToKst1KpiAmp(theData, ChiToK892KPi, K892Mass, K892Width);
   }
 
-  _currentResultHyp5[_evtCounter]=currentResult; 
+  if(_cacheAmps) _currentResultHyp5[_evtCounter]=currentResult; 
   _evtCounter++;
   result+=currentResult;
   return result;
@@ -478,18 +478,10 @@ void Hyp5Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp5Lh::copyCurrentVals(Hyp5Lh* theLh){
   Hyp4Lh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp5.begin(); it!= _currentResultHyp5.end(); ++it){
-    newResult[it->first]=it->second;
+  if(_cacheAmps){
+    theLh->_currentResultHyp5=_currentResultHyp5;
+    theLh->_currentResultK_2_2400KTof980Hyp5=_currentResultK_2_2400KTof980Hyp5;
   }
-
-  std::map<unsigned int, complex<double> > newResultK_2_2400KTof980; 
-  for (it= _currentResultK_2_2400KTof980Hyp5.begin(); it!= _currentResultK_2_2400KTof980Hyp5.end(); ++it){
-    newResultK_2_2400KTof980[it->first]=it->second;
-  }
-  theLh->_currentResultHyp5=newResult;
-  theLh->_currentResultK_2_2400KTof980Hyp5=newResultK_2_2400KTof980;
   
 }
 

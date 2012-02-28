@@ -120,7 +120,7 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     } 
   }
 
-  _currentResultHyp7[_evtCounter]=currentResult; 
+  if(_cacheAmps) _currentResultHyp7[_evtCounter]=currentResult; 
   _evtCounter++;
   result+=currentResult;
   return result;
@@ -323,25 +323,11 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp7Lh::copyCurrentVals(Hyp7Lh* theLh){
   Hyp6Lh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp7.begin(); it!= _currentResultHyp7.end(); ++it){
-    newResult[it->first]=it->second;
-  }
-
-  std::map<unsigned int, complex<double> > newResultK1_1680; 
-  for (it= _currentResultK1_1680Hyp7.begin(); it!= _currentResultK1_1680Hyp7.end(); ++it){
-    newResultK1_1680[it->first]=it->second;
-  }
-
-  std::map<unsigned int, complex<double> > newResultK1_2300; 
-  for (it= _currentResultK1_2300Hyp7.begin(); it!= _currentResultK1_2300Hyp7.end(); ++it){
-    newResultK1_2300[it->first]=it->second;
-  }
-
-  theLh->_currentResultHyp7=newResult;
-  theLh->_currentResultK1_1680Hyp7=newResultK1_1680;
-  theLh->_currentResultK1_2300Hyp7=newResultK1_2300;  
+  if(_cacheAmps){
+    theLh->_currentResultHyp7=_currentResultHyp7;
+    theLh->_currentResultK1_1680Hyp7=_currentResultK1_1680Hyp7;
+    theLh->_currentResultK1_2300Hyp7=_currentResultK1_2300Hyp7;
+  }  
 }
 
 

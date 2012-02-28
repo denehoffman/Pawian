@@ -103,7 +103,7 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   }
 
-  _currentResultHyp8[_evtCounter]=currentResult; 
+  if(_cacheAmps) _currentResultHyp8[_evtCounter]=currentResult; 
   _evtCounter++;
   result+=currentResult;
   return result;
@@ -295,12 +295,9 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 void Hyp8Lh::copyCurrentVals(Hyp8Lh* theLh){
   Hyp7Lh::copyCurrentVals(theLh);
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultHyp8.begin(); it!= _currentResultHyp8.end(); ++it){
-    newResult[it->first]=it->second;
+  if(_cacheAmps){
+    theLh->_currentResultHyp8=_currentResultHyp8;
   }
-  theLh->_currentResultHyp8=newResult;
   
 }
 
