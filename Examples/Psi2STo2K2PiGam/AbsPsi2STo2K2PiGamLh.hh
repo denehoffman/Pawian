@@ -65,9 +65,13 @@ protected:
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtDataVec;
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtMCVec;
 
+  std::map<unsigned int, complex<double> > _currentResultDecAmp;
+  
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData)=0;
+
+  virtual bool equalChic0DecParams()=0;
 
   virtual complex<double> chiTo2K892Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K892, double K892Mass, double K892Width);
 
@@ -148,9 +152,11 @@ protected:
 
   param2K2PiGam _cashedFitParms;
   param2K2PiGam _currentFitParms;
+
 private:
 
-
+  bool _equalDecParams;
+  unsigned int _evtCounter;
 };
 
 #endif

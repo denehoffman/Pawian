@@ -37,7 +37,16 @@ Hyp6Lh::~Hyp6Lh()
 {;
 }
 
+bool  Hyp6Lh::equalChic0DecParams(){
+  bool result=false; 
+  bool equalRemainHyps=Hyp5Lh::equalChic0DecParams();
+  if(!_doHyp6) return equalRemainHyps;
+  _equalParameter=equalParams();
+  DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
 
+  if(_equalParameter && equalRemainHyps) result=true;
+  return result;
+}
 
 complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 

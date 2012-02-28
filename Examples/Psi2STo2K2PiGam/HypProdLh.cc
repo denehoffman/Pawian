@@ -23,6 +23,11 @@ HypProdLh::~HypProdLh()
 {;
 }
 
+bool  HypProdLh::equalChic0DecParams(){
+  return true;
+}
+
+
 
 complex<double> HypProdLh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 

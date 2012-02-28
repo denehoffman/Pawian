@@ -10,6 +10,7 @@ Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   Hyp1Lh(theEvtList, hypMap )
   ,_doHyp2(false)
   ,_nFitParams(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap);
 }
@@ -18,6 +19,7 @@ Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   Hyp1Lh(theLhPtr->getEventList(), hypMap)
   ,_doHyp2(true)
   ,_nFitParams(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap);
 }
@@ -26,6 +28,17 @@ Hyp2Lh::~Hyp2Lh()
 {
 }
 
+bool  Hyp2Lh::equalChic0DecParams(){
+  bool result=false; 
+  bool equalRemainHyps=Hyp1Lh::equalChic0DecParams();
+  if(!_doHyp2) return equalRemainHyps;
+
+  _equalParameter=equalParams();
+  DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  if(_equalParameter && equalRemainHyps) result=true;
+  return result;
+}
 
 complex<double> Hyp2Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
   complex<double> result=Hyp1Lh::chi0DecAmps(theParamVal, theData);
@@ -186,4 +199,15 @@ void Hyp2Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _nFitParams+=2;
   }
   
+}
+
+bool Hyp2Lh::equalParams(){
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compFlatteParms()) return false;
+
+  return result;
 }

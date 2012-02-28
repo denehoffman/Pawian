@@ -70,6 +70,7 @@ protected:
   bool _doHyp9;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  virtual bool equalChic0DecParams();
 
   virtual void copyCurrentVals(Hyp9Lh* theLh);
   std::map<unsigned int, complex<double> > _currentResultHyp9;

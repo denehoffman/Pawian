@@ -43,7 +43,16 @@ Hyp7Lh::~Hyp7Lh()
 {;
 }
 
-
+bool  Hyp7Lh::equalChic0DecParams(){
+  bool result=false; 
+  bool equalRemainHyps=Hyp6Lh::equalChic0DecParams();
+  _equalParameter=equalParams();
+  if (compAmpParms(_ampVecK1_1680) && compMassParms(_massVecK1_1680)) _equalK1_1680Params=true;
+  if (compAmpParms(_ampVecK1_2300) && compMassParms(_massVecK1_2300)) _equalK1_2300Params=true;
+  DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+  if(_equalParameter && equalRemainHyps) result=true;
+  return result;
+}
 
 complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 

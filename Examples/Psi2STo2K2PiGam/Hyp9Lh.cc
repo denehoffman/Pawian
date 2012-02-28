@@ -67,7 +67,17 @@ Hyp9Lh::~Hyp9Lh()
 {;
 }
 
-
+bool  Hyp9Lh::equalChic0DecParams(){
+  bool result=false; 
+  bool equalRemainHyps=Hyp8Lh::equalChic0DecParams();
+  if (!_doHyp9) return equalRemainHyps;
+  _equalParameter=equalParams();
+  DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+  if (compAmpParms(_ampVecPi_2_2285ToK_2_1430) && compMassParms(_massVecPi_2_2285ToK_2_1430)) _equalPi_2_2285ToK_2_1430Params=true;
+  if (compAmpParms(_ampVecPi_2_2285ToK892K) && compMassParms(_massVecPi_2_2285ToK892K)) _equalPi_2_2285ToK892KParams=true;
+  if(_equalParameter && equalRemainHyps) result=true;
+  return result;
+}
 
 complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 

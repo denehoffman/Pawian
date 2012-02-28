@@ -64,6 +64,7 @@ protected:
   bool _f1710f_2_1950Hyp4;
   bool _doHyp4;
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  virtual bool equalChic0DecParams();
 
   virtual void copyCurrentVals(Hyp4Lh* theLh);
   std::map<unsigned int, complex<double> > _currentResultHyp4;

@@ -54,7 +54,7 @@ public:
 protected:
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
-
+  virtual bool equalChic0DecParams();
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
