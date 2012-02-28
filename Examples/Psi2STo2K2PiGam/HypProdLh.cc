@@ -6,14 +6,14 @@
 #include "ErrLogger/ErrLogger.hh"
 
 HypProdLh::HypProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList) :
-  AbsPsi2STo2K2PiGamLh(theEvtList)
+  AbsPsi2STo2K2PiGamLh(theEvtList, false)
   ,_nFitParams(0) 
 {
   setUp(); 
 }
 
 HypProdLh::HypProdLh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr) :
-  AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList())
+  AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList(), false)
   ,_nFitParams(0) 
 {
   setUp();

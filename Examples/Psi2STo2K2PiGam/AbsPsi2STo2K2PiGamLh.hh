@@ -32,8 +32,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
-  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>);
+  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, bool chacheAmps);
+  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, bool chacheAmps);
 
   /** Destructor */
   virtual ~AbsPsi2STo2K2PiGamLh();
@@ -52,6 +52,9 @@ public:
   virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par)=0;
   virtual unsigned int nFitParams() =0;
 
+  virtual bool ampsCached(){return _cacheAmps;}
+  virtual void cacheAmplitudes(){_cacheAmps=true;}
+
   virtual void print(std::ostream& os) const;
   virtual void printCurrentFitResult(param2K2PiGam& theParamVal)=0;
   virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix)=0;
@@ -66,6 +69,7 @@ protected:
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtMCVec;
 
   std::map<unsigned int, complex<double> > _currentResultDecAmp;
+  bool _cacheAmps;
   
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 

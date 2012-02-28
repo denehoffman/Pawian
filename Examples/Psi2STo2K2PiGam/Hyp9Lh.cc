@@ -7,8 +7,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp8Lh(theEvtList, hypMap )
+Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp8Lh(theEvtList, hypMap, cacheAmps)
   ,_Pi_2_1670Tof_2_1270PiHyp9(true)
   ,_Pi_2_1670ToK892KHyp9(true)
   ,_Pi1800Tof980PiHyp9(true)
@@ -35,8 +35,8 @@ Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp8Lh(theLhPtr->getEventList(), hypMap)
+Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp8Lh(theLhPtr->getEventList(), hypMap, cacheAmps)
   ,_Pi_2_1670Tof_2_1270PiHyp9(true)
   ,_Pi_2_1670ToK892KHyp9(true)
   ,_Pi1800Tof980PiHyp9(true)
@@ -84,14 +84,6 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp8Lh::chi0DecAmps(theParamVal, theData);
 
   if (!_doHyp9) return result;
-
-  if (_evtCounter==0){
-    _equalParameter=equalParams();
-    if (compAmpParms(_ampVecPi_2_2285ToK_2_1430) && compMassParms(_massVecPi_2_2285ToK_2_1430)) _equalPi_2_2285ToK_2_1430Params=true;
-    if (compAmpParms(_ampVecPi_2_2285ToK892K) && compMassParms(_massVecPi_2_2285ToK892K)) _equalPi_2_2285ToK892KParams=true;
-    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
-
-  } 
 
   if(_equalParameter){
     result+=_currentResultHyp9[_evtCounter];
@@ -405,188 +397,50 @@ void Hyp9Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
 
   if (!_doHyp9) return;
+  std::string theKey="Pi_2_1670Tof_2_1270PiHyp9";
+  setHyps( hypMap, _Pi_2_1670Tof_2_1270PiHyp9, theKey);
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("Pi_2_1670Tof_2_1270PiHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi_2_1670Tof_2_1270PiHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_1670Tof_2_1270PiHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi_2_1670Tof_2_1270PiHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="Pi_2_1670ToK892KHyp9";
+  setHyps( hypMap, _Pi_2_1670ToK892KHyp9, theKey);
 
-  iter= hypMap.find("Pi_2_1670ToK892KHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi_2_1670ToK892KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_1670ToK892KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi_2_1670ToK892KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }  
+  theKey="Pi1800Tof980PiHyp9";
+  setHyps( hypMap,_Pi1800Tof980PiHyp9, theKey);
 
-  iter= hypMap.find("Pi1800Tof980PiHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi1800Tof980PiHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800Tof980PiHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi1800Tof980PiHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }  
+  theKey="Pi1800ToKappaKHyp9";
+  setHyps( hypMap,_Pi1800ToKappaKHyp9, theKey);
 
-  iter= hypMap.find("Pi1800ToKappaKHyp9");
-    if (iter !=hypMap.end()){
-    _Pi1800ToKappaKHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800ToKappaKHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi1800ToKappaKHyp9 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="Pi1800Tof1370PiHyp9";
+  setHyps( hypMap, _Pi1800Tof1370PiHyp9, theKey);
 
+  theKey="Pi1800Pi0ToK892KHyp9";
+  setHyps( hypMap, _Pi1800Pi0ToK892KHyp9, theKey);
 
-  iter= hypMap.find("Pi1800Tof1370PiHyp9");
-  if (iter !=hypMap.end()){
-    _Pi1800Tof1370PiHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800Tof1370PiHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi1800Tof1370PiHyp9 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="Pi3000Pi0ToK892KHyp9";
+  setHyps( hypMap, _Pi3000Pi0ToK892KHyp9, theKey);
 
-  iter= hypMap.find("Pi1800Pi0ToK892KHyp9");
-  if (iter !=hypMap.end()){
-    _Pi1800Pi0ToK892KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi1800Pi0ToK892KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi1800Pi0ToK892KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="Pi3000Pi0ToK_0_1950KHyp9";
+  setHyps( hypMap, _Pi3000Pi0ToK_0_1950KHyp9, theKey);
 
-  iter= hypMap.find("Pi3000Pi0ToK892KHyp9");
-  if (iter !=hypMap.end()){
-    _Pi3000Pi0ToK892KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi3000Pi0ToK892KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi30000Pi0ToK892KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="Pi_2_2285Tof1710PiHyp9";
+  setHyps( hypMap, _Pi_2_2285Tof1710PiHyp9, theKey);
 
-  iter= hypMap.find("Pi3000Pi0ToK_0_1950KHyp9");
-  if (iter !=hypMap.end()){
-    _Pi3000Pi0ToK_0_1950KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi3000Pi0ToK892KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi3000Pi0ToK_0_1950KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="Pi_2_2285ToK892KHyp9";
+  setHyps( hypMap, _Pi_2_2285ToK892KHyp9, theKey);
 
-  iter= hypMap.find("Pi_2_2285Tof1710PiHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi_2_2285Tof1710PiHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285Tof1710PiHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi_2_2285Tof1710PiHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="Pi_2_2285ToK_0_1430KHyp9";
+  setHyps( hypMap, _Pi_2_2285ToK_0_1430KHyp9, theKey);
 
+  theKey="Pi_2_2285ToK_2_1430KHyp9";
+  setHyps( hypMap, _Pi_2_2285ToK_2_1430KHyp9, theKey);
 
-  iter= hypMap.find("Pi_2_2285ToK892KHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi_2_2285ToK892KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK892KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi_2_2285ToK892KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="f980f_2_2300Hyp9";
+  setHyps( hypMap, _f980f_2_2300Hyp9, theKey);
 
-  iter= hypMap.find("Pi_2_2285ToK_0_1430KHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi_2_2285ToK_0_1430KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK_0_1430KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi_2_2285ToK_0_1430KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="f_2_2300sigmaHyp9";
+  setHyps( hypMap, _f_2_2300sigmaHyp9, theKey);
 
-
-
-
-  iter= hypMap.find("Pi_2_2285ToK_2_1430KHyp9");
-  
-  if (iter !=hypMap.end()){
-    _Pi_2_2285ToK_2_1430KHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _Pi_2_2285ToK_2_1430KHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "Pi_2_2285ToK_2_1430KHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-
-
-  iter= hypMap.find("f980f_2_2300Hyp9");
-  
-  if (iter !=hypMap.end()){
-    _f980f_2_2300Hyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _f980f_2_2300Hyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "f980f_2_2300Hyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f_2_2300sigmaHyp9");
-  
-  if (iter !=hypMap.end()){
-    _f_2_2300sigmaHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _f_2_2300sigmaHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "f_2_2300sigmaHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("K_2_1770ToK_2_1430PiHyp9");
-  
-  if (iter !=hypMap.end()){
-    _K_2_1770ToK_2_1430PiHyp9= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K_2_1770ToK_2_1430PiHyp9 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "K_2_1770ToK_2_1430PiHyp9 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="K_2_1770ToK_2_1430PiHyp9";
+  setHyps( hypMap, _K_2_1770ToK_2_1430PiHyp9, theKey);
 
 
   if (_Pi_2_1670Tof_2_1270PiHyp9 || _Pi_2_1670ToK892KHyp9){

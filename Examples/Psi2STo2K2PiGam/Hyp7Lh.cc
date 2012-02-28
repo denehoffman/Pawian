@@ -7,8 +7,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp6Lh(theEvtList, hypMap )
+Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp6Lh(theEvtList, hypMap, cacheAmps )
   ,_KappaHyp(true)
   ,_K1_1680Hyp(true)
   ,_K1_1680K1_1680Hyp7(true)
@@ -23,8 +23,8 @@ Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp7Lh::Hyp7Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp6Lh(theLhPtr->getEventList(), hypMap)
+Hyp7Lh::Hyp7Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp6Lh(theLhPtr->getEventList(), hypMap, cacheAmps)
   ,_KappaHyp(true)
   ,_K1_1680Hyp(true)
   ,_K1_1680K1_1680Hyp7(true)
@@ -57,14 +57,6 @@ bool  Hyp7Lh::equalChic0DecParams(){
 complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
 
   complex<double> result=Hyp6Lh::chi0DecAmps(theParamVal, theData);
-
-  if (_evtCounter==0){
-    _equalParameter=equalParams();
-    if (compAmpParms(_ampVecK1_1680) && compMassParms(_massVecK1_1680)) _equalK1_1680Params=true;
-    if (compAmpParms(_ampVecK1_2300) && compMassParms(_massVecK1_2300)) _equalK1_2300Params=true;
-    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
-
-  } 
 
   if(_equalParameter){
     result+=_currentResultHyp7[_evtCounter];
@@ -252,50 +244,20 @@ void Hyp7Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("KappaHyp7");
-  
-  if (iter !=hypMap.end()){
-    _KappaHyp= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _KappaHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis KappaHyp7 not set!!!" <<endmsg;
-  
-  iter= hypMap.find("K1_1680Hyp7");
-  if (iter !=hypMap.end()){
-    _K1_1680Hyp= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1680Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K1_1680Hyp7 not set!!!" <<endmsg;
+  std::string theKey="KappaHyp7";
+  setHyps( hypMap, _KappaHyp, theKey);
 
+  theKey="K1_1680Hyp7";
+  setHyps( hypMap, _K1_1680Hyp, theKey);
 
-  iter= hypMap.find("K1_1680K1_1680Hyp7");
-  if (iter !=hypMap.end()){
-    _K1_1680K1_1680Hyp7= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1680K1_1680Hyp7 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K1_1680K1_1680Hyp7 not set!!!" <<endmsg;
+  theKey="K1_1680K1_1680Hyp7";
+  setHyps( hypMap, _K1_1680K1_1680Hyp7, theKey);  
 
+  theKey="K1_1680K0_1430Hyp7";
+  setHyps( hypMap, _K1_1680K0_1430Hyp7, theKey); 
 
-  iter= hypMap.find("K1_1680K0_1430Hyp7");
-  if (iter !=hypMap.end()){
-    _K1_1680K0_1430Hyp7= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1680K0_1430Hyp7 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K1_1680K0_1430Hyp7 not set!!!" <<endmsg;
-
-
-  iter= hypMap.find("K1_2300Hyp7");
-  
-  if (iter !=hypMap.end()){
-    _K1_2300Hyp= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_2300Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K1_2300Hyp7 not set!!!" <<endmsg;
+  theKey="K1_2300Hyp7";
+  setHyps( hypMap, _K1_2300Hyp, theKey);
 
 
   if(_KappaHyp){

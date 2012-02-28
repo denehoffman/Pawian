@@ -5,8 +5,8 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  AbsPsi2STo2K2PiGamLh(theEvtList)
+Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool chacheAmps ) :
+  AbsPsi2STo2K2PiGamLh(theEvtList, chacheAmps)
   ,_K1_1270Hyp(true)
   ,_K1_1400Hyp(true)
   ,_K0_1430_K0_1430Hyp(true)
@@ -27,8 +27,8 @@ Hyp1Lh::Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList())
+Hyp1Lh::Hyp1Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool chacheAmps ) :
+  AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList(), chacheAmps)
   ,_K1_1270Hyp(true)
   ,_K1_1400Hyp(true)
   ,_K0_1430_K0_1430Hyp(true)
@@ -66,21 +66,6 @@ bool  Hyp1Lh::equalChic0DecParams(){
 }
 
 complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
-
-  if (_evtCounter==0){
-    _equalParameter=equalParams();
-
-    //compare K_2_1430_K_2_1430 parameter
-    if (compAmpParms( _ampVecK2_1430_K2_1430) && compMassParms(_massVecK2_1430_K2_1430)) _equalK2_1430_K2_1430Params=true;
-    if (compAmpParms(_ampVecK892K892) && compMassParms(_massVecK892K892)) _equalK892K892Params=true;
-    if (compAmpParms(_ampVecK2_1430_K892) && compMassParms(_massVecK2_1430_K892)) _equalK2_1430_K892Params=true;
-    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
-
-//     if (!_equalParameter){
-//       DebugMsg <<"************** old fit Params ********************" << endmsg;
-//       printCurrentFitResult(_currentFitParms);
-//     } 
-  }
 
   complex<double> result(0.,0.);
 
@@ -205,7 +190,7 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 //   }
 //   Info<<"new result:\t" << result << endmsg; 
  
-  _currentResultHyp1[_evtCounter]=result; 
+  if(_cacheAmps) _currentResultHyp1[_evtCounter]=result; 
   _evtCounter++;
   return result; 
 
@@ -559,4 +544,19 @@ bool Hyp1Lh::equalParams(){
 
   return result;
 
+}
+
+void Hyp1Lh::setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey){
+
+  std::map<const std::string, bool>::const_iterator iter= theMap.find(theKey);
+  
+  if (iter !=theMap.end()){
+    theHyp= iter->second;
+    if (!_cacheAmps) DebugMsg<< "hypothesis " << iter->first << "\t" << theHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << theKey << " does not exist!!!" <<endmsg;
+    exit(0);
+  }
 }

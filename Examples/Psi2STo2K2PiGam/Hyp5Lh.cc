@@ -7,8 +7,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp4Lh(theEvtList, hypMap )
+Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool cacheAmps) :
+  Hyp4Lh(theEvtList, hypMap, cacheAmps )
   , _doHyp5(true)
   , _K_0_2400KHyp5(true)
   ,_K_0_2400KTof_0_1710Hyp5(true)
@@ -28,8 +28,8 @@ Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp5Lh::Hyp5Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp4Lh(theLhPtr->getEventList(), hypMap)
+Hyp5Lh::Hyp5Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp4Lh(theLhPtr->getEventList(), hypMap, cacheAmps)
   , _doHyp5(true)
   , _K_0_2400KHyp5(true)
   ,_K_0_2400KTof_0_1710Hyp5(true)
@@ -69,13 +69,6 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   complex<double> result=Hyp4Lh::chi0DecAmps(theParamVal, theData);
   if (!_doHyp5) return result;
-
-  if (_evtCounter==0){
-    _equalParameter=equalParams();
-    if (compAmpParms(_ampVecK_2_2400KTof980) && compMassParms(_massVecK_2_2400KTof980) && compFlatteParms()) _equalK_2_2400KTof980Params=true;
-    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
-
-  } 
 
   if(_equalParameter){
     result+=_currentResultHyp5[_evtCounter];

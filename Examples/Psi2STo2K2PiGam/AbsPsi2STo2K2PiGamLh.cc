@@ -8,9 +8,10 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList) :
+AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, bool chacheAmps) :
   _Psi2STo2K2PiGamEvtListPtr(theEvtList)
   ,_fitParams2K2PiGam()
+  ,_cacheAmps(chacheAmps)
   ,_equalDecParams(false)
   ,_evtCounter(0)
 {
@@ -18,9 +19,10 @@ AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiG
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
 }
 
-AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theAbsPsi2STo2K2PiGamLhPtr):
+AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theAbsPsi2STo2K2PiGamLhPtr, bool chacheAmps):
   _Psi2STo2K2PiGamEvtListPtr(theAbsPsi2STo2K2PiGamLhPtr->getEventList())
   ,_fitParams2K2PiGam()
+  ,_cacheAmps(chacheAmps)
   ,_equalDecParams(false)
   ,_evtCounter(0)
 {
@@ -35,7 +37,7 @@ AbsPsi2STo2K2PiGamLh::~AbsPsi2STo2K2PiGamLh()
 double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
 
   _currentFitParms=theParamVal;
-  _equalDecParams= equalChic0DecParams();
+  if(_cacheAmps) _equalDecParams= equalChic0DecParams();
 
   double logLH=0.;
   double logLH_data=0.;
@@ -1744,15 +1746,19 @@ void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
 }
 
 void AbsPsi2STo2K2PiGamLh::copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh){
-  std::map<unsigned int, complex<double> > newResult; 
-  std::map<unsigned int, complex<double> >::iterator it;
-  for (it= _currentResultDecAmp.begin(); it!= _currentResultDecAmp.end(); ++it){
-    newResult[it->first]=it->second;
+  theLh->_cacheAmps=_cacheAmps;
+  if(_cacheAmps){
+    std::map<unsigned int, complex<double> > newResult; 
+    std::map<unsigned int, complex<double> >::iterator it;
+    for (it= _currentResultDecAmp.begin(); it!= _currentResultDecAmp.end(); ++it){
+      newResult[it->first]=it->second;
+    }
+    
+    theLh->_currentResultDecAmp=newResult; 
+    theLh->_cashedFitParms=_cashedFitParms;
   }
-
-  theLh->_currentResultDecAmp=newResult; 
-  theLh->_cashedFitParms=_cashedFitParms;
 }
+
 
 bool  AbsPsi2STo2K2PiGamLh::compAmpParms( std::vector<unsigned int>& ampVec){
 

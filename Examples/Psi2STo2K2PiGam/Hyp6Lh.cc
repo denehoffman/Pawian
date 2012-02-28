@@ -7,8 +7,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp5Lh(theEvtList, hypMap )
+Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp5Lh(theEvtList, hypMap, cacheAmps )
   ,_doHyp6(true)
   ,_K_0_1430K_0_1950Hyp6(true)
   ,_KappaK_0_1430Hyp6(true)
@@ -20,8 +20,8 @@ Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp5Lh(theLhPtr->getEventList(), hypMap)
+Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp5Lh(theLhPtr->getEventList(), hypMap, cacheAmps)
   ,_doHyp6(true)
   ,_K_0_1430K_0_1950Hyp6(true)
   ,_KappaK_0_1430Hyp6(true)
@@ -53,13 +53,6 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp5Lh::chi0DecAmps(theParamVal, theData);
 
   if(!_doHyp6) return result;
-
-  if (_evtCounter==0){
-    _equalParameter=equalParams();
-
-    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
-
-  } 
 
   if(_equalParameter){
     result+=_currentResultHyp6[_evtCounter];

@@ -7,8 +7,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp7Lh(theEvtList, hypMap )
+Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp7Lh(theEvtList, hypMap, cacheAmps )
   ,_K_0_1460ToKstPiHyp8(true)
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
@@ -20,8 +20,8 @@ Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp7Lh(theLhPtr->getEventList(), hypMap)
+Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
+  Hyp7Lh(theLhPtr->getEventList(), hypMap, cacheAmps)
   ,_K_0_1460ToKstPiHyp8(true)
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
@@ -54,13 +54,6 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   complex<double> result=Hyp7Lh::chi0DecAmps(theParamVal, theData);
 
   if (!_doHyp8) return result;
-
-  if (_evtCounter==0){
-    _equalParameter=equalParams();
-
-    DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
-
-  } 
 
   if(_equalParameter){
     result+=_currentResultHyp8[_evtCounter];
@@ -241,41 +234,17 @@ void Hyp8Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("K_0_1460ToKstPiHyp8");
 
-  if (iter !=hypMap.end()){
-    _K_0_1460ToKstPiHyp8= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_0_1460ToKstPiHyp8 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "K_0_1460ToKstPiHyp8 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  std::string theKey="K_0_1460ToKstPiHyp8";
+  setHyps( hypMap, _K_0_1460ToKstPiHyp8, theKey);
 
-  iter= hypMap.find("K_0_1830ToKstPiHyp8");
+  theKey="K_0_1830ToKstPiHyp8";
+  setHyps( hypMap, _K_0_1830ToKstPiHyp8, theKey);
 
-  if (iter !=hypMap.end()){
-    _K_0_1830ToKstPiHyp8= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_0_1830ToKstPiHyp8 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "K_0_1830ToKstPiHyp8 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="K_1_1650Hyp8"; 
+  setHyps( hypMap,  _K_1_1650Hyp8, theKey);
 
-  iter= hypMap.find("K_1_1650Hyp8");
 
-  if (iter !=hypMap.end()){
-    _K_1_1650Hyp8= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_1_1650Hyp8 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "K_1_1650Hyp8 not set!!!" <<endmsg;
-    exit(0);
-  }
  
   if(!_K_0_1460ToKstPiHyp8 && !_K_0_1830ToKstPiHyp8 && !_K_1_1650Hyp8) _doHyp8=false; 
 

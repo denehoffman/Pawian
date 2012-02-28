@@ -29,14 +29,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp2Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap, bool chacheAmps=false);
+  Hyp2Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap, bool chacheAmps=false);
 
   /** Destructor */
   virtual ~Hyp2Lh();
 
   virtual AbsPsi2STo2K2PiGamLh* clone_(){
-    return new Hyp2Lh(_Psi2STo2K2PiGamEvtListPtr,_hypMap);
+    return new Hyp2Lh(_Psi2STo2K2PiGamEvtListPtr,_hypMap, _cacheAmps);
   }
 
 

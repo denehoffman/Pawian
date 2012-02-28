@@ -6,8 +6,8 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp1Lh(theEvtList, hypMap )
+Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool chacheAmps ) :
+  Hyp1Lh(theEvtList, hypMap, chacheAmps )
   ,_doHyp2(false)
   ,_nFitParams(0)
   ,_equalParameter(false)
@@ -15,8 +15,8 @@ Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap);
 }
 
-Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp1Lh(theLhPtr->getEventList(), hypMap)
+Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool chacheAmps ) :
+  Hyp1Lh(theLhPtr->getEventList(), hypMap, chacheAmps)
   ,_doHyp2(true)
   ,_nFitParams(0)
   ,_equalParameter(false)

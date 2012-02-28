@@ -279,7 +279,7 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
-
+  thePsi2STo2K2PiGamLhPtr->cacheAmplitudes();
   MnUserParameters upar;
   thePsi2STo2K2PiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
 

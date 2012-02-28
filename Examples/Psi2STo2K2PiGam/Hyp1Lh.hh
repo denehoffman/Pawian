@@ -30,14 +30,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp1Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap, bool chacheAmps=false);
+  Hyp1Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap, bool chacheAmps=false);
 
   /** Destructor */
   virtual ~Hyp1Lh();
 
   virtual AbsPsi2STo2K2PiGamLh* clone_(){
-    Hyp1Lh* result = new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+    Hyp1Lh* result = new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap, _cacheAmps);
     copyCurrentVals(result);
     return result;
   }
@@ -47,6 +47,7 @@ public:
   virtual void setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal);
   virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par);
   virtual unsigned int nFitParams();
+  virtual void setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey); 
 
   virtual void print(std::ostream& os) const;
   virtual void printCurrentFitResult(param2K2PiGam& theParamVal);
