@@ -66,17 +66,21 @@ protected:
 
   virtual void copyCurrentVals(Hyp5Lh* theLh);
   std::map<unsigned int, complex<double> > _currentResultHyp5;
+  std::map<unsigned int, complex<double> > _currentResultK_2_2400KTof980Hyp5;
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec; 
   std::vector<unsigned int> _massVecRemain;
   bool _f980FlatteRemain;
+  std::vector<unsigned int> _ampVecK_2_2400KTof980;
+  std::vector<unsigned int> _massVecK_2_2400KTof980;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
 
   unsigned int _evtCounter;
   bool _equalParameter;
+  bool _equalK_2_2400KTof980Params;
 
   bool equalParams();
 };

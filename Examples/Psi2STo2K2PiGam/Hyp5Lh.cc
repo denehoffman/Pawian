@@ -23,6 +23,7 @@ Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_f980FlatteRemain(false)
   ,_evtCounter(0)
   ,_equalParameter(false)
+  ,_equalK_2_2400KTof980Params(false)
 {
   setUp(hypMap); 
 }
@@ -43,6 +44,7 @@ Hyp5Lh::Hyp5Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_f980FlatteRemain(false)
   ,_evtCounter(0)
   ,_equalParameter(false)
+  ,_equalK_2_2400KTof980Params(false)
 {
   setUp(hypMap); 
 }
@@ -60,7 +62,7 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if (_evtCounter==0){
     _equalParameter=equalParams();
-
+    if (compAmpParms(_ampVecK_2_2400KTof980) && compMassParms(_massVecK_2_2400KTof980) && compFlatteParms()) _equalK_2_2400KTof980Params=true;
     DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
 
   } 
@@ -128,8 +130,13 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_2_2400Width=theParamVal.BwK_2_2400.second;
 
     if(_K_2_2400KTof980Hyp5){
+      if(_equalK_2_2400KTof980Params) currentResult+=_currentResultK_2_2400KTof980Hyp5[_evtCounter];
+      else{
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_2_2400Tof980K=theParamVal.K_2_2400Tof980K;
-      currentResult+=chiToKjTof980_piKAmp(theData, ChiToK_2_2400K, K_2_2400Tof980K, 2, K_2_2400Mass, K_2_2400Width, f980_Mass, f980_gKK, f980_gPiPi);
+      complex<double> tmpK_2_2400KTof980Amp=chiToKjTof980_piKAmp(theData, ChiToK_2_2400K, K_2_2400Tof980K, 2, K_2_2400Mass, K_2_2400Width, f980_Mass, f980_gKK, f980_gPiPi);
+      _currentResultK_2_2400KTof980Hyp5[_evtCounter]=tmpK_2_2400KTof980Amp;
+      currentResult+=tmpK_2_2400KTof980Amp;
+      }
     } 
 
     if (_K_2_2400KTof_0_1710Hyp5){
@@ -416,6 +423,9 @@ void Hyp5Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
     if(_K_2_2400KTof980Hyp5){
       _ampVec.push_back(paramEnum2K2PiGam::K_2_2400Tof980K);
+      _ampVecK_2_2400KTof980.push_back(paramEnum2K2PiGam::ChiToK_2_2400K);
+      _ampVecK_2_2400KTof980.push_back(paramEnum2K2PiGam::K_2_2400Tof980K);
+      _massVecK_2_2400KTof980.push_back(paramEnum2K2PiGam::K_2_2400);
     }
 
     if(_K_2_2400KTof_0_1710Hyp5){
@@ -470,7 +480,13 @@ void Hyp5Lh::copyCurrentVals(Hyp5Lh* theLh){
   for (it= _currentResultHyp5.begin(); it!= _currentResultHyp5.end(); ++it){
     newResult[it->first]=it->second;
   }
+
+  std::map<unsigned int, complex<double> > newResultK_2_2400KTof980; 
+  for (it= _currentResultK_2_2400KTof980Hyp5.begin(); it!= _currentResultK_2_2400KTof980Hyp5.end(); ++it){
+    newResultK_2_2400KTof980[it->first]=it->second;
+  }
   theLh->_currentResultHyp5=newResult;
+  theLh->_currentResultK_2_2400KTof980Hyp5=newResultK_2_2400KTof980;
   
 }
 
