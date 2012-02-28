@@ -74,6 +74,7 @@ protected:
   virtual void copyCurrentVals(Hyp9Lh* theLh);
   std::map<unsigned int, complex<double> > _currentResultHyp9;
   std::map<unsigned int, complex<double> > _currentResultPi_2_2285ToK_2_1430Hyp9;
+  std::map<unsigned int, complex<double> > _currentResultPi_2_2285ToK892KHyp9;
 
 private:
 
@@ -85,12 +86,15 @@ private:
 
   std::vector<unsigned int> _ampVecPi_2_2285ToK_2_1430;
   std::vector<unsigned int> _massVecPi_2_2285ToK_2_1430;
+  std::vector<unsigned int> _ampVecPi_2_2285ToK892K;
+  std::vector<unsigned int> _massVecPi_2_2285ToK892K;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
 
   unsigned int _evtCounter;
   bool _equalParameter;
   bool _equalPi_2_2285ToK_2_1430Params;
+  bool _equalPi_2_2285ToK892KParams;
 
   bool equalParams();
 };

@@ -15,8 +15,9 @@ Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K1_1680K0_1430Hyp7(true)
   ,_K1_2300Hyp(true)
   ,_nFitParams(0)
- ,_evtCounter(0)
+  ,_evtCounter(0)
   ,_equalParameter(false)
+  ,_equalK1_1680Params(false)
 {
   setUp(hypMap); 
 }
@@ -31,6 +32,7 @@ Hyp7Lh::Hyp7Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_nFitParams(0)
   ,_evtCounter(0)
   ,_equalParameter(false)
+  ,_equalK1_1680Params(false)
 {
   setUp(hypMap); 
 }
@@ -47,7 +49,7 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if (_evtCounter==0){
     _equalParameter=equalParams();
-
+    if (compAmpParms(_ampVecK1_1680) && compMassParms(_massVecK1_1680)) _equalK1_1680Params=true;
     DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
 
   } 
@@ -78,8 +80,13 @@ complex<double> Hyp7Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     double K_1_1680Width=theParamVal.BwK_1_1680.second; 
 
     if (_K1_1680Hyp){
+      if(_equalK1_1680Params) currentResult+=_currentResultK1_1680Hyp7[_evtCounter];
+      else{
       std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680=theParamVal.ChiToK892K1680;
-      currentResult+=chiToK1K1Amp(theData, ChiToK892K1680, K892Mass, K892Width,  K_1_1680Mass, K_1_1680Width);
+      complex<double> tmpK1_1680Amp=chiToK1K1Amp(theData, ChiToK892K1680, K892Mass, K892Width,  K_1_1680Mass, K_1_1680Width);
+      _currentResultK1_1680Hyp7[_evtCounter]=tmpK1_1680Amp;
+      currentResult+=tmpK1_1680Amp;
+      }
     } 
 
     if (_K1_1680K1_1680Hyp7){
@@ -232,7 +239,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _KappaHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _KappaHyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _KappaHyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis KappaHyp7 not set!!!" <<endmsg;
@@ -240,7 +247,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("K1_1680Hyp7");
   if (iter !=hypMap.end()){
     _K1_1680Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1680Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1680Hyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis K1_1680Hyp7 not set!!!" <<endmsg;
@@ -249,7 +256,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("K1_1680K1_1680Hyp7");
   if (iter !=hypMap.end()){
     _K1_1680K1_1680Hyp7= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1680K1_1680Hyp7 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1680K1_1680Hyp7 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis K1_1680K1_1680Hyp7 not set!!!" <<endmsg;
@@ -258,7 +265,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   iter= hypMap.find("K1_1680K0_1430Hyp7");
   if (iter !=hypMap.end()){
     _K1_1680K0_1430Hyp7= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_1680K0_1430Hyp7 <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1680K0_1430Hyp7 <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis K1_1680K0_1430Hyp7 not set!!!" <<endmsg;
@@ -268,7 +275,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   
   if (iter !=hypMap.end()){
     _K1_2300Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K1_2300Hyp <<endmsg;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_2300Hyp <<endmsg;
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis K1_2300Hyp7 not set!!!" <<endmsg;
@@ -285,6 +292,9 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _massVec.push_back(paramEnum2K2PiGam::K_1_1680);
     if(_K1_1680Hyp){
       _ampVec.push_back(paramEnum2K2PiGam::K892K_1_1680);
+      _ampVecK1_1680.push_back(paramEnum2K2PiGam::K892K_1_1680);
+      _massVecK1_1680.push_back(paramEnum2K2PiGam::K892);
+      _massVecK1_1680.push_back(paramEnum2K2PiGam::K_1_1680);
     }
     if(_K1_1680K1_1680Hyp7){
       _ampVec.push_back(paramEnum2K2PiGam::ChiToK1680K1680);
@@ -336,8 +346,14 @@ void Hyp7Lh::copyCurrentVals(Hyp7Lh* theLh){
   for (it= _currentResultHyp7.begin(); it!= _currentResultHyp7.end(); ++it){
     newResult[it->first]=it->second;
   }
+
+  std::map<unsigned int, complex<double> > newResultK1_1680; 
+  for (it= _currentResultK1_1680Hyp7.begin(); it!= _currentResultK1_1680Hyp7.end(); ++it){
+    newResultK1_1680[it->first]=it->second;
+  }
+
   theLh->_currentResultHyp7=newResult;
-  
+  theLh->_currentResultK1_1680Hyp7=newResultK1_1680;  
 }
 
 

@@ -60,17 +60,21 @@ protected:
 
   virtual void copyCurrentVals(Hyp7Lh* theLh);
   std::map<unsigned int, complex<double> > _currentResultHyp7;
+  std::map<unsigned int, complex<double> > _currentResultK1_1680Hyp7;
 private:
 
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
   std::vector<unsigned int> _massVecRemain;
+  std::vector<unsigned int> _ampVecK1_1680;
+  std::vector<unsigned int> _massVecK1_1680;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
 
   unsigned int _evtCounter;
   bool _equalParameter;
+  bool _equalK1_1680Params;
 
   bool equalParams();
 };
