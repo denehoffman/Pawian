@@ -69,9 +69,9 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
   double logLH_mc_Norm=0.;
   if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/_evtMCVec.size());
 
-  logLH=_evtDataVec.size()*(LH_mc/_evtMCVec.size()-1)*(LH_mc/_evtMCVec.size()-1)
-    -2.*logLH_data
-    +2.*_evtDataVec.size()*logLH_mc_Norm;
+  logLH=0.5*_evtDataVec.size()*(LH_mc/_evtMCVec.size()-1)*(LH_mc/_evtMCVec.size()-1)
+    -logLH_data
+    +_evtDataVec.size()*logLH_mc_Norm;
 
   Info << "current LH = " << logLH << endmsg;
 
