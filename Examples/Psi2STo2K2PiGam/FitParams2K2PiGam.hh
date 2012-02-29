@@ -14,6 +14,7 @@
 #include "TROOT.h"
 // #include <TSystem.h>
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
+#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -223,6 +224,7 @@ class FitParams2K2PiGam{
 public:
 
   FitParams2K2PiGam(); 
+  FitParams2K2PiGam(boost::shared_ptr<Psi2STo2K2PiGamStates>& theStatesPtr);
 
   virtual ~FitParams2K2PiGam();
 
@@ -236,11 +238,14 @@ public:
   void setMnUsrParamsDec(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal, unsigned int index);
   void setMnUsrParamsMass(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal, unsigned int index);
   void setMnUsrParamsFlatteMass(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal, std::string key);
+  boost::shared_ptr<Psi2STo2K2PiGamStates> states(){return _statesPtr;}
 
 protected:
 
 private:
+  void filljpclsMap();
   std::map < unsigned int, std::vector< boost::shared_ptr<const JPCLS> > > _jpclsMap;
+  boost::shared_ptr<Psi2STo2K2PiGamStates> _statesPtr;
 };
 
 

@@ -8,27 +8,34 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, bool chacheAmps) :
+AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps) :
   _Psi2STo2K2PiGamEvtListPtr(theEvtList)
-  ,_fitParams2K2PiGam()
+  ,_fitParams2K2PiGam(theStatesPtr)
   ,_cacheAmps(chacheAmps)
   ,_equalDecParams(false)
+  ,_equalProdParams(false)
   ,_evtCounter(0)
 {
   _evtDataVec=_Psi2STo2K2PiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
+  _ampVecProd.push_back(paramEnum2K2PiGam::ChiGam);
 }
 
-AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theAbsPsi2STo2K2PiGamLhPtr, bool chacheAmps):
+AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theAbsPsi2STo2K2PiGamLhPtr, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps):
   _Psi2STo2K2PiGamEvtListPtr(theAbsPsi2STo2K2PiGamLhPtr->getEventList())
-  ,_fitParams2K2PiGam()
+  ,_fitParams2K2PiGam(theStatesPtr)
   ,_cacheAmps(chacheAmps)
   ,_equalDecParams(false)
+  ,_equalProdParams(false)
   ,_evtCounter(0)
 {
   _evtDataVec=_Psi2STo2K2PiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
+  _ampVecProd.push_back(paramEnum2K2PiGam::ChiGam);
 }
+
+
+
 
 AbsPsi2STo2K2PiGamLh::~AbsPsi2STo2K2PiGamLh()
 {
@@ -37,7 +44,10 @@ AbsPsi2STo2K2PiGamLh::~AbsPsi2STo2K2PiGamLh()
 double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
 
   _currentFitParms=theParamVal;
-  if(_cacheAmps) _equalDecParams= equalChic0DecParams();
+  if(_cacheAmps){
+    _equalDecParams= equalChic0DecParams();
+    _equalProdParams=compAmpParms(_ampVecProd);
+  }
 
   double logLH=0.;
   double logLH_data=0.;
@@ -80,25 +90,41 @@ double AbsPsi2STo2K2PiGamLh::calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiG
     _currentResultDecAmp[_evtCounter]=tmpDecAmp;  
     theDecAmp=tmpDecAmp;
   }
+ 
+  complex<double> AmpPsi2SProdMpGp(0.,0.);
+  complex<double> AmpPsi2SProdMpGm(0.,0.);
+  complex<double> AmpPsi2SProdMmGp(0.,0.);
+  complex<double> AmpPsi2SProdMmGm(0.,0.);
+  if(_equalProdParams) {
+    AmpPsi2SProdMpGp=_currentResultProdAmppp[_evtCounter];
+    AmpPsi2SProdMpGm=_currentResultProdAmppm[_evtCounter];
+    AmpPsi2SProdMmGp=_currentResultProdAmpmp[_evtCounter];
+    AmpPsi2SProdMmGm=_currentResultProdAmpmm[_evtCounter];
+  }
+  else{
+
   Spin Psi2SM=1;
   Spin GamM=1;
-  complex<double> AmpPsi2SMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  _currentResultProdAmppp[_evtCounter]=AmpPsi2SProdMpGp;
 
   Psi2SM=1;
   GamM=-1;
-  complex<double> AmpPsi2SMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  _currentResultProdAmppm[_evtCounter]=AmpPsi2SProdMpGm;
 
   Psi2SM=-1;
   GamM=1; 
-  complex<double> AmpPsi2SMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  _currentResultProdAmpmp[_evtCounter]=AmpPsi2SProdMmGp;
 
   Psi2SM=-1;
   GamM=-1; 
-  complex<double> AmpPsi2SMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  _currentResultProdAmpmm[_evtCounter]=AmpPsi2SProdMmGm;
+  }  
 
-//   DebugMsg << "AmpPsi2SMp " << AmpPsi2SMp << endmsg;
-  
-  double result=norm(AmpPsi2SMpGp)+norm(AmpPsi2SMpGm)+norm(AmpPsi2SMmGp)+norm(AmpPsi2SMmGm)+phaseSpaceVal;
+  double result=norm(AmpPsi2SProdMpGp*theDecAmp)+norm(AmpPsi2SProdMpGm*theDecAmp)+norm(AmpPsi2SProdMmGp*theDecAmp)+norm(AmpPsi2SProdMmGm*theDecAmp)+phaseSpaceVal;
 
   _evtCounter++;
   return result;  
@@ -1748,15 +1774,13 @@ void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
 void AbsPsi2STo2K2PiGamLh::copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh){
   theLh->_cacheAmps=_cacheAmps;
   if(_cacheAmps){
-    std::map<unsigned int, complex<double> > newResult; 
-    std::map<unsigned int, complex<double> >::iterator it;
-    for (it= _currentResultDecAmp.begin(); it!= _currentResultDecAmp.end(); ++it){
-      newResult[it->first]=it->second;
+    theLh->_currentResultDecAmp=_currentResultDecAmp;
+    theLh->_currentResultProdAmppp=_currentResultProdAmppp;
+    theLh->_currentResultProdAmppm=_currentResultProdAmppm;
+    theLh->_currentResultProdAmpmp=_currentResultProdAmpmp;
+    theLh->_currentResultProdAmpmm=_currentResultProdAmpmm;
     }
-    
-    theLh->_currentResultDecAmp=newResult; 
-    theLh->_cashedFitParms=_cashedFitParms;
-  }
+  theLh->_cashedFitParms=_cashedFitParms;
 }
 
 

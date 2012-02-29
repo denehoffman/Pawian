@@ -7,8 +7,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
-  Hyp6Lh(theEvtList, hypMap, cacheAmps )
+Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
+  Hyp6Lh(theEvtList, hypMap, theStatesPtr, cacheAmps )
   ,_KappaHyp(true)
   ,_K1_1680Hyp(true)
   ,_K1_1680K1_1680Hyp7(true)
@@ -23,8 +23,8 @@ Hyp7Lh::Hyp7Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   setUp(hypMap); 
 }
 
-Hyp7Lh::Hyp7Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, bool cacheAmps ) :
-  Hyp6Lh(theLhPtr->getEventList(), hypMap, cacheAmps)
+Hyp7Lh::Hyp7Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
+  Hyp6Lh(theLhPtr->getEventList(), hypMap, theStatesPtr, cacheAmps)
   ,_KappaHyp(true)
   ,_K1_1680Hyp(true)
   ,_K1_1680K1_1680Hyp7(true)

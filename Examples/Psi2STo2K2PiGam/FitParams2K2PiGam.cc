@@ -3,109 +3,118 @@
 #include <string>
 
 #include "Examples/Psi2STo2K2PiGam/FitParams2K2PiGam.hh"
-#include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamStates.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 FitParams2K2PiGam::FitParams2K2PiGam() 
 {
-  Psi2STo2K2PiGamStates theStates;
-//  theStates.print(std::cout);
+  _statesPtr= boost::shared_ptr<Psi2STo2K2PiGamStates>(new Psi2STo2K2PiGamStates());
+  _statesPtr->print(std::cout);
+  filljpclsMap();
+}
 
-  _jpclsMap[paramEnum2K2PiGam::ChiGam]=theStates.PsiToChiGamStates();
-  _jpclsMap[paramEnum2K2PiGam::K892K892]=theStates.ChiTo2K892States();
-  _jpclsMap[paramEnum2K2PiGam::KappaKappa]=theStates.ChiTo2K_0_States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1430]=theStates.ChiTo2K_0_States();
-  _jpclsMap[paramEnum2K2PiGam::K_2_1430K_2_1430]=theStates.ChiTo2K_2_1430States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1430K_2_1430]=theStates.ChiToK0K2_States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_0_1430_K892]=theStates.ChiToKst0Kst1States();
-  _jpclsMap[paramEnum2K2PiGam::K_1_1410K_1_1410]=theStates.ChiTo2K892States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1410_K892]=theStates.ChiTo2K892States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_1430_K892]=theStates.ChiToKst1Kst2States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1400K]=theStates.ChiToK1400ToK892piStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_1400ToK892Pi]=theStates.K1400ToKst1PiStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1270_K]=theStates.ChiToK1400ToK892piStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK892Pi]=theStates.K1400ToKst1PiStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi]=theStates.K1ToK0PiStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1650K]=theStates.ChiToK1400ToK892piStates(); 
-  _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK892Pi]=theStates.K1400ToKst1PiStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK_0_1430Pi]=theStates.K1ToK0PiStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToKappaK_0_1430]=theStates.ChiTo2K_0_States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1950]=theStates.ChiTo2K_0_States();
-  _jpclsMap[paramEnum2K2PiGam::KappaK_0_1950]=theStates.ChiTo2K_0_States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif1710_k]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf1710_pi]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiTof1710f1710]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980f980]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980f2200]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiTof980f_2_2300]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::ChiTof_2_2300sigma]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif1370_k]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf1370_pi]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif1500_k]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf1500_pi]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f1710_pif1370_k]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f1710_kf1370_pi]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1270_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1270_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1430_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1430_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1525_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1525_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1950_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1950_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_2010_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_2010_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f1500_pif_2_1525_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f1500_kf_2_1525_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f1710_pif_2_1430_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f1710_kf_2_1430_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f1710_pif_2_1950_k]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::f1710_kf_2_1950_pi]=theStates.ChiTof0f2States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_2400KToKf980]=theStates.ChiToK0K0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_0_2400ToKf_0_1710]=theStates.ChiToK0K0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_2400K]=theStates.ChiToK1400ToK892piStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof980K]=theStates.K1pTof0KStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof1710K]=theStates.K1pTof0KStates();
-  _jpclsMap[paramEnum2K2PiGam::K_1_2400ToK_0_1430Pi]=theStates.K1ToK0PiStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_2400K]=theStates.ChiToK0K2_States();
-  _jpclsMap[paramEnum2K2PiGam::K_2_2400Tof980K]=theStates.K2Tof0KStates();
-  _jpclsMap[paramEnum2K2PiGam::K_2_2400Tof1710K]=theStates.K2Tof0KStates();
-  _jpclsMap[paramEnum2K2PiGam::K892K_1_1680]=theStates.ChiTo2K892States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK1680K1680]=theStates.ChiTo2K892States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK1680K_0_1430]=theStates.ChiToKst0Kst1States();
-  _jpclsMap[paramEnum2K2PiGam::K892K_1_2300]=theStates.ChiTo2K892States();
-  _jpclsMap[paramEnum2K2PiGam::sigmaf980]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToSigmaf1370]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::sigmaf1710]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::sigmaf2200]=theStates.ChiTof0f0States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1460ToK892Pi]=theStates.ChiToK0K0States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1460ToK_0_1430Pi]=theStates.ChiToK0K0States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK892Pi]=theStates.ChiToK0K0States();
-  _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK_0_1430Pi]=theStates.ChiToK0K0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_1670Pi]=theStates.ChiToPi_2PiStates();
-  _jpclsMap[paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi]=theStates.Pi_2Tof_2PiStates();
-  _jpclsMap[paramEnum2K2PiGam::Pi_2_1670ToK892K]=theStates.Pi_2ToKst1KStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0Tof980]=theStates.ChiToPi0Pi0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0Tof1370]=theStates.ChiToPi0Pi0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0ToKappa]=theStates.ChiToPi0Pi0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0ToK892K]=theStates.Pi0pToKstKStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi3000Pi0ToK892K]=theStates.Pi0pToKstKStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi3000Pi0ToK_0_1950K]=theStates.ChiToPi0Pi0States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_2285Pi]=theStates.ChiToPi_2PiStates();
-  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285Tof1700Pi]=theStates.Pi_2Tof0PiStates();
-  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285ToK892KPi]=theStates.Pi_2ToKst1KStates();
-  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285ToK_0_1430K]=theStates.Pi_2ToKst0KStates();
-  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285ToK_2_1430K]=theStates.Pi_2ToKst2KStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_1770K]=theStates.ChiToK2mK0mStates();
-  _jpclsMap[paramEnum2K2PiGam::K_2_1770ToK_2_1430Pi]=theStates.K2mToK2pPiStates();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK_0_1430KPi]=theStates.ChiTo2K_0_States();
-  _jpclsMap[paramEnum2K2PiGam::ChiToK892KPi]=theStates.ChiToK1400ToK892piStates();
+FitParams2K2PiGam::FitParams2K2PiGam(boost::shared_ptr<Psi2STo2K2PiGamStates>& theStatesPtr):
+  _statesPtr(theStatesPtr) 
+{
+  filljpclsMap();
 }
 
 FitParams2K2PiGam::~FitParams2K2PiGam()
 {
 }
+
+void FitParams2K2PiGam::filljpclsMap(){
+  _jpclsMap[paramEnum2K2PiGam::ChiGam]=_statesPtr->PsiToChiGamStates();
+  _jpclsMap[paramEnum2K2PiGam::K892K892]=_statesPtr->ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::KappaKappa]=_statesPtr->ChiTo2K_0_States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1430]=_statesPtr->ChiTo2K_0_States();
+  _jpclsMap[paramEnum2K2PiGam::K_2_1430K_2_1430]=_statesPtr->ChiTo2K_2_1430States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1430K_2_1430]=_statesPtr->ChiToK0K2_States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_0_1430_K892]=_statesPtr->ChiToKst0Kst1States();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1410K_1_1410]=_statesPtr->ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1410_K892]=_statesPtr->ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_1430_K892]=_statesPtr->ChiToKst1Kst2States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1400K]=_statesPtr->ChiToK1400ToK892piStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1400ToK892Pi]=_statesPtr->K1400ToKst1PiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1270_K]=_statesPtr->ChiToK1400ToK892piStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK892Pi]=_statesPtr->K1400ToKst1PiStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1270ToK_0_1430Pi]=_statesPtr->K1ToK0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_1650K]=_statesPtr->ChiToK1400ToK892piStates(); 
+  _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK892Pi]=_statesPtr->K1400ToKst1PiStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_1650ToK_0_1430Pi]=_statesPtr->K1ToK0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToKappaK_0_1430]=_statesPtr->ChiTo2K_0_States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1430K_0_1950]=_statesPtr->ChiTo2K_0_States();
+  _jpclsMap[paramEnum2K2PiGam::KappaK_0_1950]=_statesPtr->ChiTo2K_0_States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif1710_k]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf1710_pi]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof1710f1710]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980f980]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980f2200]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof980f_2_2300]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof_2_2300sigma]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif1370_k]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf1370_pi]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif1500_k]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf1500_pi]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f1710_pif1370_k]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f1710_kf1370_pi]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1270_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1270_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1430_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1430_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1525_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1525_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_1950_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_1950_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_pif_2_2010_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f980_kf_2_2010_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f1500_pif_2_1525_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f1500_kf_2_1525_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f1710_pif_2_1430_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f1710_kf_2_1430_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f1710_pif_2_1950_k]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::f1710_kf_2_1950_pi]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_2400KToKf980]=_statesPtr->ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_0_2400ToKf_0_1710]=_statesPtr->ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_1_2400K]=_statesPtr->ChiToK1400ToK892piStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof980K]=_statesPtr->K1pTof0KStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_2400Tof1710K]=_statesPtr->K1pTof0KStates();
+  _jpclsMap[paramEnum2K2PiGam::K_1_2400ToK_0_1430Pi]=_statesPtr->K1ToK0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_2400K]=_statesPtr->ChiToK0K2_States();
+  _jpclsMap[paramEnum2K2PiGam::K_2_2400Tof980K]=_statesPtr->K2Tof0KStates();
+  _jpclsMap[paramEnum2K2PiGam::K_2_2400Tof1710K]=_statesPtr->K2Tof0KStates();
+  _jpclsMap[paramEnum2K2PiGam::K892K_1_1680]=_statesPtr->ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK1680K1680]=_statesPtr->ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK1680K_0_1430]=_statesPtr->ChiToKst0Kst1States();
+  _jpclsMap[paramEnum2K2PiGam::K892K_1_2300]=_statesPtr->ChiTo2K892States();
+  _jpclsMap[paramEnum2K2PiGam::sigmaf980]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToSigmaf1370]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::sigmaf1710]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::sigmaf2200]=_statesPtr->ChiTof0f0States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1460ToK892Pi]=_statesPtr->ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1460ToK_0_1430Pi]=_statesPtr->ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK892Pi]=_statesPtr->ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::K_0_1830ToK_0_1430Pi]=_statesPtr->ChiToK0K0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_1670Pi]=_statesPtr->ChiToPi_2PiStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_1670Tof_2_1270Pi]=_statesPtr->Pi_2Tof_2PiStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_1670ToK892K]=_statesPtr->Pi_2ToKst1KStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0Tof980]=_statesPtr->ChiToPi0Pi0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0Tof1370]=_statesPtr->ChiToPi0Pi0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0ToKappa]=_statesPtr->ChiToPi0Pi0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi1800Pi0ToK892K]=_statesPtr->Pi0pToKstKStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi3000Pi0ToK892K]=_statesPtr->Pi0pToKstKStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi3000Pi0ToK_0_1950K]=_statesPtr->ChiToPi0Pi0States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToPi_2_2285Pi]=_statesPtr->ChiToPi_2PiStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285Tof1700Pi]=_statesPtr->Pi_2Tof0PiStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285ToK892KPi]=_statesPtr->Pi_2ToKst1KStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285ToK_0_1430K]=_statesPtr->Pi_2ToKst0KStates();
+  _jpclsMap[paramEnum2K2PiGam::Pi_2_2285ToK_2_1430K]=_statesPtr->Pi_2ToKst2KStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_2_1770K]=_statesPtr->ChiToK2mK0mStates();
+  _jpclsMap[paramEnum2K2PiGam::K_2_1770ToK_2_1430Pi]=_statesPtr->K2mToK2pPiStates();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK_0_1430KPi]=_statesPtr->ChiTo2K_0_States();
+  _jpclsMap[paramEnum2K2PiGam::ChiToK892KPi]=_statesPtr->ChiToK1400ToK892piStates();
+}
+
 
 std::vector< boost::shared_ptr<const JPCLS> > FitParams2K2PiGam::jpclsVec(unsigned int index){
   unsigned int nOfAmps=paramEnum2K2PiGam::nAmps;
