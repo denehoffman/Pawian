@@ -27,7 +27,6 @@ Hyp9Lh::Hyp9Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_doHyp9(true)
   ,_nFitParams(0)
   ,_f980FlatteRemain(false)
-  ,_evtCounter(0)
   ,_equalParameter(false)
   ,_equalPi_2_2285ToK_2_1430Params(false)
   ,_equalPi_2_2285ToK892KParams(false)
@@ -55,7 +54,6 @@ Hyp9Lh::Hyp9Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_doHyp9(true)
   ,_nFitParams(0)
   ,_f980FlatteRemain(false)
-  ,_evtCounter(0)
   ,_equalParameter(false)
   ,_equalPi_2_2285ToK_2_1430Params(false)
   ,_equalPi_2_2285ToK892KParams(false)
@@ -87,7 +85,6 @@ complex<double> Hyp9Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if(_equalParameter){
     result+=_currentResultHyp9[_evtCounter];
-    _evtCounter++;
     return result;
   }
 
@@ -265,7 +262,6 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   }
 
   if(_cacheAmps) _currentResultHyp9[_evtCounter]=currentResult; 
-  _evtCounter++;
   result+=currentResult;
   return result;
 }

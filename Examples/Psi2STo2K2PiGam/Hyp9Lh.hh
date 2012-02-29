@@ -92,7 +92,6 @@ private:
 
   void setUp(const std::map<const std::string, bool>& hypMap);
 
-  unsigned int _evtCounter;
   bool _equalParameter;
   bool _equalPi_2_2285ToK_2_1430Params;
   bool _equalPi_2_2285ToK892KParams;

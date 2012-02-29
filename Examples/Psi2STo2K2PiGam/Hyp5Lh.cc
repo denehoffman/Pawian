@@ -21,7 +21,6 @@ Hyp5Lh::Hyp5Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_ChiToK892KPiHyp5(true)
   , _nFitParams(0)
   ,_f980FlatteRemain(false)
-  ,_evtCounter(0)
   ,_equalParameter(false)
   ,_equalK_2_2400KTof980Params(false)
 {
@@ -42,7 +41,6 @@ Hyp5Lh::Hyp5Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_ChiToK892KPiHyp5(true)
   , _nFitParams(0)
   ,_f980FlatteRemain(false)
-  ,_evtCounter(0)
   ,_equalParameter(false)
   ,_equalK_2_2400KTof980Params(false)
 {
@@ -72,7 +70,6 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if(_equalParameter){
     result+=_currentResultHyp5[_evtCounter];
-    _evtCounter++;
     return result;
   }
 
@@ -166,7 +163,6 @@ complex<double> Hyp5Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   }
 
   if(_cacheAmps) _currentResultHyp5[_evtCounter]=currentResult; 
-  _evtCounter++;
   result+=currentResult;
   return result;
 }

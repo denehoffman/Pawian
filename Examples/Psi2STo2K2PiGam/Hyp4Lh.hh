@@ -77,7 +77,6 @@ private:
   bool _f980FlatteRemain;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
-  unsigned int _evtCounter;
   bool _equalParameter;
 
   bool equalParams();

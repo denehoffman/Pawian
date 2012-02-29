@@ -76,6 +76,7 @@ protected:
   std::map<unsigned int, complex<double> > _currentResultProdAmpmm;
 
   bool _cacheAmps;
+  unsigned int _evtCounter;
   
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
@@ -168,7 +169,7 @@ private:
   bool _equalDecParams;
   bool _equalProdParams;
   std::vector<unsigned int> _ampVecProd;
-  unsigned int _evtCounter;
+
 };
 
 #endif

@@ -77,7 +77,6 @@ private:
 
   void setUp(const std::map<const std::string, bool>& hypMap);
 
-  unsigned int _evtCounter;
   bool _equalParameter;
   bool _equalK1_1680Params;
   bool _equalK1_2300Params;

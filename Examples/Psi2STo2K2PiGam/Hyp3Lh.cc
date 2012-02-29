@@ -14,7 +14,6 @@ Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_doHyp3(true)
   ,_nFitParams(0)
   ,_f980FlatteRemain(false)
-  ,_evtCounter(0)
   ,_equalParameter(false)
 {
   setUp(hypMap); 
@@ -28,7 +27,6 @@ Hyp3Lh::Hyp3Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_doHyp3(true)
   ,_nFitParams(0)
   ,_f980FlatteRemain(false)
-  ,_evtCounter(0)
   ,_equalParameter(false)
 {
   setUp(hypMap); 
@@ -57,7 +55,6 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if(_equalParameter){
     result+=_currentResultHyp3[_evtCounter];
-    _evtCounter++;
     return result;
   }
 
@@ -90,7 +87,6 @@ complex<double> Hyp3Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   }  
 
   if(_cacheAmps) _currentResultHyp3[_evtCounter]=currentResult; 
-  _evtCounter++;
   result+=currentResult;
   return result;
 }

@@ -14,7 +14,6 @@ Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
   ,_nFitParams(0)
-  ,_evtCounter(0)
   ,_equalParameter(false)
 {
   setUp(hypMap); 
@@ -27,7 +26,6 @@ Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
   ,_nFitParams(0)
-  ,_evtCounter(0)
   ,_equalParameter(false)
 {
   setUp(hypMap); 
@@ -57,7 +55,6 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if(_equalParameter){
     result+=_currentResultHyp8[_evtCounter];
-    _evtCounter++;
     return result;
   }
 
@@ -104,7 +101,6 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   }
 
   if(_cacheAmps) _currentResultHyp8[_evtCounter]=currentResult; 
-  _evtCounter++;
   result+=currentResult;
   return result;
 }

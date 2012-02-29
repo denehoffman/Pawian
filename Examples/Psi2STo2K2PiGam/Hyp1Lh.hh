@@ -90,7 +90,6 @@ private:
   std::vector<unsigned int> _massVecK2_1430_K892;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
-  unsigned int _evtCounter;
   bool _equalParameter;
   bool _equalK2_1430_K2_1430Params;
   bool _equalK892K892Params;

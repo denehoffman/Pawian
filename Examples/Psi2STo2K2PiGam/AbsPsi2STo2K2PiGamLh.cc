@@ -12,9 +12,9 @@ AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiG
   _Psi2STo2K2PiGamEvtListPtr(theEvtList)
   ,_fitParams2K2PiGam(theStatesPtr)
   ,_cacheAmps(chacheAmps)
+  ,_evtCounter(0)
   ,_equalDecParams(false)
   ,_equalProdParams(false)
-  ,_evtCounter(0)
 {
   _evtDataVec=_Psi2STo2K2PiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
@@ -25,9 +25,9 @@ AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamL
   _Psi2STo2K2PiGamEvtListPtr(theAbsPsi2STo2K2PiGamLhPtr->getEventList())
   ,_fitParams2K2PiGam(theStatesPtr)
   ,_cacheAmps(chacheAmps)
+  ,_evtCounter(0)
   ,_equalDecParams(false)
   ,_equalProdParams(false)
-  ,_evtCounter(0)
 {
   _evtDataVec=_Psi2STo2K2PiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
@@ -106,22 +106,22 @@ double AbsPsi2STo2K2PiGamLh::calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiG
   Spin Psi2SM=1;
   Spin GamM=1;
   AmpPsi2SProdMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
-  _currentResultProdAmppp[_evtCounter]=AmpPsi2SProdMpGp;
+  if (_cacheAmps) _currentResultProdAmppp[_evtCounter]=AmpPsi2SProdMpGp;
 
   Psi2SM=1;
   GamM=-1;
   AmpPsi2SProdMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
-  _currentResultProdAmppm[_evtCounter]=AmpPsi2SProdMpGm;
+  if (_cacheAmps) _currentResultProdAmppm[_evtCounter]=AmpPsi2SProdMpGm;
 
   Psi2SM=-1;
   GamM=1; 
   AmpPsi2SProdMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
-  _currentResultProdAmpmp[_evtCounter]=AmpPsi2SProdMmGp;
+  if (_cacheAmps) _currentResultProdAmpmp[_evtCounter]=AmpPsi2SProdMmGp;
 
   Psi2SM=-1;
   GamM=-1; 
   AmpPsi2SProdMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
-  _currentResultProdAmpmm[_evtCounter]=AmpPsi2SProdMmGm;
+  if (_cacheAmps) _currentResultProdAmpmm[_evtCounter]=AmpPsi2SProdMmGm;
   }  
 
   double result=norm(AmpPsi2SProdMpGp*theDecAmp)+norm(AmpPsi2SProdMpGm*theDecAmp)+norm(AmpPsi2SProdMmGp*theDecAmp)+norm(AmpPsi2SProdMmGm*theDecAmp)+phaseSpaceVal;

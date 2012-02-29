@@ -14,7 +14,6 @@ Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_KappaK_0_1430Hyp6(true)
   ,_KappaK_0_1950Hyp6(true) 
   ,_nFitParams(0)
-  ,_evtCounter(0)
   ,_equalParameter(false) 
 {
   setUp(hypMap); 
@@ -27,7 +26,6 @@ Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_KappaK_0_1430Hyp6(true)
   ,_KappaK_0_1950Hyp6(true)  
   ,_nFitParams(0)
-  ,_evtCounter(0)
   ,_equalParameter(false) 
 {
   setUp(hypMap); 
@@ -56,7 +54,6 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
 
   if(_equalParameter){
     result+=_currentResultHyp6[_evtCounter];
-    _evtCounter++;
     return result;
   }
 
@@ -92,7 +89,6 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   }
 
   if(_cacheAmps) _currentResultHyp6[_evtCounter]=currentResult; 
-  _evtCounter++;
   result+=currentResult;
   return result;
 }
