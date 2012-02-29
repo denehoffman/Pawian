@@ -209,32 +209,15 @@ void Hyp3Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp3Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("sigmaf980Hyp3");
+  std::string theKey="sigmaf980Hyp3";
+  setHyps( hypMap, _sigmaf980Hyp, theKey);
 
-  if (iter !=hypMap.end()){
-    _sigmaf980Hyp= iter->second;
-   _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf980Hyp <<endmsg;
-  }
-  else Alert << "hypothesis sigmaf980Hyp3 not set!!!" <<endmsg;
+  theKey="sigmaf1710Hyp3";
+  setHyps( hypMap, _sigmaf1710Hyp, theKey);
 
- iter= hypMap.find("sigmaf1710Hyp3");
+  theKey="sigmaf2200Hyp3";
+  setHyps( hypMap, _sigmaf2200Hyp, theKey);
 
-  if (iter !=hypMap.end()){
-    _sigmaf1710Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1710Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis sigmaf1710Hyp not set!!!" <<endmsg;
-
- iter= hypMap.find("sigmaf2200Hyp3");
-
-  if (iter !=hypMap.end()){
-    _sigmaf2200Hyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf2200Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis sigmaf2200Hyp not set!!!" <<endmsg;
 
   if (!_sigmaf980Hyp && !_sigmaf1710Hyp && !_sigmaf2200Hyp) _doHyp3=false;
 

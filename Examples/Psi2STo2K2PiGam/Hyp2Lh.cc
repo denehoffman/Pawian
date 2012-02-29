@@ -173,14 +173,8 @@ void Hyp2Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp2Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("doHyp2");
-
-  if (iter !=hypMap.end()){
-    _doHyp2= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _doHyp2 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis doHyp2 not set!!!" <<endmsg; 
+  std::string theKey="doHyp2";
+  setHyps( hypMap, _doHyp2, theKey);
 
   if (!_doHyp2) return;
 

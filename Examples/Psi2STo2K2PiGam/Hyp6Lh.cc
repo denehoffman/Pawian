@@ -195,6 +195,7 @@ void Hyp6Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
   if(!_doHyp6) return;
 
+
   std::vector<unsigned int>::const_iterator itAmps;
   for ( itAmps=_ampVec.begin(); itAmps!=_ampVec.end(); ++itAmps){
     std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
@@ -222,34 +223,15 @@ void Hyp6Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
+  std::string theKey="K_0_1430K_0_1950Hyp6";
+  setHyps( hypMap, _K_0_1430K_0_1950Hyp6, theKey);
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("K_0_1430K_0_1950Hyp6");
+  theKey="KappaK_0_1430Hyp6";
+  setHyps( hypMap, _KappaK_0_1430Hyp6, theKey);
 
-  if (iter !=hypMap.end()){
-    _K_0_1430K_0_1950Hyp6= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_0_1430K_0_1950Hyp6 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_0_1430K_0_1950Hyp6 not set!!!" <<endmsg; 
+  theKey="KappaK_0_1950Hyp6";
+  setHyps( hypMap, _KappaK_0_1950Hyp6, theKey);
 
-  iter= hypMap.find("KappaK_0_1430Hyp6");
-
-  if (iter !=hypMap.end()){
-    _KappaK_0_1430Hyp6= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _KappaK_0_1430Hyp6 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis KappaK_0_1430Hyp6 not set!!!" <<endmsg; 
-
-
-  iter= hypMap.find("KappaK_0_1950Hyp6");
-
-  if (iter !=hypMap.end()){
-    _KappaK_0_1950Hyp6= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _KappaK_0_1950Hyp6 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis KappaK_0_1950Hyp6 not set!!!" <<endmsg; 
 
   if(!_K_0_1430K_0_1950Hyp6 && !_KappaK_0_1950Hyp6 && !_KappaK_0_1430Hyp6){
     _doHyp6=false;

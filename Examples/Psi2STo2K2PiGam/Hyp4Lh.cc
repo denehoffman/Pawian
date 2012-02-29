@@ -359,159 +359,42 @@ void Hyp4Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("f980f1370Hyp4");
+  std::string theKey="f980f1370Hyp4";
+  setHyps( hypMap, _f980f1370Hyp4, theKey);
 
-  if (iter !=hypMap.end()){
-    _f980f1370Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f1370Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f1370Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  } 
+  theKey="f980f1500Hyp4";
+  setHyps( hypMap, _f980f1500Hyp4, theKey);
 
-  iter= hypMap.find("f980f1500Hyp4");
+  theKey="f1710f1370Hyp4";
+  setHyps( hypMap, _f1710f1370Hyp4, theKey);
 
-  if (iter !=hypMap.end()){
-    _f980f1500Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f1500Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f1500Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="f980f_2_1270Hyp4";
+  setHyps( hypMap, _f980f_2_1270Hyp4, theKey);
 
-  iter= hypMap.find("f1710f1370Hyp4");
+  theKey="f980f_2_1430Hyp4";
+  setHyps( hypMap, _f980f_2_1430Hyp4, theKey);
 
-  if (iter !=hypMap.end()){
-    _f1710f1370Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1710f1370Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f1710f1370Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="f980f_2_1525Hyp4";
+  setHyps( hypMap, _f980f_2_1525Hyp4, theKey);
 
+  theKey="f980f_2_1950Hyp4";
+  setHyps( hypMap, _f980f_2_1950Hyp4, theKey);
 
-  iter= hypMap.find("f980f_2_1270Hyp4");
+  theKey="f980f_2_2010Hyp4";
+  setHyps( hypMap, _f980f_2_2010Hyp4, theKey);
 
-  if (iter !=hypMap.end()){
-    _f980f_2_1270Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_1270Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f_2_1270Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="f1500f_2_1525Hyp4";
+  setHyps( hypMap, _f1500f_2_1525Hyp4, theKey);
 
+  theKey="f1710f_2_1430Hyp4";
+  setHyps( hypMap, _f1710f_2_1430Hyp4, theKey);
 
-  iter= hypMap.find("f980f_2_1430Hyp4");
+  theKey="f1710f_2_1950Hyp4";
+  setHyps( hypMap, _f1710f_2_1950Hyp4, theKey);
 
-  if (iter !=hypMap.end()){
-    _f980f_2_1430Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_1430Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f_2_1430Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
+  theKey="sigmaf1370Hyp4";
+  setHyps( hypMap, _sigmaf1370Hyp4, theKey);
 
-  iter= hypMap.find("f980f_2_1525Hyp4");
-  if (iter !=hypMap.end()){
-    _f980f_2_1525Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_1525Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f_2_1525Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f980f_2_1950Hyp4");
-  if (iter !=hypMap.end()){
-    _f980f_2_1950Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_1950Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f_2_1950Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f980f_2_2010Hyp4");
-  if (iter !=hypMap.end()){
-    _f980f_2_2010Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f_2_2010Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f_2_2010Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f980f1500Hyp4");
-  if (iter !=hypMap.end()){
-    _f980f1500Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f980f1500Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f980f1500Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f1500f_2_1525Hyp4");
-
-  if (iter !=hypMap.end()){
-    _f1500f_2_1525Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1500f_2_1525Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f1500f_2_1525Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f1710f_2_1430Hyp4");
-
-  if (iter !=hypMap.end()){
-    _f1710f_2_1430Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1710f_2_1430Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f1710f_2_1430Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
-  iter= hypMap.find("f1710f_2_1950Hyp4");
-
-  if (iter !=hypMap.end()){
-    _f1710f_2_1950Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1710f_2_1950Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis f1710f_2_1950Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
-
- iter= hypMap.find("sigmaf1370Hyp4");
-
-  if (iter !=hypMap.end()){
-    _sigmaf1370Hyp4= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _sigmaf1370Hyp4 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else{
-    Alert << "hypothesis sigmaf1370Hyp4 not set!!!" <<endmsg;
-    exit(0);
-  }
 
   if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f980f_2_2010Hyp4 && !_f1710f_2_1950Hyp4 && !_sigmaf1370Hyp4) _doHyp4=false; 
 

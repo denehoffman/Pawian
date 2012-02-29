@@ -295,102 +295,39 @@ void Hyp5Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp5Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("doHyp5");
-
-  if (iter !=hypMap.end()){
-    _doHyp5= iter->second;
-   _hypMap[iter->first]= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _doHyp5 <<endmsg;
-  }
-  else { Alert << "hypothesis disableHyp5 not set!!!" <<endmsg;
-    exit(0);
-  }
+  std::string theKey="doHyp5";
+  setHyps( hypMap, _doHyp5, theKey);
 
 
   if (!_doHyp5) return;
 
+  theKey="K_0_2400KHyp5";
+  setHyps( hypMap, _K_0_2400KHyp5, theKey);
 
-  iter= hypMap.find("K_0_2400KHyp5");
+  theKey="K_1_2400KHyp5";
+  setHyps( hypMap, _K_1_2400KHyp5, theKey);
 
-  if (iter !=hypMap.end()){
-    _K_0_2400KHyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_0_2400KHyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_0_2400KHyp5 not set!!!" <<endmsg;
+  theKey="K_1_2400KTof_0_1710Hyp5";
+  setHyps( hypMap, _K_1_2400KTof_0_1710Hyp5, theKey);
 
+  theKey="K_1_2400KToK_0_1430Hyp5";
+  setHyps( hypMap,_K_1_2400KToK_0_1430Hyp5, theKey);
 
-  iter= hypMap.find("K_1_2400KHyp5");
+  theKey="K_2_2400KTof980Hyp5";
+  setHyps( hypMap,_K_2_2400KTof980Hyp5, theKey);
 
-  if (iter !=hypMap.end()){
-    _K_1_2400KHyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_1_2400KHyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_1_2400KHyp5 not set!!!" <<endmsg;
+  theKey="K_2_2400KTof_0_1710Hyp5";
+  setHyps( hypMap,_K_2_2400KTof_0_1710Hyp5, theKey);
 
+  theKey="K_0_2400KTof_0_1710Hyp5";
+  setHyps( hypMap,_K_0_2400KTof_0_1710Hyp5, theKey);
 
-  iter= hypMap.find("K_1_2400KTof_0_1710Hyp5");
-  if (iter !=hypMap.end()){
-    _K_1_2400KTof_0_1710Hyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_1_2400KTof_0_1710Hyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_1_2400KTof_0_1710Hyp5 not set!!!" <<endmsg;
+  theKey="ChiToK_0_1430KPiHyp5";
+  setHyps( hypMap,_ChiToK_0_1430KPiHyp5, theKey);
 
-  iter= hypMap.find("K_1_2400KToK_0_1430Hyp5");
-  if (iter !=hypMap.end()){
-    _K_1_2400KToK_0_1430Hyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_1_2400KToK_0_1430Hyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_1_2400KToK_0_1430Hyp5 not set!!!" <<endmsg;
+  theKey="ChiToK892KPiHyp5";
+  setHyps( hypMap,_ChiToK892KPiHyp5, theKey);
 
-
-
-  iter= hypMap.find("K_2_2400KTof980Hyp5");
-  if (iter !=hypMap.end()){
-    _K_2_2400KTof980Hyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_2_2400KTof980Hyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_2_2400KTof980Hyp5 not set!!!" <<endmsg;
-
-
-  iter= hypMap.find("K_2_2400KTof_0_1710Hyp5");
-  if (iter !=hypMap.end()){
-    _K_2_2400KTof_0_1710Hyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_2_2400KTof_0_1710Hyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_2_2400KTof_0_1710Hyp5 not set!!!" <<endmsg;
-
-
-  iter= hypMap.find("K_0_2400KTof_0_1710Hyp5");
-
-  if (iter !=hypMap.end()){
-    _K_0_2400KTof_0_1710Hyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _K_0_2400KTof_0_1710Hyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K_0_2400KTof_0_1710Hyp5 not set!!!" <<endmsg;
-
-  iter= hypMap.find("ChiToK_0_1430KPiHyp5");
-
-  if (iter !=hypMap.end()){
-    _ChiToK_0_1430KPiHyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _ChiToK_0_1430KPiHyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis ChiToK_0_1430KPiHyp5 not set!!!" <<endmsg;
-
-  iter= hypMap.find("ChiToK892KPiHyp5");
-  if (iter !=hypMap.end()){
-    _ChiToK892KPiHyp5= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _ChiToK892KPiHyp5 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis ChiToK892KPiHyp5 not set!!!" <<endmsg;
 
   if(_K_0_2400KHyp5 || _K_0_2400KTof_0_1710Hyp5){
 

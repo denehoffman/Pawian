@@ -185,10 +185,6 @@ complex<double> Hyp1Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     result+=chiTof0_pif0_kAmp(theData, ChiTof1710f1710, f1710Mass, f1710Width,  f1710Mass, f1710Width);
   }
 
-//   if(_currentResultHyp1.size() > _evtCounter){
-//     Info<<"old result:\t" << _currentResultHyp1[_evtCounter] << endmsg;
-//   }
-//   Info<<"new result:\t" << result << endmsg; 
  
   if(_cacheAmps) _currentResultHyp1[_evtCounter]=result; 
   _evtCounter++;
@@ -344,87 +340,37 @@ void Hyp1Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 
 void Hyp1Lh::setUp(const std::map<const std::string, bool>& hypMap){
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("K1_1270Hyp");
 
-  if (iter !=hypMap.end()){
-    _K1_1270Hyp= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1270Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K1_1270Hyp not set!!!" <<endmsg;
+  std::string theKey="K1_1270Hyp";
+  setHyps( hypMap, _K1_1270Hyp, theKey);
 
-  iter= hypMap.find("K1_1400Hyp");
-  if (iter !=hypMap.end()){
-    _K1_1400Hyp= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1400Hyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis K1_1400Hyp not set!!!" <<endmsg;
+  theKey="K1_1400Hyp";
+  setHyps( hypMap, _K1_1400Hyp, theKey);
 
-  iter= hypMap.find("K0_1430_K0_1430Hyp");
-  if (iter !=hypMap.end()){
-    _K0_1430_K0_1430Hyp= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K0_1430_K0_1430Hyp <<endmsg;
-  }
-  else Alert << "hypothesis K0_1430_K0_1430Hyp not set!!!" <<endmsg;
+  theKey="K0_1430_K0_1430Hyp";
+  setHyps( hypMap, _K0_1430_K0_1430Hyp, theKey);
 
-  iter= hypMap.find("K2_1430_K2_1430Hyp");
-  if (iter !=hypMap.end()){
-    _K2_1430_K2_1430Hyp= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K2_1430_K2_1430Hyp <<endmsg;
-  }
-  else Alert << "hypothesis K2_1430_K2_1430Hyp not set!!!" <<endmsg;
+  theKey="K2_1430_K2_1430Hyp";
+  setHyps( hypMap, _K2_1430_K2_1430Hyp, theKey);
 
-  iter= hypMap.find("K0_1430_K2_1430Hyp");
-  if (iter !=hypMap.end()){
-    _K0_1430_K2_1430Hyp= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K0_1430_K2_1430Hyp <<endmsg;
-  }
-  else Alert << "hypothesis K0_1430_K2_1430Hyp not set!!!" <<endmsg;
+  theKey="K0_1430_K2_1430Hyp";
+  setHyps( hypMap, _K0_1430_K2_1430Hyp, theKey);
 
+  theKey="K0_1430_K892Hyp1";
+  setHyps( hypMap, _K0_1430_K892Hyp1, theKey);
 
-  iter= hypMap.find("K0_1430_K892Hyp1");
-  if (iter !=hypMap.end()){
-    _K0_1430_K892Hyp1= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K0_1430_K892Hyp1 <<endmsg;
-  }
-  else Alert << "hypothesis K0_1430_K892Hyp1 not set!!!" <<endmsg;
+  theKey="K2_1430_K892Hyp1";
+  setHyps( hypMap, _K2_1430_K892Hyp1, theKey);
 
-  iter= hypMap.find("K2_1430_K892Hyp1");
-  if (iter !=hypMap.end()){
-    _K2_1430_K892Hyp1= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K2_1430_K892Hyp1 <<endmsg;
-  }
-  else Alert << "hypothesis K2_1430_K892Hyp1 not set!!!" <<endmsg;
+  theKey="K1_1410_K1_1410Hyp";
+  setHyps( hypMap, _K1_1410_K1_1410Hyp, theKey);
 
-  iter= hypMap.find("K1_1410_K1_1410Hyp");
-  if (iter !=hypMap.end()){
-    _K1_1410_K1_1410Hyp= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1410_K1_1410Hyp <<endmsg;
-  }
-  else Alert << "hypothesis K1_1410_K1_1410Hyp not set!!!" <<endmsg;
+  theKey="K1_1410_K892Hyp1";
+  setHyps( hypMap, _K1_1410_K892Hyp1, theKey);
 
-  iter= hypMap.find("K1_1410_K892Hyp1");
-  if (iter !=hypMap.end()){
-    _K1_1410_K892Hyp1= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _K1_1410_K892Hyp1 <<endmsg;
-  }
-  else Alert << "hypothesis K1_1410_K892Hyp1 not set!!!" <<endmsg;
+  theKey="f1710_f1710Hyp1";
+  setHyps( hypMap, _f1710_f1710Hyp1, theKey);
 
-  iter= hypMap.find("f1710_f1710Hyp1");
-  if (iter !=hypMap.end()){
-    _f1710_f1710Hyp1= iter->second;
-    _hypMap[iter->first]= iter->second;
-    DebugMsg<< "hypothesis " << iter->first << "\t" << _f1710_f1710Hyp1 <<endmsg;
-  }
-  else Alert << "hypothesis f1710_f1710Hyp1 not set!!!" <<endmsg;
 
 
   _ampVec.push_back(paramEnum2K2PiGam::ChiGam);
