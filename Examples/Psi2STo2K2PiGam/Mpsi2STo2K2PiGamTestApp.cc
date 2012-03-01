@@ -173,6 +173,8 @@ int main(int __argc,char *__argv[]){
   hypMap["f1710f_2_1430Hyp4"]=true;
   hypMap["f1710f_2_1950Hyp4"]=true;
   hypMap["sigmaf1370Hyp4"]=true;
+  hypMap["sigmaf_2_1525Hyp4"]=true;
+  hypMap["sigmaf_2_1950Hyp4"]=true;
   hypMap["doHyp5"]=true;
   hypMap["K_0_2400KHyp5"]=true;
   hypMap["K_0_2400KTof_0_1710Hyp5"]=true;
