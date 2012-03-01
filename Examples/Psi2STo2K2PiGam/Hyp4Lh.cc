@@ -20,6 +20,7 @@ Hyp4Lh::Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_f1500f_2_1525Hyp4(true)
   ,_f1710f_2_1430Hyp4(true)
   ,_f1710f_2_1950Hyp4(true)
+  ,_sigmaf_2_1270Hyp4(true)
   ,_sigmaf_2_1525Hyp4(true)
   ,_sigmaf_2_1950Hyp4(true)
   ,_doHyp4(true)
@@ -44,6 +45,7 @@ Hyp4Lh::Hyp4Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_f1500f_2_1525Hyp4(true)
   ,_f1710f_2_1430Hyp4(true)
   ,_f1710f_2_1950Hyp4(true)
+  ,_sigmaf_2_1270Hyp4(true)
   ,_sigmaf_2_1525Hyp4(true)
   ,_sigmaf_2_1950Hyp4(true)
   ,_doHyp4(true)
@@ -224,6 +226,15 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   currentResult+=chiTof2_pif0_kAmp(theData, ChiTof1710_kf2_pi, f_2_1950Mass, f_2_1950Width, f1710Mass, f1710Width);
   }
 
+  if(_sigmaf_2_1270Hyp4){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf_2_1270=theParamVal.ChiToSigmaf_2_1270;
+    double f_2_1270Mass=theParamVal.Bwf_2_1270.first;
+    double f_2_1270Width=theParamVal.Bwf_2_1270.second;
+    double sigmaMass=theParamVal.BwSigma.first;
+    double sigmaWidth=theParamVal.BwSigma.second;
+
+    currentResult+=chiTof0_pif2_kAmp(theData, ChiToSigmaf_2_1270, sigmaMass, sigmaWidth, f_2_1270Mass, f_2_1270Width);
+  }
   if (_sigmaf_2_1525Hyp4){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToSigmaf_2_1525=theParamVal.ChiToSigmaf_2_1525;
 
@@ -413,6 +424,9 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   theKey="sigmaf1370Hyp4";
   setHyps( hypMap, _sigmaf1370Hyp4, theKey);
 
+  theKey="sigmaf_2_1270Hyp4";
+  setHyps( hypMap, _sigmaf_2_1270Hyp4, theKey);
+
   theKey="sigmaf_2_1525Hyp4";
   setHyps( hypMap, _sigmaf_2_1525Hyp4, theKey);
 
@@ -420,7 +434,7 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   setHyps( hypMap, _sigmaf_2_1950Hyp4, theKey);
 
 
-  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f980f_2_2010Hyp4 && !_f1710f_2_1950Hyp4 && !_sigmaf1370Hyp4 && !_sigmaf_2_1525Hyp4 && !_sigmaf_2_1950Hyp4) _doHyp4=false; 
+  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f980f_2_2010Hyp4 && !_f1710f_2_1950Hyp4 && !_sigmaf1370Hyp4 && !_sigmaf_2_1270Hyp4 && !_sigmaf_2_1525Hyp4 && !_sigmaf_2_1950Hyp4) _doHyp4=false; 
 
   if (!_doHyp4) return;
 
@@ -438,10 +452,16 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::f1710_pif1370_k);
     _ampVec.push_back(paramEnum2K2PiGam::f1710_kf1370_pi);
   }
-  if(_f980f_2_1270Hyp4){
-    _ampVec.push_back(paramEnum2K2PiGam::f980_pif_2_1270_k);
-    _ampVec.push_back(paramEnum2K2PiGam::f980_kf_2_1270_pi);
+  if(_f980f_2_1270Hyp4 || _sigmaf_2_1270Hyp4){
     _massVec.push_back(paramEnum2K2PiGam::f_2_1270);
+
+    if(_f980f_2_1270Hyp4){
+      _ampVec.push_back(paramEnum2K2PiGam::f980_pif_2_1270_k);
+      _ampVec.push_back(paramEnum2K2PiGam::f980_kf_2_1270_pi);
+    }
+    if(_sigmaf_2_1270Hyp4){
+      _ampVec.push_back(paramEnum2K2PiGam::ChiToSigmaf_2_1270);
+    }
   }
   if (_f980f_2_1430Hyp4){
     _ampVec.push_back(paramEnum2K2PiGam::f980_pif_2_1430_k);
@@ -489,7 +509,7 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (_f980f_2_1525Hyp4 || _f1500f_2_1525Hyp4 || _sigmaf_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1525);
 
   // fill all other resonances
-  if (_sigmaf1370Hyp4 || _sigmaf_2_1525Hyp4 || _sigmaf_2_1950Hyp4){
+  if (_sigmaf1370Hyp4 || _sigmaf_2_1270Hyp4 || _sigmaf_2_1525Hyp4 || _sigmaf_2_1950Hyp4){
     _massVecRemain.push_back(paramEnum2K2PiGam::sigma);
   }
 
