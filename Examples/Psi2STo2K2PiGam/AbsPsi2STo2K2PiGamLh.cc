@@ -1201,7 +1201,8 @@ complex<double> AbsPsi2STo2K2PiGamLh::chiTof2_pif2_kAmp(Psi2STo2K2PiGamData::Psi
     for (Spin lamf2pi=-2; lamf2pi<=2; ++lamf2pi){
       Spin lamf2K=lamf2pi;
 
-      tmpAmp+= sqrt(2.*theState->L+1.)*Clebsch(theState->L, 0, theState->S, lamf2pi-lamf2K, theState->J, lamf2pi-lamf2K)*Clebsch(2,lamf2pi, 2, -lamf2K, theState->S, lamf2pi-lamf2K)*conj(theData->Dff2ToPiPi[2][0][lamf2pi])*conj(theData->Dff2ToKK[2][0][lamf2K]);
+      tmpAmp+= sqrt(2.*theState->L+1.)*Clebsch(theState->L, 0, theState->S, lamf2pi-lamf2K, theState->J, lamf2pi-lamf2K)*Clebsch(2,lamf2pi, 2, -lamf2K, theState->S, 
+lamf2pi-lamf2K)*conj(theData->Dff2ToPiPi[2][lamf2pi][0])*conj(theData->Dff2ToKK[2][lamf2K][0]);
       
     }
     result+=theMag*expiphi*tmpAmp;
