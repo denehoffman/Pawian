@@ -167,6 +167,7 @@ int main(int __argc,char *__argv[]){
   hypMap["f980f_2_1270Hyp4"]=true;
   hypMap["f980f_2_1430Hyp4"]=true;
   hypMap["f980f_2_1525Hyp4"]=true;
+  hypMap["f980f_2_1810Hyp4"]=true;
   hypMap["f980f_2_1950Hyp4"]=true;
   hypMap["f980f_2_2010Hyp4"]=true;
   hypMap["f1500f_2_1525Hyp4"]=true;
@@ -175,6 +176,7 @@ int main(int __argc,char *__argv[]){
   hypMap["sigmaf1370Hyp4"]=true;
   hypMap["sigmaf_2_1270Hyp4"]=true;
   hypMap["sigmaf_2_1525Hyp4"]=true;
+  hypMap["sigmaf_2_1810Hyp4"]=true;
   hypMap["sigmaf_2_1950Hyp4"]=true;
   hypMap["doHyp5"]=true;
   hypMap["K_0_2400KHyp5"]=true;
