@@ -1177,6 +1177,41 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiTof2_pif0_kAmp(Psi2STo2K2PiGamData::Ps
   return result;
 }
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiTof2_pif2_kAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTof2_pif2_k, double f2_pi_Mass, double f2_pi_Width, double f2_kMass, double f2_kWidth){
+
+  complex<double> result(0.,0.);
+  
+  Vector4<double> PiPi(theData->PiPi_HeliChic0_4V.E(), theData->PiPi_HeliChic0_4V.Px(), 
+		       theData->PiPi_HeliChic0_4V.Py(), theData->PiPi_HeliChic0_4V.Pz());
+  
+  Vector4<double> KK(theData->KpKm_HeliChic0_4V.E(), theData->KpKm_HeliChic0_4V.Px(), 
+		     theData->KpKm_HeliChic0_4V.Py(), theData->KpKm_HeliChic0_4V.Pz());
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=ChiTof2_pif2_k.begin(); it!=ChiTof2_pif2_k.end(); ++it){
+
+    boost::shared_ptr<const JPCLS> theState=it->first;
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+    complex<double> tmpResult(0.,0.);
+
+    complex<double> tmpAmp(0.,0.);
+    
+    for (Spin lamf2pi=-2; lamf2pi<=2; ++lamf2pi){
+      Spin lamf2K=lamf2pi;
+
+      tmpAmp+= sqrt(2.*theState->L+1.)*Clebsch(theState->L, 0, theState->S, lamf2pi-lamf2K, theState->J, lamf2pi-lamf2K)*Clebsch(2,lamf2pi, 2, -lamf2K, theState->S, lamf2pi-lamf2K)*conj(theData->Dff2ToPiPi[2][0][lamf2pi])*conj(theData->Dff2ToKK[2][0][lamf2K]);
+      
+    }
+    result+=theMag*expiphi*tmpAmp;
+  }  
+  
+  result*=5.*BreitWignerBlattW(PiPi, 0.1349766, 0.1349766, f2_pi_Mass, f2_pi_Width, 2)*BreitWignerBlattW(KK, 0.493677, 0.493677, f2_kMass, f2_kWidth, 2);
+
+  return result;
+
+}
 
 complex<double> AbsPsi2STo2K2PiGamLh::chiToK_0_KToKf980KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_0_KToKf980K, double f980_Mass, double f980_gPiPi,  double f980_gKK, double K_0_Mass, double K_0_Width){
 
