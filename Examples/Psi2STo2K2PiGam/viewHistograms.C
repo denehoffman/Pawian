@@ -84,7 +84,7 @@ TH1F* datainvMassKpivsKpipiAngular;
 
 bool printToPDF = false;
 
-void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root", TString hypname="hypname", TString option){
+void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiGam.root", TString hypname="hypname", TString option=""){
 
   using namespace std;
   gROOT->SetStyle("Plain");
@@ -180,7 +180,7 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
   histVectMc.push_back(cosK1430FittedHist);
   histVectMc.push_back(cosK1430ViaK892FittedHist);
 
-  /*  
+    
   TCanvas* cmain = new TCanvas("cmain","cmain",1400,600);
   cmain->Divide(4,2);
   for(int i=0; i<histVectData.size(); i++) {
@@ -227,18 +227,30 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
     if(i==1) c2->cd();
     if(i==2) c3->cd();
     if(i==3) c4->cd();
-    histVectData[i]->SetLineWidth(4);
-    histVectData[i]->SetLineColor(2);
+    histVectData[i]->SetLineWidth(3);
+    histVectData[i]->SetLineColor(1);
     histVectData[i]->Draw("E");
     histVectMc[i]->SetLineWidth(4);
+    histVectMc[i]->SetLineColor(2);
     histVectData[i]->GetXaxis()->SetTitle("invariante Masse / GeV/c^{2}");
     histVectData[i]->GetYaxis()->SetTitle("Ereignisse / 20 MeV/c^{2}");
     histVectMc[i]->Draw("same");
+    histVectData[i]->SetTitleSize(0.055,"x");
+    histVectData[i]->SetTitleSize(0.055,"y");
+    histVectMc[i]->SetTitleSize(0.055,"x");
+    histVectMc[i]->SetTitleSize(0.055,"y");
+    histVectData[i]->GetXaxis()->SetTitleOffset(0.8); 
+    histVectData[i]->GetYaxis()->SetTitleOffset(0.8); 
+    histVectMc[i]->GetXaxis()->SetTitleOffset(0.8); 
+    histVectMc[i]->GetYaxis()->SetTitleOffset(0.8); 
+
+
     TString histname = histVectData[i]->GetName();
     // cout << histname << endl;
     if(printToPDF) {
       histVectData[i]->SetTitle("");
       histVectMc[i]->SetTitle("");
+
       gStyle->SetOptStat(0);
       if(i==0) c1->Print("pdfplots/pwa_"+hypname+"_"+histname+".pdf");
       if(i==1) c2->Print("pdfplots/pwa_"+hypname+"_"+histname+".pdf");
@@ -247,8 +259,7 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
     }
   }
 
-  */
-
+  /*
   datainvMassKpivsKpi = new TH2F("datainvMassKpivsKpi", "datainvMassKpivsKpi", 48, 0.5, 2.9, 48, 0.5, 2.9);
   datainvMassKpiAngular = new TH1F("datainvMassKpiAngular", "datainvMassKpiAngular", 20, -1., 1.);
 
@@ -451,6 +462,7 @@ void viewHistograms(TString fname="bin/gcc-4.1.2/debug/link-static/Psi2STo2K2PiG
   datainvMasspipivsKK->Draw("colz");
   cangular6->cd(2);
   datainvMasspipivsKKAngular->Draw();
+  */
   
 
 }

@@ -68,6 +68,7 @@ protected:
   bool _sigmaf_2_1810Hyp4;
   bool _sigmaf_2_1950Hyp4;
   bool _f_2_1270f_2_1950Hyp4;
+  bool _f_2_1950f_2_1950Hyp4;
   bool _doHyp4;
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
   virtual bool equalChic0DecParams();

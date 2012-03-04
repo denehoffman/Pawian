@@ -129,7 +129,6 @@ int main(int __argc,char *__argv[]){
     
     if (!eventsData.findParticleTypes(pTable))
       Warning << "could not find all particles" << endmsg;
-    
     Info << "\nFile has " << eventsData.size() << " events. Each event has "
 	 <<  eventsData.nextEvent()->size() << " final state particles.\n" << endmsg;
     eventsData.rewind();
@@ -179,6 +178,7 @@ int main(int __argc,char *__argv[]){
   hypMap["sigmaf_2_1810Hyp4"]=true;
   hypMap["sigmaf_2_1950Hyp4"]=true;
   hypMap["f_2_1270f_2_1950Hyp4"]=true;
+  hypMap["f_2_1950f_2_1950Hyp4"]=true;
   hypMap["doHyp5"]=true;
   hypMap["K_0_2400KHyp5"]=true;
   hypMap["K_0_2400KTof_0_1710Hyp5"]=true;
