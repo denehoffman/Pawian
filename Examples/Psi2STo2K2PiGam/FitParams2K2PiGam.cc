@@ -97,6 +97,10 @@ void FitParams2K2PiGam::filljpclsMap(){
   _jpclsMap[paramEnum2K2PiGam::ChiToSigmaf_2_1525]=_statesPtr->ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::ChiToSigmaf_2_1810]=_statesPtr->ChiTof0f2States();
   _jpclsMap[paramEnum2K2PiGam::ChiToSigmaf_2_1950]=_statesPtr->ChiTof0f2States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1525_k]=_statesPtr->ChiTof2f2States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1525_pi]=_statesPtr->ChiTof2f2States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1810_k]=_statesPtr->ChiTof2f2States();
+  _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1810_pi]=_statesPtr->ChiTof2f2States();
   _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1950_k]=_statesPtr->ChiTof2f2States();
   _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1950_pi]=_statesPtr->ChiTof2f2States();
   _jpclsMap[paramEnum2K2PiGam::ChiTof_2_1950f_2_1950]=_statesPtr->ChiTof2f2States();
@@ -216,6 +220,10 @@ std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collecti
   else if (index==paramEnum2K2PiGam::ChiToSigmaf_2_1525) return params.ChiToSigmaf_2_1525;
   else if (index==paramEnum2K2PiGam::ChiToSigmaf_2_1810) return params.ChiToSigmaf_2_1810;
   else if (index==paramEnum2K2PiGam::ChiToSigmaf_2_1950) return params.ChiToSigmaf_2_1950;
+  else if (index==paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1525_k) return params.ChiTof_2_1270_pif_2_1525_k;
+  else if (index==paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1525_pi) return params.ChiTof_2_1270_kf_2_1525_pi;
+  else if (index==paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1810_k) return params.ChiTof_2_1270_pif_2_1810_k;
+  else if (index==paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1810_pi) return params.ChiTof_2_1270_kf_2_1810_pi;
   else if (index==paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1950_k) return params.ChiTof_2_1270_pif_2_1950_k;
   else if (index==paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1950_pi) return params.ChiTof_2_1270_kf_2_1950_pi;
   else if (index==paramEnum2K2PiGam::ChiTof_2_1950f_2_1950) return params.ChiTof_2_1950f_2_1950;

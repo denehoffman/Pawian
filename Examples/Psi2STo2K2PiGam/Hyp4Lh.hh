@@ -67,6 +67,8 @@ protected:
   bool _sigmaf_2_1525Hyp4;
   bool _sigmaf_2_1810Hyp4;
   bool _sigmaf_2_1950Hyp4;
+  bool _f_2_1270f_2_1525Hyp4;
+  bool _f_2_1270f_2_1810Hyp4;
   bool _f_2_1270f_2_1950Hyp4;
   bool _f_2_1950f_2_1950Hyp4;
   bool _doHyp4;
