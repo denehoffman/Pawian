@@ -25,9 +25,11 @@ Hyp4Lh::Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   ,_sigmaf_2_1525Hyp4(true)
   ,_sigmaf_2_1810Hyp4(true)
   ,_sigmaf_2_1950Hyp4(true)
+  ,_f_2_1270f_2_1270Hyp4(true)
   ,_f_2_1270f_2_1525Hyp4(true)
   ,_f_2_1270f_2_1810Hyp4(true)
   ,_f_2_1270f_2_1950Hyp4(true)
+  ,_f_2_1810f_2_1810Hyp4(true)
   ,_f_2_1950f_2_1950Hyp4(true)
   ,_doHyp4(true)
   ,_nFitParams(0)
@@ -56,9 +58,11 @@ Hyp4Lh::Hyp4Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   ,_sigmaf_2_1525Hyp4(true)
   ,_sigmaf_2_1810Hyp4(true)
   ,_sigmaf_2_1950Hyp4(true)
+  ,_f_2_1270f_2_1270Hyp4(true)
   ,_f_2_1270f_2_1525Hyp4(true)
   ,_f_2_1270f_2_1810Hyp4(true)
   ,_f_2_1270f_2_1950Hyp4(true)
+  ,_f_2_1810f_2_1810Hyp4(true)
   ,_f_2_1950f_2_1950Hyp4(true)
   ,_doHyp4(true)
   ,_nFitParams(0)
@@ -297,6 +301,11 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     
   }
 
+  if(_f_2_1270f_2_1270Hyp4){ 
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof_2_1270f_2_1270=theParamVal.ChiTof_2_1270f_2_1270;
+    currentResult+=chiTof2_pif2_kAmp(theData, ChiTof_2_1270f_2_1270, f_2_1270Mass, f_2_1270Width, f_2_1270Mass, f_2_1270Width);
+  }
+
   if(_f_2_1270f_2_1525Hyp4){
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof_2_1270_pif_2_1525_k=theParamVal.ChiTof_2_1270_pif_2_1525_k;
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof_2_1270_kf_2_1525_pi=theParamVal.ChiTof_2_1270_kf_2_1525_pi;
@@ -316,6 +325,11 @@ complex<double> Hyp4Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof_2_1270_kf_2_1950_pi=theParamVal.ChiTof_2_1270_kf_2_1950_pi;
     currentResult+=chiTof2_pif2_kAmp(theData, ChiTof_2_1270_pif_2_1950_k, f_2_1270Mass, f_2_1270Width, f_2_1950Mass, f_2_1950Width);
     currentResult+=chiTof2_pif2_kAmp(theData, ChiTof_2_1270_kf_2_1950_pi, f_2_1950Mass, f_2_1950Width, f_2_1270Mass, f_2_1270Width);
+  }
+
+  if(_f_2_1810f_2_1810Hyp4){ 
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiTof_2_1810f_2_1810=theParamVal.ChiTof_2_1810f_2_1810;
+    currentResult+=chiTof2_pif2_kAmp(theData, ChiTof_2_1810f_2_1810, f_2_1810Mass, f_2_1810Width, f_2_1810Mass, f_2_1810Width);
   }
 
   if(_f_2_1950f_2_1950Hyp4){ 
@@ -500,6 +514,9 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   theKey="sigmaf_2_1950Hyp4";
   setHyps( hypMap, _sigmaf_2_1950Hyp4, theKey);
 
+  theKey="f_2_1270f_2_1270Hyp4";
+  setHyps( hypMap, _f_2_1270f_2_1270Hyp4, theKey);
+
   theKey="f_2_1270f_2_1525Hyp4";
   setHyps( hypMap, _f_2_1270f_2_1525Hyp4, theKey);
 
@@ -509,10 +526,13 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   theKey="f_2_1270f_2_1950Hyp4";
   setHyps( hypMap, _f_2_1270f_2_1950Hyp4, theKey);
 
+  theKey="f_2_1810f_2_1810Hyp4";
+  setHyps( hypMap, _f_2_1810f_2_1810Hyp4, theKey);
+
   theKey="f_2_1950f_2_1950Hyp4";
   setHyps( hypMap, _f_2_1950f_2_1950Hyp4, theKey);
 
-  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f980f_2_1525Hyp4 && !_f980f_2_1810Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f980f_2_2010Hyp4 && !_f1710f_2_1950Hyp4 && !_sigmaf1370Hyp4 && !_sigmaf_2_1270Hyp4 && !_sigmaf_2_1525Hyp4 && !_sigmaf_2_1810Hyp4 && !_sigmaf_2_1950Hyp4 && !_f_2_1270f_2_1950Hyp4 && !_f_2_1270f_2_1525Hyp4 && !_f_2_1270f_2_1810Hyp4 && !_f_2_1950f_2_1950Hyp4) _doHyp4=false; 
+  if(!_f980f1370Hyp4 && !_f1710f1370Hyp4 && !_f980f_2_1430Hyp4 && !_f980f_2_1525Hyp4 && !_f980f_2_1810Hyp4 && !_f1710f_2_1430Hyp4 && !_f980f_2_1950Hyp4 && !_f980f_2_2010Hyp4 && !_f1710f_2_1950Hyp4 && !_sigmaf1370Hyp4 && !_sigmaf_2_1270Hyp4 && !_sigmaf_2_1525Hyp4 && !_sigmaf_2_1810Hyp4 && !_sigmaf_2_1950Hyp4 && _f_2_1270f_2_1270Hyp4 && !_f_2_1270f_2_1950Hyp4 && !_f_2_1270f_2_1525Hyp4 && !_f_2_1270f_2_1810Hyp4 && !_f_2_1810f_2_1810Hyp4 && !_f_2_1950f_2_1950Hyp4) _doHyp4=false; 
 
   if (!_doHyp4) return;
 
@@ -583,6 +603,10 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::ChiToSigmaf1370);
   }
 
+  if(_f_2_1270f_2_1270Hyp4){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiTof_2_1270f_2_1270);
+  }
+
   if(_f_2_1270f_2_1525Hyp4){
     _ampVec.push_back(paramEnum2K2PiGam::ChiTof_2_1270_pif_2_1525_k);
     _ampVec.push_back(paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1525_pi);
@@ -598,6 +622,10 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _ampVec.push_back(paramEnum2K2PiGam::ChiTof_2_1270_kf_2_1950_pi);
   }
 
+  if(_f_2_1810f_2_1810Hyp4){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiTof_2_1810f_2_1810);
+  }
+
   if(_f_2_1950f_2_1950Hyp4){
     _ampVec.push_back(paramEnum2K2PiGam::ChiTof_2_1950f_2_1950);
   }
@@ -606,11 +634,11 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (_f980f1500Hyp4 || _f1500f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f1500);
   if (_f980f_2_1430Hyp4 || _f1710f_2_1430Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1430);
 
-  if(_f980f_2_1270Hyp4 || _sigmaf_2_1270Hyp4 || _f_2_1270f_2_1950Hyp4 || _f_2_1270f_2_1525Hyp4 || _f_2_1270f_2_1810Hyp4)_massVec.push_back(paramEnum2K2PiGam::f_2_1270);
+  if(_f980f_2_1270Hyp4 || _sigmaf_2_1270Hyp4 || _f_2_1270f_2_1270Hyp4 || _f_2_1270f_2_1950Hyp4 || _f_2_1270f_2_1525Hyp4 || _f_2_1270f_2_1810Hyp4)_massVec.push_back(paramEnum2K2PiGam::f_2_1270);
   if (_f980f_2_1950Hyp4 || _f1710f_2_1950Hyp4 || _sigmaf_2_1950Hyp4 || _f_2_1270f_2_1950Hyp4 || _f_2_1950f_2_1950Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1950);
   if (_f980f_2_2010Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_2010);
   if (_f980f_2_1525Hyp4 || _f1500f_2_1525Hyp4 || _sigmaf_2_1525Hyp4 || _f_2_1270f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1525);
-  if (_f980f_2_1810Hyp4 || _sigmaf_2_1810Hyp4 ||  _f_2_1270f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1810);
+  if (_f980f_2_1810Hyp4 || _sigmaf_2_1810Hyp4 ||  _f_2_1270f_2_1525Hyp4 || _f_2_1810f_2_1810Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1810);
 
   // fill all other resonances
   if (_sigmaf1370Hyp4 || _sigmaf_2_1270Hyp4 || _sigmaf_2_1525Hyp4 || _sigmaf_2_1810Hyp4 || _sigmaf_2_1950Hyp4){
