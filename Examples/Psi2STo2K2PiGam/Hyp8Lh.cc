@@ -10,6 +10,7 @@
 Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps) :
   Hyp7Lh(theEvtList, hypMap, theStatesPtr, cacheAmps)
   ,_K_0_1460ToKstPiHyp8(true)
+  ,_K_0_1460ToSigmaKHyp8(true)
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
@@ -22,6 +23,7 @@ Hyp8Lh::Hyp8Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
 Hyp8Lh::Hyp8Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps) :
   Hyp7Lh(theLhPtr->getEventList(), hypMap, theStatesPtr, cacheAmps)
   ,_K_0_1460ToKstPiHyp8(true)
+  ,_K_0_1460ToSigmaKHyp8(true)
   ,_K_0_1830ToKstPiHyp8(true)
   ,_K_1_1650Hyp8(true)
   ,_doHyp8(true)
@@ -65,15 +67,24 @@ complex<double> Hyp8Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
   double K_0_1430Mass=theParamVal.BwK_0_1430.first;
   double K_0_1430Width=theParamVal.BwK_0_1430.second;
 
-  if (_K_0_1460ToKstPiHyp8){
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi=theParamVal.K_0_1460ToK892Pi;
-    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi=theParamVal.K_0_1460ToK_0_1430Pi;
+  if (_K_0_1460ToKstPiHyp8 || _K_0_1460ToSigmaKHyp8){
     
     double K_0_1460Mass=theParamVal.BwK_0_1460.first;
     double K_0_1460Width=theParamVal.BwK_0_1460.second;
-    
-    currentResult+=chiToK0KT0K1piKAmp(theData, K_0_1460ToK892Pi, K_0_1460Mass, K_0_1460Width, K892Mass, K892Width);
-    currentResult+=chiToK0KT0KpipiKAmp(theData, K_0_1460ToK_0_1430Pi, K_0_1460Mass, K_0_1460Width, K_0_1430Mass, K_0_1430Width); 
+
+    if(_K_0_1460ToKstPiHyp8){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK892Pi=theParamVal.K_0_1460ToK892Pi;
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToK_0_1430Pi=theParamVal.K_0_1460ToK_0_1430Pi;    
+      currentResult+=chiToK0KT0K1piKAmp(theData, K_0_1460ToK892Pi, K_0_1460Mass, K_0_1460Width, K892Mass, K892Width);
+      currentResult+=chiToK0KT0KpipiKAmp(theData, K_0_1460ToK_0_1430Pi, K_0_1460Mass, K_0_1460Width, K_0_1430Mass, K_0_1430Width);
+    } 
+ 
+    if(_K_0_1460ToSigmaKHyp8){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > K_0_1460ToSigmaK=theParamVal.K_0_1460ToSigmaK;
+      double sigmaMass=theParamVal.BwSigma.first;
+      double sigmaWidth=theParamVal.BwSigma.second;
+      currentResult+=chiToK_0_KToKf0KAmp(theData, K_0_1460ToSigmaK, sigmaMass, sigmaWidth, K_0_1460Mass, K_0_1460Width);
+    }
   }
 
   if (_K_0_1830ToKstPiHyp8){
@@ -234,6 +245,9 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
   std::string theKey="K_0_1460ToKstPiHyp8";
   setHyps( hypMap, _K_0_1460ToKstPiHyp8, theKey);
 
+  theKey="K_0_1460ToSigmaKHyp8";
+  setHyps( hypMap, _K_0_1460ToSigmaKHyp8, theKey);
+
   theKey="K_0_1830ToKstPiHyp8";
   setHyps( hypMap, _K_0_1830ToKstPiHyp8, theKey);
 
@@ -246,10 +260,16 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
   if (!_doHyp8) return;
 
-  if (_K_0_1460ToKstPiHyp8){
-    _ampVec.push_back(paramEnum2K2PiGam::K_0_1460ToK892Pi);
-    _ampVec.push_back(paramEnum2K2PiGam::K_0_1460ToK_0_1430Pi);
+  if (_K_0_1460ToKstPiHyp8 || _K_0_1460ToSigmaKHyp8){
     _massVec.push_back(paramEnum2K2PiGam::K_0_1460);
+
+    if(_K_0_1460ToKstPiHyp8){
+      _ampVec.push_back(paramEnum2K2PiGam::K_0_1460ToK892Pi);
+      _ampVec.push_back(paramEnum2K2PiGam::K_0_1460ToK_0_1430Pi);
+    }
+    if(_K_0_1460ToSigmaKHyp8){
+      _ampVec.push_back(paramEnum2K2PiGam::K_0_1460ToSigmaK);
+    }
   }
 
   if (_K_0_1830ToKstPiHyp8){
@@ -273,6 +293,10 @@ void Hyp8Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
 
   _massVecRemain.push_back(paramEnum2K2PiGam::K892);
+
+  if(_K_0_1460ToSigmaKHyp8){
+    _massVecRemain.push_back(paramEnum2K2PiGam::sigma);
+  }
 
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){

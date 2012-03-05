@@ -202,6 +202,7 @@ int main(int __argc,char *__argv[]){
   hypMap["K1_2300Hyp7"]=true; 
   hypMap["KappaHyp7"]=true;
   hypMap["K_0_1460ToKstPiHyp8"]=true;
+  hypMap["K_0_1460ToSigmaKHyp8"]=true;
   hypMap["K_0_1830ToKstPiHyp8"]=true;
   hypMap["K_1_1650Hyp8"]=true;
   hypMap["Pi_2_1670Tof_2_1270PiHyp9"]=true;

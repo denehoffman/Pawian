@@ -51,6 +51,7 @@ public:
 
 protected:
   bool _K_0_1460ToKstPiHyp8;
+  bool _K_0_1460ToSigmaKHyp8;
   bool _K_0_1830ToKstPiHyp8;
   bool _K_1_1650Hyp8;
   bool _doHyp8;

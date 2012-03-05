@@ -638,7 +638,7 @@ void Hyp4Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if (_f980f_2_1950Hyp4 || _f1710f_2_1950Hyp4 || _sigmaf_2_1950Hyp4 || _f_2_1270f_2_1950Hyp4 || _f_2_1950f_2_1950Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1950);
   if (_f980f_2_2010Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_2010);
   if (_f980f_2_1525Hyp4 || _f1500f_2_1525Hyp4 || _sigmaf_2_1525Hyp4 || _f_2_1270f_2_1525Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1525);
-  if (_f980f_2_1810Hyp4 || _sigmaf_2_1810Hyp4 ||  _f_2_1270f_2_1525Hyp4 || _f_2_1810f_2_1810Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1810);
+  if (_f980f_2_1810Hyp4 || _sigmaf_2_1810Hyp4 ||  _f_2_1270f_2_1810Hyp4 || _f_2_1810f_2_1810Hyp4) _massVec.push_back(paramEnum2K2PiGam::f_2_1810);
 
   // fill all other resonances
   if (_sigmaf1370Hyp4 || _sigmaf_2_1270Hyp4 || _sigmaf_2_1525Hyp4 || _sigmaf_2_1810Hyp4 || _sigmaf_2_1950Hyp4){
