@@ -8,9 +8,9 @@
 
 Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
   Hyp2Lh(theEvtList, hypMap, theStatesPtr, cacheAmps)
-  ,_sigmaf980Hyp(true)
-  ,_sigmaf1710Hyp(true)
-  ,_sigmaf2200Hyp(true)  
+  ,_sigmaf980Hyp(false)
+  ,_sigmaf1710Hyp(false)
+  ,_sigmaf2200Hyp(false)  
   ,_doHyp3(true)
   ,_nFitParams(0)
   ,_f980FlatteRemain(false)
@@ -21,9 +21,9 @@ Hyp3Lh::Hyp3Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
 
 Hyp3Lh::Hyp3Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
   Hyp2Lh(theLhPtr->getEventList(), hypMap, theStatesPtr, cacheAmps)
-  ,_sigmaf980Hyp(true)
-  ,_sigmaf1710Hyp(true)
-  ,_sigmaf2200Hyp(true)
+  ,_sigmaf980Hyp(false)
+  ,_sigmaf1710Hyp(false)
+  ,_sigmaf2200Hyp(false)
   ,_doHyp3(true)
   ,_nFitParams(0)
   ,_f980FlatteRemain(false)

@@ -10,9 +10,9 @@
 Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
   Hyp5Lh(theEvtList, hypMap, theStatesPtr, cacheAmps )
   ,_doHyp6(true)
-  ,_K_0_1430K_0_1950Hyp6(true)
-  ,_KappaK_0_1430Hyp6(true)
-  ,_KappaK_0_1950Hyp6(true) 
+  ,_K_0_1430K_0_1950Hyp6(false)
+  ,_KappaK_0_1430Hyp6(false)
+  ,_KappaK_0_1950Hyp6(false) 
   ,_nFitParams(0)
   ,_equalParameter(false) 
 {
@@ -22,9 +22,9 @@ Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
 Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
   Hyp5Lh(theLhPtr->getEventList(), hypMap, theStatesPtr, cacheAmps)
   ,_doHyp6(true)
-  ,_K_0_1430K_0_1950Hyp6(true)
-  ,_KappaK_0_1430Hyp6(true)
-  ,_KappaK_0_1950Hyp6(true)  
+  ,_K_0_1430K_0_1950Hyp6(false)
+  ,_KappaK_0_1430Hyp6(false)
+  ,_KappaK_0_1950Hyp6(false)  
   ,_nFitParams(0)
   ,_equalParameter(false) 
 {

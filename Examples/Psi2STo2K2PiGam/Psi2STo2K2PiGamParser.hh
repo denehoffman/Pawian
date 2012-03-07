@@ -89,7 +89,7 @@ class Psi2STo2K2PiGamParser
   const std::string mcFile() const {return _mcFile;}
   const std::string hepMCinFile() const {return _hepMCinFile;}
   const std::string fitParamFile() const {return _paramFile;}
-  const std::vector<std::string>& disabledHyps() const { return _disabledHyps; }
+  const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const bool qaMode() const {return _qaMode;}
   const bool generatorMode() const {return _genMode;}
@@ -107,7 +107,7 @@ protected:
   std::string _startHypo;
   bool _qaMode;	
   bool _genMode;	  
-  std::vector<std::string> _disabledHyps;
+  std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
 };
 

@@ -39,7 +39,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
       ("hepMCinFile",po::value<string>(&_hepMCinFile), "full path of HepMC input file for event generation")
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
-      ("disableHyp",po::value< vector<string> >(&_disabledHyps), "disable hypotheses")
+      ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("qaMode",po::value<bool>(&_qaMode), "enable/diable QA mode")
       ("genMode",po::value<bool>(&_genMode), "enable/diable event generator mode")
       ;
@@ -118,8 +118,8 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
 
       std::vector<std::string>::const_iterator it;
 
-      for (it=_disabledHyps.begin(); it!=_disabledHyps.end();++it){
-	std::cout << "hypothesis\t" << (*it) << "\t disabled\n";
+      for (it=_enabledHyps.begin(); it!=_enabledHyps.end();++it){
+	std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
       }
       std::cout << std::endl;
     
