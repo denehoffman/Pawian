@@ -99,6 +99,7 @@ struct param2K2PiGam
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf980;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_2400ToKf_0_1710;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK_0_1430K_0_1950;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK892;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1430;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK_0_1950;
   std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToK892K1680;
@@ -182,7 +183,7 @@ struct paramEnum2K2PiGam{
   enum {ChiGam=0, K892K892, KappaKappa, K_0_1430K_0_1430, ChiToK_0_1430_K892, 
 	K_2_1430K_2_1430, K_0_1430K_2_1430, K_1_1410K_1_1410, ChiToK_1_1410_K892, ChiToK_2_1430_K892,
 	ChiToK_1_1400K, K_1_1400ToK892Pi, ChiToK_1_1270_K, K_1_1270ToK892Pi, K_1_1270ToK_0_1430Pi, 
-	ChiToK_1_1650K, K_1_1650ToK892Pi, K_1_1650ToK_0_1430Pi, K_0_1430K_0_1950, KappaK_0_1950, ChiToKappaK_0_1430,
+	ChiToK_1_1650K, K_1_1650ToK892Pi, K_1_1650ToK_0_1430Pi, K_0_1430K_0_1950, ChiToKappaK892, KappaK_0_1950, ChiToKappaK_0_1430,
 	ChiToK_1_2400K, K_1_2400Tof980K, K_1_2400Tof1710K, K_1_2400ToK_0_1430Pi,
 	ChiToK_2_2400K, K_2_2400Tof980K, K_2_2400Tof1710K,
 	f980_pif1710_k, f980_kf1710_pi, ChiTof1710f1710, f980f980, f980f2200, ChiTof980f_2_2300, ChiTof_2_2300sigma, 
@@ -215,7 +216,7 @@ struct paramEnum2K2PiGam{
       ={"ChiGam", "K892K892", "KappaKappa", "K_0_1430K_0_1430", "ChiToK_0_1430_K892", 
 	"K_2_1430K_2_1430", "K_0_1430K_2_1430", "K_1_1410K_1_1410","ChiToK_1_1410_K892","ChiToK_2_1430_K892",
 	"ChiToK_1_1400K", "K_1_1400ToK892Pi", "ChiToK_1_1270_K", "K_1_1270ToK892Pi", "K_1_1270ToK_0_1430Pi", 
-	"ChiToK_1_1650K", "K_1_1650ToK892Pi", "K_1_1650ToK_0_1430Pi","K_0_1430K_0_1950", "KappaK_0_1950","ChiToKappaK_0_1430",
+	"ChiToK_1_1650K", "K_1_1650ToK892Pi", "K_1_1650ToK_0_1430Pi","K_0_1430K_0_1950", "ChiToKappaK892", "KappaK_0_1950","ChiToKappaK_0_1430",
 	"ChiToK_1_2400K", "K_1_2400Tof980K","K_1_2400Tof1710K", "K_1_2400ToK_0_1430Pi",
 	"ChiToK_2_2400K", "K_2_2400Tof980K","K_2_2400Tof1710K",
 	"f980_pif1710_k", "f980_kf1710_pi", "ChiTof1710f1710", "f980f980", "f980f2200", "ChiTof980f_2_2300","ChiTof_2_2300sigma",

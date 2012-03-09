@@ -194,6 +194,7 @@ int main(int __argc,char *__argv[]){
   hypMap["ChiToK_0_1430KPiHyp5"]=false;
   hypMap["ChiToK892KPiHyp5"]=false;
   hypMap["K_0_1430K_0_1950Hyp6"]=false;
+  hypMap["KappaK892Hyp6"]=false;
   hypMap["KappaK_0_1430Hyp6"]=false;
   hypMap["KappaK_0_1950Hyp6"]=false;
   hypMap["K1_1680Hyp7"]=false;

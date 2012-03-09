@@ -11,6 +11,7 @@ Hyp6Lh::Hyp6Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const
   Hyp5Lh(theEvtList, hypMap, theStatesPtr, cacheAmps )
   ,_doHyp6(true)
   ,_K_0_1430K_0_1950Hyp6(false)
+  ,_KappaK892Hyp6(false)
   ,_KappaK_0_1430Hyp6(false)
   ,_KappaK_0_1950Hyp6(false) 
   ,_nFitParams(0)
@@ -23,6 +24,7 @@ Hyp6Lh::Hyp6Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map
   Hyp5Lh(theLhPtr->getEventList(), hypMap, theStatesPtr, cacheAmps)
   ,_doHyp6(true)
   ,_K_0_1430K_0_1950Hyp6(false)
+  ,_KappaK892Hyp6(false)
   ,_KappaK_0_1430Hyp6(false)
   ,_KappaK_0_1950Hyp6(false)  
   ,_nFitParams(0)
@@ -70,6 +72,15 @@ complex<double> Hyp6Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2
     
     //Chi_c0 decay to K_0_1950 K_0_1430 
     currentResult+=chiTo2K_0_Amp(theData, ChiToK_0_1430K_0_1950, K_0_1430Mass, K_0_1430Width, K_0_1950Mass, K_0_1950Width); 
+  }
+
+  if(_KappaK892Hyp6){
+    std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > ChiToKappaK892=theParamVal.ChiToKappaK892;
+    double K892Mass=theParamVal.BwK892.first;
+    double K892Width=theParamVal.BwK892.second;
+    double KappaMass=theParamVal.BwKappa.first;
+    double KappaWidth=theParamVal.BwKappa.second;
+    currentResult+=chiToK0K1Amp(theData, ChiToKappaK892, KappaMass, KappaWidth,  K892Mass, K892Width);
   }
 
   if (_KappaK_0_1430Hyp6){
@@ -222,6 +233,9 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
   std::string theKey="K_0_1430K_0_1950Hyp6";
   setHyps( hypMap, _K_0_1430K_0_1950Hyp6, theKey);
 
+  theKey="KappaK892Hyp6";
+  setHyps( hypMap, _KappaK892Hyp6, theKey);
+
   theKey="KappaK_0_1430Hyp6";
   setHyps( hypMap, _KappaK_0_1430Hyp6, theKey);
 
@@ -229,9 +243,13 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
   setHyps( hypMap, _KappaK_0_1950Hyp6, theKey);
 
 
-  if(!_K_0_1430K_0_1950Hyp6 && !_KappaK_0_1950Hyp6 && !_KappaK_0_1430Hyp6){
+  if(!_K_0_1430K_0_1950Hyp6 && !_KappaK_0_1950Hyp6 && !_KappaK_0_1430Hyp6 && !_KappaK892Hyp6){
     _doHyp6=false;
     return;
+  }
+
+  if(_KappaK892Hyp6){
+    _ampVec.push_back(paramEnum2K2PiGam::ChiToKappaK892);
   }
 
 
@@ -253,9 +271,10 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if(_KappaK_0_1950Hyp6){
   _ampVec.push_back(paramEnum2K2PiGam::KappaK_0_1950);
 
-  _massVec.push_back(paramEnum2K2PiGam::Kappa);
   if(!_K_0_1430K_0_1950Hyp6) _massVec.push_back(paramEnum2K2PiGam::K_0_1950);
   }
+
+  if(_KappaK_0_1950Hyp6 || _KappaK_0_1430Hyp6 || _KappaK892Hyp6) _massVec.push_back(paramEnum2K2PiGam::Kappa);
 
   // fill all other resonances
   if (_K_0_1430K_0_1950Hyp6 || _KappaK_0_1430Hyp6){
@@ -263,9 +282,10 @@ void Hyp6Lh::setUp(const std::map<const std::string, bool>& hypMap){
       _massVecRemain.push_back(paramEnum2K2PiGam::K_0_1430);
     }
   }
-  if(_KappaK_0_1430Hyp6 || _KappaK_0_1950Hyp6){
-    _massVecRemain.push_back(paramEnum2K2PiGam::Kappa);
-  }
+
+//   if(_KappaK_0_1430Hyp6 || _KappaK_0_1950Hyp6 || _KappaK892Hyp6){
+//     _massVecRemain.push_back(paramEnum2K2PiGam::Kappa);
+//   }
 
   std::vector<unsigned int>::iterator ampIt;
   for (ampIt=_ampVec.begin(); ampIt!=_ampVec.end(); ++ampIt){

@@ -259,7 +259,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   if(_KappaHyp){
     _ampVec.push_back(paramEnum2K2PiGam::KappaKappa);
 
-    if(!_KappaK_0_1950Hyp6) _massVec.push_back(paramEnum2K2PiGam::Kappa);
+    if(!_KappaK_0_1950Hyp6 && !_KappaK_0_1430Hyp6 && !_KappaK892Hyp6) _massVec.push_back(paramEnum2K2PiGam::Kappa);
   }
 
   if(_K1_1680Hyp || _K1_1680K1_1680Hyp7 || _K1_1680K0_1430Hyp7){
@@ -290,7 +290,7 @@ void Hyp7Lh::setUp(const std::map<const std::string, bool>& hypMap){
   }
 
   // fill all other resonances
-  if(_KappaK_0_1950Hyp6){
+  if(_KappaK_0_1950Hyp6 || _KappaK_0_1430Hyp6 || _KappaK892Hyp6){
     _massVecRemain.push_back(paramEnum2K2PiGam::Kappa);
   }
 
