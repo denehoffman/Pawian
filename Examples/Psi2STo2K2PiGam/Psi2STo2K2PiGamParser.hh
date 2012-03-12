@@ -78,6 +78,7 @@ class Psi2STo2K2PiGamParser
       , _startHypo("hyp8")
       , _qaMode(false)
       , _genMode(false)
+      , _scanMode(false)
     {
 //     _disabledHyps.push_back("blainit");
     if (!parseCommandLine(argc, argv)) throw false;
@@ -93,6 +94,7 @@ class Psi2STo2K2PiGamParser
   const std::string startHypo() const {return _startHypo;}
   const bool qaMode() const {return _qaMode;}
   const bool generatorMode() const {return _genMode;}
+  const bool scanMode() const {return _scanMode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
 protected:
   bool parseCommandLine(int argc,char **argv);
@@ -106,7 +108,8 @@ protected:
   std::string _paramFile;
   std::string _startHypo;
   bool _qaMode;	
-  bool _genMode;	  
+  bool _genMode;
+  bool _scanMode;
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
 };

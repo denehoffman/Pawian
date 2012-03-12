@@ -41,7 +41,8 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("qaMode",po::value<bool>(&_qaMode), "enable/diable QA mode")
-      ("genMode",po::value<bool>(&_genMode), "enable/diable event generator mode")
+      ("genMode",po::value<bool>(&_genMode), "enable/disable event generator mode")
+      ("scanMode",po::value<bool>(&_scanMode), "enable/disable scan mode")
       ;
 
     po::options_description config("Configuration file options");
@@ -113,6 +114,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
 		<< "startHypo: " << _startHypo << "\n\n"
 		<< "qaMode: " << _qaMode << "\n\n"
 		<< "genMode: " << _genMode << "\n\n"
+		<< "scanMode: " << _scanMode << "\n\n"
 	    << endl;
 
 

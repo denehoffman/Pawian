@@ -2,6 +2,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <vector>
 #include <map>
 
@@ -46,6 +47,10 @@
 #include "Minuit2/FunctionMinimum.h"
 #include "Minuit2/MnMinos.h"
 #include "Minuit2/MnStrategy.h"
+#include "Minuit2/MnScan.h"
+#include "Minuit2/MnPlot.h"
+#include "Minuit2/FCNBase.h"
+#include "Minuit2/MnPrint.h"
 
 #include "PwaUtils/pbarpStates.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -293,6 +298,7 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
+
   thePsi2STo2K2PiGamLhPtr->cacheAmplitudes(true);
   MnUserParameters upar;
   thePsi2STo2K2PiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
@@ -306,12 +312,42 @@ int main(int __argc,char *__argv[]){
 
   MPsi2STo2K2PiGamFcn mPsi2STo2K2PiGamFcn(thePsi2STo2K2PiGamLhPtr);
   
+  
+  bool scanMode=theAppParams.scanMode();
+  std::cout << "scanMode: " << scanMode << std::endl;
+  if (scanMode){
+    Info << "Successfully entered Scan Mode" << endmsg;
+    MnScan scan(mPsi2STo2K2PiGamFcn, upar, 1);
+    cout << "Scan parameters: " << scan.Parameters() << endl;
+
+    MnPlot plot;
+    for(unsigned int i = 0; i < upar.VariableParameters(); i++) {
+      cout << "----------------------------------------------------------------------------------" << endl;
+      cout << "Name of current parameter: " << upar.GetName(i) << endl;
+      char streamFile[400];
+      strcpy(streamFile, "scans/");
+      strcat(streamFile, upar.GetName(i).c_str());
+      ofstream scanstream(streamFile, std::ios::out | ios::trunc);
+      std::vector<std::pair<double, double> > xy = scan.Scan(i, 100, 0., 0.);
+      plot(xy);
+      cout << "Scan finished for parameter: " << upar.GetName(i) << endl;
+      for(unsigned int i = 0; i<xy.size(); i++) {
+	scanstream << xy[i].first << "\t" << xy[i].second << endl;
+      } 
+      cout << "----------------------------------------------------------------------------------" << endl;
+    scanstream.close();
+    }
+    std::cout<<scan.Parameters()<<std::endl;
+
+    return 0;
+  }
+
   MnMigrad migrad(mPsi2STo2K2PiGamFcn, upar);
   
   Info <<"start migrad "<< endmsg;
-    FunctionMinimum min = migrad();
+  FunctionMinimum min = migrad();
     
-    if(!min.IsValid()) {
+  if(!min.IsValid()) {
       //try with higher strategy
       Info <<"FM is invalid, try with strategy = 2."<< endmsg;
       MnMigrad migrad2(mPsi2STo2K2PiGamFcn, min.UserState(), MnStrategy(2));

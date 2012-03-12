@@ -127,12 +127,13 @@ int main(){
   
   TString option="mixedsample,pwamc,nodraw,output";
 
-  //TString fileData="./Psi2STo2K2PiGamPWA_data.root"; 
+  TString fileData="/data/sleipnir1/jansch/pwa_data/Psi2STo2K2PiGamPWA_data_2874events.root"; 
   //TString fileData="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_76695events.root";
-  TString fileData="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root";
-  TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_76695events.root";
+  //TString fileData="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root";
+  //TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_76695events.root";
   //TString filePwaMc="./Psi2STo2K2PiGamPWA_pwamc_FitParamHyp9_43791events.root"; 
-
+  //TString fileData="/data/sleipnir1/jansch/pwa_data/Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_739231events.root";
+  TString filePwaMc="/data/sleipnir1/jansch/pwa_data/Psi2STo2K2PiGamPWA_pwamc_FitParamHyp1_739231events.root";
   cout << "--- ENTERING QAMIXEDSAMPLE" << endl;
   //   gROOT->SetStyle("Plain");
   //   gStyle->SetCanvasColor(0);
@@ -329,29 +330,40 @@ void mixed_sample() {
 
   std::vector<int> vec_limit_data;
   //vec_limit_data.push_back(100);
-  //   vec_limit_data.push_back(200);
-  //   vec_limit_data.push_back(500);
+  //vec_limit_data.push_back(200);
+  //vec_limit_data.push_back(500);
   vec_limit_data.push_back(1000);
-  //   vec_limit_data.push_back(2000);
-  //   vec_limit_data.push_back(3000);
-  //   vec_limit_data.push_back(5000);
-  //   vec_limit_data.push_back(7500);
+  //vec_limit_data.push_back(2000);
+  //vec_limit_data.push_back(2874);
+  //vec_limit_data.push_back(3000);
+  //vec_limit_data.push_back(5000);
+  //vec_limit_data.push_back(7500);
   // vec_limit_data.push_back(10000);
   
+  std::vector<int> vec_limit_pwamc;
+  //vec_limit_pwamc.push_back(1000);
+  //vec_limit_pwamc.push_back(2000);
+  //vec_limit_pwamc.push_back(3000);
+  //vec_limit_pwamc.push_back(4000);
+  //vec_limit_pwamc.push_back(5000);
+  vec_limit_pwamc.push_back(7500);
+  vec_limit_pwamc.push_back(10000);
+  vec_limit_pwamc.push_back(15000);
+  vec_limit_pwamc.push_back(20000);
 
   for(unsigned int i = 0; i<vec_limit_data.size(); i++) {
     cout << "Cycle " << i << " will have " << vec_limit_data[i] << " data events." << endl;
   }
 
-  for(unsigned int k = 0; k<vec_limit_data.size(); k++) {
+  for(unsigned int k = 0; k<vec_limit_pwamc.size(); k++) {
 
     //unsigned int limit_data = 2874;   // numOfEntriesData (usually 2874);
-    unsigned int limit_data = vec_limit_data[k];
-    unsigned int limit_pwamc = 1000;  //10*limit_data;  // numOfEntriesPwaMc;
-    string sourcename1 = "Hyp9pwamc";
+    unsigned int limit_data = 1000; // vec_limit_data[k];
+    unsigned int limit_pwamc = vec_limit_pwamc[k]; // 10*limit_data;  // numOfEntriesPwaMc;
+    string sourcename1 = "data";
     string sourcename2 = "Hyp1pwamc";
     unsigned int limit_runs_lower = 1;
-    unsigned int limit_runs_upper = 4; //numOfEntriesPwaMc/limit_pwamc;
+    unsigned int limit_runs_upper = numOfEntriesPwaMc/limit_pwamc;
     unsigned int numberofneighbours = 10;
     std::vector<float> fpullvector;
 
