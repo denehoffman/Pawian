@@ -6,8 +6,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-FitParams2K2PiGam::FitParams2K2PiGam() 
-{
+FitParams2K2PiGam::FitParams2K2PiGam() {
   _statesPtr= boost::shared_ptr<Psi2STo2K2PiGamStates>(new Psi2STo2K2PiGamStates());
   _statesPtr->print(std::cout);
   filljpclsMap();
@@ -342,6 +341,33 @@ int FitParams2K2PiGam::setFitParamValDec(param2K2PiGam& theParamVal, const std::
   return resultCount;
 }
 
+void FitParams2K2PiGam::resetFitParamValDec(param2K2PiGam& theParamVal, std::vector<std::string>& leaveParams){
+  
+  std::vector< boost::shared_ptr<const JPCLS> > currentStates;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >* currentMap=0;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  std::vector<std::string>::const_iterator iterStr;
+ 
+  for (int i=paramEnum2K2PiGam::ChiGam; i<paramEnum2K2PiGam::nAmps; ++i){
+    std::string currentString=paramEnum2K2PiGam::name(i);
+
+    bool found=false;
+    for (iterStr=leaveParams.begin(); iterStr!=leaveParams.end(); ++iterStr){
+    
+      if ( currentString==(*iterStr) ) found=true;
+    }
+
+    if (found) continue;  
+    
+    currentStates = _jpclsMap[i];
+    currentMap = &ampMap(theParamVal, i);
+    for ( itJPCLS=currentStates.begin(); itJPCLS!=currentStates.end(); ++itJPCLS){ 
+      std::pair <double,double> tmpParameter=make_pair(0.,0.);
+      (*currentMap)[(*itJPCLS)]=tmpParameter;
+    }
+  }
+}
 
 int FitParams2K2PiGam::setFitParamValMass(param2K2PiGam& theParamVal, const std::vector<double>& par, int counter, unsigned int index){
 
