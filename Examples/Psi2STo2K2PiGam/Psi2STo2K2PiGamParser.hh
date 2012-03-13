@@ -96,6 +96,7 @@ class Psi2STo2K2PiGamParser
   const bool generatorMode() const {return _genMode;}
   const bool scanMode() const {return _scanMode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
+  const std::vector<std::string>& scanParams() const { return _mnParScan; }  
 protected:
   bool parseCommandLine(int argc,char **argv);
 
@@ -112,6 +113,7 @@ protected:
   bool _scanMode;
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
+  std::vector<std::string> _mnParScan;
 };
 
 #endif /* Psi2STo2K2PiGamParser_HH */

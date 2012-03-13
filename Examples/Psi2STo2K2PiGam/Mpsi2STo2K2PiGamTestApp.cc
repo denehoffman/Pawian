@@ -89,18 +89,19 @@ int main(int __argc,char *__argv[]){
 
   clock_t start, end;
   start= clock();
-
+  
   // Parse the command line
   static Psi2STo2K2PiGamParser theAppParams(__argc, __argv);
-
-   // Set the desired error logging mode
+  
+  // Set the desired error logging mode
   setErrLogMode(theAppParams.getErrLogMode());
-
+  
+  // Set the Config File 
   std::string theCfgFile = theAppParams.getConfigFile();
   Info << "The path to config file is " << theCfgFile << "\n" << endmsg;    
 
+  // Set the Fit Parameter file
   std::string paramStreamerPath=theAppParams.fitParamFile();
-
   Stream2K2PiGamFitParms theParamStreamer(paramStreamerPath);
   param2K2PiGam theStartparams=theParamStreamer.getFitParamVal();
   param2K2PiGam theErrorparams=theParamStreamer.getFitParamErr();
@@ -110,6 +111,7 @@ int main(int __argc,char *__argv[]){
   EventList eventsData;
   EventList eventsMc;
 
+  // Parsing events from data and mc file (if genMode = false)
   if (!genMode){
     const std::string datFile=theAppParams.dataFile();
     const std::string mcFile=theAppParams.mcFile();
@@ -148,8 +150,8 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<const Psi2STo2K2PiGamEvtList> thePsi2STo2K2PiGamEvtListPtr(new Psi2STo2K2PiGamEvtList(eventsData, eventsMc));
 
 
+  // Get enableHyp entries from Config File and disabling all hypotheses by default
   const std::vector<std::string> enabledHyps=theAppParams.enabledHyps();
-
   std::map<const std::string, bool> hypMap;
   hypMap["K1_1270Hyp"]=false;
   hypMap["K1_1400Hyp"]=false;
@@ -227,11 +229,12 @@ int main(int __argc,char *__argv[]){
   hypMap["K_2_1770ToK_2_1430PiHyp9"]=false;
   hypMap["Pi1800ToKappaKHyp9"]=false;
   hypMap["K_2_1820ToK_2_1430PiHyp9"]=false;
-
+  
   std::vector<std::string>::const_iterator itStr;
- 
+  
+
+  // Enabling hypotheses due to enableHyp entries in Config File
   for (itStr=enabledHyps.begin(); itStr!=enabledHyps.end(); ++itStr){
-    
     std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
     if (iter !=hypMap.end()){
       hypMap[iter->first]= true;
@@ -245,6 +248,8 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr(new Psi2STo2K2PiGamStates());
   boost::shared_ptr<AbsPsi2STo2K2PiGamLh> thePsi2STo2K2PiGamLhPtr;
 
+
+  // Choosing the hypothesis to start with
   std::string startWithHyp=theAppParams.startHypo();
   if (startWithHyp=="prod") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new HypProdLh(thePsi2STo2K2PiGamEvtListPtr, theStatesPtr));
   else if (startWithHyp=="hyp1") thePsi2STo2K2PiGamLhPtr= boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(new Hyp1Lh(thePsi2STo2K2PiGamEvtListPtr, hypMap, theStatesPtr));
@@ -261,7 +266,7 @@ int main(int __argc,char *__argv[]){
   }
 
 
-
+  // Generate Monte Carlo events on basis of phase-space distributed Monte Carlo events and a given parameter set
   if (genMode){
     const std::string hepMCinFile=theAppParams.hepMCinFile();
     const std::string addSuffix="f";
@@ -282,9 +287,10 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
+
+  // QA Mode to check the results with given start parameters _without_ minimizing
   bool qaMode=theAppParams.qaMode();
   std::cout << "qaMode: " << qaMode << std::endl;
-
   if (qaMode){
     thePsi2STo2K2PiGamLhPtr->printCurrentFitResult(theStartparams);
     double theLh=thePsi2STo2K2PiGamLhPtr->calcLogLh(theStartparams);
@@ -303,86 +309,101 @@ int main(int __argc,char *__argv[]){
   MnUserParameters upar;
   thePsi2STo2K2PiGamLhPtr->setMnUsrParams(upar, theStartparams, theErrorparams);
 
-  const std::vector<std::string> fixedParams=theAppParams.fixedParams();
 
+  // Fixing parameters due to mnParFix entries in Config File
+  const std::vector<std::string> fixedParams=theAppParams.fixedParams();
   std::vector<std::string>::const_iterator itFix;
   for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
     upar.Fix( (*itFix) );
   }
 
+
+  // Creating function to be minimized
   MPsi2STo2K2PiGamFcn mPsi2STo2K2PiGamFcn(thePsi2STo2K2PiGamLhPtr);
-  
-  
+
+
+  // Scan Mode (varying one parameter with all others being fixed; x=paramValue, y=logLh)
+  //   be sure to have a directory "scans/" for dumping the result files.  
   bool scanMode=theAppParams.scanMode();
   std::cout << "scanMode: " << scanMode << std::endl;
   if (scanMode){
-    Info << "Successfully entered Scan Mode" << endmsg;
+    const std::vector<std::string> scanParams=theAppParams.scanParams();
+    std::vector<std::string>::const_iterator itScan;
+    std::vector<unsigned int> scanList;
+    for (itScan=scanParams.begin(); itScan!=scanParams.end(); ++itScan){
+      scanList.push_back(upar.Index(*itScan));
+    }
+  
     MnScan scan(mPsi2STo2K2PiGamFcn, upar, 1);
     cout << "Scan parameters: " << scan.Parameters() << endl;
 
     MnPlot plot;
-    for(unsigned int i = 0; i < upar.VariableParameters(); i++) {
-      cout << "----------------------------------------------------------------------------------" << endl;
-      cout << "Name of current parameter: " << upar.GetName(i) << endl;
+    for(unsigned int i = 0; i < scanList.size(); i++) {
+      cout << "Name of current parameter: " << upar.GetName(scanList[i]) << endl;
       char streamFile[400];
       strcpy(streamFile, "scans/");
-      strcat(streamFile, upar.GetName(i).c_str());
+      strcat(streamFile, upar.GetName(scanList[i]).c_str());
       ofstream scanstream(streamFile, std::ios::out | ios::trunc);
-      std::vector<std::pair<double, double> > xy = scan.Scan(i, 100, 0., 0.);
+      std::vector<std::pair<double, double> > xy = scan.Scan(scanList[i], 100, 0., 0.);
       plot(xy);
-      cout << "Scan finished for parameter: " << upar.GetName(i) << endl;
+      cout << "Scan finished for parameter: " << upar.GetName(scanList[i]) << endl;
       for(unsigned int i = 0; i<xy.size(); i++) {
 	scanstream << xy[i].first << "\t" << xy[i].second << endl;
       } 
-      cout << "----------------------------------------------------------------------------------" << endl;
-    scanstream.close();
+      scanstream.close();
     }
     std::cout<<scan.Parameters()<<std::endl;
-
     return 0;
   }
 
-  MnMigrad migrad(mPsi2STo2K2PiGamFcn, upar);
   
+  // Calling Minimizer
+  MnMigrad migrad(mPsi2STo2K2PiGamFcn, upar);
   Info <<"start migrad "<< endmsg;
   FunctionMinimum min = migrad();
-    
+  
+
+  // Try another minimization method if no valid FunctionMinimum found 
   if(!min.IsValid()) {
-      //try with higher strategy
       Info <<"FM is invalid, try with strategy = 2."<< endmsg;
       MnMigrad migrad2(mPsi2STo2K2PiGamFcn, min.UserState(), MnStrategy(2));
       min = migrad2();
-    }
-    
-    MnUserParameters finalUsrParameters=min.UserParameters();
-    const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    
-    param2K2PiGam finalFitParams;
-    thePsi2STo2K2PiGamLhPtr->setFitParamVal(finalFitParams, finalParamVec);
+  }
+  
+  // Retrieving fit results from minimizer
+  MnUserParameters finalUsrParameters=min.UserParameters();
+  const std::vector<double> finalParamVec=finalUsrParameters.Params();
+  param2K2PiGam finalFitParams;
+  thePsi2STo2K2PiGamLhPtr->setFitParamVal(finalFitParams, finalParamVec);
 
-    thePsi2STo2K2PiGamLhPtr->cacheAmplitudes(false);    
-    Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, finalFitParams);
+  thePsi2STo2K2PiGamLhPtr->cacheAmplitudes(false);
 
-    thePsi2STo2K2PiGamLhPtr->printCurrentFitResult(finalFitParams);
-    double theLh=thePsi2STo2K2PiGamLhPtr->calcLogLh(finalFitParams);
-    Info <<"theLh = "<< theLh << endmsg;
-    
-    // print final fit result
-    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    
-    
-    param2K2PiGam finalErrParams;
-    thePsi2STo2K2PiGamLhPtr->setFitParamVal(finalErrParams, finalParamErrorVec);
-    
-    std::ofstream theStream ( "finalResult.dat");
-    std::string theSuffix="Val"; 
-    thePsi2STo2K2PiGamLhPtr->dumpCurrentResult(theStream, finalFitParams, theSuffix);
-    theSuffix="Err"; 
-    thePsi2STo2K2PiGamLhPtr->dumpCurrentResult(theStream, finalErrParams, theSuffix);
 
-    end= clock();
-    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+  // Creating histograms and NTuples with final results
+  Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, finalFitParams);
+
+
+  // Print final fit result and logLh
+  thePsi2STo2K2PiGamLhPtr->printCurrentFitResult(finalFitParams);
+  double theLh=thePsi2STo2K2PiGamLhPtr->calcLogLh(finalFitParams);
+  Info <<"theLh = "<< theLh << endmsg;
+
+  
+  // Dumping final fit result to file
+  const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+  param2K2PiGam finalErrParams;
+  thePsi2STo2K2PiGamLhPtr->setFitParamVal(finalErrParams, finalParamErrorVec);
+  std::ofstream theStream ( "finalResult.dat");
+  std::string theSuffix="Val"; 
+  thePsi2STo2K2PiGamLhPtr->dumpCurrentResult(theStream, finalFitParams, theSuffix);
+  theSuffix="Err"; 
+  thePsi2STo2K2PiGamLhPtr->dumpCurrentResult(theStream, finalErrParams, theSuffix);
+ 
+
+  // Printing CPU time
+  end= clock();
+  double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+  Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
   return 0;
 }
 

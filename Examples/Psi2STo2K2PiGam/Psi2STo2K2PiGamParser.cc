@@ -49,6 +49,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
     config.add_options()
       ("verbose",po::value<bool>(&verbose)->default_value(true), "Determines whether additional information should be emitted")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
+      ("mnParScan",po::value< vector<string> >(&_mnParScan),  "scan these minuit parameters by scanMode")
       ;
 
     po::options_description cmdline_options;
@@ -74,7 +75,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
     if(!ifs.good()) 
     {
       stringstream strError;
-      strError << "Error accessing configuratiocommonn file " << _configFile;
+      strError << "Error accessing configuration common file " << _configFile;
       std::cout << cmdline_options << endl;
 
       throw runtime_error(strError.str());
@@ -130,6 +131,11 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
 	std::cout << "minuit parameter\t" << (*it) << "\t fixed\n";
       }
       std::cout << std::endl;
+
+      for (it=_mnParScan.begin(); it!=_mnParScan.end();++it){
+	std::cout << "minuit parameter\t" << (*it) << "\t inserted in scan-list\n";
+      }
+      std::cout << std::endl;
     }
   }  
 
@@ -143,7 +149,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
     return false;
   }
   catch(...){
-      std::cerr << "Error parsing the command line. Use -h or --help to see the description of the program paramters." << endl;
+      std::cerr << "Error parsing the command line. Use -h or --help to see the description of the program parameters." << endl;
       return false;
   }
 
