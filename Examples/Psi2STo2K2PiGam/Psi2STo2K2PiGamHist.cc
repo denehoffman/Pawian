@@ -128,6 +128,8 @@ Psi2STo2K2PiGamHist::~Psi2STo2K2PiGamHist()
   TH1F* cosPsiFittedHist=_hist1DMap[cosPsiString];
   double integralFitted=cosPsiFittedHist->Integral();
 
+  cout << "integralFitted = " << integralFitted << endl;
+
   if (integralFitted>0.){ //scale now
     Info <<"No of fit events " << integralFitted << endmsg; 
     

@@ -79,6 +79,7 @@ class Psi2STo2K2PiGamParser
       , _qaMode(false)
       , _genMode(false)
       , _scanMode(false)
+      , _branchingRatioMode(false)
     {
 //     _disabledHyps.push_back("blainit");
     if (!parseCommandLine(argc, argv)) throw false;
@@ -95,8 +96,10 @@ class Psi2STo2K2PiGamParser
   const bool qaMode() const {return _qaMode;}
   const bool generatorMode() const {return _genMode;}
   const bool scanMode() const {return _scanMode;}
+  const bool branchingRatioMode() const {return _branchingRatioMode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
   const std::vector<std::string>& scanParams() const { return _mnParScan; }  
+  const std::vector<std::string>& brParams() const { return _mnParCalcBR; }  
 protected:
   bool parseCommandLine(int argc,char **argv);
 
@@ -110,10 +113,12 @@ protected:
   std::string _startHypo;
   bool _qaMode;	
   bool _genMode;
-  bool _scanMode;
+  bool _scanMode;  
+  bool _branchingRatioMode;
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
   std::vector<std::string> _mnParScan;
+  std::vector<std::string> _mnParCalcBR;
 };
 
 #endif /* Psi2STo2K2PiGamParser_HH */

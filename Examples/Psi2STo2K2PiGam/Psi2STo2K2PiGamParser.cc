@@ -43,6 +43,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
       ("qaMode",po::value<bool>(&_qaMode), "enable/diable QA mode")
       ("genMode",po::value<bool>(&_genMode), "enable/disable event generator mode")
       ("scanMode",po::value<bool>(&_scanMode), "enable/disable scan mode")
+      ("branchingRatioMode",po::value<bool>(&_branchingRatioMode), "enable/disable branching ratio mode")
       ;
 
     po::options_description config("Configuration file options");
@@ -50,6 +51,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
       ("verbose",po::value<bool>(&verbose)->default_value(true), "Determines whether additional information should be emitted")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
       ("mnParScan",po::value< vector<string> >(&_mnParScan),  "scan these minuit parameters by scanMode")
+      ("mnParCalcBR",po::value< vector<string> >(&_mnParCalcBR),  "calculate branching ratio for these parameters")
       ;
 
     po::options_description cmdline_options;
@@ -116,6 +118,7 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
 		<< "qaMode: " << _qaMode << "\n\n"
 		<< "genMode: " << _genMode << "\n\n"
 		<< "scanMode: " << _scanMode << "\n\n"
+		<< "branching ratio mode: " << _branchingRatioMode << "\n\n"
 	    << endl;
 
 
@@ -132,10 +135,18 @@ bool Psi2STo2K2PiGamParser::parseCommandLine(int argc, char **argv)
       }
       std::cout << std::endl;
 
+
       for (it=_mnParScan.begin(); it!=_mnParScan.end();++it){
 	std::cout << "minuit parameter\t" << (*it) << "\t inserted in scan-list\n";
       }
       std::cout << std::endl;
+
+
+      for (it=_mnParCalcBR.begin(); it!=_mnParCalcBR.end();++it){
+	std::cout << "minuit parameter\t" << (*it) << "\t inserted in branching ratio list\n";
+      }
+      std::cout << std::endl;
+
     }
   }  
 

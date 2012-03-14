@@ -263,6 +263,7 @@ public:
 
   int setFitParamValDec(param2K2PiGam& theParamVal, const std::vector<double>& par, int counter, unsigned int index);
   void resetFitParamValDec(param2K2PiGam& theParamVal, std::vector<std::string>& leaveParams);
+  void resetPhasespace(param2K2PiGam& theParamVal);
   int setFitParamValMass(param2K2PiGam& theParamVal, const std::vector<double>& par, int counter, unsigned int index);
   int setFitParamFlatteMass(param2K2PiGam& theParamVal, const std::vector<double>& par, int counter, std::string key);
   void setMnUsrParamsDec(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal, unsigned int index);

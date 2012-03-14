@@ -352,22 +352,32 @@ void FitParams2K2PiGam::resetFitParamValDec(param2K2PiGam& theParamVal, std::vec
   for (int i=paramEnum2K2PiGam::ChiGam; i<paramEnum2K2PiGam::nAmps; ++i){
     std::string currentString=paramEnum2K2PiGam::name(i);
 
-    bool found=false;
-    for (iterStr=leaveParams.begin(); iterStr!=leaveParams.end(); ++iterStr){
-    
-      if ( currentString==(*iterStr) ) found=true;
-    }
-
-    if (found) continue;  
-    
     currentStates = _jpclsMap[i];
     currentMap = &ampMap(theParamVal, i);
     for ( itJPCLS=currentStates.begin(); itJPCLS!=currentStates.end(); ++itJPCLS){ 
-      std::pair <double,double> tmpParameter=make_pair(0.,0.);
-      (*currentMap)[(*itJPCLS)]=tmpParameter;
+
+      bool found=false;
+      for (iterStr=leaveParams.begin(); iterStr!=leaveParams.end(); ++iterStr){
+	std::string tmpStr=(*itJPCLS)->name()+currentString;
+	if ( tmpStr==(*iterStr) ) found=true;
+      }
+      
+      if(!found) {
+	std::pair <double,double> tmpParameter=make_pair(0.,0.);
+	(*currentMap)[(*itJPCLS)]=tmpParameter;
+      }
     }
   }
 }
+
+
+void FitParams2K2PiGam::resetPhasespace(param2K2PiGam& theParamVal){
+
+  theParamVal.phaseSpace = 0;  
+
+}
+
+
 
 int FitParams2K2PiGam::setFitParamValMass(param2K2PiGam& theParamVal, const std::vector<double>& par, int counter, unsigned int index){
 

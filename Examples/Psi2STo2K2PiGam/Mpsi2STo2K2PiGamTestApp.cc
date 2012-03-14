@@ -29,7 +29,7 @@
 #include "Examples/Psi2STo2K2PiGam/Stream2K2PiGamFitParms.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtGenConverter.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamHitAndMiss.hh"
-
+#include "Examples/Psi2STo2K2PiGam/FitParams2K2PiGam.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -301,6 +301,40 @@ int main(int __argc,char *__argv[]){
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+    return 0;
+  }
+
+
+  // Branching Ratio Mode (setting all but a few parameters to zero)
+  bool brMode=theAppParams.branchingRatioMode();
+  std::cout << "brMode: " << brMode << std::endl;
+  if (brMode){
+    // Fetching Parameters from Config File which are NOT set to zero.
+    std::vector<std::string> brParams=theAppParams.brParams();
+    
+    // Which parameters are to be left untouched?
+    for(unsigned int i = 0; i < brParams.size(); i++){
+      cout << "Leave parameter " << brParams[i] << " untouched." << endl;
+    }
+
+    FitParams2K2PiGam theFitParams(theStatesPtr);
+    // Set all other parameters to zero
+    theFitParams.resetFitParamValDec(theStartparams, brParams);
+    theFitParams.resetPhasespace(theStartparams);
+
+    // Calc the logLh for the manipulated set of parameters
+    thePsi2STo2K2PiGamLhPtr->printCurrentFitResult(theStartparams);
+    double theLh=thePsi2STo2K2PiGamLhPtr->calcLogLh(theStartparams);
+    Info << "theLh = " << theLh << endmsg;
+    
+    // Fill histograms and NTuples
+    Psi2STo2K2PiGamHist Psi2STo2K2PiGamHist(thePsi2STo2K2PiGamLhPtr, theStartparams);
+    
+    cout << "Results with all parameters zero, but left the following " << brParams.size() << " parameters untouched: " << endl;
+    for(unsigned int i = 0; i < brParams.size(); i++){
+      cout  << "\t\t" << brParams[i] << endl;
+    }
+    cout << endl;
     return 0;
   }
 
