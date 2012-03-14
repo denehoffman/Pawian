@@ -13,7 +13,7 @@
 using namespace ROOT::Minuit2;
 
 MPsi2STo2K2PiGamFcn::MPsi2STo2K2PiGamFcn(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> psi2STo2K2PiGamLh) :
-  _psi2STo2K2PiGamLhPtr(psi2STo2K2PiGamLh),
+  _psi2STo2K2PiGamLhPtr(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>(psi2STo2K2PiGamLh->clone_())),
   _fcnCounter(0)
 {
    if (0==_psi2STo2K2PiGamLhPtr) { Alert << "AbsPsi2STo2K2PiGamLh* _psi2STo2K2PiGamLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
