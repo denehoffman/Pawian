@@ -209,7 +209,7 @@ void JpsiGamKsKlKKHist::fill(){
 
   
   double iEta(0.), iEtaErr(0.), iF0(0.), iF0Err(0.), iEta2(0.), iEta2Err(0.), iF1(0.), iF1Err(0.), iF2(0.), iF2Err(0.);
-  
+  double etaReal(0.), etaImg(0.);
   
   it=mcList.begin();
   while(it!=mcList.end()){
@@ -235,6 +235,9 @@ void JpsiGamKsKlKKHist::fill(){
     iEta2+= intensityEvent.first*scaleFactor;
     iEta2Err += intensityEvent.second*scaleFactor;
     
+
+
+    
     it++;
   }
   double meanMassRange = _massRange.first + 0.5*(_massRange.second-_massRange.first);
@@ -246,9 +249,18 @@ void JpsiGamKsKlKKHist::fill(){
   Info << "Events for component f2:   " << iF2 << " +/- " << iF2Err ;
   Info << "Events for component eta2: " << iEta2 << " +/- " << iEta2Err ;
   
-
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEtacGamPhi=_fitParam.Phis[paramEnumJpsiGamKsKlKK::PsiToEtacGamma];
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEtacGamMag=_fitParam.Mags[paramEnumJpsiGamKsKlKK::PsiToEtacGamma];
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator phiIter = PsiToEtacGamPhi.begin();
+  for(; phiIter!=PsiToEtacGamPhi.end(); phiIter++){
+    double thePhase = phiIter->second;
+    double theMag = PsiToEtacGamMag[phiIter->first];
+    
+    etaImg = theMag*cos(thePhase) ;
+    etaReal = theMag*sin(thePhase);
+  }
   
-  _massIndepTuple->Fill(meanMassRange, iEta, iEtaErr, iF0, iF0Err, iF1, iF1Err, iF2, iF2Err, iEta2, iEta2Err );
+  _massIndepTuple->Fill(meanMassRange, iEta, iEtaErr, iF0, iF0Err, iF1, iF1Err, iF2, iF2Err, iEta2, iEta2Err, etaImg, etaReal );
   
 }
 
@@ -329,7 +341,7 @@ void JpsiGamKsKlKKHist::initRootStuff()
    _dataTuple=new TNtuple("_dataTuple", "data ntuple", tupleVariables.data());
    _mcTuple=new TNtuple("_mcTuple", "mc ntuple", tupleVariables.data());
 
-   _massIndepTuple = new TNtuple("_massIndepTuple","results from mass indep. fits", ("mass:eta:etaErr:f0:f0Err:f1:f1Err:f2:f2Err:eta2:eta2Err")   );
+   _massIndepTuple = new TNtuple("_massIndepTuple","results from mass indep. fits", ("mass:eta:etaErr:f0:f0Err:f1:f1Err:f2:f2Err:eta2:eta2Err:etaReal:etaImg")   );
 }
 
 void JpsiGamKsKlKKHist::plotDalitz(TH2F* theHisto,  EvtData* theData, double weight)
