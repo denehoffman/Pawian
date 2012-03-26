@@ -266,10 +266,20 @@ int main(int __argc,char *__argv[]){
     upar.Fix( (*itFix) );
   }
   
-  //MnScan theScan(theFcn, upar);
-  //theScan();
-  //cout << upar << endl;
-
+  
+  bool prescan=false;
+  if(prescan){
+    upar.Fix(0);
+    MnScan theScan(theFcn, upar);
+    FunctionMinimum smin = theScan();
+    MnUserParameterState sState = smin.UserState();
+    cout << "After scan" << endl;
+    cout << sState << endl;
+    
+    upar = smin.UserParameters();
+    upar.Release(0);
+  }
+  
   MnMigrad migrad(theFcn, upar);  
   Info <<"start migrad "<< endmsg;
   FunctionMinimum min = migrad();
@@ -321,7 +331,8 @@ int main(int __argc,char *__argv[]){
    
    //std::ofstream theCompStream ( "componentIntensity.dat");
    //theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
-   JpsiGamKsKlKKHist theHist(theProdLh, theStartparams, &theErrMatrix);
+   JpsiGamKsKlKKHist theHist(theProdLh, finalFitParams, &theErrMatrix);
+   theHist.setMassRange(theAppParams.massRange() );
    theHist.fill();
    
    return 0;

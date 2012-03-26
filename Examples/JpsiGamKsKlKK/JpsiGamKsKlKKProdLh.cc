@@ -231,8 +231,18 @@ complex<double> JpsiGamKsKlKKProdLh::f0ToPhiPhiTo4KAmp(EvtData* theData,
      complex<double> tmp2PhiDecAmp(0.,0.);
      for (Spin lambdaPhi1=-1; lambdaPhi1<=1; lambdaPhi1++){
        Spin lambdaPhi2=lambdaPhi1;
+       
+       //debug amplitude //
+       //remove later
+       //if(abs(lambdaPhi1)!=1)continue;
+       //if(lambdaPhi1!=0) continue;
+       //end of debeug
+        
+       
        tmp2PhiDecAmp+=Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, f0ToPhiPhiState->S, lambdaPhi1-lambdaPhi2)
-	 *3.*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KsKl][1][lambdaPhi1][0])*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KpKm][1][lambdaPhi2][0]); //3=sqrt(2L+1)*sqrt(2L+1) Cls=1    
+	 *Clebsch(f0ToPhiPhiState->L, 0, f0ToPhiPhiState->S, 0, 0, 0)
+	 *3.*conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KsKl][1][lambdaPhi1][0])
+	 *conj(theData->WignerDs[enumJpsiGamKsKlKKData::Df_KpKm][1][lambdaPhi2][0]); //3=sqrt(2L+1)*sqrt(2L+1) Cls=1    
      }
      
      if(dynModPars.dynamicModel==dynamicModelParams::BreitWignerBlattW){
@@ -265,6 +275,8 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, Spin fJ
   double theCommonPhasePhi=999.;
   bool setCommonPhase=false;
   
+  //cout << "f2 production for Minit=" << Minit << " and Mgamma=" << Mgamma << endl;
+  
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itPsi;
   for ( itPsi=ampf2ProdMag.begin(); itPsi!=ampf2ProdMag.end(); ++itPsi){
     boost::shared_ptr<const JPCLS> PsiState=itPsi->first;
@@ -282,9 +294,18 @@ complex<double> JpsiGamKsKlKKProdLh::f2GammaAmp(Spin Minit, Spin Mgamma, Spin fJ
     
     complex<double> expiphiPsi(cos(thePsiPhi), sin(thePsiPhi));
     
+    
     for(Spin f2Lambda=-fJSpin;f2Lambda<=fJSpin; f2Lambda++){
       Spin lambda = f2Lambda-Mgamma;
       if( fabs(lambda)>PsiState->J || fabs(lambda)>PsiState->S) continue;
+            
+//       //print oput amplitude coefficiencts
+//       if(fabs(Clebsch(PsiState->L, 0, PsiState->S, lambda, PsiState->J, lambda))>1e-8 && 
+// 	 fabs(Clebsch(fJSpin, f2Lambda, 1, -Mgamma, PsiState->S, lambda  )>1e-8)){
+// 	cout << "f2 lambda " << f2Lambda << endl;
+// 	PsiState->print(cout);
+// 	cout << endl;
+//       }
       
       complex<double> amp = thePsiMag*expiphiPsi*sqrt(2*PsiState->L+1)
 	*Clebsch(PsiState->L, 0, PsiState->S, lambda, PsiState->J, lambda)
@@ -306,6 +327,9 @@ complex<double> JpsiGamKsKlKKProdLh::f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f
 							std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecMag , 
 							std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > &ampf2DecPhi,
 							dynamicModelParams& dynModPars  ){
+  
+
+  //cout << "f2 decay amplitude for lam_f2: " << f2Lambda << endl;
   
   complex<double> result(0.,0.);
   
@@ -333,6 +357,14 @@ complex<double> JpsiGamKsKlKKProdLh::f2ToPhiPhiTo4KAmp( EvtData* theData, Spin f
 	  *Clebsch(f2State->L, 0, f2State->S, lambda, f2State->J, lambda)
 	  *Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, f2State->S, lambda  )
 	  *conj( theData->WignerDs[enumJpsiGamKsKlKKData::Df_Spin2][f2State->J][f2Lambda][lambda]  );
+	
+
+	// if(fabs(Clebsch(f2State->L, 0, f2State->S, lambda, f2State->J, lambda))>1e-8 
+// 	   && fabs(Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, f2State->S, lambda  )>1-8)){
+// 	  cout << "lam_phi1 = " << lambdaPhi1 << " " << "lam_phi2 = " << lambdaPhi2 << endl;
+// 	  f2State->print(cout); cout << endl;
+// 	}
+	
 	
 	if(dynModPars.dynamicModel==dynamicModelParams::BreitWignerBlattW){
 	  dynamicPart=BreitWignerBlattW(fv2Phi, _phiMass, _phiMass,  dynModPars.mass, dynModPars.width, f2State->L );
@@ -440,10 +472,9 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
   
   
   
-  
   std::map<int, std::vector< boost::shared_ptr<const JPCLS> > >::iterator itAmpMap;
   for (itAmpMap=theAmpMap.begin(); itAmpMap!=theAmpMap.end(); ++itAmpMap){
-
+    
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valMagMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > errMagMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > valPhiMap;
@@ -451,10 +482,10 @@ void JpsiGamKsKlKKProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr)
     
     std::vector< boost::shared_ptr<const JPCLS> >::iterator itAmp;
     for (itAmp=itAmpMap->second.begin(); itAmp!=itAmpMap->second.end(); ++itAmp){
-      valMagMap[(*itAmp)]=0.6;
-      errMagMap[(*itAmp)]=0.3; 
-      valPhiMap[(*itAmp)]=0.;
-      errPhiMap[(*itAmp)]=0.2;      
+      valMagMap[(*itAmp)]=0.0;
+      errMagMap[(*itAmp)]=0.9; 
+      valPhiMap[(*itAmp)]=0.0;
+      errPhiMap[(*itAmp)]=0.8;      
     }
     
     fitVal.Mags[itAmpMap->first]=valMagMap;
@@ -995,6 +1026,8 @@ void JpsiGamKsKlKKProdLh::calcAmpError( EvtData* theData, fitParams& theParamVal
       boost::shared_ptr<const JPCLS> theState=it->first;
       newParamsPlus.Mags[*ampIter][theState]=theParamVal.Mags[*ampIter][theState]+epsilon;
       newParamsMinus.Mags[*ampIter][theState]=theParamVal.Mags[*ampIter][theState]-epsilon;
+      fitParams newParamsPhiPlus = theParamVal;
+      fitParams newParamsPhiMinus = theParamVal;
       
       complex<double> JmpGmp(0.0,0.0);
       complex<double> JmpGmm(0.0,0.0);
@@ -1015,15 +1048,43 @@ void JpsiGamKsKlKKProdLh::calcAmpError( EvtData* theData, fitParams& theParamVal
       derivatives.push_back((resultPlus-resultMinus)/(2*epsilon));
       static FitParamIndex theParamIndex(theParamVal);
       parameterIndices.push_back( theParamIndex.Mag(*ampIter, theState ) );
+    
+
+     
+   
+      newParamsPhiPlus.Phis[*ampIter][theState]=theParamVal.Phis[*ampIter][theState]+epsilon;
+      newParamsPhiMinus.Phis[*ampIter][theState]=theParamVal.Phis[*ampIter][theState]-epsilon;
+      
+      JmpGmp = complex<double>(0.0,0.0);
+      JmpGmm =  complex<double>(0.0,0.0);
+      JmmGmp =  complex<double>(0.0,0.0);
+      JmmGmm =  complex<double>(0.0,0.0);
+      
+      calcAmp( theData, newParamsPhiPlus, JmpGmp,JmpGmm, JmmGmp,JmmGmm,dynamicModelParams::MassIndependent  );
+      resultPlus=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      
+      JmpGmp = complex<double>(0.0,0.0);
+      JmpGmm =  complex<double>(0.0,0.0);
+      JmmGmp =  complex<double>(0.0,0.0);
+      JmmGmm =  complex<double>(0.0,0.0);
+      
+      calcAmp( theData, newParamsPhiMinus, JmpGmp,JmpGmm, JmmGmp,JmmGmm,dynamicModelParams::MassIndependent  );
+      resultMinus=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
+      
+      derivatives.push_back((resultPlus-resultMinus)/(2*epsilon));
+      parameterIndices.push_back( theParamIndex.Phi(*ampIter, theState ) );
+      
     }
     
     int elements = derivatives.size();
     for(int i=0; i<elements; i++){
-      for(int j=i;j<elements;j++){
+      for(int j=0;j<elements;j++){
 	if(i==j){
 	  error+=derivatives[i]*derivatives[j]*theErrMatrix(parameterIndices[i],parameterIndices[j] );
+	  //cout << "Error for : " << i << " " << j << " " << derivatives[i]*derivatives[j]*theErrMatrix(parameterIndices[i],parameterIndices[j] ) << endl;
 	}else{
 	  error+=derivatives[i]*derivatives[j]*theErrMatrix(parameterIndices[i],parameterIndices[j] );
+	  //cout << "Error for : " << i << " " << j << " "  << derivatives[i]*derivatives[j]*theErrMatrix(parameterIndices[i],parameterIndices[j] ) << endl;
 	}
       }
     }
