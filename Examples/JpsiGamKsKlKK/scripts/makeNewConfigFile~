@@ -1,0 +1,10 @@
+#$MYPACKAGE/bin/gcc-4.1.2/release/link-static/MJpsiGamKlKsKKApp -c MassIndep.cfg --mode dumpDefaultParams
+
+#cp defaultparams.dat startParams.dat
+
+set list = `grep enableHyp MassIndep.cfg|awk '{print $3}'| sed -e 's/Hyp//'`
+
+foreach hypo ( $list )
+ grep -i $hypo startParams.dat | grep -v Gam | grep J | sort | awk '{print "mnParFix = "$1}'
+end
+
