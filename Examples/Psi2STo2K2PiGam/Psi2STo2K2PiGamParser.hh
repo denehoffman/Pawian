@@ -78,6 +78,8 @@ class Psi2STo2K2PiGamParser
       , _startHypo("hyp8")
       , _qaMode(false)
       , _genMode(false)
+      , _scanMode(false)
+      , _branchingRatioMode(false)
     {
 //     _disabledHyps.push_back("blainit");
     if (!parseCommandLine(argc, argv)) throw false;
@@ -89,11 +91,15 @@ class Psi2STo2K2PiGamParser
   const std::string mcFile() const {return _mcFile;}
   const std::string hepMCinFile() const {return _hepMCinFile;}
   const std::string fitParamFile() const {return _paramFile;}
-  const std::vector<std::string>& disabledHyps() const { return _disabledHyps; }
+  const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const bool qaMode() const {return _qaMode;}
   const bool generatorMode() const {return _genMode;}
+  const bool scanMode() const {return _scanMode;}
+  const bool branchingRatioMode() const {return _branchingRatioMode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }    
+  const std::vector<std::string>& scanParams() const { return _mnParScan; }  
+  const std::vector<std::string>& brParams() const { return _mnParCalcBR; }  
 protected:
   bool parseCommandLine(int argc,char **argv);
 
@@ -106,9 +112,13 @@ protected:
   std::string _paramFile;
   std::string _startHypo;
   bool _qaMode;	
-  bool _genMode;	  
-  std::vector<std::string> _disabledHyps;
+  bool _genMode;
+  bool _scanMode;  
+  bool _branchingRatioMode;
+  std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
+  std::vector<std::string> _mnParScan;
+  std::vector<std::string> _mnParCalcBR;
 };
 
 #endif /* Psi2STo2K2PiGamParser_HH */

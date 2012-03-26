@@ -30,14 +30,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  HypProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
-  HypProdLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>);
+  HypProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr);
+  HypProdLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr);
 
   /** Destructor */
   virtual ~HypProdLh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new HypProdLh(_Psi2STo2K2PiGamEvtListPtr);
+  virtual AbsPsi2STo2K2PiGamLh* clone_(){
+    return new HypProdLh(_Psi2STo2K2PiGamEvtListPtr, _fitParams2K2PiGam.states());
   }
 
 
@@ -54,7 +54,7 @@ public:
 protected:
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
-
+  virtual bool equalChic0DecParams();
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;

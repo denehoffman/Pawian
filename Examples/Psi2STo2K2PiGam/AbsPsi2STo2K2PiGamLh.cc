@@ -8,28 +8,47 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList) :
-  _Psi2STo2K2PiGamEvtListPtr(theEvtList),
-  _fitParams2K2PiGam()
+AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps) :
+  _Psi2STo2K2PiGamEvtListPtr(theEvtList)
+  ,_fitParams2K2PiGam(theStatesPtr)
+  ,_cacheAmps(chacheAmps)
+  ,_evtCounter(0)
+  ,_equalDecParams(false)
+  ,_equalProdParams(false)
 {
   _evtDataVec=_Psi2STo2K2PiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
+  _ampVecProd.push_back(paramEnum2K2PiGam::ChiGam);
 }
 
-AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theAbsPsi2STo2K2PiGamLhPtr):
-  _Psi2STo2K2PiGamEvtListPtr(theAbsPsi2STo2K2PiGamLhPtr->getEventList()),
-  _fitParams2K2PiGam()
+AbsPsi2STo2K2PiGamLh::AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theAbsPsi2STo2K2PiGamLhPtr, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps):
+  _Psi2STo2K2PiGamEvtListPtr(theAbsPsi2STo2K2PiGamLhPtr->getEventList())
+  ,_fitParams2K2PiGam(theStatesPtr)
+  ,_cacheAmps(chacheAmps)
+  ,_evtCounter(0)
+  ,_equalDecParams(false)
+  ,_equalProdParams(false)
 {
   _evtDataVec=_Psi2STo2K2PiGamEvtListPtr->getDataVecs();
   _evtMCVec=_Psi2STo2K2PiGamEvtListPtr->getMcVecs();
+  _ampVecProd.push_back(paramEnum2K2PiGam::ChiGam);
 }
+
+
+
 
 AbsPsi2STo2K2PiGamLh::~AbsPsi2STo2K2PiGamLh()
 {
 }
 
 double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
- 
+
+  _currentFitParms=theParamVal;
+  if(_cacheAmps){
+    _equalDecParams= equalChic0DecParams();
+    _equalProdParams=compAmpParms(_ampVecProd);
+  }
+
   double logLH=0.;
   double logLH_data=0.;
 
@@ -50,41 +69,64 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
   double logLH_mc_Norm=0.;
   if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/_evtMCVec.size());
 
-  logLH=_evtDataVec.size()*(LH_mc/_evtMCVec.size()-1)*(LH_mc/_evtMCVec.size()-1)
-    -2.*logLH_data
-    +2.*_evtDataVec.size()*logLH_mc_Norm;
+  logLH=0.5*_evtDataVec.size()*(LH_mc/_evtMCVec.size()-1)*(LH_mc/_evtMCVec.size()-1)
+    -logLH_data
+    +_evtDataVec.size()*logLH_mc_Norm;
 
   Info << "current LH = " << logLH << endmsg;
 
+  _cashedFitParms=theParamVal;
  return logLH;
 
 }
 
 double AbsPsi2STo2K2PiGamLh::calcEvtIntensity(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, const param2K2PiGam& theParamVal){
   double phaseSpaceVal=theParamVal.phaseSpace;
-  
-  complex<double> theDecAmp=chi0DecAmps(theParamVal, theData);
+
+  complex<double> theDecAmp(0.,0.); 
+  if(_equalDecParams) theDecAmp=_currentResultDecAmp[_evtCounter];
+  else{
+    complex<double> tmpDecAmp=chi0DecAmps(theParamVal, theData);
+    _currentResultDecAmp[_evtCounter]=tmpDecAmp;  
+    theDecAmp=tmpDecAmp;
+  }
+ 
+  complex<double> AmpPsi2SProdMpGp(0.,0.);
+  complex<double> AmpPsi2SProdMpGm(0.,0.);
+  complex<double> AmpPsi2SProdMmGp(0.,0.);
+  complex<double> AmpPsi2SProdMmGm(0.,0.);
+  if(_equalProdParams) {
+    AmpPsi2SProdMpGp=_currentResultProdAmppp[_evtCounter];
+    AmpPsi2SProdMpGm=_currentResultProdAmppm[_evtCounter];
+    AmpPsi2SProdMmGp=_currentResultProdAmpmp[_evtCounter];
+    AmpPsi2SProdMmGm=_currentResultProdAmpmm[_evtCounter];
+  }
+  else{
 
   Spin Psi2SM=1;
   Spin GamM=1;
-  complex<double> AmpPsi2SMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMpGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  if (_cacheAmps) _currentResultProdAmppp[_evtCounter]=AmpPsi2SProdMpGp;
 
   Psi2SM=1;
   GamM=-1;
-  complex<double> AmpPsi2SMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMpGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  if (_cacheAmps) _currentResultProdAmppm[_evtCounter]=AmpPsi2SProdMpGm;
 
   Psi2SM=-1;
   GamM=1; 
-  complex<double> AmpPsi2SMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMmGp=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  if (_cacheAmps) _currentResultProdAmpmp[_evtCounter]=AmpPsi2SProdMmGp;
 
   Psi2SM=-1;
   GamM=-1; 
-  complex<double> AmpPsi2SMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData)*theDecAmp;
+  AmpPsi2SProdMmGm=calcCoherentAmp(Psi2SM, GamM, theParamVal, theData);
+  if (_cacheAmps) _currentResultProdAmpmm[_evtCounter]=AmpPsi2SProdMmGm;
+  }  
 
-//   DebugMsg << "AmpPsi2SMp " << AmpPsi2SMp << endmsg;
-  
-  double result=norm(AmpPsi2SMpGp)+norm(AmpPsi2SMpGm)+norm(AmpPsi2SMmGp)+norm(AmpPsi2SMmGm)+phaseSpaceVal;
+  double result=norm(AmpPsi2SProdMpGp*theDecAmp)+norm(AmpPsi2SProdMpGm*theDecAmp)+norm(AmpPsi2SProdMmGp*theDecAmp)+norm(AmpPsi2SProdMmGm*theDecAmp)+phaseSpaceVal;
 
+  _evtCounter++;
   return result;  
 }
   
@@ -1135,6 +1177,42 @@ complex<double>  AbsPsi2STo2K2PiGamLh::chiTof2_pif0_kAmp(Psi2STo2K2PiGamData::Ps
   return result;
 }
 
+complex<double> AbsPsi2STo2K2PiGamLh::chiTof2_pif2_kAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTof2_pif2_k, double f2_pi_Mass, double f2_pi_Width, double f2_kMass, double f2_kWidth){
+
+  complex<double> result(0.,0.);
+  
+  Vector4<double> PiPi(theData->PiPi_HeliChic0_4V.E(), theData->PiPi_HeliChic0_4V.Px(), 
+		       theData->PiPi_HeliChic0_4V.Py(), theData->PiPi_HeliChic0_4V.Pz());
+  
+  Vector4<double> KK(theData->KpKm_HeliChic0_4V.E(), theData->KpKm_HeliChic0_4V.Px(), 
+		     theData->KpKm_HeliChic0_4V.Py(), theData->KpKm_HeliChic0_4V.Pz());
+
+  std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >::iterator it;
+  for ( it=ChiTof2_pif2_k.begin(); it!=ChiTof2_pif2_k.end(); ++it){
+
+    boost::shared_ptr<const JPCLS> theState=it->first;
+    double theMag=it->second.first;
+    double thePhi=it->second.second;
+    complex<double> expiphi(cos(thePhi), sin(thePhi));
+    complex<double> tmpResult(0.,0.);
+
+    complex<double> tmpAmp(0.,0.);
+    
+    for (Spin lamf2pi=-2; lamf2pi<=2; ++lamf2pi){
+      Spin lamf2K=lamf2pi;
+
+      tmpAmp+= sqrt(2.*theState->L+1.)*Clebsch(theState->L, 0, theState->S, lamf2pi-lamf2K, theState->J, lamf2pi-lamf2K)*Clebsch(2,lamf2pi, 2, -lamf2K, theState->S, 
+lamf2pi-lamf2K)*conj(theData->Dff2ToPiPi[2][lamf2pi][0])*conj(theData->Dff2ToKK[2][lamf2K][0]);
+      
+    }
+    result+=theMag*expiphi*tmpAmp;
+  }  
+  
+  result*=5.*BreitWignerBlattW(PiPi, 0.1349766, 0.1349766, f2_pi_Mass, f2_pi_Width, 2)*BreitWignerBlattW(KK, 0.493677, 0.493677, f2_kMass, f2_kWidth, 2);
+
+  return result;
+
+}
 
 complex<double> AbsPsi2STo2K2PiGamLh::chiToK_0_KToKf980KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_0_KToKf980K, double f980_Mass, double f980_gPiPi,  double f980_gKK, double K_0_Mass, double K_0_Width){
 
@@ -1729,3 +1807,93 @@ void AbsPsi2STo2K2PiGamLh::print(std::ostream& os) const{
   os << "AbsPsi2STo2K2PiGamLh::print\n";
 }
 
+void AbsPsi2STo2K2PiGamLh::copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh){
+  theLh->_cacheAmps=_cacheAmps;
+  if(_cacheAmps){
+    theLh->_currentResultDecAmp=_currentResultDecAmp;
+    theLh->_currentResultProdAmppp=_currentResultProdAmppp;
+    theLh->_currentResultProdAmppm=_currentResultProdAmppm;
+    theLh->_currentResultProdAmpmp=_currentResultProdAmpmp;
+    theLh->_currentResultProdAmpmm=_currentResultProdAmpmm;
+    }
+  theLh->_cashedFitParms=_cashedFitParms;
+}
+
+
+bool  AbsPsi2STo2K2PiGamLh::compAmpParms( std::vector<unsigned int>& ampVec){
+
+  bool result=false;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  std::vector<unsigned int>::const_iterator itAmps;
+  for ( itAmps=ampVec.begin(); itAmps!=ampVec.end(); ++itAmps){
+    std::vector< boost::shared_ptr<const JPCLS> > JPCLSs=_fitParams2K2PiGam.jpclsVec(*itAmps);
+    
+    for ( itJPCLS=JPCLSs.begin(); itJPCLS!=JPCLSs.end(); ++itJPCLS){
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapNew=_fitParams2K2PiGam.ampMap(_currentFitParms, *itAmps);
+      std::pair<double, double> tmpParamNew=currentMapNew[(*itJPCLS)];
+
+      std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess > currentMapOld=_fitParams2K2PiGam.ampMap(_cashedFitParms, *itAmps);
+      std::pair<double, double> tmpParamOld=currentMapOld[(*itJPCLS)];
+
+    if(fabs(tmpParamNew.first-tmpParamOld.first)>1e-10){
+      DebugMsg <<"\t Amplitude of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.first <<" != " << tmpParamOld.first  << endmsg;
+      return result;
+    }
+    if(fabs(tmpParamNew.second-tmpParamOld.second)>1e-10){
+      DebugMsg <<"\t Phase of " << paramEnum2K2PiGam::name(*itAmps) << " are not equal\t" << tmpParamNew.second <<" != " << tmpParamOld.second  << endmsg;
+      return result;
+    }
+
+    }  
+  }
+  result=true;
+  return result;
+}
+
+
+bool AbsPsi2STo2K2PiGamLh::compMassParms( std::vector<unsigned int>& massVec){
+
+  bool result=false;
+
+  std::vector<unsigned int>::const_iterator itMasses;
+  for ( itMasses=massVec.begin(); itMasses!=massVec.end(); ++itMasses){
+    std::pair<double, double> tmpParamOld=_fitParams2K2PiGam.massPair(_cashedFitParms, *itMasses);
+    std::pair<double, double> tmpParamNew=_fitParams2K2PiGam.massPair(_currentFitParms, *itMasses);
+
+    if(fabs(tmpParamOld.first-tmpParamNew.first)>1e-10){
+      DebugMsg <<"\t Mass of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.first <<" != " << tmpParamNew.first  << endmsg;
+      return result;
+    }
+
+    if(fabs(tmpParamOld.second-tmpParamNew.second)>1e-10){
+      DebugMsg <<"\t Width of " << paramEnum2K2PiGam::name(*itMasses) << " are not equal\t" << tmpParamOld.second <<" != " << tmpParamNew.second  << endmsg;
+      return result;
+    }
+  }
+
+  result=true;
+  return result;
+}
+
+bool AbsPsi2STo2K2PiGamLh::compFlatteParms(){
+  bool result=false;
+
+  if(fabs(_cashedFitParms.Flatf980-_currentFitParms.Flatf980)>1e-10){
+      DebugMsg <<"\t Flatf980 " << " are not equal\t" << _cashedFitParms.Flatf980 <<" != " << _currentFitParms.Flatf980  << endmsg;
+      return result;
+  }
+
+  if(fabs(_cashedFitParms.Flatf980gPiPi-_currentFitParms.Flatf980gPiPi)>1e-10){
+      DebugMsg <<"\t Flatf980gPiPi " << " are not equal\t" << _cashedFitParms.Flatf980gPiPi <<" != " << _currentFitParms.Flatf980gPiPi  << endmsg;
+      return result;
+  }
+
+  if(fabs(_cashedFitParms.Flatf980gKK-_currentFitParms.Flatf980gKK)>1e-10){
+      DebugMsg <<"\t Flatf980gKK " << " are not equal\t" << _cashedFitParms.Flatf980gKK <<" != " << _currentFitParms.Flatf980gKK  << endmsg;
+      return result;
+  }
+
+  result=true;
+  return result;
+}

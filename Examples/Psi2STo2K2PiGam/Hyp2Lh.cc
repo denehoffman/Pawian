@@ -6,18 +6,20 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap ) :
-  Hyp1Lh(theEvtList, hypMap )
+Hyp2Lh::Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
+  Hyp1Lh(theEvtList, hypMap, theStatesPtr, cacheAmps )
   ,_doHyp2(false)
   ,_nFitParams(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap);
 }
 
-Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap ) :
-  Hyp1Lh(theLhPtr->getEventList(), hypMap)
-  ,_doHyp2(true)
+Hyp2Lh::Hyp2Lh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps ) :
+  Hyp1Lh(theLhPtr->getEventList(), hypMap, theStatesPtr, cacheAmps)
+  ,_doHyp2(false)
   ,_nFitParams(0)
+  ,_equalParameter(false)
 {
   setUp(hypMap);
 }
@@ -26,6 +28,17 @@ Hyp2Lh::~Hyp2Lh()
 {
 }
 
+bool  Hyp2Lh::equalChic0DecParams(){
+  bool result=false; 
+  bool equalRemainHyps=Hyp1Lh::equalChic0DecParams();
+  if(!_doHyp2) return equalRemainHyps;
+
+  _equalParameter=equalParams();
+  DebugMsg << "equal parameter: "<< _equalParameter << endmsg;
+
+  if(_equalParameter && equalRemainHyps) result=true;
+  return result;
+}
 
 complex<double> Hyp2Lh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){
   complex<double> result=Hyp1Lh::chi0DecAmps(theParamVal, theData);
@@ -160,14 +173,8 @@ void Hyp2Lh::dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std
 
 void Hyp2Lh::setUp(const std::map<const std::string, bool>& hypMap){
 
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("doHyp2");
-
-  if (iter !=hypMap.end()){
-    _doHyp2= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _doHyp2 <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis doHyp2 not set!!!" <<endmsg; 
+  std::string theKey="doHyp2";
+  setHyps( hypMap, _doHyp2, theKey);
 
   if (!_doHyp2) return;
 
@@ -186,4 +193,15 @@ void Hyp2Lh::setUp(const std::map<const std::string, bool>& hypMap){
     _nFitParams+=2;
   }
   
+}
+
+bool Hyp2Lh::equalParams(){
+  bool result=true;
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  if (!compAmpParms( _ampVec )) return false;
+  if (!compMassParms(_massVec)) return false;
+  if (!compFlatteParms()) return false;
+
+  return result;
 }

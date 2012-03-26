@@ -5,15 +5,15 @@
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-HypProdLh::HypProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList) :
-  AbsPsi2STo2K2PiGamLh(theEvtList)
+HypProdLh::HypProdLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList> theEvtList, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr) :
+  AbsPsi2STo2K2PiGamLh(theEvtList, theStatesPtr, false)
   ,_nFitParams(0) 
 {
   setUp(); 
 }
 
-HypProdLh::HypProdLh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr) :
-  AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList())
+HypProdLh::HypProdLh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr) :
+  AbsPsi2STo2K2PiGamLh(theLhPtr->getEventList(), theStatesPtr, false)
   ,_nFitParams(0) 
 {
   setUp();
@@ -22,6 +22,11 @@ HypProdLh::HypProdLh( boost::shared_ptr<AbsPsi2STo2K2PiGamLh> theLhPtr) :
 HypProdLh::~HypProdLh()
 {;
 }
+
+bool  HypProdLh::equalChic0DecParams(){
+  return true;
+}
+
 
 
 complex<double> HypProdLh::chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData){

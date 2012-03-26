@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <complex>
-//#include <map>
+#include <map>
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
@@ -30,14 +30,16 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp1Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Hyp1Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps=false);
+  Hyp1Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps=false);
 
   /** Destructor */
   virtual ~Hyp1Lh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+  virtual AbsPsi2STo2K2PiGamLh* clone_(){
+    Hyp1Lh* result = new Hyp1Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap, _fitParams2K2PiGam.states(), _cacheAmps);
+    copyCurrentVals(result);
+    return result;
   }
 
 
@@ -45,6 +47,7 @@ public:
   virtual void setMnUsrParams(MnUserParameters& upar, param2K2PiGam& startVal,  param2K2PiGam& errVal);
   virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par);
   virtual unsigned int nFitParams();
+  virtual void setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey); 
 
   virtual void print(std::ostream& os) const;
   virtual void printCurrentFitResult(param2K2PiGam& theParamVal);
@@ -66,13 +69,33 @@ protected:
   std::map<const std::string, bool> _hypMap;
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  virtual bool equalChic0DecParams();
+
+  virtual void copyCurrentVals(Hyp1Lh* theLh);
+  std::map<unsigned int, complex<double> > _currentResultHyp1;
+  std::map<unsigned int, complex<double> > _currentResultlK2_1430_K2_1430Hyp1;
+  std::map<unsigned int, complex<double> > _currentResultlK892K892Hyp1;
+  std::map<unsigned int, complex<double> > _currentResultlK2_1430_K892Hyp1;
 
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
+  std::vector<unsigned int> _ampVecComp;
+  std::vector<unsigned int> _ampVecK2_1430_K2_1430;
+  std::vector<unsigned int> _massVecK2_1430_K2_1430;
+  std::vector<unsigned int> _ampVecK892K892;
+  std::vector<unsigned int> _massVecK892K892;
+  std::vector<unsigned int> _ampVecK2_1430_K892;
+  std::vector<unsigned int> _massVecK2_1430_K892;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
+  bool _equalParameter;
+  bool _equalK2_1430_K2_1430Params;
+  bool _equalK892K892Params;
+  bool _equalK2_1430_K892Params;
+  bool equalParams();
+  
 };
 
 #endif

@@ -29,14 +29,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp4Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Hyp4Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps=false);
+  Hyp4Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps=false);
 
   /** Destructor */
   virtual ~Hyp4Lh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp4Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap);
+  virtual AbsPsi2STo2K2PiGamLh* clone_(){
+    return new Hyp4Lh(_Psi2STo2K2PiGamEvtListPtr, _hypMap, _fitParams2K2PiGam.states(), _cacheAmps);
   }
 
 
@@ -57,19 +57,40 @@ protected:
   bool _f980f_2_1270Hyp4;
   bool _f980f_2_1430Hyp4;
   bool _f980f_2_1525Hyp4;
+  bool _f980f_2_1810Hyp4;
   bool _f980f_2_1950Hyp4;
+  bool _f980f_2_2010Hyp4;
   bool _f1500f_2_1525Hyp4;
   bool _f1710f_2_1430Hyp4;
   bool _f1710f_2_1950Hyp4;
+  bool _sigmaf_2_1270Hyp4;
+  bool _sigmaf_2_1525Hyp4;
+  bool _sigmaf_2_1810Hyp4;
+  bool _sigmaf_2_1950Hyp4;
+  bool _f_2_1270f_2_1270Hyp4;
+  bool _f_2_1270f_2_1525Hyp4;
+  bool _f_2_1270f_2_1810Hyp4;
+  bool _f_2_1270f_2_1950Hyp4;
+  bool _f_2_1810f_2_1810Hyp4;
+  bool _f_2_1950f_2_1950Hyp4;
   bool _doHyp4;
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  virtual bool equalChic0DecParams();
+
+  virtual void copyCurrentVals(Hyp4Lh* theLh);
+  std::map<unsigned int, complex<double> > _currentResultHyp4;
 
 private:
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
+  std::vector<unsigned int> _massVecRemain;
+  bool _f980FlatteRemain;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
+  bool _equalParameter;
+
+  bool equalParams();
 };
 
 #endif

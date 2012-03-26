@@ -29,14 +29,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap);
-  Hyp2Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap);
+  Hyp2Lh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps=false);
+  Hyp2Lh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, const std::map<const std::string, bool>& hypMap, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool cacheAmps=false);
 
   /** Destructor */
   virtual ~Hyp2Lh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const{
-    return new Hyp2Lh(_Psi2STo2K2PiGamEvtListPtr,_hypMap);
+  virtual AbsPsi2STo2K2PiGamLh* clone_(){
+    return new Hyp2Lh(_Psi2STo2K2PiGamEvtListPtr,_hypMap, _fitParams2K2PiGam.states(), _cacheAmps);
   }
 
 
@@ -51,15 +51,19 @@ public:
 
 protected:
   bool _doHyp2;
+
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
+  virtual bool equalChic0DecParams();
 
 private:
 
   unsigned int _nFitParams;
   std::vector<unsigned int> _ampVec;
   std::vector<unsigned int> _massVec;
+  bool _equalParameter;
 
   void setUp(const std::map<const std::string, bool>& hypMap);
+  bool equalParams();
 };
 
 #endif

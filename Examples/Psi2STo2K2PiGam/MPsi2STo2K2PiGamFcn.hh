@@ -6,6 +6,7 @@
 //#include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp> 
 //#include <cassert>
 #include "Minuit2/FCNBase.h"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamData.hh"
@@ -14,6 +15,7 @@
 
 class AbsPsi2STo2K2PiGamLh;
 
+//boost::mutex mutex1; 
 
 namespace ROOT {
   
@@ -28,11 +30,12 @@ namespace ROOT {
       double operator()(const std::vector<double>& par) const;
       
       double Up() const;
-      
-      
+
+      mutable boost::mutex mutex1;       
+           
     private:
-      boost::shared_ptr<AbsPsi2STo2K2PiGamLh> _psi2STo2K2PiGamLhPtr;
-      unsigned int *_fcnCounter;
+      mutable boost::shared_ptr<AbsPsi2STo2K2PiGamLh> _psi2STo2K2PiGamLhPtr;
+      mutable unsigned int _fcnCounter;
     };
   }  // namespace Minuit2
   

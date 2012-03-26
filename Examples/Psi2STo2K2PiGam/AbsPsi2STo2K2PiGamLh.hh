@@ -32,13 +32,14 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>);
-  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>);
+  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<const Psi2STo2K2PiGamEvtList>, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps);
+  AbsPsi2STo2K2PiGamLh(boost::shared_ptr<AbsPsi2STo2K2PiGamLh>, boost::shared_ptr<Psi2STo2K2PiGamStates> theStatesPtr, bool chacheAmps);
+
 
   /** Destructor */
   virtual ~AbsPsi2STo2K2PiGamLh();
 
-  virtual AbsPsi2STo2K2PiGamLh* clone_() const=0;
+  virtual AbsPsi2STo2K2PiGamLh* clone_()=0;
 
 
   // Getters:
@@ -52,6 +53,9 @@ public:
   virtual int setFitParamVal(param2K2PiGam& theParamVal, const std::vector<double>& par)=0;
   virtual unsigned int nFitParams() =0;
 
+  virtual bool ampsCached(){return _cacheAmps;}
+  virtual void cacheAmplitudes(bool cacheIt){_cacheAmps=cacheIt;}
+
   virtual void print(std::ostream& os) const;
   virtual void printCurrentFitResult(param2K2PiGam& theParamVal)=0;
   virtual void dumpCurrentResult(std::ostream& os, param2K2PiGam& theParamVal, std::string& suffix)=0;
@@ -60,14 +64,25 @@ public:
 protected:
 
   boost::shared_ptr<const Psi2STo2K2PiGamEvtList> _Psi2STo2K2PiGamEvtListPtr;
-  FitParams2K2PiGam _fitParams2K2PiGam; 
+  mutable FitParams2K2PiGam _fitParams2K2PiGam; 
   
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtDataVec;
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*> _evtMCVec;
 
+  std::map<unsigned int, complex<double> > _currentResultDecAmp;
+  std::map<unsigned int, complex<double> > _currentResultProdAmppp;
+  std::map<unsigned int, complex<double> > _currentResultProdAmppm;
+  std::map<unsigned int, complex<double> > _currentResultProdAmpmp;
+  std::map<unsigned int, complex<double> > _currentResultProdAmpmm;
+
+  bool _cacheAmps;
+  unsigned int _evtCounter;
+  
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData);
 
   virtual complex<double> chi0DecAmps(const param2K2PiGam& theParamVal, Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData)=0;
+
+  virtual bool equalChic0DecParams()=0;
 
   virtual complex<double> chiTo2K892Amp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTo2K892, double K892Mass, double K892Width);
 
@@ -113,6 +128,8 @@ protected:
 
   virtual complex<double> chiTof2_pif0_kAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTof2_pif0_k, double f2_pi_Mass, double f2_pi_Width, double f0_kMass, double f0_kWidth);
 
+  virtual complex<double> chiTof2_pif2_kAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiTof2_pif2_k, double f2_pi_Mass, double f2_pi_Width, double f2_kMass, double f2_kWidth);
+
   virtual complex<double> chiToK_0_KToKf980KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_0_KToKf980K, double f980_Mass, double f980_gPiPi,  double f980_gKK, double K_0_Mass, double K_0_Width);
 
   virtual complex<double> chiToK_0_KToKf0KAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& ChiToK_0_KToKf0K, double f0_Mass, double f0_Width, double K_0_Mass, double K_0_Width);
@@ -139,8 +156,21 @@ protected:
 
   virtual  complex<double> chiToKjTof0_piKAmp(Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData* theData, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjProd, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& KjDec, Spin Kj, double KjMass, double KjWidth, double f0Mass, double f0Width);
 
+//   virtual void copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh)=0;
+
+  void copyCurrentVals(AbsPsi2STo2K2PiGamLh* theLh);
+  bool compAmpParms( std::vector<unsigned int>& ampVec);
+  bool compMassParms( std::vector<unsigned int>& massVec);
+  bool compFlatteParms();
+
+  param2K2PiGam _cashedFitParms;
+  param2K2PiGam _currentFitParms;
+
 private:
-  
+
+  bool _equalDecParams;
+  bool _equalProdParams;
+  std::vector<unsigned int> _ampVecProd;
 
 };
 
