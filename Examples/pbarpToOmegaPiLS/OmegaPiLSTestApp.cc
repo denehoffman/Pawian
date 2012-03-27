@@ -501,7 +501,15 @@ bl::tribool GenEvA(
   //----------------------------------------------------------------------------------------------
 
   boost::shared_ptr<gp::GOmegaPiIndividualLS> bestIndividual_ptr=pop_ptr->getBestIndividual<gp::GOmegaPiIndividualLS>();
-  assert(bestIndividual_ptr->getFitParams(fitParm));
+
+  bool fitParamsSet=bestIndividual_ptr->getFitParams(fitParm);
+  
+  if (!fitParamsSet){
+    std::cout << "fit parameters could not set properly " << std::endl;
+    exit(0);
+  }
+  
+  
   omegaPiLh=bestIndividual_ptr->omegaPiLhPtr();
 
   Info << "GenEvA done.\n" << endmsg;

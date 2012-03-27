@@ -159,7 +159,11 @@ namespace Gem
       double result = 0.;
     
       OmegaPiDataLS::fitParamVal theFitParmValTmp;
-      assert(getFitParams(theFitParmValTmp));   
+      bool fitParamsSet=getFitParams(theFitParmValTmp);
+      if (!fitParamsSet){
+	std::cout << "fit parameters could not set properly " << std::endl;
+	exit(0);
+      }
       result=_omegaPiLhPtr->calcLogLh(theFitParmValTmp);
 //       std::cout << "**** current fit params ***** " << std::endl;
 //       printFitParams(theFitParmValTmp);
