@@ -2,8 +2,12 @@
 #include <fstream>
 #include <string>
 
-#include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
 #include "Examples/EtacToapi0Fit/EtacToapi0Lh.hh"
+
+#include "ErrLogger/ErrLogger.hh"
+
+#include "Examples/EtacToapi0Fit/EtacToapi0EventList.hh"
+
 
 
 EtacToapi0Lh::EtacToapi0Lh(boost::shared_ptr<const EtacToapi0EventList> theEvtList) :
@@ -67,7 +71,7 @@ double EtacToapi0Lh::calcLogLh(const fitParamVal& theParamVal)
   std::vector<evt4Vec>::const_iterator iterd;
   for (iterd=data4Vecs.begin(); iterd!=data4Vecs.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
-    if (intensity>0.) logLH_data+=log10(intensity);
+    if (intensity>0.) logLH_data+=log(intensity);
   }  
 
   double LH_mc=0.;
@@ -81,10 +85,10 @@ double EtacToapi0Lh::calcLogLh(const fitParamVal& theParamVal)
 
 
   double logLH_mc_Norm=0.;
-  if (LH_mc>0.) logLH_mc_Norm=log10(LH_mc/mc4Vecs.size());
+  if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/mc4Vecs.size());
 
 
-  logLH=data4Vecs.size()/2.*(LH_mc/mc4Vecs.size()-1)*(LH_mc/mc4Vecs.size()-1)
+  logLH=data4Vecs.size()/2.*(LH_mc/mc4Vecs.size()-1.)*(LH_mc/mc4Vecs.size()-1.)
     -logLH_data
     +data4Vecs.size()*logLH_mc_Norm;
 
@@ -100,6 +104,7 @@ bool EtacToapi0Lh::setFitParamVal(fitParamVal& fitParamVal, const std::vector<do
   fitParamVal.cont0spin=par[2];
   fitParamVal.cont1spin=par[3];
   fitParamVal.cont2spin=par[4];
+
   return result;
 } 
 

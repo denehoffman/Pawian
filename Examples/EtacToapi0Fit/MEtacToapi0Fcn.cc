@@ -25,9 +25,16 @@ MEtacToapi0Fcn::~MEtacToapi0Fcn()
 
 double MEtacToapi0Fcn::operator()(const std::vector<double>& par) const
 {
+
   fitParamVal theFitParmValTmp;
-  assert(_etacToapi0LhPtr->setFitParamVal(theFitParmValTmp, par));
- 
+
+  mutex1.lock(); 
+  bool paramsSet=_etacToapi0LhPtr->setFitParamVal(theFitParmValTmp, par);
+  if(!paramsSet){
+    Alert <<"the parameters are not set properly" << endmsg;
+    exit(0);
+  }
+  mutex1.unlock(); 
   double result=_etacToapi0LhPtr->calcLogLh(theFitParmValTmp);
   
   DebugMsg << "InterMassFit= " << theFitParmValTmp.aMass << "\n" 

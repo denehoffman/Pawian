@@ -91,7 +91,7 @@ int main(int __argc,char *__argv[]){
 
  MnUserParameters upar;
  if (dataSpin==2)
-    {  
+    {
       upar.Add("InterMass", 1.6, .1, 2.3, 0.7);
       upar.Add("InterWidth", 0.04, .01, 0.8, 0.01);
       upar.Add("spin0", 0.3, .1, 1., 0.);

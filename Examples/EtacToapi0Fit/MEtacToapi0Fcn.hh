@@ -6,6 +6,7 @@
 //#include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp>
 //#include <cassert>
 #include "Minuit2/FCNBase.h"
 
@@ -27,6 +28,7 @@ public:
 
   double Up() const;
 
+  mutable boost::mutex mutex1;
 private:
   boost::shared_ptr<EtacToapi0Lh> _etacToapi0LhPtr;
 };
