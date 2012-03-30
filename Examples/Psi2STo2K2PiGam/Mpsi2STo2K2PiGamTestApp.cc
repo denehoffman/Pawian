@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <omp.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -390,7 +391,9 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
-  
+  omp_set_num_threads(16);
+//  omp_set_blocktime(0);
+  thePsi2STo2K2PiGamLhPtr->cacheAmplitudes(false);  
   // Calling Minimizer
   MnMigrad migrad(mPsi2STo2K2PiGamFcn, upar);
   Info <<"start migrad "<< endmsg;

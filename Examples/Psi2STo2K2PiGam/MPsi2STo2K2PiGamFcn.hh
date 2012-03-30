@@ -15,7 +15,6 @@
 
 class AbsPsi2STo2K2PiGamLh;
 
-//boost::mutex mutex1; 
 
 namespace ROOT {
   
@@ -31,7 +30,7 @@ namespace ROOT {
       
       double Up() const;
 
-      mutable boost::mutex mutex1;       
+//       mutable boost::mutex mutex1; 
            
     private:
       mutable boost::shared_ptr<AbsPsi2STo2K2PiGamLh> _psi2STo2K2PiGamLhPtr;

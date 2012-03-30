@@ -1,6 +1,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <omp.h>
 
 #include "Examples/Psi2STo2K2PiGam/AbsPsi2STo2K2PiGamLh.hh"
 #include "Examples/Psi2STo2K2PiGam/Psi2STo2K2PiGamEvtList.hh"
@@ -51,16 +52,22 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
 
   double logLH=0.;
   double logLH_data=0.;
-
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*>::iterator iterd;
   for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
     if (intensity>0.) logLH_data+=log(intensity);
   } 
+//  #pragma omp parallel for 
+//  for (int i=0; i<_evtDataVec.size(); ++i){
+//    double intensity=calcEvtIntensity(_evtDataVec[i], theParamVal);
+//    #pragma omp critical
+//    if (intensity>0.) logLH_data+=log(intensity);
+//  }
+
 
   double LH_mc=0.;
   
-  std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*>::iterator iterm;
+std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*>::iterator iterm;
   for (iterm=_evtMCVec.begin(); iterm!=_evtMCVec.end(); ++iterm){
            double intensity=calcEvtIntensity((*iterm), theParamVal);
            LH_mc+=intensity;
