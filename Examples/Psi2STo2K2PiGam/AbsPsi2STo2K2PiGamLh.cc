@@ -53,6 +53,7 @@ double AbsPsi2STo2K2PiGamLh::calcLogLh(const param2K2PiGam& theParamVal){
   double logLH=0.;
   double logLH_data=0.;
   std::vector<Psi2STo2K2PiGamData::Psi2STo2K2PiGamEvtData*>::iterator iterd;
+
   for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
     if (intensity>0.) logLH_data+=log(intensity);
