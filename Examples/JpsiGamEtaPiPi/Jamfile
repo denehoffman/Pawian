@@ -1,0 +1,17 @@
+project : 
+        ;
+
+lib JpsiGamEtaPiPi : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/PwaUtils//PwaUtils 
+        $(TOP)/Event//Event 
+        $(TOP)/qft++//qft++ 
+	: <use>$(TOP)//Geneva 
+	: 
+	: <library>$(TOP)//Geneva ;
+
+exe MJpsiGamEtaPiPiApp : MJpsiGamEtaPiPiApp.cc JpsiGamEtaPiPi : ;
+exe MJpsiGamEtaPiPiParserTestApp : JpsiGamEtaPiPiParserTestApp.cc JpsiGamEtaPiPi : ;
+
+
+

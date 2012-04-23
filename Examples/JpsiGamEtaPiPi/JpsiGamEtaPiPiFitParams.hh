@@ -1,0 +1,76 @@
+#ifndef _JpsiGamEtaPiPiFitParams_H
+#define _JpsiGamEtaPiPiFitParams_H
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <complex>
+
+#include <cassert>
+#include <boost/shared_ptr.hpp>
+
+#include "TROOT.h"
+
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/FitParamsBase.hh"
+#include "Utils/PawianCollectionUtils.hh"
+#include "Minuit2/MnUserParameters.h"
+
+// using namespace std;
+using namespace ROOT::Minuit2;
+
+
+struct paramEnumJpsiGamEtaPiPi{
+  enum { PsiToEta1405Gamma=0, PsiToEta1295Gamma, PsiToF11285Gamma, nAmps,
+	  	 eta1405=nAmps, eta1295, f11285, nMasses, ngFactors, phaseSpace=ngFactors, nOthers };
+/*  enum { PsiToEtacGamma=0, PsiToEta2225Gamma, PsiToF02020Gamma, PsiToF22010Gamma, PsiToF22300Gamma,  PsiToF22340Gamma, PsiToEta21870Gamma, PsiToF1Gamma,
+	 F02020ToPhiPhi, F22300ToPhiPhi, Eta21870ToPhiPhi, F1ToPhiPhi, nAmps,
+	 etac=nAmps, eta2225, f02020, f22010, f22300 ,f22340, eta21870, f1, nMasses, f02020gKK=nMasses, f02020gPhiPhi, ngFactors,
+       phaseSpace=ngFactors, nOthers };*/
+  
+  static const std::string& name(unsigned int t)
+  {
+    static std::string fitName[paramEnumJpsiGamEtaPiPi::nOthers]
+      ={"PsiToEta1405Gamma", "PsiToEta1295Gamma", "PsiToF11285Gamma",
+    		  "eta1405", "eta1295", "f11285", "phaseSpace"};
+    if (t<0 || t>=paramEnumJpsiGamEtaPiPi::nOthers) assert(0);
+    return fitName[t];
+  } 
+};
+
+
+
+class JpsiGamEtaPiPiFitParams : public FitParamsBase {
+
+public:
+
+  JpsiGamEtaPiPiFitParams();
+  JpsiGamEtaPiPiFitParams(fitParams& theStartparams, fitParams& theErrorparams);
+  virtual ~JpsiGamEtaPiPiFitParams();
+  
+  virtual const std::string ampName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
+  virtual const std::string massName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
+  virtual const std::string widthName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
+  virtual const std::string gFactorName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
+  virtual const std::string otherName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
+
+  virtual int ampIdxMin() {return paramEnumJpsiGamEtaPiPi::PsiToEta1295Gamma;}
+  virtual int ampIdxMax() {return paramEnumJpsiGamEtaPiPi::nAmps-1;}
+  virtual int massIdxMin() {return paramEnumJpsiGamEtaPiPi::nAmps;}
+  virtual int massIdxMax() {return paramEnumJpsiGamEtaPiPi::nMasses-1;}
+  virtual int gFactorIdxMin() {return paramEnumJpsiGamEtaPiPi::nMasses;}
+  virtual int gFactorIdxMax() {return paramEnumJpsiGamEtaPiPi::ngFactors-1;}
+  virtual int otherIdxMin() {return paramEnumJpsiGamEtaPiPi::ngFactors;}
+  virtual int otherIdxMax() {return paramEnumJpsiGamEtaPiPi::nOthers-1;}
+
+protected:
+
+private:
+
+};
+
+
+#endif

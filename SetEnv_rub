@@ -1,4 +1,4 @@
-setenv ROOTSYS /opt/root/5.26-00b/Linux26SL5_x86_64_gcc412
+setenv ROOTSYS /opt/root/5.24-00/Linux26SL5_x86_64_gcc412
 
 #setenv CMAKE_SOURCE_DIR /data/pegasus2/bertram/PawianPsi2S_V2/Pawian
 setenv CMAKE_SOURCE_DIR `pwd | sed -e 's/\/nfs//'`
