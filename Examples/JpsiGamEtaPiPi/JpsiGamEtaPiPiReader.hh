@@ -22,8 +22,8 @@ public:
   virtual ~JpsiGamEtaPiPiReader();
 
   virtual bool fillAll(EventList& evtList);
-  bool fillMassRange(EventList& evtList, std::pair<double,double> massRange){
-    _useMassRange=false;
+  virtual bool fillMassRange(EventList& evtList, std::pair<double,double> massRange){
+    _useMassRange=true;
     _massRange = massRange;
     return fillAll(evtList);
   };

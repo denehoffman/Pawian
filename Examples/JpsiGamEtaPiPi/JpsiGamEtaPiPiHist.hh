@@ -20,7 +20,6 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsLh.hh"
 
-#include  "Examples/JpsiGamEtaPiPi/FitParamErrorMatrix.hh"
 
 class TFile;
 class TH2F;
@@ -40,7 +39,7 @@ public:
   JpsiGamEtaPiPiHist(boost::shared_ptr<const EvtDataBaseList>);
   //JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh>, fitParams&);
   JpsiGamEtaPiPiHist(JpsiGamEtaPiPiProdLh* theJpsiGamEtaPiPiLh, fitParams& fitParam,  FitParamErrorMatrix* theErrorMatrix );
-  void fill();
+//   void fill();
   void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
   
   
@@ -88,18 +87,7 @@ private:
   TH1F*  _costGamCmDataHist; 
   TH1F*  _costGamCmMcHist; 
   TH1F*  _costGamCmFittedHist;
-/*
-  TH1F*  _costPhi_KpKmDataHist; 
-  TH1F*  _costPhi_KpKmMcHist; 
-  TH1F*  _costPhi_KpKmFittedHist; 
 
-  TH1F*  _phiPhi_KpKmDataHist; 
-  TH1F*  _phiPhi_KpKmMcHist; 
-  TH1F*  _phiPhi_KpKmFittedHist;
-*/
-  TH1F*  _chiDataHist; 
-  TH1F*  _chiMcHist; 
-  TH1F*  _chiFittedHist;
  
   TNtuple* _dataTuple;
   TNtuple* _mcTuple;
@@ -117,18 +105,12 @@ private:
   //  void plotCostPhi_PhiPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight);
   void plotCostGam(TH1F* theCostHisto, EvtData* theData, double weight);
 
-  void plotChi(TH1F* theChiHisto, EvtData* theData, double weight);
 
   void fillTuple( TNtuple* theTuple, EvtData* theData, double weight);
 
-  double decayAngleChi(const Vector4<double>& v4_p,const Vector4<double>& v4_d1,
-		       const Vector4<double>& v4_d2,const Vector4<double>& v4_h1,
-		       const Vector4<double>& v4_h2 ) ;
 
 
-  JpsiGamEtaPiPiProdLh* _theJpsiGamEtaPiPiLh;
   fitParams _fitParam;
-  FitParamErrorMatrix* _errMatrix;
 
 };
 

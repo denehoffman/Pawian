@@ -40,16 +40,16 @@ bool JpsiGamEtaPiPiReader::fillAll(EventList& evtList)
 			Event* newEvent = new Event();
 			int parts;
 
-			Vector4<double> fv2Phi(0,0,0,0); //phi phi four-vector
+			Vector4<double> fvPiPiEta(0.,0.,0.,0.); 
 			for (parts = 0; parts < numParticles; parts++) {
 				currentStream >> px >> py >> pz >> e;
 				newEvent->addParticle(e,px,py,pz);
 				Vector4<double> tmp = newEvent->p4(parts);
-				if(parts>0) fv2Phi= fv2Phi+tmp;
+				if(parts>0) fvPiPiEta+= tmp;
 			}
 
 			if(_useMassRange){
-				if(fv2Phi.Mass()<_massRange.first || fv2Phi.Mass()>_massRange.second  ) continue;
+				if(fvPiPiEta.Mass()<_massRange.first || fvPiPiEta.Mass()>_massRange.second  ) continue;
 			}
 
 			if (!currentStream.fail()) {
