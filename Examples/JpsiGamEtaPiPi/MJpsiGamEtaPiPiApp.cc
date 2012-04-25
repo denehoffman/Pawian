@@ -12,7 +12,7 @@
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiEventList.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiReader.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiHist.hh"
-// #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiProdLh.hh"
+#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiProdLh.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiFitParams.hh"
 
 #include "PwaUtils/StreamFitParmsBase.hh"
@@ -142,16 +142,9 @@ int main(int __argc,char *__argv[]){
 
 	std::string mode=theAppParams.mode();
 	std::cout << "Mode: " << mode << std::endl;
-	if (mode=="plotMode"){
-	  std::cout << "Was ist hier los????" << std::endl;
+	if (mode=="plotmode"){
 	  JpsiGamEtaPiPiHist theHist(theJpsiGamEtaPiPiEventListPtr);                                                               
 	  theHist.setMassRange(theAppParams.massRange() );
-
-	  //		JpsiGamEtaPiPiHist* theHist = new JpsiGamEtaPiPiHist(theJpsiGamEtaPiPiEventListPtr);
-	  //		theHist->setMassRange(theAppParams.massRange());
-		//theHist->fill();
-	  //		theHist->~JpsiGamEtaPiPiHist();
-
 	  return 0;
 	}
 
@@ -159,61 +152,60 @@ int main(int __argc,char *__argv[]){
 	//disable hypotheses
 	//
 
-// 	std::map<const std::string, bool> hypMap;
-// 	hypMap["f11285Hyp"] =false;
-// 	hypMap["eta1295Hyp"]=false;
-// 	hypMap["eta1405Hyp"]=false;
-// 	hypMap["usePhasespace"]=false;
+	std::map<const std::string, bool> hypMap;
+	hypMap["f1Hyp"] =false;
+	hypMap["etaHyp"]=false;
+	hypMap["usePhasespace"]=false;
 
-// 	const std::vector<std::string> enabledHyps=theAppParams.enabledHyps();
-// 	std::vector<std::string>::const_iterator itStr;
+	const std::vector<std::string> enabledHyps=theAppParams.enabledHyps();
+	std::vector<std::string>::const_iterator itStr;
 
-// 	for (itStr=enabledHyps.begin(); itStr!=enabledHyps.end(); ++itStr){
-// 		std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
-// 		if (iter !=hypMap.end()){
-// 			hypMap[iter->first]= true;
-// 			Info<< "hypothesis " << iter->first << " enabled" ;  // << endmsg;
-// 		}
-// 		else { Alert << "hypothesis " << (*itStr) << " can not be enabled";  // << endmsg;
-//       	  	  exit(0);
-// 		}
-// 	}
+	for (itStr=enabledHyps.begin(); itStr!=enabledHyps.end(); ++itStr){
+		std::map<const std::string, bool>::const_iterator iter= hypMap.find( (*itStr) );
+		if (iter !=hypMap.end()){
+			hypMap[iter->first]= true;
+			Info<< "hypothesis " << iter->first << " enabled" ;  // << endmsg;
+		}
+		else { Alert << "hypothesis " << (*itStr) << " can not be enabled";  // << endmsg;
+      	  	  exit(0);
+		}
+	}
 
 
-// 	boost::shared_ptr<AbsLh> theLhPtr;
+	boost::shared_ptr<AbsLh> theLhPtr;
 // 	JpsiGamEtaPiPiProdLh* theProdLh = new JpsiGamEtaPiPiProdLh(theJpsiGamEtaPiPiEventListPtr, hypMap);
 // 	theProdLh->massIndependentFit( theAppParams.massIndependentFit() );
 // 	theProdLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
 
-// 	std::string startWithHyp=theAppParams.startHypo();
+ 	std::string startWithHyp=theAppParams.startHypo();
 
-// 	if (startWithHyp=="production"){
-// 		theLhPtr = boost::shared_ptr<AbsLh> (theProdLh);
-// 	}
-// 	else {
-// 		Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
-// 		exit(1);
-// 	}
+	if (startWithHyp=="production"){
+		theLhPtr = boost::shared_ptr<AbsLh> (new JpsiGamEtaPiPiProdLh(theJpsiGamEtaPiPiEventListPtr, hypMap));
+	}
+	else {
+		Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
+		exit(1);
+	}
 
 
-// 	if (mode=="dumpDefaultParams"){
-// 		fitParams defaultVal;
-// 		fitParams defaultErr;
-// 		theLhPtr->getDefaultParams(defaultVal, defaultErr);
-// 		std::ofstream theStreamDefault ( "defaultparams.dat");
-// 		boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new JpsiGamEtaPiPiFitParams(defaultVal, defaultErr));
-// 		theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-// 		return 0;
-// 	}
+	if (mode=="dumpDefaultParams"){
+		fitParams defaultVal;
+		fitParams defaultErr;
+		theLhPtr->getDefaultParams(defaultVal, defaultErr);
+		std::ofstream theStreamDefault ( "defaultparams.dat");
+		boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new JpsiGamEtaPiPiFitParams(defaultVal, defaultErr));
+		theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+		return 0;
+	}
 
-// 	std::string paramStreamerPath=theAppParams.fitParamFile();
+	std::string paramStreamerPath=theAppParams.fitParamFile();
 
-// 	StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new JpsiGamEtaPiPiFitParams()));
-// 	fitParams theStartparams=theParamStreamer.getFitParamVal();
-// 	fitParams theErrorparams=theParamStreamer.getFitParamErr();
+	StreamFitParmsBase theParamStreamer(paramStreamerPath, boost::shared_ptr<FitParamsBase> (new JpsiGamEtaPiPiFitParams()));
+	fitParams theStartparams=theParamStreamer.getFitParamVal();
+	fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
 // 	boost::shared_ptr<FitParamsBase> theFitParamBase
-// 	=boost::shared_ptr<FitParamsBase>(new JpsiGamEtaPiPiFitParams(theStartparams, theErrorparams));
+	boost::shared_ptr<FitParamsBase> theFitParamBase(new JpsiGamEtaPiPiFitParams(theStartparams, theErrorparams));
 
 // 	if (mode=="qaMode"){
 
@@ -249,87 +241,78 @@ int main(int __argc,char *__argv[]){
 // 		return 0;
 // 	}
 
-// 	if (mode=="pwa"){
-// 		PwaFcnBase theFcn(theLhPtr, theFitParamBase);
-// 		MnUserParameters upar;
-// 		theFitParamBase->setMnUsrParams(upar);
+	if (mode=="pwa"){
+		PwaFcnBase theFcn(theLhPtr, theFitParamBase);
+		MnUserParameters upar;
+		theFitParamBase->setMnUsrParams(upar);
 
-// 		std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-// 		for (int i=0; i<int(upar.Params().size()); ++i){
-// 			std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
-// 		}
+		std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
+		for (int i=0; i<int(upar.Params().size()); ++i){
+			std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+		}
 
-// 		const std::vector<std::string> fixedParams=theAppParams.fixedParams();
+		const std::vector<std::string> fixedParams=theAppParams.fixedParams();
 
-// 		std::vector<std::string>::const_iterator itFix;
-// 		for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-// 			upar.Fix( (*itFix) );
-// 		}
+		std::vector<std::string>::const_iterator itFix;
+		for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+			upar.Fix( (*itFix) );
+		}
 
-// 		bool prescan=false;
-// 		if(prescan){
-// 			upar.Fix(0);
-// 			MnScan theScan(theFcn, upar);
-// 			FunctionMinimum smin = theScan();
-// 			MnUserParameterState sState = smin.UserState();
-// 			cout << "After scan" << endl;
-// 			cout << sState << endl;
+		bool prescan=false;
+		if(prescan){
+			upar.Fix(0);
+			MnScan theScan(theFcn, upar);
+			FunctionMinimum smin = theScan();
+			MnUserParameterState sState = smin.UserState();
+			cout << "After scan" << endl;
+			cout << sState << endl;
 
-// 			upar = smin.UserParameters();
-// 			upar.Release(0);
-// 		}
+			upar = smin.UserParameters();
+			upar.Release(0);
+		}
 
-// 		MnMigrad migrad(theFcn, upar);
-// 		Info <<"start migrad "<< endmsg;
-// 		FunctionMinimum min = migrad();
+		MnMigrad migrad(theFcn, upar);
+		Info <<"start migrad "<< endmsg;
+		FunctionMinimum min = migrad();
 
-// 		if(!min.IsValid()) {
-// 			//try with higher strategy
-// 			Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-// 			MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
-// 			min = migrad2();
-// 		}
+		if(!min.IsValid()) {
+			//try with higher strategy
+			Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+			MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
+			min = migrad2();
+		}
 
-// 		MnUserParameters finalUsrParameters=min.UserParameters();
-// 		const std::vector<double> finalParamVec=finalUsrParameters.Params();
+		MnUserParameters finalUsrParameters=min.UserParameters();
+		const std::vector<double> finalParamVec=finalUsrParameters.Params();
 
-// 		fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
+		fitParams finalFitParams=theFitParamBase->getFitParamVal(finalParamVec);
 
-// 		//MnUserCovariance theCov = min.UserCovariance() ;
-// 		//cout << "User vov : "<< endl;
-// 		//cout << theCov << endl;
+		//MnUserCovariance theCov = min.UserCovariance() ;
+		//cout << "User vov : "<< endl;
+		//cout << theCov << endl;
 
-// 		MnUserParameterState theState = min.UserState();
-// 		cout << "User state " << theState << endl;
-  
-// 		theFitParamBase->printParams(finalFitParams);
-// 		double theLh=theLhPtr->calcLogLh(finalFitParams);
-// 		Info <<"theLh = "<< theLh << endmsg;
+		theFitParamBase->printParams(finalFitParams);
+		double theLh=theLhPtr->calcLogLh(finalFitParams);
+		Info <<"theLh = "<< theLh << endmsg;
 
-// 		// print and dump final fit result
-// 		const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-// 		for (size_t i=0; i<finalParamVec.size(); i++)
-// 		{
-// 			Info << "Value: " << finalParamVec[i] << "\t Error: " << finalParamErrorVec[i] << endmsg;
-// 		}
-// 		fitParams finalFitErrs=theFitParamBase->getFitParamVal(finalParamErrorVec);
-// 		std::ofstream theStream ( "finalResult.dat");
-// 		theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
 
-// 		MnUserCovariance theCovMatrix = min.UserCovariance();
-// 		std::cout  << min << std::endl;
-// 		std::ofstream theErrMatStream ( "finalErrorMatrix.dat");
-// 		FitParamErrorMatrix theErrMatrix(theCovMatrix, finalUsrParameters );
-// 		theErrMatrix.Write(theErrMatStream);
+		const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+		fitParams finalFitErrs=theFitParamBase->getFitParamVal(finalParamErrorVec);
 
-// 		//std::ofstream theCompStream ( "componentIntensity.dat");
-// 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
-// 		JpsiGamEtaPiPiHist theHist(theProdLh, finalFitParams, &theErrMatrix);
+		std::ofstream theStream ( "finalResult.dat");
+		theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+
+		MnUserCovariance theCovMatrix = min.UserCovariance();
+		std::cout  << min << std::endl;
+
+		//std::ofstream theCompStream ( "componentIntensity.dat");
+		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
+ 		JpsiGamEtaPiPiHist theHist(theLhPtr, finalFitParams);
 // 		theHist.setMassRange(theAppParams.massRange() );
 // 		theHist.fill();
 
-// 		return 0;
-// 	}
+		return 0;
+	}
 
 
 	return 0;

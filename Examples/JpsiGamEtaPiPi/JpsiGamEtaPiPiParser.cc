@@ -39,7 +39,7 @@ bool JpsiGamEtaPiPiParser::parseCommandLine(int argc, char **argv)
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
-      ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaulParams, qaMode, plotmode")
+      ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaultParams, qaMode, plotmode")
       ("massIndependentFit", po::value<bool>(&_massIndependentFit), "enable/disable mass independence in fit")
       ("commonProdPhases",po::value<bool>(&_useCommonProductionPhases), "enable/disable common production phases")
       ;

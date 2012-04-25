@@ -37,8 +37,8 @@ public:
 
   ///Constructor 
   JpsiGamEtaPiPiHist(boost::shared_ptr<const EvtDataBaseList>);
-  //JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh>, fitParams&);
-  JpsiGamEtaPiPiHist(JpsiGamEtaPiPiProdLh* theJpsiGamEtaPiPiLh, fitParams& fitParam,  FitParamErrorMatrix* theErrorMatrix );
+  JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh>, fitParams&);
+//   JpsiGamEtaPiPiHist(JpsiGamEtaPiPiProdLh* theJpsiGamEtaPiPiLh, fitParams& fitParam,  FitParamErrorMatrix* theErrorMatrix );
 //   void fill();
   void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
   
@@ -54,11 +54,11 @@ protected:
 private:
   
   TFile* _theTFile;
-/*
+
   TH2F* _dalitzDataHist;
   TH2F* _dalitzMcHist;
   TH2F* _dalitzFittedHist;
-*/
+
   TH1F* _EtaPiPiMassDataHist;
   TH1F* _EtaPiPiMassMcHist;
   TH1F* _EtaPiPiMassFittedHist;

@@ -18,24 +18,21 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Minuit2/MnUserParameters.h"
+#include "PwaUtils/FitParamsBase.hh"
 
 // using namespace std;
 using namespace ROOT::Minuit2;
 
 
 struct paramEnumJpsiGamEtaPiPi{
-  enum { PsiToEta1405Gamma=0, PsiToEta1295Gamma, PsiToF11285Gamma, nAmps,
-	  	 eta1405=nAmps, eta1295, f11285, nMasses, ngFactors, phaseSpace=ngFactors, nOthers };
-/*  enum { PsiToEtacGamma=0, PsiToEta2225Gamma, PsiToF02020Gamma, PsiToF22010Gamma, PsiToF22300Gamma,  PsiToF22340Gamma, PsiToEta21870Gamma, PsiToF1Gamma,
-	 F02020ToPhiPhi, F22300ToPhiPhi, Eta21870ToPhiPhi, F1ToPhiPhi, nAmps,
-	 etac=nAmps, eta2225, f02020, f22010, f22300 ,f22340, eta21870, f1, nMasses, f02020gKK=nMasses, f02020gPhiPhi, ngFactors,
-       phaseSpace=ngFactors, nOthers };*/
+  enum { PsiToEtaGamma=0, PsiToF1Gamma, nAmps,
+	  	 a980=nAmps, nMasses, ngFactors=nMasses, phaseSpace=ngFactors, nOthers };
   
   static const std::string& name(unsigned int t)
   {
     static std::string fitName[paramEnumJpsiGamEtaPiPi::nOthers]
-      ={"PsiToEta1405Gamma", "PsiToEta1295Gamma", "PsiToF11285Gamma",
-    		  "eta1405", "eta1295", "f11285", "phaseSpace"};
+      ={"PsiToEtaGamma", "PsiToF1Gamma",
+    		  "a980", "phaseSpace"};
     if (t<0 || t>=paramEnumJpsiGamEtaPiPi::nOthers) assert(0);
     return fitName[t];
   } 
@@ -57,7 +54,7 @@ public:
   virtual const std::string gFactorName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
   virtual const std::string otherName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
 
-  virtual int ampIdxMin() {return paramEnumJpsiGamEtaPiPi::PsiToEta1295Gamma;}
+  virtual int ampIdxMin() {return paramEnumJpsiGamEtaPiPi::PsiToEtaGamma;}
   virtual int ampIdxMax() {return paramEnumJpsiGamEtaPiPi::nAmps-1;}
   virtual int massIdxMin() {return paramEnumJpsiGamEtaPiPi::nAmps;}
   virtual int massIdxMax() {return paramEnumJpsiGamEtaPiPi::nMasses-1;}
