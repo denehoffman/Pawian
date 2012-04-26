@@ -18,6 +18,9 @@ JpsiGamEtaPiPiProdLh::JpsiGamEtaPiPiProdLh(boost::shared_ptr<const EvtDataBaseLi
   ,_etaToPiPiEtaHyp(false)
   ,_etaToa980PiHyp(false)
   ,_etaToa2_1320PiHyp(false)
+  ,_eta2ToPiPiEtaHyp(false)
+  ,_eta2Toa980PiHyp(false)
+  ,_eta2Toa2_1320PiHyp(false)
   ,_f1ToPiPiEtaHyp(false)
   ,_f1Toa980PiHyp(false)
   ,_usePhasespace(false)
@@ -31,6 +34,9 @@ JpsiGamEtaPiPiProdLh::JpsiGamEtaPiPiProdLh( boost::shared_ptr<AbsLh> theLhPtr, c
   ,_etaToPiPiEtaHyp(false)
   ,_etaToa980PiHyp(false)
   ,_etaToa2_1320PiHyp(false)
+  ,_eta2ToPiPiEtaHyp(false)
+  ,_eta2Toa980PiHyp(false)
+  ,_eta2Toa2_1320PiHyp(false)
   ,_f1ToPiPiEtaHyp(false)
   ,_f1Toa980PiHyp(false)
   ,_usePhasespace(false)
@@ -128,7 +134,6 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
     
   }
 
-//   std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > f1Amps;
   if(_f1ToPiPiEtaHyp || _f1Toa980PiHyp){
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof1GamMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof1GamPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma];
@@ -189,6 +194,105 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
 
     } 
   }
+
+
+
+
+
+
+
+  if(_eta2ToPiPiEtaHyp || _eta2Toa980PiHyp || _eta2Toa2_1320PiHyp){
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEta2GamMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::PsiToEta2Gamma];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEta2GamPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::PsiToEta2Gamma];
+
+    std::map<Spin,complex<double> > JpGpTmpMap;
+    std::map<Spin,complex<double> > JpGmTmpMap;
+    std::map<Spin,complex<double> > JmGpTmpMap;
+    std::map<Spin,complex<double> > JmGmTmpMap;
+    std::map<Spin,complex<double> > TmpDecAmp;
+ 
+    for (Spin heliEta2=-2; heliEta2<=2; heliEta2++){
+      JpGpTmpMap[heliEta2]= psiToXGammaAmp(1, 2, heliEta2, 1, theData, PsiToEta2GamMag, PsiToEta2GamPhi);
+      JpGmTmpMap[heliEta2]= psiToXGammaAmp(1, 2, heliEta2, -1, theData, PsiToEta2GamMag, PsiToEta2GamPhi); 
+      JmGpTmpMap[heliEta2]=psiToXGammaAmp(-1, 2, heliEta2, 1, theData, PsiToEta2GamMag, PsiToEta2GamPhi);
+      JmGmTmpMap[heliEta2]=psiToXGammaAmp(-1, 2, heliEta2, -1, theData, PsiToEta2GamMag, PsiToEta2GamPhi);
+      TmpDecAmp[heliEta2] = complex<double> (0.,0.);
+    }
+  
+
+    if(_eta2ToPiPiEtaHyp){
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > eta2ToPiPiEtaMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::Eta2ToPiPiEta];
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > eta2ToPiPiEtaPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::Eta2ToPiPiEta];
+      
+      for (Spin heliEta2=-2; heliEta2<=2; heliEta2++){
+	TmpDecAmp[heliEta2]+=XToPiPiEtaAmp(2, heliEta2, theData, eta2ToPiPiEtaMag, eta2ToPiPiEtaPhi);
+      }
+      
+    }
+
+    if(_eta2Toa980PiHyp){
+
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > eta2ToA980PiMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::Eta2ToA980Pi];
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > eta2ToA980PiPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::Eta2ToA980Pi];
+      Vector4<double > p4EtaPiplus(theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].E(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].Px(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].Py(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].Pz());
+
+      Vector4<double > p4EtaPiminus(theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].E(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].Px(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].Py(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].Pz());
+  
+      complex<double> a980PlusFlatte=A980DecFlatte(theParamVal, p4EtaPiplus);
+      complex<double> a980MinusFlatte=A980DecFlatte(theParamVal, p4EtaPiminus);
+      
+      for (Spin heliEta2=-2; heliEta2<=2; heliEta2++){
+	TmpDecAmp[heliEta2]+=XToAPiAmp(2, heliEta2, 0, theData, eta2ToA980PiMag, eta2ToA980PiPhi, a980PlusFlatte, a980MinusFlatte);
+      }
+
+    }
+
+
+    if(_eta2Toa2_1320PiHyp){
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > eta2ToA2_1320PiMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::Eta2ToA2_1320Pi];
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > eta2ToA2_1320PiPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::Eta2ToA2_1320Pi];
+
+      double a2_1320Mass=theParamVal.Masses[paramEnumJpsiGamEtaPiPi::a2_1320];
+      double a2_1320Width=theParamVal.Widths[paramEnumJpsiGamEtaPiPi::a2_1320];
+
+      Vector4<double > p4EtaPiplus(theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].E(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].Px(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].Py(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi].Pz());
+      
+      Vector4<double > p4EtaPiminus(theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].E(),
+				    theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].Px(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].Py(),
+				   theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi].Pz());
+ 
+     complex<double> a2_1320PlusBW=BreitWigner(p4EtaPiplus, a2_1320Mass, a2_1320Width);
+     complex<double> a2_1320MinusBW=BreitWigner(p4EtaPiminus, a2_1320Mass, a2_1320Width);
+
+     for (Spin heliEta2=-2; heliEta2<=2; heliEta2++){
+       TmpDecAmp[heliEta2]+=XToAPiAmp(2, heliEta2, 2, theData, eta2ToA2_1320PiMag, eta2ToA2_1320PiPhi, a2_1320PlusBW, a2_1320MinusBW);
+     }
+    }
+
+    for (Spin heliEta2=-2; heliEta2<=2; heliEta2++){
+      JmpGmp+=JpGpTmpMap[heliEta2]*TmpDecAmp[heliEta2];
+      JmpGmm+=JpGmTmpMap[heliEta2]*TmpDecAmp[heliEta2];
+      JmmGmp+=JmGpTmpMap[heliEta2]*TmpDecAmp[heliEta2];
+      JmmGmm+=JmGmTmpMap[heliEta2]*TmpDecAmp[heliEta2];
+
+    } 
+  }
+
+
+
+
+
+
   
 
   result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
@@ -345,6 +449,25 @@ void JpsiGamEtaPiPiProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr
     }
   }
 
+
+ if(_eta2ToPiPiEtaHyp || _eta2Toa980PiHyp || _eta2Toa2_1320PiHyp){
+    theAmpMap[paramEnumJpsiGamEtaPiPi::PsiToEta2Gamma] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::PsiToEta2Gamma);
+
+    if(_eta2ToPiPiEtaHyp){
+      theAmpMap[paramEnumJpsiGamEtaPiPi::Eta2ToPiPiEta] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::Eta2ToPiPiEta);
+    }
+
+    if (_eta2Toa980PiHyp){
+      theAmpMap[paramEnumJpsiGamEtaPiPi::Eta2ToA980Pi] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::Eta2ToA980Pi);
+    }
+    
+    if(_eta2Toa2_1320PiHyp){
+      theAmpMap[paramEnumJpsiGamEtaPiPi::Eta2ToA2_1320Pi] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::Eta2ToA2_1320Pi);
+    }
+  }
+
+
+
   
   if(_f1ToPiPiEtaHyp || _f1Toa980PiHyp){
     theAmpMap[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::PsiToF1Gamma);
@@ -436,6 +559,37 @@ JpsiGamEtaPiPiProdLh::initializeHypothesisMap( const std::map<const std::string,
     _hypMap[iter->first]= iter->second;
   }
   else Alert << "hypothesis etaToa2_1320PiHyp not set!!!" <<endmsg;    
+
+
+
+  iter= hypMap.find("eta2ToPiPiEtaHyp");  
+  if (iter !=hypMap.end()){
+    _eta2ToPiPiEtaHyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _eta2ToPiPiEtaHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis eta2ToPiPiEtaHyp not set!!!" <<endmsg;
+
+
+
+  iter= hypMap.find("eta2Toa980PiHyp");
+  if (iter !=hypMap.end()){
+    _eta2Toa980PiHyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _eta2Toa980PiHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis eta2Toa980PiHyp not set!!!" <<endmsg;    
+
+  iter= hypMap.find("eta2Toa2_1320PiHyp");
+  if (iter !=hypMap.end()){
+    _eta2Toa2_1320PiHyp= iter->second;
+    Info<< "hypothesis " << iter->first << "\t" << _eta2Toa2_1320PiHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else Alert << "hypothesis eta2Toa2_1320PiHyp not set!!!" <<endmsg;  
+
+
+
 
   
   iter= hypMap.find("f1ToPiPiEtaHyp");

@@ -156,6 +156,9 @@ int main(int __argc,char *__argv[]){
 	hypMap["etaToPiPiEtaHyp"] =false;
 	hypMap["etaToa980PiHyp"] =false;
 	hypMap["etaToa2_1320PiHyp"] =false;
+	hypMap["eta2ToPiPiEtaHyp"] =false;
+	hypMap["eta2Toa980PiHyp"] =false;
+	hypMap["eta2Toa2_1320PiHyp"] =false;
 	hypMap["f1ToPiPiEtaHyp"] =false;
 	hypMap["f1Toa980PiHyp"] =false;
 	hypMap["usePhasespace"]=false;

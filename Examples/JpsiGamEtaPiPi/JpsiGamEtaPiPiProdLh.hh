@@ -77,6 +77,9 @@ protected:
   bool _etaToPiPiEtaHyp;
   bool _etaToa980PiHyp;
   bool _etaToa2_1320PiHyp;
+  bool _eta2ToPiPiEtaHyp;
+  bool _eta2Toa980PiHyp;
+  bool _eta2Toa2_1320PiHyp;
   bool _f1ToPiPiEtaHyp;
   bool _f1Toa980PiHyp;
   
