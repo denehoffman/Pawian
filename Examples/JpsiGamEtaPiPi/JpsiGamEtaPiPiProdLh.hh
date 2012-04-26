@@ -54,7 +54,18 @@ protected:
   virtual complex<double> psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtData* theData, 
 					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToXGamMag, 
 					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToXGamPhi); 
-  
+
+  virtual complex<double> XToPiPiEtaAmp(Spin jX, Spin lamX, EvtData* theData, 
+					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag, 
+					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaPhi); 
+
+  virtual complex<double> XToAPiAmp(Spin jX, Spin lamX, Spin jA, EvtData* theData, 
+				    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiMag, 
+				    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiPhi,
+                                    complex<double>& dynAplus, complex<double>& dynAminus);
+
+  complex<double> A980DecFlatte(fitParams& theParamVal, const Vector4<double> &__p4);   
+
   virtual void calcEtaGammaAmp( EvtData* theData, 
 				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToEtaGamMag, 
 				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToEtaGamPhi, 
@@ -63,8 +74,11 @@ protected:
 
   
   
-  bool _etaHyp;
-  bool _f1Hyp;
+  bool _etaToPiPiEtaHyp;
+  bool _etaToa980PiHyp;
+  bool _etaToa2_1320PiHyp;
+  bool _f1ToPiPiEtaHyp;
+  bool _f1Toa980PiHyp;
   
   bool _usePhasespace;
   

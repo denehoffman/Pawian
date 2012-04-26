@@ -25,14 +25,18 @@ using namespace ROOT::Minuit2;
 
 
 struct paramEnumJpsiGamEtaPiPi{
-  enum { PsiToEtaGamma=0, PsiToF1Gamma, nAmps,
-	  	 a980=nAmps, nMasses, ngFactors=nMasses, phaseSpace=ngFactors, nOthers };
+  enum { PsiToEtaGamma=0, PsiToF1Gamma, EtaToPiPiEta, EtaToA980Pi, EtaToA2_1320Pi, F1ToPiPiEta, F1ToA980Pi, nAmps,
+	 a0_980=nAmps, a2_1320, nMasses, 
+	 a0_980gPiEta=nMasses, a0_980gKK, ngFactors, 
+	 phaseSpace=ngFactors, nOthers };
   
   static const std::string& name(unsigned int t)
   {
     static std::string fitName[paramEnumJpsiGamEtaPiPi::nOthers]
-      ={"PsiToEtaGamma", "PsiToF1Gamma",
-    		  "a980", "phaseSpace"};
+      ={"PsiToEtaGamma", "PsiToF1Gamma", "EtaToPiPiEta", "EtaToA980Pi", "EtaToA2_1320Pi", "F1ToPiPiEta","F1ToA980Pi",
+	"a0_980","a2_1320", 
+	"a0_980gPiEta", "a0_980gKK", 
+	"phaseSpace"};
     if (t<0 || t>=paramEnumJpsiGamEtaPiPi::nOthers) assert(0);
     return fitName[t];
   } 
@@ -64,7 +68,7 @@ public:
   virtual int otherIdxMax() {return paramEnumJpsiGamEtaPiPi::nOthers-1;}
 
 protected:
-
+  virtual void initialize();
 private:
 
 };

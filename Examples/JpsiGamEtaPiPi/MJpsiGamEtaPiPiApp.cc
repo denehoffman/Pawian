@@ -153,8 +153,11 @@ int main(int __argc,char *__argv[]){
 	//
 
 	std::map<const std::string, bool> hypMap;
-	hypMap["f1Hyp"] =false;
-	hypMap["etaHyp"]=false;
+	hypMap["etaToPiPiEtaHyp"] =false;
+	hypMap["etaToa980PiHyp"] =false;
+	hypMap["etaToa2_1320PiHyp"] =false;
+	hypMap["f1ToPiPiEtaHyp"] =false;
+	hypMap["f1Toa980PiHyp"] =false;
 	hypMap["usePhasespace"]=false;
 
 	const std::vector<std::string> enabledHyps=theAppParams.enabledHyps();

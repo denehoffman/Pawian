@@ -9,27 +9,29 @@
 
 JpsiGamEtaPiPiFitParams::JpsiGamEtaPiPiFitParams()
 {
-  JpsiGamEtaPiPiStates theStates;
-  theStates.print(std::cout);
-  
-  _jpclsMap[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma]=theStates.PsiToEtaGammaStates();
-  _jpclsMap[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma]=theStates.PsiToF0GammaStates();
-
+  initialize();
 }
 
 JpsiGamEtaPiPiFitParams::JpsiGamEtaPiPiFitParams(fitParams& theStartparams, fitParams& theErrorparams) :
   FitParamsBase(theStartparams, theErrorparams)
 {
-  JpsiGamEtaPiPiStates theStates;
-  theStates.print(std::cout);
-
-  _jpclsMap[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma]=theStates.PsiToEtaGammaStates();
-  _jpclsMap[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma]=theStates.PsiToF1GammaStates();  
+  initialize();
 }
 
 JpsiGamEtaPiPiFitParams::~JpsiGamEtaPiPiFitParams()
 {
 }
 
-
+void JpsiGamEtaPiPiFitParams::initialize(){
+  JpsiGamEtaPiPiStates theStates;
+  theStates.print(std::cout);
+  
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma]=theStates.PsiToEtaGammaStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma]=theStates.PsiToF0GammaStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaToPiPiEta]=theStates.EtaToa0PiStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaToA980Pi]=theStates.EtaToa0PiStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaToA2_1320Pi]=theStates.EtaToa2PiStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToPiPiEta]=theStates.F1Toa0PiStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToA980Pi]=theStates.F1Toa0PiStates();
+}
 

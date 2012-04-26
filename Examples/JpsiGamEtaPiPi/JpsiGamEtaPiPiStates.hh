@@ -28,7 +28,8 @@ public:
 
 
   std::vector< boost::shared_ptr<const JPCLS> > EtaToa0PiStates() const {return _JPCLS_EtaToa0Pi;}
-
+  std::vector< boost::shared_ptr<const JPCLS> > EtaToa2PiStates() const {return _JPCLS_EtaToa2Pi;}
+  std::vector< boost::shared_ptr<const JPCLS> > F1Toa0PiStates() const {return _JPCLS_F1Toa0Pi;}
   
   virtual void print(std::ostream& os) const; 
 
@@ -42,10 +43,12 @@ private:
   boost::shared_ptr<jpcRes> _f1JPC;
   boost::shared_ptr<jpcRes> _f2JPC;
   boost::shared_ptr<jpcRes> _a0JPC;
+  boost::shared_ptr<jpcRes> _a2JPC;
   boost::shared_ptr<jpcRes> _piJPC;
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_EtaToa0Pi;
-
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Toa0Pi;
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_EtaToa2Pi;
   
 };
 

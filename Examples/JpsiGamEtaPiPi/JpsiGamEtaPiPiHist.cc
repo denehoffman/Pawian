@@ -175,8 +175,10 @@ JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh> theJpsiGamEtaPiP
        plotCostPhiEta(_costEta_EtaPipHeliMcHist , _phiEta_EtaPipHeliMcHist ,(*it), 1. );
        plotCostPhiPip(_costPip_PipPimHeliMcHist, _phiPip_PipPimHeliMcHist,(*it), 1. );
        plotCostGam(_costGamCmMcHist,(*it), 1. );
-//       plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamEtaPiPiMc::V4_KpKm_HeliKsKlKpKm], 1.);
+
 //       fillTuple(_mcTuple, (*it), 1.);
+
+
 
        double evtWeight= theJpsiGamEtaPiPiLh->calcEvtIntensity( (*it), theFitParams );
        plotDalitz(_dalitzFittedHist, (*it), evtWeight);
@@ -196,7 +198,7 @@ JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh> theJpsiGamEtaPiP
    Info <<"No of fit events " << integralFitted << endmsg; 
    
    Info <<"scaling factor  " << integralData/integralFitted << endmsg;
-  _dalitzFittedHist->Scale(integralData/integralFitted);
+   _dalitzFittedHist->Scale(integralData/integralFitted);
   _EtaPiPiMassFittedHist->Scale(integralData/integralFitted);
   _EtaPiMassFittedHist->Scale(integralData/integralFitted);
   _costEta_EtaPipHeliFittedHist->Scale(integralData/integralFitted);
@@ -209,180 +211,6 @@ JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh> theJpsiGamEtaPiP
 
 
 
-// JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(JpsiGamEtaPiPiProdLh* theJpsiGamEtaPiPiLh, fitParams& fitParam, FitParamErrorMatrix* theErrorMatrix) :
-// 		_theTFile(0),
-// 		//_dalitzDataHist(0),
-// 		//_dalitzMcHist(0),
-// 		//_dalitzFittedHist(0),
-// 		_EtaPiPiMassDataHist(0),
-// 		_EtaPiPiMassMcHist(0),
-// 		_EtaPiPiMassFittedHist(0),
-// 		_PipPimMassDataHist(0),
-// 		_PipPimMassMcHist(0),
-// 		_PipPimMassFittedHist(0),
-// 		_EtaPiMassDataHist(0),
-// 		_EtaPiMassMcHist(0),
-// 		_EtaPiMassFittedHist(0),
-// 		_costEta_EtaPipHeliDataHist(0),
-// 		_costEta_EtaPipHeliMcHist(0),
-// 		_costEta_EtaPipHeliFittedHist(0),
-// 		_phiEta_EtaPipHeliDataHist(0),
-// 		_phiEta_EtaPipHeliMcHist(0),
-// 		_phiEta_EtaPipHeliFittedHist(0),
-// 		_costPip_PipPimHeliDataHist(0),
-// 		_costPip_PipPimHeliMcHist(0),
-// 		_costPip_PipPimHeliFittedHist(0),
-// 		_phiPip_PipPimHeliDataHist(0),
-// 		_phiPip_PipPimHeliMcHist(0),
-// 		_phiPip_PipPimHeliFittedHist(0),
-// 		_costGamCmDataHist(0),
-// 		_costGamCmMcHist(0),
-// 		_costGamCmFittedHist(0),
-// 		_chiDataHist(0),
-// 		_chiMcHist(0),
-// 		_chiFittedHist(0),
-// 		_dataTuple(0),
-// 		_mcTuple(0),
-// 		_massIndepTuple(0),
-// 		_massRange(make_pair(0,100)){
-
-// 	if(0==theJpsiGamEtaPiPiLh){
-// 		Alert <<"JpsiGamEtaPiPiLh* theJpsiGamEtaPiPiLh is a 0 pointer !!!!" ;  // << endmsg;
-// 		exit(1);
-// 	}
-
-// 	initRootStuff();
-// 	_theJpsiGamEtaPiPiLh = theJpsiGamEtaPiPiLh;
-// 	_fitParam = fitParam;
-// 	std::vector<double> data;
-// 	_errMatrix = theErrorMatrix;
-// }
-  
-
-// void JpsiGamEtaPiPiHist::fill(){
-// 	boost::shared_ptr<const EvtDataBaseList> theEvtList=_theJpsiGamEtaPiPiLh->getEventList();
-// 	const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
-
-// 	std::vector<EvtData*>::const_iterator it=dataList.begin();
-// 	while(it!=dataList.end()){
-// 		//		plotDalitz(_dalitzDataHist, (*it), 1.);
-// 		plotEtaPipPim(_EtaPiPiMassDataHist, (*it), 1.  );
-// 		plotEtaPi(_EtaPiMassDataHist, (*it), 1. );
-// 		plotPipPim(_PipPimMassDataHist, (*it), 1. );
-// 		plotCostPhiEta(_costEta_EtaPipHeliDataHist , _phiEta_EtaPipHeliDataHist ,(*it), 1. );
-// 		plotCostPhiPip(_costPip_PipPimHeliDataHist, _phiPip_PipPimHeliDataHist,(*it), 1. );
-// 		plotCostGam(_costGamCmDataHist,(*it), 1. );
-// 		//plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecs[enumJpsiGamEtaPiPiData::V4_KpKm_HeliKsKlKpKm], 1.);
-// //		fillTuple(_dataTuple, (*it), 1.);
-
-// 		++it;
-// 	}
-
-// 	const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
-// 	it=mcList.begin();
-// 	while(it!=mcList.end()){
-// 		//		plotDalitz(_dalitzMcHist, (*it), 1.);
-// 		plotEtaPipPim(_EtaPiPiMassMcHist, (*it), 1.  );
-// 		plotEtaPi(_EtaPiMassMcHist, (*it), 1. );
-// 		plotPipPim(_PipPimMassMcHist, (*it), 1. );
-// 		plotCostPhiEta(_costEta_EtaPipHeliMcHist , _phiEta_EtaPipHeliMcHist ,(*it), 1. );
-// 		plotCostPhiPip(_costPip_PipPimHeliMcHist, _phiPip_PipPimHeliMcHist,(*it), 1. );
-// 		plotCostGam(_costGamCmMcHist,(*it), 1. );
-// 		//plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecs[enumJpsiGamEtaPiPiMc::V4_KpKm_HeliKsKlKpKm], 1.);
-// //		fillTuple(_mcTuple, (*it), 1.);
-
-// 		double evtWeight= _theJpsiGamEtaPiPiLh->calcEvtIntensity((*it), _fitParam);
-// 		//		plotDalitz(_dalitzFittedHist, (*it), evtWeight);
-// 		plotEtaPipPim(_EtaPiPiMassFittedHist, (*it), evtWeight  );
-// 		plotEtaPi(_EtaPiMassFittedHist, (*it), evtWeight );
-// 		plotPipPim(_PipPimMassFittedHist, (*it), evtWeight );
-// 		plotCostPhiEta(_costEta_EtaPipHeliFittedHist , _phiEta_EtaPipHeliFittedHist ,(*it), evtWeight );
-// 		plotCostPhiPip(_costPip_PipPimHeliFittedHist, _phiPip_PipPimHeliFittedHist,(*it), evtWeight );
-// 		plotCostGam(_costGamCmFittedHist,(*it), evtWeight );
-// 		//plotCostPhi_PhiPhiHeli(_costPhi_KpKmFittedHist, _phiPhi_KpKmFittedHist, (*it)->FourVecs[enumJpsiGamEtaPiPiFitted::V4_KpKm_HeliKsKlKpKm], evtWeight);
-// 		plotChi(_chiFittedHist, (*it), evtWeight  );
-
-// //		fillTuple(_mcTuple, (*it), evtWeight);
-
-// 		++it;
-//     }
-
-
-// 	double integralData=(double) theEvtList->getDataVecs().size();
-// 	Info <<"No of fit data events  " << integralData ;  // << endmsg;
-  
-// 	double integralFitted=(double) theEvtList->getMcVecs().size();
-// 	Info <<"No of fit events " << integralFitted ;  // << endmsg;
-
-// 	Info <<"scaling factor  " << integralData/integralFitted ;  // << endmsg;
-
-// 	double scaleFactor = integralData/integralFitted;
-  
-// 	//_dalitzFittedHist->Scale(scaleFactor);
-// 	_EtaPiPiMassFittedHist->Scale(scaleFactor);
-// 	_EtaPiMassFittedHist->Scale(scaleFactor);
-// 	_PipPimMassFittedHist->Scale(scaleFactor);
-// 	_costEta_EtaPipHeliFittedHist->Scale(scaleFactor);
-// 	_phiEta_EtaPipHeliFittedHist->Scale(scaleFactor);
-// 	_costPip_PipPimHeliFittedHist->Scale(scaleFactor);
-// 	_phiPip_PipPimHeliFittedHist->Scale(scaleFactor);
-// 	_costGamCmFittedHist->Scale(scaleFactor);
-// 	//_costPhi_KpKmFittedHist->Scale(scaleFactor);
-// 	//_phiPhi_KpKmFittedHist->Scale(scaleFactor);
-// 	_chiFittedHist->Scale(scaleFactor);
-
-// 	/*
-// 	double iEta(0.), iEtaErr(0.), iF0(0.), iF0Err(0.), iEta2(0.), iEta2Err(0.), iF1(0.), iF1Err(0.), iF2(0.), iF2Err(0.);
-// 	double etaReal(0.), etaImg(0.);
-
-
-// 	it=mcList.begin();
-// 	while(it!=mcList.end()){
-// 		std::pair<double, double> intensityEvent = make_pair(0.,0.);
-// 		_theJpsiGamEtaPiPiLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "etacHyp", intensityEvent);
-// 		iEta+= intensityEvent.first*scaleFactor;
-// 		iEtaErr+= intensityEvent.second*scaleFactor;
-
-// 		_theJpsiGamEtaPiPiLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "f02020Hyp",intensityEvent);
-// 		iF0 += intensityEvent.first*scaleFactor;
-// 		iF0Err += intensityEvent.second*scaleFactor;
-
-// 		_theJpsiGamEtaPiPiLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "f1Hyp", intensityEvent);
-// 		iF1 += intensityEvent.first*scaleFactor;
-// 		iF1Err += intensityEvent.second*scaleFactor;
-
-// 		_theJpsiGamEtaPiPiLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "f22300Hyp",intensityEvent);
-// 		iF2 += intensityEvent.first*scaleFactor;
-// 		iF2Err += intensityEvent.second*scaleFactor;
-
-// 		_theJpsiGamEtaPiPiLh->calcComponentIntensity((*it), _fitParam, *_errMatrix, "eta21870Hyp",intensityEvent);
-// 		iEta2+= intensityEvent.first*scaleFactor;
-// 		iEta2Err += intensityEvent.second*scaleFactor;
-
-// 		it++;
-// 	}
-// 	double meanMassRange = _massRange.first + 0.5*(_massRange.second-_massRange.first);
-
-// 	Info << "Events for component eta : " << iEta << " +/- " << iEtaErr ;
-// 	Info << "Events for component f0:   " << iF0 << " +/- " << iF0Err ;
-// 	Info << "Events for component f1:   " << iF1 << " +/- " << iF1Err ;
-// 	Info << "Events for component f2:   " << iF2 << " +/- " << iF2Err ;
-// 	Info << "Events for component eta2: " << iEta2 << " +/- " << iEta2Err ;
-
-// 	std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEtacGamPhi=_fitParam.Phis[paramEnumJpsiGamEtaPiPi::PsiToEtacGamma];
-// 	std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEtacGamMag=_fitParam.Mags[paramEnumJpsiGamEtaPiPi::PsiToEtacGamma];
-// 	std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator phiIter = PsiToEtacGamPhi.begin();
-// 	for(; phiIter!=PsiToEtacGamPhi.end(); phiIter++){
-// 		double thePhase = phiIter->second;
-// 		double theMag = PsiToEtacGamMag[phiIter->first];
-
-// 		etaImg = theMag*cos(thePhase) ;
-// 		etaReal = theMag*sin(thePhase);
-// 	}
-
-// 	_massIndepTuple->Fill(meanMassRange, iEta, iEtaErr, iF0, iF0Err, iF1, iF1Err, iF2, iF2Err, iEta2, iEta2Err, etaImg, etaReal );
-// */
-// }
 
 JpsiGamEtaPiPiHist::~JpsiGamEtaPiPiHist(){
 	_theTFile->Write();
@@ -405,7 +233,6 @@ void JpsiGamEtaPiPiHist::initRootStuff(){
 	_dalitzDataHist= new TH2F("_dalitzDataHist","Dpl #pi^{+}#pi^{-}#eta data", 50, 0.65*0.65, 1.5*1.5, 50, 0.65*0.65, 1.5*1.5 );
 	_dalitzMcHist= new TH2F("_dalitzMcHist","Dpl #pi^{+}#pi^{-}#eta MC", 50, 0.65*0.65, 1.5*1.5, 50, 0.65*0.65, 1.5*1.5);
 	_dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl #pi^{+}#pi^{-}#eta fit", 50, 0.65*0.65, 1.5*1.5, 50, 0.65*0.65, 1.5*1.5 );
-
   
 	int nbins=100;
 	xmin=0.7;
@@ -444,14 +271,6 @@ void JpsiGamEtaPiPiHist::initRootStuff(){
 	_costGamCmMcHist= new TH1F("_costGamCmMcHist", "cos(#Theta_{#gamma}) CM Mc", 100, -1., 1.);
 	_costGamCmFittedHist= new TH1F("_costGamCmFittedHist", "cos(#Theta_{#gamma}) CM Fit", 100, -1, 1);
 
-	//	_costPhi_KpKmDataHist= new TH1F("_costPhi_KpKmDataHist", "cos(#Theta_{#phi}) K+ K- data", 100, -1., 1.);
-	//	_costPhi_KpKmMcHist= new TH1F("_costPhi_KpKmMcHist", "cos(#Theta_{#phi}) K+ K- Mc", 100, -1., 1.);
-	//	_costPhi_KpKmFittedHist= new TH1F("_costPhi_KpKmFittedHist", "cos(#Theta_{#phi}) K+ K- Fit", 100, -1., 1.);
-
-	//	_phiPhi_KpKmDataHist= new TH1F("_phiPhi_KpKmDataHist", "cos(#Phi_{#phi}) K+ K- data", 100, -TMath::Pi(), TMath::Pi());
-	//	_phiPhi_KpKmMcHist= new TH1F("_phiPhi_KpKmMcHist", "cos(#Phi_{#phi}) K+ K- Mc", 100, -TMath::Pi(), TMath::Pi());
-	//	_phiPhi_KpKmFittedHist= new TH1F("_phiPhi_KpKmFittedHist", "cos(#Phi_{#phi}) K+ K- Fit", 100, -TMath::Pi(), TMath::Pi());
-
 
 	std::string tupleVariables = "mEtaPipPim:mEtaPi:mPipPim:EtaPipPimCostTheta:gamCosTheta:EtaPiCosTheta:PipPimCosTheta:PipCosTheta:PimCosTheta:decPlaneChi:testHeli:weight";
   
@@ -462,8 +281,8 @@ void JpsiGamEtaPiPiHist::initRootStuff(){
 }
 
 void JpsiGamEtaPiPiHist::plotDalitz(TH2F* theHisto,  EvtData* theData, double weight){
-	Vector4<double>& v4EtaPip = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi];
-	Vector4<double>& v4EtaPim = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi];
+	Vector4<double> v4EtaPip = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi];
+	Vector4<double> v4EtaPim = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi];
 	theHisto->Fill( v4EtaPip.M2(), v4EtaPim.M2(), weight);
 	theHisto->Fill( v4EtaPim.M2(), v4EtaPip.M2(), weight);
 }
@@ -474,30 +293,30 @@ void JpsiGamEtaPiPiHist::plotEtaPipPim(TH1F* theHisto, EvtData* theData, double 
 }
 
 void JpsiGamEtaPiPiHist::plotEtaPi(TH1F* theHisto, EvtData* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi];
+	Vector4<double> v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 	v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPim_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 }
 void JpsiGamEtaPiPiHist::plotPipPim(TH1F* theHisto, EvtData* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi];
+	Vector4<double> v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 }
 
 void JpsiGamEtaPiPiHist::plotCostPhiEta(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtData* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Eta_HeliEtaPip];
+	Vector4<double> v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Eta_HeliEtaPip];
 	theCostHisto->Fill( v4.CosTheta(), weight );
 	thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void JpsiGamEtaPiPiHist::plotCostPhiPip(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtData* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pip_HeliPipPim];
+	Vector4<double> v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pip_HeliPipPim];
 	theCostHisto->Fill( v4.CosTheta(), weight );
 	thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void JpsiGamEtaPiPiHist::plotCostGam(TH1F* theCostHisto, EvtData* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_gamma_HeliPsi];
+	Vector4<double> v4 = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_gamma_HeliPsi];
 	theCostHisto->Fill( v4.CosTheta(), weight );
 }
 /*
@@ -510,23 +329,23 @@ void JpsiGamEtaPiPiHist::plotCostPhi_PhiPhiHeli(TH1F* theCostHisto, TH1F* thePhi
 
 
 void  JpsiGamEtaPiPiHist::fillTuple( TNtuple* theTuple, EvtData* theData, double weight){
-	Vector4<double>& V4_EtaPipPim_HeliPsi = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPipPim_HeliPsi]  ;
-	Vector4<double>& V4_EtaPip_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi] ;
-	Vector4<double>& V4_PipPim_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi] ;
-	Vector4<double>& V4_gamma_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_gamma_HeliPsi] ;
+	Vector4<double> V4_EtaPipPim_HeliPsi = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPipPim_HeliPsi]  ;
+	Vector4<double> V4_EtaPip_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliPsi] ;
+	Vector4<double> V4_PipPim_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi] ;
+	Vector4<double> V4_gamma_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_gamma_HeliPsi] ;
   
-	Vector4<double>& V4_EtaPip_HeliEtaPipPim= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliEtaPipPim] ;
-	Vector4<double>& V4_PipPim_HeliKsKlKpKm= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliEtaPipPim] ;
-	Vector4<double>& V4_Eta_HeliEtaPip= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Eta_HeliEtaPip] ;
-	Vector4<double>& V4_Pip_HeliPipPim= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pip_HeliPipPim] ;
+	Vector4<double> V4_EtaPip_HeliEtaPipPim= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_EtaPip_HeliEtaPipPim] ;
+	Vector4<double> V4_PipPim_HeliKsKlKpKm= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliEtaPipPim] ;
+	Vector4<double> V4_Eta_HeliEtaPip= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Eta_HeliEtaPip] ;
+	Vector4<double> V4_Pip_HeliPipPim= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pip_HeliPipPim] ;
   
 //	Vector4<double>& V4_Eta_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Eta_HeliPsi] ;
 //	Vector4<double>& V4_Pip_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pip_HeliPsi] ;
 //	Vector4<double>& V4_Pim_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pim_HeliPsi] ;
   
   
-	Vector4<double>& V4_normPipPimDecHeliEtaPipPim = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_normPipPimDecHeliEtaPipPim];
-	Vector4<double>& V4_normEtaPipDecHeliEtaPipPim = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_normEtaPipDecHeliEtaPipPim];
+	Vector4<double> V4_normPipPimDecHeliEtaPipPim = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_normPipPimDecHeliEtaPipPim];
+	Vector4<double> V4_normEtaPipDecHeliEtaPipPim = theData->FourVecs[enumJpsiGamEtaPiPiData::V4_normEtaPipDecHeliEtaPipPim];
 
 	double cosChi=(V4_normPipPimDecHeliEtaPipPim.Px()*V4_normEtaPipDecHeliEtaPipPim.Px()
 				+V4_normPipPimDecHeliEtaPipPim.Py()*V4_normEtaPipDecHeliEtaPipPim.Py()
