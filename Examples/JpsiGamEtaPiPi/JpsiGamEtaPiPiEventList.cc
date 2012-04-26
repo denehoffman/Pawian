@@ -147,6 +147,14 @@ void JpsiGamEtaPiPiEventList::read4Vecs(EventList& evtList, std::vector<EvtData*
 			}
 		}
 
+             for (Spin J_etapipi=0; J_etapipi<=2; J_etapipi++){
+               for (Spin lam_etapipi=-J_etapipi; lam_etapipi<=J_etapipi; lam_etapipi++){
+		evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_etapipidec][J_etapipi][lam_etapipi][0]
+		=Wigner_D(V4_normPipPimDecHeliEtaPipPim.Phi(),V4_normPipPimDecHeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,0);
+               }
+             }
+
+
 		/*		//WignerD function for 2+ -> phi phi
 		Spin jTensor =2;
 		for(Spin M=-jTensor; M<=jTensor; M++){

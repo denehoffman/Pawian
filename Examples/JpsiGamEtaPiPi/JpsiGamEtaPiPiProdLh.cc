@@ -58,9 +58,17 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
     
   }
 
+//   std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > f1Amps;
   if(_f1Hyp){
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof1GamMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof1GamPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma];
+
+	for (Spin helf1=-1; helf1<2; helf1++){
+	  JmpGmp+= psiToXGammaAmp(1, 1, helf1, 1, theData, PsiTof1GamMag, PsiTof1GamPhi); 
+          JmpGmm+= psiToXGammaAmp(1, 1, helf1, -1, theData, PsiTof1GamMag, PsiTof1GamPhi); 
+          JmmGmp+= psiToXGammaAmp(-1, 1, helf1, 1, theData, PsiTof1GamMag, PsiTof1GamPhi);
+          JmmGmm+= psiToXGammaAmp(-1, 1, helf1, -1, theData, PsiTof1GamMag, PsiTof1GamPhi);
+	}
 //     JmpGmp+=etaGammaAmp(1, 0, 1, theData, PsiToEtaGamMag, PsiToEtaGamPhi );
 //     JmpGmm+=etaGammaAmp(1, 0, -1, theData,  PsiToEtaGamMag, PsiToEtaGamPhi  );
 //     JmmGmp+=etaGammaAmp(-1, 0, 1, theData,  PsiToEtaGamMag, PsiToEtaGamPhi );
@@ -103,7 +111,7 @@ complex<double> JpsiGamEtaPiPiProdLh::psiToXGammaAmp(Spin Minit, Spin jX, Spin l
        *Clebsch(jX, lamX, 1, -lamGamma, PsiState->S, lambda  )
        *conj( theData->WignerDs[enumJpsiGamEtaPiPiData::Df_Psi][PsiState->J][Minit][lambda]  );
      
-     result+= amp;
+     result+= amp*conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_etapipidec][jX][lamX][0]);
    }
 
    return result;
