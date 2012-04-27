@@ -64,6 +64,11 @@ protected:
 				    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiPhi,
                                     complex<double>& dynAplus, complex<double>& dynAminus);
 
+  virtual complex<double> XToEtaFAmp(Spin jX, Spin lamX, Spin jf, EvtData* theData, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
+				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi, 
+				     double fMass, double fsigmaWidth);
+  
   complex<double> A980DecFlatte(fitParams& theParamVal, const Vector4<double> &__p4);   
 
   virtual void calcEtaGammaAmp( EvtData* theData, 
@@ -77,6 +82,8 @@ protected:
   bool _etaToPiPiEtaHyp;
   bool _etaToa980PiHyp;
   bool _etaToa2_1320PiHyp;
+  bool _etaToSigmaEtaHyp;
+  bool _etaTof0_980EtaHyp;
   bool _eta2ToPiPiEtaHyp;
   bool _eta2Toa980PiHyp;
   bool _eta2Toa2_1320PiHyp;
@@ -85,8 +92,6 @@ protected:
   
   bool _usePhasespace;
   
-  std::map<const std::string, bool> _hypMap;
-
  
   
 

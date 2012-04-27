@@ -18,6 +18,8 @@ JpsiGamEtaPiPiProdLh::JpsiGamEtaPiPiProdLh(boost::shared_ptr<const EvtDataBaseLi
   ,_etaToPiPiEtaHyp(false)
   ,_etaToa980PiHyp(false)
   ,_etaToa2_1320PiHyp(false)
+  ,_etaToSigmaEtaHyp(false)
+  ,_etaTof0_980EtaHyp(false)
   ,_eta2ToPiPiEtaHyp(false)
   ,_eta2Toa980PiHyp(false)
   ,_eta2Toa2_1320PiHyp(false)
@@ -34,6 +36,8 @@ JpsiGamEtaPiPiProdLh::JpsiGamEtaPiPiProdLh( boost::shared_ptr<AbsLh> theLhPtr, c
   ,_etaToPiPiEtaHyp(false)
   ,_etaToa980PiHyp(false)
   ,_etaToa2_1320PiHyp(false)
+  ,_etaToSigmaEtaHyp(false)
+  ,_etaTof0_980EtaHyp(false)
   ,_eta2ToPiPiEtaHyp(false)
   ,_eta2Toa980PiHyp(false)
   ,_eta2Toa2_1320PiHyp(false)
@@ -62,7 +66,7 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
   complex<double> JmmGmp(0.,0.);
   complex<double> JmmGmm(0.,0.);
   
-  if(_etaToPiPiEtaHyp || _etaToa980PiHyp || _etaToa2_1320PiHyp){
+  if(_etaToPiPiEtaHyp || _etaToa980PiHyp || _etaToa2_1320PiHyp ||_etaToSigmaEtaHyp || _etaToSigmaEtaHyp){
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEtacGamMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiToEtacGamPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma];
 
@@ -124,6 +128,16 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
       TmpDecAmp+=XToAPiAmp(0, 0, 2, theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320PlusBW, a2_1320MinusBW);
     }
 
+    if(_etaToSigmaEtaHyp){
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToSigmaEtaMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::EtaToSigmaEta];
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToSigmaEtaPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::EtaToSigmaEta];
+
+      double sigmaMass=theParamVal.Masses[paramEnumJpsiGamEtaPiPi::sigma];
+      double sigmaWidth=theParamVal.Widths[paramEnumJpsiGamEtaPiPi::sigma];
+      //dummy
+      TmpDecAmp+=XToEtaFAmp(0, 0, 0, theData, etaToSigmaEtaMag, etaToSigmaEtaPhi, sigmaMass, sigmaWidth);
+    }
+
       JmpGmp+=JpGpTmp*TmpDecAmp;
       JmpGmm+=JpGmTmp*TmpDecAmp;
       JmmGmp+=JmGpTmp*TmpDecAmp;
@@ -134,6 +148,7 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
     
   }
 
+  
   if(_f1ToPiPiEtaHyp || _f1Toa980PiHyp){
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof1GamMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > PsiTof1GamPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma];
@@ -380,11 +395,26 @@ complex<double> JpsiGamEtaPiPiProdLh::XToAPiAmp(Spin jX, Spin lamX, Spin jA, Evt
        amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)
 	 *Clebsch(XState->L, 0, XState->S, lamA, XState->J, lamA)
 	 *Clebsch(jA, lamA, 0, 0, XState->S, lamA)*
-	 (conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_AplusPiminusdec][jX][lamX][lamA])*dynAplus+conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_AminusPiplusdec][jX][lamX][lamA])*dynAminus);
+	 ( conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAplusPiminusdec][jX][lamX][lamA])
+	   *conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_AplusDec][jA][lamA][0])*dynAplus
+	  + conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAminusPiplusdec][jX][lamX][lamA])
+	   *conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_AminusDec][jA][lamA][0])*dynAminus );
      }
      
      result+= amp;
    }
+   
+   return result;
+}
+
+
+complex<double> JpsiGamEtaPiPiProdLh::XToEtaFAmp(Spin jX, Spin lamX, Spin jf, EvtData* theData, 
+						 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
+						 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi, 
+						 double fMass, double fsigmaWidth){
+   complex<double> result(0.,0.);
+
+   //dummy
    
    return result;
 }
@@ -433,7 +463,7 @@ void JpsiGamEtaPiPiProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr
   
   std::map<int, std::vector< boost::shared_ptr<const JPCLS> > > theAmpMap;
   
-  if(_etaToPiPiEtaHyp || _etaToa980PiHyp || _etaToa2_1320PiHyp){
+  if(_etaToPiPiEtaHyp || _etaToa980PiHyp || _etaToa2_1320PiHyp || _etaToSigmaEtaHyp || _etaTof0_980EtaHyp){
     theAmpMap[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::PsiToEtaGamma);
 
     if(_etaToPiPiEtaHyp){
@@ -446,6 +476,14 @@ void JpsiGamEtaPiPiProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr
     
     if(_etaToa2_1320PiHyp){
       theAmpMap[paramEnumJpsiGamEtaPiPi::EtaToA2_1320Pi] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::EtaToA2_1320Pi);
+    }
+
+    if(_etaToSigmaEtaHyp){
+      theAmpMap[paramEnumJpsiGamEtaPiPi::EtaToSigmaEta] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::EtaToSigmaEta);
+    }
+
+    if(_etaTof0_980EtaHyp){
+      theAmpMap[paramEnumJpsiGamEtaPiPi::EtaTof0_980Eta] = theFitParams.jpclsVec(paramEnumJpsiGamEtaPiPi::EtaTof0_980Eta);
     }
   }
 
@@ -509,11 +547,27 @@ void JpsiGamEtaPiPiProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr
   if (_f1Toa980PiHyp || _etaToa980PiHyp ){
     fitVal.Masses[paramEnumJpsiGamEtaPiPi::a0_980]=0.98;
     fitErr.Masses[paramEnumJpsiGamEtaPiPi::a0_980]=0.03;
-    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]= .30;
-    fitErr.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]=0.05;
-    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]= .30;
-    fitErr.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]=0.05;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]= .40;
+    fitErr.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]=0.06;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]= .40;
+    fitErr.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]=0.06;
   }
+
+  if(_etaTof0_980EtaHyp){
+    fitVal.Masses[paramEnumJpsiGamEtaPiPi::f0_980]=0.98;
+    fitErr.Masses[paramEnumJpsiGamEtaPiPi::f0_980]=0.03;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gPiPi] = .40;
+    fitErr.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gPiPi]= 0.06;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gKK]= .40;
+    fitErr.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gKK]=0.06;
+ }
+
+  if(_etaToSigmaEtaHyp){
+    fitVal.Masses[paramEnumJpsiGamEtaPiPi::sigma]=0.5;
+    fitErr.Masses[paramEnumJpsiGamEtaPiPi::sigma]=0.05;
+    fitVal.Widths[paramEnumJpsiGamEtaPiPi::sigma]=0.5;
+    fitErr.Widths[paramEnumJpsiGamEtaPiPi::sigma]=0.08;
+ }
 
   if(_etaToa2_1320PiHyp){
     fitVal.Masses[paramEnumJpsiGamEtaPiPi::a2_1320]=1.32;
@@ -534,88 +588,41 @@ void JpsiGamEtaPiPiProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr
 
 bool 
 JpsiGamEtaPiPiProdLh::initializeHypothesisMap( const std::map<const std::string, bool>& hypMap   ){
+
+
+  std::string theKey="etaToPiPiEtaHyp";
+  setHyps( hypMap, _etaToPiPiEtaHyp, theKey);
   
-  std::map<const std::string, bool>::const_iterator iter= hypMap.find("etaToPiPiEtaHyp");
-  
-  if (iter !=hypMap.end()){
-    _etaToPiPiEtaHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _etaToPiPiEtaHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis etaToPiPiEtaHyp not set!!!" <<endmsg;
+  theKey="etaToa980PiHyp";
+  setHyps( hypMap, _etaToa980PiHyp, theKey);
 
-  iter= hypMap.find("etaToa980PiHyp");
-  if (iter !=hypMap.end()){
-    _etaToa980PiHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _etaToa980PiHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis etaToa980PiHyp not set!!!" <<endmsg;    
+  theKey="etaToa2_1320PiHyp";
+  setHyps( hypMap, _etaToa2_1320PiHyp, theKey);
 
-  iter= hypMap.find("etaToa2_1320PiHyp");
-  if (iter !=hypMap.end()){
-    _etaToa2_1320PiHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _etaToa2_1320PiHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis etaToa2_1320PiHyp not set!!!" <<endmsg;    
+  theKey="etaToSigmaEtaHyp";
+  setHyps( hypMap, _etaToSigmaEtaHyp, theKey);
 
+  theKey="etaTof0_980EtaHyp";
+  setHyps( hypMap, _etaTof0_980EtaHyp, theKey);
 
+  theKey="eta2ToPiPiEtaHyp";
+  setHyps( hypMap, _eta2ToPiPiEtaHyp, theKey);
 
-  iter= hypMap.find("eta2ToPiPiEtaHyp");  
-  if (iter !=hypMap.end()){
-    _eta2ToPiPiEtaHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _eta2ToPiPiEtaHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis eta2ToPiPiEtaHyp not set!!!" <<endmsg;
+  theKey="eta2Toa980PiHyp";
+  setHyps( hypMap, _eta2Toa980PiHyp, theKey);
 
+  theKey="eta2Toa2_1320PiHyp";
+  setHyps( hypMap, _eta2Toa2_1320PiHyp, theKey);
 
+  theKey="f1ToPiPiEtaHyp";
+  setHyps( hypMap, _f1ToPiPiEtaHyp, theKey);
 
-  iter= hypMap.find("eta2Toa980PiHyp");
-  if (iter !=hypMap.end()){
-    _eta2Toa980PiHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _eta2Toa980PiHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis eta2Toa980PiHyp not set!!!" <<endmsg;    
+  theKey="f1Toa980PiHyp";
+  setHyps( hypMap, _f1Toa980PiHyp, theKey);
 
-  iter= hypMap.find("eta2Toa2_1320PiHyp");
-  if (iter !=hypMap.end()){
-    _eta2Toa2_1320PiHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _eta2Toa2_1320PiHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis eta2Toa2_1320PiHyp not set!!!" <<endmsg;  
+  theKey="usePhasespace";
+  setHyps( hypMap, _usePhasespace, theKey);
 
-
-
-
-  
-  iter= hypMap.find("f1ToPiPiEtaHyp");
-  if (iter !=hypMap.end()){
-    _f1ToPiPiEtaHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1ToPiPiEtaHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis f1ToPiPiEtaHyp not set!!!" <<endmsg;
-
-  iter= hypMap.find("f1Toa980PiHyp");
-  if (iter !=hypMap.end()){
-    _f1Toa980PiHyp= iter->second;
-    Info<< "hypothesis " << iter->first << "\t" << _f1Toa980PiHyp <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "hypothesis f1Toa980PiHyp not set!!!" <<endmsg;  
-
-  iter= hypMap.find("usePhasespace");  
-  if (iter !=hypMap.end()){
-    _usePhasespace= iter->second;
-    Info<< "Using phasespace for bg parameterization " << iter->first << "\t" << _usePhasespace <<endmsg;
-    _hypMap[iter->first]= iter->second;
-  }
-  else Alert << "using phasespace not set!!!" <<endmsg;
-  
   
   return true;
 }

@@ -15,7 +15,7 @@ struct enumJpsiGamEtaPiPiData{
 	V4_Eta_HeliEtaPipPim, V4_Pip_HeliEtaPipPim, V4_Pim_HeliEtaPipPim, V4_EtaPip_HeliEtaPipPim, V4_EtaPim_HeliEtaPipPim, V4_PipPim_HeliEtaPipPim,
 	V4_Pip_HeliPipPim, V4_Pim_HeliPipPim, V4_Pip_HeliEtaPip, V4_Pim_HeliEtaPim, V4_Eta_HeliEtaPip, V4_Eta_HeliEtaPim,
 	V4_normPipPimDecHeliEtaPipPim, V4_normEtaPipDecHeliEtaPipPim,
-	n4Vecs, Df_Psi=n4Vecs, Df_etapipidec, Df_AplusPiminusdec, Df_AminusPiplusdec, nDfuncts
+	n4Vecs, Df_Psi=n4Vecs, Df_etapipidec, Df_XToAplusPiminusdec, Df_XToAminusPiplusdec, Df_AplusDec, Df_AminusDec, nDfuncts
   };
   
   static const std::string& name(unsigned int t)
@@ -25,7 +25,7 @@ struct enumJpsiGamEtaPiPiData{
     	"gamma_HeliPsi", "Eta_HeliPsi", "Pip_HeliPsi", "Pim_HeliPsi",
     	"Eta_HeliEtaPipPim", "Pip_HeliEtaPipPim", "Pim_HeliEtaPipPim", "EtaPip_HeliEtaPipPim", "EtaPim_HeliEtaPipPim", "PipPim_HeliEtaPipPim",
     	"Pip_HeliPipPim", "Pim_HeliPipPim", "Pip_HeliEtaPip", "Pim_HeliEtaPim", "Eta_HeliEtaPip", "Eta_HeliEtaPim",
-    	"Df_Psi","Df_etapipidec", "Df_apidec", "Df_AplusPiminusdec", "Df_AminusPiplusdec"
+    	"Df_Psi","Df_etapipidec", "Df_apidec", "Df_XToAplusPiminusdec", "Df_XToAminusPiplusdec", "Df_AplusDec", "Df_AminusDec"
     };
     if (t<0 || t>=enumJpsiGamEtaPiPiData::nDfuncts) assert(0);
     return fitName[t];

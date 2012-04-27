@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <complex>
+#include <map>
+#include <string>
 
 #include <cassert>
 #include <boost/shared_ptr.hpp>
@@ -46,6 +48,10 @@ protected:
  
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
+  std::map<const std::string, bool> _hypMap;
+
+  virtual void setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey);
+
 
 private:
 

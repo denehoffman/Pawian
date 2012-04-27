@@ -201,6 +201,7 @@ JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh> theJpsiGamEtaPiP
    _dalitzFittedHist->Scale(integralData/integralFitted);
   _EtaPiPiMassFittedHist->Scale(integralData/integralFitted);
   _EtaPiMassFittedHist->Scale(integralData/integralFitted);
+  _PipPimMassFittedHist->Scale(integralData/integralFitted);
   _costEta_EtaPipHeliFittedHist->Scale(integralData/integralFitted);
   _phiEta_EtaPipHeliFittedHist->Scale(integralData/integralFitted);
   _costPip_PipPimHeliFittedHist->Scale(integralData/integralFitted);
@@ -230,9 +231,9 @@ void JpsiGamEtaPiPiHist::initRootStuff(){
 //	double ymax=xmax;
 //	xmin=0.8;
 //	xmax=10.;
-	_dalitzDataHist= new TH2F("_dalitzDataHist","Dpl #pi^{+}#pi^{-}#eta data", 50, 0.65*0.65, 1.5*1.5, 50, 0.65*0.65, 1.5*1.5 );
-	_dalitzMcHist= new TH2F("_dalitzMcHist","Dpl #pi^{+}#pi^{-}#eta MC", 50, 0.65*0.65, 1.5*1.5, 50, 0.65*0.65, 1.5*1.5);
-	_dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl #pi^{+}#pi^{-}#eta fit", 50, 0.65*0.65, 1.5*1.5, 50, 0.65*0.65, 1.5*1.5 );
+	_dalitzDataHist= new TH2F("_dalitzDataHist","Dpl #pi^{+}#pi^{-}#eta data", 50, 0.65*0.65, 2.0*2.0, 50, 0.65*0.65, 2.0*2.0 );
+	_dalitzMcHist= new TH2F("_dalitzMcHist","Dpl #pi^{+}#pi^{-}#eta MC", 50, 0.65*0.65, 2.0*2.0, 50, 0.65*0.65, 2.0*2.0);
+	_dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl #pi^{+}#pi^{-}#eta fit", 50, 0.65*0.65, 2.0*2.0, 50, 0.65*0.65, 2.0*2.0 );
   
 	int nbins=100;
 	xmin=0.7;

@@ -155,6 +155,8 @@ int main(int __argc,char *__argv[]){
 	std::map<const std::string, bool> hypMap;
 	hypMap["etaToPiPiEtaHyp"] =false;
 	hypMap["etaToa980PiHyp"] =false;
+	hypMap["etaToSigmaEtaHyp"] =false;
+	hypMap["etaTof0_980EtaHyp"] =false;
 	hypMap["etaToa2_1320PiHyp"] =false;
 	hypMap["eta2ToPiPiEtaHyp"] =false;
 	hypMap["eta2Toa980PiHyp"] =false;
@@ -179,9 +181,6 @@ int main(int __argc,char *__argv[]){
 
 
 	boost::shared_ptr<AbsLh> theLhPtr;
-// 	JpsiGamEtaPiPiProdLh* theProdLh = new JpsiGamEtaPiPiProdLh(theJpsiGamEtaPiPiEventListPtr, hypMap);
-// 	theProdLh->massIndependentFit( theAppParams.massIndependentFit() );
-// 	theProdLh->useCommonProductionPhase( theAppParams.useCommonProductionPhases() );
 
  	std::string startWithHyp=theAppParams.startHypo();
 
@@ -213,25 +212,25 @@ int main(int __argc,char *__argv[]){
 // 	boost::shared_ptr<FitParamsBase> theFitParamBase
 	boost::shared_ptr<FitParamsBase> theFitParamBase(new JpsiGamEtaPiPiFitParams(theStartparams, theErrorparams));
 
-// 	if (mode=="qaMode"){
+	if (mode=="qaMode"){
 
-// 		Info << "\nThe parameter values are: " << "\n" << endmsg;
-// 		theFitParamBase->printParams(theStartparams);
+		Info << "\nThe parameter values are: " << "\n" << endmsg;
+		theFitParamBase->printParams(theStartparams);
 
-// 		Info << "\nThe parameter errors are: " << "\n" << endmsg;
-// 		theFitParamBase->printParams(theErrorparams);
+		Info << "\nThe parameter errors are: " << "\n" << endmsg;
+		theFitParamBase->printParams(theErrorparams);
 
-// 		double theLh=theLhPtr->calcLogLh(theStartparams);
-// 		Info <<"theLh = "<< theLh << endmsg;
+		double theLh=theLhPtr->calcLogLh(theStartparams);
+		Info <<"theLh = "<< theLh << endmsg;
 
-// 		std::string errFile = "finalErrorMatrix.dat";
+//        	std::string errFile = "finalErrorMatrix.dat";
 // 		FitParamErrorMatrixStreamer theErrStreamer( errFile  );
 // 		std::vector<double> theErrData;
 // 		int ncols(0);
 // 		theErrStreamer.matrixData( theErrData, ncols  );
 // 		FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
     
-// 		JpsiGamEtaPiPiHist theHist(theProdLh, theStartparams, &theErrorMatrix);
+		JpsiGamEtaPiPiHist theHist(theLhPtr, theStartparams);
 // 		theHist.setMassRange(theAppParams.massRange() );
 // 		theHist.fill();
 
@@ -241,11 +240,11 @@ int main(int __argc,char *__argv[]){
 // 			//theProdLh->dumpComponentIntensity( theStream, theStartparams, theErrorMatrix );
 // 		}
 
-// 		end= clock();
-// 		double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-// 		Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
-// 		return 0;
-// 	}
+		end= clock();
+		double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+		Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+		return 0;
+	}
 
 	if (mode=="pwa"){
 		PwaFcnBase theFcn(theLhPtr, theFitParamBase);

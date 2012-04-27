@@ -19,6 +19,7 @@ JpsiGamEtaPiPiStates::JpsiGamEtaPiPiStates() :
 
   //X decays to phi phi
   fillJPCLS(_etaJPC, _a0JPC, _piJPC, _JPCLS_EtaToa0Pi);
+  fillJPCLS(_etaJPC, _f0JPC, _etaJPC, _JPCLS_EtaTof0Eta);
   fillJPCLS(_eta2JPC, _a0JPC, _piJPC, _JPCLS_Eta2Toa0Pi);
   fillJPCLS(_f1JPC, _a0JPC, _piJPC,_JPCLS_F1Toa0Pi);
   fillJPCLS(_etaJPC, _a2JPC, _piJPC,_JPCLS_EtaToa2Pi);
@@ -36,6 +37,9 @@ void JpsiGamEtaPiPiStates::print(std::ostream& os) const
   JpsiToXGamStates::print(os);
   os << "*** eta -> a0 pi:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_EtaToa0Pi );
+
+  os << "*** eta -> f0 eta:  LS combinations for the decay *** "<< std::endl;
+  printDecayJPCLS(os, _JPCLS_EtaTof0Eta );
 
   os << "*** eta2 -> a0 pi:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_Eta2Toa0Pi );

@@ -58,4 +58,18 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
 
 }
 
+void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey){
+
+  std::map<const std::string, bool>::const_iterator iter= theMap.find(theKey);
+  
+  if (iter !=theMap.end()){
+    theHyp= iter->second;
+    DebugMsg<< "hypothesis " << iter->first << "\t" << theHyp <<endmsg;
+    _hypMap[iter->first]= iter->second;
+  }
+  else{
+    Alert << theKey << " does not exist!!!" <<endmsg;
+    exit(0);
+  }
+}
 

@@ -149,17 +149,25 @@ void JpsiGamEtaPiPiEventList::read4Vecs(EventList& evtList, std::vector<EvtData*
              for (Spin J_etapipi=0; J_etapipi<=2; J_etapipi++){
                for (Spin lam_etapipi=-J_etapipi; lam_etapipi<=J_etapipi; lam_etapipi++){
 		 for (Spin lamA=-J_etapipi; lamA<=J_etapipi; lamA++){
-		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_AplusPiminusdec][J_etapipi][lam_etapipi][lamA]
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAplusPiminusdec][J_etapipi][lam_etapipi][lamA]
                   =Wigner_D(V4_EtaPip_HeliEtaPipPim.Phi(),V4_EtaPip_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamA);
 
-		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_AminusPiplusdec][J_etapipi][lam_etapipi][lamA]
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAminusPiplusdec][J_etapipi][lam_etapipi][lamA]
                   =Wigner_D(V4_EtaPim_HeliEtaPipPim.Phi(),V4_EtaPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamA);
 
 		 }
 	       }
 	     }
 
+             for (Spin Ja=0; Ja<=2; Ja++){
+               for (Spin lam_a=-Ja; lam_a<=Ja; lam_a++){
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_AplusDec][Ja][lam_a][0]
+                  =Wigner_D(V4_Pip_HeliEtaPip.Phi(), V4_Pip_HeliEtaPip.Theta(),0,Ja,lam_a,0);
 
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_AminusDec][Ja][lam_a][0]
+                  =Wigner_D(V4_Pim_HeliEtaPim.Phi(), V4_Pim_HeliEtaPim.Theta(),0,Ja,lam_a,0);
+	       }
+	     }
 	     evtData->evtWeight=1.;
 	     theEvtList.push_back(evtData);
 	     
