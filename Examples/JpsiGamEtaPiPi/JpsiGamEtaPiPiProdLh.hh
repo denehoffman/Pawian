@@ -67,7 +67,7 @@ protected:
   virtual complex<double> XToEtaFAmp(Spin jX, Spin lamX, Spin jf, EvtData* theData, 
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 				     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi, 
-				     double fMass, double fsigmaWidth);
+				     complex<double> dynamicFct);
   
   complex<double> A980DecFlatte(fitParams& theParamVal, const Vector4<double> &__p4);   
 

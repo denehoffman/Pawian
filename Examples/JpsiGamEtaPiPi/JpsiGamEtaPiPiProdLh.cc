@@ -135,7 +135,45 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
       double sigmaMass=theParamVal.Masses[paramEnumJpsiGamEtaPiPi::sigma];
       double sigmaWidth=theParamVal.Widths[paramEnumJpsiGamEtaPiPi::sigma];
       //dummy
-      TmpDecAmp+=XToEtaFAmp(0, 0, 0, theData, etaToSigmaEtaMag, etaToSigmaEtaPhi, sigmaMass, sigmaWidth);
+
+      Vector4<double > p4PiplusPiminus(theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].E(),
+				       theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].Px(),
+				       theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].Py(),
+				       theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].Pz());
+  
+      complex<double> dynamicFct = BreitWigner(p4PiplusPiminus, sigmaMass, sigmaWidth);
+ 
+     TmpDecAmp+=XToEtaFAmp(0, 0, 0, theData, etaToSigmaEtaMag, etaToSigmaEtaPhi, dynamicFct);
+    }
+
+
+
+    if(_etaTof0_980EtaHyp){
+
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaTof0_980EtaMag=theParamVal.Mags[paramEnumJpsiGamEtaPiPi::EtaTof0_980Eta];
+      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaTof0_980EtaPhi=theParamVal.Phis[paramEnumJpsiGamEtaPiPi::EtaTof0_980Eta];
+
+      double f0_980Mass=theParamVal.Masses[paramEnumJpsiGamEtaPiPi::f0_980];
+      double f0_980gPiPi=theParamVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gPiPi];
+      double f0_980gKK=theParamVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gKK];
+
+      Vector4<double > p4PiplusPiminus(theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].E(),
+				       theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].Px(),
+				       theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].Py(),
+				       theData->FourVecs[enumJpsiGamEtaPiPiData::V4_PipPim_HeliPsi].Pz());
+      const double massPi0 = 0.1349766;
+      std::pair <const double, const double> decPairPiPi=make_pair(massPi0, massPi0);
+      
+      const double KplusMass = 0.493677;
+      const double K0Mass = 0.497614;
+      std::pair <const double, const double> decPairKK=make_pair(KplusMass,K0Mass);
+      
+      
+      
+      complex<double> dynamicFct=Flatte(p4PiplusPiminus, decPairPiPi, decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
+
+      TmpDecAmp+=XToEtaFAmp(0, 0, 0, theData, etaTof0_980EtaMag, etaTof0_980EtaPhi, dynamicFct);
+
     }
 
       JmpGmp+=JpGpTmp*TmpDecAmp;
@@ -144,7 +182,6 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
       JmmGmm+=JmGmTmp*TmpDecAmp;
 
 
-    //    calcEtaGammaAmp( theData, PsiToEtacGamMag, PsiToEtacGamPhi, JmpGmp, JmpGmm, JmmGmp, JmmGmm);
     
   }
 
@@ -411,10 +448,31 @@ complex<double> JpsiGamEtaPiPiProdLh::XToAPiAmp(Spin jX, Spin lamX, Spin jA, Evt
 complex<double> JpsiGamEtaPiPiProdLh::XToEtaFAmp(Spin jX, Spin lamX, Spin jf, EvtData* theData, 
 						 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 						 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi, 
-						 double fMass, double fsigmaWidth){
-   complex<double> result(0.,0.);
+						 complex<double> dynamicFct){
+  complex<double> result(0.,0.);
+  
+  
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
-   //dummy
+   for ( itXMag=XToEtaFMag.begin(); itXMag!=XToEtaFMag.end(); ++itXMag){
+     boost::shared_ptr<const JPCLS> XState=itXMag->first;
+     double theXMag=itXMag->second;
+     double theXPhi=XToEtaFPhi[XState];
+     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+     complex<double> amp(0.,0.);     
+     for(Spin lamf = -jf; lamf <= jf; lamf++){
+       
+       if( fabs(lamf)> XState->J || fabs(lamf)>XState->S) continue;
+       
+       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)
+	 *Clebsch(XState->L, 0, XState->S, lamf, XState->J, lamf)
+	 *Clebsch(jf, lamf, 0, 0, XState->S, lamf)
+	 *conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_XTofEtadec][jX][lamX][lamf])
+	 *conj(theData->WignerDs[enumJpsiGamEtaPiPiData::Df_fToPiPiDec][jf][lamf][0])*dynamicFct;
+     }
+     
+     result+= amp;
+   }
    
    return result;
 }
@@ -547,25 +605,25 @@ void JpsiGamEtaPiPiProdLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr
   if (_f1Toa980PiHyp || _etaToa980PiHyp ){
     fitVal.Masses[paramEnumJpsiGamEtaPiPi::a0_980]=0.98;
     fitErr.Masses[paramEnumJpsiGamEtaPiPi::a0_980]=0.03;
-    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]= .40;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]= 1.0;
     fitErr.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gPiEta]=0.06;
-    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]= .40;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]= 1.0;
     fitErr.gFactors[paramEnumJpsiGamEtaPiPi::a0_980gKK]=0.06;
   }
 
   if(_etaTof0_980EtaHyp){
     fitVal.Masses[paramEnumJpsiGamEtaPiPi::f0_980]=0.98;
     fitErr.Masses[paramEnumJpsiGamEtaPiPi::f0_980]=0.03;
-    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gPiPi] = .40;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gPiPi] = 1.0;
     fitErr.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gPiPi]= 0.06;
-    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gKK]= .40;
+    fitVal.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gKK]= 1.0;
     fitErr.gFactors[paramEnumJpsiGamEtaPiPi::f0_980gKK]=0.06;
  }
 
   if(_etaToSigmaEtaHyp){
     fitVal.Masses[paramEnumJpsiGamEtaPiPi::sigma]=0.5;
     fitErr.Masses[paramEnumJpsiGamEtaPiPi::sigma]=0.05;
-    fitVal.Widths[paramEnumJpsiGamEtaPiPi::sigma]=0.5;
+    fitVal.Widths[paramEnumJpsiGamEtaPiPi::sigma]=0.4;
     fitErr.Widths[paramEnumJpsiGamEtaPiPi::sigma]=0.08;
  }
 

@@ -148,12 +148,15 @@ void JpsiGamEtaPiPiEventList::read4Vecs(EventList& evtList, std::vector<EvtData*
 
              for (Spin J_etapipi=0; J_etapipi<=2; J_etapipi++){
                for (Spin lam_etapipi=-J_etapipi; lam_etapipi<=J_etapipi; lam_etapipi++){
-		 for (Spin lamA=-J_etapipi; lamA<=J_etapipi; lamA++){
-		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAplusPiminusdec][J_etapipi][lam_etapipi][lamA]
-                  =Wigner_D(V4_EtaPip_HeliEtaPipPim.Phi(),V4_EtaPip_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamA);
+		 for (Spin lamAorF=-J_etapipi; lamAorF<=J_etapipi; lamAorF++){
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAplusPiminusdec][J_etapipi][lam_etapipi][lamAorF]
+                  =Wigner_D(V4_EtaPip_HeliEtaPipPim.Phi(),V4_EtaPip_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
 
-		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAminusPiplusdec][J_etapipi][lam_etapipi][lamA]
-                  =Wigner_D(V4_EtaPim_HeliEtaPipPim.Phi(),V4_EtaPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamA);
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XToAminusPiplusdec][J_etapipi][lam_etapipi][lamAorF]
+                  =Wigner_D(V4_EtaPim_HeliEtaPipPim.Phi(),V4_EtaPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
+
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_XTofEtadec][J_etapipi][lam_etapipi][lamAorF]
+		   =Wigner_D(V4_PipPim_HeliEtaPipPim.Phi(), V4_PipPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
 
 		 }
 	       }
@@ -168,6 +171,16 @@ void JpsiGamEtaPiPiEventList::read4Vecs(EventList& evtList, std::vector<EvtData*
                   =Wigner_D(V4_Pim_HeliEtaPim.Phi(), V4_Pim_HeliEtaPim.Theta(),0,Ja,lam_a,0);
 	       }
 	     }
+
+             for (Spin Jf=0; Jf<=2; Jf++){
+               for (Spin lam_f=-Jf; lam_f<=Jf; lam_f++){
+		 evtData->WignerDs[enumJpsiGamEtaPiPiData::Df_fToPiPiDec][Jf][lam_f][0]
+                  =Wigner_D(V4_Pim_HeliPipPim.Phi(), V4_Pim_HeliPipPim.Theta(),0,Jf,lam_f,0);
+
+	       }
+	     }
+
+
 	     evtData->evtWeight=1.;
 	     theEvtList.push_back(evtData);
 	     
