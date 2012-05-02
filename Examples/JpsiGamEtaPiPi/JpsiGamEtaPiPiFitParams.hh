@@ -27,7 +27,8 @@ using namespace ROOT::Minuit2;
 struct paramEnumJpsiGamEtaPiPi{
   enum { PsiToEtaGamma=0, PsiToEta2Gamma, PsiToF1Gamma, 
 	 EtaToPiPiEta, EtaToA980Pi, EtaToA2_1320Pi, EtaToSigmaEta, EtaTof0_980Eta, 
-	 Eta2ToPiPiEta, Eta2ToA980Pi, Eta2ToA2_1320Pi, F1ToPiPiEta, F1ToA980Pi, nAmps,
+	 Eta2ToPiPiEta, Eta2ToA980Pi, Eta2ToA2_1320Pi, Eta2ToSigmaEta, Eta2Tof0_980Eta,
+	 F1ToPiPiEta, F1ToA980Pi, nAmps,
 	 a0_980=nAmps, a2_1320, sigma, f0_980, nMasses, 
 	 a0_980gPiEta=nMasses, a0_980gKK, f0_980gPiPi, f0_980gKK, ngFactors, 
 	 phaseSpace=ngFactors, nOthers };
@@ -37,7 +38,8 @@ struct paramEnumJpsiGamEtaPiPi{
     static std::string fitName[paramEnumJpsiGamEtaPiPi::nOthers]
       ={"PsiToEtaGamma", "PsiToEta2Gamma", "PsiToF1Gamma", 
 	"EtaToPiPiEta", "EtaToA980Pi", "EtaToA2_1320Pi", "EtaToSigmaEta", "EtaTof0_980Eta", 
-	"Eta2ToPiPiEta", "Eta2ToA980Pi", "Eta2ToA2_1320Pi", "F1ToPiPiEta","F1ToA980Pi",
+	"Eta2ToPiPiEta", "Eta2ToA980Pi", "Eta2ToA2_1320Pi", "Eta2ToSigmaEta", "Eta2Tof0_980Eta",
+	"F1ToPiPiEta","F1ToA980Pi",
 	"a0_980","a2_1320","sigma","f0_980", 
 	"a0_980gPiEta", "a0_980gKK","f0_980gPiPi", "f0_980gKK", 
 	"phaseSpace"};

@@ -87,6 +87,8 @@ protected:
   bool _eta2ToPiPiEtaHyp;
   bool _eta2Toa980PiHyp;
   bool _eta2Toa2_1320PiHyp;
+  bool _eta2ToSigmaEtaHyp;
+  bool _eta2Tof0_980EtaHyp;
   bool _f1ToPiPiEtaHyp;
   bool _f1Toa980PiHyp;
   
@@ -96,7 +98,15 @@ protected:
   
 
 private:
+
+  const double _massPi0;
+  const double _massKplus;
+  const double _massK0;
+  const double _massEta;
   
+  std::pair <const double, const double> _decPairPiPi;
+  std::pair <const double, const double> _decPairKK;
+  std::pair <const double, const double> _decPairPi0Eta;  
   bool initializeHypothesisMap( const std::map<const std::string, bool>& hypMap   );
 
 
