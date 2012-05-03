@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <TStyle.h>
 
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiHist.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiEventList.hh"
@@ -15,6 +16,7 @@
 #include "TH2F.h"
 #include "TMath.h"
 #include "TNtuple.h"
+#include "TCanvas.h"
 #include "TLorentzVector.h"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -214,6 +216,46 @@ JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh> theJpsiGamEtaPiP
 
 
 JpsiGamEtaPiPiHist::~JpsiGamEtaPiPiHist(){
+	gStyle->SetPalette(1);
+	std::stringstream ss;
+	ss << _massRange.first << "_" << _massRange.second;
+
+	TCanvas* c_output=new TCanvas( "c_output","c_output",1000,600);
+	c_output->Divide(2,2);
+	c_output->cd(1);
+	_EtaPiMassDataHist->SetLineColor(kRed);
+	_EtaPiMassDataHist->DrawCopy("e");
+	_EtaPiMassFittedHist->DrawCopy("same");
+	c_output->cd(2);
+	_PipPimMassDataHist->SetLineColor(kRed);
+	_PipPimMassDataHist->DrawCopy("e");
+	_PipPimMassFittedHist->DrawCopy("same");
+	c_output->cd(3);
+	_dalitzDataHist->DrawCopy("colz");
+	c_output->cd(4);
+	_dalitzFittedHist->DrawCopy("colz");
+/*	c_output->cd(3);
+	_costEta_EtaPipHeliDataHist->SetLineColor(kRed);
+	_costEta_EtaPipHeliDataHist->DrawCopy("e");
+	_costEta_EtaPipHeliFittedHist->DrawCopy("same");
+	c_output->cd(4);
+	_phiEta_EtaPipHeliDataHist->SetLineColor(kRed);
+	_phiEta_EtaPipHeliDataHist->DrawCopy("e");
+	_phiEta_EtaPipHeliFittedHist->DrawCopy("same");
+	c_output->cd(5);
+	_costPip_PipPimHeliDataHist->SetLineColor(kRed);
+	_costPip_PipPimHeliDataHist->DrawCopy("e");
+	_costPip_PipPimHeliFittedHist->DrawCopy("same");
+	c_output->cd(6);
+	_phiPip_PipPimHeliDataHist->SetLineColor(kRed);
+	_phiPip_PipPimHeliDataHist->DrawCopy("e");
+	_phiPip_PipPimHeliFittedHist->DrawCopy("same");
+*/
+
+	TString outputfilename;
+	outputfilename = "JpsiGamEtaPiPi_" + ss.str() + ".pdf";
+	c_output->Print(outputfilename);
+	c_output->Close();
 	_theTFile->Write();
 	_theTFile->Close();
 }

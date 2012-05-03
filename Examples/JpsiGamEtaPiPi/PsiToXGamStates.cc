@@ -15,10 +15,10 @@ JpsiToXGamStates::JpsiToXGamStates() :
   _eta2JPC(new jpcRes(2,-1,1) )
 {
   //LS combinations for Psi decays to X gamma
-  fillJPCLS(_psiJPC, _etaJPC, _gammaJPC, _JPCLS_PsiToEtaGamma);
-  fillJPCLS(_psiJPC, _f0JPC, _gammaJPC, _JPCLS_PsiToF0Gamma);
-  fillJPCLS(_psiJPC, _f1JPC, _gammaJPC, _JPCLS_PsiToF1Gamma);
-  fillJPCLS(_psiJPC, _f2JPC, _gammaJPC, _JPCLS_PsiToF2Gamma);
+  fillJPCLS(_psiJPC, _etaJPC , _gammaJPC, _JPCLS_PsiToEtaGamma );
+  fillJPCLS(_psiJPC, _f0JPC  , _gammaJPC, _JPCLS_PsiToF0Gamma  );
+  fillJPCLS(_psiJPC, _f1JPC  , _gammaJPC, _JPCLS_PsiToF1Gamma  );
+  fillJPCLS(_psiJPC, _f2JPC  , _gammaJPC, _JPCLS_PsiToF2Gamma  );
   fillJPCLS(_psiJPC, _eta2JPC, _gammaJPC, _JPCLS_PsiToEta2Gamma);
   
 }

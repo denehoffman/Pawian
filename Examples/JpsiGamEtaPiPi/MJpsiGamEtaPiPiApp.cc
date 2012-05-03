@@ -313,7 +313,7 @@ int main(int __argc,char *__argv[]){
 		//std::ofstream theCompStream ( "componentIntensity.dat");
 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
  		JpsiGamEtaPiPiHist theHist(theLhPtr, finalFitParams);
-// 		theHist.setMassRange(theAppParams.massRange() );
+ 		theHist.setMassRange(theAppParams.massRange() );
 // 		theHist.fill();
 
 		return 0;
