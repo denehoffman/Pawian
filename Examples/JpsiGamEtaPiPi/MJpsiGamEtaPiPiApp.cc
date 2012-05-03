@@ -165,8 +165,10 @@ int main(int __argc,char *__argv[]){
 	hypMap["eta2Tof0_980EtaHyp"] =false;
 	hypMap["f1ToPiPiEtaHyp"] =false;
 	hypMap["f1Toa980PiHyp"] =false;
+	hypMap["f1Toa2_1320PiHyp"] =false;
+	hypMap["f1ToSigmaEtaHyp"] =false;
+	hypMap["f1Tof0_980EtaHyp"] =false;
 	hypMap["usePhasespace"]=false;
-
 	const std::vector<std::string> enabledHyps=theAppParams.enabledHyps();
 	std::vector<std::string>::const_iterator itStr;
 

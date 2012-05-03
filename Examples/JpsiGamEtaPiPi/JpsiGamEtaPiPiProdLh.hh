@@ -91,6 +91,9 @@ protected:
   bool _eta2Tof0_980EtaHyp;
   bool _f1ToPiPiEtaHyp;
   bool _f1Toa980PiHyp;
+  bool _f1Toa2_1320PiHyp;
+  bool _f1ToSigmaEtaHyp;
+  bool _f1Tof0_980EtaHyp;
   
   bool _usePhasespace;
   
