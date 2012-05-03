@@ -195,20 +195,22 @@ JpsiGamEtaPiPiHist::JpsiGamEtaPiPiHist(boost::shared_ptr<AbsLh> theJpsiGamEtaPiP
 
    double integralData=(double) theEvtList->getDataVecs().size();
    Info <<"No of fit data events  " << integralData << endmsg;   
- 
-   double integralFitted=(double) theEvtList->getMcVecs().size();
-   Info <<"No of fit events " << integralFitted << endmsg; 
-   
-   Info <<"scaling factor  " << integralData/integralFitted << endmsg;
-   _dalitzFittedHist->Scale(integralData/integralFitted);
-  _EtaPiPiMassFittedHist->Scale(integralData/integralFitted);
-  _EtaPiMassFittedHist->Scale(integralData/integralFitted);
-  _PipPimMassFittedHist->Scale(integralData/integralFitted);
-  _costEta_EtaPipHeliFittedHist->Scale(integralData/integralFitted);
-  _phiEta_EtaPipHeliFittedHist->Scale(integralData/integralFitted);
-  _costPip_PipPimHeliFittedHist->Scale(integralData/integralFitted);
-  _phiPip_PipPimHeliFittedHist->Scale(integralData/integralFitted);
-  _costGamCmFittedHist->Scale(integralData/integralFitted);
+
+   double integralFitted=  _EtaPiPiMassFittedHist->Integral();
+   Info <<"No of MC events " << theEvtList->getMcVecs().size() << endmsg; 
+   Info <<"No of fit events " << integralFitted << endmsg;  
+
+   double scalingFactor=integralData/theEvtList->getMcVecs().size();  
+   Info <<"scaling factor  " << scalingFactor << endmsg;
+   _dalitzFittedHist->Scale(scalingFactor);
+  _EtaPiPiMassFittedHist->Scale(scalingFactor);
+  _EtaPiMassFittedHist->Scale(scalingFactor);
+  _PipPimMassFittedHist->Scale(scalingFactor);
+  _costEta_EtaPipHeliFittedHist->Scale(scalingFactor);
+  _phiEta_EtaPipHeliFittedHist->Scale(scalingFactor);
+  _costPip_PipPimHeliFittedHist->Scale(scalingFactor);
+  _phiPip_PipPimHeliFittedHist->Scale(scalingFactor);
+  _costGamCmFittedHist->Scale(scalingFactor);
   
  }
 
