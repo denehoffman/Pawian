@@ -353,11 +353,11 @@ void JpsiGamEtaPiPiHist::initRootStuff(){
 	_phiPiPi_EtaPiPiHeliFittedHist = new TH1F("_phiPiPi_EtaPiPiHeliFittedHist" , "#Phi_{#pi^{+}#pi^{-}} #eta#pi^{+}#pi^{-}Heli data", 100, -TMath::Pi(), TMath::Pi());
 
 	_costEtaPi_EtaPiPiHeliDataHist   = new TH1F("_costEtaPi_EtaPiPiHeliDataHist"   , "cos(#Theta_{#eta#pi^{+-}}) #eta#pi^{+}#pi^{-}Heli data", 100, -1., 1.);
-	_costEtaPi_EtaPiPiHeliMcHist     = new TH1F("_costEtaPi_EtaPiPiHeliDataHist"   , "cos(#Theta_{#eta#pi^{+-}}) #eta#pi^{+}#pi^{-}Heli data", 100, -1., 1.);
-	_costEtaPi_EtaPiPiHeliFittedHist = new TH1F("_costEtaPi_EtaPiPiHeliDataHist"   , "cos(#Theta_{#eta#pi^{+-}}) #eta#pi^{+}#pi^{-}Heli data", 100, -1., 1.);
+	_costEtaPi_EtaPiPiHeliMcHist     = new TH1F("_costEtaPi_EtaPiPiHeliMcHist"   , "cos(#Theta_{#eta#pi^{+-}}) #eta#pi^{+}#pi^{-}Heli data", 100, -1., 1.);
+	_costEtaPi_EtaPiPiHeliFittedHist = new TH1F("_costEtaPi_EtaPiPiHeliFittedHist"   , "cos(#Theta_{#eta#pi^{+-}}) #eta#pi^{+}#pi^{-}Heli data", 100, -1., 1.);
 	_phiEtaPi_EtaPiPiHeliDataHist   = new TH1F("_phiEtaPi_EtaPiPiHeliDataHist"   , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli data", 100, -TMath::Pi(), TMath::Pi());
-	_phiEtaPi_EtaPiPiHeliMcHist     = new TH1F("_phiEtaPi_EtaPiPiHeliDataHist"   , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli data", 100, -TMath::Pi(), TMath::Pi());
-	_phiEtaPi_EtaPiPiHeliFittedHist = new TH1F("_phiEtaPi_EtaPiPiHeliDataHist"   , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli data", 100, -TMath::Pi(), TMath::Pi());
+	_phiEtaPi_EtaPiPiHeliMcHist     = new TH1F("_phiEtaPi_EtaPiPiHeliMcHist"   , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli data", 100, -TMath::Pi(), TMath::Pi());
+	_phiEtaPi_EtaPiPiHeliFittedHist = new TH1F("_phiEtaPi_EtaPiPiHeliFittedHist"   , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli data", 100, -TMath::Pi(), TMath::Pi());
 
 	_costGamCmDataHist= new TH1F("_costGamCmDataHist", "cos(#Theta_{#gamma}) CM data", 100, -1., 1.);
 	_costGamCmMcHist= new TH1F("_costGamCmMcHist", "cos(#Theta_{#gamma}) CM Mc", 100, -1., 1.);
