@@ -77,16 +77,19 @@ protected:
   bool _etaToa2_1320PiHyp;
   bool _etaToSigmaEtaHyp;
   bool _etaTof0_980EtaHyp;
+  bool _etaTof2_1270EtaHyp;
   bool _eta2ToPiPiEtaHyp;
   bool _eta2Toa980PiHyp;
   bool _eta2Toa2_1320PiHyp;
   bool _eta2ToSigmaEtaHyp;
   bool _eta2Tof0_980EtaHyp;
+  bool _eta2Tof2_1270EtaHyp;
   bool _f1ToPiPiEtaHyp;
   bool _f1Toa980PiHyp;
   bool _f1Toa2_1320PiHyp;
   bool _f1ToSigmaEtaHyp;
   bool _f1Tof0_980EtaHyp;
+  bool _f1Tof2_1270EtaHyp;
   
   bool _usePhasespace;
   

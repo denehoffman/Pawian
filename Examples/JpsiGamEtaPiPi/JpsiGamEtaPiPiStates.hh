@@ -29,12 +29,15 @@ public:
   std::vector< boost::shared_ptr<const JPCLS> > EtaToa0PiStates() const {return _JPCLS_EtaToa0Pi;}
   std::vector< boost::shared_ptr<const JPCLS> > EtaTof0EtaStates() const {return _JPCLS_EtaTof0Eta;}
   std::vector< boost::shared_ptr<const JPCLS> > EtaToa2PiStates() const {return _JPCLS_EtaToa2Pi;}
+  std::vector< boost::shared_ptr<const JPCLS> > EtaTof2EtaStates() const {return _JPCLS_EtaTof2Eta;}
   std::vector< boost::shared_ptr<const JPCLS> > Eta2Toa0PiStates() const {return _JPCLS_Eta2Toa0Pi;}
   std::vector< boost::shared_ptr<const JPCLS> > Eta2Toa2PiStates() const {return _JPCLS_Eta2Toa2Pi;}
   std::vector< boost::shared_ptr<const JPCLS> > Eta2Tof0EtaStates() const {return _JPCLS_Eta2Tof0Eta;}
+  std::vector< boost::shared_ptr<const JPCLS> > Eta2Tof2EtaStates() const {return _JPCLS_Eta2Tof2Eta;}
   std::vector< boost::shared_ptr<const JPCLS> > F1Toa0PiStates() const {return _JPCLS_F1Toa0Pi;}
   std::vector< boost::shared_ptr<const JPCLS> > F1Tof0EtaStates() const {return _JPCLS_F1Tof0Eta;} 
   std::vector< boost::shared_ptr<const JPCLS> > F1Toa2PiStates() const {return _JPCLS_F1Toa2Pi;}
+  std::vector< boost::shared_ptr<const JPCLS> > F1Tof2EtaStates() const {return _JPCLS_F1Tof2Eta;} 
  
   virtual void print(std::ostream& os) const; 
 
@@ -56,12 +59,14 @@ private:
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_EtaTof0Eta;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Toa0Pi;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_EtaToa2Pi;
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_EtaTof2Eta;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_Eta2Toa0Pi;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_Eta2Toa2Pi;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_Eta2Tof0Eta;
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_Eta2Tof2Eta;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Tof0Eta;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Toa2Pi;
-
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Tof2Eta;
 };
 
 #endif

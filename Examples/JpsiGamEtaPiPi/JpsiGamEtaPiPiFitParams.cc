@@ -34,16 +34,19 @@ void JpsiGamEtaPiPiFitParams::initialize(){
   _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaToA2_1320Pi]=theStates.EtaToa2PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaToSigmaEta]=theStates.EtaTof0EtaStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaTof0_980Eta]=theStates.EtaTof0EtaStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::EtaTof2_1270Eta]=theStates.EtaTof2EtaStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::Eta2ToPiPiEta]=theStates.Eta2Toa0PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::Eta2ToA980Pi]=theStates.Eta2Toa0PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::Eta2ToA2_1320Pi]=theStates.Eta2Toa2PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::Eta2ToSigmaEta]=theStates.Eta2Tof0EtaStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::Eta2Tof0_980Eta]=theStates.Eta2Tof0EtaStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::Eta2Tof2_1270Eta]=theStates.Eta2Tof2EtaStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToPiPiEta]=theStates.F1Toa0PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToA980Pi]=theStates.F1Toa0PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToA2_1320Pi]=theStates.F1Toa2PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToSigmaEta]=theStates.F1Tof0EtaStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1Tof0_980Eta]=theStates.F1Tof0EtaStates();
+  _jpclsMap[paramEnumJpsiGamEtaPiPi::F1Tof2_1270Eta]=theStates.F1Tof2EtaStates();
 
   _jpcLamLamMap[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma]=theStates.PsiToEtaGammaLamLamStates();
   _jpcLamLamMap[paramEnumJpsiGamEtaPiPi::PsiToEta2Gamma]=theStates.PsiToEta2GammaLamLamStates();
