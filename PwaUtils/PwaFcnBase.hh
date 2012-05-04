@@ -33,7 +33,7 @@ public:
 private:
   boost::shared_ptr<AbsLh> _absLhPtr;
   boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
-  unsigned int *_fcnCounter;
+  mutable unsigned int _fcnCounter;
 };
   }  // namespace Minuit2
 

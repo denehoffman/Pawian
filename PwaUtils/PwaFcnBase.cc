@@ -16,7 +16,7 @@ using namespace ROOT::Minuit2;
 PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase) :
   _absLhPtr(absLh)
   , _fitParamsBasePtr(fitParamsBase)
-  , _fcnCounter(new unsigned int (0))
+  , _fcnCounter(0)
 {
    if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
   
@@ -24,12 +24,11 @@ PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitPara
 
 PwaFcnBase::~PwaFcnBase()
 {
-  delete _fcnCounter;
 }
 
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
-  (*_fcnCounter)++;
+  _fcnCounter++;
 
   fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);  
   
@@ -37,11 +36,11 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
 
   DebugMsg << "logLh= " << result <<endmsg;
  
-  if (  (*_fcnCounter)%10 == 0) {  
+  if (  _fcnCounter%50 == 0) {  
     _fitParamsBasePtr->printParams(theFitParmValTmp);
   }
   
-  if (  (*_fcnCounter)%100 == 0) {
+  if (  _fcnCounter%200 == 0) {
     std::ofstream theStream ( "currentResult.dat");
     _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
   }
