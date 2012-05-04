@@ -59,12 +59,15 @@ public:
   virtual ~JpsiGamEtaPiPiFitParams();
   
   virtual const std::string ampName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
+  virtual const std::string ampLamLamName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
   virtual const std::string massName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
   virtual const std::string widthName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
   virtual const std::string gFactorName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
   virtual const std::string otherName(int index) {return paramEnumJpsiGamEtaPiPi::name(index);}
 
-  virtual int ampIdxMin() {return paramEnumJpsiGamEtaPiPi::PsiToEtaGamma;}
+  virtual int ampLamLamIdxMin() {return paramEnumJpsiGamEtaPiPi::PsiToEtaGamma;}
+  virtual int ampLamLamIdxMax() {return paramEnumJpsiGamEtaPiPi::PsiToF1Gamma;}
+  virtual int ampIdxMin() {return paramEnumJpsiGamEtaPiPi::EtaToPiPiEta;}
   virtual int ampIdxMax() {return paramEnumJpsiGamEtaPiPi::nAmps-1;}
   virtual int massIdxMin() {return paramEnumJpsiGamEtaPiPi::nAmps;}
   virtual int massIdxMax() {return paramEnumJpsiGamEtaPiPi::nMasses-1;}

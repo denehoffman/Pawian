@@ -18,6 +18,33 @@ void StreamFitParmsBase::fillParams(){
 //   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 //   StringPairMap::const_iterator stringPairIter;
 
+//  0. fill lam lam magnitudes and phases 
+   for (int ui=_fitParamsBasePtr->ampLamLamIdxMin(); ui<=_fitParamsBasePtr->ampLamLamIdxMax(); ui++){
+
+     std::string theAmpString=_fitParamsBasePtr->ampLamLamName(ui);
+     std::string theMagSuffix=theAmpString+"Mag";
+     std::vector< boost::shared_ptr<const JPClamlam> >  theJPCLamLams=_fitParamsBasePtr->jpcLamLamVec(ui);
+
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagVal;
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagErr;
+     fillLamLamAmps(theJPCLamLams, theMagSuffix, currentMagVal, currentMagErr);
+
+     if (currentMagVal.size()>0 && currentMagErr.size()>0){
+       _paramVal.MagLamLams[ui]=currentMagVal;
+       _paramErr.MagLamLams[ui]=currentMagErr;      
+     }
+
+     std::string thePhiSuffix=theAmpString+"Phi";
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiVal;
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiErr;
+     fillLamLamAmps(theJPCLamLams, thePhiSuffix, currentPhiVal, currentPhiErr);
+
+     if (currentPhiVal.size()>0 && currentPhiErr.size()>0){
+       _paramVal.PhiLamLams[ui]=currentPhiVal;
+       _paramErr.PhiLamLams[ui]=currentPhiErr;      
+     }
+   }
+
 //  1. fill magnitudes and phases 
    for (int ui=_fitParamsBasePtr->ampIdxMin(); ui<=_fitParamsBasePtr->ampIdxMax(); ui++){
 
@@ -96,6 +123,25 @@ void StreamFitParmsBase::fillAmps(std::vector< boost::shared_ptr<const JPCLS> >&
   }
 }
 
+void StreamFitParmsBase::fillLamLamAmps(std::vector< boost::shared_ptr<const JPClamlam> >& theJPCLamLams, std::string& suffix, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& valMap , std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& errMap){
+ 
+  std::vector< boost::shared_ptr<const JPClamlam> >::const_iterator itJPCLamLam;
+  StringPairMap::const_iterator stringPairIter;
+
+  for ( itJPCLamLam=theJPCLamLams.begin(); itJPCLamLam!=theJPCLamLams.end(); ++itJPCLamLam){
+
+    std::string theKey=(*itJPCLamLam)->name()+suffix;  
+    stringPairIter=_stringPairMap.find(theKey);
+    
+    if ( stringPairIter != _stringPairMap.end() ){
+      double val=stringPairIter->second.first;
+      double err=stringPairIter->second.second;
+      valMap[(*itJPCLamLam)]=val;
+      errMap[(*itJPCLamLam)]=err;
+    } 
+
+  }
+}
 
 void StreamFitParmsBase::fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap, std::string& suffix, int index){
 

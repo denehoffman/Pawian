@@ -26,7 +26,6 @@ public:
   /** Destructor */
   virtual ~JpsiGamEtaPiPiStates();
 
-
   std::vector< boost::shared_ptr<const JPCLS> > EtaToa0PiStates() const {return _JPCLS_EtaToa0Pi;}
   std::vector< boost::shared_ptr<const JPCLS> > EtaTof0EtaStates() const {return _JPCLS_EtaTof0Eta;}
   std::vector< boost::shared_ptr<const JPCLS> > EtaToa2PiStates() const {return _JPCLS_EtaToa2Pi;}
@@ -61,7 +60,8 @@ private:
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_Eta2Toa2Pi;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_Eta2Tof0Eta;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Tof0Eta;
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Toa2Pi;  
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_F1Toa2Pi;
+
 };
 
 #endif

@@ -21,6 +21,14 @@ FitParamsBase::FitParamsBase(fitParams& theStartparams, fitParams& theErrorparam
     _ampIdx.push_back(itMagMap->first);
   }
 
+  // fill  _ampLamLamIdx
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& startLamLamMagMap=_startParams.MagLamLams;
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::iterator itLamLamMagMap;
+  for (itLamLamMagMap=startLamLamMagMap.begin(); itLamLamMagMap!=startLamLamMagMap.end(); ++itLamLamMagMap){
+    _ampLamLamIdx.push_back(itLamLamMagMap->first);
+  }
+
+
   // fill _massIdx
   std::map<int, double> startMassMap=_startParams.Masses; 
   std::map<int, double>::iterator itMass;
@@ -67,6 +75,19 @@ std::vector< boost::shared_ptr<const JPCLS> > FitParamsBase::jpclsVec(int index)
 
 }
 
+std::vector< boost::shared_ptr<const JPClamlam> >  FitParamsBase::jpcLamLamVec(int index){
+  int nOfAmps=int(_jpcLamLamMap.size());
+  if ( index > nOfAmps ){
+    Alert << "index " << index 
+	  << "  number of amplitude parametes paramEnumKpKmPiGam::numAmps = " 
+	  << nOfAmps << endmsg;
+    exit(0);
+  }
+
+  return _jpcLamLamMap[index];
+}
+
+
 int FitParamsBase::setAmpParams( std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& ampMap, const std::vector<double>& par, int counter, int index){
 
   int resultCount=counter;
@@ -84,6 +105,24 @@ int FitParamsBase::setAmpParams( std::map<int, std::map< boost::shared_ptr<const
   return resultCount;
 }
 
+int FitParamsBase::setAmpLamLamParams( std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& ampLamLamMap, const std::vector<double>& par, int counter, int index){
+
+  int resultCount=counter;
+  std::vector< boost::shared_ptr<const JPClamlam> >::const_iterator itJPClamlam;
+  std::vector< boost::shared_ptr<const JPClamlam> > currentStates= _jpcLamLamMap[index];
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMap;
+
+  for ( itJPClamlam=currentStates.begin(); itJPClamlam!=currentStates.end(); ++itJPClamlam){
+    double currentPar=par[resultCount];
+    resultCount++;
+    currentMap[(*itJPClamlam)]=currentPar;
+  }
+
+  ampLamLamMap[index]=currentMap;  
+  return resultCount;
+}
+
+
 
 int FitParamsBase::setSingleParams(std::map<int, double>& theMap, const std::vector<double>& par, int counter, int index){
   int resultCount=counter;
@@ -93,7 +132,63 @@ int FitParamsBase::setSingleParams(std::map<int, double>& theMap, const std::vec
 }
 
 void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
-  // 1.: set magnitudes of all amplitudes
+
+  // 1.: set magnitudes of all lamlam amplitudes
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& startLamLamMagMap=_startParams.MagLamLams;
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& errLamLamMagMap=_errorParams.PhiLamLams;
+
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::iterator itLamLamMagMap;
+  for (itLamLamMagMap=startLamLamMagMap.begin(); itLamLamMagMap!=startLamLamMagMap.end(); ++itLamLamMagMap){
+
+    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& errLamLamMags=errLamLamMagMap[itLamLamMagMap->first];
+    
+    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLamMag;
+    for (itLamLamMag=itLamLamMagMap->second.begin(); itLamLamMag!=itLamLamMagMap->second.end(); ++itLamLamMag){
+      int theIndex=itLamLamMagMap->first;
+      boost::shared_ptr<const JPClamlam> theJPCLamLam=itLamLamMag->first;
+      double theStartVal=itLamLamMag->second;
+      double theErrVal=errLamLamMags[theJPCLamLam];
+      
+      //now fill the fitParameterMap
+      std::string magStr=theJPCLamLam->name()+ampName(theIndex)+"Mag";
+      
+      double magMin=theStartVal-3.*theErrVal;
+      if (magMin<0.) magMin=0.;
+      
+      upar.Add(magStr, theStartVal, theErrVal, magMin, theStartVal+3.*theErrVal);
+    }
+    
+  }
+
+   // 2.: set phases of all lam lam amplitudes
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& startLamLamPhiMap=_startParams.PhiLamLams;
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& errLamLamPhiMap=_errorParams.PhiLamLams;
+
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::iterator itLamLamPhiMap;
+  for (itLamLamPhiMap=startLamLamPhiMap.begin(); itLamLamPhiMap!=startLamLamPhiMap.end(); ++itLamLamPhiMap){
+
+    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& errLamLamPhis=errLamLamPhiMap[itLamLamPhiMap->first];
+    
+    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLamPhi;
+    for (itLamLamPhi=itLamLamPhiMap->second.begin(); itLamLamPhi!=itLamLamPhiMap->second.end(); ++itLamLamPhi){
+      int theIndex=itLamLamPhiMap->first;
+      boost::shared_ptr<const JPClamlam> theJPCLamLam=itLamLamPhi->first;
+      double theStartVal=itLamLamPhi->second;
+      double theErrVal=errLamLamPhis[theJPCLamLam];
+      
+      //now fill the fitParameterMap
+      std::string phiStr=theJPCLamLam->name()+ampName(theIndex)+"Phi";
+      
+      double phiMin=theStartVal-3.*theErrVal;
+      if (phiMin<0.) phiMin=0.;
+      
+      upar.Add(phiStr, theStartVal, theErrVal, -3.*M_PI, 3.*M_PI);
+    }
+    
+  }
+
+
+  // 3.: set magnitudes of all amplitudes
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& startMagMap=_startParams.Mags;
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& errMagMap=_errorParams.Mags;
 
@@ -120,7 +215,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
     
   }
 
-   // 2.: set phases of all amplitudes
+   // 4.: set phases of all amplitudes
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& startPhiMap=_startParams.Phis;
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& errPhiMap=_errorParams.Phis;
 
@@ -147,7 +242,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
     
   }
 
-   // 3.: set all masses
+   // 5.: set all masses
   std::map<int, double>& startMassMap= _startParams.Masses;
   std::map<int, double>& errMassMap= _errorParams.Masses;
 
@@ -166,7 +261,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
       upar.Add(massStr, theStartVal, theErrVal, massMin, massMax);
   }
 
-   // 3.: set all widths
+   // 6.: set all widths
   std::map<int, double>& startWidthMap= _startParams.Widths;
   std::map<int, double>& errWidthMap= _errorParams.Widths;
 
@@ -183,7 +278,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
       upar.Add(widthStr, theStartVal, theErrVal, widthMin, widthMax);
   } 
 
-   // 3.: set all gFactors
+   // 7.: set all gFactors
   std::map<int, double>& startgFactorMap= _startParams.gFactors;
   std::map<int, double>& errgFactorMap= _errorParams.gFactors;
 
@@ -201,7 +296,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
       upar.Add(gFactorStr, theStartVal, theErrVal, gFactorMin, gFactorMax);
   } 
 
-   // 3.: set all other parameters
+   // 8.: set all other parameters
   std::map<int, double>& startotherParamsMap= _startParams.otherParams;
   std::map<int, double>& errotherParamsMap= _errorParams.otherParams;
 
@@ -223,6 +318,33 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar){
 
 
 void FitParamsBase::printParams(fitParams& theParams){
+
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::const_iterator itLamLamAmps;
+
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::const_iterator itJPCLamLamMap;
+
+   for (itLamLamAmps=theParams.MagLamLams.begin(); itLamLamAmps!=theParams.MagLamLams.end(); ++itLamLamAmps){
+     std::string currentAmpName=ampName(itLamLamAmps->first);
+
+     std::string currentMagName=currentAmpName+"Mag";
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=itLamLamAmps->second;    
+     for ( itJPCLamLamMap=currentAmp.begin(); itJPCLamLamMap!=currentAmp.end(); ++itJPCLamLamMap){
+       std::string currentName=itJPCLamLamMap->first->name()+currentMagName;
+        Info<< currentName << "\t" << itJPCLamLamMap->second << endmsg;
+     }
+   }
+
+  for (itLamLamAmps=theParams.PhiLamLams.begin(); itLamLamAmps!=theParams.PhiLamLams.end(); ++itLamLamAmps){
+
+    std::string currentAmpName=ampName(itLamLamAmps->first);
+    std::string currentPhiName=currentAmpName+"Phi";
+
+    for (itJPCLamLamMap=itLamLamAmps->second.begin(); itJPCLamLamMap!=itLamLamAmps->second.end(); ++itJPCLamLamMap){
+       std::string currentName=itJPCLamLamMap->first->name()+currentPhiName;
+      Info<< currentName <<"\t" << itJPCLamLamMap->second << endmsg;
+    }
+  }
+
 
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >::const_iterator itAmps;
 
@@ -279,6 +401,40 @@ void FitParamsBase::printParams(fitParams& theParams){
 }
 
 void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs){
+
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::const_iterator itLamLamAmps;
+
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::const_iterator itJPCLamLamMap;
+
+   for (itLamLamAmps=theVals.MagLamLams.begin(); itLamLamAmps!=theVals.MagLamLams.end(); ++itLamLamAmps){
+     std::string currentAmpName=ampName(itLamLamAmps->first);
+     std::string currentMagName=currentAmpName+"Mag";
+
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentErrMap=theErrs.MagLamLams[itLamLamAmps->first];
+
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=itLamLamAmps->second;    
+     for ( itJPCLamLamMap=currentAmp.begin(); itJPCLamLamMap!=currentAmp.end(); ++itJPCLamLamMap){
+       std::string currentName=itJPCLamLamMap->first->name()+currentMagName;
+       
+       os << currentName << "\t" << itJPCLamLamMap->second << "\t" << currentErrMap[itJPCLamLamMap->first] << std::endl;
+     }
+   }
+
+   for (itLamLamAmps=theVals.PhiLamLams.begin(); itLamLamAmps!=theVals.PhiLamLams.end(); ++itLamLamAmps){
+     std::string currentAmpName=ampName(itLamLamAmps->first);
+     std::string currentMagName=currentAmpName+"Phi";
+
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentErrMap=theErrs.PhiLamLams[itLamLamAmps->first];
+
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=itLamLamAmps->second;    
+     for ( itJPCLamLamMap=currentAmp.begin(); itJPCLamLamMap!=currentAmp.end(); ++itJPCLamLamMap){
+       std::string currentName=itJPCLamLamMap->first->name()+currentMagName;
+       
+       os << currentName << "\t" << itJPCLamLamMap->second << "\t" << currentErrMap[itJPCLamLamMap->first] << std::endl;
+     }
+   }
+
+
 
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >::const_iterator itAmps;
 
@@ -345,7 +501,36 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
 fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
   fitParams result=_startParams;
   int counter=0;
-  // 1.: magnitudes of all amplitudes
+
+  // 1.: magnitudes of all lamlam amplitudes
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& magLamLamMap=result.MagLamLams;
+
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::iterator itMagLamLamMap;
+  for (itMagLamLamMap=magLamLamMap.begin(); itMagLamLamMap!=magLamLamMap.end(); ++itMagLamLamMap){
+
+    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    for (itMag=itMagLamLamMap->second.begin(); itMag!=itMagLamLamMap->second.end(); ++itMag){
+      itMag->second=par[counter];
+      counter++;
+
+    }
+  }
+
+  // 2.: phases of all lam lam amplitudes
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& phiLamLamMap=result.PhiLamLams;
+  
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >::iterator itPhiLamLamMap;
+  for (itPhiLamLamMap=phiLamLamMap.begin(); itPhiLamLamMap!=phiLamLamMap.end(); ++itPhiLamLamMap){
+    
+    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itPhi;
+    for (itPhi=itPhiLamLamMap->second.begin(); itPhi!=itPhiLamLamMap->second.end(); ++itPhi){
+      itPhi->second=par[counter];
+      counter++;
+    }
+  }
+
+
+  // 3.: magnitudes of all amplitudes
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& magMap=result.Mags;
 
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >::iterator itMagMap;
@@ -359,7 +544,7 @@ fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
     }
   }
 
-  // 2.: phases of all amplitudes
+  // 4.: phases of all amplitudes
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& phiMap=result.Phis;
   
   std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >::iterator itPhiMap;
@@ -372,7 +557,7 @@ fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
     }
   }
 
-  // 3.: masses
+  // 5.: masses
   std::map<int, double>& massMap= result.Masses;
   std::map<int, double>::iterator itMass;
   for (itMass=massMap.begin(); itMass!=massMap.end(); ++itMass){
@@ -380,7 +565,7 @@ fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
       counter++;
  }
 
-  // 3.: widths
+  // 6.: widths
   std::map<int, double>& widthMap= result.Widths;
   std::map<int, double>::iterator itWidth;
   for (itWidth=widthMap.begin(); itWidth!=widthMap.end(); ++itWidth){
@@ -388,7 +573,7 @@ fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
       counter++;
  }
 
-  // 4.: gFactors
+  // 7.: gFactors
   std::map<int, double>& gFactorMap= result.gFactors;
   std::map<int, double>::iterator itgFactor;
   for (itgFactor=gFactorMap.begin(); itgFactor!=gFactorMap.end(); ++itgFactor){
@@ -396,7 +581,7 @@ fitParams FitParamsBase::getFitParamVal(const std::vector<double>& par){
       counter++;
  }
 
-  // 5.: others
+  // 8.: others
   std::map<int, double>& otherMap= result.otherParams;
   std::map<int, double>::iterator itOther;
   for (itOther=otherMap.begin(); itOther!=otherMap.end(); ++itOther){

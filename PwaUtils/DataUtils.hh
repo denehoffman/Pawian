@@ -73,6 +73,84 @@ struct jpcRes
 };
 
 
+
+struct JPClamlam : public jpcRes{
+  Spin lam1;
+  Spin lam2;
+  double parityFactor;    
+
+  JPClamlam(const Spin j, const int p, const int c, const Spin& theLam1, const Spin& theLam2, const double theParityFactor=0.): jpcRes(j, p, c){
+    lam1=theLam1;
+    lam2=theLam2;
+    parityFactor=theParityFactor;
+   }
+
+  JPClamlam(boost::shared_ptr<const jpcRes> theJPC, const Spin& theLam1, const Spin& theLam2, const double theParityFactor=0.): jpcRes(theJPC){
+    lam1=theLam1;
+    lam2=theLam2; 
+    parityFactor=theParityFactor;
+  }
+
+  JPClamlam(boost::shared_ptr<const JPClamlam> theJPClamlam): jpcRes(theJPClamlam->J, theJPClamlam->P, theJPClamlam->C){
+    lam1=theJPClamlam->lam1;
+    lam2=theJPClamlam->lam2;
+    parityFactor=theJPClamlam->parityFactor;
+  }
+
+  virtual bool operator==(const jpcRes& compare) const{
+    return jpcRes::operator==(compare);
+  }
+
+  virtual bool operator==(const JPClamlam& compare) const{
+    bool result=false;
+    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C && fabs(lam1-compare.lam1)<1e-8 && fabs(lam2-compare.lam2)<1e-8) result=true;
+    return result;
+  }
+
+  virtual bool operator<(const JPClamlam& compare) const{
+    bool result=false;
+
+    if ( J < compare.J) result=true;
+    else if (J == compare.J){
+      if ( P < compare.P) result=true;
+      else if (P == compare.P){
+	if ( C < compare.C) result=true;
+	else if (C == compare.C){
+	  if ( lam1 < compare.lam1) result=true;
+	  else if (lam1 == compare.lam1){
+	    if ( lam2 < compare.lam2) result=true;
+	  }
+	}
+      }
+    }
+  
+    return result; 
+}  
+
+  virtual std::string name() const{
+    std::string result=jpcRes::name();
+    std::stringstream tmpStrStreamLam1;
+    tmpStrStreamLam1 << lam1;
+    std::stringstream tmpStrStreamLam2;
+    tmpStrStreamLam2 << lam2;   
+
+    result+="Lama"+tmpStrStreamLam1.str()+"Lamb"+tmpStrStreamLam2.str();
+    return result;
+  }
+
+
+  virtual void print(std::ostream& os) const{
+    jpcRes::print(os);
+    os <<"\tLam1,Lam2=" << lam1 << "," << lam2 <<"\tparityFactor=" << parityFactor;   
+  }
+};
+
+
+
+
+
+
+
 struct JPCLS : public jpcRes{
   Spin L;
   Spin S;

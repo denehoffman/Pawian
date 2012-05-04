@@ -52,8 +52,7 @@ protected:
   virtual complex<double> calcCoherentAmp(Spin Minit, Spin lamGam, fitParams&  theParamVal, EvtData* theData);  
 
   virtual complex<double> psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtData* theData, 
-					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToXGamMag, 
-					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToXGamPhi); 
+					 double PsiToXGamMag, double PsiToXGamPhi); 
 
   virtual complex<double> XToPiPiEtaAmp(Spin jX, Spin lamX, EvtData* theData, 
 					 std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag, 
@@ -70,12 +69,6 @@ protected:
 				     complex<double> dynamicFct);
   
   complex<double> A980DecFlatte(fitParams& theParamVal, const Vector4<double> &__p4);   
-
-  virtual void calcEtaGammaAmp( EvtData* theData, 
-				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToEtaGamMag, 
-				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& PsiToEtaGamPhi, 
-				complex<double> &JmpGmp, complex<double> &JmpGmm, complex<double> &JmmGmp, complex<double> &JmmGmm);
-  
 
   
   

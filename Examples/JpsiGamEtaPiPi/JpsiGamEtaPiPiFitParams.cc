@@ -44,5 +44,9 @@ void JpsiGamEtaPiPiFitParams::initialize(){
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToA2_1320Pi]=theStates.F1Toa2PiStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1ToSigmaEta]=theStates.F1Tof0EtaStates();
   _jpclsMap[paramEnumJpsiGamEtaPiPi::F1Tof0_980Eta]=theStates.F1Tof0EtaStates();
+
+  _jpcLamLamMap[paramEnumJpsiGamEtaPiPi::PsiToEtaGamma]=theStates.PsiToEtaGammaLamLamStates();
+  _jpcLamLamMap[paramEnumJpsiGamEtaPiPi::PsiToEta2Gamma]=theStates.PsiToEta2GammaLamLamStates();
+  _jpcLamLamMap[paramEnumJpsiGamEtaPiPi::PsiToF1Gamma]=theStates.PsiToF1GammaLamLamStates();
 }
 
