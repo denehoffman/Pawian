@@ -271,10 +271,14 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
  
     for (Spin helf1=0; helf1<2; helf1++){
       JpGpTmpMap[helf1]= ParityProdMap[helf1][1]*psiToXGammaAmp(1, 1, helf1, 1, theData, MagProdMap[helf1][1], PhiProdMap[helf1][1]);
-      JpGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]); 
       JmGpTmpMap[helf1]= ParityProdMap[helf1][1]*psiToXGammaAmp(-1, 1, helf1, 1, theData, MagProdMap[helf1][1], PhiProdMap[helf1][1]);
-      JmGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(-1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
       TmpDecAmp[helf1] = complex<double> (0.,0.);
+
+      if(helf1>0){
+	JpGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
+	JmGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(-1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
+	TmpDecAmp[-helf1] = complex<double> (0.,0.);
+      }
     }
   
 
@@ -445,11 +449,16 @@ double JpsiGamEtaPiPiProdLh::calcEvtIntensity(EvtData* theData, fitParams& thePa
     std::map<Spin,complex<double> > TmpDecAmp;
  
     for (Spin heliEta2=0; heliEta2<=2; heliEta2++){
-      JpGpTmpMap[heliEta2]= ParityProdMap[heliEta2][1]*psiToXGammaAmp(1, 2, heliEta2, 1, theData, MagProdMap[heliEta2][1], PhiProdMap[heliEta2][1]);
-      JpGmTmpMap[-heliEta2]= ParityProdMap[-heliEta2][-1]*psiToXGammaAmp(1, 2, -heliEta2, -1, theData, MagProdMap[-heliEta2][-1], PhiProdMap[-heliEta2][-1]); 
+      JpGpTmpMap[heliEta2]=ParityProdMap[heliEta2][1]*psiToXGammaAmp(1, 2, heliEta2, 1, theData, MagProdMap[heliEta2][1], PhiProdMap[heliEta2][1]);
       JmGpTmpMap[heliEta2]=ParityProdMap[heliEta2][1]*psiToXGammaAmp(-1, 2, heliEta2, 1, theData, MagProdMap[heliEta2][1], PhiProdMap[heliEta2][1]);
-      JmGmTmpMap[-heliEta2]=ParityProdMap[-heliEta2][-1]*psiToXGammaAmp(-1, 2, -heliEta2, -1, theData, MagProdMap[-heliEta2][-1], PhiProdMap[-heliEta2][-1]);
+
       TmpDecAmp[heliEta2] = complex<double> (0.,0.);
+
+      if(heliEta2>0){
+	JpGmTmpMap[-heliEta2] = ParityProdMap[-heliEta2][-1]*psiToXGammaAmp(1, 2, -heliEta2, -1, theData, MagProdMap[-heliEta2][-1], PhiProdMap[-heliEta2][-1]); 
+	JmGmTmpMap[-heliEta2] = ParityProdMap[-heliEta2][-1]*psiToXGammaAmp(-1, 2, -heliEta2, -1, theData, MagProdMap[-heliEta2][-1], PhiProdMap[-heliEta2][-1]);
+	TmpDecAmp[-heliEta2]  = complex<double> (0.,0.);
+      }
     }
   
 
