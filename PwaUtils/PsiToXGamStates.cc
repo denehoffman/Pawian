@@ -2,10 +2,10 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "Examples/JpsiGamEtaPiPi/PsiToXGamStates.hh"
+#include "PwaUtils/PsiToXGamStates.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-JpsiToXGamStates::JpsiToXGamStates() :
+PsiToXGamStates::PsiToXGamStates() :
   _psiJPC(new jpcRes(1, -1, -1)),
   _gammaJPC(new jpcRes(1, -1, -1)),
   _etaJPC(new jpcRes(0, -1, 1)),
@@ -28,11 +28,11 @@ JpsiToXGamStates::JpsiToXGamStates() :
   fillJPClamlam(_JPCLS_PsiToEta2Gamma, _eta2JPC,_JPCLamLam_PsiToEta2Gamma);  
 }
 
-JpsiToXGamStates::~JpsiToXGamStates()
+PsiToXGamStates::~PsiToXGamStates()
 {
 }
 
-void JpsiToXGamStates::fillJPCLS(boost::shared_ptr<jpcRes> motherRes, boost::shared_ptr<jpcRes> daughterRes1, boost::shared_ptr<jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)
+void PsiToXGamStates::fillJPCLS(boost::shared_ptr<jpcRes> motherRes, boost::shared_ptr<jpcRes> daughterRes1, boost::shared_ptr<jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)
 {
   // first: check C-parity
   if ( motherRes->C != daughterRes1->C*daughterRes2->C){
@@ -57,7 +57,7 @@ void JpsiToXGamStates::fillJPCLS(boost::shared_ptr<jpcRes> motherRes, boost::sha
   }
 } 
 
-void JpsiToXGamStates::fillJPClamlam(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSvec, boost::shared_ptr<jpcRes> xRes, std::vector< boost::shared_ptr<const JPClamlam> >& toFill){
+void PsiToXGamStates::fillJPClamlam(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSvec, boost::shared_ptr<jpcRes> xRes, std::vector< boost::shared_ptr<const JPClamlam> >& toFill){
   //retrieve Smax
   Spin Smax(0);
   
@@ -79,7 +79,7 @@ void JpsiToXGamStates::fillJPClamlam(std::vector< boost::shared_ptr<const JPCLS>
   
 }
 
-void JpsiToXGamStates::print(std::ostream& os) const
+void PsiToXGamStates::print(std::ostream& os) const
 {
   os << "*** Psi -> Eta gamma:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_PsiToEtaGamma );
@@ -113,7 +113,7 @@ void JpsiToXGamStates::print(std::ostream& os) const
 }
 
 
-void JpsiToXGamStates::printDecayJPCLS(std::ostream& os,std::vector< boost::shared_ptr<const JPCLS > > theJPCLS) const{
+void PsiToXGamStates::printDecayJPCLS(std::ostream& os,std::vector< boost::shared_ptr<const JPCLS > > theJPCLS) const{
   
   std::vector< boost::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
   for ( itJPCLS=theJPCLS.begin(); itJPCLS!=theJPCLS.end(); ++itJPCLS){
@@ -123,7 +123,7 @@ void JpsiToXGamStates::printDecayJPCLS(std::ostream& os,std::vector< boost::shar
 }
  
 
-void JpsiToXGamStates::printDecayJPClamlam(std::ostream& os,std::vector< boost::shared_ptr<const JPClamlam > > theJPClamlam) const{
+void PsiToXGamStates::printDecayJPClamlam(std::ostream& os,std::vector< boost::shared_ptr<const JPClamlam > > theJPClamlam) const{
 
   std::vector< boost::shared_ptr<const JPClamlam > >::const_iterator it;
   for ( it=theJPClamlam.begin(); it!=theJPClamlam.end(); ++it){

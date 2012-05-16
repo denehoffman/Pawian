@@ -12,10 +12,10 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "Examples/JpsiGamEtaPiPi/PsiToXGamStates.hh"
+#include "PwaUtils/PsiToXGamStates.hh"
 
 
-class JpsiGamEtaPiPiStates : public JpsiToXGamStates {
+class JpsiGamEtaPiPiStates : public PsiToXGamStates {
 
 public:
 

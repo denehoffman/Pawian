@@ -1,5 +1,5 @@
-#ifndef _JpsiToXGamStates_H
-#define _JpsiToXGamStates_H
+#ifndef _PsiToXGamStates_H
+#define _PsiToXGamStates_H
 
 #include <iostream>
 #include <fstream>
@@ -14,16 +14,16 @@
 #include "PwaUtils/DataUtils.hh"
 
 
-class JpsiToXGamStates {
+class PsiToXGamStates {
 
 public:
 
   ///Constructor 
-  JpsiToXGamStates();
+  PsiToXGamStates();
 
 
   /** Destructor */
-  virtual ~JpsiToXGamStates();
+  virtual ~PsiToXGamStates();
 
   virtual std::vector< boost::shared_ptr<const JPCLS> > PsiToEtaGammaStates() const {return _JPCLS_PsiToEtaGamma;}
   virtual std::vector< boost::shared_ptr<const JPCLS> > PsiToF0GammaStates() const {return _JPCLS_PsiToF0Gamma;}

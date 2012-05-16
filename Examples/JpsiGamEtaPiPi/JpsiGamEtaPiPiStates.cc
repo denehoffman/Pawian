@@ -6,7 +6,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 JpsiGamEtaPiPiStates::JpsiGamEtaPiPiStates() : 
-  JpsiToXGamStates(),
+  PsiToXGamStates(),
   _etaJPC(new jpcRes(0, -1, 1)),
   _eta2JPC(new jpcRes(2, -1, 1)),
   _f0JPC(new jpcRes(0, 1, 1)),
@@ -40,7 +40,7 @@ JpsiGamEtaPiPiStates::~JpsiGamEtaPiPiStates()
 
 void JpsiGamEtaPiPiStates::print(std::ostream& os) const
 {
-  JpsiToXGamStates::print(os);
+  PsiToXGamStates::print(os);
   os << "*** eta -> a0 pi:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_EtaToa0Pi );
 
