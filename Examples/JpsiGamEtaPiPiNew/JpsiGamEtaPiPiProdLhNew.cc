@@ -15,7 +15,7 @@
 
 
 JpsiGamEtaPiPiProdLhNew::JpsiGamEtaPiPiProdLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiGamEtaPiPiStates> theStates) :
-  PsiGamEtaPiPiProdBaseLhNew(theEvtList, hypVec, theStates)
+  PsiProdBaseLhNew(theEvtList, hypVec, theStates)
   ,_jpsiGamEtaPiPiStatesPtr(theStates)
 {
   initializeHypothesis();
@@ -23,7 +23,7 @@ JpsiGamEtaPiPiProdLhNew::JpsiGamEtaPiPiProdLhNew(boost::shared_ptr<const EvtData
 }
 
 JpsiGamEtaPiPiProdLhNew::JpsiGamEtaPiPiProdLhNew( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiGamEtaPiPiStates> theStates ) :
-  PsiGamEtaPiPiProdBaseLhNew(theLhPtr->getEventList(), hypVec, theStates)
+  PsiProdBaseLhNew(theLhPtr->getEventList(), hypVec, theStates)
   ,_jpsiGamEtaPiPiStatesPtr(theStates)
 {  
   initializeHypothesis();  

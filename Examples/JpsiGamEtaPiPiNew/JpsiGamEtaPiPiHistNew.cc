@@ -5,7 +5,7 @@
 #include <TStyle.h>
 
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiHistNew.hh"
-#include "PwaUtils/EvtDataBaseListNew.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
 
 #include "PwaUtils/KinUtils.hh"
@@ -371,56 +371,56 @@ void JpsiGamEtaPiPiHistNew::initRootStuff(){
 }
 
 void JpsiGamEtaPiPiHistNew::plotDalitz(TH2F* theHisto,  EvtDataNew* theData, double weight){
-	Vector4<double> v4EtaPip = theData->FourVecsDec["EtaPip_HeliPsi"];
-	Vector4<double> v4EtaPim = theData->FourVecsDec["EtaPim_HeliPsi"];
+  Vector4<double> v4EtaPip = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
+	Vector4<double> v4EtaPim = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
 	theHisto->Fill( v4EtaPip.M2(), v4EtaPim.M2(), weight);
 	theHisto->Fill( v4EtaPim.M2(), v4EtaPip.M2(), weight);
 }
 
 void JpsiGamEtaPiPiHistNew::plotEtaPipPim(TH1F* theHisto, EvtDataNew* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecsDec["EtaPipPim_HeliPsi"];
+	Vector4<double>& v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPipPim_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotEtaPi(TH1F* theHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["EtaPip_HeliPsi"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
-	v4 = theData->FourVecsDec["EtaPim_HeliPsi"];
+	v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 }
 void JpsiGamEtaPiPiHistNew::plotPipPim(TH1F* theHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["PipPim_HeliPsi"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhiEta(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["Eta_HeliEtaPip"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPip];
 	theCostHisto->Fill( v4.CosTheta(), weight );
 	thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhiPip(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["Pip_HeliPipPim"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliPipPim];
 	theCostHisto->Fill( v4.CosTheta(), weight );
 	thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostGam(TH1F* theCostHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["gamma_HeliPsi"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::gamma_HeliPsi];
 	theCostHisto->Fill( v4.CosTheta(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhi_PiPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["PipPim_HeliEtaPipPim"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliEtaPipPim];
 	theCostHisto->Fill( v4.CosTheta(), weight);
 	thePhiHisto->Fill( v4.Phi(), weight);
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec["EtaPip_HeliEtaPipPim"];
+	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliEtaPipPim];
 	theCostHisto->Fill( v4.CosTheta(), weight);
 	thePhiHisto->Fill( v4.Phi(), weight);
-	v4 = theData->FourVecsDec["EtaPim_HeliEtaPipPim"];
+	v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliEtaPipPim];
 	theCostHisto->Fill( v4.CosTheta(), weight);
 	thePhiHisto->Fill( v4.Phi(), weight);
 }
@@ -428,23 +428,23 @@ void JpsiGamEtaPiPiHistNew::plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* theP
 
 
 void  JpsiGamEtaPiPiHistNew::fillTuple( TNtuple* theTuple, EvtDataNew* theData, double weight){
-	Vector4<double> V4_EtaPipPim_HeliPsi = theData->FourVecsDec["EtaPipPim_HeliPsi"]  ;
-	Vector4<double> V4_EtaPip_HeliPsi= theData->FourVecsDec["EtaPip_HeliPsi"] ;
-	Vector4<double> V4_PipPim_HeliPsi= theData->FourVecsDec["PipPim_HeliPsi"] ;
-	Vector4<double> V4_gamma_HeliPsi= theData->FourVecsDec["gamma_HeliPsi"] ;
+	Vector4<double> V4_EtaPipPim_HeliPsi = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPipPim_HeliPsi]  ;
+	Vector4<double> V4_EtaPip_HeliPsi= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi] ;
+	Vector4<double> V4_PipPim_HeliPsi= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi] ;
+	Vector4<double> V4_gamma_HeliPsi= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::gamma_HeliPsi] ;
   
-	Vector4<double> V4_EtaPip_HeliEtaPipPim= theData->FourVecsDec["EtaPip_HeliEtaPipPim"] ;
-	Vector4<double> V4_PipPim_HeliEtaPipPim= theData->FourVecsDec["PipPim_HeliEtaPipPim"] ;
-	Vector4<double> V4_Eta_HeliEtaPip= theData->FourVecsDec["Eta_HeliEtaPip"] ;
-	Vector4<double> V4_Pip_HeliPipPim= theData->FourVecsDec["Pip_HeliPipPim"] ;
+	Vector4<double> V4_EtaPip_HeliEtaPipPim= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliEtaPipPim] ;
+	Vector4<double> V4_PipPim_HeliEtaPipPim= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliEtaPipPim] ;
+	Vector4<double> V4_Eta_HeliEtaPip= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPip] ;
+	Vector4<double> V4_Pip_HeliPipPim= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliPipPim] ;
   
 //	Vector4<double>& V4_Eta_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Eta_HeliPsi"] ;
 //	Vector4<double>& V4_Pip_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pip_HeliPsi"] ;
 //	Vector4<double>& V4_Pim_HeliPsi= theData->FourVecs[enumJpsiGamEtaPiPiData::V4_Pim_HeliPsi"] ;
   
   
-	Vector4<double> V4_normPipPimDecHeliEtaPipPim = theData->FourVecsDec["normPipPimDecHeliEtaPipPim"];
-	Vector4<double> V4_normEtaPipDecHeliEtaPipPim = theData->FourVecsDec["normEtaPipDecHeliEtaPipPim"];
+	Vector4<double> V4_normPipPimDecHeliEtaPipPim = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::normPipPimDecHeliEtaPipPim];
+	Vector4<double> V4_normEtaPipDecHeliEtaPipPim = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::normEtaPipDecHeliEtaPipPim];
 
 	double cosChi=(V4_normPipPimDecHeliEtaPipPim.Px()*V4_normEtaPipDecHeliEtaPipPim.Px()
 				+V4_normPipPimDecHeliEtaPipPim.Py()*V4_normEtaPipDecHeliEtaPipPim.Py()

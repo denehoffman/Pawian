@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 
-#include "PwaUtils/PsiGamEtaPiPiProdBaseLhNew.hh"
+#include "PwaUtils/PsiProdBaseLhNew.hh"
 #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
@@ -15,7 +15,7 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-PsiGamEtaPiPiProdBaseLhNew::PsiGamEtaPiPiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates) :
+PsiProdBaseLhNew::PsiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates) :
   AbsLhNew(theEvtList)
   ,_hypVec(hypVec)
   ,_theStatesPtr(theStates)
@@ -30,7 +30,7 @@ PsiGamEtaPiPiProdBaseLhNew::PsiGamEtaPiPiProdBaseLhNew(boost::shared_ptr<const E
  
 }
 
-PsiGamEtaPiPiProdBaseLhNew::PsiGamEtaPiPiProdBaseLhNew( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates ) :
+PsiProdBaseLhNew::PsiProdBaseLhNew( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates ) :
   AbsLhNew(theLhPtr->getEventList())
   ,_hypVec(hypVec)
  ,_theStatesPtr(theStates)
@@ -44,13 +44,13 @@ PsiGamEtaPiPiProdBaseLhNew::PsiGamEtaPiPiProdBaseLhNew( boost::shared_ptr<AbsLhN
   initializeHypothesis();  
 }
 
-PsiGamEtaPiPiProdBaseLhNew::~PsiGamEtaPiPiProdBaseLhNew()
+PsiProdBaseLhNew::~PsiProdBaseLhNew()
 {;
 }
 
 
 
-double PsiGamEtaPiPiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& theParamVal){
+double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& theParamVal){
 
   double result=0.;
 
@@ -216,17 +216,17 @@ double PsiGamEtaPiPiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitPara
 
 }
 
-complex<double> PsiGamEtaPiPiProdBaseLhNew::psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtDataNew* theData, 
+complex<double> PsiProdBaseLhNew::psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtDataNew* theData, 
                                                      double PsiToXGamMag, double PsiToXGamPhi ){
    Spin lambda = lamX-lamGamma;
    complex<double> expiphiPsi(cos(PsiToXGamPhi), sin(PsiToXGamPhi));
-   complex<double> result = PsiToXGamMag*expiphiPsi*conj( theData->WignerDsProd["Psi"][1][Minit][lambda]  );
+   complex<double> result = PsiToXGamMag*expiphiPsi*conj( theData->WignerDsProd[enumProdDfunc::Psi][1][Minit][lambda]  );
 
    return result;
 
 }
 
-void PsiGamEtaPiPiProdBaseLhNew::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){ 
+void PsiProdBaseLhNew::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){ 
 
   getDefaultLamLamParams(_GammaEtaHyps, _theStatesPtr->PsiToEtaGammaLamLamStates(), fitVal, fitErr);  
   getDefaultLamLamParams(_GammaEta2Hyps, _theStatesPtr->PsiToEta2GammaLamLamStates(), fitVal, fitErr); 
@@ -246,11 +246,11 @@ void PsiGamEtaPiPiProdBaseLhNew::getDefaultParams(fitParamsNew& fitVal, fitParam
   }
 }
 
-void PsiGamEtaPiPiProdBaseLhNew::print(std::ostream& os) const{
+void PsiProdBaseLhNew::print(std::ostream& os) const{
 
 }
 
-// void  PsiGamEtaPiPiProdBaseLhNew::initializeHypothesis(){
+// void  PsiProdBaseLhNew::initializeHypothesis(){
 
 //   std::vector<std::string>::const_iterator it;
 
@@ -295,7 +295,7 @@ void PsiGamEtaPiPiProdBaseLhNew::print(std::ostream& os) const{
 // //   }
 // }
 
-void  PsiGamEtaPiPiProdBaseLhNew::initializeHypothesis(){
+void  PsiProdBaseLhNew::initializeHypothesis(){
 
   std::vector<std::string>::const_iterator it;
 
@@ -331,7 +331,7 @@ void  PsiGamEtaPiPiProdBaseLhNew::initializeHypothesis(){
 
 
 
-void PsiGamEtaPiPiProdBaseLhNew::getDefaultLamLamParams(std::vector<std::string>& hyps, std::vector< boost::shared_ptr<const JPClamlam> > lamLamAmps, fitParamsNew& fitVal, fitParamsNew& fitErr){
+void PsiProdBaseLhNew::getDefaultLamLamParams(std::vector<std::string>& hyps, std::vector< boost::shared_ptr<const JPClamlam> > lamLamAmps, fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if (hyps.size()==0) return;
 

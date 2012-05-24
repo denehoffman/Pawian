@@ -15,7 +15,7 @@
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-#include "PwaUtils/PsiGamEtaPiPiProdBaseLhNew.hh"
+#include "PwaUtils/PsiProdBaseLhNew.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
 
 #include "PwaUtils/DataUtils.hh"
@@ -24,7 +24,7 @@
 
 class AbsXdecAmp;
 
-class JpsiGamEtaPiPiProdLhNew : public PsiGamEtaPiPiProdBaseLhNew{
+class JpsiGamEtaPiPiProdLhNew : public PsiProdBaseLhNew{
 
 public:
 

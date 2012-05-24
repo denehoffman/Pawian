@@ -1,5 +1,5 @@
-#ifndef _PsiGamEtaPiPiProdBaseLhNew_H
-#define _PsiGamEtaPiPiProdBaseLhNew_H
+#ifndef _PsiProdBaseLhNew_H
+#define _PsiProdBaseLhNew_H
 
 #include <iostream>
 #include <fstream>
@@ -24,21 +24,21 @@
 
 class AbsXdecAmp;
 
-class PsiGamEtaPiPiProdBaseLhNew : public AbsLhNew{
+class PsiProdBaseLhNew : public AbsLhNew{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  PsiGamEtaPiPiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew>, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates);
-  PsiGamEtaPiPiProdBaseLhNew(boost::shared_ptr<AbsLhNew>, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates);
+  PsiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew>, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates);
+  PsiProdBaseLhNew(boost::shared_ptr<AbsLhNew>, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates);
 
   /** Destructor */
-  virtual ~PsiGamEtaPiPiProdBaseLhNew();
+  virtual ~PsiProdBaseLhNew();
 
 //   virtual AbsLhNew* clone_() const {
-//     return new PsiGamEtaPiPiProdBaseLhNew(_evtListPtr, _hypVec, _theStatesPtr);
+//     return new PsiProdBaseLhNew(_evtListPtr, _hypVec, _theStatesPtr);
 //   }
   virtual AbsLhNew* clone_() const =0;
   

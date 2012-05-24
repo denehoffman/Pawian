@@ -5,7 +5,8 @@
 #include "Examples/JpsiGamEtaPiPiNew/XDecAmpBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
-#include "PwaUtils/EvtDataBaseListNew.hh"
+// #include "PwaUtils/EvtDataBaseListNew.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
 
 XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiGamEtaPiPiStates> theStates, Spin spinX) :
   AbsXdecAmp(name, hypVec)
@@ -59,15 +60,15 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fit
   double a0_980gPiEta=theParamVal.gFactors["a0_980gPiEta"];
   double a0_980gKK=theParamVal.gFactors["a0_980gKK"];
 
-  Vector4<double > p4EtaPiplus(theData->FourVecsDec["EtaPip_HeliPsi"].E(),
-			       theData->FourVecsDec["EtaPip_HeliPsi"].Px(),
-			       theData->FourVecsDec["EtaPip_HeliPsi"].Py(),
-			       theData->FourVecsDec["EtaPip_HeliPsi"].Pz());
+  Vector4<double > p4EtaPiplus(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].E(),
+			       theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].Px(),
+			       theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].Py(),
+			       theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].Pz());
 
-  Vector4<double > p4EtaPiminus(theData->FourVecsDec["EtaPim_HeliPsi"].E(),
-				theData->FourVecsDec["EtaPim_HeliPsi"].Px(),
-				theData->FourVecsDec["EtaPim_HeliPsi"].Py(),
-				theData->FourVecsDec["EtaPim_HeliPsi"].Pz());
+  Vector4<double > p4EtaPiminus(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].E(),
+				theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].Px(),
+				theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].Py(),
+				theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].Pz());
 
 
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA980PiMag=theParamVal.Mags[_a980piKey];
@@ -86,8 +87,8 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fit
 
 
      complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-       (  conj(theData->WignerDsDec["XToAplusPiminus"][_spinX][lamX][0])*Flatte(p4EtaPiplus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
-	  conj(theData->WignerDsDec["XToAminusPiplus"][_spinX][lamX][0])*
+       (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][0])*Flatte(p4EtaPiplus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
+	  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][0])*
 	  Flatte(p4EtaPiminus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 );
      result+= amp;
@@ -104,10 +105,10 @@ complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fi
   double f0_980gPiPi=theParamVal.gFactors["f0_980gPiPi"];
   double f0_980gKK=theParamVal.gFactors["f0_980gKK"];
 
-  Vector4<double > p4PiPi(theData->FourVecsDec["PipPim_HeliPsi"].E(),
-			  theData->FourVecsDec["PipPim_HeliPsi"].Px(),
-			  theData->FourVecsDec["PipPim_HeliPsi"].Py(),
-			  theData->FourVecsDec["PipPim_HeliPsi"].Pz()); 
+  Vector4<double > p4PiPi(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].E(),
+			  theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].Px(),
+			  theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].Py(),
+			  theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].Pz()); 
 
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XTof980etaMag=theParamVal.Mags[_f980etaKey];
 
@@ -125,7 +126,7 @@ complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fi
 
 
      complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-       conj(theData->WignerDsDec["Df_XTofEta"][_spinX][lamX][0])*
+       conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][0])*
        Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
      result+= amp;
    }
@@ -142,10 +143,10 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
 
   complex<double> result(0.,0.);
 
-  Vector4<double > p4PiPi(theData->FourVecsDec["PipPim_HeliPsi"].E(),
-			  theData->FourVecsDec["PipPim_HeliPsi"].Px(),
-			  theData->FourVecsDec["PipPim_HeliPsi"].Py(),
-			  theData->FourVecsDec["PipPim_HeliPsi"].Pz());  
+  Vector4<double > p4PiPi(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].E(),
+			  theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].Px(),
+			  theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].Py(),
+			  theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi].Pz());  
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
   
@@ -162,8 +163,8 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)
 	*Clebsch(XState->L, 0, XState->S, lamf, _spinX, lamf)
 	*Clebsch(jf, lamf, 0, 0, XState->S, lamf)
-	*conj(theData->WignerDsDec["XTofEta"][_spinX][lamX][lamf])
-	*conj(theData->WignerDsDec["fToPiPiDec"][jf][lamf][0])
+	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][lamf])
+	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][jf][lamf][0])
 	*BreitWignerBlattW(p4PiPi, _massPi0, _massPi0, fMass, fWidth, jf);
      }
      
