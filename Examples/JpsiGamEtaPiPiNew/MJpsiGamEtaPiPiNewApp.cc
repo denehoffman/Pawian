@@ -8,14 +8,13 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiParser.hh"
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiData.hh"
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiEventList.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiReader.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiHistNew.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiProdLhNew.hh"
 
-
+#include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
 #include "PwaUtils/StreamFitParmsBaseNew.hh"
 #include "PwaUtils/PwaFcnBaseNew.hh"
@@ -134,11 +133,9 @@ int main(int __argc,char *__argv[]){
 	//
 	//calculate helicity angles, fill map with D-functions
 	//
-	boost::shared_ptr<const JpsiGamEtaPiPiEventList> theJpsiGamEtaPiPiEventListPtr(new JpsiGamEtaPiPiEventList(eventsData, eventsMc));
+	boost::shared_ptr<const JpsiGamEtaPiPiEventListNew> theJpsiGamEtaPiPiEventListPtr(new JpsiGamEtaPiPiEventListNew(eventsData, eventsMc));
   
-	//JpsiGamEtaPiPiHist theHist(theJpsiGamEtaPiPiEventListPtr);
-
-	std::string mode=theAppParams.mode();
+		std::string mode=theAppParams.mode();
 	std::cout << "Mode: " << mode << std::endl;
 	if (mode=="plotmode"){
 	  JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr);                                                               

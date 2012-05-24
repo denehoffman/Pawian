@@ -10,7 +10,7 @@
 #include <cassert>
 #include <boost/shared_ptr.hpp>
 
-#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
 
 
@@ -29,7 +29,7 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal)=0;
+  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal)=0;
                                          
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)=0;
   virtual void print(std::ostream& os) const=0;

@@ -6,7 +6,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
   _evtListPtr(theEvtList)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
@@ -30,7 +30,7 @@ double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
   double logLH_data=0.;
   double weightSum=0.;
 
-  std::vector<EvtData*>::iterator iterd;
+  std::vector<EvtDataNew*>::iterator iterd;
   for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
     double intensity=calcEvtIntensity((*iterd), theParamVal);
     if (intensity>0.) logLH_data+=((*iterd)->evtWeight)*log(intensity);
@@ -39,7 +39,7 @@ double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
 
   double LH_mc=0.;
   
-  std::vector<EvtData*>::iterator iterm;
+  std::vector<EvtDataNew*>::iterator iterm;
   for (iterm=_evtMCVec.begin(); iterm!=_evtMCVec.end(); ++iterm){
            double intensity=calcEvtIntensity((*iterm), theParamVal);
            LH_mc+=intensity;

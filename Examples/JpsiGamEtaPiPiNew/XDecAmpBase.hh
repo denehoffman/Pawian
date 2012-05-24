@@ -29,7 +29,7 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal);
+  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
                                          
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
   virtual void print(std::ostream& os) const;
@@ -51,13 +51,13 @@ protected:
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
   Spin _spinX; 
 
-  complex<double> XToAPiFlatteAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal);
-  complex<double> XToFEtaFlatteAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal);
-  complex<double> XToEtaFAmp(Spin lamX, Spin jf, EvtData* theData, 
+  complex<double> XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
+  complex<double> XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
+  complex<double> XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
 			     double fMass, double fWidth);
-  void initialize();
+  virtual void initialize();
 
 private:
 

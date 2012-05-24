@@ -16,7 +16,7 @@
 #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "qft++/topincludes/tensor.hh"
-#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
 #include "PwaUtils/AbsLhNew.hh"
 
@@ -26,7 +26,7 @@ class TH2F;
 class TH1F;
 class TNtuple;
 class JpsiGamEtaPiPiProdLhNew;
-class EvtDataBaseList;
+class EvtDataBaseListNew;
 class FitParamErrorMatrix;
 
 class JpsiGamEtaPiPiHistNew {
@@ -36,7 +36,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBaseList>);
+  JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBaseListNew>);
   JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew>, fitParamsNew&);
 
   void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
@@ -109,18 +109,18 @@ private:
   std::pair<double, double> _massRange;
 
   void initRootStuff();
-  void plotDalitz(TH2F* theHisto, EvtData* theData, double weight);
-  void plotEtaPipPim(TH1F* theHisto, EvtData* theData, double weight);
-  void plotEtaPi(TH1F* theHisto, EvtData* theData, double weight);
-  void plotPipPim(TH1F* theHisto, EvtData* theData, double weight);
-  void plotCostPhiEta(TH1F* theCostHisto, TH1F* thePhiHisto, EvtData* theData, double weight);
-  void plotCostPhiPip(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtData* theData, double weight);
+  void plotDalitz(TH2F* theHisto, EvtDataNew* theData, double weight);
+  void plotEtaPipPim(TH1F* theHisto, EvtDataNew* theData, double weight);
+  void plotEtaPi(TH1F* theHisto, EvtDataNew* theData, double weight);
+  void plotPipPim(TH1F* theHisto, EvtDataNew* theData, double weight);
+  void plotCostPhiEta(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
+  void plotCostPhiPip(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight);
   //  void plotCostPhi_PhiPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight);
-  void plotCostGam(TH1F* theCostHisto, EvtData* theData, double weight);
-  void plotCostPhi_PiPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtData* theData, double weight);
-  void plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtData* theData, double weight);
+  void plotCostGam(TH1F* theCostHisto, EvtDataNew* theData, double weight);
+  void plotCostPhi_PiPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
+  void plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
 
-  void fillTuple( TNtuple* theTuple, EvtData* theData, double weight);
+  void fillTuple( TNtuple* theTuple, EvtDataNew* theData, double weight);
 
 
 
