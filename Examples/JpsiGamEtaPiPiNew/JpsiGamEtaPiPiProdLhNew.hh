@@ -59,6 +59,7 @@ protected:
  
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _etaDecAmpMap;
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _f1DecAmpMap;
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _eta2DecAmpMap;
 
   virtual complex<double> psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtData* theData, 
                                          double PsiToXGamMag, double PsiToXGamPhi);
