@@ -4,9 +4,10 @@
 
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiProdLhNew.hh"
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiEventList.hh"
-#include "Examples/JpsiGamEtaPiPiNew/EtaDecAmp.hh"
-#include "Examples/JpsiGamEtaPiPiNew/F1DecAmp.hh"
-#include "Examples/JpsiGamEtaPiPiNew/Eta2DecAmp.hh"
+// #include "Examples/JpsiGamEtaPiPiNew/EtaDecAmp.hh"
+// #include "Examples/JpsiGamEtaPiPiNew/F1DecAmp.hh"
+// #include "Examples/JpsiGamEtaPiPiNew/Eta2DecAmp.hh"
+#include "Examples/JpsiGamEtaPiPiNew/XDecAmpBase.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 
@@ -276,25 +277,25 @@ void  JpsiGamEtaPiPiProdLhNew::initializeHypothesis(){
       Info << "eta hypothesis\t" << (*it) << "\t found" << endmsg;
       _GammaEtaHyps.push_back(*it);
 
-      //boost::shared_ptr<AbsXdecAmp> tmpPtr=boost::shared_ptr<AbsXdecAmp>(new EtaDecAmp( (*it), _hypVec) );
+      //boost::shared_ptr<AbsXdecAmp> tmpPtr=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( (*it), _hypVec, Spin(0)) );
       size_t pos=it->find(_EtaKey);
       std::string etaDecAmpName=it->substr(pos);
 
-      _etaDecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new EtaDecAmp( etaDecAmpName, _hypVec, _theStatesPtr) );
+      _etaDecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( etaDecAmpName, _hypVec, _theStatesPtr, Spin(0)) );
     }
     else if (it->compare(0, _GammaF1Key.size(), _GammaF1Key)== 0){
       Info << "f1 hypothesis\t" << (*it) << "\t found" << endmsg;
       _GammaF1Hyps.push_back(*it);
       size_t pos=it->find(_F1Key);
       std::string f1DecAmpName=it->substr(pos);
-      _f1DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new F1DecAmp( f1DecAmpName, _hypVec, _theStatesPtr) );
+      _f1DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( f1DecAmpName, _hypVec, _theStatesPtr, Spin(1)) );
     }
     else if (it->compare(0, _GammaEta2Key.size(), _GammaEta2Key)== 0){
       Info << "eta2 hypothesis\t" << (*it) << "\t found" << endmsg;
       _GammaEta2Hyps.push_back(*it);
       size_t pos=it->find(_Eta2Key);
       std::string eta2DecAmpName=it->substr(pos);
-      _eta2DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new Eta2DecAmp( eta2DecAmpName, _hypVec, _theStatesPtr) );
+      _eta2DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( eta2DecAmpName, _hypVec, _theStatesPtr, Spin(2)) );
     }
    
   } 

@@ -29,9 +29,9 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal)=0;
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal);
                                          
-  virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)=0;
+  virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
   virtual void print(std::ostream& os) const;
 
 protected:
@@ -39,16 +39,20 @@ protected:
   bool _a980piHyp;
   const std::string _sigmaEtaKey;
   bool _sigmaEtaHyp;
+  const std::string _f980etaKey;
+  bool _f980etaHyp;
   const double _massPi0;
   const double _massKplus;
   const double _massK0;
   const double _massEta;
   std::pair <const double, const double> _decPairKK;
   std::pair <const double, const double> _decPairPi0Eta;
+  std::pair <const double, const double> _decPairPiPi;
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
   Spin _spinX; 
 
   complex<double> XToAPiFlatteAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal);
+  complex<double> XToFEtaFlatteAmp(Spin lamX, EvtData* theData, fitParamsNew& theParamVal);
   complex<double> XToEtaFAmp(Spin lamX, Spin jf, EvtData* theData, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
