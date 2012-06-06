@@ -1,10 +1,6 @@
-project : 
-	;
+project : ;
 
-lib Setup : 
-	[ glob *.cc : *App.cc ] 
-	$(TOP)/Event//Event 
-	$(TOP)/DecayTree//DecayTree : : : ;
+lib Setup : [ glob *.cc : *App.cc ] $(TOP)/Event//Event $(TOP)/DecayTree//DecayTree : : : ;
 
 exe SetupTestApp : SetupTestApp.cc Setup : ;
 

@@ -61,11 +61,11 @@ bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
   std::string::const_iterator end = storage.end();
   bool r = phrase_parse(iter, end, setupGrammar, space, *thisDecay);
   
-  if (r && iter == end) {
+   if (r && iter == end) {
     Info << "\n\n"
-	 << "-------------------------\n"
-	 << "Parsing succeeded\n"
-	 << "-------------------------\n" << endmsg;
+  	 << "-------------------------\n"
+  	 << "Parsing succeeded\n"
+  	 << "-------------------------\n" << endmsg;
     setupGrammar::decay_tree_printer printer;
     printer(*thisDecay);
     setupGrammar::edgeList.print(std::cout);
@@ -77,30 +77,30 @@ bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
       std::cout << "add: " << *cmdLine << std::endl;
       pData = new ParticleData;
       if (pdtParser.parse(cmdLine->begin(), cmdLine->end(), *pData)) { // success
-	Particle* newParticle = new Particle(*pData);
-	newParticle->print(std::cout);
-	if (0 != pdtTable)
-	  pdtTable->addParticle(newParticle);
+  	Particle* newParticle = new Particle(*pData);
+  	newParticle->print(std::cout);
+  	if (0 != pdtTable)
+  	  pdtTable->addParticle(newParticle);
       }
     }
     if (0 != pdtTable)
       pdtTable->print(std::cout);
 
     return true; // true means success
-  }
+   }
   
-  else {
-    std::string::const_iterator some = iter+30;
-    std::string context(iter, (some>end)?end:some);
-    ErrMsg << "\n\n"
-	   << "-------------------------\n"
-	   << "Parsing failed\n"
-	   << "stopped at: \": " << context << "...\"\n"
-	   << "-------------------------\n" << endmsg;
-    return false;
-  }
-  
-  return false; // success
+   else {
+     std::string::const_iterator some = iter+30;
+     std::string context(iter, (some>end)?end:some);
+     ErrMsg << "\n\n"
+	    << "-------------------------\n"
+	    << "Parsing failed\n"
+	    << "stopped at: \": " << context << "...\"\n"
+	    << "-------------------------\n" << endmsg;
+     return false;
+   }
+   
+   return false; // success
 
 }
 

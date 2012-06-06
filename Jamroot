@@ -5,19 +5,16 @@ BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboos
 
 project :
 	requirements <include>./  
-#	<include>$(extern)/log4cpp/include
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
 	<include>$(GENEVA)/include
 	<link>static
 	<cxxflags>-pthread
-#        <cxxflags>-fopenmp
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
 	<linkflags>-lMinuit2
 	<linkflags>-lgomp
 	<linkflags>-pthread
-#        <linkflags>-fopenmp
 	;
 
 actions rootlibs
@@ -41,6 +38,6 @@ build-project PwaUtils ;
 build-project Particle ;
 build-project Event ;
 build-project DecayTree ;
-# build-project Setup ;
+build-project Setup ;
 build-project PspGen ;
 build-project Examples ;

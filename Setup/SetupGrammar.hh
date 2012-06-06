@@ -1,5 +1,4 @@
-#ifndef SETUPGRAMMAR_HH
-#define SETUPGRAMMAR_HH
+#pragma once
 
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -99,20 +98,16 @@ namespace setupGrammar
     int indent;
   };
   
-  struct decay_node_printer : boost::static_visitor<>
-  {
+  struct decay_node_printer : boost::static_visitor<> {
     decay_node_printer(int indent = 0)
       : indent(indent)
-    {
-    }
+    {}
       
-    void operator()(decay_tree const& decay) const
-    {
+    void operator()(decay_tree const& decay) const {
       decay_tree_printer(indent+tabsize)(decay);
     }
     
-    void operator()(std::string const& text) const
-    {
+    void operator()(std::string const& text) const {
       tab(indent+tabsize);
       std::cout << "final state particle " << text << std::endl;
       finalToEdgeList(text);
@@ -121,8 +116,7 @@ namespace setupGrammar
     int indent;
   };
   
-  void decay_tree_printer::operator()(decay_tree const& decay) const
-  {
+  void decay_tree_printer::operator()(decay_tree const& decay) const {
     tab(indent);
     std::cout << decay.name << " -> " << std::endl;
     vertexToEdgeList(decay.name);
@@ -161,56 +155,60 @@ namespace setupGrammar
   ///////////////////////////////////////////////////////////////////////////
   //[tutorial_decay1_grammar
   template <typename Iterator>
-  struct setup_file_grammar : qi::grammar<Iterator, decay_tree(), ascii::space_type>
-  {
-    setup_file_grammar() : setup_file_grammar::base_type(decay)
-      {
-	using qi::lit;
-	using qi::lexeme;
-	using ascii::char_;
-	using ascii::string;
-	using namespace qi::labels;
-        
-	using phoenix::at_c;
-	using phoenix::push_back;
-	using boost::phoenix::ref;
-	
-	restOfLine = lexeme[*(char_ -'\n') [_val += _1]];
-	comment = (char_('#') >> lexeme[*(char_ -'\n')]);
-	
-	particleName = lexeme[+(char_('!','z') -',') [_val += _1]];
-	decNode = (decay | particleName);
-	goesTo = char_('-') >> char_('>');
-        
-	decay = +( comment ||
-		   "addParticle"        >> restOfLine[push_back(at_c<2>(_val), _1)] || 
-		   "cloneParticle"      >> restOfLine[push_back(at_c<3>(_val), _1)] || 
-		   "modParticle"        >> restOfLine[push_back(at_c<4>(_val), _1)] || 
-		   "beamInput"          >> restOfLine[push_back(at_c<5>(_val), _1)] || 
-		   "mcInput"            >> restOfLine[push_back(at_c<6>(_val), _1)] || 
-		   "defineTuple"        >> restOfLine[push_back(at_c<7>(_val), _1)] || 
-		   "fitVariables"       >> restOfLine[push_back(at_c<8>(_val), _1)] || 
-		   "initialProperties"  >> restOfLine[push_back(at_c<9>(_val), _1)] || 
-		   ( char_('{')
-		     >> (decay[push_back(at_c<1>(_val), _1)] || particleName[at_c<0>(_val) = _1])
-		     >> goesTo
-		     >> decNode   [push_back(at_c<1>(_val), _1)]
-		     >> ','
-		     >> decNode   [push_back(at_c<1>(_val), _1)]
-		     >> char_('}') )
-		   );
-	
-      }
+  struct setup_file_grammar : qi::grammar<Iterator, decay_tree(), 
+					  ascii::space_type> {
+    setup_file_grammar() : setup_file_grammar::base_type(decay) {
+      using qi::lit;
+      using qi::lexeme;
+      using ascii::char_;
+      using ascii::string;
+      using namespace qi::labels;
       
+      using phoenix::at_c;
+      using phoenix::push_back;
+      using boost::phoenix::ref;
       
-      qi::rule<Iterator, decay_tree(), ascii::space_type> decay;
-      qi::rule<Iterator, decay_node(), ascii::space_type> decNode;
-      qi::rule<Iterator, std::string(), ascii::space_type> goesTo;
-      qi::rule<Iterator, std::string(), ascii::space_type> comment;
-      qi::rule<Iterator, std::string(), ascii::space_type> restOfLine;
-      qi::rule<Iterator, std::string(), ascii::space_type> particleName;
+      restOfLine = lexeme[*(char_ -'\n') [_val += _1]];
+      comment = (char_('#') >> lexeme[*(char_ -'\n')]);
+      
+      particleName = lexeme[+(char_('!','z') -',') [_val += _1]];
+      decNode = (decay | particleName);
+      goesTo = char_('-') >> char_('>');
+      
+      decay = +( comment ||
+		 "addParticle"     
+		 >> restOfLine[push_back(at_c<2>(_val), _1)] || 
+		 "cloneParticle"      
+		 >> restOfLine[push_back(at_c<3>(_val), _1)] || 
+		 "modParticle"        
+		 >> restOfLine[push_back(at_c<4>(_val), _1)] || 
+		 "beamInput"          
+		 >> restOfLine[push_back(at_c<5>(_val), _1)] || 
+		 "mcInput"            
+		 >> restOfLine[push_back(at_c<6>(_val), _1)] || 
+		 "defineTuple"        
+		 >> restOfLine[push_back(at_c<7>(_val), _1)] || 
+		 "fitVariables"       
+		 >> restOfLine[push_back(at_c<8>(_val), _1)] || 
+		 "initialProperties"  
+		 >> restOfLine[push_back(at_c<9>(_val), _1)] || 
+		 ( char_('{')
+		   >> (decay[push_back(at_c<1>(_val), _1)] 
+		       || particleName[at_c<0>(_val) = _1])
+		   >> goesTo
+		   >> decNode   [push_back(at_c<1>(_val), _1)]
+		   >> ','
+		   >> decNode   [push_back(at_c<1>(_val), _1)]
+		   >> char_('}') )
+		 );
+    }
+      
+    qi::rule<Iterator, decay_tree(), ascii::space_type> decay;
+    qi::rule<Iterator, decay_node(), ascii::space_type> decNode;
+    qi::rule<Iterator, std::string(), ascii::space_type> goesTo;
+    qi::rule<Iterator, std::string(), ascii::space_type> comment;
+    qi::rule<Iterator, std::string(), ascii::space_type> restOfLine;
+    qi::rule<Iterator, std::string(), ascii::space_type> particleName;
   };
-  
-}
 
-#endif
+}

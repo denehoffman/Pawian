@@ -1,5 +1,4 @@
-#ifndef SETUPPARSER_HH
-#define SETUPPARSER_HH
+#pragma once
 
 #include <vector>
 #include <string>
@@ -8,13 +7,12 @@
 #include <boost/variant/recursive_variant.hpp>
 
 class ParticleTable;
-namespace decayGraph
-{
+
+namespace decayGraph {
   struct EdgeList;
 }
 
-namespace setupGrammar
-{
+namespace setupGrammar {
 
   struct decay_tree;
 
@@ -25,8 +23,7 @@ namespace setupGrammar
     >
   decay_node;
 
-  struct decay_tree
-  {
+  struct decay_tree {
     std::string name;                        // mother particle name
     std::vector<decay_node> children;        // children
     std::vector<std::string> addParticle;
@@ -55,7 +52,4 @@ public:
 private:
   
   setupGrammar::decay_tree* thisDecay;
-
 };
-
-#endif

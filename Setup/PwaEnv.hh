@@ -1,5 +1,4 @@
-#ifndef PWAENV_HH
-#define PWAENV_HH
+#pragma once
 
 #include <string>
 
@@ -9,7 +8,6 @@ class DecayTree;
 
 class PwaEnv
 {
-
 public:
   static PwaEnv& instance();
   ~PwaEnv();
@@ -27,7 +25,4 @@ private:
   DecayTree* theDecayTree;
   EventList* theBeamEventList;
   EventList* theMcEventList;
-
 };
-
-#endif

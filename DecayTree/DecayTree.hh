@@ -1,5 +1,4 @@
-#ifndef DECAYTREE_HH
-#define DECAYTREE_HH
+#pragma once
 
 #include <iostream>
 #include <cstdlib>
@@ -43,7 +42,8 @@ namespace decayGraph
       for (iter = decays.begin(); iter != decays.end(); iter++)
 	(*iter)->print(o);
       std::map<int, std::string>::const_iterator nameIter;
-      for (nameIter = particleNames.begin(); nameIter != particleNames.end(); nameIter++)
+      for (nameIter = particleNames.begin(); 
+	   nameIter != particleNames.end(); nameIter++)
 	o << nameIter->first << " " << nameIter->second << std::endl;
     }
   };
@@ -69,5 +69,3 @@ private:
   std::map<int, std::string> *nameMap;
   std::map<int, const Particle*> *particleMap;
 };
-
-#endif
