@@ -1,5 +1,4 @@
-#ifndef PARTICLETABLE_HH
-#define PARTICLETABLE_HH
+#pragma once
 
 #include <map>
 #include <string>
@@ -7,7 +6,6 @@
 class Particle;
 
 typedef std::pair<const std::string, Particle*> pdt_value_type;
-
 
 class ParticleTable
 {
@@ -31,6 +29,4 @@ private:
   std::map<const std::string, Particle*> particles;
 
 };
-
-#endif
 

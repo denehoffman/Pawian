@@ -18,8 +18,7 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef EVTCOMPLEX_HH
-#define EVTCOMPLEX_HH
+#pragma once
 
 #include <iostream>
 #include <math.h>
@@ -69,165 +68,114 @@ typedef EvtComplex* EvtComplexPtr;
 typedef EvtComplexPtr* EvtComplexPtrPtr;
 typedef EvtComplexPtrPtr* EvtComplexPtrPtrPtr;
 
-
-EvtComplex& EvtComplex::operator=(const EvtComplex& c){
-  
+EvtComplex& EvtComplex::operator=(const EvtComplex& c) {
   _rpart=c._rpart;
   _ipart=c._ipart;
-  
   return *this; 
 }
 
-EvtComplex& EvtComplex::operator+=(const EvtComplex& c){
-
+EvtComplex& EvtComplex::operator+=(const EvtComplex& c) {
   _rpart+=c._rpart;
   _ipart+=c._ipart;
-  
   return *this; 
 }
 
-EvtComplex& EvtComplex::operator-=(const EvtComplex& c){
-
+EvtComplex& EvtComplex::operator-=(const EvtComplex& c) {
   _rpart-=c._rpart;
   _ipart-=c._ipart;
-
   return *this; 
 }
 
-EvtComplex& EvtComplex::operator+=(double d){
-
+EvtComplex& EvtComplex::operator+=(double d) {
   _rpart+=d;
-  
   return *this; 
 }
 
-EvtComplex& EvtComplex::operator-=(double d){
-
+EvtComplex& EvtComplex::operator-=(double d) {
   _rpart-=d;
-
   return *this; 
 }
 
-EvtComplex operator*(double d,const EvtComplex& c){
-  
+EvtComplex operator*(double d,const EvtComplex& c) {
   return EvtComplex(c._rpart*d,c._ipart*d);
-
 }
 
-EvtComplex operator*(const EvtComplex& c, double d){
-  
+EvtComplex operator*(const EvtComplex& c, double d) {
   return EvtComplex(c._rpart*d,c._ipart*d);
-
 }
 
-
-
-EvtComplex operator/(const EvtComplex& c,double d){
-  
+EvtComplex operator/(const EvtComplex& c,double d) {
   return EvtComplex(c._rpart/d,c._ipart/d);
-
 }
 
-EvtComplex& EvtComplex::operator*=(double d){
-
+EvtComplex& EvtComplex::operator*=(double d) {
   _rpart*=d;
   _ipart*=d;
-
   return *this;
-
 }
 
-
-EvtComplex& EvtComplex::operator/=(double d){
-
+EvtComplex& EvtComplex::operator/=(double d) {
   _rpart/=d;
   _ipart/=d;
-
   return *this;
 }
 
 EvtComplex operator/(double d,const EvtComplex& c) {
-
-double Num=d/(c._rpart*c._rpart+c._ipart*c._ipart);
-
-return EvtComplex( Num*c._rpart, -Num*c._ipart );
-
+  double Num=d/(c._rpart*c._rpart+c._ipart*c._ipart);
+  return EvtComplex( Num*c._rpart, -Num*c._ipart );
 }
 
-
-
-EvtComplex operator/(const EvtComplex& c1,const EvtComplex& c2){
-
+EvtComplex operator/(const EvtComplex& c1,const EvtComplex& c2) {
   double inv=1.0/(c2._rpart*c2._rpart+c2._ipart*c2._ipart);
-
   return EvtComplex(inv*(c1._rpart*c2._rpart+c1._ipart*c2._ipart),
 		    inv*(c1._ipart*c2._rpart-c1._rpart*c2._ipart));
-
 }
 
-EvtComplex operator*(const EvtComplex& c1,const EvtComplex& c2){
-
+EvtComplex operator*(const EvtComplex& c1,const EvtComplex& c2) {
   return EvtComplex(c1._rpart*c2._rpart-c1._ipart*c2._ipart,
 		    c1._rpart*c2._ipart+c1._ipart*c2._rpart);
-
 }
 
-EvtComplex operator-(const EvtComplex& c1,const EvtComplex& c2){
-  
+EvtComplex operator-(const EvtComplex& c1,const EvtComplex& c2) {
   return EvtComplex(c1._rpart-c2._rpart,c1._ipart-c2._ipart);
-
 }
 
-EvtComplex operator+(const EvtComplex& c1,const EvtComplex& c2){
-  
+EvtComplex operator+(const EvtComplex& c1,const EvtComplex& c2) {
   return EvtComplex(c1._rpart+c2._rpart,c1._ipart+c2._ipart);
-
 }
 
-int EvtComplex::operator==(const EvtComplex c){
-
+int EvtComplex::operator==(const EvtComplex c) {
   return _rpart==c._rpart&&_ipart==c._ipart;
-
 }
 
-int EvtComplex::operator!=(const EvtComplex c){
-
+int EvtComplex::operator!=(const EvtComplex c) {
   return _rpart!=c._rpart||_ipart!=c._ipart;
-
 }
 
-
-EvtComplex operator-(const EvtComplex& c){
-
+EvtComplex operator-(const EvtComplex& c) {
   return EvtComplex(-c._rpart,-c._ipart);
-
 }
 
-EvtComplex conj(const EvtComplex& c){
-
+EvtComplex conj(const EvtComplex& c) {
   return EvtComplex(c._rpart,-c._ipart);
-
 }
 
-double abs(const EvtComplex& c){
-
+double abs(const EvtComplex& c) {
   double c2=c._rpart*c._rpart+c._ipart*c._ipart;
   if (c2<=0.0) return 0.0;
   return sqrt(c2);
-
 }
 
-
-double abs2(const EvtComplex& c){
-
+double abs2(const EvtComplex& c) {
   return c._rpart*c._rpart+c._ipart*c._ipart;
 }
 
-
 double arg(const EvtComplex& c){    
-  if ((c._rpart==0)&&(c._ipart==0)) {return 0.0;}
-  if (c._rpart==0){
-    if (c._ipart>0){
+  if ((c._rpart==0)&&(c._ipart==0)) {
+    return 0.0;
+  }
+  if (c._rpart==0) {
+    if (c._ipart>0) {
       return EvtConst::pi/2;
     } else {
       return -EvtConst::pi/2;
@@ -237,27 +185,17 @@ double arg(const EvtComplex& c){
   }      
 }
 
-double real(const EvtComplex& c){
-
+double real(const EvtComplex& c) {
   return c._rpart;
-
 }
 
-double imag(const EvtComplex& c){
-
+double imag(const EvtComplex& c) {
   return c._ipart;
-
 }
 
-EvtComplex exp(const EvtComplex& c){
-
+EvtComplex exp(const EvtComplex& c) {
   return exp(c._rpart)*EvtComplex(cos(c._ipart),sin(c._ipart));
-
 }
-
-
-
-#endif
 
 
 

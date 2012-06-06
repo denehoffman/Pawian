@@ -21,21 +21,13 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef EVTRANDOMENGINE_HH
-#define EVTRANDOMENGINE_HH
+#pragma once
 
-class EvtRandomEngine{
-
+class EvtRandomEngine {
 public:
-
   virtual ~EvtRandomEngine() {};
   virtual double random() = 0;
   virtual void reset() = 0;
-
-private:
-
 };
-
-#endif
 
 

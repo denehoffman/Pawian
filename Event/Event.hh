@@ -1,5 +1,4 @@
-#ifndef EVENT_HH
-#define EVENT_HH
+#pragma once
 
 #include "qft++/topincludes/tensor.hh"
 #include "qft++/tensor/Vector4.hh"
@@ -38,11 +37,8 @@ public:
   
   bool operator<(const Event& compare) const;
 
-
 private:
   std::vector<EvtPartData*> particles;
   double weight;
   int evtNo;
 };
-
-#endif

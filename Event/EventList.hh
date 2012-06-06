@@ -1,5 +1,4 @@
-#ifndef EVENTLIST_HH
-#define EVENTLIST_HH
+#pragma once
 
 #include <vector>
 
@@ -32,5 +31,3 @@ private:
   std::vector<Particle*> particleRefs;
   
 };
-
-#endif

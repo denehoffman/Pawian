@@ -18,8 +18,7 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef EvtTensor4C_HH
-#define EvtTensor4C_HH
+#pragma once
 
 #include "PspGen/EvtComplex.hh"
 
@@ -53,11 +52,8 @@ class EvtTensor4C {
   friend EvtTensor4C operator-(const EvtTensor4C& t1,const EvtTensor4C& t2);
   
 public:
-
   EvtTensor4C() {;}
-
   EvtTensor4C(double t00,double t11,double t22, double t33) { setdiag(t00,t11,t22,t33);}
-
 
   EvtTensor4C(const EvtTensor4C& t1 );
   virtual ~EvtTensor4C();
@@ -81,36 +77,29 @@ public:
   EvtVector4C cont1(const EvtVector4C& v4) const; 
   EvtVector4C cont2(const EvtVector4C& v4) const; 
   EvtVector4C cont1(const EvtVector4R& v4) const; 
-  EvtVector4C cont2(const EvtVector4R& v4) const; 
-  
+  EvtVector4C cont2(const EvtVector4R& v4) const;   
   
 private:
-
     EvtComplex t[4][4];
-
 };
 
-inline EvtTensor4C operator+(const EvtTensor4C& t1,const EvtTensor4C& t2){
-
+inline EvtTensor4C operator+(const EvtTensor4C& t1,const EvtTensor4C& t2) {
   return EvtTensor4C(t1)+=t2;
 }
 
-inline EvtTensor4C operator-(const EvtTensor4C& t1,const EvtTensor4C& t2){
-
+inline EvtTensor4C operator-(const EvtTensor4C& t1,const EvtTensor4C& t2) {
   return EvtTensor4C(t1)-=t2;
 }
 
-inline void EvtTensor4C::set(int i,int j,const EvtComplex& c){
+inline void EvtTensor4C::set(int i,int j,const EvtComplex& c) {
    t[i][j]=c;
 }
 
-inline const EvtComplex& EvtTensor4C::get(int i,int j) const{
+inline const EvtComplex& EvtTensor4C::get(int i,int j) const {
    return t[i][j];
 }
 
-inline EvtComplex EvtTensor4C::trace() const{
+inline EvtComplex EvtTensor4C::trace() const {
    return t[0][0]-t[1][1]-t[2][2]-t[3][3];
 }
-
-#endif
 

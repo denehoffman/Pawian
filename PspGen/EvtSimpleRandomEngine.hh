@@ -20,22 +20,18 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef EVTSIMPLERANDOMENGINE_HH
-#define EVTSIMPLERANDOMENGINE_HH
+#pragma once
 
 #include "PspGen/EvtRandomEngine.hh"
 
-class EvtSimpleRandomEngine : public EvtRandomEngine
-{
-
+class EvtSimpleRandomEngine : public EvtRandomEngine {
 public:
-
-  EvtSimpleRandomEngine(){
+  EvtSimpleRandomEngine() {
     _next = 1;
     _seed = 1;
   }
   
-  EvtSimpleRandomEngine(unsigned long int seed){
+  EvtSimpleRandomEngine(unsigned long int seed) {
     _next = seed;
     _seed = seed;
   }
@@ -47,12 +43,8 @@ public:
   virtual double random();
   
 private:
-  
   unsigned long int _next;
   unsigned long int _seed;
-  
 };
-
-#endif
 
 

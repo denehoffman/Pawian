@@ -1,5 +1,4 @@
-#ifndef PDTPARSER_HH
-#define PDTPARSER_HH
+#pragma once
 
 #include <string>
 #include "Particle/ParticleTable.hh"
@@ -17,7 +16,4 @@ public:
   bool parse(std::string::const_iterator begin,
 	     std::string::const_iterator end,
 	     ParticleData& pData);
-
 };
-
-#endif

@@ -1,11 +1,8 @@
-#ifndef HEPMCEVENTLIST_HH
-#define HEPMCEVENTLIST_HH
+#pragma once
 
 #include <vector>
 #include <string>
 #include "HepMC/GenEvent.h"
-//class HepMC::GenEvent;
-
 
 class HepMCEventList
 {
@@ -20,8 +17,6 @@ public:
 
   HepMC::GenEvent* nextEvent();
   void rewind();
-
-
   int size();
 
 private:
@@ -32,5 +27,3 @@ private:
   std::vector<HepMC::GenEvent*>::const_iterator currentEvent;
   
 };
-
-#endif

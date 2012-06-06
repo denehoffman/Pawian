@@ -1,5 +1,4 @@
-#ifndef PARTICLE_HH
-#define PARTICLE_HH
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -71,9 +70,7 @@ public:
   int strange();
   int charm();
   DynFunctionType dynFctType();
-
   ParticleData* data() const;
-
   void print(std::ostream& out);
 
 private:
@@ -81,5 +78,3 @@ private:
 
 friend std::ostream &operator<<(std::ostream &o, Particle &p);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BesEvtReader_HH
-#define BesEvtReader_HH
+#pragma once
 
 #include "Event/EventReader.hh"
 
@@ -9,7 +8,6 @@
 #include <fstream>
 #include <cstdlib>
 
-
 class EventList;
 
 class BesEvtReader : public EventReader
@@ -17,7 +15,6 @@ class BesEvtReader : public EventReader
 public:
   BesEvtReader();
   BesEvtReader(const std::vector<std::string>& files, int particles, int skip);
-
   virtual ~BesEvtReader();
 
   virtual bool fillAll(EventList& evtList);
@@ -29,5 +26,3 @@ private:
   int numParticles;
   int linesToSkip;
 };
-
-#endif

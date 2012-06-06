@@ -1,5 +1,4 @@
-#ifndef CBELSAREADER_HH
-#define CBELSAREADER_HH
+#pragma once
 
 #include "Event/EventReader.hh"
 
@@ -9,14 +8,14 @@
 #include <fstream>
 #include <cstdlib>
 
-
 class EventList;
 
 class CBElsaReader : public EventReader
 {
 public:
   CBElsaReader();
-  CBElsaReader(const std::vector<std::string>& files, int particles, int skip, bool useWeight=false);
+  CBElsaReader(const std::vector<std::string>& files, int particles, 
+	       int skip, bool useWeight=false);
   virtual ~CBElsaReader();
 
   virtual bool fillAll(EventList& evtList);
@@ -29,5 +28,3 @@ private:
   int linesToSkip;
   bool _useWeight;
 };
-
-#endif

@@ -18,16 +18,12 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef EVTRANDOM_HH
-#define EVTRANDOM_HH
-
+#pragma once
 
 class EvtRandomEngine;
 
-class EvtRandom{
-
+class EvtRandom {
 public:
-
   static double Flat();
   static double Flat(double max);
   static double Flat(double min, double max);
@@ -43,10 +39,6 @@ public:
   static void setRandomEngine(EvtRandomEngine* randomEngine);
 
 private:
-
   static EvtRandomEngine* _randomEngine;
-
 };
-
-#endif
 
