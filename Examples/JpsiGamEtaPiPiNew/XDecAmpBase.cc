@@ -16,6 +16,10 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_sigmaEtaHyp(false)
   ,_f980etaKey(name+"Tof980Eta")
   ,_f980etaHyp(false)
+  ,_a2_1320piKey(name+"Toa2_1320Pi")
+  ,_a2_1320piHyp(false)
+  ,_f2_1270etaKey(name+"Tof2_1270Eta")
+  ,_f2_1270etaHyp(false)
   ,_massPi0(0.1349766)
   ,_massKplus(0.493677)
   ,_massK0(0.497614)
@@ -47,7 +51,19 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
   if(_f980etaHyp){
     result+=XToFEtaFlatteAmp(lamX, theData, theParamVal);
   }
+  if(_a2_1320piHyp){
+    double a2_1320Mass=theParamVal.Masses["a2_1320"];
+    double a2_1320Width=theParamVal.Widths["a2_1320"];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA2_1320PiMag=theParamVal.Mags[_a2_1320piKey];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA2_1320PiPhi=theParamVal.Phis[_a2_1320piKey];
 
+    result+=XToAPiBWAmp(lamX, Spin(2), theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320Mass, a2_1320Width);
+  }
+  if(_f2_1270etaHyp){
+    double f2Mass=theParamVal.Masses["f2_1270"];
+    double f2Width=theParamVal.Widths["f2_1270"];
+    result+=XToEtaFAmp(lamX, 2, theData, theParamVal.Mags[_f2_1270etaKey], theParamVal.Phis[_f2_1270etaKey], f2Mass, f2Width);
+  }
   return result;
 }
 
@@ -175,6 +191,54 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
 
 }
 
+complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiMag, 
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiPhi, 
+			      double aMass, double aWidth){
+
+  complex<double> result(0.,0.);
+  Vector4<double > p4EtaPiplus(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].E(),
+			       theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].Px(),
+			       theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].Py(),
+			       theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].Pz());
+  
+  Vector4<double > p4EtaPiminus(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].E(),
+				theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].Px(),
+				theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].Py(),
+				theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].Pz());
+  
+
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
+
+
+  for ( itXMag=etaToAPiMag.begin(); itXMag!=etaToAPiMag.end(); ++itXMag){
+     boost::shared_ptr<const JPCLS> XState=itXMag->first;
+     double theXMag=itXMag->second;
+     double theXPhi=etaToAPiPhi[XState];
+     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+     complex<double> amp(0.,0.);     
+
+     for(Spin lamA = -jA; lamA <= jA; lamA++){
+     if( fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
+     
+     amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
+       *(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
+	   *BreitWignerBlattW(p4EtaPiplus, _massPi0, _massEta, aMass, aWidth, jA)
+	   *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][jA][lamA][0])+
+	   conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
+	   *BreitWignerBlattW(p4EtaPiminus, _massPi0, _massEta, aMass, aWidth, jA)
+	   *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][jA][lamA][0])
+	   );
+     }
+
+     result+= amp;
+   }
+
+  return result;
+}
+
+
+
 void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if(_a980piHyp){
@@ -271,6 +335,67 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
     fitVal.gFactors["f0_980gKK"]=1.2;
     fitErr.gFactors["f0_980gKK"]=0.2;
   }
+
+  if(_a2_1320piHyp){
+    std::vector< boost::shared_ptr<const JPCLS> > a2PiStates;
+    if(_spinX==0) a2PiStates=_theStatesPtr->EtaToa2PiStates();
+    else if(_spinX==1) a2PiStates=_theStatesPtr->F1Toa2PiStates();
+    else if(_spinX==2) a2PiStates=_theStatesPtr->Eta2Toa2PiStates();  
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
+    
+    for(itLS=a2PiStates.begin(); itLS!=a2PiStates.end(); ++itLS){
+      currentMagValMap[*itLS]=0.2;
+      currentPhiValMap[*itLS]=0.;
+      currentMagErrMap[*itLS]=0.8;
+      currentPhiErrMap[*itLS]=0.3;
+    }
+    fitVal.Mags[_a2_1320piKey]=currentMagValMap;
+    fitVal.Phis[_a2_1320piKey]=currentPhiValMap;
+    fitErr.Mags[_a2_1320piKey]=currentMagErrMap;
+    fitErr.Phis[_a2_1320piKey]=currentPhiErrMap;
+
+    fitVal.Masses["a2_1320"]=1.32;
+    fitErr.Masses["a2_1320"]=0.02;
+    fitVal.Widths["a2_1320"]=0.1;
+    fitErr.Widths["a2_1320"]=0.02;
+  }
+
+  if(_f2_1270etaHyp){
+    std::vector< boost::shared_ptr<const JPCLS> > f2EtaStates;
+    if(_spinX==0) f2EtaStates=_theStatesPtr->EtaTof2EtaStates();
+    else if(_spinX==1) f2EtaStates=_theStatesPtr->F1Tof2EtaStates();
+    else if(_spinX==2) f2EtaStates=_theStatesPtr->Eta2Tof2EtaStates(); 
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
+    
+    for(itLS=f2EtaStates.begin(); itLS!=f2EtaStates.end(); ++itLS){
+      currentMagValMap[*itLS]=0.2;
+      currentPhiValMap[*itLS]=0.;
+      currentMagErrMap[*itLS]=0.8;
+      currentPhiErrMap[*itLS]=0.3;
+    }
+    fitVal.Mags[_f2_1270etaKey]=currentMagValMap;
+    fitVal.Phis[_f2_1270etaKey]=currentPhiValMap;
+    fitErr.Mags[_f2_1270etaKey]=currentMagErrMap;
+    fitErr.Phis[_f2_1270etaKey]=currentPhiErrMap;
+
+    fitVal.Masses["f2_1270"]=1.27;
+    fitErr.Masses["f2_1270"]=0.02;
+    fitVal.Widths["f2_1270"]=0.185;
+    fitErr.Widths["f2_1270"]=0.02;
+
+  }
 }
 
 void XDecAmpBase::print(std::ostream& os) const{
@@ -296,6 +421,17 @@ void XDecAmpBase::initialize(){
       Info << "hypothesis\t" << _f980etaKey << "\t enabled" << endmsg;
       _f980etaHyp=true;
     }
+
+    else if (it->compare(0, _a2_1320piKey.size(), _a2_1320piKey)== 0){
+      Info << "hypothesis\t" << _a2_1320piKey << "\t enabled" << endmsg;
+      _a2_1320piHyp=true;
+    }
+
+    else if (it->compare(0, _f2_1270etaKey.size(), _f2_1270etaKey)== 0){
+      Info << "hypothesis\t" << _f2_1270etaKey << "\t enabled" << endmsg;
+      _f2_1270etaHyp=true;
+    }
+
 
   }
 
