@@ -1,5 +1,4 @@
-#ifndef EVENTREADER_HH
-#define EVENTREADER_HH
+#pragma once
 
 #include <string>
 #include <vector>
@@ -12,8 +11,5 @@ public:
   EventReader();
   virtual ~EventReader();
 
-  virtual bool fillAll(EventList& evtList) = 0;
- 
+  virtual bool fillAll(EventList& evtList) = 0; 
 };
-
-#endif

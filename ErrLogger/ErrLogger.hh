@@ -1,5 +1,4 @@
-#ifndef ERRLOGGER_HH
-#define ERRLOGGER_HH
+#pragma once
 
 #include "log4cpp/Category.hh"
 #include "log4cpp/OstreamAppender.hh"
@@ -10,7 +9,6 @@
 
 class ErrLogger
 {
-
 public:
   static ErrLogger* instance();
   ~ErrLogger();
@@ -26,7 +24,6 @@ private:
   boost::shared_ptr<log4cpp::Category> category;
   log4cpp::Appender* app;
   log4cpp::PatternLayout* layout;
-
 };
 
 #define endmsg log4cpp::eol
@@ -35,5 +32,3 @@ private:
 #define Warning  ErrLogger::instance()->logger()<<log4cpp::Priority::WARN<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
 #define ErrMsg   ErrLogger::instance()->logger()<<log4cpp::Priority::ERROR<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
 #define Alert    ErrLogger::instance()->logger()<<log4cpp::Priority::ALERT<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
-
-#endif

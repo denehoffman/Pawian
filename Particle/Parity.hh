@@ -1,18 +1,13 @@
-#ifndef PARITY_HH
-#define PARITY_HH
+#pragma once
 
 class Parity {
-
 public:
   Parity();
   Parity(int parity);
   ~Parity();
-
+  
   int parity();
 
 private:
   int pvalue;
-
 };
-
-#endif
