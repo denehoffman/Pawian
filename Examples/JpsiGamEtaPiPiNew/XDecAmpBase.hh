@@ -41,6 +41,11 @@ protected:
   bool _sigmaEtaHyp;
   const std::string _f980etaKey;
   bool _f980etaHyp;
+  const std::string _a2_1320piKey;
+  bool _a2_1320piHyp;
+  const std::string _f2_1270etaKey;
+  bool _f2_1270etaHyp;
+
   const double _massPi0;
   const double _massKplus;
   const double _massK0;
@@ -57,6 +62,11 @@ protected:
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
 			     double fMass, double fWidth);
+  complex<double> XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiMag, 
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiPhi, 
+			      double aMass, double aWidth);
+
   virtual void initialize();
 
 private:
