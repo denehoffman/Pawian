@@ -10,7 +10,7 @@
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaUtils/AbsStates.hh"
-
+#include "PwaUtils/DataUtils.hh"
 
 
 class pbarpStates;
