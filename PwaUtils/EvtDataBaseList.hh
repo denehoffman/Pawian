@@ -1,5 +1,4 @@
-#ifndef _EvtDataBaseList_H
-#define _EvtDataBaseList_H
+#pragma once
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include <boost/shared_ptr.hpp>
@@ -8,31 +7,20 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
-struct EvtData
-  {
-    std::map<int, Vector4<double> > FourVecs;
-    std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > WignerDs;
-    double evtWeight;
-  };
-
+struct EvtData {
+  std::map<int, Vector4<double> > FourVecs;
+  std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > WignerDs;
+  double evtWeight;
+};
 
 class EventList;
 
 class EvtDataBaseList {
 
 public:
-
-  // create/copy/destroy:
-
-  ///Constructor 
   EvtDataBaseList();
-
-
-
-  /** Destructor */
   virtual ~EvtDataBaseList();
 
-  // Getters:
   const std::vector<EvtData*> getDataVecs() const {return _evtDataList;}
   const std::vector<EvtData*> getMcVecs() const {return _mcDataList;}
 
@@ -40,10 +28,4 @@ protected:
   std::vector<EvtData*> _evtDataList;
   std::vector<EvtData*> _mcDataList;
   virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList)=0;  
-
-private:
-
 };
-
-  
-#endif /* _EvtDataBaseList_H */

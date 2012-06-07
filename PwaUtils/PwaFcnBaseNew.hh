@@ -1,12 +1,10 @@
-#ifndef _PwaFcnBaseNew_H
-#define _PwaFcnBaseNew_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
-//#include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-//#include <cassert>
+
 #include "Minuit2/FCNBase.h"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -14,33 +12,25 @@
 #include "Minuit2/MnUserParameters.h"
 
 class AbsLhNew;
-// class FitParamsBaseNew;
 
 namespace ROOT {
+  namespace Minuit2 {
+    class PwaFcnBaseNew : public FCNBase {
 
-   namespace Minuit2 {
-class PwaFcnBaseNew : public FCNBase {
+    public:
+      PwaFcnBaseNew(boost::shared_ptr<AbsLhNew> absLh, 
+		    boost::shared_ptr<FitParamsBaseNew> fitParamsBase);
+      virtual ~PwaFcnBaseNew();
 
-public:
+      double operator()(const std::vector<double>& par) const;
+      double Up() const;
 
-  PwaFcnBaseNew(boost::shared_ptr<AbsLhNew> absLh, boost::shared_ptr<FitParamsBaseNew> fitParamsBase);
-  virtual ~PwaFcnBaseNew();
-
-  double operator()(const std::vector<double>& par) const;
-
-  double Up() const;
-
-
-private:
-  boost::shared_ptr<AbsLhNew> _absLhPtr;
-  boost::shared_ptr<FitParamsBaseNew> _fitParamsBasePtr;
-  mutable unsigned int _fcnCounter;
-  fitParamsNew _defaultFitValParms;
-  fitParamsNew _defaultFitErrParms;
-};
+    private:
+      boost::shared_ptr<AbsLhNew> _absLhPtr;
+      boost::shared_ptr<FitParamsBaseNew> _fitParamsBasePtr;
+      mutable unsigned int _fcnCounter;
+      fitParamsNew _defaultFitValParms;
+      fitParamsNew _defaultFitErrParms;
+    };
   }  // namespace Minuit2
-
 }  // namespace ROOT
-
-
-#endif 

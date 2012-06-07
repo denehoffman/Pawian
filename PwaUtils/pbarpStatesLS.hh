@@ -1,11 +1,9 @@
-#ifndef _pbarpStatesLS_H
-#define _pbarpStatesLS_H
+#pragma once
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
-
 #include <boost/shared_ptr.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -17,33 +15,59 @@ class pbarpStatesLS : public AbsStates {
 
 public:
 
-  /// Default Constructor
   pbarpStatesLS();
   pbarpStatesLS(int lmax);
-
-  /** Destructor */
   virtual ~pbarpStatesLS();
-  virtual std::vector< boost::shared_ptr<const jpcRes> > jpcStates() const {return _alljpcRes;};
 
-  virtual std::vector< boost::shared_ptr<const JPCLS> > all_JPCLS_States() const {return _JPCLS_AllStates;};
-  virtual std::vector< boost::shared_ptr<const JPCLS> > lamUpUp_JPCLS_States() const {return _lamUpUp_JPCLS_States;};
-  virtual std::vector< boost::shared_ptr<const JPCLS> > lamUpDown_JPCLS_States() const {return _lamUpDown_JPCLS_States;}; 
-  virtual std::vector< boost::shared_ptr<const JPCLS> > lamDownUp_JPCLS_States() const {return _lamDownUp_JPCLS_States;};
-  virtual std::vector< boost::shared_ptr<const JPCLS> > lamDownDown_JPCLS_States() const {return _lamDownDown_JPCLS_States;};
+  virtual std::vector< boost::shared_ptr<const jpcRes> > jpcStates() const {
+    return _alljpcRes;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > all_JPCLS_States() const {
+    return _JPCLS_AllStates;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > lamUpUp_JPCLS_States() const {
+    return _lamUpUp_JPCLS_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > lamUpDown_JPCLS_States() const {
+    return _lamUpDown_JPCLS_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > lamDownUp_JPCLS_States() const {
+    return _lamDownUp_JPCLS_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > lamDownDown_JPCLS_States() const {
+    return _lamDownDown_JPCLS_States;
+  }
 
-  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > all_JPCLSJJ_States() const {return _allStates;};
-  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamUpUp_JPCLSJJ_States() const {return _lamUpUp_JPCLSJJ_States;};
-  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamUpDown_JPCLSJJ_States() const {return _lamUpDown_JPCLSJJ_States;}; 
-  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamDownUp_JPCLSJJ_States() const {return _lamDownUp_JPCLSJJ_States;};
-  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamDownDown_JPCLSJJ_States() const {return _lamDownDown_JPCLSJJ_States;};
+  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > all_JPCLSJJ_States() const {
+    return _allStates;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamUpUp_JPCLSJJ_States() const {
+    return _lamUpUp_JPCLSJJ_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamUpDown_JPCLSJJ_States() const {
+    return _lamUpDown_JPCLSJJ_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamDownUp_JPCLSJJ_States() const {
+    return _lamDownUp_JPCLSJJ_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLSJJ> > lamDownDown_JPCLSJJ_States() const {
+    return _lamDownDown_JPCLSJJ_States;
+  }
 
-  virtual std::vector< boost::shared_ptr<const JPCLS> > singlet_JPCLS_States() const {return _singlet_JPCLS_States;};
-  virtual std::vector< boost::shared_ptr<const JPCLS> > triplet0_JPCLS_States() const {return _triplet0_JPCLS_States;}; 
-  virtual std::vector< boost::shared_ptr<const JPCLS> > tripletp1_JPCLS_States() const {return _tripletp1_JPCLS_States;};
-  virtual std::vector< boost::shared_ptr<const JPCLS> > tripletm1_JPCLS_States() const {return _tripletm1_JPCLS_States;};
+  virtual std::vector< boost::shared_ptr<const JPCLS> > singlet_JPCLS_States() const {
+    return _singlet_JPCLS_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > triplet0_JPCLS_States() const {
+    return _triplet0_JPCLS_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > tripletp1_JPCLS_States() const {
+    return _tripletp1_JPCLS_States;
+  }
+  virtual std::vector< boost::shared_ptr<const JPCLS> > tripletm1_JPCLS_States() const {
+    return _tripletm1_JPCLS_States;
+  }
  
   virtual void print(std::ostream& os) const;
-
 
  protected:
   int _lmax;
@@ -69,13 +93,4 @@ public:
   std::vector< boost::shared_ptr<const JPCLS> > _triplet0_JPCLS_States;
   std::vector< boost::shared_ptr<const JPCLS> > _tripletp1_JPCLS_States;
   std::vector< boost::shared_ptr<const JPCLS> > _tripletm1_JPCLS_States;
-
- private:
-
-//   void extractVecs(std::vector< boost::shared_ptr<const JPCLSJJ> >& theList, std::vector< boost::shared_ptr<const JPCLS> >& toFill);
 };
-
-
-
-
-#endif /* _pbarpStatesLS_H */

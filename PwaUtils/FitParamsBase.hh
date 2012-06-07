@@ -1,5 +1,4 @@
-#ifndef _FitParamsBase_H
-#define _FitParamsBase_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -7,8 +6,6 @@
 #include <vector>
 #include <map>
 #include <complex>
-
-#include <cassert>
 #include <boost/shared_ptr.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -19,12 +16,15 @@
 
 using namespace ROOT::Minuit2;
 
-struct fitParams
-{
-  std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > Mags;
-  std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > Phis;
-  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > > MagLamLams;
-  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > > PhiLamLams;
+struct fitParams {
+  std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, 
+			  pawian::Collection::SharedPtrLess > > Mags;
+  std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, 
+			  pawian::Collection::SharedPtrLess > > Phis;
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, 
+			  pawian::Collection::SharedPtrLess > > MagLamLams;
+  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, 
+			  pawian::Collection::SharedPtrLess > > PhiLamLams;
   std::map<int, double> Masses;
   std::map<int, double> Widths;
   std::map<int, double> gFactors;
@@ -32,7 +32,7 @@ struct fitParams
 };
 
 
-class FitParamsBase{
+class FitParamsBase {
 
 public:
   FitParamsBase(); 
@@ -63,11 +63,16 @@ public:
   virtual void setMnUsrParams(MnUserParameters& upar);
   virtual fitParams getFitParamVal(const std::vector<double>& par);
 
-  int setAmpParams(std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > >& ampMap, const std::vector<double>& par, int counter, int index);
+  int setAmpParams(std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, 
+		   pawian::Collection::SharedPtrLess > >& ampMap, 
+		   const std::vector<double>& par, int counter, int index);
 
-  int setAmpLamLamParams(std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& ampLamLamMap, const std::vector<double>& par, int counter, int index);
+  int setAmpLamLamParams(std::map<int, std::map< boost::shared_ptr<const JPClamlam>, 
+			 double, pawian::Collection::SharedPtrLess > >& ampLamLamMap, 
+			 const std::vector<double>& par, int counter, int index);
 
-  int setSingleParams(std::map<int, double>& theMap, const std::vector<double>& par, int counter, int index);
+  int setSingleParams(std::map<int, double>& theMap, const std::vector<double>& par, 
+		      int counter, int index);
 
   virtual void printParams(fitParams& theParams);
   virtual void dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs);
@@ -84,10 +89,4 @@ protected:
   std::vector<int> _widthIdx;
   std::vector<int> _gFactorIdx;
   std::vector<int> _otherIdx;
-
-private:
-
 };
-
-
-#endif

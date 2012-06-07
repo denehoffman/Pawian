@@ -1,5 +1,4 @@
-#ifndef ParserBase_HH
-#define ParserBase_HH
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -8,13 +7,11 @@
 #include <vector>
 #include <utility>
 
-// Boost headers go here
-
 #include <boost/version.hpp>
 
 #if BOOST_VERSION < 103600
 #error "Error: Boost should at least have version 1.36 !"
-#endif /* BOOST_VERSION */
+#endif // BOOST_VERSION
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
@@ -32,15 +29,11 @@
 namespace po = boost::program_options;
 //using namespace Gem::Geneva;
 
-class ParserBase
-{
-  public:
-  typedef enum tagerrLogMode {debug,trace,routine,warning,error,alert} enErrLogMode;
-
-  public:
+class ParserBase {
+public:
+  typedef enum tagerrLogMode { debug, trace, routine, warning, error, alert } enErrLogMode;
 
   ParserBase(int argc,char **argv);
-
   virtual ~ParserBase(){;}
     
   const std::string& getConfigFile() const { return _configFile;}
@@ -53,12 +46,9 @@ class ParserBase
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; } 
   
-  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
-
-protected:
   std::string _configFile;
   enErrLogMode _errLogMode;
   std::string _dataFile;
@@ -73,8 +63,4 @@ protected:
   po::options_description* _desc;
   po::options_description* _common;
   po::options_description* _config;
-
 };
-
-
-#endif /* ParserBase_HH */
