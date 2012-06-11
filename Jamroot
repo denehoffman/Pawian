@@ -10,11 +10,13 @@ project :
 	<include>$(GENEVA)/include
 	<link>static
 	<cxxflags>-pthread
+	<cxxflags>-fopenmp
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
 	<linkflags>-lMinuit2
 	<linkflags>-lgomp
 	<linkflags>-pthread
+	<linkflags>-fopenmp
 	;
 
 actions rootlibs

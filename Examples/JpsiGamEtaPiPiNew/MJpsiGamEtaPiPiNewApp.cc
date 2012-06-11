@@ -5,6 +5,10 @@
 #include <vector>
 #include <map>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include <boost/shared_ptr.hpp>
 
 #include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiParser.hh"
@@ -76,6 +80,12 @@ int main(int __argc,char *__argv[]){
 
 	// Set the desired error logging mode
 	setErrLogMode(theAppParams.getErrLogMode());
+
+#ifdef _OPENMP
+	const int noOfThreads=theAppParams.noOfThreads();
+	omp_set_num_threads(noOfThreads);
+#endif
+	
 
 	std::string theCfgFile = theAppParams.getConfigFile();
 

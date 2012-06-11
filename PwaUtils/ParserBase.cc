@@ -17,6 +17,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _startHypo("base")
       , _mode("plotmode")
       , _verbose(true)
+      , _noOfThreads(16)
       , _strErrLogMode("debug")
       , _desc(0)
       , _common(new po::options_description("Common Options"))
@@ -50,6 +51,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
+      ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
       ;
 
 
@@ -129,6 +131,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "file with start parameters for fit or qa: " << _paramFile << "\n\n"
                 << "startHypo: " << _startHypo << "\n\n"
                 << "mode: " << _mode << "\n\n"
+		<< "number of threads: " << _noOfThreads  << "\n\n"
             << endl;
 
 

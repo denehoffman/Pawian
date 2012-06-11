@@ -47,6 +47,7 @@ protected:
   const std::string _EtaKey;
   const std::string _Eta2Key;
   const std::string _F1Key;
+  const std::string _phasespaceKey;
  
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _etaDecAmpMap;
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _f1DecAmpMap;

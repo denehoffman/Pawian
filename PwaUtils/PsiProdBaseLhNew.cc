@@ -19,12 +19,14 @@ PsiProdBaseLhNew::PsiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew> t
   AbsLhNew(theEvtList)
   ,_hypVec(hypVec)
   ,_theStatesPtr(theStates)
+  ,_usePhasespace(false)
   ,_GammaEtaKey("GammaEta_")
   ,_GammaEta2Key("GammaEta2_")
   ,_GammaF1Key("GammaF1_")
   ,_EtaKey("Eta_")
   ,_Eta2Key("Eta2_")
   ,_F1Key("F1_")
+  ,_phasespaceKey("Phasespace")
 {
   initializeHypothesis();
  
@@ -33,13 +35,15 @@ PsiProdBaseLhNew::PsiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew> t
 PsiProdBaseLhNew::PsiProdBaseLhNew( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates ) :
   AbsLhNew(theLhPtr->getEventList())
   ,_hypVec(hypVec)
- ,_theStatesPtr(theStates)
+  ,_theStatesPtr(theStates)
+  ,_usePhasespace(false)
   ,_GammaEtaKey("GammaEta_")
   ,_GammaEta2Key("GammaEta2_")
   ,_GammaF1Key("GammaF1_")
   ,_EtaKey("Eta_")
   ,_Eta2Key("Eta2_")
   ,_F1Key("F1_")
+  ,_phasespaceKey("Phasespace")
 {
   initializeHypothesis();  
 }
@@ -208,9 +212,11 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
 
   result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
 
-//   if(_usePhasespace){
-//     result = result + theParamVal.otherParams[_phasespaceKey];
-//   }
+
+  if(_usePhasespace){
+    result = result + theParamVal.otherParams[_phasespaceKey];
+  }
+
 //   Info << "result:\t" << result << endmsg;
   return result;  
 
@@ -227,6 +233,11 @@ complex<double> PsiProdBaseLhNew::psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX,
 }
 
 void PsiProdBaseLhNew::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){ 
+
+  if(_usePhasespace){
+    fitVal.otherParams[_phasespaceKey]=0.02;
+    fitErr.otherParams[_phasespaceKey]=0.015;
+  }
 
   getDefaultLamLamParams(_GammaEtaHyps, _theStatesPtr->PsiToEtaGammaLamLamStates(), fitVal, fitErr);  
   getDefaultLamLamParams(_GammaEta2Hyps, _theStatesPtr->PsiToEta2GammaLamLamStates(), fitVal, fitErr); 
@@ -250,50 +261,6 @@ void PsiProdBaseLhNew::print(std::ostream& os) const{
 
 }
 
-// void  PsiProdBaseLhNew::initializeHypothesis(){
-
-//   std::vector<std::string>::const_iterator it;
-
-//   for (it=_hypVec.begin(); it!=_hypVec.end(); ++it){
-
-//     if (it->compare(0, _GammaEtaKey.size(), _GammaEtaKey)== 0){
-//       Info << "eta hypothesis\t" << (*it) << "\t found" << endmsg;
-//       _GammaEtaHyps.push_back(*it);
-
-//       //boost::shared_ptr<AbsXdecAmp> tmpPtr=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( (*it), _hypVec, Spin(0)) );
-//       size_t pos=it->find(_EtaKey);
-//       std::string etaDecAmpName=it->substr(pos);
-
-//       _etaDecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( etaDecAmpName, _hypVec, _theStatesPtr, Spin(0)) );
-//     }
-//     else if (it->compare(0, _GammaF1Key.size(), _GammaF1Key)== 0){
-//       Info << "f1 hypothesis\t" << (*it) << "\t found" << endmsg;
-//       _GammaF1Hyps.push_back(*it);
-//       size_t pos=it->find(_F1Key);
-//       std::string f1DecAmpName=it->substr(pos);
-//       _f1DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( f1DecAmpName, _hypVec, _theStatesPtr, Spin(1)) );
-//     }
-//     else if (it->compare(0, _GammaEta2Key.size(), _GammaEta2Key)== 0){
-//       Info << "eta2 hypothesis\t" << (*it) << "\t found" << endmsg;
-//       _GammaEta2Hyps.push_back(*it);
-//       size_t pos=it->find(_Eta2Key);
-//       std::string eta2DecAmpName=it->substr(pos);
-//       _eta2DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( eta2DecAmpName, _hypVec, _theStatesPtr, Spin(2)) );
-//     }
-   
-//   } 
-
-// //   std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::const_iterator it1;
-// //   for (it1=_etaDecAmpMap.begin(); it1!=_etaDecAmpMap.end(); ++it1){
-// //     Info << "eta dec amp:\t" << it1->second->name() << endmsg;
-// //   }
-// //   for (it1=_f1DecAmpMap.begin(); it1!=_f1DecAmpMap.end(); ++it1){
-// //     Info << "f1 dec amp:\t" << it1->second->name() << endmsg;
-// //   }
-// //   for (it1=_eta2DecAmpMap.begin(); it1!=_eta2DecAmpMap.end(); ++it1){
-// //     Info << "eta2 dec amp:\t" << it1->second->name() << endmsg;
-// //   }
-// }
 
 void  PsiProdBaseLhNew::initializeHypothesis(){
 
@@ -314,19 +281,13 @@ void  PsiProdBaseLhNew::initializeHypothesis(){
       Info << "eta2 hypothesis\t" << (*it) << "\t found" << endmsg;
       _GammaEta2Hyps.push_back(*it);
     }
+    else if (it->compare(0, _phasespaceKey.size(), _phasespaceKey)== 0){
+      Info << "hypothesis\t" << (*it) << "\t found" << endmsg;
+      _usePhasespace=true;
+    }
    
   } 
 
-//   std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::const_iterator it1;
-//   for (it1=_etaDecAmpMap.begin(); it1!=_etaDecAmpMap.end(); ++it1){
-//     Info << "eta dec amp:\t" << it1->second->name() << endmsg;
-//   }
-//   for (it1=_f1DecAmpMap.begin(); it1!=_f1DecAmpMap.end(); ++it1){
-//     Info << "f1 dec amp:\t" << it1->second->name() << endmsg;
-//   }
-//   for (it1=_eta2DecAmpMap.begin(); it1!=_eta2DecAmpMap.end(); ++it1){
-//     Info << "eta2 dec amp:\t" << it1->second->name() << endmsg;
-//   }
 }
 
 

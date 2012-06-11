@@ -45,6 +45,7 @@ public:
   const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; } 
+  const int noOfThreads() const {return _noOfThreads;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -59,6 +60,7 @@ protected:
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
   bool _verbose;
+  int _noOfThreads;
   std::string _strErrLogMode;
   po::options_description* _desc;
   po::options_description* _common;
