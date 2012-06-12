@@ -4,6 +4,10 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "Minuit2/MnUserParameters.h"
 
 #include "PwaUtils/PwaFcnBaseNew.hh"
@@ -29,28 +33,44 @@ PwaFcnBaseNew::~PwaFcnBaseNew()
 
 double PwaFcnBaseNew::operator()(const std::vector<double>& par) const
 {
-  _fcnCounter++;
-
+  
 
   fitParamsNew theFitParmValTmp=_defaultFitValParms;
-//   fitParamsNew theFitParmValTmp;
-//   fitParamsNew theFitParmValTmp1;
-//   _absLhPtr->getDefaultParams(theFitParmValTmp, theFitParmValTmp1);
 
-  _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);  
-  
+#ifdef _OPENMP
+#pragma omp critical
+  {
+ #endif
+
+     _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+    
+#ifdef _OPENMP  
+  }
+#endif
+
+
   double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
-  DebugMsg << "logLh= " << result <<endmsg;
- 
-  if (  _fcnCounter%50 == 0) {  
-    _fitParamsBasePtr->printParams(theFitParmValTmp);
+
+#ifdef _OPENMP
+#pragma omp critical
+  {
+#endif
+    _fcnCounter++;
+    DebugMsg << "logLh= " << result <<endmsg;
+    
+    if (  _fcnCounter%50 == 0) {  
+      _fitParamsBasePtr->printParams(theFitParmValTmp);
+    }
+    
+    if (  _fcnCounter%200 == 0) {
+      std::ofstream theStream ( "currentResult.dat");
+      _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
+    }
+
+#ifdef _OPENMP  
   }
-  
-  if (  _fcnCounter%200 == 0) {
-    std::ofstream theStream ( "currentResult.dat");
-    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
-  }
+#endif
 
   return result;
 }
