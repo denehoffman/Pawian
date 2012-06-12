@@ -45,6 +45,8 @@ protected:
   bool _a2_1320piHyp;
   const std::string _f2_1270etaKey;
   bool _f2_1270etaHyp;
+  const std::string _xBWKey;
+  bool _massIndependent;
 
   const double _massPi0;
   const double _massKplus;
