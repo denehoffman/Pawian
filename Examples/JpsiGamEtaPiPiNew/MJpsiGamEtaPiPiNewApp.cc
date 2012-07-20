@@ -218,7 +218,7 @@ int main(int __argc,char *__argv[]){
 	  // 		FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
 	  
 	  JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams,theAppParams.massRange());
-	  theHist.setMassRange(theAppParams.massRange() );
+	  //theHist.setMassRange(theAppParams.massRange() );
 	  // 		theHist.fill();
 	  
 	  // 		if(theAppParams.massIndependentFit()){
@@ -301,7 +301,7 @@ int main(int __argc,char *__argv[]){
 // 		//std::ofstream theCompStream ( "componentIntensity.dat");
 // 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
   		JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
- 		theHist.setMassRange(theAppParams.massRange() );
+ 		//theHist.setMassRange(theAppParams.massRange() );
 // // 		theHist.fill();
 
  		return 0;
