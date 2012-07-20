@@ -148,7 +148,7 @@ int main(int __argc,char *__argv[]){
 		std::string mode=theAppParams.mode();
 	std::cout << "Mode: " << mode << std::endl;
 	if (mode=="plotmode"){
-	  JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr);                                                               
+	  JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange());                                                               
 	  theHist.setMassRange(theAppParams.massRange() );
 	  return 0;
 	}
@@ -217,8 +217,8 @@ int main(int __argc,char *__argv[]){
 	  // 		theErrStreamer.matrixData( theErrData, ncols  );
 	  // 		FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
 	  
-	  JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams);
-	  // 		theHist.setMassRange(theAppParams.massRange() );
+	  JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams,theAppParams.massRange());
+	  theHist.setMassRange(theAppParams.massRange() );
 	  // 		theHist.fill();
 	  
 	  // 		if(theAppParams.massIndependentFit()){
@@ -300,7 +300,7 @@ int main(int __argc,char *__argv[]){
 
 // 		//std::ofstream theCompStream ( "componentIntensity.dat");
 // 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
-  		JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams);
+  		JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
  		theHist.setMassRange(theAppParams.massRange() );
 // // 		theHist.fill();
 

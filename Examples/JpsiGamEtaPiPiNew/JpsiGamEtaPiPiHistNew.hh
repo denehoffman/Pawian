@@ -36,8 +36,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBaseListNew>);
-  JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew>, fitParamsNew&);
+  JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBaseListNew>,std::pair<double, double> theMassRange);
+  JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew>, fitParamsNew&, std::pair<double, double> theMassRange);
 
   void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
   
@@ -109,6 +109,7 @@ private:
   std::pair<double, double> _massRange;
 
   void initRootStuff();
+  void rootlogon();
   void plotDalitz(TH2F* theHisto, EvtDataNew* theData, double weight);
   void plotEtaPipPim(TH1F* theHisto, EvtDataNew* theData, double weight);
   void plotEtaPi(TH1F* theHisto, EvtDataNew* theData, double weight);
