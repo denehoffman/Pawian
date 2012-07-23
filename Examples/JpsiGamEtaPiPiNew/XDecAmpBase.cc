@@ -10,6 +10,8 @@
 
 XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiGamEtaPiPiStates> theStates, Spin spinX) :
   AbsXdecAmp(name, hypVec)
+  ,_piPiEtaKey(name+"ToPiPiEta")
+  ,_piPiEtaHyp(false)
   ,_a980piKey(name+"Toa980Pi")
   ,_a980piHyp(false)
   ,_sigmaEtaKey(name+"ToSigmaEta")
@@ -42,6 +44,9 @@ XDecAmpBase::~XDecAmpBase()
 complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
   complex<double> result(0.,0.);
 
+  if (_piPiEtaHyp){
+    result+=XToPiPiEtaAmp(lamX, theData, theParamVal);
+  }
   if(_a980piHyp){
     result+=XToAPiFlatteAmp(lamX, theData, theParamVal);
   }
@@ -79,6 +84,32 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
   result *=dynModel;
   return result;
 }
+
+complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+
+  complex<double> result(0.,0.);
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPiPiEtaMag=theParamVal.Mags[_piPiEtaKey];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPiPiEtaPhi=theParamVal.Phis[_piPiEtaKey];
+ 
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
+
+
+   for ( itXMag=XToPiPiEtaMag.begin(); itXMag!=XToPiPiEtaMag.end(); ++itXMag){
+     boost::shared_ptr<const JPCLS> XState=itXMag->first;
+     double theXMag=itXMag->second;
+     double theXPhi=XToPiPiEtaPhi[XState];
+     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+
+
+     result+= theXMag*expiphiX*sqrt(2.*XState->L+1.)
+       *Clebsch(XState->L, 0, XState->S, 0, XState->J, 0)
+       *Clebsch(0, 0, 0, 0, XState->S, 0);
+
+   }
+   result*=conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::etapipi][_spinX][lamX][0]);
+   return result;
+}
+
 
 
 complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
@@ -241,6 +272,29 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
 
 
 void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
+
+  if (_piPiEtaHyp){
+    std::vector< boost::shared_ptr<const JPCLS> > PiPiEtaStates;
+    if(_spinX==0) PiPiEtaStates=_theStatesPtr->EtaToa0PiStates();
+    else if(_spinX==1) PiPiEtaStates=_theStatesPtr->F1Toa0PiStates();
+    else if(_spinX==2) PiPiEtaStates=_theStatesPtr->Eta2Toa0PiStates();  
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
+    for(itLS=PiPiEtaStates.begin(); itLS!=PiPiEtaStates.end(); ++itLS){
+      currentMagValMap[*itLS]=0.2;
+      currentPhiValMap[*itLS]=0.;
+      currentMagErrMap[*itLS]=0.8;
+      currentPhiErrMap[*itLS]=0.3;
+    }
+    fitVal.Mags[_piPiEtaKey]=currentMagValMap;
+    fitVal.Phis[_piPiEtaKey]=currentPhiValMap;
+    fitErr.Mags[_piPiEtaKey]=currentMagErrMap;
+    fitErr.Phis[_piPiEtaKey]=currentPhiErrMap;
+  }
 
   if(_a980piHyp){
     std::vector< boost::shared_ptr<const JPCLS> > a0PiStates;
@@ -421,6 +475,11 @@ void XDecAmpBase::initialize(){
   std::vector<std::string>::const_iterator it;
 
   for (it=_hypVec.begin(); it!=_hypVec.end(); ++it){
+
+    if (it->compare(0, _piPiEtaKey.size(), _piPiEtaKey)== 0){
+      Info << "hypothesis\t" << _piPiEtaKey << "\t enabled" << endmsg;
+      _piPiEtaHyp=true;
+    }
 
     if (it->compare(0, _a980piKey.size(), _a980piKey)== 0){
       Info << "hypothesis\t" << _a980piKey << "\t enabled" << endmsg;

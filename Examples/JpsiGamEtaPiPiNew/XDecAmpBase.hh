@@ -35,6 +35,8 @@ public:
   virtual void print(std::ostream& os) const;
 
 protected:
+  const std::string _piPiEtaKey;
+  bool _piPiEtaHyp;
   const std::string _a980piKey;
   bool _a980piHyp;
   const std::string _sigmaEtaKey;
@@ -57,6 +59,8 @@ protected:
   std::pair <const double, const double> _decPairPiPi;
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
   Spin _spinX; 
+
+  complex<double> XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
 
   complex<double> XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
   complex<double> XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
