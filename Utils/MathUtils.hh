@@ -1,10 +1,8 @@
-#ifndef MATHUTILS_HH
-#define MATHUTILS_HH
+#pragma once
 
 #include <cassert>
 
-inline double pow(double x, int p)
-{
+inline double pow(double x, int p) {
   if(p == 0) return 1.0;
   if(x == 0.0 && p > 0) return 0.0;
   if(p < 0) {p=-p; x=1/x;}
@@ -17,8 +15,7 @@ inline double pow(double x, int p)
   }
 }
 
-inline double pow(double x, unsigned int p)
-{
+inline double pow(double x, unsigned int p) {
   if(p == 0) return 1.0;
   if(x == 0.0) return 0.0;
 	
@@ -30,9 +27,7 @@ inline double pow(double x, unsigned int p)
   }
 }
 
-
-inline int pow(int x, int p)
-{
+inline int pow(int x, int p) {
   if(p == 0) return 1;
   if(x == 0 && p > 0) return 0;
   if(p < 0) {assert(x == 1 || x == -1); return (-p % 2) ? x : 1;}
@@ -45,8 +40,7 @@ inline int pow(int x, int p)
   }
 }
 
-inline unsigned int pow(unsigned int x, unsigned int p)
-{
+inline unsigned int pow(unsigned int x, unsigned int p) {
   if(p == 0) return 1;
   if(x == 0) return 0;
 	
@@ -57,5 +51,3 @@ inline unsigned int pow(unsigned int x, unsigned int p)
     x *= x;
   }
 }
-
-#endif

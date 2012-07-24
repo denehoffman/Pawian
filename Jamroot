@@ -1,3 +1,5 @@
+import os ;
+local MinuitVariant = [ os.environ MinuitVariant ] ; 
 path-constant TOP : . ;
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
@@ -13,7 +15,7 @@ project :
 	<cxxflags>-fopenmp
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
-	<linkflags>-lMinuit2
+	<linkflags>-l$(MinuitVariant)
 	<linkflags>-lgomp
 	<linkflags>-pthread
 	<linkflags>-fopenmp

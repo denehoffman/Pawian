@@ -1,10 +1,8 @@
-#ifndef ERRVALUE_HH
-#define ERRVALUE_HH
+#pragma once
 
 #include <iostream>
 
-class ErrValue
-{
+class ErrValue {
 public:
 
   ErrValue();
@@ -36,13 +34,9 @@ public:
   bool operator>=(ErrValue& v) const;
 
 private:
-
   double meanValue;
   double plus;
   double minus;
 
 friend std::ostream &operator<<(std::ostream &o, const ErrValue &v);
-
 };
-
-#endif
