@@ -223,7 +223,6 @@ void FitParamsBaseNew::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble
   mapStrDouble::iterator it;
   for (it=startDoubleMap.begin(); it!=startDoubleMap.end(); ++it){
     std::string theName =it->first + suffix;
-
     double theStartVal=it->second;
     double theErrVal=errDoubleMap[it->first];
     

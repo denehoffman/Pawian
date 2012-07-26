@@ -20,6 +20,7 @@ void StreamFitParmsBaseNew::fillParams(){
   const std::string massSuffix="Mass";
   const std::string widthSuffix="Width";
   const std::string gFactorSuffix="gFactor";
+  const std::string otherSuffix="Other";
 
   fillLamLamAmps(_paramVal.MagLamLams, _paramErr.MagLamLams, magSuffix);
   fillLamLamAmps(_paramVal.PhiLamLams, _paramErr.PhiLamLams, phiSuffix);
@@ -28,6 +29,7 @@ void StreamFitParmsBaseNew::fillParams(){
   fillDoubles(_paramVal.Masses, _paramErr.Masses, massSuffix);
   fillDoubles(_paramVal.Widths, _paramErr.Widths, widthSuffix);
   fillDoubles(_paramVal.gFactors, _paramErr.gFactors, gFactorSuffix);
+  fillDoubles(_paramVal.otherParams, _paramErr.otherParams, otherSuffix);
 }
 
 void StreamFitParmsBaseNew::fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap, const std::string& suffix){
