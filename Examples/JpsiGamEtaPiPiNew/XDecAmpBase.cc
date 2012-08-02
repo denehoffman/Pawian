@@ -323,9 +323,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
     fitVal.Masses["a0_980"]=0.98;
     fitErr.Masses["a0_980"]=0.03;
     fitVal.gFactors["a0_980gPiEta"]=1.;
-    fitErr.gFactors["a0_980gPiEta"]=0.2;
+    fitErr.gFactors["a0_980gPiEta"]=0.19;
     fitVal.gFactors["a0_980gKK"]=1.;
-    fitErr.gFactors["a0_980gKK"]=0.2;
+    fitErr.gFactors["a0_980gKK"]=0.19;
   }
 
   if(_sigmaEtaHyp){
@@ -352,10 +352,10 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
     fitErr.Mags[_sigmaEtaKey]=currentMagErrMap;
     fitErr.Phis[_sigmaEtaKey]=currentPhiErrMap;
 
-    fitVal.Masses["sigma"]=0.6;
-    fitErr.Masses["sigma"]=0.1;
-    fitVal.Widths["sigma"]=0.5;
-    fitErr.Widths["sigma"]=0.2;
+    fitVal.Masses["sigma"]=0.5;
+    fitErr.Masses["sigma"]=0.09;
+    fitVal.Widths["sigma"]=0.3;
+    fitErr.Widths["sigma"]=0.059;
 
   }
 

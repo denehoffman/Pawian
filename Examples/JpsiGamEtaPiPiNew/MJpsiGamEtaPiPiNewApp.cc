@@ -11,11 +11,11 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiParser.hh"
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiReader.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiParser.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiReader.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiHistNew.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
+//#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiProdLhNew.hh"
 
 #include "PwaUtils/EvtDataBaseListNew.hh"
@@ -40,8 +40,6 @@
 #include "Minuit2/MnStrategy.h"
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnScan.h"
-
-
 
 using namespace ROOT::Minuit2;
 
