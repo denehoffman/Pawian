@@ -87,6 +87,8 @@ int main(int __argc,char *__argv[]){
 
 	std::string theCfgFile = theAppParams.getConfigFile();
 
+	std::string jobOption = theAppParams.getjobOption();
+
 	const std::string datFile=theAppParams.dataFile();
 	const std::string mcFile=theAppParams.mcFile();
 	Info << "data file: " << datFile ;  // << endmsg;
@@ -179,7 +181,9 @@ int main(int __argc,char *__argv[]){
 	  fitParamsNew defaultVal;
 	  fitParamsNew defaultErr;
 	  theLhPtr->getDefaultParams(defaultVal, defaultErr);
-	  std::ofstream theStreamDefault ( "defaultparams.dat");
+	  std::string defaultparamsname = "defaultparams" + jobOption + ".dat";
+	  std::ofstream theStreamDefault ( defaultparamsname.c_str() );
+	  //	  std::ofstream theStreamDefault ( "defaultparams.dat");
 
 	  theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
 	  return 0;
@@ -289,8 +293,10 @@ int main(int __argc,char *__argv[]){
 		const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
 		fitParamsNew finalFitErrs=theErrorparams;
 		theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
-
-		std::ofstream theStream ( "finalResult.dat");
+		
+		std::string finalResultname = "finalResult" + jobOption + ".dat";
+		std::ofstream theStream ( finalResultname.c_str() );
+		//std::ofstream theStream ( "finalResult.dat");
 		theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
 
 		MnUserCovariance theCovMatrix = min.UserCovariance();
