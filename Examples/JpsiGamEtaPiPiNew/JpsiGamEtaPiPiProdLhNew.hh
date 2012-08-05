@@ -16,7 +16,7 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 #include "PwaUtils/PsiProdBaseLhNew.hh"
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiStates.hh"
 
 #include "PwaUtils/DataUtils.hh"
 

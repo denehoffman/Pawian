@@ -50,13 +50,16 @@ protected:
   const std::string _xBWKey;
   bool _massIndependent;
 
+  const double _massPi;
   const double _massPi0;
   const double _massKplus;
   const double _massK0;
   const double _massEta;
   std::pair <const double, const double> _decPairKK;
+  std::pair <const double, const double> _decPairPiEta;
   std::pair <const double, const double> _decPairPi0Eta;
   std::pair <const double, const double> _decPairPiPi;
+  std::pair <const double, const double> _decPairPi0Pi0;
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
   Spin _spinX; 
 

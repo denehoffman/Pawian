@@ -1,4 +1,4 @@
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiReader.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiReader.hh"
 
 #include "Event/EventList.hh"
 #include "Event/Event.hh"

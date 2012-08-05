@@ -15,7 +15,7 @@
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiReader.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiHistNew.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
-//#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
+//#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiStates.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiProdLhNew.hh"
 
 #include "PwaUtils/EvtDataBaseListNew.hh"

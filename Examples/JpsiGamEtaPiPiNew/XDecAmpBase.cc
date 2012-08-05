@@ -24,13 +24,16 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_f2_1270etaHyp(false)
   ,_xBWKey(name+"BreitWigner")
   ,_massIndependent(true)
+  ,_massPi(0.13957018)
   ,_massPi0(0.1349766)
   ,_massKplus(0.493677)
   ,_massK0(0.497614)
   ,_massEta(0.547853)
   ,_decPairKK(make_pair(_massKplus,_massK0))
+  ,_decPairPiEta(make_pair(_massPi, _massEta))
   ,_decPairPi0Eta(make_pair(_massPi0, _massEta))
-  ,_decPairPiPi(make_pair(_massPi0, _massPi0))
+  ,_decPairPiPi(make_pair(_massPi, _massPi))
+  ,_decPairPi0Pi0(make_pair(_massPi0, _massPi0))
   ,_theStatesPtr(theStates)
   ,_spinX(spinX)
 {
@@ -64,7 +67,8 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA2_1320PiMag=theParamVal.Mags[_a2_1320piKey];
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA2_1320PiPhi=theParamVal.Phis[_a2_1320piKey];
 
-    result+=XToAPiBWAmp(lamX, Spin(2), theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320Mass, a2_1320Width);
+    result+=XToAPiBWAmp(lamX, 2, theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320Mass, a2_1320Width);
+    //result+=XToAPiBWAmp(lamX, Spin(2), theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320Mass, a2_1320Width);
   }
   if(_f2_1270etaHyp){
     double f2Mass=theParamVal.Masses["f2_1270"];
@@ -90,9 +94,7 @@ complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitPa
   complex<double> result(0.,0.);
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPiPiEtaMag=theParamVal.Mags[_piPiEtaKey];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPiPiEtaPhi=theParamVal.Phis[_piPiEtaKey];
- 
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
-
 
    for ( itXMag=XToPiPiEtaMag.begin(); itXMag!=XToPiPiEtaMag.end(); ++itXMag){
      boost::shared_ptr<const JPCLS> XState=itXMag->first;
@@ -134,8 +136,8 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fit
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
         
     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-      (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][0])*Flatte(p4EtaPiplus , _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
-	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][0])*Flatte(p4EtaPiminus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
+      (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][0])*Flatte(p4EtaPiplus , _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
+	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][0])*Flatte(p4EtaPiminus, _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 );
     result+= amp;
   }
@@ -203,7 +205,7 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
 	*Clebsch(jf, lamf, 0, 0, XState->S, lamf)
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][lamf])
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][jf][lamf][0])
-	*BreitWignerBlattW(p4PiPi, _massPi0, _massPi0, fMass, fWidth, jf);
+	*BreitWignerBlattW(p4PiPi, _massPi, _massPi, fMass, fWidth, jf);
      }
      
      result+= amp;
@@ -237,10 +239,10 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
      
      amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
        *(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
-	   *BreitWignerBlattW(p4EtaPiplus, _massPi0, _massEta, aMass, aWidth, jA)
+	   *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
 	   *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][jA][lamA][0])+
 	   conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
-	   *BreitWignerBlattW(p4EtaPiminus, _massPi0, _massEta, aMass, aWidth, jA)
+	   *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
 	   *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][jA][lamA][0])
 	   );
      }
