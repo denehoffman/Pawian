@@ -119,68 +119,54 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fit
   double a0_980Mass=theParamVal.Masses["a0_980"];
   double a0_980gPiEta=theParamVal.gFactors["a0_980gPiEta"];
   double a0_980gKK=theParamVal.gFactors["a0_980gKK"];
-
+  
   Vector4<double > p4EtaPiplus = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
+  Vector4<double > p4EtaPiminus= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
 
-  Vector4<double > p4EtaPiminus=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
-
-
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA980PiMag=theParamVal.Mags[_a980piKey];
-
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA980PiMag=theParamVal.Mags[_a980piKey];
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA980PiPhi=theParamVal.Phis[_a980piKey];
-
-
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
-
-   for ( itXMag=etaToA980PiMag.begin(); itXMag!=etaToA980PiMag.end(); ++itXMag){
-     boost::shared_ptr<const JPCLS> XState=itXMag->first;
-     double theXMag=itXMag->second;
-     double theXPhi=etaToA980PiPhi[XState];
-     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
-
-
-     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-       (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][0])*Flatte(p4EtaPiplus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
-	  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][0])*
-	  Flatte(p4EtaPiminus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
+  for ( itXMag=etaToA980PiMag.begin(); itXMag!=etaToA980PiMag.end(); ++itXMag){
+    boost::shared_ptr<const JPCLS> XState=itXMag->first;
+    double theXMag=itXMag->second;
+    double theXPhi=etaToA980PiPhi[XState];
+    complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+        
+    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
+      (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][0])*Flatte(p4EtaPiplus , _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
+	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][0])*Flatte(p4EtaPiminus, _decPairPi0Eta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 );
-     result+= amp;
-   }
-
+    result+= amp;
+  }
+  
   return result;
 }
 
 complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
   complex<double> result(0.,0.);
-
-
+  
   double f0_980Mass=theParamVal.Masses["f0_980"];
   double f0_980gPiPi=theParamVal.gFactors["f0_980gPiPi"];
   double f0_980gKK=theParamVal.gFactors["f0_980gKK"];
-
+  
   Vector4<double > p4PiPi=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi]; 
-
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XTof980etaMag=theParamVal.Mags[_f980etaKey];
-
+  
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XTof980etaMag=theParamVal.Mags[_f980etaKey];
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XTof980etaPhi=theParamVal.Phis[_f980etaKey];
-
-
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
-
-   for ( itXMag=XTof980etaMag.begin(); itXMag!=XTof980etaMag.end(); ++itXMag){
-     boost::shared_ptr<const JPCLS> XState=itXMag->first;
-     double theXMag=itXMag->second;
-     double theXPhi=XTof980etaPhi[XState];
-     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
-
-
-     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-       conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][0])*
-       Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
-     result+= amp;
-   }
+  for ( itXMag=XTof980etaMag.begin(); itXMag!=XTof980etaMag.end(); ++itXMag){
+    boost::shared_ptr<const JPCLS> XState=itXMag->first;
+    double theXMag=itXMag->second;
+    double theXPhi=XTof980etaPhi[XState];
+    complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+     
+    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
+      conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][0])*
+      Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
+    result+= amp;
+  }
 
   return result;
 }
@@ -191,17 +177,15 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
 					std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 					std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
 					double fMass, double fWidth){
-
+  
   complex<double> result(0.,0.);
-
+  
   Vector4<double > p4PiPiFloat=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
-
-
   Vector4<double > p4PiPi(p4PiPiFloat.E(),
 			  p4PiPiFloat.Px(),
 			  p4PiPiFloat.Py(),
 			  p4PiPiFloat.Pz());  
-
+  
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
   
   for ( itXMag=XToEtaFMag.begin(); itXMag!=XToEtaFMag.end(); ++itXMag){
@@ -237,9 +221,7 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
   complex<double> result(0.,0.);
 
   Vector4<double > p4EtaPiplus=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
-
   Vector4<double > p4EtaPiminus=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];  
-
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
 

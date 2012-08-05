@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "PwaUtils/AbsXdecAmp.hh"
-#include "Examples/JpsiGamEtaPiPi/JpsiGamEtaPiPiStates.hh"
+#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiStates.hh"
 
 
 class XDecAmpBase : public AbsXdecAmp{
