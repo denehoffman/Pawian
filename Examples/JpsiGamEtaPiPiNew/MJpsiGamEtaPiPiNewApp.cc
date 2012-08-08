@@ -116,19 +116,19 @@ int main(int __argc,char *__argv[]){
 		Warning << "could not find all particles" ;  // << endmsg;
 
 	Info 	<< "\nFile has " << eventsData.size() << " events. Each event has "
-			<<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+		<<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
 	eventsData.rewind();
-
+	
 	Event* anEvent;
 	int evtCount = 0;
 	while ((anEvent = eventsData.nextEvent()) != 0 && evtCount < 1) {
-		Info	<< "\n"
-				<< *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
-				<< *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
-				<< *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
-				<< *(anEvent->p4(3)) << "\tm = " << anEvent->p4(3)->Mass() << "\n"
-				;  // << endmsg;
-		++evtCount;
+	  Info	<< "\n"
+		<< *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
+		<< *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
+		<< *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
+		<< *(anEvent->p4(3)) << "\tm = " << anEvent->p4(3)->Mass() << "\n"
+	    ;  // << endmsg;
+	  ++evtCount;
 	}
 	eventsData.rewind();
 
@@ -143,9 +143,10 @@ int main(int __argc,char *__argv[]){
 	//
 	//calculate helicity angles, fill map with D-functions
 	//
+
 	boost::shared_ptr<const JpsiGamEtaPiPiEventListNew> theJpsiGamEtaPiPiEventListPtr(new JpsiGamEtaPiPiEventListNew(eventsData, eventsMc));
   
-		std::string mode=theAppParams.mode();
+	std::string mode=theAppParams.mode();
 	std::cout << "Mode: " << mode << std::endl;
 	if (mode=="plotmode"){
 	  JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange());                                                               
@@ -158,10 +159,7 @@ int main(int __argc,char *__argv[]){
 	//
 
 	boost::shared_ptr<JpsiGamEtaPiPiStates> jpsiGamEtaPiPiStatesPtr(new JpsiGamEtaPiPiStates());
-
-
 	const std::vector<std::string> hypVec=theAppParams.enabledHyps();
-
 
 	boost::shared_ptr<AbsLhNew> theLhPtr;
 
@@ -307,6 +305,9 @@ int main(int __argc,char *__argv[]){
   		JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
  		//theHist.setMassRange(theAppParams.massRange() );
 // // 		theHist.fill();
+		end= clock();
+		double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+		Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
  		return 0;
 	}

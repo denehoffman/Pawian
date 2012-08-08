@@ -228,28 +228,28 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
 
 
   for ( itXMag=etaToAPiMag.begin(); itXMag!=etaToAPiMag.end(); ++itXMag){
-     boost::shared_ptr<const JPCLS> XState=itXMag->first;
-     double theXMag=itXMag->second;
-     double theXPhi=etaToAPiPhi[XState];
-     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
-     complex<double> amp(0.,0.);     
-
-     for(Spin lamA = -jA; lamA <= jA; lamA++){
-     if( fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
-     
-     amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
-       *(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
-	   *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
-	   *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][jA][lamA][0])+
-	   conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
-	   *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
-	   *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][jA][lamA][0])
-	   );
-     }
-
-     result+= amp;
-   }
-
+    boost::shared_ptr<const JPCLS> XState=itXMag->first;
+    double theXMag=itXMag->second;
+    double theXPhi=etaToAPiPhi[XState];
+    complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+    complex<double> amp(0.,0.);     
+    
+    for(Spin lamA = -jA; lamA <= jA; lamA++){
+      if( fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
+      
+      amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
+	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
+	    *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
+	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][jA][lamA][0])+
+	    conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
+	    *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
+	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][jA][lamA][0])
+	    );
+    }
+    
+    result+= amp;
+  }
+  
   return result;
 }
 
