@@ -6,6 +6,10 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
   _evtListPtr(theEvtList)
 {
@@ -29,33 +33,55 @@ double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
   double logLH=0.;
   double logLH_data=0.;
   double weightSum=0.;
-
-  std::vector<EvtDataNew*>::iterator iterd;
-  for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
-    double intensity=calcEvtIntensity((*iterd), theParamVal);
-    if (intensity>0.) logLH_data+=((*iterd)->evtWeight)*log(intensity);
-    weightSum+= (*iterd)->evtWeight;
-  } 
-
   double LH_mc=0.;
-  
-  std::vector<EvtDataNew*>::iterator iterm;
-  for (iterm=_evtMCVec.begin(); iterm!=_evtMCVec.end(); ++iterm){
-           double intensity=calcEvtIntensity((*iterm), theParamVal);
-           LH_mc+=intensity;
-         }
 
-  double logLH_mc_Norm=0.;
+
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+  for (unsigned int i=0; i<_evtDataVec.size(); ++i){
+    EvtDataNew* currentEvtData=_evtDataVec[i];
+    double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+
+#ifdef _OPENMP
+#pragma omp critical
+      {
+#endif
+    if (intensity>0.) logLH_data+=(currentEvtData->evtWeight)*log(intensity);
+    weightSum+= currentEvtData->evtWeight;
+
+#ifdef _OPENMP
+       }
+#endif
+  }
+
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+  for (unsigned int i=0; i<_evtMCVec.size(); ++i){
+    EvtDataNew* currentEvtData=_evtMCVec[i];
+    double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+
+#ifdef _OPENMP
+#pragma omp critical
+      {
+#endif
+        LH_mc+=intensity;
+#ifdef _OPENMP
+       }
+#endif
+  }
+
+
+  double logLH_mc_Norm=0.;  
   if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/_evtMCVec.size());
-
   logLH=0.5*weightSum *(LH_mc/_evtMCVec.size()-1.)*(LH_mc/_evtMCVec.size()-1.)
     -logLH_data
     +weightSum*logLH_mc_Norm;
-
+  
   Info << "current LH = " << logLH << endmsg;
-
- return logLH;
-
+  return logLH;
+  
 }
 
 void AbsLhNew::setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey){

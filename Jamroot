@@ -4,7 +4,14 @@ path-constant TOP : . ;
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor ;
-
+if $(MinuitVariant) = Minuit
+{
+ OPEN_MP_FLAG = "" ;
+}
+else if $(MinuitVariant) = Minuit2noMP
+{
+ OPEN_MP_FLAG = openmp ;
+}
 project :
 	requirements <include>./  
 	<include>$(extern)/include
@@ -12,13 +19,13 @@ project :
 	<include>$(GENEVA)/include
 	<link>static
 	<cxxflags>-pthread
-	<cxxflags>-fopenmp
+	<cxxflags>-f$(OPEN_MP_FLAG)
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
 	<linkflags>-l$(MinuitVariant)
 	<linkflags>-lgomp
 	<linkflags>-pthread
-	<linkflags>-fopenmp
+	<linkflags>-f$(OPEN_MP_FLAG)
 	;
 
 actions rootlibs
