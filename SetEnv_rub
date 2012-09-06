@@ -5,7 +5,8 @@ setenv CMAKE_SOURCE_DIR `pwd | sed -e 's/\/nfs//'`
 setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
 setenv PATH ${PATH}:${ROOTSYS}/bin:/data/pegasus1/PANDA/bin/
 setenv BOOST_BUILD_PATH /data/pegasus1/PANDA/PWA/boost-build/
-setenv MinuitVariant Minuit2
+#setenv MINUITVARIANT Minuit2
+#setenv MINUITVARIANT Minuit2noMP
 
 echo "\n ROOTSYS: " $ROOTSYS 
 echo "\n CMAKE_SOURCE_DIR: " $CMAKE_SOURCE_DIR  

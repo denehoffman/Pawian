@@ -1,17 +1,17 @@
-import os ;
-local MinuitVariant = [ os.environ MinuitVariant ] ; 
+#import os ;
+#local MinuitVariant = [ os.environ MINUITVARIANT ] ; 
 path-constant TOP : . ;
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor ;
-if $(MinuitVariant) = Minuit
-{
- OPEN_MP_FLAG = "" ;
-}
-else if $(MinuitVariant) = Minuit2noMP
-{
- OPEN_MP_FLAG = openmp ;
-}
+#if $(MinuitVariant) = Minuit2
+#{
+# OPEN_MP_FLAG = "" ;
+#}
+#else if $(MinuitVariant) = Minuit2noMP
+#{
+# OPEN_MP_FLAG = "-fopenmp" ;
+#}
 project :
 	requirements <include>./  
 	<include>$(extern)/include
@@ -19,13 +19,13 @@ project :
 	<include>$(GENEVA)/include
 	<link>static
 	<cxxflags>-pthread
-	<cxxflags>-f$(OPEN_MP_FLAG)
+	<cxxflags>-fopenmp
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
-	<linkflags>-l$(MinuitVariant)
+#	<linkflags>$(extern)/lib/Linux26SL6_x86_64_gcc444/libMinuit2.a
 	<linkflags>-lgomp
 	<linkflags>-pthread
-	<linkflags>-f$(OPEN_MP_FLAG)
+	<linkflags>-fopenmp
 	;
 
 actions rootlibs
@@ -41,6 +41,7 @@ lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-common.so
 		<file>$(GENEVA)/lib/libgemfony-geneva-individuals.so
  : : ;
 lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
+lib Minuit2 : : <file>$(extern)/lib/Linux26SL6_x86_64_gcc444/libMinuit2.so : : ;
  
 build-project qft++ ;
 build-project Utils ;
