@@ -26,5 +26,4 @@ private:
   std::ifstream currentStream;
   int numParticles;
   int linesToSkip;
-  bool _useWeight;
 };

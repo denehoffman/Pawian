@@ -1,0 +1,17 @@
+project : 
+        ;
+
+lib JpsiToPhiPhiGam : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/PwaUtils//PwaUtils 
+        $(TOP)/Event//Event 
+        $(TOP)/qft++//qft++ 
+	:  
+	: 
+	:  ;
+
+exe MJpsiToPhiPhiGamApp : MJpsiToPhiPhiGamApp.cc JpsiToPhiPhiGam : ;
+
+
+
+
