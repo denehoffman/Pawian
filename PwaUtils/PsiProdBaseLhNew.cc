@@ -137,11 +137,9 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
       JmGpTmpMap[helf1]= ParityProdMap[helf1][1]*psiToXGammaAmp(-1, 1, helf1, 1, theData, MagProdMap[helf1][1], PhiProdMap[helf1][1]);
       TmpDecAmp[helf1] = currentF1DecAmp->XdecAmp(helf1, theData, theParamVal);
 
-      if(helf1>0){
         JpGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
         JmGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(-1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
         TmpDecAmp[-helf1] = currentF1DecAmp->XdecAmp(-helf1, theData, theParamVal);
-      }
     }
 
     for (Spin helf1=-1; helf1<2; helf1++){
@@ -190,12 +188,10 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
       JpGpTmpMap[heleta2]= ParityProdMap[heleta2][1]*psiToXGammaAmp(1, 2, heleta2, 1, theData, MagProdMap[heleta2][1], PhiProdMap[heleta2][1]);
       JmGpTmpMap[heleta2]= ParityProdMap[heleta2][1]*psiToXGammaAmp(-1, 2, heleta2, 1, theData, MagProdMap[heleta2][1], PhiProdMap[heleta2][1]);
       TmpDecAmp[heleta2] = currentEta2DecAmp->XdecAmp(heleta2, theData, theParamVal);
-
-      if(heleta2>0){
-        JpGmTmpMap[-heleta2]= ParityProdMap[-heleta2][-1]*psiToXGammaAmp(1, 2, -heleta2, -1, theData, MagProdMap[-heleta2][-1], PhiProdMap[-heleta2][-1]);
-        JmGmTmpMap[-heleta2]= ParityProdMap[-heleta2][-1]*psiToXGammaAmp(-1, 2, -heleta2, -1, theData, MagProdMap[-heleta2][-1], PhiProdMap[-heleta2][-1]);
-        TmpDecAmp[-heleta2] = currentEta2DecAmp->XdecAmp(-heleta2, theData, theParamVal);
-      }
+      
+      JpGmTmpMap[-heleta2]= ParityProdMap[-heleta2][-1]*psiToXGammaAmp(1, 2, -heleta2, -1, theData, MagProdMap[-heleta2][-1], PhiProdMap[-heleta2][-1]);
+      JmGmTmpMap[-heleta2]= ParityProdMap[-heleta2][-1]*psiToXGammaAmp(-1, 2, -heleta2, -1, theData, MagProdMap[-heleta2][-1], PhiProdMap[-heleta2][-1]);
+      TmpDecAmp[-heleta2] = currentEta2DecAmp->XdecAmp(-heleta2, theData, theParamVal);
     }
 
     for (Spin heleta2=-2; heleta2<3; heleta2++){

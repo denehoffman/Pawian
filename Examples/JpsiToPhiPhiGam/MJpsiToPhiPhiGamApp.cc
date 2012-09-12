@@ -14,7 +14,8 @@
 #include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamEventList.hh"
 #include "PwaUtils/PsiToXGamParser.hh"
 #include "PwaUtils/PsiToXGamReader.hh"
-//#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiHistNew.hh"
+#include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamHist.hh"
+#include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamStates.hh"
 //#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
 //#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiProdLhNew.hh"
 
@@ -23,6 +24,7 @@
 #include "PwaUtils/StreamFitParmsBaseNew.hh"
 #include "PwaUtils/PwaFcnBaseNew.hh"
 #include "PwaUtils/AbsLhNew.hh"
+#include "Utils/ErrLogUtils.hh"
 
 #include "Setup/PwaEnv.hh"
 #include "Particle/ParticleTable.hh"
@@ -44,30 +46,6 @@
 using namespace ROOT::Minuit2;
 
 
-void setErrLogMode( const PsiToXGamParser::enErrLogMode& erlMode ) {
-	switch(erlMode) {
-	case PsiToXGamParser::debug :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-		break;
-	case PsiToXGamParser::trace :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-		break;
-	case PsiToXGamParser::routine :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-		break;
-	case PsiToXGamParser::warning :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
-		break;
-	case PsiToXGamParser::error :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
-		break;
-	case PsiToXGamParser::alert :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::ALERT);
-		break;
-	default:
-		ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-	}
-}
 
 int main(int __argc,char *__argv[]){
   clock_t start, end;
@@ -152,19 +130,22 @@ int main(int __argc,char *__argv[]){
   
   std::string mode=theAppParams.mode();
   std::cout << "Mode: " << mode << std::endl;
-  // if (mode=="plotmode"){
-  //   JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange());                                                               
-  //   theHist.setMassRange(theAppParams.massRange() );
-  //   return 0;
-  // }
+  if (mode=="plotmode"){
+    // JpsiToPhiPhiGamHist theHist(theJpsiGamXEventListPtr,theAppParams.massRange()); 
+    JpsiToPhiPhiGamHist theHist(theJpsiGamXEventListPtr);    
+    // theHist.setMassRange(theAppParams.massRange() );
+    return 0;
+  }
   
   //
   //retrieve  hypotheses
   //
   
-  // boost::shared_ptr<JpsiGamEtaPiPiStates> jpsiGamEtaPiPiStatesPtr(new JpsiGamEtaPiPiStates());
-  // const std::vector<std::string> hypVec=theAppParams.enabledHyps();
-  // boost::shared_ptr<AbsLhNew> theLhPtr;
+  boost::shared_ptr<JpsiToPhiPhiGamStates> jpsiToPhiPhiGamStatesPtr(new JpsiToPhiPhiGamStates()); 
+  jpsiToPhiPhiGamStatesPtr->print(std::cout);
+
+  const std::vector<std::string> hypVec=theAppParams.enabledHyps();
+  boost::shared_ptr<AbsLhNew> theLhPtr;
   
   // std::string startWithHyp=theAppParams.startHypo();
   
