@@ -240,10 +240,10 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
 	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
 	    *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
-	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][jA][lamA][0])+
+	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplus][jA][lamA][0])+
 	    conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
 	    *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
-	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][jA][lamA][0])
+	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminus][jA][lamA][0])
 	    );
     }
     

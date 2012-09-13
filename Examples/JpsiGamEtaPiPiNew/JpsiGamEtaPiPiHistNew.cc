@@ -390,6 +390,7 @@ void JpsiGamEtaPiPiHistNew::initRootStuff(){
 	_phiEtaPi_EtaPiPiHeliMcHist     = new TH1F("_phiEtaPi_EtaPiPiHeliMcHist"      , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli Mc"  , nbins, -TMath::Pi(), TMath::Pi());
 	_phiEtaPi_EtaPiPiHeliFittedHist = new TH1F("_phiEtaPi_EtaPiPiHeliFittedHist"  , "#Phi_{#eta#pi^{+-}} #eta#pi^{+}#pi^{-}Heli Fit" , nbins, -TMath::Pi(), TMath::Pi());
 
+	nbins = 100;
 	_costGamCmDataHist   = new TH1F("_costGamCmDataHist"  , "cos(#Theta_{#gamma}) CM data", nbins, -1., 1.);
 	_costGamCmMcHist     = new TH1F("_costGamCmMcHist"    , "cos(#Theta_{#gamma}) CM Mc"  , nbins, -1., 1.);
 	_costGamCmFittedHist = new TH1F("_costGamCmFittedHist", "cos(#Theta_{#gamma}) CM Fit" , nbins, -1., 1.);
