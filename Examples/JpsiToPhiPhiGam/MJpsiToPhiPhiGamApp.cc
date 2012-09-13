@@ -17,7 +17,7 @@
 #include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamHist.hh"
 #include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamStates.hh"
 //#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
-//#include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiProdLhNew.hh"
+#include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamLh.hh"
 
 #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
@@ -147,45 +147,45 @@ int main(int __argc,char *__argv[]){
   const std::vector<std::string> hypVec=theAppParams.enabledHyps();
   boost::shared_ptr<AbsLhNew> theLhPtr;
   
-  // std::string startWithHyp=theAppParams.startHypo();
+  std::string startWithHyp=theAppParams.startHypo();
   
-  // if (startWithHyp=="production"){
-  //   theLhPtr = boost::shared_ptr<AbsLhNew> (new JpsiGamEtaPiPiProdLhNew(theJpsiGamEtaPiPiEventListPtr, hypVec, jpsiGamEtaPiPiStatesPtr));
-  // }
-  // else {
-  //   Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
-  //   exit(1);
-  // }
+  if (startWithHyp=="production"){
+    theLhPtr = boost::shared_ptr<AbsLhNew> (new JpsiToPhiPhiGamLh(theJpsiGamXEventListPtr, hypVec, jpsiToPhiPhiGamStatesPtr));
+  }
+  else {
+    Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;
+    exit(1);
+  }
   
-  // boost::shared_ptr<FitParamsBaseNew> theFitParamBase=boost::shared_ptr<FitParamsBaseNew>(new FitParamsBaseNew());
+  boost::shared_ptr<FitParamsBaseNew> theFitParamBase=boost::shared_ptr<FitParamsBaseNew>(new FitParamsBaseNew());
   
-  // if (mode=="dumpDefaultParams"){
-  //   fitParamsNew defaultVal;
-  //   fitParamsNew defaultErr;
-  //   theLhPtr->getDefaultParams(defaultVal, defaultErr);
-  //   std::string defaultparamsname = "defaultparams" + jobOption + ".dat";
-  //   std::ofstream theStreamDefault ( defaultparamsname.c_str() );
-  //   //	  std::ofstream theStreamDefault ( "defaultparams.dat");
+  if (mode=="dumpDefaultParams"){
+    fitParamsNew defaultVal;
+    fitParamsNew defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+    std::string defaultparamsname = "defaultparams" + jobOption + ".dat";
+    std::ofstream theStreamDefault ( defaultparamsname.c_str() );
+    //	  std::ofstream theStreamDefault ( "defaultparams.dat");
     
-  //   theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-  //   return 0;
-  // }
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    return 0;
+  }
   
-  // std::string paramStreamerPath=theAppParams.fitParamFile();
-  // StreamFitParmsBaseNew theParamStreamer(paramStreamerPath, theLhPtr);
-  // fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
-  // fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
+  std::string paramStreamerPath=theAppParams.fitParamFile();
+  StreamFitParmsBaseNew theParamStreamer(paramStreamerPath, theLhPtr);
+  fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
+  fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
   
-  // if (mode=="qaMode"){
+  if (mode=="qaMode"){
 
-  //   Info << "\nThe parameter values are: " << "\n" << endmsg;
-  //   theFitParamBase->printParams(theStartparams);
+  Info << "\nThe parameter values are: " << "\n" << endmsg;
+  theFitParamBase->printParams(theStartparams);
     
-  //   Info << "\nThe parameter errors are: " << "\n" << endmsg;
-  //   theFitParamBase->printParams(theErrorparams);
+  Info << "\nThe parameter errors are: " << "\n" << endmsg;
+  theFitParamBase->printParams(theErrorparams);
     
-  //   double theLh=theLhPtr->calcLogLh(theStartparams);
-  //   Info <<"theLh = "<< theLh << endmsg;
+  double theLh=theLhPtr->calcLogLh(theStartparams);
+  Info <<"theLh = "<< theLh << endmsg;
     
   //   //        	std::string errFile = "finalErrorMatrix.dat";
   //   // 		FitParamErrorMatrixStreamer theErrStreamer( errFile  );
@@ -194,8 +194,8 @@ int main(int __argc,char *__argv[]){
   //   // 		theErrStreamer.matrixData( theErrData, ncols  );
   //   // 		FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
     
-  //   JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams,theAppParams.massRange());
-  //   //theHist.setMassRange(theAppParams.massRange() );
+  JpsiToPhiPhiGamHist theHist(theLhPtr, theStartparams);
+  theHist.setMassRange(theAppParams.massRange() );
   //   // 		theHist.fill();
     
   //   // 		if(theAppParams.massIndependentFit()){
@@ -204,28 +204,28 @@ int main(int __argc,char *__argv[]){
   //   // 			//theProdLh->dumpComponentIntensity( theStream, theStartparams, theErrorMatrix );
   //   // 		}
     
-  //   end= clock();
-  //   double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-  //   Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
-  //   return 0;
-  // }
+  end= clock();
+  double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+  Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+  return 0;
+  }
   
-  // if (mode=="pwa"){
-  //   PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);
-  //   MnUserParameters upar;
-  //   theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
+  if (mode=="pwa"){
+    PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);
+    MnUserParameters upar;
+    theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
     
-  //   std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-  //   for (int i=0; i<int(upar.Params().size()); ++i){
-  //     std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
-  //   }
+    std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
+    for (int i=0; i<int(upar.Params().size()); ++i){
+      std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+    }
     
-  //   const std::vector<std::string> fixedParams=theAppParams.fixedParams();
+    const std::vector<std::string> fixedParams=theAppParams.fixedParams();
     
-  //   std::vector<std::string>::const_iterator itFix;
-  //   for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-  //     upar.Fix( (*itFix) );
-  //   }
+    std::vector<std::string>::const_iterator itFix;
+    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+      upar.Fix( (*itFix) );
+    }
     
   //   // 		bool prescan=false;
   //   // 		if(prescan){
@@ -240,51 +240,51 @@ int main(int __argc,char *__argv[]){
   //   // 			upar.Release(0);
   //   // 		}
     
-  //   MnMigrad migrad(theFcn, upar);
-  //   Info <<"start migrad "<< endmsg;
-  //   FunctionMinimum min = migrad();
+    MnMigrad migrad(theFcn, upar);
+    Info <<"start migrad "<< endmsg;
+    FunctionMinimum min = migrad();
     
-  //   if(!min.IsValid()) {
-  //     //try with higher strategy
-  //     Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-  //     MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
-  //     min = migrad2();
-  //   }
+    if(!min.IsValid()) {
+      //try with higher strategy
+      Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+      MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
+      min = migrad2();
+    }
     
-  //   MnUserParameters finalUsrParameters=min.UserParameters();
-  //   const std::vector<double> finalParamVec=finalUsrParameters.Params();
-  //   fitParamsNew finalFitParams=theStartparams;
-  //   theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+    MnUserParameters finalUsrParameters=min.UserParameters();
+    const std::vector<double> finalParamVec=finalUsrParameters.Params();
+    fitParamsNew finalFitParams=theStartparams;
+    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
     
-  //   // 		//MnUserCovariance theCov = min.UserCovariance() ;
-  //   // 		//cout << "User vov : "<< endl;
-  //   // 		//cout << theCov << endl;
+    // 		//MnUserCovariance theCov = min.UserCovariance() ;
+    // 		//cout << "User vov : "<< endl;
+    // 		//cout << theCov << endl;
     
-  //   theFitParamBase->printParams(finalFitParams);
-  //   double theLh=theLhPtr->calcLogLh(finalFitParams);
-  //   Info <<"theLh = "<< theLh << endmsg;
+    theFitParamBase->printParams(finalFitParams);
+    double theLh=theLhPtr->calcLogLh(finalFitParams);
+    Info <<"theLh = "<< theLh << endmsg;
     
     
-  //   const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-  //   fitParamsNew finalFitErrs=theErrorparams;
-  //   theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
+    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+    fitParamsNew finalFitErrs=theErrorparams;
+    theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
     
-  //   std::string finalResultname = "finalResult" + jobOption + ".dat";
-  //   std::ofstream theStream ( finalResultname.c_str() );
-  //   //std::ofstream theStream ( "finalResult.dat");
-  //   theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+    std::string finalResultname = "finalResult" + jobOption + ".dat";
+    std::ofstream theStream ( finalResultname.c_str() );
+    //std::ofstream theStream ( "finalResult.dat");
+    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
     
-  //   MnUserCovariance theCovMatrix = min.UserCovariance();
-  //   std::cout  << min << std::endl;
+    MnUserCovariance theCovMatrix = min.UserCovariance();
+    std::cout  << min << std::endl;
     
-  //   // 		//std::ofstream theCompStream ( "componentIntensity.dat");
-  //   // 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
-  //   JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
-  //   //theHist.setMassRange(theAppParams.massRange() );
-  //   // // 		theHist.fill();
-  //   end= clock();
-  //   double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-  //   Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+    // // 		//std::ofstream theCompStream ( "componentIntensity.dat");
+    // // 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
+    // JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
+    // //theHist.setMassRange(theAppParams.massRange() );
+    // // // 		theHist.fill();
+    // end= clock();
+    // double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    // Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
 
 
@@ -332,8 +332,8 @@ int main(int __argc,char *__argv[]){
   //     std::cout << std::endl;
   //   }
     
-  //   return 0;
-  // }
+    return 0;
+  }
   
   
   return 0;

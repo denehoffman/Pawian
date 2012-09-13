@@ -171,6 +171,115 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<const EvtDataBaseList
 
 }
 
+JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitParamsNew& theFitParms):
+  _theTFile(0),
+  _dalitzDataHist(0),
+  _dalitzMcHist(0),
+  _dalitzFittedHist(0),
+  _PhiPhiMassDataHist(0),
+  _PhiPhiMassMcHist(0),
+  _PhiPhiMassFittedHist(0),
+  _KpKmMassDataHist(0),
+  _KpKmMassMcHist(0),
+  _KpKmMassFittedHist(0),
+  _KsKlMassDataHist(0),
+  _KsKlMassMcHist(0),
+  _KsKlMassFittedHist(0),
+  _costPhi_KpKmDataHist(0), 
+  _costPhi_KpKmMcHist(0), 
+  _costPhi_KpKmFittedHist(0),
+  _phiPhi_KpKmDataHist(0), 
+  _phiPhi_KpKmMcHist(0), 
+  _phiPhi_KpKmFittedHist(0), 
+  _chiDataHist(0), 
+  _chiMcHist(0), 
+  _chiFittedHist(0),  
+  _dataTuple(0),
+  _mcTuple(0),
+  _massIndepTuple(0),
+  _massRange(make_pair(0.,0.) )
+{ 
+  if(0==theLh){
+    Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
+    exit(1);
+  }
+
+   initRootStuff();
+   boost::shared_ptr<const EvtDataBaseListNew> theEvtList=theLh->getEventList();
+   const std::vector<EvtDataNew*> dataList=theEvtList->getDataVecs();  
+
+   std::vector<EvtDataNew*>::const_iterator it=dataList.begin();
+  while(it!=dataList.end())
+    {
+      plotDalitz(_dalitzDataHist, (*it), 1.);
+      plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
+      plotKsKl( _KsKlMassDataHist, (*it), 1. );
+      plotKpKm( _KpKmMassDataHist, (*it), 1. );
+      plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), 1. );
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. );
+      plotCostGam( _costGamCmDataHist, (*it), 1. );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], 1.);  
+       plotChi(_chiDataHist, (*it), 1. );      
+      fillTuple(_dataTuple, (*it), 1.);
+      
+      ++it;
+    }
+
+ const std::vector<EvtDataNew*> mcList=theEvtList->getMcVecs();  
+  it=mcList.begin();
+  while(it!=mcList.end())
+    { 
+      plotDalitz(_dalitzMcHist, (*it), 1.);
+      plotPhiPhi(_PhiPhiMassMcHist, (*it), 1.  );
+      plotKsKl( _KsKlMassMcHist, (*it), 1. );
+      plotKpKm( _KpKmMassMcHist, (*it), 1. );
+      plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist, (*it), 1. );
+      plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. ); 
+      plotCostGam( _costGamCmMcHist,(*it), 1. );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], 1.);  
+      plotChi(_chiMcHist, (*it), 1. );   
+      
+      // double evtWeight= _theJpsiGamKsKlKKLh->calcEvtIntensity((*it), _fitParam);
+      double evtWeight= theLh->calcEvtIntensity( (*it), theFitParms );
+      plotDalitz(_dalitzFittedHist, (*it),evtWeight );
+      plotPhiPhi(_PhiPhiMassFittedHist, (*it), evtWeight  );
+      plotKsKl( _KsKlMassFittedHist, (*it), evtWeight );
+      plotKpKm( _KpKmMassFittedHist, (*it), evtWeight );
+      plotCostPhiKs( _costKs_KsKlHeliFittedHist, _phiKs_KsKlHeliFittedHist,(*it), evtWeight );
+      plotCostPhiKp( _costKp_KpKmHeliFittedHist, _phiKp_KpKmHeliFittedHist,(*it), evtWeight );
+      plotCostGam( _costGamCmFittedHist,(*it), evtWeight );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmFittedHist, _phiPhi_KpKmFittedHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], evtWeight); 
+      plotChi(_chiFittedHist, (*it), evtWeight  );
+        
+      fillTuple(_mcTuple, (*it), evtWeight);
+      ++it;
+    }
+
+  double integralData=(double) theEvtList->getDataVecs().size();
+  Info <<"No of fit data events  " << integralData ;  // << endmsg;
+  
+  double integralFitted=(double) theEvtList->getMcVecs().size();
+  Info <<"No of fit events " << integralFitted ;  // << endmsg; 
+  
+  Info <<"scaling factor  " << integralData/integralFitted ;  // << endmsg;
+
+  double scaleFactor = integralData/integralFitted;
+  
+  _dalitzFittedHist->Scale(scaleFactor);
+  _PhiPhiMassFittedHist->Scale(scaleFactor);
+  _KsKlMassFittedHist->Scale(scaleFactor);
+  _KpKmMassFittedHist->Scale(scaleFactor);
+  _costKs_KsKlHeliFittedHist->Scale(scaleFactor);
+  _phiKs_KsKlHeliFittedHist->Scale(scaleFactor);
+  _costKp_KpKmHeliFittedHist->Scale(scaleFactor);
+  _phiKp_KpKmHeliFittedHist->Scale(scaleFactor);
+  _costGamCmFittedHist->Scale(scaleFactor);
+  _costPhi_KpKmFittedHist->Scale(scaleFactor);
+  _phiPhi_KpKmFittedHist->Scale(scaleFactor);
+  _chiFittedHist->Scale(scaleFactor);
+
+}
+
 
 // JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(JpsiGamKsKlKKProdLh* theJpsiGamKsKlKKLh, fitParams& fitParam, FitParamErrorMatrix* theErrorMatrix) :
 //   _theTFile(0),

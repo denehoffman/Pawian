@@ -18,14 +18,15 @@
 #include "qft++/topincludes/tensor.hh"
 #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
-#include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/AbsLhNew.hh"
+
 //#include  "Examples/JpsiGamKsKlKK/FitParamErrorMatrix.hh"
 
 class TFile;
 class TH2F;
 class TH1F;
 class TNtuple;
-//class JpsiGamKsKlKKProdLh;
+//class JpsiToPhiPhiGamLh;
 class EvtDataBaseListNew;
 //class FitParamErrorMatrix;
 
@@ -37,7 +38,7 @@ public:
 
   ///Constructor 
   JpsiToPhiPhiGamHist(boost::shared_ptr<const EvtDataBaseListNew>);
-  //JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLh>, fitParams&);
+  JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew>, fitParamsNew&);
   // JpsiToPhiPhiGamHist(JpsiGamKsKlKKProdLh* theJpsiGamKsKlKKLh, fitParams& fitParam,  FitParamErrorMatrix* theErrorMatrix );
   // void fill();
   void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
