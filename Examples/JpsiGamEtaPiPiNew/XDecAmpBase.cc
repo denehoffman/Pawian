@@ -238,6 +238,8 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
       if( fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
       
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
+	*Clebsch(XState->L, 0, XState->S, lamA, _spinX, lamA)
+	*Clebsch(jA, lamA, 0, 0, XState->S, lamA)
 	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
 	    *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
 	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aplus][jA][lamA][0])+
