@@ -137,23 +137,19 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
       JmGpTmpMap[helf1]= ParityProdMap[helf1][1]*psiToXGammaAmp(-1, 1, helf1, 1, theData, MagProdMap[helf1][1], PhiProdMap[helf1][1]);
       TmpDecAmp[helf1] = currentF1DecAmp->XdecAmp(helf1, theData, theParamVal);
 
-        JpGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
-        JmGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(-1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
-        TmpDecAmp[-helf1] = currentF1DecAmp->XdecAmp(-helf1, theData, theParamVal);
+      JpGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
+      JmGmTmpMap[-helf1]= ParityProdMap[-helf1][-1]*psiToXGammaAmp(-1, 1, -helf1, -1, theData, MagProdMap[-helf1][-1], PhiProdMap[-helf1][-1]);
+      TmpDecAmp[-helf1] = currentF1DecAmp->XdecAmp(-helf1, theData, theParamVal);
     }
-
+    
     for (Spin helf1=-1; helf1<2; helf1++){
       JmpGmp+=JpGpTmpMap[helf1]*TmpDecAmp[helf1];
       JmpGmm+=JpGmTmpMap[helf1]*TmpDecAmp[helf1];
       JmmGmp+=JmGpTmpMap[helf1]*TmpDecAmp[helf1];
       JmmGmm+=JmGmTmpMap[helf1]*TmpDecAmp[helf1];
-
     }
-
   }
-
-
-
+  
   //calculate gamma eta2 amplitudes
   for (itStr= _GammaEta2Hyps.begin(); itStr!= _GammaEta2Hyps.end(); ++itStr){
 
@@ -203,9 +199,6 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
     }
 
   }
-
-
-
   result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
 
 
@@ -213,7 +206,7 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
     result = result + theParamVal.otherParams[_phasespaceKey];
   }
 
-//   Info << "result:\t" << result << endmsg;
+  //  Info << "result:\t" << result << endmsg;
   return result;  
 
 }
