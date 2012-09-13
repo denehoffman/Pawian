@@ -182,12 +182,7 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
   
   complex<double> result(0.,0.);
   
-  Vector4<double > p4PiPiFloat=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
-  Vector4<double > p4PiPi(p4PiPiFloat.E(),
-			  p4PiPiFloat.Px(),
-			  p4PiPiFloat.Py(),
-			  p4PiPiFloat.Pz());  
-  
+  Vector4<double > p4PiPi=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
   
   for ( itXMag=XToEtaFMag.begin(); itXMag!=XToEtaFMag.end(); ++itXMag){
@@ -197,22 +192,17 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
     complex<double> amp(0.,0.);     
     for(Spin lamf = -jf; lamf <= jf; lamf++){
-      
       if( fabs(lamf)> _spinX || fabs(lamf)>XState->S) continue;
-      
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)
 	*Clebsch(XState->L, 0, XState->S, lamf, _spinX, lamf)
 	*Clebsch(jf, lamf, 0, 0, XState->S, lamf)
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][lamf])
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][jf][lamf][0])
 	*BreitWignerBlattW(p4PiPi, _massPi, _massPi, fMass, fWidth, jf);
-     }
-     
-     result+= amp;
-   }
-   
-   return result;
-
+    }
+    result+= amp;
+  }
+  return result;
 }
 
 complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
@@ -226,7 +216,6 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
   Vector4<double > p4EtaPiminus=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];  
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
-
   for ( itXMag=etaToAPiMag.begin(); itXMag!=etaToAPiMag.end(); ++itXMag){
     boost::shared_ptr<const JPCLS> XState=itXMag->first;
     double theXMag=itXMag->second;
@@ -235,7 +224,7 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
     complex<double> amp(0.,0.);     
     
     for(Spin lamA = -jA; lamA <= jA; lamA++){
-      if( fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
+      if(fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
       
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
 	*Clebsch(XState->L, 0, XState->S, lamA, _spinX, lamA)
@@ -246,15 +235,12 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
 	    conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
 	    *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
 	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aminus][jA][lamA][0])
-	    );
+	 );
     }
-    
     result+= amp;
   }
-  
   return result;
 }
-
 
 
 void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){

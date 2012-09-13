@@ -130,7 +130,7 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::normPipPimDecHeliEtaPipPim] = V4_normPipPimDecHeliEtaPipPim;
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::normEtaPipDecHeliEtaPipPim] = V4_normEtaPipDecHeliEtaPipPim;
     
-    // calculate and store WignerD functions for Psi -> X gamma (JPC =0-+, 0++, 2++)
+    // calculate and store WignerD functions for Psi -> X gamma (JPC =0-+, 1++, 2-+)
 
     Spin jPsi=1;
     for (Spin M=-1; M<=1; M=M+2){
