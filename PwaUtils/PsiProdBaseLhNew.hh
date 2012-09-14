@@ -37,28 +37,39 @@ protected:
   const std::vector<std::string> _hypVec;
   std::vector<std::string> _GammaEtaHyps;
   std::vector<std::string> _GammaEta2Hyps; 
+  std::vector<std::string> _GammaF0Hyps;
   std::vector<std::string> _GammaF1Hyps;
+  std::vector<std::string> _GammaF2Hyps;
+  std::map< std::string,std::vector<std::string> > _hypMap; 
   boost::shared_ptr<PsiToXGamStates> _theStatesPtr;
  
   bool _usePhasespace;  
   const std::string _GammaEtaKey;
   const std::string _GammaEta2Key;
+  const std::string _GammaF0Key;
   const std::string _GammaF1Key;
+  const std::string _GammaF2Key;
   const std::string _EtaKey;
   const std::string _Eta2Key;
+  const std::string _F0Key;
   const std::string _F1Key;
+  const std::string _F2Key;
   const std::string _phasespaceKey;
  
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _etaDecAmpMap;
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _f0DecAmpMap;
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _f1DecAmpMap;
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _f2DecAmpMap;
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _eta2DecAmpMap;
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >  _allAmpMap; 
+
 
   virtual complex<double> psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma,
 					 EvtDataNew* theData, 
                                          double PsiToXGamMag, double PsiToXGamPhi);
  
 private:
-  void getDefaultLamLamParams(std::vector<std::string>& hyps, 
+  void getDefaultLamLamParams(const std::vector<std::string>& hyps, 
 			      std::vector< boost::shared_ptr<const JPClamlam> > lamLamAmps, 
 			      fitParamsNew& fitVal, fitParamsNew& fitErr);
   void initializeHypothesis();

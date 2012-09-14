@@ -9,7 +9,7 @@
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
 
 XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiGamEtaPiPiStates> theStates, Spin spinX) :
-  AbsXdecAmp(name, hypVec)
+  AbsXdecAmp(name, hypVec, spinX)
   ,_piPiEtaKey(name+"ToPiPiEta")
   ,_piPiEtaHyp(false)
   ,_a980piKey(name+"Toa980Pi")
@@ -35,7 +35,6 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_decPairPiPi(make_pair(_massPi, _massPi))
   ,_decPairPi0Pi0(make_pair(_massPi0, _massPi0))
   ,_theStatesPtr(theStates)
-  ,_spinX(spinX)
 {
   initialize();
 }
@@ -108,7 +107,7 @@ complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitPa
        *Clebsch(0, 0, 0, 0, XState->S, 0);
 
    }
-   result*=conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::etapipi][_spinX][lamX][0]);
+   result*=conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::etapipi][_J_X][lamX][0]);
    return result;
 }
 
@@ -136,8 +135,8 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fit
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
         
     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-      (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][0])*Flatte(p4EtaPiplus , _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
-	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][0])*Flatte(p4EtaPiminus, _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
+      (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_J_X][lamX][0])*Flatte(p4EtaPiplus , _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
+	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_J_X][lamX][0])*Flatte(p4EtaPiminus, _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 );
     result+= amp;
   }
@@ -165,7 +164,7 @@ complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fi
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
      
     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
-      conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][0])*
+      conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][0])*
       Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
     result+= amp;
   }
@@ -192,11 +191,11 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
     complex<double> amp(0.,0.);     
     for(Spin lamf = -jf; lamf <= jf; lamf++){
-      if( fabs(lamf)> _spinX || fabs(lamf)>XState->S) continue;
+      if( fabs(lamf)> _J_X || fabs(lamf)>XState->S) continue;
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)
-	*Clebsch(XState->L, 0, XState->S, lamf, _spinX, lamf)
+	*Clebsch(XState->L, 0, XState->S, lamf, _J_X, lamf)
 	*Clebsch(jf, lamf, 0, 0, XState->S, lamf)
-	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_spinX][lamX][lamf])
+	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][lamf])
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][jf][lamf][0])
 	*BreitWignerBlattW(p4PiPi, _massPi, _massPi, fMass, fWidth, jf);
     }
@@ -224,15 +223,15 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
     complex<double> amp(0.,0.);     
     
     for(Spin lamA = -jA; lamA <= jA; lamA++){
-      if(fabs(lamA)> _spinX || fabs(lamA)>XState->S) continue;
+      if(fabs(lamA)> _J_X || fabs(lamA)>XState->S) continue;
       
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA + 1.)
-	*Clebsch(XState->L, 0, XState->S, lamA, _spinX, lamA)
+	*Clebsch(XState->L, 0, XState->S, lamA, _J_X, lamA)
 	*Clebsch(jA, lamA, 0, 0, XState->S, lamA)
-	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_spinX][lamX][lamA])
+	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_J_X][lamX][lamA])
 	    *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
 	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aplus][jA][lamA][0])+
-	    conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_spinX][lamX][lamA])
+	    conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_J_X][lamX][lamA])
 	    *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
 	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aminus][jA][lamA][0])
 	 );
@@ -247,9 +246,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if (_piPiEtaHyp){
     std::vector< boost::shared_ptr<const JPCLS> > PiPiEtaStates;
-    if(_spinX==0) PiPiEtaStates=_theStatesPtr->EtaToa0PiStates();
-    else if(_spinX==1) PiPiEtaStates=_theStatesPtr->F1Toa0PiStates();
-    else if(_spinX==2) PiPiEtaStates=_theStatesPtr->Eta2Toa0PiStates();  
+    if(_J_X==0) PiPiEtaStates=_theStatesPtr->EtaToa0PiStates();
+    else if(_J_X==1) PiPiEtaStates=_theStatesPtr->F1Toa0PiStates();
+    else if(_J_X==2) PiPiEtaStates=_theStatesPtr->Eta2Toa0PiStates();  
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
@@ -270,9 +269,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if(_a980piHyp){
     std::vector< boost::shared_ptr<const JPCLS> > a0PiStates;
-    if(_spinX==0) a0PiStates=_theStatesPtr->EtaToa0PiStates();
-    else if(_spinX==1) a0PiStates=_theStatesPtr->F1Toa0PiStates();
-    else if(_spinX==2) a0PiStates=_theStatesPtr->Eta2Toa0PiStates();  
+    if(_J_X==0) a0PiStates=_theStatesPtr->EtaToa0PiStates();
+    else if(_J_X==1) a0PiStates=_theStatesPtr->F1Toa0PiStates();
+    else if(_J_X==2) a0PiStates=_theStatesPtr->Eta2Toa0PiStates();  
 
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -302,9 +301,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if(_sigmaEtaHyp){
     std::vector< boost::shared_ptr<const JPCLS> > f0EtaStates;
-    if(_spinX==0) f0EtaStates=_theStatesPtr->EtaTof0EtaStates();
-    else if(_spinX==1) f0EtaStates=_theStatesPtr->F1Tof0EtaStates();
-    else if(_spinX==2) f0EtaStates=_theStatesPtr->Eta2Tof0EtaStates(); 
+    if(_J_X==0) f0EtaStates=_theStatesPtr->EtaTof0EtaStates();
+    else if(_J_X==1) f0EtaStates=_theStatesPtr->F1Tof0EtaStates();
+    else if(_J_X==2) f0EtaStates=_theStatesPtr->Eta2Tof0EtaStates(); 
 
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -333,9 +332,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if(_f980etaHyp){
     std::vector< boost::shared_ptr<const JPCLS> > f0EtaStates;
-    if(_spinX==0) f0EtaStates=_theStatesPtr->EtaTof0EtaStates();
-    else if(_spinX==1) f0EtaStates=_theStatesPtr->F1Tof0EtaStates();
-    else if(_spinX==2) f0EtaStates=_theStatesPtr->Eta2Tof0EtaStates(); 
+    if(_J_X==0) f0EtaStates=_theStatesPtr->EtaTof0EtaStates();
+    else if(_J_X==1) f0EtaStates=_theStatesPtr->F1Tof0EtaStates();
+    else if(_J_X==2) f0EtaStates=_theStatesPtr->Eta2Tof0EtaStates(); 
 
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -365,9 +364,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if(_a2_1320piHyp){
     std::vector< boost::shared_ptr<const JPCLS> > a2PiStates;
-    if(_spinX==0) a2PiStates=_theStatesPtr->EtaToa2PiStates();
-    else if(_spinX==1) a2PiStates=_theStatesPtr->F1Toa2PiStates();
-    else if(_spinX==2) a2PiStates=_theStatesPtr->Eta2Toa2PiStates();  
+    if(_J_X==0) a2PiStates=_theStatesPtr->EtaToa2PiStates();
+    else if(_J_X==1) a2PiStates=_theStatesPtr->F1Toa2PiStates();
+    else if(_J_X==2) a2PiStates=_theStatesPtr->Eta2Toa2PiStates();  
 
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -395,9 +394,9 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   if(_f2_1270etaHyp){
     std::vector< boost::shared_ptr<const JPCLS> > f2EtaStates;
-    if(_spinX==0) f2EtaStates=_theStatesPtr->EtaTof2EtaStates();
-    else if(_spinX==1) f2EtaStates=_theStatesPtr->F1Tof2EtaStates();
-    else if(_spinX==2) f2EtaStates=_theStatesPtr->Eta2Tof2EtaStates(); 
+    if(_J_X==0) f2EtaStates=_theStatesPtr->EtaTof2EtaStates();
+    else if(_J_X==1) f2EtaStates=_theStatesPtr->F1Tof2EtaStates();
+    else if(_J_X==2) f2EtaStates=_theStatesPtr->Eta2Tof2EtaStates(); 
 
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;

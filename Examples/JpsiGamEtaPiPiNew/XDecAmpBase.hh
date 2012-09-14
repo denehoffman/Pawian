@@ -61,7 +61,6 @@ protected:
   std::pair <const double, const double> _decPairPiPi;
   std::pair <const double, const double> _decPairPi0Pi0;
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
-  Spin _spinX; 
 
   complex<double> XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
 
