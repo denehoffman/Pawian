@@ -59,16 +59,17 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<const EvtDataBaseList
   std::vector<EvtDataNew*>::const_iterator it=dataList.begin();
   while(it!=dataList.end())
     {
-      plotDalitz(_dalitzDataHist, (*it), 1.);
-      plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
-      plotKsKl( _KsKlMassDataHist, (*it), 1. );
-      plotKpKm( _KpKmMassDataHist, (*it), 1. );
-      plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. );
-      plotCostGam( _costGamCmDataHist, (*it), 1. );
-      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], 1.);  
-       plotChi(_chiDataHist, (*it), 1. );      
-      fillTuple(_dataTuple, (*it), 1.);
+      const double evtWeight=(*it)->evtWeight;
+      plotDalitz(_dalitzDataHist, (*it), evtWeight);
+      plotPhiPhi(_PhiPhiMassDataHist, (*it), evtWeight  );
+      plotKsKl( _KsKlMassDataHist, (*it), evtWeight );
+      plotKpKm( _KpKmMassDataHist, (*it), evtWeight );
+      plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), evtWeight );
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), evtWeight );
+      plotCostGam( _costGamCmDataHist, (*it), evtWeight );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], evtWeight);  
+       plotChi(_chiDataHist, (*it), evtWeight );      
+      fillTuple(_dataTuple, (*it), evtWeight);
       
       ++it;
     }
@@ -103,15 +104,18 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<const EvtDataBaseList
       ++it;
     }
 
-  double integralData=(double) theEvtList->getDataVecs().size();
-  Info <<"No of fit data events  " << integralData ;  // << endmsg;
+  double integralDataWoWeight=(double) theEvtList->getDataVecs().size();
+  Info <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
+
+  double integralDataWWeight=(double) _PhiPhiMassDataHist->Integral();;
+  Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
   
-  double integralFitted=(double) theEvtList->getMcVecs().size();
-  Info <<"No of fit events " << integralFitted ;  // << endmsg; 
+  double integralMC=(double) theEvtList->getMcVecs().size();
+  Info <<"No of MC events " << integralMC ;  // << endmsg; 
 
-  Info <<"scaling factor  " << integralData/integralFitted ;  // << endmsg; 
+  Info <<"scaling factor  " << integralDataWWeight/integralMC ;  // << endmsg; 
 
-  double scaleFactor = integralData/integralFitted;
+  double scaleFactor = integralDataWWeight/integralMC;
   
   _dalitzFittedHist->Scale(scaleFactor);
   _PhiPhiMassFittedHist->Scale(scaleFactor);
@@ -169,16 +173,17 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitP
    std::vector<EvtDataNew*>::const_iterator it=dataList.begin();
   while(it!=dataList.end())
     {
-      plotDalitz(_dalitzDataHist, (*it), 1.);
-      plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
-      plotKsKl( _KsKlMassDataHist, (*it), 1. );
-      plotKpKm( _KpKmMassDataHist, (*it), 1. );
-      plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), 1. );
-      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), 1. );
-      plotCostGam( _costGamCmDataHist, (*it), 1. );
-      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], 1.);  
-       plotChi(_chiDataHist, (*it), 1. );      
-      fillTuple(_dataTuple, (*it), 1.);
+      const double evtWeight=(*it)->evtWeight;
+      plotDalitz(_dalitzDataHist, (*it), evtWeight);
+      plotPhiPhi(_PhiPhiMassDataHist, (*it), evtWeight  );
+      plotKsKl( _KsKlMassDataHist, (*it), evtWeight );
+      plotKpKm( _KpKmMassDataHist, (*it), evtWeight );
+      plotCostPhiKs( _costKs_KsKlHeliDataHist,  _phiKs_KsKlHeliDataHist, (*it), evtWeight );
+      plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), evtWeight );
+      plotCostGam( _costGamCmDataHist, (*it), evtWeight );
+      plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], evtWeight);  
+       plotChi(_chiDataHist, (*it), evtWeight );      
+      fillTuple(_dataTuple, (*it), evtWeight);
       
       ++it;
     }
@@ -213,15 +218,19 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitP
       ++it;
     }
 
-  double integralData=(double) theEvtList->getDataVecs().size();
-  Info <<"No of fit data events  " << integralData ;  // << endmsg;
+  double integralDataWoWeight=(double) theEvtList->getDataVecs().size();
+  Info <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
+
+  double integralDataWWeight=(double) _PhiPhiMassDataHist->Integral();
+  Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
+
 
   double integralMC=(double) theEvtList->getMcVecs().size();
   Info <<"No of MC events " << integralMC ;  // << endmsg; 
 
-  Info <<"scaling factor  " << integralData/integralMC ;  // << endmsg;
+  Info <<"scaling factor  " << integralDataWWeight/integralMC ;  // << endmsg;
 
-  double scaleFactor = integralData/integralMC;
+  double scaleFactor = integralDataWWeight/integralMC;
   
   _dalitzFittedHist->Scale(scaleFactor);
   _PhiPhiMassFittedHist->Scale(scaleFactor);

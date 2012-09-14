@@ -45,18 +45,21 @@ void  JpsiGamEtaPiPiProdLhNew::initializeHypothesis(){
     size_t pos=it->find(_EtaKey);
     std::string etaDecAmpName=it->substr(pos);
     _etaDecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( etaDecAmpName, _hypVec, _jpsiGamEtaPiPiStatesPtr, Spin(0)) );
+    _allAmpMap[*it]=_etaDecAmpMap[*it];
   }
 
   for (it=_GammaF1Hyps.begin(); it!=_GammaF1Hyps.end(); ++it){
     size_t pos=it->find(_F1Key);
     std::string f1DecAmpName=it->substr(pos);
     _f1DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( f1DecAmpName, _hypVec, _jpsiGamEtaPiPiStatesPtr, Spin(1)) );
+    _allAmpMap[*it]=_f1DecAmpMap[*it];
   }
 
   for (it=_GammaEta2Hyps.begin(); it!=_GammaEta2Hyps.end(); ++it){
     size_t pos=it->find(_Eta2Key);
     std::string eta2DecAmpName=it->substr(pos);
     _eta2DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XDecAmpBase( eta2DecAmpName, _hypVec, _jpsiGamEtaPiPiStatesPtr, Spin(2)) );
+    _allAmpMap[*it]=_eta2DecAmpMap[*it];
   }
 
 //   std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::const_iterator it1;

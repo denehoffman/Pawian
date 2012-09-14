@@ -143,7 +143,7 @@ void JpsiToPhiPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtData
       evtData->WignerDsDec[enumJpsiGamXDfunc::Df_PhiToKpKm][phiSpin][M][lam] = Wigner_D(V4_Kp_HeliKpKm.Phi(),V4_Kp_HeliKpKm.Theta(), 0,phiSpin,M,lam);
      }    
     
-    evtData->evtWeight=1.;
+    evtData->evtWeight=anEvent->Weight();
     theEvtList.push_back(evtData);
     
     ++evtCount;
