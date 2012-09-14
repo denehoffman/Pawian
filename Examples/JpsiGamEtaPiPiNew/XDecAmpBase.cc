@@ -63,16 +63,12 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
   if(_a2_1320piHyp){
     double a2_1320Mass=theParamVal.Masses["a2_1320"];
     double a2_1320Width=theParamVal.Widths["a2_1320"];
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA2_1320PiMag=theParamVal.Mags[_a2_1320piKey];
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA2_1320PiPhi=theParamVal.Phis[_a2_1320piKey];
-
-    result+=XToAPiBWAmp(lamX, 2, theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320Mass, a2_1320Width);
-    //result+=XToAPiBWAmp(lamX, Spin(2), theData, etaToA2_1320PiMag, etaToA2_1320PiPhi, a2_1320Mass, a2_1320Width);
+    result+=XToAPiBWAmp(lamX, 2, theData, theParamVal.Mags[_a2_1320piKey], theParamVal.Phis[_a2_1320piKey] , a2_1320Mass, a2_1320Width);
   }
   if(_f2_1270etaHyp){
-    double f2Mass=theParamVal.Masses["f2_1270"];
-    double f2Width=theParamVal.Widths["f2_1270"];
-    result+=XToEtaFAmp(lamX, 2, theData, theParamVal.Mags[_f2_1270etaKey], theParamVal.Phis[_f2_1270etaKey], f2Mass, f2Width);
+    double f2_1270Mass=theParamVal.Masses["f2_1270"];
+    double f2_1270Width=theParamVal.Widths["f2_1270"];
+    result+=XToEtaFAmp(lamX, 2, theData, theParamVal.Mags[_f2_1270etaKey], theParamVal.Phis[_f2_1270etaKey], f2_1270Mass, f2_1270Width);
   }
 
   complex<double> dynModel(1.,0.);
@@ -115,7 +111,6 @@ complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitPa
 
 complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
   complex<double> result(0.,0.);
-
 
   double a0_980Mass=theParamVal.Masses["a0_980"];
   double a0_980gPiEta=theParamVal.gFactors["a0_980gPiEta"];
@@ -171,7 +166,6 @@ complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fi
 
   return result;
 }
-
 
 
 complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData, 
