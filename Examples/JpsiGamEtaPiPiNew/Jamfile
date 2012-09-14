@@ -2,8 +2,7 @@ project :
         ;
 
 lib JpsiGamEtaPiPiNew : 
-        [ glob *.cc : *App.cc ]
-        $(TOP)/Examples/JpsiGamEtaPiPi//JpsiGamEtaPiPi 
+        [ glob *.cc : *App.cc ] 
         $(TOP)/PwaUtils//PwaUtils 
         $(TOP)/Event//Event 
         $(TOP)/qft++//qft++ 
