@@ -127,48 +127,6 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<const EvtDataBaseList
   _chiFittedHist->Scale(scaleFactor);
 
 
-
-
-
-
-
-
-
-
-  // std::vector<EvtDataNew*>::const_iterator it=dataList.begin();
-  // while(it!=dataList.end())
-  //   {
-  //     plotDalitz(_dalitzDataHist, (*it), 1.);
-  //     plotPhiPhi(_PhiPhiMassDataHist, (*it), 1.  );
-  //     plotKsKl( _KsKlMassDataHist, (*it), 1. );
-  //     plotKpKm( _KpKmMassDataHist, (*it), 1. );
-  //     plotCostPhiKs( _costKs_KsKlHeliDataHist, _phiKs_KsKlHeliDataHist,(*it), 1. );
-  //     plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist,(*it), 1. );
-  //     plotCostGam( _costGamCmDataHist,(*it), 1. );
-  //     plotCostPhi_PhiPhiHeli(_costPhi_KpKmDataHist, _phiPhi_KpKmDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], 1.);        
-  //     fillTuple(_dataTuple, (*it), 1.);
-      
-  //     ++it;
-  //   }
-  
-  // const std::vector<EvtDataNew*> mcList=theEvtList->getMcVecs();
-  // it=mcList.begin();
-  // while(it!=mcList.end())
-  //   { 
-  //     plotDalitz(_dalitzMcHist, (*it), 1.);
-  //     plotDalitz(_dalitzMcHist, (*it), 1.);
-  //     plotPhiPhi(_PhiPhiMassMcHist, (*it), 1.  );
-  //     plotKsKl( _KsKlMassMcHist, (*it), 1. );
-  //     plotKpKm( _KpKmMassMcHist, (*it), 1. );
-  //     plotCostPhiKs( _costKs_KsKlHeliMcHist, _phiKs_KsKlHeliMcHist,(*it), 1. );
-  //     plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist, (*it), 1. );
-  //     plotCostGam( _costGamCmMcHist, (*it), 1. );
-  //     plotCostPhi_PhiPhiHeli(_costPhi_KpKmMcHist, _phiPhi_KpKmMcHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliKsKlKpKm], 1.);  
-  //    fillTuple(_mcTuple, (*it), 1.);
-     
-  //     ++it;
-  //   }
-
 }
 
 JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitParamsNew& theFitParms):
@@ -257,13 +215,13 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitP
 
   double integralData=(double) theEvtList->getDataVecs().size();
   Info <<"No of fit data events  " << integralData ;  // << endmsg;
-  
-  double integralFitted=(double) theEvtList->getMcVecs().size();
-  Info <<"No of fit events " << integralFitted ;  // << endmsg; 
-  
-  Info <<"scaling factor  " << integralData/integralFitted ;  // << endmsg;
 
-  double scaleFactor = integralData/integralFitted;
+  double integralMC=(double) theEvtList->getMcVecs().size();
+  Info <<"No of MC events " << integralMC ;  // << endmsg; 
+
+  Info <<"scaling factor  " << integralData/integralMC ;  // << endmsg;
+
+  double scaleFactor = integralData/integralMC;
   
   _dalitzFittedHist->Scale(scaleFactor);
   _PhiPhiMassFittedHist->Scale(scaleFactor);
@@ -278,6 +236,8 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitP
   _phiPhi_KpKmFittedHist->Scale(scaleFactor);
   _chiFittedHist->Scale(scaleFactor);
 
+  double integralFitted=(double) _PhiPhiMassFittedHist->Integral();
+  Info <<"No of fit events " << integralFitted ;  // << endmsg; 
 }
 
 
