@@ -13,7 +13,7 @@
 class AbsXdecAmp {
 
 public:
-  AbsXdecAmp(const std::string& name, const std::vector<std::string>& hypVec, Spin spinX=0);
+  AbsXdecAmp(const std::string& name, const std::vector<std::string>& hypVec, Spin spinX=0, int parity=1);
   virtual ~AbsXdecAmp();
   
   virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal)=0;
@@ -21,8 +21,10 @@ public:
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   const Spin  spinX() const {return _J_X;}
+  const int  parity() const {return _parity;}
 protected:
   const std::string _name;
   const std::vector<std::string> _hypVec;
-  Spin _J_X; 
+  Spin _J_X;
+  int _parity; 
 };

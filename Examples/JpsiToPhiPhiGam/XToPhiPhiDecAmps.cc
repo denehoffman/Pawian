@@ -8,8 +8,8 @@
 // #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamEventList.hh"
 
-XToPhiPhiDecAmps::XToPhiPhiDecAmps(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates, Spin spinX) :
-  AbsXdecAmp(name, hypVec, spinX)
+XToPhiPhiDecAmps::XToPhiPhiDecAmps(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates, Spin spinX, int parity) :
+  AbsXdecAmp(name, hypVec, spinX, parity)
   ,_phiPhiKey(name+"ToPhiPhi")
   ,_xBWKey(name+"BreitWigner")
   ,_massIndependent(true)
@@ -88,9 +88,11 @@ complex<double> XToPhiPhiDecAmps::phiphiTo4KAmp( EvtDataNew* theData, Spin lambd
 void  XToPhiPhiDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   std::vector< boost::shared_ptr<const JPCLS> > PhiPhiStates;
-  if(_J_X==0) PhiPhiStates=_theStatesPtr->EtaToPhiPhiStates();
-  else if(_J_X==1) PhiPhiStates=_theStatesPtr->F1ToPhiPhiStates();
-  else if(_J_X==2) PhiPhiStates=_theStatesPtr->Eta2ToPhiPhiStates();  
+  if(_J_X==0 && _parity==-1) PhiPhiStates=_theStatesPtr->EtaToPhiPhiStates();
+  else if(_J_X==0 && _parity==1) PhiPhiStates=_theStatesPtr->F0ToPhiPhiStates();
+  else if(_J_X==1 && _parity==1) PhiPhiStates=_theStatesPtr->F1ToPhiPhiStates();
+  else if(_J_X==2 && _parity==-1) PhiPhiStates=_theStatesPtr->Eta2ToPhiPhiStates();
+  else if(_J_X==2 && _parity==1) PhiPhiStates=_theStatesPtr->F2ToPhiPhiStates();  
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;

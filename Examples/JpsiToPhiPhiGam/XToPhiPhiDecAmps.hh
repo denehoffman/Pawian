@@ -20,7 +20,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  XToPhiPhiDecAmps(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates, Spin spinX);
+  XToPhiPhiDecAmps(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates, Spin spinX, int parity=1);
 
   /** Destructor */
   virtual ~XToPhiPhiDecAmps();
