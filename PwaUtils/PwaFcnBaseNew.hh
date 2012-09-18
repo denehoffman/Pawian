@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 #include <boost/shared_ptr.hpp>
 
 #include "Minuit2/FCNBase.h"
@@ -19,7 +20,7 @@ namespace ROOT {
 
     public:
       PwaFcnBaseNew(boost::shared_ptr<AbsLhNew> absLh, 
-		    boost::shared_ptr<FitParamsBaseNew> fitParamsBase);
+		    boost::shared_ptr<FitParamsBaseNew> fitParamsBase, std::string suffix="");
       virtual ~PwaFcnBaseNew();
 
       double operator()(const std::vector<double>& par) const;
@@ -31,6 +32,7 @@ namespace ROOT {
       mutable unsigned int _fcnCounter;
       fitParamsNew _defaultFitValParms;
       fitParamsNew _defaultFitErrParms;
+      std::string _currentResFileName;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

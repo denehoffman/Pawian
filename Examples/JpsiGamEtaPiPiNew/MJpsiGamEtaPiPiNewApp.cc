@@ -233,7 +233,7 @@ int main(int __argc,char *__argv[]){
   }
   
   if (mode=="pwa"){
-    PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);
+    PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase, jobOption);
     MnUserParameters upar;
     theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
     

@@ -17,10 +17,11 @@
 
 using namespace ROOT::Minuit2;
 
-PwaFcnBaseNew::PwaFcnBaseNew(boost::shared_ptr<AbsLhNew> absLh, boost::shared_ptr<FitParamsBaseNew> fitParamsBase) :
+PwaFcnBaseNew::PwaFcnBaseNew(boost::shared_ptr<AbsLhNew> absLh, boost::shared_ptr<FitParamsBaseNew> fitParamsBase, std::string suffix) :
   _absLhPtr(absLh)
   , _fitParamsBasePtr(fitParamsBase)
   , _fcnCounter(0)
+  , _currentResFileName("currentResult"+suffix+".dat")
 {
    if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
    _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
@@ -64,7 +65,7 @@ double PwaFcnBaseNew::operator()(const std::vector<double>& par) const
     }
     
     if (  _fcnCounter%200 == 0) {
-      std::ofstream theStream ( "currentResult.dat");
+      std::ofstream theStream (_currentResFileName.c_str());
       _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
     }
 
