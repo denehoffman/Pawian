@@ -87,7 +87,6 @@ int main(int __argc,char *__argv[]){
   
   
   std::string theCfgFile = theAppParams.getConfigFile();
-  
   std::string jobOption = theAppParams.getjobOption();
   
   const std::string datFile=theAppParams.dataFile();
