@@ -39,8 +39,11 @@ public:
   JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBaseListNew>,std::pair<double, double> theMassRange);
   JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew>, fitParamsNew&, std::pair<double, double> theMassRange);
 
-  void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
-  
+  //  void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
+  double getFitEvents(){
+    return _integralFitted;
+  };
+
   
   /** Destructor */
   virtual ~JpsiGamEtaPiPiHistNew();
@@ -108,6 +111,8 @@ private:
   TNtuple* _massIndepTuple;
   std::pair<double, double> _massRange;
 
+  double _integralFitted;
+
   void initRootStuff();
   void rootlogon();
   void plotDalitz(TH2F* theHisto, EvtDataNew* theData, double weight);
@@ -122,8 +127,6 @@ private:
   void plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
 
   void fillTuple( TNtuple* theTuple, EvtDataNew* theData, double weight);
-
-
 
   fitParamsNew _fitParam;
 

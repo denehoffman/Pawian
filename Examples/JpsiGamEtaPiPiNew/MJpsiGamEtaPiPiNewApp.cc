@@ -150,7 +150,6 @@ int main(int __argc,char *__argv[]){
   std::cout << "Mode: " << mode << std::endl;
   if (mode=="plotmode"){
     JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange());                                                               
-    theHist.setMassRange(theAppParams.massRange() );
     return 0;
   }
   
@@ -232,6 +231,8 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
   
+
+
   if (mode=="pwa"){
     PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase, jobOption);
     MnUserParameters upar;
@@ -298,19 +299,25 @@ int main(int __argc,char *__argv[]){
     MnUserCovariance theCovMatrix = min.UserCovariance();
     std::cout  << min << std::endl;
     
-    // 		//std::ofstream theCompStream ( "componentIntensity.dat");
-    // 		//theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
+    //std::ofstream theCompStream ( "componentIntensity.dat");
+    //theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
     JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
-    //theHist.setMassRange(theAppParams.massRange() );
-    // // 		theHist.fill();
+    //theHist.fill();
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
     // Global Summary Output
+    int number_fitParams = upar.Params().size()-fixedParams.size();
     std::ofstream summaryfile("summary.dat", std::ios::out|std::ios::app);
-    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << std::endl;
+    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams << "\t" << theHist.getFitEvents() <<  std::endl;
     summaryfile.close();
+
+
+
+
+
+
 
     // Start event number calculation for each wave
     std::cout << "Start event number calculation for each wave" << std::endl;    
