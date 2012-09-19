@@ -11,7 +11,7 @@ print $pawiandir."\n";
 
 my $configFilesDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/ConfigFiles";
 my $summaryFileDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/scan/summary.dat";
-my $mcFile = "/data/liema/michaell/PwaJpsiGamEtaPiPi/FS4Vectors-PHSPMC-JpsiGamEtaPipPim_4m_v4.dat";
+my $mcFileDir = "/data/liema/michaell/PwaJpsiGamEtaPiPi/FS4Vectors-PHSPMC-JpsiGamEtaPipPim_4m_v4.dat";
 
 print $configFilesDir."\n"; 
 
@@ -69,16 +69,16 @@ for $theHyp (@myHypList) {
                     print CONF "sumFile = $summaryFileDir\n";
                     next; #line
                 }
-		f($line=~/mcFile/){
-                    print CONF "mcFile = $mcFile\n";
+		if($line=~/mcFile/){
+                    print CONF "mcFile = $mcFileDir\n";
                     next; #line
                 }
-
+		
 		print CONF $line ."\n";
 	    }
 	    close CONF;
 	    
-	
+	    
 	    system("cp $templStart $fitDir/");
 	    chdir($fitDir);
 	    my $cmd = "bsub -l nodes=1:ppn=16 -q $queue -o $fitDir/batch.log \"$app -c $fitConfig  --mode pwa >&! $fitDir/log$subDecay.out \"";

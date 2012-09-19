@@ -368,7 +368,7 @@ int main(int __argc,char *__argv[]){
     // Global Summary Output
     int number_fitParams = upar.Params().size()-fixedParams.size();
     std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
-    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams;
+    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams;
     for (unsigned int i=0;i<evNumResult.size();i++){
       summaryfile << "\t" << evNumResult[i];
     }

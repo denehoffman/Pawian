@@ -40,9 +40,10 @@ public:
   JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew>, fitParamsNew&, std::pair<double, double> theMassRange);
 
   //  void setMassRange(std::pair<double, double> theMassRange){ _massRange = theMassRange; }
-  double getFitEvents(){
-    return _integralFitted;
-  };
+  double getFitEvents(){ return _integralFitted;  };
+  double getDataEvents(){ return _integralData;  };
+  double getMcEvents(){  return _integralMc;  };
+
   void PrintToPDF(std::string suffix);
   
   /** Destructor */
@@ -112,6 +113,8 @@ private:
   std::pair<double, double> _massRange;
 
   double _integralFitted;
+  double _integralData;
+  double _integralMc;
 
   void initRootStuff();
   void rootlogon();

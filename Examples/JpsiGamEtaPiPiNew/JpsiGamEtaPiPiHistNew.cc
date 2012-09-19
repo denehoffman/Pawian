@@ -64,7 +64,9 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBase
   _mcTuple(0),
   _massIndepTuple(0),
   _massRange(make_pair(0,100)),
-  _integralFitted(0)
+  _integralFitted(0),
+  _integralData(0),
+  _integralMc(0)
 {
   if(0==theEvtList){
     Alert <<"theEvtList is a 0 pointer !!!!" ;  // << endmsg;
@@ -162,7 +164,9 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew> theJpsi
   _mcTuple(0),
   _massIndepTuple(0),
   _massRange(make_pair(0,100)),
-  _integralFitted(0)
+  _integralFitted(0),
+  _integralData(0),
+  _integralMc(0)
 {
   
   if(0==theJpsiGamEtaPiPiLh){
@@ -224,14 +228,16 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew> theJpsi
       ++it;
     }
   
-  double integralData=(double) theEvtList->getDataVecs().size();
-  Info <<"No of fit data events  " << integralData << endmsg;   
-  
-  _integralFitted=  _EtaPiPiMassFittedHist->Integral();
-  Info <<"No of MC events " << theEvtList->getMcVecs().size() << endmsg; 
+  _integralData = (double) theEvtList->getDataVecs().size();
+  _integralMc = (double) theEvtList->getMcVecs().size();
+  _integralFitted =  _EtaPiPiMassFittedHist->Integral();
+
+  Info <<"No of fit data events " << _integralData << endmsg;   
+  Info <<"No of MC events " << _integralMc << endmsg; 
   Info <<"No of fit events " << _integralFitted << endmsg;  
   
-  double scalingFactor=integralData/theEvtList->getMcVecs().size();  
+  double scalingFactor=_integralData/_integralMc;  
+  
   Info <<"scaling factor  " << scalingFactor << endmsg;
   _dalitzFittedHist->Scale(scalingFactor);
   _EtaPiPiMassFittedHist->Scale(scalingFactor);
