@@ -15,6 +15,7 @@ JpsiGamEtaPiPiParser::JpsiGamEtaPiPiParser(int argc,char **argv):
   , _massMin(0.7)
   , _massMax(3.1)
   , _jobOption("")
+  , _sumFile("summary.dat")
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -29,6 +30,7 @@ JpsiGamEtaPiPiParser::JpsiGamEtaPiPiParser(int argc,char **argv):
     ("massRangeMin",po::value<double>(&_massMin), "min of eta pi pi mass range for mass indep. fit")
     ("massRangeMax",po::value<double>(&_massMax), "max of eta pi pi mass range for mass indep. fit")
     ("jobOption",po::value<string>(&_jobOption), "add a jobOption string to all produced files")
+    ("sumFile",po::value<string>(&_sumFile), "full path of summary File")
     ;
   _config->add(config);
   

@@ -20,7 +20,8 @@ class JpsiGamEtaPiPiParser : public ParserBase
   const bool useCommonProductionPhases() const {return _useCommonProductionPhases; }
   const std::pair<double, double> massRange() const { return std::make_pair( _massMin, _massMax  ) ; }
   const std::string getjobOption() const {return _jobOption;}
-  
+  const std::string sumFile() const {return _sumFile;}
+
 protected:
   bool _massIndependentFit;
   bool _useCommonProductionPhases;
@@ -29,6 +30,7 @@ protected:
   double _massMax;
 
   std::string _jobOption;
+  std::string _sumFile;
 };
 
 

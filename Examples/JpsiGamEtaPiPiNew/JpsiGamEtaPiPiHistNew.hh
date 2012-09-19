@@ -43,7 +43,7 @@ public:
   double getFitEvents(){
     return _integralFitted;
   };
-
+  void PrintToPDF(std::string suffix);
   
   /** Destructor */
   virtual ~JpsiGamEtaPiPiHistNew();

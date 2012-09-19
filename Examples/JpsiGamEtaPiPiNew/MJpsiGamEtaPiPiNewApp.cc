@@ -91,8 +91,10 @@ int main(int __argc,char *__argv[]){
   
   const std::string datFile=theAppParams.dataFile();
   const std::string mcFile=theAppParams.mcFile();
+  const std::string sumFile=theAppParams.sumFile();
   Info << "data file: " << datFile ;  // << endmsg;
   Info << "mc file: " << mcFile ;  // << endmsg;
+  Info << "sum file: " << sumFile ;  // << endmsg;
   
   ParticleTable pTable;
   PdtParser parser;
@@ -308,12 +310,12 @@ int main(int __argc,char *__argv[]){
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
     // Global Summary Output
-    int number_fitParams = upar.Params().size()-fixedParams.size();
-    std::ofstream summaryfile("summary.dat", std::ios::out|std::ios::app);
-    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams << "\t" << theHist.getFitEvents() <<  std::endl;
-    summaryfile.close();
+    //int number_fitParams = upar.Params().size()-fixedParams.size();
+    //    std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
+    //    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams << "\t" << theHist.getFitEvents() <<  std::endl;
+    //    summaryfile.close();
 
-
+    theHist.PrintToPDF(jobOption);
 
 
 
@@ -328,11 +330,11 @@ int main(int __argc,char *__argv[]){
     int hypnumber=0;
 
     for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
-      //std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
       if ((*it).find("Gamma")==0) hypnumber++;
     }
-    std::cout << std::endl;
     std::cout << "Number of hypothesis found: " << hypnumber << std::endl;
+    
+    std::vector<double> evNumResult;
 
     int j;
     for (int i=1;i<=hypnumber;i++){
@@ -353,9 +355,8 @@ int main(int __argc,char *__argv[]){
 	Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;                                                                                                                                       
 	exit(1);
       }
-      double theLh=theLhPtr->calcLogLh(finalFitParams_test);
-      Info <<"theLh = "<< theLh << endmsg;
       JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams_test ,theAppParams.massRange());
+      evNumResult.push_back(theHist.getFitEvents());
       // Unmark bad hypothesis
       for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
         if ((*it).find("#")==0) (*it).erase(0,1);
@@ -363,6 +364,17 @@ int main(int __argc,char *__argv[]){
       std::cout << std::endl;
     }
     
+    // Global Summary Output
+    int number_fitParams = upar.Params().size()-fixedParams.size();
+    std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
+    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams;
+    for (unsigned int i=0;i<evNumResult.size();i++){
+      summaryfile << "\t" << evNumResult[i];
+    }
+    summaryfile <<  std::endl;
+    summaryfile.close();
+
+
     return 0;
   }
   

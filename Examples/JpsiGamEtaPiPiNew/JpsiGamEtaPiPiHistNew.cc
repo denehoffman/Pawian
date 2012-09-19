@@ -249,10 +249,14 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew> theJpsi
 }
 
 JpsiGamEtaPiPiHistNew::~JpsiGamEtaPiPiHistNew(){
+
+}
+
+void JpsiGamEtaPiPiHistNew::PrintToPDF(std::string suffix){
   gStyle->SetPalette(1);
   std::stringstream ss;
   ss << _massRange.first << "_" << _massRange.second;
-  
+
   TCanvas* c_output=new TCanvas( "c_output","c_output",1600,900);
   c_output->Divide(3,2);
   c_output->cd(1);
@@ -276,7 +280,7 @@ JpsiGamEtaPiPiHistNew::~JpsiGamEtaPiPiHistNew(){
   c_output->cd(6);
   _dalitzFittedHist->DrawCopy("colz");
   TString outputfilename;
-  outputfilename = "JpsiGamEtaPiPi_" + ss.str() + ".pdf";
+  outputfilename = "JpsiGamEtaPiPi_" + ss.str() + suffix.c_str() + ".pdf";
   c_output->Print(outputfilename);
   c_output->Close();
 
@@ -314,14 +318,16 @@ JpsiGamEtaPiPiHistNew::~JpsiGamEtaPiPiHistNew(){
   _phiPiPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
   _phiPiPi_EtaPiPiHeliDataHist->DrawCopy("e");
   _phiPiPi_EtaPiPiHeliFittedHist->DrawCopy("same");
-  TString outputanglefilename;  
-  outputanglefilename = "JpsiGamEtaPiPi_angle_" + ss.str() + ".pdf";
+  TString outputanglefilename;
+  outputanglefilename = "JpsiGamEtaPiPi_angle_" + ss.str() + suffix.c_str() + ".pdf";
   c_outputangle->Print(outputanglefilename);
   c_outputangle->Close();
 
   _theTFile->Write();
   _theTFile->Close();
 }
+
+
 
 void JpsiGamEtaPiPiHistNew::initRootStuff(){
 	std::string rootFileName="JpsiGamEtaPiPi.root";
