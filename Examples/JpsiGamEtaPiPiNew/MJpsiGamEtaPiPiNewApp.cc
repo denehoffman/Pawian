@@ -46,6 +46,7 @@ using namespace ROOT::Minuit2;
 
 
 void setErrLogMode( const JpsiGamEtaPiPiParser::enErrLogMode& erlMode ) {
+  std::cout << erlMode << std::endl;
 	switch(erlMode) {
 	case JpsiGamEtaPiPiParser::debug :
 		ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
