@@ -11,6 +11,7 @@ print $pawiandir."\n";
 
 my $configFilesDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/ConfigFiles";
 my $summaryFileDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/scan/summary.dat";
+my $mcFile = "/data/liema/michaell/PwaJpsiGamEtaPiPi/FS4Vectors-PHSPMC-JpsiGamEtaPipPim_4m_v4.dat";
 
 print $configFilesDir."\n"; 
 
@@ -20,7 +21,7 @@ my $app = "$pawiandir/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-stat
 my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'EtaF1Eta2');
 
 #my @myHypList=('Eta');
-my @mySubDecayList=('_a0sigma', '_a0f0', '_a0a2sigma', '_a0f0sigma', '_a0f0a2', '_a0f0a2sigma');
+my @mySubDecayList=('_a0f0f2sigma', '_a0f0a2f2', '_a0f0a2sigma', '_a0f0a2f2sigma');
 
 my $theHyp= "";
 my $subDecay="";
@@ -32,7 +33,7 @@ for $theHyp (@myHypList) {
 	
 	my $newConfig = `cat $templConfig`;
 	
-	my $massMin=1.38;
+	my $massMin=1.70;
 	my $binWidth=0.04;
 	my $nbins=8;
 	my $bin=0;
@@ -66,8 +67,13 @@ for $theHyp (@myHypList) {
 		}
 		if($line=~/sumFile/){
                     print CONF "sumFile = $summaryFileDir\n";
-                    next; #line                                                                                                                                                                                                             
+                    next; #line
                 }
+		f($line=~/mcFile/){
+                    print CONF "mcFile = $mcFile\n";
+                    next; #line
+                }
+
 		print CONF $line ."\n";
 	    }
 	    close CONF;
