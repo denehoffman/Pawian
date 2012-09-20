@@ -175,8 +175,20 @@ int main(int __argc,char *__argv[]){
   StreamFitParmsBaseNew theParamStreamer(paramStreamerPath, theLhPtr);
   fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
   fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
+
+  PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);
+  MnUserParameters upar;
+  theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
   
-  if (mode=="qaMode"){
+  std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
+  for (int i=0; i<int(upar.Params().size()); ++i){
+    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  } 
+
+    const std::vector<std::string> fixedParams=theAppParams.fixedParams();  
+
+    const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();  
+    if (mode=="qaMode"){
 
   Info << "\nThe parameter values are: " << "\n" << endmsg;
   theFitParamBase->printParams(theStartparams);
@@ -187,23 +199,26 @@ int main(int __argc,char *__argv[]){
   double theLh=theLhPtr->calcLogLh(theStartparams);
   Info <<"theLh = "<< theLh << endmsg;
     
-  //   //        	std::string errFile = "finalErrorMatrix.dat";
-  //   // 		FitParamErrorMatrixStreamer theErrStreamer( errFile  );
-  //   // 		std::vector<double> theErrData;
-  //   // 		int ncols(0);
-  //   // 		theErrStreamer.matrixData( theErrData, ncols  );
-  //   // 		FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
     
   JpsiToPhiPhiGamHist theHist(theLhPtr, theStartparams);
   theHist.setMassRange(theAppParams.massRange() );
-  //   // 		theHist.fill();
-    
-  //   // 		if(theAppParams.massIndependentFit()){
-  //   // 			//calculate intensity contributions
-  //   // 			//std::ofstream theStream ( "componentIntensity.dat");
-  //   // 			//theProdLh->dumpComponentIntensity( theStream, theStartparams, theErrorMatrix );
-  //   // 		}
-    
+
+  double BICcriterion=2.*theLh+noOfFreeFitParams*log(eventsData.size());
+  double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+
+  Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+  Info << "eventsData.size():\t" <<eventsData.size(); 
+  Info << "BIC:\t" << BICcriterion << endmsg;
+  Info << "AIC:\t" << AICcriterion << endmsg;
+
+  std::string qaSummaryFileName = "qaSummary" + jobOption + ".dat";
+  std::ofstream theQaStream ( qaSummaryFileName.c_str() );
+  theQaStream << "BIC\t" << BICcriterion << "\n";
+  theQaStream << "AIC\t" << AICcriterion << "\n";
+  theQaStream << "logLh\t" << theLh << "\n";
+  theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+  theQaStream.close();
+   
   end= clock();
   double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
   Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
@@ -211,16 +226,6 @@ int main(int __argc,char *__argv[]){
   }
   
   if (mode=="pwa"){
-    PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);
-    MnUserParameters upar;
-    theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
-    
-    std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-    for (int i=0; i<int(upar.Params().size()); ++i){
-      std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
-    }
-    
-    const std::vector<std::string> fixedParams=theAppParams.fixedParams();
     
     std::vector<std::string>::const_iterator itFix;
     for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
