@@ -18,10 +18,11 @@ print $configFilesDir."\n";
 my $queue="pwa";
 my $app = "$pawiandir/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/MJpsiGamEtaPiPiNewApp";
 
-my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'EtaF1Eta2');
+#my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'EtaF1Eta2');
+my @myHypList=('Eta2');
 
-#my @myHypList=('Eta');
-my @mySubDecayList=('_a0f0f2sigma', '_a0f0a2f2', '_a0f0a2sigma', '_a0f0a2f2sigma');
+#my @mySubDecayList=('_a0f0f2sigma', '_a0f0a2f2', '_a0f0a2sigma', '_a0f0a2f2sigma');
+my @mySubDecayList=('_a0f0a2f2', '_a0f0a2sigma', '_a0f0a2f2sigma');
 
 my $theHyp= "";
 my $subDecay="";

@@ -10,17 +10,19 @@ my $pawiandir = $ENV{CMAKE_SOURCE_DIR};
 print $pawiandir."\n";
 
 my $configFilesDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/ConfigFiles";
-my $summaryFileDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/scan/summary.dat";
+my $summaryFileDir = $pawiandir."/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/scan/summary_eta2_a0f0a2sigma.dat";
 
 print $configFilesDir."\n"; 
 
 my $queue="pwa";
 my $app = "$pawiandir/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/MJpsiGamEtaPiPiNewApp";
 
-my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'EtaF1Eta2');
+#my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'EtaF1Eta2');
+my @myHypList=('Eta2');
 
-#my @myHypList=('Eta');
-my @mySubDecayList=('_a0sigma', '_a0f0', '_a0a2sigma', '_a0f0sigma', '_a0f0a2', '_a0f0a2sigma');
+#my @mySubDecayList=('_a0sigma', '_a0f0', '_a0a2sigma', '_a0f0sigma', '_a0f0a2', '_a0f0a2sigma');
+my @mySubDecayList=('_a0f0a2sigma');
+
 
 my $theHyp= "";
 my $subDecay="";
