@@ -61,7 +61,7 @@ complex<double> XToPhiPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData, f
         complex<double> amp = theXMag*expiphiX*sqrt(2*XState->L+1)
           *Clebsch(XState->L, 0, XState->S, lambda, XState->J, lambda)
           *Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, XState->S, lambda  )
-          *conj( theData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi][XState->J][_J_X][lambda]  );
+          *conj( theData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi][XState->J][lamX][lambda]  );
 
         
         amp = amp * phiphiTo4KAmp( theData, lambdaPhi1, lambdaPhi2 );
@@ -71,7 +71,6 @@ complex<double> XToPhiPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData, f
     }
    }
    
-   result*=conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi][_J_X][lamX][0]);
    return result;
 }
 
