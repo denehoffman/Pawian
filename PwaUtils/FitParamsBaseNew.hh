@@ -41,10 +41,8 @@ public:
 
   virtual ~FitParamsBaseNew();
 
-  virtual void setMnUsrParams(MnUserParameters& upar, fitParamsNew& theValParams, 
-			      fitParamsNew& theErrParams);
+  virtual void setMnUsrParams(MnUserParameters& upar, fitParamsNew& theValParams, fitParamsNew& theErrParams);
   virtual void getFitParamVal(const std::vector<double>& par, fitParamsNew& theParams);
-
   virtual void printParams(fitParamsNew& theParams);
   virtual void dumpParams(std::ostream& os, fitParamsNew& theVals,  fitParamsNew& theErrs);
 
@@ -61,26 +59,15 @@ private:
 				       mapStrJPCLamLam& startLamLamMagMap, 
 				       mapStrJPCLamLam& errLamLamMagMap, 
 				       const std::string& suffix);
-  virtual void setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& startMagMap, 
-				   mapStrJPCLS& errMagMap, const std::string& suffix);
-  virtual void setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& startDoubleMap,
-				    mapStrDouble& errDoubleMap, const std::string& suffix);
-  virtual void printJPCLamLamParams(fitParamsNew& theParams, mapStrJPCLamLam& lamLamMagMap, 
-				    const std::string& suffix);
-  virtual void printJPCLSParams(fitParamsNew& theParams, mapStrJPCLS& JPCLSMagMap, 
-				const std::string& suffix);
-  virtual void printDoubleParams(fitParamsNew& theParams, mapStrDouble& doubleMap, 
-				 const std::string& suffix);
-  virtual void dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, 
-				mapStrJPCLamLam& errLamLamMap, const std::string& suffix);
-  virtual void dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, mapStrJPCLS& errLSMap,
-			       const std::string& suffix);
-  virtual void dumpDoubleParams(std::ostream& os, mapStrDouble& valDoubleMap, 
-				mapStrDouble& errDoubleMap, const std::string& suffix);
-  virtual void getFitParamValJPCLamLam(const std::vector<double>& par, 
-				       mapStrJPCLamLam& startLamLamMagMap, int& counter);
-  virtual void getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, 
-				   int& counter);
-  virtual void getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, 
-				    int& counter);
+  virtual void setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix);
+  virtual void setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void printJPCLamLamParams(fitParamsNew& theParams, mapStrJPCLamLam& lamLamMagMap, const std::string& suffix);
+  virtual void printJPCLSParams(fitParamsNew& theParams, mapStrJPCLS& JPCLSMagMap, const std::string& suffix);
+  virtual void printDoubleParams(fitParamsNew& theParams, mapStrDouble& doubleMap,  const std::string& suffix);
+  virtual void dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, mapStrJPCLamLam& errLamLamMap, const std::string& suffix);
+  virtual void dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, mapStrJPCLS& errLSMap, const std::string& suffix);
+  virtual void dumpDoubleParams(std::ostream& os, mapStrDouble& valDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& startLamLamMagMap, int& counter);
+  virtual void getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, int& counter);
+  virtual void getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, int& counter);
 };

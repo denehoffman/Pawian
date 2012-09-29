@@ -314,13 +314,12 @@ void FitParamsBaseNew::getFitParamValJPCLS(const std::vector<double>& par, mapSt
 
 
 void FitParamsBaseNew::getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, int& counter){
-//   Info << "getFitParamValDouble par[" << counter << "]=\t" << par[counter] << endmsg;
+  //   Info << "getFitParamValDouble par[" << counter << "]=\t" << par[counter] << endmsg;
   mapStrDouble::iterator it;
   for (it=doubleMap.begin(); it!=doubleMap.end(); ++it){
-      it->second=par[counter];
-      counter++;
- }
-
+    it->second=par[counter];
+    counter++;
+  }
 }
 
 

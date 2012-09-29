@@ -17,7 +17,7 @@ print $configFilesDir."\n";
 my $queue="pwa";
 my $app = "$pawiandir/Examples/JpsiGamEtaPiPiNew/bin/gcc-4.4.4/release/link-static/MJpsiGamEtaPiPiNewApp";
 
-#my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'EtaF1Eta2');
+#my @myHypList=('Eta', 'Eta2', 'F1', 'EtaF1', 'EtaEta2', 'F1Eta2',  'EtaF1Eta2');
 my @myHypList=('Eta2');
 
 #my @mySubDecayList=('_a0sigma', '_a0f0', '_a0a2sigma', '_a0f0sigma', '_a0f0a2', '_a0f0a2sigma');
@@ -77,7 +77,8 @@ for $theHyp (@myHypList) {
 	
 	    system("cp $templStart $fitDir/");
 	    chdir($fitDir);
-	    my $cmd = "bsub -l nodes=1:ppn=16 -q $queue -o $fitDir/batch.log \"$app -c $fitConfig  --mode pwa >&! $fitDir/log$subDecay.out \"";
+#	    my $cmd = "bsub -l nodes=1:ppn=16 -q $queue -o $fitDir/batch.log \"$app -c $fitConfig  --mode pwa >&! $fitDir/log$subDecay.out \"";
+	    my $cmd = "bsub -l nodes=1:ppn=4 -q batch -o $fitDir/batch.log \"$app -c $fitConfig  --mode pwa >&! $fitDir/log$subDecay.out \"";
 	    print $cmd."\n";
 	    system($cmd);
 #    chdir("-");

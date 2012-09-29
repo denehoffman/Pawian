@@ -72,6 +72,7 @@ void setErrLogMode( const JpsiGamEtaPiPiParser::enErrLogMode& erlMode ) {
 }
 
 int main(int __argc,char *__argv[]){
+  setvbuf(stdout, NULL, _IONBF, 0);
   clock_t start, end;
   start= clock();
   
@@ -233,8 +234,6 @@ int main(int __argc,char *__argv[]){
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     return 0;
   }
-  
-
 
   if (mode=="pwa"){
     PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase, jobOption);
@@ -310,21 +309,13 @@ int main(int __argc,char *__argv[]){
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
-    // Global Summary Output
-    //int number_fitParams = upar.Params().size()-fixedParams.size();
-    //    std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
-    //    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams << "\t" << theHist.getFitEvents() <<  std::endl;
-    //    summaryfile.close();
-
     theHist.PrintToPDF(jobOption);
 
-
-
-
+    //    std::cout << finalUsrParameters.Value("a0_980Mass") << std::endl;
 
     // Start event number calculation for each wave
     std::cout << "Start event number calculation for each wave" << std::endl;    
-
+   
     std::vector<std::string> hypVec_test=theAppParams.enabledHyps();
     fitParamsNew finalFitParams_test=finalFitParams;
     std::vector<std::string>::iterator it;
@@ -367,8 +358,19 @@ int main(int __argc,char *__argv[]){
     
     // Global Summary Output
     int number_fitParams = upar.Params().size()-fixedParams.size();
+    double a0_fitmass = 0;
+    string aname;
+    for (int i=0; i<int(upar.Params().size()); ++i){
+      aname = upar.Name(i);
+      if (!aname.find("a0_980Mass")) {
+	std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+	a0_fitmass =  upar.Value(i);
+      }
+    }
+
     std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
-    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams;
+    summaryfile.precision(4);
+    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams << "\t" << finalUsrParameters.Value("a0_980Mass");
     for (unsigned int i=0;i<evNumResult.size();i++){
       summaryfile << "\t" << evNumResult[i];
     }
@@ -378,7 +380,6 @@ int main(int __argc,char *__argv[]){
 
     return 0;
   }
-  
   
   return 0;
 }

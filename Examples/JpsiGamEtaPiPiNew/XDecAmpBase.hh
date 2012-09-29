@@ -62,16 +62,23 @@ protected:
   std::pair <const double, const double> _decPairPi0Pi0;
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
 
-  complex<double> XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
-
-  complex<double> XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
-  complex<double> XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
+  complex<double> XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData,
+				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag,
+				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaPhi);
+  complex<double> XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData,
+				  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToA980PiMag,
+				  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToA980PiPhi,
+				  double a0_980Mass, double a0_980gPiEta,double a0_980gKK);
+  complex<double> XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData,
+				   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToFEtaFlatteMag,
+				   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToFEtaFlattePhi,
+				   double f0_980Mass, double f0_980gPiPi,double f0_980gKK);
   complex<double> XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
 			     double fMass, double fWidth);
   complex<double> XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
-			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiMag, 
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiMag,
 			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiPhi, 
 			      double aMass, double aWidth);
 

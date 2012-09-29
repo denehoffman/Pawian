@@ -47,10 +47,18 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
   complex<double> result(0.,0.);
 
   if (_piPiEtaHyp){
-    result+=XToPiPiEtaAmp(lamX, theData, theParamVal);
+    result+=XToPiPiEtaAmp(lamX, theData, theParamVal.Mags[_piPiEtaKey], theParamVal.Phis[_piPiEtaKey]);
   }
   if(_a980piHyp){
-    result+=XToAPiFlatteAmp(lamX, theData, theParamVal);
+    double a0_980Mass=theParamVal.Masses["a0_980"];
+    double a0_980gPiEta=theParamVal.gFactors["a0_980gPiEta"];
+    double a0_980gKK=theParamVal.gFactors["a0_980gKK"];
+    result+=XToAPiFlatteAmp(lamX, theData, theParamVal.Mags[_a980piKey], theParamVal.Phis[_a980piKey], a0_980Mass, a0_980gPiEta, a0_980gKK);
+  }
+  if(_a2_1320piHyp){
+    double a2_1320Mass=theParamVal.Masses["a2_1320"];
+    double a2_1320Width=theParamVal.Widths["a2_1320"];
+    result+=XToAPiBWAmp(lamX, 2, theData, theParamVal.Mags[_a2_1320piKey], theParamVal.Phis[_a2_1320piKey] , a2_1320Mass, a2_1320Width);
   }
   if(_sigmaEtaHyp){
     double sigmaMass=theParamVal.Masses["sigma"];
@@ -58,12 +66,10 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
     result+=XToEtaFAmp(lamX, 0, theData, theParamVal.Mags[_sigmaEtaKey], theParamVal.Phis[_sigmaEtaKey],sigmaMass, sigmaWidth);
   }
   if(_f980etaHyp){
-    result+=XToFEtaFlatteAmp(lamX, theData, theParamVal);
-  }
-  if(_a2_1320piHyp){
-    double a2_1320Mass=theParamVal.Masses["a2_1320"];
-    double a2_1320Width=theParamVal.Widths["a2_1320"];
-    result+=XToAPiBWAmp(lamX, 2, theData, theParamVal.Mags[_a2_1320piKey], theParamVal.Phis[_a2_1320piKey] , a2_1320Mass, a2_1320Width);
+    double f0_980Mass=theParamVal.Masses["f0_980"];
+    double f0_980gPiPi=theParamVal.gFactors["f0_980gPiPi"];
+    double f0_980gKK=theParamVal.gFactors["f0_980gKK"];
+    result+=XToFEtaFlatteAmp(lamX, theData, theParamVal.Mags[_f980etaKey], theParamVal.Phis[_f980etaKey], f0_980Mass, f0_980gPiPi, f0_980gKK);
   }
   if(_f2_1270etaHyp){
     double f2_1270Mass=theParamVal.Masses["f2_1270"];
@@ -84,12 +90,12 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNe
   return result;
 }
 
-complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, 
+					   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag,
+					   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaPhi){
 
   complex<double> result(0.,0.);
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPiPiEtaMag=theParamVal.Mags[_piPiEtaKey];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPiPiEtaPhi=theParamVal.Phis[_piPiEtaKey];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
    for ( itXMag=XToPiPiEtaMag.begin(); itXMag!=XToPiPiEtaMag.end(); ++itXMag){
      boost::shared_ptr<const JPCLS> XState=itXMag->first;
@@ -109,18 +115,14 @@ complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, fitPa
 
 
 
-complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, 
+					     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToA980PiMag,
+					     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToA980PiPhi,
+					     double a0_980Mass, double a0_980gPiEta,double a0_980gKK){
   complex<double> result(0.,0.);
-
-  double a0_980Mass=theParamVal.Masses["a0_980"];
-  double a0_980gPiEta=theParamVal.gFactors["a0_980gPiEta"];
-  double a0_980gKK=theParamVal.gFactors["a0_980gKK"];
-  
   Vector4<double > p4EtaPiplus = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
   Vector4<double > p4EtaPiminus= theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
 
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA980PiMag=theParamVal.Mags[_a980piKey];
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > etaToA980PiPhi=theParamVal.Phis[_a980piKey];
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
   for ( itXMag=etaToA980PiMag.begin(); itXMag!=etaToA980PiMag.end(); ++itXMag){
@@ -139,17 +141,13 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData, fit
   return result;
 }
 
-complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData, 
+					      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XTof980etaMag,
+					      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XTof980etaPhi,
+					      double f0_980Mass, double f0_980gPiPi,double f0_980gKK){
   complex<double> result(0.,0.);
-  
-  double f0_980Mass=theParamVal.Masses["f0_980"];
-  double f0_980gPiPi=theParamVal.gFactors["f0_980gPiPi"];
-  double f0_980gKK=theParamVal.gFactors["f0_980gKK"];
-  
   Vector4<double > p4PiPi=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi]; 
   
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XTof980etaMag=theParamVal.Mags[_f980etaKey];
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XTof980etaPhi=theParamVal.Phis[_f980etaKey];
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
   for ( itXMag=XTof980etaMag.begin(); itXMag!=XTof980etaMag.end(); ++itXMag){
