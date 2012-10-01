@@ -148,7 +148,9 @@ int main(int __argc,char *__argv[]){
   //calculate helicity angles, fill map with D-functions
   //
   
-  boost::shared_ptr<const JpsiGamEtaPiPiEventListNew> theJpsiGamEtaPiPiEventListPtr(new JpsiGamEtaPiPiEventListNew(eventsData, eventsMc));
+  boost::shared_ptr<JpsiGamEtaPiPiEventListNew> theJpsiGamEtaPiPiEventListPtr(new JpsiGamEtaPiPiEventListNew());
+  theJpsiGamEtaPiPiEventListPtr->ratioMcToData(theAppParams.ratioMcToData());
+  theJpsiGamEtaPiPiEventListPtr->read(eventsData, eventsMc);
   
   std::string mode=theAppParams.mode();
   std::cout << "Mode: " << mode << std::endl;

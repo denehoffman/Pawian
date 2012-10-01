@@ -11,10 +11,9 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-JpsiToPhiPhiGamEventList::JpsiToPhiPhiGamEventList(EventList& evtListData, EventList& evtListMc)
+JpsiToPhiPhiGamEventList::JpsiToPhiPhiGamEventList() :
+  EvtDataBaseListNew()
 {
-  read4Vecs(evtListData, _evtDataList);
-  read4Vecs(evtListMc, _mcDataList);
 }
 
 
@@ -22,10 +21,11 @@ JpsiToPhiPhiGamEventList::~JpsiToPhiPhiGamEventList()
 {
 }
 
-void JpsiToPhiPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList){
+void JpsiToPhiPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts){
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
+    if (evtCount>= maxEvts) break;
     if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
 
     Vector4<float> gam = *(anEvent->p4(0));
@@ -146,6 +146,7 @@ void JpsiToPhiPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtData
     evtData->evtWeight=anEvent->Weight();
     theEvtList.push_back(evtData);
     
+    evtWeightSum += anEvent->Weight();    
     ++evtCount;
   }
 }

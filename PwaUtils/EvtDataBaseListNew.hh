@@ -47,11 +47,23 @@ public:
   EvtDataBaseListNew();
   virtual ~EvtDataBaseListNew();
 
+  void read(EventList& evtListData, EventList& evtListMc);
+
   const std::vector<EvtDataNew*> getDataVecs() const { return _evtDataList; }
   const std::vector<EvtDataNew*> getMcVecs() const { return _mcDataList; }
+
+  double NoOfWeightedDataEvts() const {return _noOfWeightedDataEvts;}
+  double NoOfWeightedMcEvts() const {return _noOfWeightedMcEvts;}
+  void ratioMcToData (double mcToDataRatio) {_mcToDataRatio=mcToDataRatio;}
 
 protected:
   std::vector<EvtDataNew*> _evtDataList;
   std::vector<EvtDataNew*> _mcDataList;
-  virtual void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList) = 0;  
+  virtual void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts ) = 0;
+
+  double _noOfWeightedDataEvts;
+  double _noOfWeightedMcEvts;
+  int _mcToDataRatio;
+  bool _alreadyRead;
+
 };

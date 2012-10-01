@@ -46,6 +46,7 @@ public:
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; } 
   const int noOfThreads() const {return _noOfThreads;}
+  const int ratioMcToData() const {return _ratioMcToData;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -61,6 +62,7 @@ protected:
   std::vector<std::string> _mnParFixs;
   bool _verbose;
   int _noOfThreads;
+  int _ratioMcToData;
   std::string _strErrLogMode;
   po::options_description* _desc;
   po::options_description* _common;

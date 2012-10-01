@@ -55,7 +55,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiGamEtaPiPiEventListNew(EventList& evtListData, EventList& evtListMc);
+  JpsiGamEtaPiPiEventListNew();
 
 
 
@@ -68,7 +68,7 @@ public:
 protected:
 
 
-  void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList);
+  virtual void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts);
   
 private:
 

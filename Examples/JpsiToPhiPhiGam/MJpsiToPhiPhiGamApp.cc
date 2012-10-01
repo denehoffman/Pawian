@@ -126,7 +126,9 @@ int main(int __argc,char *__argv[]){
   //calculate helicity angles, fill map with D-functions
   //
   
-  boost::shared_ptr<const JpsiToPhiPhiGamEventList> theJpsiGamXEventListPtr(new JpsiToPhiPhiGamEventList(eventsData, eventsMc));
+  boost::shared_ptr<JpsiToPhiPhiGamEventList> theJpsiGamXEventListPtr(new JpsiToPhiPhiGamEventList());
+  theJpsiGamXEventListPtr->ratioMcToData(theAppParams.ratioMcToData());
+  theJpsiGamXEventListPtr->read(eventsData, eventsMc);
   
   std::string mode=theAppParams.mode();
   std::cout << "Mode: " << mode << std::endl;
@@ -203,11 +205,12 @@ int main(int __argc,char *__argv[]){
   JpsiToPhiPhiGamHist theHist(theLhPtr, theStartparams);
   theHist.setMassRange(theAppParams.massRange() );
 
-  double BICcriterion=2.*theLh+noOfFreeFitParams*log(eventsData.size());
+  double evtWeightSumData = theJpsiGamXEventListPtr->NoOfWeightedDataEvts();
+  double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
   double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
 
   Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-  Info << "eventsData.size():\t" <<eventsData.size(); 
+  Info << "evtWeightSumData:\t" <<evtWeightSumData; 
   Info << "BIC:\t" << BICcriterion << endmsg;
   Info << "AIC:\t" << AICcriterion << endmsg;
 

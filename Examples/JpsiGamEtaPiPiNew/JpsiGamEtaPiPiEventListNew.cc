@@ -11,10 +11,9 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-JpsiGamEtaPiPiEventListNew::JpsiGamEtaPiPiEventListNew(EventList& evtListData, EventList& evtListMc)
+JpsiGamEtaPiPiEventListNew::JpsiGamEtaPiPiEventListNew() :
+  EvtDataBaseListNew()
 {
-  read4Vecs(evtListData, _evtDataList);
-  read4Vecs(evtListMc, _mcDataList);
 }
 
 
@@ -22,10 +21,11 @@ JpsiGamEtaPiPiEventListNew::~JpsiGamEtaPiPiEventListNew()
 {
 }
 
-void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList){
+void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts){
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
+    if (evtCount>= maxEvts) break;
     if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
     
     Vector4<float> gam = *(anEvent->p4(0));
@@ -183,7 +183,7 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     
     evtData->evtWeight=1.;
     theEvtList.push_back(evtData);
-    
+    evtWeightSum+=1.;    
     ++evtCount;
   }
 }

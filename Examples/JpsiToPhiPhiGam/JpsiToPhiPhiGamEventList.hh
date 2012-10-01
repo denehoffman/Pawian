@@ -52,7 +52,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JpsiToPhiPhiGamEventList(EventList& evtListData, EventList& evtListMc);
+  JpsiToPhiPhiGamEventList();
 
 
 
@@ -65,7 +65,7 @@ public:
 protected:
 
 
-  void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList);
+  virtual void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts);
   
 private:
 

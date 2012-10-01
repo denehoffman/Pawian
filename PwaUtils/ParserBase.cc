@@ -18,6 +18,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _mode("plotmode")
       , _verbose(true)
       , _noOfThreads(16)
+      , _ratioMcToData(100000)
       , _strErrLogMode("debug")
       , _desc(0)
       , _common(new po::options_description("Common Options"))
@@ -52,6 +53,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
       ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
+      ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
       ;
 
 
@@ -132,6 +134,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "startHypo: " << _startHypo << "\n\n"
                 << "mode: " << _mode << "\n\n"
 		<< "number of threads: " << _noOfThreads  << "\n\n"
+		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
             << endl;
 
 
