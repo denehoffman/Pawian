@@ -72,7 +72,7 @@ void setErrLogMode( const JpsiGamEtaPiPiParser::enErrLogMode& erlMode ) {
 }
 
 int main(int __argc,char *__argv[]){
-  setvbuf(stdout, NULL, _IONBF, 0);
+  setvbuf(stdout, NULL, _IONBF, 0); // Outputbuffer
   clock_t start, end;
   start= clock();
   
@@ -153,7 +153,7 @@ int main(int __argc,char *__argv[]){
   std::string mode=theAppParams.mode();
   std::cout << "Mode: " << mode << std::endl;
   if (mode=="plotmode"){
-    JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange());                                                               
+    JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange(), jobOption.c_str());
     return 0;
   }
   
@@ -194,35 +194,19 @@ int main(int __argc,char *__argv[]){
   fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
   fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
   
-  // 	if (mode=="qaMode"){
-  
-  // 	std::ofstream theStreamTest ( "testparams.dat");
-  // 	theFitParamBase->dumpParams(theStreamTest, theStartparams, theErrorparams);
-  // 	return 0;
-  // 	}
-  
   if (mode=="qaMode"){
-
     Info << "\nThe parameter values are: " << "\n" << endmsg;
     theFitParamBase->printParams(theStartparams);
-    
     Info << "\nThe parameter errors are: " << "\n" << endmsg;
     theFitParamBase->printParams(theErrorparams);
     
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
     
-    //        	std::string errFile = "finalErrorMatrix.dat";
-    // 		FitParamErrorMatrixStreamer theErrStreamer( errFile  );
-    // 		std::vector<double> theErrData;
-    // 		int ncols(0);
-    // 		theErrStreamer.matrixData( theErrData, ncols  );
-    // 		FitParamErrorMatrix theErrorMatrix(theErrData, ncols );
-    
-    JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams,theAppParams.massRange());
-    //theHist.setMassRange(theAppParams.massRange() );
-    // 		theHist.fill();
-    
+    JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams,theAppParams.massRange(), jobOption.c_str());
+    theHist.PrintToPDF(jobOption);
+    theHist.SaveToROOT();
+
     // 		if(theAppParams.massIndependentFit()){
     // 			//calculate intensity contributions
     // 			//std::ofstream theStream ( "componentIntensity.dat");
@@ -303,15 +287,15 @@ int main(int __argc,char *__argv[]){
     
     //std::ofstream theCompStream ( "componentIntensity.dat");
     //theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
-    JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange());
-    //theHist.fill();
+    JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange(), jobOption.c_str());
+    theHist.PrintToPDF(jobOption);
+    theHist.SaveToROOT();
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
-    theHist.PrintToPDF(jobOption);
 
-    //    std::cout << finalUsrParameters.Value("a0_980Mass") << std::endl;
+
 
     // Start event number calculation for each wave
     std::cout << "Start event number calculation for each wave" << std::endl;    
@@ -322,24 +306,32 @@ int main(int __argc,char *__argv[]){
     int hypnumber=0;
 
     for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
-      if ((*it).find("Gamma")==0) hypnumber++;
+      if (((*it).find("Gamma")==0 || (*it).find("Phasespace")==0)) hypnumber++;
     }
     std::cout << "Number of hypothesis found: " << hypnumber << std::endl;
     
     std::vector<double> evNumResult;
+    std::string hypname;
+    std::string suffix;
 
     int j;
     for (int i=1;i<=hypnumber;i++){
       j=1;
       for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
 	// Mark bad hypothesis
-        if ((*it).find("Gamma")==0 && i!=j) {
+        if (((*it).find("Gamma")==0 || (*it).find("Phasespace")==0 ) && i!=j) {
           (*it).insert(0, "#");
 	  j++;
 	}
-	else{ if ((*it).find("Gamma")==0) j++; }
+	else{ 
+	  if (((*it).find("Gamma")==0  || (*it).find("Phasespace")==0)){
+	    j++;
+	    //(*it).copy(hypname,(*it).size());
+	    hypname = (*it).c_str();
+	  }
+	}
       }
-      std::cout << "Start calulation with following hypothesis:" << std::endl;
+      std::cout << "Start calulation with following hypothesis: " << hypname  << std::endl;
       if (startWithHyp=="production"){
 	theLhPtr = boost::shared_ptr<AbsLhNew> (new JpsiGamEtaPiPiProdLhNew(theJpsiGamEtaPiPiEventListPtr, hypVec_test, jpsiGamEtaPiPiStatesPtr));
       }
@@ -347,8 +339,12 @@ int main(int __argc,char *__argv[]){
 	Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;                                                                                                                                       
 	exit(1);
       }
-      JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams_test ,theAppParams.massRange());
+      suffix += jobOption.c_str();
+      suffix += hypname.c_str();
+      JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams_test ,theAppParams.massRange(), suffix);
+      suffix.clear();
       evNumResult.push_back(theHist.getFitEvents());
+      theHist.SaveToROOT();
       // Unmark bad hypothesis
       for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
         if ((*it).find("#")==0) (*it).erase(0,1);
@@ -356,6 +352,8 @@ int main(int __argc,char *__argv[]){
       std::cout << std::endl;
     }
     
+
+
     // Global Summary Output
     int number_fitParams = upar.Params().size()-fixedParams.size();
     double a0_fitmass = 0;

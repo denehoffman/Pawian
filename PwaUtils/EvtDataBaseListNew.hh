@@ -23,7 +23,7 @@ struct enumProdDfunc {
 
   static const std::string& name(unsigned int t) {
     static std::string fitName[enumProdDfunc::nDfuncts] = {"Psi"};
-    if (t<0 || t>=enumProd4V::n4Vecs) assert(0);
+    if (t<0 || t>=enumProdDfunc::nDfuncts) assert(0);
     return fitName[t];
   }
 };
