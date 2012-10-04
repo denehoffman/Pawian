@@ -597,6 +597,8 @@ bl::tribool calcSpinDensity(ApplicationParameterLS &theAppParams,
 
 int main(int __argc,char *__argv[]){
 
+  // Disable output buffering
+  setvbuf(stdout, NULL, _IONBF, 0);
 
   // Parse the command line
   static ApplicationParameterLS theAppParams(__argc, __argv);

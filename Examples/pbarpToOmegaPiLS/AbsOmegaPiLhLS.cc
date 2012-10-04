@@ -54,20 +54,45 @@ double AbsOmegaPiLhLS::calcLogLh(const OmegaPiDataLS::fitParamVal& theParamVal){
   double logLH_data=0.;
   double weightSum=0.;
 
-  std::vector<OmegaPiDataLS::OmPiEvtDataLS*>::iterator iterd;
-  for (iterd=_evtDataVec.begin(); iterd!=_evtDataVec.end(); ++iterd){
-    double intensity=calcEvtIntensity((*iterd), theParamVal);
-    if (intensity>0.) logLH_data+= ((*iterd)->eventWeight) * log(intensity);
-    weightSum+= (*iterd)->eventWeight;
-  } 
+  #ifdef _OPENMP
+  #pragma omp parallel for
+  #endif
+  for(int i=0; i< _evtDataVec.size(); ++i)
+  {
+     OmPiEvtDataLS* currentEvtData=_evtDataVec[i];
+     double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+     #ifdef _OPENMP
+     #pragma omp critical
+     {
+     #endif
+
+     if (intensity>0.) 
+     {
+        logLH_data+= (currentEvtData->eventWeight) * log(intensity);
+     }
+
+     weightSum+= currentEvtData->eventWeight;
+
+     #ifdef _OPENMP
+     }
+     #endif
+  }
 
   double LH_mc=0.;
-  
-  std::vector<OmegaPiDataLS::OmPiEvtDataLS*>::iterator iterm;
-  for (iterm=_evtMCVec.begin(); iterm!=_evtMCVec.end(); ++iterm){
-           double intensity=calcEvtIntensity((*iterm), theParamVal);
-           LH_mc+=intensity;
-         }
+
+  #ifdef _OPENMP
+  #pragma omp parallel for
+  #endif
+  for(int i=0; i< _evtMCVec.size(); ++i)
+  {
+     OmPiEvtDataLS* currentEvtData = _evtMCVec[i];
+     double intensity  = calcEvtIntensity(currentEvtData, theParamVal);
+     #ifdef _OPENMP
+     #pragma omp atomic
+     #endif
+     LH_mc += intensity;
+  }
+
 
   double logLH_mc_Norm=0.;
   if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/_evtMCVec.size());

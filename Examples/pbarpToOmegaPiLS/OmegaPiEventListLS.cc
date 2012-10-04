@@ -89,11 +89,11 @@ void OmegaPiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDataLS
     OmPiEvtDataLS* theOmPiEvtData=new OmPiEvtDataLS();
     theOmPiEvtData->cm_4Vec=cm_4V;
     theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
-    theOmPiEvtData->omegaHeliCm4Vec2=omega_cm_4V2;
+    //    theOmPiEvtData->omegaHeliCm4Vec2=omega_cm_4V2;
     theOmPiEvtData->pi0RecHeliCm4Vec=piRec_cm_4V;
     theOmPiEvtData->pi0DecHeliCm4Vec=piDec_cm_4V;
     theOmPiEvtData->pi0HeliOmega4Vec=pi0HeliOmega4V;
-    theOmPiEvtData->pi0HeliOmega4Vec2=pi0HeliOmega4V2;
+    //    theOmPiEvtData->pi0HeliOmega4Vec2=pi0HeliOmega4V2;
     theOmPiEvtData->cosPi0HeliOmega4Vec=costDecHeli(cm_4V, omega_4V, pi0FromOmega4V);
     theOmPiEvtData->eventWeight = anEvent->Weight();
 

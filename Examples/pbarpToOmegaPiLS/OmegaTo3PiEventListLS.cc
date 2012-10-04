@@ -96,13 +96,13 @@ void OmegaTo3PiEventListLS::read4Vecs(EventList& evtList, std::vector<OmPiEvtDat
     OmPiEvtDataLS* theOmPiEvtData=new OmPiEvtDataLS();
     theOmPiEvtData->cm_4Vec=cm_4V;
     theOmPiEvtData->omegaHeliCm4Vec=omega_cm_4V;
-    theOmPiEvtData->omegaHeliCm4Vec2=omega_cm_4V2;
+    //    theOmPiEvtData->omegaHeliCm4Vec2=omega_cm_4V2;
 
     theOmPiEvtData->pi0RecHeliCm4Vec=pi0Rec_cm_4V;
 
 
     theOmPiEvtData->pi0HeliOmega4Vec=normOmegaDecHeliOmega_4V;
-    theOmPiEvtData->pi0HeliOmega4Vec2=normOmegaDecHeliOmega_4V2;
+    //    theOmPiEvtData->pi0HeliOmega4Vec2=normOmegaDecHeliOmega_4V2;
 
     theOmPiEvtData->cosPi0HeliOmega4Vec=normOmegaDecHeliOmega_4V.CosTheta();
 

@@ -35,11 +35,11 @@ namespace OmegaPiDataLS {
   {
     Vector4<float> cm_4Vec;
     Vector4<float> omegaHeliCm4Vec;
-    Vector4<float> omegaHeliCm4Vec2;
+     //    Vector4<float> omegaHeliCm4Vec2;
     Vector4<float> pi0RecHeliCm4Vec;
     Vector4<float> pi0DecHeliCm4Vec;
     Vector4<float> pi0HeliOmega4Vec;
-    Vector4<float> pi0HeliOmega4Vec2;
+     //Vector4<float> pi0HeliOmega4Vec2;
 
     Vector4<float> pipHeliOmega4Vec;  //for omega -> 3pi only
     Vector4<float> pimHeliOmega4Vec;  //for omega -> 3pi only
