@@ -129,8 +129,10 @@ void JpsiToPhiPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtData
     for (Spin J_X=0; J_X<=2; J_X++){
       for (Spin lam_X=-J_X; lam_X<=J_X; lam_X++){
 	for (Spin lamPhi1mlamPhi2=-J_X; lamPhi1mlamPhi2<=J_X; lamPhi1mlamPhi2++){
-	evtData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi][J_X][lam_X][lamPhi1mlamPhi2]
+	evtData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi1][J_X][lam_X][lamPhi1mlamPhi2]
 	  =Wigner_D(V4_KsKl_HeliKsKlKpKm.Phi(),V4_KsKl_HeliKsKlKpKm.Theta(),0,J_X,lam_X,lamPhi1mlamPhi2);
+	evtData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi2][J_X][lam_X][lamPhi1mlamPhi2]
+	  =Wigner_D(V4_KpKm_HeliKsKlKpKm.Phi(),V4_KpKm_HeliKsKlKpKm.Theta(),0,J_X,lam_X,lamPhi1mlamPhi2);
       }
     }
     }

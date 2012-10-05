@@ -107,10 +107,10 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<const EvtDataBaseList
   double integralDataWoWeight=(double) theEvtList->getDataVecs().size();
   Info <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
 
-  double integralDataWWeight=(double) _PhiPhiMassDataHist->Integral();;
+  double integralDataWWeight = theEvtList->NoOfWeightedDataEvts();
   Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
   
-  double integralMC=(double) theEvtList->getMcVecs().size();
+  double integralMC = theEvtList->NoOfWeightedMcEvts();
   Info <<"No of MC events " << integralMC ;  // << endmsg; 
 
   Info <<"scaling factor  " << integralDataWWeight/integralMC ;  // << endmsg; 
@@ -221,11 +221,11 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitP
   double integralDataWoWeight=(double) theEvtList->getDataVecs().size();
   Info <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
 
-  double integralDataWWeight=(double) _PhiPhiMassDataHist->Integral();
+  double integralDataWWeight=(double) theEvtList->NoOfWeightedDataEvts();
   Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
 
 
-  double integralMC=(double) theEvtList->getMcVecs().size();
+  double integralMC=(double) theEvtList->NoOfWeightedMcEvts();
   Info <<"No of MC events " << integralMC ;  // << endmsg; 
 
   Info <<"scaling factor  " << integralDataWWeight/integralMC ;  // << endmsg;

@@ -30,12 +30,12 @@ struct enumJpsiGamX4V{
 };
 
 struct enumJpsiGamXDfunc{
-  enum {Df_XToPhiPhi=0, Df_PhiToKsKl,Df_PhiToKpKm, nDfuncts};
+  enum {Df_XToPhiPhi1=0, Df_XToPhiPhi2, Df_PhiToKsKl,Df_PhiToKpKm, nDfuncts};
 
   static const std::string& name(unsigned int t)
   {
     static std::string fitName[enumJpsiGamXDfunc::nDfuncts]
-      ={"XToPhiPhi", "PhiToKsKl", "PhiToKpKm"};
+      ={"XToPhiPhi1", "XToPhiPhi2", "PhiToKsKl", "PhiToKpKm"};
     if (t<0 || t>=enumJpsiGamXDfunc::nDfuncts) assert(0);
     return fitName[t];
   }
