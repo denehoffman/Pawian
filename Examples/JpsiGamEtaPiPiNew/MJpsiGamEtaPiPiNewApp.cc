@@ -72,7 +72,7 @@ void setErrLogMode( const JpsiGamEtaPiPiParser::enErrLogMode& erlMode ) {
 }
 
 int main(int __argc,char *__argv[]){
-  setvbuf(stdout, NULL, _IONBF, 0); // Outputbuffer
+  //  setvbuf(stdout, NULL, _IONBF, 0); // Outputbuffer
   clock_t start, end;
   start= clock();
   
