@@ -105,15 +105,20 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
       
       boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
       const Spin J_X=currentDecAmp->spinX();
-      for (Spin helX=0; helX<=J_X; helX++){
+      for (Spin helX=-J_X; helX<=J_X; helX++){
 	// Info << "helX:\t" << helX;
 	JpGpTmpMap[helX]= ParityProdMap[helX][1]*psiToXGammaAmp(1, J_X, helX, 1, theData, MagProdMap[helX][1], PhiProdMap[helX][1]);
 	JmGpTmpMap[helX]= ParityProdMap[helX][1]*psiToXGammaAmp(-1, J_X, helX, 1, theData, MagProdMap[helX][1], PhiProdMap[helX][1]);
+
+	JpGmTmpMap[helX]= ParityProdMap[helX][-1]*psiToXGammaAmp(1, J_X, helX, -1, theData, MagProdMap[helX][-1], PhiProdMap[helX][-1]);
+	JmGmTmpMap[helX]= ParityProdMap[helX][-1]*psiToXGammaAmp(-1, J_X, helX, -1, theData, MagProdMap[helX][-1], PhiProdMap[helX][-1]);	
+
 	TmpDecAmp[helX] = currentDecAmp->XdecAmp(helX, theData, theParamVal);
-	
-	JpGmTmpMap[-helX]= ParityProdMap[-helX][-1]*psiToXGammaAmp(1, J_X, -helX, -1, theData, MagProdMap[-helX][-1], PhiProdMap[-helX][-1]);
-	JmGmTmpMap[-helX]= ParityProdMap[-helX][-1]*psiToXGammaAmp(-1, J_X, -helX, -1, theData, MagProdMap[-helX][-1], PhiProdMap[-helX][-1]);
-	TmpDecAmp[-helX] = currentDecAmp->XdecAmp(-helX, theData, theParamVal);
+
+	// std::cout << "\nJpGpTmpMap[" << helX << "]=\t" << JpGpTmpMap[helX] << std::endl;
+	// std::cout << "JmGpTmpMap[" << helX << "]=\t" << JmGpTmpMap[helX] << std::endl;
+	// std::cout << "JpGmTmpMap[" << helX << "]=\t" << JpGmTmpMap[helX] << std::endl;
+	// std::cout << "JmGmTmpMap[" << helX << "]=\t" << JmGmTmpMap[helX] << "\n" <<std::endl;
       }
       
       for (Spin helX=-J_X; helX<=J_X; helX++){
@@ -141,9 +146,11 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
 
 complex<double> PsiProdBaseLhNew::psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtDataNew* theData, 
                                                      double PsiToXGamMag, double PsiToXGamPhi ){
+  complex<double> result(0.,0.);
    Spin lambda = lamX-lamGamma;
+   if (fabs(lambda)>1) return result;
    complex<double> expiphiPsi(cos(PsiToXGamPhi), sin(PsiToXGamPhi));
-   complex<double> result = PsiToXGamMag*expiphiPsi*conj( theData->WignerDsProd[enumProdDfunc::Psi][1][Minit][lambda]  );
+   result = PsiToXGamMag*expiphiPsi*conj( theData->WignerDsProd[enumProdDfunc::Psi][1][Minit][lambda]  );
 
    return result;
 
@@ -229,7 +236,7 @@ void  PsiProdBaseLhNew::initializeHypothesis(){
     else if (it->compare(0, _GammaF2Key.size(), _GammaF2Key)== 0){
       Info << "f2 hypothesis\t" << (*it) << "\t found" << endmsg; 
       _GammaF2Hyps.push_back(*it);
-      _hypMap[_GammaF1Key].push_back(*it);
+      _hypMap[_GammaF2Key].push_back(*it);
     }
     else if (it->compare(0, _phasespaceKey.size(), _phasespaceKey)== 0){
       Info << "hypothesis\t" << (*it) << "\t found" << endmsg;
