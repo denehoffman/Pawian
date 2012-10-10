@@ -60,8 +60,6 @@ PsiProdBaseLhNew::~PsiProdBaseLhNew()
 {;
 }
 
-
-
 double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& theParamVal){
 
   double result=0.;
@@ -74,16 +72,11 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
   //calculate all amplitudes
   std::map< std::string,std::vector<std::string> >::const_iterator itMap;
   for (itMap=_hypMap.begin(); itMap!=_hypMap.end(); ++itMap){
-
-   
-    // const std::vector<std::string> currentHypVecs=(*itMap);
     std::vector<std::string>::const_iterator itStr;
 
     for (itStr = itMap->second.begin(); itStr!= itMap->second.end(); ++itStr){
-      
       boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
- 
-
+      
       std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > PsiToXGamMag=theParamVal.MagLamLams[*itStr];
       std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > PsiToXGamPhi=theParamVal.PhiLamLams[*itStr];
       
@@ -91,36 +84,30 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
       for (itMag=PsiToXGamMag.begin(); itMag!=PsiToXGamMag.end(); ++itMag){
 	boost::shared_ptr<const JPClamlam> currentJPClamlam=itMag->first;
         Spin helX=currentJPClamlam->lam1;
- 
+	
 	complex<double> JpGpTmp = psiToXGammaAmp(1, helX, 1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
 	complex<double> JmGpTmp = psiToXGammaAmp(-1, helX, 1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
-
+	
 	complex<double> JpGmTmp = currentJPClamlam->parityFactor*psiToXGammaAmp(1, -helX, -1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
 	complex<double> JmGmTmp = currentJPClamlam->parityFactor*psiToXGammaAmp(-1, -helX, -1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);	
 
 	complex<double> TmpDecAmpPos = currentDecAmp->XdecAmp(helX, theData, theParamVal);
 	complex<double> TmpDecAmpNeg = TmpDecAmpPos;
         if (helX>0)  TmpDecAmpNeg = currentDecAmp->XdecAmp(-helX, theData, theParamVal);
-
+	
 	JmpGmp+=JpGpTmp*TmpDecAmpPos;
 	JmpGmm+=JpGmTmp*TmpDecAmpNeg;
 	JmmGmp+=JmGpTmp*TmpDecAmpPos;
 	JmmGmm+=JmGmTmp*TmpDecAmpNeg;
-
       }
-      
     }
   }
-  
 
   result=norm(JmpGmp)+norm(JmpGmm)+norm(JmmGmp)+norm(JmmGmm);
-
 
   if(_usePhasespace){
     result = result + theParamVal.otherParams[_phasespaceKey];
   }
-
-//   Info << "result:\t" << result << endmsg;
   return result;  
 
 }

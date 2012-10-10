@@ -131,7 +131,7 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData,
     double theXPhi=etaToA980PiPhi[XState];
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
         
-    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)/sqrt(2.*_J_X+1)*
+    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
       (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_J_X][lamX][0])*Flatte(p4EtaPiplus , _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)+
 	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_J_X][lamX][0])*Flatte(p4EtaPiminus, _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 );
@@ -156,7 +156,7 @@ complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData,
     double theXPhi=XTof980etaPhi[XState];
     complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
      
-    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)/sqrt(2.*_J_X+1.)*
+    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
       conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][0])*
       Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
     result+= amp;
@@ -184,7 +184,7 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
     complex<double> amp(0.,0.);     
     for(Spin lamf = -jf; lamf <= jf; lamf++){
       if( fabs(lamf)> _J_X || fabs(lamf)>XState->S) continue;
-      amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)/sqrt(2.*_J_X+1.)
+      amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jf+1.)
 	*Clebsch(XState->L, 0, XState->S, lamf, _J_X, lamf)
 	*Clebsch(jf, lamf, 0, 0, XState->S, lamf)
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][lamf])
@@ -217,7 +217,7 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
     for(Spin lamA = -jA; lamA <= jA; lamA++){
       if(fabs(lamA)> _J_X || fabs(lamA)>XState->S) continue;
       
-      amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)/sqrt(2.*_J_X + 1.)
+      amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA+1.)
 	*Clebsch(XState->L, 0, XState->S, lamA, _J_X, lamA)
 	*Clebsch(jA, lamA, 0, 0, XState->S, lamA)
 	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_J_X][lamX][lamA])
@@ -235,17 +235,17 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
 
 
 void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
-
+  
   if (_piPiEtaHyp){
     std::vector< boost::shared_ptr<const JPCLS> > PiPiEtaStates;
     if(_J_X==0) PiPiEtaStates=_theStatesPtr->EtaToa0PiStates();
     else if(_J_X==1) PiPiEtaStates=_theStatesPtr->F1Toa0PiStates();
     else if(_J_X==2) PiPiEtaStates=_theStatesPtr->Eta2Toa0PiStates();  
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
-
+    
     std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
     for(itLS=PiPiEtaStates.begin(); itLS!=PiPiEtaStates.end(); ++itLS){
       currentMagValMap[*itLS]=0.2;
@@ -315,10 +315,10 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
     fitErr.Mags[_sigmaEtaKey]=currentMagErrMap;
     fitErr.Phis[_sigmaEtaKey]=currentPhiErrMap;
 
-    fitVal.Masses["sigma"]=0.5;
-    fitErr.Masses["sigma"]=0.09;
-    fitVal.Widths["sigma"]=0.3;
-    fitErr.Widths["sigma"]=0.059;
+    fitVal.Masses["sigma"]=0.475;
+    fitErr.Masses["sigma"]=0.015;
+    fitVal.Widths["sigma"]=0.550;
+    fitErr.Widths["sigma"]=0.03;
 
   }
 
@@ -403,6 +403,7 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
       currentMagErrMap[*itLS]=0.8;
       currentPhiErrMap[*itLS]=0.3;
     }
+
     fitVal.Mags[_f2_1270etaKey]=currentMagValMap;
     fitVal.Phis[_f2_1270etaKey]=currentPhiValMap;
     fitErr.Mags[_f2_1270etaKey]=currentMagErrMap;

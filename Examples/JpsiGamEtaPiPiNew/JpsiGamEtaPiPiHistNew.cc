@@ -258,6 +258,7 @@ void JpsiGamEtaPiPiHistNew::PrintToPDF(std::string suffix){
   _PipPimMassDataHist->DrawCopy("e");
   _PipPimMassFittedHist->DrawCopy("same");
   c_output->cd(3);
+  _EtaPiPiMassFittedHist->DrawCopy();
   _EtaPiPiMassDataHist->SetLineColor(kRed);
   _EtaPiPiMassDataHist->DrawCopy("e");
   _EtaPiPiMassFittedHist->DrawCopy("same");
@@ -275,39 +276,41 @@ void JpsiGamEtaPiPiHistNew::PrintToPDF(std::string suffix){
   c_output->Close();
 
   TCanvas* c_outputangle=new TCanvas( "c_outputangle","c_outputangle",1600,900);
-  c_outputangle->Divide(4,2);
+  c_outputangle->Divide(2,2);
   c_outputangle->cd(1);
   _costEta_EtaPipHeliDataHist->SetLineColor(kRed);
   _costEta_EtaPipHeliDataHist->DrawCopy("e");
   _costEta_EtaPipHeliFittedHist->DrawCopy("same");
-  c_outputangle->cd(5);
+  c_outputangle->cd(2);
+  //  c_outputangle->cd(5);
   _phiEta_EtaPipHeliDataHist->SetLineColor(kRed);
   _phiEta_EtaPipHeliDataHist->DrawCopy("e");
   _phiEta_EtaPipHeliFittedHist->DrawCopy("same");
-  c_outputangle->cd(2);
-  _costEtaPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
-  _costEtaPi_EtaPiPiHeliDataHist->DrawCopy("e");
-  _costEtaPi_EtaPiPiHeliFittedHist->DrawCopy("same");
-  c_outputangle->cd(6);
-  _phiEtaPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
-  _phiEtaPi_EtaPiPiHeliDataHist->DrawCopy("e");
-  _phiEtaPi_EtaPiPiHeliFittedHist->DrawCopy("same");
+  //  c_outputangle->cd(2);
+  //  _costEtaPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
+  //  _costEtaPi_EtaPiPiHeliDataHist->DrawCopy("e");
+  //  _costEtaPi_EtaPiPiHeliFittedHist->DrawCopy("same");
+  //  c_outputangle->cd(6);
+  //  _phiEtaPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
+  //  _phiEtaPi_EtaPiPiHeliDataHist->DrawCopy("e");
+  //  _phiEtaPi_EtaPiPiHeliFittedHist->DrawCopy("same");
   c_outputangle->cd(3);
   _costPip_PipPimHeliDataHist->SetLineColor(kRed);
   _costPip_PipPimHeliDataHist->DrawCopy("e");
   _costPip_PipPimHeliFittedHist->DrawCopy("same");
-  c_outputangle->cd(7);
+  c_outputangle->cd(4);
+  //  c_outputangle->cd(7);
   _phiPip_PipPimHeliDataHist->SetLineColor(kRed);
   _phiPip_PipPimHeliDataHist->DrawCopy("e");
   _phiPip_PipPimHeliFittedHist->DrawCopy("same");
-  c_outputangle->cd(4);
-  _costPiPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
-  _costPiPi_EtaPiPiHeliDataHist->DrawCopy("e");
-  _costPiPi_EtaPiPiHeliFittedHist->DrawCopy("same");
-  c_outputangle->cd(8);
-  _phiPiPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
-  _phiPiPi_EtaPiPiHeliDataHist->DrawCopy("e");
-  _phiPiPi_EtaPiPiHeliFittedHist->DrawCopy("same");
+  //  c_outputangle->cd(4);
+  //  _costPiPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
+  //  _costPiPi_EtaPiPiHeliDataHist->DrawCopy("e");
+  //  _costPiPi_EtaPiPiHeliFittedHist->DrawCopy("same");
+  //  c_outputangle->cd(8);
+  //  _phiPiPi_EtaPiPiHeliDataHist->SetLineColor(kRed);
+  //  _phiPiPi_EtaPiPiHeliDataHist->DrawCopy("e");
+  //  _phiPiPi_EtaPiPiHeliFittedHist->DrawCopy("same");
   TString outputanglefilename;
   outputanglefilename = "JpsiGamEtaPiPi_angle_" + ss.str() + suffix.c_str() + ".pdf";
   c_outputangle->Print(outputanglefilename);
@@ -343,16 +346,16 @@ void JpsiGamEtaPiPiHistNew::initRootStuff(std::string suffix){
   nbins=50;
   xmin=0.65;
   xmax=_massRange.second-0.1;
-  ymin=0.65;
+  ymin=0.2;
   ymax=_massRange.second-0.1;
   
   _EtaPiMassDataHist   = new TH1F("_EtaPiMassDataHist"  , "_EtaPiMassDataHist"  , nbins, xmin, xmax);
   _EtaPiMassMcHist     = new TH1F("_EtaPiMassMcHist"    , "_EtaPiMassMcHist"    , nbins, xmin, xmax);
   _EtaPiMassFittedHist = new TH1F("_EtaPiMassFittedHist", "_EtaPiMassFittedHist", nbins, xmin, xmax);
   
-  _dalitzDataHist   = new TH2F("_dalitzDataHist"  ,"Dpl #pi^{+}#pi^{-}#eta data; #m^{2}(#eta#pi);#m^{2}(#eta#pi)", nbins, xmin*xmin, xmax*xmax, nbins, ymin*ymin, ymax*ymax );
-  _dalitzMcHist     = new TH2F("_dalitzMcHist"    ,"Dpl #pi^{+}#pi^{-}#eta MC  ; #m^{2}(#eta#pi);#m^{2}(#eta#pi)", nbins, xmin*xmin, xmax*xmax, nbins, ymin*ymin, ymax*ymax );
-  _dalitzFittedHist = new TH2F("_dalitzFittedHist","Dpl #pi^{+}#pi^{-}#eta fit ; #m^{2}(#eta#pi);#m^{2}(#eta#pi)", nbins, xmin*xmin, xmax*xmax, nbins, ymin*ymin, ymax*ymax );
+  _dalitzDataHist   = new TH2F("_dalitzDataHist"  ,"Dpl #pi^{+}#pi^{-}#eta data; #m^{2}(#eta#pi);#m^{2}(#pi#pi)", nbins, xmin*xmin, xmax*xmax, nbins, ymin*ymin, ymax*ymax );
+  _dalitzMcHist     = new TH2F("_dalitzMcHist"    ,"Dpl #pi^{+}#pi^{-}#eta MC  ; #m^{2}(#eta#pi);#m^{2}(#pi#pi)", nbins, xmin*xmin, xmax*xmax, nbins, ymin*ymin, ymax*ymax );
+  _dalitzFittedHist = new TH2F("_dalitzFittedHist","Dpl #pi^{+}#pi^{-}#eta fit ; #m^{2}(#eta#pi);#m^{2}(#pi#pi)", nbins, xmin*xmin, xmax*xmax, nbins, ymin*ymin, ymax*ymax );
   
   xmin=0.25;
   xmax=_massRange.second-0.5;
@@ -480,57 +483,57 @@ void JpsiGamEtaPiPiHistNew::rootlogon(){
 
 void JpsiGamEtaPiPiHistNew::plotDalitz(TH2F* theHisto,  EvtDataNew* theData, double weight){
   Vector4<double> v4EtaPip = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
-	Vector4<double> v4EtaPim = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
-	theHisto->Fill( v4EtaPip.M2(), v4EtaPim.M2(), weight);
-	theHisto->Fill( v4EtaPim.M2(), v4EtaPip.M2(), weight);
+  Vector4<double> v4PipPim = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
+  theHisto->Fill( v4EtaPip.M2(), v4PipPim.M2(), weight);
+  //  theHisto->Fill( v4PipPim.M2(), v4EtaPip.M2(), weight);
 }
 
 void JpsiGamEtaPiPiHistNew::plotEtaPipPim(TH1F* theHisto, EvtDataNew* theData, double weight){
-	Vector4<double>& v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPipPim_HeliPsi];
-	theHisto->Fill( v4.M(), weight );
+  Vector4<double>& v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPipPim_HeliPsi];
+  theHisto->Fill( v4.M(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotEtaPi(TH1F* theHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
-	theHisto->Fill( v4.M(), weight );
-	v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
-	theHisto->Fill( v4.M(), weight );
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi];
+  theHisto->Fill( v4.M(), weight );
+  v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi];
+  theHisto->Fill( v4.M(), weight );
 }
 void JpsiGamEtaPiPiHistNew::plotPipPim(TH1F* theHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
 	theHisto->Fill( v4.M(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhiEta(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPip];
-	theCostHisto->Fill( v4.CosTheta(), weight );
-	thePhiHisto->Fill( v4.Phi(), weight );
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPip];
+  theCostHisto->Fill( v4.CosTheta(), weight );
+  thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhiPip(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliPipPim];
-	theCostHisto->Fill( v4.CosTheta(), weight );
-	thePhiHisto->Fill( v4.Phi(), weight );
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliPipPim];
+  theCostHisto->Fill( v4.CosTheta(), weight );
+  thePhiHisto->Fill( v4.Phi(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostGam(TH1F* theCostHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::gamma_HeliPsi];
-	theCostHisto->Fill( v4.CosTheta(), weight );
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::gamma_HeliPsi];
+  theCostHisto->Fill( v4.CosTheta(), weight );
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhi_PiPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliEtaPipPim];
-	theCostHisto->Fill( v4.CosTheta(), weight);
-	thePhiHisto->Fill( v4.Phi(), weight);
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliEtaPipPim];
+  theCostHisto->Fill( v4.CosTheta(), weight);
+  thePhiHisto->Fill( v4.Phi(), weight);
 }
 
 void JpsiGamEtaPiPiHistNew::plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-	Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliEtaPipPim];
-	theCostHisto->Fill( v4.CosTheta(), weight);
-	thePhiHisto->Fill( v4.Phi(), weight);
-	v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliEtaPipPim];
-	theCostHisto->Fill( v4.CosTheta(), weight);
-	thePhiHisto->Fill( v4.Phi(), weight);
+  Vector4<double> v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliEtaPipPim];
+  theCostHisto->Fill( v4.CosTheta(), weight);
+  thePhiHisto->Fill( v4.Phi(), weight);
+  v4 = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliEtaPipPim];
+  theCostHisto->Fill( v4.CosTheta(), weight);
+  thePhiHisto->Fill( v4.Phi(), weight);
 }
 
 
