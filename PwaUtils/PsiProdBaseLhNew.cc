@@ -74,60 +74,41 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
   //calculate all amplitudes
   std::map< std::string,std::vector<std::string> >::const_iterator itMap;
   for (itMap=_hypMap.begin(); itMap!=_hypMap.end(); ++itMap){
-    
+
+   
     // const std::vector<std::string> currentHypVecs=(*itMap);
     std::vector<std::string>::const_iterator itStr;
+
     for (itStr = itMap->second.begin(); itStr!= itMap->second.end(); ++itStr){
+      
+      boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
+ 
+
       std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > PsiToXGamMag=theParamVal.MagLamLams[*itStr];
       std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > PsiToXGamPhi=theParamVal.PhiLamLams[*itStr];
       
-      std::map<Spin,std::map<Spin, double > > MagProdMap;
-      std::map<Spin,std::map<Spin, double > > PhiProdMap;
-      std::map<Spin,std::map<Spin, double > > ParityProdMap;	
       std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
       for (itMag=PsiToXGamMag.begin(); itMag!=PsiToXGamMag.end(); ++itMag){
 	boost::shared_ptr<const JPClamlam> currentJPClamlam=itMag->first;
-	MagProdMap[currentJPClamlam->lam1][currentJPClamlam->lam2]=itMag->second;
-	ParityProdMap[currentJPClamlam->lam1][currentJPClamlam->lam2]=1.;
-	PhiProdMap[currentJPClamlam->lam1][currentJPClamlam->lam2]=PsiToXGamPhi[currentJPClamlam];
-	
-	MagProdMap[-currentJPClamlam->lam1][-currentJPClamlam->lam2]=itMag->second;
-	ParityProdMap[-currentJPClamlam->lam1][-currentJPClamlam->lam2]=currentJPClamlam->parityFactor;
-	PhiProdMap[-currentJPClamlam->lam1][-currentJPClamlam->lam2]=PsiToXGamPhi[currentJPClamlam];      
+        Spin helX=currentJPClamlam->lam1;
+ 
+	complex<double> JpGpTmp = psiToXGammaAmp(1, helX, 1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
+	complex<double> JmGpTmp = psiToXGammaAmp(-1, helX, 1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
+
+	complex<double> JpGmTmp = currentJPClamlam->parityFactor*psiToXGammaAmp(1, -helX, -1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
+	complex<double> JmGmTmp = currentJPClamlam->parityFactor*psiToXGammaAmp(-1, -helX, -1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);	
+
+	complex<double> TmpDecAmpPos = currentDecAmp->XdecAmp(helX, theData, theParamVal);
+	complex<double> TmpDecAmpNeg = TmpDecAmpPos;
+        if (helX>0)  TmpDecAmpNeg = currentDecAmp->XdecAmp(-helX, theData, theParamVal);
+
+	JmpGmp+=JpGpTmp*TmpDecAmpPos;
+	JmpGmm+=JpGmTmp*TmpDecAmpNeg;
+	JmmGmp+=JmGpTmp*TmpDecAmpPos;
+	JmmGmm+=JmGmTmp*TmpDecAmpNeg;
+
       }
       
-      std::map<Spin,complex<double> > JpGpTmpMap;
-      std::map<Spin,complex<double> > JpGmTmpMap;
-      std::map<Spin,complex<double> > JmGpTmpMap;
-      std::map<Spin,complex<double> > JmGmTmpMap;
-      std::map<Spin,complex<double> > TmpDecAmp;
-      
-      
-      boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
-      const Spin J_X=currentDecAmp->spinX();
-      for (Spin helX=-J_X; helX<=J_X; helX++){
-	// Info << "helX:\t" << helX;
-	JpGpTmpMap[helX]= ParityProdMap[helX][1]*psiToXGammaAmp(1, J_X, helX, 1, theData, MagProdMap[helX][1], PhiProdMap[helX][1]);
-	JmGpTmpMap[helX]= ParityProdMap[helX][1]*psiToXGammaAmp(-1, J_X, helX, 1, theData, MagProdMap[helX][1], PhiProdMap[helX][1]);
-
-	JpGmTmpMap[helX]= ParityProdMap[helX][-1]*psiToXGammaAmp(1, J_X, helX, -1, theData, MagProdMap[helX][-1], PhiProdMap[helX][-1]);
-	JmGmTmpMap[helX]= ParityProdMap[helX][-1]*psiToXGammaAmp(-1, J_X, helX, -1, theData, MagProdMap[helX][-1], PhiProdMap[helX][-1]);	
-
-	TmpDecAmp[helX] = currentDecAmp->XdecAmp(helX, theData, theParamVal);
-
-	// std::cout << "\nJpGpTmpMap[" << helX << "]=\t" << JpGpTmpMap[helX] << std::endl;
-	// std::cout << "JmGpTmpMap[" << helX << "]=\t" << JmGpTmpMap[helX] << std::endl;
-	// std::cout << "JpGmTmpMap[" << helX << "]=\t" << JpGmTmpMap[helX] << std::endl;
-	// std::cout << "JmGmTmpMap[" << helX << "]=\t" << JmGmTmpMap[helX] << "\n" <<std::endl;
-      }
-      
-      for (Spin helX=-J_X; helX<=J_X; helX++){
-	JmpGmp+=JpGpTmpMap[helX]*TmpDecAmp[helX];
-	JmpGmm+=JpGmTmpMap[helX]*TmpDecAmp[helX];
-	JmmGmp+=JmGpTmpMap[helX]*TmpDecAmp[helX];
-	JmmGmm+=JmGmTmpMap[helX]*TmpDecAmp[helX];
-	
-      }	
     }
   }
   
@@ -144,11 +125,10 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
 
 }
 
-complex<double> PsiProdBaseLhNew::psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma, EvtDataNew* theData, 
+complex<double> PsiProdBaseLhNew::psiToXGammaAmp(Spin Minit, Spin lamX, Spin lamGamma, EvtDataNew* theData, 
                                                      double PsiToXGamMag, double PsiToXGamPhi ){
   complex<double> result(0.,0.);
    Spin lambda = lamX-lamGamma;
-   if (fabs(lambda)>1) return result;
    complex<double> expiphiPsi(cos(PsiToXGamPhi), sin(PsiToXGamPhi));
    result = PsiToXGamMag*expiphiPsi*conj( theData->WignerDsProd[enumProdDfunc::Psi][1][Minit][lambda]  );
 

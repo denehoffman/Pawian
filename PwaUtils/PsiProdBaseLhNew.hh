@@ -64,7 +64,7 @@ protected:
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> >  _allAmpMap; 
 
 
-  virtual complex<double> psiToXGammaAmp(Spin Minit, Spin jX, Spin lamX, Spin lamGamma,
+  virtual complex<double> psiToXGammaAmp(Spin Minit, Spin lamX, Spin lamGamma,
 					 EvtDataNew* theData, 
                                          double PsiToXGamMag, double PsiToXGamPhi);
  

@@ -245,7 +245,7 @@ JpsiToPhiPhiGamHist::JpsiToPhiPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, fitP
   _phiPhi_KpKmFittedHist->Scale(scaleFactor);
   _chiFittedHist->Scale(scaleFactor);
 
-  double integralFitted=(double) _PhiPhiMassFittedHist->Integral();
+  double integralFitted=(double) _costGamCmFittedHist->Integral();
   Info <<"No of fit events " << integralFitted ;  // << endmsg; 
 }
 
