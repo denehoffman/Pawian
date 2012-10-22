@@ -447,13 +447,14 @@ void JpsiToPhiPhiGamHist::initRootStuff()
   _dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl K+K- K+#pi^{0} fit",xbins, xmin, xmax, ybins, ymin, ymax );
 
   
-  int nbins=50;
+  int nbins=400;
    xmin=2;
-   xmax=3.2;
+   xmax=4.;
   _PhiPhiMassDataHist = new TH1F("_PhiPhiMassDataHist", "_PhiPhiMassDataHist", nbins, xmin, xmax);
   _PhiPhiMassMcHist = new TH1F("_PhiPhiMassMcHist", "_PhiPhiMassMcHist", nbins, xmin, xmax);
   _PhiPhiMassFittedHist = new TH1F("_PhiPhiMassFittedHist", "_PhiPhiMassFittedHist", nbins, xmin, xmax);
-  
+
+  nbins=50;  
   xmin=0.8;
   xmax=1.2;
   _KsKlMassDataHist = new TH1F("_KsKlMassDataHist", "_KsKlMassDataHist", nbins, xmin, xmax);
