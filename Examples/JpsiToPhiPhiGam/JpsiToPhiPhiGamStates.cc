@@ -54,4 +54,29 @@ void JpsiToPhiPhiGamStates::print(std::ostream& os) const
   printDecayJPCLS(os, _JPCLS_PhiToKK );
 }
 
+void JpsiToPhiPhiGamStates::fillJPCLS(boost::shared_ptr<jpcRes> motherRes, boost::shared_ptr<jpcRes> daughterRes1, boost::shared_ptr<jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)
+{
+  // first: check C-parity
+  if ( motherRes->C != daughterRes1->C*daughterRes2->C){
+    Warning << "C-Parity not valid for the reaction: JPC= " 
+            << motherRes->J << " " << motherRes->P << " " << motherRes->C
+            << " --> "
+            << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
+            << " and "
+            << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C
+            ;  // << endmsg; 
+  }
+  vector<LS> LSs=GetValidLS(motherRes->J, motherRes->P, daughterRes1->J, daughterRes1->P, daughterRes2->J, daughterRes2->P);
 
+  int num_LS = (int) LSs.size();
+
+  for(int ls = 0; ls < num_LS; ls++){
+    Spin L= LSs[ls].L; 
+    Spin S= LSs[ls].S;
+    int LplusS(L+S);
+    if ( LplusS%2 ==0 ){
+      boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
+      theJPCLSVec.push_back(tmpJPCLS);
+    }
+  }
+}

@@ -34,7 +34,9 @@ public:
   virtual void print(std::ostream& os) const; 
 
 protected:
-
+  virtual void fillJPCLS(boost::shared_ptr<jpcRes>, boost::shared_ptr<jpcRes>, 
+                         boost::shared_ptr<jpcRes>, 
+                         std::vector< boost::shared_ptr<const JPCLS> >& );
 
 private:
   boost::shared_ptr<jpcRes> _kJPC;
