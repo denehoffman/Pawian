@@ -66,8 +66,8 @@ protected:
 				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag,
 				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaPhi);
   complex<double> XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData,
-				  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToA980PiMag,
-				  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToA980PiPhi,
+				  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToA980PiMag,
+				  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToA980PiPhi,
 				  double a0_980Mass, double a0_980gPiEta,double a0_980gKK);
   complex<double> XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData,
 				   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToFEtaFlatteMag,
@@ -78,8 +78,8 @@ protected:
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
 			     double fMass, double fWidth);
   complex<double> XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
-			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiMag,
-			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& etaToAPiPhi, 
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiMag,
+			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiPhi, 
 			      double aMass, double aWidth);
 
   virtual void initialize();

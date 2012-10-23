@@ -21,11 +21,11 @@ PsiToXGamStates::PsiToXGamStates() :
   fillJPCLS(_psiJPC, _f2JPC  , _gammaJPC, _JPCLS_PsiToF2Gamma  );
   fillJPCLS(_psiJPC, _eta2JPC, _gammaJPC, _JPCLS_PsiToEta2Gamma);
 
-  fillJPClamlam(_JPCLS_PsiToEtaGamma, _etaJPC, _JPCLamLam_PsiToEtaGamma);
-  fillJPClamlam(_JPCLS_PsiToF0Gamma, _f0JPC,_JPCLamLam_PsiToF0Gamma);
-  fillJPClamlam(_JPCLS_PsiToF2Gamma, _f1JPC,_JPCLamLam_PsiToF1Gamma);
-  fillJPClamlam(_JPCLS_PsiToF2Gamma, _f2JPC,_JPCLamLam_PsiToF2Gamma);
-  fillJPClamlam(_JPCLS_PsiToEta2Gamma, _eta2JPC,_JPCLamLam_PsiToEta2Gamma);  
+  fillJPClamlam(_JPCLS_PsiToEtaGamma,  _etaJPC,  _JPCLamLam_PsiToEtaGamma);
+  fillJPClamlam(_JPCLS_PsiToF0Gamma,   _f0JPC,   _JPCLamLam_PsiToF0Gamma);
+  fillJPClamlam(_JPCLS_PsiToF2Gamma,   _f1JPC,   _JPCLamLam_PsiToF1Gamma);
+  fillJPClamlam(_JPCLS_PsiToF2Gamma,   _f2JPC,   _JPCLamLam_PsiToF2Gamma);
+  fillJPClamlam(_JPCLS_PsiToEta2Gamma, _eta2JPC, _JPCLamLam_PsiToEta2Gamma);  
 }
 
 PsiToXGamStates::~PsiToXGamStates()

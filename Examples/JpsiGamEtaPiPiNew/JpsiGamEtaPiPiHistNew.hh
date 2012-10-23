@@ -63,6 +63,24 @@ private:
   TH2F* _dalitzMcHist;
   TH2F* _dalitzFittedHist;
 
+  TH2F* _2dcost_EtavsGamDataHist;
+  TH2F* _2dcost_EtavsGamMcHist;
+  TH2F* _2dcost_EtavsGamFittedHist;
+  TH2F* _2dcost_PipvsGamDataHist;
+  TH2F* _2dcost_PipvsGamMcHist;
+  TH2F* _2dcost_PipvsGamFittedHist;
+
+  TH2F* _2dcost_EtaPivsGamDataHist;
+  TH2F* _2dcost_EtaPivsGamMcHist;
+  TH2F* _2dcost_EtaPivsGamFittedHist;
+  TH2F* _2dcost_PipPimvsGamDataHist;
+  TH2F* _2dcost_PipPimvsGamMcHist;
+  TH2F* _2dcost_PipPimvsGamFittedHist;
+
+  TH2F* _2dt_PipPimvsGamDataHist;
+  TH2F* _2dt_PipPimvsGamMcHist;
+  TH2F* _2dt_PipPimvsGamFittedHist;
+
   TH1F* _EtaPiPiMassDataHist;
   TH1F* _EtaPiPiMassMcHist;
   TH1F* _EtaPiPiMassFittedHist;
@@ -129,6 +147,11 @@ private:
   void plotCostGam(TH1F* theCostHisto, EvtDataNew* theData, double weight);
   void plotCostPhi_PiPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
   void plotCostPhi_EtaPiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
+  void plot2dCost_EtavsGamHeli(TH2F* theCostHisto, EvtDataNew* theData, double weight);
+  void plot2dCost_PipvsGamHeli(TH2F* theCostHisto, EvtDataNew* theData, double weight);
+  void plot2dCost_EtaPivsGamHeli(TH2F* theCostHisto, EvtDataNew* theData, double weight);
+  void plot2dCost_PipPimvsGamHeli(TH2F* theCostHisto, EvtDataNew* theData, double weight);
+  void plot2dt_PipPimvsGamHeli(TH2F* theCostHisto, EvtDataNew* theData, double weight);
 
   void fillTuple( TNtuple* theTuple, EvtDataNew* theData, double weight);
 

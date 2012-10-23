@@ -81,6 +81,8 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     Vector4<float>  V4_EtaPim_HeliEtaPipPim = helicityVec(V4_all_Lab, V4_EtaPipPim_Lab, V4_EtaPim_Lab);
     Vector4<float>  V4_PipPim_HeliEtaPipPim = helicityVec(V4_all_Lab, V4_EtaPipPim_Lab, V4_PipPim_Lab);
     
+    //    if (V4_PipPim_HeliEtaPipPim.Phi() > 0.05 || V4_PipPim_HeliEtaPipPim.Phi() < -0.05) {++evtCount;continue;}
+
     Vector4<float>  V4_Pip_HeliPipPim = helicityVec(V4_EtaPipPim_Lab, V4_PipPim_Lab, V4_Pip_Lab);
     Vector4<float>  V4_Pim_HeliPipPim = helicityVec(V4_EtaPipPim_Lab, V4_PipPim_Lab, V4_Pim_Lab);
     
@@ -88,16 +90,6 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     Vector4<float>  V4_Pim_HeliEtaPim = helicityVec(V4_EtaPipPim_Lab, V4_EtaPim_Lab, V4_Pim_Lab);
     Vector4<float>  V4_Eta_HeliEtaPip = helicityVec(V4_EtaPipPim_Lab, V4_EtaPip_Lab, V4_Eta_Lab);
     Vector4<float>  V4_Eta_HeliEtaPim = helicityVec(V4_EtaPipPim_Lab, V4_EtaPim_Lab, V4_Eta_Lab);
-    
-    Vector4<float> V4_normPipPimDecHeliEtaPipPim(0.5*(V4_Pip_HeliEtaPipPim.T()+V4_Pim_HeliEtaPipPim.T()),
-						 V4_Pim_HeliEtaPipPim.Y()*V4_Pip_HeliEtaPipPim.Z()-V4_Pim_HeliEtaPipPim.Z()*V4_Pip_HeliEtaPipPim.Y(),
-						 V4_Pim_HeliEtaPipPim.Z()*V4_Pip_HeliEtaPipPim.X()-V4_Pim_HeliEtaPipPim.X()*V4_Pip_HeliEtaPipPim.Z(),
-						 V4_Pim_HeliEtaPipPim.X()*V4_Pip_HeliEtaPipPim.Y()-V4_Pim_HeliEtaPipPim.Y()*V4_Pip_HeliEtaPipPim.X());
-    
-    Vector4<float> V4_normEtaPipDecHeliEtaPipPim(0.5*(V4_Eta_HeliEtaPipPim.T()+V4_Pip_HeliEtaPipPim.T()),
-						 V4_Pip_HeliEtaPipPim.Y()*V4_Eta_HeliEtaPipPim.Z()-V4_Pip_HeliEtaPipPim.Z()*V4_Eta_HeliEtaPipPim.Y(),
-						 V4_Pip_HeliEtaPipPim.Z()*V4_Eta_HeliEtaPipPim.X()-V4_Pip_HeliEtaPipPim.X()*V4_Eta_HeliEtaPipPim.Z(),
-						 V4_Pip_HeliEtaPipPim.X()*V4_Eta_HeliEtaPipPim.Y()-V4_Pip_HeliEtaPipPim.Y()*V4_Eta_HeliEtaPipPim.X());
     
     EvtDataNew* evtData=new EvtDataNew();
     evtData->FourVecsProd[enumProd4V::Psi] = V4_psi;
@@ -107,13 +99,13 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi] = V4_EtaPip_HeliPsi;
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi] = V4_EtaPim_HeliPsi;
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::gamma_HeliPsi] = V4_gamma_HeliPsi;
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliPsi] = V4_Eta_HeliPsi;
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliPsi] = V4_Pip_HeliPsi;
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pim_HeliPsi] = V4_Pim_HeliPsi;
+    //    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliPsi] = V4_Eta_HeliPsi;
+    //    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliPsi] = V4_Pip_HeliPsi;
+    //    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pim_HeliPsi] = V4_Pim_HeliPsi;
     
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPipPim] = V4_Eta_HeliEtaPipPim;
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliEtaPipPim] = V4_Pip_HeliEtaPipPim;
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pim_HeliEtaPipPim] = V4_Pim_HeliEtaPipPim;
+    //    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPipPim] = V4_Eta_HeliEtaPipPim;
+    //    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pip_HeliEtaPipPim] = V4_Pip_HeliEtaPipPim;
+    //    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Pim_HeliEtaPipPim] = V4_Pim_HeliEtaPipPim;
     
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliEtaPipPim] = V4_EtaPip_HeliEtaPipPim;
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliEtaPipPim] = V4_EtaPim_HeliEtaPipPim;
@@ -127,60 +119,71 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPip] = V4_Eta_HeliEtaPip;
     evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPim] = V4_Eta_HeliEtaPim;
     
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::normPipPimDecHeliEtaPipPim] = V4_normPipPimDecHeliEtaPipPim;
-    evtData->FourVecsDec[enumJpsiGamEtaPiPi4V::normEtaPipDecHeliEtaPipPim] = V4_normEtaPipDecHeliEtaPipPim;
-    
     // calculate and store WignerD functions for Psi -> X gamma (JPC =0-+, 1++, 2-+)
-
+    
+    complex<double>test(2.,3.);
     Spin jPsi=1;
     for (Spin M=-1; M<=1; M=M+2){
       for (Spin lam=-1; lam<=1; lam++){
-	evtData->WignerDsProd[enumProdDfunc::Psi][jPsi][M][lam]=Wigner_D(0.,V4_EtaPipPim_HeliPsi.Theta(),0,jPsi,M,lam);
+	test=Wigner_D(0.,V4_EtaPipPim_HeliPsi.Theta(),0,jPsi,M,lam);
+	evtData->WignerDsProd[enumProdDfunc::Psi][jPsi][M][lam]=test;
       }
     }
     
     for (Spin J_etapipi=0; J_etapipi<=2; J_etapipi++){
       for (Spin lam_etapipi=-J_etapipi; lam_etapipi<=J_etapipi; lam_etapipi++){
-	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::etapipi][J_etapipi][lam_etapipi][0]
-	  =Wigner_D(V4_normPipPimDecHeliEtaPipPim.Phi(),V4_normPipPimDecHeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,0);
+	test=Wigner_D(V4_PipPim_HeliEtaPipPim.Phi(),V4_PipPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,0);
+	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::etapipi][J_etapipi][lam_etapipi][0] =test;
       }
     }
     
     for (Spin J_etapipi=0; J_etapipi<=2; J_etapipi++){
       for (Spin lam_etapipi=-J_etapipi; lam_etapipi<=J_etapipi; lam_etapipi++){
 	for (Spin lamAorF=-J_etapipi; lamAorF<=J_etapipi; lamAorF++){
-	  evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][J_etapipi][lam_etapipi][lamAorF]
-	    =Wigner_D(V4_EtaPip_HeliEtaPipPim.Phi(),V4_EtaPip_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
-	  
-	  evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][J_etapipi][lam_etapipi][lamAorF]
-	    =Wigner_D(V4_EtaPim_HeliEtaPipPim.Phi(),V4_EtaPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
-	  
-	  evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][J_etapipi][lam_etapipi][lamAorF]
-	    =Wigner_D(V4_PipPim_HeliEtaPipPim.Phi(), V4_PipPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
-	  
+	  if (lamAorF==1) continue;
+	  test=Wigner_D(V4_EtaPip_HeliEtaPipPim.Phi(),V4_EtaPip_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
+	  evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][J_etapipi][lam_etapipi][lamAorF]=test;
+	  test=Wigner_D(V4_EtaPim_HeliEtaPipPim.Phi(),V4_EtaPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
+	  evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][J_etapipi][lam_etapipi][lamAorF]=test;
+	  test = Wigner_D(V4_PipPim_HeliEtaPipPim.Phi(), V4_PipPim_HeliEtaPipPim.Theta(),0,J_etapipi,lam_etapipi,lamAorF);
+	  evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][J_etapipi][lam_etapipi][lamAorF]=test;
 	}
       }
     }
-    
+ 
     for (Spin Ja=0; Ja<=2; Ja++){
       for (Spin lam_a=-Ja; lam_a<=Ja; lam_a++){
-	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aplus][Ja][lam_a][0]
-	  =Wigner_D(V4_Pip_HeliEtaPip.Phi(), V4_Pip_HeliEtaPip.Theta(),0,Ja,lam_a,0);
-	
-	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aminus][Ja][lam_a][0]
-	  =Wigner_D(V4_Pim_HeliEtaPim.Phi(), V4_Pim_HeliEtaPim.Theta(),0,Ja,lam_a,0);
+	if (lam_a==1) continue;
+	test=Wigner_D(V4_Eta_HeliEtaPip.Phi(), V4_Eta_HeliEtaPip.Theta(),0,Ja,lam_a,0);
+	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aplus][Ja][lam_a][0]=test;
+	test=Wigner_D(V4_Eta_HeliEtaPim.Phi(), V4_Eta_HeliEtaPim.Theta(),0,Ja,lam_a,0);
+	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aminus][Ja][lam_a][0]=test;
       }
     }
-    
+        
     for (Spin Jf=0; Jf<=2; Jf++){
       for (Spin lam_f=-Jf; lam_f<=Jf; lam_f++){
-	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][Jf][lam_f][0]
-	  =Wigner_D(V4_Pim_HeliPipPim.Phi(), V4_Pim_HeliPipPim.Theta(),0,Jf,lam_f,0);
-	
+	if (lam_f==1) continue;
+	test=Wigner_D(V4_Pip_HeliPipPim.Phi(), V4_Pip_HeliPipPim.Theta(),0,Jf,lam_f,0);
+	evtData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][Jf][lam_f][0]=test;
       }
-    }
+      }
     
-    
+    /*    complex<double> test(2,3);
+    //    test = Wigner_D(0.,0.,0.,1,1,0);    
+    //    std::cout << "WignerDTest {J,l1,l2},theta,phi: \n {1,1,0},0,0: " << test  << std::endl;
+    //    test = Wigner_D(0.,3.141592654,0.,1,1,0);
+    //    std::cout << "WignerDTest: \n {1,1,0},Pi,0: " << test << std::endl;
+    test = Wigner_D(0.,3.141592654/2.,0.,1,-1,0);
+    std::cout << "WignerDTest: \n {1,-1,0},Pi/2,0: " << test << std::endl;
+    test = Wigner_D(0.,3.141592654/4.,0.,1,-1,0);
+    std::cout << "WignerDTest: \n {1,-1,0},Pi/4,0: " << test << std::endl;
+    test = conj(Wigner_D(0.,1.,0.,1,-1,0));
+    std::cout << "WignerDTest: \n {1,-1,0},1,0: " << test  << std::endl;
+    test = Wigner_D(0.,2.,0.,1,-1,0);
+    std::cout << "WignerDTest: \n {1,-1,0},2,0: " << test << std::endl << std::endl;*/
+
+
     evtData->evtWeight=1.;
     theEvtList.push_back(evtData);
     evtWeightSum+=1.;    
