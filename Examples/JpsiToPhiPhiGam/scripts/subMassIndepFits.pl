@@ -86,7 +86,16 @@ while($bin<$nbins){
     my $fitDir = $rangeDir."/" .$theHyp;
     my $fitConfig = $fitDir ."/JpsiGamPhiPhi_$theHyp.cfg";
     my $fitStart = $fitDir."/" .basename($templStart);  
-  
+    
+    my $finalResult =  $fitDir ."/finalResult.dat";
+    if( -e $finalResult){
+	print "Fit $finalResult allready finished successfully -- do not submit again!\n";
+	$bin++;
+	next;
+    }
+    
+
+    
     if(! (-e $fitDir)) {system("mkdir $fitDir");}
     open CONF, ">$fitConfig";
 #    print CONF $addParFixList."\n";

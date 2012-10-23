@@ -1,12 +1,10 @@
-#setenv ROOTSYS /opt/root/5.24-00/Linux26SL5_x86_64_gcc412
 setenv ROOTSYS /opt/root/5.26-00b/Linux26SL5_x86_64_gcc412
-#setenv CMAKE_SOURCE_DIR /data/pegasus2/bertram/PawianPsi2S_V2/Pawian
+#setenv ROOTSYS /opt/root/5.34-01/Linux26SL6_x86_64_gcc444
+
 setenv CMAKE_SOURCE_DIR `pwd | sed -e 's/\/nfs//'`
 setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
 setenv PATH ${PATH}:${ROOTSYS}/bin:/data/pegasus1/PANDA/bin/
 setenv BOOST_BUILD_PATH /data/pegasus1/PANDA/PWA/boost-build/
-#setenv MINUITVARIANT Minuit2
-#setenv MINUITVARIANT Minuit2noMP
 
 echo "\n ROOTSYS: " $ROOTSYS 
 echo "\n CMAKE_SOURCE_DIR: " $CMAKE_SOURCE_DIR  
