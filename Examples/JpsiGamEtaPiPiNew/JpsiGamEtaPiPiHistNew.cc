@@ -637,10 +637,7 @@ void JpsiGamEtaPiPiHistNew::plot2dt_PipPimvsGamHeli(TH2F* theCostHisto, EvtDataN
   Vector4<double> v4x = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::gamma_HeliPsi];
   Vector4<double> v4y = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliEtaPipPim];
   //  if (v4y.Phi() < 0.05 && v4y.Phi() > -0.05)
-  //  theCostHisto->Fill(v4x.Theta(),v4y.Theta(),weight);
-  
-  theCostHisto->Fill(
-costDecHeli
+  theCostHisto->Fill(v4x.Theta(),v4y.Theta(),weight);
 }
 
 
