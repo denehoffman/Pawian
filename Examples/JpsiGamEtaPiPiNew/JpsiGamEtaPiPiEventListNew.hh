@@ -25,12 +25,12 @@ struct enumJpsiGamEtaPiPi4V{
     static std::string fitName[enumJpsiGamEtaPiPi4V::n4Vecs]
       /*      ={"EtaPipPim_HeliPsi", "PipPim_HeliPsi","EtaPip_HeliPsi","EtaPim_HeliPsi",
         "gamma_HeliPsi", "Eta_HeliPsi", "Pip_HeliPsi", "Pim_HeliPsi",
-        "Eta_HeliEtaPipPim", "Pip_HeliEtaPipPim", "Pim_HeliEtaPipPim", "EtaPip_HeliEtaPipPim", "EtaPim_HeliEtaPipPim", "PipPim_HeliEtaPipPim"
+        "Eta_HeliEtaPipPim", "Pip_HeliEtaPipPim", "Pim_HeliEtaPipPim", "EtaPip_HeliEtaPipPim", "EtaPim_HeliEtaPipPim", "PipPim_HeliEtaPipPim",
         "Pip_HeliPipPim", "Pim_HeliPipPim", "Pip_HeliEtaPip", "Pim_HeliEtaPim", "Eta_HeliEtaPip", "Eta_HeliEtaPim",
 	};*/
     ={"EtaPipPim_HeliPsi", "PipPim_HeliPsi","EtaPip_HeliPsi","EtaPim_HeliPsi",
-      "gamma_HeliPsi", "EtaPip_HeliEtaPipPim", "EtaPim_HeliEtaPipPim","PipPim_HeliEtaPipPim"
-      "Pip_HeliPipPim", "Pim_HeliPipPim", "Pip_HeliEtaPip", "Pim_HeliEtaPim", "Eta_HeliEtaPip", "Eta_HeliEtaPim",
+      "gamma_HeliPsi", "EtaPip_HeliEtaPipPim", "EtaPim_HeliEtaPipPim","PipPim_HeliEtaPipPim",
+      "Pip_HeliPipPim", "Pim_HeliPipPim", "Pip_HeliEtaPip", "Pim_HeliEtaPim", "Eta_HeliEtaPip", "Eta_HeliEtaPim"
     };
 
     

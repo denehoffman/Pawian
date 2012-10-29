@@ -24,6 +24,8 @@ JpsiGamEtaPiPiEventListNew::~JpsiGamEtaPiPiEventListNew()
 void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts){
   Event* anEvent;
   int evtCount = 0;
+  //  double min=4;
+  //  double max =0;
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
     if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
@@ -82,14 +84,20 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
     Vector4<float>  V4_PipPim_HeliEtaPipPim = helicityVec(V4_all_Lab, V4_EtaPipPim_Lab, V4_PipPim_Lab);
     
     //    if (V4_PipPim_HeliEtaPipPim.Phi() > 0.05 || V4_PipPim_HeliEtaPipPim.Phi() < -0.05) {++evtCount;continue;}
+    //    if (min > V4_PipPim_HeliEtaPipPim.Theta()){min = V4_PipPim_HeliEtaPipPim.Theta();  std::cout << V4_PipPim_HeliEtaPipPim.Theta() << std::endl;}
+    //    if (max < V4_PipPim_HeliEtaPipPim.Theta()){max = V4_PipPim_HeliEtaPipPim.Theta();  std::cout << V4_PipPim_HeliEtaPipPim.Theta() << std::endl;}
+
+
 
     Vector4<float>  V4_Pip_HeliPipPim = helicityVec(V4_EtaPipPim_Lab, V4_PipPim_Lab, V4_Pip_Lab);
     Vector4<float>  V4_Pim_HeliPipPim = helicityVec(V4_EtaPipPim_Lab, V4_PipPim_Lab, V4_Pim_Lab);
-    
+   
     Vector4<float>  V4_Pip_HeliEtaPip = helicityVec(V4_EtaPipPim_Lab, V4_EtaPip_Lab, V4_Pip_Lab);
     Vector4<float>  V4_Pim_HeliEtaPim = helicityVec(V4_EtaPipPim_Lab, V4_EtaPim_Lab, V4_Pim_Lab);
     Vector4<float>  V4_Eta_HeliEtaPip = helicityVec(V4_EtaPipPim_Lab, V4_EtaPip_Lab, V4_Eta_Lab);
     Vector4<float>  V4_Eta_HeliEtaPim = helicityVec(V4_EtaPipPim_Lab, V4_EtaPim_Lab, V4_Eta_Lab);
+
+    //std::cout << V4_PipPim_HeliEtaPipPim << "\t" << V4_Pip_HeliPipPim << "\t" << V4_PipPim_HeliEtaPipPim.Phi() << "\t" << V4_PipPim_HeliEtaPipPim.Theta() << std::endl;
     
     EvtDataNew* evtData=new EvtDataNew();
     evtData->FourVecsProd[enumProd4V::Psi] = V4_psi;

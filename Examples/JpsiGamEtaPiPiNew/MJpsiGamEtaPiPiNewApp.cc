@@ -205,7 +205,7 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
     
-    JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams,theAppParams.massRange(), jobOption.c_str());
+    JpsiGamEtaPiPiHistNew theHist(theLhPtr, theStartparams, theAppParams.massRange(), jobOption.c_str());
     theHist.PrintToPDF(jobOption);
     theHist.SaveToROOT();
 
@@ -370,7 +370,7 @@ int main(int __argc,char *__argv[]){
 
     std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
     summaryfile.precision(4);
-    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams << "\t" << finalUsrParameters.Value("a0_980Mass");
+    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams; // << "\t" << finalUsrParameters.Value("a0_980Mass");
     for (unsigned int i=0;i<evNumResult.size();i++){
       summaryfile << "\t" << evNumResult[i];
     }
