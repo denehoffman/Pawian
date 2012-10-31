@@ -208,16 +208,19 @@ int main(int __argc,char *__argv[]){
   double evtWeightSumData = theJpsiGamXEventListPtr->NoOfWeightedDataEvts();
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
   double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+  double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
 
   Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
   Info << "evtWeightSumData:\t" <<evtWeightSumData; 
   Info << "BIC:\t" << BICcriterion << endmsg;
   Info << "AIC:\t" << AICcriterion << endmsg;
+  Info << "AICc:\t" << AICccriterion << endmsg;
 
   std::string qaSummaryFileName = "qaSummary" + jobOption + ".dat";
   std::ofstream theQaStream ( qaSummaryFileName.c_str() );
   theQaStream << "BIC\t" << BICcriterion << "\n";
-  theQaStream << "AIC\t" << AICcriterion << "\n";
+  theQaStream << "AICa\t" << AICcriterion << "\n";
+  theQaStream << "AICc\t" << AICccriterion << "\n";
   theQaStream << "logLh\t" << theLh << "\n";
   theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
   theQaStream.close();
