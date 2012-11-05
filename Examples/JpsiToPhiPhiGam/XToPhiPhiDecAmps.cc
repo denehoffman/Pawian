@@ -12,7 +12,14 @@ XToPhiPhiDecAmps::XToPhiPhiDecAmps(const std::string& name, const std::vector<st
   AbsXdecAmp(name, hypVec, spinX, parity)
   ,_phiPhiKey(name+"ToPhiPhi")
   ,_xBWKey(name+"BreitWigner")
+  ,_xFlatteKey(name+"Flatte")
   ,_massIndependent(true)
+  ,_bwMassFit(false)
+  ,_flatteMassFit(false)
+  ,_phiMass( 1.019455)
+  ,_omegaMass( 0.78265)
+  ,_phiPhiPair(make_pair(_phiMass, _phiMass))
+  ,_omegaPhiPair(make_pair(_omegaMass, _phiMass))
   ,_theStatesPtr(theStates)
 {
   initialize();
@@ -30,9 +37,19 @@ complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData, fitPar
   complex<double> dynModel(1.,0.);
   if (!_massIndependent){
     double xMass=theParamVal.Masses[_name];
-    double xWidth=theParamVal.Widths[_name];
     Vector4<double> p4PhiPhi = theData->FourVecsDec[enumJpsiGamX4V::V4_KsKlKpKm_HeliPsi];
-    dynModel=BreitWigner(p4PhiPhi, xMass, xWidth);
+    if(_bwMassFit){
+      double xWidth=theParamVal.Widths[_name];
+      dynModel=BreitWigner(p4PhiPhi, xMass, xWidth);
+    }
+    else if(_flatteMassFit){
+      std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
+      std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
+      double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
+      double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
+
+      dynModel=Flatte( p4PhiPhi, _phiPhiPair, _omegaPhiPair, xMass, gFactorPhiPhi, gFactorOmegaPhi  );
+    }
   }
 
   result *=dynModel;
@@ -119,8 +136,19 @@ void  XToPhiPhiDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fit
     
     fitVal.Masses[_name]=MassGeV;
     fitErr.Masses[_name]=0.01;
-    fitVal.Widths[_name]=0.2;
-    fitErr.Widths[_name]=0.02;
+
+    if(_bwMassFit){
+      fitVal.Widths[_name]=0.2;
+      fitErr.Widths[_name]=0.02;
+    }
+    else if( _flatteMassFit){
+      std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
+      std::string omegaPhiGFactorKey="gFactorOmegaPhi_"+_name;
+      fitVal.gFactors[phiPhiGFactorKey]=0.3;
+      fitVal.gFactors[omegaPhiGFactorKey]=0.3;
+      fitErr.gFactors[phiPhiGFactorKey]=0.2;
+      fitErr.gFactors[omegaPhiGFactorKey]=0.2;
+    }
   }
 }
 
@@ -132,11 +160,15 @@ void XToPhiPhiDecAmps::initialize(){
   std::vector<std::string>::const_iterator it;
 
   for (it=_hypVec.begin(); it!=_hypVec.end(); ++it){
-
     if (it->compare(0, _xBWKey.size(), _xBWKey) ==0){
+      _bwMassFit=true;
       _massIndependent=false;
     }
-    
+    else if (it->compare(0, _xFlatteKey.size(), _xFlatteKey) ==0){
+      _flatteMassFit=true;
+      _massIndependent=false;
+    }    
   }
+
 
 }

@@ -36,8 +36,16 @@ public:
 protected:
   const std::string _phiPhiKey;
   const std::string _xBWKey;
+  const std::string _xFlatteKey;
 
   bool _massIndependent;
+  bool _bwMassFit;
+  bool _flatteMassFit;
+
+  const double _phiMass;
+  const double _omegaMass;
+  pair<const double, const double> _phiPhiPair;
+  pair<const double, const double> _omegaPhiPair;
 
   boost::shared_ptr<JpsiToPhiPhiGamStates> _theStatesPtr;
 
