@@ -37,6 +37,7 @@ struct EvtDataNew {
   mapIntSpinComplex WignerDsProd;
   mapIntSpinComplex WignerDsDec;
   double evtWeight;
+  int evtNo;
 };
 
 class EventList;
@@ -65,5 +66,6 @@ protected:
   double _noOfWeightedMcEvts;
   int _mcToDataRatio;
   bool _alreadyRead;
+  int _evtNoAll;
 
 };

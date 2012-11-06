@@ -146,10 +146,12 @@ void JpsiToPhiPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtData
      }    
     
     evtData->evtWeight=anEvent->Weight();
+    evtData->evtNo=_evtNoAll;
     theEvtList.push_back(evtData);
     
     evtWeightSum += anEvent->Weight();    
     ++evtCount;
+    ++_evtNoAll;
   }
 }
 

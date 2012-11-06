@@ -258,3 +258,16 @@ void PsiProdBaseLhNew::getDefaultLamLamParams(const std::vector<std::string>& hy
   
 
 }
+
+void PsiProdBaseLhNew::checkParamVariation(fitParamsNew& theParamVal){
+  std::map< std::string,std::vector<std::string> >::const_iterator itMap;
+  for (itMap=_hypMap.begin(); itMap!=_hypMap.end(); ++itMap){
+    std::vector<std::string>::const_iterator itStr;
+
+    for (itStr = itMap->second.begin(); itStr!= itMap->second.end(); ++itStr){
+      boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
+      currentDecAmp->checkRecalculation(theParamVal);
+    }  
+  }  
+  return;
+}

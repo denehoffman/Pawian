@@ -35,4 +35,6 @@ protected:
 
   virtual void setHyps( const std::map<const std::string, bool>& theMap, 
 			bool& theHyp, std::string& theKey);
+  
+  virtual void checkParamVariation(fitParamsNew& theParamVal);
 };

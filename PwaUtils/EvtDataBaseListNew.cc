@@ -12,7 +12,8 @@ EvtDataBaseListNew::EvtDataBaseListNew() :
   _noOfWeightedDataEvts(0.),
   _noOfWeightedMcEvts(0.),
   _mcToDataRatio(1000),
-  _alreadyRead(false)
+  _alreadyRead(false),
+  _evtNoAll(0)
 {
 }
 

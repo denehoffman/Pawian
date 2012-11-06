@@ -67,6 +67,8 @@ protected:
   virtual complex<double> psiToXGammaAmp(Spin Minit, Spin lamX, Spin lamGamma,
 					 EvtDataNew* theData, 
                                          double PsiToXGamMag, double PsiToXGamPhi);
+  
+  virtual void checkParamVariation(fitParamsNew& theParamVal);
  
 private:
   void getDefaultLamLamParams(const std::vector<std::string>& hyps, 

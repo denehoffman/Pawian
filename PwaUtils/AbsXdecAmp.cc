@@ -11,6 +11,11 @@ AbsXdecAmp::AbsXdecAmp(const std::string& name, const std::vector<std::string>& 
   ,_hypVec(hypVec)
   ,_J_X(spinX)
   ,_parity(parity)
+  ,_oldXMass(0.)
+  ,_oldXWidth(0.)
+  ,_oldgFactorPhiPhi(0.)
+  ,_oldgFactorOmegaPhi(0.)
+  ,_recalculate(true)
 {
 }
 
@@ -18,6 +23,8 @@ AbsXdecAmp::~AbsXdecAmp()
 {
 }
 
-
+void AbsXdecAmp::checkRecalculation(fitParamsNew& theParamVal){
+  _recalculate=true;
+}
 
 

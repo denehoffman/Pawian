@@ -22,9 +22,18 @@ public:
   const std::string name() const {return _name;}
   const Spin  spinX() const {return _J_X;}
   const int  parity() const {return _parity;}
+  virtual void checkRecalculation(fitParamsNew& theParamVal);
 protected:
   const std::string _name;
   const std::vector<std::string> _hypVec;
   Spin _J_X;
   int _parity; 
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _oldParamMags;
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _oldParamPhis;
+  double _oldXMass;
+  double _oldXWidth;
+  double _oldgFactorPhiPhi;
+  double _oldgFactorOmegaPhi;
+  bool _recalculate;
+  std::map<int, std::map<Spin, complex<double> > > _cachedAmpMap;
 };

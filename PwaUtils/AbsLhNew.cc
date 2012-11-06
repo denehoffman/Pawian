@@ -29,7 +29,9 @@ AbsLhNew::~AbsLhNew()
 }
 
 double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
- 
+
+  checkParamVariation(theParamVal); 
+  
   double logLH=0.;
   double logLH_data=0.;
   double weightSum=0.;
@@ -99,3 +101,6 @@ void AbsLhNew::setHyps( const std::map<const std::string, bool>& theMap, bool& t
   }
 }
 
+void AbsLhNew::checkParamVariation(fitParamsNew& theParamVal){
+  return;
+}

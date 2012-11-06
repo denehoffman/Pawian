@@ -8,6 +8,10 @@
 // #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "Examples/JpsiToPhiPhiGam/JpsiToPhiPhiGamEventList.hh"
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 XToPhiPhiDecAmps::XToPhiPhiDecAmps(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates, Spin spinX, int parity) :
   AbsXdecAmp(name, hypVec, spinX, parity)
   ,_phiPhiKey(name+"ToPhiPhi")
@@ -30,29 +34,45 @@ XToPhiPhiDecAmps::~XToPhiPhiDecAmps()
 }
 
 complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+  int evtNo=theData->evtNo;
+  
+  if (!_recalculate) return _cachedAmpMap[theData->evtNo][lamX];
+
+
   complex<double> result(0.,0.);
 
-  result+=XToPhiPhiAmp(lamX, theData, theParamVal);
-
-  complex<double> dynModel(1.,0.);
-  if (!_massIndependent){
-    double xMass=theParamVal.Masses[_name];
-    Vector4<double> p4PhiPhi = theData->FourVecsDec[enumJpsiGamX4V::V4_KsKlKpKm_HeliPsi];
-    if(_bwMassFit){
-      double xWidth=theParamVal.Widths[_name];
-      dynModel=BreitWigner(p4PhiPhi, xMass, xWidth);
+    result+=XToPhiPhiAmp(lamX, theData, theParamVal);
+    
+    complex<double> dynModel(1.,0.);
+    if (!_massIndependent){
+      double xMass=theParamVal.Masses[_name];
+      Vector4<double> p4PhiPhi = theData->FourVecsDec[enumJpsiGamX4V::V4_KsKlKpKm_HeliPsi];
+      if(_bwMassFit){
+	double xWidth=theParamVal.Widths[_name];
+	dynModel=BreitWigner(p4PhiPhi, xMass, xWidth);
+      }
+      else if(_flatteMassFit){
+	std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
+	std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
+	double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
+	double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
+	
+	dynModel=Flatte( p4PhiPhi, _phiPhiPair, _omegaPhiPair, xMass, gFactorPhiPhi, gFactorOmegaPhi  );
+      }
     }
-    else if(_flatteMassFit){
-      std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
-      std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
-      double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
-      double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
-
-      dynModel=Flatte( p4PhiPhi, _phiPhiPair, _omegaPhiPair, xMass, gFactorPhiPhi, gFactorOmegaPhi  );
-    }
-  }
-
-  result *=dynModel;
+    
+    result *=dynModel;
+    
+#ifdef _OPENMP
+#pragma omp critical
+     {
+#endif
+      _cachedAmpMap[evtNo][lamX]=result;
+#ifdef _OPENMP
+     }
+#endif
+ 
+  
   return result;
 }
 
@@ -86,7 +106,7 @@ complex<double> XToPhiPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData, f
       }
     }
    }
-   
+ 
    return result;
 }
 
@@ -171,4 +191,44 @@ void XToPhiPhiDecAmps::initialize(){
   }
 
 
+}
+
+void XToPhiPhiDecAmps::checkRecalculation(fitParamsNew& theParamVal){
+  _recalculate=false;
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiMag=theParamVal.Mags[_phiPhiKey];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiPhi=theParamVal.Phis[_phiPhiKey];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
+   for ( itXMag=XToPhiPhiMag.begin(); itXMag!=XToPhiPhiMag.end(); ++itXMag){
+     boost::shared_ptr<const JPCLS> XState=itXMag->first;
+     double theXMag=itXMag->second;
+     double theXPhi=XToPhiPhiPhi[XState];
+     if ( fabs(theXMag - _oldParamMags[XState])  > 1.e-8 ) _recalculate=true;
+     _oldParamMags[XState]=theXMag;
+     if ( fabs(theXPhi - _oldParamPhis[XState])  > 1.e-8 ) _recalculate=true;
+     _oldParamPhis[XState]=theXPhi;
+   }
+
+   if (!_massIndependent){
+     double xMass=theParamVal.Masses[_name];
+     if ( fabs(xMass-_oldXMass) > 1.e-8) _recalculate=true;
+     _oldXMass= xMass; 
+    
+     if(_bwMassFit){
+       double xWidth=theParamVal.Widths[_name];
+       if ( fabs(xWidth - _oldXWidth) > 1.e-8) _recalculate=true;
+       _oldXWidth=xWidth;      
+     }
+    else if(_flatteMassFit){
+      std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
+      std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
+      double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
+      double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
+      if ( fabs(gFactorPhiPhi - _oldgFactorPhiPhi)  > 1.e-8 ) _recalculate=true;
+      _oldgFactorPhiPhi=gFactorPhiPhi;
+      if ( fabs(gFactorOmegaPhi - _oldgFactorOmegaPhi)  > 1.e-8 ) _recalculate=true;
+      _oldgFactorOmegaPhi=gFactorOmegaPhi;
+    }
+  }
+   if (_recalculate) Info << "Recalculation for amplitudes for " << _name << endmsg;  
+   
 }
