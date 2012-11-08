@@ -36,7 +36,7 @@ XToPhiPhiDecAmps::~XToPhiPhiDecAmps()
 complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
   int evtNo=theData->evtNo;
   
-  if (!_recalculate) return _cachedAmpMap[theData->evtNo][lamX];
+  if ( _cacheAmps && !_recalculate) return _cachedAmpMap[theData->evtNo][lamX];
 
 
   complex<double> result(0.,0.);
@@ -62,16 +62,17 @@ complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData, fitPar
     }
     
     result *=dynModel;
-    
+
+    if ( _cacheAmps){    
 #ifdef _OPENMP
 #pragma omp critical
-     {
+      {
 #endif
-      _cachedAmpMap[evtNo][lamX]=result;
+	_cachedAmpMap[evtNo][lamX]=result;
 #ifdef _OPENMP
-     }
+      }
 #endif
- 
+    }
   
   return result;
 }
@@ -229,6 +230,6 @@ void XToPhiPhiDecAmps::checkRecalculation(fitParamsNew& theParamVal){
       _oldgFactorOmegaPhi=gFactorOmegaPhi;
     }
   }
-   if (_recalculate) Info << "Recalculation for amplitudes for " << _name << endmsg;  
+   if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;  
    
 }

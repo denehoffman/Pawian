@@ -24,6 +24,7 @@ public:
   virtual boost::shared_ptr<const EvtDataBaseListNew> getEventList() const {
     return _evtListPtr;
   }
+  void cacheAmplitudes();
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)=0;
   virtual void print(std::ostream& os) const=0;
 
@@ -32,9 +33,11 @@ protected:
   std::vector<EvtDataNew*> _evtDataVec;
   std::vector<EvtDataNew*> _evtMCVec;
   std::map<const std::string, bool> _hypMap;
+  bool _cacheAmps;
 
   virtual void setHyps( const std::map<const std::string, bool>& theMap, 
 			bool& theHyp, std::string& theKey);
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
+  virtual void cacheTheAmps()=0;
 };

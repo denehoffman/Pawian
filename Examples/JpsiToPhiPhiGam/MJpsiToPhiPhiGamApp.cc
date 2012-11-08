@@ -167,7 +167,6 @@ int main(int __argc,char *__argv[]){
     theLhPtr->getDefaultParams(defaultVal, defaultErr);
     std::string defaultparamsname = "defaultparams" + jobOption + ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.c_str() );
-    //	  std::ofstream theStreamDefault ( "defaultparams.dat");
     
     theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
     return 0;
@@ -232,7 +231,9 @@ int main(int __argc,char *__argv[]){
   }
   
   if (mode=="pwa"){
-    
+    bool cacheAmps = theAppParams.cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
     std::vector<std::string>::const_iterator itFix;
     for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
       upar.Fix( (*itFix) );

@@ -69,7 +69,7 @@ protected:
                                          double PsiToXGamMag, double PsiToXGamPhi);
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
- 
+  virtual void cacheTheAmps(); 
 private:
   void getDefaultLamLamParams(const std::vector<std::string>& hyps, 
 			      std::vector< boost::shared_ptr<const JPClamlam> > lamLamAmps, 

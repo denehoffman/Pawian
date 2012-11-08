@@ -33,10 +33,9 @@ PsiProdBaseLhNew::PsiProdBaseLhNew(boost::shared_ptr<const EvtDataBaseListNew> t
   ,_phasespaceKey("Phasespace")
 {
   initializeHypothesis();
- 
 }
 
-PsiProdBaseLhNew::PsiProdBaseLhNew( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates ) :
+PsiProdBaseLhNew::PsiProdBaseLhNew( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<PsiToXGamStates> theStates) :
   AbsLhNew(theLhPtr->getEventList())
   ,_hypVec(hypVec)
   ,_theStatesPtr(theStates)
@@ -267,6 +266,19 @@ void PsiProdBaseLhNew::checkParamVariation(fitParamsNew& theParamVal){
     for (itStr = itMap->second.begin(); itStr!= itMap->second.end(); ++itStr){
       boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
       currentDecAmp->checkRecalculation(theParamVal);
+    }  
+  }  
+  return;
+}
+
+void PsiProdBaseLhNew::cacheTheAmps(){
+  std::map< std::string,std::vector<std::string> >::const_iterator itMap;
+  for (itMap=_hypMap.begin(); itMap!=_hypMap.end(); ++itMap){
+    std::vector<std::string>::const_iterator itStr;
+
+    for (itStr = itMap->second.begin(); itStr!= itMap->second.end(); ++itStr){
+      boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
+      currentDecAmp->cacheAmplitudes();
     }  
   }  
   return;

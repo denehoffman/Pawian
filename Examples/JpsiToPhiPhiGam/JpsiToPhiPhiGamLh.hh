@@ -50,7 +50,6 @@ public:
 protected:
   boost::shared_ptr<JpsiToPhiPhiGamStates> _jpsiToPhiPhiGamStatesPtr; 
 
-
 private:
 
   void initializeHypothesis();

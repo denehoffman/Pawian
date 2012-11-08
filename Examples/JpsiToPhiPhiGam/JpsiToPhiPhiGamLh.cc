@@ -22,7 +22,7 @@ JpsiToPhiPhiGamLh::JpsiToPhiPhiGamLh(boost::shared_ptr<const EvtDataBaseListNew>
  
 }
 
-JpsiToPhiPhiGamLh::JpsiToPhiPhiGamLh( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates ) :
+JpsiToPhiPhiGamLh::JpsiToPhiPhiGamLh( boost::shared_ptr<AbsLhNew> theLhPtr, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiToPhiPhiGamStates> theStates) :
   PsiProdBaseLhNew(theLhPtr->getEventList(), hypVec, theStates)
   ,_jpsiToPhiPhiGamStatesPtr(theStates)
 {  
@@ -65,7 +65,7 @@ void  JpsiToPhiPhiGamLh::initializeHypothesis(){
     size_t pos=it->find(_F1Key);
     std::string f1DecAmpName=it->substr(pos);
     _f1DecAmpMap[*it]=boost::shared_ptr<AbsXdecAmp>(new XToPhiPhiDecAmps( f1DecAmpName, _hypVec, _jpsiToPhiPhiGamStatesPtr, Spin(1), 1 ));
-    _allAmpMap[*it]=_f1DecAmpMap[*it];
+     _allAmpMap[*it]=_f1DecAmpMap[*it];
   }
 
   for (it=_GammaF2Hyps.begin(); it!=_GammaF2Hyps.end(); ++it){
@@ -76,4 +76,6 @@ void  JpsiToPhiPhiGamLh::initializeHypothesis(){
   }
 
 }
+
+
 

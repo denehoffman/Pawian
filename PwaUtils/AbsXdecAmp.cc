@@ -15,6 +15,7 @@ AbsXdecAmp::AbsXdecAmp(const std::string& name, const std::vector<std::string>& 
   ,_oldXWidth(0.)
   ,_oldgFactorPhiPhi(0.)
   ,_oldgFactorOmegaPhi(0.)
+  ,_cacheAmps(false)
   ,_recalculate(true)
 {
 }

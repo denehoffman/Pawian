@@ -12,6 +12,7 @@
 
 AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
   _evtListPtr(theEvtList)
+  ,_cacheAmps(false)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
   _evtMCVec=_evtListPtr->getMcVecs();
@@ -19,6 +20,7 @@ AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
 
 AbsLhNew::AbsLhNew(boost::shared_ptr<AbsLhNew> theAbsLhPtr):
   _evtListPtr(theAbsLhPtr->getEventList())
+  ,_cacheAmps(false)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
   _evtMCVec=_evtListPtr->getMcVecs();
@@ -30,7 +32,7 @@ AbsLhNew::~AbsLhNew()
 
 double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
 
-  checkParamVariation(theParamVal); 
+  if (_cacheAmps) checkParamVariation(theParamVal); 
   
   double logLH=0.;
   double logLH_data=0.;
@@ -103,4 +105,9 @@ void AbsLhNew::setHyps( const std::map<const std::string, bool>& theMap, bool& t
 
 void AbsLhNew::checkParamVariation(fitParamsNew& theParamVal){
   return;
+}
+
+void AbsLhNew::cacheAmplitudes(){
+  _cacheAmps=true;
+    cacheTheAmps();
 }

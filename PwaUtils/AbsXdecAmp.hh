@@ -23,6 +23,7 @@ public:
   const Spin  spinX() const {return _J_X;}
   const int  parity() const {return _parity;}
   virtual void checkRecalculation(fitParamsNew& theParamVal);
+  void cacheAmplitudes(){_cacheAmps=true;}
 protected:
   const std::string _name;
   const std::vector<std::string> _hypVec;
@@ -34,6 +35,7 @@ protected:
   double _oldXWidth;
   double _oldgFactorPhiPhi;
   double _oldgFactorOmegaPhi;
+  bool _cacheAmps;
   bool _recalculate;
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpMap;
 };

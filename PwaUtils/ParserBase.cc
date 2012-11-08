@@ -19,6 +19,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _verbose(true)
       , _noOfThreads(16)
       , _ratioMcToData(100000)
+      , _cacheAmps(true)
       , _strErrLogMode("debug")
       , _desc(0)
       , _common(new po::options_description("Common Options"))
@@ -46,14 +47,15 @@ ParserBase::ParserBase(int argc,char **argv)
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
       ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaultParams, qaMode, plotmode")
+      ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
+      ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
+      ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
       ;
 
     _config->add_options()
       ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
-      ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
-      ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
       ;
 
 
@@ -135,6 +137,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "mode: " << _mode << "\n\n"
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
+		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
             << endl;
 
 
