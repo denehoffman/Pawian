@@ -132,10 +132,12 @@ complex<double> XDecAmpBase::XToAPiFlatteAmp(Spin lamX, EvtDataNew* theData,
 
     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
       (  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_J_X][lamX][0])
-	 /**Flatte(p4EtaPiplus , _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)*/
+	 //*sqrt(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPip_HeliPsi].M()/theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPip].P())
+	 *Flatte(p4EtaPiplus , _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 +
 	 conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_J_X][lamX][0])
-	 /*	 *Flatte(p4EtaPiminus, _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)*/
+	 //*sqrt(theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPim_HeliPsi].M()/theData->FourVecsDec[enumJpsiGamEtaPiPi4V::Eta_HeliEtaPim].P())
+	 *Flatte(p4EtaPiminus, _decPairPiEta, _decPairKK, a0_980Mass, a0_980gPiEta, a0_980gKK)
 	 )*0.5;
     result+= amp;
   }
@@ -160,7 +162,7 @@ complex<double> XDecAmpBase::XToFEtaFlatteAmp(Spin lamX, EvtDataNew* theData,
      
     complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
       conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][0])
-      /*      *Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK)*/;
+      *Flatte(p4PiPi, _decPairPiPi, _decPairKK, f0_980Mass, f0_980gPiPi, f0_980gKK);
     result+= amp;
   }
 
@@ -191,7 +193,7 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
 	*Clebsch(jf, lamf, 0, 0, XState->S, lamf)
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][lamf])
 	*conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::fToPiPi][jf][lamf][0])
-	/*	*BreitWignerBlattW(p4PiPi, _massPi, _massPi, fMass, fWidth, jf)*/;
+	*BreitWignerBlattW(p4PiPi, _massPi, _massPi, fMass, fWidth, jf);
     }
     result+= amp;
   }
@@ -220,15 +222,14 @@ complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData
       if(fabs(lamA)> _J_X || fabs(lamA)>XState->S){ 
 	continue;
       }
-
       amp += theXMag*expiphiX*sqrt(2.*XState->L+1.)*sqrt(2.*jA+1.)
 	*Clebsch(XState->L, 0, XState->S, lamA, _J_X, lamA)
 	*Clebsch(jA, lamA, 0, 0, XState->S, lamA)
 	*(  conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAplusPiminus][_J_X][lamX][lamA])
-	    /*  *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)*/
+	    *BreitWignerBlattW(p4EtaPiplus, _massPi, _massEta, aMass, aWidth, jA)
 	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aplus][jA][lamA][0])+
 	    conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XToAminusPiplus][_J_X][lamX][lamA])
-	    /**BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)*/
+	    *BreitWignerBlattW(p4EtaPiminus, _massPi, _massEta, aMass, aWidth, jA)
 	    *conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::Aminus][jA][lamA][0])
 	 )*0.5;
     }
