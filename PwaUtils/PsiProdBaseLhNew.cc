@@ -97,9 +97,9 @@ double PsiProdBaseLhNew::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& the
 	/*complex<double>*/ JpGmTmp = currentJPClamlam->parityFactor*psiToXGammaAmp(1, -helX, -1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);
 	/*complex<double>*/ JmGmTmp = currentJPClamlam->parityFactor*psiToXGammaAmp(-1, -helX, -1, theData, itMag->second, PsiToXGamPhi[currentJPClamlam]);	
 
-	/*complex<double>*/ TmpDecAmpPos = currentDecAmp->XdecAmp(helX, theData, theParamVal);
+	/*complex<double>*/ TmpDecAmpPos = currentDecAmp->XdecAmp(helX, theData);
 	/*complex<double>*/ TmpDecAmpNeg = TmpDecAmpPos;
-        if (helX>0)  TmpDecAmpNeg = currentDecAmp->XdecAmp(-helX, theData, theParamVal);
+        if (helX>0)  TmpDecAmpNeg = currentDecAmp->XdecAmp(-helX, theData);
 
 	JmpGmp+=JpGpTmp*TmpDecAmpPos;
 	JmpGmm+=JpGmTmp*TmpDecAmpNeg;
@@ -282,4 +282,17 @@ void PsiProdBaseLhNew::cacheTheAmps(){
     }  
   }  
   return;
+}
+
+void PsiProdBaseLhNew::updateFitParams(fitParamsNew& theParamVal){
+
+  std::map< std::string,std::vector<std::string> >::const_iterator itMap;
+  for (itMap=_hypMap.begin(); itMap!=_hypMap.end(); ++itMap){
+    std::vector<std::string>::const_iterator itStr;
+    
+    for (itStr = itMap->second.begin(); itStr!= itMap->second.end(); ++itStr){
+      boost::shared_ptr<AbsXdecAmp> currentDecAmp=_allAmpMap[*itStr];
+      currentDecAmp->updateFitParams(theParamVal);
+    }
+  }
 }

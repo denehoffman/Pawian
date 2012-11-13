@@ -32,7 +32,7 @@ public:
   
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
   virtual void print(std::ostream& os) const;
-  
+
 protected:
   const std::vector<std::string> _hypVec;
   std::vector<std::string> _GammaEtaHyps;
@@ -69,10 +69,12 @@ protected:
                                          double PsiToXGamMag, double PsiToXGamPhi);
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
-  virtual void cacheTheAmps(); 
+  virtual void updateFitParams(fitParamsNew& theParamVal);
 private:
   void getDefaultLamLamParams(const std::vector<std::string>& hyps, 
 			      std::vector< boost::shared_ptr<const JPClamlam> > lamLamAmps, 
 			      fitParamsNew& fitVal, fitParamsNew& fitErr);
   void initializeHypothesis();
+  virtual void cacheTheAmps(); 
+  
 };

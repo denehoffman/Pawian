@@ -193,9 +193,11 @@ void JpsiGamEtaPiPiEventListNew::read4Vecs(EventList& evtList, std::vector<EvtDa
 
 
     evtData->evtWeight=1.;
+    evtData->evtNo=_evtNoAll;
     theEvtList.push_back(evtData);
     evtWeightSum+=1.;    
     ++evtCount;
+    ++_evtNoAll;
   }
 }
 

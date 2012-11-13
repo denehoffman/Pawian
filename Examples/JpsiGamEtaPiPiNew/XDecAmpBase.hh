@@ -29,10 +29,13 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
+  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData);
                                          
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
   virtual void print(std::ostream& os) const;
+  virtual void checkRecalculation(fitParamsNew& theParamVal);
+
+  virtual void updateFitParams(fitParamsNew& theParamVal);
 
 protected:
   const std::string _piPiEtaKey;
@@ -61,6 +64,8 @@ protected:
   std::pair <const double, const double> _decPairPiPi;
   std::pair <const double, const double> _decPairPi0Pi0;
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
+  bool _recalculatef2_1270;
+  bool _recalculatea2_1320;
 
   complex<double> XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData,
 				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag,
@@ -85,10 +90,19 @@ protected:
   virtual void initialize();
 
 private:
+ 
+  std::map<int, std::map<Spin, complex<double> > > _cachedAmpa2_1320;
+  std::map<int, std::map<Spin, complex<double> > > _cachedAmpf2_1270;
 
-
-
-
+  std::vector<std::string> _enabledAmpKeys;
+  std::vector<std::string> _enabledMassKeys;
+  std::vector<std::string> _enabledWidthKeys;
+  std::vector<std::string> _enabledFactorKeys;
+  std::map<std::string, double> _currentMassMap;
+  std::map<std::string, double> _currentWidthMap;
+  std::map<std::string, double> _currentgFactorMap;
+  std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > _currentParamMagMap;
+  std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > _currentParamPhiMap;
 };
 
 #endif

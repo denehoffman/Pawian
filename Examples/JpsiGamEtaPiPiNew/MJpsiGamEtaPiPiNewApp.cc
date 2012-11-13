@@ -222,6 +222,9 @@ int main(int __argc,char *__argv[]){
   }
 
   if (mode=="pwa"){
+    bool cacheAmps = theAppParams.cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
     PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase, jobOption);
     MnUserParameters upar;
     theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);

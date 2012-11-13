@@ -33,31 +33,24 @@ XToPhiPhiDecAmps::~XToPhiPhiDecAmps()
 {
 }
 
-complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData){
   int evtNo=theData->evtNo;
   
-  if ( _cacheAmps && !_recalculate) return _cachedAmpMap[theData->evtNo][lamX];
+  if ( _cacheAmps && !_recalculate) return _cachedAmpMap[evtNo][lamX];
 
 
   complex<double> result(0.,0.);
 
-    result+=XToPhiPhiAmp(lamX, theData, theParamVal);
+    result+=XToPhiPhiAmp(lamX, theData);
     
     complex<double> dynModel(1.,0.);
     if (!_massIndependent){
-      double xMass=theParamVal.Masses[_name];
       Vector4<double> p4PhiPhi = theData->FourVecsDec[enumJpsiGamX4V::V4_KsKlKpKm_HeliPsi];
       if(_bwMassFit){
-	double xWidth=theParamVal.Widths[_name];
-	dynModel=BreitWigner(p4PhiPhi, xMass, xWidth);
+	dynModel=BreitWigner(p4PhiPhi, _currentXMass, _currentXWidth);
       }
       else if(_flatteMassFit){
-	std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
-	std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
-	double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
-	double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
-	
-	dynModel=Flatte( p4PhiPhi, _phiPhiPair, _omegaPhiPair, xMass, gFactorPhiPhi, gFactorOmegaPhi  );
+	dynModel=Flatte( p4PhiPhi, _phiPhiPair, _omegaPhiPair, _currentXMass, _currentgFactorPhiPhi, _currentgFactorOmegaPhi  );
       }
     }
     
@@ -77,18 +70,16 @@ complex<double> XToPhiPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData, fitPar
   return result;
 }
 
-complex<double> XToPhiPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+complex<double> XToPhiPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData){
 
   complex<double> result(0.,0.);
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiMag=theParamVal.Mags[_phiPhiKey];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiPhi=theParamVal.Phis[_phiPhiKey];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
 
 
-   for ( itXMag=XToPhiPhiMag.begin(); itXMag!=XToPhiPhiMag.end(); ++itXMag){
+   for ( itXMag=_currentParamMags.begin(); itXMag!=_currentParamMags.end(); ++itXMag){
      boost::shared_ptr<const JPCLS> XState=itXMag->first;
      double theXMag=itXMag->second;
-     double theXPhi=XToPhiPhiPhi[XState];
+     double theXPhi=_currentParamPhis[XState];
      complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
 
     for(Spin lambdaPhi1=-1; lambdaPhi1<=1; lambdaPhi1++){
@@ -203,33 +194,71 @@ void XToPhiPhiDecAmps::checkRecalculation(fitParamsNew& theParamVal){
      boost::shared_ptr<const JPCLS> XState=itXMag->first;
      double theXMag=itXMag->second;
      double theXPhi=XToPhiPhiPhi[XState];
-     if ( fabs(theXMag - _oldParamMags[XState])  > 1.e-8 ) _recalculate=true;
-     _oldParamMags[XState]=theXMag;
-     if ( fabs(theXPhi - _oldParamPhis[XState])  > 1.e-8 ) _recalculate=true;
-     _oldParamPhis[XState]=theXPhi;
+     if ( fabs(theXMag - _currentParamMags[XState])  > 1.e-10 ){
+       _recalculate=true;
+     }
+     if ( fabs(theXPhi - _currentParamPhis[XState])  > 1.e-10 ){
+       _recalculate=true;
+     }
    }
 
    if (!_massIndependent){
      double xMass=theParamVal.Masses[_name];
-     if ( fabs(xMass-_oldXMass) > 1.e-8) _recalculate=true;
-     _oldXMass= xMass; 
+     if ( fabs(xMass-_currentXMass) > 1.e-10){
+       _recalculate=true;
+     } 
     
      if(_bwMassFit){
        double xWidth=theParamVal.Widths[_name];
-       if ( fabs(xWidth - _oldXWidth) > 1.e-8) _recalculate=true;
-       _oldXWidth=xWidth;      
+       if ( fabs(xWidth - _currentXWidth) > 1.e-10){
+	 _recalculate=true;
+       }      
      }
     else if(_flatteMassFit){
       std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
       std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
       double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
       double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
-      if ( fabs(gFactorPhiPhi - _oldgFactorPhiPhi)  > 1.e-8 ) _recalculate=true;
-      _oldgFactorPhiPhi=gFactorPhiPhi;
-      if ( fabs(gFactorOmegaPhi - _oldgFactorOmegaPhi)  > 1.e-8 ) _recalculate=true;
-      _oldgFactorOmegaPhi=gFactorOmegaPhi;
+      if ( fabs(gFactorPhiPhi - _currentgFactorPhiPhi)  > 1.e-10 ){
+	_recalculate=true;
+      }
+      if ( fabs(gFactorOmegaPhi - _currentgFactorOmegaPhi)  > 1.e-10 ){
+	_recalculate=true;
+      }
     }
   }
    if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;  
    
+}
+ 
+
+void  XToPhiPhiDecAmps::updateFitParams(fitParamsNew& theParamVal){
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiMag=theParamVal.Mags[_phiPhiKey];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiPhi=theParamVal.Phis[_phiPhiKey];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
+   for ( itXMag=XToPhiPhiMag.begin(); itXMag!=XToPhiPhiMag.end(); ++itXMag){
+     boost::shared_ptr<const JPCLS> XState=itXMag->first;
+     double theXMag=itXMag->second;
+     double theXPhi=XToPhiPhiPhi[XState];
+     _currentParamMags[XState]=theXMag;
+     _currentParamPhis[XState]=theXPhi;
+   }
+
+   if (!_massIndependent){
+     double xMass=theParamVal.Masses[_name];
+     _currentXMass= xMass; 
+    
+     if(_bwMassFit){
+       double xWidth=theParamVal.Widths[_name];
+       _currentXWidth=xWidth;      
+     }
+    else if(_flatteMassFit){
+      std::string phiPhiGFactorKey="gFactorPhiPhi_"+_name;
+      std::string omegaPhiFactorKey="gFactorOmegaPhi_"+_name;
+      double gFactorPhiPhi=theParamVal.gFactors[phiPhiGFactorKey];
+      double gFactorOmegaPhi=theParamVal.gFactors[omegaPhiFactorKey];
+      _currentgFactorPhiPhi=gFactorPhiPhi;
+      _currentgFactorOmegaPhi=gFactorOmegaPhi;
+    }
+  }
 }

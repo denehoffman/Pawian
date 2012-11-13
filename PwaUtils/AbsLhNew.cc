@@ -33,6 +33,7 @@ AbsLhNew::~AbsLhNew()
 double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
 
   if (_cacheAmps) checkParamVariation(theParamVal); 
+  updateFitParams(theParamVal);
   
   double logLH=0.;
   double logLH_data=0.;
@@ -109,5 +110,5 @@ void AbsLhNew::checkParamVariation(fitParamsNew& theParamVal){
 
 void AbsLhNew::cacheAmplitudes(){
   _cacheAmps=true;
-    cacheTheAmps();
+  cacheTheAmps();
 }

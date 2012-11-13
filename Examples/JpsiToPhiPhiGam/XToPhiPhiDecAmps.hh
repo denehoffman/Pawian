@@ -28,11 +28,13 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
+  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData);
                                          
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
   virtual void print(std::ostream& os) const;
   virtual void checkRecalculation(fitParamsNew& theParamVal);
+
+  void updateFitParams(fitParamsNew& theParamVal);
 protected:
   const std::string _phiPhiKey;
   const std::string _xBWKey;
@@ -49,7 +51,7 @@ protected:
 
   boost::shared_ptr<JpsiToPhiPhiGamStates> _theStatesPtr;
 
-  complex<double> XToPhiPhiAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal);
+  complex<double> XToPhiPhiAmp(Spin lamX, EvtDataNew* theData);
   complex<double> phiphiTo4KAmp( EvtDataNew* theData, Spin lambdaPhi1, Spin lambdaPhi2  );
 
   virtual void initialize();

@@ -1,4 +1,6 @@
 #include <getopt.h>
+#include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 
@@ -35,6 +37,8 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_decPairPiPi(make_pair(_massPi, _massPi))
   ,_decPairPi0Pi0(make_pair(_massPi0, _massPi0))
   ,_theStatesPtr(theStates)
+  ,_recalculatef2_1270(true)
+  ,_recalculatea2_1320(true)
 {
   initialize();
 }
@@ -43,50 +47,81 @@ XDecAmpBase::~XDecAmpBase()
 {
 }
 
-complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData, fitParamsNew& theParamVal){
+complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData){
+  int evtNo=theData->evtNo;
+  if ( _cacheAmps && !_recalculate) return _cachedAmpMap[theData->evtNo][lamX];
+
   complex<double> result(0.,0.);
 
   if (_piPiEtaHyp){
-    result+=XToPiPiEtaAmp(lamX, theData, theParamVal.Mags[_piPiEtaKey], theParamVal.Phis[_piPiEtaKey]);
+    result+=XToPiPiEtaAmp(lamX, theData, _currentParamMagMap[_piPiEtaKey], _currentParamPhiMap[_piPiEtaKey]);
   }
   if(_a980piHyp){
-    double a0_980Mass=theParamVal.Masses["a0_980"];
-    double a0_980gPiEta=theParamVal.gFactors["a0_980gPiEta"];
-    double a0_980gKK=theParamVal.gFactors["a0_980gKK"];
-    result+=XToAPiFlatteAmp(lamX, theData, theParamVal.Mags[_a980piKey], theParamVal.Phis[_a980piKey], a0_980Mass, a0_980gPiEta, a0_980gKK);
+    result+=XToAPiFlatteAmp(lamX, theData, _currentParamMagMap[_a980piKey], _currentParamPhiMap[_a980piKey], _currentMassMap["a0_980"], _currentgFactorMap["a0_980gPiEta"], _currentgFactorMap["a0_980gKK"]);
   }
+
   if(_a2_1320piHyp){
-    double a2_1320Mass=theParamVal.Masses["a2_1320"];
-    double a2_1320Width=theParamVal.Widths["a2_1320"];
-    result+=XToAPiBWAmp(lamX, 2, theData, theParamVal.Mags[_a2_1320piKey], theParamVal.Phis[_a2_1320piKey] , a2_1320Mass, a2_1320Width);
+    if (_cacheAmps && !_recalculatea2_1320) result+=_cachedAmpa2_1320[evtNo][lamX];
+    else {
+      complex<double> tmpResult=XToAPiBWAmp(lamX, 2, theData, _currentParamMagMap[_a2_1320piKey], _currentParamPhiMap[_a2_1320piKey] , _currentMassMap["a2_1320"], _currentWidthMap["a2_1320"]);
+      result+=tmpResult;
+      if ( _cacheAmps){
+#ifdef _OPENMP
+#pragma omp critical
+	{
+#endif
+	  _cachedAmpa2_1320[evtNo][lamX]=tmpResult;
+#ifdef _OPENMP
+	}
+#endif
+      }
+    }
   }
+  
   if(_sigmaEtaHyp){
-    double sigmaMass=theParamVal.Masses["sigma"];
-    double sigmaWidth=theParamVal.Widths["sigma"];
-    result+=XToEtaFAmp(lamX, 0, theData, theParamVal.Mags[_sigmaEtaKey], theParamVal.Phis[_sigmaEtaKey],sigmaMass, sigmaWidth);
+    result+=XToEtaFAmp(lamX, 0, theData, _currentParamMagMap[_sigmaEtaKey], _currentParamPhiMap[_sigmaEtaKey],_currentMassMap["sigma"], _currentWidthMap["sigma"]);
   }
   if(_f980etaHyp){
-    double f0_980Mass=theParamVal.Masses["f0_980"];
-    double f0_980gPiPi=theParamVal.gFactors["f0_980gPiPi"];
-    double f0_980gKK=theParamVal.gFactors["f0_980gKK"];
-    result+=XToFEtaFlatteAmp(lamX, theData, theParamVal.Mags[_f980etaKey], theParamVal.Phis[_f980etaKey], f0_980Mass, f0_980gPiPi, f0_980gKK);
+    result+=XToFEtaFlatteAmp(lamX, theData, _currentParamMagMap[_f980etaKey], _currentParamPhiMap[_f980etaKey], _currentMassMap["f0_980"], _currentgFactorMap["f0_980gPiPi"], _currentgFactorMap["f0_980gKK"]);
   }
   if(_f2_1270etaHyp){
-    double f2_1270Mass=theParamVal.Masses["f2_1270"];
-    double f2_1270Width=theParamVal.Widths["f2_1270"];
-    result+=XToEtaFAmp(lamX, 2, theData, theParamVal.Mags[_f2_1270etaKey], theParamVal.Phis[_f2_1270etaKey], f2_1270Mass, f2_1270Width);
+    if (_cacheAmps && !_recalculatef2_1270) result+=_cachedAmpf2_1270[evtNo][lamX];
+    else {
+      complex<double> tmpResult=XToEtaFAmp(lamX, 2, theData, _currentParamMagMap[_f2_1270etaKey], _currentParamPhiMap[_f2_1270etaKey], _currentMassMap["f2_1270"], _currentWidthMap["f2_1270"]);
+      result+=tmpResult;
+      if ( _cacheAmps){
+#ifdef _OPENMP
+#pragma omp critical
+	{
+#endif
+	  _cachedAmpf2_1270[evtNo][lamX]=tmpResult;
+#ifdef _OPENMP
+	}
+#endif
+      }
+      
+    }
   }
 
   complex<double> dynModel(1.,0.);
 
   if (!_massIndependent){
-    double xMass=theParamVal.Masses[_name];
-    double xWidth=theParamVal.Widths[_name];
     Vector4<double> p4EtaPiPi = theData->FourVecsDec[enumJpsiGamEtaPiPi4V::EtaPipPim_HeliPsi];
-    dynModel=BreitWigner(p4EtaPiPi, xMass, xWidth);
+    dynModel=BreitWigner(p4EtaPiPi, _currentXMass, _currentXWidth);
   }
 
   result *=dynModel;
+
+  if ( _cacheAmps){    
+#ifdef _OPENMP
+#pragma omp critical
+    {
+#endif
+      _cachedAmpMap[evtNo][lamX]=result;
+#ifdef _OPENMP
+    }
+#endif
+  }
   return result;
 }
 
@@ -448,31 +483,49 @@ void XDecAmpBase::initialize(){
     if (it->compare(0, _piPiEtaKey.size(), _piPiEtaKey)== 0){
       Info << "hypothesis\t" << _piPiEtaKey << "\t enabled" << endmsg;
       _piPiEtaHyp=true;
+      _enabledAmpKeys.push_back(_piPiEtaKey);
     }
 
     if (it->compare(0, _a980piKey.size(), _a980piKey)== 0){
       Info << "hypothesis\t" << _a980piKey << "\t enabled" << endmsg;
       _a980piHyp=true;
+      _enabledAmpKeys.push_back(_a980piKey);
+      _enabledMassKeys.push_back("a0_980");
+      _enabledFactorKeys.push_back("a0_980gPiEta");
+      _enabledFactorKeys.push_back("a0_980gKK");
     }
 
     else if (it->compare(0, _sigmaEtaKey.size(), _sigmaEtaKey)== 0){
       Info << "hypothesis\t" << _sigmaEtaKey << "\t enabled" << endmsg;
       _sigmaEtaHyp=true;
+      _enabledAmpKeys.push_back(_sigmaEtaKey);
+      _enabledMassKeys.push_back("sigma");
+      _enabledWidthKeys.push_back("sigma");
     }
 
     else if (it->compare(0, _f980etaKey.size(), _f980etaKey)== 0){
       Info << "hypothesis\t" << _f980etaKey << "\t enabled" << endmsg;
       _f980etaHyp=true;
+      _enabledAmpKeys.push_back(_f980etaKey);
+      _enabledMassKeys.push_back("f0_980");
+      _enabledFactorKeys.push_back("f0_980gPiPi");
+      _enabledFactorKeys.push_back("f0_980gKK");
     }
 
     else if (it->compare(0, _a2_1320piKey.size(), _a2_1320piKey)== 0){
       Info << "hypothesis\t" << _a2_1320piKey << "\t enabled" << endmsg;
       _a2_1320piHyp=true;
+      _enabledAmpKeys.push_back(_a2_1320piKey);
+      _enabledMassKeys.push_back("a2_1320");
+      _enabledWidthKeys.push_back("a2_1320");
     }
 
     else if (it->compare(0, _f2_1270etaKey.size(), _f2_1270etaKey)== 0){
       Info << "hypothesis\t" << _f2_1270etaKey << "\t enabled" << endmsg;
       _f2_1270etaHyp=true;
+      _enabledAmpKeys.push_back(_f2_1270etaKey);
+      _enabledMassKeys.push_back("f2_1270");
+      _enabledWidthKeys.push_back("f2_1270");
     }
 
     else if (it->compare(0, _xBWKey.size(), _xBWKey) ==0){
@@ -481,4 +534,175 @@ void XDecAmpBase::initialize(){
     
   }
 
+}
+
+void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
+  _recalculate=false;
+
+  std::vector<std::string>::const_iterator itKeys;
+  for ( itKeys=_enabledAmpKeys.begin(); itKeys!=_enabledAmpKeys.end(); ++itKeys){ 
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[(*itKeys)];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[(*itKeys)];
+    
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+      boost::shared_ptr<const JPCLS> XState=itMag->first;
+      double theMag=itMag->second;
+      double thePhi=thePhis[XState];
+      if ( fabs(theMag - _currentParamMagMap[(*itKeys)][XState])  > 1.e-10 ){
+        _recalculate=true;
+        // _currentParamMags[XState]=theMag;
+        DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[(*itKeys)][XState] << "\tnew: " << theMag << endmsg;
+      }
+      if ( fabs(thePhi - _currentParamPhiMap[(*itKeys)][XState])  > 1.e-10 ){
+        _recalculate=true;
+        DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[(*itKeys)][XState] << "\tnew: " << thePhi << endmsg;
+      }
+    }
+  }
+ 
+ for ( itKeys=_enabledMassKeys.begin(); itKeys!=_enabledMassKeys.end(); ++itKeys){
+   double currentMass=theParamVal.Masses[(*itKeys)];
+   if ( fabs(currentMass-_currentMassMap[(*itKeys)]) > 1.e-10){
+     DebugMsg << "Mass " << (*itKeys) << ":\t" << "current: " << _currentMassMap[(*itKeys)] << "\tnew: " << currentMass << endmsg;
+     _recalculate=true;
+   }   
+ }
+
+ for ( itKeys=_enabledWidthKeys.begin(); itKeys!=_enabledWidthKeys.end(); ++itKeys){
+   double currentWidth=theParamVal.Widths[(*itKeys)];
+   if ( fabs(currentWidth-_currentWidthMap[(*itKeys)]) > 1.e-10){
+     DebugMsg << "Width " << (*itKeys) << ":\t" << "current: " << _currentWidthMap[(*itKeys)] << "\tnew: " << currentWidth << endmsg;
+     _recalculate=true;
+   }   
+ }
+
+ for ( itKeys=_enabledFactorKeys.begin(); itKeys!=_enabledFactorKeys.end(); ++itKeys){
+   double currentgFactor=theParamVal.gFactors[(*itKeys)];
+   if ( fabs(currentgFactor-_currentgFactorMap[(*itKeys)]) > 1.e-10){
+     DebugMsg << "gFactor " << (*itKeys) << ":\t" << "current: " << _currentgFactorMap[(*itKeys)] << "\tnew: " << currentgFactor << endmsg;
+     _recalculate=true;
+   }   
+ } 
+
+  if (!_massIndependent){
+    double xMass=theParamVal.Masses[_name];
+    if ( fabs(xMass-_currentXMass) > 1.e-10){ 
+      _recalculate=true;
+    }
+
+    double xWidth=theParamVal.Widths[_name];
+    if ( fabs(xWidth - _currentXWidth) > 1.e-10){
+      _recalculate=true;
+    }
+  }
+  if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;
+
+  //a2_1320 amp
+  _recalculatea2_1320=false;
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[_a2_1320piKey];
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[_a2_1320piKey];
+  
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+  for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+    boost::shared_ptr<const JPCLS> XState=itMag->first;
+    double theMag=itMag->second;
+    double thePhi=thePhis[XState];
+    if ( fabs(theMag - _currentParamMagMap[_a2_1320piKey][XState])  > 1.e-10 ){
+      _recalculatea2_1320=true;
+      DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_a2_1320piKey][XState] << "\tnew: " << theMag << endmsg;
+    }
+    if ( fabs(thePhi - _currentParamPhiMap[_a2_1320piKey][XState])  > 1.e-10 ){
+      _recalculatea2_1320=true;
+      DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_a2_1320piKey][XState] << "\tnew: " << thePhi << endmsg;
+    }
+  }
+
+  double currentMass=theParamVal.Masses["a2_1320"];
+  if ( fabs(currentMass-_currentMassMap["a2_1320"]) > 1.e-10){
+    DebugMsg << "Mass a2_1320:\t" << "current: " << _currentMassMap["a2_1320"] << "\tnew: " << currentMass << endmsg;
+    _recalculatea2_1320=true;
+  }
+
+  double currentWidth=theParamVal.Widths["a2_1320"];
+  if ( fabs(currentWidth-_currentWidthMap["a2_1320"]) > 1.e-10){
+    DebugMsg << "Width a2_1320:\t" << "current: " << _currentWidthMap["a2_1320"] << "\tnew: " << currentWidth << endmsg;
+    _recalculatea2_1320=true;
+  }
+
+  if (_recalculatea2_1320) DebugMsg << "Recalculate a2_1320 amplitude in:\t" << _name << endmsg;
+
+  //f2_1270 amp
+  _recalculatef2_1270=false;
+  theMags=theParamVal.Mags[_f2_1270etaKey];
+  thePhis=theParamVal.Phis[_f2_1270etaKey];
+  
+  for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+    boost::shared_ptr<const JPCLS> XState=itMag->first;
+    double theMag=itMag->second;
+    double thePhi=thePhis[XState];
+    if ( fabs(theMag - _currentParamMagMap[_f2_1270etaKey][XState])  > 1.e-10 ){
+      _recalculatef2_1270=true;
+      DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_f2_1270etaKey][XState] << "\tnew: " << theMag << endmsg;
+    }
+    if ( fabs(thePhi - _currentParamPhiMap[_f2_1270etaKey][XState])  > 1.e-10 ){
+      _recalculatef2_1270=true;
+      DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_f2_1270etaKey][XState] << "\tnew: " << thePhi << endmsg;
+    }
+  }
+
+  currentMass=theParamVal.Masses["f2_1270"];
+  if ( fabs(currentMass-_currentMassMap["f2_1270"]) > 1.e-10){
+    DebugMsg << setprecision (8) << "Mass f2_1270:\t" << "current: " << _currentMassMap["f2_1270"] << "\tnew: " << currentMass << endmsg;
+    _recalculatef2_1270=true;
+  }
+
+  currentWidth=theParamVal.Widths["f2_1270"];
+  if ( fabs(currentWidth-_currentWidthMap["f2_1270"]) > 1.e-10){
+    DebugMsg << setprecision (8) << "Width f2_1270:\t" << "current: " << _currentWidthMap["f2_1270"] << "\tnew: " << currentWidth << endmsg;
+    _recalculatef2_1270=true;
+  }
+
+  if (_recalculatef2_1270) Info << "Recalculate f2_1270 amplitude in:\t" << _name << endmsg;
+}
+
+void XDecAmpBase::updateFitParams(fitParamsNew& theParamVal){
+  std::vector<std::string>::const_iterator itKeys;
+  for ( itKeys=_enabledAmpKeys.begin(); itKeys!=_enabledAmpKeys.end(); ++itKeys){ 
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[(*itKeys)];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[(*itKeys)];
+    
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+      boost::shared_ptr<const JPCLS> XState=itMag->first;
+      double theMag=itMag->second;
+      double thePhi=thePhis[XState];
+      _currentParamMagMap[(*itKeys)][XState]=theMag;
+      _currentParamPhiMap[(*itKeys)][XState]=thePhi;
+    }
+  }
+
+ for ( itKeys=_enabledMassKeys.begin(); itKeys!=_enabledMassKeys.end(); ++itKeys){
+   double currentMass=theParamVal.Masses[(*itKeys)];
+   _currentMassMap[(*itKeys)]=currentMass;      
+ }
+
+ for ( itKeys=_enabledWidthKeys.begin(); itKeys!=_enabledWidthKeys.end(); ++itKeys){
+   double currentWidth=theParamVal.Widths[(*itKeys)];
+   _currentWidthMap[(*itKeys)]=currentWidth;
+ }
+
+ for ( itKeys=_enabledFactorKeys.begin(); itKeys!=_enabledFactorKeys.end(); ++itKeys){
+   double currentgFactor=theParamVal.gFactors[(*itKeys)];
+   _currentgFactorMap[(*itKeys)]=currentgFactor;
+ }
+
+ if (!_massIndependent){
+   double xMass=theParamVal.Masses[_name];
+   _currentXMass= xMass;
+   
+   double xWidth=theParamVal.Widths[_name];
+   _currentXWidth=xWidth;
+   
+ }
 }

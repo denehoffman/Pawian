@@ -28,6 +28,7 @@ public:
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)=0;
   virtual void print(std::ostream& os) const=0;
 
+
 protected:
   boost::shared_ptr<const EvtDataBaseListNew> _evtListPtr;
   std::vector<EvtDataNew*> _evtDataVec;
@@ -39,5 +40,7 @@ protected:
 			bool& theHyp, std::string& theKey);
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
+  // virtual void cacheTheAmps()=0;
+  virtual void updateFitParams(fitParamsNew& theParamVal)=0;
   virtual void cacheTheAmps()=0;
 };
