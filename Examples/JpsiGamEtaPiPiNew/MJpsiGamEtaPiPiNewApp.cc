@@ -93,10 +93,8 @@ int main(int __argc,char *__argv[]){
   
   const std::string datFile=theAppParams.dataFile();
   const std::string mcFile=theAppParams.mcFile();
-  const std::string sumFile=theAppParams.sumFile();
   Info << "data file: " << datFile ;  // << endmsg;
   Info << "mc file: " << mcFile ;  // << endmsg;
-  Info << "sum file: " << sumFile ;  // << endmsg;
   
   ParticleTable pTable;
   PdtParser parser;
@@ -112,6 +110,8 @@ int main(int __argc,char *__argv[]){
   
   std::vector<std::string> fileNames;
   fileNames.push_back(datFile);
+
+
   JpsiGamEtaPiPiReader eventReader(fileNames, 4, 0);
   EventList eventsData;
   eventReader.fillMassRange(eventsData, massRange );
@@ -156,6 +156,7 @@ int main(int __argc,char *__argv[]){
   std::cout << "Mode: " << mode << std::endl;
   if (mode=="plotmode"){
     JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr,theAppParams.massRange(), jobOption.c_str());
+    //    JpsiGamEtaPiPiHistNew theHist(theJpsiGamEtaPiPiEventListPtr);
     return 0;
   }
   
@@ -164,6 +165,8 @@ int main(int __argc,char *__argv[]){
   //
   
   boost::shared_ptr<JpsiGamEtaPiPiStates> jpsiGamEtaPiPiStatesPtr(new JpsiGamEtaPiPiStates());
+  jpsiGamEtaPiPiStatesPtr->print(std::cout);
+
   const std::vector<std::string> hypVec=theAppParams.enabledHyps();
   boost::shared_ptr<AbsLhNew> theLhPtr;
   
@@ -185,7 +188,6 @@ int main(int __argc,char *__argv[]){
     theLhPtr->getDefaultParams(defaultVal, defaultErr);
     std::string defaultparamsname = "defaultparams" + jobOption + ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.c_str() );
-    //	  std::ofstream theStreamDefault ( "defaultparams.dat");
     
     theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
     return 0;
@@ -195,6 +197,18 @@ int main(int __argc,char *__argv[]){
   StreamFitParmsBaseNew theParamStreamer(paramStreamerPath, theLhPtr);
   fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
   fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
+
+  PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase, jobOption);
+  MnUserParameters upar;
+  theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
+  
+  std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
+  for (int i=0; i<int(upar.Params().size()); ++i){
+    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  }
+  
+  const std::vector<std::string> fixedParams=theAppParams.fixedParams();
+  const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size(); 
   
   if (mode=="qaMode"){
     Info << "\nThe parameter values are: " << "\n" << endmsg;
@@ -209,33 +223,37 @@ int main(int __argc,char *__argv[]){
     theHist.PrintToPDF(jobOption);
     theHist.SaveToROOT();
 
-    // 		if(theAppParams.massIndependentFit()){
-    // 			//calculate intensity contributions
-    // 			//std::ofstream theStream ( "componentIntensity.dat");
-    // 			//theProdLh->dumpComponentIntensity( theStream, theStartparams, theErrorMatrix );
-    // 		}
     
+    double evtWeightSumData = theJpsiGamEtaPiPiEventListPtr->NoOfWeightedDataEvts();
+    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+    
+    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
+    Info << "BIC:\t" << BICcriterion << endmsg;
+    Info << "AIC:\t" << AICcriterion << endmsg;
+    Info << "AICc:\t" << AICccriterion << endmsg;
+    
+    std::string qaSummaryFileName = "qaSummary" + jobOption + ".dat";
+    std::ofstream theQaStream ( qaSummaryFileName.c_str() );
+    theQaStream << "BIC\t" << BICcriterion << "\n";
+    theQaStream << "AICa\t" << AICcriterion << "\n";
+    theQaStream << "AICc\t" << AICccriterion << "\n";
+    theQaStream << "logLh\t" << theLh << "\n";
+    theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+    theQaStream.close();    
+  
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     return 0;
   }
-
+  
   if (mode=="pwa"){
     bool cacheAmps = theAppParams.cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
-    PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase, jobOption);
-    MnUserParameters upar;
-    theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
-    
-    std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-    for (int i=0; i<int(upar.Params().size()); ++i){
-      std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
-    }
-    
-    const std::vector<std::string> fixedParams=theAppParams.fixedParams();
-    
     std::vector<std::string>::const_iterator itFix;
     for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
       upar.Fix( (*itFix) );
@@ -290,8 +308,6 @@ int main(int __argc,char *__argv[]){
     MnUserCovariance theCovMatrix = min.UserCovariance();
     std::cout  << min << std::endl;
     
-    //std::ofstream theCompStream ( "componentIntensity.dat");
-    //theProdLh->dumpComponentIntensity( theCompStream, finalFitParams, theErrMatrix );
     JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams,theAppParams.massRange(), jobOption.c_str());
     theHist.PrintToPDF(jobOption);
     theHist.SaveToROOT();
@@ -299,86 +315,83 @@ int main(int __argc,char *__argv[]){
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
+    
 
 
-
-    // Start event number calculation for each wave
-    std::cout << "Start event number calculation for each wave" << std::endl;    
+    // // Start event number calculation for each wave
+    // std::cout << "Start event number calculation for each wave" << std::endl;    
    
-    std::vector<std::string> hypVec_test=theAppParams.enabledHyps();
-    fitParamsNew finalFitParams_test=finalFitParams;
-    std::vector<std::string>::iterator it;
-    int hypnumber=0;
+    // std::vector<std::string> hypVec_copy=theAppParams.enabledHyps();
+    // std::vector<std::string>::iterator it;
+    // int hypnumber=0;
 
-    for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
-      if (((*it).find("Gamma")==0 || (*it).find("Phasespace")==0)) hypnumber++;
-    }
-    std::cout << "Number of hypothesis found: " << hypnumber << std::endl;
+    // for (it=hypVec_copy.begin(); it!=hypVec_copy.end();++it){
+    //   if (((*it).find("Gamma")==0 || (*it).find("Phasespace")==0)) hypnumber++;
+    // }
+    // std::cout << "Number of hypothesis found: " << hypnumber << std::endl;
     
-    std::vector<double> evNumResult;
-    std::string hypname;
-    std::string suffix;
+    // std::vector<double> evNumResult;
+    // std::string hypname;
+    // std::string suffix;
 
-    int j;
-    for (int i=1;i<=hypnumber;i++){
-      j=1;
-      for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
-	// Mark bad hypothesis
-        if (((*it).find("Gamma")==0 || (*it).find("Phasespace")==0 ) && i!=j) {
-          (*it).insert(0, "#");
-	  j++;
-	}
-	else{ 
-	  if (((*it).find("Gamma")==0  || (*it).find("Phasespace")==0)){
-	    j++;
-	    //(*it).copy(hypname,(*it).size());
-	    hypname = (*it).c_str();
-	  }
-	}
-      }
-      std::cout << "Start calulation with following hypothesis: " << hypname  << std::endl;
-      if (startWithHyp=="production"){
-	theLhPtr = boost::shared_ptr<AbsLhNew> (new JpsiGamEtaPiPiProdLhNew(theJpsiGamEtaPiPiEventListPtr, hypVec_test, jpsiGamEtaPiPiStatesPtr));
-      }
-      else {
-	Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;                                                                                                                                       
-	exit(1);
-      }
-      suffix += jobOption.c_str();
-      suffix += hypname.c_str();
-      JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams_test ,theAppParams.massRange(), suffix);
-      suffix.clear();
-      evNumResult.push_back(theHist.getFitEvents());
-      theHist.SaveToROOT();
-      // Unmark bad hypothesis
-      for (it=hypVec_test.begin(); it!=hypVec_test.end();++it){
-        if ((*it).find("#")==0) (*it).erase(0,1);
-      }
-      std::cout << std::endl;
-    }
-    
+    // int j;
+    // for (int i=1;i<=hypnumber;i++){
+    //   j=1;
+    //   for (it=hypVec_copy.begin(); it!=hypVec_copy.end();++it){
+    // 	// Mark bad hypothesis
+    //     if (((*it).find("Gamma")==0 || (*it).find("Phasespace")==0 ) && i!=j) {
+    //       (*it).insert(0, "#");
+    // 	  j++;
+    // 	}
+    // 	else{ 
+    // 	  if (((*it).find("Gamma")==0  || (*it).find("Phasespace")==0)){
+    // 	    j++;
+    // 	    //(*it).copy(hypname,(*it).size());
+    // 	    hypname = (*it).c_str();
+    // 	  }
+    // 	}
+    //   }
+    //   std::cout << "Start calulation with following hypothesis: " << hypname  << std::endl;
+    //   if (startWithHyp=="production"){
+    // 	theLhPtr = boost::shared_ptr<AbsLhNew> (new JpsiGamEtaPiPiProdLhNew(theJpsiGamEtaPiPiEventListPtr, hypVec_copy, jpsiGamEtaPiPiStatesPtr));
+    //   }
+    //   else {
+    // 	Alert << "start with hypothesis " << startWithHyp << " not supported!!!!" ;  // << endmsg;                                                                                                                                       
+    // 	exit(1);
+    //   }
+    //   suffix += jobOption.c_str();
+    //   suffix += hypname.c_str();
+    //   JpsiGamEtaPiPiHistNew theHist(theLhPtr, finalFitParams ,theAppParams.massRange(), suffix);
+    //   suffix.clear();
+    //   evNumResult.push_back(theHist.getFitEvents());
+    //   theHist.SaveToROOT();
+    //   // Unmark bad hypothesis
+    //   for (it=hypVec_copy.begin(); it!=hypVec_copy.end();++it){
+    //     if ((*it).find("#")==0) (*it).erase(0,1);
+    //   }
+    //   std::cout << std::endl;
+    // }
 
+    // // Global Summary Output
+    // int number_fitParams = upar.Params().size()-fixedParams.size();
+    // double a0_fitmass = 0;
+    // string aname;
+    // for (int i=0; i<int(upar.Params().size()); ++i){
+    //   aname = upar.Name(i);
+    //   if (!aname.find("a0_980Mass")) {
+    // 	std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+    // 	a0_fitmass =  upar.Value(i);
+    //   }
+    // }
 
-    // Global Summary Output
-    int number_fitParams = upar.Params().size()-fixedParams.size();
-    double a0_fitmass = 0;
-    string aname;
-    for (int i=0; i<int(upar.Params().size()); ++i){
-      aname = upar.Name(i);
-      if (!aname.find("a0_980Mass")) {
-	std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
-	a0_fitmass =  upar.Value(i);
-      }
-    }
-
-    std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
-    summaryfile.precision(4);
-    summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams; // << "\t" << finalUsrParameters.Value("a0_980Mass");
-    for (unsigned int i=0;i<evNumResult.size();i++){
-      summaryfile << "\t" << evNumResult[i];
-    }
-    summaryfile <<  std::endl;
-    summaryfile.close();
+    // std::ofstream summaryfile(sumFile.c_str(), std::ios::out|std::ios::app);
+    // summaryfile.precision(4);
+    // summaryfile << theAppParams.massRange().first  << "\t" << theAppParams.massRange().second << "\t" << theHist.getDataEvents() << "\t" << theHist.getMcEvents()  << "\t" << jobOption.c_str() << "\t" << theLh << "\t" << number_fitParams; // << "\t" << finalUsrParameters.Value("a0_980Mass");
+    // for (unsigned int i=0;i<evNumResult.size();i++){
+    //   summaryfile << "\t" << evNumResult[i];
+    // }
+    // summaryfile <<  std::endl;
+    // summaryfile.close();
 
 
     return 0;

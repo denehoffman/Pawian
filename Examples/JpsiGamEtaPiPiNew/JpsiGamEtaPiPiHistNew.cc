@@ -262,7 +262,7 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew> theJpsi
   
   _integralData = (double) theEvtList->getDataVecs().size();
   _integralMc = (double) theEvtList->getMcVecs().size();
-  _integralFitted =  _EtaPiPiMassFittedHist->Integral();
+  _integralFitted = _EtaPiPiMassFittedHist->Integral();
   
   Info <<"No of fit data events " << _integralData << endmsg;   
   Info <<"No of MC events " << _integralMc << endmsg; 
