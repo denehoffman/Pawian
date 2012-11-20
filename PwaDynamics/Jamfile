@@ -1,0 +1,11 @@
+project : 
+	;
+
+lib PwaDynamics : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger 
+	: 
+	: 
+	:  ;
