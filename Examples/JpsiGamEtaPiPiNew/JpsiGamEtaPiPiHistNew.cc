@@ -105,8 +105,6 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBase
     plot2dCost_PipvsGamHeli(_2dcost_PipvsGamDataHist,(*it),1.);
     plot2dCost_EtaPivsGamHeli(_2dcost_EtaPivsGamDataHist,(*it),1.);
     plot2dCost_PipPimvsGamHeli(_2dcost_PipPimvsGamDataHist,(*it),1.);
-
-    //       fillTuple(_dataTuple, (*it), 1.);
     ++it;
   }
     
@@ -126,8 +124,6 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<const EvtDataBase
     plot2dCost_EtavsGamHeli(_2dcost_PipvsGamMcHist,(*it),1.);
     plot2dCost_EtaPivsGamHeli(_2dcost_EtaPivsGamMcHist,(*it),1.);
     plot2dCost_PipPimvsGamHeli(_2dcost_PipPimvsGamMcHist,(*it),1.);
-
-    //       fillTuple(_mcTuple, (*it), 1.);
     ++it;
   }
 }
@@ -262,11 +258,6 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew> theJpsi
   
   _integralData = (double) theEvtList->getDataVecs().size();
   _integralMc = (double) theEvtList->getMcVecs().size();
-  _integralFitted = _EtaPiPiMassFittedHist->Integral();
-  
-  Info <<"No of fit data events " << _integralData << endmsg;   
-  Info <<"No of MC events " << _integralMc << endmsg; 
-  Info <<"No of fit events " << _integralFitted << endmsg;  
   
   double scalingFactor=_integralData/_integralMc;  
   
@@ -288,6 +279,12 @@ JpsiGamEtaPiPiHistNew::JpsiGamEtaPiPiHistNew(boost::shared_ptr<AbsLhNew> theJpsi
   _phiPiPi_EtaPiPiHeliFittedHist->Scale(scalingFactor);
   _costEtaPi_EtaPiPiHeliFittedHist->Scale(scalingFactor);
   _phiEtaPi_EtaPiPiHeliFittedHist->Scale(scalingFactor);
+
+  _integralFitted = _EtaPiPiMassFittedHist->Integral();
+  
+  Info <<"No of fit data events " << _integralData   << endmsg;
+  Info <<"No of MC events "       << _integralMc     << endmsg;
+  Info <<"No of fit events "      << _integralFitted << endmsg;
 }
 
 JpsiGamEtaPiPiHistNew::~JpsiGamEtaPiPiHistNew(){
