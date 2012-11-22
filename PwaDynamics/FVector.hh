@@ -1,39 +1,41 @@
-// TMatrixNonRel class definition file. -*- C++ -*-
-// Copyright 2010 Bertram Kopf
+// FVector class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
 
 #pragma once 
 
 //_____________________________________________________________________________
-// @file TMatrixNonRel.h
+// @file FVector.h
 //_____________________________________________________________________________
 
 #include "qft++/matrix/Matrix.hh"
-#include "PwaDynamics/TMatrixBase.hh"
+#include "PwaDynamics/KMatrixBase.hh"
+#include "PwaDynamics/PVectorRel.hh"
 #include <iostream>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-
-class KMatrixBase;
-class KMatrixNonRel;
 
 using namespace std;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class TMatrixNonRel : public TMatrixBase {
+class FVector : public Matrix< complex<double> > {
 
 public:
 
   /// Constructor 
-  TMatrixNonRel(boost::shared_ptr<KMatrixNonRel> Kmatrix); 
+  FVector(boost::shared_ptr<KMatrixBase> Kmatrix, boost::shared_ptr<PVectorRel> Pvector);
+  FVector(int numRows); 
 
   /// Destructor
-  virtual ~TMatrixNonRel();
+  virtual ~FVector();
 
   virtual void evalMatrix(const double mass);
-
+  virtual void updateBeta(int i, complex<double> beta) {_Pvector->updateBeta(i, beta);}
+  virtual void updateFprod (int i, complex<double> fProd) {;}
+  virtual void updateS0prod (double s0prod) {;}
 protected:
-
+  boost::shared_ptr<KMatrixBase> _Kmatrix; 
+  boost::shared_ptr<PVectorRel> _Pvector; 
 };
 //_____________________________________________________________________________
 

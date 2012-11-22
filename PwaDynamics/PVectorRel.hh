@@ -1,44 +1,40 @@
-// KMatrixSlowAdlerCor class definition file. -*- C++ -*-
+// PVectorRel class definition file. -*- C++ -*-
 // Copyright 2010 Bertram Kopf
 
 #pragma once 
 
 //_____________________________________________________________________________
-// @file KMatrixSlowAdlerCorRel.h
+// @file PVectorRel.h
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <boost/multi_array.hpp>
 
-class KPole;
+class PPole;
 class AbsPhaseSpace;
-
-typedef boost::multi_array< double, 2> array_type_2d;
 
 using namespace std;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class KMatrixSlowAdlerCorRel : public KMatrixBase {
+class PVectorRel : public KMatrixBase {
 
 public:
 
   /// Constructor 
-  KMatrixSlowAdlerCorRel(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, boost::shared_ptr<array_type_2d> fscatPtr, double s0_scat, double sAdler0=-0.15, double sAdler=1.); 
-  KMatrixSlowAdlerCorRel(int numCols, int numRows);
+  PVectorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs); 
+
   /// Destructor
-  virtual ~KMatrixSlowAdlerCorRel();
+  virtual ~PVectorRel();
 
   virtual void evalMatrix(const double mass);
 
+  virtual void updateBeta(int i, complex<double> beta);
+
 protected:
-  boost::shared_ptr<array_type_2d> _fScatPtr;
-  double _s0Scat; 
-  double _sAdler0;
-  double _sAdler;
+  vector<boost::shared_ptr<PPole> > _Ppoles;
 };
 //_____________________________________________________________________________
 

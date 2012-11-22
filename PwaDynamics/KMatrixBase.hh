@@ -1,5 +1,5 @@
 // KMatrixBase class definition file. -*- C++ -*-
-// Copyright 2010 Bertram Kopf
+// Copyright 2012 Bertram Kopf
 
 #pragma once 
 
@@ -26,12 +26,14 @@ public:
 
   /// Constructor 
   KMatrixBase(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs); 
-
+  KMatrixBase(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows);
+  KMatrixBase(int numCols, int numRows); 
   /// Destructor
   virtual ~KMatrixBase();
 
-  virtual void evalMatrix(const double mass){return;}
+  virtual void evalMatrix(const double mass) {return;}
   virtual vector<boost::shared_ptr<AbsPhaseSpace> > phaseSpaceVec() {return _phpVecs;}
+  virtual vector<boost::shared_ptr<KPole> > kpoles() {return _KPoles;}
 
 protected:
   vector<boost::shared_ptr<KPole> > _KPoles;

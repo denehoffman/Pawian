@@ -1,0 +1,45 @@
+// PVectorSlowSlowCorRel class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
+#pragma once 
+
+//_____________________________________________________________________________
+// @file PVectorSlowCorRel.h
+//_____________________________________________________________________________
+
+#include "PwaDynamics/PVectorRel.hh"
+#include <iostream>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+//#include <boost/multi_array.hpp>
+
+class PPole;
+class AbsPhaseSpace;
+
+//typedef boost::multi_array< complex<double>, 2> array_type_2dc;
+
+using namespace std;
+//_____________________________________________________________________________
+//_____________________________________________________________________________
+
+class PVectorSlowCorRel : public PVectorRel {
+
+public:
+
+  /// Constructor 
+  PVectorSlowCorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, std::vector< complex<double> >& fProdVec, double s0prod);
+
+  /// Destructor
+  virtual ~PVectorSlowCorRel();
+
+  virtual void evalMatrix(const double mass);
+  virtual void updateFprod (int i, complex<double> fProd);
+  virtual void updateS0prod (double s0prod) {_s0prod=s0prod;}
+
+protected:
+  std::vector< complex<double> > _fProdVec;
+  double _s0prod; 
+};
+//_____________________________________________________________________________
+
+

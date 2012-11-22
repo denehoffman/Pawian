@@ -1,10 +1,10 @@
 #include "PwaDynamics/TMatrixNonRel.hh"
-#include "PwaDynamics/KMatrixBase.hh"
+#include "PwaDynamics/KMatrixNonRel.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 
-TMatrixNonRel::TMatrixNonRel(boost::shared_ptr<KMatrixBase> Kmatrix) :
+TMatrixNonRel::TMatrixNonRel(boost::shared_ptr<KMatrixNonRel> Kmatrix) :
   TMatrixBase(Kmatrix)
  {
  }

@@ -10,6 +10,15 @@ KMatrixBase::KMatrixBase(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost:
  {
  }
 
+KMatrixBase::KMatrixBase(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows) :
+  Matrix< complex<double> >::Matrix(numCols, numRows)
+  ,_phpVecs(phpVecs)
+ {
+ }
+KMatrixBase::KMatrixBase(int numCols, int numRows) :
+  Matrix< complex<double> >::Matrix(numCols, numRows)
+ {
+ }
 
 KMatrixBase::~KMatrixBase(){
 }

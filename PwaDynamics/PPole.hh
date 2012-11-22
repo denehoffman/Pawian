@@ -1,13 +1,15 @@
-// KPole class definition file. -*- C++ -*-
+// PPole class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once 
 
 //_____________________________________________________________________________
-// @file KPole.h
+// @file PPole.h
 //_____________________________________________________________________________
 
 #include "qft++/matrix/Matrix.hh"
+#include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/AbsPhaseSpace.hh"
 #include <iostream>
 #include <vector>
 #include <complex>
@@ -18,24 +20,23 @@ class AbsPhaseSpace;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class KPole : public Matrix< complex<double> > {
+class PPole : public KPole {
 
 public:
 
   // create/copy/destroy:
 
   /// Default Constructor (rank 0)
-//   KPole() : Matrix<double>::Matrix() {}
+//   PPole() : Matrix<double>::Matrix() {}
 
   /// Constructor 
-  KPole(vector<double>& g_i, double mass_0);
-  KPole(vector<double>& g_i, double mass_0, int numRow, int numCol); 
+  PPole(complex<double>& beta, vector<double>& g_i, double mass_0); 
 
   /// Copy Constructor
-  // KPole(const KPole &theCopy);
+  // PPole(const PPole &theCopy);
 
   /// Destructor
-  virtual ~KPole();
+  virtual ~PPole();
 
   // operators:
 
@@ -44,14 +45,10 @@ public:
 
   virtual void evalMatrix(const double mass);
 
+  void updateBeta (complex<double> beta) {_beta=beta;}
 
-  virtual double poleMass() {return _poleMass;}
-  virtual vector<double> gFactors() {return _g_i;}
-
-  void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
   
 protected:
-  vector<double> _g_i;
-  double _poleMass;
+  complex<double> _beta;
 };
 //_____________________________________________________________________________

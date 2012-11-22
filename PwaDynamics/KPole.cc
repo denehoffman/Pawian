@@ -9,6 +9,13 @@ KPole::KPole(vector<double>& g_i, double mass_0):
 {
 }
 
+KPole::KPole(vector<double>& g_i, double mass_0, int numRow, int numCol):
+  Matrix< complex<double> >::Matrix(numRow, numCol)
+  , _g_i(g_i)
+  , _poleMass(mass_0)
+{
+}
+
 KPole::~KPole(){
 }
 

@@ -1,5 +1,5 @@
-#ifndef _PiPiSWave_H
-#define _PiPiSWave_H
+
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -9,29 +9,30 @@
 
 #include <cassert>
 
-#include <boost/shared_ptr.hpp>
+
 
 #include "TROOT.h"
 // #include <TSystem.h>
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+//PiPiSWaveTMatrix class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
 
 class TFile;
 class TH1F;
 class TH2F;
-class AbsPhaseSpace;
 
-class PiPiSWave {
+
+class PiPiSWaveTMatrix {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  PiPiSWave(std::map< int, std::vector<double> >& gFactors, std::vector<double >& poleMasses, std::vector<  boost::shared_ptr<AbsPhaseSpace> > phpVecs);
+  PiPiSWaveTMatrix();
 
 
   /** Destructor */
-  virtual ~PiPiSWave();
+  virtual ~PiPiSWaveTMatrix();
 
   // Getters:
  
@@ -42,10 +43,14 @@ private:
   TFile* _theTFile;
   TH1F* _invPiPiMassH1;
   TH1F* _invPiPiMassRelH1;
+  TH1F* _absT00RelH1;
+  TH1F* _absS00RelH1;
+  TH2F* _pipiPhaseSpaceFactorH2;
+  TH2F* _pipipipiPhaseSpaceFactorH2;
   TH2F*  _argandH2;
   TH2F*  _argandRelH2;
   TH2F* _phaseShiftH2;
   TH2F* _phaseShiftRelH2;
 };
 
-#endif
+

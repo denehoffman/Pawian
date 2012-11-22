@@ -1,5 +1,5 @@
 // TMatrixBase class definition file. -*- C++ -*-
-// Copyright 2010 Bertram Kopf
+// Copyright 2012 Bertram Kopf
 
 #pragma once 
 
@@ -29,6 +29,7 @@ public:
   virtual ~TMatrixBase();
 
   virtual void evalMatrix(const double mass);
+  virtual boost::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 
 protected:
   boost::shared_ptr<KMatrixBase> _Kmatrix; 
