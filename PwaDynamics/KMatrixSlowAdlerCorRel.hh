@@ -28,7 +28,7 @@ public:
 
   /// Constructor 
   KMatrixSlowAdlerCorRel(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, boost::shared_ptr<array_type_2d> fscatPtr, double s0_scat, double sAdler0=-0.15, double sAdler=1.); 
-  KMatrixSlowAdlerCorRel(int numCols, int numRows);
+  KMatrixSlowAdlerCorRel(int dim);
   /// Destructor
   virtual ~KMatrixSlowAdlerCorRel();
 

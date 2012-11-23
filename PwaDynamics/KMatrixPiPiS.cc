@@ -9,7 +9,7 @@
 
 
 KMatrixPiPiS::KMatrixPiPiS() :
-  KMatrixSlowAdlerCorRel(5,5)
+  KMatrixSlowAdlerCorRel(5)
 {
   initASParam1900();
 }

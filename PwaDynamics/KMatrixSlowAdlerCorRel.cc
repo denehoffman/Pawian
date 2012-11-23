@@ -13,8 +13,8 @@ KMatrixSlowAdlerCorRel::KMatrixSlowAdlerCorRel(vector<boost::shared_ptr<KPole> >
  {
  }
 
-KMatrixSlowAdlerCorRel::KMatrixSlowAdlerCorRel(int numCols, int numRows) :
-  KMatrixBase(numCols, numRows)
+KMatrixSlowAdlerCorRel::KMatrixSlowAdlerCorRel(int dim) :
+  KMatrixBase(dim, dim)
   ,_s0Scat(0.)
   ,_sAdler0(0.)
   ,_sAdler(0.)

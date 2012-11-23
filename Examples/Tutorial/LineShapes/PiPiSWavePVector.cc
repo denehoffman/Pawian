@@ -36,18 +36,55 @@ PiPiSWavePVector::PiPiSWavePVector() :
 
   std::vector< complex<double> > fProd;
   fProd.resize(5);
-  fProd[0]=complex <double>(- 2.19449   , -7.62666);
-  fProd[1]=complex <double>(1.87981, -.628378)*fProd[0];
-  fProd[2]=complex <double>(4.3242 , 2.75019)*fProd[0];
-  fProd[3]=complex <double>(3.22336,  .271048)*fProd[0];
+  // fProd[0]=complex <double>(- 2.19449   , -7.62666);
+  // fProd[1]=complex <double>(1.87981, -.628378)*fProd[0];
+  // fProd[2]=complex <double>(4.3242 , 2.75019)*fProd[0];
+  // fProd[3]=complex <double>(3.22336,  .271048)*fProd[0];
+  // fProd[4]=complex <double>(0.,0.);
+
+  // fProd[0]=complex <double>(-0.798456,-0.327471);
+  // fProd[1]=complex <double>(0.,0.);
+  // fProd[2]=complex <double>(-2.8991,2.40688);
+  // fProd[3]=complex <double>(-0.622515,2.08818);
+  // fProd[4]=complex <double>(-1.35335,-2.04469);
+
+  // fProd[0]=complex <double>(-2.33219,1.06776);
+  // fProd[1]=complex <double>(-5.93134,-2.15883);
+  // fProd[2]=complex <double>(0.,0.);
+  // fProd[3]=complex <double>(0.,0.);
+  // fProd[4]=complex <double>(0.,0.);
+
+  fProd[0]=complex <double>(0.,0.);
+  fProd[1]=complex <double>(0.,0.);
+  fProd[2]=complex <double>(0.,0.);
+  fProd[3]=complex <double>(0.,0.);
   fProd[4]=complex <double>(0.,0.);
 
   std::vector<complex <double> > betaPars;
-  betaPars.push_back(complex <double>(1.8223,-9.11972));
+  betaPars.push_back(complex <double>(-0.798456,-0.327471));
   betaPars.push_back(complex <double>(-10.1735,-3.88488));
   betaPars.push_back(complex <double>(-23.6712,5.03146));
   betaPars.push_back(complex <double>(-0.0799351,9.15965));
   betaPars.push_back(complex <double>(0.,0.));
+
+  // betaPars.push_back(complex <double>(1.,0.));
+  // betaPars.push_back(complex <double>(-0.86784,-0.442187));
+  // betaPars.push_back(complex <double>(0.0566089,0.752875));
+  // betaPars.push_back(complex <double>(-0.85595,1.53784));
+  // betaPars.push_back(complex <double>(0.,0.));
+
+  // betaPars.push_back(complex <double>(1.,0.));
+  // betaPars.push_back(complex <double>(0.32253,2.44986));
+  // betaPars.push_back(complex <double>(-0.240159,1.05706));
+  // betaPars.push_back(complex <double>(0.,0.));
+  // betaPars.push_back(complex <double>(0.,0.));
+
+  // betaPars.push_back(complex <double>(1.8223,-9.11972));
+  // betaPars.push_back(complex <double>(-10.1735,-3.88488));
+  // betaPars.push_back(complex <double>(-23.6712,-5.03146));
+  // betaPars.push_back(complex <double>(-0.0799351,9.15965));
+  // betaPars.push_back(complex <double>(0.,0.));
+
 
   int size=2000;
   double massMin=2.*0.135;
@@ -86,6 +123,8 @@ PiPiSWavePVector::PiPiSWavePVector() :
 
   double s0Prod=-0.0737;
   theFVector->updateS0prod(s0Prod);
+
+  vector<boost::shared_ptr<AbsPhaseSpace> > thePhpVecs=theFVector->kMatrix()->phaseSpaceVec();  
   
   for (double mass=massMin; mass<massMax; mass+=stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
