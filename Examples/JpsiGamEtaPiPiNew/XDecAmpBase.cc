@@ -9,6 +9,7 @@
 #include "ErrLogger/ErrLogger.hh"
 // #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiEventListNew.hh"
+#include "PwaDynamics/FVectorPiPiS.hh"
 
 XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>& hypVec, boost::shared_ptr<JpsiGamEtaPiPiStates> theStates, Spin spinX) :
   AbsXdecAmp(name, hypVec, spinX)
@@ -24,6 +25,8 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_a2_1320piHyp(false)
   ,_f2_1270etaKey(name+"Tof2_1270Eta")
   ,_f2_1270etaHyp(false)
+  ,_pipiSetaKey(name+"TopipiSEta")
+  ,_pipiSetaHyp(false)
   ,_xBWKey(name+"BreitWigner")
   ,_massIndependent(true)
   ,_massPi(0.13957018)
@@ -39,6 +42,7 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_theStatesPtr(theStates)
   ,_recalculatef2_1270(true)
   ,_recalculatea2_1320(true)
+  ,_pipiSFVec(new FVectorPiPiS())
 {
   initialize();
 }
@@ -56,6 +60,10 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData){
   if (_piPiEtaHyp){
     result+=XToPiPiEtaAmp(lamX, theData, _currentParamMagMap[_piPiEtaKey], _currentParamPhiMap[_piPiEtaKey]);
   }
+  if (_pipiSetaHyp){
+    result+=XToPiPiSEtaAmp(lamX, theData);
+  }
+
   if(_a980piHyp){
     result+=XToAPiFlatteAmp(lamX, theData, _currentParamMagMap[_a980piKey], _currentParamPhiMap[_a980piKey], _currentMassMap["a0_980"], _currentgFactorMap["a0_980gPiEta"], _currentgFactorMap["a0_980gKK"]);
   }
@@ -234,6 +242,42 @@ complex<double> XDecAmpBase::XToEtaFAmp(Spin lamX, Spin jf, EvtDataNew* theData,
   }
   return result;
 }
+
+
+complex<double> XDecAmpBase::XToPiPiSEtaAmp(Spin lamX, EvtDataNew* theData){
+  complex<double> result(0.,0.);
+  Vector4<double > p4PiPi=theData->FourVecsDec[enumJpsiGamEtaPiPi4V::PipPim_HeliPsi];
+
+  complex<double> pipiSFVecMass;
+#ifdef _OPENMP
+#pragma omp critical
+  {
+#endif
+    _pipiSFVec->evalMatrix(p4PiPi.M());
+    pipiSFVecMass=(*_pipiSFVec)[0];
+#ifdef _OPENMP
+  }
+#endif  
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > pipiSEtaMag=_currentParamMagMap[_pipiSetaKey];
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > pipiSEtaPhi=_currentParamPhiMap[_pipiSetaKey];
+
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;  
+
+  for ( itXMag=pipiSEtaMag.begin(); itXMag!=pipiSEtaMag.end(); ++itXMag){
+    boost::shared_ptr<const JPCLS> XState=itXMag->first;
+    double theXMag=itXMag->second;
+    double theXPhi=pipiSEtaPhi[XState];
+    complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
+     
+    complex<double> amp = theXMag*expiphiX*sqrt(2.*XState->L+1.)*
+      conj(theData->WignerDsDec[enumJpsiGamEtaPiPiDfunc::XTofEta][_J_X][lamX][0])*pipiSFVecMass;
+    result+= amp;
+  }
+
+  return result;
+}
+
+
 
 complex<double> XDecAmpBase::XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
 			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiMag, 
@@ -456,6 +500,38 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
   }
 
+  if(_pipiSetaHyp){
+    std::vector< boost::shared_ptr<const JPCLS> > pipiSEtaStates;
+    if(_J_X==0) pipiSEtaStates=_theStatesPtr->EtaTof0EtaStates();
+    else if(_J_X==1) pipiSEtaStates=_theStatesPtr->F1Tof0EtaStates();
+    else if(_J_X==2) pipiSEtaStates=_theStatesPtr->Eta2Tof0EtaStates(); 
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+
+    std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
+    
+    for(itLS=pipiSEtaStates.begin(); itLS!=pipiSEtaStates.end(); ++itLS){
+      currentMagValMap[*itLS]=0.2;
+      currentPhiValMap[*itLS]=0.;
+      currentMagErrMap[*itLS]=0.8;
+      currentPhiErrMap[*itLS]=0.3;
+    }
+    fitVal.Mags[_pipiSetaKey]=currentMagValMap;
+    fitVal.Phis[_pipiSetaKey]=currentPhiValMap;
+    fitErr.Mags[_pipiSetaKey]=currentMagErrMap;
+    fitErr.Phis[_pipiSetaKey]=currentPhiErrMap;
+
+    std::map<std::string, double>::const_iterator itbFac;
+    for(itbFac=_currentbFactorMap.begin();itbFac!=_currentbFactorMap.end(); ++itbFac){ 
+      fitVal.otherParams[itbFac->first]=itbFac->second;
+    }
+
+  }
+
+
   if (!_massIndependent){
     size_t pos=_name.find("_");
     std::string massMeVString=_name.substr(pos+1); 
@@ -527,7 +603,26 @@ void XDecAmpBase::initialize(){
       _enabledMassKeys.push_back("f2_1270");
       _enabledWidthKeys.push_back("f2_1270");
     }
+    
+    else if (it->compare(0, _pipiSetaKey.size(), _pipiSetaKey)== 0){
+      Info << "hypothesis\t" << _pipiSetaKey << "\t enabled" << endmsg;
+      _pipiSetaHyp=true;
+      _enabledAmpKeys.push_back(_pipiSetaKey);
+      _currentbFactorMap[_pipiSetaKey+"b_pole1Mag"]=1.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole1Phi"]=0.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole2Mag"]=1.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole2Phi"]=0.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole3Mag"]=1.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole3Phi"]=0.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole4Mag"]=1.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole4Phi"]=0.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole5Mag"]=1.;
+      _currentbFactorMap[_pipiSetaKey+"b_pole5Phi"]=0.;
+       
+      complex<double> woFprod=0.;
+      for (int i=0; i<5; ++i) _pipiSFVec->updateFprod (i, woFprod);
 
+    }
     else if (it->compare(0, _xBWKey.size(), _xBWKey) ==0){
       _massIndependent=false;
     }
@@ -584,6 +679,20 @@ void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
      _recalculate=true;
    }   
  } 
+
+ if (_pipiSetaHyp){
+   std::map<std::string, double>::const_iterator itbFac;
+
+   for(itbFac=_currentbFactorMap.begin();itbFac!=_currentbFactorMap.end(); ++itbFac){
+     double currentbFactor=theParamVal.otherParams[itbFac->first];
+     if ( fabs(currentbFactor-itbFac->second) > 1.e-10){
+       DebugMsg << "bFactor " << itbFac->first << ":\t" << "current: " << itbFac->second << "\tnew: " << currentbFactor << endmsg;
+       _recalculate=true;
+     } 
+   }
+
+ }
+
 
   if (!_massIndependent){
     double xMass=theParamVal.Masses[_name];
@@ -695,6 +804,28 @@ void XDecAmpBase::updateFitParams(fitParamsNew& theParamVal){
  for ( itKeys=_enabledFactorKeys.begin(); itKeys!=_enabledFactorKeys.end(); ++itKeys){
    double currentgFactor=theParamVal.gFactors[(*itKeys)];
    _currentgFactorMap[(*itKeys)]=currentgFactor;
+ }
+
+ if (_pipiSetaHyp){
+   std::map<std::string, double>::iterator itbFac;
+   
+   for(itbFac=_currentbFactorMap.begin();itbFac!=_currentbFactorMap.end(); ++itbFac){
+     double currentbFactor=theParamVal.otherParams[itbFac->first];
+     itbFac->second = currentbFactor;
+   }
+
+   //update _pipiSFVec
+   complex<double> b_pole1=_currentbFactorMap[_pipiSetaKey+"b_pole1Mag"]*complex<double>(cos(_currentbFactorMap[_pipiSetaKey+"b_pole1Phi"]), sin(_currentbFactorMap[_pipiSetaKey+"b_pole1Phi"]));
+   complex<double> b_pole2=_currentbFactorMap[_pipiSetaKey+"b_pole2Mag"]*complex<double>(cos(_currentbFactorMap[_pipiSetaKey+"b_pole2Phi"]), sin(_currentbFactorMap[_pipiSetaKey+"b_pole2Phi"])); 
+   complex<double> b_pole3=_currentbFactorMap[_pipiSetaKey+"b_pole3Mag"]*complex<double>(cos(_currentbFactorMap[_pipiSetaKey+"b_pole3Phi"]), sin(_currentbFactorMap[_pipiSetaKey+"b_pole3Phi"]));
+   complex<double> b_pole4=_currentbFactorMap[_pipiSetaKey+"b_pole4Mag"]*complex<double>(cos(_currentbFactorMap[_pipiSetaKey+"b_pole4Phi"]), sin(_currentbFactorMap[_pipiSetaKey+"b_pole4Phi"]));
+   complex<double> b_pole5=_currentbFactorMap[_pipiSetaKey+"b_pole5Mag"]*complex<double>(cos(_currentbFactorMap[_pipiSetaKey+"b_pole5Phi"]), sin(_currentbFactorMap[_pipiSetaKey+"b_pole5Phi"]));
+   
+   _pipiSFVec->updateBeta(0, b_pole1);
+   _pipiSFVec->updateBeta(1, b_pole2);
+   _pipiSFVec->updateBeta(0, b_pole3);
+   _pipiSFVec->updateBeta(0, b_pole4);
+   _pipiSFVec->updateBeta(0, b_pole5); 
  }
 
  if (!_massIndependent){

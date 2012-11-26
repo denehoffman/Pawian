@@ -5,7 +5,8 @@ lib JpsiGamEtaPiPiNew :
         [ glob *.cc : *App.cc ] 
         $(TOP)/PwaUtils//PwaUtils 
         $(TOP)/Event//Event 
-        $(TOP)/qft++//qft++ 
+        $(TOP)/qft++//qft++
+        $(TOP)/PwaDynamics//PwaDynamics 
 	: <use>$(TOP)//Geneva 
 	: 
 	: <library>$(TOP)//Geneva ;

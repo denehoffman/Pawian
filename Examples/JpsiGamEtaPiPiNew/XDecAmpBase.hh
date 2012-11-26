@@ -12,6 +12,7 @@
 
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiStates.hh"
+#include "PwaDynamics/FVector.hh"
 
 
 class XDecAmpBase : public AbsXdecAmp{
@@ -50,6 +51,8 @@ protected:
   bool _a2_1320piHyp;
   const std::string _f2_1270etaKey;
   bool _f2_1270etaHyp;
+  const std::string _pipiSetaKey;
+  bool _pipiSetaHyp;
   const std::string _xBWKey;
   bool _massIndependent;
 
@@ -82,6 +85,7 @@ protected:
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFMag, 
 			     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToEtaFPhi,
 			     double fMass, double fWidth);
+  complex<double> XToPiPiSEtaAmp(Spin lamX, EvtDataNew* theData);
   complex<double> XToAPiBWAmp(Spin lamX, Spin jA, EvtDataNew* theData, 
 			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiMag,
 			      std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToAPiPhi, 
@@ -90,7 +94,7 @@ protected:
   virtual void initialize();
 
 private:
- 
+  boost::shared_ptr<FVector> _pipiSFVec;  
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpa2_1320;
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpf2_1270;
 
@@ -101,6 +105,7 @@ private:
   std::map<std::string, double> _currentMassMap;
   std::map<std::string, double> _currentWidthMap;
   std::map<std::string, double> _currentgFactorMap;
+  std::map<std::string, double> _currentbFactorMap;
   std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > _currentParamMagMap;
   std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > _currentParamPhiMap;
 };
