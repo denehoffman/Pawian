@@ -708,71 +708,76 @@ void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
   if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;
 
   //a2_1320 amp
-  _recalculatea2_1320=false;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[_a2_1320piKey];
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[_a2_1320piKey];
-  
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
-  for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
-    boost::shared_ptr<const JPCLS> XState=itMag->first;
-    double theMag=itMag->second;
-    double thePhi=thePhis[XState];
-    if ( fabs(theMag - _currentParamMagMap[_a2_1320piKey][XState])  > 1.e-10 ){
-      _recalculatea2_1320=true;
-      DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_a2_1320piKey][XState] << "\tnew: " << theMag << endmsg;
+  if(_a2_1320piHyp){
+    _recalculatea2_1320=false;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[_a2_1320piKey];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[_a2_1320piKey];
+    
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+      boost::shared_ptr<const JPCLS> XState=itMag->first;
+      double theMag=itMag->second;
+      double thePhi=thePhis[XState];
+      if ( fabs(theMag - _currentParamMagMap[_a2_1320piKey][XState])  > 1.e-10 ){
+	_recalculatea2_1320=true;
+	DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_a2_1320piKey][XState] << "\tnew: " << theMag << endmsg;
+      }
+      if ( fabs(thePhi - _currentParamPhiMap[_a2_1320piKey][XState])  > 1.e-10 ){
+	_recalculatea2_1320=true;
+	DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_a2_1320piKey][XState] << "\tnew: " << thePhi << endmsg;
+      }
     }
-    if ( fabs(thePhi - _currentParamPhiMap[_a2_1320piKey][XState])  > 1.e-10 ){
+    
+    double currentMass=theParamVal.Masses["a2_1320"];
+    if ( fabs(currentMass-_currentMassMap["a2_1320"]) > 1.e-10){
+      DebugMsg << "Mass a2_1320:\t" << "current: " << _currentMassMap["a2_1320"] << "\tnew: " << currentMass << endmsg;
       _recalculatea2_1320=true;
-      DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_a2_1320piKey][XState] << "\tnew: " << thePhi << endmsg;
     }
+    
+    double currentWidth=theParamVal.Widths["a2_1320"];
+    if ( fabs(currentWidth-_currentWidthMap["a2_1320"]) > 1.e-10){
+      DebugMsg << "Width a2_1320:\t" << "current: " << _currentWidthMap["a2_1320"] << "\tnew: " << currentWidth << endmsg;
+      _recalculatea2_1320=true;
+    }
+    
+    if (_recalculatea2_1320) DebugMsg << "Recalculate a2_1320 amplitude in:\t" << _name << endmsg;
   }
-
-  double currentMass=theParamVal.Masses["a2_1320"];
-  if ( fabs(currentMass-_currentMassMap["a2_1320"]) > 1.e-10){
-    DebugMsg << "Mass a2_1320:\t" << "current: " << _currentMassMap["a2_1320"] << "\tnew: " << currentMass << endmsg;
-    _recalculatea2_1320=true;
-  }
-
-  double currentWidth=theParamVal.Widths["a2_1320"];
-  if ( fabs(currentWidth-_currentWidthMap["a2_1320"]) > 1.e-10){
-    DebugMsg << "Width a2_1320:\t" << "current: " << _currentWidthMap["a2_1320"] << "\tnew: " << currentWidth << endmsg;
-    _recalculatea2_1320=true;
-  }
-
-  if (_recalculatea2_1320) DebugMsg << "Recalculate a2_1320 amplitude in:\t" << _name << endmsg;
 
   //f2_1270 amp
-  _recalculatef2_1270=false;
-  theMags=theParamVal.Mags[_f2_1270etaKey];
-  thePhis=theParamVal.Phis[_f2_1270etaKey];
-  
-  for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
-    boost::shared_ptr<const JPCLS> XState=itMag->first;
-    double theMag=itMag->second;
-    double thePhi=thePhis[XState];
-    if ( fabs(theMag - _currentParamMagMap[_f2_1270etaKey][XState])  > 1.e-10 ){
-      _recalculatef2_1270=true;
-      DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_f2_1270etaKey][XState] << "\tnew: " << theMag << endmsg;
+  if(_f2_1270etaHyp){
+    _recalculatef2_1270=false;
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[_f2_1270etaKey];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[_f2_1270etaKey];
+
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;    
+    for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+      boost::shared_ptr<const JPCLS> XState=itMag->first;
+      double theMag=itMag->second;
+      double thePhi=thePhis[XState];
+      if ( fabs(theMag - _currentParamMagMap[_f2_1270etaKey][XState])  > 1.e-10 ){
+	_recalculatef2_1270=true;
+	DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_f2_1270etaKey][XState] << "\tnew: " << theMag << endmsg;
+      }
+      if ( fabs(thePhi - _currentParamPhiMap[_f2_1270etaKey][XState])  > 1.e-10 ){
+	_recalculatef2_1270=true;
+	DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_f2_1270etaKey][XState] << "\tnew: " << thePhi << endmsg;
+      }
     }
-    if ( fabs(thePhi - _currentParamPhiMap[_f2_1270etaKey][XState])  > 1.e-10 ){
+    
+    double currentMass=theParamVal.Masses["f2_1270"];
+    if ( fabs(currentMass-_currentMassMap["f2_1270"]) > 1.e-10){
+      DebugMsg << setprecision (8) << "Mass f2_1270:\t" << "current: " << _currentMassMap["f2_1270"] << "\tnew: " << currentMass << endmsg;
       _recalculatef2_1270=true;
-      DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_f2_1270etaKey][XState] << "\tnew: " << thePhi << endmsg;
     }
+    
+    double currentWidth=theParamVal.Widths["f2_1270"];
+    if ( fabs(currentWidth-_currentWidthMap["f2_1270"]) > 1.e-10){
+      DebugMsg << setprecision (8) << "Width f2_1270:\t" << "current: " << _currentWidthMap["f2_1270"] << "\tnew: " << currentWidth << endmsg;
+      _recalculatef2_1270=true;
+    }
+    
+    if (_recalculatef2_1270) Info << "Recalculate f2_1270 amplitude in:\t" << _name << endmsg;
   }
-
-  currentMass=theParamVal.Masses["f2_1270"];
-  if ( fabs(currentMass-_currentMassMap["f2_1270"]) > 1.e-10){
-    DebugMsg << setprecision (8) << "Mass f2_1270:\t" << "current: " << _currentMassMap["f2_1270"] << "\tnew: " << currentMass << endmsg;
-    _recalculatef2_1270=true;
-  }
-
-  currentWidth=theParamVal.Widths["f2_1270"];
-  if ( fabs(currentWidth-_currentWidthMap["f2_1270"]) > 1.e-10){
-    DebugMsg << setprecision (8) << "Width f2_1270:\t" << "current: " << _currentWidthMap["f2_1270"] << "\tnew: " << currentWidth << endmsg;
-    _recalculatef2_1270=true;
-  }
-
-  if (_recalculatef2_1270) Info << "Recalculate f2_1270 amplitude in:\t" << _name << endmsg;
 }
 
 void XDecAmpBase::updateFitParams(fitParamsNew& theParamVal){
