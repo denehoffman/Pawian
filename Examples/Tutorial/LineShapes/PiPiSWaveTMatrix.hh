@@ -45,6 +45,7 @@ private:
   TH1F* _invPiPiMassRelH1;
   TH1F* _absT00RelH1;
   TH1F* _absS00RelH1;
+  TH1F* _sqrT00RelSigmaPoleH1;
   TH2F* _pipiPhaseSpaceFactorH2;
   TH2F* _pipipipiPhaseSpaceFactorH2;
   TH2F*  _argandH2;

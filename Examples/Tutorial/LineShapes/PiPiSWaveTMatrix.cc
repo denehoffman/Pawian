@@ -47,6 +47,7 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
   _absT00RelH1->SetYTitle("|#rho_{00}#hat{T}_{00}|");
   _absS00RelH1= new TH1F("_absS00RelH1","abs(S00) (rel)",size+1, massMin, massMax);
   _absS00RelH1->SetYTitle("|1-2i#rho_{00}#hat{T}_{00}|");
+  _sqrT00RelSigmaPoleH1= new TH1F("_sqrT00RelSigmaPoleH1","|#rho_{00}#hat{T}_{00}|^{2} (rel) #{sigma} pole",size+1, massMin, massMax);
   _pipiPhaseSpaceFactorH2= new TH2F("_pipiPhaseSpaceFactorH2","#pi^{-} #pi^{+} phase space factor",size+1, 0., 2., 1000, 0., 1.);
   _pipipipiPhaseSpaceFactorH2= new TH2F("_pipipipiPhaseSpaceFactorH2","4#pi^{-} phase space factor",size+1, 0., 2., 1000, 0., 1.);
   _argandH2=new TH2F("_argandH2","Argand plot K matrix",301, -1., 1., 301, 0., 1.3);
@@ -72,6 +73,14 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
   boost::shared_ptr<KMatrixNonRel> theKMatrixNonRel(new KMatrixNonRel(thePoles, thePhpVecs));
   boost::shared_ptr<TMatrixBase> theTMatrixNonRel(new TMatrixNonRel(theKMatrixNonRel));
 
+
+  vector<boost::shared_ptr<KPole> >  sigmaPoleVec;
+  sigmaPoleVec.push_back(thePoles[0]);
+  boost::shared_ptr<array_type_2d> fScatProd=theKMatrix->fScatProd();
+  double soScat=theKMatrix->s0Scat(); 
+  boost::shared_ptr<KMatrixSlowAdlerCorRel> theKMatrixSigmaPole(new KMatrixSlowAdlerCorRel(sigmaPoleVec, thePhpVecs, fScatProd, soScat));
+  boost::shared_ptr<TMatrixBase> theTMatrixSigmaPole(new TMatrixRel(theKMatrixSigmaPole));
+
   for (double mass=massMin; mass<massMax; mass+=stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     
@@ -95,7 +104,11 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
     _phaseShiftRelH2->Fill(mass, atan2(currentValLowRel.imag(), currentValLowRel.real()));
 
     _pipiPhaseSpaceFactorH2->Fill(mass, thePhpVecs[0]->factor(mass4Vec.M()).real() );
-    _pipipipiPhaseSpaceFactorH2->Fill(mass, thePhpVecs[2]->factor(mass4Vec.M()).real() );     
+    _pipipipiPhaseSpaceFactorH2->Fill(mass, thePhpVecs[2]->factor(mass4Vec.M()).real() );
+
+    theTMatrixSigmaPole->evalMatrix(mass);
+    complex<double> currentValRelSigmaPole=(*theTMatrixSigmaPole)(0,0);
+    _sqrT00RelSigmaPoleH1->Fill( mass4Vec.M(), norm( sqrt((thePhpVecs[0]->factor(mass4Vec.M())).real())*currentValRelSigmaPole*sqrt( (thePhpVecs[0]->factor(mass4Vec.M())).real())) );     
   }
 }
 

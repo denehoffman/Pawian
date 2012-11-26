@@ -823,9 +823,9 @@ void XDecAmpBase::updateFitParams(fitParamsNew& theParamVal){
    
    _pipiSFVec->updateBeta(0, b_pole1);
    _pipiSFVec->updateBeta(1, b_pole2);
-   _pipiSFVec->updateBeta(0, b_pole3);
-   _pipiSFVec->updateBeta(0, b_pole4);
-   _pipiSFVec->updateBeta(0, b_pole5); 
+   _pipiSFVec->updateBeta(2, b_pole3);
+   _pipiSFVec->updateBeta(3, b_pole4);
+   _pipiSFVec->updateBeta(4, b_pole5); 
  }
 
  if (!_massIndependent){

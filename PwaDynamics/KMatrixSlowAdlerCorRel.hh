@@ -33,6 +33,8 @@ public:
   virtual ~KMatrixSlowAdlerCorRel();
 
   virtual void evalMatrix(const double mass);
+  virtual boost::shared_ptr<array_type_2d> fScatProd() {return _fScatPtr;}
+  virtual double s0Scat() {return _s0Scat;}
 
 protected:
   boost::shared_ptr<array_type_2d> _fScatPtr;
