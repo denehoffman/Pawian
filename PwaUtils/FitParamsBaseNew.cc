@@ -231,6 +231,14 @@ void FitParamsBaseNew::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble
     
     double maxVal=theStartVal+5.*theErrVal;
 
+    // for complex fit parameter; phi component; quick workaround
+    if(theName.size()>9){
+      if (theName.compare(theName.size()-8, theName.size(), "PhiOther")==0){
+	minVal=-4.*M_PI;
+	maxVal=4.*M_PI;	    
+      }
+    }
+    
     upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
   }
 
