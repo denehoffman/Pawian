@@ -69,6 +69,7 @@ protected:
   boost::shared_ptr<JpsiGamEtaPiPiStates> _theStatesPtr;
   bool _recalculatef2_1270;
   bool _recalculatea2_1320;
+  bool _recalculatepipiSeta;
 
   complex<double> XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData,
 				std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag,
@@ -97,6 +98,7 @@ private:
   boost::shared_ptr<FVector> _pipiSFVec;  
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpa2_1320;
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpf2_1270;
+  std::map<int, std::map<Spin, complex<double> > > _cachedAmppipiSeta;
 
   std::vector<std::string> _enabledAmpKeys;
   std::vector<std::string> _enabledMassKeys;

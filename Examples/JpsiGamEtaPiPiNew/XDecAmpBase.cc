@@ -42,6 +42,7 @@ XDecAmpBase::XDecAmpBase(const std::string& name, const std::vector<std::string>
   ,_theStatesPtr(theStates)
   ,_recalculatef2_1270(true)
   ,_recalculatea2_1320(true)
+  ,_recalculatepipiSeta(true)
   ,_pipiSFVec(new FVectorPiPiS())
 {
   initialize();
@@ -61,7 +62,21 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData){
     result+=XToPiPiEtaAmp(lamX, theData, _currentParamMagMap[_piPiEtaKey], _currentParamPhiMap[_piPiEtaKey]);
   }
   if (_pipiSetaHyp){
-    result+=XToPiPiSEtaAmp(lamX, theData);
+    if (_cacheAmps && !_recalculatepipiSeta) result+=_cachedAmppipiSeta[evtNo][lamX];
+    else{
+      complex<double> tmpResult=XToPiPiSEtaAmp(lamX, theData);
+      result+=tmpResult;
+      if ( _cacheAmps){
+#ifdef _OPENMP
+#pragma omp critical
+	{
+#endif
+	  _cachedAmppipiSeta[evtNo][lamX]=tmpResult;
+#ifdef _OPENMP
+	}
+#endif
+      }
+    }
   }
 
   if(_a980piHyp){
@@ -131,7 +146,7 @@ complex<double> XDecAmpBase::XdecAmp(Spin lamX, EvtDataNew* theData){
 #endif
   }
   return result;
-}
+  }
 
 complex<double> XDecAmpBase::XToPiPiEtaAmp(Spin lamX, EvtDataNew* theData, 
 					   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& XToPiPiEtaMag,
@@ -681,6 +696,8 @@ void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
  } 
 
  if (_pipiSetaHyp){
+
+   _recalculatepipiSeta=false;
    std::map<std::string, double>::const_iterator itbFac;
 
    for(itbFac=_currentbFactorMap.begin();itbFac!=_currentbFactorMap.end(); ++itbFac){
@@ -688,10 +705,31 @@ void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
      if ( fabs(currentbFactor-itbFac->second) > 1.e-10){
        DebugMsg << "bFactor " << itbFac->first << ":\t" << "current: " << itbFac->second << "\tnew: " << currentbFactor << endmsg;
        _recalculate=true;
+       _recalculatepipiSeta=true;
      } 
    }
 
+   //for chaching: check pipiS amp again 
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > theMags=theParamVal.Mags[_pipiSetaKey];
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > thePhis=theParamVal.Phis[_pipiSetaKey];
+    
+    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    for ( itMag=theMags.begin(); itMag!=theMags.end(); ++itMag){
+      boost::shared_ptr<const JPCLS> XState=itMag->first;
+      double theMag=itMag->second;
+      double thePhi=thePhis[XState];
+      if ( fabs(theMag - _currentParamMagMap[_pipiSetaKey][XState])  > 1.e-10 ){
+	_recalculatepipiSeta=true;
+	DebugMsg << setprecision (8) << "Difference Mag " << XState->name() << ":\t" << "current: " << _currentParamMagMap[_pipiSetaKey][XState] << "\tnew: " << theMag << endmsg;
+      }
+      if ( fabs(thePhi - _currentParamPhiMap[_pipiSetaKey][XState])  > 1.e-10 ){
+	_recalculatepipiSeta=true;
+	DebugMsg  << setprecision (8) << "Difference Phi " << XState->name() << ":\t" << "current: " << _currentParamPhiMap[_pipiSetaKey][XState] << "\tnew: " << thePhi << endmsg;
+      }
+    }
+    if (_recalculatepipiSeta) DebugMsg << "Recalculate pipiSeta amplitude in:\t" << _name << endmsg;
  }
+
 
 
   if (!_massIndependent){
