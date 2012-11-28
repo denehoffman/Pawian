@@ -542,6 +542,7 @@ void  XDecAmpBase::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
     std::map<std::string, double>::const_iterator itbFac;
     for(itbFac=_currentbFactorMap.begin();itbFac!=_currentbFactorMap.end(); ++itbFac){ 
       fitVal.otherParams[itbFac->first]=itbFac->second;
+      fitErr.otherParams[itbFac->first]=1.0;
     }
 
   }
