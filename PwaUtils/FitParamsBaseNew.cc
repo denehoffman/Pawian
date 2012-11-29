@@ -238,7 +238,16 @@ void FitParamsBaseNew::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble
 	maxVal=4.*M_PI;	    
       }
     }
-    
+
+    // for parameter where pos and neg values are allowed
+    if(theName.size()>12){
+      if (theName.compare(theName.size()-11, theName.size(), "PosNegOther")==0){
+	minVal = -fabs(theStartVal)-5.*theErrVal;
+	maxVal = fabs(theStartVal)+5.*theErrVal;;	    
+      }
+    }
+
+   
     upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
   }
 
