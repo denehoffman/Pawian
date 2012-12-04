@@ -48,6 +48,7 @@ public:
   const int noOfThreads() const {return _noOfThreads;}
   const int ratioMcToData() const {return _ratioMcToData;}
   const bool cacheAmps() const {return _cacheAmps;}
+  const bool useEvtWeight() const {return _useEvtWeight; }
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -69,4 +70,5 @@ protected:
   po::options_description* _desc;
   po::options_description* _common;
   po::options_description* _config;
+  bool _useEvtWeight;
 };

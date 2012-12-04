@@ -195,6 +195,7 @@ void FitParamsBaseNew::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& 
       boost::shared_ptr<const JPCLS> theJPCLS=itMag->first;
       double theStartVal=itMag->second;
       double theErrVal=errMags[theJPCLS];
+      if (theErrVal<=0.) theErrVal=0.1;
       
       //now fill the fitParameterMap
       std::string magStr=theJPCLS->name()+itMagMap->first+suffix;
@@ -225,6 +226,7 @@ void FitParamsBaseNew::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble
     std::string theName =it->first + suffix;
     double theStartVal=it->second;
     double theErrVal=errDoubleMap[it->first];
+    if (theErrVal<=0.) theErrVal=0.1;
     
     double minVal=theStartVal-5.*theErrVal;
     if (minVal<0.) minVal=0.;

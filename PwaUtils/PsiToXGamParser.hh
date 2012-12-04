@@ -18,14 +18,12 @@ class PsiToXGamParser : public ParserBase
   
   const bool massIndependentFit() const {return _massIndependentFit; }
   const bool useCommonProductionPhases() const {return _useCommonProductionPhases; }
-  const bool useEvtWeight() const {return _useEvtWeight; }
   const std::pair<double, double> massRange() const { return std::make_pair( _massMin, _massMax  ) ; }
   const std::string getjobOption() const {return _jobOption;}
   
 protected:
   bool _massIndependentFit;
   bool _useCommonProductionPhases;
-  bool _useEvtWeight;
   
   double _massMin;
   double _massMax;

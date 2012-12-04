@@ -12,7 +12,6 @@ PsiToXGamParser::PsiToXGamParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_massIndependentFit(false)
   , _useCommonProductionPhases(false)
-  ,_useEvtWeight(false)
   , _massMin(0.7)
   , _massMax(3.1)
   , _jobOption("")
@@ -21,7 +20,6 @@ PsiToXGamParser::PsiToXGamParser(int argc,char **argv):
   common.add_options()
     ("massIndependentFit", po::value<bool>(&_massIndependentFit), "enable/disable mass independence in fit")
     ("commonProdPhases",po::value<bool>(&_useCommonProductionPhases), "enable/disable common production phases")
-    ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
     ;
   
   _common->add(common);

@@ -1,0 +1,18 @@
+project : 
+        ;
+
+lib D0ToKsPipPim : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/PwaUtils//PwaUtils 
+        $(TOP)/Event//Event 
+        $(TOP)/qft++//qft++
+        $(TOP)/PwaDynamics//PwaDynamics 
+	:  
+	: 
+	:  ;
+
+exe MD0ToKsPipPimApp : MD0ToKsPipPimApp.cc D0ToKsPipPim : ;
+
+
+
+

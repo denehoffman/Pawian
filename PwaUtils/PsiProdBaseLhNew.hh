@@ -70,11 +70,11 @@ protected:
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
   virtual void updateFitParams(fitParamsNew& theParamVal);
+  virtual void cacheTheAmps(); 
 private:
   void getDefaultLamLamParams(const std::vector<std::string>& hyps, 
 			      std::vector< boost::shared_ptr<const JPClamlam> > lamLamAmps, 
 			      fitParamsNew& fitVal, fitParamsNew& fitErr);
   void initializeHypothesis();
-  virtual void cacheTheAmps(); 
   
 };

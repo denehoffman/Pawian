@@ -24,6 +24,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _desc(0)
       , _common(new po::options_description("Common Options"))
       , _config(new po::options_description("Configuration file options"))
+      ,_useEvtWeight(false)
      {
        string strErrLogMode="debug";
     // Check the command line options. Uses the Boost program options library.
@@ -50,6 +51,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
       ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
       ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
+      ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
       ;
 
     _config->add_options()
@@ -138,6 +140,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
+		<< "use event weight: " << _useEvtWeight  << "\n\n"
             << endl;
 
 
