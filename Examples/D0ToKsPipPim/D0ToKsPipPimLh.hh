@@ -15,6 +15,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "PwaDynamics/FVector.hh"
+#include "PwaDynamics/FVectorPiPiS.hh"
 
 
 class D0ToKsPipPimLh : public AbsLhNew {
@@ -53,7 +54,8 @@ private:
   void initializeHypothesis();
   virtual void cacheTheAmps();
 
-  boost::shared_ptr<FVector> _pipiSFVec;
+  boost::shared_ptr<FVectorPiPiS> _pipiSFVec;
+
   std::vector<std::string> _enabledAmpKeys;
   std::vector<std::string> _enabledMassKeys;
   std::vector<std::string> _enabledWidthKeys;

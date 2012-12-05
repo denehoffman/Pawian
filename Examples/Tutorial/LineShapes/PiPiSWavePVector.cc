@@ -109,7 +109,7 @@ PiPiSWavePVector::PiPiSWavePVector() :
 
   // //boost::shared_ptr<PVectorRel> thePVector(new PVectorRel(pPoles, phpVecs));
 
-  boost::shared_ptr<FVector> theFVector(new FVectorPiPiS());
+  boost::shared_ptr<FVectorPiPiS> theFVector(new FVectorPiPiS());
 
   std::vector<complex <double> >::const_iterator itBeta;
   for( int i=0; i< int(betaPars.size()); ++i){

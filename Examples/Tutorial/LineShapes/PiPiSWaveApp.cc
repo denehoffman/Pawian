@@ -9,6 +9,8 @@
 #include <boost/shared_ptr.hpp>
 #include "Examples/Tutorial/LineShapes/PiPiSWaveTMatrix.hh"
 #include "Examples/Tutorial/LineShapes/PiPiSWavePVector.hh"
+#include "Examples/Tutorial/LineShapes/KPiSWaveTMatrix.hh"
+
 #include "ErrLogger/ErrLogger.hh"
 
 int main(int __argc,char *__argv[]){
@@ -16,7 +18,7 @@ int main(int __argc,char *__argv[]){
 
   PiPiSWaveTMatrix pipiSWaveTMatrix;
   PiPiSWavePVector piPiSWavePVector;
-
+  KPiSWaveTMatrix kPiSWaveTMatrix;
   return 0;
 }
 

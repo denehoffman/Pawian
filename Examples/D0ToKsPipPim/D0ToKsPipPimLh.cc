@@ -10,8 +10,6 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
-#include "PwaDynamics/FVectorPiPiS.hh"
-
 #include "ErrLogger/ErrLogger.hh"
 
 #include <boost/bind.hpp>

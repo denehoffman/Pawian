@@ -28,6 +28,7 @@ public:
 
   /// Destructor
   virtual ~FVectorPiPiS();
+  virtual boost::shared_ptr<PVectorSlowCorRel> pVectorSlowCorrRel() {return _pVectorCor;}
   virtual void updateFprod (int i, complex<double> fProd){_pVectorCor->updateFprod (i, fProd);}
   virtual void updateS0prod (double s0prod) {_pVectorCor->updateS0prod(s0prod);}
 protected:

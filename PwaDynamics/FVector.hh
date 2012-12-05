@@ -31,8 +31,8 @@ public:
 
   virtual void evalMatrix(const double mass);
   virtual void updateBeta(int i, complex<double> beta) {_Pvector->updateBeta(i, beta);}
-  virtual void updateFprod (int i, complex<double> fProd) {;}
-  virtual void updateS0prod (double s0prod) {;}
+  //  virtual void updateFprod (int i, complex<double> fProd) {;}
+  //  virtual void updateS0prod (double s0prod) {;}
   virtual boost::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 protected:
   boost::shared_ptr<KMatrixBase> _Kmatrix; 

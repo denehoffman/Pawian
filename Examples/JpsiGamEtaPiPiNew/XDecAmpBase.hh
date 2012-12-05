@@ -13,7 +13,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "Examples/JpsiGamEtaPiPiNew/JpsiGamEtaPiPiStates.hh"
 #include "PwaDynamics/FVector.hh"
-
+#include "PwaDynamics/FVectorPiPiS.hh"
 
 class XDecAmpBase : public AbsXdecAmp{
 
@@ -95,7 +95,7 @@ protected:
   virtual void initialize();
 
 private:
-  boost::shared_ptr<FVector> _pipiSFVec;  
+  boost::shared_ptr<FVectorPiPiS> _pipiSFVec;  
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpa2_1320;
   std::map<int, std::map<Spin, complex<double> > > _cachedAmpf2_1270;
   std::map<int, std::map<Spin, complex<double> > > _cachedAmppipiSeta;
