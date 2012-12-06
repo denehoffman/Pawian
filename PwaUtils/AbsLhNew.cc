@@ -104,11 +104,36 @@ void AbsLhNew::setHyps( const std::map<const std::string, bool>& theMap, bool& t
   }
 }
 
-void AbsLhNew::checkParamVariation(fitParamsNew& theParamVal){
-  return;
-}
 
 void AbsLhNew::cacheAmplitudes(){
   _cacheAmps=true;
   cacheTheAmps();
+}
+
+
+void AbsLhNew::checkParamVariation(fitParamsNew& theParamVal){
+
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for(it = _allDecAmpMap.begin(); it != _allDecAmpMap.end(); ++it){
+    it->second->checkRecalculation(theParamVal);
+  }
+
+  return;
+}
+
+void AbsLhNew::cacheTheAmps(){
+
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for(it = _allDecAmpMap.begin(); it != _allDecAmpMap.end(); ++it){
+    it->second->cacheAmplitudes();
+  }
+  return;
+}
+
+void AbsLhNew::updateFitParams(fitParamsNew& theParamVal){
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for(it = _allDecAmpMap.begin(); it != _allDecAmpMap.end(); ++it){
+    it->second->updateFitParams(theParamVal);
+  }
+  return;
 }

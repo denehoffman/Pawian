@@ -9,11 +9,12 @@ D0ToKsPipPimStates::D0ToKsPipPimStates() :
   _D0JPC(new jpcRes(0, -1, 0)),
   _f0JPC(new jpcRes(0, 1, 1)),
   _piJPC(new jpcRes(0, -1, 1)),
-  _kJPC(new jpcRes(0, -1, 0))
+  _kJPC(new jpcRes(0, -1, 0)),
+  _k0JPC(new jpcRes(0, 1, 0))
 {
   //X decays to Phi Phi
   fillJPCLS(_D0JPC, _f0JPC, _kJPC, _JPCLS_D0ToF0K);
-
+  fillJPCLS(_D0JPC, _k0JPC, _kJPC,_JPCLS_D0ToK0K);
 
 }
 
@@ -25,7 +26,9 @@ void D0ToKsPipPimStates::print(std::ostream& os) const
 {
   os << "*** D0 -> f0 K:  LS combinations for the decay *** "<< std::endl;
   printDecayJPCLS(os, _JPCLS_D0ToF0K );
-  
+
+  os << "*** D0 -> K0 K:  LS combinations for the decay *** "<< std::endl;
+  printDecayJPCLS(os, _JPCLS_D0ToK0K );  
 }
 
 void D0ToKsPipPimStates::fillJPCLS(boost::shared_ptr<jpcRes> motherRes, boost::shared_ptr<jpcRes> daughterRes1, boost::shared_ptr<jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)

@@ -9,7 +9,7 @@
 
 #include "PwaUtils/EvtDataBaseListNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
-
+#include "PwaUtils/AbsXdecAmp.hh"
 
 class AbsLhNew {
 
@@ -36,11 +36,13 @@ protected:
   std::map<const std::string, bool> _hypMap;
   bool _cacheAmps;
 
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _allDecAmpMap; 
+
   virtual void setHyps( const std::map<const std::string, bool>& theMap, 
 			bool& theHyp, std::string& theKey);
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
   // virtual void cacheTheAmps()=0;
-  virtual void updateFitParams(fitParamsNew& theParamVal)=0;
-  virtual void cacheTheAmps()=0;
+  virtual void updateFitParams(fitParamsNew& theParamVal);
+  virtual void cacheTheAmps();
 };

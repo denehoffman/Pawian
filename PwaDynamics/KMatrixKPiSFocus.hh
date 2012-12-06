@@ -32,7 +32,7 @@ public:
   virtual ~KMatrixKPiSFocus();
 
   virtual void evalMatrix(const double mass);
-
+  virtual double sNorm() {return _sNorm;}
 
 protected:
   boost::shared_ptr<array_type_2d> _aScatPtr;

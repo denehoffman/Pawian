@@ -13,7 +13,6 @@ KMatrixKPiSFocus::KMatrixKPiSFocus(int isospin2) :
 {
   const double piMass=0.1349766;
   const double KplusMass=0.493677;
-  const double K0Mass= 0.497614;
   const double etaprimeMass= 0.95778;
 
   boost::shared_ptr<AbsPhaseSpace> kpiPhp(new PhaseSpaceIsobar(KplusMass, piMass));

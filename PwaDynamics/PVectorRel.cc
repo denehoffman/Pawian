@@ -11,6 +11,10 @@ PVectorRel::PVectorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::s
  {
  }
 
+PVectorRel::PVectorRel(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs) :
+  KMatrixBase(phpVecs, int(phpVecs.size()), 1)
+ {
+ }
 
 PVectorRel::~PVectorRel(){
 }

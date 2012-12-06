@@ -17,6 +17,7 @@
 #include "PwaDynamics/FVector.hh"
 #include "PwaDynamics/FVectorPiPiS.hh"
 
+class AbsXdecAmp;
 
 class D0ToKsPipPimLh : public AbsLhNew {
 
@@ -41,31 +42,22 @@ protected:
   boost::shared_ptr<D0ToKsPipPimStates> _theStatesPtr;
  
   bool _usePhasespace;
-  bool _pipiSHyp;  
-  const std::string _pipiSKey;
   const std::string _phasespaceKey;
-  bool _recalculatepipiS;
- 
-  virtual complex<double> D0ToPiPiSAmp(EvtDataNew* theData);
-  
-  virtual void checkParamVariation(fitParamsNew& theParamVal);
-  virtual void updateFitParams(fitParamsNew& theParamVal);
+
+  bool _pipiSHyp;
+  const std::string _pipiSKey;
+
+  bool _KpiSHyp;
+  const std::string _KpiSKey;
+
+  std::map< std::string,std::vector<std::string> > _hypMaps;
+
 private:
+
+  void getDefaultLSParams(const std::vector<std::string>& hyps, 
+			  std::vector< boost::shared_ptr<const JPCLS> > lsAmps, 
+			  fitParamsNew& fitVal, fitParamsNew& fitErr);
   void initializeHypothesis();
-  virtual void cacheTheAmps();
 
-  boost::shared_ptr<FVectorPiPiS> _pipiSFVec;
 
-  std::vector<std::string> _enabledAmpKeys;
-  std::vector<std::string> _enabledMassKeys;
-  std::vector<std::string> _enabledWidthKeys;
-  std::vector<std::string> _enabledFactorKeys;
-  std::map<std::string, double> _currentMassMap;
-  std::map<std::string, double> _currentWidthMap;
-  std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > _currentParamMagMap;
-  std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > > _currentParamPhiMap;
-  std::map<std::string, double> _currentgFactorMap;
-  std::map<std::string, double> _currentbFactorMap;
-  std::map<std::string, double> _currentfProdFactorMap; 
-  double _currentS0Val;  
 };

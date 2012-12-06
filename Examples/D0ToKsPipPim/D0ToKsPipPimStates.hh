@@ -24,7 +24,7 @@ public:
   virtual ~D0ToKsPipPimStates();
 
   std::vector< boost::shared_ptr<const JPCLS> > D0Tof0KStates() const {return _JPCLS_D0ToF0K;}
-
+  std::vector< boost::shared_ptr<const JPCLS> > D0ToK0KStates() const {return _JPCLS_D0ToK0K;}
  
   virtual void print(std::ostream& os) const; 
 
@@ -39,8 +39,10 @@ private:
   boost::shared_ptr<jpcRes> _f0JPC;
   boost::shared_ptr<jpcRes> _piJPC;
   boost::shared_ptr<jpcRes> _kJPC;
+  boost::shared_ptr<jpcRes> _k0JPC;
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_D0ToF0K;
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLS_D0ToK0K;
 
 
 };

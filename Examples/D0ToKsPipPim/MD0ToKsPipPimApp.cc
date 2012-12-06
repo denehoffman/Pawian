@@ -173,7 +173,7 @@ int main(int __argc,char *__argv[]){
     const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();  
 
     if (mode=="qaMode"){
-      
+
       Info << "\nThe parameter values are: " << "\n" << endmsg;
       theFitParamBase->printParams(theStartparams);
       
@@ -213,9 +213,9 @@ int main(int __argc,char *__argv[]){
     }
   
   if (mode=="pwa"){
-    //bool cacheAmps = theAppParams.cacheAmps();
-    //Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
-    //if (cacheAmps) theLhPtr->cacheAmplitudes();
+    bool cacheAmps = theAppParams.cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
     std::vector<std::string>::const_iterator itFix;
     for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
       upar.Fix( (*itFix) );

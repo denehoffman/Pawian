@@ -25,6 +25,7 @@ public:
 
   /// Constructor 
   PVectorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs); 
+  PVectorRel(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs);
 
   /// Destructor
   virtual ~PVectorRel();
