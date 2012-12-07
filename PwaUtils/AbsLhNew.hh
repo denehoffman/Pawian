@@ -35,6 +35,7 @@ protected:
   std::vector<EvtDataNew*> _evtMCVec;
   std::map<const std::string, bool> _hypMap;
   bool _cacheAmps;
+  unsigned int _calcCounter;
 
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _allDecAmpMap; 
 

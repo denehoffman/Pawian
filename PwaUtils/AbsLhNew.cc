@@ -13,6 +13,7 @@
 AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
   _evtListPtr(theEvtList)
   ,_cacheAmps(false)
+  ,_calcCounter(0)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
   _evtMCVec=_evtListPtr->getMcVecs();
@@ -21,6 +22,7 @@ AbsLhNew::AbsLhNew(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
 AbsLhNew::AbsLhNew(boost::shared_ptr<AbsLhNew> theAbsLhPtr):
   _evtListPtr(theAbsLhPtr->getEventList())
   ,_cacheAmps(false)
+  ,_calcCounter(0)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
   _evtMCVec=_evtListPtr->getMcVecs();
@@ -31,8 +33,8 @@ AbsLhNew::~AbsLhNew()
 }
 
 double AbsLhNew::calcLogLh(fitParamsNew& theParamVal){
-
-  if (_cacheAmps) checkParamVariation(theParamVal); 
+  _calcCounter++;
+  if (_cacheAmps && _calcCounter>1) checkParamVariation(theParamVal); 
   updateFitParams(theParamVal);
   
   double logLH=0.;

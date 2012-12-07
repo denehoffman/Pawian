@@ -102,22 +102,22 @@ void D0ToKPiSPiDec::print(std::ostream& os) const{
 void D0ToKPiSPiDec::initialize(){
 
 
-    _currentaProdMap[_name+"a_Kpi"]=1.;
+    _currentaProdMap[_name+"a_KpiPosNeg"]=1.;
 
-    _currentbProdMap[_name+"b_Kpi"]=1.;
+    _currentbProdMap[_name+"b_KpiPosNeg"]=1.;
 
-    _currentcProdMap[_name+"c_Kpi"]=1.;
+    _currentcProdMap[_name+"c_KpiPosNeg"]=1.;
 
-    _currentphaseProdMap[_name+"phi_KpiPosNeg"]=0.;
+    _currentphaseProdMap[_name+"_KpiPhi"]=0.;
 
   if(_name==_iso1Key){
     _iso1Hyp=true;
     _currentbFactorMap[_name+"b_pole1Mag"]=1.;
-    _currentbFactorMap[_name+"b_pole1PhiPosNeg"]=0.;
-    _currentaProdMap[_name+"a_Ketap"]=0.5;
-    _currentbProdMap[_name+"b_Ketap"]=0.5;
-    _currentcProdMap[_name+"c_Ketap"]=0.5;
-    _currentphaseProdMap[_name+"phi_KetapPosNeg"]=0.;
+    _currentbFactorMap[_name+"b_pole1Phi"]=0.;
+    _currentaProdMap[_name+"a_KetapPosNeg"]=1.;
+    _currentbProdMap[_name+"b_KetapPosNeg"]=0.5;
+    _currentcProdMap[_name+"c_KetapPosNeg"]=0.5;
+    _currentphaseProdMap[_name+"_KetapPhi"]=0.;
     _kMatr=  boost::shared_ptr<KMatrixKPiSFocus> (new KMatrixKPiSFocus(1));
   }
   else if(_name==_iso3Key){
@@ -198,7 +198,7 @@ void D0ToKPiSPiDec::updateFitParams(fitParamsNew& theParamVal){
     }
   
   
-    complex<double> b_pole1=_currentbFactorMap[_name+"b_pole1Mag"]*complex<double>(cos(_currentbFactorMap[_name+"b_pole1PhiPosNeg"]), sin(_currentbFactorMap[_name+"b_pole1PhiPosNeg"]));
+    complex<double> b_pole1=_currentbFactorMap[_name+"b_pole1Mag"]*complex<double>(cos(_currentbFactorMap[_name+"b_pole1Phi"]), sin(_currentbFactorMap[_name+"b_pole1Phi"]));
     _pVec->updateBeta(0, b_pole1);
   }
 
@@ -222,15 +222,15 @@ void D0ToKPiSPiDec::updateFitParams(fitParamsNew& theParamVal){
      it->second = currentphaseFactor;
    }
 
-  _pVec->updateAprod(0,_currentaProdMap[_name+"a_Kpi"]);
-  _pVec->updateBprod(0,_currentbProdMap[_name+"b_Kpi"]);
-  _pVec->updateCprod(0,_currentcProdMap[_name+"c_Kpi"]);
-  _pVec->updatePhaseprod(0,_currentphaseProdMap[_name+"phi_KpiPosNeg"]);
+  _pVec->updateAprod(0,_currentaProdMap[_name+"a_KpiPosNeg"]);
+  _pVec->updateBprod(0,_currentbProdMap[_name+"b_KpiPosNeg"]);
+  _pVec->updateCprod(0,_currentcProdMap[_name+"c_KpiPosNeg"]);
+  _pVec->updatePhaseprod(0,_currentphaseProdMap[_name+"_KpiPhi"]);
  
   if(_iso1Hyp){
-  _pVec->updateAprod(1,_currentaProdMap[_name+"a_Ketap"]);
-  _pVec->updateBprod(1,_currentbProdMap[_name+"b_Ketap"]);
-  _pVec->updateCprod(1,_currentcProdMap[_name+"c_Ketap"]);
-  _pVec->updatePhaseprod(1,_currentphaseProdMap[_name+"phi_KetapPosNeg"]);
+  _pVec->updateAprod(1,_currentaProdMap[_name+"a_KetapPosNeg"]);
+  _pVec->updateBprod(1,_currentbProdMap[_name+"b_KetapPosNeg"]);
+  _pVec->updateCprod(1,_currentcProdMap[_name+"c_KetapPosNeg"]);
+  _pVec->updatePhaseprod(1,_currentphaseProdMap[_name+"_KetapPhi"]);
   }
 }
