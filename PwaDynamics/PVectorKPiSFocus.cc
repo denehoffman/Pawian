@@ -42,7 +42,7 @@ void PVectorKPiSFocus::evalMatrix(const double mass){
 
   for (int i=0; i<thePVector.NumRows(); ++i){
     complex<double> expiphiX(cos(_phaseProdVec[i]), sin(_phaseProdVec[i]));  
-    this->operator()(i,0)=thePVector(i,0)+(_aProdVec[i]+_bProdVec[i]*s_hat+_bProdVec[i]*s_hat*s_hat)*expiphiX;
+    this->operator()(i,0)=thePVector(i,0)+(_aProdVec[i]+_bProdVec[i]*s_hat+_cProdVec[i]*s_hat*s_hat)*expiphiX;
   } 
 
 }
