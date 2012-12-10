@@ -158,8 +158,8 @@ void D0ToKsPipPimHist::initRootStuff()
   double ymax=xmax;
   
   _dalitzDataHist= new TH2F("_dalitzDataHist","Dpl K_{s} #pi^{+} #pi^{-} data",xbins, xmin, xmax, ybins, ymin, ymax );
-  _dalitzMcHist= new TH2F("_dalitzMcHist","Dpl K+K- K+#pi^{0} MC",xbins, xmin, xmax, ybins, ymin, ymax);
-  _dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl K+K- K+#pi^{0} fit",xbins, xmin, xmax, ybins, ymin, ymax );
+  _dalitzMcHist= new TH2F("_dalitzMcHist","Dpl K_{s} #pi^{+} #pi^{-} MC",xbins, xmin, xmax, ybins, ymin, ymax);
+  _dalitzFittedHist= new TH2F("_dalitzFittedHist","Dpl K_{s} #pi^{+} #pi^{-} fit",xbins, xmin, xmax, ybins, ymin, ymax );
 
   
   int nbins=200;
