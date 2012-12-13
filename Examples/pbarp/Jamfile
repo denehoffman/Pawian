@@ -1,4 +1,15 @@
 project : 
         ;
 
-exe pbarpStatesApp : [ glob *.cc ] $(TOP)/PwaUtils//PwaUtils : ;
+lib pbarp : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/PwaUtils//PwaUtils
+        $(TOP)/Particle//Particle
+        :  
+        : 
+        :   ;
+
+exe pbarpStatesApp : pbarpStatesApp.cc pbarp : ;
+exe pbarpReactionApp : pbarpReactionApp.cc pbarp : ;

@@ -127,10 +127,30 @@ double Particle::J()
   return 0.;
 }
 
+int Particle::theParity()
+{
+  if (0 != pdata)
+    return pdata->theParity;
+  else {
+    Alert << "Error::Particle: accessing uninitialized data" << endmsg;
+    exit(1);
+  }
+}
+
 Parity& Particle::parity()
 {
   if (0 != pdata)
     return pdata->parity;
+  else {
+    Alert << "Error::Particle: accessing uninitialized data" << endmsg;
+    exit(1);
+  }
+}
+
+int Particle::theCParity()
+{
+  if (0 != pdata)
+    return pdata->theCParity;
   else {
     Alert << "Error::Particle: accessing uninitialized data" << endmsg;
     exit(1);
@@ -216,7 +236,8 @@ ParticleData* Particle::data() const
 void Particle::print(std::ostream& out)
 {
   out << name() << "\tmass=" << massErr() << "\twidth=" << widthErr() << "\t3*q=" << charge()
-      << "\t2*J=" << twoJ() << "\tP=" << parity().parity() << "\tC=" << chargeParity().parity() 
+      << "\t2*J=" << twoJ() << "\tP=" << theParity() << "\tp=" << parity().parity() 
+      << "\tC=" << theCParity()  << "\tc=" << chargeParity().parity() 
       << "\tG=" << gParity().parity() << "\tI=" << iso() << "\tI3=" << iso3() 
       << "\tcharm=" << charm() << "\tstrange=" << strange() << std::endl;
   
@@ -231,7 +252,8 @@ Particle::Particle()
 std::ostream &operator<<(std::ostream &o, Particle &p)
 {
   o << p.name() << "\tmass=" << p.massErr() << "\twidth=" << p.widthErr() << "\t3*q=" << p.charge()
-    << "\t2*J=" << p.twoJ() << "\tP=" << p.parity().parity() << "\tC=" << p.chargeParity().parity() 
+    << "\t2*J=" << p.twoJ() << "\tP=" << p.theParity() << "\tp=" << p.parity().parity() 
+    << "\tC=" << p.theCParity()  << "\tc=" << p.chargeParity().parity() 
     << "\tG=" << p.gParity().parity() << "\tI=" << p.iso() << "\tI3=" << p.iso3() 
     << "\tcharm=" << p.charm() << "\tstrange=" << p.strange() << std::endl;
 

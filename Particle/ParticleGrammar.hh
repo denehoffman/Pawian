@@ -75,8 +75,8 @@ namespace particleGrammar
 	     lexeme[+char_('!', '}')[ref(pData.texName) += _1]] >>
 	     int_[ref(pData.charge) = _1] >>
 	     int_[ref(pData.twoJ) = _1] >>
- 	     int_ >> // P
- 	     int_ >> // C
+ 	     int_[ref(pData.theParity) = _1] >> // P
+ 	     int_[ref(pData.theCParity) = _1] >> // C
  	     int_    // G
            ),
            //  End grammar

@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include "Utils/PawianCollectionUtils.hh"
+
 
 struct jpcRes {
   Spin J;
@@ -485,7 +485,7 @@ struct JPCSM : public jpcRes {
     return result;
   }
   
-  void print(std::ostream& os) const {
+  virtual void print(std::ostream& os) const {
     jpcRes::print(os);
     os <<"\tS=" << S << "\tM=" << M
        << std::endl;   
@@ -624,3 +624,11 @@ void fillStatesInitialDec( std::vector< boost::shared_ptr<const T1 > >& initial,
     }       
   }
 }
+
+
+void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<const jpcRes> daughterRes1, boost::shared_ptr<const jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec);
+
+
+class Particle;
+
+boost::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);

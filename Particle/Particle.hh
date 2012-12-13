@@ -20,7 +20,9 @@ struct ParticleData {
   int isoThree;
   int strange;
   int charm;
+  int theParity;
   Parity parity;
+  int theCParity;
   Parity chargeParity;
   Parity gParity;
   DynFunctionType dynamicFunction;
@@ -36,8 +38,10 @@ struct ParticleData {
     iso(other->iso),
     isoThree(other->isoThree),
     strange(other->strange),
-    charm(other->charm),
+    charm(other->charm), 
+    theParity(other->theParity),
     parity(other->parity),
+    theCParity(other->theCParity),
     gParity(other->gParity)
   { }
 };
@@ -62,7 +66,9 @@ public:
   double width();
   int twoJ();
   double J();
+  int theParity();
   Parity& parity();
+  int theCParity();
   Parity& chargeParity();
   Parity& gParity();
   int iso();
