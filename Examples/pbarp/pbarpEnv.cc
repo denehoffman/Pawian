@@ -22,6 +22,8 @@ pbarpEnv* pbarpEnv::instance()
 pbarpEnv::pbarpEnv() :
   _alreadySetUp(false)
   ,_lmax(0)
+  ,_decList(new IsobarDecayList())
+  ,_prodDecList(new IsobarDecayList())
 {
 }
 pbarpEnv::~pbarpEnv(){
@@ -89,7 +91,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
 
     boost::shared_ptr<IsobarDecay> tmpDec(new IsobarDecay(motherParticle, daughter1Particle, daughter2Particle));
  
-    IsobarDecayList::instance()->addDecay(tmpDec);
+    _decList->addDecay(tmpDec);
   }
 
   //produced particle pairs
@@ -123,6 +125,51 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   }
 
   _pbarpReaction=boost::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
+
+  //fill prodDecayList
+  std::vector< boost::shared_ptr<IsobarDecay> > prodDecs= _pbarpReaction->productionDecays();
+  std::vector< boost::shared_ptr<IsobarDecay> >::iterator itDec;
+  for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+    _prodDecList->addDecay(*itDec);
+  }
+
+  //set suffixes
+  std::vector<std::string> suffixVec = thePbarpParser.fitSuffixNames();
+  std::map<std::string, std::string> decSuffixNames;
+
+  for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    std::string classStr;
+    stringStr >> classStr;
+
+    std::string suffixStr;
+    stringStr >> suffixStr;
+    decSuffixNames[classStr]=suffixStr;
+
+     // boost::shared_ptr<IsobarDecay> theDec=IsobarDecayList::instance()->decay(classStr);
+     // if (0 != theDec) theDec->setFitParSuffix(suffixStr);
+     // theDec->setFitParSuffix(suffixStr);   
+  }
+
+  //set suffixes for decay classes
+  std::map<std::string, std::string>::iterator itMapStrStr;
+  for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
+    boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
+    if(0!= theDec) {
+      theDec->setFitParSuffix(itMapStrStr->second);
+      continue;
+    }
+
+    theDec=_prodDecList->decay(itMapStrStr->first);
+    if(0!= theDec) {
+      std::cout << "found!!!!!!!!!!!!!!!!!!\t" << itMapStrStr->first << std::endl;
+      std::cout << "replaced by\t" << itMapStrStr->second << std::endl;
+      theDec->setFitParSuffix(itMapStrStr->second);
+    }
+  }
+
+
 }
 
 

@@ -18,6 +18,7 @@ class pbarpParser : public ParserBase
   const std::vector<std::string>& finalStateParticles() const { return _finalStateParticles; }
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
   const std::vector<std::string>& decaySystem() const { return _decaySystem; }
+  const std::vector<std::string>& fitSuffixNames() const { return _fitParSuffix; }
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -26,6 +27,7 @@ protected:
   std::vector<std::string> _finalStateParticles;
   std::vector<std::string> _productionSystem;
   std::vector<std::string> _decaySystem;
+  std::vector<std::string> _fitParSuffix;
 };
 
 

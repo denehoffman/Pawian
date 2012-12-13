@@ -17,16 +17,15 @@ class IsobarDecay;
 class IsobarDecayList {
 
 public:
-  static IsobarDecayList* instance();
 
+  IsobarDecayList();
   ~IsobarDecayList();
 
   void addDecay(boost::shared_ptr<IsobarDecay> theIsoDec);
   boost::shared_ptr<IsobarDecay> decay(Particle* mother);
- 
+  boost::shared_ptr<IsobarDecay> decay(const std::string& name);
+   
 protected:  
 
-  IsobarDecayList(){;}
-  static IsobarDecayList* _instance;
-  std::map<std::string, boost::shared_ptr<IsobarDecay> > _isoDecList;  
+  std::vector<boost::shared_ptr<IsobarDecay> > _isoDecList;  
 };

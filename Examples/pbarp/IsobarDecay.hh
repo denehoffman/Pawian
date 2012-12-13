@@ -22,7 +22,8 @@ public:
   virtual ~IsobarDecay();
   //  virtual IsobarDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;} 
-
+  virtual std::string fitParSuffix() const {return _fitParamSuffix;}
+  void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   boost::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual void print(std::ostream& os) const;
@@ -39,6 +40,7 @@ protected:
   boost::shared_ptr<const jpcRes> _daughter2JPCPtr;
 
   std::string _name;
+  std::string _fitParamSuffix;
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 

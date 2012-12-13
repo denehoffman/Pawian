@@ -22,7 +22,7 @@ public:
   virtual ~pbarpReaction();
 
   virtual void print(std::ostream& os) const;
-  
+  std::vector< boost::shared_ptr<IsobarDecay> >& productionDecays() {return _prodDecs;}  
 
 protected:
 
