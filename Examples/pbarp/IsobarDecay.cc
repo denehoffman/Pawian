@@ -14,6 +14,7 @@ IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daught
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
   ,_motherJPCPtr(getJPCPtr(mother)) 
+
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())

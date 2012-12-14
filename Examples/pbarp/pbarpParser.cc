@@ -26,7 +26,7 @@ pbarpParser::pbarpParser(int argc,char **argv):
     ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
     ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
     ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
-    ("fitParamSuffix",po::value< vector<string> >(&_fitParSuffix),  "suffix for fit parameter name")
+    ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
     ;
   _config->add(config);
   
@@ -54,8 +54,8 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
     std::cout << (*it) << "\n";
   }
 
-  std::cout << "\nsuffix for fit parameter name" << std::endl;
-  for (it=_fitParSuffix.begin(); it!=_fitParSuffix.end();++it){
+  std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
+  for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
     std::cout << (*it) << "\n";
   }
   return true;

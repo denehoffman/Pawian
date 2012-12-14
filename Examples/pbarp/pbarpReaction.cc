@@ -19,7 +19,10 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
     bool acceptJPC=false;
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
-      boost::shared_ptr<IsobarDecay> currentDec(new IsobarDecay( (*itJPC),itPartPairs->first, itPartPairs->second));
+      std::string decName=(*itJPC)->name();
+      //      std::string decName="";
+      boost::shared_ptr<IsobarDecay> currentDec(new IsobarDecay( (*itJPC),itPartPairs->first, itPartPairs->second, decName));
+
       if (currentDec->JPCLSAmps().size()>0){
 	_prodDecs.push_back(currentDec);
 	acceptJPC=true;
@@ -27,6 +30,9 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
     }
     if(acceptJPC) _pbarpJPCs.push_back(*itJPC);
   }
+
+  std::vector< boost::shared_ptr<const JPCLS> > all_JPCLSs= thepbarpStates->all_JPCLS_States();
+  _pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);
 
   std::vector< boost::shared_ptr<const JPCLS> > pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
   fillMap(pbarpSingletLS, _prodDecs, _pbarpSingletDecMap);

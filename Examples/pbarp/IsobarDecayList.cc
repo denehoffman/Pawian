@@ -1,11 +1,15 @@
 #include <getopt.h>
 #include <fstream>
+#include <iostream>
+
+#include <boost/algorithm/string.hpp>
 
 #include "Examples/pbarp/IsobarDecayList.hh"
 #include "Examples/pbarp/IsobarDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+
 
 IsobarDecayList::IsobarDecayList(){
 }
@@ -58,4 +62,14 @@ boost::shared_ptr<IsobarDecay> IsobarDecayList::decay(const std::string& name){
 
   return result; 
 
+}
+
+void IsobarDecayList::replaceSuffix(const std::string& oldPart, const std::string& newPart){
+
+  std::vector<boost::shared_ptr<IsobarDecay> >::iterator it;
+  for (it= _isoDecList.begin(); it!=_isoDecList.end(); ++it){
+    std::string theSuffix= (*it)->fitParSuffix();
+    boost::replace_all(theSuffix, oldPart, newPart);
+    (*it)->setFitParSuffix(theSuffix); 
+  }
 }

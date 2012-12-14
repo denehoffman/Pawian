@@ -24,7 +24,8 @@ public:
   void addDecay(boost::shared_ptr<IsobarDecay> theIsoDec);
   boost::shared_ptr<IsobarDecay> decay(Particle* mother);
   boost::shared_ptr<IsobarDecay> decay(const std::string& name);
-   
+  void replaceSuffix(const std::string& oldPart, const std::string& newPart);
+    
 protected:  
 
   std::vector<boost::shared_ptr<IsobarDecay> > _isoDecList;  

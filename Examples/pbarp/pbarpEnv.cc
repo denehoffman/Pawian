@@ -134,7 +134,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   }
 
   //set suffixes
-  std::vector<std::string> suffixVec = thePbarpParser.fitSuffixNames();
+  std::vector<std::string> suffixVec = thePbarpParser.replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;
 
   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -155,18 +155,18 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   //set suffixes for decay classes
   std::map<std::string, std::string>::iterator itMapStrStr;
   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
+    _decList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
+    _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
     boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
-    if(0!= theDec) {
-      theDec->setFitParSuffix(itMapStrStr->second);
-      continue;
-    }
+    // if(0!= theDec) {
+    //   theDec->setFitParSuffix(itMapStrStr->second);
+    //   continue;
+    // }
 
-    theDec=_prodDecList->decay(itMapStrStr->first);
-    if(0!= theDec) {
-      std::cout << "found!!!!!!!!!!!!!!!!!!\t" << itMapStrStr->first << std::endl;
-      std::cout << "replaced by\t" << itMapStrStr->second << std::endl;
-      theDec->setFitParSuffix(itMapStrStr->second);
-    }
+    // theDec=_prodDecList->decay(itMapStrStr->first);
+    // if(0!= theDec) {
+    //   theDec->setFitParSuffix(itMapStrStr->second);
+    // }
   }
 
 

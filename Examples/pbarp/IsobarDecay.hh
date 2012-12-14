@@ -26,6 +26,8 @@ public:
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   boost::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
+  boost::shared_ptr<IsobarDecay> decDaughter1() {return _isoDecDaughter1;}
+  boost::shared_ptr<IsobarDecay> decDaughter2() {return _isoDecDaughter2;}
   virtual void print(std::ostream& os) const;
   
   Particle* motherPart() {return _mother;}

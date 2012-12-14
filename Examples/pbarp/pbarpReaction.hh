@@ -23,12 +23,15 @@ public:
 
   virtual void print(std::ostream& os) const;
   std::vector< boost::shared_ptr<IsobarDecay> >& productionDecays() {return _prodDecs;}  
-
+  std::vector< boost::shared_ptr<const jpcRes> >& jpcStates() {return _pbarpJPCs;}
+  std::vector< boost::shared_ptr<const JPCLS> >& jpclsStates() {return _pbarpJPCLSs;}
 protected:
 
 private:
   int _lmax;
   std::vector< boost::shared_ptr<const jpcRes> > _pbarpJPCs;
+  std::vector< boost::shared_ptr<const JPCLS> > _pbarpJPCLSs;
+
   std::vector< boost::shared_ptr<IsobarDecay> > _prodDecs;
 
   std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > _pbarpSingletDecMap;

@@ -14,6 +14,7 @@ class AbsXdecAmp {
 
 public:
   AbsXdecAmp(const std::string& name, const std::vector<std::string>& hypVec, Spin spinX=0, int parity=1);
+  AbsXdecAmp(const std::string& name);
   virtual ~AbsXdecAmp();
   
   virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData)=0;
