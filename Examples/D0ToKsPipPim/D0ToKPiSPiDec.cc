@@ -135,7 +135,7 @@ void D0ToKPiSPiDec::initialize(){
   Info << "hypothesis\t" << _name << "\t found" << endmsg;
 }
 
-void D0ToKPiSPiDec::checkRecalculation(fitParamsNew& theParamVal){
+bool D0ToKPiSPiDec::checkRecalculation(fitParamsNew& theParamVal){
   _recalculate=false;
 
  std::map<std::string, double>::const_iterator it;
@@ -183,7 +183,7 @@ void D0ToKPiSPiDec::checkRecalculation(fitParamsNew& theParamVal){
   
   if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;
   
-  
+  return _recalculate;  
 }
 
 

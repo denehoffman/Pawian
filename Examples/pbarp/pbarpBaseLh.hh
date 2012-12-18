@@ -45,13 +45,13 @@ protected:
   std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<pbarpDecAmps> >, pawian::Collection::SharedPtrLess > _decAmpsTripletp1;
   std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<pbarpDecAmps> >, pawian::Collection::SharedPtrLess > _decAmpsTripletm1;
  
-  virtual complex<double> pbarpToXYAmp(Spin Minit, Spin lamX, Spin lamY,
-					 EvtDataNew* theData, 
-                                         double pbarpMag, double pbarpPhi);
+ std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
   
   virtual void checkParamVariation(fitParamsNew& theParamVal);
   virtual void updateFitParams(fitParamsNew& theParamVal);
-  virtual void cacheTheAmps(); 
+  virtual void cacheTheAmps();
+ 
 private:
 
   // void getDefaultParams(const std::vector<std::string>& hyps, 
@@ -59,6 +59,6 @@ private:
   // 			fitParamsNew& fitVal, fitParamsNew& fitErr);
  
   void initialize();
-  void fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<pbarpDecAmps> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<pbarpDecAmps> >, pawian::Collection::SharedPtrLess > toFill);
+  void fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<pbarpDecAmps> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<pbarpDecAmps> >, pawian::Collection::SharedPtrLess >& toFill);
   
 };

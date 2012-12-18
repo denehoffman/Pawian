@@ -29,8 +29,9 @@ AbsXdecAmp::~AbsXdecAmp()
 {
 }
 
-void AbsXdecAmp::checkRecalculation(fitParamsNew& theParamVal){
+bool AbsXdecAmp::checkRecalculation(fitParamsNew& theParamVal){
   _recalculate=true;
+  return _recalculate;
 }
 
 

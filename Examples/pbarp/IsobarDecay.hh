@@ -22,7 +22,8 @@ public:
   IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName="pbarp");
   virtual ~IsobarDecay();
   //  virtual IsobarDecay* clone_() const = 0;
-  virtual const std::string name() const {return _name;} 
+  virtual const std::string name() const {return _name;}
+  const std::string wignerDKey() {return _wignerDKey;} 
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   boost::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}

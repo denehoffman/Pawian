@@ -647,7 +647,7 @@ void XDecAmpBase::initialize(){
 
 }
 
-void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
+bool XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
   _recalculate=false;
 
   std::vector<std::string>::const_iterator itKeys;
@@ -817,6 +817,8 @@ void XDecAmpBase::checkRecalculation(fitParamsNew& theParamVal){
     
     if (_recalculatef2_1270) Info << "Recalculate f2_1270 amplitude in:\t" << _name << endmsg;
   }
+
+  return _recalculate;
 }
 
 void XDecAmpBase::updateFitParams(fitParamsNew& theParamVal){

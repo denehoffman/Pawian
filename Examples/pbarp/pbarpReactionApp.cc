@@ -13,18 +13,27 @@
 #include "PwaUtils/pbarpStatesLS.hh"
 #include "PwaUtils/AbsLhNew.hh"
 #include "PwaUtils/FitParamsBaseNew.hh"
+#include "PwaUtils/StreamFitParmsBaseNew.hh"
+#include "PwaUtils/PwaFcnBaseNew.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 #include "Examples/pbarp/IsobarDecay.hh"
 #include "Examples/pbarp/IsobarDecayList.hh"
 #include "Examples/pbarp/pbarpEnv.hh"
 #include "Examples/pbarp/pbarpReaction.hh"
-#include "Examples/pbarp/pbarpDataBaseList.hh"
 #include "Examples/pbarp/pbarpBaseLh.hh"
 #include "Examples/pbarp/pbarpEvtReader.hh"
 #include "Examples/pbarp/pbarpEventList.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
+
+#include "Minuit2/MnUserParameters.h"
+#include "Minuit2/MnMigrad.h"
+#include "Minuit2/FunctionMinimum.h"
+#include "Minuit2/MnMinos.h"
+#include "Minuit2/MnStrategy.h"
+#include "Minuit2/MnPrint.h"
+#include "Minuit2/MnScan.h"
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -52,23 +61,14 @@ int main(int __argc,char *__argv[]){
 
   thepbarpReaction->print(std::cout);
 
-  boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
-  boost::shared_ptr<AbsLhNew> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
+  // boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
+  // boost::shared_ptr<AbsLhNew> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
 
   std::string mode=theAppParams.mode();
 
   boost::shared_ptr<FitParamsBaseNew> theFitParamBase=boost::shared_ptr<FitParamsBaseNew>(new FitParamsBaseNew());
 
-  if (mode=="dumpDefaultParams"){
-    fitParamsNew defaultVal;
-    fitParamsNew defaultErr;
-    theLhPtr->getDefaultParams(defaultVal, defaultErr);
-    std::string defaultparamsname = "defaultparams.dat";
-    std::ofstream theStreamDefault ( defaultparamsname.c_str() );
-    
-    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-    return 0;
-  }
+
 
   const std::string datFile=theAppParams.dataFile();
   const std::string mcFile=theAppParams.mcFile();
@@ -133,6 +133,81 @@ int main(int __argc,char *__argv[]){
   pbarpEventListPtr->ratioMcToData(theAppParams.ratioMcToData());
   pbarpEventListPtr->read(eventsData, mcData);
   // pbarpEventListPtr->read4Vecs();
+
+  boost::shared_ptr<AbsLhNew> theLhPtr(new pbarpBaseLh(pbarpEventListPtr));
+
+  if (mode=="dumpDefaultParams"){
+    fitParamsNew defaultVal;
+    fitParamsNew defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+    std::string defaultparamsname = "defaultparams.dat";
+    std::ofstream theStreamDefault ( defaultparamsname.c_str() );
+    
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    return 0;
+  }
+
+
+  std::string paramStreamerPath=theAppParams.fitParamFile();
+  StreamFitParmsBaseNew theParamStreamer(paramStreamerPath, theLhPtr);
+  fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
+  fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
+
+  PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);  
+  MnUserParameters upar;
+  theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
+  
+  std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
+  for (int i=0; i<int(upar.Params().size()); ++i){
+    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  }
+
+  const std::vector<std::string> fixedParams=theAppParams.fixedParams();  
+  const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();
+
+  if (mode=="pwa"){
+    bool cacheAmps = theAppParams.cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
+    std::vector<std::string>::const_iterator itFix;
+    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+      upar.Fix( (*itFix) );
+    }
+
+    MnMigrad migrad(theFcn, upar);
+    Info <<"start migrad "<< endmsg;
+    FunctionMinimum min = migrad();
+    
+    if(!min.IsValid()) {
+      //try with higher strategy
+      Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+      MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
+      min = migrad2();
+    }
+    
+    MnUserParameters finalUsrParameters=min.UserParameters();
+    const std::vector<double> finalParamVec=finalUsrParameters.Params();
+    fitParamsNew finalFitParams=theStartparams;
+    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+
+    theFitParamBase->printParams(finalFitParams);
+    double theLh=theLhPtr->calcLogLh(finalFitParams);
+    Info <<"theLh = "<< theLh << endmsg;
+    
+    
+    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+    fitParamsNew finalFitErrs=theErrorparams;
+    theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
+    
+    std::string finalResultname = "finalResult.dat";
+    std::ofstream theStream ( finalResultname.c_str() );
+    //std::ofstream theStream ( "finalResult.dat");
+    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+    
+    MnUserCovariance theCovMatrix = min.UserCovariance();
+    std::cout  << min << std::endl;
+    return 0;
+ }
 }     
  
   

@@ -134,7 +134,7 @@ void D0ToPiPiSKDec::initialize(){
   Info << "hypothesis\t" << _name << "\t found" << endmsg;
 }
 
-void D0ToPiPiSKDec::checkRecalculation(fitParamsNew& theParamVal){
+bool D0ToPiPiSKDec::checkRecalculation(fitParamsNew& theParamVal){
   _recalculate=false;
 
   if (_piPiSASHyp){
@@ -164,7 +164,7 @@ void D0ToPiPiSKDec::checkRecalculation(fitParamsNew& theParamVal){
   
   if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;
   
-  
+  return _recalculate;
 }
 
 

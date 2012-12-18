@@ -185,7 +185,7 @@ void XToPhiPhiDecAmps::initialize(){
 
 }
 
-void XToPhiPhiDecAmps::checkRecalculation(fitParamsNew& theParamVal){
+bool XToPhiPhiDecAmps::checkRecalculation(fitParamsNew& theParamVal){
   _recalculate=false;
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiMag=theParamVal.Mags[_phiPhiKey];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > XToPhiPhiPhi=theParamVal.Phis[_phiPhiKey];
@@ -228,7 +228,8 @@ void XToPhiPhiDecAmps::checkRecalculation(fitParamsNew& theParamVal){
     }
   }
    if (_recalculate) Info << "Recalculate amplitude:\t" << _name << endmsg;  
-   
+
+   return _recalculate;  
 }
  
 

@@ -23,7 +23,7 @@ public:
   const std::string name() const {return _name;}
   const Spin  spinX() const {return _J_X;}
   const int  parity() const {return _parity;}
-  virtual void checkRecalculation(fitParamsNew& theParamVal);
+  virtual bool checkRecalculation(fitParamsNew& theParamVal);
   virtual void cacheAmplitudes(){_cacheAmps=true;}
   virtual void updateFitParams(fitParamsNew& theParamVal){return;}
 protected:

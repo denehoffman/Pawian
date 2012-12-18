@@ -96,6 +96,9 @@ IsobarDecay::~IsobarDecay(){
 }
 
 void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<float> >& fsMap, EvtDataNew* evtData){
+  if (!_daughter1IsStable) _isoDecDaughter1->fillWignerDs(fsMap, evtData);
+  if (!_daughter2IsStable) _isoDecDaughter2->fillWignerDs(fsMap, evtData);
+  
   Vector4<float> all4Vec(0.,0.,0.,0.);
   Vector4<float> mother4Vec(0.,0.,0.,0.);
   Vector4<float> daughter2_4Vec(0.,0.,0.,0.);

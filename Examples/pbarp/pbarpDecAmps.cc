@@ -7,6 +7,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "Examples/pbarp/IsobarDecay.hh"
+#include "Particle/Particle.hh"
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -18,6 +19,7 @@ pbarpDecAmps::pbarpDecAmps(boost::shared_ptr<IsobarDecay> theDec) :
   ,_JPCPtr(theDec->motherJPC())
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_key("_"+theDec->fitParSuffix())
+  ,_wignerDKey(theDec->wignerDKey())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
 {
@@ -29,11 +31,59 @@ pbarpDecAmps::~pbarpDecAmps()
 }
 
 complex<double> pbarpDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData){
+int evtNo=theData->evtNo;
+  
+ if ( _cacheAmps && !_recalculate){
+   return _cachedAmpMap[evtNo][lamX];
+ }
 
   complex<double> result(0.,0.);
+   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+     if(lamX > (*it)->J ) continue;
+     double theMag=_currentParamMags[*it];
+     double thePhi=_currentParamPhis[*it];
+     complex<double> expi(cos(thePhi), sin(thePhi));
+
+    for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; lambda1++){
+      for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; lambda2++){
+	Spin lambda = lambda1-lambda2;
+	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
+
+	complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
+          *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
+          *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
+          *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+
+	// std::cout << "amp: " << amp << std::endl;
+	amp *=daughterAmp(lambda1, lambda2, theData);
+
+	result+=amp;
+      }
+    }
+   }
+
+    if ( _cacheAmps){    
+#ifdef _OPENMP
+#pragma omp critical
+      {
+#endif
+        _cachedAmpMap[evtNo][lamX]=result;
+#ifdef _OPENMP
+      }
+#endif
+    }
 
   return result;
 }
+
+complex<double> pbarpDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtDataNew* theData){
+  complex<double> result(1.,0.);
+  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData);
+  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData);
+  return result;
+}
+
 
 void  pbarpDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
 
@@ -44,7 +94,7 @@ void  pbarpDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)
   
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
   for(itLS=_JPCLSs.begin(); itLS!=_JPCLSs.end(); ++itLS){
-    currentMagValMap[*itLS]=0.5;
+    currentMagValMap[*itLS]=1.;
     currentPhiValMap[*itLS]=0.;
     currentMagErrMap[*itLS]=0.5;
     currentPhiErrMap[*itLS]=0.3;
@@ -73,12 +123,53 @@ void pbarpDecAmps::initialize(){
     boost::shared_ptr<IsobarDecay> decDaughter2=_decay->decDaughter1();
     _decAmpDaughter2=boost::shared_ptr<pbarpDecAmps>(new pbarpDecAmps(decDaughter2));
   }
-
+ 
+  _Jdaughter1=(Spin) _decay->daughter1Part()->J();
+  _Jdaughter2=(Spin) _decay->daughter2Part()->J();
 }
 
-void pbarpDecAmps::checkRecalculation(fitParamsNew& theParamVal){
+bool pbarpDecAmps::checkRecalculation(fitParamsNew& theParamVal){
+  _recalculate=false;
+
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
+
+   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+     double theMag=magMap[*it];
+     double thePhi=phiMap[*it];
+
+     if ( fabs(theMag - _currentParamMags[*it])  > 1.e-10 ){
+       _recalculate=true;
+     }
+     if ( fabs(thePhi - _currentParamPhis[*it])  > 1.e-10 ){
+       _recalculate=true;
+     }
+   }
+
+   if(!_daughter1IsStable) {
+     if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
+   }
+   if(!_daughter2IsStable){
+     if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
+   }
+   return _recalculate;
 }
  
 
 void  pbarpDecAmps::updateFitParams(fitParamsNew& theParamVal){
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
+
+   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+     double theMag=magMap[*it];
+     double thePhi=phiMap[*it];
+     _currentParamMags[*it]=theMag;
+     _currentParamPhis[*it]=thePhi;
+   }
+
+  if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
+  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
+
 }

@@ -32,7 +32,7 @@ public:
                                          
   virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
   virtual void print(std::ostream& os) const;
-  virtual void checkRecalculation(fitParamsNew& theParamVal);
+  virtual bool checkRecalculation(fitParamsNew& theParamVal);
 
   void updateFitParams(fitParamsNew& theParamVal);
 protected:
