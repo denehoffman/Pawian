@@ -40,7 +40,7 @@ int evtNo=theData->evtNo;
   complex<double> result(0.,0.);
    std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
    for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-     if(lamX > (*it)->J ) continue;
+     if( fabs(lamX) > (*it)->J ) continue;
      double theMag=_currentParamMags[*it];
      double thePhi=_currentParamPhis[*it];
      complex<double> expi(cos(thePhi), sin(thePhi));
