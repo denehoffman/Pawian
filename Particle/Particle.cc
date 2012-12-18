@@ -248,6 +248,22 @@ Particle::Particle()
 {
 }
 
+bool Particle::operator<(Particle& compare){
+ bool result=false;
+ if( type() < compare.type()) result=true;
+ else if( charm() < compare.charm()) result=true;
+ else if( strange() < compare.strange()) result=true;
+ else if( iso() < compare.iso()) result=true;
+ else if( J() < compare.J()) result=true;
+ else if( theParity() < compare.theParity()) result=true;
+ else if( theCParity() < compare.theCParity()) result=true;
+ else if( charge() < compare.charge()) result=true;
+ else if ( mass() < compare.mass()) result=true;
+ else if ( width() < compare.width()) result=true;
+ return result;
+}
+
+
 
 std::ostream &operator<<(std::ostream &o, Particle &p)
 {

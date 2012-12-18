@@ -5,6 +5,7 @@
 #include "Examples/pbarp/IsobarDecay.hh"
 #include "Examples/pbarp/IsobarDecayList.hh"
 #include "Examples/pbarp/pbarpReaction.hh"
+#include "Examples/pbarp/pbarpEventList.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -22,6 +23,7 @@ pbarpEnv* pbarpEnv::instance()
 pbarpEnv::pbarpEnv() :
   _alreadySetUp(false)
   ,_lmax(0)
+  ,_noFinalStateParticles(0)
   ,_decList(new IsobarDecayList())
   ,_prodDecList(new IsobarDecayList())
 {
@@ -60,7 +62,9 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     _finalStateParticles.push_back(currentParticle);
   }
 
-  //decays
+  _noFinalStateParticles= (int) _finalStateParticles.size();
+  
+    //decays
   std::vector<std::string> decaySystem= thePbarpParser.decaySystem();
   for ( itStr = decaySystem.begin(); itStr != decaySystem.end(); ++itStr){
     std::stringstream stringStr;
@@ -168,7 +172,6 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     //   theDec->setFitParSuffix(itMapStrStr->second);
     // }
   }
-
 
 }
 

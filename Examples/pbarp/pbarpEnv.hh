@@ -15,6 +15,7 @@ class Particle;
 class ParticleTable;
 class pbarpReaction;
 class IsobarDecayList;
+class pbarpEventList;
 
 class pbarpEnv {
 
@@ -26,17 +27,20 @@ public:
   ParticleTable* particleTable() {return _particleTable;}
 
   const int lmax() const {return _lmax;}
+  const int noFinalStateParticles() {return _noFinalStateParticles;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
   boost::shared_ptr<IsobarDecayList> decayList() {return _decList;}
   boost::shared_ptr<IsobarDecayList> prodDecayList() {return _prodDecList;}
   boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
+
 protected:  
 
   pbarpEnv();
   static pbarpEnv* _instance;
   bool _alreadySetUp;
   int _lmax;
+  int _noFinalStateParticles;
 
   ParticleTable* _particleTable;
   std::vector<Particle*> _finalStateParticles;

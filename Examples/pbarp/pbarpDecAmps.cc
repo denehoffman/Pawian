@@ -15,10 +15,11 @@
 pbarpDecAmps::pbarpDecAmps(boost::shared_ptr<IsobarDecay> theDec) :
   AbsXdecAmp(theDec->name())
   ,_decay(theDec)
+  ,_JPCPtr(theDec->motherJPC())
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_key("_"+theDec->fitParSuffix())
-  ,_daughter1IsStable(true)
-  ,_daughter2IsStable(true)
+  ,_daughter1IsStable(theDec->isDaughter1Stable())
+  ,_daughter2IsStable(theDec->isDaughter2Stable())
 {
   initialize();
 }
@@ -63,16 +64,14 @@ void pbarpDecAmps::print(std::ostream& os) const{
 }
 
 void pbarpDecAmps::initialize(){
-  boost::shared_ptr<IsobarDecay> decDaughter1=_decay->decDaughter1();
-  if(0!=decDaughter1){
+  if(!_daughter1IsStable){
+    boost::shared_ptr<IsobarDecay> decDaughter1=_decay->decDaughter1();
     _decAmpDaughter1=boost::shared_ptr<pbarpDecAmps>(new pbarpDecAmps(decDaughter1));
-    _daughter1IsStable=false;
   }
 
-  boost::shared_ptr<IsobarDecay> decDaughter2=_decay->decDaughter2();
-  if(0!=decDaughter2){
+  if(!_daughter2IsStable){
+    boost::shared_ptr<IsobarDecay> decDaughter2=_decay->decDaughter1();
     _decAmpDaughter2=boost::shared_ptr<pbarpDecAmps>(new pbarpDecAmps(decDaughter2));
-    _daughter2IsStable=false;
   }
 
 }

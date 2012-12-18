@@ -21,6 +21,10 @@
 #include "Examples/pbarp/pbarpReaction.hh"
 #include "Examples/pbarp/pbarpDataBaseList.hh"
 #include "Examples/pbarp/pbarpBaseLh.hh"
+#include "Examples/pbarp/pbarpEvtReader.hh"
+#include "Examples/pbarp/pbarpEventList.hh"
+#include "Event/Event.hh"
+#include "Event/EventList.hh"
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -66,6 +70,69 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
+  const std::string datFile=theAppParams.dataFile();
+  const std::string mcFile=theAppParams.mcFile();
+  Info << "data file: " << datFile ;  // << endmsg;
+  Info << "mc file: " << mcFile ;  // << endmsg;
+  
+  std::vector<std::string> dataFileNames;
+  dataFileNames.push_back(datFile);
+
+  std::vector<std::string> mcFileNames;
+  mcFileNames.push_back(mcFile);  
+
+  bool withEvtWeight=theAppParams.useEvtWeight();
+  Info << "EvtWeight: " << withEvtWeight << endmsg;  
+
+  
+  int noFinalStateParticles=pbarpEnv::instance()->noFinalStateParticles();  
+  pbarpEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+
+  EventList eventsData;
+  eventReaderData.fillAll(eventsData);
+  
+  Info  << "\nFile has " << eventsData.size() << " events. Each event has "
+        <<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  eventsData.rewind();
+
+  Event* anEvent;
+  int evtCount = 0;
+  while ((anEvent = eventsData.nextEvent()) != 0 && evtCount < 10) {
+    Info        << "\n";
+    for(int i=0; i<noFinalStateParticles; ++i){
+      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
+    }
+    Info        << "\n" << endmsg;
+    ;  // << endmsg;
+    ++evtCount;
+  }
+  eventsData.rewind();
+
+  pbarpEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, false);
+
+  EventList mcData;
+  eventReaderMc.fillAll(mcData);
+ Info  << "\nFile has " << mcData.size() << " events. Each event has "
+        <<  mcData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  mcData.rewind();
+
+  evtCount = 0;
+  while ((anEvent = mcData.nextEvent()) != 0 && evtCount < 10) {
+    Info        << "\n";
+    for(int i=0; i<noFinalStateParticles; ++i){
+      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
+    }
+    Info        << "\n" << endmsg;
+    ;  // << endmsg;
+    ++evtCount;
+  }
+  mcData.rewind();
+
+
+  boost::shared_ptr<pbarpEventList> pbarpEventListPtr(new pbarpEventList());
+  pbarpEventListPtr->ratioMcToData(theAppParams.ratioMcToData());
+  pbarpEventListPtr->read(eventsData, mcData);
+  // pbarpEventListPtr->read4Vecs();
 }     
  
   

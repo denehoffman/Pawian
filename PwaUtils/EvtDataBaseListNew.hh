@@ -30,12 +30,16 @@ struct enumProdDfunc {
 
 typedef std::map<int, Vector4<double> > mapInt4Vec;
 typedef std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapIntSpinComplex;
+typedef std::map<std::string, Vector4<double> > mapString4Vec;
+typedef std::map<std::string, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapStringSpinComplex;
 
 struct EvtDataNew {
   mapInt4Vec FourVecsProd;
   mapInt4Vec FourVecsDec;
   mapIntSpinComplex WignerDsProd;
   mapIntSpinComplex WignerDsDec;
+  mapString4Vec FourVecsString;
+  mapStringSpinComplex WignerDsString;
   double evtWeight;
   int evtNo;
 };

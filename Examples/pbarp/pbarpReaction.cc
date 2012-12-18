@@ -34,17 +34,21 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
   std::vector< boost::shared_ptr<const JPCLS> > all_JPCLSs= thepbarpStates->all_JPCLS_States();
   _pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);
 
-  std::vector< boost::shared_ptr<const JPCLS> > pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
-  fillMap(pbarpSingletLS, _prodDecs, _pbarpSingletDecMap);
+  std::vector< boost::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
+  _pbarpJPCLSsinglet =  extractStates(_pbarpJPCs, all_pbarpSingletLS);
+  fillMap(_pbarpJPCLSsinglet, _prodDecs, _pbarpSingletDecMap);
 
-  std::vector< boost::shared_ptr<const JPCLS> > pbarpTriplet0LS = thepbarpStates->triplet0_JPCLS_States();
-  fillMap(pbarpTriplet0LS, _prodDecs, _pbarpTriplet0DecMap);
+  std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTriplet0LS = thepbarpStates->triplet0_JPCLS_States();
+  _pbarpJPCLStriplet0 =  extractStates(_pbarpJPCs, all_pbarpTriplet0LS);
+  fillMap(_pbarpJPCLStriplet0, _prodDecs, _pbarpTriplet0DecMap);
 
-  std::vector< boost::shared_ptr<const JPCLS> > pbarpTripletp1LS = thepbarpStates->tripletp1_JPCLS_States();
-  fillMap(pbarpTripletp1LS, _prodDecs, _pbarpTripletp1DecMap);
+  std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletp1LS = thepbarpStates->tripletp1_JPCLS_States();
+  _pbarpJPCLStripletp1 =  extractStates(_pbarpJPCs, all_pbarpTripletp1LS);
+  fillMap(_pbarpJPCLStripletp1, _prodDecs, _pbarpTripletp1DecMap);
 
-  std::vector< boost::shared_ptr<const JPCLS> > pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
-  fillMap(pbarpTripletm1LS, _prodDecs, _pbarpTripletm1DecMap);
+  std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
+  _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCs, all_pbarpTripletm1LS);
+  fillMap(_pbarpJPCLStripletm1, _prodDecs, _pbarpTripletm1DecMap);
 }
 
 pbarpReaction::~pbarpReaction(){
