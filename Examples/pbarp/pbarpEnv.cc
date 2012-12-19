@@ -150,10 +150,6 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     std::string suffixStr;
     stringStr >> suffixStr;
     decSuffixNames[classStr]=suffixStr;
-
-     // boost::shared_ptr<IsobarDecay> theDec=IsobarDecayList::instance()->decay(classStr);
-     // if (0 != theDec) theDec->setFitParSuffix(suffixStr);
-     // theDec->setFitParSuffix(suffixStr);   
   }
 
   //set suffixes for decay classes
@@ -162,15 +158,20 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     _decList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
     _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
     boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
-    // if(0!= theDec) {
-    //   theDec->setFitParSuffix(itMapStrStr->second);
-    //   continue;
-    // }
+  }
 
-    // theDec=_prodDecList->decay(itMapStrStr->first);
-    // if(0!= theDec) {
-    //   theDec->setFitParSuffix(itMapStrStr->second);
-    // }
+  std::vector<std::string> theHistMassNames=thePbarpParser.histMassNames();
+  //fill vector histMassSystems
+  for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string tmpName;
+    std::vector<std::string> currentStringVec;
+    while(stringStr >> tmpName){
+      currentStringVec.push_back(tmpName);
+    } 
+    _histMassSystems.push_back(currentStringVec);
   }
 
 }

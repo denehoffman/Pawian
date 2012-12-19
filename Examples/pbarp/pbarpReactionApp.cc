@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <iterator>
+#include <boost/shared_ptr.hpp>
 
 #include "Examples/pbarp/pbarpParser.hh"
 #include "Particle/ParticleTable.hh"
@@ -24,6 +25,7 @@
 #include "Examples/pbarp/pbarpBaseLh.hh"
 #include "Examples/pbarp/pbarpEvtReader.hh"
 #include "Examples/pbarp/pbarpEventList.hh"
+//#include "Examples/pbarp/pbarpHist.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
@@ -34,6 +36,7 @@
 #include "Minuit2/MnStrategy.h"
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnScan.h"
+
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -164,6 +167,20 @@ int main(int __argc,char *__argv[]){
 
   const std::vector<std::string> fixedParams=theAppParams.fixedParams();  
   const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();
+
+  if (mode=="qaMode"){
+    Info << "\nThe parameter values are: " << "\n" << endmsg;
+    theFitParamBase->printParams(theStartparams);
+    
+    Info << "\nThe parameter errors are: " << "\n" << endmsg;
+    theFitParamBase->printParams(theErrorparams);
+    
+    double theLh=theLhPtr->calcLogLh(theStartparams);
+    Info <<"theLh = "<< theLh << endmsg;
+
+    //    pbarpHist theHist(theLhPtr, theStartparams);    
+  }
+
 
   if (mode=="pwa"){
     bool cacheAmps = theAppParams.cacheAmps();

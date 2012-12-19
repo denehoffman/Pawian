@@ -33,6 +33,7 @@ public:
   boost::shared_ptr<IsobarDecayList> decayList() {return _decList;}
   boost::shared_ptr<IsobarDecayList> prodDecayList() {return _prodDecList;}
   boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
+  std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
 
 protected:  
 
@@ -48,4 +49,5 @@ protected:
   boost::shared_ptr<IsobarDecayList> _decList;
   boost::shared_ptr<IsobarDecayList> _prodDecList;
   boost::shared_ptr<pbarpReaction> _pbarpReaction;
+  std::vector<std::vector<std::string> > _histMassSystems;
 };

@@ -27,6 +27,7 @@ pbarpParser::pbarpParser(int argc,char **argv):
     ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
     ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
     ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
+    ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ;
   _config->add(config);
   
@@ -56,6 +57,11 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
 
   std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
   for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
+    std::cout << (*it) << "\n";
+  }
+
+  std::cout << "\nhistograms inv mass for systems" << std::endl;
+  for (it=_histMass.begin(); it!=_histMass.end();++it){
     std::cout << (*it) << "\n";
   }
   return true;
