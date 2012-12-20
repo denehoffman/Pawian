@@ -6,6 +6,8 @@
 #include <iterator>
 #include <boost/shared_ptr.hpp>
 
+#include "TROOT.h"
+
 #include "Examples/pbarp/pbarpParser.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
@@ -25,7 +27,7 @@
 #include "Examples/pbarp/pbarpBaseLh.hh"
 #include "Examples/pbarp/pbarpEvtReader.hh"
 #include "Examples/pbarp/pbarpEventList.hh"
-//#include "Examples/pbarp/pbarpHist.hh"
+#include "Examples/pbarp/pbarpHist.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
@@ -41,6 +43,7 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+
 
 int main(int __argc,char *__argv[]){
   clock_t start, end;
@@ -178,7 +181,7 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    //    pbarpHist theHist(theLhPtr, theStartparams);    
+    pbarpHist theHist(theLhPtr, theStartparams);    
   }
 
 
