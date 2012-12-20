@@ -26,6 +26,7 @@ pbarpParser::pbarpParser(int argc,char **argv):
     ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
     ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
     ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
+    ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
     ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
     ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
@@ -53,6 +54,11 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
 
   std::cout << "\ndecay system:" << std::endl;
   for (it=_decaySystem.begin(); it!=_decaySystem.end();++it){
+    std::cout << (*it) << "\n";
+  }
+
+  std::cout << "\ndecay dynamics:" << std::endl;
+  for (it=_dynamics.begin(); it!=_dynamics.end();++it){
     std::cout << (*it) << "\n";
   }
 

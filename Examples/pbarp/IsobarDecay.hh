@@ -30,11 +30,14 @@ public:
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   boost::shared_ptr<IsobarDecay> decDaughter1() {return _isoDecDaughter1;}
   boost::shared_ptr<IsobarDecay> decDaughter2() {return _isoDecDaughter2;}
+  bool hasMother() {return _hasMotherPart;}
   bool isDaughter1Stable() {return _daughter1IsStable;}
   bool isDaughter2Stable() {return _daughter2IsStable;}
+  bool withDynamics() {return _withDyn;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
-  void fillWignerDs(std::map<std::string , Vector4<float> >& fsMap, EvtDataNew* evtData);
+  void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtDataNew* evtData);
+  void enableDynamics(std::string& dynString) {_withDyn=true;}
   virtual void print(std::ostream& os) const;
   
   Particle* motherPart() {return _mother;}
@@ -49,7 +52,7 @@ protected:
   bool _daughter1IsStable;
   bool _daughter2IsStable;
   bool _hasMotherPart;
-
+  bool _withDyn;
   boost::shared_ptr<const jpcRes> _motherJPCPtr;
   boost::shared_ptr<const jpcRes> _daughter1JPCPtr;
   boost::shared_ptr<const jpcRes> _daughter2JPCPtr;

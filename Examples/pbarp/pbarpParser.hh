@@ -21,6 +21,7 @@ class pbarpParser : public ParserBase
   const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
+  const std::vector<std::string>& decayDynamics() const { return _dynamics;}
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -29,6 +30,7 @@ protected:
   std::vector<std::string> _finalStateParticles;
   std::vector<std::string> _productionSystem;
   std::vector<std::string> _decaySystem;
+  std::vector<std::string> _dynamics;
   std::vector<std::string> _replaceParSuffix;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;

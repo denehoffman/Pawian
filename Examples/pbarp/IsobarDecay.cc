@@ -20,6 +20,7 @@ IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daught
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(true)
+  ,_withDyn(false)
   ,_motherJPCPtr(getJPCPtr(mother)) 
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
@@ -59,6 +60,7 @@ IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle*
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(false)
+  ,_withDyn(false)
   ,_motherJPCPtr(motherJPCPtr)
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
@@ -95,16 +97,16 @@ IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle*
 IsobarDecay::~IsobarDecay(){
 }
 
-void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<float> >& fsMap, EvtDataNew* evtData){
+void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtDataNew* evtData){
   if (!_daughter1IsStable) _isoDecDaughter1->fillWignerDs(fsMap, evtData);
   if (!_daughter2IsStable) _isoDecDaughter2->fillWignerDs(fsMap, evtData);
   
-  Vector4<float> all4Vec(0.,0.,0.,0.);
-  Vector4<float> mother4Vec(0.,0.,0.,0.);
-  Vector4<float> daughter2_4Vec(0.,0.,0.,0.);
+  Vector4<double> all4Vec(0.,0.,0.,0.);
+  Vector4<double> mother4Vec(0.,0.,0.,0.);
+  Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
 
   //fill all4Vec
-  std::map<std::string, Vector4<float>, pawian::Collection::PtrLess>::iterator itMap;
+  std::map<std::string, Vector4<double>, pawian::Collection::PtrLess>::iterator itMap;
   for(itMap=fsMap.begin(); itMap!=fsMap.end(); ++itMap){
     all4Vec+=itMap->second;
   }
@@ -122,7 +124,7 @@ void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<float> >& fsMap, Ev
     daughter2_4Vec+=itMap->second;
   }
 
-  Vector4<float> daughter2HelMother(0.,0.,0.,0.);
+  Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   if(_hasMotherPart){
     daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
   }

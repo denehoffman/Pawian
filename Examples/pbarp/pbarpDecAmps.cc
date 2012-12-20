@@ -19,9 +19,11 @@ pbarpDecAmps::pbarpDecAmps(boost::shared_ptr<IsobarDecay> theDec) :
   ,_JPCPtr(theDec->motherJPC())
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_key("_"+theDec->fitParSuffix())
+  ,_massKey("")
   ,_wignerDKey(theDec->wignerDKey())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
+  ,_withDyn(theDec->withDynamics())
 {
   initialize();
 }
@@ -63,6 +65,16 @@ int evtNo=theData->evtNo;
     }
    }
 
+   if(_withDyn){
+     Vector4<double> mass4Vec(0.,0.,0.,0.);
+     std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
+
+     std::vector<Particle*>::iterator itPartVec;
+     for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
+       mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
+     }
+     result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);     
+   }
     if ( _cacheAmps){    
 #ifdef _OPENMP
 #pragma omp critical
@@ -105,6 +117,13 @@ void  pbarpDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)
   fitErr.Mags[_key]=currentMagErrMap;
   fitErr.Phis[_key]=currentPhiErrMap;
 
+  if(_withDyn){
+    fitVal.Masses[_massKey]=_decay->motherPart()->mass();
+    fitErr.Masses[_massKey]=3.*_decay->motherPart()->width();
+    fitVal.Widths[_massKey]=_decay->motherPart()->width();
+    fitErr.Widths[_massKey]=2.*_decay->motherPart()->width();
+  }
+
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
 }
@@ -114,16 +133,25 @@ void pbarpDecAmps::print(std::ostream& os) const{
 }
 
 void pbarpDecAmps::initialize(){
+
+  if(_withDyn){
+    if(!_decay->hasMother()){
+      Alert << "no mother resonance; can not add dynamis" << endmsg;
+      exit(1);
+    }
+    _massKey=_decay->motherPart()->name();
+  }
+  
   if(!_daughter1IsStable){
     boost::shared_ptr<IsobarDecay> decDaughter1=_decay->decDaughter1();
     _decAmpDaughter1=boost::shared_ptr<pbarpDecAmps>(new pbarpDecAmps(decDaughter1));
   }
-
+  
   if(!_daughter2IsStable){
     boost::shared_ptr<IsobarDecay> decDaughter2=_decay->decDaughter1();
     _decAmpDaughter2=boost::shared_ptr<pbarpDecAmps>(new pbarpDecAmps(decDaughter2));
   }
- 
+  
   _Jdaughter1=(Spin) _decay->daughter1Part()->J();
   _Jdaughter2=(Spin) _decay->daughter2Part()->J();
 }
@@ -143,6 +171,17 @@ bool pbarpDecAmps::checkRecalculation(fitParamsNew& theParamVal){
        _recalculate=true;
      }
      if ( fabs(thePhi - _currentParamPhis[*it])  > 1.e-10 ){
+       _recalculate=true;
+     }
+   }
+
+   if(_withDyn){
+     double mass=theParamVal.Masses[_massKey];
+     if ( fabs(mass-_currentXMass) > 1.e-10){
+       _recalculate=true;
+     }
+     double width=theParamVal.Widths[_massKey];
+     if ( fabs(width-_currentXWidth) > 1.e-10){
        _recalculate=true;
      }
    }
@@ -167,6 +206,13 @@ void  pbarpDecAmps::updateFitParams(fitParamsNew& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMags[*it]=theMag;
      _currentParamPhis[*it]=thePhi;
+   }
+
+   if (_withDyn){
+     double xMass=theParamVal.Masses[_massKey];
+     _currentXMass= xMass;
+     double xWidth=theParamVal.Widths[_massKey];
+     _currentXWidth=xWidth;
    }
 
   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);

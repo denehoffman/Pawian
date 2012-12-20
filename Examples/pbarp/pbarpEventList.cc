@@ -34,15 +34,16 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& the
     if (evtCount>= maxEvts) break;
     if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
 
-    Vector4<float> V4_all_lab(0.,0.,0.,0.);
+    Vector4<double> V4_all_lab(0.,0.,0.,0.);
     
-    std::vector< Vector4<float> > finalState4Vecs;
+    std::vector< Vector4<double> > finalState4Vecs;
     std::vector<Particle*>  finalStateParticles=pbarpEnv::instance()->finalStateParticles();
-    std::map<std::string, Vector4<float> > particle4VecMap;
+    std::map<std::string, Vector4<double> > particle4VecMap;
     std::vector<Particle*>::iterator itPart;
     int counter=0;
     for (itPart=finalStateParticles.begin(); itPart != finalStateParticles.end(); ++itPart){
-      Vector4<float> current4Vec = *(anEvent->p4(counter));
+      Vector4<float> current4VecFloat=*(anEvent->p4(counter));
+      Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
       finalState4Vecs.push_back(current4Vec);
       particle4VecMap[ (*itPart)->name()]=current4Vec;
       V4_all_lab += current4Vec;
@@ -68,7 +69,7 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& the
     EvtDataNew* evtData=new EvtDataNew();
     evtData->FourVecsString["all"]=V4_all_lab;
     //cache 4 vectors of inital state particles
-    std::map<std::string, Vector4<float> >::iterator it4VecMap;
+    std::map<std::string, Vector4<double> >::iterator it4VecMap;
     for (it4VecMap=particle4VecMap.begin(); it4VecMap!=particle4VecMap.end(); ++it4VecMap){
       evtData->FourVecsString[it4VecMap->first]=it4VecMap->second;
     }
@@ -80,52 +81,52 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& the
       (*itIso)->fillWignerDs(particle4VecMap, evtData);
     }
  
-    // Vector4<float>  V4_all_Lab( ks+kl+kp+km+gam   );
-    //  Vector4<float>  V4_KsKlKpKm_Lab( ks+kl+kp+km   );
-    //  Vector4<float>  V4_KsKl_Lab( ks+kl   );
-    //  Vector4<float>  V4_Ks_Lab( ks   );
-    //  Vector4<float>  V4_KpKm_Lab( kp+km   );
-    //  Vector4<float>  V4_Kp_Lab( kp   );
-    //  Vector4<float>  V4_Km_Lab( km   );
-    //  Vector4<float>  V4_Kl_Lab( kl   );
+    // Vector4<double>  V4_all_Lab( ks+kl+kp+km+gam   );
+    //  Vector4<double>  V4_KsKlKpKm_Lab( ks+kl+kp+km   );
+    //  Vector4<double>  V4_KsKl_Lab( ks+kl   );
+    //  Vector4<double>  V4_Ks_Lab( ks   );
+    //  Vector4<double>  V4_KpKm_Lab( kp+km   );
+    //  Vector4<double>  V4_Kp_Lab( kp   );
+    //  Vector4<double>  V4_Km_Lab( km   );
+    //  Vector4<double>  V4_Kl_Lab( kl   );
           
-    //  Vector4<float>  V4_KsKlKpKm_HeliPsi( ks+kl+kp+km   );
+    //  Vector4<double>  V4_KsKlKpKm_HeliPsi( ks+kl+kp+km   );
     //  V4_KsKlKpKm_HeliPsi.Boost(V4_psi);
      
-    //  Vector4<float>  V4_gamma_HeliPsi( gam   );
+    //  Vector4<double>  V4_gamma_HeliPsi( gam   );
     //  V4_gamma_HeliPsi.Boost(V4_psi);
-    //  Vector4<float>  V4_KpKm_HeliPsi( kp+km  );
+    //  Vector4<double>  V4_KpKm_HeliPsi( kp+km  );
     //  V4_KpKm_HeliPsi.Boost(V4_psi);
-    //  Vector4<float>  V4_KsKl_HeliPsi( ks+kl  );
+    //  Vector4<double>  V4_KsKl_HeliPsi( ks+kl  );
     //  V4_KsKl_HeliPsi.Boost(V4_psi);
 
-    //  Vector4<float>  V4_Kl_HeliPsi( kl   );
+    //  Vector4<double>  V4_Kl_HeliPsi( kl   );
     //  V4_Kl_HeliPsi.Boost( V4_psi );
-    //  Vector4<float>  V4_Ks_HeliPsi( ks   );
+    //  Vector4<double>  V4_Ks_HeliPsi( ks   );
     //  V4_Ks_HeliPsi.Boost( V4_psi );
-    //  Vector4<float>  V4_Kp_HeliPsi( kp   );
+    //  Vector4<double>  V4_Kp_HeliPsi( kp   );
     //  V4_Kp_HeliPsi.Boost( V4_psi );
-    //  Vector4<float>  V4_Km_HeliPsi( km   );
+    //  Vector4<double>  V4_Km_HeliPsi( km   );
     //  V4_Km_HeliPsi.Boost( V4_psi );
 
-    //  Vector4<float>  V4_KsKl_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_KsKl_Lab);
-    //  Vector4<float>  V4_KpKm_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_KpKm_Lab);     
-    //  Vector4<float>  V4_Ks_HeliKsKl=helicityVec(V4_KsKlKpKm_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
-    //  Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_KsKlKpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
+    //  Vector4<double>  V4_KsKl_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_KsKl_Lab);
+    //  Vector4<double>  V4_KpKm_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_KpKm_Lab);     
+    //  Vector4<double>  V4_Ks_HeliKsKl=helicityVec(V4_KsKlKpKm_Lab, V4_KsKl_Lab, V4_Ks_Lab);     
+    //  Vector4<double>  V4_Kp_HeliKpKm=helicityVec(V4_KsKlKpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
 
-    //  Vector4<float>  V4_Kp_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Kp_Lab);
-    //  Vector4<float>  V4_Km_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Km_Lab);
+    //  Vector4<double>  V4_Kp_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Kp_Lab);
+    //  Vector4<double>  V4_Km_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Km_Lab);
      
-    //  Vector4<float> V4_normKpKmDecHeliKsKlKpKm
+    //  Vector4<double> V4_normKpKmDecHeliKsKlKpKm
     //    (0.5*(V4_Kp_HeliKsKlKpKm.T()+V4_Km_HeliKsKlKpKm.T()),
     // 	V4_Km_HeliKsKlKpKm.Y()*V4_Kp_HeliKsKlKpKm.Z()-V4_Km_HeliKsKlKpKm.Z()*V4_Kp_HeliKsKlKpKm.Y(),
     // 	V4_Km_HeliKsKlKpKm.Z()*V4_Kp_HeliKsKlKpKm.X()-V4_Km_HeliKsKlKpKm.X()*V4_Kp_HeliKsKlKpKm.Z(),
     // 	V4_Km_HeliKsKlKpKm.X()*V4_Kp_HeliKsKlKpKm.Y()-V4_Km_HeliKsKlKpKm.Y()*V4_Kp_HeliKsKlKpKm.X());
      
-    //  Vector4<float>  V4_Kl_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Kl_Lab);
-    //  Vector4<float>  V4_Ks_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Ks_Lab);
+    //  Vector4<double>  V4_Kl_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Kl_Lab);
+    //  Vector4<double>  V4_Ks_HeliKsKlKpKm=helicityVec(V4_all_Lab, V4_KsKlKpKm_Lab, V4_Ks_Lab);
      
-    //  Vector4<float> V4_normKsKlDecHeliKsKlKpKm
+    //  Vector4<double> V4_normKsKlDecHeliKsKlKpKm
     //    (0.5*(V4_Kl_HeliKsKlKpKm.T()+V4_Ks_HeliKsKlKpKm.T()),
     // 	V4_Ks_HeliKsKlKpKm.Y()*V4_Kl_HeliKsKlKpKm.Z()-V4_Ks_HeliKsKlKpKm.Z()*V4_Kl_HeliKsKlKpKm.Y(),
     // 	V4_Ks_HeliKsKlKpKm.Z()*V4_Kl_HeliKsKlKpKm.X()-V4_Ks_HeliKsKlKpKm.X()*V4_Kl_HeliKsKlKpKm.Z(),

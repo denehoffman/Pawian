@@ -98,6 +98,33 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     _decList->addDecay(tmpDec);
   }
 
+  //add dynamics
+
+  std::vector<boost::shared_ptr<IsobarDecay> > isoDecList= _decList->getList();
+ 
+  std::vector<std::string> decDynVec = thePbarpParser.decayDynamics();
+  for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+
+    std::string particleStr;
+    stringStr >> particleStr;
+
+    std::string dynStr;
+    stringStr >> dynStr;
+
+    std::vector<boost::shared_ptr<IsobarDecay> >::iterator itDyn;
+    for (itDyn=isoDecList.begin(); itDyn!=isoDecList.end(); ++itDyn){
+      std::string theDecName=(*itDyn)->name();
+      std::string toFind=particleStr+"To";
+      size_t found;
+      found=theDecName.find(toFind);
+      if (found!=string::npos){
+	(*itDyn)->enableDynamics(dynStr);
+      }
+    }
+  }
+
   //produced particle pairs
   std::vector<std::string> productionSystem = thePbarpParser.productionSystem();
 

@@ -46,9 +46,11 @@ protected:
   Spin _Jdaughter1;
   Spin _Jdaughter2;
   std::string _key;
+  std::string _massKey;
   const std::string _wignerDKey;
   bool _daughter1IsStable;
   bool _daughter2IsStable;
+  bool _withDyn;
   virtual void initialize();
 
 private:
