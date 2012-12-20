@@ -60,7 +60,6 @@ struct massHistData {
 class TFile;
 //class TH2F;
 class TH1F;
-// class TNtuple;
 
 
 class pbarpHist {
@@ -72,12 +71,13 @@ public:
 protected:
 
 private:
-  void fillMassHists(EvtDataNew* theData, double weight);
+  void fillMassHists(EvtDataNew* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
 
  TFile* _theTFile;
 
- std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massHistMap;
-
+ std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
+ std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;
+ std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massFitHistMap;
   void initRootStuff();
 };
 
