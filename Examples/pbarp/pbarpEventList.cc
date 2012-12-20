@@ -66,7 +66,7 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& the
 
 
     EvtDataNew* evtData=new EvtDataNew();
-
+    evtData->FourVecsString["all"]=V4_all_lab;
     //cache 4 vectors of inital state particles
     std::map<std::string, Vector4<float> >::iterator it4VecMap;
     for (it4VecMap=particle4VecMap.begin(); it4VecMap!=particle4VecMap.end(); ++it4VecMap){

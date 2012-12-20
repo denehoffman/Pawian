@@ -174,6 +174,27 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     _histMassSystems.push_back(currentStringVec);
   }
 
+  std::vector<std::string> theHistAngleNames=thePbarpParser.histAngleNames();
+  //fill vector histMassSystems
+  for ( itStr = theHistAngleNames.begin(); itStr != theHistAngleNames.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string tmpName;
+    std::vector<std::string> currentStringDecVec;
+    std::vector<std::string> currentStringMotherVec;
+    bool isDecParticle=true;
+    while(stringStr >> tmpName){
+      if(tmpName=="from") {
+	isDecParticle=false;
+	continue;
+      }
+      if(isDecParticle) currentStringDecVec.push_back(tmpName);
+      else currentStringMotherVec.push_back(tmpName);
+    }
+    boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec)); 
+    _angleHistDataVec.push_back(currentAngleHistData);
+  }
 }
 
 

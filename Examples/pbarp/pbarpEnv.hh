@@ -10,12 +10,14 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Examples/pbarp/pbarpParser.hh"
+#include "Examples/pbarp/pbarpHist.hh"
 
 class Particle;
 class ParticleTable;
 class pbarpReaction;
 class IsobarDecayList;
 class pbarpEventList;
+//class pbarpHist;
 
 class pbarpEnv {
 
@@ -34,7 +36,7 @@ public:
   boost::shared_ptr<IsobarDecayList> prodDecayList() {return _prodDecList;}
   boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
-
+  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
 protected:  
 
   pbarpEnv();
@@ -50,4 +52,5 @@ protected:
   boost::shared_ptr<IsobarDecayList> _prodDecList;
   boost::shared_ptr<pbarpReaction> _pbarpReaction;
   std::vector<std::vector<std::string> > _histMassSystems;
+  std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
 };
