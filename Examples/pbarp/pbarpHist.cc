@@ -184,12 +184,15 @@ void pbarpHist::fillThetaHists(EvtDataNew* theData, double weight, std::map<boos
     }
 
     Vector4<double>  result4Vec(0.,0.,0.,0.);
-    result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
-    // if(all4Vec==combinedMother4Vec){
-    //   result4Vec=combinedDec4Vec;
-    //   result4Vec.Boost(all4Vec);
-    // } 
-    // else result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
+    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1e-5
+	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5 
+	&& fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1e-5
+	&& fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1e-5  ){
+    result4Vec=combinedDec4Vec;
+    result4Vec.Boost(all4Vec);
+    } 
+    else result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
+
     it->second->Fill( result4Vec.CosTheta(), weight);     
   }
 }
