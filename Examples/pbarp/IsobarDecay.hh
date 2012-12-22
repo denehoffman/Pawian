@@ -26,6 +26,8 @@ public:
   const std::string wignerDKey() {return _wignerDKey;} 
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
+  virtual std::string massParKey() const {return _massParamKey;}
+  void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
   boost::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   boost::shared_ptr<IsobarDecay> decDaughter1() {return _isoDecDaughter1;}
@@ -59,6 +61,7 @@ protected:
 
   std::string _name;
   std::string _fitParamSuffix;
+  std::string _massParamKey;
   std::string _wignerDKey;
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;

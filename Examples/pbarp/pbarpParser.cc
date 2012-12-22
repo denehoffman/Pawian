@@ -28,6 +28,7 @@ pbarpParser::pbarpParser(int argc,char **argv):
     ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
     ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
     ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
+    ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
     ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
     ;
@@ -64,6 +65,11 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
 
   std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
   for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
+    std::cout << (*it) << "\n";
+  }
+
+  std::cout << "\nreplaced mass key" << std::endl;
+  for (it=_replaceMassKey.begin(); it!=_replaceMassKey.end();++it){
     std::cout << (*it) << "\n";
   }
 

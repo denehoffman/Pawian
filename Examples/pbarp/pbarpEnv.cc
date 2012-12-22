@@ -187,6 +187,27 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
   }
 
+  //replace mass key
+  std::vector<std::string> replMassKeyVec = thePbarpParser.replaceMassKey();
+  std::map<std::string, std::string> decRepMassKeyNames;
+
+  for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    std::string oldStr;
+    stringStr >> oldStr;
+
+    std::string newStr;
+    stringStr >> newStr;
+    decRepMassKeyNames[oldStr]=newStr;
+  }
+
+  for (itMapStrStr=decRepMassKeyNames.begin(); itMapStrStr!=decRepMassKeyNames.end(); ++itMapStrStr){
+    _decList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
+  }
+
+
+
   std::vector<std::string> theHistMassNames=thePbarpParser.histMassNames();
   //fill vector histMassSystems
   for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){

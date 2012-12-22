@@ -37,15 +37,14 @@ int evtNo=theData->evtNo;
   
  if ( _cacheAmps && !_recalculate){
    complex<double> result(0.,0.);    
-#ifdef _OPENMP
-#pragma omp critical
-   {
-#endif
+   //#ifdef _OPENMP
+   //#pragma omp critical
+   //   {
+   //#endif
      result= _cachedAmpMap[evtNo][lamX];
-#ifdef _OPENMP
-     
-   }
-#endif
+     //#ifdef _OPENMP     
+     //   }
+     //#endif
    return result;
  }
 
@@ -149,7 +148,7 @@ void pbarpDecAmps::initialize(){
       Alert << "no mother resonance; can not add dynamis" << endmsg;
       exit(1);
     }
-    _massKey=_decay->motherPart()->name();
+    _massKey=_decay->massParKey();
   }
   
   if(!_daughter1IsStable){

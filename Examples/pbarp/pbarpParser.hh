@@ -19,6 +19,7 @@ class pbarpParser : public ParserBase
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
   const std::vector<std::string>& decaySystem() const { return _decaySystem; }
   const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
+  const std::vector<std::string>& replaceMassKey() const { return _replaceMassKey; }
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
   const std::vector<std::string>& decayDynamics() const { return _dynamics;}
@@ -32,6 +33,7 @@ protected:
   std::vector<std::string> _decaySystem;
   std::vector<std::string> _dynamics;
   std::vector<std::string> _replaceParSuffix;
+  std::vector<std::string>  _replaceMassKey;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
 };

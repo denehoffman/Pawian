@@ -73,3 +73,12 @@ void IsobarDecayList::replaceSuffix(const std::string& oldPart, const std::strin
     (*it)->setFitParSuffix(theSuffix); 
   }
 }
+
+void IsobarDecayList::replaceMassKey(const std::string& oldPart, const std::string& newPart){
+  std::vector<boost::shared_ptr<IsobarDecay> >::iterator it;
+  for (it= _isoDecList.begin(); it!=_isoDecList.end(); ++it){
+    if(oldPart== (*it)->massParKey()){
+      (*it)->setMassParKey(newPart);
+    } 
+  }
+}

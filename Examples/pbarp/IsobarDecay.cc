@@ -26,6 +26,7 @@ IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daught
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
+  ,_massParamKey(mother->name())
 {
   validJPCLS( _motherJPCPtr, _daughter1JPCPtr, _daughter2JPCPtr, _JPCLSDecAmps);
   _isoDecDaughter1=pbarpEnv::instance()->decayList()->decay(_daughter1);
@@ -66,6 +67,7 @@ IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle*
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
+  ,_massParamKey("")
 {
   validJPCLS( _motherJPCPtr, _daughter1JPCPtr, _daughter2JPCPtr, _JPCLSDecAmps);
   _isoDecDaughter1=pbarpEnv::instance()->decayList()->decay(_daughter1);
