@@ -181,9 +181,35 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    pbarpHist theHist(theLhPtr, theStartparams);    
-  }
+    pbarpHist theHist(theLhPtr, theStartparams);  
 
+    double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
+    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+    
+    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
+    Info << "BIC:\t" << BICcriterion << endmsg;
+    Info << "AIC:\t" << AICcriterion << endmsg;
+    Info << "AICc:\t" << AICccriterion << endmsg;
+    
+    std::string qaSummaryFileName = "qaSummary.dat";
+    std::ofstream theQaStream ( qaSummaryFileName.c_str() );
+    theQaStream << "BIC\t" << BICcriterion << "\n";
+    theQaStream << "AICa\t" << AICcriterion << "\n";
+    theQaStream << "AICc\t" << AICccriterion << "\n";
+    theQaStream << "logLh\t" << theLh << "\n";
+    theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+    theQaStream.close();
+    
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+    
+    return 1;    
+  }
+  
 
   if (mode=="pwa"){
     bool cacheAmps = theAppParams.cacheAmps();

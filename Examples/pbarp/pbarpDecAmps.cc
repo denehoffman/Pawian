@@ -36,7 +36,17 @@ complex<double> pbarpDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData){
 int evtNo=theData->evtNo;
   
  if ( _cacheAmps && !_recalculate){
-   return _cachedAmpMap[evtNo][lamX];
+   complex<double> result(0.,0.);    
+#ifdef _OPENMP
+#pragma omp critical
+   {
+#endif
+     result= _cachedAmpMap[evtNo][lamX];
+#ifdef _OPENMP
+     
+   }
+#endif
+   return result;
  }
 
   complex<double> result(0.,0.);
@@ -119,9 +129,9 @@ void  pbarpDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)
 
   if(_withDyn){
     fitVal.Masses[_massKey]=_decay->motherPart()->mass();
-    fitErr.Masses[_massKey]=3.*_decay->motherPart()->width();
+    fitErr.Masses[_massKey]=_decay->motherPart()->width();
     fitVal.Widths[_massKey]=_decay->motherPart()->width();
-    fitErr.Widths[_massKey]=2.*_decay->motherPart()->width();
+    fitErr.Widths[_massKey]=_decay->motherPart()->width();
   }
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);

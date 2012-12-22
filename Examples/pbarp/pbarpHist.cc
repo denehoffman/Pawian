@@ -8,6 +8,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLhNew.hh"
@@ -97,19 +98,30 @@ void pbarpHist::initRootStuff(){
     boost::replace_all(tmpBaseName,"-","m");
     std::string histName="data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
-    TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., 0., 2.);
+
+    double massMin=-0.05;
+    double massMax=2.;
+    std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
+    std::vector<std::string>::iterator itStr2;
+    for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
+      Particle* currentParticle=pbarpEnv::instance()->particleTable()->particle(*itStr2);
+      massMin+= currentParticle->mass(); 
+      massMax+= currentParticle->mass(); 
+    }
+
+    TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
     currentMassDataHist->Sumw2();
     _massDataHistMap[tmpMassHistData]=currentMassDataHist;
 
     histName="MC"+tmpBaseName;
     histDescription = "M("+tmpMassHistData->_name+") (MC)";
-    TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., 0., 2.);
+    TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
     currentMassMcHist->Sumw2();
     _massMcHistMap[tmpMassHistData]=currentMassMcHist;
 
     histName="Fit"+tmpBaseName;
     histDescription = "M("+tmpMassHistData->_name+") (fit)";
-    TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., 0., 2.);
+    TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
     currentMassFitHist->Sumw2();
     _massFitHistMap[tmpMassHistData]=currentMassFitHist;
   }
