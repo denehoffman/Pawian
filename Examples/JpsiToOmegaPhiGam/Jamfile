@@ -1,0 +1,17 @@
+project : 
+        ;
+
+lib JpsiToOmegaPhiGam : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/PwaUtils//PwaUtils 
+        $(TOP)/Event//Event 
+        $(TOP)/qft++//qft++ 
+	:  
+	: 
+	:  ;
+
+exe MJpsiToOmegaPhiGamApp : MJpsiToOmegaPhiGamApp.cc JpsiToOmegaPhiGam : ;
+
+
+
+
