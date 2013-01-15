@@ -11,7 +11,6 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/PsiToXGamStates.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "Minuit2/MnUserParameters.h"
 
