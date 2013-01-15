@@ -1,18 +1,10 @@
 import os ;
-#local MinuitVariant = [ os.environ MINUITVARIANT ] ; 
 path-constant TOP : . ;
 local ROOTSYS = [ os.environ ROOTSYS ] ; 
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor ;
-#if $(MinuitVariant) = Minuit2
-#{
-# OPEN_MP_FLAG = "" ;
-#}
-#else if $(MinuitVariant) = Minuit2noMP
-#{
-# OPEN_MP_FLAG = "-fopenmp" ;
-#}
+
 project :
 	requirements <include>./  
 	<include>$(extern)/include
@@ -23,7 +15,6 @@ project :
 	<cxxflags>-fopenmp
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
-#	<linkflags>$(extern)/lib/Linux26SL6_x86_64_gcc444/libMinuit2.a
 	<linkflags>-lgomp
 	<linkflags>-pthread
 	<linkflags>-fopenmp
@@ -50,8 +41,5 @@ build-project ErrLogger ;
 build-project PwaUtils ;
 build-project Particle ;
 build-project Event ;
-build-project DecayTree ;
-build-project Setup ;
 build-project PwaDynamics ;
-build-project PspGen ;
 build-project Examples ;

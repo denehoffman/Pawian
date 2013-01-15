@@ -1,12 +1,3 @@
 
-build-project EtacToapi0Fit ;
-build-project Psi2SToKpKmPiGam ;
-build-project Psi2STo2K2PiGam ; 
 build-project pbarp ;
-build-project SeqDecHeliAmps ; 
-build-project pbarpToOmegaPiLS ;
 build-project Tutorial ;
-build-project JpsiGamKsKlKK ;
-build-project JpsiGamEtaPiPiNew ;
-build-project JpsiToPhiPhiGam ;
-build-project D0ToKsPipPim ;

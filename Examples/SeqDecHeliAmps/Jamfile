@@ -1,5 +1,0 @@
-project : 
-        ;
-
-exe compton_scatteringApp : compton_scattering.cc $(TOP)/qft++//qft++ : ;
-exe SeqDecHeliAmpsApp : SeqDecayHeliAmpsMain.cc SeqDecHeliAmps.cc $(TOP)/qft++//qft++ : ;

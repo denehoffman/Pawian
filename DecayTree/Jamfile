@@ -1,4 +1,0 @@
-project : 
-	;
-
-lib DecayTree : [ glob *.cc : *App.cc ] $(TOP)/Particle//Particle : : : ;
