@@ -5,7 +5,7 @@
 #include <vector>
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/AbsStates.hh"
-#include "PwaUtils/pbarpStates.hh"
+#include "PwaUtils/pbarpStatesLS.hh"
 #include "PwaUtils/DataUtils.hh"
 
 int main(int __argc,char *__argv[]){
@@ -17,15 +17,15 @@ int main(int __argc,char *__argv[]){
 	      << "output: JPC states with contributed LS combinations + helicicty + corresponding Clebsch-Gordan coefficient\n"
 	      << "The application can be started with two flags: \n"
 	      << "with -msg <errorLogMode>: choose the mode for the error logger \n"
-	      << "with -jmax <value>: choose the maximum Spin J \n"
-              << "e.g. type: ./pbarpStatesApp -jmax 6 -msg debugging \n"
+	      << "with -lmax <value>: choose the maximum Spin J \n"
+              << "e.g. type: ./pbarpStatesApp -lmax 6 -msg debugging \n"
 	      << std::endl;
     return 0;
   }
 
   int optind=1;
   std::string msgModeStr="default";
-  std::string jmaxStr="0";
+  std::string lmaxStr="0";
   // decode arguments
 
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -36,9 +36,9 @@ int main(int __argc,char *__argv[]){
       msgModeStr = __argv[optind];
       found=true;
     }
-    if(sw=="-jmax"){
+    if(sw=="-lmax"){
       optind++;
-      jmaxStr = __argv[optind];
+      lmaxStr = __argv[optind];
       found=true;
     }
     if (!found){
@@ -62,74 +62,15 @@ int main(int __argc,char *__argv[]){
 
 
 
- std::stringstream jmaxStrStr(jmaxStr);
- int jmax=0;
- jmaxStrStr >> jmax;
+ std::stringstream lmaxStrStr(lmaxStr);
+ int lmax=0;
+ lmaxStrStr >> lmax;
 
-  Info << "jmax: " << jmax << endmsg;
+  Info << "lmax: " << lmax << endmsg;
 
-  pbarpStates thepbarpState(jmax);
-
-  std::vector< boost::shared_ptr<const jpcRes> > jpcStatesRequest;
-  
-  std::vector< boost::shared_ptr<const jpcRes> > theJPCStates=thepbarpState.jpcStates();
-  Info << "The pbarp JPC states are: " << endmsg;
-  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator it1;
-  for ( it1=theJPCStates.begin(); it1!=theJPCStates.end(); ++it1){
-    if (0!= (*it1))(*it1)->print(std::cout);
-    std::cout << std::endl;
-
-    if ( (*it1)->J==1 ||  (*it1)->J==4) jpcStatesRequest.push_back(*it1);
-  }
-
-  std::vector< boost::shared_ptr<const JPCLSM> >::const_iterator it;
-
-  std::vector< boost::shared_ptr<const JPCLSM> > pbarpExtract=thepbarpState.extractJPCLSMStates(jpcStatesRequest);
-
-  Info << "The requested pbarp states (JPCSML) are: " << endmsg;
-  for ( it=pbarpExtract.begin(); it!=pbarpExtract.end(); ++it){
-    if (0!= (*it))(*it)->print(std::cout);
-  }
-
-  std::vector< boost::shared_ptr<const JPCSM> >::const_iterator itJPCSM;
-
-  std::vector< boost::shared_ptr<const JPCSM> > pbarpJPCSMExtract=thepbarpState.extractJPCSMStates(jpcStatesRequest);
-
-  Info << "The requested pbarp states (JPCSM) are: " << endmsg;
-  for ( itJPCSM=pbarpJPCSMExtract.begin(); itJPCSM!=pbarpJPCSMExtract.end(); ++itJPCSM){
-    if (0!= (*itJPCSM))(*itJPCSM)->print(std::cout);
-  }
+  pbarpStatesLS thepbarpState(lmax);
 
   thepbarpState.print(std::cout);
-
-  std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itjpc;
-  std::vector< boost::shared_ptr<const jpcRes> > theSingletStates=thepbarpState.singletStates();
-  Info << "The pbarp singlet states are: " << endmsg;
-  for ( itjpc=theSingletStates.begin(); itjpc!=theSingletStates.end(); ++itjpc){
-    if (0!= (*itjpc))(*itjpc)->print(std::cout);
-    std::cout << std::endl;
-  }
-
-  std::vector< boost::shared_ptr<const jpcRes> > theTripletM0States=thepbarpState.tripletM0States();
-  Info << "The pbarp triplet states with helicity=0 are: " << endmsg;
-  for ( itjpc=theTripletM0States.begin(); itjpc!=theTripletM0States.end(); ++itjpc){
-    if (0!= (*itjpc))(*itjpc)->print(std::cout);
-    std::cout << std::endl;
-  }
-
-  std::vector< boost::shared_ptr<const jpcRes> > theTripletMp1States=thepbarpState.tripletMp1States();
-  Info << "The pbarp triplet states with helicity=1 are: " << endmsg;
-  for ( itjpc=theTripletMp1States.begin(); itjpc!=theTripletMp1States.end(); ++itjpc){
-    if (0!= (*itjpc))(*itjpc)->print(std::cout);
-    std::cout << std::endl;
-  }
-
-  std::vector< boost::shared_ptr<const jpcRes> > theTripletMm1States=thepbarpState.tripletMm1States();
-  Info << "The pbarp triplet states with helicity=-1 are: " << endmsg;
-  for ( itjpc=theTripletMm1States.begin(); itjpc!=theTripletMm1States.end(); ++itjpc){
-    if (0!= (*itjpc))(*itjpc)->print(std::cout); 
-    std::cout << std::endl;
-  }
 
   return 0;
 }
