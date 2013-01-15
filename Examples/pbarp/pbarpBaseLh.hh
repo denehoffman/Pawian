@@ -10,7 +10,7 @@
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-#include "PwaUtils/AbsLhNew.hh"
+#include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/PsiToXGamStates.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "Minuit2/MnUserParameters.h"
@@ -19,19 +19,19 @@ class AbsXdecAmp;
 class pbarpReaction;
 class pbarpDecAmps;
 
-class pbarpBaseLh : public AbsLhNew {
+class pbarpBaseLh : public AbsLh {
 
 public:
-  pbarpBaseLh(boost::shared_ptr<const EvtDataBaseListNew>);
+  pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList>);
 
   virtual ~pbarpBaseLh();
 
-  virtual AbsLhNew* clone_() const {
+  virtual AbsLh* clone_() const {
     return new  pbarpBaseLh(_evtListPtr);
   }
-  virtual double calcEvtIntensity( EvtDataNew* theData, fitParamsNew& theParamVal);
+  virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   
-  virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
 
 protected:
@@ -48,15 +48,15 @@ protected:
  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
   
-  virtual void checkParamVariation(fitParamsNew& theParamVal);
-  virtual void updateFitParams(fitParamsNew& theParamVal);
+  virtual void checkParamVariation(fitParams& theParamVal);
+  virtual void updateFitParams(fitParams& theParamVal);
   virtual void cacheTheAmps();
  
 private:
 
   // void getDefaultParams(const std::vector<std::string>& hyps, 
   // 			std::vector< boost::shared_ptr<const JPCLS> > lsAmps, 
-  // 			fitParamsNew& fitVal, fitParamsNew& fitErr);
+  // 			fitParams& fitVal, fitParams& fitErr);
  
   void initialize();
   void fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<pbarpDecAmps> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<pbarpDecAmps> >, pawian::Collection::SharedPtrLess >& toFill);

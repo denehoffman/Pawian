@@ -1,3 +1,6 @@
+// DataUtils class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
 #include "PwaUtils/DataUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Utils/PawianCollectionUtils.hh"

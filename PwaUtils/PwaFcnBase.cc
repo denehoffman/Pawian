@@ -4,21 +4,27 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "Minuit2/MnUserParameters.h"
 
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/FitParamsBase.hh"
+// #include "PwaUtils/FitParamsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase) :
+PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
   _absLhPtr(absLh)
   , _fitParamsBasePtr(fitParamsBase)
   , _fcnCounter(0)
+  , _currentResFileName("currentResult"+suffix+".dat")
 {
    if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
+   _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
   
 }
 
@@ -28,22 +34,44 @@ PwaFcnBase::~PwaFcnBase()
 
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
-  _fcnCounter++;
-
-  fitParams theFitParmValTmp=_fitParamsBasePtr->getFitParamVal(par);  
   
+
+  fitParams theFitParmValTmp=_defaultFitValParms;
+
+#ifdef _OPENMP
+#pragma omp critical
+  {
+ #endif
+
+     _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+    
+#ifdef _OPENMP  
+  }
+#endif
+
+
   double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
-  DebugMsg << "logLh= " << result <<endmsg;
- 
-  if (  _fcnCounter%50 == 0) {  
-    _fitParamsBasePtr->printParams(theFitParmValTmp);
+
+#ifdef _OPENMP
+#pragma omp critical
+  {
+#endif
+    _fcnCounter++;
+    DebugMsg << "logLh= " << result <<endmsg;
+    
+    if (  _fcnCounter%50 == 0) {  
+      _fitParamsBasePtr->printParams(theFitParmValTmp);
+    }
+    
+    if (  _fcnCounter%200 == 0) {
+      std::ofstream theStream (_currentResFileName.c_str());
+      _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
+    }
+
+#ifdef _OPENMP  
   }
-  
-  if (  _fcnCounter%200 == 0) {
-    std::ofstream theStream ( "currentResult.dat");
-    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
-  }
+#endif
 
   return result;
 }

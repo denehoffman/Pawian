@@ -1,3 +1,6 @@
+// AbsXdecAmp class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
 #pragma once
 
 #include <iostream>
@@ -7,8 +10,8 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "PwaUtils/EvtDataBaseListNew.hh"
-#include "PwaUtils/FitParamsBaseNew.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/FitParamsBase.hh"
 
 class AbsXdecAmp {
 
@@ -17,15 +20,15 @@ public:
   AbsXdecAmp(const std::string& name);
   virtual ~AbsXdecAmp();
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData)=0;
-  virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr)=0;
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData)=0;
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   const Spin  spinX() const {return _J_X;}
   const int  parity() const {return _parity;}
-  virtual bool checkRecalculation(fitParamsNew& theParamVal);
+  virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void cacheAmplitudes(){_cacheAmps=true;}
-  virtual void updateFitParams(fitParamsNew& theParamVal){return;}
+  virtual void updateFitParams(fitParams& theParamVal){return;}
 protected:
  
 

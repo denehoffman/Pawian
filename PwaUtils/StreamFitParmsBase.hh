@@ -9,36 +9,33 @@
 #include "PwaUtils/AbsFitParamStreamer.hh"
 #include "PwaUtils/FitParamsBase.hh"
 
+class AbsLh;
+
 class StreamFitParmsBase : public AbsFitParamStreamer {
   
 public:
-  StreamFitParmsBase(std::string&, boost::shared_ptr<FitParamsBase> fitParamsBasePtr);
+  StreamFitParmsBase(std::string&, boost::shared_ptr<AbsLh> theLhPtr);
   virtual ~StreamFitParmsBase();
   
-  fitParams getFitParamVal() { return _paramVal; }
-  fitParams getFitParamErr() { return _paramErr; }
-   virtual void fillParamMap() { return; }
+  fitParams getFitParamVal() { return _paramVal;}
+  fitParams getFitParamErr() { return _paramErr;}
+ 
+  virtual void fillParamMap() {return;}
 
 protected:
   virtual void fillParams();
 
-  virtual void fillAmps(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSs, 
-			std::string& suffix, std::map< boost::shared_ptr<const JPCLS>, 
-			double, pawian::Collection::SharedPtrLess >& valMap , 
-			std::map< boost::shared_ptr<const JPCLS>, double,
-			pawian::Collection::SharedPtrLess >& errMap);
 
-  virtual void fillLamLamAmps(std::vector< boost::shared_ptr<const JPClamlam> >& theJPCLamLams,
-			      std::string& suffix, std::map< boost::shared_ptr<const JPClamlam>,
-			      double, pawian::Collection::SharedPtrLess >& valMap, 
-			      std::map< boost::shared_ptr<const JPClamlam>, double, 
-			      pawian::Collection::SharedPtrLess >& errMap);
-  
+  virtual void fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap, 
+			      const std::string& suffix);
+  virtual void fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, 
+			  const std::string& suffix);
+  virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap, 
+			   const std::string& suffix);
 private:
   fitParams _paramVal;
   fitParams _paramErr;
-  boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
 
-  void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap,
+  void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap, 
 		     std::string& suffix, int index);
 };

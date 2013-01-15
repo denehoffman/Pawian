@@ -1,3 +1,6 @@
+// EvtDataBaseList class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
 #include <getopt.h>
 
 
@@ -8,12 +11,30 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-EvtDataBaseList::EvtDataBaseList() 
+EvtDataBaseList::EvtDataBaseList() :
+  _noOfWeightedDataEvts(0.),
+  _noOfWeightedMcEvts(0.),
+  _mcToDataRatio(1000),
+  _alreadyRead(false),
+  _evtNoAll(0)
 {
 }
 
 
 EvtDataBaseList::~EvtDataBaseList()
 {
+}
+
+void EvtDataBaseList::read(EventList& evtListData, EventList& evtListMc){
+  if(_alreadyRead){
+   Alert << "4 vectors already read " << endmsg;  // << endmsg;
+    exit(1);
+  }
+  read4Vecs(evtListData, _evtDataList, _noOfWeightedDataEvts, evtListData.size());
+
+  int maxMcEvts=evtListMc.size();
+  if (maxMcEvts > _mcToDataRatio*evtListData.size() ) maxMcEvts=_mcToDataRatio*evtListData.size();
+  read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, maxMcEvts);
+  _alreadyRead=true;
 }
 

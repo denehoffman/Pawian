@@ -14,10 +14,10 @@
 #include "Particle/PdtParser.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/pbarpStatesLS.hh"
-#include "PwaUtils/AbsLhNew.hh"
-#include "PwaUtils/FitParamsBaseNew.hh"
-#include "PwaUtils/StreamFitParmsBaseNew.hh"
-#include "PwaUtils/PwaFcnBaseNew.hh"
+#include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/StreamFitParmsBase.hh"
+#include "PwaUtils/PwaFcnBase.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 #include "Examples/pbarp/IsobarDecay.hh"
@@ -68,11 +68,11 @@ int main(int __argc,char *__argv[]){
   thepbarpReaction->print(std::cout);
 
   // boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
-  // boost::shared_ptr<AbsLhNew> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
+  // boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
 
   std::string mode=theAppParams.mode();
 
-  boost::shared_ptr<FitParamsBaseNew> theFitParamBase=boost::shared_ptr<FitParamsBaseNew>(new FitParamsBaseNew());
+  boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
 
 
 
@@ -140,11 +140,11 @@ int main(int __argc,char *__argv[]){
   pbarpEventListPtr->read(eventsData, mcData);
   // pbarpEventListPtr->read4Vecs();
 
-  boost::shared_ptr<AbsLhNew> theLhPtr(new pbarpBaseLh(pbarpEventListPtr));
+  boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(pbarpEventListPtr));
 
   if (mode=="dumpDefaultParams"){
-    fitParamsNew defaultVal;
-    fitParamsNew defaultErr;
+    fitParams defaultVal;
+    fitParams defaultErr;
     theLhPtr->getDefaultParams(defaultVal, defaultErr);
     std::string defaultparamsname = "defaultparams.dat";
     std::ofstream theStreamDefault ( defaultparamsname.c_str() );
@@ -155,11 +155,11 @@ int main(int __argc,char *__argv[]){
 
 
   std::string paramStreamerPath=theAppParams.fitParamFile();
-  StreamFitParmsBaseNew theParamStreamer(paramStreamerPath, theLhPtr);
-  fitParamsNew theStartparams=theParamStreamer.getFitParamVal();
-  fitParamsNew theErrorparams=theParamStreamer.getFitParamErr();
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
-  PwaFcnBaseNew theFcn(theLhPtr, theFitParamBase);  
+  PwaFcnBase theFcn(theLhPtr, theFitParamBase);  
   MnUserParameters upar;
   theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
   
@@ -233,7 +233,7 @@ int main(int __argc,char *__argv[]){
     
     MnUserParameters finalUsrParameters=min.UserParameters();
     const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    fitParamsNew finalFitParams=theStartparams;
+    fitParams finalFitParams=theStartparams;
     theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
 
     theFitParamBase->printParams(finalFitParams);
@@ -242,7 +242,7 @@ int main(int __argc,char *__argv[]){
     
     
     const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    fitParamsNew finalFitErrs=theErrorparams;
+    fitParams finalFitErrs=theErrorparams;
     theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
     
     std::string finalResultname = "finalResult.dat";

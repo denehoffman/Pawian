@@ -1,3 +1,6 @@
+// AbsStates class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
 #pragma once
 
 #include <iostream>

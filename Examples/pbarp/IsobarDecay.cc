@@ -11,7 +11,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/FunctionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
-#include "PwaUtils/EvtDataBaseListNew.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 
 IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daughter2) :
   _mother(mother)
@@ -99,7 +99,7 @@ IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle*
 IsobarDecay::~IsobarDecay(){
 }
 
-void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtDataNew* evtData){
+void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
   if (!_daughter1IsStable) _isoDecDaughter1->fillWignerDs(fsMap, evtData);
   if (!_daughter2IsStable) _isoDecDaughter2->fillWignerDs(fsMap, evtData);
   

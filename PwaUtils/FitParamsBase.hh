@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <complex>
+
 #include <boost/shared_ptr.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -16,77 +17,57 @@
 
 using namespace ROOT::Minuit2;
 
-struct fitParams {
-  std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, 
-			  pawian::Collection::SharedPtrLess > > Mags;
-  std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, 
-			  pawian::Collection::SharedPtrLess > > Phis;
-  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, 
-			  pawian::Collection::SharedPtrLess > > MagLamLams;
-  std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, 
-			  pawian::Collection::SharedPtrLess > > PhiLamLams;
-  std::map<int, double> Masses;
-  std::map<int, double> Widths;
-  std::map<int, double> gFactors;
-  std::map<int, double> otherParams;
-};
+typedef std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, 
+					pawian::Collection::SharedPtrLess > > mapStrJPCLS;
+typedef std::map<std::string, std::map< boost::shared_ptr<const JPClamlam>, double, 
+					pawian::Collection::SharedPtrLess > > mapStrJPCLamLam;
+typedef std::map<std::string, double> mapStrDouble;
 
+struct fitParams {
+  mapStrJPCLS Mags;
+  mapStrJPCLS Phis;
+  mapStrJPCLamLam MagLamLams;
+  mapStrJPCLamLam PhiLamLams;
+  mapStrDouble Masses;
+  mapStrDouble Widths;
+  mapStrDouble gFactors;
+  mapStrDouble otherParams;
+};
 
 class FitParamsBase {
 
 public:
   FitParamsBase(); 
-  FitParamsBase(fitParams& theStartparams, fitParams& theErrorparams); 
 
   virtual ~FitParamsBase();
 
-  std::vector< boost::shared_ptr<const JPCLS> >  jpclsVec(int index);
-  std::vector< boost::shared_ptr<const JPClamlam> >  jpcLamLamVec(int index);
-  virtual const std::string ampName(int index)=0;
-  virtual const std::string ampLamLamName(int index) {return "noAmps";}
-  virtual const std::string massName(int index)=0;
-  virtual const std::string widthName(int index)=0;
-  virtual const std::string gFactorName(int index)=0;
-  virtual const std::string otherName(int index)=0;
-
-  virtual int ampIdxMin()=0;
-  virtual int ampIdxMax()=0;
-  virtual int ampLamLamIdxMin() {return 0;}
-  virtual int ampLamLamIdxMax() {return 0;}
-  virtual int massIdxMin()=0;
-  virtual int massIdxMax()=0;
-  virtual int gFactorIdxMin()=0;
-  virtual int gFactorIdxMax()=0;
-  virtual int otherIdxMin()=0;
-  virtual int otherIdxMax()=0;
-
-  virtual void setMnUsrParams(MnUserParameters& upar);
-  virtual fitParams getFitParamVal(const std::vector<double>& par);
-
-  int setAmpParams(std::map<int, std::map< boost::shared_ptr<const JPCLS>, double, 
-		   pawian::Collection::SharedPtrLess > >& ampMap, 
-		   const std::vector<double>& par, int counter, int index);
-
-  int setAmpLamLamParams(std::map<int, std::map< boost::shared_ptr<const JPClamlam>, 
-			 double, pawian::Collection::SharedPtrLess > >& ampLamLamMap, 
-			 const std::vector<double>& par, int counter, int index);
-
-  int setSingleParams(std::map<int, double>& theMap, const std::vector<double>& par, 
-		      int counter, int index);
-
+  virtual void setMnUsrParams(MnUserParameters& upar, fitParams& theValParams, fitParams& theErrParams);
+  virtual void getFitParamVal(const std::vector<double>& par, fitParams& theParams);
   virtual void printParams(fitParams& theParams);
   virtual void dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs);
 
 protected:
-  std::map < int, std::vector< boost::shared_ptr<const JPCLS> > > _jpclsMap;
-  std::map < int, std::vector< boost::shared_ptr<const JPClamlam> > > _jpcLamLamMap;
-  fitParams _startParams;
-  fitParams _errorParams;
+  const std::string _magSuffix;
+  const std::string _phiSuffix;
+  const std::string _massSuffix;
+  const std::string _widthSuffix;
+  const std::string _gFactorSuffix;
+  const std::string _otherParamSuffix;
 
-  std::vector<int> _ampIdx;
-  std::vector<int> _ampLamLamIdx;
-  std::vector<int> _massIdx;
-  std::vector<int> _widthIdx;
-  std::vector<int> _gFactorIdx;
-  std::vector<int> _otherIdx;
+private:
+  virtual void setMnUsrParamsJPCLamLam(MnUserParameters& upar, 
+				       mapStrJPCLamLam& startLamLamMagMap, 
+				       mapStrJPCLamLam& errLamLamMagMap, 
+				       const std::string& suffix);
+  virtual void setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix);
+  virtual void setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& lamLamMagMap, const std::string& suffix);
+  virtual void printJPCLSParams(fitParams& theParams, mapStrJPCLS& JPCLSMagMap, const std::string& suffix);
+  virtual void printDoubleParams(fitParams& theParams, mapStrDouble& doubleMap,  const std::string& suffix);
+  virtual void dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, mapStrJPCLamLam& errLamLamMap, const std::string& suffix);
+  virtual void dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, mapStrJPCLS& errLSMap, const std::string& suffix);
+  virtual void dumpDoubleParams(std::ostream& os, mapStrDouble& valDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& startLamLamMagMap, int& counter);
+  virtual void getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, int& counter);
+  virtual void getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, int& counter);
 };

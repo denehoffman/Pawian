@@ -6,12 +6,12 @@
 #include <cassert>
 // #include <TSystem.h>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include "PwaUtils/EvtDataBaseListNew.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 
 
 class EventList;
 
-class pbarpEventList : public EvtDataBaseListNew {
+class pbarpEventList : public EvtDataBaseList {
 
 public:
 
@@ -31,7 +31,7 @@ public:
 protected:
 
 
-  virtual void read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts);
+  virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts);
   
 private:
 

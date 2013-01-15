@@ -32,7 +32,7 @@ pbarpDecAmps::~pbarpDecAmps()
 {
 }
 
-complex<double> pbarpDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData){
+complex<double> pbarpDecAmps::XdecAmp(Spin lamX, EvtData* theData){
 int evtNo=theData->evtNo;
   
  if ( _cacheAmps && !_recalculate){
@@ -98,7 +98,7 @@ int evtNo=theData->evtNo;
   return result;
 }
 
-complex<double> pbarpDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtDataNew* theData){
+complex<double> pbarpDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtData* theData){
   complex<double> result(1.,0.);
   if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData);
   if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData);
@@ -106,7 +106,7 @@ complex<double> pbarpDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtDataNew* theD
 }
 
 
-void  pbarpDecAmps::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){
+void  pbarpDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -165,7 +165,7 @@ void pbarpDecAmps::initialize(){
   _Jdaughter2=(Spin) _decay->daughter2Part()->J();
 }
 
-bool pbarpDecAmps::checkRecalculation(fitParamsNew& theParamVal){
+bool pbarpDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
@@ -205,7 +205,7 @@ bool pbarpDecAmps::checkRecalculation(fitParamsNew& theParamVal){
 }
  
 
-void  pbarpDecAmps::updateFitParams(fitParamsNew& theParamVal){
+void  pbarpDecAmps::updateFitParams(fitParams& theParamVal){
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
 

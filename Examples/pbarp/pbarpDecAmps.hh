@@ -28,14 +28,14 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtDataNew* theData);
-  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtDataNew* theData);                                         
-  virtual void getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr);
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData);
+  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData);                                         
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
-  virtual bool checkRecalculation(fitParamsNew& theParamVal);
+  virtual bool checkRecalculation(fitParams& theParamVal);
   boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
-  void updateFitParams(fitParamsNew& theParamVal);
+  void updateFitParams(fitParams& theParamVal);
 
 protected:
   boost::shared_ptr<IsobarDecay> _decay; 

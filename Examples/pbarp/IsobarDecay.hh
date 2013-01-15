@@ -13,7 +13,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 
 class Particle;
-class EvtDataNew;
+class EvtData;
 
 class IsobarDecay {
 
@@ -38,7 +38,7 @@ public:
   bool withDynamics() {return _withDyn;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
-  void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtDataNew* evtData);
+  void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   void enableDynamics(std::string& dynString) {_withDyn=true;}
   virtual void print(std::ostream& os) const;
   

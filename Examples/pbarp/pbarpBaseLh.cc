@@ -6,9 +6,9 @@
 #include "Examples/pbarp/pbarpEnv.hh"
 #include "Examples/pbarp/pbarpReaction.hh"
 #include "Examples/pbarp/pbarpDecAmps.hh"
-#include "PwaUtils/EvtDataBaseListNew.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
-#include "PwaUtils/FitParamsBaseNew.hh"
+#include "PwaUtils/FitParamsBase.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
@@ -17,8 +17,8 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseListNew> theEvtList) :
-  AbsLhNew(theEvtList)
+pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+  AbsLh(theEvtList)
   ,_usePhasespace(false)
   ,_phasespaceKey("Phasespace")
 {
@@ -31,7 +31,7 @@ pbarpBaseLh::~pbarpBaseLh()
 {;
 }
 
-double pbarpBaseLh::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& theParamVal){
+double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
   double result=0.;
 
@@ -122,7 +122,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtDataNew* theData, fitParamsNew& theParam
 
 
 
-void pbarpBaseLh::getDefaultParams(fitParamsNew& fitVal, fitParamsNew& fitErr){ 
+void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -192,7 +192,7 @@ void pbarpBaseLh::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLS
 
 }
 
-void pbarpBaseLh::checkParamVariation(fitParamsNew& theParamVal){
+void pbarpBaseLh::checkParamVariation(fitParams& theParamVal){
   std::vector< boost::shared_ptr<pbarpDecAmps> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     (*it)->checkRecalculation(theParamVal);
@@ -206,7 +206,7 @@ void pbarpBaseLh::cacheTheAmps(){
   }
 }
 
-void pbarpBaseLh::updateFitParams(fitParamsNew& theParamVal){
+void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
 
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags["pbarp"];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis["pbarp"];

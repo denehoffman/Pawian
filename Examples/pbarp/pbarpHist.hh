@@ -13,7 +13,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/FitParamsBaseNew.hh"
+#include "PwaUtils/FitParamsBase.hh"
 
 
 //#include "TFile.h"
@@ -24,8 +24,8 @@
 //class TH2F;
 //class TH1F;
 
-class AbsLhNew;
-class EvtDataNew;
+class AbsLh;
+class EvtData;
 
 
 struct massHistData {
@@ -99,15 +99,15 @@ class TH1F;
 class pbarpHist {
 
 public:
-  pbarpHist(boost::shared_ptr<AbsLhNew>, fitParamsNew& theFitParams);
+  pbarpHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams);
   virtual ~pbarpHist();
 
 protected:
 
 private:
-  void fillMassHists(EvtDataNew* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
+  void fillMassHists(EvtData* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
 
-  void fillThetaHists(EvtDataNew* theData, double weight, std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
+  void fillThetaHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
 
  TFile* _theTFile;
 

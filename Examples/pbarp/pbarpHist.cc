@@ -11,8 +11,8 @@
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
-#include "PwaUtils/AbsLhNew.hh"
-#include "PwaUtils/EvtDataBaseListNew.hh"
+#include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -20,19 +20,19 @@
 #include "TNtuple.h"
 //#include "TMath.h"
 
-pbarpHist::pbarpHist(boost::shared_ptr<AbsLhNew> theLh, fitParamsNew& theFitParams) 
+pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) 
 {
   if(0==theLh){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
     exit(1);
   }
 
-  boost::shared_ptr<const EvtDataBaseListNew> theEvtList=theLh->getEventList();
-  const std::vector<EvtDataNew*> dataList=theEvtList->getDataVecs();
+  boost::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
+  const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
 
   initRootStuff();
   
-  std::vector<EvtDataNew*>::const_iterator it=dataList.begin();
+  std::vector<EvtData*>::const_iterator it=dataList.begin();
   while(it!=dataList.end())
     {
       double weight = (*it)->evtWeight;
@@ -41,7 +41,7 @@ pbarpHist::pbarpHist(boost::shared_ptr<AbsLhNew> theLh, fitParamsNew& theFitPara
       ++it;
     }
 
-  const std::vector<EvtDataNew*> mcList=theEvtList->getMcVecs();  
+  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();  
   it=mcList.begin();
   while(it!=mcList.end())
     {
@@ -155,7 +155,7 @@ void pbarpHist::initRootStuff(){
  std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess > _thetaDataHistMap;
 }
 
-void pbarpHist::fillMassHists(EvtDataNew* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
+void pbarpHist::fillMassHists(EvtData* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
 
   std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
@@ -173,7 +173,7 @@ void pbarpHist::fillMassHists(EvtDataNew* theData, double weight, std::map<boost
   
 }
 
-void pbarpHist::fillThetaHists(EvtDataNew* theData, double weight, std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
+void pbarpHist::fillThetaHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
 
   std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){

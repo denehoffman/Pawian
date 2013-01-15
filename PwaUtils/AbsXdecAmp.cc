@@ -1,3 +1,6 @@
+// AbsXdecAmp class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
 #include <getopt.h>
 #include <fstream>
 #include <string>
@@ -29,7 +32,7 @@ AbsXdecAmp::~AbsXdecAmp()
 {
 }
 
-bool AbsXdecAmp::checkRecalculation(fitParamsNew& theParamVal){
+bool AbsXdecAmp::checkRecalculation(fitParams& theParamVal){
   _recalculate=true;
   return _recalculate;
 }

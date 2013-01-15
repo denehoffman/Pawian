@@ -18,7 +18,7 @@
 
 
 pbarpEventList::pbarpEventList() :
-  EvtDataBaseListNew()
+  EvtDataBaseList()
 {
 }
 
@@ -27,7 +27,7 @@ pbarpEventList::~pbarpEventList()
 {
 }
 
-void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& theEvtList, double& evtWeightSum, int maxEvts){
+void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts){
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
@@ -66,7 +66,7 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& the
     std::string name_all_lab=getName(sortedFinalStateParticles);
 
 
-    EvtDataNew* evtData=new EvtDataNew();
+    EvtData* evtData=new EvtData();
     evtData->FourVecsString["all"]=V4_all_lab;
     //cache 4 vectors of inital state particles
     std::map<std::string, Vector4<double> >::iterator it4VecMap;
@@ -133,7 +133,7 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtDataNew*>& the
     // 	V4_Ks_HeliKsKlKpKm.X()*V4_Kl_HeliKsKlKpKm.Y()-V4_Ks_HeliKsKlKpKm.Y()*V4_Kl_HeliKsKlKpKm.X());
      
  
-    //     EvtDataNew* evtData=new EvtDataNew();
+    //     EvtData* evtData=new EvtData();
      evtData->FourVecsString[name_all_lab] = V4_all_lab;
      // evtData->FourVecsDec[enumJpsiGamX4V::V4_KsKlKpKm_HeliPsi]=V4_KsKlKpKm_HeliPsi;
      // evtData->FourVecsDec[enumJpsiGamX4V::V4_KsKl_HeliPsi]=V4_KsKl_HeliPsi;

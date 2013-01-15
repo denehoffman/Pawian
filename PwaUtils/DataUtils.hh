@@ -1,3 +1,6 @@
+// DataUtils class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
 #pragma once
 
 #include <boost/shared_ptr.hpp>
