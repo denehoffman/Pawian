@@ -35,26 +35,19 @@ pbarpDecAmps::~pbarpDecAmps()
 complex<double> pbarpDecAmps::XdecAmp(Spin lamX, EvtData* theData){
 int evtNo=theData->evtNo;
   
- if ( _cacheAmps && !_recalculate){
-   complex<double> result(0.,0.);    
-   //#ifdef _OPENMP
-   //#pragma omp critical
-   //   {
-   //#endif
-     result= _cachedAmpMap[evtNo][lamX];
-     //#ifdef _OPENMP     
-     //   }
-     //#endif
-   return result;
- }
+  if ( _cacheAmps && !_recalculate){
+    complex<double> result(0.,0.);
+    result= _cachedAmpMap[evtNo][lamX];
+    return result;
+  }
 
   complex<double> result(0.,0.);
-   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
-   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-     if( fabs(lamX) > (*it)->J ) continue;
-     double theMag=_currentParamMags[*it];
-     double thePhi=_currentParamPhis[*it];
-     complex<double> expi(cos(thePhi), sin(thePhi));
+  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+    if( fabs(lamX) > (*it)->J ) continue;
+    double theMag=_currentParamMags[*it];
+    double thePhi=_currentParamPhis[*it];
+    complex<double> expi(cos(thePhi), sin(thePhi));
 
     for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; lambda1++){
       for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; lambda2++){
@@ -62,9 +55,9 @@ int evtNo=theData->evtNo;
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 
 	complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-          *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
-          *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
-          *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+	   *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
+	   *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
+	   *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
 	// std::cout << "amp: " << amp << std::endl;
 	amp *=daughterAmp(lambda1, lambda2, theData);
@@ -72,28 +65,29 @@ int evtNo=theData->evtNo;
 	result+=amp;
       }
     }
-   }
+  }
 
-   if(_withDyn){
-     Vector4<double> mass4Vec(0.,0.,0.,0.);
-     std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
+  if(_withDyn){
+    Vector4<double> mass4Vec(0.,0.,0.,0.);
+    std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
 
-     std::vector<Particle*>::iterator itPartVec;
-     for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
+    std::vector<Particle*>::iterator itPartVec;
+    for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
        mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
-     }
-     result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);     
-   }
-    if ( _cacheAmps){    
+    }
+    result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
+  }
+
+  if ( _cacheAmps){
 #ifdef _OPENMP
 #pragma omp critical
-      {
+    {
 #endif
-        _cachedAmpMap[evtNo][lamX]=result;
+      _cachedAmpMap[evtNo][lamX]=result;
 #ifdef _OPENMP
-      }
-#endif
     }
+#endif
+  }
 
   return result;
 }

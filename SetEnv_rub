@@ -1,5 +1,5 @@
-#setenv ROOTSYS /opt/root/5.28-00h/Linux26SL6_x86_64_gcc444/
-setenv ROOTSYS /opt/root/5.26-00b/Linux26SL5_x86_64_gcc412
+setenv ROOTSYS /opt/root/5.28-00h/Linux26SL6_x86_64_gcc444/
+#setenv ROOTSYS /opt/root/5.26-00b/Linux26SL5_x86_64_gcc412
 #setenv ROOTSYS /opt/root/5.34-01/Linux26SL6_x86_64_gcc444
 
 setenv CMAKE_SOURCE_DIR `pwd | sed -e 's/\/nfs//'`

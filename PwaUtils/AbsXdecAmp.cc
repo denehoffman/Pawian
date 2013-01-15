@@ -25,6 +25,7 @@ AbsXdecAmp::AbsXdecAmp(const std::string& name, const std::vector<std::string>& 
 
 AbsXdecAmp::AbsXdecAmp(const std::string& name) :
  _name(name)
+ ,_recalculate(true)
 {
 }
 
