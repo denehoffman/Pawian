@@ -20,7 +20,8 @@
 #include "TNtuple.h"
 //#include "TMath.h"
 
-pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) 
+pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string suffix) :
+   rootFileNameSuffix(suffix)
 {
   if(0==theLh){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
@@ -86,8 +87,9 @@ pbarpHist::~pbarpHist(){
 }
 
 void pbarpHist::initRootStuff(){
-  std::string rootFileName="./pawianHists.root";
-  _theTFile=new TFile(rootFileName.c_str(),"recreate");
+  std::ostringstream rootFileName;
+  rootFileName << "./pawianHists" << rootFileNameSuffix << ".root";
+  _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
 
   std::vector<std::vector<std::string> > histMassNameVec=pbarpEnv::instance()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;

@@ -99,7 +99,7 @@ class TH1F;
 class pbarpHist {
 
 public:
-  pbarpHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams);
+  pbarpHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams, std::string suffix);
   virtual ~pbarpHist();
 
 protected:
@@ -109,6 +109,7 @@ private:
 
   void fillThetaHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
 
+ std::string rootFileNameSuffix;
  TFile* _theTFile;
 
  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;

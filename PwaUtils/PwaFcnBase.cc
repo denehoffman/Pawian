@@ -34,9 +34,9 @@ PwaFcnBase::~PwaFcnBase()
 
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
-  
 
   fitParams theFitParmValTmp=_defaultFitValParms;
+
 
 #ifdef _OPENMP
 #pragma omp critical
@@ -66,7 +66,7 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
     
     if (  _fcnCounter%200 == 0) {
       std::ofstream theStream (_currentResFileName.c_str());
-      _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, theFitParmValTmp);
+      _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
     }
 
 #ifdef _OPENMP  
