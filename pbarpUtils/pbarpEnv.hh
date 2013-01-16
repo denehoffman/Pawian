@@ -40,6 +40,8 @@ public:
   boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
+
+  const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
 protected:  
 
   pbarpEnv();
@@ -56,4 +58,6 @@ protected:
   boost::shared_ptr<pbarpReaction> _pbarpReaction;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
+
+  std::string _outputFileNameSuffix;
 };

@@ -149,8 +149,10 @@ int main(int __argc,char *__argv[]){
     fitParams defaultVal;
     fitParams defaultErr;
     theLhPtr->getDefaultParams(defaultVal, defaultErr);
-    std::string defaultparamsname = "defaultparams.dat";
-    std::ofstream theStreamDefault ( defaultparamsname.c_str() );
+
+    std::stringstream defaultparamsname;
+    defaultparamsname << "defaultparams" << pbarpEnv::instance()->outputFileNameSuffix() << ".dat";
+    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
     
     theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
     return 0;
@@ -158,7 +160,7 @@ int main(int __argc,char *__argv[]){
 
 
   std::string paramStreamerPath=theAppParams.fitParamFile();
-  std::string outputFileNameSuffix=theAppParams.outputFileNameSuffix();
+  std::string outputFileNameSuffix= pbarpEnv::instance()->outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
   fitParams theStartparams=theParamStreamer.getFitParamVal();
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
@@ -185,7 +187,7 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    pbarpHist theHist(theLhPtr, theStartparams, outputFileNameSuffix);
+    pbarpHist theHist(theLhPtr, theStartparams);
 
     double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);

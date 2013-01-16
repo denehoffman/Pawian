@@ -41,6 +41,9 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   }
 
   _alreadySetUp=true;
+  // common options (move to base class later)
+  _outputFileNameSuffix = thePbarpParser.outputFileNameSuffix();
+
   // pdtTable
   PdtParser pdtParser;
   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
