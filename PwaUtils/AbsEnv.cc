@@ -49,6 +49,77 @@ void AbsEnv::setup(ParserBase* theParser){
     exit(1);
   }
 
+  //final state particles
+  const std::vector<std::string> finalStateParticleStr=theParser->finalStateParticles();
+  
+  std::vector<std::string>::const_iterator itStr;
+  for ( itStr = finalStateParticleStr.begin(); itStr != finalStateParticleStr.end(); ++itStr){
+    Particle* currentParticle = _particleTable->particle(*itStr);
+    _finalStateParticles.push_back(currentParticle);
+  }
 
+  _noFinalStateParticles= (int) _finalStateParticles.size();
+
+  //decays
+
+  std::vector<std::string> decaySystem= theParser->decaySystem();
+  for ( itStr = decaySystem.begin(); itStr != decaySystem.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+
+    std::string motherStr;
+    stringStr >> motherStr;
+    Particle* motherParticle = _particleTable->particle(motherStr);
+    if( 0==motherParticle){
+      Alert << "mother particle\t" << motherStr << "\tdoes not exist in pdtTable" << endmsg;
+      exit(1);
+    }
+    std::string daughter1Str;
+    stringStr >> daughter1Str;
+    Particle* daughter1Particle = _particleTable->particle(daughter1Str);
+    if( 0==daughter1Particle){
+      Alert << "first daughter particle\t" << daughter1Str << "\tdoes not exist in pdtTable" << endmsg;
+      exit(1);
+    }
+
+    std::string daughter2Str;
+    stringStr >> daughter2Str;
+    Particle* daughter2Particle = _particleTable->particle(daughter2Str);
+    if( 0==daughter2Particle){
+      Alert << "second daughter particle\t" << daughter2Str << "\tdoes not exist in pdtTable" << endmsg;
+      exit(1);
+    }
+
+    boost::shared_ptr<IsobarDecay> tmpDec(new IsobarDecay(motherParticle, daughter1Particle, daughter2Particle));
+ 
+    _decList->addDecay(tmpDec);
+  }
+
+  //add dynamics
+
+  std::vector<boost::shared_ptr<IsobarDecay> > isoDecList= _decList->getList();
+ 
+  std::vector<std::string> decDynVec = theParser->decayDynamics();
+  for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+
+    std::string particleStr;
+    stringStr >> particleStr;
+
+    std::string dynStr;
+    stringStr >> dynStr;
+
+    std::vector<boost::shared_ptr<IsobarDecay> >::iterator itDyn;
+    for (itDyn=isoDecList.begin(); itDyn!=isoDecList.end(); ++itDyn){
+      std::string theDecName=(*itDyn)->name();
+      std::string toFind=particleStr+"To";
+      size_t found;
+      found=theDecName.find(toFind);
+      if (found!=string::npos){
+	(*itDyn)->enableDynamics(dynStr);
+      }
+    }
+  }
 }
 

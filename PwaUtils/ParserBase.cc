@@ -62,6 +62,11 @@ ParserBase::ParserBase(int argc,char **argv)
       ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
       ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
       ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
+      ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
+      ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
+      ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
+      ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
+      ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
       ;
 
 
@@ -161,8 +166,36 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
           std::cout << "minuit parameter\t" << (*it) << "\t fixed\n";
       }
       std::cout << std::endl;
-    }
 
+      std::cout << "the final state particles are:" << std::endl;
+      //      std::vector<std::string>::const_iterator it;
+      for (it=_finalStateParticles.begin(); it!=_finalStateParticles.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
+      std::cout << "\ndecay system:" << std::endl;
+      for (it=_decaySystem.begin(); it!=_decaySystem.end();++it){
+	std::cout << (*it) << "\n";
+      }
+      
+      std::cout << "\ndecay dynamics:" << std::endl;
+      for (it=_dynamics.begin(); it!=_dynamics.end();++it){
+	std::cout << (*it) << "\n";
+      }
+      
+      std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
+      for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
+      std::cout << "\nreplaced mass key" << std::endl;
+      for (it=_replaceMassKey.begin(); it!=_replaceMassKey.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
+      
+    }
+    
 
 
   }

@@ -51,6 +51,11 @@ public:
   const bool cacheAmps() const {return _cacheAmps;}
   const bool useEvtWeight() const {return _useEvtWeight; }
   const std::string pdgTableFile() const {return _pdgTableFile;}
+  const std::vector<std::string>& finalStateParticles() const { return _finalStateParticles; }
+  const std::vector<std::string>& decaySystem() const { return _decaySystem; }
+  const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
+  const std::vector<std::string>& replaceMassKey() const { return _replaceMassKey; }
+  const std::vector<std::string>& decayDynamics() const { return _dynamics;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -74,5 +79,10 @@ protected:
   po::options_description* _common;
   po::options_description* _config;
   bool _useEvtWeight;
-  std::string _pdgTableFile; 
+  std::string _pdgTableFile;
+  std::vector<std::string> _finalStateParticles;
+  std::vector<std::string> _decaySystem;
+  std::vector<std::string> _dynamics;
+  std::vector<std::string> _replaceParSuffix;
+  std::vector<std::string>  _replaceMassKey;
 };
