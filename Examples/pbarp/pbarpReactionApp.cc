@@ -53,13 +53,13 @@ int main(int __argc,char *__argv[]){
   setvbuf(stdout, NULL, _IONBF, 0);
 
   // Parse the command line
-  static pbarpParser theAppParams(__argc, __argv);
+  pbarpParser* theAppParams=new pbarpParser(__argc, __argv);
 
   // Set the desired error logging mode
-  setErrLogMode(theAppParams.getErrLogMode());
+  setErrLogMode(theAppParams->getErrLogMode());
   
 #ifdef _OPENMP
-  const int noOfThreads=theAppParams.noOfThreads();
+  const int noOfThreads=theAppParams->noOfThreads();
   omp_set_num_threads(noOfThreads);
 #endif
 
@@ -73,14 +73,14 @@ int main(int __argc,char *__argv[]){
   // boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
   // boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
 
-  std::string mode=theAppParams.mode();
+  std::string mode=theAppParams->mode();
 
   boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
 
 
 
-  const std::string datFile=theAppParams.dataFile();
-  const std::string mcFile=theAppParams.mcFile();
+  const std::string datFile=theAppParams->dataFile();
+  const std::string mcFile=theAppParams->mcFile();
   Info << "data file: " << datFile ;  // << endmsg;
   Info << "mc file: " << mcFile ;  // << endmsg;
   
@@ -90,7 +90,7 @@ int main(int __argc,char *__argv[]){
   std::vector<std::string> mcFileNames;
   mcFileNames.push_back(mcFile);  
 
-  bool withEvtWeight=theAppParams.useEvtWeight();
+  bool withEvtWeight=theAppParams->useEvtWeight();
   Info << "EvtWeight: " << withEvtWeight << endmsg;  
 
   
@@ -139,7 +139,7 @@ int main(int __argc,char *__argv[]){
 
 
   boost::shared_ptr<pbarpEventList> pbarpEventListPtr(new pbarpEventList());
-  pbarpEventListPtr->ratioMcToData(theAppParams.ratioMcToData());
+  pbarpEventListPtr->ratioMcToData(theAppParams->ratioMcToData());
   pbarpEventListPtr->read(eventsData, mcData);
   // pbarpEventListPtr->read4Vecs();
 
@@ -159,7 +159,7 @@ int main(int __argc,char *__argv[]){
   }
 
 
-  std::string paramStreamerPath=theAppParams.fitParamFile();
+  std::string paramStreamerPath=theAppParams->fitParamFile();
   std::string outputFileNameSuffix= pbarpEnv::instance()->outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
   fitParams theStartparams=theParamStreamer.getFitParamVal();
@@ -174,7 +174,7 @@ int main(int __argc,char *__argv[]){
     std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
   }
 
-  const std::vector<std::string> fixedParams=theAppParams.fixedParams();  
+  const std::vector<std::string> fixedParams=theAppParams->fixedParams();  
   const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();
 
   if (mode=="qaMode"){
@@ -220,7 +220,7 @@ int main(int __argc,char *__argv[]){
   
 
   if (mode=="pwa"){
-    bool cacheAmps = theAppParams.cacheAmps();
+    bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
     std::vector<std::string>::const_iterator itFix;

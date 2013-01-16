@@ -13,13 +13,11 @@ using namespace std;
 pbarpParser::pbarpParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_lMax(3)
-  ,_pdgTableFile("/Particle/pdt.table")
 {
   po::options_description common("Common Options");
   common.add_options()
     ("lmax", po::value<unsigned>(&_lMax)->default_value(_lMax),"choose lmax.")
-    ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
-   ;
+    ;
   
   _common->add(common);
   
@@ -43,7 +41,7 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
   std::cout << "Maximum orbital momentum for pbarp system\t Lmax=\t" << _lMax <<std::endl;
-  std::cout << "pdg table:\t" << _pdgTableFile <<std::endl;
+  //  std::cout << "pdg table:\t" << _pdgTableFile <<std::endl;
   std::cout << "the final state particles are:" << std::endl;
   std::vector<std::string>::const_iterator it;
   for (it=_finalStateParticles.begin(); it!=_finalStateParticles.end();++it){

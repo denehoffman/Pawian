@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "pbarpUtils/pbarpEnv.hh"
+#include "pbarpUtils/pbarpParser.hh"
 #include "PwaUtils/IsobarDecay.hh"
 #include "PwaUtils/IsobarDecayList.hh"
 #include "pbarpUtils/pbarpReaction.hh"
@@ -24,43 +25,37 @@ pbarpEnv* pbarpEnv::instance()
 }
 
 pbarpEnv::pbarpEnv() :
-  _alreadySetUp(false)
+  AbsEnv()
   ,_lmax(0)
-  ,_noFinalStateParticles(0)
-  ,_decList(new IsobarDecayList())
-  ,_prodDecList(new IsobarDecayList())
 {
 }
 pbarpEnv::~pbarpEnv(){
 }
 
-void pbarpEnv::setup(pbarpParser& thePbarpParser){
-  if(_alreadySetUp){
-    Alert << " pbarpEnv already set up" << endmsg;
-    exit(1);
-  }
+void pbarpEnv::setup(pbarpParser* thePbarpParser){
 
-  _alreadySetUp=true;
-  // common options (move to base class later)
-  _outputFileNameSuffix = thePbarpParser.outputFileNameSuffix();
+  AbsEnv::setup(thePbarpParser);
 
-  // pdtTable
-  PdtParser pdtParser;
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
-  std::string pdtFileRelPath=thePbarpParser.pdgTableFile(); 
-  std::string pdtFile(theSourcePath+pdtFileRelPath);
-  _particleTable = new ParticleTable;
+  // // common options (move to base class later)
+  // _outputFileNameSuffix = thePbarpParser->outputFileNameSuffix();
+
+  // // pdtTable
+  // PdtParser pdtParser;
+  // std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
+  // std::string pdtFileRelPath=thePbarpParser->pdgTableFile(); 
+  // std::string pdtFile(theSourcePath+pdtFileRelPath);
+  // _particleTable = new ParticleTable;
   
-  if (!pdtParser.parse(pdtFile, *_particleTable)) {
-    Alert << "can not parse particle table " << pdtFile << endmsg;
-    exit(1);
-  }
+  // if (!pdtParser.parse(pdtFile, *_particleTable)) {
+  //   Alert << "can not parse particle table " << pdtFile << endmsg;
+  //   exit(1);
+  // }
 
   //Lmax
-  _lmax=thePbarpParser.getLMax();
+  _lmax=thePbarpParser->getLMax();
 
   //final state particles
-  const std::vector<std::string> finalStateParticleStr=thePbarpParser.finalStateParticles();
+  const std::vector<std::string> finalStateParticleStr=thePbarpParser->finalStateParticles();
   
   std::vector<std::string>::const_iterator itStr;
   for ( itStr = finalStateParticleStr.begin(); itStr != finalStateParticleStr.end(); ++itStr){
@@ -71,7 +66,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   _noFinalStateParticles= (int) _finalStateParticles.size();
   
     //decays
-  std::vector<std::string> decaySystem= thePbarpParser.decaySystem();
+  std::vector<std::string> decaySystem= thePbarpParser->decaySystem();
   for ( itStr = decaySystem.begin(); itStr != decaySystem.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
@@ -108,7 +103,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
 
   std::vector<boost::shared_ptr<IsobarDecay> > isoDecList= _decList->getList();
  
-  std::vector<std::string> decDynVec = thePbarpParser.decayDynamics();
+  std::vector<std::string> decDynVec = thePbarpParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
@@ -132,7 +127,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   }
 
   //produced particle pairs
-  std::vector<std::string> productionSystem = thePbarpParser.productionSystem();
+  std::vector<std::string> productionSystem = thePbarpParser->productionSystem();
 
   for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
     std::stringstream stringStr;
@@ -171,7 +166,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   }
 
   //set suffixes
-  std::vector<std::string> suffixVec = thePbarpParser.replaceSuffixNames();
+  std::vector<std::string> suffixVec = thePbarpParser->replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;
 
   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -194,7 +189,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
   }
 
   //replace mass key
-  std::vector<std::string> replMassKeyVec = thePbarpParser.replaceMassKey();
+  std::vector<std::string> replMassKeyVec = thePbarpParser->replaceMassKey();
   std::map<std::string, std::string> decRepMassKeyNames;
 
   for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -214,7 +209,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
 
 
 
-  std::vector<std::string> theHistMassNames=thePbarpParser.histMassNames();
+  std::vector<std::string> theHistMassNames=thePbarpParser->histMassNames();
   //fill vector histMassSystems
   for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){
     std::stringstream stringStr;
@@ -228,7 +223,7 @@ void pbarpEnv::setup(pbarpParser& thePbarpParser){
     _histMassSystems.push_back(currentStringVec);
   }
 
-  std::vector<std::string> theHistAngleNames=thePbarpParser.histAngleNames();
+  std::vector<std::string> theHistAngleNames=thePbarpParser->histAngleNames();
   //fill vector histMassSystems
   for ( itStr = theHistAngleNames.begin(); itStr != theHistAngleNames.end(); ++itStr){
     std::stringstream stringStr;

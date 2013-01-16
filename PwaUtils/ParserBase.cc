@@ -26,6 +26,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _common(new po::options_description("Common Options"))
       , _config(new po::options_description("Configuration file options"))
       ,_useEvtWeight(false)
+      ,_pdgTableFile("/Particle/pdtNew.table")
      {
        string strErrLogMode="debug";
     // Check the command line options. Uses the Boost program options library.
@@ -54,6 +55,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
       ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
       ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
+      ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
       ;
 
     _config->add_options()
@@ -142,7 +144,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
-		<< "use event weight: " << _useEvtWeight  << "\n\n"
+		<< "use event weight: " << _useEvtWeight  << "\n\n" 
+		<< "pdg table: " << _pdgTableFile << "\n\n" 
             << endl;
 
 

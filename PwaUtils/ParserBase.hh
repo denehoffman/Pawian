@@ -50,6 +50,7 @@ public:
   const int ratioMcToData() const {return _ratioMcToData;}
   const bool cacheAmps() const {return _cacheAmps;}
   const bool useEvtWeight() const {return _useEvtWeight; }
+  const std::string pdgTableFile() const {return _pdgTableFile;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -73,4 +74,5 @@ protected:
   po::options_description* _common;
   po::options_description* _config;
   bool _useEvtWeight;
+  std::string _pdgTableFile; 
 };
