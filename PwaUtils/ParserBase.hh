@@ -41,6 +41,7 @@ public:
   const std::string dataFile() const {return _dataFile;}
   const std::string mcFile() const {return _mcFile;}
   const std::string fitParamFile() const {return _paramFile;}
+  const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
   const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
@@ -60,6 +61,7 @@ protected:
   std::string _paramFile;
   std::string _startHypo;
   std::string _mode;		  
+  std::string _outputFileNameSuffix;
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
   bool _verbose;

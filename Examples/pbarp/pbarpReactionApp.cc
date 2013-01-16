@@ -49,6 +49,9 @@ int main(int __argc,char *__argv[]){
   clock_t start, end;
   start= clock();
 
+  // Disable output buffering
+  setvbuf(stdout, NULL, _IONBF, 0);
+
   // Parse the command line
   static pbarpParser theAppParams(__argc, __argv);
 
@@ -155,11 +158,12 @@ int main(int __argc,char *__argv[]){
 
 
   std::string paramStreamerPath=theAppParams.fitParamFile();
+  std::string outputFileNameSuffix=theAppParams.outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
   fitParams theStartparams=theParamStreamer.getFitParamVal();
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
-  PwaFcnBase theFcn(theLhPtr, theFitParamBase);  
+  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
   MnUserParameters upar;
   theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
   
@@ -181,7 +185,7 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    pbarpHist theHist(theLhPtr, theStartparams);  
+    pbarpHist theHist(theLhPtr, theStartparams, outputFileNameSuffix);
 
     double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
@@ -194,8 +198,10 @@ int main(int __argc,char *__argv[]){
     Info << "AIC:\t" << AICcriterion << endmsg;
     Info << "AICc:\t" << AICccriterion << endmsg;
     
-    std::string qaSummaryFileName = "qaSummary.dat";
-    std::ofstream theQaStream ( qaSummaryFileName.c_str() );
+    std::ostringstream qaSummaryFileName;
+    qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
+
+    std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
     theQaStream << "BIC\t" << BICcriterion << "\n";
     theQaStream << "AICa\t" << AICcriterion << "\n";
     theQaStream << "AICc\t" << AICccriterion << "\n";
@@ -245,9 +251,10 @@ int main(int __argc,char *__argv[]){
     fitParams finalFitErrs=theErrorparams;
     theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
     
-    std::string finalResultname = "finalResult.dat";
-    std::ofstream theStream ( finalResultname.c_str() );
-    //std::ofstream theStream ( "finalResult.dat");
+    std::ostringstream finalResultname;
+    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+
+    std::ofstream theStream ( finalResultname.str().c_str() );
     theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
     
     MnUserCovariance theCovMatrix = min.UserCovariance();
