@@ -32,6 +32,7 @@ public:
   void setup(pbarpParser* thePbarpParser);
   // ParticleTable* particleTable() {return _particleTable;}
 
+  const float pbarMomentum() const {return _pbarMomentum;}
   // const int lmax() const {return _lmax;}
   // const int noFinalStateParticles() {return _noFinalStateParticles;}
   // std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
@@ -42,13 +43,13 @@ public:
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
 
-  const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
 protected:  
 
   pbarpEnv();
   static pbarpEnv* _instance;
   //  bool _alreadySetUp;
   int _lmax;
+  float _pbarMomentum;
   // int _noFinalStateParticles;
 
   // ParticleTable* _particleTable;

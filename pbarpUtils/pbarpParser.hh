@@ -17,6 +17,7 @@ class pbarpParser : public ParserBase
   virtual ~pbarpParser(){;}
 
   const unsigned int getLMax() const { return _lMax; }
+  const float getpbarMomentum() const { return _pbarMomentum; } 
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
@@ -25,6 +26,7 @@ class pbarpParser : public ParserBase
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   unsigned int _lMax;
+  float _pbarMomentum;
   std::vector<std::string> _productionSystem;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;

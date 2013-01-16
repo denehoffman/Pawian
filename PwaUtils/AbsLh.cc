@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 #include "PwaUtils/AbsLh.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -89,7 +90,7 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
     -logLH_data
     +weightSum*logLH_mc_Norm;
   
-  Info << "current LH = " << logLH << endmsg;
+  Info << "current LH = " << std::setprecision(10) << logLH << endmsg;
   return logLH;
   
 }

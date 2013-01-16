@@ -27,6 +27,7 @@ pbarpEnv* pbarpEnv::instance()
 pbarpEnv::pbarpEnv() :
   AbsEnv()
   ,_lmax(0)
+  ,_pbarMomentum(0)
 {
 }
 pbarpEnv::~pbarpEnv(){
@@ -35,6 +36,9 @@ pbarpEnv::~pbarpEnv(){
 void pbarpEnv::setup(pbarpParser* thePbarpParser){
 
   AbsEnv::setup(thePbarpParser);
+
+  //Antiproton momentum
+  _pbarMomentum = thePbarpParser->getpbarMomentum();
 
   //Lmax
   _lmax=thePbarpParser->getLMax();

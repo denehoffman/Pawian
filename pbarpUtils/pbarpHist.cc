@@ -103,15 +103,29 @@ void pbarpHist::initRootStuff(){
     std::string histName="data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
-    double massMin=-0.05;
-    double massMax=2.;
+    double pbarMom = pbarpEnv::instance()->pbarMomentum();
+    double massMin=0;
+    double massMax = sqrt(pow(sqrt(0.9383*0.9383 + pbarMom*pbarMom) + 0.9383, 2) - pbarMom*pbarMom);
+
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    std::vector<std::string>::iterator itStr2;
-    for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
-      Particle* currentParticle=pbarpEnv::instance()->particleTable()->particle(*itStr2);
-      massMin+= currentParticle->mass(); 
-      massMax+= currentParticle->mass(); 
+    std::vector<Particle*> allFsp =  pbarpEnv::instance()->finalStateParticles();
+    std::vector<Particle*>::iterator itAllFsp;
+
+    for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
+       bool isObserver = true;
+       std::vector<std::string>::iterator itStr2;
+       for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
+	  if(*itStr2 == (*itAllFsp)->name())
+	     isObserver = false;
+       }
+       if(isObserver)
+	  massMax-= (*itAllFsp)->mass();
+       else
+	  massMin+= (*itAllFsp)->mass();
     }
+
+    std::cout << "Setting massMin to " << massMin << std::endl;
+    std::cout << "Setting massMax to " << massMax << std::endl;
 
     TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
     currentMassDataHist->Sumw2();

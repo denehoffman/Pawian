@@ -58,7 +58,7 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
   {
 #endif
     _fcnCounter++;
-    DebugMsg << "logLh= " << result <<endmsg;
+    //    DebugMsg << "logLh= " << result <<endmsg;
     
     if (  _fcnCounter%50 == 0) {  
       _fitParamsBasePtr->printParams(theFitParmValTmp);

@@ -13,10 +13,12 @@ using namespace std;
 pbarpParser::pbarpParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_lMax(3)
+  ,_pbarMomentum(2.)
 {
   po::options_description common("Common Options");
   common.add_options()
     ("lmax", po::value<unsigned>(&_lMax)->default_value(_lMax),"choose lmax.")
+    ("pbarmom", po::value<float>(&_pbarMomentum)->default_value(_pbarMomentum),"antiproton momentum")
     ;
   
   _common->add(common);
@@ -36,7 +38,9 @@ pbarpParser::pbarpParser(int argc,char **argv):
 bool pbarpParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
-  std::cout << "Maximum orbital momentum for pbarp system\t Lmax=\t" << _lMax <<std::endl;
+
+  std::cout << "Antiproton momentum in lab frame\t pbarmom = " << _pbarMomentum << std::endl;
+  std::cout << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax <<std::endl;
 
   std::vector<std::string>::const_iterator it;
   std::cout << "\nproduction system:" << std::endl;
