@@ -5,7 +5,7 @@
 #include <vector>
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/AbsStates.hh"
-#include "PwaUtils/pbarpStatesLS.hh"
+#include "pbarpUtils/pbarpStatesLS.hh"
 #include "PwaUtils/DataUtils.hh"
 
 int main(int __argc,char *__argv[]){

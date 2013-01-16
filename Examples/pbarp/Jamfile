@@ -6,6 +6,7 @@ lib pbarp :
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
         $(TOP)/PwaUtils//PwaUtils
+        $(TOP)/pbarpUtils//pbarpUtils
         $(TOP)/Particle//Particle
         $(TOP)/Event//Event
         :  

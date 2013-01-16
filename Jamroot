@@ -39,6 +39,7 @@ build-project qft++ ;
 build-project Utils ;
 build-project ErrLogger ;
 build-project PwaUtils ;
+build-project pbarpUtils ;
 build-project Particle ;
 build-project Event ;
 build-project PwaDynamics ;
