@@ -92,7 +92,6 @@ void pbarpHist::initRootStuff(){
   std::ostringstream rootFileName;
   rootFileName << "./pawianHists" << pbarpEnv::instance()->outputFileNameSuffix() << ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
-  std::cout << "creating file with name" << rootFileName.str() <<std::endl;
 
   std::vector<std::vector<std::string> > histMassNameVec=pbarpEnv::instance()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
