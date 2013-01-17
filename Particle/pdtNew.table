@@ -140,3 +140,9 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 #
 # End gauge bosons
 #
+# Start Baryons
+#
+# type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C    mass    width   dyn.f   	comment
+#
+Baryon proton		p			3  2  1  0  0	1    2  0  0	0.93827 0.0     undefined	[none]
+Baryon antiproton	\overline{p}	       -3  2 -1  0  0   2   -2  0  0    0.93827 0.0     undefined	[none] 	

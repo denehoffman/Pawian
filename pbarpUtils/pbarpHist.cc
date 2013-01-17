@@ -40,7 +40,7 @@ pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams)
     {
       double weight = (*it)->evtWeight;
       fillMassHists((*it), weight, _massDataHistMap);
-      fillThetaHists((*it), weight, _thetaDataHistMap);
+      fillAngleHists((*it), weight, _angleDataHistMap);
       ++it;
     }
 
@@ -50,11 +50,11 @@ pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams)
     {
       double evtWeight = (*it)->evtWeight;
       fillMassHists((*it), evtWeight, _massMcHistMap);
-      fillThetaHists((*it), evtWeight, _thetaMcHistMap);
+      fillAngleHists((*it), evtWeight, _angleMcHistMap);
 
       double fitWeight= theLh->calcEvtIntensity( (*it), theFitParams );
       fillMassHists((*it), evtWeight*fitWeight, _massFitHistMap);
-      fillThetaHists((*it), evtWeight*fitWeight, _thetaFitHistMap);
+      fillAngleHists((*it), evtWeight*fitWeight, _angleFitHistMap);
       ++it;
     }
 
@@ -77,9 +77,10 @@ pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams)
     itMassMap->second->Scale(scaleFactor);
   }
 
-  std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
-  for(itAngleMap= _thetaFitHistMap.begin(); itAngleMap!=_thetaFitHistMap.end(); ++itAngleMap){
-    itAngleMap->second->Scale(scaleFactor);
+  std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
+  for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){
+    itAngleMap->second.first->Scale(scaleFactor);
+    itAngleMap->second.second->Scale(scaleFactor);
   }
 }
 
@@ -103,9 +104,10 @@ void pbarpHist::initRootStuff(){
     std::string histName="data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
+    double pMass = pbarpEnv::instance()->particleTable()->particle("proton")->mass();
     double pbarMom = pbarpEnv::instance()->pbarMomentum();
-    double massMin=0;
-    double massMax = sqrt(pow(sqrt(0.9383*0.9383 + pbarMom*pbarMom) + 0.9383, 2) - pbarMom*pbarMom);
+    double massMin = 0;
+    double massMax = sqrt(pow(sqrt(pMass*pMass + pbarMom*pbarMom) + pMass, 2) - pbarMom*pbarMom);
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
     std::vector<Particle*> allFsp =  pbarpEnv::instance()->finalStateParticles();
@@ -119,13 +121,13 @@ void pbarpHist::initRootStuff(){
 	     isObserver = false;
        }
        if(isObserver)
-	  massMax-= (*itAllFsp)->mass();
+	  massMax -= (*itAllFsp)->mass();
        else
-	  massMin+= (*itAllFsp)->mass();
+	  massMin += (*itAllFsp)->mass();
     }
 
-    std::cout << "Setting massMin to " << massMin << std::endl;
-    std::cout << "Setting massMax to " << massMax << std::endl;
+    massMax += (massMax - massMin) * 0.02;
+    massMin -= (massMax - massMin) * 0.02;
 
     TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
     currentMassDataHist->Sumw2();
@@ -151,26 +153,41 @@ void pbarpHist::initRootStuff(){
     std::string tmpBaseName= (*itAngleVec)->_name;
     boost::replace_all(tmpBaseName,"+","p");
     boost::replace_all(tmpBaseName,"-","m");
-    std::string histName="data"+tmpBaseName;
-    std::string histDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (data)";
-    TH1F* currentThetaAngleDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., -1., 1.);
+    std::string histThetaName="dataTheta"+tmpBaseName;
+    std::string histPhiName="dataPhi"+tmpBaseName;
+    std::string histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (data)";
+    std::string histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (data)";
+
+    TH1F* currentThetaAngleDataHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleDataHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
     currentThetaAngleDataHist->Sumw2();
-    _thetaDataHistMap[*itAngleVec]=currentThetaAngleDataHist;
+    currentPhiAngleDataHist->Sumw2();
+    _angleDataHistMap[*itAngleVec]=std::pair<TH1F*, TH1F*>(currentThetaAngleDataHist, currentPhiAngleDataHist);
 
-    histName="MC"+tmpBaseName;
-    histDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (MC)";
-    TH1F* currentThetaAngleMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., -1., 1.);
+    histThetaName="MCTheta"+tmpBaseName;
+    histPhiName="MCPhi"+tmpBaseName;
+    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (MC)";
+    histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (MC)";
+
+    TH1F* currentThetaAngleMcHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleMcHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
     currentThetaAngleMcHist->Sumw2();
-    _thetaMcHistMap[*itAngleVec]=currentThetaAngleMcHist;
+    currentPhiAngleMcHist->Sumw2();
+    _angleMcHistMap[*itAngleVec]=std::pair<TH1F*, TH1F*>(currentThetaAngleMcHist, currentPhiAngleMcHist);
 
-    histName="Fit"+tmpBaseName;
-    histDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (fit)";
-    TH1F* currentThetaAngleFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., -1., 1.);
+    histThetaName="FitTheta"+tmpBaseName;
+    histPhiName="FitPhi"+tmpBaseName;
+    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (fit)";
+    histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (fit)";
+
+    TH1F* currentThetaAngleFitHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleFitHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
     currentThetaAngleFitHist->Sumw2();
-    _thetaFitHistMap[*itAngleVec]=currentThetaAngleFitHist;
+    currentPhiAngleFitHist->Sumw2();
+    _angleFitHistMap[*itAngleVec]=std::pair<TH1F*, TH1F*>(currentThetaAngleFitHist, currentPhiAngleFitHist);
   } 
 
- std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess > _thetaDataHistMap;
+ std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess > _angleDataHistMap;
 }
 
 void pbarpHist::fillMassHists(EvtData* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
@@ -191,9 +208,9 @@ void pbarpHist::fillMassHists(EvtData* theData, double weight, std::map<boost::s
   
 }
 
-void pbarpHist::fillThetaHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
+void pbarpHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >& toFill){
 
-  std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
     Vector4<double> combinedDec4Vec(0.,0.,0.,0.);
     Vector4<double> combinedMother4Vec(0.,0.,0.,0.);
@@ -223,6 +240,7 @@ void pbarpHist::fillThetaHists(EvtData* theData, double weight, std::map<boost::
     } 
     else result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
 
-    it->second->Fill( result4Vec.CosTheta(), weight);     
+    it->second.first->Fill( result4Vec.CosTheta(), weight);  
+    it->second.second->Fill( result4Vec.Phi(), weight);
   }
 }
