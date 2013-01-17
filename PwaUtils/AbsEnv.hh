@@ -32,9 +32,6 @@ public:
   std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
   boost::shared_ptr<IsobarDecayList> decayList() {return _decList;}
   boost::shared_ptr<IsobarDecayList> prodDecayList() {return _prodDecList;}
-  //  std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
-  //  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
-
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
 
 protected:  
