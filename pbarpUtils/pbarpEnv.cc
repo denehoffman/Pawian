@@ -46,35 +46,35 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   std::vector<std::string>::const_iterator itStr;
 
 
-  //produced particle pairs
-  std::vector<std::string> productionSystem = thePbarpParser->productionSystem();
+  // //produced particle pairs
+  // std::vector<std::string> productionSystem = thePbarpParser->productionSystem();
 
-  for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
-    std::string firstParticleStr;
-    stringStr >> firstParticleStr;
-    std::cout << "first particle:\t" << firstParticleStr << std::endl;
+  // for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
+  //   std::stringstream stringStr;
+  //   stringStr << (*itStr);
+  //   std::string firstParticleStr;
+  //   stringStr >> firstParticleStr;
+  //   std::cout << "first particle:\t" << firstParticleStr << std::endl;
 
-    std::string secondParticleStr;
-    stringStr >> secondParticleStr;
-    std::cout << "second particle:\t" << secondParticleStr << std::endl;
+  //   std::string secondParticleStr;
+  //   stringStr >> secondParticleStr;
+  //   std::cout << "second particle:\t" << secondParticleStr << std::endl;
 
-    Particle* firstParticle = _particleTable->particle(firstParticleStr);
-    if( 0==firstParticle){
-      Alert << "particle\t" << firstParticleStr << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
-    }
+  //   Particle* firstParticle = _particleTable->particle(firstParticleStr);
+  //   if( 0==firstParticle){
+  //     Alert << "particle\t" << firstParticleStr << "\tdoes not exist in pdtTable" << endmsg;
+  //     exit(1);
+  //   }
 
-    Particle* secondParticle = _particleTable->particle(secondParticleStr);
-    if( 0==secondParticle){
-      Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
-    }
+  //   Particle* secondParticle = _particleTable->particle(secondParticleStr);
+  //   if( 0==secondParticle){
+  //     Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
+  //     exit(1);
+  //   }
 
-    _producedParticlePairs.push_back(make_pair(firstParticle, secondParticle));
+  //   _producedParticlePairs.push_back(make_pair(firstParticle, secondParticle));
 
-  }
+  // }
 
   _pbarpReaction=boost::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
 
@@ -164,6 +164,8 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec)); 
     _angleHistDataVec.push_back(currentAngleHistData);
   }
+
+
 }
 
 

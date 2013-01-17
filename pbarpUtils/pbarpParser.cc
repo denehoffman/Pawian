@@ -25,8 +25,6 @@ pbarpParser::pbarpParser(int argc,char **argv):
   
   po::options_description config("Configuration file options");
   config.add_options()
-    //    ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
-    ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
     ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
     ;
@@ -43,10 +41,10 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
   std::cout << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax <<std::endl;
 
   std::vector<std::string>::const_iterator it;
-  std::cout << "\nproduction system:" << std::endl;
-  for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
-    std::cout << (*it) << "\n";
-  }
+  // std::cout << "\nproduction system:" << std::endl;
+  // for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
+  //   std::cout << (*it) << "\n";
+  // }
 
   std::cout << "\nhistograms inv mass for systems" << std::endl;
   for (it=_histMass.begin(); it!=_histMass.end();++it){

@@ -67,6 +67,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
       ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
       ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
+      ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
       ;
 
 
@@ -193,11 +194,13 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 	std::cout << (*it) << "\n";
       }
 
+      std::cout << "\nproduction system:" << std::endl;
+      for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
+	std::cout << (*it) << "\n";
+      }
       
     }
     
-
-
   }
 
 

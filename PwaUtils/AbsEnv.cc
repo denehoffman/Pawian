@@ -121,5 +121,37 @@ void AbsEnv::setup(ParserBase* theParser){
       }
     }
   }
+
+  //produced particle pairs
+  std::vector<std::string> productionSystem = theParser->productionSystem();
+
+  for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    std::string firstParticleStr;
+    stringStr >> firstParticleStr;
+    std::cout << "first particle:\t" << firstParticleStr << std::endl;
+
+    std::string secondParticleStr;
+    stringStr >> secondParticleStr;
+    std::cout << "second particle:\t" << secondParticleStr << std::endl;
+
+    Particle* firstParticle = _particleTable->particle(firstParticleStr);
+    if( 0==firstParticle){
+      Alert << "particle\t" << firstParticleStr << "\tdoes not exist in pdtTable" << endmsg;
+      exit(1);
+    }
+
+    Particle* secondParticle = _particleTable->particle(secondParticleStr);
+    if( 0==secondParticle){
+      Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
+      exit(1);
+    }
+
+    _producedParticlePairs.push_back(make_pair(firstParticle, secondParticle));
+
+  }
+
+
 }
 

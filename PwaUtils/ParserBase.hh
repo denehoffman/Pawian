@@ -56,7 +56,8 @@ public:
   const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
   const std::vector<std::string>& replaceMassKey() const { return _replaceMassKey; }
   const std::vector<std::string>& decayDynamics() const { return _dynamics;}
-  
+  const std::vector<std::string>& productionSystem() const { return _productionSystem; } 
+ 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
@@ -85,4 +86,5 @@ protected:
   std::vector<std::string> _dynamics;
   std::vector<std::string> _replaceParSuffix;
   std::vector<std::string>  _replaceMassKey;
+  std::vector<std::string> _productionSystem;
 };
