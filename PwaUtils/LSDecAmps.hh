@@ -31,8 +31,8 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData);
-  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData);                                         
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs=0);
+  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs);                                         
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
   virtual bool checkRecalculation(fitParams& theParamVal);

@@ -20,7 +20,7 @@ public:
   AbsXdecAmp(const std::string& name);
   virtual ~AbsXdecAmp();
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData)=0;
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs)=0;
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
@@ -44,5 +44,5 @@ protected:
   double _currentgFactorOmegaPhi;
   bool _cacheAmps;
   bool _recalculate;
-  std::map<int, std::map<Spin, complex<double> > > _cachedAmpMap;
+  std::map<int, std::map<Spin, std::map<Spin, complex<double> > > > _cachedAmpMap;
 };

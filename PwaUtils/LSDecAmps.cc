@@ -35,13 +35,27 @@ LSDecAmps::~LSDecAmps()
 {
 }
 
-complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData){
+complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 int evtNo=theData->evtNo;
   
   if ( _cacheAmps && !_recalculate){
     complex<double> result(0.,0.);
-    result= _cachedAmpMap[evtNo][lamX];
+    result= _cachedAmpMap[evtNo][lamX][lamFs];
     return result;
+  }
+
+  Spin lam1Min=-_Jdaughter1;
+  Spin lam1Max= _Jdaughter1;
+  Spin lam2Min=-_Jdaughter2;
+  Spin lam2Max=_Jdaughter2;
+
+  if( _daughter1IsStable && _Jdaughter1>0){
+    lam1Min=lamFs;
+    lam1Max=lamFs;
+  }
+  else if(_daughter2IsStable && _Jdaughter2>0){
+    lam2Min=lamFs;
+    lam2Max=lamFs;
   }
 
   complex<double> result(0.,0.);
@@ -52,8 +66,8 @@ int evtNo=theData->evtNo;
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
 
-    for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; lambda1++){
-      for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; lambda2++){
+    for(Spin lambda1=lam1Min; lambda1<=lam1Max; lambda1++){
+      for(Spin lambda2=lam2Min; lambda2<=lam2Max; lambda2++){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 
@@ -63,7 +77,7 @@ int evtNo=theData->evtNo;
 	   *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
 	// std::cout << "amp: " << amp << std::endl;
-	amp *=daughterAmp(lambda1, lambda2, theData);
+	amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 
 	result+=amp;
       }
@@ -86,7 +100,7 @@ int evtNo=theData->evtNo;
 #pragma omp critical
     {
 #endif
-      _cachedAmpMap[evtNo][lamX]=result;
+      _cachedAmpMap[evtNo][lamX][lamFs]=result;
 #ifdef _OPENMP
     }
 #endif
@@ -95,10 +109,10 @@ int evtNo=theData->evtNo;
   return result;
 }
 
-complex<double> LSDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtData* theData){
+complex<double> LSDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs){
   complex<double> result(1.,0.);
-  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData);
-  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData);
+  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs);
+  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs);
   return result;
 }
 

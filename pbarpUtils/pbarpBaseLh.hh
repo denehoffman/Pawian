@@ -49,6 +49,8 @@ protected:
  
  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+  int _highestJFsp;
+  bool _isHighestJaPhoton;
   
   virtual void checkParamVariation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
