@@ -90,7 +90,7 @@ complex<double> XToOmegaPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData)
         complex<double> amp = theXMag*expiphiX*sqrt(2*XState->L+1)
           *Clebsch(XState->L, 0, XState->S, lambda, XState->J, lambda)
           *Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, XState->S, lambda  )
-          *conj( theData->WignerDsDec[enumJpsiGamXDfunc::Df_XToPhiPhi1][XState->J][lamX][lambda]);
+          *conj( theData->WignerDsDec[enumJpsiGamXDfunc::Df_XToOmegaPhi_KK][XState->J][lamX][lambda]);
         
         amp = amp * phiphiTo4KAmp( theData, lambdaPhi1, lambdaPhi2 );
 
@@ -105,7 +105,9 @@ complex<double> XToOmegaPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData)
 complex<double> XToOmegaPhiDecAmps::phiphiTo4KAmp( EvtDataNew* theData, Spin lambdaPhi1, Spin lambdaPhi2 ){
   complex<double> result(0.,0.);
   
-  result = 3. * conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_PhiToKsKl][1][lambdaPhi1][0])
+  double lambda = theData->KinematicVariables[enumJpsiGamXKin::OmegaDecLambda];
+  
+  result = 3. * conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_OmegaToPipPimPi0][1][lambdaPhi1][0]) * sqrt(lambda)
     * 3.* conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_PhiToKpKm][1][lambdaPhi2][0]);
   
   return result;
