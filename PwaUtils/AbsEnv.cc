@@ -34,7 +34,7 @@ void AbsEnv::setup(ParserBase* theParser){
   
   _alreadySetUp=true;
 
-  // common options (move to base class later)
+  // common options
   _outputFileNameSuffix = theParser->outputFileNameSuffix();
 
   // pdtTable
@@ -48,6 +48,20 @@ void AbsEnv::setup(ParserBase* theParser){
     Alert << "can not parse particle table " << pdtFile << endmsg;
     exit(1);
   }
+
+  // cloned particles
+  const std::vector<std::string> cloneParticle=theParser->cloneParticle();
+  std::vector<std::string>::const_iterator itcP;
+
+  for ( itcP = cloneParticle.begin(); itcP != cloneParticle.end(); ++itcP){
+     std::istringstream particles(*itcP);
+     std::string particleOld;
+     std::string particleNew;
+     particles >> particleOld >> particleNew;
+
+     _particleTable->clone(particleNew, particleOld);
+  }
+
 
   //final state particles
   const std::vector<std::string> finalStateParticleStr=theParser->finalStateParticles();

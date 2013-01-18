@@ -57,6 +57,7 @@ public:
   const std::vector<std::string>& replaceMassKey() const { return _replaceMassKey; }
   const std::vector<std::string>& decayDynamics() const { return _dynamics;}
   const std::vector<std::string>& productionSystem() const { return _productionSystem; } 
+  const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -87,4 +88,5 @@ protected:
   std::vector<std::string> _replaceParSuffix;
   std::vector<std::string>  _replaceMassKey;
   std::vector<std::string> _productionSystem;
+  std::vector<std::string> _cloneParticle;
 };

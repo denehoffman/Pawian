@@ -68,6 +68,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
       ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
+      ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ;
 
 
@@ -156,6 +157,10 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
 
       std::vector<std::string>::const_iterator it;
+
+      for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
+	  std::cout << "clone particles: " << (*it) << "\n";
+      }
 
       for (it=_enabledHyps.begin(); it!=_enabledHyps.end();++it){
           std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
