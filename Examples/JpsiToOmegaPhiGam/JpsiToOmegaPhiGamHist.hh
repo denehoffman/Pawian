@@ -54,7 +54,6 @@ protected:
 
 private:
   
- 
 
 
   TFile* _theTFile;
@@ -62,9 +61,9 @@ private:
   TH2F* _dalitzMcHist;
   TH2F* _dalitzFittedHist;
   
-  TH1F* _PhiPhiMassDataHist;
-  TH1F* _PhiPhiMassMcHist;
-  TH1F* _PhiPhiMassFittedHist;
+  TH1F* _OmegaPhiMassDataHist;
+  TH1F* _OmegaPhiMassMcHist;
+  TH1F* _OmegaPhiMassFittedHist;
   
   TH1F* _KpKmMassDataHist;
   TH1F* _KpKmMassMcHist;
@@ -91,13 +90,13 @@ private:
   TH1F*  _costGamCmMcHist; 
   TH1F*  _costGamCmFittedHist;
 
-  TH1F*  _costPhi_KpKmDataHist; 
-  TH1F*  _costPhi_KpKmMcHist; 
-  TH1F*  _costPhi_KpKmFittedHist; 
+  TH1F*  _costPhi_OmegaPhiHeliDataHist; 
+  TH1F*  _costPhi_OmegaPhiHeliMcHist; 
+  TH1F*  _costPhi_OmegaPhiHeliFittedHist; 
 
-  TH1F*  _phiPhi_KpKmDataHist; 
-  TH1F*  _phiPhi_KpKmMcHist; 
-  TH1F*  _phiPhi_KpKmFittedHist;
+  TH1F*  _phiPhi_OmegaPhiHeliDataHist; 
+  TH1F*  _phiPhi_OmegaPhiHeliMcHist; 
+  TH1F*  _phiPhi_OmegaPhiHeliFittedHist;
 
   TH1F*  _chiDataHist; 
   TH1F*  _chiMcHist; 
@@ -111,12 +110,12 @@ private:
 
   void initRootStuff();
   void plotDalitz(TH2F* theHisto, EvtDataNew* theData, double weight);
-  void plotPhiPhi(TH1F* theHisto, EvtDataNew* theData, double weight);
+  void plotOmegaPhi(TH1F* theHisto, EvtDataNew* theData, double weight);
   void plotPipPimPi0(TH1F* theHisto, EvtDataNew* theData, double weight);
   void plotKpKm(TH1F* theHisto, EvtDataNew* theData, double weight);
   void plotCostPhiPip(TH1F* theCostHisto, TH1F* thePhiHisto, EvtDataNew* theData, double weight);
   void plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight);
-  void plotCostPhi_PhiPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight);
+  void plotCostPhi_OmegaPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight);
   void plotCostGam(TH1F* theCostHisto, EvtDataNew* theData, double weight);
 
   void plotChi(TH1F* theChiHisto, EvtDataNew* theData, double weight);
