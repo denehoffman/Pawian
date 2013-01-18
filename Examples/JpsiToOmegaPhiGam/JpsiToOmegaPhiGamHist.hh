@@ -101,6 +101,11 @@ private:
   TH1F*  _chiDataHist; 
   TH1F*  _chiMcHist; 
   TH1F*  _chiFittedHist;
+
+  TH1F* _lambdaDataHist;
+  TH1F* _lambdaMcHist;
+  TH1F* _lambdaFittedHist;
+
  
   TNtuple* _dataTuple;
   TNtuple* _mcTuple;
@@ -117,8 +122,9 @@ private:
   void plotCostPhiKp(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight);
   void plotCostPhi_OmegaPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight);
   void plotCostGam(TH1F* theCostHisto, EvtDataNew* theData, double weight);
-
   void plotChi(TH1F* theChiHisto, EvtDataNew* theData, double weight);
+  void plotLambda(TH1F* theHisto, EvtDataNew* theData, double weight);
+
 
   void fillTuple( TNtuple* theTuple, EvtDataNew* theData, double weight);
 

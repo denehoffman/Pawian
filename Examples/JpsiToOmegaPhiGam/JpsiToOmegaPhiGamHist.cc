@@ -41,7 +41,10 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<const EvtDataBase
   _phiPhi_OmegaPhiHeliFittedHist(0), 
   _chiDataHist(0), 
   _chiMcHist(0), 
-  _chiFittedHist(0),  
+  _chiFittedHist(0),
+  _lambdaDataHist(0),
+  _lambdaMcHist(0),
+  _lambdaFittedHist(0),
   _dataTuple(0),
   _mcTuple(0),
   _massIndepTuple(0),
@@ -68,7 +71,8 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<const EvtDataBase
       plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), evtWeight );
       plotCostGam( _costGamCmDataHist, (*it), evtWeight );
       plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliDataHist, _phiPhi_OmegaPhiHeliDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], evtWeight);  
-       plotChi(_chiDataHist, (*it), evtWeight );      
+      plotLambda(_lambdaDataHist, (*it), evtWeight);
+      plotChi(_chiDataHist, (*it), evtWeight );      
       fillTuple(_dataTuple, (*it), evtWeight);
       
       ++it;
@@ -85,7 +89,8 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<const EvtDataBase
       plotCostPhiPip( _costPip_PipPimPi0HeliMcHist, _phiPip_PipPimPi0HeliMcHist, (*it), 1. );
       plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. ); 
       plotCostGam( _costGamCmMcHist,(*it), 1. );
-      plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliMcHist, _phiPhi_OmegaPhiHeliMcHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], 1.);  
+      plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliMcHist, _phiPhi_OmegaPhiHeliMcHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], 1.); 
+      plotLambda(_lambdaMcHist, (*it), 1.);
       plotChi(_chiMcHist, (*it), 1. );   
       
       // double evtWeight= _theJpsiGamPipPimPi0KKLh->calcEvtIntensity((*it), _fitParam);
@@ -98,6 +103,7 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<const EvtDataBase
       plotCostPhiKp( _costKp_KpKmHeliFittedHist, _phiKp_KpKmHeliFittedHist,(*it), evtWeight );
       plotCostGam( _costGamCmFittedHist,(*it), evtWeight );
       plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliFittedHist, _phiPhi_OmegaPhiHeliFittedHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], evtWeight); 
+      plotLambda(_lambdaFittedHist, (*it), evtWeight);
       plotChi(_chiFittedHist, (*it), evtWeight  );
         
       fillTuple(_mcTuple, (*it), evtWeight);
@@ -129,6 +135,8 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<const EvtDataBase
   _costPhi_OmegaPhiHeliFittedHist->Scale(scaleFactor);
   _phiPhi_OmegaPhiHeliFittedHist->Scale(scaleFactor);
   _chiFittedHist->Scale(scaleFactor);
+  _lambdaFittedHist->Scale(scaleFactor);
+
 
 
 }
@@ -155,7 +163,10 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, 
   _phiPhi_OmegaPhiHeliFittedHist(0), 
   _chiDataHist(0), 
   _chiMcHist(0), 
-  _chiFittedHist(0),  
+  _chiFittedHist(0), 
+  _lambdaDataHist(0),
+  _lambdaMcHist(0),
+  _lambdaFittedHist(0),
   _dataTuple(0),
   _mcTuple(0),
   _massIndepTuple(0),
@@ -181,7 +192,8 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, 
       plotCostPhiPip( _costPip_PipPimPi0HeliDataHist,  _phiPip_PipPimPi0HeliDataHist, (*it), evtWeight );
       plotCostPhiKp( _costKp_KpKmHeliDataHist, _phiKp_KpKmHeliDataHist, (*it), evtWeight );
       plotCostGam( _costGamCmDataHist, (*it), evtWeight );
-      plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliDataHist, _phiPhi_OmegaPhiHeliDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], evtWeight);  
+      plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliDataHist, _phiPhi_OmegaPhiHeliDataHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], evtWeight);
+      plotLambda(_lambdaDataHist, (*it), evtWeight);
       plotChi(_chiDataHist, (*it), evtWeight );      
       fillTuple(_dataTuple, (*it), evtWeight);
       
@@ -200,6 +212,7 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, 
       plotCostPhiKp( _costKp_KpKmHeliMcHist, _phiKp_KpKmHeliMcHist,(*it), 1. ); 
       plotCostGam( _costGamCmMcHist,(*it), 1. );
       plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliMcHist, _phiPhi_OmegaPhiHeliMcHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], 1.);  
+      plotLambda(_lambdaMcHist, (*it), 1.);
       plotChi(_chiMcHist, (*it), 1. );   
       
       // double evtWeight= _theJpsiGamPipPimPi0KKLh->calcEvtIntensity((*it), _fitParam);
@@ -212,6 +225,7 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, 
       plotCostPhiKp( _costKp_KpKmHeliFittedHist, _phiKp_KpKmHeliFittedHist,(*it), evtWeight );
       plotCostGam( _costGamCmFittedHist,(*it), evtWeight );
       plotCostPhi_OmegaPhiHeli(_costPhi_OmegaPhiHeliFittedHist, _phiPhi_OmegaPhiHeliFittedHist, (*it)->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm], evtWeight); 
+      plotLambda(_lambdaFittedHist, (*it), evtWeight);
       plotChi(_chiFittedHist, (*it), evtWeight  );
         
       fillTuple(_mcTuple, (*it), evtWeight);
@@ -243,6 +257,7 @@ JpsiToOmegaPhiGamHist::JpsiToOmegaPhiGamHist(boost::shared_ptr<AbsLhNew> theLh, 
   _costGamCmFittedHist->Scale(scaleFactor);
   _costPhi_OmegaPhiHeliFittedHist->Scale(scaleFactor);
   _phiPhi_OmegaPhiHeliFittedHist->Scale(scaleFactor);
+  _lambdaFittedHist->Scale(scaleFactor);
   _chiFittedHist->Scale(scaleFactor);
 
   double integralFitted=(double) _costGamCmFittedHist->Integral();
@@ -323,6 +338,16 @@ void JpsiToOmegaPhiGamHist::initRootStuff()
   _chiMcHist= new TH1F("_chiMcHist", "#chi Mc", 90, 0., 90.); 
   _chiFittedHist= new TH1F("_chiFittedHist", "#chi Fit", 90, 0., 90.);  
 
+  nbins = 50;
+  xmin=0;
+  xmax=1;
+  _lambdaDataHist =new TH1F("lambdaDataHist", "#lambda", nbins, xmin, xmax);
+  _lambdaMcHist =new TH1F("lambdaMcHist", "#lambda", nbins, xmin, xmax);
+  _lambdaFittedHist =new TH1F("lambdaFittedHist", "#lambda", nbins, xmin, xmax);
+
+
+
+
    std::string tupleVariables = "mPipPimPi0KpKm:mPipPimPi0:mKpKm:PipPimPi0KpKmCostTheta:gamCosTheta:PipPimPi0CosTheta:KpKmCosTheta:PipCosTheta:KpCosTheta:decPlaneChi:testHeli:weight";
    
   
@@ -358,7 +383,7 @@ void JpsiToOmegaPhiGamHist::plotKpKm(TH1F* theHisto, EvtDataNew* theData, double
 }
 
 void JpsiToOmegaPhiGamHist::plotCostPhiPip(TH1F* theCostHisto,  TH1F* thePhiHisto, EvtDataNew* theData, double weight){
-  Vector4<double>& v4 = theData->FourVecsDec[enumJpsiGamX4V::V4_Pip_HeliPipPimPi0]; 
+  Vector4<double>& v4 = theData->FourVecsDec[enumJpsiGamX4V::V4_omegaDecPlaneNormal_HeliPipPimPi0]; 
   theCostHisto->Fill( v4.CosTheta(), weight );
   thePhiHisto->Fill( v4.Phi(), weight );
 }
@@ -377,6 +402,12 @@ void JpsiToOmegaPhiGamHist::plotCostGam(TH1F* theCostHisto, EvtDataNew* theData,
 void JpsiToOmegaPhiGamHist::plotCostPhi_OmegaPhiHeli(TH1F* theCostHisto, TH1F* thePhiHisto, const Vector4<double>& the4Vec, double weight){
   theCostHisto->Fill( the4Vec.CosTheta(), weight);
   thePhiHisto->Fill( the4Vec.Phi(), weight);
+}
+
+
+void JpsiToOmegaPhiGamHist::plotLambda(TH1F* theHisto, EvtDataNew* theData, double weight){
+ double lambda =theData->KinematicVariables[enumJpsiGamXKin::OmegaDecLambda];
+ theHisto->Fill( lambda  ,weight);  
 }
 
 void JpsiToOmegaPhiGamHist::plotChi(TH1F* theChiHisto, EvtDataNew* theData, double weight){
@@ -411,7 +442,8 @@ void  JpsiToOmegaPhiGamHist::fillTuple( TNtuple* theTuple, EvtDataNew* theData, 
   
   Vector4<double>& V4_PipPimPi0_HeliPipPimPi0KpKm= theData->FourVecsDec[enumJpsiGamX4V::V4_PipPimPi0_HeliPipPimPi0KpKm] ;
   Vector4<double>& V4_KpKm_HeliPipPimPi0KpKm= theData->FourVecsDec[enumJpsiGamX4V::V4_KpKm_HeliPipPimPi0KpKm] ;
-  Vector4<double>& V4_Pip_HeliPipPimPi0= theData->FourVecsDec[enumJpsiGamX4V::V4_Pip_HeliPipPimPi0] ;
+  // Vector4<double>& V4_Pip_HeliPipPimPi0= theData->FourVecsDec[enumJpsiGamX4V::V4_Pip_HeliPipPimPi0] ;
+  Vector4<double>& V4_omegaDecPlaneNormal_HeliPipPimPi0= theData->FourVecsDec[enumJpsiGamX4V::V4_omegaDecPlaneNormal_HeliPipPimPi0]; 
   Vector4<double>& V4_Kp_HeliKpKm= theData->FourVecsDec[enumJpsiGamX4V::V4_Kp_HeliKpKm] ;
   
   //Vector4<double>& V4_Pip_HeliPsi= theData->FourVecsDec[enumJpsiGamX4V::V4_Pip_HeliPsi] ;
@@ -443,7 +475,8 @@ void  JpsiToOmegaPhiGamHist::fillTuple( TNtuple* theTuple, EvtDataNew* theData, 
 		  V4_gamma_HeliPsi.CosTheta(),
 		  V4_PipPimPi0_HeliPipPimPi0KpKm.CosTheta(),
 		  V4_KpKm_HeliPipPimPi0KpKm.CosTheta(),
-		  V4_Pip_HeliPipPimPi0.CosTheta(),
+		  V4_omegaDecPlaneNormal_HeliPipPimPi0.CosTheta(),
+		  // V4_Pip_HeliPipPimPi0.CosTheta(),
 		  V4_Kp_HeliKpKm.CosTheta(),
 		  thePhiPhiDecayPlaneAngle,		  
 		  testHeli,
