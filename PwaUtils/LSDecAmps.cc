@@ -36,6 +36,62 @@ LSDecAmps::~LSDecAmps()
 {
 }
 
+
+complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs){
+
+  Spin lam1Min=-_Jdaughter1;
+  Spin lam1Max= _Jdaughter1;
+  Spin lam2Min=-_Jdaughter2;
+  Spin lam2Max=_Jdaughter2;
+
+  if(fixDaughterNr == 1){
+     lam1Min = lam1Max = lamDec;
+  }
+  else if(fixDaughterNr == 2){
+     lam2Min = lam2Max = lamDec;
+  }
+  else{
+     Alert << "Invalid fitDaughterNr in XdecPartAmp." << endmsg;
+  }
+
+  if( _daughter1IsStable && _Jdaughter1>0){
+    lam1Min=lamFs;
+    lam1Max=lamFs;
+  }
+  else if(_daughter2IsStable && _Jdaughter2>0){
+    lam2Min=lamFs;
+    lam2Max=lamFs;
+  }
+
+  complex<double> result(0.,0.);
+  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+    if( fabs(lamX) > (*it)->J ) continue;
+    double theMag=_currentParamMags[*it];
+    double thePhi=_currentParamPhis[*it];
+    complex<double> expi(cos(thePhi), sin(thePhi));
+
+    for(Spin lambda1=lam1Min; lambda1<=lam1Max; lambda1++){
+      for(Spin lambda2=lam2Min; lambda2<=lam2Max; lambda2++){
+        Spin lambda = lambda1-lambda2;
+        if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
+
+        complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
+           *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
+           *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
+           *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+
+        result+=amp;
+      }
+    }
+  }
+
+  return result;
+}
+
+
+
+
 complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 int evtNo=theData->evtNo;
   

@@ -32,7 +32,12 @@ public:
     return new  pbarpBaseLh(_evtListPtr);
   }
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
-  
+  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+					  std::map <boost::shared_ptr<const JPCLS>,
+			                            std::vector< boost::shared_ptr<LSDecAmps> >,
+			                            pawian::Collection::SharedPtrLess > pbarpAmps);
+  virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
+  virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
 

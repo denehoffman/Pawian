@@ -4,8 +4,15 @@
 #include "PwaUtils/DataUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "PwaUtils/FitParamsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+#include "Minuit2/MnUserCovariance.h"
+
 
 void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<const jpcRes> daughterRes1, boost::shared_ptr<const jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)
 {
@@ -40,4 +47,18 @@ boost::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle){
   boost::shared_ptr<jpcRes> result(new jpcRes((int) theParticle->J(), theParticle->theParity(), theParticle->theCParity()));
 
   return result;  
+}
+
+
+
+PwaCovMatrix::PwaCovMatrix(unsigned short n) :
+   n(n)
+{
+
+}
+
+
+
+PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, fitParams &theFitParams){
+  int n = theMinuitCovMatrix.Nrow();
 }

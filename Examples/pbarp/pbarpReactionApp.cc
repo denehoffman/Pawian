@@ -261,6 +261,7 @@ int main(int __argc,char *__argv[]){
     
     MnUserCovariance theCovMatrix = min.UserCovariance();
     std::cout  << min << std::endl;
+
     return 0;
  }
 }     

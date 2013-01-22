@@ -11,6 +11,7 @@
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
+#include "PwaUtils/IsobarDecay.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -35,6 +36,92 @@ pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
 pbarpBaseLh::~pbarpBaseLh()
 {;
 }
+
+
+complex<double> pbarpBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData){
+
+   complex<double> result = 0;
+
+   complex<double> singletAmpM1   = calcProdPartAmp( 0, M1, nameDec, theData, _decAmpsSinglet);
+   complex<double> triplet0AmpM1  = calcProdPartAmp( 0, M1, nameDec, theData, _decAmpsTriplet0);
+   complex<double> triplet1AmpM1  = calcProdPartAmp( 1, M1, nameDec, theData, _decAmpsTripletp1);
+   complex<double> tripletm1AmpM1 = calcProdPartAmp(-1, M1, nameDec, theData, _decAmpsTripletm1);
+
+   complex<double> singletAmpM2   = calcProdPartAmp( 0, M2, nameDec, theData, _decAmpsSinglet);
+   complex<double> triplet0AmpM2  = calcProdPartAmp( 0, M2, nameDec, theData, _decAmpsTriplet0);
+   complex<double> triplet1AmpM2  = calcProdPartAmp( 1, M2, nameDec, theData, _decAmpsTripletp1);
+   complex<double> tripletm1AmpM2 = calcProdPartAmp(-1, M2, nameDec, theData, _decAmpsTripletm1);
+
+   result = singletAmpM1   * conj(singletAmpM2) +
+            triplet0AmpM1  * conj(triplet0AmpM2) +
+            triplet1AmpM1  * conj(triplet1AmpM2) +
+            tripletm1AmpM1 * conj(tripletm1AmpM2);
+
+   double norm = calcSpinDensityNorm(nameDec, theData);
+
+
+   return (result / norm);
+}
+
+
+
+double pbarpBaseLh::calcSpinDensityNorm(std::string& nameDec, EvtData* theData){
+
+   double result = 0;
+
+   for (Spin M=-1; M<=1; M++){
+     complex<double> singletAmpM1   = calcProdPartAmp( 0, M, nameDec, theData, _decAmpsSinglet);
+     complex<double> triplet0AmpM1  = calcProdPartAmp( 0, M, nameDec, theData, _decAmpsTriplet0);
+     complex<double> triplet1AmpM1  = calcProdPartAmp( 1, M, nameDec, theData, _decAmpsTripletp1);
+     complex<double> tripletm1AmpM1 = calcProdPartAmp(-1, M, nameDec, theData, _decAmpsTripletm1);
+
+     result += (norm(singletAmpM1) + norm(triplet0AmpM1) + norm(triplet1AmpM1) + norm(tripletm1AmpM1));
+   }
+
+   return result;
+}
+
+
+complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+					     std::map <boost::shared_ptr<const JPCLS>,
+					               std::vector< boost::shared_ptr<LSDecAmps> >,
+					               pawian::Collection::SharedPtrLess > pbarpAmps){
+   complex<double> resultAmp(0.,0.);
+
+   std::map <boost::shared_ptr<const JPCLS>,
+             std::vector< boost::shared_ptr<LSDecAmps> >,
+             pawian::Collection::SharedPtrLess >::iterator it;
+
+   for(it=pbarpAmps.begin(); it!=pbarpAmps.end(); ++it){
+     complex<double> tmpAmp(0.,0.);
+     boost::shared_ptr<const JPCLS> theJPCLS=it->first;
+     std::vector<boost::shared_ptr<LSDecAmps> > decAmps=it->second;
+     std::vector<boost::shared_ptr<LSDecAmps> >::iterator itDec;
+
+     for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
+       Particle* particle1 = (*itDec)->isobarDec()->daughter1Part();
+       Particle* particle2 = (*itDec)->isobarDec()->daughter2Part();
+       complex<double> currentDecAmp;
+       if(particle1->name() == nameDec)
+	  currentDecAmp=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
+       else if(particle2->name() == nameDec)
+	  currentDecAmp=(*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
+       else
+	  Alert << "Particle " << nameDec << " not found in calcProdAmp" << endmsg;
+
+       tmpAmp+=currentDecAmp;
+     }
+
+     double theMag=_currentParamMags[theJPCLS];
+     double thePhi=_currentParamPhis[theJPCLS];
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     tmpAmp*=theJPCLS->preFactor*theMag*expi;
+     resultAmp+=tmpAmp;
+   }
+
+   return resultAmp;
+}
+
 
 double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
