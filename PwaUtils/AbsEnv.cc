@@ -5,8 +5,9 @@
 #include <fstream>
 
 #include "PwaUtils/AbsEnv.hh"
-#include "PwaUtils/IsobarDecay.hh"
-#include "PwaUtils/IsobarDecayList.hh"
+#include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -18,8 +19,8 @@
 AbsEnv::AbsEnv() :
   _alreadySetUp(false)
   , _noFinalStateParticles(0)
-  ,_decList(new IsobarDecayList())
-  ,_prodDecList(new IsobarDecayList())
+  ,_absDecList(new AbsDecayList())
+  ,_prodDecList(new AbsDecayList())
 {
 }
 
@@ -78,40 +79,43 @@ void AbsEnv::setup(ParserBase* theParser){
 
   std::vector<std::string> decaySystem= theParser->decaySystem();
   for ( itStr = decaySystem.begin(); itStr != decaySystem.end(); ++itStr){
+
+    Particle* motherParticle =0;
+    std::vector<Particle*> daughterParticles;
+
     std::stringstream stringStr;
     stringStr << (*itStr);
 
-    std::string motherStr;
-    stringStr >> motherStr;
-    Particle* motherParticle = _particleTable->particle(motherStr);
-    if( 0==motherParticle){
-      Alert << "mother particle\t" << motherStr << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
+    std::string tmpName;
+
+    bool isDecParticle=false;
+    while(stringStr >> tmpName){
+      if(tmpName=="To") {
+        isDecParticle=true;
+        continue;
+      }
+      if(isDecParticle){
+  	daughterParticles.push_back(_particleTable->particle(tmpName));
+      }
+      else{
+  	motherParticle = _particleTable->particle(tmpName);
+      }
     }
-    std::string daughter1Str;
-    stringStr >> daughter1Str;
-    Particle* daughter1Particle = _particleTable->particle(daughter1Str);
-    if( 0==daughter1Particle){
-      Alert << "first daughter particle\t" << daughter1Str << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
+    boost::shared_ptr<AbsDecay> tmpDec;
+    if(daughterParticles.size()==2){
+      tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+    }
+    else {
+      Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ; 
     }
 
-    std::string daughter2Str;
-    stringStr >> daughter2Str;
-    Particle* daughter2Particle = _particleTable->particle(daughter2Str);
-    if( 0==daughter2Particle){
-      Alert << "second daughter particle\t" << daughter2Str << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
-    }
-
-    boost::shared_ptr<IsobarDecay> tmpDec(new IsobarDecay(motherParticle, daughter1Particle, daughter2Particle));
- 
-    _decList->addDecay(tmpDec);
+    //    _decList->addDecay(tmpDec);
+    _absDecList->addDecay(tmpDec);
   }
 
   //add dynamics
 
-  std::vector<boost::shared_ptr<IsobarDecay> > isoDecList= _decList->getList();
+  std::vector<boost::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
  
   std::vector<std::string> decDynVec = theParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
@@ -124,8 +128,8 @@ void AbsEnv::setup(ParserBase* theParser){
     std::string dynStr;
     stringStr >> dynStr;
 
-    std::vector<boost::shared_ptr<IsobarDecay> >::iterator itDyn;
-    for (itDyn=isoDecList.begin(); itDyn!=isoDecList.end(); ++itDyn){
+    std::vector<boost::shared_ptr<AbsDecay> >::iterator itDyn;
+    for (itDyn=absDecList.begin(); itDyn!=absDecList.end(); ++itDyn){
       std::string theDecName=(*itDyn)->name();
       std::string toFind=particleStr+"To";
       size_t found;

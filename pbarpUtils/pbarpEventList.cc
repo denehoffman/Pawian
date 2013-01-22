@@ -9,8 +9,8 @@
 
 #include "pbarpUtils/pbarpEventList.hh"
 #include "pbarpUtils/pbarpEnv.hh"
-#include "PwaUtils/IsobarDecay.hh"
-#include "PwaUtils/IsobarDecayList.hh"
+#include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
 
 #include "Event/EventList.hh"
 #include "PwaUtils/KinUtils.hh"
@@ -78,8 +78,8 @@ void pbarpEventList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvt
     }
  
    //fill WignerD functions
-    std::vector<boost::shared_ptr<IsobarDecay> > theDecays=pbarpEnv::instance()->prodDecayList()->getList();
-    std::vector<boost::shared_ptr<IsobarDecay> >::iterator itIso;
+    std::vector<boost::shared_ptr<AbsDecay> > theDecays=pbarpEnv::instance()->prodDecayList()->getList();
+    std::vector<boost::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
       (*itIso)->fillWignerDs(particle4VecMap, evtData);
     }

@@ -15,7 +15,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 
 class Particle;
-class IsobarDecay;
+class IsobarLSDecay;
 
 class pbarpReaction {
 
@@ -25,7 +25,7 @@ public:
   virtual ~pbarpReaction();
 
   virtual void print(std::ostream& os) const;
-  std::vector< boost::shared_ptr<IsobarDecay> >& productionDecays() {return _prodDecs;}  
+  std::vector< boost::shared_ptr<IsobarLSDecay> >& productionDecays() {return _prodDecs;}  
   std::vector< boost::shared_ptr<const jpcRes> >& jpcStates() {return _pbarpJPCs;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsStates() {return _pbarpJPCLSs;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsSingletStates() {return _pbarpJPCLSsinglet;}
@@ -33,7 +33,7 @@ public:
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsTripletp1States() {return _pbarpJPCLStripletp1;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsTripletm1States() {return _pbarpJPCLStripletm1;}
 
-  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess >& singletDecMap() {return _pbarpSingletDecMap;}
+  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess >& singletDecMap() {return _pbarpSingletDecMap;}
 protected:
 
 private:
@@ -45,12 +45,12 @@ private:
   std::vector< boost::shared_ptr<const JPCLS> > _pbarpJPCLStripletp1;
   std::vector< boost::shared_ptr<const JPCLS> > _pbarpJPCLStripletm1;
 
-  std::vector< boost::shared_ptr<IsobarDecay> > _prodDecs;
+  std::vector< boost::shared_ptr<IsobarLSDecay> > _prodDecs;
 
-  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > _pbarpSingletDecMap;
-  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > _pbarpTriplet0DecMap;
-  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > _pbarpTripletp1DecMap;
-  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > _pbarpTripletm1DecMap;
+  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > _pbarpSingletDecMap;
+  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > _pbarpTriplet0DecMap;
+  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > _pbarpTripletp1DecMap;
+  std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > _pbarpTripletm1DecMap;
 
-  void  fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > toFill);
+  void  fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarLSDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > toFill);
 };

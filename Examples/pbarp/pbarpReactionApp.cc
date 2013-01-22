@@ -20,8 +20,6 @@
 #include "PwaUtils/PwaFcnBase.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
-#include "PwaUtils/IsobarDecay.hh"
-#include "PwaUtils/IsobarDecayList.hh"
 #include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/pbarpBaseLh.hh"

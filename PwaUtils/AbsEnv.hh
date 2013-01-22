@@ -15,6 +15,7 @@
 
 class Particle;
 class ParticleTable;
+class AbsDecayList;
 class IsobarDecayList;
 class ParserBase;
 
@@ -30,8 +31,8 @@ public:
   const int noFinalStateParticles() {return _noFinalStateParticles;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
-  boost::shared_ptr<IsobarDecayList> decayList() {return _decList;}
-  boost::shared_ptr<IsobarDecayList> prodDecayList() {return _prodDecList;}
+  boost::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
+  boost::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
 
 protected:  
@@ -42,9 +43,7 @@ protected:
   ParticleTable* _particleTable;
   std::vector<Particle*> _finalStateParticles;
   std::vector<std::pair<Particle*, Particle*> > _producedParticlePairs;
-  boost::shared_ptr<IsobarDecayList> _decList;
-  boost::shared_ptr<IsobarDecayList> _prodDecList;
-  //  std::vector<std::vector<std::string> > _histMassSystems;
-  //  std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
+  boost::shared_ptr<AbsDecayList> _absDecList;
+  boost::shared_ptr<AbsDecayList> _prodDecList;
   std::string _outputFileNameSuffix;
 };

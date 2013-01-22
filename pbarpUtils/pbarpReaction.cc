@@ -5,7 +5,8 @@
 #include <fstream>
 
 #include "pbarpUtils/pbarpReaction.hh"
-#include "PwaUtils/IsobarDecay.hh"
+#include "pbarpUtils/pbarpEnv.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -24,7 +25,7 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
       std::string decName=(*itJPC)->name();
       //      std::string decName="";
-      boost::shared_ptr<IsobarDecay> currentDec(new IsobarDecay( (*itJPC),itPartPairs->first, itPartPairs->second, decName));
+      boost::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodDecs.push_back(currentDec);
@@ -57,13 +58,13 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 pbarpReaction::~pbarpReaction(){
 }
 
-void  pbarpReaction::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarDecay> >, pawian::Collection::SharedPtrLess > toFill){
+void  pbarpReaction::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarLSDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > toFill){
 
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
-    std::vector<boost::shared_ptr<IsobarDecay> > currentIsobarVecs;
+    std::vector<boost::shared_ptr<IsobarLSDecay> > currentIsobarVecs;
 
-    std::vector<boost::shared_ptr<IsobarDecay> >::iterator itIsobar;
+    std::vector<boost::shared_ptr<IsobarLSDecay> >::iterator itIsobar;
     for(itIsobar=decs.begin(); itIsobar!=decs.end(); ++itIsobar){
       if( (*(*itIsobar)->motherJPC())==(*(*itJPCLS)) )  currentIsobarVecs.push_back(*itIsobar);
     }
@@ -85,7 +86,7 @@ void pbarpReaction::print(std::ostream& os) const{
   }
 
   os << "\n ***** decay chains *******\n";
-  std::vector< boost::shared_ptr<IsobarDecay> >::const_iterator itIso;
+  std::vector< boost::shared_ptr<IsobarLSDecay> >::const_iterator itIso;
   for( itIso=_prodDecs.begin(); itIso!=_prodDecs.end(); ++itIso){
     (*itIso)->print(os);
   }  

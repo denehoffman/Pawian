@@ -14,7 +14,7 @@
 
 #include "PwaUtils/AbsXdecAmp.hh"
 
-class IsobarDecay;
+class IsobarLSDecay;
 
 class LSDecAmps : public AbsXdecAmp{
 
@@ -23,7 +23,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  LSDecAmps(boost::shared_ptr<IsobarDecay> theDec);
+  LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec);
 
   /** Destructor */
   virtual ~LSDecAmps();
@@ -41,11 +41,11 @@ public:
   virtual bool checkRecalculation(fitParams& theParamVal);
   boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
-  boost::shared_ptr<IsobarDecay> isobarDec() {return _decay;}
+  boost::shared_ptr<IsobarLSDecay> isobarLSDec() {return _decay;}
   void updateFitParams(fitParams& theParamVal);
 
 protected:
-  boost::shared_ptr<IsobarDecay> _decay; 
+  boost::shared_ptr<IsobarLSDecay> _decay; 
   boost::shared_ptr<const jpcRes> _JPCPtr;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
   boost::shared_ptr<LSDecAmps> _decAmpDaughter1;

@@ -30,15 +30,10 @@ public:
   ~pbarpEnv();
 
   void setup(pbarpParser* thePbarpParser);
-  // ParticleTable* particleTable() {return _particleTable;}
 
   const float pbarMomentum() const {return _pbarMomentum;}
-  // const int lmax() const {return _lmax;}
-  // const int noFinalStateParticles() {return _noFinalStateParticles;}
-  // std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
-  // std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
-  // boost::shared_ptr<IsobarDecayList> decayList() {return _decList;}
-  // boost::shared_ptr<IsobarDecayList> prodDecayList() {return _prodDecList;}
+  const int lmax() const {return _lmax;}
+
   boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
@@ -47,19 +42,10 @@ protected:
 
   pbarpEnv();
   static pbarpEnv* _instance;
-  //  bool _alreadySetUp;
   int _lmax;
   float _pbarMomentum;
-  // int _noFinalStateParticles;
 
-  // ParticleTable* _particleTable;
-  // std::vector<Particle*> _finalStateParticles;
-  // std::vector<std::pair<Particle*, Particle*> > _producedParticlePairs;
-  // boost::shared_ptr<IsobarDecayList> _decList;
-  // boost::shared_ptr<IsobarDecayList> _prodDecList;
   boost::shared_ptr<pbarpReaction> _pbarpReaction;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
-
-  // std::string _outputFileNameSuffix;
 };

@@ -1,4 +1,4 @@
-// IsobarDecay class definition file. -*- C++ -*-
+// AbsDecay class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -17,14 +17,15 @@
 
 class Particle;
 class EvtData;
+class AbsEnv;
 
-class IsobarDecay {
+class AbsDecay {
 
 public:
-  IsobarDecay(Particle* mother, Particle* daughter1, Particle* daughter2);
-  IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName="pbarp");
-  virtual ~IsobarDecay();
-  //  virtual IsobarDecay* clone_() const = 0;
+  AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
+  AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName);
+  virtual ~AbsDecay();
+  //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
   const std::string wignerDKey() {return _wignerDKey;} 
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
@@ -32,9 +33,9 @@ public:
   virtual std::string massParKey() const {return _massParamKey;}
   void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
   boost::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
-  std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
-  boost::shared_ptr<IsobarDecay> decDaughter1() {return _isoDecDaughter1;}
-  boost::shared_ptr<IsobarDecay> decDaughter2() {return _isoDecDaughter2;}
+  //  std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
+  boost::shared_ptr<AbsDecay> decDaughter1() {return _absDecDaughter1;}
+  boost::shared_ptr<AbsDecay> decDaughter2() {return _absDecDaughter2;}
   bool hasMother() {return _hasMotherPart;}
   bool isDaughter1Stable() {return _daughter1IsStable;}
   bool isDaughter2Stable() {return _daughter2IsStable;}
@@ -48,6 +49,7 @@ public:
   Particle* motherPart() {return _mother;}
   Particle* daughter1Part() {return _daughter1;}
   Particle* daughter2Part() {return _daughter2;}
+  virtual std::string type() =0;
 
 protected:
   Particle* _mother;
@@ -69,10 +71,10 @@ protected:
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 
-  boost::shared_ptr<IsobarDecay> _isoDecDaughter1;
-  boost::shared_ptr<IsobarDecay> _isoDecDaughter2;
+  boost::shared_ptr<AbsDecay> _absDecDaughter1;
+  boost::shared_ptr<AbsDecay> _absDecDaughter2;
 
   std::vector<Particle*> _finalStateParticles;
   std::vector<Particle*> _finalStateParticlesDaughter2;
-
+  AbsEnv* _env;
 };

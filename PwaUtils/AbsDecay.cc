@@ -1,13 +1,13 @@
-// IsobarDecay class definition file. -*- C++ -*-
+// AbsDecay class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 #include <algorithm>
 
-#include "PwaUtils/IsobarDecay.hh"
-#include "PwaUtils/IsobarDecayList.hh"
-#include "pbarpUtils/pbarpEnv.hh"
+#include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
+#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -16,7 +16,7 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daughter2) :
+AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
   _mother(mother)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
@@ -30,20 +30,20 @@ IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daught
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey(mother->name())
+  ,_env(theEnv)
 {
-  validJPCLS( _motherJPCPtr, _daughter1JPCPtr, _daughter2JPCPtr, _JPCLSDecAmps);
-  _isoDecDaughter1=pbarpEnv::instance()->decayList()->decay(_daughter1);
-  if(0 != _isoDecDaughter1){
+  _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
+  if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
-    std::vector<Particle*> fsParticlesDaughter1=_isoDecDaughter1->finalStateParticles();
+    std::vector<Particle*> fsParticlesDaughter1=_absDecDaughter1->finalStateParticles();
     _finalStateParticles.insert(_finalStateParticles.end(), fsParticlesDaughter1.begin(), fsParticlesDaughter1.end());
   }
   else _finalStateParticles.push_back(daughter1);
-  _isoDecDaughter2=pbarpEnv::instance()->decayList()->decay(_daughter2);
+  _absDecDaughter2=_env->absDecayList()->decay(_daughter2);
 
-  if(0 != _isoDecDaughter2){
+  if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
-    _finalStateParticlesDaughter2=_isoDecDaughter2->finalStateParticles();
+    _finalStateParticlesDaughter2=_absDecDaughter2->finalStateParticles();
     _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter2.begin(), _finalStateParticlesDaughter2.end());
   }
   else{
@@ -57,7 +57,7 @@ IsobarDecay::IsobarDecay(Particle* mother, Particle* daughter1, Particle* daught
 
 }
 
-IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName) :
+AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
   _mother(0)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
@@ -71,22 +71,22 @@ IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle*
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey("")
+  ,_env(theEnv)
 {
-  validJPCLS( _motherJPCPtr, _daughter1JPCPtr, _daughter2JPCPtr, _JPCLSDecAmps);
-  _isoDecDaughter1=pbarpEnv::instance()->decayList()->decay(_daughter1);
+  _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
 
 
-  if(0 != _isoDecDaughter1){
+  if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
-    std::vector<Particle*> fsParticlesDaughter1=_isoDecDaughter1->finalStateParticles();
+    std::vector<Particle*> fsParticlesDaughter1=_absDecDaughter1->finalStateParticles();
     _finalStateParticles.insert(_finalStateParticles.end(), fsParticlesDaughter1.begin(), fsParticlesDaughter1.end());
   }
   else _finalStateParticles.push_back(daughter1);
-  _isoDecDaughter2=pbarpEnv::instance()->decayList()->decay(_daughter2);
+  _absDecDaughter2=_env->absDecayList()->decay(_daughter2);
 
-  if(0 != _isoDecDaughter2){
+  if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
-    _finalStateParticlesDaughter2=_isoDecDaughter2->finalStateParticles();
+    _finalStateParticlesDaughter2=_absDecDaughter2->finalStateParticles();
     _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter2.begin(), _finalStateParticlesDaughter2.end());
   }
   else{
@@ -99,12 +99,12 @@ IsobarDecay::IsobarDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle*
   _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+motherName;
 }
 
-IsobarDecay::~IsobarDecay(){
+AbsDecay::~AbsDecay(){
 }
 
-void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
-  if (!_daughter1IsStable) _isoDecDaughter1->fillWignerDs(fsMap, evtData);
-  if (!_daughter2IsStable) _isoDecDaughter2->fillWignerDs(fsMap, evtData);
+void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
+  if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, evtData);
+  if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, evtData);
   
   Vector4<double> all4Vec(0.,0.,0.,0.);
   Vector4<double> mother4Vec(0.,0.,0.,0.);
@@ -157,23 +157,15 @@ void IsobarDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, E
   }
 }
 
-void IsobarDecay::print(std::ostream& os) const{
-  os << "\nJPCLS amplitudes for decay\t" << _name << ":\n";
-  os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
-  
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator it;
-  for (it = _JPCLSDecAmps.begin(); it!= _JPCLSDecAmps.end(); ++it){
-    (*it)->print(os);
-    os << "\n";
-  }
-  
+void AbsDecay::print(std::ostream& os) const{
+
   if(!_daughter1IsStable){
     os << "with further decay:";
-    _isoDecDaughter1->print(os);
+    _absDecDaughter1->print(os);
   }
   if(!_daughter2IsStable){
     os << "with further decay:";
-    _isoDecDaughter2->print(os);
+    _absDecDaughter2->print(os);
   }  
 
   os << "\n";

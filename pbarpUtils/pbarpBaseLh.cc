@@ -11,7 +11,7 @@
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
-#include "PwaUtils/IsobarDecay.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -99,8 +99,8 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
      std::vector<boost::shared_ptr<LSDecAmps> >::iterator itDec;
 
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-       Particle* particle1 = (*itDec)->isobarDec()->daughter1Part();
-       Particle* particle2 = (*itDec)->isobarDec()->daughter2Part();
+       Particle* particle1 = (*itDec)->isobarLSDec()->daughter1Part();
+       Particle* particle2 = (*itDec)->isobarLSDec()->daughter2Part();
        complex<double> currentDecAmp;
        if(particle1->name() == nameDec)
 	  currentDecAmp=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
@@ -270,9 +270,9 @@ void  pbarpBaseLh::initialize(){
   
   boost::shared_ptr<pbarpReaction> _pbarpReactionPtr= pbarpEnv::instance()->reaction();
   _jpclsStates=_pbarpReactionPtr->jpclsStates();
-  std::vector< boost::shared_ptr<IsobarDecay> > theDecs = _pbarpReactionPtr->productionDecays();
+  std::vector< boost::shared_ptr<IsobarLSDecay> > theDecs = _pbarpReactionPtr->productionDecays();
 
-  std::vector< boost::shared_ptr<IsobarDecay> >::iterator it;
+  std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     boost::shared_ptr<LSDecAmps> currentAmp(new LSDecAmps(*it));
     _decAmps.push_back(currentAmp);

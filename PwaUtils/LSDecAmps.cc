@@ -9,14 +9,14 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/IsobarDecay.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
 #include "Particle/Particle.hh"
 
 #ifdef _OPENMP
 #include <omp.h>
 #endif
 
-LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarDecay> theDec) :
+LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
   AbsXdecAmp(theDec->name())
   ,_decay(theDec)
   ,_JPCPtr(theDec->motherJPC())
@@ -220,13 +220,27 @@ void LSDecAmps::initialize(){
   }
   
   if(!_daughter1IsStable){
-    boost::shared_ptr<IsobarDecay> decDaughter1=_decay->decDaughter1();
-    _decAmpDaughter1=boost::shared_ptr<LSDecAmps>(new LSDecAmps(decDaughter1));
+    boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
+    if(decDaughter1->type()=="IsobarLSDecay"){
+      boost::shared_ptr<IsobarLSDecay> decLSDaughter1 =  boost::dynamic_pointer_cast<IsobarLSDecay>(decDaughter1);
+    _decAmpDaughter1=boost::shared_ptr<LSDecAmps>(new LSDecAmps(decLSDaughter1));
+    }
+    else{
+      Alert << "Not supported!!!!" << endmsg;
+      exit(1);
+    }
   }
   
   if(!_daughter2IsStable){
-    boost::shared_ptr<IsobarDecay> decDaughter2=_decay->decDaughter1();
-    _decAmpDaughter2=boost::shared_ptr<LSDecAmps>(new LSDecAmps(decDaughter2));
+    boost::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter1();
+    if(decDaughter2->type()=="IsobarLSDecay"){
+      boost::shared_ptr<IsobarLSDecay> decLSDaughter2 =  boost::dynamic_pointer_cast<IsobarLSDecay>(decDaughter2);
+      _decAmpDaughter2=boost::shared_ptr<LSDecAmps>(new LSDecAmps(decLSDaughter2));
+    }
+    else{
+      Alert << "Not supported!!!!" << endmsg;
+      exit(1);
+    }
   }
   
   _Jdaughter1=(Spin) _decay->daughter1Part()->J();

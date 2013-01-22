@@ -6,8 +6,10 @@
 
 #include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpParser.hh"
-#include "PwaUtils/IsobarDecay.hh"
-#include "PwaUtils/IsobarDecayList.hh"
+#include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
+//#include "PwaUtils/IsobarDecayList.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/pbarpEventList.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -50,8 +52,8 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   _pbarpReaction=boost::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
 
   //fill prodDecayList
-  std::vector< boost::shared_ptr<IsobarDecay> > prodDecs= _pbarpReaction->productionDecays();
-  std::vector< boost::shared_ptr<IsobarDecay> >::iterator itDec;
+  std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
+  std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
     _prodDecList->addDecay(*itDec);
   }
@@ -74,9 +76,9 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   //set suffixes for decay classes
   std::map<std::string, std::string>::iterator itMapStrStr;
   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
-    _decList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
+    _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
     _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-    boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
+    //    boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
   }
 
   //replace mass key
@@ -95,7 +97,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   }
 
   for (itMapStrStr=decRepMassKeyNames.begin(); itMapStrStr!=decRepMassKeyNames.end(); ++itMapStrStr){
-    _decList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
+    _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
   }
 
 
