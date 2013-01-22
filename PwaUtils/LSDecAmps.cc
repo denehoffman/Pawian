@@ -27,6 +27,7 @@ LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarDecay> theDec) :
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
   ,_withDyn(theDec->withDynamics())
+  ,_factorMag(1.)
 {
   initialize();
 }
@@ -123,12 +124,12 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
-  
+
   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
   for(itLS=_JPCLSs.begin(); itLS!=_JPCLSs.end(); ++itLS){
-    currentMagValMap[*itLS]=1.;
+    currentMagValMap[*itLS]=_factorMag;
     currentPhiValMap[*itLS]=0.;
-    currentMagErrMap[*itLS]=0.5;
+    currentMagErrMap[*itLS]=0.5*_factorMag;
     currentPhiErrMap[*itLS]=0.3;
   }
 
@@ -139,7 +140,7 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   if(_withDyn){
     fitVal.Masses[_massKey]=_decay->motherPart()->mass();
-    fitErr.Masses[_massKey]=_decay->motherPart()->width();
+    fitErr.Masses[_massKey]=0.03;
     fitVal.Widths[_massKey]=_decay->motherPart()->width();
     fitErr.Widths[_massKey]=_decay->motherPart()->width();
   }
@@ -153,7 +154,7 @@ void LSDecAmps::print(std::ostream& os) const{
 }
 
 void LSDecAmps::initialize(){
-
+  if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
   if(_withDyn){
     if(!_decay->hasMother()){
       Alert << "no mother resonance; can not add dynamis" << endmsg;

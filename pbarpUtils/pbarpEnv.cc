@@ -70,7 +70,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     stringStr >> suffixStr;
     decSuffixNames[classStr]=suffixStr;
   }
-
+  
   //set suffixes for decay classes
   std::map<std::string, std::string>::iterator itMapStrStr;
   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){

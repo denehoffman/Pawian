@@ -54,6 +54,7 @@ protected:
   bool _daughter1IsStable;
   bool _daughter2IsStable;
   bool _withDyn;
+  double _factorMag;
   virtual void initialize();
 
 private:

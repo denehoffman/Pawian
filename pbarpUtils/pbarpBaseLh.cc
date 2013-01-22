@@ -138,12 +138,13 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
-  
+
+  double magFactor=1./sqrt(_jpclsStates.size());  
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
-    currentMagValMap[*it] = 1.0;
+    currentMagValMap[*it] = magFactor;
     currentPhiValMap[*it] = 0.;
-    currentMagErrMap[*it] = 0.3;
+    currentMagErrMap[*it] = 0.5*magFactor;
     currentPhiErrMap[*it] = 0.3;
   }
   fitVal.Mags["pbarp"]=currentMagValMap;
