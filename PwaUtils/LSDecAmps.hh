@@ -38,6 +38,7 @@ public:
   virtual bool checkRecalculation(fitParams& theParamVal);
   boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  boost::shared_ptr<IsobarDecay> isobarDec() {return _decay;}
   void updateFitParams(fitParams& theParamVal);
 
 protected:
