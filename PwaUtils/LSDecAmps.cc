@@ -10,7 +10,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
-#include "PwaUtils/XdecAmpRegistry.hh"
+//#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 
 #ifdef _OPENMP
@@ -18,19 +18,11 @@
 #endif
 
 LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
-  AbsXdecAmp(theDec->name())
-  ,_decay(theDec)
-  ,_JPCPtr(theDec->motherJPC())
+  AbsXdecAmp(theDec)
   ,_JPCLSs(theDec->JPCLSAmps())
-  ,_key("_"+theDec->fitParSuffix())
-  ,_massKey("")
-  ,_wignerDKey(theDec->wignerDKey())
-  ,_daughter1IsStable(theDec->isDaughter1Stable())
-  ,_daughter2IsStable(theDec->isDaughter2Stable())
-  ,_withDyn(theDec->withDynamics())
   ,_factorMag(1.)
 {
-  initialize();
+  if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
 
 LSDecAmps::~LSDecAmps()
@@ -167,14 +159,6 @@ int evtNo=theData->evtNo;
   return result;
 }
 
-complex<double> LSDecAmps::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs){
-  complex<double> result(1.,0.);
-  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs);
-  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs);
-  return result;
-}
-
-
 void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
@@ -210,29 +194,6 @@ void LSDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
-void LSDecAmps::initialize(){
-  if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
-  if(_withDyn){
-    if(!_decay->hasMother()){
-      Alert << "no mother resonance; can not add dynamis" << endmsg;
-      exit(1);
-    }
-    _massKey=_decay->massParKey();
-  }
-  
-  if(!_daughter1IsStable){
-    boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
-    _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(decDaughter1);
-  }
-  
-  if(!_daughter2IsStable){
-    boost::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
-    _decAmpDaughter2=XdecAmpRegistry::instance()->getXdecAmp(decDaughter2);
-  }
-  
-  _Jdaughter1=(Spin) _decay->daughter1Part()->J();
-  _Jdaughter2=(Spin) _decay->daughter2Part()->J();
-}
 
 bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;

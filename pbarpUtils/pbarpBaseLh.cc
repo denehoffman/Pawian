@@ -11,7 +11,7 @@
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
-#include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -99,8 +99,8 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
      std::vector<boost::shared_ptr<LSDecAmps> >::iterator itDec;
 
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-       Particle* particle1 = (*itDec)->isobarLSDec()->daughter1Part();
-       Particle* particle2 = (*itDec)->isobarLSDec()->daughter2Part();
+       Particle* particle1 = (*itDec)->absDec()->daughter1Part();
+       Particle* particle2 = (*itDec)->absDec()->daughter2Part();
        complex<double> currentDecAmp;
        if(particle1->name() == nameDec)
 	  currentDecAmp=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);

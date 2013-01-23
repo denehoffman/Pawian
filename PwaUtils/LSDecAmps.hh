@@ -34,32 +34,17 @@ public:
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs=0);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs);
-  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs);
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
   virtual bool checkRecalculation(fitParams& theParamVal);
   boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
-  boost::shared_ptr<IsobarLSDecay> isobarLSDec() {return _decay;}
   void updateFitParams(fitParams& theParamVal);
 
 protected:
-  boost::shared_ptr<IsobarLSDecay> _decay; 
-  boost::shared_ptr<const jpcRes> _JPCPtr;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
-  boost::shared_ptr<AbsXdecAmp> _decAmpDaughter1;
-  boost::shared_ptr<AbsXdecAmp> _decAmpDaughter2;
-  Spin _Jdaughter1;
-  Spin _Jdaughter2;
-  std::string _key;
-  std::string _massKey;
-  const std::string _wignerDKey;
-  bool _daughter1IsStable;
-  bool _daughter2IsStable;
-  bool _withDyn;
   double _factorMag;
-  virtual void initialize();
 
 private:
 
