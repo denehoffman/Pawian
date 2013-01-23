@@ -48,8 +48,8 @@ protected:
   boost::shared_ptr<IsobarLSDecay> _decay; 
   boost::shared_ptr<const jpcRes> _JPCPtr;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
-  boost::shared_ptr<LSDecAmps> _decAmpDaughter1;
-  boost::shared_ptr<LSDecAmps> _decAmpDaughter2;
+  boost::shared_ptr<AbsXdecAmp> _decAmpDaughter1;
+  boost::shared_ptr<AbsXdecAmp> _decAmpDaughter2;
   Spin _Jdaughter1;
   Spin _Jdaughter2;
   std::string _key;

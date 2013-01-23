@@ -10,6 +10,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 
 #ifdef _OPENMP
@@ -221,26 +222,12 @@ void LSDecAmps::initialize(){
   
   if(!_daughter1IsStable){
     boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
-    if(decDaughter1->type()=="IsobarLSDecay"){
-      boost::shared_ptr<IsobarLSDecay> decLSDaughter1 =  boost::dynamic_pointer_cast<IsobarLSDecay>(decDaughter1);
-    _decAmpDaughter1=boost::shared_ptr<LSDecAmps>(new LSDecAmps(decLSDaughter1));
-    }
-    else{
-      Alert << "Not supported!!!!" << endmsg;
-      exit(1);
-    }
+    _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(decDaughter1);
   }
   
   if(!_daughter2IsStable){
-    boost::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter1();
-    if(decDaughter2->type()=="IsobarLSDecay"){
-      boost::shared_ptr<IsobarLSDecay> decLSDaughter2 =  boost::dynamic_pointer_cast<IsobarLSDecay>(decDaughter2);
-      _decAmpDaughter2=boost::shared_ptr<LSDecAmps>(new LSDecAmps(decLSDaughter2));
-    }
-    else{
-      Alert << "Not supported!!!!" << endmsg;
-      exit(1);
-    }
+    boost::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
+    _decAmpDaughter2=XdecAmpRegistry::instance()->getXdecAmp(decDaughter2);
   }
   
   _Jdaughter1=(Spin) _decay->daughter1Part()->J();
