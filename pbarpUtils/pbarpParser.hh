@@ -21,7 +21,7 @@ class pbarpParser : public ParserBase
   //  const std::vector<std::string>& productionSystem() const { return _productionSystem; }
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
-
+  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -30,6 +30,7 @@ protected:
   //  std::vector<std::string> _productionSystem;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
+  std::vector<std::string> _spinDensity;
 };
 
 

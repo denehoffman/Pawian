@@ -59,7 +59,6 @@ complex<double> pbarpBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& name
 
    double norm = calcSpinDensityNorm(nameDec, theData);
 
-
    return (result / norm);
 }
 

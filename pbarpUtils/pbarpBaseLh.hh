@@ -40,6 +40,7 @@ public:
   virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
+  virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
    bool _usePhasespace;  
@@ -58,7 +59,6 @@ protected:
   bool _isHighestJaPhoton;
   
   virtual void checkParamVariation(fitParams& theParamVal);
-  virtual void updateFitParams(fitParams& theParamVal);
   virtual void cacheTheAmps();
  
 private:

@@ -26,6 +26,7 @@
 #include "pbarpUtils/pbarpEvtReader.hh"
 #include "pbarpUtils/pbarpEventList.hh"
 #include "pbarpUtils/pbarpHist.hh"
+#include "pbarpUtils/spinDensityHist.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
@@ -261,6 +262,10 @@ int main(int __argc,char *__argv[]){
     std::cout  << min << std::endl;
 
     return 0;
+ }
+
+ if(mode == "spinDensity"){
+   spinDensityHist theSpinDensityHists(theLhPtr, theStartparams);
  }
 }     
  

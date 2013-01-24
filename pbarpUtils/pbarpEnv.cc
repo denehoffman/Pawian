@@ -138,6 +138,8 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     _angleHistDataVec.push_back(currentAngleHistData);
   }
 
+  // spin density particles
+  _spinDensity = thePbarpParser->spinDensityNames();
 
 }
 
