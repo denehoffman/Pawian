@@ -40,7 +40,7 @@ pbarpBaseLh::~pbarpBaseLh()
 
 complex<double> pbarpBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData){
 
-   complex<double> result = 0;
+  complex<double> result(0.,0.);
 
    complex<double> singletAmpM1   = calcProdPartAmp( 0, M1, nameDec, theData, _decAmpsSinglet);
    complex<double> triplet0AmpM1  = calcProdPartAmp( 0, M1, nameDec, theData, _decAmpsTriplet0);

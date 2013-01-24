@@ -25,6 +25,11 @@ LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
 
+LSDecAmps::LSDecAmps(boost::shared_ptr<AbsDecay> theDec) :
+  AbsXdecAmp(theDec)
+{
+}
+
 LSDecAmps::~LSDecAmps()
 {
 }
@@ -73,7 +78,6 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
            *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
            *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
            *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
-
         result+=amp;
       }
     }

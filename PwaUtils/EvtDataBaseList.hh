@@ -35,6 +35,7 @@ typedef std::map<int, Vector4<double> > mapInt4Vec;
 typedef std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapIntSpinComplex;
 typedef std::map<std::string, Vector4<double> > mapString4Vec;
 typedef std::map<std::string, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapStringSpinComplex;
+typedef std::map<std::string, double> mapStringDouble;
 
 struct EvtData {
   mapInt4Vec FourVecsProd;
@@ -43,6 +44,7 @@ struct EvtData {
   mapIntSpinComplex WignerDsDec;
   mapString4Vec FourVecsString;
   mapStringSpinComplex WignerDsString;
+  mapStringDouble DoubleString;
   double evtWeight;
   int evtNo;
 };

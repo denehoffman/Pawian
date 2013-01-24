@@ -42,7 +42,7 @@ public:
   bool withDynamics() {return _withDyn;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
-  void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   void enableDynamics(std::string& dynString) {_withDyn=true;}
   virtual void print(std::ostream& os) const;
   
@@ -75,6 +75,7 @@ protected:
   boost::shared_ptr<AbsDecay> _absDecDaughter2;
 
   std::vector<Particle*> _finalStateParticles;
+  std::vector<Particle*> _finalStateParticlesDaughter1;
   std::vector<Particle*> _finalStateParticlesDaughter2;
   AbsEnv* _env;
 };

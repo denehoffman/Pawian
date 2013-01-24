@@ -8,6 +8,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -104,6 +105,9 @@ void AbsEnv::setup(ParserBase* theParser){
     boost::shared_ptr<AbsDecay> tmpDec;
     if(daughterParticles.size()==2){
       tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+    }
+    if(daughterParticles.size()==3){
+      tmpDec= boost::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
     }
     else {
       Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ; 

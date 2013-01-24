@@ -35,10 +35,14 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
-    std::vector<Particle*> fsParticlesDaughter1=_absDecDaughter1->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), fsParticlesDaughter1.begin(), fsParticlesDaughter1.end());
+    _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
   }
-  else _finalStateParticles.push_back(daughter1);
+  else{
+    _finalStateParticles.push_back(daughter1);
+    _finalStateParticlesDaughter1.push_back(daughter1);
+  }
+
   _absDecDaughter2=_env->absDecayList()->decay(_daughter2);
 
   if(0 != _absDecDaughter2){
@@ -111,7 +115,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
   Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
 
   //fill all4Vec
-  std::map<std::string, Vector4<double>, pawian::Collection::PtrLess>::iterator itMap;
+  std::map<std::string, Vector4<double> >::iterator itMap;
   for(itMap=fsMap.begin(); itMap!=fsMap.end(); ++itMap){
     all4Vec+=itMap->second;
   }
