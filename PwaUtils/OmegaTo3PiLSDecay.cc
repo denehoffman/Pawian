@@ -24,6 +24,9 @@ OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Part
 
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
+
+  _name+="_"+daughter3->name();
+  _fitParamSuffix=_name;
   
   //check correct quantum numbers
   //...
