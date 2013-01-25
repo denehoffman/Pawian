@@ -635,8 +635,10 @@ void fillStatesInitialDec( std::vector< boost::shared_ptr<const T1 > >& initial,
 
 void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<const jpcRes> daughterRes1, boost::shared_ptr<const jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec);
 
-
 class Particle;
+
+void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPClamlam> >& theJPClamlamVec);
+
 
 boost::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);
 
