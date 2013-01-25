@@ -39,6 +39,8 @@ public:
 
 protected:
 
+  const std::string _lambdaDecKey;
+
 private:
 
 

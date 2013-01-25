@@ -28,11 +28,13 @@ public:
   //  virtual OmegaTo3PiLSDecay* clone_() const = 0;
   std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
+  virtual const std::string lambdaDecKey() {return _lambdaDecKey;}
   virtual void print(std::ostream& os) const;
   Particle* daughter3Part() {return _daughter3;}
   virtual std::string type() {return "OmegaTo3PiLSDecay";} 
 
 protected:
+  std::string _lambdaDecKey;
   Particle* _daughter3;
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
   std::vector<Particle*> _finalStateParticlesDaughter3;

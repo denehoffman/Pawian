@@ -19,6 +19,7 @@
 
 LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(boost::shared_ptr<OmegaTo3PiLSDecay> theDec) :
   LSDecAmps(theDec)
+  ,_lambdaDecKey(theDec->lambdaDecKey())
 {
   _JPCLSs=theDec->JPCLSAmps();
   _factorMag=1.;

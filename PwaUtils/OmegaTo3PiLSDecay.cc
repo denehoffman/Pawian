@@ -32,7 +32,8 @@ OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Part
   boost::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherJPCPtr, validL, validS));
   _JPCLSDecAmps.push_back(theValidJPCLS);
 
-  _wignerDKey="normOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles); 
+  _wignerDKey="normOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
+  _lambdaDecKey="lambdaOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles); 
 }
 
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
