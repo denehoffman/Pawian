@@ -22,7 +22,7 @@ XToOmegaPhiDecAmps::XToOmegaPhiDecAmps(const std::string& name, const std::vecto
   ,_flatteMassFit(false)
   ,_phiMass( 1.019455)
   ,_omegaMass( 0.78265)
-  ,_phiPhiPair(make_pair(_phiMass, _phiMass))
+  ,_phiPhiPair(make_pair(_omegaMass, _omegaMass))
   ,_omegaPhiPair(make_pair(_omegaMass, _phiMass))
   ,_theStatesPtr(theStates)
 {
@@ -41,7 +41,7 @@ complex<double> XToOmegaPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData){
 
   complex<double> result(0.,0.);
 
-    result+=XToPhiPhiAmp(lamX, theData);
+    result+=XToPhiOmegaAmp(lamX, theData);
     
     complex<double> dynModel(1.,0.);
     if (!_massIndependent){
@@ -70,7 +70,7 @@ complex<double> XToOmegaPhiDecAmps::XdecAmp(Spin lamX, EvtDataNew* theData){
   return result;
 }
 
-complex<double> XToOmegaPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData){
+complex<double> XToOmegaPhiDecAmps::XToPhiOmegaAmp(Spin lamX, EvtDataNew* theData){
 
   complex<double> result(0.,0.);
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itXMag;
@@ -82,17 +82,17 @@ complex<double> XToOmegaPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData)
      double theXPhi=_currentParamPhis[XState];
      complex<double> expiphiX(cos(theXPhi), sin(theXPhi));
 
-    for(Spin lambdaPhi1=-1; lambdaPhi1<=1; lambdaPhi1++){
-      for(Spin lambdaPhi2=-1; lambdaPhi2<=1; lambdaPhi2++){
-        Spin lambda = lambdaPhi1-lambdaPhi2;
+    for(Spin lambdaOmega=-1; lambdaOmega<=1; lambdaOmega++){
+      for(Spin lambdaPhi=-1; lambdaPhi<=1; lambdaPhi++){
+        Spin lambda = lambdaOmega-lambdaPhi;
         if( fabs(lambda)>XState->J || fabs(lambda)>XState->S) continue;
         
         complex<double> amp = theXMag*expiphiX*sqrt(2*XState->L+1)
           *Clebsch(XState->L, 0, XState->S, lambda, XState->J, lambda)
-          *Clebsch(1, lambdaPhi1, 1, -lambdaPhi2, XState->S, lambda  )
+          *Clebsch(1, lambdaOmega, 1, -lambdaPhi, XState->S, lambda  )
           *conj( theData->WignerDsDec[enumJpsiGamXDfunc::Df_XToOmegaPhi_KK][XState->J][lamX][lambda]);
         
-        amp = amp * phiphiTo4KAmp( theData, lambdaPhi1, lambdaPhi2 );
+        amp = amp * phiOmegaTo2K3piAmp( theData, lambdaOmega, lambdaPhi );
 
         result +=amp;
       }
@@ -102,13 +102,13 @@ complex<double> XToOmegaPhiDecAmps::XToPhiPhiAmp(Spin lamX, EvtDataNew* theData)
    return result;
 }
 
-complex<double> XToOmegaPhiDecAmps::phiphiTo4KAmp( EvtDataNew* theData, Spin lambdaPhi1, Spin lambdaPhi2 ){
+complex<double> XToOmegaPhiDecAmps::phiOmegaTo2K3piAmp( EvtDataNew* theData, Spin lambdaOmega, Spin lambdaPhi ){
   complex<double> result(0.,0.);
   
   double lambda = theData->KinematicVariables[enumJpsiGamXKin::OmegaDecLambda];
   
-  result = 3. * conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_OmegaToPipPimPi0][1][lambdaPhi1][0]) * sqrt(lambda)
-    * 3.* conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_PhiToKpKm][1][lambdaPhi2][0]);
+  result = 3. * conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_OmegaToPipPimPi0][1][lambdaOmega][0]) * sqrt(lambda)
+    * 3.* conj(theData->WignerDsDec[enumJpsiGamXDfunc::Df_PhiToKpKm][1][lambdaPhi][0]);
   
   return result;
 }

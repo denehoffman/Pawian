@@ -51,8 +51,8 @@ protected:
 
   boost::shared_ptr<JpsiToOmegaPhiGamStates> _theStatesPtr;
 
-  complex<double> XToPhiPhiAmp(Spin lamX, EvtDataNew* theData);
-  complex<double> phiphiTo4KAmp( EvtDataNew* theData, Spin lambdaPhi1, Spin lambdaPhi2  );
+  complex<double> XToPhiOmegaAmp(Spin lamX, EvtDataNew* theData);
+  complex<double> phiOmegaTo2K3piAmp( EvtDataNew* theData, Spin lambdaOmega, Spin lambdaPhi  );
 
   virtual void initialize();
 

@@ -334,9 +334,9 @@ void JpsiToOmegaPhiGamHist::initRootStuff()
   _phiPhi_OmegaPhiHeliMcHist= new TH1F("_phiPhi_OmegaPhiHeliMcHist", "cos(#Phi_{#phi}) K+ K- Mc", 100, -TMath::Pi(), TMath::Pi());  
   _phiPhi_OmegaPhiHeliFittedHist= new TH1F("_phiPhi_OmegaPhiHeliFittedHist", "cos(#Phi_{#phi}) K+ K- Fit", 100, -TMath::Pi(), TMath::Pi());
 
-  _chiDataHist= new TH1F("_chiDataHist", "#chi data", 90, 0., 90.);
-  _chiMcHist= new TH1F("_chiMcHist", "#chi Mc", 90, 0., 90.); 
-  _chiFittedHist= new TH1F("_chiFittedHist", "#chi Fit", 90, 0., 90.);  
+  _chiDataHist= new TH1F("_chiDataHist", "#chi data", 100, 0., 90.);
+  _chiMcHist= new TH1F("_chiMcHist", "#chi Mc", 100, 0., 90.); 
+  _chiFittedHist= new TH1F("_chiFittedHist", "#chi Fit", 100, 0., 90.);  
 
   nbins = 50;
   xmin=0;
@@ -411,25 +411,20 @@ void JpsiToOmegaPhiGamHist::plotLambda(TH1F* theHisto, EvtDataNew* theData, doub
 }
 
 void JpsiToOmegaPhiGamHist::plotChi(TH1F* theChiHisto, EvtDataNew* theData, double weight){
-//   Vector4<double>& V4_PipPimPi0KpKm_HeliPsi = theData->FourVecsDec[enumJpsiGamX4V::V4_PipPimPi0KpKm_HeliPsi]  ;
-//   Vector4<double>& V4_Pip_HeliPsi= theData->FourVecsDec[enumJpsiGamX4V::V4_Pip_HeliPsi] ;
-//   Vector4<double>& V4_Kl_HeliPsi= theData->FourVecsDec[enumJpsiGamX4V::V4_Kl_HeliPsi] ;
-//   Vector4<double>& V4_Kp_HeliPsi= theData->FourVecsDec[enumJpsiGamX4V::V4_Kp_HeliPsi] ;
-//   Vector4<double>& V4_Km_HeliPsi= theData->FourVecsDec[enumJpsiGamX4V::V4_Km_HeliPsi] ;
-
-//   double thePhiPhiDecayPlaneAngle = decayAngleChi( V4_PipPimPi0KpKm_HeliPsi, V4_Kp_HeliPsi, V4_Km_HeliPsi, V4_Pip_HeliPsi, V4_Kl_HeliPsi   );
-
-
-  //Vector4<double>& V4_normKpKmDecHeliPipPimPi0KpKm = theData->FourVecsDec[enumJpsiGamX4V::V4_normKpKmDecHeliPipPimPi0KpKm];
-  //Vector4<double>& V4_normPipPimPi0DecHeliPipPimPi0KpKm = theData->FourVecsDec[enumJpsiGamX4V::V4_normPipPimPi0DecHeliPipPimPi0KpKm];
-
-  // double cosChi=(V4_normKpKmDecHeliPipPimPi0KpKm.Px()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.Px()
-  // 		 +V4_normKpKmDecHeliPipPimPi0KpKm.Py()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.Py()
-  // 		 +V4_normKpKmDecHeliPipPimPi0KpKm.Pz()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.Pz())
-  //   / (V4_normKpKmDecHeliPipPimPi0KpKm.P()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.P());
-
-  // double chi=acos(fabs(cosChi));
-  // theChiHisto->Fill(chi*180./TMath::Pi(),weight);   
+  
+  Vector4<double>& V4_normKpKmDecHeliPipPimPi0KpKm = theData->FourVecsDec[enumJpsiGamX4V::V4_phiDecPlaneNormal_HeliPipPimPi0KpKm];
+  Vector4<double>& V4_normPipPimPi0DecHeliPipPimPi0KpKm = theData->FourVecsDec[enumJpsiGamX4V::V4_omegaDecPlaneNormal_HeliPipPimPi0KpKm];
+  
+  double cosChi=(V4_normKpKmDecHeliPipPimPi0KpKm.Px()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.Px()
+    		 +V4_normKpKmDecHeliPipPimPi0KpKm.Py()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.Py()
+    		 +V4_normKpKmDecHeliPipPimPi0KpKm.Pz()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.Pz())
+    / (V4_normKpKmDecHeliPipPimPi0KpKm.P()*V4_normPipPimPi0DecHeliPipPimPi0KpKm.P());
+  
+  double chi=acos(fabs(cosChi));
+  if(chi>0.5*TMath::Pi()){ 
+    chi=TMath::Pi()-chi; 
+  }
+  theChiHisto->Fill(chi*180./TMath::Pi(),weight);   
 }
 
 void  JpsiToOmegaPhiGamHist::fillTuple( TNtuple* theTuple, EvtDataNew* theData, double weight)

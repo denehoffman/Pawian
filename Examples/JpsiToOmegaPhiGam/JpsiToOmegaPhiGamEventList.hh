@@ -15,7 +15,8 @@ struct enumJpsiGamX4V{
 	 V4_PipPimPi0_HeliPipPimPi0KpKm, V4_KpKm_HeliPipPimPi0KpKm, 
 	 V4_Pip_HeliPipPimPi0, V4_Pim_HeliPipPimPi0, V4_Pi0_HeliPipPimPi0,
 	 V4_Kp_HeliKpKm, 
-	 V4_omegaDecPlaneNormal_HeliPipPimPi0, n4Vecs};
+	 V4_omegaDecPlaneNormal_HeliPipPimPi0, V4_omegaDecPlaneNormal_HeliPipPimPi0KpKm, V4_phiDecPlaneNormal_HeliPipPimPi0KpKm, 
+	 n4Vecs};
   
   static const std::string& name(unsigned int t)
   {
@@ -25,7 +26,7 @@ struct enumJpsiGamX4V{
 	 "PipPimPi0_HeliPipPimPi0KpKm", "KpKm_HeliPipPimPi0KpKm", 
 	 "Pip_HeliPipPimPi0",  "Pim_HeliPipPimPi0",  "Pi0_HeliPipPimPi0"
 	 "Kp_HeliKpKm", 
-	 "V4_omegaDecPlaneNormal_HeliPipPimPi0"  };
+	 "V4_omegaDecPlaneNormal_HeliPipPimPi0","V4_omegaDecPlaneNormal_HeliPipPimPi0KpKm", "V4_phiDecPlaneNormal_HeliPipPimPi0KpKm" };
     
     if (t<0 || t>=enumJpsiGamX4V::n4Vecs) assert(0);
     return fitName[t];

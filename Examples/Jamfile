@@ -10,3 +10,5 @@ build-project JpsiGamKsKlKK ;
 build-project JpsiGamEtaPiPiNew ;
 build-project JpsiToPhiPhiGam ;
 build-project D0ToKsPipPim ;
+build-project JpsiToOmegaPhiGam ;
+

@@ -79,27 +79,56 @@ void JpsiToOmegaPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtDa
      
      Vector4<float>  V4_PipPimPi0_HeliPipPimPi0KpKm=helicityVec(V4_all_Lab, V4_PipPimPi0KpKm_Lab, V4_PipPimPi0_Lab);
      Vector4<float>  V4_KpKm_HeliPipPimPi0KpKm=helicityVec(V4_all_Lab, V4_PipPimPi0KpKm_Lab, V4_KpKm_Lab);     
+     Vector4<float>  V4_Kp_HeliPipPimPi0KpKm=helicityVec(V4_all_Lab, V4_PipPimPi0KpKm_Lab, V4_Kp_Lab);
+     Vector4<float>  V4_Km_HeliPipPimPi0KpKm=helicityVec(V4_all_Lab, V4_PipPimPi0KpKm_Lab, V4_Km_Lab);
+     
      Vector4<float>  V4_Pip_HeliPipPimPi0=helicityVec(V4_PipPimPi0KpKm_Lab, V4_PipPimPi0_Lab, V4_pip_Lab);
      Vector4<float>  V4_Pim_HeliPipPimPi0=helicityVec(V4_PipPimPi0KpKm_Lab, V4_PipPimPi0_Lab, V4_pim_Lab);
      Vector4<float>  V4_Pi0_HeliPipPimPi0=helicityVec(V4_PipPimPi0KpKm_Lab, V4_PipPimPi0_Lab, V4_pi0_Lab);
      
      Vector4<float>  V4_Kp_HeliKpKm=helicityVec(V4_PipPimPi0KpKm_Lab, V4_KpKm_Lab, V4_Kp_Lab);
      
-     Vector4<float>  V4_Kp_HeliPipPimPi0KpKm=helicityVec(V4_all_Lab, V4_PipPimPi0KpKm_Lab, V4_Kp_Lab);
-     Vector4<float>  V4_Km_HeliPipPimPi0KpKm=helicityVec(V4_all_Lab, V4_PipPimPi0KpKm_Lab, V4_Km_Lab);
      
-     
+     //
+     // Omega decay plane normal and lambda parameter
+     //
      Vector4<float> V4_omegaDecPlaneNormal_HeliPipPimPi0 ( 0.5*( V4_Pip_HeliPipPimPi0.T()+ V4_Pim_HeliPipPimPi0.T()+ V4_Pi0_HeliPipPimPi0.T() ),
 							     V4_Pim_HeliPipPimPi0.Y()*V4_Pip_HeliPipPimPi0.Z() - V4_Pim_HeliPipPimPi0.Z()*V4_Pip_HeliPipPimPi0.Y(),
 							     V4_Pim_HeliPipPimPi0.Z()*V4_Pip_HeliPipPimPi0.X() - V4_Pim_HeliPipPimPi0.X()*V4_Pip_HeliPipPimPi0.Z(),
 							     V4_Pim_HeliPipPimPi0.X()*V4_Pip_HeliPipPimPi0.Y() - V4_Pim_HeliPipPimPi0.Y()*V4_Pip_HeliPipPimPi0.X() );
-     
-     
-     
      double theQ =  V4_Pip_HeliPipPimPi0.E()- V4_Pip_HeliPipPimPi0.M() +  V4_Pim_HeliPipPimPi0.E()- V4_Pim_HeliPipPimPi0.M() +  V4_Pi0_HeliPipPimPi0.E()- V4_Pi0_HeliPipPimPi0.M();
      double lambdaNorm=theQ*theQ*(theQ*theQ/108.+ V4_Pim_HeliPipPimPi0.M()*theQ/9.+ V4_Pim_HeliPipPimPi0.M()* V4_Pim_HeliPipPimPi0.M()/3.);
      double lambda= V4_omegaDecPlaneNormal_HeliPipPimPi0.P()*  V4_omegaDecPlaneNormal_HeliPipPimPi0.P()/lambdaNorm;
+     ///////
      
+
+
+     //
+     // omega and phi decay plane normal in omega phi helicity system
+     //
+     
+     //omega
+     Vector4<float> normalpipluspiminusheliomegaTLVlab= helicityVecInverse( V4_PipPimPi0KpKm_Lab, V4_PipPimPi0_Lab, V4_omegaDecPlaneNormal_HeliPipPimPi0);
+     Vector4<float> V4_omegaDecPlaneNormal_HeliPipPimPi0KpKm= helicityVec(V4_all_Lab,V4_PipPimPi0KpKm_Lab , normalpipluspiminusheliomegaTLVlab);
+     
+     //test
+     Vector4<float> testBoosted =  helicityVec(  V4_PipPimPi0KpKm_Lab, V4_PipPimPi0_Lab, normalpipluspiminusheliomegaTLVlab );
+     //cout << "++++++++++++++++++++++++++++++"<<endl;
+     //cout << V4_omegaDecPlaneNormal_HeliPipPimPi0 << endl;
+     //cout <<  testBoosted  << endl;
+     //cout << "+++++++++++++++++++++++++++++++" << endl;
+     //eot
+     
+
+
+
+     
+     //phi
+     Vector4<float> V4_phiDecPlaneNormal_HeliPipPimPi0KpKm ( 0.5*( V4_Kp_HeliPipPimPi0KpKm.T()+ V4_Km_HeliPipPimPi0KpKm.T() ),
+							V4_Km_HeliPipPimPi0KpKm.Y()*V4_Kp_HeliPipPimPi0KpKm.Z() - V4_Km_HeliPipPimPi0KpKm.Z()*V4_Kp_HeliPipPimPi0KpKm.Y(),
+							V4_Km_HeliPipPimPi0KpKm.Z()*V4_Kp_HeliPipPimPi0KpKm.X() - V4_Km_HeliPipPimPi0KpKm.X()*V4_Kp_HeliPipPimPi0KpKm.Z(),
+							V4_Km_HeliPipPimPi0KpKm.X()*V4_Kp_HeliPipPimPi0KpKm.Y() - V4_Km_HeliPipPimPi0KpKm.Y()*V4_Kp_HeliPipPimPi0KpKm.X() );
+     //
      
      EvtDataNew* evtData=new EvtDataNew();
      evtData->FourVecsProd[enumProd4V::Psi] = V4_psi;
@@ -121,6 +150,8 @@ void JpsiToOmegaPhiGamEventList::read4Vecs(EventList& evtList, std::vector<EvtDa
      evtData->FourVecsDec[enumJpsiGamX4V::V4_Pi0_HeliPipPimPi0]=V4_Pi0_HeliPipPimPi0;
      
      evtData->FourVecsDec[enumJpsiGamX4V::V4_omegaDecPlaneNormal_HeliPipPimPi0] =V4_omegaDecPlaneNormal_HeliPipPimPi0;
+     evtData->FourVecsDec[enumJpsiGamX4V::V4_omegaDecPlaneNormal_HeliPipPimPi0KpKm] =V4_omegaDecPlaneNormal_HeliPipPimPi0KpKm;
+     evtData->FourVecsDec[enumJpsiGamX4V::V4_phiDecPlaneNormal_HeliPipPimPi0KpKm] =V4_phiDecPlaneNormal_HeliPipPimPi0KpKm;
      
      evtData->KinematicVariables[enumJpsiGamXKin::OmegaDecLambda]=lambda;
      
