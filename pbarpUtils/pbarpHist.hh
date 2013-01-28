@@ -59,14 +59,23 @@ struct massHistData {
 };
 
 struct angleHistData {
-  angleHistData(std::vector<std::string>& motherPNames, std::vector<std::string>& decPNames) :
-    _name("")
+   angleHistData(std::vector<std::string>& motherPNames, std::vector<std::string>& decPNames, std::vector<std::string>& decPNames2, short nBodyDecay) :
+     _nBodyDecay(nBodyDecay)
+    ,_name("")
     ,_motherPNames(motherPNames)
     ,_decPNames(decPNames)
+    ,_decPNames2(decPNames2)
   {
 
     std::vector<std::string>::iterator it;
     for(it=decPNames.begin(); it!=decPNames.end(); ++it){
+      _name+=(*it);
+    }
+
+    if(nBodyDecay == 3)
+       _name+="AND";
+
+    for(it=decPNames2.begin(); it!=decPNames2.end(); ++it){
       _name+=(*it);
     }
 
@@ -77,9 +86,11 @@ struct angleHistData {
     }
   }
 
+  short _nBodyDecay;
   std::string _name;
-  std::vector<std::string> _motherPNames; 
-  std::vector<std::string> _decPNames; 
+  std::vector<std::string> _motherPNames;
+  std::vector<std::string> _decPNames;
+  std::vector<std::string> _decPNames2;
 
   virtual bool operator==(const angleHistData& compare) const {
     bool result=false;

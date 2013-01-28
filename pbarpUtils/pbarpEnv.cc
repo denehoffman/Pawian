@@ -124,17 +124,26 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     
     std::string tmpName;
     std::vector<std::string> currentStringDecVec;
+    std::vector<std::string> currentStringDecVec2;
     std::vector<std::string> currentStringMotherVec;
     bool isDecParticle=true;
+    bool isFirstDecParticle=true;
+    short nBodyDecay=2;
     while(stringStr >> tmpName){
       if(tmpName=="from") {
 	isDecParticle=false;
 	continue;
       }
-      if(isDecParticle) currentStringDecVec.push_back(tmpName);
+      else if(tmpName=="and") {
+	isFirstDecParticle=false;
+	nBodyDecay=3;
+	continue;
+      }
+      if(isDecParticle && isFirstDecParticle) currentStringDecVec.push_back(tmpName);
+      else if(isDecParticle && !isFirstDecParticle) currentStringDecVec2.push_back(tmpName);
       else currentStringMotherVec.push_back(tmpName);
     }
-    boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec)); 
+    boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec, currentStringDecVec2, nBodyDecay));
     _angleHistDataVec.push_back(currentAngleHistData);
   }
 

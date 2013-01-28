@@ -25,12 +25,12 @@ spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theF
   ,_maxEvents(2000)
   ,_theLh(theLh)
 {
-   _dataList=_theLh->getEventList()->getMcVecs(); 
+   _dataList=_theLh->getEventList()->getMcVecs();
    boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->updateFitParams(theFitParams);
 
    std::stringstream spinDensityRootFileName;
    spinDensityRootFileName << "./spinDensity" << pbarpEnv::instance()->outputFileNameSuffix() << ".root";
-   
+
    _spinDensityRootFile = new TFile(spinDensityRootFileName.str().c_str(), "recreate");
 
    std::vector<string> spinDensityParticles = pbarpEnv::instance()->spinDensityNames();
@@ -39,7 +39,7 @@ spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theF
    for(it=spinDensityParticles.begin(); it!=spinDensityParticles.end(); ++it){
       Info << "Calculating spin density matrix for particle " << (*it) << endmsg;
       calcSpinDensityMatrix(*it);
-   }   
+   }
 }
 
 
@@ -52,7 +52,7 @@ spinDensityHist::~spinDensityHist(){
 
 
 void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
-   
+
    int J = pbarpEnv::instance()->particleTable()->particle(particleName)->J();
 
    if(J!=1){
@@ -79,7 +79,7 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
 	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
 	calcSpinDensityMatrixElement(particleName, M1, M2);
      }
-   }   
+   }
 }
 
 
@@ -101,7 +101,7 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
   int eventsRead=0;
   std::vector<EvtData*>::iterator it;
   for(it = _dataList.begin(); it != _dataList.end(); ++it){
-     complex<double> tempSpinDensity = 
+     complex<double> tempSpinDensity =
 	boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
 
      fillHistogram(particleName, newHistoReal, *it, tempSpinDensity.real());
@@ -123,18 +123,18 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
 
 
 
-void spinDensityHist::fillHistogram(std::string& particleName, TH1F* theHisto, 
+void spinDensityHist::fillHistogram(std::string& particleName, TH1F* theHisto,
 				    EvtData* theData, double spinDensityValue){
 
    boost::shared_ptr<AbsDecayList> absDecayList = pbarpEnv::instance()->absDecayList();
    std::vector<boost::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
    std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
-   
-   Vector4<double> all4Vec=theData->FourVecsString["all"]; 
+
+   Vector4<double> all4Vec=theData->FourVecsString["all"];
    Vector4<double> particle4Vec(0.,0.,0.,0.);
 
    for(it=absDecays.begin(); it!=absDecays.end(); ++it){
-            
+
       if( (*it)->motherPart()->name() == particleName){
 	 std::vector<Particle*> fsParticles = (*it)->finalStateParticles();
 	 std::vector<Particle*>::iterator it2;
@@ -148,8 +148,8 @@ void spinDensityHist::fillHistogram(std::string& particleName, TH1F* theHisto,
 	 particle4Vec.Boost(all4Vec);
 
 	 break;
-      }      
+      }
    }
-   
+
    theHisto->Fill(particle4Vec.CosTheta(), spinDensityValue * theData->evtWeight);
 }

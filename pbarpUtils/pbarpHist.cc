@@ -212,15 +212,24 @@ void pbarpHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::
 
   std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
+    short nBodyDecay = it->first->_nBodyDecay;
+
     Vector4<double> combinedDec4Vec(0.,0.,0.,0.);
+    Vector4<double> combinedDec4Vec2(0.,0.,0.,0.);
+
     Vector4<double> combinedMother4Vec(0.,0.,0.,0.);
     Vector4<double> all4Vec=theData->FourVecsString["all"];
 
     std::vector<std::string> decNames=it->first->_decPNames;
+    std::vector<std::string> decNames2=it->first->_decPNames2;
     std::vector<std::string>::iterator itStr;
     for(itStr=decNames.begin(); itStr!=decNames.end(); ++itStr){
       Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
       combinedDec4Vec+=tmp4vec;
+    }
+    for(itStr=decNames2.begin(); itStr!=decNames2.end(); ++itStr){
+      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      combinedDec4Vec2+=tmp4vec;
     }
 
     std::vector<std::string> motherNames=it->first->_motherPNames;
@@ -231,6 +240,8 @@ void pbarpHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::
     }
 
     Vector4<double>  result4Vec(0.,0.,0.,0.);
+    Vector4<double>  result4Vec2(0.,0.,0.,0.);
+
     if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1e-5
 	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5 
 	&& fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1e-5
@@ -238,9 +249,26 @@ void pbarpHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::
     result4Vec=combinedDec4Vec;
     result4Vec.Boost(all4Vec);
     } 
-    else result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
+    else{
+       result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
+       if(nBodyDecay==3)
+	  result4Vec2=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec2);
+    }
 
-    it->second.first->Fill( result4Vec.CosTheta(), weight);  
-    it->second.second->Fill( result4Vec.Phi(), weight);
+    if(nBodyDecay == 2){
+      it->second.first->Fill( result4Vec.CosTheta(), weight);
+      it->second.second->Fill( result4Vec.Phi(), weight);
+    }
+    else if(nBodyDecay == 3){
+      Vector4<double> result4VecPart1 = result4Vec;
+      Vector4<double> result4VecPart2 = result4Vec2;
+      Vector4<float> normVec(0,
+			     result4VecPart1.Y()*result4VecPart2.Z()-result4VecPart1.Z()*result4VecPart2.Y(),
+			     result4VecPart1.Z()*result4VecPart2.X()-result4VecPart1.X()*result4VecPart2.Z(),
+			     result4VecPart1.X()*result4VecPart2.Y()-result4VecPart1.Y()*result4VecPart2.X());
+
+      it->second.first->Fill( normVec.CosTheta(), weight);
+      it->second.second->Fill( normVec.Phi(), weight);
+    }
   }
 }
