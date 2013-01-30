@@ -8,9 +8,11 @@
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/LSDecAmps.hh"
+#include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/LSOmegaTo3PiDecAmps.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -42,6 +44,10 @@ boost::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(boost::shared_ptr<AbsD
     if(theAbsXDec->type()=="IsobarLSDecay"){
       boost::shared_ptr<IsobarLSDecay> decLS =  boost::dynamic_pointer_cast<IsobarLSDecay>(theAbsXDec);
       result=boost::shared_ptr<AbsXdecAmp>(new LSDecAmps(decLS));
+    }
+    else if(theAbsXDec->type()=="IsobarHeliDecay"){
+      boost::shared_ptr<IsobarHeliDecay> decLamLam =  boost::dynamic_pointer_cast<IsobarHeliDecay>(theAbsXDec);
+      result=boost::shared_ptr<AbsXdecAmp>(new HeliDecAmps(decLamLam));
     }
     else if(theAbsXDec->type()=="OmegaTo3PiLSDecay"){
       boost::shared_ptr<OmegaTo3PiLSDecay> decOmega =  boost::dynamic_pointer_cast<OmegaTo3PiLSDecay>(theAbsXDec);

@@ -1,4 +1,4 @@
-// LSDecAmps class definition file. -*- C++ -*-
+// HeliDecAmps class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -14,20 +14,20 @@
 
 #include "PwaUtils/AbsXdecAmp.hh"
 
-class IsobarLSDecay;
+class IsobarHeliDecay;
 class AbsDecay;
 
-class LSDecAmps : public AbsXdecAmp{
+class HeliDecAmps : public AbsXdecAmp{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec);
-  LSDecAmps(boost::shared_ptr<AbsDecay> theDec);
+  HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec);
+  HeliDecAmps(boost::shared_ptr<AbsDecay> theDec);
   /** Destructor */
-  virtual ~LSDecAmps();
+  virtual ~HeliDecAmps();
 
 
   // Getters:
@@ -40,14 +40,15 @@ public:
   virtual void print(std::ostream& os) const;
   virtual bool checkRecalculation(fitParams& theParamVal);
   boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
-  std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  std::vector< boost::shared_ptr<const JPClamlam> >& jpclamlamVec() {return _JPClamlams;}
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
+  std::vector< boost::shared_ptr<const JPClamlam> > _JPClamlams;
   double _factorMag;
   double _parityFactor;
-
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamMagLamLams;
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamPhiLamLams;
 private:
 
 

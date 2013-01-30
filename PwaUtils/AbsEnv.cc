@@ -8,6 +8,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -90,7 +91,15 @@ void AbsEnv::setup(ParserBase* theParser){
     std::string tmpName;
 
     bool isDecParticle=false;
+    bool firstArgument=true;
+    std::string usedSystem("");
+
     while(stringStr >> tmpName){
+      if(firstArgument){
+	usedSystem=tmpName;
+	firstArgument=false;
+	continue;
+      }
       if(tmpName=="To") {
         isDecParticle=true;
         continue;
@@ -104,10 +113,20 @@ void AbsEnv::setup(ParserBase* theParser){
     }
     boost::shared_ptr<AbsDecay> tmpDec;
     if(daughterParticles.size()==2){
-      tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      if (usedSystem=="Heli") tmpDec= boost::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      else if (usedSystem=="Cano")  tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      else {
+	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!" << endmsg;
+	exit(1);
+      }
+
     }
     if(daughterParticles.size()==3){
-      tmpDec= boost::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
+      if (usedSystem=="Cano") tmpDec= boost::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
+      else {
+	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!" << endmsg;
+	exit(1);
+      }
     }
     else {
       Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ; 

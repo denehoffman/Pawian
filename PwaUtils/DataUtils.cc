@@ -77,9 +77,9 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
   bool isDaughter2Photon=false;
   if(daughter2->name()=="photon") isDaughter2Photon=true;
 
-  for (Spin lam1=0; lam1<=Jdaughter1; ++lam1){
+  for (Spin lam1=-Jdaughter1; lam1<=Jdaughter1; ++lam1){
     if(isDaughter1Photon && lam1==0) continue;
-    for (Spin lam2=-Jdaughter2; lam2<=Jdaughter2; ++lam2){
+    for (Spin lam2=lam1; lam2<=Jdaughter2; ++lam2){
       if(isDaughter2Photon && lam2==0) continue;
       Spin lambda=lam1-lam2;
       if (fabs(lambda)>Smax) continue;

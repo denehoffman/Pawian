@@ -23,11 +23,19 @@ LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
   ,_factorMag(1.)
 {
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
+  Particle* daughter1=_decay->daughter1Part();
+  Particle* daughter2=_decay->daughter2Part();
+  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
+  Info << "_parityFactor=\t" << _parityFactor << endmsg; 
 }
 
 LSDecAmps::LSDecAmps(boost::shared_ptr<AbsDecay> theDec) :
   AbsXdecAmp(theDec)
 {
+  Particle* daughter1=_decay->daughter1Part();
+  Particle* daughter2=_decay->daughter2Part();
+  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J()); 
+  Info << "_parityFactor=\t" << _parityFactor << endmsg; 
 }
 
 LSDecAmps::~LSDecAmps()
@@ -78,7 +86,8 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
            *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
            *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
            *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
-        result+=amp;
+       
+	result+=amp;
       }
     }
   }
@@ -98,6 +107,7 @@ int evtNo=theData->evtNo;
     return result;
   }
 
+  //  Spin lam1Min=-_Jdaughter1;
   Spin lam1Min=-_Jdaughter1;
   Spin lam1Max= _Jdaughter1;
   Spin lam2Min=-_Jdaughter2;
@@ -130,9 +140,7 @@ int evtNo=theData->evtNo;
 	   *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
 	   *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
-	// std::cout << "amp: " << amp << std::endl;
-	amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
-
+      	amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;
       }
     }

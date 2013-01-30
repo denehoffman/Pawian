@@ -27,7 +27,7 @@ public:
   IsobarHeliDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
   virtual ~IsobarHeliDecay();
   //  virtual IsobarHeliDecay* clone_() const = 0;
-  std::vector< boost::shared_ptr<const JPClamlam> > JPCLSAmps(){ return _JPClamlamDecAmps;}
+  std::vector< boost::shared_ptr<const JPClamlam> > JPClamlamAmps(){ return _JPClamlamDecAmps;}
   virtual void print(std::ostream& os) const;
   virtual std::string type() {return "IsobarHeliDecay";} 
 
