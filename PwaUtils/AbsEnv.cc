@@ -116,18 +116,20 @@ void AbsEnv::setup(ParserBase* theParser){
       if (usedSystem=="Heli") tmpDec= boost::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
       else if (usedSystem=="Cano")  tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
       else {
-	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!" << endmsg;
+	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);
       }
 
     }
-    if(daughterParticles.size()==3){
+
+    else if(daughterParticles.size()==3){
       if (usedSystem=="Cano") tmpDec= boost::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
       else {
-	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!" << endmsg;
+	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);
       }
     }
+ 
     else {
       Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ; 
     }

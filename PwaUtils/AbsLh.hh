@@ -30,7 +30,7 @@ public:
   void cacheAmplitudes();
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
   virtual void print(std::ostream& os) const=0;
-
+  virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
   boost::shared_ptr<const EvtDataBaseList> _evtListPtr;
@@ -47,6 +47,5 @@ protected:
   
   virtual void checkParamVariation(fitParams& theParamVal);
   // virtual void cacheTheAmps()=0;
-  virtual void updateFitParams(fitParams& theParamVal);
   virtual void cacheTheAmps();
 };

@@ -26,7 +26,7 @@ spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theF
   ,_theLh(theLh)
 {
    _dataList=_theLh->getEventList()->getMcVecs();
-   boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->updateFitParams(theFitParams);
+   _theLh->updateFitParams(theFitParams);
 
    std::stringstream spinDensityRootFileName;
    spinDensityRootFileName << "./spinDensity" << pbarpEnv::instance()->outputFileNameSuffix() << ".root";

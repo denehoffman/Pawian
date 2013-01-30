@@ -49,7 +49,7 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
 
   validJPCLS(motherRes, daughterRes1, daughterRes2, currentJPCLSDecAmps);
   if(currentJPCLSDecAmps.size()==0){
-    Alert << "decay JPC= " 
+    Warning << "decay JPC= " 
 	  << motherRes->J << " " << motherRes->P << " " << motherRes->C
 	  << " --> "
 	  << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
@@ -57,7 +57,7 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
 	  << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C 
 	  << " not allowed!!!" 
 	  << endmsg;
-    exit(1);  
+    return;
   }
 
   Spin Smax=0;

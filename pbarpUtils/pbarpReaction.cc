@@ -7,6 +7,7 @@
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/pbarpEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/IsobarHeliDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -29,6 +30,8 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodDecs.push_back(currentDec);
+	boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+	_prodHeliDecs.push_back(currentHeliDec);
 	acceptJPC=true;
       }
     }
@@ -40,41 +43,57 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
   _pbarpJPCLSsinglet =  extractStates(_pbarpJPCs, all_pbarpSingletLS);
-  fillMap(_pbarpJPCLSsinglet, _prodDecs, _pbarpSingletDecMap);
+  // fillMap(_pbarpJPCLSsinglet, _prodDecs, _pbarpSingletDecMap);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTriplet0LS = thepbarpStates->triplet0_JPCLS_States();
   _pbarpJPCLStriplet0 =  extractStates(_pbarpJPCs, all_pbarpTriplet0LS);
-  fillMap(_pbarpJPCLStriplet0, _prodDecs, _pbarpTriplet0DecMap);
+  // fillMap(_pbarpJPCLStriplet0, _prodDecs, _pbarpTriplet0DecMap);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletp1LS = thepbarpStates->tripletp1_JPCLS_States();
   _pbarpJPCLStripletp1 =  extractStates(_pbarpJPCs, all_pbarpTripletp1LS);
-  fillMap(_pbarpJPCLStripletp1, _prodDecs, _pbarpTripletp1DecMap);
+  // fillMap(_pbarpJPCLStripletp1, _prodDecs, _pbarpTripletp1DecMap);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
   _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCs, all_pbarpTripletm1LS);
-  fillMap(_pbarpJPCLStripletm1, _prodDecs, _pbarpTripletm1DecMap);
+  // fillMap(_pbarpJPCLStripletm1, _prodDecs, _pbarpTripletm1DecMap);
 }
 
 pbarpReaction::~pbarpReaction(){
 }
 
-void  pbarpReaction::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarLSDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > toFill){
+// void  pbarpReaction::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarLSDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > toFill){
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-  for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
-    std::vector<boost::shared_ptr<IsobarLSDecay> > currentIsobarVecs;
+//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+//   for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
+//     std::vector<boost::shared_ptr<IsobarLSDecay> > currentIsobarVecs;
 
-    std::vector<boost::shared_ptr<IsobarLSDecay> >::iterator itIsobar;
-    for(itIsobar=decs.begin(); itIsobar!=decs.end(); ++itIsobar){
-      if( (*(*itIsobar)->motherJPC())==(*(*itJPCLS)) )  currentIsobarVecs.push_back(*itIsobar);
-    }
-    std::cout << "\nfill map for";
-    (*itJPCLS)->print(std::cout);
-    std::cout <<"\t with currentIsobarVecs.size()=\t" << currentIsobarVecs.size() << std::endl;
-    toFill[(*itJPCLS)]=currentIsobarVecs;   
-  }
-}
+//     std::vector<boost::shared_ptr<IsobarLSDecay> >::iterator itIsobar;
+//     for(itIsobar=decs.begin(); itIsobar!=decs.end(); ++itIsobar){
+//       if( (*(*itIsobar)->motherJPC())==(*(*itJPCLS)) )  currentIsobarVecs.push_back(*itIsobar);
+//     }
+//     std::cout << "\nfill map for";
+//     (*itJPCLS)->print(std::cout);
+//     std::cout <<"\t with currentIsobarVecs.size()=\t" << currentIsobarVecs.size() << std::endl;
+//     toFill[(*itJPCLS)]=currentIsobarVecs;   
+//   }
+// }
 
+// void  pbarpReaction::fillHeliMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarHeliDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarHeliDecay> >, pawian::Collection::SharedPtrLess > toFill){
+
+//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+//   for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
+//     std::vector<boost::shared_ptr<IsobarHeliDecay> > currentHeliVecs;
+
+//     std::vector<boost::shared_ptr<IsobarHeliDecay> >::iterator itHeli;
+//     for(itHeli=decs.begin(); itHeli!=decs.end(); ++itHeli){
+//       if( (*(*itHeli)->motherJPC())==(*(*itJPCLS)) )  currentHeliVecs.push_back(*itHeli);
+//     }
+//     std::cout << "\nfill map for";
+//     (*itJPCLS)->print(std::cout);
+//     std::cout <<"\t with currentHeliVecs.size()=\t" << currentHeliVecs.size() << std::endl;
+//     toFill[(*itJPCLS)]=currentHeliVecs;   
+//   }
+// }
 
 void pbarpReaction::print(std::ostream& os) const{
   os << "\n pbarp reaction\n";
