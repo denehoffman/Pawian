@@ -18,6 +18,7 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/StreamFitParmsBase.hh"
 #include "PwaUtils/PwaFcnBase.hh"
+#include "PwaUtils/PwaCovMatrix.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 #include "pbarpUtils/pbarpEnv.hh"
@@ -269,14 +270,34 @@ int main(int __argc,char *__argv[]){
     MnUserCovariance theCovMatrix = min.UserCovariance();
     std::cout  << min << std::endl;
 
+    std::ostringstream serializationFileName;
+    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
+    std::ofstream serializationStream(serializationFileName.str().c_str());
+    boost::archive::text_oarchive boostOutputArchive(serializationStream);
+
+    PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
+    boostOutputArchive << thePwaCovMatrix;
+
     return 0;
  }
 
  if(mode == "spinDensity"){
-   spinDensityHist theSpinDensityHists(theLhPtr, theStartparams);
+
+    std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
+    std::ifstream serializationStream(serializationFileName.c_str());
+
+    if(!serializationStream.is_open()){
+       Alert << "Could not open serialization file." << endmsg;
+       return 0;
+    }
+
+    boost::archive::text_iarchive boostInputArchive(serializationStream);
+
+    PwaCovMatrix thePwaCovMatrix;
+    boostInputArchive >> thePwaCovMatrix;
+
+    spinDensityHist theSpinDensityHists(theLhPtr, theStartparams, thePwaCovMatrix);
  }
 }     
  
   
-
-

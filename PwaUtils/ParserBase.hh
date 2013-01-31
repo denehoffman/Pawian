@@ -41,6 +41,7 @@ public:
   const std::string dataFile() const {return _dataFile;}
   const std::string mcFile() const {return _mcFile;}
   const std::string fitParamFile() const {return _paramFile;}
+  const std::string serializationFile() const{ return _serializationFile; }
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
   const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
@@ -68,6 +69,7 @@ protected:
   std::string _dataFile;
   std::string _mcFile;
   std::string _paramFile;
+  std::string _serializationFile;
   std::string _startHypo;
   std::string _mode;		  
   std::string _outputFileNameSuffix;

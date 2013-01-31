@@ -4,16 +4,11 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
 #include <string>
 #include <sstream>
 #include <vector>
 #include <map>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-
-#include "Minuit2/MnUserCovariance.h"
-#include "Minuit2/MnUserParameters.h"
 
 struct jpcRes {
   Spin J;
@@ -643,22 +638,3 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
 boost::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);
 
 
-struct fitParams;
-
-class PwaCovMatrix
-{
-  public:
-   PwaCovMatrix(unsigned short n);
-   PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, fitParams &theFitParams);
-   template<class Archive>
-   void serialize(Archive & ar, const unsigned int version)
-   {
-      ar & n;
-      ar & covMatrix;
-   }
-
-  private:
-   friend class boost::serialization::access;
-   unsigned short n;
-   std::map<std::string, std::map<std::string, double> > covMatrix;
-};

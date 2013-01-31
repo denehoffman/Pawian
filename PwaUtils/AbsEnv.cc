@@ -39,6 +39,7 @@ void AbsEnv::setup(ParserBase* theParser){
 
   // common options
   _outputFileNameSuffix = theParser->outputFileNameSuffix();
+  _serializationFileName = theParser->serializationFile();
 
   // pdtTable
   PdtParser pdtParser;

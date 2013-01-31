@@ -34,6 +34,7 @@ public:
   boost::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
   boost::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
+  const std::string serializationFileName() const {return _serializationFileName;}
 
 protected:  
 
@@ -46,4 +47,5 @@ protected:
   boost::shared_ptr<AbsDecayList> _absDecList;
   boost::shared_ptr<AbsDecayList> _prodDecList;
   std::string _outputFileNameSuffix;
+  std::string _serializationFileName;
 };

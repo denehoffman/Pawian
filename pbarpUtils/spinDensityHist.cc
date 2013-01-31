@@ -9,8 +9,8 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/PwaCovMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
@@ -20,14 +20,18 @@
 
 
 
-spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, 
+				 fitParams& theFitParams, PwaCovMatrix& theCovMatrix) :
    _nBins(101)
   ,_maxEvents(2000)
   ,_theLh(theLh)
 {
+   _theFitParamsOriginal = &theFitParams;
+   _thePwaCovMatrix = &theCovMatrix;
    _dataList=_theLh->getEventList()->getMcVecs();
-   _theLh->updateFitParams(theFitParams);
 
+   theFitParamsBaseClass.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
+   
    std::stringstream spinDensityRootFileName;
    spinDensityRootFileName << "./spinDensity" << pbarpEnv::instance()->outputFileNameSuffix() << ".root";
 
@@ -73,12 +77,12 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
       Alert << "Particles not produced from pbarp currently not supported." << endmsg;
       return;
    }
-
+   
    for(Spin M1 = -J; M1 <= J; M1++){
-     for(Spin M2 = -J; M2 <= J; M2++){
-	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
+      for(Spin M2 = -J; M2 <= J; M2++){
+	 Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
 	calcSpinDensityMatrixElement(particleName, M1, M2);
-     }
+      }
    }
 }
 
@@ -86,40 +90,105 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
 
 void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Spin M1, Spin M2){
 
-  std::stringstream newHistNameReal;
-  newHistNameReal << particleName << "_" << M1 << "_" << M2 << "_Real";
-  TH1F* newHistoReal = new TH1F(newHistNameReal.str().c_str(), newHistNameReal.str().c_str(), _nBins, -1, 1);
-  std::stringstream newHistNameImag;
-  newHistNameImag << particleName << "_" << M1 << "_" << M2 << "_Imag";
-  TH1F* newHistoImag = new TH1F(newHistNameImag.str().c_str(), newHistNameImag.str().c_str(), _nBins, -1, 1);
+   std::stringstream newHistNameReal;
+   newHistNameReal << particleName << "_" << M1 << "_" << M2 << "_Real";
+   TH1F* newHistoReal = new TH1F(newHistNameReal.str().c_str(), newHistNameReal.str().c_str(), _nBins, -1, 1);
+   std::stringstream newHistNameImag;
+   newHistNameImag << particleName << "_" << M1 << "_" << M2 << "_Imag";
+   TH1F* newHistoImag = new TH1F(newHistNameImag.str().c_str(), newHistNameImag.str().c_str(), _nBins, -1, 1);
+   
+   TH1F* normHist = new TH1F("normHist", "normHist", _nBins, -1, 1);
+   normHist->SetDirectory(0);
+   TH1F* errReal = new TH1F("errReal", "errRead", _nBins, -1, 1);
+   TH1F* errImag = new TH1F("errImag", "errImag", _nBins, -1, 1);
+   errReal->SetDirectory(0);
+   errImag->SetDirectory(0);
+   
+   int eventsRead=0;
+   std::vector<EvtData*>::iterator it;
+   for(it = _dataList.begin(); it != _dataList.end(); ++it){
+      _theLh->updateFitParams(*_theFitParamsOriginal);
+      complex<double> tempSpinDensity =
+	 boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
+      
+      fillHistogram(particleName, newHistoReal, *it, tempSpinDensity.real());
+      fillHistogram(particleName, newHistoImag, *it, tempSpinDensity.imag());
+      fillHistogram(particleName, normHist, *it, 1.0);
+      
+      complex<double> tempSpinDensityErr = calcSpinDensityMatrixError(particleName, M1, M2, *it, tempSpinDensity);
+      
+      fillHistogram(particleName, errReal, *it, tempSpinDensityErr.real());
+      fillHistogram(particleName, errImag, *it, tempSpinDensityErr.imag());
+      
+      eventsRead++;
+      if(eventsRead >= _maxEvents)
+	 break;
+   }
 
-  TH1F* normReal = new TH1F("normReal", "normReal", _nBins, -1, 1);
-  TH1F* normImag = new TH1F("normImag", "normImag", _nBins, -1, 1);
-  normReal->SetDirectory(0);
-  normImag->SetDirectory(0);
-
-  int eventsRead=0;
-  std::vector<EvtData*>::iterator it;
-  for(it = _dataList.begin(); it != _dataList.end(); ++it){
-     complex<double> tempSpinDensity =
-	boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
-
-     fillHistogram(particleName, newHistoReal, *it, tempSpinDensity.real());
-     fillHistogram(particleName, newHistoImag, *it, tempSpinDensity.imag());
-     fillHistogram(particleName, normReal, *it, 1.0);
-     fillHistogram(particleName, normImag, *it, 1.0);
-     eventsRead++;
-     if(eventsRead >= _maxEvents)
-	break;
-  }
-
-  newHistoReal->Divide(normReal);
-  newHistoImag->Divide(normImag);
-
-  delete normReal;
-  delete normImag;
-
+   newHistoReal->Divide(normHist);
+   newHistoImag->Divide(normHist);
+   errReal->Divide(normHist);
+   errImag->Divide(normHist);
+   
+   for(int i=1; i<=_nBins; i++){
+      newHistoReal->SetBinError(i, errReal->GetBinContent(i));
+      newHistoImag->SetBinError(i, errImag->GetBinContent(i));
+   }
+   
+   delete normHist;
+   delete errReal;
+   delete errImag;
 }
+
+
+
+complex<double> 
+spinDensityHist::calcSpinDensityMatrixError(std::string& particleName, 
+					    Spin M1, Spin M2, EvtData* evtData, complex<double> sdmValue){
+
+   double stepSize = 0.0001;
+   std::map< std::string, complex<double> > derivatives;
+
+   unsigned int nPar = _theMnUserParameters.Params().size();
+
+   for(unsigned int i=0; i<nPar; i++){
+      double parOrig = _theMnUserParameters.Value(i);
+      std::string parName = _theMnUserParameters.GetName(i);
+      
+      _theMnUserParameters.SetValue(i, parOrig + stepSize);
+      
+      fitParams newFitParams = *_theFitParamsOriginal;
+      theFitParamsBaseClass.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
+      _theLh->updateFitParams(newFitParams);
+      
+      complex<double> tempSpinDensity  = 
+	 boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, evtData);
+      
+      complex<double> newDerivative = (tempSpinDensity - sdmValue) / stepSize;
+      derivatives[parName] = newDerivative;
+      
+      _theMnUserParameters.SetValue(i, parOrig);
+   }
+
+   double errorReal=0;
+   double errorImag=0;
+
+   for(unsigned int i=0; i<nPar; i++)
+      for(unsigned int j=0; j<nPar; j++){
+	 
+	 std::string name1 = _theMnUserParameters.GetName(i);
+	 std::string name2 = _theMnUserParameters.GetName(j);
+	 
+	 errorReal += derivatives[name1].real() * _thePwaCovMatrix->GetElement(name1, name2) * derivatives[name2].real();
+	 errorImag += derivatives[name1].imag() * _thePwaCovMatrix->GetElement(name1, name2) * derivatives[name2].imag();
+      }
+
+   errorReal = sqrt(errorReal);
+   errorImag = sqrt(errorImag);
+
+   return complex<double>(errorReal, errorImag);
+}
+
 
 
 
@@ -129,27 +198,27 @@ void spinDensityHist::fillHistogram(std::string& particleName, TH1F* theHisto,
    boost::shared_ptr<AbsDecayList> absDecayList = pbarpEnv::instance()->absDecayList();
    std::vector<boost::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
    std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
-
+   
    Vector4<double> all4Vec=theData->FourVecsString["all"];
    Vector4<double> particle4Vec(0.,0.,0.,0.);
-
+   
    for(it=absDecays.begin(); it!=absDecays.end(); ++it){
-
+      
       if( (*it)->motherPart()->name() == particleName){
 	 std::vector<Particle*> fsParticles = (*it)->finalStateParticles();
 	 std::vector<Particle*>::iterator it2;
 	 Vector4<double> allDaughters4Vec(0., 0., 0., 0.);
-
+	 
 	 for(it2 = fsParticles.begin(); it2!=fsParticles.end(); ++it2){
-	     allDaughters4Vec += theData->FourVecsString[(*it2)->name()];
+	    allDaughters4Vec += theData->FourVecsString[(*it2)->name()];
 	 }
-
+	 
 	 particle4Vec = allDaughters4Vec;
 	 particle4Vec.Boost(all4Vec);
-
+	 
 	 break;
       }
    }
-
+   
    theHisto->Fill(particle4Vec.CosTheta(), spinDensityValue * theData->evtWeight);
 }

@@ -21,7 +21,6 @@ class pbarpReaction;
 class IsobarDecayList;
 class pbarpEventList;
 class pbarpParser;
-//class pbarpHist;
 
 class pbarpEnv : public AbsEnv{
 
