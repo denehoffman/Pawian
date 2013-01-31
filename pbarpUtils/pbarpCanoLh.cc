@@ -1,14 +1,13 @@
-// pbarpHeliLh class definition file. -*- C++ -*-
+// pbarpCanoLh class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 #include <string>
 
-#include "pbarpUtils/pbarpHeliLh.hh"
+#include "pbarpUtils/pbarpCanoLh.hh"
 #include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
-#include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -22,7 +21,7 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpHeliLh::pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+pbarpCanoLh::pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
   pbarpBaseLh(theEvtList)
 {
   initialize();
@@ -30,36 +29,36 @@ pbarpHeliLh::pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
 
 
 
-pbarpHeliLh::~pbarpHeliLh()
+pbarpCanoLh::~pbarpCanoLh()
 {;
 }
 
 
-void pbarpHeliLh::print(std::ostream& os) const{
-  
+void pbarpCanoLh::print(std::ostream& os) const{
+
 }
 
 
-void  pbarpHeliLh::initialize(){
-  
-  std::vector< boost::shared_ptr<IsobarHeliDecay> > theDecs = _pbarpReactionPtr->productionHeliDecays();
+void  pbarpCanoLh::initialize(){
 
-  std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator it;
+  std::vector< boost::shared_ptr<IsobarLSDecay> > theDecs = _pbarpReactionPtr->productionDecays();
+  std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    boost::shared_ptr<AbsXdecAmp> currentAmp(new HeliDecAmps(*it));
+    boost::shared_ptr<AbsXdecAmp> currentAmp(new LSDecAmps(*it));
     _decAmps.push_back(currentAmp);
   }
 
   std::vector< boost::shared_ptr<const JPCLS> > jpclsSingletStates=_pbarpReactionPtr->jpclsSingletStates();
   fillMap(jpclsSingletStates, _decAmps, _decAmpsSinglet);
-  
+
   std::vector< boost::shared_ptr<const JPCLS> > jpclsTriplet0States=_pbarpReactionPtr->jpclsTriplet0States();
   fillMap(jpclsTriplet0States, _decAmps, _decAmpsTriplet0);
-  
+
   std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletp1States=_pbarpReactionPtr->jpclsTripletp1States();
   fillMap(jpclsTripletp1States, _decAmps, _decAmpsTripletp1);
-  
+
   std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
   fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);  
 }
+
 

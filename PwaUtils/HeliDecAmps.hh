@@ -39,7 +39,7 @@ public:
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
   virtual bool checkRecalculation(fitParams& theParamVal);
-  boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
+  // boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< boost::shared_ptr<const JPClamlam> >& jpclamlamVec() {return _JPClamlams;}
   virtual void updateFitParams(fitParams& theParamVal);
 

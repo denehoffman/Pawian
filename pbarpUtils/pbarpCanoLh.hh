@@ -1,4 +1,4 @@
-// pbarpHeliLh class definition file. -*- C++ -*-
+// pbarpCanoLh class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -19,25 +19,25 @@
 
 class AbsXdecAmp;
 class pbarpReaction;
-class HeliDecAmps;
+class LSDecAmps;
 
-class pbarpHeliLh : public pbarpBaseLh {
+class pbarpCanoLh : public pbarpBaseLh {
 
 public:
-  pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList>);
-  
-  virtual ~pbarpHeliLh();
-  
+  pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList>);
+
+  virtual ~pbarpCanoLh();
+
   virtual AbsLh* clone_() const {
-    return new  pbarpHeliLh(_evtListPtr);
+    return new  pbarpCanoLh(_evtListPtr);
   }
   virtual void print(std::ostream& os) const;
-  
+
+
 protected:
 
-  
+
 private:
-  
+
   void initialize();
-  
 };

@@ -25,6 +25,7 @@
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "pbarpUtils/pbarpHeliLh.hh"
+#include "pbarpUtils/pbarpCanoLh.hh"
 #include "pbarpUtils/pbarpEvtReader.hh"
 #include "pbarpUtils/pbarpEventList.hh"
 #include "pbarpUtils/pbarpHist.hh"
@@ -146,7 +147,7 @@ int main(int __argc,char *__argv[]){
 
   std::string prodFormalism=theAppParams->productionFormalism();
   boost::shared_ptr<AbsLh> theLhPtr;
-  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpBaseLh(pbarpEventListPtr));
+  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpCanoLh(pbarpEventListPtr));
   else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh(pbarpEventListPtr));
   else {
     Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;

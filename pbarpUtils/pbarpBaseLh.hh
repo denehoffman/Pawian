@@ -25,49 +25,44 @@ class pbarpBaseLh : public AbsLh {
 
 public:
   pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList>);
-
+  
   virtual ~pbarpBaseLh();
+  
+  virtual AbsLh* clone_() const =0;
 
-  virtual AbsLh* clone_() const {
-    return new  pbarpBaseLh(_evtListPtr);
-  }
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
 					  std::map <boost::shared_ptr<const JPCLS>,
-			                            std::vector< boost::shared_ptr<LSDecAmps> >,
-			                            pawian::Collection::SharedPtrLess > pbarpAmps);
+					  std::vector< boost::shared_ptr<AbsXdecAmp> >,
+					  pawian::Collection::SharedPtrLess > pbarpAmps);
+
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
   virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
   virtual void updateFitParams(fitParams& theParamVal);
-
+  
 protected:
-   bool _usePhasespace;  
+  bool _usePhasespace;  
   const std::string _phasespaceKey;
   boost::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< boost::shared_ptr<const JPCLS> > _jpclsStates;
-  std::vector< boost::shared_ptr<LSDecAmps> > _decAmps;
-  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<LSDecAmps> >, pawian::Collection::SharedPtrLess > _decAmpsSinglet;
-  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<LSDecAmps> >, pawian::Collection::SharedPtrLess > _decAmpsTriplet0;
-  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<LSDecAmps> >, pawian::Collection::SharedPtrLess > _decAmpsTripletp1;
-  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<LSDecAmps> >, pawian::Collection::SharedPtrLess > _decAmpsTripletm1;
- 
- std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
+  std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;
+  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsSinglet;
+  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTriplet0;
+  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletp1;
+  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletm1;
+  
+  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
   int _highestJFsp;
   bool _isHighestJaPhoton;
   
   virtual void checkParamVariation(fitParams& theParamVal);
   virtual void cacheTheAmps();
- 
+  virtual void fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<AbsXdecAmp> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill); 
+
 private:
 
-  // void getDefaultParams(const std::vector<std::string>& hyps, 
-  // 			std::vector< boost::shared_ptr<const JPCLS> > lsAmps, 
-  // 			fitParams& fitVal, fitParams& fitErr);
- 
   void initialize();
-  void fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<LSDecAmps> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<LSDecAmps> >, pawian::Collection::SharedPtrLess >& toFill);
-  
 };

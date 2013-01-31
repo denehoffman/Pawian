@@ -22,6 +22,8 @@ public:
   virtual ~AbsXdecAmp();
   
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs)=0;
+  virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
+                                      EvtData* theData, Spin lamFs)=0;
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
   virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs);
   virtual void print(std::ostream& os) const=0;
@@ -29,6 +31,7 @@ public:
   const Spin  spinX() const {return _J_X;}
   const int  parity() const {return _parity;}
   virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   boost::shared_ptr<AbsDecay> absDec() {return _decay;}
   virtual void cacheAmplitudes(){_cacheAmps=true;}
   virtual void updateFitParams(fitParams& theParamVal){return;}
