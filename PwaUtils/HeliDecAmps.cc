@@ -168,7 +168,7 @@ int evtNo=theData->evtNo;
     result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
   }
 
-  result*=sqrt(2.*_JPCPtr->J+1.);
+  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
   if ( _cacheAmps){
 #ifdef _OPENMP
 #pragma omp critical
