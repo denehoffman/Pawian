@@ -23,6 +23,7 @@
 #include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/pbarpBaseLh.hh"
+#include "pbarpUtils/pbarpHeliLh.hh"
 #include "pbarpUtils/pbarpEvtReader.hh"
 #include "pbarpUtils/pbarpEventList.hh"
 #include "pbarpUtils/pbarpHist.hh"
@@ -142,7 +143,14 @@ int main(int __argc,char *__argv[]){
   pbarpEventListPtr->read(eventsData, mcData);
   // pbarpEventListPtr->read4Vecs();
 
-  boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(pbarpEventListPtr));
+  std::string prodFormalism=theAppParams->productionFormalism();
+  boost::shared_ptr<AbsLh> theLhPtr;
+  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpBaseLh(pbarpEventListPtr));
+  else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh(pbarpEventListPtr));
+  else {
+    Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
+    exit(1);
+  }
 
   if (mode=="dumpDefaultParams"){
     fitParams defaultVal;

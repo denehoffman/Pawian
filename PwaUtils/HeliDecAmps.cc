@@ -25,7 +25,7 @@ HeliDecAmps::HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec) :
   if(_JPClamlams.size()>0) _factorMag=1./sqrt(_JPClamlams.size());
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
+  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg; 
 }
 
@@ -34,7 +34,7 @@ HeliDecAmps::HeliDecAmps(boost::shared_ptr<AbsDecay> theDec) :
 {
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J()); 
+  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J()); 
   Info << "_parityFactor=\t" << _parityFactor << endmsg; 
 }
 
@@ -168,6 +168,7 @@ int evtNo=theData->evtNo;
     result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
   }
 
+  result*=sqrt(2.*_JPCPtr->J+1.);
   if ( _cacheAmps){
 #ifdef _OPENMP
 #pragma omp critical

@@ -27,6 +27,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _config(new po::options_description("Configuration file options"))
       ,_useEvtWeight(false)
       ,_pdgTableFile("/Particle/pdtNew.table")
+      ,_productionFormalism("Cano")
      {
        string strErrLogMode="debug";
     // Check the command line options. Uses the Boost program options library.
@@ -68,6 +69,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
       ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
+      ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ;
 
@@ -203,6 +205,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
 	std::cout << (*it) << "\n";
       }
+
+      std::cout << "\nproduction formalism:\t" << _productionFormalism << std::endl;
       
     }
     

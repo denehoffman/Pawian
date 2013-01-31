@@ -72,6 +72,10 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
   Spin Jmother=motherRes->J;
   Spin Jdaughter1=daughterRes1->J;
   Spin Jdaughter2=daughterRes2->J;
+
+  double parityFactor = motherRes->P*daughter1->theParity()*daughter2->theParity()*pow(-1., Jmother - Jdaughter1 - Jdaughter2 );
+  // std::cout << "daughter1->theParity()\t" << daughter1->theParity() << "\tdaughter2->theParity()\t" << daughter1->theParity() <<std::endl; 
+  // std::cout << "Jmother=\t" << Jmother << "\tJdaughter1=\t" << Jdaughter1 << "\tJdaughter2=\t" << Jdaughter2 <<"\tparityFactor=\t" << parityFactor << "\n" <<std::endl; 
   bool isDaughter1Photon=false;
   if(daughter1->name()=="photon") isDaughter1Photon=true;
   bool isDaughter2Photon=false;
@@ -80,6 +84,8 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
   for (Spin lam1=-Jdaughter1; lam1<=Jdaughter1; ++lam1){
     if(isDaughter1Photon && lam1==0) continue;
     for (Spin lam2=lam1; lam2<=Jdaughter2; ++lam2){
+      if(lam1==0 && lam2==0 && parityFactor <0) continue; //parity conservation 
+      if (lam2<-Jdaughter2) continue; 
       if(isDaughter2Photon && lam2==0) continue;
       Spin lambda=lam1-lam2;
       if (fabs(lambda)>Smax) continue;

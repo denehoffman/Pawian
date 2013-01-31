@@ -56,7 +56,8 @@ public:
   const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
   const std::vector<std::string>& replaceMassKey() const { return _replaceMassKey; }
   const std::vector<std::string>& decayDynamics() const { return _dynamics;}
-  const std::vector<std::string>& productionSystem() const { return _productionSystem; } 
+  const std::vector<std::string>& productionSystem() const { return _productionSystem; }
+  const std::string productionFormalism() const { return _productionFormalism; } 
   const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
  
 protected:
@@ -88,5 +89,6 @@ protected:
   std::vector<std::string> _replaceParSuffix;
   std::vector<std::string>  _replaceMassKey;
   std::vector<std::string> _productionSystem;
+  std::string _productionFormalism;
   std::vector<std::string> _cloneParticle;
 };
