@@ -26,7 +26,14 @@ HeliDecAmps::HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec) :
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-  Info << "_parityFactor=\t" << _parityFactor << endmsg; 
+  Info << "_parityFactor=\t" << _parityFactor << endmsg;
+
+  //fill JPClamlamSymMap
+  std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+  for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+    boost::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2));
+    _JPClamlamSymMap[*it]=currentSym; 
+  }
 }
 
 HeliDecAmps::HeliDecAmps(boost::shared_ptr<AbsDecay> theDec) :
@@ -44,54 +51,6 @@ HeliDecAmps::~HeliDecAmps()
 
 
 complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs){
-
-  // Spin lam1Min=-_Jdaughter1;
-  // Spin lam1Max= _Jdaughter1;
-  // Spin lam2Min=-_Jdaughter2;
-  // Spin lam2Max=_Jdaughter2;
-
-  // if(fixDaughterNr == 1){
-  //    lam1Min = lam1Max = lamDec;
-  // }
-  // else if(fixDaughterNr == 2){
-  //    lam2Min = lam2Max = lamDec;
-  // }
-  // else{
-  //    Alert << "Invalid fitDaughterNr in XdecPartAmp." << endmsg;
-  // }
-
-  // if( _daughter1IsStable && _Jdaughter1>0){
-  //   lam1Min=lamFs;
-  //   lam1Max=lamFs;
-  // }
-  // else if(_daughter2IsStable && _Jdaughter2>0){
-  //   lam2Min=lamFs;
-  //   lam2Max=lamFs;
-  // }
-
-  // complex<double> result(0.,0.);
-  // std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
-  // for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-  //   if( fabs(lamX) > (*it)->J ) continue;
-  //   double theMag=_currentParamMags[*it];
-  //   double thePhi=_currentParamPhis[*it];
-  //   complex<double> expi(cos(thePhi), sin(thePhi));
-
-  //   for(Spin lambda1=lam1Min; lambda1<=lam1Max; lambda1++){
-  //     for(Spin lambda2=lam2Min; lambda2<=lam2Max; lambda2++){
-  //       Spin lambda = lambda1-lambda2;
-  //       if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
-
-  //       complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-  //          *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
-  //          *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
-  //          *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
-       
-  // 	result+=amp;
-  //     }
-  //   }
-  // }
-
   complex<double> result(0.,0.);
   return result;
 }
@@ -116,46 +75,69 @@ int evtNo=theData->evtNo;
   
 
   complex<double> result(0.,0.);
-  std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
-  for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-    if( fabs(lamX) > (*it)->J ) continue;
 
-    double theMag=_currentParamMagLamLams[*it];
-    double thePhi=_currentParamPhiLamLams[*it];
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
+
+  for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
+    boost::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
+    if( fabs(lamX) > currentJPClamlam->J) continue;
+
+    double theMag=it->second;
+    double thePhi=_currentParamPhiLamLams[currentJPClamlam];
     complex<double> expi(cos(thePhi), sin(thePhi));
 
-    double preFactor=1.;
-    Spin lambda1= (*it)->lam1;
-    if(lamFs_daughter1){
-      if( fabs(lamFs)!=fabs(lambda1) ) continue;
-      else if(lamFs = -lambda1){
-	preFactor=_parityFactor;
-	lambda1=-lambda1;
-      }
-    }
-
-
-    Spin lambda2= (*it)->lam2;
-    if(lamFs_daughter2){
-      if( fabs(lamFs)!=fabs(lambda2) ) continue;
-      else if(lamFs = -lambda2){
-	preFactor=_parityFactor;
-	lambda2=-lambda2;
-      }
-    }
-
+    Spin lambda1= currentJPClamlam->lam1;
+    Spin lambda2= currentJPClamlam->lam2;
     Spin lambda = lambda1-lambda2;
-    //    if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
-    
-    complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
-    
-    if(!lamFs_daughter1 && !lamFs_daughter2){
-      result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
-      if(lambda1 != lambda2) result+=_parityFactor*amp*daughterAmp(-lambda1, -lambda2, theData, lamFs);
-    } 
-    else result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
+    if( fabs(lambda) > currentJPClamlam->J) continue;
+    if(lamFs_daughter1 && lamFs!=lambda1) continue;
+    if(lamFs_daughter2 && lamFs!=lambda2) continue;
 
+    complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
+    result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
+
+
+  // std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+  // for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+  //   if( fabs(lamX) > (*it)->J ) continue;
+
+  //   double theMag=_currentParamMagLamLams[*it];
+  //   double thePhi=_currentParamPhiLamLams[*it];
+  //   complex<double> expi(cos(thePhi), sin(thePhi));
+
+  //   double preFactor=1.;
+  //   Spin lambda1= (*it)->lam1;
+  //   if(lamFs_daughter1){
+  //     if( fabs(lamFs)!=fabs(lambda1) ) continue;
+  //     else if(lamFs = -lambda1){
+  // 	preFactor=_parityFactor;
+  // 	lambda1=-lambda1;
+  //     }
+  //   }
+
+
+  //   Spin lambda2= (*it)->lam2;
+  //   if(lamFs_daughter2){
+  //     if( fabs(lamFs)!=fabs(lambda2) ) continue;
+  //     else if(lamFs = -lambda2){
+  // 	preFactor=_parityFactor;
+  // 	lambda2=-lambda2;
+  //     }
+  //   }
+
+  //   Spin lambda = lambda1-lambda2;
+  //   //    if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
+    
+  //   complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+    
+  //   if(!lamFs_daughter1 && !lamFs_daughter2){
+  //     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
+  //     if(lambda1 != lambda2) result+=_parityFactor*amp*daughterAmp(-lambda1, -lambda2, theData, lamFs);
+  //   } 
+  //   else result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
+
+  // }
 
   if(_withDyn){
     Vector4<double> mass4Vec(0.,0.,0.,0.);
@@ -269,6 +251,10 @@ void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMagLamLams[*it]=theMag;
      _currentParamPhiLamLams[*it]=thePhi;
+     
+     boost::shared_ptr<const JPClamlam> symJPClamlam=_JPClamlamSymMap[*it];
+     _currentParamMagLamLams[symJPClamlam]=_parityFactor*theMag;
+     _currentParamPhiLamLams[symJPClamlam]=thePhi;
    }
 
    if (_withDyn){
