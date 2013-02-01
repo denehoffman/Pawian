@@ -52,6 +52,36 @@ HeliDecAmps::~HeliDecAmps()
 
 complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs){
   complex<double> result(0.,0.);
+
+  bool lamFs_daughter1=false;
+  if( _daughter1IsStable && _Jdaughter1>0) lamFs_daughter1=true;
+  
+  bool lamFs_daughter2=false;
+  if( _daughter2IsStable && _Jdaughter2>0) lamFs_daughter2=true;
+
+  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
+
+  for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
+    boost::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
+    if( fabs(lamX) > currentJPClamlam->J) continue;
+
+    double theMag=it->second;
+    double thePhi=_currentParamPhiLamLams[currentJPClamlam];
+    complex<double> expi(cos(thePhi), sin(thePhi));
+
+    Spin lambda1= currentJPClamlam->lam1;
+    Spin lambda2= currentJPClamlam->lam2;
+    Spin lambda = lambda1-lambda2;
+    if( fabs(lambda) > currentJPClamlam->J) continue;
+    if(lamFs_daughter1 && lamFs!=lambda1) continue;
+    if(lamFs_daughter2 && lamFs!=lambda2) continue;
+    if(fixDaughterNr==1 && lamDec!=lambda1) continue;
+    if(fixDaughterNr==2 && lamDec!=lambda2) continue;
+
+    complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
+    result+=amp;
+  }
+  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
   return result;
 }
 
@@ -96,48 +126,6 @@ int evtNo=theData->evtNo;
     complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
-
-
-  // std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
-  // for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-  //   if( fabs(lamX) > (*it)->J ) continue;
-
-  //   double theMag=_currentParamMagLamLams[*it];
-  //   double thePhi=_currentParamPhiLamLams[*it];
-  //   complex<double> expi(cos(thePhi), sin(thePhi));
-
-  //   double preFactor=1.;
-  //   Spin lambda1= (*it)->lam1;
-  //   if(lamFs_daughter1){
-  //     if( fabs(lamFs)!=fabs(lambda1) ) continue;
-  //     else if(lamFs = -lambda1){
-  // 	preFactor=_parityFactor;
-  // 	lambda1=-lambda1;
-  //     }
-  //   }
-
-
-  //   Spin lambda2= (*it)->lam2;
-  //   if(lamFs_daughter2){
-  //     if( fabs(lamFs)!=fabs(lambda2) ) continue;
-  //     else if(lamFs = -lambda2){
-  // 	preFactor=_parityFactor;
-  // 	lambda2=-lambda2;
-  //     }
-  //   }
-
-  //   Spin lambda = lambda1-lambda2;
-  //   //    if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
-    
-  //   complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
-    
-  //   if(!lamFs_daughter1 && !lamFs_daughter2){
-  //     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
-  //     if(lambda1 != lambda2) result+=_parityFactor*amp*daughterAmp(-lambda1, -lambda2, theData, lamFs);
-  //   } 
-  //   else result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
-
-  // }
 
   if(_withDyn){
     Vector4<double> mass4Vec(0.,0.,0.,0.);
