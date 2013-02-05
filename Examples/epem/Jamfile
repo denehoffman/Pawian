@@ -1,0 +1,16 @@
+project : 
+        ;
+
+lib epem : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/PwaUtils//PwaUtils
+        $(TOP)/epemUtils//epemUtils
+        $(TOP)/Particle//Particle
+        $(TOP)/Event//Event
+        :  
+        : 
+        :   ;
+
+exe epemReactionApp : epemReactionApp.cc epem : ;

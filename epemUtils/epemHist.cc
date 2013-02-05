@@ -1,4 +1,4 @@
-// pbarpHist class definition file. -*- C++ -*-
+// epemHist class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #include <getopt.h>
@@ -6,9 +6,8 @@
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 
-#include "pbarpUtils/pbarpHist.hh"
-#include "pbarpUtils/pbarpEnv.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "epemUtils/epemHist.hh"
+#include "epemUtils/epemEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
@@ -21,26 +20,25 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TNtuple.h"
-//#include "TMath.h"
 
-pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+epemHist::epemHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
   AbsHist() 
 {
   initRootStuff();
   fillIt(theLh, theFitParams);
 }
 
-pbarpHist::~pbarpHist(){
+epemHist::~epemHist(){
   _theTFile->Write();
   _theTFile->Close();
 }
 
-void pbarpHist::initRootStuff(){
+void epemHist::initRootStuff(){
   std::ostringstream rootFileName;
-  rootFileName << "./pawianHists" << pbarpEnv::instance()->outputFileNameSuffix() << ".root";
+  rootFileName << "./pawianHists" << epemEnv::instance()->outputFileNameSuffix() << ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
 
-  std::vector<std::vector<std::string> > histMassNameVec=pbarpEnv::instance()->histMassSystems();
+  std::vector<std::vector<std::string> > histMassNameVec=epemEnv::instance()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
   for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
     boost::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
@@ -50,13 +48,12 @@ void pbarpHist::initRootStuff(){
     std::string histName="data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
-    double pMass = pbarpEnv::instance()->particleTable()->particle("proton")->mass();
-    double pbarMom = pbarpEnv::instance()->pbarMomentum();
+    double psiMass = epemEnv::instance()->particleTable()->particle("Jpsi")->mass();
     double massMin = 0;
-    double massMax = sqrt(pow(sqrt(pMass*pMass + pbarMom*pbarMom) + pMass, 2) - pbarMom*pbarMom);
+    double massMax = psiMass;
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    std::vector<Particle*> allFsp =  pbarpEnv::instance()->finalStateParticles();
+    std::vector<Particle*> allFsp =  epemEnv::instance()->finalStateParticles();
     std::vector<Particle*>::iterator itAllFsp;
 
     for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
@@ -92,7 +89,7 @@ void pbarpHist::initRootStuff(){
     _massFitHistMap[tmpMassHistData]=currentMassFitHist;
   }
 
-  std::vector<boost::shared_ptr<angleHistData> > angleHistDataVec=pbarpEnv::instance()->angleHistDataVec();
+  std::vector<boost::shared_ptr<angleHistData> > angleHistDataVec=epemEnv::instance()->angleHistDataVec();
 
   std::vector<boost::shared_ptr<angleHistData> >::iterator itAngleVec;
   for (itAngleVec=angleHistDataVec.begin(); itAngleVec!=angleHistDataVec.end(); ++itAngleVec){
@@ -135,5 +132,4 @@ void pbarpHist::initRootStuff(){
 
  std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess > _angleDataHistMap;
 }
-
 

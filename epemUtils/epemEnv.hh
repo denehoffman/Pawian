@@ -1,4 +1,4 @@
-// pbarpEnv class definition file. -*- C++ -*-
+// epemEnv class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -17,34 +17,28 @@
 
 class Particle;
 class ParticleTable;
-class pbarpReaction;
+class epemReaction;
 class IsobarDecayList;
-class pbarpParser;
+class epemParser;
 
-class pbarpEnv : public AbsEnv{
+class epemEnv : public AbsEnv{
 
 public:
-  static pbarpEnv* instance();
-  ~pbarpEnv();
+  static epemEnv* instance();
+  ~epemEnv();
 
-  void setup(pbarpParser* thePbarpParser);
+  void setup(epemParser* theEpEmParser);
 
-  const float pbarMomentum() const {return _pbarMomentum;}
-  const int lmax() const {return _lmax;}
-
-  boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
+  boost::shared_ptr<epemReaction> reaction() {return _epemReaction;}
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
-  std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
 
 protected:  
 
-  pbarpEnv();
-  static pbarpEnv* _instance;
-  int _lmax;
-  float _pbarMomentum;
+  epemEnv();
+  static epemEnv* _instance;
 
-  boost::shared_ptr<pbarpReaction> _pbarpReaction;
+  boost::shared_ptr<epemReaction> _epemReaction;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
   std::vector<std::string> _spinDensity;

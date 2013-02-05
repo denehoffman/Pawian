@@ -1,4 +1,4 @@
-// pbarpHist class definition file. -*- C++ -*-
+// epemHist class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -16,17 +16,16 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsHist.hh"
 
-class pbarpHist : public AbsHist{
+
+class epemHist : public AbsHist{
 
 public:
-  pbarpHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams);
-  virtual ~pbarpHist();
+  epemHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams);
+  virtual ~epemHist();
 
 protected:
-
 
  virtual void initRootStuff();
 

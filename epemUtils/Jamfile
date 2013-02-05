@@ -1,0 +1,12 @@
+project : 
+	;
+
+lib epemUtils : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/PwaUtils//PwaUtils 
+	: <use>$(TOP)//Minuit2
+	: 
+	: <library>$(TOP)//Minuit2 ;

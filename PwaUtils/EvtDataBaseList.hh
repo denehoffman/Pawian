@@ -50,11 +50,12 @@ struct EvtData {
 };
 
 class EventList;
+class AbsEnv;
 
 class EvtDataBaseList {
 
 public:
-  EvtDataBaseList();
+  EvtDataBaseList(AbsEnv* theEnv);
   virtual ~EvtDataBaseList();
 
   void read(EventList& evtListData, EventList& evtListMc);
@@ -69,12 +70,14 @@ public:
 protected:
   std::vector<EvtData*> _evtDataList;
   std::vector<EvtData*> _mcDataList;
-  virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts ) = 0;
+  virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts );
+  virtual std::string getName(std::vector<Particle*>& theVec);
 
   double _noOfWeightedDataEvts;
   double _noOfWeightedMcEvts;
   int _mcToDataRatio;
   bool _alreadyRead;
   int _evtNoAll;
+  AbsEnv* _absEnv;
 
 };

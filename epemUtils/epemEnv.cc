@@ -1,65 +1,55 @@
-// pbarpEnv class definition file. -*- C++ -*-
+// epemEnv class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 
-#include "pbarpUtils/pbarpEnv.hh"
-#include "pbarpUtils/pbarpParser.hh"
+#include "epemUtils/epemEnv.hh"
+#include "epemUtils/epemParser.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
-//#include "PwaUtils/IsobarDecayList.hh"
-#include "pbarpUtils/pbarpReaction.hh"
-//#include "pbarpUtils/pbarpEventList.hh"
+#include "epemUtils/epemReaction.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/PdtParser.hh"
 
-pbarpEnv* pbarpEnv::_instance=0;
+epemEnv* epemEnv::_instance=0;
 
-pbarpEnv* pbarpEnv::instance()
+epemEnv* epemEnv::instance()
 {
-  if (0==_instance) _instance = new pbarpEnv();
+  if (0==_instance) _instance = new epemEnv();
   return _instance;
 }
 
-pbarpEnv::pbarpEnv() :
+epemEnv::epemEnv() :
   AbsEnv()
-  ,_lmax(0)
-  ,_pbarMomentum(0)
 {
 }
-pbarpEnv::~pbarpEnv(){
+epemEnv::~epemEnv(){
 }
 
-void pbarpEnv::setup(pbarpParser* thePbarpParser){
+void epemEnv::setup(epemParser* theEpEmParser){
 
-  AbsEnv::setup(thePbarpParser);
-
-  //Antiproton momentum
-  _pbarMomentum = thePbarpParser->getpbarMomentum();
-
-  //Lmax
-  _lmax=thePbarpParser->getLMax();
+  AbsEnv::setup(theEpEmParser);
 
   std::vector<std::string>::const_iterator itStr;
 
 
-  //pbarp reaction
-  _pbarpReaction=boost::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
+  //epem reaction
+  _epemReaction=boost::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs));
 
   //fill prodDecayList
-  std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
+  std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _epemReaction->productionCanoDecays();
   std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
     _prodDecList->addDecay(*itDec);
   }
 
   //set suffixes
-  std::vector<std::string> suffixVec = thePbarpParser->replaceSuffixNames();
+  std::vector<std::string> suffixVec = theEpEmParser->replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;
 
   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -82,7 +72,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   }
 
   //replace mass key
-  std::vector<std::string> replMassKeyVec = thePbarpParser->replaceMassKey();
+  std::vector<std::string> replMassKeyVec = theEpEmParser->replaceMassKey();
   std::map<std::string, std::string> decRepMassKeyNames;
 
   for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -102,7 +92,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
 
 
 
-  std::vector<std::string> theHistMassNames=thePbarpParser->histMassNames();
+  std::vector<std::string> theHistMassNames=theEpEmParser->histMassNames();
   //fill vector histMassSystems
   for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){
     std::stringstream stringStr;
@@ -116,7 +106,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     _histMassSystems.push_back(currentStringVec);
   }
 
-  std::vector<std::string> theHistAngleNames=thePbarpParser->histAngleNames();
+  std::vector<std::string> theHistAngleNames=theEpEmParser->histAngleNames();
   //fill vector histMassSystems
   for ( itStr = theHistAngleNames.begin(); itStr != theHistAngleNames.end(); ++itStr){
     std::stringstream stringStr;
@@ -147,8 +137,6 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     _angleHistDataVec.push_back(currentAngleHistData);
   }
 
-  // spin density particles
-  _spinDensity = thePbarpParser->spinDensityNames();
 
 }
 

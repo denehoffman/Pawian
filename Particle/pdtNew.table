@@ -128,6 +128,15 @@ Meson K(1830) 		K(1830)  		0  0 -1  0  0   0  0  0  0  	1.830 	0.250   relBW	[PD
 #
 # End strange mesons
 #
+# Start c cbar mesons
+#
+# type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass      width   dyn.f   comment
+#
+Meson etac 		\eta_c  		0  0 -1  1  1  	0  0  0  0 	2.981 	  0.0297 relBW	[PDG]
+Meson Jpsi 		J/\psi  		0  2 -1 -1 -1   0  0  0  0 	3.096916  0.0929 relBW	[PDG]
+#
+# End strange mesons
+#
 # End mesons
 #
 # Start gauge bosons

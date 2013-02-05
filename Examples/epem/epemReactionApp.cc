@@ -8,12 +8,11 @@
 
 #include "TROOT.h"
 
-#include "pbarpUtils/pbarpParser.hh"
+#include "epemUtils/epemParser.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
 #include "ErrLogger/ErrLogger.hh"
-#include "pbarpUtils/pbarpStatesLS.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/StreamFitParmsBase.hh"
@@ -21,16 +20,16 @@
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
-#include "pbarpUtils/pbarpEnv.hh"
-#include "pbarpUtils/pbarpReaction.hh"
-#include "pbarpUtils/pbarpBaseLh.hh"
-#include "pbarpUtils/pbarpHeliLh.hh"
-#include "pbarpUtils/pbarpCanoLh.hh"
-#include "pbarpUtils/pbarpEvtReader.hh"
-#include "PwaUtils/EvtDataBaseList.hh"
+#include "epemUtils/epemEnv.hh"
+#include "epemUtils/epemReaction.hh"
+#include "epemUtils/epemBaseLh.hh"
+//#include "pbarpUtils/pbarpHeliLh.hh"
+// #include "pbarpUtils/pbarpCanoLh.hh"
+#include "epemUtils/epemEvtReader.hh"
+// #include "PwaUtils/EvtDataBaseList.hh"
 //#include "pbarpUtils/pbarpEventList.hh"
-#include "pbarpUtils/pbarpHist.hh"
-#include "pbarpUtils/spinDensityHist.hh"
+#include "epemUtils/epemHist.hh"
+// #include "pbarpUtils/spinDensityHist.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
@@ -56,7 +55,7 @@ int main(int __argc,char *__argv[]){
   setvbuf(stdout, NULL, _IONBF, 0);
 
   // Parse the command line
-  pbarpParser* theAppParams=new pbarpParser(__argc, __argv);
+  epemParser* theAppParams=new epemParser(__argc, __argv);
 
   // Set the desired error logging mode
   setErrLogMode(theAppParams->getErrLogMode());
@@ -67,11 +66,11 @@ int main(int __argc,char *__argv[]){
 #endif
 
 
-  pbarpEnv::instance()->setup(theAppParams);
+  epemEnv::instance()->setup(theAppParams);
 
-  boost::shared_ptr<pbarpReaction> thepbarpReaction=pbarpEnv::instance()->reaction();
+  boost::shared_ptr<epemReaction> theEpEmReaction=epemEnv::instance()->reaction();
 
-  thepbarpReaction->print(std::cout);
+  theEpEmReaction->print(std::cout);
 
   // boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
   // boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
@@ -97,8 +96,8 @@ int main(int __argc,char *__argv[]){
   Info << "EvtWeight: " << withEvtWeight << endmsg;  
 
   
-  int noFinalStateParticles=pbarpEnv::instance()->noFinalStateParticles();  
-  pbarpEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+  int noFinalStateParticles=epemEnv::instance()->noFinalStateParticles();  
+  epemEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
 
   EventList eventsData;
   eventReaderData.fillAll(eventsData);
@@ -120,7 +119,7 @@ int main(int __argc,char *__argv[]){
   }
   eventsData.rewind();
 
-  pbarpEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, false);
+  epemEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, withEvtWeight);
 
   EventList mcData;
   eventReaderMc.fillAll(mcData);
@@ -141,20 +140,14 @@ int main(int __argc,char *__argv[]){
   mcData.rewind();
 
 
-  //  boost::shared_ptr<pbarpEventList> pbarpEventListPtr(new pbarpEventList());
-  boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-  pbarpEventListPtr->ratioMcToData(theAppParams->ratioMcToData());
-  pbarpEventListPtr->read(eventsData, mcData);
-  // pbarpEventListPtr->read4Vecs();
+  boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
+  eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
+  eventListPtr->read(eventsData, mcData);
+
 
   std::string prodFormalism=theAppParams->productionFormalism();
   boost::shared_ptr<AbsLh> theLhPtr;
-  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpCanoLh(pbarpEventListPtr));
-  else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh(pbarpEventListPtr));
-  else {
-    Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
-    exit(1);
-  }
+  theLhPtr=boost::shared_ptr<AbsLh>(new epemBaseLh(eventListPtr));
 
   if (mode=="dumpDefaultParams"){
     fitParams defaultVal;
@@ -162,7 +155,7 @@ int main(int __argc,char *__argv[]){
     theLhPtr->getDefaultParams(defaultVal, defaultErr);
 
     std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << pbarpEnv::instance()->outputFileNameSuffix() << ".dat";
+    defaultparamsname << "defaultparams" << epemEnv::instance()->outputFileNameSuffix() << ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
     
     theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
@@ -171,7 +164,7 @@ int main(int __argc,char *__argv[]){
 
 
   std::string paramStreamerPath=theAppParams->fitParamFile();
-  std::string outputFileNameSuffix= pbarpEnv::instance()->outputFileNameSuffix();
+  std::string outputFileNameSuffix= epemEnv::instance()->outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
   fitParams theStartparams=theParamStreamer.getFitParamVal();
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
@@ -198,9 +191,9 @@ int main(int __argc,char *__argv[]){
     double theLh=theLhPtr->calcLogLh(theStartparams);
     Info <<"theLh = "<< theLh << endmsg;
 
-    pbarpHist theHist(theLhPtr, theStartparams);
+    epemHist theHist(theLhPtr, theStartparams);
 
-    double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
+    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
@@ -284,23 +277,6 @@ int main(int __argc,char *__argv[]){
     return 0;
  }
 
- if(mode == "spinDensity"){
-
-    std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
-    std::ifstream serializationStream(serializationFileName.c_str());
-
-    if(!serializationStream.is_open()){
-       Alert << "Could not open serialization file." << endmsg;
-       return 0;
-    }
-
-    boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-    PwaCovMatrix thePwaCovMatrix;
-    boostInputArchive >> thePwaCovMatrix;
-
-    spinDensityHist theSpinDensityHists(theLhPtr, theStartparams, thePwaCovMatrix);
- }
 }     
  
   
