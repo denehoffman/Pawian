@@ -36,6 +36,7 @@ public:
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
+  std::map<std::string, short> lmaxParticleData(){ return _lmaxParticleData; }
 
 protected:  
 
@@ -48,4 +49,5 @@ protected:
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
   std::vector<std::string> _spinDensity;
+  std::map<std::string, short> _lmaxParticleData;
 };

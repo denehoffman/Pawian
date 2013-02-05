@@ -314,7 +314,7 @@ void pbarpBaseLh::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLS
     for(itAmp=decs.begin(); itAmp!=decs.end(); ++itAmp){
       if( (*(*itAmp)->jpcPtr())==(*(*itJPCLS)) )  currentAmpVec.push_back(*itAmp);
     }
-    toFill[(*itJPCLS)]=currentAmpVec;   
+    toFill[(*itJPCLS)]=currentAmpVec;
   }
 
 }

@@ -13,6 +13,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 class Particle;
 class IsobarLSDecay;
@@ -49,4 +50,7 @@ private:
   std::vector< boost::shared_ptr<IsobarLSDecay> > _prodDecs;
   std::vector< boost::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
 
+  std::map< boost::shared_ptr<const jpcRes>, Spin, pawian::Collection::SharedPtrLess > _minLMap;
+
+  bool CheckLmaxLimit(std::string& particleName,  boost::shared_ptr<const jpcRes> theJPC);
 };

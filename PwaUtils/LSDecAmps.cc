@@ -57,7 +57,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
      lam2Min = lam2Max = lamDec;
   }
   else{
-     Alert << "Invalid fitDaughterNr in XdecPartAmp." << endmsg;
+     Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
   }
 
   if( _daughter1IsStable && _Jdaughter1>0){

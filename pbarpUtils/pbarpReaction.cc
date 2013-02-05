@@ -18,8 +18,23 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 {
   boost::shared_ptr<pbarpStatesLS> thepbarpStates(new pbarpStatesLS(lmax));
   std::vector< boost::shared_ptr<const jpcRes> > pbarpJPCStatesAll= thepbarpStates->jpcStates(); 
-
   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
+  std::vector< boost::shared_ptr<const JPCLS> > all_JPCLSs= thepbarpStates->all_JPCLS_States();
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  for(itJPCLS = all_JPCLSs.begin(); itJPCLS != all_JPCLSs.end(); ++itJPCLS){
+     boost::shared_ptr<const jpcRes> currentJPC = (*itJPCLS);
+     std::map< boost::shared_ptr<const jpcRes>, Spin, pawian::Collection::SharedPtrLess >::iterator mapIt;
+     mapIt = _minLMap.find(currentJPC);
+     if(mapIt == _minLMap.end()){
+	_minLMap[currentJPC] = (*itJPCLS)->L;
+     }
+     else{
+	if(_minLMap[currentJPC] > (*itJPCLS)->L)
+	   _minLMap[currentJPC] = (*itJPCLS)->L;
+     }
+  }
+
   for(itJPC = pbarpJPCStatesAll.begin(); itJPC!=pbarpJPCStatesAll.end(); ++itJPC){
     bool acceptJPC=false;
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
@@ -28,17 +43,19 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
       //      std::string decName="";
       boost::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 
-      if (currentDec->JPCLSAmps().size()>0){
-	_prodDecs.push_back(currentDec);
-	boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
-	_prodHeliDecs.push_back(currentHeliDec);
-	acceptJPC=true;
+      if (currentDec->JPCLSAmps().size()>0 &&
+	  CheckLmaxLimit((std::string&)(*itPartPairs).first->name(), *itJPC) &&
+	  CheckLmaxLimit((std::string&)(*itPartPairs).second->name(), *itJPC)){
+	 _prodDecs.push_back(currentDec);
+	 boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+	 _prodHeliDecs.push_back(currentHeliDec);
+	 acceptJPC=true;
       }
     }
     if(acceptJPC) _pbarpJPCs.push_back(*itJPC);
+    else   std::cout << "dropping amp" << (*itJPC)->J << std::endl;
   }
 
-  std::vector< boost::shared_ptr<const JPCLS> > all_JPCLSs= thepbarpStates->all_JPCLS_States();
   _pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
@@ -57,6 +74,29 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
   _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCs, all_pbarpTripletm1LS);
   // fillMap(_pbarpJPCLStripletm1, _prodDecs, _pbarpTripletm1DecMap);
 }
+
+
+
+bool pbarpReaction::CheckLmaxLimit(std::string& particleName, boost::shared_ptr<const jpcRes> theJPC){
+
+   short lmaxParticle;
+   std::map<std::string, short> lmaxMap = pbarpEnv::instance()->lmaxParticleData();
+   std::map<std::string, short>::iterator it;
+
+   it = lmaxMap.find(particleName);
+
+   if(it == lmaxMap.end())
+      return true;
+
+   lmaxParticle = (*it).second;
+
+   if(_minLMap[theJPC] <= lmaxParticle)
+      return true;
+
+   return false;
+}
+
+
 
 pbarpReaction::~pbarpReaction(){
 }

@@ -45,6 +45,19 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   //Lmax
   _lmax=thePbarpParser->getLMax();
 
+  // individual Lmax settings
+  std::vector<std::string>::iterator lmaxIt;
+  std::vector<std::string> theLmaxParticles = thePbarpParser->lmaxParticle();
+  for(lmaxIt = theLmaxParticles.begin(); lmaxIt != theLmaxParticles.end(); ++lmaxIt){
+    std::string particle;
+    short lmax;
+    std::stringstream stringStr;
+    stringStr << (*lmaxIt);
+    stringStr >> particle >> lmax;
+    _lmaxParticleData[particle] = lmax;
+  }
+
+
   std::vector<std::string>::const_iterator itStr;
 
 
