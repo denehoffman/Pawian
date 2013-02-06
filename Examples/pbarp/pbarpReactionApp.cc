@@ -278,8 +278,10 @@ int main(int __argc,char *__argv[]){
     std::ofstream serializationStream(serializationFileName.str().c_str());
     boost::archive::text_oarchive boostOutputArchive(serializationStream);
 
-    PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
-    boostOutputArchive << thePwaCovMatrix;
+    if(min.IsValid()){
+       PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
+       boostOutputArchive << thePwaCovMatrix;
+    }
 
     return 0;
  }
