@@ -28,11 +28,21 @@ HeliDecAmps::HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec) :
   _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
 
+  bool identicalDaughters=false;
+  if( (*daughter1)==(*daughter2)) identicalDaughters=true;
+  
   //fill JPClamlamSymMap
   std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
   for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-    boost::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2));
-    _JPClamlamSymMap[*it]=currentSym; 
+    boost::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2, _parityFactor));
+    //    std::vector< boost::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];
+    _JPClamlamSymMap[*it].push_back(currentSym);
+    if(identicalDaughters && ( fabs((*it)->lam1) != fabs((*it)->lam2) ) ){
+    	boost::shared_ptr<const JPClamlam> currentSymIdPart1(new JPClamlam(*it, (*it)->lam2, (*it)->lam1, (*it)->parityFactor));
+    	boost::shared_ptr<const JPClamlam> currentSymIdPart2(new JPClamlam(*it, -(*it)->lam2, -(*it)->lam1, _parityFactor));
+    	_JPClamlamSymMap[*it].push_back(currentSymIdPart1);
+    	_JPClamlamSymMap[*it].push_back(currentSymIdPart2);
+    } 
   }
 }
 
@@ -78,10 +88,11 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
     if(fixDaughterNr==1 && lamDec!=lambda1) continue;
     if(fixDaughterNr==2 && lamDec!=lambda2) continue;
 
-    complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
+     complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
     result+=amp;
   }
-  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
+  //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
+  result*=sqrt(2.*_JPCPtr->J+1.);
   return result;
 }
 
@@ -123,7 +134,9 @@ int evtNo=theData->evtNo;
     if(lamFs_daughter1 && lamFs!=lambda1) continue;
     if(lamFs_daughter2 && lamFs!=lambda2) continue;
 
-    complex<double> amp = theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
+    // currentJPClamlam->print(std::cout);
+    // std::cout << std::endl;
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
@@ -138,7 +151,8 @@ int evtNo=theData->evtNo;
     result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
   }
 
-  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
+  //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
+  result*=sqrt(2.*_JPCPtr->J+1.);
   if ( _cacheAmps){
 #ifdef _OPENMP
 #pragma omp critical
@@ -239,10 +253,13 @@ void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMagLamLams[*it]=theMag;
      _currentParamPhiLamLams[*it]=thePhi;
-     
-     boost::shared_ptr<const JPClamlam> symJPClamlam=_JPClamlamSymMap[*it];
-     _currentParamMagLamLams[symJPClamlam]=_parityFactor*theMag;
-     _currentParamPhiLamLams[symJPClamlam]=thePhi;
+
+     std::vector< boost::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];     
+     std::vector< boost::shared_ptr<const JPClamlam> >::iterator itLamLam;
+     for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
+       _currentParamMagLamLams[*itLamLam]=theMag; 
+       _currentParamPhiLamLams[*itLamLam]=thePhi;
+     }
    }
 
    if (_withDyn){

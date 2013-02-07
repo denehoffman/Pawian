@@ -18,13 +18,13 @@
 IsobarLSDecay::IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
   AbsDecay(mother, daughter1, daughter2, theEnv)
 {
-  validJPCLS( _motherJPCPtr, _daughter1JPCPtr, _daughter2JPCPtr, _JPCLSDecAmps);
+  validJPCLS( _motherJPCPtr, daughter1, daughter2, _JPCLSDecAmps);
 }
 
 IsobarLSDecay::IsobarLSDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
   AbsDecay(motherJPCPtr, daughter1, daughter2, theEnv, motherName)
 {
-  validJPCLS( _motherJPCPtr, _daughter1JPCPtr, _daughter2JPCPtr, _JPCLSDecAmps);
+  validJPCLS( _motherJPCPtr, daughter1, daughter2, _JPCLSDecAmps);
 }
 
 IsobarLSDecay::~IsobarLSDecay(){

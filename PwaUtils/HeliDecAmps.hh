@@ -49,7 +49,7 @@ protected:
   double _parityFactor;
   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamMagLamLams;
   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamPhiLamLams;
-  std::map< boost::shared_ptr<const JPClamlam>, boost::shared_ptr<const JPClamlam>, pawian::Collection::SharedPtrLess > _JPClamlamSymMap;
+  std::map< boost::shared_ptr<const JPClamlam>, std::vector< boost::shared_ptr<const JPClamlam> >, pawian::Collection::SharedPtrLess > _JPClamlamSymMap;
 private:
 
 

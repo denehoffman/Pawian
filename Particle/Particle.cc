@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <math.h>
 
 Particle::Particle(const ParticleData& data)
 {
@@ -263,6 +264,20 @@ bool Particle::operator<(Particle& compare){
  return result;
 }
 
+bool Particle::operator==(Particle& compare){
+ bool result=true;
+ if( type() != compare.type()) result=false;
+ else if( charm() != compare.charm()) result=false;
+ else if( strange() != compare.strange()) result=false;
+ else if( iso() != compare.iso()) result=false;
+ else if( fabs(J()-compare.J()) > 1.e-8) result=false;
+ else if( theParity() != compare.theParity()) result=false;
+ else if( theCParity() != compare.theCParity()) result=false;
+ else if( charge() != compare.charge()) result=false;
+ else if ( fabs(mass()-compare.mass()) > 1.e-8) result=false;
+ else if ( fabs(width()-compare.width()) > 1.e-8) result=false;
+ return result;
+}
 
 
 std::ostream &operator<<(std::ostream &o, Particle &p)

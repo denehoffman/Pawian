@@ -78,6 +78,7 @@ public:
   DynFunctionType dynFctType();
   ParticleData* data() const;
   bool operator<(Particle& compare);
+  bool operator==(Particle& compare);
   void print(std::ostream& out);
 
 private:

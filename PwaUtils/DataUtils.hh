@@ -632,6 +632,8 @@ void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<con
 
 class Particle;
 
+void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec);
+
 void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPClamlam> >& theJPClamlamVec);
 
 
