@@ -60,6 +60,8 @@ public:
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
   const std::string productionFormalism() const { return _productionFormalism; } 
   const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
+  const std::vector<std::string>& histMassNames() const { return _histMass; }
+  const std::vector<std::string>& histAngleNames() const { return _histAngles;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -93,4 +95,6 @@ protected:
   std::vector<std::string> _productionSystem;
   std::string _productionFormalism;
   std::vector<std::string> _cloneParticle;
+  std::vector<std::string> _histMass;
+  std::vector<std::string> _histAngles;
 };

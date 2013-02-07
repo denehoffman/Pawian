@@ -22,21 +22,16 @@
 #include "TNtuple.h"
 
 epemHist::epemHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  AbsHist() 
+  AbsHist(epemEnv::instance()) 
 {
   initRootStuff();
   fillIt(theLh, theFitParams);
 }
 
 epemHist::~epemHist(){
-  _theTFile->Write();
-  _theTFile->Close();
 }
 
 void epemHist::initRootStuff(){
-  std::ostringstream rootFileName;
-  rootFileName << "./pawianHists" << epemEnv::instance()->outputFileNameSuffix() << ".root";
-  _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
 
   std::vector<std::vector<std::string> > histMassNameVec=epemEnv::instance()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
@@ -45,7 +40,7 @@ void epemHist::initRootStuff(){
     std::string tmpBaseName=tmpMassHistData->_name;
     boost::replace_all(tmpBaseName,"+","p");
     boost::replace_all(tmpBaseName,"-","m");
-    std::string histName="data"+tmpBaseName;
+    std::string histName="Data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
     double psiMass = epemEnv::instance()->particleTable()->particle("Jpsi")->mass();
@@ -89,47 +84,5 @@ void epemHist::initRootStuff(){
     _massFitHistMap[tmpMassHistData]=currentMassFitHist;
   }
 
-  std::vector<boost::shared_ptr<angleHistData> > angleHistDataVec=epemEnv::instance()->angleHistDataVec();
-
-  std::vector<boost::shared_ptr<angleHistData> >::iterator itAngleVec;
-  for (itAngleVec=angleHistDataVec.begin(); itAngleVec!=angleHistDataVec.end(); ++itAngleVec){
-    std::string tmpBaseName= (*itAngleVec)->_name;
-    boost::replace_all(tmpBaseName,"+","p");
-    boost::replace_all(tmpBaseName,"-","m");
-    std::string histThetaName="dataTheta"+tmpBaseName;
-    std::string histPhiName="dataPhi"+tmpBaseName;
-    std::string histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (data)";
-    std::string histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (data)";
-
-    TH1F* currentThetaAngleDataHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentPhiAngleDataHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentThetaAngleDataHist->Sumw2();
-    currentPhiAngleDataHist->Sumw2();
-    _angleDataHistMap[*itAngleVec]=std::pair<TH1F*, TH1F*>(currentThetaAngleDataHist, currentPhiAngleDataHist);
-
-    histThetaName="MCTheta"+tmpBaseName;
-    histPhiName="MCPhi"+tmpBaseName;
-    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (MC)";
-    histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (MC)";
-
-    TH1F* currentThetaAngleMcHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentPhiAngleMcHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentThetaAngleMcHist->Sumw2();
-    currentPhiAngleMcHist->Sumw2();
-    _angleMcHistMap[*itAngleVec]=std::pair<TH1F*, TH1F*>(currentThetaAngleMcHist, currentPhiAngleMcHist);
-
-    histThetaName="FitTheta"+tmpBaseName;
-    histPhiName="FitPhi"+tmpBaseName;
-    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (fit)";
-    histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (fit)";
-
-    TH1F* currentThetaAngleFitHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentPhiAngleFitHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentThetaAngleFitHist->Sumw2();
-    currentPhiAngleFitHist->Sumw2();
-    _angleFitHistMap[*itAngleVec]=std::pair<TH1F*, TH1F*>(currentThetaAngleFitHist, currentPhiAngleFitHist);
-  } 
-
- std::map<boost::shared_ptr<angleHistData>, TH1F*, pawian::Collection::SharedPtrLess > _angleDataHistMap;
 }
 

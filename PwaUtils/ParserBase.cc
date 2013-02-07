@@ -73,6 +73,8 @@ ParserBase::ParserBase(int argc,char **argv)
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
       ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
+      ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
+      ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
       ;
 
 
@@ -209,7 +211,17 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
 
       std::cout << "\nproduction formalism:\t" << _productionFormalism << std::endl;
+
+
+      std::cout << "\nhistograms inv mass for systems" << std::endl;
+      for (it=_histMass.begin(); it!=_histMass.end();++it){
+	std::cout << (*it) << "\n";
+      }
       
+      std::cout << "\nhistograms decay angles for systems" << std::endl;
+      for (it=_histAngles.begin(); it!=_histAngles.end();++it){
+	std::cout << (*it) << "\n";
+      }      
     }
     
   }

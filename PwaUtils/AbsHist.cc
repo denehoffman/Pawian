@@ -7,6 +7,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "PwaUtils/AbsHist.hh"
+#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -22,8 +23,74 @@
 #include "TNtuple.h"
 
 
-AbsHist::AbsHist() 
+AbsHist::AbsHist(AbsEnv* theEnv) :
+  _absEnv(theEnv) 
 {
+  std::ostringstream rootFileName;
+  rootFileName << "./pawianHists" << _absEnv->outputFileNameSuffix() << ".root";
+  _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
+
+  std::vector<boost::shared_ptr<angleHistData> > angleHistDataVec=_absEnv->angleHistDataVec();
+
+  std::vector<boost::shared_ptr<angleHistData> >::iterator itAngleVec;
+  for (itAngleVec=angleHistDataVec.begin(); itAngleVec!=angleHistDataVec.end(); ++itAngleVec){
+    std::string tmpBaseName= (*itAngleVec)->_name;
+    boost::replace_all(tmpBaseName,"+","p");
+    boost::replace_all(tmpBaseName,"-","m");
+    std::string histThetaName="DataTheta"+tmpBaseName;
+    std::string histPhiName="DataPhi"+tmpBaseName;
+    std::string histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (data)";
+    std::string histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (data)";
+
+    TH1F* currentThetaAngleDataHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleDataHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
+    currentThetaAngleDataHist->Sumw2();
+    currentPhiAngleDataHist->Sumw2();
+    _angleDataHistMap[*itAngleVec].push_back(currentThetaAngleDataHist);
+    _angleDataHistMap[*itAngleVec].push_back(currentPhiAngleDataHist);
+
+    histThetaName="MCTheta"+tmpBaseName;
+    histPhiName="MCPhi"+tmpBaseName;
+    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (MC)";
+    histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (MC)";
+
+    TH1F* currentThetaAngleMcHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleMcHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
+    currentThetaAngleMcHist->Sumw2();
+    currentPhiAngleMcHist->Sumw2();
+    _angleMcHistMap[*itAngleVec].push_back(currentThetaAngleMcHist);
+    _angleMcHistMap[*itAngleVec].push_back(currentPhiAngleMcHist);
+
+    histThetaName="FitTheta"+tmpBaseName;
+    histPhiName="FitPhi"+tmpBaseName;
+    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + ") (fit)";
+    histPhiDescription = "#phi(" +(*itAngleVec)->_name + ") (fit)";
+
+    TH1F* currentThetaAngleFitHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleFitHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
+    currentThetaAngleFitHist->Sumw2();
+    currentPhiAngleFitHist->Sumw2();
+    _angleFitHistMap[*itAngleVec].push_back(currentThetaAngleFitHist);
+    _angleFitHistMap[*itAngleVec].push_back(currentPhiAngleFitHist);
+
+    if( (*itAngleVec)->_nBodyDecay == 3){
+      std::string histLambdaName="DataLambda"+tmpBaseName;
+      std::string histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (data)";
+      TH1F* currentLambdaDataHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      _angleDataHistMap[*itAngleVec].push_back(currentLambdaDataHist);
+
+      histLambdaName="MCLambda"+tmpBaseName;
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (MC)";
+      TH1F* currentLambdaMcHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.); 
+      _angleMcHistMap[*itAngleVec].push_back(currentLambdaMcHist);
+ 
+      histLambdaName="FitLambda"+tmpBaseName;
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (fit)";
+      TH1F* currentLambdaFitHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.); 
+      _angleFitHistMap[*itAngleVec].push_back(currentLambdaFitHist);
+    }
+  } 
+
 }
 
 AbsHist::~AbsHist(){
@@ -82,10 +149,12 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     itMassMap->second->Scale(scaleFactor);
   }
 
-  std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
+  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
   for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){
-    itAngleMap->second.first->Scale(scaleFactor);
-    itAngleMap->second.second->Scale(scaleFactor);
+    std::vector<TH1F*>::iterator itTH1F;
+    for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){  
+      (*itTH1F)->Scale(scaleFactor);
+    }
   }
 }
 
@@ -109,9 +178,9 @@ void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<boost::sha
   
 }
 
-void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill){
 
-  std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
     short nBodyDecay = it->first->_nBodyDecay;
 
@@ -157,8 +226,8 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::sh
     }
 
     if(nBodyDecay == 2){
-      it->second.first->Fill( result4Vec.CosTheta(), weight);
-      it->second.second->Fill( result4Vec.Phi(), weight);
+      it->second[0]->Fill( result4Vec.CosTheta(), weight);
+      it->second[1]->Fill( result4Vec.Phi(), weight);
     }
     else if(nBodyDecay == 3){
       Vector4<double> result4VecPart1 = result4Vec;
@@ -168,8 +237,18 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::sh
 			     result4VecPart1.Z()*result4VecPart2.X()-result4VecPart1.X()*result4VecPart2.Z(),
 			     result4VecPart1.X()*result4VecPart2.Y()-result4VecPart1.Y()*result4VecPart2.X());
 
-      it->second.first->Fill( normVec.CosTheta(), weight);
-      it->second.second->Fill( normVec.Phi(), weight);
+      it->second[0]->Fill( normVec.CosTheta(), weight);
+      it->second[1]->Fill( normVec.Phi(), weight);
+
+      Vector4<double> result4VecPart3(combinedMother4Vec.M()-result4VecPart1.E()-result4VecPart2.E()
+				      ,-result4VecPart1.Px()-result4VecPart2.Px()
+				      ,-result4VecPart1.Py()-result4VecPart2.Py()
+				      ,-result4VecPart1.Pz()-result4VecPart2.Pz());
+
+      double theQ=result4VecPart1.E()-result4VecPart1.M()+result4VecPart2.E()-result4VecPart2.M()+result4VecPart3.E()-result4VecPart3.M();
+      double lambdaNorm=theQ*theQ*(theQ*theQ/108.+result4VecPart1.M()*theQ/9.+result4VecPart1.M()*result4VecPart1.M()/3.);
+      double lambda=normVec.P()*normVec.P()/lambdaNorm;
+      it->second[2]->Fill( lambda, weight);
     }
   }
 }

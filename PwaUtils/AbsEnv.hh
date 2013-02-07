@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsHist.hh"
 
 class Particle;
 class ParticleTable;
@@ -35,6 +36,8 @@ public:
   boost::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
   const std::string serializationFileName() const {return _serializationFileName;}
+  std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
+  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
 
 protected:  
 
@@ -48,4 +51,6 @@ protected:
   boost::shared_ptr<AbsDecayList> _prodDecList;
   std::string _outputFileNameSuffix;
   std::string _serializationFileName;
+  std::vector<std::vector<std::string> > _histMassSystems;
+  std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
 };

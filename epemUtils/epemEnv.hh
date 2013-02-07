@@ -30,8 +30,7 @@ public:
   void setup(epemParser* theEpEmParser);
 
   boost::shared_ptr<epemReaction> reaction() {return _epemReaction;}
-  std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
-  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
+  
 
 protected:  
 
@@ -39,7 +38,5 @@ protected:
   static epemEnv* _instance;
 
   boost::shared_ptr<epemReaction> _epemReaction;
-  std::vector<std::vector<std::string> > _histMassSystems;
-  std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
   std::vector<std::string> _spinDensity;
 };

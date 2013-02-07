@@ -100,12 +100,12 @@ struct angleHistData {
 class TFile;
 //class TH2F;
 class TH1F;
-
+class AbsEnv;
 
 class AbsHist {
 
 public:
-  AbsHist();
+  AbsHist(AbsEnv* theEnv);
   virtual ~AbsHist();
 
 protected:
@@ -114,17 +114,18 @@ protected:
 
   void fillMassHists(EvtData* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
 
-  void fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
+  void fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
 
  TFile* _theTFile;
+  AbsEnv* _absEnv;
 
  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;
  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massFitHistMap;
 
- std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap;
- std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap;
- std::map<boost::shared_ptr<angleHistData>, std::pair<TH1F*, TH1F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap;
+ std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap;
+ std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap;
+ std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap;
 
  virtual void initRootStuff()=0;
 

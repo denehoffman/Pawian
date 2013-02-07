@@ -18,9 +18,6 @@ class pbarpParser : public ParserBase
 
   const unsigned int getLMax() const { return _lMax; }
   const float getpbarMomentum() const { return _pbarMomentum; } 
-  //  const std::vector<std::string>& productionSystem() const { return _productionSystem; }
-  const std::vector<std::string>& histMassNames() const { return _histMass; }
-  const std::vector<std::string>& histAngleNames() const { return _histAngles;}
   const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
   const std::vector<std::string>& lmaxParticle() const{ return _lmaxParticle; }
 
@@ -28,9 +25,6 @@ protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   unsigned int _lMax;
   float _pbarMomentum;
-  //  std::vector<std::string> _productionSystem;
-  std::vector<std::string> _histMass;
-  std::vector<std::string> _histAngles;
   std::vector<std::string> _spinDensity;
   std::vector<std::string> _lmaxParticle;
 };

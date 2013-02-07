@@ -197,5 +197,20 @@ void AbsEnv::setup(ParserBase* theParser){
   }
 
 
+  //fill vector histMassSystems
+  std::vector<std::string> theHistMassNames=theParser->histMassNames();
+  for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string tmpName;
+    std::vector<std::string> currentStringVec;
+    while(stringStr >> tmpName){
+      currentStringVec.push_back(tmpName);
+    } 
+    _histMassSystems.push_back(currentStringVec);
+  }
+
+
 }
 
