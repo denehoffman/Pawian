@@ -72,6 +72,7 @@ void AbsDecayList::replaceSuffix(const std::string& oldPart, const std::string& 
   std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
   for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
     std::string theSuffix= (*it)->fitParSuffix();
+    std::cout << "theSuffix:\t" << theSuffix << std::endl;
     boost::replace_all(theSuffix, oldPart, newPart);
     (*it)->setFitParSuffix(theSuffix); 
   }

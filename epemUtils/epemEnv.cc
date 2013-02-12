@@ -8,7 +8,7 @@
 #include "epemUtils/epemParser.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
-#include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/IsobarHeliDecay.hh"
 #include "epemUtils/epemReaction.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -42,11 +42,12 @@ void epemEnv::setup(epemParser* theEpEmParser){
   _epemReaction=boost::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs));
 
   //fill prodDecayList
-  std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _epemReaction->productionCanoDecays();
-  std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator itDec;
+  std::vector< boost::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
+  std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
     _prodDecList->addDecay(*itDec);
   }
+
 
   //set suffixes
   std::vector<std::string> suffixVec = theEpEmParser->replaceSuffixNames();
