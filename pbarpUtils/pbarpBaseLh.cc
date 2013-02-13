@@ -228,7 +228,7 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
     currentMagValMap[*it] = magFactor;
     currentPhiValMap[*it] = 0.;
-    currentMagErrMap[*it] = 0.5*magFactor;
+    currentMagErrMap[*it] = magFactor;
     currentPhiErrMap[*it] = 0.3;
   }
   fitVal.Mags["pbarp"]=currentMagValMap;

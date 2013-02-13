@@ -178,7 +178,7 @@ void  HeliDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
     currentMagValMap[*itlamlam]=_factorMag;
     currentPhiValMap[*itlamlam]=0.;
-    currentMagErrMap[*itlamlam]=0.5*_factorMag;
+    currentMagErrMap[*itlamlam]=_factorMag;
     currentPhiErrMap[*itlamlam]=0.3;
   }
 
@@ -191,7 +191,7 @@ void  HeliDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     fitVal.Masses[_massKey]=_decay->motherPart()->mass();
     fitErr.Masses[_massKey]=0.03;
     fitVal.Widths[_massKey]=_decay->motherPart()->width();
-    fitErr.Widths[_massKey]=_decay->motherPart()->width();
+    fitErr.Widths[_massKey]=0.2*_decay->motherPart()->width();
   }
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);

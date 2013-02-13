@@ -182,7 +182,7 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   for(itLS=_JPCLSs.begin(); itLS!=_JPCLSs.end(); ++itLS){
     currentMagValMap[*itLS]=_factorMag;
     currentPhiValMap[*itLS]=0.;
-    currentMagErrMap[*itLS]=0.5*_factorMag;
+    currentMagErrMap[*itLS]=_factorMag;
     currentPhiErrMap[*itLS]=0.3;
   }
 
@@ -195,7 +195,7 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     fitVal.Masses[_massKey]=_decay->motherPart()->mass();
     fitErr.Masses[_massKey]=0.03;
     fitVal.Widths[_massKey]=_decay->motherPart()->width();
-    fitErr.Widths[_massKey]=_decay->motherPart()->width();
+    fitErr.Widths[_massKey]=0.2*_decay->motherPart()->width();
   }
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
