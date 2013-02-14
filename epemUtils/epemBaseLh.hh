@@ -39,7 +39,7 @@ public:
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
-  //  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+
   virtual void print(std::ostream& os) const;
 
   

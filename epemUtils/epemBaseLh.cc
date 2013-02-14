@@ -95,16 +95,6 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
 }
 
-
-
-// void epemBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
-
-//   std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-//   for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-//     (*itDecs)->getDefaultParams(fitVal, fitErr);
-//   }
-// }
-
 void epemBaseLh::print(std::ostream& os) const{
 
 }
