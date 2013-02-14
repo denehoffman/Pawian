@@ -10,11 +10,12 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 
-class AbsLh {
+class AbsLh : public AbsParamHandler{
 
 public:
   AbsLh(boost::shared_ptr<const EvtDataBaseList>);
@@ -27,25 +28,24 @@ public:
   virtual boost::shared_ptr<const EvtDataBaseList> getEventList() const {
     return _evtListPtr;
   }
-  void cacheAmplitudes();
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
-  virtual void print(std::ostream& os) const=0;
+
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual bool checkRecalculation(fitParams& theParamVal);  
+  virtual void cacheAmplitudes();
   virtual void updateFitParams(fitParams& theParamVal);
+
+  virtual void print(std::ostream& os) const=0;
 
 protected:
   boost::shared_ptr<const EvtDataBaseList> _evtListPtr;
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
-  std::map<const std::string, bool> _hypMap;
-  bool _cacheAmps;
-  unsigned int _calcCounter;
+  std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;
 
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _allDecAmpMap; 
+  std::map<const std::string, bool> _hypMap;
+  unsigned int _calcCounter;
 
   virtual void setHyps( const std::map<const std::string, bool>& theMap, 
 			bool& theHyp, std::string& theKey);
   
-  virtual void checkParamVariation(fitParams& theParamVal);
-  // virtual void cacheTheAmps()=0;
-  virtual void cacheTheAmps();
 };

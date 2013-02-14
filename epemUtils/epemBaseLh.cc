@@ -97,13 +97,13 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
 
 
-void epemBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
+// void epemBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
 
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-    (*itDecs)->getDefaultParams(fitVal, fitErr);
-  }
-}
+//   std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
+//   for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
+//     (*itDecs)->getDefaultParams(fitVal, fitErr);
+//   }
+// }
 
 void epemBaseLh::print(std::ostream& os) const{
 
@@ -139,26 +139,6 @@ std::vector< boost::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->pr
 
 }
 
-void epemBaseLh::checkParamVariation(fitParams& theParamVal){
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    (*it)->checkRecalculation(theParamVal);
-  }
-}
 
-void epemBaseLh::cacheTheAmps(){
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    (*it)->cacheAmplitudes();
-  }
-}
-
-void epemBaseLh::updateFitParams(fitParams& theParamVal){
-
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-    (*itDecs)->updateFitParams(theParamVal);
-  }
-}
 
 

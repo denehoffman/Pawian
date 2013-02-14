@@ -39,22 +39,18 @@ public:
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  //  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
-  virtual void updateFitParams(fitParams& theParamVal);
+
   
 protected:
   bool _usePhasespace;  
   const std::string _phasespaceKey;
   boost::shared_ptr<epemReaction> _epemReactionPtr;
-  std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;
+
   int _highestJFsp;
   bool _isHighestJaPhoton;
   
-  virtual void checkParamVariation(fitParams& theParamVal);
-  virtual void cacheTheAmps();
-
-
 private:
 
   void initialize();

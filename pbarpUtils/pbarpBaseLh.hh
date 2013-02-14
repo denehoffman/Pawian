@@ -38,16 +38,18 @@ public:
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
   virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
+  
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual void print(std::ostream& os) const;
   virtual void updateFitParams(fitParams& theParamVal);
+  
+  virtual void print(std::ostream& os) const;
   
 protected:
   bool _usePhasespace;  
   const std::string _phasespaceKey;
   boost::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< boost::shared_ptr<const JPCLS> > _jpclsStates;
-  std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;
+
   std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsSinglet;
   std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTriplet0;
   std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletp1;
@@ -58,8 +60,6 @@ protected:
   int _highestJFsp;
   bool _isHighestJaPhoton;
   
-  virtual void checkParamVariation(fitParams& theParamVal);
-  virtual void cacheTheAmps();
   virtual void fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<AbsXdecAmp> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill); 
 
 private:

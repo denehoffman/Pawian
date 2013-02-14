@@ -218,6 +218,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
 void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
 
+  AbsLh::getDefaultParams(fitVal, fitErr);
+
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
@@ -236,10 +238,6 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   fitErr.Mags["pbarp"]=currentMagErrMap;
   fitErr.Phis["pbarp"]=currentPhiErrMap;
 
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-    (*itDecs)->getDefaultParams(fitVal, fitErr);
-  }
 }
 
 void pbarpBaseLh::print(std::ostream& os) const{
@@ -270,21 +268,9 @@ void  pbarpBaseLh::initialize(){
 
 }
 
-void pbarpBaseLh::checkParamVariation(fitParams& theParamVal){
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    (*it)->checkRecalculation(theParamVal);
-  }
-}
-
-void pbarpBaseLh::cacheTheAmps(){
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    (*it)->cacheAmplitudes();
-  }
-}
-
 void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
+
+  AbsLh::updateFitParams(theParamVal);
 
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags["pbarp"];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis["pbarp"];
@@ -297,10 +283,6 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
      _currentParamPhis[*it]=thePhi;
    }
 
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-    (*itDecs)->updateFitParams(theParamVal);
-  }
 }
 
 void pbarpBaseLh::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<AbsXdecAmp> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill){

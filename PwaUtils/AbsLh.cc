@@ -15,8 +15,8 @@
 #endif
 
 AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  _evtListPtr(theEvtList)
-  ,_cacheAmps(false)
+  AbsParamHandler()
+  ,_evtListPtr(theEvtList)
   ,_calcCounter(0)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
@@ -24,8 +24,8 @@ AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
 }
 
 AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr):
-  _evtListPtr(theAbsLhPtr->getEventList())
-  ,_cacheAmps(false)
+  AbsParamHandler()
+  ,_evtListPtr(theAbsLhPtr->getEventList())
   ,_calcCounter(0)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
@@ -38,7 +38,7 @@ AbsLh::~AbsLh()
 
 double AbsLh::calcLogLh(fitParams& theParamVal){
   _calcCounter++;
-  if (_cacheAmps && _calcCounter>1) checkParamVariation(theParamVal); 
+  if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal); 
   updateFitParams(theParamVal);
   
   double logLH=0.;
@@ -110,36 +110,37 @@ void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theH
   }
 }
 
+void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
+
+  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
+  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
+    (*itDecs)->getDefaultParams(fitVal, fitErr);
+  }
+}
 
 void AbsLh::cacheAmplitudes(){
   _cacheAmps=true;
-  cacheTheAmps();
-}
-
-
-void AbsLh::checkParamVariation(fitParams& theParamVal){
-
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for(it = _allDecAmpMap.begin(); it != _allDecAmpMap.end(); ++it){
-    it->second->checkRecalculation(theParamVal);
+  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
+    (*it)->cacheAmplitudes();
   }
-
-  return;
-}
-
-void AbsLh::cacheTheAmps(){
-
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for(it = _allDecAmpMap.begin(); it != _allDecAmpMap.end(); ++it){
-    it->second->cacheAmplitudes();
-  }
-  return;
 }
 
 void AbsLh::updateFitParams(fitParams& theParamVal){
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for(it = _allDecAmpMap.begin(); it != _allDecAmpMap.end(); ++it){
-    it->second->updateFitParams(theParamVal);
+
+  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
+  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
+    (*itDecs)->updateFitParams(theParamVal);
   }
-  return;
 }
+
+bool AbsLh::checkRecalculation(fitParams& theParamVal){
+  bool result=true;
+  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
+    if(!(*it)->checkRecalculation(theParamVal)) result=false;
+  }
+  return result;
+}
+
+
