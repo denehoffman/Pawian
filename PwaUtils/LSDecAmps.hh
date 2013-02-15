@@ -36,11 +36,11 @@ public:
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs);
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
-  virtual bool checkRecalculation(fitParams& theParamVal);
-  //  boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:

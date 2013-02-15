@@ -13,7 +13,8 @@
 #include "Particle/Particle.hh"
 
 AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
-  _decay(theDec)
+  AbsParamHandler()
+  , _decay(theDec)
   , _name(theDec->name())
   ,_JPCPtr(theDec->motherJPC())
   ,_key("_"+theDec->fitParSuffix())
@@ -22,8 +23,6 @@ AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
   ,_withDyn(theDec->withDynamics())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
-  ,_cacheAmps(false)
-  ,_recalculate(true)
 {
   initialize();
 }
@@ -31,6 +30,7 @@ AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
 AbsXdecAmp::~AbsXdecAmp()
 {
 }
+
 void AbsXdecAmp::initialize(){
   if(_withDyn){
     if(!_decay->hasMother()){
@@ -54,15 +54,16 @@ void AbsXdecAmp::initialize(){
   _Jdaughter2=(Spin) _decay->daughter2Part()->J();
 }
 
-bool AbsXdecAmp::checkRecalculation(fitParams& theParamVal){
-  _recalculate=true;
-  return _recalculate;
-}
-
 complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs){
   complex<double> result(1.,0.);
   if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs);
   if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs);
   return result;
+}
+
+void AbsXdecAmp::cacheAmplitudes(){
+  _cacheAmps=true;
+  if(!_daughter1IsStable) _decAmpDaughter1->cacheAmplitudes();
+  if(!_daughter2IsStable) _decAmpDaughter2->cacheAmplitudes();
 }
 

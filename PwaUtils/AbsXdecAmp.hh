@@ -12,10 +12,11 @@
 
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/AbsParamHandler.hh"
 
 class AbsDecay;
 
-class AbsXdecAmp {
+class AbsXdecAmp : public AbsParamHandler{
 
 public:
   AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec);
@@ -24,17 +25,16 @@ public:
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs)=0;
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
                                       EvtData* theData, Spin lamFs)=0;
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
   virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs);
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   const Spin  spinX() const {return _J_X;}
   const int  parity() const {return _parity;}
-  virtual bool checkRecalculation(fitParams& theParamVal);
   virtual boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   boost::shared_ptr<AbsDecay> absDec() {return _decay;}
-  virtual void cacheAmplitudes(){_cacheAmps=true;}
-  virtual void updateFitParams(fitParams& theParamVal){return;}
+
+  virtual void cacheAmplitudes();
+
 protected:
  
   boost::shared_ptr<AbsDecay> _decay; 
@@ -56,12 +56,8 @@ protected:
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
   double _currentXMass;
   double _currentXWidth;
-  double _currentgFactorPhiPhi;
-  double _currentgFactorOmegaPhi;
   bool _daughter1IsStable;
   bool _daughter2IsStable;
-  bool _cacheAmps;
-  bool _recalculate;
   std::map<int, std::map<Spin, std::map<Spin, complex<double> > > > _cachedAmpMap;
 
   virtual void initialize();
