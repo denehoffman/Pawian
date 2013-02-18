@@ -99,10 +99,11 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
 
 
 complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
-int evtNo=theData->evtNo;
-  
-  if ( _cacheAmps && !_recalculate){
-    complex<double> result(0.,0.);
+
+  int evtNo=theData->evtNo;
+  complex<double> result(0.,0.);  
+ 
+ if ( _cacheAmps && !_recalculate){
     result= _cachedAmpMap[evtNo][lamX][lamFs];
     return result;
   }
@@ -122,7 +123,6 @@ int evtNo=theData->evtNo;
     lam2Max=lamFs;
   }
 
-  complex<double> result(0.,0.);
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
@@ -146,16 +146,7 @@ int evtNo=theData->evtNo;
     }
   }
 
-  if(_withDyn){
-    Vector4<double> mass4Vec(0.,0.,0.,0.);
-    std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
-
-    std::vector<Particle*>::iterator itPartVec;
-    for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
-       mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
-    }
-    result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
-  }
+  result*=_absDyn->eval(theData);
 
   if ( _cacheAmps){
 #ifdef _OPENMP
@@ -191,12 +182,8 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   fitErr.Mags[_key]=currentMagErrMap;
   fitErr.Phis[_key]=currentPhiErrMap;
 
-  if(_withDyn){
-    fitVal.Masses[_massKey]=_decay->motherPart()->mass();
-    fitErr.Masses[_massKey]=0.03;
-    fitVal.Widths[_massKey]=_decay->motherPart()->width();
-    fitErr.Widths[_massKey]=0.2*_decay->motherPart()->width();
-  }
+  _absDyn->getDefaultParams(fitVal, fitErr);
+
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
@@ -226,16 +213,7 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
      }
    }
 
-   if(_withDyn){
-     double mass=theParamVal.Masses[_massKey];
-     if ( fabs(mass-_currentXMass) > 1.e-10){
-       _recalculate=true;
-     }
-     double width=theParamVal.Widths[_massKey];
-     if ( fabs(width-_currentXWidth) > 1.e-10){
-       _recalculate=true;
-     }
-   }
+   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
 
    if(!_daughter1IsStable) {
      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
@@ -259,12 +237,7 @@ void  LSDecAmps::updateFitParams(fitParams& theParamVal){
      _currentParamPhis[*it]=thePhi;
    }
 
-   if (_withDyn){
-     double xMass=theParamVal.Masses[_massKey];
-     _currentXMass= xMass;
-     double xWidth=theParamVal.Widths[_massKey];
-     _currentXWidth=xWidth;
-   }
+   _absDyn->updateFitParams(theParamVal);
 
   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);

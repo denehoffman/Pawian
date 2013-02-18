@@ -11,6 +11,9 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+//#include "PwaUtils/AbsDynamics.hh"
+#include "PwaUtils/BreitWignerDynamics.hh"
+#include "PwaUtils/WoDynamics.hh"
 
 AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
   AbsParamHandler()
@@ -32,12 +35,17 @@ AbsXdecAmp::~AbsXdecAmp()
 }
 
 void AbsXdecAmp::initialize(){
+  std::vector<Particle*> fsParticles=_decay->finalStateParticles();
   if(_withDyn){
     if(!_decay->hasMother()){
       Alert << "no mother resonance; can not add dynamis" << endmsg;
       exit(1);
     }
     _massKey=_decay->massParKey();
+      _absDyn= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(_massKey, fsParticles, _decay->motherPart()));
+  }
+  else{
+    _absDyn= boost::shared_ptr<AbsDynamics>(new WoDynamics(fsParticles, _decay->motherPart()));
   }
   
   if(!_daughter1IsStable){
@@ -63,6 +71,7 @@ complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, 
 
 void AbsXdecAmp::cacheAmplitudes(){
   _cacheAmps=true;
+  _absDyn->cacheAmplitudes();
   if(!_daughter1IsStable) _decAmpDaughter1->cacheAmplitudes();
   if(!_daughter2IsStable) _decAmpDaughter2->cacheAmplitudes();
 }

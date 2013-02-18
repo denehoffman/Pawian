@@ -13,8 +13,10 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsParamHandler.hh"
+#include "PwaUtils/AbsDynamics.hh"
 
 class AbsDecay;
+//class AbsDynamics;
 
 class AbsXdecAmp : public AbsParamHandler{
 
@@ -40,6 +42,7 @@ protected:
   boost::shared_ptr<AbsDecay> _decay; 
   const std::string _name;
   boost::shared_ptr<const jpcRes> _JPCPtr;
+  boost::shared_ptr<AbsDynamics> _absDyn;
   const std::vector<std::string> _hypVec;
   Spin _J_X;
   int _parity;
@@ -58,7 +61,7 @@ protected:
   double _currentXWidth;
   bool _daughter1IsStable;
   bool _daughter2IsStable;
-  std::map<int, std::map<Spin, std::map<Spin, complex<double> > > > _cachedAmpMap;
+  std::map<int, std::map<Spin, std::map<Spin, complex<float> > > > _cachedAmpMap;
 
   virtual void initialize();
 };

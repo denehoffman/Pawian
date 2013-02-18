@@ -5,7 +5,7 @@ lib PwaDynamics :
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
-	$(TOP)/ErrLogger//ErrLogger 
+	$(TOP)/ErrLogger//ErrLogger
 	: 
 	: 
 	:  ;

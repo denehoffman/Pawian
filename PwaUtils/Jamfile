@@ -5,7 +5,7 @@ lib PwaUtils :
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
-	$(TOP)/ErrLogger//ErrLogger 
+	$(TOP)/ErrLogger//ErrLogger
 	: <use>$(TOP)//Minuit2
 	: 
 	: <library>$(TOP)//Minuit2 ;

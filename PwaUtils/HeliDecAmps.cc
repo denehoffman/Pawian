@@ -140,16 +140,18 @@ int evtNo=theData->evtNo;
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
-  if(_withDyn){
-    Vector4<double> mass4Vec(0.,0.,0.,0.);
-    std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
+  result*=_absDyn->eval(theData);
 
-    std::vector<Particle*>::iterator itPartVec;
-    for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
-       mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
-    }
-    result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
-  }
+  // if(_withDyn){
+  //   Vector4<double> mass4Vec(0.,0.,0.,0.);
+  //   std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
+
+  //   std::vector<Particle*>::iterator itPartVec;
+  //   for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
+  //      mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
+  //   }
+  //   result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
+  // }
 
   //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
   result*=sqrt(2.*_JPCPtr->J+1.);
@@ -187,12 +189,7 @@ void  HeliDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   fitErr.MagLamLams[_key]=currentMagErrMap;
   fitErr.PhiLamLams[_key]=currentPhiErrMap;
 
-  if(_withDyn){
-    fitVal.Masses[_massKey]=_decay->motherPart()->mass();
-    fitErr.Masses[_massKey]=0.03;
-    fitVal.Widths[_massKey]=_decay->motherPart()->width();
-    fitErr.Widths[_massKey]=0.2*_decay->motherPart()->width();
-  }
+  _absDyn->getDefaultParams(fitVal, fitErr);
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
@@ -222,16 +219,7 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
      }
    }
 
-   if(_withDyn){
-     double mass=theParamVal.Masses[_massKey];
-     if ( fabs(mass-_currentXMass) > 1.e-10){
-       _recalculate=true;
-     }
-     double width=theParamVal.Widths[_massKey];
-     if ( fabs(width-_currentXWidth) > 1.e-10){
-       _recalculate=true;
-     }
-   }
+   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
 
    if(!_daughter1IsStable) {
      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
@@ -262,14 +250,10 @@ void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
      }
    }
 
-   if (_withDyn){
-     double xMass=theParamVal.Masses[_massKey];
-     _currentXMass= xMass;
-     double xWidth=theParamVal.Widths[_massKey];
-     _currentXWidth=xWidth;
-   }
 
-  if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
-  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
+   _absDyn->updateFitParams(theParamVal);
 
+   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
+   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
+   
 }
