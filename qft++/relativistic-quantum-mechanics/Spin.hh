@@ -48,8 +48,8 @@ class Spin {
 
 private:
   // data members:
-  int _numer; ///< numerator
-  int _denom; ///< denominator
+  short _numer; ///< numerator
+  short _denom; ///< denominator
 
   // private functions:
 
@@ -61,21 +61,21 @@ private:
 
   /// Build a rational spin from a double
   void _BuildFromDouble(double __x){
-    int x_int = (int)__x;
-    if(abs(__x - x_int) < 1.e-5) { // integer spin
-      _numer = x_int;
+    short x_short = (short)__x;
+    if(abs(__x - x_short) < 1.e-5) { // shorteger spin
+      _numer = x_short;
       _denom = 1;
     }
     else{
       double x = 2.*__x;
-      x_int = (int)x;
-      if(abs(x - x_int) < 1.e-5) { // half-integer spin
-	_numer = x_int;
+      x_short = (short)x;
+      if(abs(x - x_short) < 1.e-5) { // half-shorteger spin
+	_numer = x_short;
 	_denom = 2;
       }
       else{ // illegal assignment attempt
 	cout << "Error! Attempt to assign a Spin object the value " << __x
-	     << " which is neither integral nor half-integral." << endl;
+	     << " which is neither short integral nor half-integral." << endl;
 	abort();
       }
     }
@@ -120,12 +120,12 @@ public:
   // Getters:
 
   /// Returns the numerator of the spin
-  inline int Numerator() const {
+  inline short Numerator() const {
     return _numer;
   }
 
   /// Returns the denominator of the spin
-  inline int Denominator() const {
+  inline short Denominator() const {
     return _denom;
   }
 
@@ -137,7 +137,7 @@ public:
   // Setters:
 
   /// Set the spin
-  inline void SetSpin(int __numer,int __denom = 1){
+  inline void SetSpin(short __numer,short __denom = 1){
     _numer = __numer;
     _denom = __denom;
   }
