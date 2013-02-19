@@ -16,7 +16,7 @@
 class WoDynamics : public AbsDynamics{
 
 public:
-  WoDynamics(std::vector<Particle*>& fsParticles, Particle* mother);
+  WoDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~WoDynamics();
 
   virtual complex<double> eval(EvtData* theData, Spin OrbMom=0);

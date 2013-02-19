@@ -11,9 +11,8 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
-//#include "PwaUtils/AbsDynamics.hh"
-#include "PwaUtils/BreitWignerDynamics.hh"
-#include "PwaUtils/WoDynamics.hh"
+#include "PwaUtils/DynRegistry.hh"
+
 
 AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
   AbsParamHandler()
@@ -21,9 +20,7 @@ AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
   , _name(theDec->name())
   ,_JPCPtr(theDec->motherJPC())
   ,_key("_"+theDec->fitParSuffix())
-  ,_massKey("")
   ,_wignerDKey(theDec->wignerDKey())
-  ,_withDyn(theDec->withDynamics())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
 {
@@ -35,18 +32,8 @@ AbsXdecAmp::~AbsXdecAmp()
 }
 
 void AbsXdecAmp::initialize(){
-  std::vector<Particle*> fsParticles=_decay->finalStateParticles();
-  if(_withDyn){
-    if(!_decay->hasMother()){
-      Alert << "no mother resonance; can not add dynamis" << endmsg;
-      exit(1);
-    }
-    _massKey=_decay->massParKey();
-      _absDyn= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(_massKey, fsParticles, _decay->motherPart()));
-  }
-  else{
-    _absDyn= boost::shared_ptr<AbsDynamics>(new WoDynamics(fsParticles, _decay->motherPart()));
-  }
+
+  _absDyn = DynRegistry::instance()->getDynamics(_decay);
   
   if(!_daughter1IsStable){
     boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();

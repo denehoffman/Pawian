@@ -9,8 +9,8 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 
-WoDynamics::WoDynamics(std::vector<Particle*>& fsParticles, Particle* mother) :
-  AbsDynamics(fsParticles, mother)
+WoDynamics::WoDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
+  AbsDynamics(name, fsParticles, mother)
 {
 }
 

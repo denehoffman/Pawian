@@ -88,7 +88,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
     if(fixDaughterNr==1 && lamDec!=lambda1) continue;
     if(fixDaughterNr==2 && lamDec!=lambda2) continue;
 
-     complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
     result+=amp;
   }
   //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
@@ -142,18 +142,7 @@ int evtNo=theData->evtNo;
 
   result*=_absDyn->eval(theData);
 
-  // if(_withDyn){
-  //   Vector4<double> mass4Vec(0.,0.,0.,0.);
-  //   std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
 
-  //   std::vector<Particle*>::iterator itPartVec;
-  //   for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
-  //      mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
-  //   }
-  //   result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
-  // }
-
-  //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
   result*=sqrt(2.*_JPCPtr->J+1.);
   if ( _cacheAmps){
 #ifdef _OPENMP

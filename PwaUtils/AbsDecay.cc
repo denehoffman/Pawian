@@ -29,7 +29,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
-  ,_massParamKey(mother->name())
+  ,_massParamKey("WoDynamics")
   ,_env(theEnv)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
@@ -74,7 +74,7 @@ AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daugh
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
-  ,_massParamKey("")
+  ,_massParamKey("WoDynamics")
   ,_env(theEnv)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
@@ -104,6 +104,13 @@ AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daugh
 }
 
 AbsDecay::~AbsDecay(){
+}
+
+
+void AbsDecay::enableDynamics(std::string& dynString) {
+  _withDyn=true;
+  if(0!=_mother) _massParamKey=_mother->name(); 
+  else _massParamKey=_motherJPCPtr->name();
 }
 
 void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){

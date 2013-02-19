@@ -82,10 +82,10 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
         Spin lambda = lambda1-lambda2;
         if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 
-        complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
+        complex<double> amp = theMag*expi*sqrt(2.*(*it)->L+1)
            *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
            *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
-           *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+	  *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
        
 	result+=amp;
       }
@@ -138,7 +138,7 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 	complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
 	   *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
 	   *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  )
-	   *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+	  *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
       	amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;

@@ -43,7 +43,7 @@ public:
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
-  void enableDynamics(std::string& dynString) {_withDyn=true;}
+  void enableDynamics(std::string& dynString);
   virtual void print(std::ostream& os) const;
   
   Particle* motherPart() {return _mother;}

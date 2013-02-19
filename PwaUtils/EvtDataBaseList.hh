@@ -11,26 +11,6 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
-struct enumProd4V {
-  enum { Psi=0, n4Vecs };
-  
-  static const std::string& name(unsigned int t) {
-    static std::string fitName[enumProd4V::n4Vecs] = {"Psi"};
-    if (t<0 || t>=enumProd4V::n4Vecs) assert(0);
-    return fitName[t];
-  }
-};
-
-struct enumProdDfunc {
-  enum {Psi=0, nDfuncts};
-
-  static const std::string& name(unsigned int t) {
-    static std::string fitName[enumProdDfunc::nDfuncts] = {"Psi"};
-    if (t<0 || t>=enumProdDfunc::nDfuncts) assert(0);
-    return fitName[t];
-  }
-};
-
 typedef std::map<int, Vector4<double> > mapInt4Vec;
 typedef std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapIntSpinComplex;
 typedef std::map<std::string, Vector4<double> > mapString4Vec;

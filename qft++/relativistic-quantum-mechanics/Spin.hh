@@ -115,7 +115,7 @@ public:
   }
 
   /// Destructor
-  virtual ~Spin(){}
+  ~Spin(){}
 
   // Getters:
 

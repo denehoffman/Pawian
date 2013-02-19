@@ -42,7 +42,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short f
     complex<double> expi(cos(thePhi), sin(thePhi));
 
         complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-           *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
+	  *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
         result+=amp;
   }
 
@@ -54,14 +54,13 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short f
 
 complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 int evtNo=theData->evtNo;
-  
+
+ complex<double> result(0.,0.);  
   if ( _cacheAmps && !_recalculate){
-    complex<double> result(0.,0.);
     result= _cachedAmpMap[evtNo][lamX][lamFs];
     return result;
   }
 
-  complex<double> result(0.,0.);
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
@@ -75,16 +74,7 @@ int evtNo=theData->evtNo;
     result+=amp;
   }
   result*=sqrt( theData->DoubleString["lamOmegaDec"] );
-  if(_withDyn){
-    Vector4<double> mass4Vec(0.,0.,0.,0.);
-    std::vector<Particle*> fsParticleVec=_decay->finalStateParticles();
-
-    std::vector<Particle*>::iterator itPartVec;
-    for (itPartVec=fsParticleVec.begin(); itPartVec!=fsParticleVec.end(); ++itPartVec){
-      mass4Vec+=theData->FourVecsString[(*itPartVec)->name()];
-    }
-    result*=BreitWigner(mass4Vec, _currentXMass, _currentXWidth);
-  }
+  result*=_absDyn->eval(theData);
 
   if ( _cacheAmps){
 #ifdef _OPENMP

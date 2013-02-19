@@ -51,14 +51,11 @@ protected:
   Spin _Jdaughter1;
   Spin _Jdaughter2;
   std::string _key;
-  std::string _massKey;
   const std::string _wignerDKey;
-  bool _withDyn;
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
-  double _currentXMass;
-  double _currentXWidth;
+
   bool _daughter1IsStable;
   bool _daughter2IsStable;
   std::map<int, std::map<Spin, std::map<Spin, complex<float> > > > _cachedAmpMap;

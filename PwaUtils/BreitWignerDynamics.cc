@@ -10,7 +10,7 @@
 #include "Particle/Particle.hh"
 
 BreitWignerDynamics::BreitWignerDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother) :
-  AbsDynamics(fsParticles, mother)
+  AbsDynamics(massKey, fsParticles, mother)
   ,_massKey(massKey)
 {
 }

@@ -19,13 +19,15 @@ class Particle;
 class AbsDynamics : public AbsParamHandler{
 
 public:
-  AbsDynamics(std::vector<Particle*>& fsParticles, Particle* mother );
+  AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother );
   virtual ~AbsDynamics();
 
+  virtual std::string name() {return _name;};
   virtual complex<double> eval(EvtData* theData, Spin OrbMom=0)=0;
   virtual void cacheAmplitudes();
 
 protected:
+  std::string _name;
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
   std::map<int, complex<float> >  _cachedMap;
