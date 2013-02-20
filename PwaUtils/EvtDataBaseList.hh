@@ -10,6 +10,7 @@
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "Particle/Particle.hh"
 
 typedef std::map<int, Vector4<double> > mapInt4Vec;
 typedef std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapIntSpinComplex;

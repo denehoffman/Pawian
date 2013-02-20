@@ -141,19 +141,18 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
   }
 
   result*=_absDyn->eval(theData);
-
-
   result*=sqrt(2.*_JPCPtr->J+1.);
+
   if ( _cacheAmps){
 #ifdef _OPENMP
-#pragma omp critical
+#pragma omp critical (heliAmpCache)
     {
 #endif
       _cachedAmpMap[evtNo][lamX][lamFs]=result;
 #ifdef _OPENMP
     }
 #endif
-  }
+}
 
   return result;
 }

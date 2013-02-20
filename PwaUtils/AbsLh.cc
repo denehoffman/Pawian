@@ -48,39 +48,23 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
 
 
 #ifdef _OPENMP
-#pragma omp parallel for
+#pragma omp parallel for reduction(+ : logLH_data, weightSum)
 #endif
   for (unsigned int i=0; i<_evtDataVec.size(); ++i){
     EvtData* currentEvtData=_evtDataVec[i];
     double intensity=calcEvtIntensity(currentEvtData, theParamVal);
 
-#ifdef _OPENMP
-#pragma omp critical
-      {
-#endif
-    if (intensity>0.) logLH_data+=(currentEvtData->evtWeight)*log(intensity);
+    logLH_data+=(currentEvtData->evtWeight)*log(intensity);
     weightSum+= currentEvtData->evtWeight;
-
-#ifdef _OPENMP
-       }
-#endif
   }
 
 #ifdef _OPENMP
-#pragma omp parallel for
+#pragma omp parallel for reduction(+ : LH_mc) 
 #endif
   for (unsigned int i=0; i<_evtMCVec.size(); ++i){
     EvtData* currentEvtData=_evtMCVec[i];
     double intensity=calcEvtIntensity(currentEvtData, theParamVal);
-
-#ifdef _OPENMP
-#pragma omp critical
-      {
-#endif
-        LH_mc+=intensity;
-#ifdef _OPENMP
-       }
-#endif
+    LH_mc+=intensity;
   }
 
 
@@ -127,18 +111,29 @@ void AbsLh::cacheAmplitudes(){
 }
 
 void AbsLh::updateFitParams(fitParams& theParamVal){
-
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-    (*itDecs)->updateFitParams(theParamVal);
+#ifdef _OPENMP
+#pragma omp parallel for  
+#endif
+  for(unsigned int i=0; i<_decAmps.size(); ++i){
+    _decAmps[i]->updateFitParams(theParamVal);
   }
 }
 
 bool AbsLh::checkRecalculation(fitParams& theParamVal){
   bool result=true;
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
-  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    if(!(*it)->checkRecalculation(theParamVal)) result=false;
+#ifdef _OPENMP
+#pragma omp parallel for  
+#endif
+  for(unsigned int i=0; i<_decAmps.size(); ++i){
+    bool currentResult=_decAmps[i]->checkRecalculation(theParamVal);
+#ifdef _OPENMP
+#pragma omp critical (globalRecalcCheck)
+    {
+#endif 
+    if(!currentResult) result=false;
+#ifdef _OPENMP
+    }
+#endif 
   }
   return result;
 }

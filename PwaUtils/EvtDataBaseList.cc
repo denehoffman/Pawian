@@ -13,7 +13,7 @@
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
 
-#include "Particle/Particle.hh"
+//#include "Particle/Particle.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 #include "ErrLogger/ErrLogger.hh"
@@ -59,6 +59,7 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     std::vector< Vector4<double> > finalState4Vecs;
     std::vector<Particle*>  finalStateParticles=_absEnv->finalStateParticles();
     std::map<std::string, Vector4<double> > particle4VecMap;
+
     std::vector<Particle*>::iterator itPart;
     int counter=0;
     for (itPart=finalStateParticles.begin(); itPart != finalStateParticles.end(); ++itPart){
@@ -94,7 +95,8 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     for (it4VecMap=particle4VecMap.begin(); it4VecMap!=particle4VecMap.end(); ++it4VecMap){
       evtData->FourVecsString.insert(mapString4Vec::value_type(it4VecMap->first, it4VecMap->second));
     }
- 
+
+
    //fill WignerD functions
     std::vector<boost::shared_ptr<AbsDecay> > theDecays=_absEnv->prodDecayList()->getList();
     std::vector<boost::shared_ptr<AbsDecay> >::iterator itIso;

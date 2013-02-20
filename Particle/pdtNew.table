@@ -103,8 +103,8 @@ Meson a0Hat(1600) 	\hat{a}_0(1600)  	0  0  1 -1 -1   1  0  0  0 	1.600 	0.300  	
 #
 Meson kappa 		\kappa  		0  0  1  0  0   0  0  0  0 	0.75 	0.05   	relBW	[PDG nonett 1^3P_0]
 Meson K 		K  			0  0 -1  0  0   0  0  0  0  	0.493 	0.0001  relBW	[PDG nonett 1^1S_0]
-Meson K+ 		K^+  			0  0 -1  0  0   0  0  0  +1  	0.49367 0.0001  relBW	[PDG nonett 1^1S_0]
-Meson K- 		K^-  			0  0 -1  0  0   0  0  0  -1  	0.49367 0.0001  relBW	[PDG nonett 1^1S_0]
+Meson K+ 		K^+  			3  0 -1  0  0   0  0  0  +1  	0.49367 0.0001  relBW	[PDG nonett 1^1S_0]
+Meson K- 		K^-  			-3 0 -1  0  0   0  0  0  -1  	0.49367 0.0001  relBW	[PDG nonett 1^1S_0]
 Meson K* 		K^\ast  		0  2 -1  0  0   0  0  0  0  	0.89116 0.0508  relBW	[PDG nonett 1^3S_1]
 Meson K*+ 		K^{\ast+}  		0  2 -1  0  0   0  0  0  +1  	0.8955  0.0508  relBW	[PDG nonett 1^3S_1]
 Meson K*- 		K^{\ast-}  		0  2 -1  0  0   0  0  0  -1  	0.8955  0.0505  relBW	[PDG nonett 1^3S_1]

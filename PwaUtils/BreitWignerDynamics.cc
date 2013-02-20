@@ -28,14 +28,14 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, Spin OrbMom){
   Vector4<double> mass4Vec(0.,0.,0.,0.);
   std::vector<Particle*>::iterator it;
   for (it=_fsParticles.begin(); it != _fsParticles.end(); ++it){
-       mass4Vec+=theData->FourVecsString[(*it)->name()];
+    mass4Vec+=theData->FourVecsString[(*it)->name()];
     }
 
   complex<double> result=BreitWigner(mass4Vec, _currentMass, _currentWidth);
   
   if ( _cacheAmps){
 #ifdef _OPENMP
-#pragma omp critical
+#pragma omp critical (bwDynCache)
     {
 #endif
       _cachedMap[evtNo]=result;
