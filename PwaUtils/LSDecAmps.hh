@@ -47,7 +47,10 @@ protected:
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
   double _factorMag;
   double _parityFactor;
+  std::map< boost::shared_ptr<const JPCLS>, map<Spin,map<Spin, double > > > _cgPreFactor;
 
+  void  fillCgPreFactor();
+ 
 private:
 
 
