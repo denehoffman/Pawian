@@ -156,7 +156,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
   if(lam12Max>spinMother) lam12Max=spinMother;
 
   Spin lamMotherMax=spinMother;
-  if (!_hasMotherPart && spinMother>1) lamMotherMax=1;
+  if (!_hasMotherPart && spinMother>1) lamMotherMax=1; //attention: this is only valid for pbar p or e+ e- reactions; must be moved to individual specific classes
 
  
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){

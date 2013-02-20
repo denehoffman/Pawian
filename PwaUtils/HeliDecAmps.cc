@@ -100,10 +100,13 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
 
 
 complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
-int evtNo=theData->evtNo;
-  
+
+  int evtNo=theData->evtNo;
+  complex<double> result(0.,0.);  
+
+  if( fabs(lamX) > _JPCPtr->J) return result;
+
   if ( _cacheAmps && !_recalculate){
-    complex<double> result(0.,0.);
     result= _cachedAmpMap[evtNo][lamX][lamFs];
     return result;
   }
@@ -114,14 +117,10 @@ int evtNo=theData->evtNo;
   bool lamFs_daughter2=false;
   if( _daughter2IsStable && _Jdaughter2>0) lamFs_daughter2=true;
   
-
-  complex<double> result(0.,0.);
-
   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
 
   for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
     boost::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
-    if( fabs(lamX) > currentJPClamlam->J) continue;
 
     double theMag=it->second;
     double thePhi=_currentParamPhiLamLams[currentJPClamlam];
@@ -131,6 +130,7 @@ int evtNo=theData->evtNo;
     Spin lambda2= currentJPClamlam->lam2;
     Spin lambda = lambda1-lambda2;
     if( fabs(lambda) > currentJPClamlam->J) continue;
+
     if(lamFs_daughter1 && lamFs!=lambda1) continue;
     if(lamFs_daughter2 && lamFs!=lambda2) continue;
 

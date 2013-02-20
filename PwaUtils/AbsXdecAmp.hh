@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
@@ -17,6 +18,8 @@
 
 class AbsDecay;
 //class AbsDynamics;
+
+typedef boost::unordered_map<int, std::map<Spin, std::map<Spin, complex<float> > > > intSpinSpinFloatUsMap;
 
 class AbsXdecAmp : public AbsParamHandler{
 
@@ -30,8 +33,6 @@ public:
   virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs);
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
-  const Spin  spinX() const {return _J_X;}
-  const int  parity() const {return _parity;}
   virtual boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   boost::shared_ptr<AbsDecay> absDec() {return _decay;}
 
@@ -44,8 +45,6 @@ protected:
   boost::shared_ptr<const jpcRes> _JPCPtr;
   boost::shared_ptr<AbsDynamics> _absDyn;
   const std::vector<std::string> _hypVec;
-  Spin _J_X;
-  int _parity;
   boost::shared_ptr<AbsXdecAmp> _decAmpDaughter1;
   boost::shared_ptr<AbsXdecAmp> _decAmpDaughter2; 
   Spin _Jdaughter1;
@@ -58,7 +57,7 @@ protected:
 
   bool _daughter1IsStable;
   bool _daughter2IsStable;
-  std::map<int, std::map<Spin, std::map<Spin, complex<float> > > > _cachedAmpMap;
-
+  //  std::map<int, std::map<Spin, std::map<Spin, complex<float> > > > _cachedAmpMap;
+  intSpinSpinFloatUsMap _cachedAmpMap;
   virtual void initialize();
 };

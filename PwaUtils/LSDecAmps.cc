@@ -102,8 +102,9 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 
   int evtNo=theData->evtNo;
   complex<double> result(0.,0.);  
+  if( fabs(lamX) > _JPCPtr->J) return result; 
  
- if ( _cacheAmps && !_recalculate){
+  if ( _cacheAmps && !_recalculate){
     result= _cachedAmpMap[evtNo][lamX][lamFs];
     return result;
   }
@@ -125,13 +126,13 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    if( fabs(lamX) > (*it)->J ) continue;
+    //    if( fabs(lamX) > (*it)->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
 
-    for(Spin lambda1=lam1Min; lambda1<=lam1Max; lambda1++){
-      for(Spin lambda2=lam2Min; lambda2<=lam2Max; lambda2++){
+    for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
+      for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 

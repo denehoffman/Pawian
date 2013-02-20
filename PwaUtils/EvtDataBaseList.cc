@@ -65,7 +65,7 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
       Vector4<float> current4VecFloat=*(anEvent->p4(counter));
       Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
       finalState4Vecs.push_back(current4Vec);
-      particle4VecMap[ (*itPart)->name()]=current4Vec;
+      particle4VecMap.insert(std::map<std::string, Vector4<double> >::value_type((*itPart)->name(), current4Vec));
       V4_all_lab += current4Vec;
       counter++;
     }     
@@ -87,11 +87,12 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
 
 
     EvtData* evtData=new EvtData();
-    evtData->FourVecsString["all"]=V4_all_lab;
+    evtData->FourVecsString.insert(mapString4Vec::value_type("all",V4_all_lab)); 
+
     //cache 4 vectors of inital state particles
     std::map<std::string, Vector4<double> >::iterator it4VecMap;
     for (it4VecMap=particle4VecMap.begin(); it4VecMap!=particle4VecMap.end(); ++it4VecMap){
-      evtData->FourVecsString[it4VecMap->first]=it4VecMap->second;
+      evtData->FourVecsString.insert(mapString4Vec::value_type(it4VecMap->first, it4VecMap->second));
     }
  
    //fill WignerD functions
@@ -100,8 +101,6 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
       (*itIso)->fillWignerDs(particle4VecMap, evtData);
     }
-
-    evtData->FourVecsString[name_all_lab] = V4_all_lab;
 
     evtData->evtWeight=anEvent->Weight();
     evtData->evtNo=_evtNoAll;

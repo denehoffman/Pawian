@@ -200,6 +200,7 @@ void spinDensityHist::fillHistogram(std::string& particleName, TH1F* theHisto,
    std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
    
    Vector4<double> all4Vec=theData->FourVecsString["all"];
+
    Vector4<double> particle4Vec(0.,0.,0.,0.);
    
    for(it=absDecays.begin(); it!=absDecays.end(); ++it){
