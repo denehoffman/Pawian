@@ -253,8 +253,8 @@ void  LSDecAmps::fillCgPreFactor(){
 
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    for(Spin lambda1=-(*it)->J; lambda1<=(*it)->J; ++lambda1){
-      for(Spin lambda2=-(*it)->J; lambda2<=(*it)->J; ++lambda2){
+    for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; ++lambda1){
+      for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 

@@ -111,30 +111,19 @@ void AbsLh::cacheAmplitudes(){
 }
 
 void AbsLh::updateFitParams(fitParams& theParamVal){
-#ifdef _OPENMP
-#pragma omp parallel for  
-#endif
-  for(unsigned int i=0; i<_decAmps.size(); ++i){
-    _decAmps[i]->updateFitParams(theParamVal);
+std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
+    (*it)->updateFitParams(theParamVal);
   }
 }
 
 bool AbsLh::checkRecalculation(fitParams& theParamVal){
   bool result=true;
-#ifdef _OPENMP
-#pragma omp parallel for  
-#endif
-  for(unsigned int i=0; i<_decAmps.size(); ++i){
-    bool currentResult=_decAmps[i]->checkRecalculation(theParamVal);
-#ifdef _OPENMP
-#pragma omp critical (globalRecalcCheck)
-    {
-#endif 
-    if(!currentResult) result=false;
-#ifdef _OPENMP
-    }
-#endif 
+  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
+    if(!(*it)->checkRecalculation(theParamVal)) result=false;
   }
+
   return result;
 }
 
