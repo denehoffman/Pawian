@@ -57,7 +57,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
 
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
-  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
+  //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
+ _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
 
 }
 
@@ -100,7 +101,8 @@ AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daugh
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
 
-  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+motherName;
+  //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+motherName;
+  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
 }
 
 AbsDecay::~AbsDecay(){
