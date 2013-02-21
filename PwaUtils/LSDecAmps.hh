@@ -50,7 +50,7 @@ protected:
   std::map< boost::shared_ptr<const JPCLS>, map<Spin,map<Spin, double > > > _cgPreFactor;
 
   void  fillCgPreFactor();
- 
+  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 ); 
 private:
 
 
