@@ -58,13 +58,9 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
   {
 #endif
     _fcnCounter++;
-    //    DebugMsg << "logLh= " << result <<endmsg;
-    
-    if (  _fcnCounter%50 == 0) {  
-      _fitParamsBasePtr->printParams(theFitParmValTmp);
-    }
     
     if (  _fcnCounter%200 == 0) {
+      _fitParamsBasePtr->printParams(theFitParmValTmp);
       std::ofstream theStream (_currentResFileName.c_str());
       _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
     }

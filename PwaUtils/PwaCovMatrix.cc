@@ -63,16 +63,13 @@ double PwaCovMatrix::GetElement(std::string parameter1, std::string parameter2){
 
    it1 = _covMatrix.find(parameter1);
 
-
    if(it1==_covMatrix.end()){
-      //Alert << "Covariance line not found: " << parameter1 << endmsg;
       return 0;
    }
 
    it2 = (*it1).second.find(parameter2);
 
    if(it2== (*it1).second.end()){
-      //Alert << "Covariance column not found: " << parameter2 << endmsg;
       return 0;
    }
 

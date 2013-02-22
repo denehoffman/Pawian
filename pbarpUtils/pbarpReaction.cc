@@ -52,8 +52,8 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 	 acceptJPC=true;
       }
     }
-    if(acceptJPC) _pbarpJPCs.push_back(*itJPC);
-    else   std::cout << "dropping amp" << (*itJPC)->J << std::endl;
+    if(acceptJPC)
+       _pbarpJPCs.push_back(*itJPC);
   }
 
   _pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);

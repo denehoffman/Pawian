@@ -270,8 +270,22 @@ int main(int __argc,char *__argv[]){
     std::ofstream theStream ( finalResultname.str().c_str() );
     theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
     
-    MnUserCovariance theCovMatrix = min.UserCovariance();
     std::cout  << min << std::endl;
+
+    std::cout << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
+    if(min.IsValid())             std::cout << "Function minimum is valid." << std::endl;
+    else                          std::cout << "*** Function minimum is invalid! ***" << std::endl;
+    if(!min.HasValidParameters()) std::cout << "hasValidParameters() returned FALSE" << std::endl;
+    if(!min.HasValidCovariance()) std::cout << "hasValidCovariance() returned FALSE" << std::endl;
+    if(!min.HasAccurateCovar())   std::cout << "hasAccurateCovar() returned FALSE" << std::endl;
+    if(!min.HasPosDefCovar())     std::cout << "hasPosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasMadePosDefCovar()) std::cout << "hasMadePosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasCovariance())      std::cout << "hasCovariance() returned FALSE" << std::endl;
+    if(min.HasReachedCallLimit()) std::cout << "hasReachedCallLimit() returned TRUE" << std::endl;
+    if(min.IsAboveMaxEdm())       std::cout << "isAboveMaxEdm() returned TRUE" << std::endl;
+    if(min.HesseFailed())         std::cout << "hesseFailed() returned TRUE" << std::endl;
+
+    MnUserCovariance theCovMatrix = min.UserCovariance();
 
     std::ostringstream serializationFileName;
     serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";

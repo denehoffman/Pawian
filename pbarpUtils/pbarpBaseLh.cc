@@ -100,15 +100,11 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        Particle* particle1 = (*itDec)->absDec()->daughter1Part();
        Particle* particle2 = (*itDec)->absDec()->daughter2Part();
-       complex<double> currentDecAmp;
-       if(particle1->name() == nameDec)
-	  currentDecAmp=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
-       else if(particle2->name() == nameDec)
-	  currentDecAmp=(*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
-       else
-	  Alert << "Particle " << nameDec << " not found in calcProdAmp" << endmsg;
 
-       tmpAmp+=currentDecAmp;
+       if(particle1->name() == nameDec)
+	  tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
+       else if(particle2->name() == nameDec)
+	  tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
      }
 
      double theMag=_currentParamMags[theJPCLS];
