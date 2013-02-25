@@ -148,6 +148,7 @@ int main(int __argc,char *__argv[]){
   std::string prodFormalism=theAppParams->productionFormalism();
   boost::shared_ptr<AbsLh> theLhPtr;
   theLhPtr=boost::shared_ptr<AbsLh>(new epemBaseLh(eventListPtr));
+  
 
   if (mode=="dumpDefaultParams"){
     fitParams defaultVal;

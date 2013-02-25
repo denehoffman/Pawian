@@ -9,6 +9,7 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
+#include "PwaUtils/AbsDynamics.hh"
 
 #include "Event/EventList.hh"
 #include "Event/Event.hh"

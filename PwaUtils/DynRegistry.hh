@@ -36,7 +36,6 @@ private:
   std::map<std::string, boost::shared_ptr<AbsDynamics> > _dynMap;
 
 
-
 };
 
 

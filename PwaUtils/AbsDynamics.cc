@@ -8,6 +8,7 @@
 #include "PwaUtils/AbsDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "Utils/FunctionUtils.hh"
 
 AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsParamHandler()

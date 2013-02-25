@@ -12,7 +12,9 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -44,7 +46,8 @@ void  pbarpCanoLh::initialize(){
   std::vector< boost::shared_ptr<IsobarLSDecay> > theDecs = _pbarpReactionPtr->productionDecays();
   std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    boost::shared_ptr<AbsXdecAmp> currentAmp(new LSDecAmps(*it));
+    boost::shared_ptr<AbsDecay> currentDec( (*it).get() );
+    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
     _decAmps.push_back(currentAmp);
   }
 

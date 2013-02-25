@@ -4,10 +4,6 @@
 #include <math.h>
 #include <stdio.h>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 #include "Minuit2/MnUserParameters.h"
 
 #include "PwaUtils/PwaFcnBase.hh"
@@ -37,37 +33,19 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
 
   fitParams theFitParmValTmp=_defaultFitValParms;
 
-
-#ifdef _OPENMP
-#pragma omp critical
-  {
- #endif
-
-     _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+  _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
     
-#ifdef _OPENMP  
-  }
-#endif
-
-
   double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
-
-#ifdef _OPENMP
-#pragma omp critical
-  {
-#endif
-    _fcnCounter++;
-    
-    if (  _fcnCounter%200 == 0) {
-      _fitParamsBasePtr->printParams(theFitParmValTmp);
-      std::ofstream theStream (_currentResFileName.c_str());
-      _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
-    }
-
-#ifdef _OPENMP  
+  _fcnCounter++;
+  if (  _fcnCounter%100 == 0) {
+    _fitParamsBasePtr->printParams(theFitParmValTmp);
   }
-#endif
+  
+  if (  _fcnCounter%200 == 0) {
+    std::ofstream theStream (_currentResFileName.c_str());
+    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
+  }
 
   return result;
 }

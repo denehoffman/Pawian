@@ -48,11 +48,13 @@ boost::shared_ptr<AbsDynamics> DynRegistry::getDynamics(boost::shared_ptr<AbsDec
 	exit(1);
       }
       result= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
+      _dynMap[theName]=result;
     }
 
     else{
-      std::string woDynName="woDynamica";
-      result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart())); 
+      std::string woDynName="woDynamics";
+      result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+      _dynMap[theName]=result;
     }
   }
   return result;

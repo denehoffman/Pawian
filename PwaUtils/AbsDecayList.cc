@@ -21,17 +21,24 @@ AbsDecayList::~AbsDecayList(){
 }
 
 void AbsDecayList::addDecay(boost::shared_ptr<AbsDecay> theIsoDec){
-  //  const std::string key = theIsoDec->motherPart()->name();
 
-  // std::map<const std::string, boost::shared_ptr<AbsDecay> >::iterator it;
-  // it=_absDecList.find(key);
-  // if (it != _absDecList.end()){
-  _absDecList.push_back(theIsoDec);
-  // }
-  // else{
-  //   Warning << "decay of the particle " << key << " already exists\n"
-  //   	    << "new decay cannot be added!!!" << endmsg;  
-  // }
+//check if this decay already exists
+  bool alreadyThere=false;  
+  const std::string key = theIsoDec->name();
+  std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+  for(it=_absDecList.begin(); it!=_absDecList.end();++it){
+    if (key==(*it)->name()){
+      alreadyThere=true;
+      break;
+    }
+  }
+  
+  if(!alreadyThere) _absDecList.push_back(theIsoDec);
+  else{
+    Warning << "decay of the particle " << key << " already exists\n"
+	    << "new decay cannot be added!!!" << endmsg;  
+  }
+  
 }
 
 boost::shared_ptr<AbsDecay> AbsDecayList::decay(Particle* mother){

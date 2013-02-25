@@ -32,7 +32,7 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, Spin OrbMom){
     }
 
   complex<double> result=BreitWigner(mass4Vec, _currentMass, _currentWidth);
-  
+
   if ( _cacheAmps){
 #ifdef _OPENMP
 #pragma omp critical (bwDynCache)
