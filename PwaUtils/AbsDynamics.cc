@@ -15,6 +15,7 @@ AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles,
   ,_name(name)
   ,_fsParticles(fsParticles)
   ,_mother(mother)
+  ,_dynKey(FunctionUtils::particleListName(fsParticles))
 {
 }
 
@@ -24,5 +25,16 @@ AbsDynamics::~AbsDynamics()
 
 void AbsDynamics::cacheAmplitudes(){
   _cacheAmps=true;
+}
+
+void AbsDynamics::fillMasses(EvtData* theData){
+
+  Vector4<double> mass4Vec(0.,0.,0.,0.);
+  std::vector<Particle*>::iterator it;
+  for (it=_fsParticles.begin(); it != _fsParticles.end(); ++it){
+    mass4Vec+=theData->FourVecsString[(*it)->name()];
+  }
+
+  theData->FourVecsString[_dynKey]=mass4Vec;
 }
 

@@ -11,10 +11,14 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/FunctionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/DynRegistry.hh"
+#include "PwaUtils/AbsDynamics.hh"
+
 
 AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
   _mother(mother)
@@ -23,13 +27,14 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(true)
-  ,_withDyn(false)
   ,_motherJPCPtr(getJPCPtr(mother)) 
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey("WoDynamics")
+  ,_dynType("WoDynamics")
+  ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
@@ -69,13 +74,14 @@ AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daugh
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(false)
-  ,_withDyn(false)
   ,_motherJPCPtr(motherJPCPtr)
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey("WoDynamics")
+  ,_dynType("WoDynamics")
+  ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
@@ -109,10 +115,27 @@ AbsDecay::~AbsDecay(){
 }
 
 
-void AbsDecay::enableDynamics(std::string& dynString) {
-  _withDyn=true;
+void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec) {
+  _dynType=dynString;
+
   if(0!=_mother) _massParamKey=_mother->name(); 
   else _massParamKey=_motherJPCPtr->name();
+
+  if(additionalStringVec.size()==2){ //fill second decay channel (Flatte)
+    Particle* firstParticle=_env->particleTable()->particle(additionalStringVec[0]);
+    if(0==firstParticle){
+      Alert << "particle with name\t" << additionalStringVec[0] << "\tnot available in the particle table" << endmsg;
+      exit(1);
+    }
+    Particle* secondParticle=_env->particleTable()->particle(additionalStringVec[1]);
+    if(0==secondParticle){
+      Alert << "particle with name\t" << additionalStringVec[1] << "\tnot available in the particle table" << endmsg;
+      exit(1);
+    }
+    _decPair2ndChannel=make_pair(firstParticle,secondParticle);
+  }
+
+  _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
 }
 
 void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){

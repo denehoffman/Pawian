@@ -10,6 +10,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDynamics.hh"
+#include "PwaUtils/DynRegistry.hh"
 
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
@@ -104,6 +105,13 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
       (*itIso)->fillWignerDs(particle4VecMap, evtData);
     }
+
+   //fill 4Vecs for dynamics
+    std::vector<boost::shared_ptr<AbsDynamics> > theDynVec=DynRegistry::instance()->getDynVec();
+    std::vector<boost::shared_ptr<AbsDynamics> >::iterator itDyn;
+    for (itDyn=theDynVec.begin(); itDyn!=theDynVec.end(); ++itDyn){
+      (*itDyn)->fillMasses(evtData);
+    }; 
 
     evtData->evtWeight=anEvent->Weight();
     evtData->evtNo=_evtNoAll;

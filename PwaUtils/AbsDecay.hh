@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -18,8 +19,9 @@
 class Particle;
 class EvtData;
 class AbsEnv;
+class AbsDynamics;
 
-class AbsDecay {
+class AbsDecay : public boost::enable_shared_from_this<AbsDecay>{
 
 public:
   AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
@@ -39,16 +41,21 @@ public:
   bool hasMother() {return _hasMotherPart;}
   bool isDaughter1Stable() {return _daughter1IsStable;}
   bool isDaughter2Stable() {return _daughter2IsStable;}
-  bool withDynamics() {return _withDyn;}
+
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
-  void enableDynamics(std::string& dynString);
+  void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
+  boost::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
   virtual void print(std::ostream& os) const;
   
   Particle* motherPart() {return _mother;}
   Particle* daughter1Part() {return _daughter1;}
   Particle* daughter2Part() {return _daughter2;}
+
+  virtual std::string dynType() {return _dynType;}
+  virtual std::pair<Particle*, Particle*>& firstDecayChannel() { return _decPair1stChannel;}
+  virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual std::string type() =0;
 
 protected:
@@ -59,7 +66,7 @@ protected:
   bool _daughter1IsStable;
   bool _daughter2IsStable;
   bool _hasMotherPart;
-  bool _withDyn;
+
   boost::shared_ptr<const jpcRes> _motherJPCPtr;
   boost::shared_ptr<const jpcRes> _daughter1JPCPtr;
   boost::shared_ptr<const jpcRes> _daughter2JPCPtr;
@@ -68,6 +75,7 @@ protected:
   std::string _fitParamSuffix;
   std::string _massParamKey;
   std::string _wignerDKey;
+  std::string _dynType;
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 
@@ -77,5 +85,9 @@ protected:
   std::vector<Particle*> _finalStateParticles;
   std::vector<Particle*> _finalStateParticlesDaughter1;
   std::vector<Particle*> _finalStateParticlesDaughter2;
+  std::pair<Particle*, Particle*> _decPair1stChannel;
+  std::pair<Particle*, Particle*> _decPair2ndChannel;
+
   AbsEnv* _env;
+  boost::shared_ptr<AbsDynamics> _absDynPtr;
 };

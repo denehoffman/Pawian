@@ -25,12 +25,14 @@ public:
   virtual std::string name() {return _name;};
   virtual complex<double> eval(EvtData* theData, Spin OrbMom=0)=0;
   virtual void cacheAmplitudes();
+  virtual void fillMasses(EvtData* theData);
 
 protected:
   std::string _name;
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
   std::map<int, complex<float> >  _cachedMap;
+  std::string _dynKey;
 
 private:
 

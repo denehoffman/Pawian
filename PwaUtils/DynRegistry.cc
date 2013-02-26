@@ -9,6 +9,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/BreitWignerDynamics.hh"
+#include "PwaUtils/FlatteDynamics.hh"
 #include "PwaUtils/WoDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -32,6 +33,8 @@ DynRegistry::~DynRegistry()
 boost::shared_ptr<AbsDynamics> DynRegistry::getDynamics(boost::shared_ptr<AbsDecay> theDec){
 
   std::string theName=theDec->massParKey();
+  std::string dynType=theDec->dynType();
+
   boost::shared_ptr<AbsDynamics> result;
 
   std::map<std::string, boost::shared_ptr<AbsDynamics> >::iterator it = _dynMap.find(theName);
@@ -42,21 +45,33 @@ boost::shared_ptr<AbsDynamics> DynRegistry::getDynamics(boost::shared_ptr<AbsDec
   else{
     std::vector<Particle*> fsParticles=theDec->finalStateParticles();
 
-    if(theDec->withDynamics()){
-      if(!theDec->hasMother()){
-	Alert << "no mother resonance; can not add dynamis" << endmsg;
+    if(theDec->hasMother()){
+
+      if(theDec->dynType()=="BreitWigner") 
+    	result= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
+      else if(theDec->dynType()=="Flatte")
+    	result= boost::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
+      else if(theDec->dynType()=="WoDynamics") result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+      else{
+    	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
+    	exit(1);
+      }
+    }
+    else{ // has no mother
+      if(theDec->dynType()=="WoDynamics") result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+      else{
+	Alert << "no mother resonance; can not add dynamis" 
+	      << "\nDyn type:\t" << theDec->dynType() 
+	      << endmsg;
 	exit(1);
       }
-      result= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
-      _dynMap[theName]=result;
     }
 
-    else{
-      std::string woDynName="woDynamics";
-      result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
-      _dynMap[theName]=result;
-    }
+    _dynMap[theName]=result;
+    _dynVec.push_back(result); 
   }
+
   return result;
 }
+
 

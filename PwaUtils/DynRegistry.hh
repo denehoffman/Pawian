@@ -25,6 +25,7 @@ public:
 
   static DynRegistry* instance();
   boost::shared_ptr<AbsDynamics> getDynamics(boost::shared_ptr<AbsDecay> theDec);
+  std::vector<boost::shared_ptr<AbsDynamics> > getDynVec(){return _dynVec;}
 
 protected:
  ///Constructor 
@@ -34,7 +35,7 @@ protected:
 private:
 
   std::map<std::string, boost::shared_ptr<AbsDynamics> > _dynMap;
-
+  std::vector<boost::shared_ptr<AbsDynamics> > _dynVec;
 
 };
 

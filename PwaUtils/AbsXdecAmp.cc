@@ -8,10 +8,10 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
+#include "PwaUtils/DynRegistry.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
-#include "PwaUtils/DynRegistry.hh"
 
 
 AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
@@ -19,6 +19,7 @@ AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
   , _decay(theDec)
   , _name(theDec->name())
   ,_JPCPtr(theDec->motherJPC())
+  ,_absDyn(theDec->getDynamics())
   ,_key("_"+theDec->fitParSuffix())
   ,_wignerDKey(theDec->wignerDKey())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
@@ -34,7 +35,7 @@ AbsXdecAmp::~AbsXdecAmp()
 void AbsXdecAmp::initialize(){
 
   _absDyn = DynRegistry::instance()->getDynamics(_decay);
-  
+
   if(!_daughter1IsStable){
     boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
     _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(decDaughter1);

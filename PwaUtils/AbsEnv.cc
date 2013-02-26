@@ -154,6 +154,12 @@ void AbsEnv::setup(ParserBase* theParser){
     std::string dynStr;
     stringStr >> dynStr;
 
+    std::string tmpName;
+    std::vector<std::string> additionalStringVec;
+    while(stringStr >> tmpName){
+      additionalStringVec.push_back(tmpName);
+    }
+
     std::vector<boost::shared_ptr<AbsDecay> >::iterator itDyn;
     for (itDyn=absDecList.begin(); itDyn!=absDecList.end(); ++itDyn){
       std::string theDecName=(*itDyn)->name();
@@ -161,7 +167,7 @@ void AbsEnv::setup(ParserBase* theParser){
       size_t found;
       found=theDecName.find(toFind);
       if (found!=string::npos){
-	(*itDyn)->enableDynamics(dynStr);
+	(*itDyn)->enableDynamics(dynStr, additionalStringVec);
       }
     }
   }
