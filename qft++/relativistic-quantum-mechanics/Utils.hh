@@ -112,7 +112,7 @@ complex<double> BreitWignerBlattW(const Vector4<double> &__p4, double __massA,
 
 complex<double> FlatteA980(const Vector4<double> &__p4, double __mass0, double g_KK, double g_EtaPi);
 
-complex<double> Flatte(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
+complex<double> FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
 		       , const double>& decPair2, double __mass0, double g1, double g2);
 //_____________________________________________________________________________
 /// Returns \f$ \frac{\Lambda^2 - m^2}{\Lambda^2 - p^2} \f$

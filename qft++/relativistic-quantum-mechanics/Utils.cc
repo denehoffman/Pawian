@@ -394,7 +394,7 @@ complex<double> FlatteA980(const Vector4<double> &__p4, double __mass0, double g
 }
 
 
-complex<double> Flatte(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
+complex<double> FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
 		       , const double>& decPair2, double __mass0, double g1, double g2){
 
   complex<double> i(0.,1.);

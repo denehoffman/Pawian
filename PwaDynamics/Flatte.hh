@@ -1,10 +1,10 @@
-// FlatteShape class definition file. -*- C++ -*-
+// Flatte class definition file. -*- C++ -*-
 // Copyright 2013 Bertram Kopf
 
 #pragma once 
 
 //_____________________________________________________________________________
-// @file FlatteShape.h
+// @file Flatte.h
 //_____________________________________________________________________________
 
 #include <iostream>
@@ -19,18 +19,20 @@ using namespace std;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class FlatteShape {
+class Flatte {
 
 public:
 
   /// Constructor 
-  FlatteShape(std::pair<Particle*, Particle*>& decPair1, std::pair<Particle*, Particle*>& decPair2); //decPair1: decay particles
+  Flatte(std::pair<Particle*, Particle*>& decPair1, std::pair<Particle*, Particle*>& decPair2); //decPair1: decay particles
                                                                                                 //decPair2: second decay channel    
-
+  Flatte(std::pair <const double, const double>& massPair1, std::pair <const double, const double>& massPair2);
+ 
   /// Destructor
-  ~FlatteShape();
+  ~Flatte();
 
-  complex<double> calculate(double currentMass, double mass0, double g1, double g2);
+  complex<double> calcFirstChannel(double currentMass, double mass0, double g1, double g2);
+  complex<double> calcSecondChannel(double currentMass, double mass0, double g1, double g2);
 
 protected:
   double _mass11;

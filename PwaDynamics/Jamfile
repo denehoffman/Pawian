@@ -3,7 +3,8 @@ project :
 
 lib PwaDynamics : 
 	[ glob *.cc : *App.cc ] 
-	$(TOP)/Utils//Utils 
+	$(TOP)/Utils//Utils
+	$(TOP)/Particle//Particle 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
 	: 

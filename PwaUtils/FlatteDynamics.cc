@@ -8,7 +8,7 @@
 #include "PwaUtils/FlatteDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
-#include "PwaDynamics/FlatteShape.hh"
+#include "PwaDynamics/Flatte.hh"
 #include "Utils/FunctionUtils.hh"
 
 FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParticles, Particle* mother, std::pair<Particle*, Particle*>& decPair1stChannel, std::pair<Particle*, Particle*>& decPair2ndChannel) :
@@ -17,7 +17,7 @@ FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParti
   ,_g11Key(key+decPair1stChannel.first->name()+decPair1stChannel.second->name())
   ,_g22Key(key+decPair2ndChannel.first->name()+decPair2ndChannel.second->name())
 {
-  _flattePtr=boost::shared_ptr<FlatteShape>(new FlatteShape(decPair1stChannel, decPair2ndChannel));
+  _flattePtr=boost::shared_ptr<Flatte>(new Flatte(decPair1stChannel, decPair2ndChannel));
 }
 
 FlatteDynamics::~FlatteDynamics()
@@ -30,7 +30,7 @@ complex<double> FlatteDynamics::eval(EvtData* theData, Spin OrbMom){
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=_flattePtr->calculate(theData->FourVecsString[_dynKey].M(), _currentMass, _currentg11, _currentg22);
+  complex<double> result=_flattePtr->calcFirstChannel(theData->FourVecsString[_dynKey].M(), _currentMass, _currentg11, _currentg22);
   
   if ( _cacheAmps){
 #ifdef _OPENMP

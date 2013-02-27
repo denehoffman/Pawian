@@ -40,6 +40,8 @@ private:
   TFile* _theTFile;
   TH1F* _histShapeLow;
   TH1F* _histShapeHigh;
+  TH1F* _histShapeLowFlatteNew;
+  TH1F* _histShapeHighFlatteNew;
   TH1F* _histShapeLowTest;
   TH1F* _histShapeHighTest;
   TH1F* _histShapeLowKmatr;

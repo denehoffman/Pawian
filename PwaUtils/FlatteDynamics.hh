@@ -12,7 +12,7 @@
 
 #include "PwaUtils/AbsDynamics.hh"
 
-class FlatteShape;
+class Flatte;
 
 class FlatteDynamics : public AbsDynamics{
 
@@ -36,7 +36,7 @@ protected:
   double _currentg22;
 
   std::map<int, complex<double> >  _cachedMap; 
-  boost::shared_ptr<FlatteShape> _flattePtr;
+  boost::shared_ptr<Flatte> _flattePtr;
 
 private:
 

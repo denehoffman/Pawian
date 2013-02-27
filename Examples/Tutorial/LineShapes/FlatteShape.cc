@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include "Examples/Tutorial/LineShapes/FlatteShape.hh"
+#include "PwaDynamics/Flatte.hh"
 #include "qft++/matrix/KpoleMatrix.hh"
 #include "qft++/matrix/TMatrix.hh"
 
@@ -61,6 +62,8 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
 
   _histShapeLow= new TH1F("_histShapeLow","hist low",size+1, massMin, massMax);
   _histShapeHigh= new TH1F("_histShapeHigh","hist high",size+1, massMin, massMax);
+  _histShapeLowFlatteNew= new TH1F("_histShapeLowFlatteNew","hist high flatte new",size+1, massMin, massMax);
+  _histShapeHighFlatteNew= new TH1F("_histShapeHighFlatteNew","hist high",size+1, massMin, massMax);
   _histShapeLowTest= new TH1F("_histShapeLowTest","hist low test",size+1, massMin, massMax);
   _histShapeHighTest= new TH1F("_histShapeHighTest","hist high test",size+1, massMin, massMax);
   _histShapeLowKmatr= new TH1F("_histShapeLowKmatr","hist low K-matrix",size+1, massMin, massMax);
@@ -110,19 +113,27 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
    vector<KpoleMatrix> kPoles;
    kPoles.push_back(kPole);
    TMatrix theTMatrix(kPoles);
+
+   Flatte theFlatte(decPairLow, decPairHigh); 
   
    for (double mass=massMin; mass<massMax; mass+=stepSize){
      Vector4<double> mass4Vec(mass, 0.,0.,0.);
-     complex<double> flatteLow=Flatte(mass4Vec, decPairLow, decPairHigh, 0.98, g1, g2);
+     complex<double> flatteLow=FlatteFkt(mass4Vec, decPairLow, decPairHigh, 0.98, g1, g2);
      cout << "flatteLow" << flatteLow << "  norm: " << norm(flatteLow) << endl;
      _histShapeLow->Fill(mass4Vec.M(), norm(flatteLow));
      
      _argandKmatrFlatteLowHist->Fill(flatteLow.real(),flatteLow.imag());
     
-     complex<double> flatteHigh=Flatte(mass4Vec, decPairHigh, decPairLow, 0.98, g2, g1);
+     complex<double> flatteHigh=FlatteFkt(mass4Vec, decPairHigh, decPairLow, 0.98, g2, g1);
 
      cout << "flatteHigh" << flatteHigh << "  norm: " << norm(flatteHigh) << endl;
      _histShapeHigh->Fill(mass4Vec.M(), norm(flatteHigh));
+
+     complex<double> flatteLowNew=theFlatte.calcFirstChannel(mass, 0.98, g1, g2);
+     _histShapeLowFlatteNew->Fill(mass4Vec.M(), norm(flatteLowNew));
+
+     complex<double> flatteHighNew=theFlatte.calcSecondChannel(mass, 0.98, g1, g2);
+     _histShapeHighFlatteNew->Fill(mass4Vec.M(), norm(flatteHighNew));
      
      theTMatrix.updateMatrix(mass);
      cout << "current TMatrix:\n " <<  theTMatrix << endl;
