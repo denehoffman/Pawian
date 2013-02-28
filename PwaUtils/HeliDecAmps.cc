@@ -111,33 +111,23 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
     return result;
   }
 
-  bool lamFs_daughter1=false;
-  if( _daughter1IsStable && _Jdaughter1>0) lamFs_daughter1=true;
-  
-  bool lamFs_daughter2=false;
-  if( _daughter2IsStable && _Jdaughter2>0) lamFs_daughter2=true;
-  
   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
 
   for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
-    boost::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
+
+    Spin lambda1= it->first->lam1;
+    Spin lambda2= it->first->lam2;
+    Spin lambda = lambda1-lambda2;
+    if( fabs(lambda) > it->first->J) continue;
+
+    if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
+    if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
 
     double theMag=it->second;
-    double thePhi=_currentParamPhiLamLams[currentJPClamlam];
+    double thePhi=_currentParamPhiLamLams[it->first];
     complex<double> expi(cos(thePhi), sin(thePhi));
-
-    Spin lambda1= currentJPClamlam->lam1;
-    Spin lambda2= currentJPClamlam->lam2;
-    Spin lambda = lambda1-lambda2;
-    if( fabs(lambda) > currentJPClamlam->J) continue;
-
-    if(lamFs_daughter1 && lamFs!=lambda1) continue;
-    if(lamFs_daughter2 && lamFs!=lambda2) continue;
-
-    // currentJPClamlam->print(std::cout);
-    // std::cout << std::endl;
-    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
-    result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
+    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][it->first->J][lamX][lambda]);
+    result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs, this);
   }
 
   result*=_absDyn->eval(theData);

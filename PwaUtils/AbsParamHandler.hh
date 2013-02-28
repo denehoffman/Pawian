@@ -21,7 +21,7 @@ public:
   virtual void updateFitParams(fitParams& theParamVal)=0;
 
 protected:
-   bool _cacheAmps;
+  bool _cacheAmps;
   bool _recalculate;
 
 private:

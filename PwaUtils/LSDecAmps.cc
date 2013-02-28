@@ -96,15 +96,26 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
   Spin lam2Min=-_Jdaughter2;
   Spin lam2Max=_Jdaughter2;
 
-  if( _daughter1IsStable && _Jdaughter1>0){
+  // if( _daughter1IsStable && _Jdaughter1>0){
+  //   lam1Min=lamFs;
+  //   lam1Max=lamFs;
+  // }
+  // else if(_daughter2IsStable && _Jdaughter2>0){
+  //   lam2Min=lamFs;
+  //   lam2Max=lamFs;
+  // }
+
+  if(_enabledlamFsDaughter1){
     lam1Min=lamFs;
     lam1Max=lamFs;
   }
-  else if(_daughter2IsStable && _Jdaughter2>0){
+
+  if(_enabledlamFsDaughter2){
     lam2Min=lamFs;
     lam2Max=lamFs;
   }
 
+  
   result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
 
   result*=_absDyn->eval(theData);
@@ -120,6 +131,7 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 #endif
   }
 
+
   return result;
 }
 
@@ -128,7 +140,7 @@ complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spi
   complex<double> result(0.,0.);
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    //    if( fabs(lamX) > (*it)->J ) continue;
+
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
@@ -139,7 +151,7 @@ complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spi
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 	complex<double> amp = theMag*expi*_cgPreFactor[*it][lambda1][lambda2]*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
+      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs, this);
 	result+=amp;
       }
     }

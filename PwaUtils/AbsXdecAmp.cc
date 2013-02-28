@@ -24,6 +24,8 @@ AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
   ,_wignerDKey(theDec->wignerDKey())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
+  ,_enabledlamFsDaughter1(false)
+  ,_enabledlamFsDaughter2(false)
 {
   initialize();
 }
@@ -48,12 +50,18 @@ void AbsXdecAmp::initialize(){
   
   _Jdaughter1=(Spin) _decay->daughter1Part()->J();
   _Jdaughter2=(Spin) _decay->daughter2Part()->J();
+
+  if( _daughter1IsStable && _Jdaughter1>0) _enabledlamFsDaughter1=true;
+  if( _daughter2IsStable && _Jdaughter2>0) _enabledlamFsDaughter2=true;
 }
 
-complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs){
+//complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs, const std::string& grandmaAmpName, boost::shared_ptr<const jpcRes> grandmaJPC)
+complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs,AbsXdecAmp* grandmaAmp){
   complex<double> result(1.,0.);
   if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs);
   if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs);
+  // if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs, grandmaAmpName, grandmaJPC);
+  // if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs, grandmaAmpName, grandmaJPC);
   return result;
 }
 
