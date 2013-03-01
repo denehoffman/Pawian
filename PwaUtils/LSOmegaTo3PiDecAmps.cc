@@ -31,7 +31,7 @@ LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
 }
 
 
-complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs){
+complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
@@ -52,7 +52,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short f
 
 
 
-complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
+complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 int evtNo=theData->evtNo;
 
  complex<double> result(0.,0.);  

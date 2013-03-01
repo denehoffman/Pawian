@@ -60,7 +60,7 @@ HeliDecAmps::~HeliDecAmps()
 }
 
 
-complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs){
+complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
 
   bool lamFs_daughter1=false;
@@ -99,7 +99,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
 
 
 
-complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
+complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
   int evtNo=theData->evtNo;
   complex<double> result(0.,0.);  
@@ -138,7 +138,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
 #pragma omp critical (heliAmpCache)
     {
 #endif
-      _cachedAmpMap[evtNo][lamX][lamFs]=result;
+           _cachedAmpMap[evtNo][lamX][lamFs]=result;
 #ifdef _OPENMP
     }
 #endif
@@ -181,22 +181,6 @@ void HeliDecAmps::print(std::ostream& os) const{
 bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.MagLamLams[_key];
-   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.PhiLamLams[_key];
-
-   std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
-   for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-     double theMag=magMap[*it];
-     double thePhi=phiMap[*it];
-
-     if ( fabs(theMag - _currentParamMagLamLams[*it])  > 1.e-10 ){
-       _recalculate=true;
-     }
-     if ( fabs(thePhi - _currentParamPhiLamLams[*it])  > 1.e-10 ){
-       _recalculate=true;
-     }
-   }
-
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
 
    if(!_daughter1IsStable) {
@@ -204,6 +188,25 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
    }
    if(!_daughter2IsStable){
      if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
+   }
+
+   if(!_recalculate){
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.MagLamLams[_key];
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.PhiLamLams[_key];
+     std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+     for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+       double theMag=magMap[*it];
+       double thePhi=phiMap[*it];
+       
+       if ( fabs(theMag - _currentParamMagLamLams[*it])  > 1.e-10 ){
+	 _recalculate=true;
+	 return _recalculate;
+       }
+       if ( fabs(thePhi - _currentParamPhiLamLams[*it])  > 1.e-10 ){
+	 _recalculate=true;
+	 return _recalculate;
+       }
+     }
    }
    return _recalculate;
 }

@@ -1,0 +1,51 @@
+// KPiSWaveDynamics class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
+
+#pragma once
+
+#include <iostream>
+#include <vector>
+#include <complex>
+#include <map>
+#include <string>
+#include <boost/shared_ptr.hpp>
+
+#include "PwaUtils/AbsDynamics.hh"
+
+class AbsXdecAmp;
+class KMatrixKPiSFocus;
+class FVector;
+class PVectorKPiSFocus;
+
+class KPiSWaveDynamics : public AbsDynamics{
+
+public:
+  KPiSWaveDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
+  virtual ~KPiSWaveDynamics();
+
+  virtual complex<double> eval(EvtData* theData, Spin OrbMom=0);
+  
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec);
+
+protected:
+  //  std::string _massKey;
+  double _currentMass;
+  std::map<int, complex<double> >  _cachedMap;
+  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
+
+  boost::shared_ptr<KMatrixKPiSFocus> _kMatr;
+  std::map<std::string, boost::shared_ptr<FVector> > _fVecMap;
+  std::map<std::string, boost::shared_ptr<PVectorKPiSFocus> > _pVecMap;
+
+  std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
+  std::map<std::string, std::map<std::string, double> > _currentaProdMap; 
+  std::map<std::string, std::map<std::string, double> > _currentbProdMap; 
+  std::map<std::string, std::map<std::string, double> > _currentcProdMap;
+  std::map<std::string, std::map<std::string, double> > _currentphaseProdMap;
+
+private:
+
+};

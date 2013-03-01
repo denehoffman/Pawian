@@ -139,38 +139,79 @@ void AbsEnv::setup(ParserBase* theParser){
     _absDecList->addDecay(tmpDec);
   }
 
-  //add dynamics
+  // //set suffixes
+  // std::vector<std::string> suffixVec = theParser->replaceSuffixNames();
+  // std::map<std::string, std::string> decSuffixNames;
 
-  std::vector<boost::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
- 
-  std::vector<std::string> decDynVec = theParser->decayDynamics();
-  for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
+  // //  std::vector<std::string>::iterator itStr;
+  // for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
+  //   std::stringstream stringStr;
+  //   stringStr << (*itStr);
+  //   std::string classStr;
+  //   stringStr >> classStr;
 
-    std::string particleStr;
-    stringStr >> particleStr;
+  //   std::string suffixStr;
+  //   stringStr >> suffixStr;
+  //   decSuffixNames[classStr]=suffixStr;
+  // }
+  
+  // //set suffixes for decay classes
+  // std::map<std::string, std::string>::iterator itMapStrStr;
+  // for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
+  //   _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
+  //   //    _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
+  //   //    boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
+  // }
 
-    std::string dynStr;
-    stringStr >> dynStr;
+  // //replace mass key
+  // std::vector<std::string> replMassKeyVec = theParser->replaceMassKey();
+  // std::map<std::string, std::string> decRepMassKeyNames;
 
-    std::string tmpName;
-    std::vector<std::string> additionalStringVec;
-    while(stringStr >> tmpName){
-      additionalStringVec.push_back(tmpName);
-    }
+  // for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
+  //   std::stringstream stringStr;
+  //   stringStr << (*itStr);
+  //   std::string oldStr;
+  //   stringStr >> oldStr;
 
-    std::vector<boost::shared_ptr<AbsDecay> >::iterator itDyn;
-    for (itDyn=absDecList.begin(); itDyn!=absDecList.end(); ++itDyn){
-      std::string theDecName=(*itDyn)->name();
-      std::string toFind=particleStr+"To";
-      size_t found;
-      found=theDecName.find(toFind);
-      if (found!=string::npos){
-	(*itDyn)->enableDynamics(dynStr, additionalStringVec);
-      }
-    }
-  }
+  //   std::string newStr;
+  //   stringStr >> newStr;
+  //   decRepMassKeyNames[oldStr]=newStr;
+  // }
+
+  // for (itMapStrStr=decRepMassKeyNames.begin(); itMapStrStr!=decRepMassKeyNames.end(); ++itMapStrStr){
+  //   _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
+  // }
+
+  // //add dynamics 
+  // std::vector<boost::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
+  // std::vector<std::string> decDynVec = theParser->decayDynamics();
+  // for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
+  //   std::stringstream stringStr;
+  //   stringStr << (*itStr);
+
+  //   std::string particleStr;
+  //   stringStr >> particleStr;
+
+  //   std::string dynStr;
+  //   stringStr >> dynStr;
+
+  //   std::string tmpName;
+  //   std::vector<std::string> additionalStringVec;
+  //   while(stringStr >> tmpName){
+  //     additionalStringVec.push_back(tmpName);
+  //   }
+
+  //   std::vector<boost::shared_ptr<AbsDecay> >::iterator itDec;
+  //   for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
+  //     std::string theDecName=(*itDec)->name();
+  //     std::string toFind=particleStr+"To";
+  //     size_t found;
+  //     found = theDecName.find(toFind);
+  //     if (found!=string::npos){
+  // 	(*itDec)->enableDynamics(dynStr, additionalStringVec);
+  //     }
+  //   }
+  // }
 
   //produced particle pairs
   std::vector<std::string> productionSystem = theParser->productionSystem();

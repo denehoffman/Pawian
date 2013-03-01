@@ -27,10 +27,10 @@ public:
   AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec);
   virtual ~AbsXdecAmp();
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs)=0;
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0)=0;
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
-                                      EvtData* theData, Spin lamFs)=0;
-  //  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs, const std::string& grandmaAmpName, boost::shared_ptr<const jpcRes> grandmaJPC);
+                                      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0)=0;
+
   virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0); 
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}

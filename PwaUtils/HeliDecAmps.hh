@@ -32,9 +32,9 @@ public:
 
   // Getters:
   
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs=0);
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
-				      EvtData* theData, Spin lamFs);
+				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;

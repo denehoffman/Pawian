@@ -21,51 +21,6 @@ FitParamsBase::~FitParamsBase()
 {
 }
 
-// int FitParamsBase::setAmpParams( mapStrJPCLS& ampMap, const std::vector<double>& par, int counter, std::string& key){
-
-//   int resultCount=counter;
-//   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMap=
-//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-//   std::vector< boost::shared_ptr<const JPCLS> > currentStates= _jpclsMap[index];
-
-//   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMap;
-
-//   for ( itJPCLS=currentStates.begin(); itJPCLS!=currentStates.end(); ++itJPCLS){
-//     double currentPar=par[resultCount];
-//     resultCount++;
-//     currentMap[(*itJPCLS)]=currentPar;
-//   }
-
-//   ampMap[key]=currentMap;  
-//   return resultCount;
-// }
-
-// int FitParamsBase::setAmpLamLamParams( std::map<int, std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > >& ampLamLamMap, const std::vector<double>& par, int counter, int index){
-
-//   int resultCount=counter;
-//   std::vector< boost::shared_ptr<const JPClamlam> >::const_iterator itJPClamlam;
-//   std::vector< boost::shared_ptr<const JPClamlam> > currentStates= _jpcLamLamMap[index];
-//   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMap;
-
-//   for ( itJPClamlam=currentStates.begin(); itJPClamlam!=currentStates.end(); ++itJPClamlam){
-//     double currentPar=par[resultCount];
-//     resultCount++;
-//     currentMap[(*itJPClamlam)]=currentPar;
-//   }
-
-//   ampLamLamMap[index]=currentMap;  
-//   return resultCount;
-// }
-
-
-
-// int FitParamsBase::setSingleParams(std::map<int, double>& theMap, const std::vector<double>& par, int counter, int index){
-//   int resultCount=counter;
-//   theMap[index]=par[resultCount];
-//   resultCount++;
-//   return resultCount;
-// }
-
 void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValParams, fitParams& theErrParams){
 
   // 1.: set magnitudes of all lamlam amplitudes
@@ -304,7 +259,7 @@ void FitParamsBase::printDoubleParams(fitParams& theParams, mapStrDouble& double
 }
 
 void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& lamLamMagMap, int& counter){
-//   Info << "getFitParamValJPCLamLam par[" << counter << "]=\t" << par[counter] << endmsg;
+
   mapStrJPCLamLam::iterator it;
   for (it=lamLamMagMap.begin(); it!=lamLamMagMap.end(); ++it){
 

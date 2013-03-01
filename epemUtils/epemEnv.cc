@@ -91,7 +91,36 @@ void epemEnv::setup(epemParser* theEpEmParser){
     _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
   }
 
+  //add dynamics 
+  std::vector<boost::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
+  std::vector<std::string> decDynVec = theEpEmParser->decayDynamics();
+  for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
 
+    std::string particleStr;
+    stringStr >> particleStr;
+
+    std::string dynStr;
+    stringStr >> dynStr;
+
+    std::string tmpName;
+    std::vector<std::string> additionalStringVec;
+    while(stringStr >> tmpName){
+      additionalStringVec.push_back(tmpName);
+    }
+
+    std::vector<boost::shared_ptr<AbsDecay> >::iterator itDec;
+    for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
+      std::string theDecName=(*itDec)->name();
+      std::string toFind=particleStr+"To";
+      size_t found;
+      found = theDecName.find(toFind);
+      if (found!=string::npos){
+	(*itDec)->enableDynamics(dynStr, additionalStringVec);
+      }
+    }
+  }
 
   // std::vector<std::string> theHistMassNames=theEpEmParser->histMassNames();
   // //fill vector histMassSystems

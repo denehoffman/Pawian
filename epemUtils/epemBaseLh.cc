@@ -125,8 +125,9 @@ void  epemBaseLh::initialize(){
 std::vector< boost::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
   std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    boost::shared_ptr<AbsDecay> currentDec((*it).get() );
-    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    //    boost::shared_ptr<AbsDecay> currentDec((*it).get() );
+    //    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp((*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
 

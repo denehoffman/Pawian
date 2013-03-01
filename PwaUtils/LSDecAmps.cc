@@ -45,7 +45,7 @@ LSDecAmps::~LSDecAmps()
 }
 
 
-complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs){
+complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
   Spin lam1Min=-_Jdaughter1;
   Spin lam1Max= _Jdaughter1;
@@ -62,11 +62,11 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
      Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
   }
 
-  if( _daughter1IsStable && _Jdaughter1>0){
+  if(_enabledlamFsDaughter1){
     lam1Min=lamFs;
     lam1Max=lamFs;
   }
-  else if(_daughter2IsStable && _Jdaughter2>0){
+  else if(_enabledlamFsDaughter2){
     lam2Min=lamFs;
     lam2Max=lamFs;
   }
@@ -79,7 +79,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
 
 
 
-complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
+complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
   int evtNo=theData->evtNo;
   complex<double> result(0.,0.);  
@@ -96,21 +96,11 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs){
   Spin lam2Min=-_Jdaughter2;
   Spin lam2Max=_Jdaughter2;
 
-  // if( _daughter1IsStable && _Jdaughter1>0){
-  //   lam1Min=lamFs;
-  //   lam1Max=lamFs;
-  // }
-  // else if(_daughter2IsStable && _Jdaughter2>0){
-  //   lam2Min=lamFs;
-  //   lam2Max=lamFs;
-  // }
-
   if(_enabledlamFsDaughter1){
     lam1Min=lamFs;
     lam1Max=lamFs;
   }
-
-  if(_enabledlamFsDaughter2){
+  else if(_enabledlamFsDaughter2){
     lam2Min=lamFs;
     lam2Max=lamFs;
   }
@@ -195,22 +185,6 @@ void LSDecAmps::print(std::ostream& os) const{
 bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
-
-   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
-   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-     double theMag=magMap[*it];
-     double thePhi=phiMap[*it];
-
-     if ( fabs(theMag - _currentParamMags[*it])  > 1.e-10 ){
-       _recalculate=true;
-     }
-     if ( fabs(thePhi - _currentParamPhis[*it])  > 1.e-10 ){
-       _recalculate=true;
-     }
-   }
-
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
 
    if(!_daughter1IsStable) {
@@ -219,6 +193,27 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
    if(!_daughter2IsStable){
      if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
    }
+
+   if(!_recalculate){
+     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
+     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
+     
+     std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+     for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+       double theMag=magMap[*it];
+       double thePhi=phiMap[*it];
+       
+       if ( fabs(theMag - _currentParamMags[*it])  > 1.e-10 ){
+	 _recalculate=true;
+	 return _recalculate;
+       }
+       if ( fabs(thePhi - _currentParamPhis[*it])  > 1.e-10 ){
+	 _recalculate=true;
+	 return _recalculate;
+       }
+     }
+   }
+
    return _recalculate;
 }
  

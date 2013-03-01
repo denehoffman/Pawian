@@ -24,7 +24,7 @@ class AbsEnv {
 
 public:
   ~AbsEnv();
-
+  
   void setup(ParserBase* theParser);
 
   ParticleTable* particleTable() {return _particleTable;}

@@ -13,7 +13,6 @@
 
 FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParticles, Particle* mother, std::pair<Particle*, Particle*>& decPair1stChannel, std::pair<Particle*, Particle*>& decPair2ndChannel) :
   AbsDynamics(key, fsParticles, mother)
-  ,_key(key)
   ,_g11Key(key+decPair1stChannel.first->name()+decPair1stChannel.second->name())
   ,_g22Key(key+decPair2ndChannel.first->name()+decPair2ndChannel.second->name())
 {
@@ -47,8 +46,8 @@ complex<double> FlatteDynamics::eval(EvtData* theData, Spin OrbMom){
 }
 
 void  FlatteDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
-    fitVal.Masses[_key]=_mother->mass();
-    fitErr.Masses[_key]=0.03;
+    fitVal.Masses[_massKey]=_mother->mass();
+    fitErr.Masses[_massKey]=0.03;
     fitVal.gFactors[_g11Key]=1.;
     fitErr.gFactors[_g11Key]=1.;
     fitVal.gFactors[_g22Key]=1.;
@@ -58,7 +57,7 @@ void  FlatteDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 bool FlatteDynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-  double mass=theParamVal.Masses[_key];
+  double mass=theParamVal.Masses[_massKey];
   if ( fabs(mass-_currentMass) > 1.e-10){
     _recalculate=true;
   }
@@ -76,7 +75,7 @@ bool FlatteDynamics::checkRecalculation(fitParams& theParamVal){
 }
 
 void FlatteDynamics::updateFitParams(fitParams& theParamVal){
-  _currentMass=theParamVal.Masses[_key];
+  _currentMass=theParamVal.Masses[_massKey];
   _currentg11=theParamVal.gFactors[_g11Key];
   _currentg22=theParamVal.gFactors[_g22Key];
 }

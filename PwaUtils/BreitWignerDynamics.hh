@@ -15,7 +15,7 @@
 class BreitWignerDynamics : public AbsDynamics{
 
 public:
-  BreitWignerDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
+  BreitWignerDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~BreitWignerDynamics();
 
   virtual complex<double> eval(EvtData* theData, Spin OrbMom=0);
@@ -25,7 +25,7 @@ public:
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-  std::string _massKey;
+  //  std::string _massKey;
 
   double _currentMass;
   double _currentWidth;

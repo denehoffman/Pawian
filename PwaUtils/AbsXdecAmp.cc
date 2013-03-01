@@ -40,11 +40,22 @@ void AbsXdecAmp::initialize(){
 
   if(!_daughter1IsStable){
     boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
+    boost::shared_ptr<AbsDynamics> currentDyn=decDaughter1->getDynamics();
+    if (0!=currentDyn) decDaughter1->getDynamics()->addGrandMa(_decay);
+    else{
+      Warning <<"no dynamics for\t" << decDaughter1->name() << endmsg;
+    }
     _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(decDaughter1);
   }
   
   if(!_daughter2IsStable){
     boost::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
+    //    decDaughter2->getDynamics()->addGrandMa(_decay);
+    boost::shared_ptr<AbsDynamics> currentDyn=decDaughter2->getDynamics();
+    if (0!=currentDyn) decDaughter2->getDynamics()->addGrandMa(_decay);
+    else{
+      Warning <<"no dynamics for\t" << decDaughter2->name() << endmsg;
+    }
     _decAmpDaughter2=XdecAmpRegistry::instance()->getXdecAmp(decDaughter2);
   }
   
@@ -55,13 +66,10 @@ void AbsXdecAmp::initialize(){
   if( _daughter2IsStable && _Jdaughter2>0) _enabledlamFsDaughter2=true;
 }
 
-//complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs, const std::string& grandmaAmpName, boost::shared_ptr<const jpcRes> grandmaJPC)
 complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs,AbsXdecAmp* grandmaAmp){
   complex<double> result(1.,0.);
-  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs);
-  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs);
-  // if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs, grandmaAmpName, grandmaJPC);
-  // if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs, grandmaAmpName, grandmaJPC);
+  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs, this);
+  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs, this);
   return result;
 }
 

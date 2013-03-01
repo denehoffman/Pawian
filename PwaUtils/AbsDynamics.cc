@@ -13,10 +13,12 @@
 AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsParamHandler()
   ,_name(name)
+  ,_massKey("defaultMassKey")
   ,_fsParticles(fsParticles)
   ,_mother(mother)
   ,_dynKey(FunctionUtils::particleListName(fsParticles))
 {
+  if(0!=mother) _massKey=mother->name(); 
 }
 
 AbsDynamics::~AbsDynamics()

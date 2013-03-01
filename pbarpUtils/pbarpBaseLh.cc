@@ -102,9 +102,9 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
        Particle* particle2 = (*itDec)->absDec()->daughter2Part();
 
        if(particle1->name() == nameDec)
-	  tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
+	 tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
        else if(particle2->name() == nameDec)
-	  tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
+	 tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
      }
 
      double theMag=_currentParamMags[theJPCLS];

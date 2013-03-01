@@ -9,9 +9,8 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 
-BreitWignerDynamics::BreitWignerDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother) :
-  AbsDynamics(massKey, fsParticles, mother)
-  ,_massKey(massKey)
+BreitWignerDynamics::BreitWignerDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
+  AbsDynamics(name, fsParticles, mother)
 {
 }
 

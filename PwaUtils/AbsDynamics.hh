@@ -15,6 +15,7 @@
 #include "PwaUtils/AbsParamHandler.hh"
 
 class Particle;
+class AbsDecay;
 
 class AbsDynamics : public AbsParamHandler{
 
@@ -26,9 +27,12 @@ public:
   virtual complex<double> eval(EvtData* theData, Spin OrbMom=0)=0;
   virtual void cacheAmplitudes();
   virtual void fillMasses(EvtData* theData);
+  virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}
+  virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec) {;}
 
 protected:
   std::string _name;
+  std::string _massKey;
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
   std::map<int, complex<float> >  _cachedMap;

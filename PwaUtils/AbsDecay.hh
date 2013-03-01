@@ -32,7 +32,7 @@ public:
   const std::string wignerDKey() {return _wignerDKey;} 
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
-  virtual std::string massParKey() const {return _massParamKey;}
+  virtual std::string& massParKey() {return _massParamKey;}
   void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
   boost::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
   //  std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
@@ -54,8 +54,10 @@ public:
   Particle* daughter2Part() {return _daughter2;}
 
   virtual std::string dynType() {return _dynType;}
+  virtual std::string dynKey() {return _dynKey;}
   virtual std::pair<Particle*, Particle*>& firstDecayChannel() { return _decPair1stChannel;}
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
+  virtual boost::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}
   virtual std::string type() =0;
 
 protected:
@@ -76,6 +78,7 @@ protected:
   std::string _massParamKey;
   std::string _wignerDKey;
   std::string _dynType;
+  std::string _dynKey;
 
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 

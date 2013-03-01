@@ -27,7 +27,7 @@ public:
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-  std::string _key;
+  //  std::string _key;
   std::string _g11Key;
   std::string _g22Key;
 

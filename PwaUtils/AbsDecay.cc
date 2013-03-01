@@ -32,8 +32,9 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
-  ,_massParamKey("WoDynamics")
+  ,_massParamKey(_mother->name())
   ,_dynType("WoDynamics")
+  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
 {
@@ -81,6 +82,7 @@ AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daugh
   ,_fitParamSuffix(_name)
   ,_massParamKey("WoDynamics")
   ,_dynType("WoDynamics")
+  ,_dynKey("WoDynamics")
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
 {
@@ -117,9 +119,6 @@ AbsDecay::~AbsDecay(){
 
 void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec) {
   _dynType=dynString;
-
-  if(0!=_mother) _massParamKey=_mother->name(); 
-  else _massParamKey=_motherJPCPtr->name();
 
   if(additionalStringVec.size()==2){ //fill second decay channel (Flatte)
     Particle* firstParticle=_env->particleTable()->particle(additionalStringVec[0]);
