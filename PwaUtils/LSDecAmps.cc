@@ -195,8 +195,8 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
    }
 
    if(!_recalculate){
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
+     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
+     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
      
      std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
      for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
@@ -219,8 +219,8 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
  
 
 void  LSDecAmps::updateFitParams(fitParams& theParamVal){
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags[_key];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis[_key];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
+   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
 
    std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
    for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){

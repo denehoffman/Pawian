@@ -191,8 +191,8 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
    }
 
    if(!_recalculate){
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.MagLamLams[_key];
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.PhiLamLams[_key];
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
+     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
      std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
      for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
        double theMag=magMap[*it];
@@ -213,8 +213,8 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
  
 
 void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
-   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.MagLamLams[_key];
-   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.PhiLamLams[_key];
+   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
+   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
 
    std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
    for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
@@ -223,7 +223,7 @@ void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
      _currentParamMagLamLams[*it]=theMag;
      _currentParamPhiLamLams[*it]=thePhi;
 
-     std::vector< boost::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];     
+     std::vector< boost::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];     
      std::vector< boost::shared_ptr<const JPClamlam> >::iterator itLamLam;
      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
        _currentParamMagLamLams[*itLamLam]=theMag; 
