@@ -16,6 +16,7 @@
 
 class Particle;
 class AbsDecay;
+class AbsXdecAmp;
 
 class AbsDynamics : public AbsParamHandler{
 
@@ -24,7 +25,7 @@ public:
   virtual ~AbsDynamics();
 
   virtual std::string name() {return _name;};
-  virtual complex<double> eval(EvtData* theData, Spin OrbMom=0)=0;
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0)=0;
   virtual void cacheAmplitudes();
   virtual void fillMasses(EvtData* theData);
   virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}

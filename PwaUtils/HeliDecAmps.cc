@@ -130,7 +130,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs, this);
   }
 
-  result*=_absDyn->eval(theData);
+  result*=_absDyn->eval(theData, grandmaAmp);
   result*=sqrt(2.*_JPCPtr->J+1.);
 
   if ( _cacheAmps){

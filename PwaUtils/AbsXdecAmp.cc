@@ -66,7 +66,7 @@ void AbsXdecAmp::initialize(){
   if( _daughter2IsStable && _Jdaughter2>0) _enabledlamFsDaughter2=true;
 }
 
-complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs,AbsXdecAmp* grandmaAmp){
+complex<double> AbsXdecAmp::daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(1.,0.);
   if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs, this);
   if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs, this);

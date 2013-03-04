@@ -18,7 +18,7 @@ public:
   BreitWignerDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~BreitWignerDynamics();
 
-  virtual complex<double> eval(EvtData* theData, Spin OrbMom=0);
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);

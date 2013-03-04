@@ -23,7 +23,7 @@ FlatteDynamics::~FlatteDynamics()
 {
 }
 
-complex<double> FlatteDynamics::eval(EvtData* theData, Spin OrbMom){
+complex<double> FlatteDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   int evtNo=theData->evtNo;
   if ( _cacheAmps && !_recalculate){
     return _cachedMap[evtNo];

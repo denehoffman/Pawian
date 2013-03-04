@@ -18,7 +18,7 @@ WoDynamics::~WoDynamics()
 {
 }
 
-complex<double> WoDynamics::eval(EvtData* theData, Spin OrbMom){
+complex<double> WoDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
 
   complex<double> result(1.,0.);
   return result;

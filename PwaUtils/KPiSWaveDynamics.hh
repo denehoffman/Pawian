@@ -23,7 +23,7 @@ public:
   KPiSWaveDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~KPiSWaveDynamics();
 
-  virtual complex<double> eval(EvtData* theData, Spin OrbMom=0);
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
@@ -46,6 +46,8 @@ protected:
   std::map<std::string, std::map<std::string, double> > _currentcProdMap;
   std::map<std::string, std::map<std::string, double> > _currentphaseProdMap;
 
+  std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
+  std::map<std::string, bool > _recalcMap;
 private:
 
 };

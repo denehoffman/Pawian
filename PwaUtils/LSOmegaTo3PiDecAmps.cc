@@ -74,7 +74,7 @@ int evtNo=theData->evtNo;
     result+=amp;
   }
   result*=sqrt( theData->DoubleString["lamOmegaDec"] );
-  result*=_absDyn->eval(theData);
+  result*=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
 #ifdef _OPENMP

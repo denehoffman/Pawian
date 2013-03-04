@@ -108,7 +108,7 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
   
   result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
 
-  result*=_absDyn->eval(theData);
+  result*=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
 #ifdef _OPENMP

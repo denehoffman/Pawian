@@ -18,7 +18,7 @@ BreitWignerDynamics::~BreitWignerDynamics()
 {
 }
 
-complex<double> BreitWignerDynamics::eval(EvtData* theData, Spin OrbMom){
+complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   int evtNo=theData->evtNo;
   if ( _cacheAmps && !_recalculate){
     return _cachedMap[evtNo];
