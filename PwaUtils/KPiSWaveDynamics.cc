@@ -59,31 +59,31 @@ void  KPiSWaveDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     
     std::map<std::string, double>::iterator it2;
     
-    std::map<std::string, double> bFactors=it1->second;
+    std::map<std::string, double>& bFactors=it1->second;
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.;
     }
 
-    std::map<std::string, double> aProds=_currentaProdMap[it1->first];
+    std::map<std::string, double>& aProds=_currentaProdMap[it1->first];
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.;
     }
 
-    std::map<std::string, double> bProds=_currentbProdMap[it1->first];
+    std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.; 
     }
 
-    std::map<std::string, double> cProds=_currentcProdMap[it1->first];
+    std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.;
     }
 
-    std::map<std::string, double> phaseProds=_currentphaseProdMap[it1->first];
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.;
@@ -152,28 +152,27 @@ void KPiSWaveDynamics::updateFitParams(fitParams& theParamVal){
 
     std::map<std::string, double>::iterator it2;
 
-    std::map<std::string, double> bFactors = it1->second;
-    bFactors["b_pole1Mag"]=theParamVal.otherParams[it1->first+"b_pole1Mag"];
-    bFactors["b_pole1Phi"]=theParamVal.otherParams[it1->first+"b_pole1Phi"];
+    it1->second["b_pole1Mag"]=theParamVal.otherParams[it1->first+"b_pole1Mag"];
+    it1->second["b_pole1Phi"]=theParamVal.otherParams[it1->first+"b_pole1Phi"];
 
-    complex<double> b_pole1=bFactors["b_pole1Mag"]*complex<double>(cos(bFactors["b_pole1Phi"]), sin(bFactors["b_pole1Phi"]));
+    complex<double> b_pole1=it1->second["b_pole1Mag"]*complex<double>(cos(it1->second["b_pole1Phi"]), sin(it1->second["b_pole1Phi"]));
 
-    std::map<std::string, double> aProds=_currentaProdMap[it1->first];
+    std::map<std::string, double>& aProds=_currentaProdMap[it1->first];
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
 
-    std::map<std::string, double> bProds=_currentbProdMap[it1->first];
+    std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
 
-    std::map<std::string, double> cProds=_currentcProdMap[it1->first];
+    std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
 
-    std::map<std::string, double> phaseProds=_currentphaseProdMap[it1->first];
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
