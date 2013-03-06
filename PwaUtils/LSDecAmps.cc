@@ -81,12 +81,15 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
 
 complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  int evtNo=theData->evtNo;
   complex<double> result(0.,0.);  
   if( fabs(lamX) > _JPCPtr->J) return result; 
+
+  int evtNo=theData->evtNo;
+  std::string currentKey=_absDyn->grandMaKey(grandmaAmp);
  
   if ( _cacheAmps && !_recalculate){
-    result= _cachedAmpMap[evtNo][lamX][lamFs];
+    //    result= _cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs];
     return result;
   }
 
@@ -115,7 +118,8 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
 #pragma omp critical
     {
 #endif
-      _cachedAmpMap[evtNo][lamX][lamFs]=result;
+      //      _cachedAmpMap[evtNo][lamX][lamFs]=result;
+      _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
 #ifdef _OPENMP
     }
 #endif

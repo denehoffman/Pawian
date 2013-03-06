@@ -30,6 +30,7 @@ public:
   virtual void fillMasses(EvtData* theData);
   virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}
   virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec) {;}
+  virtual std::string grandMaKey(AbsXdecAmp* grandmaAmp){return "default";}
 
 protected:
   std::string _name;

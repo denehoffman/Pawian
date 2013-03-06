@@ -53,21 +53,24 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short f
 
 
 complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
-int evtNo=theData->evtNo;
 
- complex<double> result(0.,0.);  
+  complex<double> result(0.,0.); 
+  
+  int evtNo=theData->evtNo;
+  std::string currentKey=_absDyn->grandMaKey(grandmaAmp); 
+
   if ( _cacheAmps && !_recalculate){
-    result= _cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs];
     return result;
   }
-
+  
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
-
+    
     complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
       *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
     
@@ -81,7 +84,7 @@ int evtNo=theData->evtNo;
 #pragma omp critical
     {
 #endif
-      _cachedAmpMap[evtNo][lamX][lamFs]=result;
+      _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
 #ifdef _OPENMP
     }
 #endif

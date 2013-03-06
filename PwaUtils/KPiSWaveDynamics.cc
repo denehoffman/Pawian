@@ -27,25 +27,26 @@ KPiSWaveDynamics::~KPiSWaveDynamics()
 
 complex<double> KPiSWaveDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
 
-  int evtNo=theData->evtNo; 
-  std::string currentName=_massKey+grandmaAmp->absDec()->motherJPC()->name();
+complex<double> result(0.,0.);
 
-  if ( _cacheAmps && !_recalcMap[currentName]){
-    return _cachedStringMap[evtNo][currentName];
+  int evtNo=theData->evtNo;
+  std::string currentKey="default";
+  if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->dynKey(); 
+
+  if ( _cacheAmps && !_recalcMap[currentKey]){
+    result=_cachedStringMap[evtNo][currentKey];
   }
-  complex<double> result(0.,0.);
-  //  boost::shared_ptr<FVector> currentFVec=_fVecMap[currentName];
-  
+
 #ifdef _OPENMP
 #pragma omp critical (KPiSWaveDynCache)
   {
 #endif
-    boost::shared_ptr<FVector> currentFVec=_fVecMap[currentName];
-    currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
-    result=(*currentFVec)[0]*complex<double> (1.,0.);
-    if ( _cacheAmps){
-      _cachedStringMap[evtNo][currentName]=result;
-    }
+  boost::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
+  currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
+  result=(*currentFVec)[0];
+  if ( _cacheAmps){
+     _cachedStringMap[evtNo][currentKey]=result;
+  }
 #ifdef _OPENMP
   }
 #endif
@@ -101,7 +102,7 @@ bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
     
      std::map<std::string, double>::iterator it2;
     
-    std::map<std::string, double> bFactors=it1->second;
+    std::map<std::string, double>& bFactors=it1->second;
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
       if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
 	_recalculate=true;
@@ -109,7 +110,7 @@ bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
       }
     }
 
-    std::map<std::string, double> aProds=_currentaProdMap[it1->first];
+    std::map<std::string, double>& aProds=_currentaProdMap[it1->first];
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
       if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
 	_recalculate=true;
@@ -117,7 +118,7 @@ bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
       }
     }
 
-    std::map<std::string, double> bProds=_currentbProdMap[it1->first];
+    std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
       if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
 	_recalculate=true;
@@ -125,7 +126,7 @@ bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
       }
     }
 
-    std::map<std::string, double> cProds=_currentcProdMap[it1->first];
+    std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
       if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
 	_recalculate=true;
@@ -133,7 +134,7 @@ bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
       }
     }
 
-    std::map<std::string, double> phaseProds=_currentphaseProdMap[it1->first];
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
       if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
 	_recalculate=true;
@@ -197,19 +198,16 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
     exit(1);
   }
   
-  std::string theName=_massKey+theDec->motherJPC()->name();
+  //  std::string theName=_massKey+theDec->motherJPC()->name();
+  std::string theName=_massKey+theDec->dynKey();
   std::cout << "addGrandMa:\t" << theName << std::endl;
 
   std::map<std::string, boost::shared_ptr<FVector> >::iterator it = _fVecMap.find(theName);
   
   if (it != _fVecMap.end()) return;
 
-  std::string currentKey=_massKey+theDec->motherJPC()->name();
-  
   boost::shared_ptr<PVectorKPiSFocus> currentPVector=boost::shared_ptr<PVectorKPiSFocus>(new PVectorKPiSFocus(_kMatr));
   _pVecMap[theName]=currentPVector;
-  boost::shared_ptr<FVector> currentFVector=boost::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
-  _fVecMap[theName]=currentFVector;
 
   _currentaProdMap[theName]["a_KpiPosNeg"]=1.;
   _currentaProdMap[theName]["a_KetapPosNeg"]=1.;  
@@ -236,5 +234,14 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   currentPVector->updateBprod(1, _currentbProdMap[theName]["b_KetapPosNeg"]);
   currentPVector->updateCprod(1, _currentcProdMap[theName]["c_KetapPosNeg"]);
   currentPVector->updatePhaseprod(1, _currentphaseProdMap[theName]["KetapPhi"]);
+
+  boost::shared_ptr<FVector> currentFVector=boost::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
+  _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
+}
+
+std::string KPiSWaveDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
+  std::string result="default";
+  if(0!=grandmaAmp) result=grandmaAmp->absDec()->dynKey();
+  return result;
 }
