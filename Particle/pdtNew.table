@@ -70,6 +70,8 @@ Meson pion+ 		\pi^+  			3  0 -1	 0 -1   1  1  0	 +1 	0.13957	0.0001 	relBW	[PDG 
 Meson pion- 		\pi^-  			-3 0 -1	 0 -1   1  -1 0	 -1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson rho 		\rho  			0  2 -1 -1  1   1  0  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
 Meson a0(980) 		a_0(980)  		0  0  1  1 -1   1  0  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
+Meson a0(980)+ 		a_0(980)^+  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
+Meson a0(980)- 		a_0(980)^-  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
 Meson b1(1235) 		b_1(1235)  		0  2  1 -1  1   1  0  0  0 	1.231 	0.142 	relBW	[PDG nonett 2^1P_1]
 Meson a1(1260) 		a_1(1260)  		0  2  1  1 -1   1  0  0  0 	1.230 	0.400 	relBW	[PDG nonett 2^3P_1]
 Meson pi(1300) 		\pi(1300)  		0  0 -1  1 -1   1  0  0  0 	1.300 	0.200 	relBW	[PDG nonett 2^1S_0]
@@ -134,6 +136,7 @@ Meson K(1830) 		K(1830)  		0  0 -1  0  0   0  0  0  0  	1.830 	0.250   relBW	[PD
 #
 Meson etac 		\eta_c  		0  0 -1  1  1  	0  0  0  0 	2.981 	  0.0297 relBW	[PDG]
 Meson Jpsi 		J/\psi  		0  2 -1 -1 -1   0  0  0  0 	3.096916  0.0929 relBW	[PDG]
+Meson Chic1 		chi_{c1}  		0  2 1	1  1   0  0  0  0 	3.51066	  0.00086	relBW	[PDG]
 #
 # End strange mesons
 #

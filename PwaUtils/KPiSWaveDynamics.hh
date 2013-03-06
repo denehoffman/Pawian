@@ -29,7 +29,7 @@ public:
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
   virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec);
-  virtual std::string grandMaKey(AbsXdecAmp* grandmaAmp);
+  virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
 
 protected:
   //  std::string _massKey;

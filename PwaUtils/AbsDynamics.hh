@@ -30,7 +30,7 @@ public:
   virtual void fillMasses(EvtData* theData);
   virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}
   virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec) {;}
-  virtual std::string grandMaKey(AbsXdecAmp* grandmaAmp){return "default";}
+  virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp){return _grandmaKey;}
 
 protected:
   std::string _name;
@@ -39,7 +39,7 @@ protected:
   Particle* _mother;
   std::map<int, complex<float> >  _cachedMap;
   std::string _dynKey;
-
+  std::string _grandmaKey;
 private:
 
 };

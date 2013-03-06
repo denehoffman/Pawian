@@ -37,19 +37,21 @@ complex<double> result(0.,0.);
     result=_cachedStringMap[evtNo][currentKey];
   }
 
+  else{
 #ifdef _OPENMP
 #pragma omp critical (KPiSWaveDynCache)
-  {
+    {
 #endif
-  boost::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
-  currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
-  result=(*currentFVec)[0];
-  if ( _cacheAmps){
-     _cachedStringMap[evtNo][currentKey]=result;
-  }
+      boost::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
+      currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
+      result=(*currentFVec)[0];
+      if ( _cacheAmps){
+	_cachedStringMap[evtNo][currentKey]=result;
+      }
 #ifdef _OPENMP
-  }
+    }
 #endif
+  }
   
   return result;
 }
@@ -240,8 +242,7 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   _recalcMap[theName]=true;
 }
 
-std::string KPiSWaveDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
-  std::string result="default";
-  if(0!=grandmaAmp) result=grandmaAmp->absDec()->dynKey();
-  return result;
+const std::string& KPiSWaveDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
+  if(0==grandmaAmp) return _grandmaKey;
+  return grandmaAmp->absDec()->dynKey();
 }

@@ -54,7 +54,7 @@ public:
   Particle* daughter2Part() {return _daughter2;}
 
   virtual std::string dynType() {return _dynType;}
-  virtual std::string dynKey() {return _dynKey;}
+  virtual std::string& dynKey() {return _dynKey;}
   virtual std::pair<Particle*, Particle*>& firstDecayChannel() { return _decPair1stChannel;}
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual boost::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}

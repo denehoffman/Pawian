@@ -88,7 +88,6 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
   std::string currentKey=_absDyn->grandMaKey(grandmaAmp);
  
   if ( _cacheAmps && !_recalculate){
-    //    result= _cachedAmpMap[evtNo][lamX][lamFs];
     result=_cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs];
     return result;
   }
