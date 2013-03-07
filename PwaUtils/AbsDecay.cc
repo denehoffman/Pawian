@@ -34,7 +34,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
   ,_dynType("WoDynamics")
-  ,_dynKey(mother->name())
+  //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
 {
@@ -80,9 +80,9 @@ AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daugh
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
-  ,_massParamKey("WoDynamics")
+  ,_massParamKey(motherJPCPtr->name())
   ,_dynType("WoDynamics")
-  ,_dynKey(motherJPCPtr->name())
+  //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
 {

@@ -31,7 +31,8 @@ complex<double> result(0.,0.);
 
   int evtNo=theData->evtNo;
   std::string currentKey="default";
-  if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->dynKey(); 
+  //  if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->dynKey(); 
+  if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
   if ( _cacheAmps && !_recalcMap[currentKey]){
     result=_cachedStringMap[evtNo][currentKey];
@@ -201,7 +202,9 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   }
   
   //  std::string theName=_massKey+theDec->motherJPC()->name();
-  std::string theName=_massKey+theDec->dynKey();
+  //  std::string theName=_massKey+theDec->dynKey();
+  std::string theName=_massKey+theDec->massParKey();
+
   std::cout << "addGrandMa:\t" << theName << std::endl;
 
   std::map<std::string, boost::shared_ptr<FVector> >::iterator it = _fVecMap.find(theName);
@@ -244,5 +247,6 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
 
 const std::string& KPiSWaveDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   if(0==grandmaAmp) return _grandmaKey;
-  return grandmaAmp->absDec()->dynKey();
+  //  return grandmaAmp->absDec()->dynKey();
+  return grandmaAmp->absDec()->massParKey();
 }

@@ -1,6 +1,6 @@
 
 build-project DfuncClebschG ;
 build-project MinuitFit ;
-# build-project FitIF ;
-# build-project FitIF2 ;
+build-project FitIF ;
+build-project FitIF2 ;
 build-project LineShapes ;
