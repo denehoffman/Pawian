@@ -43,9 +43,10 @@ void epemHist::initRootStuff(){
     std::string histName="Data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
-    double psiMass = epemEnv::instance()->particleTable()->particle("Jpsi")->mass();
+    //    double psiMass = epemEnv::instance()->particleTable()->particle("Jpsi")->mass();
     double massMin = 0;
-    double massMax = psiMass;
+    //    double massMax = psiMass;
+    double massMax = epemEnv::instance()->cmsMass();
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
     std::vector<Particle*> allFsp =  epemEnv::instance()->finalStateParticles();

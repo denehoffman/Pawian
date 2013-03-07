@@ -18,7 +18,7 @@
 
 epemEnv* epemEnv::_instance=0;
 
-epemEnv* epemEnv::instance()
+epemEnv* epemEnv::instance() 
 {
   if (0==_instance) _instance = new epemEnv();
   return _instance;
@@ -26,15 +26,16 @@ epemEnv* epemEnv::instance()
 
 epemEnv::epemEnv() :
   AbsEnv()
+  , _cmsMass(3.096916)
 {
 }
 epemEnv::~epemEnv(){
 }
 
 void epemEnv::setup(epemParser* theEpEmParser){
-
+ 
   AbsEnv::setup(theEpEmParser);
-
+  
   std::vector<std::string>::const_iterator itStr;
 
 
@@ -167,7 +168,7 @@ void epemEnv::setup(epemParser* theEpEmParser){
     _angleHistDataVec.push_back(currentAngleHistData);
   }
 
-
+  _cmsMass=theEpEmParser->cmsMass();
 }
 
 

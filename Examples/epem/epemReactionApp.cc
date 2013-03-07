@@ -80,7 +80,6 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
 
 
-
   const std::string datFile=theAppParams->dataFile();
   const std::string mcFile=theAppParams->mcFile();
   Info << "data file: " << datFile ;  // << endmsg;

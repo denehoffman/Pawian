@@ -22,7 +22,8 @@ epemParser::epemParser(int argc,char **argv):
   
   po::options_description config("Configuration file options");
   config.add_options()
-    ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation")
+    ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation") 
+    ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
     ;
   _config->add(config);
   
@@ -33,15 +34,16 @@ bool epemParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
 
+  std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
 
   std::vector<std::string>::const_iterator it;
-
+  
   std::cout << "\nspin density matrix calculation for particles" << std::endl;
-  for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
-     std::cout << (*it) << "\n";
-  }
-
+   for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
+      std::cout << (*it) << "\n";
+   }
+  
   std::cout << std::endl;
-
+  
   return true;
 }

@@ -30,13 +30,13 @@ public:
   void setup(epemParser* theEpEmParser);
 
   boost::shared_ptr<epemReaction> reaction() {return _epemReaction;}
-  
+  const double cmsMass() {return _cmsMass;}  
 
 protected:  
 
   epemEnv();
   static epemEnv* _instance;
-
+  double _cmsMass;
   boost::shared_ptr<epemReaction> _epemReaction;
   std::vector<std::string> _spinDensity;
 };

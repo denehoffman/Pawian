@@ -16,11 +16,13 @@ class epemParser : public ParserBase
   epemParser(int argc,char **argv);
   virtual ~epemParser(){;}
 
-  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
+  //  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
+  const double cmsMass() {return _cmsMass;}
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
+  double _cmsMass;
   std::vector<std::string> _spinDensity;
 };
 
