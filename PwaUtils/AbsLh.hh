@@ -15,6 +15,14 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 
+
+struct ThreadData{
+   double weightSum;
+   double logLH_data;
+   double LH_mc;
+};
+
+
 class AbsLh : public AbsParamHandler{
 
 public:
@@ -44,8 +52,13 @@ protected:
 
   std::map<const std::string, bool> _hypMap;
   unsigned int _calcCounter;
+  unsigned short _noOfThreads;
 
   virtual void setHyps( const std::map<const std::string, bool>& theMap, 
 			bool& theHyp, std::string& theKey);
-  
+
+  virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
+			      double& logLH_data, double& weightSum, fitParams& theParamVal);
+  virtual void ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
+			    double& lh_mc, fitParams& theParamVal);
 };

@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <mutex>
 
 #include "PwaUtils/FlatteDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -32,14 +33,9 @@ complex<double> FlatteDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, S
   complex<double> result=_flattePtr->calcFirstChannel(theData->FourVecsString[_dynKey].M(), _currentMass, _currentg11, _currentg22);
   
   if ( _cacheAmps){
-#ifdef _OPENMP
-#pragma omp critical (flatteDynCache)
-    {
-#endif
+      theMutex.lock();
       _cachedMap[evtNo]=result;
-#ifdef _OPENMP
-    }
-#endif
+      theMutex.unlock();
   }  
 
   return result;

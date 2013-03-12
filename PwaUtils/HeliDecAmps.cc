@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <mutex>
 
 #include "PwaUtils/HeliDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -13,9 +14,6 @@
 //#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 HeliDecAmps::HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec) :
   AbsXdecAmp(theDec)
@@ -136,14 +134,9 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
   result*=sqrt(2.*_JPCPtr->J+1.);
 
   if ( _cacheAmps){
-#ifdef _OPENMP
-#pragma omp critical (heliAmpCache)
-    {
-#endif
-           _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
-#ifdef _OPENMP
-    }
-#endif
+     theMutex.lock();
+     _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
+     theMutex.unlock();
 }
 
   return result;

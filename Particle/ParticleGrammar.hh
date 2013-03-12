@@ -71,8 +71,8 @@ namespace particleGrammar
 	     || '#' >> +char_[ref(wasComment)=true] || char_('#')[ref(wasComment)=true]
 	     ||
 	     types[ref(pData.type) = _1] >>
-	     lexeme[+char_('!', 'z')[ref(pData.name) += _1]] >>
-	     lexeme[+char_('!', '}')[ref(pData.texName) += _1]] >>
+	     lexeme[+char_('!', 'z')[boost::phoenix::ref(pData.name) += _1]] >>
+	     lexeme[+char_('!', '}')[boost::phoenix::ref(pData.texName) += _1]] >>
 	     int_[ref(pData.charge) = _1] >>
 	     int_[ref(pData.twoJ) = _1] >>
  	     int_[ref(pData.theParity) = _1] >> // P

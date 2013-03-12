@@ -39,19 +39,14 @@ complex<double> result(0.,0.);
   }
 
   else{
-#ifdef _OPENMP
-#pragma omp critical (KPiSWaveDynCache)
-    {
-#endif
+      theMutex.lock();
       boost::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
       currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
       result=(*currentFVec)[0];
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }
-#ifdef _OPENMP
-    }
-#endif
+      theMutex.unlock();
   }
   
   return result;

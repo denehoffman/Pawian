@@ -3,7 +3,7 @@ path-constant TOP : . ;
 local ROOTSYS = [ os.environ ROOTSYS ] ; 
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
-BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor ;
+BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor -lboost_timer ;
 
 project :
 	requirements <include>./  
@@ -11,13 +11,11 @@ project :
 	<include>$(ROOTSYS)/include
 	<include>$(GENEVA)/include
 	<link>static
+	<cxxflags>-std=gnu++0x
 	<cxxflags>-pthread
-	<cxxflags>-fopenmp
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
-	<linkflags>-lgomp
 	<linkflags>-pthread
-	<linkflags>-fopenmp
 	;
 
 actions rootlibs

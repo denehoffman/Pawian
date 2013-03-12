@@ -43,10 +43,6 @@
 #include "Minuit2/MnScan.h"
 
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 
 int main(int __argc,char *__argv[]){
   clock_t start, end;

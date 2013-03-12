@@ -5,14 +5,15 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <vector>
+#include <thread>
+
+#include <boost/thread.hpp>
 
 #include "PwaUtils/AbsLh.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
   AbsParamHandler()
@@ -21,6 +22,7 @@ AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
 {
   _evtDataVec=_evtListPtr->getDataVecs();
   _evtMCVec=_evtListPtr->getMcVecs();
+  _noOfThreads = boost::thread::hardware_concurrency();
 }
 
 AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr):
@@ -30,43 +32,98 @@ AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr):
 {
   _evtDataVec=_evtListPtr->getDataVecs();
   _evtMCVec=_evtListPtr->getMcVecs();
+  _noOfThreads = boost::thread::hardware_concurrency();
 }
 
 AbsLh::~AbsLh()
 {
 }
 
+
+
+void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
+			   double& logLH_data, double& weightSum, fitParams& theParamVal){
+
+   logLH_data=0.;
+   weightSum=0.;
+
+   for (unsigned int i=minEvent; i<=maxEvent; ++i){
+      EvtData* currentEvtData=_evtDataVec[i];
+      double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+      logLH_data+=(currentEvtData->evtWeight)*log(intensity);
+      weightSum+= currentEvtData->evtWeight;
+   }
+}
+
+
+
+void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
+			 double& lh_mc, fitParams& theParamVal ){
+
+   lh_mc=0.;
+
+   for (unsigned int i=minEvent; i<=maxEvent; ++i){
+      EvtData* currentEvtData=_evtMCVec[i];
+      double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+      lh_mc+=intensity;
+   }
+}
+
+
+
 double AbsLh::calcLogLh(fitParams& theParamVal){
+
   _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal); 
   updateFitParams(theParamVal);
-  
+
   double logLH=0.;
   double logLH_data=0.;
   double weightSum=0.;
   double LH_mc=0.;
 
+  int eventStepData = _evtDataVec.size() / _noOfThreads;
+  int eventStepMC = _evtMCVec.size() / _noOfThreads;
 
-#ifdef _OPENMP
-#pragma omp parallel for reduction(+ : logLH_data, weightSum)
-#endif
-  for (unsigned int i=0; i<_evtDataVec.size(); ++i){
-    EvtData* currentEvtData=_evtDataVec[i];
-    double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+  std::vector<std::thread> theThreads;
+  std::vector<ThreadData> threadDataVec;
+  threadDataVec.resize(_noOfThreads);
 
-    logLH_data+=(currentEvtData->evtWeight)*log(intensity);
-    weightSum+= currentEvtData->evtWeight;
+
+  for(int i = 0; i<_noOfThreads;i++){
+
+     int eventMin = i*eventStepData;
+     int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
+
+     theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
+				      std::ref(threadDataVec.at(i).logLH_data), 
+				      std::ref(threadDataVec.at(i).weightSum), theParamVal));
+  }
+  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
+     (*it).join();
   }
 
-#ifdef _OPENMP
-#pragma omp parallel for reduction(+ : LH_mc) 
-#endif
-  for (unsigned int i=0; i<_evtMCVec.size(); ++i){
-    EvtData* currentEvtData=_evtMCVec[i];
-    double intensity=calcEvtIntensity(currentEvtData, theParamVal);
-    LH_mc+=intensity;
+  theThreads.clear();
+
+  for(int i = 0; i<_noOfThreads;i++){
+
+     int eventMin = i*eventStepMC;
+     int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
+
+     theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
+				      std::ref(threadDataVec.at(i).LH_mc), theParamVal));
+  }
+  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
+     (*it).join();
   }
 
+
+
+  for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it){
+     logLH_data += (*it).logLH_data;
+     weightSum += (*it).weightSum;
+     LH_mc += (*it).LH_mc;
+  }
 
   double logLH_mc_Norm=0.;  
   if (LH_mc>0.) logLH_mc_Norm=log(LH_mc/_evtMCVec.size());
@@ -78,6 +135,8 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
   return logLH;
   
 }
+
+
 
 void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey){
 

@@ -8,6 +8,7 @@
 #include <complex>
 #include <map>
 #include <string>
+#include <mutex>
 #include <boost/shared_ptr.hpp>
 
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -38,6 +39,7 @@ protected:
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
   std::map<int, complex<float> >  _cachedMap;
+  std::mutex theMutex;
   std::string _dynKey;
   std::string _grandmaKey;
 private:

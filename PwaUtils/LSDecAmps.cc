@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <mutex>
 
 #include "PwaUtils/LSDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -13,9 +14,6 @@
 //#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
   AbsXdecAmp(theDec)
@@ -113,17 +111,11 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
   result*=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
-#ifdef _OPENMP
-#pragma omp critical
-    {
-#endif
-      //      _cachedAmpMap[evtNo][lamX][lamFs]=result;
-      _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
-#ifdef _OPENMP
-    }
-#endif
+     theMutex.lock();
+     //      _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
+     theMutex.unlock();
   }
-
 
   return result;
 }

@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <mutex>
 
 #include "PwaUtils/LSOmegaTo3PiDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -13,9 +14,6 @@
 //#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(boost::shared_ptr<OmegaTo3PiLSDecay> theDec) :
   LSDecAmps(theDec)
@@ -80,14 +78,9 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
   result*=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
-#ifdef _OPENMP
-#pragma omp critical
-    {
-#endif
-      _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
-#ifdef _OPENMP
-    }
-#endif
+     theMutex.lock();
+     _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
+     theMutex.unlock();
   }
   return result;
 }

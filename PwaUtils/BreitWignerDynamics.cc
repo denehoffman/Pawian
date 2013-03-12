@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <mutex>
 
 #include "PwaUtils/BreitWignerDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -27,14 +28,9 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaA
   complex<double> result=BreitWigner(theData->FourVecsString[_dynKey], _currentMass, _currentWidth);
   
   if ( _cacheAmps){
-#ifdef _OPENMP
-#pragma omp critical (bwDynCache)
-    {
-#endif
-      _cachedMap[evtNo]=result;
-#ifdef _OPENMP
-    }
-#endif
+     theMutex.lock();
+     _cachedMap[evtNo]=result;
+     theMutex.unlock();
   }  
 
   return result;

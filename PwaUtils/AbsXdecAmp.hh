@@ -8,6 +8,7 @@
 #include <complex>
 #include <map>
 #include <string>
+#include <mutex>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -53,6 +54,7 @@ protected:
   Spin _Jdaughter2;
   std::string _key;
   const std::string _wignerDKey;
+  std::mutex theMutex;
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;

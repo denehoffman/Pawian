@@ -3,6 +3,7 @@
 //#include <string>
 #include <math.h>
 #include <stdio.h>
+#include <boost/timer/timer.hpp>
 
 #include "Minuit2/MnUserParameters.h"
 
@@ -12,6 +13,8 @@
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
+
+boost::timer::cpu_timer theTimer;
 
 PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
   _absLhPtr(absLh)
@@ -38,6 +41,17 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
   double result=_absLhPtr->calcLogLh(theFitParmValTmp);
 
   _fcnCounter++;
+
+  if(_fcnCounter%20 == 0){
+     theTimer.stop();
+     boost::timer::cpu_times elapsed(theTimer.elapsed());
+     if(elapsed.wall > 0){
+	Info << "Wall time: " << elapsed.wall / 1E9 << "s User: "
+	     << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
+     }
+     theTimer.start();
+  }
+
   if (  _fcnCounter%100 == 0) {
     _fitParamsBasePtr->printParams(theFitParmValTmp);
   }
