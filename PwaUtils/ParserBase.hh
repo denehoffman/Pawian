@@ -51,6 +51,7 @@ public:
   const int ratioMcToData() const {return _ratioMcToData;}
   const bool cacheAmps() const {return _cacheAmps;}
   const bool useEvtWeight() const {return _useEvtWeight; }
+  const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const std::string pdgTableFile() const {return _pdgTableFile;}
   const std::vector<std::string>& finalStateParticles() const { return _finalStateParticles; }
   const std::vector<std::string>& decaySystem() const { return _decaySystem; }
@@ -86,6 +87,7 @@ protected:
   po::options_description* _common;
   po::options_description* _config;
   bool _useEvtWeight;
+  bool _usePhaseSpaceHyp;
   std::string _pdgTableFile;
   std::vector<std::string> _finalStateParticles;
   std::vector<std::string> _decaySystem;

@@ -36,9 +36,6 @@ private:
   std::ifstream currentStream;
   int numParticles;
   int linesToSkip;
-  bool _useMassRange;
-  std::pair<double,double> _massRange;
-  
 };
 
 

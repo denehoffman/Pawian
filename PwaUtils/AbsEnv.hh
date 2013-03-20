@@ -38,6 +38,7 @@ public:
   const std::string serializationFileName() const {return _serializationFileName;}
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
+  ParserBase* parser() {return _theParser;}
 
 protected:  
 
@@ -53,4 +54,5 @@ protected:
   std::string _serializationFileName;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
+  ParserBase* _theParser;
 };

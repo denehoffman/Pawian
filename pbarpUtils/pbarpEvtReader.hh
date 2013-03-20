@@ -24,11 +24,6 @@ public:
   virtual ~pbarpEvtReader();
 
   virtual bool fillAll(EventList& evtList);
-  bool fillMassRange(EventList& evtList, std::pair<double,double> massRange){
-    _useMassRange=true;
-    _massRange = massRange;
-    return fillAll(evtList);
-  };
   
 private:
   std::vector<std::string> fileNames;
@@ -36,9 +31,6 @@ private:
   std::ifstream currentStream;
   int numParticles;
   int linesToSkip;
-  bool _useMassRange;
-  std::pair<double,double> _massRange;
-  
 };
 
 

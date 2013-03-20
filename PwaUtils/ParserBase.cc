@@ -27,6 +27,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _common(new po::options_description("Common Options"))
       , _config(new po::options_description("Configuration file options"))
       ,_useEvtWeight(false)
+      ,_usePhaseSpaceHyp(false)
       ,_pdgTableFile("/Particle/pdtNew.table")
       ,_productionFormalism("Cano")
      {
@@ -57,6 +58,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
       ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
       ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
+      ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space") 
       ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
       ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
       ;
@@ -157,7 +159,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
-		<< "use event weight: " << _useEvtWeight  << "\n\n" 
+		<< "use event weight: " << _useEvtWeight  << "\n\n"
+		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n" 
 		<< "pdg table: " << _pdgTableFile << "\n\n" 
             << endl;
 

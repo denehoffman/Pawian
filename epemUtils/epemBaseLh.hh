@@ -44,8 +44,6 @@ public:
 
   
 protected:
-  bool _usePhasespace;  
-  const std::string _phasespaceKey;
   boost::shared_ptr<epemReaction> _epemReactionPtr;
 
   int _highestJFsp;

@@ -8,6 +8,7 @@
 #include "epemUtils/epemBaseLh.hh"
 #include "epemUtils/epemEnv.hh"
 #include "epemUtils/epemReaction.hh"
+#include "epemUtils/epemEnv.hh"
 #include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -24,9 +25,7 @@
 
 
 epemBaseLh::epemBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  AbsLh(theEvtList)
-  ,_usePhasespace(false)
-  ,_phasespaceKey("Phasespace")
+  AbsLh(theEvtList, epemEnv::instance())
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -90,9 +89,6 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
 
-  if(_usePhasespace){
-    result = result + theParamVal.otherParams[_phasespaceKey];
-  }
   return result;  
 
 }

@@ -13,9 +13,7 @@ epemEvtReader::epemEvtReader()
 epemEvtReader::epemEvtReader(const std::vector<std::string>& files, int particles, int skip, bool useWeight):
   EventReader(useWeight),
   numParticles(particles),
-  linesToSkip(skip),
-  _useMassRange(false),
-  _massRange(std::make_pair(0.,10.) )
+  linesToSkip(skip)
 {
   if (0 == files.size()) {
     Alert << "empty list of event files" ;  // << endmsg;

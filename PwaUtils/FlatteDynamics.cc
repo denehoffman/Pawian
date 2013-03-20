@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <mutex>
+#include <boost/algorithm/string.hpp>
 
 #include "PwaUtils/FlatteDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -14,9 +15,29 @@
 
 FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParticles, Particle* mother, std::pair<Particle*, Particle*>& decPair1stChannel, std::pair<Particle*, Particle*>& decPair2ndChannel) :
   AbsDynamics(key, fsParticles, mother)
-  ,_g11Key(key+decPair1stChannel.first->name()+decPair1stChannel.second->name())
-  ,_g22Key(key+decPair2ndChannel.first->name()+decPair2ndChannel.second->name())
+  ,_g11Key(_massKey+decPair1stChannel.first->name()+decPair1stChannel.second->name())
+  ,_g22Key(_massKey+decPair2ndChannel.first->name()+decPair2ndChannel.second->name())
 {
+  std::string firstPair1stPartStr=decPair1stChannel.first->name();
+  boost::replace_all(firstPair1stPartStr,"+", "");
+  boost::replace_all(firstPair1stPartStr,"-", "");
+
+  std::string firstPair2ndPartStr=decPair1stChannel.second->name();
+  boost::replace_all(firstPair2ndPartStr,"+", "");
+  boost::replace_all(firstPair2ndPartStr,"-", "");
+
+  _g11Key=_massKey+firstPair1stPartStr+firstPair2ndPartStr;
+
+  std::string secondPair1stPartStr=decPair2ndChannel.first->name();
+  boost::replace_all(secondPair1stPartStr,"+", "");
+  boost::replace_all(secondPair1stPartStr,"-", "");
+
+  std::string secondPair2ndPartStr=decPair2ndChannel.second->name();
+  boost::replace_all(secondPair2ndPartStr,"+", "");
+  boost::replace_all(secondPair2ndPartStr,"-", "");
+
+  _g22Key=_massKey+secondPair1stPartStr+secondPair2ndPartStr;  
+
   _flattePtr=boost::shared_ptr<Flatte>(new Flatte(decPair1stChannel, decPair2ndChannel));
 }
 
@@ -74,4 +95,10 @@ void FlatteDynamics::updateFitParams(fitParams& theParamVal){
   _currentMass=theParamVal.Masses[_massKey];
   _currentg11=theParamVal.gFactors[_g11Key];
   _currentg22=theParamVal.gFactors[_g22Key];
+}
+
+void FlatteDynamics::setMassKey(std::string& theMassKey){
+  boost::replace_all(_g11Key,_massKey, theMassKey);
+  boost::replace_all(_g22Key,_massKey, theMassKey);
+  AbsDynamics::setMassKey(theMassKey);
 }

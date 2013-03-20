@@ -11,13 +11,18 @@
 #include <boost/thread.hpp>
 
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/AbsEnv.hh"
+#include "PwaUtils/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
-AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList, AbsEnv* theEnv) :
   AbsParamHandler()
+  ,_absEnv(theEnv)
   ,_evtListPtr(theEvtList)
+  ,_usePhasespace(theEnv->parser()->usePhaseSpaceHyp())
+  ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
@@ -25,9 +30,12 @@ AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
   _noOfThreads = boost::thread::hardware_concurrency();
 }
 
-AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr):
+AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr, AbsEnv* theEnv):
   AbsParamHandler()
+  ,_absEnv(theEnv)
   ,_evtListPtr(theAbsLhPtr->getEventList())
+  ,_usePhasespace(theEnv->parser()->usePhaseSpaceHyp())
+  ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
   _evtDataVec=_evtListPtr->getDataVecs();
@@ -50,6 +58,7 @@ void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
    for (unsigned int i=minEvent; i<=maxEvent; ++i){
       EvtData* currentEvtData=_evtDataVec[i];
       double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+      if(_usePhasespace) intensity+=theParamVal.otherParams[_phasespaceKey];
       logLH_data+=(currentEvtData->evtWeight)*log(intensity);
       weightSum+= currentEvtData->evtWeight;
    }
@@ -65,6 +74,7 @@ void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
    for (unsigned int i=minEvent; i<=maxEvent; ++i){
       EvtData* currentEvtData=_evtMCVec[i];
       double intensity=calcEvtIntensity(currentEvtData, theParamVal);
+      if(_usePhasespace) intensity+=theParamVal.otherParams[_phasespaceKey];
       lh_mc+=intensity;
    }
 }
@@ -154,6 +164,11 @@ void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theH
 }
 
 void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
+
+  if(_usePhasespace){
+    fitVal.otherParams[_phasespaceKey]=0.01;
+    fitErr.otherParams[_phasespaceKey]=0.05;
+  } 
 
   std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
   for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){

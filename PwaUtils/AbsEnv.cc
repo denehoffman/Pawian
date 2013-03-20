@@ -23,6 +23,7 @@ AbsEnv::AbsEnv() :
   , _noFinalStateParticles(0)
   ,_absDecList(new AbsDecayList())
   ,_prodDecList(new AbsDecayList())
+  ,_theParser(0)
 {
 }
 
@@ -37,6 +38,7 @@ void AbsEnv::setup(ParserBase* theParser){
   
   _alreadySetUp=true;
 
+  _theParser=theParser;
   // common options
   _outputFileNameSuffix = theParser->outputFileNameSuffix();
   _serializationFileName = theParser->serializationFile();

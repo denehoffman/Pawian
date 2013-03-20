@@ -22,12 +22,13 @@ struct ThreadData{
    double LH_mc;
 };
 
+class AbsEnv;
 
 class AbsLh : public AbsParamHandler{
 
 public:
-  AbsLh(boost::shared_ptr<const EvtDataBaseList>);
-  AbsLh(boost::shared_ptr<AbsLh>);
+  AbsLh(boost::shared_ptr<const EvtDataBaseList>, AbsEnv* theEnv);
+  AbsLh(boost::shared_ptr<AbsLh>, AbsEnv* theEnv);
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
 
@@ -45,11 +46,14 @@ public:
   virtual void print(std::ostream& os) const=0;
 
 protected:
+  AbsEnv* _absEnv;
   boost::shared_ptr<const EvtDataBaseList> _evtListPtr;
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
   std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;
 
+  bool _usePhasespace;  
+  const std::string _phasespaceKey;
   std::map<const std::string, bool> _hypMap;
   unsigned int _calcCounter;
   unsigned short _noOfThreads;

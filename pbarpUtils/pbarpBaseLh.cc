@@ -8,6 +8,7 @@
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
+#include "pbarpUtils/pbarpEnv.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -22,9 +23,7 @@
 
 
 pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  AbsLh(theEvtList)
-  ,_usePhasespace(false)
-  ,_phasespaceKey("Phasespace")
+  AbsLh(theEvtList, pbarpEnv::instance())
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -203,9 +202,6 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
 
-  if(_usePhasespace){
-    result = result + theParamVal.otherParams[_phasespaceKey];
-  }
   return result;  
 
 }

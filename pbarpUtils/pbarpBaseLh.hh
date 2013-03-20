@@ -45,8 +45,6 @@ public:
   virtual void print(std::ostream& os) const;
   
 protected:
-  bool _usePhasespace;  
-  const std::string _phasespaceKey;
   boost::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< boost::shared_ptr<const JPCLS> > _jpclsStates;
 

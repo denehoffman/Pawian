@@ -25,6 +25,7 @@ public:
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
+  virtual void setMassKey(std::string& theMassKey);
 
 protected:
   //  std::string _key;
