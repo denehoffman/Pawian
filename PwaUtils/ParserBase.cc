@@ -77,6 +77,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
       ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
+      ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
       ;
 
 
@@ -225,6 +226,13 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_histAngles.begin(); it!=_histAngles.end();++it){
 	std::cout << (*it) << "\n";
       }      
+      
+      std::cout << "\n2Dhistogram decay angles for systems" << std::endl;
+      for (it=_histAngles2D.begin(); it!=_histAngles2D.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
+
     }
     
   }

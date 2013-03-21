@@ -22,7 +22,6 @@
 #include "TH2F.h"
 #include "TNtuple.h"
 
-
 AbsHist::AbsHist(AbsEnv* theEnv) :
   _absEnv(theEnv) 
 {
@@ -90,7 +89,51 @@ AbsHist::AbsHist(AbsEnv* theEnv) :
       _angleFitHistMap[*itAngleVec].push_back(currentLambdaFitHist);
     }
   } 
+  // 2D-Histograms
 
+ std::vector<boost::shared_ptr<angleHistData2D> > angleHistDataVec2D=_absEnv->angleHistDataVec2D();
+
+  std::vector<boost::shared_ptr<angleHistData2D> >::iterator itAngleVec2D;
+  for (itAngleVec2D=angleHistDataVec2D.begin(); itAngleVec2D!=angleHistDataVec2D.end(); ++itAngleVec2D){
+    std::string tmpBaseName= (*itAngleVec2D)->_name;
+    boost::replace_all(tmpBaseName,"+","p");
+    boost::replace_all(tmpBaseName,"-","m");
+    std::string histThetaName="DataTheta"+tmpBaseName;
+    std::string histPhiName="DataPhi"+tmpBaseName;
+    std::string histThetaDescription = "cos#Theta(" +(*itAngleVec2D)->_name + ") (data); " + (*itAngleVec2D)->_nameXAxis + " ; " + (*itAngleVec2D)->_nameYAxis;
+    std::string histPhiDescription = "#phi(" +(*itAngleVec2D)->_name + ") (data); " + (*itAngleVec2D)->_nameXAxis + " ; " + (*itAngleVec2D)->_nameYAxis;
+
+    TH2F* currentThetaAngleDataHist=new TH2F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1., 100., -1., 1.);
+    TH2F* currentPhiAngleDataHist=new TH2F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159, 100., -3.14159, 3.1415);
+    currentThetaAngleDataHist->Sumw2();
+    currentPhiAngleDataHist->Sumw2();
+    _angleDataHistMap2D[*itAngleVec2D].push_back(currentThetaAngleDataHist);
+    _angleDataHistMap2D[*itAngleVec2D].push_back(currentPhiAngleDataHist);
+
+    histThetaName="MCTheta"+tmpBaseName;
+    histPhiName="MCPhi"+tmpBaseName;
+    histThetaDescription = "cos#Theta(" +(*itAngleVec2D)->_name + ") (MC); " + (*itAngleVec2D)->_nameXAxis + " ; " + (*itAngleVec2D)->_nameYAxis;
+    histPhiDescription = "#phi(" +(*itAngleVec2D)->_name + ") (MC); " + (*itAngleVec2D)->_nameXAxis + " ; " + (*itAngleVec2D)->_nameYAxis;
+
+    TH2F* currentThetaAngleMcHist=new TH2F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1., 100., -1., 1.);
+    TH2F* currentPhiAngleMcHist=new TH2F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159, 100., -3.14159, 3.14159);
+    currentThetaAngleMcHist->Sumw2();
+    currentPhiAngleMcHist->Sumw2();
+    _angleMcHistMap2D[*itAngleVec2D].push_back(currentThetaAngleMcHist);
+    _angleMcHistMap2D[*itAngleVec2D].push_back(currentPhiAngleMcHist);
+
+    histThetaName="FitTheta"+tmpBaseName;
+    histPhiName="FitPhi"+tmpBaseName;
+    histThetaDescription = "cos#Theta(" +(*itAngleVec2D)->_name + ") (fit); " + (*itAngleVec2D)->_nameXAxis + " ; " + (*itAngleVec2D)->_nameYAxis;
+    histPhiDescription = "#phi(" +(*itAngleVec2D)->_name + ") (fit); " + (*itAngleVec2D)->_nameXAxis + " ; " + (*itAngleVec2D)->_nameYAxis;
+
+    TH2F* currentThetaAngleFitHist=new TH2F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1., 100., -1., 1.);
+    TH2F* currentPhiAngleFitHist=new TH2F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159, 100., -3.14159, 3.14159);
+    currentThetaAngleFitHist->Sumw2();
+    currentPhiAngleFitHist->Sumw2();
+    _angleFitHistMap2D[*itAngleVec2D].push_back(currentThetaAngleFitHist);
+    _angleFitHistMap2D[*itAngleVec2D].push_back(currentPhiAngleFitHist);
+  }
 }
 
 AbsHist::~AbsHist(){
@@ -104,6 +147,7 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
     exit(1);
   }
+
   boost::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
   const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
 
@@ -113,6 +157,7 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       double weight = (*it)->evtWeight;
       fillMassHists((*it), weight, _massDataHistMap);
       fillAngleHists((*it), weight, _angleDataHistMap);
+      fillAngleHists2D((*it), weight, _angleDataHistMap2D);
       ++it;
     }
 
@@ -123,10 +168,12 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       double evtWeight = (*it)->evtWeight;
       fillMassHists((*it), evtWeight, _massMcHistMap);
       fillAngleHists((*it), evtWeight, _angleMcHistMap);
+      fillAngleHists2D((*it), evtWeight, _angleMcHistMap2D);
 
       double fitWeight= theLh->calcEvtIntensity( (*it), theFitParams );
       fillMassHists((*it), evtWeight*fitWeight, _massFitHistMap);
       fillAngleHists((*it), evtWeight*fitWeight, _angleFitHistMap);
+      fillAngleHists2D((*it), evtWeight*fitWeight, _angleFitHistMap2D);
       ++it;
     }
 
@@ -156,6 +203,16 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       (*itTH1F)->Scale(scaleFactor);
     }
   }
+  
+  std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
+  for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
+    std::vector<TH2F*>::iterator itTH2F;
+    for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){  
+      (*itTH2F)->Scale(scaleFactor);
+    }
+  }
+
+
 }
 
 
@@ -250,5 +307,71 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::sh
       double lambda=normVec.P()*normVec.P()/lambdaNorm;
       it->second[2]->Fill( lambda, weight);
     }
+  }
+}
+
+void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill){
+
+  std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator it;
+  for(it= toFill.begin(); it!= toFill.end(); ++it){
+
+    Vector4<double> combinedDec4Vec(0.,0.,0.,0.);
+    Vector4<double> combinedMother4Vec(0.,0.,0.,0.);
+    Vector4<double> combinedDec4Vec_2(0.,0.,0.,0.);
+    Vector4<double> combinedMother4Vec_2(0.,0.,0.,0.);
+    Vector4<double> all4Vec=theData->FourVecsString["all"];
+
+    std::vector<std::string> decNames=it->first->_decPNames;
+    std::vector<std::string> decNames_2=it->first->_decPNames_2;
+    std::vector<std::string> motherNames=it->first->_motherPNames;
+    std::vector<std::string> motherNames_2=it->first->_motherPNames_2;
+
+    std::vector<std::string>::iterator itStr;
+    for(itStr=decNames.begin(); itStr!=decNames.end(); ++itStr){
+      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      combinedDec4Vec+=tmp4vec;
+    }
+    
+    for(itStr=motherNames.begin(); itStr!=motherNames.end(); ++itStr){
+      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      combinedMother4Vec+=tmp4vec;
+    }
+
+    Vector4<double>  result4Vec(0.,0.,0.,0.);
+    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1e-5
+	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5 
+	&& fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1e-5
+	&& fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1e-5  ){
+      result4Vec=combinedDec4Vec;
+      result4Vec.Boost(all4Vec);
+    } 
+    else{
+       result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
+    }
+    
+    for(itStr=decNames_2.begin(); itStr!=decNames_2.end(); ++itStr){
+      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      combinedDec4Vec_2+=tmp4vec;
+    }
+
+    for(itStr=motherNames_2.begin(); itStr!=motherNames_2.end(); ++itStr){
+      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      combinedMother4Vec_2+=tmp4vec;
+    }
+
+    Vector4<double>  result4Vec_2(0.,0.,0.,0.);
+    if( fabs(all4Vec.E()-combinedMother4Vec_2.E()) < 1e-5
+        && fabs(all4Vec.Px()-combinedMother4Vec_2.Px()) < 1e-5
+        && fabs(all4Vec.Py()-combinedMother4Vec_2.Py()) < 1e-5
+        && fabs(all4Vec.Pz()-combinedMother4Vec_2.Pz()) < 1e-5  ){
+      result4Vec_2=combinedDec4Vec_2;
+      result4Vec_2.Boost(all4Vec);
+    }
+    else{
+      result4Vec_2=helicityVec(all4Vec, combinedMother4Vec_2, combinedDec4Vec_2);
+    }
+
+    it->second[0]->Fill( result4Vec.CosTheta(), result4Vec_2.CosTheta(),weight);
+    it->second[1]->Fill( result4Vec.Phi(), result4Vec_2.Phi(),weight);
   }
 }

@@ -63,6 +63,7 @@ public:
   const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
+  const std::vector<std::string>& histAngleNames2D() const { return _histAngles2D;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -99,4 +100,5 @@ protected:
   std::vector<std::string> _cloneParticle;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
+  std::vector<std::string> _histAngles2D;
 };
