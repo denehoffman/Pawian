@@ -59,13 +59,10 @@ protected:
   std::string _serializationFileName;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
-<<<<<<< HEAD
   bool _useMassRange;
   double _massMin;
   double _massMax;
   std::vector<unsigned int> _particleIndicesMassRange;
-=======
   std::vector<boost::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
->>>>>>> 0cbe746e8a6627bc52676240b21a6d3d82929075
   ParserBase* _theParser;
 };
