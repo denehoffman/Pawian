@@ -78,6 +78,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
       ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
       ("massRange",po::value< string >(&_massRange), "mass Range min max particle1 particle2 ...")
+      ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
       ;
 
 
@@ -230,7 +231,13 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::cout << "\nmass range" << std::endl;
       std::cout << _massRange << "\n";
+            
       
+      std::cout << "\n2Dhistogram decay angles for systems" << std::endl;
+      for (it=_histAngles2D.begin(); it!=_histAngles2D.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
     }
     
   }

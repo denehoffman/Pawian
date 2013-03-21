@@ -97,8 +97,72 @@ struct angleHistData {
   }  
 };
 
+struct angleHistData2D {
+  angleHistData2D(std::vector<std::string>& motherPNames, std::vector<std::string>& decPNames, std::vector<std::string>& motherPNames_2, std::vector<std::string>& decPNames_2 ) :
+    _name("")
+    ,_nameXAxis("")
+    ,_nameYAxis("")
+    ,_motherPNames(motherPNames)
+    ,_decPNames(decPNames)
+    ,_motherPNames_2(motherPNames_2)
+    ,_decPNames_2(decPNames_2)
+  {
+
+    std::vector<std::string>::iterator it;
+    for(it=decPNames.begin(); it!=decPNames.end(); ++it){
+      _name+=(*it);
+      _nameXAxis+=(*it);
+    }
+
+    _name+="_Heli";
+    _nameXAxis+="_Heli";
+
+    for(it=motherPNames.begin(); it!=motherPNames.end(); ++it){
+      _name+=(*it);
+      _nameXAxis+=(*it);
+    }
+
+    _name+="_VS_";
+
+    for(it=decPNames_2.begin(); it!=decPNames_2.end(); ++it){
+      _name+=(*it);
+      _nameYAxis+=(*it);
+    }
+
+    _name+="_Heli";
+    _nameYAxis+="_Heli";
+
+    for(it=motherPNames_2.begin(); it!=motherPNames_2.end(); ++it){
+      _name+=(*it);
+      _nameYAxis+=(*it);
+    }
+
+  }
+
+  std::string _name;
+  std::string _nameXAxis;
+  std::string _nameYAxis;
+  std::vector<std::string> _motherPNames;
+  std::vector<std::string> _decPNames;
+  std::vector<std::string> _motherPNames_2;
+  std::vector<std::string> _decPNames_2;
+
+  virtual bool operator==(const angleHistData2D& compare) const {
+    bool result=false;
+    if ( _name==compare._name) result=true;
+    return result;
+  }
+
+ virtual bool operator<(const angleHistData2D& compare) const {
+   bool result=false;
+   if(_name < compare._name) result=true; 
+    return result; 
+  }  
+};
+
+
 class TFile;
-//class TH2F;
+class TH2F;
 class TH1F;
 class AbsEnv;
 
@@ -116,6 +180,9 @@ protected:
 
   void fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
 
+  void fillAngleHists2D(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill);
+
+
  TFile* _theTFile;
   AbsEnv* _absEnv;
 
@@ -126,6 +193,10 @@ protected:
  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap;
  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap;
  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap;
+
+ std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap2D;
+ std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap2D;
+ std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap2D;
 
  virtual void initRootStuff()=0;
 

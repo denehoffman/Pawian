@@ -30,6 +30,7 @@ Meson f2'(1525) 	f_2^{\prime}(1525)  	0  4  1  1  1  	0  0  0  0 	1.525 	0.0760 
 Meson f2(1565) 		f_2(1565)  		0  4  1  1  1   0  0  0  0 	1.565 	0.1700 	relBW	[PDG no idea]
 Meson omega(1600) 	\omega(1600)  		0  2 -1 -1 -1   0  0  0  0 	1.662 	0.2800 	relBW	[PDG nonett 3^3D_1]
 Meson f2(1640) 		f_2(1640)  		0  4  1  1  1  	0  0  0  0 	1.640 	0.1200 	relBW	[PDG no idea]
+Meson eta2(1645)	\eta_2(1645)		0  4 -1	 1  1	0  0  0	 0	1.617	0.1810	relBW	[PDG no idea]	
 Meson omega3(1670) 	\omega_3(1600)  	0  6 -1 -1 -1   0  0  0  0 	1.668 	0.1730 	relBW	[PDG nonett 3^3D_3]
 Meson phi(1680) 	\phi(1680)  		0  2 -1 -1 -1   0  0  0  0 	1.680 	0.1500 	relBW	[PDG nonett 2^3S_1]
 Meson eta(1760) 	\eta(1760)  		0  0 -1  1  1  	0  0  0  0 	1.295 	0.0530 	relBW	[PDG nonett 3^1S_0]
@@ -67,8 +68,8 @@ Meson f2Hat(1800) 	\hat{f}_2(1800)  	0  4  1 -1  1   0  0  0  0 	1.800 	0.3000 	
 #
 Meson pion 		\pi  			0  0 -1  1 -1   1  0  0  0 	0.139 	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion0 		\pi^0  			0  0 -1  1 -1   1  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson pion+ 		\pi^+  			3  0 -1	 0 -1   1  1  0	 +1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson pion- 		\pi^-  			-3 0 -1	 0 -1   1  -1 0	 -1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pion+ 		\pi^+  			3  0 -1	 1 -1   1  1  0	 +1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pion- 		\pi^-  			-3 0 -1	 1 -1   1  -1 0	 -1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson rho 		\rho  			0  2 -1 -1  1   1  0  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
 Meson a0(980) 		a_0(980)  		0  0  1  1 -1   1  0  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
 Meson a0(980)+ 		a_0(980)^+  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
