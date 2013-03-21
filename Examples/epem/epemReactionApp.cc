@@ -99,7 +99,9 @@ int main(int __argc,char *__argv[]){
   epemEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
 
   EventList eventsData;
-  eventReaderData.fillAll(eventsData);
+
+  if(epemEnv::instance()->useMassRange())  eventReaderData.fillMassRange(eventsData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());  
+  else eventReaderData.fillAll(eventsData);
   
   Info  << "\nFile has " << eventsData.size() << " events. Each event has "
         <<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
@@ -121,7 +123,9 @@ int main(int __argc,char *__argv[]){
   epemEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, withEvtWeight);
 
   EventList mcData;
-  eventReaderMc.fillAll(mcData);
+  if(epemEnv::instance()->useMassRange())  eventReaderMc.fillMassRange(mcData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());
+  else eventReaderMc.fillAll(mcData);
+
  Info  << "\nFile has " << mcData.size() << " events. Each event has "
         <<  mcData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   mcData.rewind();

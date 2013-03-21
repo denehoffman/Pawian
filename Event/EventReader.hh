@@ -14,14 +14,20 @@ public:
 
   virtual bool fillAll(EventList& evtList) = 0;
 
-  virtual bool fillMassRange(EventList& evtList, std::pair<double,double> massRange){
+  virtual bool fillMassRange(EventList& evtList, double massMin, double massMax, std::vector<unsigned int>& particleIndices){
     _useMassRange=true;
-    _massRange = massRange;
+    _massMin = massMin;
+    _massMax = massMax;
+    _particleIdxesMassRange=particleIndices;
     return fillAll(evtList);
   };
 
 protected:
   bool _useWeight;
   bool _useMassRange;
-  std::pair<double,double> _massRange; 
+  double _massMin;
+  double _massMax;
+  std::vector<unsigned int> _particleIdxesMassRange;
+
+  bool isMassrangeParticle(int index); 
 };

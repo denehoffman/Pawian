@@ -77,6 +77,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
       ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
+      ("massRange",po::value< string >(&_massRange), "mass Range min max particle1 particle2 ...")
       ;
 
 
@@ -109,6 +110,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       {
 	std::cout << cmdline_options << endl;
 	stringstream strError;
+
 	strError << "Error: Invalid configuration file name given: \"" << _configFile << "\"";
 	throw runtime_error(strError.str());
       }
@@ -119,7 +121,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 	stringstream strError;
 	strError << "Error accessing configuratiocommonn file " << _configFile;
 	std::cout << cmdline_options << endl;
-	
+
 	throw runtime_error(strError.str());
       }
 
@@ -130,7 +132,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     // Emit a help message, if necessary
     if (vm.count("help")) 
     {
-      std::cout << cmdline_options << endl;
+      std::cout << config_file_options << endl;
       exit(0);
     }    
 
@@ -224,7 +226,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       std::cout << "\nhistograms decay angles for systems" << std::endl;
       for (it=_histAngles.begin(); it!=_histAngles.end();++it){
 	std::cout << (*it) << "\n";
-      }      
+      }
+
+      std::cout << "\nmass range" << std::endl;
+      std::cout << _massRange << "\n";
+      
     }
     
   }

@@ -59,7 +59,7 @@ bool pbarpEvtReader::fillAll(EventList& evtList)
       }
       
       if(_useMassRange){
-	if(fvX.Mass()<_massRange.first || fvX.Mass()>_massRange.second  ) continue;
+	if(fvX.Mass()<_massMin || fvX.Mass()>_massMax  ) continue;
       }
       
       if (!currentStream.fail()) {

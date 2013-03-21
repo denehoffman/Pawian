@@ -37,7 +37,11 @@ public:
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
   const std::string serializationFileName() const {return _serializationFileName;}
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
-  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;} 
+  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
+  bool useMassRange() {return _useMassRange;}
+  double massRangeMin() {return _massMin;}
+  double massRangeMax() {return _massMax;}
+  std::vector<unsigned int>& particleIndicesMassRange() {return _particleIndicesMassRange;} 
   ParserBase* parser() {return _theParser;}
 
 protected:  
@@ -54,5 +58,9 @@ protected:
   std::string _serializationFileName;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
+  bool _useMassRange;
+  double _massMin;
+  double _massMax;
+  std::vector<unsigned int> _particleIndicesMassRange;
   ParserBase* _theParser;
 };
