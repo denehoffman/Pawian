@@ -1,11 +1,11 @@
-// KPiSWaveDynamics class definition file. -*- C++ -*-
+// KPiSWaveIso12Dynamics class definition file. -*- C++ -*-
 // Copyright 20123Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 #include <string>
 
-#include "PwaUtils/KPiSWaveDynamics.hh"
+#include "PwaUtils/KPiSWaveIso12Dynamics.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -15,23 +15,23 @@
 #include "PwaDynamics/FVector.hh"
 #include "PwaDynamics/PVectorKPiSFocus.hh"
 
-KPiSWaveDynamics::KPiSWaveDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
+KPiSWaveIso12Dynamics::KPiSWaveIso12Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
 {
   _kMatr =  boost::shared_ptr<KMatrixKPiSFocus> (new KMatrixKPiSFocus(1));
 }
 
-KPiSWaveDynamics::~KPiSWaveDynamics()
+KPiSWaveIso12Dynamics::~KPiSWaveIso12Dynamics()
 {
 }
 
-complex<double> KPiSWaveDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
+complex<double> KPiSWaveIso12Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
 
 complex<double> result(0.,0.);
 
   int evtNo=theData->evtNo;
   std::string currentKey="default";
-  //  if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->dynKey(); 
+
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
   if ( _cacheAmps && !_recalcMap[currentKey]){
@@ -52,7 +52,7 @@ complex<double> result(0.,0.);
   return result;
 }
 
-void  KPiSWaveDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  KPiSWaveIso12Dynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
     
@@ -90,7 +90,7 @@ void  KPiSWaveDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   }
 }
 
-bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
+bool KPiSWaveIso12Dynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
@@ -144,7 +144,7 @@ bool KPiSWaveDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void KPiSWaveDynamics::updateFitParams(fitParams& theParamVal){
+void KPiSWaveIso12Dynamics::updateFitParams(fitParams& theParamVal){
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
@@ -190,14 +190,12 @@ void KPiSWaveDynamics::updateFitParams(fitParams& theParamVal){
   }
 }
 
-void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
+void KPiSWaveIso12Dynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   if(0==theDec){
     Alert << "Can not add AbsXdecAmp; 0 pointer!!!" << endmsg;
     exit(1);
   }
   
-  //  std::string theName=_massKey+theDec->motherJPC()->name();
-  //  std::string theName=_massKey+theDec->dynKey();
   std::string theName=_massKey+theDec->massParKey();
 
   std::cout << "addGrandMa:\t" << theName << std::endl;
@@ -212,11 +210,11 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   _currentaProdMap[theName]["a_KpiPosNeg"]=1.;
   _currentaProdMap[theName]["a_KetapPosNeg"]=1.;  
 
-  _currentbProdMap[theName]["b_KpiPosNeg"]=1.;
+  _currentbProdMap[theName]["b_KpiPosNeg"]=0.5;
   _currentbProdMap[theName]["b_KetapPosNeg"]=0.5;
   
-  _currentcProdMap[theName]["c_KpiPosNeg"]=1.;
-  _currentcProdMap[theName]["c_KetapPosNeg"]=0.5;  
+  _currentcProdMap[theName]["c_KpiPosNeg"]=0.1;
+  _currentcProdMap[theName]["c_KetapPosNeg"]=0.1;  
   
   _currentphaseProdMap[theName]["KpiPhi"]=0.;
   _currentphaseProdMap[theName]["KetapPhi"]=0.;
@@ -240,7 +238,7 @@ void KPiSWaveDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   _recalcMap[theName]=true;
 }
 
-const std::string& KPiSWaveDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
+const std::string& KPiSWaveIso12Dynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   if(0==grandmaAmp) return _grandmaKey;
   //  return grandmaAmp->absDec()->dynKey();
   return grandmaAmp->absDec()->massParKey();

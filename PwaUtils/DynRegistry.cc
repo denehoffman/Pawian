@@ -10,7 +10,8 @@
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/BreitWignerDynamics.hh"
 #include "PwaUtils/FlatteDynamics.hh"
-#include "PwaUtils/KPiSWaveDynamics.hh"
+#include "PwaUtils/KPiSWaveIso12Dynamics.hh"
+#include "PwaUtils/KPiSWaveIso32Dynamics.hh"
 #include "PwaUtils/WoDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -52,8 +53,10 @@ boost::shared_ptr<AbsDynamics> DynRegistry::getDynamics(boost::shared_ptr<AbsDec
     	result= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="Flatte")
     	result= boost::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
-      else if(theDec->dynType()=="KpiSWave")
-	result= boost::shared_ptr<AbsDynamics>(new KPiSWaveDynamics(theName, fsParticles, theDec->motherPart()));
+      else if(theDec->dynType()=="KpiSWaveIso12")
+	result= boost::shared_ptr<AbsDynamics>(new KPiSWaveIso12Dynamics(theName, fsParticles, theDec->motherPart()));
+      else if(theDec->dynType()=="KpiSWaveIso32")
+	result= boost::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="WoDynamics") result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
     	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;

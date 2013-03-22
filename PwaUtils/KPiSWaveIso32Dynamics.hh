@@ -1,4 +1,4 @@
-// KPiSWaveDynamics class definition file. -*- C++ -*-
+// KPiSWaveIso32Dynamics class definition file. -*- C++ -*-
 // Copyright 2013 Bertram Kopf
 
 #pragma once
@@ -17,11 +17,11 @@ class KMatrixKPiSFocus;
 class FVector;
 class PVectorKPiSFocus;
 
-class KPiSWaveDynamics : public AbsDynamics{
+class KPiSWaveIso32Dynamics : public AbsDynamics{
 
 public:
-  KPiSWaveDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
-  virtual ~KPiSWaveDynamics();
+  KPiSWaveIso32Dynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
+  virtual ~KPiSWaveIso32Dynamics();
 
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
@@ -41,7 +41,7 @@ protected:
   std::map<std::string, boost::shared_ptr<FVector> > _fVecMap;
   std::map<std::string, boost::shared_ptr<PVectorKPiSFocus> > _pVecMap;
 
-  std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
+  //  std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
   std::map<std::string, std::map<std::string, double> > _currentaProdMap; 
   std::map<std::string, std::map<std::string, double> > _currentbProdMap; 
   std::map<std::string, std::map<std::string, double> > _currentcProdMap;
