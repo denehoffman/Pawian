@@ -58,7 +58,6 @@ void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
    for (unsigned int i=minEvent; i<=maxEvent; ++i){
       EvtData* currentEvtData=_evtDataVec[i];
       double intensity=calcEvtIntensity(currentEvtData, theParamVal);
-      if(_usePhasespace) intensity+=theParamVal.otherParams[_phasespaceKey];
       logLH_data+=(currentEvtData->evtWeight)*log(intensity);
       weightSum+= currentEvtData->evtWeight;
    }
@@ -74,7 +73,6 @@ void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
    for (unsigned int i=minEvent; i<=maxEvent; ++i){
       EvtData* currentEvtData=_evtMCVec[i];
       double intensity=calcEvtIntensity(currentEvtData, theParamVal);
-      if(_usePhasespace) intensity+=theParamVal.otherParams[_phasespaceKey];
       lh_mc+=intensity;
    }
 }

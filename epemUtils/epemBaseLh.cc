@@ -68,29 +68,28 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
   for (int lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
  
-  complex<double> lamp1Amp(0.,0.);
-
-  std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
-
-  for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-    complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
-    lamp1Amp+=currentDecAmp;
+    complex<double> lamp1Amp(0.,0.);
+    
+    std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+    
+    for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
+      complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
+      lamp1Amp+=currentDecAmp;
+    }
+    
+    
+    complex<double> lamm1Amp(0.,0.);
+    for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
+      complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
+      lamm1Amp+=currentDecAmp;
+    }
+    
+    result += norm(lamp1Amp) + norm(lamm1Amp);
   }
   
-
- complex<double> lamm1Amp(0.,0.);
- for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-   complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
-   lamm1Amp+=currentDecAmp;
- }
-
-  result += norm(lamp1Amp) + norm(lamm1Amp); 
-
-  }
-
-
+  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey]; 
   return result;  
-
+  
 }
 
 void epemBaseLh::print(std::ostream& os) const{

@@ -198,10 +198,9 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
   result += norm(singletAmp)+ norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp); 
-
   }
 
-
+  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
   return result;  
 
 }
