@@ -11,6 +11,7 @@ Meson sigma 		\sigma  		0  0  1  1  1  	0  0  0  0 	1.000 	0.6000 	relBW	[PDG f_
 Meson omega 		\omega  		0  2 -1 -1 -1   0  0  0  0 	0.7825  0.0700 	relBW	[PDG nonett 1^3S_1]
 Meson xomeg 		\omega^{\prime}  	0  2 -1 -1 -1   0  0  0  0 	0.7825 	0.0700 	relBW	[PDG nonett 1^3S_1]
 Meson eta' 		\eta^{\prime}  		0  0 -1  1  1  	0  0  0  0 	0.957 	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pipiS 		\pi\piS  		0  0  1  1  1   0  0  0  0 	1. 	1. 	relBW	[PDG no idea]
 Meson f0(980) 		f_0(980)  		0  0  1  1  1   0  0  0  0 	0.980 	0.0500 	relBW	[PDG K\bar{K} molecule candidate]
 Meson phi 		\phi  			0  2 -1 -1 -1   0  0  0  0 	1.019 	0.0040 	relBW	[PDG nonett 1^3S_1]
 Meson h1(1170) 		h_1(1170)  		0  2  1 -1 -1  	0  0  0  0 	1.170 	0.3600 	relBW	[PDG nonett 1^3S_1]
