@@ -194,6 +194,7 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
+    Info << "No of fit events: " << itMassMap->second->Integral(); // << endmsg;
   }
 
   std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
