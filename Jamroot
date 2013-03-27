@@ -42,4 +42,5 @@ build-project pbarpUtils ;
 build-project epemUtils ;
 build-project Particle ;
 build-project Event ;
+build-project PspGen ;
 build-project Examples ;
