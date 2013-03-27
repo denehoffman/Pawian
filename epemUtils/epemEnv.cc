@@ -117,7 +117,8 @@ void epemEnv::setup(epemParser* theEpEmParser){
       std::string toFind=particleStr+"To";
       size_t found;
       found = theDecName.find(toFind);
-      if (found!=string::npos){
+
+      if (found!=string::npos && found==0){
 	(*itDec)->enableDynamics(dynStr, additionalStringVec);
       }
     }
