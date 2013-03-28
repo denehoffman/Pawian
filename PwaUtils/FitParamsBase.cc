@@ -125,9 +125,9 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
 	valMax=4.*M_PI;
       }
       else{
-	valMin=theStartVal-3.*theErrVal;
+	valMin=theStartVal-6.*theErrVal;
 	if (valMin<0.) valMin=0.;
-	valMax=theStartVal+3.*theErrVal;
+	valMax=theStartVal+6.*theErrVal;
       }
       
       upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
@@ -162,9 +162,9 @@ void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& sta
 	valMax=4.*M_PI;
       }
       else{
-	valMin=theStartVal-3.*theErrVal;
+	valMin=theStartVal-6.*theErrVal;
 	if (valMin<0.) valMin=0.;
-	valMax=theStartVal+3.*theErrVal;
+	valMax=theStartVal+6.*theErrVal;
       }      
 
       upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
@@ -183,10 +183,10 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
     double theErrVal=errDoubleMap[it->first];
     if (theErrVal<=0.) theErrVal=0.1;
     
-    double minVal=theStartVal-5.*theErrVal;
+    double minVal=theStartVal-6.*theErrVal;
     if (minVal<0.) minVal=0.;
     
-    double maxVal=theStartVal+5.*theErrVal;
+    double maxVal=theStartVal+6.*theErrVal;
 
     // for complex fit parameter; phi component; quick workaround
     if(theName.size()>9){
@@ -199,8 +199,8 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
     // for parameter where pos and neg values are allowed
     if(theName.size()>12){
       if (theName.compare(theName.size()-11, theName.size(), "PosNegOther")==0){
-	minVal = -fabs(theStartVal)-5.*theErrVal;
-	maxVal = fabs(theStartVal)+5.*theErrVal;;	    
+	minVal = -fabs(theStartVal)-6.*theErrVal;
+	maxVal = fabs(theStartVal)+6.*theErrVal;;
       }
     }
 

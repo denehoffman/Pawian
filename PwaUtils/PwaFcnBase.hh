@@ -13,6 +13,7 @@
 #include "Minuit2/MnUserParameters.h"
 
 class AbsLh;
+class NetworkServer;
 
 namespace ROOT {
   namespace Minuit2 {
@@ -25,14 +26,17 @@ namespace ROOT {
 
       double operator()(const std::vector<double>& par) const;
       double Up() const;
+      void SetServerMode(boost::shared_ptr<NetworkServer> networkServerPtr);
 
     private:
       boost::shared_ptr<AbsLh> _absLhPtr;
       boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
+      boost::shared_ptr<NetworkServer> _networkServerPtr;
       mutable unsigned int _fcnCounter;
       fitParams _defaultFitValParms;
       fitParams _defaultFitErrParms;
       std::string _currentResFileName;
+      bool _serverMode;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

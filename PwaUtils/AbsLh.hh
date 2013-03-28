@@ -16,7 +16,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 
 
-struct ThreadData{
+struct LHData{
    double weightSum;
    double logLH_data;
    double LH_mc;
@@ -33,6 +33,9 @@ public:
   virtual AbsLh* clone_() const = 0;
 
   virtual double calcLogLh(fitParams& theParamVal);
+  virtual double mergeLogLhData(LHData& theLHData);
+  virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData,
+				   std::vector<double>& eventLimits);
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;
   virtual boost::shared_ptr<const EvtDataBaseList> getEventList() const {
     return _evtListPtr;

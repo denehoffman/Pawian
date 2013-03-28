@@ -43,11 +43,14 @@ public:
   const std::string fitParamFile() const {return _paramFile;}
   const std::string serializationFile() const{ return _serializationFile; }
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
+  const std::string serverAddress() const {return _serverAddress;}
   const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
   const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; } 
   const int noOfThreads() const {return _noOfThreads;}
+  const int noOfClients() const {return _noOfClients;}
+  const int serverPort() const {return _serverPort;}
   const int ratioMcToData() const {return _ratioMcToData;}
   const bool cacheAmps() const {return _cacheAmps;}
   const bool useEvtWeight() const {return _useEvtWeight; }
@@ -78,10 +81,13 @@ protected:
   std::string _startHypo;
   std::string _mode;		  
   std::string _outputFileNameSuffix;
+  std::string _serverAddress;
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
   bool _verbose;
   int _noOfThreads;
+  int _noOfClients;
+  int _serverPort;
   int _ratioMcToData;
   bool _cacheAmps;
   std::string _strErrLogMode;

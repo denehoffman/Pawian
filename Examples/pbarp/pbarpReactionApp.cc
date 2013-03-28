@@ -33,6 +33,9 @@
 #include "pbarpUtils/spinDensityHist.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
+#include "PwaUtils/NetworkServer.hh"
+#include "PwaUtils/NetworkClient.hh"
+#include "PwaUtils/WelcomeScreen.hh"
 
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
@@ -48,6 +51,8 @@ int main(int __argc,char *__argv[]){
   clock_t start, end;
   start= clock();
 
+  Info << welcomeScreen << endmsg;
+
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);
 
@@ -57,11 +62,6 @@ int main(int __argc,char *__argv[]){
   // Set the desired error logging mode
   setErrLogMode(theAppParams->getErrLogMode());
   
-#ifdef _OPENMP
-  const int noOfThreads=theAppParams->noOfThreads();
-  omp_set_num_threads(noOfThreads);
-#endif
-
 
   pbarpEnv::instance()->setup(theAppParams);
 
@@ -313,6 +313,109 @@ int main(int __argc,char *__argv[]){
 
     spinDensityHist theSpinDensityHists(theLhPtr, theStartparams, thePwaCovMatrix);
  }
+
+ if(mode == "server"){
+
+    std::vector<std::string>::const_iterator itFix;
+    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+       upar.Fix( (*itFix) );
+    }
+
+    boost::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+								 theAppParams->noOfClients(),
+								 pbarpEventListPtr->getDataVecs().size(),
+								 pbarpEventListPtr->getMcVecs().size()));
+    theFcn.SetServerMode(theServer);
+    theServer->WaitForFirstClientLogin();
+
+    MnMigrad migrad(theFcn, upar);
+    Info <<"start migrad "<< endmsg;
+    FunctionMinimum min = migrad();
+
+    if(!min.IsValid()) {
+      //try with higher strategy
+      Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+      MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
+      min = migrad2();
+    }
+
+    theServer->SendClosingMessage();
+    Info << "Closing server." << endmsg;
+
+    MnUserParameters finalUsrParameters=min.UserParameters();
+    const std::vector<double> finalParamVec=finalUsrParameters.Params();
+    fitParams finalFitParams=theStartparams;
+    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+    theFitParamBase->printParams(finalFitParams);
+
+    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+    fitParams finalFitErrs=theErrorparams;
+    theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
+
+    std::ostringstream finalResultname;
+    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+
+    std::ofstream theStream ( finalResultname.str().c_str() );
+    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+
+    std::cout  << min << std::endl;
+
+    std::cout << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
+    if(min.IsValid())             std::cout << "Function minimum is valid." << std::endl;
+    else                          std::cout << "*** Function minimum is invalid! ***" << std::endl;
+    if(!min.HasValidParameters()) std::cout << "hasValidParameters() returned FALSE" << std::endl;
+    if(!min.HasValidCovariance()) std::cout << "hasValidCovariance() returned FALSE" << std::endl;
+    if(!min.HasAccurateCovar())   std::cout << "hasAccurateCovar() returned FALSE" << std::endl;
+    if(!min.HasPosDefCovar())     std::cout << "hasPosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasMadePosDefCovar()) std::cout << "hasMadePosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasCovariance())      std::cout << "hasCovariance() returned FALSE" << std::endl;
+    if(min.HasReachedCallLimit()) std::cout << "hasReachedCallLimit() returned TRUE" << std::endl;
+    if(min.IsAboveMaxEdm())       std::cout << "isAboveMaxEdm() returned TRUE" << std::endl;
+    if(min.HesseFailed())         std::cout << "hesseFailed() returned TRUE" << std::endl;
+
+    MnUserCovariance theCovMatrix = min.UserCovariance();
+    std::ostringstream serializationFileName;
+    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
+    std::ofstream serializationStream(serializationFileName.str().c_str());
+    boost::archive::text_oarchive boostOutputArchive(serializationStream);
+
+    if(min.IsValid()){
+       PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
+       boostOutputArchive << thePwaCovMatrix;
+    }
+
+ }
+
+ if(mode == "client"){
+    bool cacheAmps = theAppParams->cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
+
+    std::ostringstream portStringStream;
+    portStringStream << theAppParams->serverPort();
+
+    NetworkClient theClient(theAppParams->serverAddress(), portStringStream.str());
+    if(!theClient.Login())
+       return 0;
+
+    while(true){
+
+       if(!theClient.WaitForParams())
+	  return 0;
+
+       const std::vector<double> currentParamVec=theClient.GetParams();
+       fitParams currentFitParams=theStartparams;
+       theFitParamBase->getFitParamVal(currentParamVec, currentFitParams);
+
+       LHData theLHData;
+       theLhPtr->calcLogLhDataClient(currentFitParams, theLHData, theClient.GetEventLimits());
+
+       if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
+	  return 0;
+    }
+ }
+
+ return 0;
 }     
  
   

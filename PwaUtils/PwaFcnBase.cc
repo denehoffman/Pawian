@@ -1,6 +1,3 @@
-//#include <getopt.h>
-//#include <fstream>
-//#include <string>
 #include <math.h>
 #include <stdio.h>
 #include <boost/timer/timer.hpp>
@@ -9,7 +6,7 @@
 
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/AbsLh.hh"
-// #include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/NetworkServer.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
@@ -21,6 +18,7 @@ PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitPara
   , _fitParamsBasePtr(fitParamsBase)
   , _fcnCounter(0)
   , _currentResFileName("currentResult"+suffix+".dat")
+  , _serverMode(false)
 {
    if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
    _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
@@ -33,12 +31,23 @@ PwaFcnBase::~PwaFcnBase()
 
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
+  double result=0;
 
   fitParams theFitParmValTmp=_defaultFitValParms;
 
   _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
     
-  double result=_absLhPtr->calcLogLh(theFitParmValTmp);
+  if(_serverMode){
+     LHData theLHData;
+     _networkServerPtr->BroadcastParams(par);
+     if(!_networkServerPtr->WaitForLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
+	result = 0;
+     else
+	result = _absLhPtr->mergeLogLhData(theLHData);
+  }
+  else{
+     result = _absLhPtr->calcLogLh(theFitParmValTmp);
+  }
 
   _fcnCounter++;
 
@@ -69,3 +78,9 @@ double PwaFcnBase::Up() const
 return .5;
 }
 
+
+
+void PwaFcnBase::SetServerMode(boost::shared_ptr<NetworkServer> networkServerPtr){
+   _serverMode = true;
+   _networkServerPtr = networkServerPtr;
+}
