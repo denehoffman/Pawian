@@ -1,0 +1,180 @@
+// Networking class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
+
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <iostream>
+#include <iomanip>
+
+#include "PwaUtils/NetworkServer.hh"
+#include "PwaUtils/NetworkClient.hh"
+#include "ErrLogger/ErrLogger.hh"
+
+short NetworkServer::SERVERMESSAGE_PARAMS = 1;
+short NetworkServer::SERVERMESSAGE_CLOSE = 2;
+
+
+
+NetworkServer::NetworkServer(int port, short noOfClients, int numData, int numMC) :
+     _port(port) 
+   , _timeout(10)
+   , _noOfClients(noOfClients)
+   , _firstLH(true)
+   , _numData(numData)
+   , _numMC(numMC)
+{
+   theIOService = std::shared_ptr<boost::asio::io_service>(new  boost::asio::io_service);
+   theAcceptor = std::shared_ptr<tcp::acceptor>(new tcp::acceptor(*theIOService, tcp::endpoint(tcp::v4(), _port)));
+   theDeadlineTimer = std::shared_ptr<boost::asio::deadline_timer>(new boost::asio::deadline_timer(*theIOService));
+
+   for(int i=0; i<_noOfClients; i++){
+      theStreams.push_back( std::shared_ptr<tcp::iostream>(new tcp::iostream) );
+   }
+
+   Info << "************* Server mode ****************" << endmsg;
+   Info << "Listening on port " << port << endmsg;
+}
+
+
+
+bool NetworkServer::WaitForFirstClientLogin(){
+   
+   Info << "Waiting for " << _noOfClients << " clients ..." << endmsg;
+
+   for(int i=0; i<_noOfClients; i++){
+
+      theAcceptor->accept(*(theStreams.at(i)->rdbuf()));
+
+      int eventStepData = (int)((double)_numData / (double)_noOfClients);
+      int firstDataEvent = i*eventStepData;
+      int lastDataEvent = (i+1)*eventStepData - 1;
+      
+      int eventStepMC = (int)((double)_numMC / (double)_noOfClients);
+      int firstMcEvent = i*eventStepMC;
+      int lastMcEvent = (i+1)*eventStepMC - 1;
+
+      if(i == (_noOfClients - 1)){
+	 lastDataEvent = _numData - 1;
+	 lastMcEvent = _numMC - 1;
+      }
+
+      short connectionPurpose;
+      *theStreams.at(i) >> connectionPurpose;
+
+      if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
+	 Alert << "ERROR: Client did not login" << endmsg;
+	 return false;
+      }
+
+      std::string nodeName;
+      *theStreams.at(i) >> nodeName;
+
+      Info << "Client " << nodeName << " logged in." << endmsg;
+      *theStreams.at(i) << firstDataEvent << "\n" << lastDataEvent << "\n" 
+			<< firstMcEvent << "\n" << lastMcEvent << "\n"; 
+   }
+
+   Info << "All clients ready." << endmsg;
+ 
+   return true;
+}
+
+
+
+void NetworkServer::AcceptHandler(const boost::system::error_code& err){
+
+   theDeadlineTimer->cancel();
+   theAcceptor->cancel();   
+}
+
+
+
+void NetworkServer::Timeout(const boost::system::error_code& err){
+
+   if (err != boost::asio::error::operation_aborted){
+      Alert << "Timeout" << endmsg;
+      theAcceptor->cancel();
+   }
+}
+
+
+
+bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc){
+
+   for(int i=0; i<_noOfClients; i++){
+
+      if(_firstLH){
+	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(300));
+	 _firstLH=false;
+      }
+      else{
+	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(_timeout));
+      }
+
+      theDeadlineTimer->async_wait(boost::bind(&NetworkServer::Timeout, this 
+					       ,boost::asio::placeholders::error ));
+      theAcceptor->async_accept(*(theStreams.at(i)->rdbuf()),
+				boost::bind(&NetworkServer::AcceptHandler, this,
+					    boost::asio::placeholders::error));
+      theIOService->run();
+      theIOService->reset();         
+
+      short connectionPurpose;
+      *theStreams.at(i) >> connectionPurpose;
+
+      if(connectionPurpose == NetworkClient::CLIENTMESSAGE_LOGIN){
+	 Alert << "Client tried to login too late." << endmsg;
+	 theStreams.at(i)->close();
+	 i--;
+	 continue;
+      }
+      else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LH){
+	 Alert << "Protocoll error in WaitForLH()" << endmsg;
+	 return false;
+      }
+
+      double tempData, tempMc, tempWeightSum;
+      *theStreams.at(i) >> tempData >> tempWeightSum >> tempMc;
+
+      llh_data += tempData;
+      lh_mc += tempMc;
+      weightSum += tempWeightSum;      
+   }
+
+   return true;
+}
+
+
+
+void NetworkServer::SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par){
+   
+   *destinationStream << NetworkServer::SERVERMESSAGE_PARAMS << "\n";
+   *destinationStream << par.size() << "\n";
+
+   for(auto it = par.begin(); it != par.end(); ++it){
+      *destinationStream << std::setprecision(16) << *it << "\n";
+   }
+
+   destinationStream->flush();
+   destinationStream->close();
+}
+
+
+
+void NetworkServer::BroadcastParams(const std::vector<double>& par){
+   
+   for(auto it = theStreams.begin(); it != theStreams.end(); ++it){
+      SendParams(*it, par);
+   }
+}
+
+
+
+void NetworkServer::SendClosingMessage(){
+
+   for(auto it = theStreams.begin(); it != theStreams.end(); ++it){
+      **it << NetworkServer::SERVERMESSAGE_CLOSE << "\n";
+      (*it)->flush();
+      (*it)->close();
+   }
+}
