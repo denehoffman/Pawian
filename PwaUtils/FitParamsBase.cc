@@ -24,6 +24,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 #include "PwaUtils/FitParamsBase.hh"
 //#include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -91,6 +92,7 @@ void FitParamsBase::printParams(fitParams& theParams){
 
 void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs){
 
+  os << std::setprecision(16);
   dumpLamLamParams(os, theVals.MagLamLams, theErrs.MagLamLams, _magSuffix);
   dumpLamLamParams(os, theVals.PhiLamLams, theErrs.PhiLamLams, _phiSuffix);
 
