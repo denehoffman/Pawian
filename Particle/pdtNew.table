@@ -67,11 +67,13 @@ Meson f2Hat(1800) 	\hat{f}_2(1800)  	0  4  1 -1  1   0  0  0  0 	1.800 	0.3000 	
 #
 # type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass    width   dyn.f   comment
 #
-Meson pion 		\pi  			0  0 -1  1 -1   1  0  0  0 	0.139 	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pion 		\pi  			0  0 -1  1 -1	1  0  0  0 	0.139 	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion0 		\pi^0  			0  0 -1  1 -1   1  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson pion+ 		\pi^+  			3  0 -1	 1 -1   1  1  0	 +1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson pion- 		\pi^-  			-3 0 -1	 1 -1   1  -1 0	 -1 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson rho 		\rho  			0  2 -1 -1  1   1  0  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
+Meson pion+ 		\pi^+  			3  0 -1	 0 -1   1  1  0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pion- 		\pi^-  			-3 0 -1	 0 -1   1  -1 0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson rho0 		\rho0  			0  2 -1	 -1 1   1  0  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
+Meson rho+ 		\rho+  			3  2 -1	 0  1   1  1  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
+Meson rho- 		\rho-  			-3 2 -1	 0  1   1  -1 0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
 Meson a0(980) 		a_0(980)  		0  0  1  1 -1   1  0  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
 Meson a0(980)+ 		a_0(980)^+  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
 Meson a0(980)- 		a_0(980)^-  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]

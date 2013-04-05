@@ -58,6 +58,13 @@ epemEnv::~epemEnv(){
 void epemEnv::setup(epemParser* theEpEmParser){
  
   AbsEnv::setup(theEpEmParser);
+
+  
+_cmsMass=theEpEmParser->cmsMass();
+
+  // has to be set via parser !!!!
+  double totalyMom=0.04;
+  _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
   
   std::vector<std::string>::const_iterator itStr;
 
@@ -225,7 +232,6 @@ void epemEnv::setup(epemParser* theEpEmParser){
   }
 
 
-  _cmsMass=theEpEmParser->cmsMass();
 }
 
 

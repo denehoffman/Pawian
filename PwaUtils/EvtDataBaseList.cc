@@ -49,7 +49,6 @@ EvtDataBaseList::EvtDataBaseList(AbsEnv* theEnv) :
   _noOfWeightedMcEvts(0.),
   _mcToDataRatio(1000),
   _alreadyRead(false),
-  _evtNoAll(0),
   _absEnv(theEnv)
 {
 }
@@ -64,15 +63,15 @@ void EvtDataBaseList::read(EventList& evtListData, EventList& evtListMc){
    Alert << "4 vectors already read " << endmsg;  // << endmsg;
     exit(1);
   }
-  read4Vecs(evtListData, _evtDataList, _noOfWeightedDataEvts, evtListData.size());
+  read4Vecs(evtListData, _evtDataList, _noOfWeightedDataEvts, evtListData.size(), 0 );
 
   int maxMcEvts=evtListMc.size();
   if (maxMcEvts > _mcToDataRatio*evtListData.size() ) maxMcEvts=_mcToDataRatio*evtListData.size();
-  read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, maxMcEvts);
+  read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, maxMcEvts, evtListData.size());
   _alreadyRead=true;
 }
 
-void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts){
+void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo){
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
@@ -137,12 +136,11 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     }; 
 
     evtData->evtWeight=anEvent->Weight();
-    evtData->evtNo=_evtNoAll;
+    evtData->evtNo=startNo+evtCount;
     theEvtList.push_back(evtData);
     
     evtWeightSum += anEvent->Weight();    
     ++evtCount;
-    ++_evtNoAll;
   }
 }
 

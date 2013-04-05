@@ -65,7 +65,8 @@ public:
   bool useMassRange() {return _useMassRange;}
   double massRangeMin() {return _massMin;}
   double massRangeMax() {return _massMax;}
-  std::vector<unsigned int>& particleIndicesMassRange() {return _particleIndicesMassRange;} 
+  std::vector<unsigned int>& particleIndicesMassRange() {return _particleIndicesMassRange;}
+  Vector4<double>&  initial4Vec() {return _initial4Vec;} 
   ParserBase* parser() {return _theParser;}
 
 protected:  
@@ -87,5 +88,6 @@ protected:
   double _massMax;
   std::vector<unsigned int> _particleIndicesMassRange;
   std::vector<boost::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
+  Vector4<double> _initial4Vec;
   ParserBase* _theParser;
 };

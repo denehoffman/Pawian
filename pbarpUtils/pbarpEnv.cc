@@ -65,6 +65,10 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   //Antiproton momentum
   _pbarMomentum = thePbarpParser->getpbarMomentum();
 
+  double pMass=_particleTable->particle("proton")->mass();
+  double antipMass=_particleTable->particle("antiproton")->mass();
+  _initial4Vec = Vector4<double>(pMass+sqrt(antipMass*antipMass+_pbarMomentum*_pbarMomentum), 0., 0., _pbarMomentum);
+
   //Lmax
   _lmax=thePbarpParser->getLMax();
 
