@@ -73,4 +73,5 @@ protected:
   TH1F* inv01MassH1;
   TH1F* inv02MassH1;
   TH1F* inv12MassH1;
+  bool _genWithModel;
 };

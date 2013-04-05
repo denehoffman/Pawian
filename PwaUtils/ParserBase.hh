@@ -91,6 +91,10 @@ public:
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
   const std::string& massRange() const { return _massRange;} 
   const std::vector<std::string>& histAngleNames2D() const { return _histAngles2D;}
+
+  const int randomSeed() const {return _randomSeed;}
+  const bool generateWithModel() const {return _genWithModel;}
+  const int noOfGenEvts() const {return _noOfGenEvts;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -132,4 +136,8 @@ protected:
   std::vector<std::string> _histAngles;
   std::string  _massRange;
   std::vector<std::string> _histAngles2D;
+  int _randomSeed;
+  bool _genWithModel;
+  int _noOfGenEvts;
+
 };

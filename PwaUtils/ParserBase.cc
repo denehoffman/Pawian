@@ -56,6 +56,9 @@ ParserBase::ParserBase(int argc,char **argv)
       ,_usePhaseSpaceHyp(false)
       ,_pdgTableFile("/Particle/pdtNew.table")
       ,_productionFormalism("Cano")
+      ,_randomSeed(44123)
+      ,_genWithModel(true)
+      ,_noOfGenEvts(10000)
      {
        string strErrLogMode="debug";
     // Check the command line options. Uses the Boost program options library.
@@ -108,6 +111,9 @@ ParserBase::ParserBase(int argc,char **argv)
       ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
       ("massRange",po::value< string >(&_massRange), "mass Range min max particle1 particle2 ...")
       ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
+      ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
+      ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
+      ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
       ;
 
 
@@ -266,6 +272,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_histAngles2D.begin(); it!=_histAngles2D.end();++it){
 	std::cout << (*it) << "\n";
       }
+      std::cout << "\nrandom seed:\t" << _randomSeed << std::endl;
+      std::cout << "\ngenerate with model:\t" << _genWithModel << std::endl;
+      std::cout << "\nnumber of generated events:\t" << _noOfGenEvts << std::endl;
 
     }
     

@@ -34,6 +34,7 @@
 #include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/ParserBase.hh"
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Particle/Particle.hh"
@@ -56,11 +57,13 @@ PwaGen::PwaGen(AbsEnv* theEnv) :
   ,_initial4Vec(EvtVector4R(theEnv->initial4Vec().E(), theEnv->initial4Vec().Px(), theEnv->initial4Vec().Py(), theEnv->initial4Vec().Pz()))
   ,_finalStateParticles(theEnv->finalStateParticles())
   ,_stream(new std::ofstream("evtGen.dat"))
+  ,_genWithModel(true)
 {
   _theTFile=new TFile("EvtGen.root","recreate");
   inv01MassH1=new TH1F("inv01MassH1","inv01MassH1",500, 0., 3.);
   inv02MassH1=new TH1F("inv02MassH1","inv02MassH1",500, 0., 3.);
-  inv12MassH1=new TH1F("inv12MassH1","inv12MassH1",500, 0., 3.);  
+  inv12MassH1=new TH1F("inv12MassH1","inv12MassH1",500, 0., 3.);
+  _genWithModel=theEnv->parser()->generateWithModel();  
 }
 
 PwaGen::~PwaGen()
@@ -79,91 +82,121 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     counterFsp++;
   }
 
-  EvtSimpleRandomEngine myRandom(4701);
+  EvtSimpleRandomEngine myRandom(_absEnv->parser()->randomSeed());
   EvtRandom::setRandomEngine(&myRandom);
-  EventList currentEvtList;
-  for (int count = 0; count < 100000; count++){
-    //    std::cout << "Event #" << count << std::endl;
-    EvtVector4R p4[_finalStateParticles.size()];
-    EvtGenKine::PhaseSpace(_finalStateParticles.size(), mass, p4, _initial4Vec.mass());
-    for(int t=0; t<_finalStateParticles.size(); ++t){
-      p4[t].applyBoostTo(_initial4Vec);
+  bool generateEvents=true;
+  int noOfAcceptedEvts=0;
+  int noOfEvtsToGenerate=_absEnv->parser()->noOfGenEvts();
+  int noOfAllGenEvts=0;
+  int noOfIterations=0;
+
+  while(generateEvents){
+    noOfIterations++;
+
+    EventList currentEvtList;
+    for (int count = 0; count < 100000; count++){
+      noOfAllGenEvts++;
+      EvtVector4R p4[_finalStateParticles.size()];
+      EvtGenKine::PhaseSpace(_finalStateParticles.size(), mass, p4, _initial4Vec.mass());
+      for(unsigned int t=0; t<_finalStateParticles.size(); ++t){
+	p4[t].applyBoostTo(_initial4Vec);
+      }
+      //    dumpAscii(p4);
+      addEvt(currentEvtList, p4, count);
+      
+      //    EvtData* theData
+      inv01MassH1->Fill((p4[0]+p4[1]).mass());
+      inv02MassH1->Fill((p4[0]+p4[2]).mass());
+      inv12MassH1->Fill((p4[1]+p4[2]).mass());
     }
-    //    dumpAscii(p4);
-    addEvt(currentEvtList, p4, count);
-
-    //    EvtData* theData
-    inv01MassH1->Fill((p4[0]+p4[1]).mass());
-    inv02MassH1->Fill((p4[0]+p4[2]).mass());
-    inv12MassH1->Fill((p4[1]+p4[2]).mass());
-  }
-
-  currentEvtList.rewind();
-
-  Event* anEvent;
-  int evtCount = 0;
-  while ((anEvent = currentEvtList.nextEvent()) != 0 && evtCount < 10) {
-    Info        << "\n";
-    for(int i=0; i<_finalStateParticles.size(); ++i){
-      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
+    
+    currentEvtList.rewind();
+    
+    Event* anEvent;
+    int evtCount = 0;
+    while ((anEvent = currentEvtList.nextEvent()) != 0 && evtCount < 10) {
+      Info        << "\n";
+      for(unsigned int i=0; i<_finalStateParticles.size(); ++i){
+	Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
+      }
+      Info        << "\n" << endmsg;
+      ;  // << endmsg;
+      ++evtCount;
     }
-    Info        << "\n" << endmsg;
-    ;  // << endmsg;
-    ++evtCount;
-  }
+    
+    currentEvtList.rewind();
+    std::cout << "currentEvtList.size():\t" << currentEvtList.size() << std::endl;
+    
+    boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(_absEnv));
+    
+    std::vector<EvtData*> dataList;
+    double evtWeightSum=0.;
+    eventListPtr->read4Vecs(currentEvtList, dataList, evtWeightSum, 100000, noOfAllGenEvts-100000); 
+    
+    std::cout << "dataList.size():\t" <<  dataList.size() << std::endl;
+    
+    theLh->updateFitParams(theFitParams);
+    std::vector<EvtData*>::const_iterator itEvt;
+ 
+   if(!_genWithModel){
+      itEvt=dataList.begin();
+      while(itEvt!=dataList.end()){
+	dumpAscii(*itEvt);
+	noOfAcceptedEvts++;
+	if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	  generateEvents=false;
+	  break;
+	}
+	++itEvt;
+      }
+    }
+   else{ //generate with model    
+     //fit retrieve maxFitWeight
+     double maxFitWeight=0.;
+     itEvt=dataList.begin();
+     while(itEvt!=dataList.end())
+       {
+	 double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
+	 std::cout << (*itEvt)->evtNo <<  "\tfitWeight:\t" << fitWeight << std::endl;
+	 if (maxFitWeight< fitWeight) maxFitWeight=fitWeight;
+	 ++itEvt;
+       }
+     
+     itEvt=dataList.begin();
+     while(itEvt!=dataList.end())
+       {
+	 double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
+	 double randWeight = EvtRandom::Flat( 0., maxFitWeight );
+	 if ( randWeight < fitWeight ){
+	   dumpAscii(*itEvt);
+	   noOfAcceptedEvts++;
+	   if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	     generateEvents=false;
+	     break;
+	   }
+	 }
+	 ++itEvt;
+       }
+     
+   }
+   Info << "iteration:\t" << noOfIterations << "\tnoOfAcceptedEvts:\t" << noOfAcceptedEvts << endmsg;
+
+   //delete content of data list
+   for(itEvt=dataList.begin(); itEvt!=dataList.end(); ++itEvt) delete (*itEvt); 
+  }  
   
-  currentEvtList.rewind();
-  std::cout << "currentEvtList.size():\t" << currentEvtList.size() << std::endl;
-
-  //  EventList mcDummyEvtList;
-  boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(_absEnv));
-
-  std::vector<EvtData*> dataList;
-  double evtWeightSum=0.;
-  eventListPtr->read4Vecs(currentEvtList, dataList, evtWeightSum, 100000, 0); 
-
-  std::cout << "dataList.size():\t" <<  dataList.size() << std::endl;
-
-  theLh->updateFitParams(theFitParams);
-
-  //fit retrieve maxFitWeight
-  double maxFitWeight=0.; 
-  std::vector<EvtData*>::const_iterator itEvt=dataList.begin();
-  while(itEvt!=dataList.end())
-    {
-      double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
-      std::cout << (*itEvt)->evtNo <<  "\tfitWeight:\t" << fitWeight << std::endl;
-      if (maxFitWeight< fitWeight) maxFitWeight=fitWeight;
-       ++itEvt;
-    }
-
-  itEvt=dataList.begin();
-  while(itEvt!=dataList.end())
-    {
-      double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
-      double randWeight = EvtRandom::Flat( 0., maxFitWeight );
-      if ( randWeight < fitWeight ) dumpAscii(*itEvt);
-      ++itEvt;
-    }  
-
-  //  theStream.close();
 }
 
 void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber){
   Event* newEvent = new Event();
   newEvent->addWeight(1.);
-  for(int t=0; t<_finalStateParticles.size(); ++t){
+  for(unsigned int t=0; t<_finalStateParticles.size(); ++t){
     newEvent->addParticle(evt4Vec4Rs[t].get(0), evt4Vec4Rs[t].get(1), evt4Vec4Rs[t].get(2), evt4Vec4Rs[t].get(3));
   }
 
   evtList.add(newEvent);
 }
 
-// void PwaGen::dumpAscii(EvtVector4R* evt4Vec4R){
-//   for(int t=0; t<_finalStateParticles.size(); ++t){
-//     *_stream << std::setprecision(8)  << evt4Vec4R[t].get(1) << "\t" << evt4Vec4R[t].get(2) << "\t" << evt4Vec4R[t].get(3) << "\t" << evt4Vec4R[t].get(0) << std::endl;
-//   }
-// }
 
 void PwaGen::dumpAscii(EvtData* evtData){
   std::vector<Particle* > fsParticles = _absEnv->finalStateParticles();
