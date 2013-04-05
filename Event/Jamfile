@@ -8,5 +8,4 @@ lib Event :
 	: 
 	: <library>$(TOP)//HepMc ;
 
-exe EvtReaderTestApp : EvtReaderTestApp.cc Event : ;
 exe HepMCEvtReaderTestApp : HepMCEvtReaderTestApp.cc Event : ;

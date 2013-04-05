@@ -49,7 +49,10 @@
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "pbarpUtils/pbarpHeliLh.hh"
 #include "pbarpUtils/pbarpCanoLh.hh"
+
+#include "Event/EventReaderDefault.hh"
 #include "pbarpUtils/pbarpEvtReader.hh"
+
 #include "PwaUtils/EvtDataBaseList.hh"
 //#include "pbarpUtils/pbarpEventList.hh"
 #include "pbarpUtils/pbarpHist.hh"
@@ -117,7 +120,10 @@ int main(int __argc,char *__argv[]){
 
   
   int noFinalStateParticles=pbarpEnv::instance()->noFinalStateParticles();  
-  pbarpEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+  //  pbarpEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+  EventReaderDefault eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+  eventReaderData.setUnit(theAppParams->unitInFile());
+  eventReaderData.setOrder(theAppParams->orderInFile());
 
   EventList eventsData;
   eventReaderData.fillAll(eventsData);
@@ -139,7 +145,10 @@ int main(int __argc,char *__argv[]){
   }
   eventsData.rewind();
 
-  pbarpEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, false);
+  //  pbarpEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, false);
+  EventReaderDefault eventReaderMc(mcFileNames, noFinalStateParticles, 0, false);
+  eventReaderMc.setUnit(theAppParams->unitInFile());
+  eventReaderMc.setOrder(theAppParams->orderInFile());
 
   EventList mcData;
   eventReaderMc.fillAll(mcData);

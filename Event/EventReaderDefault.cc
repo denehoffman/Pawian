@@ -21,22 +21,33 @@
 //									  //
 //************************************************************************//
 
-#include "Event/CBElsaReader.hh"
+// EventReaderDefault class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
+#include "Event/EventReaderDefault.hh"
 
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-CBElsaReader::CBElsaReader()
+EventReaderDefault::EventReaderDefault() :
+  _unit("GEV"),
+  _order("Px Py Pz E"),
+  _unitScaleFactor(1.),
+  _energyFirst(false)
 {}
 
-CBElsaReader::CBElsaReader(const std::vector<std::string>& files, int particles, int skip, bool useWeight):
-  EventReader(useWeight), 
+EventReaderDefault::EventReaderDefault(const std::vector<std::string>& files, int particles, int skip, bool useWeight):
+  EventReader(useWeight),
   numParticles(particles),
-  linesToSkip(skip)
+  linesToSkip(skip),
+  _unit("GEV"),
+  _order("Px Py Pz E"),
+  _unitScaleFactor(1.),
+  _energyFirst(false)
 {
   if (0 == files.size()) {
-    Alert << "empty list of event files" << endmsg;
+    Alert << "empty list of event files" ;  // << endmsg;
     exit(1);
   }
   std::vector<std::string>::const_iterator iter = files.begin();
@@ -45,16 +56,16 @@ CBElsaReader::CBElsaReader(const std::vector<std::string>& files, int particles,
   currentFile = fileNames.begin();
 }
 
-CBElsaReader::~CBElsaReader()
+EventReaderDefault::~EventReaderDefault()
 {}
 
-bool CBElsaReader::fillAll(EventList& evtList)
+bool EventReaderDefault::fillAll(EventList& evtList)
 {
   
   while (currentFile != fileNames.end()) {
     currentStream.open(currentFile->c_str());
     if (!currentStream) {
-      Alert << "can not open " << *currentFile << endmsg;
+      Alert << "can not open " << *currentFile ;  // << endmsg;
       exit(1);
     }
 
@@ -68,17 +79,27 @@ bool CBElsaReader::fillAll(EventList& evtList)
          double weight;
          currentStream >> weight;
          newEvent->addWeight(weight);
-      }
+      }      
 
+      Vector4<double> fvX(0,0,0,0); //X four-vector
       for (parts = 0; parts < numParticles; parts++) {
-	currentStream >> e >> px >> py >> pz;
-	newEvent->addParticle(e*1.e-3,px*1.e-3,py*1.e-3,pz*1.e-3);
-      }
+	if(_energyFirst) currentStream >> e >> px >> py >> pz; 
+	else currentStream >> px >> py >> pz >> e;
 
+        newEvent->addParticle(e/_unitScaleFactor, px/_unitScaleFactor, py/_unitScaleFactor, pz/_unitScaleFactor);
+	Vector4<double> tmp = newEvent->p4(parts);
+	if(isMassrangeParticle(parts)) fvX= fvX+tmp;
+      }
+      
+      if(_useMassRange){
+	if(fvX.Mass()<_massMin || fvX.Mass()>_massMax  ) continue;
+      }
+      
       if (!currentStream.fail()) {
 	evtList.add(newEvent);
 	for (parts = 0; parts < linesToSkip; parts++)
-	  currentStream >> e >> px >> py >> pz;
+	  if(_energyFirst) currentStream >> e >> px >> py >> pz; 
+	  else currentStream >> px >> py >> pz >> e;
       }
     }
     currentStream.close();
@@ -89,5 +110,31 @@ bool CBElsaReader::fillAll(EventList& evtList)
   return true; // success
 }
 
+void EventReaderDefault::setUnit(const std::string& theUnit){
+  _unit=theUnit;
+  if(_unit=="GEV"){
+    _unitScaleFactor=1.;
+  }
+  else if(_unit=="MEV"){
+    _unitScaleFactor=1000.;
+    }
+  else{
+    Alert << "unit " << _unit << " does not exist!!!" <<endmsg;
+    exit(0);
+  }
+}
 
+void EventReaderDefault::setOrder(const std::string& theOrder){
+  _order=theOrder;
+  if(_order=="E Px Py Pz"){
+    _energyFirst=true;
+  }
+  else if(_order=="Px Py Pz E"){
+    _energyFirst=false;
+  }
+  else{
+    Alert << "order " << _order << " does not exist!!!" <<endmsg;
+    exit(0);
+  }
+}
 

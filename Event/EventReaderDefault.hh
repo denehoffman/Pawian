@@ -38,15 +38,17 @@
 
 class EventList;
 
-class epemEvtReader : public EventReader
+class EventReaderDefault : public EventReader
 {
 public:
-  epemEvtReader();
-  epemEvtReader(const std::vector<std::string>& files, int particles, int skip, bool useWeight=false);
+  EventReaderDefault();
+  EventReaderDefault(const std::vector<std::string>& files, int particles, int skip, bool useWeight=false);
 
-  virtual ~epemEvtReader();
+  virtual ~EventReaderDefault();
 
   virtual bool fillAll(EventList& evtList);
+  virtual void setUnit(const std::string& theUnit);
+  virtual void setOrder(const std::string& theOrder);
   
 private:
   std::vector<std::string> fileNames;
@@ -54,6 +56,10 @@ private:
   std::ifstream currentStream;
   int numParticles;
   int linesToSkip;
+  std::string _unit;
+  std::string _order;
+  double _unitScaleFactor;
+  bool _energyFirst;
 };
 
 

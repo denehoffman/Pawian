@@ -63,6 +63,8 @@ public:
   const enErrLogMode& getErrLogMode() const { return _errLogMode; }
   const std::string dataFile() const {return _dataFile;}
   const std::string mcFile() const {return _mcFile;}
+  const std::string unitInFile() const {return _unitInFile;}
+  const std::string orderInFile() const {return _orderInFile;}
   const std::string fitParamFile() const {return _paramFile;}
   const std::string serializationFile() const{ return _serializationFile; }
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
@@ -103,6 +105,8 @@ protected:
   enErrLogMode _errLogMode;
   std::string _dataFile;
   std::string _mcFile;
+  std::string _unitInFile;
+  std::string _orderInFile;
   std::string _paramFile;
   std::string _serializationFile;
   std::string _startHypo;

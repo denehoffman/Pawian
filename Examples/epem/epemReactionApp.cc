@@ -47,13 +47,10 @@
 #include "epemUtils/epemEnv.hh"
 #include "epemUtils/epemReaction.hh"
 #include "epemUtils/epemBaseLh.hh"
-//#include "pbarpUtils/pbarpHeliLh.hh"
-// #include "pbarpUtils/pbarpCanoLh.hh"
-#include "epemUtils/epemEvtReader.hh"
-// #include "PwaUtils/EvtDataBaseList.hh"
-//#include "pbarpUtils/pbarpEventList.hh"
+
+#include "Event/EventReaderDefault.hh"
 #include "epemUtils/epemHist.hh"
-// #include "pbarpUtils/spinDensityHist.hh"
+
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
@@ -120,7 +117,10 @@ int main(int __argc,char *__argv[]){
 
   
   int noFinalStateParticles=epemEnv::instance()->noFinalStateParticles();  
-  epemEvtReader eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+
+  EventReaderDefault eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+  eventReaderData.setUnit(theAppParams->unitInFile());
+  eventReaderData.setOrder(theAppParams->orderInFile());
 
   EventList eventsData;
 
@@ -144,7 +144,9 @@ int main(int __argc,char *__argv[]){
   }
   eventsData.rewind();
 
-  epemEvtReader eventReaderMc(mcFileNames, noFinalStateParticles, 0, withEvtWeight);
+  EventReaderDefault eventReaderMc(mcFileNames, noFinalStateParticles, 0, withEvtWeight);
+  eventReaderMc.setUnit(theAppParams->unitInFile());
+  eventReaderMc.setOrder(theAppParams->orderInFile());
 
   EventList mcData;
   if(epemEnv::instance()->useMassRange())  eventReaderMc.fillMassRange(mcData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());
