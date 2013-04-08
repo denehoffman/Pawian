@@ -231,7 +231,7 @@ void PwaGen::dumpAscii(EvtData* evtData){
   for( ; fspIter != fsParticles.end(); ++fspIter ) {
     Vector4<double> tmp4vec = evtData->FourVecsString[ (*fspIter)->name() ];
     if(_energyFirst){ 
-      *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
+      *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor  << "\t" << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
     }
     else{
       *_stream << std::setprecision(8)  << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << tmp4vec.E()*_unitScaleFactor << std::endl;
