@@ -58,12 +58,40 @@ PwaGen::PwaGen(AbsEnv* theEnv) :
   ,_finalStateParticles(theEnv->finalStateParticles())
   ,_stream(new std::ofstream("evtGen.dat"))
   ,_genWithModel(true)
+  ,_unitScaleFactor(1.)
+  ,_energyFirst(false)
+  ,_useEvtWeight(theEnv->parser()->useEvtWeight())
 {
   _theTFile=new TFile("EvtGen.root","recreate");
   inv01MassH1=new TH1F("inv01MassH1","inv01MassH1",500, 0., 3.);
   inv02MassH1=new TH1F("inv02MassH1","inv02MassH1",500, 0., 3.);
   inv12MassH1=new TH1F("inv12MassH1","inv12MassH1",500, 0., 3.);
-  _genWithModel=theEnv->parser()->generateWithModel();  
+  _genWithModel=theEnv->parser()->generateWithModel();
+
+  std::string unit=theEnv->parser()->unitInFile();
+
+  if(unit=="GEV"){
+    _unitScaleFactor=1.;
+  }
+  else if(unit=="MEV"){
+    _unitScaleFactor=1000.;
+    }
+  else{
+    Alert << "unit " << unit << " does not exist!!!" <<endmsg;
+    exit(0);
+  }
+
+  std::string order =theEnv->parser()->orderInFile();
+  if(order=="E Px Py Pz"){
+    _energyFirst=true;
+  }
+  else if(order=="Px Py Pz E"){
+    _energyFirst=false;
+  }
+  else{
+    Alert << "order " << order << " does not exist!!!" <<endmsg;
+    exit(0);
+  }
 }
 
 PwaGen::~PwaGen()
@@ -125,15 +153,12 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     }
     
     currentEvtList.rewind();
-    std::cout << "currentEvtList.size():\t" << currentEvtList.size() << std::endl;
     
     boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(_absEnv));
     
     std::vector<EvtData*> dataList;
     double evtWeightSum=0.;
     eventListPtr->read4Vecs(currentEvtList, dataList, evtWeightSum, 100000, noOfAllGenEvts-100000); 
-    
-    std::cout << "dataList.size():\t" <<  dataList.size() << std::endl;
     
     theLh->updateFitParams(theFitParams);
     std::vector<EvtData*>::const_iterator itEvt;
@@ -157,7 +182,7 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
      while(itEvt!=dataList.end())
        {
 	 double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
-	 std::cout << (*itEvt)->evtNo <<  "\tfitWeight:\t" << fitWeight << std::endl;
+	 DebugMsg << (*itEvt)->evtNo <<  "\tfitWeight:\t" << fitWeight << endmsg;
 	 if (maxFitWeight< fitWeight) maxFitWeight=fitWeight;
 	 ++itEvt;
        }
@@ -199,11 +224,17 @@ void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber){
 
 
 void PwaGen::dumpAscii(EvtData* evtData){
+  if (_useEvtWeight) *_stream << 1.000 << std::endl;
   std::vector<Particle* > fsParticles = _absEnv->finalStateParticles();
 
   std::vector<Particle* >::const_iterator fspIter = fsParticles.begin();
   for( ; fspIter != fsParticles.end(); ++fspIter ) {
     Vector4<double> tmp4vec = evtData->FourVecsString[ (*fspIter)->name() ];
-    *_stream << std::setprecision(8)  << tmp4vec.Px() << "\t" << tmp4vec.Py() << "\t" << tmp4vec.Pz() << "\t" << tmp4vec.E() << std::endl;
+    if(_energyFirst){ 
+      *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
+    }
+    else{
+      *_stream << std::setprecision(8)  << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << tmp4vec.E()*_unitScaleFactor << std::endl;
+    }
   }
 }

@@ -42,6 +42,7 @@
 #include "PwaUtils/StreamFitParmsBase.hh"
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
+#include "PwaUtils/PwaGen.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 #include "pbarpUtils/pbarpEnv.hh"
@@ -201,6 +202,14 @@ int main(int __argc,char *__argv[]){
   StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
   fitParams theStartparams=theParamStreamer.getFitParamVal();
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
+
+  if (mode=="gen"){
+    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(pbarpEnv::instance()));
+    pwaGenPtr->generate(theLhPtr, theStartparams);
+    theFitParamBase->printParams(theStartparams);
+    return 1;
+  }
+
 
   PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
   MnUserParameters upar;
