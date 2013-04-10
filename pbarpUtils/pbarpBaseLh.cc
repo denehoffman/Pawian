@@ -45,14 +45,21 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  AbsLh(theEvtList, pbarpEnv::instance())
+// pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+//   AbsLh(theEvtList, pbarpEnv::instance())
+//   ,_highestJFsp(0)
+//   ,_isHighestJaPhoton(true)
+// {
+//   initialize();
+// }
+
+pbarpBaseLh::pbarpBaseLh() :
+  AbsLh(pbarpEnv::instance())
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
   initialize();
 }
-
 
 
 pbarpBaseLh::~pbarpBaseLh()

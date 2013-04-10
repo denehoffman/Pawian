@@ -47,13 +47,19 @@ class LSDecAmps;
 class pbarpCanoLh : public pbarpBaseLh {
 
 public:
-  pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList>);
+  // pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList>);
+  pbarpCanoLh();
 
   virtual ~pbarpCanoLh();
 
   virtual AbsLh* clone_() const {
-    return new  pbarpCanoLh(_evtListPtr);
+    AbsLh* theClone=new pbarpCanoLh();
+    theClone->setDataVec(_evtDataVec);
+    theClone->setMcVec(_evtMCVec);
+    return theClone;
   }
+
+
   virtual void print(std::ostream& os) const;
 
 

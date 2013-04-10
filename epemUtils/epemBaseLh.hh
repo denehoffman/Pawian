@@ -47,12 +47,16 @@ class LSDecAmps;
 class epemBaseLh : public AbsLh {
 
 public:
-  epemBaseLh(boost::shared_ptr<const EvtDataBaseList>);
+  // epemBaseLh(boost::shared_ptr<const EvtDataBaseList>);
+  epemBaseLh();
   
   virtual ~epemBaseLh();
   
   virtual AbsLh* clone_() const{
-    return new  epemBaseLh(_evtListPtr);
+    AbsLh* theClone=new epemBaseLh();
+    theClone->setDataVec(_evtDataVec);
+    theClone->setMcVec(_evtMCVec);
+    return theClone;
   }
 
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);

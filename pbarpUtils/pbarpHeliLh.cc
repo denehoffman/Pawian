@@ -47,13 +47,17 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpHeliLh::pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  pbarpBaseLh(theEvtList)
+// pbarpHeliLh::pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+//   pbarpBaseLh(theEvtList)
+// {
+//   initialize();
+// }
+
+pbarpHeliLh::pbarpHeliLh() : 
+  pbarpBaseLh()
 {
   initialize();
 }
-
-
 
 pbarpHeliLh::~pbarpHeliLh()
 {;

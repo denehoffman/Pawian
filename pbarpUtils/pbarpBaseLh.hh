@@ -47,8 +47,10 @@ class LSDecAmps;
 class pbarpBaseLh : public AbsLh {
 
 public:
-  pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList>);
-  
+  // pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList>);
+
+  pbarpBaseLh();  
+
   virtual ~pbarpBaseLh();
   
   virtual AbsLh* clone_() const =0;

@@ -50,8 +50,8 @@ class AbsEnv;
 class AbsLh : public AbsParamHandler{
 
 public:
-  AbsLh(boost::shared_ptr<const EvtDataBaseList>, AbsEnv* theEnv);
-  AbsLh(boost::shared_ptr<AbsLh>, AbsEnv* theEnv);
+  AbsLh(boost::shared_ptr<AbsLh>);
+  AbsLh(AbsEnv* theEnv);
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
 
@@ -60,9 +60,12 @@ public:
   virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData,
 				   std::vector<double>& eventLimits);
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;
-  virtual boost::shared_ptr<const EvtDataBaseList> getEventList() const {
-    return _evtListPtr;
-  }
+
+  virtual void setDataVec(std::vector<EvtData*> theVec);
+  virtual void setMcVec(std::vector<EvtData*> theVec);
+
+  virtual std::vector<EvtData*> getDataVec() {return _evtDataVec;}
+  virtual std::vector<EvtData*> getMcVec() {return _evtMCVec;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);  
@@ -73,7 +76,7 @@ public:
 
 protected:
   AbsEnv* _absEnv;
-  boost::shared_ptr<const EvtDataBaseList> _evtListPtr;
+
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
   std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;

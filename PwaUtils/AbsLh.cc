@@ -40,29 +40,25 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-AbsLh::AbsLh(boost::shared_ptr<const EvtDataBaseList> theEvtList, AbsEnv* theEnv) :
+AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr):
   AbsParamHandler()
-  ,_absEnv(theEnv)
-  ,_evtListPtr(theEvtList)
-  ,_usePhasespace(theEnv->parser()->usePhaseSpaceHyp())
+  ,_absEnv(theAbsLhPtr->_absEnv)
+  ,_evtDataVec(theAbsLhPtr->getDataVec())
+  ,_evtMCVec(theAbsLhPtr->getMcVec())
+  ,_usePhasespace(theAbsLhPtr->_absEnv->parser()->usePhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
-  _evtDataVec=_evtListPtr->getDataVecs();
-  _evtMCVec=_evtListPtr->getMcVecs();
   _noOfThreads = boost::thread::hardware_concurrency();
 }
 
-AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr, AbsEnv* theEnv):
+AbsLh::AbsLh(AbsEnv* theEnv) :
   AbsParamHandler()
   ,_absEnv(theEnv)
-  ,_evtListPtr(theAbsLhPtr->getEventList())
   ,_usePhasespace(theEnv->parser()->usePhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
-  _evtDataVec=_evtListPtr->getDataVecs();
-  _evtMCVec=_evtListPtr->getMcVecs();
   _noOfThreads = boost::thread::hardware_concurrency();
 }
 
@@ -282,5 +278,24 @@ bool AbsLh::checkRecalculation(fitParams& theParamVal){
 
   return result;
 }
+
+void AbsLh::setDataVec(std::vector<EvtData*> theVec) {
+  if(_evtDataVec.size()>0){
+    Alert << "data vector already set!!!" << endmsg;
+    exit(0); 
+  }
+
+  _evtDataVec=theVec;
+}
+
+void AbsLh::setMcVec(std::vector<EvtData*> theVec) {
+  if(_evtMCVec.size()>0){
+    Alert << "mc vector already set!!!" << endmsg;
+    exit(0); 
+  }
+
+  _evtMCVec=theVec;
+}
+
 
 

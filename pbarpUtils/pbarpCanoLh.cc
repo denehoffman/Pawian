@@ -46,12 +46,17 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpCanoLh::pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  pbarpBaseLh(theEvtList)
+// pbarpCanoLh::pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+//   pbarpBaseLh(theEvtList)
+// {
+//   initialize();
+// }
+
+pbarpCanoLh::pbarpCanoLh() :
+  pbarpBaseLh()
 {
   initialize();
 }
-
 
 
 pbarpCanoLh::~pbarpCanoLh()

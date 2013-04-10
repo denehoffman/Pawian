@@ -93,12 +93,42 @@ int main(int __argc,char *__argv[]){
 
   theEpEmReaction->print(std::cout);
 
-  // boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
-  // boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
-
   std::string mode=theAppParams->mode();
 
   boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
+
+
+  std::string prodFormalism=theAppParams->productionFormalism();
+  boost::shared_ptr<AbsLh> theLhPtr;
+  theLhPtr=boost::shared_ptr<AbsLh>(new epemBaseLh());
+
+
+  if (mode=="dumpDefaultParams"){
+    fitParams defaultVal;
+    fitParams defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+
+    std::stringstream defaultparamsname;
+    defaultparamsname << "defaultparams" << epemEnv::instance()->outputFileNameSuffix() << ".dat";
+    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
+    
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    return 0;
+  }
+
+
+  std::string paramStreamerPath=theAppParams->fitParamFile();
+  std::string outputFileNameSuffix= epemEnv::instance()->outputFileNameSuffix();
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();
+
+  if (mode=="gen"){
+    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(epemEnv::instance()));
+    pwaGenPtr->generate(theLhPtr, theStartparams);
+    theFitParamBase->printParams(theStartparams);
+    return 1;
+  }
 
 
   const std::string datFile=theAppParams->dataFile();
@@ -168,44 +198,12 @@ int main(int __argc,char *__argv[]){
   }
   mcData.rewind();
 
-
   boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
   eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
   eventListPtr->read(eventsData, mcData);
 
-
-  std::string prodFormalism=theAppParams->productionFormalism();
-  boost::shared_ptr<AbsLh> theLhPtr;
-  theLhPtr=boost::shared_ptr<AbsLh>(new epemBaseLh(eventListPtr));
-  
-
-  if (mode=="dumpDefaultParams"){
-    fitParams defaultVal;
-    fitParams defaultErr;
-    theLhPtr->getDefaultParams(defaultVal, defaultErr);
-
-    std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << epemEnv::instance()->outputFileNameSuffix() << ".dat";
-    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
-    
-    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-    return 0;
-  }
-
-
-  std::string paramStreamerPath=theAppParams->fitParamFile();
-  std::string outputFileNameSuffix= epemEnv::instance()->outputFileNameSuffix();
-  StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
-  fitParams theStartparams=theParamStreamer.getFitParamVal();
-  fitParams theErrorparams=theParamStreamer.getFitParamErr();
-
-  if (mode=="gen"){
-    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(epemEnv::instance()));
-    pwaGenPtr->generate(theLhPtr, theStartparams);
-    theFitParamBase->printParams(theStartparams);
-    return 1;
-  }
-
+  theLhPtr->setDataVec(eventListPtr->getDataVecs());
+  theLhPtr->setMcVec(eventListPtr->getMcVecs()); 
 
   PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
   MnUserParameters upar;

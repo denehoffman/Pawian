@@ -38,7 +38,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/EvtDataBaseList.hh"
+//#include "PwaUtils/EvtDataBaseList.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -171,24 +171,29 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     exit(1);
   }
 
-  boost::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
-  const std::vector<EvtData*> dataList=theEvtList->getDataVecs();
+  //  boost::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
+  const std::vector<EvtData*> dataList=theLh->getDataVec();
+  double integralDataWWeight=0.;
 
   std::vector<EvtData*>::const_iterator it=dataList.begin();
   while(it!=dataList.end())
     {
       double weight = (*it)->evtWeight;
+      integralDataWWeight+=weight;
       fillMassHists((*it), weight, _massDataHistMap);
       fillAngleHists((*it), weight, _angleDataHistMap);
       fillAngleHists2D((*it), weight, _angleDataHistMap2D);
       ++it;
     }
 
-  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();  
+  //  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
+  const std::vector<EvtData*> mcList=theLh->getMcVec();
+  double integralMC=0.;  
   it=mcList.begin();
   while(it!=mcList.end())
     {
       double evtWeight = (*it)->evtWeight;
+      integralMC+=evtWeight;
       fillMassHists((*it), evtWeight, _massMcHistMap);
       fillAngleHists((*it), evtWeight, _angleMcHistMap);
       fillAngleHists2D((*it), evtWeight, _angleMcHistMap2D);
@@ -200,14 +205,14 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       ++it;
     }
 
-  double integralDataWoWeight=(double) theEvtList->getDataVecs().size();
+  double integralDataWoWeight=(double) dataList.size();
   Info <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
 
-  double integralDataWWeight=(double) theEvtList->NoOfWeightedDataEvts();
+  //  double integralDataWWeight=(double) theEvtList->NoOfWeightedDataEvts();
   Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
 
 
-  double integralMC=(double) theEvtList->NoOfWeightedMcEvts();
+  //  double integralMC=(double) theEvtList->NoOfWeightedMcEvts();
   Info <<"No of MC events " << integralMC ;  // << endmsg; 
 
   Info <<"scaling factor  " << integralDataWWeight/integralMC ;  // << endmsg;

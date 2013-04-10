@@ -47,14 +47,21 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-epemBaseLh::epemBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-  AbsLh(theEvtList, epemEnv::instance())
+// epemBaseLh::epemBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+//   AbsLh(theEvtList, epemEnv::instance())
+//   ,_highestJFsp(0)
+//   ,_isHighestJaPhoton(true)
+// {
+//   initialize();
+// }
+
+epemBaseLh::epemBaseLh() :
+  AbsLh(epemEnv::instance())
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
   initialize();
 }
-
 
 
 epemBaseLh::~epemBaseLh()

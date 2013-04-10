@@ -47,17 +47,20 @@ class HeliDecAmps;
 class pbarpHeliLh : public pbarpBaseLh {
 
 public:
-  pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList>);
-  
+  // pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList>);
+  pbarpHeliLh();  
   virtual ~pbarpHeliLh();
   
   virtual AbsLh* clone_() const {
-    return new  pbarpHeliLh(_evtListPtr);
+    AbsLh* theClone=new pbarpHeliLh();
+    theClone->setDataVec(_evtDataVec);
+    theClone->setMcVec(_evtMCVec);
+    return theClone;
+    //    return new  pbarpHeliLh(_evtListPtr);
   }
   virtual void print(std::ostream& os) const;
   
 protected:
-
   
 private:
   

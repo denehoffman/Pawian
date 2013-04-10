@@ -51,7 +51,7 @@ spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh,
 {
    _theFitParamsOriginal = &theFitParams;
    _thePwaCovMatrix = &theCovMatrix;
-   _dataList=_theLh->getEventList()->getMcVecs();
+   _dataList=_theLh->getMcVec();
 
    theFitParamsBaseClass.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
    

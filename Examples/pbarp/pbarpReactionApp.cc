@@ -95,14 +95,47 @@ int main(int __argc,char *__argv[]){
 
   thepbarpReaction->print(std::cout);
 
-  // boost::shared_ptr<pbarpDataBaseList> thepbarbDataBaseListPtr(new pbarpDataBaseList()); 
-  // boost::shared_ptr<AbsLh> theLhPtr(new pbarpBaseLh(thepbarbDataBaseListPtr));
 
   std::string mode=theAppParams->mode();
 
   boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
 
 
+  std::string prodFormalism=theAppParams->productionFormalism();
+  boost::shared_ptr<AbsLh> theLhPtr;
+  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpCanoLh());
+  else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh());
+  else {
+    Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
+    exit(1);
+  }
+
+  if (mode=="dumpDefaultParams"){
+    fitParams defaultVal;
+    fitParams defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+
+    std::stringstream defaultparamsname;
+    defaultparamsname << "defaultparams" << pbarpEnv::instance()->outputFileNameSuffix() << ".dat";
+    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
+    
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    return 0;
+  }
+
+
+  std::string paramStreamerPath=theAppParams->fitParamFile();
+  std::string outputFileNameSuffix= pbarpEnv::instance()->outputFileNameSuffix();
+  StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();
+
+  if (mode=="gen"){
+    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(pbarpEnv::instance()));
+    pwaGenPtr->generate(theLhPtr, theStartparams);
+    theFitParamBase->printParams(theStartparams);
+    return 1;
+  }
 
   const std::string datFile=theAppParams->dataFile();
   const std::string mcFile=theAppParams->mcFile();
@@ -168,48 +201,12 @@ int main(int __argc,char *__argv[]){
   mcData.rewind();
 
 
-  //  boost::shared_ptr<pbarpEventList> pbarpEventListPtr(new pbarpEventList());
   boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
   pbarpEventListPtr->ratioMcToData(theAppParams->ratioMcToData());
   pbarpEventListPtr->read(eventsData, mcData);
-  // pbarpEventListPtr->read4Vecs();
 
-  std::string prodFormalism=theAppParams->productionFormalism();
-  boost::shared_ptr<AbsLh> theLhPtr;
-  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpCanoLh(pbarpEventListPtr));
-  else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh(pbarpEventListPtr));
-  else {
-    Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
-    exit(1);
-  }
-
-  if (mode=="dumpDefaultParams"){
-    fitParams defaultVal;
-    fitParams defaultErr;
-    theLhPtr->getDefaultParams(defaultVal, defaultErr);
-
-    std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << pbarpEnv::instance()->outputFileNameSuffix() << ".dat";
-    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
-    
-    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-    return 0;
-  }
-
-
-  std::string paramStreamerPath=theAppParams->fitParamFile();
-  std::string outputFileNameSuffix= pbarpEnv::instance()->outputFileNameSuffix();
-  StreamFitParmsBase theParamStreamer(paramStreamerPath, theLhPtr);
-  fitParams theStartparams=theParamStreamer.getFitParamVal();
-  fitParams theErrorparams=theParamStreamer.getFitParamErr();
-
-  if (mode=="gen"){
-    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(pbarpEnv::instance()));
-    pwaGenPtr->generate(theLhPtr, theStartparams);
-    theFitParamBase->printParams(theStartparams);
-    return 1;
-  }
-
+  theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
+  theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
 
   PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
   MnUserParameters upar;
