@@ -55,10 +55,10 @@ public:
 
 protected:
 
-  void addEvt(EventList& evtList, EvtVector4R* evt4Vec4R, int evtNumber);
+  void addEvt(EventList& evtList, EvtVector4R* evt4Vec4R, int evtNumber, double weight=1.);
 
   //  void dumpAscii(EvtVector4R* evt4Vec4R);
-  void dumpAscii(EvtData* evtData);
+  void dumpAscii(EvtData* evtData, double weight=1.);
 
   AbsEnv* _absEnv;
   EvtVector4R _initial4Vec;

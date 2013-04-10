@@ -183,10 +183,19 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
        {
 	 double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
 	 DebugMsg << (*itEvt)->evtNo <<  "\tfitWeight:\t" << fitWeight << endmsg;
+	 if (_useEvtWeight){
+	   dumpAscii(*itEvt, fitWeight);
+	   noOfAcceptedEvts++;
+	   if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	     generateEvents=false;
+	     break;
+	   }
+	 }
 	 if (maxFitWeight< fitWeight) maxFitWeight=fitWeight;
 	 ++itEvt;
        }
-     
+
+     if (!_useEvtWeight){     
      itEvt=dataList.begin();
      while(itEvt!=dataList.end())
        {
@@ -202,6 +211,8 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 	 }
 	 ++itEvt;
        }
+     }
+
      
    }
    Info << "iteration:\t" << noOfIterations << "\tnoOfAcceptedEvts:\t" << noOfAcceptedEvts << endmsg;
@@ -212,9 +223,9 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   
 }
 
-void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber){
+void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber, double weight){
   Event* newEvent = new Event();
-  newEvent->addWeight(1.);
+  newEvent->addWeight(weight);
   for(unsigned int t=0; t<_finalStateParticles.size(); ++t){
     newEvent->addParticle(evt4Vec4Rs[t].get(0), evt4Vec4Rs[t].get(1), evt4Vec4Rs[t].get(2), evt4Vec4Rs[t].get(3));
   }
@@ -223,8 +234,8 @@ void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber){
 }
 
 
-void PwaGen::dumpAscii(EvtData* evtData){
-  if (_useEvtWeight) *_stream << 1.000 << std::endl;
+void PwaGen::dumpAscii(EvtData* evtData, double weight){
+  if (_useEvtWeight && _genWithModel) *_stream << weight << std::endl;
   std::vector<Particle* > fsParticles = _absEnv->finalStateParticles();
 
   std::vector<Particle* >::const_iterator fspIter = fsParticles.begin();
