@@ -37,14 +37,14 @@ public:
   EventReader(bool useWeight);
   virtual ~EventReader();
 
-  virtual bool fillAll(EventList& evtList) = 0;
+  virtual bool fill(EventList& evtList, int evtStart=1, int evtStop=1000000) = 0;
 
-  virtual bool fillMassRange(EventList& evtList, double massMin, double massMax, std::vector<unsigned int>& particleIndices){
+  virtual void setMassRange(EventList& evtList, double massMin, double massMax, std::vector<unsigned int>& particleIndices){
     _useMassRange=true;
     _massMin = massMin;
     _massMax = massMax;
     _particleIdxesMassRange=particleIndices;
-    return fillAll(evtList);
+    //   return fillAll(evtList);
   };
 
 protected:

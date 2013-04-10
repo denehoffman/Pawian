@@ -56,7 +56,7 @@ public:
   virtual AbsLh* clone_() const = 0;
 
   virtual double calcLogLh(fitParams& theParamVal);
-  virtual double mergeLogLhData(LHData& theLHData);
+  virtual double mergeLogLhData(LHData& theLHData, int nMCs);
   virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData,
 				   std::vector<double>& eventLimits);
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;

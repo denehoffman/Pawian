@@ -47,7 +47,7 @@
 EvtDataBaseList::EvtDataBaseList(AbsEnv* theEnv) :
   _noOfWeightedDataEvts(0.),
   _noOfWeightedMcEvts(0.),
-  _mcToDataRatio(1000),
+  //  _mcToDataRatio(1000),
   _alreadyRead(false),
   _absEnv(theEnv)
 {
@@ -65,9 +65,9 @@ void EvtDataBaseList::read(EventList& evtListData, EventList& evtListMc){
   }
   read4Vecs(evtListData, _evtDataList, _noOfWeightedDataEvts, evtListData.size(), 0 );
 
-  int maxMcEvts=evtListMc.size();
-  if (maxMcEvts > _mcToDataRatio*evtListData.size() ) maxMcEvts=_mcToDataRatio*evtListData.size();
-  read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, maxMcEvts, evtListData.size());
+  //  int maxMcEvts=evtListMc.size();
+  //  if (maxMcEvts > _mcToDataRatio*evtListData.size() ) maxMcEvts=_mcToDataRatio*evtListData.size();
+  read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, evtListMc.size(), evtListData.size() );
   _alreadyRead=true;
 }
 

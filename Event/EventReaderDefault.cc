@@ -59,8 +59,9 @@ EventReaderDefault::EventReaderDefault(const std::vector<std::string>& files, in
 EventReaderDefault::~EventReaderDefault()
 {}
 
-bool EventReaderDefault::fillAll(EventList& evtList)
+bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
 {
+  int currentEvtNo=-1;
   
   while (currentFile != fileNames.end()) {
     currentStream.open(currentFile->c_str());
@@ -70,6 +71,7 @@ bool EventReaderDefault::fillAll(EventList& evtList)
     }
 
     while (!currentStream.eof()) {
+      currentEvtNo++;
       double e,px,py,pz;
       Event* newEvent = new Event();
       int parts;
@@ -90,7 +92,10 @@ bool EventReaderDefault::fillAll(EventList& evtList)
 	Vector4<double> tmp = newEvent->p4(parts);
 	if(isMassrangeParticle(parts)) fvX= fvX+tmp;
       }
-      
+
+      if(currentEvtNo<evtStart) continue; 
+      if(currentEvtNo>evtStop) continue;      
+
       if(_useMassRange){
 	if(fvX.Mass()<_massMin || fvX.Mass()>_massMax  ) continue;
       }

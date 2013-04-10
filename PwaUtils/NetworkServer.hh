@@ -35,18 +35,19 @@ using boost::asio::ip::tcp;
 
 class NetworkServer
 {
-  public:
-   static short SERVERMESSAGE_PARAMS;
-   static short SERVERMESSAGE_CLOSE;
-
-   NetworkServer(int port, short noOfClients, int numData, int numMC);
-   bool WaitForLH(double& llh_data, double& weightSum, double& lh_mc);
-   bool WaitForFirstClientLogin();
-   void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par);
-   void BroadcastParams(const std::vector<double>& par);
-   void SendClosingMessage();
-
-  private:
+public:
+  static short SERVERMESSAGE_PARAMS;
+  static short SERVERMESSAGE_CLOSE;
+  
+  NetworkServer(int port, short noOfClients, int numData, int numMC);
+  bool WaitForLH(double& llh_data, double& weightSum, double& lh_mc);
+  bool WaitForFirstClientLogin();
+  void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par);
+  void BroadcastParams(const std::vector<double>& par);
+  void SendClosingMessage();
+  int numMCs() const {return _numMC;}
+  
+private:
 
    unsigned int _port;
    unsigned int _timeout;

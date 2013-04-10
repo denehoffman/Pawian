@@ -27,18 +27,19 @@
 
 #include "Minuit2/MnUserParameters.h"
 
-#include "PwaUtils/PwaFcnBase.hh"
+#include "PwaUtils/PwaFcnServer.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-//boost::timer::cpu_timer theTimer;
+boost::timer::cpu_timer theTimer;
 
-PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
+PwaFcnServer::PwaFcnServer(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, boost::shared_ptr<NetworkServer> netServer, std::string suffix) :
   _absLhPtr(absLh)
   , _fitParamsBasePtr(fitParamsBase)
+  , _networkServerPtr(netServer)
   , _fcnCounter(0)
   , _currentResFileName("currentResult"+suffix+".dat")
 {
@@ -47,50 +48,51 @@ PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitPara
   
 }
 
-PwaFcnBase::~PwaFcnBase()
+PwaFcnServer::~PwaFcnServer()
 {
 }
 
-double PwaFcnBase::operator()(const std::vector<double>& par) const
+double PwaFcnServer::operator()(const std::vector<double>& par) const
 {
   double result=0;
-
-  fitParams theFitParmValTmp=_defaultFitValParms;
-
-  _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
-    
-  result = _absLhPtr->calcLogLh(theFitParmValTmp);
-
-
+  
+  LHData theLHData;
+  _networkServerPtr->BroadcastParams(par);
+  if(!_networkServerPtr->WaitForLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
+    result = 0;
+  else
+    result = _absLhPtr->mergeLogLhData(theLHData, _networkServerPtr->numMCs());
+  
+  
   _fcnCounter++;
-
-
-  //    theTimer.stop();
-  //    boost::timer::cpu_times elapsed(theTimer.elapsed());
-  //    if(elapsed.wall > 0){
-  // 	Info << "Wall time: " << elapsed.wall / 1E9 << "s User: "
-  // 	     << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
-  //    }
-  //    theTimer.start();
-  // }
-
-  if (  _fcnCounter%100 == 0) {
-    _fitParamsBasePtr->printParams(theFitParmValTmp);
+  
+  if(_fcnCounter%20 == 0){
+    theTimer.stop();
+    boost::timer::cpu_times elapsed(theTimer.elapsed());
+    if(elapsed.wall > 0){
+      Info << "Wall time: " << elapsed.wall / 1E9 << "s User: "
+	   << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
+    }
+    theTimer.start();
   }
   
-  if (  _fcnCounter%200 == 0) {
-    std::ofstream theStream (_currentResFileName.c_str());
-    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
+  if (  _fcnCounter%100 == 0) {
+    fitParams theFitParmValTmp=_defaultFitValParms;
+    _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+    _fitParamsBasePtr->printParams(theFitParmValTmp);
+    if (  _fcnCounter%200 == 0) {
+      std::ofstream theStream (_currentResFileName.c_str());
+      _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
+    }
   }
-
+  
   return result;
 }
 
-double PwaFcnBase::Up() const 
+double PwaFcnServer::Up() const 
 {
 return .5;
 }
-
 
 
 

@@ -154,8 +154,9 @@ int main(int __argc,char *__argv[]){
 
   EventList eventsData;
 
-  if(epemEnv::instance()->useMassRange())  eventReaderData.fillMassRange(eventsData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());  
-  else eventReaderData.fillAll(eventsData);
+  if(epemEnv::instance()->useMassRange())  eventReaderData.setMassRange(eventsData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());  
+  
+  eventReaderData.fill(eventsData);
   
   Info  << "\nFile has " << eventsData.size() << " events. Each event has "
         <<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
@@ -179,8 +180,11 @@ int main(int __argc,char *__argv[]){
   eventReaderMc.setOrder(theAppParams->orderInFile());
 
   EventList mcData;
-  if(epemEnv::instance()->useMassRange())  eventReaderMc.fillMassRange(mcData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());
-  else eventReaderMc.fillAll(mcData);
+  if(epemEnv::instance()->useMassRange())  eventReaderMc.setMassRange(mcData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());
+
+  int ratioMcToData=theAppParams->ratioMcToData();
+  int maxMcEvts=eventsData.size()*ratioMcToData;  
+  eventReaderMc.fill(mcData, 0, maxMcEvts-1);
 
  Info  << "\nFile has " << mcData.size() << " events. Each event has "
         <<  mcData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
@@ -199,7 +203,7 @@ int main(int __argc,char *__argv[]){
   mcData.rewind();
 
   boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
-  eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
+  //  eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
   eventListPtr->read(eventsData, mcData);
 
   theLhPtr->setDataVec(eventListPtr->getDataVecs());

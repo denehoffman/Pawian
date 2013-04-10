@@ -46,7 +46,7 @@ public:
 
   virtual ~EventReaderDefault();
 
-  virtual bool fillAll(EventList& evtList);
+  virtual bool fill(EventList& evtList, int evtStart=1, int evtStop=1000000);
   virtual void setUnit(const std::string& theUnit);
   virtual void setOrder(const std::string& theOrder);
   

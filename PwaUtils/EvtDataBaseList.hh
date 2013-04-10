@@ -64,13 +64,14 @@ public:
 
   void read(EventList& evtListData, EventList& evtListMc);
 
+
   const std::vector<EvtData*> getDataVecs() const { return _evtDataList; }
   const std::vector<EvtData*> getMcVecs() const { return _mcDataList; }
 
   double NoOfWeightedDataEvts() const {return _noOfWeightedDataEvts;}
   double NoOfWeightedMcEvts() const {return _noOfWeightedMcEvts;}
-  void ratioMcToData (double mcToDataRatio) {_mcToDataRatio=mcToDataRatio;}
-  virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo );
+  //  void ratioMcToData (double mcToDataRatio) {_mcToDataRatio=mcToDataRatio;}
+  virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo);
 
 protected:
   std::vector<EvtData*> _evtDataList;
@@ -79,7 +80,7 @@ protected:
 
   double _noOfWeightedDataEvts;
   double _noOfWeightedMcEvts;
-  int _mcToDataRatio;
+  //  int _mcToDataRatio;
   bool _alreadyRead;
   AbsEnv* _absEnv;
 

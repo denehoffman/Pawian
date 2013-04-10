@@ -40,16 +40,17 @@ class NetworkServer;
 
 namespace ROOT {
   namespace Minuit2 {
-    class PwaFcnBase : public FCNBase {
+    class PwaFcnServer : public FCNBase {
 
     public:
-      PwaFcnBase(boost::shared_ptr<AbsLh> absLh, 
-		    boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
-      virtual ~PwaFcnBase();
+      PwaFcnServer(boost::shared_ptr<AbsLh> absLh, 
+		   boost::shared_ptr<FitParamsBase> fitParamsBase, boost::shared_ptr<NetworkServer> netServer, std::string suffix="");
+      virtual ~PwaFcnServer();
 
       double operator()(const std::vector<double>& par) const;
       double Up() const;
- 
+      //      void SetServerMode(boost::shared_ptr<NetworkServer> networkServerPtr);
+
     private:
       boost::shared_ptr<AbsLh> _absLhPtr;
       boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
