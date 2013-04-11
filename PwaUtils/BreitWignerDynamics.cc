@@ -70,11 +70,11 @@ bool BreitWignerDynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
   double mass=theParamVal.Masses[_massKey];
-  if ( fabs(mass-_currentMass) > 1.e-10){
+  if (!CheckDoubleEquality(mass, _currentMass)){
     _recalculate=true;
   }
   double width=theParamVal.Widths[_massKey];
-  if ( fabs(width-_currentWidth) > 1.e-10){
+  if (!CheckDoubleEquality(width, _currentWidth)){
     _recalculate=true;
   }
 

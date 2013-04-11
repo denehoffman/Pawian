@@ -119,7 +119,7 @@ bool KPiSWaveIso32Dynamics::checkRecalculation(fitParams& theParamVal){
     
     std::map<std::string, double>& aProds=it1->second;
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
-      if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
+      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
       }
@@ -127,7 +127,7 @@ bool KPiSWaveIso32Dynamics::checkRecalculation(fitParams& theParamVal){
 
     std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
-      if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
+      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
       }
@@ -135,7 +135,7 @@ bool KPiSWaveIso32Dynamics::checkRecalculation(fitParams& theParamVal){
 
     std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
-      if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
+      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
       }
@@ -143,7 +143,7 @@ bool KPiSWaveIso32Dynamics::checkRecalculation(fitParams& theParamVal){
 
     std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
-      if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
+      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
       }

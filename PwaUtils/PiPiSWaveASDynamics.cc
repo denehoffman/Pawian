@@ -107,7 +107,7 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
     
     std::map<std::string, double>& bFactors=it1->second;
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
-      if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
+       if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
       }
@@ -115,13 +115,13 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
 
    std::map<std::string, double>& fProds=_currentfProdMap[it1->first];
    for(it2=fProds.begin(); it2!=fProds.end(); ++it2){
-     if (fabs(it2->second - theParamVal.otherParams[it1->first+it2->first]) > 1.e-10){
+     if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
        _recalculate=true;
        _recalcMap[it1->first]=true;
      }
    }
 
-   if (fabs(_currentS0Map[it1->first] - theParamVal.otherParams[it1->first+"S0_PosNeg"]) > 1.e-10){
+   if (!CheckDoubleEquality(_currentS0Map[it1->first], theParamVal.otherParams[it1->first+"S0_PosNeg"])){
      _recalculate=true;
      _recalcMap[it1->first]=true;
    }

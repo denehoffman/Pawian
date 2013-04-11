@@ -78,6 +78,7 @@ public:
   const int serverPort() const {return _serverPort;}
   const int ratioMcToData() const {return _ratioMcToData;}
   const bool cacheAmps() const {return _cacheAmps;}
+  const bool calcContributionError() const {return _calcContributionError;}
   const bool useEvtWeight() const {return _useEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const std::string pdgTableFile() const {return _pdgTableFile;}
@@ -121,6 +122,7 @@ protected:
   int _serverPort;
   int _ratioMcToData;
   bool _cacheAmps;
+  bool _calcContributionError;
   std::string _strErrLogMode;
   po::options_description* _desc;
   po::options_description* _common;

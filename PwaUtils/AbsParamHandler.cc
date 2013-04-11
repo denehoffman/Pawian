@@ -24,6 +24,7 @@
 // AbsParamHandler class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
+#include <float.h>
 #include "PwaUtils/AbsParamHandler.hh"
 
 AbsParamHandler::AbsParamHandler() :
@@ -36,3 +37,17 @@ AbsParamHandler::~AbsParamHandler()
 {
 }
 
+bool AbsParamHandler::CheckDoubleEquality(double a, double b){
+
+   float diff = fabs(a - b);
+   if (diff <= 10*DBL_EPSILON)
+      return true;
+
+   a = fabs(a);
+   b = fabs(b);
+   float largest = (b > a) ? b : a;
+
+   if (diff <= largest * 2*DBL_EPSILON)
+      return true;
+   return false;
+}

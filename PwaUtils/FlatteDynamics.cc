@@ -98,17 +98,17 @@ bool FlatteDynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
   double mass=theParamVal.Masses[_massKey];
-  if ( fabs(mass-_currentMass) > 1.e-10){
+  if (!CheckDoubleEquality(mass, _currentMass)){
     _recalculate=true;
   }
 
   double g11=theParamVal.gFactors[_g11Key];
-  if ( fabs(g11-_currentg11) > 1.e-10){
+  if (!CheckDoubleEquality(g11, _currentg11)){
     _recalculate=true;
   }
 
   double g22=theParamVal.gFactors[_g22Key];
-  if ( fabs(g22-_currentg22) > 1.e-10){
+  if (!CheckDoubleEquality(g22, _currentg22)){
     _recalculate=true;
   }
   return _recalculate;

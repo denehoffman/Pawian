@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// pbarpEventList class definition file. -*- C++ -*-
+// spinDensityHist class definition file. -*- C++ -*-
 // Copyright 2013 Julian Pychy
 
 #include <sstream>

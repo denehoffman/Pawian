@@ -221,11 +221,11 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
        
-       if ( fabs(theMag - _currentParamMags[*it])  > 1.e-10 ){
+       if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
 	 _recalculate=true;
 	 return _recalculate;
        }
-       if ( fabs(thePhi - _currentParamPhis[*it])  > 1.e-10 ){
+       if(!CheckDoubleEquality(thePhi, _currentParamPhis[*it])){
 	 _recalculate=true;
 	 return _recalculate;
        }

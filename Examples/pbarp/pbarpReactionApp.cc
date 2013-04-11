@@ -43,6 +43,7 @@
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/PwaFcnServer.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
+#include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -385,12 +386,38 @@ if(mode == "client"){
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
     
+    boost::shared_ptr<WaveContribution> theWaveContribution;
+    if(pbarpEnv::instance()->parser()->calcContributionError()){
+       std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
+       std::ifstream serializationStream(serializationFileName.c_str());
+
+       if(!serializationStream.is_open()){
+	  Alert << "Could not open serialization file." << endmsg;
+	  return 0;
+       }
+
+       boost::archive::text_iarchive boostInputArchive(serializationStream);
+
+       boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+       boostInputArchive >> *thePwaCovMatrix;
+       theWaveContribution = boost::shared_ptr<WaveContribution>
+	  (new WaveContribution(theLhPtr, theStartparams, thePwaCovMatrix));
+    }
+    else{
+       theWaveContribution = boost::shared_ptr<WaveContribution>
+	  (new WaveContribution(theLhPtr, theStartparams));
+    }
+
+    std::pair<double, double> contValue = theWaveContribution->CalcContribution();
+
     Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
     Info << "evtWeightSumData:\t" <<evtWeightSumData; 
     Info << "BIC:\t" << BICcriterion << endmsg;
     Info << "AIC:\t" << AICcriterion << endmsg;
     Info << "AICc:\t" << AICccriterion << endmsg;
-    
+    Info << "Selected wave contribution:\t" << contValue.first
+	 << " +- " << contValue.second << endmsg;
+
     std::ostringstream qaSummaryFileName;
     qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
 
@@ -400,6 +427,8 @@ if(mode == "client"){
     theQaStream << "AICc\t" << AICccriterion << "\n";
     theQaStream << "logLh\t" << theLh << "\n";
     theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+    theQaStream << "Selected wave contribution\t" << contValue.first
+		<< " +- " << contValue.second <<  "\n";
     theQaStream.close();
     
     end= clock();

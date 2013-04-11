@@ -216,11 +216,11 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
        
-       if ( fabs(theMag - _currentParamMagLamLams[*it])  > 1.e-10 ){
+       if (!CheckDoubleEquality(theMag, _currentParamMagLamLams[*it])){
 	 _recalculate=true;
 	 return _recalculate;
        }
-       if ( fabs(thePhi - _currentParamPhiLamLams[*it])  > 1.e-10 ){
+       if (!CheckDoubleEquality(thePhi, _currentParamPhiLamLams[*it])){
 	 _recalculate=true;
 	 return _recalculate;
        }
