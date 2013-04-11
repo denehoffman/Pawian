@@ -38,6 +38,7 @@
 class AbsDecay;
 class AbsDynamics;
 class Particle;
+class ParticleTable;
 
 class DynRegistry{
 

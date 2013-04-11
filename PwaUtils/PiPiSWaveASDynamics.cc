@@ -34,11 +34,16 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "Utils/FunctionUtils.hh"
 #include "PwaDynamics/FVectorPiPiS.hh"
+#include "Particle/ParticleTable.hh"
 
-PiPiSWaveASDynamics::PiPiSWaveASDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
+PiPiSWaveASDynamics::PiPiSWaveASDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, ParticleTable* thePdtTable) :
   AbsDynamics(name, fsParticles, mother)
+  ,_pdtTable(thePdtTable)
+  ,_projectionIndex(projectionIndex(fsParticles))
 {
+  DebugMsg << "projection index is " << _projectionIndex << endmsg;
 }
 
 PiPiSWaveASDynamics::~PiPiSWaveASDynamics()
@@ -62,7 +67,7 @@ complex<double> result(0.,0.);
       theMutex.lock();
       boost::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[currentKey];
       currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
-      result=(*currentFVec)[1];
+      result=(*currentFVec)[_projectionIndex];
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }
@@ -252,4 +257,43 @@ void PiPiSWaveASDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
 const std::string& PiPiSWaveASDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   if(0==grandmaAmp) return _grandmaKey;
   return grandmaAmp->absDec()->massParKey();
+}
+
+int PiPiSWaveASDynamics::projectionIndex(std::vector<Particle*>& fsParticles){
+
+  if ( fsParticles.size() != 2 && fsParticles.size() != 4){
+    Alert << "PiPiSWave: decay to " << FunctionUtils::particleListName(fsParticles) << " is not supported!!!" << endmsg;
+    exit(0); 
+  }
+  if ( fsParticles.size()==4){
+    return 2; //4 pi
+   }
+  // here  fsParticles.size()==2
+
+  //first: check pi pi channel
+  Particle* Piplus=_pdtTable->particle("pion+");
+  Particle* Piminus=_pdtTable->particle("pion-");
+  Particle* Pi0=_pdtTable->particle("pion0");
+
+  if(fsParticles[0]==Piplus && fsParticles[1]==Piminus) return 0;
+  else if(fsParticles[1]==Piplus && fsParticles[0]==Piminus) return 0;
+  else if(fsParticles[0]==Pi0 && fsParticles[1]==Pi0) return 0;
+
+  //second: check KK channel
+  Particle* Kplus=_pdtTable->particle("K+");
+  Particle* Kminus=_pdtTable->particle("K-");
+  if(fsParticles[0]==Kplus && fsParticles[1]==Kminus) return 1;
+  else if (fsParticles[1]==Kplus && fsParticles[0]==Kminus) return 1;
+
+  //3: check eta eta channel
+  Particle* Eta=_pdtTable->particle("eta");
+  if(fsParticles[0]==Eta && fsParticles[1]==Eta) return 3;
+
+  //3: check eta etaprime channel
+  Particle* Etaprime=_pdtTable->particle("eta'");
+  if(fsParticles[0]==Eta && fsParticles[1]==Etaprime) return 4;
+  else if(fsParticles[1]==Eta && fsParticles[0]==Etaprime) return 4;
+
+ Alert << "PiPiSWave: decay to " << FunctionUtils::particleListName(fsParticles) << " is not supported!!!" <<endmsg;
+ exit(0);
 }

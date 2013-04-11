@@ -37,11 +37,12 @@
 
 class AbsXdecAmp;
 class FVectorPiPiS;
+class ParticleTable;
 
 class PiPiSWaveASDynamics : public AbsDynamics{
 
 public:
-  PiPiSWaveASDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
+  PiPiSWaveASDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother, ParticleTable* thePdtTable);
   virtual ~PiPiSWaveASDynamics();
 
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
@@ -53,7 +54,8 @@ public:
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
 
 protected:
-  //  std::string _massKey;
+  virtual int projectionIndex(std::vector<Particle*>& fsParticles);
+
   double _currentMass;
   std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, boost::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
@@ -66,6 +68,9 @@ protected:
 
   std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
   std::map<std::string, bool > _recalcMap;
+
+  ParticleTable* _pdtTable;
+  int _projectionIndex;
 private:
 
 };

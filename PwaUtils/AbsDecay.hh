@@ -82,6 +82,7 @@ public:
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual boost::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}
   virtual std::string type() =0;
+  AbsEnv* currentEnv() {return _env;}
 
 protected:
   Particle* _mother;
