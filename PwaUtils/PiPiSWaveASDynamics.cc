@@ -242,7 +242,7 @@ void PiPiSWaveASDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   currentFVector->updateFprod(3, fProdEtaEta);
   currentFVector->updateFprod(4, fProdEtaEtap);
 
-  _currentS0Map[theName]=1.;
+  _currentS0Map[theName]=-1.;
   currentFVector->updateS0prod(_currentS0Map[theName]);
 
   _fVecMap[theName]=currentFVector;
