@@ -43,6 +43,10 @@ struct LHData{
    double weightSum;
    double logLH_data;
    double LH_mc;
+
+  LHData(){
+    weightSum=logLH_data=LH_mc=0.0;
+  }
 };
 
 class AbsEnv;

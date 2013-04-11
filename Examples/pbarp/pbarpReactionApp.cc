@@ -189,13 +189,13 @@ if(mode == "client"){
   eventReaderDataClient.setUnit(theAppParams->unitInFile());
   eventReaderDataClient.setOrder(theAppParams->orderInFile());
   
-  EventList eventsDataClient;
-  eventReaderDataClient.fill(eventsDataClient, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  EventList* eventsDataClient=new EventList();
+  eventReaderDataClient.fill(*eventsDataClient, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
   
-  eventsDataClient.rewind();  
-  Info  << "\nFile has " << eventsDataClient.size() << " events. Each event has "
-        <<  eventsDataClient.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  eventsDataClient.rewind();
+  eventsDataClient->rewind();  
+  Info  << "\nFile has " << eventsDataClient->size() << " events. Each event has "
+        <<  eventsDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  eventsDataClient->rewind();
   
   
   
@@ -204,14 +204,17 @@ if(mode == "client"){
   eventReaderMcClient.setOrder(theAppParams->orderInFile());
   
   
-  EventList mcDataClient;
-  eventReaderMcClient.fill(mcDataClient, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
-  Info  << "\nFile has " << mcDataClient.size() << " events. Each event has "
-        <<  mcDataClient.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  mcDataClient.rewind();
+  EventList* mcDataClient=new EventList();
+  eventReaderMcClient.fill(*mcDataClient, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  Info  << "\nFile has " << mcDataClient->size() << " events. Each event has "
+        <<  mcDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  mcDataClient->rewind();
   
   boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-  pbarpEventListPtr->read(eventsDataClient, mcDataClient);
+  pbarpEventListPtr->read(*eventsDataClient, *mcDataClient);
+
+  delete eventsDataClient;
+  delete mcDataClient;
   
   theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
   theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
