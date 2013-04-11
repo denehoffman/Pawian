@@ -29,35 +29,24 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "Minuit2/FCNBase.h"
-//#include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/FitParamsBase.hh"
-#include "Minuit2/MnUserParameters.h"
+#include "PwaUtils/AbsFcn.hh"
 
 class AbsLh;
 class NetworkServer;
 
 namespace ROOT {
   namespace Minuit2 {
-    class PwaFcnBase : public FCNBase {
+    class PwaFcnBase : public AbsFcn {
 
     public:
       PwaFcnBase(boost::shared_ptr<AbsLh> absLh, 
 		    boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
       virtual ~PwaFcnBase();
 
-      double operator()(const std::vector<double>& par) const;
-      double Up() const;
+      virtual double operator()(const std::vector<double>& par) const;
  
     private:
       boost::shared_ptr<AbsLh> _absLhPtr;
-      boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
-      boost::shared_ptr<NetworkServer> _networkServerPtr;
-      mutable unsigned int _fcnCounter;
-      fitParams _defaultFitValParms;
-      fitParams _defaultFitErrParms;
-      std::string _currentResFileName;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

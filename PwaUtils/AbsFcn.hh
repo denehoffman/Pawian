@@ -29,25 +29,35 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "PwaUtils/AbsFcn.hh"
-
-class AbsLh;
-class NetworkServer;
+#include "Minuit2/FCNBase.h"
+#include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/FitParamsBase.hh"
+#include "Minuit2/MnUserParameters.h"
 
 namespace ROOT {
   namespace Minuit2 {
-    class PwaFcnServer : public AbsFcn {
+    class AbsFcn : public FCNBase {
 
     public:
-      PwaFcnServer(boost::shared_ptr<AbsLh> absLh, 
-		   boost::shared_ptr<FitParamsBase> fitParamsBase, boost::shared_ptr<NetworkServer> netServer, std::string suffix="");
-      virtual ~PwaFcnServer();
+      AbsFcn(boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
+      virtual ~AbsFcn();
 
-      virtual double operator()(const std::vector<double>& par) const;
+      virtual double operator()(const std::vector<double>& par) const=0;
+      virtual double Up() const;
+
 
     protected:
-      boost::shared_ptr<AbsLh> _absLhPtr;
-      boost::shared_ptr<NetworkServer> _networkServerPtr;
+      boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
+      mutable unsigned int _fcnCounter;
+       fitParams _defaultFitValParms;
+      fitParams _defaultFitErrParms;
+      std::string _currentResFileName;
+
+      virtual void printTimer() const;
+      virtual void printFitParams(const std::vector<double>& par) const;
+      virtual void dumpFitParams(const std::vector<double>& par) const;
+
+    private:
     };
   }  // namespace Minuit2
 }  // namespace ROOT

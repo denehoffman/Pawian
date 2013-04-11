@@ -34,13 +34,10 @@
 
 using namespace ROOT::Minuit2;
 
-//boost::timer::cpu_timer theTimer;
 
 PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
-  _absLhPtr(absLh)
-  , _fitParamsBasePtr(fitParamsBase)
-  , _fcnCounter(0)
-  , _currentResFileName("currentResult"+suffix+".dat")
+  AbsFcn(fitParamsBase, suffix)
+  ,_absLhPtr(absLh)
 {
    if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
    _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
@@ -64,31 +61,11 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
 
   _fcnCounter++;
 
-
-  //    theTimer.stop();
-  //    boost::timer::cpu_times elapsed(theTimer.elapsed());
-  //    if(elapsed.wall > 0){
-  // 	Info << "Wall time: " << elapsed.wall / 1E9 << "s User: "
-  // 	     << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
-  //    }
-  //    theTimer.start();
-  // }
-
-  if (  _fcnCounter%100 == 0) {
-    _fitParamsBasePtr->printParams(theFitParmValTmp);
-  }
-  
-  if (  _fcnCounter%200 == 0) {
-    std::ofstream theStream (_currentResFileName.c_str());
-    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
-  }
+  if(_fcnCounter%20 == 0) printTimer();  
+  printFitParams(par);
+  dumpFitParams(par);
 
   return result;
-}
-
-double PwaFcnBase::Up() const 
-{
-return .5;
 }
 
 

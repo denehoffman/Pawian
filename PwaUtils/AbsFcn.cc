@@ -23,49 +23,60 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <boost/timer/timer.hpp>
 
-#include "PwaUtils/PwaFcnServer.hh"
+#include "Minuit2/MnUserParameters.h"
+
+#include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-PwaFcnServer::PwaFcnServer(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, boost::shared_ptr<NetworkServer> netServer, std::string suffix) :
-  AbsFcn(fitParamsBase, suffix)
-  , _absLhPtr(absLh)
-  , _networkServerPtr(netServer)
-{
-   if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
-   _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
-  
-}
+boost::timer::cpu_timer theTimer1;
 
-PwaFcnServer::~PwaFcnServer()
+AbsFcn::AbsFcn(boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
+  _fitParamsBasePtr(fitParamsBase)
+  , _fcnCounter(0)
+  , _currentResFileName("currentResult"+suffix+".dat")
 {
 }
 
-double PwaFcnServer::operator()(const std::vector<double>& par) const
+AbsFcn::~AbsFcn()
 {
-  double result=0;
-  
-  LHData theLHData;
-  _networkServerPtr->BroadcastParams(par);
-  if(!_networkServerPtr->WaitForLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
-    result = 0;
-  else
-    result = _absLhPtr->mergeLogLhData(theLHData, _networkServerPtr->numMCs());
-  
-  
-  _fcnCounter++;
-
-  if(_fcnCounter%20 == 0) printTimer();  
-  printFitParams(par);
-  dumpFitParams(par);  
-  
-  return result;
 }
 
+double AbsFcn::Up() const 
+{
+return .5;
+}
 
+void AbsFcn::printTimer() const{
 
+  theTimer1.stop();
+  boost::timer::cpu_times elapsed(theTimer1.elapsed());
+  if(elapsed.wall > 0){
+    Info << "Wall time: " << elapsed.wall / 1E9 << "s User: "
+	 << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
+  }
+  theTimer1.start();
+}
+
+void AbsFcn::printFitParams(const std::vector<double>& par) const{
+  if (  _fcnCounter%100 == 0) {
+    fitParams theFitParmValTmp=_defaultFitValParms;
+    _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+    _fitParamsBasePtr->printParams(theFitParmValTmp);
+  }
+}
+
+void AbsFcn::dumpFitParams(const std::vector<double>& par) const{
+  if (  _fcnCounter%200 == 0) {
+    fitParams theFitParmValTmp=_defaultFitValParms;
+    _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+    std::ofstream theStream (_currentResFileName.c_str());
+    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
+  }
+}
 
