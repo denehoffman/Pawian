@@ -120,7 +120,7 @@ int main(int __argc,char *__argv[]){
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
     
     theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-    return 0;
+    return 1;
   }
 
 
@@ -172,43 +172,43 @@ int main(int __argc,char *__argv[]){
 
 if(mode == "client"){
 
-    bool cacheAmps = theAppParams->cacheAmps();
-    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
-    if (cacheAmps) theLhPtr->cacheAmplitudes();
-
-    std::ostringstream portStringStream;
-    portStringStream << theAppParams->serverPort();
-
-    NetworkClient theClient(theAppParams->serverAddress(), portStringStream.str());
-    if(!theClient.Login())
-       return 0;
-
-
+  bool cacheAmps = theAppParams->cacheAmps();
+  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  if (cacheAmps) theLhPtr->cacheAmplitudes();
+  
+  std::ostringstream portStringStream;
+  portStringStream << theAppParams->serverPort();
+  
+  NetworkClient theClient(theAppParams->serverAddress(), portStringStream.str());
+  if(!theClient.Login())
+    return 0;
+  
+  
   EventReaderDefault eventReaderDataClient(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
   eventReaderDataClient.setUnit(theAppParams->unitInFile());
   eventReaderDataClient.setOrder(theAppParams->orderInFile());
-
+  
   EventList eventsDataClient;
   eventReaderDataClient.fill(eventsDataClient, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
-
+  
   eventsDataClient.rewind();  
   Info  << "\nFile has " << eventsDataClient.size() << " events. Each event has "
         <<  eventsDataClient.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   eventsDataClient.rewind();
-
-
-
+  
+  
+  
   EventReaderDefault eventReaderMcClient(mcFileNames, noFinalStateParticles, 0, false);
   eventReaderMcClient.setUnit(theAppParams->unitInFile());
   eventReaderMcClient.setOrder(theAppParams->orderInFile());
-
-
+  
+  
   EventList mcDataClient;
   eventReaderMcClient.fill(mcDataClient, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
   Info  << "\nFile has " << mcDataClient.size() << " events. Each event has "
         <<  mcDataClient.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   mcDataClient.rewind();
-
+  
   boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
   pbarpEventListPtr->read(eventsDataClient, mcDataClient);
   
@@ -232,6 +232,7 @@ if(mode == "client"){
     if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
       return 0;
   }
+  return 1;
  }
 
 
@@ -243,7 +244,7 @@ if(mode == "client"){
   eventReaderData.fill(eventsData);
   
   Info  << "\nFile has " << eventsData.size() << " events. Each event has "
-        <<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+	<<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   eventsData.rewind();
 
   Event* anEvent;
@@ -354,7 +355,7 @@ if(mode == "client"){
        PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
        boostOutputArchive << thePwaCovMatrix;
     }
-
+    return 1;
  }
 
 
@@ -363,13 +364,13 @@ if(mode == "client"){
  
  theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
  theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
-
+ 
  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix); 
-    Info << "\nThe parameter values are: " << "\n" << endmsg;
-    theFitParamBase->printParams(theStartparams);
-    
-    Info << "\nThe parameter errors are: " << "\n" << endmsg;
-    theFitParamBase->printParams(theErrorparams);
+ Info << "\nThe parameter values are: " << "\n" << endmsg;
+ theFitParamBase->printParams(theStartparams);
+ 
+ Info << "\nThe parameter errors are: " << "\n" << endmsg;
+ theFitParamBase->printParams(theErrorparams);
 
  
  if (mode=="qaMode"){
@@ -410,13 +411,6 @@ if(mode == "client"){
   
 
   if (mode=="pwa"){
-    // boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-    // pbarpEventListPtr->read(eventsData, mcData);
-    
-    // theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
-    // theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
-    
-    // PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
 
     bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
@@ -484,17 +478,11 @@ if(mode == "client"){
        boostOutputArchive << thePwaCovMatrix;
     }
 
-    return 0;
+    return 1;
  }
 
  if(mode == "spinDensity"){
-    // boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-    // pbarpEventListPtr->read(eventsData, mcData);
-    
-    // theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
-    // theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
-    
-    // PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
+ 
     std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
     std::ifstream serializationStream(serializationFileName.c_str());
 
@@ -509,9 +497,10 @@ if(mode == "client"){
     boostInputArchive >> thePwaCovMatrix;
 
     spinDensityHist theSpinDensityHists(theLhPtr, theStartparams, thePwaCovMatrix);
+    return 1;
  }
 
- return 0;
+ return 1;
 }     
  
   
