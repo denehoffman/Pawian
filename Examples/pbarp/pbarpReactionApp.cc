@@ -460,15 +460,32 @@ if(mode == "client"){
       min = migrad2();
     }
     
+
+    std::cout << "\n\n********************** Final fit parameters *************************" << std::endl;
+    std::cout << "\n" << min.UserParameters() << std::endl;
+    std::cout << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
+    if(min.IsValid())             std::cout << "\n Function minimum is valid." << std::endl;
+    else                          std::cout << "\n WARNING: Function minimum is invalid!" << std::endl;
+    if(min.HasValidCovariance())  std::cout << "\n Covariance matrix is valid." << std::endl;
+    else                          std::cout << "\n WARNING: Covariance matrix is invalid!" << std::endl;
+    std::cout <<"\n Final LH: "<< std::setprecision(10) << min.Fval() << "\n" << std::endl;
+    std::cout <<" # of function calls: " << min.NFcn() << std::endl;
+    std::cout <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;    
+    if(!min.HasValidParameters()) std::cout << " hasValidParameters() returned FALSE" << std::endl;
+    if(!min.HasAccurateCovar())   std::cout << " hasAccurateCovar() returned FALSE" << std::endl;
+    if(!min.HasPosDefCovar())     std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasCovariance())      std::cout << " hasCovariance() returned FALSE" << std::endl;
+    if(min.HasReachedCallLimit()) std::cout << " hasReachedCallLimit() returned TRUE" << std::endl;
+    if(min.IsAboveMaxEdm())       std::cout << " isAboveMaxEdm() returned TRUE" << std::endl;
+    if(min.HesseFailed())         std::cout << " hesseFailed() returned TRUE" << std::endl;
+    std::cout << std::endl;
+
+
     MnUserParameters finalUsrParameters=min.UserParameters();
     const std::vector<double> finalParamVec=finalUsrParameters.Params();
     fitParams finalFitParams=theStartparams;
     theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
-
-    theFitParamBase->printParams(finalFitParams);
-    double theLh=theLhPtr->calcLogLh(finalFitParams);
-    Info <<"theLh = "<< theLh << endmsg;
-    
     
     const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
     fitParams finalFitErrs=theErrorparams;
@@ -480,21 +497,6 @@ if(mode == "client"){
     std::ofstream theStream ( finalResultname.str().c_str() );
     theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
     
-    std::cout  << min << std::endl;
-
-    std::cout << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
-    if(min.IsValid())             std::cout << "Function minimum is valid." << std::endl;
-    else                          std::cout << "*** Function minimum is invalid! ***" << std::endl;
-    if(!min.HasValidParameters()) std::cout << "hasValidParameters() returned FALSE" << std::endl;
-    if(!min.HasValidCovariance()) std::cout << "hasValidCovariance() returned FALSE" << std::endl;
-    if(!min.HasAccurateCovar())   std::cout << "hasAccurateCovar() returned FALSE" << std::endl;
-    if(!min.HasPosDefCovar())     std::cout << "hasPosDefCovar() returned FALSE" << std::endl;
-    if(!min.HasMadePosDefCovar()) std::cout << "hasMadePosDefCovar() returned FALSE" << std::endl;
-    if(!min.HasCovariance())      std::cout << "hasCovariance() returned FALSE" << std::endl;
-    if(min.HasReachedCallLimit()) std::cout << "hasReachedCallLimit() returned TRUE" << std::endl;
-    if(min.IsAboveMaxEdm())       std::cout << "isAboveMaxEdm() returned TRUE" << std::endl;
-    if(min.HesseFailed())         std::cout << "hesseFailed() returned TRUE" << std::endl;
-
     MnUserCovariance theCovMatrix = min.UserCovariance();
 
     std::ostringstream serializationFileName;
@@ -502,7 +504,7 @@ if(mode == "client"){
     std::ofstream serializationStream(serializationFileName.str().c_str());
     boost::archive::text_oarchive boostOutputArchive(serializationStream);
 
-    if(min.IsValid()){
+    if(min.HasValidCovariance()){
        PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
        boostOutputArchive << thePwaCovMatrix;
     }
