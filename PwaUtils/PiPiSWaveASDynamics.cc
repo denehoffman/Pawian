@@ -261,39 +261,47 @@ const std::string& PiPiSWaveASDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
 
 int PiPiSWaveASDynamics::projectionIndex(std::vector<Particle*>& fsParticles){
 
+  int result=-1;
+
   if ( fsParticles.size() != 2 && fsParticles.size() != 4){
     Alert << "PiPiSWave: decay to " << FunctionUtils::particleListName(fsParticles) << " is not supported!!!" << endmsg;
     exit(0); 
   }
   if ( fsParticles.size()==4){
-    return 2; //4 pi
-   }
+    result=2; //4 pi
+  }
   // here  fsParticles.size()==2
+  
+  else{
+    Particle* Piplus=_pdtTable->particle("pion+");
+    Particle* Piminus=_pdtTable->particle("pion-");
+    Particle* Pi0=_pdtTable->particle("pion0");
+    Particle* Kplus=_pdtTable->particle("K+");
+    Particle* Kminus=_pdtTable->particle("K-");
+    Particle* Eta=_pdtTable->particle("eta");
+    Particle* Etaprime=_pdtTable->particle("eta'");
 
-  //first: check pi pi channel
-  Particle* Piplus=_pdtTable->particle("pion+");
-  Particle* Piminus=_pdtTable->particle("pion-");
-  Particle* Pi0=_pdtTable->particle("pion0");
-
-  if(fsParticles[0]==Piplus && fsParticles[1]==Piminus) return 0;
-  else if(fsParticles[1]==Piplus && fsParticles[0]==Piminus) return 0;
-  else if(fsParticles[0]==Pi0 && fsParticles[1]==Pi0) return 0;
-
-  //second: check KK channel
-  Particle* Kplus=_pdtTable->particle("K+");
-  Particle* Kminus=_pdtTable->particle("K-");
-  if(fsParticles[0]==Kplus && fsParticles[1]==Kminus) return 1;
-  else if (fsParticles[1]==Kplus && fsParticles[0]==Kminus) return 1;
-
-  //3: check eta eta channel
-  Particle* Eta=_pdtTable->particle("eta");
-  if(fsParticles[0]==Eta && fsParticles[1]==Eta) return 3;
-
-  //3: check eta etaprime channel
-  Particle* Etaprime=_pdtTable->particle("eta'");
-  if(fsParticles[0]==Eta && fsParticles[1]==Etaprime) return 4;
-  else if(fsParticles[1]==Eta && fsParticles[0]==Etaprime) return 4;
-
- Alert << "PiPiSWave: decay to " << FunctionUtils::particleListName(fsParticles) << " is not supported!!!" <<endmsg;
- exit(0);
+    //first: check pi pi channel    
+    if( *(fsParticles[0])==*Piplus && *(fsParticles[1])==*Piminus) result=0;
+    else if(*(fsParticles[1])==*Piplus && *(fsParticles[0])==*Piminus) result=0;
+    else if(*(fsParticles[0])==*Pi0 && *(fsParticles[1])==*Pi0) result=0;
+    
+    //second: check KK channel
+    else if(*(fsParticles[0])==*Kplus && *(fsParticles[1])==*Kminus) result=1;
+    else if (*(fsParticles[1])==*Kplus && *(fsParticles[0])==*Kminus) result=1;
+    
+    //3: check eta eta channel
+    else if(*(fsParticles[0])==*Eta && *(fsParticles[1])==*Eta) result=3;
+    
+    //3: check eta etaprime channel
+    else if(*(fsParticles[0])==*Eta && *(fsParticles[1])==*Etaprime) result=4;
+    else if(*(fsParticles[1])==*Eta && *(fsParticles[0])==*Etaprime) result=4;
+  }
+  
+  if(result==-1){
+    Alert << "PiPiSWave: decay to " << FunctionUtils::particleListName(fsParticles) << " is not supported!!!" <<endmsg;
+    exit(0);
+  }
+  
+  return result;
 }
