@@ -41,6 +41,7 @@
 #include "PwaUtils/StreamFitParmsBase.hh"
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
+#include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -238,6 +239,30 @@ int main(int __argc,char *__argv[]){
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
     
+    boost::shared_ptr<WaveContribution> theWaveContribution;
+    if(epemEnv::instance()->parser()->calcContributionError()){
+       std::string serializationFileName = epemEnv::instance()->serializationFileName();
+       std::ifstream serializationStream(serializationFileName.c_str());
+
+       if(!serializationStream.is_open()){
+	  Alert << "Could not open serialization file." << endmsg;
+	  return 0;
+       }
+
+       boost::archive::text_iarchive boostInputArchive(serializationStream);
+
+       boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+       boostInputArchive >> *thePwaCovMatrix;
+       theWaveContribution = boost::shared_ptr<WaveContribution>
+	  (new WaveContribution(theLhPtr, theStartparams, thePwaCovMatrix));
+    }
+    else{
+       theWaveContribution = boost::shared_ptr<WaveContribution>
+	  (new WaveContribution(theLhPtr, theStartparams));
+    }
+
+    std::pair<double, double> contValue = theWaveContribution->CalcContribution();
+
     Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
     Info << "evtWeightSumData:\t" <<evtWeightSumData; 
     Info << "BIC:\t" << BICcriterion << endmsg;
@@ -253,6 +278,8 @@ int main(int __argc,char *__argv[]){
     theQaStream << "AICc\t" << AICccriterion << "\n";
     theQaStream << "logLh\t" << theLh << "\n";
     theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+    theQaStream << "Selected wave contribution\t" << contValue.first
+		<< " +- " << contValue.second <<  "\n";
     theQaStream.close();
     
     end= clock();
@@ -310,10 +337,12 @@ int main(int __argc,char *__argv[]){
     serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
     std::ofstream serializationStream(serializationFileName.str().c_str());
     boost::archive::text_oarchive boostOutputArchive(serializationStream);
-
-    PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
-    boostOutputArchive << thePwaCovMatrix;
-
+    
+    if(min.HasValidCovariance()){
+      PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
+      boostOutputArchive << thePwaCovMatrix;
+    }
+    
     return 0;
  }
 
