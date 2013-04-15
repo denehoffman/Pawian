@@ -36,6 +36,7 @@ using namespace std;
 
 epemParser::epemParser(int argc,char **argv):
   ParserBase(argc,argv)
+  ,_cmsMass(3.096916)
 {
   po::options_description common("Common Options");
   common.add_options()

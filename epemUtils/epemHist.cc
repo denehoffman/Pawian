@@ -70,6 +70,7 @@ void epemHist::initRootStuff(){
     double massMin = 0;
     //    double massMax = psiMass;
     double massMax = epemEnv::instance()->cmsMass();
+    DebugMsg << "epemEnv::instance()->cmsMass():\t" << epemEnv::instance()->cmsMass() << endmsg;
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
     std::vector<Particle*> allFsp =  epemEnv::instance()->finalStateParticles();
@@ -91,21 +92,27 @@ void epemHist::initRootStuff(){
     massMax += (massMax - massMin) * 0.02;
     massMin -= (massMax - massMin) * 0.02;
 
-    TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+    TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100, massMin, massMax);
     currentMassDataHist->Sumw2();
     _massDataHistMap[tmpMassHistData]=currentMassDataHist;
 
+    DebugMsg << histName.c_str() << "\t" << massMin << "\t" << massMax << endmsg;
+
     histName="MC"+tmpBaseName;
     histDescription = "M("+tmpMassHistData->_name+") (MC)";
-    TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+    TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100, massMin, massMax);
     currentMassMcHist->Sumw2();
     _massMcHistMap[tmpMassHistData]=currentMassMcHist;
 
+    DebugMsg << histName.c_str() << "\t" << massMin << "\t" << massMax << endmsg;
+    
     histName="Fit"+tmpBaseName;
     histDescription = "M("+tmpMassHistData->_name+") (fit)";
-    TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+    TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100, massMin, massMax);
     currentMassFitHist->Sumw2();
     _massFitHistMap[tmpMassHistData]=currentMassFitHist;
+
+    DebugMsg << histName.c_str() << "\t" << massMin << "\t" << massMax << endmsg;
   }
 
 }

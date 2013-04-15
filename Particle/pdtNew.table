@@ -67,7 +67,6 @@ Meson f2Hat(1800) 	\hat{f}_2(1800)  	0  4  1 -1  1   0  0  0  0 	1.800 	0.3000 	
 #
 # type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass    width   dyn.f   comment
 #
-Meson pion 		\pi  			0  0 -1  1 -1	1  0  0  0 	0.139 	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion0 		\pi^0  			0  0 -1  1 -1   1  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion+ 		\pi^+  			3  0 -1	 0 -1   1  1  0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion- 		\pi^-  			-3 0 -1	 0 -1   1  -1 0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
