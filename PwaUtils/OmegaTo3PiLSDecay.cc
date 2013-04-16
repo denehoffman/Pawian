@@ -49,6 +49,10 @@ OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
 }
 
 void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData){
+  int evtNo=evtData->evtNo;
+  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
+  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
+
   Vector4<double> all4Vec(0.,0.,0.,0.);
   Vector4<double> mother4Vec(0.,0.,0.,0.);
 
@@ -91,6 +95,8 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   for(Spin lamOmega=-1;  lamOmega<=1; ++lamOmega){
     evtData->WignerDsString[_wignerDKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
   }
+
+  _alreadyFilledMap[evtNo]=true;
 }
 
 

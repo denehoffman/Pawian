@@ -68,9 +68,6 @@ public:
 protected:
   std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
   double _factorMag;
-  double _parityFactor;
-
-  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
 
   Particle* _daughter1;
   Particle* _daughter2;

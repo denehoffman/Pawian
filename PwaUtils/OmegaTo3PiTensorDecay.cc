@@ -47,16 +47,30 @@ OmegaTo3PiTensorDecay::~OmegaTo3PiTensorDecay(){
 }
 
 void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData){
+  int evtNo=evtData->evtNo;
+  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
+  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
 
   std::map<std::string , Vector4<double> >::iterator itMap;
+
+  Vector4<double> all4Vec(0.,0.,0.,0.);
+  //fill all4Vec
+  for(itMap=fsMap.begin(); itMap!=fsMap.end(); ++itMap){
+    all4Vec+=itMap->second;
+  }
 
   //fill daughter1 and daughter2 4Vec
   itMap=fsMap.find(_daughter1->name());
   Vector4<double> daughter1_4Vec=itMap->second;
+  daughter1_4Vec.Boost(all4Vec);
+
   itMap=fsMap.find(_daughter2->name());
   Vector4<double> daughter2_4Vec=itMap->second;
+  daughter2_4Vec.Boost(all4Vec);
+
   itMap=fsMap.find(_daughter3->name());
   Vector4<double> daughter3_4Vec=itMap->second;
+  daughter3_4Vec.Boost(all4Vec);
 
   Vector4<double> P_3particle_4Vec=daughter1_4Vec+daughter2_4Vec+daughter3_4Vec;
   LeviCivitaTensor eps; 
@@ -69,5 +83,6 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
     
     evtData->ComplexDoubleString["omegTensor"][_motherJPCPtr->J][mz]=(complex<double>) ampTensor;
   }
+   _alreadyFilledMap[evtNo]=true;
 }
 

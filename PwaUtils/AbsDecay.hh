@@ -117,4 +117,5 @@ protected:
 
   AbsEnv* _env;
   boost::shared_ptr<AbsDynamics> _absDynPtr;
+  std::map<int, bool> _alreadyFilledMap;
 };

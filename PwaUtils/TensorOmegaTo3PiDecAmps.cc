@@ -121,29 +121,6 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Sp
   return result;
 }
 
-complex<double> TensorOmegaTo3PiDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
-  complex<double> result(0.,0.);
-  // std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
-  // for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-
-  //   double theMag=_currentParamMags[*it];
-  //   double thePhi=_currentParamPhis[*it];
-  //   complex<double> expi(cos(thePhi), sin(thePhi));
-
-  //   for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-  //     for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-  //       Spin lambda = lambda1-lambda2;
-  //       if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
-  //       complex<double> amp = theMag*expi*_cgPreFactor[*it][lambda1][lambda2]*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
-
-  //       if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs, this);
-  //       result+=amp;
-  //     }
-  //   }
-  // }
-  return result;
-}
-
 void TensorOmegaTo3PiDecAmps::print(std::ostream& os) const{
   return; //dummy
 }

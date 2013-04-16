@@ -112,6 +112,9 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
 
 
     EvtData* evtData=new EvtData();
+    evtData->evtWeight=anEvent->Weight();
+    evtData->evtNo=startNo+evtCount;
+
     evtData->FourVecsString.insert(mapString4Vec::value_type("all",V4_all_lab)); 
 
     //cache 4 vectors of inital state particles
@@ -135,8 +138,6 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
       (*itDyn)->fillMasses(evtData);
     }; 
 
-    evtData->evtWeight=anEvent->Weight();
-    evtData->evtNo=startNo+evtCount;
     theEvtList.push_back(evtData);
     
     evtWeightSum += anEvent->Weight();    

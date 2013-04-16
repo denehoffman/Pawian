@@ -161,6 +161,10 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
 }
 
 void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
+  int evtNo=evtData->evtNo;
+  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
+  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled 
+
   if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, evtData);
   if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, evtData);
   
@@ -213,6 +217,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
       evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
     }
   }
+
+   _alreadyFilledMap[evtNo]=true;
 }
 
 void AbsDecay::print(std::ostream& os) const{
