@@ -39,25 +39,8 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 
 OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv) :
-  AbsDecay(mother, daughter1, daughter2, theEnv)
-  ,_daughter3(daughter3)
+  OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, theEnv)
 {
-  _finalStateParticles.push_back(daughter3);
-  _finalStateParticlesDaughter3.push_back(daughter3);
-
-  pawian::Collection::PtrLess thePtrLess;
-  std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
-
-  _name+="_"+daughter3->name();
-  _fitParamSuffix=_name;
-  
-  //check correct quantum numbers
-  //...
-  Spin validL=1;
-  Spin validS=0;
-  boost::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherJPCPtr, validL, validS));
-  _JPCLSDecAmps.push_back(theValidJPCLS);
-
   _wignerDKey="normOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
   _lambdaDecKey="lambdaOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles); 
 }
@@ -110,16 +93,4 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   }
 }
 
-void OmegaTo3PiLSDecay::print(std::ostream& os) const{
-  os << "\nJPCLS amplitudes for decay\t" << _name << ":\n";
-  os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
-  
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator it;
-  for (it = _JPCLSDecAmps.begin(); it!= _JPCLSDecAmps.end(); ++it){
-    (*it)->print(os);
-    os << "\n";
-  }
 
-  AbsDecay::print(os);  
-  os << "\n";
-}

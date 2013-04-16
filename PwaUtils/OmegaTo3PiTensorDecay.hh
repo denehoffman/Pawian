@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// OmegaTo3PiLSDecay class definition file. -*- C++ -*-
+// OmegaTo3PiTensorDecay class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -43,16 +43,15 @@ class Particle;
 class EvtData;
 class AbsEnv;
 
-class OmegaTo3PiLSDecay : public OmegaTo3PiDecay{
+class OmegaTo3PiTensorDecay : public OmegaTo3PiDecay{
 
 public:
-  OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
-  virtual ~OmegaTo3PiLSDecay();
+  OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
+  virtual ~OmegaTo3PiTensorDecay();
+
+  virtual std::string type() {return "OmegaTo3PiTensorDecay";} 
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
-  virtual const std::string lambdaDecKey() {return _lambdaDecKey;}
-  virtual std::string type() {return "OmegaTo3PiLSDecay";} 
 
 protected:
-  std::string _lambdaDecKey;
 };

@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// LSDecAmps class definition file. -*- C++ -*-
+// TensorOmegaTo3PiDecAmps class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #include <getopt.h>
@@ -29,70 +29,44 @@
 #include <string>
 #include <mutex>
 
-#include "PwaUtils/LSDecAmps.hh"
+#include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/IsobarLSDecay.hh"
-//#include "PwaUtils/XdecAmpRegistry.hh"
+#include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "Particle/Particle.hh"
 
 
-LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
+TensorOmegaTo3PiDecAmps::TensorOmegaTo3PiDecAmps(boost::shared_ptr<OmegaTo3PiTensorDecay> theDec) :
   AbsXdecAmp(theDec)
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
 {
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
-  Particle* daughter1=_decay->daughter1Part();
-  Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-  Info << "_parityFactor=\t" << _parityFactor << endmsg;
-  fillCgPreFactor(); 
+  _daughter1=_decay->daughter1Part();
+  _daughter2=_decay->daughter2Part();
+  _daughter3=theDec->daughter3Part();
 }
 
-LSDecAmps::LSDecAmps(boost::shared_ptr<AbsDecay> theDec) :
-  AbsXdecAmp(theDec)
-{
-  Particle* daughter1=_decay->daughter1Part();
-  Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J()); 
-  Info << "_parityFactor=\t" << _parityFactor << endmsg;
-  fillCgPreFactor();  
-}
-
-LSDecAmps::~LSDecAmps()
+TensorOmegaTo3PiDecAmps::~TensorOmegaTo3PiDecAmps()
 {
 }
 
 
-complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
+  complex<double> result(0.,0.);
+  // std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  // for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+  //   if( fabs(lamX) > (*it)->J ) continue;
+  //   double theMag=_currentParamMags[*it];
+  //   double thePhi=_currentParamPhis[*it];
+  //   complex<double> expi(cos(thePhi), sin(thePhi));
 
-  if(fixDaughterNr == 1){
-     lam1Min = lam1Max = lamDec;
-  }
-  else if(fixDaughterNr == 2){
-     lam2Min = lam2Max = lamDec;
-  }
-  else{
-     Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
-  }
-
-  if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
-  }
-
-  complex<double> result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  //       complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
+  // 	  *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
+  //       result+=amp;
+  // }
 
   return result;
 }
@@ -100,36 +74,42 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
 
 
 
-complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.);  
-  if( fabs(lamX) > _JPCPtr->J) return result; 
-
+  complex<double> result(0.,0.); 
+  
   int evtNo=theData->evtNo;
- 
+
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap[evtNo][lamX][lamFs];
-    result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
 
-  //  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
-  if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
-  }
-
+ 
+  // Vector4<double> part1_4Vec=theData->FourVecsString[_daughter1->name()];
+  // Vector4<double> part2_4Vec=theData->FourVecsString[_daughter2->name()];
+  // Vector4<double> part3_4Vec=theData->FourVecsString[_daughter3->name()];
+ 
+  // Vector4<double> P_2part_4Vec=part1_4Vec+part2_4Vec+part3_4Vec;
+  // LeviCivitaTensor eps; 
+  // PolVector omega; // spin-1 particle is the default constructor
+  // omega.SetP4(P_2part_4Vec, P_2part_4Vec.M());
   
-  result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
+  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+    if( fabs(lamX) > (*it)->J ) continue;
+    double theMag=_currentParamMags[*it];
+    double thePhi=_currentParamPhis[*it];
+    complex<double> expi(cos(thePhi), sin(thePhi));
+    //    Tensor<complex<double> >  ampTensor(0);
+    //    ampTensor = eps|(part1_4Vec%part2_4Vec%part3_4Vec%omega(lamX));   
+    complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][lamX];
+
+    //    Info << "amp:\t" << amp << endmsg;
+
+    result+=amp;
+  }
+
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -141,32 +121,35 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
   return result;
 }
 
-
-complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
+complex<double> TensorOmegaTo3PiDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
   complex<double> result(0.,0.);
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
-  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+  // std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  // for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
 
-    double theMag=_currentParamMags[*it];
-    double thePhi=_currentParamPhis[*it];
-    complex<double> expi(cos(thePhi), sin(thePhi));
+  //   double theMag=_currentParamMags[*it];
+  //   double thePhi=_currentParamPhis[*it];
+  //   complex<double> expi(cos(thePhi), sin(thePhi));
 
-    for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-      for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	Spin lambda = lambda1-lambda2;
-	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
-	complex<double> amp = theMag*expi*_cgPreFactor[*it][lambda1][lambda2]*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
+  //   for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
+  //     for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
+  //       Spin lambda = lambda1-lambda2;
+  //       if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
+  //       complex<double> amp = theMag*expi*_cgPreFactor[*it][lambda1][lambda2]*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs, this);
-	result+=amp;
-      }
-    }
-  }
+  //       if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs, this);
+  //       result+=amp;
+  //     }
+  //   }
+  // }
   return result;
-} 
+}
+
+void TensorOmegaTo3PiDecAmps::print(std::ostream& os) const{
+  return; //dummy
+}
 
 
-void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void TensorOmegaTo3PiDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -193,12 +176,8 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
 }
 
-void LSDecAmps::print(std::ostream& os) const{
-  return; //dummy
-}
 
-
-bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
+bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
@@ -220,21 +199,21 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
        double thePhi=phiMap[*it];
        
        if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
-	 _recalculate=true;
-	 return _recalculate;
+         _recalculate=true;
+         return _recalculate;
        }
        if(!CheckDoubleEquality(thePhi, _currentParamPhis[*it])){
-	 _recalculate=true;
-	 return _recalculate;
+         _recalculate=true;
+         return _recalculate;
        }
      }
    }
 
    return _recalculate;
 }
- 
 
-void  LSDecAmps::updateFitParams(fitParams& theParamVal){
+
+void TensorOmegaTo3PiDecAmps::updateFitParams(fitParams& theParamVal){
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
 
@@ -253,19 +232,6 @@ void  LSDecAmps::updateFitParams(fitParams& theParamVal){
 
 }
 
-void  LSDecAmps::fillCgPreFactor(){
 
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
-  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; ++lambda1){
-      for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){
-	Spin lambda = lambda1-lambda2;
-	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 
-	_cgPreFactor[*it][lambda1][lambda2]=sqrt(2.*(*it)->L+1)
-	  *Clebsch((*it)->L, 0, (*it)->S, lambda, (*it)->J, lambda)
-	  *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
-      }
-    }
-  }
-}
+

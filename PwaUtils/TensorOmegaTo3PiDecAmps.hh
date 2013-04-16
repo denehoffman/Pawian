@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// OmegaTo3PiLSDecay class definition file. -*- C++ -*-
+// TensorOmegaTo3PiDecAmps class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -30,29 +30,58 @@
 #include <vector>
 #include <complex>
 #include <map>
-#include <vector>
 #include <string>
-#include <sstream>
+
+#include <cassert>
 #include <boost/shared_ptr.hpp>
 
-#include "PwaUtils/OmegaTo3PiDecay.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "Utils/PawianCollectionUtils.hh"
+#include "PwaUtils/AbsXdecAmp.hh"
 
+class OmegaTo3PiTensorDecay;
 class Particle;
-class EvtData;
-class AbsEnv;
 
-class OmegaTo3PiLSDecay : public OmegaTo3PiDecay{
+class TensorOmegaTo3PiDecAmps : public AbsXdecAmp{
 
 public:
-  OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
-  virtual ~OmegaTo3PiLSDecay();
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
-  virtual const std::string lambdaDecKey() {return _lambdaDecKey;}
-  virtual std::string type() {return "OmegaTo3PiLSDecay";} 
+  // create/copy/destroy:
 
+  ///Constructor 
+  TensorOmegaTo3PiDecAmps(boost::shared_ptr<OmegaTo3PiTensorDecay> theDec);
+
+  /** Destructor */
+  virtual ~TensorOmegaTo3PiDecAmps();
+
+
+  // Getters:
+  
+  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
+				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
+
+  virtual void print(std::ostream& os) const;
+  std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual void updateFitParams(fitParams& theParamVal);
 protected:
-  std::string _lambdaDecKey;
+  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
+  double _factorMag;
+  double _parityFactor;
+
+  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
+
+  Particle* _daughter1;
+  Particle* _daughter2;
+  Particle* _daughter3;
+
+private:
+
+
+
+
 };
+
+
+

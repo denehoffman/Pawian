@@ -78,10 +78,10 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
   complex<double> result(0.,0.); 
   
   int evtNo=theData->evtNo;
-  std::string currentKey=_absDyn->grandMaKey(grandmaAmp); 
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs];
+    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
   
@@ -98,13 +98,14 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
     result+=amp;
   }
   result*=sqrt( theData->DoubleString["lamOmegaDec"] );
-  result*=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][lamX][lamFs]=result;
      theMutex.unlock();
   }
+
+  result*=_absDyn->eval(theData, grandmaAmp);
   return result;
 }
 

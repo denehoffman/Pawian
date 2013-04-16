@@ -198,7 +198,8 @@ public:
   }
 
   /** Destructor */
-  virtual ~PolVector(){}
+  //  virtual ~PolVector(){}
+  ~PolVector(){}
 
   // Setters:
 

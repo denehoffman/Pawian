@@ -127,10 +127,10 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  std::string currentKey=_absDyn->grandMaKey(grandmaAmp);
   
   if ( _cacheAmps && !_recalculate){
-    result=_cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs];
+    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
 
@@ -153,15 +153,15 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs, this);
   }
 
-  result*=_absDyn->eval(theData, grandmaAmp);
   result*=sqrt(2.*_JPCPtr->J+1.);
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedGrandmaAmpMap[currentKey][evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][lamX][lamFs]=result;
      theMutex.unlock();
 }
 
+  result*=_absDyn->eval(theData, grandmaAmp);
   return result;
 }
 

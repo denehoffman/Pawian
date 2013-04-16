@@ -33,10 +33,12 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
+#include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/LSOmegaTo3PiDecAmps.hh"
+#include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -75,6 +77,10 @@ boost::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(boost::shared_ptr<AbsD
     else if(theAbsXDec->type()=="OmegaTo3PiLSDecay"){
       boost::shared_ptr<OmegaTo3PiLSDecay> decOmega =  boost::dynamic_pointer_cast<OmegaTo3PiLSDecay>(theAbsXDec);
       result=boost::shared_ptr<AbsXdecAmp>(new LSOmegaTo3PiDecAmps(decOmega));
+    }
+    else if(theAbsXDec->type()=="OmegaTo3PiTensorDecay"){
+      boost::shared_ptr<OmegaTo3PiTensorDecay> decOmega =  boost::dynamic_pointer_cast<OmegaTo3PiTensorDecay>(theAbsXDec);
+      result=boost::shared_ptr<AbsXdecAmp>(new TensorOmegaTo3PiDecAmps(decOmega));
     }
     else{
       Alert << "can nor create XdecAmp object for theAbsXDec->name():\t" << theAbsXDec->name() << endmsg;
