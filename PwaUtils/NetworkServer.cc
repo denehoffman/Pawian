@@ -40,7 +40,7 @@ short NetworkServer::SERVERMESSAGE_CLOSE = 2;
 
 NetworkServer::NetworkServer(int port, short noOfClients, int numData, int numMC) :
      _port(port) 
-   , _timeout(10)
+   , _timeout(20)
    , _noOfClients(noOfClients)
    , _firstLH(true)
    , _numData(numData)
@@ -127,8 +127,7 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
    for(int i=0; i<_noOfClients; i++){
 
       if(_firstLH){
-	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(300));
-	 _firstLH=false;
+	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(3000));
       }
       else{
 	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(_timeout));
@@ -162,6 +161,9 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
       llh_data += tempData;
       lh_mc += tempMc;
       weightSum += tempWeightSum;      
+   }
+   if(_firstLH){
+      _firstLH=false;
    }
 
    return true;

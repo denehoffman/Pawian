@@ -165,10 +165,6 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
   if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
   updateFitParams(theParamVal);
 
-  theLHData.logLH_data = theLHData.weightSum = theLHData.LH_mc = 0.0;
-
-  //  int numData = eventLimits[1] - eventLimits[0];
-  //  int numMC = eventLimits[3] - eventLimits[2];
   int numData = _evtDataVec.size();
   int numMC = _evtMCVec.size();
 
@@ -183,10 +179,6 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
      int eventMin = i*eventStepData;
      int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
 
-    // int eventMin = i*eventStepData + eventLimits[0];
-
-    //  int eventMax = (i==_noOfThreads-1) ? eventLimits[1] : (i+1)*eventStepData - 1 + eventLimits[0];
-
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
 				      std::ref(threadDataVec.at(i).logLH_data),
 				      std::ref(threadDataVec.at(i).weightSum), theParamVal));
@@ -198,9 +190,6 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
   theThreads.clear();
 
   for(int i = 0; i<_noOfThreads;i++){
-
-     // int eventMin = i*eventStepMC + eventLimits[2];
-     // int eventMax = (i==_noOfThreads-1) ? eventLimits[3] : (i+1)*eventStepMC - 1 + eventLimits[2];
 
     int eventMin = i*eventStepMC;
     int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
@@ -222,7 +211,7 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
 
 
 
-double AbsLh::mergeLogLhData(LHData& theLHData, int nMCs){//double& llh_data, double& weightSum, double& lh_mc){
+double AbsLh::mergeLogLhData(LHData& theLHData, int nMCs){
 
   double logLH=0.;
   double logLH_mc_Norm=0.;  
