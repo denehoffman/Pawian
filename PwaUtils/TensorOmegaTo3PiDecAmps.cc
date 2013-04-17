@@ -103,8 +103,9 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Sp
     complex<double> expi(cos(thePhi), sin(thePhi));
     //    Tensor<complex<double> >  ampTensor(0);
     //    ampTensor = eps|(part1_4Vec%part2_4Vec%part3_4Vec%omega(lamX));   
-    complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][lamX];
 
+    complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][lamX];
+    // complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][1];
     //    Info << "amp:\t" << amp << endmsg;
 
     result+=amp;
