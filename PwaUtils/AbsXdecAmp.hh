@@ -56,7 +56,7 @@ public:
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
                                       EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0)=0;
 
-  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0); 
+  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs); 
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   virtual boost::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}

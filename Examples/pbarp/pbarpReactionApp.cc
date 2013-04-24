@@ -231,7 +231,7 @@ if(mode == "client"){
     theFitParamBase->getFitParamVal(currentParamVec, currentFitParams);
     
     LHData theLHData;
-    theLhPtr->calcLogLhDataClient(currentFitParams, theLHData, theClient.GetEventLimits());
+    theLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
     
     if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
       return 0;

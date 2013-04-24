@@ -150,7 +150,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
     double thePhi=_currentParamPhiLamLams[it->first];
     complex<double> expi(cos(thePhi), sin(thePhi));
     complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][it->first->J][lamX][lambda]);
-    result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs, this);
+    result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
   result*=sqrt(2.*_JPCPtr->J+1.);

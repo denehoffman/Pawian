@@ -61,8 +61,7 @@ public:
 
   virtual double calcLogLh(fitParams& theParamVal);
   virtual double mergeLogLhData(LHData& theLHData, int nMCs);
-  virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData,
-				   std::vector<double>& eventLimits);
+  virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData);
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;
 
   virtual void setDataVec(std::vector<EvtData*> theVec);

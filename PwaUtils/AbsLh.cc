@@ -159,7 +159,7 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
 
 
 void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
-				LHData& theLHData, std::vector<double>& eventLimits ){
+				LHData& theLHData){
 
   _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
@@ -215,11 +215,6 @@ double AbsLh::mergeLogLhData(LHData& theLHData, int nMCs){
 
   double logLH=0.;
   double logLH_mc_Norm=0.;  
-
-  // if (theLHData.LH_mc>0.) logLH_mc_Norm=log(theLHData.LH_mc/_evtMCVec.size());
-  // logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/_evtMCVec.size()-1.)*(theLHData.LH_mc/_evtMCVec.size()-1.)
-  //   -theLHData.logLH_data
-  //   +theLHData.weightSum*logLH_mc_Norm;
 
   if (theLHData.LH_mc>0.) logLH_mc_Norm=log(theLHData.LH_mc/nMCs);
   logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/nMCs-1.)*(theLHData.LH_mc/nMCs-1.)

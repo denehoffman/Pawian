@@ -157,7 +157,7 @@ complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spi
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 	complex<double> amp = theMag*expi*_cgPreFactor[*it][lambda1][lambda2]*conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][lambda]);
 
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs, this);
+      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;
       }
     }
