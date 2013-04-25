@@ -187,6 +187,7 @@ struct angleHistData2D {
 class TFile;
 class TH2F;
 class TH1F;
+class TTree;
 class AbsEnv;
 
 class AbsHist {
@@ -207,7 +208,10 @@ protected:
 
 
  TFile* _theTFile;
-  AbsEnv* _absEnv;
+ TTree* _dataFourvecs;
+ TTree* _fittedFourvecs;
+
+ AbsEnv* _absEnv;
 
  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;

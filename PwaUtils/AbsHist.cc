@@ -32,7 +32,7 @@
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
+
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -45,12 +45,19 @@
 #include "TH2F.h"
 #include "TNtuple.h"
 
+#include "TLorentzVector.h"
+#include "ErrLogger/ErrLogger.hh"
+#include "TTree.h"
+
 AbsHist::AbsHist(AbsEnv* theEnv) :
   _absEnv(theEnv) 
 {
   std::ostringstream rootFileName;
   rootFileName << "./pawianHists" << _absEnv->outputFileNameSuffix() << ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
+
+  _dataFourvecs = new TTree("_dataFourvecs", "_dataFourvecs");
+  _fittedFourvecs = new TTree("_fittedFourvecs", "_fittedFourvecs");
 
   std::vector<boost::shared_ptr<angleHistData> > angleHistDataVec=_absEnv->angleHistDataVec();
 
@@ -171,6 +178,20 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     exit(1);
   }
 
+  std::vector<Particle*> fsParticles = _absEnv->finalStateParticles();
+  std::map<std::string, std::shared_ptr<TLorentzVector> > fourVecMap;
+  float weightToWrite;
+
+  for(auto fsIt = fsParticles.begin(); fsIt != fsParticles.end(); ++fsIt){
+     std::string particleName = (*fsIt)->name();
+     fourVecMap[particleName] = std::shared_ptr<TLorentzVector>(new TLorentzVector(0,0,0,0));
+     _dataFourvecs->Branch(particleName.c_str(), "TLorentzVector", fourVecMap[particleName].get());
+     _fittedFourvecs->Branch(particleName.c_str(), "TLorentzVector", fourVecMap[particleName].get());
+  }
+  _dataFourvecs->Branch("weight", &weightToWrite, "weight");
+  _fittedFourvecs->Branch("weight", &weightToWrite, "weight");
+
+
   //  boost::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
   const std::vector<EvtData*> dataList=theLh->getDataVec();
   double integralDataWWeight=0.;
@@ -183,6 +204,15 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       fillMassHists((*it), weight, _massDataHistMap);
       fillAngleHists((*it), weight, _angleDataHistMap);
       fillAngleHists2D((*it), weight, _angleDataHistMap2D);
+
+      for(auto fsIt = fsParticles.begin(); fsIt != fsParticles.end(); ++fsIt){
+	 std::string particleName = (*fsIt)->name();
+	 Vector4<double> tmp4vec=(*it)->FourVecsString[particleName];
+	 fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
+      }
+      weightToWrite = weight;
+      _dataFourvecs->Fill();
+
       ++it;
     }
 
@@ -202,6 +232,15 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       fillMassHists((*it), evtWeight*fitWeight, _massFitHistMap);
       fillAngleHists((*it), evtWeight*fitWeight, _angleFitHistMap);
       fillAngleHists2D((*it), evtWeight*fitWeight, _angleFitHistMap2D);
+
+      for(auto fsIt = fsParticles.begin(); fsIt != fsParticles.end(); ++fsIt){
+	 std::string particleName = (*fsIt)->name();
+	 Vector4<double> tmp4vec=(*it)->FourVecsString[particleName];
+	 fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
+      }
+      weightToWrite = fitWeight;
+      _fittedFourvecs->Fill();
+
       ++it;
     }
 
@@ -261,7 +300,7 @@ void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<boost::sha
     }
     it->second->Fill(combined4Vec.M(), weight); 
   }
-  
+
 }
 
 void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill){

@@ -331,8 +331,9 @@ if(mode == "client"){
     std::cout <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;
     if(!min.HasValidParameters()) std::cout << " hasValidParameters() returned FALSE" << std::endl;
     if(!min.HasAccurateCovar())   std::cout << " hasAccurateCovar() returned FALSE" << std::endl;
-    if(!min.HasPosDefCovar())     std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
-    if(!min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasPosDefCovar()){    std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
+                                  if(min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned TRUE" << std::endl;
+    }
     if(!min.HasCovariance())      std::cout << " hasCovariance() returned FALSE" << std::endl;
     if(min.HasReachedCallLimit()) std::cout << " hasReachedCallLimit() returned TRUE" << std::endl;
     if(min.IsAboveMaxEdm())       std::cout << " isAboveMaxEdm() returned TRUE" << std::endl;
@@ -483,8 +484,9 @@ if(mode == "client"){
     std::cout <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;    
     if(!min.HasValidParameters()) std::cout << " hasValidParameters() returned FALSE" << std::endl;
     if(!min.HasAccurateCovar())   std::cout << " hasAccurateCovar() returned FALSE" << std::endl;
-    if(!min.HasPosDefCovar())     std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
-    if(!min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned FALSE" << std::endl;
+    if(!min.HasPosDefCovar()){    std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
+                                  if(min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned TRUE" << std::endl;
+    }
     if(!min.HasCovariance())      std::cout << " hasCovariance() returned FALSE" << std::endl;
     if(min.HasReachedCallLimit()) std::cout << " hasReachedCallLimit() returned TRUE" << std::endl;
     if(min.IsAboveMaxEdm())       std::cout << " isAboveMaxEdm() returned TRUE" << std::endl;
