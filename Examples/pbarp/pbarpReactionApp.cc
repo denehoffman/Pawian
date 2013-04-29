@@ -52,6 +52,7 @@
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "pbarpUtils/pbarpHeliLh.hh"
 #include "pbarpUtils/pbarpCanoLh.hh"
+#include "pbarpUtils/pbarpTensorLh.hh"
 
 #include "Event/EventReaderDefault.hh"
 
@@ -106,6 +107,7 @@ int main(int __argc,char *__argv[]){
   boost::shared_ptr<AbsLh> theLhPtr;
   if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpCanoLh());
   else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh());
+  else if(prodFormalism=="Tensor") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpTensorLh());
   else {
     Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
     exit(1);

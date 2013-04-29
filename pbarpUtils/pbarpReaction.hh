@@ -41,6 +41,7 @@
 class Particle;
 class IsobarLSDecay;
 class IsobarHeliDecay;
+class IsobarTensorDecay;
 
 class pbarpReaction {
 
@@ -51,7 +52,8 @@ public:
 
   virtual void print(std::ostream& os) const;
   std::vector< boost::shared_ptr<IsobarLSDecay> >& productionDecays() {return _prodDecs;}
-  std::vector< boost::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}  
+  std::vector< boost::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
+  std::vector< boost::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}  
   std::vector< boost::shared_ptr<const jpcRes> >& jpcStates() {return _pbarpJPCs;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsStates() {return _pbarpJPCLSs;}
   std::vector< boost::shared_ptr<const JPCLS> >& jpclsSingletStates() {return _pbarpJPCLSsinglet;}
@@ -72,6 +74,7 @@ private:
 
   std::vector< boost::shared_ptr<IsobarLSDecay> > _prodDecs;
   std::vector< boost::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
+  std::vector< boost::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
 
   std::map< boost::shared_ptr<const jpcRes>, Spin, pawian::Collection::SharedPtrLess > _minLMap;
 
