@@ -5,6 +5,22 @@ local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor -lboost_timer ;
 
+rule split-stack-cond ( properties * )
+{
+  local toolset = [ MATCH <toolset>(.*) : $(properties) ] ;
+  if $(toolset) = gcc
+  {
+    local gcc-ver = [ MATCH <toolset-gcc:version>(.*) : $(properties) ] ;
+    local major = [ MATCH (.)\..* : $(gcc-ver) ] ;
+    local minor = [ MATCH .\.(.).* : $(gcc-ver) ] ;
+    if $(major) > 4 | ( $(major) = 4 & $(minor) >= 7 )
+    {
+      return <cxxflags>-ftemplate-depth=256 ;
+    }
+  }
+} 
+
+
 project :
 	requirements <include>./  
 	<include>$(extern)/include
@@ -13,6 +29,7 @@ project :
 	<link>static
 	<cxxflags>-std=gnu++0x
 	<cxxflags>-pthread
+  <conditional>@split-stack-cond
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
 	<linkflags>-pthread
