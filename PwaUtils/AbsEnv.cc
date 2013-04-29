@@ -33,6 +33,7 @@
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/IsobarTensorDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/ParserBase.hh"
@@ -146,6 +147,7 @@ void AbsEnv::setup(ParserBase* theParser){
     if(daughterParticles.size()==2){
       if (usedSystem=="Heli") tmpDec= boost::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
       else if (usedSystem=="Cano")  tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      else if (usedSystem=="Tensor")  tmpDec= boost::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
       else {
 	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);

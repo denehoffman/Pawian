@@ -32,11 +32,13 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/IsobarTensorDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/HeliDecAmps.hh"
+#include "PwaUtils/TensorDecAmps.hh"
 #include "PwaUtils/LSOmegaTo3PiDecAmps.hh"
 #include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -73,6 +75,10 @@ boost::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(boost::shared_ptr<AbsD
     else if(theAbsXDec->type()=="IsobarHeliDecay"){
       boost::shared_ptr<IsobarHeliDecay> decLamLam =  boost::dynamic_pointer_cast<IsobarHeliDecay>(theAbsXDec);
       result=boost::shared_ptr<AbsXdecAmp>(new HeliDecAmps(decLamLam));
+    }
+    else if(theAbsXDec->type()=="IsobarTensorDecay"){
+      boost::shared_ptr<IsobarTensorDecay> decTensor =  boost::dynamic_pointer_cast<IsobarTensorDecay>(theAbsXDec);
+      result=boost::shared_ptr<AbsXdecAmp>(new TensorDecAmps(decTensor));
     }
     else if(theAbsXDec->type()=="OmegaTo3PiLSDecay"){
       boost::shared_ptr<OmegaTo3PiLSDecay> decOmega =  boost::dynamic_pointer_cast<OmegaTo3PiLSDecay>(theAbsXDec);

@@ -31,6 +31,7 @@
 #include "pbarpUtils/pbarpEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/IsobarTensorDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -70,6 +71,10 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 	  CheckLmaxLimit((std::string&)(*itPartPairs).first->name(), *itJPC) &&
 	  CheckLmaxLimit((std::string&)(*itPartPairs).second->name(), *itJPC)){
 	 _prodDecs.push_back(currentDec);
+
+	 boost::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+         _prodTensorDecs.push_back(currentTensorDec);
+
 	 boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 	 _prodHeliDecs.push_back(currentHeliDec);
 	 acceptJPC=true;

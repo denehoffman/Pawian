@@ -32,6 +32,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/IsobarTensorDecay.hh"
 //#include "PwaUtils/IsobarDecayList.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 //#include "pbarpUtils/pbarpEventList.hh"
@@ -92,10 +93,23 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   _pbarpReaction=boost::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
 
   //fill prodDecayList
-  std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
-  std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator itDec;
-  for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-    _prodDecList->addDecay(*itDec);
+  if(thePbarpParser->productionFormalism()=="Cano"){
+    std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
+    std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      _prodDecList->addDecay(*itDec);
+    }
+  }
+  else if(thePbarpParser->productionFormalism()=="Tensor"){
+      std::vector< boost::shared_ptr<IsobarTensorDecay> > prodDecs= _pbarpReaction->productionTensorDecays();
+      std::vector< boost::shared_ptr<IsobarTensorDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      _prodDecList->addDecay(*itDec);
+    }
+  }
+  else{
+    Alert <<"production formalism\t" << thePbarpParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+    exit(0);
   }
 
   //set suffixes
