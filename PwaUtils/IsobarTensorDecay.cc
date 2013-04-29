@@ -190,7 +190,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   // 		  // if(add_lctForTensor) result=_lctTensor_lctTensor|result;
   // 		  // Tensor<complex<double> > result;
 	  if(spinMother==0 && spinDaughter1 && spinDaughter1) evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]= complex<double> (1.,0.); 
-	  else if(S==0 && spinDaughter1 && spinDaughter1) {
+	  else if(S==0 && spinDaughter1==0 && spinDaughter2==0) {
 	    Tensor<complex<double> > result = epsilonMotherProject | orbTensor;
 	    DebugMsg << "result Tensor Amp for " << _name << ":\t" << result << endmsg;
 	    evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
