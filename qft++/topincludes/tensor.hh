@@ -25,6 +25,7 @@
 #define _include_tensor_H
 
 #include "qft++/tensor/TensorIndex.hh"
+#include "qft++/tensor/TensorIndexOrder.hh"
 #include "qft++/tensor/Tensor_Base.hh"
 #include "qft++/tensor/Tensor.hh"
 #include "qft++/tensor/SpecialTensors.hh"

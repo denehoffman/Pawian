@@ -414,7 +414,7 @@ Tensor<_Tp> Tensor<_Tp>::Permute(int __mu,int __nu) const {
 //_____________________________________________________________________________
 
 template <typename _Tp>
-Tensor<_Tp> Tensor<_Tp>::Order(const TensorIndex &__order) const {
+Tensor<_Tp> Tensor<_Tp>::Order(const TensorIndexOrder &__order) const {
 
   if((int)__order.Size() != _rank){
     cout << "Error! Attempt to reorder tensor indicies w/ incorrect number of"
@@ -445,7 +445,7 @@ Tensor<_Tp> Tensor<_Tp>::Symmetric() const {
 
   // if rank < 2 just return the tensor
   if(_rank > 1){    
-    TensorIndex order(_rank);
+    TensorIndexOrder order(_rank);
     // get the 1st permutation (0,1,2,...,rank-1)
     order.Permute();
     while(order.PermIsValid()){ // loop over all valid permutations
@@ -472,7 +472,7 @@ Tensor<_Tp> Tensor<_Tp>::AntiSymmetric() const {
 
   // if rank < 2 just return the tensor
   if(_rank > 1){    
-    TensorIndex order(_rank);
+    TensorIndexOrder order(_rank);
     sign = 1.0;
     ind = 1;
     // get the 1st permuation (0,1,2,...,rank -1)

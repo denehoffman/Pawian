@@ -530,7 +530,7 @@ public:
    * Example: If order = (0,2,1), then Tensor<float> A(3) A.Order(order) 
    * returns \f$ A_{\mu\rho\nu} \f$ if \f$ A = A_{\mu\nu\rho} \f$.
    */
-  Tensor Order(const TensorIndex &__order) const;
+  Tensor Order(const TensorIndexOrder &__order) const;
 
   /** Returns the symmetric tensor built from the current tensor.
    *
