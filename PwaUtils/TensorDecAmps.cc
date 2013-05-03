@@ -150,11 +150,11 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 	complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString[_name][(*it)->L][(*it)->S][lamX][lambda1][lambda2];
-	//	Info << "theData->ComplexDouble5SpinString[" << _name << "][" 
+	     // 	Info << "theData->ComplexDouble5SpinString[" << _name << "][" 
 	     // << (*it)->L << "][" << (*it)->S << "][" 
 	     // << lamX <<"][" << lambda1 << "][" << lambda2 << "]:\t" 
 	     // << theData->ComplexDouble5SpinString[_name][(*it)->L][(*it)->S][lamX][lambda1][lambda2] << endmsg;
-	//	Info << "amp:\t" << amp << endmsg;
+	     // 	Info << "amp:\t" << amp << endmsg;
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;
       }

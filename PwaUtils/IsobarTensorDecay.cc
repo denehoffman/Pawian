@@ -136,7 +136,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   if (!_hasMotherPart && spinMother>1) lamMotherMax=1; //attention: this is only valid for pbar p or e+ e- reactions; must be moved to individual specific classes
 
   std::vector< boost::shared_ptr<const JPCLS> > theJPCLSAmps=JPCLSAmps();
-  // DebugMsg << name() << endmsg;  
+  DebugMsg << name() << endmsg;  
   std::vector< boost::shared_ptr<const JPCLS> >::iterator itJPCLS;
   for(itJPCLS=theJPCLSAmps.begin(); itJPCLS!=theJPCLSAmps.end(); ++itJPCLS){
     // (*itJPCLS)->print(std::cout);
@@ -145,62 +145,102 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
     Spin S=(*itJPCLS)->S;
     int s1s2S=spinDaughter1+spinDaughter2+(*itJPCLS)->S;
 
-  //   bool add_lctForChi=true;
-  //   if( s1s2S%2 ==0 ) add_lctForChi=false;  //odd
+    bool add_lctForChi=true;
+    if( s1s2S%2 ==0 ) add_lctForChi=false;  //odd
 
-  //   int SLms1=(*itJPCLS)->S+(*itJPCLS)->L+_motherJPCPtr->J;
-  //   bool add_lctForTensor=true;
-  //   if( SLms1%2 ==0 ) add_lctForTensor=false;  //odd
+    int SLms1=(*itJPCLS)->S+(*itJPCLS)->L+_motherJPCPtr->J;
+    bool add_lctForTensor=true;
+    if( SLms1%2 ==0 ) add_lctForTensor=false;  //odd
 
     OrbitalTensor orbTensor(L);
-    if (L>0) orbTensor.SetP4(daughter1_4Vec, daughter2_4Vec);
+    orbTensor.SetP4(daughter1_4Vec, daughter2_4Vec);
     
     for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
       DebugMsg << "lamMother:\t" << lamMother << endmsg;
 
-      Tensor<complex<double> > epsilonMotherProject(0);
-      if(spinMother>0) epsilonMotherProject=_polMother(lamMother);
+      Tensor<complex<double> > epsilonMotherProject;
+      if(spinMother==0){
+	epsilonMotherProject=Tensor<complex<double> >(0);
+        epsilonMotherProject(0)=complex<double>(1.,0.);
+      }
+      else epsilonMotherProject=_polMother(lamMother);
  
-  //     //calculate chi
-  //     // Tensor<complex<double> > chi12;
-  //     // Tensor<complex<double> > s12SpinProjector(0);
-  //     // s12SpinProjector(0)=complex<double>(1.,0);
+      //calculate chi
+      Tensor<complex<double> > chi12;
+      Tensor<complex<double> > s12SpinProjector;
+      if (S>0){
+        //      PolVector::Projector(S, 2*S, mother_4Vec, mother_4Vec.M(), s12SpinProjector);
+        PolVector part12PolVec(S);
+        part12PolVec.SetP4(mother_4Vec,mother_4Vec.M());
+        s12SpinProjector=part12PolVec.Projector(); 
+        
+        DebugMsg << "s12SpinProjector(0,0,0,0):\t" << s12SpinProjector(0,0,0,0) << endmsg;
+      }
+      else{
+	s12SpinProjector=Tensor<complex<double> >(0);
+        s12SpinProjector(0)=complex<double>(1.,0.);
+      }
 
-  //     // if (S>0) PolVector::Projector(S, 2*S, mother_4Vec, mother_4Vec.M(), s12SpinProjector);
 
       for (Spin lamDaughter1=-spinDaughter1; lamDaughter1 <= spinDaughter1; ++lamDaughter1){
 	DebugMsg << "lamDaughter1:\t" << lamDaughter1 << endmsg;
-  // 	// Tensor<complex<double> > epsilonDaughter1Project(0);
-  // 	// epsilonDaughter1Project(0)=complex<double>(1.,0);
 
-  //     //		if(spinDaughter1>0) epsilonDaughter1Project=_polDaughter1(lamDaughter1);
+	Tensor<complex<double> > epsilonDaughter1Project;
+        if(spinDaughter1==0){
+          epsilonDaughter1Project=Tensor<complex<double> >(0);
+          epsilonDaughter1Project(0)=complex<double>(1.,0.);
+        }
+        else epsilonDaughter1Project=_polDaughter1(lamDaughter1);
+
 	for (Spin lamDaughter2=-spinDaughter2; lamDaughter2<=spinDaughter2; ++lamDaughter2){
 	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg;
-  // 		  // Tensor<complex<double> > epsilonDaughter2Project(0);
-  // 		  // epsilonDaughter2Project(0)=complex<double>(1.,0);
 
-  // 		  // if(spinDaughter2>0) epsilonDaughter2Project=_polDaughter2(lamDaughter2);
-  // 		  // //		  chi12=conj(epsilonDaughter2Project)%conj(epsilonDaughter2Project);
-  // 		  // if(add_lctForChi) chi12=epsilonMotherProject| _lctTensor | (conj(epsilonDaughter2Project)%conj(epsilonDaughter2Project));
+	  if(spinDaughter2==0){
+            chi12= s12SpinProjector | conj(epsilonDaughter1Project);
+            //      DebugMsg << "chi12 Tensor Amp (spinDaughter2==0):\t" << chi12 << endmsg;
+          }
+	  else{
+            Tensor<complex<double> >epsilonDaughter2Project=_polDaughter2(lamDaughter2);
+            if(spinDaughter1==0){
+              chi12 = s12SpinProjector | conj(epsilonDaughter2Project);
+              //              DebugMsg << "chi12 Tensor Amp (spinDaughter1==0):\t" << chi12 << endmsg;
+            }
+            else{
+              if(add_lctForChi) chi12=s12SpinProjector | _lctTensor | (conj(epsilonDaughter1Project)%conj(epsilonDaughter2Project));
+              else chi12=s12SpinProjector | (conj(epsilonDaughter1Project)%conj(epsilonDaughter2Project));
+            }
+          }
 
-  // 		  //chi12=epsilonMotherProject| (conj(epsilonDaughter2Project)%conj(epsilonDaughter2Project));
-  // 		  // DebugMsg << "chi12 Tensor Amp:\t" << chi12 << endmsg;
-		  
-  // 		  // Tensor<complex<double> > result=orbTensor|chi12;
-  // 		  // if(add_lctForTensor) result=_lctTensor_lctTensor|result;
-  // 		  // Tensor<complex<double> > result;
+          if( S!=0 && (spinDaughter1!=0 || spinDaughter2!=0) ){
+            DebugMsg << "chi12 Tensor Amp:\t" << chi12 << endmsg;
+            Tensor<complex<double> > result;
+            if(add_lctForTensor){
+              //              result = epsilonMotherProject | ( (_metricTensor | (_lctTensor | mother_4Vec )) | (orbTensor | chi12));
+              result = (epsilonMotherProject % mother_4Vec) | (orbTensor % chi12);
+            }
+            else{
+              if( orbTensor.Rank()+chi12.Rank() == epsilonMotherProject.Rank()) result = epsilonMotherProject | (orbTensor % chi12);
+              else if( orbTensor.Rank() == chi12.Rank() + epsilonMotherProject.Rank()) result = epsilonMotherProject | (orbTensor | chi12);
+            }
+            DebugMsg << "result Tensor Amp for S!=0 && (spinDaughter1!=0 || spinDaughter2!=0 " << _name << ":\t" << result << endmsg;
+            DebugMsg << "epsilonMotherProject " << epsilonMotherProject << endmsg;
+            DebugMsg << "orbTensor " << orbTensor << endmsg;
+            DebugMsg << "chi12 " << chi12 << endmsg;
+	    evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result;
+          }
+
 	  if(spinMother==0 && spinDaughter1==0 && spinDaughter2==0) evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]= complex<double> (1.,0.); 
 	  else if(S==0 && spinDaughter1==0 && spinDaughter2==0) {
 	    Tensor<complex<double> > result = epsilonMotherProject | orbTensor;
 	    DebugMsg << "result Tensor Amp for " << _name << ":\t" << result << endmsg;
 	    evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
 	  }
-  // 		  // else{
-  // 		  //   Tensor<complex<double> > result;
-  // 		  //   if(add_lctForTensor) result=epsilonMotherProject | _lctTensor | orbTensor| chi12;
-  // 		  //   else result=epsilonMotherProject | orbTensor | chi12;
-  // 		  // }
-  // 		  // DebugMsg << "result Tensor Amp:\t" << result << endmsg;
+	  // 		  // else{
+	  // 		  //   Tensor<complex<double> > result;
+	  // 		  //   if(add_lctForTensor) result=epsilonMotherProject | _lctTensor | orbTensor| chi12;
+	  // 		  //   else result=epsilonMotherProject | orbTensor | chi12;
+	  // 		  // }
+	  // 		  // DebugMsg << "result Tensor Amp:\t" << result << endmsg;
 	}
       }
     }
