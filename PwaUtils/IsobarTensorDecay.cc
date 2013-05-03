@@ -139,8 +139,8 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   DebugMsg << name() << endmsg;  
   std::vector< boost::shared_ptr<const JPCLS> >::iterator itJPCLS;
   for(itJPCLS=theJPCLSAmps.begin(); itJPCLS!=theJPCLSAmps.end(); ++itJPCLS){
-    // (*itJPCLS)->print(std::cout);
-    // std::cout << std::endl;
+    //    (*itJPCLS)->print(std::cout);
+    //    std::cout << std::endl;
     Spin L=(*itJPCLS)->L;
     Spin S=(*itJPCLS)->S;
     int s1s2S=spinDaughter1+spinDaughter2+(*itJPCLS)->S;
@@ -216,7 +216,10 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
             Tensor<complex<double> > result;
             if(add_lctForTensor){
               //              result = epsilonMotherProject | ( (_metricTensor | (_lctTensor | mother_4Vec )) | (orbTensor | chi12));
-              result = (epsilonMotherProject % mother_4Vec) | (orbTensor % chi12);
+	      result = epsilonMotherProject | ( ( (_lctTensor * mother_4Vec ) | orbTensor) | chi12);
+
+
+	      //              result = (epsilonMotherProject % mother_4Vec) | (orbTensor % chi12);
             }
             else{
               if( orbTensor.Rank()+chi12.Rank() == epsilonMotherProject.Rank()) result = epsilonMotherProject | (orbTensor % chi12);

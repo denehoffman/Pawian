@@ -39,18 +39,13 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
+#include "Particle/ParticleTable.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 #include <boost/bind.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
-
-// pbarpTensorLh::pbarpTensorLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
-//   pbarpBaseLh(theEvtList)
-// {
-//   initialize();
-// }
 
 pbarpTensorLh::pbarpTensorLh() :
   pbarpBaseLh()
@@ -89,7 +84,27 @@ void  pbarpTensorLh::initialize(){
   fillMap(jpclsTripletp1States, _decAmps, _decAmpsTripletp1);
 
   std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
-  fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);  
+  fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1); 
+
+  double pbarMass = _absEnv->particleTable()->particle("antiproton")->mass();
+  double pMass = _absEnv->particleTable()->particle("proton")->mass();
+  double pbarMom = pbarpEnv::instance()->pbarMomentum();
+
+  Vector4<double> pbar4Vec(sqrt(pbarMass*pbarMass+pbarMom*pbarMom), 0.,0., pbarMom);
+  Vector4<double> p4Vec(pMass, 0.,0.,0.);
+  Vector4<double> allVec=pbar4Vec+p4Vec;
+
+  std::vector< boost::shared_ptr<const JPCLS> > jpclsStatesAll=_pbarpReactionPtr->jpclsStates();
+  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  for(itJPCLS=jpclsStatesAll.begin(); itJPCLS!=jpclsStatesAll.end(); ++itJPCLS){
+    std::shared_ptr<OrbitalTensor> currentTensorPtr(new OrbitalTensor((*itJPCLS)->L));
+    currentTensorPtr->SetP4(pbar4Vec,p4Vec); 
+    _orbTensorMap[(*itJPCLS)->L]=currentTensorPtr;
+
+    std::shared_ptr<PolVector> currentPolVecPtr(new PolVector((*itJPCLS)->J));
+    currentPolVecPtr->SetP4(allVec, allVec.M());
+    _polVectorMap[(*itJPCLS)->J]=currentPolVecPtr; 
+    }
 }
 
 

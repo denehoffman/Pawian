@@ -33,6 +33,7 @@
 #include <complex>
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
+#include <memory>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
@@ -69,4 +70,7 @@ protected:
 private:
 
   void initialize();
+ 
+  std::map< Spin, std::shared_ptr<OrbitalTensor> > _orbTensorMap;
+  std::map< Spin, std::shared_ptr<PolVector> > _polVectorMap;
 };
