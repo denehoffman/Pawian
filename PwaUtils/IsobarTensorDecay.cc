@@ -200,7 +200,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
             //      DebugMsg << "chi12 Tensor Amp (spinDaughter2==0):\t" << chi12 << endmsg;
           }
 	  else{
-            Tensor<complex<double> >epsilonDaughter2Project=_polDaughter2(lamDaughter2);
+            Tensor<complex<double> > epsilonDaughter2Project=_polDaughter2(lamDaughter2);
             if(spinDaughter1==0){
               chi12 = s12SpinProjector | conj(epsilonDaughter2Project);
               //              DebugMsg << "chi12 Tensor Amp (spinDaughter1==0):\t" << chi12 << endmsg;
@@ -235,12 +235,6 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	    DebugMsg << "result Tensor Amp for " << _name << ":\t" << result << endmsg;
 	    evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
 	  }
-	  // 		  // else{
-	  // 		  //   Tensor<complex<double> > result;
-	  // 		  //   if(add_lctForTensor) result=epsilonMotherProject | _lctTensor | orbTensor| chi12;
-	  // 		  //   else result=epsilonMotherProject | orbTensor | chi12;
-	  // 		  // }
-	  // 		  // DebugMsg << "result Tensor Amp:\t" << result << endmsg;
 	}
       }
     }
