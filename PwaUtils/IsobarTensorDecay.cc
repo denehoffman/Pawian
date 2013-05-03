@@ -44,6 +44,7 @@ IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Part
   ,_polDaughter1(PolVector(_daughter1JPCPtr->J))
   ,_polDaughter2(PolVector(_daughter2JPCPtr->J))
   ,_lctTensor(LeviCivitaTensor())
+  , _metricTensor(MetricTensor())
 {
 }
 
@@ -139,8 +140,8 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   DebugMsg << name() << endmsg;  
   std::vector< boost::shared_ptr<const JPCLS> >::iterator itJPCLS;
   for(itJPCLS=theJPCLSAmps.begin(); itJPCLS!=theJPCLSAmps.end(); ++itJPCLS){
-    //    (*itJPCLS)->print(std::cout);
-    //    std::cout << std::endl;
+       (*itJPCLS)->print(std::cout);
+       std::cout << std::endl;
     Spin L=(*itJPCLS)->L;
     Spin S=(*itJPCLS)->S;
     int s1s2S=spinDaughter1+spinDaughter2+(*itJPCLS)->S;
@@ -215,9 +216,15 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
             DebugMsg << "chi12 Tensor Amp:\t" << chi12 << endmsg;
             Tensor<complex<double> > result;
             if(add_lctForTensor){
-              //              result = epsilonMotherProject | ( (_metricTensor | (_lctTensor | mother_4Vec )) | (orbTensor | chi12));
-	      result = epsilonMotherProject | ( ( (_lctTensor * mother_4Vec ) | orbTensor) | chi12);
+ 	      
+	      //	      result = epsilonMotherProject | ( ( (_lctTensor * mother_4Vec ) | orbTensor) | chi12);
+	      result = epsilonMotherProject | ( ( (_lctTensor * mother_4Vec ) * orbTensor) | chi12);
+	      //	      result = (epsilonMotherProject | ( (_lctTensor * mother_4Vec ) | orbTensor) ) | chi12;
 
+	      //	      result = epsilonMotherProject | ( (_lctTensor * mother_4Vec ) | (orbTensor * chi12) );
+
+	      //	      result = epsilonMotherProject | ( (_lctTensor * mother_4Vec ) % (orbTensor | chi12) );
+	      //	      result = epsilonMotherProject |  ( (_lctTensor * mother_4Vec ) | (orbTensor | chi12));
 
 	      //              result = (epsilonMotherProject % mother_4Vec) | (orbTensor % chi12);
             }
@@ -229,7 +236,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
             DebugMsg << "epsilonMotherProject " << epsilonMotherProject << endmsg;
             DebugMsg << "orbTensor " << orbTensor << endmsg;
             DebugMsg << "chi12 " << chi12 << endmsg;
-	    evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result;
+	    evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
           }
 
 	  if(spinMother==0 && spinDaughter1==0 && spinDaughter2==0) evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]= complex<double> (1.,0.); 

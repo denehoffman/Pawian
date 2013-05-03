@@ -58,5 +58,6 @@ protected:
   PolVector _polMother;
   PolVector _polDaughter1;
   PolVector _polDaughter2;
-  LeviCivitaTensor _lctTensor; 
+  LeviCivitaTensor _lctTensor;
+  MetricTensor _metricTensor;  
 };
