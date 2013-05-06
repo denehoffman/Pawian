@@ -365,7 +365,7 @@ if(mode == "client"){
     std::ofstream serializationStream(serializationFileName.str().c_str());
     boost::archive::text_oarchive boostOutputArchive(serializationStream);
 
-    if(min.IsValid()){
+    if(min.HasValidCovariance()){
        PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
        boostOutputArchive << thePwaCovMatrix;
     }

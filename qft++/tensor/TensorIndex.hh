@@ -121,30 +121,6 @@ public:
     return (--(*this));
   }
 
-  // permutation functions:
-
-  /** Obtains the next valid permuation of the current stored index.
-   *
-   * This function is NOT to be used when the TensorIndex object is being
-   * used to get elements from a tensor (the normal use). 
-   * This function is meant to be used on a TensorIndex object declared for 
-   * the sole purpose of performing permutations on the indicies of a Tensor.
-   */
-  TensorIndex& Permute();
-
-  /** Checks to see if the current index permutation is valid.
-   *
-   * Valid means all indicies are between 0 and Rank-1. The function doesn't 
-   * actually check if any 2 indicies are equal, this is done in 
-   * TensorIndex::Permutation.
-   */
-  bool PermIsValid() const {
-    for(int i = 0; i < this->Size(); i++){
-      if(((*this)[i] < 0)||((*this)[i] >= this->Size())) return false;
-    }
-    return true;
-  }
-
   // functions:
 
   /// Returns the number of entries (coresponds to tensor rank)

@@ -29,7 +29,6 @@
 
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/NetworkServer.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;

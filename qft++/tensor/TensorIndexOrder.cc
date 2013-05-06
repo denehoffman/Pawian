@@ -24,18 +24,6 @@
  */
 //_____________________________________________________________________________
 
-// void print(int _index){
-
-//    for(int i=31; i>=0;i--){
-
-//       int r = 1 & (_index >> i);
-//       std::cout << r;
-
-//    }
-//    std::cout << std::endl;
-
-
-// }
 
 
 TensorIndexOrder& TensorIndexOrder::Permute() {
@@ -67,14 +55,4 @@ TensorIndexOrder& TensorIndexOrder::Permute() {
   }
   return (*this); 
 }
-//_____________________________________________________________________________
 
-void TensorIndexOrder::Print(ostream &__os){
-  __os << "(" ;
-  for(unsigned int i = 0; i < _rank; i++){
-    __os << (*this)[i];
-    if(i < (_rank - 1)) cout << "," ;
-  }
-  __os << ")" << endl;
-}
-//_____________________________________________________________________________

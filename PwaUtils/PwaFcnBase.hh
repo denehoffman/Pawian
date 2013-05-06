@@ -32,7 +32,6 @@
 #include "PwaUtils/AbsFcn.hh"
 
 class AbsLh;
-class NetworkServer;
 
 namespace ROOT {
   namespace Minuit2 {

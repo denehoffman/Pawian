@@ -115,8 +115,10 @@ void NetworkServer::AcceptHandler(const boost::system::error_code& err){
 void NetworkServer::Timeout(const boost::system::error_code& err){
 
    if (err != boost::asio::error::operation_aborted){
-      Alert << "Timeout" << endmsg;
+      Alert << "Client timeout!" << endmsg;
+      _timeout = 9999999;
       theAcceptor->cancel();
+      SendClosingMessage();
    }
 }
 
@@ -139,7 +141,7 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
 				boost::bind(&NetworkServer::AcceptHandler, this,
 					    boost::asio::placeholders::error));
       theIOService->run();
-      theIOService->reset();         
+      theIOService->reset();
 
       short connectionPurpose;
       *theStreams.at(i) >> connectionPurpose;

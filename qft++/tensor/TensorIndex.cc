@@ -23,36 +23,6 @@
  */
 //_____________________________________________________________________________
 
-TensorIndex& TensorIndex::Permute() {
-
-  if(_rank < 1) return *this;
-  int level;
-  bool valid = false;
-  while(valid == false){
-    level = _rank - 1;
-    _index += (1 << (level << 1));
-    while(((*this)[level] > (int)_rank - 1) && (level >= 0)){
-      this->SetIndex(level,0);
-      if(level > 0){
-	this->SetIndex(level-1,(*this)[level-1] + 1);
-	level--; 
-      }
-      else{
-	_index = -1;
-	level--;
-      }
-    }
-    valid = true;
-    for(unsigned int i = 0; i < _rank; ++i){
-      for(unsigned int j = 0; j < i; ++j){			  
-	if((j < i) && (*this)[i] == (*this)[j]) valid = false;
-      }
-    }
-  }
-  return (*this); 
-}
-//_____________________________________________________________________________
-
 void TensorIndex::Print(ostream &__os){
   __os << "(" ;
   for(unsigned int i = 0; i < _rank; i++){
