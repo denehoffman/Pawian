@@ -77,6 +77,7 @@ private:
   std::vector< boost::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
 
   std::map< boost::shared_ptr<const jpcRes>, Spin, pawian::Collection::SharedPtrLess > _minLMap;
+  std::map< boost::shared_ptr<const jpcRes>, std::vector<Spin>, pawian::Collection::SharedPtrLess> _jpcToLMap;
 
-  bool CheckLmaxLimit(std::string& particleName,  boost::shared_ptr<const jpcRes> theJPC);
+  bool CheckLDrop(std::string& particleName, boost::shared_ptr<const jpcRes> theJPC);
 };

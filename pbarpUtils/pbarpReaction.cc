@@ -48,15 +48,16 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
   for(itJPCLS = all_JPCLSs.begin(); itJPCLS != all_JPCLSs.end(); ++itJPCLS){
      boost::shared_ptr<const jpcRes> currentJPC = (*itJPCLS);
-     std::map< boost::shared_ptr<const jpcRes>, Spin, pawian::Collection::SharedPtrLess >::iterator mapIt;
-     mapIt = _minLMap.find(currentJPC);
-     if(mapIt == _minLMap.end()){
+     auto minMapIt = _minLMap.find(currentJPC);
+     if(minMapIt == _minLMap.end()){
 	_minLMap[currentJPC] = (*itJPCLS)->L;
      }
      else{
 	if(_minLMap[currentJPC] > (*itJPCLS)->L)
 	   _minLMap[currentJPC] = (*itJPCLS)->L;
      }
+
+     _jpcToLMap[currentJPC].push_back((*itJPCLS)->L);
   }
 
   for(itJPC = pbarpJPCStatesAll.begin(); itJPC!=pbarpJPCStatesAll.end(); ++itJPC){
@@ -68,12 +69,12 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
       boost::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 
       if (currentDec->JPCLSAmps().size()>0 &&
-	  CheckLmaxLimit((std::string&)(*itPartPairs).first->name(), *itJPC) &&
-	  CheckLmaxLimit((std::string&)(*itPartPairs).second->name(), *itJPC)){
+	  CheckLDrop((std::string&)(*itPartPairs).first->name(), *itJPC) &&
+	  CheckLDrop((std::string&)(*itPartPairs).second->name(), *itJPC)){
 	 _prodDecs.push_back(currentDec);
 
-	 boost::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
-         _prodTensorDecs.push_back(currentTensorDec);
+	 //boost::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+         //_prodTensorDecs.push_back(currentTensorDec);
 
 	 boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 	 _prodHeliDecs.push_back(currentHeliDec);
@@ -105,23 +106,51 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
 
 
-bool pbarpReaction::CheckLmaxLimit(std::string& particleName, boost::shared_ptr<const jpcRes> theJPC){
+bool pbarpReaction::CheckLDrop(std::string& particleName, boost::shared_ptr<const jpcRes> theJPC){
 
-   short lmaxParticle;
    std::map<std::string, short> lmaxMap = pbarpEnv::instance()->lmaxParticleData();
-   std::map<std::string, short>::iterator it;
+   std::map<std::string, std::vector<short> > ldropMap = pbarpEnv::instance()->dropPbarpLForParticleData();
 
-   it = lmaxMap.find(particleName);
+   auto lmaxIt = lmaxMap.find(particleName);
+   if(lmaxIt != lmaxMap.end()){
+      short lmaxParticle = (*lmaxIt).second;
+      short lMin = 1E4;
 
-   if(it == lmaxMap.end())
-      return true;
+      for(auto jpcLIt = _jpcToLMap[theJPC].begin(); jpcLIt != _jpcToLMap[theJPC].end(); ++jpcLIt){
+	 if((*jpcLIt) < lMin)
+	    lMin = *jpcLIt;
+      }
 
-   lmaxParticle = (*it).second;
+      if(lMin > lmaxParticle)
+      return false;
+   }
 
-   if(_minLMap[theJPC] <= lmaxParticle)
-      return true;
+   auto ldropIt = ldropMap.find(particleName);
+   if(ldropIt != ldropMap.end()){
+      bool accept = false;
+      short numfound=0;
+      for(auto jpcLIt = _jpcToLMap[theJPC].begin(); jpcLIt != _jpcToLMap[theJPC].end(); ++jpcLIt){
+	 bool found=false;
+	 for(auto ldropListIt = (*ldropIt).second.begin(); ldropListIt != (*ldropIt).second.end(); ++ldropListIt){
+	    if((*ldropListIt) == (*jpcLIt)){
+	       found = true;
+	    }
+	 }
+	 if(!found)
+	    accept = true;
+	 else
+	    numfound++;
+      }
 
-   return false;
+      if(accept && numfound>0){
+	 Warning << "Could not drop " << numfound << " pbarp L state(s) due to JPC = " << theJPC->J << " " << theJPC->P << " " << theJPC->C <<
+	    " ambiguity. Manual parameter fixing needed." << endmsg;
+      }
+
+      return accept;
+   }
+
+   return true;
 }
 
 

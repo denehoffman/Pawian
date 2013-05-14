@@ -50,7 +50,8 @@ pbarpParser::pbarpParser(int argc,char **argv):
   po::options_description config("Configuration file options");
   config.add_options()
      ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation")
-    ("lmaxParticle", po::value< vector<string> >(&_lmaxParticle), "individual lmax (pbarp system) for certain particle")
+     ("lmaxParticle", po::value< vector<string> >(&_lmaxParticle), "individual lmax (pbarp system) for certain particle")
+     ("dropPbarpLForParticle", po::value< vector<string> >(&_dropPbarpLForParticle), "drop l (pbarp system) for certain particle")
     ;
   _config->add(config);
   
@@ -71,8 +72,12 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
      std::cout << (*it) << "\n";
   }
 
-  std::cout << "\nindividual lmax settings " << std::endl;
+  std::cout << "\nindividual pbarp angular momentum settings " << std::endl;
   for (it=_lmaxParticle.begin(); it!=_lmaxParticle.end(); ++it){
+     std::cout << (*it) << "\n";
+  }
+
+  for (it=_dropPbarpLForParticle.begin(); it!=_dropPbarpLForParticle.end(); ++it){
      std::cout << (*it) << "\n";
   }
 

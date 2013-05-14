@@ -42,8 +42,12 @@ void PolVector::SetP4(const Vector4<double> &__p4,double __mass){
   double by = __p4.Y()/__p4.E();
   double bz = __p4.Z()/__p4.E();
 
+  if(_spin == 0) {
+     _pols[0](0) = complex<double>(1., 0.);
+  }
+
   // indicies in pol are i = S + Mz
-  if(_spin == 1) {
+  else if(_spin == 1) {
     _pols[2](1) = complex<double>(-1.0/sqrt(2.),0.); // m=+1  x
     _pols[2](2) = complex<double>(0.,-1.0/sqrt(2.));  // m=+1 y
     _pols[0](1) = complex<double>(1.0/sqrt(2.),0.); // m=-1 x

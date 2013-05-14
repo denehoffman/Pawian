@@ -121,14 +121,11 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   Spin spinDaughter1=_daughter1JPCPtr->J;
   Spin spinDaughter2=_daughter2JPCPtr->J;
   
-  if(spinMother>0){
-     _polMother.SetP4(mother_4Vec,mother_4Vec.M());
-  }
+  _polMother.SetP4(mother_4Vec,mother_4Vec.M());
   //  _polMother.SetP4(mother_4Vec,mother_4Vec.M());
   //  DebugMsg << "_polMother:\t" << _polMother << endmsg;   
-  
-  if(spinDaughter1>0) _polDaughter1.SetP4(daughter1_4Vec, daughter1_4Vec.M());   
-  if(spinDaughter2>0) _polDaughter2.SetP4(daughter2_4Vec, daughter2_4Vec.M()); 
+  _polDaughter1.SetP4(daughter1_4Vec, daughter1_4Vec.M());
+  _polDaughter2.SetP4(daughter2_4Vec, daughter2_4Vec.M());
   
   Spin lam12Max=spinDaughter1+spinDaughter2;
   if(lam12Max>spinMother) lam12Max=spinMother;
@@ -159,39 +156,21 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
     for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
       DebugMsg << "lamMother:\t" << lamMother << endmsg;
 
-      Tensor<complex<double> > epsilonMotherProject;
-      if(spinMother==0){
-	epsilonMotherProject=Tensor<complex<double> >(0);
-        epsilonMotherProject(0)=complex<double>(1.,0.);
-      }
-      else epsilonMotherProject=_polMother(lamMother);
+      Tensor<complex<double> > epsilonMotherProject = _polMother(lamMother);
  
       //calculate chi
       Tensor<complex<double> > chi12;
       Tensor<complex<double> > s12SpinProjector;
-      if (S>0){
-        //      PolVector::Projector(S, 2*S, mother_4Vec, mother_4Vec.M(), s12SpinProjector);
-        PolVector part12PolVec(S);
-        part12PolVec.SetP4(mother_4Vec,mother_4Vec.M());
-        s12SpinProjector=part12PolVec.Projector(); 
-        
-        DebugMsg << "s12SpinProjector(0,0,0,0):\t" << s12SpinProjector(0,0,0,0) << endmsg;
-      }
-      else{
-	s12SpinProjector=Tensor<complex<double> >(0);
-        s12SpinProjector(0)=complex<double>(1.,0.);
-      }
+      PolVector part12PolVec(S);
+      part12PolVec.SetP4(mother_4Vec,mother_4Vec.M());
+      s12SpinProjector=part12PolVec.Projector();
+      DebugMsg << "s12SpinProjector(0,0,0,0):\t" << s12SpinProjector(0,0,0,0) << endmsg;
 
 
       for (Spin lamDaughter1=-spinDaughter1; lamDaughter1 <= spinDaughter1; ++lamDaughter1){
 	DebugMsg << "lamDaughter1:\t" << lamDaughter1 << endmsg;
 
-	Tensor<complex<double> > epsilonDaughter1Project;
-        if(spinDaughter1==0){
-          epsilonDaughter1Project=Tensor<complex<double> >(0);
-          epsilonDaughter1Project(0)=complex<double>(1.,0.);
-        }
-        else epsilonDaughter1Project=_polDaughter1(lamDaughter1);
+	Tensor<complex<double> > epsilonDaughter1Project = _polDaughter1(lamDaughter1);
 
 	for (Spin lamDaughter2=-spinDaughter2; lamDaughter2<=spinDaughter2; ++lamDaughter2){
 	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg;
