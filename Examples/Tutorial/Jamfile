@@ -2,3 +2,4 @@
 build-project DfuncClebschG ;
 build-project MinuitFit ;
 build-project LineShapes ;
+build-project qft++Exams ;
