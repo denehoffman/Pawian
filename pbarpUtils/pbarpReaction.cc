@@ -81,9 +81,11 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
       acceptJPC=true;
 
-      _prodDecs.push_back(currentDec);
+      if(pbarpEnv::instance()->parser()->productionFormalism() == "Cano"){
+	_prodDecs.push_back(currentDec);
+      }
       
-      if(pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
+      else if(pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
 	 boost::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 	 _prodTensorDecs.push_back(currentTensorDec);
       }
@@ -135,40 +137,6 @@ bool pbarpReaction::CheckJPCLSForParticle(std::string& particleName, boost::shar
 pbarpReaction::~pbarpReaction(){
 }
 
-// void  pbarpReaction::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarLSDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarLSDecay> >, pawian::Collection::SharedPtrLess > toFill){
-
-//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-//   for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
-//     std::vector<boost::shared_ptr<IsobarLSDecay> > currentIsobarVecs;
-
-//     std::vector<boost::shared_ptr<IsobarLSDecay> >::iterator itIsobar;
-//     for(itIsobar=decs.begin(); itIsobar!=decs.end(); ++itIsobar){
-//       if( (*(*itIsobar)->motherJPC())==(*(*itJPCLS)) )  currentIsobarVecs.push_back(*itIsobar);
-//     }
-//     std::cout << "\nfill map for";
-//     (*itJPCLS)->print(std::cout);
-//     std::cout <<"\t with currentIsobarVecs.size()=\t" << currentIsobarVecs.size() << std::endl;
-//     toFill[(*itJPCLS)]=currentIsobarVecs;   
-//   }
-// }
-
-// void  pbarpReaction::fillHeliMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<IsobarHeliDecay> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<IsobarHeliDecay> >, pawian::Collection::SharedPtrLess > toFill){
-
-//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-//   for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
-//     std::vector<boost::shared_ptr<IsobarHeliDecay> > currentHeliVecs;
-
-//     std::vector<boost::shared_ptr<IsobarHeliDecay> >::iterator itHeli;
-//     for(itHeli=decs.begin(); itHeli!=decs.end(); ++itHeli){
-//       if( (*(*itHeli)->motherJPC())==(*(*itJPCLS)) )  currentHeliVecs.push_back(*itHeli);
-//     }
-//     std::cout << "\nfill map for";
-//     (*itJPCLS)->print(std::cout);
-//     std::cout <<"\t with currentHeliVecs.size()=\t" << currentHeliVecs.size() << std::endl;
-//     toFill[(*itJPCLS)]=currentHeliVecs;   
-//   }
-// }
-
 void pbarpReaction::print(std::ostream& os) const{
   os << "\n pbarp reaction\n";
  
@@ -179,8 +147,22 @@ void pbarpReaction::print(std::ostream& os) const{
   }
 
   os << "\n ***** decay chains *******\n";
-  std::vector< boost::shared_ptr<IsobarLSDecay> >::const_iterator itIso;
-  for( itIso=_prodDecs.begin(); itIso!=_prodDecs.end(); ++itIso){
-    (*itIso)->print(os);
+  if (pbarpEnv::instance()->parser()->productionFormalism() == "Cano"){
+    std::vector< boost::shared_ptr<IsobarLSDecay> >::const_iterator itIso;
+    for( itIso=_prodDecs.begin(); itIso!=_prodDecs.end(); ++itIso){
+      (*itIso)->print(os);
+    } 
+  } 
+  else if (pbarpEnv::instance()->parser()->productionFormalism() == "Heli"){
+    std::vector< boost::shared_ptr<IsobarHeliDecay> >::const_iterator itIso;
+    for( itIso=_prodHeliDecs.begin(); itIso!=_prodHeliDecs.end(); ++itIso){
+      (*itIso)->print(os);
+    } 
+  }
+  else if (pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
+    std::vector< boost::shared_ptr<IsobarTensorDecay> >::const_iterator itIso;
+    for( itIso=_prodTensorDecs.begin(); itIso!=_prodTensorDecs.end(); ++itIso){
+      (*itIso)->print(os);
+    } 
   }  
 }
