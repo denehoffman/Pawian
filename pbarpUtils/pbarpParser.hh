@@ -42,7 +42,6 @@ class pbarpParser : public ParserBase
   const unsigned int getLMax() const { return _lMax; }
   const float getpbarMomentum() const { return _pbarMomentum; } 
   const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
-  const std::vector<std::string>& lmaxParticle() const{ return _lmaxParticle; }
   const std::vector<std::string>& dropPbarpLForParticle() const{ return _dropPbarpLForParticle; }
 
 protected:
@@ -50,7 +49,6 @@ protected:
   unsigned int _lMax;
   float _pbarMomentum;
   std::vector<std::string> _spinDensity;
-  std::vector<std::string> _lmaxParticle;
   std::vector<std::string> _dropPbarpLForParticle;
 };
 

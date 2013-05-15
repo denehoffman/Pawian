@@ -32,6 +32,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -48,16 +49,11 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
   for(itJPCLS = all_JPCLSs.begin(); itJPCLS != all_JPCLSs.end(); ++itJPCLS){
      boost::shared_ptr<const jpcRes> currentJPC = (*itJPCLS);
-     auto minMapIt = _minLMap.find(currentJPC);
-     if(minMapIt == _minLMap.end()){
-	_minLMap[currentJPC] = (*itJPCLS)->L;
-     }
-     else{
-	if(_minLMap[currentJPC] > (*itJPCLS)->L)
-	   _minLMap[currentJPC] = (*itJPCLS)->L;
+
+     if(std::find(_jpcToJPCLSMap[currentJPC].begin(), _jpcToJPCLSMap[currentJPC].end(), (*itJPCLS)) == _jpcToJPCLSMap[currentJPC].end()){
+	_jpcToJPCLSMap[currentJPC].push_back(*itJPCLS);
      }
 
-     _jpcToLMap[currentJPC].push_back((*itJPCLS)->L);
   }
 
   for(itJPC = pbarpJPCStatesAll.begin(); itJPC!=pbarpJPCStatesAll.end(); ++itJPC){
@@ -65,89 +61,70 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
       std::string decName=(*itJPC)->name();
-      //      std::string decName="";
       boost::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 
-      if (currentDec->JPCLSAmps().size()>0 &&
-	  CheckLDrop((std::string&)(*itPartPairs).first->name(), *itJPC) &&
-	  CheckLDrop((std::string&)(*itPartPairs).second->name(), *itJPC)){
-	 _prodDecs.push_back(currentDec);
+      if(!currentDec->JPCLSAmps().size()>0)// &&
+	 continue;
 
-	 //boost::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
-         //_prodTensorDecs.push_back(currentTensorDec);
+      bool acceptProd=false;
+      for(auto lIt = _jpcToJPCLSMap[*itJPC].begin(); lIt != _jpcToJPCLSMap[*itJPC].end(); ++lIt){
+	 if(CheckJPCLSForParticle((std::string&)(*itPartPairs).first->name(), *lIt) &&
+	    CheckJPCLSForParticle((std::string&)(*itPartPairs).second->name(), *lIt)){
+	    if(std::find(_pbarpJPCLSs.begin(), _pbarpJPCLSs.end(), *lIt) == _pbarpJPCLSs.end())
+	       _pbarpJPCLSs.push_back(*lIt);
+	    acceptProd = true;
+	 }
+      }
 
+      if(!acceptProd)
+	 continue;
+
+      acceptJPC=true;
+
+      _prodDecs.push_back(currentDec);
+      
+      if(pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
+	 boost::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+	 _prodTensorDecs.push_back(currentTensorDec);
+      }
+      else if(pbarpEnv::instance()->parser()->productionFormalism() == "Heli"){
 	 boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 	 _prodHeliDecs.push_back(currentHeliDec);
-	 acceptJPC=true;
       }
     }
     if(acceptJPC)
        _pbarpJPCs.push_back(*itJPC);
   }
 
-  _pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);
+  //_pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
-  _pbarpJPCLSsinglet =  extractStates(_pbarpJPCs, all_pbarpSingletLS);
-  // fillMap(_pbarpJPCLSsinglet, _prodDecs, _pbarpSingletDecMap);
+  _pbarpJPCLSsinglet =  extractStates(_pbarpJPCLSs, all_pbarpSingletLS);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTriplet0LS = thepbarpStates->triplet0_JPCLS_States();
-  _pbarpJPCLStriplet0 =  extractStates(_pbarpJPCs, all_pbarpTriplet0LS);
-  // fillMap(_pbarpJPCLStriplet0, _prodDecs, _pbarpTriplet0DecMap);
+  _pbarpJPCLStriplet0 =  extractStates(_pbarpJPCLSs, all_pbarpTriplet0LS);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletp1LS = thepbarpStates->tripletp1_JPCLS_States();
-  _pbarpJPCLStripletp1 =  extractStates(_pbarpJPCs, all_pbarpTripletp1LS);
-  // fillMap(_pbarpJPCLStripletp1, _prodDecs, _pbarpTripletp1DecMap);
+  _pbarpJPCLStripletp1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletp1LS);
 
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
-  _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCs, all_pbarpTripletm1LS);
-  // fillMap(_pbarpJPCLStripletm1, _prodDecs, _pbarpTripletm1DecMap);
+  _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletm1LS);
 }
 
 
+bool pbarpReaction::CheckJPCLSForParticle(std::string& particleName, boost::shared_ptr<const JPCLS> theJPCLS){
 
-bool pbarpReaction::CheckLDrop(std::string& particleName, boost::shared_ptr<const jpcRes> theJPC){
-
-   std::map<std::string, short> lmaxMap = pbarpEnv::instance()->lmaxParticleData();
    std::map<std::string, std::vector<short> > ldropMap = pbarpEnv::instance()->dropPbarpLForParticleData();
 
-   auto lmaxIt = lmaxMap.find(particleName);
-   if(lmaxIt != lmaxMap.end()){
-      short lmaxParticle = (*lmaxIt).second;
-      short lMin = 1E4;
-
-      for(auto jpcLIt = _jpcToLMap[theJPC].begin(); jpcLIt != _jpcToLMap[theJPC].end(); ++jpcLIt){
-	 if((*jpcLIt) < lMin)
-	    lMin = *jpcLIt;
-      }
-
-      if(lMin > lmaxParticle)
-      return false;
-   }
-
    auto ldropIt = ldropMap.find(particleName);
-   if(ldropIt != ldropMap.end()){
-      bool accept = false;
-      short numfound=0;
-      for(auto jpcLIt = _jpcToLMap[theJPC].begin(); jpcLIt != _jpcToLMap[theJPC].end(); ++jpcLIt){
-	 bool found=false;
-	 for(auto ldropListIt = (*ldropIt).second.begin(); ldropListIt != (*ldropIt).second.end(); ++ldropListIt){
-	    if((*ldropListIt) == (*jpcLIt)){
-	       found = true;
-	    }
-	 }
-	 if(!found)
-	    accept = true;
-	 else
-	    numfound++;
-      }
 
-      if(accept && numfound>0){
-	 Warning << "Could not drop " << numfound << " pbarp L state(s) due to JPC = " << theJPC->J << " " << theJPC->P << " " << theJPC->C <<
-	    " ambiguity. Manual parameter fixing needed." << endmsg;
-      }
+   if(ldropIt == ldropMap.end())
+      return true;
 
-      return accept;
+   for(auto ldropListIt = (*ldropIt).second.begin(); ldropListIt != (*ldropIt).second.end(); ++ldropListIt){
+      if((*ldropListIt) == theJPCLS->L){
+	 return false;
+      }
    }
 
    return true;

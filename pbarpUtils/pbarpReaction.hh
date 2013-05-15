@@ -76,8 +76,7 @@ private:
   std::vector< boost::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
   std::vector< boost::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
 
-  std::map< boost::shared_ptr<const jpcRes>, Spin, pawian::Collection::SharedPtrLess > _minLMap;
-  std::map< boost::shared_ptr<const jpcRes>, std::vector<Spin>, pawian::Collection::SharedPtrLess> _jpcToLMap;
+  std::map< boost::shared_ptr<const jpcRes>, std::vector< boost::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess> _jpcToJPCLSMap;
 
-  bool CheckLDrop(std::string& particleName, boost::shared_ptr<const jpcRes> theJPC);
+  bool CheckJPCLSForParticle(std::string& particleName, boost::shared_ptr<const JPCLS> theJPCLS);
 };

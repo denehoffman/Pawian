@@ -57,7 +57,6 @@ public:
 
   boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
-  std::map<std::string, short> lmaxParticleData(){ return _lmaxParticleData; }
   std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
 
 protected:  
@@ -69,6 +68,5 @@ protected:
 
   boost::shared_ptr<pbarpReaction> _pbarpReaction;
   std::vector<std::string> _spinDensity;
-  std::map<std::string, short> _lmaxParticleData;
   std::map<std::string, std::vector<short> > _dropPbarpLForParticleData;
 };
