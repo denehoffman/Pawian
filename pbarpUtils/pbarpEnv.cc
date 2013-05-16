@@ -32,6 +32,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
 //#include "PwaUtils/IsobarDecayList.hh"
 #include "pbarpUtils/pbarpReaction.hh"
@@ -102,9 +103,16 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   else if(thePbarpParser->productionFormalism()=="Tensor"){
       std::vector< boost::shared_ptr<IsobarTensorDecay> > prodDecs= _pbarpReaction->productionTensorDecays();
       std::vector< boost::shared_ptr<IsobarTensorDecay> >::iterator itDec;
-    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-      _prodDecList->addDecay(*itDec);
-    }
+      for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+	 _prodDecList->addDecay(*itDec);
+      }
+  }
+  else if(thePbarpParser->productionFormalism()=="Heli"){
+     std::vector< boost::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
+     std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+	_prodDecList->addDecay(*itDec);
+     }
   }
   else{
     Alert <<"production formalism\t" << thePbarpParser->productionFormalism() << "\t is not supported!!!" << endmsg;

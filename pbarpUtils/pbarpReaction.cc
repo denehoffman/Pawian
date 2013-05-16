@@ -63,7 +63,7 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
       std::string decName=(*itJPC)->name();
       boost::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
 
-      if(!currentDec->JPCLSAmps().size()>0)// &&
+      if(!currentDec->JPCLSAmps().size()>0)
 	 continue;
 
       bool acceptProd=false;
@@ -98,8 +98,6 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
        _pbarpJPCs.push_back(*itJPC);
   }
 
-  //_pbarpJPCLSs =  extractStates(_pbarpJPCs, all_JPCLSs);
-
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
   _pbarpJPCLSsinglet =  extractStates(_pbarpJPCLSs, all_pbarpSingletLS);
 
@@ -112,6 +110,7 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
   std::vector< boost::shared_ptr<const JPCLS> > all_pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
   _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletm1LS);
 }
+
 
 
 bool pbarpReaction::CheckJPCLSForParticle(std::string& particleName, boost::shared_ptr<const JPCLS> theJPCLS){

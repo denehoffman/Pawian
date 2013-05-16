@@ -139,7 +139,8 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
       boost::shared_ptr<const JPClamlam> theJPCLamLam=itLamLamMag->first;
       double theStartVal=itLamLamMag->second;
       double theErrVal=errLamLamMags[theJPCLamLam];
-      
+      if (theErrVal<=0.) theErrVal=0.1;
+
       //now fill the fitParameterMap
       std::string magStr=theJPCLamLam->name()+itLamLamMagMap->first+suffix;
 
