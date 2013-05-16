@@ -65,7 +65,7 @@ int main(int __argc,char *__argv[]){
   // Tensor is a template class, here we'll work with double's and 
   // complex<double>'s...but you could use any data type that defines the 
   // proper operators. The constructor argument is the rank.
-  Tensor<double> x1(1),x2(2),x3(3);
+  Tensor<double> x1(1),x2(2),x3(3),x4(4);
   Tensor<complex<double> > y1(1);
   Vector4<double> v;
   LeviCivitaTensor eps; // totally anti-symetric 4th rank tensor
@@ -91,6 +91,9 @@ int main(int __argc,char *__argv[]){
   // using the assignment operator
   x3 = x1 % x2; // tensor outer product
   cout << "->x3: x1^{mu}x2^{nu,rho} (printing only defined for rank <= 2)" 
+       << endl;
+  x4 = x1 % x3;
+  cout << "->x4: x1^{mu}x3^{nu,rho,pi} (printing only defined for rank <= 2)" 
        << endl;
   // just make sure these don't throw errors
   x3.Symmetric();
@@ -133,6 +136,10 @@ int main(int __argc,char *__argv[]){
   cout << "(x1^{mu}x2^{nu,rho} + 2*x3^{mu,nu,rho})x3_{mu,nu,rho}:\n(((x1%x2) + 2*x3)|x3)\t->\t"
        << (((x1%x2) + 2*x3)|x3) << endl;
   cout << "epsilon^{mu,nu,rho,pi} x2_{mu,nu}:\n(eps|x2)\t->\t" << (eps|x2) << endl;
+  cout << "x3(mu,nu,rho)x4(pi,mu,nu,rho):\nx4.Contract(x3, 3)->\t" << x4.Contract(x3, 3) << endl;
+  cout << "x3(mu,nu,rho)x4(pi,mu,nu,rho):\nx4.Permute(1,x4.Rank())\t x3|x4->\t" << (x4|x3) << endl;
+  cout << "x3(pi,mu,nu)x4(pi,mu,nu,rho):\nx3.Contract(x4, 3)->\t" << x3.Contract(x4, 3) << endl;
+  cout << "x3(pi,mu,nu)x4(pi,mu,nu,rho):\nx(x3|x4)->\t" << (x3|x4) << endl;
   cout << "etc...as complicated as you want, it's still easy in the code."
        << endl;
 

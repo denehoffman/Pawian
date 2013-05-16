@@ -76,7 +76,8 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
-    if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
+    //    if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
+    if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
 
     Vector4<double> V4_all_lab(0.,0.,0.,0.);
     
