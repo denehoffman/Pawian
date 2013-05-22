@@ -85,28 +85,14 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Sp
     return result;
   }
 
- 
-  // Vector4<double> part1_4Vec=theData->FourVecsString[_daughter1->name()];
-  // Vector4<double> part2_4Vec=theData->FourVecsString[_daughter2->name()];
-  // Vector4<double> part3_4Vec=theData->FourVecsString[_daughter3->name()];
- 
-  // Vector4<double> P_2part_4Vec=part1_4Vec+part2_4Vec+part3_4Vec;
-  // LeviCivitaTensor eps; 
-  // PolVector omega; // spin-1 particle is the default constructor
-  // omega.SetP4(P_2part_4Vec, P_2part_4Vec.M());
-  
   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
-    //    Tensor<complex<double> >  ampTensor(0);
-    //    ampTensor = eps|(part1_4Vec%part2_4Vec%part3_4Vec%omega(lamX));   
 
     complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][lamX];
-    // complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][1];
-    //    Info << "amp:\t" << amp << endmsg;
 
     result+=amp;
   }

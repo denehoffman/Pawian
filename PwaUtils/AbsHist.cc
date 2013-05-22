@@ -218,7 +218,9 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
   //  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
   const std::vector<EvtData*> mcList=theLh->getMcVec();
-  double integralMC=0.;  
+  double integralMC=0.;
+  double integralFitWeight=0.;
+  
   it=mcList.begin();
   while(it!=mcList.end())
     {
@@ -229,6 +231,7 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       fillAngleHists2D((*it), evtWeight, _angleMcHistMap2D);
 
       double fitWeight= theLh->calcEvtIntensity( (*it), theFitParams );
+      integralFitWeight+=fitWeight;
       fillMassHists((*it), evtWeight*fitWeight, _massFitHistMap);
       fillAngleHists((*it), evtWeight*fitWeight, _angleFitHistMap);
       fillAngleHists2D((*it), evtWeight*fitWeight, _angleFitHistMap2D);
@@ -258,6 +261,8 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
   double scaleFactor = integralDataWWeight/integralMC;
 
+  Info <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor ;  // << endmsg;
+  
   std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
