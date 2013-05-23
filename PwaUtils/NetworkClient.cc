@@ -24,8 +24,13 @@
 // NetworkClient class definition file. -*- C++ -*-
 // Copyright 2013 Julian Pychy
 
+#define _GLIBCXX_USE_NANOSLEEP
+
 #include <iomanip>
+#include <chrono>
+#include <thread>
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
 
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/NetworkServer.hh"
@@ -33,11 +38,11 @@
 
 short NetworkClient::CLIENTMESSAGE_LOGIN = 1;
 short NetworkClient::CLIENTMESSAGE_LH = 2;
-
-
+short NetworkClient::CLIENTMESSAGE_HEARTBEAT = 3;
+short NetworkClient::HEARTBEAT_INTERVAL = 60;
 
 NetworkClient::NetworkClient(std::string serverAddress, std::string port) :
-   _port(port)
+    _port(port)
    , _serverAddress(serverAddress)
 {
    _eventLimits.resize(4, 0);
@@ -67,6 +72,9 @@ bool NetworkClient::Login(){
    Info << "Received data event range " << _eventLimits[0] << " - " << _eventLimits[1] << endmsg;
    Info << "Received mc event range " << _eventLimits[2] << " - " << _eventLimits[3] << endmsg;
 
+   std::thread timerthread(&NetworkClient::SendHeartbeat, this);
+   timerthread.detach();
+
    return true;
 }
 
@@ -85,6 +93,29 @@ bool NetworkClient::SendLH(double llh_data, double weightSum, double lh_mc){
    _theStream <<  std::setprecision(16) << llh_data << "\n" << weightSum << "\n" << lh_mc << "\n";
 
    return true;
+}
+
+
+
+bool NetworkClient::SendHeartbeat(){
+
+   while(true){
+
+      _theHeartbeatStream.connect(_serverAddress, _port);
+
+      if(!_theStream){
+	 Alert << "Could not send heartbeat." << endmsg;
+	 return false;
+      }
+
+      _theHeartbeatStream << NetworkClient::CLIENTMESSAGE_HEARTBEAT << "\n";
+      _theHeartbeatStream << _eventLimits[0] << "\n";
+      short answer;
+      _theHeartbeatStream >> answer;
+
+      std::this_thread::sleep_for(  std::chrono::seconds(HEARTBEAT_INTERVAL) );
+   }
+
 }
 
 

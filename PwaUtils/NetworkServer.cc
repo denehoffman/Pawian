@@ -26,6 +26,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
+#include "boost/date_time/local_time/local_time.hpp"
 #include <iostream>
 #include <iomanip>
 
@@ -33,6 +34,7 @@
 #include "PwaUtils/NetworkClient.hh"
 #include "ErrLogger/ErrLogger.hh"
 
+short NetworkServer::SERVERMESSAGE_OK = 0;
 short NetworkServer::SERVERMESSAGE_PARAMS = 1;
 short NetworkServer::SERVERMESSAGE_CLOSE = 2;
 
@@ -40,9 +42,10 @@ short NetworkServer::SERVERMESSAGE_CLOSE = 2;
 
 NetworkServer::NetworkServer(int port, short noOfClients, int numData, int numMC) :
      _port(port) 
-   , _timeout(20)
+   , _clientTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
+   , _globalTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
    , _noOfClients(noOfClients)
-   , _firstLH(true)
+   , _closed(false)
    , _numData(numData)
    , _numMC(numMC)
 {
@@ -116,9 +119,9 @@ void NetworkServer::Timeout(const boost::system::error_code& err){
 
    if (err != boost::asio::error::operation_aborted){
       Alert << "Client timeout!" << endmsg;
-      _timeout = 9999999;
+      _closed = true;
+      _globalTimeout = 9999999;
       theAcceptor->cancel();
-      SendClosingMessage();
    }
 }
 
@@ -128,13 +131,7 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
 
    for(int i=0; i<_noOfClients; i++){
 
-      if(_firstLH){
-	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(3000));
-      }
-      else{
-	 theDeadlineTimer->expires_from_now(boost::posix_time::seconds(_timeout));
-      }
-
+      theDeadlineTimer->expires_from_now(boost::posix_time::seconds(_globalTimeout));
       theDeadlineTimer->async_wait(boost::bind(&NetworkServer::Timeout, this 
 					       ,boost::asio::placeholders::error ));
       theAcceptor->async_accept(*(theStreams.at(i)->rdbuf()),
@@ -152,10 +149,30 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
 	 i--;
 	 continue;
       }
+      else if (connectionPurpose == NetworkClient::CLIENTMESSAGE_HEARTBEAT){
+	 double clientID;
+	 *theStreams.at(i) >> clientID;
+
+	 if(!UpdateHeartbeats(clientID)){
+	    Timeout(boost::asio::error::timed_out);
+	    BroadcastClosingMessage();
+	 }
+	 else{
+	    *theStreams.at(i) << NetworkServer::SERVERMESSAGE_OK << "\n";
+	    theStreams.at(i)->flush();
+	    theStreams.at(i)->close();
+	 }
+
+	 i--;
+	 continue;
+      }
       else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LH){
 	 Alert << "Protocoll error in WaitForLH()" << endmsg;
+	 _closed = true;
+	 i--;
 	 return false;
       }
+
 
       double tempData, tempMc, tempWeightSum;
       *theStreams.at(i) >> tempData >> tempWeightSum >> tempMc;
@@ -163,14 +180,33 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
       llh_data += tempData;
       lh_mc += tempMc;
       weightSum += tempWeightSum;      
-   }
-   if(_firstLH){
-      _firstLH=false;
+
+      if(_closed)
+	 SendClosingMessage(theStreams.at(i));
    }
 
    return true;
 }
 
+
+
+bool NetworkServer::UpdateHeartbeats(int clientID){
+
+   boost::posix_time::ptime now(boost::posix_time::second_clock::local_time());
+   lastHeartbeats[clientID] = now;
+
+   for(auto it = lastHeartbeats.begin(); it!= lastHeartbeats.end(); ++it){
+      boost::posix_time::time_duration diff = now - (*it).second;
+
+      if((unsigned)diff.total_seconds() >= _clientTimeout){
+	 Alert << "No signal from clientID " << (*it).first << " for "
+	       << diff.total_seconds() << " seconds." << endmsg;
+	 return false;      
+      }
+   }
+
+   return true;
+}
 
 
 void NetworkServer::SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par){
@@ -197,11 +233,19 @@ void NetworkServer::BroadcastParams(const std::vector<double>& par){
 
 
 
-void NetworkServer::SendClosingMessage(){
+void NetworkServer::SendClosingMessage(std::shared_ptr<tcp::iostream> destinationStream){
 
+   *destinationStream << NetworkServer::SERVERMESSAGE_CLOSE << "\n";
+   destinationStream->flush();
+   destinationStream->close();
+}
+
+
+
+void NetworkServer::BroadcastClosingMessage(){
+
+   _closed = true;
    for(auto it = theStreams.begin(); it != theStreams.end(); ++it){
-      **it << NetworkServer::SERVERMESSAGE_CLOSE << "\n";
-      (*it)->flush();
-      (*it)->close();
+      SendClosingMessage(*it);
    }
 }

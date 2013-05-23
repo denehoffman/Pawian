@@ -38,28 +38,33 @@ class NetworkServer
 public:
   static short SERVERMESSAGE_PARAMS;
   static short SERVERMESSAGE_CLOSE;
+  static short SERVERMESSAGE_OK;
   
   NetworkServer(int port, short noOfClients, int numData, int numMC);
   bool WaitForLH(double& llh_data, double& weightSum, double& lh_mc);
   bool WaitForFirstClientLogin();
   void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par);
   void BroadcastParams(const std::vector<double>& par);
-  void SendClosingMessage();
+  void BroadcastClosingMessage();
+  void SendClosingMessage(std::shared_ptr<tcp::iostream> destinationStream);
   int numMCs() const {return _numMC;}
   
 private:
 
    unsigned int _port;
-   unsigned int _timeout;
+   unsigned int _clientTimeout;
+   unsigned int _globalTimeout;
    unsigned short _noOfClients;	
-   bool _firstLH;
+   bool _closed;
    int _numData;
    int _numMC;
    std::shared_ptr<boost::asio::io_service> theIOService;
    std::shared_ptr<boost::asio::deadline_timer> theDeadlineTimer;
    std::shared_ptr<tcp::acceptor> theAcceptor;
    std::vector<std::shared_ptr<tcp::iostream>> theStreams;	 
+   std::map<int, boost::posix_time::ptime > lastHeartbeats;
 
    void Timeout(const boost::system::error_code& err);
    void AcceptHandler(const boost::system::error_code& err);
+   bool UpdateHeartbeats(int clientID);
 };

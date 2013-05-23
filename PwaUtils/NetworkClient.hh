@@ -39,9 +39,13 @@ class NetworkClient
   public:
    static short CLIENTMESSAGE_LOGIN;
    static short CLIENTMESSAGE_LH;
+   static short CLIENTMESSAGE_HEARTBEAT;
+   static short HEARTBEAT_INTERVAL;
+
    NetworkClient(std::string serverAddress,std::string port);
    bool Login();
    bool SendLH(double llh_data, double weightSum, double lh_mc);
+   bool SendHeartbeat();
    bool WaitForParams();
    std::vector<double>& GetParams(){return _theParams;}
    std::vector<double>& GetEventLimits(){return _eventLimits;}
@@ -51,5 +55,6 @@ class NetworkClient
    std::string _port;
    std::string _serverAddress;
    tcp::iostream _theStream;
+   tcp::iostream _theHeartbeatStream;
    std::vector<double> _theParams;
 };

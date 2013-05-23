@@ -317,7 +317,7 @@ if(mode == "client"){
       min = migrad2();
     }
 
-    theServer->SendClosingMessage();
+    theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
 
