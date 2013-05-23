@@ -193,51 +193,6 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     }
   }
 
-  // std::vector<std::string> theHistMassNames=thePbarpParser->histMassNames();
-  // //fill vector histMassSystems
-  // for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){
-  //   std::stringstream stringStr;
-  //   stringStr << (*itStr);
-    
-  //   std::string tmpName;
-  //   std::vector<std::string> currentStringVec;
-  //   while(stringStr >> tmpName){
-  //     currentStringVec.push_back(tmpName);
-  //   } 
-  //   _histMassSystems.push_back(currentStringVec);
-  // }
-
-  std::vector<std::string> theHistAngleNames=thePbarpParser->histAngleNames();
-  //fill vector histMassSystems
-  for ( itStr = theHistAngleNames.begin(); itStr != theHistAngleNames.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
-    
-    std::string tmpName;
-    std::vector<std::string> currentStringDecVec;
-    std::vector<std::string> currentStringDecVec2;
-    std::vector<std::string> currentStringMotherVec;
-    bool isDecParticle=true;
-    bool isFirstDecParticle=true;
-    short nBodyDecay=2;
-    while(stringStr >> tmpName){
-      if(tmpName=="from") {
-	isDecParticle=false;
-	continue;
-      }
-      else if(tmpName=="and") {
-	isFirstDecParticle=false;
-	nBodyDecay=3;
-	continue;
-      }
-      if(isDecParticle && isFirstDecParticle) currentStringDecVec.push_back(tmpName);
-      else if(isDecParticle && !isFirstDecParticle) currentStringDecVec2.push_back(tmpName);
-      else currentStringMotherVec.push_back(tmpName);
-    }
-    boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec, currentStringDecVec2, nBodyDecay));
-    _angleHistDataVec.push_back(currentAngleHistData);
-  }
-
   // spin density particles
   _spinDensity = thePbarpParser->spinDensityNames();
 

@@ -243,5 +243,71 @@ void AbsEnv::setup(ParserBase* theParser){
     }
     counter++;
   }
+
+ // hist angles
+  std::vector<std::string> theHistAngleNames=theParser->histAngleNames();
+//fill vector histMassSystems
+  for ( itStr = theHistAngleNames.begin(); itStr != theHistAngleNames.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string tmpName;
+    std::vector<std::string> currentStringDecVec;
+    std::vector<std::string> currentStringDecVec2;
+    std::vector<std::string> currentStringMotherVec;
+    bool isDecParticle=true;
+    bool isFirstDecParticle=true;
+    short nBodyDecay=2;
+    while(stringStr >> tmpName){
+      if(tmpName=="from") {
+	isDecParticle=false;
+	continue;
+      }
+      else if(tmpName=="and") {
+	isFirstDecParticle=false;
+	nBodyDecay=3;
+	continue;
+      }
+      if(isDecParticle && isFirstDecParticle) currentStringDecVec.push_back(tmpName);
+      else if(isDecParticle && !isFirstDecParticle) currentStringDecVec2.push_back(tmpName);
+      else currentStringMotherVec.push_back(tmpName);
+    }
+    boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec, currentStringDecVec2, nBodyDecay));
+    _angleHistDataVec.push_back(currentAngleHistData);
+  }
+
+  // 2D hists
+  std::vector<std::string> theHistAngleNames2D=theParser->histAngleNames2D();
+  for ( itStr = theHistAngleNames2D.begin(); itStr != theHistAngleNames2D.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+
+    std::string tmpName;
+    std::vector<std::string> currentStringDecVec;
+    std::vector<std::string> currentStringMotherVec;
+    std::vector<std::string> currentStringDecVec_2;
+    std::vector<std::string> currentStringMotherVec_2;
+    bool isDecParticle=true;
+    bool isFirstAxes=true;
+    while(stringStr >> tmpName){
+      if(tmpName=="from") {
+        isDecParticle=false;
+	std::cout << tmpName << std::endl;
+        continue;
+      }
+      else if(tmpName=="versus") {
+        isFirstAxes=false;
+	isDecParticle=true;
+        continue;
+      }
+      if(isDecParticle && isFirstAxes) currentStringDecVec.push_back(tmpName);
+      else if (!isDecParticle && isFirstAxes) currentStringMotherVec.push_back(tmpName);
+      else if(isDecParticle && !isFirstAxes) currentStringDecVec_2.push_back(tmpName);
+      else currentStringMotherVec_2.push_back(tmpName);
+    }
+    boost::shared_ptr<angleHistData2D> currentAngleHistData2D(new angleHistData2D(currentStringMotherVec, currentStringDecVec, currentStringMotherVec_2, currentStringDecVec_2));
+    _angleHistDataVec2D.push_back(currentAngleHistData2D);
+  }
+
 }
 
