@@ -54,6 +54,7 @@ class spinDensityHist{
    ~spinDensityHist();
 
   private:
+   bool _calcErrors;
    short _nBins;
    int _maxEvents;
    TFile* _spinDensityRootFile;

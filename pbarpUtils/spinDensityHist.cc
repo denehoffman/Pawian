@@ -45,7 +45,8 @@
 
 spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, 
 				 fitParams& theFitParams, PwaCovMatrix& theCovMatrix) :
-   _nBins(101)
+   _calcErrors(false)
+  , _nBins(101)
   ,_maxEvents(2000)
   ,_theLh(theLh)
 {
@@ -138,8 +139,11 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
       fillHistogram(particleName, newHistoImag, *it, tempSpinDensity.imag());
       fillHistogram(particleName, normHist, *it, 1.0);
       
-      complex<double> tempSpinDensityErr = calcSpinDensityMatrixError(particleName, M1, M2, *it, tempSpinDensity);
-      
+      complex<double> tempSpinDensityErr(0,0);
+      if(_calcErrors){
+	 tempSpinDensityErr = calcSpinDensityMatrixError(particleName, M1, M2, *it, tempSpinDensity);
+      }
+
       fillHistogram(particleName, errReal, *it, tempSpinDensityErr.real());
       fillHistogram(particleName, errImag, *it, tempSpinDensityErr.imag());
       

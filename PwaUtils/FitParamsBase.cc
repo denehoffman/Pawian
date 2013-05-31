@@ -147,16 +147,18 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
       double valMin=0.;
       double valMax=0.;
       if (suffix==_phiSuffix){
-	valMin=-4.*M_PI;
-	valMax=4.*M_PI;
+	 //valMin=-4.*M_PI;
+	 //valMax=4.*M_PI;
+	 upar.Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
       }
       else{
 	valMin=theStartVal-6.*theErrVal;
 	if (valMin<0.) valMin=0.;
-	valMax=theStartVal+6.*theErrVal;
+	valMin = 0.0;
+	valMax=theStartVal+30.*theErrVal;
+
+	upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
       }
-      
-      upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
     }
     
   }
@@ -184,16 +186,18 @@ void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& sta
       double valMin=0.;
       double valMax=0.;
       if (suffix==_phiSuffix){
-	valMin=-4.*M_PI;
-	valMax=4.*M_PI;
+	 //valMin=-4.*M_PI;
+	 //valMax=4.*M_PI;
+	 upar.Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
       }
       else{
 	valMin=theStartVal-6.*theErrVal;
 	if (valMin<0.) valMin=0.;
-	valMax=theStartVal+6.*theErrVal;
-      }      
+	valMin=0.0;
+	valMax=theStartVal+30.*theErrVal;
 
-      upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
+	upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
+      }
     }
     
   }
@@ -211,27 +215,26 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
     
     double minVal=theStartVal-6.*theErrVal;
     if (minVal<0.) minVal=0.;
+    minVal=0;
     
-    double maxVal=theStartVal+6.*theErrVal;
+    double maxVal=theStartVal+30.*theErrVal;
 
     // for complex fit parameter; phi component; quick workaround
-    if(theName.size()>9){
-      if (theName.compare(theName.size()-8, theName.size(), "PhiOther")==0){
+    if(theName.size()>9 && (theName.compare(theName.size()-8, theName.size(), "PhiOther")==0)){
 	minVal=-4.*M_PI;
 	maxVal=4.*M_PI;	    
-      }
+	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
 
     // for parameter where pos and neg values are allowed
-    if(theName.size()>12){
-      if (theName.compare(theName.size()-11, theName.size(), "PosNegOther")==0){
-	minVal = -fabs(theStartVal)-6.*theErrVal;
-	maxVal = fabs(theStartVal)+6.*theErrVal;;
-      }
+    else if(theName.size()>12 && (theName.compare(theName.size()-11, theName.size(), "PosNegOther")==0)){
+	minVal = -fabs(theStartVal)-30.*theErrVal;
+	maxVal = fabs(theStartVal)+30.*theErrVal;;
+	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
-
-   
-    upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+    else{
+       upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+    }
   }
 
 }

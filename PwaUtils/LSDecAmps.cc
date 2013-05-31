@@ -93,6 +93,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
   }
 
   complex<double> result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  result*=_absDyn->eval(theData, grandmaAmp);
 
   return result;
 }
