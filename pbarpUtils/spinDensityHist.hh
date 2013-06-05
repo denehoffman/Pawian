@@ -50,23 +50,26 @@ typedef std::map<int, std::map<int, TH1F*> > spinDensityHistMatrix;
 class spinDensityHist{
 
   public:
-   spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams, PwaCovMatrix& thePwaCovMatrix);
+   spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
    ~spinDensityHist();
+   void SetCovarianceMatrix(boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
+   void Calculate();
+
+   static const int MAX_EVENTS;
 
   private:
    bool _calcErrors;
    short _nBins;
-   int _maxEvents;
    TFile* _spinDensityRootFile;
    FitParamsBase theFitParamsBaseClass;
    std::vector<EvtData*> _dataList;
    boost::shared_ptr<AbsLh> _theLh;
    fitParams* _theFitParamsOriginal;
-   PwaCovMatrix* _thePwaCovMatrix;
+   boost::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
    ROOT::Minuit2::MnUserParameters _theMnUserParameters;
 
    void calcSpinDensityMatrix(std::string& particleName);
    void calcSpinDensityMatrixElement(std::string& particleName, Spin M1, Spin M2);
    complex<double> calcSpinDensityMatrixError(std::string& particleName, Spin M1, Spin M2, EvtData* evtData, complex<double> sdmValue);
-   void fillHistogram(std::string& particleName, TH1F* theHisto, EvtData* theData, double spinDensityValue);
+   double ParticleCosTheta(std::string& particleName, EvtData* theData);
 };

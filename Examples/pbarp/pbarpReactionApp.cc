@@ -173,7 +173,7 @@ int main(int __argc,char *__argv[]){
 
 
 
-if(mode == "client"){
+  if(mode == "client"){
 
   bool cacheAmps = theAppParams->cacheAmps();
   Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
@@ -240,6 +240,66 @@ if(mode == "client"){
   }
   return 1;
  }
+
+  if(mode == "spinDensity"){
+
+  bool cacheAmps = theAppParams->cacheAmps();
+  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  if (cacheAmps) theLhPtr->cacheAmplitudes();
+
+  EventReaderDefault eventReaderDataClient(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
+  eventReaderDataClient.setUnit(theAppParams->unitInFile());
+  eventReaderDataClient.setOrder(theAppParams->orderInFile());
+
+  EventList* eventsDataClient=new EventList();
+  eventReaderDataClient.fill(*eventsDataClient, 0, spinDensityHist::MAX_EVENTS);
+
+  eventsDataClient->rewind();
+  Info  << "\nFile has " << eventsDataClient->size() << " events. Each event has "
+        <<  eventsDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  eventsDataClient->rewind();
+
+  EventReaderDefault eventReaderMcClient(mcFileNames, noFinalStateParticles, 0, false);
+  eventReaderMcClient.setUnit(theAppParams->unitInFile());
+  eventReaderMcClient.setOrder(theAppParams->orderInFile());
+
+
+  EventList* mcDataClient=new EventList();
+  eventReaderMcClient.fill(*mcDataClient, 0, spinDensityHist::MAX_EVENTS);
+  Info  << "\nFile has " << mcDataClient->size() << " events. Each event has "
+        <<  mcDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  mcDataClient->rewind();
+
+  boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+  pbarpEventListPtr->read(*eventsDataClient, *mcDataClient);
+
+  delete eventsDataClient;
+  delete mcDataClient;
+
+  theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
+  theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
+
+  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
+
+  boost::shared_ptr<spinDensityHist> theSpinDensityHist(new spinDensityHist(theLhPtr, theStartparams));
+
+  std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
+  std::ifstream serializationStream(serializationFileName.c_str());
+
+  if(!serializationStream.is_open()){
+     Warning << "Could not open serialization file." << endmsg;
+  }
+  else{
+     boost::archive::text_iarchive boostInputArchive(serializationStream);
+     boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+     boostInputArchive >> *thePwaCovMatrix;
+     theSpinDensityHist->SetCovarianceMatrix(thePwaCovMatrix);
+  }
+  theSpinDensityHist->Calculate();
+
+  return 1;
+ }
+
 
 
   EventReaderDefault eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
@@ -523,25 +583,6 @@ if(mode == "client"){
        boostOutputArchive << thePwaCovMatrix;
     }
 
-    return 1;
- }
-
- if(mode == "spinDensity"){
- 
-    std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
-    std::ifstream serializationStream(serializationFileName.c_str());
-
-    if(!serializationStream.is_open()){
-       Alert << "Could not open serialization file." << endmsg;
-       return 0;
-    }
-
-    boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-    PwaCovMatrix thePwaCovMatrix;
-    boostInputArchive >> thePwaCovMatrix;
-
-    spinDensityHist theSpinDensityHists(theLhPtr, theStartparams, thePwaCovMatrix);
     return 1;
  }
 

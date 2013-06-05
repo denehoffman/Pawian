@@ -167,7 +167,7 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
 	 continue;
       }
       else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LH){
-	 Alert << "Protocoll error in WaitForLH()" << endmsg;
+	 Alert << "Protocol error in WaitForLH()" << endmsg;
 	 _closed = true;
 	 i--;
 	 return false;

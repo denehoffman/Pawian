@@ -42,17 +42,37 @@
 #include "TFile.h"
 
 
+const int spinDensityHist::MAX_EVENTS = 2000;
 
-spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, 
-				 fitParams& theFitParams, PwaCovMatrix& theCovMatrix) :
-   _calcErrors(false)
+
+spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+  _calcErrors(false)
   , _nBins(101)
-  ,_maxEvents(2000)
   ,_theLh(theLh)
 {
    _theFitParamsOriginal = &theFitParams;
-   _thePwaCovMatrix = &theCovMatrix;
    _dataList=_theLh->getMcVec();
+}
+
+
+
+
+spinDensityHist::~spinDensityHist(){
+   _spinDensityRootFile->Write();
+   _spinDensityRootFile->Close();
+}
+
+
+
+void spinDensityHist::SetCovarianceMatrix(boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix){
+
+   _calcErrors = true;
+   _thePwaCovMatrix = thePwaCovMatrix;
+}
+
+
+
+void spinDensityHist::Calculate(){
 
    theFitParamsBaseClass.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
    
@@ -62,19 +82,11 @@ spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh,
    _spinDensityRootFile = new TFile(spinDensityRootFileName.str().c_str(), "recreate");
 
    std::vector<string> spinDensityParticles = pbarpEnv::instance()->spinDensityNames();
-   std::vector<string>::iterator it;
 
-   for(it=spinDensityParticles.begin(); it!=spinDensityParticles.end(); ++it){
+   for(auto it=spinDensityParticles.begin(); it!=spinDensityParticles.end(); ++it){
       Info << "Calculating spin density matrix for particle " << (*it) << endmsg;
       calcSpinDensityMatrix(*it);
    }
-}
-
-
-
-spinDensityHist::~spinDensityHist(){
-   _spinDensityRootFile->Write();
-   _spinDensityRootFile->Close();
 }
 
 
@@ -90,9 +102,9 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
 
    boost::shared_ptr<AbsDecayList> prodDecayList = pbarpEnv::instance()->prodDecayList();
    std::vector<boost::shared_ptr<AbsDecay> > prodDecays = prodDecayList->getList();
-   std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+
    bool particleFrompbarp=false;
-   for(it=prodDecays.begin(); it!=prodDecays.end();++it){
+   for(auto it=prodDecays.begin(); it!=prodDecays.end();++it){
       if( ( (*it)->daughter1Part()->name() == particleName) ||
 	  ( (*it)->daughter2Part()->name() == particleName))
 	 particleFrompbarp=true;
@@ -101,10 +113,10 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
       Alert << "Particles not produced from pbarp currently not supported." << endmsg;
       return;
    }
-   
+
    for(Spin M1 = -J; M1 <= J; M1++){
       for(Spin M2 = -J; M2 <= J; M2++){
-	 Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
+	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
 	calcSpinDensityMatrixElement(particleName, M1, M2);
       }
    }
@@ -129,26 +141,31 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
    errImag->SetDirectory(0);
    
    int eventsRead=0;
-   std::vector<EvtData*>::iterator it;
-   for(it = _dataList.begin(); it != _dataList.end(); ++it){
+   for(auto it = _dataList.begin(); it != _dataList.end(); ++it){
+
+      double costheta = ParticleCosTheta(particleName, *it);
+
+      if(newHistoReal->GetBinContent(newHistoReal->FindBin(costheta)) != 0)
+	 continue;
+
       _theLh->updateFitParams(*_theFitParamsOriginal);
       complex<double> tempSpinDensity =
 	 boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
-      
-      fillHistogram(particleName, newHistoReal, *it, tempSpinDensity.real());
-      fillHistogram(particleName, newHistoImag, *it, tempSpinDensity.imag());
-      fillHistogram(particleName, normHist, *it, 1.0);
-      
+
+      newHistoReal->Fill(costheta, tempSpinDensity.real() * (*it)->evtWeight);
+      newHistoImag->Fill(costheta, tempSpinDensity.imag() * (*it)->evtWeight);
+      normHist->Fill(costheta, (*it)->evtWeight);
+
       complex<double> tempSpinDensityErr(0,0);
       if(_calcErrors){
 	 tempSpinDensityErr = calcSpinDensityMatrixError(particleName, M1, M2, *it, tempSpinDensity);
       }
-
-      fillHistogram(particleName, errReal, *it, tempSpinDensityErr.real());
-      fillHistogram(particleName, errImag, *it, tempSpinDensityErr.imag());
       
+      errReal->Fill(costheta, tempSpinDensityErr.real() * (*it)->evtWeight);
+      errImag->Fill(costheta, tempSpinDensityErr.imag() * (*it)->evtWeight);
+
       eventsRead++;
-      if(eventsRead >= _maxEvents)
+      if(eventsRead >= MAX_EVENTS)
 	 break;
    }
 
@@ -179,6 +196,7 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
    unsigned int nPar = _theMnUserParameters.Params().size();
 
    for(unsigned int i=0; i<nPar; i++){
+
       double parOrig = _theMnUserParameters.Value(i);
       std::string parName = _theMnUserParameters.GetName(i);
       
@@ -218,35 +236,30 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
 
 
-
-void spinDensityHist::fillHistogram(std::string& particleName, TH1F* theHisto,
-				    EvtData* theData, double spinDensityValue){
+double spinDensityHist::ParticleCosTheta(std::string& particleName, EvtData* theData){
 
    boost::shared_ptr<AbsDecayList> absDecayList = pbarpEnv::instance()->absDecayList();
    std::vector<boost::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
-   std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
    
    Vector4<double> all4Vec=theData->FourVecsString["all"];
-
    Vector4<double> particle4Vec(0.,0.,0.,0.);
    
-   for(it=absDecays.begin(); it!=absDecays.end(); ++it){
+   for(auto it=absDecays.begin(); it!=absDecays.end(); ++it){
       
       if( (*it)->motherPart()->name() == particleName){
 	 std::vector<Particle*> fsParticles = (*it)->finalStateParticles();
-	 std::vector<Particle*>::iterator it2;
 	 Vector4<double> allDaughters4Vec(0., 0., 0., 0.);
-	 
-	 for(it2 = fsParticles.begin(); it2!=fsParticles.end(); ++it2){
+
+	 for(auto it2 = fsParticles.begin(); it2!=fsParticles.end(); ++it2){
 	    allDaughters4Vec += theData->FourVecsString[(*it2)->name()];
 	 }
 	 
 	 particle4Vec = allDaughters4Vec;
 	 particle4Vec.Boost(all4Vec);
-	 
+
 	 break;
       }
    }
    
-   theHisto->Fill(particle4Vec.CosTheta(), spinDensityValue * theData->evtWeight);
+   return particle4Vec.CosTheta();
 }

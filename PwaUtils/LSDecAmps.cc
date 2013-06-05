@@ -68,6 +68,8 @@ LSDecAmps::~LSDecAmps()
 
 complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
+  complex<double> result(0.,0.);
+
   Spin lam1Min=-_Jdaughter1;
   Spin lam1Max= _Jdaughter1;
   Spin lam2Min=-_Jdaughter2;
@@ -92,8 +94,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
     lam2Max=lamFs;
   }
 
-  complex<double> result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
-  result*=_absDyn->eval(theData, grandmaAmp);
+  result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
 
   return result;
 }
