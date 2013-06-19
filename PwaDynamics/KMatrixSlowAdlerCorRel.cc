@@ -27,7 +27,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
 
-KMatrixSlowAdlerCorRel::KMatrixSlowAdlerCorRel(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, boost::shared_ptr<array_type_2d> fscatPtr, double s0_scat, double sAdler0, double sAdler) :
+KMatrixSlowAdlerCorRel::KMatrixSlowAdlerCorRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, std::shared_ptr<array_type_2d> fscatPtr, double s0_scat, double sAdler0, double sAdler) :
   KMatrixBase(Kpoles, phpVecs)
   ,_fScatPtr(fscatPtr)
   ,_s0Scat(s0_scat)
@@ -50,7 +50,7 @@ KMatrixSlowAdlerCorRel::~KMatrixSlowAdlerCorRel(){
 void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
 
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
-  vector<boost::shared_ptr<KPole> >::iterator it;
+  vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
     (*it)->evalMatrix(mass);
     theKMatrix += *(*it);

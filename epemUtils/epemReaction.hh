@@ -32,7 +32,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -49,15 +49,15 @@ public:
   virtual ~epemReaction();
 
   virtual void print(std::ostream& os) const;
-  std::vector< boost::shared_ptr<IsobarLSDecay> >& productionCanoDecays() {return _prodCanoDecs;}
-  std::vector< boost::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}  
+  std::vector< std::shared_ptr<IsobarLSDecay> >& productionCanoDecays() {return _prodCanoDecs;}
+  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}  
 
 protected:
 
 private:
-  boost::shared_ptr<const jpcRes> _epemJPC;
+  std::shared_ptr<const jpcRes> _epemJPC;
 
-  std::vector< boost::shared_ptr<IsobarLSDecay> > _prodCanoDecs;
-  std::vector< boost::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
+  std::vector< std::shared_ptr<IsobarLSDecay> > _prodCanoDecs;
+  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
 
 };

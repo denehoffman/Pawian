@@ -33,7 +33,7 @@
 #include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/multi_array.hpp>
 
 class KPole;
@@ -50,17 +50,17 @@ class KMatrixSlowAdlerCorRel : public KMatrixBase {
 public:
 
   /// Constructor 
-  KMatrixSlowAdlerCorRel(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, boost::shared_ptr<array_type_2d> fscatPtr, double s0_scat, double sAdler0=-0.15, double sAdler=1.); 
+  KMatrixSlowAdlerCorRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, std::shared_ptr<array_type_2d> fscatPtr, double s0_scat, double sAdler0=-0.15, double sAdler=1.); 
   KMatrixSlowAdlerCorRel(int dim);
   /// Destructor
   virtual ~KMatrixSlowAdlerCorRel();
 
   virtual void evalMatrix(const double mass);
-  virtual boost::shared_ptr<array_type_2d> fScatProd() {return _fScatPtr;}
+  virtual std::shared_ptr<array_type_2d> fScatProd() {return _fScatPtr;}
   virtual double s0Scat() {return _s0Scat;}
 
 protected:
-  boost::shared_ptr<array_type_2d> _fScatPtr;
+  std::shared_ptr<array_type_2d> _fScatPtr;
   double _s0Scat; 
   double _sAdler0;
   double _sAdler;

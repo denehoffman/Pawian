@@ -128,11 +128,11 @@ PiPiSWavePVector::PiPiSWavePVector() :
 
 
   // //  double s0Prod=-3.;
-  // boost::shared_ptr<PVectorRel> thePVector(new PVectorSlowCorRel(pPoles, phpVecs, fProdMatr, s0Prod));
+  // std::shared_ptr<PVectorRel> thePVector(new PVectorSlowCorRel(pPoles, phpVecs, fProdMatr, s0Prod));
 
-  // //boost::shared_ptr<PVectorRel> thePVector(new PVectorRel(pPoles, phpVecs));
+  // //std::shared_ptr<PVectorRel> thePVector(new PVectorRel(pPoles, phpVecs));
 
-  boost::shared_ptr<FVectorPiPiS> theFVector(new FVectorPiPiS());
+  std::shared_ptr<FVectorPiPiS> theFVector(new FVectorPiPiS());
 
   std::vector<complex <double> >::const_iterator itBeta;
   for( int i=0; i< int(betaPars.size()); ++i){
@@ -147,7 +147,7 @@ PiPiSWavePVector::PiPiSWavePVector() :
   double s0Prod=-0.0737;
   theFVector->updateS0prod(s0Prod);
 
-  vector<boost::shared_ptr<AbsPhaseSpace> > thePhpVecs=theFVector->kMatrix()->phaseSpaceVec();  
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=theFVector->kMatrix()->phaseSpaceVec();  
   
   for (double mass=massMin; mass<massMax; mass+=stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);

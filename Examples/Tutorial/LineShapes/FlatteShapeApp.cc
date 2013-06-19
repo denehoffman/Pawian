@@ -28,7 +28,7 @@
 #include <vector>
 #include <map>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Examples/Tutorial/LineShapes/FlatteShape.hh"
 #include "ErrLogger/ErrLogger.hh"

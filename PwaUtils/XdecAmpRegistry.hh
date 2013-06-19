@@ -33,7 +33,7 @@
 #include <string>
 
 #include <cassert>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class AbsXdecAmp;
 class AbsDecay;
@@ -46,7 +46,7 @@ public:
   virtual ~XdecAmpRegistry();
 
   static XdecAmpRegistry* instance();
-  boost::shared_ptr<AbsXdecAmp> getXdecAmp(boost::shared_ptr<AbsDecay>);
+  std::shared_ptr<AbsXdecAmp> getXdecAmp(std::shared_ptr<AbsDecay>);
 
 protected:
  ///Constructor 
@@ -55,7 +55,7 @@ protected:
 
 private:
 
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> > _xDecAmpMap;
+  std::map<std::string, std::shared_ptr<AbsXdecAmp> > _xDecAmpMap;
 
 
 

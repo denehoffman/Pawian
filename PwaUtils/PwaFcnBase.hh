@@ -27,7 +27,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsFcn.hh"
 
@@ -38,14 +38,14 @@ namespace ROOT {
     class PwaFcnBase : public AbsFcn {
 
     public:
-      PwaFcnBase(boost::shared_ptr<AbsLh> absLh, 
-		    boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
+      PwaFcnBase(std::shared_ptr<AbsLh> absLh, 
+		    std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
       virtual ~PwaFcnBase();
 
       virtual double operator()(const std::vector<double>& par) const;
  
     private:
-      boost::shared_ptr<AbsLh> _absLhPtr;
+      std::shared_ptr<AbsLh> _absLhPtr;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

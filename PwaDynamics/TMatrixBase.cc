@@ -25,7 +25,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 
-TMatrixBase::TMatrixBase(boost::shared_ptr<KMatrixBase> Kmatrix) :
+TMatrixBase::TMatrixBase(std::shared_ptr<KMatrixBase> Kmatrix) :
   Matrix< complex<double> >::Matrix(int(Kmatrix->phaseSpaceVec().size()), int(Kmatrix->phaseSpaceVec().size()))
   , _Kmatrix(Kmatrix)
  {

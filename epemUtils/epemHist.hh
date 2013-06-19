@@ -32,7 +32,7 @@
 #include <map>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "TROOT.h"
 
@@ -45,7 +45,7 @@
 class epemHist : public AbsHist{
 
 public:
-  epemHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams);
+  epemHist(std::shared_ptr<AbsLh>, fitParams& theFitParams);
   virtual ~epemHist();
 
 protected:

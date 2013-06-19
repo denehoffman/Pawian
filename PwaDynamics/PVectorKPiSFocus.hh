@@ -33,7 +33,7 @@
 #include "PwaDynamics/PVectorRel.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaDynamics/KMatrixKPiSFocus.hh"
 
@@ -53,7 +53,7 @@ class PVectorKPiSFocus : public PVectorRel {
 public:
 
   /// Constructor 
-  PVectorKPiSFocus(boost::shared_ptr<KMatrixKPiSFocus> kMatrix);
+  PVectorKPiSFocus(std::shared_ptr<KMatrixKPiSFocus> kMatrix);
 
   /// Destructor
   virtual ~PVectorKPiSFocus();
@@ -69,7 +69,7 @@ protected:
   std::vector< double > _bProdVec;
   std::vector< double > _cProdVec;
   std::vector< double > _phaseProdVec;
-  boost::shared_ptr<KMatrixKPiSFocus> _kMatrix;
+  std::shared_ptr<KMatrixKPiSFocus> _kMatrix;
   void init2IsoSpin1();
   void init2IsoSpin3();
 };

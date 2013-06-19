@@ -27,7 +27,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 
-TMatrixNonRel::TMatrixNonRel(boost::shared_ptr<KMatrixNonRel> Kmatrix) :
+TMatrixNonRel::TMatrixNonRel(std::shared_ptr<KMatrixNonRel> Kmatrix) :
   TMatrixBase(Kmatrix)
  {
  }

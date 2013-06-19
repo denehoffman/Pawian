@@ -33,7 +33,7 @@
 
 
 
-void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<const jpcRes> daughterRes1, boost::shared_ptr<const jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec)
+void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcRes> daughterRes1, std::shared_ptr<const jpcRes> daughterRes2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec)
 {
   // first: check C-parity
   if ( motherRes->C != daughterRes1->C*daughterRes2->C){
@@ -55,12 +55,12 @@ void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<con
   for(int ls = 0; ls < num_LS; ls++){
     Spin L= LSs[ls].L; 
     Spin S= LSs[ls].S;
-    boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
+    std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
     theJPCLSVec.push_back(tmpJPCLS);
   }
 }
 
-void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec){
+void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec){
 
   // first: check C-parity
   if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()){
@@ -86,18 +86,18 @@ void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, 
     int LplusS=L+S;
     if( LplusS% 2 == 0) LplusSeven=true;
     if(!identicalDaughters || (identicalDaughters && LplusSeven)){ 
-      boost::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
+      std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
       theJPCLSVec.push_back(tmpJPCLS);
     }
   }
 }
 
 
-void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPClamlam> >& theJPClamlamVec){
+void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec){
 
-  std::vector< boost::shared_ptr<const JPCLS> > currentJPCLSDecAmps;
-  boost::shared_ptr<const jpcRes> daughterRes1=getJPCPtr(daughter1);
-  boost::shared_ptr<const jpcRes> daughterRes2=getJPCPtr(daughter2);
+  std::vector< std::shared_ptr<const JPCLS> > currentJPCLSDecAmps;
+  std::shared_ptr<const jpcRes> daughterRes1=getJPCPtr(daughter1);
+  std::shared_ptr<const jpcRes> daughterRes2=getJPCPtr(daughter2);
 
   validJPCLS(motherRes, daughterRes1, daughterRes2, currentJPCLSDecAmps);
   if(currentJPCLSDecAmps.size()==0){
@@ -117,7 +117,7 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
 
   Spin Smax=0;
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator it;
   std::vector<Spin> itSpin;
   for (it=currentJPCLSDecAmps.begin(); it!=currentJPCLSDecAmps.end(); ++it){
     Spin currentSpin=(*it)->S;
@@ -150,7 +150,7 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
       bool fillIt=true;
       if( identicalDaughters ){
 	//check if lam2 lam1 combination already exists
-	std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+	std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
 	for (it=theJPClamlamVec.begin(); it!=theJPClamlamVec.end(); ++it){
 	  if( ((*it)->lam1==lam2 && (*it)->lam2==lam1) ||  ((*it)->lam1==-lam2 && (*it)->lam2==-lam1) ){
 	    fillIt=false;
@@ -159,7 +159,7 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
       }
 
       if(fillIt){
-	boost::shared_ptr<const JPClamlam> tmpJPClamlam(new JPClamlam(motherRes, lam1, lam2, 1.));
+	std::shared_ptr<const JPClamlam> tmpJPClamlam(new JPClamlam(motherRes, lam1, lam2, 1.));
 	theJPClamlamVec.push_back(tmpJPClamlam);
       }
     }
@@ -167,9 +167,9 @@ void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughte
 }
 
 
-boost::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle){
+std::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle){
 
-  boost::shared_ptr<jpcRes> result(new jpcRes((int) theParticle->J(), theParticle->theParity(), theParticle->theCParity()));
+  std::shared_ptr<jpcRes> result(new jpcRes((int) theParticle->J(), theParticle->theParity(), theParticle->theCParity()));
 
   return result;  
 }

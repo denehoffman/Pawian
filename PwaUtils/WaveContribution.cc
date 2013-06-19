@@ -33,7 +33,7 @@
 
 #include <iostream>
 
-WaveContribution::WaveContribution(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
       _calcError(false)
     , _theLh(theLh)
     , _theFitParamsOriginal(&theFitParams)
@@ -44,8 +44,8 @@ WaveContribution::WaveContribution(boost::shared_ptr<AbsLh> theLh, fitParams& th
 
 
 
-WaveContribution::WaveContribution(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
-				   boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
+WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
+				   std::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
     _calcError(true)
    ,_theLh(theLh)
    ,_thePwaCovMatrix(thePwaCovMatrix)

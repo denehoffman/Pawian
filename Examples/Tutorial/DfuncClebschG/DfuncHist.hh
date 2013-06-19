@@ -31,7 +31,7 @@
 
 #include <cassert>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 

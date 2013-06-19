@@ -66,24 +66,24 @@ void pbarpTensorLh::print(std::ostream& os) const{
 
 void  pbarpTensorLh::initialize(){
 
-  std::vector< boost::shared_ptr<IsobarTensorDecay> > theDecs = _pbarpReactionPtr->productionTensorDecays();
-  std::vector< boost::shared_ptr<IsobarTensorDecay> >::iterator it;
+  std::vector< std::shared_ptr<IsobarTensorDecay> > theDecs = _pbarpReactionPtr->productionTensorDecays();
+  std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    boost::shared_ptr<AbsDecay> currentDec( (*it).get() );
-    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    std::shared_ptr<AbsDecay> currentDec( (*it).get() );
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
     _decAmps.push_back(currentAmp);
   }
 
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsSingletStates=_pbarpReactionPtr->jpclsSingletStates();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsSingletStates=_pbarpReactionPtr->jpclsSingletStates();
   fillMap(jpclsSingletStates, _decAmps, _decAmpsSinglet);
 
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsTriplet0States=_pbarpReactionPtr->jpclsTriplet0States();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsTriplet0States=_pbarpReactionPtr->jpclsTriplet0States();
   fillMap(jpclsTriplet0States, _decAmps, _decAmpsTriplet0);
 
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletp1States=_pbarpReactionPtr->jpclsTripletp1States();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsTripletp1States=_pbarpReactionPtr->jpclsTripletp1States();
   fillMap(jpclsTripletp1States, _decAmps, _decAmpsTripletp1);
 
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
   fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1); 
 
   double pbarMass = _absEnv->particleTable()->particle("antiproton")->mass();
@@ -94,8 +94,8 @@ void  pbarpTensorLh::initialize(){
   Vector4<double> p4Vec(pMass, 0.,0.,0.);
   Vector4<double> allVec=pbar4Vec+p4Vec;
 
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsStatesAll=_pbarpReactionPtr->jpclsStates();
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::vector< std::shared_ptr<const JPCLS> > jpclsStatesAll=_pbarpReactionPtr->jpclsStates();
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   for(itJPCLS=jpclsStatesAll.begin(); itJPCLS!=jpclsStatesAll.end(); ++itJPCLS){
     std::shared_ptr<OrbitalTensor> currentTensorPtr(new OrbitalTensor((*itJPCLS)->L));
     currentTensorPtr->SetP4(pbar4Vec,p4Vec); 

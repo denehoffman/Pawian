@@ -25,7 +25,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 
-FVector::FVector(boost::shared_ptr<KMatrixBase> Kmatrix, boost::shared_ptr<PVectorRel> Pvector) :
+FVector::FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRel> Pvector) :
   Matrix< complex<double> >::Matrix(Pvector->NumRows(), Pvector->NumCols())
   , _Kmatrix(Kmatrix)
   ,_Pvector(Pvector)
@@ -44,7 +44,7 @@ void FVector::evalMatrix(const double mass){
   _Kmatrix->evalMatrix(mass);
   _Pvector->evalMatrix(mass);
 
-  vector<boost::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
+  vector<std::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
   Matrix< complex<double> > theRhoMatrix(NumRows(),NumRows());
 
   for (int i=0; i<NumRows(); ++i){

@@ -46,7 +46,7 @@
 #include "TNtuple.h"
 //#include "TMath.h"
 
-pbarpHist::pbarpHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+pbarpHist::pbarpHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
   AbsHist(pbarpEnv::instance()) 
 {
   initRootStuff();
@@ -64,7 +64,7 @@ void pbarpHist::initRootStuff(){
   std::vector<std::vector<std::string> > histMassNameVec=pbarpEnv::instance()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
   for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
-    boost::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
+    std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
     std::string tmpBaseName=tmpMassHistData->_name;
     boost::replace_all(tmpBaseName,"+","p");
     boost::replace_all(tmpBaseName,"-","m");

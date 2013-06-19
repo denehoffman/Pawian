@@ -31,7 +31,7 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsDynamics.hh"
 
@@ -51,18 +51,18 @@ public:
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
-  virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec);
+  virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
 
 protected:
   //  std::string _massKey;
   double _currentMass;
   std::map<int, complex<double> >  _cachedMap;
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
+  std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
 
-  boost::shared_ptr<KMatrixKPiSFocus> _kMatr;
-  std::map<std::string, boost::shared_ptr<FVector> > _fVecMap;
-  std::map<std::string, boost::shared_ptr<PVectorKPiSFocus> > _pVecMap;
+  std::shared_ptr<KMatrixKPiSFocus> _kMatr;
+  std::map<std::string, std::shared_ptr<FVector> > _fVecMap;
+  std::map<std::string, std::shared_ptr<PVectorKPiSFocus> > _pVecMap;
 
   //  std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
   std::map<std::string, std::map<std::string, double> > _currentaProdMap; 

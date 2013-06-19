@@ -28,7 +28,7 @@
 #include <vector>
 #include <map>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Examples/Tutorial/MinuitFit/MinuitFit.hh"
 #include "Examples/Tutorial/MinuitFit/MinuitFitFcn.hh"
@@ -128,7 +128,7 @@ int main(int __argc,char *__argv[]){
   sigmaStrStr >> sigma;
 
   // Generate data distribution
-  boost::shared_ptr<MinuitFit> minuitFit(new MinuitFit(p0, p1, p2, p3, sigma));
+  std::shared_ptr<MinuitFit> minuitFit(new MinuitFit(p0, p1, p2, p3, sigma));
 
   MinuitFitFcn minuitFitFcn(minuitFit);
 

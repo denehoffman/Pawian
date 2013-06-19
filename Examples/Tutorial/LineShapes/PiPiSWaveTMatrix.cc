@@ -84,25 +84,25 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
 
 
 
-  boost::shared_ptr<KMatrixSlowAdlerCorRel> theKMatrix(new KMatrixPiPiS());
-  boost::shared_ptr<TMatrixBase> theTMatrix(new TMatrixRel(theKMatrix));
+  std::shared_ptr<KMatrixSlowAdlerCorRel> theKMatrix(new KMatrixPiPiS());
+  std::shared_ptr<TMatrixBase> theTMatrix(new TMatrixRel(theKMatrix));
 
 
   // non relativistic TMatrix
-  boost::shared_ptr<KMatrixBase> retrievedKMatrix=theTMatrix->kMatrix();
-  vector<boost::shared_ptr<AbsPhaseSpace> > thePhpVecs=retrievedKMatrix->phaseSpaceVec();
-  vector<boost::shared_ptr<KPole> > thePoles=retrievedKMatrix->kpoles();
+  std::shared_ptr<KMatrixBase> retrievedKMatrix=theTMatrix->kMatrix();
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=retrievedKMatrix->phaseSpaceVec();
+  vector<std::shared_ptr<KPole> > thePoles=retrievedKMatrix->kpoles();
 
-  boost::shared_ptr<KMatrixNonRel> theKMatrixNonRel(new KMatrixNonRel(thePoles, thePhpVecs));
-  boost::shared_ptr<TMatrixBase> theTMatrixNonRel(new TMatrixNonRel(theKMatrixNonRel));
+  std::shared_ptr<KMatrixNonRel> theKMatrixNonRel(new KMatrixNonRel(thePoles, thePhpVecs));
+  std::shared_ptr<TMatrixBase> theTMatrixNonRel(new TMatrixNonRel(theKMatrixNonRel));
 
 
-  vector<boost::shared_ptr<KPole> >  sigmaPoleVec;
+  vector<std::shared_ptr<KPole> >  sigmaPoleVec;
   sigmaPoleVec.push_back(thePoles[0]);
-  boost::shared_ptr<array_type_2d> fScatProd=theKMatrix->fScatProd();
+  std::shared_ptr<array_type_2d> fScatProd=theKMatrix->fScatProd();
   double soScat=theKMatrix->s0Scat(); 
-  boost::shared_ptr<KMatrixSlowAdlerCorRel> theKMatrixSigmaPole(new KMatrixSlowAdlerCorRel(sigmaPoleVec, thePhpVecs, fScatProd, soScat));
-  boost::shared_ptr<TMatrixBase> theTMatrixSigmaPole(new TMatrixRel(theKMatrixSigmaPole));
+  std::shared_ptr<KMatrixSlowAdlerCorRel> theKMatrixSigmaPole(new KMatrixSlowAdlerCorRel(sigmaPoleVec, thePhpVecs, fScatProd, soScat));
+  std::shared_ptr<TMatrixBase> theTMatrixSigmaPole(new TMatrixRel(theKMatrixSigmaPole));
 
   for (double mass=massMin; mass<massMax; mass+=stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);

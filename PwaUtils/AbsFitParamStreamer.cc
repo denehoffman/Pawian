@@ -70,9 +70,9 @@ void AbsFitParamStreamer::StringParameterMap(const string &theName, const double
   _stringPairMap[theName]=thePair;
 }
 
-void AbsFitParamStreamer::fillParamMapAmps(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSs, std::string& suffix, std::map< boost::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsFitParamStreamer::fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, std::string& suffix, std::map< std::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& toFill){
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   StringPairMap::const_iterator stringPairIter;
 
   for ( itJPCLS=theJPCLSs.begin(); itJPCLS!=theJPCLSs.end(); ++itJPCLS){

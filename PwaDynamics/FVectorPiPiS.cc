@@ -31,17 +31,17 @@
 FVectorPiPiS::FVectorPiPiS() :
   FVector(5)
  {
-   boost::shared_ptr<KMatrixPiPiS> theKMatrix(new KMatrixPiPiS());
-   vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs=theKMatrix->phaseSpaceVec();
-   vector<boost::shared_ptr<KPole> > kPoles=theKMatrix->kpoles();
+   std::shared_ptr<KMatrixPiPiS> theKMatrix(new KMatrixPiPiS());
+   vector<std::shared_ptr<AbsPhaseSpace> > phpVecs=theKMatrix->phaseSpaceVec();
+   vector<std::shared_ptr<KPole> > kPoles=theKMatrix->kpoles();
 
-   vector<boost::shared_ptr<PPole> > thePpoles;
+   vector<std::shared_ptr<PPole> > thePpoles;
    complex<double> defaultBeta(1.,0.); 
      
-   vector<boost::shared_ptr<KPole> >::iterator it;
+   vector<std::shared_ptr<KPole> >::iterator it;
    for (it=kPoles.begin(); it!=kPoles.end(); ++it){ 
      std::vector<double> currentGFactors=(*it)->gFactors();
-     boost::shared_ptr<PPole> currentPPole(new PPole(defaultBeta, currentGFactors, (*it)->poleMass()));
+     std::shared_ptr<PPole> currentPPole(new PPole(defaultBeta, currentGFactors, (*it)->poleMass()));
      thePpoles.push_back(currentPPole);     
    } 
 
@@ -53,7 +53,7 @@ FVectorPiPiS::FVectorPiPiS() :
   }
 
   double s0Prod=-0.0737;
-  boost::shared_ptr<PVectorSlowCorRel> thePVector(new PVectorSlowCorRel(thePpoles, phpVecs, fProdVec, s0Prod));   
+  std::shared_ptr<PVectorSlowCorRel> thePVector(new PVectorSlowCorRel(thePpoles, phpVecs, fProdVec, s0Prod));   
   _Kmatrix=theKMatrix;
   _Pvector=thePVector;
   _pVectorCor=thePVector;

@@ -47,7 +47,7 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-// pbarpHeliLh::pbarpHeliLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+// pbarpHeliLh::pbarpHeliLh(std::shared_ptr<const EvtDataBaseList> theEvtList) :
 //   pbarpBaseLh(theEvtList)
 // {
 //   initialize();
@@ -71,25 +71,25 @@ void pbarpHeliLh::print(std::ostream& os) const{
 
 void  pbarpHeliLh::initialize(){
   
-  std::vector< boost::shared_ptr<IsobarHeliDecay> > theDecs = _pbarpReactionPtr->productionHeliDecays();
+  std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _pbarpReactionPtr->productionHeliDecays();
 
-  std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator it;
+  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    boost::shared_ptr<AbsDecay> currentDec((*it).get() );
-    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    std::shared_ptr<AbsDecay> currentDec((*it).get() );
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
     _decAmps.push_back(currentAmp);
   }
 
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsSingletStates=_pbarpReactionPtr->jpclsSingletStates();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsSingletStates=_pbarpReactionPtr->jpclsSingletStates();
   fillMap(jpclsSingletStates, _decAmps, _decAmpsSinglet);
   
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsTriplet0States=_pbarpReactionPtr->jpclsTriplet0States();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsTriplet0States=_pbarpReactionPtr->jpclsTriplet0States();
   fillMap(jpclsTriplet0States, _decAmps, _decAmpsTriplet0);
   
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletp1States=_pbarpReactionPtr->jpclsTripletp1States();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsTripletp1States=_pbarpReactionPtr->jpclsTripletp1States();
   fillMap(jpclsTripletp1States, _decAmps, _decAmpsTripletp1);
   
-  std::vector< boost::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
+  std::vector< std::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
   fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);  
 }
 

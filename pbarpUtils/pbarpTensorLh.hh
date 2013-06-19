@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 #include <complex>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/function.hpp>
 #include <memory>
 
@@ -48,7 +48,7 @@ class LSDecAmps;
 class pbarpTensorLh : public pbarpBaseLh {
 
 public:
-  // pbarpTensorLh(boost::shared_ptr<const EvtDataBaseList>);
+  // pbarpTensorLh(std::shared_ptr<const EvtDataBaseList>);
   pbarpTensorLh();
 
   virtual ~pbarpTensorLh();

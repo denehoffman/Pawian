@@ -40,7 +40,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-AbsLh::AbsLh(boost::shared_ptr<AbsLh> theAbsLhPtr):
+AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   AbsParamHandler()
   ,_absEnv(theAbsLhPtr->_absEnv)
   ,_evtDataVec(theAbsLhPtr->getDataVec())
@@ -249,7 +249,7 @@ void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     fitErr.otherParams[_phasespaceKey]=0.05;
   } 
 
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator itDecs;
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecs;
   for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
     (*itDecs)->getDefaultParams(fitVal, fitErr);
   }
@@ -257,14 +257,14 @@ void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
 void AbsLh::cacheAmplitudes(){
   _cacheAmps=true;
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     (*it)->cacheAmplitudes();
   }
 }
 
 void AbsLh::updateFitParams(fitParams& theParamVal){
-std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     (*it)->updateFitParams(theParamVal);
   }
@@ -272,7 +272,7 @@ std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
 
 bool AbsLh::checkRecalculation(fitParams& theParamVal){
   bool result=true;
-  std::vector< boost::shared_ptr<AbsXdecAmp> >::iterator it;
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     if(!(*it)->checkRecalculation(theParamVal)) result=false;
   }

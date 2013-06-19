@@ -44,7 +44,7 @@ IsobarHeliDecay::IsobarHeliDecay(Particle* mother, Particle* daughter1, Particle
   validJPClamlam( _motherJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
 }
 
-IsobarHeliDecay::IsobarHeliDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+IsobarHeliDecay::IsobarHeliDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
   AbsDecay(motherJPCPtr, daughter1, daughter2, theEnv, motherName)
 {
   validJPClamlam( _motherJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
@@ -57,7 +57,7 @@ void IsobarHeliDecay::print(std::ostream& os) const{
   os << "\nJPClamlam amplitudes for decay\t" << _name << ":\n";
   os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
   
-  std::vector< boost::shared_ptr<const JPClamlam> >::const_iterator it;
+  std::vector< std::shared_ptr<const JPClamlam> >::const_iterator it;
   for (it = _JPClamlamDecAmps.begin(); it!= _JPClamlamDecAmps.end(); ++it){
     (*it)->print(os);
     os << "\n";

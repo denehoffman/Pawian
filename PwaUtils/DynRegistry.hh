@@ -33,7 +33,7 @@
 #include <string>
 
 #include <cassert>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class AbsDecay;
 class AbsDynamics;
@@ -48,8 +48,8 @@ public:
   virtual ~DynRegistry();
 
   static DynRegistry* instance();
-  boost::shared_ptr<AbsDynamics> getDynamics(boost::shared_ptr<AbsDecay> theDec);
-  std::vector<boost::shared_ptr<AbsDynamics> > getDynVec(){return _dynVec;}
+  std::shared_ptr<AbsDynamics> getDynamics(std::shared_ptr<AbsDecay> theDec);
+  std::vector<std::shared_ptr<AbsDynamics> > getDynVec(){return _dynVec;}
 
 protected:
  ///Constructor 
@@ -58,8 +58,8 @@ protected:
 
 private:
 
-  std::map<std::string, boost::shared_ptr<AbsDynamics> > _dynMap;
-  std::vector<boost::shared_ptr<AbsDynamics> > _dynVec;
+  std::map<std::string, std::shared_ptr<AbsDynamics> > _dynMap;
+  std::vector<std::shared_ptr<AbsDynamics> > _dynVec;
 
 };
 

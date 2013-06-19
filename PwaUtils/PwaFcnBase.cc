@@ -34,7 +34,7 @@
 using namespace ROOT::Minuit2;
 
 
-PwaFcnBase::PwaFcnBase(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
+PwaFcnBase::PwaFcnBase(std::shared_ptr<AbsLh> absLh, std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
   AbsFcn(fitParamsBase, suffix)
   ,_absLhPtr(absLh)
 {

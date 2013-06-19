@@ -32,7 +32,7 @@
 #include <map>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "TROOT.h"
 
@@ -45,7 +45,7 @@
 class pbarpHist : public AbsHist{
 
 public:
-  pbarpHist(boost::shared_ptr<AbsLh>, fitParams& theFitParams);
+  pbarpHist(std::shared_ptr<AbsLh>, fitParams& theFitParams);
   virtual ~pbarpHist();
 
 protected:

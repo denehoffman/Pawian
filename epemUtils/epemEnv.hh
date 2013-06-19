@@ -32,7 +32,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -52,7 +52,7 @@ public:
 
   void setup(epemParser* theEpEmParser);
 
-  boost::shared_ptr<epemReaction> reaction() {return _epemReaction;}
+  std::shared_ptr<epemReaction> reaction() {return _epemReaction;}
   const double cmsMass() {return _cmsMass;}  
 
 protected:  
@@ -60,6 +60,6 @@ protected:
   epemEnv();
   static epemEnv* _instance;
   double _cmsMass;
-  boost::shared_ptr<epemReaction> _epemReaction;
+  std::shared_ptr<epemReaction> _epemReaction;
   std::vector<std::string> _spinDensity;
 };

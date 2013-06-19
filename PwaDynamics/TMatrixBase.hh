@@ -34,7 +34,7 @@
 #include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 using namespace std;
@@ -46,16 +46,16 @@ class TMatrixBase : public Matrix< complex<double> > {
 public:
 
   /// Constructor 
-  TMatrixBase(boost::shared_ptr<KMatrixBase> Kmatrix); 
+  TMatrixBase(std::shared_ptr<KMatrixBase> Kmatrix); 
 
   /// Destructor
   virtual ~TMatrixBase();
 
   virtual void evalMatrix(const double mass);
-  virtual boost::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
+  virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 
 protected:
-  boost::shared_ptr<KMatrixBase> _Kmatrix; 
+  std::shared_ptr<KMatrixBase> _Kmatrix; 
 
 };
 //_____________________________________________________________________________

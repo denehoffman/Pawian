@@ -41,7 +41,7 @@
 KPiSWaveIso12Dynamics::KPiSWaveIso12Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
 {
-  _kMatr =  boost::shared_ptr<KMatrixKPiSFocus> (new KMatrixKPiSFocus(1));
+  _kMatr =  std::shared_ptr<KMatrixKPiSFocus> (new KMatrixKPiSFocus(1));
 }
 
 KPiSWaveIso12Dynamics::~KPiSWaveIso12Dynamics()
@@ -63,7 +63,7 @@ complex<double> result(0.,0.);
 
   else{
       theMutex.lock();
-      boost::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
+      std::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
       currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
       result=(*currentFVec)[0];
       if ( _cacheAmps){
@@ -199,7 +199,7 @@ void KPiSWaveIso12Dynamics::updateFitParams(fitParams& theParamVal){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
 
-    boost::shared_ptr<PVectorKPiSFocus> currentPVec=_pVecMap[it1->first];
+    std::shared_ptr<PVectorKPiSFocus> currentPVec=_pVecMap[it1->first];
     currentPVec->updateBeta(0, b_pole1);
     currentPVec->updateAprod(0, aProds["a_KpiPosNeg"]);
     currentPVec->updateBprod(0, bProds["b_KpiPosNeg"]);
@@ -213,7 +213,7 @@ void KPiSWaveIso12Dynamics::updateFitParams(fitParams& theParamVal){
   }
 }
 
-void KPiSWaveIso12Dynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
+void KPiSWaveIso12Dynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   if(0==theDec){
     Alert << "Can not add AbsXdecAmp; 0 pointer!!!" << endmsg;
     exit(1);
@@ -223,11 +223,11 @@ void KPiSWaveIso12Dynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
 
   std::cout << "addGrandMa:\t" << theName << std::endl;
 
-  std::map<std::string, boost::shared_ptr<FVector> >::iterator it = _fVecMap.find(theName);
+  std::map<std::string, std::shared_ptr<FVector> >::iterator it = _fVecMap.find(theName);
   
   if (it != _fVecMap.end()) return;
 
-  boost::shared_ptr<PVectorKPiSFocus> currentPVector=boost::shared_ptr<PVectorKPiSFocus>(new PVectorKPiSFocus(_kMatr));
+  std::shared_ptr<PVectorKPiSFocus> currentPVector=std::shared_ptr<PVectorKPiSFocus>(new PVectorKPiSFocus(_kMatr));
   _pVecMap[theName]=currentPVector;
 
   _currentaProdMap[theName]["a_KpiPosNeg"]=1.;
@@ -256,7 +256,7 @@ void KPiSWaveIso12Dynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
   currentPVector->updateCprod(1, _currentcProdMap[theName]["c_KetapPosNeg"]);
   currentPVector->updatePhaseprod(1, _currentphaseProdMap[theName]["KetapPhi"]);
 
-  boost::shared_ptr<FVector> currentFVector=boost::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
+  std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
   _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
 }

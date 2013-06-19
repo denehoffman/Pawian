@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -45,8 +45,8 @@ protected:
   virtual void fillParamMap() = 0;
   virtual void StringParameterMap(const string &theName, const double firstVal,
 				  const double secondVal);
-  virtual void fillParamMapAmps(std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSs, 
-				std::string& suffix, std::map< boost::shared_ptr<const JPCLS>,
+  virtual void fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, 
+				std::string& suffix, std::map< std::shared_ptr<const JPCLS>,
 				pair<double, double>, 
 				pawian::Collection::SharedPtrLess >& toFill);
   virtual void fillParamMapMass(std::string& name, pair<double, double>& toFill);

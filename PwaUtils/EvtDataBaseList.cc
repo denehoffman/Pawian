@@ -126,15 +126,15 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
 
 
    //fill WignerD functions
-    std::vector<boost::shared_ptr<AbsDecay> > theDecays=_absEnv->prodDecayList()->getList();
-    std::vector<boost::shared_ptr<AbsDecay> >::iterator itIso;
+    std::vector<std::shared_ptr<AbsDecay> > theDecays=_absEnv->prodDecayList()->getList();
+    std::vector<std::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
       (*itIso)->fillWignerDs(particle4VecMap, evtData);
     }
 
    //fill 4Vecs for dynamics
-    std::vector<boost::shared_ptr<AbsDynamics> > theDynVec=DynRegistry::instance()->getDynVec();
-    std::vector<boost::shared_ptr<AbsDynamics> >::iterator itDyn;
+    std::vector<std::shared_ptr<AbsDynamics> > theDynVec=DynRegistry::instance()->getDynVec();
+    std::vector<std::shared_ptr<AbsDynamics> >::iterator itDyn;
     for (itDyn=theDynVec.begin(); itDyn!=theDynVec.end(); ++itDyn){
       (*itDyn)->fillMasses(evtData);
     }; 

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -44,7 +44,7 @@ struct jpcRes {
     C=c;
   }
 
-  jpcRes(boost::shared_ptr<const jpcRes> theJPC) {
+  jpcRes(std::shared_ptr<const jpcRes> theJPC) {
     J=theJPC->J;
     P=theJPC->P;
     C=theJPC->C;
@@ -107,14 +107,14 @@ struct JPClamlam : public jpcRes {
     parityFactor=theParityFactor;
    }
 
-  JPClamlam(boost::shared_ptr<const jpcRes> theJPC, const Spin& theLam1, 
+  JPClamlam(std::shared_ptr<const jpcRes> theJPC, const Spin& theLam1, 
 	    const Spin& theLam2, const double theParityFactor=0.): jpcRes(theJPC) {
     lam1=theLam1;
     lam2=theLam2; 
     parityFactor=theParityFactor;
   }
 
-  JPClamlam(boost::shared_ptr<const JPClamlam> theJPClamlam): 
+  JPClamlam(std::shared_ptr<const JPClamlam> theJPClamlam): 
     jpcRes(theJPClamlam->J, theJPClamlam->P, theJPClamlam->C) {
     lam1=theJPClamlam->lam1;
     lam2=theJPClamlam->lam2;
@@ -185,14 +185,14 @@ struct JPCLS : public jpcRes {
     preFactor=thePreFactor;
   }
 
-  JPCLS(boost::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS, 
+  JPCLS(std::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS, 
 	const double thePreFactor=0.): jpcRes(theJPC) {
     L=theL;
     S=theS;
     preFactor=thePreFactor;
   }
 
-  JPCLS(boost::shared_ptr<const JPCLS> theJPCLS): 
+  JPCLS(std::shared_ptr<const JPCLS> theJPCLS): 
     jpcRes(theJPCLS->J, theJPCLS->P, theJPCLS->C) {
     L=theJPCLS->L;
     S=theJPCLS->S;
@@ -261,7 +261,7 @@ struct JPCLSJJ : public JPCLS {
   double CGJJ;
   double prefactorAll;
 
-  JPCLSJJ(boost::shared_ptr<const JPCLS> theJPCLS, const Spin& theJ1, 
+  JPCLSJJ(std::shared_ptr<const JPCLS> theJPCLS, const Spin& theJ1, 
 	  const Spin& theLambda1, const Spin& theJ2, const Spin& theLambda2): 
     JPCLS(theJPCLS) {
     J1=theJ1;
@@ -273,7 +273,7 @@ struct JPCLSJJ : public JPCLS {
     prefactorAll = sqrt( (2.*L+1)/(2.*J+1)  ) * CGLS * CGJJ;
   }
 
-  JPCLSJJ(boost::shared_ptr<const JPCLSJJ> theJPCLSJJ): JPCLS(theJPCLSJJ) {
+  JPCLSJJ(std::shared_ptr<const JPCLSJJ> theJPCLSJJ): JPCLS(theJPCLSJJ) {
     J1=theJPCLSJJ->J1;
     Lambda1=theJPCLSJJ->Lambda1;
     J2=theJPCLSJJ->J2;
@@ -345,13 +345,13 @@ struct JPCLSJJls : public JPCLSJJ {
   Spin l;
   Spin s;
 
-  JPCLSJJls(boost::shared_ptr<const JPCLSJJ> theJPCLSJJ, const Spin& thel, 
+  JPCLSJJls(std::shared_ptr<const JPCLSJJ> theJPCLSJJ, const Spin& thel, 
 	    const Spin& thes): JPCLSJJ(theJPCLSJJ){
     l=thel;
     s=thes;
   }
 
-  JPCLSJJls(boost::shared_ptr<const JPCLSJJls> theJPCLSJJls): JPCLSJJ(theJPCLSJJls) {
+  JPCLSJJls(std::shared_ptr<const JPCLSJJls> theJPCLSJJls): JPCLSJJ(theJPCLSJJls) {
     l=theJPCLSJJls->l;
     s=theJPCLSJJls->s;
   }
@@ -405,13 +405,13 @@ struct JPCLSls : public JPCLS {
   Spin l;
   Spin s;
 
-  JPCLSls(boost::shared_ptr<const JPCLS> theJPCLS, const Spin& thel, const Spin& thes): 
+  JPCLSls(std::shared_ptr<const JPCLS> theJPCLS, const Spin& thel, const Spin& thes): 
     JPCLS(theJPCLS) {
     l=thel;
     s=thes;
   }
 
-  JPCLSls(boost::shared_ptr<const JPCLSls> theJPCLSls): JPCLS(theJPCLSls) {
+  JPCLSls(std::shared_ptr<const JPCLSls> theJPCLSls): JPCLS(theJPCLSls) {
     l=theJPCLSls->l;
     s=theJPCLSls->s;
   }
@@ -464,7 +464,7 @@ struct JPCLSls : public JPCLS {
 struct JPCSM : public jpcRes {
   Spin S;
   Spin M;
-  JPCSM(boost::shared_ptr<const jpcRes> theJPC, const Spin& theS, const Spin& theM): 
+  JPCSM(std::shared_ptr<const jpcRes> theJPC, const Spin& theS, const Spin& theM): 
     jpcRes(theJPC){
     S=theS;
     M=theM;
@@ -519,11 +519,11 @@ struct JPCSM : public jpcRes {
 
 
 struct JPCLSM : public JPCLS {
-  boost::shared_ptr<const jpcRes> jpc;
+  std::shared_ptr<const jpcRes> jpc;
   Spin M;
   double ClebschG;
 
-  JPCLSM(boost::shared_ptr<const JPCLS> theJPCLS, const Spin theM, const double theClebschG) :
+  JPCLSM(std::shared_ptr<const JPCLS> theJPCLS, const Spin theM, const double theClebschG) :
     JPCLS(theJPCLS) {
     M=theM;
     ClebschG=theClebschG;
@@ -586,8 +586,8 @@ struct JPCLSM : public JPCLS {
 
 
 template<typename T>
-void fillVec(boost::shared_ptr<const T> currentRes, 
-	     std::vector< boost::shared_ptr<const T> >& theVec) {
+void fillVec(std::shared_ptr<const T> currentRes, 
+	     std::vector< std::shared_ptr<const T> >& theVec) {
 
   const T* current=currentRes.get();
   if (0==current) {
@@ -595,7 +595,7 @@ void fillVec(boost::shared_ptr<const T> currentRes,
     exit(1);
   }
  
-  typename std::vector< boost::shared_ptr<const T> >::const_iterator it;
+  typename std::vector< std::shared_ptr<const T> >::const_iterator it;
   bool found=false;
   for ( it=theVec.begin(); it!=theVec.end(); ++it){
     const T* resIt=(*it).get();
@@ -613,11 +613,11 @@ void fillVec(boost::shared_ptr<const T> currentRes,
 
 
 template<typename T1, typename T2>
-std::vector< boost::shared_ptr<const T2 > > extractStates (std::vector< boost::shared_ptr<const T1 > >& vec1, std::vector< boost::shared_ptr<const T2 > >& vec2) {
+std::vector< std::shared_ptr<const T2 > > extractStates (std::vector< std::shared_ptr<const T1 > >& vec1, std::vector< std::shared_ptr<const T2 > >& vec2) {
 
-  typename std::vector< boost::shared_ptr<const T2 > > result;
-  typename std::vector< boost::shared_ptr<const T1 > >::const_iterator it1;
-  typename std::vector< boost::shared_ptr<const T2 > >::const_iterator it2;
+  typename std::vector< std::shared_ptr<const T2 > > result;
+  typename std::vector< std::shared_ptr<const T1 > >::const_iterator it1;
+  typename std::vector< std::shared_ptr<const T2 > >::const_iterator it2;
   
   for ( it1=vec1.begin(); it1!=vec1.end(); ++it1) {
     for ( it2 = vec2.begin(); it2!= vec2.end(); ++it2) {
@@ -629,12 +629,12 @@ std::vector< boost::shared_ptr<const T2 > > extractStates (std::vector< boost::s
 }
 
 template<typename T1, typename T2, typename T3>
-void fillStatesInitialDec( std::vector< boost::shared_ptr<const T1 > >& initial, 
-			   std::vector< boost::shared_ptr<const T2 > >& dec,  
-			   std::vector< boost::shared_ptr<const T3 > >& initialDecToFill) {
+void fillStatesInitialDec( std::vector< std::shared_ptr<const T1 > >& initial, 
+			   std::vector< std::shared_ptr<const T2 > >& dec,  
+			   std::vector< std::shared_ptr<const T3 > >& initialDecToFill) {
 
-  typename std::vector< boost::shared_ptr<const T1 > >::const_iterator it1;
-  typename std::vector< boost::shared_ptr<const T2 > >::const_iterator it2;
+  typename std::vector< std::shared_ptr<const T1 > >::const_iterator it1;
+  typename std::vector< std::shared_ptr<const T2 > >::const_iterator it2;
 
   for ( it1=initial.begin(); it1!=initial.end(); ++it1) {
    
@@ -642,7 +642,7 @@ void fillStatesInitialDec( std::vector< boost::shared_ptr<const T1 > >& initial,
     thejpcRes.print(std::cout);  
     for ( it2=dec.begin(); it2!=dec.end(); ++it2){
       if( *(*it2) == thejpcRes){
-	boost::shared_ptr<const T3> currentInitialDecState(new T3( (*it1), (*it2)->L, 
+	std::shared_ptr<const T3> currentInitialDecState(new T3( (*it1), (*it2)->L, 
 								   (*it2)->S));
 	initialDecToFill.push_back(currentInitialDecState); 
       }
@@ -651,15 +651,15 @@ void fillStatesInitialDec( std::vector< boost::shared_ptr<const T1 > >& initial,
 }
 
 
-void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, boost::shared_ptr<const jpcRes> daughterRes1, boost::shared_ptr<const jpcRes> daughterRes2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec);
+void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcRes> daughterRes1, std::shared_ptr<const jpcRes> daughterRes2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec);
 
 class Particle;
 
-void validJPCLS(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPCLS> >& theJPCLSVec);
+void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec);
 
-void validJPClamlam(boost::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< boost::shared_ptr<const JPClamlam> >& theJPClamlamVec);
+void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec);
 
 
-boost::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);
+std::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);
 
 

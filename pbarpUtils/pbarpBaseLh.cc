@@ -45,7 +45,7 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-// pbarpBaseLh::pbarpBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+// pbarpBaseLh::pbarpBaseLh(std::shared_ptr<const EvtDataBaseList> theEvtList) :
 //   AbsLh(theEvtList, pbarpEnv::instance())
 //   ,_highestJFsp(0)
 //   ,_isHighestJaPhoton(true)
@@ -111,20 +111,20 @@ double pbarpBaseLh::calcSpinDensityNorm(std::string& nameDec, EvtData* theData){
 
 
 complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
-					     std::map <boost::shared_ptr<const JPCLS>,
-					     std::vector< boost::shared_ptr<AbsXdecAmp> >,
+					     std::map <std::shared_ptr<const JPCLS>,
+					     std::vector< std::shared_ptr<AbsXdecAmp> >,
 					     pawian::Collection::SharedPtrLess > pbarpAmps){
    complex<double> resultAmp(0.,0.);
 
-   std::map <boost::shared_ptr<const JPCLS>,
-             std::vector< boost::shared_ptr<AbsXdecAmp> >,
+   std::map <std::shared_ptr<const JPCLS>,
+             std::vector< std::shared_ptr<AbsXdecAmp> >,
              pawian::Collection::SharedPtrLess >::iterator it;
 
    for(it=pbarpAmps.begin(); it!=pbarpAmps.end(); ++it){
      complex<double> tmpAmp(0.,0.);
-     boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-     std::vector<boost::shared_ptr<AbsXdecAmp> > decAmps=it->second;
-     std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+     std::shared_ptr<const JPCLS> theJPCLS=it->first;
+     std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
 
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        Particle* particle1 = (*itDec)->absDec()->daughter1Part();
@@ -151,7 +151,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
   double result=0.;
 
-  std::map <boost::shared_ptr<const JPCLS>, std::vector< boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >::iterator it;
 
   int lamSteps=1;
   if(_isHighestJaPhoton) lamSteps=2;
@@ -161,9 +161,9 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   complex<double> singletAmp(0.,0.);
   for(it=_decAmpsSinglet.begin(); it!=_decAmpsSinglet.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-    std::vector<boost::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
-     std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        complex<double> currentDecAmp=(*itDec)->XdecAmp(0, theData, lamHigestJFsp);
        tmpAmp+=currentDecAmp;
@@ -179,9 +179,9 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   complex<double> triplet0Amp(0.,0.);
   for(it=_decAmpsTriplet0.begin(); it!=_decAmpsTriplet0.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-    std::vector<boost::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
-     std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        tmpAmp+=(*itDec)->XdecAmp(0, theData, lamHigestJFsp);
      }
@@ -196,9 +196,9 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
    complex<double> tripletp1Amp(0.,0.);
   for(it=_decAmpsTripletp1.begin(); it!=_decAmpsTripletp1.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-    std::vector<boost::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
-     std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        tmpAmp+=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
      }
@@ -213,9 +213,9 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
    complex<double> tripletm1Amp(0.,0.);
   for(it=_decAmpsTripletm1.begin(); it!=_decAmpsTripletm1.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    boost::shared_ptr<const JPCLS> theJPCLS=it->first;
-    std::vector<boost::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
-     std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        tmpAmp+=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
      }
@@ -241,13 +241,13 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   AbsLh::getDefaultParams(fitVal, fitErr);
 
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
   double magFactor=1./sqrt(_jpclsStates.size());  
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
     currentMagValMap[*it] = magFactor;
     currentPhiValMap[*it] = 0.;
@@ -293,10 +293,10 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
 
   AbsLh::updateFitParams(theParamVal);
 
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags["pbarp"];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis["pbarp"];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags["pbarp"];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis["pbarp"];
 
-   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
    for (it=_jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
      double theMag=magMap[*it];
      double thePhi=phiMap[*it];
@@ -306,14 +306,14 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
 
 }
 
-void pbarpBaseLh::fillMap(std::vector< boost::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<boost::shared_ptr<AbsXdecAmp> >& decs, std::map< boost::shared_ptr<const JPCLS>, std::vector<boost::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill){
+void pbarpBaseLh::fillMap(std::vector< std::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<std::shared_ptr<AbsXdecAmp> >& decs, std::map< std::shared_ptr<const JPCLS>, std::vector<std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill){
 
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   for (itJPCLS = pbarpLSs.begin(); itJPCLS != pbarpLSs.end(); ++itJPCLS){
-    std::vector<boost::shared_ptr<AbsXdecAmp> > currentAmpVec;
+    std::vector<std::shared_ptr<AbsXdecAmp> > currentAmpVec;
 
-    std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itAmp;
+    std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itAmp;
     for(itAmp=decs.begin(); itAmp!=decs.end(); ++itAmp){
       if( (*(*itAmp)->jpcPtr())==(*(*itJPCLS)) )  currentAmpVec.push_back(*itAmp);
     }

@@ -60,33 +60,33 @@ XdecAmpRegistry::~XdecAmpRegistry()
 {
 }
 
-boost::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(boost::shared_ptr<AbsDecay> theAbsXDec){
+std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(std::shared_ptr<AbsDecay> theAbsXDec){
 
-  boost::shared_ptr<AbsXdecAmp> result;
+  std::shared_ptr<AbsXdecAmp> result;
 
   std::string theName=theAbsXDec->name();
-  std::map<std::string, boost::shared_ptr<AbsXdecAmp> >::iterator it = _xDecAmpMap.find(theName);
+  std::map<std::string, std::shared_ptr<AbsXdecAmp> >::iterator it = _xDecAmpMap.find(theName);
   if (it !=_xDecAmpMap.end()) result=it->second;
   else{
     if(theAbsXDec->type()=="IsobarLSDecay"){
-      boost::shared_ptr<IsobarLSDecay> decLS =  boost::dynamic_pointer_cast<IsobarLSDecay>(theAbsXDec);
-      result=boost::shared_ptr<AbsXdecAmp>(new LSDecAmps(decLS));
+      std::shared_ptr<IsobarLSDecay> decLS =  std::dynamic_pointer_cast<IsobarLSDecay>(theAbsXDec);
+      result=std::shared_ptr<AbsXdecAmp>(new LSDecAmps(decLS));
     }
     else if(theAbsXDec->type()=="IsobarHeliDecay"){
-      boost::shared_ptr<IsobarHeliDecay> decLamLam =  boost::dynamic_pointer_cast<IsobarHeliDecay>(theAbsXDec);
-      result=boost::shared_ptr<AbsXdecAmp>(new HeliDecAmps(decLamLam));
+      std::shared_ptr<IsobarHeliDecay> decLamLam =  std::dynamic_pointer_cast<IsobarHeliDecay>(theAbsXDec);
+      result=std::shared_ptr<AbsXdecAmp>(new HeliDecAmps(decLamLam));
     }
     else if(theAbsXDec->type()=="IsobarTensorDecay"){
-      boost::shared_ptr<IsobarTensorDecay> decTensor =  boost::dynamic_pointer_cast<IsobarTensorDecay>(theAbsXDec);
-      result=boost::shared_ptr<AbsXdecAmp>(new TensorDecAmps(decTensor));
+      std::shared_ptr<IsobarTensorDecay> decTensor =  std::dynamic_pointer_cast<IsobarTensorDecay>(theAbsXDec);
+      result=std::shared_ptr<AbsXdecAmp>(new TensorDecAmps(decTensor));
     }
     else if(theAbsXDec->type()=="OmegaTo3PiLSDecay"){
-      boost::shared_ptr<OmegaTo3PiLSDecay> decOmega =  boost::dynamic_pointer_cast<OmegaTo3PiLSDecay>(theAbsXDec);
-      result=boost::shared_ptr<AbsXdecAmp>(new LSOmegaTo3PiDecAmps(decOmega));
+      std::shared_ptr<OmegaTo3PiLSDecay> decOmega =  std::dynamic_pointer_cast<OmegaTo3PiLSDecay>(theAbsXDec);
+      result=std::shared_ptr<AbsXdecAmp>(new LSOmegaTo3PiDecAmps(decOmega));
     }
     else if(theAbsXDec->type()=="OmegaTo3PiTensorDecay"){
-      boost::shared_ptr<OmegaTo3PiTensorDecay> decOmega =  boost::dynamic_pointer_cast<OmegaTo3PiTensorDecay>(theAbsXDec);
-      result=boost::shared_ptr<AbsXdecAmp>(new TensorOmegaTo3PiDecAmps(decOmega));
+      std::shared_ptr<OmegaTo3PiTensorDecay> decOmega =  std::dynamic_pointer_cast<OmegaTo3PiTensorDecay>(theAbsXDec);
+      result=std::shared_ptr<AbsXdecAmp>(new TensorOmegaTo3PiDecAmps(decOmega));
     }
     else{
       Alert << "can nor create XdecAmp object for theAbsXDec->name():\t" << theAbsXDec->name() << endmsg;

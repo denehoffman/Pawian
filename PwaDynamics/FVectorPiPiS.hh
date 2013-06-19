@@ -36,7 +36,7 @@
 #include "PwaDynamics/PVectorSlowCorRel.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 using namespace std;
 //_____________________________________________________________________________
@@ -51,11 +51,11 @@ public:
 
   /// Destructor
   virtual ~FVectorPiPiS();
-  virtual boost::shared_ptr<PVectorSlowCorRel> pVectorSlowCorrRel() {return _pVectorCor;}
+  virtual std::shared_ptr<PVectorSlowCorRel> pVectorSlowCorrRel() {return _pVectorCor;}
   virtual void updateFprod (int i, complex<double> fProd){_pVectorCor->updateFprod (i, fProd);}
   virtual void updateS0prod (double s0prod) {_pVectorCor->updateS0prod(s0prod);}
 protected:
-  boost::shared_ptr<PVectorSlowCorRel> _pVectorCor;
+  std::shared_ptr<PVectorSlowCorRel> _pVectorCor;
 };
 //_____________________________________________________________________________
 

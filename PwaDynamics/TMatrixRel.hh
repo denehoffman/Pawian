@@ -34,7 +34,7 @@
 #include "PwaDynamics/TMatrixBase.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class KMatrixBase;
 
@@ -47,7 +47,7 @@ class TMatrixRel : public TMatrixBase {
 public:
 
   /// Constructor 
-  TMatrixRel(boost::shared_ptr<KMatrixBase> Kmatrix); 
+  TMatrixRel(std::shared_ptr<KMatrixBase> Kmatrix); 
 
   /// Destructor
   virtual ~TMatrixRel();

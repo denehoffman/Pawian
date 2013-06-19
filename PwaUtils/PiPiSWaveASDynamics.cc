@@ -65,7 +65,7 @@ complex<double> result(0.,0.);
 
   else{
       theMutex.lock();
-      boost::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[currentKey];
+      std::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[currentKey];
       currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
       result=(*currentFVec)[_projectionIndex];
       if ( _cacheAmps){
@@ -155,7 +155,7 @@ void PiPiSWaveASDynamics::updateFitParams(fitParams& theParamVal){
 
     _currentS0Map[it1->first]=theParamVal.otherParams[it1->first+"S0_PosNeg"];
 
-    boost::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[it1->first];
+    std::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[it1->first];
 
     //update _pipiSFVec
     complex<double> b_pole1=bFactors["b_pole1Mag"]*complex<double>(cos(bFactors["b_pole1Phi"]), sin(bFactors["b_pole1Phi"]));
@@ -184,7 +184,7 @@ void PiPiSWaveASDynamics::updateFitParams(fitParams& theParamVal){
    }
 }
 
-void PiPiSWaveASDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
+void PiPiSWaveASDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   if(0==theDec){
     Alert << "Can not add AbsXdecAmp; 0 pointer!!!" << endmsg;
     exit(1);
@@ -194,11 +194,11 @@ void PiPiSWaveASDynamics::addGrandMa(boost::shared_ptr<AbsDecay> theDec){
 
   std::cout << "addGrandMa:\t" << theName << std::endl;
 
-  std::map<std::string, boost::shared_ptr<FVectorPiPiS> >::iterator it = _fVecMap.find(theName);
+  std::map<std::string, std::shared_ptr<FVectorPiPiS> >::iterator it = _fVecMap.find(theName);
   
   if (it != _fVecMap.end()) return;
 
-  boost::shared_ptr<FVectorPiPiS> currentFVector=boost::shared_ptr<FVectorPiPiS>(new FVectorPiPiS());
+  std::shared_ptr<FVectorPiPiS> currentFVector=std::shared_ptr<FVectorPiPiS>(new FVectorPiPiS());
 
   _currentbFactorMap[theName]["b_pole1Mag"]=1.;
   _currentbFactorMap[theName]["b_pole1Phi"]=0.;

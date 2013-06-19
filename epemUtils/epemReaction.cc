@@ -41,11 +41,11 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
       //      std::string decName=(*itJPC)->name();
-      boost::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _epemJPC, itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
+      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _epemJPC, itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
-	boost::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemJPC,itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
+	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemJPC,itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
 	_prodHeliDecs.push_back(currentHeliDec);
       }
     }
@@ -59,7 +59,7 @@ void epemReaction::print(std::ostream& os) const{
   os << "\n e+e- reaction\n";
  
   os << "\n ***** decay chains *******\n";
-  std::vector< boost::shared_ptr<IsobarLSDecay> >::const_iterator itIso;
+  std::vector< std::shared_ptr<IsobarLSDecay> >::const_iterator itIso;
   for( itIso=_prodCanoDecs.begin(); itIso!=_prodCanoDecs.end(); ++itIso){
     (*itIso)->print(os);
   }  

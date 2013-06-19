@@ -48,7 +48,7 @@ IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Part
 {
 }
 
-IsobarTensorDecay::IsobarTensorDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+IsobarTensorDecay::IsobarTensorDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
   IsobarLSDecay(motherJPCPtr, daughter1, daughter2, theEnv, motherName)
   ,_polMother(PolVector(_motherJPCPtr->J))
   ,_polDaughter1(PolVector(_daughter1JPCPtr->J))
@@ -65,7 +65,7 @@ void IsobarTensorDecay::print(std::ostream& os) const{
   os << "\nJPCLS tensor amplitudes for decay\t" << _name << ":\n";
   os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
   
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator it;
   for (it = _JPCLSDecAmps.begin(); it!= _JPCLSDecAmps.end(); ++it){
     (*it)->print(os);
     os << "\n";
@@ -134,9 +134,9 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   Spin lamMotherMax=spinMother;
   if (!_hasMotherPart && spinMother>1) lamMotherMax=1; //attention: this is only valid for pbar p or e+ e- reactions; must be moved to individual specific classes
 
-  std::vector< boost::shared_ptr<const JPCLS> > theJPCLSAmps=JPCLSAmps();
+  std::vector< std::shared_ptr<const JPCLS> > theJPCLSAmps=JPCLSAmps();
   DebugMsg << name() << endmsg;  
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator itJPCLS;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator itJPCLS;
   for(itJPCLS=theJPCLSAmps.begin(); itJPCLS!=theJPCLSAmps.end(); ++itJPCLS){
     //      (*itJPCLS)->print(std::cout);
     //       std::cout << std::endl;

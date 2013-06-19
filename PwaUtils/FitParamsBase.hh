@@ -30,7 +30,7 @@
 #include <map>
 #include <complex>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -40,9 +40,9 @@
 
 using namespace ROOT::Minuit2;
 
-typedef std::map<std::string, std::map< boost::shared_ptr<const JPCLS>, double, 
+typedef std::map<std::string, std::map< std::shared_ptr<const JPCLS>, double, 
 					pawian::Collection::SharedPtrLess > > mapStrJPCLS;
-typedef std::map<std::string, std::map< boost::shared_ptr<const JPClamlam>, double, 
+typedef std::map<std::string, std::map< std::shared_ptr<const JPClamlam>, double, 
 					pawian::Collection::SharedPtrLess > > mapStrJPCLamLam;
 typedef std::map<std::string, double> mapStrDouble;
 

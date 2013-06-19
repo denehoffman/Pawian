@@ -27,7 +27,7 @@
 #pragma once
 
 #include <iostream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"

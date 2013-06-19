@@ -27,7 +27,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsFcn.hh"
 
@@ -39,15 +39,15 @@ namespace ROOT {
     class PwaFcnServer : public AbsFcn {
 
     public:
-      PwaFcnServer(boost::shared_ptr<AbsLh> absLh, 
-		   boost::shared_ptr<FitParamsBase> fitParamsBase, boost::shared_ptr<NetworkServer> netServer, std::string suffix="");
+      PwaFcnServer(std::shared_ptr<AbsLh> absLh, 
+		   std::shared_ptr<FitParamsBase> fitParamsBase, std::shared_ptr<NetworkServer> netServer, std::string suffix="");
       virtual ~PwaFcnServer();
 
       virtual double operator()(const std::vector<double>& par) const;
 
     protected:
-      boost::shared_ptr<AbsLh> _absLhPtr;
-      boost::shared_ptr<NetworkServer> _networkServerPtr;
+      std::shared_ptr<AbsLh> _absLhPtr;
+      std::shared_ptr<NetworkServer> _networkServerPtr;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

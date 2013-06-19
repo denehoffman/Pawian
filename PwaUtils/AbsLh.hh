@@ -31,7 +31,7 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -54,7 +54,7 @@ class AbsEnv;
 class AbsLh : public AbsParamHandler{
 
 public:
-  AbsLh(boost::shared_ptr<AbsLh>);
+  AbsLh(std::shared_ptr<AbsLh>);
   AbsLh(AbsEnv* theEnv);
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
@@ -82,7 +82,7 @@ protected:
 
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
-  std::vector< boost::shared_ptr<AbsXdecAmp> > _decAmps;
+  std::vector< std::shared_ptr<AbsXdecAmp> > _decAmps;
 
   bool _usePhasespace;  
   const std::string _phasespaceKey;

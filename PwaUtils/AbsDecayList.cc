@@ -43,12 +43,12 @@ AbsDecayList::AbsDecayList(){
 AbsDecayList::~AbsDecayList(){
 }
 
-void AbsDecayList::addDecay(boost::shared_ptr<AbsDecay> theIsoDec){
+void AbsDecayList::addDecay(std::shared_ptr<AbsDecay> theIsoDec){
 
 //check if this decay already exists
   bool alreadyThere=false;  
   const std::string key = theIsoDec->name();
-  std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for(it=_absDecList.begin(); it!=_absDecList.end();++it){
     if (key==(*it)->name()){
       alreadyThere=true;
@@ -64,13 +64,13 @@ void AbsDecayList::addDecay(boost::shared_ptr<AbsDecay> theIsoDec){
   
 }
 
-boost::shared_ptr<AbsDecay> AbsDecayList::decay(Particle* mother){
+std::shared_ptr<AbsDecay> AbsDecayList::decay(Particle* mother){
    
-  boost::shared_ptr<AbsDecay> result;
+  std::shared_ptr<AbsDecay> result;
 
   const std::string key = mother->name();
 
-  std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it=_absDecList.begin(); it!=_absDecList.end(); ++it){
     if (key==(*it)->motherPart()->name()){
       result=(*it);
@@ -81,10 +81,10 @@ boost::shared_ptr<AbsDecay> AbsDecayList::decay(Particle* mother){
   return result; 
 }
 
-boost::shared_ptr<AbsDecay> AbsDecayList::decay(const std::string& name){
-  boost::shared_ptr<AbsDecay> result;
+std::shared_ptr<AbsDecay> AbsDecayList::decay(const std::string& name){
+  std::shared_ptr<AbsDecay> result;
 
-  std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it=_absDecList.begin(); it!=_absDecList.end(); ++it){
     if (name==(*it)->name()){
       result=(*it);
@@ -99,7 +99,7 @@ boost::shared_ptr<AbsDecay> AbsDecayList::decay(const std::string& name){
 
 void AbsDecayList::replaceSuffix(const std::string& oldPart, const std::string& newPart){
 
-  std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
     std::string theSuffix= (*it)->fitParSuffix();
     std::cout << "theSuffix:\t" << theSuffix << std::endl;
@@ -109,7 +109,7 @@ void AbsDecayList::replaceSuffix(const std::string& oldPart, const std::string& 
 }
 
 void AbsDecayList::replaceMassKey(const std::string& oldPart, const std::string& newPart){
-  std::vector<boost::shared_ptr<AbsDecay> >::iterator it;
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
     if(oldPart== (*it)->massParKey()){
       (*it)->setMassParKey(newPart);

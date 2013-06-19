@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsFitParamStreamer.hh"
 #include "PwaUtils/FitParamsBase.hh"
@@ -37,7 +37,7 @@ class AbsLh;
 class StreamFitParmsBase : public AbsFitParamStreamer {
   
 public:
-  StreamFitParmsBase(std::string&, boost::shared_ptr<AbsLh> theLhPtr);
+  StreamFitParmsBase(std::string&, std::shared_ptr<AbsLh> theLhPtr);
   virtual ~StreamFitParmsBase();
   
   fitParams getFitParamVal() { return _paramVal;}

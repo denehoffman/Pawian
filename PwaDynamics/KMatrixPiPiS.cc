@@ -87,11 +87,11 @@ void  KMatrixPiPiS::initASParam1900(){
   gFactorsMap[4].push_back(-0.00355); //eta eta
   gFactorsMap[4].push_back(0.22358); //eta eta'  
 
-  boost::shared_ptr<AbsPhaseSpace> pipiPhp(new PhaseSpaceIsobar(piMass, piMass));
-  boost::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobar(KplusMass, K0Mass));
-  boost::shared_ptr<AbsPhaseSpace> pipipipiPhp(new PhaseSpace4Pi());
-  boost::shared_ptr<AbsPhaseSpace> etaetaPhp(new PhaseSpaceIsobar(etaMass, etaMass));
-  boost::shared_ptr<AbsPhaseSpace> etaetapPhp(new PhaseSpaceIsobar(etaMass, etaprimeMass));
+  std::shared_ptr<AbsPhaseSpace> pipiPhp(new PhaseSpaceIsobar(piMass, piMass));
+  std::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobar(KplusMass, K0Mass));
+  std::shared_ptr<AbsPhaseSpace> pipipipiPhp(new PhaseSpace4Pi());
+  std::shared_ptr<AbsPhaseSpace> etaetaPhp(new PhaseSpaceIsobar(etaMass, etaMass));
+  std::shared_ptr<AbsPhaseSpace> etaetapPhp(new PhaseSpaceIsobar(etaMass, etaprimeMass));
 
   _phpVecs.push_back(pipiPhp);
   _phpVecs.push_back(kkPhp);
@@ -99,9 +99,9 @@ void  KMatrixPiPiS::initASParam1900(){
   _phpVecs.push_back(etaetaPhp);
   _phpVecs.push_back(etaetapPhp);
 
-  //  boost::shared_ptr< boost::multi_array<double, 2> > fScatMatr(new boost::multi_array<double, 2>(boost::extents[gFactors.size()][gFactors.size()]));
+  //  std::shared_ptr< boost::multi_array<double, 2> > fScatMatr(new boost::multi_array<double, 2>(boost::extents[gFactors.size()][gFactors.size()]));
 
-  _fScatPtr=boost::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
+  _fScatPtr=std::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
 
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){
@@ -119,11 +119,11 @@ void  KMatrixPiPiS::initASParam1900(){
   (*_fScatPtr)[3][0]=(*_fScatPtr)[0][3];
   (*_fScatPtr)[4][0]=(*_fScatPtr)[0][4];
 
-  std::vector< boost::shared_ptr<KPole> > kPoles;
+  std::vector< std::shared_ptr<KPole> > kPoles;
 
   std::map<int, std::vector<double> >::iterator itgFac;
   for (itgFac=gFactorsMap.begin(); itgFac!=gFactorsMap.end(); ++itgFac){
-    boost::shared_ptr<KPole> currentPole(new KPole(itgFac->second, poleMasses[itgFac->first]));
+    std::shared_ptr<KPole> currentPole(new KPole(itgFac->second, poleMasses[itgFac->first]));
     _KPoles.push_back(currentPole);
   }
 

@@ -33,7 +33,7 @@
 #include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class PPole;
 class AbsPhaseSpace;
@@ -47,8 +47,8 @@ class PVectorRel : public KMatrixBase {
 public:
 
   /// Constructor 
-  PVectorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs); 
-  PVectorRel(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs);
+  PVectorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs); 
+  PVectorRel(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs);
 
   /// Destructor
   virtual ~PVectorRel();
@@ -58,7 +58,7 @@ public:
   virtual void updateBeta(int i, complex<double> beta);
 
 protected:
-  vector<boost::shared_ptr<PPole> > _Ppoles;
+  vector<std::shared_ptr<PPole> > _Ppoles;
 };
 //_____________________________________________________________________________
 

@@ -33,13 +33,13 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/OmegaTo3PiLSDecay.hh"
+//#include "PwaUtils/OmegaTo3PiLSDecay.hh"
 //#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 
 
-LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(boost::shared_ptr<OmegaTo3PiLSDecay> theDec) :
-  LSDecAmps(theDec)
+LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec) :
+  LSDecAmps( (std::shared_ptr<AbsDecay>) theDec )
   ,_lambdaDecKey(theDec->lambdaDecKey())
 {
   _JPCLSs=theDec->JPCLSAmps();
@@ -55,7 +55,7 @@ LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
 complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
     double theMag=_currentParamMags[*it];
@@ -85,7 +85,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
     return result;
   }
   
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
     double theMag=_currentParamMags[*it];

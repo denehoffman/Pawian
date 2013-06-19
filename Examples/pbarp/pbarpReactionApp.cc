@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 #include <iterator>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "TROOT.h"
 
@@ -93,21 +93,21 @@ int main(int __argc,char *__argv[]){
 
   pbarpEnv::instance()->setup(theAppParams);
 
-  boost::shared_ptr<pbarpReaction> thepbarpReaction=pbarpEnv::instance()->reaction();
+  std::shared_ptr<pbarpReaction> thepbarpReaction=pbarpEnv::instance()->reaction();
 
   thepbarpReaction->print(std::cout);
 
 
   std::string mode=theAppParams->mode();
 
-  boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
+  std::shared_ptr<FitParamsBase> theFitParamBase=std::shared_ptr<FitParamsBase>(new FitParamsBase());
 
 
   std::string prodFormalism=theAppParams->productionFormalism();
-  boost::shared_ptr<AbsLh> theLhPtr;
-  if(prodFormalism=="Cano") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpCanoLh());
-  else if(prodFormalism=="Heli") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpHeliLh());
-  else if(prodFormalism=="Tensor") theLhPtr=boost::shared_ptr<AbsLh>(new pbarpTensorLh());
+  std::shared_ptr<AbsLh> theLhPtr;
+  if(prodFormalism=="Cano") theLhPtr=std::shared_ptr<AbsLh>(new pbarpCanoLh());
+  else if(prodFormalism=="Heli") theLhPtr=std::shared_ptr<AbsLh>(new pbarpHeliLh());
+  else if(prodFormalism=="Tensor") theLhPtr=std::shared_ptr<AbsLh>(new pbarpTensorLh());
   else {
     Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
     exit(1);
@@ -134,7 +134,7 @@ int main(int __argc,char *__argv[]){
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
   if (mode=="gen"){
-    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(pbarpEnv::instance()));
+    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(pbarpEnv::instance()));
     pwaGenPtr->generate(theLhPtr, theStartparams);
     theFitParamBase->printParams(theStartparams);
     return 1;
@@ -212,7 +212,7 @@ int main(int __argc,char *__argv[]){
         <<  mcDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   mcDataClient->rewind();
   
-  boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+  std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
   pbarpEventListPtr->read(*eventsDataClient, *mcDataClient);
 
   delete eventsDataClient;
@@ -270,7 +270,7 @@ int main(int __argc,char *__argv[]){
         <<  mcDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   mcDataClient->rewind();
 
-  boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+  std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
   pbarpEventListPtr->read(*eventsDataClient, *mcDataClient);
 
   delete eventsDataClient;
@@ -281,7 +281,7 @@ int main(int __argc,char *__argv[]){
 
   PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
 
-  boost::shared_ptr<spinDensityHist> theSpinDensityHist(new spinDensityHist(theLhPtr, theStartparams));
+  std::shared_ptr<spinDensityHist> theSpinDensityHist(new spinDensityHist(theLhPtr, theStartparams));
 
   std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
   std::ifstream serializationStream(serializationFileName.c_str());
@@ -291,7 +291,7 @@ int main(int __argc,char *__argv[]){
   }
   else{
      boost::archive::text_iarchive boostInputArchive(serializationStream);
-     boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
      boostInputArchive >> *thePwaCovMatrix;
      theSpinDensityHist->SetCovarianceMatrix(thePwaCovMatrix);
   }
@@ -358,7 +358,7 @@ int main(int __argc,char *__argv[]){
        upar.Fix( (*itFix) );
     }
 
-    boost::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
  								 theAppParams->noOfClients(),
  								 eventsData.size(),
  								 mcData.size()));
@@ -433,7 +433,7 @@ int main(int __argc,char *__argv[]){
  }
 
 
- boost::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+ std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
  pbarpEventListPtr->read(eventsData, mcData);
  
  theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
@@ -459,7 +459,7 @@ int main(int __argc,char *__argv[]){
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
     
-    boost::shared_ptr<WaveContribution> theWaveContribution;
+    std::shared_ptr<WaveContribution> theWaveContribution;
     if(pbarpEnv::instance()->parser()->calcContributionError()){
        std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
        std::ifstream serializationStream(serializationFileName.c_str());
@@ -471,13 +471,13 @@ int main(int __argc,char *__argv[]){
 
        boost::archive::text_iarchive boostInputArchive(serializationStream);
 
-       boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+       std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
        boostInputArchive >> *thePwaCovMatrix;
-       theWaveContribution = boost::shared_ptr<WaveContribution>
+       theWaveContribution = std::shared_ptr<WaveContribution>
 	  (new WaveContribution(theLhPtr, theStartparams, thePwaCovMatrix));
     }
     else{
-       theWaveContribution = boost::shared_ptr<WaveContribution>
+       theWaveContribution = std::shared_ptr<WaveContribution>
 	  (new WaveContribution(theLhPtr, theStartparams));
     }
 

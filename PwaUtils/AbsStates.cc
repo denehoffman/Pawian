@@ -34,12 +34,12 @@ AbsStates::AbsStates(){
 AbsStates::~AbsStates(){
 }
 
-// std::vector< boost::shared_ptr<const JPCLSM> > AbsStates::extractJPCLSMStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+// std::vector< std::shared_ptr<const JPCLSM> > AbsStates::extractJPCLSMStates(std::vector< std::shared_ptr<const jpcRes> >& theJPCStates) const{
 
-//   std::vector< boost::shared_ptr<const JPCLSM> > result;
+//   std::vector< std::shared_ptr<const JPCLSM> > result;
 
-//   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
-//   std::vector< boost::shared_ptr<const JPCLSM> >::const_iterator itAllStates;
+//   std::vector< std::shared_ptr<const jpcRes> >::const_iterator itJPC;
+//   std::vector< std::shared_ptr<const JPCLSM> >::const_iterator itAllStates;
 
 //   for ( itJPC=theJPCStates.begin(); itJPC!=theJPCStates.end(); ++itJPC){
 //     const jpcRes* jpcRequest=(*itJPC).get();
@@ -55,12 +55,12 @@ AbsStates::~AbsStates(){
 //   return result;
 // }
 
-// std::vector< boost::shared_ptr<const JPCSM> > AbsStates::extractJPCSMStates(std::vector< boost::shared_ptr<const jpcRes> >& theJPCStates) const{
+// std::vector< std::shared_ptr<const JPCSM> > AbsStates::extractJPCSMStates(std::vector< std::shared_ptr<const jpcRes> >& theJPCStates) const{
 
-//   std::vector< boost::shared_ptr<const JPCSM> > result;
+//   std::vector< std::shared_ptr<const JPCSM> > result;
 
-//   std::vector< boost::shared_ptr<const jpcRes> >::const_iterator itJPC;
-//   std::vector< boost::shared_ptr<const JPCSM> >::const_iterator itAllStates;
+//   std::vector< std::shared_ptr<const jpcRes> >::const_iterator itJPC;
+//   std::vector< std::shared_ptr<const JPCSM> >::const_iterator itAllStates;
 
 //   for ( itJPC=theJPCStates.begin(); itJPC!=theJPCStates.end(); ++itJPC){
 //     const jpcRes* jpcRequest=(*itJPC).get();
@@ -77,10 +77,10 @@ AbsStates::~AbsStates(){
 
 // }
 
-// std::vector< boost::shared_ptr<const JPCLS> > AbsStates::extractJPCLSStates(boost::shared_ptr<const jpcRes> theJPCState) const{
-//   std::vector< boost::shared_ptr<const JPCLS> > result;
+// std::vector< std::shared_ptr<const JPCLS> > AbsStates::extractJPCLSStates(std::shared_ptr<const jpcRes> theJPCState) const{
+//   std::vector< std::shared_ptr<const JPCLS> > result;
 
-//   std::vector< boost::shared_ptr<const JPCLS> >::const_iterator it;
+//   std::vector< std::shared_ptr<const JPCLS> >::const_iterator it;
 //   for ( it=_allJPCLS.begin(); it!=_allJPCLS.end(); ++it){
 // //     const jpcRes* currentJPC= (jpcRes*) (*it).get(); 
 // //     const jpcRes* currentJPC=dynamic_cast<const jpcRes*> ((*it).get());
@@ -94,7 +94,7 @@ AbsStates::~AbsStates(){
 
 void AbsStates::print(std::ostream& os) const{
   os << "AbsStates" << std::endl;
-//   std::vector< boost::shared_ptr<const JPCLSM> >::const_iterator it;
+//   std::vector< std::shared_ptr<const JPCLSM> >::const_iterator it;
 //    for ( it=_allStates.begin(); it!=_allStates.end(); ++it){
 //     if (0!= (*it)){
 //       (*it)->print(os); 

@@ -70,11 +70,11 @@ _cmsMass=theEpEmParser->cmsMass();
 
 
   //epem reaction
-  _epemReaction=boost::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs));
+  _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs));
 
   //fill prodDecayList
-  std::vector< boost::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
-  std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+  std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
+  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
     _prodDecList->addDecay(*itDec);
   }
@@ -100,7 +100,7 @@ _cmsMass=theEpEmParser->cmsMass();
   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
     _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
     _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-    //    boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
+    //    std::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
   }
 
   //replace mass key
@@ -123,7 +123,7 @@ _cmsMass=theEpEmParser->cmsMass();
   }
 
   //add dynamics 
-  std::vector<boost::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
+  std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
   std::vector<std::string> decDynVec = theEpEmParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
     std::stringstream stringStr;
@@ -141,7 +141,7 @@ _cmsMass=theEpEmParser->cmsMass();
       additionalStringVec.push_back(tmpName);
     }
 
-    std::vector<boost::shared_ptr<AbsDecay> >::iterator itDec;
+    std::vector<std::shared_ptr<AbsDecay> >::iterator itDec;
     for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
       std::string theDecName=(*itDec)->name();
       std::string toFind=particleStr+"To";

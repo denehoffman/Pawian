@@ -36,7 +36,7 @@
 #include <iostream>
 #include <vector>
 #include <complex>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 using namespace std;
 
 class AbsPhaseSpace;

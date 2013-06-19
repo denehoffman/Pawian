@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/OmegaTo3PiDecay.hh"
 #include "PwaUtils/DataUtils.hh"

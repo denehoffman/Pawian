@@ -59,14 +59,14 @@ DynRegistry::~DynRegistry()
 {
 }
 
-boost::shared_ptr<AbsDynamics> DynRegistry::getDynamics(boost::shared_ptr<AbsDecay> theDec){
+std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> theDec){
 
   std::string theName=theDec->name();
   std::string dynType=theDec->dynType();
 
-  boost::shared_ptr<AbsDynamics> result;
+  std::shared_ptr<AbsDynamics> result;
 
-  std::map<std::string, boost::shared_ptr<AbsDynamics> >::iterator it = _dynMap.find(theName);
+  std::map<std::string, std::shared_ptr<AbsDynamics> >::iterator it = _dynMap.find(theName);
   if (it !=_dynMap.end()){
     result=it->second;
     Info << "Dynamics\t" << theName << "\tfound!!!" << endmsg;
@@ -77,23 +77,23 @@ boost::shared_ptr<AbsDynamics> DynRegistry::getDynamics(boost::shared_ptr<AbsDec
     if(theDec->hasMother()){
 
       if(theDec->dynType()=="BreitWigner") 
-    	result= boost::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
+    	result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="Flatte")
-    	result= boost::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
+    	result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
       else if(theDec->dynType()=="KpiSWaveIso12")
-	result= boost::shared_ptr<AbsDynamics>(new KPiSWaveIso12Dynamics(theName, fsParticles, theDec->motherPart()));
+	result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso12Dynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="KpiSWaveIso32")
-	result= boost::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
+	result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="PiPiSWaveAS")
-	result= boost::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), theDec->currentEnv()->particleTable()));
-      else if(theDec->dynType()=="WoDynamics") result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+	result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), theDec->currentEnv()->particleTable()));
+      else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
     	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
     	exit(1);
       }
     }
     else{ // has no mother
-      if(theDec->dynType()=="WoDynamics") result= boost::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+      if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
 	Alert << "no mother resonance; can not add dynamis" 
 	      << "\nDyn type:\t" << theDec->dynType() 

@@ -27,7 +27,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Minuit2/FCNBase.h"
 #include "PwaUtils/DataUtils.hh"
@@ -39,7 +39,7 @@ namespace ROOT {
     class AbsFcn : public FCNBase {
 
     public:
-      AbsFcn(boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
+      AbsFcn(std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
       virtual ~AbsFcn();
 
       virtual double operator()(const std::vector<double>& par) const=0;
@@ -47,7 +47,7 @@ namespace ROOT {
 
 
     protected:
-      boost::shared_ptr<FitParamsBase> _fitParamsBasePtr;
+      std::shared_ptr<FitParamsBase> _fitParamsBasePtr;
       mutable unsigned int _fcnCounter;
        fitParams _defaultFitValParms;
       fitParams _defaultFitErrParms;

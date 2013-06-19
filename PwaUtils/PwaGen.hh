@@ -29,7 +29,7 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PspGen/EvtVector4R.hh"
 #include "PwaUtils/FitParamsBase.hh"
@@ -51,7 +51,7 @@ public:
   PwaGen(AbsEnv* theEnv);
   virtual ~PwaGen();
 
-  virtual void generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+  virtual void generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
 
 protected:
 

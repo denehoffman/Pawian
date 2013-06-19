@@ -38,7 +38,7 @@
 #include "Particle/Particle.hh"
 
 
-HeliDecAmps::HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec) :
+HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec) :
   AbsXdecAmp(theDec)
   ,_JPClamlams(theDec->JPClamlamAmps())
   ,_factorMag(1.)
@@ -53,21 +53,21 @@ HeliDecAmps::HeliDecAmps(boost::shared_ptr<IsobarHeliDecay> theDec) :
   if( (*daughter1)==(*daughter2)) identicalDaughters=true;
   
   //fill JPClamlamSymMap
-  std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+  std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
   for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-    boost::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2, _parityFactor));
-    //    std::vector< boost::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];
+    std::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2, _parityFactor));
+    //    std::vector< std::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];
     _JPClamlamSymMap[*it].push_back(currentSym);
     if(identicalDaughters && ( fabs((*it)->lam1) != fabs((*it)->lam2) ) ){
-    	boost::shared_ptr<const JPClamlam> currentSymIdPart1(new JPClamlam(*it, (*it)->lam2, (*it)->lam1, (*it)->parityFactor));
-    	boost::shared_ptr<const JPClamlam> currentSymIdPart2(new JPClamlam(*it, -(*it)->lam2, -(*it)->lam1, _parityFactor));
+    	std::shared_ptr<const JPClamlam> currentSymIdPart1(new JPClamlam(*it, (*it)->lam2, (*it)->lam1, (*it)->parityFactor));
+    	std::shared_ptr<const JPClamlam> currentSymIdPart2(new JPClamlam(*it, -(*it)->lam2, -(*it)->lam1, _parityFactor));
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart1);
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart2);
     } 
   }
 }
 
-HeliDecAmps::HeliDecAmps(boost::shared_ptr<AbsDecay> theDec) :
+HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec) :
   AbsXdecAmp(theDec)
 {
   Particle* daughter1=_decay->daughter1Part();
@@ -90,10 +90,10 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
   bool lamFs_daughter2=false;
   if( _daughter2IsStable && _Jdaughter2>0) lamFs_daughter2=true;
 
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
 
   for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
-    boost::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
+    std::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
     if( fabs(lamX) > currentJPClamlam->J) continue;
 
     double theMag=it->second;
@@ -134,7 +134,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
     return result;
   }
 
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
 
   for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
 
@@ -167,12 +167,12 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
 
 void  HeliDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  std::vector< boost::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
+  std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
   for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
     currentMagValMap[*itlamlam]=_factorMag;
     currentPhiValMap[*itlamlam]=0.;
@@ -209,9 +209,9 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
    }
 
    if(!_recalculate){
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
-     std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
+     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
+     std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
      for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
@@ -231,18 +231,18 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
  
 
 void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
-   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
-   std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
+   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
+   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
 
-   std::vector< boost::shared_ptr<const JPClamlam> >::iterator it;
+   std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
    for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
      double theMag=magMap[*it];
      double thePhi=phiMap[*it];
      _currentParamMagLamLams[*it]=theMag;
      _currentParamPhiLamLams[*it]=thePhi;
 
-     std::vector< boost::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];     
-     std::vector< boost::shared_ptr<const JPClamlam> >::iterator itLamLam;
+     std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];     
+     std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
        _currentParamMagLamLams[*itLamLam]=theMag; 
        _currentParamPhiLamLams[*itLamLam]=thePhi;

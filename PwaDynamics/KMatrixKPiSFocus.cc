@@ -38,14 +38,14 @@ KMatrixKPiSFocus::KMatrixKPiSFocus(int isospin2) :
   const double KplusMass=0.493677;
   const double etaprimeMass= 0.95778;
 
-  boost::shared_ptr<AbsPhaseSpace> kpiPhp(new PhaseSpaceIsobar(KplusMass, piMass));
-  boost::shared_ptr<AbsPhaseSpace> ketapPhp(new PhaseSpaceIsobar(KplusMass, etaprimeMass));
+  std::shared_ptr<AbsPhaseSpace> kpiPhp(new PhaseSpaceIsobar(KplusMass, piMass));
+  std::shared_ptr<AbsPhaseSpace> ketapPhp(new PhaseSpaceIsobar(KplusMass, etaprimeMass));
   _phpVecs.push_back(kpiPhp);
   _phpVecs.push_back(ketapPhp);
 
-  _aScatPtr=boost::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
-  _bScatPtr=boost::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
-  _cScatPtr=boost::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
+  _aScatPtr=std::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
+  _bScatPtr=std::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
+  _cScatPtr=std::shared_ptr< boost::multi_array<double, 2> >(new boost::multi_array<double, 2>(boost::extents[NumRows()][NumCols()]));
 
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){
@@ -69,7 +69,7 @@ KMatrixKPiSFocus::~KMatrixKPiSFocus(){
 void KMatrixKPiSFocus::evalMatrix(const double mass){
 
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
-  vector<boost::shared_ptr<KPole> >::iterator it;
+  vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
     (*it)->evalMatrix(mass);
     theKMatrix += *(*it);
@@ -109,11 +109,11 @@ void KMatrixKPiSFocus::init2IsoSpin1(){
   std::vector<double> poleMasses;
   poleMasses.resize(1);
   poleMasses[0]=sqrt(1.7919);
-  std::vector< boost::shared_ptr<KPole> > kPoles;
+  std::vector< std::shared_ptr<KPole> > kPoles;
 
   std::map<int, std::vector<double> >::iterator itgFac;
   for (itgFac=gFactorsMap.begin(); itgFac!=gFactorsMap.end(); ++itgFac){
-    boost::shared_ptr<KPole> currentPole(new KPole(itgFac->second, poleMasses[itgFac->first]));
+    std::shared_ptr<KPole> currentPole(new KPole(itgFac->second, poleMasses[itgFac->first]));
     _KPoles.push_back(currentPole);
   }
 
@@ -143,11 +143,11 @@ void KMatrixKPiSFocus::init2IsoSpin3(){
   std::vector<double> poleMasses;
    poleMasses.resize(1);
    poleMasses[0]=sqrt(100.);
-  std::vector< boost::shared_ptr<KPole> > kPoles;
+  std::vector< std::shared_ptr<KPole> > kPoles;
 
   std::map<int, std::vector<double> >::iterator itgFac;
   for (itgFac=gFactorsMap.begin(); itgFac!=gFactorsMap.end(); ++itgFac){
-    boost::shared_ptr<KPole> currentPole(new KPole(itgFac->second, poleMasses[itgFac->first]));
+    std::shared_ptr<KPole> currentPole(new KPole(itgFac->second, poleMasses[itgFac->first]));
     _KPoles.push_back(currentPole);
   }
 

@@ -33,7 +33,7 @@
 #include "qft++/matrix/Matrix.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "PwaDynamics/AbsPhaseSpace.hh"
 
 class KPole;
@@ -48,19 +48,19 @@ class KMatrixBase : public Matrix< complex<double> > {
 public:
 
   /// Constructor 
-  KMatrixBase(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs); 
-  KMatrixBase(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows);
+  KMatrixBase(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs); 
+  KMatrixBase(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows);
   KMatrixBase(int numCols, int numRows); 
   /// Destructor
   virtual ~KMatrixBase();
 
   virtual void evalMatrix(const double mass) {return;}
-  virtual vector<boost::shared_ptr<AbsPhaseSpace> > phaseSpaceVec() {return _phpVecs;}
-  virtual vector<boost::shared_ptr<KPole> > kpoles() {return _KPoles;}
+  virtual vector<std::shared_ptr<AbsPhaseSpace> > phaseSpaceVec() {return _phpVecs;}
+  virtual vector<std::shared_ptr<KPole> > kpoles() {return _KPoles;}
 
 protected:
-  vector<boost::shared_ptr<KPole> > _KPoles;
-  vector<boost::shared_ptr<AbsPhaseSpace> > _phpVecs;
+  vector<std::shared_ptr<KPole> > _KPoles;
+  vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
 };
 //_____________________________________________________________________________
 

@@ -32,7 +32,7 @@
 #include <map>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "TROOT.h"
 
@@ -198,13 +198,13 @@ public:
 
 protected:
 
-  void fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+  void fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
 
-  void fillMassHists(EvtData* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
+  void fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
 
-  void fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
+  void fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
 
-  void fillAngleHists2D(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill);
+  void fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill);
 
 
  TFile* _theTFile;
@@ -213,17 +213,17 @@ protected:
 
  AbsEnv* _absEnv;
 
- std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
- std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;
- std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massFitHistMap;
+ std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
+ std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;
+ std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massFitHistMap;
 
- std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap;
- std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap;
- std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap;
+ std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap;
+ std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap;
+ std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap;
 
- std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap2D;
- std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap2D;
- std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap2D;
+ std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap2D;
+ std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap2D;
+ std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap2D;
 
  virtual void initRootStuff()=0;
 

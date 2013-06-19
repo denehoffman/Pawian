@@ -32,7 +32,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -55,7 +55,7 @@ public:
   const float pbarMomentum() const {return _pbarMomentum;}
   const int lmax() const {return _lmax;}
 
-  boost::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
+  std::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
   std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
 
@@ -66,7 +66,7 @@ protected:
   int _lmax;
   float _pbarMomentum;
 
-  boost::shared_ptr<pbarpReaction> _pbarpReaction;
+  std::shared_ptr<pbarpReaction> _pbarpReaction;
   std::vector<std::string> _spinDensity;
   std::map<std::string, std::vector<short> > _dropPbarpLForParticleData;
 };

@@ -131,12 +131,12 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
   mapStrJPCLamLam::iterator itLamLamMagMap;
   for (itLamLamMagMap=startLamLamMagMap.begin(); itLamLamMagMap!=startLamLamMagMap.end(); ++itLamLamMagMap){
 
-    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& errLamLamMags= errLamLamMagMap[itLamLamMagMap->first];
+    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& errLamLamMags= errLamLamMagMap[itLamLamMagMap->first];
     
-    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLamMag;
+    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLamMag;
     for (itLamLamMag=itLamLamMagMap->second.begin(); itLamLamMag!=itLamLamMagMap->second.end(); ++itLamLamMag){
       
-      boost::shared_ptr<const JPClamlam> theJPCLamLam=itLamLamMag->first;
+      std::shared_ptr<const JPClamlam> theJPCLamLam=itLamLamMag->first;
       double theStartVal=itLamLamMag->second;
       double theErrVal=errLamLamMags[theJPCLamLam];
       if (theErrVal<=0.) theErrVal=0.1;
@@ -170,12 +170,12 @@ void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& sta
   mapStrJPCLS::iterator itMagMap;
   for (itMagMap=startMagMap.begin(); itMagMap!=startMagMap.end(); ++itMagMap){
 
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& errMags=errMagMap[itMagMap->first];
+    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& errMags=errMagMap[itMagMap->first];
     
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
     for (itMag=itMagMap->second.begin(); itMag!=itMagMap->second.end(); ++itMag){
 
-      boost::shared_ptr<const JPCLS> theJPCLS=itMag->first;
+      std::shared_ptr<const JPCLS> theJPCLS=itMag->first;
       double theStartVal=itMag->second;
       double theErrVal=errMags[theJPCLS];
       if (theErrVal<=0.) theErrVal=0.1;
@@ -243,12 +243,12 @@ void FitParamsBase::printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& 
 
   mapStrJPCLamLam::const_iterator it;
 
-  std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::const_iterator itJPCLamLamMap;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::const_iterator itJPCLamLamMap;
 
    for (it=lamLamMap.begin(); it!=lamLamMap.end(); ++it){
      std::string currentAmpName=it->first;
 
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;    
+     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;    
      for ( itJPCLamLamMap=currentAmp.begin(); itJPCLamLamMap!=currentAmp.end(); ++itJPCLamLamMap){
        std::string currentName=itJPCLamLamMap->first->name()+currentAmpName+suffix;
        
@@ -262,11 +262,11 @@ void FitParamsBase::printJPCLSParams(fitParams& theParams, mapStrJPCLS& JPCLSMag
 
   mapStrJPCLS::const_iterator it;
 
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::const_iterator itJPCLSMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::const_iterator itJPCLSMap;
 
    for (it=JPCLSMagMap.begin(); it!=JPCLSMagMap.end(); ++it){
  
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;    
+    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;    
      for ( itJPCLSMap=currentAmp.begin(); itJPCLSMap!=currentAmp.end(); ++itJPCLSMap){
        std::string currentName=itJPCLSMap->first->name()+it->first+suffix;
         Info<< currentName << "\t" << itJPCLSMap->second << endmsg;
@@ -292,7 +292,7 @@ void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapS
   mapStrJPCLamLam::iterator it;
   for (it=lamLamMagMap.begin(); it!=lamLamMagMap.end(); ++it){
 
-    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itJPClamlam;
+    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itJPClamlam;
     for (itJPClamlam=it->second.begin(); itJPClamlam!=it->second.end(); ++itJPClamlam){
       itJPClamlam->second=par[counter];
       counter++;
@@ -306,7 +306,7 @@ void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJP
   mapStrJPCLS::iterator it;
   for (it=jpclsMap.begin(); it!=jpclsMap.end(); ++it){
 
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itjpcls;
+    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itjpcls;
     for (itjpcls=it->second.begin(); itjpcls!=it->second.end(); ++itjpcls){
       itjpcls->second=par[counter];
       counter++;
@@ -332,11 +332,11 @@ void  FitParamsBase::dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamL
 
    for (it=valLamLamMap.begin(); it!=valLamLamMap.end(); ++it){
 
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentErrMap=errLamLamMap[it->first];
+     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentErrMap=errLamLamMap[it->first];
 
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;
+     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;
 
-     std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::const_iterator itLamLam;   
+     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::const_iterator itLamLam;   
      for ( itLamLam=currentAmp.begin(); itLamLam!=currentAmp.end(); ++itLamLam){
        std::string currentName=itLamLam->first->name()+it->first+suffix;
        
@@ -352,11 +352,11 @@ void FitParamsBase::dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, map
 
    for (it=valLSMap.begin(); it!=valLSMap.end(); ++it){
 
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentErrMap=errLSMap[it->first];
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentErrMap=errLSMap[it->first];
 
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;
 
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::const_iterator itLS;   
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::const_iterator itLS;   
      for ( itLS=currentAmp.begin(); itLS!=currentAmp.end(); ++itLS){
        std::string currentName=itLS->first->name()+it->first+suffix;
        

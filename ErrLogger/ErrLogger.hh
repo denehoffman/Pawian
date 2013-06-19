@@ -3,7 +3,7 @@
 #include "log4cpp/Category.hh"
 #include "log4cpp/OstreamAppender.hh"
 #include "log4cpp/PatternLayout.hh"
-#include "boost/shared_ptr.hpp"
+#include "memory"
 
 #include <string.h>
 
@@ -21,7 +21,7 @@ private:
 
   ErrLogger();
 
-  boost::shared_ptr<log4cpp::Category> category;
+  std::shared_ptr<log4cpp::Category> category;
   log4cpp::Appender* app;
   log4cpp::PatternLayout* layout;
 };

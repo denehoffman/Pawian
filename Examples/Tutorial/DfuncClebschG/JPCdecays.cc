@@ -32,7 +32,7 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-JPCdecays::JPCdecays(boost::shared_ptr<const jpcRes> motherJPC, boost::shared_ptr<const jpcRes> daughter1JPC, boost::shared_ptr<const jpcRes> daughter2JPC, bool sameDaughters) :
+JPCdecays::JPCdecays(std::shared_ptr<const jpcRes> motherJPC, std::shared_ptr<const jpcRes> daughter1JPC, std::shared_ptr<const jpcRes> daughter2JPC, bool sameDaughters) :
   _motherJPC(motherJPC)
   ,_daughter1JPC(daughter1JPC)
   ,_daughter2JPC(daughter2JPC)

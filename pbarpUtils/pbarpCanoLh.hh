@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 #include <complex>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/function.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -47,7 +47,7 @@ class LSDecAmps;
 class pbarpCanoLh : public pbarpBaseLh {
 
 public:
-  // pbarpCanoLh(boost::shared_ptr<const EvtDataBaseList>);
+  // pbarpCanoLh(std::shared_ptr<const EvtDataBaseList>);
   pbarpCanoLh();
 
   virtual ~pbarpCanoLh();

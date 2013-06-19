@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -47,7 +47,7 @@ class IsobarTensorDecay : public IsobarLSDecay{
 
 public:
   IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  IsobarTensorDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
+  IsobarTensorDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
   virtual ~IsobarTensorDecay();
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);

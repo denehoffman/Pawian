@@ -64,13 +64,13 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
   _KPiAmpImagH1->SetYTitle("K #pi amp Im");
 
 
-  boost::shared_ptr<KMatrixBase> theKMatrixIso12(new KMatrixKPiSFocus(1));
-  boost::shared_ptr<KMatrixBase> theKMatrixIso32(new KMatrixKPiSFocus(3));
-  // boost::shared_ptr<TMatrixRel> theTMatrix(new TMatrixRel(theKMatrix));
-  boost::shared_ptr<TMatrixRel> theTMatrix12(new TMatrixRel(theKMatrixIso12));
-  boost::shared_ptr<TMatrixRel> theTMatrix32(new TMatrixRel(theKMatrixIso32));
+  std::shared_ptr<KMatrixBase> theKMatrixIso12(new KMatrixKPiSFocus(1));
+  std::shared_ptr<KMatrixBase> theKMatrixIso32(new KMatrixKPiSFocus(3));
+  // std::shared_ptr<TMatrixRel> theTMatrix(new TMatrixRel(theKMatrix));
+  std::shared_ptr<TMatrixRel> theTMatrix12(new TMatrixRel(theKMatrixIso12));
+  std::shared_ptr<TMatrixRel> theTMatrix32(new TMatrixRel(theKMatrixIso32));
 
-  vector<boost::shared_ptr<AbsPhaseSpace> > thePhpVecs=theKMatrixIso12->phaseSpaceVec();
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=theKMatrixIso12->phaseSpaceVec();
 
   
   for (double mass=massMin; mass<massMax; mass+=stepSize){

@@ -28,13 +28,13 @@
 #include "qft++/matrix/IdentityMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-PVectorRel::PVectorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs) :
+PVectorRel::PVectorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   KMatrixBase(phpVecs, int(phpVecs.size()), 1)
   ,_Ppoles(Ppoles)
  {
  }
 
-PVectorRel::PVectorRel(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs) :
+PVectorRel::PVectorRel(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   KMatrixBase(phpVecs, int(phpVecs.size()), 1)
  {
  }
@@ -45,7 +45,7 @@ PVectorRel::~PVectorRel(){
 void PVectorRel::evalMatrix(const double mass){
 
   Matrix< complex<double> > thePVector(NumRows(), 1);
-  vector<boost::shared_ptr<PPole> >::iterator it;
+  vector<std::shared_ptr<PPole> >::iterator it;
   for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
     (*it)->evalMatrix(mass);
     thePVector += *(*it);

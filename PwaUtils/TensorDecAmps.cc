@@ -37,7 +37,7 @@
 #include "Particle/Particle.hh"
 
 
-TensorDecAmps::TensorDecAmps(boost::shared_ptr<IsobarTensorDecay> theDec) :
+TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec) :
   AbsXdecAmp(theDec)
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
@@ -47,7 +47,7 @@ TensorDecAmps::TensorDecAmps(boost::shared_ptr<IsobarTensorDecay> theDec) :
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
 
-TensorDecAmps::TensorDecAmps(boost::shared_ptr<AbsDecay> theDec) :
+TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec) :
   AbsXdecAmp(theDec)
 {
   Particle* daughter1=_decay->daughter1Part();
@@ -138,7 +138,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, 
 
 complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
   complex<double> result(0.,0.);
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
 
     double theMag=_currentParamMags[*it];
@@ -166,12 +166,12 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
 
 void  TensorDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itLS;
   for(itLS=_JPCLSs.begin(); itLS!=_JPCLSs.end(); ++itLS){
     currentMagValMap[*itLS]=_factorMag;
     currentPhiValMap[*itLS]=0.;
@@ -209,10 +209,10 @@ bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
    }
 
    if(!_recalculate){
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
      
-     std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+     std::vector< std::shared_ptr<const JPCLS> >::iterator it;
      for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
@@ -233,10 +233,10 @@ bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
  
 
 void  TensorDecAmps::updateFitParams(fitParams& theParamVal){
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
 
-   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
    for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
      double theMag=magMap[*it];
      double thePhi=phiMap[*it];

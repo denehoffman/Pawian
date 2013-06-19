@@ -91,7 +91,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
 
 }
 
-AbsDecay::AbsDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
   _mother(0)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)

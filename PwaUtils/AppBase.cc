@@ -21,56 +21,46 @@
 //									  //
 //************************************************************************//
 
-#ifndef _MinuitFit_H
-#define _MinuitFit_H
+// AppBase class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
 
-#include <iostream>
+#include <getopt.h>
 #include <fstream>
 #include <string>
-#include <vector>
-#include <map>
-#include <cassert>
 
-#include <memory>
+#include "PwaUtils/AppBase.hh"
+#include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/AbsEnv.hh"
+#include "PwaUtils/FitParamsBase.hh"
 
-#include "TROOT.h"
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-
-class TFile;
-class TGraph;
-class TCanvas;
-class TRandom;
-
-class MinuitFit {
-
-public:
-
-  // create/copy/destroy:
-
-  ///Constructor 
-  MinuitFit(double p0, double p1, double p2, double p3, double sigma);
+#include "ErrLogger/ErrLogger.hh"
 
 
-  /** Destructor */
-  virtual ~MinuitFit();
+AppBase* AppBase::_instance=0;
 
+AppBase* AppBase::instance()
+{
+  if (0==_instance) _instance = new AppBase();
+  return _instance;
+}
 
-  double calcChiSqr(const std::vector<double>& minPar);
-  void drawGraph(double a, double b, double c, double d);
-  // Getters:
- 
-protected:
+AppBase::AppBase()
+{
+}
 
+AppBase::~AppBase()
+{
+}
 
-private:
-  TFile* _theTFile;
-  std::map <unsigned int, TGraph* > _myGraph;
+void AppBase::AppBase::dumpDefaultParams(std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase, AbsEnv* absEnv){
+    fitParams defaultVal;
+    fitParams defaultErr;
+    theLhPtr->getDefaultParams(defaultVal, defaultErr);
 
-  std::vector< double > _xValue;
-  std::vector< double > _yValue;
+    std::stringstream defaultparamsname;
+    defaultparamsname << "defaultparams" << absEnv->outputFileNameSuffix() << ".dat";
+    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
+    
+    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+}
 
-  double _sigma;
-
-};
-
-#endif

@@ -26,14 +26,14 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
 
-KMatrixBase::KMatrixBase(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs) :
+KMatrixBase::KMatrixBase(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   Matrix< complex<double> >::Matrix(int(phpVecs.size()), int(phpVecs.size()))
   ,_KPoles(Kpoles)
   ,_phpVecs(phpVecs)
  {
  }
 
-KMatrixBase::KMatrixBase(vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows) :
+KMatrixBase::KMatrixBase(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
   ,_phpVecs(phpVecs)
  {

@@ -33,7 +33,7 @@
 #include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/multi_array.hpp>
 
 class KPole;
@@ -58,9 +58,9 @@ public:
   virtual double sNorm() {return _sNorm;}
 
 protected:
-  boost::shared_ptr<array_type_2d> _aScatPtr;
-  boost::shared_ptr<array_type_2d> _bScatPtr;
-  boost::shared_ptr<array_type_2d> _cScatPtr;
+  std::shared_ptr<array_type_2d> _aScatPtr;
+  std::shared_ptr<array_type_2d> _bScatPtr;
+  std::shared_ptr<array_type_2d> _cScatPtr;
   double _sAdler0;
   const double _sNorm;
 

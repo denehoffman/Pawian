@@ -33,7 +33,7 @@
 #include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class KPole;
 class AbsPhaseSpace;
@@ -47,7 +47,7 @@ class KMatrixNonRel : public KMatrixBase {
 public:
 
   /// Constructor 
-  KMatrixNonRel(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs); 
+  KMatrixNonRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs); 
 
   /// Destructor
   virtual ~KMatrixNonRel();

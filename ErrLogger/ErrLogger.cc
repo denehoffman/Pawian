@@ -15,7 +15,7 @@ ErrLogger::ErrLogger()
   layout = new log4cpp::PatternLayout();
   layout->setConversionPattern(std::string("%p: %m%n"));
   app->setLayout(layout);
-  category = boost::shared_ptr<log4cpp::Category>(&(log4cpp::Category::getInstance("ErrLogger")));
+  category = std::shared_ptr<log4cpp::Category>(&(log4cpp::Category::getInstance("ErrLogger")));
   category->setAdditivity(false);
   category->setAppender(app);
   category->setPriority(log4cpp::Priority::INFO);

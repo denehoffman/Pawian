@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/DataUtils.hh"
 
@@ -47,13 +47,13 @@ public:
   AbsDecayList();
   ~AbsDecayList();
 
-  void addDecay(boost::shared_ptr<AbsDecay> theIsoDec);
-  boost::shared_ptr<AbsDecay> decay(Particle* mother);
-  boost::shared_ptr<AbsDecay> decay(const std::string& name);
+  void addDecay(std::shared_ptr<AbsDecay> theIsoDec);
+  std::shared_ptr<AbsDecay> decay(Particle* mother);
+  std::shared_ptr<AbsDecay> decay(const std::string& name);
   void replaceSuffix(const std::string& oldPart, const std::string& newPart);
   void replaceMassKey(const std::string& oldPart, const std::string& newPart);
-  std::vector<boost::shared_ptr<AbsDecay> >& getList() {return _absDecList;}    
+  std::vector<std::shared_ptr<AbsDecay> >& getList() {return _absDecList;}    
 protected:  
 
-  std::vector<boost::shared_ptr<AbsDecay> > _absDecList;  
+  std::vector<std::shared_ptr<AbsDecay> > _absDecList;  
 };

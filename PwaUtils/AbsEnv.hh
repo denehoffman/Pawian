@@ -32,7 +32,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsHist.hh"
@@ -55,13 +55,13 @@ public:
   const int noFinalStateParticles() {return _noFinalStateParticles;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
-  boost::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
-  boost::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
+  std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
+  std::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
   const std::string serializationFileName() const {return _serializationFileName;}
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
-  std::vector<boost::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
-  std::vector<boost::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
+  std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
+  std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
   bool useMassRange() {return _useMassRange;}
   double massRangeMin() {return _massMin;}
   double massRangeMax() {return _massMax;}
@@ -77,17 +77,17 @@ protected:
   ParticleTable* _particleTable;
   std::vector<Particle*> _finalStateParticles;
   std::vector<std::pair<Particle*, Particle*> > _producedParticlePairs;
-  boost::shared_ptr<AbsDecayList> _absDecList;
-  boost::shared_ptr<AbsDecayList> _prodDecList;
+  std::shared_ptr<AbsDecayList> _absDecList;
+  std::shared_ptr<AbsDecayList> _prodDecList;
   std::string _outputFileNameSuffix;
   std::string _serializationFileName;
   std::vector<std::vector<std::string> > _histMassSystems;
-  std::vector<boost::shared_ptr<angleHistData> > _angleHistDataVec;
+  std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
   bool _useMassRange;
   double _massMin;
   double _massMax;
   std::vector<unsigned int> _particleIndicesMassRange;
-  std::vector<boost::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
+  std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
   Vector4<double> _initial4Vec;
   ParserBase* _theParser;
 };

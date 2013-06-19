@@ -28,7 +28,7 @@
 #include "qft++/matrix/IdentityMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-PVectorKPiSFocus::PVectorKPiSFocus(boost::shared_ptr<KMatrixKPiSFocus> kMatrix) :
+PVectorKPiSFocus::PVectorKPiSFocus(std::shared_ptr<KMatrixKPiSFocus> kMatrix) :
   PVectorRel(kMatrix->phaseSpaceVec())
   ,_kMatrix(kMatrix)
  {
@@ -39,12 +39,12 @@ PVectorKPiSFocus::PVectorKPiSFocus(boost::shared_ptr<KMatrixKPiSFocus> kMatrix) 
 
    complex<double> defaultBeta(1.,0.); 
   
-   vector<boost::shared_ptr<KPole> > theKPoles=kMatrix->kpoles();
+   vector<std::shared_ptr<KPole> > theKPoles=kMatrix->kpoles();
       
-   vector<boost::shared_ptr<KPole> >::iterator it;
+   vector<std::shared_ptr<KPole> >::iterator it;
    for (it=theKPoles.begin(); it!=theKPoles.end(); ++it){ 
      std::vector<double> currentGFactors=(*it)->gFactors();
-     boost::shared_ptr<PPole> currentPPole(new PPole(defaultBeta, currentGFactors, (*it)->poleMass()));
+     std::shared_ptr<PPole> currentPPole(new PPole(defaultBeta, currentGFactors, (*it)->poleMass()));
      _Ppoles.push_back(currentPPole);     
    }
  }
@@ -57,7 +57,7 @@ void PVectorKPiSFocus::evalMatrix(const double mass){
   double s_hat=mass*mass/(_kMatrix->sNorm())-1.;
   
   Matrix< complex<double> > thePVector(NumRows(), 1);
-  vector<boost::shared_ptr<PPole> >::iterator it;
+  vector<std::shared_ptr<PPole> >::iterator it;
   for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
     (*it)->evalMatrix(mass);
     thePVector += *(*it);

@@ -30,7 +30,7 @@
 #include <vector>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
-#include <boost/shared_ptr.hpp> 
+#include <memory> 
 #include "Minuit2/MnUserParameters.h"
 #include "PwaUtils/FitParamsBase.hh"
 
@@ -50,9 +50,9 @@ typedef std::map<int, std::map<int, TH1F*> > spinDensityHistMatrix;
 class spinDensityHist{
 
   public:
-   spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+   spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
    ~spinDensityHist();
-   void SetCovarianceMatrix(boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
+   void SetCovarianceMatrix(std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
    void Calculate();
 
    static const int MAX_EVENTS;
@@ -63,9 +63,9 @@ class spinDensityHist{
    TFile* _spinDensityRootFile;
    FitParamsBase theFitParamsBaseClass;
    std::vector<EvtData*> _dataList;
-   boost::shared_ptr<AbsLh> _theLh;
+   std::shared_ptr<AbsLh> _theLh;
    fitParams* _theFitParamsOriginal;
-   boost::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
+   std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
    ROOT::Minuit2::MnUserParameters _theMnUserParameters;
 
    void calcSpinDensityMatrix(std::string& particleName);

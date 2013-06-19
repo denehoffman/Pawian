@@ -28,7 +28,7 @@
 
 using namespace ROOT::Minuit2;
 
-MinuitFitFcn::MinuitFitFcn(boost::shared_ptr<MinuitFit> minuitFit) :
+MinuitFitFcn::MinuitFitFcn(std::shared_ptr<MinuitFit> minuitFit) :
   _minFitPtr(minuitFit)
 {
   if (0==_minFitPtr) {

@@ -47,7 +47,7 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-// epemBaseLh::epemBaseLh(boost::shared_ptr<const EvtDataBaseList> theEvtList) :
+// epemBaseLh::epemBaseLh(std::shared_ptr<const EvtDataBaseList> theEvtList) :
 //   AbsLh(theEvtList, epemEnv::instance())
 //   ,_highestJFsp(0)
 //   ,_isHighestJaPhoton(true)
@@ -80,8 +80,8 @@ complex<double> epemBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameD
 
 
 complex<double> epemBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
-					     std::map <boost::shared_ptr<const JPCLS>,
-					     std::vector< boost::shared_ptr<AbsXdecAmp> >,
+					     std::map <std::shared_ptr<const JPCLS>,
+					     std::vector< std::shared_ptr<AbsXdecAmp> >,
 					     pawian::Collection::SharedPtrLess > pbarpAmps){
    complex<double> resultAmp(0.,0.);
 
@@ -100,7 +100,7 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
  
     complex<double> lamp1Amp(0.,0.);
     
-    std::vector<boost::shared_ptr<AbsXdecAmp> >::iterator itDec;
+    std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
     
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
@@ -147,12 +147,12 @@ void  epemBaseLh::initialize(){
   
   _epemReactionPtr = epemEnv::instance()->reaction();
 
-std::vector< boost::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
-  std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator it;
+std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
+  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    //    boost::shared_ptr<AbsDecay> currentDec((*it).get() );
-    //    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
-    boost::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp((*it)->absDecPtr());
+    //    std::shared_ptr<AbsDecay> currentDec((*it).get() );
+    //    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp((*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
 

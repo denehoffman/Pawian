@@ -45,7 +45,7 @@
 const int spinDensityHist::MAX_EVENTS = 2000;
 
 
-spinDensityHist::spinDensityHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
   _calcErrors(false)
   , _nBins(101)
   ,_theLh(theLh)
@@ -64,7 +64,7 @@ spinDensityHist::~spinDensityHist(){
 
 
 
-void spinDensityHist::SetCovarianceMatrix(boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix){
+void spinDensityHist::SetCovarianceMatrix(std::shared_ptr<PwaCovMatrix> thePwaCovMatrix){
 
    _calcErrors = true;
    _thePwaCovMatrix = thePwaCovMatrix;
@@ -100,8 +100,8 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
       return;
    }
 
-   boost::shared_ptr<AbsDecayList> prodDecayList = pbarpEnv::instance()->prodDecayList();
-   std::vector<boost::shared_ptr<AbsDecay> > prodDecays = prodDecayList->getList();
+   std::shared_ptr<AbsDecayList> prodDecayList = pbarpEnv::instance()->prodDecayList();
+   std::vector<std::shared_ptr<AbsDecay> > prodDecays = prodDecayList->getList();
 
    bool particleFrompbarp=false;
    for(auto it=prodDecays.begin(); it!=prodDecays.end();++it){
@@ -150,7 +150,7 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
 
       _theLh->updateFitParams(*_theFitParamsOriginal);
       complex<double> tempSpinDensity =
-	 boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
+	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
 
       newHistoReal->Fill(costheta, tempSpinDensity.real() * (*it)->evtWeight);
       newHistoImag->Fill(costheta, tempSpinDensity.imag() * (*it)->evtWeight);
@@ -207,7 +207,7 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
       _theLh->updateFitParams(newFitParams);
       
       complex<double> tempSpinDensity  = 
-	 boost::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, evtData);
+	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, evtData);
       
       complex<double> newDerivative = (tempSpinDensity - sdmValue) / stepSize;
       derivatives[parName] = newDerivative;
@@ -238,8 +238,8 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
 double spinDensityHist::ParticleCosTheta(std::string& particleName, EvtData* theData){
 
-   boost::shared_ptr<AbsDecayList> absDecayList = pbarpEnv::instance()->absDecayList();
-   std::vector<boost::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
+   std::shared_ptr<AbsDecayList> absDecayList = pbarpEnv::instance()->absDecayList();
+   std::vector<std::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
    
    Vector4<double> all4Vec=theData->FourVecsString["all"];
    Vector4<double> particle4Vec(0.,0.,0.,0.);

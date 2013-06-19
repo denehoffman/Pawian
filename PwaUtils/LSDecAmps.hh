@@ -33,7 +33,7 @@
 #include <string>
 
 #include <cassert>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsXdecAmp.hh"
 
@@ -47,8 +47,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec);
-  LSDecAmps(boost::shared_ptr<AbsDecay> theDec);
+  LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec);
+  LSDecAmps(std::shared_ptr<AbsDecay> theDec);
   /** Destructor */
   virtual ~LSDecAmps();
 
@@ -60,17 +60,17 @@ public:
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
-  std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  std::vector< std::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
   double _factorMag;
   double _parityFactor;
-  std::map< boost::shared_ptr<const JPCLS>, map<Spin,map<Spin, double > > > _cgPreFactor;
+  std::map< std::shared_ptr<const JPCLS>, map<Spin,map<Spin, double > > > _cgPreFactor;
 
   void  fillCgPreFactor();
   virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 ); 

@@ -33,7 +33,7 @@
 #include "PwaDynamics/KMatrixSlowAdlerCorRel.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/multi_array.hpp>
 
 

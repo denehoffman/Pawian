@@ -31,7 +31,7 @@
 
 #include <cassert>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "TROOT.h"
 // #include <TSystem.h>
@@ -46,7 +46,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  JPCdecays(boost::shared_ptr<const jpcRes> motherJPC, boost::shared_ptr<const jpcRes> daughter1JPC, boost::shared_ptr<const jpcRes> daughter2JPC, bool sameDaughters=false);
+  JPCdecays(std::shared_ptr<const jpcRes> motherJPC, std::shared_ptr<const jpcRes> daughter1JPC, std::shared_ptr<const jpcRes> daughter2JPC, bool sameDaughters=false);
 
 
   /** Destructor */
@@ -59,9 +59,9 @@ protected:
 
 
 private:
-  boost::shared_ptr<const jpcRes> _motherJPC;
-  boost::shared_ptr<const jpcRes> _daughter1JPC;
-  boost::shared_ptr<const jpcRes> _daughter2JPC;
+  std::shared_ptr<const jpcRes> _motherJPC;
+  std::shared_ptr<const jpcRes> _daughter1JPC;
+  std::shared_ptr<const jpcRes> _daughter2JPC;
   std::vector<LS> _allLSs;
   std::vector<LS> _allowedCParityLSs;
   std::vector<LS> _forbiddenCParityLSs;

@@ -32,7 +32,7 @@
 #include <map>
 #include <string>
 #include <mutex>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
@@ -53,7 +53,7 @@ public:
   virtual void cacheAmplitudes();
   virtual void fillMasses(EvtData* theData);
   virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}
-  virtual void addGrandMa(boost::shared_ptr<AbsDecay> theDec) {;}
+  virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) {;}
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp){return _grandmaKey;}
 
 protected:

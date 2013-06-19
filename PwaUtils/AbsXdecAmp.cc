@@ -37,7 +37,7 @@
 #include "Particle/Particle.hh"
 
 
-AbsXdecAmp::AbsXdecAmp(boost::shared_ptr<AbsDecay> theDec) :
+AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec) :
   AbsParamHandler()
   , _decay(theDec)
   , _name(theDec->name())
@@ -62,8 +62,8 @@ void AbsXdecAmp::initialize(){
   _absDyn = DynRegistry::instance()->getDynamics(_decay);
 
   if(!_daughter1IsStable){
-    boost::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
-    boost::shared_ptr<AbsDynamics> currentDyn=decDaughter1->getDynamics();
+    std::shared_ptr<AbsDecay> decDaughter1=_decay->decDaughter1();
+    std::shared_ptr<AbsDynamics> currentDyn=decDaughter1->getDynamics();
     if (0!=currentDyn) decDaughter1->getDynamics()->addGrandMa(_decay);
     else{
       Warning <<"no dynamics for\t" << decDaughter1->name() << endmsg;
@@ -72,9 +72,9 @@ void AbsXdecAmp::initialize(){
   }
   
   if(!_daughter2IsStable){
-    boost::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
+    std::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
     //    decDaughter2->getDynamics()->addGrandMa(_decay);
-    boost::shared_ptr<AbsDynamics> currentDyn=decDaughter2->getDynamics();
+    std::shared_ptr<AbsDynamics> currentDyn=decDaughter2->getDynamics();
     if (0!=currentDyn) decDaughter2->getDynamics()->addGrandMa(_decay);
     else{
       Warning <<"no dynamics for\t" << decDaughter2->name() << endmsg;

@@ -31,7 +31,7 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsDynamics.hh"
 
@@ -60,7 +60,7 @@ protected:
   double _currentg22;
 
   std::map<int, complex<double> >  _cachedMap; 
-  boost::shared_ptr<Flatte> _flattePtr;
+  std::shared_ptr<Flatte> _flattePtr;
 
 private:
 

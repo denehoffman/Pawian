@@ -44,7 +44,7 @@
 #include "TH2F.h"
 #include "TNtuple.h"
 
-epemHist::epemHist(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+epemHist::epemHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
   AbsHist(epemEnv::instance()) 
 {
   initRootStuff();
@@ -59,7 +59,7 @@ void epemHist::initRootStuff(){
   std::vector<std::vector<std::string> > histMassNameVec=epemEnv::instance()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
   for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
-    boost::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
+    std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
     std::string tmpBaseName=tmpMassHistData->_name;
     boost::replace_all(tmpBaseName,"+","p");
     boost::replace_all(tmpBaseName,"-","m");

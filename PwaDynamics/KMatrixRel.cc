@@ -27,7 +27,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
 
-KMatrixRel::KMatrixRel(vector<boost::shared_ptr<KPole> > Kpoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs) :
+KMatrixRel::KMatrixRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   KMatrixBase(Kpoles, phpVecs)
  {
  }
@@ -39,7 +39,7 @@ KMatrixRel::~KMatrixRel(){
 void KMatrixRel::evalMatrix(const double mass){
 
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
-  vector<boost::shared_ptr<KPole> >::iterator it;
+  vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
     (*it)->evalMatrix(mass);
     theKMatrix += *(*it);

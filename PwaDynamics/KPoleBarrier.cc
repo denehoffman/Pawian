@@ -25,7 +25,7 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
-KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom):
+KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom):
   KPole(g_i, mass_0)
   , _phpVecs(phpVecs)
   , _orbMom(orbMom)

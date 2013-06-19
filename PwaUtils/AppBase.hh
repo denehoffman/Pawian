@@ -21,56 +21,44 @@
 //									  //
 //************************************************************************//
 
-#ifndef _MinuitFit_H
-#define _MinuitFit_H
+// AppBase class definition file. -*- C++ -*-
+// Copyright 2012 Bertram Kopf
+
+#pragma once
 
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
+#include <complex>
 #include <map>
-#include <cassert>
-
+#include <string>
 #include <memory>
 
-#include "TROOT.h"
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include <cassert>
+// #include <memory>
 
-class TFile;
-class TGraph;
-class TCanvas;
-class TRandom;
+class AbsLh;
+class FitParamsBase;
+class AbsEnv;
 
-class MinuitFit {
+class AppBase{
 
 public:
 
-  // create/copy/destroy:
-
-  ///Constructor 
-  MinuitFit(double p0, double p1, double p2, double p3, double sigma);
-
-
   /** Destructor */
-  virtual ~MinuitFit();
+  virtual ~AppBase();
 
+  static AppBase* instance();
 
-  double calcChiSqr(const std::vector<double>& minPar);
-  void drawGraph(double a, double b, double c, double d);
-  // Getters:
- 
+  void dumpDefaultParams(std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase, AbsEnv* absEnv);
+
 protected:
-
+ ///Constructor 
+  AppBase();
+  static AppBase* _instance;
 
 private:
-  TFile* _theTFile;
-  std::map <unsigned int, TGraph* > _myGraph;
-
-  std::vector< double > _xValue;
-  std::vector< double > _yValue;
-
-  double _sigma;
 
 };
 
-#endif
+
+

@@ -27,7 +27,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-StreamFitParmsBase::StreamFitParmsBase(std::string& filePath, boost::shared_ptr<AbsLh> theLhPtr) :
+StreamFitParmsBase::StreamFitParmsBase(std::string& filePath, std::shared_ptr<AbsLh> theLhPtr) :
   AbsFitParamStreamer(filePath)
 {
   theLhPtr->getDefaultParams(_paramVal,_paramErr);
@@ -60,7 +60,7 @@ void StreamFitParmsBase::fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam
   mapStrJPCLamLam::iterator itLamLamMap;
   for( itLamLamMap=valMap.begin(); itLamLamMap!=valMap.end(); ++itLamLamMap){
 
-    std::map< boost::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLam;
+    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLam;
 
     for ( itLamLam=itLamLamMap->second.begin(); itLamLam!=itLamLamMap->second.end();  ++itLamLam){
      
@@ -91,7 +91,7 @@ void StreamFitParmsBase::fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, co
   mapStrJPCLS::iterator itLSMap;
   for( itLSMap=valMap.begin(); itLSMap!=valMap.end(); ++itLSMap){
 
-    std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itLS;
+    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itLS;
 
     for ( itLS=itLSMap->second.begin(); itLS!=itLSMap->second.end();  ++itLS){
      

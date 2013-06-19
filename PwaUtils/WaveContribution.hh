@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "PwaUtils/FitParamsBase.hh"
 #include "Minuit2/MnUserParameters.h"
 
@@ -39,17 +39,17 @@ class PwaCovMatrix;
 class WaveContribution{
 
    public:
-    WaveContribution(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
-    WaveContribution(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
-		     boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
+    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
+		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::pair<double,double> CalcContribution();
 
    private:
 
     bool _calcError;
-    boost::shared_ptr<AbsLh> _theLh;
-    boost::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
+    std::shared_ptr<AbsLh> _theLh;
+    std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
     FitParamsBase _theFitParamsBase;
     ROOT::Minuit2::MnUserParameters _theMnUserParameters;
     fitParams* _theFitParamsOriginal;

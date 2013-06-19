@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 #include <complex>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/function.hpp>
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
@@ -47,7 +47,7 @@ class LSDecAmps;
 class epemBaseLh : public AbsLh {
 
 public:
-  // epemBaseLh(boost::shared_ptr<const EvtDataBaseList>);
+  // epemBaseLh(std::shared_ptr<const EvtDataBaseList>);
   epemBaseLh();
   
   virtual ~epemBaseLh();
@@ -61,8 +61,8 @@ public:
 
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
-					  std::map <boost::shared_ptr<const JPCLS>,
-					  std::vector< boost::shared_ptr<AbsXdecAmp> >,
+					  std::map <std::shared_ptr<const JPCLS>,
+					  std::vector< std::shared_ptr<AbsXdecAmp> >,
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
@@ -71,7 +71,7 @@ public:
 
   
 protected:
-  boost::shared_ptr<epemReaction> _epemReactionPtr;
+  std::shared_ptr<epemReaction> _epemReactionPtr;
 
   int _highestJFsp;
   bool _isHighestJaPhoton;

@@ -143,11 +143,11 @@ void AbsEnv::setup(ParserBase* theParser){
   	motherParticle = _particleTable->particle(tmpName);
       }
     }
-    boost::shared_ptr<AbsDecay> tmpDec;
+    std::shared_ptr<AbsDecay> tmpDec;
     if(daughterParticles.size()==2){
-      if (usedSystem=="Heli") tmpDec= boost::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
-      else if (usedSystem=="Cano")  tmpDec= boost::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
-      else if (usedSystem=="Tensor")  tmpDec= boost::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      if (usedSystem=="Heli") tmpDec= std::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      else if (usedSystem=="Cano")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      else if (usedSystem=="Tensor")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
       else {
 	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);
@@ -156,8 +156,8 @@ void AbsEnv::setup(ParserBase* theParser){
     }
 
     else if(daughterParticles.size()==3){
-      if (usedSystem=="Cano") tmpDec= boost::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
-      else if (usedSystem=="Tensor") tmpDec= boost::shared_ptr<AbsDecay>(new OmegaTo3PiTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
+      if (usedSystem=="Cano") tmpDec= std::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
+      else if (usedSystem=="Tensor") tmpDec= std::shared_ptr<AbsDecay>(new OmegaTo3PiTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
       else {
 	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);
@@ -272,7 +272,7 @@ void AbsEnv::setup(ParserBase* theParser){
       else if(isDecParticle && !isFirstDecParticle) currentStringDecVec2.push_back(tmpName);
       else currentStringMotherVec.push_back(tmpName);
     }
-    boost::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec, currentStringDecVec2, nBodyDecay));
+    std::shared_ptr<angleHistData> currentAngleHistData(new angleHistData(currentStringMotherVec, currentStringDecVec, currentStringDecVec2, nBodyDecay));
     _angleHistDataVec.push_back(currentAngleHistData);
   }
 
@@ -305,7 +305,7 @@ void AbsEnv::setup(ParserBase* theParser){
       else if(isDecParticle && !isFirstAxes) currentStringDecVec_2.push_back(tmpName);
       else currentStringMotherVec_2.push_back(tmpName);
     }
-    boost::shared_ptr<angleHistData2D> currentAngleHistData2D(new angleHistData2D(currentStringMotherVec, currentStringDecVec, currentStringMotherVec_2, currentStringDecVec_2));
+    std::shared_ptr<angleHistData2D> currentAngleHistData2D(new angleHistData2D(currentStringMotherVec, currentStringDecVec, currentStringMotherVec_2, currentStringDecVec_2));
     _angleHistDataVec2D.push_back(currentAngleHistData2D);
   }
 

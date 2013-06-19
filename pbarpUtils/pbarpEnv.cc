@@ -90,26 +90,26 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
 
 
   //pbarp reaction
-  _pbarpReaction=boost::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
+  _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, _lmax));
 
   //fill prodDecayList
   if(thePbarpParser->productionFormalism()=="Cano"){
-    std::vector< boost::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
-    std::vector< boost::shared_ptr<IsobarLSDecay> >::iterator itDec;
+    std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
+    std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
       _prodDecList->addDecay(*itDec);
     }
   }
   else if(thePbarpParser->productionFormalism()=="Tensor"){
-      std::vector< boost::shared_ptr<IsobarTensorDecay> > prodDecs= _pbarpReaction->productionTensorDecays();
-      std::vector< boost::shared_ptr<IsobarTensorDecay> >::iterator itDec;
+      std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _pbarpReaction->productionTensorDecays();
+      std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
 	 _prodDecList->addDecay(*itDec);
       }
   }
   else if(thePbarpParser->productionFormalism()=="Heli"){
-     std::vector< boost::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
-     std::vector< boost::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+     std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
+     std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
      for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
 	_prodDecList->addDecay(*itDec);
      }
@@ -139,7 +139,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
     _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
     _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-    //    boost::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
+    //    std::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
   }
 
   //replace mass key
@@ -163,7 +163,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
 
 
   //add dynamics 
-  std::vector<boost::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
+  std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
   std::vector<std::string> decDynVec = thePbarpParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
     std::stringstream stringStr;
@@ -181,7 +181,7 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
       additionalStringVec.push_back(tmpName);
     }
 
-    std::vector<boost::shared_ptr<AbsDecay> >::iterator itDec;
+    std::vector<std::shared_ptr<AbsDecay> >::iterator itDec;
     for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
       std::string theDecName=(*itDec)->name();
       std::string toFind=particleStr+"To";

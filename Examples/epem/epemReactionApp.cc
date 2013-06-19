@@ -27,7 +27,8 @@
 #include <vector>
 #include <map>
 #include <iterator>
-#include <boost/shared_ptr.hpp>
+#include <memory>
+#include <memory>
 
 #include "TROOT.h"
 
@@ -43,6 +44,8 @@
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/PwaGen.hh"
+#include "PwaUtils/AppBase.hh"
+
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 #include "epemUtils/epemEnv.hh"
@@ -90,30 +93,31 @@ int main(int __argc,char *__argv[]){
 
   epemEnv::instance()->setup(theAppParams);
 
-  boost::shared_ptr<epemReaction> theEpEmReaction=epemEnv::instance()->reaction();
+  std::shared_ptr<epemReaction> theEpEmReaction=epemEnv::instance()->reaction();
 
   theEpEmReaction->print(std::cout);
 
   std::string mode=theAppParams->mode();
 
-  boost::shared_ptr<FitParamsBase> theFitParamBase=boost::shared_ptr<FitParamsBase>(new FitParamsBase());
+  std::shared_ptr<FitParamsBase> theFitParamBase=std::shared_ptr<FitParamsBase>(new FitParamsBase());
 
 
   std::string prodFormalism=theAppParams->productionFormalism();
-  boost::shared_ptr<AbsLh> theLhPtr;
-  theLhPtr=boost::shared_ptr<AbsLh>(new epemBaseLh());
+  std::shared_ptr<AbsLh> theLhPtr;
+  theLhPtr=std::shared_ptr<AbsLh>(new epemBaseLh());
 
 
   if (mode=="dumpDefaultParams"){
-    fitParams defaultVal;
-    fitParams defaultErr;
-    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+    AppBase::instance()->dumpDefaultParams(theLhPtr, theFitParamBase, epemEnv::instance());
+    // fitParams defaultVal;
+    // fitParams defaultErr;
+    // theLhPtr->getDefaultParams(defaultVal, defaultErr);
 
-    std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << epemEnv::instance()->outputFileNameSuffix() << ".dat";
-    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
+    // std::stringstream defaultparamsname;
+    // defaultparamsname << "defaultparams" << epemEnv::instance()->outputFileNameSuffix() << ".dat";
+    // std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
     
-    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    // theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
     return 0;
   }
 
@@ -125,7 +129,7 @@ int main(int __argc,char *__argv[]){
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
   if (mode=="gen"){
-    boost::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(epemEnv::instance()));
+    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(epemEnv::instance()));
     pwaGenPtr->generate(theLhPtr, theStartparams);
     theFitParamBase->printParams(theStartparams);
     return 1;
@@ -203,7 +207,7 @@ int main(int __argc,char *__argv[]){
   }
   mcData.rewind();
 
-  boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
+  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
   //  eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
   eventListPtr->read(eventsData, mcData);
 
@@ -239,7 +243,7 @@ int main(int __argc,char *__argv[]){
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
     
-    boost::shared_ptr<WaveContribution> theWaveContribution;
+    std::shared_ptr<WaveContribution> theWaveContribution;
     if(epemEnv::instance()->parser()->calcContributionError()){
        std::string serializationFileName = epemEnv::instance()->serializationFileName();
        std::ifstream serializationStream(serializationFileName.c_str());
@@ -251,13 +255,13 @@ int main(int __argc,char *__argv[]){
 
        boost::archive::text_iarchive boostInputArchive(serializationStream);
 
-       boost::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+       std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
        boostInputArchive >> *thePwaCovMatrix;
-       theWaveContribution = boost::shared_ptr<WaveContribution>
+       theWaveContribution = std::shared_ptr<WaveContribution>
 	  (new WaveContribution(theLhPtr, theStartparams, thePwaCovMatrix));
     }
     else{
-       theWaveContribution = boost::shared_ptr<WaveContribution>
+       theWaveContribution = std::shared_ptr<WaveContribution>
 	  (new WaveContribution(theLhPtr, theStartparams));
     }
 

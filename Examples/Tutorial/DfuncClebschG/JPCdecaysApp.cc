@@ -162,9 +162,9 @@ int main(int __argc,char *__argv[]){
 
 
   
-  boost::shared_ptr<const jpcRes> motherJPC(new jpcRes(Spin(motherJ), motherP, motherC));
-  boost::shared_ptr<const jpcRes> daughter1JPC(new jpcRes(Spin(daughter1J), daughter1P, daughter1C)); 
-  boost::shared_ptr<const jpcRes> daughter2JPC(new jpcRes(Spin(daughter2J), daughter2P, daughter2C));
+  std::shared_ptr<const jpcRes> motherJPC(new jpcRes(Spin(motherJ), motherP, motherC));
+  std::shared_ptr<const jpcRes> daughter1JPC(new jpcRes(Spin(daughter1J), daughter1P, daughter1C)); 
+  std::shared_ptr<const jpcRes> daughter2JPC(new jpcRes(Spin(daughter2J), daughter2P, daughter2C));
 
   JPCdecays theDecays(motherJPC, daughter1JPC, daughter2JPC);
   theDecays.print(std::cout);

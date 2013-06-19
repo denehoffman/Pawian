@@ -33,7 +33,7 @@
 #include <string>
 
 #include <cassert>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsXdecAmp.hh"
 
@@ -47,8 +47,8 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  TensorDecAmps(boost::shared_ptr<IsobarTensorDecay> theDec);
-  TensorDecAmps(boost::shared_ptr<AbsDecay> theDec);
+  TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec);
+  TensorDecAmps(std::shared_ptr<AbsDecay> theDec);
   /** Destructor */
   virtual ~TensorDecAmps();
 
@@ -60,14 +60,14 @@ public:
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
-  std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  std::vector< std::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
   double _factorMag;
 
   virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 ); 

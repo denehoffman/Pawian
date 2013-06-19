@@ -36,7 +36,7 @@ using namespace ROOT::Minuit2;
 
 boost::timer::cpu_timer theTimer1;
 
-AbsFcn::AbsFcn(boost::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
+AbsFcn::AbsFcn(std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
   _fitParamsBasePtr(fitParamsBase)
   , _fcnCounter(0)
   , _currentResFileName("currentResult"+suffix+".dat")

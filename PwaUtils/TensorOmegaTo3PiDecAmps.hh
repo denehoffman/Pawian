@@ -33,7 +33,7 @@
 #include <string>
 
 #include <cassert>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsXdecAmp.hh"
 
@@ -47,7 +47,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  TensorOmegaTo3PiDecAmps(boost::shared_ptr<OmegaTo3PiTensorDecay> theDec);
+  TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTensorDecay> theDec);
 
   /** Destructor */
   virtual ~TensorOmegaTo3PiDecAmps();
@@ -60,13 +60,13 @@ public:
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
-  std::vector< boost::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  std::vector< std::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
 protected:
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSs;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
   double _factorMag;
 
   Particle* _daughter1;

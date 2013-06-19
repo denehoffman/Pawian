@@ -31,7 +31,7 @@
 
 using namespace ROOT::Minuit2;
 
-PwaFcnServer::PwaFcnServer(boost::shared_ptr<AbsLh> absLh, boost::shared_ptr<FitParamsBase> fitParamsBase, boost::shared_ptr<NetworkServer> netServer, std::string suffix) :
+PwaFcnServer::PwaFcnServer(std::shared_ptr<AbsLh> absLh, std::shared_ptr<FitParamsBase> fitParamsBase, std::shared_ptr<NetworkServer> netServer, std::string suffix) :
   AbsFcn(fitParamsBase, suffix)
   , _absLhPtr(absLh)
   , _networkServerPtr(netServer)

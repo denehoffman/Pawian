@@ -59,9 +59,9 @@ AbsHist::AbsHist(AbsEnv* theEnv) :
   _dataFourvecs = new TTree("_dataFourvecs", "_dataFourvecs");
   _fittedFourvecs = new TTree("_fittedFourvecs", "_fittedFourvecs");
 
-  std::vector<boost::shared_ptr<angleHistData> > angleHistDataVec=_absEnv->angleHistDataVec();
+  std::vector<std::shared_ptr<angleHistData> > angleHistDataVec=_absEnv->angleHistDataVec();
 
-  std::vector<boost::shared_ptr<angleHistData> >::iterator itAngleVec;
+  std::vector<std::shared_ptr<angleHistData> >::iterator itAngleVec;
   for (itAngleVec=angleHistDataVec.begin(); itAngleVec!=angleHistDataVec.end(); ++itAngleVec){
     std::string tmpBaseName= (*itAngleVec)->_name;
     boost::replace_all(tmpBaseName,"+","p");
@@ -121,9 +121,9 @@ AbsHist::AbsHist(AbsEnv* theEnv) :
   } 
   // 2D-Histograms
 
- std::vector<boost::shared_ptr<angleHistData2D> > angleHistDataVec2D=_absEnv->angleHistDataVec2D();
+ std::vector<std::shared_ptr<angleHistData2D> > angleHistDataVec2D=_absEnv->angleHistDataVec2D();
 
-  std::vector<boost::shared_ptr<angleHistData2D> >::iterator itAngleVec2D;
+  std::vector<std::shared_ptr<angleHistData2D> >::iterator itAngleVec2D;
   for (itAngleVec2D=angleHistDataVec2D.begin(); itAngleVec2D!=angleHistDataVec2D.end(); ++itAngleVec2D){
     std::string tmpBaseName= (*itAngleVec2D)->_name;
     boost::replace_all(tmpBaseName,"+","p");
@@ -171,7 +171,7 @@ AbsHist::~AbsHist(){
   _theTFile->Close();
 }
 
-void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
+void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
   if(0==theLh){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
@@ -192,7 +192,7 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   _fittedFourvecs->Branch("weight", &weightToWrite, "weight");
 
 
-  //  boost::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
+  //  std::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
   const std::vector<EvtData*> dataList=theLh->getDataVec();
   double integralDataWWeight=0.;
 
@@ -263,13 +263,13 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
   Info <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor ;  // << endmsg;
   
-  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
+  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
     if (itMassMap == _massFitHistMap.begin()) Info << "No of fit events: " << itMassMap->second->Integral(); // << endmsg;
   }
 
-  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
+  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
   for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){
     std::vector<TH1F*>::iterator itTH1F;
     for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){  
@@ -277,7 +277,7 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     }
   }
   
-  std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
+  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
   for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
     std::vector<TH2F*>::iterator itTH2F;
     for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){  
@@ -290,9 +290,9 @@ void AbsHist::fillIt(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
 
 
-void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
 
-  std::map<boost::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
     //get relevant 4 vecs
     Vector4<double> combined4Vec(0.,0.,0.,0.);
@@ -308,9 +308,9 @@ void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<boost::sha
 
 }
 
-void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill){
 
-  std::map<boost::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
     short nBodyDecay = it->first->_nBodyDecay;
 
@@ -383,9 +383,9 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<boost::sh
   }
 }
 
-void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill){
 
-  std::map<boost::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
 
     Vector4<double> combinedDec4Vec(0.,0.,0.,0.);

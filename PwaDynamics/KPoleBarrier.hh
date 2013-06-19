@@ -36,7 +36,7 @@
 #include <iostream>
 #include <vector>
 #include <complex>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 using namespace std;
 
 class AbsPhaseSpace;
@@ -53,7 +53,7 @@ public:
 //   KPoleBarrier() : Matrix<double>::Matrix() {}
 
   /// Constructor 
-  KPoleBarrier(vector<double>& g_i, double mass_0, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom); 
+  KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom); 
 
   /// Copy Constructor
   // KPoleBarrier(const KPoleBarrier &theCopy);
@@ -71,7 +71,7 @@ public:
 
   
 protected:
-  vector<boost::shared_ptr<AbsPhaseSpace> > _phpVecs;
+  vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
   int _orbMom;
 };
 //_____________________________________________________________________________

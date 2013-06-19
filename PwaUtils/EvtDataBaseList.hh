@@ -27,7 +27,7 @@
 #pragma once
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/unordered_map.hpp>
 #include <map>
 

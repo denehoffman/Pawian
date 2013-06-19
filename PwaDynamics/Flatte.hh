@@ -34,7 +34,7 @@
 #include <vector>
 #include <complex>
 #include <utility>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class Particle;
 

@@ -29,7 +29,7 @@
 #include <vector>
 #include <map>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Examples/Tutorial/LineShapes/PiPiSWaveTMatrix.hh"
 #include "Examples/Tutorial/LineShapes/PiPiSWavePVector.hh"
 #include "Examples/Tutorial/LineShapes/KPiSWaveTMatrix.hh"

@@ -38,7 +38,7 @@
 #include "Particle/Particle.hh"
 
 
-LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
+LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec) :
   AbsXdecAmp(theDec)
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
@@ -51,7 +51,7 @@ LSDecAmps::LSDecAmps(boost::shared_ptr<IsobarLSDecay> theDec) :
   fillCgPreFactor(); 
 }
 
-LSDecAmps::LSDecAmps(boost::shared_ptr<AbsDecay> theDec) :
+LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec) :
   AbsXdecAmp(theDec)
 {
   Particle* daughter1=_decay->daughter1Part();
@@ -146,7 +146,7 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
 
 complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
   complex<double> result(0.,0.);
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
 
     double theMag=_currentParamMags[*it];
@@ -170,12 +170,12 @@ complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spi
 
 void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  std::vector< boost::shared_ptr<const JPCLS> >::const_iterator itLS;
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itLS;
   for(itLS=_JPCLSs.begin(); itLS!=_JPCLSs.end(); ++itLS){
     currentMagValMap[*itLS]=_factorMag;
     currentPhiValMap[*itLS]=0.;
@@ -213,10 +213,10 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
    }
 
    if(!_recalculate){
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
-     std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
+     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
      
-     std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+     std::vector< std::shared_ptr<const JPCLS> >::iterator it;
      for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
@@ -237,10 +237,10 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
  
 
 void  LSDecAmps::updateFitParams(fitParams& theParamVal){
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
-   std::map< boost::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
 
-   std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
    for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
      double theMag=magMap[*it];
      double thePhi=phiMap[*it];
@@ -257,7 +257,7 @@ void  LSDecAmps::updateFitParams(fitParams& theParamVal){
 
 void  LSDecAmps::fillCgPreFactor(){
 
-  std::vector< boost::shared_ptr<const JPCLS> >::iterator it;
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; ++lambda1){
       for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){

@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -48,7 +48,7 @@ class OmegaTo3PiDecay : public AbsDecay{
 public:
   OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
   virtual ~OmegaTo3PiDecay();
-  virtual std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
+  virtual std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   virtual void print(std::ostream& os) const;
   Particle* daughter3Part() {return _daughter3;}
@@ -56,7 +56,7 @@ public:
 
 protected:
   Particle* _daughter3;
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
   std::vector<Particle*> _finalStateParticlesDaughter3;
 
 };

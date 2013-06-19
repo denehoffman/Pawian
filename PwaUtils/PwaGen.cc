@@ -101,7 +101,7 @@ PwaGen::~PwaGen()
   _stream->close();
 }
 
-void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
+void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   // std::ofstream theStream ("output.dat");
   int counterFsp=0;
   std::vector<Particle*>::iterator it;
@@ -154,7 +154,7 @@ void PwaGen::generate(boost::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     
     currentEvtList.rewind();
     
-    boost::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(_absEnv));
+    std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(_absEnv));
     
     std::vector<EvtData*> dataList;
     double evtWeightSum=0.;

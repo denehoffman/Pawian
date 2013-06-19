@@ -33,7 +33,7 @@
 #include "PwaDynamics/PVectorRel.hh"
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 //#include <boost/multi_array.hpp>
 
 class PPole;
@@ -50,7 +50,7 @@ class PVectorSlowCorRel : public PVectorRel {
 public:
 
   /// Constructor 
-  PVectorSlowCorRel(vector<boost::shared_ptr<PPole> > Ppoles, vector<boost::shared_ptr<AbsPhaseSpace> > phpVecs, std::vector< complex<double> >& fProdVec, double s0prod);
+  PVectorSlowCorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, std::vector< complex<double> >& fProdVec, double s0prod);
 
   /// Destructor
   virtual ~PVectorSlowCorRel();

@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/DataUtils.hh"
@@ -47,14 +47,14 @@ class IsobarLSDecay : public AbsDecay{
 
 public:
   IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  IsobarLSDecay(boost::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
+  IsobarLSDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
   virtual ~IsobarLSDecay();
   //  virtual IsobarLSDecay* clone_() const = 0;
-  std::vector< boost::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
+  std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual void print(std::ostream& os) const;
   virtual std::string type() {return "IsobarLSDecay";} 
 
 protected:
-  std::vector< boost::shared_ptr<const JPCLS> > _JPCLSDecAmps;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 
 };

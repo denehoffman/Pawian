@@ -66,17 +66,17 @@ bool pbarpStatesLS::calcStates(){
 	  Spin S= motherLSs[ls].S;
 	  int cparity(pow(-1,int(L+S)));
 
-	  boost::shared_ptr<const jpcRes> jpcPtr(new jpcRes(j,p,cparity));
+	  std::shared_ptr<const jpcRes> jpcPtr(new jpcRes(j,p,cparity));
 
 	  DebugMsg << "L=" << L <<" S=" << S << " ==> C=" << cparity << endmsg;
-	  boost::shared_ptr<const JPCLS> jpcLSPtr(new JPCLS(jpcPtr, L, S));
+	  std::shared_ptr<const JPCLS> jpcLSPtr(new JPCLS(jpcPtr, L, S));
 
 	  for(Spin lampbar = -0.5; lampbar <= 0.5; lampbar++){
 	    for(Spin lamp = -0.5; lamp <= 0.5; lamp++){
  
 	      double preFactorLS=sqrt(2.*L+1)*Clebsch(L,0,S, lampbar-lamp, j, lampbar-lamp);
-	      boost::shared_ptr<const JPCLS> tmpJPCLS( new JPCLS(jpcPtr,L, S, preFactorLS) );              
-	      boost::shared_ptr<const JPCLSJJ> jpcLSJJPtr(new JPCLSJJ(tmpJPCLS,_pbarJPC.J, lampbar, _pJPC.J, lamp)); 
+	      std::shared_ptr<const JPCLS> tmpJPCLS( new JPCLS(jpcPtr,L, S, preFactorLS) );              
+	      std::shared_ptr<const JPCLSJJ> jpcLSJJPtr(new JPCLSJJ(tmpJPCLS,_pbarJPC.J, lampbar, _pJPC.J, lamp)); 
 
  	      if (fabs(jpcLSJJPtr->prefactorAll)>1.e-8){
 		_allStates.push_back(jpcLSJJPtr);
@@ -137,9 +137,9 @@ bool pbarpStatesLS::calcStates(){
 void pbarpStatesLS::print(std::ostream& os) const{
   os << "initital states of the pbar p annihilation for Lmax = " << _lmax << " are: " << std::endl; 
   //  AbsStates::print(os);
-   std::vector< boost::shared_ptr<const JPCLSJJ > >::const_iterator itJPCLSJJ;
-   std::vector< boost::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
-   std::vector< boost::shared_ptr<const jpcRes > >::const_iterator itjpcRes;
+   std::vector< std::shared_ptr<const JPCLSJJ > >::const_iterator itJPCLSJJ;
+   std::vector< std::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
+   std::vector< std::shared_ptr<const jpcRes > >::const_iterator itjpcRes;
 
   os << "\n******** all JPC states ************ " << std::endl;
   for ( itjpcRes=_alljpcRes.begin(); itjpcRes!=_alljpcRes.end(); ++itjpcRes){
