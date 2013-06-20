@@ -32,19 +32,15 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/PwaGen.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
 
-AppBase* AppBase::_instance=0;
-
-AppBase* AppBase::instance()
-{
-  if (0==_instance) _instance = new AppBase();
-  return _instance;
-}
-
-AppBase::AppBase()
+AppBase::AppBase(AbsEnv* absEnv, std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase) :
+  _absEnv(absEnv), 
+  _absLhPtr(theLhPtr),
+  _fitParamBasePtr(theFitParamBase)
 {
 }
 
@@ -52,15 +48,21 @@ AppBase::~AppBase()
 {
 }
 
-void AppBase::AppBase::dumpDefaultParams(std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase, AbsEnv* absEnv){
+void AppBase::dumpDefaultParams(){
     fitParams defaultVal;
     fitParams defaultErr;
-    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+    _absLhPtr->getDefaultParams(defaultVal, defaultErr);
 
     std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << absEnv->outputFileNameSuffix() << ".dat";
+    defaultparamsname << "defaultparams" << _absEnv->outputFileNameSuffix() << ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
     
-    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+    _fitParamBasePtr->dumpParams(theStreamDefault, defaultVal, defaultErr);
+}
+
+void AppBase::generate(fitParams& theParams){
+    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(_absEnv));
+    pwaGenPtr->generate(_absLhPtr, theParams);
+    _fitParamBasePtr->printParams(theParams);
 }
 

@@ -44,7 +44,9 @@
 #include "PwaUtils/PwaFcnServer.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "PwaUtils/WaveContribution.hh"
-#include "PwaUtils/PwaGen.hh"
+//#include "PwaUtils/PwaGen.hh"
+#include "PwaUtils/AppBase.hh"
+
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 #include "pbarpUtils/pbarpEnv.hh"
@@ -113,16 +115,10 @@ int main(int __argc,char *__argv[]){
     exit(1);
   }
 
-  if (mode=="dumpDefaultParams"){
-    fitParams defaultVal;
-    fitParams defaultErr;
-    theLhPtr->getDefaultParams(defaultVal, defaultErr);
+  AppBase theAppBase(pbarpEnv::instance(), theLhPtr, theFitParamBase);
 
-    std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << pbarpEnv::instance()->outputFileNameSuffix() << ".dat";
-    std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
-    
-    theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
+  if (mode=="dumpDefaultParams"){
+    theAppBase.dumpDefaultParams();
     return 1;
   }
 
@@ -134,9 +130,7 @@ int main(int __argc,char *__argv[]){
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
   if (mode=="gen"){
-    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(pbarpEnv::instance()));
-    pwaGenPtr->generate(theLhPtr, theStartparams);
-    theFitParamBase->printParams(theStartparams);
+    theAppBase.generate(theStartparams);
     return 1;
   }
 

@@ -39,22 +39,26 @@
 class AbsLh;
 class FitParamsBase;
 class AbsEnv;
+class fitParams;
 
 class AppBase{
 
 public:
 
+  AppBase(AbsEnv* absEnv, std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase);
   /** Destructor */
   virtual ~AppBase();
 
-  static AppBase* instance();
+  //  static AppBase* instance();
 
-  void dumpDefaultParams(std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase, AbsEnv* absEnv);
+  virtual void dumpDefaultParams();
+  virtual void generate(fitParams& theParams);
 
 protected:
- ///Constructor 
-  AppBase();
-  static AppBase* _instance;
+
+  AbsEnv* _absEnv;
+  std::shared_ptr<AbsLh> _absLhPtr;
+  std::shared_ptr<FitParamsBase> _fitParamBasePtr;
 
 private:
 

@@ -43,7 +43,6 @@
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "PwaUtils/WaveContribution.hh"
-#include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AppBase.hh"
 
 #include "Utils/PawianCollectionUtils.hh"
@@ -106,19 +105,11 @@ int main(int __argc,char *__argv[]){
   std::shared_ptr<AbsLh> theLhPtr;
   theLhPtr=std::shared_ptr<AbsLh>(new epemBaseLh());
 
+  AppBase theAppBase(epemEnv::instance(), theLhPtr, theFitParamBase);
 
   if (mode=="dumpDefaultParams"){
-    AppBase::instance()->dumpDefaultParams(theLhPtr, theFitParamBase, epemEnv::instance());
-    // fitParams defaultVal;
-    // fitParams defaultErr;
-    // theLhPtr->getDefaultParams(defaultVal, defaultErr);
-
-    // std::stringstream defaultparamsname;
-    // defaultparamsname << "defaultparams" << epemEnv::instance()->outputFileNameSuffix() << ".dat";
-    // std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
-    
-    // theFitParamBase->dumpParams(theStreamDefault, defaultVal, defaultErr);
-    return 0;
+    theAppBase.dumpDefaultParams();
+     return 0;
   }
 
 
@@ -129,10 +120,8 @@ int main(int __argc,char *__argv[]){
   fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
   if (mode=="gen"){
-    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(epemEnv::instance()));
-    pwaGenPtr->generate(theLhPtr, theStartparams);
-    theFitParamBase->printParams(theStartparams);
-    return 1;
+    theAppBase.generate(theStartparams);
+    return 0;
   }
 
 
