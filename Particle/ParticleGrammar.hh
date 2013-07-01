@@ -111,8 +111,8 @@ namespace particleGrammar
       r = phrase_parse(first, last,
         //  Begin grammar
         (
-          int_[ref(pData.iso) = _1] >>
-	  int_[ref(pData.isoThree) = _1] >>
+          int_[ref(pData.twoIso) = _1] >>
+	  int_[ref(pData.twoIsoThree) = _1] >>
 	  int_[ref(pData.strange) = _1] >>
 	  int_[ref(pData.charm) = _1] >>
 	  double_[ref(mass) = _1] >> -(char_('(') >> double_[ref(plusDm) = _1] >> double_[ref(minusDm) = _1] >> char_(')')) >>

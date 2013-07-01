@@ -85,6 +85,7 @@ void  pbarpTensorLh::initialize(){
 
   std::vector< std::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
   fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1); 
+  fillIsos();
 
   double pbarMass = _absEnv->particleTable()->particle("antiproton")->mass();
   double pMass = _absEnv->particleTable()->particle("proton")->mass();

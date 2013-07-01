@@ -81,8 +81,16 @@ public:
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual std::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}
   virtual std::string type() =0;
+  double isospinCG() {return _isospinClebschG;}
   AbsEnv* currentEnv() {return _env;}
 
+  Spin iDaughter1() {return _idaughter1;}
+  Spin i3Daughter1() {return _i3daughter1;}
+  Spin iDaughter2() {return _idaughter2;}
+  Spin i3Daughter2() {return _i3daughter2;}
+  void disableIsospin(){_useIsospin=false;}
+  bool useIsospin(){ return _useIsospin;}
+ 
 protected:
   Particle* _mother;
   Particle* _daughter1;
@@ -95,6 +103,8 @@ protected:
   std::shared_ptr<const jpcRes> _motherJPCPtr;
   std::shared_ptr<const jpcRes> _daughter1JPCPtr;
   std::shared_ptr<const jpcRes> _daughter2JPCPtr;
+
+  double _isospinClebschG;
 
   std::string _name;
   std::string _fitParamSuffix;
@@ -117,4 +127,11 @@ protected:
   AbsEnv* _env;
   std::shared_ptr<AbsDynamics> _absDynPtr;
   std::map<int, bool> _alreadyFilledMap;
+
+  Spin _idaughter1;
+  Spin _i3daughter1;
+  Spin _idaughter2;
+  Spin _i3daughter2;
+
+  bool _useIsospin;
 };

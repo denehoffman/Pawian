@@ -40,6 +40,8 @@
 
 using namespace ROOT::Minuit2;
 
+typedef std::map<std::string, std::map< std::shared_ptr<const jpcRes>, double, 
+					pawian::Collection::SharedPtrLess > > mapStrJPC;
 typedef std::map<std::string, std::map< std::shared_ptr<const JPCLS>, double, 
 					pawian::Collection::SharedPtrLess > > mapStrJPCLS;
 typedef std::map<std::string, std::map< std::shared_ptr<const JPClamlam>, double, 
@@ -47,6 +49,7 @@ typedef std::map<std::string, std::map< std::shared_ptr<const JPClamlam>, double
 typedef std::map<std::string, double> mapStrDouble;
 
 struct fitParams {
+  mapStrJPC Isos;
   mapStrJPCLS Mags;
   mapStrJPCLS Phis;
   mapStrJPCLamLam MagLamLams;
@@ -70,6 +73,7 @@ public:
   virtual void dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs);
 
 protected:
+  const std::string _isoSuffix;
   const std::string _magSuffix;
   const std::string _phiSuffix;
   const std::string _massSuffix;
@@ -78,18 +82,25 @@ protected:
   const std::string _otherParamSuffix;
 
 private:
+  virtual void setMnUsrParamsJPC(MnUserParameters& upar, 
+				 mapStrJPC& startIsoMap, 
+				 mapStrJPC& errIsoMap, 
+				 const std::string& suffix);
   virtual void setMnUsrParamsJPCLamLam(MnUserParameters& upar, 
 				       mapStrJPCLamLam& startLamLamMagMap, 
 				       mapStrJPCLamLam& errLamLamMagMap, 
 				       const std::string& suffix);
   virtual void setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix);
   virtual void setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void printJPCParams(fitParams& theParams, mapStrJPC& jpcMap, const std::string& suffix);
   virtual void printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& lamLamMagMap, const std::string& suffix);
   virtual void printJPCLSParams(fitParams& theParams, mapStrJPCLS& JPCLSMagMap, const std::string& suffix);
   virtual void printDoubleParams(fitParams& theParams, mapStrDouble& doubleMap,  const std::string& suffix);
+  virtual void dumpJPCParams(std::ostream& os, mapStrJPC& valJPCMap, mapStrJPC& errJPCMap, const std::string& suffix);
   virtual void dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, mapStrJPCLamLam& errLamLamMap, const std::string& suffix);
   virtual void dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, mapStrJPCLS& errLSMap, const std::string& suffix);
   virtual void dumpDoubleParams(std::ostream& os, mapStrDouble& valDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void getFitParamValJPC(const std::vector<double>& par, mapStrJPC& startMap, int& counter);
   virtual void getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& startLamLamMagMap, int& counter);
   virtual void getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, int& counter);
   virtual void getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, int& counter);

@@ -39,8 +39,8 @@ struct ParticleData {
   ErrValue mass;
   ErrValue width;
   int twoJ;
-  int iso;
-  int isoThree;
+  int twoIso;
+  int twoIsoThree;
   int strange;
   int charm;
   int theParity;
@@ -58,8 +58,8 @@ struct ParticleData {
     mass(other->mass),
     width(other->width),
     twoJ(other->twoJ),
-    iso(other->iso),
-    isoThree(other->isoThree),
+    twoIso(other->twoIso),
+    twoIsoThree(other->twoIsoThree),
     strange(other->strange),
     charm(other->charm), 
     theParity(other->theParity),
@@ -94,8 +94,8 @@ public:
   int theCParity();
   Parity& chargeParity();
   Parity& gParity();
-  int iso();
-  int iso3();
+  int twoIso();
+  int twoIso3();
   int strange();
   int charm();
   DynFunctionType dynFctType();

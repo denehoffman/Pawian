@@ -48,6 +48,8 @@ public:
 protected:
   virtual void fillParams();
 
+  virtual void fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap, 
+			  const std::string& suffix);
 
   virtual void fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap, 
 			      const std::string& suffix);

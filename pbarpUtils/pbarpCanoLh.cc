@@ -89,7 +89,9 @@ void  pbarpCanoLh::initialize(){
   fillMap(jpclsTripletp1States, _decAmps, _decAmpsTripletp1);
 
   std::vector< std::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
-  fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);  
+  fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);
+
+  fillIsos();  
 }
 
 

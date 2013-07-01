@@ -75,6 +75,7 @@ protected:
   std::shared_ptr<AbsXdecAmp> _decAmpDaughter2; 
   Spin _Jdaughter1;
   Spin _Jdaughter2;
+  double _isospinCG;
   std::string _key;
   const std::string _wignerDKey;
   std::mutex theMutex;

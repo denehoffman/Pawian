@@ -4,7 +4,7 @@
 #
 # unflavoured mesons with Isospin 0
 #
-# type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass              width  dyn.f   comment
+# type name             texName               3*Q 2*J P  C  G   2*I 2*I3 S  C      mass              width  dyn.f   comment
 #
 Meson eta 		\eta  			0  0 -1  1  1	0  0  0  0 	0.547(+0.01-0.01) 0.0001 relBW	[PDG nonett 1^1S_0]
 Meson sigma 		\sigma  		0  0  1  1  1  	0  0  0  0 	1.000 	0.6000 	relBW	[PDG f_0(400-1200)\pi\pi S-wave]
@@ -64,43 +64,43 @@ Meson f2Hat(1800) 	\hat{f}_2(1800)  	0  4  1 -1  1   0  0  0  0 	1.800 	0.3000 	
 #
 # Isospin-1
 #
-# type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass    width   dyn.f   comment
+# type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C      mass    width   dyn.f   comment
 #
-Meson pion0 		\pi^0  			0  0 -1  1 -1   1  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson pion+ 		\pi^+  			3  0 -1	 0 -1   1  1  0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson pion- 		\pi^-  			-3 0 -1	 0 -1   1  -1 0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
-Meson rho0 		\rho0  			0  2 -1	 -1 1   1  0  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
-Meson rho+ 		\rho+  			3  2 -1	 0  1   1  1  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
-Meson rho- 		\rho-  			-3 2 -1	 0  1   1  -1 0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
-Meson a0(980) 		a_0(980)  		0  0  1  1 -1   1  0  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
-Meson a0(980)+ 		a_0(980)^+  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
-Meson a0(980)- 		a_0(980)^-  		3  0  1  0 -1   1  1  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
-Meson b1(1235) 		b_1(1235)  		0  2  1 -1  1   1  0  0  0 	1.231 	0.142 	relBW	[PDG nonett 2^1P_1]
-Meson a1(1260) 		a_1(1260)  		0  2  1  1 -1   1  0  0  0 	1.230 	0.400 	relBW	[PDG nonett 2^3P_1]
-Meson pi(1300) 		\pi(1300)  		0  0 -1  1 -1   1  0  0  0 	1.300 	0.200 	relBW	[PDG nonett 2^1S_0]
-Meson a2(1320) 		a_2(1320)  		0  4  1  1 -1   1  0  0  0 	1.318 	0.107 	relBW	[PDG nonett 2^3P_2]
-Meson a2(1320)+		a_2(1320)^+  		3  4  1  0  0   1  1  0  0 	1.318 	0.107 	relBW	[PDG nonett 2^3P_2]
-Meson a2(1320)-		a_2(1320)^-  		-3 4  1  0  0   1  -1 0  0 	1.318 	0.107 	relBW	[PDG nonett 2^3P_2] 
-Meson rhoHat(1405)0 	\hat{\rho}(1405)^0  	0  2 -1  1 -1   1  0  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
-Meson rhoHat(1405)+ 	\hat{\rho}(1405)^+  	3  2 -1  0 -1   1  +1  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
-Meson rhoHat(1405)- 	\hat{\rho}(1405)^-  	3  2 -1  0 -1   1  -1  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
-Meson a0(1450) 		a_0(1450)  		0  0  1  1 -1   1  0  0  0 	1.450 	0.050  	relBW	[PDG nonett 2^3P_0] 
-Meson rho(1270) 	\rho(1270)  		0  2 -1 -1  1   1  0  0  0 	1.270 	0.300  	relBW	[PDG nonett 2^3S_1]
-Meson rho(1450) 	\rho(1450)  		0  2 -1 -1  1   1  0  0  0 	1.465 	0.310  	relBW	[PDG nonett 2^3S_1]
-Meson pi2(1670) 	\pi_2(1670)  		0  4 -1  1 -1   1  0  0  0 	1.670 	0.240  	relBW	[PDG nonett 3^1D_2]
-Meson rho3(1690) 	\rho_3(1690)  		0  6 -1 -1  1   1  0  0  0 	1.691 	0.215  	relBW	[PDG nonett 3^3D_3]
-Meson rho(1700)	 	\rho(1700)  		0  2 -1 -1  1   1  0  0  0 	1.700 	0.235  	relBW	[PDG nonett 3^3D_1]
-Meson pi(1800) 		\pi(1800)  		0  0 -1  1 -1   1  0  0  0 	1.795 	0.212  	relBW	[PDG nonett 3^1S_0]
-Meson a4(2040) 		a_4(2040)  		0  8  1  1 -1   1  0  0  0 	2.037 	0.427  	relBW	[PDG no idea]
-Meson pi2(2100) 	\pi_2(2100)  		0  4 -1  1 -1   1  0  0  0 	2.100 	0.651  	relBW	[PDG nonett 4^1D_2]
-Meson rho(2150) 	\rho(2150)  		0  2 -1 -1  1   1  0  0  0 	2.150 	0.200  	relBW	[PDG nonett 4^3D_1]
-Meson rho3(2250) 	\rho_3(2250)  		0  6 -1 -1  1   1  0  0  0 	2.250 	0.200  	relBW	[PDG nonett 4^3D_3]
-Meson rho5(2350) 	\rho_5(2350)  		0  10 -1 -1 1   1  0  0  0 	2.400 	0.250  	relBW	[PDG no idea]
-Meson a6(2450) 		a_6(2450)  		0  12  1 1 -1   1  0  0  0 	2.450 	0.400  	relBW	[PDG no idea]
-Meson a2(1650) 		a_2(1650)  		0  4  1  1 -1   1  0  0  0 	1.650 	0.200  	relBW	[ppbar(1940)-pee]
-Meson X1mp1m(1900) 	X1^{-+}1^{-}(1900)  	0  2 -1  1 -1   1  0  0  0 	1.900 	0.180  	relBW	[ppbar(1940)-4pe]
-Meson piHat(1600) 	\hat{\pi}(1600)  	0  0 -1 -1 -1   1  0  0  0 	1.600 	0.300  	relBW	[0^{--} state]
-Meson a0Hat(1600) 	\hat{a}_0(1600)  	0  0  1 -1 -1   1  0  0  0 	1.600 	0.300  	relBW	[0^{+-} state]
+Meson pion0 		\pi^0  			0  0 -1  1 -1   2  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pion+ 		\pi^+  			3  0 -1	 0 -1   2  2  0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson pion- 		\pi^-  			-3 0 -1	 0 -1   2  -2 0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
+Meson rho0 		\rho0  			0  2 -1	 -1 1   2  0  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
+Meson rho+ 		\rho+  			3  2 -1	 0  1   2  2  0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
+Meson rho- 		\rho-  			-3 2 -1	 0  1   2  -2 0  0 	0.769 	0.151 	relBW	[PDG nonett 1^3S_1]
+Meson a0(980) 		a_0(980)  		0  0  1  1 -1   2  0  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
+Meson a0(980)+ 		a_0(980)^+  		3  0  1  0 -1   2  2  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
+Meson a0(980)- 		a_0(980)^-  		3  0  1  0 -1   2  -2  0  0 	0.982 	0.050 	relBW	[PDG K\bar{K} molecule candidate]
+Meson b1(1235) 		b_1(1235)  		0  2  1 -1  1   2  0  0  0 	1.231 	0.142 	relBW	[PDG nonett 2^1P_1]
+Meson a1(1260) 		a_1(1260)  		0  2  1  1 -1   2  0  0  0 	1.230 	0.400 	relBW	[PDG nonett 2^3P_1]
+Meson pi(1300) 		\pi(1300)  		0  0 -1  1 -1   2  0  0  0 	1.300 	0.200 	relBW	[PDG nonett 2^1S_0]
+Meson a2(1320) 		a_2(1320)  		0  4  1  1 -1   2  0  0  0 	1.318 	0.107 	relBW	[PDG nonett 2^3P_2]
+Meson a2(1320)+		a_2(1320)^+  		3  4  1  0  0   2  2  0  0 	1.318 	0.107 	relBW	[PDG nonett 2^3P_2]
+Meson a2(1320)-		a_2(1320)^-  		-3 4  1  0  0   2  -2 0  0 	1.318 	0.107 	relBW	[PDG nonett 2^3P_2] 
+Meson rhoHat(1405)0 	\hat{\rho}(1405)^0  	0  2 -1  1 -1   2  0  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
+Meson rhoHat(1405)+ 	\hat{\rho}(1405)^+  	3  2 -1  0 -1   2  +2  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
+Meson rhoHat(1405)- 	\hat{\rho}(1405)^-  	3  2 -1  0 -1   2  -2  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
+Meson a0(1450) 		a_0(1450)  		0  0  1  1 -1   2  0  0  0 	1.450 	0.050  	relBW	[PDG nonett 2^3P_0] 
+Meson rho(1270) 	\rho(1270)  		0  2 -1 -1  1   2  0  0  0 	1.270 	0.300  	relBW	[PDG nonett 2^3S_1]
+Meson rho(1450) 	\rho(1450)  		0  2 -1 -1  1   2  0  0  0 	1.465 	0.310  	relBW	[PDG nonett 2^3S_1]
+Meson pi2(1670) 	\pi_2(1670)  		0  4 -1  1 -1   2  0  0  0 	1.670 	0.240  	relBW	[PDG nonett 3^1D_2]
+Meson rho3(1690) 	\rho_3(1690)  		0  6 -1 -1  1   2  0  0  0 	1.691 	0.215  	relBW	[PDG nonett 3^3D_3]
+Meson rho(1700)	 	\rho(1700)  		0  2 -1 -1  1   2  0  0  0 	1.700 	0.235  	relBW	[PDG nonett 3^3D_1]
+Meson pi(1800) 		\pi(1800)  		0  0 -1  1 -1   2  0  0  0 	1.795 	0.212  	relBW	[PDG nonett 3^1S_0]
+Meson a4(2040) 		a_4(2040)  		0  8  1  1 -1   2  0  0  0 	2.037 	0.427  	relBW	[PDG no idea]
+Meson pi2(2100) 	\pi_2(2100)  		0  4 -1  1 -1   2  0  0  0 	2.100 	0.651  	relBW	[PDG nonett 4^1D_2]
+Meson rho(2150) 	\rho(2150)  		0  2 -1 -1  1   2  0  0  0 	2.150 	0.200  	relBW	[PDG nonett 4^3D_1]
+Meson rho3(2250) 	\rho_3(2250)  		0  6 -1 -1  1   2  0  0  0 	2.250 	0.200  	relBW	[PDG nonett 4^3D_3]
+Meson rho5(2350) 	\rho_5(2350)  		0  10 -1 -1 1   2  0  0  0 	2.400 	0.250  	relBW	[PDG no idea]
+Meson a6(2450) 		a_6(2450)  		0  12  1 1 -1   2  0  0  0 	2.450 	0.400  	relBW	[PDG no idea]
+Meson a2(1650) 		a_2(1650)  		0  4  1  1 -1   2  0  0  0 	1.650 	0.200  	relBW	[ppbar(1940)-pee]
+Meson X1mp1m(1900) 	X1^{-+}1^{-}(1900)  	0  2 -1  1 -1   2  0  0  0 	1.900 	0.180  	relBW	[ppbar(1940)-4pe]
+Meson piHat(1600) 	\hat{\pi}(1600)  	0  0 -1 -1 -1   2  0  0  0 	1.600 	0.300  	relBW	[0^{--} state]
+Meson a0Hat(1600) 	\hat{a}_0(1600)  	0  0  1 -1 -1   2  0  0  0 	1.600 	0.300  	relBW	[0^{+-} state]
 #
 # End light unflavoured mesons with Isospin 1
 #

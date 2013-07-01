@@ -43,6 +43,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec) :
   , _name(theDec->name())
   ,_JPCPtr(theDec->motherJPC())
   ,_absDyn(theDec->getDynamics())
+  ,_isospinCG(theDec->isospinCG())
   ,_key("_"+theDec->fitParSuffix())
   ,_wignerDKey(theDec->wignerDKey())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
@@ -58,6 +59,7 @@ AbsXdecAmp::~AbsXdecAmp()
 }
 
 void AbsXdecAmp::initialize(){
+  if(!_decay->useIsospin()) _isospinCG=1.;
 
   _absDyn = DynRegistry::instance()->getDynamics(_decay);
 

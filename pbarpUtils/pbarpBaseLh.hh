@@ -54,13 +54,13 @@ public:
   virtual ~pbarpBaseLh();
   
   virtual AbsLh* clone_() const =0;
-
+  
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
-
+  
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
   virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
   
@@ -72,18 +72,26 @@ public:
 protected:
   std::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< std::shared_ptr<const JPCLS> > _jpclsStates;
-
+  std::vector< std::shared_ptr<const jpcRes> > _jpcStates;
+  
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsSinglet;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTriplet0;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletp1;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletm1;
   
+  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > _currentParamIsos;  
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+  
+  std::map< std::string, double> _iso0Map;
+  std::map< std::string, double> _iso1Map;
+
   int _highestJFsp;
   bool _isHighestJaPhoton;
   
   virtual void fillMap(std::vector< std::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<std::shared_ptr<AbsXdecAmp> >& decs, std::map< std::shared_ptr<const JPCLS>, std::vector<std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill); 
+
+  virtual void fillIsos();
 
 private:
 

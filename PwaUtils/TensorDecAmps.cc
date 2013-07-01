@@ -160,6 +160,8 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
       }
     }
   }
+
+  result*=_isospinCG;
   return result;
 } 
 

@@ -122,15 +122,22 @@ void AbsEnv::setup(ParserBase* theParser){
 
     std::string tmpName;
 
+    bool useIsospin=true;
     bool isDecParticle=false;
     bool firstArgument=true;
+    bool secondArgument=false;
     std::string usedSystem("");
 
     while(stringStr >> tmpName){
       if(firstArgument){
 	usedSystem=tmpName;
 	firstArgument=false;
+	secondArgument=true;
 	continue;
+      }
+      if(secondArgument){
+	if(tmpName=="noIso") useIsospin=false; 
+	secondArgument=false;
       }
       if(tmpName=="To") {
         isDecParticle=true;
@@ -167,8 +174,9 @@ void AbsEnv::setup(ParserBase* theParser){
     else {
       Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ; 
     }
-
-     _absDecList->addDecay(tmpDec);
+  
+    if(!useIsospin) tmpDec->disableIsospin();
+    _absDecList->addDecay(tmpDec);
   }
 
 

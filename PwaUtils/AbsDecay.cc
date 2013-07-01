@@ -53,6 +53,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_motherJPCPtr(getJPCPtr(mother)) 
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
+  ,_isospinClebschG(1.)
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
@@ -60,6 +61,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
+  ,_useIsospin(true)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -89,6 +91,18 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
 
+ _idaughter1=Spin(_daughter1->twoIso(), 2);
+ _i3daughter1=Spin(_daughter1->twoIso3(), 2);
+ _idaughter2=Spin(_daughter2->twoIso(), 2);
+ _i3daughter2=Spin(_daughter2->twoIso3(), 2);
+ Spin Imother(_mother->twoIso(), 2);
+ Spin I3mother(_mother->twoIso3(), 2);
+
+ _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
+
+ if(_isospinClebschG<1.e-8){
+   Warning << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
+ }
 }
 
 AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
@@ -101,6 +115,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughte
   ,_motherJPCPtr(motherJPCPtr)
   ,_daughter1JPCPtr(getJPCPtr(daughter1))
   ,_daughter2JPCPtr(getJPCPtr(daughter2))
+  ,_isospinClebschG(1.)
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey(motherJPCPtr->name())
@@ -108,6 +123,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughte
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
+  ,_useIsospin(true)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
 
@@ -134,6 +150,15 @@ AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughte
 
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+motherName;
   _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+
+  _daughter1->print(std::cout);
+  _daughter2->print(std::cout);
+
+  _idaughter1=Spin(_daughter1->twoIso(), 2);
+
+  _i3daughter1=Spin(_daughter1->twoIso3(), 2);
+  _idaughter2=Spin(_daughter2->twoIso(), 2);
+  _i3daughter2=Spin(_daughter2->twoIso3(), 2);
 }
 
 AbsDecay::~AbsDecay(){

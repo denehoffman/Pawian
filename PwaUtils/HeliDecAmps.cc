@@ -113,7 +113,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
     result+=amp;
   }
   //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
-  result*=sqrt(2.*_JPCPtr->J+1.);
+  result*=_isospinCG*sqrt(2.*_JPCPtr->J+1.);
   return result;
 }
 
@@ -153,7 +153,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
-  result*=sqrt(2.*_JPCPtr->J+1.);
+  result*=_isospinCG*sqrt(2.*_JPCPtr->J+1.);
 
   if ( _cacheAmps){
      theMutex.lock();
