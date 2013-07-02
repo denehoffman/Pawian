@@ -77,6 +77,8 @@ public:
   const int noOfClients() const {return _noOfClients;}
   const int serverPort() const {return _serverPort;}
   const int ratioMcToData() const {return _ratioMcToData;}
+  const int evoPopulation() const {return _evoPopulation;}
+  const int evoIterations() const {return _evoIterations;}
   const bool cacheAmps() const {return _cacheAmps;}
   const bool calcContributionError() const {return _calcContributionError;}
   const bool useEvtWeight() const {return _useEvtWeight; }
@@ -121,6 +123,8 @@ protected:
   int _noOfClients;
   int _serverPort;
   int _ratioMcToData;
+  int _evoIterations;
+  int _evoPopulation;
   bool _cacheAmps;
   bool _calcContributionError;
   std::string _strErrLogMode;

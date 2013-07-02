@@ -42,7 +42,7 @@
 #include "TFile.h"
 
 
-const int spinDensityHist::MAX_EVENTS = 2000;
+const int spinDensityHist::MAX_EVENTS = 3500;
 
 
 spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :

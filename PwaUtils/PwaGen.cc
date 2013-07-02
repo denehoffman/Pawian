@@ -23,6 +23,7 @@
 
 #include <getopt.h>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <iomanip>
 #include <vector>
@@ -56,13 +57,18 @@ PwaGen::PwaGen(AbsEnv* theEnv) :
   _absEnv(theEnv)
   ,_initial4Vec(EvtVector4R(theEnv->initial4Vec().E(), theEnv->initial4Vec().Px(), theEnv->initial4Vec().Py(), theEnv->initial4Vec().Pz()))
   ,_finalStateParticles(theEnv->finalStateParticles())
-  ,_stream(new std::ofstream("evtGen.dat"))
   ,_genWithModel(true)
   ,_unitScaleFactor(1.)
   ,_energyFirst(false)
   ,_useEvtWeight(theEnv->parser()->useEvtWeight())
 {
-  _theTFile=new TFile("EvtGen.root","recreate");
+  std::ostringstream datFileName;
+  datFileName << "evtGen" << theEnv->outputFileNameSuffix() << ".dat";
+  _stream = new std::ofstream(datFileName.str());
+  std::ostringstream rootFileName;
+  rootFileName << "evtGen" << theEnv->outputFileNameSuffix() << ".root";
+
+  _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
   inv01MassH1=new TH1F("inv01MassH1","inv01MassH1",500, 0., 3.);
   inv02MassH1=new TH1F("inv02MassH1","inv02MassH1",500, 0., 3.);
   inv12MassH1=new TH1F("inv12MassH1","inv12MassH1",500, 0., 3.);

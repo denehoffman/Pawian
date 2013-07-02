@@ -67,6 +67,8 @@
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/WelcomeScreen.hh"
 
+#include "PwaUtils/EvoMinimizer.hh"
+
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
 #include "Minuit2/FunctionMinimum.h"
@@ -579,6 +581,35 @@ int main(int __argc,char *__argv[]){
 
     return 1;
  }
+
+  if (mode=="evo"){
+
+    bool cacheAmps = theAppParams->cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
+    std::vector<std::string>::const_iterator itFix;
+    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+      upar.Fix( (*itFix) );
+    }
+
+    EvoMinimizer theEvoMinimizer(theFcn, upar, pbarpEnv::instance()->parser()->evoPopulation(),
+				 pbarpEnv::instance()->parser()->evoIterations());
+    Info <<"start evolutionary minimizer "<< endmsg;
+    std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
+
+    fitParams finalFitParams=theStartparams;
+    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+
+    fitParams finalFitErrs=theErrorparams;
+
+    std::ostringstream finalResultname;
+    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+
+    std::ofstream theStream ( finalResultname.str().c_str() );
+    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+
+    return 1;
+  }
 
  return 1;
 }     
