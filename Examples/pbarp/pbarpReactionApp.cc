@@ -429,6 +429,44 @@ int main(int __argc,char *__argv[]){
  }
 
 
+ if(mode == "evoserver"){
+
+    std::vector<std::string>::const_iterator itFix;
+    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+       upar.Fix( (*itFix) );
+    }
+
+    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+								 theAppParams->noOfClients(),
+								 eventsData.size(),
+								 mcData.size()));
+
+    PwaFcnServer theFcnServer(theLhPtr, theFitParamBase, theServer, outputFileNameSuffix);
+    theServer->WaitForFirstClientLogin();
+
+    EvoMinimizer theEvoMinimizer(theFcnServer, upar, pbarpEnv::instance()->parser()->evoPopulation(),
+				 pbarpEnv::instance()->parser()->evoIterations());
+    Info <<"start evolutionary minimizer "<< endmsg;
+    std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
+
+    theServer->BroadcastClosingMessage();
+    Info << "Closing server." << endmsg;
+
+    fitParams finalFitParams=theStartparams;
+    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+
+    fitParams finalFitErrs=theErrorparams;
+
+    std::ostringstream finalResultname;
+    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+
+    std::ofstream theStream ( finalResultname.str().c_str() );
+    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+
+    return 1;
+ }
+
+
  std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
  pbarpEventListPtr->read(eventsData, mcData);
  

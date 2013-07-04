@@ -21,6 +21,8 @@
 //                                                                        //
 //************************************************************************//
 
+#pragma once
+
 #include <vector>
 #include "AbsFcn.hh"
 #include "Minuit2/MnUserParameters.h"
@@ -40,9 +42,10 @@ private:
    int _iterations;
    AbsFcn* _theAbsFcn;
    MnUserParameters _bestParamsGlobal;
-   MnUserParameters _bestParamsIteration;
    MnUserParameters _tmpParams;
 
    void ShuffleParams();
    void AdjustSigma(double factor);
+
+   static const char* evologo;
 };
