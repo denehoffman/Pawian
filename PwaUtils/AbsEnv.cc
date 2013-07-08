@@ -176,6 +176,7 @@ void AbsEnv::setup(ParserBase* theParser){
     }
   
     if(!useIsospin) tmpDec->disableIsospin();
+    tmpDec->extractStates();
     _absDecList->addDecay(tmpDec);
   }
 

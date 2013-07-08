@@ -48,6 +48,7 @@ struct ParticleData {
   int theCParity;
   Parity chargeParity;
   Parity gParity;
+  int theGParity;
   DynFunctionType dynamicFunction;
   ParticleData(){}
   ParticleData(ParticleData* other):
@@ -65,7 +66,8 @@ struct ParticleData {
     theParity(other->theParity),
     parity(other->parity),
     theCParity(other->theCParity),
-    gParity(other->gParity)
+    gParity(other->gParity),
+    theGParity(other->theGParity)
   { }
 };
 
@@ -94,6 +96,7 @@ public:
   int theCParity();
   Parity& chargeParity();
   Parity& gParity();
+  int theGParity();
   int twoIso();
   int twoIso3();
   int strange();

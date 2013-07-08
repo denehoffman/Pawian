@@ -41,7 +41,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec) :
   AbsParamHandler()
   , _decay(theDec)
   , _name(theDec->name())
-  ,_JPCPtr(theDec->motherJPC())
+  ,_JPCPtr(theDec->motherIGJPC())
   ,_absDyn(theDec->getDynamics())
   ,_isospinCG(theDec->isospinCG())
   ,_key("_"+theDec->fitParSuffix())

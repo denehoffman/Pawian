@@ -100,7 +100,8 @@ namespace particleGrammar
 	     int_[ref(pData.twoJ) = _1] >>
  	     int_[ref(pData.theParity) = _1] >> // P
  	     int_[ref(pData.theCParity) = _1] >> // C
- 	     int_    // G
+ 	     int_[ref(pData.theGParity) = _1]  // G 	    
+	     //	     int_    // G
            ),
            //  End grammar
 

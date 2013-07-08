@@ -201,6 +201,16 @@ Parity& Particle::gParity()
   }
 }
 
+int Particle::theGParity()
+{
+  if (0 != pdata)
+    return pdata->theGParity;
+  else {
+    Alert << "Error::Particle: accessing uninitialized data" << endmsg;
+    exit(1);
+  }
+}
+
 int Particle::twoIso()
 {
   if (0 != pdata)
@@ -262,7 +272,7 @@ void Particle::print(std::ostream& out)
   out << name() << "\tmass=" << massErr() << "\twidth=" << widthErr() << "\t3*q=" << charge()
       << "\t2*J=" << twoJ() << "\tP=" << theParity() << "\tp=" << parity().parity() 
       << "\tC=" << theCParity()  << "\tc=" << chargeParity().parity() 
-      << "\tG=" << gParity().parity() << "\t2*I=" << twoIso() << "\t2*I3=" << twoIso3() 
+      << "\tG=" << gParity().parity() << "\ttheGParity=" << theGParity() << "\t2*I=" << twoIso() << "\t2*I3=" << twoIso3() 
       << "\tcharm=" << charm() << "\tstrange=" << strange() << std::endl;
   
   return;
@@ -281,7 +291,8 @@ bool Particle::operator<(Particle& compare){
  else if( twoIso3() < compare.twoIso3()) result=true;
  else if( J() < compare.J()) result=true;
  else if( theParity() < compare.theParity()) result=true;
- else if( theCParity() < compare.theCParity()) result=true;
+ else if( theCParity() < compare.theCParity()) result=true; 
+ else if( theGParity() < compare.theGParity()) result=true;
  else if( charge() < compare.charge()) result=true;
  else if ( mass() < compare.mass()) result=true;
  else if ( width() < compare.width()) result=true;
@@ -298,6 +309,7 @@ bool Particle::operator==(Particle& compare){
  else if( fabs(J()-compare.J()) > 1.e-8) result=false;
  else if( theParity() != compare.theParity()) result=false;
  else if( theCParity() != compare.theCParity()) result=false;
+ else if( theGParity() != compare.theGParity()) result=false;
  else if( charge() != compare.charge()) result=false;
  else if ( fabs(mass()-compare.mass()) > 1.e-8) result=false;
  else if ( fabs(width()-compare.width()) > 1.e-8) result=false;
@@ -310,7 +322,7 @@ std::ostream &operator<<(std::ostream &o, Particle &p)
   o << p.name() << "\tmass=" << p.massErr() << "\twidth=" << p.widthErr() << "\t3*q=" << p.charge()
     << "\t2*J=" << p.twoJ() << "\tP=" << p.theParity() << "\tp=" << p.parity().parity() 
     << "\tC=" << p.theCParity()  << "\tc=" << p.chargeParity().parity() 
-    << "\tG=" << p.gParity().parity() << "\t2*I=" << p.twoIso() << "\t2*I3=" << p.twoIso3() 
+    << "\tG=" << p.gParity().parity() << "\ttheGParity=" << p.theGParity() << "\t2*I=" << p.twoIso() << "\t2*I3=" << p.twoIso3() 
     << "\tcharm=" << p.charm() << "\tstrange=" << p.strange() << std::endl;
 
   return o;

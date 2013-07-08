@@ -54,7 +54,7 @@ public:
   std::vector< std::shared_ptr<IsobarLSDecay> >& productionDecays() {return _prodDecs;}
   std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
   std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}  
-  std::vector< std::shared_ptr<const jpcRes> >& jpcStates() {return _pbarpJPCs;}
+  std::vector< std::shared_ptr<const IGJPC> >& igjpcStates() {return _pbarpIGJPCs;}
   std::vector< std::shared_ptr<const JPCLS> >& jpclsStates() {return _pbarpJPCLSs;}
   std::vector< std::shared_ptr<const JPCLS> >& jpclsSingletStates() {return _pbarpJPCLSsinglet;}
   std::vector< std::shared_ptr<const JPCLS> >& jpclsTriplet0States() {return _pbarpJPCLStriplet0;}
@@ -65,7 +65,7 @@ protected:
 
 private:
   int _lmax;
-  std::vector< std::shared_ptr<const jpcRes> > _pbarpJPCs;
+  std::vector< std::shared_ptr<const IGJPC> > _pbarpIGJPCs;
   std::vector< std::shared_ptr<const JPCLS> > _pbarpJPCLSs;
   std::vector< std::shared_ptr<const JPCLS> > _pbarpJPCLSsinglet;
   std::vector< std::shared_ptr<const JPCLS> > _pbarpJPCLStriplet0;

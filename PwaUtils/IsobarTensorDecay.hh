@@ -47,7 +47,7 @@ class IsobarTensorDecay : public IsobarLSDecay{
 
 public:
   IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  IsobarTensorDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
+  IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
   virtual ~IsobarTensorDecay();
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);

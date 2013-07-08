@@ -60,18 +60,32 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const j
   }
 }
 
-void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec){
-
+void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec, bool useCParity, int gParityMother, bool useIsospin){
   // first: check C-parity
-  if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()){
-    Warning << "C-Parity not valid for the reaction: JPC= " 
-            << motherRes->J << " " << motherRes->P << " " << motherRes->C
-            << " --> "
-            << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
-            << " and "
-            << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theCParity()
-            ;  // << endmsg;
-    if( fabs(motherRes->C)==1 && fabs(daughter1->theCParity())==1 && fabs(daughter2->theCParity())==1) return; 
+  if (useCParity){
+    if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()){
+      Warning << "C-Parity not valid for the reaction: JPC= " 
+	      << motherRes->J << " " << motherRes->P << " " << motherRes->C
+	      << " --> "
+	      << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
+	      << " and "
+	      << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theCParity()
+	;  // << endmsg;
+      if( fabs(motherRes->C)==1 && fabs(daughter1->theCParity())==1 && fabs(daughter2->theCParity())==1) return; 
+    }
+  }
+
+  if(useIsospin){
+    // second: check G-parity
+    if (gParityMother != daughter1->theGParity()*daughter2->theGParity() ){
+      Warning << "G-Parity not valid for:" 
+	      << gParityMother 
+	      << " --> "
+	      << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
+	      << endmsg;
+      
+      if( fabs(gParityMother)==1 && fabs(daughter1->theGParity())==1 && fabs(daughter2->theGParity())==1) return; 
+    }
   }
 
   bool identicalDaughters=false;
@@ -93,13 +107,14 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Pa
 }
 
 
-void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec){
-
+// void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec, bool useCParity, int gParityMother, bool useIsospin){
+void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec, bool useCParity, int gParityMother, bool useIsospin){
   std::vector< std::shared_ptr<const JPCLS> > currentJPCLSDecAmps;
   std::shared_ptr<const jpcRes> daughterRes1=getJPCPtr(daughter1);
   std::shared_ptr<const jpcRes> daughterRes2=getJPCPtr(daughter2);
 
-  validJPCLS(motherRes, daughterRes1, daughterRes2, currentJPCLSDecAmps);
+  //  validJPCLS(motherRes, daughterRes1, daughterRes2, currentJPCLSDecAmps, useCParity, gParityMother, useIsospin);
+  validJPCLS(motherRes, daughter1, daughter2, currentJPCLSDecAmps, useCParity, gParityMother, useIsospin);
   if(currentJPCLSDecAmps.size()==0){
     Warning << "decay JPC= " 
 	  << motherRes->J << " " << motherRes->P << " " << motherRes->C
@@ -170,6 +185,13 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
 std::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle){
 
   std::shared_ptr<jpcRes> result(new jpcRes((int) theParticle->J(), theParticle->theParity(), theParticle->theCParity()));
+
+  return result;  
+}
+
+std::shared_ptr<IGJPC> getIGJPCPtr(Particle* theParticle){
+  Spin isoSpin=Spin(theParticle->twoIso3(), 2);
+  std::shared_ptr<IGJPC> result(new IGJPC((int) theParticle->J(), theParticle->theParity(), theParticle->theCParity(), isoSpin, theParticle->theGParity()));
 
   return result;  
 }

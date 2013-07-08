@@ -53,6 +53,7 @@ public:
   virtual void print(std::ostream& os) const;
   Particle* daughter3Part() {return _daughter3;}
   virtual std::string type() {return "OmegaTo3PiDecay";} 
+  virtual void extractStates();
 
 protected:
   Particle* _daughter3;

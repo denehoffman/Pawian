@@ -41,13 +41,19 @@
 IsobarHeliDecay::IsobarHeliDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
   AbsDecay(mother, daughter1, daughter2, theEnv)
 {
-  validJPClamlam( _motherJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
 }
 
-IsobarHeliDecay::IsobarHeliDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
-  AbsDecay(motherJPCPtr, daughter1, daughter2, theEnv, motherName)
+IsobarHeliDecay::IsobarHeliDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+  AbsDecay(motherIGJPCPtr, daughter1, daughter2, theEnv, motherName)
 {
-  validJPClamlam( _motherJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
+}
+
+void IsobarHeliDecay::extractStates(){
+  if (_useIsospin){
+    Spin currentGParity=_motherIGJPCPtr->G;
+    if(currentGParity==-1 || currentGParity==1) validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps, true, _gParity, true);
+  }
+  else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps); 
 }
 
 IsobarHeliDecay::~IsobarHeliDecay(){

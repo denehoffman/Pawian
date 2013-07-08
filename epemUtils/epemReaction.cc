@@ -36,16 +36,18 @@
 #include "Particle/Particle.hh"
 
 epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs) :
-  _epemJPC(new jpcRes(1,-1,-1))
+  _epemIGJPC(new IGJPC(1,-1,-1, 0, -1))
 {
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
       //      std::string decName=(*itJPC)->name();
-      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _epemJPC, itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
+      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _epemIGJPC, itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
+      currentDec->extractStates();
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
-	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemJPC,itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
+	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, epemEnv::instance(), "epem"));
+	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
       }
     }

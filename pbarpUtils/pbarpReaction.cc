@@ -42,8 +42,8 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
   _lmax(lmax)
 {
   std::shared_ptr<pbarpStatesLS> thepbarpStates(new pbarpStatesLS(lmax));
-  std::vector< std::shared_ptr<const jpcRes> > pbarpJPCStatesAll= thepbarpStates->jpcStates(); 
-  std::vector< std::shared_ptr<const jpcRes> >::const_iterator itJPC;
+  std::vector< std::shared_ptr<const IGJPC> > pbarpIGJPCStatesAll= thepbarpStates->igjpcStates(); 
+  std::vector< std::shared_ptr<const IGJPC> >::const_iterator itIGJPC;
   std::vector< std::shared_ptr<const JPCLS> > all_JPCLSs= thepbarpStates->all_JPCLS_States();
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
 
@@ -56,57 +56,58 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
   }
 
-  for(itJPC = pbarpJPCStatesAll.begin(); itJPC!=pbarpJPCStatesAll.end(); ++itJPC){
+  for(itIGJPC = pbarpIGJPCStatesAll.begin(); itIGJPC!=pbarpIGJPCStatesAll.end(); ++itIGJPC){
     bool acceptJPC=false;
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
-      std::string decName=(*itJPC)->name();
-      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+      std::string decName=(*itIGJPC)->name();
+      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+      currentDec->extractStates();
 
-      if(!currentDec->JPCLSAmps().size()>0)
-	 continue;
+      if(!currentDec->JPCLSAmps().size()>0) continue;
 
       bool acceptProd=false;
-      for(auto lIt = _jpcToJPCLSMap[*itJPC].begin(); lIt != _jpcToJPCLSMap[*itJPC].end(); ++lIt){
-	 if(CheckJPCLSForParticle((std::string&)(*itPartPairs).first->name(), *lIt) &&
-	    CheckJPCLSForParticle((std::string&)(*itPartPairs).second->name(), *lIt)){
-	    if(std::find(_pbarpJPCLSs.begin(), _pbarpJPCLSs.end(), *lIt) == _pbarpJPCLSs.end())
-	       _pbarpJPCLSs.push_back(*lIt);
-	    acceptProd = true;
-	 }
+      for(auto lIt = _jpcToJPCLSMap[*itIGJPC].begin(); lIt != _jpcToJPCLSMap[*itIGJPC].end(); ++lIt){
+	if(CheckJPCLSForParticle((std::string&)(*itPartPairs).first->name(), *lIt) &&
+	   CheckJPCLSForParticle((std::string&)(*itPartPairs).second->name(), *lIt)){
+	  if(std::find(_pbarpJPCLSs.begin(), _pbarpJPCLSs.end(), *lIt) == _pbarpJPCLSs.end())
+	    _pbarpJPCLSs.push_back(*lIt);
+	  acceptProd = true;
+	}
       }
 
-      if(!acceptProd)
-	 continue;
+      if(!acceptProd)	 continue;
 
       acceptJPC=true;
-
+      
       if(pbarpEnv::instance()->parser()->productionFormalism() == "Cano"){
 	_prodDecs.push_back(currentDec);
       }
       
       else if(pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
-	 std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
-	 _prodTensorDecs.push_back(currentTensorDec);
+	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+	currentTensorDec->extractStates();
+	_prodTensorDecs.push_back(currentTensorDec);
       }
       else if(pbarpEnv::instance()->parser()->productionFormalism() == "Heli"){
-	 std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
-	 _prodHeliDecs.push_back(currentHeliDec);
+	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+	currentHeliDec->extractStates();
+	_prodHeliDecs.push_back(currentHeliDec);
       }
     }
     if(acceptJPC)
-       _pbarpJPCs.push_back(*itJPC);
+      _pbarpIGJPCs.push_back(*itIGJPC);
   }
-
+  
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
   _pbarpJPCLSsinglet =  extractStates(_pbarpJPCLSs, all_pbarpSingletLS);
-
+  
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpTriplet0LS = thepbarpStates->triplet0_JPCLS_States();
   _pbarpJPCLStriplet0 =  extractStates(_pbarpJPCLSs, all_pbarpTriplet0LS);
-
+  
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpTripletp1LS = thepbarpStates->tripletp1_JPCLS_States();
   _pbarpJPCLStripletp1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletp1LS);
-
+  
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
   _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletm1LS);
 }
@@ -140,9 +141,9 @@ void pbarpReaction::print(std::ostream& os) const{
   os << "\n pbarp reaction\n";
  
   os << "\n **** JPC states for pbarp system ****** \n";
-  std::vector<std::shared_ptr<const jpcRes> >::const_iterator itJPC;
-  for(itJPC=_pbarpJPCs.begin(); itJPC!=_pbarpJPCs.end(); ++itJPC){
-    (*itJPC)->print(os);
+  std::vector<std::shared_ptr<const IGJPC> >::const_iterator itIGJPC;
+  for(itIGJPC=_pbarpIGJPCs.begin(); itIGJPC!=_pbarpIGJPCs.end(); ++itIGJPC){
+    (*itIGJPC)->print(os);
   }
 
   os << "\n ***** decay chains *******\n";

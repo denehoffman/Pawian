@@ -50,9 +50,9 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(true)
-  ,_motherJPCPtr(getJPCPtr(mother)) 
-  ,_daughter1JPCPtr(getJPCPtr(daughter1))
-  ,_daughter2JPCPtr(getJPCPtr(daughter2))
+  ,_motherIGJPCPtr(getIGJPCPtr(mother)) 
+  ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
+  ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
   ,_isospinClebschG(1.)
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
@@ -61,6 +61,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
+  ,_gParity(mother->theGParity())
   ,_useIsospin(true)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
@@ -105,24 +106,25 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
  }
 }
 
-AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
   _mother(0)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(false)
-  ,_motherJPCPtr(motherJPCPtr)
-  ,_daughter1JPCPtr(getJPCPtr(daughter1))
-  ,_daughter2JPCPtr(getJPCPtr(daughter2))
+  ,_motherIGJPCPtr(motherIGJPCPtr)
+  ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
+  ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
   ,_isospinClebschG(1.)
   ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
-  ,_massParamKey(motherJPCPtr->name())
+  ,_massParamKey(motherIGJPCPtr->name())
   ,_dynType("WoDynamics")
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
+  ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
 {
   _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
@@ -159,6 +161,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughte
   _i3daughter1=Spin(_daughter1->twoIso3(), 2);
   _idaughter2=Spin(_daughter2->twoIso(), 2);
   _i3daughter2=Spin(_daughter2->twoIso3(), 2);
+
+  _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
 }
 
 AbsDecay::~AbsDecay(){
@@ -225,9 +229,9 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
     daughter2HelMother.Boost(mother4Vec);
   }
 
-  Spin spinMother=_motherJPCPtr->J;
-  Spin spinDaughter1=_daughter1JPCPtr->J;
-  Spin spinDaughter2=_daughter2JPCPtr->J;
+  Spin spinMother=_motherIGJPCPtr->J;
+  Spin spinDaughter1=_daughter1IGJPCPtr->J;
+  Spin spinDaughter2=_daughter2IGJPCPtr->J;
   Spin lam12Max=spinDaughter1+spinDaughter2;
   if(lam12Max>spinMother) lam12Max=spinMother;
 

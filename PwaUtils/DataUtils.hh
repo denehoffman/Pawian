@@ -95,6 +95,88 @@ struct jpcRes {
 };
 
 
+
+
+struct IGJPC : public jpcRes {
+  Spin I;
+  int G;
+  double parityFactor;    
+
+  IGJPC(const Spin j, const int p, const int c, const Spin& theI, 
+	    int theG, const double theParityFactor=0.): jpcRes(j, p, c) {
+    I=theI;
+    G=theG;
+    parityFactor=theParityFactor;
+   }
+
+  IGJPC(std::shared_ptr<const jpcRes> theJPC, const Spin& theI, 
+	    int theG, const double theParityFactor=0.): jpcRes(theJPC) {
+    I=theI;
+    G=theG; 
+    parityFactor=theParityFactor;
+  }
+
+
+
+  IGJPC(std::shared_ptr<const IGJPC> theIGJPC): 
+    jpcRes(theIGJPC->J, theIGJPC->P, theIGJPC->C) {
+    I=theIGJPC->I;
+    G=theIGJPC->G;
+    parityFactor=theIGJPC->parityFactor;
+  }
+
+  virtual bool operator==(const jpcRes& compare) const {
+    return jpcRes::operator==(compare);
+  }
+
+  virtual bool operator==(const IGJPC& compare) const {
+    bool result=false;
+    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C 
+	 && fabs(I-compare.I)<1e-8 && fabs(G-compare.G)<1e-8) 
+      result=true;
+    return result;
+  }
+
+  virtual bool operator<(const IGJPC& compare) const {
+    bool result=false;
+
+    if ( J < compare.J) result=true;
+    else if (J == compare.J){
+      if ( P < compare.P) result=true;
+      else if (P == compare.P){
+	if ( C < compare.C) result=true;
+	else if (C == compare.C){
+	  if ( I < compare.I) result=true;
+	  else if (I == compare.I){
+	    if ( G < compare.G) result=true;
+	  }
+	}
+      }
+    }
+  
+    return result; 
+}  
+
+  virtual std::string name() const {
+    //    std::string result=jpcRes::name();
+    std::stringstream tmpStrStreamI;
+    tmpStrStreamI << I;
+    std::stringstream tmpStrStreamG;
+    tmpStrStreamG << G;   
+
+    std::string result="I"+tmpStrStreamI.str()+"G"+tmpStrStreamG.str()+jpcRes::name();
+    return result;
+  }
+
+
+  virtual void print(std::ostream& os) const {
+    os <<"\tI,G=" << I << "," << G;
+    jpcRes::print(os);
+    os << "\tparityFactor=" << parityFactor;   
+  }
+};
+
+
 struct JPClamlam : public jpcRes {
   Spin lam1;
   Spin lam2;
@@ -655,11 +737,10 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const j
 
 class Particle;
 
-void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec);
+void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec,  bool useCParity=true, int gParityMother=0, bool useIsospin=false);
 
-void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec);
-
+void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec,  bool useCParity=true, int gParityMother=0, bool useIsospin=false);
 
 std::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);
-
+std::shared_ptr<IGJPC> getIGJPCPtr(Particle* theParticle);
 

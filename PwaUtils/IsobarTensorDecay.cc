@@ -40,19 +40,19 @@
 
 IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
   IsobarLSDecay(mother, daughter1, daughter2, theEnv)
-  ,_polMother(PolVector(_motherJPCPtr->J))
-  ,_polDaughter1(PolVector(_daughter1JPCPtr->J))
-  ,_polDaughter2(PolVector(_daughter2JPCPtr->J))
+  ,_polMother(PolVector(_motherIGJPCPtr->J))
+  ,_polDaughter1(PolVector(_daughter1IGJPCPtr->J))
+  ,_polDaughter2(PolVector(_daughter2IGJPCPtr->J))
   ,_lctTensor(LeviCivitaTensor())
   , _metricTensor(MetricTensor())
 {
 }
 
-IsobarTensorDecay::IsobarTensorDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
-  IsobarLSDecay(motherJPCPtr, daughter1, daughter2, theEnv, motherName)
-  ,_polMother(PolVector(_motherJPCPtr->J))
-  ,_polDaughter1(PolVector(_daughter1JPCPtr->J))
-  ,_polDaughter2(PolVector(_daughter2JPCPtr->J))
+IsobarTensorDecay::IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+  IsobarLSDecay(motherIGJPCPtr, daughter1, daughter2, theEnv, motherName)
+  ,_polMother(PolVector(_motherIGJPCPtr->J))
+  ,_polDaughter1(PolVector(_daughter1IGJPCPtr->J))
+  ,_polDaughter2(PolVector(_daughter2IGJPCPtr->J))
   ,_lctTensor(LeviCivitaTensor())
   ,_metricTensor(MetricTensor())
 {
@@ -118,9 +118,9 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   
   Vector4<double> mother_4Vec=daughter1_4Vec+daughter2_4Vec;
 
-  Spin spinMother=_motherJPCPtr->J;
-  Spin spinDaughter1=_daughter1JPCPtr->J;
-  Spin spinDaughter2=_daughter2JPCPtr->J;
+  Spin spinMother=_motherIGJPCPtr->J;
+  Spin spinDaughter1=_daughter1IGJPCPtr->J;
+  Spin spinDaughter2=_daughter2IGJPCPtr->J;
   
   _polMother.SetP4(mother_4Vec,mother_4Vec.M());
   //  _polMother.SetP4(mother_4Vec,mother_4Vec.M());
@@ -155,7 +155,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
     }
     DebugMsg << "leviPssTensor: " << leviPssTensor << endmsg;
 
-    int SLms1=(*itJPCLS)->S+(*itJPCLS)->L+_motherJPCPtr->J;
+    int SLms1=(*itJPCLS)->S+(*itJPCLS)->L+_motherIGJPCPtr->J;
 
     Tensor<complex<double> > leviPlsTensor;
     bool add_lctForTensor=true;

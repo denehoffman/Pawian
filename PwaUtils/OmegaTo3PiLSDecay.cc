@@ -41,8 +41,8 @@
 OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv) :
   OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, theEnv)
 {
-  _wignerDKey="normOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
-  _lambdaDecKey="lambdaOmega_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles); 
+  _wignerDKey="normOmega_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
+  _lambdaDecKey="lambdaOmega_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles); 
 }
 
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){

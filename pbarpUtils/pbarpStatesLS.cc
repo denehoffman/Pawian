@@ -70,6 +70,8 @@ bool pbarpStatesLS::calcStates(){
 
 	  DebugMsg << "L=" << L <<" S=" << S << " ==> C=" << cparity << endmsg;
 	  std::shared_ptr<const JPCLS> jpcLSPtr(new JPCLS(jpcPtr, L, S));
+	  std::shared_ptr<const IGJPC> i0gjpcPtr(new IGJPC(jpcPtr, 0, jpcPtr->C)); //G=C*(-1)^I
+	  std::shared_ptr<const IGJPC> i1gjpcPtr(new IGJPC(jpcPtr, 1, -jpcPtr->C)); //G=C*(-1)^I
 
 	  for(Spin lampbar = -0.5; lampbar <= 0.5; lampbar++){
 	    for(Spin lamp = -0.5; lamp <= 0.5; lamp++){
@@ -81,6 +83,8 @@ bool pbarpStatesLS::calcStates(){
  	      if (fabs(jpcLSJJPtr->prefactorAll)>1.e-8){
 		_allStates.push_back(jpcLSJJPtr);
 		fillVec(jpcPtr, _alljpcRes);
+		fillVec(i0gjpcPtr,_allIGjpcRes);
+		fillVec(i1gjpcPtr,_allIGjpcRes);
 		fillVec(jpcLSPtr, _JPCLS_AllStates);
 
 		if ( fabs(lampbar-0.5) < 1e-8 &&  fabs(lamp-0.5) < 1e-8 ){
@@ -140,10 +144,17 @@ void pbarpStatesLS::print(std::ostream& os) const{
    std::vector< std::shared_ptr<const JPCLSJJ > >::const_iterator itJPCLSJJ;
    std::vector< std::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
    std::vector< std::shared_ptr<const jpcRes > >::const_iterator itjpcRes;
+   std::vector< std::shared_ptr<const IGJPC > >::const_iterator itIGJPC;
 
   os << "\n******** all JPC states ************ " << std::endl;
   for ( itjpcRes=_alljpcRes.begin(); itjpcRes!=_alljpcRes.end(); ++itjpcRes){
     (*itjpcRes)->print(os);
+    os << std::endl;
+  }
+
+  os << "\n******** all IG(JPC) states ************ " << std::endl;
+  for ( itIGJPC=_allIGjpcRes.begin(); itIGJPC!=_allIGjpcRes.end(); ++itIGJPC){
+    (*itIGJPC)->print(os);
     os << std::endl;
   }
 

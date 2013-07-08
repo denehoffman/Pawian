@@ -165,7 +165,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        // double cgIso1=Clebsch(theDec->iDaughter1(), theDec->i3Daughter1(), theDec->iDaughter2(), theDec->i3Daughter2(), 1, 0);
        double theIso0=_currentParamIsos[theJPCLS];
        double theIso1=sqrt(1.-theIso0*theIso0);
-       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       // tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       tmpAmp+=currentDecAmp;
      }
 
      double theMag=_currentParamMags[theJPCLS];
@@ -190,7 +191,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        // double cgIso1=Clebsch(theDec->iDaughter1(), theDec->i3Daughter1(), theDec->iDaughter2(), theDec->i3Daughter2(), 1, 0);
        double theIso0=_currentParamIsos[theJPCLS];
        double theIso1=sqrt(1.-theIso0*theIso0);
-       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       //       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       tmpAmp+=currentDecAmp;
      }
 
      double theMag=_currentParamMags[theJPCLS];
@@ -214,7 +216,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        // double cgIso1=Clebsch(theDec->iDaughter1(), theDec->i3Daughter1(), theDec->iDaughter2(), theDec->i3Daughter2(), 1, 0);
        double theIso0=_currentParamIsos[theJPCLS];
        double theIso1=sqrt(1.-theIso0*theIso0);
-       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       //       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       tmpAmp+=currentDecAmp;
      }
 
      double theMag=_currentParamMags[theJPCLS];
@@ -238,7 +241,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        // double cgIso1=Clebsch(theDec->iDaughter1(), theDec->i3Daughter1(), theDec->iDaughter2(), theDec->i3Daughter2(), 1, 0);
        double theIso0=_currentParamIsos[theJPCLS];
        double theIso1=sqrt(1.-theIso0*theIso0);
-       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       //       tmpAmp+=(theIso0*_iso0Map[currentName]+theIso1*_iso1Map[currentName])*currentDecAmp;
+       tmpAmp+=currentDecAmp;
      }
 
      double theMag=_currentParamMags[theJPCLS];
@@ -262,15 +266,15 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   AbsLh::getDefaultParams(fitVal, fitErr);
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentIsoValMap;
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentIsoErrMap;
-  std::vector< std::shared_ptr<const jpcRes> >::iterator itJPC;
-  for ( itJPC = _jpcStates.begin(); itJPC!=_jpcStates.end(); ++itJPC){
-    currentIsoValMap[*itJPC]=0.5;
-    currentIsoErrMap[*itJPC]=0.3;
-  }
-  fitVal.Isos["pbarp"]=currentIsoValMap;
-  fitErr.Isos["pbarp"]=currentIsoErrMap;
+  // std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentIsoValMap;
+  // std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentIsoErrMap;
+  // std::vector< std::shared_ptr<const IGJPC> >::iterator itIGJPC;
+  // for ( itIGJPC = _igjpcStates.begin(); itIGJPC!=_igjpcStates.end(); ++itIGJPC){
+  //   currentIsoValMap[*itIGJPC]=0.5;
+  //   currentIsoErrMap[*itIGJPC]=0.3;
+  // }
+  // fitVal.Isos["pbarp"]=currentIsoValMap;
+  // fitErr.Isos["pbarp"]=currentIsoErrMap;
 
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -317,7 +321,7 @@ void  pbarpBaseLh::initialize(){
   
   _pbarpReactionPtr = pbarpEnv::instance()->reaction();
   _jpclsStates=_pbarpReactionPtr->jpclsStates();
-  _jpcStates=_pbarpReactionPtr->jpcStates();
+  _igjpcStates=_pbarpReactionPtr->igjpcStates();
 
 }
 
@@ -325,12 +329,12 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
 
   AbsLh::updateFitParams(theParamVal);
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > isoMap=theParamVal.Isos["pbarp"];
-  std::vector< std::shared_ptr<const jpcRes> >::iterator itJPC;
-  for (itJPC=_jpcStates.begin(); itJPC!=_jpcStates.end(); ++itJPC){
-    double theVal=isoMap[*itJPC];
-    _currentParamIsos[*itJPC]=theVal;
-   }
+  // std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > isoMap=theParamVal.Isos["pbarp"];
+  // std::vector< std::shared_ptr<const IGJPC> >::iterator itIGJPC;
+  // for (itIGJPC=_igjpcStates.begin(); itIGJPC!=_igjpcStates.end(); ++itIGJPC){
+  //   double theVal=isoMap[*itIGJPC];
+  //   _currentParamIsos[*itIGJPC]=theVal;
+  //  }
 
    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags["pbarp"];
    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis["pbarp"];

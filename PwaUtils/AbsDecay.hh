@@ -47,7 +47,7 @@ class AbsDecay : public std::enable_shared_from_this<AbsDecay>{
 
 public:
   AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  AbsDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName);
+  AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName);
   virtual ~AbsDecay();
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
@@ -56,7 +56,7 @@ public:
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   virtual std::string& massParKey() {return _massParamKey;}
   void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
-  std::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
+  std::shared_ptr<const IGJPC> motherIGJPC(){ return _motherIGJPCPtr;}
   //  std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   std::shared_ptr<AbsDecay> decDaughter1() {return _absDecDaughter1;}
   std::shared_ptr<AbsDecay> decDaughter2() {return _absDecDaughter2;}
@@ -81,6 +81,8 @@ public:
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual std::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}
   virtual std::string type() =0;
+  virtual void extractStates()=0;
+
   double isospinCG() {return _isospinClebschG;}
   AbsEnv* currentEnv() {return _env;}
 
@@ -88,7 +90,7 @@ public:
   Spin i3Daughter1() {return _i3daughter1;}
   Spin iDaughter2() {return _idaughter2;}
   Spin i3Daughter2() {return _i3daughter2;}
-  void disableIsospin(){_useIsospin=false;}
+  virtual void disableIsospin(){_useIsospin=false;}
   bool useIsospin(){ return _useIsospin;}
  
 protected:
@@ -100,9 +102,9 @@ protected:
   bool _daughter2IsStable;
   bool _hasMotherPart;
 
-  std::shared_ptr<const jpcRes> _motherJPCPtr;
-  std::shared_ptr<const jpcRes> _daughter1JPCPtr;
-  std::shared_ptr<const jpcRes> _daughter2JPCPtr;
+  std::shared_ptr<const IGJPC> _motherIGJPCPtr;
+  std::shared_ptr<const IGJPC> _daughter1IGJPCPtr;
+  std::shared_ptr<const IGJPC> _daughter2IGJPCPtr;
 
   double _isospinClebschG;
 
@@ -132,6 +134,8 @@ protected:
   Spin _i3daughter1;
   Spin _idaughter2;
   Spin _i3daughter2;
+
+  int _gParity;
 
   bool _useIsospin;
 };

@@ -48,6 +48,11 @@ public:
   virtual std::vector< std::shared_ptr<const jpcRes> > jpcStates() const {
     return _alljpcRes;
   }
+
+  virtual std::vector< std::shared_ptr<const IGJPC> > igjpcStates(){
+    return _allIGjpcRes; 
+  }
+
   virtual std::vector< std::shared_ptr<const JPCLS> > all_JPCLS_States() const {
     return _JPCLS_AllStates;
   }
@@ -103,6 +108,8 @@ public:
   virtual bool calcStates();
 
   std::vector< std::shared_ptr<const jpcRes> > _alljpcRes;
+  std::vector< std::shared_ptr<const IGJPC> > _allIGjpcRes;
+
   std::vector< std::shared_ptr<const JPCLSJJ> > _allStates;
   std::vector< std::shared_ptr<const JPCLSJJ> > _lamUpUp_JPCLSJJ_States;
   std::vector< std::shared_ptr<const JPCLSJJ> > _lamUpDown_JPCLSJJ_States;

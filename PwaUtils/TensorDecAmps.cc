@@ -42,16 +42,12 @@ TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec) :
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
 {
-  Particle* daughter1=_decay->daughter1Part();
-  Particle* daughter2=_decay->daughter2Part();
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
 
 TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec) :
   AbsXdecAmp(theDec)
 {
-  Particle* daughter1=_decay->daughter1Part();
-  Particle* daughter2=_decay->daughter2Part();
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
 

@@ -55,7 +55,7 @@ public:
 protected:
 
 private:
-  std::shared_ptr<const jpcRes> _epemJPC;
+  std::shared_ptr<const IGJPC> _epemIGJPC;
 
   std::vector< std::shared_ptr<IsobarLSDecay> > _prodCanoDecs;
   std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;

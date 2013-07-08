@@ -41,13 +41,19 @@
 IsobarLSDecay::IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
   AbsDecay(mother, daughter1, daughter2, theEnv)
 {
-  validJPCLS( _motherJPCPtr, daughter1, daughter2, _JPCLSDecAmps);
 }
 
-IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const jpcRes> motherJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
-  AbsDecay(motherJPCPtr, daughter1, daughter2, theEnv, motherName)
+IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
+  AbsDecay(motherIGJPCPtr, daughter1, daughter2, theEnv, motherName)
 {
-  validJPCLS( _motherJPCPtr, daughter1, daughter2, _JPCLSDecAmps);
+}
+
+void IsobarLSDecay::extractStates(){
+  if (_useIsospin){
+    Spin currentGParity=_motherIGJPCPtr->G;
+    if(currentGParity==-1 || currentGParity==1) validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps, true, _gParity, true);
+  }
+  else validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps); 
 }
 
 IsobarLSDecay::~IsobarLSDecay(){

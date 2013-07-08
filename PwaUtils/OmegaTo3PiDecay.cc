@@ -51,13 +51,22 @@ OmegaTo3PiDecay::OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle
   _name+="_"+daughter3->name();
   _fitParamSuffix=_name;
   
-  //check correct quantum numbers
+  // //check correct quantum numbers
+  // //...
+  // Spin validL=1;
+  // Spin validS=0;
+  // std::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherJPCPtr, validL, validS));
+  // _JPCLSDecAmps.push_back(theValidJPCLS);
+
+}
+
+void OmegaTo3PiDecay::extractStates(){
+//check correct quantum numbers
   //...
   Spin validL=1;
   Spin validS=0;
-  std::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherJPCPtr, validL, validS));
+  std::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherIGJPCPtr, validL, validS));
   _JPCLSDecAmps.push_back(theValidJPCLS);
-
 }
 
 OmegaTo3PiDecay::~OmegaTo3PiDecay(){

@@ -72,7 +72,7 @@ public:
 protected:
   std::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< std::shared_ptr<const JPCLS> > _jpclsStates;
-  std::vector< std::shared_ptr<const jpcRes> > _jpcStates;
+  std::vector< std::shared_ptr<const IGJPC> > _igjpcStates;
   
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsSinglet;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTriplet0;

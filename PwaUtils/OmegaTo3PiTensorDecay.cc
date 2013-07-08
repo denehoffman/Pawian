@@ -89,7 +89,7 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
     ampTensor = eps|(daughter1_4Vec%daughter2_4Vec%daughter3_4Vec%omega(mz));
     // ampTensor = eps|(daughter1Hel%daughter2Hel%daughter3Hel%omega(mz));
     //    DebugMsg << "mz: " << mz << "\t" << ampTensor << endmsg;    
-    evtData->ComplexDoubleString["omegTensor"][_motherJPCPtr->J][mz]=(complex<double>) ampTensor(0);
+    evtData->ComplexDoubleString["omegTensor"][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
   }
    _alreadyFilledMap[evtNo]=true;
 }
