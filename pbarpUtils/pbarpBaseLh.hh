@@ -82,10 +82,15 @@ protected:
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > _currentParamIsos;  
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
-  
+
+  std::map< std::string, double> _isoMap;  
   std::map< std::string, double> _iso0Map;
   std::map< std::string, double> _iso1Map;
 
+  std::vector< std::shared_ptr<AbsXdecAmp> > _iso0DecAmps;
+  std::vector< std::shared_ptr<AbsXdecAmp> > _iso1DecAmps;
+  //  std::map< std::shared_ptr<AbsXdecAmp>, std::shared_ptr<AbsXdecAmp>, pawian::Collection::SharedPtrLess > _iso0Iso1DecAmpMap;
+  std::map<std::string, std::pair<std::string, std::string> > _iso0Iso1NameMap; 
   int _highestJFsp;
   bool _isHighestJaPhoton;
   

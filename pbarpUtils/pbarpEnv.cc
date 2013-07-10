@@ -119,6 +119,32 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     exit(0);
   }
 
+  //set prefactor for production and decay amplitudes
+  std::map<std::string, double>::iterator strDoubleIt;
+  for(strDoubleIt=_preFactorMap.begin(); strDoubleIt!=_preFactorMap.end(); ++strDoubleIt){
+    std::string currentAmplitudeName=strDoubleIt->first;
+    double currentPrefactor=strDoubleIt->second;
+    
+    std::shared_ptr<AbsDecay> currentDec=_prodDecList->decay(currentAmplitudeName);
+    if(0!=currentDec){
+      currentDec->setPreFactor(currentPrefactor);
+      Info << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg; 
+    }
+    else{
+      // look in decay amplitudes
+      currentDec=_absDecList->decay(currentAmplitudeName);
+      if(0!=currentDec){
+	currentDec->setPreFactor(currentPrefactor);
+	Info << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg; 
+      }
+      else{
+	Alert << "Amplitude with name\t" << currentAmplitudeName << "\tnot found!!!" << endmsg;
+	exit(0);
+      }
+    }
+  } 
+
+
   //set suffixes
   std::vector<std::string> suffixVec = thePbarpParser->replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;

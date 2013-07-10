@@ -44,10 +44,6 @@
 #pragma once
 #endif
 
-// GenEvA headers go here
-//#include <common/GCommonEnums.hpp>
-//#include <common/GSerializationHelperFunctionsT.hpp>
-//#include <geneva/GOptimizationEnums.hpp>
 
 namespace po = boost::program_options;
 //using namespace Gem::Geneva;
@@ -92,6 +88,7 @@ public:
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
   const std::string productionFormalism() const { return _productionFormalism; } 
   const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
+  const std::vector<std::string>& preFactor() const { return _preFactor;}
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
   const std::string& massRange() const { return _massRange;} 
@@ -142,6 +139,7 @@ protected:
   std::vector<std::string> _productionSystem;
   std::string _productionFormalism;
   std::vector<std::string> _cloneParticle;
+  std::vector<std::string> _preFactor;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
   std::string  _massRange;

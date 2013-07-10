@@ -178,6 +178,7 @@ void AbsEnv::setup(ParserBase* theParser){
     if(!useIsospin) tmpDec->disableIsospin();
     tmpDec->extractStates();
     _absDecList->addDecay(tmpDec);
+    Info << "added decay " << tmpDec->name() << " to decay list" << endmsg;
   }
 
 
@@ -211,6 +212,29 @@ void AbsEnv::setup(ParserBase* theParser){
 
   }
 
+  //set prefactor
+  std::vector<std::string> preFactorVec = theParser->preFactor();
+  for ( itStr = preFactorVec.begin(); itStr != preFactorVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string ampName;
+    stringStr >> ampName;
+    
+    std::string valueStr;
+    stringStr >> valueStr;
+    
+    double currentValue;
+    currentValue=atof(valueStr.c_str());
+    
+    _preFactorMap[ampName]=currentValue;
+  }
+  
+  // std::cout << "preFactors:\n" << std::endl;
+  // std::map<std::string, double>::iterator strDoubleIt;
+  // for(strDoubleIt=_preFactorMap.begin(); strDoubleIt!=_preFactorMap.end(); ++strDoubleIt){
+  //   std::cout << strDoubleIt->first << " = " << strDoubleIt->second << std::endl;
+  // } 
 
   //fill vector histMassSystems
   std::vector<std::string> theHistMassNames=theParser->histMassNames();

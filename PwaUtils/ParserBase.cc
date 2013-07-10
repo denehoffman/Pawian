@@ -117,6 +117,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
       ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
+      ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
       ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
       ("massRange",po::value< string >(&_massRange), "mass Range min max particle1 particle2 ...")
@@ -220,7 +221,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
 	  std::cout << "clone particles: " << (*it) << "\n";
       }
-
+      for (it = _preFactor.begin(); it!=_preFactor.end(); ++it){
+	  std::cout << "preFactors: " << (*it) << "\n";
+      }
       for (it=_enabledHyps.begin(); it!=_enabledHyps.end();++it){
           std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
       }

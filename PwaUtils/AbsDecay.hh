@@ -56,6 +56,8 @@ public:
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   virtual std::string& massParKey() {return _massParamKey;}
   void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
+  void setPreFactor(double thePreFactor) {_preFactor=thePreFactor;}
+  double preFactor() {return _preFactor;}
   std::shared_ptr<const IGJPC> motherIGJPC(){ return _motherIGJPCPtr;}
   //  std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   std::shared_ptr<AbsDecay> decDaughter1() {return _absDecDaughter1;}
@@ -114,6 +116,7 @@ protected:
   std::string _wignerDKey;
   std::string _dynType;
   //  std::string _dynKey;
+  double _preFactor;
 
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 

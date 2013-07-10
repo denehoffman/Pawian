@@ -89,5 +89,6 @@ protected:
   std::vector<unsigned int> _particleIndicesMassRange;
   std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
   Vector4<double> _initial4Vec;
+  std::map<std::string, double> _preFactorMap;
   ParserBase* _theParser;
 };

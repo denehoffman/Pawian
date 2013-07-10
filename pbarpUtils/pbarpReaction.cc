@@ -64,7 +64,10 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
       std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
       currentDec->extractStates();
 
-      if(!currentDec->JPCLSAmps().size()>0) continue;
+      if(!currentDec->JPCLSAmps().size()>0 || fabs(currentDec->isospinCG())<1.e-10){
+	Info << "Skip amplitude " << currentDec->name() << "\tJPCLSAmps().size(): " << currentDec->JPCLSAmps().size() <<"\tisospinCG(): " << currentDec->isospinCG() << endmsg; 
+	continue;
+      }
 
       bool acceptProd=false;
       for(auto lIt = _jpcToJPCLSMap[*itIGJPC].begin(); lIt != _jpcToJPCLSMap[*itIGJPC].end(); ++lIt){

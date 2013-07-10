@@ -164,7 +164,7 @@ complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spi
       }
     }
   }
-  result*=_isospinCG;
+  result*=_preFactor*_isospinCG;
   return result;
 } 
 

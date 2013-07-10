@@ -67,8 +67,7 @@ struct jpcRes {
     }
     return result; 
   }
-
-  virtual std::string name() const {
+  virtual std::string jpcname() const {
     std::stringstream tmpStrStreamJ;
     tmpStrStreamJ << J;
     std::stringstream tmpStrStreamP;
@@ -78,6 +77,19 @@ struct jpcRes {
     tmpStrStreamC << C;   
     std::string result="J"+tmpStrStreamJ.str()+"P"+tmpStrStreamP.str()+"C"+tmpStrStreamC.str();
     return result;
+  }
+
+  virtual std::string name() const {
+    return jpcname();
+    // std::stringstream tmpStrStreamJ;
+    // tmpStrStreamJ << J;
+    // std::stringstream tmpStrStreamP;
+    // tmpStrStreamP << P;   
+
+    // std::stringstream tmpStrStreamC;
+    // tmpStrStreamC << C;   
+    // std::string result="J"+tmpStrStreamJ.str()+"P"+tmpStrStreamP.str()+"C"+tmpStrStreamC.str();
+    // return result;
   }
 
   virtual void print(std::ostream& os) const {

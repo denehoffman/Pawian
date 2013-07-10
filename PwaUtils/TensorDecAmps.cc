@@ -157,7 +157,7 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
     }
   }
 
-  result*=_isospinCG;
+  result*=_preFactor*_isospinCG;
   return result;
 } 
 

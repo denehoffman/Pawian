@@ -50,7 +50,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(true)
-  ,_motherIGJPCPtr(getIGJPCPtr(mother)) 
+  ,_motherIGJPCPtr(getIGJPCPtr(mother))
   ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
   ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
   ,_isospinClebschG(1.)
@@ -58,6 +58,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
   ,_dynType("WoDynamics")
+  ,_preFactor(1.)
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)
@@ -101,8 +102,11 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
 
  _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
 
- if(_isospinClebschG<1.e-8){
+ if(fabs(_isospinClebschG)<1.e-8){
    Warning << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
+   Warning << "Imother: " << Imother << "\tI3mother: " << I3mother << endmsg;
+   Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
+   Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
  }
 }
 
@@ -117,10 +121,12 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
   ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
   ,_isospinClebschG(1.)
-  ,_name(motherName+"To"+daughter1->name()+"_"+daughter2->name())
-  ,_fitParamSuffix(_name)
-  ,_massParamKey(motherIGJPCPtr->name())
+  ,_name(_motherIGJPCPtr->name()+"To"+daughter1->name()+"_"+daughter2->name())
+  ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name()+"_"+daughter2->name())
+  // ,_massParamKey(motherIGJPCPtr->name())
+  ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_dynType("WoDynamics")
+  ,_preFactor(1.)
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_env(theEnv)

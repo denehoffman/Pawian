@@ -62,6 +62,9 @@ DynRegistry::~DynRegistry()
 std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> theDec){
 
   std::string theName=theDec->name();
+  if(0==theDec->motherPart()) theName=theDec->motherIGJPC()->jpcname(); 
+  //  std::string theName=theDec->motherIGJPC()->jpcname();
+
   std::string dynType=theDec->dynType();
 
   std::shared_ptr<AbsDynamics> result;

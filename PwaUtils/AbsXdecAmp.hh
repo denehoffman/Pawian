@@ -61,6 +61,8 @@ public:
   const std::string name() const {return _name;}
   virtual std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::shared_ptr<AbsDecay> absDec() {return _decay;}
+  const std::string jpcDecsName() const {return _jpcDecsName;}
+  const std::string isoKey() const {return _isoKey;}
 
   virtual void cacheAmplitudes();
 
@@ -69,6 +71,8 @@ protected:
   std::shared_ptr<AbsDecay> _decay; 
   const std::string _name;
   std::shared_ptr<const jpcRes> _JPCPtr;
+  const std::string _jpcDecsName;
+  const std::string _isoKey;
   std::shared_ptr<AbsDynamics> _absDyn;
   const std::vector<std::string> _hypVec;
   std::shared_ptr<AbsXdecAmp> _decAmpDaughter1;
@@ -76,6 +80,7 @@ protected:
   Spin _Jdaughter1;
   Spin _Jdaughter2;
   double _isospinCG;
+  const double _preFactor;
   std::string _key;
   const std::string _wignerDKey;
   std::mutex theMutex;
