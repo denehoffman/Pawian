@@ -264,6 +264,12 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
 	maxVal = fabs(theStartVal)+30.*theErrVal;;
 	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
+    // for parameter where pos and neg values are allowed
+    else if(theName.size()>13 && (theName.compare(theName.size()-12, theName.size(), "Range01Other")==0)){
+	minVal = 0.;
+	maxVal = 1.;
+	upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+    }
     else{
        upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }

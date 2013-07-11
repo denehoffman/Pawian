@@ -270,8 +270,8 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   for(itStringMapPair=_iso0Iso1NameMap.begin(); itStringMapPair!=_iso0Iso1NameMap.end(); ++itStringMapPair){
     _isoMap[itStringMapPair->second.first]=sqrt(0.5);
     _isoMap[itStringMapPair->second.second]=sqrt(1.-0.5*0.5);
-    fitVal.otherParams["Iso"+itStringMapPair->first]=sqrt(0.5);
-    fitErr.otherParams["Iso"+itStringMapPair->first]=0.2;
+    fitVal.otherParams["Iso"+itStringMapPair->first+"Range01"]=sqrt(0.5);
+    fitErr.otherParams["Iso"+itStringMapPair->first+"Range01"]=0.2;
   }
 
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
@@ -329,7 +329,7 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
 
   std::map<std::string, std::pair<std::string, std::string> >::iterator itStringMapPair;
   for(itStringMapPair=_iso0Iso1NameMap.begin(); itStringMapPair!=_iso0Iso1NameMap.end(); ++itStringMapPair){
-    double theVal=theParamVal.otherParams["Iso"+itStringMapPair->first];
+    double theVal=theParamVal.otherParams["Iso"+itStringMapPair->first+"Range01"];
     if(theVal<0. || theVal>1.){
       Alert << "fit parameter must be between 0. and 1." << endmsg;
       exit(0);
