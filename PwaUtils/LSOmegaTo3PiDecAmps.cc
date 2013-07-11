@@ -97,7 +97,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
     
     result+=amp;
   }
-  result*=sqrt( theData->DoubleString["lamOmegaDec"] );
+  result*=sqrt( theData->DoubleString[_lambdaDecKey] );
 
   if ( _cacheAmps){
      theMutex.lock();

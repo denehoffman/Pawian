@@ -90,7 +90,7 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   double theQ=daughter1_HeliOmega.E()-daughter1_HeliOmega.M()+daughter2_HeliOmega.E()-daughter2_HeliOmega.M()+daughter3_HeliOmega.E()-daughter3_HeliOmega.M();
   double lambdaNorm=theQ*theQ*(theQ*theQ/108.+daughter1_HeliOmega.M()*theQ/9.+daughter1_HeliOmega.M()*daughter1_HeliOmega.M()/3.);
   double lambdaOmegaDec=normOmegaDecHeliOmega_4V.P()*normOmegaDecHeliOmega_4V.P()/lambdaNorm;
-  evtData->DoubleString["lamOmegaDec"]=lambdaOmegaDec;
+  evtData->DoubleString[_lambdaDecKey]=lambdaOmegaDec;
 
   for(Spin lamOmega=-1;  lamOmega<=1; ++lamOmega){
     evtData->WignerDsString[_wignerDKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);

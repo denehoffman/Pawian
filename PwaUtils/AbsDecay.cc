@@ -108,6 +108,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
    Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
    Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
  }
+ if( (*daughter1) == *(theEnv->particleTable()->particle("photon")) || (*daughter2) == *(theEnv->particleTable()->particle("photon"))) disableIsospin();
 }
 
 AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
@@ -169,6 +170,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   _i3daughter2=Spin(_daughter2->twoIso3(), 2);
 
   _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
+  if( (*daughter1) == *(theEnv->particleTable()->particle("photon")) || (*daughter2) == *(theEnv->particleTable()->particle("photon"))) disableIsospin();
 }
 
 AbsDecay::~AbsDecay(){
