@@ -152,7 +152,7 @@ int main(int __argc,char *__argv[]){
   Info << "EvtWeight: " << withEvtWeight << endmsg;  
 
   
-  int noFinalStateParticles=pbarpEnv::instance()->noFinalStateParticles();  
+  //  int noFinalStateParticles=pbarpEnv::instance()->noFinalStateParticles();  
 
 
 
@@ -183,37 +183,15 @@ int main(int __argc,char *__argv[]){
     return 0;
   
   
-  EventReaderDefault eventReaderDataClient(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReaderDataClient.setUnit(theAppParams->unitInFile());
-  eventReaderDataClient.setOrder(theAppParams->orderInFile());
+  EventList eventsDataClient;  
+  theAppBase.readEvents(eventsDataClient, dataFileNames, withEvtWeight, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);  
   
-  EventList* eventsDataClient=new EventList();
-  eventReaderDataClient.fill(*eventsDataClient, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
-  
-  eventsDataClient->rewind();  
-  Info  << "\nFile has " << eventsDataClient->size() << " events. Each event has "
-        <<  eventsDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  eventsDataClient->rewind();
-  
-  
-  
-  EventReaderDefault eventReaderMcClient(mcFileNames, noFinalStateParticles, 0, false);
-  eventReaderMcClient.setUnit(theAppParams->unitInFile());
-  eventReaderMcClient.setOrder(theAppParams->orderInFile());
-  
-  
-  EventList* mcDataClient=new EventList();
-  eventReaderMcClient.fill(*mcDataClient, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
-  Info  << "\nFile has " << mcDataClient->size() << " events. Each event has "
-        <<  mcDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  mcDataClient->rewind();
-  
+  EventList mcDataClient; 
+  theAppBase.readEvents(mcDataClient, mcFileNames, false, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);  
+ 
   std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-  pbarpEventListPtr->read(*eventsDataClient, *mcDataClient);
+  pbarpEventListPtr->read(eventsDataClient, mcDataClient);
 
-  delete eventsDataClient;
-  delete mcDataClient;
-  
   theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
   theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
   
@@ -243,34 +221,14 @@ int main(int __argc,char *__argv[]){
   Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
   if (cacheAmps) theLhPtr->cacheAmplitudes();
 
-  EventReaderDefault eventReaderDataClient(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReaderDataClient.setUnit(theAppParams->unitInFile());
-  eventReaderDataClient.setOrder(theAppParams->orderInFile());
-
-  EventList* eventsDataClient=new EventList();
-  eventReaderDataClient.fill(*eventsDataClient, 0, spinDensityHist::MAX_EVENTS);
-
-  eventsDataClient->rewind();
-  Info  << "\nFile has " << eventsDataClient->size() << " events. Each event has "
-        <<  eventsDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  eventsDataClient->rewind();
-
-  EventReaderDefault eventReaderMcClient(mcFileNames, noFinalStateParticles, 0, false);
-  eventReaderMcClient.setUnit(theAppParams->unitInFile());
-  eventReaderMcClient.setOrder(theAppParams->orderInFile());
-
-
-  EventList* mcDataClient=new EventList();
-  eventReaderMcClient.fill(*mcDataClient, 0, spinDensityHist::MAX_EVENTS);
-  Info  << "\nFile has " << mcDataClient->size() << " events. Each event has "
-        <<  mcDataClient->nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  mcDataClient->rewind();
+  EventList eventsData;  
+  theAppBase.readEvents(eventsData, dataFileNames, withEvtWeight, 0, spinDensityHist::MAX_EVENTS);  
+  
+  EventList mcData; 
+  theAppBase.readEvents(mcData, mcFileNames, false, 0, spinDensityHist::MAX_EVENTS);  
 
   std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-  pbarpEventListPtr->read(*eventsDataClient, *mcDataClient);
-
-  delete eventsDataClient;
-  delete mcDataClient;
+  pbarpEventListPtr->read(eventsData, mcData);
 
   theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
   theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
@@ -297,55 +255,14 @@ int main(int __argc,char *__argv[]){
  }
 
 
-
-  EventReaderDefault eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReaderData.setUnit(theAppParams->unitInFile());
-  eventReaderData.setOrder(theAppParams->orderInFile());
-
-  EventList eventsData;
-  eventReaderData.fill(eventsData);
-  
-  Info  << "\nFile has " << eventsData.size() << " events. Each event has "
-	<<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  eventsData.rewind();
-
-  Event* anEvent;
-  int evtCount = 0;
-  while ((anEvent = eventsData.nextEvent()) != 0 && evtCount < 10) {
-    Info        << "\n";
-    for(int i=0; i<noFinalStateParticles; ++i){
-      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
-    }
-    Info        << "\n" << endmsg;
-    ;  // << endmsg;
-    ++evtCount;
-  }
-  eventsData.rewind();
-
-  EventReaderDefault eventReaderMc(mcFileNames, noFinalStateParticles, 0, false);
-  eventReaderMc.setUnit(theAppParams->unitInFile());
-  eventReaderMc.setOrder(theAppParams->orderInFile());
+  EventList eventsData;  
+  theAppBase.readEvents(eventsData, dataFileNames, withEvtWeight);  
 
   int ratioMcToData=theAppParams->ratioMcToData();
-  int maxMcEvts=eventsData.size()*ratioMcToData;
+  int maxMcEvts=eventsData.size()*ratioMcToData;  
+  EventList mcData; 
+  theAppBase.readEvents(mcData, mcFileNames, false, 0, maxMcEvts-1);  
 
-  EventList mcData;
-  eventReaderMc.fill(mcData, 0, maxMcEvts-1);
-  Info  << "\nFile has " << mcData.size() << " events. Each event has "
-        <<  mcData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  mcData.rewind();
-
-  evtCount = 0;
-  while ((anEvent = mcData.nextEvent()) != 0 && evtCount < 10) {
-    Info        << "\n";
-    for(int i=0; i<noFinalStateParticles; ++i){
-      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
-    }
-    Info        << "\n" << endmsg;
-    ;  // << endmsg;
-    ++evtCount;
-  }
-  mcData.rewind();
 
  if(mode == "server"){
 
@@ -482,65 +399,12 @@ int main(int __argc,char *__argv[]){
 
  
  if (mode=="qaMode"){
-
-    double theLh=theLhPtr->calcLogLh(theStartparams);
-    Info <<"theLh = "<< theLh << endmsg;
-
-    pbarpHist theHist(theLhPtr, theStartparams);
-
-    double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
-    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
-    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    
-    std::shared_ptr<WaveContribution> theWaveContribution;
-    if(pbarpEnv::instance()->parser()->calcContributionError()){
-       std::string serializationFileName = pbarpEnv::instance()->serializationFileName();
-       std::ifstream serializationStream(serializationFileName.c_str());
-
-       if(!serializationStream.is_open()){
-	  Alert << "Could not open serialization file." << endmsg;
-	  return 0;
-       }
-
-       boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-       std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
-       boostInputArchive >> *thePwaCovMatrix;
-       theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(theLhPtr, theStartparams, thePwaCovMatrix));
-    }
-    else{
-       theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(theLhPtr, theStartparams));
-    }
-
-    std::pair<double, double> contValue = theWaveContribution->CalcContribution();
-
-    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
-    Info << "BIC:\t" << BICcriterion << endmsg;
-    Info << "AIC:\t" << AICcriterion << endmsg;
-    Info << "AICc:\t" << AICccriterion << endmsg;
-    Info << "Selected wave contribution:\t" << contValue.first
-	 << " +- " << contValue.second << endmsg;
-
-    std::ostringstream qaSummaryFileName;
-    qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
-
-    std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
-    theQaStream << "BIC\t" << BICcriterion << "\n";
-    theQaStream << "AICa\t" << AICcriterion << "\n";
-    theQaStream << "AICc\t" << AICccriterion << "\n";
-    theQaStream << "logLh\t" << theLh << "\n";
-    theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
-    theQaStream << "Selected wave contribution\t" << contValue.first
-		<< " +- " << contValue.second <<  "\n";
-    theQaStream.close();
-    
-    end= clock();
-    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+   double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
+   theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
+   pbarpHist theHist(theLhPtr, theStartparams);     
+     end= clock();
+   double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+   Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
     
     return 1;    
   }

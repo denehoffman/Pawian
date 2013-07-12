@@ -34,12 +34,15 @@
 #include <memory>
 
 #include <cassert>
+
+#include "Event/EventList.hh"
 // #include <memory>
 
 class AbsLh;
 class FitParamsBase;
 class AbsEnv;
 class fitParams;
+class AbsHist;
 
 class AppBase{
 
@@ -53,6 +56,8 @@ public:
 
   virtual void dumpDefaultParams();
   virtual void generate(fitParams& theParams);
+  virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
+  virtual void qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
 
 protected:
 

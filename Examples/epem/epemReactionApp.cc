@@ -139,62 +139,12 @@ int main(int __argc,char *__argv[]){
   bool withEvtWeight=theAppParams->useEvtWeight();
   Info << "EvtWeight: " << withEvtWeight << endmsg;  
 
-  
-  int noFinalStateParticles=epemEnv::instance()->noFinalStateParticles();  
-
-  EventReaderDefault eventReaderData(dataFileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReaderData.setUnit(theAppParams->unitInFile());
-  eventReaderData.setOrder(theAppParams->orderInFile());
-
   EventList eventsData;
-
-  if(epemEnv::instance()->useMassRange())  eventReaderData.setMassRange(eventsData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());  
+  theAppBase.readEvents(eventsData, dataFileNames, withEvtWeight);
   
-  eventReaderData.fill(eventsData);
-  
-  Info  << "\nFile has " << eventsData.size() << " events. Each event has "
-        <<  eventsData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  eventsData.rewind();
-
-  Event* anEvent;
-  int evtCount = 0;
-  while ((anEvent = eventsData.nextEvent()) != 0 && evtCount < 10) {
-    Info        << "\n";
-    for(int i=0; i<noFinalStateParticles; ++i){
-      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
-    }
-    Info        << "\n" << endmsg;
-    ;  // << endmsg;
-    ++evtCount;
-  }
-  eventsData.rewind();
-
-  EventReaderDefault eventReaderMc(mcFileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReaderMc.setUnit(theAppParams->unitInFile());
-  eventReaderMc.setOrder(theAppParams->orderInFile());
-
   EventList mcData;
-  if(epemEnv::instance()->useMassRange())  eventReaderMc.setMassRange(mcData, epemEnv::instance()->massRangeMin(), epemEnv::instance()->massRangeMax(), epemEnv::instance()->particleIndicesMassRange());
+  theAppBase.readEvents(mcData, mcFileNames, withEvtWeight);
 
-  int ratioMcToData=theAppParams->ratioMcToData();
-  int maxMcEvts=eventsData.size()*ratioMcToData;  
-  eventReaderMc.fill(mcData, 0, maxMcEvts-1);
-
- Info  << "\nFile has " << mcData.size() << " events. Each event has "
-        <<  mcData.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  mcData.rewind();
-
-  evtCount = 0;
-  while ((anEvent = mcData.nextEvent()) != 0 && evtCount < 10) {
-    Info        << "\n";
-    for(int i=0; i<noFinalStateParticles; ++i){
-      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
-    }
-    Info        << "\n" << endmsg;
-    ;  // << endmsg;
-    ++evtCount;
-  }
-  mcData.rewind();
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
   //  eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
@@ -216,65 +166,9 @@ int main(int __argc,char *__argv[]){
   const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();
 
   if (mode=="qaMode"){
-    Info << "\nThe parameter values are: " << "\n" << endmsg;
-    theFitParamBase->printParams(theStartparams);
-    
-    Info << "\nThe parameter errors are: " << "\n" << endmsg;
-    theFitParamBase->printParams(theErrorparams);
-    
-    double theLh=theLhPtr->calcLogLh(theStartparams);
-    Info <<"theLh = "<< theLh << endmsg;
-
-    epemHist theHist(theLhPtr, theStartparams);
-
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
-    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    
-    std::shared_ptr<WaveContribution> theWaveContribution;
-    if(epemEnv::instance()->parser()->calcContributionError()){
-       std::string serializationFileName = epemEnv::instance()->serializationFileName();
-       std::ifstream serializationStream(serializationFileName.c_str());
-
-       if(!serializationStream.is_open()){
-	  Alert << "Could not open serialization file." << endmsg;
-	  return 0;
-       }
-
-       boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-       std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
-       boostInputArchive >> *thePwaCovMatrix;
-       theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(theLhPtr, theStartparams, thePwaCovMatrix));
-    }
-    else{
-       theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(theLhPtr, theStartparams));
-    }
-
-    std::pair<double, double> contValue = theWaveContribution->CalcContribution();
-
-    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
-    Info << "BIC:\t" << BICcriterion << endmsg;
-    Info << "AIC:\t" << AICcriterion << endmsg;
-    Info << "AICc:\t" << AICccriterion << endmsg;
-    
-    std::ostringstream qaSummaryFileName;
-    qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
-
-    std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
-    theQaStream << "BIC\t" << BICcriterion << "\n";
-    theQaStream << "AICa\t" << AICcriterion << "\n";
-    theQaStream << "AICc\t" << AICccriterion << "\n";
-    theQaStream << "logLh\t" << theLh << "\n";
-    theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
-    theQaStream << "Selected wave contribution\t" << contValue.first
-		<< " +- " << contValue.second <<  "\n";
-    theQaStream.close();
-    
+    theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
+    epemHist theHist(theLhPtr, theStartparams);
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
