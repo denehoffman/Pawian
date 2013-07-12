@@ -48,4 +48,9 @@ private:
    void AdjustSigma(double factor);
 
    static const char* evologo;
+   static const double DECREASESIGMAFACTOR;
+   static const double INCREASESIGMAFACTOR;
+   static const double DECREASELOWTHRESH;
+   static const double INCREASEHIGHTHRESH;
+   static const double LHSPREADEXIT;   
 };

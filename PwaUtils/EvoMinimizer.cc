@@ -25,6 +25,14 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "EvoMinimizer.hh"
 
+const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
+const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
+const double EvoMinimizer::DECREASELOWTHRESH = 0.01;
+const double EvoMinimizer::INCREASEHIGHTHRESH = 0.05;
+const double EvoMinimizer::LHSPREADEXIT = 0.1;
+
+
+
 EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations) :
    _population(population)
  , _iterations(iterations)
@@ -33,6 +41,7 @@ EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int populat
    _bestParamsGlobal = upar;
    Info << evologo << endmsg;
 }
+
 
 
 std::vector<double> EvoMinimizer::Minimize(){
@@ -66,27 +75,28 @@ std::vector<double> EvoMinimizer::Minimize(){
 	 }	 
       }
 
-      if(maxitlhspread < 0.1)
+      if(maxitlhspread < LHSPREADEXIT)
 	 break;
 
       if(numbetterlh == 0)
 	 numnoimprovement++;
+      else
+	 numnoimprovement=0;
 
       if(numnoimprovement>5){
-	 numnoimprovement=0;
-	 AdjustSigma(0.5);
+	 AdjustSigma(DECREASESIGMAFACTOR*DECREASESIGMAFACTOR);
       }
       
       Info << "===============================================" << endmsg;
       Info << "Iteration " << i+1 << " / " << _iterations << " done. Best LH " << minlh << endmsg;
       Info << "Likelihood improvements " << numbetterlh << " / " << _population << endmsg;
 
-      if(((double)numbetterlh / (double)_population) <= 0.01){
-	 AdjustSigma(0.9);
+      if(((double)numbetterlh / (double)_population) <= DECREASELOWTHRESH){
+	 AdjustSigma(DECREASESIGMAFACTOR);
 	 Info << "Decreasing errors." << endmsg;
       }
-      else if(((double)numbetterlh / (double)_population) > 0.05){
-	 AdjustSigma(1.1);
+      else if(((double)numbetterlh / (double)_population) > INCREASEHIGHTHRESH){
+	 AdjustSigma(INCREASESIGMAFACTOR);
 	 Info << "Increasing errors." << endmsg;
       }
       Info << "===============================================" << endmsg;
@@ -135,8 +145,6 @@ void EvoMinimizer::AdjustSigma(double factor){
       _bestParamsGlobal.SetError(i, _bestParamsGlobal.Error(i) * factor);
    }
 }
-
-
 
 
 
