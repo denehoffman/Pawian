@@ -27,6 +27,7 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <complex>
 #include <map>
@@ -36,6 +37,11 @@
 #include <cassert>
 
 #include "Event/EventList.hh"
+#include "PwaUtils/AbsFcn.hh"
+#include "Minuit2/MnUserParameters.h"
+#include "Minuit2/MnMigrad.h"
+#include "Minuit2/FunctionMinimum.h"
+
 // #include <memory>
 
 class AbsLh;
@@ -43,6 +49,8 @@ class FitParamsBase;
 class AbsEnv;
 class fitParams;
 class AbsHist;
+
+using namespace ROOT::Minuit2;
 
 class AppBase{
 
@@ -52,13 +60,14 @@ public:
   /** Destructor */
   virtual ~AppBase();
 
-  //  static AppBase* instance();
-
   virtual void dumpDefaultParams();
   virtual void generate(fitParams& theParams);
   virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
   virtual void qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
-
+  virtual void fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams);
+  virtual FunctionMinimum migradDefault(AbsFcn& theFcn, MnUserParameters& upar);
+  virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix="");
+  
 protected:
 
   AbsEnv* _absEnv;
@@ -66,7 +75,6 @@ protected:
   std::shared_ptr<FitParamsBase> _fitParamBasePtr;
 
 private:
-
 };
 
 

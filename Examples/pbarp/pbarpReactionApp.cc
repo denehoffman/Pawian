@@ -151,10 +151,6 @@ int main(int __argc,char *__argv[]){
   bool withEvtWeight=theAppParams->useEvtWeight();
   Info << "EvtWeight: " << withEvtWeight << endmsg;  
 
-  
-  //  int noFinalStateParticles=pbarpEnv::instance()->noFinalStateParticles();  
-
-
 
   MnUserParameters upar;
   theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
@@ -265,13 +261,9 @@ int main(int __argc,char *__argv[]){
 
 
  if(mode == "server"){
+   theAppBase.fixParams(upar,fixedParams); 
 
-    std::vector<std::string>::const_iterator itFix;
-    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-       upar.Fix( (*itFix) );
-    }
-
-    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+   std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
  								 theAppParams->noOfClients(),
  								 eventsData.size(),
  								 mcData.size()));
@@ -279,108 +271,48 @@ int main(int __argc,char *__argv[]){
     PwaFcnServer theFcnServer(theLhPtr, theFitParamBase, theServer, outputFileNameSuffix);
     theServer->WaitForFirstClientLogin();
 
-    MnMigrad migrad(theFcnServer, upar);
-    Info <<"start migrad "<< endmsg;
-    FunctionMinimum min = migrad();
-
-    if(!min.IsValid()) {
-      //try with higher strategy
-      Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-      MnMigrad migrad2(theFcnServer, min.UserState(), MnStrategy(2));
-      min = migrad2();
-    }
-
+    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar); 
+ 
     theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix);
 
-    std::cout << "\n\n********************** Final fit parameters *************************" << std::endl;
-    std::cout << "\n" << min.UserParameters() << std::endl;
-    std::cout << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
-    if(min.IsValid())             std::cout << "\n Function minimum is valid." << std::endl;
-    else                          std::cout << "\n WARNING: Function minimum is invalid!" << std::endl;
-    if(min.HasValidCovariance())  std::cout << "\n Covariance matrix is valid." << std::endl;
-    else                          std::cout << "\n WARNING: Covariance matrix is invalid!" << std::endl;
-    std::cout <<"\n Final LH: "<< std::setprecision(10) << min.Fval() << "\n" << std::endl;
-    std::cout <<" # of function calls: " << min.NFcn() << std::endl;
-    std::cout <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;
-    if(!min.HasValidParameters()) std::cout << " hasValidParameters() returned FALSE" << std::endl;
-    if(!min.HasAccurateCovar())   std::cout << " hasAccurateCovar() returned FALSE" << std::endl;
-    if(!min.HasPosDefCovar()){    std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
-                                  if(min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned TRUE" << std::endl;
-    }
-    if(!min.HasCovariance())      std::cout << " hasCovariance() returned FALSE" << std::endl;
-    if(min.HasReachedCallLimit()) std::cout << " hasReachedCallLimit() returned TRUE" << std::endl;
-    if(min.IsAboveMaxEdm())       std::cout << " isAboveMaxEdm() returned TRUE" << std::endl;
-    if(min.HesseFailed())         std::cout << " hesseFailed() returned TRUE" << std::endl;
-    std::cout << std::endl;
-
-
-
-    MnUserParameters finalUsrParameters=min.UserParameters();
-    const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    fitParams finalFitParams=theStartparams;
-    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
-
-    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    fitParams finalFitErrs=theErrorparams;
-    theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
-
-    std::ostringstream finalResultname;
-    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-
-    std::ofstream theStream ( finalResultname.str().c_str() );
-    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
-
-    MnUserCovariance theCovMatrix = min.UserCovariance();
-    std::ostringstream serializationFileName;
-    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
-    std::ofstream serializationStream(serializationFileName.str().c_str());
-    boost::archive::text_oarchive boostOutputArchive(serializationStream);
-
-    if(min.HasValidCovariance()){
-       PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
-       boostOutputArchive << thePwaCovMatrix;
-    }
     return 1;
  }
 
 
  if(mode == "evoserver"){
+   theAppBase.fixParams(upar,fixedParams); 
 
-    std::vector<std::string>::const_iterator itFix;
-    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-       upar.Fix( (*itFix) );
-    }
+   std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+							      theAppParams->noOfClients(),
+							      eventsData.size(),
+							      mcData.size()));
+   
+   PwaFcnServer theFcnServer(theLhPtr, theFitParamBase, theServer, outputFileNameSuffix);
+   theServer->WaitForFirstClientLogin();
 
-    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
-								 theAppParams->noOfClients(),
-								 eventsData.size(),
-								 mcData.size()));
+   EvoMinimizer theEvoMinimizer(theFcnServer, upar, pbarpEnv::instance()->parser()->evoPopulation(),
+				pbarpEnv::instance()->parser()->evoIterations());
+   Info <<"start evolutionary minimizer "<< endmsg;
+   std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
+   
+   theServer->BroadcastClosingMessage();
+   Info << "Closing server." << endmsg;
+   
+   fitParams finalFitParams=theStartparams;
+   theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+   
+   fitParams finalFitErrs=theErrorparams;
+   
+   std::ostringstream finalResultname;
+   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
 
-    PwaFcnServer theFcnServer(theLhPtr, theFitParamBase, theServer, outputFileNameSuffix);
-    theServer->WaitForFirstClientLogin();
-
-    EvoMinimizer theEvoMinimizer(theFcnServer, upar, pbarpEnv::instance()->parser()->evoPopulation(),
-				 pbarpEnv::instance()->parser()->evoIterations());
-    Info <<"start evolutionary minimizer "<< endmsg;
-    std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
-
-    theServer->BroadcastClosingMessage();
-    Info << "Closing server." << endmsg;
-
-    fitParams finalFitParams=theStartparams;
-    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
-
-    fitParams finalFitErrs=theErrorparams;
-
-    std::ostringstream finalResultname;
-    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-
-    std::ofstream theStream ( finalResultname.str().c_str() );
-    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
-
-    return 1;
+   std::ofstream theStream ( finalResultname.str().c_str() );
+   theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+   
+   return 1;
  }
 
 
@@ -415,71 +347,10 @@ int main(int __argc,char *__argv[]){
     bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
-    std::vector<std::string>::const_iterator itFix;
-    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-      upar.Fix( (*itFix) );
-    }
 
-    MnMigrad migrad(theFcn, upar);
-    Info <<"start migrad "<< endmsg;
-    FunctionMinimum min = migrad();
-    
-    if(!min.IsValid()) {
-      //try with higher strategy
-      Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-      MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
-      min = migrad2();
-    }
-    
-
-    std::cout << "\n\n********************** Final fit parameters *************************" << std::endl;
-    std::cout << "\n" << min.UserParameters() << std::endl;
-    std::cout << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
-    if(min.IsValid())             std::cout << "\n Function minimum is valid." << std::endl;
-    else                          std::cout << "\n WARNING: Function minimum is invalid!" << std::endl;
-    if(min.HasValidCovariance())  std::cout << "\n Covariance matrix is valid." << std::endl;
-    else                          std::cout << "\n WARNING: Covariance matrix is invalid!" << std::endl;
-    std::cout <<"\n Final LH: "<< std::setprecision(10) << min.Fval() << "\n" << std::endl;
-    std::cout <<" # of function calls: " << min.NFcn() << std::endl;
-    std::cout <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;    
-    if(!min.HasValidParameters()) std::cout << " hasValidParameters() returned FALSE" << std::endl;
-    if(!min.HasAccurateCovar())   std::cout << " hasAccurateCovar() returned FALSE" << std::endl;
-    if(!min.HasPosDefCovar()){    std::cout << " hasPosDefCovar() returned FALSE" << std::endl;
-                                  if(min.HasMadePosDefCovar()) std::cout << " hasMadePosDefCovar() returned TRUE" << std::endl;
-    }
-    if(!min.HasCovariance())      std::cout << " hasCovariance() returned FALSE" << std::endl;
-    if(min.HasReachedCallLimit()) std::cout << " hasReachedCallLimit() returned TRUE" << std::endl;
-    if(min.IsAboveMaxEdm())       std::cout << " isAboveMaxEdm() returned TRUE" << std::endl;
-    if(min.HesseFailed())         std::cout << " hesseFailed() returned TRUE" << std::endl;
-    std::cout << std::endl;
-
-
-    MnUserParameters finalUsrParameters=min.UserParameters();
-    const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    fitParams finalFitParams=theStartparams;
-    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
-
-    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    fitParams finalFitErrs=theErrorparams;
-    theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
-    
-    std::ostringstream finalResultname;
-    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-
-    std::ofstream theStream ( finalResultname.str().c_str() );
-    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
-    
-    MnUserCovariance theCovMatrix = min.UserCovariance();
-
-    std::ostringstream serializationFileName;
-    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
-    std::ofstream serializationStream(serializationFileName.str().c_str());
-    boost::archive::text_oarchive boostOutputArchive(serializationStream);
-
-    if(min.HasValidCovariance()){
-       PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
-       boostOutputArchive << thePwaCovMatrix;
-    }
+    theAppBase.fixParams(upar,fixedParams); 
+     FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix); 
 
     return 1;
  }
@@ -489,10 +360,8 @@ int main(int __argc,char *__argv[]){
     bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
-    std::vector<std::string>::const_iterator itFix;
-    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-      upar.Fix( (*itFix) );
-    }
+
+    theAppBase.fixParams(upar,fixedParams); 
 
     EvoMinimizer theEvoMinimizer(theFcn, upar, pbarpEnv::instance()->parser()->evoPopulation(),
 				 pbarpEnv::instance()->parser()->evoIterations());

@@ -181,56 +181,14 @@ int main(int __argc,char *__argv[]){
     bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
-    std::vector<std::string>::const_iterator itFix;
-    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-      upar.Fix( (*itFix) );
-    }
 
-    MnMigrad migrad(theFcn, upar);
-    Info <<"start migrad "<< endmsg;
-    FunctionMinimum min = migrad();
-    
-    if(!min.IsValid()) {
-      //try with higher strategy
-      Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-      MnMigrad migrad2(theFcn, min.UserState(), MnStrategy(2));
-      min = migrad2();
-    }
-    
-    MnUserParameters finalUsrParameters=min.UserParameters();
-    const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    fitParams finalFitParams=theStartparams;
-    theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+    theAppBase.fixParams(upar, fixedParams);
 
-    theFitParamBase->printParams(finalFitParams);
-    double theLh=theLhPtr->calcLogLh(finalFitParams);
-    Info <<"theLh = "<< theLh << endmsg;
+    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
     
-    
-    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    fitParams finalFitErrs=theErrorparams;
-    theFitParamBase->getFitParamVal(finalParamErrorVec, finalFitErrs);
-    
-    std::ostringstream finalResultname;
-    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix);    
 
-    std::ofstream theStream ( finalResultname.str().c_str() );
-    theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
-    
-    MnUserCovariance theCovMatrix = min.UserCovariance();
-    std::cout  << min << std::endl;
-
-    std::ostringstream serializationFileName;
-    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
-    std::ofstream serializationStream(serializationFileName.str().c_str());
-    boost::archive::text_oarchive boostOutputArchive(serializationStream);
-    
-    if(min.HasValidCovariance()){
-      PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
-      boostOutputArchive << thePwaCovMatrix;
-    }
-    
-    return 0;
+    return 1;
  }
 
 }     

@@ -25,8 +25,8 @@
 // Copyright 2012 Bertram Kopf
 
 #include <getopt.h>
-#include <fstream>
 #include <string>
+#include <memory>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -35,6 +35,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/FitParamsBase.hh"
+//#include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/ParserBase.hh"
 #include "PwaUtils/AbsHist.hh"
@@ -44,6 +45,11 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
 #include "Event/EventReaderDefault.hh"
+
+#include "Minuit2/MnMigrad.h"
+#include "Minuit2/MnUserParameters.h"
+#include "Minuit2/MnPrint.h"
+#include "Minuit2/MnUserCovariance.h"
 
 AppBase::AppBase(AbsEnv* absEnv, std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase) :
   _absEnv(absEnv), 
@@ -154,4 +160,76 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
 		<< " +- " << contValue.second <<  "\n";
     theQaStream.close();
 }
+
+void AppBase::fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams){
+    std::vector<std::string>::const_iterator itFix;
+    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+       upar.Fix( (*itFix) );
+    }
+}
+
+FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
+  MnMigrad migrad(theFcn, upar);
+  Info <<"start migrad "<< endmsg;
+  FunctionMinimum funcMin = migrad();
+  if(!funcMin.IsValid()) {
+    //try with higher strategy
+    Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+    MnMigrad migrad2(theFcn, funcMin.UserState(), MnStrategy(2));
+    funcMin = migrad2();
+  }
+
+  return funcMin;
+}
+
+void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix){
+
+    os << "\n\n********************** Final fit parameters *************************\n";
+    os << "\n" << min.UserParameters() << "\n";
+    os << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
+    if(min.IsValid())             os << "\n Function minimum is valid.\n";
+    else                          os << "\n WARNING: Function minimum is invalid!" << std::endl;
+    if(min.HasValidCovariance())  os << "\n Covariance matrix is valid." << std::endl;
+    else                          os << "\n WARNING: Covariance matrix is invalid!" << std::endl;
+    os <<"\n Final LH: "<< std::setprecision(10) << min.Fval() << "\n" << std::endl;
+    os <<" # of function calls: " << min.NFcn() << std::endl;
+    os <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;
+    if(!min.HasValidParameters()) os << " hasValidParameters() returned FALSE" << std::endl;
+    if(!min.HasAccurateCovar())   os << " hasAccurateCovar() returned FALSE" << std::endl;
+    if(!min.HasPosDefCovar()){    os << " hasPosDefCovar() returned FALSE" << std::endl;
+                                  if(min.HasMadePosDefCovar()) os << " hasMadePosDefCovar() returned TRUE" << std::endl;
+    }
+    if(!min.HasCovariance())      os << " hasCovariance() returned FALSE" << std::endl;
+    if(min.HasReachedCallLimit()) os << " hasReachedCallLimit() returned TRUE" << std::endl;
+    if(min.IsAboveMaxEdm())       os << " isAboveMaxEdm() returned TRUE" << std::endl;
+    if(min.HesseFailed())         os << " hesseFailed() returned TRUE" << std::endl;
+    os << std::endl;
+
+    MnUserParameters finalUsrParameters=min.UserParameters();
+    const std::vector<double> finalParamVec=finalUsrParameters.Params();
+    fitParams finalFitParams=theStartparams;
+    _fitParamBasePtr->getFitParamVal(finalParamVec, finalFitParams);
+
+    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
+    fitParams finalFitErrs=theStartparams;
+    _fitParamBasePtr->getFitParamVal(finalParamErrorVec, finalFitErrs);
+
+    std::ostringstream finalResultname;
+    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+
+    std::ofstream theStream ( finalResultname.str().c_str() );
+    _fitParamBasePtr->dumpParams(theStream, finalFitParams, finalFitErrs);
+
+    MnUserCovariance theCovMatrix = min.UserCovariance();
+    std::ostringstream serializationFileName;
+    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
+    std::ofstream serializationStream(serializationFileName.str().c_str());
+    boost::archive::text_oarchive boostOutputArchive(serializationStream);
+
+    if(min.HasValidCovariance()){
+        PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
+        boostOutputArchive << thePwaCovMatrix;
+    }
+
+}   
 
