@@ -51,6 +51,7 @@ int main(int __argc,char *__argv[]){
   std::string twolam1Str="0";
   std::string twolam2Str="0";
   
+  int optind = 1;
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
     bool found=false;
     std::string sw = __argv[optind];

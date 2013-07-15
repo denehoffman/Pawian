@@ -50,6 +50,7 @@ int main(int __argc,char *__argv[]){
   std::string twoj2Str="3";
   std::string twoJStr="4";
   
+  int optind=1;
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
     bool found=false;
     std::string sw = __argv[optind];
