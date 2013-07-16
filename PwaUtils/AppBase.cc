@@ -41,6 +41,7 @@
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
+#include "PwaUtils/NetworkClient.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
@@ -162,10 +163,22 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
 }
 
 void AppBase::fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams){
-    std::vector<std::string>::const_iterator itFix;
-    for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
-       upar.Fix( (*itFix) );
+  const std::vector<MinuitParameter> theParams= upar.Parameters();
+  std::vector<std::string> parNames;
+  std::vector<MinuitParameter>::const_iterator itPar;
+  for (itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
+    parNames.push_back(itPar->GetName());
+  }  
+
+  std::vector<std::string>::const_iterator itFix;
+  for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
+    //check if name exisists
+    if(std::find(parNames.begin(), parNames.end(), (*itFix)) != parNames.end()) upar.Fix( (*itFix) );
+    else{
+      Alert << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg;
+      exit(0);
     }
+  }
 }
 
 FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
@@ -231,5 +244,20 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
         boostOutputArchive << thePwaCovMatrix;
     }
 
+}
+
+bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams){
+
+    if(!theClient.WaitForParams()) return false;
+    
+    const std::vector<double> currentParamVec=theClient.GetParams();
+    fitParams currentFitParams=theStartparams;
+    _fitParamBasePtr->getFitParamVal(currentParamVec, currentFitParams);
+    
+    LHData theLHData;
+    _absLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
+    
+    if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc)) return false;
+    return true;
 }   
 

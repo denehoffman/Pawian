@@ -190,24 +190,24 @@ int main(int __argc,char *__argv[]){
 
   theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
   theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
+
+  theAppBase.calcAndSendClientLh(theClient, theStartparams);
   
-  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
-  
-  while(true){
+  // while(true){
     
-    if(!theClient.WaitForParams())
-      return 0;
+  //   if(!theClient.WaitForParams())
+  //     return 0;
     
-    const std::vector<double> currentParamVec=theClient.GetParams();
-    fitParams currentFitParams=theStartparams;
-    theFitParamBase->getFitParamVal(currentParamVec, currentFitParams);
+  //   const std::vector<double> currentParamVec=theClient.GetParams();
+  //   fitParams currentFitParams=theStartparams;
+  //   theFitParamBase->getFitParamVal(currentParamVec, currentFitParams);
     
-    LHData theLHData;
-    theLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
+  //   LHData theLHData;
+  //   theLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
     
-    if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
-      return 0;
-  }
+  //   if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
+  //     return 0;
+  // }
   return 1;
  }
 

@@ -49,6 +49,7 @@ class FitParamsBase;
 class AbsEnv;
 class fitParams;
 class AbsHist;
+class NetworkClient;
 
 using namespace ROOT::Minuit2;
 
@@ -67,7 +68,8 @@ public:
   virtual void fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams);
   virtual FunctionMinimum migradDefault(AbsFcn& theFcn, MnUserParameters& upar);
   virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix="");
-  
+  virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams);
+   
 protected:
 
   AbsEnv* _absEnv;
