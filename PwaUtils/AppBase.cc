@@ -248,6 +248,7 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
 
 bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams){
 
+  while(true){
     if(!theClient.WaitForParams()) return false;
     
     const std::vector<double> currentParamVec=theClient.GetParams();
@@ -258,6 +259,7 @@ bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartp
     _absLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
     
     if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc)) return false;
-    return true;
+  }
+  return true;
 }   
 
