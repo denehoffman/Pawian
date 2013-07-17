@@ -58,6 +58,9 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const j
     std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
     theJPCLSVec.push_back(tmpJPCLS);
   }
+
+  if(LSs.size()==0) Info << "size for decay " << motherRes->name() << " to " << daughterRes1->name() << " and " << daughterRes2->name()
+			 << " =0!!!" << endmsg;
 }
 
 void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec, bool useCParity, int gParityMother, bool useIsospin){
@@ -107,7 +110,6 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Pa
 }
 
 
-// void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec, bool useCParity, int gParityMother, bool useIsospin){
 void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec, bool useCParity, int gParityMother, bool useIsospin){
   std::vector< std::shared_ptr<const JPCLS> > currentJPCLSDecAmps;
   std::shared_ptr<const jpcRes> daughterRes1=getJPCPtr(daughter1);

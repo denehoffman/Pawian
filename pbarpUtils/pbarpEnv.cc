@@ -128,7 +128,8 @@ void pbarpEnv::setup(pbarpParser* thePbarpParser){
     std::shared_ptr<AbsDecay> currentDec=_prodDecList->decay(currentAmplitudeName);
     if(0!=currentDec){
       currentDec->setPreFactor(currentPrefactor);
-      Info << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg; 
+      currentDec->disableIsospin();
+      Info << "Disable isospin coupling and set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg; 
     }
     else{
       // look in decay amplitudes

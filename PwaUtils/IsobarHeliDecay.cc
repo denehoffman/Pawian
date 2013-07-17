@@ -51,9 +51,13 @@ IsobarHeliDecay::IsobarHeliDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Pa
 void IsobarHeliDecay::extractStates(){
   if (_useIsospin){
     Spin currentGParity=_motherIGJPCPtr->G;
-    if(currentGParity==-1 || currentGParity==1) validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps, true, _gParity, true);
+    int daughter1GParity=_daughter1->theGParity();
+    int daughter2GParity=_daughter2->theGParity();
+    if(fabs(currentGParity)==1 && fabs(daughter1GParity)==1 && fabs(daughter2GParity)==1) validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps, true, _gParity, true);
+    else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps); 
   }
-  else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps); 
+  else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
+  print(std::cout);  
 }
 
 IsobarHeliDecay::~IsobarHeliDecay(){

@@ -193,21 +193,6 @@ int main(int __argc,char *__argv[]){
 
   theAppBase.calcAndSendClientLh(theClient, theStartparams);
   
-  // while(true){
-    
-  //   if(!theClient.WaitForParams())
-  //     return 0;
-    
-  //   const std::vector<double> currentParamVec=theClient.GetParams();
-  //   fitParams currentFitParams=theStartparams;
-  //   theFitParamBase->getFitParamVal(currentParamVec, currentFitParams);
-    
-  //   LHData theLHData;
-  //   theLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
-    
-  //   if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
-  //     return 0;
-  // }
   return 1;
  }
 
