@@ -24,16 +24,18 @@
 #pragma once
 
 #include <vector>
-#include "AbsFcn.hh"
+#include "PwaUtils/FitParamsBase.hh"
+#include "PwaUtils/AbsFcn.hh"
 #include "Minuit2/MnUserParameters.h"
 
 #include <boost/random/normal_distribution.hpp>
 
+//class AbsFcn;
 
 class EvoMinimizer
 {
 public:
-   EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int iterations, int population);
+   EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int iterations, int population, std::string suffix="");
    
    std::vector<double> Minimize();
 
@@ -41,6 +43,11 @@ private:
    int _population;
    int _iterations;
    AbsFcn* _theAbsFcn;
+  std::shared_ptr<FitParamsBase> _fitParamBase;
+  fitParams _currentBestParams;
+  fitParams _defaultFitErrParms;
+  
+  std::string _currentResultFileName;
    MnUserParameters _bestParamsGlobal;
    MnUserParameters _tmpParams;
 

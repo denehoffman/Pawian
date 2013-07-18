@@ -44,12 +44,14 @@ namespace ROOT {
 
       virtual double operator()(const std::vector<double>& par) const=0;
       virtual double Up() const;
-
+      std::shared_ptr<FitParamsBase> fitParamBase() {return _fitParamsBasePtr;}
+      fitParams defaultFitValParms() {return _defaultFitValParms;}
+      fitParams defaultFitErrParms() {return _defaultFitErrParms;}
 
     protected:
       std::shared_ptr<FitParamsBase> _fitParamsBasePtr;
       mutable unsigned int _fcnCounter;
-       fitParams _defaultFitValParms;
+      fitParams _defaultFitValParms;
       fitParams _defaultFitErrParms;
       std::string _currentResFileName;
 

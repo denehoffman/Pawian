@@ -21,9 +21,13 @@
 //                                                                        //
 //************************************************************************//
 
+#include <iostream>
+#include <fstream>
 #include <boost/random.hpp> 
 #include "ErrLogger/ErrLogger.hh"
-#include "EvoMinimizer.hh"
+#include "PwaUtils/EvoMinimizer.hh"
+#include "PwaUtils/FitParamsBase.hh"
+//#include "PwaUtils/AbsFcn.hh"
 
 const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
 const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
@@ -33,10 +37,14 @@ const double EvoMinimizer::LHSPREADEXIT = 0.1;
 
 
 
-EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations) :
-   _population(population)
- , _iterations(iterations)
- , _theAbsFcn(&theAbsFcn)
+EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations, std::string suffix) :
+  _population(population)
+  , _iterations(iterations)
+  , _theAbsFcn(&theAbsFcn)
+  , _fitParamBase(theAbsFcn.fitParamBase())
+  , _currentBestParams(theAbsFcn.defaultFitValParms())
+  , _defaultFitErrParms(theAbsFcn.defaultFitErrParms())
+  , _currentResultFileName("currentEvoResult"+suffix+".dat")
 {
    _bestParamsGlobal = upar;
    Info << evologo << endmsg;
@@ -69,6 +77,9 @@ std::vector<double> EvoMinimizer::Minimize(){
 	 if(currentlh < minlh){
 	    minlh = currentlh;
 	    _bestParamsGlobal = _tmpParams;
+	    _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams); 
+	    std::ofstream theStream(_currentResultFileName.c_str());
+	    _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms); 
 	 }
 	 if(currentlh < itlh){
 	    numbetterlh++;
