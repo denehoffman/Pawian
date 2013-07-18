@@ -44,6 +44,10 @@
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/AppBase.hh"
+#include "PwaUtils/NetworkClient.hh"
+#include "PwaUtils/NetworkServer.hh"
+#include "PwaUtils/PwaFcnServer.hh"
+#include "PwaUtils/EvoMinimizer.hh"
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -139,21 +143,6 @@ int main(int __argc,char *__argv[]){
   bool withEvtWeight=theAppParams->useEvtWeight();
   Info << "EvtWeight: " << withEvtWeight << endmsg;  
 
-  EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, withEvtWeight);
-  
-  EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, withEvtWeight);
-
-
-  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
-  //  eventListPtr->ratioMcToData(theAppParams->ratioMcToData());
-  eventListPtr->read(eventsData, mcData);
-
-  theLhPtr->setDataVec(eventListPtr->getDataVecs());
-  theLhPtr->setMcVec(eventListPtr->getMcVecs()); 
-
-  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
   MnUserParameters upar;
   theFitParamBase->setMnUsrParams(upar, theStartparams, theErrorparams);
   
@@ -164,6 +153,109 @@ int main(int __argc,char *__argv[]){
 
   const std::vector<std::string> fixedParams=theAppParams->fixedParams();  
   const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();
+
+  if(mode == "client"){
+
+  bool cacheAmps = theAppParams->cacheAmps();
+  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  if (cacheAmps) theLhPtr->cacheAmplitudes();
+  
+  std::ostringstream portStringStream;
+  portStringStream << theAppParams->serverPort();
+  
+  NetworkClient theClient(theAppParams->serverAddress(), portStringStream.str());
+  if(!theClient.Login())
+    return 0;
+  
+  
+  EventList eventsDataClient;  
+  theAppBase.readEvents(eventsDataClient, dataFileNames, withEvtWeight, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);  
+  
+  EventList mcDataClient; 
+  theAppBase.readEvents(mcDataClient, mcFileNames, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);  
+ 
+  std::shared_ptr<EvtDataBaseList> epemEventListPtr(new EvtDataBaseList(epemEnv::instance()));
+  epemEventListPtr->read(eventsDataClient, mcDataClient);
+
+  theLhPtr->setDataVec(epemEventListPtr->getDataVecs());
+  theLhPtr->setMcVec(epemEventListPtr->getMcVecs());
+
+  theAppBase.calcAndSendClientLh(theClient, theStartparams);
+  
+  return 1;
+ }
+
+  EventList eventsData;
+  theAppBase.readEvents(eventsData, dataFileNames, withEvtWeight);
+
+  int ratioMcToData=theAppParams->ratioMcToData();
+  int maxMcEvts=eventsData.size()*ratioMcToData;  
+  EventList mcData;
+  theAppBase.readEvents(mcData, mcFileNames, withEvtWeight, 0, maxMcEvts-1);
+
+
+  if(mode == "server"){
+    theAppBase.fixParams(upar,fixedParams); 
+    
+    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+							       theAppParams->noOfClients(),
+							       eventsData.size(),
+							       mcData.size()));
+
+    PwaFcnServer theFcnServer(theLhPtr, theFitParamBase, theServer, outputFileNameSuffix);
+    theServer->WaitForFirstClientLogin();
+
+    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar); 
+    
+    theServer->BroadcastClosingMessage();
+    Info << "Closing server." << endmsg;
+
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix);
+    
+    return 1;
+ }
+
+ if(mode == "evoserver"){
+   theAppBase.fixParams(upar,fixedParams); 
+
+   std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+                                                              theAppParams->noOfClients(),
+                                                              eventsData.size(),
+                                                              mcData.size()));
+   
+   PwaFcnServer theFcnServer(theLhPtr, theFitParamBase, theServer, outputFileNameSuffix);
+   theServer->WaitForFirstClientLogin();
+
+   EvoMinimizer theEvoMinimizer(theFcnServer, upar, epemEnv::instance()->parser()->evoPopulation(),
+                                epemEnv::instance()->parser()->evoIterations());
+   Info <<"start evolutionary minimizer "<< endmsg;
+   std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
+   
+   theServer->BroadcastClosingMessage();
+   Info << "Closing server." << endmsg;
+   
+   fitParams finalFitParams=theStartparams;
+   theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+   
+   fitParams finalFitErrs=theErrorparams;
+   
+   std::ostringstream finalResultname;
+   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+
+   std::ofstream theStream ( finalResultname.str().c_str() );
+   theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+   
+   return 1;
+ }
+
+
+  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
+  eventListPtr->read(eventsData, mcData);
+
+  theLhPtr->setDataVec(eventListPtr->getDataVecs());
+  theLhPtr->setMcVec(eventListPtr->getMcVecs()); 
+
+  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
 
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
