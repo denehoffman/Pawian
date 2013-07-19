@@ -105,6 +105,9 @@ complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,
 				   double __width);
 
 //
+complex<double> BreitWignerRel(const Vector4<double> &__p4,double __mass,
+			       double __width, double __massA, double __massB);
+
 complex<double> BreitWignerBlattW(const Vector4<double> &__p4, double __massA, 
                                   double __massB, double __mass0, double __width, int __LL);
 

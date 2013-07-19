@@ -32,6 +32,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/BreitWignerDynamics.hh"
+#include "PwaUtils/BreitWignerRelDynamics.hh"
 #include "PwaUtils/FlatteDynamics.hh"
 #include "PwaUtils/KPiSWaveIso12Dynamics.hh"
 #include "PwaUtils/KPiSWaveIso32Dynamics.hh"
@@ -81,6 +82,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 
       if(theDec->dynType()=="BreitWigner") 
     	result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
+      else if(theDec->dynType()=="BreitWignerRel") 
+    	result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="Flatte")
     	result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
       else if(theDec->dynType()=="KpiSWaveIso12")
