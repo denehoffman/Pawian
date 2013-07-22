@@ -310,10 +310,9 @@ complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,
 complex<double> BreitWignerRel(const Vector4<double> &__p4,double __mass,
 			       double __width, double __massA, double __massB){
   complex<double> i(0.,1.);
-
-  double mass0=__p4.Mass();
-  complex<double> rho0_m0=phaseSpaceFac(mass0, __massA, __massB);
-  return __mass*(__width/rho0_m0)/(__mass*__mass - __p4*__p4- i*__mass*__width);
+  
+  complex<double> rho0_m=phaseSpaceFac(__mass, __massA, __massB);
+  return __mass*__width/(__mass*__mass - __p4*__p4- i*rho0_m*__mass*__width);
 }
 
 
