@@ -29,6 +29,8 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
+#include <math.h>
+#include <limits>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
@@ -88,6 +90,11 @@ bool NetworkClient::SendLH(double llh_data, double weightSum, double lh_mc){
       Alert << "Could not send LH." << endmsg;
       return false;
    }
+
+   if(isinf(llh_data) && llh_data > 0)
+      llh_data=std::numeric_limits<double>::max() / 10.;
+   else if(isinf(llh_data) && llh_data < 0)
+      llh_data=-std::numeric_limits<double>::max() / 10.;
 
    _theStream << NetworkClient::CLIENTMESSAGE_LH << "\n";
    _theStream <<  std::setprecision(16) << llh_data << "\n" << weightSum << "\n" << lh_mc << "\n";

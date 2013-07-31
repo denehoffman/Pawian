@@ -34,10 +34,9 @@
 #include "PwaUtils/NetworkClient.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-short NetworkServer::SERVERMESSAGE_OK = 0;
 short NetworkServer::SERVERMESSAGE_PARAMS = 1;
 short NetworkServer::SERVERMESSAGE_CLOSE = 2;
-
+short NetworkServer::SERVERMESSAGE_OK = 3;
 
 
 NetworkServer::NetworkServer(int port, short noOfClients, int numData, int numMC) :
@@ -179,7 +178,7 @@ bool NetworkServer::WaitForLH(double& llh_data, double& weightSum, double& lh_mc
 
       llh_data += tempData;
       lh_mc += tempMc;
-      weightSum += tempWeightSum;      
+      weightSum += tempWeightSum;
 
       if(_closed)
 	 SendClosingMessage(theStreams.at(i));

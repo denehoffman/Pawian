@@ -21,17 +21,18 @@
 //                                                                        //
 //************************************************************************//
 
+#define mysign(x) (( x > 0 ) - ( x < 0 ))
+
 #include <iostream>
 #include <fstream>
 #include <boost/random.hpp> 
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/EvoMinimizer.hh"
 #include "PwaUtils/FitParamsBase.hh"
-//#include "PwaUtils/AbsFcn.hh"
 
-const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
-const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
-const double EvoMinimizer::DECREASELOWTHRESH = 0.01;
+const double EvoMinimizer::DECREASESIGMAFACTOR = -0.1;
+const double EvoMinimizer::INCREASESIGMAFACTOR =  0.1;
+const double EvoMinimizer::DECREASELOWTHRESH = 0.001;
 const double EvoMinimizer::INCREASEHIGHTHRESH = 0.05;
 const double EvoMinimizer::LHSPREADEXIT = 0.1;
 
@@ -47,6 +48,7 @@ EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int populat
   , _currentResultFileName("currentEvoResult"+suffix+".dat")
 {
    _bestParamsGlobal = upar;
+   _parShuffleMod.assign(upar.Parameters().size(), 0);
    Info << evologo << endmsg;
 }
 
@@ -56,7 +58,6 @@ std::vector<double> EvoMinimizer::Minimize(){
   
    double startlh = (*_theAbsFcn)(_bestParamsGlobal.Params());
    double minlh = startlh;
-   double itlh = startlh;
    int numnoimprovement = 0;
 
    Info << "Start LH = " << startlh << endmsg;
@@ -65,37 +66,45 @@ std::vector<double> EvoMinimizer::Minimize(){
 
       int numbetterlh = 0;
       double maxitlhspread=0;
+      double itlh = minlh;
+
+      _iterationParamBackup = _bestParamsGlobal;
+      _bestParamsIteration = _bestParamsGlobal;
 
       for(int j = 0; j<_population; j++){
 	 _tmpParams = _bestParamsGlobal;
-	 itlh = minlh;
 	 ShuffleParams();
 	 double currentlh = (*_theAbsFcn)(_tmpParams.Params());
 	 if(fabs(currentlh - minlh) > maxitlhspread){
 	    maxitlhspread = fabs(currentlh - minlh);
 	 }
-	 if(currentlh < minlh){
-	    minlh = currentlh;
-	    _bestParamsGlobal = _tmpParams;
+	 if(currentlh < itlh){
+	    itlh = currentlh;
+	    _bestParamsIteration = _tmpParams;
 	    _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams); 
 	    std::ofstream theStream(_currentResultFileName.c_str());
 	    _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms); 
 	 }
-	 if(currentlh < itlh){
+	 if(currentlh < minlh){
 	    numbetterlh++;
 	 }	 
       }
 
+
       if(maxitlhspread < LHSPREADEXIT)
 	 break;
 
-      if(numbetterlh == 0)
-	 numnoimprovement++;
-      else
+      if(numbetterlh > 0){
+	 _bestParamsGlobal = _bestParamsIteration;
+	 minlh = itlh;
 	 numnoimprovement=0;
+      }
+      else
+	 numnoimprovement++;
+
 
       if(numnoimprovement>5){
-	 AdjustSigma(DECREASESIGMAFACTOR*DECREASESIGMAFACTOR);
+	 AdjustSigma(DECREASESIGMAFACTOR*2, 0);
       }
       
       Info << "===============================================" << endmsg;
@@ -103,12 +112,15 @@ std::vector<double> EvoMinimizer::Minimize(){
       Info << "Likelihood improvements " << numbetterlh << " / " << _population << endmsg;
 
       if(((double)numbetterlh / (double)_population) <= DECREASELOWTHRESH){
-	 AdjustSigma(DECREASESIGMAFACTOR);
+	 AdjustSigma(DECREASESIGMAFACTOR, numbetterlh);
 	 Info << "Decreasing errors." << endmsg;
       }
       else if(((double)numbetterlh / (double)_population) > INCREASEHIGHTHRESH){
-	 AdjustSigma(INCREASESIGMAFACTOR);
+	 AdjustSigma(INCREASESIGMAFACTOR, numbetterlh);
 	 Info << "Increasing errors." << endmsg;
+      }
+      else{
+	 AdjustSigma(0, numbetterlh);
       }
       Info << "===============================================" << endmsg;
    }
@@ -147,13 +159,24 @@ void EvoMinimizer::ShuffleParams(){
 
 
 
-void EvoMinimizer::AdjustSigma(double factor){
+void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
 
    for(unsigned int i=0; i<_bestParamsGlobal.Params().size(); i++){
       if(_bestParamsGlobal.Parameter(i).IsFixed())
 	 continue;
 
-      _bestParamsGlobal.SetError(i, _bestParamsGlobal.Error(i) * factor);
+      if(numimprovements>0){
+	 double pardiff = fabs(_bestParamsGlobal.Value(i) - _iterationParamBackup.Value(i))
+	    / _bestParamsGlobal.Error(i);
+
+	 if(pardiff > 1.0 && _parShuffleMod[i] < 1.0)
+	    _parShuffleMod[i] += 0.05; 
+	 else if(pardiff < 0.4 && _parShuffleMod[i] > -1.0)
+	    _parShuffleMod[i] -= 0.05; 
+      }
+
+      double mod = factor * pow( fabs(_parShuffleMod[i]) + 1, mysign(_parShuffleMod[i]));
+      _bestParamsGlobal.SetError(i, _bestParamsGlobal.Error(i) * (1 + mod));
    }
 }
 

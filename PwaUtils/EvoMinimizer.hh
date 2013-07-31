@@ -35,7 +35,8 @@
 class EvoMinimizer
 {
 public:
-   EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int iterations, int population, std::string suffix="");
+   EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int iterations,
+		int population, std::string suffix="");
    
    std::vector<double> Minimize();
 
@@ -43,16 +44,19 @@ private:
    int _population;
    int _iterations;
    AbsFcn* _theAbsFcn;
-  std::shared_ptr<FitParamsBase> _fitParamBase;
-  fitParams _currentBestParams;
-  fitParams _defaultFitErrParms;
+   std::shared_ptr<FitParamsBase> _fitParamBase;
+   fitParams _currentBestParams;
+   fitParams _defaultFitErrParms;
+   std::vector<double> _parShuffleMod;
   
-  std::string _currentResultFileName;
+   std::string _currentResultFileName;
    MnUserParameters _bestParamsGlobal;
+   MnUserParameters _bestParamsIteration;
    MnUserParameters _tmpParams;
+   MnUserParameters _iterationParamBackup;
 
    void ShuffleParams();
-   void AdjustSigma(double factor);
+   void AdjustSigma(double factor, int numimprovements);
 
    static const char* evologo;
    static const double DECREASESIGMAFACTOR;

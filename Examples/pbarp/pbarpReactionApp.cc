@@ -279,7 +279,7 @@ int main(int __argc,char *__argv[]){
    theServer->WaitForFirstClientLogin();
 
    EvoMinimizer theEvoMinimizer(theFcnServer, upar, pbarpEnv::instance()->parser()->evoPopulation(),
-				pbarpEnv::instance()->parser()->evoIterations());
+				pbarpEnv::instance()->parser()->evoIterations(), outputFileNameSuffix);
    Info <<"start evolutionary minimizer "<< endmsg;
    std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
    

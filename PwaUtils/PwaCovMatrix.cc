@@ -67,8 +67,12 @@ PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix,
 	    Info << "Diagonal sqrt(cov) element (" << i << ", " << i << ") / param error: "
 		 << sqrt(covValue) << " / " << errValue << endmsg;
 	 }
-	 else if(covValue >= 0.98){
-	    Warning << "Correlation between parameter " << i << " and " << j << " = " << covValue << endmsg;
+	 else{
+	    double correlationCoeff = covValue / sqrt( theMinuitCovMatrix(iCov, iCov) * theMinuitCovMatrix(jCov, jCov));
+
+	    if(fabs(correlationCoeff) > 0.99){
+	       Warning << "Correlation between parameter " << i << " and " << j << " = " << correlationCoeff << endmsg;
+	    }
 	 }
 
 	 _covMatrix[theMinuitParameters.GetName(i)][theMinuitParameters.GetName(j)] = covValue;
