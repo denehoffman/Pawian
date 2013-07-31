@@ -63,7 +63,6 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValPara
    // 4.: set phases of all amplitudes
   setMnUsrParamsJPCLS(upar, theValParams.Phis, theErrParams.Phis, _phiSuffix);
 
-
    // 5.: set all masses
   setMnUsrParamsDouble(upar, theValParams.Masses, theErrParams.Masses, _massSuffix);
 
@@ -251,13 +250,18 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
     
     double maxVal=theStartVal+30.*theErrVal;
 
+    // for mass and width Parameter
+    if (suffix==_massSuffix || suffix==_widthSuffix){
+      minVal=theStartVal-5.*theErrVal;
+      maxVal=theStartVal+5.*theErrVal;
+      upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+    }
     // for complex fit parameter; phi component; quick workaround
-    if(theName.size()>9 && (theName.compare(theName.size()-8, theName.size(), "PhiOther")==0)){
+    else if(theName.size()>9 && (theName.compare(theName.size()-8, theName.size(), "PhiOther")==0)){
 	minVal=-4.*M_PI;
 	maxVal=4.*M_PI;	    
 	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
-
     // for parameter where pos and neg values are allowed
     else if(theName.size()>12 && (theName.compare(theName.size()-11, theName.size(), "PosNegOther")==0)){
 	minVal = -fabs(theStartVal)-30.*theErrVal;
