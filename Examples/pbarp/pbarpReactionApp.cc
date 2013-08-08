@@ -244,6 +244,11 @@ int main(int __argc,char *__argv[]){
   EventList mcData; 
   theAppBase.readEvents(mcData, mcFileNames, false, 0, maxMcEvts-1);  
 
+  std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+  pbarpEventListPtr->read(eventsData, mcData);
+ 
+  theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
+  theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
 
  if(mode == "server"){
    theAppBase.fixParams(upar,fixedParams); 
@@ -261,7 +266,8 @@ int main(int __argc,char *__argv[]){
     theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
-    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix);
+    double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix, evtWeightSumData, noOfFreeFitParams);
 
     return 1;
  }
@@ -301,12 +307,6 @@ int main(int __argc,char *__argv[]){
  }
 
 
- std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
- pbarpEventListPtr->read(eventsData, mcData);
- 
- theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
- theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
- 
  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix); 
  Info << "\nThe parameter values are: " << "\n" << endmsg;
  theFitParamBase->printParams(theStartparams);
@@ -334,8 +334,9 @@ int main(int __argc,char *__argv[]){
     if (cacheAmps) theLhPtr->cacheAmplitudes();
 
     theAppBase.fixParams(upar,fixedParams); 
-     FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
-    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix); 
+    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
+    double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix, evtWeightSumData, noOfFreeFitParams); 
 
     return 1;
  }

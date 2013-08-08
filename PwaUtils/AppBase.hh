@@ -67,7 +67,7 @@ public:
   virtual void qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
   virtual void fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams);
   virtual FunctionMinimum migradDefault(AbsFcn& theFcn, MnUserParameters& upar);
-  virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix="");
+  virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix="", double evtWeightSumData=0, int noOfFreeFitParams=0);
   virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams);
    
 protected:

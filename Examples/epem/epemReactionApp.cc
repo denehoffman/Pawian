@@ -193,6 +193,11 @@ int main(int __argc,char *__argv[]){
   EventList mcData;
   theAppBase.readEvents(mcData, mcFileNames, withEvtWeight, 0, maxMcEvts-1);
 
+  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
+  eventListPtr->read(eventsData, mcData);
+
+  theLhPtr->setDataVec(eventListPtr->getDataVecs());
+  theLhPtr->setMcVec(eventListPtr->getMcVecs()); 
 
   if(mode == "server"){
     theAppBase.fixParams(upar,fixedParams); 
@@ -210,7 +215,8 @@ int main(int __argc,char *__argv[]){
     theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
-    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix);
+    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix, evtWeightSumData, noOfFreeFitParams);
     
     return 1;
  }
@@ -249,12 +255,6 @@ int main(int __argc,char *__argv[]){
  }
 
 
-  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(epemEnv::instance()));
-  eventListPtr->read(eventsData, mcData);
-
-  theLhPtr->setDataVec(eventListPtr->getDataVecs());
-  theLhPtr->setMcVec(eventListPtr->getMcVecs()); 
-
   PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix);
 
   if (mode=="qaMode"){
@@ -278,7 +278,8 @@ int main(int __argc,char *__argv[]){
 
     FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
     
-    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix);    
+    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+    theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix, evtWeightSumData, noOfFreeFitParams);
 
     return 1;
  }

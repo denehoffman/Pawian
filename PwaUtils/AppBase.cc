@@ -108,7 +108,7 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   theEventList.rewind();  
 }
 
-void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams ){
+void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
 
   double theLh=_absLhPtr->calcLogLh(theStartParams);
   Info <<"theLh = "<< theLh << endmsg;
@@ -195,7 +195,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
   return funcMin;
 }
 
-void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix){
+void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix, double evtWeightSumData, int noOfFreeFitParams){
 
     os << "\n\n********************** Final fit parameters *************************\n";
     os << "\n" << min.UserParameters() << "\n";
@@ -244,6 +244,20 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
         boostOutputArchive << thePwaCovMatrix;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // calculate AIC, BIC criteria and output selected wave contrib
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    double theLh=_absLhPtr->calcLogLh(finalFitParams);
+    Info <<"theLh = "<< theLh << endmsg;
+
+    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
+    Info << "BIC:\t" << BICcriterion << endmsg;
+    Info << "AIC:\t" << AICcriterion << endmsg;
+    Info << "AICc:\t" << AICccriterion << endmsg;
 }
 
 bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams){
