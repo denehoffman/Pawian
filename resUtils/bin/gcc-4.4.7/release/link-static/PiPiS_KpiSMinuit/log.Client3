@@ -1,0 +1,836 @@
+
+Running with the following options using resReactionDefault.cfg:
+
+Error log mode: 1
+
+data file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSandKpiS/KMatrix+Kst1430m.txt
+
+mc file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSOnly/Ascii_PHSP.txt
+
+chosen unit in input file: GEV
+
+chosen order in file: E Px Py Pz
+
+file with start parameters for fit or qa: ./currentEvoResult.dat
+
+startHypo: base
+
+mode: client
+
+number of threads: 1
+
+ratioMcToData: 3
+
+cache amplitudes: 1
+
+use event weight: 1
+
+use phase space hyp: 0
+
+pdg table: /Particle/pdtNew.table
+
+
+
+minuit parameter	J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Mag	 fixed
+minuit parameter	J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Phi	 fixed
+minuit parameter	J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Mag	 fixed
+minuit parameter	J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Phi	 fixed
+minuit parameter	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	 fixed
+minuit parameter	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	 fixed
+minuit parameter	J0P1C0L0S0_KPiS12-ToKshort_pion-Mag	 fixed
+minuit parameter	J0P1C0L0S0_KPiS12-ToKshort_pion-Phi	 fixed
+minuit parameter	J0P1C0L0S0_KPiS32-ToKshort_pion-Mag	 fixed
+minuit parameter	J0P1C0L0S0_KPiS32-ToKshort_pion-Phi	 fixed
+minuit parameter	J0P1C1L0S0_pipiSTopion+_pion-Mag	 fixed
+minuit parameter	J0P1C1L0S0_pipiSTopion+_pion-Phi	 fixed
+minuit parameter	pipiSD0b_pole1PhiOther	 fixed
+
+the final state particles are:
+Kshort
+pion+
+pion-
+
+decay system:
+Cano pipiS To pion+ pion-
+Cano noIso KPiS12- To Kshort pion-
+Cano noIso KPiS32- To Kshort pion-
+
+decay dynamics:
+pipiS PiPiSWaveAS
+KPiS12- KpiSWaveIso12
+KPiS32- KpiSWaveIso32
+
+replaced suffix for fit parameter name
+
+replaced mass key
+
+production system:
+Kshort pipiS
+KPiS12- pion+
+KPiS32- pion+
+
+production formalism:	Heli
+
+histograms inv mass for systems
+pion+ pion-
+Kshort pion+
+Kshort pion-
+
+histograms decay angles for systems
+pion+ from pion+ pion-
+Kshort from Kshort pion+
+Kshort from Kshort pion-
+
+mass range
+
+
+2Dhistogram decay angles for systems
+
+random seed:	44123
+
+generate with model:	1
+
+number of generated events:	10000
+
+name of the mother resonance:	D0
+
+WARN: /DataUtils.cc:70: C-Parity not valid for the reaction: JPC= 0 1 1 -->  JPC= 0 -1 0 and  JPC= 0 -1 0
+
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+INFO: added decay pipiSTopion+_pion- to decay list
+WARN: /AbsDecay.cc:106: no isospin coupling for decay KPiS12- to Kshort pion-
+WARN: /AbsDecay.cc:107: Imother: 1/2	I3mother: -1/2
+WARN: /AbsDecay.cc:108: idaughter1: 1/2	i3daughter1: 0/2
+WARN: /AbsDecay.cc:109: idaughter2: 2/2	i3daughter2: -2/2
+
+JPCLS amplitudes for decay	KPiS12-ToKshort_pion-:
+suffix for fit parameter name:	KPiS12-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+INFO: added decay KPiS12-ToKshort_pion- to decay list
+WARN: /AbsDecay.cc:106: no isospin coupling for decay KPiS32- to Kshort pion-
+WARN: /AbsDecay.cc:107: Imother: 3/2	I3mother: -1/2
+WARN: /AbsDecay.cc:108: idaughter1: 1/2	i3daughter1: 0/2
+WARN: /AbsDecay.cc:109: idaughter2: 2/2	i3daughter2: -2/2
+
+JPCLS amplitudes for decay	KPiS32-ToKshort_pion-:
+suffix for fit parameter name:	KPiS32-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+INFO: added decay KPiS32-ToKshort_pion- to decay list
+first particle:	Kshort
+second particle:	pipiS
+first particle:	KPiS12-
+second particle:	pion+
+first particle:	KPiS32-
+second particle:	pion+
+
+JPCLS amplitudes for decay	D0ToKshort_pipiS:
+suffix for fit parameter name:	D0ToKshort_pipiS
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+
+
+
+JPClamlam amplitudes for decay	D0ToKshort_pipiS:
+suffix for fit parameter name:	D0ToKshort_pipiS
+JPC=0-0	Lam1,Lam2=0,0	parityFactor=1
+with further decay:
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+
+
+WARN: /AbsDecay.cc:106: no isospin coupling for decay D0 to KPiS12- pion+
+WARN: /AbsDecay.cc:107: Imother: 1/2	I3mother: 0/2
+WARN: /AbsDecay.cc:108: idaughter1: 1/2	i3daughter1: -1/2
+WARN: /AbsDecay.cc:109: idaughter2: 2/2	i3daughter2: 2/2
+
+JPCLS amplitudes for decay	D0ToKPiS12-_pion+:
+suffix for fit parameter name:	D0ToKPiS12-_pion+
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	KPiS12-ToKshort_pion-:
+suffix for fit parameter name:	KPiS12-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+
+
+WARN: /AbsDecay.cc:106: no isospin coupling for decay D0 to KPiS12- pion+
+WARN: /AbsDecay.cc:107: Imother: 1/2	I3mother: 0/2
+WARN: /AbsDecay.cc:108: idaughter1: 1/2	i3daughter1: -1/2
+WARN: /AbsDecay.cc:109: idaughter2: 2/2	i3daughter2: 2/2
+
+JPClamlam amplitudes for decay	D0ToKPiS12-_pion+:
+suffix for fit parameter name:	D0ToKPiS12-_pion+
+JPC=0-0	Lam1,Lam2=0,0	parityFactor=1
+with further decay:
+JPCLS amplitudes for decay	KPiS12-ToKshort_pion-:
+suffix for fit parameter name:	KPiS12-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+
+
+WARN: /AbsDecay.cc:106: no isospin coupling for decay D0 to KPiS32- pion+
+WARN: /AbsDecay.cc:107: Imother: 1/2	I3mother: 0/2
+WARN: /AbsDecay.cc:108: idaughter1: 3/2	i3daughter1: -1/2
+WARN: /AbsDecay.cc:109: idaughter2: 2/2	i3daughter2: 2/2
+
+JPCLS amplitudes for decay	D0ToKPiS32-_pion+:
+suffix for fit parameter name:	D0ToKPiS32-_pion+
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	KPiS32-ToKshort_pion-:
+suffix for fit parameter name:	KPiS32-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+
+
+WARN: /AbsDecay.cc:106: no isospin coupling for decay D0 to KPiS32- pion+
+WARN: /AbsDecay.cc:107: Imother: 1/2	I3mother: 0/2
+WARN: /AbsDecay.cc:108: idaughter1: 3/2	i3daughter1: -1/2
+WARN: /AbsDecay.cc:109: idaughter2: 2/2	i3daughter2: 2/2
+
+JPClamlam amplitudes for decay	D0ToKPiS32-_pion+:
+suffix for fit parameter name:	D0ToKPiS32-_pion+
+JPC=0-0	Lam1,Lam2=0,0	parityFactor=1
+with further decay:
+JPCLS amplitudes for decay	KPiS32-ToKshort_pion-:
+suffix for fit parameter name:	KPiS32-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+
+
+
+ res reaction
+
+ ***** decay chains *******
+
+JPCLS amplitudes for decay	D0ToKshort_pipiS:
+suffix for fit parameter name:	D0ToKshort_pipiS
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	D0ToKPiS12-_pion+:
+suffix for fit parameter name:	D0ToKPiS12-_pion+
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	KPiS12-ToKshort_pion-:
+suffix for fit parameter name:	KPiS12-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	D0ToKPiS32-_pion+:
+suffix for fit parameter name:	D0ToKPiS32-_pion+
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	KPiS32-ToKshort_pion-:
+suffix for fit parameter name:	KPiS32-ToKshort_pion-
+JPC=0+0	L,S=0,0	preFactorLS=0
+
+
+
+
+addGrandMa:	pipiSD0
+INFO: Dynamics	pipiSTopion+_pion-	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	1
+addGrandMa:	KPiS12-D0
+INFO: Dynamics	KPiS12-ToKshort_pion-	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	1
+addGrandMa:	KPiS32-D0
+INFO: Dynamics	KPiS32-ToKshort_pion-	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	1
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Mag
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Mag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Mag
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Mag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Phi
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Phi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Phi
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Phi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P1C0L0S0_KPiS12-ToKshort_pion-Mag
+INFO: key	J0P1C0L0S0_KPiS12-ToKshort_pion-Mag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P1C0L0S0_KPiS32-ToKshort_pion-Mag
+INFO: key	J0P1C0L0S0_KPiS32-ToKshort_pion-Mag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P1C1L0S0_pipiSTopion+_pion-Mag
+INFO: key	J0P1C1L0S0_pipiSTopion+_pion-Mag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P1C0L0S0_KPiS12-ToKshort_pion-Phi
+INFO: key	J0P1C0L0S0_KPiS12-ToKshort_pion-Phi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P1C0L0S0_KPiS32-ToKshort_pion-Phi
+INFO: key	J0P1C0L0S0_KPiS32-ToKshort_pion-Phi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P1C1L0S0_pipiSTopion+_pion-Phi
+INFO: key	J0P1C1L0S0_pipiSTopion+_pion-Phi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	KPiS12-D0KetapPhiOther
+INFO: key	KPiS12-D0KetapPhiOther	found
+INFO: replace val by 0.304741
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0KpiPhiOther
+INFO: key	KPiS12-D0KpiPhiOther	found
+INFO: replace val by 3.96518
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0a_KetapPosNegOther
+INFO: key	KPiS12-D0a_KetapPosNegOther	found
+INFO: replace val by 3.09232
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0a_KpiPosNegOther
+INFO: key	KPiS12-D0a_KpiPosNegOther	found
+INFO: replace val by -0.585309
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0b_KetapPosNegOther
+INFO: key	KPiS12-D0b_KetapPosNegOther	found
+INFO: replace val by 1.10454
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0b_KpiPosNegOther
+INFO: key	KPiS12-D0b_KpiPosNegOther	found
+INFO: replace val by 1.47967
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0b_pole1MagOther
+INFO: key	KPiS12-D0b_pole1MagOther	found
+INFO: replace val by 0.226213
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0b_pole1PhiOther
+INFO: key	KPiS12-D0b_pole1PhiOther	found
+INFO: replace val by 2.84879
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0c_KetapPosNegOther
+INFO: key	KPiS12-D0c_KetapPosNegOther	found
+INFO: replace val by 0.20018
+INFO: replace err by 1
+INFO: theKey=	KPiS12-D0c_KpiPosNegOther
+INFO: key	KPiS12-D0c_KpiPosNegOther	found
+INFO: replace val by -0.151677
+INFO: replace err by 1
+INFO: theKey=	KPiS32-D0PhiOther
+INFO: key	KPiS32-D0PhiOther	found
+INFO: replace val by -4.46604
+INFO: replace err by 1
+INFO: theKey=	KPiS32-D0a_PosNegOther
+INFO: key	KPiS32-D0a_PosNegOther	found
+INFO: replace val by 0.967667
+INFO: replace err by 1
+INFO: theKey=	KPiS32-D0b_PosNegOther
+INFO: key	KPiS32-D0b_PosNegOther	found
+INFO: replace val by 0.363404
+INFO: replace err by 1
+INFO: theKey=	KPiS32-D0c_PosNegOther
+INFO: key	KPiS32-D0c_PosNegOther	found
+INFO: replace val by -0.052161
+INFO: replace err by 1
+INFO: theKey=	pipiSD0S0_PosNegOther
+INFO: key	pipiSD0S0_PosNegOther	found
+INFO: replace val by 4.22283
+INFO: replace err by 4
+INFO: theKey=	pipiSD0b_pole1MagOther
+INFO: key	pipiSD0b_pole1MagOther	found
+INFO: replace val by 0.086754
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole1PhiOther
+INFO: key	pipiSD0b_pole1PhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole2MagOther
+INFO: key	pipiSD0b_pole2MagOther	found
+INFO: replace val by 1.88567
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole2PhiOther
+INFO: key	pipiSD0b_pole2PhiOther	found
+INFO: replace val by -2.50182
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole3MagOther
+INFO: key	pipiSD0b_pole3MagOther	found
+INFO: replace val by 4.81095
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole3PhiOther
+INFO: key	pipiSD0b_pole3PhiOther	found
+INFO: replace val by -2.82273
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole4MagOther
+INFO: key	pipiSD0b_pole4MagOther	found
+INFO: replace val by 6.65717
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole4PhiOther
+INFO: key	pipiSD0b_pole4PhiOther	found
+INFO: replace val by -0.0702193
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole5MagOther
+INFO: key	pipiSD0b_pole5MagOther	found
+INFO: replace val by 0.732418
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole5PhiOther
+INFO: key	pipiSD0b_pole5PhiOther	found
+INFO: replace val by 4.27531
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_4PiMagOther
+INFO: key	pipiSD0fprod_4PiMagOther	found
+INFO: replace val by 3.9704
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_4PiPhiOther
+INFO: key	pipiSD0fprod_4PiPhiOther	found
+INFO: replace val by 0.982223
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtaMagOther
+INFO: key	pipiSD0fprod_EtaEtaMagOther	found
+INFO: replace val by 0.426338
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtaPhiOther
+INFO: key	pipiSD0fprod_EtaEtaPhiOther	found
+INFO: replace val by -1.12097
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtapMagOther
+INFO: key	pipiSD0fprod_EtaEtapMagOther	found
+INFO: replace val by 0.0109259
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtapPhiOther
+INFO: key	pipiSD0fprod_EtaEtapPhiOther	found
+INFO: replace val by -4.53278
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_KKMagOther
+INFO: key	pipiSD0fprod_KKMagOther	found
+INFO: replace val by 0.77762
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_KKPhiOther
+INFO: key	pipiSD0fprod_KKPhiOther	found
+INFO: replace val by -1.26312
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_PiPiMagOther
+INFO: key	pipiSD0fprod_PiPiMagOther	found
+INFO: replace val by 0.789702
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_PiPiPhiOther
+INFO: key	pipiSD0fprod_PiPiPhiOther	found
+INFO: replace val by -3.14207
+INFO: replace err by 1
+INFO: data file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSandKpiS/KMatrix+Kst1430m.txt
+INFO: mc file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSOnly/Ascii_PHSP.txt
+INFO: EvtWeight: 1
+
+
+**************** Minuit Fit parameter **************************
+J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Mag	1	1
+J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Mag	1	1
+J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1	1
+J0P-1C0Lama0Lamb0_D0ToKPiS12-_pion+Phi	0	0.3
+J0P-1C0Lama0Lamb0_D0ToKPiS32-_pion+Phi	0	0.3
+J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	0	0.3
+J0P1C0L0S0_KPiS12-ToKshort_pion-Mag	1	1
+J0P1C0L0S0_KPiS32-ToKshort_pion-Mag	1	1
+J0P1C1L0S0_pipiSTopion+_pion-Mag	1	1
+J0P1C0L0S0_KPiS12-ToKshort_pion-Phi	0	0.3
+J0P1C0L0S0_KPiS32-ToKshort_pion-Phi	0	0.3
+J0P1C1L0S0_pipiSTopion+_pion-Phi	0	0.3
+KPiS12-D0KetapPhiOther	0.304741	1
+KPiS12-D0KpiPhiOther	3.96518	1
+KPiS12-D0a_KetapPosNegOther	3.09232	1
+KPiS12-D0a_KpiPosNegOther	-0.585309	1
+KPiS12-D0b_KetapPosNegOther	1.10454	1
+KPiS12-D0b_KpiPosNegOther	1.47967	1
+KPiS12-D0b_pole1MagOther	0.226213	1
+KPiS12-D0b_pole1PhiOther	2.84879	1
+KPiS12-D0c_KetapPosNegOther	0.20018	1
+KPiS12-D0c_KpiPosNegOther	-0.151677	1
+KPiS32-D0PhiOther	-4.46604	1
+KPiS32-D0a_PosNegOther	0.967667	1
+KPiS32-D0b_PosNegOther	0.363404	1
+KPiS32-D0c_PosNegOther	-0.052161	1
+pipiSD0S0_PosNegOther	4.22283	4
+pipiSD0b_pole1MagOther	0.086754	1
+pipiSD0b_pole1PhiOther	0	1
+pipiSD0b_pole2MagOther	1.88567	1
+pipiSD0b_pole2PhiOther	-2.50182	1
+pipiSD0b_pole3MagOther	4.81095	1
+pipiSD0b_pole3PhiOther	-2.82273	1
+pipiSD0b_pole4MagOther	6.65717	1
+pipiSD0b_pole4PhiOther	-0.0702193	1
+pipiSD0b_pole5MagOther	0.732418	1
+pipiSD0b_pole5PhiOther	4.27531	1
+pipiSD0fprod_4PiMagOther	3.9704	1
+pipiSD0fprod_4PiPhiOther	0.982223	1
+pipiSD0fprod_EtaEtaMagOther	0.426338	1
+pipiSD0fprod_EtaEtaPhiOther	-1.12097	1
+pipiSD0fprod_EtaEtapMagOther	0.0109259	1
+pipiSD0fprod_EtaEtapPhiOther	-4.53278	1
+pipiSD0fprod_KKMagOther	0.77762	1
+pipiSD0fprod_KKPhiOther	-1.26312	1
+pipiSD0fprod_PiPiMagOther	0.789702	1
+pipiSD0fprod_PiPiPhiOther	-3.14207	1
+INFO: caching amplitudes enabled / disabled:	1
+INFO: ************* Client mode ****************
+INFO: Connecting to server pc14:29945
+INFO: Received data event range 37500 - 49999
+INFO: Received mc event range 112500 - 149999
+INFO: 
+File has 12500 events. Each event has 3 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.55802,0.0408742,0.0758857,0.237354) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.765734,0.106464,-0.344506,-0.660946) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.541087,-0.147338,0.26862,0.423591) } 	m = 0.139573
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.715235,-0.387091,-0.277851,0.192098) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.372942,-0.00355234,-0.135223,0.318289) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.776663,0.390643,0.413073,-0.510386) } 	m = 0.139572
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.733054,-0.171421,0.24532,0.447417) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.367677,-0.0692631,-0.204238,0.263051) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.764108,0.240684,-0.0410811,-0.710469) } 	m = 0.139565
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.852413,0.269625,-0.134165,-0.623129) } 	m = 0.497615
+
+INFO: {Rank = 1 ( 0.412233,-0.323535,0.208809,0.0466965) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.600194,0.0539093,-0.0746448,0.576433) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.557213,-0.0387003,0.188246,0.161034) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.700061,-0.456915,-0.503331,-0.0921536) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.607567,0.495615,0.315085,-0.0688809) } 	m = 0.139572
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.69777,-0.379063,-0.295187,0.0918676) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.453314,-0.317484,0.252565,-0.146387) } 	m = 0.139568
+
+INFO: {Rank = 1 ( 0.713755,0.696547,0.042622,0.0545191) } 	m = 0.139569
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.837194,-0.428102,0.518123,0.039383) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.447704,-0.11317,-0.404775,0.0656407) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.579943,0.541272,-0.113348,-0.105024) } 	m = 0.139573
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.958019,-0.67968,0.407941,-0.20445) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.351712,0.272133,-0.060315,0.162872) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.55511,0.407547,-0.347626,0.041578) } 	m = 0.139571
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.533089,-0.120147,0.140244,0.0496082) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.665213,0.146124,-0.210362,0.597849) } 	m = 0.139572
+
+INFO: {Rank = 1 ( 0.666538,-0.0259768,0.0701181,-0.647458) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.769136,0.147484,-0.558173,-0.103155) } 	m = 0.497615
+
+INFO: {Rank = 1 ( 0.364637,0.156958,-0.0638834,0.291141) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.731067,-0.304443,0.622057,-0.187987) } 	m = 0.139568
+
+INFO: 
+
+INFO: 
+File has 37500 events. Each event has 3 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.53475,-0.0519551,-0.000632147,0.188782) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.684285,-0.537494,0.109106,-0.384659) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.645805,0.589449,-0.108474,0.195877) } 	m = 0.139569
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.580845,0.220327,0.0634381,0.192855) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.56859,-0.0560911,-0.338439,0.431425) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.715405,-0.164236,0.275001,-0.62428) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.829405,0.648509,0.0589511,0.127491) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.807123,-0.746982,-0.0125877,-0.271713) } 	m = 0.139567
+
+INFO: {Rank = 1 ( 0.228311,0.0984731,-0.0463635,0.144221) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.63871,0.374,0.137843,0.0381355) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.545644,0.167774,-0.334106,-0.372119) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.680486,-0.541773,0.196262,0.333983) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.71449,-0.247887,0.00247833,0.448801) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.338121,-0.25072,0.0312561,0.176091) } 	m = 0.139572
+
+INFO: {Rank = 1 ( 0.81223,0.498607,-0.0337344,-0.624892) } 	m = 0.139573
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.829521,0.25419,0.42131,0.445389) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.767724,-0.112995,-0.600712,-0.443055) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.267594,-0.141195,0.179403,-0.00233446) } 	m = 0.139569
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.633236,0.205502,-0.167821,-0.288051) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.752486,-0.323785,-0.0709533,0.660972) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.479118,0.118284,0.238774,-0.372921) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.823996,-0.184184,0.541648,-0.322559) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.512033,-0.0728936,-0.126682,0.470464) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.528811,0.257077,-0.414966,-0.147905) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.60464,0.17015,-0.297089,-0.0275216) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.536868,0.286478,0.00716187,-0.432003) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.723332,-0.456628,0.289927,0.459525) } 	m = 0.139568
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.586435,-0.227372,-0.205399,-0.0489881) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.665142,0.0529819,0.448739,-0.467718) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.613263,0.17439,-0.24334,0.516706) } 	m = 0.139571
+
+INFO: 
+
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 1.9744e-07	 py: -2.83122e-07	 pz: -1.02818e-06	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 7500
+INFO: 4vec calculation for event 8000
+INFO: 4vec calculation for event 8500
+INFO: 4vec calculation for event 9000
+INFO: 4vec calculation for event 9500
+INFO: 4vec calculation for event 10000
+INFO: 4vec all in lab system
+ px: 1.49012e-08	 py: -9.31323e-08	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 10500
+INFO: 4vec calculation for event 11000
+INFO: 4vec calculation for event 11500
+INFO: 4vec calculation for event 12000
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: -1.15484e-07	 py: -1.51515e-07	 pz: 1.49012e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 7500
+INFO: 4vec calculation for event 8000
+INFO: 4vec calculation for event 8500
+INFO: 4vec calculation for event 9000
+INFO: 4vec calculation for event 9500
+INFO: 4vec calculation for event 10000
+INFO: 4vec all in lab system
+ px: -1.49012e-08	 py: 9.68575e-08	 pz: -2.01166e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 10500
+INFO: 4vec calculation for event 11000
+INFO: 4vec calculation for event 11500
+INFO: 4vec calculation for event 12000
+INFO: 4vec calculation for event 12500
+INFO: 4vec calculation for event 13000
+INFO: 4vec calculation for event 13500
+INFO: 4vec calculation for event 14000
+INFO: 4vec calculation for event 14500
+INFO: 4vec calculation for event 15000
+INFO: 4vec calculation for event 15500
+INFO: 4vec calculation for event 16000
+INFO: 4vec calculation for event 16500
+INFO: 4vec calculation for event 17000
+INFO: 4vec calculation for event 17500
+INFO: 4vec calculation for event 18000
+INFO: 4vec calculation for event 18500
+INFO: 4vec calculation for event 19000
+INFO: 4vec calculation for event 19500
+INFO: 4vec calculation for event 20000
+INFO: 4vec all in lab system
+ px: -2.90573e-07	 py: -1.01328e-06	 pz: 9.98378e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 20500
+INFO: 4vec calculation for event 21000
+INFO: 4vec calculation for event 21500
+INFO: 4vec calculation for event 22000
+INFO: 4vec calculation for event 22500
+INFO: 4vec calculation for event 23000
+INFO: 4vec calculation for event 23500
+INFO: 4vec calculation for event 24000
+INFO: 4vec calculation for event 24500
+INFO: 4vec calculation for event 25000
+INFO: 4vec calculation for event 25500
+INFO: 4vec calculation for event 26000
+INFO: 4vec calculation for event 26500
+INFO: 4vec calculation for event 27000
+INFO: 4vec calculation for event 27500
+INFO: 4vec calculation for event 28000
+INFO: 4vec calculation for event 28500
+INFO: 4vec calculation for event 29000
+INFO: 4vec calculation for event 29500
+INFO: 4vec calculation for event 30000
+INFO: 4vec all in lab system
+ px: -5.1409e-07	 py: 7.19214e-07	 pz: -3.35276e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 30500
+INFO: 4vec calculation for event 31000
+INFO: 4vec calculation for event 31500
+INFO: 4vec calculation for event 32000
+INFO: 4vec calculation for event 32500
+INFO: 4vec calculation for event 33000
+INFO: 4vec calculation for event 33500
+INFO: 4vec calculation for event 34000
+INFO: 4vec calculation for event 34500
+INFO: 4vec calculation for event 35000
+INFO: 4vec calculation for event 35500
+INFO: 4vec calculation for event 36000
+INFO: 4vec calculation for event 36500
+INFO: 4vec calculation for event 37000

@@ -1,0 +1,16 @@
+project : 
+	;
+
+lib resUtils : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/Particle//Particle
+        $(TOP)/Event//Event 
+	: <use>$(TOP)//Minuit2
+	: 
+	: <library>$(TOP)//Minuit2 ;
+
+exe resReactionApp : resReactionApp.cc resUtils : ;

@@ -230,7 +230,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   if(_hasMotherPart){
-    daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
+    if(fabs(mother4Vec==all4Vec)){
+      daughter2HelMother=daughter2_4Vec;
+      daughter2HelMother.Boost(daughter2HelMother);      
+    }
+    else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
   }
   else{
     daughter2HelMother=daughter2_4Vec;
@@ -252,6 +256,14 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
       double thePhi=0.;
       if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
       evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+      if(evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] != evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]){
+	DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
+    	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
+	DebugMsg << "thePhi:\t" << thePhi << endmsg;
+	DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
+	DebugMsg << "daughter2HelMother:\t" << daughter2HelMother << endmsg;
+	DebugMsg << "mother4Vec:\t" << mother4Vec << "\tP:" << mother4Vec.P() << endmsg;
+      }
     }
   }
 

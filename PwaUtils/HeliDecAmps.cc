@@ -131,6 +131,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap[evtNo][lamX][lamFs];
     result*=_absDyn->eval(theData, grandmaAmp);
+    if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg; 
     return result;
   }
 
@@ -162,6 +163,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, Ab
 }
 
   result*=_absDyn->eval(theData, grandmaAmp);
+  if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
   return result;
 }
 

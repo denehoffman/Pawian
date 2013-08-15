@@ -1,0 +1,5206 @@
+
+Running with the following options using resReactionDefault.cfg:
+
+Error log mode: 1
+
+data file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSOnly/Ascii_Data.txt
+
+mc file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSOnly/Ascii_PHSP.txt
+
+chosen unit in input file: GEV
+
+chosen order in file: E Px Py Pz
+
+file with start parameters for fit or qa: ./defaultparams.dat
+
+startHypo: base
+
+mode: pwa
+
+number of threads: 4
+
+ratioMcToData: 3
+
+cache amplitudes: 1
+
+use event weight: 1
+
+use phase space hyp: 0
+
+pdg table: /Particle/pdtNew.table
+
+
+
+
+the final state particles are:
+Kshort
+pion+
+pion-
+
+decay system:
+Cano pipiS To pion+ pion-
+
+decay dynamics:
+pipiS PiPiSWaveAS
+
+replaced suffix for fit parameter name
+
+replaced mass key
+
+production system:
+Kshort pipiS
+
+production formalism:	Heli
+
+histograms inv mass for systems
+pion+ pion-
+Kshort pion+
+Kshort pion-
+
+histograms decay angles for systems
+pion+ from pion+ pion-
+Kshort from Kshort pion+
+Kshort from Kshort pion-
+
+mass range
+
+
+2Dhistogram decay angles for systems
+
+random seed:	44123
+
+generate with model:	1
+
+number of generated events:	10000
+
+name of the mother resonance:	D0
+
+WARN: /DataUtils.cc:70: C-Parity not valid for the reaction: JPC= 0 1 1 -->  JPC= 0 -1 0 and  JPC= 0 -1 0
+
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+INFO: added decay pipiSTopion+_pion- to decay list
+first particle:	Kshort
+second particle:	pipiS
+
+JPCLS amplitudes for decay	D0ToKshort_pipiS:
+suffix for fit parameter name:	D0ToKshort_pipiS
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+
+
+
+JPClamlam amplitudes for decay	D0ToKshort_pipiS:
+suffix for fit parameter name:	D0ToKshort_pipiS
+JPC=0-0	Lam1,Lam2=0,0	parityFactor=1
+with further decay:
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+
+
+
+ res reaction
+
+ ***** decay chains *******
+
+JPCLS amplitudes for decay	D0ToKshort_pipiS:
+suffix for fit parameter name:	D0ToKshort_pipiS
+JPC=0-0	L,S=0,0	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	pipiSTopion+_pion-:
+suffix for fit parameter name:	pipiSTopion+_pion-
+JPC=0++	L,S=0,0	preFactorLS=0
+
+
+
+
+addGrandMa:	pipiSD0
+INFO: Dynamics	pipiSTopion+_pion-	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	1
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi
+INFO: key	J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P1C1L0S0_pipiSTopion+_pion-Mag
+INFO: key	J0P1C1L0S0_pipiSTopion+_pion-Mag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	J0P1C1L0S0_pipiSTopion+_pion-Phi
+INFO: key	J0P1C1L0S0_pipiSTopion+_pion-Phi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	pipiSD0S0_PosNegOther
+INFO: key	pipiSD0S0_PosNegOther	found
+INFO: replace val by -1
+INFO: replace err by 4
+INFO: theKey=	pipiSD0b_pole1MagOther
+INFO: key	pipiSD0b_pole1MagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole1PhiOther
+INFO: key	pipiSD0b_pole1PhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole2MagOther
+INFO: key	pipiSD0b_pole2MagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole2PhiOther
+INFO: key	pipiSD0b_pole2PhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole3MagOther
+INFO: key	pipiSD0b_pole3MagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole3PhiOther
+INFO: key	pipiSD0b_pole3PhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole4MagOther
+INFO: key	pipiSD0b_pole4MagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole4PhiOther
+INFO: key	pipiSD0b_pole4PhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole5MagOther
+INFO: key	pipiSD0b_pole5MagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0b_pole5PhiOther
+INFO: key	pipiSD0b_pole5PhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_4PiMagOther
+INFO: key	pipiSD0fprod_4PiMagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_4PiPhiOther
+INFO: key	pipiSD0fprod_4PiPhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtaMagOther
+INFO: key	pipiSD0fprod_EtaEtaMagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtaPhiOther
+INFO: key	pipiSD0fprod_EtaEtaPhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtapMagOther
+INFO: key	pipiSD0fprod_EtaEtapMagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_EtaEtapPhiOther
+INFO: key	pipiSD0fprod_EtaEtapPhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_KKMagOther
+INFO: key	pipiSD0fprod_KKMagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_KKPhiOther
+INFO: key	pipiSD0fprod_KKPhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_PiPiMagOther
+INFO: key	pipiSD0fprod_PiPiMagOther	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	pipiSD0fprod_PiPiPhiOther
+INFO: key	pipiSD0fprod_PiPiPhiOther	found
+INFO: replace val by 0
+INFO: replace err by 1
+INFO: data file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSOnly/Ascii_Data.txt
+INFO: mc file: /data/sleipnir1/bertram/pwaData/D0Data/pipiSOnly/Ascii_PHSP.txt
+INFO: EvtWeight: 1
+
+
+**************** Minuit Fit parameter **************************
+J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1	1
+J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	0	0.3
+J0P1C1L0S0_pipiSTopion+_pion-Mag	1	1
+J0P1C1L0S0_pipiSTopion+_pion-Phi	0	0.3
+pipiSD0S0_PosNegOther	-1	4
+pipiSD0b_pole1MagOther	1	1
+pipiSD0b_pole1PhiOther	0	1
+pipiSD0b_pole2MagOther	1	1
+pipiSD0b_pole2PhiOther	0	1
+pipiSD0b_pole3MagOther	1	1
+pipiSD0b_pole3PhiOther	0	1
+pipiSD0b_pole4MagOther	1	1
+pipiSD0b_pole4PhiOther	0	1
+pipiSD0b_pole5MagOther	1	1
+pipiSD0b_pole5PhiOther	0	1
+pipiSD0fprod_4PiMagOther	1	1
+pipiSD0fprod_4PiPhiOther	0	1
+pipiSD0fprod_EtaEtaMagOther	1	1
+pipiSD0fprod_EtaEtaPhiOther	0	1
+pipiSD0fprod_EtaEtapMagOther	1	1
+pipiSD0fprod_EtaEtapPhiOther	0	1
+pipiSD0fprod_KKMagOther	1	1
+pipiSD0fprod_KKPhiOther	0	1
+pipiSD0fprod_PiPiMagOther	1	1
+pipiSD0fprod_PiPiPhiOther	0	1
+INFO: 
+File has 100000 events. Each event has 3 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.738328,-0.0167683,0.525901,0.143721) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.395683,0.320082,0.12418,-0.138608) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.730829,-0.303313,-0.650081,-0.00511214) } 	m = 0.139574
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.73489,-0.0903135,0.25284,-0.469424) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.714536,-0.0979978,-0.582945,0.376369) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.415415,0.188311,0.330105,0.0930546) } 	m = 0.139571
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.622103,-0.0721409,0.334948,0.148317) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.643465,0.480364,-0.00741149,-0.404677) } 	m = 0.139568
+
+INFO: {Rank = 1 ( 0.599271,-0.408223,-0.327537,0.25636) } 	m = 0.139566
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.963598,0.520415,-0.333248,-0.546822) } 	m = 0.497615
+
+INFO: {Rank = 1 ( 0.399318,-0.176267,0.0838802,0.31917) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.501924,-0.344148,0.249368,0.227652) } 	m = 0.139571
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.740789,-0.0959236,-0.530984,0.100019) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.327304,0.065477,-0.251762,-0.141339) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.796747,0.0304466,0.782746,0.0413192) } 	m = 0.139572
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.579244,-0.0370448,0.259913,0.137756) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.688088,0.527245,-0.394138,0.143713) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.597508,-0.4902,0.134225,-0.281468) } 	m = 0.139568
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.58401,0.0849346,-0.137182,-0.259645) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.67829,-0.54725,0.375503,-0.0106181) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.60254,0.462315,-0.23832,0.270263) } 	m = 0.139574
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.596943,0.198491,-0.262204,0.0239064) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.508544,0.48808,-0.0287397,0.00941137) } 	m = 0.139572
+
+INFO: {Rank = 1 ( 0.759354,-0.686571,0.290943,-0.0333178) } 	m = 0.139574
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.7543,-0.553755,0.0357863,0.115862) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.71181,0.613274,0.3283,-0.0575161) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.39873,-0.0595198,-0.364086,-0.0583455) } 	m = 0.139571
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.629024,-0.152501,0.0561152,0.348778) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.536404,-0.460637,-0.219168,-0.0896029) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.699411,0.613138,0.163053,-0.259175) } 	m = 0.139569
+
+INFO: 
+
+INFO: 
+File has 300000 events. Each event has 3 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.928027,-0.420894,-0.426576,-0.504475) } 	m = 0.497615
+
+INFO: {Rank = 1 ( 0.651409,0.263826,0.482757,0.319682) } 	m = 0.139566
+
+INFO: {Rank = 1 ( 0.285404,0.157068,-0.0561808,0.184794) } 	m = 0.139571
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.796602,-0.20691,-0.206116,-0.549236) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.673149,0.0576649,0.513469,0.408257) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.395089,0.149245,-0.307353,0.140979) } 	m = 0.139572
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.920886,0.555145,0.00134778,-0.540577) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.574574,-0.396863,-0.21591,0.326402) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.36938,-0.158282,0.214563,0.214176) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.737517,0.173288,-0.512342,-0.0615541) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.456549,0.325463,0.189638,-0.216953) } 	m = 0.139569
+
+INFO: {Rank = 1 ( 0.670773,-0.498751,0.322704,0.278507) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.860841,0.633898,0.221323,-0.206437) } 	m = 0.497615
+
+INFO: {Rank = 1 ( 0.520924,-0.228872,-0.428964,0.124456) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.483075,-0.405026,0.207641,0.0819803) } 	m = 0.13957
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.876545,-0.425476,-0.578969,0.0669134) } 	m = 0.497613
+
+INFO: {Rank = 1 ( 0.504023,0.325322,0.25647,0.250896) } 	m = 0.139568
+
+INFO: {Rank = 1 ( 0.484271,0.100154,0.322499,-0.317809) } 	m = 0.139569
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.554586,-0.153986,0.151637,0.115068) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.671228,0.588128,0.289349,-0.0380746) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.639026,-0.434142,-0.440985,-0.076993) } 	m = 0.139568
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.685911,0.24302,0.323845,-0.242733) } 	m = 0.497615
+
+INFO: {Rank = 1 ( 0.363957,0.1305,0.280627,-0.131161) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.814972,-0.373521,-0.604471,0.373894) } 	m = 0.139569
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.820842,-0.639355,-0.103796,0.0813222) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.485561,0.193893,0.409322,-0.105597) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.558437,0.445462,-0.305526,0.0242745) } 	m = 0.139571
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.671689,0.192228,-0.128963,-0.387251) } 	m = 0.497614
+
+INFO: {Rank = 1 ( 0.668037,-0.594383,-0.13742,0.233705) } 	m = 0.139571
+
+INFO: {Rank = 1 ( 0.525114,0.402155,0.266383,0.153546) } 	m = 0.13957
+
+INFO: 
+
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 7.20844e-07	 py: 3.72529e-08	 pz: 8.65664e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 7500
+INFO: 4vec calculation for event 8000
+INFO: 4vec calculation for event 8500
+INFO: 4vec calculation for event 9000
+INFO: 4vec calculation for event 9500
+INFO: 4vec calculation for event 10000
+INFO: 4vec all in lab system
+ px: 2.98023e-08	 py: 0	 pz: -3.96743e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 10500
+INFO: 4vec calculation for event 11000
+INFO: 4vec calculation for event 11500
+INFO: 4vec calculation for event 12000
+INFO: 4vec calculation for event 12500
+INFO: 4vec calculation for event 13000
+INFO: 4vec calculation for event 13500
+INFO: 4vec calculation for event 14000
+INFO: 4vec calculation for event 14500
+INFO: 4vec calculation for event 15000
+INFO: 4vec calculation for event 15500
+INFO: 4vec calculation for event 16000
+INFO: 4vec calculation for event 16500
+INFO: 4vec calculation for event 17000
+INFO: 4vec calculation for event 17500
+INFO: 4vec calculation for event 18000
+INFO: 4vec calculation for event 18500
+INFO: 4vec calculation for event 19000
+INFO: 4vec calculation for event 19500
+INFO: 4vec calculation for event 20000
+INFO: 4vec all in lab system
+ px: 1.2666e-07	 py: 5.58794e-09	 pz: 7.97212e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 20500
+INFO: 4vec calculation for event 21000
+INFO: 4vec calculation for event 21500
+INFO: 4vec calculation for event 22000
+INFO: 4vec calculation for event 22500
+INFO: 4vec calculation for event 23000
+INFO: 4vec calculation for event 23500
+INFO: 4vec calculation for event 24000
+INFO: 4vec calculation for event 24500
+INFO: 4vec calculation for event 25000
+INFO: 4vec calculation for event 25500
+INFO: 4vec calculation for event 26000
+INFO: 4vec calculation for event 26500
+INFO: 4vec calculation for event 27000
+INFO: 4vec calculation for event 27500
+INFO: 4vec calculation for event 28000
+INFO: 4vec calculation for event 28500
+INFO: 4vec calculation for event 29000
+INFO: 4vec calculation for event 29500
+INFO: 4vec calculation for event 30000
+INFO: 4vec all in lab system
+ px: -2.98023e-08	 py: 3.98606e-07	 pz: 1.49012e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 30500
+INFO: 4vec calculation for event 31000
+INFO: 4vec calculation for event 31500
+INFO: 4vec calculation for event 32000
+INFO: 4vec calculation for event 32500
+INFO: 4vec calculation for event 33000
+INFO: 4vec calculation for event 33500
+INFO: 4vec calculation for event 34000
+INFO: 4vec calculation for event 34500
+INFO: 4vec calculation for event 35000
+INFO: 4vec calculation for event 35500
+INFO: 4vec calculation for event 36000
+INFO: 4vec calculation for event 36500
+INFO: 4vec calculation for event 37000
+INFO: 4vec calculation for event 37500
+INFO: 4vec calculation for event 38000
+INFO: 4vec calculation for event 38500
+INFO: 4vec calculation for event 39000
+INFO: 4vec calculation for event 39500
+INFO: 4vec calculation for event 40000
+INFO: 4vec all in lab system
+ px: 2.98023e-08	 py: 5.96046e-07	 pz: 2.98023e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 40500
+INFO: 4vec calculation for event 41000
+INFO: 4vec calculation for event 41500
+INFO: 4vec calculation for event 42000
+INFO: 4vec calculation for event 42500
+INFO: 4vec calculation for event 43000
+INFO: 4vec calculation for event 43500
+INFO: 4vec calculation for event 44000
+INFO: 4vec calculation for event 44500
+INFO: 4vec calculation for event 45000
+INFO: 4vec calculation for event 45500
+INFO: 4vec calculation for event 46000
+INFO: 4vec calculation for event 46500
+INFO: 4vec calculation for event 47000
+INFO: 4vec calculation for event 47500
+INFO: 4vec calculation for event 48000
+INFO: 4vec calculation for event 48500
+INFO: 4vec calculation for event 49000
+INFO: 4vec calculation for event 49500
+INFO: 4vec calculation for event 50000
+INFO: 4vec all in lab system
+ px: -1.01328e-06	 py: 4.93601e-07	 pz: 1.91852e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 50500
+INFO: 4vec calculation for event 51000
+INFO: 4vec calculation for event 51500
+INFO: 4vec calculation for event 52000
+INFO: 4vec calculation for event 52500
+INFO: 4vec calculation for event 53000
+INFO: 4vec calculation for event 53500
+INFO: 4vec calculation for event 54000
+INFO: 4vec calculation for event 54500
+INFO: 4vec calculation for event 55000
+INFO: 4vec calculation for event 55500
+INFO: 4vec calculation for event 56000
+INFO: 4vec calculation for event 56500
+INFO: 4vec calculation for event 57000
+INFO: 4vec calculation for event 57500
+INFO: 4vec calculation for event 58000
+INFO: 4vec calculation for event 58500
+INFO: 4vec calculation for event 59000
+INFO: 4vec calculation for event 59500
+INFO: 4vec calculation for event 60000
+INFO: 4vec all in lab system
+ px: -2.98023e-08	 py: -3.72529e-09	 pz: 4.06057e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 60500
+INFO: 4vec calculation for event 61000
+INFO: 4vec calculation for event 61500
+INFO: 4vec calculation for event 62000
+INFO: 4vec calculation for event 62500
+INFO: 4vec calculation for event 63000
+INFO: 4vec calculation for event 63500
+INFO: 4vec calculation for event 64000
+INFO: 4vec calculation for event 64500
+INFO: 4vec calculation for event 65000
+INFO: 4vec calculation for event 65500
+INFO: 4vec calculation for event 66000
+INFO: 4vec calculation for event 66500
+INFO: 4vec calculation for event 67000
+INFO: 4vec calculation for event 67500
+INFO: 4vec calculation for event 68000
+INFO: 4vec calculation for event 68500
+INFO: 4vec calculation for event 69000
+INFO: 4vec calculation for event 69500
+INFO: 4vec calculation for event 70000
+INFO: 4vec all in lab system
+ px: 2.38419e-07	 py: 0	 pz: -1.04308e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 70500
+INFO: 4vec calculation for event 71000
+INFO: 4vec calculation for event 71500
+INFO: 4vec calculation for event 72000
+INFO: 4vec calculation for event 72500
+INFO: 4vec calculation for event 73000
+INFO: 4vec calculation for event 73500
+INFO: 4vec calculation for event 74000
+INFO: 4vec calculation for event 74500
+INFO: 4vec calculation for event 75000
+INFO: 4vec calculation for event 75500
+INFO: 4vec calculation for event 76000
+INFO: 4vec calculation for event 76500
+INFO: 4vec calculation for event 77000
+INFO: 4vec calculation for event 77500
+INFO: 4vec calculation for event 78000
+INFO: 4vec calculation for event 78500
+INFO: 4vec calculation for event 79000
+INFO: 4vec calculation for event 79500
+INFO: 4vec calculation for event 80000
+INFO: 4vec all in lab system
+ px: -7.1153e-07	 py: 1.08033e-07	 pz: -9.98378e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 80500
+INFO: 4vec calculation for event 81000
+INFO: 4vec calculation for event 81500
+INFO: 4vec calculation for event 82000
+INFO: 4vec calculation for event 82500
+INFO: 4vec calculation for event 83000
+INFO: 4vec calculation for event 83500
+INFO: 4vec calculation for event 84000
+INFO: 4vec calculation for event 84500
+INFO: 4vec calculation for event 85000
+INFO: 4vec calculation for event 85500
+INFO: 4vec calculation for event 86000
+INFO: 4vec calculation for event 86500
+INFO: 4vec calculation for event 87000
+INFO: 4vec calculation for event 87500
+INFO: 4vec calculation for event 88000
+INFO: 4vec calculation for event 88500
+INFO: 4vec calculation for event 89000
+INFO: 4vec calculation for event 89500
+INFO: 4vec calculation for event 90000
+INFO: 4vec all in lab system
+ px: 4.5076e-07	 py: -3.12924e-07	 pz: -7.45058e-09	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 90500
+INFO: 4vec calculation for event 91000
+INFO: 4vec calculation for event 91500
+INFO: 4vec calculation for event 92000
+INFO: 4vec calculation for event 92500
+INFO: 4vec calculation for event 93000
+INFO: 4vec calculation for event 93500
+INFO: 4vec calculation for event 94000
+INFO: 4vec calculation for event 94500
+INFO: 4vec calculation for event 95000
+INFO: 4vec calculation for event 95500
+INFO: 4vec calculation for event 96000
+INFO: 4vec calculation for event 96500
+INFO: 4vec calculation for event 97000
+INFO: 4vec calculation for event 97500
+INFO: 4vec calculation for event 98000
+INFO: 4vec calculation for event 98500
+INFO: 4vec calculation for event 99000
+INFO: 4vec calculation for event 99500
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 1.49012e-08	 py: 2.12342e-07	 pz: 9.98378e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 7500
+INFO: 4vec calculation for event 8000
+INFO: 4vec calculation for event 8500
+INFO: 4vec calculation for event 9000
+INFO: 4vec calculation for event 9500
+INFO: 4vec calculation for event 10000
+INFO: 4vec all in lab system
+ px: 0	 py: -6.03497e-07	 pz: -2.98023e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 10500
+INFO: 4vec calculation for event 11000
+INFO: 4vec calculation for event 11500
+INFO: 4vec calculation for event 12000
+INFO: 4vec calculation for event 12500
+INFO: 4vec calculation for event 13000
+INFO: 4vec calculation for event 13500
+INFO: 4vec calculation for event 14000
+INFO: 4vec calculation for event 14500
+INFO: 4vec calculation for event 15000
+INFO: 4vec calculation for event 15500
+INFO: 4vec calculation for event 16000
+INFO: 4vec calculation for event 16500
+INFO: 4vec calculation for event 17000
+INFO: 4vec calculation for event 17500
+INFO: 4vec calculation for event 18000
+INFO: 4vec calculation for event 18500
+INFO: 4vec calculation for event 19000
+INFO: 4vec calculation for event 19500
+INFO: 4vec calculation for event 20000
+INFO: 4vec all in lab system
+ px: 9.68575e-08	 py: -1.49012e-08	 pz: 1.01328e-06	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 20500
+INFO: 4vec calculation for event 21000
+INFO: 4vec calculation for event 21500
+INFO: 4vec calculation for event 22000
+INFO: 4vec calculation for event 22500
+INFO: 4vec calculation for event 23000
+INFO: 4vec calculation for event 23500
+INFO: 4vec calculation for event 24000
+INFO: 4vec calculation for event 24500
+INFO: 4vec calculation for event 25000
+INFO: 4vec calculation for event 25500
+INFO: 4vec calculation for event 26000
+INFO: 4vec calculation for event 26500
+INFO: 4vec calculation for event 27000
+INFO: 4vec calculation for event 27500
+INFO: 4vec calculation for event 28000
+INFO: 4vec calculation for event 28500
+INFO: 4vec calculation for event 29000
+INFO: 4vec calculation for event 29500
+INFO: 4vec calculation for event 30000
+INFO: 4vec all in lab system
+ px: 1.49012e-08	 py: 3.12924e-07	 pz: 1.49012e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 30500
+INFO: 4vec calculation for event 31000
+INFO: 4vec calculation for event 31500
+INFO: 4vec calculation for event 32000
+INFO: 4vec calculation for event 32500
+INFO: 4vec calculation for event 33000
+INFO: 4vec calculation for event 33500
+INFO: 4vec calculation for event 34000
+INFO: 4vec calculation for event 34500
+INFO: 4vec calculation for event 35000
+INFO: 4vec calculation for event 35500
+INFO: 4vec calculation for event 36000
+INFO: 4vec calculation for event 36500
+INFO: 4vec calculation for event 37000
+INFO: 4vec calculation for event 37500
+INFO: 4vec calculation for event 38000
+INFO: 4vec calculation for event 38500
+INFO: 4vec calculation for event 39000
+INFO: 4vec calculation for event 39500
+INFO: 4vec calculation for event 40000
+INFO: 4vec all in lab system
+ px: 3.72529e-08	 py: 9.90927e-07	 pz: -1.95578e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 40500
+INFO: 4vec calculation for event 41000
+INFO: 4vec calculation for event 41500
+INFO: 4vec calculation for event 42000
+INFO: 4vec calculation for event 42500
+INFO: 4vec calculation for event 43000
+INFO: 4vec calculation for event 43500
+INFO: 4vec calculation for event 44000
+INFO: 4vec calculation for event 44500
+INFO: 4vec calculation for event 45000
+INFO: 4vec calculation for event 45500
+INFO: 4vec calculation for event 46000
+INFO: 4vec calculation for event 46500
+INFO: 4vec calculation for event 47000
+INFO: 4vec calculation for event 47500
+INFO: 4vec calculation for event 48000
+INFO: 4vec calculation for event 48500
+INFO: 4vec calculation for event 49000
+INFO: 4vec calculation for event 49500
+INFO: 4vec calculation for event 50000
+INFO: 4vec all in lab system
+ px: -1.49012e-08	 py: 0	 pz: -9.40636e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 50500
+INFO: 4vec calculation for event 51000
+INFO: 4vec calculation for event 51500
+INFO: 4vec calculation for event 52000
+INFO: 4vec calculation for event 52500
+INFO: 4vec calculation for event 53000
+INFO: 4vec calculation for event 53500
+INFO: 4vec calculation for event 54000
+INFO: 4vec calculation for event 54500
+INFO: 4vec calculation for event 55000
+INFO: 4vec calculation for event 55500
+INFO: 4vec calculation for event 56000
+INFO: 4vec calculation for event 56500
+INFO: 4vec calculation for event 57000
+INFO: 4vec calculation for event 57500
+INFO: 4vec calculation for event 58000
+INFO: 4vec calculation for event 58500
+INFO: 4vec calculation for event 59000
+INFO: 4vec calculation for event 59500
+INFO: 4vec calculation for event 60000
+INFO: 4vec all in lab system
+ px: 1.49012e-08	 py: 6.29574e-07	 pz: 1.93715e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 60500
+INFO: 4vec calculation for event 61000
+INFO: 4vec calculation for event 61500
+INFO: 4vec calculation for event 62000
+INFO: 4vec calculation for event 62500
+INFO: 4vec calculation for event 63000
+INFO: 4vec calculation for event 63500
+INFO: 4vec calculation for event 64000
+INFO: 4vec calculation for event 64500
+INFO: 4vec calculation for event 65000
+INFO: 4vec calculation for event 65500
+INFO: 4vec calculation for event 66000
+INFO: 4vec calculation for event 66500
+INFO: 4vec calculation for event 67000
+INFO: 4vec calculation for event 67500
+INFO: 4vec calculation for event 68000
+INFO: 4vec calculation for event 68500
+INFO: 4vec calculation for event 69000
+INFO: 4vec calculation for event 69500
+INFO: 4vec calculation for event 70000
+INFO: 4vec all in lab system
+ px: 5.21541e-07	 py: -4.99189e-07	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 70500
+INFO: 4vec calculation for event 71000
+INFO: 4vec calculation for event 71500
+INFO: 4vec calculation for event 72000
+INFO: 4vec calculation for event 72500
+INFO: 4vec calculation for event 73000
+INFO: 4vec calculation for event 73500
+INFO: 4vec calculation for event 74000
+INFO: 4vec calculation for event 74500
+INFO: 4vec calculation for event 75000
+INFO: 4vec calculation for event 75500
+INFO: 4vec calculation for event 76000
+INFO: 4vec calculation for event 76500
+INFO: 4vec calculation for event 77000
+INFO: 4vec calculation for event 77500
+INFO: 4vec calculation for event 78000
+INFO: 4vec calculation for event 78500
+INFO: 4vec calculation for event 79000
+INFO: 4vec calculation for event 79500
+INFO: 4vec calculation for event 80000
+INFO: 4vec all in lab system
+ px: 3.31551e-07	 py: -4.06057e-07	 pz: -2.98023e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 80500
+INFO: 4vec calculation for event 81000
+INFO: 4vec calculation for event 81500
+INFO: 4vec calculation for event 82000
+INFO: 4vec calculation for event 82500
+INFO: 4vec calculation for event 83000
+INFO: 4vec calculation for event 83500
+INFO: 4vec calculation for event 84000
+INFO: 4vec calculation for event 84500
+INFO: 4vec calculation for event 85000
+INFO: 4vec calculation for event 85500
+INFO: 4vec calculation for event 86000
+INFO: 4vec calculation for event 86500
+INFO: 4vec calculation for event 87000
+INFO: 4vec calculation for event 87500
+INFO: 4vec calculation for event 88000
+INFO: 4vec calculation for event 88500
+INFO: 4vec calculation for event 89000
+INFO: 4vec calculation for event 89500
+INFO: 4vec calculation for event 90000
+INFO: 4vec all in lab system
+ px: -1.04308e-07	 py: 7.45058e-09	 pz: 1.8999e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 90500
+INFO: 4vec calculation for event 91000
+INFO: 4vec calculation for event 91500
+INFO: 4vec calculation for event 92000
+INFO: 4vec calculation for event 92500
+INFO: 4vec calculation for event 93000
+INFO: 4vec calculation for event 93500
+INFO: 4vec calculation for event 94000
+INFO: 4vec calculation for event 94500
+INFO: 4vec calculation for event 95000
+INFO: 4vec calculation for event 95500
+INFO: 4vec calculation for event 96000
+INFO: 4vec calculation for event 96500
+INFO: 4vec calculation for event 97000
+INFO: 4vec calculation for event 97500
+INFO: 4vec calculation for event 98000
+INFO: 4vec calculation for event 98500
+INFO: 4vec calculation for event 99000
+INFO: 4vec calculation for event 99500
+INFO: 4vec calculation for event 100000
+INFO: 4vec all in lab system
+ px: 8.56817e-08	 py: -1.04308e-07	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 100500
+INFO: 4vec calculation for event 101000
+INFO: 4vec calculation for event 101500
+INFO: 4vec calculation for event 102000
+INFO: 4vec calculation for event 102500
+INFO: 4vec calculation for event 103000
+INFO: 4vec calculation for event 103500
+INFO: 4vec calculation for event 104000
+INFO: 4vec calculation for event 104500
+INFO: 4vec calculation for event 105000
+INFO: 4vec calculation for event 105500
+INFO: 4vec calculation for event 106000
+INFO: 4vec calculation for event 106500
+INFO: 4vec calculation for event 107000
+INFO: 4vec calculation for event 107500
+INFO: 4vec calculation for event 108000
+INFO: 4vec calculation for event 108500
+INFO: 4vec calculation for event 109000
+INFO: 4vec calculation for event 109500
+INFO: 4vec calculation for event 110000
+INFO: 4vec all in lab system
+ px: 3.8743e-07	 py: 5.06639e-07	 pz: -7.87899e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 110500
+INFO: 4vec calculation for event 111000
+INFO: 4vec calculation for event 111500
+INFO: 4vec calculation for event 112000
+INFO: 4vec calculation for event 112500
+INFO: 4vec calculation for event 113000
+INFO: 4vec calculation for event 113500
+INFO: 4vec calculation for event 114000
+INFO: 4vec calculation for event 114500
+INFO: 4vec calculation for event 115000
+INFO: 4vec calculation for event 115500
+INFO: 4vec calculation for event 116000
+INFO: 4vec calculation for event 116500
+INFO: 4vec calculation for event 117000
+INFO: 4vec calculation for event 117500
+INFO: 4vec calculation for event 118000
+INFO: 4vec calculation for event 118500
+INFO: 4vec calculation for event 119000
+INFO: 4vec calculation for event 119500
+INFO: 4vec calculation for event 120000
+INFO: 4vec all in lab system
+ px: 3.12924e-07	 py: -1.93715e-07	 pz: 3.05008e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 120500
+INFO: 4vec calculation for event 121000
+INFO: 4vec calculation for event 121500
+INFO: 4vec calculation for event 122000
+INFO: 4vec calculation for event 122500
+INFO: 4vec calculation for event 123000
+INFO: 4vec calculation for event 123500
+INFO: 4vec calculation for event 124000
+INFO: 4vec calculation for event 124500
+INFO: 4vec calculation for event 125000
+INFO: 4vec calculation for event 125500
+INFO: 4vec calculation for event 126000
+INFO: 4vec calculation for event 126500
+INFO: 4vec calculation for event 127000
+INFO: 4vec calculation for event 127500
+INFO: 4vec calculation for event 128000
+INFO: 4vec calculation for event 128500
+INFO: 4vec calculation for event 129000
+INFO: 4vec calculation for event 129500
+INFO: 4vec calculation for event 130000
+INFO: 4vec all in lab system
+ px: -8.19564e-08	 py: 8.86619e-07	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 130500
+INFO: 4vec calculation for event 131000
+INFO: 4vec calculation for event 131500
+INFO: 4vec calculation for event 132000
+INFO: 4vec calculation for event 132500
+INFO: 4vec calculation for event 133000
+INFO: 4vec calculation for event 133500
+INFO: 4vec calculation for event 134000
+INFO: 4vec calculation for event 134500
+INFO: 4vec calculation for event 135000
+INFO: 4vec calculation for event 135500
+INFO: 4vec calculation for event 136000
+INFO: 4vec calculation for event 136500
+INFO: 4vec calculation for event 137000
+INFO: 4vec calculation for event 137500
+INFO: 4vec calculation for event 138000
+INFO: 4vec calculation for event 138500
+INFO: 4vec calculation for event 139000
+INFO: 4vec calculation for event 139500
+INFO: 4vec calculation for event 140000
+INFO: 4vec all in lab system
+ px: -9.83477e-07	 py: 1.04308e-07	 pz: 3.98606e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 140500
+INFO: 4vec calculation for event 141000
+INFO: 4vec calculation for event 141500
+INFO: 4vec calculation for event 142000
+INFO: 4vec calculation for event 142500
+INFO: 4vec calculation for event 143000
+INFO: 4vec calculation for event 143500
+INFO: 4vec calculation for event 144000
+INFO: 4vec calculation for event 144500
+INFO: 4vec calculation for event 145000
+INFO: 4vec calculation for event 145500
+INFO: 4vec calculation for event 146000
+INFO: 4vec calculation for event 146500
+INFO: 4vec calculation for event 147000
+INFO: 4vec calculation for event 147500
+INFO: 4vec calculation for event 148000
+INFO: 4vec calculation for event 148500
+INFO: 4vec calculation for event 149000
+INFO: 4vec calculation for event 149500
+INFO: 4vec calculation for event 150000
+INFO: 4vec all in lab system
+ px: -1.02818e-06	 py: -9.98378e-07	 pz: -7.00355e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 150500
+INFO: 4vec calculation for event 151000
+INFO: 4vec calculation for event 151500
+INFO: 4vec calculation for event 152000
+INFO: 4vec calculation for event 152500
+INFO: 4vec calculation for event 153000
+INFO: 4vec calculation for event 153500
+INFO: 4vec calculation for event 154000
+INFO: 4vec calculation for event 154500
+INFO: 4vec calculation for event 155000
+INFO: 4vec calculation for event 155500
+INFO: 4vec calculation for event 156000
+INFO: 4vec calculation for event 156500
+INFO: 4vec calculation for event 157000
+INFO: 4vec calculation for event 157500
+INFO: 4vec calculation for event 158000
+INFO: 4vec calculation for event 158500
+INFO: 4vec calculation for event 159000
+INFO: 4vec calculation for event 159500
+INFO: 4vec calculation for event 160000
+INFO: 4vec all in lab system
+ px: 5.86733e-08	 py: -2.12371e-07	 pz: -3.72529e-09	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 160500
+INFO: 4vec calculation for event 161000
+INFO: 4vec calculation for event 161500
+INFO: 4vec calculation for event 162000
+INFO: 4vec calculation for event 162500
+INFO: 4vec calculation for event 163000
+INFO: 4vec calculation for event 163500
+INFO: 4vec calculation for event 164000
+INFO: 4vec calculation for event 164500
+INFO: 4vec calculation for event 165000
+INFO: 4vec calculation for event 165500
+INFO: 4vec calculation for event 166000
+INFO: 4vec calculation for event 166500
+INFO: 4vec calculation for event 167000
+INFO: 4vec calculation for event 167500
+INFO: 4vec calculation for event 168000
+INFO: 4vec calculation for event 168500
+INFO: 4vec calculation for event 169000
+INFO: 4vec calculation for event 169500
+INFO: 4vec calculation for event 170000
+INFO: 4vec all in lab system
+ px: -1.49012e-08	 py: 7.31088e-07	 pz: -1.90921e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 170500
+INFO: 4vec calculation for event 171000
+INFO: 4vec calculation for event 171500
+INFO: 4vec calculation for event 172000
+INFO: 4vec calculation for event 172500
+INFO: 4vec calculation for event 173000
+INFO: 4vec calculation for event 173500
+INFO: 4vec calculation for event 174000
+INFO: 4vec calculation for event 174500
+INFO: 4vec calculation for event 175000
+INFO: 4vec calculation for event 175500
+INFO: 4vec calculation for event 176000
+INFO: 4vec calculation for event 176500
+INFO: 4vec calculation for event 177000
+INFO: 4vec calculation for event 177500
+INFO: 4vec calculation for event 178000
+INFO: 4vec calculation for event 178500
+INFO: 4vec calculation for event 179000
+INFO: 4vec calculation for event 179500
+INFO: 4vec calculation for event 180000
+INFO: 4vec all in lab system
+ px: 3.09199e-07	 py: 3.07336e-07	 pz: -1.00583e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 180500
+INFO: 4vec calculation for event 181000
+INFO: 4vec calculation for event 181500
+INFO: 4vec calculation for event 182000
+INFO: 4vec calculation for event 182500
+INFO: 4vec calculation for event 183000
+INFO: 4vec calculation for event 183500
+INFO: 4vec calculation for event 184000
+INFO: 4vec calculation for event 184500
+INFO: 4vec calculation for event 185000
+INFO: 4vec calculation for event 185500
+INFO: 4vec calculation for event 186000
+INFO: 4vec calculation for event 186500
+INFO: 4vec calculation for event 187000
+INFO: 4vec calculation for event 187500
+INFO: 4vec calculation for event 188000
+INFO: 4vec calculation for event 188500
+INFO: 4vec calculation for event 189000
+INFO: 4vec calculation for event 189500
+INFO: 4vec calculation for event 190000
+INFO: 4vec all in lab system
+ px: 2.98023e-08	 py: 2.98023e-07	 pz: -2.98023e-08	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 190500
+INFO: 4vec calculation for event 191000
+INFO: 4vec calculation for event 191500
+INFO: 4vec calculation for event 192000
+INFO: 4vec calculation for event 192500
+INFO: 4vec calculation for event 193000
+INFO: 4vec calculation for event 193500
+INFO: 4vec calculation for event 194000
+INFO: 4vec calculation for event 194500
+INFO: 4vec calculation for event 195000
+INFO: 4vec calculation for event 195500
+INFO: 4vec calculation for event 196000
+INFO: 4vec calculation for event 196500
+INFO: 4vec calculation for event 197000
+INFO: 4vec calculation for event 197500
+INFO: 4vec calculation for event 198000
+INFO: 4vec calculation for event 198500
+INFO: 4vec calculation for event 199000
+INFO: 4vec calculation for event 199500
+INFO: 4vec calculation for event 200000
+INFO: 4vec all in lab system
+ px: 1.49012e-08	 py: -4.84288e-07	 pz: -2.10479e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 200500
+INFO: 4vec calculation for event 201000
+INFO: 4vec calculation for event 201500
+INFO: 4vec calculation for event 202000
+INFO: 4vec calculation for event 202500
+INFO: 4vec calculation for event 203000
+INFO: 4vec calculation for event 203500
+INFO: 4vec calculation for event 204000
+INFO: 4vec calculation for event 204500
+INFO: 4vec calculation for event 205000
+INFO: 4vec calculation for event 205500
+INFO: 4vec calculation for event 206000
+INFO: 4vec calculation for event 206500
+INFO: 4vec calculation for event 207000
+INFO: 4vec calculation for event 207500
+INFO: 4vec calculation for event 208000
+INFO: 4vec calculation for event 208500
+INFO: 4vec calculation for event 209000
+INFO: 4vec calculation for event 209500
+INFO: 4vec calculation for event 210000
+INFO: 4vec all in lab system
+ px: -7.0408e-07	 py: -1.49012e-08	 pz: -7.45058e-09	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 210500
+INFO: 4vec calculation for event 211000
+INFO: 4vec calculation for event 211500
+INFO: 4vec calculation for event 212000
+INFO: 4vec calculation for event 212500
+INFO: 4vec calculation for event 213000
+INFO: 4vec calculation for event 213500
+INFO: 4vec calculation for event 214000
+INFO: 4vec calculation for event 214500
+INFO: 4vec calculation for event 215000
+INFO: 4vec calculation for event 215500
+INFO: 4vec calculation for event 216000
+INFO: 4vec calculation for event 216500
+INFO: 4vec calculation for event 217000
+INFO: 4vec calculation for event 217500
+INFO: 4vec calculation for event 218000
+INFO: 4vec calculation for event 218500
+INFO: 4vec calculation for event 219000
+INFO: 4vec calculation for event 219500
+INFO: 4vec calculation for event 220000
+INFO: 4vec all in lab system
+ px: 5.07571e-07	 py: 2.98023e-08	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 220500
+INFO: 4vec calculation for event 221000
+INFO: 4vec calculation for event 221500
+INFO: 4vec calculation for event 222000
+INFO: 4vec calculation for event 222500
+INFO: 4vec calculation for event 223000
+INFO: 4vec calculation for event 223500
+INFO: 4vec calculation for event 224000
+INFO: 4vec calculation for event 224500
+INFO: 4vec calculation for event 225000
+INFO: 4vec calculation for event 225500
+INFO: 4vec calculation for event 226000
+INFO: 4vec calculation for event 226500
+INFO: 4vec calculation for event 227000
+INFO: 4vec calculation for event 227500
+INFO: 4vec calculation for event 228000
+INFO: 4vec calculation for event 228500
+INFO: 4vec calculation for event 229000
+INFO: 4vec calculation for event 229500
+INFO: 4vec calculation for event 230000
+INFO: 4vec all in lab system
+ px: -6.79865e-08	 py: 0	 pz: 1.15484e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 230500
+INFO: 4vec calculation for event 231000
+INFO: 4vec calculation for event 231500
+INFO: 4vec calculation for event 232000
+INFO: 4vec calculation for event 232500
+INFO: 4vec calculation for event 233000
+INFO: 4vec calculation for event 233500
+INFO: 4vec calculation for event 234000
+INFO: 4vec calculation for event 234500
+INFO: 4vec calculation for event 235000
+INFO: 4vec calculation for event 235500
+INFO: 4vec calculation for event 236000
+INFO: 4vec calculation for event 236500
+INFO: 4vec calculation for event 237000
+INFO: 4vec calculation for event 237500
+INFO: 4vec calculation for event 238000
+INFO: 4vec calculation for event 238500
+INFO: 4vec calculation for event 239000
+INFO: 4vec calculation for event 239500
+INFO: 4vec calculation for event 240000
+INFO: 4vec all in lab system
+ px: 2.98023e-08	 py: -1.49012e-08	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 240500
+INFO: 4vec calculation for event 241000
+INFO: 4vec calculation for event 241500
+INFO: 4vec calculation for event 242000
+INFO: 4vec calculation for event 242500
+INFO: 4vec calculation for event 243000
+INFO: 4vec calculation for event 243500
+INFO: 4vec calculation for event 244000
+INFO: 4vec calculation for event 244500
+INFO: 4vec calculation for event 245000
+INFO: 4vec calculation for event 245500
+INFO: 4vec calculation for event 246000
+INFO: 4vec calculation for event 246500
+INFO: 4vec calculation for event 247000
+INFO: 4vec calculation for event 247500
+INFO: 4vec calculation for event 248000
+INFO: 4vec calculation for event 248500
+INFO: 4vec calculation for event 249000
+INFO: 4vec calculation for event 249500
+INFO: 4vec calculation for event 250000
+INFO: 4vec all in lab system
+ px: 1.49012e-08	 py: 7.45058e-09	 pz: -2.04891e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 250500
+INFO: 4vec calculation for event 251000
+INFO: 4vec calculation for event 251500
+INFO: 4vec calculation for event 252000
+INFO: 4vec calculation for event 252500
+INFO: 4vec calculation for event 253000
+INFO: 4vec calculation for event 253500
+INFO: 4vec calculation for event 254000
+INFO: 4vec calculation for event 254500
+INFO: 4vec calculation for event 255000
+INFO: 4vec calculation for event 255500
+INFO: 4vec calculation for event 256000
+INFO: 4vec calculation for event 256500
+INFO: 4vec calculation for event 257000
+INFO: 4vec calculation for event 257500
+INFO: 4vec calculation for event 258000
+INFO: 4vec calculation for event 258500
+INFO: 4vec calculation for event 259000
+INFO: 4vec calculation for event 259500
+INFO: 4vec calculation for event 260000
+INFO: 4vec all in lab system
+ px: 4.47035e-08	 py: -9.31323e-10	 pz: 0	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 260500
+INFO: 4vec calculation for event 261000
+INFO: 4vec calculation for event 261500
+INFO: 4vec calculation for event 262000
+INFO: 4vec calculation for event 262500
+INFO: 4vec calculation for event 263000
+INFO: 4vec calculation for event 263500
+INFO: 4vec calculation for event 264000
+INFO: 4vec calculation for event 264500
+INFO: 4vec calculation for event 265000
+INFO: 4vec calculation for event 265500
+INFO: 4vec calculation for event 266000
+INFO: 4vec calculation for event 266500
+INFO: 4vec calculation for event 267000
+INFO: 4vec calculation for event 267500
+INFO: 4vec calculation for event 268000
+INFO: 4vec calculation for event 268500
+INFO: 4vec calculation for event 269000
+INFO: 4vec calculation for event 269500
+INFO: 4vec calculation for event 270000
+INFO: 4vec all in lab system
+ px: 9.83477e-07	 py: 0	 pz: -1.01328e-06	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 270500
+INFO: 4vec calculation for event 271000
+INFO: 4vec calculation for event 271500
+INFO: 4vec calculation for event 272000
+INFO: 4vec calculation for event 272500
+INFO: 4vec calculation for event 273000
+INFO: 4vec calculation for event 273500
+INFO: 4vec calculation for event 274000
+INFO: 4vec calculation for event 274500
+INFO: 4vec calculation for event 275000
+INFO: 4vec calculation for event 275500
+INFO: 4vec calculation for event 276000
+INFO: 4vec calculation for event 276500
+INFO: 4vec calculation for event 277000
+INFO: 4vec calculation for event 277500
+INFO: 4vec calculation for event 278000
+INFO: 4vec calculation for event 278500
+INFO: 4vec calculation for event 279000
+INFO: 4vec calculation for event 279500
+INFO: 4vec calculation for event 280000
+INFO: 4vec all in lab system
+ px: -7.45058e-09	 py: 3.5594e-07	 pz: -5.25266e-07	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 280500
+INFO: 4vec calculation for event 281000
+INFO: 4vec calculation for event 281500
+INFO: 4vec calculation for event 282000
+INFO: 4vec calculation for event 282500
+INFO: 4vec calculation for event 283000
+INFO: 4vec calculation for event 283500
+INFO: 4vec calculation for event 284000
+INFO: 4vec calculation for event 284500
+INFO: 4vec calculation for event 285000
+INFO: 4vec calculation for event 285500
+INFO: 4vec calculation for event 286000
+INFO: 4vec calculation for event 286500
+INFO: 4vec calculation for event 287000
+INFO: 4vec calculation for event 287500
+INFO: 4vec calculation for event 288000
+INFO: 4vec calculation for event 288500
+INFO: 4vec calculation for event 289000
+INFO: 4vec calculation for event 289500
+INFO: 4vec calculation for event 290000
+INFO: 4vec all in lab system
+ px: -2.94298e-07	 py: 1.49012e-08	 pz: 1.01328e-06	 e : 1.86484	 m : 1.86484
+INFO: 4vec calculation for event 290500
+INFO: 4vec calculation for event 291000
+INFO: 4vec calculation for event 291500
+INFO: 4vec calculation for event 292000
+INFO: 4vec calculation for event 292500
+INFO: 4vec calculation for event 293000
+INFO: 4vec calculation for event 293500
+INFO: 4vec calculation for event 294000
+INFO: 4vec calculation for event 294500
+INFO: 4vec calculation for event 295000
+INFO: 4vec calculation for event 295500
+INFO: 4vec calculation for event 296000
+INFO: 4vec calculation for event 296500
+INFO: 4vec calculation for event 297000
+INFO: 4vec calculation for event 297500
+INFO: 4vec calculation for event 298000
+INFO: 4vec calculation for event 298500
+INFO: 4vec calculation for event 299000
+INFO: 4vec calculation for event 299500
+INFO: caching amplitudes enabled / disabled:	1
+INFO: start migrad 
+INFO: current LH = 174903.5893
+INFO: current LH = 736735.1954
+INFO: current LH = 105377.0653
+INFO: current LH = 198160.453
+INFO: current LH = 156037.8642
+INFO: current LH = 177021.539
+INFO: current LH = 172829.4801
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: current LH = 736735.2536
+INFO: current LH = 105377.0649
+INFO: current LH = 198160.4646
+INFO: current LH = 156037.8715
+INFO: current LH = 177021.5485
+INFO: current LH = 172829.4892
+INFO: current LH = 174903.5893
+INFO: current LH = 174903.5893
+INFO: current LH = 174903.5893
+INFO: Wall time: 32.9224s User: 56.93s System: 9.67s
+
+INFO: current LH = 174903.5893
+INFO: current LH = 1.194114397e+14
+INFO: current LH = 154492.3555
+INFO: current LH = 179415.0943
+INFO: current LH = 171209.664
+INFO: current LH = 175313.8276
+INFO: current LH = 174501.4438
+INFO: current LH = 322088.2811
+INFO: current LH = 122932.1844
+INFO: current LH = 184082.1836
+INFO: current LH = 166635.6168
+INFO: current LH = 175779.2565
+INFO: current LH = 174037.0242
+INFO: current LH = 178126.2239
+INFO: current LH = 162493.2313
+INFO: current LH = 175626.9514
+INFO: current LH = 174085.9739
+INFO: current LH = 207917.7729
+INFO: current LH = 167033.3331
+INFO: current LH = 176893.0084
+INFO: Wall time: 158.412s User: 175.97s System: 34.36s
+
+INFO: current LH = 173160.7603
+INFO: current LH = 175091.258
+INFO: current LH = 174718.386
+INFO: current LH = 163363.3656
+INFO: current LH = 182294.6384
+INFO: current LH = 173943.3712
+INFO: current LH = 175821.5607
+INFO: current LH = 185406.5866
+INFO: current LH = 166647.3756
+INFO: current LH = 175849.4298
+INFO: current LH = 173980.1849
+INFO: current LH = 174367.0756
+INFO: current LH = 173583.8005
+INFO: current LH = 174934.3367
+INFO: current LH = 174854.1229
+INFO: current LH = 194608.5644
+INFO: current LH = 159830.2818
+INFO: current LH = 176655.275
+INFO: current LH = 173198.1357
+INFO: current LH = 170796.5863
+INFO: Wall time: 174.146s User: 190.19s System: 39.62s
+
+INFO: current LH = 175842.2825
+INFO: current LH = 174629.2163
+INFO: current LH = 175146.0774
+INFO: current LH = 178780.8372
+INFO: current LH = 171832.7737
+INFO: current LH = 175253.9643
+INFO: current LH = 174561.2648
+INFO: current LH = 174158.1269
+INFO: current LH = 174908.4492
+INFO: current LH = 174861.2201
+INFO: current LH = 174938.4773
+INFO: current LH = 174713.6753
+INFO: current LH = 175128.5495
+INFO: current LH = 174882.303
+INFO: current LH = 174925.2227
+INFO: current LH = 175053.7284
+INFO: current LH = 174820.1631
+INFO: current LH = 174915.9453
+INFO: current LH = 174891.9028
+INFO: current LH = 176883.9884
+INFO: Wall time: 172.355s User: 188.98s System: 38.32s
+
+INFO: current LH = 175456.2387
+INFO: current LH = 174963.3595
+INFO: current LH = 174868.8833
+INFO: current LH = 174908.4143
+INFO: current LH = 174899.0149
+INFO: current LH = 177561.5029
+INFO: current LH = 172540.4408
+INFO: current LH = 175156.1351
+INFO: current LH = 174653.8859
+INFO: current LH = 191593.2754
+INFO: current LH = 166835.3789
+INFO: current LH = 176117.8876
+INFO: current LH = 173774.3262
+INFO: current LH = 175021.127
+INFO: current LH = 174786.9019
+INFO: current LH = 178374.4019
+INFO: current LH = 170516.308
+INFO: current LH = 175288.2087
+INFO: current LH = 174509.661
+INFO: current LH = 190286.6178
+INFO: Wall time: 171.332s User: 188.34s System: 37.18s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	0
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	0
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	0
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	1
+INFO: pipiSD0b_pole3PhiOther	0
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1.44387
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = 165085.7185
+INFO: current LH = 176157.1523
+INFO: current LH = 173705.1751
+INFO: current LH = 176586.9824
+INFO: current LH = 171022.5531
+INFO: current LH = 175170.5164
+INFO: current LH = 174614.2939
+INFO: current LH = 239988.1373
+INFO: current LH = 136647.9118
+INFO: current LH = 179989.2733
+INFO: current LH = 170080.6236
+INFO: current LH = 166802.9987
+INFO: current LH = 176405.7618
+INFO: current LH = 174365.5273
+INFO: current LH = 175374.6872
+INFO: current LH = 174903.5893
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: Wall time: 140.361s User: 157.51s System: 32.23s
+
+INFO: current LH = 175113.3922
+INFO: current LH = 174694.2065
+INFO: current LH = 174903.58
+INFO: current LH = 174903.58
+INFO: current LH = 175113.4015
+INFO: current LH = 174694.2157
+INFO: current LH = 174903.5893
+INFO: current LH = 174903.5893
+INFO: current LH = 174944.862
+INFO: current LH = 174862.4
+INFO: current LH = 174990.7452
+INFO: current LH = 174816.5244
+INFO: current LH = 174980.1555
+INFO: current LH = 174826.0803
+INFO: current LH = 174937.9208
+INFO: current LH = 174869.3412
+INFO: current LH = 174809.476
+INFO: current LH = 174997.28
+INFO: current LH = 174997.1604
+INFO: current LH = 174810.2426
+INFO: Wall time: 108.415s User: 128.15s System: 25.76s
+
+INFO: current LH = 174907.5073
+INFO: current LH = 174899.484
+INFO: current LH = 175076.6671
+INFO: current LH = 174730.9738
+INFO: current LH = 174877.5806
+INFO: current LH = 174929.2791
+INFO: current LH = 174938.8823
+INFO: current LH = 174868.3797
+INFO: current LH = 174899.4678
+INFO: current LH = 174907.6274
+INFO: current LH = 174893.1098
+INFO: current LH = 174914.1521
+INFO: current LH = 174907.8747
+INFO: current LH = 174899.3873
+INFO: current LH = 174906.342
+INFO: current LH = 174900.9199
+INFO: current LH = 174946.6473
+INFO: current LH = 174860.6146
+INFO: current LH = 174940.3099
+INFO: current LH = 174866.9521
+INFO: Wall time: 172.122s User: 188.7s System: 38.25s
+
+INFO: current LH = 174942.4664
+INFO: current LH = 174864.6191
+INFO: current LH = 175026.4299
+INFO: current LH = 174781.3001
+INFO: current LH = 174931.2884
+INFO: current LH = 174875.6664
+INFO: current LH = 175400.1258
+INFO: current LH = 174409.6794
+INFO: current LH = 174852.7711
+INFO: current LH = 174953.7377
+INFO: current LH = 174826.0803
+INFO: current LH = 174506.6036
+INFO: current LH = 173641.6421
+INFO: current LH = 170476.9585
+INFO: current LH = 156032.2083
+INFO: current LH = 87189.07075
+INFO: current LH = 24286.55096
+INFO: current LH = 24284.1966
+INFO: current LH = 24288.90644
+INFO: current LH = 24278.95409
+INFO: Wall time: 143.641s User: 161.21s System: 31.99s
+
+INFO: current LH = 24294.14768
+INFO: current LH = 24286.55159
+INFO: current LH = 24286.55159
+INFO: current LH = 24284.24434
+INFO: current LH = 24288.85742
+INFO: current LH = 24267.34738
+INFO: current LH = 24305.74552
+INFO: current LH = 24286.55094
+INFO: current LH = 24286.55094
+INFO: current LH = 24287.61245
+INFO: current LH = 24285.49104
+INFO: current LH = 24289.44462
+INFO: current LH = 24283.66888
+INFO: current LH = 24276.25687
+INFO: current LH = 24296.85149
+INFO: current LH = 24286.54526
+INFO: current LH = 24286.56828
+INFO: current LH = 24277.96656
+INFO: current LH = 24295.13705
+INFO: current LH = 24264.08873
+INFO: Wall time: 98.3587s User: 118.91s System: 23.58s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-0.00918767
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	0
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1.00066
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	1
+INFO: pipiSD0b_pole3PhiOther	0
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = 24309.02478
+INFO: current LH = 24293.43361
+INFO: current LH = 24279.67015
+INFO: current LH = 24303.88084
+INFO: current LH = 24269.23266
+INFO: current LH = 24293.44037
+INFO: current LH = 24279.66636
+INFO: current LH = 24297.25017
+INFO: current LH = 24275.86334
+INFO: current LH = 24284.99211
+INFO: current LH = 24288.10542
+INFO: current LH = 24284.0192
+INFO: current LH = 24289.07114
+INFO: current LH = 24289.9911
+INFO: current LH = 24283.11127
+INFO: current LH = 24304.18548
+INFO: current LH = 24268.92802
+INFO: current LH = 24277.9158
+INFO: current LH = 24295.18685
+INFO: current LH = 24252.05987
+INFO: Wall time: 170.696s User: 187.53s System: 37.56s
+
+INFO: current LH = 24321.05364
+INFO: current LH = 24291.63663
+INFO: current LH = 24281.46816
+INFO: current LH = 24296.78603
+INFO: current LH = 24276.32748
+INFO: current LH = 24281.82706
+INFO: current LH = 24291.27019
+INFO: current LH = 24279.11317
+INFO: current LH = 24293.97718
+INFO: current LH = 24274.97146
+INFO: current LH = 24298.1136
+INFO: current LH = 24284.4279
+INFO: current LH = 24288.70089
+INFO: current LH = 24285.15395
+INFO: current LH = 24287.95956
+INFO: current LH = 24300.19344
+INFO: current LH = 24272.92771
+INFO: current LH = 24307.03826
+INFO: current LH = 24266.03582
+INFO: current LH = 24299.76777
+INFO: Wall time: 170.183s User: 187.04s System: 37.49s
+
+INFO: current LH = 24273.32257
+INFO: current LH = 24301.43732
+INFO: current LH = 24271.67642
+INFO: current LH = 24303.8585
+INFO: current LH = 24269.22002
+INFO: current LH = 24298.72831
+INFO: current LH = 24274.36203
+INFO: current LH = 24294.94383
+INFO: current LH = 24278.1611
+INFO: current LH = 24303.02855
+INFO: current LH = 24270.08496
+INFO: current LH = 24294.47587
+INFO: current LH = 24278.62425
+INFO: current LH = 24306.60448
+INFO: current LH = 24266.48587
+INFO: current LH = 24284.43887
+INFO: current LH = 24288.67452
+INFO: current LH = 24274.41064
+INFO: current LH = 24298.69695
+INFO: current LH = 24269.1985
+INFO: Wall time: 169.426s User: 186.16s System: 37.27s
+
+INFO: current LH = 24303.915
+INFO: current LH = 24278.95347
+INFO: current LH = 24248.55004
+INFO: current LH = 24172.44157
+INFO: current LH = 23943.27737
+INFO: current LH = 23248.34507
+INFO: current LH = 21099.88808
+INFO: current LH = 16082.67267
+INFO: current LH = 16022.43254
+INFO: current LH = 16142.88047
+INFO: current LH = 16053.332
+INFO: current LH = 16112.00566
+INFO: current LH = 16082.67267
+INFO: current LH = 16082.67267
+INFO: current LH = 16060.20453
+INFO: current LH = 16105.13463
+INFO: current LH = 16082.67185
+INFO: current LH = 16082.67185
+INFO: current LH = 16083.97911
+INFO: current LH = 16081.3709
+INFO: Wall time: 43.2968s User: 64.96s System: 12.84s
+
+INFO: current LH = 16071.71619
+INFO: current LH = 16093.6349
+INFO: current LH = 16081.0972
+INFO: current LH = 16084.25356
+INFO: current LH = 16061.08594
+INFO: current LH = 16104.26627
+INFO: current LH = 16098.11487
+INFO: current LH = 16067.23797
+INFO: current LH = 16090.87124
+INFO: current LH = 16074.47984
+INFO: current LH = 16080.89815
+INFO: current LH = 16084.43829
+INFO: current LH = 16093.05781
+INFO: current LH = 16072.28981
+INFO: current LH = 16101.70866
+INFO: current LH = 16063.64811
+INFO: current LH = 16055.51358
+INFO: current LH = 16109.84156
+INFO: current LH = 16090.65811
+INFO: current LH = 16074.69286
+INFO: Wall time: 170.906s User: 187.93s System: 37.5s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1.22295
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-0.00918767
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	0
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	1
+INFO: pipiSD0b_pole3PhiOther	0
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	0.997728
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = 16076.57099
+INFO: current LH = 16088.76543
+INFO: current LH = 16076.44598
+INFO: current LH = 16088.89336
+INFO: current LH = 16081.48416
+INFO: current LH = 16083.86592
+INFO: current LH = 16091.86736
+INFO: current LH = 16073.484
+INFO: current LH = 16094.14221
+INFO: current LH = 16071.19225
+INFO: current LH = 16095.3926
+INFO: current LH = 16069.95874
+INFO: current LH = 16093.82102
+INFO: current LH = 16071.51337
+INFO: current LH = 16095.06572
+INFO: current LH = 16070.28486
+INFO: current LH = 16101.13348
+INFO: current LH = 16064.20453
+INFO: current LH = 16078.99421
+INFO: current LH = 16086.35719
+INFO: Wall time: 172.154s User: 189.18s System: 37.95s
+
+INFO: current LH = 16068.40527
+INFO: current LH = 16096.94587
+INFO: current LH = 16053.3312
+INFO: current LH = 15935.89348
+INFO: current LH = 15641.7807
+INFO: current LH = 14755.39242
+INFO: current LH = 12070.61593
+INFO: current LH = 4151.318023
+INFO: current LH = -4887.67076
+INFO: current LH = -4884.177329
+INFO: current LH = -4891.131109
+INFO: current LH = -4886.746712
+INFO: current LH = -4888.592478
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4883.669363
+INFO: current LH = -4891.628324
+INFO: current LH = -4886.751714
+INFO: current LH = -4888.58703
+INFO: current LH = -4887.670525
+INFO: Wall time: 35.15s User: 57.29s System: 11.24s
+
+INFO: current LH = -4887.670525
+INFO: current LH = -4882.261409
+INFO: current LH = -4893.068909
+INFO: current LH = -4885.204457
+INFO: current LH = -4890.134327
+INFO: current LH = -4895.754824
+INFO: current LH = -4879.582211
+INFO: current LH = -4893.498847
+INFO: current LH = -4881.840097
+INFO: current LH = -4882.461192
+INFO: current LH = -4892.86869
+INFO: current LH = -4885.340591
+INFO: current LH = -4889.998188
+INFO: current LH = -4888.550281
+INFO: current LH = -4886.767034
+INFO: current LH = -4887.946048
+INFO: current LH = -4887.392678
+INFO: current LH = -4883.598666
+INFO: current LH = -4891.738833
+INFO: current LH = -4884.570929
+INFO: Wall time: 160.898s User: 178.9s System: 34.75s
+
+INFO: current LH = -4890.768045
+INFO: current LH = -4880.488946
+INFO: current LH = -4894.847631
+INFO: current LH = -4882.739729
+INFO: current LH = -4892.59919
+INFO: current LH = -4889.464185
+INFO: current LH = -4885.879192
+INFO: current LH = -4859.149135
+INFO: current LH = -4916.10824
+INFO: current LH = -4882.929397
+INFO: current LH = -4892.409294
+INFO: current LH = -4903.600274
+INFO: current LH = -4871.742217
+INFO: current LH = -4912.357465
+INFO: current LH = -4862.987105
+INFO: current LH = -4881.200054
+INFO: current LH = -4894.136562
+INFO: current LH = -4883.210127
+INFO: current LH = -4892.128794
+INFO: current LH = -4890.637731
+INFO: Wall time: 172.762s User: 189.94s System: 38.46s
+
+INFO: current LH = -4884.705754
+INFO: current LH = -4897.529172
+INFO: current LH = -4877.815358
+INFO: current LH = -4888.291955
+INFO: current LH = -4887.041969
+INFO: current LH = -4888.015617
+INFO: current LH = -4887.323217
+INFO: current LH = -4884.13989
+INFO: current LH = -4891.197287
+INFO: current LH = -4885.084481
+INFO: current LH = -4890.254472
+INFO: current LH = -4884.364677
+INFO: current LH = -4890.975567
+INFO: current LH = -4882.510007
+INFO: current LH = -4892.826644
+INFO: current LH = -4884.100806
+INFO: current LH = -4891.238116
+INFO: current LH = -4885.992097
+INFO: current LH = -4889.346749
+INFO: current LH = -4875.310014
+INFO: Wall time: 173.359s User: 190.39s System: 38.86s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-0.00918767
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	0
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	1
+INFO: pipiSD0b_pole3PhiOther	0
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1.00061
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -4900.022958
+INFO: current LH = -4881.217233
+INFO: current LH = -4894.121584
+INFO: current LH = -4884.578452
+INFO: current LH = -4890.759274
+INFO: current LH = -4882.617219
+INFO: current LH = -4892.711973
+INFO: current LH = -4885.47476
+INFO: current LH = -4889.864014
+INFO: current LH = -4896.15392
+INFO: current LH = -4879.183415
+INFO: current LH = -4894.00118
+INFO: current LH = -4881.337783
+INFO: current LH = -4887.670504
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: Wall time: 123.472s User: 141.7s System: 28.75s
+
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4886.746712
+INFO: current LH = -4888.592478
+INFO: current LH = -4887.67076
+INFO: current LH = -4887.67076
+INFO: current LH = -4886.828732
+INFO: current LH = -4888.510382
+INFO: current LH = -4887.670525
+INFO: current LH = -4887.670525
+INFO: current LH = -4885.394686
+INFO: current LH = -4889.944428
+INFO: current LH = -4893.213617
+INFO: current LH = -4882.125524
+INFO: current LH = -4885.521896
+INFO: current LH = -4889.817217
+INFO: current LH = -4887.922272
+INFO: current LH = -4887.416833
+INFO: current LH = -4884.704978
+INFO: Wall time: 83.4545s User: 104.16s System: 21s
+
+INFO: current LH = -4890.634168
+INFO: current LH = -4883.003438
+INFO: current LH = -4892.335698
+INFO: current LH = -4889.680235
+INFO: current LH = -4885.663747
+INFO: current LH = -4883.36713
+INFO: current LH = -4891.971969
+INFO: current LH = -4909.255184
+INFO: current LH = -4866.088547
+INFO: current LH = -4883.447101
+INFO: current LH = -4891.892036
+INFO: current LH = -4890.90268
+INFO: current LH = -4884.441267
+INFO: current LH = -4896.346061
+INFO: current LH = -4878.997675
+INFO: current LH = -4887.992062
+INFO: current LH = -4887.34706
+INFO: current LH = -4885.206948
+INFO: current LH = -4890.132194
+INFO: current LH = -4883.204129
+INFO: Wall time: 174.425s User: 191.05s System: 39.48s
+
+INFO: current LH = -4892.135484
+INFO: current LH = -4884.289361
+INFO: current LH = -4891.049776
+INFO: current LH = -4886.103698
+INFO: current LH = -4889.235426
+INFO: current LH = -4881.67856
+INFO: current LH = -4893.660559
+INFO: current LH = -4885.24711
+INFO: current LH = -4890.091882
+INFO: current LH = -4885.647749
+INFO: current LH = -4889.691363
+INFO: current LH = -4893.713697
+INFO: current LH = -4881.625447
+INFO: current LH = -4889.680235
+INFO: current LH = -4897.748879
+INFO: current LH = -4918.128203
+INFO: current LH = -4981.038048
+INFO: current LH = -5185.472227
+INFO: current LH = -5932.412951
+INFO: current LH = -8153.603979
+INFO: Wall time: 172.851s User: 189.99s System: 38.57s
+
+INFO: current LH = -8153.315796
+INFO: current LH = -8153.888808
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.345678
+INFO: current LH = -8153.859489
+INFO: current LH = -8153.60397
+INFO: current LH = -8153.60397
+INFO: current LH = -8151.235957
+INFO: current LH = -8155.969191
+INFO: current LH = -8160.43675
+INFO: current LH = -8146.768015
+INFO: current LH = -8151.853394
+INFO: current LH = -8155.351854
+INFO: current LH = -8153.957556
+INFO: current LH = -8153.247666
+INFO: current LH = -8147.224827
+INFO: current LH = -8159.977548
+INFO: current LH = -8149.986644
+INFO: current LH = -8157.219424
+INFO: Wall time: 108.371s User: 128.55s System: 25.93s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-0.0421097
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	0
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	0.99941
+INFO: pipiSD0b_pole3PhiOther	0.573061
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -8148.414916
+INFO: current LH = -8158.789153
+INFO: current LH = -8158.923879
+INFO: current LH = -8148.286055
+INFO: current LH = -8149.099876
+INFO: current LH = -8158.105152
+INFO: current LH = -8178.671231
+INFO: current LH = -8128.539256
+INFO: current LH = -8149.008662
+INFO: current LH = -8158.19686
+INFO: current LH = -8157.454143
+INFO: current LH = -8149.757519
+INFO: current LH = -8164.043093
+INFO: current LH = -8143.168986
+INFO: current LH = -8153.972746
+INFO: current LH = -8153.232357
+INFO: current LH = -8150.056223
+INFO: current LH = -8157.148595
+INFO: current LH = -8146.61561
+INFO: current LH = -8160.591268
+INFO: Wall time: 174.572s User: 190.92s System: 39.63s
+
+INFO: current LH = -8140.341894
+INFO: current LH = -8166.862176
+INFO: current LH = -8149.1596
+INFO: current LH = -8158.045287
+INFO: current LH = -8150.973715
+INFO: current LH = -8156.231781
+INFO: current LH = -8146.200611
+INFO: current LH = -8161.004288
+INFO: current LH = -8149.491867
+INFO: current LH = -8157.713755
+INFO: current LH = -8151.843997
+INFO: current LH = -8155.360999
+INFO: current LH = -8160.475099
+INFO: current LH = -8146.729936
+INFO: current LH = -8153.603979
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: Wall time: 132.452s User: 150.06s System: 31.01s
+
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.293545
+INFO: current LH = -8153.910509
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.604027
+INFO: current LH = -8153.298831
+INFO: current LH = -8153.905245
+INFO: current LH = -8153.60397
+INFO: current LH = -8153.60397
+INFO: current LH = -8150.817794
+INFO: current LH = -8156.386276
+INFO: current LH = -8161.145393
+INFO: current LH = -8146.058677
+INFO: current LH = -8151.506447
+INFO: current LH = -8155.697622
+INFO: current LH = -8154.025171
+INFO: current LH = -8153.178899
+INFO: current LH = -8148.280636
+INFO: current LH = -8158.923433
+INFO: Wall time: 92.063s User: 112.58s System: 22.58s
+
+INFO: current LH = -8148.414917
+INFO: current LH = -8158.789153
+INFO: current LH = -8161.067087
+INFO: current LH = -8146.144759
+INFO: current LH = -8148.41445
+INFO: current LH = -8158.78962
+INFO: current LH = -8184.682509
+INFO: current LH = -8122.529336
+INFO: current LH = -8147.797301
+INFO: current LH = -8159.406768
+INFO: current LH = -8157.548464
+INFO: current LH = -8149.663382
+INFO: current LH = -8163.742502
+INFO: current LH = -8143.469344
+INFO: current LH = -8154.034103
+INFO: current LH = -8153.169966
+INFO: current LH = -8149.65561
+INFO: current LH = -8157.548459
+INFO: current LH = -8140.341918
+INFO: current LH = -8166.862152
+INFO: Wall time: 174.929s User: 191.07s System: 40s
+
+INFO: current LH = -8148.60274
+INFO: current LH = -8158.60133
+INFO: current LH = -8150.298185
+INFO: current LH = -8156.905885
+INFO: current LH = -8145.255827
+INFO: current LH = -8161.948242
+INFO: current LH = -8148.297656
+INFO: current LH = -8158.906414
+INFO: current LH = -8151.587004
+INFO: current LH = -8155.617066
+INFO: current LH = -8161.528765
+INFO: current LH = -8145.675305
+INFO: current LH = -8161.067087
+INFO: current LH = -8190.958155
+INFO: current LH = -8265.95194
+INFO: current LH = -8493.105093
+INFO: current LH = -9191.182016
+INFO: current LH = -11355.4502
+INFO: current LH = -15559.24634
+INFO: current LH = -15561.16331
+INFO: Wall time: 165.132s User: 182.16s System: 37.28s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13197
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-2554.11
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	0
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	1
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -15557.32326
+INFO: current LH = -15559.24612
+INFO: current LH = -15559.24612
+INFO: current LH = -15561.13602
+INFO: current LH = -15557.35124
+INFO: current LH = -15559.24638
+INFO: current LH = -15559.24638
+INFO: current LH = -15558.54614
+INFO: current LH = -15559.94161
+INFO: current LH = -15565.9887
+INFO: current LH = -15552.49593
+INFO: current LH = -15558.14023
+INFO: current LH = -15560.34717
+INFO: current LH = -15560.71199
+INFO: current LH = -15557.77473
+INFO: current LH = -15551.67943
+INFO: current LH = -15566.80348
+INFO: current LH = -15561.64878
+INFO: current LH = -15556.84428
+INFO: current LH = -15569.99742
+INFO: Wall time: 117.678s User: 137.34s System: 28.22s
+
+INFO: current LH = -15548.50269
+INFO: current LH = -15567.10384
+INFO: current LH = -15551.37688
+INFO: current LH = -15555.59004
+INFO: current LH = -15562.89637
+INFO: current LH = -15593.53372
+INFO: current LH = -15524.94163
+INFO: current LH = -15581.67578
+INFO: current LH = -15536.80949
+INFO: current LH = -15553.76579
+INFO: current LH = -15564.72134
+INFO: current LH = -15563.28966
+INFO: current LH = -15555.20795
+INFO: current LH = -15573.07731
+INFO: current LH = -15545.42374
+INFO: current LH = -15559.85175
+INFO: current LH = -15558.63389
+INFO: current LH = -15553.09916
+INFO: current LH = -15565.38574
+INFO: current LH = -15543.9773
+INFO: Wall time: 173.546s User: 190.22s System: 39.14s
+
+INFO: current LH = -15574.53212
+INFO: current LH = -15549.07668
+INFO: current LH = -15569.42343
+INFO: current LH = -15553.33891
+INFO: current LH = -15565.1467
+INFO: current LH = -15554.56082
+INFO: current LH = -15563.9259
+INFO: current LH = -15550.71962
+INFO: current LH = -15567.76605
+INFO: current LH = -15553.44762
+INFO: current LH = -15565.03637
+INFO: current LH = -15559.92911
+INFO: current LH = -15558.55659
+INFO: current LH = -15566.97163
+INFO: current LH = -15551.51509
+INFO: current LH = -15559.24634
+INFO: current LH = -15559.24638
+INFO: current LH = -15559.24638
+INFO: current LH = -15559.24638
+INFO: current LH = -15559.24638
+INFO: Wall time: 140.291s User: 160s System: 31.85s
+
+INFO: current LH = -15561.35808
+INFO: current LH = -15557.12764
+INFO: current LH = -15559.2463
+INFO: current LH = -15559.2463
+INFO: current LH = -15561.45481
+INFO: current LH = -15557.03043
+INFO: current LH = -15559.24638
+INFO: current LH = -15559.24638
+INFO: current LH = -15558.38788
+INFO: current LH = -15560.09739
+INFO: current LH = -15565.71768
+INFO: current LH = -15552.76759
+INFO: current LH = -15557.93593
+INFO: current LH = -15560.54934
+INFO: current LH = -15560.88039
+INFO: current LH = -15557.60488
+INFO: current LH = -15552.65632
+INFO: current LH = -15565.82895
+INFO: current LH = -15569.99748
+INFO: current LH = -15548.50263
+INFO: Wall time: 109.938s User: 129.72s System: 26.91s
+
+INFO: current LH = -15565.43413
+INFO: current LH = -15553.05114
+INFO: current LH = -15555.27007
+INFO: current LH = -15563.2152
+INFO: current LH = -15581.6758
+INFO: current LH = -15536.80946
+INFO: current LH = -15552.91494
+INFO: current LH = -15565.57033
+INFO: current LH = -15564.21177
+INFO: current LH = -15554.28834
+INFO: current LH = -15572.27243
+INFO: current LH = -15546.22768
+INFO: current LH = -15559.86773
+INFO: current LH = -15558.61754
+INFO: current LH = -15553.24646
+INFO: current LH = -15565.23881
+INFO: current LH = -15549.07671
+INFO: current LH = -15569.4234
+INFO: current LH = -15553.1989
+INFO: current LH = -15565.28637
+INFO: Wall time: 173.964s User: 190.65s System: 39.44s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-2554.11
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	1
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	0
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	0.999718
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -15554.02124
+INFO: current LH = -15564.46403
+INFO: current LH = -15550.47703
+INFO: current LH = -15568.00823
+INFO: current LH = -15553.89149
+INFO: current LH = -15564.59378
+INFO: current LH = -15559.94971
+INFO: current LH = -15558.53556
+INFO: current LH = -15567.85901
+INFO: current LH = -15550.62626
+INFO: current LH = -15569.99748
+INFO: current LH = -15613.07361
+INFO: current LH = -15721.21915
+INFO: current LH = -16048.3965
+INFO: current LH = -17022.65527
+INFO: current LH = -18672.71272
+INFO: current LH = -20128.35019
+INFO: current LH = 29469.95037
+INFO: current LH = -13473.0353
+INFO: current LH = -19391.75935
+INFO: Wall time: 174.13s User: 190.92s System: 39.4s
+
+INFO: current LH = -20282.11475
+INFO: current LH = -20282.85624
+INFO: current LH = -20281.36204
+INFO: current LH = -20282.11471
+INFO: current LH = -20282.11471
+INFO: current LH = -20282.86525
+INFO: current LH = -20281.3528
+INFO: current LH = -20282.11473
+INFO: current LH = -20282.11473
+INFO: current LH = -20277.40874
+INFO: current LH = -20286.80896
+INFO: current LH = -20294.16037
+INFO: current LH = -20270.05908
+INFO: current LH = -20280.97133
+INFO: current LH = -20283.24844
+INFO: current LH = -20278.69301
+INFO: current LH = -20285.52786
+INFO: current LH = -20269.22336
+INFO: current LH = -20294.98724
+INFO: current LH = -20272.89322
+INFO: Wall time: 108.894s User: 129.09s System: 26.28s
+
+INFO: current LH = -20291.32661
+INFO: current LH = -20284.39613
+INFO: current LH = -20279.55893
+INFO: current LH = -20282.564
+INFO: current LH = -20281.65582
+INFO: current LH = -20324.1577
+INFO: current LH = -20239.92798
+INFO: current LH = -20293.03137
+INFO: current LH = -20271.18845
+INFO: current LH = -20277.75677
+INFO: current LH = -20286.46293
+INFO: current LH = -20289.62958
+INFO: current LH = -20274.58699
+INFO: current LH = -20276.87307
+INFO: current LH = -20287.34844
+INFO: current LH = -20284.5471
+INFO: current LH = -20279.68899
+INFO: current LH = -20294.90641
+INFO: current LH = -20269.32468
+INFO: current LH = -20313.5783
+INFO: Wall time: 173.545s User: 190.37s System: 39.23s
+
+INFO: current LH = -20250.66087
+INFO: current LH = -20283.02356
+INFO: current LH = -20281.19763
+INFO: current LH = -20274.06657
+INFO: current LH = -20290.15154
+INFO: current LH = -20278.65203
+INFO: current LH = -20285.60821
+INFO: current LH = -20280.16874
+INFO: current LH = -20284.07043
+INFO: current LH = -20272.12558
+INFO: current LH = -20292.08966
+INFO: current LH = -20283.18438
+INFO: current LH = -20281.06318
+INFO: current LH = -20282.89554
+INFO: current LH = -20281.34362
+INFO: current LH = -20268.58226
+INFO: current LH = -20295.63363
+INFO: current LH = -20276.3376
+INFO: current LH = -20287.90189
+INFO: current LH = -20282.03446
+INFO: Wall time: 173.991s User: 190.46s System: 39.7s
+
+INFO: current LH = -20282.1868
+INFO: current LH = -20279.05406
+INFO: current LH = -20285.15299
+INFO: current LH = -20280.10844
+INFO: current LH = -20284.11138
+INFO: current LH = -20284.5471
+INFO: current LH = -20294.34231
+INFO: current LH = -20319.28783
+INFO: current LH = -20397.96858
+INFO: current LH = -20666.61657
+INFO: current LH = -21707.90538
+INFO: current LH = -23935.23174
+INFO: current LH = -23936.64369
+INFO: current LH = -23933.80896
+INFO: current LH = -23935.23167
+INFO: current LH = -23935.23167
+INFO: current LH = -23936.64704
+INFO: current LH = -23933.80567
+INFO: current LH = -23935.23172
+INFO: current LH = -23935.23172
+INFO: Wall time: 109.308s User: 129.22s System: 26.59s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-2554.11
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-2349.64
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	5.44531
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	1
+INFO: pipiSD0b_pole5PhiOther	2.35063
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -23932.05421
+INFO: current LH = -23938.3999
+INFO: current LH = -23946.09186
+INFO: current LH = -23924.36039
+INFO: current LH = -23933.76575
+INFO: current LH = -23936.68623
+INFO: current LH = -23932.22121
+INFO: current LH = -23938.23088
+INFO: current LH = -23928.11131
+INFO: current LH = -23942.34167
+INFO: current LH = -23935.10558
+INFO: current LH = -23935.34649
+INFO: current LH = -23944.82642
+INFO: current LH = -23925.62585
+INFO: current LH = -23931.41187
+INFO: current LH = -23939.04117
+INFO: current LH = -23940.7406
+INFO: current LH = -23929.70593
+INFO: current LH = -23940.52516
+INFO: current LH = -23929.94203
+INFO: Wall time: 172.306s User: 189.64s System: 38.27s
+
+INFO: current LH = -23944.51955
+INFO: current LH = -23925.95535
+INFO: current LH = -23937.56015
+INFO: current LH = -23932.88424
+INFO: current LH = -23965.35454
+INFO: current LH = -23905.08708
+INFO: current LH = -23956.99619
+INFO: current LH = -23913.45588
+INFO: current LH = -23936.53809
+INFO: current LH = -23933.91525
+INFO: current LH = -23927.36872
+INFO: current LH = -23943.08385
+INFO: current LH = -23933.07739
+INFO: current LH = -23937.39558
+INFO: current LH = -23927.07925
+INFO: current LH = -23943.37336
+INFO: current LH = -23935.57764
+INFO: current LH = -23934.89461
+INFO: current LH = -23924.65901
+INFO: current LH = -23945.79393
+INFO: Wall time: 173.841s User: 190.66s System: 39.17s
+
+INFO: current LH = -23930.67015
+INFO: current LH = -23939.79617
+INFO: current LH = -23926.08749
+INFO: current LH = -23944.38741
+INFO: current LH = -23936.35368
+INFO: current LH = -23934.0993
+INFO: current LH = -23933.70792
+INFO: current LH = -23936.74229
+INFO: current LH = -23944.51955
+INFO: current LH = -23981.78218
+INFO: current LH = -24075.66992
+INFO: current LH = -24362.34586
+INFO: current LH = -25231.67023
+INFO: current LH = -26831.28104
+INFO: current LH = -26104.43739
+INFO: current LH = -26830.2055
+INFO: current LH = -26832.34126
+INFO: current LH = -26831.28105
+INFO: current LH = -26831.28105
+INFO: current LH = -26830.20056
+INFO: Wall time: 141.601s User: 159.92s System: 32.53s
+
+INFO: current LH = -26832.34599
+INFO: current LH = -26831.28101
+INFO: current LH = -26831.28101
+INFO: current LH = -26828.50953
+INFO: current LH = -26834.0425
+INFO: current LH = -26840.9183
+INFO: current LH = -26821.63202
+INFO: current LH = -26829.2196
+INFO: current LH = -26833.32755
+INFO: current LH = -26826.04147
+INFO: current LH = -26836.50629
+INFO: current LH = -26828.07635
+INFO: current LH = -26834.4733
+INFO: current LH = -26829.31611
+INFO: current LH = -26833.229
+INFO: current LH = -26837.74525
+INFO: current LH = -26824.80619
+INFO: current LH = -26827.22021
+INFO: current LH = -26835.32917
+INFO: current LH = -26829.67324
+INFO: Wall time: 148.134s User: 167.43s System: 33.33s
+
+INFO: current LH = -26832.87169
+INFO: current LH = -26831.46254
+INFO: current LH = -26831.03407
+INFO: current LH = -26831.36936
+INFO: current LH = -26831.17992
+INFO: current LH = -26846.15931
+INFO: current LH = -26816.34455
+INFO: current LH = -26838.26287
+INFO: current LH = -26824.28642
+INFO: current LH = -26849.47504
+INFO: current LH = -26813.03565
+INFO: current LH = -26840.36625
+INFO: current LH = -26822.18303
+INFO: current LH = -26833.85665
+INFO: current LH = -26828.69521
+INFO: current LH = -26823.3921
+INFO: current LH = -26839.15822
+INFO: current LH = -26830.23879
+INFO: current LH = -26832.3288
+INFO: current LH = -26829.69507
+INFO: Wall time: 173.142s User: 189.75s System: 39.24s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-2554.11
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	5.44531
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	4.578
+INFO: pipiSD0b_pole5PhiOther	2.35063
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	0.00166869
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -26832.8798
+INFO: current LH = -26823.93218
+INFO: current LH = -26838.61766
+INFO: current LH = -26832.07084
+INFO: current LH = -26830.49745
+INFO: current LH = -26832.4163
+INFO: current LH = -26830.15858
+INFO: current LH = -26821.38734
+INFO: current LH = -26841.16287
+INFO: current LH = -26831.18866
+INFO: current LH = -26831.34807
+INFO: current LH = -26831.21804
+INFO: current LH = -26831.33125
+INFO: current LH = -26833.35345
+INFO: current LH = -26829.19738
+INFO: current LH = -26828.4328
+INFO: current LH = -26834.10974
+INFO: current LH = -26831.28104
+INFO: current LH = -26831.28105
+INFO: current LH = -26831.28105
+INFO: Wall time: 157.718s User: 174.93s System: 36.07s
+
+INFO: current LH = -26831.28105
+INFO: current LH = -26831.28105
+INFO: current LH = -26831.28105
+INFO: current LH = -26830.29895
+INFO: current LH = -26832.25034
+INFO: current LH = -26831.28105
+INFO: current LH = -26831.28105
+INFO: current LH = -26830.30088
+INFO: current LH = -26832.24839
+INFO: current LH = -26831.28101
+INFO: current LH = -26831.28101
+INFO: current LH = -26828.15291
+INFO: current LH = -26834.39637
+INFO: current LH = -26841.33339
+INFO: current LH = -26821.2159
+INFO: current LH = -26829.37284
+INFO: current LH = -26833.17645
+INFO: current LH = -26826.32992
+INFO: current LH = -26836.21936
+INFO: current LH = -26828.02963
+INFO: Wall time: 84.1511s User: 104.84s System: 21.34s
+
+INFO: current LH = -26834.51965
+INFO: current LH = -26829.57546
+INFO: current LH = -26832.97382
+INFO: current LH = -26838.36709
+INFO: current LH = -26824.1822
+INFO: current LH = -26827.20582
+INFO: current LH = -26835.34346
+INFO: current LH = -26829.89354
+INFO: current LH = -26832.65575
+INFO: current LH = -26831.36936
+INFO: current LH = -26831.17992
+INFO: current LH = -26838.26286
+INFO: current LH = -26824.28642
+INFO: current LH = -26840.36631
+INFO: current LH = -26822.18298
+INFO: current LH = -26834.16199
+INFO: current LH = -26828.3873
+INFO: current LH = -26823.05159
+INFO: current LH = -26839.49769
+INFO: current LH = -26829.69507
+INFO: Wall time: 172.515s User: 189.65s System: 38.39s
+
+INFO: current LH = -26832.8798
+INFO: current LH = -26823.76756
+INFO: current LH = -26838.78172
+INFO: current LH = -26832.4163
+INFO: current LH = -26830.15857
+INFO: current LH = -26821.00463
+INFO: current LH = -26841.54465
+INFO: current LH = -26831.21804
+INFO: current LH = -26831.33125
+INFO: current LH = -26833.49171
+INFO: current LH = -26829.05758
+INFO: current LH = -26828.97719
+INFO: current LH = -26833.57209
+INFO: current LH = -26832.8798
+INFO: current LH = -26839.40151
+INFO: current LH = -26856.5681
+INFO: current LH = -26914.76005
+INFO: current LH = -27122.91556
+INFO: current LH = -26811.26085
+INFO: current LH = -27283.27598
+INFO: Wall time: 174.945s User: 191.59s System: 39.77s
+
+INFO: current LH = -27186.87793
+INFO: current LH = -27288.59197
+INFO: current LH = -27283.39163
+INFO: current LH = -27293.77586
+INFO: current LH = -27288.59215
+INFO: current LH = -27288.59215
+INFO: current LH = -27283.40516
+INFO: current LH = -27293.76206
+INFO: current LH = -27288.59198
+INFO: current LH = -27288.59198
+INFO: current LH = -27282.31356
+INFO: current LH = -27294.85042
+INFO: current LH = -27298.83351
+INFO: current LH = -27278.33656
+INFO: current LH = -27287.48215
+INFO: current LH = -27289.68981
+INFO: current LH = -27280.19599
+INFO: current LH = -27296.97286
+INFO: current LH = -27284.41163
+INFO: current LH = -27292.76061
+INFO: Wall time: 108.471s User: 129.02s System: 25.69s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-2430.63
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	-0.000513987
+INFO: pipiSD0b_pole3MagOther	5.44531
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	4.578
+INFO: pipiSD0b_pole5PhiOther	2.35063
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.398101
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -27285.41092
+INFO: current LH = -27291.75916
+INFO: current LH = -27297.3521
+INFO: current LH = -27279.8189
+INFO: current LH = -27281.3088
+INFO: current LH = -27295.85996
+INFO: current LH = -27285.99304
+INFO: current LH = -27291.18224
+INFO: current LH = -27287.15163
+INFO: current LH = -27290.01784
+INFO: current LH = -27298.89421
+INFO: current LH = -27278.27724
+INFO: current LH = -27299.88444
+INFO: current LH = -27277.29348
+INFO: current LH = -27305.18425
+INFO: current LH = -27271.98668
+INFO: current LH = -27292.19506
+INFO: current LH = -27284.97262
+INFO: current LH = -27282.88543
+INFO: current LH = -27294.28846
+INFO: Wall time: 173.498s User: 190.75s System: 38.78s
+
+INFO: current LH = -27288.18122
+INFO: current LH = -27288.96909
+INFO: current LH = -27288.34044
+INFO: current LH = -27288.83049
+INFO: current LH = -27282.66482
+INFO: current LH = -27294.50574
+INFO: current LH = -27294.04576
+INFO: current LH = -27283.14343
+INFO: current LH = -27297.18234
+INFO: current LH = -27280.01462
+INFO: current LH = -27277.8827
+INFO: current LH = -27299.28683
+INFO: current LH = -27291.49815
+INFO: current LH = -27285.68336
+INFO: current LH = -27295.31353
+INFO: current LH = -27281.8574
+INFO: current LH = -27286.99686
+INFO: current LH = -27290.1729
+INFO: current LH = -27282.10714
+INFO: current LH = -27295.06234
+INFO: Wall time: 173.781s User: 191.09s System: 38.69s
+
+INFO: current LH = -27288.59197
+INFO: current LH = -27288.59215
+INFO: current LH = -27288.59215
+INFO: current LH = -27288.59215
+INFO: current LH = -27288.59215
+INFO: current LH = -27283.96801
+INFO: current LH = -27293.203
+INFO: current LH = -27288.59215
+INFO: current LH = -27288.59215
+INFO: current LH = -27284.01712
+INFO: current LH = -27293.15382
+INFO: current LH = -27288.59198
+INFO: current LH = -27288.59198
+INFO: current LH = -27283.52482
+INFO: current LH = -27293.64611
+INFO: current LH = -27298.51236
+INFO: current LH = -27278.65857
+INFO: current LH = -27287.43538
+INFO: current LH = -27289.73555
+INFO: current LH = -27280.79738
+INFO: Wall time: 76.7313s User: 97.6s System: 20.02s
+
+INFO: current LH = -27296.37356
+INFO: current LH = -27284.18418
+INFO: current LH = -27292.98676
+INFO: current LH = -27285.51042
+INFO: current LH = -27291.66051
+INFO: current LH = -27297.37594
+INFO: current LH = -27279.79499
+INFO: current LH = -27281.85086
+INFO: current LH = -27295.32007
+INFO: current LH = -27285.40549
+INFO: current LH = -27291.76544
+INFO: current LH = -27287.22646
+INFO: current LH = -27289.94447
+INFO: current LH = -27299.10672
+INFO: current LH = -27278.06421
+INFO: current LH = -27305.18417
+INFO: current LH = -27271.98676
+INFO: current LH = -27291.8155
+INFO: current LH = -27285.35543
+INFO: current LH = -27282.09878
+INFO: Wall time: 175.378s User: 191.95s System: 40.04s
+
+INFO: current LH = -27295.07216
+INFO: current LH = -27288.34044
+INFO: current LH = -27288.83049
+INFO: current LH = -27282.74829
+INFO: current LH = -27294.42264
+INFO: current LH = -27297.18249
+INFO: current LH = -27280.01447
+INFO: current LH = -27278.41678
+INFO: current LH = -27298.75415
+INFO: current LH = -27295.31352
+INFO: current LH = -27281.85741
+INFO: current LH = -27287.06399
+INFO: current LH = -27290.10694
+INFO: current LH = -27282.44219
+INFO: current LH = -27294.72874
+INFO: current LH = -27297.18249
+INFO: current LH = -27331.68285
+INFO: current LH = -27419.03037
+INFO: current LH = -27692.64468
+INFO: current LH = -28603.58926
+INFO: Wall time: 174.848s User: 191.87s System: 39.38s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	-2404.67
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	5.44531
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	4.578
+INFO: pipiSD0b_pole5PhiOther	2.35063
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.398101
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.229574
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -28668.25885
+INFO: current LH = -29651.58297
+INFO: current LH = -29647.50752
+INFO: current LH = -29655.64515
+INFO: current LH = -29651.58312
+INFO: current LH = -29651.58312
+INFO: current LH = -29647.56146
+INFO: current LH = -29655.59125
+INFO: current LH = -29651.58298
+INFO: current LH = -29651.58298
+INFO: current LH = -29648.39537
+INFO: current LH = -29654.76058
+INFO: current LH = -29658.15058
+INFO: current LH = -29645.00329
+INFO: current LH = -29654.15602
+INFO: current LH = -29648.99303
+INFO: current LH = -29645.8838
+INFO: current LH = -29657.26926
+INFO: current LH = -29646.49918
+INFO: current LH = -29656.64989
+INFO: Wall time: 109.185s User: 129.39s System: 26.37s
+
+INFO: current LH = -29646.19999
+INFO: current LH = -29656.95074
+INFO: current LH = -29657.19943
+INFO: current LH = -29645.95466
+INFO: current LH = -29646.84968
+INFO: current LH = -29656.30345
+INFO: current LH = -29643.71588
+INFO: current LH = -29659.43001
+INFO: current LH = -29649.96184
+INFO: current LH = -29653.19035
+INFO: current LH = -29658.88708
+INFO: current LH = -29644.26563
+INFO: current LH = -29662.37449
+INFO: current LH = -29640.74877
+INFO: current LH = -29657.79968
+INFO: current LH = -29645.35212
+INFO: current LH = -29652.45419
+INFO: current LH = -29650.70251
+INFO: current LH = -29648.83915
+INFO: current LH = -29654.31443
+INFO: Wall time: 174.174s User: 191.34s System: 38.99s
+
+INFO: current LH = -29647.71883
+INFO: current LH = -29655.4269
+INFO: current LH = -29649.17677
+INFO: current LH = -29653.97959
+INFO: current LH = -29653.90322
+INFO: current LH = -29649.13641
+INFO: current LH = -29652.37336
+INFO: current LH = -29650.77845
+INFO: current LH = -29645.34685
+INFO: current LH = -29657.80893
+INFO: current LH = -29641.5909
+INFO: current LH = -29661.26204
+INFO: current LH = -29649.48549
+INFO: current LH = -29653.66632
+INFO: current LH = -29649.66056
+INFO: current LH = -29653.49219
+INFO: current LH = -29647.7778
+INFO: current LH = -29655.37488
+INFO: current LH = -29651.58297
+INFO: current LH = -29651.58312
+INFO: Wall time: 167.79s User: 184.81s System: 38.33s
+
+INFO: current LH = -29651.58312
+INFO: current LH = -29651.58312
+INFO: current LH = -29651.58312
+INFO: current LH = -29647.37823
+INFO: current LH = -29655.77356
+INFO: current LH = -29651.58312
+INFO: current LH = -29651.58312
+INFO: current LH = -29647.42507
+INFO: current LH = -29655.72673
+INFO: current LH = -29651.58298
+INFO: current LH = -29651.58298
+INFO: current LH = -29647.79156
+INFO: current LH = -29655.36025
+INFO: current LH = -29658.68863
+INFO: current LH = -29644.46318
+INFO: current LH = -29653.93742
+INFO: current LH = -29649.21438
+INFO: current LH = -29645.61375
+INFO: current LH = -29657.53806
+INFO: current LH = -29646.9302
+INFO: Wall time: 84.9573s User: 105.49s System: 21.88s
+
+INFO: current LH = -29656.22161
+INFO: current LH = -29646.39344
+INFO: current LH = -29656.75837
+INFO: current LH = -29657.71662
+INFO: current LH = -29645.43519
+INFO: current LH = -29646.6108
+INFO: current LH = -29656.541
+INFO: current LH = -29644.97905
+INFO: current LH = -29658.17275
+INFO: current LH = -29649.93979
+INFO: current LH = -29653.21201
+INFO: current LH = -29659.13273
+INFO: current LH = -29644.01908
+INFO: current LH = -29657.79969
+INFO: current LH = -29645.35211
+INFO: current LH = -29652.6588
+INFO: current LH = -29650.493
+INFO: current LH = -29648.64809
+INFO: current LH = -29654.50372
+INFO: current LH = -29648.35325
+INFO: Wall time: 174.341s User: 191.65s System: 38.93s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.13169
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	1
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1
+INFO: pipiSD0b_pole1MagOther	1
+INFO: pipiSD0b_pole1PhiOther	-2.88792
+INFO: pipiSD0b_pole2MagOther	1
+INFO: pipiSD0b_pole2PhiOther	0
+INFO: pipiSD0b_pole3MagOther	5.44531
+INFO: pipiSD0b_pole3PhiOther	1.58335
+INFO: pipiSD0b_pole4MagOther	1
+INFO: pipiSD0b_pole4PhiOther	0
+INFO: pipiSD0b_pole5MagOther	4.578
+INFO: pipiSD0b_pole5PhiOther	2.35063
+INFO: pipiSD0fprod_4PiMagOther	1
+INFO: pipiSD0fprod_4PiPhiOther	0
+INFO: pipiSD0fprod_EtaEtaMagOther	1
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.3972
+INFO: pipiSD0fprod_EtaEtapMagOther	1
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.466568
+INFO: pipiSD0fprod_KKMagOther	1
+INFO: pipiSD0fprod_KKPhiOther	0
+INFO: pipiSD0fprod_PiPiMagOther	1
+INFO: pipiSD0fprod_PiPiPhiOther	0
+INFO: current LH = -29654.79856
+INFO: current LH = -29648.66006
+INFO: current LH = -29654.49174
+INFO: current LH = -29652.37336
+INFO: current LH = -29650.77845
+INFO: current LH = -29644.22989
+INFO: current LH = -29658.92192
+INFO: current LH = -29649.48549
+INFO: current LH = -29653.66632
+INFO: current LH = -29649.59242
+INFO: current LH = -29653.55938
+INFO: current LH = -29647.65493
+INFO: current LH = -29655.49687
+INFO: current LH = 26598.0478
+INFO: current LH = -32124.655
+INFO: current LH = -32126.44984
+INFO: current LH = -32122.85038
+INFO: current LH = -32124.65504
+INFO: current LH = -32124.65504
+INFO: current LH = -32126.43046
+INFO: Wall time: 134.388s User: 152.45s System: 31.71s
+
+INFO: current LH = -32122.86989
+INFO: current LH = -32124.655
+INFO: current LH = -32124.655
+INFO: current LH = -32128.42291
+INFO: current LH = -32120.88533
+INFO: current LH = -32135.75819
+INFO: current LH = -32113.53649
+INFO: current LH = -32123.0963
+INFO: current LH = -32126.19614
+INFO: current LH = -32122.65948
+INFO: current LH = -32126.64201
+INFO: current LH = -32125.30114
+INFO: current LH = -32123.99831
+INFO: current LH = -32127.77285
+INFO: current LH = -32121.51843
+INFO: current LH = -32127.2567
+INFO: current LH = -32122.04387
+INFO: current LH = -32120.99889
+INFO: current LH = -32128.29148
+INFO: current LH = -32126.82607
+INFO: Wall time: 151.053s User: 171.02s System: 33.43s
+
+INFO: current LH = -32122.4764
+INFO: current LH = -32128.68703
+INFO: current LH = -32120.59277
+INFO: current LH = -32127.52991
+INFO: current LH = -32121.76478
+INFO: current LH = -32123.59208
+INFO: current LH = -32125.70636
+INFO: current LH = -32122.86559
+INFO: current LH = -32126.43057
+INFO: current LH = -32128.6041
+INFO: current LH = -32120.67865
+INFO: current LH = -32127.6184
+INFO: current LH = -32121.67628
+INFO: current LH = -32125.28504
+INFO: current LH = -32124.00874
+INFO: current LH = -32122.69938
+INFO: current LH = -32126.59925
+INFO: current LH = -32118.34012
+INFO: current LH = -32130.95404
+INFO: current LH = -32122.88592
+INFO: Wall time: 174.752s User: 192.86s System: 38.05s
+
+INFO: current LH = -32126.41064
+INFO: current LH = -32123.76263
+INFO: current LH = -32125.53529
+INFO: current LH = -32123.98233
+INFO: current LH = -32125.31688
+INFO: current LH = -32127.10558
+INFO: current LH = -32122.18339
+INFO: current LH = -32129.41383
+INFO: current LH = -32119.88508
+INFO: current LH = -32129.41929
+INFO: current LH = -32119.87652
+INFO: current LH = -31996.41857
+INFO: current LH = -33736.68135
+INFO: current LH = -33736.74766
+INFO: current LH = -33736.59599
+INFO: current LH = -33736.68131
+INFO: current LH = -33736.68131
+INFO: current LH = -33736.74742
+INFO: current LH = -33736.59637
+INFO: current LH = -33736.6813
+INFO: Wall time: 117.597s User: 137.83s System: 27.24s
+
+INFO: current LH = -33736.6813
+INFO: current LH = -33741.77464
+INFO: current LH = -33731.51864
+INFO: current LH = -33739.142
+INFO: current LH = -33734.20461
+INFO: current LH = -33734.63373
+INFO: current LH = -33738.71353
+INFO: current LH = -33738.59102
+INFO: current LH = -33734.75318
+INFO: current LH = -33738.1258
+INFO: current LH = -33735.22028
+INFO: current LH = -33736.40854
+INFO: current LH = -33736.93702
+INFO: current LH = -33736.5046
+INFO: current LH = -33736.83872
+INFO: current LH = -33734.66309
+INFO: current LH = -33738.68578
+INFO: current LH = -33738.49132
+INFO: current LH = -33734.85435
+INFO: current LH = -33736.47134
+INFO: Wall time: 166.391s User: 185.41s System: 36.12s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.11158
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.990765
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.00429
+INFO: pipiSD0b_pole1MagOther	1.02228
+INFO: pipiSD0b_pole1PhiOther	-2.88568
+INFO: pipiSD0b_pole2MagOther	0.967142
+INFO: pipiSD0b_pole2PhiOther	-0.0197096
+INFO: pipiSD0b_pole3MagOther	5.30086
+INFO: pipiSD0b_pole3PhiOther	1.61263
+INFO: pipiSD0b_pole4MagOther	0.935705
+INFO: pipiSD0b_pole4PhiOther	-0.0982801
+INFO: pipiSD0b_pole5MagOther	4.25112
+INFO: pipiSD0b_pole5PhiOther	2.52683
+INFO: pipiSD0fprod_4PiMagOther	2.23179
+INFO: pipiSD0fprod_4PiPhiOther	0.103919
+INFO: pipiSD0fprod_EtaEtaMagOther	0.927855
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.590794
+INFO: pipiSD0fprod_EtaEtapMagOther	0.95843
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.465915
+INFO: pipiSD0fprod_KKMagOther	0.852392
+INFO: pipiSD0fprod_KKPhiOther	0.00692878
+INFO: pipiSD0fprod_PiPiMagOther	1.01619
+INFO: pipiSD0fprod_PiPiPhiOther	0.00429022
+INFO: current LH = -33736.87589
+INFO: current LH = -33734.74503
+INFO: current LH = -33738.60056
+INFO: current LH = -33735.49359
+INFO: current LH = -33737.8558
+INFO: current LH = -33736.16404
+INFO: current LH = -33737.16827
+INFO: current LH = -33736.308
+INFO: current LH = -33737.03861
+INFO: current LH = -33737.93678
+INFO: current LH = -33735.40277
+INFO: current LH = -33739.05782
+INFO: current LH = -33734.29338
+INFO: current LH = -33735.28351
+INFO: current LH = -33738.05634
+INFO: current LH = -33736.98033
+INFO: current LH = -33736.3661
+INFO: current LH = -33733.58031
+INFO: current LH = -33739.76545
+INFO: current LH = -33738.38816
+INFO: Wall time: 176.186s User: 194.56s System: 38.21s
+
+INFO: current LH = -33734.96224
+INFO: current LH = -33735.78458
+INFO: current LH = -33737.56068
+INFO: current LH = -33738.03577
+INFO: current LH = -33735.30817
+INFO: current LH = -33738.5403
+INFO: current LH = -33734.80643
+INFO: current LH = -34183.62334
+INFO: current LH = -34308.27064
+INFO: current LH = -34307.58063
+INFO: current LH = -34308.94338
+INFO: current LH = -34308.27059
+INFO: current LH = -34308.27059
+INFO: current LH = -34307.58109
+INFO: current LH = -34308.94307
+INFO: current LH = -34308.27065
+INFO: current LH = -34308.27065
+INFO: current LH = -34308.25754
+INFO: current LH = -34308.25189
+INFO: current LH = -34308.2645
+INFO: Wall time: 109.728s User: 130.71s System: 25.53s
+
+INFO: current LH = -34308.26042
+INFO: current LH = -34306.94127
+INFO: current LH = -34309.5822
+INFO: current LH = -34308.95326
+INFO: current LH = -34307.57634
+INFO: current LH = -34308.29555
+INFO: current LH = -34308.22825
+INFO: current LH = -34307.8919
+INFO: current LH = -34308.63535
+INFO: current LH = -34308.06734
+INFO: current LH = -34308.46071
+INFO: current LH = -34307.49832
+INFO: current LH = -34309.02489
+INFO: current LH = -34309.14066
+INFO: current LH = -34307.38183
+INFO: current LH = -34308.67326
+INFO: current LH = -34307.85304
+INFO: current LH = -34308.28061
+INFO: current LH = -34308.24612
+INFO: current LH = -34308.11944
+INFO: Wall time: 174.694s User: 192.76s System: 37.9s
+
+INFO: current LH = -34308.4061
+INFO: current LH = -34309.48856
+INFO: current LH = -34307.03907
+INFO: current LH = -34307.53958
+INFO: current LH = -34308.97011
+INFO: current LH = -34307.74772
+INFO: current LH = -34308.7772
+INFO: current LH = -34309.80566
+INFO: current LH = -34306.72021
+INFO: current LH = -34309.77278
+INFO: current LH = -34306.75043
+INFO: current LH = -34309.24644
+INFO: current LH = -34307.27704
+INFO: current LH = -34307.7297
+INFO: current LH = -34308.79847
+INFO: current LH = -34309.31402
+INFO: current LH = -34307.20819
+INFO: current LH = -34308.79203
+INFO: current LH = -34307.73521
+INFO: current LH = -34307.86432
+INFO: Wall time: 173.234s User: 191.31s System: 37.61s
+
+INFO: current LH = -34308.65716
+INFO: current LH = -34307.69753
+INFO: current LH = -34308.82987
+INFO: current LH = -34077.83311
+INFO: current LH = -34429.13383
+INFO: current LH = -34429.49056
+INFO: current LH = -34428.76191
+INFO: current LH = -34429.13386
+INFO: current LH = -34429.13386
+INFO: current LH = -34429.49179
+INFO: current LH = -34428.76056
+INFO: current LH = -34429.13385
+INFO: current LH = -34429.13385
+INFO: current LH = -34428.67723
+INFO: current LH = -34429.57275
+INFO: current LH = -34429.21371
+INFO: current LH = -34429.03754
+INFO: current LH = -34430.08277
+INFO: current LH = -34428.16913
+INFO: current LH = -34429.81286
+INFO: Wall time: 109.817s User: 130.85s System: 25.59s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.10052
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.985683
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-0.949945
+INFO: pipiSD0b_pole1MagOther	1.01292
+INFO: pipiSD0b_pole1PhiOther	-2.87052
+INFO: pipiSD0b_pole2MagOther	0.967755
+INFO: pipiSD0b_pole2PhiOther	-0.0399032
+INFO: pipiSD0b_pole3MagOther	5.21646
+INFO: pipiSD0b_pole3PhiOther	1.57979
+INFO: pipiSD0b_pole4MagOther	0.963708
+INFO: pipiSD0b_pole4PhiOther	-0.155772
+INFO: pipiSD0b_pole5MagOther	3.81556
+INFO: pipiSD0b_pole5PhiOther	2.53709
+INFO: pipiSD0fprod_4PiMagOther	2.76804
+INFO: pipiSD0fprod_4PiPhiOther	0.237909
+INFO: pipiSD0fprod_EtaEtaMagOther	0.967663
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.67155
+INFO: pipiSD0fprod_EtaEtapMagOther	0.954893
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.398074
+INFO: pipiSD0fprod_KKMagOther	0.854192
+INFO: pipiSD0fprod_KKPhiOther	-0.0345494
+INFO: pipiSD0fprod_PiPiMagOther	1.0298
+INFO: pipiSD0fprod_PiPiPhiOther	0.0207433
+INFO: current LH = -34428.43884
+INFO: current LH = -34428.01804
+INFO: current LH = -34430.23369
+INFO: current LH = -34428.53483
+INFO: current LH = -34429.71745
+INFO: current LH = -34429.33305
+INFO: current LH = -34428.91818
+INFO: current LH = -34430.09784
+INFO: current LH = -34428.15291
+INFO: current LH = -34428.98563
+INFO: current LH = -34429.26611
+INFO: current LH = -34429.16092
+INFO: current LH = -34429.09033
+INFO: current LH = -34428.86585
+INFO: current LH = -34429.38677
+INFO: current LH = -34429.11685
+INFO: current LH = -34429.13152
+INFO: current LH = -34429.75482
+INFO: current LH = -34428.49534
+INFO: current LH = -34429.57789
+INFO: Wall time: 174.471s User: 192.91s System: 37.6s
+
+INFO: current LH = -34428.67259
+INFO: current LH = -34429.70461
+INFO: current LH = -34428.5474
+INFO: current LH = -34428.4971
+INFO: current LH = -34429.75376
+INFO: current LH = -34429.47391
+INFO: current LH = -34428.78105
+INFO: current LH = -34429.14391
+INFO: current LH = -34429.1063
+INFO: current LH = -34428.54222
+INFO: current LH = -34429.71038
+INFO: current LH = -34429.25846
+INFO: current LH = -34428.99298
+INFO: current LH = -34428.40513
+INFO: current LH = -34429.8469
+INFO: current LH = -34571.81842
+INFO: current LH = -34572.86019
+INFO: current LH = -34575.73431
+INFO: current LH = -34575.21036
+INFO: current LH = -34576.24077
+INFO: Wall time: 158.308s User: 176.61s System: 34.98s
+
+INFO: current LH = -34575.73434
+INFO: current LH = -34575.73434
+INFO: current LH = -34575.21069
+INFO: current LH = -34576.24051
+INFO: current LH = -34575.73436
+INFO: current LH = -34575.73436
+INFO: current LH = -34575.10009
+INFO: current LH = -34576.35111
+INFO: current LH = -34576.21375
+INFO: current LH = -34575.23793
+INFO: current LH = -34576.19343
+INFO: current LH = -34575.26025
+INFO: current LH = -34575.05568
+INFO: current LH = -34576.39541
+INFO: current LH = -34575.47318
+INFO: current LH = -34575.97991
+INFO: current LH = -34574.72681
+INFO: current LH = -34576.72712
+INFO: current LH = -34576.26136
+INFO: current LH = -34575.18996
+INFO: Wall time: 124.704s User: 145.9s System: 27.73s
+
+INFO: current LH = -34576.26335
+INFO: current LH = -34575.18524
+INFO: current LH = -34575.33392
+INFO: current LH = -34576.11854
+INFO: current LH = -34575.57936
+INFO: current LH = -34575.87198
+INFO: current LH = -34575.90863
+INFO: current LH = -34575.54451
+INFO: current LH = -34575.73355
+INFO: current LH = -34575.71961
+INFO: current LH = -34575.15656
+INFO: current LH = -34576.28418
+INFO: current LH = -34575.2926
+INFO: current LH = -34576.15954
+INFO: current LH = -34575.77423
+INFO: current LH = -34575.67628
+INFO: current LH = -34576.12001
+INFO: current LH = -34575.33196
+INFO: current LH = -34575.38633
+INFO: current LH = -34576.06575
+INFO: Wall time: 175.2s User: 193.05s System: 38.44s
+
+INFO: current LH = -34575.7369
+INFO: current LH = -34575.71465
+INFO: current LH = -34575.21025
+INFO: current LH = -34576.24032
+INFO: current LH = -34575.88386
+INFO: current LH = -34575.56968
+INFO: current LH = -34575.43061
+INFO: current LH = -34576.02007
+INFO: current LH = -34574.92412
+INFO: current LH = -34576.52905
+INFO: current LH = -34644.33589
+INFO: current LH = -34663.44193
+INFO: current LH = -34663.25403
+INFO: current LH = -34663.61358
+INFO: current LH = -34663.44192
+INFO: current LH = -34663.44192
+INFO: current LH = -34663.25378
+INFO: current LH = -34663.61381
+INFO: current LH = -34663.44193
+INFO: current LH = -34663.44193
+INFO: Wall time: 109.421s User: 130.05s System: 25.76s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.10333
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.986974
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-2437.85
+INFO: pipiSD0S0_PosNegOther	-0.977453
+INFO: pipiSD0b_pole1MagOther	1.00986
+INFO: pipiSD0b_pole1PhiOther	-2.85583
+INFO: pipiSD0b_pole2MagOther	0.975078
+INFO: pipiSD0b_pole2PhiOther	-0.0847936
+INFO: pipiSD0b_pole3MagOther	5.07361
+INFO: pipiSD0b_pole3PhiOther	1.57344
+INFO: pipiSD0b_pole4MagOther	1.10779
+INFO: pipiSD0b_pole4PhiOther	-0.138633
+INFO: pipiSD0b_pole5MagOther	3.69302
+INFO: pipiSD0b_pole5PhiOther	2.47844
+INFO: pipiSD0fprod_4PiMagOther	3.35923
+INFO: pipiSD0fprod_4PiPhiOther	0.267286
+INFO: pipiSD0fprod_EtaEtaMagOther	0.996979
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.615307
+INFO: pipiSD0fprod_EtaEtapMagOther	0.926857
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.392006
+INFO: pipiSD0fprod_KKMagOther	0.849859
+INFO: pipiSD0fprod_KKPhiOther	-0.039629
+INFO: pipiSD0fprod_PiPiMagOther	1.04201
+INFO: pipiSD0fprod_PiPiPhiOther	0.00621611
+INFO: current LH = -34663.19068
+INFO: current LH = -34663.67784
+INFO: current LH = -34664.04231
+INFO: current LH = -34662.82479
+INFO: current LH = -34663.15526
+INFO: current LH = -34663.7131
+INFO: current LH = -34662.94019
+INFO: current LH = -34663.9269
+INFO: current LH = -34663.28879
+INFO: current LH = -34663.57965
+INFO: current LH = -34663.09402
+INFO: current LH = -34663.7758
+INFO: current LH = -34664.06192
+INFO: current LH = -34662.80496
+INFO: current LH = -34663.38003
+INFO: current LH = -34663.48442
+INFO: current LH = -34662.89639
+INFO: current LH = -34663.97048
+INFO: current LH = -34662.67521
+INFO: current LH = -34664.19217
+INFO: Wall time: 175.127s User: 193.55s System: 37.87s
+
+INFO: current LH = -34663.42244
+INFO: current LH = -34663.44668
+INFO: current LH = -34663.24738
+INFO: current LH = -34663.61711
+INFO: current LH = -34664.07394
+INFO: current LH = -34662.79402
+INFO: current LH = -34663.28419
+INFO: current LH = -34663.58214
+INFO: current LH = -34663.28206
+INFO: current LH = -34663.58582
+INFO: current LH = -34663.08074
+INFO: current LH = -34663.78705
+INFO: current LH = -34663.56868
+INFO: current LH = -34663.29931
+INFO: current LH = -34662.41828
+INFO: current LH = -34664.44816
+INFO: current LH = -34663.47532
+INFO: current LH = -34663.39406
+INFO: current LH = -34663.40036
+INFO: current LH = -34663.46672
+INFO: Wall time: 172.045s User: 190.66s System: 36.59s
+
+INFO: current LH = -34663.27025
+INFO: current LH = -34663.5981
+INFO: current LH = -34712.46925
+INFO: current LH = -34746.90294
+INFO: current LH = -34748.10916
+INFO: current LH = -34748.27155
+INFO: current LH = -34747.9306
+INFO: current LH = -34748.10918
+INFO: current LH = -34748.10918
+INFO: current LH = -34748.2716
+INFO: current LH = -34747.93049
+INFO: current LH = -34748.10916
+INFO: current LH = -34748.10916
+INFO: current LH = -34748.42202
+INFO: current LH = -34747.78138
+INFO: current LH = -34748.11737
+INFO: current LH = -34748.0843
+INFO: current LH = -34747.67573
+INFO: current LH = -34748.52753
+INFO: current LH = -34747.92087
+INFO: Wall time: 108.965s User: 129.88s System: 25.31s
+
+INFO: current LH = -34748.28151
+INFO: current LH = -34748.01307
+INFO: current LH = -34748.18849
+INFO: current LH = -34748.45273
+INFO: current LH = -34747.75131
+INFO: current LH = -34748.47807
+INFO: current LH = -34747.72357
+INFO: current LH = -34748.20873
+INFO: current LH = -34747.99206
+INFO: current LH = -34748.78864
+INFO: current LH = -34747.41056
+INFO: current LH = -34748.45931
+INFO: current LH = -34747.74421
+INFO: current LH = -34747.14946
+INFO: current LH = -34749.05296
+INFO: current LH = -34748.46503
+INFO: current LH = -34747.73909
+INFO: current LH = -34747.66551
+INFO: current LH = -34748.53157
+INFO: current LH = -34748.3385
+INFO: Wall time: 175.753s User: 193.31s System: 38.94s
+
+INFO: current LH = -34747.86289
+INFO: current LH = -34747.65464
+INFO: current LH = -34748.5472
+INFO: current LH = -34748.2862
+INFO: current LH = -34747.91631
+INFO: current LH = -34747.53596
+INFO: current LH = -34748.66509
+INFO: current LH = -34747.44859
+INFO: current LH = -34748.75341
+INFO: current LH = -34748.41433
+INFO: current LH = -34747.78938
+INFO: current LH = -34748.13291
+INFO: current LH = -34748.06888
+INFO: current LH = -34748.78737
+INFO: current LH = -34747.41541
+INFO: current LH = -34787.95882
+INFO: current LH = -34868.22883
+INFO: current LH = -34869.24482
+INFO: current LH = -34869.21432
+INFO: current LH = -34869.25835
+INFO: Wall time: 157.595s User: 176.05s System: 34.58s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.09375
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.982779
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.00541
+INFO: pipiSD0b_pole1MagOther	1.01654
+INFO: pipiSD0b_pole1PhiOther	-2.85278
+INFO: pipiSD0b_pole2MagOther	0.957032
+INFO: pipiSD0b_pole2PhiOther	-0.118569
+INFO: pipiSD0b_pole3MagOther	4.89296
+INFO: pipiSD0b_pole3PhiOther	1.62101
+INFO: pipiSD0b_pole4MagOther	1.3219
+INFO: pipiSD0b_pole4PhiOther	-0.129795
+INFO: pipiSD0b_pole5MagOther	3.15258
+INFO: pipiSD0b_pole5PhiOther	2.27805
+INFO: pipiSD0fprod_4PiMagOther	3.9796
+INFO: pipiSD0fprod_4PiPhiOther	0.381466
+INFO: pipiSD0fprod_EtaEtaMagOther	1.05341
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.587838
+INFO: pipiSD0fprod_EtaEtapMagOther	0.898335
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.349346
+INFO: pipiSD0fprod_KKMagOther	0.736242
+INFO: pipiSD0fprod_KKPhiOther	0.0621607
+INFO: pipiSD0fprod_PiPiMagOther	1.05098
+INFO: pipiSD0fprod_PiPiPhiOther	0.002409
+INFO: current LH = -34869.24479
+INFO: current LH = -34869.24479
+INFO: current LH = -34869.21437
+INFO: current LH = -34869.25834
+INFO: current LH = -34869.24479
+INFO: current LH = -34869.24479
+INFO: current LH = -34870.33616
+INFO: current LH = -34868.1383
+INFO: current LH = -34867.86911
+INFO: current LH = -34870.60319
+INFO: current LH = -34868.78929
+INFO: current LH = -34869.68864
+INFO: current LH = -34869.60766
+INFO: current LH = -34868.86594
+INFO: current LH = -34870.12002
+INFO: current LH = -34868.35214
+INFO: current LH = -34870.00593
+INFO: current LH = -34868.47077
+INFO: current LH = -34868.23695
+INFO: current LH = -34870.2358
+INFO: Wall time: 125.967s User: 147.02s System: 28.16s
+
+INFO: current LH = -34870.45564
+INFO: current LH = -34868.015
+INFO: current LH = -34870.06047
+INFO: current LH = -34868.40926
+INFO: current LH = -34868.90178
+INFO: current LH = -34869.57217
+INFO: current LH = -34867.79486
+INFO: current LH = -34870.68187
+INFO: current LH = -34868.85732
+INFO: current LH = -34869.61534
+INFO: current LH = -34868.81009
+INFO: current LH = -34869.65766
+INFO: current LH = -34870.12426
+INFO: current LH = -34868.34925
+INFO: current LH = -34869.64452
+INFO: current LH = -34868.82613
+INFO: current LH = -34870.23073
+INFO: current LH = -34868.24219
+INFO: current LH = -34868.51895
+INFO: current LH = -34869.95561
+INFO: Wall time: 173.987s User: 192.08s System: 37.82s
+
+INFO: current LH = -34870.19328
+INFO: current LH = -34868.28125
+INFO: current LH = -34870.04215
+INFO: current LH = -34868.43322
+INFO: current LH = -34869.65333
+INFO: current LH = -34868.81943
+INFO: current LH = -34870.05476
+INFO: current LH = -34868.41884
+INFO: current LH = -34904.47891
+INFO: current LH = -35018.3581
+INFO: current LH = -35104.39259
+INFO: current LH = -35106.09299
+INFO: current LH = -35105.65291
+INFO: current LH = -35106.51573
+INFO: current LH = -35106.09296
+INFO: current LH = -35106.09296
+INFO: current LH = -35105.6531
+INFO: current LH = -35106.51559
+INFO: current LH = -35106.09298
+INFO: current LH = -35106.09298
+INFO: Wall time: 109.86s User: 130.99s System: 25.49s
+
+INFO: current LH = -35105.97971
+INFO: current LH = -35106.18716
+INFO: current LH = -35106.13641
+INFO: current LH = -35106.03342
+INFO: current LH = -35105.0132
+INFO: current LH = -35107.15491
+INFO: current LH = -35105.6684
+INFO: current LH = -35106.50166
+INFO: current LH = -35106.13802
+INFO: current LH = -35106.03257
+INFO: current LH = -35106.71556
+INFO: current LH = -35105.45738
+INFO: current LH = -35106.48219
+INFO: current LH = -35105.68866
+INFO: current LH = -35105.22052
+INFO: current LH = -35106.94079
+INFO: current LH = -35105.95215
+INFO: current LH = -35106.21613
+INFO: current LH = -35105.72864
+INFO: current LH = -35106.44399
+INFO: Wall time: 174.941s User: 193.24s System: 37.97s
+
+INFO: current LH = -35105.83492
+INFO: current LH = -35106.34183
+INFO: current LH = -35106.09691
+INFO: current LH = -35106.07293
+INFO: current LH = -35106.61997
+INFO: current LH = -35105.54701
+INFO: current LH = -35106.32395
+INFO: current LH = -35105.84041
+INFO: current LH = -35106.30841
+INFO: current LH = -35105.86069
+INFO: current LH = -35106.48626
+INFO: current LH = -35105.68287
+INFO: current LH = -35106.19316
+INFO: current LH = -35105.98054
+INFO: current LH = -35105.66884
+INFO: current LH = -35106.50199
+INFO: current LH = -35106.53983
+INFO: current LH = -35105.6393
+INFO: current LH = -35106.78899
+INFO: current LH = -35105.38024
+INFO: Wall time: 174.778s User: 193.32s System: 37.7s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.07751
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.975123
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-0.988409
+INFO: pipiSD0b_pole1MagOther	1.01722
+INFO: pipiSD0b_pole1PhiOther	-2.84887
+INFO: pipiSD0b_pole2MagOther	0.933049
+INFO: pipiSD0b_pole2PhiOther	-0.173849
+INFO: pipiSD0b_pole3MagOther	4.63654
+INFO: pipiSD0b_pole3PhiOther	1.68992
+INFO: pipiSD0b_pole4MagOther	1.71531
+INFO: pipiSD0b_pole4PhiOther	-0.0218531
+INFO: pipiSD0b_pole5MagOther	2.43713
+INFO: pipiSD0b_pole5PhiOther	1.94352
+INFO: pipiSD0fprod_4PiMagOther	4.21491
+INFO: pipiSD0fprod_4PiPhiOther	0.390647
+INFO: pipiSD0fprod_EtaEtaMagOther	1.15959
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.523516
+INFO: pipiSD0fprod_EtaEtapMagOther	0.882656
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.285738
+INFO: pipiSD0fprod_KKMagOther	0.582745
+INFO: pipiSD0fprod_KKPhiOther	0.195591
+INFO: pipiSD0fprod_PiPiMagOther	1.06658
+INFO: pipiSD0fprod_PiPiPhiOther	-0.000578918
+INFO: current LH = -35105.69116
+INFO: current LH = -35106.47733
+INFO: current LH = -35106.21403
+INFO: current LH = -35105.95693
+INFO: current LH = -35212.26124
+INFO: current LH = -35214.42336
+INFO: current LH = -35214.7455
+INFO: current LH = -35214.08527
+INFO: current LH = -35214.42339
+INFO: current LH = -35214.42339
+INFO: current LH = -35214.74583
+INFO: current LH = -35214.08488
+INFO: current LH = -35214.42338
+INFO: current LH = -35214.42338
+INFO: current LH = -35215.02108
+INFO: current LH = -35213.81064
+INFO: current LH = -35214.0283
+INFO: current LH = -35214.80171
+INFO: current LH = -35213.58519
+INFO: current LH = -35215.24781
+INFO: Wall time: 109.248s User: 130.53s System: 25.13s
+
+INFO: current LH = -35214.57486
+INFO: current LH = -35214.25691
+INFO: current LH = -35214.96652
+INFO: current LH = -35213.8621
+INFO: current LH = -35215.33897
+INFO: current LH = -35213.49207
+INFO: current LH = -35213.98908
+INFO: current LH = -35214.84138
+INFO: current LH = -35214.83177
+INFO: current LH = -35213.99791
+INFO: current LH = -35215.194
+INFO: current LH = -35213.63363
+INFO: current LH = -35214.51186
+INFO: current LH = -35214.31964
+INFO: current LH = -35213.99528
+INFO: current LH = -35214.83811
+INFO: current LH = -35214.69856
+INFO: current LH = -35214.13402
+INFO: current LH = -35214.27459
+INFO: current LH = -35214.55616
+INFO: Wall time: 175.59s User: 193.65s System: 38.38s
+
+INFO: current LH = -35214.22327
+INFO: current LH = -35214.6067
+INFO: current LH = -35214.1399
+INFO: current LH = -35214.68904
+INFO: current LH = -35214.35505
+INFO: current LH = -35214.47483
+INFO: current LH = -35214.42286
+INFO: current LH = -35214.41041
+INFO: current LH = -35214.62416
+INFO: current LH = -35214.20789
+INFO: current LH = -35215.12923
+INFO: current LH = -35213.70411
+INFO: current LH = -35214.95194
+INFO: current LH = -35213.87909
+INFO: current LH = -35215.05421
+INFO: current LH = -35213.77481
+INFO: current LH = -35245.1357
+INFO: current LH = -35248.69235
+INFO: current LH = -35248.61012
+INFO: current LH = -35248.75716
+INFO: Wall time: 157.877s User: 176.4s System: 34.64s
+
+INFO: current LH = -35248.69235
+INFO: current LH = -35248.69235
+INFO: current LH = -35248.6102
+INFO: current LH = -35248.75709
+INFO: current LH = -35248.69234
+INFO: current LH = -35248.69234
+INFO: current LH = -35248.66257
+INFO: current LH = -35248.70383
+INFO: current LH = -35248.54154
+INFO: current LH = -35248.82693
+INFO: current LH = -35248.54984
+INFO: current LH = -35248.81503
+INFO: current LH = -35248.72477
+INFO: current LH = -35248.64398
+INFO: current LH = -35248.91619
+INFO: current LH = -35248.45103
+INFO: current LH = -35248.71037
+INFO: current LH = -35248.65508
+INFO: current LH = -35248.58737
+INFO: current LH = -35248.78164
+INFO: Wall time: 126.269s User: 147.06s System: 28.64s
+
+INFO: current LH = -35248.84502
+INFO: current LH = -35248.52186
+INFO: current LH = -35248.58665
+INFO: current LH = -35248.78062
+INFO: current LH = -35248.51682
+INFO: current LH = -35248.85151
+INFO: current LH = -35248.58963
+INFO: current LH = -35248.78325
+INFO: current LH = -35248.46809
+INFO: current LH = -35248.90052
+INFO: current LH = -35248.62844
+INFO: current LH = -35248.73912
+INFO: current LH = -35248.8175
+INFO: current LH = -35248.55067
+INFO: current LH = -35248.85628
+INFO: current LH = -35248.50983
+INFO: current LH = -35248.58922
+INFO: current LH = -35248.77883
+INFO: current LH = -35248.70582
+INFO: current LH = -35248.66193
+INFO: Wall time: 173.892s User: 192.13s System: 37.67s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.05703
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.965722
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-0.953395
+INFO: pipiSD0b_pole1MagOther	1.01725
+INFO: pipiSD0b_pole1PhiOther	-2.86113
+INFO: pipiSD0b_pole2MagOther	0.907191
+INFO: pipiSD0b_pole2PhiOther	-0.198302
+INFO: pipiSD0b_pole3MagOther	4.56502
+INFO: pipiSD0b_pole3PhiOther	1.76354
+INFO: pipiSD0b_pole4MagOther	1.90645
+INFO: pipiSD0b_pole4PhiOther	0.139474
+INFO: pipiSD0b_pole5MagOther	1.98917
+INFO: pipiSD0b_pole5PhiOther	1.67674
+INFO: pipiSD0fprod_4PiMagOther	4.09873
+INFO: pipiSD0fprod_4PiPhiOther	0.542763
+INFO: pipiSD0fprod_EtaEtaMagOther	1.24718
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.481303
+INFO: pipiSD0fprod_EtaEtapMagOther	0.891012
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.238066
+INFO: pipiSD0fprod_KKMagOther	0.469222
+INFO: pipiSD0fprod_KKPhiOther	0.330809
+INFO: pipiSD0fprod_PiPiMagOther	1.06829
+INFO: pipiSD0fprod_PiPiPhiOther	0.00834488
+INFO: current LH = -35248.94235
+INFO: current LH = -35248.42722
+INFO: current LH = -35248.94467
+INFO: current LH = -35248.4259
+INFO: current LH = -35248.74222
+INFO: current LH = -35248.62594
+INFO: current LH = -35248.63207
+INFO: current LH = -35248.7346
+INFO: current LH = -35258.56998
+INFO: current LH = -35259.26548
+INFO: current LH = -35259.36953
+INFO: current LH = -35259.14478
+INFO: current LH = -35259.26548
+INFO: current LH = -35259.26548
+INFO: current LH = -35259.36947
+INFO: current LH = -35259.14488
+INFO: current LH = -35259.26549
+INFO: current LH = -35259.26549
+INFO: current LH = -35259.2771
+INFO: current LH = -35259.23763
+INFO: Wall time: 109.558s User: 130.68s System: 25.43s
+
+INFO: current LH = -35259.23301
+INFO: current LH = -35259.28146
+INFO: current LH = -35259.20267
+INFO: current LH = -35259.31047
+INFO: current LH = -35259.47187
+INFO: current LH = -35259.04291
+INFO: current LH = -35259.22904
+INFO: current LH = -35259.28505
+INFO: current LH = -35259.41064
+INFO: current LH = -35259.10363
+INFO: current LH = -35259.24608
+INFO: current LH = -35259.26856
+INFO: current LH = -35259.24257
+INFO: current LH = -35259.27092
+INFO: current LH = -35259.18731
+INFO: current LH = -35259.32585
+INFO: current LH = -35259.15616
+INFO: current LH = -35259.35896
+INFO: current LH = -35259.13515
+INFO: current LH = -35259.38219
+INFO: Wall time: 174.155s User: 192.56s System: 37.67s
+
+INFO: current LH = -35259.17202
+INFO: current LH = -35259.34262
+INFO: current LH = -35259.43571
+INFO: current LH = -35259.07891
+INFO: current LH = -35259.31926
+INFO: current LH = -35259.19428
+INFO: current LH = -35259.12574
+INFO: current LH = -35259.38823
+INFO: current LH = -35259.04512
+INFO: current LH = -35259.4694
+INFO: current LH = -35259.19863
+INFO: current LH = -35259.31609
+INFO: current LH = -35259.27688
+INFO: current LH = -35259.23821
+INFO: current LH = -35259.30315
+INFO: current LH = -35259.21434
+INFO: current LH = -35259.38728
+INFO: current LH = -35259.12717
+INFO: current LH = -35259.39287
+INFO: current LH = -35259.12112
+INFO: Wall time: 175.19s User: 193.43s System: 38.11s
+
+INFO: current LH = -35262.27896
+INFO: current LH = -35262.35864
+INFO: current LH = -35262.31246
+INFO: current LH = -35262.38776
+INFO: current LH = -35262.35862
+INFO: current LH = -35262.35862
+INFO: current LH = -35262.31243
+INFO: current LH = -35262.38777
+INFO: current LH = -35262.35862
+INFO: current LH = -35262.35862
+INFO: current LH = -35262.3311
+INFO: current LH = -35262.36939
+INFO: current LH = -35262.28678
+INFO: current LH = -35262.41374
+INFO: current LH = -35262.2643
+INFO: current LH = -35262.43634
+INFO: current LH = -35262.3959
+INFO: current LH = -35262.30459
+INFO: current LH = -35262.3394
+INFO: current LH = -35262.36119
+INFO: Wall time: 109.369s User: 130.28s System: 25.21s
+
+INFO: current LH = -35262.53199
+INFO: current LH = -35262.16872
+INFO: current LH = -35262.37879
+INFO: current LH = -35262.32178
+INFO: current LH = -35262.26633
+INFO: current LH = -35262.43385
+INFO: current LH = -35262.44377
+INFO: current LH = -35262.25643
+INFO: current LH = -35262.34643
+INFO: current LH = -35262.35443
+INFO: current LH = -35262.36887
+INFO: current LH = -35262.33226
+INFO: current LH = -35262.33619
+INFO: current LH = -35262.36448
+INFO: current LH = -35262.25699
+INFO: current LH = -35262.44313
+INFO: current LH = -35262.49426
+INFO: current LH = -35262.20602
+INFO: current LH = -35262.28173
+INFO: current LH = -35262.41841
+INFO: Wall time: 176.066s User: 193.77s System: 38.91s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.0495
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.962266
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-0.952854
+INFO: pipiSD0b_pole1MagOther	1.01666
+INFO: pipiSD0b_pole1PhiOther	-2.86473
+INFO: pipiSD0b_pole2MagOther	0.899031
+INFO: pipiSD0b_pole2PhiOther	-0.206128
+INFO: pipiSD0b_pole3MagOther	4.51467
+INFO: pipiSD0b_pole3PhiOther	1.79194
+INFO: pipiSD0b_pole4MagOther	2.03403
+INFO: pipiSD0b_pole4PhiOther	0.169723
+INFO: pipiSD0b_pole5MagOther	1.78962
+INFO: pipiSD0b_pole5PhiOther	1.57349
+INFO: pipiSD0fprod_4PiMagOther	4.08159
+INFO: pipiSD0fprod_4PiPhiOther	0.570841
+INFO: pipiSD0fprod_EtaEtaMagOther	1.29096
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.455182
+INFO: pipiSD0fprod_EtaEtapMagOther	0.878684
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.220525
+INFO: pipiSD0fprod_KKMagOther	0.430954
+INFO: pipiSD0fprod_KKPhiOther	0.396423
+INFO: pipiSD0fprod_PiPiMagOther	1.07401
+INFO: pipiSD0fprod_PiPiPhiOther	0.00863744
+INFO: current LH = -35262.29886
+INFO: current LH = -35262.40175
+INFO: current LH = -35262.21365
+INFO: current LH = -35262.48658
+INFO: current LH = -35262.41254
+INFO: current LH = -35262.28822
+INFO: current LH = -35262.54694
+INFO: current LH = -35262.15428
+INFO: current LH = -35262.3362
+INFO: current LH = -35262.3642
+INFO: current LH = -35262.47598
+INFO: current LH = -35262.22454
+INFO: current LH = -35265.43994
+INFO: current LH = -35275.58981
+INFO: current LH = -35286.74707
+INFO: current LH = -35286.8686
+INFO: current LH = -35286.83071
+INFO: current LH = -35286.88958
+INFO: current LH = -35286.8686
+INFO: current LH = -35286.8686
+INFO: Wall time: 141.833s User: 160.72s System: 31.6s
+
+INFO: current LH = -35286.83072
+INFO: current LH = -35286.88958
+INFO: current LH = -35286.8686
+INFO: current LH = -35286.8686
+INFO: current LH = -35286.61559
+INFO: current LH = -35287.10633
+INFO: current LH = -35286.63889
+INFO: current LH = -35287.08245
+INFO: current LH = -35287.05345
+INFO: current LH = -35286.6655
+INFO: current LH = -35287.11442
+INFO: current LH = -35286.60727
+INFO: current LH = -35286.67681
+INFO: current LH = -35287.04265
+INFO: current LH = -35286.88982
+INFO: current LH = -35286.82916
+INFO: current LH = -35286.7532
+INFO: current LH = -35286.96769
+INFO: current LH = -35286.90933
+INFO: current LH = -35286.8113
+INFO: Wall time: 142.537s User: 163.37s System: 31.42s
+
+INFO: current LH = -35286.95447
+INFO: current LH = -35286.76531
+INFO: current LH = -35286.81827
+INFO: current LH = -35286.9038
+INFO: current LH = -35287.1081
+INFO: current LH = -35286.61885
+INFO: current LH = -35287.10112
+INFO: current LH = -35286.62097
+INFO: current LH = -35286.70663
+INFO: current LH = -35287.01701
+INFO: current LH = -35287.33608
+INFO: current LH = -35286.38562
+INFO: current LH = -35287.28345
+INFO: current LH = -35286.43248
+INFO: current LH = -35286.89881
+INFO: current LH = -35286.82266
+INFO: current LH = -35287.02164
+INFO: current LH = -35286.70106
+INFO: current LH = -35287.12909
+INFO: current LH = -35286.59266
+INFO: Wall time: 175.173s User: 193.42s System: 38.11s
+
+INFO: current LH = -35286.78906
+INFO: current LH = -35286.93423
+INFO: current LH = -35286.68923
+INFO: current LH = -35287.03297
+INFO: current LH = -35286.60611
+INFO: current LH = -35287.11159
+INFO: current LH = -35289.85733
+INFO: current LH = -35301.23663
+INFO: current LH = -35324.39472
+INFO: current LH = -35305.19917
+INFO: current LH = -35334.76728
+INFO: current LH = -35334.85278
+INFO: current LH = -35334.66483
+INFO: current LH = -35334.7673
+INFO: current LH = -35334.7673
+INFO: current LH = -35334.85272
+INFO: current LH = -35334.66488
+INFO: current LH = -35334.76728
+INFO: current LH = -35334.76728
+INFO: current LH = -35334.63346
+INFO: Wall time: 110.402s User: 131s System: 26.17s
+
+INFO: current LH = -35334.88963
+INFO: current LH = -35334.44169
+INFO: current LH = -35335.07855
+INFO: current LH = -35334.89057
+INFO: current LH = -35334.62094
+INFO: current LH = -35335.26668
+INFO: current LH = -35334.25359
+INFO: current LH = -35335.03853
+INFO: current LH = -35334.47786
+INFO: current LH = -35334.48904
+INFO: current LH = -35335.02654
+INFO: current LH = -35334.36995
+INFO: current LH = -35335.14918
+INFO: current LH = -35335.09805
+INFO: current LH = -35334.4193
+INFO: current LH = -35334.43893
+INFO: current LH = -35335.0762
+INFO: current LH = -35334.54986
+INFO: current LH = -35334.97322
+INFO: current LH = -35334.73121
+INFO: Wall time: 175.714s User: 193.26s System: 38.89s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.00289
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.94086
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.01025
+INFO: pipiSD0b_pole1MagOther	0.993239
+INFO: pipiSD0b_pole1PhiOther	-2.9002
+INFO: pipiSD0b_pole2MagOther	0.895774
+INFO: pipiSD0b_pole2PhiOther	-0.248635
+INFO: pipiSD0b_pole3MagOther	4.62469
+INFO: pipiSD0b_pole3PhiOther	1.94221
+INFO: pipiSD0b_pole4MagOther	2.28188
+INFO: pipiSD0b_pole4PhiOther	0.403094
+INFO: pipiSD0b_pole5MagOther	0.951214
+INFO: pipiSD0b_pole5PhiOther	1.28337
+INFO: pipiSD0fprod_4PiMagOther	3.33027
+INFO: pipiSD0fprod_4PiPhiOther	0.696961
+INFO: pipiSD0fprod_EtaEtaMagOther	1.6671
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.445525
+INFO: pipiSD0fprod_EtaEtapMagOther	0.760812
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.11057
+INFO: pipiSD0fprod_KKMagOther	0.324581
+INFO: pipiSD0fprod_KKPhiOther	0.84524
+INFO: pipiSD0fprod_PiPiMagOther	1.10403
+INFO: pipiSD0fprod_PiPiPhiOther	0.0391652
+INFO: current LH = -35334.79984
+INFO: current LH = -35334.68374
+INFO: current LH = -35334.83398
+INFO: current LH = -35334.53134
+INFO: current LH = -35334.98863
+INFO: current LH = -35334.82898
+INFO: current LH = -35334.69298
+INFO: current LH = -35335.16406
+INFO: current LH = -35334.35475
+INFO: current LH = -35335.18507
+INFO: current LH = -35334.32493
+INFO: current LH = -35334.69696
+INFO: current LH = -35334.8237
+INFO: current LH = -35334.73913
+INFO: current LH = -35334.78056
+INFO: current LH = -35335.18212
+INFO: current LH = -35334.33948
+INFO: current LH = -35334.29769
+INFO: current LH = -35335.22629
+INFO: current LH = -35334.8121
+INFO: Wall time: 175.655s User: 193.25s System: 38.77s
+
+INFO: current LH = -35334.70959
+INFO: current LH = -35334.61441
+INFO: current LH = -35334.89893
+INFO: current LH = -35362.82848
+INFO: current LH = -35366.07725
+INFO: current LH = -35366.138
+INFO: current LH = -35366.22276
+INFO: current LH = -35366.03621
+INFO: current LH = -35366.13801
+INFO: current LH = -35366.13801
+INFO: current LH = -35366.22268
+INFO: current LH = -35366.03633
+INFO: current LH = -35366.13801
+INFO: current LH = -35366.13801
+INFO: current LH = -35365.82756
+INFO: current LH = -35366.43554
+INFO: current LH = -35366.25609
+INFO: current LH = -35366.00493
+INFO: current LH = -35366.41404
+INFO: current LH = -35365.84194
+INFO: Wall time: 109.399s User: 130.21s System: 25.6s
+
+INFO: current LH = -35366.44493
+INFO: current LH = -35365.81515
+INFO: current LH = -35366.39389
+INFO: current LH = -35365.86513
+INFO: current LH = -35365.64511
+INFO: current LH = -35366.61264
+INFO: current LH = -35366.04794
+INFO: current LH = -35366.21197
+INFO: current LH = -35366.19451
+INFO: current LH = -35366.06475
+INFO: current LH = -35365.67608
+INFO: current LH = -35366.58152
+INFO: current LH = -35365.62085
+INFO: current LH = -35366.64226
+INFO: current LH = -35366.00295
+INFO: current LH = -35366.27331
+INFO: current LH = -35365.08021
+INFO: current LH = -35367.20929
+INFO: current LH = -35365.93183
+INFO: current LH = -35366.32888
+INFO: Wall time: 174.842s User: 193.08s System: 37.91s
+
+INFO: current LH = -35366.31053
+INFO: current LH = -35365.95181
+INFO: current LH = -35366.08899
+INFO: current LH = -35366.17009
+INFO: current LH = -35366.21856
+INFO: current LH = -35366.03675
+INFO: current LH = -35365.82045
+INFO: current LH = -35366.44093
+INFO: current LH = -35365.8192
+INFO: current LH = -35366.44185
+INFO: current LH = -35366.23384
+INFO: current LH = -35366.02763
+INFO: current LH = -35365.82409
+INFO: current LH = -35366.44023
+INFO: current LH = -35366.19291
+INFO: current LH = -35366.06896
+INFO: current LH = -35365.90086
+INFO: current LH = -35366.35654
+INFO: current LH = -35390.83179
+INFO: current LH = -35395.12055
+INFO: Wall time: 175.332s User: 193.38s System: 38.32s
+
+INFO: current LH = -35395.21395
+INFO: current LH = -35395.01032
+INFO: current LH = -35395.12057
+INFO: current LH = -35395.12057
+INFO: current LH = -35395.21396
+INFO: current LH = -35395.01032
+INFO: current LH = -35395.12057
+INFO: current LH = -35395.12057
+INFO: current LH = -35395.07002
+INFO: current LH = -35395.15582
+INFO: current LH = -35395.14541
+INFO: current LH = -35395.07815
+INFO: current LH = -35394.91886
+INFO: current LH = -35395.30702
+INFO: current LH = -35395.08432
+INFO: current LH = -35395.1391
+INFO: current LH = -35395.4578
+INFO: current LH = -35394.76645
+INFO: current LH = -35395.20411
+INFO: current LH = -35395.02126
+INFO: Wall time: 108.361s User: 129.72s System: 24.71s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1.98842
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.934207
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.08959
+INFO: pipiSD0b_pole1MagOther	0.977706
+INFO: pipiSD0b_pole1PhiOther	-2.91679
+INFO: pipiSD0b_pole2MagOther	0.914667
+INFO: pipiSD0b_pole2PhiOther	-0.249363
+INFO: pipiSD0b_pole3MagOther	4.7169
+INFO: pipiSD0b_pole3PhiOther	1.99181
+INFO: pipiSD0b_pole4MagOther	2.33773
+INFO: pipiSD0b_pole4PhiOther	0.411752
+INFO: pipiSD0b_pole5MagOther	0.666052
+INFO: pipiSD0b_pole5PhiOther	1.23054
+INFO: pipiSD0fprod_4PiMagOther	3.07858
+INFO: pipiSD0fprod_4PiPhiOther	0.695079
+INFO: pipiSD0fprod_EtaEtaMagOther	1.88774
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.429029
+INFO: pipiSD0fprod_EtaEtapMagOther	0.679736
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.0629814
+INFO: pipiSD0fprod_KKMagOther	0.309547
+INFO: pipiSD0fprod_KKPhiOther	1.05075
+INFO: pipiSD0fprod_PiPiMagOther	1.1222
+INFO: pipiSD0fprod_PiPiPhiOther	0.0526998
+INFO: current LH = -35394.92269
+INFO: current LH = -35395.30056
+INFO: current LH = -35395.22221
+INFO: current LH = -35395.00243
+INFO: current LH = -35395.48623
+INFO: current LH = -35394.73813
+INFO: current LH = -35394.78487
+INFO: current LH = -35395.44018
+INFO: current LH = -35396.96119
+INFO: current LH = -35392.92479
+INFO: current LH = -35395.55216
+INFO: current LH = -35394.6723
+INFO: current LH = -35395.41912
+INFO: current LH = -35394.80468
+INFO: current LH = -35394.79629
+INFO: current LH = -35395.42729
+INFO: current LH = -35394.99146
+INFO: current LH = -35395.23217
+INFO: current LH = -35395.00637
+INFO: current LH = -35395.21772
+INFO: Wall time: 175.952s User: 193.73s System: 38.73s
+
+INFO: current LH = -35395.04408
+INFO: current LH = -35395.18038
+INFO: current LH = -35394.86955
+INFO: current LH = -35395.35603
+INFO: current LH = -35395.39758
+INFO: current LH = -35394.82606
+INFO: current LH = -35395.3795
+INFO: current LH = -35394.83962
+INFO: current LH = -35395.16793
+INFO: current LH = -35395.05586
+INFO: current LH = -35395.23207
+INFO: current LH = -35394.99267
+INFO: current LH = -35408.2592
+INFO: current LH = -35417.87418
+INFO: current LH = -35418.00126
+INFO: current LH = -35417.65225
+INFO: current LH = -35418.33287
+INFO: current LH = -35418.00125
+INFO: current LH = -35418.00125
+INFO: current LH = -35417.65218
+INFO: Wall time: 134.095s User: 153.48s System: 30.17s
+
+INFO: current LH = -35418.33295
+INFO: current LH = -35418.00127
+INFO: current LH = -35418.00127
+INFO: current LH = -35417.50719
+INFO: current LH = -35418.48011
+INFO: current LH = -35418.13016
+INFO: current LH = -35417.85594
+INFO: current LH = -35418.19049
+INFO: current LH = -35417.79361
+INFO: current LH = -35417.74978
+INFO: current LH = -35418.23519
+INFO: current LH = -35417.76358
+INFO: current LH = -35418.22161
+INFO: current LH = -35417.73755
+INFO: current LH = -35418.24598
+INFO: current LH = -35418.2731
+INFO: current LH = -35417.71275
+INFO: current LH = -35417.63457
+INFO: current LH = -35418.35156
+INFO: current LH = -35418.03404
+INFO: Wall time: 150.788s User: 170.66s System: 33.39s
+
+INFO: current LH = -35417.9518
+INFO: current LH = -35417.68903
+INFO: current LH = -35418.29835
+INFO: current LH = -35418.71236
+INFO: current LH = -35417.27935
+INFO: current LH = -35418.2473
+INFO: current LH = -35417.73739
+INFO: current LH = -35417.56503
+INFO: current LH = -35418.42047
+INFO: current LH = -35418.21961
+INFO: current LH = -35417.7662
+INFO: current LH = -35418.31915
+INFO: current LH = -35417.66524
+INFO: current LH = -35418.2671
+INFO: current LH = -35417.71957
+INFO: current LH = -35418.08843
+INFO: current LH = -35417.89626
+INFO: current LH = -35418.02966
+INFO: current LH = -35417.95437
+INFO: current LH = -35418.22865
+INFO: Wall time: 174.033s User: 192.21s System: 37.71s
+
+INFO: current LH = -35417.75592
+INFO: current LH = -35417.3893
+INFO: current LH = -35418.59679
+INFO: current LH = -35417.5829
+INFO: current LH = -35418.40259
+INFO: current LH = -35426.18728
+INFO: current LH = -35431.06342
+INFO: current LH = -35431.0857
+INFO: current LH = -35431.02469
+INFO: current LH = -35431.06342
+INFO: current LH = -35431.06342
+INFO: current LH = -35431.08571
+INFO: current LH = -35431.02466
+INFO: current LH = -35431.06342
+INFO: current LH = -35431.06342
+INFO: current LH = -35430.90101
+INFO: current LH = -35431.21127
+INFO: current LH = -35431.1964
+INFO: current LH = -35430.91367
+INFO: current LH = -35431.16961
+INFO: Wall time: 110.49s User: 131.35s System: 25.9s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	1.99235
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.936007
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.17225
+INFO: pipiSD0b_pole1MagOther	0.976155
+INFO: pipiSD0b_pole1PhiOther	-2.92034
+INFO: pipiSD0b_pole2MagOther	0.935446
+INFO: pipiSD0b_pole2PhiOther	-0.21848
+INFO: pipiSD0b_pole3MagOther	4.75624
+INFO: pipiSD0b_pole3PhiOther	1.98567
+INFO: pipiSD0b_pole4MagOther	2.26752
+INFO: pipiSD0b_pole4PhiOther	0.415072
+INFO: pipiSD0b_pole5MagOther	0.517432
+INFO: pipiSD0b_pole5PhiOther	1.29968
+INFO: pipiSD0fprod_4PiMagOther	3.1739
+INFO: pipiSD0fprod_4PiPhiOther	0.627169
+INFO: pipiSD0fprod_EtaEtaMagOther	1.94819
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.429477
+INFO: pipiSD0fprod_EtaEtapMagOther	0.637051
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.0461367
+INFO: pipiSD0fprod_KKMagOther	0.342186
+INFO: pipiSD0fprod_KKPhiOther	1.07463
+INFO: pipiSD0fprod_PiPiMagOther	1.12447
+INFO: pipiSD0fprod_PiPiPhiOther	0.0523537
+INFO: current LH = -35430.9397
+INFO: current LH = -35431.14585
+INFO: current LH = -35430.96419
+INFO: current LH = -35430.88389
+INFO: current LH = -35431.22562
+INFO: current LH = -35431.04519
+INFO: current LH = -35431.06444
+INFO: current LH = -35431.23429
+INFO: current LH = -35430.87579
+INFO: current LH = -35430.86399
+INFO: current LH = -35431.24625
+INFO: current LH = -35431.08774
+INFO: current LH = -35431.0219
+INFO: current LH = -35431.08502
+INFO: current LH = -35431.02832
+INFO: current LH = -35431.32187
+INFO: current LH = -35430.7641
+INFO: current LH = -35431.23429
+INFO: current LH = -35430.87567
+INFO: current LH = -35430.97523
+INFO: Wall time: 174.561s User: 193.03s System: 37.67s
+
+INFO: current LH = -35431.13375
+INFO: current LH = -35430.92004
+INFO: current LH = -35431.18951
+INFO: current LH = -35431.19253
+INFO: current LH = -35430.91703
+INFO: current LH = -35430.93606
+INFO: current LH = -35431.17405
+INFO: current LH = -35431.21816
+INFO: current LH = -35430.89214
+INFO: current LH = -35430.8346
+INFO: current LH = -35431.27612
+INFO: current LH = -35430.89732
+INFO: current LH = -35431.21207
+INFO: current LH = -35431.17678
+INFO: current LH = -35430.93383
+INFO: current LH = -35430.79108
+INFO: current LH = -35431.31954
+INFO: current LH = -35431.09167
+INFO: current LH = -35431.01817
+INFO: current LH = -35437.24893
+INFO: Wall time: 174.838s User: 192.77s System: 38.28s
+
+INFO: current LH = -35449.16445
+INFO: current LH = -35449.16305
+INFO: current LH = -35449.07502
+INFO: current LH = -35449.23685
+INFO: current LH = -35449.16444
+INFO: current LH = -35449.16444
+INFO: current LH = -35449.07502
+INFO: current LH = -35449.23686
+INFO: current LH = -35449.16445
+INFO: current LH = -35449.16445
+INFO: current LH = -35449.08294
+INFO: current LH = -35449.2328
+INFO: current LH = -35449.04815
+INFO: current LH = -35449.26459
+INFO: current LH = -35449.03459
+INFO: current LH = -35449.27587
+INFO: current LH = -35449.17955
+INFO: current LH = -35449.13226
+INFO: current LH = -35449.3248
+INFO: current LH = -35448.98612
+INFO: Wall time: 116.992s User: 137.86s System: 26.85s
+
+INFO: current LH = -35449.09866
+INFO: current LH = -35449.21195
+INFO: current LH = -35449.06062
+INFO: current LH = -35449.25125
+INFO: current LH = -35449.19243
+INFO: current LH = -35449.12045
+INFO: current LH = -35449.12936
+INFO: current LH = -35449.18297
+INFO: current LH = -35449.11406
+INFO: current LH = -35449.20179
+INFO: current LH = -35449.08405
+INFO: current LH = -35449.23769
+INFO: current LH = -35449.03809
+INFO: current LH = -35449.2739
+INFO: current LH = -35449.00716
+INFO: current LH = -35449.3041
+INFO: current LH = -35448.99878
+INFO: current LH = -35449.31555
+INFO: current LH = -35449.31258
+INFO: current LH = -35449.00007
+INFO: Wall time: 175.137s User: 193.16s System: 38.22s
+
+INFO: current LH = -35449.38601
+INFO: current LH = -35448.92355
+INFO: current LH = -35449.45908
+INFO: current LH = -35448.85439
+INFO: current LH = -35449.22663
+INFO: current LH = -35449.08525
+INFO: current LH = -35449.36727
+INFO: current LH = -35448.94467
+INFO: current LH = -35449.1067
+INFO: current LH = -35449.20026
+INFO: current LH = -35448.94546
+INFO: current LH = -35449.36826
+INFO: current LH = -35449.08707
+INFO: current LH = -35449.22412
+INFO: current LH = -35460.73472
+INFO: current LH = -35461.03928
+INFO: current LH = -35461.08052
+INFO: current LH = -35461.06377
+INFO: current LH = -35461.08053
+INFO: current LH = -35461.0805
+INFO: Wall time: 150.05s User: 168.37s System: 33.55s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.00452
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	562.747
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.941584
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.27504
+INFO: pipiSD0b_pole1MagOther	0.973514
+INFO: pipiSD0b_pole1PhiOther	-2.92675
+INFO: pipiSD0b_pole2MagOther	0.976316
+INFO: pipiSD0b_pole2PhiOther	-0.186626
+INFO: pipiSD0b_pole3MagOther	4.89651
+INFO: pipiSD0b_pole3PhiOther	1.97285
+INFO: pipiSD0b_pole4MagOther	2.02556
+INFO: pipiSD0b_pole4PhiOther	0.404876
+INFO: pipiSD0b_pole5MagOther	0.409372
+INFO: pipiSD0b_pole5PhiOther	1.43529
+INFO: pipiSD0fprod_4PiMagOther	2.94624
+INFO: pipiSD0fprod_4PiPhiOther	0.482147
+INFO: pipiSD0fprod_EtaEtaMagOther	2.02928
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.450424
+INFO: pipiSD0fprod_EtaEtapMagOther	0.597274
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.0396926
+INFO: pipiSD0fprod_KKMagOther	0.402995
+INFO: pipiSD0fprod_KKPhiOther	1.1167
+INFO: pipiSD0fprod_PiPiMagOther	1.11686
+INFO: pipiSD0fprod_PiPiPhiOther	0.0552754
+INFO: current LH = -35461.0805
+INFO: current LH = -35461.06376
+INFO: current LH = -35461.08053
+INFO: current LH = -35461.0805
+INFO: current LH = -35461.0805
+INFO: current LH = -35460.81734
+INFO: current LH = -35461.3276
+INFO: current LH = -35461.19919
+INFO: current LH = -35460.9447
+INFO: current LH = -35461.20274
+INFO: current LH = -35460.94042
+INFO: current LH = -35461.09988
+INFO: current LH = -35461.04335
+INFO: current LH = -35460.88051
+INFO: current LH = -35461.26274
+INFO: current LH = -35460.96438
+INFO: current LH = -35461.17766
+INFO: current LH = -35461.26098
+INFO: current LH = -35460.88295
+INFO: current LH = -35460.99497
+INFO: Wall time: 134.268s User: 155.15s System: 29.85s
+
+INFO: current LH = -35461.15043
+INFO: current LH = -35461.00513
+INFO: current LH = -35461.14
+INFO: current LH = -35461.07739
+INFO: current LH = -35461.06557
+INFO: current LH = -35461.15704
+INFO: current LH = -35460.98018
+INFO: current LH = -35461.07392
+INFO: current LH = -35461.06854
+INFO: current LH = -35460.94986
+INFO: current LH = -35461.19534
+INFO: current LH = -35461.13277
+INFO: current LH = -35461.01086
+INFO: current LH = -35461.21904
+INFO: current LH = -35460.92543
+INFO: current LH = -35461.21862
+INFO: current LH = -35460.92494
+INFO: current LH = -35461.07339
+INFO: current LH = -35461.07192
+INFO: current LH = -35460.96397
+INFO: Wall time: 174.082s User: 192.31s System: 37.63s
+
+INFO: current LH = -35461.17714
+INFO: current LH = -35461.24415
+INFO: current LH = -35460.89786
+INFO: current LH = -35460.80078
+INFO: current LH = -35461.34342
+INFO: current LH = -35460.87604
+INFO: current LH = -35461.26813
+INFO: current LH = -35467.56484
+INFO: current LH = -35469.41943
+INFO: current LH = -35469.5765
+INFO: current LH = -35469.24576
+INFO: current LH = -35469.41942
+INFO: current LH = -35469.41942
+INFO: current LH = -35469.57652
+INFO: current LH = -35469.24572
+INFO: current LH = -35469.41941
+INFO: current LH = -35469.41941
+INFO: current LH = -35469.50441
+INFO: current LH = -35469.31892
+INFO: current LH = -35469.40692
+INFO: Wall time: 109.353s User: 130.02s System: 25.7s
+
+INFO: current LH = -35469.41454
+INFO: current LH = -35469.26705
+INFO: current LH = -35469.55447
+INFO: current LH = -35469.51045
+INFO: current LH = -35469.31104
+INFO: current LH = -35469.47881
+INFO: current LH = -35469.34252
+INFO: current LH = -35469.57504
+INFO: current LH = -35469.24636
+INFO: current LH = -35469.35043
+INFO: current LH = -35469.4712
+INFO: current LH = -35469.46825
+INFO: current LH = -35469.35398
+INFO: current LH = -35469.52037
+INFO: current LH = -35469.30175
+INFO: current LH = -35469.44591
+INFO: current LH = -35469.37541
+INFO: current LH = -35469.17298
+INFO: current LH = -35469.64559
+INFO: current LH = -35469.4556
+INFO: Wall time: 175.475s User: 193.32s System: 38.5s
+
+INFO: current LH = -35469.36508
+INFO: current LH = -35469.49426
+INFO: current LH = -35469.3284
+INFO: current LH = -35469.43229
+INFO: current LH = -35469.38923
+INFO: current LH = -35469.34529
+INFO: current LH = -35469.47713
+INFO: current LH = -35469.49473
+INFO: current LH = -35469.32642
+INFO: current LH = -35469.29026
+INFO: current LH = -35469.53144
+INFO: current LH = -35469.4077
+INFO: current LH = -35469.41345
+INFO: current LH = -35469.62635
+INFO: current LH = -35469.19354
+INFO: current LH = -35469.45377
+INFO: current LH = -35469.36832
+INFO: current LH = -35469.55331
+INFO: current LH = -35469.26846
+INFO: current LH = -35472.84488
+INFO: Wall time: 173.538s User: 192.13s System: 37.12s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.0172
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.947401
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.31138
+INFO: pipiSD0b_pole1MagOther	0.977974
+INFO: pipiSD0b_pole1PhiOther	-2.92868
+INFO: pipiSD0b_pole2MagOther	0.992228
+INFO: pipiSD0b_pole2PhiOther	-0.175848
+INFO: pipiSD0b_pole3MagOther	4.92135
+INFO: pipiSD0b_pole3PhiOther	1.97314
+INFO: pipiSD0b_pole4MagOther	1.95966
+INFO: pipiSD0b_pole4PhiOther	0.415172
+INFO: pipiSD0b_pole5MagOther	0.356518
+INFO: pipiSD0b_pole5PhiOther	1.45784
+INFO: pipiSD0fprod_4PiMagOther	2.82043
+INFO: pipiSD0fprod_4PiPhiOther	0.408319
+INFO: pipiSD0fprod_EtaEtaMagOther	2.04683
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.439636
+INFO: pipiSD0fprod_EtaEtapMagOther	0.597403
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.0322559
+INFO: pipiSD0fprod_KKMagOther	0.413388
+INFO: pipiSD0fprod_KKPhiOther	1.1346
+INFO: pipiSD0fprod_PiPiMagOther	1.10676
+INFO: pipiSD0fprod_PiPiPhiOther	0.0543506
+INFO: current LH = -35472.82256
+INFO: current LH = -35472.85012
+INFO: current LH = -35472.84489
+INFO: current LH = -35472.84489
+INFO: current LH = -35472.82258
+INFO: current LH = -35472.85012
+INFO: current LH = -35472.84489
+INFO: current LH = -35472.84489
+INFO: current LH = -35472.81289
+INFO: current LH = -35472.86164
+INFO: current LH = -35472.93272
+INFO: current LH = -35472.74062
+INFO: current LH = -35472.81119
+INFO: current LH = -35472.86031
+INFO: current LH = -35472.71185
+INFO: current LH = -35472.96083
+INFO: current LH = -35472.92813
+INFO: current LH = -35472.74426
+INFO: current LH = -35472.77308
+INFO: current LH = -35472.89852
+INFO: Wall time: 109.336s User: 130.39s System: 25.36s
+
+INFO: current LH = -35472.86874
+INFO: current LH = -35472.8044
+INFO: current LH = -35472.7705
+INFO: current LH = -35472.90252
+INFO: current LH = -35472.79249
+INFO: current LH = -35472.8801
+INFO: current LH = -35472.63113
+INFO: current LH = -35473.04249
+INFO: current LH = -35472.67942
+INFO: current LH = -35473.00697
+INFO: current LH = -35472.4687
+INFO: current LH = -35473.20407
+INFO: current LH = -35472.91216
+INFO: current LH = -35472.76051
+INFO: current LH = -35472.88226
+INFO: current LH = -35472.79189
+INFO: current LH = -35472.77706
+INFO: current LH = -35472.89537
+INFO: current LH = -35472.7958
+INFO: current LH = -35472.87612
+INFO: Wall time: 172.007s User: 190.87s System: 36.39s
+
+INFO: current LH = -35472.90609
+INFO: current LH = -35472.76722
+INFO: current LH = -35472.65621
+INFO: current LH = -35473.01623
+INFO: current LH = -35472.84645
+INFO: current LH = -35472.82662
+INFO: current LH = -35473.11458
+INFO: current LH = -35472.55791
+INFO: current LH = -35472.80861
+INFO: current LH = -35472.86509
+INFO: current LH = -35472.82974
+INFO: current LH = -35472.84257
+INFO: current LH = -35475.05652
+INFO: current LH = -35478.29975
+INFO: current LH = -35478.27549
+INFO: current LH = -35478.30709
+INFO: current LH = -35478.29974
+INFO: current LH = -35478.29974
+INFO: current LH = -35478.27548
+INFO: current LH = -35478.30709
+INFO: Wall time: 124.638s User: 144.39s System: 28.33s
+
+INFO: current LH = -35478.29973
+INFO: current LH = -35478.29973
+INFO: current LH = -35478.33245
+INFO: current LH = -35478.25086
+INFO: current LH = -35478.20276
+INFO: current LH = -35478.37986
+INFO: current LH = -35478.28279
+INFO: current LH = -35478.29869
+INFO: current LH = -35478.37143
+INFO: current LH = -35478.21116
+INFO: current LH = -35478.4148
+INFO: current LH = -35478.16737
+INFO: current LH = -35478.17162
+INFO: current LH = -35478.41031
+INFO: current LH = -35478.20043
+INFO: current LH = -35478.38247
+INFO: current LH = -35478.31069
+INFO: current LH = -35478.27167
+INFO: current LH = -35478.0635
+INFO: current LH = -35478.5184
+INFO: Wall time: 157.494s User: 177.33s System: 33.71s
+
+INFO: current LH = -35478.15091
+INFO: current LH = -35478.43331
+INFO: current LH = -35477.54061
+INFO: current LH = -35479.03805
+INFO: current LH = -35478.08089
+INFO: current LH = -35478.50111
+INFO: current LH = -35478.4624
+INFO: current LH = -35478.11981
+INFO: current LH = -35478.41345
+INFO: current LH = -35478.16907
+INFO: current LH = -35478.37965
+INFO: current LH = -35478.20272
+INFO: current LH = -35478.41108
+INFO: current LH = -35478.17115
+INFO: current LH = -35478.15392
+INFO: current LH = -35478.42635
+INFO: current LH = -35478.35126
+INFO: current LH = -35478.23137
+INFO: current LH = -35478.20351
+INFO: current LH = -35478.37943
+INFO: Wall time: 173.234s User: 191.44s System: 36.91s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.02358
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.950326
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.31139
+INFO: pipiSD0b_pole1MagOther	0.983615
+INFO: pipiSD0b_pole1PhiOther	-2.9294
+INFO: pipiSD0b_pole2MagOther	0.989811
+INFO: pipiSD0b_pole2PhiOther	-0.167629
+INFO: pipiSD0b_pole3MagOther	4.88465
+INFO: pipiSD0b_pole3PhiOther	1.97893
+INFO: pipiSD0b_pole4MagOther	1.97184
+INFO: pipiSD0b_pole4PhiOther	0.431123
+INFO: pipiSD0b_pole5MagOther	0.323363
+INFO: pipiSD0b_pole5PhiOther	1.4267
+INFO: pipiSD0fprod_4PiMagOther	2.85949
+INFO: pipiSD0fprod_4PiPhiOther	0.415922
+INFO: pipiSD0fprod_EtaEtaMagOther	2.04143
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.435213
+INFO: pipiSD0fprod_EtaEtapMagOther	0.611763
+INFO: pipiSD0fprod_EtaEtapPhiOther	0.0213773
+INFO: pipiSD0fprod_KKMagOther	0.405863
+INFO: pipiSD0fprod_KKPhiOther	1.14082
+INFO: pipiSD0fprod_PiPiMagOther	1.10026
+INFO: pipiSD0fprod_PiPiPhiOther	0.0532517
+INFO: current LH = -35478.29967
+INFO: current LH = -35478.28338
+INFO: current LH = -35478.28553
+INFO: current LH = -35478.29666
+INFO: current LH = -35483.92597
+INFO: current LH = -35493.39348
+INFO: current LH = -35493.2184
+INFO: current LH = -35493.55171
+INFO: current LH = -35493.39349
+INFO: current LH = -35493.39349
+INFO: current LH = -35493.21836
+INFO: current LH = -35493.55174
+INFO: current LH = -35493.39349
+INFO: current LH = -35493.39349
+INFO: current LH = -35493.13485
+INFO: current LH = -35493.63807
+INFO: current LH = -35493.51304
+INFO: current LH = -35493.25744
+INFO: current LH = -35493.68876
+INFO: current LH = -35493.07734
+INFO: Wall time: 104.34s User: 125.46s System: 23.12s
+
+INFO: current LH = -35493.25829
+INFO: current LH = -35493.51093
+INFO: current LH = -35493.18325
+INFO: current LH = -35493.58545
+INFO: current LH = -35493.03391
+INFO: current LH = -35493.73317
+INFO: current LH = -35493.60073
+INFO: current LH = -35493.17013
+INFO: current LH = -35493.23266
+INFO: current LH = -35493.53799
+INFO: current LH = -35493.10119
+INFO: current LH = -35493.66661
+INFO: current LH = -35493.17564
+INFO: current LH = -35493.59923
+INFO: current LH = -35493.33576
+INFO: current LH = -35493.45938
+INFO: current LH = -35493.31318
+INFO: current LH = -35493.49066
+INFO: current LH = -35493.45219
+INFO: current LH = -35493.31694
+INFO: Wall time: 166.568s User: 185.44s System: 34.02s
+
+INFO: current LH = -35493.38827
+INFO: current LH = -35493.38302
+INFO: current LH = -35493.33363
+INFO: current LH = -35493.43445
+INFO: current LH = -35493.53384
+INFO: current LH = -35493.23449
+INFO: current LH = -35493.33928
+INFO: current LH = -35493.43028
+INFO: current LH = -35493.196
+INFO: current LH = -35493.5691
+INFO: current LH = -35493.27953
+INFO: current LH = -35493.49062
+INFO: current LH = -35493.49042
+INFO: current LH = -35493.28001
+INFO: current LH = -35493.2872
+INFO: current LH = -35493.48469
+INFO: current LH = -35493.08025
+INFO: current LH = -35493.68843
+INFO: current LH = -35504.15812
+INFO: current LH = -35504.20777
+INFO: Wall time: 171.422s User: 189.72s System: 36.34s
+
+INFO: current LH = -35504.2741
+INFO: current LH = -35504.12476
+INFO: current LH = -35504.20777
+INFO: current LH = -35504.20777
+INFO: current LH = -35504.27409
+INFO: current LH = -35504.12476
+INFO: current LH = -35504.20776
+INFO: current LH = -35504.20776
+INFO: current LH = -35504.20124
+INFO: current LH = -35504.19809
+INFO: current LH = -35504.28464
+INFO: current LH = -35504.11389
+INFO: current LH = -35504.16255
+INFO: current LH = -35504.23584
+INFO: current LH = -35504.16663
+INFO: current LH = -35504.23241
+INFO: current LH = -35504.24431
+INFO: current LH = -35504.15468
+INFO: current LH = -35504.26481
+INFO: current LH = -35504.13497
+INFO: Wall time: 108.416s User: 129.48s System: 24.77s
+
+INFO: current LH = -35504.21893
+INFO: current LH = -35504.17973
+INFO: current LH = -35504.21995
+INFO: current LH = -35504.17765
+INFO: current LH = -35504.32332
+INFO: current LH = -35504.07296
+INFO: current LH = -35504.15777
+INFO: current LH = -35504.24693
+INFO: current LH = -35504.23366
+INFO: current LH = -35504.17129
+INFO: current LH = -35504.31423
+INFO: current LH = -35504.0854
+INFO: current LH = -35504.17249
+INFO: current LH = -35504.22444
+INFO: current LH = -35504.04592
+INFO: current LH = -35504.35214
+INFO: current LH = -35504.09829
+INFO: current LH = -35504.29989
+INFO: current LH = -35504.08442
+INFO: current LH = -35504.31414
+INFO: Wall time: 174.19s User: 192.08s System: 37.82s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.04685
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.960992
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.32275
+INFO: pipiSD0b_pole1MagOther	0.999996
+INFO: pipiSD0b_pole1PhiOther	-2.94538
+INFO: pipiSD0b_pole2MagOther	0.984906
+INFO: pipiSD0b_pole2PhiOther	-0.119633
+INFO: pipiSD0b_pole3MagOther	4.73706
+INFO: pipiSD0b_pole3PhiOther	2.03719
+INFO: pipiSD0b_pole4MagOther	2.06581
+INFO: pipiSD0b_pole4PhiOther	0.443797
+INFO: pipiSD0b_pole5MagOther	0.145978
+INFO: pipiSD0b_pole5PhiOther	1.23141
+INFO: pipiSD0fprod_4PiMagOther	2.77052
+INFO: pipiSD0fprod_4PiPhiOther	0.477329
+INFO: pipiSD0fprod_EtaEtaMagOther	2.15361
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.379788
+INFO: pipiSD0fprod_EtaEtapMagOther	0.651197
+INFO: pipiSD0fprod_EtaEtapPhiOther	-0.0662549
+INFO: pipiSD0fprod_KKMagOther	0.346652
+INFO: pipiSD0fprod_KKPhiOther	1.32292
+INFO: pipiSD0fprod_PiPiMagOther	1.08461
+INFO: pipiSD0fprod_PiPiPhiOther	0.0597452
+INFO: current LH = -35503.95181
+INFO: current LH = -35504.44419
+INFO: current LH = -35504.21958
+INFO: current LH = -35504.18138
+INFO: current LH = -35504.38268
+INFO: current LH = -35504.01818
+INFO: current LH = -35504.3219
+INFO: current LH = -35504.07734
+INFO: current LH = -35504.27917
+INFO: current LH = -35504.11898
+INFO: current LH = -35507.65508
+INFO: current LH = -35507.61837
+INFO: current LH = -35507.4835
+INFO: current LH = -35507.80945
+INFO: current LH = -35507.65504
+INFO: current LH = -35507.65504
+INFO: current LH = -35507.48354
+INFO: current LH = -35507.80942
+INFO: current LH = -35507.65506
+INFO: current LH = -35507.65506
+INFO: Wall time: 116.699s User: 137.69s System: 26.49s
+
+INFO: current LH = -35507.50415
+INFO: current LH = -35507.79033
+INFO: current LH = -35507.74065
+INFO: current LH = -35507.55295
+INFO: current LH = -35507.70571
+INFO: current LH = -35507.58643
+INFO: current LH = -35507.46069
+INFO: current LH = -35507.83238
+INFO: current LH = -35507.61469
+INFO: current LH = -35507.67845
+INFO: current LH = -35507.53383
+INFO: current LH = -35507.75892
+INFO: current LH = -35507.77667
+INFO: current LH = -35507.51704
+INFO: current LH = -35507.44446
+INFO: current LH = -35507.84837
+INFO: current LH = -35507.60529
+INFO: current LH = -35507.68675
+INFO: current LH = -35507.47313
+INFO: current LH = -35507.82331
+INFO: Wall time: 171.384s User: 190.54s System: 35.74s
+
+INFO: current LH = -35507.60203
+INFO: current LH = -35507.72313
+INFO: current LH = -35507.77031
+INFO: current LH = -35507.52286
+INFO: current LH = -35507.60771
+INFO: current LH = -35507.6853
+INFO: current LH = -35507.54896
+INFO: current LH = -35507.74369
+INFO: current LH = -35507.68496
+INFO: current LH = -35507.60729
+INFO: current LH = -35507.6409
+INFO: current LH = -35507.65289
+INFO: current LH = -35507.53057
+INFO: current LH = -35507.76022
+INFO: current LH = -35507.6641
+INFO: current LH = -35507.63031
+INFO: current LH = -35507.81571
+INFO: current LH = -35507.47848
+INFO: current LH = -35507.57443
+INFO: current LH = -35507.7195
+INFO: Wall time: 172.963s User: 191.71s System: 36.34s
+
+INFO: current LH = -35507.53757
+INFO: current LH = -35507.7552
+INFO: current LH = -35509.75538
+INFO: current LH = -35510.39039
+INFO: current LH = -35510.2197
+INFO: current LH = -35510.54422
+INFO: current LH = -35510.39038
+INFO: current LH = -35510.39038
+INFO: current LH = -35510.21968
+INFO: current LH = -35510.54422
+INFO: current LH = -35510.39037
+INFO: current LH = -35510.39037
+INFO: current LH = -35510.29881
+INFO: current LH = -35510.46613
+INFO: current LH = -35510.29633
+INFO: current LH = -35510.46761
+INFO: current LH = -35510.41539
+INFO: current LH = -35510.34759
+INFO: current LH = -35510.33399
+INFO: current LH = -35510.42972
+INFO: Wall time: 103.318s User: 122.52s System: 20.61s
+
+INFO: current LH = -35510.2984
+INFO: current LH = -35510.46506
+INFO: current LH = -35510.29375
+INFO: current LH = -35510.46959
+INFO: current LH = -35510.43853
+INFO: current LH = -35510.32557
+INFO: current LH = -35510.25006
+INFO: current LH = -35510.51396
+INFO: current LH = -35510.32368
+INFO: current LH = -35510.43965
+INFO: current LH = -35510.34939
+INFO: current LH = -35510.42106
+INFO: current LH = -35510.36659
+INFO: current LH = -35510.41028
+INFO: current LH = -35510.33835
+INFO: current LH = -35510.42515
+INFO: current LH = -35510.40165
+INFO: current LH = -35510.36161
+INFO: current LH = -35510.31925
+INFO: current LH = -35510.44405
+INFO: Wall time: 143.761s User: 156.49s System: 17.82s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.0565
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.965416
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.34373
+INFO: pipiSD0b_pole1MagOther	1.00806
+INFO: pipiSD0b_pole1PhiOther	-2.95194
+INFO: pipiSD0b_pole2MagOther	0.984649
+INFO: pipiSD0b_pole2PhiOther	-0.095609
+INFO: pipiSD0b_pole3MagOther	4.66137
+INFO: pipiSD0b_pole3PhiOther	2.06617
+INFO: pipiSD0b_pole4MagOther	2.1056
+INFO: pipiSD0b_pole4PhiOther	0.463692
+INFO: pipiSD0b_pole5MagOther	0.071081
+INFO: pipiSD0b_pole5PhiOther	1.13897
+INFO: pipiSD0fprod_4PiMagOther	2.81164
+INFO: pipiSD0fprod_4PiPhiOther	0.497965
+INFO: pipiSD0fprod_EtaEtaMagOther	2.2092
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.354999
+INFO: pipiSD0fprod_EtaEtapMagOther	0.660704
+INFO: pipiSD0fprod_EtaEtapPhiOther	-0.118475
+INFO: pipiSD0fprod_KKMagOther	0.326803
+INFO: pipiSD0fprod_KKPhiOther	1.41273
+INFO: pipiSD0fprod_PiPiMagOther	1.07953
+INFO: pipiSD0fprod_PiPiPhiOther	0.0617919
+INFO: current LH = -35510.48746
+INFO: current LH = -35510.27617
+INFO: current LH = -35510.52673
+INFO: current LH = -35510.23686
+INFO: current LH = -35510.50604
+INFO: current LH = -35510.25788
+INFO: current LH = -35510.39233
+INFO: current LH = -35510.36956
+INFO: current LH = -35510.4025
+INFO: current LH = -35510.36115
+INFO: current LH = -35510.34721
+INFO: current LH = -35510.41654
+INFO: current LH = -35510.23997
+INFO: current LH = -35510.52432
+INFO: current LH = -35510.288
+INFO: current LH = -35510.47557
+INFO: current LH = -35511.85114
+INFO: current LH = -35514.0782
+INFO: current LH = -35514.16778
+INFO: current LH = -35514.1741
+INFO: Wall time: 154.268s User: 168.84s System: 25.09s
+
+INFO: current LH = -35514.01863
+INFO: current LH = -35514.31274
+INFO: current LH = -35514.17411
+INFO: current LH = -35514.17411
+INFO: current LH = -35514.01867
+INFO: current LH = -35514.31268
+INFO: current LH = -35514.17409
+INFO: current LH = -35514.17409
+INFO: current LH = -35514.04946
+INFO: current LH = -35514.28437
+INFO: current LH = -35514.20565
+INFO: current LH = -35514.12626
+INFO: current LH = -35514.34508
+INFO: current LH = -35513.98454
+INFO: current LH = -35514.08106
+INFO: current LH = -35514.25005
+INFO: current LH = -35514.05787
+INFO: current LH = -35514.27294
+INFO: current LH = -35513.95699
+INFO: current LH = -35514.37327
+INFO: Wall time: 96.7187s User: 112.91s System: 17.1s
+
+INFO: current LH = -35514.31211
+INFO: current LH = -35514.0199
+INFO: current LH = -35514.03929
+INFO: current LH = -35514.29239
+INFO: current LH = -35514.01544
+INFO: current LH = -35514.31481
+INFO: current LH = -35514.11161
+INFO: current LH = -35514.22756
+INFO: current LH = -35514.1534
+INFO: current LH = -35514.20471
+INFO: current LH = -35514.12593
+INFO: current LH = -35514.20497
+INFO: current LH = -35514.05105
+INFO: current LH = -35514.28056
+INFO: current LH = -35514.14364
+INFO: current LH = -35514.18662
+INFO: current LH = -35514.18315
+INFO: current LH = -35514.14727
+INFO: current LH = -35514.22009
+INFO: current LH = -35514.1119
+INFO: Wall time: 134.897s User: 144.77s System: 10.49s
+
+INFO: current LH = -35514.00895
+INFO: current LH = -35514.3199
+INFO: current LH = -35514.09651
+INFO: current LH = -35514.23554
+INFO: current LH = -35514.18356
+INFO: current LH = -35514.14867
+INFO: current LH = -35514.08743
+INFO: current LH = -35514.24509
+INFO: current LH = -35514.05433
+INFO: current LH = -35514.27638
+INFO: current LH = -35517.03413
+INFO: current LH = -35517.30632
+INFO: current LH = -35517.28224
+INFO: current LH = -35517.3137
+INFO: current LH = -35517.30635
+INFO: current LH = -35517.30635
+INFO: current LH = -35517.28227
+INFO: current LH = -35517.3137
+INFO: current LH = -35517.30635
+INFO: current LH = -35517.30635
+INFO: Wall time: 90.5847s User: 107.93s System: 14.28s
+
+INFO: current LH = -35517.39449
+INFO: current LH = -35517.20343
+INFO: current LH = -35517.21074
+INFO: current LH = -35517.38516
+INFO: current LH = -35517.21375
+INFO: current LH = -35517.38125
+INFO: current LH = -35517.24416
+INFO: current LH = -35517.35144
+INFO: current LH = -35517.40784
+INFO: current LH = -35517.18749
+INFO: current LH = -35517.34305
+INFO: current LH = -35517.25254
+INFO: current LH = -35517.20711
+INFO: current LH = -35517.38866
+INFO: current LH = -35517.38774
+INFO: current LH = -35517.20842
+INFO: current LH = -35517.41888
+INFO: current LH = -35517.17644
+INFO: current LH = -35517.33181
+INFO: current LH = -35517.27984
+INFO: Wall time: 167.465s User: 181.92s System: 32.57s
+
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSMag	2.06792
+INFO: J0P-1C0Lama0Lamb0_D0ToKshort_pipiSPhi	30.5732
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Mag	0.970645
+INFO: J0P1C1L0S0_pipiSTopion+_pion-Phi	-1912.69
+INFO: pipiSD0S0_PosNegOther	-1.37086
+INFO: pipiSD0b_pole1MagOther	1.01575
+INFO: pipiSD0b_pole1PhiOther	-2.96248
+INFO: pipiSD0b_pole2MagOther	0.992382
+INFO: pipiSD0b_pole2PhiOther	-0.0669695
+INFO: pipiSD0b_pole3MagOther	4.58659
+INFO: pipiSD0b_pole3PhiOther	2.10682
+INFO: pipiSD0b_pole4MagOther	2.07729
+INFO: pipiSD0b_pole4PhiOther	0.48202
+INFO: pipiSD0b_pole5MagOther	0.0089814
+INFO: pipiSD0b_pole5PhiOther	1.02326
+INFO: pipiSD0fprod_4PiMagOther	2.76695
+INFO: pipiSD0fprod_4PiPhiOther	0.49332
+INFO: pipiSD0fprod_EtaEtaMagOther	2.29507
+INFO: pipiSD0fprod_EtaEtaPhiOther	-0.312276
+INFO: pipiSD0fprod_EtaEtapMagOther	0.667979
+INFO: pipiSD0fprod_EtaEtapPhiOther	-0.192284
+INFO: pipiSD0fprod_KKMagOther	0.308063
+INFO: pipiSD0fprod_KKPhiOther	1.54188
+INFO: pipiSD0fprod_PiPiMagOther	1.07561
+INFO: pipiSD0fprod_PiPiPhiOther	0.068264
+INFO: current LH = -35517.38448
+INFO: current LH = -35517.20642
+INFO: current LH = -35517.31908
+INFO: current LH = -35517.28515
+INFO: current LH = -35517.35721
+INFO: current LH = -35517.23806
+INFO: current LH = -35517.12725
+INFO: current LH = -35517.46875
+INFO: current LH = -35517.27505
+INFO: current LH = -35517.32027
+INFO: current LH = -35517.27717
+INFO: current LH = -35517.31811
+INFO: current LH = -35517.39623
+INFO: current LH = -35517.19998
+INFO: current LH = -35517.21246
+INFO: current LH = -35517.38151
+INFO: current LH = -35517.41991
+INFO: current LH = -35517.17643
+INFO: current LH = -35517.28114
+INFO: current LH = -35517.31333
+INFO: Wall time: 172.604s User: 191.39s System: 36.4s
+
+INFO: current LH = -35517.34315
+INFO: current LH = -35517.25333
+INFO: current LH = -35517.39759
+INFO: current LH = -35517.1978
+INFO: current LH = -35518.93884
+INFO: current LH = -35519.04514
+INFO: current LH = -35519.44368
+INFO: current LH = -35519.30588
+INFO: current LH = -35519.56443
+INFO: current LH = -35519.44367
+INFO: current LH = -35519.44367
+INFO: current LH = -35519.30585
+INFO: current LH = -35519.56443
+INFO: current LH = -35519.44366
+INFO: current LH = -35519.44366
+INFO: current LH = -35519.43896
+INFO: current LH = -35519.43332
+INFO: current LH = -35519.337
+INFO: current LH = -35519.53375
+INFO: current LH = -35519.42281
+INFO: Wall time: 107.732s User: 128.03s System: 24.52s
+
+INFO: current LH = -35519.4462
+INFO: current LH = -35519.34401
+INFO: current LH = -35519.52603
+INFO: current LH = -35519.44222
+INFO: current LH = -35519.4278
+INFO: current LH = -35519.38197
+INFO: current LH = -35519.48767
+INFO: current LH = -35519.41146
+INFO: current LH = -35519.45961
+INFO: current LH = -35519.38836
+INFO: current LH = -35519.48226
+INFO: current LH = -35519.46434
+INFO: current LH = -35519.40518
+INFO: current LH = -35519.4076
+INFO: current LH = -35519.43962
+INFO: current LH = -35519.42601
+INFO: current LH = -35519.44512
+INFO: current LH = -35519.44336
+INFO: current LH = -35519.44432
+INFO: current LH = -35519.44771
+INFO: Wall time: 169.722s User: 188.26s System: 35.9s
+
+INFO: current LH = -35519.44921
+INFO: current LH = -35519.54752
+INFO: current LH = -35519.32214
+INFO: current LH = -35519.31183
+INFO: current LH = -35519.55865
+INFO: current LH = -35519.45504
+INFO: current LH = -35519.41455
+INFO: current LH = -35519.51051
+INFO: current LH = -35519.35926
+INFO: current LH = -35519.57798

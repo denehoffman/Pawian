@@ -81,7 +81,7 @@ void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
       EvtData* currentEvtData=_evtDataVec[i];
       double intensity=calcEvtIntensity(currentEvtData, theParamVal);
       logLH_data+=(currentEvtData->evtWeight)*log(intensity);
-      weightSum+= currentEvtData->evtWeight;
+      weightSum+= currentEvtData->evtWeight; 
    }
 }
 
@@ -220,7 +220,6 @@ double AbsLh::mergeLogLhData(LHData& theLHData, int nMCs){
   logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/nMCs-1.)*(theLHData.LH_mc/nMCs-1.)
     -theLHData.logLH_data
     +theLHData.weightSum*logLH_mc_Norm;  
-
   Info << "current LH = " << std::setprecision(10) << logLH << endmsg;
   return logLH;
 }

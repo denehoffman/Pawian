@@ -193,6 +193,15 @@ public:
     return *this;
   }
 
+  template <typename T> bool operator==(const Vector4<T> &__v4){
+    bool result=true;
+    if( fabs(Px()-__v4.Px()) > 1e-6) result=false;
+    else if(fabs(Py()-__v4.Py()) > 1e-6) result=false;
+    else if(fabs(Pz()-__v4.Pz()) > 1e-6) result=false;
+    else if(fabs(E()-__v4.E()) > 1e-6) result=false;
+    return result;
+  }
+
   // Functions:
   
   /** Is this a valid 4-momentum?
