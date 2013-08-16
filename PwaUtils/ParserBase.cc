@@ -125,6 +125,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
       ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
       ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
+      ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
       ;
 
 

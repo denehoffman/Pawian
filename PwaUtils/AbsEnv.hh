@@ -36,6 +36,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsHist.hh"
+#include "PwaUtils/WaveContribution.hh"
 
 class Particle;
 class ParticleTable;
@@ -62,6 +63,7 @@ public:
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;} 
   std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
   std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
+  std::vector<std::shared_ptr<calcContributionData> >& calcContributionDataVec() {return _calcContributionDataVec;}
   bool useMassRange() {return _useMassRange;}
   double massRangeMin() {return _massMin;}
   double massRangeMax() {return _massMax;}
@@ -83,11 +85,12 @@ protected:
   std::string _serializationFileName;
   std::vector<std::vector<std::string> > _histMassSystems;
   std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
+  std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
+  std::vector<std::shared_ptr<calcContributionData> > _calcContributionDataVec;
   bool _useMassRange;
   double _massMin;
   double _massMax;
   std::vector<unsigned int> _particleIndicesMassRange;
-  std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
   Vector4<double> _initial4Vec;
   std::map<std::string, double> _preFactorMap;
   ParserBase* _theParser;

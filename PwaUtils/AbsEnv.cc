@@ -342,5 +342,27 @@ void AbsEnv::setup(ParserBase* theParser){
     _angleHistDataVec2D.push_back(currentAngleHistData2D);
   }
 
+ // calculate contributions
+  std::vector<std::string> theCalcContribution=theParser->calcContribution();
+  for ( itStr = theCalcContribution.begin(); itStr != theCalcContribution.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string tmpName;
+    std::string contribName;
+    std::vector<std::string> currentStringZeroAmp;
+    bool isContribName = true;
+    while(stringStr >> tmpName){
+      if(tmpName=="withZeroAmp") {
+      	isContribName = false;
+      	continue;
+      }
+      if(isContribName) contribName = tmpName;
+      else currentStringZeroAmp.push_back(tmpName);
+    }
+    std::shared_ptr<calcContributionData> currentCalcContributionData(new calcContributionData(contribName, currentStringZeroAmp));
+    _calcContributionDataVec.push_back(currentCalcContributionData);
+  }
+
 }
 

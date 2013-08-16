@@ -247,27 +247,36 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       ++it;
     }
 
+  std::string outputFileName= "qaSummary" + _absEnv->outputFileNameSuffix() + ".dat";
+  std::ofstream theQaStream ( outputFileName.c_str(), std::ofstream::out | std::ofstream::app);
+
   double integralDataWoWeight=(double) dataList.size();
+
   Info <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
+  theQaStream <<"No of data events without weight " << integralDataWoWeight << "\n";
 
-  //  double integralDataWWeight=(double) theEvtList->NoOfWeightedDataEvts();
   Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
+  theQaStream <<"No of data events with weight " << integralDataWWeight << "\n";
 
-
-  //  double integralMC=(double) theEvtList->NoOfWeightedMcEvts();
   Info <<"No of MC events " << integralMC ;  // << endmsg; 
-
-  Info <<"scaling factor  " << integralDataWWeight/integralMC ;  // << endmsg;
+  theQaStream <<"No of MC events " << integralMC << "\n"; 
 
   double scaleFactor = integralDataWWeight/integralMC;
+  Info <<"scaling factor  " << scaleFactor;  // << endmsg;
+  theQaStream <<"scaling factor  " << scaleFactor << "\n";  // << endmsg;
 
   Info <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor ;  // << endmsg;
+  theQaStream <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
   
   std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
-    if (itMassMap == _massFitHistMap.begin()) Info << "No of fit events: " << itMassMap->second->Integral(); // << endmsg;
+    if (itMassMap == _massFitHistMap.begin()) {
+       Info << "No of fit events: " << itMassMap->second->Integral();
+       theQaStream << "No of fit events: " << itMassMap->second->Integral() << "\n";
+    }
   }
+  theQaStream.close();
 
   std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
   for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){

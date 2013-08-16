@@ -30,23 +30,48 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "Minuit2/MnUserParameters.h"
 
+struct calcContributionData {
+   calcContributionData(std::string contribName, std::vector<std::string>& contribZeroAmpVec) :
+     _contribName(contribName)
+    ,_contribZeroAmpVec(contribZeroAmpVec)
+  {}
+
+  std::string _contribName;
+  std::vector<std::string> _contribZeroAmpVec;
+
+  virtual bool operator==(const calcContributionData& compare) const {
+    bool result=false;
+    if ( _contribName==compare._contribName) result=true;
+    return result;
+  }
+
+ virtual bool operator<(const calcContributionData& compare) const {
+   bool result=false;
+   if(_contribName < compare._contribName) result=true; 
+    return result; 
+  }  
+};
+
 class AbsLh;
 class fitParams;
 class EvtData;
 class PwaCovMatrix;
+class AbsEnv;
 
 
 class WaveContribution{
 
    public:
-    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
-    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
+    WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+    WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::pair<double,double> CalcContribution();
+    std::vector<std::pair<std::string,std::pair<double,double>>> CalcSingleContributions();
+    double CalcError(double result);
 
    private:
-
+    AbsEnv* _absEnv;
     bool _calcError;
     std::shared_ptr<AbsLh> _theLh;
     std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;

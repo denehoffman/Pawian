@@ -131,21 +131,25 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
        std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
        boostInputArchive >> *thePwaCovMatrix;
        theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(_absLhPtr, theStartParams, thePwaCovMatrix));
+	  (new WaveContribution(_absEnv, _absLhPtr, theStartParams, thePwaCovMatrix));
   }
   else{
     theWaveContribution = std::shared_ptr<WaveContribution>
-      (new WaveContribution(_absLhPtr, theStartParams));
+      (new WaveContribution(_absEnv, _absLhPtr, theStartParams));
   }
   std::pair<double, double> contValue = theWaveContribution->CalcContribution();
+  std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues = theWaveContribution->CalcSingleContributions();
 
     Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
     Info << "evtWeightSumData:\t" <<evtWeightSumData; 
     Info << "BIC:\t" << BICcriterion << endmsg;
     Info << "AIC:\t" << AICcriterion << endmsg;
     Info << "AICc:\t" << AICccriterion << endmsg;
-    Info << "Selected wave contribution:\t" << contValue.first
-	 << " +- " << contValue.second << endmsg;
+    Info << "Selected wave contribution:\t" << contValue.first << " +- " << contValue.second << endmsg;
+    std::vector<std::pair<std::string,std::pair<double,double>>>::iterator it;
+    for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
+      Info << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  endmsg;
+    }
 
     std::ostringstream qaSummaryFileName;
     std::string outputFileNameSuffix= _absEnv->outputFileNameSuffix();
@@ -157,8 +161,10 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
     theQaStream << "AICc\t" << AICccriterion << "\n";
     theQaStream << "logLh\t" << theLh << "\n";
     theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
-    theQaStream << "Selected wave contribution\t" << contValue.first
-		<< " +- " << contValue.second <<  "\n";
+    theQaStream << "Selected wave contribution\t" << contValue.first << " +- " << contValue.second <<  "\n";
+    for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
+      theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  "\n";
+    }
     theQaStream.close();
 }
 
@@ -258,6 +264,8 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
     Info << "BIC:\t" << BICcriterion << endmsg;
     Info << "AIC:\t" << AICcriterion << endmsg;
     Info << "AICc:\t" << AICccriterion << endmsg;
+
+
 }
 
 bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams){

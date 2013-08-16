@@ -24,8 +24,8 @@
 // WaveContribution class definition file. -*- C++ -*-
 // Copyright 2013 Julian Pychy
 
-
 #include "PwaUtils/WaveContribution.hh"
+#include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -33,8 +33,9 @@
 
 #include <iostream>
 
-WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-      _calcError(false)
+WaveContribution::WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+      _absEnv(theEnv)
+    , _calcError(false)
     , _theLh(theLh)
     , _theFitParamsOriginal(&theFitParams)
 {
@@ -44,11 +45,12 @@ WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theF
 
 
 
-WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
+WaveContribution::WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
 				   std::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
-    _calcError(true)
-   ,_theLh(theLh)
-   ,_thePwaCovMatrix(thePwaCovMatrix)
+    _absEnv(theEnv)
+   , _calcError(true)
+   , _theLh(theLh)
+   , _thePwaCovMatrix(thePwaCovMatrix)
    , _theFitParamsOriginal(&theFitParams)
 {
    _MCDataList=_theLh->getMcVec();
@@ -79,7 +81,50 @@ std::pair<double,double> WaveContribution::CalcContribution(){
 
    if(!_calcError)
       return std::pair<double,double>(result, resultErr);
+   else
+      return std::pair<double,double>(result, CalcError(result));
+}
 
+std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::CalcSingleContributions(){
+   std::vector<std::pair<std::string,std::pair<double,double>>> retValues;
+
+   std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = _absEnv->calcContributionDataVec();
+   std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
+   ROOT::Minuit2::MnUserParameters mnUserParamsOrig = _theMnUserParameters;
+   unsigned int nPar = _theMnUserParameters.Params().size();
+
+   for (itContribVec=calcContributionDataVec.begin(); itContribVec!=calcContributionDataVec.end(); ++itContribVec){ // loop over "calcContribution"-lines in cfg file
+      std::string tmpContribName= (*itContribVec)->_contribName;
+      std::vector<std::string> tmpZeroAmp = (*itContribVec)->_contribZeroAmpVec;
+      std::vector<std::string>::iterator itZeroAmpVec;
+      for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
+        for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
+           std::string parName = _theMnUserParameters.GetName(i);
+           if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) { 
+              Info << "found matching parameter:" << parName << " = " << (*itZeroAmpVec) << endmsg;
+              _theMnUserParameters.SetValue(i, 0.);
+           }
+        }
+      }
+      fitParams newFitParams = *_theFitParamsOriginal;
+      _theFitParamsBase.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
+      _theLh->updateFitParams(newFitParams);
+      double newContribution = CalcContribution(newFitParams);
+      if(!_calcError)
+         retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, 0)));
+      else
+         retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, CalcError(newContribution))));
+
+      Info << "calculated contribution for " << tmpContribName << " = " << newContribution << " +- " << retValues.back().second.second << endmsg;
+      _theMnUserParameters = mnUserParamsOrig;
+   }
+
+   _theLh->updateFitParams(*_theFitParamsOriginal);
+   return retValues;
+}
+
+double WaveContribution::CalcError(double result) {
+   double resultErr=0;
    double stepSize = 0.0001;
    std::map< std::string, double > derivatives;
 
@@ -126,7 +171,5 @@ std::pair<double,double> WaveContribution::CalcContribution(){
    }
    
    resultErr = sqrt(resultErr);
-
-   return std::pair<double,double>(result, resultErr);
+   return resultErr;
 }
-
