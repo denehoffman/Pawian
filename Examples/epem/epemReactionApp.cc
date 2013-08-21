@@ -284,6 +284,31 @@ int main(int __argc,char *__argv[]){
     return 1;
  }
 
+  if (mode=="evo"){
+    bool cacheAmps = theAppParams->cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
+    
+     theAppBase.fixParams(upar,fixedParams); 
+        
+     EvoMinimizer theEvoMinimizer(theFcn, upar, epemEnv::instance()->parser()->evoPopulation(), epemEnv::instance()->parser()->evoIterations());
+     Info <<"start evolutionary minimizer "<< endmsg;
+     std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
+      
+     fitParams finalFitParams=theStartparams;
+     theFitParamBase->getFitParamVal(finalParamVec, finalFitParams);
+        
+     fitParams finalFitErrs=theErrorparams;
+      
+     std::ostringstream finalResultname;
+     finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+      
+     std::ofstream theStream ( finalResultname.str().c_str() );
+     theFitParamBase->dumpParams(theStream, finalFitParams, finalFitErrs);
+     
+     return 1;
+  }
+
 }     
  
   
