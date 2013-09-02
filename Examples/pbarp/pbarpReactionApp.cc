@@ -59,6 +59,7 @@
 #include "Event/EventReaderDefault.hh"
 
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/EvtWeightList.hh"
 #include "pbarpUtils/pbarpHist.hh"
 #include "pbarpUtils/spinDensityHist.hh"
 #include "Event/Event.hh"
@@ -244,16 +245,21 @@ int main(int __argc,char *__argv[]){
   EventList mcData; 
   theAppBase.readEvents(mcData, mcFileNames, false, 0, maxMcEvts-1);  
 
-  std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
-  pbarpEventListPtr->read(eventsData, mcData);
+  // std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+  // pbarpEventListPtr->read(eventsData, mcData);
  
-  theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
-  theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
+  // theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
+  // theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
 
  if(mode == "server"){
-   theAppBase.fixParams(upar,fixedParams); 
-
-   std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
+   std::shared_ptr<EvtWeightList> pbarpWeightListPtr(new EvtWeightList(pbarpEnv::instance()));
+   pbarpWeightListPtr->read(eventsData, mcData);
+ 
+  theLhPtr->setDataVec(pbarpWeightListPtr->getDataVecs());
+  theLhPtr->setMcVec(pbarpWeightListPtr->getMcVecs());
+  theAppBase.fixParams(upar,fixedParams); 
+  
+  std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
  								 theAppParams->noOfClients(),
  								 eventsData.size(),
  								 mcData.size()));
@@ -266,7 +272,7 @@ int main(int __argc,char *__argv[]){
     theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
-    double evtWeightSumData = pbarpEventListPtr->NoOfWeightedDataEvts();
+    double evtWeightSumData = pbarpWeightListPtr->NoOfWeightedDataEvts();
     theAppBase.printFitResult(min, theStartparams, std::cout, outputFileNameSuffix, evtWeightSumData, noOfFreeFitParams);
 
     return 1;
@@ -276,6 +282,8 @@ int main(int __argc,char *__argv[]){
  if(mode == "evoserver"){
    theAppBase.fixParams(upar,fixedParams); 
 
+   std::shared_ptr<EvtWeightList> pbarpWeightListPtr(new EvtWeightList(pbarpEnv::instance()));
+   pbarpWeightListPtr->read(eventsData, mcData);
    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
 							      theAppParams->noOfClients(),
 							      eventsData.size(),
@@ -306,6 +314,11 @@ int main(int __argc,char *__argv[]){
    return 1;
  }
 
+ std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(pbarpEnv::instance()));
+ pbarpEventListPtr->read(eventsData, mcData);
+ 
+ theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());
+ theLhPtr->setMcVec(pbarpEventListPtr->getMcVecs());
 
  PwaFcnBase theFcn(theLhPtr, theFitParamBase, outputFileNameSuffix); 
  Info << "\nThe parameter values are: " << "\n" << endmsg;
