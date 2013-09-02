@@ -81,9 +81,6 @@ std::vector<double> EvoMinimizer::Minimize(){
 	 if(currentlh < itlh){
 	    itlh = currentlh;
 	    _bestParamsIteration = _tmpParams;
-	    _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams); 
-	    std::ofstream theStream(_currentResultFileName.c_str());
-	    _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms); 
 	 }
 	 if(currentlh < minlh){
 	    numbetterlh++;
@@ -98,6 +95,10 @@ std::vector<double> EvoMinimizer::Minimize(){
 	 _bestParamsGlobal = _bestParamsIteration;
 	 minlh = itlh;
 	 numnoimprovement=0;
+
+	 _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams); 
+	 std::ofstream theStream(_currentResultFileName.c_str());
+	 _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms); 
       }
       else
 	 numnoimprovement++;

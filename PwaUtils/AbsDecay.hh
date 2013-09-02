@@ -58,6 +58,7 @@ public:
   void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
   void setPreFactor(double thePreFactor) {_preFactor=thePreFactor;}
   double preFactor() {return _preFactor;}
+  std::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
   std::shared_ptr<const IGJPC> motherIGJPC(){ return _motherIGJPCPtr;}
   //  std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   std::shared_ptr<AbsDecay> decDaughter1() {return _absDecDaughter1;}
@@ -104,6 +105,7 @@ protected:
   bool _daughter2IsStable;
   bool _hasMotherPart;
 
+  std::shared_ptr<const jpcRes> _motherJPCPtr;
   std::shared_ptr<const IGJPC> _motherIGJPCPtr;
   std::shared_ptr<const IGJPC> _daughter1IGJPCPtr;
   std::shared_ptr<const IGJPC> _daughter2IGJPCPtr;
