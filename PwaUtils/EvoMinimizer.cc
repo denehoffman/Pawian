@@ -25,19 +25,20 @@
 
 #include <iostream>
 #include <fstream>
-#include <boost/random.hpp> 
+#include <boost/random.hpp>
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/EvoMinimizer.hh"
 #include "PwaUtils/FitParamsBase.hh"
 
-const double EvoMinimizer::DECREASESIGMAFACTOR = -0.1;
-const double EvoMinimizer::INCREASESIGMAFACTOR =  0.1;
-const double EvoMinimizer::DECREASELOWTHRESH = 0.001;
-const double EvoMinimizer::INCREASEHIGHTHRESH = 0.05;
-const double EvoMinimizer::LHSPREADEXIT = 0.1;
+const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
+const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
+const double EvoMinimizer::DECREASELOWTHRESH = 0.2;
+const double EvoMinimizer::INCREASEHIGHTHRESH = 0.2;
+const double EvoMinimizer::LHSPREADEXIT = 0.01;
 
 
-
+// Constructor takes AbsFcn to minimze, start parameters upar, population and iteration
+// sizes and the output file name suffix
 EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations, std::string suffix) :
   _population(population)
   , _iterations(iterations)
@@ -47,15 +48,17 @@ EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int populat
   , _defaultFitErrParms(theAbsFcn.defaultFitErrParms())
   , _currentResultFileName("currentEvoResult"+suffix+".dat")
 {
+   // Initialize the best global parameters
    _bestParamsGlobal = upar;
-   _parShuffleMod.assign(upar.Parameters().size(), 0);
+
+   // Print the logo
    Info << evologo << endmsg;
 }
 
 
-
+// Minimization takes place here
 std::vector<double> EvoMinimizer::Minimize(){
-  
+
    double startlh = (*_theAbsFcn)(_bestParamsGlobal.Params());
    double minlh = startlh;
    int numnoimprovement = 0;
@@ -67,162 +70,208 @@ std::vector<double> EvoMinimizer::Minimize(){
       int numbetterlh = 0;
       double maxitlhspread=0;
       double itlh = minlh;
-
       _iterationParamBackup = _bestParamsGlobal;
       _bestParamsIteration = _bestParamsGlobal;
 
       for(int j = 0; j<_population; j++){
-	 _tmpParams = _bestParamsGlobal;
-	 ShuffleParams();
-	 double currentlh = (*_theAbsFcn)(_tmpParams.Params());
-	 if(fabs(currentlh - minlh) > maxitlhspread){
-	    maxitlhspread = fabs(currentlh - minlh);
-	 }
-	 if(currentlh < itlh){
-	    itlh = currentlh;
-	    _bestParamsIteration = _tmpParams;
-	 }
-	 if(currentlh < minlh){
-	    numbetterlh++;
-	 }	 
+
+         // Get iteration start parameters and shuffle them
+         _tmpParams = _bestParamsGlobal;
+         ShuffleParams();
+
+         // Calc likelihood
+         double currentlh = (*_theAbsFcn)(_tmpParams.Params());
+
+         // Get information for break condition
+         if(fabs(currentlh - minlh) > maxitlhspread){
+               maxitlhspread = fabs(currentlh - minlh);
+         }
+
+         // Test for new best lh in iteration;
+         if(currentlh < itlh){
+            itlh = currentlh;
+            _bestParamsIteration = _tmpParams;
+         }
+
+         // Count number of lh improvements in the iteration
+         if(currentlh < minlh){
+            numbetterlh++;
+        }
       }
 
-
+      // Break condition
       if(maxitlhspread < LHSPREADEXIT)
-	 break;
+         break;
 
+      // If a new minimum has been found, store information
+      // and print parameters
       if(numbetterlh > 0){
-	 _bestParamsGlobal = _bestParamsIteration;
-	 minlh = itlh;
-	 numnoimprovement=0;
+         _bestParamsGlobal = _bestParamsIteration;
+         minlh = itlh;
+         numnoimprovement=0;
 
-	 _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams); 
-	 std::ofstream theStream(_currentResultFileName.c_str());
-	 _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms); 
+        _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams);
+        std::ofstream theStream(_currentResultFileName.c_str());
+        _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
       }
-      else
-	 numnoimprovement++;
-
-
-      if(numnoimprovement>5){
-	 AdjustSigma(DECREASESIGMAFACTOR*2, 0);
+      else{
+         numnoimprovement++;
       }
-      
+
+      // Emergency sigma decrease
+      if(numnoimprovement > 5){
+         AdjustSigma(DECREASESIGMAFACTOR*DECREASESIGMAFACTOR, 0);
+      }
+
+      // Adjust errors depending on ratio of improved likelihoods to population size
+      std::string logmessage;
+      if(((double)numbetterlh / (double)_population) <= DECREASELOWTHRESH){
+         AdjustSigma(DECREASESIGMAFACTOR, numbetterlh);
+         logmessage = "Decreasing errors.";
+      }
+      else if(((double)numbetterlh / (double)_population) > INCREASEHIGHTHRESH){
+         AdjustSigma(INCREASESIGMAFACTOR, numbetterlh);
+         logmessage = "Increasing errors.";
+      }
+
+      // Print iteration summary
       Info << "===============================================" << endmsg;
       Info << "Iteration " << i+1 << " / " << _iterations << " done. Best LH " << minlh << endmsg;
       Info << "Likelihood improvements " << numbetterlh << " / " << _population << endmsg;
-
-      if(((double)numbetterlh / (double)_population) <= DECREASELOWTHRESH){
-	 AdjustSigma(DECREASESIGMAFACTOR, numbetterlh);
-	 Info << "Decreasing errors." << endmsg;
-      }
-      else if(((double)numbetterlh / (double)_population) > INCREASEHIGHTHRESH){
-	 AdjustSigma(INCREASESIGMAFACTOR, numbetterlh);
-	 Info << "Increasing errors." << endmsg;
-      }
-      else{
-	 AdjustSigma(0, numbetterlh);
-      }
+      Info << "Likelihood spread " << maxitlhspread << endmsg;
+      Info << logmessage << endmsg;
       Info << "===============================================" << endmsg;
-   }
-   
+
+   } // Iterations
+
    return _bestParamsGlobal.Params();
 }
 
 
 
+
+// Shuffles parameters using gauss distributions
 void EvoMinimizer::ShuffleParams(){
 
    typedef boost::normal_distribution<double> NormalDistribution;
    typedef boost::mt19937 RandomGenerator;
-   typedef boost::variate_generator<RandomGenerator&,		\
-      NormalDistribution> GaussianGenerator;
-   
+   typedef boost::variate_generator<RandomGenerator&,	NormalDistribution> GaussianGenerator;
    static RandomGenerator rng(static_cast<unsigned> (time(0)));
-   
+
 
    for(unsigned int i=0; i<_tmpParams.Params().size(); i++){
-      
-      if(_tmpParams.Parameter(i).IsFixed()) continue;
 
-      NormalDistribution gaussian_dist(_tmpParams.Parameter(i).Value(), _tmpParams.Parameter(i).Error());
-      GaussianGenerator generator(rng, gaussian_dist);
-      _tmpParams.SetValue(i,generator());
+      // Don't touch fixed parameters
+      if(_tmpParams.Parameter(i).IsFixed()){
+         continue;
+      }
 
+      // Decide whether parameter is increased or decreased
+      boost::random::uniform_int_distribution<> coin(0,1);
+      bool c = coin(rng);
+
+      // Initialize gaussian width as parameter error
+      double sigma = _tmpParams.Parameter(i).Error();
+
+      // If gaussian collides with parameter limit, reduce width
       if(_tmpParams.Parameter(i).HasLimits()){
-	 if(_tmpParams.Value(i) < _tmpParams.Parameter(i).LowerLimit())
-	    _tmpParams.SetValue(i, _tmpParams.Parameter(i).LowerLimit()); 
-	 if(_tmpParams.Value(i) > _tmpParams.Parameter(i).UpperLimit())
-	    _tmpParams.SetValue(i, _tmpParams.Parameter(i).UpperLimit()); 
-       }
+         if(c && (2*sigma > (_tmpParams.Parameter(i).UpperLimit() - _tmpParams.Value(i)))){
+            sigma = (_tmpParams.Parameter(i).UpperLimit() - _tmpParams.Value(i)) / 2.0;
+         }
+         else if(!c && (2*sigma > (_tmpParams.Value(i) - _tmpParams.Parameter(i).LowerLimit()))){
+            sigma = (_tmpParams.Value(i) - _tmpParams.Parameter(i).LowerLimit()) / 2.0;
+         }
+      }
+
+      // Get random number and set new parameter
+      NormalDistribution gaussian_dist(0, sigma);
+      GaussianGenerator generator(rng, gaussian_dist);
+      double val = fabs(generator());
+
+      if(c) _tmpParams.SetValue(i, _tmpParams.Value(i) + val);
+      else  _tmpParams.SetValue(i, _tmpParams.Value(i) - val);
+
+      // Check for limits
+      if(_tmpParams.Parameter(i).HasLimits()){
+        if(_tmpParams.Value(i) < _tmpParams.Parameter(i).LowerLimit())
+	    _tmpParams.SetValue(i, _tmpParams.Parameter(i).LowerLimit());
+        if(_tmpParams.Value(i) > _tmpParams.Parameter(i).UpperLimit())
+	    _tmpParams.SetValue(i, _tmpParams.Parameter(i).UpperLimit());
+      }
    }
+
 }
 
 
 
+// Increase or decrease parameter errors by a factor
 void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
 
    for(unsigned int i=0; i<_bestParamsGlobal.Params().size(); i++){
-      if(_bestParamsGlobal.Parameter(i).IsFixed())
-	 continue;
 
-      if(numimprovements>0){
-	 double pardiff = fabs(_bestParamsGlobal.Value(i) - _iterationParamBackup.Value(i))
-	    / _bestParamsGlobal.Error(i);
-
-	 if(pardiff > 1.0 && _parShuffleMod[i] < 1.0)
-	    _parShuffleMod[i] += 0.05; 
-	 else if(pardiff < 0.4 && _parShuffleMod[i] > -1.0)
-	    _parShuffleMod[i] -= 0.05; 
+      // Don't touch fixed parameters
+      if(_bestParamsGlobal.Parameter(i).IsFixed()){
+         continue;
       }
 
-      double mod = factor * pow( fabs(_parShuffleMod[i]) + 1, mysign(_parShuffleMod[i]));
-      _bestParamsGlobal.SetError(i, _bestParamsGlobal.Error(i) * (1 + mod));
+      // When a lh improvement was achieved, don't decrease errors of parameters
+      // that changed rapidly, also add a bonus to increasements.
+      double afactor=factor;
+      double pardiffsigmas = fabs(_bestParamsGlobal.Value(i) - _iterationParamBackup.Value(i)) / _bestParamsGlobal.Error(i);
+
+      if(numimprovements > 0 && pardiffsigmas > 1.5){
+         if(factor < 1)        afactor = 1.0;
+         else if(factor > 1 )  afactor *= afactor;
+      }
+
+      // Set new error
+      _bestParamsGlobal.SetError(i, _bestParamsGlobal.Error(i) * afactor);
    }
+
 }
 
 
 
 const char* EvoMinimizer::evologo = R"(
-                                   ....$$$$ZZZ$$Z7ZZ:..... .                                                            
-                                   .~$ZZ.............O$ZZ+.                                                             
-         .. ... ...=...............ZZZ.. .... ..      ..ZOO: ...                                                        
-       ......$OZZ$7$ZZ$ZZZZZZZZZZ$ZZ.....ZO$....      .. .ZO. .                                                         
-       ..:8OO...................:ZZ.......Z$. ..     ..  ..OO...                                                        
-    ...OOO. ....                 ..     ....           ....$Z...                                                        
-   .8OO..... .                          . ..            . +$Z...                                                        
-. .OO...                                            .......$Z...                                                        
-.OO. ...                                             ....Z:Z$... .                                                      
-OO......  .     ........   ..                      ...$$:ZZ.ZZOZ.. .                                                    
-OOO88O8OOI........... .. .......                .....ZZZZZ...$ZZO...                                                    
-8O.....,$ZZOZZOOOO8OOOZ$........               ..$OZ$..........7$7..                                                    
-88.. . .            ....~ZZOOZOOZZZ$....       .Z....ZZZ$...   .$$$:....                                                
-.8O.....            ................ZZ..       .... ....ZZ..   ..$ZZ....                                                
-..8OO...            .   ....... ........       ....... .OO$.    ..$:Z...                                                
- ...888~....                           .....       ....ZOZ..    ...ZZ$..                                                
-......88OO. ..                         .....        .,OZZ..     ....ZZ$.                                                
-       .888OO............. .         ..OOZ.. . ....ZZOO.           ..$$Z....                                            
-        ...7888OO$........ .         ...ZOOZZZZDZZZO....           ...ZZ$...                                            
-        .......ZO8O8OOZZ..          .  ...ZOOO8Z$..... .           ... ZZZ..                                            
-                ....,ZOOOOZ..  .              ........=ZOOZZO$......   .ZZ$....                                        
-                .........=O8....                 ..O88OZZ...$ZZZZ?..   ...ZZ....                                        
-                       . ..88O... ..           ...OO?ZOZZ...  ..ZZZZ.......ZZ...                                        
-                       ... .O8O?....            .O8,.ZOZZ$.   ....ZZZZ......ZO..                                        
-                         .....ODOI..            .O8.....ZO..   .... .ZZZZ. ..OO.                                        
-                            ..OOO8OI.. ..      ..O8.    ZZZ... .    ...Z$$$?.Z$....                                    
-                            .O8..ZOOOOZ.....    ZZ..    .ZO....    .. ...ZZZ$$$$.. .                                    
+                                   ....$$$$ZZZ$$Z7ZZ:..... .
+                                   .~$ZZ.............O$ZZ+.
+         .. ... ...=...............ZZZ.. .... ..      ..ZOO: ...
+       ......$OZZ$7$ZZ$ZZZZZZZZZZ$ZZ.....ZO$....      .. .ZO. .
+       ..:8OO...................:ZZ.......Z$. ..     ..  ..OO...
+    ...OOO. ....                 ..     ....           ....$Z...
+   .8OO..... .                          . ..            . +$Z...
+. .OO...                                            .......$Z...
+.OO. ...                                             ....Z:Z$... .
+OO......  .     ........   ..                      ...$$:ZZ.ZZOZ.. .
+OOO88O8OOI........... .. .......                .....ZZZZZ...$ZZO...
+8O.....,$ZZOZZOOOO8OOOZ$........               ..$OZ$..........7$7..
+88.. . .            ....~ZZOOZOOZZZ$....       .Z....ZZZ$...   .$$$:....
+.8O.....            ................ZZ..       .... ....ZZ..   ..$ZZ....
+..8OO...            .   ....... ........       ....... .OO$.    ..$:Z...
+ ...888~....                           .....       ....ZOZ..    ...ZZ$..
+......88OO. ..                         .....        .,OZZ..     ....ZZ$.
+       .888OO............. .         ..OOZ.. . ....ZZOO.           ..$$Z....
+        ...7888OO$........ .         ...ZOOZZZZDZZZO....           ...ZZ$...
+        .......ZO8O8OOZZ..          .  ...ZOOO8Z$..... .           ... ZZZ..
+                ....,ZOOOOZ..  .              ........=ZOOZZO$......   .ZZ$....
+                .........=O8....                 ..O88OZZ...$ZZZZ?..   ...ZZ....
+                       . ..88O... ..           ...OO?ZOZZ...  ..ZZZZ.......ZZ...
+                       ... .O8O?....            .O8,.ZOZZ$.   ....ZZZZ......ZO..
+                         .....ODOI..            .O8.....ZO..   .... .ZZZZ. ..OO.
+                            ..OOO8OI.. ..      ..O8.    ZZZ... .    ...Z$$$?.Z$....
+                            .O8..ZOOOOZ.....    ZZ..    .ZO....    .. ...ZZZ$$$$.. .
                         ....O8,...ZOOO88O...... .Z..    ..ZZ....           .ZZ$$Z...
                         ...OO8.....ZOO.O8OZ. .....:.   .. .ZO...           ....$$Z$.
-                       .. .Z8...... .OO$.ZOOO.Z.,O8.    . ..$O..            .. ..$$$.
+                       .. .Z8...... .OO$.ZOOO.Z.,O8.    . ..$O..            .. ..$$$
                        ....OO........,OOOOOOOO$Z.OO.....   ..$O~.......         .ZZZ:
                       ....IZO.......8888O8OO..Z$ZZOO....    ..,Z8.......       ...ZO$O
                .......=O8888O.. .O88O....OO+OOOOZO88O........~,ZZZ$Z....... . ....ZZ..
                  .Z888OOO7....O88O............ZOZOOZOOOOZOOOO$.............. ....7ZOO...
               ..O888OOOO8OOOO8OZZ=IZZOZO8OOO8OOOZZOZ..ZZZ~$ZZ$?.7?I?::?$OOOZZZZZZ$Z.OOZ.
-            . .O88888888OOOOOOOO8OOOOOOZZOOOZ~..,ZZ=.~=7......ZZZZ$$ZZZZ$Z$ZZZZZZZOZ... 
-            .. ..........  .......    .Z$?ZZZOZ$IIZ$=7Z:=7ZZ~.....................$ZZO..      
-                   . ...        ....   .......  .... ..$+I7Z$$ZZZZZZZ$ZZZZZZZZZZZZZ$Z$$..        
-                                                      . ........ ...............+?=...        
+            . .O88888888OOOOOOOO8OOOOOOZZOOOZ~..,ZZ=.~=7......ZZZZ$$ZZZZ$Z$ZZZZZZZOZ...
+            .. ..........  .......    .Z$?ZZZOZ$IIZ$=7Z:=7ZZ~.....................$ZZO..
+                   . ...        ....   .......  .... ..$+I7Z$$ZZZZZZZ$ZZZZZZZZZZZZZ$Z$$..
+                                                      . ........ ...............+?=...
 
 //**********************************************************************************//
 //                                                                                  //

@@ -30,14 +30,14 @@
 
 #include <boost/random/normal_distribution.hpp>
 
-//class AbsFcn;
+
 
 class EvoMinimizer
 {
 public:
    EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int iterations,
 		int population, std::string suffix="");
-   
+
    std::vector<double> Minimize();
 
 private:
@@ -47,8 +47,7 @@ private:
    std::shared_ptr<FitParamsBase> _fitParamBase;
    fitParams _currentBestParams;
    fitParams _defaultFitErrParms;
-   std::vector<double> _parShuffleMod;
-  
+
    std::string _currentResultFileName;
    MnUserParameters _bestParamsGlobal;
    MnUserParameters _bestParamsIteration;
@@ -63,5 +62,5 @@ private:
    static const double INCREASESIGMAFACTOR;
    static const double DECREASELOWTHRESH;
    static const double INCREASEHIGHTHRESH;
-   static const double LHSPREADEXIT;   
+   static const double LHSPREADEXIT;
 };
