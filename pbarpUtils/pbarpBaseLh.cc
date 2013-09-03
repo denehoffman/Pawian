@@ -160,12 +160,14 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
     std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
+
        complex<double> currentDecAmp=(*itDec)->XdecAmp(0, theData, lamHigestJFsp);
 
        std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
        else isoFactor=iso0Val;
+
        tmpAmp+= isoFactor*currentDecAmp;
      }
 
@@ -193,6 +195,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
        else isoFactor=iso0Val;
+
        tmpAmp+=isoFactor*currentDecAmp;
      }
 
@@ -234,8 +237,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   for(it=_decAmpsTripletm1.begin(); it!=_decAmpsTripletm1.end(); ++it){
     complex<double> tmpAmp(0.,0.);
     std::shared_ptr<const JPCLS> theJPCLS=it->first;
-    double iso1Val=_currentParamJPCIsos1[theJPCLS];
-    double iso0Val=_currentParamJPCIsos0[theJPCLS];
+      double iso1Val=_currentParamJPCIsos1[theJPCLS];
+       double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
     std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
@@ -246,7 +249,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
         double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
        else isoFactor=iso0Val;
-       
+
        tmpAmp+=isoFactor*currentDecAmp;
      }
 
@@ -395,7 +398,7 @@ void pbarpBaseLh::fillIsos(){
     bool found=false;
     std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itIso1;
     for(itIso1= _iso1DecAmps.begin(); itIso1!= _iso1DecAmps.end(); ++itIso1){
-      if( (*it)->jpcPtr()== (*itIso1)->jpcPtr() ){
+      if( (*(*it)->jpcPtr()) == (*(*itIso1)->jpcPtr()) ){
 	_currentParamJPCIsos0[(*it)->jpcPtr()]=sqrt(.5);
 	_currentParamJPCIsos1[(*it)->jpcPtr()]=sqrt(.5);
       }
