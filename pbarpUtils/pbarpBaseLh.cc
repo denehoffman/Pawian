@@ -115,17 +115,24 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
    for(it=pbarpAmps.begin(); it!=pbarpAmps.end(); ++it){
      complex<double> tmpAmp(0.,0.);
      std::shared_ptr<const JPCLS> theJPCLS=it->first;
+     double iso1Val=_currentParamJPCIsos1[theJPCLS];
+     double iso0Val=_currentParamJPCIsos0[theJPCLS];
+
      std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        Particle* particle1 = (*itDec)->absDec()->daughter1Part();
        Particle* particle2 = (*itDec)->absDec()->daughter2Part();
 
+       std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
+       double isoFactor=0;
+       if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+       else isoFactor=iso0Val;
+
        if(particle1->name() == nameDec)
-	 tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
+	 tmpAmp+=isoFactor * (*itDec)->XdecPartAmp(lamX, lamDec, 1,  theData, 0);
        else if(particle2->name() == nameDec)
-	 tmpAmp+=(*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
+	 tmpAmp+=isoFactor * (*itDec)->XdecPartAmp(lamX, lamDec, 2,  theData, 0);
      }
 
      double theMag=_currentParamMags[theJPCLS];
