@@ -48,7 +48,7 @@ public:
   void CalcEventDistribution(std::map<short, std::tuple<long,double,long> > numEventMap);
   bool WaitForLH(std::map<short, LHData>& theLHDataMap);
   bool WaitForFirstClientLogin();
-  void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par);
+  void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<std::pair<unsigned int, double> >& par);
   void BroadcastParams(const std::vector<double>& par);
   void BroadcastClosingMessage();
   void SendClosingMessage(std::shared_ptr<tcp::iostream> destinationStream);
@@ -63,8 +63,10 @@ private:
    unsigned int _globalTimeout;
    unsigned short _noOfClients;
    bool _closed;
+   bool _clientParamsInitialized;
    int _numData;
    int _numMC;
+   long _numBroadcasted;
    std::shared_ptr<boost::asio::io_service> theIOService;
    std::shared_ptr<boost::asio::deadline_timer> theDeadlineTimer;
    std::shared_ptr<tcp::acceptor> theAcceptor;
@@ -73,6 +75,7 @@ private:
    std::map<short, ChannelID> _clientChannelMap;
    std::map<ChannelID, std::tuple<long, double, long> > _numEventMap;
    std::vector<std::pair<ChannelID, std::vector<long> > > _eventDistribution;
+   std::vector<double> _cachedParams;
 
    void Timeout(const boost::system::error_code& err);
    void AcceptHandler(const boost::system::error_code& err);

@@ -115,7 +115,7 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
 
 void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& theParams){
 
-  int counter=0;
+  unsigned int counter=0;
   getFitParamValJPC(par, theParams.Isos, counter);
   getFitParamValJPCLamLam(par, theParams.MagLamLams, counter);
   getFitParamValJPCLamLam(par, theParams.PhiLamLams, counter);
@@ -352,7 +352,7 @@ void FitParamsBase::printDoubleParams(fitParams& theParams, mapStrDouble& double
 
 }
 
-void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC& jpcMap, int& counter){
+void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC& jpcMap, unsigned int& counter){
 
   mapStrJPC::iterator it;
   for (it=jpcMap.begin(); it!=jpcMap.end(); ++it){
@@ -367,7 +367,7 @@ void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC&
 }
 
 
-void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& lamLamMagMap, int& counter){
+void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& lamLamMagMap, unsigned int& counter){
 
   mapStrJPCLamLam::iterator it;
   for (it=lamLamMagMap.begin(); it!=lamLamMagMap.end(); ++it){
@@ -381,7 +381,7 @@ void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapS
   }
 }
 
-void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, int& counter){
+void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, unsigned int& counter){
 //   Info << "getFitParamValJPCLS par[" << counter << "]=\t" << par.at(counter) << endmsg;
   mapStrJPCLS::iterator it;
   for (it=jpclsMap.begin(); it!=jpclsMap.end(); ++it){
@@ -396,7 +396,7 @@ void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJP
 }
 
 
-void FitParamsBase::getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, int& counter){
+void FitParamsBase::getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, unsigned int& counter){
   //   Info << "getFitParamValDouble par[" << counter << "]=\t" << par.at(counter) << endmsg;
   mapStrDouble::iterator it;
   for (it=doubleMap.begin(); it!=doubleMap.end(); ++it){

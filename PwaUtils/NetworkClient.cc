@@ -45,6 +45,7 @@ short NetworkClient::HEARTBEAT_INTERVAL = 60;
 
 NetworkClient::NetworkClient(std::string serverAddress, std::string port) :
     _clientID(-1)
+   ,_paramsInitialized(false)
    ,_channelID(-1)
    ,_port(port)
    , _serverAddress(serverAddress)
@@ -163,14 +164,29 @@ bool NetworkClient::WaitForParams(){
       return false;
    }
 
+   // Read number of parameters to be submitted
    int numParams;
    _theStream >> numParams;
-   _theParams.clear();
 
+   // First parameter list received contains full parameter set
+   if(!_paramsInitialized){
+      _theParams.clear();
+      _theParams.resize(numParams);
+      _paramsInitialized=true;
+   }
+
+   // Read updated parameters, leave other parameters unchanged
    for(int i=0; i< numParams; i++){
-      double tmpParam;
-      _theStream >> tmpParam;
-      _theParams.push_back(tmpParam);
+      unsigned int paramID;
+      double paramVal;
+      _theStream >> paramID >> paramVal;
+
+      if(paramID >= _theParams.size()){
+         Alert << "Received invalid parameter id: " << paramID << endmsg;
+         return false;
+      }
+
+      _theParams.at(paramID) = paramVal;
    }
 
    return true;

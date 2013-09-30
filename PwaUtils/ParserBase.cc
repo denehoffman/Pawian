@@ -48,9 +48,9 @@ ParserBase::ParserBase(int argc,char **argv)
       , _noOfThreads(16)
       , _noOfClients(1)
       , _serverPort(22222)
+      , _ratioMcToData(100000)
       , _evoIterations(100)
       , _evoPopulation(20)
-      , _ratioMcToData(100000)
       , _cacheAmps(true)
       , _calcContributionError(false)
       , _strErrLogMode("debug")
@@ -70,7 +70,7 @@ ParserBase::ParserBase(int argc,char **argv)
     string strAppName(argv[0]);
     size_t found = strAppName.rfind("/")+1;
     if (found != string::npos) strAppName=strAppName.substr(found);
-    
+
     string strDesc="Usage: " + strAppName + " [options]";
     _desc= new po::options_description(strDesc);
 
@@ -86,7 +86,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("datFile",po::value<string>(&_dataFile), "full path of data file")
       ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
       ("unitInFile",po::value<string>(&_unitInFile),"chosen unit in input files")
-      ("orderInFile",po::value<string>(&_orderInFile),"chosen order in input files") 
+      ("orderInFile",po::value<string>(&_orderInFile),"chosen order in input files")
       ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
       ("serializationFile", po::value<string>(&_serializationFile), "serialized pwa i/o file")
       ("serverAddress", po::value<string>(&_serverAddress), "server address for client mode")
@@ -101,7 +101,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
       ("contributionError",po::value<bool>(&_calcContributionError),  "calculate the wave contribution error")
       ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
-      ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space") 
+      ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
       ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
       ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
       ;
@@ -131,7 +131,7 @@ ParserBase::ParserBase(int argc,char **argv)
 
 
 
-  }  
+  }
 
 /************************************************************************************************/
 /************************************************************************************************/
@@ -143,19 +143,19 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 {
   try
   {
-    
+
     po::options_description cmdline_options;
     cmdline_options.add(*_desc).add(*_common);
 
     po::options_description config_file_options;
     config_file_options.add(*_config).add(*_common);
-    
+
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, cmdline_options), vm);
     po::notify(vm);
 
     // Check the name of the configuation file
-    if(_configFile.empty() || _configFile == "empty" || _configFile == "unknown") 
+    if(_configFile.empty() || _configFile == "empty" || _configFile == "unknown")
       {
 	std::cout << cmdline_options << endl;
 	stringstream strError;
@@ -163,9 +163,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 	strError << "Error: Invalid configuration file name given: \"" << _configFile << "\"";
 	throw runtime_error(strError.str());
       }
-    
+
     std::ifstream ifs(_configFile.c_str());
-    if(!ifs.good()) 
+    if(!ifs.good())
       {
 	stringstream strError;
 	strError << "Error accessing configuratiocommonn file " << _configFile;
@@ -179,26 +179,26 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     po::notify(vm);
 
     // Emit a help message, if necessary
-    if (vm.count("help")) 
+    if (vm.count("help"))
     {
       std::cout << config_file_options << endl;
       exit(0);
-    }    
+    }
 
-        
+
     if(_strErrLogMode == "debug") _errLogMode = debug;
     else if(_strErrLogMode == "trace") _errLogMode = trace;
     else if(_strErrLogMode == "routine") _errLogMode = routine;
     else if(_strErrLogMode == "warning") _errLogMode = warning;
-    else if(_strErrLogMode == "error")   _errLogMode = error; 
-    else if(_strErrLogMode == "alert")   _errLogMode = alert; 
-    else 
+    else if(_strErrLogMode == "error")   _errLogMode = error;
+    else if(_strErrLogMode == "alert")   _errLogMode = alert;
+    else
     {
       _errLogMode = debug;
       Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " ;  // << endmsg;
     }
 
-    
+
     if(_verbose){
       std::cout << "\nRunning with the following options using " << _configFile << ":\n\n"
                 << "Error log mode: " << _errLogMode <<"\n\n"
@@ -213,8 +213,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
 		<< "use event weight: " << _useEvtWeight  << "\n\n"
-		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n" 
-		<< "pdg table: " << _pdgTableFile << "\n\n" 
+		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
+		<< "pdg table: " << _pdgTableFile << "\n\n"
             << endl;
 
 
@@ -233,7 +233,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
           std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
       }
       std::cout << std::endl;
-    
+
 
       for (it=_mnParFixs.begin(); it!=_mnParFixs.end();++it){
           std::cout << "minuit parameter\t" << (*it) << "\t fixed\n";
@@ -250,12 +250,12 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_decaySystem.begin(); it!=_decaySystem.end();++it){
 	std::cout << (*it) << "\n";
       }
-      
+
       std::cout << "\ndecay dynamics:" << std::endl;
       for (it=_dynamics.begin(); it!=_dynamics.end();++it){
 	std::cout << (*it) << "\n";
       }
-      
+
       std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
       for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
 	std::cout << (*it) << "\n";
@@ -278,7 +278,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_histMass.begin(); it!=_histMass.end();++it){
 	std::cout << (*it) << "\n";
       }
-      
+
       std::cout << "\nhistograms decay angles for systems" << std::endl;
       for (it=_histAngles.begin(); it!=_histAngles.end();++it){
 	std::cout << (*it) << "\n";
@@ -286,8 +286,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::cout << "\nmass range" << std::endl;
       std::cout << _massRange << "\n";
-            
-      
+
+
       std::cout << "\n2Dhistogram decay angles for systems" << std::endl;
       for (it=_histAngles2D.begin(); it!=_histAngles2D.end();++it){
 	std::cout << (*it) << "\n";
@@ -297,7 +297,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       std::cout << "\nnumber of generated events:\t" << _noOfGenEvts << std::endl;
 
     }
-    
+
   }
 
 

@@ -33,6 +33,7 @@
 
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
+#include "PwaUtils/AbsParamHandler.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 short NetworkServer::SERVERMESSAGE_PARAMS = 1;
@@ -46,6 +47,8 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
    , _globalTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
    , _noOfClients(noOfClients)
    , _closed(false)
+   , _clientParamsInitialized(false)
+   , _numBroadcasted(0)
    , _numEventMap(numEventMap)
 {
    theIOService = std::shared_ptr<boost::asio::io_service>(new  boost::asio::io_service);
@@ -205,13 +208,14 @@ bool NetworkServer::UpdateHeartbeats(short clientID){
 
 
 
-void NetworkServer::SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<double>& par){
+void NetworkServer::SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<std::pair<unsigned int, double> >& par){
 
    *destinationStream << NetworkServer::SERVERMESSAGE_PARAMS << "\n";
    *destinationStream << par.size() << "\n";
 
    for(auto it = par.begin(); it != par.end(); ++it){
-      *destinationStream << std::setprecision(16) << *it << "\n";
+      *destinationStream << (*it).first << "\n";                           // Parameter id
+      *destinationStream << std::setprecision(16) << (*it).second << "\n"; // Parameter value
    }
 
    destinationStream->flush();
@@ -222,9 +226,37 @@ void NetworkServer::SendParams(std::shared_ptr<tcp::iostream> destinationStream,
 
 void NetworkServer::BroadcastParams(const std::vector<double>& par){
 
-   for(auto it = theStreams.begin(); it != theStreams.end(); ++it){
-      SendParams(*it, par);
+   _numBroadcasted++;
+
+   // The vector that will only contain changed parameters
+   std::vector<std::pair<unsigned int, double> > updatedParams;
+
+   // Send the full parameter list as initialization
+   if(!_clientParamsInitialized){
+      _cachedParams.resize(par.size());
+      for(unsigned int i=0; i<par.size();i++){
+         updatedParams.push_back(std::pair<unsigned int, double>(i, par.at(i)));
+         _cachedParams.at(i) = par.at(i);
+      }
+      _clientParamsInitialized = true;
    }
+   // Otherwise, only changed parameters
+   else{
+      for(unsigned int i=0; i<par.size();i++){
+         if(!AbsParamHandler::CheckDoubleEquality(par.at(i), _cachedParams.at(i)) || // Check whether param has changed
+            ((_numBroadcasted) % 100 == 0))                                          // But send full list every now and then
+         {
+            updatedParams.push_back(std::pair<unsigned int, double>(i, par.at(i)));
+            _cachedParams.at(i) = par.at(i);
+         }
+      }
+   }
+
+   // Send changed parameters so clients
+   for(auto it = theStreams.begin(); it != theStreams.end(); ++it){
+      SendParams(*it, updatedParams);
+   }
+
 }
 
 

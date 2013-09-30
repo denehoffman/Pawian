@@ -37,12 +37,12 @@ class AbsParamHandler {
 public:
   AbsParamHandler();
   virtual ~AbsParamHandler();
-  
+
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
   virtual bool checkRecalculation(fitParams& theParamVal)=0;
   virtual void cacheAmplitudes()=0;
   virtual void updateFitParams(fitParams& theParamVal)=0;
-  bool CheckDoubleEquality(double a, double b);
+  static bool CheckDoubleEquality(double a, double b);
 
 protected:
   bool _cacheAmps;

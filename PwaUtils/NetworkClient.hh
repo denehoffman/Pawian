@@ -55,6 +55,7 @@ class NetworkClient
 
   private:
    short _clientID;
+   bool _paramsInitialized;
    ChannelID _channelID;
    std::vector<double> _eventLimits;
    std::string _port;
