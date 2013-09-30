@@ -38,6 +38,7 @@
 
 #include "Event/EventList.hh"
 #include "PwaUtils/AbsFcn.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
 #include "Minuit2/FunctionMinimum.h"
@@ -45,8 +46,6 @@
 // #include <memory>
 
 class AbsLh;
-class FitParamsBase;
-class AbsEnv;
 class fitParams;
 class AbsHist;
 class NetworkClient;
@@ -57,26 +56,19 @@ class AppBase{
 
 public:
 
-  AppBase(AbsEnv* absEnv, std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase);
+  AppBase();
   /** Destructor */
   virtual ~AppBase();
 
   virtual void dumpDefaultParams();
   virtual void generate(fitParams& theParams);
-  virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
+  virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
   virtual void qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
   virtual void fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams);
   virtual FunctionMinimum migradDefault(AbsFcn& theFcn, MnUserParameters& upar);
-  virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix="", double evtWeightSumData=0, int noOfFreeFitParams=0);
-  virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams);
-   
-protected:
+  virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, double evtWeightSumData=0, int noOfFreeFitParams=0);
+  virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams, ChannelID channelID);
 
-  AbsEnv* _absEnv;
-  std::shared_ptr<AbsLh> _absLhPtr;
-  std::shared_ptr<FitParamsBase> _fitParamBasePtr;
-
-private:
 };
 
 

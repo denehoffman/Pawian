@@ -25,7 +25,6 @@
 // Copyright 2013 Julian Pychy
 
 #include "PwaUtils/PwaCovMatrix.hh"
-#include "pbarpUtils/pbarpEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Minuit2/MnUserCovariance.h"
 #include "Minuit2/MinuitParameter.h"

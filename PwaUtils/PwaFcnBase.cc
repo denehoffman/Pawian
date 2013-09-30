@@ -23,24 +23,24 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <iomanip>
 #include <boost/timer/timer.hpp>
 
 #include "Minuit2/MnUserParameters.h"
 
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
 
-PwaFcnBase::PwaFcnBase(std::shared_ptr<AbsLh> absLh, std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
-  AbsFcn(fitParamsBase, suffix)
-  ,_absLhPtr(absLh)
+PwaFcnBase::PwaFcnBase() :
+  AbsFcn()
 {
-   if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
-   _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
-  
+   _defaultFitValParms = GlobalEnv::instance()->DefaultParamVal();
+   _defaultFitErrParms = GlobalEnv::instance()->DefaultParamErr();
 }
 
 PwaFcnBase::~PwaFcnBase()
@@ -50,17 +50,16 @@ PwaFcnBase::~PwaFcnBase()
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   double result=0;
-
   fitParams theFitParmValTmp=_defaultFitValParms;
 
-  _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
-    
-  result = _absLhPtr->calcLogLh(theFitParmValTmp);
+  GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
 
+  result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theFitParmValTmp);
+  Info << "current LH = " << result << endmsg;
 
   _fcnCounter++;
 
-  if(_fcnCounter%20 == 0) printTimer();  
+  if(_fcnCounter%20 == 0) printTimer();
   printFitParams(par);
   dumpFitParams(par);
 

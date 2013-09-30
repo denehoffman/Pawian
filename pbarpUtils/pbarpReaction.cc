@@ -28,7 +28,8 @@
 #include <fstream>
 
 #include "pbarpUtils/pbarpReaction.hh"
-#include "pbarpUtils/pbarpEnv.hh"
+#include "pbarpUtils/PbarpChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
@@ -38,11 +39,12 @@
 #include "Particle/Particle.hh"
 #include "pbarpUtils/pbarpStatesLS.hh"
 
-pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, int lmax) :
-  _lmax(lmax)
+pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID, int lmax) :
+   _channelID(channelID)
+  ,_lmax(lmax)
 {
   std::shared_ptr<pbarpStatesLS> thepbarpStates(new pbarpStatesLS(lmax));
-  std::vector< std::shared_ptr<const IGJPC> > pbarpIGJPCStatesAll= thepbarpStates->igjpcStates(); 
+  std::vector< std::shared_ptr<const IGJPC> > pbarpIGJPCStatesAll= thepbarpStates->igjpcStates();
   std::vector< std::shared_ptr<const IGJPC> >::const_iterator itIGJPC;
   std::vector< std::shared_ptr<const JPCLS> > all_JPCLSs= thepbarpStates->all_JPCLS_States();
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
@@ -61,11 +63,11 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
       std::string decName=(*itIGJPC)->name();
-      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, _channelID, decName));
       currentDec->extractStates();
 
       if(!currentDec->JPCLSAmps().size()>0 || fabs(currentDec->isospinCG())<1.e-10){
-	Info << "Skip amplitude " << currentDec->name() << "\tJPCLSAmps().size(): " << currentDec->JPCLSAmps().size() <<"\tisospinCG(): " << currentDec->isospinCG() << endmsg; 
+	Info << "Skip amplitude " << currentDec->name() << "\tJPCLSAmps().size(): " << currentDec->JPCLSAmps().size() <<"\tisospinCG(): " << currentDec->isospinCG() << endmsg;
 	continue;
       }
 
@@ -82,18 +84,18 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
       if(!acceptProd)	 continue;
 
       acceptJPC=true;
-      
-      if(pbarpEnv::instance()->parser()->productionFormalism() == "Cano"){
+
+      if(GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
 	_prodDecs.push_back(currentDec);
       }
-      
-      else if(pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
-	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+
+      else if(GlobalEnv::instance()->parser()->productionFormalism() == "Tensor"){
+	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, _channelID, decName));
 	currentTensorDec->extractStates();
 	_prodTensorDecs.push_back(currentTensorDec);
       }
-      else if(pbarpEnv::instance()->parser()->productionFormalism() == "Heli"){
-	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, pbarpEnv::instance(), decName));
+      else if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli"){
+	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, _channelID, decName));
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
       }
@@ -101,16 +103,16 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
     if(acceptJPC)
       _pbarpIGJPCs.push_back(*itIGJPC);
   }
-  
+
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
   _pbarpJPCLSsinglet =  extractStates(_pbarpJPCLSs, all_pbarpSingletLS);
-  
+
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpTriplet0LS = thepbarpStates->triplet0_JPCLS_States();
   _pbarpJPCLStriplet0 =  extractStates(_pbarpJPCLSs, all_pbarpTriplet0LS);
-  
+
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpTripletp1LS = thepbarpStates->tripletp1_JPCLS_States();
   _pbarpJPCLStripletp1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletp1LS);
-  
+
   std::vector< std::shared_ptr<const JPCLS> > all_pbarpTripletm1LS = thepbarpStates->tripletm1_JPCLS_States();
   _pbarpJPCLStripletm1 =  extractStates(_pbarpJPCLSs, all_pbarpTripletm1LS);
 }
@@ -119,7 +121,7 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
 bool pbarpReaction::CheckJPCLSForParticle(std::string& particleName, std::shared_ptr<const JPCLS> theJPCLS){
 
-   std::map<std::string, std::vector<short> > ldropMap = pbarpEnv::instance()->dropPbarpLForParticleData();
+   std::map<std::string, std::vector<short> > ldropMap = std::static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->Channel(_channelID))->dropPbarpLForParticleData();
 
    auto ldropIt = ldropMap.find(particleName);
 
@@ -142,7 +144,7 @@ pbarpReaction::~pbarpReaction(){
 
 void pbarpReaction::print(std::ostream& os) const{
   os << "\n pbarp reaction\n";
- 
+
   os << "\n **** JPC states for pbarp system ****** \n";
   std::vector<std::shared_ptr<const IGJPC> >::const_iterator itIGJPC;
   for(itIGJPC=_pbarpIGJPCs.begin(); itIGJPC!=_pbarpIGJPCs.end(); ++itIGJPC){
@@ -150,22 +152,22 @@ void pbarpReaction::print(std::ostream& os) const{
   }
 
   os << "\n ***** decay chains *******\n";
-  if (pbarpEnv::instance()->parser()->productionFormalism() == "Cano"){
+  if (GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
     std::vector< std::shared_ptr<IsobarLSDecay> >::const_iterator itIso;
     for( itIso=_prodDecs.begin(); itIso!=_prodDecs.end(); ++itIso){
       (*itIso)->print(os);
-    } 
-  } 
-  else if (pbarpEnv::instance()->parser()->productionFormalism() == "Heli"){
+    }
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism() == "Heli"){
     std::vector< std::shared_ptr<IsobarHeliDecay> >::const_iterator itIso;
     for( itIso=_prodHeliDecs.begin(); itIso!=_prodHeliDecs.end(); ++itIso){
       (*itIso)->print(os);
-    } 
+    }
   }
-  else if (pbarpEnv::instance()->parser()->productionFormalism() == "Tensor"){
+  else if (GlobalEnv::instance()->parser()->productionFormalism() == "Tensor"){
     std::vector< std::shared_ptr<IsobarTensorDecay> >::const_iterator itIso;
     for( itIso=_prodTensorDecs.begin(); itIso!=_prodTensorDecs.end(); ++itIso){
       (*itIso)->print(os);
-    } 
-  }  
+    }
+  }
 }

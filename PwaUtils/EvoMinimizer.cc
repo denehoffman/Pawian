@@ -26,9 +26,10 @@
 #include <iostream>
 #include <fstream>
 #include <boost/random.hpp>
-#include "ErrLogger/ErrLogger.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvoMinimizer.hh"
 #include "PwaUtils/FitParamsBase.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
 const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
@@ -39,20 +40,16 @@ const double EvoMinimizer::LHSPREADEXIT = 0.01;
 
 // Constructor takes AbsFcn to minimze, start parameters upar, population and iteration
 // sizes and the output file name suffix
-EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations, std::string suffix) :
+EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations) :
   _population(population)
   , _iterations(iterations)
   , _theAbsFcn(&theAbsFcn)
-  , _fitParamBase(theAbsFcn.fitParamBase())
   , _currentBestParams(theAbsFcn.defaultFitValParms())
   , _defaultFitErrParms(theAbsFcn.defaultFitErrParms())
-  , _currentResultFileName("currentEvoResult"+suffix+".dat")
+  , _currentResultFileName("currentEvoResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
 {
    // Initialize the best global parameters
    _bestParamsGlobal = upar;
-
-   // Print the logo
-   Info << evologo << endmsg;
 }
 
 
@@ -110,9 +107,9 @@ std::vector<double> EvoMinimizer::Minimize(){
          minlh = itlh;
          numnoimprovement=0;
 
-        _fitParamBase->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams);
+        GlobalEnv::instance()->fitParamsBase()->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams);
         std::ofstream theStream(_currentResultFileName.c_str());
-        _fitParamBase->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
+        GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
       }
       else{
          numnoimprovement++;
@@ -125,11 +122,11 @@ std::vector<double> EvoMinimizer::Minimize(){
 
       // Adjust errors depending on ratio of improved likelihoods to population size
       std::string logmessage;
-      if(((double)numbetterlh / (double)_population) <= DECREASELOWTHRESH){
+      if(((double)numbetterlh / (double)_population) < DECREASELOWTHRESH){
          AdjustSigma(DECREASESIGMAFACTOR, numbetterlh);
          logmessage = "Decreasing errors.";
       }
-      else if(((double)numbetterlh / (double)_population) > INCREASEHIGHTHRESH){
+      else if(((double)numbetterlh / (double)_population) >= INCREASEHIGHTHRESH){
          AdjustSigma(INCREASESIGMAFACTOR, numbetterlh);
          logmessage = "Increasing errors.";
       }
@@ -229,55 +226,3 @@ void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
    }
 
 }
-
-
-
-const char* EvoMinimizer::evologo = R"(
-                                   ....$$$$ZZZ$$Z7ZZ:..... .
-                                   .~$ZZ.............O$ZZ+.
-         .. ... ...=...............ZZZ.. .... ..      ..ZOO: ...
-       ......$OZZ$7$ZZ$ZZZZZZZZZZ$ZZ.....ZO$....      .. .ZO. .
-       ..:8OO...................:ZZ.......Z$. ..     ..  ..OO...
-    ...OOO. ....                 ..     ....           ....$Z...
-   .8OO..... .                          . ..            . +$Z...
-. .OO...                                            .......$Z...
-.OO. ...                                             ....Z:Z$... .
-OO......  .     ........   ..                      ...$$:ZZ.ZZOZ.. .
-OOO88O8OOI........... .. .......                .....ZZZZZ...$ZZO...
-8O.....,$ZZOZZOOOO8OOOZ$........               ..$OZ$..........7$7..
-88.. . .            ....~ZZOOZOOZZZ$....       .Z....ZZZ$...   .$$$:....
-.8O.....            ................ZZ..       .... ....ZZ..   ..$ZZ....
-..8OO...            .   ....... ........       ....... .OO$.    ..$:Z...
- ...888~....                           .....       ....ZOZ..    ...ZZ$..
-......88OO. ..                         .....        .,OZZ..     ....ZZ$.
-       .888OO............. .         ..OOZ.. . ....ZZOO.           ..$$Z....
-        ...7888OO$........ .         ...ZOOZZZZDZZZO....           ...ZZ$...
-        .......ZO8O8OOZZ..          .  ...ZOOO8Z$..... .           ... ZZZ..
-                ....,ZOOOOZ..  .              ........=ZOOZZO$......   .ZZ$....
-                .........=O8....                 ..O88OZZ...$ZZZZ?..   ...ZZ....
-                       . ..88O... ..           ...OO?ZOZZ...  ..ZZZZ.......ZZ...
-                       ... .O8O?....            .O8,.ZOZZ$.   ....ZZZZ......ZO..
-                         .....ODOI..            .O8.....ZO..   .... .ZZZZ. ..OO.
-                            ..OOO8OI.. ..      ..O8.    ZZZ... .    ...Z$$$?.Z$....
-                            .O8..ZOOOOZ.....    ZZ..    .ZO....    .. ...ZZZ$$$$.. .
-                        ....O8,...ZOOO88O...... .Z..    ..ZZ....           .ZZ$$Z...
-                        ...OO8.....ZOO.O8OZ. .....:.   .. .ZO...           ....$$Z$.
-                       .. .Z8...... .OO$.ZOOO.Z.,O8.    . ..$O..            .. ..$$$
-                       ....OO........,OOOOOOOO$Z.OO.....   ..$O~.......         .ZZZ:
-                      ....IZO.......8888O8OO..Z$ZZOO....    ..,Z8.......       ...ZO$O
-               .......=O8888O.. .O88O....OO+OOOOZO88O........~,ZZZ$Z....... . ....ZZ..
-                 .Z888OOO7....O88O............ZOZOOZOOOOZOOOO$.............. ....7ZOO...
-              ..O888OOOO8OOOO8OZZ=IZZOZO8OOO8OOOZZOZ..ZZZ~$ZZ$?.7?I?::?$OOOZZZZZZ$Z.OOZ.
-            . .O88888888OOOOOOOO8OOOOOOZZOOOZ~..,ZZ=.~=7......ZZZZ$$ZZZZ$Z$ZZZZZZZOZ...
-            .. ..........  .......    .Z$?ZZZOZ$IIZ$=7Z:=7ZZ~.....................$ZZO..
-                   . ...        ....   .......  .... ..$+I7Z$$ZZZZZZZ$ZZZZZZZZZZZZZ$Z$$..
-                                                      . ........ ...............+?=...
-
-//**********************************************************************************//
-//                                                                                  //
-//                           ApeFrog evolutionary minimizer                         //
-//                                                                                  //
-//**********************************************************************************//
-
-
- )";

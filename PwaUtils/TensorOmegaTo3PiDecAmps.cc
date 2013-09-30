@@ -31,14 +31,13 @@
 
 #include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "Particle/Particle.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-
-TensorOmegaTo3PiDecAmps::TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTensorDecay> theDec) :
-  AbsXdecAmp(theDec)
+TensorOmegaTo3PiDecAmps::TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTensorDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
 {
@@ -76,8 +75,8 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, sho
 
 complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.); 
-  
+  complex<double> result(0.,0.);
+
   int evtNo=theData->evtNo;
 
   if ( _cacheAmps && !_recalculate){
@@ -137,14 +136,14 @@ void TensorOmegaTo3PiDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fit
 
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
+  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
 }
 
 
 bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
+   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
 
    if(!_daughter1IsStable) {
      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
@@ -156,12 +155,12 @@ bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
    if(!_recalculate){
      std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
      std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
-     
+
      std::vector< std::shared_ptr<const JPCLS> >::iterator it;
      for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
-       
+
        if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
          _recalculate=true;
          return _recalculate;

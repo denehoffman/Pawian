@@ -30,7 +30,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "pbarpUtils/pbarpHist.hh"
-#include "pbarpUtils/pbarpEnv.hh"
+#include "pbarpUtils/PbarpChannelEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -39,6 +39,7 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/GlobalEnv.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -47,7 +48,7 @@
 //#include "TMath.h"
 
 pbarpHist::pbarpHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  AbsHist(pbarpEnv::instance()) 
+  AbsHist()
 {
   initRootStuff();
   fillIt(theLh, theFitParams);
@@ -61,7 +62,7 @@ pbarpHist::~pbarpHist(){
 void pbarpHist::initRootStuff(){
 
 
-  std::vector<std::vector<std::string> > histMassNameVec=pbarpEnv::instance()->histMassSystems();
+  std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
   for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
     std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
@@ -71,13 +72,13 @@ void pbarpHist::initRootStuff(){
     std::string histName="Data"+tmpBaseName;
     std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
-    double pMass = pbarpEnv::instance()->particleTable()->particle("proton")->mass();
-    double pbarMom = pbarpEnv::instance()->pbarMomentum();
+    double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
+    double pbarMom = static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel())->pbarMomentum();
     double massMin = 0;
     double massMax = sqrt(pow(sqrt(pMass*pMass + pbarMom*pbarMom) + pMass, 2) - pbarMom*pbarMom);
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    std::vector<Particle*> allFsp =  pbarpEnv::instance()->finalStateParticles();
+    std::vector<Particle*> allFsp = GlobalEnv::instance()->Channel()->finalStateParticles();
     std::vector<Particle*>::iterator itAllFsp;
 
     for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){

@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -38,8 +37,8 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-OmegaTo3PiTensorDecay::OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv) :
-  OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, theEnv)
+OmegaTo3PiTensorDecay::OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID) :
+  OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, channelID)
 {
 }
 
@@ -67,7 +66,7 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
   itMap=fsMap.find(_daughter2->name());
   Vector4<double> daughter2_4Vec=itMap->second;
   // daughter2_4Vec.Boost(all4Vec);
-  
+
   itMap=fsMap.find(_daughter3->name());
   Vector4<double> daughter3_4Vec=itMap->second;
   // daughter3_4Vec.Boost(all4Vec);
@@ -79,7 +78,7 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
    Vector4<double> daughter3Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter3_4Vec);
    Vector4<double> mother_4Vec=helicityVec(all4Vec, P_3particle_4Vec, P_3particle_4Vec);
 
-  LeviCivitaTensor eps; 
+  LeviCivitaTensor eps;
   PolVector omega; // spin-1 particle is the default constructor
   omega.SetP4(P_3particle_4Vec, P_3particle_4Vec.M());
 //  omega.SetP4(mother_4Vec, mother_4Vec.M());
@@ -88,7 +87,7 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
     Tensor<complex<double> >  ampTensor;
     ampTensor = eps|(daughter1_4Vec%daughter2_4Vec%daughter3_4Vec%omega(mz));
     // ampTensor = eps|(daughter1Hel%daughter2Hel%daughter3Hel%omega(mz));
-    //    DebugMsg << "mz: " << mz << "\t" << ampTensor << endmsg;    
+    //    DebugMsg << "mz: " << mz << "\t" << ampTensor << endmsg;
     evtData->ComplexDoubleString["omegTensor"][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
   }
    _alreadyFilledMap[evtNo]=true;

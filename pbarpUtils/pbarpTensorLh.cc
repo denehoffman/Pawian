@@ -29,8 +29,9 @@
 #include <string>
 
 #include "pbarpUtils/pbarpTensorLh.hh"
-#include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
+#include "pbarpUtils/PbarpChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -47,8 +48,8 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpTensorLh::pbarpTensorLh() :
-  pbarpBaseLh()
+pbarpTensorLh::pbarpTensorLh(ChannelID channelID) :
+   pbarpBaseLh(channelID)
 {
   initialize();
 }
@@ -70,7 +71,7 @@ void  pbarpTensorLh::initialize(){
   std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     std::shared_ptr<AbsDecay> currentDec( (*it).get() );
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, currentDec);
     _decAmps.push_back(currentAmp);
   }
 
@@ -84,12 +85,12 @@ void  pbarpTensorLh::initialize(){
   fillMap(jpclsTripletp1States, _decAmps, _decAmpsTripletp1);
 
   std::vector< std::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
-  fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1); 
+  fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);
   fillIsos();
 
-  double pbarMass = _absEnv->particleTable()->particle("antiproton")->mass();
-  double pMass = _absEnv->particleTable()->particle("proton")->mass();
-  double pbarMom = pbarpEnv::instance()->pbarMomentum();
+  double pbarMass = GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
+  double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
+  double pbarMom = std::static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel(_channelID))->pbarMomentum();
 
   Vector4<double> pbar4Vec(sqrt(pbarMass*pbarMass+pbarMom*pbarMom), 0.,0., pbarMom);
   Vector4<double> p4Vec(pMass, 0.,0.,0.);
@@ -99,12 +100,12 @@ void  pbarpTensorLh::initialize(){
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   for(itJPCLS=jpclsStatesAll.begin(); itJPCLS!=jpclsStatesAll.end(); ++itJPCLS){
     std::shared_ptr<OrbitalTensor> currentTensorPtr(new OrbitalTensor((*itJPCLS)->L));
-    currentTensorPtr->SetP4(pbar4Vec,p4Vec); 
+    currentTensorPtr->SetP4(pbar4Vec,p4Vec);
     _orbTensorMap[(*itJPCLS)->L]=currentTensorPtr;
 
     std::shared_ptr<PolVector> currentPolVecPtr(new PolVector((*itJPCLS)->J));
     currentPolVecPtr->SetP4(allVec, allVec.M());
-    _polVectorMap[(*itJPCLS)->J]=currentPolVecPtr; 
+    _polVectorMap[(*itJPCLS)->J]=currentPolVecPtr;
     }
 }
 

@@ -35,6 +35,7 @@
 #include <memory>
 #include <boost/unordered_map.hpp>
 
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsParamHandler.hh"
@@ -44,19 +45,19 @@ class AbsDecay;
 //class AbsDynamics;
 
 typedef boost::unordered_map<int, std::map<Spin, std::map<Spin, complex<float> > > > intSpinSpinFloatUsMap;
-//typedef boost::unordered_map<std::string, intSpinSpinFloatUsMap> stringIntSpiSpinFloatMap; 
+//typedef boost::unordered_map<std::string, intSpinSpinFloatUsMap> stringIntSpiSpinFloatMap;
 
 class AbsXdecAmp : public AbsParamHandler{
 
 public:
-  AbsXdecAmp(std::shared_ptr<AbsDecay> theDec);
+  AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   virtual ~AbsXdecAmp();
-  
+
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0)=0;
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
                                       EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp=0)=0;
 
-  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs); 
+  virtual complex<double> daughterAmp(Spin lam1, Spin lam2, EvtData* theData, Spin lamFs);
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   virtual std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
@@ -67,8 +68,9 @@ public:
   virtual void cacheAmplitudes();
 
 protected:
- 
-  std::shared_ptr<AbsDecay> _decay; 
+
+  ChannelID _channelID;
+  std::shared_ptr<AbsDecay> _decay;
   const std::string _name;
   std::shared_ptr<const jpcRes> _JPCPtr;
   const std::string _jpcDecsName;
@@ -76,7 +78,7 @@ protected:
   std::shared_ptr<AbsDynamics> _absDyn;
   const std::vector<std::string> _hypVec;
   std::shared_ptr<AbsXdecAmp> _decAmpDaughter1;
-  std::shared_ptr<AbsXdecAmp> _decAmpDaughter2; 
+  std::shared_ptr<AbsXdecAmp> _decAmpDaughter2;
   Spin _Jdaughter1;
   Spin _Jdaughter2;
   double _isospinCG;

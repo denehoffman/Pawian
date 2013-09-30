@@ -46,16 +46,16 @@ public:
   virtual ~XdecAmpRegistry();
 
   static XdecAmpRegistry* instance();
-  std::shared_ptr<AbsXdecAmp> getXdecAmp(std::shared_ptr<AbsDecay>);
+  std::shared_ptr<AbsXdecAmp> getXdecAmp(short channelID, std::shared_ptr<AbsDecay>);
 
 protected:
- ///Constructor 
+ ///Constructor
   XdecAmpRegistry();
   static XdecAmpRegistry* _instance;
 
 private:
 
-  std::map<std::string, std::shared_ptr<AbsXdecAmp> > _xDecAmpMap;
+  std::map<short, std::map<std::string, std::shared_ptr<AbsXdecAmp> > > _xDecAmpMap;
 
 
 

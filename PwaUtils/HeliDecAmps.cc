@@ -31,15 +31,15 @@
 
 #include "PwaUtils/HeliDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 //#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-
-HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec) :
-  AbsXdecAmp(theDec)
+HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
   ,_JPClamlams(theDec->JPClamlamAmps())
   ,_factorMag(1.)
 {
@@ -51,7 +51,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec) :
 
   bool identicalDaughters=false;
   if( (*daughter1)==(*daughter2)) identicalDaughters=true;
-  
+
   //fill JPClamlamSymMap
   std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
   for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
@@ -63,17 +63,17 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec) :
     	std::shared_ptr<const JPClamlam> currentSymIdPart2(new JPClamlam(*it, -(*it)->lam2, -(*it)->lam1, _parityFactor));
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart1);
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart2);
-    } 
+    }
   }
 }
 
-HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec) :
-  AbsXdecAmp(theDec)
+HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
 {
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J()); 
-  Info << "_parityFactor=\t" << _parityFactor << endmsg; 
+  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
+  Info << "_parityFactor=\t" << _parityFactor << endmsg;
 }
 
 HeliDecAmps::~HeliDecAmps()
@@ -86,7 +86,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
 
   bool lamFs_daughter1=false;
   if( _daughter1IsStable && _Jdaughter1>0) lamFs_daughter1=true;
-  
+
   bool lamFs_daughter2=false;
   if( _daughter2IsStable && _Jdaughter2>0) lamFs_daughter2=true;
 
@@ -122,16 +122,16 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
 
 complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.);  
+  complex<double> result(0.,0.);
 
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  
+
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap[evtNo][lamX][lamFs];
     result*=_absDyn->eval(theData, grandmaAmp);
-    if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg; 
+    if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
   }
 
@@ -190,7 +190,7 @@ void  HeliDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   _absDyn->getDefaultParams(fitVal, fitErr);
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
+  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
 }
 
 void HeliDecAmps::print(std::ostream& os) const{
@@ -201,7 +201,7 @@ void HeliDecAmps::print(std::ostream& os) const{
 bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
+   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
 
    if(!_daughter1IsStable) {
      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
@@ -217,7 +217,7 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
      for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
-       
+
        if (!CheckDoubleEquality(theMag, _currentParamMagLamLams[*it])){
 	 _recalculate=true;
 	 return _recalculate;
@@ -230,7 +230,7 @@ bool HeliDecAmps::checkRecalculation(fitParams& theParamVal){
    }
    return _recalculate;
 }
- 
+
 
 void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
@@ -243,10 +243,10 @@ void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
      _currentParamMagLamLams[*it]=theMag;
      _currentParamPhiLamLams[*it]=thePhi;
 
-     std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];     
+     std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];
      std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
-       _currentParamMagLamLams[*itLamLam]=theMag; 
+       _currentParamMagLamLams[*itLamLam]=theMag;
        _currentParamPhiLamLams[*itLamLam]=thePhi;
      }
    }
@@ -256,5 +256,5 @@ void  HeliDecAmps::updateFitParams(fitParams& theParamVal){
 
    if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
-   
+
 }

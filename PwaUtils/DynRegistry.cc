@@ -37,7 +37,7 @@
 #include "PwaUtils/KPiSWaveIso12Dynamics.hh"
 #include "PwaUtils/KPiSWaveIso32Dynamics.hh"
 #include "PwaUtils/PiPiSWaveASDynamics.hh"
-#include "PwaUtils/AbsEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/WoDynamics.hh"
 
 #include "Particle/ParticleTable.hh"
@@ -63,7 +63,7 @@ DynRegistry::~DynRegistry()
 std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> theDec){
 
   std::string theName=theDec->name();
-  if(0==theDec->motherPart()) theName=theDec->motherIGJPC()->jpcname(); 
+  if(0==theDec->motherPart()) theName=theDec->motherIGJPC()->jpcname();
   //  std::string theName=theDec->motherIGJPC()->jpcname();
 
   std::string dynType=theDec->dynType();
@@ -80,9 +80,9 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 
     if(theDec->hasMother()){
 
-      if(theDec->dynType()=="BreitWigner") 
+      if(theDec->dynType()=="BreitWigner")
     	result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
-      else if(theDec->dynType()=="BreitWignerRel") 
+      else if(theDec->dynType()=="BreitWignerRel")
     	result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="Flatte")
     	result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
@@ -91,7 +91,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       else if(theDec->dynType()=="KpiSWaveIso32")
 	result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="PiPiSWaveAS")
-	result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), theDec->currentEnv()->particleTable()));
+	result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), GlobalEnv::instance()->particleTable()));
       else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
     	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
@@ -101,15 +101,15 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     else{ // has no mother
       if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
-	Alert << "no mother resonance; can not add dynamis" 
-	      << "\nDyn type:\t" << theDec->dynType() 
+	Alert << "no mother resonance; can not add dynamis"
+	      << "\nDyn type:\t" << theDec->dynType()
 	      << endmsg;
 	exit(1);
       }
     }
     result->setMassKey(theDec->massParKey());
     _dynMap[theName]=result;
-    _dynVec.push_back(result); 
+    _dynVec.push_back(result);
   }
 
   return result;

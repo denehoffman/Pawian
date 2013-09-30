@@ -27,14 +27,13 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <iomanip>
 #include <vector>
 #include <thread>
 
 #include <boost/thread.hpp>
 
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/AbsEnv.hh"
+#include "GlobalEnv.hh"
 #include "PwaUtils/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -42,27 +41,25 @@
 
 AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   AbsParamHandler()
-  ,_absEnv(theAbsLhPtr->_absEnv)
   ,_evtDataVec(theAbsLhPtr->getDataVec())
   ,_evtMCVec(theAbsLhPtr->getMcVec())
-  ,_usePhasespace(theAbsLhPtr->_absEnv->parser()->usePhaseSpaceHyp())
+  ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
-  unsigned int noOfThreads=_absEnv->parser()->noOfThreads();
+  unsigned int noOfThreads=GlobalEnv::instance()->parser()->noOfThreads();
   if(noOfThreads > boost::thread::hardware_concurrency()) noOfThreads=boost::thread::hardware_concurrency();
   _noOfThreads = noOfThreads;
 }
 
-AbsLh::AbsLh(AbsEnv* theEnv) :
+AbsLh::AbsLh() :
   AbsParamHandler()
-  ,_absEnv(theEnv)
-  ,_usePhasespace(theEnv->parser()->usePhaseSpaceHyp())
+  ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
   //  _noOfThreads = boost::thread::hardware_concurrency();
-  _noOfThreads = theEnv->parser()->noOfThreads();
+  _noOfThreads = GlobalEnv::instance()->parser()->noOfThreads();
 }
 
 AbsLh::~AbsLh()
@@ -81,7 +78,7 @@ void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
       EvtData* currentEvtData=_evtDataVec[i];
       double intensity=calcEvtIntensity(currentEvtData, theParamVal);
       logLH_data+=(currentEvtData->evtWeight)*log(intensity);
-      weightSum+= currentEvtData->evtWeight; 
+      weightSum+= currentEvtData->evtWeight;
    }
 }
 
@@ -104,7 +101,7 @@ void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
 double AbsLh::calcLogLh(fitParams& theParamVal){
 
   _calcCounter++;
-  if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal); 
+  if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
   updateFitParams(theParamVal);
 
   LHData theLHData;
@@ -124,7 +121,7 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
      int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
 
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i).logLH_data), 
+				      std::ref(threadDataVec.at(i).logLH_data),
 				      std::ref(threadDataVec.at(i).weightSum), std::ref(theParamVal)));
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
@@ -152,14 +149,14 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
      theLHData.LH_mc  += (*it).LH_mc;
   }
 
-  return mergeLogLhData(theLHData, _evtMCVec.size());
+  theLHData.num_mc = _evtMCVec.size();
+  return mergeLogLhData(theLHData);
 }
 
 
 
 
-void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
-				LHData& theLHData){
+void AbsLh::calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData){
 
   _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
@@ -193,7 +190,7 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
 
     int eventMin = i*eventStepMC;
     int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
-    
+
 
     theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
 				     std::ref(threadDataVec.at(i).LH_mc), std::ref(theParamVal)));
@@ -207,20 +204,21 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal,
      theLHData.weightSum += (*it).weightSum;
      theLHData.LH_mc += (*it).LH_mc;
   }
+
+  theLHData.num_mc = _evtMCVec.size();
 }
 
 
 
-double AbsLh::mergeLogLhData(LHData& theLHData, int nMCs){
+double AbsLh::mergeLogLhData(LHData& theLHData){
 
   double logLH=0.;
-  double logLH_mc_Norm=0.;  
+  double logLH_mc_Norm=0.;
 
-  if (theLHData.LH_mc>0.) logLH_mc_Norm=log(theLHData.LH_mc/nMCs);
-  logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/nMCs-1.)*(theLHData.LH_mc/nMCs-1.)
+  if (theLHData.LH_mc>0.) logLH_mc_Norm=log(theLHData.LH_mc/theLHData.num_mc);
+  logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/theLHData.num_mc-1.)*(theLHData.LH_mc/theLHData.num_mc-1.)
     -theLHData.logLH_data
-    +theLHData.weightSum*logLH_mc_Norm;  
-  Info << "current LH = " << std::setprecision(10) << logLH << endmsg;
+    +theLHData.weightSum*logLH_mc_Norm;
   return logLH;
 }
 
@@ -229,7 +227,7 @@ double AbsLh::mergeLogLhData(LHData& theLHData, int nMCs){
 void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theHyp, std::string& theKey){
 
   std::map<const std::string, bool>::const_iterator iter= theMap.find(theKey);
-  
+
   if (iter !=theMap.end()){
     theHyp= iter->second;
     DebugMsg<< "hypothesis " << iter->first << "\t" << theHyp <<endmsg;
@@ -241,12 +239,12 @@ void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theH
   }
 }
 
-void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
+void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   if(_usePhasespace){
     fitVal.otherParams[_phasespaceKey]=0.01;
     fitErr.otherParams[_phasespaceKey]=0.05;
-  } 
+  }
 
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecs;
   for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
@@ -282,7 +280,7 @@ bool AbsLh::checkRecalculation(fitParams& theParamVal){
 void AbsLh::setDataVec(std::vector<EvtData*> theVec) {
   if(_evtDataVec.size()>0){
     Alert << "data vector already set!!!" << endmsg;
-    exit(0); 
+    exit(0);
   }
 
   _evtDataVec=theVec;
@@ -291,7 +289,7 @@ void AbsLh::setDataVec(std::vector<EvtData*> theVec) {
 void AbsLh::setMcVec(std::vector<EvtData*> theVec) {
   if(_evtMCVec.size()>0){
     Alert << "mc vector already set!!!" << endmsg;
-    exit(0); 
+    exit(0);
   }
 
   _evtMCVec=theVec;

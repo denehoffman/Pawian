@@ -30,9 +30,7 @@
 
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -41,10 +39,12 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/DynRegistry.hh"
 #include "PwaUtils/AbsDynamics.hh"
+#include "PwaUtils/GlobalEnv.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-
-AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
-  _mother(mother)
+AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId) :
+   _channelId(channelId)
+  ,_mother(mother)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
   ,_daughter1IsStable(true)
@@ -62,11 +62,10 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
   ,_preFactor(1.)
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
-  ,_env(theEnv)
   ,_gParity(mother->theGParity())
   ,_useIsospin(true)
 {
-  _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
+  _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
     _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
@@ -77,7 +76,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
     _finalStateParticlesDaughter1.push_back(daughter1);
   }
 
-  _absDecDaughter2=_env->absDecayList()->decay(_daughter2);
+  _absDecDaughter2=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter2);
 
   if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
@@ -109,11 +108,12 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, A
    Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
    Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
  }
- if( (*daughter1) == *(theEnv->particleTable()->particle("photon")) || (*daughter2) == *(theEnv->particleTable()->particle("photon"))) disableIsospin();
+ if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
 }
 
-AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
-  _mother(0)
+AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId) :
+   _channelId(channelId)
+  ,_mother(0)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
   ,_daughter1IsStable(true)
@@ -132,11 +132,10 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_preFactor(1.)
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
-  ,_env(theEnv)
   ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
 {
-  _absDecDaughter1=_env->absDecayList()->decay(_daughter1);
+  _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
 
   if(0 != _absDecDaughter1){
@@ -145,7 +144,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     _finalStateParticles.insert(_finalStateParticles.end(), fsParticlesDaughter1.begin(), fsParticlesDaughter1.end());
   }
   else _finalStateParticles.push_back(daughter1);
-  _absDecDaughter2=_env->absDecayList()->decay(_daughter2);
+  _absDecDaughter2=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter2);
 
   if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
@@ -172,7 +171,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   _i3daughter2=Spin(_daughter2->twoIso3(), 2);
 
   _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
-  if( (*daughter1) == *(theEnv->particleTable()->particle("photon")) || (*daughter2) == *(theEnv->particleTable()->particle("photon"))) disableIsospin();
+  if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
 }
 
 AbsDecay::~AbsDecay(){
@@ -183,12 +182,12 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   _dynType=dynString;
 
   if(additionalStringVec.size()==2){ //fill second decay channel (Flatte)
-    Particle* firstParticle=_env->particleTable()->particle(additionalStringVec[0]);
+    Particle* firstParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[0]);
     if(0==firstParticle){
       Alert << "particle with name\t" << additionalStringVec[0] << "\tnot available in the particle table" << endmsg;
       exit(1);
     }
-    Particle* secondParticle=_env->particleTable()->particle(additionalStringVec[1]);
+    Particle* secondParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[1]);
     if(0==secondParticle){
       Alert << "particle with name\t" << additionalStringVec[1] << "\tnot available in the particle table" << endmsg;
       exit(1);
@@ -202,11 +201,11 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
 void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
   int evtNo=evtData->evtNo;
   std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
-  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled 
+  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
 
   if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, evtData);
   if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, evtData);
-  
+
   Vector4<double> all4Vec(0.,0.,0.,0.);
   Vector4<double> mother4Vec(0.,0.,0.,0.);
   Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
@@ -234,7 +233,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
   if(_hasMotherPart){
     if(fabs(mother4Vec==all4Vec)){
       daughter2HelMother=daughter2_4Vec;
-      daughter2HelMother.Boost(daughter2HelMother);      
+      daughter2HelMother.Boost(daughter2HelMother);
     }
     else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
   }
@@ -252,7 +251,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
   Spin lamMotherMax=spinMother;
   if (!_hasMotherPart && spinMother>1) lamMotherMax=1; //attention: this is only valid for pbar p or e+ e- reactions; must be moved to individual specific classes
 
- 
+
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
       double thePhi=0.;
@@ -281,7 +280,7 @@ void AbsDecay::print(std::ostream& os) const{
   if(!_daughter2IsStable){
     os << "with further decay:";
     _absDecDaughter2->print(os);
-  }  
+  }
 
   os << "\n";
 }

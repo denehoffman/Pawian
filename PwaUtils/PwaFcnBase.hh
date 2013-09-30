@@ -38,12 +38,11 @@ namespace ROOT {
     class PwaFcnBase : public AbsFcn {
 
     public:
-      PwaFcnBase(std::shared_ptr<AbsLh> absLh, 
-		    std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix="");
+      PwaFcnBase();
       virtual ~PwaFcnBase();
 
       virtual double operator()(const std::vector<double>& par) const;
- 
+
     private:
       std::shared_ptr<AbsLh> _absLhPtr;
     };

@@ -39,14 +39,12 @@ namespace ROOT {
     class PwaFcnServer : public AbsFcn {
 
     public:
-      PwaFcnServer(std::shared_ptr<AbsLh> absLh, 
-		   std::shared_ptr<FitParamsBase> fitParamsBase, std::shared_ptr<NetworkServer> netServer, std::string suffix="");
+      PwaFcnServer(std::shared_ptr<NetworkServer> netServer);
       virtual ~PwaFcnServer();
 
       virtual double operator()(const std::vector<double>& par) const;
 
     protected:
-      std::shared_ptr<AbsLh> _absLhPtr;
       std::shared_ptr<NetworkServer> _networkServerPtr;
     };
   }  // namespace Minuit2

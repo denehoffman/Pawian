@@ -44,12 +44,25 @@ short NetworkClient::CLIENTMESSAGE_HEARTBEAT = 3;
 short NetworkClient::HEARTBEAT_INTERVAL = 60;
 
 NetworkClient::NetworkClient(std::string serverAddress, std::string port) :
-    _port(port)
+    _clientID(-1)
+   ,_channelID(-1)
+   ,_port(port)
    , _serverAddress(serverAddress)
 {
    _eventLimits.resize(4, 0);
    Info << "************* Client mode ****************" << endmsg;
 }
+
+
+
+ChannelID NetworkClient::channelID(){
+   if(_channelID == -1){
+      Alert << "Did not receive channel id yet!" << endmsg;
+      return 0;
+   }
+   return _channelID;
+}
+
 
 
 bool NetworkClient::Login(){
@@ -62,15 +75,18 @@ bool NetworkClient::Login(){
       return false;
    }
 
-   _theStream << NetworkClient::CLIENTMESSAGE_LOGIN << "\n" 
+   _theStream << NetworkClient::CLIENTMESSAGE_LOGIN << "\n"
 	      << boost::asio::ip::host_name() <<  "\n";
-   _theStream >> _eventLimits[0] >> _eventLimits[1] >> _eventLimits[2] >> _eventLimits[3];
+   _theStream >> _clientID >> _channelID
+              >> _eventLimits[0] >> _eventLimits[1] >> _eventLimits[2] >> _eventLimits[3];
 
    if(!_theStream){
       Alert << "Error: " << _theStream.error().message() << endmsg;
       return false;
    }
 
+   Info << "Received client id: " << _clientID << endmsg;
+   Info << "Received channel id: " << _channelID << endmsg;
    Info << "Received data event range " << _eventLimits[0] << " - " << _eventLimits[1] << endmsg;
    Info << "Received mc event range " << _eventLimits[2] << " - " << _eventLimits[3] << endmsg;
 
@@ -81,8 +97,8 @@ bool NetworkClient::Login(){
 }
 
 
- 
-bool NetworkClient::SendLH(double llh_data, double weightSum, double lh_mc){
+
+bool NetworkClient::SendLH(double llh_data, double lh_mc){
 
    _theStream.connect(_serverAddress, _port);
 
@@ -96,8 +112,9 @@ bool NetworkClient::SendLH(double llh_data, double weightSum, double lh_mc){
    else if(isinf(llh_data) && llh_data < 0)
       llh_data=-std::numeric_limits<double>::max() / 10.;
 
-   _theStream << NetworkClient::CLIENTMESSAGE_LH << "\n";
-   _theStream <<  std::setprecision(16) << llh_data << "\n" << weightSum << "\n" << lh_mc << "\n";
+   _theStream << NetworkClient::CLIENTMESSAGE_LH << "\n"
+              << _clientID << "\n"
+              << std::setprecision(16) << llh_data << "\n" << lh_mc << "\n";
 
    return true;
 }
@@ -116,7 +133,7 @@ bool NetworkClient::SendHeartbeat(){
       }
 
       _theHeartbeatStream << NetworkClient::CLIENTMESSAGE_HEARTBEAT << "\n";
-      _theHeartbeatStream << _eventLimits[0] << "\n";
+      _theHeartbeatStream << _clientID << "\n";
       short answer;
       _theHeartbeatStream >> answer;
 
@@ -142,14 +159,14 @@ bool NetworkClient::WaitForParams(){
       return false;
    }
    else if(serverMessage != NetworkServer::SERVERMESSAGE_PARAMS){
-      Alert << "Protocol error WaitForParams()" << endmsg;
+      Alert << "Protocol error WaitForParams() : " << serverMessage << endmsg;
       return false;
    }
 
    int numParams;
    _theStream >> numParams;
    _theParams.clear();
-   
+
    for(int i=0; i< numParams; i++){
       double tmpParam;
       _theStream >> tmpParam;

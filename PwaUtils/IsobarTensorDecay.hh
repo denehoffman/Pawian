@@ -41,23 +41,22 @@
 
 class Particle;
 class EvtData;
-class AbsEnv;
 
 class IsobarTensorDecay : public IsobarLSDecay{
 
 public:
-  IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
+  IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
+  IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
   virtual ~IsobarTensorDecay();
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   virtual void print(std::ostream& os) const;
-  virtual std::string type() {return "IsobarTensorDecay";} 
+  virtual std::string type() {return "IsobarTensorDecay";}
 
 protected:
   PolVector _polMother;
   PolVector _polDaughter1;
   PolVector _polDaughter2;
   LeviCivitaTensor _lctTensor;
-  MetricTensor _metricTensor;  
+  MetricTensor _metricTensor;
 };

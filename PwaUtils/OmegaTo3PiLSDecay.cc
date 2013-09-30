@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -38,11 +37,11 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv) :
-  OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, theEnv)
+OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID) :
+  OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, channelID)
 {
   _wignerDKey="normOmega_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
-  _lambdaDecKey="lambdaOmega_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles); 
+  _lambdaDecKey="lambdaOmega_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
 }
 
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
@@ -84,7 +83,7 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   //calculate normal of the decay plane
   Vector4<float> normOmegaDecHeliOmega_4V(0.5*(daughter1_HeliOmega.T()+daughter2_HeliOmega.T()+daughter3_HeliOmega.T()),
 					  daughter1_HeliOmega.Y()*daughter2_HeliOmega.Z()-daughter1_HeliOmega.Z()*daughter2_HeliOmega.Y(),
-					  daughter1_HeliOmega.Z()*daughter2_HeliOmega.X()-daughter1_HeliOmega.X()*daughter2_HeliOmega.Z(),        
+					  daughter1_HeliOmega.Z()*daughter2_HeliOmega.X()-daughter1_HeliOmega.X()*daughter2_HeliOmega.Z(),
 					  daughter1_HeliOmega.X()*daughter2_HeliOmega.Y()-daughter1_HeliOmega.Y()*daughter2_HeliOmega.X());
 
   double theQ=daughter1_HeliOmega.E()-daughter1_HeliOmega.M()+daughter2_HeliOmega.E()-daughter2_HeliOmega.M()+daughter3_HeliOmega.E()-daughter3_HeliOmega.M();

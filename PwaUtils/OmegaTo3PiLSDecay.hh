@@ -41,17 +41,16 @@
 
 class Particle;
 class EvtData;
-class AbsEnv;
 
 class OmegaTo3PiLSDecay : public OmegaTo3PiDecay{
 
 public:
-  OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
+  OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID);
   virtual ~OmegaTo3PiLSDecay();
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   virtual const std::string lambdaDecKey() {return _lambdaDecKey;}
-  virtual std::string type() {return "OmegaTo3PiLSDecay";} 
+  virtual std::string type() {return "OmegaTo3PiLSDecay";}
 
 protected:
   std::string _lambdaDecKey;

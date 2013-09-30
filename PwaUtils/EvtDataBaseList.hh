@@ -33,6 +33,7 @@
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Particle/Particle.hh"
 
 typedef std::map<int, Vector4<double> > mapInt4Vec;
@@ -58,12 +59,11 @@ struct EvtData {
 };
 
 class EventList;
-class AbsEnv;
 
 class EvtDataBaseList {
 
 public:
-  EvtDataBaseList(AbsEnv* theEnv);
+  EvtDataBaseList(ChannelID channelID);
   virtual ~EvtDataBaseList();
 
   void read(EventList& evtListData, EventList& evtListMc);
@@ -78,6 +78,7 @@ public:
   virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo);
 
 protected:
+  ChannelID _channelID;
   std::vector<EvtData*> _evtDataList;
   std::vector<EvtData*> _mcDataList;
   virtual std::string getName(std::vector<Particle*>& theVec);
@@ -86,6 +87,5 @@ protected:
   double _noOfWeightedMcEvts;
   //  int _mcToDataRatio;
   bool _alreadyRead;
-  AbsEnv* _absEnv;
 
 };

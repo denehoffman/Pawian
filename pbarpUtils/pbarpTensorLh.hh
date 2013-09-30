@@ -39,6 +39,7 @@
 
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
@@ -49,12 +50,12 @@ class pbarpTensorLh : public pbarpBaseLh {
 
 public:
   // pbarpTensorLh(std::shared_ptr<const EvtDataBaseList>);
-  pbarpTensorLh();
+  pbarpTensorLh(ChannelID channelID);
 
   virtual ~pbarpTensorLh();
 
   virtual AbsLh* clone_() const {
-    AbsLh* theClone=new pbarpTensorLh();
+    AbsLh* theClone=new pbarpTensorLh(_channelID);
     theClone->setDataVec(_evtDataVec);
     theClone->setMcVec(_evtMCVec);
     return theClone;
@@ -68,9 +69,8 @@ protected:
 
 
 private:
-
   void initialize();
- 
+
   std::map< Spin, std::shared_ptr<OrbitalTensor> > _orbTensorMap;
   std::map< Spin, std::shared_ptr<PolVector> > _polVectorMap;
 };

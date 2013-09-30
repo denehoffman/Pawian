@@ -46,15 +46,15 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
-  HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec);
-  HeliDecAmps(std::shared_ptr<AbsDecay> theDec);
+  ///Constructor
+  HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
+  HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
   virtual ~HeliDecAmps();
 
 
   // Getters:
-  
+
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);

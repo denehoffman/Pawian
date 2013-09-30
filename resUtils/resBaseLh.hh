@@ -38,6 +38,7 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
@@ -48,19 +49,19 @@ class resBaseLh : public AbsLh {
 
 public:
   // resBaseLh(std::shared_ptr<const EvtDataBaseList>);
-  resBaseLh();
-  
+  resBaseLh(ChannelID channelID);
+
   virtual ~resBaseLh();
-  
+
   virtual AbsLh* clone_() const{
-    AbsLh* theClone=new resBaseLh();
+    AbsLh* theClone=new resBaseLh(_channelID);
     theClone->setDataVec(_evtDataVec);
     theClone->setMcVec(_evtMCVec);
     return theClone;
   }
 
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
-  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
@@ -69,13 +70,14 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  
+
 protected:
+  ChannelID _channelID;
   std::shared_ptr<resReaction> _resReactionPtr;
 
   int _highestJFsp;
   bool _isHighestJaPhoton;
-  Spin _Jmother;  
+  Spin _Jmother;
 private:
 
   void initialize();

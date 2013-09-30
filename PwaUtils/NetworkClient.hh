@@ -30,6 +30,8 @@
 
 #include <boost/asio.hpp>
 
+#include "PwaUtils/AbsChannelEnv.hh"
+
 using boost::asio::ip::tcp;
 
 
@@ -44,13 +46,16 @@ class NetworkClient
 
    NetworkClient(std::string serverAddress,std::string port);
    bool Login();
-   bool SendLH(double llh_data, double weightSum, double lh_mc);
+   bool SendLH(double llh_data, double lh_mc);
    bool SendHeartbeat();
    bool WaitForParams();
+   ChannelID channelID();
    std::vector<double>& GetParams(){return _theParams;}
    std::vector<double>& GetEventLimits(){return _eventLimits;}
 
   private:
+   short _clientID;
+   ChannelID _channelID;
    std::vector<double> _eventLimits;
    std::string _port;
    std::string _serverAddress;

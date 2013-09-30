@@ -21,45 +21,31 @@
 //									  //
 //************************************************************************//
 
-// resEnv class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// EpemChannelEnv class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <map>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <memory>
+#include "PwaUtils/AbsChannelEnv.hh"
 
-#include "PwaUtils/AbsEnv.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "pbarpUtils/pbarpHist.hh"
 
-class Particle;
-class ParticleTable;
-class resReaction;
-class IsobarDecayList;
-class resParser;
-class Particle;
+class epemParser;
+class epemReaction;
 
-class resEnv : public AbsEnv{
 
+class EpemChannelEnv : public AbsChannelEnv
+{
 public:
-  static resEnv* instance();
-  ~resEnv();
+   void setup(ChannelID id);
+   EpemChannelEnv(epemParser* theParser);
 
-  void setup(resParser* theResParser);
+   std::shared_ptr<epemReaction> reaction() {return _epemReaction;}
+   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
+   const double cmsMass() {return _cmsMass;}
 
-  std::shared_ptr<resReaction> reaction() {return _resReaction;}
-  Particle* motherParticle() {return _motherParticle;}
-
-protected:  
-
-  resEnv();
-  static resEnv* _instance;
-  Particle* _motherParticle;
-  std::shared_ptr<resReaction> _resReaction;
+private:
+   epemParser* _theParser;
+   double _cmsMass;
+   std::shared_ptr<epemReaction> _epemReaction;
+   std::vector<std::string> _spinDensity;
 };

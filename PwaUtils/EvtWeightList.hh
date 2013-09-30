@@ -27,11 +27,12 @@
 #pragma once
 
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 
 class EvtWeightList : public EvtDataBaseList {
 
 public:
-  EvtWeightList(AbsEnv* theEnv);
+  EvtWeightList(ChannelID channelID);
   virtual ~EvtWeightList();
 
   virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo);

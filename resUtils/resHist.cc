@@ -30,12 +30,13 @@
 #include <boost/algorithm/string.hpp>
 
 #include "resUtils/resHist.hh"
-#include "resUtils/resEnv.hh"
+#include "resUtils/ResChannelEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
@@ -45,7 +46,7 @@
 #include "TNtuple.h"
 
 resHist::resHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  AbsHist(resEnv::instance()) 
+  AbsHist()
 {
   initRootStuff();
   fillIt(theLh, theFitParams);
@@ -56,7 +57,7 @@ resHist::~resHist(){
 
 void resHist::initRootStuff(){
 
-  std::vector<std::vector<std::string> > histMassNameVec=resEnv::instance()->histMassSystems();
+  std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
   for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
     std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
@@ -69,11 +70,11 @@ void resHist::initRootStuff(){
     //    double psiMass = epemEnv::instance()->particleTable()->particle("Jpsi")->mass();
     double massMin = 0;
     //    double massMax = psiMass;
-    double massMax = resEnv::instance()->motherParticle()->mass();
+    double massMax = std::static_pointer_cast<ResChannelEnv>(GlobalEnv::instance()->ResChannel())-> motherParticle()->mass();
     //    DebugMsg << "epemEnv::instance()->cmsMass():\t" << epemEnv::instance()->cmsMass() << endmsg;
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    std::vector<Particle*> allFsp =  resEnv::instance()->finalStateParticles();
+    std::vector<Particle*> allFsp =  GlobalEnv::instance()->Channel()->finalStateParticles();
     std::vector<Particle*>::iterator itAllFsp;
 
     for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
@@ -105,7 +106,7 @@ void resHist::initRootStuff(){
     _massMcHistMap[tmpMassHistData]=currentMassMcHist;
 
     DebugMsg << histName.c_str() << "\t" << massMin << "\t" << massMax << endmsg;
-    
+
     histName="Fit"+tmpBaseName;
     histDescription = "M("+tmpMassHistData->_name+") (fit)";
     TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100, massMin, massMax);

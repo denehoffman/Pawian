@@ -1,3 +1,4 @@
+
 //************************************************************************//
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
@@ -80,6 +81,7 @@ public:
   const bool useEvtWeight() const {return _useEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const std::string pdgTableFile() const {return _pdgTableFile;}
+  const std::vector<std::string>& coupledChannelCfgs() const { return _coupledChannelCfgs; }
   const std::vector<std::string>& finalStateParticles() const { return _finalStateParticles; }
   const std::vector<std::string>& decaySystem() const { return _decaySystem; }
   const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
@@ -132,6 +134,7 @@ protected:
   bool _useEvtWeight;
   bool _usePhaseSpaceHyp;
   std::string _pdgTableFile;
+  std::vector<std::string> _coupledChannelCfgs;
   std::vector<std::string> _finalStateParticles;
   std::vector<std::string> _decaySystem;
   std::vector<std::string> _dynamics;

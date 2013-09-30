@@ -36,7 +36,6 @@
 
 #include "TROOT.h"
 
-class AbsEnv;
 class AbsLh;
 class EvtData;
 class EvtVector4R;
@@ -48,7 +47,7 @@ class EventList;
 class PwaGen{
 
 public:
-  PwaGen(AbsEnv* theEnv);
+  PwaGen();
   virtual ~PwaGen();
 
   virtual void generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
@@ -60,10 +59,9 @@ protected:
   //  void dumpAscii(EvtVector4R* evt4Vec4R);
   void dumpAscii(EvtData* evtData, double weight=1.);
 
-  AbsEnv* _absEnv;
   EvtVector4R _initial4Vec;
   std::vector<Particle*> _finalStateParticles;
-  
+
   std::ofstream* _stream;
 
   double mass[30];

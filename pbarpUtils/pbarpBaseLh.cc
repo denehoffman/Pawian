@@ -29,9 +29,9 @@
 #include <string>
 
 #include "pbarpUtils/pbarpBaseLh.hh"
-#include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
-#include "pbarpUtils/pbarpEnv.hh"
+#include "pbarpUtils/PbarpChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -45,8 +45,9 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-pbarpBaseLh::pbarpBaseLh() :
-  AbsLh(pbarpEnv::instance())
+pbarpBaseLh::pbarpBaseLh(ChannelID channelID) :
+  AbsLh()
+  ,_channelID(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -102,7 +103,7 @@ double pbarpBaseLh::calcSpinDensityNorm(std::string& nameDec, EvtData* theData){
 }
 
 
-complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					     std::map <std::shared_ptr<const JPCLS>,
 					     std::vector< std::shared_ptr<AbsXdecAmp> >,
 					     pawian::Collection::SharedPtrLess > pbarpAmps){
@@ -156,7 +157,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   if(_isHighestJaPhoton) lamSteps=2;
 
   for (int lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
- 
+
   complex<double> singletAmp(0.,0.);
   for(it=_decAmpsSinglet.begin(); it!=_decAmpsSinglet.end(); ++it){
     complex<double> tmpAmp(0.,0.);
@@ -164,7 +165,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
     double iso1Val=_currentParamJPCIsos1[theJPCLS];
     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
 
@@ -192,11 +193,11 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
     double iso1Val=_currentParamJPCIsos1[theJPCLS];
     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        complex<double> currentDecAmp=(*itDec)->XdecAmp(0, theData, lamHigestJFsp);
-       
+
        std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
 
        double isoFactor=0;
@@ -220,7 +221,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
     double iso1Val=_currentParamJPCIsos1[theJPCLS];
     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
@@ -238,7 +239,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
      complex<double> expi(cos(thePhi), sin(thePhi));
      tmpAmp*=theJPCLS->preFactor*theMag*expi;
      tripletp1Amp+=tmpAmp;
-  }  
+  }
 
    complex<double> tripletm1Amp(0.,0.);
   for(it=_decAmpsTripletm1.begin(); it!=_decAmpsTripletm1.end(); ++it){
@@ -247,7 +248,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
       double iso1Val=_currentParamJPCIsos1[theJPCLS];
        double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;    
+    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
@@ -267,32 +268,32 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
      tripletm1Amp+=tmpAmp;
   }
 
-  result += norm(singletAmp)+ norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp); 
+  result += norm(singletAmp)+ norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp);
   }
 
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
-  return result;  
+  return result;
 
 }
 
 
 
-void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){ 
+void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   AbsLh::getDefaultParams(fitVal, fitErr);
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso; 
+  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
   for(itIso=_currentParamJPCIsos1.begin(); itIso!=_currentParamJPCIsos1.end(); ++itIso){
     fitVal.otherParams["Iso1"+(*itIso).first->name()+"Range01"]=(*itIso).second;
     fitErr.otherParams["Iso1"+(*itIso).first->name()+"Range01"]=0.5;
    }
- 
+
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  double magFactor=1./sqrt(_jpclsStates.size());  
+  double magFactor=1./sqrt(_jpclsStates.size());
   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
     currentMagValMap[*it] = magFactor;
@@ -314,7 +315,7 @@ void pbarpBaseLh::print(std::ostream& os) const{
 
 void  pbarpBaseLh::initialize(){
 
-  std::vector<Particle*> fsParticles=pbarpEnv::instance()->finalStateParticles();
+  std::vector<Particle*> fsParticles=std::static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel(_channelID))->finalStateParticles();
   std::vector<Particle*>::iterator itParticle;
   bool highestJFound=false;
 
@@ -323,14 +324,14 @@ void  pbarpBaseLh::initialize(){
     if(current2J>0){
       if(highestJFound){
 	Alert << "final states with more than 1 particles with J>0 not supported!!!!" << endmsg;
-	exit(1); 
+	exit(1);
       }
       _highestJFsp=int(current2J/2);
       if( (*itParticle)->name() != "photon" ) _isHighestJaPhoton=false;
     }
-  }  
-  
-  _pbarpReactionPtr = pbarpEnv::instance()->reaction();
+  }
+
+  _pbarpReactionPtr = std::static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel(_channelID))->reaction();
   _jpclsStates=_pbarpReactionPtr->jpclsStates();
   _igjpcStates=_pbarpReactionPtr->igjpcStates();
 
@@ -340,11 +341,11 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
 
   AbsLh::updateFitParams(theParamVal);
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso; 
+  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
   for(itIso=_currentParamJPCIsos1.begin(); itIso!=_currentParamJPCIsos1.end(); ++ itIso){
     double theVal=theParamVal.otherParams["Iso1"+(*itIso).first->name()+"Range01"];
     (*itIso).second=theVal;
-    _currentParamJPCIsos0[(*itIso).first]=sqrt(1.-theVal*theVal);    
+    _currentParamJPCIsos0[(*itIso).first]=sqrt(1.-theVal*theVal);
   }
 
 
@@ -414,7 +415,7 @@ void pbarpBaseLh::fillIsos(){
   }
 
 
-  //now look if iso0 and iso1 exisist for the same amplitude 
+  //now look if iso0 and iso1 exisist for the same amplitude
   for(it= _iso0DecAmps.begin(); it!= _iso0DecAmps.end(); ++it){
     std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it2;
     for(it2= _iso1DecAmps.begin(); it2!= _iso1DecAmps.end(); ++it2){
@@ -426,5 +427,5 @@ void pbarpBaseLh::fillIsos(){
 	_currentParamJPCIsos0[(*it)->jpcPtr()]=sqrt(.3);
       }
     }
-  } 
+  }
 }

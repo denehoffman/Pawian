@@ -25,7 +25,7 @@
 // Copyright 2013 Julian Pychy
 
 #include "PwaUtils/WaveContribution.hh"
-#include "PwaUtils/AbsEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -33,9 +33,8 @@
 
 #include <iostream>
 
-WaveContribution::WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-      _absEnv(theEnv)
-    , _calcError(false)
+WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+      _calcError(false)
     , _theLh(theLh)
     , _theFitParamsOriginal(&theFitParams)
 {
@@ -45,10 +44,9 @@ WaveContribution::WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh,
 
 
 
-WaveContribution::WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
+WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams,
 				   std::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
-    _absEnv(theEnv)
-   , _calcError(true)
+     _calcError(true)
    , _theLh(theLh)
    , _thePwaCovMatrix(thePwaCovMatrix)
    , _theFitParamsOriginal(&theFitParams)
@@ -66,8 +64,8 @@ double WaveContribution::CalcContribution(fitParams& theFitParams){
    double result=0;
 
    for(auto it=_MCDataList.begin(); it!=_MCDataList.end(); ++it){
-      result +=_theLh->calcEvtIntensity( (*it), theFitParams);   
-   } 
+      result +=_theLh->calcEvtIntensity( (*it), theFitParams);
+   }
 
    return result;
 }
@@ -88,7 +86,7 @@ std::pair<double,double> WaveContribution::CalcContribution(){
 std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::CalcSingleContributions(){
    std::vector<std::pair<std::string,std::pair<double,double>>> retValues;
 
-   std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = _absEnv->calcContributionDataVec();
+   std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
    std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
    ROOT::Minuit2::MnUserParameters mnUserParamsOrig = _theMnUserParameters;
    unsigned int nPar = _theMnUserParameters.Params().size();
@@ -100,7 +98,7 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
       for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
         for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
            std::string parName = _theMnUserParameters.GetName(i);
-           if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) { 
+           if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) {
               Info << "found matching parameter:" << parName << " = " << (*itZeroAmpVec) << endmsg;
               _theMnUserParameters.SetValue(i, 0.);
            }
@@ -129,7 +127,7 @@ double WaveContribution::CalcError(double result) {
    std::map< std::string, double > derivatives;
 
    unsigned int nPar = _theMnUserParameters.Params().size();
-   
+
    for(unsigned int i=0; i<nPar; i++){
       double parOrig = _theMnUserParameters.Value(i);
       std::string parName = _theMnUserParameters.GetName(i);
@@ -153,7 +151,7 @@ double WaveContribution::CalcError(double result) {
 	 _theLh->CheckDoubleEquality(_thePwaCovMatrix->GetElement(_theMnUserParameters.GetName(i),
        								  _theMnUserParameters.GetName(i)), 0))
 	 continue;
-      
+
       Info << "Param used in contribution error calculation: " << _theMnUserParameters.GetName(i) << endmsg;
 
       for(unsigned int j=0; j<nPar; j++){
@@ -164,12 +162,12 @@ double WaveContribution::CalcError(double result) {
          std::string name1 = _theMnUserParameters.GetName(i);
          std::string name2 = _theMnUserParameters.GetName(j);
 
-	 resultErr += derivatives[name1] * 
-	    _thePwaCovMatrix->GetElement(name1, name2) * 
+	 resultErr += derivatives[name1] *
+	    _thePwaCovMatrix->GetElement(name1, name2) *
 	    derivatives[name2];
       }
    }
-   
+
    resultErr = sqrt(resultErr);
    return resultErr;
 }

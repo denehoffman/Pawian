@@ -58,7 +58,7 @@ struct massHistData {
   }
 
   std::string _name;
-  std::vector<std::string> _fspNames; 
+  std::vector<std::string> _fspNames;
 
   virtual bool operator==(const massHistData& compare) const {
     bool result=false;
@@ -68,9 +68,9 @@ struct massHistData {
 
  virtual bool operator<(const massHistData& compare) const {
    bool result=false;
-   if(_name < compare._name) result=true; 
-    return result; 
-  }  
+   if(_name < compare._name) result=true;
+    return result;
+  }
 };
 
 struct angleHistData {
@@ -115,9 +115,9 @@ struct angleHistData {
 
  virtual bool operator<(const angleHistData& compare) const {
    bool result=false;
-   if(_name < compare._name) result=true; 
-    return result; 
-  }  
+   if(_name < compare._name) result=true;
+    return result;
+  }
 };
 
 struct angleHistData2D {
@@ -178,9 +178,9 @@ struct angleHistData2D {
 
  virtual bool operator<(const angleHistData2D& compare) const {
    bool result=false;
-   if(_name < compare._name) result=true; 
-    return result; 
-  }  
+   if(_name < compare._name) result=true;
+    return result;
+  }
 };
 
 
@@ -188,12 +188,11 @@ class TFile;
 class TH2F;
 class TH1F;
 class TTree;
-class AbsEnv;
 
 class AbsHist {
 
 public:
-  AbsHist(AbsEnv* theEnv);
+  AbsHist();
   virtual ~AbsHist();
 
 protected:
@@ -210,8 +209,6 @@ protected:
  TFile* _theTFile;
  TTree* _dataFourvecs;
  TTree* _fittedFourvecs;
-
- AbsEnv* _absEnv;
 
  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;

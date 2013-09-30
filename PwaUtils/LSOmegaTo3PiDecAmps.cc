@@ -38,8 +38,8 @@
 #include "Particle/Particle.hh"
 
 
-LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec) :
-  LSDecAmps( (std::shared_ptr<AbsDecay>) theDec )
+LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec, ChannelID channelID) :
+  LSDecAmps( (std::shared_ptr<AbsDecay>) theDec, channelID)
   ,_lambdaDecKey(theDec->lambdaDecKey())
 {
   _JPCLSs=theDec->JPCLSAmps();
@@ -75,8 +75,8 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short f
 
 complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.); 
-  
+  complex<double> result(0.,0.);
+
   int evtNo=theData->evtNo;
 
   if ( _cacheAmps && !_recalculate){
@@ -84,17 +84,17 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
     result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
-  
+
   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
     if( fabs(lamX) > (*it)->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
-    
+
     complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
       *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
-    
+
     result+=amp;
   }
   result*=sqrt( theData->DoubleString[_lambdaDecKey] );

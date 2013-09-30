@@ -27,6 +27,7 @@
 
 #include "Minuit2/MnUserParameters.h"
 
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/NetworkServer.hh"
@@ -36,10 +37,9 @@ using namespace ROOT::Minuit2;
 
 boost::timer::cpu_timer theTimer1;
 
-AbsFcn::AbsFcn(std::shared_ptr<FitParamsBase> fitParamsBase, std::string suffix) :
-  _fitParamsBasePtr(fitParamsBase)
-  , _fcnCounter(0)
-  , _currentResFileName("currentResult"+suffix+".dat")
+AbsFcn::AbsFcn() :
+    _fcnCounter(0)
+  , _currentResFileName("currentResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
 {
 }
 
@@ -47,7 +47,7 @@ AbsFcn::~AbsFcn()
 {
 }
 
-double AbsFcn::Up() const 
+double AbsFcn::Up() const
 {
 return .5;
 }
@@ -66,17 +66,17 @@ void AbsFcn::printTimer() const{
 void AbsFcn::printFitParams(const std::vector<double>& par) const{
   if (  _fcnCounter%100 == 0) {
     fitParams theFitParmValTmp=_defaultFitValParms;
-    _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
-    _fitParamsBasePtr->printParams(theFitParmValTmp);
+    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
+    GlobalEnv::instance()->fitParamsBase()->printParams(theFitParmValTmp);
   }
 }
 
 void AbsFcn::dumpFitParams(const std::vector<double>& par) const{
   if (  _fcnCounter%200 == 0) {
     fitParams theFitParmValTmp=_defaultFitValParms;
-    _fitParamsBasePtr->getFitParamVal(par, theFitParmValTmp);
+    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
     std::ofstream theStream (_currentResFileName.c_str());
-    _fitParamsBasePtr->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
+    GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
   }
 }
 

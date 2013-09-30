@@ -29,9 +29,9 @@
 #include <string>
 
 #include "epemUtils/epemBaseLh.hh"
-#include "epemUtils/epemEnv.hh"
 #include "epemUtils/epemReaction.hh"
-#include "epemUtils/epemEnv.hh"
+#include "epemUtils/EpemChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -55,8 +55,9 @@
 //   initialize();
 // }
 
-epemBaseLh::epemBaseLh() :
-  AbsLh(epemEnv::instance())
+epemBaseLh::epemBaseLh(ChannelID channelID) :
+  AbsLh()
+  ,_channelID(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -79,7 +80,7 @@ complex<double> epemBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameD
 
 
 
-complex<double> epemBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+complex<double> epemBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					     std::map <std::shared_ptr<const JPCLS>,
 					     std::vector< std::shared_ptr<AbsXdecAmp> >,
 					     pawian::Collection::SharedPtrLess > pbarpAmps){
@@ -97,29 +98,29 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   if(_isHighestJaPhoton) lamSteps=2;
 
   for (int lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
- 
+
     complex<double> lamp1Amp(0.,0.);
-    
+
     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-    
+
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
       lamp1Amp+=currentDecAmp;
     }
-    
-    
+
+
     complex<double> lamm1Amp(0.,0.);
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
       lamm1Amp+=currentDecAmp;
     }
-    
+
     result += norm(lamp1Amp) + norm(lamm1Amp);
   }
-  
-  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey]; 
-  return result;  
-  
+
+  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+  return result;
+
 }
 
 void epemBaseLh::print(std::ostream& os) const{
@@ -129,7 +130,7 @@ void epemBaseLh::print(std::ostream& os) const{
 
 void  epemBaseLh::initialize(){
 
-  std::vector<Particle*> fsParticles=epemEnv::instance()->finalStateParticles();
+  std::vector<Particle*> fsParticles=std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel(_channelID))->finalStateParticles();
   std::vector<Particle*>::iterator itParticle;
   bool highestJFound=false;
 
@@ -138,21 +139,21 @@ void  epemBaseLh::initialize(){
     if(current2J>0){
       if(highestJFound){
 	Alert << "final states with more than 1 particles with J>0 not supported!!!!" << endmsg;
-	exit(1); 
+	exit(1);
       }
       _highestJFsp=int(current2J/2);
       if( (*itParticle)->name() != "photon" ) _isHighestJaPhoton=false;
     }
-  }  
-  
-  _epemReactionPtr = epemEnv::instance()->reaction();
+  }
+
+  _epemReactionPtr =  std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel(_channelID))->reaction();
 
 std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
   std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     //    std::shared_ptr<AbsDecay> currentDec((*it).get() );
     //    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp((*it)->absDecPtr());
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
 

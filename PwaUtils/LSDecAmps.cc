@@ -31,15 +31,15 @@
 
 #include "PwaUtils/LSDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 //#include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-
-LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec) :
-  AbsXdecAmp(theDec)
+LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
 {
@@ -48,17 +48,17 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec) :
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
-  fillCgPreFactor(); 
+  fillCgPreFactor();
 }
 
-LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec) :
-  AbsXdecAmp(theDec)
+LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
 {
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J()); 
+  _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
-  fillCgPreFactor();  
+  fillCgPreFactor();
 }
 
 LSDecAmps::~LSDecAmps()
@@ -104,11 +104,11 @@ complex<double> LSDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughter
 
 complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.);  
-  if( fabs(lamX) > _JPCPtr->J) return result; 
+  complex<double> result(0.,0.);
+  if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
- 
+
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap[evtNo][lamX][lamFs];
     result*=_absDyn->eval(theData, grandmaAmp);
@@ -130,7 +130,7 @@ complex<double> LSDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsX
     lam2Max=lamFs;
   }
 
-  
+
   result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
 
   if ( _cacheAmps){
@@ -166,7 +166,7 @@ complex<double> LSDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spi
   }
   result*=_preFactor*_isospinCG;
   return result;
-} 
+}
 
 
 void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
@@ -193,7 +193,7 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
+  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
 }
 
 void LSDecAmps::print(std::ostream& os) const{
@@ -204,7 +204,7 @@ void LSDecAmps::print(std::ostream& os) const{
 bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
+   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
 
    if(!_daughter1IsStable) {
      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
@@ -216,12 +216,12 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
    if(!_recalculate){
      std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
      std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
-     
+
      std::vector< std::shared_ptr<const JPCLS> >::iterator it;
      for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
-       
+
        if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
 	 _recalculate=true;
 	 return _recalculate;
@@ -235,7 +235,7 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
 
    return _recalculate;
 }
- 
+
 
 void  LSDecAmps::updateFitParams(fitParams& theParamVal){
    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];

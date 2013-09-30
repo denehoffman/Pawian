@@ -31,22 +31,21 @@
 
 #include "PwaUtils/TensorDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
 #include "Particle/Particle.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-
-TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec) :
-  AbsXdecAmp(theDec)
+TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
   ,_JPCLSs(theDec->JPCLSAmps())
   ,_factorMag(1.)
 {
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
 
-TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec) :
-  AbsXdecAmp(theDec)
+TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
+  AbsXdecAmp(theDec, channelID)
 {
   if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
 }
@@ -92,11 +91,11 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaug
 
 complex<double> TensorDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.);  
-  if( fabs(lamX) > _JPCPtr->J) return result; 
+  complex<double> result(0.,0.);
+  if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
- 
+
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap[evtNo][lamX][lamFs];
     result*=_absDyn->eval(theData, grandmaAmp);
@@ -118,7 +117,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, 
     lam2Max=lamFs;
   }
 
-  
+
   result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
 
   if ( _cacheAmps){
@@ -146,9 +145,9 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>(*it)->J || fabs(lambda)>(*it)->S) continue;
 	complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString[_name][(*it)->L][(*it)->S][lamX][lambda1][lambda2];
-	     // 	Info << "theData->ComplexDouble5SpinString[" << _name << "][" 
-	     // << (*it)->L << "][" << (*it)->S << "][" 
-	     // << lamX <<"][" << lambda1 << "][" << lambda2 << "]:\t" 
+	     // 	Info << "theData->ComplexDouble5SpinString[" << _name << "]["
+	     // << (*it)->L << "][" << (*it)->S << "]["
+	     // << lamX <<"][" << lambda1 << "][" << lambda2 << "]:\t"
 	     // << theData->ComplexDouble5SpinString[_name][(*it)->L][(*it)->S][lamX][lambda1][lambda2] << endmsg;
 	     // 	Info << "amp:\t" << amp << endmsg;
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
@@ -159,7 +158,7 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
 
   result*=_preFactor*_isospinCG;
   return result;
-} 
+}
 
 
 void  TensorDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
@@ -186,7 +185,7 @@ void  TensorDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);  
+  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
 }
 
 void TensorDecAmps::print(std::ostream& os) const{
@@ -197,7 +196,7 @@ void TensorDecAmps::print(std::ostream& os) const{
 bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true; 
+   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
 
    if(!_daughter1IsStable) {
      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
@@ -209,12 +208,12 @@ bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
    if(!_recalculate){
      std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
      std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
-     
+
      std::vector< std::shared_ptr<const JPCLS> >::iterator it;
      for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
-       
+
        if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
 	 _recalculate=true;
 	 return _recalculate;
@@ -228,7 +227,7 @@ bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
 
    return _recalculate;
 }
- 
+
 
 void  TensorDecAmps::updateFitParams(fitParams& theParamVal){
    std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];

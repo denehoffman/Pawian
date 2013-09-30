@@ -41,15 +41,14 @@
 
 class Particle;
 class EvtData;
-class AbsEnv;
 
 class OmegaTo3PiTensorDecay : public OmegaTo3PiDecay{
 
 public:
-  OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
+  OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID);
   virtual ~OmegaTo3PiTensorDecay();
 
-  virtual std::string type() {return "OmegaTo3PiTensorDecay";} 
+  virtual std::string type() {return "OmegaTo3PiTensorDecay";}
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
 

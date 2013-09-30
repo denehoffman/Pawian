@@ -30,12 +30,13 @@
 #include <boost/algorithm/string.hpp>
 
 #include "epemUtils/epemHist.hh"
-#include "epemUtils/epemEnv.hh"
+#include "epemUtils/EpemChannelEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
@@ -45,7 +46,7 @@
 #include "TNtuple.h"
 
 epemHist::epemHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  AbsHist(epemEnv::instance()) 
+  AbsHist()
 {
   initRootStuff();
   fillIt(theLh, theFitParams);
@@ -56,7 +57,7 @@ epemHist::~epemHist(){
 
 void epemHist::initRootStuff(){
 
-  std::vector<std::vector<std::string> > histMassNameVec=epemEnv::instance()->histMassSystems();
+  std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
   std::vector<std::vector<std::string> >::iterator itVecStr;
   for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
     std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
@@ -69,11 +70,11 @@ void epemHist::initRootStuff(){
     //    double psiMass = epemEnv::instance()->particleTable()->particle("Jpsi")->mass();
     double massMin = 0;
     //    double massMax = psiMass;
-    double massMax = epemEnv::instance()->cmsMass();
-    DebugMsg << "epemEnv::instance()->cmsMass():\t" << epemEnv::instance()->cmsMass() << endmsg;
+    double massMax = std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel())->cmsMass();
+    DebugMsg << "EpemChannelEnv->cmsMass():\t" << std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel())->cmsMass();
 
     std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    std::vector<Particle*> allFsp =  epemEnv::instance()->finalStateParticles();
+    std::vector<Particle*> allFsp = GlobalEnv::instance()->Channel()->finalStateParticles();
     std::vector<Particle*>::iterator itAllFsp;
 
     for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
@@ -105,7 +106,7 @@ void epemHist::initRootStuff(){
     _massMcHistMap[tmpMassHistData]=currentMassMcHist;
 
     DebugMsg << histName.c_str() << "\t" << massMin << "\t" << massMax << endmsg;
-    
+
     histName="Fit"+tmpBaseName;
     histDescription = "M("+tmpMassHistData->_name+") (fit)";
     TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100, massMin, massMax);

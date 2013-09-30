@@ -46,15 +46,15 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
-  LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec);
-  LSDecAmps(std::shared_ptr<AbsDecay> theDec);
+  ///Constructor
+  LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID);
+  LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
   virtual ~LSDecAmps();
 
 
   // Getters:
-  
+
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
@@ -73,7 +73,7 @@ protected:
   std::map< std::shared_ptr<const JPCLS>, map<Spin,map<Spin, double > > > _cgPreFactor;
 
   void  fillCgPreFactor();
-  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 ); 
+  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
 private:
 
 

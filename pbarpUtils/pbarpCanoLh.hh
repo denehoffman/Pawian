@@ -38,6 +38,7 @@
 
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
@@ -48,12 +49,12 @@ class pbarpCanoLh : public pbarpBaseLh {
 
 public:
   // pbarpCanoLh(std::shared_ptr<const EvtDataBaseList>);
-  pbarpCanoLh();
+  pbarpCanoLh(ChannelID channelID);
 
   virtual ~pbarpCanoLh();
 
   virtual AbsLh* clone_() const {
-    AbsLh* theClone=new pbarpCanoLh();
+    AbsLh* theClone=new pbarpCanoLh(_channelID);
     theClone->setDataVec(_evtDataVec);
     theClone->setMcVec(_evtMCVec);
     return theClone;

@@ -37,22 +37,22 @@
 
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 class Particle;
 class EvtData;
-class AbsEnv;
 
 class IsobarLSDecay : public AbsDecay{
 
 public:
-  IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName="pbarp");
+  IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
+  IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
   virtual ~IsobarLSDecay();
   //  virtual IsobarLSDecay* clone_() const = 0;
   std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual void print(std::ostream& os) const;
-  virtual std::string type() {return "IsobarLSDecay";} 
+  virtual std::string type() {return "IsobarLSDecay";}
   virtual void extractStates();
 
 protected:

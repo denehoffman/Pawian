@@ -21,52 +21,38 @@
 //									  //
 //************************************************************************//
 
-// pbarpEnv class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// ResChannelEnv class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
+
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <map>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <memory>
+//#include <iostream>
+//#include <vector>
+//#include <map>
+//#include <vector>
+//#include <string>
+//#include <sstream>
+//#include <memory>
 
-#include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "pbarpUtils/pbarpHist.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 
+class resReaction;
+class resParser;
 class Particle;
-class ParticleTable;
-class pbarpReaction;
-class IsobarDecayList;
-class pbarpParser;
 
-class pbarpEnv : public AbsEnv{
+class ResChannelEnv : public AbsChannelEnv{
 
 public:
-  static pbarpEnv* instance();
-  ~pbarpEnv();
+  void setup(ChannelID id);
+  ResChannelEnv(resParser* theResParser);
 
-  void setup(pbarpParser* thePbarpParser);
+  std::shared_ptr<resReaction> reaction() {return _resReaction;}
+  Particle* motherParticle() {return _motherParticle;}
 
-  const float pbarMomentum() const {return _pbarMomentum;}
-  const int lmax() const {return _lmax;}
-
-  std::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;} 
-  std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
-  std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
-
-protected:  
-
-  pbarpEnv();
-  static pbarpEnv* _instance;
-  int _lmax;
-  float _pbarMomentum;
-
-  std::shared_ptr<pbarpReaction> _pbarpReaction;
-  std::vector<std::string> _spinDensity;
-  std::map<std::string, std::vector<short> > _dropPbarpLForParticleData;
+protected:
+  resParser* _theParser;
+  Particle* _motherParticle;
+  std::shared_ptr<resReaction> _resReaction;
 };

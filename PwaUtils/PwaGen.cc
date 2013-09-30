@@ -32,10 +32,10 @@
 #include <boost/thread.hpp>
 
 #include "PwaUtils/PwaGen.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/ParserBase.hh"
+#include "PwaUtils/GlobalEnv.hh"
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "Particle/Particle.hh"
@@ -53,28 +53,28 @@
 #include "TFile.h"
 #include "TH1F.h"
 
-PwaGen::PwaGen(AbsEnv* theEnv) :
-  _absEnv(theEnv)
-  ,_initial4Vec(EvtVector4R(theEnv->initial4Vec().E(), theEnv->initial4Vec().Px(), theEnv->initial4Vec().Py(), theEnv->initial4Vec().Pz()))
-  ,_finalStateParticles(theEnv->finalStateParticles())
+PwaGen::PwaGen() :
+   _initial4Vec(EvtVector4R(GlobalEnv::instance()->Channel()->initial4Vec().E(), GlobalEnv::instance()->Channel()->initial4Vec().Px(),
+                            GlobalEnv::instance()->Channel()->initial4Vec().Py(), GlobalEnv::instance()->Channel()->initial4Vec().Pz()))
+  ,_finalStateParticles(GlobalEnv::instance()->Channel()->finalStateParticles())
   ,_genWithModel(true)
   ,_unitScaleFactor(1.)
   ,_energyFirst(false)
-  ,_useEvtWeight(theEnv->parser()->useEvtWeight())
+  ,_useEvtWeight(GlobalEnv::instance()->parser()->useEvtWeight())
 {
   std::ostringstream datFileName;
-  datFileName << "evtGen" << theEnv->outputFileNameSuffix() << ".dat";
+  datFileName << "evtGen" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
   _stream = new std::ofstream(datFileName.str());
   std::ostringstream rootFileName;
-  rootFileName << "evtGen" << theEnv->outputFileNameSuffix() << ".root";
+  rootFileName << "evtGen" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
 
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
   inv01MassH1=new TH1F("inv01MassH1","inv01MassH1",500, 0., 3.);
   inv02MassH1=new TH1F("inv02MassH1","inv02MassH1",500, 0., 3.);
   inv12MassH1=new TH1F("inv12MassH1","inv12MassH1",500, 0., 3.);
-  _genWithModel=theEnv->parser()->generateWithModel();
+  _genWithModel = GlobalEnv::instance()->parser()->generateWithModel();
 
-  std::string unit=theEnv->parser()->unitInFile();
+  std::string unit=GlobalEnv::instance()->parser()->unitInFile();
 
   if(unit=="GEV"){
     _unitScaleFactor=1.;
@@ -87,7 +87,7 @@ PwaGen::PwaGen(AbsEnv* theEnv) :
     exit(0);
   }
 
-  std::string order =theEnv->parser()->orderInFile();
+  std::string order = GlobalEnv::instance()->parser()->orderInFile();
   if(order=="E Px Py Pz"){
     _energyFirst=true;
   }
@@ -116,11 +116,11 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     counterFsp++;
   }
 
-  EvtSimpleRandomEngine myRandom(_absEnv->parser()->randomSeed());
+  EvtSimpleRandomEngine myRandom(GlobalEnv::instance()->parser()->randomSeed());
   EvtRandom::setRandomEngine(&myRandom);
   bool generateEvents=true;
   int noOfAcceptedEvts=0;
-  int noOfEvtsToGenerate=_absEnv->parser()->noOfGenEvts();
+  int noOfEvtsToGenerate=GlobalEnv::instance()->parser()->noOfGenEvts();
   int noOfAllGenEvts=0;
   int noOfIterations=0;
 
@@ -137,15 +137,15 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       }
       //    dumpAscii(p4);
       addEvt(currentEvtList, p4, count);
-      
+
       //    EvtData* theData
       inv01MassH1->Fill((p4[0]+p4[1]).mass());
       inv02MassH1->Fill((p4[0]+p4[2]).mass());
       inv12MassH1->Fill((p4[1]+p4[2]).mass());
     }
-    
+
     currentEvtList.rewind();
-    
+
     Event* anEvent;
     int evtCount = 0;
     while ((anEvent = currentEvtList.nextEvent()) != 0 && evtCount < 10) {
@@ -157,18 +157,18 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       ;  // << endmsg;
       ++evtCount;
     }
-    
+
     currentEvtList.rewind();
-    
-    std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(_absEnv));
-    
+
+    std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
+
     std::vector<EvtData*> dataList;
     double evtWeightSum=0.;
-    eventListPtr->read4Vecs(currentEvtList, dataList, evtWeightSum, 100000, noOfAllGenEvts-100000); 
-    
+    eventListPtr->read4Vecs(currentEvtList, dataList, evtWeightSum, 100000, noOfAllGenEvts-100000);
+
     theLh->updateFitParams(theFitParams);
     std::vector<EvtData*>::const_iterator itEvt;
- 
+
    if(!_genWithModel){
       itEvt=dataList.begin();
       while(itEvt!=dataList.end()){
@@ -181,7 +181,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 	++itEvt;
       }
     }
-   else{ //generate with model    
+   else{ //generate with model
      //fit retrieve maxFitWeight
      double maxFitWeight=0.;
      itEvt=dataList.begin();
@@ -201,7 +201,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 	 ++itEvt;
        }
 
-     if (!_useEvtWeight){     
+     if (!_useEvtWeight){
      itEvt=dataList.begin();
      while(itEvt!=dataList.end())
        {
@@ -219,14 +219,14 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
        }
      }
 
-     
+
    }
    Info << "iteration:\t" << noOfIterations << "\tnoOfAcceptedEvts:\t" << noOfAcceptedEvts << endmsg;
 
    //delete content of data list
-   for(itEvt=dataList.begin(); itEvt!=dataList.end(); ++itEvt) delete (*itEvt); 
-  }  
-  
+   for(itEvt=dataList.begin(); itEvt!=dataList.end(); ++itEvt) delete (*itEvt);
+  }
+
 }
 
 void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber, double weight){
@@ -242,12 +242,12 @@ void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber, d
 
 void PwaGen::dumpAscii(EvtData* evtData, double weight){
   if (_useEvtWeight && _genWithModel) *_stream << weight << std::endl;
-  std::vector<Particle* > fsParticles = _absEnv->finalStateParticles();
+  std::vector<Particle* > fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
 
   std::vector<Particle* >::const_iterator fspIter = fsParticles.begin();
   for( ; fspIter != fsParticles.end(); ++fspIter ) {
     Vector4<double> tmp4vec = evtData->FourVecsString[ (*fspIter)->name() ];
-    if(_energyFirst){ 
+    if(_energyFirst){
       *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor  << "\t" << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
     }
     else{

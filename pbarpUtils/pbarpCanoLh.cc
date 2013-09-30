@@ -29,7 +29,6 @@
 #include <string>
 
 #include "pbarpUtils/pbarpCanoLh.hh"
-#include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -52,8 +51,8 @@
 //   initialize();
 // }
 
-pbarpCanoLh::pbarpCanoLh() :
-  pbarpBaseLh()
+pbarpCanoLh::pbarpCanoLh(ChannelID channelID) :
+  pbarpBaseLh(channelID)
 {
   initialize();
 }
@@ -75,7 +74,7 @@ void  pbarpCanoLh::initialize(){
   std::vector< std::shared_ptr<IsobarLSDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     std::shared_ptr<AbsDecay> currentDec( (*it).get() );
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, currentDec);
     _decAmps.push_back(currentAmp);
   }
 
@@ -91,7 +90,7 @@ void  pbarpCanoLh::initialize(){
   std::vector< std::shared_ptr<const JPCLS> > jpclsTripletm1States=_pbarpReactionPtr->jpclsTripletm1States();
   fillMap(jpclsTripletm1States, _decAmps, _decAmpsTripletm1);
 
-  fillIsos();  
+  fillIsos();
 }
 
 

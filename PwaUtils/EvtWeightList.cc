@@ -28,12 +28,12 @@
 
 
 #include "PwaUtils/EvtWeightList.hh"
-#include "PwaUtils/AbsEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
 
-EvtWeightList::EvtWeightList(AbsEnv* theEnv) :
-  EvtDataBaseList(theEnv)
+EvtWeightList::EvtWeightList(ChannelID channelID) :
+  EvtDataBaseList(channelID)
 {
 }
 
@@ -51,8 +51,8 @@ void EvtWeightList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtL
     if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
 
     Vector4<double> V4_all_lab(0.,0.,0.,0.);
-    
-    std::vector<Particle*>  finalStateParticles=_absEnv->finalStateParticles();
+
+    std::vector<Particle*>  finalStateParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
 
     std::vector<Particle*>::iterator itPart;
     int counter=0;
@@ -61,8 +61,8 @@ void EvtWeightList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtL
       Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
       V4_all_lab += current4Vec;
       counter++;
-    }     
-    
+    }
+
     if (evtCount%10000 == 0){
       Info << "4vec all in lab system" << "\n"
            << " px: " << V4_all_lab.Px() <<"\t"
@@ -76,8 +76,8 @@ void EvtWeightList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtL
     evtData->evtWeight=anEvent->Weight();
     evtData->evtNo=startNo+evtCount;
     theEvtList.push_back(evtData);
-    
-    evtWeightSum += anEvent->Weight();    
+
+    evtWeightSum += anEvent->Weight();
     ++evtCount;
   }
 }

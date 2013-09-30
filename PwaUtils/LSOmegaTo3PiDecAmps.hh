@@ -45,15 +45,15 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
-  LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec);
-  
+  ///Constructor
+  LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec, ChannelID channelID);
+
   /** Destructor */
   virtual ~LSOmegaTo3PiDecAmps();
 
 
   // Getters:
-  
+
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);

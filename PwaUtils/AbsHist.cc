@@ -30,7 +30,6 @@
 #include <boost/algorithm/string.hpp>
 
 #include "PwaUtils/AbsHist.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 #include "Particle/Particle.hh"
@@ -38,6 +37,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/GlobalEnv.hh"
 //#include "PwaUtils/EvtDataBaseList.hh"
 
 #include "TFile.h"
@@ -49,17 +49,16 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "TTree.h"
 
-AbsHist::AbsHist(AbsEnv* theEnv) :
-  _absEnv(theEnv) 
+AbsHist::AbsHist()
 {
   std::ostringstream rootFileName;
-  rootFileName << "./pawianHists" << _absEnv->outputFileNameSuffix() << ".root";
+  rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
 
   _dataFourvecs = new TTree("_dataFourvecs", "_dataFourvecs");
   _fittedFourvecs = new TTree("_fittedFourvecs", "_fittedFourvecs");
 
-  std::vector<std::shared_ptr<angleHistData> > angleHistDataVec=_absEnv->angleHistDataVec();
+  std::vector<std::shared_ptr<angleHistData> > angleHistDataVec=GlobalEnv::instance()->Channel()->angleHistDataVec();
 
   std::vector<std::shared_ptr<angleHistData> >::iterator itAngleVec;
   for (itAngleVec=angleHistDataVec.begin(); itAngleVec!=angleHistDataVec.end(); ++itAngleVec){
@@ -110,18 +109,18 @@ AbsHist::AbsHist(AbsEnv* theEnv) :
 
       histLambdaName="MCLambda"+tmpBaseName;
       histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (MC)";
-      TH1F* currentLambdaMcHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.); 
+      TH1F* currentLambdaMcHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
       _angleMcHistMap[*itAngleVec].push_back(currentLambdaMcHist);
- 
+
       histLambdaName="FitLambda"+tmpBaseName;
       histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (fit)";
-      TH1F* currentLambdaFitHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.); 
+      TH1F* currentLambdaFitHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
       _angleFitHistMap[*itAngleVec].push_back(currentLambdaFitHist);
     }
-  } 
+  }
   // 2D-Histograms
 
- std::vector<std::shared_ptr<angleHistData2D> > angleHistDataVec2D=_absEnv->angleHistDataVec2D();
+  std::vector<std::shared_ptr<angleHistData2D> > angleHistDataVec2D=GlobalEnv::instance()->Channel()->angleHistDataVec2D();
 
   std::vector<std::shared_ptr<angleHistData2D> >::iterator itAngleVec2D;
   for (itAngleVec2D=angleHistDataVec2D.begin(); itAngleVec2D!=angleHistDataVec2D.end(); ++itAngleVec2D){
@@ -178,7 +177,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     exit(1);
   }
 
-  std::vector<Particle*> fsParticles = _absEnv->finalStateParticles();
+  std::vector<Particle*> fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
   std::map<std::string, std::shared_ptr<TLorentzVector> > fourVecMap;
   float weightToWrite;
 
@@ -220,7 +219,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   const std::vector<EvtData*> mcList=theLh->getMcVec();
   double integralMC=0.;
   double integralFitWeight=0.;
-  
+
   it=mcList.begin();
   while(it!=mcList.end())
     {
@@ -247,7 +246,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
       ++it;
     }
 
-  std::string outputFileName= "qaSummary" + _absEnv->outputFileNameSuffix() + ".dat";
+  std::string outputFileName= "qaSummary" + GlobalEnv::instance()->outputFileNameSuffix() + ".dat";
   std::ofstream theQaStream ( outputFileName.c_str(), std::ofstream::out | std::ofstream::app);
 
   double integralDataWoWeight=(double) dataList.size();
@@ -258,8 +257,8 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   Info <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
   theQaStream <<"No of data events with weight " << integralDataWWeight << "\n";
 
-  Info <<"No of MC events " << integralMC ;  // << endmsg; 
-  theQaStream <<"No of MC events " << integralMC << "\n"; 
+  Info <<"No of MC events " << integralMC ;  // << endmsg;
+  theQaStream <<"No of MC events " << integralMC << "\n";
 
   double scaleFactor = integralDataWWeight/integralMC;
   Info <<"scaling factor  " << scaleFactor;  // << endmsg;
@@ -267,7 +266,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
   Info <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor ;  // << endmsg;
   theQaStream <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
-  
+
   std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
@@ -281,15 +280,15 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
   for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){
     std::vector<TH1F*>::iterator itTH1F;
-    for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){  
+    for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){
       (*itTH1F)->Scale(scaleFactor);
     }
   }
-  
+
   std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
   for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
     std::vector<TH2F*>::iterator itTH2F;
-    for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){  
+    for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){
       (*itTH2F)->Scale(scaleFactor);
     }
   }
@@ -312,7 +311,7 @@ void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::share
       Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
       combined4Vec+=tmp4vec;
     }
-    it->second->Fill(combined4Vec.M(), weight); 
+    it->second->Fill(combined4Vec.M(), weight);
   }
 
 }
@@ -352,12 +351,12 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shar
     Vector4<double>  result4Vec2(0.,0.,0.,0.);
 
     if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1e-5
-	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5 
+	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5
 	&& fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1e-5
 	&& fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1e-5  ){
     result4Vec=combinedDec4Vec;
     result4Vec.Boost(all4Vec);
-    } 
+    }
     else{
        result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
        if(nBodyDecay==3)
@@ -413,7 +412,7 @@ void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::sh
       Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
       combinedDec4Vec+=tmp4vec;
     }
-    
+
     for(itStr=motherNames.begin(); itStr!=motherNames.end(); ++itStr){
       Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
       combinedMother4Vec+=tmp4vec;
@@ -421,16 +420,16 @@ void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::sh
 
     Vector4<double>  result4Vec(0.,0.,0.,0.);
     if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1e-5
-	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5 
+	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5
 	&& fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1e-5
 	&& fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1e-5  ){
       result4Vec=combinedDec4Vec;
       result4Vec.Boost(all4Vec);
-    } 
+    }
     else{
        result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
     }
-    
+
     for(itStr=decNames_2.begin(); itStr!=decNames_2.end(); ++itStr){
       Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
       combinedDec4Vec_2+=tmp4vec;

@@ -47,23 +47,22 @@ struct calcContributionData {
 
  virtual bool operator<(const calcContributionData& compare) const {
    bool result=false;
-   if(_contribName < compare._contribName) result=true; 
-    return result; 
-  }  
+   if(_contribName < compare._contribName) result=true;
+    return result;
+  }
 };
 
 class AbsLh;
 class fitParams;
 class EvtData;
 class PwaCovMatrix;
-class AbsEnv;
 
 
 class WaveContribution{
 
    public:
-    WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
-    WaveContribution(AbsEnv* theEnv, std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, 
+    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams,
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::pair<double,double> CalcContribution();
@@ -71,7 +70,6 @@ class WaveContribution{
     double CalcError(double result);
 
    private:
-    AbsEnv* _absEnv;
     bool _calcError;
     std::shared_ptr<AbsLh> _theLh;
     std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;

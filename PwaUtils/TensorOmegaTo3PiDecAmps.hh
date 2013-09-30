@@ -46,15 +46,15 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
-  TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTensorDecay> theDec);
+  ///Constructor
+  TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTensorDecay> theDec, ChannelID channelID);
 
   /** Destructor */
   virtual ~TensorOmegaTo3PiDecAmps();
 
 
   // Getters:
-  
+
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);

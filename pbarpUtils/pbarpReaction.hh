@@ -35,6 +35,7 @@
 #include <memory>
 
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
@@ -46,14 +47,14 @@ class IsobarTensorDecay;
 class pbarpReaction {
 
 public:
-  pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, int lmax=3);
+  pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID, int lmax=3);
 
   virtual ~pbarpReaction();
 
   virtual void print(std::ostream& os) const;
   std::vector< std::shared_ptr<IsobarLSDecay> >& productionDecays() {return _prodDecs;}
   std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
-  std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}  
+  std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}
   std::vector< std::shared_ptr<const IGJPC> >& igjpcStates() {return _pbarpIGJPCs;}
   std::vector< std::shared_ptr<const JPCLS> >& jpclsStates() {return _pbarpJPCLSs;}
   std::vector< std::shared_ptr<const JPCLS> >& jpclsSingletStates() {return _pbarpJPCLSsinglet;}
@@ -64,6 +65,7 @@ public:
 protected:
 
 private:
+  ChannelID _channelID;
   int _lmax;
   std::vector< std::shared_ptr<const IGJPC> > _pbarpIGJPCs;
   std::vector< std::shared_ptr<const JPCLS> > _pbarpJPCLSs;

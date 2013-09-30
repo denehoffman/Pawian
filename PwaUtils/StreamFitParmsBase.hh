@@ -32,35 +32,34 @@
 #include "PwaUtils/AbsFitParamStreamer.hh"
 #include "PwaUtils/FitParamsBase.hh"
 
-class AbsLh;
 
 class StreamFitParmsBase : public AbsFitParamStreamer {
-  
+
 public:
-  StreamFitParmsBase(std::string&, std::shared_ptr<AbsLh> theLhPtr);
+  StreamFitParmsBase(std::string&);
   virtual ~StreamFitParmsBase();
-  
+
   fitParams getFitParamVal() { return _paramVal;}
   fitParams getFitParamErr() { return _paramErr;}
- 
+
   virtual void fillParamMap() {return;}
 
 protected:
   virtual void fillParams();
 
-  virtual void fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap, 
+  virtual void fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
 			  const std::string& suffix);
 
-  virtual void fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap, 
+  virtual void fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap,
 			      const std::string& suffix);
-  virtual void fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, 
+  virtual void fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap,
 			  const std::string& suffix);
-  virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap, 
+  virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
 			   const std::string& suffix);
 private:
   fitParams _paramVal;
   fitParams _paramErr;
 
-  void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap, 
+  void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap,
 		     std::string& suffix, int index);
 };

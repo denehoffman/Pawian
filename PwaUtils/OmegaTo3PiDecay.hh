@@ -41,18 +41,17 @@
 
 class Particle;
 class EvtData;
-class AbsEnv;
 
 class OmegaTo3PiDecay : public AbsDecay{
 
 public:
-  OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv);
+  OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelId);
   virtual ~OmegaTo3PiDecay();
   virtual std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   virtual void print(std::ostream& os) const;
   Particle* daughter3Part() {return _daughter3;}
-  virtual std::string type() {return "OmegaTo3PiDecay";} 
+  virtual std::string type() {return "OmegaTo3PiDecay";}
   virtual void extractStates();
 
 protected:

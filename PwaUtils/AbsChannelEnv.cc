@@ -21,97 +21,96 @@
 //									  //
 //************************************************************************//
 
-// AbsEnv class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// AbsChannelEnv class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
 
-#include <getopt.h>
-#include <fstream>
-#include <stdlib.h>
 
-#include "PwaUtils/AbsEnv.hh"
-#include "PwaUtils/AbsDecay.hh"
+#include "AbsChannelEnv.hh"
+#include "ParserBase.hh"
+#include "GlobalEnv.hh"
+#include "AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
-#include "PwaUtils/ParserBase.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
+#include "PwaUtils/AbsLh.hh"
 #include "Particle/Particle.hh"
-#include "Particle/ParticleTable.hh"
 #include "Particle/PdtParser.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 
-AbsEnv::AbsEnv() :
-  _alreadySetUp(false)
+
+short AbsChannelEnv::CHANNEL_PBARP = 1;
+short AbsChannelEnv::CHANNEL_EPEM = 2;
+short AbsChannelEnv::CHANNEL_RES = 3;
+
+AbsChannelEnv::AbsChannelEnv(ParserBase* theParser) :
+   _alreadySetUp(false)
   , _noFinalStateParticles(0)
   ,_absDecList(new AbsDecayList())
   ,_prodDecList(new AbsDecayList())
   ,_useMassRange(false)
   ,_massMin(0.)
   ,_massMax(100.)
-  ,_theParser(0)
+  ,_theParser(theParser)
 {
+   _theLh.reset();
 }
 
-AbsEnv::~AbsEnv(){
+
+
+std::shared_ptr<AbsLh> AbsChannelEnv::Lh(){
+   if(_theLh == nullptr){
+      Alert << "Accessing Lh NULL pointer." << endmsg;
+   }
+   return _theLh;
 }
 
-void AbsEnv::setup(ParserBase* theParser){
-  if(_alreadySetUp){
-    Alert << " AbsEnv already set up" << endmsg;
-    exit(1);
-  }
-  
-  _alreadySetUp=true;
-
-  _theParser=theParser;
-  // common options
-  _outputFileNameSuffix = theParser->outputFileNameSuffix();
-  _serializationFileName = theParser->serializationFile();
-
-  // pdtTable
-  PdtParser pdtParser;
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
-  std::string pdtFileRelPath=theParser->pdgTableFile(); 
-  std::string pdtFile(theSourcePath+pdtFileRelPath);
-  _particleTable = new ParticleTable;
-  
-  if (!pdtParser.parse(pdtFile, *_particleTable)) {
-    Alert << "can not parse particle table " << pdtFile << endmsg;
-    exit(1);
-  }
-
-  // cloned particles
-  const std::vector<std::string> cloneParticle=theParser->cloneParticle();
-  std::vector<std::string>::const_iterator itcP;
-
-  for ( itcP = cloneParticle.begin(); itcP != cloneParticle.end(); ++itcP){
-     std::istringstream particles(*itcP);
-     std::string particleOld;
-     std::string particleNew;
-     particles >> particleOld >> particleNew;
-
-     _particleTable->clone(particleNew, particleOld);
-  }
 
 
-  //final state particles
-  const std::vector<std::string> finalStateParticleStr=theParser->finalStateParticles();
-  
-  std::vector<std::string>::const_iterator itStr;
-  for ( itStr = finalStateParticleStr.begin(); itStr != finalStateParticleStr.end(); ++itStr){
-    Particle* currentParticle = _particleTable->particle(*itStr);
-    _finalStateParticles.push_back(currentParticle);
-  }
+void AbsChannelEnv::setup(ChannelID id){
+   if(_alreadySetUp){
+      Alert << "PbarpChannelEnv already set up!" << endmsg;
+      exit(1);
+   }
+   _alreadySetUp = true;
 
-  _noFinalStateParticles= (int) _finalStateParticles.size();
+   // Set channel id
+   _channelID = id;
+
+   // Event weights for data?
+   _useEvtWeight = _theParser->useEvtWeight();
+
+   // cloned particles
+   const std::vector<std::string> cloneParticle=_theParser->cloneParticle();
+   std::vector<std::string>::const_iterator itcP;
+
+   for ( itcP = cloneParticle.begin(); itcP != cloneParticle.end(); ++itcP){
+      std::istringstream particles(*itcP);
+      std::string particleOld;
+      std::string particleNew;
+      particles >> particleOld >> particleNew;
+
+      GlobalEnv::instance()->particleTable()->clone(particleNew, particleOld);
+   }
+
+
+   //final state particles
+   const std::vector<std::string> finalStateParticleStr=_theParser->finalStateParticles();
+
+   std::vector<std::string>::const_iterator itStr;
+   for ( itStr = finalStateParticleStr.begin(); itStr != finalStateParticleStr.end(); ++itStr){
+      Particle* currentParticle = GlobalEnv::instance()->particleTable()->particle(*itStr);
+      _finalStateParticles.push_back(currentParticle);
+   }
+
+   _noFinalStateParticles= (int) _finalStateParticles.size();
 
   //decays
 
-  std::vector<std::string> decaySystem= theParser->decaySystem();
+  std::vector<std::string> decaySystem= _theParser->decaySystem();
   for ( itStr = decaySystem.begin(); itStr != decaySystem.end(); ++itStr){
 
     Particle* motherParticle =0;
@@ -136,7 +135,7 @@ void AbsEnv::setup(ParserBase* theParser){
 	continue;
       }
       if(secondArgument){
-	if(tmpName=="noIso") useIsospin=false; 
+	if(tmpName=="noIso") useIsospin=false;
 	secondArgument=false;
       }
       if(tmpName=="To") {
@@ -144,17 +143,17 @@ void AbsEnv::setup(ParserBase* theParser){
         continue;
       }
       if(isDecParticle){
-  	daughterParticles.push_back(_particleTable->particle(tmpName));
+	 daughterParticles.push_back(GlobalEnv::instance()->particleTable()->particle(tmpName));
       }
       else{
-  	motherParticle = _particleTable->particle(tmpName);
+	 motherParticle = GlobalEnv::instance()->particleTable()->particle(tmpName);
       }
     }
     std::shared_ptr<AbsDecay> tmpDec;
     if(daughterParticles.size()==2){
-      if (usedSystem=="Heli") tmpDec= std::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
-      else if (usedSystem=="Cano")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
-      else if (usedSystem=="Tensor")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], this));
+      if (usedSystem=="Heli") tmpDec= std::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
+      else if (usedSystem=="Cano")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
+      else if (usedSystem=="Tensor")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
       else {
 	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);
@@ -163,18 +162,18 @@ void AbsEnv::setup(ParserBase* theParser){
     }
 
     else if(daughterParticles.size()==3){
-      if (usedSystem=="Cano") tmpDec= std::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
-      else if (usedSystem=="Tensor") tmpDec= std::shared_ptr<AbsDecay>(new OmegaTo3PiTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], this));
+      if (usedSystem=="Cano") tmpDec= std::shared_ptr<AbsDecay>(new OmegaTo3PiLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], _channelID));
+      else if (usedSystem=="Tensor") tmpDec= std::shared_ptr<AbsDecay>(new OmegaTo3PiTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], daughterParticles[2], _channelID));
       else {
 	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);
       }
     }
- 
+
     else {
-      Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ; 
+      Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ;
     }
-  
+
     if(!useIsospin) tmpDec->disableIsospin();
     tmpDec->extractStates();
     _absDecList->addDecay(tmpDec);
@@ -183,7 +182,7 @@ void AbsEnv::setup(ParserBase* theParser){
 
 
   //produced particle pairs
-  std::vector<std::string> productionSystem = theParser->productionSystem();
+  std::vector<std::string> productionSystem = _theParser->productionSystem();
 
   for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
     std::stringstream stringStr;
@@ -196,13 +195,13 @@ void AbsEnv::setup(ParserBase* theParser){
     stringStr >> secondParticleStr;
     std::cout << "second particle:\t" << secondParticleStr << std::endl;
 
-    Particle* firstParticle = _particleTable->particle(firstParticleStr);
+    Particle* firstParticle = GlobalEnv::instance()->particleTable()->particle(firstParticleStr);
     if( 0==firstParticle){
       Alert << "particle\t" << firstParticleStr << "\tdoes not exist in pdtTable" << endmsg;
       exit(1);
     }
 
-    Particle* secondParticle = _particleTable->particle(secondParticleStr);
+    Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
     if( 0==secondParticle){
       Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
       exit(1);
@@ -213,46 +212,41 @@ void AbsEnv::setup(ParserBase* theParser){
   }
 
   //set prefactor
-  std::vector<std::string> preFactorVec = theParser->preFactor();
+  std::vector<std::string> preFactorVec = _theParser->preFactor();
   for ( itStr = preFactorVec.begin(); itStr != preFactorVec.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
-    
+
     std::string ampName;
     stringStr >> ampName;
-    
+
     std::string valueStr;
     stringStr >> valueStr;
-    
+
     double currentValue;
     currentValue=atof(valueStr.c_str());
-    
+
     _preFactorMap[ampName]=currentValue;
   }
-  
-  // std::cout << "preFactors:\n" << std::endl;
-  // std::map<std::string, double>::iterator strDoubleIt;
-  // for(strDoubleIt=_preFactorMap.begin(); strDoubleIt!=_preFactorMap.end(); ++strDoubleIt){
-  //   std::cout << strDoubleIt->first << " = " << strDoubleIt->second << std::endl;
-  // } 
+
 
   //fill vector histMassSystems
-  std::vector<std::string> theHistMassNames=theParser->histMassNames();
+  std::vector<std::string> theHistMassNames=_theParser->histMassNames();
   for ( itStr = theHistMassNames.begin(); itStr != theHistMassNames.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
-    
+
     std::string tmpName;
     std::vector<std::string> currentStringVec;
     while(stringStr >> tmpName){
       currentStringVec.push_back(tmpName);
-    } 
+    }
     _histMassSystems.push_back(currentStringVec);
   }
 
   //mass range
   int counter=0;
-  std::string massRangeStr=theParser->massRange();
+  std::string massRangeStr=_theParser->massRange();
   if(massRangeStr.size()>0) _useMassRange=true;
 
   std::stringstream stringStrMassRange;
@@ -266,24 +260,24 @@ void AbsEnv::setup(ParserBase* theParser){
     else{
       //find index
       for(size_t idex=0; idex<_finalStateParticles.size(); ++idex){
-	Particle* currentParticle=_finalStateParticles[idex];
-	if(currentParticle->name() == tmpNameMassRange){
-	  _particleIndicesMassRange.push_back(idex);
-	  Info << "\nFound particle\t" << currentParticle->name() << "\t index:\t" << idex << endmsg; 
-	  break;
-	}
+         Particle* currentParticle=_finalStateParticles[idex];
+         if(currentParticle->name() == tmpNameMassRange){
+            _particleIndicesMassRange.push_back(idex);
+            Info << "\nFound particle\t" << currentParticle->name() << "\t index:\t" << idex << endmsg;
+            break;
+         }
       }
     }
     counter++;
   }
 
  // hist angles
-  std::vector<std::string> theHistAngleNames=theParser->histAngleNames();
+  std::vector<std::string> theHistAngleNames=_theParser->histAngleNames();
 //fill vector histMassSystems
   for ( itStr = theHistAngleNames.begin(); itStr != theHistAngleNames.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
-    
+
     std::string tmpName;
     std::vector<std::string> currentStringDecVec;
     std::vector<std::string> currentStringDecVec2;
@@ -310,7 +304,7 @@ void AbsEnv::setup(ParserBase* theParser){
   }
 
   // 2D hists
-  std::vector<std::string> theHistAngleNames2D=theParser->histAngleNames2D();
+  std::vector<std::string> theHistAngleNames2D=_theParser->histAngleNames2D();
   for ( itStr = theHistAngleNames2D.begin(); itStr != theHistAngleNames2D.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
@@ -343,11 +337,11 @@ void AbsEnv::setup(ParserBase* theParser){
   }
 
  // calculate contributions
-  std::vector<std::string> theCalcContribution=theParser->calcContribution();
+  std::vector<std::string> theCalcContribution=_theParser->calcContribution();
   for ( itStr = theCalcContribution.begin(); itStr != theCalcContribution.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
-    
+
     std::string tmpName;
     std::string contribName;
     std::vector<std::string> currentStringZeroAmp;
@@ -364,5 +358,5 @@ void AbsEnv::setup(ParserBase* theParser){
     _calcContributionDataVec.push_back(currentCalcContributionData);
   }
 
-}
 
+}

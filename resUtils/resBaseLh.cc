@@ -29,9 +29,9 @@
 #include <string>
 
 #include "resUtils/resBaseLh.hh"
-#include "resUtils/resEnv.hh"
 #include "resUtils/resReaction.hh"
-#include "resUtils/resEnv.hh"
+#include "resUtils/ResChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -47,8 +47,9 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-resBaseLh::resBaseLh() :
-  AbsLh(resEnv::instance())
+resBaseLh::resBaseLh(ChannelID channelID) :
+  AbsLh()
+  ,_channelID(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -71,7 +72,7 @@ complex<double> resBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDe
 
 
 
-complex<double> resBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+complex<double> resBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					     std::map <std::shared_ptr<const JPCLS>,
 					     std::vector< std::shared_ptr<AbsXdecAmp> >,
 					     pawian::Collection::SharedPtrLess > pbarpAmps){
@@ -92,7 +93,7 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
     for( Spin itLam=-_Jmother; itLam<=_Jmother; ++itLam){
       complex<double> lamItAmp(0.,0.);
-      
+
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
 	complex<double> currentDecAmp=(*itDec)->XdecAmp(itLam, theData, lamHigestJFsp);
@@ -103,8 +104,8 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
-  return result;  
-  
+  return result;
+
 }
 
 void resBaseLh::print(std::ostream& os) const{
@@ -114,9 +115,9 @@ void resBaseLh::print(std::ostream& os) const{
 
 void  resBaseLh::initialize(){
 
-  _Jmother = Spin(resEnv::instance()->motherParticle()->twoJ(), 2);
+  _Jmother = Spin(std::static_pointer_cast<ResChannelEnv>(GlobalEnv::instance()->ResChannel(_channelID))->motherParticle()->twoJ(), 2);
 
-  std::vector<Particle*> fsParticles=resEnv::instance()->finalStateParticles();
+  std::vector<Particle*> fsParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
   std::vector<Particle*>::iterator itParticle;
   bool highestJFound=false;
 
@@ -125,21 +126,21 @@ void  resBaseLh::initialize(){
     if(current2J>0){
       if(highestJFound){
 	Alert << "final states with more than 1 particles with J>0 not supported!!!!" << endmsg;
-	exit(1); 
+	exit(1);
       }
       _highestJFsp=int(current2J/2);
       if( (*itParticle)->name() != "photon" ) _isHighestJaPhoton=false;
     }
-  }  
-  
-  _resReactionPtr = resEnv::instance()->reaction();
+  }
+
+  _resReactionPtr = std::static_pointer_cast<ResChannelEnv>(GlobalEnv::instance()->ResChannel(_channelID))->reaction();
 
   std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _resReactionPtr->productionHeliDecays();
   std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     //    std::shared_ptr<AbsDecay> currentDec((*it).get() );
     //    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp((*it)->absDecPtr());
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
 

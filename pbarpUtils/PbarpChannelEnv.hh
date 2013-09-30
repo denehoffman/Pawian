@@ -21,45 +21,37 @@
 //									  //
 //************************************************************************//
 
-// epemEnv class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// PbarpChannelEnv class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <map>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <memory>
+#include "PwaUtils/AbsChannelEnv.hh"
 
-#include "PwaUtils/AbsEnv.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "pbarpUtils/pbarpHist.hh"
 
-class Particle;
-class ParticleTable;
-class epemReaction;
-class IsobarDecayList;
-class epemParser;
+class pbarpParser;
+class pbarpReaction;
 
-class epemEnv : public AbsEnv{
 
+class PbarpChannelEnv : public AbsChannelEnv
+{
 public:
-  static epemEnv* instance();
-  ~epemEnv();
+   void setup(ChannelID id);
+   PbarpChannelEnv(pbarpParser* theParser);
+   const float pbarMomentum() const {return _pbarMomentum;}
+   const int lmax() const {return _lmax;}
 
-  void setup(epemParser* theEpEmParser);
+   std::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;}
+   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
+   std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
 
-  std::shared_ptr<epemReaction> reaction() {return _epemReaction;}
-  const double cmsMass() {return _cmsMass;}  
 
-protected:  
+private:
+   int _lmax;
+   float _pbarMomentum;
+   pbarpParser* _theParser;
 
-  epemEnv();
-  static epemEnv* _instance;
-  double _cmsMass;
-  std::shared_ptr<epemReaction> _epemReaction;
-  std::vector<std::string> _spinDensity;
+   std::shared_ptr<pbarpReaction> _pbarpReaction;
+   std::vector<std::string> _spinDensity;
+   std::map<std::string, std::vector<short> > _dropPbarpLForParticleData;
 };

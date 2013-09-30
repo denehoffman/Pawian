@@ -28,12 +28,12 @@
 
 
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/DynRegistry.hh"
+#include "PwaUtils/GlobalEnv.hh"
 
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
@@ -44,12 +44,12 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-EvtDataBaseList::EvtDataBaseList(AbsEnv* theEnv) :
-  _noOfWeightedDataEvts(0.),
-  _noOfWeightedMcEvts(0.),
-  //  _mcToDataRatio(1000),
-  _alreadyRead(false),
-  _absEnv(theEnv)
+EvtDataBaseList::EvtDataBaseList(ChannelID channelID) :
+  _channelID(channelID)
+  ,_noOfWeightedDataEvts(0.)
+  ,_noOfWeightedMcEvts(0.)
+  //, _mcToDataRatio(1000),
+  ,_alreadyRead(false)
 {
 }
 
@@ -80,9 +80,9 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
 
     Vector4<double> V4_all_lab(0.,0.,0.,0.);
-    
+
     std::vector< Vector4<double> > finalState4Vecs;
-    std::vector<Particle*>  finalStateParticles=_absEnv->finalStateParticles();
+    std::vector<Particle*>  finalStateParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
     std::map<std::string, Vector4<double> > particle4VecMap;
 
     std::vector<Particle*>::iterator itPart;
@@ -94,8 +94,8 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
       particle4VecMap.insert(std::map<std::string, Vector4<double> >::value_type((*itPart)->name(), current4Vec));
       V4_all_lab += current4Vec;
       counter++;
-    }     
-    
+    }
+
     if (evtCount%10000 == 0){
       Info << "4vec all in lab system" << "\n"
            << " px: " << V4_all_lab.Px() <<"\t"
@@ -105,9 +105,9 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
            << " m : " << V4_all_lab.M() ;  // << endmsg;
     }
 
-    std::vector<Particle*>  sortedFinalStateParticles=_absEnv->finalStateParticles();    
-    pawian::Collection::PtrLess thePtrLess; 
-    std::sort(sortedFinalStateParticles.begin(), sortedFinalStateParticles.end(), thePtrLess);    
+    std::vector<Particle*>  sortedFinalStateParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
+    pawian::Collection::PtrLess thePtrLess;
+    std::sort(sortedFinalStateParticles.begin(), sortedFinalStateParticles.end(), thePtrLess);
 
     std::string name_all_lab=getName(sortedFinalStateParticles);
 
@@ -116,7 +116,7 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     evtData->evtWeight=anEvent->Weight();
     evtData->evtNo=startNo+evtCount;
 
-    evtData->FourVecsString.insert(mapString4Vec::value_type("all",V4_all_lab)); 
+    evtData->FourVecsString.insert(mapString4Vec::value_type("all",V4_all_lab));
 
     //cache 4 vectors of inital state particles
     std::map<std::string, Vector4<double> >::iterator it4VecMap;
@@ -126,7 +126,7 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
 
 
    //fill WignerD functions
-    std::vector<std::shared_ptr<AbsDecay> > theDecays=_absEnv->prodDecayList()->getList();
+    std::vector<std::shared_ptr<AbsDecay> > theDecays=GlobalEnv::instance()->Channel(_channelID)->prodDecayList()->getList();
     std::vector<std::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
       (*itIso)->fillWignerDs(particle4VecMap, evtData);
@@ -137,11 +137,11 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     std::vector<std::shared_ptr<AbsDynamics> >::iterator itDyn;
     for (itDyn=theDynVec.begin(); itDyn!=theDynVec.end(); ++itDyn){
       (*itDyn)->fillMasses(evtData);
-    }; 
+    };
 
     theEvtList.push_back(evtData);
-    
-    evtWeightSum += anEvent->Weight();    
+
+    evtWeightSum += anEvent->Weight();
     ++evtCount;
   }
 }

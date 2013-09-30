@@ -37,30 +37,19 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
+#include "PwaUtils/DataUtils.hh"
 
-
-struct LHData{
-   double weightSum;
-   double logLH_data;
-   double LH_mc;
-
-  LHData(){
-    weightSum=logLH_data=LH_mc=0.0;
-  }
-};
-
-class AbsEnv;
 
 class AbsLh : public AbsParamHandler{
 
 public:
   AbsLh(std::shared_ptr<AbsLh>);
-  AbsLh(AbsEnv* theEnv);
+  AbsLh();
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
 
   virtual double calcLogLh(fitParams& theParamVal);
-  virtual double mergeLogLhData(LHData& theLHData, int nMCs);
+  static  double mergeLogLhData(LHData& theLHData);
   virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData);
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;
 
@@ -71,26 +60,25 @@ public:
   virtual std::vector<EvtData*> getMcVec() {return _evtMCVec;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual bool checkRecalculation(fitParams& theParamVal);  
+  virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void cacheAmplitudes();
   virtual void updateFitParams(fitParams& theParamVal);
 
   virtual void print(std::ostream& os) const=0;
 
 protected:
-  AbsEnv* _absEnv;
 
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
   std::vector< std::shared_ptr<AbsXdecAmp> > _decAmps;
 
-  bool _usePhasespace;  
+  bool _usePhasespace;
   const std::string _phasespaceKey;
   std::map<const std::string, bool> _hypMap;
   unsigned int _calcCounter;
   unsigned short _noOfThreads;
 
-  virtual void setHyps( const std::map<const std::string, bool>& theMap, 
+  virtual void setHyps( const std::map<const std::string, bool>& theMap,
 			bool& theHyp, std::string& theKey);
 
   virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,

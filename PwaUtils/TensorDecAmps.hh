@@ -46,15 +46,15 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
-  TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec);
-  TensorDecAmps(std::shared_ptr<AbsDecay> theDec);
+  ///Constructor
+  TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec, ChannelID channelID);
+  TensorDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
   virtual ~TensorDecAmps();
 
 
   // Getters:
-  
+
   virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
@@ -70,7 +70,7 @@ protected:
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
   double _factorMag;
 
-  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 ); 
+  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
 private:
 
 

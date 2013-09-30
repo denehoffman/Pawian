@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include "PwaUtils/OmegaTo3PiDecay.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -38,8 +37,8 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-OmegaTo3PiDecay::OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, AbsEnv* theEnv) :
-  AbsDecay(mother, daughter1, daughter2, theEnv)
+OmegaTo3PiDecay::OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID) :
+  AbsDecay(mother, daughter1, daughter2, channelID)
   ,_daughter3(daughter3)
 {
   _finalStateParticles.push_back(daughter3);
@@ -50,7 +49,7 @@ OmegaTo3PiDecay::OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle
 
   _name+="_"+daughter3->name();
   _fitParamSuffix=_name;
-  
+
   // //check correct quantum numbers
   // //...
   // Spin validL=1;
@@ -79,13 +78,13 @@ void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsM
 void OmegaTo3PiDecay::print(std::ostream& os) const{
   os << "\nJPCLS amplitudes for decay\t" << _name << ":\n";
   os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
-  
+
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator it;
   for (it = _JPCLSDecAmps.begin(); it!= _JPCLSDecAmps.end(); ++it){
     (*it)->print(os);
     os << "\n";
   }
 
-  AbsDecay::print(os);  
+  AbsDecay::print(os);
   os << "\n";
 }

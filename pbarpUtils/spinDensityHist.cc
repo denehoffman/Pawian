@@ -27,8 +27,9 @@
 #include <sstream>
 
 #include "pbarpUtils/spinDensityHist.hh"
-#include "pbarpUtils/pbarpEnv.hh"
 #include "pbarpUtils/pbarpBaseLh.hh"
+#include "pbarpUtils/PbarpChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -77,11 +78,12 @@ void spinDensityHist::Calculate(){
    theFitParamsBaseClass.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
    
    std::stringstream spinDensityRootFileName;
-   spinDensityRootFileName << "./spinDensity" << pbarpEnv::instance()->outputFileNameSuffix() << ".root";
+   spinDensityRootFileName << "./spinDensity" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
 
    _spinDensityRootFile = new TFile(spinDensityRootFileName.str().c_str(), "recreate");
 
-   std::vector<string> spinDensityParticles = pbarpEnv::instance()->spinDensityNames();
+   std::vector<string> spinDensityParticles = 
+      static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel())->spinDensityNames();
 
    for(auto it=spinDensityParticles.begin(); it!=spinDensityParticles.end(); ++it){
       Info << "Calculating spin density matrix for particle " << (*it) << endmsg;
@@ -93,14 +95,15 @@ void spinDensityHist::Calculate(){
 
 void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
 
-   int J = pbarpEnv::instance()->particleTable()->particle(particleName)->J();
+   int J = GlobalEnv::instance()->particleTable()->particle(particleName)->J();
 
    if(J!=1){
       Alert << "Spin density calculation for J!=1 currently not supported." << endmsg;
       return;
    }
 
-   std::shared_ptr<AbsDecayList> prodDecayList = pbarpEnv::instance()->prodDecayList();
+   std::shared_ptr<AbsDecayList> prodDecayList = 
+      static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel())->prodDecayList();
    std::vector<std::shared_ptr<AbsDecay> > prodDecays = prodDecayList->getList();
 
    bool particleFrompbarp=false;
@@ -238,7 +241,7 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
 double spinDensityHist::ParticleCosTheta(std::string& particleName, EvtData* theData){
 
-   std::shared_ptr<AbsDecayList> absDecayList = pbarpEnv::instance()->absDecayList();
+   std::shared_ptr<AbsDecayList> absDecayList = static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel())->absDecayList();
    std::vector<std::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
    
    Vector4<double> all4Vec=theData->FourVecsString["all"];

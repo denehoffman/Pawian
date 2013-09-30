@@ -24,15 +24,15 @@
 #include <fstream>
 
 #include "PwaUtils/StreamFitParmsBase.hh"
-#include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-StreamFitParmsBase::StreamFitParmsBase(std::string& filePath, std::shared_ptr<AbsLh> theLhPtr) :
+StreamFitParmsBase::StreamFitParmsBase(std::string& filePath) :
   AbsFitParamStreamer(filePath)
 {
-  theLhPtr->getDefaultParams(_paramVal,_paramErr);
+  _paramVal = GlobalEnv::instance()->DefaultParamVal();
+  _paramErr = GlobalEnv::instance()->DefaultParamErr();
   fillParams();
-
 }
 
 StreamFitParmsBase::~StreamFitParmsBase(){;}
@@ -40,7 +40,7 @@ StreamFitParmsBase::~StreamFitParmsBase(){;}
 void StreamFitParmsBase::fillParams(){
   const std::string isoSuffix="Iso";
   const std::string magSuffix="Mag";
-  const std::string phiSuffix="Phi"; 
+  const std::string phiSuffix="Phi";
   const std::string massSuffix="Mass";
   const std::string widthSuffix="Width";
   const std::string gFactorSuffix="gFactor";
@@ -57,7 +57,7 @@ void StreamFitParmsBase::fillParams(){
   fillDoubles(_paramVal.otherParams, _paramErr.otherParams, otherSuffix);
 }
 
-void StreamFitParmsBase::fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap, 
+void StreamFitParmsBase::fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
 				     const std::string& suffix){
   mapStrJPC::iterator itIsoMap;
   for( itIsoMap=valMap.begin(); itIsoMap!=valMap.end(); ++itIsoMap){
@@ -66,9 +66,9 @@ void StreamFitParmsBase::fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
       std::string theKey=itIso->first->name()+itIsoMap->first+suffix;
       Info << "theKey=\t" << theKey << endmsg;
       StringPairMap::const_iterator stringPairIter;
-      
+
       stringPairIter=_stringPairMap.find(theKey);
-      
+
       if ( stringPairIter != _stringPairMap.end() ){
 	Info << "key\t" << theKey << "\tfound" << endmsg;
 	double val=stringPairIter->second.first;
@@ -92,14 +92,14 @@ void StreamFitParmsBase::fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam
     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator itLamLam;
 
     for ( itLamLam=itLamLamMap->second.begin(); itLamLam!=itLamLamMap->second.end();  ++itLamLam){
-     
+
 
       std::string theKey=itLamLam->first->name()+itLamLamMap->first+suffix;
       Info << "theKey=\t" << theKey << endmsg;
       StringPairMap::const_iterator stringPairIter;
-      
+
       stringPairIter=_stringPairMap.find(theKey);
-      
+
       if ( stringPairIter != _stringPairMap.end() ){
 	Info << "key\t" << theKey << "\tfound" << endmsg;
 	double val=stringPairIter->second.first;
@@ -123,14 +123,14 @@ void StreamFitParmsBase::fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, co
     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itLS;
 
     for ( itLS=itLSMap->second.begin(); itLS!=itLSMap->second.end();  ++itLS){
-     
+
 
       std::string theKey=itLS->first->name()+itLSMap->first+suffix;
       Info << "theKey=\t" << theKey << endmsg;
       StringPairMap::const_iterator stringPairIter;
-      
+
       stringPairIter=_stringPairMap.find(theKey);
-      
+
       if ( stringPairIter != _stringPairMap.end() ){
 	Info << "key\t" << theKey << "\tfound" << endmsg;
 	double val=stringPairIter->second.first;
@@ -154,7 +154,7 @@ void StreamFitParmsBase::fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
     std::string theKey=itMap->first+suffix;
     Info << "theKey=\t" << theKey << endmsg;
     StringPairMap::const_iterator stringPairIter;
-    
+
     stringPairIter=_stringPairMap.find(theKey);
 
     if ( stringPairIter != _stringPairMap.end() ){
@@ -163,12 +163,12 @@ void StreamFitParmsBase::fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
       Info << "replace val by " << val << endmsg;
       double err=stringPairIter->second.second;
       Info << "replace err by " << err << endmsg;
-      
+
       valMap[itMap->first] = val;
       errMap[itMap->first] = err;
-      
+
     }
-    
+
   }
 
 }
@@ -178,7 +178,7 @@ void StreamFitParmsBase::fillParameter(std::map<int, double>& theValMap, std::ma
   StringPairMap::const_iterator stringPairIter=_stringPairMap.find(suffix);
   if ( stringPairIter != _stringPairMap.end() ){
     theValMap[index]=stringPairIter->second.first;
-    theErrMap[index]=stringPairIter->second.second;    
+    theErrMap[index]=stringPairIter->second.second;
   }
 
 }

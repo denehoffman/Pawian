@@ -78,6 +78,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("help,h", "emit help message")
       ("configFile,c",po::value<std::string>(&_configFile)->default_value(_configFile),
 	    "The name of the configuration file holding further configuration options")
+      ("coupledChannelConfigFile,C",po::value< vector<string> >(&_coupledChannelCfgs),  "Configuration files for coupled channels")
       ;
 
     _common->add_options()
@@ -219,6 +220,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::vector<std::string>::const_iterator it;
 
+      for (it = _coupledChannelCfgs.begin(); it!=_coupledChannelCfgs.end(); ++it){
+	  std::cout << "Coupled channel configuration file: " << (*it) << "\n";
+      }
       for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
 	  std::cout << "clone particles: " << (*it) << "\n";
       }

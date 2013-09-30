@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include "PwaUtils/IsobarHeliDecay.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -38,13 +37,13 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-IsobarHeliDecay::IsobarHeliDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
-  AbsDecay(mother, daughter1, daughter2, theEnv)
+IsobarHeliDecay::IsobarHeliDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
+  AbsDecay(mother, daughter1, daughter2, channelID)
 {
 }
 
-IsobarHeliDecay::IsobarHeliDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
-  AbsDecay(motherIGJPCPtr, daughter1, daughter2, theEnv, motherName)
+IsobarHeliDecay::IsobarHeliDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName) :
+  AbsDecay(motherIGJPCPtr, daughter1, daughter2, motherName, channelID)
 {
 }
 
@@ -54,10 +53,10 @@ void IsobarHeliDecay::extractStates(){
     int daughter1GParity=_daughter1->theGParity();
     int daughter2GParity=_daughter2->theGParity();
     if(fabs(currentGParity)==1 && fabs(daughter1GParity)==1 && fabs(daughter2GParity)==1) validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps, true, _gParity, true);
-    else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps); 
+    else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
   }
   else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
-  print(std::cout);  
+  print(std::cout);
 }
 
 IsobarHeliDecay::~IsobarHeliDecay(){
@@ -66,13 +65,13 @@ IsobarHeliDecay::~IsobarHeliDecay(){
 void IsobarHeliDecay::print(std::ostream& os) const{
   os << "\nJPClamlam amplitudes for decay\t" << _name << ":\n";
   os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
-  
+
   std::vector< std::shared_ptr<const JPClamlam> >::const_iterator it;
   for (it = _JPClamlamDecAmps.begin(); it!= _JPClamlamDecAmps.end(); ++it){
     (*it)->print(os);
     os << "\n";
   }
 
-  AbsDecay::print(os);  
+  AbsDecay::print(os);
   os << "\n";
 }

@@ -37,8 +37,9 @@
 #include "Particle/Particle.hh"
 
 
-AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec) :
+AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsParamHandler()
+  , _channelID(channelID)
   , _decay(theDec)
   , _name(theDec->name())
   ,_JPCPtr(theDec->motherJPC())
@@ -73,9 +74,9 @@ void AbsXdecAmp::initialize(){
     else{
       Warning <<"no dynamics for\t" << decDaughter1->name() << endmsg;
     }
-    _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(decDaughter1);
+    _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(_channelID, decDaughter1);
   }
-  
+
   if(!_daughter2IsStable){
     std::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
     //    decDaughter2->getDynamics()->addGrandMa(_decay);
@@ -84,9 +85,9 @@ void AbsXdecAmp::initialize(){
     else{
       Warning <<"no dynamics for\t" << decDaughter2->name() << endmsg;
     }
-    _decAmpDaughter2=XdecAmpRegistry::instance()->getXdecAmp(decDaughter2);
+    _decAmpDaughter2=XdecAmpRegistry::instance()->getXdecAmp(_channelID, decDaughter2);
   }
-  
+
   _Jdaughter1=(Spin) _decay->daughter1Part()->J();
   _Jdaughter2=(Spin) _decay->daughter2Part()->J();
 

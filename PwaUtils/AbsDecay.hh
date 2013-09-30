@@ -36,22 +36,22 @@
 #include <memory>
 
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 class Particle;
 class EvtData;
-class AbsEnv;
 class AbsDynamics;
 
 class AbsDecay : public std::enable_shared_from_this<AbsDecay>{
 
 public:
-  AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv);
-  AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName);
+  AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId);
+  AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId);
   virtual ~AbsDecay();
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
-  const std::string wignerDKey() {return _wignerDKey;} 
+  const std::string wignerDKey() {return _wignerDKey;}
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   virtual std::string& massParKey() {return _massParamKey;}
@@ -73,7 +73,7 @@ public:
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
   virtual void print(std::ostream& os) const;
-  
+
   Particle* motherPart() {return _mother;}
   Particle* daughter1Part() {return _daughter1;}
   Particle* daughter2Part() {return _daughter2;}
@@ -87,7 +87,6 @@ public:
   virtual void extractStates()=0;
 
   double isospinCG() {return _isospinClebschG;}
-  AbsEnv* currentEnv() {return _env;}
 
   Spin iDaughter1() {return _idaughter1;}
   Spin i3Daughter1() {return _i3daughter1;}
@@ -95,8 +94,10 @@ public:
   Spin i3Daughter2() {return _i3daughter2;}
   virtual void disableIsospin(){_useIsospin=false;}
   bool useIsospin(){ return _useIsospin;}
- 
+
 protected:
+  ChannelID _channelId;
+
   Particle* _mother;
   Particle* _daughter1;
   Particle* _daughter2;
@@ -131,7 +132,6 @@ protected:
   std::pair<Particle*, Particle*> _decPair1stChannel;
   std::pair<Particle*, Particle*> _decPair2ndChannel;
 
-  AbsEnv* _env;
   std::shared_ptr<AbsDynamics> _absDynPtr;
   std::map<int, bool> _alreadyFilledMap;
 

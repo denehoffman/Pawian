@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include "PwaUtils/IsobarLSDecay.hh"
-#include "PwaUtils/AbsEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -38,13 +37,13 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-IsobarLSDecay::IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv) :
-  AbsDecay(mother, daughter1, daughter2, theEnv)
+IsobarLSDecay::IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
+  AbsDecay(mother, daughter1, daughter2, channelID)
 {
 }
 
-IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, AbsEnv* theEnv, std::string motherName) :
-  AbsDecay(motherIGJPCPtr, daughter1, daughter2, theEnv, motherName)
+IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName) :
+  AbsDecay(motherIGJPCPtr, daughter1, daughter2, motherName, channelID)
 {
 }
 
@@ -59,7 +58,7 @@ void IsobarLSDecay::extractStates(){
   else validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps);
 
   if( 0==_JPCLSDecAmps.size()) Info << "_JPCLSDecAmps.size()==0 for " << name() << endmsg;
-  print(std::cout); 
+  print(std::cout);
 }
 
 IsobarLSDecay::~IsobarLSDecay(){
@@ -68,13 +67,13 @@ IsobarLSDecay::~IsobarLSDecay(){
 void IsobarLSDecay::print(std::ostream& os) const{
   os << "\nJPCLS amplitudes for decay\t" << _name << ":\n";
   os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
-  
+
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator it;
   for (it = _JPCLSDecAmps.begin(); it!= _JPCLSDecAmps.end(); ++it){
     (*it)->print(os);
     os << "\n";
   }
 
-  AbsDecay::print(os);  
+  AbsDecay::print(os);
   os << "\n";
 }

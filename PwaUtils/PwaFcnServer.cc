@@ -23,22 +23,24 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <iomanip>
 
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/PwaFcnServer.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-PwaFcnServer::PwaFcnServer(std::shared_ptr<AbsLh> absLh, std::shared_ptr<FitParamsBase> fitParamsBase, std::shared_ptr<NetworkServer> netServer, std::string suffix) :
-  AbsFcn(fitParamsBase, suffix)
-  , _absLhPtr(absLh)
+PwaFcnServer::PwaFcnServer(std::shared_ptr<NetworkServer> netServer) :
+  AbsFcn()
   , _networkServerPtr(netServer)
 {
-   if (0==_absLhPtr) { Alert << "AbsLh* _absLhPtr pointer is 0 !!!!" << endmsg; exit(1); }
-   _absLhPtr->getDefaultParams(_defaultFitValParms, _defaultFitErrParms);
-  
+   _defaultFitValParms = GlobalEnv::instance()->DefaultParamVal();
+   _defaultFitErrParms = GlobalEnv::instance()->DefaultParamErr();
 }
 
 PwaFcnServer::~PwaFcnServer()
@@ -48,21 +50,35 @@ PwaFcnServer::~PwaFcnServer()
 double PwaFcnServer::operator()(const std::vector<double>& par) const
 {
   double result=0;
-  
-  LHData theLHData;
+
+  std::map<ChannelID, LHData> theLHDataMap;
   _networkServerPtr->BroadcastParams(par);
-  if(!_networkServerPtr->WaitForLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc))
+  if(!_networkServerPtr->WaitForLH(theLHDataMap))
     result = 0;
-  else
-    result = _absLhPtr->mergeLogLhData(theLHData, _networkServerPtr->numMCs());
-  
-  
+  else{
+      // Add LLHs of different channels
+      std::ostringstream output;
+      output << "current LH = " << std::setprecision(10);
+      for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
+         (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
+         (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
+         double channelLH = AbsLh::mergeLogLhData((*it).second);
+         result += channelLH;
+         output << channelLH << "\t";
+      }
+      if(theLHDataMap.size() > 1){
+         output << "sum = " << result;
+      }
+
+      Info << output.str() << endmsg;
+  }
+
   _fcnCounter++;
 
-  if(_fcnCounter%20 == 0) printTimer();  
+  if(_fcnCounter%20 == 0) printTimer();
   printFitParams(par);
-  dumpFitParams(par);  
-  
+  dumpFitParams(par);
+
   return result;
 }
 

@@ -33,7 +33,7 @@
 
 #include "PwaUtils/AppBase.hh"
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/AbsEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/FitParamsBase.hh"
 //#include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/PwaGen.hh"
@@ -52,11 +52,14 @@
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnUserCovariance.h"
 
-AppBase::AppBase(AbsEnv* absEnv, std::shared_ptr<AbsLh> theLhPtr, std::shared_ptr<FitParamsBase> theFitParamBase) :
-  _absEnv(absEnv), 
-  _absLhPtr(theLhPtr),
-  _fitParamBasePtr(theFitParamBase)
+AppBase::AppBase()
 {
+   // Check mode for coupled channel analyses
+   std::string mode = GlobalEnv::instance()->parser()->mode();
+   if((GlobalEnv::instance()->NoChannels() > 1) &&
+         ((mode == "spinDensity") || (mode == "pwa") || (mode == "qaMode"))){
+      Alert << "Selected mode does not support coupled channel analyses!" << endmsg;
+   }
 }
 
 AppBase::~AppBase()
@@ -64,31 +67,34 @@ AppBase::~AppBase()
 }
 
 void AppBase::dumpDefaultParams(){
-    fitParams defaultVal;
-    fitParams defaultErr;
-    _absLhPtr->getDefaultParams(defaultVal, defaultErr);
+
+    fitParams paramVal = GlobalEnv::instance()->DefaultParamVal();
+    fitParams paramErr = GlobalEnv::instance()->DefaultParamErr();
 
     std::stringstream defaultparamsname;
-    defaultparamsname << "defaultparams" << _absEnv->outputFileNameSuffix() << ".dat";
+    defaultparamsname << "defaultparams" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
-    
-    _fitParamBasePtr->dumpParams(theStreamDefault, defaultVal, defaultErr);
+
+    GlobalEnv::instance()->fitParamsBase()->dumpParams(theStreamDefault, paramVal, paramErr);
 }
 
 void AppBase::generate(fitParams& theParams){
-    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen(_absEnv));
-    pwaGenPtr->generate(_absLhPtr, theParams);
-    _fitParamBasePtr->printParams(theParams);
+    std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen());
+    pwaGenPtr->generate(GlobalEnv::instance()->Channel()->Lh(), theParams);
+    GlobalEnv::instance()->fitParamsBase()->printParams(theParams);
 }
 
-void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& fileNames, bool withEvtWeight, int evtStart, int evtStop){
-  int noFinalStateParticles=_absEnv->noFinalStateParticles();
+void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight, int evtStart, int evtStop){
+  int noFinalStateParticles=GlobalEnv::instance()->Channel(channelID)->noFinalStateParticles();
   EventReaderDefault eventReader(fileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReader.setUnit(_absEnv->parser()->unitInFile());
-  eventReader.setOrder(_absEnv->parser()->orderInFile());
+  eventReader.setUnit(GlobalEnv::instance()->parser()->unitInFile());
+  eventReader.setOrder(GlobalEnv::instance()->parser()->orderInFile());
 
-  if(_absEnv->useMassRange())  eventReader.setMassRange(theEventList, _absEnv->massRangeMin(), _absEnv->massRangeMax(), _absEnv->particleIndicesMassRange());  
-  
+  if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
+   eventReader.setMassRange(theEventList, GlobalEnv::instance()->Channel(channelID)->massRangeMin(),
+                                          GlobalEnv::instance()->Channel(channelID)->massRangeMax(), GlobalEnv::instance()->Channel(channelID)->particleIndicesMassRange());
+  }
+
   eventReader.fill(theEventList, evtStart, evtStop);
 
   Info  << "\nFile has " << theEventList.size() << " events. Each event has "
@@ -105,12 +111,12 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
     Info        << "\n" << endmsg;
     ++evtCount;
   }
-  theEventList.rewind();  
+  theEventList.rewind();
 }
 
 void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
 
-  double theLh=_absLhPtr->calcLogLh(theStartParams);
+  double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theStartParams);
   Info <<"theLh = "<< theLh << endmsg;
 
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
@@ -118,8 +124,8 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
   double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
 
   std::shared_ptr<WaveContribution> theWaveContribution;
-  if(_absEnv->parser()->calcContributionError()){
-    std::string serializationFileName = _absEnv->serializationFileName();
+  if(GlobalEnv::instance()->parser()->calcContributionError()){
+    std::string serializationFileName = GlobalEnv::instance()->serializationFileName();
     std::ifstream serializationStream(serializationFileName.c_str());
 
     if(!serializationStream.is_open()){
@@ -131,17 +137,17 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
        std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
        boostInputArchive >> *thePwaCovMatrix;
        theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(_absEnv, _absLhPtr, theStartParams, thePwaCovMatrix));
+	  (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams, thePwaCovMatrix));
   }
   else{
     theWaveContribution = std::shared_ptr<WaveContribution>
-      (new WaveContribution(_absEnv, _absLhPtr, theStartParams));
+      (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams));
   }
   std::pair<double, double> contValue = theWaveContribution->CalcContribution();
   std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues = theWaveContribution->CalcSingleContributions();
 
     Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
+    Info << "evtWeightSumData:\t" <<evtWeightSumData;
     Info << "BIC:\t" << BICcriterion << endmsg;
     Info << "AIC:\t" << AICcriterion << endmsg;
     Info << "AICc:\t" << AICccriterion << endmsg;
@@ -152,7 +158,7 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
     }
 
     std::ostringstream qaSummaryFileName;
-    std::string outputFileNameSuffix= _absEnv->outputFileNameSuffix();
+    std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
     qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
 
     std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
@@ -174,7 +180,7 @@ void AppBase::fixParams(MnUserParameters& upar, const std::vector<std::string>& 
   std::vector<MinuitParameter>::const_iterator itPar;
   for (itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
     parNames.push_back(itPar->GetName());
-  }  
+  }
 
   std::vector<std::string>::const_iterator itFix;
   for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
@@ -201,7 +207,9 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
   return funcMin;
 }
 
-void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, std::string outputFileNameSuffix, double evtWeightSumData, int noOfFreeFitParams){
+void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, double evtWeightSumData, int noOfFreeFitParams){
+
+    double theLh = min.Fval();
 
     os << "\n\n********************** Final fit parameters *************************\n";
     os << "\n" << min.UserParameters() << "\n";
@@ -210,7 +218,7 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
     else                          os << "\n WARNING: Function minimum is invalid!" << std::endl;
     if(min.HasValidCovariance())  os << "\n Covariance matrix is valid." << std::endl;
     else                          os << "\n WARNING: Covariance matrix is invalid!" << std::endl;
-    os <<"\n Final LH: "<< std::setprecision(10) << min.Fval() << "\n" << std::endl;
+    os <<"\n Final LH: "<< std::setprecision(10) << theLh << "\n" << std::endl;
     os <<" # of function calls: " << min.NFcn() << std::endl;
     os <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;
     if(!min.HasValidParameters()) os << " hasValidParameters() returned FALSE" << std::endl;
@@ -227,21 +235,21 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
     MnUserParameters finalUsrParameters=min.UserParameters();
     const std::vector<double> finalParamVec=finalUsrParameters.Params();
     fitParams finalFitParams=theStartparams;
-    _fitParamBasePtr->getFitParamVal(finalParamVec, finalFitParams);
+    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(finalParamVec, finalFitParams);
 
     const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
     fitParams finalFitErrs=theStartparams;
-    _fitParamBasePtr->getFitParamVal(finalParamErrorVec, finalFitErrs);
+    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(finalParamErrorVec, finalFitErrs);
 
     std::ostringstream finalResultname;
-    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+    finalResultname << "finalResult" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
 
     std::ofstream theStream ( finalResultname.str().c_str() );
-    _fitParamBasePtr->dumpParams(theStream, finalFitParams, finalFitErrs);
+    GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
 
     MnUserCovariance theCovMatrix = min.UserCovariance();
     std::ostringstream serializationFileName;
-    serializationFileName << "serializedOutput" << outputFileNameSuffix << ".dat";
+    serializationFileName << "serializedOutput" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
     std::ofstream serializationStream(serializationFileName.str().c_str());
     boost::archive::text_oarchive boostOutputArchive(serializationStream);
 
@@ -253,35 +261,32 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // calculate AIC, BIC criteria and output selected wave contrib
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    double theLh=_absLhPtr->calcLogLh(finalFitParams);
     Info <<"theLh = "<< theLh << endmsg;
 
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
     Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData; 
+    Info << "evtWeightSumData:\t" <<evtWeightSumData;
     Info << "BIC:\t" << BICcriterion << endmsg;
     Info << "AIC:\t" << AICcriterion << endmsg;
     Info << "AICc:\t" << AICccriterion << endmsg;
-
-
 }
 
-bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams){
+bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams, ChannelID channelID){
 
   while(true){
     if(!theClient.WaitForParams()) return false;
-    
+
     const std::vector<double> currentParamVec=theClient.GetParams();
     fitParams currentFitParams=theStartparams;
-    _fitParamBasePtr->getFitParamVal(currentParamVec, currentFitParams);
-    
+    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(currentParamVec, currentFitParams);
+
     LHData theLHData;
-    _absLhPtr->calcLogLhDataClient(currentFitParams, theLHData);
-    
-    if(!theClient.SendLH(theLHData.logLH_data, theLHData.weightSum, theLHData.LH_mc)) return false;
+    GlobalEnv::instance()->Channel(channelID)->Lh()->calcLogLhDataClient(currentFitParams, theLHData);
+
+    if(!theClient.SendLH(theLHData.logLH_data, theLHData.LH_mc)) return false;
   }
   return true;
-}   
+}
 

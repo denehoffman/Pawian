@@ -38,6 +38,7 @@
 
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
@@ -48,22 +49,22 @@ class pbarpHeliLh : public pbarpBaseLh {
 
 public:
   // pbarpHeliLh(std::shared_ptr<const EvtDataBaseList>);
-  pbarpHeliLh();  
+  pbarpHeliLh(ChannelID channelID);
   virtual ~pbarpHeliLh();
-  
+
   virtual AbsLh* clone_() const {
-    AbsLh* theClone=new pbarpHeliLh();
+    AbsLh* theClone=new pbarpHeliLh(_channelID);
     theClone->setDataVec(_evtDataVec);
     theClone->setMcVec(_evtMCVec);
     return theClone;
     //    return new  pbarpHeliLh(_evtListPtr);
   }
   virtual void print(std::ostream& os) const;
-  
+
 protected:
-  
+
 private:
-  
+
   void initialize();
-  
+
 };

@@ -37,6 +37,7 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "Minuit2/MnUserParameters.h"
 
@@ -49,37 +50,38 @@ class pbarpBaseLh : public AbsLh {
 public:
   // pbarpBaseLh(std::shared_ptr<const EvtDataBaseList>);
 
-  pbarpBaseLh();  
+  pbarpBaseLh(ChannelID channelID);
 
   virtual ~pbarpBaseLh();
-  
+
   virtual AbsLh* clone_() const =0;
-  
+
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
-  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData, 
+  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
-  
+
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
   virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
-  
+
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void updateFitParams(fitParams& theParamVal);
-  
+
   virtual void print(std::ostream& os) const;
-  
+
 protected:
+  ChannelID _channelID;
   std::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< std::shared_ptr<const JPCLS> > _jpclsStates;
   std::vector< std::shared_ptr<const IGJPC> > _igjpcStates;
-  
+
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsSinglet;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTriplet0;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletp1;
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletm1;
-  
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > _currentParamIsos;  
+
+  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > _currentParamIsos;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
 
@@ -89,11 +91,11 @@ protected:
   std::vector< std::shared_ptr<AbsXdecAmp> > _iso0DecAmps;
   std::vector< std::shared_ptr<AbsXdecAmp> > _iso1DecAmps;
   //  std::map< std::shared_ptr<AbsXdecAmp>, std::shared_ptr<AbsXdecAmp>, pawian::Collection::SharedPtrLess > _iso0Iso1DecAmpMap;
-  std::map<std::string, std::pair<std::string, std::string> > _iso0Iso1NameMap; 
+  std::map<std::string, std::pair<std::string, std::string> > _iso0Iso1NameMap;
   int _highestJFsp;
   bool _isHighestJaPhoton;
-  
-  virtual void fillMap(std::vector< std::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<std::shared_ptr<AbsXdecAmp> >& decs, std::map< std::shared_ptr<const JPCLS>, std::vector<std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill); 
+
+  virtual void fillMap(std::vector< std::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<std::shared_ptr<AbsXdecAmp> >& decs, std::map< std::shared_ptr<const JPCLS>, std::vector<std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill);
 
   virtual void fillIsos();
 

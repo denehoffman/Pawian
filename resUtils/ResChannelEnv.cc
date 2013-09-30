@@ -21,67 +21,57 @@
 //									  //
 //************************************************************************//
 
-// epemEnv class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// ResChannelEnv class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
 
-#include <getopt.h>
-#include <fstream>
-
-#include "epemUtils/epemEnv.hh"
-#include "epemUtils/epemParser.hh"
+#include "Particle/ParticleTable.hh"
+#include "resUtils/ResChannelEnv.hh"
+#include "resUtils/resParser.hh"
+#include "resUtils/resReaction.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-#include "epemUtils/epemReaction.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
-#include "Particle/Particle.hh"
-#include "Particle/ParticleTable.hh"
-#include "Particle/PdtParser.hh"
 
-epemEnv* epemEnv::_instance=0;
-
-epemEnv* epemEnv::instance() 
-{
-  if (0==_instance) _instance = new epemEnv();
-  return _instance;
-}
-
-epemEnv::epemEnv() :
-  AbsEnv()
-  , _cmsMass(3.096916)
+ResChannelEnv::ResChannelEnv(resParser* theParser) : AbsChannelEnv(theParser)
+   ,_theParser(theParser)
 {
 }
-epemEnv::~epemEnv(){
-}
 
-void epemEnv::setup(epemParser* theEpEmParser){
- 
-  AbsEnv::setup(theEpEmParser);
 
-  
-_cmsMass=theEpEmParser->cmsMass();
 
-  // has to be set via parser !!!!
-  double totalyMom=0.04;
-  _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
-  
+void ResChannelEnv::setup(ChannelID id){
+
+   AbsChannelEnv::setup(id);
+
+   //  // has to be set via parser !!!!
+  // double totalyMom=0.04;
+  // _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
+
+  _motherParticle = GlobalEnv::instance()->particleTable()->particle(_theParser->motherResName());
+  if(0==_motherParticle){
+    Alert << "mother particle with name\t" << _theParser->motherResName() << "\tdoesn't exist" << endmsg;
+    exit(0);
+  }
+
   std::vector<std::string>::const_iterator itStr;
 
 
   //epem reaction
-  _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs));
+  _resReaction=std::shared_ptr<resReaction>(new resReaction(_motherParticle, _producedParticlePairs, 0));
 
   //fill prodDecayList
-  std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
+  std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _resReaction->productionHeliDecays();
   std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+    (*itDec)->disableIsospin();
     _prodDecList->addDecay(*itDec);
   }
 
 
   //set suffixes
-  std::vector<std::string> suffixVec = theEpEmParser->replaceSuffixNames();
+  std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;
 
   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -94,7 +84,7 @@ _cmsMass=theEpEmParser->cmsMass();
     stringStr >> suffixStr;
     decSuffixNames[classStr]=suffixStr;
   }
-  
+
   //set suffixes for decay classes
   std::map<std::string, std::string>::iterator itMapStrStr;
   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
@@ -104,7 +94,7 @@ _cmsMass=theEpEmParser->cmsMass();
   }
 
   //replace mass key
-  std::vector<std::string> replMassKeyVec = theEpEmParser->replaceMassKey();
+  std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
   std::map<std::string, std::string> decRepMassKeyNames;
 
   for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -122,9 +112,9 @@ _cmsMass=theEpEmParser->cmsMass();
     _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
   }
 
-  //add dynamics 
+  //add dynamics
   std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-  std::vector<std::string> decDynVec = theEpEmParser->decayDynamics();
+  std::vector<std::string> decDynVec = _theParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);
@@ -153,7 +143,4 @@ _cmsMass=theEpEmParser->cmsMass();
       }
     }
   }
-
 }
-
-
