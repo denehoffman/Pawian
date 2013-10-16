@@ -267,7 +267,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   Info <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor ;  // << endmsg;
   theQaStream <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
 
-  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
+  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLessNoRef >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
     if (itMassMap == _massFitHistMap.begin()) {
@@ -277,7 +277,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   }
   theQaStream.close();
 
-  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
+  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLessNoRef >::iterator itAngleMap;
   for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){
     std::vector<TH1F*>::iterator itTH1F;
     for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){
@@ -285,7 +285,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     }
   }
 
-  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
+  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLessNoRef >::iterator itAngleMap2D;
   for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
     std::vector<TH2F*>::iterator itTH2F;
     for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){
@@ -298,9 +298,9 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
 
 
-void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLessNoRef >& toFill){
 
-  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLessNoRef >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
     //get relevant 4 vecs
     Vector4<double> combined4Vec(0.,0.,0.,0.);
@@ -316,9 +316,9 @@ void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::share
 
 }
 
-void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLessNoRef >& toFill){
 
-  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLessNoRef >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
     short nBodyDecay = it->first->_nBodyDecay;
 
@@ -391,9 +391,9 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shar
   }
 }
 
-void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLessNoRef >& toFill){
 
-  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator it;
+  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLessNoRef >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
 
     Vector4<double> combinedDec4Vec(0.,0.,0.,0.);

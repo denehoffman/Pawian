@@ -58,7 +58,7 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
   else{
       // Add LLHs of different channels
       std::ostringstream output;
-      output << "current LH = " << std::setprecision(10);
+      output << "current LH = ";
       for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
          (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
          (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
@@ -70,7 +70,7 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
          output << "sum = " << result;
       }
 
-      Info << output.str() << endmsg;
+      Info << std::setprecision(10) << output.str() << endmsg;
   }
 
   _fcnCounter++;

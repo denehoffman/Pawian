@@ -125,7 +125,6 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
        Particle* particle1 = (*itDec)->absDec()->daughter1Part();
        Particle* particle2 = (*itDec)->absDec()->daughter2Part();
 
-       std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
        else isoFactor=iso0Val;
@@ -161,17 +160,16 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   complex<double> singletAmp(0.,0.);
   for(it=_decAmpsSinglet.begin(); it!=_decAmpsSinglet.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
     double iso1Val=_currentParamJPCIsos1[theJPCLS];
     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
+    std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
 
        complex<double> currentDecAmp=(*itDec)->XdecAmp(0, theData, lamHigestJFsp);
 
-       std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
        else isoFactor=iso0Val;
@@ -189,16 +187,14 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   complex<double> triplet0Amp(0.,0.);
   for(it=_decAmpsTriplet0.begin(); it!=_decAmpsTriplet0.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
     double iso1Val=_currentParamJPCIsos1[theJPCLS];
     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
+    std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        complex<double> currentDecAmp=(*itDec)->XdecAmp(0, theData, lamHigestJFsp);
-
-       std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
 
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
@@ -217,15 +213,14 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
    complex<double> tripletp1Amp(0.,0.);
   for(it=_decAmpsTripletp1.begin(); it!=_decAmpsTripletp1.end(); ++it){
     complex<double> tmpAmp(0.,0.);
-    std::shared_ptr<const JPCLS> theJPCLS=it->first;
+    const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
     double iso1Val=_currentParamJPCIsos1[theJPCLS];
     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
+    std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
        complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
-       std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
 
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
@@ -243,22 +238,21 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
    complex<double> tripletm1Amp(0.,0.);
   for(it=_decAmpsTripletm1.begin(); it!=_decAmpsTripletm1.end(); ++it){
-    complex<double> tmpAmp(0.,0.);
-    std::shared_ptr<const JPCLS> theJPCLS=it->first;
-      double iso1Val=_currentParamJPCIsos1[theJPCLS];
-       double iso0Val=_currentParamJPCIsos0[theJPCLS];
+     complex<double> tmpAmp(0.,0.);
+     const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
+     double iso1Val=_currentParamJPCIsos1[theJPCLS];
+     double iso0Val=_currentParamJPCIsos0[theJPCLS];
 
-    std::vector<std::shared_ptr<AbsXdecAmp> > decAmps=it->second;
+     std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-       complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
-       std::shared_ptr<AbsDecay> theDec=(*itDec)->absDec();
+	complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
 
         double isoFactor=0;
-       if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
-       else isoFactor=iso0Val;
+	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+	else isoFactor=iso0Val;
 
-       tmpAmp+=isoFactor*currentDecAmp;
+	tmpAmp+=isoFactor*currentDecAmp;
      }
 
      double theMag=_currentParamMags[theJPCLS];
@@ -349,8 +343,8 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
   }
 
 
-   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > magMap=theParamVal.Mags["pbarp"];
-   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > phiMap=theParamVal.Phis["pbarp"];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags["pbarp"];
+   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis["pbarp"];
    std::vector< std::shared_ptr<const JPCLS> >::iterator it;
    for (it=_jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
      double theMag=magMap[*it];

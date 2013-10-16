@@ -28,11 +28,9 @@ project :
 	<include>$(GENEVA)/include
 	<link>static
 	<cxxflags>-std=gnu++0x
-	<cxxflags>-pthread
   <conditional>@split-stack-cond
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
-	<linkflags>-pthread
 	;
 
 actions rootlibs
