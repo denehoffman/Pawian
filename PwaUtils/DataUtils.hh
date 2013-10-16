@@ -51,35 +51,27 @@ struct jpcRes {
   Spin J;
   int P;
   int C;
-
+  unsigned short idnumberJPC;
   jpcRes(Spin j=0, int p=1, int c=1) {
     J=j;
     P=p;
     C=c;
+    idnumberJPC=2*J*1e2+(P+2)*1e1+(C+2);
   }
 
   jpcRes(std::shared_ptr<const jpcRes> theJPC) {
     J=theJPC->J;
     P=theJPC->P;
     C=theJPC->C;
+    idnumberJPC=2*J*1e2+(P+2)*1e1+(C+2);
   }
 
   virtual bool operator==(const jpcRes& compare) const {
-    bool result=false;
-    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C) result=true;
-    return result;
+    return (idnumberJPC==compare.idnumberJPC);
   }
 
   virtual bool operator<(const jpcRes& compare) const {
-    bool result=false;
-    if ( J < compare.J) result=true;
-    else if (J == compare.J) {
-      if ( P < compare.P) result=true;
-      else if (P == compare.P) {
-	if ( C < compare.C) result=true;
-      }
-    }
-    return result;
+    return (idnumberJPC<compare.idnumberJPC);
   }
   virtual std::string jpcname() const {
     std::stringstream tmpStrStreamJ;
@@ -95,15 +87,6 @@ struct jpcRes {
 
   virtual std::string name() const {
     return jpcname();
-    // std::stringstream tmpStrStreamJ;
-    // tmpStrStreamJ << J;
-    // std::stringstream tmpStrStreamP;
-    // tmpStrStreamP << P;
-
-    // std::stringstream tmpStrStreamC;
-    // tmpStrStreamC << C;
-    // std::string result="J"+tmpStrStreamJ.str()+"P"+tmpStrStreamP.str()+"C"+tmpStrStreamC.str();
-    // return result;
   }
 
   virtual void print(std::ostream& os) const {
@@ -127,12 +110,14 @@ struct IGJPC : public jpcRes {
   Spin I;
   int G;
   double parityFactor;
+  unsigned long idnumberIGJPC;
 
   IGJPC(const Spin j, const int p, const int c, const Spin& theI,
 	    int theG, const double theParityFactor=0.): jpcRes(j, p, c) {
     I=theI;
     G=theG;
     parityFactor=theParityFactor;
+    idnumberIGJPC=2*I*1e5+(G+2)*1e4+idnumberJPC;
    }
 
   IGJPC(std::shared_ptr<const jpcRes> theJPC, const Spin& theI,
@@ -140,6 +125,7 @@ struct IGJPC : public jpcRes {
     I=theI;
     G=theG;
     parityFactor=theParityFactor;
+    idnumberIGJPC=2*I*1e5+(G+2)*1e4+idnumberJPC;
   }
 
 
@@ -149,6 +135,7 @@ struct IGJPC : public jpcRes {
     I=theIGJPC->I;
     G=theIGJPC->G;
     parityFactor=theIGJPC->parityFactor;
+    idnumberIGJPC=2*I*1e5+(G+2)*1e4+idnumberJPC; 
   }
 
   virtual bool operator==(const jpcRes& compare) const {
@@ -156,31 +143,11 @@ struct IGJPC : public jpcRes {
   }
 
   virtual bool operator==(const IGJPC& compare) const {
-    bool result=false;
-    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C
-	 && fabs(I-compare.I)<1e-8 && fabs(G-compare.G)<1e-8)
-      result=true;
-    return result;
+    return (idnumberIGJPC==compare.idnumberIGJPC);
   }
 
   virtual bool operator<(const IGJPC& compare) const {
-    bool result=false;
-
-    if ( J < compare.J) result=true;
-    else if (J == compare.J){
-      if ( P < compare.P) result=true;
-      else if (P == compare.P){
-	if ( C < compare.C) result=true;
-	else if (C == compare.C){
-	  if ( I < compare.I) result=true;
-	  else if (I == compare.I){
-	    if ( G < compare.G) result=true;
-	  }
-	}
-      }
-    }
-
-    return result;
+    return (idnumberIGJPC<compare.idnumberIGJPC);
 }
 
   virtual std::string name() const {
@@ -207,12 +174,14 @@ struct JPClamlam : public jpcRes {
   Spin lam1;
   Spin lam2;
   double parityFactor;
+  unsigned long idnumberJPClamlam;
 
   JPClamlam(const Spin j, const int p, const int c, const Spin& theLam1,
 	    const Spin& theLam2, const double theParityFactor=0.): jpcRes(j, p, c) {
     lam1=theLam1;
     lam2=theLam2;
     parityFactor=theParityFactor;
+    idnumberJPClamlam=idnumberJPC*1e4+2*lam2*1e2+2*lam1;
    }
 
   JPClamlam(std::shared_ptr<const jpcRes> theJPC, const Spin& theLam1,
@@ -220,6 +189,7 @@ struct JPClamlam : public jpcRes {
     lam1=theLam1;
     lam2=theLam2;
     parityFactor=theParityFactor;
+    idnumberJPClamlam=idnumberJPC*1e4+2*lam2*1e2+2*lam1;
   }
 
   JPClamlam(std::shared_ptr<const JPClamlam> theJPClamlam):
@@ -227,6 +197,7 @@ struct JPClamlam : public jpcRes {
     lam1=theJPClamlam->lam1;
     lam2=theJPClamlam->lam2;
     parityFactor=theJPClamlam->parityFactor;
+    idnumberJPClamlam=idnumberJPC*1e4+2*lam2*1e2+2*lam1;
   }
 
   virtual bool operator==(const jpcRes& compare) const {
@@ -234,31 +205,11 @@ struct JPClamlam : public jpcRes {
   }
 
   virtual bool operator==(const JPClamlam& compare) const {
-    bool result=false;
-    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C
-	 && fabs(lam1-compare.lam1)<1e-8 && fabs(lam2-compare.lam2)<1e-8)
-      result=true;
-    return result;
+    return (idnumberJPClamlam==compare.idnumberJPClamlam);
   }
 
   virtual bool operator<(const JPClamlam& compare) const {
-    bool result=false;
-
-    if ( J < compare.J) result=true;
-    else if (J == compare.J){
-      if ( P < compare.P) result=true;
-      else if (P == compare.P){
-	if ( C < compare.C) result=true;
-	else if (C == compare.C){
-	  if ( lam1 < compare.lam1) result=true;
-	  else if (lam1 == compare.lam1){
-	    if ( lam2 < compare.lam2) result=true;
-	  }
-	}
-      }
-    }
-
-    return result;
+    return (idnumberJPClamlam<compare.idnumberJPClamlam);
 }
 
   virtual std::string name() const {
@@ -284,13 +235,14 @@ struct JPCLS : public jpcRes {
   Spin L;
   Spin S;
   double preFactor;
-
+  unsigned long idnumberJPCLS;
 
   JPCLS(const Spin j, const int p, const int c, const Spin& theL, const Spin& theS,
 	const double thePreFactor=0.): jpcRes(j, p, c) {
     L=theL;
     S=theS;
     preFactor=thePreFactor;
+    idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
   }
 
   JPCLS(std::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS,
@@ -298,6 +250,7 @@ struct JPCLS : public jpcRes {
     L=theL;
     S=theS;
     preFactor=thePreFactor;
+    idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
   }
 
   JPCLS(std::shared_ptr<const JPCLS> theJPCLS):
@@ -305,6 +258,7 @@ struct JPCLS : public jpcRes {
     L=theJPCLS->L;
     S=theJPCLS->S;
     preFactor=theJPCLS->preFactor;
+    idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
   }
 
   virtual bool operator==(const jpcRes& compare) const {
@@ -312,31 +266,11 @@ struct JPCLS : public jpcRes {
   }
 
   virtual bool operator==(const JPCLS& compare) const {
-    bool result=false;
-    if ( fabs(J-compare.J)<1e-8 && P==compare.P && C==compare.C
-	 && fabs(L-compare.L)<1e-8 && fabs(S-compare.S)<1e-8)
-      result=true;
-    return result;
+    return (idnumberJPCLS==compare.idnumberJPCLS);
   }
 
   virtual bool operator<(const JPCLS& compare) const {
-    bool result=false;
-
-    if ( J < compare.J) result=true;
-    else if (J == compare.J){
-      if ( P < compare.P) result=true;
-      else if (P == compare.P){
-	if ( C < compare.C) result=true;
-	else if (C == compare.C){
-	  if ( L < compare.L) result=true;
-	  else if (L == compare.L){
-	    if ( S < compare.S) result=true;
-	  }
-	}
-      }
-    }
-
-    return result;
+    return (idnumberJPCLS<compare.idnumberJPCLS);
 }
 
   virtual std::string name() const {
@@ -347,6 +281,7 @@ struct JPCLS : public jpcRes {
     tmpStrStreamS << S;
 
     result+="L"+tmpStrStreamL.str()+"S"+tmpStrStreamS.str();
+
     return result;
   }
 
@@ -420,7 +355,6 @@ struct JPCLSJJ : public JPCLS {
 	}
       }
     }
-
     return result;
 }
 
@@ -448,250 +382,6 @@ struct JPCLSJJ : public JPCLS {
        << "\tCGLS=" << CGLS << "\tCGJJ=" << CGJJ << "\tpreFactorAll=" << prefactorAll;
   }
 };
-
-struct JPCLSJJls : public JPCLSJJ {
-  Spin l;
-  Spin s;
-
-  JPCLSJJls(std::shared_ptr<const JPCLSJJ> theJPCLSJJ, const Spin& thel,
-	    const Spin& thes): JPCLSJJ(theJPCLSJJ){
-    l=thel;
-    s=thes;
-  }
-
-  JPCLSJJls(std::shared_ptr<const JPCLSJJls> theJPCLSJJls): JPCLSJJ(theJPCLSJJls) {
-    l=theJPCLSJJls->l;
-    s=theJPCLSJJls->s;
-  }
-
-  virtual bool operator==(const jpcRes& compare) const {
-    return jpcRes::operator==(compare);
-  }
-
-  virtual bool operator==(const JPCLSJJls& compare) const {
-    bool result = JPCLSJJ::operator==(compare);
-    if ( fabs(l-compare.l)>1e-8 || fabs(s-compare.s)>1e-8 ) result=false;
-    return result;
-  }
-
-  virtual bool operator<(const JPCLSJJls& compare) const {
-
-    bool result= JPCLSJJ::operator<(compare);
-
-    if (result) return result;
-
-    if ( Lambda2 == compare.Lambda2){
-      if ( l < compare.l) result=true;
-      else if (l == compare.l){
-	if ( s < compare.s) result=true;
-      }
-    }
-
-    return result;
-}
-
-  virtual std::string name() const {
-    std::string result=JPCLSJJ::name();
-
-    std::stringstream tmpStrStreaml;
-    tmpStrStreaml << l;
-    std::stringstream tmpStrStreams;
-    tmpStrStreams << s;
-
-    result+="l"+tmpStrStreaml.str()+"s"+tmpStrStreams.str();
-    return result;
-  }
-
-  virtual void print(std::ostream& os) const {
-    JPCLSJJ::print(os);
-    os <<"\tl,s=" << l << "," << s;
-  }
-};
-
-
-struct JPCLSls : public JPCLS {
-  Spin l;
-  Spin s;
-
-  JPCLSls(std::shared_ptr<const JPCLS> theJPCLS, const Spin& thel, const Spin& thes):
-    JPCLS(theJPCLS) {
-    l=thel;
-    s=thes;
-  }
-
-  JPCLSls(std::shared_ptr<const JPCLSls> theJPCLSls): JPCLS(theJPCLSls) {
-    l=theJPCLSls->l;
-    s=theJPCLSls->s;
-  }
-
-  virtual bool operator==(const jpcRes& compare) const {
-    return jpcRes::operator==(compare);
-  }
-
-  virtual bool operator==(const JPCLSls& compare) const {
-    bool result = JPCLS::operator==(compare);
-    if ( fabs(l-compare.l)>1e-8 || fabs(s-compare.s)>1e-8 ) result=false;
-    return result;
-  }
-
-  virtual bool operator<(const JPCLSls& compare) const {
-
-    bool result= JPCLS::operator<(compare);
-
-    if (result) return result;
-
-    if ( S == compare.S){
-      if ( l < compare.l) result=true;
-      else if (l == compare.l){
-	if ( s < compare.s) result=true;
-      }
-    }
-
-    return result;
-}
-
-  virtual std::string name() const {
-    std::string result=JPCLS::name();
-
-    std::stringstream tmpStrStreaml;
-    tmpStrStreaml << l;
-    std::stringstream tmpStrStreams;
-    tmpStrStreams << s;
-
-    result+="l"+tmpStrStreaml.str()+"s"+tmpStrStreams.str();
-    return result;
-  }
-
-
-  virtual void print(std::ostream& os) const {
-    JPCLS::print(os);
-    os <<"\tl,s=" << l << "," << s;
-  }
-};
-
-struct JPCSM : public jpcRes {
-  Spin S;
-  Spin M;
-  JPCSM(std::shared_ptr<const jpcRes> theJPC, const Spin& theS, const Spin& theM):
-    jpcRes(theJPC){
-    S=theS;
-    M=theM;
-  }
-
-  virtual bool operator==(const jpcRes& compare) const {
-    return jpcRes::operator==(compare);
-  }
-
-  virtual bool operator==(const JPCSM& compare) const {
-    bool result=jpcRes::operator==(compare);;
-    if ( fabs(S-compare.S)>1e-8 || fabs(M-compare.M)>1e-8 ) result=false;
-    return result;
-  }
-
-  virtual bool operator<(const JPCSM& compare) const {
-    bool result=false;
-    if ( J < compare.J) result=true;
-    else if (J == compare.J){
-      if ( P < compare.P) result=true;
-      else if (P == compare.P){
-	if ( C < compare.C) result=true;
-	else if (C == compare.C){
-	  if ( S < compare.S) result=true;
-	  else if (S == compare.S){
-	    if ( M < compare.M) result=true;
-	  }
-	}
-      }
-    }
-
-    return result;
-  }
-
-  virtual std::string name() const {
-    std::string result=jpcRes::name();
-    std::stringstream tmpStrStreamS;
-    tmpStrStreamS << S;
-    std::stringstream tmpStrStreamM;
-    tmpStrStreamM << M;
-
-    result+="S"+tmpStrStreamS.str()+"M"+tmpStrStreamM.str();
-    return result;
-  }
-
-  virtual void print(std::ostream& os) const {
-    jpcRes::print(os);
-    os <<"\tS=" << S << "\tM=" << M
-       << std::endl;
-  }
-};
-
-
-struct JPCLSM : public JPCLS {
-  std::shared_ptr<const jpcRes> jpc;
-  Spin M;
-  double ClebschG;
-
-  JPCLSM(std::shared_ptr<const JPCLS> theJPCLS, const Spin theM, const double theClebschG) :
-    JPCLS(theJPCLS) {
-    M=theM;
-    ClebschG=theClebschG;
-  }
-
-  virtual bool operator==(const jpcRes& compare) const {
-    return jpcRes::operator==(compare);
-  }
-
-  virtual bool operator==(const JPCLSM& compare) const {
-    bool result=jpcRes::operator==(compare);;
-    if ( fabs(L-compare.L)>1e-8 || fabs(S-compare.S)>1e-8 || fabs(M-compare.M)>1e-8 )
-      result=false;
-    return result;
-  }
-
-  virtual bool operator<(const JPCLSM& compare) const {
-    bool result=false;
-    if ( J < compare.J) result=true;
-    else if (J == compare.J){
-      if ( P < compare.P) result=true;
-      else if (P == compare.P){
-	if ( C < compare.C) result=true;
-	else if (C == compare.C){
-	  if ( L < compare.L) result=true;
-	  else if (L == compare.L){
-	    if ( S < compare.S) result=true;
-	    else if (S == compare.S){
-	      if ( M < compare.M) result=true;
-	    }
-	  }
-	}
-      }
-    }
-    return result;
-  }
-
-
-  virtual std::string name() const {
-    std::string result=jpcRes::name();
-    std::stringstream tmpStrStreamL;
-    tmpStrStreamL << L;
-    std::stringstream tmpStrStreamS;
-    tmpStrStreamS << S;
-    std::stringstream tmpStrStreamM;
-    tmpStrStreamS << M;
-
-    result+="L"+tmpStrStreamL.str()+"S"+tmpStrStreamS.str()+"M"+tmpStrStreamM.str();
-    return result;
-  }
-
-
-  virtual void print(std::ostream& os) const {
-    JPCLS::print(os);
-    os <<"\tM=" << M
-       <<"\tClebschGordan=" << ClebschG
-       << std::endl;
-  }
-};
-
 
 template<typename T>
 void fillVec(std::shared_ptr<const T> currentRes,
