@@ -397,7 +397,6 @@ void pbarpBaseLh::fillIsos(){
   //now look if iso0 and iso1 exisist
   for(it= _iso0DecAmps.begin(); it!= _iso0DecAmps.end(); ++it){
     // find corresponding iso1 partner
-    bool found=false;
     std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itIso1;
     for(itIso1= _iso1DecAmps.begin(); itIso1!= _iso1DecAmps.end(); ++itIso1){
       if( (*(*it)->jpcPtr()) == (*(*itIso1)->jpcPtr()) ){
