@@ -81,7 +81,7 @@ HeliDecAmps::~HeliDecAmps()
 }
 
 
-complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
 
   bool lamFs_daughter1=false;
@@ -120,7 +120,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaught
 
 
 
-complex<double> HeliDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
 

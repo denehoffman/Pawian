@@ -55,9 +55,9 @@ public:
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
-				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}

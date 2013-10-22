@@ -55,12 +55,11 @@ public:
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr,
-				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
-  //  std::vector< std::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
@@ -77,7 +76,7 @@ protected:
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
 
   void  fillCgPreFactor();
-  virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
+  virtual complex<double> lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
 private:
 
 

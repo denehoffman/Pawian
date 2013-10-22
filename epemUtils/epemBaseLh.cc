@@ -94,24 +94,25 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
   double result=0.;
 
-  int lamSteps=1;
+  Spin lamSteps=1;
   if(_isHighestJaPhoton) lamSteps=2;
 
-  for (int lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
+  for (Spin lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
 
     complex<double> lamp1Amp(0.,0.);
 
     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-
+    Spin lamepem=1;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(1, theData, lamHigestJFsp);
+      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData, lamHigestJFsp);
       lamp1Amp+=currentDecAmp;
     }
 
 
     complex<double> lamm1Amp(0.,0.);
+    lamepem=-1;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(-1, theData, lamHigestJFsp);
+      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData, lamHigestJFsp);
       lamm1Amp+=currentDecAmp;
     }
 

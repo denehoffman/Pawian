@@ -86,10 +86,10 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
   double result=0.;
 
-  int lamSteps=1;
+  Spin lamSteps=1;
   if(_isHighestJaPhoton) lamSteps=2;
 
-  for (int lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
+  for (Spin lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
 
     for( Spin itLam=-_Jmother; itLam<=_Jmother; ++itLam){
       complex<double> lamItAmp(0.,0.);

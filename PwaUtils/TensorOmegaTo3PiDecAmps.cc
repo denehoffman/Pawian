@@ -52,7 +52,7 @@ TensorOmegaTo3PiDecAmps::~TensorOmegaTo3PiDecAmps()
 }
 
 
-complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   // std::vector< std::shared_ptr<const JPCLS> >::iterator it;
@@ -73,7 +73,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, sho
 
 
 
-complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
 

@@ -55,7 +55,7 @@ TensorDecAmps::~TensorDecAmps()
 }
 
 
-complex<double> TensorDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   Spin lam1Min=-_Jdaughter1;
   Spin lam1Max= _Jdaughter1;
@@ -89,7 +89,7 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaug
 
 
 
-complex<double> TensorDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
