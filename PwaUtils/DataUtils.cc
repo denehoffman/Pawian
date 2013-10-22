@@ -35,6 +35,19 @@
 
 void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcRes> daughterRes1, std::shared_ptr<const jpcRes> daughterRes2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec)
 {
+  std::vector< std::shared_ptr<const LScomb> > LSVec;
+  validLS(motherRes, daughterRes1, daughterRes2, LSVec);
+
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+
+  for(it=LSVec.begin(); it!=LSVec.end(); ++it){
+    std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, (*it)->L, (*it)->S));
+    theJPCLSVec.push_back(tmpJPCLS);
+  }
+}
+
+void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcRes> daughterRes1, std::shared_ptr<const jpcRes> daughterRes2, std::vector< std::shared_ptr<const LScomb> >& theLSVec)
+{
   // first: check C-parity
   if ( motherRes->C != daughterRes1->C*daughterRes2->C){
     Warning << "C-Parity not valid for the reaction: JPC= " 
@@ -53,27 +66,41 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const j
   int num_LS = (int) LSs.size();
 
   for(int ls = 0; ls < num_LS; ls++){
-    Spin L= LSs[ls].L; 
+    int L= LSs[ls].L; 
     Spin S= LSs[ls].S;
-    std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
-    theJPCLSVec.push_back(tmpJPCLS);
+    std::shared_ptr<const LScomb> tmpLS(new LScomb(L, S));
+    theLSVec.push_back(tmpLS);
   }
 
   if(LSs.size()==0) Info << "size for decay " << motherRes->name() << " to " << daughterRes1->name() << " and " << daughterRes2->name()
-			 << " =0!!!" << endmsg;
+                         << " =0!!!" << endmsg;
 }
 
+
 void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec, bool useCParity, int gParityMother, bool useIsospin){
+
+  std::vector< std::shared_ptr<const LScomb> > LSVec;
+  validLS(motherRes, daughter1, daughter2, LSVec, useCParity, gParityMother, useIsospin);
+
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+
+  for(it=LSVec.begin(); it!=LSVec.end(); ++it){
+    std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, (*it)->L, (*it)->S));
+    theJPCLSVec.push_back(tmpJPCLS);
+  }
+}
+
+void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const LScomb> >& theLSVec, bool useCParity, int gParityMother, bool useIsospin){
   // first: check C-parity
   if (useCParity){
     if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()){
       Warning << "C-Parity not valid for the reaction: JPC= " 
-	      << motherRes->J << " " << motherRes->P << " " << motherRes->C
-	      << " --> "
-	      << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
-	      << " and "
-	      << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theCParity()
-	;  // << endmsg;
+              << motherRes->J << " " << motherRes->P << " " << motherRes->C
+              << " --> "
+              << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
+              << " and "
+              << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theCParity()
+        ;  // << endmsg;
       if( fabs(motherRes->C)==1 && fabs(daughter1->theCParity())==1 && fabs(daughter2->theCParity())==1) return; 
     }
   }
@@ -82,10 +109,10 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Pa
     // second: check G-parity
     if (gParityMother != daughter1->theGParity()*daughter2->theGParity() ){
       Warning << "G-Parity not valid for:" 
-	      << gParityMother 
-	      << " --> "
-	      << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
-	      << endmsg;
+              << gParityMother 
+              << " --> "
+              << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
+              << endmsg;
       
       if( fabs(gParityMother)==1 && fabs(daughter1->theGParity())==1 && fabs(daughter2->theGParity())==1) return; 
     }
@@ -97,14 +124,14 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Pa
 
   int num_LS = (int) LSs.size();
   for(int ls = 0; ls < num_LS; ls++){
-    Spin L= LSs[ls].L; 
+    int L= LSs[ls].L; 
     Spin S= LSs[ls].S;
     bool LplusSeven=false;
     int LplusS=L+S;
     if( LplusS% 2 == 0) LplusSeven=true;
     if(!identicalDaughters || (identicalDaughters && LplusSeven)){ 
-      std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, L, S));
-      theJPCLSVec.push_back(tmpJPCLS);
+      std::shared_ptr<const LScomb> tmpLS(new LScomb(L, S));
+      theLSVec.push_back(tmpLS);
     }
   }
 }

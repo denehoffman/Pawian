@@ -62,10 +62,12 @@ OmegaTo3PiDecay::OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle
 void OmegaTo3PiDecay::extractStates(){
 //check correct quantum numbers
   //...
-  Spin validL=1;
+  int validL=1;
   Spin validS=0;
   std::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherIGJPCPtr, validL, validS));
   _JPCLSDecAmps.push_back(theValidJPCLS);
+  std::shared_ptr<const LScomb> theValidLS(new LScomb(validL, validS));
+  _LSDecAmps.push_back(theValidLS);
 }
 
 OmegaTo3PiDecay::~OmegaTo3PiDecay(){
@@ -76,11 +78,11 @@ void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsM
 }
 
 void OmegaTo3PiDecay::print(std::ostream& os) const{
-  os << "\nJPCLS amplitudes for decay\t" << _name << ":\n";
+  os << "\nLS amplitudes for decay\t" << _name << ":\n";
   os << "suffix for fit parameter name:\t" << _fitParamSuffix << "\n";
 
-  std::vector< std::shared_ptr<const JPCLS> >::const_iterator it;
-  for (it = _JPCLSDecAmps.begin(); it!= _JPCLSDecAmps.end(); ++it){
+  std::vector< std::shared_ptr<const LScomb> >::const_iterator it;
+  for (it = _LSDecAmps.begin(); it!= _LSDecAmps.end(); ++it){
     (*it)->print(os);
     os << "\n";
   }

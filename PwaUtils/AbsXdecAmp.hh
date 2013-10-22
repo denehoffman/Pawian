@@ -87,9 +87,6 @@ protected:
   const std::string _wignerDKey;
   std::mutex theMutex;
 
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
-
   bool _daughter1IsStable;
   bool _daughter2IsStable;
   bool _enabledlamFsDaughter1;

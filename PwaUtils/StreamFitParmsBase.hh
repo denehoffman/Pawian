@@ -49,10 +49,11 @@ protected:
 
   virtual void fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
 			  const std::string& suffix);
-
-  virtual void fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap,
+ virtual void fillLSAmps(mapStrLS& valMap, mapStrLS& errMap,
+			  const std::string& suffix);
+  virtual void fillJPCLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap,
 			      const std::string& suffix);
-  virtual void fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap,
+  virtual void fillJPCLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap,
 			  const std::string& suffix);
   virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
 			   const std::string& suffix);

@@ -45,7 +45,46 @@ struct LHData{
   }
 };
 
+struct LScomb {
+  int L;
+  Spin S;
+  unsigned short idnumberLS;
 
+  LScomb(const int theL, const Spin& theS){
+    L=theL;
+    S=theS;
+    idnumberLS=2*L*1e2+2*S;
+  }
+
+  LScomb(std::shared_ptr<const LScomb> theLScomb){
+    L=theLScomb->L;
+    S=theLScomb->S;
+    idnumberLS=2*L*1e2+2*S;
+  }
+
+  virtual bool operator==(const LScomb& compare) const {
+    return (idnumberLS==compare.idnumberLS);
+  }
+
+  virtual bool operator<(const LScomb& compare) const {
+    return (idnumberLS<compare.idnumberLS);
+}
+
+  virtual std::string name() const {
+    std::stringstream tmpStrStreamL;
+    tmpStrStreamL << L;
+    std::stringstream tmpStrStreamS;
+    tmpStrStreamS << S;
+
+    std::string result="L"+tmpStrStreamL.str()+"S"+tmpStrStreamS.str();
+
+    return result;
+  }
+
+  virtual void print(std::ostream& os) const {
+    os <<"\tL,S=" << L << "," << S;
+  }
+};
 
 struct jpcRes {
   Spin J;
@@ -451,9 +490,13 @@ void fillStatesInitialDec( std::vector< std::shared_ptr<const T1 > >& initial,
 
 void validJPCLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcRes> daughterRes1, std::shared_ptr<const jpcRes> daughterRes2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec);
 
+void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcRes> daughterRes1, std::shared_ptr<const jpcRes> daughterRes2, std::vector< std::shared_ptr<const LScomb> >& theLSVec);
+
 class Particle;
 
 void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec,  bool useCParity=true, int gParityMother=0, bool useIsospin=false);
+
+void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const LScomb> >& theLSVec,  bool useCParity=true, int gParityMother=0, bool useIsospin=false);
 
 void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec,  bool useCParity=true, int gParityMother=0, bool useIsospin=false);
 

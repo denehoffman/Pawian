@@ -51,6 +51,12 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValPara
   // 0.: set magnitudes of all lamlam amplitudes
   setMnUsrParamsJPC(upar, theValParams.Isos, theErrParams.Isos, _isoSuffix);
 
+  // 1.a: set magnitudes of all ls amplitudes
+  setMnUsrParamsLS(upar, theValParams.MagsLS, theErrParams.MagsLS, _magSuffix);
+
+  // 1.b: set phases of all ls amplitudes
+  setMnUsrParamsLS(upar, theValParams.PhisLS, theErrParams.PhisLS, _phiSuffix);
+
   // 1.: set magnitudes of all lamlam amplitudes
   setMnUsrParamsJPCLamLam(upar, theValParams.MagLamLams, theErrParams.MagLamLams, _magSuffix);
 
@@ -83,6 +89,9 @@ void FitParamsBase::printParams(fitParams& theParams){
 
   printJPCParams(theParams, theParams.Isos, _isoSuffix);
 
+  printLSParams(theParams, theParams.MagsLS, _magSuffix);
+  printLSParams(theParams, theParams.PhisLS, _phiSuffix);
+  
   printJPCLamLamParams(theParams, theParams.MagLamLams, _magSuffix);
   printJPCLamLamParams(theParams, theParams.PhiLamLams, _phiSuffix);
 
@@ -99,6 +108,9 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
 
   os << std::setprecision(16);
   dumpJPCParams(os, theVals.Isos, theErrs.Isos, _isoSuffix);
+
+  dumpLSParams(os, theVals.MagsLS, theErrs.MagsLS,  _magSuffix);
+  dumpLSParams(os, theVals.PhisLS, theErrs.PhisLS,  _phiSuffix);
 
   dumpLamLamParams(os, theVals.MagLamLams, theErrs.MagLamLams, _magSuffix);
   dumpLamLamParams(os, theVals.PhiLamLams, theErrs.PhiLamLams, _phiSuffix);
@@ -117,6 +129,8 @@ void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& th
 
   unsigned int counter=0;
   getFitParamValJPC(par, theParams.Isos, counter);
+  getFitParamValLS(par, theParams.MagsLS, counter);
+  getFitParamValLS(par, theParams.PhisLS, counter);
   getFitParamValJPCLamLam(par, theParams.MagLamLams, counter);
   getFitParamValJPCLamLam(par, theParams.PhiLamLams, counter);
   getFitParamValJPCLS(par, theParams.Mags, counter);
@@ -158,7 +172,44 @@ void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startIs
 
 }
 
+void FitParamsBase::setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix){
 
+  mapStrLS::iterator itMagMap;
+  for (itMagMap=startMagMap.begin(); itMagMap!=startMagMap.end(); ++itMagMap){
+
+    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& errMags=errMagMap[itMagMap->first];
+
+    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::iterator itMag;
+    for (itMag=itMagMap->second.begin(); itMag!=itMagMap->second.end(); ++itMag){
+
+      std::shared_ptr<const LScomb> theLS=itMag->first;
+      double theStartVal=itMag->second;
+      double theErrVal=errMags[theLS];
+      if (theErrVal<=0.) theErrVal=0.1;
+
+      //now fill the fitParameterMap
+      std::string magStr=theLS->name()+itMagMap->first+suffix;
+
+      double valMin=0.;
+      double valMax=0.;
+      if (suffix==_phiSuffix){
+	 //valMin=-4.*M_PI;
+	 //valMax=4.*M_PI;
+	 upar.Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
+      }
+      else{
+	valMin=theStartVal-6.*theErrVal;
+	if (valMin<0.) valMin=0.;
+	valMin=0.0;
+	valMax=theStartVal+30.*theErrVal;
+
+	upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
+      }
+    }
+
+  }
+
+}
 
 
 void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLamLam& startLamLamMagMap, mapStrJPCLamLam& errLamLamMagMap, const std::string& suffix){
@@ -303,6 +354,22 @@ void FitParamsBase::printJPCParams(fitParams& theParams, mapStrJPC& jpcMap, cons
    }
 }
 
+void FitParamsBase::printLSParams(fitParams& theParams, mapStrLS& LSMagMap, const std::string& suffix){
+
+  mapStrLS::const_iterator it;
+
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::const_iterator itLSMap;
+
+   for (it=LSMagMap.begin(); it!=LSMagMap.end(); ++it){
+
+    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;
+     for ( itLSMap=currentAmp.begin(); itLSMap!=currentAmp.end(); ++itLSMap){
+       std::string currentName=itLSMap->first->name()+it->first+suffix;
+        Info<< currentName << "\t" << itLSMap->second << endmsg;
+     }
+   }
+
+}
 
 void FitParamsBase::printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& lamLamMap, const std::string& suffix){
 
@@ -366,6 +433,19 @@ void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC&
   }
 }
 
+void FitParamsBase::getFitParamValLS(const std::vector<double>& par, mapStrLS& lsMap, unsigned int& counter){
+
+  mapStrLS::iterator it;
+  for (it=lsMap.begin(); it!=lsMap.end(); ++it){
+
+    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::iterator itls;
+    for (itls=it->second.begin(); itls!=it->second.end(); ++itls){
+      itls->second=par.at(counter);
+      counter++;
+
+    }
+  }
+}
 
 void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& lamLamMagMap, unsigned int& counter){
 
@@ -423,6 +503,25 @@ void  FitParamsBase::dumpJPCParams(std::ostream& os, mapStrJPC& valJPCMap, mapSt
      }
    }
 
+}
+
+void FitParamsBase::dumpLSParams(std::ostream& os, mapStrLS& valLSMap, mapStrLS& errLSMap, const std::string& suffix){
+
+  mapStrLS::const_iterator it;
+
+   for (it=valLSMap.begin(); it!=valLSMap.end(); ++it){
+
+     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentErrMap=errLSMap[it->first];
+
+     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentAmp=it->second;
+
+     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::const_iterator itLS;
+     for ( itLS=currentAmp.begin(); itLS!=currentAmp.end(); ++itLS){
+       std::string currentName=itLS->first->name()+it->first+suffix;
+
+       os << currentName << "\t" << itLS->second << "\t" << currentErrMap[itLS->first] << std::endl;
+     }
+   }
 }
 
 void  FitParamsBase::dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, mapStrJPCLamLam& errLamLamMap, const std::string& suffix){

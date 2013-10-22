@@ -47,10 +47,12 @@ void StreamFitParmsBase::fillParams(){
   const std::string otherSuffix="Other";
 
   fillJPCIsos(_paramVal.Isos, _paramErr.Isos, isoSuffix);
-  fillLamLamAmps(_paramVal.MagLamLams, _paramErr.MagLamLams, magSuffix);
-  fillLamLamAmps(_paramVal.PhiLamLams, _paramErr.PhiLamLams, phiSuffix);
-  fillLSAmps(_paramVal.Mags, _paramErr.Mags, magSuffix);
-  fillLSAmps(_paramVal.Phis, _paramErr.Phis, phiSuffix);
+  fillLSAmps(_paramVal.MagsLS, _paramErr.MagsLS, magSuffix);
+  fillLSAmps(_paramVal.PhisLS, _paramErr.PhisLS, phiSuffix);
+  fillJPCLamLamAmps(_paramVal.MagLamLams, _paramErr.MagLamLams, magSuffix);
+  fillJPCLamLamAmps(_paramVal.PhiLamLams, _paramErr.PhiLamLams, phiSuffix);
+  fillJPCLSAmps(_paramVal.Mags, _paramErr.Mags, magSuffix);
+  fillJPCLSAmps(_paramVal.Phis, _paramErr.Phis, phiSuffix);
   fillDoubles(_paramVal.Masses, _paramErr.Masses, massSuffix);
   fillDoubles(_paramVal.Widths, _paramErr.Widths, widthSuffix);
   fillDoubles(_paramVal.gFactors, _paramErr.gFactors, gFactorSuffix);
@@ -70,7 +72,7 @@ void StreamFitParmsBase::fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
       stringPairIter=_stringPairMap.find(theKey);
 
       if ( stringPairIter != _stringPairMap.end() ){
-	Info << "key\t" << theKey << "\tfound" << endmsg;
+	Info << "fillJPCIsos: key\t" << theKey << "\tfound" << endmsg;
 	double val=stringPairIter->second.first;
 	Info << "replace val by " << val << endmsg;
 	double err=stringPairIter->second.second;
@@ -84,7 +86,38 @@ void StreamFitParmsBase::fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
   }
 }
 
-void StreamFitParmsBase::fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap, const std::string& suffix){
+void StreamFitParmsBase::fillLSAmps(mapStrLS& valMap, mapStrLS& errMap, const std::string& suffix){
+
+  mapStrLS::iterator itLSMap;
+  for( itLSMap=valMap.begin(); itLSMap!=valMap.end(); ++itLSMap){
+
+    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::iterator itLS;
+
+    for ( itLS=itLSMap->second.begin(); itLS!=itLSMap->second.end();  ++itLS){
+
+
+      std::string theKey=itLS->first->name()+itLSMap->first+suffix;
+      Info << "theKey=\t" << theKey << endmsg;
+      StringPairMap::const_iterator stringPairIter;
+
+      stringPairIter=_stringPairMap.find(theKey);
+
+      if ( stringPairIter != _stringPairMap.end() ){
+	Info << "fillLSAmps: key\t" << theKey << "\tfound" << endmsg;
+	double val=stringPairIter->second.first;
+	Info << "replace val by " << val << endmsg;
+	double err=stringPairIter->second.second;
+	Info << "replace err by " << err << endmsg;
+
+	valMap[itLSMap->first][itLS->first] = val;
+	errMap[itLSMap->first][itLS->first] = err;
+
+      }
+    }
+  }
+}
+
+void StreamFitParmsBase::fillJPCLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap, const std::string& suffix){
 
   mapStrJPCLamLam::iterator itLamLamMap;
   for( itLamLamMap=valMap.begin(); itLamLamMap!=valMap.end(); ++itLamLamMap){
@@ -95,7 +128,7 @@ void StreamFitParmsBase::fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam
 
 
       std::string theKey=itLamLam->first->name()+itLamLamMap->first+suffix;
-      Info << "theKey=\t" << theKey << endmsg;
+      Info << "fillJPCLamLamAmps: theKey=\t" << theKey << endmsg;
       StringPairMap::const_iterator stringPairIter;
 
       stringPairIter=_stringPairMap.find(theKey);
@@ -115,7 +148,7 @@ void StreamFitParmsBase::fillLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam
   }
 }
 
-void StreamFitParmsBase::fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, const std::string& suffix){
+void StreamFitParmsBase::fillJPCLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, const std::string& suffix){
 
   mapStrJPCLS::iterator itLSMap;
   for( itLSMap=valMap.begin(); itLSMap!=valMap.end(); ++itLSMap){
@@ -132,7 +165,7 @@ void StreamFitParmsBase::fillLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap, co
       stringPairIter=_stringPairMap.find(theKey);
 
       if ( stringPairIter != _stringPairMap.end() ){
-	Info << "key\t" << theKey << "\tfound" << endmsg;
+	Info << "fillJPCLSAmps: key\t" << theKey << "\tfound" << endmsg;
 	double val=stringPairIter->second.first;
 	Info << "replace val by " << val << endmsg;
 	double err=stringPairIter->second.second;
@@ -152,7 +185,7 @@ void StreamFitParmsBase::fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
   for( itMap=valMap.begin(); itMap!=valMap.end(); ++itMap){
 
     std::string theKey=itMap->first+suffix;
-    Info << "theKey=\t" << theKey << endmsg;
+    Info << "fillDoubles: theKey=\t" << theKey << endmsg;
     StringPairMap::const_iterator stringPairIter;
 
     stringPairIter=_stringPairMap.find(theKey);

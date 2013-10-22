@@ -48,6 +48,7 @@ public:
   OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelId);
   virtual ~OmegaTo3PiDecay();
   virtual std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
+  virtual std::vector< std::shared_ptr<const LScomb> > LSAmps(){ return _LSDecAmps;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
   virtual void print(std::ostream& os) const;
   Particle* daughter3Part() {return _daughter3;}
@@ -57,6 +58,7 @@ public:
 protected:
   Particle* _daughter3;
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
+  std::vector< std::shared_ptr<const LScomb> > _LSDecAmps;
   std::vector<Particle*> _finalStateParticlesDaughter3;
 
 };

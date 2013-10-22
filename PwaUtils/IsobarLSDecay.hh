@@ -51,11 +51,12 @@ public:
   virtual ~IsobarLSDecay();
   //  virtual IsobarLSDecay* clone_() const = 0;
   std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
+  std::vector< std::shared_ptr<const LScomb> > LSAmps(){ return _LSDecAmps;}
   virtual void print(std::ostream& os) const;
   virtual std::string type() {return "IsobarLSDecay";}
   virtual void extractStates();
 
 protected:
+  std::vector< std::shared_ptr<const LScomb> > _LSDecAmps;
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
-
 };

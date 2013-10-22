@@ -42,9 +42,9 @@ LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theD
   LSDecAmps( (std::shared_ptr<AbsDecay>) theDec, channelID)
   ,_lambdaDecKey(theDec->lambdaDecKey())
 {
-  _JPCLSs=theDec->JPCLSAmps();
+  _LSs=theDec->LSAmps();
   _factorMag=1.;
-  if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
+  if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
 }
 
 LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
@@ -55,15 +55,15 @@ LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
 complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin lamX, Spin lamDec, short fixDaughterNr, EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    if( fabs(lamX) > (*it)->J ) continue;
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( fabs(lamX) > _JPCPtr->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
 
         complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-	  *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
+	  *conj( theData->WignerDsString[_wignerDKey][_JPCPtr->J][lamX][0]);
         result+=amp;
   }
 
@@ -85,15 +85,15 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Spin l
     return result;
   }
 
-  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    if( fabs(lamX) > (*it)->J ) continue;
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( fabs(lamX) > _JPCPtr->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
 
     complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-      *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
+      *conj( theData->WignerDsString[_wignerDKey][_JPCPtr->J][lamX][0]);
 
     result+=amp;
   }

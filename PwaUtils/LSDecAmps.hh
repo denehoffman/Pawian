@@ -60,17 +60,21 @@ public:
 				      EvtData* theData, Spin lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
-  std::vector< std::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  //  std::vector< std::shared_ptr<const JPCLS> >& jpclsVec() {return _JPCLSs;}
+  std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-  std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
+  //  std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
+  std::vector< std::shared_ptr<const LScomb> > _LSs;
   double _factorMag;
   double _parityFactor;
-  std::map< std::shared_ptr<const JPCLS>, map<Spin,map<Spin, double > > > _cgPreFactor;
+  std::map< std::shared_ptr<const LScomb>, map<Spin,map<Spin, double > > > _cgPreFactor;
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
 
   void  fillCgPreFactor();
   virtual complex<double> lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );

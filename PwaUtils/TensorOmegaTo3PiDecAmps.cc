@@ -38,10 +38,10 @@
 
 TensorOmegaTo3PiDecAmps::TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTensorDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
-  ,_JPCLSs(theDec->JPCLSAmps())
+  ,_LSs(theDec->LSAmps())
   ,_factorMag(1.)
 {
-  if(_JPCLSs.size()>0) _factorMag=1./sqrt(_JPCLSs.size());
+  if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
   _daughter1=_decay->daughter1Part();
   _daughter2=_decay->daughter2Part();
   _daughter3=theDec->daughter3Part();
@@ -84,9 +84,9 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin lamX, EvtData* theData, Sp
     return result;
   }
 
-  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-  for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-    if( fabs(lamX) > (*it)->J ) continue;
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( fabs(lamX) > _JPCPtr->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
@@ -114,23 +114,23 @@ void TensorOmegaTo3PiDecAmps::print(std::ostream& os) const{
 
 void TensorOmegaTo3PiDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itLS;
-  for(itLS=_JPCLSs.begin(); itLS!=_JPCLSs.end(); ++itLS){
+  std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
+  for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
     currentMagValMap[*itLS]=_factorMag;
     currentPhiValMap[*itLS]=0.;
     currentMagErrMap[*itLS]=_factorMag;
     currentPhiErrMap[*itLS]=0.3;
   }
 
-  fitVal.Mags[_key]=currentMagValMap;
-  fitVal.Phis[_key]=currentPhiValMap;
-  fitErr.Mags[_key]=currentMagErrMap;
-  fitErr.Phis[_key]=currentPhiErrMap;
+  fitVal.MagsLS[_key]=currentMagValMap;
+  fitVal.PhisLS[_key]=currentPhiValMap;
+  fitErr.MagsLS[_key]=currentMagErrMap;
+  fitErr.PhisLS[_key]=currentPhiErrMap;
 
   _absDyn->getDefaultParams(fitVal, fitErr);
 
@@ -153,11 +153,11 @@ bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
    }
 
    if(!_recalculate){
-     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
-     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
+     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
+     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 
-     std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-     for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+     std::vector< std::shared_ptr<const LScomb> >::iterator it;
+     for (it=_LSs.begin(); it!=_LSs.end(); ++it){
        double theMag=magMap[*it];
        double thePhi=phiMap[*it];
 
@@ -177,11 +177,11 @@ bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
 
 
 void TensorOmegaTo3PiDecAmps::updateFitParams(fitParams& theParamVal){
-   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags[_key];
-   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis[_key];
+   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
+   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 
-   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-   for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
+   std::vector< std::shared_ptr<const LScomb> >::iterator it;
+   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
      double theMag=magMap[*it];
      double thePhi=phiMap[*it];
      _currentParamMags[*it]=theMag;

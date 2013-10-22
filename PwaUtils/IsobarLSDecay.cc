@@ -52,10 +52,19 @@ void IsobarLSDecay::extractStates(){
     Spin currentGParity=_motherIGJPCPtr->G;
     int daughter1GParity=_daughter1->theGParity();
     int daughter2GParity=_daughter2->theGParity();
-    if( fabs(currentGParity)==1 && fabs(daughter1GParity)==1 && fabs(daughter2GParity)==1) validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps, true, _gParity, true);
-    else validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps);
+    if( fabs(currentGParity)==1 && fabs(daughter1GParity)==1 && fabs(daughter2GParity)==1){
+      validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps, true, _gParity, true);
+      validLS( _motherIGJPCPtr, _daughter1, _daughter2, _LSDecAmps, true, _gParity, true);
+    }
+    else{
+      validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps);
+      validLS( _motherIGJPCPtr, _daughter1, _daughter2, _LSDecAmps);
+    }
   }
-  else validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps);
+  else{
+    validJPCLS( _motherIGJPCPtr, _daughter1, _daughter2, _JPCLSDecAmps);
+    validLS( _motherIGJPCPtr, _daughter1, _daughter2, _LSDecAmps);
+  }
 
   if( 0==_JPCLSDecAmps.size()) Info << "_JPCLSDecAmps.size()==0 for " << name() << endmsg;
   print(std::cout);
