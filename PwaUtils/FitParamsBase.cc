@@ -48,37 +48,37 @@ FitParamsBase::~FitParamsBase()
 
 void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValParams, fitParams& theErrParams){
 
-  // 0.: set magnitudes of all lamlam amplitudes
-  setMnUsrParamsJPC(upar, theValParams.Isos, theErrParams.Isos, _isoSuffix);
+  // // 0.: set magnitudes of all lamlam amplitudes
+  // setMnUsrParamsJPC(upar, theValParams.Isos, theErrParams.Isos, _isoSuffix);
 
-  // 1.a: set magnitudes of all ls amplitudes
-  setMnUsrParamsLS(upar, theValParams.MagsLS, theErrParams.MagsLS, _magSuffix);
-
-  // 1.b: set phases of all ls amplitudes
-  setMnUsrParamsLS(upar, theValParams.PhisLS, theErrParams.PhisLS, _phiSuffix);
-
-  // 1.: set magnitudes of all lamlam amplitudes
-  setMnUsrParamsJPCLamLam(upar, theValParams.MagLamLams, theErrParams.MagLamLams, _magSuffix);
-
-  // 2.: set phases of all lam lam amplitudes
-  setMnUsrParamsJPCLamLam(upar, theValParams.PhiLamLams, theErrParams.PhiLamLams, _phiSuffix);
-
-  // 3.: set magnitudes of all amplitudes
+  // 1.: set magnitudes of all JPCLS amplitudes
   setMnUsrParamsJPCLS(upar, theValParams.Mags, theErrParams.Mags, _magSuffix);
 
-   // 4.: set phases of all amplitudes
+   // 2.: set phases of all JPCLS amplitudes
   setMnUsrParamsJPCLS(upar, theValParams.Phis, theErrParams.Phis, _phiSuffix);
 
-   // 5.: set all masses
+  // 3.: set magnitudes of all lamlam amplitudes
+  setMnUsrParamsJPCLamLam(upar, theValParams.MagLamLams, theErrParams.MagLamLams, _magSuffix);
+
+  // 4.: set phases of all lam lamlam amplitudes
+  setMnUsrParamsJPCLamLam(upar, theValParams.PhiLamLams, theErrParams.PhiLamLams, _phiSuffix);
+
+  // 5.: set magnitudes of all ls amplitudes
+  setMnUsrParamsLS(upar, theValParams.MagsLS, theErrParams.MagsLS, _magSuffix);
+
+  // 6.: set phases of all ls amplitudes
+  setMnUsrParamsLS(upar, theValParams.PhisLS, theErrParams.PhisLS, _phiSuffix);
+
+   // 7.: set all masses
   setMnUsrParamsDouble(upar, theValParams.Masses, theErrParams.Masses, _massSuffix);
 
-   // 6.: set all widths
+   // 8.: set all widths
    setMnUsrParamsDouble(upar, theValParams.Widths, theErrParams.Widths, _widthSuffix);
 
-   // 7.: set all gFactors
+   // 9.: set all gFactors
   setMnUsrParamsDouble(upar, theValParams.gFactors, theErrParams.gFactors, _gFactorSuffix);
 
-   // 8.: set all other parameters
+   // 10.: set all other parameters
   setMnUsrParamsDouble(upar, theValParams.otherParams, theErrParams.otherParams, _otherParamSuffix);
 
 }
@@ -87,16 +87,15 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValPara
 
 void FitParamsBase::printParams(fitParams& theParams){
 
-  printJPCParams(theParams, theParams.Isos, _isoSuffix);
-
-  printLSParams(theParams, theParams.MagsLS, _magSuffix);
-  printLSParams(theParams, theParams.PhisLS, _phiSuffix);
+  //  printJPCParams(theParams, theParams.Isos, _isoSuffix);
+  printJPCLSParams(theParams, theParams.Mags, _magSuffix);
+  printJPCLSParams(theParams, theParams.Phis, _phiSuffix);
   
   printJPCLamLamParams(theParams, theParams.MagLamLams, _magSuffix);
   printJPCLamLamParams(theParams, theParams.PhiLamLams, _phiSuffix);
 
-  printJPCLSParams(theParams, theParams.Mags, _magSuffix);
-  printJPCLSParams(theParams, theParams.Phis, _phiSuffix);
+  printLSParams(theParams, theParams.MagsLS, _magSuffix);
+  printLSParams(theParams, theParams.PhisLS, _phiSuffix);
 
   printDoubleParams(theParams, theParams.Masses, _massSuffix);
   printDoubleParams(theParams, theParams.Widths, _widthSuffix);
@@ -107,16 +106,15 @@ void FitParamsBase::printParams(fitParams& theParams){
 void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs){
 
   os << std::setprecision(16);
-  dumpJPCParams(os, theVals.Isos, theErrs.Isos, _isoSuffix);
-
-  dumpLSParams(os, theVals.MagsLS, theErrs.MagsLS,  _magSuffix);
-  dumpLSParams(os, theVals.PhisLS, theErrs.PhisLS,  _phiSuffix);
+  // dumpJPCParams(os, theVals.Isos, theErrs.Isos, _isoSuffix);
+  dumpJPCLSParams(os, theVals.Mags, theErrs.Mags,  _magSuffix);
+  dumpJPCLSParams(os, theVals.Phis, theErrs.Phis,  _phiSuffix);
 
   dumpLamLamParams(os, theVals.MagLamLams, theErrs.MagLamLams, _magSuffix);
   dumpLamLamParams(os, theVals.PhiLamLams, theErrs.PhiLamLams, _phiSuffix);
 
-  dumpJPCLSParams(os, theVals.Mags, theErrs.Mags,  _magSuffix);
-  dumpJPCLSParams(os, theVals.Phis, theErrs.Phis,  _phiSuffix);
+  dumpLSParams(os, theVals.MagsLS, theErrs.MagsLS,  _magSuffix);
+  dumpLSParams(os, theVals.PhisLS, theErrs.PhisLS,  _phiSuffix);
 
   dumpDoubleParams(os, theVals.Masses, theErrs.Masses, _massSuffix);
   dumpDoubleParams(os, theVals.Widths, theErrs.Widths, _widthSuffix);
@@ -128,13 +126,13 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
 void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& theParams){
 
   unsigned int counter=0;
-  getFitParamValJPC(par, theParams.Isos, counter);
-  getFitParamValLS(par, theParams.MagsLS, counter);
-  getFitParamValLS(par, theParams.PhisLS, counter);
-  getFitParamValJPCLamLam(par, theParams.MagLamLams, counter);
-  getFitParamValJPCLamLam(par, theParams.PhiLamLams, counter);
+  //  getFitParamValJPC(par, theParams.Isos, counter);
   getFitParamValJPCLS(par, theParams.Mags, counter);
   getFitParamValJPCLS(par, theParams.Phis, counter);
+  getFitParamValJPCLamLam(par, theParams.MagLamLams, counter);
+  getFitParamValJPCLamLam(par, theParams.PhiLamLams, counter);
+  getFitParamValLS(par, theParams.MagsLS, counter);
+  getFitParamValLS(par, theParams.PhisLS, counter);
   getFitParamValDouble(par, theParams.Masses, counter);
   getFitParamValDouble(par, theParams.Widths, counter);
   getFitParamValDouble(par, theParams.gFactors, counter);
