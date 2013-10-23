@@ -56,10 +56,12 @@ void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
     theKMatrix += *(*it);
   }
 
+  double adlerFactor=(1.-_sAdler0)/(mass*mass-_sAdler0)*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
   for (int i=0; i<theKMatrix.NumRows(); ++i){
     for (int j=0; j<theKMatrix.NumCols(); ++j){
       this->operator()(i,j)=theKMatrix(i,j)+complex<double> ((*_fScatPtr)[i][j]*(1.0-_s0Scat)/(mass*mass-_s0Scat), 0.);
-      this->operator()(i,j)*=(1.-_sAdler0)/(mass*mass-_sAdler0)*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
+      //     this->operator()(i,j)*=(1.-_sAdler0)/(mass*mass-_sAdler0)*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
+      this->operator()(i,j)*=adlerFactor;
     }
   }
 }

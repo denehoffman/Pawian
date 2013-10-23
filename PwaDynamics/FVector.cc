@@ -22,19 +22,36 @@
 //************************************************************************//
 
 #include "PwaDynamics/FVector.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+//#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 
 FVector::FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRel> Pvector) :
   Matrix< complex<double> >::Matrix(Pvector->NumRows(), Pvector->NumCols())
   , _Kmatrix(Kmatrix)
   ,_Pvector(Pvector)
+  ,_imagCompl(0.,1.)
+  ,_idMatrix(NumRows())
+  ,_rhoMatrix(NumRows(),NumRows())
+  ,_phpVec(Kmatrix->phaseSpaceVec())
  {
+   for (int i=0; i<NumRows(); ++i){
+     for (int j=0; j<NumRows(); ++j){
+       _rhoMatrix(i,j)=complex<double> (0.,0.);
+     }
+   }
  }
 
 FVector::FVector(int numRows) :
   Matrix< complex<double> >::Matrix(numRows, 1)
+  ,_imagCompl(0.,1.)
+  ,_idMatrix(NumRows())
+  ,_rhoMatrix(NumRows(),NumRows())
  {
+   for (int i=0; i<NumRows(); ++i){
+     for (int j=0; j<NumRows(); ++j){
+       _rhoMatrix(i,j)=complex<double> (0.,0.);
+     }
+   }
  }
 
 FVector::~FVector(){
@@ -44,31 +61,32 @@ void FVector::evalMatrix(const double mass){
   _Kmatrix->evalMatrix(mass);
   _Pvector->evalMatrix(mass);
 
-  vector<std::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
-  Matrix< complex<double> > theRhoMatrix(NumRows(),NumRows());
+ for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
 
-  for (int i=0; i<NumRows(); ++i){
-    for (int j=0; j<NumRows(); ++j){
-      theRhoMatrix(i,j)=complex<double> (0.,0.);
-      if (i==j){
-        theRhoMatrix(i,j) = phpVec[j]->factor(mass); 
-      }
-    }
-  }
-
-  complex<double> imagCompl(0.,1.); 
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix-_imagCompl*(*_Kmatrix)*_rhoMatrix;
+  denomMatrComplInv.invert();
   
-  IdentityMatrix< complex<double> > theIdMatrix(NumRows());
-  Matrix< complex< double > > tmpDenomMatrCompl = theIdMatrix-imagCompl*(*_Kmatrix)*theRhoMatrix;
-
-  Matrix< complex< double > > tmpDenomMatrInv=tmpDenomMatrCompl;
-  tmpDenomMatrInv.invert();
-  
-  Matrix< complex <double> > currentTMatr=tmpDenomMatrInv*(*_Pvector);
+  Matrix< complex <double> > currentTMatr=denomMatrComplInv*(*_Pvector);
 
   for (int i=0; i<currentTMatr.NumRows(); ++i){
     this->operator()(i,0)=currentTMatr(i,0);
   }
 
+}
+
+complex<double> FVector::evalProjMatrix(const double mass, int index){
+  _Kmatrix->evalMatrix(mass);
+  _Pvector->evalMatrix(mass);
+
+  for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
+ 
+  Matrix< complex< double > > denomMatrInv=_idMatrix-_imagCompl*(*_Kmatrix)*_rhoMatrix;
+  denomMatrInv.invert();
+  
+  complex <double> result(0.,0.);
+  for(int i=0;i<NumRows(); ++i){
+    result+=denomMatrInv(index,i)*(*_Pvector)(i,0);
+  }
+  return result; 
 }
 

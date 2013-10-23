@@ -32,7 +32,7 @@ FVectorPiPiS::FVectorPiPiS() :
   FVector(5)
  {
    std::shared_ptr<KMatrixPiPiS> theKMatrix(new KMatrixPiPiS());
-   vector<std::shared_ptr<AbsPhaseSpace> > phpVecs=theKMatrix->phaseSpaceVec();
+   _phpVec=theKMatrix->phaseSpaceVec();
    vector<std::shared_ptr<KPole> > kPoles=theKMatrix->kpoles();
 
    vector<std::shared_ptr<PPole> > thePpoles;
@@ -47,13 +47,13 @@ FVectorPiPiS::FVectorPiPiS() :
 
    std::vector<complex <double> > fProdVec;
 
-   for (int i=0; i<int(phpVecs.size()); ++i){
+   for (int i=0; i<int(_phpVec.size()); ++i){
      complex<double> currentVal(1.0,0.);
      fProdVec.push_back(currentVal);
   }
 
   double s0Prod=-0.0737;
-  std::shared_ptr<PVectorSlowCorRel> thePVector(new PVectorSlowCorRel(thePpoles, phpVecs, fProdVec, s0Prod));   
+  std::shared_ptr<PVectorSlowCorRel> thePVector(new PVectorSlowCorRel(thePpoles, _phpVec, fProdVec, s0Prod));   
   _Kmatrix=theKMatrix;
   _Pvector=thePVector;
   _pVectorCor=thePVector;

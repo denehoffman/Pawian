@@ -29,7 +29,7 @@
 //_____________________________________________________________________________
 // @file FVector.h
 //_____________________________________________________________________________
-
+#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/Matrix.hh"
 #include "PwaDynamics/KMatrixBase.hh"
 #include "PwaDynamics/PVectorRel.hh"
@@ -38,6 +38,8 @@
 #include <memory>
 
 using namespace std;
+
+class AbsPhaseSpace;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
@@ -53,13 +55,18 @@ public:
   virtual ~FVector();
 
   virtual void evalMatrix(const double mass);
+  virtual complex<double> evalProjMatrix(const double mass, int index);
   virtual void updateBeta(int i, complex<double> beta) {_Pvector->updateBeta(i, beta);}
   //  virtual void updateFprod (int i, complex<double> fProd) {;}
   //  virtual void updateS0prod (double s0prod) {;}
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 protected:
   std::shared_ptr<KMatrixBase> _Kmatrix; 
-  std::shared_ptr<PVectorRel> _Pvector; 
+  std::shared_ptr<PVectorRel> _Pvector;
+  complex<double> _imagCompl;
+  IdentityMatrix< complex<double> > _idMatrix;
+  Matrix< complex<double> > _rhoMatrix;
+  vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
 };
 //_____________________________________________________________________________
 
