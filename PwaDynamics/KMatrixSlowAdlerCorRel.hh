@@ -34,6 +34,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <map>
 #include <boost/multi_array.hpp>
 
 class KPole;

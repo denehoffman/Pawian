@@ -35,13 +35,21 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Utils/FunctionUtils.hh"
-#include "PwaDynamics/FVectorPiPiS.hh"
+#include "PwaDynamics/FVector.hh"
+#include "PwaDynamics/KMatrixPiPiS.hh" 
+#include "PwaDynamics/PVectorSlowCorRel.hh"
+#include "PwaDynamics/AbsPhaseSpace.hh"
+#include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/PPole.hh"
 #include "Particle/ParticleTable.hh"
 
 PiPiSWaveASDynamics::PiPiSWaveASDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, ParticleTable* thePdtTable) :
   AbsDynamics(name, fsParticles, mother)
   ,_pdtTable(thePdtTable)
   ,_projectionIndex(projectionIndex(fsParticles))
+  , _KmatrixPiPiS(new KMatrixPiPiS())
+  , _phpVec(_KmatrixPiPiS->phaseSpaceVec())
+  ,_kPoles(_KmatrixPiPiS->kpoles())
 {
   DebugMsg << "projection index is " << _projectionIndex << endmsg;
 }
@@ -153,7 +161,8 @@ void PiPiSWaveASDynamics::updateFitParams(fitParams& theParamVal){
 
     _currentS0Map[it1->first]=theParamVal.otherParams[it1->first+"S0_PosNeg"];
 
-    std::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[it1->first];
+    // std::shared_ptr<FVectorPiPiS> currentFVec=_fVecMap[it1->first];
+    std::shared_ptr<PVectorSlowCorRel> currentPVec=_pVecMap[it1->first];
 
     //update _pipiSFVec
     complex<double> b_pole1=bFactors["b_pole1Mag"]*complex<double>(cos(bFactors["b_pole1Phi"]), sin(bFactors["b_pole1Phi"]));
@@ -161,24 +170,24 @@ void PiPiSWaveASDynamics::updateFitParams(fitParams& theParamVal){
     complex<double> b_pole3=bFactors["b_pole3Mag"]*complex<double>(cos(bFactors["b_pole3Phi"]), sin(bFactors["b_pole3Phi"]));
     complex<double> b_pole4=bFactors["b_pole4Mag"]*complex<double>(cos(bFactors["b_pole4Phi"]), sin(bFactors["b_pole4Phi"]));
     complex<double> b_pole5=bFactors["b_pole5Mag"]*complex<double>(cos(bFactors["b_pole5Phi"]), sin(bFactors["b_pole5Phi"]));
-    currentFVec->updateBeta(0, b_pole1);
-    currentFVec->updateBeta(1, b_pole2);
-    currentFVec->updateBeta(2, b_pole3);
-    currentFVec->updateBeta(3, b_pole4);
-    currentFVec->updateBeta(4, b_pole5);
+    currentPVec->updateBeta(0, b_pole1);
+    currentPVec->updateBeta(1, b_pole2);
+    currentPVec->updateBeta(2, b_pole3);
+    currentPVec->updateBeta(3, b_pole4);
+    currentPVec->updateBeta(4, b_pole5);
 
     complex<double> fProdPiPi=fProds["fprod_PiPiMag"]*complex<double>(cos(fProds["fprod_PiPiPhi"]), sin(fProds["fprod_PiPiPhi"]));
     complex<double> fProdKK=fProds["fprod_KKMag"]*complex<double>(cos(fProds["fprod_KKPhi"]), sin(fProds["fprod_KKPhi"]));
     complex<double> fProd4Pi=fProds["fprod_4PiMag"]*complex<double>(cos(fProds["fprod_4PiPhi"]), sin(fProds["fprod_4PiPhi"]));
     complex<double> fProdEtaEta=fProds["fprod_EtaEtaMag"]*complex<double>(cos(fProds["fprod_EtaEtaPhi"]), sin(fProds["fprod_EtaEtaPhi"]));
     complex<double> fProdEtaEtap=fProds["fprod_EtaEtapMag"]*complex<double>(cos(fProds["fprod_EtaEtapPhi"]), sin(fProds["fprod_EtaEtapPhi"]));
-    currentFVec->updateFprod(0, fProdPiPi);
-    currentFVec->updateFprod(1, fProdKK);
-    currentFVec->updateFprod(2, fProd4Pi);
-    currentFVec->updateFprod(3, fProdEtaEta);
-    currentFVec->updateFprod(4, fProdEtaEtap);
+    currentPVec->updateFprod(0, fProdPiPi);
+    currentPVec->updateFprod(1, fProdKK);
+    currentPVec->updateFprod(2, fProd4Pi);
+    currentPVec->updateFprod(3, fProdEtaEta);
+    currentPVec->updateFprod(4, fProdEtaEtap);
     
-    currentFVec->updateS0prod(_currentS0Map[it1->first]);
+    currentPVec->updateS0prod(_currentS0Map[it1->first]);
    }
 }
 
@@ -192,11 +201,12 @@ void PiPiSWaveASDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
 
   std::cout << "addGrandMa:\t" << theName << std::endl;
 
-  std::map<std::string, std::shared_ptr<FVectorPiPiS> >::iterator it = _fVecMap.find(theName);
+  std::map<std::string, std::shared_ptr<FVector> >::iterator it = _fVecMap.find(theName);
   
   if (it != _fVecMap.end()) return;
 
-  std::shared_ptr<FVectorPiPiS> currentFVector=std::shared_ptr<FVectorPiPiS>(new FVectorPiPiS());
+  std::shared_ptr<PVectorSlowCorRel> currentPVector=makeNewPVec();
+  std::shared_ptr<FVector> currentFVector(new FVector(_KmatrixPiPiS, currentPVector));
 
   _currentbFactorMap[theName]["b_pole1Mag"]=1.;
   _currentbFactorMap[theName]["b_pole1Phi"]=0.;
@@ -215,11 +225,11 @@ void PiPiSWaveASDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   complex<double> b_pole3=bFactors["b_pole3Mag"]*complex<double>(cos(bFactors["b_pole3Phi"]), sin(bFactors["b_pole3Phi"]));
   complex<double> b_pole4=bFactors["b_pole4Mag"]*complex<double>(cos(bFactors["b_pole4Phi"]), sin(bFactors["b_pole4Phi"]));
   complex<double> b_pole5=bFactors["b_pole5Mag"]*complex<double>(cos(bFactors["b_pole5Phi"]), sin(bFactors["b_pole5Phi"]));
-  currentFVector->updateBeta(0, b_pole1);
-  currentFVector->updateBeta(1, b_pole2);
-  currentFVector->updateBeta(2, b_pole3);
-  currentFVector->updateBeta(3, b_pole4);
-  currentFVector->updateBeta(4, b_pole5);
+  currentPVector->updateBeta(0, b_pole1);
+  currentPVector->updateBeta(1, b_pole2);
+  currentPVector->updateBeta(2, b_pole3);
+  currentPVector->updateBeta(3, b_pole4);
+  currentPVector->updateBeta(4, b_pole5);
 
   _currentfProdMap[theName]["fprod_PiPiMag"]=1.;
   _currentfProdMap[theName]["fprod_PiPiPhi"]=0.;
@@ -239,15 +249,16 @@ void PiPiSWaveASDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   complex<double> fProdEtaEta=fProds["fprod_EtaEtaMag"]*complex<double>(cos(fProds["fprod_EtaEtaPhi"]), sin(fProds["fprod_EtaEtaPhi"]));
   complex<double> fProdEtaEtap=fProds["fprod_EtaEtapMag"]*complex<double>(cos(fProds["fprod_EtaEtapPhi"]), sin(fProds["fprod_EtaEtapPhi"]));
 
-  currentFVector->updateFprod(0, fProdPiPi);
-  currentFVector->updateFprod(1, fProdKK);
-  currentFVector->updateFprod(2, fProd4Pi);
-  currentFVector->updateFprod(3, fProdEtaEta);
-  currentFVector->updateFprod(4, fProdEtaEtap);
+  currentPVector->updateFprod(0, fProdPiPi);
+  currentPVector->updateFprod(1, fProdKK);
+  currentPVector->updateFprod(2, fProd4Pi);
+  currentPVector->updateFprod(3, fProdEtaEta);
+  currentPVector->updateFprod(4, fProdEtaEtap);
 
   _currentS0Map[theName]=-1.;
-  currentFVector->updateS0prod(_currentS0Map[theName]);
+  currentPVector->updateS0prod(_currentS0Map[theName]);
 
+  _pVecMap[theName]=currentPVector;
   _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
 }
@@ -302,4 +313,28 @@ int PiPiSWaveASDynamics::projectionIndex(std::vector<Particle*>& fsParticles){
   }
   
   return result;
+}
+
+std::shared_ptr<PVectorSlowCorRel> PiPiSWaveASDynamics::makeNewPVec(){
+
+  vector<std::shared_ptr<PPole> > thePpoles;
+  complex<double> defaultBeta(1.,0.); 
+     
+   vector<std::shared_ptr<KPole> >::iterator it;
+   for (it=_kPoles.begin(); it!=_kPoles.end(); ++it){ 
+     std::vector<double> currentGFactors=(*it)->gFactors();
+     std::shared_ptr<PPole> currentPPole(new PPole(defaultBeta, currentGFactors, (*it)->poleMass()));
+     thePpoles.push_back(currentPPole);     
+   }
+
+   std::vector<complex <double> > fProdVec;
+   
+   for (int i=0; i<int(_phpVec.size()); ++i){
+     complex<double> currentVal(1.0,0.);
+     fProdVec.push_back(currentVal);
+   }
+   
+   double s0Prod=-0.0737;
+   std::shared_ptr<PVectorSlowCorRel> thePVector(new PVectorSlowCorRel(thePpoles, _phpVec, fProdVec, s0Prod));
+   return thePVector;
 }

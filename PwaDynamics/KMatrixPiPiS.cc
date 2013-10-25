@@ -109,6 +109,7 @@ void  KMatrixPiPiS::initASParam1900(){
       (*_fScatPtr)[i][j]=0.;
     }
   }
+
   (*_fScatPtr)[0][0]=0.23399;
   (*_fScatPtr)[0][1]=0.15044;
   (*_fScatPtr)[0][2]=-0.20545;
@@ -135,9 +136,9 @@ void  KMatrixPiPiS::initASParam1900(){
 
 }
 
-void KMatrixPiPiS::evalMatrix(const double mass){
-  if(fabs(mass-_oldMass) > 1e-8){
-    KMatrixSlowAdlerCorRel::evalMatrix(mass);
-    _oldMass=mass;
-  }
-}
+// void KMatrixPiPiS::evalMatrix(const double mass){
+//   if(fabs(mass-_oldMass) > 1e-8){
+//     KMatrixSlowAdlerCorRel::evalMatrix(mass);
+//     _oldMass=mass;
+//   }
+// }

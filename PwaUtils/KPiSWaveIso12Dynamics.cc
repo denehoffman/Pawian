@@ -63,9 +63,7 @@ complex<double> result(0.,0.);
 
   else{
       theMutex.lock();
-      std::shared_ptr<FVector> currentFVec=_fVecMap[currentKey];
-      currentFVec->evalMatrix(theData->FourVecsString[_dynKey].M());
-      result=(*currentFVec)[0];
+      result=_fVecMap[currentKey]->evalProjMatrix(theData->FourVecsString[_dynKey].M(), 0);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }

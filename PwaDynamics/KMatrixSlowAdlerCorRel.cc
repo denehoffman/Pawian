@@ -49,18 +49,23 @@ KMatrixSlowAdlerCorRel::~KMatrixSlowAdlerCorRel(){
 
 void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
 
-  Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
+  for (int i=0; i<NumRows(); ++i){
+    for (int j=0; j<NumCols(); ++j){
+      this->operator()(i,j)=0.;
+    }
+  }
   vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
     (*it)->evalMatrix(mass);
-    theKMatrix += *(*it);
+    (*this)+= *(*it);
   }
 
   double adlerFactor=(1.-_sAdler0)/(mass*mass-_sAdler0)*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
-  for (int i=0; i<theKMatrix.NumRows(); ++i){
-    for (int j=0; j<theKMatrix.NumCols(); ++j){
-      this->operator()(i,j)=theKMatrix(i,j)+complex<double> ((*_fScatPtr)[i][j]*(1.0-_s0Scat)/(mass*mass-_s0Scat), 0.);
-      //     this->operator()(i,j)*=(1.-_sAdler0)/(mass*mass-_sAdler0)*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
+  double s0ScatFactor=(1.0-_s0Scat)/(mass*mass-_s0Scat);
+
+  for (int i=0; i<NumRows(); ++i){
+    for (int j=0; j<NumCols(); ++j){
+      this->operator()(i,j)+=complex<double> ((*_fScatPtr)[i][j]*s0ScatFactor, 0.);
       this->operator()(i,j)*=adlerFactor;
     }
   }

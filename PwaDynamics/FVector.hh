@@ -56,10 +56,8 @@ public:
 
   virtual void evalMatrix(const double mass);
   virtual complex<double> evalProjMatrix(const double mass, int index);
-  virtual void updateBeta(int i, complex<double> beta) {_Pvector->updateBeta(i, beta);}
-  //  virtual void updateFprod (int i, complex<double> fProd) {;}
-  //  virtual void updateS0prod (double s0prod) {;}
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
+
 protected:
   std::shared_ptr<KMatrixBase> _Kmatrix; 
   std::shared_ptr<PVectorRel> _Pvector;

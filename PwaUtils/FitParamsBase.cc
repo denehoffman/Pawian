@@ -86,7 +86,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValPara
 
 
 void FitParamsBase::printParams(fitParams& theParams){
-  
+
   //  printJPCParams(theParams, theParams.Isos, _isoSuffix);
   printJPCLSParams(theParams, theParams.Mags, _magSuffix);
   printJPCLSParams(theParams, theParams.Phis, _phiSuffix);

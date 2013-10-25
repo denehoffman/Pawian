@@ -36,8 +36,12 @@
 #include "PwaUtils/AbsDynamics.hh"
 
 class AbsXdecAmp;
-class FVectorPiPiS;
+class FVector;
 class ParticleTable;
+class KMatrixPiPiS;
+class PVectorSlowCorRel;
+class AbsPhaseSpace;
+class KPole;
 
 class PiPiSWaveASDynamics : public AbsDynamics{
 
@@ -60,7 +64,7 @@ protected:
   std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
 
-  std::map<std::string, std::shared_ptr<FVectorPiPiS> > _fVecMap;
+  std::map<std::string, std::shared_ptr<FVector> > _fVecMap;
 
   std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
   std::map<std::string, std::map<std::string, double> > _currentfProdMap;
@@ -71,6 +75,11 @@ protected:
 
   ParticleTable* _pdtTable;
   int _projectionIndex;
-private:
+  std::shared_ptr<KMatrixPiPiS> _KmatrixPiPiS;
+  std::map<std::string, std::shared_ptr<PVectorSlowCorRel> > _pVecMap;
+  vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
+  vector<std::shared_ptr<KPole> > _kPoles;
 
+private:
+  std::shared_ptr<PVectorSlowCorRel> makeNewPVec();
 };
