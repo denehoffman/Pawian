@@ -37,7 +37,7 @@
 #include "PwaUtils/FitParamsBase.hh"
 //#include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/PwaGen.hh"
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/PwaCovMatrix.hh"

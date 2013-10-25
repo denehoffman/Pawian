@@ -5,6 +5,7 @@ lib pbarp :
         [ glob *.cc : *App.cc ]  
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/ConfigParser//ConfigParser
         $(TOP)/PwaUtils//PwaUtils
         $(TOP)/pbarpUtils//pbarpUtils
         $(TOP)/Particle//Particle

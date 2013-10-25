@@ -27,7 +27,7 @@
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "epemUtils/EpemChannelEnv.hh"
-#include "epemUtils/epemParser.hh"
+#include "ConfigParser/epemParser.hh"
 #include "epemUtils/epemReaction.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"

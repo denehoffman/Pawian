@@ -40,14 +40,10 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 
-// For Microsoft-compatible compilers
-#if defined(_MSC_VER)  &&  (_MSC_VER >= 1020)
 #pragma once
-#endif
 
 
 namespace po = boost::program_options;
-//using namespace Gem::Geneva;
 
 class ParserBase {
 public:

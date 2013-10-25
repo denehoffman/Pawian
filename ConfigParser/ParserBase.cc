@@ -23,7 +23,7 @@
 
 // Bertram Kopf (RUB)
 
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include <iterator>
 #include <iostream>

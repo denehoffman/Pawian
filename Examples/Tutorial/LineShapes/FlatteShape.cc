@@ -27,8 +27,13 @@
 #include <string>
 #include "Examples/Tutorial/LineShapes/FlatteShape.hh"
 #include "PwaDynamics/Flatte.hh"
-#include "qft++/matrix/KpoleMatrix.hh"
-#include "qft++/matrix/TMatrix.hh"
+#include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/KMatrixRel.hh"
+#include "PwaDynamics/TMatrixRel.hh"
+#include "PwaDynamics/AbsPhaseSpace.hh"
+#include "PwaDynamics/PhaseSpaceIsobar.hh"
+//#include "qft++/matrix/KpoleMatrix.hh"
+//#include "qft++/matrix/TMatrix.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -128,14 +133,25 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
   theMassDecPairVec.push_back(decPairLow);
   theMassDecPairVec.push_back(decPairHigh);
 
- //   KpoleMatrix kPole(the_gis, 0.981, 0.97, theMassDecPairVec);
+  //    KpoleMatrix kPole(the_gis, 0.98, theMassDecPairVec);
+  std::shared_ptr<KPole> kPole(new KPole(the_gis, 0.98));
 
-    KpoleMatrix kPole(the_gis, 0.98, theMassDecPairVec);
-//    KpoleMatrix kPole(the_gis, 1.3, 0.97, theMassDecPairVec);
+   // vector<KpoleMatrix> kPoles;
+   // kPoles.push_back(kPole);
 
-   vector<KpoleMatrix> kPoles;
+  std::vector<std::shared_ptr<KPole> > kPoles;
    kPoles.push_back(kPole);
-   TMatrix theTMatrix(kPoles);
+
+   std::vector<std::shared_ptr<AbsPhaseSpace> > phpVec;
+   std::shared_ptr<AbsPhaseSpace> lowPhp(new PhaseSpaceIsobar(decPairLow.first, decPairLow.second));
+   phpVec.push_back(lowPhp);
+   std::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobar(KplusMass, K0Mass));
+   phpVec.push_back(kkPhp);
+
+   std::shared_ptr<KMatrixRel> theKMatrixRel( new KMatrixRel(kPoles, phpVec));
+
+
+   TMatrixRel theTMatrix(theKMatrixRel);
 
    Flatte theFlatte(decPairLow, decPairHigh); 
   
@@ -158,7 +174,7 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      complex<double> flatteHighNew=theFlatte.calcSecondChannel(mass, 0.98, g1, g2);
      _histShapeHighFlatteNew->Fill(mass4Vec.M(), norm(flatteHighNew));
      
-     theTMatrix.updateMatrix(mass);
+     theTMatrix.evalMatrix(mass);
      cout << "current TMatrix:\n " <<  theTMatrix << endl;
      
      complex<double> currentValLow=theTMatrix(0,0);
@@ -172,7 +188,7 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      _histShapeHighKmatr->Fill(mass4Vec.M(), norm(currentValHigh) );
      _argandKmatrHighHist->Fill(currentValHigh.real(),currentValHigh.imag());
 
-     theTMatrix.updateMatrixRel(mass);
+     theTMatrix.evalMatrix(mass);
      cout << "current TMatrixRel:\n " <<  theTMatrix << endl;
 
      complex<double> currentValLowRel=theTMatrix(0,0);
@@ -180,9 +196,12 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      complex<double> currentValHighRel=theTMatrix(0,1); 
      cout << "currentValHighRel= " << currentValHighRel << "  norm: " <<  norm(currentValHighRel) << endl;
 
-     vector< complex<double> > rhoFactors=theTMatrix.currentRhoFactors(); 
-     complex<double> rhoDiv=rhoFactors[1]/rhoFactors[0];     
-
+     //     vector< complex<double> > rhoFactors=theTMatrix.currentRhoFactors(); 
+     // complex<double> rhoDiv=rhoFactors[1]/rhoFactors[0];    
+     vector< complex<double> > rhoFactors;
+     rhoFactors.push_back(lowPhp->factor(mass4Vec.M()));
+     rhoFactors.push_back(kkPhp->factor(mass4Vec.M()));
+     
      _histShapeLowKmatrRel->Fill(mass4Vec.M(), norm(currentValLowRel)*norm(rhoFactors[0]) );
      _argandKmatrLowRelHist->Fill(sqrt(norm(rhoFactors[0]))*currentValLowRel.real(),sqrt(norm(rhoFactors[0]))*currentValLowRel.imag());
      _histShapeHighKmatrRel->Fill(mass4Vec.M(), norm(currentValHighRel)*norm(sqrt(rhoFactors[0]*rhoFactors[1])) );

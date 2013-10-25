@@ -26,7 +26,7 @@
 
 #include "Particle/ParticleTable.hh"
 #include "resUtils/ResChannelEnv.hh"
-#include "resUtils/resParser.hh"
+#include "ConfigParser/resParser.hh"
 #include "resUtils/resReaction.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 void setErrLogMode( const ParserBase::enErrLogMode& erlMode ) {

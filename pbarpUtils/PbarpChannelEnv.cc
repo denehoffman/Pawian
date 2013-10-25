@@ -27,7 +27,7 @@
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "pbarpUtils/PbarpChannelEnv.hh"
-#include "pbarpUtils/pbarpParser.hh"
+#include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"

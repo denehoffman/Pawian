@@ -32,7 +32,7 @@
 
 #include "TROOT.h"
 
-#include "epemUtils/epemParser.hh"
+#include "ConfigParser/epemParser.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"

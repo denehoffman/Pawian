@@ -21,11 +21,11 @@
 //									  //
 //************************************************************************//
 
-// pbarpParser class definition file. -*- C++ -*-
+// resParser class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 
-#include "pbarpUtils/pbarpParser.hh"
+#include "ConfigParser/resParser.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 #include <iterator>
@@ -34,49 +34,32 @@
 using namespace std;
 
 
-pbarpParser::pbarpParser(int argc,char **argv):
+resParser::resParser(int argc,char **argv):
   ParserBase(argc,argv)
-  ,_lMax(3)
-  ,_pbarMomentum(2.)
+  ,_motherResName("Jpsi")
 {
   po::options_description common("Common Options");
   common.add_options()
-    ("lmax", po::value<unsigned>(&_lMax)->default_value(_lMax),"choose lmax.")
-    ("pbarmom", po::value<float>(&_pbarMomentum)->default_value(_pbarMomentum),"antiproton momentum")
-    ;
+     ;
   
   _common->add(common);
   
   po::options_description config("Configuration file options");
   config.add_options()
-     ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation")
-     ("dropPbarpLForParticle", po::value< vector<string> >(&_dropPbarpLForParticle), "drop l (pbarp system) for certain particle")
+    ("motherRes",po::value<string>(&_motherResName),"mother resonance of the complete decay tree")
     ;
   _config->add(config);
   
   parseCommandLine(argc, argv);
 }
 
-bool pbarpParser::parseCommandLine(int argc, char **argv)
+bool resParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
 
-  std::cout << "Antiproton momentum in lab frame\t pbarmom = " << _pbarMomentum << std::endl;
-  std::cout << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax <<std::endl;
-
-  std::vector<std::string>::const_iterator it;
-
-  std::cout << "\nspin density matrix calculation for particles" << std::endl;
-  for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
-     std::cout << (*it) << "\n";
-  }
-
-  std::cout << "\ndrop pbarp L " << std::endl;
-  for (it=_dropPbarpLForParticle.begin(); it!=_dropPbarpLForParticle.end(); ++it){
-     std::cout << (*it) << "\n";
-  }
-
+  std::cout << "\nname of the mother resonance:\t" << _motherResName << std::endl;
+  
   std::cout << std::endl;
-
+  
   return true;
 }

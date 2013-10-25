@@ -24,50 +24,30 @@
 // epemParser class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
+#pragma once
 
-#include "epemUtils/epemParser.hh"
-#include "ErrLogger/ErrLogger.hh"
-
-#include <iterator>
-#include <iostream>
-#include <fstream>
-using namespace std;
+#include "ConfigParser/ParserBase.hh"
+// Boost headers go here
 
 
-epemParser::epemParser(int argc,char **argv):
-  ParserBase(argc,argv)
-  ,_cmsMass(3.096916)
+
+class epemParser : public ParserBase 
 {
-  po::options_description common("Common Options");
-  common.add_options()
-     ;
-  
-  _common->add(common);
-  
-  po::options_description config("Configuration file options");
-  config.add_options()
-    ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation") 
-    ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
-    ;
-  _config->add(config);
-  
-  parseCommandLine(argc, argv);
-}
 
-bool epemParser::parseCommandLine(int argc, char **argv)
-{
-  ParserBase::parseCommandLine(argc, argv);
+  public:
 
-  std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
+  epemParser(int argc,char **argv);
+  virtual ~epemParser(){;}
 
-  std::vector<std::string>::const_iterator it;
-  
-  std::cout << "\nspin density matrix calculation for particles" << std::endl;
-   for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
-      std::cout << (*it) << "\n";
-   }
-  
-  std::cout << std::endl;
-  
-  return true;
-}
+  //  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
+  const double cmsMass() {return _cmsMass;}
+
+protected:
+  virtual bool parseCommandLine(int argc,char **argv); 
+
+  double _cmsMass;
+  std::vector<std::string> _spinDensity;
+};
+
+
+

@@ -21,31 +21,53 @@
 //									  //
 //************************************************************************//
 
-// resParser class definition file. -*- C++ -*-
+// epemParser class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
-#pragma once
 
-#include "PwaUtils/ParserBase.hh"
-// Boost headers go here
+#include "ConfigParser/epemParser.hh"
+#include "ErrLogger/ErrLogger.hh"
+
+#include <iterator>
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 
-
-class resParser : public ParserBase 
+epemParser::epemParser(int argc,char **argv):
+  ParserBase(argc,argv)
+  ,_cmsMass(3.096916)
 {
+  po::options_description common("Common Options");
+  common.add_options()
+     ;
+  
+  _common->add(common);
+  
+  po::options_description config("Configuration file options");
+  config.add_options()
+    ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation") 
+    ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
+    ;
+  _config->add(config);
+  
+  parseCommandLine(argc, argv);
+}
 
-  public:
+bool epemParser::parseCommandLine(int argc, char **argv)
+{
+  ParserBase::parseCommandLine(argc, argv);
 
-  resParser(int argc,char **argv);
-  virtual ~resParser(){;}
+  std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
 
-  const std::string motherResName() const { return _motherResName;}
-
-protected:
-  virtual bool parseCommandLine(int argc,char **argv); 
-
-  std::string _motherResName;
-};
-
-
-
+  std::vector<std::string>::const_iterator it;
+  
+  std::cout << "\nspin density matrix calculation for particles" << std::endl;
+   for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
+      std::cout << (*it) << "\n";
+   }
+  
+  std::cout << std::endl;
+  
+  return true;
+}

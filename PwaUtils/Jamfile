@@ -6,6 +6,7 @@ lib PwaUtils :
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/PspGen//PspGen
 	: <use>$(TOP)//Minuit2

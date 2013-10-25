@@ -54,7 +54,7 @@
 #include "PwaUtils/EvoMinimizer.hh"
 
 #include "pbarpUtils/pbarpStatesLS.hh"
-#include "pbarpUtils/pbarpParser.hh"
+#include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/pbarpBaseLh.hh"

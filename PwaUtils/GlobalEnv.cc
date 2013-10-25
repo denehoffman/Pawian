@@ -25,7 +25,7 @@
 // Copyright 2013 Julian Pychy
 
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "Particle/PdtParser.hh"
 #include "ErrLogger/ErrLogger.hh"

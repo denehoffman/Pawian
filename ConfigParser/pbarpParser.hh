@@ -21,32 +21,35 @@
 //									  //
 //************************************************************************//
 
-// epemParser class definition file. -*- C++ -*-
+// pbarpParser class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
 
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 // Boost headers go here
 
 
 
-class epemParser : public ParserBase 
+class pbarpParser : public ParserBase 
 {
 
   public:
 
-  epemParser(int argc,char **argv);
-  virtual ~epemParser(){;}
+  pbarpParser(int argc,char **argv);
+  virtual ~pbarpParser(){;}
 
-  //  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
-  const double cmsMass() {return _cmsMass;}
+  const unsigned int getLMax() const { return _lMax; }
+  const float getpbarMomentum() const { return _pbarMomentum; } 
+  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
+  const std::vector<std::string>& dropPbarpLForParticle() const{ return _dropPbarpLForParticle; }
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
-
-  double _cmsMass;
+  unsigned int _lMax;
+  float _pbarMomentum;
   std::vector<std::string> _spinDensity;
+  std::vector<std::string> _dropPbarpLForParticle;
 };
 
 

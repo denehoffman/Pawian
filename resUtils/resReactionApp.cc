@@ -32,7 +32,7 @@
 
 #include "TROOT.h"
 
-#include "resUtils/resParser.hh"
+#include "ConfigParser/resParser.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"

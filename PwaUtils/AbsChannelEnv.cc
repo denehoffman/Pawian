@@ -26,7 +26,7 @@
 
 
 #include "AbsChannelEnv.hh"
-#include "ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "GlobalEnv.hh"
 #include "AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"

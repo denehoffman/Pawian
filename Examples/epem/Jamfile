@@ -5,6 +5,7 @@ lib epem :
         [ glob *.cc : *App.cc ]  
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/ConfigParser//ConfigParser
         $(TOP)/PwaUtils//PwaUtils
         $(TOP)/epemUtils//epemUtils
         $(TOP)/Particle//Particle

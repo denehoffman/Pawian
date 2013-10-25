@@ -26,8 +26,15 @@
 #include <sstream>
 #include <string>
 #include "Examples/Tutorial/LineShapes/TwoPoles.hh"
-#include "qft++/matrix/KpoleMatrix.hh"
-#include "qft++/matrix/TMatrix.hh"
+//#include "qft++/matrix/KpoleMatrix.hh"
+//#include "qft++/matrix/TMatrix.hh"
+#include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/KMatrixRel.hh"
+#include "PwaDynamics/TMatrixRel.hh"
+#include "PwaDynamics/KMatrixNonRel.hh"
+#include "PwaDynamics/TMatrixNonRel.hh"
+#include "PwaDynamics/AbsPhaseSpace.hh"
+#include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -115,18 +122,33 @@ TwoPoles::TwoPoles(double MassRes1, double Width1, double MassRes2, double Width
 
   vector<double> low_gis;
   low_gis.push_back(gLow);
-  KpoleMatrix kPoleLow(low_gis, _massLow, theMassDecPairVec);
+  // KpoleMatrix kPoleLow(low_gis, _massLow, theMassDecPairVec);
+  std::shared_ptr<KPole> kPoleLow(new KPole(low_gis, _massLow));
 
   vector<double> high_gis;
   high_gis.push_back(gHigh);
-  KpoleMatrix kPoleHigh(high_gis, _massHigh, theMassDecPairVec);
+  // KpoleMatrix kPoleHigh(high_gis, _massHigh, theMassDecPairVec);
+  std::shared_ptr<KPole> kPoleHigh(new KPole(high_gis, _massHigh));
 
-  vector<KpoleMatrix> kPoles;
-  kPoles.push_back(kPoleLow);
-  kPoles.push_back(kPoleHigh);
+  // vector<KpoleMatrix> kPoles;
+  // kPoles.push_back(kPoleLow);
+  // kPoles.push_back(kPoleHigh);
+  std::vector<std::shared_ptr<KPole> > kPoles;
+   kPoles.push_back(kPoleLow);
+   kPoles.push_back(kPoleHigh);
 
-  TMatrix theTMatrix(kPoles);
-  
+   std::vector<std::shared_ptr<AbsPhaseSpace> > phpVec;
+   std::shared_ptr<AbsPhaseSpace> firstPhp(new PhaseSpaceIsobar(piMass, piMass));
+   phpVec.push_back(firstPhp); 
+
+   // TMatrix theTMatrix(kPoles);
+   std::shared_ptr<KMatrixRel> theKMatrixRel( new KMatrixRel(kPoles, phpVec));
+   TMatrixRel theTMatrixRel(theKMatrixRel);
+
+
+   std::shared_ptr<KMatrixNonRel> theKMatrixNonRel( new KMatrixNonRel(kPoles, phpVec));
+   TMatrixNonRel theTMatrixNonRel(theKMatrixNonRel);  
+
   double stepSize=( (_massHigh+deltaMass)-(_massLow-deltaMass) )/300.;  
 
 
@@ -165,16 +187,16 @@ TwoPoles::TwoPoles(double MassRes1, double Width1, double MassRes2, double Width
 //     double  rhoMab=2*qab/massIt;
 
 
-    theTMatrix.updateMatrix(massIt);
-    complex<double> currentTmatrix=theTMatrix(0,0);
+    theTMatrixNonRel.evalMatrix(massIt);
+    complex<double> currentTmatrix=theTMatrixNonRel(0,0);
     cout << "TMatrix:\t" <<  currentTmatrix << endl;
     weight=norm(currentTmatrix); 
     _massShapeKmatrHist->Fill(massIt,weight);
     _argandKmatrHist->Fill(currentTmatrix.real(),currentTmatrix.imag()); 
     _phaseKmatrHist->Fill(massIt, atan2(currentTmatrix.imag(), currentTmatrix.real()));
 
-    theTMatrix.updateMatrixRel(massIt);
-    complex<double> currentTmatrixRel=theTMatrix(0,0);
+    theTMatrixRel.evalMatrix(massIt);
+    complex<double> currentTmatrixRel=theTMatrixRel(0,0);
     cout << "TMatrixRel:\t" <<  currentTmatrixRel << endl;
     weight=norm(currentTmatrixRel); 
     _massShapeKmatrHistRel->Fill(massIt,weight);

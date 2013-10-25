@@ -6,6 +6,7 @@ lib resUtils :
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/Particle//Particle
         $(TOP)/Event//Event 

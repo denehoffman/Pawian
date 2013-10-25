@@ -43,11 +43,11 @@ int main(int __argc,char *__argv[]){
   double width2=0.1; 
 
   
-//   double mass1=1.2;
-//   double width1=0.1;
+  // double mass1=1.2;
+  // double width1=0.1;
 
-//   double mass2=1.8;
-//   double width2=0.1; 
+  // double mass2=1.8;
+  // double width2=0.1; 
 
 
 

@@ -34,7 +34,7 @@
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"

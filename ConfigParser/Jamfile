@@ -1,0 +1,9 @@
+project : 
+	;
+
+lib ConfigParser : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/ErrLogger//ErrLogger
+	: 
+	: 
+	:  ;

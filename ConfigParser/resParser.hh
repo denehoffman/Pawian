@@ -21,35 +21,30 @@
 //									  //
 //************************************************************************//
 
-// pbarpParser class definition file. -*- C++ -*-
+// resParser class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
 
-#include "PwaUtils/ParserBase.hh"
+#include "ConfigParser/ParserBase.hh"
 // Boost headers go here
 
 
 
-class pbarpParser : public ParserBase 
+class resParser : public ParserBase 
 {
 
   public:
 
-  pbarpParser(int argc,char **argv);
-  virtual ~pbarpParser(){;}
+  resParser(int argc,char **argv);
+  virtual ~resParser(){;}
 
-  const unsigned int getLMax() const { return _lMax; }
-  const float getpbarMomentum() const { return _pbarMomentum; } 
-  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
-  const std::vector<std::string>& dropPbarpLForParticle() const{ return _dropPbarpLForParticle; }
+  const std::string motherResName() const { return _motherResName;}
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
-  unsigned int _lMax;
-  float _pbarMomentum;
-  std::vector<std::string> _spinDensity;
-  std::vector<std::string> _dropPbarpLForParticle;
+
+  std::string _motherResName;
 };
 
 
