@@ -97,7 +97,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
   int evtNo=theData->evtNo;
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
     result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
@@ -136,15 +136,15 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
 
-    double theMag=_currentParamMags[*it];
-    double thePhi=_currentParamPhis[*it];
+    double theMag=_currentParamMags.at(*it);
+    double thePhi=_currentParamPhis.at(*it);
     complex<double> expi(cos(thePhi), sin(thePhi));
 
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString[_name][(*it)->L][(*it)->S][lamX][lambda1][lambda2];
+	complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString.at(_name).at((*it)->L).at((*it)->S).at(lamX).at(lambda1).at(lambda2);
 
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;

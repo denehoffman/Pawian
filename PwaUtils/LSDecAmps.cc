@@ -110,7 +110,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   int evtNo=theData->evtNo;
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
     result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
@@ -147,24 +147,22 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
 complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
   complex<double> result(0.,0.);
 
-  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString[_wignerDKey][_JPCPtr->J][lamX];
+  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
 
-    map<Spin,map<Spin, double > >& currentCgFactor=_cgPreFactor[*it];
+    map<Spin,map<Spin, double > >& currentCgFactor=_cgPreFactor.at(*it);
 
-    double theMag=_currentParamMags[*it];
-    double thePhi=_currentParamPhis[*it];
+    double theMag=_currentParamMags.at(*it);
+    double thePhi=_currentParamPhis.at(*it);
     complex<double> expi(cos(thePhi), sin(thePhi));
 
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-      map<Spin, double >& currentCgFactor1=currentCgFactor[lambda1];
-
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	complex<double> amp = theMag*expi*currentCgFactor1[lambda2]*conj(currentWignerDsMap[lambda]);
+	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;
       }

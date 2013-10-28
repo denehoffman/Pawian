@@ -80,7 +80,9 @@ bool NetworkServer::WaitForFirstClientLogin(){
 
       if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
          Alert << "ERROR: Client did not login" << endmsg;
-         return false;
+	 SendClosingMessage(theStreams.at(i));
+	 i--;
+	 continue;
       }
 
       std::string nodeName;
@@ -252,7 +254,7 @@ void NetworkServer::BroadcastParams(const std::vector<double>& par){
       }
    }
 
-   // Send changed parameters so clients
+   // Send changed parameters to clients
    for(auto it = theStreams.begin(); it != theStreams.end(); ++it){
       SendParams(*it, updatedParams);
    }
