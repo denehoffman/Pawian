@@ -1,3 +1,4 @@
+
 //************************************************************************//
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
@@ -21,47 +22,50 @@
 //									  //
 //************************************************************************//
 
-// PVectorRel class definition file. -*- C++ -*-
-// Copyright 2010 Bertram Kopf
+#pragma once
 
-#pragma once 
-
-//_____________________________________________________________________________
-// @file PVectorRel.h
-//_____________________________________________________________________________
-
-#include "PwaDynamics/KMatrixBase.hh"
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include <vector>
-#include <memory>
+#include <utility>
 
-class PPole;
-class AbsPhaseSpace;
+#include <boost/version.hpp>
 
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#if BOOST_VERSION < 103600
+#error "Error: Boost should at least have version 1.36 !"
+#endif // BOOST_VERSION
 
-class PVectorRel : public KMatrixBase {
+#include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
+#pragma once
+
+
+namespace po = boost::program_options;
+
+class KMatrixParser {
 public:
-
-  /// Constructor 
-  PVectorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs); 
-  PVectorRel(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs);
-
-  /// Destructor
-  virtual ~PVectorRel();
-
-  virtual void evalMatrix(const double mass);
-
-  virtual void updateBeta(int i, complex<double> beta);
-  virtual void updatePoleMass(int i, double mass);
-  virtual void updategFactors(int i, vector<double>& newg_i);
-
+  KMatrixParser(std::string& path);
+  virtual ~KMatrixParser(){;}
+    
+  const std::string& getConfigFile() const { return _configFile;}
+  const unsigned int noOfChannels() const {return _noOfChannels;}
+  const unsigned int noOfPoles() const {return _noOfPoles;}
+  const std::vector<std::string>& gFactors() const { return _gFactors; }
+  const std::vector<std::string>& poles() const { return _poles; }
+  const std::string projection() const { return _projection; }
+ 
 protected:
-  vector<std::shared_ptr<PPole> > _Ppoles;
+  //  virtual bool parseCommandLine(int argc,char **argv); 
+  virtual bool parseCommandLine();
+  std::string _configFile;
+  unsigned int _noOfChannels;
+  unsigned int _noOfPoles;
+  std::vector<std::string> _gFactors;
+  std::vector<std::string> _poles;
+  std::string _projection;
+ 
+  po::options_description* _config;
 };
-//_____________________________________________________________________________
-
-

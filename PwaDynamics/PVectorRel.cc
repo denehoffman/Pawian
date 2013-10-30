@@ -66,3 +66,19 @@ void PVectorRel::updateBeta(int i, complex<double> beta){
   }
   _Ppoles[i]->updateBeta(beta);
 }
+
+void PVectorRel::updatePoleMass(int i, double mass){
+  if ( i<0 || i>=int(_Ppoles.size()) ){
+    Alert << "no pole with index " << i << " available!!!" << endmsg;
+    exit(0);
+  }
+  _Ppoles[i]->updatePoleMass(mass);
+}
+
+void PVectorRel::updategFactors(int i, vector<double>& newg_i){
+  if ( i<0 || i>=int(_Ppoles.size()) ){
+    Alert << "no pole with index " << i << " available!!!" << endmsg;
+    exit(0);
+  }
+  _Ppoles[i]->updategFactors(newg_i);
+}

@@ -6,6 +6,7 @@
 #
 # type name             texName               3*Q 2*J P  C  G   2*I 2*I3 S  C      mass              width  dyn.f   comment
 #
+Meson f2Matrix	 	f_2Matrix  		0  4  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]  
 Meson eta 		\eta  			0  0 -1  1  1	0  0  0  0 	0.547(+0.01-0.01) 0.0001 relBW	[PDG nonett 1^1S_0]
 Meson sigma 		\sigma  		0  0  1  1  1  	0  0  0  0 	1.000 	0.6000 	relBW	[PDG f_0(400-1200)\pi\pi S-wave]
 Meson omega 		\omega  		0  2 -1 -1 -1   0  0  0  0 	0.7825  0.0700 	relBW	[PDG nonett 1^3S_1]
@@ -66,6 +67,9 @@ Meson f2Hat(1800) 	\hat{f}_2(1800)  	0  4  1 -1  1   0  0  0  0 	1.800 	0.3000 	
 #
 # type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C      mass    width   dyn.f   comment
 #
+Meson rhoMatrix0 	\rhoMatrix^0  		0  2 -1	 -1 1   2  0  0  0 	1. 	0.2 	relBW	[PDG nonett 1^3S_1]
+Meson rhoMatrix+ 	\rhoMatrix^+  		3  2 -1	 0  1   2  2  0  0 	1. 	0.2 	relBW	[PDG nonett 1^3S_1]
+Meson rhoMatrix- 	\rhooMatrix^-  		-3 2 -1	 0  1   2  -2 0  0 	1. 	0.2 	relBW	[PDG nonett 1^3S_1]
 Meson pion0 		\pi^0  			0  0 -1  1 -1   2  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion+ 		\pi^+  			3  0 -1	 0 -1   2  2  0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]
 Meson pion- 		\pi^-  			-3 0 -1	 0 -1   2  -2 0	 0 	0.13957	0.0001 	relBW	[PDG nonett 1^1S_0]

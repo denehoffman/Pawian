@@ -94,6 +94,7 @@ public:
   Spin i3Daughter2() {return _i3daughter2;}
   virtual void disableIsospin(){_useIsospin=false;}
   bool useIsospin(){ return _useIsospin;}
+  virtual std::string pathToConfigParser() {return _pathParserFile;}
 
 protected:
   ChannelID _channelId;
@@ -120,6 +121,7 @@ protected:
   std::string _dynType;
   //  std::string _dynKey;
   double _preFactor;
+  std::string _pathParserFile;
 
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 

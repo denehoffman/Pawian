@@ -72,6 +72,7 @@ public:
   virtual vector<double> gFactors() {return _g_i;}
 
   void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
+  void updategFactors (vector<double>& newg_i) {_g_i=newg_i;}
   
 protected:
   vector<double> _g_i;

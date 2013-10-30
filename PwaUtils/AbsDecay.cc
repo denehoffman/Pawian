@@ -60,6 +60,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_massParamKey(_mother->name())
   ,_dynType("WoDynamics")
   ,_preFactor(1.)
+   ,_pathParserFile("")
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_gParity(mother->theGParity())
@@ -130,6 +131,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_dynType("WoDynamics")
   ,_preFactor(1.)
+   ,_pathParserFile("")
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_gParity(motherIGJPCPtr->G)
@@ -181,7 +183,8 @@ AbsDecay::~AbsDecay(){
 void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec) {
   _dynType=dynString;
 
-  if(additionalStringVec.size()==2){ //fill second decay channel (Flatte)
+  if(_dynType=="KMatrix") _pathParserFile=additionalStringVec[0];
+  else if(_dynType=="Flatte"){ //fill second decay channel (Flatte)
     Particle* firstParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[0]);
     if(0==firstParticle){
       Alert << "particle with name\t" << additionalStringVec[0] << "\tnot available in the particle table" << endmsg;
@@ -194,7 +197,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
     }
     _decPair2ndChannel=make_pair(firstParticle,secondParticle);
   }
-
+  
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
 }
 
