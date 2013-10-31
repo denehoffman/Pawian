@@ -66,7 +66,8 @@ complex<double> result(0.,0.);
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
-  if ( _cacheAmps && !_recalcMap[currentKey]){
+  //  if ( _cacheAmps && !_recalcMap[currentKey]){
+  if ( _cacheAmps && !_recalculate){
     result=_cachedStringMap[evtNo][currentKey];
   }
   else{
@@ -130,6 +131,7 @@ bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
       if (!CheckDoubleEquality(it2->second, theParamVal.otherParams.at(it1->first+it2->first))){
 	_recalcMap[it1->first]=true;
+	_recalculate=true;
       }
     }
   }
