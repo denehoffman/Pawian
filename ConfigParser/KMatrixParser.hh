@@ -56,6 +56,8 @@ public:
   const std::vector<std::string>& gFactors() const { return _gFactors; }
   const std::vector<std::string>& poles() const { return _poles; }
   const std::string projection() const { return _projection; }
+  const int useBarrierFactors() const {return _useBarrierFactors;}
+  const unsigned int orbitalMom() const {return _orbitalMom;}
  
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
@@ -66,6 +68,8 @@ protected:
   std::vector<std::string> _gFactors;
   std::vector<std::string> _poles;
   std::string _projection;
+  bool _useBarrierFactors;
+  unsigned int _orbitalMom;
  
   po::options_description* _config;
 };

@@ -35,6 +35,9 @@ KMatrixParser::KMatrixParser(std::string& path)
       : _configFile(path)
       , _noOfChannels(0)
       , _noOfPoles(0)
+      , _projection("")
+      , _useBarrierFactors(false)
+      , _orbitalMom(0)
       ,_config(new po::options_description("Configuration file options"))
 
      {
@@ -46,6 +49,8 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("gFactor",po::value< vector<string> >(&_gFactors),  "g-factors for the individual channels")
       ("pole",po::value< vector<string> >(&_poles),  "pole: name and mass")
       ("projection",po::value< string>(&_projection),  "projection of the P-vector via pair of decay particles")
+      ("useBarrierFactors",po::value<bool>(&_useBarrierFactors),  "calculation with or without barrier factors")
+      ("orbitalMomentum",po::value<unsigned int>(&_orbitalMom),  "orbital momentum of the decay")
        ;
 
 
@@ -79,6 +84,9 @@ bool KMatrixParser::parseCommandLine()
     std::cout << "\nRunning with the following options using " << _configFile << ":\n\n"
 	      << "number of channels: " << _noOfChannels  << "\n\n"
 	      << "number of poles: " << _noOfPoles  << "\n\n"
+	      << "\nprojection: " << _projection << "\n\n"
+	      << "with barrier factors: " << _useBarrierFactors  << "\n\n"
+	      << "orbital momentum: " << _orbitalMom  << "\n\n" 
 	      << endl;
     
     std::cout << "g-factors are defined as follows:" << std::endl;
@@ -92,8 +100,6 @@ bool KMatrixParser::parseCommandLine()
       std::cout << (*it) << "\n";
     }
 
-    std::cout << "\nprojection: " << _projection << std::endl;
- 
   return true;
 }
 

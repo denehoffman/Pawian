@@ -21,16 +21,18 @@
 //									  //
 //************************************************************************//
 
-// KPole class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// PPoleBarrier class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
 
 #pragma once 
 
 //_____________________________________________________________________________
-// @file KPole.h
+// @file PPole.h
 //_____________________________________________________________________________
 
 #include "qft++/matrix/Matrix.hh"
+#include "PwaDynamics/PPole.hh"
+#include "PwaDynamics/AbsPhaseSpace.hh"
 #include <iostream>
 #include <vector>
 #include <complex>
@@ -41,24 +43,22 @@ class AbsPhaseSpace;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class KPole : public Matrix< complex<double> > {
+class PPoleBarrier : public PPole {
 
 public:
 
   // create/copy/destroy:
 
   /// Default Constructor (rank 0)
-//   KPole() : Matrix<double>::Matrix() {}
+//   PPoleBarrier() : Matrix<double>::Matrix() {}
 
   /// Constructor 
-  KPole(vector<double>& g_i, double mass_0);
-  KPole(vector<double>& g_i, double mass_0, int numRow, int numCol); 
+  PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom); 
 
   /// Copy Constructor
-  // KPole(const KPole &theCopy);
 
   /// Destructor
-  virtual ~KPole();
+  virtual ~PPoleBarrier();
 
   // operators:
 
@@ -67,15 +67,12 @@ public:
 
   virtual void evalMatrix(const double mass);
 
-
-  virtual double poleMass() {return _poleMass;}
-  virtual vector<double> gFactors() {return _g_i;}
-
-  virtual void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
-  virtual void updategFactors (vector<double>& newg_i) {_g_i=newg_i;}
+  virtual void updatePoleMass (double newPoleMass);
   
 protected:
-  vector<double> _g_i;
-  double _poleMass;
+  vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
+  int _orbMom;
+  std::vector< complex<double> > _breakUpM0;
+  std::vector< complex<double> > _barrierFactor;
 };
 //_____________________________________________________________________________

@@ -30,6 +30,11 @@ KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::share
   , _phpVecs(phpVecs)
   , _orbMom(orbMom)
 {
+  _breakUpM0.resize(_phpVecs.size());
+  _barrierFactor.resize(_phpVecs.size());
+  for(unsigned int i=0; i<_phpVecs.size(); ++i){
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(mass_0);
+  }
 }
 
 KPoleBarrier::~KPoleBarrier(){
@@ -37,18 +42,29 @@ KPoleBarrier::~KPoleBarrier(){
 
 void KPoleBarrier::evalMatrix(const double mass){
 
-  vector< complex<double> > barrierFactor;
-
   for (int i=0; i< int(_phpVecs.size()); ++i){
-    complex<double> breakUpM=_phpVecs[i]->breakUpMom(mass);
-    complex<double> breakUpM0=_phpVecs[i]->breakUpMom(_poleMass);
-    barrierFactor.push_back(breakUpM/breakUpM0);
+    _barrierFactor.at(i)=pow(_phpVecs.at(i)->breakUpMom(mass)/_breakUpM0.at(i), _orbMom);
+    //std::cout << "Barrier factor " << i << ": " << _barrierFactor.at(i) << std::endl;
+  }
+
+  double denom=_poleMass*_poleMass-mass*mass;
+  if(fabs(denom)<1e-10){
+    if(denom<0.) denom=-1e-10; 
+    else denom=1e-10;
   }
 
   for (int i=0; i< int(_g_i.size()); ++i){
     for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i[i]*barrierFactor[i]*_g_i[j]*barrierFactor[j])/(_poleMass*_poleMass-mass*mass);
+      this->operator()(i,j)= ( _g_i.at(i)*_barrierFactor.at(i)*_g_i.at(j)*_barrierFactor.at(j))/denom;
      }
    }
+}
+
+
+void KPoleBarrier::updatePoleMass (double newPoleMass){
+  _poleMass=newPoleMass;
+  for(unsigned int i=0; i<_phpVecs.size(); ++i){
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
+  }
 }
 

@@ -21,26 +21,44 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/PPole.hh"
+#include "PwaDynamics/PPoleBarrier.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
-PPole::PPole(complex<double>& beta, vector<double>& g_i, double mass_0):
-  KPole(g_i, mass_0, g_i.size(), 1)
-  ,_beta(beta)
+PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom):
+  PPole(beta, g_i, mass_0)
+  , _phpVecs(phpVecs)
+  , _orbMom(orbMom)
 {
+  _breakUpM0.resize(_phpVecs.size());
+  _barrierFactor.resize(_phpVecs.size());
+  for(unsigned int i=0; i<_phpVecs.size(); ++i){
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
+  }
 }
 
-PPole::~PPole(){
+PPoleBarrier::~PPoleBarrier(){
 }
 
-void PPole::evalMatrix(const double mass){
+void PPoleBarrier::evalMatrix(const double mass){
+
+  for (int i=0; i< int(_phpVecs.size()); ++i){
+    _barrierFactor.at(i)=pow(_phpVecs[i]->breakUpMom(mass)/_breakUpM0.at(i), _orbMom);
+  }
+
   double denom=_poleMass*_poleMass-mass*mass;
   if(fabs(denom)<1e-10){
     if(denom<0.) denom=-1e-10; 
     else denom=1e-10;
   }
   for (int i=0; i< int(_g_i.size()); ++i){
-    this->operator()(i,0)= (_beta*_g_i[i])/denom;
+    this->operator()(i,0)= (_beta*_g_i.at(i)*_barrierFactor.at(i))/denom;
+  }
+}
+
+void PPoleBarrier::updatePoleMass (double newPoleMass){
+  _poleMass=newPoleMass;
+  for(unsigned int i=0; i<_phpVecs.size(); ++i){
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
   }
 }
 

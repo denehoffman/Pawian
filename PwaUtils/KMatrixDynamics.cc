@@ -40,7 +40,9 @@
 #include "ConfigParser/KMatrixParser.hh"
 #include "PwaDynamics/KMatrixRel.hh"
 #include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/KPoleBarrier.hh"
 #include "PwaDynamics/PPole.hh"
+#include "PwaDynamics/PPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 
@@ -324,7 +326,9 @@ void KMatrixDynamics::init(){
   std::map<int, std::vector<double> >::iterator itgFac;
   for (itgFac=_currentgFactorMap.begin(); itgFac!=_currentgFactorMap.end(); ++itgFac){
     std::vector<double> currentgVector=itgFac->second;
-    std::shared_ptr<KPole> currentPole(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
+    std::shared_ptr<KPole> currentPole;
+    if (_kMatrixParser->useBarrierFactors()) currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), _phpVecs, _kMatrixParser->orbitalMom()));
+    else currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
     _kPoles.push_back(currentPole);
   }
 
@@ -359,7 +363,9 @@ std::shared_ptr<PVectorRel> KMatrixDynamics::makeNewPVec(){
    vector<std::shared_ptr<KPole> >::iterator it;
    for (it=_kPoles.begin(); it!=_kPoles.end(); ++it){ 
      std::vector<double> currentGFactors=(*it)->gFactors();
-     std::shared_ptr<PPole> currentPPole(new PPole(defaultBeta, currentGFactors, (*it)->poleMass()));
+     std::shared_ptr<PPole> currentPPole;
+     if (_kMatrixParser->useBarrierFactors()) currentPPole=std::shared_ptr<PPole>(new PPoleBarrier(defaultBeta, currentGFactors, (*it)->poleMass(), _phpVecs, _kMatrixParser->orbitalMom()));
+     else currentPPole=std::shared_ptr<PPole>(new PPole(defaultBeta, currentGFactors, (*it)->poleMass())); 
      thePpoles.push_back(currentPPole);     
    }
 

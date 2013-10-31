@@ -67,11 +67,13 @@ public:
   // functions:
 
   virtual void evalMatrix(const double mass);
-
+  virtual void updatePoleMass (double newPoleMass);
 
   
 protected:
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
   int _orbMom;
+  std::vector< complex<double> > _breakUpM0;
+  std::vector< complex<double> > _barrierFactor;
 };
 //_____________________________________________________________________________
