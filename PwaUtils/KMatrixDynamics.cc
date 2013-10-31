@@ -147,7 +147,7 @@ bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
     std::vector<double> currentgFactorVec=_currentgFactorMap.at(i);
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-      if (!CheckDoubleEquality( currentgFactorVec.at(j), theParamVal.gFactors[currentName])){
+      if (!CheckDoubleEquality( currentgFactorVec.at(j), theParamVal.gFactors.at(currentName))){
 	_recalculate=true;
       }
     }
@@ -159,6 +159,7 @@ bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
       itRecalcMap->second=true;
     } 
   }
+
   return _recalculate;
 }
 
@@ -198,7 +199,7 @@ void KMatrixDynamics::updateFitParams(fitParams& theParamVal){
 
   //g-factors
   for(unsigned int i=0; i<_poleNames.size(); ++i){
-    std::vector<double> currentgFactorVec=_currentgFactorMap.at(i);
+    std::vector<double>& currentgFactorVec=_currentgFactorMap.at(i);
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
       currentgFactorVec.at(j)=theParamVal.gFactors.at(currentName);
