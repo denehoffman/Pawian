@@ -5,7 +5,10 @@ lib LineShapes :
         [ glob *.cc : *App.cc ]  
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
+	$(TOP)/Particle//Particle
 	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaUtils//PwaUtils
 	:  
 	: 
 	:   ;
@@ -14,3 +17,4 @@ exe BwShapeApp : BwShapeApp.cc LineShapes : ;
 exe FlatteShapeApp : FlatteShapeApp.cc LineShapes : ;
 exe TwoPolesApp : TwoPolesApp.cc LineShapes : ;
 exe PiPiSWaveApp : PiPiSWaveApp.cc LineShapes : ;
+exe TMatrixGeneralApp : TMatrixGeneralApp.cc LineShapes : ;

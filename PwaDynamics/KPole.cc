@@ -24,6 +24,7 @@
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 KPole::KPole(vector<double>& g_i, double mass_0):
   Matrix< complex<double> >::Matrix(int(g_i.size()), int(g_i.size()))
