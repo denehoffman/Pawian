@@ -307,6 +307,8 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
     if (suffix==_massSuffix || suffix==_widthSuffix){
       minVal=theStartVal-5.*theErrVal;
       maxVal=theStartVal+5.*theErrVal;
+      if(minVal<0.) minVal=0.;
+
       upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }
     // for complex fit parameter; phi component; quick workaround

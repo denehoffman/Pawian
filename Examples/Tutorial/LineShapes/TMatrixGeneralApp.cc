@@ -21,33 +21,47 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/KMatrixRel.hh"
-#include "PwaDynamics/KPole.hh"
-#include "PwaDynamics/AbsPhaseSpace.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "qft++/matrix/IdentityMatrix.hh"
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
 
-KMatrixRel::KMatrixRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
-  KMatrixBase(Kpoles, phpVecs)
- {
- }
+#include <memory>
 
+#include "Examples/Tutorial/LineShapes/TMatrixGeneral.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-KMatrixRel::~KMatrixRel(){
-}
+int main(int __argc,char *__argv[]){
+  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
+                    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-void KMatrixRel::evalMatrix(const double mass){
-
-  Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
-  vector<std::shared_ptr<KPole> >::iterator it;
-  for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-    (*it)->evalMatrix(mass);
-    theKMatrix += *(*it);
+    Info << "\nThis is a test application for Bla bla\n"
+         << endmsg;
+    return 0;
   }
 
-  for (int i=0; i<theKMatrix.NumRows(); ++i){
-    for (int j=0; j<theKMatrix.NumCols(); ++j){
-      this->operator()(i,j)=theKMatrix(i,j)+_bgTerms.at(i).at(j);
+  std::string pathToConfigParser;
+
+  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
+    bool found=false;
+    std::string sw = __argv[optind];
+    if (sw=="--path" || sw=="-path"){
+      optind++;
+      pathToConfigParser = __argv[optind];
+      found=true;
+    }
+    if (!found){
+      Warning << "Unknown switch: " 
+            << __argv[optind] << endmsg;
+      optind++;
     }
   }
+
+  TMatrixGeneral tMatrixGeneral(pathToConfigParser);
+
+  return 0;
 }
+

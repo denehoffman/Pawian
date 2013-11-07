@@ -61,6 +61,7 @@ public:
 protected:
   vector<std::shared_ptr<KPole> > _KPoles;
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
+  vector< vector<double> > _bgTerms; 
 };
 //_____________________________________________________________________________
 

@@ -31,16 +31,44 @@ KMatrixBase::KMatrixBase(vector<std::shared_ptr<KPole> > Kpoles, vector<std::sha
   ,_KPoles(Kpoles)
   ,_phpVecs(phpVecs)
  {
+   _bgTerms.resize(phpVecs.size());
+   for(unsigned int i=0; i<phpVecs.size(); ++i){
+     std::vector<double> currentbgVec;
+     currentbgVec.resize(phpVecs.size());
+     for(unsigned int j=0; j<phpVecs.size(); ++j){
+       currentbgVec[j]=0.;
+     }
+     _bgTerms[i]=currentbgVec;
+   }
  }
 
 KMatrixBase::KMatrixBase(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
   ,_phpVecs(phpVecs)
  {
+   _bgTerms.resize(numRows);
+   for(int i=0; i<numRows; ++i){
+     std::vector<double> currentbgVec;
+     currentbgVec.resize(numCols);
+     for(int j=0; j<numCols; ++j){
+       currentbgVec[j]=0.;
+     }
+     _bgTerms[i]=currentbgVec;
+   }
  }
+
 KMatrixBase::KMatrixBase(int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
  {
+   _bgTerms.resize(numRows);
+   for(int i=0; i<numRows; ++i){
+     std::vector<double> currentbgVec;
+     currentbgVec.resize(numCols);
+     for(int j=0; j<numCols; ++j){
+       currentbgVec[j]=0.;
+     }
+     _bgTerms[i]=currentbgVec;
+   }
  }
 
 KMatrixBase::~KMatrixBase(){
