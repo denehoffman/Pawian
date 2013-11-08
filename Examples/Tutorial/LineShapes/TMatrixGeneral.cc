@@ -36,6 +36,7 @@
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/KPoleBarrier.hh"
 #include "PwaDynamics/KMatrixRel.hh"
+#include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "ConfigParser/KMatrixParser.hh"
@@ -116,6 +117,12 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
     currentSqrT11H1->SetYTitle("|T_{11}|^{2}");
     currentSqrT11H1->SetXTitle("mass/GeV");
     _SqrT11H1Vec.push_back(currentSqrT11H1);
+
+    std::string currentphpKey="phase space factor"+key;
+    TH1F* currentphpH1=new TH1F(currentphpKey.c_str(), currentphpKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentphpH1->SetYTitle("#rho");
+    currentphpH1->SetXTitle("mass/GeV");
+    _phpH1Vec.push_back(currentphpH1);
   }
 
   DebugMsg << "_massMin: "<< _massMin
@@ -130,8 +137,8 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
       complex<double> currentRho=_phpVecs.at(i)->factor(mass);
       //      std::cout << mass << "(" << i << ")\t"<< (*_tMatr)(i,i) << std::endl;
-      _AmpRealH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).real());
-      _AmpImagH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).imag());
+      _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
+      _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
       
       _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
       double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
@@ -141,7 +148,9 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
       complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
       _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
 
-      _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i))); 
+      _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i)));
+
+      _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho))); 
     }    
   }
 }
@@ -243,7 +252,30 @@ void TMatrixGeneral::init(){
     _kPoles.push_back(currentPole);
   }
 
-  _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
+  int orderBg=_kMatrixParser->orderBg();
+  if(orderBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
+  else{
+    bool withAdler=_kMatrixParser->useAdler();
+    _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, orderBg, withAdler));
+    _kMatr->updateBgTerms(0, 0, 0, 0.79299);
+    _kMatr->updateBgTerms(0, 0, 1, 0.15040);
+    _kMatr->updateBgTerms(0, 1, 1, 0.17054);
+    if(orderBg>0){
+      _kMatr->updateBgTerms(1, 0, 0, -0.15099);
+      _kMatr->updateBgTerms(1, 0, 1, -0.038266);
+      _kMatr->updateBgTerms(1, 1, 1, -0.0219);
+    }
+    if(orderBg>1){
+      _kMatr->updateBgTerms(2, 0, 0, 0.00811);
+      _kMatr->updateBgTerms(2, 0, 1, 0.0022596);
+      _kMatr->updateBgTerms(2, 1, 1, 0.00085655);
+    }
+
+    if(withAdler){
+      _kMatr->updates0Adler(_kMatrixParser->s0Adler());
+      _kMatr->updatesnormAdler(_kMatrixParser->snormAdler());
+    }
+  }
   _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
 
 

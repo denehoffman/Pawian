@@ -80,8 +80,9 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
     theTMatrix32->evalMatrix(mass);        
 
     complex<double> currentVal=(*theTMatrix12)(0,0)+0.5*(*theTMatrix32)(0,0);
-    _KPiAmpRealH1->Fill(mass, sqrt(thePhpVecs[0]->factor(mass4Vec.M()).real())*currentVal.real());    
-    _KPiAmpImagH1->Fill(mass, sqrt(thePhpVecs[0]->factor(mass4Vec.M()).real())*currentVal.imag());   
+    //    complex<double> currentVal=(*theTMatrix12)(0,0);
+       _KPiAmpRealH1->Fill(mass, sqrt(thePhpVecs[0]->factor(mass4Vec.M()).real())*currentVal.real());    
+       _KPiAmpImagH1->Fill(mass, sqrt(thePhpVecs[0]->factor(mass4Vec.M()).real())*currentVal.imag());
   }
 }
 

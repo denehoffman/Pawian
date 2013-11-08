@@ -57,11 +57,17 @@ public:
   virtual void evalMatrix(const double mass) {return;}
   virtual vector<std::shared_ptr<AbsPhaseSpace> > phaseSpaceVec() {return _phpVecs;}
   virtual vector<std::shared_ptr<KPole> > kpoles() {return _KPoles;}
+  virtual void updateBgTerms(unsigned int order, unsigned int row,  unsigned int column, double theVal);
+  virtual void updates0Adler(double s0Adler) {_s0Adler=s0Adler;}
+  virtual void updatesnormAdler(double snormAdler) {_snormAdler=snormAdler;}
 
 protected:
   vector<std::shared_ptr<KPole> > _KPoles;
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  vector< vector<double> > _bgTerms; 
+  vector< vector< vector<double> > > _bgTerms;
+  unsigned int _orderBg;
+  double _s0Adler;
+  double _snormAdler;
 };
 //_____________________________________________________________________________
 

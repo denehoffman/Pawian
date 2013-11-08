@@ -25,52 +25,52 @@
 #include "PwaDynamics/KPole.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 KMatrixBase::KMatrixBase(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   Matrix< complex<double> >::Matrix(int(phpVecs.size()), int(phpVecs.size()))
   ,_KPoles(Kpoles)
   ,_phpVecs(phpVecs)
+  ,_orderBg(0)
+  ,_s0Adler(0.)
+  ,_snormAdler(1.)
  {
-   _bgTerms.resize(phpVecs.size());
-   for(unsigned int i=0; i<phpVecs.size(); ++i){
-     std::vector<double> currentbgVec;
-     currentbgVec.resize(phpVecs.size());
-     for(unsigned int j=0; j<phpVecs.size(); ++j){
-       currentbgVec[j]=0.;
-     }
-     _bgTerms[i]=currentbgVec;
-   }
  }
 
 KMatrixBase::KMatrixBase(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
   ,_phpVecs(phpVecs)
+  ,_orderBg(0)
+  ,_s0Adler(0.)
+  ,_snormAdler(1.)
  {
-   _bgTerms.resize(numRows);
-   for(int i=0; i<numRows; ++i){
-     std::vector<double> currentbgVec;
-     currentbgVec.resize(numCols);
-     for(int j=0; j<numCols; ++j){
-       currentbgVec[j]=0.;
-     }
-     _bgTerms[i]=currentbgVec;
-   }
  }
 
 KMatrixBase::KMatrixBase(int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
+  ,_orderBg(0)
  {
-   _bgTerms.resize(numRows);
-   for(int i=0; i<numRows; ++i){
-     std::vector<double> currentbgVec;
-     currentbgVec.resize(numCols);
-     for(int j=0; j<numCols; ++j){
-       currentbgVec[j]=0.;
-     }
-     _bgTerms[i]=currentbgVec;
-   }
  }
 
 KMatrixBase::~KMatrixBase(){
+}
+
+void KMatrixBase::updateBgTerms(unsigned int order, unsigned int row,  unsigned int column, double theVal){
+  if(row>column){
+    Alert << "K-matrix is symmetric; for update row<=column" << endmsg;
+    exit(0);
+  }
+  if(order>_orderBg){
+    Alert << "background parameter for order " << order << " not available!!!" << endmsg;
+    exit(0);
+  }
+  if(row>=NumRows() || column>=NumCols()){
+    Alert << "row " << row << " or column " << column 
+	  << " >= NumRows " << NumRows() << " or  >= NumCols " << NumCols() << endmsg;
+    exit(0);
+  }
+
+  _bgTerms.at(order).at(row).at(column)=theVal;
+  _bgTerms.at(order).at(column).at(row)=theVal;
 }
 

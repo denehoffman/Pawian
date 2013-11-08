@@ -21,33 +21,42 @@
 //									  //
 //************************************************************************//
 
+// KMatrixRelBg class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
+
+#pragma once 
+
+//_____________________________________________________________________________
+// @file KMatrixRelBg.h
+//_____________________________________________________________________________
+
 #include "PwaDynamics/KMatrixRel.hh"
-#include "PwaDynamics/KPole.hh"
-#include "PwaDynamics/AbsPhaseSpace.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "qft++/matrix/IdentityMatrix.hh"
+#include <iostream>
+#include <vector>
+#include <memory>
 
-KMatrixRel::KMatrixRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
-  KMatrixBase(Kpoles, phpVecs)
- {
- }
+class KPole;
+class AbsPhaseSpace;
+
+using namespace std;
+//_____________________________________________________________________________
+//_____________________________________________________________________________
+
+class KMatrixRelBg : public KMatrixRel {
+
+public:
+
+  /// Constructor 
+  KMatrixRelBg(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg, bool withAdler); 
+
+  /// Destructor
+  virtual ~KMatrixRelBg();
+
+  virtual void evalMatrix(const double mass);
+
+protected:
+  bool _withAdler;
+};
+//_____________________________________________________________________________
 
 
-KMatrixRel::~KMatrixRel(){
-}
-
-void KMatrixRel::evalMatrix(const double mass){
-
-  Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
-  vector<std::shared_ptr<KPole> >::iterator it;
-  for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-    (*it)->evalMatrix(mass);
-    theKMatrix += *(*it);
-  }
-
-  for (int i=0; i<theKMatrix.NumRows(); ++i){
-    for (int j=0; j<theKMatrix.NumCols(); ++j){
-      this->operator()(i,j)=theKMatrix(i,j);
-    }
-  }
-}

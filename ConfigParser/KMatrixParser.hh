@@ -58,6 +58,10 @@ public:
   const std::string projection() const { return _projection; }
   const int useBarrierFactors() const {return _useBarrierFactors;}
   const unsigned int orbitalMom() const {return _orbitalMom;}
+  const int orderBg() const {return _orderKMatrixBackground;}
+  const bool useAdler() const {return _useAdler0;}
+  const double s0Adler() const {return _s0Adler;}
+  const double snormAdler() const {return _snormAdler;}
  
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
@@ -70,6 +74,10 @@ protected:
   std::string _projection;
   bool _useBarrierFactors;
   unsigned int _orbitalMom;
+  int _orderKMatrixBackground;
+  bool _useAdler0;
+  double _s0Adler;
+  double _snormAdler;
  
   po::options_description* _config;
 };

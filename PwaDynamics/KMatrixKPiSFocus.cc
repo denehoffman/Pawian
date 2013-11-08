@@ -67,7 +67,7 @@ KMatrixKPiSFocus::~KMatrixKPiSFocus(){
 }
 
 void KMatrixKPiSFocus::evalMatrix(const double mass){
-
+ 
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){

@@ -21,22 +21,41 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/KMatrixRel.hh"
+#include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
 
-KMatrixRel::KMatrixRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
-  KMatrixBase(Kpoles, phpVecs)
+KMatrixRelBg::KMatrixRelBg(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg, bool withAdler) :
+  KMatrixRel(Kpoles, phpVecs)
+  ,_withAdler(withAdler)
  {
+   _orderBg=orderBg;
+   _bgTerms.resize(_orderBg+1);
+   for(unsigned int i=0; i<=_orderBg; ++i){
+     _bgTerms.at(i).resize(phpVecs.size());
+     for(unsigned int j=0; j<phpVecs.size(); ++j){
+       _bgTerms.at(i).at(j).resize(phpVecs.size());
+       for(unsigned int k=0; k<phpVecs.size(); ++k){
+	 _bgTerms.at(i).at(j).at(k)=0.;
+       }
+     }
+   }
  }
 
 
-KMatrixRel::~KMatrixRel(){
+KMatrixRelBg::~KMatrixRelBg(){
 }
 
-void KMatrixRel::evalMatrix(const double mass){
+void KMatrixRelBg::evalMatrix(const double mass){
+
+  double adlerTerm=1.;
+  double s_hat=mass*mass;
+  if(_withAdler){
+    adlerTerm=(mass*mass-_s0Adler)/_snormAdler;
+    s_hat=mass*mass/_snormAdler-1.;
+  }
 
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
@@ -45,9 +64,15 @@ void KMatrixRel::evalMatrix(const double mass){
     theKMatrix += *(*it);
   }
 
-  for (int i=0; i<theKMatrix.NumRows(); ++i){
-    for (int j=0; j<theKMatrix.NumCols(); ++j){
-      this->operator()(i,j)=theKMatrix(i,j);
+  for (int i=0; i<NumRows(); ++i){
+    for (int j=i; j<NumRows(); ++j){
+      complex<double> currentBg(0.,0.);
+      for (unsigned int k=0; k<=_orderBg; ++k){
+	currentBg+=complex<double>(_bgTerms.at(k).at(i).at(j)*pow(s_hat,k), 0.);
+      }
+      this->operator()(i,j)=theKMatrix(i,j)+currentBg;
+      this->operator()(i,j)*=adlerTerm;
+      this->operator()(j,i)=this->operator()(i,j);
     }
   }
 }
