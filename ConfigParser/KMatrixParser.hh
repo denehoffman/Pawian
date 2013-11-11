@@ -49,8 +49,9 @@ class KMatrixParser {
 public:
   KMatrixParser(std::string& path);
   virtual ~KMatrixParser(){;}
-    
+
   const std::string& getConfigFile() const { return _configFile;}
+  const std::string keyName() const { return _keyName; }   
   const unsigned int noOfChannels() const {return _noOfChannels;}
   const unsigned int noOfPoles() const {return _noOfPoles;}
   const std::vector<std::string>& gFactors() const { return _gFactors; }
@@ -67,6 +68,7 @@ protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
   virtual bool parseCommandLine();
   std::string _configFile;
+  std::string _keyName;
   unsigned int _noOfChannels;
   unsigned int _noOfPoles;
   std::vector<std::string> _gFactors;

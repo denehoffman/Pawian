@@ -39,6 +39,7 @@
 #include "PwaDynamics/FVector.hh"
 #include "ConfigParser/KMatrixParser.hh"
 #include "PwaDynamics/KMatrixRel.hh"
+#include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/KPoleBarrier.hh"
 #include "PwaDynamics/PPole.hh"
@@ -48,6 +49,10 @@
 
 KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
   AbsDynamics(name, fsParticles, mother)
+  ,_kMatName("")
+  , _orderKMatBg(-1)
+  ,_withKMatAdler(false)
+  ,_currentAdler0(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
   init();
@@ -114,9 +119,25 @@ void  KMatrixDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
       fitErr.gFactors[currentName]=currentgFactorVec.at(j);
     }
   }
- 
 
+  //k-matrix bg-terms
+  if(_orderKMatBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
+	  fitVal.otherParams[currentName]=_currentBgTerms.at(i).at(j).at(k);
+	  fitErr.otherParams[currentName]=fabs(_currentBgTerms.at(i).at(j).at(k))+0.3;
+	}
+      }
+    }
+    //Adler-term
+    if(_withKMatAdler){
+      fitVal.otherParams["s0"+_kMatName]=_currentAdler0;
+      fitErr.otherParams["s0"+_kMatName]=fabs(_currentAdler0)+0.2;
+    }
   }
+}
 
 bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
@@ -150,6 +171,27 @@ bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
       if (!CheckDoubleEquality( currentgFactorVec.at(j), theParamVal.gFactors.at(currentName))){
+	_recalculate=true;
+      }
+    }
+  }
+
+  //k-matrix bg-terms
+  if(_orderKMatBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
+	  if (!CheckDoubleEquality(_currentBgTerms.at(i).at(j).at(k), theParamVal.otherParams.at(currentName))){
+	    _recalculate=true;
+	  }
+	}
+      }
+    }
+
+    //Adler-term
+    if(_withKMatAdler){
+      if (!CheckDoubleEquality(_currentAdler0, theParamVal.otherParams.at("s0"+_kMatName))){
 	_recalculate=true;
       }
     }
@@ -214,6 +256,24 @@ void KMatrixDynamics::updateFitParams(fitParams& theParamVal){
     }
   }
 
+  //k-matrix bg-terms
+  if(_orderKMatBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+	  double newVal=theParamVal.otherParams.at(_bgTermNames.at(i).at(j).at(k));
+	  _currentBgTerms.at(i).at(j).at(k)=newVal;
+	  _kMatr->updateBgTerms(i,j,k,newVal);
+	}
+      }
+    }
+
+    //Adler-term
+    if(_withKMatAdler){
+      _currentAdler0=theParamVal.otherParams.at("s0"+_kMatName);
+      _kMatr->updates0Adler(_currentAdler0);
+    }
+  }
 }
 
 void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
@@ -255,14 +315,16 @@ void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
 
 const std::string& KMatrixDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   if(0==grandmaAmp) return _grandmaKey;
-  //  return grandmaAmp->absDec()->dynKey();
   return grandmaAmp->absDec()->massParKey();
 }
 
 
 
 void KMatrixDynamics::init(){
-  
+  _kMatName=_kMatrixParser->keyName();
+  _orderKMatBg=_kMatrixParser->orderBg();  
+  _withKMatAdler=_kMatrixParser->useAdler();  
+
   std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
   std::vector<std::string>::iterator itString;
   for (itString=poleNameAndMassVecs.begin(); itString!=poleNameAndMassVecs.end(); ++itString){
@@ -335,8 +397,36 @@ void KMatrixDynamics::init(){
     _kPoles.push_back(currentPole);
   }
 
-  _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
+  if(_orderKMatBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
+  else {
+    _currentBgTerms.resize(_orderKMatBg+1);
+    _bgTermNames.resize(_orderKMatBg+1);
+    for(unsigned int i=0; i<= fabs(_orderKMatBg); ++i){
+      _currentBgTerms.at(i).resize(_phpVecs.size());
+      _bgTermNames.at(i).resize(_phpVecs.size());
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	_currentBgTerms.at(i).at(j).resize(_phpVecs.size());
+	_bgTermNames.at(i).at(j).resize(_phpVecs.size());
+	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+	  _currentBgTerms.at(i).at(j).at(k)=0.;
 
+	  std::stringstream keyOrderStrStr;
+	  keyOrderStrStr << i << j << k;
+	  std::string keyOrder=keyOrderStrStr.str();
+	  std::string currentName="bg"+keyOrder+_kMatName+"PosNeg";
+	  _bgTermNames.at(i).at(j).at(k)=currentName;
+	}
+      }
+    }
+
+    _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, _orderKMatBg, _withKMatAdler ));
+    if(_withKMatAdler){
+      _currentAdler0=_kMatrixParser->s0Adler();
+      _kMatr->updates0Adler(_currentAdler0);
+      _kMatr->updatesnormAdler(_kMatrixParser->snormAdler());
+    }
+  }
+ 
   const std::string porjectionParticleNames=_kMatrixParser->projection();
   std::istringstream projParticles(porjectionParticleNames);
   std::string firstProjParticleName;

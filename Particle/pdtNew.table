@@ -173,6 +173,7 @@ Meson D- 		D^-  			-3 0 -1  0  0   1  -1 	0  -1	1.86962 0.0001  relBW	[PDG nonet
 Meson etac 		\eta_c  		0  0 -1  1  1  	0  0  0  0 	2.981 	  0.0297 relBW	[PDG]
 Meson Jpsi 		J/\psi  		0  2 -1 -1 -1   0  0  0  0 	3.096916  0.0929 relBW	[PDG]
 Meson Chic1 		chi_{c1}  		0  2 1	1  1   0  0  0  0 	3.51066	  0.00086	relBW	[PDG]
+Meson Chic2             chi_{c2}                0  4 1  1  1   0  0  0  0       3.55562   0.00198       relBW   [PDG]
 #
 # End strange mesons
 #

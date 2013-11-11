@@ -33,6 +33,7 @@ using namespace std;
 
 KMatrixParser::KMatrixParser(std::string& path)
       : _configFile(path)
+      , _keyName("Default")
       , _noOfChannels(0)
       , _noOfPoles(0)
       , _projection("")
@@ -48,6 +49,7 @@ KMatrixParser::KMatrixParser(std::string& path)
     _config->add_options()
       ("configFile",po::value<std::string>(&_configFile),
      	    "The name of the configuration file holding further configuration options")
+      ("keyName",po::value<std::string>(&_keyName), "name for this specific k-matrix")
       ("noOfChannels",po::value<unsigned int>(&_noOfChannels),  "number of channels")
       ("noOfPoles",po::value<unsigned int>(&_noOfPoles),  "number of poles")
       ("gFactor",po::value< vector<string> >(&_gFactors),  "g-factors for the individual channels")
@@ -90,6 +92,7 @@ bool KMatrixParser::parseCommandLine()
     po::notify(vm);
 
     std::cout << "\nRunning with the following options using " << _configFile << ":\n\n"
+	      << "key name: " << _keyName  << "\n\n"
 	      << "number of channels: " << _noOfChannels  << "\n\n"
 	      << "number of poles: " << _noOfPoles  << "\n\n"
 	      << "\nprojection: " << _projection << "\n\n"

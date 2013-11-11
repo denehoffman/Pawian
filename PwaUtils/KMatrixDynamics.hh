@@ -59,8 +59,10 @@ public:
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
 
 protected:
-  //  std::string _massKey;
+  std::string _kMatName;
   int _projectionIndex;
+  int _orderKMatBg;
+  bool _withKMatAdler;
   double _currentMass;
   std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
@@ -76,6 +78,9 @@ protected:
   std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
   std::vector<double> _currentPoleMasses;
   std::map<int, std::vector<double> > _currentgFactorMap;
+  std::vector< std::vector< std::vector<double> > > _currentBgTerms;
+  std::vector< std::vector< std::vector<std::string> > > _bgTermNames;
+  double _currentAdler0;
   
   std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
   std::map<std::string, bool > _recalcMap;

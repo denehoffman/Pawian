@@ -257,6 +257,9 @@ void TMatrixGeneral::init(){
   else{
     bool withAdler=_kMatrixParser->useAdler();
     _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, orderBg, withAdler));
+    // _kMatr->updateBgTerms(0, 0, 0,-1.281220068926377);
+    // _kMatr->updateBgTerms(0, 0, 1,-0.7545915734604509);
+    // _kMatr->updateBgTerms(0, 1, 1,-2.368661199177109);
     _kMatr->updateBgTerms(0, 0, 0, 0.79299);
     _kMatr->updateBgTerms(0, 0, 1, 0.15040);
     _kMatr->updateBgTerms(0, 1, 1, 0.17054);
