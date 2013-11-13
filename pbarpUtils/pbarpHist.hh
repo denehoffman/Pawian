@@ -46,6 +46,7 @@ class pbarpHist : public AbsHist{
 
 public:
   pbarpHist(std::shared_ptr<AbsLh>, fitParams& theFitParams);
+  pbarpHist();
   virtual ~pbarpHist();
 
 protected:

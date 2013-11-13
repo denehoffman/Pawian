@@ -49,7 +49,9 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "TTree.h"
 
-AbsHist::AbsHist()
+AbsHist::AbsHist() :
+  _weightToWrite(1.)
+  ,_fsParticles(GlobalEnv::instance()->Channel()->finalStateParticles())
 {
   std::ostringstream rootFileName;
   rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
@@ -163,6 +165,17 @@ AbsHist::AbsHist()
     _angleFitHistMap2D[*itAngleVec2D].push_back(currentThetaAngleFitHist);
     _angleFitHistMap2D[*itAngleVec2D].push_back(currentPhiAngleFitHist);
   }
+
+  //tree
+  for(auto fsIt = _fsParticles.begin(); fsIt != _fsParticles.end(); ++fsIt){
+     std::string particleName = (*fsIt)->name();
+     _fourVecMap[particleName] = std::shared_ptr<TLorentzVector>(new TLorentzVector(0,0,0,0));
+     _dataFourvecs->Branch(particleName.c_str(), "TLorentzVector", _fourVecMap[particleName].get());
+     _fittedFourvecs->Branch(particleName.c_str(), "TLorentzVector", _fourVecMap[particleName].get());
+  }
+
+  _dataFourvecs->Branch("weight", &_weightToWrite, "weight");
+  _fittedFourvecs->Branch("weight", &_weightToWrite, "weight");
 }
 
 AbsHist::~AbsHist(){
@@ -177,21 +190,6 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     exit(1);
   }
 
-  std::vector<Particle*> fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
-  std::map<std::string, std::shared_ptr<TLorentzVector> > fourVecMap;
-  float weightToWrite;
-
-  for(auto fsIt = fsParticles.begin(); fsIt != fsParticles.end(); ++fsIt){
-     std::string particleName = (*fsIt)->name();
-     fourVecMap[particleName] = std::shared_ptr<TLorentzVector>(new TLorentzVector(0,0,0,0));
-     _dataFourvecs->Branch(particleName.c_str(), "TLorentzVector", fourVecMap[particleName].get());
-     _fittedFourvecs->Branch(particleName.c_str(), "TLorentzVector", fourVecMap[particleName].get());
-  }
-  _dataFourvecs->Branch("weight", &weightToWrite, "weight");
-  _fittedFourvecs->Branch("weight", &weightToWrite, "weight");
-
-
-  //  std::shared_ptr<const EvtDataBaseList> theEvtList=theLh->getEventList();
   const std::vector<EvtData*> dataList=theLh->getDataVec();
   double integralDataWWeight=0.;
 
@@ -200,18 +198,7 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     {
       double weight = (*it)->evtWeight;
       integralDataWWeight+=weight;
-      fillMassHists((*it), weight, _massDataHistMap);
-      fillAngleHists((*it), weight, _angleDataHistMap);
-      fillAngleHists2D((*it), weight, _angleDataHistMap2D);
-
-      for(auto fsIt = fsParticles.begin(); fsIt != fsParticles.end(); ++fsIt){
-	 std::string particleName = (*fsIt)->name();
-	 Vector4<double> tmp4vec=(*it)->FourVecsString[particleName];
-	 fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
-      }
-      weightToWrite = weight;
-      _dataFourvecs->Fill();
-
+      fillEvt((*it), weight, "data");
       ++it;
     }
 
@@ -225,23 +212,11 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     {
       double evtWeight = (*it)->evtWeight;
       integralMC+=evtWeight;
-      fillMassHists((*it), evtWeight, _massMcHistMap);
-      fillAngleHists((*it), evtWeight, _angleMcHistMap);
-      fillAngleHists2D((*it), evtWeight, _angleMcHistMap2D);
+      fillEvt((*it), evtWeight, "mc");
 
       double fitWeight= theLh->calcEvtIntensity( (*it), theFitParams );
       integralFitWeight+=fitWeight;
-      fillMassHists((*it), evtWeight*fitWeight, _massFitHistMap);
-      fillAngleHists((*it), evtWeight*fitWeight, _angleFitHistMap);
-      fillAngleHists2D((*it), evtWeight*fitWeight, _angleFitHistMap2D);
-
-      for(auto fsIt = fsParticles.begin(); fsIt != fsParticles.end(); ++fsIt){
-	 std::string particleName = (*fsIt)->name();
-	 Vector4<double> tmp4vec=(*it)->FourVecsString[particleName];
-	 fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
-      }
-      weightToWrite = fitWeight;
-      _fittedFourvecs->Fill();
+      fillEvt((*it), evtWeight*fitWeight, "fit");
 
       ++it;
     }
@@ -296,6 +271,35 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
 }
 
+void AbsHist::fillEvt(EvtData* theData, double weight, std::string evtType){
+  TTree* theTree=0;
+  if(evtType=="data"){
+    theTree=_dataFourvecs;
+    fillMassHists(theData, weight, _massDataHistMap);
+    fillAngleHists(theData, weight, _angleDataHistMap);
+    fillAngleHists2D(theData, weight, _angleDataHistMap2D);
+  }
+  else if(evtType=="fit"){
+    theTree=_fittedFourvecs;
+    fillMassHists(theData, weight, _massFitHistMap);
+    fillAngleHists(theData, weight, _angleFitHistMap);
+    fillAngleHists2D(theData, weight, _angleFitHistMap2D);
+  }
+  else if(evtType=="mc"){
+    fillMassHists(theData, weight, _massMcHistMap);
+    fillAngleHists(theData, weight, _angleMcHistMap);
+    fillAngleHists2D(theData, weight, _angleMcHistMap2D);
+  }
+  if(evtType=="data" || evtType=="fit"){
+    for(auto fsIt = _fsParticles.begin(); fsIt != _fsParticles.end(); ++fsIt){
+      std::string particleName = (*fsIt)->name();
+      Vector4<double> tmp4vec=theData->FourVecsString[particleName];
+      _fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
+    }
+    _weightToWrite = weight;
+    theTree->Fill();
+  }
+}
 
 
 void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
@@ -456,3 +460,30 @@ void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::sh
     it->second[1]->Fill( result4Vec.Phi(), result4Vec_2.Phi(),weight);
   }
 }
+
+
+void AbsHist::scaleFitHists(double scaleFactor){
+
+  std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
+  for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
+    itMassMap->second->Scale(scaleFactor);
+  }
+
+  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
+  for(itAngleMap= _angleFitHistMap.begin(); itAngleMap!=_angleFitHistMap.end(); ++itAngleMap){
+    std::vector<TH1F*>::iterator itTH1F;
+    for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){
+      (*itTH1F)->Scale(scaleFactor);
+    }
+  }
+
+  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
+  for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
+    std::vector<TH2F*>::iterator itTH2F;
+    for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){
+      (*itTH2F)->Scale(scaleFactor);
+    }
+  }
+}
+
+

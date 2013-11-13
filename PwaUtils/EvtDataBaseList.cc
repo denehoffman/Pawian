@@ -48,8 +48,8 @@ EvtDataBaseList::EvtDataBaseList(ChannelID channelID) :
   _channelID(channelID)
   ,_noOfWeightedDataEvts(0.)
   ,_noOfWeightedMcEvts(0.)
-  //, _mcToDataRatio(1000),
   ,_alreadyRead(false)
+  ,_finalStateParticles(GlobalEnv::instance()->Channel(_channelID)->finalStateParticles())
 {
 }
 
@@ -65,8 +65,6 @@ void EvtDataBaseList::read(EventList& evtListData, EventList& evtListMc){
   }
   read4Vecs(evtListData, _evtDataList, _noOfWeightedDataEvts, evtListData.size(), 0 );
 
-  //  int maxMcEvts=evtListMc.size();
-  //  if (maxMcEvts > _mcToDataRatio*evtListData.size() ) maxMcEvts=_mcToDataRatio*evtListData.size();
   read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, evtListMc.size(), evtListData.size() );
   _alreadyRead=true;
 }
@@ -76,27 +74,12 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
-    //    if (evtCount%10000 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
     if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
 
-    Vector4<double> V4_all_lab(0.,0.,0.,0.);
-
-    std::vector< Vector4<double> > finalState4Vecs;
-    std::vector<Particle*>  finalStateParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
-    std::map<std::string, Vector4<double> > particle4VecMap;
-
-    std::vector<Particle*>::iterator itPart;
-    int counter=0;
-    for (itPart=finalStateParticles.begin(); itPart != finalStateParticles.end(); ++itPart){
-      Vector4<float> current4VecFloat=*(anEvent->p4(counter));
-      Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
-      finalState4Vecs.push_back(current4Vec);
-      particle4VecMap.insert(std::map<std::string, Vector4<double> >::value_type((*itPart)->name(), current4Vec));
-      V4_all_lab += current4Vec;
-      counter++;
-    }
+    EvtData* currentEvt=convertEvent(anEvent, startNo+evtCount);
 
     if (evtCount%10000 == 0){
+      Vector4<double> V4_all_lab=currentEvt->FourVecsString.at("all");
       Info << "4vec all in lab system" << "\n"
            << " px: " << V4_all_lab.Px() <<"\t"
            << " py: " << V4_all_lab.Py() <<"\t"
@@ -105,16 +88,33 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
            << " m : " << V4_all_lab.M() ;  // << endmsg;
     }
 
-    std::vector<Particle*>  sortedFinalStateParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
-    pawian::Collection::PtrLess thePtrLess;
-    std::sort(sortedFinalStateParticles.begin(), sortedFinalStateParticles.end(), thePtrLess);
+    theEvtList.push_back(currentEvt);
 
-    std::string name_all_lab=getName(sortedFinalStateParticles);
+    evtWeightSum += anEvent->Weight();
+    ++evtCount;
+  }
+}
 
+EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
+    Vector4<double> V4_all_lab(0.,0.,0.,0.);
+
+    std::vector< Vector4<double> > finalState4Vecs;
+    std::map<std::string, Vector4<double> > particle4VecMap;
+
+    std::vector<Particle*>::iterator itPart;
+    int counter=0;
+    for (itPart=_finalStateParticles.begin(); itPart != _finalStateParticles.end(); ++itPart){
+      Vector4<float> current4VecFloat=*(theEvent->p4(counter));
+      Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
+      finalState4Vecs.push_back(current4Vec);
+      particle4VecMap.insert(std::map<std::string, Vector4<double> >::value_type((*itPart)->name(), current4Vec));
+      V4_all_lab += current4Vec;
+      counter++;
+    }
 
     EvtData* evtData=new EvtData();
-    evtData->evtWeight=anEvent->Weight();
-    evtData->evtNo=startNo+evtCount;
+    evtData->evtNo=evtNo;
+    evtData->evtWeight=theEvent->Weight();
 
     evtData->FourVecsString.insert(mapString4Vec::value_type("all",V4_all_lab));
 
@@ -139,12 +139,9 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
       (*itDyn)->fillMasses(evtData);
     };
 
-    theEvtList.push_back(evtData);
-
-    evtWeightSum += anEvent->Weight();
-    ++evtCount;
-  }
+    return evtData;
 }
+
 
 std::string EvtDataBaseList::getName(std::vector<Particle*>& theVec){
   std::string result;

@@ -401,6 +401,21 @@ int main(int __argc,char *__argv[]){
   theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(0));
+
+  if (mode=="plotMode"){
+    std::shared_ptr<AbsHist> theHistPtr( new pbarpHist());
+    theAppBase.plotMode(eventsData, mcData, pbarpEventListPtr, theHistPtr);
+    return 1;
+  }
+
+  if (mode=="qaModeSimple"){
+    std::shared_ptr<AbsHist> theHistPtr( new pbarpHist());
+    theAppBase.qaModeSimple(eventsData, mcData, theStartparams, pbarpEventListPtr, theHistPtr, noOfFreeFitParams);
+    return 1;
+  }
+
+
+
   pbarpEventListPtr->read(eventsData, mcData);
 
   theLhPtr->setDataVec(pbarpEventListPtr->getDataVecs());

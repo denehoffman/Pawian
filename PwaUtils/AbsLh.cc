@@ -66,37 +66,19 @@ AbsLh::~AbsLh()
 {
 }
 
-
-
-void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			   double& logLH_data, double& weightSum, fitParams& theParamVal){
-
-   logLH_data=0.;
-   weightSum=0.;
-
-   for (unsigned int i=minEvent; i<=maxEvent; ++i){
-      EvtData* currentEvtData=_evtDataVec[i];
-      double intensity=calcEvtIntensity(currentEvtData, theParamVal);
-      logLH_data+=(currentEvtData->evtWeight)*log(intensity);
-      weightSum+= currentEvtData->evtWeight;
-   }
+void  AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
+			    LHData& theLHData, fitParams& theParamVal){
+  for (unsigned int i=minEvent; i<=maxEvent; ++i){
+    addDataToLogLh(_evtDataVec.at(i), theParamVal, theLHData);
+  }
 }
-
-
 
 void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			 double& lh_mc, fitParams& theParamVal ){
-
-   lh_mc=0.;
-
-   for (unsigned int i=minEvent; i<=maxEvent; ++i){
-      EvtData* currentEvtData=_evtMCVec[i];
-      double intensity=calcEvtIntensity(currentEvtData, theParamVal);
-      lh_mc+=intensity;
-   }
+			  LHData& theLHData, fitParams& theParamVal){
+  for (unsigned int i=minEvent; i<=maxEvent; ++i){
+     addMcToLogLh(_evtMCVec.at(i), theParamVal, theLHData);
+  }
 }
-
-
 
 double AbsLh::calcLogLh(fitParams& theParamVal){
 
@@ -121,8 +103,7 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
      int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
 
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i).logLH_data),
-				      std::ref(threadDataVec.at(i).weightSum), std::ref(theParamVal)));
+				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
@@ -136,7 +117,7 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
      int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
 
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i).LH_mc), std::ref(theParamVal)));
+				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
@@ -147,14 +128,27 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
      theLHData.logLH_data += (*it).logLH_data;
      theLHData.weightSum += (*it).weightSum;
      theLHData.LH_mc  += (*it).LH_mc;
+     theLHData.num_mc += (*it).num_mc; 
   }
 
-  theLHData.num_mc = _evtMCVec.size();
+  //  theLHData.num_mc = _evtMCVec.size();
   return mergeLogLhData(theLHData);
 }
 
 
+double AbsLh::addDataToLogLh(EvtData* dataEvt, fitParams& theParamVal, LHData& theLHData){
+  double intensity=calcEvtIntensity(dataEvt, theParamVal);
+  theLHData.logLH_data+=(dataEvt->evtWeight)*log(intensity);
+  theLHData.weightSum+= dataEvt->evtWeight;
+  return intensity;
+}
 
+double AbsLh::addMcToLogLh(EvtData* mcEvt, fitParams& theParamVal, LHData& theLHData){
+  double intensity=calcEvtIntensity(mcEvt, theParamVal);
+  theLHData.LH_mc+=intensity;
+  theLHData.num_mc++;
+  return intensity;
+}
 
 void AbsLh::calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData){
 
@@ -176,9 +170,11 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData){
      int eventMin = i*eventStepData;
      int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
 
+     // theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
+     // 				      std::ref(threadDataVec.at(i).logLH_data),
+     // 				      std::ref(threadDataVec.at(i).weightSum), std::ref(theParamVal)));
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i).logLH_data),
-				      std::ref(threadDataVec.at(i).weightSum), std::ref(theParamVal)));
+				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
@@ -192,8 +188,11 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData){
     int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
 
 
+    // theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
+    // 				     std::ref(threadDataVec.at(i).LH_mc), std::ref(theParamVal)));
     theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-				     std::ref(threadDataVec.at(i).LH_mc), std::ref(theParamVal)));
+				     std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
+
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
@@ -203,9 +202,10 @@ void AbsLh::calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData){
      theLHData.logLH_data += (*it).logLH_data;
      theLHData.weightSum += (*it).weightSum;
      theLHData.LH_mc += (*it).LH_mc;
+     theLHData.num_mc += (*it).num_mc;
   }
 
-  theLHData.num_mc = _evtMCVec.size();
+  //  theLHData.num_mc = _evtMCVec.size();
 }
 
 

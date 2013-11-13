@@ -59,6 +59,8 @@ struct EvtData {
 };
 
 class EventList;
+class Event;
+class Particle;
 
 class EvtDataBaseList {
 
@@ -74,8 +76,8 @@ public:
 
   double NoOfWeightedDataEvts() const {return _noOfWeightedDataEvts;}
   double NoOfWeightedMcEvts() const {return _noOfWeightedMcEvts;}
-  //  void ratioMcToData (double mcToDataRatio) {_mcToDataRatio=mcToDataRatio;}
   virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo);
+  virtual EvtData* convertEvent(Event* theEvent, int evtNo=1);
 
 protected:
   ChannelID _channelID;
@@ -87,5 +89,6 @@ protected:
   double _noOfWeightedMcEvts;
   //  int _mcToDataRatio;
   bool _alreadyRead;
-
+  std::vector<Particle*>  _finalStateParticles;
+ 
 };

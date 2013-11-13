@@ -42,6 +42,7 @@
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
 #include "PwaUtils/NetworkClient.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
@@ -172,6 +173,102 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
       theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  "\n";
     }
     theQaStream.close();
+}
+
+void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr, int noOfFreeFitParams){
+  std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
+  absLh->updateFitParams(theStartParams);
+  LHData theLHData;
+
+  //loop over data events
+  Event* anEvent;
+  int evtCount = 0;
+  dataEventList.rewind();
+  while ((anEvent = dataEventList.nextEvent())){
+    EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    absLh->addDataToLogLh(currentDataEvt, theStartParams, theLHData);
+    histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+    delete currentDataEvt;
+    evtCount++;
+    if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
+  }
+
+  //loop over mc events
+  int evtCountMc = 0;
+  mcEventList.rewind();
+  while ((anEvent = mcEventList.nextEvent())){
+    EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    double currentIntensity=absLh->addMcToLogLh(currentMcEvt, theStartParams, theLHData);
+    histPtr->fillEvt(currentMcEvt, 1., "mc");
+    histPtr->fillEvt(currentMcEvt, currentIntensity, "fit");
+    delete currentMcEvt;
+    evtCount++;
+    evtCountMc++;
+    if (evtCountMc%1000 == 0) Info << evtCountMc << " MC events calculated" << endmsg ;
+  }
+
+  double histScaleFactor=theLHData.weightSum/theLHData.num_mc;
+  histPtr->scaleFitHists(histScaleFactor);
+
+  double theLh=absLh->mergeLogLhData(theLHData);
+  Info <<"theLh = "<< theLh << endmsg;
+
+  double evtWeightSumData=theLHData.weightSum;
+  double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+  double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+  double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+
+  Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+  Info << "evtWeightSumData:\t" <<evtWeightSumData;
+  Info << "BIC:\t" << BICcriterion << endmsg;
+  Info << "AIC:\t" << AICcriterion << endmsg;
+  Info << "AICc:\t" << AICccriterion << endmsg;
+
+  std::ostringstream qaSummaryFileName;
+  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+  qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
+  
+  std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+  theQaStream << "BIC\t" << BICcriterion << "\n";
+  theQaStream << "AICa\t" << AICcriterion << "\n";
+  theQaStream << "AICc\t" << AICccriterion << "\n";
+  theQaStream << "logLh\t" << theLh << "\n";
+  theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+}
+
+void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr){
+
+  //loop over data events
+  Event* anEvent;
+  int evtCount = 0;
+  double evtWeightSumData=0.;
+  dataEventList.rewind();
+  while ((anEvent = dataEventList.nextEvent())){
+    // EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent);
+    histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+    evtWeightSumData+=currentDataEvt->evtWeight;
+    delete currentDataEvt;
+    evtCount++;
+    if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
+  }
+
+  //loop over mc events
+  int evtCountMc = 0;
+  mcEventList.rewind();
+  while ((anEvent = mcEventList.nextEvent())){
+    // EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent);
+    histPtr->fillEvt(currentMcEvt, 1., "fit");
+    histPtr->fillEvt(currentMcEvt, 1., "mc");
+    delete currentMcEvt;
+    evtCount++;
+    evtCountMc++;
+    if (evtCountMc%1000 == 0) Info << evtCountMc << " MC events calculated" << endmsg ;
+  }
+
+  double histScaleFactor=evtWeightSumData/evtCountMc;
+  histPtr->scaleFitHists(histScaleFactor);
 }
 
 void AppBase::fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams){

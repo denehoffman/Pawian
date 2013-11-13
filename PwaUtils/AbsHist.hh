@@ -36,7 +36,6 @@
 
 #include "TROOT.h"
 
-
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/FitParamsBase.hh"
@@ -44,7 +43,7 @@
 
 class AbsLh;
 class EvtData;
-
+class TLorentzVector; 
 
 struct massHistData {
   massHistData(std::vector<std::string>& fspNames) :
@@ -188,23 +187,22 @@ class TFile;
 class TH2F;
 class TH1F;
 class TTree;
+class Particle;
 
 class AbsHist {
 
 public:
   AbsHist();
   virtual ~AbsHist();
+  void fillEvt(EvtData* theData, double weight, std::string evtType);
+  void scaleFitHists(double scaleFactor);
 
 protected:
 
   void fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
-
   void fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
-
   void fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
-
   void fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill);
-
 
  TFile* _theTFile;
  TTree* _dataFourvecs;
@@ -225,6 +223,9 @@ protected:
  virtual void initRootStuff()=0;
 
 private:
+  float _weightToWrite;
+  std::vector<Particle*> _fsParticles;
+  std::map<std::string, std::shared_ptr<TLorentzVector> > _fourVecMap;
 
 };
 

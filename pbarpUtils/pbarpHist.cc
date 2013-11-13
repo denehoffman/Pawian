@@ -54,6 +54,12 @@ pbarpHist::pbarpHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
   fillIt(theLh, theFitParams);
 }
 
+pbarpHist::pbarpHist() :
+  AbsHist()
+{
+  initRootStuff();
+}
+
 pbarpHist::~pbarpHist(){
   // _theTFile->Write();
   // _theTFile->Close();

@@ -50,6 +50,8 @@ public:
 
   virtual double calcLogLh(fitParams& theParamVal);
   static  double mergeLogLhData(LHData& theLHData);
+  virtual double addDataToLogLh(EvtData* dataEvt, fitParams& theParamVal, LHData& theLHData);
+  virtual double addMcToLogLh(EvtData* mcEvt, fitParams& theParamVal, LHData& theLHData);
   virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData);
   virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;
 
@@ -82,7 +84,7 @@ protected:
 			bool& theHyp, std::string& theKey);
 
   virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			      double& logLH_data, double& weightSum, fitParams& theParamVal);
+			      LHData& theLHData, fitParams& theParamVal);
   virtual void ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			    double& lh_mc, fitParams& theParamVal);
+			     LHData& theLHData, fitParams& theParamVal);
 };

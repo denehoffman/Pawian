@@ -49,6 +49,8 @@ class AbsLh;
 class fitParams;
 class AbsHist;
 class NetworkClient;
+class EvtDataBaseList;
+class AbsHist;
 
 using namespace ROOT::Minuit2;
 
@@ -64,6 +66,8 @@ public:
   virtual void generate(fitParams& theParams);
   virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
   virtual void qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
+  virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr, int noOfFreeFitParams);
+  virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr);
   virtual void fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams);
   virtual FunctionMinimum migradDefault(AbsFcn& theFcn, MnUserParameters& upar);
   virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, double evtWeightSumData=0, int noOfFreeFitParams=0);

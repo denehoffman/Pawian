@@ -257,12 +257,12 @@ void TMatrixGeneral::init(){
   else{
     bool withAdler=_kMatrixParser->useAdler();
     _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, orderBg, withAdler));
-    // _kMatr->updateBgTerms(0, 0, 0,-1.281220068926377);
-    // _kMatr->updateBgTerms(0, 0, 1,-0.7545915734604509);
-    // _kMatr->updateBgTerms(0, 1, 1,-2.368661199177109);
-    _kMatr->updateBgTerms(0, 0, 0, 0.79299);
-    _kMatr->updateBgTerms(0, 0, 1, 0.15040);
-    _kMatr->updateBgTerms(0, 1, 1, 0.17054);
+    _kMatr->updateBgTerms(0, 0, 0,-1.199873290423058);
+    _kMatr->updateBgTerms(0, 0, 1,-1.313917626425926);
+    _kMatr->updateBgTerms(0, 1, 1,-3.41578529550388);
+    // _kMatr->updateBgTerms(0, 0, 0, 0.79299);
+    // _kMatr->updateBgTerms(0, 0, 1, 0.15040);
+    // _kMatr->updateBgTerms(0, 1, 1, 0.17054);
     if(orderBg>0){
       _kMatr->updateBgTerms(1, 0, 0, -0.15099);
       _kMatr->updateBgTerms(1, 0, 1, -0.038266);
