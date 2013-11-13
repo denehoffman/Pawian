@@ -60,8 +60,21 @@ void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
     (*this)+= *(*it);
   }
 
-  double adlerFactor=(1.-_sAdler0)/(mass*mass-_sAdler0)*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
-  double s0ScatFactor=(1.0-_s0Scat)/(mass*mass-_s0Scat);
+  double sAdler0Denom=mass*mass-_sAdler0;
+  if( fabs(sAdler0Denom)<1e-10){
+    if(sAdler0Denom<0) sAdler0Denom=-1e-10;
+    else sAdler0Denom=1e-10;
+  }
+
+ 
+  double adlerFactor=(1.-_sAdler0)/sAdler0Denom*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
+
+  double s0ScatDenom=mass*mass-_s0Scat;
+  if( fabs(s0ScatDenom)<1e-10){
+    if(s0ScatDenom<0.) s0ScatDenom=-1e-10;
+    else s0ScatDenom=1e-10;
+  }
+  double s0ScatFactor=(1.0-_s0Scat)/s0ScatDenom;
 
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){

@@ -129,7 +129,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
   int evtNo=theData->evtNo;
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
     result*=_absDyn->eval(theData, grandmaAmp);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
@@ -148,9 +148,9 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
 
     double theMag=it->second;
-    double thePhi=_currentParamPhiLamLams[it->first];
+    double thePhi=_currentParamPhiLamLams.at(it->first);
     complex<double> expi(cos(thePhi), sin(thePhi));
-    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][it->first->J][lamX][lambda]);
+    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDsString.at(_wignerDKey).at(it->first->J).at(lamX).at(lambda));
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
@@ -163,7 +163,10 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 }
 
   result*=_absDyn->eval(theData, grandmaAmp);
-  if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
+  if(result.real()!=result.real()){
+    Alert << "result:\t" << result << endmsg;
+    exit(0);
+  }
   return result;
 }
 

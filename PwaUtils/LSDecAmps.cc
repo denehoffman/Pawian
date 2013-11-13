@@ -140,6 +140,13 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   }
 
   result*=_absDyn->eval(theData, grandmaAmp);
+  if(result.real()!=result.real()){
+    Info << "dyn name: " << _absDyn->name() 
+	 << "\nname(): " << name()
+	 << endmsg;
+    Alert << "result:\t" << result << endmsg;
+    exit(0);
+  }
   return result;
 }
 
@@ -169,6 +176,10 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
     }
   }
   result*=_preFactor*_isospinCG;
+  if(result.real()!=result.real()){
+    Alert << "result:\t" << result << endmsg;
+    exit(0);
+  }
   return result;
 }
 

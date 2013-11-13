@@ -47,8 +47,14 @@ void PVectorSlowCorRel::evalMatrix(const double mass){
     thePVector += *(*it);
   }
 
+  double s0prodDenom=mass*mass-_s0prod;
+  if(fabs(s0prodDenom)<1e-10){
+    if (s0prodDenom<0.) s0prodDenom=-1e-10;
+    else s0prodDenom=1e-10;
+  }
+
   for (int i=0; i<thePVector.NumRows(); ++i){  
-    this->operator()(i,0)=thePVector(i,0)+ _fProdVec[i]*(1.0-_s0prod)/(mass*mass-_s0prod);
+    this->operator()(i,0)=thePVector(i,0)+ _fProdVec[i]*(1.0-_s0prod)/s0prodDenom;
   } 
 
 }

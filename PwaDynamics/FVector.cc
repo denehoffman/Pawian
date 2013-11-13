@@ -22,6 +22,7 @@
 //************************************************************************//
 
 #include "PwaDynamics/FVector.hh"
+#include "ErrLogger/ErrLogger.hh"
 //#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 
@@ -87,6 +88,11 @@ complex<double> FVector::evalProjMatrix(const double mass, int index){
   complex <double> result(0.,0.);
   for(int i=0;i<NumRows(); ++i){
     result+=denomMatrInv(index,i)*(*_Pvector)(i,0);
+  }
+
+  if(result.real() != result.real()){
+    Alert << "result:\t" << result << endmsg;
+    exit(0);
   }
   return result; 
 }
