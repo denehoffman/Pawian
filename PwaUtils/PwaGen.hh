@@ -71,6 +71,9 @@ protected:
   TH1F* inv01MassH1;
   TH1F* inv02MassH1;
   TH1F* inv12MassH1;
+  TH1F* inv01MassWeightH1;
+  TH1F* inv02MassWeightH1;
+  TH1F* inv12MassWeightH1;
   bool _genWithModel;
   double _unitScaleFactor;
   bool _energyFirst;

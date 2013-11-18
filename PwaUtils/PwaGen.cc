@@ -72,6 +72,9 @@ PwaGen::PwaGen() :
   inv01MassH1=new TH1F("inv01MassH1","inv01MassH1",500, 0., 3.);
   inv02MassH1=new TH1F("inv02MassH1","inv02MassH1",500, 0., 3.);
   inv12MassH1=new TH1F("inv12MassH1","inv12MassH1",500, 0., 3.);
+  inv01MassWeightH1=new TH1F("inv01MassWeightH1","inv01MassWeightH1",500, 0., 3.);
+  inv02MassWeightH1=new TH1F("inv02MassWeightH1","inv02MassWeightH1",500, 0., 3.);
+  inv12MassWeightH1=new TH1F("inv12MassWeightH1","inv12MassWeightH1",500, 0., 3.);
   _genWithModel = GlobalEnv::instance()->parser()->generateWithModel();
 
   std::string unit=GlobalEnv::instance()->parser()->unitInFile();
@@ -123,6 +126,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   int noOfEvtsToGenerate=GlobalEnv::instance()->parser()->noOfGenEvts();
   int noOfAllGenEvts=0;
   int noOfIterations=0;
+  int currentEvtNo=0;
 
   while(generateEvents){
     noOfIterations++;
@@ -140,8 +144,10 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
       //    EvtData* theData
       inv01MassH1->Fill((p4[0]+p4[1]).mass());
-      inv02MassH1->Fill((p4[0]+p4[2]).mass());
-      inv12MassH1->Fill((p4[1]+p4[2]).mass());
+      if(p4.size()>1){
+	inv02MassH1->Fill((p4[0]+p4[2]).mass());
+	inv12MassH1->Fill((p4[1]+p4[2]).mass());
+      }
     }
 
     currentEvtList.rewind();
@@ -164,69 +170,63 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
     std::vector<EvtData*> dataList;
     double evtWeightSum=0.;
-    eventListPtr->read4Vecs(currentEvtList, dataList, evtWeightSum, 100000, noOfAllGenEvts-100000);
+    double maxFitWeight=0.;
 
     theLh->updateFitParams(theFitParams);
-    std::vector<EvtData*>::const_iterator itEvt;
-
-   if(!_genWithModel){
-      itEvt=dataList.begin();
-      while(itEvt!=dataList.end()){
-	dumpAscii(*itEvt);
-	noOfAcceptedEvts++;
-	if(noOfAcceptedEvts==noOfEvtsToGenerate){
-	  generateEvents=false;
-	  break;
-	}
-	++itEvt;
+    while ((anEvent = currentEvtList.nextEvent()) !=0){
+      EvtData* currentEvtData=eventListPtr->convertEvent(anEvent, currentEvtNo);
+      currentEvtNo++;
+  
+      if(!_genWithModel){
+	  dumpAscii(currentEvtData);
+	  delete currentEvtData;
+	  noOfAcceptedEvts++;
+	  if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	    generateEvents=false;
+	    break;
+	  }
       }
+      //    }
+      else{ //generate with model
+	//fit retrieve maxFitWeight
+	theLh->updateFitParams(theFitParams);
+	double fitWeight= theLh->calcEvtIntensity( currentEvtData, theFitParams );
+	if (maxFitWeight< fitWeight) maxFitWeight=fitWeight;
+	
+	DebugMsg << currentEvtData->evtNo <<  "\tfitWeight:\t" << fitWeight << endmsg;
+	if (_useEvtWeight){
+	  dumpAscii(currentEvtData, fitWeight);
+	  noOfAcceptedEvts++;
+	  if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	    delete currentEvtData;
+	    generateEvents=false;
+	    break;
+	  }
+	}
+	
+	if (!_useEvtWeight && noOfIterations>0){
+	  double randWeight = EvtRandom::Flat( 0., maxFitWeight );
+	  if ( randWeight < fitWeight ){
+	    dumpAscii(currentEvtData);
+	    noOfAcceptedEvts++;
+	    if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	      delete currentEvtData;
+	      generateEvents=false;
+	      break;
+	    }
+	  }
+	}
+      }
+      delete currentEvtData;
+      
     }
-   else{ //generate with model
-     //fit retrieve maxFitWeight
-     double maxFitWeight=0.;
-     itEvt=dataList.begin();
-     while(itEvt!=dataList.end())
-       {
-	 double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
-	 DebugMsg << (*itEvt)->evtNo <<  "\tfitWeight:\t" << fitWeight << endmsg;
-	 if (_useEvtWeight){
-	   dumpAscii(*itEvt, fitWeight);
-	   noOfAcceptedEvts++;
-	   if(noOfAcceptedEvts==noOfEvtsToGenerate){
-	     generateEvents=false;
-	     break;
-	   }
-	 }
-	 if (maxFitWeight< fitWeight) maxFitWeight=fitWeight;
-	 ++itEvt;
-       }
+    Info << "iteration:\t" << noOfIterations << "\tnoOfAcceptedEvts:\t" << noOfAcceptedEvts << endmsg;
 
-     if (!_useEvtWeight){
-     itEvt=dataList.begin();
-     while(itEvt!=dataList.end())
-       {
-	 double fitWeight= theLh->calcEvtIntensity( *itEvt, theFitParams );
-	 double randWeight = EvtRandom::Flat( 0., maxFitWeight );
-	 if ( randWeight < fitWeight ){
-	   dumpAscii(*itEvt);
-	   noOfAcceptedEvts++;
-	   if(noOfAcceptedEvts==noOfEvtsToGenerate){
-	     generateEvents=false;
-	     break;
-	   }
-	 }
-	 ++itEvt;
-       }
-     }
-
-
-   }
-   Info << "iteration:\t" << noOfIterations << "\tnoOfAcceptedEvts:\t" << noOfAcceptedEvts << endmsg;
-
-   //delete content of data list
-   for(itEvt=dataList.begin(); itEvt!=dataList.end(); ++itEvt) delete (*itEvt);
+    //delete Events
+    currentEvtList.rewind();
+    currentEvtList.removeEvents(0,currentEvtList.size()); 
   }
-
+  
 }
 
 void PwaGen::addEvt(EventList& evtList, EvtVector4R* evt4Vec4Rs,int evtNumber, double weight){
@@ -244,14 +244,23 @@ void PwaGen::dumpAscii(EvtData* evtData, double weight){
   if (_useEvtWeight && _genWithModel) *_stream << weight << std::endl;
   std::vector<Particle* > fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
 
+  std::vector<Vector4<double>> current4Vecs;
+
   std::vector<Particle* >::const_iterator fspIter = fsParticles.begin();
   for( ; fspIter != fsParticles.end(); ++fspIter ) {
     Vector4<double> tmp4vec = evtData->FourVecsString[ (*fspIter)->name() ];
+    current4Vecs.push_back(tmp4vec);
     if(_energyFirst){
       *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor  << "\t" << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
     }
     else{
       *_stream << std::setprecision(8)  << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" << tmp4vec.E()*_unitScaleFactor << std::endl;
     }
+
+  }
+  inv01MassWeightH1->Fill((current4Vecs[0]+current4Vecs[1]).M(), weight);
+  if(current4Vecs.size()>1){
+    inv02MassWeightH1->Fill((current4Vecs[0]+current4Vecs[2]).M(), weight);
+    inv12MassWeightH1->Fill((current4Vecs[1]+current4Vecs[2]).M(), weight);
   }
 }
