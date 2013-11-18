@@ -144,7 +144,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
       //    EvtData* theData
       inv01MassH1->Fill((p4[0]+p4[1]).mass());
-      if(p4.size()>1){
+      if(_finalStateParticles.size()>2){
 	inv02MassH1->Fill((p4[0]+p4[2]).mass());
 	inv12MassH1->Fill((p4[1]+p4[2]).mass());
       }
@@ -259,7 +259,7 @@ void PwaGen::dumpAscii(EvtData* evtData, double weight){
 
   }
   inv01MassWeightH1->Fill((current4Vecs[0]+current4Vecs[1]).M(), weight);
-  if(current4Vecs.size()>1){
+  if(_finalStateParticles.size()>2){
     inv02MassWeightH1->Fill((current4Vecs[0]+current4Vecs[2]).M(), weight);
     inv12MassWeightH1->Fill((current4Vecs[1]+current4Vecs[2]).M(), weight);
   }
