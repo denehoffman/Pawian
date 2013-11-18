@@ -43,6 +43,8 @@ PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix,
 			   ROOT::Minuit2::MnUserParameters &theMinuitParameters,
 			   fitParams &theFitParams)
 {
+   DiagonalIsValid(theMinuitCovMatrix);
+
    _n = theMinuitCovMatrix.Nrow();
    unsigned int _nPar = theMinuitParameters.Params().size();
   
@@ -106,3 +108,17 @@ double PwaCovMatrix::GetElement(std::string parameter1, std::string parameter2){
    return _covMatrix[parameter1][parameter2];
 }
 
+
+
+bool PwaCovMatrix::DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix){
+
+   bool result = true;
+   for(unsigned int i=0; i<theMinuitCovMatrix.Nrow(); i++){
+      if(theMinuitCovMatrix(i, i) < 0){
+	 Warning << "Covariance element (" << i << "," << i << ")"
+		 << " = " << theMinuitCovMatrix(i,i) << " < 0" << endmsg;
+	 result = false;
+      }
+   }
+   return result;
+}

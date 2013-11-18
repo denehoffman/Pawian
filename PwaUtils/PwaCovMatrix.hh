@@ -52,6 +52,8 @@ class PwaCovMatrix
 		ROOT::Minuit2::MnUserParameters &theMinuitParameters,
 		fitParams &theFitParams);
    double GetElement(std::string parameter1, std::string parameter2);
+   static bool DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix);
+
 
    template<class Archive>
    void serialize(Archive & ar, const unsigned int version){

@@ -294,11 +294,43 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
   MnMigrad migrad(theFcn, upar);
   Info <<"start migrad "<< endmsg;
   FunctionMinimum funcMin = migrad();
-  if(!funcMin.IsValid()) {
-    //try with higher strategy
-    Info <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2(theFcn, funcMin.UserState(), MnStrategy(2));
-    funcMin = migrad2();
+
+  if(funcMin.IsValid()){
+     return funcMin;
+  }
+
+  // Two more tries to get a valid result unsing strategy 2
+  for(int i=0; i<2; i++){
+     Warning <<"FM is invalid, try with strategy = 2."<< endmsg;
+
+     // Check minimum covariance matrix
+     bool badCovarianceDiagonal=false;
+     if(funcMin.HasCovariance()){
+	badCovarianceDiagonal = !PwaCovMatrix::DiagonalIsValid(funcMin.UserCovariance());
+     }
+
+     if(badCovarianceDiagonal){
+       Warning << "Using default errors" << endmsg;
+       MnUserParameters newParams = upar;
+       for(unsigned int i=0; i< funcMin.UserParameters().Params().size();i++){
+	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
+       }
+       MnMigrad migrad2(theFcn, newParams, MnStrategy(2));
+       funcMin = migrad2();
+    }
+    else{
+       MnUserParameters newParams = upar;
+       for(unsigned int i=0; i< funcMin.UserParameters().Params().size();i++){
+	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
+	  newParams.SetError(i, funcMin.UserParameters().Errors().at(i));
+       }
+       MnMigrad migrad2(theFcn, newParams, MnStrategy(2));
+       funcMin = migrad2();
+    }
+
+    if(funcMin.IsValid()){
+       break;
+    }
   }
 
   return funcMin;
