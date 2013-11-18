@@ -55,7 +55,7 @@ void EventList::add(Event* newEvent)
 
 void EventList::removeEvents(unsigned int nBegin, unsigned int nEnd)
 {
-  if ( nBegin < nEnd || eventList.size()>nEnd) {
+  if ( nBegin > nEnd || eventList.size()<nEnd) {
     Alert << "can not remove event no " << nBegin << " - " << nEnd 
 	  << " from list" << endmsg; 
     exit(1);  
