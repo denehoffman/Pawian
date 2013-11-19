@@ -47,8 +47,6 @@ KMatrixParser::KMatrixParser(std::string& path)
 
      {
     _config->add_options()
-      ("configFile",po::value<std::string>(&_configFile),
-     	    "The name of the configuration file holding further configuration options")
       ("keyName",po::value<std::string>(&_keyName), "name for this specific k-matrix")
       ("noOfChannels",po::value<unsigned int>(&_noOfChannels),  "number of channels")
       ("noOfPoles",po::value<unsigned int>(&_noOfPoles),  "number of poles")
@@ -75,17 +73,17 @@ KMatrixParser::KMatrixParser(std::string& path)
 
 bool KMatrixParser::parseCommandLine()
 {
-    po::options_description config_file_options;
-    config_file_options.add(*_config);
 
     std::ifstream ifs(_configFile.c_str());
     if(!ifs.good())
       {
     	stringstream strError;
-    	strError << "Error accessing configuratiocommonn file " << _configFile;
-    	std::cout << config_file_options << endl;
-	exit(0);
+	std::cout << "Error accessing configuration file " << _configFile << std::endl;
+ 	exit(0);
       }
+
+     po::options_description config_file_options;
+     config_file_options.add(*_config);
 
     po::variables_map vm;
     store(po::parse_config_file(ifs, config_file_options), vm);
