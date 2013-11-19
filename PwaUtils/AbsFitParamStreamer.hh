@@ -31,9 +31,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
-using namespace std;
-
-typedef map<string, pair<double, double> > StringPairMap;
+typedef map<std::string, pair<double, double> > StringPairMap;
 
 class AbsFitParamStreamer {
 public:
@@ -43,7 +41,7 @@ public:
 protected:
   StringPairMap _stringPairMap;
   virtual void fillParamMap() = 0;
-  virtual void StringParameterMap(const string &theName, const double firstVal,
+  virtual void StringParameterMap(const std::string &theName, const double firstVal,
 				  const double secondVal);
   virtual void fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, 
 				std::string& suffix, std::map< std::shared_ptr<const JPCLS>,
