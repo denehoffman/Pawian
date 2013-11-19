@@ -37,7 +37,7 @@ AbsFitParamStreamer::AbsFitParamStreamer(std::string& filePath)
     }
 
 
-  string strTmp, strState;
+  std::string strTmp, strState;
   bool bError=false;
   double dMag=0.0, dPhi=0.0;
   
@@ -64,7 +64,7 @@ AbsFitParamStreamer::AbsFitParamStreamer(std::string& filePath)
 AbsFitParamStreamer::~AbsFitParamStreamer(){;}
 
 
-void AbsFitParamStreamer::StringParameterMap(const string &theName, const double firstVal, const double secondVal)
+void AbsFitParamStreamer::StringParameterMap(const std::string &theName, const double firstVal, const double secondVal)
 {
   std::pair <double,double> thePair=make_pair(firstVal, secondVal);
   _stringPairMap[theName]=thePair;

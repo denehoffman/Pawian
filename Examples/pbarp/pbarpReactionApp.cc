@@ -90,9 +90,6 @@ int main(int __argc,char *__argv[]){
   Info << welcomeScreen << endmsg;
   Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
-  // Disable output buffering
-  setvbuf(stdout, NULL, _IONBF, 0);
-
   // Parse the command line
   pbarpParser* theAppParams=new pbarpParser(__argc, __argv);
 
@@ -177,6 +174,8 @@ int main(int __argc,char *__argv[]){
   theAppBase.fixParams(upar,fixedParams);
   const unsigned int noOfFreeFitParams = upar.VariableParameters();
 
+  // Disable output buffering
+  setvbuf(stdout, NULL, _IONBF, 0);
 
   if(mode == "client"){
 

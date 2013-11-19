@@ -29,7 +29,6 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
-#include <math.h>
 #include <limits>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -108,9 +107,9 @@ bool NetworkClient::SendLH(double llh_data, double lh_mc){
       return false;
    }
 
-   if(isinf(llh_data) && llh_data > 0)
+   if(std::isinf(llh_data) && llh_data > 0)
       llh_data=std::numeric_limits<double>::max() / 10.;
-   else if(isinf(llh_data) && llh_data < 0)
+   else if(std::isinf(llh_data) && llh_data < 0)
       llh_data=-std::numeric_limits<double>::max() / 10.;
 
    _theStream << NetworkClient::CLIENTMESSAGE_LH << "\n"
