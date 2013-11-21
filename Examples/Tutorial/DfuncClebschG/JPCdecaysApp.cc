@@ -39,6 +39,8 @@ bool findPCAndRemove(std::string& theString, int& theP, int& theC){
   std::string plusminusStr("+-");
   std::string minusplusStr("-+");
   std::string minusminusStr("--");
+  std::string plus0Str("+0");
+  std::string minus0Str("-0");
 
   size_t strfound=0;
   if ( (strfound=theString.find(plusplusStr)) != std::string::npos){
@@ -61,6 +63,16 @@ bool findPCAndRemove(std::string& theString, int& theP, int& theC){
    theP=-1;
    theC=-1;
   }
+  else if ( (strfound=theString.find(plus0Str)) != std::string::npos){
+   theString.erase (strfound, strfound+2);
+   theP=1;
+   theC=0;
+  }
+  else if ( (strfound=theString.find(minus0Str)) != std::string::npos){
+   theString.erase (strfound, strfound+2);
+   theP=-1;
+   theC=0;
+  }
   else result=false;
 
   return result;
@@ -75,18 +87,18 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application which calculates all allowed LS combinations for the decay a(JPC) -> b(JPC) + c(JPC)\n"
+    Info << "\nThis is a test application which calculates all allowed LS combinations for the decay a((2J)PC) -> b((2J)PC) + c((2J)PC)\n"
 	 << "The switches are:\n\n"
-         << "-mother  (default 1+-)\n\n" 
-         << "-daughter1  (default 2--)\n\n"
-         << "-daughter2   (default 1-+)"
+         << "-mother  (default 2+-)\n\n" 
+         << "-daughter1  (default 4--)\n\n"
+         << "-daughter2   (default 2-+)"
          << endmsg;
     return 0;
   }
 
-  std::string motherStr="1+-";
-  std::string daughter1Str="2--";
-  std::string daughter2Str="1-+";
+  std::string motherStr="2+-";
+  std::string daughter1Str="4--";
+  std::string daughter2Str="2-+";
   
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
     bool found=false;
@@ -135,37 +147,37 @@ int main(int __argc,char *__argv[]){
     exit(0);
   }
 
-  std::stringstream motherJStrStr(motherStr);
-  double motherJ=0.;
-  motherJStrStr >> motherJ;
-  Info << "mother:\tJ: " << motherJ << "\tP: " << motherP << "\tC: " << motherC << endmsg;
+  std::stringstream mother2JStrStr(motherStr);
+  double mother2J=0.;
+  mother2JStrStr >> mother2J;
+  Info << "mother:\tJ: " << mother2J << "/2\tP: " << motherP << "\tC: " << motherC << endmsg;
 
   found=findPCAndRemove(daughter1Str, daughter1P, daughter1C);
   if (!found) {
     Alert << "JPCdaughter1: " << daughter1Str << " not allowed!!!" << endmsg;
     exit(0);
   }
-  std::stringstream daughter1JStrStr(daughter1Str);
-  double daughter1J=0.;
-  daughter1JStrStr >> daughter1J;
-  Info << "daughter1:\tJ: " << daughter1J << "\tP: " << daughter1P << "\tC: " << daughter1C << endmsg;
+  std::stringstream daughter1_2JStrStr(daughter1Str);
+  double daughter1_2J=0.;
+  daughter1_2JStrStr >> daughter1_2J;
+  Info << "daughter1:\tJ: " << daughter1_2J << "/2\tP: " << daughter1P << "\tC: " << daughter1C << endmsg;
 
   found=findPCAndRemove(daughter2Str, daughter2P, daughter2C);
   if (!found) {
     Alert << "JPCdaughter2: " << daughter2Str << " not allowed!!!" << endmsg;
     exit(0);
   }
-  std::stringstream daughter2JStrStr(daughter2Str);
-  double daughter2J=0.;
-  daughter2JStrStr >> daughter2J;
-  Info << "daughter2:\tJ: " << daughter2J << "\tP: " << daughter2P << "\tC: " << daughter2C << endmsg;
+  std::stringstream daughter2_2JStrStr(daughter2Str);
+  double daughter2_2J=0.;
+  daughter2_2JStrStr >> daughter2_2J;
+  Info << "daughter2:\tJ: " << daughter2_2J << "/2\tP: " << daughter2P << "\tC: " << daughter2C << endmsg;
 
 
   
-  std::shared_ptr<const jpcRes> motherJPC(new jpcRes(Spin(motherJ), motherP, motherC));
-  std::shared_ptr<const jpcRes> daughter1JPC(new jpcRes(Spin(daughter1J), daughter1P, daughter1C)); 
-  std::shared_ptr<const jpcRes> daughter2JPC(new jpcRes(Spin(daughter2J), daughter2P, daughter2C));
-
+  std::shared_ptr<const jpcRes> motherJPC(new jpcRes(Spin(mother2J/2), motherP, motherC));
+  std::shared_ptr<const jpcRes> daughter1JPC(new jpcRes(Spin(daughter1_2J/2), daughter1P, daughter1C)); 
+  std::shared_ptr<const jpcRes> daughter2JPC(new jpcRes(Spin(daughter2_2J/2), daughter2P, daughter2C));
+  motherJPC->print(std::cout);
   JPCdecays theDecays(motherJPC, daughter1JPC, daughter2JPC);
   theDecays.print(std::cout);
   return 0;

@@ -21,53 +21,36 @@
 //									  //
 //************************************************************************//
 
-#ifndef _JPCdecays_H
-#define _JPCdecays_H
+// gammapParser class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
+#pragma once
 
-#include <cassert>
-
-#include <memory>
-
-#include "TROOT.h"
-// #include <TSystem.h>
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-
-class jpcRes;
-
-class JPCdecays {
-
-public:
-
-  // create/copy/destroy:
-
-  ///Constructor 
-  JPCdecays(std::shared_ptr<const jpcRes> motherJPC, std::shared_ptr<const jpcRes> daughter1JPC, std::shared_ptr<const jpcRes> daughter2JPC, bool sameDaughters=false);
+#include "ConfigParser/ParserBase.hh"
+// Boost headers go here
 
 
-  /** Destructor */
-  virtual ~JPCdecays();
 
-  // Getters:
-  void print(std::ostream& os) const; 
+class gammapParser : public ParserBase 
+{
+
+  public:
+
+  gammapParser(int argc,char **argv);
+  virtual ~gammapParser(){;}
+
+  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
+  const double cmsMass() {return _cmsMass;}
+  const unsigned int getLMax() const { return _lMax; }
+  const std::vector<std::string>& dropGammapLForParticle() const{ return _dropGammapLForParticle; }
 
 protected:
-
-
-private:
-  std::shared_ptr<const jpcRes> _motherJPC;
-  std::shared_ptr<const jpcRes> _daughter1JPC;
-  std::shared_ptr<const jpcRes> _daughter2JPC;
-  std::vector<LS> _allLSs;
-  std::vector<LS> _allowedCParityLSs;
-  std::vector<LS> _forbiddenCParityLSs;
-  std::vector<LS> _undefinedCParityLSs;
-  bool _sameDaughters;
-  bool _definedCParity;
+  virtual bool parseCommandLine(int argc,char **argv); 
+  unsigned int _lMax;
+  double _cmsMass;
+  std::vector<std::string> _spinDensity;
+  std::vector<std::string> _dropGammapLForParticle;
 };
 
-#endif
+
+
