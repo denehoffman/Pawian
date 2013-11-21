@@ -57,6 +57,7 @@ build-project PwaUtils ;
 build-project pbarpUtils ;
 build-project epemUtils ;
 build-project resUtils ;
+build-project gammapUtils ;
 build-project Particle ;
 build-project Event ;
 build-project PspGen ;

@@ -69,6 +69,7 @@ public:
    static short CHANNEL_PBARP;
    static short CHANNEL_EPEM;
    static short CHANNEL_RES;
+   static short CHANNEL_GAMMAP;
 
 protected:
    int _channelID;

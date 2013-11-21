@@ -1,0 +1,18 @@
+project : 
+        ;
+
+lib gammap : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/ConfigParser//ConfigParser
+        $(TOP)/PwaUtils//PwaUtils
+        $(TOP)/gammapUtils//gammapUtils
+        $(TOP)/Particle//Particle
+        $(TOP)/Event//Event
+        :  
+        : 
+        :   ;
+
+exe gammapReactionApp : gammapReactionApp.cc gammap : ;
+exe selectGammapDataApp : selectGammapDataApp.cc gammap : ;

@@ -156,9 +156,9 @@ template <typename _Tp>
 void Tensor<_Tp>::Boost(double __bx,double __by,double __bz){
    
   // check to see if bx,by,bz are all less than 1
-  if(abs(__bx) >= 1 || abs(__by) >= 1 || abs(__bz) >= 1)
-    cout << "Error! Attempt to boost using invalid boost vector." << endl;
-  assert((abs(__bx) < 1)&&(abs(__by)<1)&&(abs(__bz)<1));
+  if(fabs(__bx) >= 1. || fabs(__by) >= 1. || fabs(__bz) >= 1.) cout << "Error! Attempt to boost using invalid boost vector." << endl;
+  
+  assert(((fabs(__bx) < 1.)&&(fabs(__by)<1.)&&(fabs(__bz)<1.)));
 
   Tensor<double> lt(2); // Lorentz transformation tensor
   double gamma = 1.0/sqrt(1.0 - __bx*__bx - __by*__by - __bz*__bz);

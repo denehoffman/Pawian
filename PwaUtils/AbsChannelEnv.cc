@@ -45,6 +45,7 @@
 short AbsChannelEnv::CHANNEL_PBARP = 1;
 short AbsChannelEnv::CHANNEL_EPEM = 2;
 short AbsChannelEnv::CHANNEL_RES = 3;
+short AbsChannelEnv::CHANNEL_GAMMAP = 4;
 
 AbsChannelEnv::AbsChannelEnv(ParserBase* theParser) :
    _alreadySetUp(false)
