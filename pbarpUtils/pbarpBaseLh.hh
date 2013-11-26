@@ -62,8 +62,8 @@ public:
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
 
-  virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
-  virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData);
+virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData, int J);
+virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J);
 
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void updateFitParams(fitParams& theParamVal);

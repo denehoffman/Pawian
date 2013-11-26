@@ -60,7 +60,7 @@ pbarpBaseLh::~pbarpBaseLh()
 }
 
 
-complex<double> pbarpBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData){
+complex<double> pbarpBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData, int J){
 
    complex<double> result(0.,0.);
 
@@ -79,18 +79,18 @@ complex<double> pbarpBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& name
             triplet1AmpM1  * conj(triplet1AmpM2) +
             tripletm1AmpM1 * conj(tripletm1AmpM2);
 
-   double norm = calcSpinDensityNorm(nameDec, theData);
+   double norm = calcSpinDensityNorm(nameDec, theData, J);
 
    return (result / norm);
 }
 
 
 
-double pbarpBaseLh::calcSpinDensityNorm(std::string& nameDec, EvtData* theData){
+double pbarpBaseLh::calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J){
 
    double result = 0;
 
-   for (Spin M=-1; M<=1; M++){
+   for (Spin M=-J; M<=J; M++){
      complex<double> singletAmpM1   = calcProdPartAmp( 0, M, nameDec, theData, _decAmpsSinglet);
      complex<double> triplet0AmpM1  = calcProdPartAmp( 0, M, nameDec, theData, _decAmpsTriplet0);
      complex<double> triplet1AmpM1  = calcProdPartAmp( 1, M, nameDec, theData, _decAmpsTripletp1);

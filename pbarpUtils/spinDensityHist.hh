@@ -69,7 +69,7 @@ class spinDensityHist{
    ROOT::Minuit2::MnUserParameters _theMnUserParameters;
 
    void calcSpinDensityMatrix(std::string& particleName);
-   void calcSpinDensityMatrixElement(std::string& particleName, Spin M1, Spin M2);
-   complex<double> calcSpinDensityMatrixError(std::string& particleName, Spin M1, Spin M2, EvtData* evtData, complex<double> sdmValue);
+   void calcSpinDensityMatrixElement(std::string& particleName, Spin M1, Spin M2, int J);
+   complex<double> calcSpinDensityMatrixError(std::string& particleName, Spin M1, Spin M2, EvtData* evtData, complex<double> sdmValue, int J);
    double ParticleCosTheta(std::string& particleName, EvtData* theData);
 };

@@ -43,11 +43,11 @@
 #include "TFile.h"
 
 
-const int spinDensityHist::MAX_EVENTS = 3500;
+const int spinDensityHist::MAX_EVENTS = 10000;
 
 
 spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  _calcErrors(false)
+   _calcErrors(false)
   , _nBins(101)
   ,_theLh(theLh)
 {
@@ -97,9 +97,13 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
 
    int J = GlobalEnv::instance()->particleTable()->particle(particleName)->J();
 
-   if(J!=1){
-      Alert << "Spin density calculation for J!=1 currently not supported." << endmsg;
-      return;
+   if(J<=0){
+       Alert << "Cannot calculate spin density matrix for spin 0 particles" << endmsg;
+       return;
+   }
+
+   if(J>1){
+       Warning << "Spin density calculation for J!=1 experimental." << endmsg;
    }
 
    std::shared_ptr<AbsDecayList> prodDecayList = 
@@ -120,14 +124,14 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
    for(Spin M1 = -J; M1 <= J; M1++){
       for(Spin M2 = -J; M2 <= J; M2++){
 	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
-	calcSpinDensityMatrixElement(particleName, M1, M2);
+	calcSpinDensityMatrixElement(particleName, M1, M2, J);
       }
    }
 }
 
 
 
-void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Spin M1, Spin M2){
+void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Spin M1, Spin M2, int J){
 
    std::stringstream newHistNameReal;
    newHistNameReal << particleName << "_" << M1 << "_" << M2 << "_Real";
@@ -142,18 +146,23 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
    TH1F* errImag = new TH1F("errImag", "errImag", _nBins, -1, 1);
    errReal->SetDirectory(0);
    errImag->SetDirectory(0);
-   
-   int eventsRead=0;
+
+   std::vector<short> entries (_nBins);
+   std::fill(entries.begin(), entries.end(), 0);
+
    for(auto it = _dataList.begin(); it != _dataList.end(); ++it){
 
       double costheta = ParticleCosTheta(particleName, *it);
+      short histIndex = newHistoReal->FindBin(costheta);
 
-      if(newHistoReal->GetBinContent(newHistoReal->FindBin(costheta)) != 0)
+      if(entries.at(histIndex-1) >= 2)
 	 continue;
+
+      entries.at(histIndex-1)++;
 
       _theLh->updateFitParams(*_theFitParamsOriginal);
       complex<double> tempSpinDensity =
-	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it);
+	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it, J);
 
       newHistoReal->Fill(costheta, tempSpinDensity.real() * (*it)->evtWeight);
       newHistoImag->Fill(costheta, tempSpinDensity.imag() * (*it)->evtWeight);
@@ -161,15 +170,11 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
 
       complex<double> tempSpinDensityErr(0,0);
       if(_calcErrors){
-	 tempSpinDensityErr = calcSpinDensityMatrixError(particleName, M1, M2, *it, tempSpinDensity);
+	 tempSpinDensityErr = calcSpinDensityMatrixError(particleName, M1, M2, *it, tempSpinDensity, J);
       }
-      
+
       errReal->Fill(costheta, tempSpinDensityErr.real() * (*it)->evtWeight);
       errImag->Fill(costheta, tempSpinDensityErr.imag() * (*it)->evtWeight);
-
-      eventsRead++;
-      if(eventsRead >= MAX_EVENTS)
-	 break;
    }
 
    newHistoReal->Divide(normHist);
@@ -191,9 +196,8 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
 
 complex<double> 
 spinDensityHist::calcSpinDensityMatrixError(std::string& particleName, 
-					    Spin M1, Spin M2, EvtData* evtData, complex<double> sdmValue){
+					    Spin M1, Spin M2, EvtData* evtData, complex<double> sdmValue, int J){
 
-   double stepSize = 0.0001;
    std::map< std::string, complex<double> > derivatives;
 
    unsigned int nPar = _theMnUserParameters.Params().size();
@@ -202,7 +206,13 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
       double parOrig = _theMnUserParameters.Value(i);
       std::string parName = _theMnUserParameters.GetName(i);
-      
+      double stepSize = sqrt(_thePwaCovMatrix->GetElement(parName, parName)) * 0.01;
+
+      if(AbsParamHandler::CheckDoubleEquality(stepSize, 0)){
+	 derivatives[parName] = std::complex<double>(0,0);
+	 continue;
+      }
+
       _theMnUserParameters.SetValue(i, parOrig + stepSize);
       
       fitParams newFitParams = *_theFitParamsOriginal;
@@ -210,7 +220,7 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
       _theLh->updateFitParams(newFitParams);
       
       complex<double> tempSpinDensity  = 
-	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, evtData);
+	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, evtData, J);
       
       complex<double> newDerivative = (tempSpinDensity - sdmValue) / stepSize;
       derivatives[parName] = newDerivative;
@@ -266,3 +276,5 @@ double spinDensityHist::ParticleCosTheta(std::string& particleName, EvtData* the
    
    return particle4Vec.CosTheta();
 }
+
+
