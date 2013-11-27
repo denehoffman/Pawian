@@ -11,3 +11,5 @@ lib gammapUtils :
 	: <use>$(TOP)//Minuit2
 	: 
 	: <library>$(TOP)//Minuit2 ;
+
+exe gammapStatesApp : gammapStatesApp.cc gammapUtils : ;

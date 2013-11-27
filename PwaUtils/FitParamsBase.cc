@@ -31,8 +31,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 FitParamsBase::FitParamsBase() :
-  _isoSuffix("Iso")
-  ,_magSuffix("Mag")
+  _magSuffix("Mag")
   ,_phiSuffix("Phi")
   ,_massSuffix("Mass")
   ,_widthSuffix("Width")
@@ -48,8 +47,11 @@ FitParamsBase::~FitParamsBase()
 
 void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValParams, fitParams& theErrParams){
 
-  // // 0.: set magnitudes of all lamlam amplitudes
-  // setMnUsrParamsJPC(upar, theValParams.Isos, theErrParams.Isos, _isoSuffix);
+  // 0.: set magnitudes of all JPC amplitudes
+   setMnUsrParamsJPC(upar, theValParams.MagsJPC, theErrParams.MagsJPC, _magSuffix);
+
+  // 0a.: set phi of all JPC amplitudes
+   setMnUsrParamsJPC(upar, theValParams.PhisJPC, theErrParams.PhisJPC, _magSuffix);
 
   // 1.: set magnitudes of all JPCLS amplitudes
   setMnUsrParamsJPCLS(upar, theValParams.Mags, theErrParams.Mags, _magSuffix);
@@ -87,7 +89,9 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValPara
 
 void FitParamsBase::printParams(fitParams& theParams){
 
-  //  printJPCParams(theParams, theParams.Isos, _isoSuffix);
+  printJPCParams(theParams, theParams.MagsJPC, _magSuffix);
+  printJPCParams(theParams, theParams.PhisJPC, _phiSuffix);
+
   printJPCLSParams(theParams, theParams.Mags, _magSuffix);
   printJPCLSParams(theParams, theParams.Phis, _phiSuffix);
   
@@ -106,7 +110,9 @@ void FitParamsBase::printParams(fitParams& theParams){
 void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs){
 
   os << std::setprecision(16);
-  // dumpJPCParams(os, theVals.Isos, theErrs.Isos, _isoSuffix);
+  dumpJPCParams(os, theVals.MagsJPC, theErrs.MagsJPC, _magSuffix);
+  dumpJPCParams(os, theVals.PhisJPC, theErrs.PhisJPC, _phiSuffix);
+  
   dumpJPCLSParams(os, theVals.Mags, theErrs.Mags,  _magSuffix);
   dumpJPCLSParams(os, theVals.Phis, theErrs.Phis,  _phiSuffix);
 
@@ -126,7 +132,8 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
 void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& theParams){
 
   unsigned int counter=0;
-  //  getFitParamValJPC(par, theParams.Isos, counter);
+  getFitParamValJPC(par, theParams.MagsJPC, counter);
+  getFitParamValJPC(par, theParams.PhisJPC, counter);
   getFitParamValJPCLS(par, theParams.Mags, counter);
   getFitParamValJPCLS(par, theParams.Phis, counter);
   getFitParamValJPCLamLam(par, theParams.MagLamLams, counter);
@@ -145,25 +152,25 @@ void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& th
 }
 
 
-void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startIsoMap, mapStrJPC& errIsoMap, const std::string& suffix){
+void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
 
-  mapStrJPC::iterator itIsoMap;
-  for (itIsoMap=startIsoMap.begin(); itIsoMap!=startIsoMap.end(); ++itIsoMap){
+  mapStrJPC::iterator itJPCMap;
+  for (itJPCMap=startJPCMap.begin(); itJPCMap!=startJPCMap.end(); ++itJPCMap){
 
-    std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >& errIsos= errIsoMap[itIsoMap->first];
+    std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >& errJPCs= errJPCMap[itJPCMap->first];
 
-    std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >::iterator itIso;
-    for (itIso=itIsoMap->second.begin(); itIso!=itIsoMap->second.end(); ++itIso){
+    std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >::iterator itJPC;
+    for (itJPC=itJPCMap->second.begin(); itJPC!=itJPCMap->second.end(); ++itJPC){
 
-      std::shared_ptr<const jpcRes> theJPC=itIso->first;
-      double theStartVal=itIso->second;
-      double theErrVal=errIsos[theJPC];
+      std::shared_ptr<const jpcRes> theJPC=itJPC->first;
+      double theStartVal=itJPC->second;
+      double theErrVal=errJPCs[theJPC];
       if (theErrVal<=0.) theErrVal=0.1;
 
       //now fill the fitParameterMap
-      std::string isoStr = theJPC->name() + itIsoMap->first +suffix;
+      std::string jpcStr = theJPC->name() + itJPCMap->first +suffix;
 
-      upar.Add(isoStr, theStartVal, theErrVal, 0., 1.);
+      upar.Add(jpcStr, theStartVal, theErrVal, 0., 1.);
     }
 
   }

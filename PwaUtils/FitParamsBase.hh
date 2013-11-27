@@ -50,7 +50,8 @@ typedef std::map<std::string, std::map< std::shared_ptr<const JPClamlam>, double
 typedef std::map<std::string, double> mapStrDouble;
 
 struct fitParams {
-  mapStrJPC Isos;
+  mapStrJPC MagsJPC;
+  mapStrJPC PhisJPC;
   mapStrLS MagsLS;
   mapStrLS PhisLS;
   mapStrJPCLS Mags;
@@ -76,7 +77,7 @@ public:
   virtual void dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs);
 
 protected:
-  const std::string _isoSuffix;
+  //  const std::string _isoSuffix;
   const std::string _magSuffix;
   const std::string _phiSuffix;
   const std::string _massSuffix;
@@ -86,8 +87,8 @@ protected:
 
 private:
   virtual void setMnUsrParamsJPC(MnUserParameters& upar,
-				 mapStrJPC& startIsoMap,
-				 mapStrJPC& errIsoMap,
+				 mapStrJPC& startJPCMap,
+				 mapStrJPC& errJPCMap,
 				 const std::string& suffix);
   virtual void setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix);
   virtual void setMnUsrParamsJPCLamLam(MnUserParameters& upar,

@@ -38,7 +38,6 @@ StreamFitParmsBase::StreamFitParmsBase(std::string& filePath) :
 StreamFitParmsBase::~StreamFitParmsBase(){;}
 
 void StreamFitParmsBase::fillParams(){
-  const std::string isoSuffix="Iso";
   const std::string magSuffix="Mag";
   const std::string phiSuffix="Phi";
   const std::string massSuffix="Mass";
@@ -46,7 +45,8 @@ void StreamFitParmsBase::fillParams(){
   const std::string gFactorSuffix="gFactor";
   const std::string otherSuffix="Other";
 
-  fillJPCIsos(_paramVal.Isos, _paramErr.Isos, isoSuffix);
+  fillJPCAmps(_paramVal.MagsJPC, _paramErr.MagsJPC, magSuffix);
+  fillJPCAmps(_paramVal.PhisJPC, _paramErr.PhisJPC, phiSuffix);
   fillLSAmps(_paramVal.MagsLS, _paramErr.MagsLS, magSuffix);
   fillLSAmps(_paramVal.PhisLS, _paramErr.PhisLS, phiSuffix);
   fillJPCLamLamAmps(_paramVal.MagLamLams, _paramErr.MagLamLams, magSuffix);
@@ -59,27 +59,27 @@ void StreamFitParmsBase::fillParams(){
   fillDoubles(_paramVal.otherParams, _paramErr.otherParams, otherSuffix);
 }
 
-void StreamFitParmsBase::fillJPCIsos(mapStrJPC& valMap, mapStrJPC& errMap,
+void StreamFitParmsBase::fillJPCAmps(mapStrJPC& valMap, mapStrJPC& errMap,
 				     const std::string& suffix){
-  mapStrJPC::iterator itIsoMap;
-  for( itIsoMap=valMap.begin(); itIsoMap!=valMap.end(); ++itIsoMap){
-    std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >::iterator itIso;
-    for ( itIso=itIsoMap->second.begin(); itIso!=itIsoMap->second.end();  ++itIso){
-      std::string theKey=itIso->first->name()+itIsoMap->first+suffix;
+  mapStrJPC::iterator itJPCMap;
+  for( itJPCMap=valMap.begin(); itJPCMap!=valMap.end(); ++itJPCMap){
+    std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >::iterator itJPC;
+    for ( itJPC=itJPCMap->second.begin(); itJPC!=itJPCMap->second.end();  ++itJPC){
+      std::string theKey=itJPC->first->name()+itJPCMap->first+suffix;
       Info << "theKey=\t" << theKey << endmsg;
       StringPairMap::const_iterator stringPairIter;
 
       stringPairIter=_stringPairMap.find(theKey);
 
       if ( stringPairIter != _stringPairMap.end() ){
-	Info << "fillJPCIsos: key\t" << theKey << "\tfound" << endmsg;
+	Info << "fillJPCs: key\t" << theKey << "\tfound" << endmsg;
 	double val=stringPairIter->second.first;
 	Info << "replace val by " << val << endmsg;
 	double err=stringPairIter->second.second;
 	Info << "replace err by " << err << endmsg;
 
-	valMap[itIsoMap->first][itIso->first] = val;
-	errMap[itIsoMap->first][itIso->first] = err;
+	valMap[itJPCMap->first][itJPC->first] = val;
+	errMap[itJPCMap->first][itJPC->first] = err;
 
       }
     }

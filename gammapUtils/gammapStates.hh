@@ -21,46 +21,52 @@
 //									  //
 //************************************************************************//
 
+// gammapStates class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
+
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include <map>
 #include <string>
+#include <vector>
+#include <fstream>
 #include <memory>
 
-#include "PwaUtils/AbsFitParamStreamer.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include "PwaUtils/AbsStates.hh"
+#include "PwaUtils/DataUtils.hh"
 
 
-class StreamFitParmsBase : public AbsFitParamStreamer {
+class gammapStates : public AbsStates {
 
 public:
-  StreamFitParmsBase(std::string&);
-  virtual ~StreamFitParmsBase();
 
-  fitParams getFitParamVal() { return _paramVal;}
-  fitParams getFitParamErr() { return _paramErr;}
+  gammapStates();
+  gammapStates(int lmax);
+  virtual ~gammapStates();
 
-  virtual void fillParamMap() {return;}
+  virtual std::vector< std::shared_ptr<const jpcRes> > jpcStates() const {
+    return _alljpcRes;
+  }
 
-protected:
-  virtual void fillParams();
+  virtual std::vector< std::shared_ptr<const JPCLS> > jpcljStates() const {
+    return _JPClj_States;
+  }
 
-  virtual void fillJPCAmps(mapStrJPC& valMap, mapStrJPC& errMap,
-			  const std::string& suffix);
- virtual void fillLSAmps(mapStrLS& valMap, mapStrLS& errMap,
-			  const std::string& suffix);
-  virtual void fillJPCLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap,
-			      const std::string& suffix);
-  virtual void fillJPCLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap,
-			  const std::string& suffix);
-  virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
-			   const std::string& suffix);
-private:
-  fitParams _paramVal;
-  fitParams _paramErr;
+  virtual void print(std::ostream& os) const;
 
-  void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap,
-		     std::string& suffix, int index);
+ protected:
+  int _lmax;
+  jpcRes _gammapJPC;
+  jpcRes _pJPC;
+  jpcRes _gammaJPC;
+
+  virtual bool calcStates();
+
+  std::vector< std::shared_ptr<const jpcRes> > _alljpcRes;
+
+  std::vector< std::shared_ptr<const JPCLS> > _JPClj_States; //l;momentum between p and gamma
+                                                             //j multipole gamma l coupling
+  std::vector< std::shared_ptr<const JPCLS> > _elMpolJPClj_States;
+  std::vector< std::shared_ptr<const JPCLS> > _magMpolJPClj_States;
 };
