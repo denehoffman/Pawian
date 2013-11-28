@@ -45,6 +45,10 @@ public:
   gammapStates(int lmax);
   virtual ~gammapStates();
 
+  virtual std::vector< std::shared_ptr<const IGJPC> > igjpcStates(){
+    return _allIGjpcRes; 
+  }
+
   virtual std::vector< std::shared_ptr<const jpcRes> > jpcStates() const {
     return _alljpcRes;
   }
@@ -62,6 +66,8 @@ public:
   jpcRes _gammaJPC;
 
   virtual bool calcStates();
+
+  std::vector< std::shared_ptr<const IGJPC> > _allIGjpcRes;
 
   std::vector< std::shared_ptr<const jpcRes> > _alljpcRes;
 

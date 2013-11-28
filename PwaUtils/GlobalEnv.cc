@@ -74,6 +74,15 @@ const std::shared_ptr<AbsChannelEnv> GlobalEnv::EpemChannel(int id) const
    return _channelEnvs.at(id).first;
 }
 
+const std::shared_ptr<AbsChannelEnv> GlobalEnv::GammapChannel(int id) const
+{
+
+   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GAMMAP){
+      Alert << "Faultily accessing non-epem channel environment." << endmsg;
+   }
+
+   return _channelEnvs.at(id).first;
+}
 
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::ResChannel(int id) const

@@ -41,7 +41,7 @@
 
 
 
-EpemChannelEnv::EpemChannelEnv(epemParser* theParser) : AbsChannelEnv(theParser)
+EpemChannelEnv::EpemChannelEnv(epemParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_EPEM)
   ,_theParser(theParser)
 {
 }

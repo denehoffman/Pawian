@@ -34,7 +34,7 @@
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-ResChannelEnv::ResChannelEnv(resParser* theParser) : AbsChannelEnv(theParser)
+ResChannelEnv::ResChannelEnv(resParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_RES)
    ,_theParser(theParser)
 {
 }

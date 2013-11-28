@@ -22,7 +22,7 @@
 //************************************************************************//
 
 // GammapChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
+// Copyright 2013 Bertram Kopf, Julian Pychy
 
 #pragma once
 
@@ -30,7 +30,7 @@
 
 
 class gammapParser;
-//class pbarpReaction;
+class gammapReaction;
 
 
 class GammapChannelEnv : public AbsChannelEnv
@@ -41,17 +41,17 @@ public:
   //  const float gammaMomentum() const {return _gammaMomentum;}
    const int lmax() const {return _lmax;}
 
-  //   std::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;}
+  std::shared_ptr<gammapReaction> reaction() {return _gammapReaction;}
    std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
    std::map<std::string, std::vector<short> > dropGammapLForParticleData(){ return _dropGammapLForParticleData; }
 
 
 private:
    int _lmax;
-  //   float _pbarMomentum;
+  //  float _gammaMomentum;
    gammapParser* _theParser;
 
-  //   std::shared_ptr<pbarpReaction> _pbarpReaction;
+  std::shared_ptr<gammapReaction> _gammapReaction;
    std::vector<std::string> _spinDensity;
    std::map<std::string, std::vector<short> > _dropGammapLForParticleData;
 };

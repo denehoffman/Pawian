@@ -65,6 +65,7 @@ public:
    void SetLh(std::shared_ptr<AbsLh> theLh){ _theLh = theLh; }
    std::shared_ptr<AbsLh> Lh();
    ChannelID channelID(){return _channelID;}
+  short channelType(){return _channelType;}
 
    static short CHANNEL_PBARP;
    static short CHANNEL_EPEM;
@@ -73,9 +74,10 @@ public:
 
 protected:
    int _channelID;
+  short _channelType;
    bool _alreadySetUp;
    bool _useEvtWeight;
-   AbsChannelEnv(ParserBase* theParser);
+  AbsChannelEnv(ParserBase* theParser, short channelType);
    int _noFinalStateParticles;
    std::vector<Particle*> _finalStateParticles;
    std::vector<std::pair<Particle*, Particle*> > _producedParticlePairs;

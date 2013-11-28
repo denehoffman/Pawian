@@ -55,7 +55,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 
-//#include "epemUtils/epemReaction.hh"
+#include "gammapUtils/gammapReaction.hh"
 //#include "epemUtils/epemBaseLh.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
 
@@ -92,9 +92,9 @@ int main(int __argc,char *__argv[]){
   GlobalEnv::instance()->setup(theAppParams);
   GlobalEnv::instance()->AddEnv(std::shared_ptr<GammapChannelEnv>(new GammapChannelEnv(theAppParams)), AbsChannelEnv::CHANNEL_GAMMAP);
 
-  // // Print the primary epemReaction
-  // std::shared_ptr<epemReaction> theEpEmReaction=std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel())->reaction();
-  // theEpEmReaction->print(std::cout);
+  // Print the primary gamma p Reaction
+  std::shared_ptr<gammapReaction> theGammapReaction=std::static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel())->reaction();
+  theGammapReaction->print(std::cout);
 
   // Create environments for coupled channels
   // Currently secondary channels need to be of the same type(pbarp, epem,..) as the primary one

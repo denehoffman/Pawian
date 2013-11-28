@@ -22,13 +22,13 @@
 //************************************************************************//
 
 // GammapChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
+// Copyright 2013 Bertram Kopf, Julian Pychy
 
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
 #include "ConfigParser/gammapParser.hh"
-//#include "pbarpUtils/pbarpReaction.hh"
+#include "gammapUtils/gammapReaction.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -41,7 +41,7 @@
 
 
 
-GammapChannelEnv::GammapChannelEnv(gammapParser* theParser) : AbsChannelEnv(theParser)
+GammapChannelEnv::GammapChannelEnv(gammapParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GAMMAP)
   ,_lmax(0)
   ,_theParser(theParser)
 {
@@ -52,7 +52,7 @@ void GammapChannelEnv::setup(ChannelID id){
    AbsChannelEnv::setup(id);
 
    //Antiproton momentum
-   // _pbarMomentum = _theParser->getpbarMomentum();
+   //   _gammaMomentum = _theParser->getpbarMomentum();
 
    // double pMass=GlobalEnv::instance()->particleTable()->particle("proton")->mass();
    // double antipMass=GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
@@ -76,35 +76,35 @@ void GammapChannelEnv::setup(ChannelID id){
    std::vector<std::string>::const_iterator itStr;
 
 
-   // //pbarp reaction
-   // _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, id,_lmax));
+   //gammap reaction
+   _gammapReaction=std::shared_ptr<gammapReaction>(new gammapReaction(_producedParticlePairs, id,_lmax));
 
    //fill prodDecayList
-   // if(_theParser->productionFormalism()=="Cano"){
-   //    std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
-   //    std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
-   //    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-   // 	 _prodDecList->addDecay(*itDec);
-   //    }
-   // }
-   // else if(_theParser->productionFormalism()=="Tensor"){
-   //    std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _pbarpReaction->productionTensorDecays();
-   //    std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
-   //    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-   //       _prodDecList->addDecay(*itDec);
-   //    }
-   // }
-   // else if(_theParser->productionFormalism()=="Heli"){
-   //    std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
-   //    std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
-   //    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-   // 	 _prodDecList->addDecay(*itDec);
-   //    }
-   // }
-   // else{
-   //    Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
-   //    exit(0);
-   // }
+   if(_theParser->productionFormalism()=="Cano"){
+      std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _gammapReaction->productionDecays();
+      std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
+      for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+   	 _prodDecList->addDecay(*itDec);
+      }
+   }
+   else if(_theParser->productionFormalism()=="Tensor"){
+      std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _gammapReaction->productionTensorDecays();
+      std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
+      for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+         _prodDecList->addDecay(*itDec);
+      }
+   }
+   else if(_theParser->productionFormalism()=="Heli"){
+      std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _gammapReaction->productionHeliDecays();
+      std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+      for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+   	 _prodDecList->addDecay(*itDec);
+      }
+   }
+   else{
+      Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+      exit(0);
+   }
 
 
    //set prefactor for production and decay amplitudes

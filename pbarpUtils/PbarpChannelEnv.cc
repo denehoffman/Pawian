@@ -41,7 +41,7 @@
 
 
 
-PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(theParser)
+PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_PBARP)
   ,_lmax(0)
   ,_pbarMomentum(0)
   ,_theParser(theParser)

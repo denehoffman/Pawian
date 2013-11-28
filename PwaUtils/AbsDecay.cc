@@ -172,7 +172,18 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   _idaughter2=Spin(_daughter2->twoIso(), 2);
   _i3daughter2=Spin(_daughter2->twoIso3(), 2);
 
-  _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
+  if ( GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_PBARP 
+       ||  GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
+  }
+  else if (GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMMAP){
+    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 1./2); //p gamma
+  }
+  else{
+    Alert << "AbsDecay cannot be set up for channel type " <<  GlobalEnv::instance()->Channel(channelId)->channelType() << endmsg;
+    exit(0);
+  }
+
   if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
 }
 
