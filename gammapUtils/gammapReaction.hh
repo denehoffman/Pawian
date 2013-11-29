@@ -57,7 +57,9 @@ public:
   std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}
   std::vector< std::shared_ptr<const IGJPC> >& igjpcStates() {return _gammapIGJPCs;}
   std::vector< std::shared_ptr<const JPCLS> >& JPCljStates() {return _gammapJPCljs;}
-
+  std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess>& jpcToJPCljMap(){return _jpcToJPCljMap;}
+  std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess>& jpcToIGJPCMap(){return _jpcToIGJPCMap;}
+  
 protected:
 
 private:
@@ -71,6 +73,7 @@ private:
   std::vector< std::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
 
   std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess> _jpcToJPCljMap;
+  std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess> _jpcToIGJPCMap;
 
   bool CheckJPCLSForParticle(std::string& particleName, std::shared_ptr<const JPCLS> theJPCLS);
 };

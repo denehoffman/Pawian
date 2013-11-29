@@ -56,7 +56,7 @@
 #include "Utils/ErrLogUtils.hh"
 
 #include "gammapUtils/gammapReaction.hh"
-//#include "epemUtils/epemBaseLh.hh"
+#include "gammapUtils/gammapBaseLh.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
 
 #include "Event/EventReaderDefault.hh"
@@ -108,25 +108,25 @@ int main(int __argc,char *__argv[]){
   // Get mode
   std::string mode=theAppParams->mode();
 
-  // // Create likelihood objects
-  // ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
-  // for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-  //    //std::string prodFormalism=(*it).first->parser()->productionFormalism();
-  //    std::shared_ptr<AbsLh> theLhPtr = std::shared_ptr<AbsLh>(new epemBaseLh((*it).first->channelID()));
-  //    (*it).first->SetLh(theLhPtr);
-  // }
+  // Create likelihood objects
+  ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
+  for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+     //std::string prodFormalism=(*it).first->parser()->productionFormalism();
+     std::shared_ptr<AbsLh> theLhPtr = std::shared_ptr<AbsLh>(new gammapBaseLh((*it).first->channelID()));
+     (*it).first->SetLh(theLhPtr);
+  }
 
-  // // Generate the full parameter set using the likelihood list
-  // GlobalEnv::instance()->CreateDefaultParameterSet();
+  // Generate the full parameter set using the likelihood list
+  GlobalEnv::instance()->CreateDefaultParameterSet();
 
 
 
   AppBase theAppBase;
 
-  // if(mode=="dumpDefaultParams"){
-  //   theAppBase.dumpDefaultParams();
-  //   return 1;
-  // }
+  if(mode=="dumpDefaultParams"){
+    theAppBase.dumpDefaultParams();
+    return 1;
+  }
 
   // // Read start param file
   // std::string paramStreamerPath=theAppParams->fitParamFile();

@@ -49,17 +49,18 @@ gammapReaction::gammapReaction(std::vector<std::pair<Particle*, Particle*> >& pr
   std::vector< std::shared_ptr<const JPCLS> > all_JPCljs= thegammapStates->jpcljStates();
   
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-
+  std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess> currentjpcToJPCljMap;
   for(itJPCLS = all_JPCljs.begin(); itJPCLS != all_JPCljs.end(); ++itJPCLS){
       std::shared_ptr<const jpcRes> currentJPC = (*itJPCLS);
 
-      if(std::find(_jpcToJPCljMap[currentJPC].begin(), _jpcToJPCljMap[currentJPC].end(), (*itJPCLS)) == _jpcToJPCljMap[currentJPC].end()){
-   	_jpcToJPCljMap[currentJPC].push_back(*itJPCLS);
+      if(std::find(currentjpcToJPCljMap[currentJPC].begin(), currentjpcToJPCljMap[currentJPC].end(), (*itJPCLS)) == currentjpcToJPCljMap[currentJPC].end()){
+   	currentjpcToJPCljMap[currentJPC].push_back(*itJPCLS);
       }
 
   }
 
   for(itIGJPC = gammapIGJPCStatesAll.begin(); itIGJPC!=gammapIGJPCStatesAll.end(); ++itIGJPC){
+    std::shared_ptr<const jpcRes> currentJPC(new jpcRes((*itIGJPC)));
     bool acceptJPC=false;
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
@@ -73,11 +74,12 @@ gammapReaction::gammapReaction(std::vector<std::pair<Particle*, Particle*> >& pr
       }
 
       bool acceptProd=false;
-      for(auto lIt = _jpcToJPCljMap[*itIGJPC].begin(); lIt != _jpcToJPCljMap[*itIGJPC].end(); ++lIt){
+      for(auto lIt = currentjpcToJPCljMap[*itIGJPC].begin(); lIt != currentjpcToJPCljMap[*itIGJPC].end(); ++lIt){
   	if(CheckJPCLSForParticle((std::string&)(*itPartPairs).first->name(), *lIt) &&
    	   CheckJPCLSForParticle((std::string&)(*itPartPairs).second->name(), *lIt)){
    	  if(std::find(_gammapJPCljs.begin(), _gammapJPCljs.end(), *lIt) == _gammapJPCljs.end())
    	    _gammapJPCljs.push_back(*lIt);
+	  _jpcToJPCljMap[currentJPC].push_back(*lIt);
    	  acceptProd = true;
    	}
       }
@@ -100,9 +102,12 @@ gammapReaction::gammapReaction(std::vector<std::pair<Particle*, Particle*> >& pr
   	_prodHeliDecs.push_back(currentHeliDec);
       }
     }
-    if(acceptJPC)
+    if(acceptJPC){
+      //      std::shared_ptr<const jpcRes> acceptedJPC = (*itIGJPC);
       _gammapIGJPCs.push_back(*itIGJPC);
+      _jpcToIGJPCMap[currentJPC].push_back(*itIGJPC);
     }
+  }
 
   // std::vector< std::shared_ptr<const JPCLS> > all_pbarpSingletLS = thepbarpStates->singlet_JPCLS_States();
   // _pbarpJPCLSsinglet =  extractStates(_pbarpJPCLSs, all_pbarpSingletLS);
@@ -150,6 +155,32 @@ void gammapReaction::print(std::ostream& os) const{
   for(itIGJPC=_gammapIGJPCs.begin(); itIGJPC!=_gammapIGJPCs.end(); ++itIGJPC){
     (*itIGJPC)->print(os);
   }
+
+  os << "\n\n**** map JPC to IGJPC ****\n";
+  for( std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess>::const_iterator it=_jpcToIGJPCMap.begin(); it!=_jpcToIGJPCMap.end(); ++it){
+    os << "\n JPC:";
+    it->first->print(os);
+
+    os << "\n IGJPCs:";
+    for(std::vector< std::shared_ptr<const IGJPC> >::const_iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2){
+      os << "\t";
+      (*it2)->print(os);
+      os << "\n";
+    }
+  } 
+
+  os << "\n\n**** map JPC to JPClj ****\n";
+  for( std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess>::const_iterator it=_jpcToJPCljMap.begin(); it!=_jpcToJPCljMap.end(); ++it){
+    os << "\n JPC:";
+    it->first->print(os);
+
+    os << "\n JPClj:";
+    for(std::vector< std::shared_ptr<const JPCLS> >::const_iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2){
+      os << "\t";
+      (*it2)->print(os);
+      os << "\n";
+    }
+  } 
 
   os << "\n ***** decay chains *******\n";
   if (GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){

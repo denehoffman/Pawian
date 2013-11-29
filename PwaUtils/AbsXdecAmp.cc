@@ -79,7 +79,7 @@ void AbsXdecAmp::initialize(){
 
   if(!_daughter2IsStable){
     std::shared_ptr<AbsDecay> decDaughter2=_decay->decDaughter2();
-    //    decDaughter2->getDynamics()->addGrandMa(_decay);
+
     std::shared_ptr<AbsDynamics> currentDyn=decDaughter2->getDynamics();
     if (0!=currentDyn) decDaughter2->getDynamics()->addGrandMa(_decay);
     else{
