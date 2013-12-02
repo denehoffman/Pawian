@@ -52,6 +52,12 @@ epemHist::epemHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
   fillIt(theLh, theFitParams);
 }
 
+epemHist::epemHist() :
+  AbsHist()
+{
+  initRootStuff();
+}
+
 epemHist::~epemHist(){
 }
 

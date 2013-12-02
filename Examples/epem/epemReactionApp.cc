@@ -335,6 +335,20 @@ int main(int __argc,char *__argv[]){
   theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
+
+  if (mode=="plotMode"){
+    std::shared_ptr<AbsHist> theHistPtr( new epemHist());
+    theAppBase.plotMode(eventsData, mcData, eventListPtr, theHistPtr);
+    return 1;
+  }
+
+  if (mode=="qaModeSimple"){
+    std::shared_ptr<AbsHist> theHistPtr( new epemHist());
+    theAppBase.qaModeSimple(eventsData, mcData, theStartparams, eventListPtr, theHistPtr, noOfFreeFitParams);
+    return 1;
+  }
+
+
   eventListPtr->read(eventsData, mcData);
 
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
