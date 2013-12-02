@@ -179,9 +179,9 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   
       if(!_genWithModel){
 	  dumpAscii(currentEvtData);
-	  delete currentEvtData;
 	  noOfAcceptedEvts++;
 	  if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	    delete currentEvtData;
 	    generateEvents=false;
 	    break;
 	  }

@@ -64,7 +64,7 @@ void AbsFcn::printTimer() const{
 }
 
 void AbsFcn::printFitParams(const std::vector<double>& par) const{
-  if (  _fcnCounter%100 == 0) {
+  if (  _fcnCounter%1000 == 0) {
     fitParams theFitParmValTmp=_defaultFitValParms;
     GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
     GlobalEnv::instance()->fitParamsBase()->printParams(theFitParmValTmp);

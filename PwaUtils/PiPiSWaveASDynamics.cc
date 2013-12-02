@@ -255,7 +255,7 @@ void PiPiSWaveASDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   currentPVector->updateFprod(3, fProdEtaEta);
   currentPVector->updateFprod(4, fProdEtaEtap);
 
-  _currentS0Map[theName]=-1.;
+  _currentS0Map[theName]=-3.;
   currentPVector->updateS0prod(_currentS0Map[theName]);
 
   _pVecMap[theName]=currentPVector;
