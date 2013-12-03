@@ -128,39 +128,39 @@ int main(int __argc,char *__argv[]){
     return 1;
   }
 
-  // // Read start param file
-  // std::string paramStreamerPath=theAppParams->fitParamFile();
-  // std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-  // StreamFitParmsBase theParamStreamer(paramStreamerPath);
-  // fitParams theStartparams=theParamStreamer.getFitParamVal();
-  // fitParams theErrorparams=theParamStreamer.getFitParamErr();
+  // Read start param file
+  std::string paramStreamerPath=theAppParams->fitParamFile();
+  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+  StreamFitParmsBase theParamStreamer(paramStreamerPath);
+  fitParams theStartparams=theParamStreamer.getFitParamVal();
+  fitParams theErrorparams=theParamStreamer.getFitParamErr();
 
-  // if (mode=="gen"){
-  //   theAppBase.generate(theStartparams);
-  //   return 1;
-  // }
+  if (mode=="gen"){
+    theAppBase.generate(theStartparams);
+    return 1;
+  }
 
 
-  // // Set minuit parameters
-  // MnUserParameters upar;
-  // GlobalEnv::instance()->fitParamsBase()->setMnUsrParams(upar, theStartparams, theErrorparams);
+  // Set minuit parameters
+  MnUserParameters upar;
+  GlobalEnv::instance()->fitParamsBase()->setMnUsrParams(upar, theStartparams, theErrorparams);
 
-  // std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-  // for (int i=0; i<int(upar.Params().size()); ++i){
-  //   std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
-  // }
+  Info << "\n\n**************** Minuit Fit parameter **************************" << endmsg;
+  for (int i=0; i<int(upar.Params().size()); ++i){
+    Info << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << endmsg;
+  }
 
-  // // Fix params for all channels
-  // std::vector<std::string> fixedParams;
-  // for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-  //     std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
-  //     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
-  // }
-  // theAppBase.fixParams(upar,fixedParams);
-  // const unsigned int noOfFreeFitParams = upar.VariableParameters();
+  // Fix params for all channels
+  std::vector<std::string> fixedParams;
+  for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+      std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
+      fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
+  }
+  theAppBase.fixParams(upar,fixedParams);
+  const unsigned int noOfFreeFitParams = upar.VariableParameters();
 
-  // // Disable output buffering
-  // setvbuf(stdout, NULL, _IONBF, 0);
+  // Disable output buffering
+  setvbuf(stdout, NULL, _IONBF, 0);
 
   // if(mode == "client"){
 
@@ -311,8 +311,8 @@ int main(int __argc,char *__argv[]){
  // }
 
 
- //  // The following modes only need the primary channel data/mc and lh ptr
- //  std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
+  // The following modes only need the primary channel data/mc and lh ptr
+  std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
 
   const std::string datFile=theAppParams->dataFile();
   const std::string mcFile=theAppParams->mcFile();
@@ -342,43 +342,43 @@ int main(int __argc,char *__argv[]){
    return 1;
  }
 
- //  eventListPtr->read(eventsData, mcData);
+  eventListPtr->read(eventsData, mcData);
 
- //  theLhPtr->setDataVec(eventListPtr->getDataVecs());
- //  theLhPtr->setMcVec(eventListPtr->getMcVecs());
+  theLhPtr->setDataVec(eventListPtr->getDataVecs());
+  theLhPtr->setMcVec(eventListPtr->getMcVecs());
 
- //  PwaFcnBase theFcn;
-  // Info << "\nThe parameter values are: " << "\n" << endmsg;
-  // GlobalEnv::instance()->fitParamsBase()->printParams(theStartparams);
+  PwaFcnBase theFcn;
+  Info << "\nThe parameter values are: " << "\n" << endmsg;
+  GlobalEnv::instance()->fitParamsBase()->printParams(theStartparams);
 
-  // Info << "\nThe parameter errors are: " << "\n" << endmsg;
-  // GlobalEnv::instance()->fitParamsBase()->printParams(theErrorparams);
-
-
-
-  // if (mode=="qaMode"){
-  //   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-  //   theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
-  //   epemHist theHist(theLhPtr, theStartparams);
-  //   end= clock();
-  //   double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-  //   Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
-
-  //   return 1;
-  // }
+  Info << "\nThe parameter errors are: " << "\n" << endmsg;
+  GlobalEnv::instance()->fitParamsBase()->printParams(theErrorparams);
 
 
-  // if (mode=="pwa"){
-  //   bool cacheAmps = theAppParams->cacheAmps();
- //    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
- //    if (cacheAmps) theLhPtr->cacheAmplitudes();
 
- //    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
- //    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
- //    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+  if (mode=="qaMode"){
+    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+    theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
+    gammapHist theHist(theLhPtr, theStartparams);
+    end= clock();
+    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
- //    return 1;
- // }
+    return 1;
+  }
+
+
+  if (mode=="pwa"){
+    bool cacheAmps = theAppParams->cacheAmps();
+    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    if (cacheAmps) theLhPtr->cacheAmplitudes();
+
+    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
+    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+
+    return 1;
+ }
 
  //  if (mode=="evo"){
  //    bool cacheAmps = theAppParams->cacheAmps();

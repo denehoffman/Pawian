@@ -48,7 +48,8 @@ short AbsChannelEnv::CHANNEL_RES = 3;
 short AbsChannelEnv::CHANNEL_GAMMAP = 4;
 
 AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
-   _alreadySetUp(false)
+  _channelType(channelType)
+  ,_alreadySetUp(false)
   , _noFinalStateParticles(0)
   ,_absDecList(new AbsDecayList())
   ,_prodDecList(new AbsDecayList())
@@ -56,7 +57,6 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_massMin(0.)
   ,_massMax(100.)
   ,_theParser(theParser)
-   ,_channelType(channelType)
 {
    _theLh.reset();
 }

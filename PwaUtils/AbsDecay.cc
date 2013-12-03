@@ -263,8 +263,15 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
   if(lam12Max>spinMother) lam12Max=spinMother;
 
   Spin lamMotherMax=spinMother;
-  if (!_hasMotherPart && spinMother>1) lamMotherMax=1; //attention: this is only valid for pbar p or e+ e- reactions; must be moved to individual specific classes
-
+  if (!_hasMotherPart && spinMother>1){
+    if ( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_PBARP 
+	 ||  GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+      lamMotherMax=1; //attention
+    }
+    else if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMMAP){
+      lamMotherMax=3./2;
+    }
+  }
 
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
