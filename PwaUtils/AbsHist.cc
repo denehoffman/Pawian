@@ -49,17 +49,17 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "TTree.h"
 
-AbsHist::AbsHist() :
+AbsHist::AbsHist(std::string additionalSuffix) :
   _weightToWrite(1.)
   ,_fsParticles(GlobalEnv::instance()->Channel()->finalStateParticles())
 {
   std::ostringstream rootFileName;
-  rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
+  rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << additionalSuffix.c_str() <<  ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
-
+  
   _dataFourvecs = new TTree("_dataFourvecs", "_dataFourvecs");
   _fittedFourvecs = new TTree("_fittedFourvecs", "_fittedFourvecs");
-
+  
   std::vector<std::shared_ptr<angleHistData> > angleHistDataVec=GlobalEnv::instance()->Channel()->angleHistDataVec();
 
   std::vector<std::shared_ptr<angleHistData> >::iterator itAngleVec;
@@ -189,6 +189,8 @@ void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
     exit(1);
   }
+
+  theLh->updateFitParams(theFitParams);
 
   const std::vector<EvtData*> dataList=theLh->getDataVec();
   double integralDataWWeight=0.;

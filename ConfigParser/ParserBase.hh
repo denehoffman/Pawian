@@ -74,6 +74,7 @@ public:
   const int evoIterations() const {return _evoIterations;}
   const bool cacheAmps() const {return _cacheAmps;}
   const bool calcContributionError() const {return _calcContributionError;}
+  const bool saveContributionHistos() const {return _saveContributionHistos;}
   const bool useEvtWeight() const {return _useEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const std::string pdgTableFile() const {return _pdgTableFile;}
@@ -123,6 +124,7 @@ protected:
   int _evoPopulation;
   bool _cacheAmps;
   bool _calcContributionError;
+  bool _saveContributionHistos;
   std::string _strErrLogMode;
   po::options_description* _desc;
   po::options_description* _common;

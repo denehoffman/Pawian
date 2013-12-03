@@ -361,19 +361,29 @@ int main(int __argc,char *__argv[]){
   Info << "\nThe parameter errors are: " << "\n" << endmsg;
   GlobalEnv::instance()->fitParamsBase()->printParams(theErrorparams);
 
-
-
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-    theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
+    theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams);
     epemHist theHist(theLhPtr, theStartparams);
-    end= clock();
-    double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
+    if(GlobalEnv::instance()->parser()->saveContributionHistos()){
+      std::shared_ptr<WaveContribution> theWaveContribution;
+      theWaveContribution = std::shared_ptr<WaveContribution>(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartparams));
+      std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
+      std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
+      for (itContribVec=calcContributionDataVec.begin(); itContribVec!=calcContributionDataVec.end(); ++itContribVec){ // loop over "calcContribution"-lines in cfg file
+	std::string tmpContribName= (*itContribVec)->_contribName;
+	fitParams singleContributionFitParams = theWaveContribution->getFitParamsForSingleContribution(tmpContribName);
+	epemHist theHist(theLhPtr, singleContributionFitParams, tmpContribName);
+      }
+    }
+    end= clock();
+    double cpuTime= (end-start)/(CLOCKS_PER_SEC);
+    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+    
     return 1;
   }
-
+  
 
   if (mode=="pwa"){
     bool cacheAmps = theAppParams->cacheAmps();
@@ -385,8 +395,8 @@ int main(int __argc,char *__argv[]){
     theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
 
     return 1;
- }
-
+  }
+  
   if (mode=="evo"){
     bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;

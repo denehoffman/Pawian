@@ -192,7 +192,7 @@ class Particle;
 class AbsHist {
 
 public:
-  AbsHist();
+  AbsHist(std::string additionalSuffix = "");
   virtual ~AbsHist();
   void fillEvt(EvtData* theData, double weight, std::string evtType);
   void scaleFitHists(double scaleFactor);

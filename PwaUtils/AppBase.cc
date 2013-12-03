@@ -116,29 +116,29 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
 }
 
 void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
-
+  
   double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theStartParams);
   Info <<"theLh = "<< theLh << endmsg;
-
+  
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
   double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
   double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-
+  
   std::shared_ptr<WaveContribution> theWaveContribution;
   if(GlobalEnv::instance()->parser()->calcContributionError()){
     std::string serializationFileName = GlobalEnv::instance()->serializationFileName();
     std::ifstream serializationStream(serializationFileName.c_str());
-
+    
     if(!serializationStream.is_open()){
       Alert << "Could not open serialization file." << endmsg;
       exit(0);
     }
-       boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-       std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
-       boostInputArchive >> *thePwaCovMatrix;
-       theWaveContribution = std::shared_ptr<WaveContribution>
-	  (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams, thePwaCovMatrix));
+    boost::archive::text_iarchive boostInputArchive(serializationStream);
+    
+    std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
+    boostInputArchive >> *thePwaCovMatrix;
+    theWaveContribution = std::shared_ptr<WaveContribution>
+      (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams, thePwaCovMatrix));
   }
   else{
     theWaveContribution = std::shared_ptr<WaveContribution>
@@ -147,32 +147,32 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
   std::pair<double, double> contValue = theWaveContribution->CalcContribution();
   std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues = theWaveContribution->CalcSingleContributions();
 
-    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData;
-    Info << "BIC:\t" << BICcriterion << endmsg;
-    Info << "AIC:\t" << AICcriterion << endmsg;
-    Info << "AICc:\t" << AICccriterion << endmsg;
-    Info << "Selected wave contribution:\t" << contValue.first << " +- " << contValue.second << endmsg;
-    std::vector<std::pair<std::string,std::pair<double,double>>>::iterator it;
-    for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
-      Info << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  endmsg;
-    }
-
-    std::ostringstream qaSummaryFileName;
-    std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-    qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
-
-    std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
-    theQaStream << "BIC\t" << BICcriterion << "\n";
-    theQaStream << "AICa\t" << AICcriterion << "\n";
-    theQaStream << "AICc\t" << AICccriterion << "\n";
-    theQaStream << "logLh\t" << theLh << "\n";
-    theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
-    theQaStream << "Selected wave contribution\t" << contValue.first << " +- " << contValue.second <<  "\n";
-    for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
-      theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  "\n";
-    }
-    theQaStream.close();
+  Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+  Info << "evtWeightSumData:\t" <<evtWeightSumData;
+  Info << "BIC:\t" << BICcriterion << endmsg;
+  Info << "AIC:\t" << AICcriterion << endmsg;
+  Info << "AICc:\t" << AICccriterion << endmsg;
+  Info << "Selected wave contribution:\t" << contValue.first << " +- " << contValue.second << endmsg;
+  std::vector<std::pair<std::string,std::pair<double,double>>>::iterator it;
+  for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
+    Info << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  endmsg;
+  }
+  
+  std::ostringstream qaSummaryFileName;
+  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+  qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
+  
+  std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+  theQaStream << "BIC\t" << BICcriterion << "\n";
+  theQaStream << "AICa\t" << AICcriterion << "\n";
+  theQaStream << "AICc\t" << AICccriterion << "\n";
+  theQaStream << "logLh\t" << theLh << "\n";
+  theQaStream << "free parameter\t" << noOfFreeFitParams << "\n";
+  theQaStream << "Selected wave contribution\t" << contValue.first << " +- " << contValue.second <<  "\n";
+  for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
+    theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  "\n";
+  }
+  theQaStream.close();
 }
 
 void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr, int noOfFreeFitParams){

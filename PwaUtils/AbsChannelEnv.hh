@@ -65,7 +65,7 @@ public:
    void SetLh(std::shared_ptr<AbsLh> theLh){ _theLh = theLh; }
    std::shared_ptr<AbsLh> Lh();
    ChannelID channelID(){return _channelID;}
-  short channelType(){return _channelType;}
+   short channelType(){return _channelType;}
 
    static short CHANNEL_PBARP;
    static short CHANNEL_EPEM;

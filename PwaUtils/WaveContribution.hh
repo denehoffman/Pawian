@@ -59,13 +59,14 @@ class PwaCovMatrix;
 
 
 class WaveContribution{
-
-   public:
+  
+  public:
     WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
     WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams,
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::pair<double,double> CalcContribution();
+    fitParams getFitParamsForSingleContribution(std::string contribName);
     std::vector<std::pair<std::string,std::pair<double,double>>> CalcSingleContributions();
     double CalcError(double result);
 

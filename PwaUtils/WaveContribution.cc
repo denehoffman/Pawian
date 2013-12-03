@@ -83,6 +83,37 @@ std::pair<double,double> WaveContribution::CalcContribution(){
       return std::pair<double,double>(result, CalcError(result));
 }
 
+fitParams WaveContribution::getFitParamsForSingleContribution(std::string contribName){
+  fitParams newFitParams=*_theFitParamsOriginal;
+  std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
+  std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
+  ROOT::Minuit2::MnUserParameters mnUserParamsOrig = _theMnUserParameters;
+  unsigned int nPar = _theMnUserParameters.Params().size();
+  
+  for (itContribVec=calcContributionDataVec.begin(); itContribVec!=calcContributionDataVec.end(); ++itContribVec){
+    std::string tmpContribName= (*itContribVec)->_contribName;
+    if (contribName.compare(tmpContribName) != 0) continue;
+    
+    std::vector<std::string> tmpZeroAmp = (*itContribVec)->_contribZeroAmpVec;
+    std::vector<std::string>::iterator itZeroAmpVec;
+    for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
+      for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
+	std::string parName = _theMnUserParameters.GetName(i);
+	if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) {
+	  Info << "found matching parameter:" << parName << " set to 0!" << endmsg;
+	  _theMnUserParameters.SetValue(i, 0.);
+	}
+      }
+    }
+    _theFitParamsBase.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
+    _theLh->updateFitParams(newFitParams);
+    break;
+  }
+  _theMnUserParameters = mnUserParamsOrig;
+  _theLh->updateFitParams(*_theFitParamsOriginal);
+  return newFitParams;
+}
+
 std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::CalcSingleContributions(){
    std::vector<std::pair<std::string,std::pair<double,double>>> retValues;
 
@@ -99,7 +130,7 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
         for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
            std::string parName = _theMnUserParameters.GetName(i);
            if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) {
-              Info << "found matching parameter:" << parName << " = " << (*itZeroAmpVec) << endmsg;
+	     Info << "found matching parameter:" << parName << endmsg;
               _theMnUserParameters.SetValue(i, 0.);
            }
         }
@@ -112,7 +143,6 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
          retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, 0)));
       else
          retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, CalcError(newContribution))));
-
       Info << "calculated contribution for " << tmpContribName << " = " << newContribution << " +- " << retValues.back().second.second << endmsg;
       _theMnUserParameters = mnUserParamsOrig;
    }
@@ -171,3 +201,4 @@ double WaveContribution::CalcError(double result) {
    resultErr = sqrt(resultErr);
    return resultErr;
 }
+
