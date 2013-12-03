@@ -51,7 +51,7 @@ void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValPara
    setMnUsrParamsJPC(upar, theValParams.MagsJPC, theErrParams.MagsJPC, _magSuffix);
 
   // 0a.: set phi of all JPC amplitudes
-   setMnUsrParamsJPC(upar, theValParams.PhisJPC, theErrParams.PhisJPC, _magSuffix);
+   setMnUsrParamsJPC(upar, theValParams.PhisJPC, theErrParams.PhisJPC, _phiSuffix);
 
   // 1.: set magnitudes of all JPCLS amplitudes
   setMnUsrParamsJPCLS(upar, theValParams.Mags, theErrParams.Mags, _magSuffix);
@@ -170,8 +170,16 @@ void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startJP
       //now fill the fitParameterMap
       std::string jpcStr = theJPC->name() + itJPCMap->first +suffix;
 
-      upar.Add(jpcStr, theStartVal, theErrVal, 0., 1.);
-    }
+      if (suffix==_phiSuffix){
+	 upar.Add(jpcStr, theStartVal, theErrVal);
+      }
+      else{
+	double valMin=0.0;
+	double valMax=theStartVal+30.*theErrVal;
+
+	upar.Add(jpcStr, theStartVal, theErrVal, valMin, valMax);
+      }
+     }
 
   }
 
@@ -415,7 +423,6 @@ void FitParamsBase::printJPCLSParams(fitParams& theParams, mapStrJPCLS& JPCLSMag
 }
 
 void FitParamsBase::printDoubleParams(fitParams& theParams, mapStrDouble& doubleMap, const std::string& suffix){
-
   mapStrDouble::const_iterator it;
 
   for (it=doubleMap.begin(); it!=doubleMap.end(); ++it){
@@ -441,7 +448,6 @@ void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC&
 }
 
 void FitParamsBase::getFitParamValLS(const std::vector<double>& par, mapStrLS& lsMap, unsigned int& counter){
-
   mapStrLS::iterator it;
   for (it=lsMap.begin(); it!=lsMap.end(); ++it){
 
@@ -469,10 +475,8 @@ void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapS
 }
 
 void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, unsigned int& counter){
-//   Info << "getFitParamValJPCLS par[" << counter << "]=\t" << par.at(counter) << endmsg;
   mapStrJPCLS::iterator it;
   for (it=jpclsMap.begin(); it!=jpclsMap.end(); ++it){
-
     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itjpcls;
     for (itjpcls=it->second.begin(); itjpcls!=it->second.end(); ++itjpcls){
       itjpcls->second=par.at(counter);
@@ -484,7 +488,7 @@ void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJP
 
 
 void FitParamsBase::getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, unsigned int& counter){
-  //   Info << "getFitParamValDouble par[" << counter << "]=\t" << par.at(counter) << endmsg;
+  //  Info << "getFitParamValDouble par[" << counter << "]=\t" << par.at(counter) << endmsg;
   mapStrDouble::iterator it;
   for (it=doubleMap.begin(); it!=doubleMap.end(); ++it){
     it->second=par.at(counter);

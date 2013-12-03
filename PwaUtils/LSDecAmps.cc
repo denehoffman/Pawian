@@ -103,7 +103,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaught
 
 
 complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
-
+  // Info <<"\nlamX: " << lamX << "\tlamFs: " << lamFs << endmsg;
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
@@ -152,6 +152,9 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
 
 
 complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
+
+  // Info << "\n_JPCPtr->J: " << _JPCPtr->J << "\tlamX: " << lamX << "\tlam1Min: " << lam1Min << "\tlam2Min: " << lam2Min << "\tlam1Max: " << lam1Max << "\tlam2Max: " << lam2Max << "\tlamFs: " <<lamFs << endmsg;
+ 
   complex<double> result(0.,0.);
 
   map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);

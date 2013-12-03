@@ -220,7 +220,7 @@ std::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle){
 
 std::shared_ptr<IGJPC> getIGJPCPtr(Particle* theParticle){
   Spin isoSpin=Spin(theParticle->twoIso3(), 2);
-  std::shared_ptr<IGJPC> result(new IGJPC((int) theParticle->J(), theParticle->theParity(), theParticle->theCParity(), isoSpin, theParticle->theGParity()));
+  std::shared_ptr<IGJPC> result(new IGJPC(theParticle->J(), theParticle->theParity(), theParticle->theCParity(), isoSpin, theParticle->theGParity()));
 
   return result;  
 }
