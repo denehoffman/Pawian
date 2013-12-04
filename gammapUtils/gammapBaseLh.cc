@@ -111,18 +111,33 @@ double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
     else if(currentJPC->P == 1){ // 1/2+ M1 
       thePhi=M_PI/2.;
     }
-  
+
     complex<double> current_amp_prod(0.,0.);
     std::vector< std::shared_ptr<const JPCLS> > currentJPCljVec = _jpcToJPCljMap.at(currentJPC);
     for(itJPClj=currentJPCljVec.begin(); itJPClj!=currentJPCljVec.end(); ++itJPClj){
       int lmp=(*itJPClj)->L;
       Spin jmp=(*itJPClj)->S;
       Spin J=(*itJPClj)->J;
+
+      double elMagFactor=1.;
+      if(currentJPC->P == pow(-1.,(int)(J + 1./2))){ // 1/2-,3/2+,5/2-,...
+	if(jmp==J+Spin(1./2)){ //el. multipole
+	  elMagFactor=cos(thePhi);
+	} 
+	else elMagFactor=sin(thePhi); //mag multipole
+      }
+      else{ // 1/2+,3/2-,5/2+,...
+	if(jmp==J+Spin(1./2)){ //mag. multipole
+	  elMagFactor=sin(thePhi);
+	}
+	else elMagFactor=cos(thePhi);  //el. multipole
+      }
+
       for (Spin mzPin=-1./2; mzPin<=1./2; mzPin++){
 	for (Spin mzGam=-1.; mzGam<=1.; mzGam+=2.){
   	  Spin mz = mzGam + mzPin; // spin-j projection
 	  if( J < fabs(mz) || jmp < fabs(mzGam) ) continue; 
-  	  complex<double> current_amp_prod=theMag*(sin(thePhi)+cos(thePhi))*isoFactor*sqrt(2*lmp+1)*Clebsch(1, mzGam,lmp,0,jmp,mzGam)*Clebsch(jmp, mzGam,1/2., mzPin,J,mz);
+  	  complex<double> current_amp_prod=theMag*elMagFactor*isoFactor*sqrt(2*lmp+1)*Clebsch(1, mzGam,lmp,0,jmp,mzGam)*Clebsch(jmp, mzGam,1/2., mzPin,J,mz);
 	  for (Spin lamPout=-1./2; lamPout<=1./2; lamPout++){
   	    mapPinGamiPout.at(mzPin).at(mzGam).at(lamPout)+=current_amp_prod*(*itDec)->XdecAmp(mz, theData, lamPout);
   	  }
