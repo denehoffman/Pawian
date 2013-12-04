@@ -162,96 +162,96 @@ int main(int __argc,char *__argv[]){
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);
 
-  // if(mode == "client"){
+  if(mode == "client"){
 
-  // std::ostringstream portStringStream;
-  // portStringStream << theAppParams->serverPort();
+  std::ostringstream portStringStream;
+  portStringStream << theAppParams->serverPort();
 
-  // NetworkClient theClient(theAppParams->serverAddress(), portStringStream.str());
-  // if(!theClient.Login())
-  //   return 0;
+  NetworkClient theClient(theAppParams->serverAddress(), portStringStream.str());
+  if(!theClient.Login())
+    return 0;
 
-  // ChannelID channelID = theClient.channelID();
+  ChannelID channelID = theClient.channelID();
 
-  // bool cacheAmps = theAppParams->cacheAmps();
-  // Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
-  // if (cacheAmps) GlobalEnv::instance()->Channel(channelID)->Lh()->cacheAmplitudes();
+  bool cacheAmps = theAppParams->cacheAmps();
+  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  if (cacheAmps) GlobalEnv::instance()->Channel(channelID)->Lh()->cacheAmplitudes();
 
-  // const std::string datFile=GlobalEnv::instance()->Channel(channelID)->parser()->dataFile();
-  // const std::string mcFile=GlobalEnv::instance()->Channel(channelID)->parser()->mcFile();
-  // Info << "data file: " << datFile ;  // << endmsg;
-  // Info << "mc file: " << mcFile ;  // << endmsg;
-  // std::vector<std::string> dataFileNames;
-  // dataFileNames.push_back(datFile);
+  const std::string datFile=GlobalEnv::instance()->Channel(channelID)->parser()->dataFile();
+  const std::string mcFile=GlobalEnv::instance()->Channel(channelID)->parser()->mcFile();
+  Info << "data file: " << datFile ;  // << endmsg;
+  Info << "mc file: " << mcFile ;  // << endmsg;
+  std::vector<std::string> dataFileNames;
+  dataFileNames.push_back(datFile);
 
-  // std::vector<std::string> mcFileNames;
-  // mcFileNames.push_back(mcFile);
+  std::vector<std::string> mcFileNames;
+  mcFileNames.push_back(mcFile);
 
-  // EventList eventsDataClient;
-  // theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  EventList eventsDataClient;
+  theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
 
-  // EventList mcDataClient;
-  // theAppBase.readEvents(mcDataClient, mcFileNames, channelID, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  EventList mcDataClient;
+  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
 
- //  std::shared_ptr<EvtDataBaseList> epemEventListPtr(new EvtDataBaseList(channelID));
- //  epemEventListPtr->read(eventsDataClient, mcDataClient);
+  std::shared_ptr<EvtDataBaseList> gammapEventListPtr(new EvtDataBaseList(channelID));
+  gammapEventListPtr->read(eventsDataClient, mcDataClient);
 
- //  GlobalEnv::instance()->Channel(channelID)->Lh()->setDataVec(epemEventListPtr->getDataVecs());
- //  GlobalEnv::instance()->Channel(channelID)->Lh()->setMcVec(epemEventListPtr->getMcVecs());
+  GlobalEnv::instance()->Channel(channelID)->Lh()->setDataVec(gammapEventListPtr->getDataVecs());
+  GlobalEnv::instance()->Channel(channelID)->Lh()->setMcVec(gammapEventListPtr->getMcVecs());
 
- //  theAppBase.calcAndSendClientLh(theClient, theStartparams, channelID);
+  theAppBase.calcAndSendClientLh(theClient, theStartparams, channelID);
 
- //  return 1;
- // }
+  return 1;
+  }
 
   //  Get the mc data limit
   int ratioMcToData=theAppParams->ratioMcToData();
 
-  // if(mode == "server"){
+  if(mode == "server"){
 
-  //   double evtWeightSumData=0;
-  //   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
-  //   std::map<short, std::tuple<long, double, long> > numEventMap;
+    double evtWeightSumData=0;
+    ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
+    std::map<short, std::tuple<long, double, long> > numEventMap;
 
-  //   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-  //     const std::string datFile=(*it).first->parser()->dataFile();
-  //     const std::string mcFile=(*it).first->parser()->mcFile();
-  //     Info << "data file: " << datFile ;  // << endmsg;
-  //     Info << "mc file: " << mcFile ;  // << endmsg;
-  //     std::vector<std::string> dataFileNames;
-  //     dataFileNames.push_back(datFile);
+    for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+      const std::string datFile=(*it).first->parser()->dataFile();
+      const std::string mcFile=(*it).first->parser()->mcFile();
+      Info << "data file: " << datFile ;  // << endmsg;
+      Info << "mc file: " << mcFile ;  // << endmsg;
+      std::vector<std::string> dataFileNames;
+      dataFileNames.push_back(datFile);
 
-  //     std::vector<std::string> mcFileNames;
-  //     mcFileNames.push_back(mcFile);
+      std::vector<std::string> mcFileNames;
+      mcFileNames.push_back(mcFile);
 
-  //     EventList eventsData;
-  //     theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
+      EventList eventsData;
+      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
 
-  //     EventList mcData;
-  //     int maxMcEvts=eventsData.size()*ratioMcToData;
-  //     theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
+      EventList mcData;
+      int maxMcEvts=eventsData.size()*ratioMcToData;
+      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
 
-  //     std::shared_ptr<EvtWeightList> epemWeightListPtr(new EvtWeightList((*it).first->channelID()));
-  //     epemWeightListPtr->read(eventsData, mcData);
-  //     evtWeightSumData+=epemWeightListPtr->NoOfWeightedDataEvts();
+      std::shared_ptr<EvtWeightList> gammapWeightListPtr(new EvtWeightList((*it).first->channelID()));
+      gammapWeightListPtr->read(eventsData, mcData);
+      evtWeightSumData+=gammapWeightListPtr->NoOfWeightedDataEvts();
 
-  //     numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), epemWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
-  //   }
+      numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), gammapWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
+    }
 
-    // std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(), theAppParams->noOfClients(), numEventMap));
+    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(), theAppParams->noOfClients(), numEventMap));
 
-    // PwaFcnServer theFcnServer(theServer);
-    // theServer->WaitForFirstClientLogin();
+    PwaFcnServer theFcnServer(theServer);
+    theServer->WaitForFirstClientLogin();
 
-    // FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
+    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
 
-    // theServer->BroadcastClosingMessage();
-    // Info << "Closing server." << endmsg;
+    theServer->BroadcastClosingMessage();
+    Info << "Closing server." << endmsg;
 
-    // theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
 
- //    return 1;
- // }
+    return 1;
+  }
 
  // if(mode == "evoserver"){
  //   double evtWeightSumData=0;
