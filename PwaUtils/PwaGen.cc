@@ -127,6 +127,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
   int noOfAllGenEvts=0;
   int noOfIterations=0;
   int currentEvtNo=0;
+  double maxFitWeight=0.;
 
   while(generateEvents){
     noOfIterations++;
@@ -169,8 +170,6 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
 
     std::vector<EvtData*> dataList;
-    double evtWeightSum=0.;
-    double maxFitWeight=0.;
 
     theLh->updateFitParams(theFitParams);
     while ((anEvent = currentEvtList.nextEvent()) !=0){
@@ -204,7 +203,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 	  }
 	}
 	
-	if (!_useEvtWeight && noOfIterations>0){
+	if (!_useEvtWeight && noOfIterations>1){
 	  double randWeight = EvtRandom::Flat( 0., maxFitWeight );
 	  if ( randWeight < fitWeight ){
 	    dumpAscii(currentEvtData);
