@@ -96,10 +96,6 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     std::shared_ptr<const JPClamlam> currentJPClamlam=it->first;
     if( fabs(lamX) > currentJPClamlam->J) continue;
 
-    double theMag=it->second;
-    double thePhi=_currentParamPhiLamLams[currentJPClamlam];
-    complex<double> expi(cos(thePhi), sin(thePhi));
-
     Spin lambda1= currentJPClamlam->lam1;
     Spin lambda2= currentJPClamlam->lam2;
     Spin lambda = lambda1-lambda2;
@@ -109,7 +105,11 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     if(fixDaughterNr==1 && lamDec!=lambda1) continue;
     if(fixDaughterNr==2 && lamDec!=lambda2) continue;
 
-    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj( theData->WignerDsString[_wignerDKey][currentJPClamlam->J][lamX][lambda]);
+    double theMag=it->second;
+    double thePhi=_currentParamPhiLamLams[currentJPClamlam];
+    complex<double> expi(cos(thePhi), sin(thePhi));
+
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDsString.at(_wignerDKey).at(currentJPClamlam->J).at(lamX).at(lambda));
     result+=amp;
   }
   //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
