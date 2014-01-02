@@ -366,6 +366,7 @@ int main(int __argc,char *__argv[]){
     theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams);
     epemHist theHist(theLhPtr, theStartparams);
 
+    // Make Histograms for all single contributions
     if(GlobalEnv::instance()->parser()->saveContributionHistos()){
       std::shared_ptr<WaveContribution> theWaveContribution;
       theWaveContribution = std::shared_ptr<WaveContribution>(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartparams));
@@ -377,6 +378,7 @@ int main(int __argc,char *__argv[]){
 	epemHist theHist(theLhPtr, singleContributionFitParams, tmpContribName);
       }
     }
+
     end= clock();
     double cpuTime= (end-start)/(CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
