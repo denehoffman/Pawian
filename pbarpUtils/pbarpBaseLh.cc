@@ -300,11 +300,11 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     currentMagErrMap[*it] = magFactor;
     currentPhiErrMap[*it] = 0.3;
   }
-  fitVal.Mags["pbarp"]=currentMagValMap;
-  fitVal.Phis["pbarp"]=currentPhiValMap;
-  fitErr.Mags["pbarp"]=currentMagErrMap;
-  fitErr.Phis["pbarp"]=currentPhiErrMap;
 
+  fitVal.Mags["pbarp"].insert(currentMagValMap.begin(), currentMagValMap.end());
+  fitVal.Phis["pbarp"].insert(currentPhiValMap.begin(), currentPhiValMap.end());
+  fitErr.Mags["pbarp"].insert(currentMagErrMap.begin(), currentMagErrMap.end());
+  fitErr.Phis["pbarp"].insert(currentPhiErrMap.begin(), currentPhiErrMap.end());
 }
 
 void pbarpBaseLh::print(std::ostream& os) const{
