@@ -36,6 +36,7 @@
 #include "Utils/FunctionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/GlobalEnv.hh"
 
 IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
   IsobarLSDecay(mother, daughter1, daughter2, channelID)
@@ -116,6 +117,9 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   //  DebugMsg << "daughter2_4Vec:\t"  << _daughter2->name() << "\t" << daughter2_4Vec << endmsg;
 
   Vector4<double> mother_4Vec=daughter1_4Vec+daughter2_4Vec;
+  mother_4Vec.Boost(all4Vec);
+  daughter1_4Vec.Boost(all4Vec);
+  daughter2_4Vec.Boost(all4Vec); //transformation into the initial state system
 
   Spin spinMother=_motherIGJPCPtr->J;
   Spin spinDaughter1=_daughter1IGJPCPtr->J;
@@ -131,21 +135,29 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   if(lam12Max>spinMother) lam12Max=spinMother;
 
   Spin lamMotherMax=spinMother;
-  if (!_hasMotherPart && spinMother>1) lamMotherMax=1; //attention: this is only valid for pbar p or e+ e- reactions; must be moved to individual specific classes
+  if (!_hasMotherPart && spinMother>1){
+    if ( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_PBARP 
+         ||  GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+      lamMotherMax=1; //attention
+    }
+    else if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMMAP){
+      lamMotherMax=3./2;
+    }
+  }
 
   std::vector< std::shared_ptr<const JPCLS> > theJPCLSAmps=JPCLSAmps();
   DebugMsg << name() << endmsg;
   std::vector< std::shared_ptr<const JPCLS> >::iterator itJPCLS;
   for(itJPCLS=theJPCLSAmps.begin(); itJPCLS!=theJPCLSAmps.end(); ++itJPCLS){
-    //      (*itJPCLS)->print(std::cout);
-    //       std::cout << std::endl;
+    //    (*itJPCLS)->print(std::cout);
+    //   std::cout << std::endl;
     Spin L=(*itJPCLS)->L;
     Spin S=(*itJPCLS)->S;
     int s1s2S=spinDaughter1+spinDaughter2+(*itJPCLS)->S;
 
     Tensor<complex<double> > leviPssTensor;
     bool add_lctForChi=true;
-    if( s1s2S%2 ==0 ) { //odd
+    if( s1s2S%2 ==0 ) { //even
       add_lctForChi=false;
       leviPssTensor(0)=complex<double>(1.,0.);
     }
@@ -158,7 +170,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 
     Tensor<complex<double> > leviPlsTensor;
     bool add_lctForTensor=true;
-    if( SLms1%2 ==0 ){ //odd
+    if( SLms1%2 ==0 ){ //even
       add_lctForTensor=false;
       leviPlsTensor=complex<double>(1.,0.);
     }
@@ -194,7 +206,6 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
       // for !add_lctForTensor calculation will be done in heli loops
 
       //calculate chi
-      Tensor<complex<double> > chi12;
       Tensor<complex<double> > s12SpinProjector;
       PolVector part12PolVec(S);
       part12PolVec.SetP4(mother_4Vec,mother_4Vec.M());
@@ -209,6 +220,9 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	DebugMsg << "epsilonDaughter1Project:\t" << epsilonDaughter1Project << endmsg;
 
 	for (Spin lamDaughter2=-spinDaughter2; lamDaughter2<=spinDaughter2; ++lamDaughter2){
+	  Spin lambda = lamDaughter1-lamDaughter2;
+	  if( fabs(lambda)>(*itJPCLS)->J || fabs(lambda)>(*itJPCLS)->S) continue;
+ 	  
 	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg;
 	  Tensor<complex<double> > epsilonDaughter2Project=_polDaughter2(lamDaughter2);
 	  DebugMsg << "epsilonDaughter2Project:\t" << epsilonDaughter2Project << endmsg;
@@ -218,15 +232,17 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	    chiPart=(conj(epsilonDaughter1Project)*leviPssTensor)*conj(epsilonDaughter2Project);
 	  }
 	  else{
-	    chiPart=conj(epsilonDaughter1Project)%conj(epsilonDaughter2Project);
+	    if((*itJPCLS)->S==0 && (*itJPCLS)->L==0) chiPart=conj(epsilonDaughter1Project)*conj(epsilonDaughter2Project); 
+	    else chiPart=conj(epsilonDaughter1Project)%conj(epsilonDaughter2Project);
 	  }
 	  DebugMsg << "chiPart:\t" << chiPart << endmsg;
 
-	  chi12=s12SpinProjector|chiPart;
+	  Tensor<complex<double> > chi12=s12SpinProjector|chiPart;
 	  DebugMsg << "chi12:\t" << chi12 << endmsg;
 
 	  //calculate ls part;
 	  Tensor<complex<double> > lsPartTensor;
+	  DebugMsg << "add_lctForTensor:\t" << add_lctForTensor << endmsg;
 	  if(add_lctForTensor){
 	    if(epsilonMotherProject.Rank() >= orbTensor.Rank()){
 	      lsPartTensor= epsilonMotherProject*leviPlsTensor;
@@ -240,10 +256,14 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	    }
 	  }
 	  if(!add_lctForTensor){
+            DebugMsg << "epsilonMotherProject.Rank() " << epsilonMotherProject.Rank() << endmsg;
+	    DebugMsg << "orbTensor.Rank(): " << orbTensor.Rank() << endmsg;
+ 	    DebugMsg << "orbTensor: " << orbTensor << endmsg;
 	    if (chi12.Rank()==fabs(epsilonMotherProject.Rank()-orbTensor.Rank())) lsPartTensor= epsilonMotherProject|orbTensor;
 	    else if (chi12.Rank()==(epsilonMotherProject.Rank()+orbTensor.Rank())) lsPartTensor= epsilonMotherProject%orbTensor;
 	    else if (epsilonMotherProject.Rank()==orbTensor.Rank()){
 	      int noOfContractions=int((epsilonMotherProject.Rank()+orbTensor.Rank()-chi12.Rank())/2);
+	      DebugMsg << "noOfContractions: " << noOfContractions << endmsg;
 	      if (noOfContractions<=epsilonMotherProject.Rank() && noOfContractions>0) lsPartTensor= epsilonMotherProject.Contract(orbTensor, noOfContractions);
 	    }
 	    else{
@@ -262,6 +282,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 
 	  if(result.Rank()>0){
 	    Alert << "result.Rank()=" << result.Rank() << " > 0" << endmsg;
+	    Alert << "decay name: " <<  name() << endmsg;
 	    exit(0);
 	  }
 	  evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);

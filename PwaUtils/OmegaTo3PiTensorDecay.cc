@@ -71,12 +71,17 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
   Vector4<double> daughter3_4Vec=itMap->second;
   // daughter3_4Vec.Boost(all4Vec);
 
+  // Vector4<double> P_3particle_4Vec=daughter1_4Vec+daughter2_4Vec+daughter3_4Vec;
+  // P_3particle_4Vec.Boost(all4Vec); //transformation into the initial CMS system
+  daughter1_4Vec.Boost(all4Vec);
+  daughter2_4Vec.Boost(all4Vec);
+  daughter3_4Vec.Boost(all4Vec);
   Vector4<double> P_3particle_4Vec=daughter1_4Vec+daughter2_4Vec+daughter3_4Vec;
 
-   Vector4<double> daughter1Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter1_4Vec);
-   Vector4<double> daughter2Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter2_4Vec);
-   Vector4<double> daughter3Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter3_4Vec);
-   Vector4<double> mother_4Vec=helicityVec(all4Vec, P_3particle_4Vec, P_3particle_4Vec);
+   // Vector4<double> daughter1Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter1_4Vec);
+   // Vector4<double> daughter2Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter2_4Vec);
+   // Vector4<double> daughter3Hel=helicityVec(all4Vec, P_3particle_4Vec, daughter3_4Vec);
+   // Vector4<double> mother_4Vec=helicityVec(all4Vec, P_3particle_4Vec, P_3particle_4Vec);
 
   LeviCivitaTensor eps;
   PolVector omega; // spin-1 particle is the default constructor
@@ -88,7 +93,7 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
     ampTensor = eps|(daughter1_4Vec%daughter2_4Vec%daughter3_4Vec%omega(mz));
     // ampTensor = eps|(daughter1Hel%daughter2Hel%daughter3Hel%omega(mz));
     //    DebugMsg << "mz: " << mz << "\t" << ampTensor << endmsg;
-    evtData->ComplexDoubleString["omegTensor"][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
+    evtData->ComplexDoubleString[_wignerDKey][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
   }
    _alreadyFilledMap[evtNo]=true;
 }

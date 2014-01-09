@@ -247,7 +247,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
   if(_hasMotherPart){
     if(fabs(mother4Vec==all4Vec)){
       daughter2HelMother=daughter2_4Vec;
-      daughter2HelMother.Boost(daughter2HelMother);
+      daughter2HelMother.Boost(daughter2HelMother); //is this correct????
     }
     else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
   }

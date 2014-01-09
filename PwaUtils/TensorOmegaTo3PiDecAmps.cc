@@ -91,12 +91,12 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));
 
-    complex<double> amp = theMag*expi*theData->ComplexDoubleString["omegTensor"][_JPCPtr->J][lamX];
+    complex<double> amp = theMag*expi*theData->ComplexDoubleString[_wignerDKey][_JPCPtr->J][lamX];
 
     result+=amp;
   }
 
-
+  result*=1000.;
   if ( _cacheAmps){
      theMutex.lock();
      _cachedAmpMap[evtNo][lamX][lamFs]=result;
@@ -104,6 +104,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
   }
 
   result*=_absDyn->eval(theData, grandmaAmp);
+  //  Info <<"TensorOmegaTo3PiDecAmps result: " << result << endmsg; 
   return result;
 }
 
