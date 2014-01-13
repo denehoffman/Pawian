@@ -47,7 +47,7 @@ OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Part
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
 }
 
-void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData){
+void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   int evtNo=evtData->evtNo;
   std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
   if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled

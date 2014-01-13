@@ -48,7 +48,7 @@ public:
   OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID);
   virtual ~OmegaTo3PiLSDecay();
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
   virtual const std::string lambdaDecKey() {return _lambdaDecKey;}
   virtual std::string type() {return "OmegaTo3PiLSDecay";}
 

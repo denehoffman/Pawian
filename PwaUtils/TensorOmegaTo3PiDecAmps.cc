@@ -86,7 +86,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-    if( fabs(lamX) > _JPCPtr->J ) continue;
+    //    if( fabs(lamX) > _JPCPtr->J ) continue;
     double theMag=_currentParamMags[*it];
     double thePhi=_currentParamPhis[*it];
     complex<double> expi(cos(thePhi), sin(thePhi));

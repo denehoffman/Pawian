@@ -37,6 +37,7 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "ConfigParser/ParserBase.hh"
 
 IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
   IsobarLSDecay(mother, daughter1, daughter2, channelID)
@@ -75,13 +76,13 @@ void IsobarTensorDecay::print(std::ostream& os) const{
   os << "\n";
 }
 
-void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
+void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   int evtNo=evtData->evtNo;
   std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
   if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
 
-  if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, evtData);
-  if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, evtData);
+  // if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, evtData);
+  // if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, evtData);
 
   Vector4<double> all4Vec(0.,0.,0.,0.);
   //fill all4Vec
@@ -114,22 +115,39 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
        itMap=fsMap.find( (*itParticle)->name() );
        daughter2_4Vec+=itMap->second;
   }
+
+  if(_isProdAmp){
+    if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
+    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
+  }
+  else{
+    if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+  }
+
+
   //  DebugMsg << "daughter2_4Vec:\t"  << _daughter2->name() << "\t" << daughter2_4Vec << endmsg;
 
   Vector4<double> mother_4Vec=daughter1_4Vec+daughter2_4Vec;
-  mother_4Vec.Boost(all4Vec);
-  daughter1_4Vec.Boost(all4Vec);
-  daughter2_4Vec.Boost(all4Vec); //transformation into the initial state system
+
+  Vector4<double> daughter1Tensor4Vec=daughter1_4Vec;
+  Vector4<double> daughter2Tensor4Vec=daughter2_4Vec;
+  Vector4<double> motherTensor4Vec=mother_4Vec;
+
+  if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli" ||
+     GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
+    daughter1Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter1_4Vec);
+    daughter2Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter2_4Vec);
+    motherTensor4Vec=helicityVec(all4Vec, prodParticle4Vec, mother_4Vec);
+  }
 
   Spin spinMother=_motherIGJPCPtr->J;
   Spin spinDaughter1=_daughter1IGJPCPtr->J;
   Spin spinDaughter2=_daughter2IGJPCPtr->J;
 
-  _polMother.SetP4(mother_4Vec,mother_4Vec.M());
-  //  _polMother.SetP4(mother_4Vec,mother_4Vec.M());
-  //  DebugMsg << "_polMother:\t" << _polMother << endmsg;
-  _polDaughter1.SetP4(daughter1_4Vec, daughter1_4Vec.M());
-  _polDaughter2.SetP4(daughter2_4Vec, daughter2_4Vec.M());
+  _polMother.SetP4(motherTensor4Vec,motherTensor4Vec.M());
+  _polDaughter1.SetP4(daughter1Tensor4Vec, daughter1Tensor4Vec.M());
+  _polDaughter2.SetP4(daughter2Tensor4Vec, daughter2Tensor4Vec.M());
 
   Spin lam12Max=spinDaughter1+spinDaughter2;
   if(lam12Max>spinMother) lam12Max=spinMother;
@@ -180,7 +198,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
     DebugMsg << "leviPlsTensor: " << leviPlsTensor << endmsg;
 
     OrbitalTensor orbTensor(L);
-    orbTensor.SetP4(daughter1_4Vec, daughter2_4Vec);
+    orbTensor.SetP4(daughter1Tensor4Vec, daughter2Tensor4Vec);
     DebugMsg << "orbTensor:\t" << orbTensor << endmsg;
 
     for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
@@ -189,26 +207,10 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
       Tensor<complex<double> > epsilonMotherProject = _polMother(lamMother);
       DebugMsg << "epsilonMotherProject:\t" << epsilonMotherProject << endmsg;
 
-      // //calculate ls part;
-      // Tensor<complex<double> > lsPartTensor;
-      // if(add_lctForTensor){
-      // 	if(epsilonMotherProject.Rank() >= orbTensor.Rank()){
-      // 	  lsPartTensor= epsilonMotherProject*leviPlsTensor;
-      // 	  lsPartTensor.Permute(1,lsPartTensor.Rank());
-      // 	  lsPartTensor=lsPartTensor|orbTensor;
-      // 	}
-      // 	else{
-      // 	  lsPartTensor= orbTensor*leviPlsTensor;
-      // 	  lsPartTensor.Permute(1,lsPartTensor.Rank());
-      // 	  lsPartTensor=lsPartTensor|epsilonMotherProject;
-      // 	}
-      // }
-      // for !add_lctForTensor calculation will be done in heli loops
-
-      //calculate chi
+       //calculate chi
       Tensor<complex<double> > s12SpinProjector;
       PolVector part12PolVec(S);
-      part12PolVec.SetP4(mother_4Vec,mother_4Vec.M());
+      part12PolVec.SetP4(motherTensor4Vec,motherTensor4Vec.M());
       s12SpinProjector=part12PolVec.Projector();
       DebugMsg << "s12SpinProjector:\t" << s12SpinProjector << endmsg;
 
@@ -220,8 +222,8 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	DebugMsg << "epsilonDaughter1Project:\t" << epsilonDaughter1Project << endmsg;
 
 	for (Spin lamDaughter2=-spinDaughter2; lamDaughter2<=spinDaughter2; ++lamDaughter2){
-	  Spin lambda = lamDaughter1-lamDaughter2;
-	  if( fabs(lambda)>(*itJPCLS)->J || fabs(lambda)>(*itJPCLS)->S) continue;
+	  // Spin lambda = lamDaughter1-lamDaughter2;
+	  // if( fabs(lambda)>(*itJPCLS)->J || fabs(lambda)>(*itJPCLS)->S) continue;
  	  
 	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg;
 	  Tensor<complex<double> > epsilonDaughter2Project=_polDaughter2(lamDaughter2);
@@ -292,4 +294,5 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
     }
   }
 
+  _alreadyFilledMap[evtNo]=true;  
 }

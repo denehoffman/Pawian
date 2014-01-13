@@ -49,7 +49,7 @@ public:
   IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
   virtual ~IsobarTensorDecay();
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
   virtual void print(std::ostream& os) const;
   virtual std::string type() {return "IsobarTensorDecay";}
 

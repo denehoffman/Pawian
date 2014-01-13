@@ -42,11 +42,13 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
       //      std::string decName=(*itJPC)->name();
       std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _epemIGJPC, itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+      currentDec->setProductionAmp();
       currentDec->extractStates();
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
 	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	currentHeliDec->setProductionAmp();
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
       }

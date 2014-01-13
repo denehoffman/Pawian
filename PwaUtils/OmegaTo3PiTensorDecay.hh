@@ -50,7 +50,7 @@ public:
 
   virtual std::string type() {return "OmegaTo3PiTensorDecay";}
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
 
 protected:
 };

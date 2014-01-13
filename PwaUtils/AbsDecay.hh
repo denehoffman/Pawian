@@ -69,7 +69,7 @@ public:
 
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, EvtData* evtData);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
   virtual void print(std::ostream& os) const;
@@ -95,7 +95,8 @@ public:
   virtual void disableIsospin(){_useIsospin=false;}
   bool useIsospin(){ return _useIsospin;}
   virtual std::string pathToConfigParser() {return _pathParserFile;}
-
+  void setProductionAmp() {_isProdAmp=true;}
+  bool isProductionAmp() {return _isProdAmp;}
 protected:
   ChannelID _channelId;
 
@@ -145,4 +146,5 @@ protected:
   int _gParity;
 
   bool _useIsospin;
+  bool _isProdAmp;
 };

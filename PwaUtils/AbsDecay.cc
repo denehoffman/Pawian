@@ -65,6 +65,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_gParity(mother->theGParity())
   ,_useIsospin(true)
+   ,_isProdAmp(false)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -136,16 +137,20 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
+   ,_isProdAmp(false)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
-
   if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
-    std::vector<Particle*> fsParticlesDaughter1=_absDecDaughter1->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), fsParticlesDaughter1.begin(), fsParticlesDaughter1.end());
+    _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
   }
-  else _finalStateParticles.push_back(daughter1);
+  else{
+    _finalStateParticles.push_back(daughter1);
+    _finalStateParticlesDaughter1.push_back(daughter1);
+  }
+
   _absDecDaughter2=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter2);
 
   if(0 != _absDecDaughter2){
@@ -157,6 +162,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     _finalStateParticles.push_back(daughter2);
     _finalStateParticlesDaughter2.push_back(daughter2);
   }
+
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
 
@@ -212,32 +218,37 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
 }
 
-void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtData* evtData){
+void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   int evtNo=evtData->evtNo;
   std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
   if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
 
-  if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, evtData);
-  if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, evtData);
+  std::vector<Particle*>::iterator itP;
+  std::map<std::string, Vector4<double> >::iterator itMap;
 
   Vector4<double> all4Vec(0.,0.,0.,0.);
   Vector4<double> mother4Vec(0.,0.,0.,0.);
+  Vector4<double> daughter1_4Vec(0.,0.,0.,0.);
   Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
 
   //fill all4Vec
-  std::map<std::string, Vector4<double> >::iterator itMap;
   for(itMap=fsMap.begin(); itMap!=fsMap.end(); ++itMap){
     all4Vec+=itMap->second;
   }
 
   //fill mother4Vec
-  std::vector<Particle*>::iterator itP;
   for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
     itMap=fsMap.find((*itP)->name());
     mother4Vec+=itMap->second;
   }
 
-  //fill mother4Vec
+  //fill daughter1
+  for(itP=_finalStateParticlesDaughter1.begin(); itP!=_finalStateParticlesDaughter1.end(); ++itP){
+    itMap=fsMap.find((*itP)->name());
+    daughter1_4Vec+=itMap->second;
+  }
+
+  //fill daughter2
   for(itP=_finalStateParticlesDaughter2.begin(); itP!=_finalStateParticlesDaughter2.end(); ++itP){
     itMap=fsMap.find((*itP)->name());
     daughter2_4Vec+=itMap->second;
@@ -289,6 +300,22 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, EvtD
     }
   }
 
+  if(_isProdAmp){
+     if (!_daughter1IsStable){
+       _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
+     }
+     if (!_daughter2IsStable){
+       _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
+     }
+   }
+   else{
+     if (!_daughter1IsStable){
+       _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+     }
+     if (!_daughter2IsStable){
+       _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+     }
+   }
    _alreadyFilledMap[evtNo]=true;
 }
 

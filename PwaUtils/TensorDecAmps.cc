@@ -92,7 +92,7 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDa
 complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  if( fabs(lamX) > _JPCPtr->J) return result;
+  // if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
 
@@ -142,8 +142,8 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
 
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	Spin lambda = lambda1-lambda2;
-	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
+	// Spin lambda = lambda1-lambda2;
+	// if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
 	complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString.at(_name).at((*it)->L).at((*it)->S).at(lamX).at(lambda1).at(lambda2);
 
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);

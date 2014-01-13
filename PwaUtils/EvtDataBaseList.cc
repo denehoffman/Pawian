@@ -129,7 +129,7 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     std::vector<std::shared_ptr<AbsDecay> > theDecays=GlobalEnv::instance()->Channel(_channelID)->prodDecayList()->getList();
     std::vector<std::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
-      (*itIso)->fillWignerDs(particle4VecMap, evtData);
+      (*itIso)->fillWignerDs(particle4VecMap, V4_all_lab, evtData);
     }
 
    //fill 4Vecs for dynamics
