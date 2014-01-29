@@ -92,7 +92,7 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDa
 complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  //  if( fabs(lamX) > _JPCPtr->J) return result;
+  if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
 
