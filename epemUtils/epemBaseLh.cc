@@ -46,22 +46,12 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
-
-// epemBaseLh::epemBaseLh(std::shared_ptr<const EvtDataBaseList> theEvtList) :
-//   AbsLh(theEvtList, epemEnv::instance())
-//   ,_highestJFsp(0)
-//   ,_isHighestJaPhoton(true)
-// {
-//   initialize();
-// }
-
 epemBaseLh::epemBaseLh(ChannelID channelID) :
   AbsLh()
   ,_channelID(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
-  initialize();
 }
 
 
@@ -148,15 +138,6 @@ void  epemBaseLh::initialize(){
   }
 
   _epemReactionPtr =  std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel(_channelID))->reaction();
-
-std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
-  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
-  for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    //    std::shared_ptr<AbsDecay> currentDec((*it).get() );
-    //    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
-    _decAmps.push_back(currentAmp);
-  }
 
 }
 

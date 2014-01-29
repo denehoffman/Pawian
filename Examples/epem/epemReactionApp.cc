@@ -57,6 +57,8 @@
 
 #include "epemUtils/epemReaction.hh"
 #include "epemUtils/epemBaseLh.hh"
+#include "epemUtils/epemHeliLh.hh"
+#include "epemUtils/epemTensorLh.hh"
 #include "epemUtils/EpemChannelEnv.hh"
 
 #include "Event/EventReaderDefault.hh"
@@ -111,8 +113,15 @@ int main(int __argc,char *__argv[]){
   // Create likelihood objects
   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-     //std::string prodFormalism=(*it).first->parser()->productionFormalism();
-     std::shared_ptr<AbsLh> theLhPtr = std::shared_ptr<AbsLh>(new epemBaseLh((*it).first->channelID()));
+     std::string prodFormalism=(*it).first->parser()->productionFormalism();
+     std::shared_ptr<AbsLh> theLhPtr;
+     if (prodFormalism=="Heli") theLhPtr = std::shared_ptr<AbsLh>(new epemHeliLh((*it).first->channelID()));
+     else if (prodFormalism=="Tensor") theLhPtr = std::shared_ptr<AbsLh>(new epemTensorLh((*it).first->channelID()));
+     else {
+       Alert << "prodFormalism\t" << prodFormalism << "\tdoesn't exist!!!" << endmsg;
+       exit(1);
+     }
+
      (*it).first->SetLh(theLhPtr);
   }
 
@@ -192,6 +201,7 @@ int main(int __argc,char *__argv[]){
 
   EventList mcDataClient;
   theAppBase.readEvents(mcDataClient, mcFileNames, channelID, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  //  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
 
   std::shared_ptr<EvtDataBaseList> epemEventListPtr(new EvtDataBaseList(channelID));
   epemEventListPtr->read(eventsDataClient, mcDataClient);
@@ -218,6 +228,8 @@ int main(int __argc,char *__argv[]){
       const std::string mcFile=(*it).first->parser()->mcFile();
       Info << "data file: " << datFile ;  // << endmsg;
       Info << "mc file: " << mcFile ;  // << endmsg;
+
+      int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
 
@@ -225,11 +237,12 @@ int main(int __argc,char *__argv[]){
       mcFileNames.push_back(mcFile);
 
       EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
+      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
 
       EventList mcData;
       int maxMcEvts=eventsData.size()*ratioMcToData;
       theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
+      //theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
 
       std::shared_ptr<EvtWeightList> epemWeightListPtr(new EvtWeightList((*it).first->channelID()));
       epemWeightListPtr->read(eventsData, mcData);
@@ -263,6 +276,9 @@ int main(int __argc,char *__argv[]){
       const std::string mcFile=(*it).first->parser()->mcFile();
       Info << "data file: " << datFile ;  // << endmsg;
       Info << "mc file: " << mcFile ;  // << endmsg;
+
+      int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
+
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
 
@@ -270,11 +286,13 @@ int main(int __argc,char *__argv[]){
       mcFileNames.push_back(mcFile);
 
       EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
+      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
 
       EventList mcData;
       int maxMcEvts=eventsData.size()*ratioMcToData;
       theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
+      //theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
+
 
       std::shared_ptr<EvtWeightList> epemWeightListPtr(new EvtWeightList((*it).first->channelID()));
       epemWeightListPtr->read(eventsData, mcData);
@@ -319,6 +337,8 @@ int main(int __argc,char *__argv[]){
   Info << "data file: " << datFile ;  // << endmsg;
   Info << "mc file: " << mcFile ;  // << endmsg;
 
+  int noOfDataEvents = theAppParams->noOfDataEvts();
+  
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
@@ -327,12 +347,13 @@ int main(int __argc,char *__argv[]){
 
 
   EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight());
+  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, noOfDataEvents);
 
   int maxMcEvts=eventsData.size()*ratioMcToData;
 
   EventList mcData;
   theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, maxMcEvts-1);
+  //theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
 

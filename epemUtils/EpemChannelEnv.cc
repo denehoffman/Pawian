@@ -63,13 +63,30 @@ void EpemChannelEnv::setup(ChannelID id){
   //epem reaction
   _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs, 0));
 
-  //fill prodDecayList
-  std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
-  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+  std::vector< std::shared_ptr<AbsDecay> > prodDecs;
+  if (_theParser->productionFormalism()=="Heli"){
+    std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
+    std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      _prodDecList->addDecay(*itDec);
+    }
+  }
+  else if (_theParser->productionFormalism()=="Tensor"){
+    std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _epemReaction->productionTensorDecays();
+    std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      _prodDecList->addDecay(*itDec);
+    }
+  }
+   else{
+      Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+      exit(0);
+   }
+
+  std::vector< std::shared_ptr<AbsDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
     _prodDecList->addDecay(*itDec);
   }
-
 
   //set suffixes
   std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();

@@ -84,14 +84,31 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
   Vector4<double> daughter2Tensor4Vec=daughter2_4Vec;  
   Vector4<double> daughter3Tensor4Vec=daughter3_4Vec;
   Vector4<double> motherTensor4Vec=P_3particle_4Vec;
+
+  // daughter1Tensor4Vec.RotateZ(-all4Vec.Phi());
+  // daughter1Tensor4Vec.RotateY(-all4Vec.Theta());
+
+  // daughter2Tensor4Vec.RotateZ(-all4Vec.Phi());
+  // daughter2Tensor4Vec.RotateY(-all4Vec.Theta());
+
+  // daughter3Tensor4Vec.RotateZ(-all4Vec.Phi());
+  // daughter3Tensor4Vec.RotateY(-all4Vec.Theta());
+
+  // motherTensor4Vec.RotateZ(-all4Vec.Phi());
+  // motherTensor4Vec.RotateY(-all4Vec.Theta());
+  // Vector4<double> daughter1Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter1_4Vec);
+  // Vector4<double> daughter2Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter2_4Vec);
+  // Vector4<double> daughter3Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter3_4Vec);
+  // Vector4<double> motherTensor4Vec=helicityVec(all4Vec, all4Vec, P_3particle_4Vec);
+
   
-  if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli" ||
-     GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
-    daughter1Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter1_4Vec);
-    daughter2Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter2_4Vec);
-    daughter3Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter3_4Vec);
-    motherTensor4Vec=helicityVec(all4Vec, prodParticle4Vec, P_3particle_4Vec);
-  }
+  // if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli" ||
+  //    GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
+  //   daughter1Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter1_4Vec);
+  //   daughter2Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter2_4Vec);
+  //   daughter3Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter3_4Vec);
+  //   motherTensor4Vec=helicityVec(all4Vec, prodParticle4Vec, P_3particle_4Vec);
+  // }
 
   LeviCivitaTensor eps;
   PolVector omega; // spin-1 particle is the default constructor

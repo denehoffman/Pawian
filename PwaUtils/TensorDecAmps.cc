@@ -92,7 +92,7 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDa
 complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  // if( fabs(lamX) > _JPCPtr->J) return result;
+  //  if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
 
@@ -125,7 +125,9 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
      _cachedAmpMap[evtNo][lamX][lamFs]=result;
      theMutex.unlock();
   }
-
+  // if (norm(result)>1.){
+  //   Info << "evtNo: " << evtNo << "  name(): " << name() << " result(lamX=" << lamX << ", lamFs=" << lamFs << "): " << result << endmsg;
+  // }
   result*=_absDyn->eval(theData, grandmaAmp);
   return result;
 }
@@ -135,24 +137,26 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
   complex<double> result(0.,0.);
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-
     double theMag=_currentParamMags.at(*it);
     double thePhi=_currentParamPhis.at(*it);
     complex<double> expi(cos(thePhi), sin(thePhi));
 
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	// Spin lambda = lambda1-lambda2;
-	// if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString.at(_name).at((*it)->L).at((*it)->S).at(lamX).at(lambda1).at(lambda2);
-
+	Spin lambda = lambda1-lambda2;
+	//	if((*it)->S < fabs(lambda) || _JPCPtr->J < fabs(lambda)) continue;
+       complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString.at(_name).at((*it)->L).at((*it)->S).at(lamX).at(lambda1).at(lambda2);
+       if (norm(amp)>1000.){
+         Info << "norm(amp): " << norm(amp) << endmsg;
+	 Info << "evtNo: " << theData->evtNo << "  name(): " << name() << " result(L=" << (*it)->L << ", S=" << (*it)->S << ", lamX=" << lamX << ", lambda1=" << lambda1 << ", lambda2=" << lambda2 << "): " << amp << endmsg;
+       }
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;
       }
     }
   }
 
-  result*=_preFactor*_isospinCG;
+  result*=_isospinCG;
   return result;
 }
 

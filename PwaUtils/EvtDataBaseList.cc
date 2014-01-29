@@ -38,7 +38,8 @@
 #include "Event/EventList.hh"
 #include "Event/Event.hh"
 
-//#include "Particle/Particle.hh"
+#include "Particle/Particle.hh"
+#include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 #include "ErrLogger/ErrLogger.hh"
@@ -106,6 +107,11 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     for (itPart=_finalStateParticles.begin(); itPart != _finalStateParticles.end(); ++itPart){
       Vector4<float> current4VecFloat=*(theEvent->p4(counter));
       Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
+      if(*(*itPart)==*(GlobalEnv::instance()->particleTable()->particle("photon"))){ //set mass=0
+	  current4Vec.SetP4(sqrt(current4Vec.Px()*current4Vec.Px()+current4Vec.Py()*current4Vec.Py()+current4Vec.Pz()*current4Vec.Pz()), current4Vec.Px(), current4Vec.Py(), current4Vec.Pz()); 
+	}
+
+	//      if( (current4Vec.M() != current4Vec.M()) || current4Vec.M()<1e-4) current4Vec.SetP4(sqrt(current4VecFloat.Px()*current4VecFloat.Px()+current4VecFloat.Py()*current4VecFloat.Py()+current4VecFloat.Pz()*current4VecFloat.Pz()), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz()); 
       finalState4Vecs.push_back(current4Vec);
       particle4VecMap.insert(std::map<std::string, Vector4<double> >::value_type((*itPart)->name(), current4Vec));
       V4_all_lab += current4Vec;

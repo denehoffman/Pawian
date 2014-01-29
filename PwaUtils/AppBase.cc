@@ -345,7 +345,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
   }
 
   // Two more tries to get a valid result unsing strategy 2
-  for(int i=0; i<2; i++){
+  for(int j=0; j<2; j++){
      Warning <<"FM is invalid, try with strategy = 2."<< endmsg;
 
      // Check minimum covariance matrix

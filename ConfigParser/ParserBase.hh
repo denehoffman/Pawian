@@ -97,6 +97,7 @@ public:
   const int randomSeed() const {return _randomSeed;}
   const bool generateWithModel() const {return _genWithModel;}
   const int noOfGenEvts() const {return _noOfGenEvts;}
+  const int noOfDataEvts() const {return _noOfDataEvts;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -150,5 +151,5 @@ protected:
   int _randomSeed;
   bool _genWithModel;
   int _noOfGenEvts;
-
+  int _noOfDataEvts;
 };

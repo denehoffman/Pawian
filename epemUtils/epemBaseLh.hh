@@ -53,12 +53,13 @@ public:
 
   virtual ~epemBaseLh();
 
-  virtual AbsLh* clone_() const{
-    AbsLh* theClone=new epemBaseLh(_channelID);
-    theClone->setDataVec(_evtDataVec);
-    theClone->setMcVec(_evtMCVec);
-    return theClone;
-  }
+  virtual AbsLh* clone_() const = 0;
+  // virtual AbsLh* clone_() const{
+  //   AbsLh* theClone=new epemBaseLh(_channelID);
+  //   theClone->setDataVec(_evtDataVec);
+  //   theClone->setMcVec(_evtMCVec);
+  //   return theClone;
+  // }
 
   virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
@@ -78,7 +79,6 @@ protected:
   int _highestJFsp;
   bool _isHighestJaPhoton;
 
+  virtual void initialize();
 private:
-
-  void initialize();
 };

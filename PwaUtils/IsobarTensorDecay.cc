@@ -103,6 +103,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
     itMap=fsMap.find( (*itParticle)->name() );
     daughter1_4Vec+=itMap->second;
   }
+
   //  DebugMsg << "daughter1_4Vec:\t" << _daughter1->name() << "\t" << daughter1_4Vec << endmsg;
 
   Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
@@ -134,20 +135,51 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   Vector4<double> daughter2Tensor4Vec=daughter2_4Vec;
   Vector4<double> motherTensor4Vec=mother_4Vec;
 
-  if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli" ||
-     GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
-    daughter1Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter1_4Vec);
-    daughter2Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter2_4Vec);
-    motherTensor4Vec=helicityVec(all4Vec, prodParticle4Vec, mother_4Vec);
-  }
+  // daughter1Tensor4Vec.Boost(all4Vec);
+  // daughter2Tensor4Vec.Boost(all4Vec);
+  // motherTensor4Vec.Boost(all4Vec);
+  // //rotate everything into the cms flight direction 
+  // Vector4<double> allRot4Vec=all4Vec;
+
+  // allRot4Vec.RotateZ(-all4Vec.Phi());
+  // allRot4Vec.RotateY(-all4Vec.Theta());
+  // // std::cout << "\n\nall4Vec: " << all4Vec << std::endl;
+  // // std::cout << "\nallRot4Vec: " << allRot4Vec << std::endl;
+
+  // daughter1Tensor4Vec.RotateZ(-all4Vec.Phi());
+  // daughter1Tensor4Vec.RotateY(-all4Vec.Theta());
+
+  // daughter2Tensor4Vec.RotateZ(-all4Vec.Phi());
+  // daughter2Tensor4Vec.RotateY(-all4Vec.Theta());
+
+  // motherTensor4Vec.RotateZ(-all4Vec.Phi());
+  // motherTensor4Vec.RotateY(-all4Vec.Theta());
+
+  // Vector4<double> daughter1Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter1_4Vec);
+  // Vector4<double> daughter2Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter2_4Vec);
+  // Vector4<double> motherTensor4Vec=helicityVec(all4Vec, all4Vec, mother_4Vec);
+
+  // if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli" ||
+  //    GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
+  //   daughter1Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter1_4Vec);
+  //   daughter2Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter2_4Vec);
+  //   motherTensor4Vec=helicityVec(all4Vec, prodParticle4Vec, mother_4Vec);
+  // }
 
   Spin spinMother=_motherIGJPCPtr->J;
   Spin spinDaughter1=_daughter1IGJPCPtr->J;
   Spin spinDaughter2=_daughter2IGJPCPtr->J;
 
   _polMother.SetP4(motherTensor4Vec,motherTensor4Vec.M());
-  _polDaughter1.SetP4(daughter1Tensor4Vec, daughter1Tensor4Vec.M());
-  _polDaughter2.SetP4(daughter2Tensor4Vec, daughter2Tensor4Vec.M());
+
+
+  double daughter1Mass=daughter1Tensor4Vec.M();
+  double daughter2Mass=daughter2Tensor4Vec.M();
+  if(daughter1Mass!=daughter1Mass || daughter1Mass < 1e-6) daughter1Mass=0.;
+  if(daughter2Mass!=daughter2Mass || daughter2Mass < 1e-6) daughter2Mass=0.;
+
+  _polDaughter1.SetP4(daughter1Tensor4Vec, daughter1Mass);
+  _polDaughter2.SetP4(daughter2Tensor4Vec, daughter2Mass);
 
   Spin lam12Max=spinDaughter1+spinDaughter2;
   if(lam12Max>spinMother) lam12Max=spinMother;
@@ -225,7 +257,8 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	  // Spin lambda = lamDaughter1-lamDaughter2;
 	  // if( fabs(lambda)>(*itJPCLS)->J || fabs(lambda)>(*itJPCLS)->S) continue;
  	  
-	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg;
+	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg; 
+
 	  Tensor<complex<double> > epsilonDaughter2Project=_polDaughter2(lamDaughter2);
 	  DebugMsg << "epsilonDaughter2Project:\t" << epsilonDaughter2Project << endmsg;
 
@@ -280,7 +313,7 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 
 
 	  Tensor<complex<double> > result=lsPartTensor|chi12;
-	  DebugMsg << "result:\t" << result << endmsg;
+	  DebugMsg << "result " << name()<<": " << result << endmsg;
 
 	  if(result.Rank()>0){
 	    Alert << "result.Rank()=" << result.Rank() << " > 0" << endmsg;
@@ -293,6 +326,5 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
       }
     }
   }
-
   _alreadyFilledMap[evtNo]=true;  
 }

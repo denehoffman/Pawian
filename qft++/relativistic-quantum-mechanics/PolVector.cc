@@ -54,7 +54,8 @@ void PolVector::SetP4(const Vector4<double> &__p4,double __mass){
     _pols[0](2) = complex<double>(0.,-1.0/sqrt(2.)); // m=-1 y
     _pols[1](3) = complex<double>(1.,0.); // m=0 z
 
-    if(__mass > 0.) this->_BoostPolVectors(bx,by,bz);    
+    //    if(__mass > 0.) this->_BoostPolVectors(bx,by,bz); 
+    if(__mass > 1e-6) this->_BoostPolVectors(bx,by,bz);    
     else{ // photon case
       _pols[1].Zero();  // mz = 0    
       if((abs(bx) > 1.E-4)||(abs(by) > 1.E-4)){

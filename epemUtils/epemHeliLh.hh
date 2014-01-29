@@ -21,46 +21,50 @@
 //									  //
 //************************************************************************//
 
-// epemReaction class definition file. -*- C++ -*-
+// epemBaseLh class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <complex>
-#include <map>
-#include <vector>
-#include <string>
 #include <memory>
+#include <boost/function.hpp>
 
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+
+#include "epemUtils/epemBaseLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
-#include "Utils/PawianCollectionUtils.hh"
+#include "Minuit2/MnUserParameters.h"
 
-class Particle;
-class IsobarLSDecay;
-class IsobarHeliDecay;
-class IsobarTensorDecay;
+class AbsXdecAmp;
+class epemReaction;
+class LSDecAmps;
 
-class epemReaction {
+class epemHeliLh : public epemBaseLh {
 
 public:
-  epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID);
+  epemHeliLh(ChannelID channelID);
 
-  virtual ~epemReaction();
+  virtual ~epemHeliLh();
+
+  virtual AbsLh* clone_() const{
+    AbsLh* theClone=new epemHeliLh(_channelID);
+    theClone->setDataVec(_evtDataVec);
+    theClone->setMcVec(_evtMCVec);
+    return theClone;
+  }
 
   virtual void print(std::ostream& os) const;
-  std::vector< std::shared_ptr<IsobarLSDecay> >& productionCanoDecays() {return _prodCanoDecs;}
-  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
-  std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}
+
+
 protected:
 
 private:
-  ChannelID _channelID;
-  std::shared_ptr<const IGJPC> _epemIGJPC;
 
-  std::vector< std::shared_ptr<IsobarLSDecay> > _prodCanoDecs;
-  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
-  std::vector< std::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
+  void initialize();
 };

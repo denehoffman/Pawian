@@ -65,6 +65,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ,_randomSeed(44123)
       ,_genWithModel(true)
       ,_noOfGenEvts(10000)
+      ,_noOfDataEvts(1000000)
      {
        string strErrLogMode="debug";
     // Check the command line options. Uses the Boost program options library.
@@ -128,6 +129,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
       ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
       ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
+      ("noOfDataEvents",po::value<int>(&_noOfDataEvts),  "number of data events for PWA and qa")
       ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
       ;
 
@@ -297,6 +299,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       std::cout << "\nrandom seed:\t" << _randomSeed << std::endl;
       std::cout << "\ngenerate with model:\t" << _genWithModel << std::endl;
       std::cout << "\nnumber of generated events:\t" << _noOfGenEvts << std::endl;
+      std::cout << "\nnumber of data events:\t" << _noOfDataEvts << std::endl;
 
     }
 

@@ -30,6 +30,7 @@
 #include "epemUtils/epemReaction.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/IsobarTensorDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -47,6 +48,11 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
+	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	currentTensorDec->setProductionAmp();
+	currentTensorDec->extractStates();	
+	_prodTensorDecs.push_back(currentTensorDec);
+
 	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
 	currentHeliDec->setProductionAmp();
 	currentHeliDec->extractStates();
