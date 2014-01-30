@@ -54,6 +54,12 @@ public:
   virtual std::string type() {return "IsobarTensorDecay";}
 
 protected:
+
+  void calcChi12(Tensor<complex<double> >& s12SpinProjector, Tensor<complex<double> >& epsilonDaughter1Project, Tensor<complex<double> >& epsilonDaughter2Project, Vector4<double>& mother_4Vec, Tensor<complex<double> >& result);
+
+  void calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<double> >& chi12, Spin spin12, Vector4<double>& mother_4Vec, Tensor<complex<double> >& result);
+
+
   PolVector _polMother;
   PolVector _polDaughter1;
   PolVector _polDaughter2;

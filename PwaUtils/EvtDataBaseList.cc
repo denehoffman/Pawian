@@ -108,7 +108,7 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
       Vector4<float> current4VecFloat=*(theEvent->p4(counter));
       Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
       if(*(*itPart)==*(GlobalEnv::instance()->particleTable()->particle("photon"))){ //set mass=0
-	  current4Vec.SetP4(sqrt(current4Vec.Px()*current4Vec.Px()+current4Vec.Py()*current4Vec.Py()+current4Vec.Pz()*current4Vec.Pz()), current4Vec.Px(), current4Vec.Py(), current4Vec.Pz()); 
+	current4Vec.SetP4(current4Vec.P(), current4Vec.Px(), current4Vec.Py(), current4Vec.Pz()); 
 	}
 
 	//      if( (current4Vec.M() != current4Vec.M()) || current4Vec.M()<1e-4) current4Vec.SetP4(sqrt(current4VecFloat.Px()*current4VecFloat.Px()+current4VecFloat.Py()*current4VecFloat.Py()+current4VecFloat.Pz()*current4VecFloat.Pz()), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz()); 
