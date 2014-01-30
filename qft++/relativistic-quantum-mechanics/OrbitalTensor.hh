@@ -121,6 +121,7 @@ public:
    * See the class description above for details.
    */  
   void SetP4(const Vector4<double> &__p4a,const Vector4<double> &__p4b){
+
     int rank = this->Rank();
     if(rank == 0) *this = 1.;
     else{
