@@ -144,8 +144,8 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 
   // allRot4Vec.RotateZ(-all4Vec.Phi());
   // allRot4Vec.RotateY(-all4Vec.Theta());
-  // // // std::cout << "\n\nall4Vec: " << all4Vec << std::endl;
-  // // // std::cout << "\nallRot4Vec: " << allRot4Vec << std::endl;
+  // // // // std::cout << "\n\nall4Vec: " << all4Vec << std::endl;
+  // // // // std::cout << "\nallRot4Vec: " << allRot4Vec << std::endl;
 
   // daughter1Tensor4Vec.RotateZ(-all4Vec.Phi());
   // daughter1Tensor4Vec.RotateY(-all4Vec.Theta());
@@ -301,7 +301,8 @@ void IsobarTensorDecay::calcChi12(Tensor<complex<double> >& s12SpinProjector, Te
   Tensor<complex<double> > chiPart;
   if(add_lctForChi){
     chiPart=leviPssTensor*conj(epsilonDaughter1Project);
-    chiPart.Permute(1,chiPart.Rank());
+    //    chiPart.Permute(1,chiPart.Rank());
+    chiPart.Permute(0,chiPart.Rank()-1);
     chiPart=chiPart*conj(epsilonDaughter2Project);
   }
   else{
@@ -357,7 +358,8 @@ void IsobarTensorDecay::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<doub
   Tensor<complex<double> > lsPartTensor;
   if(add_lct){
     lsPartTensor=leviPlsTensor*orbTensor;
-    lsPartTensor.Permute(1,lsPartTensor.Rank());
+    // lsPartTensor.Permute(1,lsPartTensor.Rank());
+    lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
     //     DebugMsg << "lsPartTensor w levi and permute: rank" << lsPartTensor.Rank() << endmsg;
     //      DebugMsg << "chi12.Rank() " << chi12.Rank() << endmsg;
     result=lsPartTensor.Contract(chi12, noOfContractions-2);

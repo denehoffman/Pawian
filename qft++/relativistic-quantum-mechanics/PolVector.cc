@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with qft++.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
 #include "qft++/relativistic-quantum-mechanics/PolVector.hh"
 //_____________________________________________________________________________
 /** @file PolVector.C
@@ -58,7 +59,8 @@ void PolVector::SetP4(const Vector4<double> &__p4,double __mass){
     if(__mass > 1e-6) this->_BoostPolVectors(bx,by,bz);    
     else{ // photon case
       _pols[1].Zero();  // mz = 0    
-      if((abs(bx) > 1.E-4)||(abs(by) > 1.E-4)){
+      //      if((abs(bx) > 1.E-4)||(abs(by) > 1.E-4)){
+      if((std::abs(bx) > 1.E-7)||(std::abs(by) > 1.E-7)){
 	complex<double> i(0,1);
 	double x = -by/sqrt(bx*bx + by*by);
 	double y = bx/sqrt(bx*bx + by*by);

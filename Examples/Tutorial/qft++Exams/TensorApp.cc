@@ -118,14 +118,25 @@ int main(int __argc,char *__argv[]){
 
   cout << "Tensor contractions:" << endl;
 
+  cout << "permute: " << endl;
+  cout << "x2^{mu,nu}: " << x2 << endl;
+
   // To contract the last index of x with the 1st index of y, just do x*y
   cout << "contraction of 1 index: " << endl;
   cout << "x1_{mu}x1^{mu}:\nx1*x1\t->\t" << x1*x1 << endl;
   cout << "x1_{mu}x2^{mu,nu}:\nx1*x2\t->\t" << x1 * x2 << endl;
   cout << "x1_{mu}x3^{mu,nu,rho}:\nx1*x3\t->\t" << x1 * x3 << endl;
+  Tensor<double> x3_1=x3;
+  cout << "x1 * ((x3.Permute(0,2)))\t->\t" << x1 * (x3_1.Permute(0,2)) << endl;
+
   cout << "x1_{rho}x3^{mu,nu,rho}:\nx3*x1\t->\t" << x3 * x1 << endl;
-  cout << "x1_{nu}x3^{mu,nu,rho}:\n(x3.Permute(2,3))*x1\t->\t" << (x3.Permute(2,3)) * x1 << endl;
-  cout << "sqrt(v^{mu}v_{mu}):\nsqrt(v*v)\t->\t" << sqrt(v*v) << endl;
+  Tensor<double> x3_2=x3;
+  cout << "x1_{nu}x3^{mu,nu,rho}:\n(x3.Permute(1,2))*x1\t->\t" << (x3_2.Permute(1,2)) * x1 << endl;
+  Tensor<double> x3_3=x3;
+  cout << "x1_{nu}x3^{mu,nu,rho}:\nx1 * (x3.Permute(0,1))\t->\t" << x1 * (x3_3.Permute(0,1)) << endl;
+  Tensor<double> x3_4=x3;
+  cout << "x1_{nu}x3^{mu,nu,rho}:\nx1 * ((x3.Permute(1,2)).Permute(0,2))\t->\t" << x1 * ((x3.Permute(1,2)).Permute(0,1)) << endl;
+ cout << "sqrt(v^{mu}v_{mu}):\nsqrt(v*v)\t->\t" << sqrt(v*v) << endl;
 
   // To contract the last n indicies of x with the 1st n indicies of y, do
   // x.Contract(y,n). If n is the rank of either x or y, then you can just do
