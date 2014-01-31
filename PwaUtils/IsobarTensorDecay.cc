@@ -365,7 +365,8 @@ void IsobarTensorDecay::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<doub
     result=lsPartTensor.Contract(chi12, noOfContractions-2);
   }
   else{ // add_lct=false
-    if(orbTensor.Rank()>=chi12.Rank()){
+    if(noOfContractions==0) result=orbTensor%chi12;
+    else if(orbTensor.Rank()>=chi12.Rank()){
       result=orbTensor.Contract(chi12, noOfContractions); 
     }
     else{
