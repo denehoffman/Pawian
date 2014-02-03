@@ -121,12 +121,40 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
       return;
    }
 
+   calcSpinDensityMatrixNorm(particleName, J);
    for(Spin M1 = -J; M1 <= J; M1++){
       for(Spin M2 = -J; M2 <= J; M2++){
 	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
 	calcSpinDensityMatrixElement(particleName, M1, M2, J);
       }
    }
+}
+
+
+
+void spinDensityHist::calcSpinDensityMatrixNorm(std::string& particleName, int J){
+
+   std::stringstream newHistNameNorm;
+   newHistNameNorm << particleName << "_norm";
+   TH1F* normHist = new TH1F(newHistNameNorm.str().c_str(), newHistNameNorm.str().c_str(), _nBins, -1, 1);
+
+   TH1F* normnormHist = new TH1F("normnormHist", "normnormHist", _nBins, -1, 1);
+   normnormHist->SetDirectory(0);
+
+   for(auto it = _dataList.begin(); it != _dataList.end(); ++it){
+
+      double costheta = ParticleCosTheta(particleName, *it);
+
+      _theLh->updateFitParams(*_theFitParamsOriginal);
+      double tempSpinDensityNorm =
+	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensityNorm(particleName, *it, J);
+
+      normHist->Fill(costheta, tempSpinDensityNorm * (*it)->evtWeight);
+      normnormHist->Fill(costheta, (*it)->evtWeight);
+   }
+
+   normHist->Divide(normnormHist);
+   delete normnormHist;
 }
 
 
@@ -139,7 +167,7 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
    std::stringstream newHistNameImag;
    newHistNameImag << particleName << "_" << M1 << "_" << M2 << "_Imag";
    TH1F* newHistoImag = new TH1F(newHistNameImag.str().c_str(), newHistNameImag.str().c_str(), _nBins, -1, 1);
-   
+
    TH1F* normHist = new TH1F("normHist", "normHist", _nBins, -1, 1);
    normHist->SetDirectory(0);
    TH1F* errReal = new TH1F("errReal", "errRead", _nBins, -1, 1);
