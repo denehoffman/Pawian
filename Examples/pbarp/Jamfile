@@ -16,3 +16,4 @@ lib pbarp :
 
 exe pbarpStatesApp : pbarpStatesApp.cc pbarp : ;
 exe pbarpReactionApp : pbarpReactionApp.cc pbarp : ;
+exe pbarpTensorAmpApp : pbarpTensorAmpApp.cc pbarp : ;
