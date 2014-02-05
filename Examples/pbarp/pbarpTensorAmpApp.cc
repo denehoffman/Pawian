@@ -201,14 +201,14 @@ int main(int __argc,char *__argv[]){
   std::cout << "\nBar(pSpinorCM(1./2))*gamma5*pbarAntiSpinorCM(-1./2):\n" <<  Bar(pSpinorCM(1./2))*gamma5*pbarAntiSpinorCM(-1./2) << std::endl;
   std::cout << "\nBar(pSpinor(1./2))*gamma5*pbarAntiSpinor(-1./2):\n" <<  Bar(pSpinor(1./2))*gamma5*pbarAntiSpinor(-1./2) << std::endl;
 
-  Tensor<complex<double> > Psi0_m12_12=Bar(pSpinor(1./2))*gamma5*pbarAntiSpinor(-1./2);
-  Tensor<complex<double> > Psi0_m12_12CM=Bar(pSpinorCM(-1./2))*gamma5*pbarAntiSpinorCM(1./2);
+  Tensor<complex<double> > Psi0_m12_12=Bar(pbarAntiSpinor(1./2))*gamma5*pSpinor(-1./2);
+  Tensor<complex<double> > Psi0_m12_12CM=Bar(pbarAntiSpinorCM(-1./2))*gamma5*pSpinorCM(1./2);
 
   std::cout << "\nPsi0_m12_12:\n" <<  Psi0_m12_12 << std::endl;
   std::cout << "\nPsi0_m12_12CM:\n" <<  Psi0_m12_12CM << std::endl;
 
-  Tensor<complex<double> > Psi0_12_m12=Bar(pSpinor(1./2))*gamma5*pbarAntiSpinor(-1./2);
-  Tensor<complex<double> > Psi0_12_m12CM=Bar(pSpinorCM(1./2))*gamma5*pbarAntiSpinorCM(-1./2);
+  Tensor<complex<double> > Psi0_12_m12=Bar(pbarAntiSpinor(1./2))*gamma5*pSpinor(-1./2);
+  Tensor<complex<double> > Psi0_12_m12CM=Bar(pbarAntiSpinorCM(1./2))*gamma5*pSpinorCM(-1./2);
 
   std::cout << "\nPsi0_12_m12:\n" <<  Psi0_12_m12 << std::endl;
   std::cout << "\nPsi0_12_m12CM:\n" <<  Psi0_12_m12CM << std::endl;
@@ -276,7 +276,7 @@ int main(int __argc,char *__argv[]){
     PolVector currentPolVec((*itJPCLS)->J);
     currentPolVec.SetP4(allVec, allVec.M());
 
-    Tensor<complex<double> > result= conj(currentPolVec(0)) | currentTensor;
+    Tensor<complex<double> > result= currentPolVec(0).Conjugate() | currentTensor;
     result*= Psi0_m12_12;
      
     std::cout <<"\n" << (*itJPCLS)->name() << std::endl;
@@ -288,8 +288,8 @@ int main(int __argc,char *__argv[]){
     PolVector currentPolVecCM((*itJPCLS)->J);
     currentPolVecCM.SetP4(allCM4Vec, allCM4Vec.M());
 
-    Tensor<complex<double> > resultCM= conj(currentPolVecCM(0)) | currentTensorCM;
-    result*= Psi0_m12_12CM;
+    Tensor<complex<double> > resultCM= currentPolVecCM(0).Conjugate() | currentTensorCM;
+    resultCM*= Psi0_m12_12CM;
     std::cout <<"resultCM: " << resultCM  << "\n" << std::endl;
   }
 
@@ -302,24 +302,42 @@ int main(int __argc,char *__argv[]){
     PolVector currentPolVec((*itJPCLS)->J);
     currentPolVec.SetP4(allVec, allVec.M());
 
+    OrbitalTensor currentTensorCM((*itJPCLS)->L);
+    currentTensorCM.SetP4(pbarCM4Vec,pCM4Vec);
+
+    PolVector currentPolVecCM((*itJPCLS)->J);
+    currentPolVecCM.SetP4(allCM4Vec, allCM4Vec.M());
+
     Tensor<complex<double> > result;
-    if ((*itJPCLS)->J > (*itJPCLS)->L) result= conj(currentPolVec(0)) | (Psi1_m12_12 % currentTensor);
-    else result= conj(currentPolVec(0)) | (Psi1_m12_12 *  currentTensor );
+    if ((*itJPCLS)->J > (*itJPCLS)->L) result= currentPolVec(0).Conjugate() | (Psi1_m12_12 % currentTensor);
+    else result= currentPolVec(0).Conjugate() | (Psi1_m12_12 *  currentTensor );
 
     std::cout <<"\n" << (*itJPCLS)->name() << std::endl;
     std::cout <<"result Psi1 -1/2 1/2: " << result  << "\n" << std::endl;
  
     Tensor<complex<double> > result1;
-    if ((*itJPCLS)->J > (*itJPCLS)->L) result1=conj(currentPolVec(0)) | (Psi1_12_m12 % currentTensor);
-    else result1=conj(currentPolVec(0)) | (Psi1_12_m12 *  currentTensor );
+    if ((*itJPCLS)->J > (*itJPCLS)->L) result1=currentPolVec(0).Conjugate() | (Psi1_12_m12 % currentTensor);
+    else result1=currentPolVec(0).Conjugate() | (Psi1_12_m12 *  currentTensor );
     std::cout <<"result Psi1 1/2 -1/2: " << result1  << "\n" << std::endl;
+
+    Tensor<complex<double> > resultCM;
+    if ((*itJPCLS)->J > (*itJPCLS)->L) resultCM= currentPolVecCM(0).Conjugate() | (Psi1_m12_12CM % currentTensorCM);
+    else resultCM= currentPolVecCM(0).Conjugate() | (Psi1_m12_12CM *  currentTensorCM );
+
+    std::cout <<"resultCM Psi1 -1/2 1/2: " << resultCM  << "\n" << std::endl;
  
+    Tensor<complex<double> > result1CM;
+    if ((*itJPCLS)->J > (*itJPCLS)->L) result1CM= currentPolVecCM(0).Conjugate() | (Psi1_12_m12CM % currentTensorCM);
+   else result1CM= currentPolVecCM(0).Conjugate() | (Psi1_12_m12CM *  currentTensorCM );
+    std::cout <<"resultCM Psi1 1/2 -1/2: " << result1CM  << "\n" << std::endl; 
   }
 
   LeviCivitaTensor lctTensor;
-  Tensor<complex<double> > levipTensor=pbar4Vec*lctTensor;
+  Tensor<complex<double> > levipTensor=lctTensor*allVec;
 
-  std::cout <<"\n\n\n" << "*** triplet 1 states ******" <<"\n\n\n" << std::endl;
+  Tensor<complex<double> > levipTensorCM=lctTensor*allCM4Vec;
+  
+ std::cout <<"\n\n\n" << "*** triplet 1 states ******" <<"\n\n\n" << std::endl;
   std::vector< std::shared_ptr<const JPCLS> > jpclsStatesTriplet1=thepbarpState.tripletp1_JPCLS_States();
   for(itJPCLS=jpclsStatesTriplet1.begin(); itJPCLS!=jpclsStatesTriplet1.end(); ++itJPCLS){
     OrbitalTensor currentTensor((*itJPCLS)->L);
@@ -328,29 +346,52 @@ int main(int __argc,char *__argv[]){
     PolVector currentPolVec((*itJPCLS)->J);
     currentPolVec.SetP4(allVec, allVec.M());
 
+    OrbitalTensor currentTensorCM((*itJPCLS)->L);
+    currentTensorCM.SetP4(pbarCM4Vec,pCM4Vec);
+
+    PolVector currentPolVecCM((*itJPCLS)->J);
+    currentPolVecCM.SetP4(allCM4Vec, allCM4Vec.M());
+
     Tensor<complex<double> > result;
     Tensor<complex<double> > resultm1m1;
+    Tensor<complex<double> > resultCM;
+    Tensor<complex<double> > resultm1m1CM;
+    
     if ((*itJPCLS)->J > (*itJPCLS)->L){
-      result=conj(currentPolVec(1)) | (Psi1_12_12 % currentTensor);
-      resultm1m1=conj(currentPolVec(-1)) | (Psi1_m12_m12 % currentTensor);
+      result= currentPolVec(1).Conjugate() | (Psi1_12_12 % currentTensor);
+      resultm1m1= currentPolVec(-1).Conjugate() | (Psi1_m12_m12 % currentTensor);
+      resultCM= currentPolVecCM(1).Conjugate() | (Psi1_12_12CM % currentTensorCM);
+      resultm1m1CM= currentPolVecCM(-1).Conjugate() | (Psi1_m12_m12CM % currentTensorCM);
     }
     else if ((*itJPCLS)->J == (*itJPCLS)->L){
       Tensor<complex<double> > tmpResult=levipTensor*Psi1_12_12;
-      Tensor<complex<double> > tmpResult1=tmpResult.Permute(0, tmpResult.Rank()-1)*currentTensor;
-      result= conj(currentPolVec(1)) | tmpResult1;
+      Tensor<complex<double> > tmpResult1 = tmpResult.Permute(0, tmpResult.Rank()-1)*currentTensor;
+      result= currentPolVec(1).Conjugate() | tmpResult1;
 
       Tensor<complex<double> > tmpResultm1m1=levipTensor*Psi1_m12_m12;
       Tensor<complex<double> > tmpResult1m1m1=tmpResultm1m1.Permute(0, tmpResultm1m1.Rank()-1)*currentTensor; 
-      resultm1m1= conj(currentPolVec(-1)) | tmpResult1m1m1;      
+      resultm1m1= currentPolVec(-1).Conjugate() | tmpResult1m1m1;
+
+      Tensor<complex<double> > tmpResultCM=levipTensorCM*Psi1_12_12CM;
+      Tensor<complex<double> > tmpResult1CM=tmpResultCM.Permute(0, tmpResultCM.Rank()-1)*currentTensorCM;
+      resultCM= currentPolVecCM(1).Conjugate() | tmpResult1CM;
+
+      Tensor<complex<double> > tmpResultm1m1CM=levipTensorCM*Psi1_m12_m12CM;
+      Tensor<complex<double> > tmpResult1m1m1CM=tmpResultm1m1CM.Permute(0, tmpResultm1m1CM.Rank()-1)*currentTensorCM; 
+      resultm1m1CM= currentPolVecCM(-1).Conjugate() | tmpResult1m1m1CM;      
     }
     else{
-      result=conj(currentPolVec(1)) | (Psi1_12_12 *  currentTensor );
-      resultm1m1=conj(currentPolVec(-1)) | (Psi1_m12_m12 *  currentTensor );
+      result= currentPolVec(1).Conjugate() | (Psi1_12_12 *  currentTensor );
+      resultm1m1= currentPolVec(-1).Conjugate() | (Psi1_m12_m12 *  currentTensor );
+      resultCM= currentPolVecCM(1).Conjugate() | (Psi1_12_12CM *  currentTensorCM );
+      resultm1m1CM= currentPolVecCM(-1).Conjugate() | (Psi1_m12_m12CM *  currentTensorCM );
     }
 
     std::cout <<"\n" << (*itJPCLS)->name() << std::endl;
     std::cout <<"result M1 Psi 1/2 1/2: " << result  << "\n" << std::endl;
     std::cout <<"result M-1 Psi -1/2 -1/2: " << resultm1m1  << "\n" << std::endl;
+    std::cout <<"resultCM M1 Psi 1/2 1/2: " << resultCM  << "\n" << std::endl;
+    std::cout <<"resultCM M-1 Psi -1/2 -1/2: " << resultm1m1CM  << "\n" << std::endl;
   }
 
   return 0;

@@ -61,16 +61,18 @@ public:
     return theClone;
   }
 
-
+  virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
   virtual void print(std::ostream& os) const;
 
 
 protected:
 
+  std::map< std::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > _pbarpAmpSingletMap;
+  std::map< std::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > _pbarpAmpTriplet0Map;
+  std::map< std::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > _pbarpAmpTripletp1Map;
+  std::map< std::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > _pbarpAmpTripletm1Map;
 
 private:
   void initialize();
 
-  std::map< Spin, std::shared_ptr<OrbitalTensor> > _orbTensorMap;
-  std::map< Spin, std::shared_ptr<PolVector> > _polVectorMap;
 };

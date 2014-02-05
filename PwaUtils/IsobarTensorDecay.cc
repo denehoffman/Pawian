@@ -156,17 +156,6 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   // motherTensor4Vec.RotateZ(-all4Vec.Phi());
   // motherTensor4Vec.RotateY(-all4Vec.Theta());
 
-  // Vector4<double> daughter1Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter1_4Vec);
-  // Vector4<double> daughter2Tensor4Vec=helicityVec(all4Vec, all4Vec, daughter2_4Vec);
-  // Vector4<double> motherTensor4Vec=helicityVec(all4Vec, all4Vec, mother_4Vec);
-
-  // if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli" ||
-  //    GlobalEnv::instance()->parser()->productionFormalism() == "Cano"){
-  //   daughter1Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter1_4Vec);
-  //   daughter2Tensor4Vec=helicityVec(all4Vec, prodParticle4Vec, daughter2_4Vec);
-  //   motherTensor4Vec=helicityVec(all4Vec, prodParticle4Vec, mother_4Vec);
-  // }
-
   Spin spinMother=_motherIGJPCPtr->J;
   Spin spinDaughter1=_daughter1IGJPCPtr->J;
   Spin spinDaughter2=_daughter2IGJPCPtr->J;

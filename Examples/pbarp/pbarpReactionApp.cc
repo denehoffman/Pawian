@@ -237,6 +237,8 @@ int main(int __argc,char *__argv[]){
       const std::string mcFile=(*it).first->parser()->mcFile();
       Info << "data file: " << datFile ;  // << endmsg;
       Info << "mc file: " << mcFile ;  // << endmsg;
+
+      int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
 
@@ -244,7 +246,7 @@ int main(int __argc,char *__argv[]){
       mcFileNames.push_back(mcFile);
 
       EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
+      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
 
       EventList mcData;
       int maxMcEvts=eventsData.size()*ratioMcToData;
@@ -283,6 +285,9 @@ int main(int __argc,char *__argv[]){
       const std::string mcFile=(*it).first->parser()->mcFile();
       Info << "data file: " << datFile ;  // << endmsg;
       Info << "mc file: " << mcFile ;  // << endmsg;
+
+      int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
+      
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
 
@@ -290,7 +295,7 @@ int main(int __argc,char *__argv[]){
       mcFileNames.push_back(mcFile);
 
       EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
+      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
 
       EventList mcData;
       int maxMcEvts=eventsData.size()*ratioMcToData;
@@ -343,6 +348,8 @@ int main(int __argc,char *__argv[]){
   Info << "data file: " << datFile ;  // << endmsg;
   Info << "mc file: " << mcFile ;  // << endmsg;
 
+  int noOfDataEvents = theAppParams->noOfDataEvts();
+  
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
@@ -392,7 +399,7 @@ int main(int __argc,char *__argv[]){
 
 
   EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight());
+  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, noOfDataEvents);
 
   int maxMcEvts=eventsData.size()*ratioMcToData;
 

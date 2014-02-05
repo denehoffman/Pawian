@@ -64,6 +64,143 @@ void pbarpTensorLh::print(std::ostream& os) const{
 
 }
 
+double pbarpTensorLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
+
+  double result=0.;
+
+  std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >::iterator it;
+
+  Spin lamSteps=1;
+  if(_isHighestJaPhoton) lamSteps=2;
+
+  for (Spin lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
+
+  complex<double> singletAmp(0.,0.);
+  Spin lampbarp=0;
+  for(it=_decAmpsSinglet.begin(); it!=_decAmpsSinglet.end(); ++it){
+    complex<double> tmpAmp(0.,0.);
+    const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
+    double iso1Val=_currentParamJPCIsos1[theJPCLS];
+    double iso0Val=_currentParamJPCIsos0[theJPCLS];
+
+    std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+     for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
+
+       complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData, lamHigestJFsp);
+
+       double isoFactor=0;
+       if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+       else isoFactor=iso0Val;
+
+       tmpAmp+= isoFactor*currentDecAmp;
+     }
+
+     double theMag=_currentParamMags.at(theJPCLS);
+     double thePhi=_currentParamPhis.at(theJPCLS);
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     tmpAmp*=_pbarpAmpSingletMap.at(theJPCLS)*theMag*expi;
+     singletAmp+=tmpAmp;
+  }
+
+  complex<double> triplet0Amp(0.,0.);
+  lampbarp=0;
+  for(it=_decAmpsTriplet0.begin(); it!=_decAmpsTriplet0.end(); ++it){
+    complex<double> tmpAmp(0.,0.);
+    const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
+    double iso1Val=_currentParamJPCIsos1[theJPCLS];
+    double iso0Val=_currentParamJPCIsos0[theJPCLS];
+
+    std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+     for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
+       complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData, lamHigestJFsp);
+
+       double isoFactor=0;
+       if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+       else isoFactor=iso0Val;
+
+       tmpAmp+=isoFactor*currentDecAmp;
+     }
+
+     double theMag=_currentParamMags.at(theJPCLS);
+     double thePhi=_currentParamPhis.at(theJPCLS);
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     tmpAmp*=_pbarpAmpTriplet0Map.at(theJPCLS)*theMag*expi;
+     triplet0Amp+=tmpAmp;
+  }
+
+   complex<double> tripletp1Amp(0.,0.);
+   lampbarp=1;
+  for(it=_decAmpsTripletp1.begin(); it!=_decAmpsTripletp1.end(); ++it){
+    complex<double> tmpAmp(0.,0.);
+    const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
+
+    // std::cout << "\ntripletp1:" << std::endl;
+    //  theJPCLS->print(std::cout);
+    //  std::cout << "\t" << _pbarpAmpTripletp1Map.at(theJPCLS) << std::endl; 
+   
+     double iso1Val=_currentParamJPCIsos1[theJPCLS];
+    double iso0Val=_currentParamJPCIsos0[theJPCLS];
+
+    std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+     for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
+       complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData, lamHigestJFsp);
+
+       double isoFactor=0;
+       if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+       else isoFactor=iso0Val;
+
+       tmpAmp+=isoFactor*currentDecAmp;
+     }
+
+     double theMag=_currentParamMags.at(theJPCLS);
+     double thePhi=_currentParamPhis.at(theJPCLS);
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     tmpAmp*=_pbarpAmpTripletp1Map.at(theJPCLS)*theMag*expi;
+     tripletp1Amp+=tmpAmp;
+  }
+
+   complex<double> tripletm1Amp(0.,0.);
+   lampbarp=-1;
+  for(it=_decAmpsTripletm1.begin(); it!=_decAmpsTripletm1.end(); ++it){
+     complex<double> tmpAmp(0.,0.);
+     const std::shared_ptr<const JPCLS> theJPCLS=it->first;
+     //    std::cout << "\ntripletm1:" << std::endl;
+     //     theJPCLS->print(std::cout);
+     //     std::cout << "\t" << _pbarpAmpTripletm1Map.at(theJPCLS) << std::endl; 
+
+     double iso1Val=_currentParamJPCIsos1[theJPCLS];
+     double iso0Val=_currentParamJPCIsos0[theJPCLS];
+
+     std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
+     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+     for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
+	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData, lamHigestJFsp);
+
+        double isoFactor=0;
+	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+	else isoFactor=iso0Val;
+
+	tmpAmp+=isoFactor*currentDecAmp;
+     }
+
+     double theMag=_currentParamMags.at(theJPCLS);
+     double thePhi=_currentParamPhis.at(theJPCLS);
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     tmpAmp*=_pbarpAmpTripletm1Map.at(theJPCLS)*theMag*expi;
+     tripletm1Amp+=tmpAmp;
+  }
+
+  result += 2.*norm(singletAmp)+ 2.*norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp);
+  }
+
+  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+  return result;
+
+}
+
 
 void  pbarpTensorLh::initialize(){
 
@@ -92,21 +229,118 @@ void  pbarpTensorLh::initialize(){
   double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
   double pbarMom = std::static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel(_channelID))->pbarMomentum();
 
+  if(pbarMom>400.){
+    pbarMass*=1000.;
+    pMass*=1000.;
+  }
+
   Vector4<double> pbar4Vec(sqrt(pbarMass*pbarMass+pbarMom*pbarMom), 0.,0., pbarMom);
   Vector4<double> p4Vec(pMass, 0.,0.,0.);
   Vector4<double> allVec=pbar4Vec+p4Vec;
 
-  std::vector< std::shared_ptr<const JPCLS> > jpclsStatesAll=_pbarpReactionPtr->jpclsStates();
-  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
-  for(itJPCLS=jpclsStatesAll.begin(); itJPCLS!=jpclsStatesAll.end(); ++itJPCLS){
-    std::shared_ptr<OrbitalTensor> currentTensorPtr(new OrbitalTensor((*itJPCLS)->L));
-    currentTensorPtr->SetP4(pbar4Vec,p4Vec);
-    _orbTensorMap[(*itJPCLS)->L]=currentTensorPtr;
+  Tensor<complex<double> > cancelTerm=(pbar4Vec-p4Vec)/(pbarMass+pMass+allVec.M());
 
-    std::shared_ptr<PolVector> currentPolVecPtr(new PolVector((*itJPCLS)->J));
-    currentPolVecPtr->SetP4(allVec, allVec.M());
-    _polVectorMap[(*itJPCLS)->J]=currentPolVecPtr;
+  DiracAntiSpinor pbarAntiSpinor; // pbar anti spinor 
+  pbarAntiSpinor.SetP4(pbar4Vec, pbarMass);
+
+  DiracSpinor pSpinor; // p spinor
+  pSpinor.SetP4(p4Vec, pMass);
+
+  DiracGamma5 gamma5;
+  DiracGamma gamma; 
+
+  std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
+
+  // fill singlet states
+  
+  Tensor<complex<double> > Psi0_m12_12=Bar(pbarAntiSpinor(1./2))*gamma5*pSpinor(-1./2);
+  
+  for(itJPCLS=jpclsSingletStates.begin(); itJPCLS!=jpclsSingletStates.end(); ++itJPCLS){
+    OrbitalTensor currentTensor((*itJPCLS)->L);
+    currentTensor.SetP4(pbar4Vec,p4Vec);
+
+    PolVector currentPolVec((*itJPCLS)->J);
+    currentPolVec.SetP4(allVec, allVec.M());
+
+    Tensor<complex<double> > result= currentPolVec(0).Conjugate() | currentTensor;
+    result*= Psi0_m12_12;
+
+    _pbarpAmpSingletMap[(*itJPCLS)]=result(0);     
+  }
+
+
+  // fill triplet 0 states 
+  Tensor<complex<double> > Psi1_m12_12=Bar(pbarAntiSpinor(-1./2))*gamma*pSpinor(1./2)-Bar(pbarAntiSpinor(-1./2))*cancelTerm*pSpinor(1./2);
+
+  for(itJPCLS=jpclsTriplet0States.begin(); itJPCLS!=jpclsTriplet0States.end(); ++itJPCLS){
+    OrbitalTensor currentTensor((*itJPCLS)->L);
+    currentTensor.SetP4(pbar4Vec,p4Vec);
+
+    PolVector currentPolVec((*itJPCLS)->J);
+    currentPolVec.SetP4(allVec, allVec.M());
+
+    Tensor<complex<double> > result;
+    if ((*itJPCLS)->J > (*itJPCLS)->L) result= currentPolVec(0).Conjugate()  | (Psi1_m12_12 % currentTensor);
+    else result= currentPolVec(0).Conjugate()  | (Psi1_m12_12 *  currentTensor );
+
+    _pbarpAmpTriplet0Map[(*itJPCLS)]=result(0);  
+  }
+
+  // fill triplet 1 states
+  LeviCivitaTensor lctTensor;
+  Tensor<complex<double> > levipTensor=lctTensor*allVec;
+  Tensor<complex<double> > Psi1_12_12=Bar(pbarAntiSpinor(1./2))*gamma*pSpinor(1./2)-Bar(pbarAntiSpinor(1./2))*cancelTerm*pSpinor(1./2);
+
+  for(itJPCLS=jpclsTripletp1States.begin(); itJPCLS!=jpclsTripletp1States.end(); ++itJPCLS){
+    OrbitalTensor currentTensor((*itJPCLS)->L);
+    currentTensor.SetP4(pbar4Vec,p4Vec);
+
+    PolVector currentPolVec((*itJPCLS)->J);
+    currentPolVec.SetP4(allVec, allVec.M());
+
+    Tensor<complex<double> > resultTr1;
+    if ((*itJPCLS)->J > (*itJPCLS)->L){
+      resultTr1= currentPolVec(1).Conjugate()  | (Psi1_12_12 % currentTensor);
     }
+    else if ((*itJPCLS)->J == (*itJPCLS)->L){
+      Tensor<complex<double> > tmpResultTr1=levipTensor*Psi1_12_12;
+      Tensor<complex<double> > tmpResultTr1_1=tmpResultTr1.Permute(0, tmpResultTr1.Rank()-1)*currentTensor;
+      resultTr1= currentPolVec(1).Conjugate()  | tmpResultTr1_1;
+
+    }
+    else{
+      resultTr1= currentPolVec(1).Conjugate()  | (Psi1_12_12 *  currentTensor );
+    }
+
+    _pbarpAmpTripletp1Map[(*itJPCLS)]=resultTr1(0);
+
+  }
+
+  // fill triplet -1 states
+  Tensor<complex<double> > Psi1_m12_m12=Bar(pbarAntiSpinor(-1./2))*gamma*pSpinor(-1./2)-Bar(pbarAntiSpinor(-1./2))*cancelTerm*pSpinor(-1./2);
+
+  for(itJPCLS=jpclsTripletp1States.begin(); itJPCLS!=jpclsTripletp1States.end(); ++itJPCLS){
+    OrbitalTensor currentTensor((*itJPCLS)->L);
+    currentTensor.SetP4(pbar4Vec,p4Vec);
+
+    PolVector currentPolVec((*itJPCLS)->J);
+    currentPolVec.SetP4(allVec, allVec.M());
+
+    Tensor<complex<double> > result;
+    if ((*itJPCLS)->J > (*itJPCLS)->L){
+      result= currentPolVec(-1).Conjugate()  | (Psi1_m12_m12 % currentTensor);
+    }
+    else if ((*itJPCLS)->J == (*itJPCLS)->L){
+      Tensor<complex<double> > tmpResult=levipTensor*Psi1_m12_m12;
+      Tensor<complex<double> > tmpResult_1=tmpResult.Permute(0, tmpResult.Rank()-1)*currentTensor; 
+      result= currentPolVec(-1).Conjugate()  | tmpResult_1;      
+    }
+    else{
+      result= currentPolVec(-1).Conjugate()  | (Psi1_m12_m12 *  currentTensor );
+    }
+
+    _pbarpAmpTripletm1Map[(*itJPCLS)]=result(0);
+  } 
 }
 
 
