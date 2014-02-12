@@ -338,7 +338,7 @@ void AppBase::fixParams(MnUserParameters& upar, const std::vector<std::string>& 
 FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
   MnMigrad migrad(theFcn, upar);
   Info <<"start migrad "<< endmsg;
-  FunctionMinimum funcMin = migrad();
+  FunctionMinimum funcMin = migrad(0, GlobalEnv::instance()->parser()->tolerance());
 
   if(funcMin.IsValid()){
      return funcMin;

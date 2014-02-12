@@ -107,16 +107,19 @@ AbsHist::AbsHist(std::string additionalSuffix) :
       std::string histLambdaName="DataLambda"+tmpBaseName;
       std::string histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (data)";
       TH1F* currentLambdaDataHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaDataHist->Sumw2();
       _angleDataHistMap[*itAngleVec].push_back(currentLambdaDataHist);
 
       histLambdaName="MCLambda"+tmpBaseName;
       histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (MC)";
       TH1F* currentLambdaMcHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaMcHist->Sumw2();
       _angleMcHistMap[*itAngleVec].push_back(currentLambdaMcHist);
 
       histLambdaName="FitLambda"+tmpBaseName;
       histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + ") (fit)";
       TH1F* currentLambdaFitHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaFitHist->Sumw2();
       _angleFitHistMap[*itAngleVec].push_back(currentLambdaFitHist);
     }
   }

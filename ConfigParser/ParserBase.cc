@@ -66,6 +66,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ,_genWithModel(true)
       ,_noOfGenEvts(10000)
       ,_noOfDataEvts(1000000)
+      ,_tolerance(0.1)
      {
        string strErrLogMode="debug";
     // Check the command line options. Uses the Boost program options library.
@@ -131,6 +132,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
       ("noOfDataEvents",po::value<int>(&_noOfDataEvts),  "number of data events for PWA and qa")
       ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
+      ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
       ;
 
 
@@ -219,6 +221,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "use event weight: " << _useEvtWeight  << "\n\n"
 		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
+	        << "minimumTolerance: " << _tolerance << "\n\n"
             << endl;
 
 
