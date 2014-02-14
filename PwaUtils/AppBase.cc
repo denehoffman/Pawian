@@ -361,7 +361,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
 	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
        }
        MnMigrad migrad2(theFcn, newParams, MnStrategy(2));
-       funcMin = migrad2();
+       funcMin = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
     }
     else{
        MnUserParameters newParams = upar;
@@ -370,7 +370,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
 	  newParams.SetError(i, funcMin.UserParameters().Errors().at(i));
        }
        MnMigrad migrad2(theFcn, newParams, MnStrategy(2));
-       funcMin = migrad2();
+       funcMin = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
     }
 
     if(funcMin.IsValid()){
