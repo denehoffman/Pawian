@@ -1,7 +1,9 @@
 project : 
+	requirements
+	<linkflags>-llog4cpp
 	;
 
-lib ErrLogger : [ glob *.cc : *App.cc ] : <use>$(TOP)//log4cpp : : <library>$(TOP)//log4cpp  ;
+lib ErrLogger : [ glob *.cc : *App.cc ] : : : ;
 
 exe ErrLoggerTestApp : ErrLoggerTestApp.cc ErrLogger : ;
 exe Log4CppTestApp : Log4CppTestApp.cc ErrLogger : ;

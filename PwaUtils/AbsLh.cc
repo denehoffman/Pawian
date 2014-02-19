@@ -48,7 +48,7 @@ AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   ,_calcCounter(0)
 {
   unsigned int noOfThreads=GlobalEnv::instance()->parser()->noOfThreads();
-  if(noOfThreads > boost::thread::hardware_concurrency()) noOfThreads=boost::thread::hardware_concurrency();
+  if(noOfThreads > std::thread::hardware_concurrency()) noOfThreads=std::thread::hardware_concurrency();
   _noOfThreads = noOfThreads;
 }
 
@@ -58,7 +58,6 @@ AbsLh::AbsLh() :
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
 {
-  //  _noOfThreads = boost::thread::hardware_concurrency();
   _noOfThreads = GlobalEnv::instance()->parser()->noOfThreads();
 }
 

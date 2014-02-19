@@ -3,7 +3,7 @@ path-constant TOP : . ;
 local ROOTSYS = [ os.environ ROOTSYS ] ; 
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
-BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_thread -lboost_test_exec_monitor -lboost_timer -lboost_chrono -lrt ;
+BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_test_exec_monitor -lboost_timer -lboost_chrono -lrt ;
 
 rule split-stack-cond ( properties * )
 {
@@ -31,6 +31,7 @@ project :
   <conditional>@split-stack-cond
 	<linkflags>$(ROOTLIBS)
 	<linkflags>$(BOOSTLIBS)
+	<linkflags>-llog4cpp
 	;
 
 actions rootlibs
@@ -38,7 +39,6 @@ actions rootlibs
 	$(ROOTSYS)/bin/root-config --libs
 }
 
-lib log4cpp : : <file>$(extern)/lib/liblog4cpp.a : : ;
 lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-common.so 
 		<file>$(GENEVA)/lib/libgemfony-geneva.so
 		<file>$(GENEVA)/lib/libgemfony-courtier.so

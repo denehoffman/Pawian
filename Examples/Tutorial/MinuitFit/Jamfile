@@ -5,11 +5,9 @@ lib MinuitFit :
         [ glob *.cc : *App.cc ]  
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
-	: <use>$(TOP)//Geneva
- 	  <use>$(TOP)//Minuit2 
+	: <use>$(TOP)//Minuit2 
 	: 
-	: <library>$(TOP)//Geneva
- 	  <library>$(TOP)//Minuit2 ;
+	: <library>$(TOP)//Minuit2 ;
 
 exe MinuitFitApp : MinuitFitApp.cc MinuitFit : ;
 
