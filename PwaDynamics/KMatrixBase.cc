@@ -64,7 +64,7 @@ void KMatrixBase::updateBgTerms(unsigned int order, unsigned int row,  unsigned 
     Alert << "background parameter for order " << order << " not available!!!" << endmsg;
     exit(0);
   }
-  if(row>=NumRows() || column>=NumCols()){
+  if(int(row) >= NumRows() || int(column) >= NumCols()){
     Alert << "row " << row << " or column " << column 
 	  << " >= NumRows " << NumRows() << " or  >= NumCols " << NumCols() << endmsg;
     exit(0);
