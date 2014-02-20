@@ -1,10 +1,7 @@
 import os ;
 path-constant TOP : . ;
-local ROOTSYS = [ os.environ ROOTSYS ] ; 
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
-path-constant BOOSTINCLUDE : /usr/local/boost153/include ;
-path-constant BOOSTLIBPATH : /usr/local/boost153/lib64 ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_test_exec_monitor -lboost_timer -lboost_chrono -lrt ;
 
 rule split-stack-cond ( properties * )
