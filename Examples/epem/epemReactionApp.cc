@@ -386,20 +386,6 @@ int main(int __argc,char *__argv[]){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
     theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams);
     epemHist theHist(theLhPtr, theStartparams);
-
-    // Make Histograms for all single contributions
-    if(GlobalEnv::instance()->parser()->saveContributionHistos()){
-      std::shared_ptr<WaveContribution> theWaveContribution;
-      theWaveContribution = std::shared_ptr<WaveContribution>(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartparams));
-      std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
-      std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
-      for (itContribVec=calcContributionDataVec.begin(); itContribVec!=calcContributionDataVec.end(); ++itContribVec){ // loop over "calcContribution"-lines in cfg file
-	std::string tmpContribName= (*itContribVec)->_contribName;
-	fitParams singleContributionFitParams = theWaveContribution->getFitParamsForSingleContribution(tmpContribName);
-	epemHist theHist(theLhPtr, singleContributionFitParams, tmpContribName);
-      }
-    }
-
     end= clock();
     double cpuTime= (end-start)/(CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;

@@ -127,9 +127,11 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
+  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
+    result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
+    //    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
     result*=_absDyn->eval(theData, grandmaAmp);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
@@ -158,7 +160,8 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedAmpShortMap[evtNo][currentSpinIndex]=result;
+     //     _cachedAmpMap[evtNo][lamX][lamFs]=result;
      theMutex.unlock();
 }
 

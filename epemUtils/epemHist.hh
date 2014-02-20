@@ -39,6 +39,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsHist.hh"
 
 

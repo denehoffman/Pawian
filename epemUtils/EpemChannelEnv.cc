@@ -29,6 +29,7 @@
 #include "epemUtils/EpemChannelEnv.hh"
 #include "ConfigParser/epemParser.hh"
 #include "epemUtils/epemReaction.hh"
+#include "epemUtils/epemHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -161,4 +162,11 @@ void EpemChannelEnv::setup(ChannelID id){
       }
     }
   }
+}
+
+
+
+void EpemChannelEnv::CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix){
+
+   epemHist(theLh, theFitParams, additionalSuffix);
 }

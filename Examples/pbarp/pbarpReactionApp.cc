@@ -42,8 +42,6 @@
 #include "PwaUtils/PwaFcnBase.hh"
 #include "PwaUtils/PwaFcnServer.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
-#include "PwaUtils/WaveContribution.hh"
-//#include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
