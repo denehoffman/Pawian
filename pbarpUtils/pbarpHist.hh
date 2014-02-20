@@ -42,15 +42,15 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsHist.hh"
 
+
 class pbarpHist : public AbsHist{
 
 public:
-  pbarpHist(std::shared_ptr<AbsLh>, fitParams& theFitParams);
+  pbarpHist(std::shared_ptr<AbsLh>, fitParams& theFitParams, std::string additionalSuffix = "");
   pbarpHist();
   virtual ~pbarpHist();
 
 protected:
-
 
  virtual void initRootStuff();
 

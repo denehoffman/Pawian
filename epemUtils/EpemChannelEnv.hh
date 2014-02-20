@@ -42,6 +42,7 @@ public:
    std::shared_ptr<epemReaction> reaction() {return _epemReaction;}
    std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
    const double cmsMass() {return _cmsMass;}
+   void CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix);
 
 private:
    epemParser* _theParser;

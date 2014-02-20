@@ -29,6 +29,7 @@
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/pbarpReaction.hh"
+#include "pbarpUtils/pbarpHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -216,4 +217,11 @@ void PbarpChannelEnv::setup(ChannelID id){
    // spin density particles
    _spinDensity = _theParser->spinDensityNames();
 
+}
+
+
+
+void PbarpChannelEnv::CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix){
+
+   pbarpHist(theLh, theFitParams, additionalSuffix);
 }

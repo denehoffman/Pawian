@@ -66,6 +66,7 @@ public:
    std::shared_ptr<AbsLh> Lh();
    ChannelID channelID(){return _channelID;}
    short channelType(){return _channelType;}
+   virtual void CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix){};
 
    static short CHANNEL_PBARP;
    static short CHANNEL_EPEM;
@@ -74,7 +75,7 @@ public:
 
 protected:
    int _channelID;
-  short _channelType;
+   short _channelType;
    bool _alreadySetUp;
    bool _useEvtWeight;
   AbsChannelEnv(ParserBase* theParser, short channelType);

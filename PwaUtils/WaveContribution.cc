@@ -28,6 +28,9 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/PwaCovMatrix.hh"
+#include "ConfigParser/ParserBase.hh"
+#include "epemUtils/epemHist.hh"
+#include "pbarpUtils/pbarpHist.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -83,36 +86,7 @@ std::pair<double,double> WaveContribution::CalcContribution(){
       return std::pair<double,double>(result, CalcError(result));
 }
 
-fitParams WaveContribution::getFitParamsForSingleContribution(std::string contribName){
-  fitParams newFitParams=*_theFitParamsOriginal;
-  std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
-  std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
-  ROOT::Minuit2::MnUserParameters mnUserParamsOrig = _theMnUserParameters;
-  unsigned int nPar = _theMnUserParameters.Params().size();
-  
-  for (itContribVec=calcContributionDataVec.begin(); itContribVec!=calcContributionDataVec.end(); ++itContribVec){
-    std::string tmpContribName= (*itContribVec)->_contribName;
-    if (contribName.compare(tmpContribName) != 0) continue;
-    
-    std::vector<std::string> tmpZeroAmp = (*itContribVec)->_contribZeroAmpVec;
-    std::vector<std::string>::iterator itZeroAmpVec;
-    for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
-      for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
-	std::string parName = _theMnUserParameters.GetName(i);
-	if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) {
-	  Info << "found matching parameter:" << parName << " set to 0!" << endmsg;
-	  _theMnUserParameters.SetValue(i, 0.);
-	}
-      }
-    }
-    _theFitParamsBase.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
-    _theLh->updateFitParams(newFitParams);
-    break;
-  }
-  _theMnUserParameters = mnUserParamsOrig;
-  _theLh->updateFitParams(*_theFitParamsOriginal);
-  return newFitParams;
-}
+
 
 std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::CalcSingleContributions(){
    std::vector<std::pair<std::string,std::pair<double,double>>> retValues;
@@ -129,8 +103,10 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
       for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
         for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
            std::string parName = _theMnUserParameters.GetName(i);
-           if(0 == strcmp(parName.c_str(), (*itZeroAmpVec).c_str())) {
-	     Info << "found matching parameter:" << parName << endmsg;
+	   std::string match1 = (*itZeroAmpVec) + "Mag";
+	   std::string match2 = (*itZeroAmpVec) + "Phi";
+	   if(parName.find(match1) != std::string::npos || parName.find(match2) != std::string::npos){
+	      Info << "setting parameter to 0.0: " << parName << endmsg;
               _theMnUserParameters.SetValue(i, 0.);
            }
         }
@@ -138,6 +114,11 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
       fitParams newFitParams = *_theFitParamsOriginal;
       _theFitParamsBase.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
       _theLh->updateFitParams(newFitParams);
+
+      if(GlobalEnv::instance()->parser()->saveContributionHistos()){
+	 GlobalEnv::instance()->Channel()->CreateHistInstance(_theLh, newFitParams, tmpContribName);
+      }
+
       double newContribution = CalcContribution(newFitParams);
       if(!_calcError)
          retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, 0)));
