@@ -332,3 +332,25 @@ void AbsDecay::print(std::ostream& os) const{
 
   os << "\n";
 }
+
+
+ void AbsDecay::resetFilledMap() {
+   _alreadyFilledMap.clear();
+
+   if(_isProdAmp){
+     if (!_daughter1IsStable){
+       _absDecDaughter1->resetFilledMap();
+     }
+     if (!_daughter2IsStable){
+       _absDecDaughter2->resetFilledMap();
+     }
+   }
+   else{
+     if (!_daughter1IsStable){
+       _absDecDaughter1->resetFilledMap();
+     }
+     if (!_daughter2IsStable){
+       _absDecDaughter2->resetFilledMap();
+     }
+   }
+}

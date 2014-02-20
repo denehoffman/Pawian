@@ -145,6 +145,11 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
       (*itDyn)->fillMasses(evtData);
     };
 
+   //reset filled map
+    for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
+      (*itIso)->resetFilledMap();
+    }
+
     return evtData;
 }
 

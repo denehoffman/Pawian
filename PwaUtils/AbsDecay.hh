@@ -97,6 +97,9 @@ public:
   virtual std::string pathToConfigParser() {return _pathParserFile;}
   void setProductionAmp() {_isProdAmp=true;}
   bool isProductionAmp() {return _isProdAmp;}
+
+  void resetFilledMap();
+
 protected:
   ChannelID _channelId;
 
