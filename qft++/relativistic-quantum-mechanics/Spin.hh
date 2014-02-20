@@ -134,6 +134,15 @@ public:
     return  _numer/(double)_denom;
   }
 
+  inline unsigned short ToIndex(){
+    if(_denom*_numer >= 0){
+      return _numer * 4 / _denom;
+    }
+    else{
+      return _numer * (-4) / _denom - 1;
+    }
+  }
+
   // Setters:
 
   /// Set the spin

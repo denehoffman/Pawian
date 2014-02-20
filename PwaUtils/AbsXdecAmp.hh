@@ -44,8 +44,9 @@
 class AbsDecay;
 //class AbsDynamics;
 
-typedef boost::unordered_map<int, std::map<Spin, std::map<Spin, complex<float> > > > intSpinSpinFloatUsMap;
-//typedef boost::unordered_map<std::string, intSpinSpinFloatUsMap> stringIntSpiSpinFloatMap;
+typedef boost::unordered_map<int, std::map< unsigned short, complex<float> > > intShortComplFloatMap;
+//typedef boost::unordered_map<int, std::map<Spin, std::map<Spin, complex<float> > > > intSpinSpinFloatUsMap;
+
 
 class AbsXdecAmp : public AbsParamHandler{
 
@@ -92,7 +93,8 @@ protected:
   bool _enabledlamFsDaughter1;
   bool _enabledlamFsDaughter2;
 
-  intSpinSpinFloatUsMap _cachedAmpMap;
-  //  stringIntSpiSpinFloatMap _cachedGrandmaAmpMap;
+  intShortComplFloatMap _cachedAmpShortMap;
+  //  intSpinSpinFloatUsMap _cachedAmpMap;
+
   virtual void initialize();
 };
