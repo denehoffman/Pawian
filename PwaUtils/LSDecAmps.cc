@@ -34,7 +34,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
-//#include "PwaUtils/XdecAmpRegistry.hh"
+#include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -160,7 +160,9 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
  
   complex<double> result(0.,0.);
 
-  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
+  //  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
+  //  Spin currentJ=_JPCPtr->J;
+  std::map<unsigned int, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
@@ -175,7 +177,9 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
+	unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
+	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	result+=amp;
       }
