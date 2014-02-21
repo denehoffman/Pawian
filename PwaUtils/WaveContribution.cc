@@ -103,9 +103,7 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
       for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
         for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
            std::string parName = _theMnUserParameters.GetName(i);
-	   std::string match1 = (*itZeroAmpVec) + "Mag";
-	   std::string match2 = (*itZeroAmpVec) + "Phi";
-	   if(parName.find(match1) != std::string::npos || parName.find(match2) != std::string::npos){
+	   if(parName.find(*itZeroAmpVec) != std::string::npos){
 	      Info << "setting parameter to 0.0: " << parName << endmsg;
               _theMnUserParameters.SetValue(i, 0.);
            }
