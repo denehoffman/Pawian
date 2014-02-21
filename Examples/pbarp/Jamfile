@@ -1,3 +1,18 @@
+alias install : install-bin install-lib ;
+explicit install ;
+
+install install-bin : pbarpStatesApp pbarpReactionApp pbarpTensorAmpApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+install install-lib : pbarp
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
 project : 
         ;
 

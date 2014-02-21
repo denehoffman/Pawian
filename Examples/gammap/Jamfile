@@ -1,3 +1,18 @@
+alias install : install-bin install-lib ;
+explicit install ;
+
+install install-bin : gammapReactionApp selectGammapDataApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+install install-lib : gammap
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
 project : 
         ;
 

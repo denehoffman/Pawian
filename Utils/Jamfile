@@ -1,3 +1,12 @@
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : Utils
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
 project : 
 	;
 
