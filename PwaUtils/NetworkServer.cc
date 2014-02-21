@@ -78,8 +78,17 @@ bool NetworkServer::WaitForFirstClientLogin(){
       short connectionPurpose;
       *theStreams.at(i) >> connectionPurpose;
 
-      if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
-         Alert << "ERROR: Client did not login" << endmsg;
+      if(connectionPurpose == NetworkClient::CLIENTMESSAGE_HEARTBEAT){
+         short clientID;
+         *theStreams.at(i) >> clientID;
+	 *theStreams.at(i) << NetworkServer::SERVERMESSAGE_OK << "\n";
+         theStreams.at(i)->flush();
+         theStreams.at(i)->close();
+	 i--;
+	 continue;
+      }
+      else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
+         Alert << "ERROR: Client did not login. Message: " << connectionPurpose << endmsg;
 	 SendClosingMessage(theStreams.at(i));
 	 i--;
 	 continue;
