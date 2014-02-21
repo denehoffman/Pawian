@@ -34,7 +34,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-//#include "PwaUtils/XdecAmpRegistry.hh"
+#include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -108,8 +108,9 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     double theMag=it->second;
     double thePhi=_currentParamPhiLamLams[currentJPClamlam];
     complex<double> expi(cos(thePhi), sin(thePhi));
-
-    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDsString.at(_wignerDKey).at(currentJPClamlam->J).at(lamX).at(lambda));
+    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
+    //    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDsString.at(_wignerDKey).at(currentJPClamlam->J).at(lamX).at(lambda));
     result+=amp;
   }
   //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
@@ -152,7 +153,9 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
     double theMag=it->second;
     double thePhi=_currentParamPhiLamLams.at(it->first);
     complex<double> expi(cos(thePhi), sin(thePhi));
-    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDsString.at(_wignerDKey).at(it->first->J).at(lamX).at(lambda));
+    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+
+    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
