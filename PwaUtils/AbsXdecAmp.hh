@@ -93,6 +93,7 @@ protected:
   bool _enabledlamFsDaughter1;
   bool _enabledlamFsDaughter2;
 
+  Spin _J;
   intShortComplFloatMap _cachedAmpShortMap;
   //  intSpinSpinFloatUsMap _cachedAmpMap;
 

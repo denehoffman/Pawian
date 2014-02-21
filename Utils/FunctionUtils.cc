@@ -2,7 +2,7 @@
 
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
-
+#include "qft++/relativistic-quantum-mechanics/Spin.hh"
 
 namespace FunctionUtils{
 
@@ -24,5 +24,10 @@ namespace FunctionUtils{
 
   return result;
   }
+ 
 
+  unsigned int spin3Index(Spin& spin1, Spin& spin2, Spin& spin3){
+    unsigned int result=spin1.ToIndex()*100*100+spin2.ToIndex()*100+spin3.ToIndex();
+    return result;
+  }
 }

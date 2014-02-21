@@ -288,8 +288,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
       double thePhi=0.;
       if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
-      evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-      if(evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] != evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]){
+      unsigned int IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12); 
+      evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+      //      evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+      //      if(evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] != evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12]){
+      if(evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]){
 	DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
     	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
 	DebugMsg << "thePhi:\t" << thePhi << endmsg;
