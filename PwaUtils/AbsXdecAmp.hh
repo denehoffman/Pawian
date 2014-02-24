@@ -40,11 +40,12 @@
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/AbsDynamics.hh"
+#include "Utils/FunctionUtils.hh"
 
 class AbsDecay;
 //class AbsDynamics;
 
-typedef boost::unordered_map<int, std::map< unsigned short, complex<float> > > intShortComplFloatMap;
+typedef boost::unordered_map<int, std::map< Id2StringType, complex<float> > > intShortComplFloatMap;
 //typedef boost::unordered_map<int, std::map<Spin, std::map<Spin, complex<float> > > > intSpinSpinFloatUsMap;
 
 

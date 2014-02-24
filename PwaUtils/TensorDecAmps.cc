@@ -95,8 +95,8 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
-
+  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
     //    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);

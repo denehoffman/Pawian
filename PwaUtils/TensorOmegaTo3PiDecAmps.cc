@@ -78,8 +78,8 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
   complex<double> result(0.,0.);
 
   int evtNo=theData->evtNo;
-  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
-
+  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
     //    result=_cachedAmpMap[evtNo][lamX][lamFs];

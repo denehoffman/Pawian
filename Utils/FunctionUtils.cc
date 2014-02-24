@@ -25,9 +25,13 @@ namespace FunctionUtils{
   return result;
   }
  
+  Id2StringType spin2Index(Spin& spin1, Spin& spin2){//only for spin<=9 particles
+    Id2StringType result=spin1.ToIndex()*36+spin2.ToIndex();
+    return result;
+  }
 
-  unsigned int spin3Index(Spin& spin1, Spin& spin2, Spin& spin3){
-    unsigned int result=spin1.ToIndex()*100*100+spin2.ToIndex()*100+spin3.ToIndex();
+  Id3StringType spin3Index(Spin& spin1, Spin& spin2, Spin& spin3){ //only for spin<=9 particles
+    Id3StringType result=spin1.ToIndex()*36*36+spin2.ToIndex()*36+spin3.ToIndex();
     return result;
   }
 }

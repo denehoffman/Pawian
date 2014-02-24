@@ -108,7 +108,9 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
+
+  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs); 
+  //  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
 
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
@@ -162,7 +164,7 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
 
   //  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
   //  Spin currentJ=_JPCPtr->J;
-  std::map<unsigned int, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
+  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
@@ -177,7 +179,7 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
 	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);

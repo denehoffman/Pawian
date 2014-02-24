@@ -108,7 +108,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     double theMag=it->second;
     double thePhi=_currentParamPhiLamLams[currentJPClamlam];
     complex<double> expi(cos(thePhi), sin(thePhi));
-    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+    Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
     complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
     //    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDsString.at(_wignerDKey).at(currentJPClamlam->J).at(lamX).at(lambda));
     result+=amp;
@@ -128,7 +128,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
+  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
 
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);

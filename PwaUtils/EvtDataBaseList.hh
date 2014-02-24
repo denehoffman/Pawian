@@ -32,15 +32,18 @@
 #include <map>
 
 #include "Utils/PawianCollectionUtils.hh"
+#include "Utils/FunctionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "Particle/Particle.hh"
+
+//typedef unsigned int Id3StringType;
 
 typedef std::map<int, Vector4<double> > mapInt4Vec;
 typedef std::map<int, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapIntSpinComplex;
 typedef std::map<std::string, Vector4<double> > mapString4Vec;
 typedef std::map<std::string, map<Spin,map<Spin,map<Spin,complex<double> > > > > mapStringSpinComplex;
-typedef std::map<std::string, std::map<unsigned int, complex<double> > > mapStringIntComplex;
+typedef std::map<std::string, std::map<Id3StringType, complex<double> > > mapStringIntComplex;
 typedef std::map<std::string, double> mapStringDouble;
 typedef std::map<std::string, map<Spin,map<Spin, complex<double> > > > mapStringComplDouble;
 typedef std::map<std::string, map<Spin,map<Spin,map<Spin, map<Spin, map<Spin,complex<double> > > > > > > mapString5SpinsComplex;
