@@ -174,7 +174,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     if(!ifs.good())
       {
 	stringstream strError;
-	strError << "Error accessing configuratiocommonn file " << _configFile;
+	strError << "Error accessing configuration file " << _configFile;
 	std::cout << cmdline_options << endl;
 
 	throw runtime_error(strError.str());
@@ -314,8 +314,10 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     cerr << "Error parsing the command line:" << endl;
     cerr << e.what() << std::endl;
     cerr << "You can use -h or --help to obtain the description of the program parameters." << endl;
-    cerr << "This is the command line options\n" << endl;
-    return false;
+    //    cerr << "This is the command line options\n" << endl;
+
+    exit(0);
+    //    return false;
   }
   catch(...){
       std::cerr << "Error parsing the command line. Use -h or --help to see the description of the program paramters." << endl;
