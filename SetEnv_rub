@@ -1,11 +1,10 @@
 setenv ROOTSYS /opt/root/5.34-15/Linux26SL6_x86_64_gcc447
 
-setenv CMAKE_SOURCE_DIR `pwd | sed -e 's/\/nfs//'`
-setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
-setenv PATH ${PATH}:${ROOTSYS}/bin:/data/pegasus1/PANDA/bin/
-setenv BOOST_BUILD_PATH /data/pegasus1/PANDA/PWA/boost-build/
+setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${TOP_DIR}/lib:/data/pegasus1/PANDA/PWA/lib
+setenv PATH ${PATH}:${ROOTSYS}/bin:/data/pegasus1/PANDA/bin
+setenv BOOST_BUILD_PATH /data/pegasus1/PANDA/PWA/boost-build
 
 echo "\n ROOTSYS: " $ROOTSYS 
-echo "\n CMAKE_SOURCE_DIR: " $CMAKE_SOURCE_DIR  
 echo "\n BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
 echo "\n"
