@@ -315,8 +315,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     cerr << e.what() << std::endl;
     cerr << "You can use -h or --help to obtain the description of the program parameters." << endl;
     //    cerr << "This is the command line options\n" << endl;
-
-    exit(0);
+    exit(1);
     //    return false;
   }
   catch(...){

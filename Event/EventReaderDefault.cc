@@ -62,7 +62,7 @@ EventReaderDefault::~EventReaderDefault()
 bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
 {
   int currentEvtNo=0;
-  
+
   while (currentFile != fileNames.end()) {
     currentStream.open(currentFile->c_str());
     if (!currentStream) {
@@ -75,37 +75,32 @@ bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
       double e,px,py,pz;
       Event* newEvent = new Event();
       int parts;
-
+      
       if(_useWeight)
-      {
-         double weight;
-         currentStream >> weight;
-         newEvent->addWeight(weight);
-      }      
-
+	{
+	  double weight;
+	  currentStream >> weight;
+	  newEvent->addWeight(weight);
+	}      
       Vector4<double> fvX(0,0,0,0); //X four-vector
       for (parts = 0; parts < numParticles; parts++) {
 	if(_energyFirst) currentStream >> e >> px >> py >> pz; 
 	else currentStream >> px >> py >> pz >> e;
-
         newEvent->addParticle(e/_unitScaleFactor, px/_unitScaleFactor, py/_unitScaleFactor, pz/_unitScaleFactor);
 	Vector4<double> tmp = newEvent->p4(parts);
 	if(isMassrangeParticle(parts)) fvX= fvX+tmp;
       }
- 
-     if(_useMassRange){
+      if(_useMassRange){
 	if(fvX.Mass()<_massMin || fvX.Mass()>_massMax  ){
 	  delete newEvent;
 	  continue;
 	}
       }
-
       if(currentEvtNo<evtStart || currentEvtNo>evtStop){
 	currentEvtNo++;
 	delete newEvent;
 	continue;
       }
-
       currentEvtNo++; 
       if (!currentStream.fail()) {
 	evtList.add(newEvent);
@@ -113,6 +108,10 @@ bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
 	  if(_energyFirst) currentStream >> e >> px >> py >> pz; 
 	  else currentStream >> px >> py >> pz >> e;
       }
+    }
+    if (currentEvtNo == 0){
+      Alert << "No events have been read in from File: " << *currentFile << " ! \nNo events in massRange? Wrong order of particles? currentEvtNo = " << currentEvtNo;
+      exit(1);
     }
     currentStream.close();
     ++currentFile;
