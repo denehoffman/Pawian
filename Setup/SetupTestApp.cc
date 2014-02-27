@@ -38,7 +38,7 @@ int main()
 {
   ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
   
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
+  std::string theSourcePath=getenv("TOP_DIR"); 
   std::string setupFile(theSourcePath + "/Setup/test.setup");
   PwaEnv::instance().setup(setupFile);
 

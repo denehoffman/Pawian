@@ -7,7 +7,7 @@ MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 set(INCLUDE_DIRECTORIES
 ${Boost_INCLUDE_DIRS}
 ${log4cpp_INCLUDE_DIRS}
-${CMAKE_SOURCE_DIR}
+${TOP_DIR}
 )
 
 include_directories( ${INCLUDE_DIRECTORIES})

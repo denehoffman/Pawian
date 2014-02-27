@@ -4,9 +4,9 @@ set(PACKAGE_NAME tensor)
 
 
 set(INCLUDE_DIRECTORIES
-${CMAKE_SOURCE_DIR}/qft++/tensor
-${CMAKE_SOURCE_DIR}/qft++/c++-template-utils
-${CMAKE_SOURCE_DIR}/qft++/matrix
+${TOP_DIR}/qft++/tensor
+${TOP_DIR}/qft++/c++-template-utils
+${TOP_DIR}/qft++/matrix
 )
 
 include_directories( ${INCLUDE_DIRECTORIES})

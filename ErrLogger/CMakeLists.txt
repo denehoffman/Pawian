@@ -5,7 +5,7 @@ set(PACKAGE_NAME ErrLogger)
 MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
 include_directories (
-                    ${CMAKE_SOURCE_DIR}
+                    ${TOP_DIR}
                     ${log4cpp_INCLUDE_DIRS}
                     ${Boost_INCLUDE_DIRS}
 )

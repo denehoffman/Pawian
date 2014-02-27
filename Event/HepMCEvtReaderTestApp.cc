@@ -32,7 +32,7 @@ int main()
   ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
   std::vector<std::string> fileNames;
 
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
+  std::string theSourcePath=getenv("TOP_DIR"); 
 
   std::string hepMCFile(theSourcePath+"/Event/HepMCEvt.out");
 

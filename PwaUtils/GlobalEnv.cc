@@ -131,7 +131,7 @@ void GlobalEnv::setup(ParserBase* theParser){
 
    // pdtTable
    PdtParser pdtParser;
-   std::string theSourcePath=getenv("CMAKE_SOURCE_DIR");
+   std::string theSourcePath=getenv("TOP_DIR");
    std::string pdtFileRelPath=theParser->pdgTableFile();
    std::string pdtFile(theSourcePath+pdtFileRelPath);
    _particleTable = new ParticleTable;

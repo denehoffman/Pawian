@@ -40,7 +40,7 @@ PwaEnv& PwaEnv::instance()
 bool PwaEnv::setup(std::string& setupFileName)
 {
   PdtParser pdtParser;
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
+  std::string theSourcePath=getenv("TOP_DIR"); 
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
   theParticleTable = new ParticleTable;
 

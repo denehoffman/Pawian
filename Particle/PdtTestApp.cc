@@ -38,7 +38,7 @@ int main()
 
   ParticleTable pTable;
   PdtParser parser;
-  std::string theSourcePath=getenv("CMAKE_SOURCE_DIR"); 
+  std::string theSourcePath=getenv("TOP_DIR"); 
   std::string pdtFile(theSourcePath+"/Particle/pdt.table");
 
   if (parser.parse(pdtFile, pTable)) {

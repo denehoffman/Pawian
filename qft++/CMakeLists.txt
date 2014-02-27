@@ -3,7 +3,7 @@ set(PACKAGE_NAME qft++)
 
 MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
 
-set(INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR})
+set(INCLUDE_DIRECTORIES ${TOP_DIR})
 
 include_directories( ${INCLUDE_DIRECTORIES})
 
