@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo Starting server ...
+
+../pbarp/bin/gcc-4.4.7/release/link-static/pbarpReactionApp -c pbarpReactionDefault.cfg --mode server --paramFile defaultparams.dat !>& server.log &
+
+sleep 5
+
+echo Starting clients ...
+
+../pbarp/bin/gcc-4.4.7/release/link-static/pbarpReactionApp -c pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& client1.log &
+
+../pbarp/bin/gcc-4.4.7/release/link-static/pbarpReactionApp -c pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& client2.log &
+
+echo done
