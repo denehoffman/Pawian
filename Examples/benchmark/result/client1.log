@@ -1,0 +1,1482 @@
+INFO: 
+                                       MMMMM
+                                      M8NO  +M
+                                    NO       M         ,MM
+                                    MM     ?MN,   D8MMMO  :NMM
+                               :MZ            ZM  MZ            NM,  M
+                              M,          :M   MMN            DMMN M  ~
+                             M        8MMM M  M,    7O: :M, M+     N:
+                            M  =NMZ M     ,M8 M    ,O     MM   :    M
+                            D  DM   M    $8        I= MM  $M   7    M
+                           Z~ M M  O 8   8          M     N MM    DM
+                           8, O    MM    M           :MM8,     ,, MMD
+                           O:       M    87MMO ,  MM~                ,M,
+                           I=O  M   M   M        M                     M
+                           :M   M   N   M N,     M                    M~
+                           :M  ?~  N    8I+  M    MMMMMMMMMMMMMMMOM? 7,
+                            M  ++  M   8MZ7  M     M                MM
+                            M   D  M  N   N   M,    ND          DM8,
+                            M   M  M M~M               DMNM88= 8,
+                            M    8  ?M?       M                 M~
+                            M      N~8       ?$    :             M
+                            NN      M     M  M     M             8:
+                            D M    M   DDM   M     M               M,
+                            D     ,D  D?M    N     M                 ND
+                            M     M  ,O8$   ,7     M    M    M         M~
+                            NN  8IO  M M    I=     =    M    M          ,M
+                                 M  M                   M    M I          M
+                                ~M ?8                 M M    M +M   MM     N
+        N+I8MMM~                MM M ,      M         M D    M   M   MON   ~$
+        M       NM              M8   M      O     D   M Z+  M:    M,  M M   M
+         ,MMMD    88            8M   N     M      M         M      ~M  M M+  M
+               7M, MI          +ZM  M      M      M        I$ $NI    M ,O M8 ?O
+                 ?N M          I:   M      M       8       M     ,    M M     M
+                  M +?         8,          N       M       N    :MMMMM7D M    M
+                   D M         8,                  N,     ,$   M       M 8    8:
+                   N,D,        ?:    =MMMMMZ               D  M         M  M  8ZMM
+                    M ND       :Z=MO,                      N    MM8ZN8  M  M  M+ ,:~MMM 8~
+                     M  DMMMMMNZ             D    ~MM        :MM        M   M MM    MNMM M
+                     $7           DMMZZNOMMNMZ       M     =M       MZ  :7 MM   MM$ M8   N$ M
+                       MO      MMZ        Z                +   ,MMD   +  D M~8  N  M       M
+                          ?I=    D         8                        ,NMMMMO MM M 8  M     ID
+                                  8        D                     MN,     M  ~,  MM       8N
+     ,MNZ,  ,8MM         :~ZMMM,  :8       D                   8         ,M      N
+   88           :M   M+         M  ,D       D                $            M      M
+  M:       M      M ,7           D  8N$     8~             :D             M      M ?M,
+  M    7   M      M M   +MM?     M ,8  D8    D=          ,D              Z?     ,O
+  $I~ ~?  Z8     M  M      M     M 7+  M  :,   D$      8Z  M? M          M$D+M  7M?
+   Z:  MMN       N, M     M?     M D   M          =$~   M :+  D,      NMMMMM OMM  MM          MMM
+   O:           :M $Z    D8      M M   M          M     M O:  N      M     ,O     M M        M   N
+   $~          M:  M  D  DM      O N   M   MM     M    :N M   M     +7      M     M  M       D   D
+   ~=  MNMMMM8    D: $     M    ?Z M   D   M M    M    M  M   M     M M M   7,    M   M     D~   7=
+   ~I     M       N  O     :$   N  M   D   8 Z=   M   M~  M   M     Z   N    M    M   D,    M    Z
+    M     M      M   D     $~   M  M   N   M  M   M   M   Z   M    M         D    M    N    M    M
+    M     M      O   M     M    M  M   M  M     ,M   Z7  N~   N    M  NM     M    N    M    M    M
+ M  M     M     M    M     D    M  M   MMM   M M     M   M    M    N M  N    M   7$     D   M    M
+  MMM7  MN     O$   M     M    N   M          +      M   M    $   N +I  ~+   M   M  ,   M   M    M
+                MMM+      M    M   M       M,        N   M   O=   M M   ~?   M   M M~NN  M  8    M
+                           N  $$   7M      M+       D    8   M    M M   D,   M   M M  M  ,N 8    D
+                            D8:     M      OM      MN    D   M  , M M   M    M   O $  +~  $MZ    D
+                                     :M88DM  N +MM+      MMM$M  N~+~N   D,   M  :8  D  M         N
+                                                                 MMM     M   M  Z=  M  M         D
+
+//************************************************************************//
+//									  //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//          	   - Ruhr-Universität Bochum 				  //
+//									  //
+//  Pawian is free software: you can redistribute it and/or modify	  //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or 	  //
+//  (at your option) any later version.	 	      	  	   	  //
+//									  //
+//  Pawian is distributed in the hope that it will be useful,		  //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
+//  GNU General Public License for more details.	      		  //
+//									  //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
+//									  //
+//************************************************************************//
+
+   
+INFO: Compiled Feb 25 2014 20:57:00
+
+Running with the following options using pbarpReactionDefault.cfg:
+
+Error log mode: 1
+
+data file: ./toyDataModel.dat
+
+mc file: ./toyDataMC.dat
+
+chosen unit in input file: MEV
+
+chosen order in file: E Px Py Pz
+
+file with start parameters for fit or qa: defaultparams.dat
+
+startHypo: base
+
+mode: client
+
+number of threads: 2
+
+ratioMcToData: 3
+
+cache amplitudes: 1
+
+use event weight: 0
+
+use phase space hyp: 0
+
+pdg table: /Particle/pdtNew.table
+
+minimumTolerance: 0.1
+
+
+clone particles: pion0 pion0A
+clone particles: pion0 pion0B
+clone particles: a0(980)0 a0(980)0A
+clone particles: a0(980)0 a0(980)0B
+clone particles: a2(1320)0 a2(1320)0A
+clone particles: a2(1320)0 a2(1320)0B
+
+minuit parameter	f2(1270)Mass	 fixed
+minuit parameter	f2(1270)Width	 fixed
+minuit parameter	a2(1320)0ABMass	 fixed
+minuit parameter	a2(1320)0ABWidth	 fixed
+minuit parameter	J0P-1C1L0S0pbarpPhi	 fixed
+minuit parameter	J1P1C1L1S1pbarpPhi	 fixed
+minuit parameter	L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	 fixed
+minuit parameter	L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	 fixed
+minuit parameter	L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	 fixed
+minuit parameter	L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	 fixed
+minuit parameter	L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	 fixed
+minuit parameter	L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	 fixed
+minuit parameter	L2S0_a2(1320)0ABTopion0AB_etaMag	 fixed
+minuit parameter	L2S0_a2(1320)0ABTopion0AB_etaPhi	 fixed
+minuit parameter	L2S0_f2(1270)Topion0A_pion0BMag	 fixed
+minuit parameter	L2S0_f2(1270)Topion0A_pion0BPhi	 fixed
+minuit parameter	Iso1J0P-1C1Range01Other	 fixed
+minuit parameter	Iso1J1P1C1Range01Other	 fixed
+minuit parameter	Iso1J2P1C1Range01Other	 fixed
+
+the final state particles are:
+pion0A
+pion0B
+eta
+
+decay system:
+Cano Iso f2(1270) To pion0A pion0B
+Cano Iso a2(1320)0A To pion0A eta
+Cano Iso a2(1320)0B To pion0B eta
+
+decay dynamics:
+f2(1270)	BreitWigner
+a2(1320)0A BreitWigner
+a2(1320)0B BreitWigner
+
+replaced suffix for fit parameter name
+a2(1320)0B_pion0A a2(1320)0AB_pion0AB
+a2(1320)0A_pion0B a2(1320)0AB_pion0AB
+a2(1320)0ATopion0A_eta a2(1320)0ABTopion0AB_eta
+a2(1320)0BTopion0B_eta a2(1320)0ABTopion0AB_eta
+
+replaced mass key
+a2(1320)0A a2(1320)0AB
+a2(1320)0B a2(1320)0AB
+
+production system:
+f2(1270) eta
+a2(1320)0B pion0A
+a2(1320)0A pion0B
+
+production formalism:	Cano
+
+histograms inv mass for systems
+pion0A pion0B
+pion0A eta
+pion0B eta
+
+histograms decay angles for systems
+pion0A pion0B from pion0A pion0B eta
+pion0A eta from pion0A pion0B eta
+pion0B eta from pion0A pion0B eta
+pion0A from pion0A pion0B
+pion0A from pion0A eta
+
+mass range
+
+
+2Dhistogram decay angles for systems
+
+random seed:	44123
+
+generate with model:	1
+
+number of generated events:	10000
+
+number of data events:	1000000
+Antiproton momentum in lab frame	 pbarmom = 0.9
+Maximum orbital momentum for pbarp system	 Lmax = 1
+
+spin density matrix calculation for particles
+
+drop pbarp L 
+
+
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+INFO: added decay f2(1270)Topion0A_pion0B to decay list
+
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+INFO: added decay a2(1320)0ATopion0A_eta to decay list
+
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+INFO: added decay a2(1320)0BTopion0B_eta to decay list
+first particle:	f2(1270)
+second particle:	eta
+first particle:	a2(1320)0B
+second particle:	pion0A
+first particle:	a2(1320)0A
+second particle:	pion0B
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J0P-1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J0P-1C1Tof2(1270)_eta
+JPC=0-+	L,S=2,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J0P-1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J0P-1C1Toa2(1320)0B_pion0A
+JPC=0-+	L,S=2,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J0P-1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J0P-1C1Toa2(1320)0A_pion0B
+JPC=0-+	L,S=2,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I1G-1J0P-1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J0P-1C1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J0P-1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I1G-1J0P-1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J0P-1C1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J0P-1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I1G-1J0P-1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J0P-1C1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J0P-1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+INFO: _JPCLSDecAmps.size()==0 for I0G1J0P1C1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I0G1J0P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J0P1C1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+INFO: _JPCLSDecAmps.size()==0 for I0G1J0P1C1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I0G1J0P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J0P1C1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+INFO: _JPCLSDecAmps.size()==0 for I0G1J0P1C1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I0G1J0P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J0P1C1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I1G-1J0P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J0P1C1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I1G-1J0P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J0P1C1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I1G-1J0P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J0P1C1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I0G-1J1P-1C-1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P-1C-1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G-1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I0G-1J1P-1C-1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P-1C-1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G-1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I0G-1J1P-1C-1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P-1C-1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G-1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I1G1J1P-1C-1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P-1C-1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I1G1J1P-1C-1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P-1C-1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I1G1J1P-1C-1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P-1C-1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I0G-1J1P1C-1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C-1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G-1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I0G-1J1P1C-1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C-1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G-1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I0G-1J1P1C-1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C-1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I0G-1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I1G1J1P1C-1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C-1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I1G1J1P1C-1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C-1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+WARN: /DataUtils.cc:97: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+INFO: _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I1G1J1P1C-1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C-1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C1Tof2(1270)_eta
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0B_pion0A
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0A_pion0B
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I1G-1J1P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J1P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I1G-1J1P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J1P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I1G-1J1P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J1P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J2P1C1Tof2(1270)_eta
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0B_pion0A
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0A_pion0B
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> 1 * 1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Tof2(1270)_eta
+
+JPCLS amplitudes for decay	I1G-1J2P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J2P1C1Tof2(1270)_eta
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J2P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Toa2(1320)0B_pion0A
+
+JPCLS amplitudes for decay	I1G-1J2P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0B_pion0A
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J2P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+WARN: /DataUtils.cc:111: G-Parity not valid for:-1 --> -1 * -1 
+INFO: _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Toa2(1320)0A_pion0B
+
+JPCLS amplitudes for decay	I1G-1J2P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0A_pion0B
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Skip amplitude I1G-1J2P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+theSuffix:	f2(1270)Topion0A_pion0B
+theSuffix:	a2(1320)0ATopion0A_eta
+theSuffix:	a2(1320)0BTopion0B_eta
+theSuffix:	J0P-1C1Tof2(1270)_eta
+theSuffix:	J0P-1C1Toa2(1320)0B_pion0A
+theSuffix:	J0P-1C1Toa2(1320)0A_pion0B
+theSuffix:	J1P1C1Tof2(1270)_eta
+theSuffix:	J1P1C1Toa2(1320)0B_pion0A
+theSuffix:	J1P1C1Toa2(1320)0A_pion0B
+theSuffix:	J2P1C1Tof2(1270)_eta
+theSuffix:	J2P1C1Toa2(1320)0B_pion0A
+theSuffix:	J2P1C1Toa2(1320)0A_pion0B
+theSuffix:	f2(1270)Topion0A_pion0B
+theSuffix:	a2(1320)0ABTopion0AB_eta
+theSuffix:	a2(1320)0BTopion0B_eta
+theSuffix:	J0P-1C1Tof2(1270)_eta
+theSuffix:	J0P-1C1Toa2(1320)0B_pion0A
+theSuffix:	J0P-1C1Toa2(1320)0A_pion0B
+theSuffix:	J1P1C1Tof2(1270)_eta
+theSuffix:	J1P1C1Toa2(1320)0B_pion0A
+theSuffix:	J1P1C1Toa2(1320)0A_pion0B
+theSuffix:	J2P1C1Tof2(1270)_eta
+theSuffix:	J2P1C1Toa2(1320)0B_pion0A
+theSuffix:	J2P1C1Toa2(1320)0A_pion0B
+theSuffix:	f2(1270)Topion0A_pion0B
+theSuffix:	a2(1320)0ABTopion0AB_eta
+theSuffix:	a2(1320)0BTopion0B_eta
+theSuffix:	J0P-1C1Tof2(1270)_eta
+theSuffix:	J0P-1C1Toa2(1320)0B_pion0A
+theSuffix:	J0P-1C1Toa2(1320)0AB_pion0AB
+theSuffix:	J1P1C1Tof2(1270)_eta
+theSuffix:	J1P1C1Toa2(1320)0B_pion0A
+theSuffix:	J1P1C1Toa2(1320)0AB_pion0AB
+theSuffix:	J2P1C1Tof2(1270)_eta
+theSuffix:	J2P1C1Toa2(1320)0B_pion0A
+theSuffix:	J2P1C1Toa2(1320)0AB_pion0AB
+theSuffix:	f2(1270)Topion0A_pion0B
+theSuffix:	a2(1320)0ABTopion0AB_eta
+theSuffix:	a2(1320)0ABTopion0AB_eta
+theSuffix:	J0P-1C1Tof2(1270)_eta
+theSuffix:	J0P-1C1Toa2(1320)0B_pion0A
+theSuffix:	J0P-1C1Toa2(1320)0AB_pion0AB
+theSuffix:	J1P1C1Tof2(1270)_eta
+theSuffix:	J1P1C1Toa2(1320)0B_pion0A
+theSuffix:	J1P1C1Toa2(1320)0AB_pion0AB
+theSuffix:	J2P1C1Tof2(1270)_eta
+theSuffix:	J2P1C1Toa2(1320)0B_pion0A
+theSuffix:	J2P1C1Toa2(1320)0AB_pion0AB
+
+ pbarp reaction
+
+ **** JPC states for pbarp system ****** 
+	I,G=0,1JPC=0-+	parityFactor=0	I,G=0,1JPC=1++	parityFactor=0	I,G=0,1JPC=2++	parityFactor=0
+ ***** decay chains *******
+
+JPCLS amplitudes for decay	I0G1J0P-1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J0P-1C1Tof2(1270)_eta
+JPC=0-+	L,S=2,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J0P-1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J0P-1C1Toa2(1320)0AB_pion0AB
+JPC=0-+	L,S=2,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0ABTopion0AB_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J0P-1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J0P-1C1Toa2(1320)0AB_pion0AB
+JPC=0-+	L,S=2,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ABTopion0AB_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J1P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C1Tof2(1270)_eta
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0AB_pion0AB
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0ABTopion0AB_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0AB_pion0AB
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ABTopion0AB_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J2P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J2P1C1Tof2(1270)_eta
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0AB_pion0AB
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0ABTopion0AB_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0AB_pion0AB
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ABTopion0AB_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+INFO: Dynamics	f2(1270)Topion0A_pion0B	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	-1
+INFO: Dynamics	J0P-1C1	found!!!
+INFO: Dynamics	a2(1320)0BTopion0B_eta	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	-1
+INFO: Dynamics	J0P-1C1	found!!!
+INFO: Dynamics	a2(1320)0ATopion0A_eta	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	-1
+INFO: _parityFactor=	1
+INFO: Dynamics	J1P1C1	found!!!
+INFO: _parityFactor=	1
+INFO: Dynamics	J1P1C1	found!!!
+INFO: _parityFactor=	1
+INFO: _parityFactor=	-1
+INFO: Dynamics	J2P1C1	found!!!
+INFO: _parityFactor=	-1
+INFO: Dynamics	J2P1C1	found!!!
+INFO: _parityFactor=	-1
+INFO: theKey=	L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag
+INFO: fillLSAmps: key	L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	L2S2_J0P-1C1Tof2(1270)_etaMag
+INFO: fillLSAmps: key	L2S2_J0P-1C1Tof2(1270)_etaMag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag
+INFO: fillLSAmps: key	L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag
+INFO: fillLSAmps: key	L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L1S2_J1P1C1Tof2(1270)_etaMag
+INFO: fillLSAmps: key	L1S2_J1P1C1Tof2(1270)_etaMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L3S2_J1P1C1Tof2(1270)_etaMag
+INFO: fillLSAmps: key	L3S2_J1P1C1Tof2(1270)_etaMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag
+INFO: fillLSAmps: key	L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag
+INFO: fillLSAmps: key	L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L1S2_J2P1C1Tof2(1270)_etaMag
+INFO: fillLSAmps: key	L1S2_J2P1C1Tof2(1270)_etaMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L3S2_J2P1C1Tof2(1270)_etaMag
+INFO: fillLSAmps: key	L3S2_J2P1C1Tof2(1270)_etaMag	found
+INFO: replace val by 0.707107
+INFO: replace err by 0.707107
+INFO: theKey=	L2S0_a2(1320)0ABTopion0AB_etaMag
+INFO: fillLSAmps: key	L2S0_a2(1320)0ABTopion0AB_etaMag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	L2S0_f2(1270)Topion0A_pion0BMag
+INFO: fillLSAmps: key	L2S0_f2(1270)Topion0A_pion0BMag	found
+INFO: replace val by 1
+INFO: replace err by 1
+INFO: theKey=	L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi
+INFO: fillLSAmps: key	L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L2S2_J0P-1C1Tof2(1270)_etaPhi
+INFO: fillLSAmps: key	L2S2_J0P-1C1Tof2(1270)_etaPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi
+INFO: fillLSAmps: key	L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi
+INFO: fillLSAmps: key	L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L1S2_J1P1C1Tof2(1270)_etaPhi
+INFO: fillLSAmps: key	L1S2_J1P1C1Tof2(1270)_etaPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L3S2_J1P1C1Tof2(1270)_etaPhi
+INFO: fillLSAmps: key	L3S2_J1P1C1Tof2(1270)_etaPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi
+INFO: fillLSAmps: key	L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi
+INFO: fillLSAmps: key	L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L1S2_J2P1C1Tof2(1270)_etaPhi
+INFO: fillLSAmps: key	L1S2_J2P1C1Tof2(1270)_etaPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L3S2_J2P1C1Tof2(1270)_etaPhi
+INFO: fillLSAmps: key	L3S2_J2P1C1Tof2(1270)_etaPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L2S0_a2(1320)0ABTopion0AB_etaPhi
+INFO: fillLSAmps: key	L2S0_a2(1320)0ABTopion0AB_etaPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	L2S0_f2(1270)Topion0A_pion0BPhi
+INFO: fillLSAmps: key	L2S0_f2(1270)Topion0A_pion0BPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J0P-1C1L0S0pbarpMag
+INFO: fillJPCLSAmps: key	J0P-1C1L0S0pbarpMag	found
+INFO: replace val by 0.57735
+INFO: replace err by 0.57735
+INFO: theKey=	J1P1C1L1S1pbarpMag
+INFO: fillJPCLSAmps: key	J1P1C1L1S1pbarpMag	found
+INFO: replace val by 0.57735
+INFO: replace err by 0.57735
+INFO: theKey=	J2P1C1L1S1pbarpMag
+INFO: fillJPCLSAmps: key	J2P1C1L1S1pbarpMag	found
+INFO: replace val by 0.57735
+INFO: replace err by 0.57735
+INFO: theKey=	J0P-1C1L0S0pbarpPhi
+INFO: fillJPCLSAmps: key	J0P-1C1L0S0pbarpPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J1P1C1L1S1pbarpPhi
+INFO: fillJPCLSAmps: key	J1P1C1L1S1pbarpPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: theKey=	J2P1C1L1S1pbarpPhi
+INFO: fillJPCLSAmps: key	J2P1C1L1S1pbarpPhi	found
+INFO: replace val by 0
+INFO: replace err by 0.3
+INFO: fillDoubles: theKey=	a2(1320)0ABMass
+INFO: key	a2(1320)0ABMass	found
+INFO: replace val by 1.318
+INFO: replace err by 0.03
+INFO: fillDoubles: theKey=	f2(1270)Mass
+INFO: key	f2(1270)Mass	found
+INFO: replace val by 1.275
+INFO: replace err by 0.03
+INFO: fillDoubles: theKey=	a2(1320)0ABWidth
+INFO: key	a2(1320)0ABWidth	found
+INFO: replace val by 0.107
+INFO: replace err by 0.0214
+INFO: fillDoubles: theKey=	f2(1270)Width
+INFO: key	f2(1270)Width	found
+INFO: replace val by 0.185
+INFO: replace err by 0.037
+INFO: fillDoubles: theKey=	Iso1J0P-1C1Range01Other
+INFO: key	Iso1J0P-1C1Range01Other	found
+INFO: replace val by 0
+INFO: replace err by 0.5
+INFO: fillDoubles: theKey=	Iso1J1P1C1Range01Other
+INFO: key	Iso1J1P1C1Range01Other	found
+INFO: replace val by 0
+INFO: replace err by 0.5
+INFO: fillDoubles: theKey=	Iso1J2P1C1Range01Other
+INFO: key	Iso1J2P1C1Range01Other	found
+INFO: replace val by 0
+INFO: replace err by 0.5
+
+
+**************** Minuit Fit parameter **************************
+J0P-1C1L0S0pbarpMag	0.57735	0.57735
+J1P1C1L1S1pbarpMag	0.57735	0.57735
+J2P1C1L1S1pbarpMag	0.57735	0.57735
+J0P-1C1L0S0pbarpPhi	0	0.3
+J1P1C1L1S1pbarpPhi	0	0.3
+J2P1C1L1S1pbarpPhi	0	0.3
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	1
+L2S2_J0P-1C1Tof2(1270)_etaMag	1	1
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.707107	0.707107
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.707107	0.707107
+L1S2_J1P1C1Tof2(1270)_etaMag	0.707107	0.707107
+L3S2_J1P1C1Tof2(1270)_etaMag	0.707107	0.707107
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.707107	0.707107
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.707107	0.707107
+L1S2_J2P1C1Tof2(1270)_etaMag	0.707107	0.707107
+L3S2_J2P1C1Tof2(1270)_etaMag	0.707107	0.707107
+L2S0_a2(1320)0ABTopion0AB_etaMag	1	1
+L2S0_f2(1270)Topion0A_pion0BMag	1	1
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.3
+L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.3
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.3
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.3
+L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.3
+L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.3
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.3
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.3
+L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.3
+L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.3
+L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.3
+L2S0_f2(1270)Topion0A_pion0BPhi	0	0.3
+a2(1320)0ABMass	1.318	0.03
+f2(1270)Mass	1.275	0.03
+a2(1320)0ABWidth	0.107	0.0214
+f2(1270)Width	0.185	0.037
+Iso1J0P-1C1Range01Other	0	0.5
+Iso1J1P1C1Range01Other	0	0.5
+Iso1J2P1C1Range01Other	0	0.5
+INFO: ************* Client mode ****************
+INFO: Connecting to server localhost:22225
+INFO: Received client id: 1
+INFO: Received channel id: 0
+INFO: Received data event range 7500 - 14999
+INFO: Received mc event range 22500 - 44999
+INFO: caching amplitudes enabled / disabled:	1
+INFO: data file: ./toyDataModel.dat
+INFO: mc file: ./toyDataMC.dat
+INFO: 
+File has 7500 events. Each event has 3 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.477629,0.450135,-0.0820211,0.0236862) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.384374,0.0212757,-0.264601,-0.243016) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 1.3764,-0.47141,0.346622,1.11933) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.945067,-0.548941,-0.61327,0.444405) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.289778,-0.0552304,0.0684905,0.240854) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 1.00356,0.604172,0.544779,0.214741) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.625586,0.550499,-0.264373,0.0139845) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.812613,-0.624514,-0.148532,0.479626) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.800206,0.0740147,0.412905,0.406389) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.788294,-0.722237,0.0262541,0.28438) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.690166,0.516047,-0.354231,0.257537) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.759945,0.206191,0.327977,0.358083) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.844178,-0.247704,0.088172,0.79075) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.657,0.393678,-0.488268,-0.141566) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.737227,-0.145974,0.400096,0.250816) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.504666,0.303578,-0.241243,0.293447) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.929171,-0.186369,0.791517,0.428844) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.804567,-0.117209,-0.550274,0.177709) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.746144,-0.0810612,-0.672364,0.282607) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.574608,-0.37136,0.135153,0.394691) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.917653,0.452421,0.537211,0.222703) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.597248,0.573176,-0.0995657,0.00644981) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.778456,-0.563709,0.418664,0.307778) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.8627,-0.00946781,-0.319099,0.585772) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.765609,0.55464,0.509691,-0.0229613) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.782009,-0.377045,-0.326512,0.58698) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.690787,-0.177595,-0.183179,0.335981) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.804613,-0.0611534,-0.417375,0.671745) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.547774,-0.52148,0.0678373,0.0727579) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.886018,0.582634,0.349538,0.155498) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+File has 22500 events. Each event has 3 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.392228,-0.163627,0.236871,0.229655) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.957799,-0.445329,0.0668311,0.834491) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.888378,0.608956,-0.303702,-0.164146) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 1.00159,0.113645,0.604443,0.778909) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.429089,0.0203807,-0.0946642,0.395628) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.807724,-0.134025,-0.509779,-0.274537) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.446868,0.23229,0.135676,0.330311) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.630238,0.307069,-0.481656,-0.229558) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 1.1613,-0.539358,0.34598,0.799247) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.700555,-0.13675,-0.0718325,0.669849) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.57895,-0.536142,-0.00566279,-0.171706) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.9589,0.672893,0.0774953,0.401857) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.566699,-0.0757309,-0.0113297,-0.545037) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.628943,-0.167026,0.00303118,0.591137) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 1.04276,0.242756,0.00829857,0.8539) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.710677,0.48785,0.498608,-0.0152983) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.500113,0.118957,-0.34852,0.310285) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 1.02761,-0.606807,-0.150088,0.605013) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 1.134,0.0883956,-0.124741,1.11551) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.50894,-0.0807026,0.252685,-0.412841) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.595464,-0.00769301,-0.127944,0.197329) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.503181,0.0689107,-0.414473,-0.241734) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.74792,-0.0810661,0.640996,0.351735) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.987303,0.0121554,-0.226523,0.789999) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.179364,0.117815,0.00192033,-0.00823161) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.96726,0.529114,0.583268,0.545169) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 1.09178,-0.646929,-0.585188,0.363063) } 	m = 0.547
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.861819,-0.229699,-0.433192,0.69577) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.746567,0.186217,0.707631,0.0610292) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.630018,0.0434818,-0.274439,0.143201) } 	m = 0.547
+
+INFO: 
+
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 1.11759e-08	 py: 2.23517e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 0	 py: -7.45058e-09	 pz: 0.9	 e : 2.2384	 m : 2.0495
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 7500
+INFO: 4vec calculation for event 8000
+INFO: 4vec calculation for event 8500
+INFO: 4vec calculation for event 9000
+INFO: 4vec calculation for event 9500
+INFO: 4vec calculation for event 10000
+INFO: 4vec all in lab system
+ px: 0	 py: 1.11759e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
+INFO: 4vec calculation for event 10500
+INFO: 4vec calculation for event 11000
+INFO: 4vec calculation for event 11500
+INFO: 4vec calculation for event 12000
+INFO: 4vec calculation for event 12500
+INFO: 4vec calculation for event 13000
+INFO: 4vec calculation for event 13500
+INFO: 4vec calculation for event 14000
+INFO: 4vec calculation for event 14500
+INFO: 4vec calculation for event 15000
+INFO: 4vec calculation for event 15500
+INFO: 4vec calculation for event 16000
+INFO: 4vec calculation for event 16500
+INFO: 4vec calculation for event 17000
+INFO: 4vec calculation for event 17500
+INFO: 4vec calculation for event 18000
+INFO: 4vec calculation for event 18500
+INFO: 4vec calculation for event 19000
+INFO: 4vec calculation for event 19500
+INFO: 4vec calculation for event 20000
+INFO: 4vec all in lab system
+ px: -1.49012e-08	 py: 0	 pz: 0.9	 e : 2.2384	 m : 2.0495
+INFO: 4vec calculation for event 20500
+INFO: 4vec calculation for event 21000
+INFO: 4vec calculation for event 21500
+INFO: 4vec calculation for event 22000
+INFO: Received goodbye. Exiting.
