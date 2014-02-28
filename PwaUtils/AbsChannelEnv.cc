@@ -144,11 +144,15 @@ void AbsChannelEnv::setup(ChannelID id){
         isDecParticle=true;
         continue;
       }
+      if (GlobalEnv::instance()->particleTable()->particle(tmpName) == NULL){
+	Alert << "Particle " << tmpName << " does not exist in ParticleTable. Please clone an existing particle or add it to the table.";
+	exit(1);
+      }
       if(isDecParticle){
-	 daughterParticles.push_back(GlobalEnv::instance()->particleTable()->particle(tmpName));
+	daughterParticles.push_back(GlobalEnv::instance()->particleTable()->particle(tmpName));
       }
       else{
-	 motherParticle = GlobalEnv::instance()->particleTable()->particle(tmpName);
+	motherParticle = GlobalEnv::instance()->particleTable()->particle(tmpName);
       }
     }
     std::shared_ptr<AbsDecay> tmpDec;

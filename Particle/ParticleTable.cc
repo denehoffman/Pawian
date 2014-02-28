@@ -75,7 +75,8 @@ bool ParticleTable::clone(std::string newName, std::string oldName)
   
   Particle* oldParticle = particle(oldName);
   if (0 == oldParticle) {
-    Warning << "ParticleTable: cannot clone, " << oldName << " does not exist!" << endmsg;
+    Alert << "ParticleTable: cannot clone, " << oldName << " does not exist!" << endmsg;
+    exit(1);
     return false;
   }
 
