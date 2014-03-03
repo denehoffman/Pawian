@@ -59,7 +59,7 @@ void ResChannelEnv::setup(ChannelID id){
 
 
   //epem reaction
-  _resReaction=std::shared_ptr<resReaction>(new resReaction(_motherParticle, _producedParticlePairs, 0));
+  _resReaction=std::shared_ptr<resReaction>(new resReaction(_motherParticle, _producedParticlePairs, id));
 
   //fill prodDecayList
   std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _resReaction->productionHeliDecays();

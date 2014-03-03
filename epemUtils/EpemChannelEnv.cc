@@ -62,7 +62,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
 
   //epem reaction
-  _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs, 0));
+  _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs, id));
 
   std::vector< std::shared_ptr<AbsDecay> > prodDecs;
   if (_theParser->productionFormalism()=="Heli"){
