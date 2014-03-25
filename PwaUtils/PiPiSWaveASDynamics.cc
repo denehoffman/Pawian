@@ -66,20 +66,49 @@ complex<double> result(0.,0.);
   std::string currentKey="default";
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
+ 
+  bool readFromCachedMap=false;
 
-  if ( _cacheAmps && !_recalcMap[currentKey]){
-    result=_cachedStringMap[evtNo][currentKey];
+  if( _cacheAmps){
+    if(_recalcMap[currentKey]){
+      bool currentEvtAlreadyCached=false;
+      
+      std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
+      if( itAlreadyCached != _alreadyCached.end()){
+	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
+	if( itAlreadyCached2 != itAlreadyCached->second.end()){
+	  currentEvtAlreadyCached=itAlreadyCached2->second;     
+	}
+	else{
+	  theMutex.lock();
+	  _alreadyCached[evtNo][currentKey]=false;
+	  theMutex.unlock();
+	}   
+      }
+      else{ 
+	theMutex.lock();
+	_alreadyCached[evtNo][currentKey]=false;
+	theMutex.unlock();
+      } 
+  
+      if(currentEvtAlreadyCached) readFromCachedMap=true;
+    }
+    else readFromCachedMap=true; 
   }
 
+  if ( readFromCachedMap){
+    result=_cachedStringMap.at(evtNo).at(currentKey);
+  }  
   else{
       theMutex.lock();
       result=_fVecMap[currentKey]->evalProjMatrix(theData->FourVecsString[_dynKey].M(), _projectionIndex);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
+	_alreadyCached.at(evtNo).at(currentKey)=true;
       }
       theMutex.unlock();
   }
-  
+  //  Info << "result: " << result << endmsg;  
   return result;
 }
 
@@ -108,6 +137,14 @@ void  PiPiSWaveASDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr
 
 bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
+  std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached;
+  for(itAlreadyCached=_alreadyCached.begin(); itAlreadyCached!=_alreadyCached.end(); ++itAlreadyCached){
+    std::map<std::string, bool >::iterator itAlreadyCached2;
+    for(itAlreadyCached2=itAlreadyCached->second.begin(); itAlreadyCached2!=itAlreadyCached->second.end(); ++itAlreadyCached2){
+      itAlreadyCached2->second=false;     
+    }
+  }  
+
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
@@ -121,11 +158,13 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
        if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
+	continue;
       }
     }
 
    std::map<std::string, double>& fProds=_currentfProdMap[it1->first];
    for(it2=fProds.begin(); it2!=fProds.end(); ++it2){
+     if(_recalcMap[it1->first]==true) continue;
      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
        _recalculate=true;
        _recalcMap[it1->first]=true;

@@ -71,19 +71,49 @@ complex<double> result(0.,0.);
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
-  //  if ( _cacheAmps && !_recalcMap[currentKey]){
-  if ( _cacheAmps && !_recalculate){
-    result=_cachedStringMap[evtNo][currentKey];
+  bool readFromCachedMap=false;
+
+  if( _cacheAmps){
+    if(_recalculate){
+      bool currentEvtAlreadyCached=false;
+      
+      std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
+      if( itAlreadyCached != _alreadyCached.end()){
+	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
+	if( itAlreadyCached2 != itAlreadyCached->second.end()){
+	  currentEvtAlreadyCached=itAlreadyCached2->second;     
+	}
+	else{
+	  theMutex.lock();
+	  _alreadyCached[evtNo][currentKey]=false;
+	  theMutex.unlock();
+	}   
+      }
+      else{ 
+	theMutex.lock();
+	_alreadyCached[evtNo][currentKey]=false;
+	theMutex.unlock();
+      } 
+  
+      if(currentEvtAlreadyCached) readFromCachedMap=true;
+    }
+    else readFromCachedMap=true; 
   }
+
+  if ( readFromCachedMap){
+    result=_cachedStringMap.at(evtNo).at(currentKey);
+  }  
   else{
       theMutex.lock();
       result=_fVecMap[currentKey]->evalProjMatrix(theData->FourVecsString[_dynKey].M(), _projectionIndex);
       if ( _cacheAmps){
-  	_cachedStringMap[evtNo][currentKey]=result;
+	_cachedStringMap[evtNo][currentKey]=result;
+	_alreadyCached.at(evtNo).at(currentKey)=true;
       }
       theMutex.unlock();
   }
-  
+
+
   return result;
 }
 
@@ -141,6 +171,14 @@ void  KMatrixDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
 bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
+
+  std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached;
+  for(itAlreadyCached=_alreadyCached.begin(); itAlreadyCached!=_alreadyCached.end(); ++itAlreadyCached){
+    std::map<std::string, bool >::iterator itAlreadyCached2;
+    for(itAlreadyCached2=itAlreadyCached->second.begin(); itAlreadyCached2!=itAlreadyCached->second.end(); ++itAlreadyCached2){
+      itAlreadyCached2->second=false;     
+    }
+  }
 
   //beta factor for production  
   std::map<std::string, std::map<std::string, double> >::iterator it1;

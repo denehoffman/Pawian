@@ -71,6 +71,7 @@ protected:
   std::map<std::string, double > _currentS0Map; 
 
   std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
+  std::map<int, std::map<std::string, bool > > _alreadyCached;
   std::map<std::string, bool > _recalcMap;
 
   ParticleTable* _pdtTable;

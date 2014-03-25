@@ -137,7 +137,10 @@ void AbsChannelEnv::setup(ChannelID id){
 	continue;
       }
       if(secondArgument){
-	if(tmpName=="noIso") useIsospin=false;
+	if(tmpName=="noIso"){
+	 useIsospin=false;
+         continue;
+        }
 	secondArgument=false;
       }
       if(tmpName=="To") {

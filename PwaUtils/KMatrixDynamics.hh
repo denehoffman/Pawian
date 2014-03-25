@@ -83,6 +83,7 @@ protected:
   double _currentAdler0;
   
   std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
+  std::map<int, std::map<std::string, bool > > _alreadyCached;
   std::map<std::string, bool > _recalcMap;
   std::shared_ptr<KMatrixParser> _kMatrixParser;
 
