@@ -27,6 +27,7 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
+#include <thread>
 
 #include "PwaUtils/PiPiSWaveASDynamics.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
@@ -66,6 +67,8 @@ complex<double> result(0.,0.);
   std::string currentKey="default";
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
+
+  //  Info << "thread Id:\t" <<  std::this_thread::get_id() << endmsg; 
  
   bool readFromCachedMap=false;
 
@@ -157,23 +160,23 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
        if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
-	_recalcMap[it1->first]=true;
+	_recalcMap.at(it1->first)=true;
 	continue;
       }
     }
 
    std::map<std::string, double>& fProds=_currentfProdMap[it1->first];
    for(it2=fProds.begin(); it2!=fProds.end(); ++it2){
-     if(_recalcMap[it1->first]==true) continue;
+     if(_recalcMap.at(it1->first)) continue;
      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
        _recalculate=true;
-       _recalcMap[it1->first]=true;
+       _recalcMap.at(it1->first)=true;
      }
    }
 
    if (!CheckDoubleEquality(_currentS0Map[it1->first], theParamVal.otherParams[it1->first+"S0_PosNeg"])){
      _recalculate=true;
-     _recalcMap[it1->first]=true;
+     _recalcMap.at(it1->first)=true;
    }
    
   }
