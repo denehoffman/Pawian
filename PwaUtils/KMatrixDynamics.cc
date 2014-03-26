@@ -73,6 +73,7 @@ complex<double> result(0.,0.);
 
   bool readFromCachedMap=false;
 
+  theMutex.lock();
   if( _cacheAmps){
     if(_recalculate){
       bool currentEvtAlreadyCached=false;
@@ -84,15 +85,11 @@ complex<double> result(0.,0.);
 	  currentEvtAlreadyCached=itAlreadyCached2->second;     
 	}
 	else{
-	  theMutex.lock();
 	  _alreadyCached[evtNo][currentKey]=false;
-	  theMutex.unlock();
 	}   
       }
       else{ 
-	theMutex.lock();
 	_alreadyCached[evtNo][currentKey]=false;
-	theMutex.unlock();
       } 
   
       if(currentEvtAlreadyCached) readFromCachedMap=true;
@@ -104,15 +101,13 @@ complex<double> result(0.,0.);
     result=_cachedStringMap.at(evtNo).at(currentKey);
   }  
   else{
-      theMutex.lock();
       result=_fVecMap[currentKey]->evalProjMatrix(theData->FourVecsString[_dynKey].M(), _projectionIndex);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
 	_alreadyCached.at(evtNo).at(currentKey)=true;
       }
-      theMutex.unlock();
   }
-
+  theMutex.unlock();
 
   return result;
 }

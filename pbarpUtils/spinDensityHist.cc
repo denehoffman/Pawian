@@ -141,9 +141,18 @@ void spinDensityHist::calcSpinDensityMatrixNorm(std::string& particleName, int J
    TH1F* normnormHist = new TH1F("normnormHist", "normnormHist", _nBins, -1, 1);
    normnormHist->SetDirectory(0);
 
+   std::vector<short> entries (_nBins);
+   std::fill(entries.begin(), entries.end(), 0);
+
    for(auto it = _dataList.begin(); it != _dataList.end(); ++it){
 
       double costheta = ParticleCosTheta(particleName, *it);
+      short histIndex = normHist->FindBin(costheta);
+
+      if(entries.at(histIndex-1) >= 2)
+	 continue;
+
+      entries.at(histIndex-1)++;
 
       _theLh->updateFitParams(*_theFitParamsOriginal);
       double tempSpinDensityNorm =
