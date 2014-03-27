@@ -38,6 +38,7 @@
 #include "PwaUtils/KPiSWaveIso32Dynamics.hh"
 #include "PwaUtils/PiPiSWaveASDynamics.hh"
 #include "PwaUtils/KMatrixDynamics.hh"
+#include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/WoDynamics.hh"
 
@@ -97,6 +98,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="PiPiSWaveAS")
 	result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), GlobalEnv::instance()->particleTable()));
+      else if(theDec->dynType()=="Voigt") 
+	result= std::shared_ptr<AbsDynamics>(new VoigtDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
     	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;

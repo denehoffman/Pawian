@@ -33,3 +33,4 @@ exe FlatteShapeApp : FlatteShapeApp.cc LineShapes : ;
 exe TwoPolesApp : TwoPolesApp.cc LineShapes : ;
 exe PiPiSWaveApp : PiPiSWaveApp.cc LineShapes : ;
 exe TMatrixGeneralApp : TMatrixGeneralApp.cc LineShapes : ;
+exe VoigtShapeApp : VoigtShapeApp.cc LineShapes : ;

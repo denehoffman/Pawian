@@ -21,34 +21,43 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/Voigtian.hh"
-#include "Utils/Faddeeva.hh"
+// VoigtDynamics class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
-Voigtian::Voigtian()
- {
- }
+#pragma once
 
-Voigtian::~Voigtian(){
-}
+#include <iostream>
+#include <vector>
+#include <complex>
+#include <map>
+#include <string>
+#include <memory>
 
-double Voigtian::calc(double currentMass, double mass0, double gamma, double sigma){
-  double result=0.;
-  if ((sigma < 0. || gamma < 0.) || (fabs(sigma)<1e-20 && fabs(gamma)<1.e-20)) {
-    return result;  // Not meant to be for those who want to be thinner than 0
-   }
-  if (fabs(sigma) < 1.e-20){
-    sigma=1.e-12;
-  }
-  if (fabs(gamma) < 1.e-20){
-    gamma=1.e-12;
-  }
+#include "PwaUtils/AbsDynamics.hh"
+
+class Voigtian;
+
+class VoigtDynamics : public AbsDynamics{
+
+public:
+  VoigtDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
+  virtual ~VoigtDynamics();
+
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
-  double denom=sqrt(2.)*sigma;  
-  double realZ=(currentMass-mass0)/denom;
-  double imagZ=gamma/(2.*denom);
-  complex<double> complZ(realZ,imagZ);  
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void setMassKey(std::string& theMassKey);
 
-  result=sqrt(2.*M_PI)/4.*gamma/sigma*Faddeeva::w(complZ).real();
-  return result;
-}
+protected:
+  //  std::string _massKey;
+  std::string _massSigmaKey;
+  double _currentMass0;
+  double _currentWidth;
+  double _currentSigma;
+  std::map<int, complex<double> >  _cachedMap; 
+  std::shared_ptr<Voigtian> _voigtPtr;
+private:
 
+};

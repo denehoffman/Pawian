@@ -50,7 +50,7 @@ public:
   /// Destructor
   ~Voigtian();
 
-  complex<double> calc(double currentMass, double mass0, double gamma, double sigma);
+  double calc(double currentMass, double mass0, double gamma, double sigma);
 
 protected:
 };

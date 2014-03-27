@@ -21,34 +21,47 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/Voigtian.hh"
-#include "Utils/Faddeeva.hh"
+#ifndef _BwShape_H
+#define _BwShape_H
 
-Voigtian::Voigtian()
- {
- }
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <cassert>
 
-Voigtian::~Voigtian(){
-}
+#include <memory>
 
-double Voigtian::calc(double currentMass, double mass0, double gamma, double sigma){
-  double result=0.;
-  if ((sigma < 0. || gamma < 0.) || (fabs(sigma)<1e-20 && fabs(gamma)<1.e-20)) {
-    return result;  // Not meant to be for those who want to be thinner than 0
-   }
-  if (fabs(sigma) < 1.e-20){
-    sigma=1.e-12;
-  }
-  if (fabs(gamma) < 1.e-20){
-    gamma=1.e-12;
-  }
-  
-  double denom=sqrt(2.)*sigma;  
-  double realZ=(currentMass-mass0)/denom;
-  double imagZ=gamma/(2.*denom);
-  complex<double> complZ(realZ,imagZ);  
+#include "TROOT.h"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-  result=sqrt(2.*M_PI)/4.*gamma/sigma*Faddeeva::w(complZ).real();
-  return result;
-}
+class TFile;
+class TH1F;
+class TH2F;
 
+class VoigtShape {
+
+public:
+
+  // create/copy/destroy:
+
+  ///Constructor 
+  VoigtShape(double mass0, double gamma, double sigma);
+
+
+  /** Destructor */
+  virtual ~VoigtShape();
+
+  // Getters:
+ 
+protected:
+
+
+private:
+  TFile* _theTFile;
+  TH1F* _voigtMassH1;
+  TH1F* _bwMassH1;
+};
+
+#endif

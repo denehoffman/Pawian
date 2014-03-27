@@ -21,34 +21,40 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/Voigtian.hh"
-#include "Utils/Faddeeva.hh"
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
 
-Voigtian::Voigtian()
- {
- }
+#include <memory>
 
-Voigtian::~Voigtian(){
-}
+#include "Examples/Tutorial/LineShapes/VoigtShape.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-double Voigtian::calc(double currentMass, double mass0, double gamma, double sigma){
-  double result=0.;
-  if ((sigma < 0. || gamma < 0.) || (fabs(sigma)<1e-20 && fabs(gamma)<1.e-20)) {
-    return result;  // Not meant to be for those who want to be thinner than 0
-   }
-  if (fabs(sigma) < 1.e-20){
-    sigma=1.e-12;
+int main(int __argc,char *__argv[]){
+  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
+                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+
+    Info << "\nThis is a test application for histogramming the line shape of an Voigtian\n"
+	 << "The switches are:\n\n"
+         << "-mass (mass of the resonance;default 1.318)\n\n" 
+         << "-width (width of the resonance;default 0.1)\n\n"
+         << "-sigma (resolution)\n\n"
+          << endmsg;
+    return 0;
   }
-  if (fabs(gamma) < 1.e-20){
-    gamma=1.e-12;
-  }
-  
-  double denom=sqrt(2.)*sigma;  
-  double realZ=(currentMass-mass0)/denom;
-  double imagZ=gamma/(2.*denom);
-  complex<double> complZ(realZ,imagZ);  
+  double mass0=0.782;
+  double gamma=0.00849;
+  //  double gamma=0.001;
+  //  double gamma=0.1;
+  double sigma=0.01;
+  //  double sigma=0.1;
+  //double sigma=0.000001;
+  VoigtShape VoigtShape(mass0, gamma, sigma);
 
-  result=sqrt(2.*M_PI)/4.*gamma/sigma*Faddeeva::w(complZ).real();
-  return result;
+  return 0;
 }
 
