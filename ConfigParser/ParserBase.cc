@@ -62,6 +62,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ,_usePhaseSpaceHyp(false)
       ,_pdgTableFile("/Particle/pdtNew.table")
       ,_productionFormalism("Cano")
+      ,_useProductionBarrier(false)
       ,_randomSeed(44123)
       ,_genWithModel(true)
       ,_noOfGenEvts(10000)
@@ -122,6 +123,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
       ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
+      ("useProductionBarrier",po::value<bool>(&_useProductionBarrier), "use barrier factors for the production, not supported for helicity formalism")
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
@@ -279,7 +281,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
 
       std::cout << "\nproduction formalism:\t" << _productionFormalism << std::endl;
-
+      std::cout << "useProductionBarrier:\t" << _useProductionBarrier  << std::endl;
 
       std::cout << "\nhistograms inv mass for systems" << std::endl;
       for (it=_histMass.begin(); it!=_histMass.end();++it){

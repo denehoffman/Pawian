@@ -66,6 +66,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_gParity(mother->theGParity())
   ,_useIsospin(true)
    ,_isProdAmp(false)
+   ,_useProdBarrier(false)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -138,6 +139,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
    ,_isProdAmp(false)
+   ,_useProdBarrier(false)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -310,7 +312,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
      if (!_daughter2IsStable){
        _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
      }
-   }
+     if (_useProdBarrier){
+       double qVal=daughter2HelMother.P();
+       evtData->DoubleString[_wignerDKey]=qVal;
+     }
+  }
    else{
      if (!_daughter1IsStable){
        _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
@@ -356,4 +362,13 @@ void AbsDecay::print(std::ostream& os) const{
        _absDecDaughter2->resetFilledMap();
      }
    }
+}
+
+void AbsDecay::enableProdBarrier(){
+  if(!_isProdAmp){
+    Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    exit(1);
+  }
+  _useProdBarrier=true;
+  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg; 
 }

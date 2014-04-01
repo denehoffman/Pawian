@@ -42,6 +42,8 @@
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
+#include "ConfigParser/ParserBase.hh"
+
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -132,7 +134,8 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
 
 
    //fill WignerD functions
-    std::vector<std::shared_ptr<AbsDecay> > theDecays=GlobalEnv::instance()->Channel(_channelID)->prodDecayList()->getList();
+    const std::shared_ptr<AbsChannelEnv> absChannelEnvPtr=GlobalEnv::instance()->Channel(_channelID);
+    std::vector<std::shared_ptr<AbsDecay> > theDecays=absChannelEnvPtr->prodDecayList()->getList();
     std::vector<std::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
       (*itIso)->fillWignerDs(particle4VecMap, V4_all_lab, evtData);

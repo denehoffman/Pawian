@@ -99,6 +99,8 @@ public:
   bool isProductionAmp() {return _isProdAmp;}
 
   void resetFilledMap();
+  void enableProdBarrier();
+  bool useProdBarrier() {return _useProdBarrier;}
 
 protected:
   ChannelID _channelId;
@@ -150,4 +152,5 @@ protected:
 
   bool _useIsospin;
   bool _isProdAmp;
+  bool _useProdBarrier;
 };

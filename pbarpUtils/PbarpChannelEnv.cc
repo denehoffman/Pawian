@@ -86,6 +86,7 @@ void PbarpChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier();
 	 _prodDecList->addDecay(*itDec);
       }
    }

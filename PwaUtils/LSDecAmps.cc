@@ -34,6 +34,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/BarrierFactor.hh"
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -175,6 +176,7 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
     double thePhi=_currentParamPhis.at(*it);
     complex<double> expi(cos(thePhi), sin(thePhi));
 
+    complex<double> tmpResult(0.,0.);
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Spin lambda = lambda1-lambda2;
@@ -183,10 +185,13 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
 	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
 	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
-	result+=amp;
+	tmpResult+=amp;
       }
     }
+    if(absDec()->useProdBarrier()) tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString[_wignerDKey], 0.197);
+    result+=tmpResult; 
   }
+
   result*=_preFactor*_isospinCG;
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;

@@ -85,7 +85,8 @@ public:
   const std::vector<std::string>& replaceMassKey() const { return _replaceMassKey; }
   const std::vector<std::string>& decayDynamics() const { return _dynamics;}
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
-  const std::string productionFormalism() const { return _productionFormalism; } 
+  const std::string productionFormalism() const { return _productionFormalism; }
+  const bool useProductionBarrier() const { return _useProductionBarrier; }
   const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
   const std::vector<std::string>& preFactor() const { return _preFactor;}
   const std::vector<std::string>& histMassNames() const { return _histMass; }
@@ -142,6 +143,7 @@ protected:
   std::vector<std::string>  _replaceMassKey;
   std::vector<std::string> _productionSystem;
   std::string _productionFormalism;
+  bool _useProductionBarrier;
   std::vector<std::string> _cloneParticle;
   std::vector<std::string> _preFactor;
   std::vector<std::string> _histMass;
