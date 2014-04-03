@@ -188,7 +188,10 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
 	tmpResult+=amp;
       }
     }
-    if(absDec()->useProdBarrier()) tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString[_wignerDKey], 0.197);
+    if(absDec()->useProdBarrier()){
+       tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
+ 	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
+    }
     result+=tmpResult; 
   }
 

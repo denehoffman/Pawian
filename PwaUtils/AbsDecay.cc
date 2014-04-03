@@ -232,6 +232,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   Vector4<double> mother4Vec(0.,0.,0.,0.);
   Vector4<double> daughter1_4Vec(0.,0.,0.,0.);
   Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
+  double daughter1_fsMassSum=0;
+  double daughter2_fsMassSum=0;
 
   //fill all4Vec
   for(itMap=fsMap.begin(); itMap!=fsMap.end(); ++itMap){
@@ -248,12 +250,14 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   for(itP=_finalStateParticlesDaughter1.begin(); itP!=_finalStateParticlesDaughter1.end(); ++itP){
     itMap=fsMap.find((*itP)->name());
     daughter1_4Vec+=itMap->second;
+    daughter1_fsMassSum += itMap->second.M();
   }
 
   //fill daughter2
   for(itP=_finalStateParticlesDaughter2.begin(); itP!=_finalStateParticlesDaughter2.end(); ++itP){
     itMap=fsMap.find((*itP)->name());
     daughter2_4Vec+=itMap->second;
+    daughter2_fsMassSum += itMap->second.M();
   }
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
@@ -314,7 +318,9 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
      }
      if (_useProdBarrier){
        double qVal=daughter2HelMother.P();
+       double qValNorm=breakupMomQ(mother4Vec.M(), daughter1_fsMassSum, daughter2_fsMassSum).real();
        evtData->DoubleString[_wignerDKey]=qVal;
+       evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
      }
   }
    else{
