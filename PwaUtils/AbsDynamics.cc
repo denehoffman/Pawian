@@ -61,6 +61,6 @@ void AbsDynamics::fillMasses(EvtData* theData){
     mass4Vec+=theData->FourVecsString[(*it)->name()];
   }
 
-  theData->FourVecsString[_dynKey]=mass4Vec;
+  theData->DoubleString[_dynKey]=mass4Vec.Mass();
 }
 

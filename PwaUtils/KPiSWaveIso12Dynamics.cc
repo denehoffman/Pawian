@@ -63,7 +63,7 @@ complex<double> result(0.,0.);
 
   else{
       theMutex.lock();
-      result=_fVecMap[currentKey]->evalProjMatrix(theData->FourVecsString[_dynKey].M(), 0);
+      result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), 0);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }

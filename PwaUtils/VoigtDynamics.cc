@@ -51,8 +51,8 @@ complex<double> VoigtDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   if ( _cacheAmps && !_recalculate){
     return _cachedMap[evtNo];
   }
-  double currentMass=theData->FourVecsString.at(_dynKey).Mass();
-  complex<double> result(sqrt(_voigtPtr->calc(currentMass, _currentMass0, _currentWidth, _currentSigma)), 0.);
+
+  complex<double> result(sqrt(_voigtPtr->calc(theData->DoubleString.at(_dynKey), _currentMass0, _currentWidth, _currentSigma)), 0.);
   
   if ( _cacheAmps){
      theMutex.lock();

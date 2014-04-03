@@ -32,6 +32,7 @@
 #include "PwaUtils/BreitWignerDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "PwaDynamics/BreitWignerFunction.hh"
 
 BreitWignerDynamics::BreitWignerDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
@@ -48,8 +49,7 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaA
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=BreitWigner(theData->FourVecsString[_dynKey], _currentMass, _currentWidth);
-  
+  complex<double> result=BreitWignerFunction::NonRel(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth);  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedMap[evtNo]=result;

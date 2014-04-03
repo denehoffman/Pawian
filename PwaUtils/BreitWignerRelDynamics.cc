@@ -32,6 +32,7 @@
 #include "PwaUtils/BreitWignerRelDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "PwaDynamics/BreitWignerFunction.hh"
 
 BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   BreitWignerDynamics(name, fsParticles, mother)
@@ -56,8 +57,7 @@ complex<double> BreitWignerRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=BreitWignerRel(theData->FourVecsString[_dynKey], _currentMass, _currentWidth, _fsp1Mass, _fsp2Mass);
-  
+  complex<double> result=BreitWignerFunction::Rel(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, _fsp1Mass, _fsp2Mass);  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedMap[evtNo]=result;
