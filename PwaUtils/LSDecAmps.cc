@@ -34,7 +34,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
-#include "PwaUtils/BarrierFactor.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -95,7 +95,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaught
     lam2Max=lamFs;
   }
 
-  result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  result=lsLoop( grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
 
   return result;
 }
@@ -116,7 +116,8 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
     //    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
-    result*=_absDyn->eval(theData, grandmaAmp);
+
+    //    result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
 
@@ -136,7 +137,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   }
 
 
-  result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
+  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs);
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -145,7 +146,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
      theMutex.unlock();
   }
 
-  result*=_absDyn->eval(theData, grandmaAmp);
+  //  result*=_absDyn->eval(theData, grandmaAmp);
   if(result.real()!=result.real()){
     Info << "dyn name: " << _absDyn->name() 
 	 << "\nname(): " << name()
@@ -157,7 +158,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
 }
 
 
-complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
+complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
 
   // Info << "\n_JPCPtr->J: " << _JPCPtr->J << "\tlamX: " << lamX << "\tlam1Min: " << lam1Min << "\tlam2Min: " << lam2Min << "\tlam1Max: " << lam1Max << "\tlam2Max: " << lam2Max << "\tlamFs: " <<lamFs << endmsg;
  
@@ -188,10 +189,13 @@ complex<double> LSDecAmps::lsLoop(Spin& lamX, EvtData* theData, Spin& lam1Min, S
 	tmpResult+=amp;
       }
     }
+
     if(absDec()->useProdBarrier()){
        tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
  	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
     }
+    else tmpResult*=_absDyn->eval(theData, grandmaAmp);
+
     result+=tmpResult; 
   }
 

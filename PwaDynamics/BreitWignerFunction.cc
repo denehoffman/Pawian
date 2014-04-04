@@ -22,6 +22,7 @@
 //************************************************************************//
 
 #include "PwaDynamics/BreitWignerFunction.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 
 complex<double>  BreitWignerFunction::NonRel(double currentMass,double mass0, double width){
   complex<double> i(0.,1.);
@@ -32,4 +33,22 @@ complex<double> BreitWignerFunction::Rel(double currentMass,double mass0, double
   complex<double> i(0.,1.);
   complex<double> rho0_m=phaseSpaceFac(mass0, massA, massB);
   return mass0*width/(mass0*mass0 - currentMass*currentMass- i*rho0_m*mass0*width);
+}
+
+
+complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB){
+  complex<double> i(0.,1.);
+  complex<double> rho0=phaseSpaceFac(mass0, massA, massB);
+  complex<double> rho=phaseSpaceFac(currentMass, massA, massB);
+  complex<double> momQ0=breakupMomQ(mass0, massA, massB);
+  complex<double> momQ=breakupMomQ(currentMass, massA, massB);
+
+  //  BarrierFactor theBarrierFac(orbMom, momQ0.real(), BarrierFactor::qRDefault);
+  //  double bwkFactor=theBarrierFac.D(momQ.real());
+  double bwkFactor=BarrierFactor::D(orbMom, momQ.real(), momQ0.real(), BarrierFactor::qRDefault);
+
+
+  return mass0*width*bwkFactor/(mass0*mass0 - currentMass*currentMass- i*(rho/rho0)*mass0*width*bwkFactor*bwkFactor);
+  //  return mass0*width*bwkFactor/(mass0*mass0 - currentMass*currentMass- i*mass0*width*bwkFactor*bwkFactor);
+  //  return mass0*width/(mass0*mass0 - currentMass*currentMass- i*mass0*width*(rho/rho0)); 
 }

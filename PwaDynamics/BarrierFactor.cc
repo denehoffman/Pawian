@@ -22,7 +22,7 @@
 //************************************************************************//
 
 #include <cmath>
-#include "PwaUtils/BarrierFactor.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 const double BarrierFactor::qRDefault = 0.1973; // GeV

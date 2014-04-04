@@ -61,7 +61,9 @@ protected:
 private:
   TFile* _theTFile;
   std::map <unsigned int, TH1F* > _histMap;
+  std::map <unsigned int, TH1F* > _histMapNew;
   std::map <unsigned int, TH2F* > _argandHistMap;
+  std::map <unsigned int, TH2F* > _argandHistMapNew;
   std::map <unsigned int, TH2F* > _phaseHistMap;
 };
 

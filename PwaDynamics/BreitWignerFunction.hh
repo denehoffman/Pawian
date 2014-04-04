@@ -40,9 +40,9 @@
 //_____________________________________________________________________________
 
 namespace BreitWignerFunction { 
-  complex<double> NonRel(double cuurentMass,double mass0, double width);
-  complex<double> Rel(double cuurentMass,double mass0, double width, double massA, double massB);
-  //  complex<double> BlattWRel(double> & p4,double mass, double width);
+  complex<double> NonRel(double currentMass,double mass0, double width);
+  complex<double> Rel(double currentMass,double mass0, double width, double massA, double massB);
+  complex<double> BlattWRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB);
 
 }; // namespace BreitWignerFunction
 
