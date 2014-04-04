@@ -191,10 +191,12 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
     }
 
     if(absDec()->useProdBarrier()){
-       tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
- 	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
+      //      tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString[_wignerDKey], 0.197);
+      tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
+      	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
     }
-    else tmpResult*=_absDyn->eval(theData, grandmaAmp);
+    
+    else tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
 
     result+=tmpResult; 
   }

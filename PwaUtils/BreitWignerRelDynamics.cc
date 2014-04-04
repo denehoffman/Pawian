@@ -34,17 +34,12 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 
-BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
+BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2) :
   BreitWignerDynamics(name, fsParticles, mother)
 {
-  Particle* fsParticle1=fsParticles[0];
-  Particle* fsParticle2=fsParticles[1];
-  if(0==fsParticle1 || 0==fsParticle2){
-    Alert << "0 pionter for final state particle 0 or 1!!!" << endmsg;
-    exit(0);
-  }
-  _fsp1Mass=fsParticle1->mass();
-  _fsp2Mass=fsParticle2->mass();
+  _fsp1Mass=massSumDaughter1;
+  _fsp2Mass=massSumDaughter2;
+  Info << "BreitWignerRelDynamics for " << _name << " with  massSumDaughter1= " << _fsp1Mass << " and  massSumDaughter2= " << _fsp2Mass <<endmsg;
 }
 
 BreitWignerRelDynamics::~BreitWignerRelDynamics()

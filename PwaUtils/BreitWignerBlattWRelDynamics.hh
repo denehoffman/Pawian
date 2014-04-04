@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// BreitWignerDynamics class definition file. -*- C++ -*-
+// BreitWignerBlattWRelDynamics class definition file. -*- C++ -*-
 // Copyright 2013 Bertram Kopf
 
 #pragma once
@@ -33,20 +33,19 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/BreitWignerDynamics.hh"
+#include "PwaUtils/BreitWignerRelDynamics.hh"
 
-class BreitWignerRelDynamics : public BreitWignerDynamics{
+class BreitWignerBlattWRelDynamics : public BreitWignerRelDynamics{
 
 public:
-  BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2);
-  virtual ~BreitWignerRelDynamics();
+  BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2);
+  virtual ~BreitWignerBlattWRelDynamics();
 
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
-  
 
 protected:
-  double _fsp1Mass;
-  double _fsp2Mass;
+  std::map<int, std::map<int, complex<float> > >  _cachedLMap;
+
 private:
 
 };

@@ -67,6 +67,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_useIsospin(true)
    ,_isProdAmp(false)
    ,_useProdBarrier(false)
+   ,_massSumFsParticles(0.)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -112,6 +113,12 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
  }
  if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
+
+ //fill mass sum of final state particles
+ std::vector<Particle*>::iterator itP;
+  for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
+    _massSumFsParticles+=(*itP)->mass();
+  }
 }
 
 AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId) :
@@ -140,6 +147,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_useIsospin(true)
    ,_isProdAmp(false)
    ,_useProdBarrier(false)
+   ,_massSumFsParticles(0.)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -193,6 +201,12 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   }
 
   if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
+
+ //fill mass sum of final state particles
+ std::vector<Particle*>::iterator itP;
+  for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
+    _massSumFsParticles+=(*itP)->mass();
+  }
 }
 
 AbsDecay::~AbsDecay(){
@@ -232,8 +246,6 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   Vector4<double> mother4Vec(0.,0.,0.,0.);
   Vector4<double> daughter1_4Vec(0.,0.,0.,0.);
   Vector4<double> daughter2_4Vec(0.,0.,0.,0.);
-  double daughter1_fsMassSum=0;
-  double daughter2_fsMassSum=0;
 
   //fill all4Vec
   for(itMap=fsMap.begin(); itMap!=fsMap.end(); ++itMap){
@@ -250,14 +262,12 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   for(itP=_finalStateParticlesDaughter1.begin(); itP!=_finalStateParticlesDaughter1.end(); ++itP){
     itMap=fsMap.find((*itP)->name());
     daughter1_4Vec+=itMap->second;
-    daughter1_fsMassSum += itMap->second.M();
   }
 
   //fill daughter2
   for(itP=_finalStateParticlesDaughter2.begin(); itP!=_finalStateParticlesDaughter2.end(); ++itP){
     itMap=fsMap.find((*itP)->name());
     daughter2_4Vec+=itMap->second;
-    daughter2_fsMassSum += itMap->second.M();
   }
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
@@ -318,7 +328,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
      }
      if (_useProdBarrier){
        double qVal=daughter2HelMother.P();
-       double qValNorm=breakupMomQ(mother4Vec.M(), daughter1_fsMassSum, daughter2_fsMassSum).real();
+       //       double qValNorm=breakupMomQ(mother4Vec.M(), daughter1_fsMassSum, daughter2_fsMassSum).real();
+       double qValNorm=breakupMomQ(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
        evtData->DoubleString[_wignerDKey]=qVal;
        evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
      }
@@ -377,4 +388,14 @@ void AbsDecay::enableProdBarrier(){
   }
   _useProdBarrier=true;
   Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg; 
+}
+
+double AbsDecay::massSumFsParticlesDec1(){
+  if (!_daughter1IsStable) return _absDecDaughter1->massSumFsParticles();
+  else return _daughter1->mass();
+}
+
+double AbsDecay::massSumFsParticlesDec2(){
+  if (!_daughter2IsStable) return _absDecDaughter2->massSumFsParticles();
+  return _daughter2->mass();
 }

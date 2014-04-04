@@ -22,31 +22,42 @@
 //************************************************************************//
 
 // BreitWignerDynamics class definition file. -*- C++ -*-
-// Copyright 2013 Bertram Kopf
+// Copyright 20123Bertram Kopf
 
-#pragma once
-
-#include <iostream>
-#include <vector>
-#include <complex>
-#include <map>
+#include <getopt.h>
+#include <fstream>
 #include <string>
-#include <memory>
+#include <mutex>
 
-#include "PwaUtils/BreitWignerDynamics.hh"
+#include "PwaUtils/BreitWignerBlattWRelDynamics.hh"
+#include "ErrLogger/ErrLogger.hh"
+#include "Particle/Particle.hh"
+#include "PwaDynamics/BreitWignerFunction.hh"
 
-class BreitWignerRelDynamics : public BreitWignerDynamics{
+BreitWignerBlattWRelDynamics::BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2) :
+  BreitWignerRelDynamics(name, fsParticles, mother, massSumDaughter1, massSumDaughter2)
+{
+}
 
-public:
-  BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2);
-  virtual ~BreitWignerRelDynamics();
+BreitWignerBlattWRelDynamics::~BreitWignerBlattWRelDynamics()
+{
+}
 
-  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
-  
+complex<double> BreitWignerBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
+  int evtNo=theData->evtNo;
+  int orbMom(OrbMom);
+  if ( _cacheAmps && !_recalculate){
+    return _cachedLMap.at(evtNo).at(orbMom);
+  }
 
-protected:
-  double _fsp1Mass;
-  double _fsp2Mass;
-private:
+  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, _fsp1Mass, _fsp2Mass);  
+  if ( _cacheAmps){
+     theMutex.lock();
+     _cachedLMap[evtNo][orbMom]=result;
+     theMutex.unlock();
+  }  
 
-};
+  return result;
+}
+
+

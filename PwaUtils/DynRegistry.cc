@@ -33,6 +33,7 @@
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/BreitWignerDynamics.hh"
 #include "PwaUtils/BreitWignerRelDynamics.hh"
+#include "PwaUtils/BreitWignerBlattWRelDynamics.hh"
 #include "PwaUtils/FlatteDynamics.hh"
 #include "PwaUtils/KPiSWaveIso12Dynamics.hh"
 #include "PwaUtils/KPiSWaveIso32Dynamics.hh"
@@ -85,7 +86,9 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       if(theDec->dynType()=="BreitWigner")
     	result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="BreitWignerRel")
-    	result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart()));
+    	result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2() ));
+      else if(theDec->dynType()=="BreitWignerBlattWRel")
+	result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2()));
       else if(theDec->dynType()=="KMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
 	result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile)); 

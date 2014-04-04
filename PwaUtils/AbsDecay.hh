@@ -101,6 +101,9 @@ public:
   void resetFilledMap();
   void enableProdBarrier();
   bool useProdBarrier() {return _useProdBarrier;}
+  double massSumFsParticles() {return _massSumFsParticles;}
+  double massSumFsParticlesDec1();
+  double massSumFsParticlesDec2();
 
 protected:
   ChannelID _channelId;
@@ -153,4 +156,5 @@ protected:
   bool _useIsospin;
   bool _isProdAmp;
   bool _useProdBarrier;
+  double _massSumFsParticles;
 };
