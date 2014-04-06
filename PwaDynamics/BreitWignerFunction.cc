@@ -43,9 +43,7 @@ complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,d
   complex<double> momQ0=breakupMomQ(mass0, massA, massB);
   complex<double> momQ=breakupMomQ(currentMass, massA, massB);
 
-  //  BarrierFactor theBarrierFac(orbMom, momQ0.real(), BarrierFactor::qRDefault);
-  //  double bwkFactor=theBarrierFac.D(momQ.real());
-  double bwkFactor=BarrierFactor::D(orbMom, momQ.real(), momQ0.real(), BarrierFactor::qRDefault);
+  std::complex<double> bwkFactor=BarrierFactor::D(orbMom, momQ, momQ0, BarrierFactor::qRDefault);
 
 
   return mass0*width*bwkFactor/(mass0*mass0 - currentMass*currentMass- i*(rho/rho0)*mass0*width*bwkFactor*bwkFactor);

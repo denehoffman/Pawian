@@ -23,23 +23,24 @@
 
 #pragma once
 
+#include <complex>
 
 class BarrierFactor
 {
 
 public:
-   BarrierFactor(double l, double q0, double qR);
-   double D(double q);
-   double BlattWeisskopf(double q);
-   static double D(int l, double q, double q0, double qR);
-   static double BlattWeisskopf(int l, double q, double qR);
-   static double BlattWeisskopf(int l, double z);
+   BarrierFactor(int l, std::complex<double> q0, double qR);
+   std::complex<double> D(std::complex<double> q);
+   std::complex<double> BlattWeisskopf(std::complex<double> q);
+   static std::complex<double> D(int l, std::complex<double> q, std::complex<double> q0, double qR);
+   static std::complex<double> BlattWeisskopf(int l, std::complex<double> q, double qR);
+   static std::complex<double> BlattWeisskopf(int l, std::complex<double> z);
 
    static const double qRDefault;
 
 private:
    double _l;
    double _qR;
-   double _q0;
-   double _B0;
+   std::complex<double> _q0;
+   std::complex<double> _B0;
  };

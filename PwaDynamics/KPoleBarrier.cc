@@ -23,7 +23,7 @@
 
 #include "PwaDynamics/KPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 
 KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom):
   KPole(g_i, mass_0)
@@ -43,8 +43,7 @@ KPoleBarrier::~KPoleBarrier(){
 void KPoleBarrier::evalMatrix(const double mass){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
-    _barrierFactor.at(i)=pow(_phpVecs.at(i)->breakUpMom(mass)/_breakUpM0.at(i), _orbMom);
-    //std::cout << "Barrier factor " << i << ": " << _barrierFactor.at(i) << std::endl;
+     _barrierFactor.at(i) = BarrierFactor::D(_orbMom, _phpVecs.at(i)->breakUpMom(mass), _breakUpM0.at(i), BarrierFactor::qRDefault);
   }
 
   double denom=_poleMass*_poleMass-mass*mass;

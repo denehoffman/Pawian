@@ -27,43 +27,29 @@
 
 const double BarrierFactor::qRDefault = 0.1973; // GeV
 
-BarrierFactor::BarrierFactor(double l, double q0, double qR) :
+BarrierFactor::BarrierFactor(int l, std::complex<double> q0, double qR) :
    _l(l),
    _qR(qR),
    _q0(q0)
 {
-
-   if(q0 < 0){
-      Alert << "q0 < 0" << endmsg;
-   }
-
    _B0 = BlattWeisskopf(_q0);
-
-   if(_B0 < 0){
-      Alert << "_B0 < 0" << endmsg;
-   }
 }
 
 
 
-double BarrierFactor::BlattWeisskopf(double q){
+std::complex<double> BarrierFactor::BlattWeisskopf(std::complex<double> q){
    return BlattWeisskopf(_l, q*q/_qR/_qR);
 }
 
 
 
-double BarrierFactor::BlattWeisskopf(int l, double q, double qR){
+std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> q, double qR){
    return BlattWeisskopf(l, q*q/qR/qR);
 }
 
 
 
-double BarrierFactor::BlattWeisskopf(int l, double z){
-
-   if(z<0){
-      Alert << "z<0" << endmsg;
-      return 0;
-   }
+std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> z){
 
    if(0==l){
       return 1.0;
@@ -99,12 +85,12 @@ double BarrierFactor::BlattWeisskopf(int l, double z){
 
 
 
-double BarrierFactor::D(double q){
+std::complex<double> BarrierFactor::D(std::complex<double> q){
    return BlattWeisskopf(q) / _B0;
 }
 
 
 
-double BarrierFactor::D(int l, double q, double q0, double qR){
+std::complex<double> BarrierFactor::D(int l, std::complex<double> q, std::complex<double> q0, double qR){
    return BlattWeisskopf(l, q, qR) / BlattWeisskopf(l, q0, qR);
 }
