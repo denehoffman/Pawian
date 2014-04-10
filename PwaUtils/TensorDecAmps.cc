@@ -81,7 +81,7 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDa
     lam2Max=lamFs;
   }
 
-  complex<double> result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  complex<double> result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
 
   return result;
 }
@@ -98,8 +98,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
   
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
-    //    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
@@ -120,23 +119,22 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
   }
 
 
-  result=lsLoop(lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
+  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpShortMap[evtNo][currentSpinIndex]=result;
-     //     _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
   // if (norm(result)>1.){
   //   Info << "evtNo: " << evtNo << "  name(): " << name() << " result(lamX=" << lamX << ", lamFs=" << lamFs << "): " << result << endmsg;
   // }
-  result*=_absDyn->eval(theData, grandmaAmp);
+  //  result*=_absDyn->eval(theData, grandmaAmp);
   return result;
 }
 
 
-complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
+complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
   complex<double> result(0.,0.);
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
@@ -144,6 +142,7 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
     double thePhi=_currentParamPhis.at(*it);
     complex<double> expi(cos(thePhi), sin(thePhi));
 
+    complex<double> tmpResult(0.,0.);
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	//	Spin lambda = lambda1-lambda2;
@@ -155,9 +154,11 @@ complex<double> TensorDecAmps::lsLoop(Spin lamX, EvtData* theData, Spin lam1Min,
        // 	 //	 amp= complex<double>(0.,0.);
        // }
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
-	result+=amp;
+	tmpResult+=amp;
       }
     }
+    tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+    result+=tmpResult;
   }
 
   result*=_isospinCG;

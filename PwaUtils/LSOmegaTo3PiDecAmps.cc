@@ -81,8 +81,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
   
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
-    //    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
@@ -103,8 +102,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpShortMap[evtNo][currentSpinIndex]=result;
-     //     _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 

@@ -81,8 +81,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
   
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
-    //    result=_cachedAmpMap[evtNo][lamX][lamFs];
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
@@ -101,8 +100,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
   result*=100.;
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpShortMap[evtNo][currentSpinIndex]=result;
-     //     _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 

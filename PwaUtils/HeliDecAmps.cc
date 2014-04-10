@@ -110,10 +110,9 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     complex<double> expi(cos(thePhi), sin(thePhi));
     Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
     complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
-    //    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDsString.at(_wignerDKey).at(currentJPClamlam->J).at(lamX).at(lambda));
     result+=amp;
   }
-  //  result*=sqrt((2.*_JPCPtr->J+1.)/12.56637);
+
   result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
   return result;
 }
@@ -131,8 +130,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
-    //    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     result*=_absDyn->eval(theData, grandmaAmp);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
@@ -163,8 +161,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpShortMap[evtNo][currentSpinIndex]=result;
-     //     _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
 }
 

@@ -114,10 +114,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   //  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpShortMap.at(evtNo).at(currentSpinIndex);
-    //    result=_cachedAmpMap.at(evtNo).at(lamX).at(lamFs);
-
-    //    result*=_absDyn->eval(theData, grandmaAmp);
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
@@ -141,12 +138,10 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpShortMap[evtNo][currentSpinIndex]=result;
-     //     _cachedAmpMap[evtNo][lamX][lamFs]=result;
+     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 
-  //  result*=_absDyn->eval(theData, grandmaAmp);
   if(result.real()!=result.real()){
     Info << "dyn name: " << _absDyn->name() 
 	 << "\nname(): " << name()
