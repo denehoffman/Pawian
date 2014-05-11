@@ -312,9 +312,30 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
 
    // Assign client numbers to channels
    std::vector<short> numClVec;
+   short sumCl=0;
    for(auto it = numEventMap.begin(); it!=numEventMap.end();++it){
       long channelSum = std::get<0>((*it).second) + std::get<2>((*it).second);
-      numClVec.push_back((short)(((double)channelSum / (double)totalEvt) * _noOfClients + 0.5));
+      short numClElem = (short)(((double)channelSum / (double)totalEvt) * _noOfClients);
+      sumCl += numClElem;
+      numClVec.push_back(numClElem);
+   }
+
+   // Correct roundings
+   while(sumCl != _noOfClients){
+      // Find channel with lowest number of clients and increase by one
+      short min=1E4;
+      short minid=-1;
+      int i=0;
+      for(auto it = numClVec.begin(); it!=numClVec.end();++it){
+	 if(*it < min){
+	    min=*it;
+	    minid=i;
+	 }
+	 i++;
+      }
+      
+      numClVec.at(minid)++;
+      sumCl++;
    }
 
    // Check for #clients=0 and do correction
@@ -374,6 +395,11 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
          eventRanges.push_back(lastMCEvent);
          _eventDistribution.push_back(std::pair<ChannelID, std::vector<long> >((*it).first, eventRanges));
       }
+   }
+
+   if(_eventDistribution.size() != _noOfClients){
+      Alert << "_eventDistributions has wrong size" << endmsg;
+      exit(0);
    }
 }
 
