@@ -1,0 +1,18 @@
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : qft++Extension
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+project : 
+	;
+
+lib qft++Extension : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	:
+	: 
+	: ;

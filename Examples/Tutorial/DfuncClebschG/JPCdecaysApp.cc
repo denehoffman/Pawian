@@ -27,6 +27,9 @@
 #include <sstream>
 
 #include "Examples/Tutorial/DfuncClebschG/JPCdecays.hh"
+#include "Examples/Tutorial/DfuncClebschG/DecAngularDist.hh"
+#include "Examples/Tutorial/DfuncClebschG/SphericalHarmonicsPolts.hh"
+
 #include "PwaUtils/DataUtils.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -180,6 +183,10 @@ int main(int __argc,char *__argv[]){
   motherJPC->print(std::cout);
   JPCdecays theDecays(motherJPC, daughter1JPC, daughter2JPC);
   theDecays.print(std::cout);
+
+  DecAngularDist theDecAngularDist(motherJPC, daughter1JPC, daughter2JPC);
+
+  SphericalHarmonicsPolts sphericalHarmonicsPolts(motherJPC->J+2); 
   return 0;
 }
 

@@ -20,6 +20,7 @@ lib DfuncClebschG :
         [ glob *.cc : *App.cc ]  
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
+	$(TOP)/qft++Extension//qft++Extension
 	: 
 	: 
 	: ;

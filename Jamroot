@@ -52,6 +52,7 @@ lib Minuit2 : : <file>$(extern)/lib/Linux26SL6_x86_64_gcc444/libMinuit2.so : : ;
 build-project qft++ ;
 build-project Utils ;
 build-project ErrLogger ;
+build-project qft++Extension ;
 build-project ConfigParser ;
 build-project PwaDynamics ;
 build-project PwaUtils ;
