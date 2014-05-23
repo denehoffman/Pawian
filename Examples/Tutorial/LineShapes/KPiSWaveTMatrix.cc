@@ -37,6 +37,8 @@
 #include "PwaDynamics/KPole.hh"
 //#include "PwaDynamics/KPoleNonRel.hh"
 #include "PwaDynamics/KMatrixRel.hh"
+#include "PwaDynamics/LASS.hh"
+
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -52,6 +54,17 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
   std::string rootFileName="./KPiSWaveTMatrix.root";
   _theTFile=new TFile(rootFileName.c_str(),"recreate");
 
+  double mLASS=1.435;
+  double gammaLASS=0.279;
+  // double aLASS=1.9/1000.;
+  // double rLASS=1.76/1000.;
+  double aLASS=1.9;
+  double rLASS=1.76;
+  double BLASS=1.0;
+  double phiB=0.;
+  double RLASS=1.0;
+  double phiR=0.;
+
   int size=2000;
   double massMin=0.135+0.5;
   double massMax=1.8;
@@ -63,6 +76,10 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
   _KPiAmpImagH1= new TH1F("_KPiAmpImagH1","K #pi amp Im",size+1, massMin, massMax);
   _KPiAmpImagH1->SetYTitle("K #pi amp Im");
 
+  _KPiAmpRealLASSH1= new TH1F("_KPiAmpRealLASSH1","K #pi amp Re LASS",size+1, massMin, massMax);
+  _KPiAmpRealLASSH1->SetYTitle("K #pi amp Re");
+  _KPiAmpImagLASSH1= new TH1F("_KPiAmpImagLASSH1","K #pi amp Im LASS",size+1, massMin, massMax);
+  _KPiAmpImagLASSH1->SetYTitle("K #pi amp Im");
 
   std::shared_ptr<KMatrixBase> theKMatrixIso12(new KMatrixKPiSFocus(1));
   std::shared_ptr<KMatrixBase> theKMatrixIso32(new KMatrixKPiSFocus(3));
@@ -75,7 +92,11 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
   
   for (double mass=massMin; mass<massMax; mass+=stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
-    
+
+    complex<double> currentLASS=LASS::K0star_1430(mass, mLASS, gammaLASS, aLASS, rLASS, BLASS, phiB, RLASS, phiR);
+    _KPiAmpRealLASSH1->Fill(mass, currentLASS.real());
+    _KPiAmpImagLASSH1->Fill(mass, currentLASS.imag());
+     
     theTMatrix12->evalMatrix(mass);
     theTMatrix32->evalMatrix(mass);        
 

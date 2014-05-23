@@ -295,6 +295,9 @@ void  DecAngularDist::fillTensorAmps(double cosT){
 	      Tensor<complex<double> > epsilonDaughter1Project = _polDaughter1(lamDaughter1);
 
 	      for (Spin lamDaughter2=-_daughter2JPC->J; lamDaughter2<=_daughter2JPC->J; ++lamDaughter2){
+		// if( fabs(lamMother-lamDaughter1-lamDaughter2)> (*itLS).L) continue;
+		// if( fabs(lamDaughter1+lamDaughter2)> (*itLS).S) continue;
+
 		//		Spin lamDaughterDiff=lamDaughter1-lamDaughter2;
 		//		if( fabs(lamDaughterDiff)>_motherJPC->J || fabs(lamDaughterDiff)>(*itLS).S) continue;
 	

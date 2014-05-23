@@ -21,53 +21,28 @@
 //									  //
 //************************************************************************//
 
+// Copyright 2014 Bertram Kopf
 
-#pragma once
+#pragma once 
+
+//_____________________________________________________________________________
+// @file LASS.hh
+//_____________________________________________________________________________
 
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <map>
+#include <complex>
+#include <utility>
+#include <memory>
 
-#include <cassert>
+#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
+//_____________________________________________________________________________
+//_____________________________________________________________________________
 
+namespace LASS { 
+  complex<double> K0star_1430(double currentMass, double m0, double gammaM, double aLASS, double rLASS, double BLASS, double phiB, double RLASS, double phiR);
 
-#include "TROOT.h"
-// #include <TSystem.h>
-//KPiSWaveTMatrix class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+}; // namespace LASS
 
-class TFile;
-class TH1F;
-class TH2F;
-
-
-class KPiSWaveTMatrix {
-
-public:
-
-  // create/copy/destroy:
-
-  ///Constructor 
-  KPiSWaveTMatrix();
-
-
-  /** Destructor */
-  virtual ~KPiSWaveTMatrix();
-
-  // Getters:
- 
-protected:
-
-
-private:
-  TFile* _theTFile;
-  TH1F* _KPiAmpRealH1;
-  TH1F* _KPiAmpImagH1;
-  TH1F* _KPiAmpRealLASSH1;
-  TH1F* _KPiAmpImagLASSH1;
-};
 
 

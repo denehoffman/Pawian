@@ -21,53 +21,55 @@
 //									  //
 //************************************************************************//
 
+// K0star1430LassDynamics class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
 #pragma once
 
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
+#include <complex>
 #include <map>
+#include <string>
+#include <memory>
 
-#include <cassert>
+#include "PwaUtils/AbsDynamics.hh"
 
+class K0star1430Lass;
 
-
-#include "TROOT.h"
-// #include <TSystem.h>
-//KPiSWaveTMatrix class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
-
-class TFile;
-class TH1F;
-class TH2F;
-
-
-class KPiSWaveTMatrix {
+class K0star1430LassDynamics : public AbsDynamics{
 
 public:
+  K0star1430LassDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
+  virtual ~K0star1430LassDynamics();
 
-  // create/copy/destroy:
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
+  
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void setMassKey(std::string& theMassKey);
 
-  ///Constructor 
-  KPiSWaveTMatrix();
-
-
-  /** Destructor */
-  virtual ~KPiSWaveTMatrix();
-
-  // Getters:
- 
 protected:
+  //  std::string _key;
+  std::string _aLASSKey;
+  std::string _rLASSKey;
+  std::string _BLASSKey;
+  std::string _phiBKey;
+  std::string _RLASSKey;
+  std::string _phiRKey;
 
+  double _currentMass;
+  double _currentWidth;
+  double _currentaLASS;
+  double _currentrLASS;
+  double _currentBLASS;
+  double _currentphiB;
+  double _currentRLASS;
+  double _currentphiR;
+
+  std::map<int, complex<double> >  _cachedMap; 
 
 private:
-  TFile* _theTFile;
-  TH1F* _KPiAmpRealH1;
-  TH1F* _KPiAmpImagH1;
-  TH1F* _KPiAmpRealLASSH1;
-  TH1F* _KPiAmpImagLASSH1;
+
 };
-
-
