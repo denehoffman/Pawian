@@ -46,8 +46,7 @@
 
 
 pbarpBaseLh::pbarpBaseLh(ChannelID channelID) :
-  AbsLh()
-  ,_channelID(channelID)
+  AbsLh(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -271,6 +270,9 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+
+  result *= theParamVal.otherParams.at(_channelScaleParam);
+
   return result;
 
 }
@@ -305,6 +307,7 @@ void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   fitVal.Phis["pbarp"].insert(currentPhiValMap.begin(), currentPhiValMap.end());
   fitErr.Mags["pbarp"].insert(currentMagErrMap.begin(), currentMagErrMap.end());
   fitErr.Phis["pbarp"].insert(currentPhiErrMap.begin(), currentPhiErrMap.end());
+
 }
 
 void pbarpBaseLh::print(std::ostream& os) const{
@@ -333,7 +336,6 @@ void  pbarpBaseLh::initialize(){
   _pbarpReactionPtr = std::static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel(_channelID))->reaction();
   _jpclsStates=_pbarpReactionPtr->jpclsStates();
   _igjpcStates=_pbarpReactionPtr->igjpcStates();
-
 }
 
 void pbarpBaseLh::updateFitParams(fitParams& theParamVal){

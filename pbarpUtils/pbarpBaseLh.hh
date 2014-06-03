@@ -71,7 +71,6 @@ virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J
   virtual void print(std::ostream& os) const;
 
 protected:
-  ChannelID _channelID;
   std::shared_ptr<pbarpReaction> _pbarpReactionPtr;
   std::vector< std::shared_ptr<const JPCLS> > _jpclsStates;
   std::vector< std::shared_ptr<const IGJPC> > _igjpcStates;

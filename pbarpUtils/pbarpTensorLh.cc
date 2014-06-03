@@ -197,6 +197,9 @@ double pbarpTensorLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal)
   }
 
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+
+  result *= theParamVal.otherParams.at(_channelScaleParam);
+
   return result;
 
 }

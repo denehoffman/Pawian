@@ -44,7 +44,9 @@ class AbsLh : public AbsParamHandler{
 
 public:
   AbsLh(std::shared_ptr<AbsLh>);
-  AbsLh();
+  AbsLh(ChannelID channelID);
+  void initialize();
+
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
 
@@ -68,8 +70,13 @@ public:
 
   virtual void print(std::ostream& os) const=0;
 
+  ChannelID getChannelID(){return _channelID;}
+  std::string getChannelScaleParam(){return _channelScaleParam;}
+
 protected:
 
+  ChannelID _channelID;
+  std::string _channelScaleParam;
   std::vector<EvtData*> _evtDataVec;
   std::vector<EvtData*> _evtMCVec;
   std::vector< std::shared_ptr<AbsXdecAmp> > _decAmps;

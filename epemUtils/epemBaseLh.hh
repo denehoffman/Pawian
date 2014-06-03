@@ -73,7 +73,6 @@ public:
 
 
 protected:
-  ChannelID _channelID;
   std::shared_ptr<epemReaction> _epemReactionPtr;
 
   int _highestJFsp;

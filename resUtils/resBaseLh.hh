@@ -72,7 +72,6 @@ public:
 
 
 protected:
-  ChannelID _channelID;
   std::shared_ptr<resReaction> _resReactionPtr;
 
   int _highestJFsp;

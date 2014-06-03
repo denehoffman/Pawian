@@ -47,8 +47,7 @@
 #include <boost/numeric/ublas/io.hpp>
 
 epemBaseLh::epemBaseLh(ChannelID channelID) :
-  AbsLh()
-  ,_channelID(channelID)
+  AbsLh(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -110,6 +109,9 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+
+  result *= theParamVal.otherParams.at(_channelScaleParam);
+
   return result;
 
 }

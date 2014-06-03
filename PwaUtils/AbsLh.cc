@@ -41,29 +41,52 @@
 
 AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   AbsParamHandler()
+  , _channelID(theAbsLhPtr->getChannelID())
   ,_evtDataVec(theAbsLhPtr->getDataVec())
   ,_evtMCVec(theAbsLhPtr->getMcVec())
   ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
+  ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
+
 {
-  unsigned int noOfThreads=GlobalEnv::instance()->parser()->noOfThreads();
-  if(noOfThreads > std::thread::hardware_concurrency()) noOfThreads=std::thread::hardware_concurrency();
-  _noOfThreads = noOfThreads;
+   initialize();
 }
 
-AbsLh::AbsLh() :
+AbsLh::AbsLh(ChannelID channelID) :
   AbsParamHandler()
+  , _channelID(channelID)
   ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
   ,_calcCounter(0)
+  ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 {
-  _noOfThreads = GlobalEnv::instance()->parser()->noOfThreads();
+   initialize();
 }
 
 AbsLh::~AbsLh()
 {
 }
+
+
+
+void AbsLh::initialize(){
+
+    std::vector<Particle*> fsParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
+    std::vector<Particle*>::iterator itParticle;
+
+    std::ostringstream channelScaleParamStream;
+    channelScaleParamStream << "channelType" << GlobalEnv::instance()->Channel(_channelID)->channelType() << "To";
+    
+    for (itParticle=fsParticles.begin(); itParticle != fsParticles.end(); ++itParticle){
+       channelScaleParamStream << (*itParticle)->name();
+    }
+    channelScaleParamStream << "channelScaling";
+
+    _channelScaleParam = channelScaleParamStream.str();
+}
+
+
 
 void  AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
 			    LHData& theLHData, fitParams& theParamVal){
@@ -95,7 +118,6 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
   std::vector<LHData> threadDataVec;
   threadDataVec.resize(_noOfThreads);
 
-
   for(int i = 0; i<_noOfThreads;i++){
 
      int eventMin = i*eventStepData;
@@ -104,6 +126,7 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
 				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
   }
+
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
   }
@@ -121,7 +144,6 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
   }
-
 
   for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it){
      theLHData.logLH_data += (*it).logLH_data;
@@ -249,6 +271,9 @@ void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
     (*itDecs)->getDefaultParams(fitVal, fitErr);
   }
+
+  fitVal.otherParams[_channelScaleParam] = 1.;
+  fitErr.otherParams[_channelScaleParam] = 0.01;
 }
 
 void AbsLh::cacheAmplitudes(){

@@ -48,8 +48,7 @@
 
 
 resBaseLh::resBaseLh(ChannelID channelID) :
-  AbsLh()
-  ,_channelID(channelID)
+  AbsLh(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -104,6 +103,9 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   }
 
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+
+  result *= theParamVal.otherParams.at(_channelScaleParam);
+
   return result;
 
 }

@@ -316,7 +316,13 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
   histPtr->scaleFitHists(histScaleFactor);
 }
 
-void AppBase::fixParams(MnUserParameters& upar, const std::vector<std::string>& fixedParams){
+void AppBase::fixParams(MnUserParameters& upar, std::vector<std::string> fixedParams){
+
+  // Always fix the primary channel's scaling parameters
+  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
+  fixedParams.push_back(fixedScaleParam);
+  Info << "Fixing scaling parameter " << fixedScaleParam << endmsg;
+
   const std::vector<MinuitParameter> theParams= upar.Parameters();
   std::vector<std::string> parNames;
   std::vector<MinuitParameter>::const_iterator itPar;

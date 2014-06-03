@@ -75,7 +75,6 @@ public:
 
 
 protected:
-  ChannelID _channelID;
   std::shared_ptr<gammapReaction> _gammapReactionPtr;
   std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess> _jpcToIGJPCMap;
   std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess> _jpcToJPCljMap;

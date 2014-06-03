@@ -344,6 +344,12 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
 	maxVal = 1.;
 	upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }
+    // channel scaling params
+    else if(theName.size()>20 && (theName.compare(theName.size()-19, theName.size(), "channelScalingOther")==0)){
+       minVal = 0.;
+       maxVal = 10;
+       upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+    }
     else{
        upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }

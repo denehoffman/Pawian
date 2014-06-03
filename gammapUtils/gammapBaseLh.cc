@@ -49,8 +49,7 @@
 
 
 gammapBaseLh::gammapBaseLh(ChannelID channelID) :
-  AbsLh()
-  ,_channelID(channelID)
+  AbsLh(channelID)
 {
   initialize();
 }
@@ -159,6 +158,9 @@ double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
   
   
   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+
+  result *= theParamVal.otherParams.at(_channelScaleParam);
+
   return result;
 
 }
@@ -273,7 +275,7 @@ void gammapBaseLh::print(std::ostream& os) const{
 
 void  gammapBaseLh::initialize(){
   // check that only one non spin0 final particle exists  
-  std::vector<Particle*> fsParticles=std::static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->PbarpChannel(_channelID))->finalStateParticles();
+  std::vector<Particle*> fsParticles=std::static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel(_channelID))->finalStateParticles();
   std::vector<Particle*>::iterator itParticle;
   bool spinParticleFound=false;
 
