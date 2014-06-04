@@ -204,8 +204,7 @@ int main(int __argc,char *__argv[]){
   return 1;
   }
 
-  //  Get the mc data limit
-  int ratioMcToData=theAppParams->ratioMcToData();
+
 
   if(mode == "server"){
 
@@ -228,6 +227,7 @@ int main(int __argc,char *__argv[]){
       theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
 
       EventList mcData;
+      int ratioMcToData=(*it).first->parser()->ratioMcToData();
       int maxMcEvts=eventsData.size()*ratioMcToData;
       theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
 
@@ -273,6 +273,7 @@ int main(int __argc,char *__argv[]){
    //    theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
 
    //    EventList mcData;
+   //    int ratioMcToData=(*it).first->parser()->ratioMcToData();
    //    int maxMcEvts=eventsData.size()*ratioMcToData;
    //    theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
 
@@ -330,6 +331,7 @@ int main(int __argc,char *__argv[]){
  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight());
  // theAppBase.readEvents(eventsData, dataFileNames, 0, 100000);
 
+ int ratioMcToData=theAppParams->ratioMcToData();
  int maxMcEvts=eventsData.size()*ratioMcToData;
 
  EventList mcData;

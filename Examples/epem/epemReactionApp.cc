@@ -214,8 +214,6 @@ int main(int __argc,char *__argv[]){
   return 1;
  }
 
-  // Get the mc data limit
-  int ratioMcToData=theAppParams->ratioMcToData();
 
   if(mode == "server"){
 
@@ -230,6 +228,7 @@ int main(int __argc,char *__argv[]){
       Info << "mc file: " << mcFile ;  // << endmsg;
 
       int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
+      int ratioMcToData=(*it).first->parser()->ratioMcToData();
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
 
@@ -278,6 +277,7 @@ int main(int __argc,char *__argv[]){
       Info << "mc file: " << mcFile ;  // << endmsg;
 
       int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
+      int ratioMcToData=(*it).first->parser()->ratioMcToData();
 
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
@@ -338,7 +338,8 @@ int main(int __argc,char *__argv[]){
   Info << "mc file: " << mcFile ;  // << endmsg;
 
   int noOfDataEvents = theAppParams->noOfDataEvts();
-  
+  int ratioMcToData = theAppParams->ratioMcToData();
+
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
