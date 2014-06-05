@@ -290,8 +290,8 @@ void IsobarTensorDecay::calcChi12(Tensor<complex<double> >& s12SpinProjector, Te
   Tensor<complex<double> > chiPart;
   if(add_lctForChi){
     chiPart=leviPssTensor*conj(epsilonDaughter1Project);
-    //    chiPart.Permute(1,chiPart.Rank());
-    chiPart.Permute(0,chiPart.Rank()-1);
+    chiPart=chiPart.Permute(0,chiPart.Rank()-1);
+    //    chiPart=conj(epsilonDaughter1Project)*leviPssTensor;
     chiPart=chiPart*conj(epsilonDaughter2Project);
   }
   else{
@@ -348,7 +348,10 @@ void IsobarTensorDecay::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<doub
   if(add_lct){
     lsPartTensor=leviPlsTensor*orbTensor;
     // lsPartTensor.Permute(1,lsPartTensor.Rank());
-    lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
+    lsPartTensor=lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
+
+    //    lsPartTensor=orbTensor*leviPlsTensor;
+
     //     DebugMsg << "lsPartTensor w levi and permute: rank" << lsPartTensor.Rank() << endmsg;
     //      DebugMsg << "chi12.Rank() " << chi12.Rank() << endmsg;
     result=lsPartTensor.Contract(chi12, noOfContractions-2);

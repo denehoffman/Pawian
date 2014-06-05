@@ -90,6 +90,8 @@ DecAngularDist::DecAngularDist(std::shared_ptr<const jpcRes> motherJPC, std::sha
    lamMotherStrStr << lamMother;
 
    std::string histThetaTensorAmpJMName="ampJMThetaTensor"+_motherJPC->name()+"_"+lamMotherStrStr.str();
+   std::string histThetaCanoJMName="CanoJM"+_motherJPC->name()+"_"+lamMotherStrStr.str();
+   _canoJMAmpThetaHistMap[lamMother]=new TH1F(histThetaCanoJMName.c_str(), histThetaCanoJMName.c_str(), 201, -1., 1.);
 
    for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
      std::stringstream M1StrStr;
@@ -99,11 +101,11 @@ DecAngularDist::DecAngularDist(std::shared_ptr<const jpcRes> motherJPC, std::sha
        M2StrStr << lamDaughter2;
 
        std::string histThetaTensorJMM1M1Name="TensorJMM1M2"+_motherJPC->name()+"_"+lamMotherStrStr.str()+"_M1_"+M1StrStr.str()+"_M2_"+M2StrStr.str();
-       TH1F* currentTensorJMM1M2Hist=new TH1F(histThetaTensorJMM1M1Name.c_str(), histThetaTensorJMM1M1Name.c_str(), 202., -1.01, 1.01);
+       TH1F* currentTensorJMM1M2Hist=new TH1F(histThetaTensorJMM1M1Name.c_str(), histThetaTensorJMM1M1Name.c_str(), 201, -1., 1.);
        _tensorJMM1M2AmpThetaHistMap[lamMother][lamDaughter1][lamDaughter2]=currentTensorJMM1M2Hist;
 
        std::string histThetaCanoJMM1M1Name="CanoJMM1M2"+_motherJPC->name()+"_"+lamMotherStrStr.str()+"_M1_"+M1StrStr.str()+"_M2_"+M2StrStr.str();
-       TH1F* currentCanoJMM1M2Hist=new TH1F(histThetaCanoJMM1M1Name.c_str(), histThetaCanoJMM1M1Name.c_str(), 202., -1.01, 1.01);
+       TH1F* currentCanoJMM1M2Hist=new TH1F(histThetaCanoJMM1M1Name.c_str(), histThetaCanoJMM1M1Name.c_str(), 201, -1., 1.);
        _canoJMM1M2AmpThetaHistMap[lamMother][lamDaughter1][lamDaughter2]=currentCanoJMM1M2Hist;
 
        for (itLS=_allowedCParityLSs.begin(); itLS!=_allowedCParityLSs.end(); ++itLS){
@@ -113,31 +115,47 @@ DecAngularDist::DecAngularDist(std::shared_ptr<const jpcRes> motherJPC, std::sha
 	 sStrStr << (*itLS).S;
 
 	 std::string histThetaTensorJLSMM1M1Name="Tensor"+_motherJPC->name()+"_L"+lStrStr.str()+"_S"+sStrStr.str()+"_M"+lamMotherStrStr.str()+"_M1_"+M1StrStr.str()+"_M2_"+M2StrStr.str();
-	 TH1F* currentTensorJLSMM1M2Hist=new TH1F(histThetaTensorJLSMM1M1Name.c_str(), histThetaTensorJLSMM1M1Name.c_str(), 202., -1.01, 1.01);
+	 TH1F* currentTensorJLSMM1M2Hist=new TH1F(histThetaTensorJLSMM1M1Name.c_str(), histThetaTensorJLSMM1M1Name.c_str(), 201, -1., 1.);
 	 _tensorJLSMM1M2AmpThetaHistMap[(*itLS).L][(*itLS).S][lamMother][lamDaughter1][lamDaughter2]=currentTensorJLSMM1M2Hist;
 
 	 std::string histThetaCanoJLSMM1M1Name="Cano"+_motherJPC->name()+"_L"+lStrStr.str()+"_S"+sStrStr.str()+"_M"+lamMotherStrStr.str()+"_M1_"+M1StrStr.str()+"_M2_"+M2StrStr.str();
-	 TH1F* currentCanoJLSMM1M2Hist=new TH1F(histThetaCanoJLSMM1M1Name.c_str(), histThetaCanoJLSMM1M1Name.c_str(), 202., -1.01, 1.01);
+	 TH1F* currentCanoJLSMM1M2Hist=new TH1F(histThetaCanoJLSMM1M1Name.c_str(), histThetaCanoJLSMM1M1Name.c_str(), 201, -1., 1.);
 	 _canoJLSMM1M2AmpThetaHistMap[(*itLS).L][(*itLS).S][lamMother][lamDaughter1][lamDaughter2]=currentCanoJLSMM1M2Hist;
 	 }
      }
    }
  }
  
- _heliJAmpAllThetaHist = new TH1F("ampJAllThetaHeli", "ampJAllThetaHeli", 202., -1.01, 1.01);
- _heliLSJAmpAllThetaHist = new TH1F("ampJAllThetaHeliLS", "ampJAllThetaHeliLS", 202., -1.01, 1.01);
- _canoJAmpAllThetaHist = new TH1F("ampJAllThetaCano", "ampJAllThetaCano", 202., -1.01, 1.01);
- _tensorJAmpAllThetaHist = new TH1F("ampJAllThetaTensor", "ampJAllThetaTensor", 202., -1.01, 1.01);
- _tensorJMM1M2AmpAllThetaHist = new TH1F("ampJMM1M2AllThetaTensor", "ampJMM1M2AllThetaTensor", 202., -1.01, 1.01);
- _canoJMM1M2AmpAllThetaHist = new TH1F("ampJMM1M2AllThetaCano", "ampJMM1M2AllThetaCano", 202., -1.01, 1.01);
+ _heliJAmpAllThetaHist = new TH1F("ampJAllThetaHeli", "ampJAllThetaHeli", 201, -1., 1.);
+ _heliLSJAmpAllThetaHist = new TH1F("ampJAllThetaHeliLS", "ampJAllThetaHeliLS", 201, -1., 1.);
+ _canoJAmpAllThetaHist = new TH1F("ampJAllThetaCano", "ampJAllThetaCano", 201, -1., 1.);
+ _tensorJAmpAllThetaHist = new TH1F("ampJAllThetaTensor", "ampJAllThetaTensor", 201, -1., 1.);
+ _tensorJMM1M2AmpAllThetaHist = new TH1F("ampJMM1M2AllThetaTensor", "ampJMM1M2AllThetaTensor", 201, -1., 1.);
+ _canoJMM1M2AmpAllThetaHist = new TH1F("ampJMM1M2AllThetaCano", "ampJMM1M2AllThetaCano", 201, -1., 1.);
+ _canoJMAmpAllThetaHist = new TH1F("ampJMAllThetaCano", "ampJMAllThetaCano", 201, -1.0, 1.0);
+ _tensorJMAmpAllThetaHist = new TH1F("ampJMAllThetaTensor", "ampJMAllThetaTensor", 201., -1.0, 1.0);
+ _heliJMAmpAllThetaHist = new TH1F("ampJMAllThetaHeli", "ampJMAllThetaHeli", 201, -1.0, 1.0);
+
+ for (itLS=_allowedCParityLSs.begin(); itLS!=_allowedCParityLSs.end(); ++itLS){
+   std::stringstream lStrStr;
+   lStrStr << (*itLS).L;
+   std::stringstream sStrStr;
+   sStrStr << (*itLS).S;
+   std::string histThetacanoJLSincohMName="cano"+_motherJPC->name()+"_L"+lStrStr.str()+"_S"+sStrStr.str()+"_incohM";
+   _canoLSincohMAmpAllThetaHist[(*itLS).L][(*itLS).S]=new TH1F(histThetacanoJLSincohMName.c_str(), histThetacanoJLSincohMName.c_str(), 201, -1., 1.);
+
+   std::string histThetatensorJLSincohMName="tensor"+_motherJPC->name()+"_L"+lStrStr.str()+"_S"+sStrStr.str()+"_incohM";
+   _tensorLSincohMAmpAllThetaHist[(*itLS).L][(*itLS).S]=new TH1F(histThetatensorJLSincohMName.c_str(), histThetatensorJLSincohMName.c_str(), 201, -1., 1.);
+ }
 
   //fill heli
   _polMother.SetP4(_mother4Vec, _mother4Vec.Mass());
   complex<double> qCMS=breakupMomQ(1., .135, .135);
+  Info << "breakup momentum: " << qCMS.real() << endmsg;
   _qCMSReal=qCMS.real();
 
 
-  for (double cosT=-1.; cosT<=1.; cosT+=2./200.){
+  for (double cosT=-1.+1./201.; cosT<1.; cosT+=2./201.){
     fillCanoAmps(cosT);
     fillheliAmps(cosT);
     fillTensorAmps(cosT);
@@ -160,6 +178,7 @@ void DecAngularDist::calcChi12(Tensor<complex<double> >& s12SpinProjector, Tenso
   Tensor<complex<double> > leviPssTensor;
   bool add_lctForChi=true;
   if( s1s2S%2 ==0 ) { //even
+    //    std::cout << "s1s2S%2 =0 even!!!!!!" << std::endl;
     add_lctForChi=false;
     leviPssTensor(0)=complex<double>(1.,0.);
   }
@@ -171,15 +190,18 @@ void DecAngularDist::calcChi12(Tensor<complex<double> >& s12SpinProjector, Tenso
   Tensor<complex<double> > chiPart;
   if(add_lctForChi){
     chiPart=leviPssTensor*conj(epsilonDaughter1Project);
-    //    chiPart.Permute(1,chiPart.Rank());
-    chiPart.Permute(0,chiPart.Rank()-1);
+
+    chiPart=chiPart.Permute(0,chiPart.Rank()-1);
     chiPart=chiPart*conj(epsilonDaughter2Project);
   }
   else{
     DebugMsg << "conj(epsilonDaughter1Project):\t" << conj(epsilonDaughter1Project) << endmsg;
     DebugMsg << "conj(epsilonDaughter2Project):\t" << conj(epsilonDaughter2Project) << endmsg;
     if(spin12==0) chiPart=conj(epsilonDaughter1Project)|conj(epsilonDaughter2Project);
-    else chiPart=conj(epsilonDaughter1Project)%conj(epsilonDaughter2Project);
+    else {
+      //      std::cout << "!add_lctForChi and pin12!=0" << std::endl;
+      chiPart=conj(epsilonDaughter1Project)%conj(epsilonDaughter2Project);
+    }
   }
   //  DebugMsg << "chiPart:\t" << chiPart << endmsg;
 
@@ -191,13 +213,14 @@ void DecAngularDist::calcChi12(Tensor<complex<double> >& s12SpinProjector, Tenso
   }
 
   result=s12SpinProjector.Contract(chiPart, noRemainingContr);
+
   //  DebugMsg << "no of contractions chi12:\t" << noContractionsChi12 << endmsg;
   int rankCh12=2*spin12+spin1+spin2-2*noContractionsChi12;
   if(add_lctForChi) rankCh12=2*spin12+spin1+spin2+5-2*noContractionsChi12; 
   // DebugMsg << "chi12:\t" << "should have rank " << rankCh12 << " and (cross check): " << spin12 <<"\trank" << result.Rank() << endmsg;
-  // if(result.Rank()<3){
-  //   DebugMsg << result << endmsg;
-  // }
+  if(result.Rank()<3){
+    DebugMsg << "result chi12: " << result << endmsg;
+  }
 }
 
 
@@ -227,10 +250,7 @@ void DecAngularDist::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<double>
   Tensor<complex<double> > lsPartTensor;
   if(add_lct){
     lsPartTensor=leviPlsTensor*orbTensor;
-    // lsPartTensor.Permute(1,lsPartTensor.Rank());
-    lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
-    //     DebugMsg << "lsPartTensor w levi and permute: rank" << lsPartTensor.Rank() << endmsg;
-    //      DebugMsg << "chi12.Rank() " << chi12.Rank() << endmsg;
+    lsPartTensor=lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
     result=lsPartTensor.Contract(chi12, noOfContractions-2);
   }
   else{ // add_lct=false
@@ -258,14 +278,25 @@ void  DecAngularDist::fillTensorAmps(double cosT){
 	Vector4<double> daughter1_4Vec(daughter1LV.E(), daughter1LV.Px(), daughter1LV.Py(), daughter1LV.Pz());
 	Vector4<double> daughter2_4Vec(daughter1LV.E(), -daughter1LV.Px(), -daughter1LV.Py(), -daughter1LV.Pz());
 
-	std::cout << "daughter1_4Vec.Phi(): " << daughter1_4Vec.Phi() << std::endl;
-	std::cout << "daughter2_4Vec.Phi(): " << daughter2_4Vec.Phi() << std::endl;
+	// std::cout << "daughter1_4Vec.Phi(): " << daughter1_4Vec.Phi() << std::endl;
+	// std::cout << "daughter2_4Vec.Phi(): " << daughter2_4Vec.Phi() << std::endl;
 
 	_polDaughter1.SetP4(daughter1_4Vec, daughter1_4Vec.Mass());
 	_polDaughter2.SetP4(daughter2_4Vec, daughter2_4Vec.Mass());
 
+	std::map<Spin, std::map<Spin, std::map<Spin, complex<double> > > > sumInCoherentAmpMap;
+	for (Spin lamMother=-_motherJPC->J; lamMother<=_motherJPC->J; ++lamMother){
+	  for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
+	    for (Spin lamDaughter2=-_daughter2JPC->J; lamDaughter2<=_daughter2JPC->J; ++lamDaughter2){
+	      sumInCoherentAmpMap[lamMother][lamDaughter1][lamDaughter2]=complex<double>(0.,0.);
+	    }
+	  }
+	}
+
 	for (Spin lamMother=-_motherJPC->J; lamMother<=_motherJPC->J; ++lamMother){
 	  complex<double> sumAmp(0.,0.);
+	  complex<double> ampcurrentM(0.,0.);
+
 	  double sumInCoherentAmp=0.;
 	  Tensor<complex<double> > epsilonMotherProject = _polMother(lamMother);
 
@@ -306,25 +337,31 @@ void  DecAngularDist::fillTensorAmps(double cosT){
 		calcChi12(s12SpinProjector, epsilonDaughter1Project, epsilonDaughter2Project, _mother4Vec, chi12);
 		// calcChi12(s12SpinProjector, epsilonDaughter1Project, epsilonDaughter2Project,mother4VecBoost, chi12);		
 		
-		if (chi12.Rank()<2) std::cout << "chi12: " << chi12 << std::endl;
+		if (chi12.Rank()<2) DebugMsg  << "chi12: " << chi12 << endmsg;
 		
 		//calculate ls part;
 		Tensor<complex<double> > lsPartTensorNew;
 		calcLSpart(orbTensor, chi12, (*itLS).S, _mother4Vec, lsPartTensorNew);
 		//		calcLSpart(orbTensor, chi12, (*itLS).S, mother4VecBoost, lsPartTensorNew);		
 		
-		std::cout << "lsPartTensorNew.Rank(): " << lsPartTensorNew.Rank() << std::endl;		
-		if (lsPartTensorNew.Rank()<3) std::cout << "lsPartTensorNew: " << lsPartTensorNew << std::endl;
+		DebugMsg  << "lsPartTensorNew.Rank(): " << lsPartTensorNew.Rank() << endmsg;		
+		if (lsPartTensorNew.Rank()<3) DebugMsg  << "lsPartTensorNew: " << lsPartTensorNew << endmsg;
+		if (epsilonMotherProject.Rank()<3) DebugMsg  << "epsilonMotherProject: " << epsilonMotherProject << endmsg;
 		
 		Tensor<complex<double> > finalTmpAmp=epsilonMotherProject|lsPartTensorNew;
+		if (finalTmpAmp.Rank()<3) DebugMsg  << "finalTmpAmp: " << finalTmpAmp << endmsg;
+		
+		ampcurrentM+=finalTmpAmp(0);
 		currentTensorLSAmp+= finalTmpAmp(0);
 		sumAmp+=finalTmpAmp(0);
 		sumInCoherentAmp+=norm(finalTmpAmp(0));
+		sumInCoherentAmpMap.at(lamMother).at(lamDaughter1).at(lamDaughter2)+=finalTmpAmp(0);
 		ampM1M2Map.at(lamDaughter1).at(lamDaughter2)+=finalTmpAmp(0);
 		_tensorJLSMM1M2AmpThetaHistMap.at((*itLS).L).at((*itLS).S).at(lamMother).at(lamDaughter1).at(lamDaughter2)->Fill(cosT, finalTmpAmp(0).real());
 		//_tensorJLSMM1M2AmpThetaHistMap.at((*itLS).L).at((*itLS).S).at(lamMother).at(lamDaughter1).at(lamDaughter2)->Fill(cosT, norm(finalTmpAmp(0)));
 	      }
 	    }
+	    _tensorLSincohMAmpAllThetaHist.at((*itLS).L).at((*itLS).S)->Fill(cosT, norm(currentTensorLSAmp));
 	  }
 
 	  for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
@@ -334,10 +371,16 @@ void  DecAngularDist::fillTensorAmps(double cosT){
 	      _tensorJMM1M2AmpAllThetaHist->Fill(cosT, norm(ampM1M2Map.at(lamDaughter1).at(lamDaughter2)));
 	    }
 	  }
-	  _tensorJAmpAllThetaHist->Fill(cosT, sumInCoherentAmp);
+	  //	  _tensorJAmpAllThetaHist->Fill(cosT, sumInCoherentAmp);
+	  _tensorJMAmpAllThetaHist->Fill(cosT, norm(ampcurrentM));
 	} 
-	
-	
+	for (Spin lamMother=-_motherJPC->J; lamMother<=_motherJPC->J; ++lamMother){
+	  for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
+	    for (Spin lamDaughter2=-_daughter2JPC->J; lamDaughter2<=_daughter2JPC->J; ++lamDaughter2){	
+	      _tensorJAmpAllThetaHist->Fill(cosT, norm(sumInCoherentAmpMap.at(lamMother).at(lamDaughter1).at(lamDaughter2)));
+	    }
+	  }
+	}	
 }
 
 
@@ -350,6 +393,8 @@ void DecAngularDist::fillheliAmps(double cosT){
   }
 
   for (Spin lamMother=-_motherJPC->J; lamMother<=_motherJPC->J; ++lamMother){
+    complex<double> ampcurrentM(0.,0.);
+
     for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
       for (Spin lamDaughter2=-_daughter2JPC->J; lamDaughter2<=_daughter2JPC->J; ++lamDaughter2){
 	complex<double> ampSum(0.,0.);
@@ -357,13 +402,18 @@ void DecAngularDist::fillheliAmps(double cosT){
 	Spin lamDaughterDiff=lamDaughter1-lamDaughter2;
 	if(fabs(lamDaughterDiff)>_motherJPC->J || fabs(lamDaughterDiff)>sMax) continue;
 	ampSum=  conj(Wigner_D(0., theta,0, _motherJPC->J, lamMother, lamDaughterDiff));
-	
+
+	//	ampcurrentM+=conj(Wigner_D(0., theta,0, _motherJPC->J, lamMother, lamDaughterDiff));	
+
 	for (itLS=_allowedCParityLSs.begin(); itLS!=_allowedCParityLSs.end(); ++itLS){
 	  if(fabs(lamDaughterDiff)>_motherJPC->J || fabs(lamDaughterDiff)>(*itLS).S) continue;
-	  ampLSSum+=sqrt(2.*(*itLS).L+1)
+	  complex<double> currentAmp=sqrt(2.*(*itLS).L+1.)
 	    *Clebsch((*itLS).L, 0, (*itLS).S, lamDaughterDiff, _motherJPC->J, lamDaughterDiff)
 	    *Clebsch(_daughter1JPC->J, lamDaughter1, _daughter2JPC->J, -lamDaughter2, (*itLS).S, lamDaughterDiff)
 	    *conj(Wigner_D(0., theta,0, _motherJPC->J, lamMother, lamDaughterDiff));
+
+	  ampLSSum+=currentAmp;
+	  ampcurrentM+=currentAmp;
 	}
 
 	_heliJAmpAllThetaHist->Fill(cosT, norm(ampSum));
@@ -372,7 +422,7 @@ void DecAngularDist::fillheliAmps(double cosT){
 	
       }
     }
-    
+    _heliJMAmpAllThetaHist->Fill(cosT, norm(ampcurrentM));
   }
 }
 
@@ -382,7 +432,7 @@ void  DecAngularDist::fillCanoAmps(double cosT){
   for (Spin lamMother=-_motherJPC->J; lamMother<=_motherJPC->J; ++lamMother){
     complex<double> currentJMamp(0.,0.);
     complex<double> currentJMLSamp(0.,0.);
-    
+    complex<double> ampcurrentM(0.,0.);    
     std::map< Spin, std::map< Spin, complex<double> > > ampM1M2Map;
     for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
       for (Spin lamDaughter2=-_daughter2JPC->J; lamDaughter2<=_daughter2JPC->J; ++lamDaughter2){
@@ -410,10 +460,13 @@ void  DecAngularDist::fillCanoAmps(double cosT){
 	  double cgJJ=Clebsch(_daughter1JPC->J, mDaughter1, _daughter2JPC->J, mDaughter2, (*itLS).S, mS);
 	  
 	  complex<double> currentMM1M2Amp=cgLS*cgJJ*sphereHarmAmp;
+	  ampcurrentM+=cgLS*cgJJ*sphereHarmAmp;
 	  ampM1M2Map.at(mDaughter1).at(mDaughter2)+=currentMM1M2Amp;
+	  currentLSAmp+=currentMM1M2Amp;
 	  _canoJLSMM1M2AmpThetaHistMap.at((*itLS).L).at((*itLS).S).at(lamMother).at(mDaughter1).at(mDaughter2)->Fill(cosT, norm(currentMM1M2Amp));
 	}
       }
+      _canoLSincohMAmpAllThetaHist.at((*itLS).L).at((*itLS).S)->Fill(cosT, norm(currentLSAmp));
     }
     
     for (Spin lamDaughter1=-_daughter1JPC->J; lamDaughter1<=_daughter1JPC->J; ++lamDaughter1){
@@ -421,12 +474,13 @@ void  DecAngularDist::fillCanoAmps(double cosT){
 	//	_canoJMM1M2AmpThetaHistMap.at(lamMother).at(lamDaughter1).at(lamDaughter2)->Fill(cosT, norm(ampM1M2Map.at(lamDaughter1).at(lamDaughter2)));
       	_canoJMM1M2AmpThetaHistMap.at(lamMother).at(lamDaughter1).at(lamDaughter2)->Fill(cosT, ampM1M2Map.at(lamDaughter1).at(lamDaughter2).real());
 	_canoJMM1M2AmpAllThetaHist->Fill(cosT, norm(ampM1M2Map.at(lamDaughter1).at(lamDaughter2)));
-
       }
     }
-
+    _canoJMAmpThetaHistMap.at(lamMother)->Fill(cosT, norm(ampcurrentM));
+    _canoJMAmpAllThetaHist->Fill(cosT, norm(ampcurrentM));
   }
 }
+
 
 
 

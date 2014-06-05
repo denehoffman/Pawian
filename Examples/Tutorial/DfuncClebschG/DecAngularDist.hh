@@ -77,7 +77,15 @@ private:
   TFile* _theTFile;
 
   std::map<Spin, std::map<Spin, std::map<Spin, TH1F*> > > _tensorJMM1M2AmpThetaHistMap;
-  std::map<Spin, std::map<Spin, std::map<Spin, TH1F*> > > _canoJMM1M2AmpThetaHistMap;
+  std::map<Spin, std::map<Spin, std::map<Spin, TH1F*> > > _canoJMM1M2AmpThetaHistMap; 
+
+  std::map<Spin, TH1F*> _canoJMAmpThetaHistMap;
+  TH1F* _canoJMAmpAllThetaHist;
+  TH1F* _tensorJMAmpAllThetaHist;
+  TH1F* _heliJMAmpAllThetaHist; 
+
+  std::map<Spin, std::map<Spin, TH1F*> > _canoLSincohMAmpAllThetaHist;
+  std::map<Spin, std::map<Spin, TH1F*> > _tensorLSincohMAmpAllThetaHist;
 
   std::map<Spin, std::map<Spin, std::map<Spin, std::map<Spin, std::map<Spin, TH1F*> > > > > _tensorJLSMM1M2AmpThetaHistMap;
   std::map<Spin, std::map<Spin, std::map<Spin, std::map<Spin, std::map<Spin, TH1F*> > > > > _canoJLSMM1M2AmpThetaHistMap;
