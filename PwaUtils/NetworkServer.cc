@@ -36,19 +36,22 @@
 #include "PwaUtils/AbsParamHandler.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-short NetworkServer::SERVERMESSAGE_PARAMS = 1;
-short NetworkServer::SERVERMESSAGE_CLOSE = 2;
-short NetworkServer::SERVERMESSAGE_OK = 3;
+
+const short NetworkServer::SERVERMESSAGE_PARAMS = 1;
+const short NetworkServer::SERVERMESSAGE_CLOSE = 2;
+const short NetworkServer::SERVERMESSAGE_OK = 3;
 
 
-NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<ChannelID, std::tuple<long, double, long> > numEventMap) :
+NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<ChannelID, std::tuple<long, double, long> > numEventMap, std::string clientNumberWeights) :
      _port(port)
    , _clientTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
    , _globalTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
    , _noOfClients(noOfClients)
+   , _noOfChannels(numEventMap.size()) 
    , _closed(false)
    , _clientParamsInitialized(false)
    , _numBroadcasted(0)
+   , _clientNumberWeights(clientNumberWeights)
    , _numEventMap(numEventMap)
 {
    theIOService = std::shared_ptr<boost::asio::io_service>(new  boost::asio::io_service);
@@ -59,10 +62,10 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
       theStreams.push_back( std::shared_ptr<tcp::iostream>(new tcp::iostream) );
    }
 
-   CalcEventDistribution(numEventMap);
-
    Info << "************* Server mode ****************" << endmsg;
    Info << "Listening on port " << port << endmsg;
+
+   CalcEventDistribution(numEventMap);
 }
 
 
@@ -186,15 +189,42 @@ bool NetworkServer::WaitForLH(std::map<ChannelID, LHData>& theLHDataMap){
       short clientID;
       *theStreams.at(i) >> clientID >> tempData >> tempMc;
 
-      ChannelID channelID = _clientChannelMap[clientID];
+      ChannelID channelID = _clientChannelMap.at(clientID);
       theLHDataMap[channelID].logLH_data += tempData;
       theLHDataMap[channelID].LH_mc += tempMc;
 
+      lastLhTimes[i] = std::pair<short, boost::posix_time::ptime>(clientID, boost::posix_time::microsec_clock::local_time());
+
       if(_closed)
-      SendClosingMessage(theStreams.at(i));
+	 SendClosingMessage(theStreams.at(i));
    }
 
+   EvalClientTiming();
+
    return true;
+}
+
+
+
+void NetworkServer::EvalClientTiming(){
+
+   if(!((_numBroadcasted % 200) == 30) || lastLhTimes.size() == 0)
+      return;
+
+   boost::posix_time::ptime now(boost::posix_time::microsec_clock::local_time());
+
+   boost::posix_time::time_duration maxdiff = now - lastLhTimes.at(0).second;
+
+   Info << "Client timing information: " << endmsg;
+   for(auto it = lastLhTimes.begin(); it!= lastLhTimes.end(); ++it){
+      boost::posix_time::time_duration diff = now - (*it).second.second;
+
+      int clientID = (*it).second.first;
+
+      Info << "Client id " << clientID << " channel id " << _clientChannelMap.at(clientID) << " "
+	   << " response time +" 
+	   << std::setprecision(10) << ((double)(maxdiff.total_microseconds() - diff.total_microseconds()))/1E6 << " s" << endmsg;
+   }
 }
 
 
@@ -291,33 +321,44 @@ void NetworkServer::BroadcastClosingMessage(){
 
 
 
-// This function distributes the events of the respecive channels to the
+// This function distributes the events of the respective channels to the
 // available clients and stores the information in the _eventDistribution vector
 void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,double,long> > numEventMap){
 
    _eventDistribution.clear();
 
    // At least one client per channel is needed
-   if(_noOfClients < numEventMap.size()){
+   if(_noOfClients < _noOfChannels){
       Alert << "Number of clients < number of channels!" << endmsg;
       return;
    }
 
-   // Get total event number
-   long totalEvt=0;
-   for(auto it = numEventMap.begin(); it!=numEventMap.end();++it){
-      long channelSum = std::get<0>((*it).second) + std::get<2>((*it).second);
-      totalEvt += channelSum;
-   }
-
-   // Assign client numbers to channels
+   // Vector holding number of clients for each channel
    std::vector<short> numClVec;
-   short sumCl=0;
-   for(auto it = numEventMap.begin(); it!=numEventMap.end();++it){
-      long channelSum = std::get<0>((*it).second) + std::get<2>((*it).second);
-      short numClElem = (short)(((double)channelSum / (double)totalEvt) * _noOfClients);
-      sumCl += numClElem;
-      numClVec.push_back(numClElem);
+   int sumCl = 0;
+
+   // First check if number of clients (as weights) for each channel is given in the configuration file.
+   // Otherwise, calc client numbers using the event numbers
+   if(ReadNumClientsFromConfig(numClVec)){
+      for(auto it = numClVec.begin(); it != numClVec.end(); ++it){
+	 sumCl += (*it);
+      }
+   }
+   else{
+      // Get total event number
+      long totalEvt=0;
+      for(auto it = numEventMap.begin(); it!=numEventMap.end();++it){
+	 long channelSum = std::get<0>((*it).second) + std::get<2>((*it).second);
+	 totalEvt += channelSum;
+      }
+
+      // Assign client numbers to channels
+      for(auto it = numEventMap.begin(); it!=numEventMap.end();++it){
+	 long channelSum = std::get<0>((*it).second) + std::get<2>((*it).second);
+	 short numClElem = (short)(((double)channelSum / (double)totalEvt) * _noOfClients);
+	 sumCl += numClElem;
+	 numClVec.push_back(numClElem);
+      }
    }
 
    // Correct roundings
@@ -341,29 +382,34 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
    // Check for #clients=0 and do correction
    for(auto it = numClVec.begin(); it!=numClVec.end();++it){
       if(*it == 0){
-         // Minimum number is 1
-         *it = 1;
-
-         // Find channel with highest number of clients and decrease by one
-         short max=0;
-         short maxid=-1;
-         int i=0;
-         for(auto it2 = numClVec.begin(); it2!=numClVec.end();++it2){
-            if(*it2 > max){
-               max=*it2;
-               maxid=i;
-            }
-            i++;
-         }
-         // Check #channel-=1 > 0
-         if(numClVec.at(maxid) >= 2){
-            numClVec.at(maxid)--;
-         }
-         else{
-            Alert << "Failed to decrease client number." << endmsg;
-         }
+	 // Minimum number is 1
+	 *it = 1;
+	 
+	 // Find channel with highest number of clients and decrease by one
+	 short max=0;
+	 short maxid=-1;
+	 int i=0;
+	 for(auto it2 = numClVec.begin(); it2!=numClVec.end();++it2){
+	    if(*it2 > max){
+	       max=*it2;
+	       maxid=i;
+	    }
+	    i++;
+	 }
+	 // Check #channel-=1 > 0
+	 if(numClVec.at(maxid) >= 2){
+	    numClVec.at(maxid)--;
+	 }
+	 else{
+	    Alert << "Failed to decrease client number." << endmsg;
+	 }
       }
    }
+
+   for(unsigned int i=0; i<numClVec.size();i++){
+      Info << "Number of clients for channel " << i << " : " << numClVec.at(i) << endmsg;
+   }
+   
 
    // Fill event number vector
    int i=0;
@@ -403,3 +449,35 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
    }
 }
 
+
+
+bool NetworkServer::ReadNumClientsFromConfig(std::vector<short>& numClVec){
+
+   if(_clientNumberWeights == ""){
+      return false;
+   }
+
+   std::istringstream stream(_clientNumberWeights);
+   std::vector<double> weights;
+   double sumOfWeights=0;
+
+   for(int i=0; i<_noOfChannels; i++){
+      double currentweight;
+      if(!(stream >> currentweight)){
+	 Info << "Could not read client number weights" << endmsg;
+	 return false;
+      }
+      weights.push_back(currentweight);
+      sumOfWeights += currentweight;
+   }
+
+   numClVec.clear();
+
+   for(auto it = weights.begin(); it != weights.end(); ++it){
+      numClVec.push_back((short)(_noOfClients * (*it) / sumOfWeights));
+   }
+
+   Info << "Read client number weights from configuration file." << endmsg;
+
+   return true;
+}

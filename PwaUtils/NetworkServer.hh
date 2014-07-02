@@ -40,11 +40,11 @@ using boost::asio::ip::tcp;
 class NetworkServer
 {
 public:
-  static short SERVERMESSAGE_PARAMS;
-  static short SERVERMESSAGE_CLOSE;
-  static short SERVERMESSAGE_OK;
+  static const short SERVERMESSAGE_PARAMS;
+  static const short SERVERMESSAGE_CLOSE;
+  static const short SERVERMESSAGE_OK;
 
-  NetworkServer(int port, unsigned short noOfClients,  std::map<ChannelID, std::tuple<long, double, long> > numEventVec);
+   NetworkServer(int port, unsigned short noOfClients,  std::map<ChannelID, std::tuple<long, double, long> > numEventVec, std::string clientNumberWeights);
   void CalcEventDistribution(std::map<short, std::tuple<long,double,long> > numEventMap);
   bool WaitForLH(std::map<short, LHData>& theLHDataMap);
   bool WaitForFirstClientLogin();
@@ -62,16 +62,19 @@ private:
    unsigned int _clientTimeout;
    unsigned int _globalTimeout;
    unsigned short _noOfClients;
+   unsigned short _noOfChannels;
    bool _closed;
    bool _clientParamsInitialized;
    int _numData;
    int _numMC;
    long _numBroadcasted;
+   std::string _clientNumberWeights;
    std::shared_ptr<boost::asio::io_service> theIOService;
    std::shared_ptr<boost::asio::deadline_timer> theDeadlineTimer;
    std::shared_ptr<tcp::acceptor> theAcceptor;
    std::vector<std::shared_ptr<tcp::iostream>> theStreams;
    std::map<short, boost::posix_time::ptime > lastHeartbeats;
+   std::map<short, std::pair<short, boost::posix_time::ptime > > lastLhTimes;
    std::map<short, ChannelID> _clientChannelMap;
    std::map<ChannelID, std::tuple<long, double, long> > _numEventMap;
    std::vector<std::pair<ChannelID, std::vector<long> > > _eventDistribution;
@@ -79,5 +82,7 @@ private:
 
    void Timeout(const boost::system::error_code& err);
    void AcceptHandler(const boost::system::error_code& err);
+   void EvalClientTiming();
    bool UpdateHeartbeats(short clientID);
+   bool ReadNumClientsFromConfig(std::vector<short>& numClVec);
 };

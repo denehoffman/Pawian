@@ -205,7 +205,7 @@ int main(int __argc,char *__argv[]){
 
     std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
  							       theAppParams->noOfClients(),
- 							       numEventMap));
+ 							       numEventMap, theAppParams->clientNumberWeights()));
 
 
     PwaFcnServer theFcnServer(theServer);
@@ -230,7 +230,7 @@ int main(int __argc,char *__argv[]){
 
     std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
  							       theAppParams->noOfClients(),
- 							       numEventMap));
+ 							       numEventMap, theAppParams->clientNumberWeights()));
 
    PwaFcnServer theFcnServer(theServer);
    theServer->WaitForFirstClientLogin();

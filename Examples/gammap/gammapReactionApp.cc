@@ -238,7 +238,7 @@ int main(int __argc,char *__argv[]){
       numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), gammapWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
     }
 
-    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(), theAppParams->noOfClients(), numEventMap));
+    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(), theAppParams->noOfClients(), numEventMap, theAppParams->clientNumberWeights()));
 
     PwaFcnServer theFcnServer(theServer);
     theServer->WaitForFirstClientLogin();
