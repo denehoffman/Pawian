@@ -25,7 +25,6 @@ project :
 	<include>$(BOOSTINCLUDE)
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
-	<include>$(GENEVA)/include
 	<link>static
 	<cxxflags>-std=gnu++0x
   <conditional>@split-stack-cond
@@ -40,12 +39,6 @@ actions rootlibs
 	$(ROOTSYS)/bin/root-config --libs
 }
 
-lib Geneva : :  <file>$(GENEVA)/lib/libgemfony-common.so 
-		<file>$(GENEVA)/lib/libgemfony-geneva.so
-		<file>$(GENEVA)/lib/libgemfony-courtier.so
-		<file>$(GENEVA)/lib/libgemfony-hap.so
-		<file>$(GENEVA)/lib/libgemfony-geneva-individuals.so
- : : ;
 lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
 lib Minuit2 : : <file>$(extern)/lib/Linux26SL6_x86_64_gcc444/libMinuit2.so : : ;
  
