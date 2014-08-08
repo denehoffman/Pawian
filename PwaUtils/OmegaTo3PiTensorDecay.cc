@@ -63,27 +63,24 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
   //fill daughter1 and daughter2 4Vec
   itMap=fsMap.find(_daughter1->name());
   Vector4<double> daughter1_4Vec=itMap->second;
-  // daughter1_4Vec.Boost(all4Vec);
 
   itMap=fsMap.find(_daughter2->name());
   Vector4<double> daughter2_4Vec=itMap->second;
-  // daughter2_4Vec.Boost(all4Vec);
 
   itMap=fsMap.find(_daughter3->name());
   Vector4<double> daughter3_4Vec=itMap->second;
-  // daughter3_4Vec.Boost(all4Vec);
 
-  // Vector4<double> P_3particle_4Vec=daughter1_4Vec+daughter2_4Vec+daughter3_4Vec;
-  // P_3particle_4Vec.Boost(all4Vec); //transformation into the initial CMS system
-  // daughter1_4Vec.Boost(all4Vec);
-  // daughter2_4Vec.Boost(all4Vec);
-  // daughter3_4Vec.Boost(all4Vec);
   Vector4<double> P_3particle_4Vec=daughter1_4Vec+daughter2_4Vec+daughter3_4Vec;
 
   Vector4<double> daughter1Tensor4Vec=daughter1_4Vec;
   Vector4<double> daughter2Tensor4Vec=daughter2_4Vec;  
   Vector4<double> daughter3Tensor4Vec=daughter3_4Vec;
   Vector4<double> motherTensor4Vec=P_3particle_4Vec;
+
+  //transformation into the initial CMS system
+  daughter1Tensor4Vec.Boost(all4Vec);
+  daughter2Tensor4Vec.Boost(all4Vec);
+  daughter3Tensor4Vec.Boost(all4Vec);
 
   // daughter1Tensor4Vec.RotateZ(-all4Vec.Phi());
   // daughter1Tensor4Vec.RotateY(-all4Vec.Theta());

@@ -33,12 +33,14 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/IsobarTensorPsiToGamXDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/TensorDecAmps.hh"
+#include "PwaUtils/TensorPsiToGamXDecAmps.hh"
 #include "PwaUtils/LSOmegaTo3PiDecAmps.hh"
 #include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -79,6 +81,10 @@ std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(short channelID, std::sh
     else if(theAbsXDec->type()=="IsobarTensorDecay"){
       std::shared_ptr<IsobarTensorDecay> decTensor =  std::dynamic_pointer_cast<IsobarTensorDecay>(theAbsXDec);
       result=std::shared_ptr<AbsXdecAmp>(new TensorDecAmps(decTensor, channelID));
+    }
+    else if(theAbsXDec->type()=="IsobarTensorPsiToGamXDecay"){
+      std::shared_ptr<IsobarTensorPsiToGamXDecay> decTensor =  std::dynamic_pointer_cast<IsobarTensorPsiToGamXDecay>(theAbsXDec);
+      result=std::shared_ptr<AbsXdecAmp>(new TensorPsiToGamXDecAmps(decTensor, channelID));
     }
     else if(theAbsXDec->type()=="OmegaTo3PiLSDecay"){
       std::shared_ptr<OmegaTo3PiLSDecay> decOmega =  std::dynamic_pointer_cast<OmegaTo3PiLSDecay>(theAbsXDec);

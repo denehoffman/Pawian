@@ -39,15 +39,16 @@
 TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
   ,_LSs(theDec->LSAmps())
-  ,_factorMag(1.)
+  ,_factorMag(5.)
 {
-  if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
+  if(_LSs.size()>0) _factorMag/=sqrt(_LSs.size());
 }
 
 TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
+  ,_factorMag(5.)
 {
-  if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
+  if(_LSs.size()>0) _factorMag/=sqrt(_LSs.size());
 }
 
 TensorDecAmps::~TensorDecAmps()
@@ -99,7 +100,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
   
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    result*=_absDyn->eval(theData, grandmaAmp);
+    //    result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
 
@@ -177,7 +178,7 @@ void  TensorDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
     currentMagValMap[*itLS]=_factorMag;
     currentPhiValMap[*itLS]=0.;
-    currentMagErrMap[*itLS]=_factorMag;
+    currentMagErrMap[*itLS]=_factorMag/3.;
     currentPhiErrMap[*itLS]=0.3;
   }
 

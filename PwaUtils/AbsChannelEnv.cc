@@ -33,6 +33,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/IsobarTensorPsiToGamXDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsLh.hh"
@@ -162,7 +163,14 @@ void AbsChannelEnv::setup(ChannelID id){
     if(daughterParticles.size()==2){
       if (usedSystem=="Heli") tmpDec= std::shared_ptr<AbsDecay>(new IsobarHeliDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
       else if (usedSystem=="Cano")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarLSDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
-      else if (usedSystem=="Tensor")  tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
+      else if (usedSystem=="Tensor"){
+	if(motherParticle->twoJ()==2 && motherParticle->theParity()==-1 && motherParticle->theCParity()==-1){
+	  if (daughterParticles[0]->name()=="photon") tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorPsiToGamXDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
+	  else if (daughterParticles[1]->name()=="photon") tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorPsiToGamXDecay(motherParticle, daughterParticles[1], daughterParticles[0], _channelID));
+	  else tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
+	}
+	else tmpDec= std::shared_ptr<AbsDecay>(new IsobarTensorDecay(motherParticle, daughterParticles[0], daughterParticles[1], _channelID));
+      }
       else {
 	Alert << "used decay system\t" << usedSystem << "\tnot supported!!!\n" << endmsg;
 	exit(1);

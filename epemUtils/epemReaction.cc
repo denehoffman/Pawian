@@ -31,6 +31,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/IsobarTensorPsiToGamXDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -48,7 +49,15 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
-	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	std::shared_ptr<IsobarTensorDecay> currentTensorDec;
+	if(itPartPairs->first->name()=="photon"){
+	  currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	}
+	else if(itPartPairs->second->name()=="photon"){
+	  currentTensorDec=std::shared_ptr<IsobarTensorPsiToGamXDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->second, itPartPairs->first, _channelID, "epem"));
+	} 
+	else currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+
 	currentTensorDec->setProductionAmp();
 	currentTensorDec->extractStates();	
 	_prodTensorDecs.push_back(currentTensorDec);

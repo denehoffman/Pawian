@@ -135,9 +135,10 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   Vector4<double> daughter2Tensor4Vec=daughter2_4Vec;
   Vector4<double> motherTensor4Vec=mother_4Vec;
 
-  // daughter1Tensor4Vec.Boost(all4Vec);
-  // daughter2Tensor4Vec.Boost(all4Vec);
-  // motherTensor4Vec.Boost(all4Vec);
+  //transorm into the CM frame of the initial two-body-system (e.g. pbar p, e+ e-, gamma p)
+  daughter1Tensor4Vec.Boost(all4Vec);
+  daughter2Tensor4Vec.Boost(all4Vec);
+  motherTensor4Vec.Boost(all4Vec);
 
   //rotate everything into the cms flight direction 
   // Vector4<double> allRot4Vec=all4Vec;
@@ -174,9 +175,6 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 
   _polDaughter1.SetP4(daughter1Tensor4Vec, daughter1Mass);
   _polDaughter2.SetP4(daughter2Tensor4Vec, daughter2Mass);
-
-  Spin lam12Max=spinDaughter1+spinDaughter2;
-  if(lam12Max>spinMother) lam12Max=spinMother;
 
   Spin lamMotherMax=spinMother;
   if (!_hasMotherPart && spinMother>1){
@@ -290,7 +288,7 @@ void IsobarTensorDecay::calcChi12(Tensor<complex<double> >& s12SpinProjector, Te
   Tensor<complex<double> > chiPart;
   if(add_lctForChi){
     chiPart=leviPssTensor*conj(epsilonDaughter1Project);
-    chiPart=chiPart.Permute(0,chiPart.Rank()-1);
+    chiPart.Permute(0,chiPart.Rank()-1);
     //    chiPart=conj(epsilonDaughter1Project)*leviPssTensor;
     chiPart=chiPart*conj(epsilonDaughter2Project);
   }
@@ -347,8 +345,7 @@ void IsobarTensorDecay::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<doub
   Tensor<complex<double> > lsPartTensor;
   if(add_lct){
     lsPartTensor=leviPlsTensor*orbTensor;
-    // lsPartTensor.Permute(1,lsPartTensor.Rank());
-    lsPartTensor=lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
+    lsPartTensor.Permute(0,lsPartTensor.Rank()-1);
 
     //    lsPartTensor=orbTensor*leviPlsTensor;
 
