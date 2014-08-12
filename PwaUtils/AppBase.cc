@@ -81,8 +81,8 @@ void AppBase::dumpDefaultParams(){
 
 void AppBase::generate(fitParams& theParams){
     std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen());
-    pwaGenPtr->generate(GlobalEnv::instance()->Channel()->Lh(), theParams);
     GlobalEnv::instance()->fitParamsBase()->printParams(theParams);
+    pwaGenPtr->generate(GlobalEnv::instance()->Channel()->Lh(), theParams);
 }
 
 void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight, int evtStart, int evtStop){
@@ -434,7 +434,7 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
     boost::archive::text_oarchive boostOutputArchive(serializationStream);
 
     if(min.HasValidCovariance()){
-        PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
+        const PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
         boostOutputArchive << thePwaCovMatrix;
     }
 
