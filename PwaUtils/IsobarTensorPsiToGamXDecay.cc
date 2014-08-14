@@ -44,7 +44,7 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particl
   ,_XisEven(false)
   ,_noOfAmps(0)
 {
-  if(mother->twoIso() !=0 || mother->theGParity() != -1 || mother->twoJ() != 2 || mother->theParity() != -1 ||  mother->theCParity() || mother->mass() < 0.01){
+  if(mother->twoIso() !=0 || mother->theParity() != -1 || mother->twoJ() != 2 || mother->theParity() != -1 ||  mother->theCParity() || mother->mass() < 0.01){
     Alert << "mother particle does not have the quantum number combinations JPC=1-- or its mass is below 0.01 GeV/c2 !!!" << endmsg;
     exit(0); 
   } 
@@ -55,8 +55,13 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particl
   } 
   if(daughter2->twoJ()%4 == 0) _XisEven=true;
 
-  if(!_XisEven && mother->theGParity() == -1){
-    Alert << "radiative decays of Psi -> odd^- + gamma are not supported so far" << endmsg;
+  if(!_XisEven && mother->theParity() == -1 && daughter2->twoJ()>=6){
+    Alert << "radiative decays of Psi -> odd^- + gamma with J>=3 are not supported so far" << endmsg;
+    exit(0);
+  }
+
+  if(!_XisEven && mother->theParity() == 1 && daughter2->twoJ()>=6){
+    Alert << "radiative decays of Psi -> odd^+ + gamma with J>=3 are not supported so far" << endmsg;
     exit(0);
   }
 
@@ -87,8 +92,13 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(std::shared_ptr<const IGJ
 
   if(daughter2->twoJ()%4 ==0) _XisEven=true;
 
-  if(!_XisEven && mother->theGParity() == -1){
-    Alert << "radiative decays of Psi -> odd^- + gamma are not supported so far" << endmsg;
+  if(!_XisEven && motherIGJPCPtr->P == -1 && daughter2->twoJ()>=6){
+    Alert << "radiative decays of Psi -> odd^- + gamma with J>=3 are not supported so far" << endmsg;
+    exit(0);
+  }
+
+  if(!_XisEven && motherIGJPCPtr->P == 1 && daughter2->twoJ()>=6){
+    Alert << "radiative decays of Psi -> odd^+ + gamma with J>=3 are not supported so far" << endmsg;
     exit(0);
   }
 
@@ -294,6 +304,35 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 	      currentAmp2=PsiGamPolProj | U_numu3;
 	      evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
 	    }
+	}
+
+	//case J^PC(X)=1-, 3-, 5-, ...
+	if(!_XisEven && _daughter2IGJPCPtr->P==-1){ //??????????????
+	  MetricTensor g_munu;
+	  Tensor<complex<double> > S_alpha_beta= (_lctTensor*daughter1GamTensor4Vec)*motherTensor4Vec;	    
+	  
+	  //1. amplitude
+	  DebugMsg << "S_alpha_beta*PpsySpinProjX_jg1: " << S_alpha_beta*PpsySpinProjX_jg1 << endmsg;
+	  DebugMsg << "(S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec: " << (S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec << endmsg;
+	  DebugMsg << "S_alpha_beta*motherTensor4Vec: " << S_alpha_beta*motherTensor4Vec << endmsg;
+	  DebugMsg << "(S_alpha_beta*motherTensor4Vec)*PpsySpinProjX_jg1: " << (S_alpha_beta*motherTensor4Vec)*PpsySpinProjX_jg1 << endmsg;
+
+	  Tensor<complex<double> > U_numu1= g_munu*((S_alpha_beta*PpsySpinProjX_jg2)*motherTensor4Vec);
+	  currentAmp1 = PsiGamPolProj | U_numu1;
+	  DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
+	  evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
+
+	  //2. amplitude
+	  Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % ((_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec)*motherTensor4Vec;
+	  currentAmp2=PsiGamPolProj | U_numu2;
+	  DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
+	  evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
+	  
+	  if(spinDaughter2>1){
+	    //3. amplitude ?????
+	    currentAmp2=complex<double>(0.,0.);
+	    evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=complex<double>(0.,0.);
+	  }
 	}
       }
     }
