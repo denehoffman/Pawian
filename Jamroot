@@ -40,7 +40,7 @@ actions rootlibs
 }
 
 lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
-lib Minuit2 : : <file>$(extern)/lib/Linux26SL6_x86_64_gcc444/libMinuit2.so : : ;
+lib Minuit2 : : <file>$(extern)/lib/libMinuit2.so : : ;
  
 build-project qft++ ;
 build-project Utils ;
