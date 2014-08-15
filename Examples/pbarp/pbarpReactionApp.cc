@@ -163,13 +163,17 @@ int main(int __argc,char *__argv[]){
     std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
   }
 
-  // Fix params for all channels
-  std::vector<std::string> fixedParams;
-  for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+  if (theAppParams->doScaling()) theAppBase.fixAllReleaseScaleParams(upar);
+  else{  
+    // Fix params for all channels
+    std::vector<std::string> fixedParams;
+    for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
       std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
       fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
+    }
+    theAppBase.fixParams(upar,fixedParams);
   }
-  theAppBase.fixParams(upar,fixedParams);
+
   const unsigned int noOfFreeFitParams = upar.VariableParameters();
 
   // Disable output buffering

@@ -69,6 +69,7 @@ public:
   virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr, int noOfFreeFitParams);
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr);
   virtual void fixParams(MnUserParameters& upar, std::vector<std::string> fixedParams);
+  virtual void fixAllReleaseScaleParams(MnUserParameters& upar);
   virtual FunctionMinimum migradDefault(AbsFcn& theFcn, MnUserParameters& upar);
   virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, double evtWeightSumData=0, int noOfFreeFitParams=0);
   virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams, ChannelID channelID);

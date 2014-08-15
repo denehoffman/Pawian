@@ -197,6 +197,7 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 
   _polDaughter1.SetP4(daughter1GamTensor4Vec, daughter1GamMass);
   _polDaughter2.SetP4(daughter2Tensor4Vec, daughter2Mass);
+  Tensor<complex<double> > S_alpha_beta= (_lctTensor*daughter1GamTensor4Vec)*motherTensor4Vec;
 
   Tensor<complex<double> > currentAmp1;
   Tensor<complex<double> > currentAmp2;
@@ -213,15 +214,16 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 	Tensor<complex<double> > PpsySpinProjX_jg1=conj(_polDaughter2(mX));	
 	Tensor<complex<double> > PpsySpinProjX_jg2=conj(_polDaughter2(mX));
 
-	if(spinDaughter2>=1){
+	if(spinDaughter2>0){
 	  //J contractions
 	  for (int i=0; i<spinDaughter2; ++i) PpsySpinProjX_jg0*=motherTensor4Vec;
-
+	}
+	if(spinDaughter2>1){
 	  //J-1 contractions
 	  for (int i=0; i<spinDaughter2-1; ++i) PpsySpinProjX_jg1*=motherTensor4Vec;
 	}
 
-	if(spinDaughter2>=2){
+	if(spinDaughter2>2){
 	  //J-2 contractions
 	  for (int i=0; i<spinDaughter2-2; ++i) PpsySpinProjX_jg2*=motherTensor4Vec;
 	}
@@ -230,8 +232,8 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 	DebugMsg << "PpsySpinProjX_jg1.Rank(): " << PpsySpinProjX_jg1.Rank() << "\nval: " << PpsySpinProjX_jg1 << endmsg;
 	DebugMsg << "PpsySpinProjX_jg2.Rank(): " << PpsySpinProjX_jg2.Rank() << "\nval: " << PpsySpinProjX_jg2 << endmsg;
 
-	//case J^PC(X)=0+, 2+, 4+, ...
-	if(_XisEven && _daughter2IGJPCPtr->P==1){ //0++, 2++, 4++, ...
+	//case J^PC(X)=0+, 2+, 4+, ... and 1-, 3-, ...
+	if((_XisEven && _daughter2IGJPCPtr->P==1) || (!_XisEven && _daughter2IGJPCPtr->P==-1) ){ //0++, 2++, 4++, ...
 	  //first amplitude
 	  MetricTensor g_munu;
  	  
@@ -250,90 +252,95 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 	    
 	    evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);	    
 
-	    //3. amplitude
-	    currentAmp3= PsiGamPolProj | PpsySpinProjX_jg2;
-	    DebugMsg << "currentAmp3.Rank(): " << currentAmp3.Rank() << "\nval: " << currentAmp3 << endmsg;
-	    evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
-	    
+	    if(_noOfAmps>2){
+	      //3. amplitude
+	      currentAmp3= PsiGamPolProj | PpsySpinProjX_jg2;
+	      DebugMsg << "currentAmp3.Rank(): " << currentAmp3.Rank() << "\nval: " << currentAmp3 << endmsg;
+	      evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+	    }
 	  }  	  
 	}
 
-	//case J^PC(X)=1+, 3+, 5+, ...
-	if(!_XisEven && _daughter2IGJPCPtr->P==1){
+	// //case J^PC(X)=1+, 3+, 5+, ...
+	// if(!_XisEven && _daughter2IGJPCPtr->P==1){
 	    
-	    //1. amplitude
-	    Tensor<complex<double> > U_numu1= (_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec;
-	    currentAmp1 = PsiGamPolProj | U_numu1;
-	    DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
-	    evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
+	//     //1. amplitude
+	//     Tensor<complex<double> > U_numu1= (_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec;
+	//     currentAmp1 = PsiGamPolProj | U_numu1;
+	//     DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
+	//     evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
 
-	    //2. amplitude
-	    Tensor<complex<double> > S_alpha_beta= (_lctTensor*daughter1GamTensor4Vec)*motherTensor4Vec;
-	    Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % (S_alpha_beta*PpsySpinProjX_jg1);
-	    currentAmp2=PsiGamPolProj | U_numu2;
-	    DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
-	    evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
+	//     //2. amplitude
+	//     Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % (S_alpha_beta*PpsySpinProjX_jg1);
+	//     currentAmp2=PsiGamPolProj | U_numu2;
+	//     DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
+	//     evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
 
-	    if(spinDaughter2>1){
-	      //3. amplitude ?????
-	      currentAmp2=complex<double>(0.,0.);
-	      evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=complex<double>(0.,0.);
-	    }
-	}
+	//     if(spinDaughter2>1){
+	//       //3. amplitude ?????
+	//       currentAmp2=complex<double>(0.,0.);
+	//       evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=complex<double>(0.,0.);
+	//     }
+	// }
 
-	//case J^PC(X)=0-, 2-, 4-, ...
-	if(_XisEven && _daughter2IGJPCPtr->P==-1){ //0-, 2-, 4-, ...
+	//case J^PC(X)=0-, 2-, 4-, ... and 1+, 3+, ...
+	if((_XisEven && _daughter2IGJPCPtr->P==-1) || (!_XisEven && _daughter2IGJPCPtr->P==1)){ //0-, 2-, 4-, ...
+	  //if(_XisEven && _daughter2IGJPCPtr->P==-1){
 	    //1. amplitude 
-	    Tensor<complex<double> > S_alpha_beta= (_lctTensor*daughter1GamTensor4Vec)*motherTensor4Vec;
-
 	    Tensor<complex<double> > U_numu1;
-            U_numu1=S_alpha_beta*PpsySpinProjX_jg0;
+            U_numu1 = S_alpha_beta*PpsySpinProjX_jg0;
 	    currentAmp1=PsiGamPolProj | U_numu1;
 	    DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
 	    evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
 
-	    if(spinDaughter2>1){
+	    if(spinDaughter2>0){
 	      //2. amplitude 
 	      Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % (S_alpha_beta*PpsySpinProjX_jg1);
 	      currentAmp2=PsiGamPolProj | U_numu2;
 	      DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
 	      evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
 
-	      //3. amplitude ?????
-	      Tensor<complex<double> > U_numu3= (_lctTensor*(PpsySpinProjX_jg2*daughter1GamTensor4Vec))*motherTensor4Vec;
-	      currentAmp2=PsiGamPolProj | U_numu3;
-	      evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+	      if(spinDaughter2>1){	      
+		//3. amplitude ?????
+		Tensor<complex<double> > U_numu3= (_lctTensor*(PpsySpinProjX_jg2*daughter1GamTensor4Vec))*motherTensor4Vec;
+		currentAmp2=PsiGamPolProj | U_numu3;
+		evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+	      }
 	    }
 	}
 
-	//case J^PC(X)=1-, 3-, 5-, ...
-	if(!_XisEven && _daughter2IGJPCPtr->P==-1){ //??????????????
-	  MetricTensor g_munu;
-	  Tensor<complex<double> > S_alpha_beta= (_lctTensor*daughter1GamTensor4Vec)*motherTensor4Vec;	    
+	// //case J^PC(X)=1-, 3-, 5-, ...
+	// if(!_XisEven && _daughter2IGJPCPtr->P==-1){ //??????????????
+	//   MetricTensor g_munu;
 	  
-	  //1. amplitude
-	  DebugMsg << "S_alpha_beta*PpsySpinProjX_jg1: " << S_alpha_beta*PpsySpinProjX_jg1 << endmsg;
-	  DebugMsg << "(S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec: " << (S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec << endmsg;
-	  DebugMsg << "S_alpha_beta*motherTensor4Vec: " << S_alpha_beta*motherTensor4Vec << endmsg;
-	  DebugMsg << "(S_alpha_beta*motherTensor4Vec)*PpsySpinProjX_jg1: " << (S_alpha_beta*motherTensor4Vec)*PpsySpinProjX_jg1 << endmsg;
+	//   //1. amplitude
+	//   DebugMsg << "S_alpha_beta*PpsySpinProjX_jg1: " << S_alpha_beta*PpsySpinProjX_jg1 << endmsg;
+	//   DebugMsg << "(S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec: " << (S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec << endmsg;
+	//   DebugMsg << "S_alpha_beta*motherTensor4Vec: " << S_alpha_beta*motherTensor4Vec << endmsg;
+	//   DebugMsg << "(S_alpha_beta*motherTensor4Vec)*PpsySpinProjX_jg1: " << (S_alpha_beta*motherTensor4Vec)*PpsySpinProjX_jg1 << endmsg;
+	//   DebugMsg << "(S_alpha_beta*PpsySpinProjX_jg1)*daughter1GamTensor4Vec: " << (S_alpha_beta*PpsySpinProjX_jg1)*daughter1GamTensor4Vec << endmsg;
+	//   Tensor<complex<double> > U_numu1= g_munu*((S_alpha_beta*PpsySpinProjX_jg1)*motherTensor4Vec);
+	//   DebugMsg << "U_numu1: " << U_numu1 << endmsg;
 
-	  Tensor<complex<double> > U_numu1= g_munu*((S_alpha_beta*PpsySpinProjX_jg2)*motherTensor4Vec);
-	  currentAmp1 = PsiGamPolProj | U_numu1;
-	  DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
-	  evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
+	//   currentAmp1 = PsiGamPolProj | U_numu1;
+	//   DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
+	//   evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
 
-	  //2. amplitude
-	  Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % ((_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec)*motherTensor4Vec;
-	  currentAmp2=PsiGamPolProj | U_numu2;
-	  DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
-	  evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
+	//   //2. amplitude
+	//   DebugMsg << "((_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec)*motherTensor4Vec: " << ((_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec)*motherTensor4Vec << endmsg;
+	//   DebugMsg << "(_lctTensor*PpsySpinProjX_jg1)*motherTensor: " << (_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec << endmsg;
+
+	//   Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % (((_lctTensor*PpsySpinProjX_jg1)*motherTensor4Vec)*motherTensor4Vec);
+	//   currentAmp2=PsiGamPolProj | U_numu2;
+	//   DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
+	//   evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
 	  
-	  if(spinDaughter2>1){
-	    //3. amplitude ?????
-	    currentAmp2=complex<double>(0.,0.);
-	    evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=complex<double>(0.,0.);
-	  }
-	}
+	//   if(spinDaughter2>1){
+	//     //3. amplitude ?????
+	//     currentAmp2=complex<double>(0.,0.);
+	//     evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=complex<double>(0.,0.);
+	//   }
+	// }
       }
     }
   }

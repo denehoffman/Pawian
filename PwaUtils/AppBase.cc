@@ -341,6 +341,21 @@ void AppBase::fixParams(MnUserParameters& upar, std::vector<std::string> fixedPa
   }
 }
 
+void AppBase::fixAllReleaseScaleParams(MnUserParameters& upar){
+  std::string scaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
+  const std::vector<MinuitParameter> theParams= upar.Parameters();
+
+  std::vector< MinuitParameter >::const_iterator itPar;
+  for(itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
+    //   if (scaleParam != itPar->GetName()) itPar->Fix();
+    if (scaleParam != itPar->GetName()) upar.Fix( itPar->GetName() );
+    else upar.Release( itPar->GetName() );
+    // upar.Fix( itPar->GetName() );
+    // if (scaleParam == itPar->GetName()) upar.Release( itPar->GetName() );
+  }
+
+}
+
 FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
   MnMigrad migrad(theFcn, upar);
   Info <<"start migrad "<< endmsg;

@@ -78,6 +78,7 @@ public:
   const bool saveContributionHistos() const {return _saveContributionHistos;}
   const bool useEvtWeight() const {return _useEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
+  const bool doScaling() const {return _doScaling;}
   const std::string pdgTableFile() const {return _pdgTableFile;}
   const std::vector<std::string>& coupledChannelCfgs() const { return _coupledChannelCfgs; }
   const std::vector<std::string>& finalStateParticles() const { return _finalStateParticles; }
@@ -136,6 +137,7 @@ protected:
   po::options_description* _config;
   bool _useEvtWeight;
   bool _usePhaseSpaceHyp;
+  bool _doScaling;
   std::string _pdgTableFile;
   std::vector<std::string> _coupledChannelCfgs;
   std::vector<std::string> _finalStateParticles;

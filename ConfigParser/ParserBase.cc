@@ -61,6 +61,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _config(new po::options_description("Configuration file options"))
       ,_useEvtWeight(false)
       ,_usePhaseSpaceHyp(false)
+      ,_doScaling(false)
       ,_pdgTableFile("/Particle/pdtNew.table")
       ,_productionFormalism("Cano")
       ,_useProductionBarrier(false)
@@ -109,6 +110,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("saveContributionHistos",po::value<bool>(&_saveContributionHistos),  "creates a histogram root-file for each contribution of Option: calcContribution")
       ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
       ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
+      ("doScaling",po::value<bool>(&_doScaling), "enable/disable prefit with free scaling factor")
       ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
       ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
       ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
@@ -224,6 +226,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
 		<< "use event weight: " << _useEvtWeight  << "\n\n"
 		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
+		<< "prefit with free scaling factor: " << _doScaling << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
 	        << "minimumTolerance: " << _tolerance << "\n\n"
             << endl;
