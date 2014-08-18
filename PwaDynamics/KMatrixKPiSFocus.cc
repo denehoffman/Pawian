@@ -67,6 +67,15 @@ KMatrixKPiSFocus::~KMatrixKPiSFocus(){
 }
 
 void KMatrixKPiSFocus::evalMatrix(const double mass){
+   evalMatrixTemplate(mass);
+}
+
+void KMatrixKPiSFocus::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void KMatrixKPiSFocus::evalMatrixTemplate(const MassType mass){
  
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
@@ -75,15 +84,18 @@ void KMatrixKPiSFocus::evalMatrix(const double mass){
     theKMatrix += *(*it);
   }
 
-  double s_hat=mass*mass/(_sNorm)-1.;  
+  MassType s_hat=mass*mass/(_sNorm)-1.;  
   
   for (int i=0; i<theKMatrix.NumRows(); ++i){
     for (int j=0; j<theKMatrix.NumCols(); ++j){
-      this->operator()(i,j)=theKMatrix(i,j)+complex<double> ( (*_aScatPtr)[i][j] + (*_bScatPtr)[i][j]*s_hat + (*_cScatPtr)[i][j]*s_hat*s_hat , 0. );
+      this->operator()(i,j)=theKMatrix(i,j)+complex<double> ( (*_aScatPtr)[i][j] + (*_bScatPtr)[i][j]*s_hat + (*_cScatPtr)[i][j]*s_hat*s_hat);
       this->operator()(i,j)*=(mass*mass-_sAdler0)/_sNorm;
     }
   }
 }
+
+template void KMatrixKPiSFocus::evalMatrixTemplate(const double mass);
+template void KMatrixKPiSFocus::evalMatrixTemplate(const complex<double> mass);
 
 void KMatrixKPiSFocus::init2IsoSpin1(){
 

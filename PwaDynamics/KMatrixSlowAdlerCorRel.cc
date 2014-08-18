@@ -47,7 +47,17 @@ KMatrixSlowAdlerCorRel::KMatrixSlowAdlerCorRel(int dim) :
 KMatrixSlowAdlerCorRel::~KMatrixSlowAdlerCorRel(){
 }
 
+
 void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
+   evalMatrixTemplate(mass);
+}
+
+void KMatrixSlowAdlerCorRel::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const MassType mass){
 
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){
@@ -60,26 +70,29 @@ void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
     (*this)+= *(*it);
   }
 
-  double sAdler0Denom=mass*mass-_sAdler0;
-  if( fabs(sAdler0Denom)<1e-10){
-    if(sAdler0Denom<0) sAdler0Denom=-1e-10;
-    else sAdler0Denom=1e-10;
+  MassType sAdler0Denom=mass*mass-_sAdler0;
+  double absAdler0Denom=abs(sAdler0Denom);
+  if(absAdler0Denom < 1e-10){
+     sAdler0Denom *= 1e-10 / absAdler0Denom;
   }
 
  
-  double adlerFactor=(1.-_sAdler0)/sAdler0Denom*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
+  MassType adlerFactor=(1.-_sAdler0)/sAdler0Denom*(mass*mass-_sAdler*0.1349766*0.1349766/2.);
 
-  double s0ScatDenom=mass*mass-_s0Scat;
-  if( fabs(s0ScatDenom)<1e-10){
-    if(s0ScatDenom<0.) s0ScatDenom=-1e-10;
-    else s0ScatDenom=1e-10;
+  MassType s0ScatDenom=mass*mass-_s0Scat;
+  double absScatDenom=abs(s0ScatDenom);
+  if(absScatDenom < 1e-10){
+     s0ScatDenom *= 1e-10 / absScatDenom;
   }
-  double s0ScatFactor=(1.0-_s0Scat)/s0ScatDenom;
+  MassType s0ScatFactor=(1.0-_s0Scat)/s0ScatDenom;
 
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){
-      this->operator()(i,j)+=complex<double> ((*_fScatPtr)[i][j]*s0ScatFactor, 0.);
+      this->operator()(i,j)+=complex<double>((*_fScatPtr)[i][j]*s0ScatFactor);
       this->operator()(i,j)*=adlerFactor;
     }
   }
 }
+
+template void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const double mass);
+template void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const complex<double> mass);

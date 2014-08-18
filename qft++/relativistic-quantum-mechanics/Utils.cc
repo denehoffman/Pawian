@@ -563,28 +563,33 @@ void Wigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
 }
 //_____________________________________________________________________________
 
-complex<double> phaseSpaceFac(double mass, double massDec1, double massDec2){  
-
+template<typename MassType>
+complex<double> phaseSpaceFac(MassType mass, double massDec1, double massDec2){
   complex<double> result(0.,0.);
-  if(mass < 1e-8) {
-    
-    std::cout << "mass " << mass << " very close to 0 or negative; not possible to calculate phasespace factor " <<std::endl;
-    assert(0);
+
+  if(fabs(mass) < 1e-8) {
+     std::cout << "mass " << mass << " very close to 0; not possible to calculate phasespace factor " <<std::endl;
   }
 
-  double termPlus=(massDec1+massDec2)/mass;
-  double termMinus=(massDec1-massDec2)/mass;   
-  double tmpVal=(1.-termPlus*termPlus) * (1.-termMinus*termMinus);
+  MassType termPlus=(massDec1+massDec2)/mass;
+  MassType termMinus=(massDec1-massDec2)/mass;
+  MassType tmpVal=(1.-termPlus*termPlus) * (1.-termMinus*termMinus);
 
-//    double tmpVal=mass*mass/4-massDec1*massDec2; 
-  
-  if (tmpVal>=0.)  result = complex<double> (sqrt(tmpVal), 0. );
-  else   result = complex<double> (0., sqrt(-tmpVal));
+  result = std::sqrt(std::complex<double>(tmpVal));
   return result;
 }
 
-complex<double> breakupMomQ(double mass, double massDec1, double massDec2){
+
+template<typename T>
+complex<double> breakupMomQ(T mass, double massDec1, double massDec2){
 
   complex<double> result=phaseSpaceFac(mass, massDec1, massDec2)*mass/2.;
   return result;  
 }
+
+
+template complex<double> phaseSpaceFac(double, double, double);
+template complex<double> phaseSpaceFac(complex<double> , double, double);
+
+template complex<double> breakupMomQ(double, double, double);
+template complex<double> breakupMomQ(complex<double>, double, double);

@@ -55,6 +55,7 @@ public:
   virtual ~KMatrixKPiSFocus();
 
   virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const complex<double> mass);
   virtual double sNorm() {return _sNorm;}
 
 protected:
@@ -66,6 +67,10 @@ protected:
 
   void init2IsoSpin1();
   void init2IsoSpin3();
+
+private:
+  template<typename MassType>
+  void evalMatrixTemplate(const MassType mass);
 };
 //_____________________________________________________________________________
 

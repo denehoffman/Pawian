@@ -44,16 +44,28 @@ KPole::~KPole(){
 }
 
 void KPole::evalMatrix(const double mass){
-  double denom=_poleMass*_poleMass-mass*mass;
-  if(fabs(denom)<1e-10){
-    if(denom<0.) denom=-1e-10; 
-    else denom=1e-10;
+   evalMatrixTemplate(mass);
+}
+
+void KPole::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void KPole::evalMatrixTemplate(const MassType mass){
+  MassType denom=_poleMass*_poleMass-mass*mass;
+
+  double absDenom = abs(denom);
+  if(absDenom < 1e-10){
+     denom *= 1e-10 / absDenom;
   }
 
   for (int i=0; i< int(_g_i.size()); ++i){
     for (int j=0; j< int(_g_i.size()); ++j){
       this->operator()(i,j)= ( _g_i[i]*_g_i[j])/denom;
      }
-   }
+  }
 }
 
+template void KPole::evalMatrixTemplate(const double mass);
+template void KPole::evalMatrixTemplate(const complex<double> mass);

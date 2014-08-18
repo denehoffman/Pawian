@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,45 +21,20 @@
 //									  //
 //************************************************************************//
 
-#include <iostream>
-#include <cstring>
-#include <string>
-#include <sstream>
+#include <complex>
 #include <vector>
-#include <map>
+#include "PwaDynamics/TMatrixBase.hh"
 
-#include <memory>
+class TH2F;
 
-#include "Examples/Tutorial/LineShapes/TMatrixGeneral.hh"
-#include "ErrLogger/ErrLogger.hh"
+class RiemannSheetAnalyzer
+{
 
-int main(int __argc,char *__argv[]){
-  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-  if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+public:
+   RiemannSheetAnalyzer(unsigned int noOfChannels, std::shared_ptr<TMatrixBase> tMatrix, 
+			std::complex<double> massMin, std::complex<double> massMax);
 
-    return 0;
-  }
-
-  std::string pathToConfigParser;
-
-  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
-    bool found=false;
-    std::string sw = __argv[optind];
-    if (sw=="--path" || sw=="-path"){
-      optind++;
-      pathToConfigParser = __argv[optind];
-      found=true;
-    }
-    if (!found){
-      Warning << "Unknown switch: " 
-            << __argv[optind] << endmsg;
-      optind++;
-    }
-  }
-
-  TMatrixGeneral tMatrixGeneral(pathToConfigParser);
-
-  return 0;
-}
-
+private:
+   void FindPolePositions(TH2F* histo);
+   std::vector<double> GetSignsFromInteger(unsigned int noOfChannels, unsigned int signCollection);
+};

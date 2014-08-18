@@ -57,6 +57,7 @@ public:
   virtual ~KMatrixSlowAdlerCorRel();
 
   virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const complex<double> mass);
   virtual std::shared_ptr<array_type_2d> fScatProd() {return _fScatPtr;}
   virtual double s0Scat() {return _s0Scat;}
 
@@ -65,6 +66,10 @@ protected:
   double _s0Scat; 
   double _sAdler0;
   double _sAdler;
+
+private:
+  template<typename MassType>
+  void evalMatrixTemplate(const MassType mass);
 };
 //_____________________________________________________________________________
 

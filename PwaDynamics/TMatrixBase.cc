@@ -39,3 +39,10 @@ void TMatrixBase::evalMatrix(const double mass){
   _Kmatrix->evalMatrix(mass);
 }
 
+void TMatrixBase::evalMatrix(const complex<double> mass){
+  _Kmatrix->evalMatrix(mass);
+}
+
+void TMatrixBase::SetBumImPartSigns(std::vector<double> signs){
+  _Kmatrix->SetBumImPartSigns(signs);
+}

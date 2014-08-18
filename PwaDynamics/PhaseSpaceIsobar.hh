@@ -55,7 +55,8 @@ public:
 
   virtual complex<double> factor(const double mass);
   virtual complex<double> breakUpMom(const double mass);
-
+  virtual complex<double> factor(const complex<double> mass);
+  virtual complex<double> breakUpMom(const complex<double> mass);
 
 protected:
 

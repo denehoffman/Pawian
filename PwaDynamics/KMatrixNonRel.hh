@@ -53,8 +53,12 @@ public:
   virtual ~KMatrixNonRel();
 
   virtual void evalMatrix(const double mass);
-
+  virtual void evalMatrix(const complex<double> mass);
 protected:
+
+private:
+  template<typename MassType>
+  void evalMatrixTemplate(const MassType mass);
 };
 //_____________________________________________________________________________
 

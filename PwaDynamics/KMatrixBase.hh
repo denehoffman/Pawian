@@ -54,12 +54,15 @@ public:
   /// Destructor
   virtual ~KMatrixBase();
 
-  virtual void evalMatrix(const double mass) {return;}
+  virtual void evalMatrix(const double mass){return;}
+  virtual void evalMatrix(const complex<double> mass) {return;}
   virtual vector<std::shared_ptr<AbsPhaseSpace> > phaseSpaceVec() {return _phpVecs;}
   virtual vector<std::shared_ptr<KPole> > kpoles() {return _KPoles;}
   virtual void updateBgTerms(unsigned int order, unsigned int row,  unsigned int column, double theVal);
   virtual void updates0Adler(double s0Adler) {_s0Adler=s0Adler;}
   virtual void updatesnormAdler(double snormAdler) {_snormAdler=snormAdler;}
+
+  void SetBumImPartSigns(std::vector<double> signs);
 
 protected:
   vector<std::shared_ptr<KPole> > _KPoles;

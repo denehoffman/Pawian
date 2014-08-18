@@ -37,6 +37,15 @@ KMatrixNonRel::~KMatrixNonRel(){
 }
 
 void KMatrixNonRel::evalMatrix(const double mass){
+   return evalMatrixTemplate(mass);
+}
+
+void KMatrixNonRel::evalMatrix(const complex<double> mass){
+   return evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void KMatrixNonRel::evalMatrixTemplate(const MassType mass){
 
   vector< complex<double> > rhoFactors;
 
@@ -57,3 +66,6 @@ void KMatrixNonRel::evalMatrix(const double mass){
     }
   }
 }
+
+template void KMatrixNonRel::evalMatrixTemplate(const double mass);
+template void KMatrixNonRel::evalMatrixTemplate(const complex<double> mass);

@@ -53,8 +53,6 @@ public:
   /// Destructor
   virtual ~KMatrixPiPiS();
 
-  // virtual void evalMatrix(const double mass);
-
 protected:
   void initASParam1900();
   double _oldMass;

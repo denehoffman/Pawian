@@ -27,6 +27,7 @@
 #include <string>
 #include <boost/multi_array.hpp>
 #include "Examples/Tutorial/LineShapes/TMatrixGeneral.hh"
+#include "Examples/Tutorial/LineShapes/RiemannSheetAnalyzer.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/TMatrixBase.hh"
@@ -40,7 +41,6 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "ConfigParser/KMatrixParser.hh"
-//#include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/PdtParser.hh"
 #include "Particle/Particle.hh"
@@ -57,7 +57,7 @@
 TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
   _noOfSteps(1000)
   ,_stepSize(0.)
-  , _massMin(100000.)
+  ,_massMin(100000.)
   ,_massMax(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
   ,_theTFile(0)
@@ -133,18 +133,18 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
-    //    std::cout << mass << " \t" << (*_tMatr)(i,i) << std::endl;
+
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
       complex<double> currentRho=_phpVecs.at(i)->factor(mass);
-      //      std::cout << mass << "(" << i << ")\t"<< (*_tMatr)(i,i) << std::endl;
+
       _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
       _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
       
       _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
       double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
       _PhaseH2Vec.at(i)->Fill(mass, currentphase);
-      double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
-      double currentElasticity=2.*sqrt(sqrtFactor);
+      // double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
+      // double currentElasticity=2.*sqrt(sqrtFactor);
       complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
       _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
 
@@ -153,6 +153,9 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
       _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho))); 
     }    
   }
+
+  RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
+		       std::complex<double>(_massMin, -0.2), std::complex<double>(_massMax, 0.0));
 }
 
 TMatrixGeneral::~TMatrixGeneral()
@@ -163,7 +166,6 @@ TMatrixGeneral::~TMatrixGeneral()
 
 
 void TMatrixGeneral::init(){
-   // pdtTable
    PdtParser pdtParser;
    std::string theSourcePath=getenv("TOP_DIR");
    std::string pdtFileRelPath="/Particle/pdtNew.table";
@@ -257,12 +259,12 @@ void TMatrixGeneral::init(){
   else{
     bool withAdler=_kMatrixParser->useAdler();
     _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, orderBg, withAdler));
-    _kMatr->updateBgTerms(0, 0, 0,-1.199873290423058);
-    _kMatr->updateBgTerms(0, 0, 1,-1.313917626425926);
-    _kMatr->updateBgTerms(0, 1, 1,-3.41578529550388);
-    // _kMatr->updateBgTerms(0, 0, 0, 0.79299);
-    // _kMatr->updateBgTerms(0, 0, 1, 0.15040);
-    // _kMatr->updateBgTerms(0, 1, 1, 0.17054);
+    // _kMatr->updateBgTerms(0, 0, 0,-1.199873290423058);
+    // _kMatr->updateBgTerms(0, 0, 1,-1.313917626425926);
+    // _kMatr->updateBgTerms(0, 1, 1,-3.41578529550388);
+    _kMatr->updateBgTerms(0, 0, 0, 0.0);
+    _kMatr->updateBgTerms(0, 0, 1, 0.0);
+    _kMatr->updateBgTerms(0, 1, 1, 0.0);
     if(orderBg>0){
       _kMatr->updateBgTerms(1, 0, 0, -0.15099);
       _kMatr->updateBgTerms(1, 0, 1, -0.038266);

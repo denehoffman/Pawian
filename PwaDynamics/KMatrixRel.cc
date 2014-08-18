@@ -37,6 +37,15 @@ KMatrixRel::~KMatrixRel(){
 }
 
 void KMatrixRel::evalMatrix(const double mass){
+   evalMatrixTemplate(mass);
+}
+
+void KMatrixRel::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void KMatrixRel::evalMatrixTemplate(const MassType mass){
 
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
@@ -51,3 +60,6 @@ void KMatrixRel::evalMatrix(const double mass){
     }
   }
 }
+
+template void KMatrixRel::evalMatrixTemplate(const double mass);
+template void KMatrixRel::evalMatrixTemplate(const complex<double> mass);

@@ -41,7 +41,7 @@ class AbsPhaseSpace {
 public:
 
   /// Constructor 
-  AbsPhaseSpace(){;} 
+  AbsPhaseSpace() : _bumImPartSign(1){;} 
 
   /// Destructor
   virtual ~AbsPhaseSpace(){;}
@@ -52,13 +52,22 @@ public:
   // functions:
 
   virtual complex<double> factor(const double mass)=0;
+  virtual complex<double> factor(const complex<double> mass)=0;
   virtual complex<double> breakUpMom(const double mass)=0;
+  virtual complex<double> breakUpMom(const complex<double> mass)=0;
 
+  void SetBumImPartSign(double sign){_bumImPartSign = sign;}
 
 protected:
+  void CorrectForChosenSign(complex<double>& breakUpMom){
+     if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
+	(_bumImPartSign < 0 && breakUpMom.imag() > 0)){
+	breakUpMom *= -1;
+     }
+  }
 
 private:
-
+  double _bumImPartSign;
 };
 //_____________________________________________________________________________
 

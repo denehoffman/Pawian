@@ -74,3 +74,13 @@ void KMatrixBase::updateBgTerms(unsigned int order, unsigned int row,  unsigned 
   _bgTerms.at(order).at(column).at(row)=theVal;
 }
 
+void KMatrixBase::SetBumImPartSigns(std::vector<double> signs){
+   if(signs.size() != _phpVecs.size()){
+      Alert << "signs.size() != _phpVecs.size()" << endmsg;
+      exit(EXIT_FAILURE);
+   }
+
+   for(unsigned int i=0; i<signs.size();i++){
+      _phpVecs.at(i)->SetBumImPartSign(signs.at(i));
+   }
+}

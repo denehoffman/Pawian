@@ -23,6 +23,7 @@
 
 #include "PwaDynamics/PhaseSpace4Pi.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 PhaseSpace4Pi::PhaseSpace4Pi():
   AbsPhaseSpace()
@@ -37,9 +38,10 @@ PhaseSpace4Pi::~PhaseSpace4Pi(){
 complex<double> PhaseSpace4Pi::factor(const double mass){
   double mass_sqr=mass*mass;
   complex<double> result(0.,0.);
-  if( mass_sqr <= 1 )
-    {
-      double real   = 1.2274 + .00370909 / ( mass_sqr * mass_sqr ) - .111203 / mass_sqr - 6.39017 * mass_sqr + 16.8358*mass_sqr*mass_sqr - 21.8845*mass_sqr*mass_sqr*mass_sqr + 11.3153*mass_sqr*mass_sqr*mass_sqr*mass_sqr;
+  if( mass_sqr <= 1 ){
+      double real = 1.2274 + .00370909 / ( mass_sqr * mass_sqr ) - .111203 / mass_sqr - 6.39017 * mass_sqr + 
+	 16.8358*mass_sqr*mass_sqr - 21.8845*mass_sqr*mass_sqr*mass_sqr + 11.3153*mass_sqr*mass_sqr*mass_sqr*mass_sqr;
+
       double cont32 = sqrt(1.0-(16.0*_piMass*_piMass));
       result = complex<double>( cont32 * real, 0 );
     }
@@ -47,7 +49,19 @@ complex<double> PhaseSpace4Pi::factor(const double mass){
   return result;
 }
 
+complex<double> PhaseSpace4Pi::factor(const complex<double> mass){
+   Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
+   exit(EXIT_FAILURE);
+   return 0;
+}
+
 complex<double> PhaseSpace4Pi::breakUpMom(const double mass){
-  return factor(mass)*mass/2.;
+   return factor(mass)*mass/2.;
+}
+
+complex<double> PhaseSpace4Pi::breakUpMom(const complex<double> mass){
+   Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
+   exit(EXIT_FAILURE);
+   return 0;
 }
 

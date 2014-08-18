@@ -66,7 +66,7 @@ public:
   // functions:
 
   virtual void evalMatrix(const double mass);
-
+  virtual void evalMatrix(const complex<double> mass);
 
   virtual double poleMass() {return _poleMass;}
   virtual vector<double> gFactors() {return _g_i;}
@@ -77,5 +77,10 @@ public:
 protected:
   vector<double> _g_i;
   double _poleMass;
+
+private:
+  template<typename MassType>
+  void evalMatrixTemplate(const MassType mass);
+
 };
 //_____________________________________________________________________________

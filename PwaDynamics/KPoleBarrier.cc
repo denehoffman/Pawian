@@ -40,16 +40,27 @@ KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::share
 KPoleBarrier::~KPoleBarrier(){
 }
 
+
+
 void KPoleBarrier::evalMatrix(const double mass){
+   evalMatrixTemplate(mass);
+}
+
+void KPoleBarrier::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+ 
+template<typename MassType>
+void KPoleBarrier::evalMatrixTemplate(const MassType mass){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
      _barrierFactor.at(i) = BarrierFactor::D(_orbMom, _phpVecs.at(i)->breakUpMom(mass), _breakUpM0.at(i), BarrierFactor::qRDefault);
   }
 
-  double denom=_poleMass*_poleMass-mass*mass;
-  if(fabs(denom)<1e-10){
-    if(denom<0.) denom=-1e-10; 
-    else denom=1e-10;
+  MassType denom=_poleMass*_poleMass-mass*mass;
+  double absDenom=abs(denom);
+  if(absDenom < 1e-10){
+     denom *= 1E-10/absDenom;
   }
 
   for (int i=0; i< int(_g_i.size()); ++i){
@@ -59,6 +70,8 @@ void KPoleBarrier::evalMatrix(const double mass){
    }
 }
 
+template void KPoleBarrier::evalMatrixTemplate(const double mass);
+template void KPoleBarrier::evalMatrixTemplate(const complex<double> mass);
 
 void KPoleBarrier::updatePoleMass (double newPoleMass){
   _poleMass=newPoleMass;

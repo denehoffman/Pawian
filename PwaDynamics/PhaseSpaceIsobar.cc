@@ -43,3 +43,16 @@ complex<double> PhaseSpaceIsobar::breakUpMom(const double mass){
   return breakupMomQ(mass,_mass1, _mass2);
 }
 
+complex<double> PhaseSpaceIsobar::factor(const complex<double> mass){
+  // Calc from the breakup momentum to account for chosen sign
+  complex<double> q = breakupMomQ(mass,_mass1, _mass2);
+  CorrectForChosenSign(q);
+  return q * 2. / mass;
+}
+
+complex<double> PhaseSpaceIsobar::breakUpMom(const complex<double> mass){
+  complex<double> q = breakupMomQ(mass,_mass1, _mass2);
+  CorrectForChosenSign(q);
+  return q;
+}
+

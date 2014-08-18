@@ -53,9 +53,13 @@ public:
   virtual ~KMatrixRelBg();
 
   virtual void evalMatrix(const double mass);
-
+  virtual void evalMatrix(const complex<double> mass);
 protected:
   bool _withAdler;
+
+private:
+  template<typename MassType>
+  void evalMatrixTemplate(const MassType mass);
 };
 //_____________________________________________________________________________
 

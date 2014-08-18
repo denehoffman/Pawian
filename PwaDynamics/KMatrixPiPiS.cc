@@ -136,9 +136,3 @@ void  KMatrixPiPiS::initASParam1900(){
 
 }
 
-// void KMatrixPiPiS::evalMatrix(const double mass){
-//   if(fabs(mass-_oldMass) > 1e-8){
-//     KMatrixSlowAdlerCorRel::evalMatrix(mass);
-//     _oldMass=mass;
-//   }
-// }

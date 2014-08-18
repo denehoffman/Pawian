@@ -67,6 +67,7 @@ public:
   // functions:
 
   virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const complex<double> mass);
   virtual void updatePoleMass (double newPoleMass);
 
   
@@ -75,5 +76,9 @@ protected:
   int _orbMom;
   std::vector< complex<double> > _breakUpM0;
   std::vector< complex<double> > _barrierFactor;
+
+private:
+  template<typename MassType>
+  void evalMatrixTemplate(const MassType mass);
 };
 //_____________________________________________________________________________

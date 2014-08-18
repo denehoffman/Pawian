@@ -49,9 +49,18 @@ KMatrixRelBg::~KMatrixRelBg(){
 }
 
 void KMatrixRelBg::evalMatrix(const double mass){
+   evalMatrixTemplate(mass);
+}
 
-  double adlerTerm=1.;
-  double s_hat=mass*mass;
+void KMatrixRelBg::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void KMatrixRelBg::evalMatrixTemplate(const MassType mass){
+
+  MassType adlerTerm=1.;
+  MassType s_hat=mass*mass;
   if(_withAdler){
     adlerTerm=(mass*mass-_s0Adler)/_snormAdler;
     s_hat=mass*mass/_snormAdler-1.;
@@ -68,7 +77,7 @@ void KMatrixRelBg::evalMatrix(const double mass){
     for (int j=i; j<NumRows(); ++j){
       complex<double> currentBg(0.,0.);
       for (unsigned int k=0; k<=_orderBg; ++k){
-	currentBg+=complex<double>(_bgTerms.at(k).at(i).at(j)*pow(s_hat,k), 0.);
+	currentBg+=complex<double>(_bgTerms.at(k).at(i).at(j)*pow(s_hat,k));
       }
       this->operator()(i,j)=theKMatrix(i,j)+currentBg;
       this->operator()(i,j)*=adlerTerm;
@@ -76,3 +85,6 @@ void KMatrixRelBg::evalMatrix(const double mass){
     }
   }
 }
+
+template void KMatrixRelBg::evalMatrixTemplate(const double mass);
+template void KMatrixRelBg::evalMatrixTemplate(const complex<double> mass);

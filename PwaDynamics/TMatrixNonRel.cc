@@ -37,6 +37,15 @@ TMatrixNonRel::~TMatrixNonRel(){
 }
 
 void TMatrixNonRel::evalMatrix(const double mass){
+   evalMatrixTemplate(mass);
+}
+
+void TMatrixNonRel::evalMatrix(const complex<double> mass){
+   evalMatrixTemplate(mass);
+}
+
+template<typename MassType>
+void TMatrixNonRel::evalMatrixTemplate(const MassType mass){
   TMatrixBase::evalMatrix(mass);
 
   complex<double> imagCompl(0.,1.);  
@@ -54,3 +63,6 @@ void TMatrixNonRel::evalMatrix(const double mass){
     }
   }
 }
+
+template void TMatrixNonRel::evalMatrixTemplate(const double mass);
+template void TMatrixNonRel::evalMatrixTemplate(const complex<double> mass);

@@ -52,7 +52,10 @@ public:
   virtual ~TMatrixBase();
 
   virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const complex<double> mass);
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
+
+  void SetBumImPartSigns(std::vector<double> signs);
 
 protected:
   std::shared_ptr<KMatrixBase> _Kmatrix; 
