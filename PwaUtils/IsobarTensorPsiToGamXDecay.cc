@@ -303,7 +303,8 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 	      if(spinDaughter2>1){	      
 		//3. amplitude ?????
 		Tensor<complex<double> > U_numu3= (_lctTensor*(PpsySpinProjX_jg2*daughter1GamTensor4Vec))*motherTensor4Vec;
-		currentAmp2=PsiGamPolProj | U_numu3;
+		//		Tensor<complex<double> > U_numu3= _lctTensor | PpsySpinProjX_jg2;
+		currentAmp3=PsiGamPolProj | U_numu3;
 		evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
 	      }
 	    }
