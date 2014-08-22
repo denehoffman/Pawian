@@ -34,6 +34,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -131,7 +132,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    result*=_absDyn->eval(theData, grandmaAmp);
+    //    result*=_absDyn->eval(theData, grandmaAmp);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
   }
@@ -159,17 +160,23 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 
   result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
 
-  if ( _cacheAmps){
-     theMutex.lock();
-     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
-     theMutex.unlock();
-}
+  if(absDec()->useProdBarrier()){
+    result *= BarrierFactor::BlattWeisskopf(absDec()->orbMomMin(), theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
+      BarrierFactor::BlattWeisskopf(absDec()->orbMomMin(), theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
+  }
+  else result*=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
 
-  result*=_absDyn->eval(theData, grandmaAmp);
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;
     exit(0);
   }
+
+  if ( _cacheAmps){
+    theMutex.lock();
+    _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
+    theMutex.unlock();
+  }
+
   return result;
 }
 

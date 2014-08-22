@@ -68,6 +68,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_isProdAmp(false)
    ,_useProdBarrier(false)
    ,_massSumFsParticles(0.)
+   ,_Lmin(0)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -148,6 +149,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
    ,_isProdAmp(false)
    ,_useProdBarrier(false)
    ,_massSumFsParticles(0.)
+   ,_Lmin(0)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -276,7 +278,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       daughter2HelMother=daughter2_4Vec;
       daughter2HelMother.Boost(daughter2HelMother); //is this correct????
     }
-    else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
+    //    else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
+    else daughter2HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
   }
   else{
     daughter2HelMother=daughter2_4Vec;
@@ -325,10 +328,12 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 
   if(_isProdAmp){
      if (!_daughter1IsStable){
-       _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
+       //       _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
+      _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData); 
      }
      if (!_daughter2IsStable){
-       _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
+       //       _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
+       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData);
      }
      if (_useProdBarrier){
        double qVal=daughter2HelMother.P();
@@ -339,10 +344,12 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   }
    else{
      if (!_daughter1IsStable){
-       _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+       // _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+       _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData);
      }
      if (!_daughter2IsStable){
-       _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+       //       _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData);
      }
    }
    _alreadyFilledMap[evtNo]=true;
@@ -401,4 +408,31 @@ double AbsDecay::massSumFsParticlesDec1(){
 double AbsDecay::massSumFsParticlesDec2(){
   if (!_daughter2IsStable) return _absDecDaughter2->massSumFsParticles();
   return _daughter2->mass();
+}
+
+void AbsDecay::extractLmin(){
+  std::vector< std::shared_ptr<const LScomb> > LSDecAmps;
+  if (_useIsospin){
+    Spin currentGParity=_motherIGJPCPtr->G;
+    int daughter1GParity=_daughter1->theGParity();
+    int daughter2GParity=_daughter2->theGParity();
+
+    if( fabs(currentGParity)==1 && fabs(daughter1GParity)==1 && fabs(daughter2GParity)==1){
+      validLS( _motherIGJPCPtr, _daughter1, _daughter2, LSDecAmps, true, _gParity, true);
+    }
+    else{
+      validLS( _motherIGJPCPtr, _daughter1, _daughter2, LSDecAmps);
+    }
+  }
+  else{
+    validLS( _motherIGJPCPtr, _daughter1, _daughter2, LSDecAmps);
+  }
+ 
+  _Lmin=100;
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=LSDecAmps.begin(); it!=LSDecAmps.end(); ++it){
+    int currentL=(*it)->L;
+    if(_Lmin>currentL) _Lmin=currentL;
+  }
+   
 }

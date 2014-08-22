@@ -48,6 +48,7 @@ IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Partic
 }
 
 void IsobarLSDecay::extractStates(){
+  extractLmin();
   if (_useIsospin){
     Spin currentGParity=_motherIGJPCPtr->G;
     int daughter1GParity=_daughter1->theGParity();

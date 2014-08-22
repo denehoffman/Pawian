@@ -69,6 +69,7 @@ void EpemChannelEnv::setup(ChannelID id){
     std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
     std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier();
       _prodDecList->addDecay(*itDec);
     }
   }
@@ -76,6 +77,7 @@ void EpemChannelEnv::setup(ChannelID id){
     std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _epemReaction->productionTensorDecays();
     std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier();
       _prodDecList->addDecay(*itDec);
     }
   }

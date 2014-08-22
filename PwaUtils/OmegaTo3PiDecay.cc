@@ -63,6 +63,7 @@ void OmegaTo3PiDecay::extractStates(){
 //check correct quantum numbers
   //...
   int validL=1;
+  _Lmin=1;
   Spin validS=0;
   std::shared_ptr<const JPCLS> theValidJPCLS(new JPCLS(_motherIGJPCPtr, validL, validS));
   _JPCLSDecAmps.push_back(theValidJPCLS);

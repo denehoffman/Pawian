@@ -84,7 +84,7 @@ public:
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual std::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}
   virtual std::string type() =0;
-  virtual void extractStates()=0;
+  virtual void extractStates() =0;
 
   double isospinCG() {return _isospinClebschG;}
 
@@ -104,8 +104,12 @@ public:
   double massSumFsParticles() {return _massSumFsParticles;}
   double massSumFsParticlesDec1();
   double massSumFsParticlesDec2();
+  int orbMomMin() {return _Lmin;}
 
 protected:
+
+  virtual void extractLmin();
+
   ChannelID _channelId;
 
   Particle* _mother;
@@ -157,4 +161,6 @@ protected:
   bool _isProdAmp;
   bool _useProdBarrier;
   double _massSumFsParticles;
+
+  int _Lmin;
 };
