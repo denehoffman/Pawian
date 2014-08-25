@@ -104,6 +104,10 @@ complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaught
 
 
 complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+
+  std::string refKey=_refKey;
+  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
+  
   // Info <<"\nlamX: " << lamX << "\tlamFs: " << lamFs << endmsg;
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
@@ -114,7 +118,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   //  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
+    result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
@@ -138,7 +142,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
+     _cachedAmpMapNew[evtNo][refKey][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 
@@ -154,14 +158,15 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
 
 
 complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
-
+  std::string refKey=_refKey;
+  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
   // Info << "\n_JPCPtr->J: " << _JPCPtr->J << "\tlamX: " << lamX << "\tlam1Min: " << lam1Min << "\tlam2Min: " << lam2Min << "\tlam1Max: " << lam1Max << "\tlam2Max: " << lam2Max << "\tlamFs: " <<lamFs << endmsg;
  
   complex<double> result(0.,0.);
 
   //  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
   //  Spin currentJ=_JPCPtr->J;
-  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
+  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(refKey);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){

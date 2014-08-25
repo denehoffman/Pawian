@@ -52,6 +52,7 @@ public:
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
   const std::string wignerDKey() {return _wignerDKey;}
+  const std::string refKey() {return _refKey;}
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   virtual std::string& massParKey() {return _massParamKey;}
@@ -69,7 +70,7 @@ public:
 
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
   virtual void print(std::ostream& os) const;
@@ -131,6 +132,7 @@ protected:
   std::string _fitParamSuffix;
   std::string _massParamKey;
   std::string _wignerDKey;
+  std::string _refKey;
   std::string _dynType;
   //  std::string _dynKey;
   double _preFactor;

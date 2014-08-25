@@ -46,6 +46,7 @@ class AbsDecay;
 //class AbsDynamics;
 
 typedef boost::unordered_map<int,std::map<std::string,std::map<Id2StringType, complex<float> > > >  intStringShortComplFloatMap;
+typedef boost::unordered_map<int,std::map<std::string,std::map< std::string, std::map<Id2StringType, complex<float> > > > > intStringStringShortComplFloatMap;
 
 class AbsXdecAmp : public AbsParamHandler{
 
@@ -64,7 +65,8 @@ public:
   std::shared_ptr<AbsDecay> absDec() {return _decay;}
   const std::string jpcDecsName() const {return _jpcDecsName;}
   const std::string isoKey() const {return _isoKey;}
-
+  const std::string wignerDKey() const {return _wignerDKey;}
+  const std::string refKey() const {return _refKey;}
   virtual void cacheAmplitudes();
 
 protected:
@@ -85,6 +87,7 @@ protected:
   const double _preFactor;
   std::string _key;
   const std::string _wignerDKey;
+  const std::string _refKey;
   std::mutex theMutex;
 
   bool _daughter1IsStable;
@@ -94,6 +97,7 @@ protected:
 
   Spin _J;
   intStringShortComplFloatMap _cachedAmpMap;
+  intStringStringShortComplFloatMap _cachedAmpMapNew;
 
   virtual void initialize();
 };

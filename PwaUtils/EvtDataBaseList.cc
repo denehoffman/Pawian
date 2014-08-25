@@ -132,13 +132,13 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
       evtData->FourVecsString.insert(mapString4Vec::value_type(it4VecMap->first, it4VecMap->second));
     }
 
-
    //fill WignerD functions
     const std::shared_ptr<AbsChannelEnv> absChannelEnvPtr=GlobalEnv::instance()->Channel(_channelID);
     std::vector<std::shared_ptr<AbsDecay> > theDecays=absChannelEnvPtr->prodDecayList()->getList();
     std::vector<std::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
-      (*itIso)->fillWignerDs(particle4VecMap, V4_all_lab, evtData);
+      std::string theRefKey=(*itIso)->refKey();
+      (*itIso)->fillWignerDs(particle4VecMap, V4_all_lab, evtData, theRefKey);
     }
 
    //fill 4Vecs for dynamics

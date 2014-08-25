@@ -50,6 +50,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   ,_preFactor(theDec->preFactor())
   ,_key("_"+theDec->fitParSuffix())
   ,_wignerDKey(theDec->wignerDKey())
+  ,_refKey(theDec->refKey())
   ,_daughter1IsStable(theDec->isDaughter1Stable())
   ,_daughter2IsStable(theDec->isDaughter2Stable())
   ,_enabledlamFsDaughter1(false)
