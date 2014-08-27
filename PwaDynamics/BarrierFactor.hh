@@ -1,3 +1,4 @@
+
 //************************************************************************//
 //                                                                        //
 //  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)                      //
@@ -30,9 +31,9 @@ class BarrierFactor
 
 public:
    BarrierFactor(int l, std::complex<double> q0, double qR);
-   std::complex<double> D(std::complex<double> q);
+   std::complex<double> BlattWeisskopfRatio(std::complex<double> q);
    std::complex<double> BlattWeisskopf(std::complex<double> q);
-   static std::complex<double> D(int l, std::complex<double> q, std::complex<double> q0, double qR);
+   static std::complex<double> BlattWeisskopfRatio(int l, std::complex<double> q, std::complex<double> q0, double qR);
    static std::complex<double> BlattWeisskopf(int l, std::complex<double> q, double qR);
    static std::complex<double> BlattWeisskopf(int l, std::complex<double> z);
 

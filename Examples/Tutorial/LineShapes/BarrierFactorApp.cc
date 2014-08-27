@@ -247,12 +247,11 @@ int main(int argc, char *argv[])
 	 dHist->SetLineWidth(2);
 
 	 for(int i=1; i<= dHist->GetNbinsX(); i++){
-	    double qDec = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
 	    double qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	    std::complex<double> valueDec = BarrierFactor::BlattWeisskopf(ld, qDec, qR);
-  	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qR);
-	    std::complex<double> breitWigner = BreitWignerFunction::NonRel(dHist->GetBinCenter(i), resonanceMass, resonanceWidth);
-	    dHist->SetBinContent(i, std::abs(breitWigner * valueDec * valueProd));
+	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qR);
+	    std::complex<double> breitWigner = BreitWignerFunction::BlattWRel(ld, dHist->GetBinCenter(i), resonanceMass, 
+									      resonanceWidth,decayParticle1Mass, decayParticle2Mass );
+	    dHist->SetBinContent(i, std::norm(breitWigner * valueProd));
 	 }
 
 	 if(normMass > 0){

@@ -42,7 +42,8 @@ PPoleBarrier::~PPoleBarrier(){
 void PPoleBarrier::evalMatrix(const double mass){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
-    _barrierFactor.at(i) = BarrierFactor::D(_orbMom, _phpVecs.at(i)->breakUpMom(mass), _breakUpM0.at(i), BarrierFactor::qRDefault);
+    _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+							      _breakUpM0.at(i), BarrierFactor::qRDefault);
   }
 
   double denom=_poleMass*_poleMass-mass*mass;

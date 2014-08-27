@@ -35,7 +35,6 @@ complex<double> BreitWignerFunction::Rel(double currentMass,double mass0, double
   return mass0*width/(mass0*mass0 - currentMass*currentMass- i*rho0_m*mass0*width);
 }
 
-
 complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB){
   complex<double> i(0.,1.);
   complex<double> rho0=phaseSpaceFac(mass0, massA, massB);
@@ -43,7 +42,7 @@ complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,d
   complex<double> momQ0=breakupMomQ(mass0, massA, massB);
   complex<double> momQ=breakupMomQ(currentMass, massA, massB);
 
-  std::complex<double> bwkFactor=BarrierFactor::D(orbMom, momQ, momQ0, BarrierFactor::qRDefault);
+  std::complex<double> bwkFactor=BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, BarrierFactor::qRDefault);
 
 
   return mass0*width*bwkFactor/(mass0*mass0 - currentMass*currentMass- i*(rho/rho0)*mass0*width*bwkFactor*bwkFactor);

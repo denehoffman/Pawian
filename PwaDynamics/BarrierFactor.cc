@@ -77,6 +77,17 @@ std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> z
 		  (z*z*z*z*z*z + 21.*z*z*z*z*z + 630.*z*z*z*z + 18900.*z*z*z +
 		   496125.*z*z + 9823275.*z + 108056025.));
    }
+   else if(7==l){
+      return sqrt(19727003738.*z*z*z*z*z*z*z /
+		  (z*z*z*z*z*z*z + 28.*z*z*z*z*z*z + 1134.*z*z*z*z*z + 47250.*z*z*z*z +
+		   1819125.*z*z*z + 58939650.*z*z + 1404728325.*z + 18261468225.));
+   }
+   else if(8==l){
+      return sqrt(4392846440677.*z*z*z*z*z*z*z*z /
+		  (z*z*z*z*z*z*z*z + 36.*z*z*z*z*z*z*z + 1890.*z*z*z*z*z*z +
+		   103950.*z*z*z*z*z + 5457375.*z*z*z*z + 255405150.*z*z*z +
+		   9833098275.*z*z + 273922023375.*z + 4108830350625.));
+   }
    else{
       Alert << "Cannot compute BlattWeisskopf factor for l=" << l << endmsg;
    }
@@ -85,12 +96,12 @@ std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> z
 
 
 
-std::complex<double> BarrierFactor::D(std::complex<double> q){
+std::complex<double> BarrierFactor::BlattWeisskopfRatio(std::complex<double> q){
    return BlattWeisskopf(q) / _B0;
 }
 
 
 
-std::complex<double> BarrierFactor::D(int l, std::complex<double> q, std::complex<double> q0, double qR){
+std::complex<double> BarrierFactor::BlattWeisskopfRatio(int l, std::complex<double> q, std::complex<double> q0, double qR){
    return BlattWeisskopf(l, q, qR) / BlattWeisskopf(l, q0, qR);
 }
