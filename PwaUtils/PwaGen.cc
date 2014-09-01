@@ -43,8 +43,7 @@
 
 #include "PspGen/EvtGenKine.hh"
 #include "PspGen/EvtRandom.hh"
-#include "PspGen/EvtRandomEngine.hh"
-#include "PspGen/EvtSimpleRandomEngine.hh"
+#include "PspGen/EvtMTRandomEngine.hh"
 #include "PspGen/EvtVector4R.hh"
 
 #include "Event/Event.hh"
@@ -119,7 +118,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     counterFsp++;
   }
 
-  EvtSimpleRandomEngine myRandom(GlobalEnv::instance()->parser()->randomSeed());
+  EvtMTRandomEngine myRandom(GlobalEnv::instance()->parser()->randomSeed());
   EvtRandom::setRandomEngine(&myRandom);
   bool generateEvents=true;
   int noOfAcceptedEvts=0;
