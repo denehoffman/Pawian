@@ -1,6 +1,6 @@
 //************************************************************************//
 //                                                                        //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 Julian Pychy (julian@ep1.rub.de)                       //
 //                 - Ruhr-Universität Bochum                              //
 //                                                                        //
@@ -44,28 +44,35 @@ class TFile;
 class TH1F;
 class EventList;
 
+
+
+
+
 class PwaGen{
 
 public:
   PwaGen();
   virtual ~PwaGen();
-
   virtual void generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
 
 protected:
 
-  void addEvt(EventList& evtList, EvtVector4R* evt4Vec4R, int evtNumber, double weight=1.);
+  void AddEventToEventList(std::shared_ptr<EventList> evtList, EvtVector4R* evt4Vec4R, int evtNumber, double weight=1.);
+  void DumpEventToAsciiFile(std::shared_ptr<EvtData> evtData, double weight=1.);
+  void UpdateMaxFitWeight(double weight, int currentIteration);
+  std::shared_ptr<EventList> GeneratePspEventList(unsigned int numEvents);
 
-  //  void dumpAscii(EvtVector4R* evt4Vec4R);
-  void dumpAscii(EvtData* evtData, double weight=1.);
+  bool _energyFirst;
+  bool _useEvtWeight;
+  bool _genWithModel;
+
+  double _unitScaleFactor;
+  double _fspMasses[30];
+  double _maxFitWeight;
 
   EvtVector4R _initial4Vec;
   std::vector<Particle*> _finalStateParticles;
-
   std::ofstream* _stream;
-
-  double mass[30];
-  //  EvtVector4R p4[30];
 
   TFile* _theTFile;
   TH1F* inv01MassH1;
@@ -74,8 +81,4 @@ protected:
   TH1F* inv01MassWeightH1;
   TH1F* inv02MassWeightH1;
   TH1F* inv12MassWeightH1;
-  bool _genWithModel;
-  double _unitScaleFactor;
-  bool _energyFirst;
-  bool _useEvtWeight;
 };
