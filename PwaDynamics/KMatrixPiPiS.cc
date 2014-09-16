@@ -24,7 +24,7 @@
 #include "PwaDynamics/KMatrixPiPiS.hh"
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
-#include "PwaDynamics/PhaseSpaceIsobar.hh"
+#include "PwaDynamics/PhaseSpaceIsobarAS.hh"
 #include "PwaDynamics/PhaseSpace4Pi.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
@@ -88,11 +88,11 @@ void  KMatrixPiPiS::initASParam1900(){
   gFactorsMap[4].push_back(-0.00355); //eta eta
   gFactorsMap[4].push_back(0.22358); //eta eta'  
 
-  std::shared_ptr<AbsPhaseSpace> pipiPhp(new PhaseSpaceIsobar(piMass, piMass));
-  std::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobar(KplusMass, K0Mass));
+  std::shared_ptr<AbsPhaseSpace> pipiPhp(new PhaseSpaceIsobarAS(piMass, piMass));
+  std::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobarAS(KplusMass, K0Mass));
   std::shared_ptr<AbsPhaseSpace> pipipipiPhp(new PhaseSpace4Pi());
-  std::shared_ptr<AbsPhaseSpace> etaetaPhp(new PhaseSpaceIsobar(etaMass, etaMass));
-  std::shared_ptr<AbsPhaseSpace> etaetapPhp(new PhaseSpaceIsobar(etaMass, etaprimeMass));
+  std::shared_ptr<AbsPhaseSpace> etaetaPhp(new PhaseSpaceIsobarAS(etaMass, etaMass));
+  std::shared_ptr<AbsPhaseSpace> etaetapPhp(new PhaseSpaceIsobarAS(etaMass, etaprimeMass));
 
   _phpVecs.push_back(pipiPhp);
   _phpVecs.push_back(kkPhp);

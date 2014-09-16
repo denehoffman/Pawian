@@ -579,6 +579,21 @@ complex<double> phaseSpaceFac(MassType mass, double massDec1, double massDec2){
   return result;
 }
 
+template<typename MassType>
+complex<double> phaseSpaceFacAS(MassType mass, double massDec1, double massDec2){
+  complex<double> result(0.,0.);
+
+  if(fabs(mass) < 1e-8) {
+     std::cout << "mass " << mass << " very close to 0; not possible to calculate phasespace factor " <<std::endl;
+  }
+
+  MassType termPlus=(massDec1+massDec2)/mass;
+  MassType tmpVal= 1. - termPlus*termPlus;
+
+  result = std::sqrt(std::complex<double>(tmpVal));
+  return result;
+}
+
 
 template<typename T>
 complex<double> breakupMomQ(T mass, double massDec1, double massDec2){
@@ -587,9 +602,22 @@ complex<double> breakupMomQ(T mass, double massDec1, double massDec2){
   return result;  
 }
 
+template<typename T>
+complex<double> breakupMomQAS(T mass, double massDec1, double massDec2){
+
+  complex<double> result=phaseSpaceFacAS(mass, massDec1, massDec2)*mass/2.;
+  return result;  
+}
+
 
 template complex<double> phaseSpaceFac(double, double, double);
 template complex<double> phaseSpaceFac(complex<double> , double, double);
 
+template complex<double> phaseSpaceFacAS(double, double, double);
+template complex<double> phaseSpaceFacAS(complex<double> , double, double);
+
 template complex<double> breakupMomQ(double, double, double);
 template complex<double> breakupMomQ(complex<double>, double, double);
+
+template complex<double> breakupMomQAS(double, double, double);
+template complex<double> breakupMomQAS(complex<double>, double, double);

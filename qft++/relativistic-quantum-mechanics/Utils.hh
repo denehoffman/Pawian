@@ -158,5 +158,9 @@ complex<double> phaseSpaceFac(MassType mass, double massDec1, double massDec2);
 template<typename MassType>
 complex<double> breakupMomQ(MassType mass, double massDec1, double massDec2);
 
+template<typename MassType>
+complex<double> phaseSpaceFacAS(MassType mass, double massDec1, double massDec2);
+template<typename MassType>
+complex<double> breakupMomQAS(MassType mass, double massDec1, double massDec2);
 
 #endif /* _Utils_H */
