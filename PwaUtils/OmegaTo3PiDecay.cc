@@ -74,7 +74,7 @@ void OmegaTo3PiDecay::extractStates(){
 OmegaTo3PiDecay::~OmegaTo3PiDecay(){
 }
 
-void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
+void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
   return;
 }
 

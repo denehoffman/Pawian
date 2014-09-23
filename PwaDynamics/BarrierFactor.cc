@@ -72,7 +72,12 @@ std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> z
 		  (z*z*z*z*z + 15.*z*z*z*z + 315.*z*z*z + 
 		   6300.*z*z + 99225.*z + 893025.));
    }
-   else if(6==l){
+   // else if(6==l){
+   //    return sqrt(118394977.*z*z*z*z*z*z / 
+   // 		  (z*z*z*z*z*z + 21.*z*z*z*z*z + 630.*z*z*z*z + 18900.*z*z*z +
+   // 		   496125.*z*z + 9823275.*z + 108056025.));
+   // }
+   else if(6<=l){ //attention work-around for l>=7
       return sqrt(118394977.*z*z*z*z*z*z / 
 		  (z*z*z*z*z*z + 21.*z*z*z*z*z + 630.*z*z*z*z + 18900.*z*z*z +
 		   496125.*z*z + 9823275.*z + 108056025.));

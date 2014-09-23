@@ -126,7 +126,7 @@ void IsobarTensorPsiToGamXDecay::print(std::ostream& os) const{
   os << "\n";
 }
 
-void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
+void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
 
  int evtNo=evtData->evtNo;
   std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
@@ -162,10 +162,10 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
   }
 
   if(_isProdAmp){
-    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
+    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData, _name);
   }
   else{
-    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData, _name);
   }
 
 

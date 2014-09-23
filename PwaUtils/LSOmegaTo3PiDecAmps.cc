@@ -75,13 +75,16 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
 
 complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
+  std::string refKey=_refKey;
+  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
+  
   complex<double> result(0.,0.);
 
   int evtNo=theData->evtNo;
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
   
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
+    result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
@@ -94,15 +97,15 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
     complex<double> expi(cos(thePhi), sin(thePhi));
 
     complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-      *conj( theData->WignerDsString[_wignerDKey][_JPCPtr->J][lamX][0]);
+      *conj( theData->WignerDsStringString.at(_wignerDKey).at(refKey).at(_JPCPtr->J).at(lamX).at(0));
 
     result+=amp;
   }
-  result*=sqrt( theData->DoubleString[_lambdaDecKey] );
+  result*=sqrt( theData->DoubleStringString[_lambdaDecKey][refKey] );
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
+     _cachedAmpMapNew[evtNo][refKey][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 

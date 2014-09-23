@@ -47,10 +47,10 @@ OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Part
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
 }
 
-void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
-  int evtNo=evtData->evtNo;
-  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
-  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
+void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
+  //  int evtNo=evtData->evtNo;
+  // std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
+  // if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
 
   Vector4<double> all4Vec(0.,0.,0.,0.);
   Vector4<double> mother4Vec(0.,0.,0.,0.);
@@ -76,9 +76,13 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   itMap=fsMap.find(_daughter3->name());
   Vector4<double> daughter3_4Vec=itMap->second;
 
-  Vector4<double> daughter1_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter1_4Vec);
-  Vector4<double> daughter2_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
-  Vector4<double> daughter3_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter3_4Vec);
+  //  Vector4<double> daughter1_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter1_4Vec);
+  //  Vector4<double> daughter2_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
+  //  Vector4<double> daughter3_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter3_4Vec);
+
+  Vector4<double> daughter1_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter1_4Vec);
+  Vector4<double> daughter2_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
+  Vector4<double> daughter3_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter3_4Vec);
 
   //calculate normal of the decay plane
   Vector4<float> normOmegaDecHeliOmega_4V(0.5*(daughter1_HeliOmega.T()+daughter2_HeliOmega.T()+daughter3_HeliOmega.T()),
@@ -89,13 +93,14 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   double theQ=daughter1_HeliOmega.E()-daughter1_HeliOmega.M()+daughter2_HeliOmega.E()-daughter2_HeliOmega.M()+daughter3_HeliOmega.E()-daughter3_HeliOmega.M();
   double lambdaNorm=theQ*theQ*(theQ*theQ/108.+daughter1_HeliOmega.M()*theQ/9.+daughter1_HeliOmega.M()*daughter1_HeliOmega.M()/3.);
   double lambdaOmegaDec=normOmegaDecHeliOmega_4V.P()*normOmegaDecHeliOmega_4V.P()/lambdaNorm;
-  evtData->DoubleString[_lambdaDecKey]=lambdaOmegaDec;
+  evtData->DoubleStringString[_lambdaDecKey][refKey]=lambdaOmegaDec;
 
   for(Spin lamOmega=-1;  lamOmega<=1; ++lamOmega){
-    evtData->WignerDsString[_wignerDKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
+    //    evtData->WignerDsString[_wignerDKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
+    evtData->WignerDsStringString[_wignerDKey][refKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
   }
 
-  _alreadyFilledMap[evtNo]=true;
+  //  _alreadyFilledMap[evtNo]=true;
 }
 
 

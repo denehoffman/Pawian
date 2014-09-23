@@ -97,6 +97,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+ _refKey=FunctionUtils::particleListName(_finalStateParticles);
+
 
  _idaughter1=Spin(_daughter1->twoIso(), 2);
  _i3daughter1=Spin(_daughter1->twoIso3(), 2);
@@ -180,7 +182,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
 
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+motherName;
   _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
-
+  _refKey=FunctionUtils::particleListName(_finalStateParticles);
+ 
   _daughter1->print(std::cout);
   _daughter2->print(std::cout);
 
@@ -236,10 +239,10 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
 }
 
-void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
-  int evtNo=evtData->evtNo;
-  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
-  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
+void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
+  //  int evtNo=evtData->evtNo;
+  //  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
+  //  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
 
   std::vector<Particle*>::iterator itP;
   std::map<std::string, Vector4<double> >::iterator itMap;
@@ -309,14 +312,14 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
 
-      std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDStringId[_wignerDKey].find(IdSpinMotherLamMotherLam12);
-      if(found != evtData->WignerDStringId[_wignerDKey].end()){
-        continue;
+      std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDStringStringId[_wignerDKey][refKey].find(IdSpinMotherLamMotherLam12);
+      if(found != evtData->WignerDStringStringId[_wignerDKey][refKey].end()){
+	continue;
       } 
-      evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+      evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
 
-      if(evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]){
-	DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
+      if(evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12]){
+	DebugMsg << "WignerDStringString nan:\t" << evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12] << endmsg;
     	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
 	DebugMsg << "thePhi:\t" << thePhi << endmsg;
 	DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
@@ -329,11 +332,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   if(_isProdAmp){
      if (!_daughter1IsStable){
        //       _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
-      _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData); 
+       _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey); 
      }
      if (!_daughter2IsStable){
        //       _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
-       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData);
+       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
      if (_useProdBarrier){
        double qVal=daughter2HelMother.P();
@@ -345,14 +348,14 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
    else{
      if (!_daughter1IsStable){
        // _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
-       _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData);
+       _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
      if (!_daughter2IsStable){
        //       _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
-       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData);
+       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
    }
-   _alreadyFilledMap[evtNo]=true;
+  //   _alreadyFilledMap[evtNo]=true;
 }
 
 void AbsDecay::print(std::ostream& os) const{

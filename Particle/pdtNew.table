@@ -30,6 +30,7 @@ Meson f0(1500) 		f_0(1500)  		0  0  1  1  1  	0  0  0  0 	1.505 	0.1050 	relBW	[
 Meson f1'(1510) 	f_1^{\prime}(1510)  	0  2  1  1  1  	0  0  0  0 	1.518 	0.0730 	relBW	[PDG nonett 2^3P_1]
 Meson f2'(1525) 	f_2^{\prime}(1525)  	0  4  1  1  1  	0  0  0  0 	1.525 	0.0760 	relBW	[PDG nonett 2^3P_2]
 Meson f2(1565) 		f_2(1565)  		0  4  1  1  1   0  0  0  0 	1.565 	0.1340 	relBW	[PDG no idea]
+Meson h1(1595)          h_1(1595)               0  2  1 -1 -1   0  0  0  0      1.594   0.3840  relBW   [PDG no idea]
 Meson omega(1650) 	\omega(1650)  		0  2 -1 -1 -1   0  0  0  0 	1.670 	0.3150 	relBW	[PDG nonett 3^3D_1]
 Meson f2(1640) 		f_2(1640)  		0  4  1  1  1  	0  0  0  0 	1.640 	0.1200 	relBW	[PDG no idea]
 Meson eta2(1645)	\eta_2(1645)		0  4 -1	 1  1	0  0  0	 0	1.617	0.1810	relBW	[PDG no idea]	
