@@ -50,6 +50,7 @@ public:
   KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser);
   virtual ~KMatrixDynamics();
 
+  virtual std::string type() {return "KMatrixDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);

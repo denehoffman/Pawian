@@ -34,17 +34,20 @@
 #include <memory>
 
 #include "PwaUtils/BreitWignerRelDynamics.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 
 class BreitWignerBlattWRelDynamics : public BreitWignerRelDynamics{
 
 public:
-  BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2);
+  BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2, double qR=BarrierFactor::qRDefault);
   virtual ~BreitWignerBlattWRelDynamics();
 
+  virtual std::string type() {return "BreitWignerBlattWRelDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
 
 protected:
   std::map<int, std::map<int, complex<float> > >  _cachedLMap;
+  double _qR;
 
 private:
 

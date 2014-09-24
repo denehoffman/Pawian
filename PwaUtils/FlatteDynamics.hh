@@ -43,6 +43,7 @@ public:
   FlatteDynamics(std::string& key, std::vector<Particle*>& fsParticles, Particle* mother, std::pair<Particle*, Particle*>& decPair1stChannel, std::pair<Particle*, Particle*>& decPair2ndChannel);
   virtual ~FlatteDynamics();
 
+  virtual std::string type() {return "FlatteDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);

@@ -73,6 +73,7 @@ public:
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
+  double barrierqR() {return _qR;}
   virtual void print(std::ostream& os) const;
 
   Particle* motherPart() {return _mother;}
@@ -127,6 +128,7 @@ protected:
   std::shared_ptr<const IGJPC> _daughter2IGJPCPtr;
 
   double _isospinClebschG;
+  double _qR;
 
   std::string _name;
   std::string _fitParamSuffix;

@@ -26,6 +26,7 @@
 
 #include <getopt.h>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 
 #include "PwaUtils/AbsDecay.hh"
@@ -40,6 +41,7 @@
 #include "PwaUtils/DynRegistry.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId) :
@@ -55,6 +57,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
   ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
   ,_isospinClebschG(1.)
+   ,_qR(BarrierFactor::qRDefault)
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
@@ -235,6 +238,17 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
     }
     _decPair2ndChannel=make_pair(firstParticle,secondParticle);
   }
+  else if(_dynType=="BlattWBarrier" || _dynType=="BreitWignerBlattWRel"){
+    if(additionalStringVec.size()>0){
+      std::istringstream currentqRIstr(additionalStringVec[0]);
+      _qR=stof(additionalStringVec[0]);
+      if ( _qR <1.e-5 || _qR > 20.){
+	Alert << "radius for barrier factor too high or too low qr=" << _qR << endmsg;
+	exit(0);
+      }
+    }
+    Info << "AmpName: " << name() << "  radius for barrier factor qr= " << _qR << endmsg;
+  }
   
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
 }
@@ -338,12 +352,6 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
        //       _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
        _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
-     if (_useProdBarrier){
-       double qVal=daughter2HelMother.P();
-       double qValNorm=breakupMomQ(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
-       evtData->DoubleString[_wignerDKey]=qVal;
-       evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
-     }
   }
    else{
      if (!_daughter1IsStable){
@@ -355,6 +363,19 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
        _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
    }
+
+  bool fillqVals=false;
+  if(_isProdAmp && _useProdBarrier) fillqVals=true;
+  else if(0!=_absDynPtr){
+    if(_absDynPtr->type()=="BlattWBarrierDynamics") fillqVals=true; 
+  }
+
+  if(fillqVals){
+       double qVal=daughter2HelMother.P();
+    double qValNorm=breakupMomQ(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
+    evtData->DoubleString[_wignerDKey]=qVal;
+    evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
+  } 
   //   _alreadyFilledMap[evtNo]=true;
 }
 

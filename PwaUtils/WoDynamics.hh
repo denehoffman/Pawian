@@ -42,6 +42,7 @@ public:
   WoDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~WoDynamics();
 
+  virtual std::string type() {return "WoDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);

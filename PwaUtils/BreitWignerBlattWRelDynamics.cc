@@ -34,8 +34,9 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 
-BreitWignerBlattWRelDynamics::BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2) :
+BreitWignerBlattWRelDynamics::BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2, double qR) :
   BreitWignerRelDynamics(name, fsParticles, mother, massSumDaughter1, massSumDaughter2)
+  ,_qR(qR)
 {
 }
 
@@ -50,7 +51,7 @@ complex<double> BreitWignerBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp*
     return _cachedLMap.at(evtNo).at(orbMom);
   }
 
-  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, _fsp1Mass, _fsp2Mass);  
+  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, _fsp1Mass, _fsp2Mass, _qR);  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedLMap[evtNo][orbMom]=result;

@@ -41,6 +41,7 @@ public:
   BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2);
   virtual ~BreitWignerRelDynamics();
 
+  virtual std::string type() {return "BreitWignerRelDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
 

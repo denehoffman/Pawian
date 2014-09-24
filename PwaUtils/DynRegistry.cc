@@ -41,6 +41,7 @@
 #include "PwaUtils/KMatrixDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"
+#include "PwaUtils/BlattWBarrierDynamics.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/WoDynamics.hh"
@@ -90,7 +91,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       else if(theDec->dynType()=="BreitWignerRel")
     	result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2() ));
       else if(theDec->dynType()=="BreitWignerBlattWRel")
-	result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2()));
+	result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->barrierqR()));
       else if(theDec->dynType()=="KMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
 	result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile)); 
@@ -107,6 +108,10 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	result= std::shared_ptr<AbsDynamics>(new VoigtDynamics(theName, fsParticles, theDec->motherPart()));
       else if(theDec->dynType()=="K0star1430Lass") 
 	result= std::shared_ptr<AbsDynamics>(new K0star1430LassDynamics(theName, fsParticles, theDec->motherPart()));
+      else if(theDec->dynType()=="BlattWBarrier") 
+	result= std::shared_ptr<AbsDynamics>(new BlattWBarrierDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->wignerDKey(), theDec->barrierqR()));
+
+
       else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
       else{
     	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;

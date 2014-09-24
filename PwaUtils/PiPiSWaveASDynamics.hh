@@ -49,6 +49,7 @@ public:
   PiPiSWaveASDynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother, ParticleTable* thePdtTable);
   virtual ~PiPiSWaveASDynamics();
 
+  virtual std::string type() {return "PiPiSWaveASDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);

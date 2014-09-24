@@ -49,6 +49,7 @@ public:
   virtual ~AbsDynamics();
 
   virtual std::string name() {return _name;};
+  virtual std::string type()=0;
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0)=0;
   virtual void cacheAmplitudes();
   virtual void fillMasses(EvtData* theData);

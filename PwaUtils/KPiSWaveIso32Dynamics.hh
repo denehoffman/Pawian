@@ -46,6 +46,7 @@ public:
   KPiSWaveIso32Dynamics(std::string& massKey, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~KPiSWaveIso32Dynamics();
 
+  virtual std::string type() {return "KPiSWaveIso32Dynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
