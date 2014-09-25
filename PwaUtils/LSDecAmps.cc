@@ -190,13 +190,14 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
       }
     }
 
-    if(absDec()->useProdBarrier()){
-      //      tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString[_wignerDKey], 0.197);
-      tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
-      	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
-    }
+    // if(absDec()->useProdBarrier()){
+    //   //      tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString[_wignerDKey], 0.197);
+    //   tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
+    //   	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
+    // }
     
-    else tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+    // else tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+    tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
 
     result+=tmpResult; 
   }

@@ -82,11 +82,15 @@ void PbarpChannelEnv::setup(ChannelID id){
    _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, id,_lmax));
 
    //fill prodDecayList
+   std::vector<std::string> additionalStringVecDummy;
+   additionalStringVecDummy.push_back("0.197");
    if(_theParser->productionFormalism()=="Cano"){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier();
+	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	//	std::string currentType=(*itDec)->dynType();
+	//	(*itDec)->enableDynamics(currentType, additionalStringVecDummy);
 	 _prodDecList->addDecay(*itDec);
       }
    }

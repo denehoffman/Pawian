@@ -62,6 +62,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
   ,_dynType("WoDynamics")
+   ,_dynEnabled(false)
   ,_preFactor(1.)
    ,_pathParserFile("")
   //  ,_dynKey(mother->name())
@@ -145,6 +146,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_dynType("WoDynamics")
+   ,_dynEnabled(false)
   ,_preFactor(1.)
    ,_pathParserFile("")
   //  ,_dynKey(motherJPCPtr->name())
@@ -222,6 +224,10 @@ AbsDecay::~AbsDecay(){
 
 
 void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec) {
+  if(_dynEnabled){
+    Alert << "dynamics already enabled for " << name() << endmsg;
+    exit(0);
+  }
   _dynType=dynString;
 
   if(_dynType=="KMatrix") _pathParserFile=additionalStringVec[0];
@@ -251,6 +257,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
+  _dynEnabled=true;
 }
 
 void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
@@ -415,13 +422,21 @@ void AbsDecay::print(std::ostream& os) const{
    }
 }
 
-void AbsDecay::enableProdBarrier(){
+void AbsDecay::enableProdBarrier(double qRValue){
+  if(_dynEnabled){
+    Alert << "dynamics already enabled for " << name() << endmsg;
+    exit(0);
+  }
   if(!_isProdAmp){
     Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
     exit(1);
   }
   _useProdBarrier=true;
-  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg; 
+  _dynType="BlattWBarrier";
+  _qR=qRValue;
+  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
+  _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
+  _dynEnabled=true;
 }
 
 double AbsDecay::massSumFsParticlesDec1(){

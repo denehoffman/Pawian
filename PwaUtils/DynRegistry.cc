@@ -69,8 +69,14 @@ DynRegistry::~DynRegistry()
 std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> theDec){
 
   std::string theName=theDec->name();
-  if(0==theDec->motherPart()) theName=theDec->motherIGJPC()->jpcname();
-  //  std::string theName=theDec->motherIGJPC()->jpcname();
+  if(theDec->dynType()=="BlattWBarrier") theName=theDec->wignerDKey();
+  if(0==theDec->motherPart()){
+    if(theDec->dynType()=="WoDynamics") theName=theDec->motherIGJPC()->jpcname();
+    else if (theDec->dynType()!="BlattWBarrier"){
+      Alert << "dynamics with type " << theDec->dynType() << " is not allowed for annihilation amplitude!!!" << endmsg;
+      exit(0); 
+    }
+  }
 
   std::string dynType=theDec->dynType();
 
@@ -84,49 +90,39 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   else{
     std::vector<Particle*> fsParticles=theDec->finalStateParticles();
 
-    if(theDec->hasMother()){
-
-      if(theDec->dynType()=="BreitWigner")
-    	result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
-      else if(theDec->dynType()=="BreitWignerRel")
-    	result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2() ));
-      else if(theDec->dynType()=="BreitWignerBlattWRel")
-	result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->barrierqR()));
-      else if(theDec->dynType()=="KMatrix"){
-	std::string pathToConfigFile=theDec->pathToConfigParser();
-	result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile)); 
-      }
-      else if(theDec->dynType()=="Flatte")
-    	result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
-      else if(theDec->dynType()=="KpiSWaveIso12")
-	result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso12Dynamics(theName, fsParticles, theDec->motherPart()));
-      else if(theDec->dynType()=="KpiSWaveIso32")
-	result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
-      else if(theDec->dynType()=="PiPiSWaveAS")
-	result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), GlobalEnv::instance()->particleTable()));
-      else if(theDec->dynType()=="Voigt") 
-	result= std::shared_ptr<AbsDynamics>(new VoigtDynamics(theName, fsParticles, theDec->motherPart()));
-      else if(theDec->dynType()=="K0star1430Lass") 
-	result= std::shared_ptr<AbsDynamics>(new K0star1430LassDynamics(theName, fsParticles, theDec->motherPart()));
-      else if(theDec->dynType()=="BlattWBarrier") 
-	result= std::shared_ptr<AbsDynamics>(new BlattWBarrierDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->wignerDKey(), theDec->barrierqR()));
-
-
-      else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
-      else{
-    	Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
-    	exit(1);
-      }
+    if(theDec->dynType()=="BreitWigner")
+      result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="BreitWignerRel")
+      result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2() ));
+    else if(theDec->dynType()=="BreitWignerBlattWRel")
+      result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->barrierqR()));
+    else if(theDec->dynType()=="KMatrix"){
+      std::string pathToConfigFile=theDec->pathToConfigParser();
+      result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile)); 
     }
-    else{ // has no mother
-      if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
-      else{
-	Alert << "no mother resonance; can not add dynamis"
-	      << "\nDyn type:\t" << theDec->dynType()
-	      << endmsg;
-	exit(1);
-      }
+    else if(theDec->dynType()=="Flatte")
+      result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
+    else if(theDec->dynType()=="KpiSWaveIso12")
+      result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso12Dynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="KpiSWaveIso32")
+      result= std::shared_ptr<AbsDynamics>(new KPiSWaveIso32Dynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="PiPiSWaveAS")
+      result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), GlobalEnv::instance()->particleTable()));
+    else if(theDec->dynType()=="Voigt") 
+      result= std::shared_ptr<AbsDynamics>(new VoigtDynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="K0star1430Lass") 
+      result= std::shared_ptr<AbsDynamics>(new K0star1430LassDynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="BlattWBarrier"){
+      std::string blattWBarrierName=theDec->wignerDKey(); 
+      result= std::shared_ptr<AbsDynamics>(new BlattWBarrierDynamics(blattWBarrierName, fsParticles, theDec->motherPart(), theDec->wignerDKey(), theDec->barrierqR()));
+      
     }
+    else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+    else{
+      Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
+      exit(1);
+    }
+    
     result->setMassKey(theDec->massParKey());
     _dynMap[theName]=result;
     _dynVec.push_back(result);

@@ -101,7 +101,7 @@ public:
   bool isProductionAmp() {return _isProdAmp;}
 
   void resetFilledMap();
-  void enableProdBarrier();
+  void enableProdBarrier(double qRValue);
   bool useProdBarrier() {return _useProdBarrier;}
   double massSumFsParticles() {return _massSumFsParticles;}
   double massSumFsParticlesDec1();
@@ -136,6 +136,7 @@ protected:
   std::string _wignerDKey;
   std::string _refKey;
   std::string _dynType;
+  bool _dynEnabled;
   //  std::string _dynKey;
   double _preFactor;
   std::string _pathParserFile;
