@@ -83,14 +83,15 @@ void PbarpChannelEnv::setup(ChannelID id){
 
    //fill prodDecayList
    std::vector<std::string> additionalStringVecDummy;
+   std::string dynTypeDefault="WoDynamics";
+
    additionalStringVecDummy.push_back("0.197");
    if(_theParser->productionFormalism()=="Cano"){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
 	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
-	//	std::string currentType=(*itDec)->dynType();
-	//	(*itDec)->enableDynamics(currentType, additionalStringVecDummy);
+	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	 _prodDecList->addDecay(*itDec);
       }
    }
@@ -99,12 +100,15 @@ void PbarpChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
          _prodDecList->addDecay(*itDec);
+	 (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       }
    }
    else if(_theParser->productionFormalism()=="Heli"){
       std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
       std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	 _prodDecList->addDecay(*itDec);
       }
    }

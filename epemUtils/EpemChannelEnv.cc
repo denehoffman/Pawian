@@ -64,6 +64,7 @@ void EpemChannelEnv::setup(ChannelID id){
   //epem reaction
   _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs, id));
   std::vector<std::string> additionalStringVecDummy;
+  std::string dynTypeDefault="WoDynamics";
 
   std::vector< std::shared_ptr<AbsDecay> > prodDecs;
   if (_theParser->productionFormalism()=="Heli"){
@@ -71,6 +72,7 @@ void EpemChannelEnv::setup(ChannelID id){
     std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
       if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
     }
   }
@@ -78,7 +80,9 @@ void EpemChannelEnv::setup(ChannelID id){
     std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _epemReaction->productionTensorDecays();
     std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+      //      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+      std::string currentType=(*itDec)->dynType();
+      (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
     }
   }

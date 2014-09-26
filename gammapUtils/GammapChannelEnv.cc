@@ -80,17 +80,23 @@ void GammapChannelEnv::setup(ChannelID id){
    _gammapReaction=std::shared_ptr<gammapReaction>(new gammapReaction(_producedParticlePairs, id,_lmax));
 
    //fill prodDecayList
+   std::vector<std::string> additionalStringVecDummy;
+   std::string dynTypeDefault="WoDynamics";
+   
    if(_theParser->productionFormalism()=="Cano"){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _gammapReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-   	 _prodDecList->addDecay(*itDec);
+	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+	_prodDecList->addDecay(*itDec);
       }
    }
    else if(_theParser->productionFormalism()=="Tensor"){
       std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _gammapReaction->productionTensorDecays();
       std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+	(*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
          _prodDecList->addDecay(*itDec);
       }
    }
@@ -98,7 +104,9 @@ void GammapChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _gammapReaction->productionHeliDecays();
       std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-   	 _prodDecList->addDecay(*itDec);
+	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+	_prodDecList->addDecay(*itDec);
       }
    }
    else{
