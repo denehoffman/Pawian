@@ -1,0 +1,10 @@
+setenv ROOTSYS /cluster/bes3/lcg/external/ROOT/5.24.00b/x86_64-slc5-gcc43-opt/root
+
+setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${TOP_DIR}/lib:/data/work/kphpbb/kopf/PWA/lib:/data/work/kphpbb/kopf/PWA/localSys/lib
+setenv PATH ${PATH}:${ROOTSYS}/bin:/data/work/kphpbb/kopf/PWA/bin:/data/work/kphpbb/kopf/PWA/localSys/bin
+setenv BOOST_BUILD_PATH /data/work/kphpbb/kopf/PWA/boost-build
+
+echo "\n ROOTSYS: " $ROOTSYS 
+echo "\n BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
+echo "\n"
