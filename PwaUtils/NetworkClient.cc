@@ -103,8 +103,22 @@ bool NetworkClient::SendLH(double llh_data, double lh_mc){
    _theStream.connect(_serverAddress, _port);
 
    if(!_theStream){
-      Alert << "Could not send LH." << endmsg;
-      return false;
+     //try it serveral times
+     int counter=1;
+     while(!_theStream){
+       Warning << "Could not send LH " << counter << " time!" << endmsg;
+       Warning << "current error message " << _theStream.error().message() << endmsg;
+       std::this_thread::sleep_for(  std::chrono::seconds(5));  
+
+       _theStream.clear();
+       _theStream.connect(_serverAddress, _port);
+       counter++;
+       if (counter>20){
+	 Alert << "Could not send LH last time." << endmsg;
+	 return false;
+       }
+       Warning << "Try to send LH again!!!" << endmsg;
+     }
    }
 
    if(std::isinf(llh_data) && llh_data > 0)
@@ -127,10 +141,25 @@ bool NetworkClient::SendHeartbeat(){
 
       _theHeartbeatStream.connect(_serverAddress, _port);
 
-      if(!_theStream){
-	 Alert << "Could not send heartbeat." << endmsg;
-	 return false;
+      int counter=0;
+      while(!_theHeartbeatStream){
+	Warning << "Could not send heartbeat " << counter << " time!" << endmsg; 
+	Warning << "current error message " << _theHeartbeatStream.error().message() << endmsg; 
+	std::this_thread::sleep_for(  std::chrono::seconds(5));	
+	_theHeartbeatStream.clear();
+	_theHeartbeatStream.connect(_serverAddress, _port);
+	counter++;
+	if (counter>20){
+	  Alert << "Could not send heartbeat last time" << endmsg;
+	  return false;
+	}
+	Warning << "Try to send heartbeat again!!!" << endmsg;
       }
+
+      // if(!_theStream){
+      // 	 Alert << "Could not send heartbeat." << endmsg;
+      // 	 return false;
+      // }
 
       _theHeartbeatStream << NetworkClient::CLIENTMESSAGE_HEARTBEAT << "\n";
       _theHeartbeatStream << _clientID << "\n";
