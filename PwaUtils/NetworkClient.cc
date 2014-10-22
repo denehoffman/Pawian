@@ -145,13 +145,13 @@ bool NetworkClient::SendHeartbeat(){
       while(!_theHeartbeatStream){
 	Warning << "Could not send heartbeat " << counter << " time!" << endmsg; 
 	Warning << "current error message " << _theHeartbeatStream.error().message() << endmsg; 
-	std::this_thread::sleep_for(  std::chrono::seconds(5));	
+	std::this_thread::sleep_for(  std::chrono::seconds(1));	
 	_theHeartbeatStream.clear();
 	_theHeartbeatStream.connect(_serverAddress, _port);
 	counter++;
 	if (counter>20){
 	  Alert << "Could not send heartbeat last time" << endmsg;
-	  return false;
+	  exit(0);
 	}
 	Warning << "Try to send heartbeat again!!!" << endmsg;
       }
