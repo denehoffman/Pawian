@@ -28,6 +28,7 @@
 #include <fstream>
 #include <algorithm>
 
+#include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -37,6 +38,7 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/DynRegistry.hh"
 #include "ConfigParser/ParserBase.hh"
 
 IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
@@ -140,6 +142,18 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   daughter2Tensor4Vec.Boost(all4Vec);
   motherTensor4Vec.Boost(all4Vec);
 
+  Vector4<double> daughter2HelMother(0.,0.,0.,0.);
+  if(_hasMotherPart){
+    if(fabs(mother_4Vec==all4Vec)){
+      daughter2HelMother=daughter2_4Vec;
+      daughter2HelMother.Boost(daughter2HelMother); //is this correct????
+    }
+    else daughter2HelMother=helicityVec(prodParticle4Vec, mother_4Vec, daughter2_4Vec);
+  }
+  else{
+    daughter2HelMother=daughter2_4Vec;
+    daughter2HelMother.Boost(mother_4Vec);
+  }
   //rotate everything into the cms flight direction 
   // Vector4<double> allRot4Vec=all4Vec;
 
@@ -264,6 +278,19 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
       }
     }
   }
+
+  bool fillqVals=false;
+  if(_isProdAmp && _useProdBarrier) fillqVals=true;
+  else if(0!=_absDynPtr){
+    if(_absDynPtr->type()=="BlattWBarrierTensorDynamics") fillqVals=true; 
+  }
+  
+  if(fillqVals){
+    double qVal=daughter2HelMother.P();
+    double qValNorm=breakupMomQ(mother_4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
+    evtData->DoubleString[_wignerDKey]=qVal;
+    evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
+  }
   _alreadyFilledMap[evtNo]=true;  
 }
 
@@ -367,4 +394,21 @@ void IsobarTensorDecay::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<doub
     if(result.Rank()<3){
       DebugMsg << result << endmsg;
     }
+}
+
+void IsobarTensorDecay::enableProdBarrier(double qRValue){
+  if(_dynEnabled){
+    Alert << "dynamics already enabled for " << name() << endmsg;
+    exit(0);
+  }
+  if(!_isProdAmp){
+    Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    exit(1);
+  }
+  _useProdBarrier=true;
+  _dynType="BlattWBarrierTensor";
+  _qR=qRValue;
+  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
+  _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
+  _dynEnabled=true;
 }

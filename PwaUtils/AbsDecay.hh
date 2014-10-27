@@ -67,6 +67,7 @@ public:
   bool hasMother() {return _hasMotherPart;}
   bool isDaughter1Stable() {return _daughter1IsStable;}
   bool isDaughter2Stable() {return _daughter2IsStable;}
+  virtual bool isTensorAmp() {return false;} 
 
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
@@ -101,7 +102,7 @@ public:
   bool isProductionAmp() {return _isProdAmp;}
 
   void resetFilledMap();
-  void enableProdBarrier(double qRValue);
+  virtual void enableProdBarrier(double qRValue);
   bool useProdBarrier() {return _useProdBarrier;}
   double massSumFsParticles() {return _massSumFsParticles;}
   double massSumFsParticlesDec1();

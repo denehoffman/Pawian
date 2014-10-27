@@ -41,6 +41,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiTo
   ,_noOfAmps(0)
 {
   _noOfAmps=theDec->noOfAmplitudes();
+  _ampLMap=theDec->ampLMap();
 
   _currentParamLocalMags.resize(_noOfAmps);
   _currentParamLocalPhis.resize(_noOfAmps);
@@ -56,6 +57,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiTo
     _MagParamNames[2]=_key+"Mag3";
     _PhiParamNames[2]=_key+"_3Phi";
   }
+
 }
 
 TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -129,7 +131,7 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
       double theMag=_currentParamLocalMags.at(i);
       double thePhi=_currentParamLocalPhis.at(i);
       complex<double> expi(cos(thePhi), sin(thePhi));
-      tmpResult+=theMag*expi*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2);
+      tmpResult+=theMag*expi*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
     }
 
     result+=tmpResult*daughterAmp(lambda2, theData, lamFs);    

@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,37 +21,34 @@
 //									  //
 //************************************************************************//
 
-// OmegaTo3PiTensorDecay class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// BreitWignerDynamics class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
-#pragma once
-
-#include <iostream>
-#include <vector>
-#include <complex>
-#include <map>
-#include <vector>
+#include <getopt.h>
+#include <fstream>
 #include <string>
-#include <sstream>
-#include <memory>
+#include <mutex>
 
-#include "PwaUtils/OmegaTo3PiDecay.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "Utils/PawianCollectionUtils.hh"
+#include "PwaUtils/BlattWBarrierTensorDynamics.hh"
+#include "ErrLogger/ErrLogger.hh"
+#include "Particle/Particle.hh"
 
-class Particle;
-class EvtData;
+BlattWBarrierTensorDynamics::BlattWBarrierTensorDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, const std::string& wignerDKey, double qR) :
+  BlattWBarrierDynamics(name, fsParticles, mother, wignerDKey, qR)
+{
+}
 
-class OmegaTo3PiTensorDecay : public OmegaTo3PiDecay{
+BlattWBarrierTensorDynamics::~BlattWBarrierTensorDynamics()
+{
+}
 
-public:
-  OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID);
-  virtual ~OmegaTo3PiTensorDecay();
+complex<double> BlattWBarrierTensorDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
+  complex<double> result(1.,0.);
+  if(OrbMom==0) return result;
+  result=BarrierFactor::BlattWeisskopfTensor(OrbMom, theData->DoubleString.at(_wignerDKey), _qR) /
+    BarrierFactor::BlattWeisskopfTensor(OrbMom, theData->DoubleString.at(_wignerDKey + "qNorm"), _qR);
 
-  virtual std::string type() {return "OmegaTo3PiTensorDecay";}
+  return result;
+}
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
 
-  virtual bool isTensorAmp() {return true;}
-protected:
-};

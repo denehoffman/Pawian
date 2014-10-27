@@ -244,7 +244,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
     }
     _decPair2ndChannel=make_pair(firstParticle,secondParticle);
   }
-  else if(_dynType=="BlattWBarrier" || _dynType=="BreitWignerBlattWRel"){
+  else if(_dynType=="BlattWBarrier" || _dynType=="BlattWBarrierTensor" || _dynType=="BreitWignerBlattWRel" || _dynType=="BreitWignerBlattWTensorRel"){
     if(additionalStringVec.size()>0){
       std::istringstream currentqRIstr(additionalStringVec[0]);
       _qR=stof(additionalStringVec[0]);
@@ -374,7 +374,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   bool fillqVals=false;
   if(_isProdAmp && _useProdBarrier) fillqVals=true;
   else if(0!=_absDynPtr){
-    if(_absDynPtr->type()=="BlattWBarrierDynamics") fillqVals=true; 
+    if(_absDynPtr->type()=="BlattWBarrierDynamics" || _absDynPtr->type()=="BlattWBarrierTensorDynamics") fillqVals=true; 
   }
 
   if(fillqVals){

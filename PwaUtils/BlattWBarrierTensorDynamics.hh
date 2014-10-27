@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,37 +21,24 @@
 //									  //
 //************************************************************************//
 
-// OmegaTo3PiTensorDecay class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// BlattWBarrierTensorDynamics class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <complex>
-#include <map>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <memory>
+#include "PwaUtils/BlattWBarrierDynamics.hh"
 
-#include "PwaUtils/OmegaTo3PiDecay.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "Utils/PawianCollectionUtils.hh"
-
-class Particle;
-class EvtData;
-
-class OmegaTo3PiTensorDecay : public OmegaTo3PiDecay{
+class BlattWBarrierTensorDynamics : public BlattWBarrierDynamics{
 
 public:
-  OmegaTo3PiTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID);
-  virtual ~OmegaTo3PiTensorDecay();
+  BlattWBarrierTensorDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, const std::string& wignerDKey, double qR=BarrierFactor::qRDefault);
+  virtual ~BlattWBarrierTensorDynamics();
 
-  virtual std::string type() {return "OmegaTo3PiTensorDecay";}
+  virtual std::string type() {return "BlattWBarrierTensorDynamics";}
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
-
-  virtual bool isTensorAmp() {return true;}
 protected:
+
+private:
+
 };

@@ -51,9 +51,13 @@ public:
   virtual void print(std::ostream& os) const;
   virtual std::string type() {return "IsobarTensorPsiToGamXDecay";}
 
+  virtual void enableProdBarrier(double qRValue);
   virtual short noOfAmplitudes() const {return _noOfAmps;}
-
+  virtual std::map<int, int> ampLMap() {return _ampLMap;}
 protected:
   bool _XisEven;
   short _noOfAmps;
+  std::map<int, int> _ampLMap;
+
+  void fillAmpLMap();
 };

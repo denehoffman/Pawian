@@ -75,7 +75,7 @@ protected:
   std::vector<double> _currentParamLocalPhis;
 
   complex<double> daughterAmp(Spin& lam2, EvtData* theData, Spin& lamFs);
-
+  std::map<int, int> _ampLMap;
 private:
 
 

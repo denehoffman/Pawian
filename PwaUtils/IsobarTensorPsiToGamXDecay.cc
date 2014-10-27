@@ -37,6 +37,8 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/AbsDynamics.hh"
+#include "PwaUtils/DynRegistry.hh"
 #include "ConfigParser/ParserBase.hh"
 
 IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID) :
@@ -69,7 +71,8 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particl
   else if(daughter2->twoJ()==2) _noOfAmps=2;
   else _noOfAmps=3;  
 
-  Info << "daughter2->twoJ()%2 = " << daughter2->twoJ()%2 << "_XisEven: " << _XisEven <<  "  daughter2->theParity(): " << daughter2->theParity() << endmsg;  
+  Info << "daughter2->twoJ()%2 = " << daughter2->twoJ()%2 << "_XisEven: " << _XisEven <<  "  daughter2->theParity(): " << daughter2->theParity() << endmsg;
+  fillAmpLMap();  
 }
 
 IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID, std::string motherName) :
@@ -106,7 +109,8 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(std::shared_ptr<const IGJ
   else if(daughter2->twoJ()==2) _noOfAmps=2;
   else _noOfAmps=3;
 
-  Info << "daughter2->twoJ()%2 = " << daughter2->twoJ()%2 << "_XisEven: " << _XisEven <<  "  daughter2->theParity(): " << daughter2->theParity() << endmsg;  
+  Info << "daughter2->twoJ()%2 = " << daughter2->twoJ()%2 << "_XisEven: " << _XisEven <<  "  daughter2->theParity(): " << daughter2->theParity() << endmsg;
+  fillAmpLMap();  
 }
 
 IsobarTensorPsiToGamXDecay::~IsobarTensorPsiToGamXDecay(){
@@ -179,6 +183,18 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
   daughter2Tensor4Vec.Boost(all4Vec);
   motherTensor4Vec.Boost(all4Vec);
 
+  Vector4<double> daughter2HelMother(0.,0.,0.,0.);
+  if(_hasMotherPart){
+    if(fabs(mother_4Vec==all4Vec)){
+      daughter2HelMother=daughter2_4Vec;
+      daughter2HelMother.Boost(daughter2HelMother); //is this correct????
+    }
+    else daughter2HelMother=helicityVec(prodParticle4Vec, mother_4Vec, daughter2_4Vec);
+  }
+  else{
+    daughter2HelMother=daughter2_4Vec;
+    daughter2HelMother.Boost(mother_4Vec);
+  }
 
   Spin spinMother(1);
   Spin spinDaughter1Gam(1);
@@ -345,5 +361,51 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
       }
     }
   }
+
+  bool fillqVals=false;
+  if(_isProdAmp && _useProdBarrier) fillqVals=true;
+  else if(0!=_absDynPtr){
+    if(_absDynPtr->type()=="BlattWBarrierTensorDynamics") fillqVals=true; 
+  }
+  
+  if(fillqVals){
+    double qVal=daughter2HelMother.P();
+    double qValNorm=breakupMomQ(mother_4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
+    evtData->DoubleString[_wignerDKey]=qVal;
+    evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
+  }
+}
+
+
+void IsobarTensorPsiToGamXDecay::fillAmpLMap(){
+
+//case J^PC(X)=0+, 2+, 4+, ... and 1-, 3-, ...
+  if((_XisEven && _daughter2IGJPCPtr->P==1) || (!_XisEven && _daughter2IGJPCPtr->P==-1) ){
+    _ampLMap[0]=_daughter2IGJPCPtr->J;
+    if(_noOfAmps>1) _ampLMap[1]=_daughter2IGJPCPtr->J;
+    if(_noOfAmps>2) _ampLMap[2]=_daughter2IGJPCPtr->J-2; 
+  }
+  else{	//case J^PC(X)=0-, 2-, 4-, ... and 1+, 3+, ...
+    _ampLMap[0]=_daughter2IGJPCPtr->J+1;
+    if(_noOfAmps>1) _ampLMap[1]=_daughter2IGJPCPtr->J+1;
+    if(_noOfAmps>2) _ampLMap[2]=_daughter2IGJPCPtr->J-1;
+  }
+}
+
+void IsobarTensorPsiToGamXDecay::enableProdBarrier(double qRValue){
+  if(_dynEnabled){
+    Alert << "dynamics already enabled for " << name() << endmsg;
+    exit(0);
+  }
+  if(!_isProdAmp){
+    Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    exit(1);
+  }
+  _useProdBarrier=true;
+  _dynType="BlattWBarrierTensor";
+  _qR=qRValue;
+  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
+  _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
+  _dynEnabled=true;
 }
 

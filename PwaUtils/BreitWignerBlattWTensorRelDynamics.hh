@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,32 +21,34 @@
 //									  //
 //************************************************************************//
 
+// BreitWignerBlattWTensorRelDynamics class definition file. -*- C++ -*-
 // Copyright 2014 Bertram Kopf
 
-#pragma once 
-
-//_____________________________________________________________________________
-// @file BreitWignerFunction.hh
-//_____________________________________________________________________________
+#pragma once
 
 #include <iostream>
+#include <vector>
 #include <complex>
-#include <utility>
+#include <map>
+#include <string>
 #include <memory>
 
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "PwaUtils/BreitWignerRelDynamics.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+class BreitWignerBlattWTensorRelDynamics : public BreitWignerRelDynamics{
 
-namespace BreitWignerFunction { 
-  complex<double> NonRel(double currentMass,double mass0, double width);
-  complex<double> Rel(double currentMass,double mass0, double width, double massA, double massB);
-  complex<double> BlattWRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB, double qR=BarrierFactor::qRDefault);
-  complex<double> BlattWTensorRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB, double qR=BarrierFactor::qRDefault);
+public:
+  BreitWignerBlattWTensorRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2, double qR=BarrierFactor::qRDefault);
+  virtual ~BreitWignerBlattWTensorRelDynamics();
 
-}; // namespace BreitWignerFunction
+  virtual std::string type() {return "BreitWignerBlattWTensorRelDynamics";}
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
 
+protected:
+  std::map<int, std::map<int, complex<float> > >  _cachedLMap;
+  double _qR;
 
+private:
 
+};
