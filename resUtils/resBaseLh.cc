@@ -32,7 +32,6 @@
 #include "resUtils/resReaction.hh"
 #include "resUtils/ResChannelEnv.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"

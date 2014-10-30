@@ -33,7 +33,6 @@
 #include "gammapUtils/gammapReaction.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
