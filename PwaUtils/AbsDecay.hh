@@ -46,6 +46,8 @@ class AbsDynamics;
 class AbsDecay : public std::enable_shared_from_this<AbsDecay>{
 
 public:
+  typedef enum decayLevel {noLevel=-1, isProdAmp, firstLevel, secondLevel, thirdLevel, fourthLevel, fifthLevel, severalLevels} decLevel;
+  
   AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId);
   AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId);
   virtual ~AbsDecay();
@@ -67,7 +69,10 @@ public:
   bool hasMother() {return _hasMotherPart;}
   bool isDaughter1Stable() {return _daughter1IsStable;}
   bool isDaughter2Stable() {return _daughter2IsStable;}
-  virtual bool isTensorAmp() {return false;} 
+  virtual bool isTensorAmp() {return false;}
+  virtual void setDecayLevel(decLevel theLevel);
+  virtual void setDecayLevelTree(decLevel theLevel); 
+  virtual decLevel whichDecayLevel() {return _decLevel;}
 
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
@@ -169,4 +174,5 @@ protected:
   double _massSumFsParticles;
 
   int _Lmin;
+  decLevel _decLevel;
 };

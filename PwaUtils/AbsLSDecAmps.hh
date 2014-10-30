@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,8 +21,8 @@
 //									  //
 //************************************************************************//
 
-// LSDecAmps class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// AbsLSDecAmps class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
 #pragma once
 
@@ -40,24 +40,24 @@
 class IsobarLSDecay;
 class AbsDecay;
 
-class LSDecAmps : public AbsXdecAmp{
+class AbsLSDecAmps : public AbsXdecAmp{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor
-  LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID);
-  LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
+  AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID);
+  AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
-  virtual ~LSDecAmps();
+  virtual ~AbsLSDecAmps();
 
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
-				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  //  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  // virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+  //				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
@@ -76,7 +76,7 @@ protected:
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
 
   void  fillCgPreFactor();
-  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
+  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 )=0;
 private:
 
 

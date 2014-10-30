@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,8 +21,8 @@
 //									  //
 //************************************************************************//
 
-// LSOmegaTo3PiDecAmps class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// HeliDecRefAmps class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
 #pragma once
 
@@ -35,21 +35,22 @@
 #include <cassert>
 #include <memory>
 
-#include "PwaUtils/LSDecRefAmps.hh"
-#include "PwaUtils/OmegaTo3PiLSDecay.hh"
-//class OmegaTo3PiLSDecay;
+#include "PwaUtils/AbsHeliDecAmps.hh"
 
-class LSOmegaTo3PiDecAmps : public LSDecRefAmps{
+class IsobarHeliDecay;
+class AbsDecay;
+
+class HeliDecRefAmps : public AbsHeliDecAmps{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor
-  LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec, ChannelID channelID);
-
+  HeliDecRefAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
+  HeliDecRefAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
-  virtual ~LSOmegaTo3PiDecAmps();
+  virtual ~HeliDecRefAmps();
 
 
   // Getters:
@@ -58,11 +59,7 @@ public:
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
-  virtual void print(std::ostream& os) const;
-
 protected:
-
-  std::string _lambdaDecKey;
 
 private:
 

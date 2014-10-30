@@ -32,7 +32,6 @@
 #include "pbarpUtils/pbarpReaction.hh"
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"

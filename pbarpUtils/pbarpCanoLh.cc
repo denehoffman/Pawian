@@ -30,7 +30,6 @@
 
 #include "pbarpUtils/pbarpCanoLh.hh"
 #include "pbarpUtils/pbarpReaction.hh"
-#include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"

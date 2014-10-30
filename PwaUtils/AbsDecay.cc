@@ -73,6 +73,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_useProdBarrier(false)
    ,_massSumFsParticles(0.)
    ,_Lmin(0)
+   ,_decLevel(decayLevel::noLevel)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -157,6 +158,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
    ,_useProdBarrier(false)
    ,_massSumFsParticles(0.)
    ,_Lmin(0)
+   ,_decLevel(decayLevel::noLevel)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -327,46 +329,63 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     }
   }
 
-  for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
-    for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
-      double thePhi=0.;
-      if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
-      Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
-
-      std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDStringStringId[_wignerDKey][refKey].find(IdSpinMotherLamMotherLam12);
-      if(found != evtData->WignerDStringStringId[_wignerDKey][refKey].end()){
-	continue;
-      } 
-      evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-
-      if(evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12]){
-	DebugMsg << "WignerDStringString nan:\t" << evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12] << endmsg;
-    	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
-	DebugMsg << "thePhi:\t" << thePhi << endmsg;
-	DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
-	DebugMsg << "daughter2HelMother:\t" << daughter2HelMother << endmsg;
-	DebugMsg << "mother4Vec:\t" << mother4Vec << "\tP:" << mother4Vec.P() << endmsg;
+  if (whichDecayLevel()==decayLevel::isProdAmp || whichDecayLevel()==decayLevel::firstLevel){
+    for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
+      for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
+	double thePhi=0.;
+	if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
+	Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12); 
+	evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+	if(evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]){
+	  DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
+	  DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
+	  DebugMsg << "thePhi:\t" << thePhi << endmsg;
+	  DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
+	  DebugMsg << "daughter2HelMother:\t" << daughter2HelMother << endmsg;
+	  DebugMsg << "mother4Vec:\t" << mother4Vec << "\tP:" << mother4Vec.P() << endmsg;
+	}
+      }
+    }
+  }
+  else{
+    for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
+      for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
+	double thePhi=0.;
+	if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
+	Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
+	
+	std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDStringStringId[_wignerDKey][refKey].find(IdSpinMotherLamMotherLam12);
+	if(found != evtData->WignerDStringStringId[_wignerDKey][refKey].end()){
+	  continue;
+	} 
+	evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+	
+	if(evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12]){
+	  DebugMsg << "WignerDStringString nan:\t" << evtData->WignerDStringStringId[_wignerDKey][refKey][IdSpinMotherLamMotherLam12] << endmsg;
+	  DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
+	  DebugMsg << "thePhi:\t" << thePhi << endmsg;
+	  DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
+	  DebugMsg << "daughter2HelMother:\t" << daughter2HelMother << endmsg;
+	  DebugMsg << "mother4Vec:\t" << mother4Vec << "\tP:" << mother4Vec.P() << endmsg;
+	}
       }
     }
   }
 
+
   if(_isProdAmp){
      if (!_daughter1IsStable){
-       //       _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
        _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey); 
      }
      if (!_daughter2IsStable){
-       //       _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
        _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
   }
    else{
      if (!_daughter1IsStable){
-       // _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
        _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
      if (!_daughter2IsStable){
-       //       _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
        _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
      }
    }
@@ -474,4 +493,25 @@ void AbsDecay::extractLmin(){
     if(_Lmin>currentL) _Lmin=currentL;
   }
    
+}
+
+void AbsDecay::setDecayLevel(decLevel theLevel){
+  if (_decLevel==decayLevel::noLevel){
+    _decLevel=theLevel;
+  }
+  else if(_decLevel != theLevel) _decLevel=decayLevel::severalLevels;
+  else return;
+  Info << name() << " set decay level to " << _decLevel << endmsg; 
+}
+
+void AbsDecay::setDecayLevelTree(decLevel theLevel){
+
+  setDecayLevel(theLevel);
+
+  if (!_daughter1IsStable){
+    _absDecDaughter1->setDecayLevelTree(decayLevel(theLevel+1));
+  }
+  if (!_daughter2IsStable){
+    _absDecDaughter2->setDecayLevelTree(decayLevel(theLevel+1));
+  }
 }

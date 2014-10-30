@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// LSOmegaTo3PiDecAmps class definition file. -*- C++ -*-
+// AbsHeliDecAmps class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -35,35 +35,40 @@
 #include <cassert>
 #include <memory>
 
-#include "PwaUtils/LSDecRefAmps.hh"
-#include "PwaUtils/OmegaTo3PiLSDecay.hh"
-//class OmegaTo3PiLSDecay;
+#include "PwaUtils/AbsXdecAmp.hh"
 
-class LSOmegaTo3PiDecAmps : public LSDecRefAmps{
+class IsobarHeliDecay;
+class AbsDecay;
+
+class AbsHeliDecAmps : public AbsXdecAmp{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor
-  LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec, ChannelID channelID);
-
+  AbsHeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
+  AbsHeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
-  virtual ~LSOmegaTo3PiDecAmps();
+  virtual ~AbsHeliDecAmps();
 
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
-				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
-
+  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual void print(std::ostream& os) const;
+  virtual bool checkRecalculation(fitParams& theParamVal);
+  // std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
+  std::vector< std::shared_ptr<const JPClamlam> >& jpclamlamVec() {return _JPClamlams;}
+  virtual void updateFitParams(fitParams& theParamVal);
 
 protected:
-
-  std::string _lambdaDecKey;
-
+  std::vector< std::shared_ptr<const JPClamlam> > _JPClamlams;
+  double _factorMag;
+  double _parityFactor;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamMagLamLams;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamPhiLamLams;
+  std::map< std::shared_ptr<const JPClamlam>, std::vector< std::shared_ptr<const JPClamlam> >, pawian::Collection::SharedPtrLess > _JPClamlamSymMap;
 private:
 
 

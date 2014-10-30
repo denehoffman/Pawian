@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,15 +21,15 @@
 //									  //
 //************************************************************************//
 
-// LSDecAmps class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// AbsLSDecAmps class definition file. -*- C++ -*-
+// Copyright 2014 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 #include <string>
 #include <mutex>
 
-#include "PwaUtils/LSDecAmps.hh"
+#include "PwaUtils/AbsLSDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -39,7 +39,7 @@
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
+AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
   ,_LSs(theDec->LSAmps())
   ,_factorMag(1.)
@@ -52,7 +52,7 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID)
   fillCgPreFactor();
 }
 
-LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
+AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
 {
   Particle* daughter1=_decay->daughter1Part();
@@ -62,156 +62,11 @@ LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   fillCgPreFactor();
 }
 
-LSDecAmps::~LSDecAmps()
+AbsLSDecAmps::~AbsLSDecAmps()
 {
 }
 
-
-complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
-
-  complex<double> result(0.,0.);
-
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
-  if(fixDaughterNr == 1){
-     lam1Min = lam1Max = lamDec;
-  }
-  else if(fixDaughterNr == 2){
-     lam2Min = lam2Max = lamDec;
-  }
-  else{
-     Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
-  }
-
-  if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
-  }
-
-  result=lsLoop( grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
-
-  return result;
-}
-
-
-
-
-complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
-
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
-  
-  // Info <<"\nlamX: " << lamX << "\tlamFs: " << lamFs << endmsg;
-  complex<double> result(0.,0.);
-  if( fabs(lamX) > _JPCPtr->J) return result;
-
-  int evtNo=theData->evtNo;
-
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs); 
-  //  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
-
-  if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    return result;
-  }
-
-  //  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
-  if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
-  }
-
-
-  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs);
-
-  if ( _cacheAmps){
-     theMutex.lock();
-     _cachedAmpMapNew[evtNo][refKey][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
-     theMutex.unlock();
-  }
-
-  if(result.real()!=result.real()){
-    Info << "dyn name: " << _absDyn->name() 
-	 << "\nname(): " << name()
-	 << endmsg;
-    Alert << "result:\t" << result << endmsg;
-    exit(0);
-  }
-  return result;
-}
-
-
-complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
-  // Info << "\n_JPCPtr->J: " << _JPCPtr->J << "\tlamX: " << lamX << "\tlam1Min: " << lam1Min << "\tlam2Min: " << lam2Min << "\tlam1Max: " << lam1Max << "\tlam2Max: " << lam2Max << "\tlamFs: " <<lamFs << endmsg;
- 
-  complex<double> result(0.,0.);
-
-  //  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
-  //  Spin currentJ=_JPCPtr->J;
-  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(refKey);
-
-  std::vector< std::shared_ptr<const LScomb> >::iterator it;
-  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-
-    map<Spin,map<Spin, double > >& currentCgFactor=_cgPreFactor.at(*it);
-
-    double theMag=_currentParamMags.at(*it);
-    double thePhi=_currentParamPhis.at(*it);
-    complex<double> expi(cos(thePhi), sin(thePhi));
-
-    complex<double> tmpResult(0.,0.);
-    for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-      for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	Spin lambda = lambda1-lambda2;
-	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
-	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
-	tmpResult+=amp;
-      }
-    }
-
-    // if(absDec()->useProdBarrier()){
-    //   //      tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString[_wignerDKey], 0.197);
-    //   tmpResult *= BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
-    //   	            BarrierFactor::BlattWeisskopf((*it)->L, theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
-    // }
-    
-    // else tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
-    tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
-
-    result+=tmpResult; 
-  }
-
-  result*=_preFactor*_isospinCG;
-  if(result.real()!=result.real()){
-    Alert << "result:\t" << result << endmsg;
-    exit(0);
-  }
-  return result;
-}
-
-
-void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  AbsLSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -238,12 +93,12 @@ void  LSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
 }
 
-void LSDecAmps::print(std::ostream& os) const{
+void AbsLSDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
 
-bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
+bool AbsLSDecAmps::checkRecalculation(fitParams& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
@@ -279,7 +134,7 @@ bool LSDecAmps::checkRecalculation(fitParams& theParamVal){
 }
 
 
-void  LSDecAmps::updateFitParams(fitParams& theParamVal){
+void  AbsLSDecAmps::updateFitParams(fitParams& theParamVal){
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 
@@ -298,7 +153,7 @@ void  LSDecAmps::updateFitParams(fitParams& theParamVal){
 
 }
 
-void  LSDecAmps::fillCgPreFactor(){
+void  AbsLSDecAmps::fillCgPreFactor(){
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
