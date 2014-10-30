@@ -32,7 +32,6 @@
 #include "epemUtils/epemReaction.hh"
 #include "epemUtils/EpemChannelEnv.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/HeliDecAmps.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
