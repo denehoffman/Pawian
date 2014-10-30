@@ -43,7 +43,6 @@
 
 class AbsXdecAmp;
 class pbarpReaction;
-class HeliDecAmps;
 
 class pbarpHeliLh : public pbarpBaseLh {
 
