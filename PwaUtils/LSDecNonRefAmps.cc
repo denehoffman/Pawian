@@ -58,31 +58,26 @@ complex<double> LSDecNonRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fix
 
   complex<double> result(0.,0.);
 
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
   if(fixDaughterNr == 1){
-     lam1Min = lam1Max = lamDec;
+     _lam1Min = _lam1Max = lamDec;
   }
   else if(fixDaughterNr == 2){
-     lam2Min = lam2Max = lamDec;
+     _lam2Min = _lam2Max = lamDec;
   }
   else{
      Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
   }
 
   if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
+    _lam1Min=lamFs;
+    _lam1Max=lamFs;
   }
   else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
+    _lam2Min=lamFs;
+    _lam2Max=lamFs;
   }
 
-  result=lsLoop( grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  result=lsLoop( grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, false);
 
   return result;
 }
@@ -92,7 +87,6 @@ complex<double> LSDecNonRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fix
 
 complex<double> LSDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
-  // Info <<"\nlamX: " << lamX << "\tlamFs: " << lamFs << endmsg;
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
@@ -106,23 +100,17 @@ complex<double> LSDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lam
     return result;
   }
 
-  //  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
   if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
+    _lam1Min=lamFs;
+    _lam1Max=lamFs;
   }
   else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
+    _lam2Min=lamFs;
+    _lam2Max=lamFs;
   }
 
 
-  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs);
+  result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
 
   if ( _cacheAmps){
      theMutex.lock();

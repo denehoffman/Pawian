@@ -87,7 +87,7 @@ protected:
   const double _preFactor;
   std::string _key;
   const std::string _wignerDKey;
-  const std::string _refKey;
+  std::string _refKey;
   std::mutex theMutex;
 
   bool _daughter1IsStable;

@@ -55,6 +55,8 @@ LSDecRefAmps::~LSDecRefAmps()
 
 
 complex<double> LSDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+  std::string& refKey=_refKey;
+  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
 
   complex<double> result(0.,0.);
 
@@ -82,7 +84,7 @@ complex<double> LSDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDau
     lam2Max=lamFs;
   }
 
-  result=lsLoop( grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  result=lsLoopRef(grandmaAmp, refKey, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
 
   return result;
 }
@@ -92,40 +94,32 @@ complex<double> LSDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDau
 
 complex<double> LSDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
-  std::string refKey=_refKey;
+  std::string& refKey=_refKey;
   if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
   
-  // Info <<"\nlamX: " << lamX << "\tlamFs: " << lamFs << endmsg;
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
 
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs); 
-  //  unsigned short currentSpinIndex=lamX.ToIndex()*100+lamFs.ToIndex();
 
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
-  //  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
   if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
+    _lam1Min=lamFs;
+    _lam1Max=lamFs;
   }
   else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
+    _lam2Min=lamFs;
+    _lam2Max=lamFs;
   }
 
 
-  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs);
+  result=lsLoopRef(grandmaAmp, refKey, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -144,15 +138,10 @@ complex<double> LSDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs,
 }
 
 
-complex<double> LSDecRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
-  // Info << "\n_JPCPtr->J: " << _JPCPtr->J << "\tlamX: " << lamX << "\tlam1Min: " << lam1Min << "\tlam2Min: " << lam2Min << "\tlam1Max: " << lam1Max << "\tlam2Max: " << lam2Max << "\tlamFs: " <<lamFs << endmsg;
+complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& refKey, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
  
   complex<double> result(0.,0.);
 
-  //  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
-  //  Spin currentJ=_JPCPtr->J;
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(refKey);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
@@ -171,7 +160,7 @@ complex<double> LSDecRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
 	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
-	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
+
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	tmpResult+=amp;
       }

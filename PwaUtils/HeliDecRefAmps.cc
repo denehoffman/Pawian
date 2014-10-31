@@ -57,7 +57,7 @@ HeliDecRefAmps::~HeliDecRefAmps()
 complex<double> HeliDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
 
-  std::string refKey=_refKey;
+  std::string& refKey=_refKey;
   if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
 
 
@@ -101,7 +101,7 @@ complex<double> HeliDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamF
 
   complex<double> result(0.,0.);
 
-  std::string refKey=_refKey;
+  std::string& refKey=_refKey;
   if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
 
   if( fabs(lamX) > _JPCPtr->J) return result;

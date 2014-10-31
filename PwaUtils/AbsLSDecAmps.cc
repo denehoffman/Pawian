@@ -43,6 +43,10 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID chan
   AbsXdecAmp(theDec, channelID)
   ,_LSs(theDec->LSAmps())
   ,_factorMag(1.)
+  ,_lam1Min(-_Jdaughter1)
+  ,_lam1Max(_Jdaughter1)
+  ,_lam2Min(-_Jdaughter2)
+  ,_lam2Max(_Jdaughter2)
 {
   if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
   Particle* daughter1=_decay->daughter1Part();
@@ -54,6 +58,10 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID chan
 
 AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
+  ,_lam1Min(-_Jdaughter1)
+  ,_lam1Max(_Jdaughter1)
+  ,_lam2Min(-_Jdaughter2)
+  ,_lam2Max(_Jdaughter2)
 {
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
