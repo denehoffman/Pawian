@@ -58,7 +58,6 @@ public:
 protected:
   //  std::string _massKey;
   double _currentMass;
-  std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
 
   std::shared_ptr<KMatrixKPiSFocus> _kMatr;

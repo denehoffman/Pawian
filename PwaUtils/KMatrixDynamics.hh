@@ -65,7 +65,6 @@ protected:
   int _orderKMatBg;
   bool _withKMatAdler;
   double _currentMass;
-  std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
   
   std::shared_ptr<KMatrixRel> _kMatr;

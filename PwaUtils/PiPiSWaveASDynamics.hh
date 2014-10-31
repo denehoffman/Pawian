@@ -62,7 +62,6 @@ protected:
   virtual int projectionIndex(std::vector<Particle*>& fsParticles);
 
   double _currentMass;
-  std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
 
   std::map<std::string, std::shared_ptr<FVector> > _fVecMap;

@@ -72,8 +72,9 @@ complex<double> result(0.,0.);
  
   bool readFromCachedMap=false;
 
+  theMutex.lock();
   if( _cacheAmps){
-    if(_recalcMap[currentKey]){
+    if(_recalcMap.at(currentKey)){
       bool currentEvtAlreadyCached=false;
       
       std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
@@ -83,15 +84,11 @@ complex<double> result(0.,0.);
 	  currentEvtAlreadyCached=itAlreadyCached2->second;     
 	}
 	else{
-	  theMutex.lock();
-	  _alreadyCached[evtNo][currentKey]=false;
-	  theMutex.unlock();
+	  _alreadyCached.at(evtNo)[currentKey]=false;
 	}   
       }
       else{ 
-	theMutex.lock();
 	_alreadyCached[evtNo][currentKey]=false;
-	theMutex.unlock();
       } 
   
       if(currentEvtAlreadyCached) readFromCachedMap=true;
@@ -103,15 +100,14 @@ complex<double> result(0.,0.);
     result=_cachedStringMap.at(evtNo).at(currentKey);
   }  
   else{
-      theMutex.lock();
       result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
 	_alreadyCached.at(evtNo).at(currentKey)=true;
       }
-      theMutex.unlock();
   }
-  //  Info << "result: " << result << endmsg;  
+  theMutex.unlock();
+  
   return result;
 }
 

@@ -53,7 +53,6 @@ protected:
 
   double _currentMass;
   double _currentWidth;
-  std::map<int, complex<double> >  _cachedMap; 
 
 private:
 
