@@ -169,6 +169,14 @@ void EpemChannelEnv::setup(ChannelID id){
       }
     }
   }
+
+
+   //set decay levels
+   std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
+   std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
+   for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
+     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp);    
+   }
 }
 
 
