@@ -172,10 +172,10 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
   }
 
   result*=_preFactor*_isospinCG;
-  if(result.real()!=result.real()){
-    Alert << "result:\t" << result << endmsg;
-    exit(0);
-  }
+  // if(result.real()!=result.real()){
+  //   Alert << "result:\t" << result << endmsg;
+  //   exit(0);
+  // }
   return result;
 }
 
