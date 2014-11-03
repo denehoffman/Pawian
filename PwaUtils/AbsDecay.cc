@@ -329,7 +329,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     }
   }
 
-  if (whichDecayLevel()==decayLevel::isProdAmp || whichDecayLevel()==decayLevel::firstLevel){
+  if (whichDecayLevel()==decayLevel::isProdAmp || whichDecayLevel()==decayLevel::firstLevel || whichDecayLevel()==decayLevel::severalLevels){
     for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
       for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
 	double thePhi=0.;
@@ -347,7 +347,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       }
     }
   }
-  else{
+  if (whichDecayLevel()!=decayLevel::isProdAmp && whichDecayLevel()!=decayLevel::firstLevel){
     for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
       for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
 	double thePhi=0.;

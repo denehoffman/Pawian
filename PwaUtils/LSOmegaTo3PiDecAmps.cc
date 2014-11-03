@@ -75,7 +75,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
 
 complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
-  std::string& refKey=_refKey;
+  std::string refKey=_refKey;
   if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
   
   complex<double> result(0.,0.);
