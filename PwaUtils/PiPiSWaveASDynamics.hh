@@ -70,7 +70,7 @@ protected:
   std::map<std::string, std::map<std::string, double> > _currentfProdMap;
   std::map<std::string, double > _currentS0Map; 
 
-  std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
+  CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;
   std::map<int, std::map<std::string, bool > > _alreadyCached;
   std::map<std::string, bool > _recalcMap;
 

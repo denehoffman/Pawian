@@ -33,6 +33,22 @@
 #include <map>
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
+template <typename T>
+class CacheVector
+{
+private:
+   std::vector<T> _vec;
+
+public:
+   T& at(unsigned int i){ return _vec.at(i);}
+   T& operator[](unsigned int const& i){
+      if(i>=_vec.size()){
+         _vec.resize(i+1);
+      }
+      return _vec.at(i);
+   }
+  unsigned int size(){return _vec.size();}
+};
 
 struct LHData{
    double weightSum;

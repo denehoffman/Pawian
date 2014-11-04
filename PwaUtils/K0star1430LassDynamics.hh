@@ -69,8 +69,6 @@ protected:
   double _currentRLASS;
   double _currentphiR;
 
-  std::map<int, complex<double> >  _cachedMap; 
-
 private:
 
 };

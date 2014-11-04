@@ -62,7 +62,7 @@ protected:
   std::string _massKey;
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
-  std::map<int, complex<float> >  _cachedMap;
+  CacheVector<complex<float> >  _cachedMap;
   std::mutex theMutex;
   std::string _dynKey;
   std::string _grandmaKey;

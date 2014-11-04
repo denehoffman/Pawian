@@ -60,7 +60,6 @@ protected:
   double _currentg11;
   double _currentg22;
 
-  std::map<int, complex<double> >  _cachedMap; 
   std::shared_ptr<Flatte> _flattePtr;
 
 private:

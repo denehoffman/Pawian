@@ -58,7 +58,6 @@ public:
 protected:
   //  std::string _massKey;
   double _currentMass;
-  std::map<int, complex<double> >  _cachedMap;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
 
   std::shared_ptr<KMatrixKPiSFocus> _kMatr;
@@ -71,7 +70,7 @@ protected:
   std::map<std::string, std::map<std::string, double> > _currentcProdMap;
   std::map<std::string, std::map<std::string, double> > _currentphaseProdMap;
 
-  std::map<int, std::map<std::string, complex<float> > > _cachedStringMap;
+  CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;
   std::map<std::string, bool > _recalcMap;
 private:
 

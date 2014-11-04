@@ -46,7 +46,7 @@ public:
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
 
 protected:
-  std::map<int, std::map<int, complex<float> > >  _cachedLMap;
+  CacheVector<std::map<int, complex<float> > >  _cachedLMap;
   double _qR;
 
 private:

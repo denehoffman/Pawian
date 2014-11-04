@@ -57,7 +57,6 @@ protected:
   double _currentMass0;
   double _currentWidth;
   double _currentSigma;
-  std::map<int, complex<double> >  _cachedMap; 
   std::shared_ptr<Voigtian> _voigtPtr;
 private:
 

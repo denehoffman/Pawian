@@ -45,8 +45,8 @@
 class AbsDecay;
 //class AbsDynamics;
 
-typedef boost::unordered_map<int,std::map<std::string,std::map<Id2StringType, complex<float> > > >  intStringShortComplFloatMap;
-typedef boost::unordered_map<int,std::map<std::string,std::map< std::string, std::map<Id2StringType, complex<float> > > > > intStringStringShortComplFloatMap;
+typedef CacheVector<std::map<std::string,std::map<Id2StringType, complex<float> > > >  intStringShortComplFloatMap;
+typedef CacheVector<std::map<std::string,std::map< std::string, std::map<Id2StringType, complex<float> > > > > intStringStringShortComplFloatMap;
 
 class AbsXdecAmp : public AbsParamHandler{
 
