@@ -74,7 +74,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   if(theDec->dynType()=="BlattWBarrier") theName=theDec->wignerDKey();
   if(0==theDec->motherPart()){
     if(theDec->dynType()=="WoDynamics") theName=theDec->motherIGJPC()->jpcname();
-    else if (theDec->dynType()!="BlattWBarrier"){
+    else if (theDec->dynType()!="BlattWBarrier" && theDec->dynType()!="BlattWBarrierTensor"){
       Alert << "dynamics with type " << theDec->dynType() << " is not allowed for annihilation amplitude!!!" << endmsg;
       exit(0); 
     }

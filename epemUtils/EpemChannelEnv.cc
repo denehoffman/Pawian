@@ -80,9 +80,9 @@ void EpemChannelEnv::setup(ChannelID id){
     std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _epemReaction->productionTensorDecays();
     std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-      //      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
-      std::string currentType=(*itDec)->dynType();
-      (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+      //      std::string currentType=(*itDec)->dynType();
       _prodDecList->addDecay(*itDec);
     }
   }

@@ -22,7 +22,7 @@
 //************************************************************************//
 
 // TensorPsiToGamXDecAmps class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// Copyright 2013 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
@@ -137,8 +137,6 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
     result+=tmpResult*daughterAmp(lambda2, theData, lamFs);    
   }
 
-  result*=_absDyn->eval(theData, grandmaAmp);
-
   if ( _cacheAmps){
      theMutex.lock();
      _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
@@ -151,8 +149,8 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
 void  TensorPsiToGamXDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
 
   for (int i=0; i<_noOfAmps; ++i){
-    fitVal.otherParams[_MagParamNames.at(i)]=15.;
-    fitErr.otherParams[_MagParamNames.at(i)]=5.;
+    fitVal.otherParams[_MagParamNames.at(i)]=1.;
+    fitErr.otherParams[_MagParamNames.at(i)]=0.5;
     fitVal.otherParams[_PhiParamNames.at(i)]=0.;
     fitErr.otherParams[_PhiParamNames.at(i)]=0.3;
   }

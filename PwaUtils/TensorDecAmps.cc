@@ -39,14 +39,14 @@
 TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
   ,_LSs(theDec->LSAmps())
-  ,_factorMag(5.)
+  ,_factorMag(1.)
 {
   if(_LSs.size()>0) _factorMag/=sqrt(_LSs.size());
 }
 
 TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
-  ,_factorMag(5.)
+  ,_factorMag(1.)
 {
   if(_LSs.size()>0) _factorMag/=sqrt(_LSs.size());
 }
