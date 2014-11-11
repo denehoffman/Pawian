@@ -101,7 +101,7 @@ void PolVector::_SetProjector(){
   MetricTensor g;
 
   if(_spin == 1){
-    if(_mass > 0.) _projector = (_p4%_p4)/(_mass*_mass) - g;    
+    if(_mass > 1e-6) _projector = (_p4%_p4)/(_mass*_mass) - g;    
     else _projector = -1.*g;    
   }
   else{
