@@ -425,7 +425,7 @@ void KMatrixDynamics::init(){
   for (itgFac=_currentgFactorMap.begin(); itgFac!=_currentgFactorMap.end(); ++itgFac){
     std::vector<double> currentgVector=itgFac->second;
     std::shared_ptr<KPole> currentPole;
-    if (_kMatrixParser->useBarrierFactors()) currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), _phpVecs, _kMatrixParser->orbitalMom()));
+    if (_kMatrixParser->useBarrierFactors()) currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), _phpVecs, _kMatrixParser->orbitalMom(), _kMatrixParser->useTruncatedBarrierFactors()));
     else currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
     _kPoles.push_back(currentPole);
   }

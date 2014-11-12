@@ -58,6 +58,7 @@ public:
   const std::vector<std::string>& poles() const { return _poles; }
   const std::string projection() const { return _projection; }
   const int useBarrierFactors() const {return _useBarrierFactors;}
+  const bool useTruncatedBarrierFactors() const {return _useTruncatedBarrierFactors;}
   const unsigned int orbitalMom() const {return _orbitalMom;}
   const int orderBg() const {return _orderKMatrixBackground;}
   const bool useAdler() const {return _useAdler0;}
@@ -75,6 +76,7 @@ protected:
   std::vector<std::string> _poles;
   std::string _projection;
   bool _useBarrierFactors;
+  bool _useTruncatedBarrierFactors;
   unsigned int _orbitalMom;
   int _orderKMatrixBackground;
   bool _useAdler0;

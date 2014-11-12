@@ -38,6 +38,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       , _noOfPoles(0)
       , _projection("")
       , _useBarrierFactors(false)
+      ,_useTruncatedBarrierFactors(false)
       , _orbitalMom(0)
       ,_orderKMatrixBackground(-1)
       ,_useAdler0(false)
@@ -54,6 +55,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("pole",po::value< vector<string> >(&_poles),  "pole: name and mass")
       ("projection",po::value< string>(&_projection),  "projection of the P-vector via pair of decay particles")
       ("useBarrierFactors",po::value<bool>(&_useBarrierFactors),  "calculation with or without barrier factors")
+      ("useTruncatedBarrierFactors",po::value<bool>(&_useTruncatedBarrierFactors), "use truncated barrier factors, needed for tensor formalism")
       ("orbitalMomentum",po::value<unsigned int>(&_orbitalMom),  "orbital momentum of the decay")
       ("orderKMatrixBackground",po::value<int>(&_orderKMatrixBackground),  "order of the K-matrix background")
       ("useAdler0",po::value<bool>(&_useAdler0),  "use adler0 term")
@@ -95,6 +97,7 @@ bool KMatrixParser::parseCommandLine()
 	      << "number of poles: " << _noOfPoles  << "\n\n"
 	      << "\nprojection: " << _projection << "\n\n"
 	      << "with barrier factors: " << _useBarrierFactors  << "\n\n"
+	      << "truncated barrier factors: " << _useTruncatedBarrierFactors  << "\n\n"
 	      << "orbital momentum: " << _orbitalMom  << "\n\n"
 	      << "order of the K-matrix background: " << _orderKMatrixBackground << "\n\n"
 	      << "use Adler0 term: " << _useAdler0 << "\n\n"

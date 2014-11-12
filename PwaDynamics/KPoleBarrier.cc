@@ -25,10 +25,11 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 
-KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom):
+KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier):
   KPole(g_i, mass_0)
   , _phpVecs(phpVecs)
   , _orbMom(orbMom)
+  ,_truncatedBarrier(truncatedBarrier)
 {
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
@@ -54,8 +55,14 @@ template<typename MassType>
 void KPoleBarrier::evalMatrixTemplate(const MassType mass){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
-     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+    if(_truncatedBarrier){
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
+    else{
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
 							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
   }
 
   MassType denom=_poleMass*_poleMass-mass*mass;
