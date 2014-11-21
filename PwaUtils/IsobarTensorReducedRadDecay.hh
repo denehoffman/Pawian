@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,8 +21,8 @@
 //									  //
 //************************************************************************//
 
-// epemReaction class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// IsobarTensorReducedRadDecay class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
 
 #pragma once
 
@@ -32,37 +32,27 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <memory>
 
+#include "PwaUtils/IsobarTensorDecay.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 class Particle;
-class IsobarLSDecay;
-class IsobarHeliDecay;
-class IsobarTensorDecay;
+class EvtData;
 
-class epemReaction {
+class IsobarTensorReducedRadDecay : public IsobarTensorDecay{
 
 public:
-  epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID);
+  IsobarTensorReducedRadDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
+  IsobarTensorReducedRadDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
+  virtual ~IsobarTensorReducedRadDecay();
 
-  virtual ~epemReaction();
-
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   virtual void print(std::ostream& os) const;
-  std::vector< std::shared_ptr<IsobarLSDecay> >& productionCanoDecays() {return _prodCanoDecs;}
-  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
-  std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}
-  std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorZouDecays() {return _prodTensorZouDecs;}
+  virtual std::string type() {return "IsobarTensorReducedRadDecay";}
+
 protected:
 
-private:
-  ChannelID _channelID;
-  std::shared_ptr<const IGJPC> _epemIGJPC;
-
-  std::vector< std::shared_ptr<IsobarLSDecay> > _prodCanoDecs;
-  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
-  std::vector< std::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
-  std::vector< std::shared_ptr<IsobarTensorDecay> > _prodTensorZouDecs;
 };

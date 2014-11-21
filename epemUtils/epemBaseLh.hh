@@ -39,6 +39,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
+#include "epemUtils/EpemChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
@@ -73,7 +74,8 @@ public:
 
 
 protected:
-  std::shared_ptr<epemReaction> _epemReactionPtr;
+  //  std::shared_ptr<epemReaction> _epemReactionPtr;
+  const std::shared_ptr<EpemChannelEnv> _epemChannelEnv;
 
   int _highestJFsp;
   bool _isHighestJaPhoton;

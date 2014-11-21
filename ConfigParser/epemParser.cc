@@ -37,6 +37,7 @@ using namespace std;
 epemParser::epemParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_cmsMass(3.096916)
+  ,_productionTensorRadType("Default")
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -48,6 +49,7 @@ epemParser::epemParser(int argc,char **argv):
   config.add_options()
     ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation") 
     ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
+    ("productionTensorRadType", po::value< string >(&_productionTensorRadType), "chosen tensor formalism for describing radiative decays in the production: Zou, Koch")
     ;
   _config->add(config);
   
@@ -57,16 +59,17 @@ epemParser::epemParser(int argc,char **argv):
 bool epemParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
-
+  
   std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
-
+  
   std::vector<std::string>::const_iterator it;
   
   std::cout << "\nspin density matrix calculation for particles" << std::endl;
-   for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
-      std::cout << (*it) << "\n";
-   }
+  for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
+    std::cout << (*it) << "\n";
+  }
   
+  std::cout << "\nproductionTensorRadType: " << _productionTensorRadType << std::endl;  
   std::cout << std::endl;
   
   return true;

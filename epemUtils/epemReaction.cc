@@ -50,22 +50,40 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
 	std::shared_ptr<IsobarTensorDecay> currentTensorDec;
-	if(itPartPairs->first->name()=="photon"){
-	  currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
-	}
-	else if(itPartPairs->second->name()=="photon"){
-	  currentTensorDec=std::shared_ptr<IsobarTensorPsiToGamXDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->second, itPartPairs->first, _channelID, "epem"));
-	} 
-	else currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	// if(itPartPairs->first->name()=="photon"){
+	//   currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	// }
+	// else if(itPartPairs->second->name()=="photon"){
+	//   currentTensorDec=std::shared_ptr<IsobarTensorPsiToGamXDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->second, itPartPairs->first, _channelID, "epem"));
+	// } 
+	// else currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
 
+	currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem")); //workaround
+	
 	currentTensorDec->setProductionAmp();
 	currentTensorDec->extractStates();	
 	_prodTensorDecs.push_back(currentTensorDec);
+
+	//fill Zou amplitudes
+	std::shared_ptr<IsobarTensorDecay> currentTensorZouDec;
+	if(itPartPairs->first->name()=="photon" || itPartPairs->second->name()=="photon"){
+	  if(itPartPairs->first->name()=="photon"){
+	    currentTensorZouDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
+	  }
+	  else{ //itPartPairs->second->name()=="photon"
+	    currentTensorZouDec=std::shared_ptr<IsobarTensorPsiToGamXDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->second, itPartPairs->first, _channelID, "epem"));
+	  }
+	  currentTensorZouDec->setProductionAmp();
+	  currentTensorZouDec->extractStates();	
+	  _prodTensorZouDecs.push_back(currentTensorZouDec);
+	}
+	else _prodTensorZouDecs.push_back(currentTensorDec); 
 
 	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
 	currentHeliDec->setProductionAmp();
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
+
       }
     }
 

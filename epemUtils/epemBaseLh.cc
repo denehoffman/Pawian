@@ -35,6 +35,7 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
@@ -47,6 +48,7 @@
 
 epemBaseLh::epemBaseLh(ChannelID channelID) :
   AbsLh(channelID)
+  ,_epemChannelEnv(std::static_pointer_cast<EpemChannelEnv> (GlobalEnv::instance()->EpemChannel(channelID)))
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
 {
@@ -122,7 +124,7 @@ void epemBaseLh::print(std::ostream& os) const{
 
 void  epemBaseLh::initialize(){
 
-  std::vector<Particle*> fsParticles=std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel(_channelID))->finalStateParticles();
+  std::vector<Particle*> fsParticles=_epemChannelEnv->finalStateParticles();
   std::vector<Particle*>::iterator itParticle;
   bool highestJFound=false;
 
@@ -138,8 +140,14 @@ void  epemBaseLh::initialize(){
     }
   }
 
-  _epemReactionPtr =  std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel(_channelID))->reaction();
+  //  _epemReactionPtr =  std::static_pointer_cast<EpemChannelEnv>(GlobalEnv::instance()->EpemChannel(_channelID))->reaction();
 
+  std::vector< std::shared_ptr<AbsDecay> > theDecs = _epemChannelEnv->prodDecayList()->getList();
+  std::vector< std::shared_ptr<AbsDecay> >::iterator it;
+  for (it=theDecs.begin(); it!=theDecs.end(); ++it){
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
+    _decAmps.push_back(currentAmp);
+  }
 }
 
 

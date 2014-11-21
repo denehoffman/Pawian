@@ -41,12 +41,13 @@ class epemParser : public ParserBase
 
   //  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
   const double cmsMass() {return _cmsMass;}
-
+  const std::string productionTensorRadType() const { return _productionTensorRadType; }
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
   double _cmsMass;
   std::vector<std::string> _spinDensity;
+  std::string _productionTensorRadType;
 };
 
 

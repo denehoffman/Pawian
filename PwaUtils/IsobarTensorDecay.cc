@@ -235,6 +235,10 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	DebugMsg << "lamDaughter1:\t" << lamDaughter1 << endmsg;
 
 	Tensor<complex<double> > epsilonDaughter1Project = _polDaughter1(lamDaughter1);
+	if(_isDaughter1Photon){
+	  epsilonDaughter1Project = epsilonDaughter1Project
+	    - (daughter2Tensor4Vec*epsilonDaughter1Project)/(daughter1Tensor4Vec*daughter2Tensor4Vec)*daughter1Tensor4Vec;
+	}
 	DebugMsg << "epsilonDaughter1Project:\t" << epsilonDaughter1Project << endmsg;
 
 	for (Spin lamDaughter2=-spinDaughter2; lamDaughter2<=spinDaughter2; ++lamDaughter2){
@@ -244,6 +248,11 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	  DebugMsg << "lamDaughter2:\t" << lamDaughter2 << endmsg; 
 
 	  Tensor<complex<double> > epsilonDaughter2Project=_polDaughter2(lamDaughter2);
+	  if(_isDaughter2Photon){
+	    epsilonDaughter2Project = epsilonDaughter2Project
+	      - (daughter1Tensor4Vec*epsilonDaughter2Project)/(daughter2Tensor4Vec*daughter1Tensor4Vec)*daughter2Tensor4Vec;
+	  }
+
 	  DebugMsg << "epsilonDaughter2Project:\t" << epsilonDaughter2Project << endmsg;
 
 

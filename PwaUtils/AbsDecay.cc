@@ -67,6 +67,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_pathParserFile("")
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
+   ,_isDaughter1Photon(false)
+   ,_isDaughter2Photon(false)
   ,_gParity(mother->theGParity())
   ,_useIsospin(true)
    ,_isProdAmp(false)
@@ -120,8 +122,17 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
    Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
  }
- if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
+ // if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
 
+ if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 && daughter1->mass() < 1.e-6){
+   _isDaughter1Photon=true;   
+ }
+ if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 && daughter1->mass() < 1.e-6){
+   _isDaughter2Photon=true;   
+ }
+
+ if( _isDaughter1Photon || _isDaughter2Photon) disableIsospin();
+  
  //fill mass sum of final state particles
  std::vector<Particle*>::iterator itP;
   for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
@@ -152,6 +163,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
    ,_pathParserFile("")
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
+   ,_isDaughter1Photon(false)
+   ,_isDaughter2Photon(false)
   ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
    ,_isProdAmp(false)
@@ -212,7 +225,16 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     exit(0);
   }
 
-  if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
+  //  if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
+
+ if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 && daughter1->mass() < 1.e-6){
+   _isDaughter1Photon=true;   
+ }
+ if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 && daughter2->mass() < 1.e-6){
+   _isDaughter2Photon=true;   
+ }
+
+ if( _isDaughter1Photon || _isDaughter2Photon) disableIsospin();
 
  //fill mass sum of final state particles
  std::vector<Particle*>::iterator itP;

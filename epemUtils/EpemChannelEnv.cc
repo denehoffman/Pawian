@@ -77,12 +77,25 @@ void EpemChannelEnv::setup(ChannelID id){
     }
   }
   else if (_theParser->productionFormalism()=="Tensor"){
-    std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _epemReaction->productionTensorDecays();
+    std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs;
+    if(_theParser->productionTensorRadType() == "Zou"){
+      Info << "use productionTensorRadType " << _theParser->productionTensorRadType() << endmsg;
+      prodDecs=_epemReaction->productionTensorZouDecays();
+    } 
+    else if(_theParser->productionTensorRadType() == "Default"){
+      Info << "use productionTensorRadType " << _theParser->productionTensorRadType() << endmsg;
+      prodDecs=_epemReaction->productionTensorDecays(); //default
+    } 
+    else{
+      Alert <<"productionTensorRadType with the name " << _theParser->productionTensorRadType() << " doesn't exist!!!" << endmsg;
+      exit(0);
+    }
+
+
     std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
       if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
       else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
-      //      std::string currentType=(*itDec)->dynType();
       _prodDecList->addDecay(*itDec);
     }
   }

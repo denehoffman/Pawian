@@ -66,12 +66,12 @@ void epemHeliLh::print(std::ostream& os) const{
 void  epemHeliLh::initialize(){
   epemBaseLh::initialize();
 
-  std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
-  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
-  for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
-    _decAmps.push_back(currentAmp);
-  }
+  // std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _epemReactionPtr->productionHeliDecays();
+  // std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
+  // for (it=theDecs.begin(); it!=theDecs.end(); ++it){
+  //   std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
+  //   _decAmps.push_back(currentAmp);
+  // }
 
 }
 

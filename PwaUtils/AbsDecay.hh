@@ -166,6 +166,9 @@ protected:
   Spin _idaughter2;
   Spin _i3daughter2;
 
+  bool _isDaughter1Photon;
+  bool _isDaughter2Photon;
+
   int _gParity;
 
   bool _useIsospin;

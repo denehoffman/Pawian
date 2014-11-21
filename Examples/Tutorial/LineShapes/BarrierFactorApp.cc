@@ -28,21 +28,26 @@
 #include "TH1F.h"
 #include "TFile.h"
 #include "TCanvas.h"
+#include "TLegend.h"
 
 #include <sstream>
+#include <vector>
 
 int main(int argc, char *argv[])
 {
-   double decayParticle1Mass = 0.494;
-   double decayParticle2Mass = 0.494;
+  std::vector<TH1F*>::iterator it;
+  
+  double decayParticle1Mass = 0.135;
+   double decayParticle2Mass = 0.135;
    double motherMass = 2.049; // pbarp @ 900 MeV/c
-   double recoilMass = 0.135;
+   double recoilMass = 0.547;
    double massMin = 0.0;
    double massMax = 0.0;
-   double resonanceMass = 1.68;
+   double resonanceMass = 1.26;
    double resonanceWidth = 0.150;
    double normMass=-1;
-   double qR = BarrierFactor::qRDefault;
+   double qRdec = BarrierFactor::qRDefault;
+   double qRprod = BarrierFactor::qRDefault;
    int lprod=-1;
    int ldec=-1;
 
@@ -60,7 +65,8 @@ int main(int argc, char *argv[])
 	 std::cout << "-max:\t\tminimum mass in plots [GeV]" << std::endl;
 	 std::cout << "-resmass:\tmass of Breit-Wigner resonance [GeV]" << std::endl;
 	 std::cout << "-reswidth:\twidth of Breit-Wigner resonance [GeV]" << std::endl;
-         std::cout << "-qR:\t\tqR value [GeV]" << std::endl;
+         std::cout << "-qRdec:\t\tqRdec value [GeV]" << std::endl;
+	 std::cout << "-qRprod:\t\tqRprod value [GeV]" << std::endl;
          std::cout << "-lprod:\t\tfix l of production [GeV]" << std::endl;
          std::cout << "-ldec:\t\tfix l of decay [GeV]" << std::endl;
          return 0;
@@ -120,10 +126,15 @@ int main(int argc, char *argv[])
          std::stringstream strStream(std::string(argv[i+1]));
          strStream >> normMass;
       }
-      else if(std::string(argv[i]).compare(std::string("-qR")) == 0)
+      else if(std::string(argv[i]).compare(std::string("-qRdec")) == 0)
       {
          std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> qR;
+         strStream >> qRdec;
+      }
+      else if(std::string(argv[i]).compare(std::string("-qRprod")) == 0)
+      {
+         std::stringstream strStream(std::string(argv[i+1]));
+         strStream >> qRprod;
       }
    }
 
@@ -142,14 +153,15 @@ int main(int argc, char *argv[])
    std::cout << "Mass max: " << massMax << std::endl;
    std::cout << "Resonance mass: " << resonanceMass << std::endl;
    std::cout << "Resonance width: " << resonanceWidth << std::endl;
-   std::cout << "qR: " << qR << std::endl;
+   std::cout << "qRprod: " << qRprod << std::endl;
+   std::cout << "qRdec: " << qRdec << std::endl;
 
    TFile* file = new TFile("BarrierFactorApp.root", "recreate");
  
    int lprodMin = 0;
-   int lprodMax = 6;
+   int lprodMax = 5;
    int ldecMin = 0;
-   int ldecMax = 6;
+   int ldecMax = 2;
 
    if(lprod >= 0){
       lprodMin = lprodMax = lprod;
@@ -158,67 +170,128 @@ int main(int argc, char *argv[])
       ldecMin = ldecMax = ldec;
    }
 
+   TCanvas* allCanvas = new TCanvas("allCanvas", "allCanvas", 800, 600);
+   allCanvas->Divide(3,2);
+
+   // q values for production and decay
+   TCanvas* qValCanvas = new TCanvas("qValCanvas", "qValCanvas", 800, 600);
+   qValCanvas->SetObjectStat(10);
+ 
+   TH1F* dHistqValProd = new TH1F("qValProd", "qValProd", 500, massMin, massMax);
+   dHistqValProd->SetStats(0);
+   dHistqValProd->GetXaxis()->SetTitle("m [GeV]");
+   dHistqValProd->SetLineColor(1);
+   dHistqValProd->SetLineWidth(2);
+
+   TH1F* dHistqValDec = new TH1F("qValDec", "qValDec", 500, massMin, massMax);
+   dHistqValDec->SetStats(0);
+   dHistqValDec->GetXaxis()->SetTitle("m [GeV]");
+    dHistqValDec->SetLineColor(2);
+   dHistqValDec->SetLineWidth(2);
+
+   for(int i=1; i<= dHistqValProd->GetNbinsX(); i++){
+     double qProd = breakupMomQ(motherMass, recoilMass, dHistqValProd->GetBinCenter(i)).real();
+     double qDec = breakupMomQ(dHistqValDec->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
+     dHistqValProd->SetBinContent(i, qProd);
+     dHistqValDec->SetBinContent(i, qDec);
+
+   }
+   dHistqValProd->Draw();
+   dHistqValDec->Draw("same");
+
+   TLegend *legend_qVal = new TLegend(0.8,0.75,0.96,0.98);
+   legend_qVal->AddEntry(dHistqValProd,"q prod","l");
+   legend_qVal->AddEntry(dHistqValDec,"q dec","l");
+   legend_qVal->Draw();
+   qValCanvas->Write();
+
+   allCanvas->cd(5);
+   qValCanvas->DrawClonePad();
+
+
    // Barrier factors for decay
    TCanvas* decOnlyCanvas = new TCanvas("decOnlyCanvas", "decOnlyCanvas", 800, 600);
-   for(int l = 6; l>=0; l--){
+   TLegend *legend_bdec = new TLegend(0.8,0.75,0.96,0.98);
+   for(int l = ldecMax; l>=ldecMin; l--){
       std::ostringstream histName;
       histName << "BW_dec_l" << l;
 
       TH1F* dHist = new TH1F(histName.str().c_str(), histName.str().c_str(), 500, massMin, massMax);
+      dHist->SetStats(0);
       dHist->GetXaxis()->SetTitle("m [GeV]");
       dHist->SetLineColor(l+1);
       dHist->SetLineWidth(2);
 
       for(int i=1; i<= dHist->GetNbinsX(); i++){
 	 double q = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
-	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qR);
+	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRdec);
    	 dHist->SetBinContent(i, std::abs(value));
       }
       dHist->Scale(1./dHist->GetBinContent(dHist->GetNbinsX()));
       dHist->Draw("same");
+      legend_bdec->AddEntry(dHist,histName.str().c_str(),"l");
    }
+   legend_bdec->Draw();
    decOnlyCanvas->Write();
+
+   allCanvas->cd(1);
+   decOnlyCanvas->DrawClonePad();
 
 
    // Barrier factors for production
    TCanvas* prodOnlyCanvas = new TCanvas("prodOnlyCanvas", "prodOnlyCanvas", 800, 600);
-   for(int l = 6; l>=0; l--){
+   TLegend *legend_bprod = new TLegend(0.8,0.75,0.96,0.98);
+   for(int l = lprodMax; l>=lprodMin; l--){
       std::ostringstream histName;
       histName << "BW_prod_l" << l;
 
       TH1F* dHist = new TH1F(histName.str().c_str(), histName.str().c_str(), 500, massMin, massMax);
+      dHist->SetStats(0);
       dHist->GetXaxis()->SetTitle("m [GeV]");
       dHist->SetLineColor(l+1);
       dHist->SetLineWidth(2);
 
       for(int i=1; i<= dHist->GetNbinsX(); i++){
 	 double q = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qR);
+	 double qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRprod)/BarrierFactor::BlattWeisskopf(l, qNorm, qRprod);
    	 dHist->SetBinContent(i, std::abs(value.real()));
       }
       dHist->Scale(1./dHist->GetBinContent(1));
       dHist->Draw("same");
+      legend_bprod->AddEntry(dHist,histName.str().c_str(),"l");
    }
+   legend_bprod->Draw();
    prodOnlyCanvas->Write();
+
+   allCanvas->cd(2);
+   prodOnlyCanvas->DrawClonePad();
 
 
    // Barrier factors production*decay
    TCanvas* combinedCanvas = new TCanvas("combinedCanvas", "combinedCanvas", 800, 600);
+   TLegend *legend_bcomb = new TLegend(0.8,0.75,0.96,0.98);
+   std::vector<TH1F*> combinedHistVec;
+   double maxValCombined=0.;
    for(int lp = lprodMax; lp>=lprodMin; lp--){
       for(int ld = ldecMax; ld>=ldecMin; ld--){
 	 std::ostringstream histName;
 	 histName << "BW_combined_l" << ld << "lprod" << lp;
 
 	 TH1F* dHist = new TH1F(histName.str().c_str(), histName.str().c_str(), 500, massMin, massMax);
+	 dHist->SetStats(0);
 	 dHist->GetXaxis()->SetTitle("m [GeV]");
-	 dHist->SetLineColor(lp+ld*10+1);
+	 //	 dHist->SetLineColor(lp+ld*10+1);
+	 dHist->SetLineColor(lp+1);
 	 dHist->SetLineWidth(2);
+	 combinedHistVec.push_back(dHist);
 
 	 for(int i=1; i<= dHist->GetNbinsX(); i++){
 	    double qDec = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
 	    double qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	    std::complex<double> valueDec = BarrierFactor::BlattWeisskopf(ld, qDec, qR);
-  	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qR);
+	    double qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	    std::complex<double> valueDec = BarrierFactor::BlattWeisskopf(ld, qDec, qRdec);
+  	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qRprod)/BarrierFactor::BlattWeisskopf(lp, qNorm, qRprod);
 	    dHist->SetBinContent(i, std::abs(valueDec.real() * valueProd.real()));
 	 }
 
@@ -228,29 +301,49 @@ int main(int argc, char *argv[])
 	 else{
 	    dHist->Scale(1./dHist->GetBinContent(250));
 	 }
-	 dHist->Draw("same");
+	 double currentMax = dHist->GetMaximum();
+	 if(currentMax>maxValCombined) maxValCombined=currentMax;
+
+	 legend_bcomb->AddEntry(dHist,histName.str().c_str(),"l");
       }
    }
+ 
+   for (it=combinedHistVec.begin(); it != combinedHistVec.end(); ++it){
+     (*it)->SetMaximum(1.05 * maxValCombined);
+     (*it)->Draw("same");
+    }
+
+   legend_bcomb->Draw();
    combinedCanvas->Write();
 
+   allCanvas->cd(3);
+   combinedCanvas->DrawClonePad();
 
    // Barrier factors production*decay * Breit Wigner resonance
    TCanvas* resshapeCanvas = new TCanvas("resshapeCanvas", "resshapeCanvas", 800, 600);
+   TLegend *legend_resshape = new TLegend(0.8,0.75,0.96,0.98);
+
+   std::vector<TH1F*> resHistVec;
+   double maxValRes=0.;
    for(int lp = lprodMax; lp>=lprodMin; lp--){
       for(int ld = ldecMax; ld>=ldecMin; ld--){
 	 std::ostringstream histName;
 	 histName << "BW_resshape_ldec" << ld << "lprod" << lp;
 
 	 TH1F* dHist = new TH1F(histName.str().c_str(), histName.str().c_str(), 500, massMin, massMax);
+	 dHist->SetStats(0);
 	 dHist->GetXaxis()->SetTitle("m [GeV]");
-	 dHist->SetLineColor(lp+ld*10+1);
+	 //	 dHist->SetLineColor(lp+ld*10+1);
+	 dHist->SetLineColor(lp+1);
 	 dHist->SetLineWidth(2);
+	 resHistVec.push_back(dHist);
 
 	 for(int i=1; i<= dHist->GetNbinsX(); i++){
 	    double qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qR);
+	    double qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qRprod)/BarrierFactor::BlattWeisskopf(lp, qNorm, qRprod);
 	    std::complex<double> breitWigner = BreitWignerFunction::BlattWRel(ld, dHist->GetBinCenter(i), resonanceMass, 
-									      resonanceWidth,decayParticle1Mass, decayParticle2Mass );
+									      resonanceWidth,decayParticle1Mass, decayParticle2Mass, qRdec );
 	    dHist->SetBinContent(i, std::norm(breitWigner * valueProd));
 	 }
 
@@ -260,11 +353,25 @@ int main(int argc, char *argv[])
 	 else{
 	    dHist->Scale(1./dHist->GetBinContent(dHist->FindBin(resonanceMass)));
 	 }
-	 dHist->Draw("same");
+	 double currentMax = dHist->GetMaximum();
+	 if(currentMax>maxValRes) maxValRes=currentMax;
+
+	 legend_resshape->AddEntry(dHist,histName.str().c_str(),"l");
       }
    }
+
+   for (it=resHistVec.begin(); it != resHistVec.end(); ++it){
+     (*it)->Scale(maxValRes/(*it)->GetMaximum());
+     (*it)->SetMaximum(1.05 * maxValRes);
+     (*it)->Draw("same");
+    }
+
+   legend_resshape->Draw();
    resshapeCanvas->Write();
 
+   allCanvas->cd(4);
+   resshapeCanvas->DrawClonePad();
+   allCanvas->Write();
 
    file->Close();
    return 0;
