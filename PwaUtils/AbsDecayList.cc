@@ -116,3 +116,12 @@ void AbsDecayList::replaceMassKey(const std::string& oldPart, const std::string&
     } 
   }
 }
+
+void AbsDecayList::replaceProdKey(const std::string& oldPart, const std::string& newPart){
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
+  for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
+    if(oldPart== (*it)->prodParKey()){
+      (*it)->setProdParKey(newPart);
+    } 
+  }
+}

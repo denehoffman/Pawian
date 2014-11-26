@@ -44,7 +44,7 @@ public:
   std::shared_ptr<gammapReaction> reaction() {return _gammapReaction;}
    std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
    std::map<std::string, std::vector<short> > dropGammapLForParticleData(){ return _dropGammapLForParticleData; }
-
+  virtual const std::string  channelTypeName() {return "gammap";}
 
 private:
    int _lmax;

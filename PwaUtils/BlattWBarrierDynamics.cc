@@ -30,16 +30,21 @@
 #include <mutex>
 
 #include "PwaUtils/BlattWBarrierDynamics.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
+#include "ConfigParser/ParserBase.hh"
 
 BlattWBarrierDynamics::BlattWBarrierDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, const std::string& wignerDKey, double qR) :
   AbsDynamics(name, fsParticles, mother)
   ,_wignerDKey(wignerDKey)
   ,_qR(qR)
+  ,_fitqRVals(false)
+  ,_fitqRKey(_massKey+"qRPosOther")
 {
   Info << "BlattWBarrierDynamics for " << _name <<endmsg;
+  if(GlobalEnv::instance()->parser()->fitqRProduction()) _fitqRVals=true;
 }
 
 BlattWBarrierDynamics::~BlattWBarrierDynamics()
@@ -56,13 +61,28 @@ complex<double> BlattWBarrierDynamics::eval(EvtData* theData, AbsXdecAmp* grandm
 }
 
 void  BlattWBarrierDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+  if(!_fitqRVals) return;
+  fitVal.otherParams[_fitqRKey]=_qR;
+  fitErr.otherParams[_fitqRKey]=0.3;
 }
 
 bool BlattWBarrierDynamics::checkRecalculation(fitParams& theParamVal){
-  return false;
+  _recalculate=false;
+ 
+  if(_fitqRVals){
+    if (!CheckDoubleEquality( _qR, theParamVal.otherParams.at(_fitqRKey))) _recalculate=true;
+  }
+
+  return _recalculate;
 }
 
 void BlattWBarrierDynamics::updateFitParams(fitParams& theParamVal){
+  _qR=theParamVal.otherParams.at(_fitqRKey);
+}
+
+void BlattWBarrierDynamics::setMassKey(std::string& theMassKey){
+  _massKey=theMassKey;
+  _fitqRKey=_massKey+"qRPosOther";
 }
 
 

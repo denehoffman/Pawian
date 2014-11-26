@@ -59,6 +59,8 @@ public:
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   virtual std::string& massParKey() {return _massParamKey;}
   void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
+  virtual std::string& prodParKey() {return _prodParamKey;}
+  void setProdParKey(const std::string& newKey) {_prodParamKey = newKey;}
   void setPreFactor(double thePreFactor) {_preFactor=thePreFactor;}
   double preFactor() {return _preFactor;}
   std::shared_ptr<const jpcRes> motherJPC(){ return _motherJPCPtr;}
@@ -139,6 +141,7 @@ protected:
   std::string _name;
   std::string _fitParamSuffix;
   std::string _massParamKey;
+  std::string _prodParamKey;
   std::string _wignerDKey;
   std::string _refKey;
   std::string _dynType;

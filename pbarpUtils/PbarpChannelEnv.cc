@@ -81,6 +81,37 @@ void PbarpChannelEnv::setup(ChannelID id){
    //pbarp reaction
    _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, id,_lmax));
 
+   //preparations for prod key replacements
+   std::vector<std::string> replProdKeyVec = _theParser->replaceProdKey();
+   std::map<std::string, std::string> repProdKeyNames;
+
+   for ( itStr = replProdKeyVec.begin(); itStr != replProdKeyVec.end(); ++itStr){
+      std::stringstream stringStr;
+      stringStr << (*itStr);
+      std::string oldStr;
+      stringStr >> oldStr;
+
+      std::string newStr;
+      stringStr >> newStr;
+      repProdKeyNames[oldStr]=newStr;
+   }
+
+
+   // //preparations for mass key replacements
+   // std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
+   // std::map<std::string, std::string> decRepMassKeyNames;
+
+   // for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
+   //    std::stringstream stringStr;
+   //    stringStr << (*itStr);
+   //    std::string oldStr;
+   //    stringStr >> oldStr;
+
+   //    std::string newStr;
+   //    stringStr >> newStr;
+   //    decRepMassKeyNames[oldStr]=newStr;
+   // }
+
    //fill prodDecayList
    std::vector<std::string> additionalStringVecDummy;
    std::string dynTypeDefault="WoDynamics";
@@ -90,8 +121,8 @@ void PbarpChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
-	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+	//	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	//	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	 _prodDecList->addDecay(*itDec);
       }
    }
@@ -100,21 +131,34 @@ void PbarpChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
          _prodDecList->addDecay(*itDec);
-	 (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+	 //	 (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       }
    }
    else if(_theParser->productionFormalism()=="Heli"){
       std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
       std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
-	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+	//	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	//	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	 _prodDecList->addDecay(*itDec);
       }
    }
    else{
       Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
       exit(0);
+   }
+
+   //enable dynamics and replace mass keys
+   std::map<std::string, std::string>::iterator itMapStrStr;
+   for (itMapStrStr=repProdKeyNames.begin(); itMapStrStr!=repProdKeyNames.end(); ++itMapStrStr){
+      _prodDecList->replaceProdKey(itMapStrStr->first, itMapStrStr->second);
+   }
+
+   std::vector< std::shared_ptr<AbsDecay> > theProdDecs=_prodDecList->getList();
+   std::vector< std::shared_ptr<AbsDecay> >::iterator itAbsDec;
+   for (itAbsDec=theProdDecs.begin(); itAbsDec!=theProdDecs.end(); ++itAbsDec){
+     if(_theParser->useProductionBarrier()) (*itAbsDec)->enableProdBarrier(_theParser->qRProduction());
+     else (*itAbsDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
    }
 
 
@@ -164,7 +208,7 @@ void PbarpChannelEnv::setup(ChannelID id){
    }
 
    //set suffixes for decay classes
-   std::map<std::string, std::string>::iterator itMapStrStr;
+   //   std::map<std::string, std::string>::iterator itMapStrStr;
    for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
       _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
       _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
@@ -172,7 +216,7 @@ void PbarpChannelEnv::setup(ChannelID id){
    }
 
 
-   //replace mass key
+   //replace mass key for decays
    std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
    std::map<std::string, std::string> decRepMassKeyNames;
 

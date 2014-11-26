@@ -41,14 +41,64 @@
 #include "PwaUtils/DynRegistry.hh"
 #include "ConfigParser/ParserBase.hh"
 
-IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
-  IsobarTensorDecay(mother, daughter1, daughter2, channelID)
+IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(Particle* mother, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID) :
+  IsobarTensorDecay(mother, daughter1_gamma, daughter2, channelID)
+  ,_XisEven(false)
+  ,_noOfAmps(0)
 {
+  if(mother->twoIso() !=0 || mother->theParity() != -1 || mother->twoJ() != 2 || mother->theParity() != -1 ||  mother->theCParity() !=-1 || mother->mass() < 0.01){
+    Alert << "so far only mother particle with quantum number combinations JPC=1-- or its masses abov 0.01 GeV/c2 supported!!!" << endmsg;
+    exit(0); 
+  }
+ if(daughter1_gamma->twoJ() != 2 || daughter1_gamma->theParity() != -1 ||  daughter1_gamma->theCParity() || daughter1_gamma->mass() < 1.e-6){
+   Alert << "daughter particle 1 is not a photon" << endmsg;
+   exit(0); 
+ }
+
+ if(daughter2->twoJ()%4 == 0) _XisEven=true;
+ if(_XisEven){
+   Alert << "decay particle with even J not supported so far!!!" << endmsg;
+   exit(0);
+ }
+
+ if(daughter2->twoJ() != 2 || daughter2->theParity() != 1){
+   Alert << "decay particle with even JP!=1+ not supported so far!!!" << endmsg;
+   exit(0);
+ }
+ 
+ if(daughter2->twoJ() == 2 && daughter2->theParity() == 1){
+     _noOfAmps=2;
+   }
 }
 
-IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName) :
-  IsobarTensorDecay(motherIGJPCPtr, daughter1, daughter2, channelID, motherName)
+IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID, std::string motherName) :
+  IsobarTensorDecay(motherIGJPCPtr, daughter1_gamma, daughter2, channelID, motherName)
+  ,_XisEven(false)
+  ,_noOfAmps(0)
 {
+  if(motherIGJPCPtr->I !=0 || motherIGJPCPtr->G != -1 || motherIGJPCPtr->J != 1 || motherIGJPCPtr->P != -1 ||  motherIGJPCPtr->C !=-1){
+    Alert << "so far only mother particle with quantum number combinations JPC=1-- !!!" << endmsg;
+    exit(0); 
+  }
+  if(daughter1_gamma->twoJ() != 2 || daughter1_gamma->theParity() != -1 ||  daughter1_gamma->theCParity() || daughter1_gamma->mass() < 1.e-6){
+    Alert << "daughter particle 1 is not a photon" << endmsg;
+    exit(0); 
+  }
+  
+  if(daughter2->twoJ()%4 == 0) _XisEven=true;
+  if(_XisEven){
+    Alert << "decay particle with even J not supported so far!!!" << endmsg;
+    exit(0);
+  }
+  
+  if(daughter2->twoJ() != 2 || daughter2->theParity() != 1){
+    Alert << "decay particle with even JP!=1+ not supported so far!!!" << endmsg;
+    exit(0);
+  }
+  
+  if(daughter2->twoJ() == 2 && daughter2->theParity() == 1){
+    _noOfAmps=2;
+  }
 }
 
 IsobarTensorReducedRadDecay::~IsobarTensorReducedRadDecay(){

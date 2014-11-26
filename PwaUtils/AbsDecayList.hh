@@ -52,6 +52,7 @@ public:
   std::shared_ptr<AbsDecay> decay(const std::string& name);
   void replaceSuffix(const std::string& oldPart, const std::string& newPart);
   void replaceMassKey(const std::string& oldPart, const std::string& newPart);
+  void replaceProdKey(const std::string& oldPart, const std::string& newPart);
   std::vector<std::shared_ptr<AbsDecay> >& getList() {return _absDecList;}    
 protected:  
 

@@ -61,6 +61,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
+   ,_prodParamKey("")
   ,_dynType("WoDynamics")
    ,_dynEnabled(false)
   ,_preFactor(1.)
@@ -141,7 +142,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
 }
 
 AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId) :
-   _channelId(channelId)
+  _channelId(channelId)
   ,_mother(0)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
@@ -157,21 +158,22 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name()+"_"+daughter2->name())
   // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
+  ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_dynType("WoDynamics")
-   ,_dynEnabled(false)
+  ,_dynEnabled(false)
   ,_preFactor(1.)
-   ,_pathParserFile("")
+  ,_pathParserFile("")
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
-   ,_isDaughter1Photon(false)
-   ,_isDaughter2Photon(false)
+  ,_isDaughter1Photon(false)
+  ,_isDaughter2Photon(false)
   ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
-   ,_isProdAmp(false)
-   ,_useProdBarrier(false)
-   ,_massSumFsParticles(0.)
-   ,_Lmin(0)
-   ,_decLevel(decayLevel::noLevel)
+  ,_isProdAmp(false)
+  ,_useProdBarrier(false)
+  ,_massSumFsParticles(0.)
+  ,_Lmin(0)
+  ,_decLevel(decayLevel::noLevel)
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -475,6 +477,7 @@ void AbsDecay::enableProdBarrier(double qRValue){
   _useProdBarrier=true;
   _dynType="BlattWBarrier";
   _qR=qRValue;
+
   Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
   _dynEnabled=true;

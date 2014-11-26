@@ -50,6 +50,7 @@ public:
 
   std::shared_ptr<resReaction> reaction() {return _resReaction;}
   Particle* motherParticle() {return _motherParticle;}
+  virtual const std::string  channelTypeName() {return "res";}
 
 protected:
   resParser* _theParser;

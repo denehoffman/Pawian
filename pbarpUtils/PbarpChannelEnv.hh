@@ -36,22 +36,23 @@ class pbarpReaction;
 class PbarpChannelEnv : public AbsChannelEnv
 {
 public:
-   void setup(ChannelID id);
-   PbarpChannelEnv(pbarpParser* theParser);
-   const float pbarMomentum() const {return _pbarMomentum;}
-   const int lmax() const {return _lmax;}
-
-   std::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;}
-   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
-   std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
-   void CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix);
-
+  void setup(ChannelID id);
+  PbarpChannelEnv(pbarpParser* theParser);
+  const float pbarMomentum() const {return _pbarMomentum;}
+  const int lmax() const {return _lmax;}
+  
+  std::shared_ptr<pbarpReaction> reaction() {return _pbarpReaction;}
+  std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
+  std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
+  virtual const std::string  channelTypeName() {return "pbarp";}
+  void CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix);
+  
 private:
-   int _lmax;
-   float _pbarMomentum;
-   pbarpParser* _theParser;
-
-   std::shared_ptr<pbarpReaction> _pbarpReaction;
-   std::vector<std::string> _spinDensity;
-   std::map<std::string, std::vector<short> > _dropPbarpLForParticleData;
+  int _lmax;
+  float _pbarMomentum;
+  pbarpParser* _theParser;
+  
+  std::shared_ptr<pbarpReaction> _pbarpReaction;
+  std::vector<std::string> _spinDensity;
+  std::map<std::string, std::vector<short> > _dropPbarpLForParticleData;
 };

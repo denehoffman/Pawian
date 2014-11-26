@@ -71,7 +71,7 @@ DynRegistry::~DynRegistry()
 std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> theDec){
 
   std::string theName=theDec->name();
-  if(theDec->dynType()=="BlattWBarrier") theName=theDec->wignerDKey();
+  //  if(theDec->dynType()=="BlattWBarrier") theName=theDec->wignerDKey();
   if(0==theDec->motherPart()){
     if(theDec->dynType()=="WoDynamics") theName=theDec->motherIGJPC()->jpcname();
     else if (theDec->dynType()!="BlattWBarrier" && theDec->dynType()!="BlattWBarrierTensor"){
@@ -131,7 +131,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	Alert << "dynamics BlattWBarrier is not allowed for tensor amplitudes (amp name: " << theDec->name() << endmsg;
 	exit(0);
       }
-      std::string blattWBarrierName=theDec->wignerDKey();
+      //      std::string blattWBarrierName=theDec->wignerDKey();
+      std::string blattWBarrierName=theName;
       result= std::shared_ptr<AbsDynamics>(new BlattWBarrierDynamics(blattWBarrierName, fsParticles, theDec->motherPart(), theDec->wignerDKey(), theDec->barrierqR()));
     }
     else if(theDec->dynType()=="BlattWBarrierTensor"){
@@ -139,7 +140,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	Alert << "dynamics BlattWBarrierTensor is not allowed for tensor amplitudes (amp name: " << theDec->name() << endmsg;
 	exit(0);
       }
-      std::string blattWBarrierName=theDec->wignerDKey();
+      // std::string blattWBarrierName=theDec->wignerDKey();
+      std::string blattWBarrierName=theName;
       result= std::shared_ptr<AbsDynamics>(new BlattWBarrierTensorDynamics(blattWBarrierName, fsParticles, theDec->motherPart(), theDec->wignerDKey(), theDec->barrierqR()));
     }
     else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
@@ -149,6 +151,11 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     }
     
     result->setMassKey(theDec->massParKey());
+
+    if(theDec->isProductionAmp() &&  (theDec->dynType()=="BlattWBarrier" || theDec->dynType()=="BlattWBarrierTensor")) result->setMassKey(theDec->prodParKey()); 
+
+    Info << "add dynamics for " <<  theName << endmsg;
+
     _dynMap[theName]=result;
     _dynVec.push_back(result);
   }

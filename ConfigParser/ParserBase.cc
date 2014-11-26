@@ -67,6 +67,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ,_useProductionBarrier(false)
       ,_withProductionBarrier("false")
       ,_qRProduction(0.1973)
+      ,_fitqRProduction(false)
       ,_randomSeed(44123)
       ,_genWithModel(true)
       ,_noOfGenEvts(10000)
@@ -127,10 +128,12 @@ ParserBase::ParserBase(int argc,char **argv)
       ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
       ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
       ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
+      ("replaceProdKey",po::value< vector<string> >(&_replaceProdKey),  "replace key for specific fit parameter of the production")
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
       ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
       //      ("useProductionBarrier",po::value<bool>(&_useProductionBarrier), "use barrier factors for the production, not supported for helicity formalism")
       ("useProductionBarrier",po::value<string>(&_withProductionBarrier), "use barrier factors for the production, not supported for helicity formalism, first argument yes/false; second argument optional qR value (default 0.197) ")
+      ("fitqRProduction",po::value<bool>(&_fitqRProduction), "enable/disable fir parameter for individual qR prduction values")
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
@@ -283,6 +286,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 	std::cout << (*it) << "\n";
       }
 
+      std::cout << "\nreplaced prod key" << std::endl;
+      for (it=_replaceProdKey.begin(); it!=_replaceProdKey.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
       std::cout << "\nproduction system:" << std::endl;
       for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
 	std::cout << (*it) << "\n";
@@ -291,6 +299,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       std::cout << "\nproduction formalism:\t" << _productionFormalism << std::endl;
       std::cout << "useProductionBarrier:\t" << _useProductionBarrier  << std::endl;
       std::cout << "withProductionBarrier:\t" << _withProductionBarrier  << std::endl;
+      std::cout << "fitqRProduction:\t" << _fitqRProduction << std::endl;
 
       std::string tmpName;
       std::stringstream stringStr;

@@ -45,8 +45,8 @@ class EvtData;
 class IsobarTensorReducedRadDecay : public IsobarTensorDecay{
 
 public:
-  IsobarTensorReducedRadDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
-  IsobarTensorReducedRadDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
+  IsobarTensorReducedRadDecay(Particle* mother, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID);
+  IsobarTensorReducedRadDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
   virtual ~IsobarTensorReducedRadDecay();
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
@@ -54,5 +54,6 @@ public:
   virtual std::string type() {return "IsobarTensorReducedRadDecay";}
 
 protected:
-
+  bool _XisEven;
+  short _noOfAmps;
 };
