@@ -77,6 +77,7 @@ bool BlattWBarrierDynamics::checkRecalculation(fitParams& theParamVal){
 }
 
 void BlattWBarrierDynamics::updateFitParams(fitParams& theParamVal){
+  if(!_fitqRVals) return;
   _qR=theParamVal.otherParams.at(_fitqRKey);
 }
 
