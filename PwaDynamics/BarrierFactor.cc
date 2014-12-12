@@ -75,12 +75,7 @@ std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> z
 		  (z*z*z*z*z + 15.*z*z*z*z + 315.*z*z*z + 
 		   6300.*z*z + 99225.*z + 893025.));
    }
-   // else if(6==l){
-   //    return sqrt(118394977.*z*z*z*z*z*z / 
-   // 		  (z*z*z*z*z*z + 21.*z*z*z*z*z + 630.*z*z*z*z + 18900.*z*z*z +
-   // 		   496125.*z*z + 9823275.*z + 108056025.));
-   // }
-   else if(6<=l){ //attention work-around for l>=7
+   else if(6==l){
       return sqrt(118394977.*z*z*z*z*z*z / 
 		  (z*z*z*z*z*z + 21.*z*z*z*z*z + 630.*z*z*z*z + 18900.*z*z*z +
 		   496125.*z*z + 9823275.*z + 108056025.));
@@ -90,7 +85,7 @@ std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> z
 		  (z*z*z*z*z*z*z + 28.*z*z*z*z*z*z + 1134.*z*z*z*z*z + 47250.*z*z*z*z +
 		   1819125.*z*z*z + 58939650.*z*z + 1404728325.*z + 18261468225.));
    }
-   else if(8==l){
+   else if(8>=l){  //attention work-around for l>=9
       return sqrt(4392846440677.*z*z*z*z*z*z*z*z /
 		  (z*z*z*z*z*z*z*z + 36.*z*z*z*z*z*z*z + 1890.*z*z*z*z*z*z +
 		   103950.*z*z*z*z*z + 5457375.*z*z*z*z + 255405150.*z*z*z +
