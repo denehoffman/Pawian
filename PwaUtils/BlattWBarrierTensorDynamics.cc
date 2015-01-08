@@ -36,6 +36,7 @@
 BlattWBarrierTensorDynamics::BlattWBarrierTensorDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, const std::string& wignerDKey, double qR) :
   BlattWBarrierDynamics(name, fsParticles, mother, wignerDKey, qR)
 {
+  _isLdependent=true;
 }
 
 BlattWBarrierTensorDynamics::~BlattWBarrierTensorDynamics()

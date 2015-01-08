@@ -35,6 +35,7 @@
 WoDynamics::WoDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
 {
+  _isLdependent=false;
 }
 
 WoDynamics::~WoDynamics()

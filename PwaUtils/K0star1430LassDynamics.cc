@@ -45,6 +45,7 @@ K0star1430LassDynamics::K0star1430LassDynamics(std::string& name, std::vector<Pa
   ,_RLASSKey(_massKey+"RLASS_PosNeg")
   ,_phiRKey(_massKey+"phiR_PosNeg")
 {
+  _isLdependent=false;
 }
 
 K0star1430LassDynamics::~K0star1430LassDynamics()

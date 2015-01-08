@@ -37,6 +37,7 @@
 BreitWignerDynamics::BreitWignerDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
 {
+  _isLdependent=false;
 }
 
 BreitWignerDynamics::~BreitWignerDynamics()

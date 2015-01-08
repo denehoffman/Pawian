@@ -45,6 +45,7 @@ BlattWBarrierDynamics::BlattWBarrierDynamics(std::string& name, std::vector<Part
 {
   Info << "BlattWBarrierDynamics for " << _name <<endmsg;
   if(GlobalEnv::instance()->parser()->fitqRProduction()) _fitqRVals=true;
+  _isLdependent=true;
 }
 
 BlattWBarrierDynamics::~BlattWBarrierDynamics()

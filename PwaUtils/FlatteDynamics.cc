@@ -62,6 +62,7 @@ FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParti
   _g22Key=_massKey+secondPair1stPartStr+secondPair2ndPartStr;  
 
   _flattePtr=std::shared_ptr<Flatte>(new Flatte(decPair1stChannel, decPair2ndChannel));
+  _isLdependent=false;
 }
 
 FlatteDynamics::~FlatteDynamics()

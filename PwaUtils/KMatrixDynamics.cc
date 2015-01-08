@@ -56,6 +56,7 @@ KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
   init();
+  _isLdependent=false;
 }
 
 KMatrixDynamics::~KMatrixDynamics()

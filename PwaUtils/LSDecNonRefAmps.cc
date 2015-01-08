@@ -41,12 +41,22 @@
 
 LSDecNonRefAmps::LSDecNonRefAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
   AbsLSDecAmps(theDec, channelID)
+  ,_Smax(0)
 {
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( (*it)->S > _Smax ) _Smax=(*it)->S;
+  }
 }
 
 LSDecNonRefAmps::LSDecNonRefAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsLSDecAmps(theDec, channelID)
+  ,_Smax(0)
 {
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( (*it)->S > _Smax ) _Smax=(*it)->S;
+  }
 }
 
 LSDecNonRefAmps::~LSDecNonRefAmps()
@@ -78,6 +88,8 @@ complex<double> LSDecNonRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fix
   }
 
   result=lsLoop( grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, false);
+  result*=_preFactor*_isospinCG;
+  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
 
   return result;
 }
@@ -111,6 +123,8 @@ complex<double> LSDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lam
 
 
   result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
+  result*=_preFactor*_isospinCG;
+  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -133,44 +147,30 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
  
   complex<double> result(0.,0.);
 
-  //  map<Spin,complex<double> >& currentWignerDsMap=theData->WignerDsString.at(_wignerDKey).at(_JPCPtr->J).at(lamX);
-  //  Spin currentJ=_JPCPtr->J;
-  //  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(refKey);
-
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
 
-  std::vector< std::shared_ptr<const LScomb> >::iterator it;
-  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-
-    map<Spin,map<Spin, double > >& currentCgFactor=_cgPreFactor.at(*it);
-
-    double theMag=_currentParamMags.at(*it);
-    double thePhi=_currentParamPhis.at(*it);
-    complex<double> expi(cos(thePhi), sin(thePhi));
-
-    complex<double> tmpResult(0.,0.);
-    for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-      for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	Spin lambda = lambda1-lambda2;
-	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
-	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDsMap.at(lambda));
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
-	tmpResult+=amp;
+  for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
+    for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
+      Spin lambda = lambda1-lambda2;
+      if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>_Smax) continue;
+      
+      complex<double> amp(0.,0.);     
+      for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+	if( fabs(lambda)>(*it)->S) continue;
+	double theMag=_currentParamMags.at(*it);
+	double thePhi=_currentParamPhis.at(*it);
+	complex<double> expi(cos(thePhi), sin(thePhi));
+	if (_absDyn->isLdependent()) amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2)*_absDyn->eval(theData, grandmaAmp, (*it)->L);
+	else amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2);
       }
+      Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+      amp *= conj(currentWignerDMap.at(IdJLamXLam12));
+      if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
+      result+=amp;    
     }
-
-    tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
-
-    result+=tmpResult; 
   }
-
-  result*=_preFactor*_isospinCG;
-  // if(result.real()!=result.real()){
-  //   Alert << "result:\t" << result << endmsg;
-  //   exit(0);
-  // }
+  
   return result;
 }
 

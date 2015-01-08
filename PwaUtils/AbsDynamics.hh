@@ -56,6 +56,7 @@ public:
   virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) {;}
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp){return _grandmaKey;}
+  virtual bool isLdependent() {return _isLdependent;}
 
 protected:
   std::string _name;
@@ -66,6 +67,7 @@ protected:
   std::mutex theMutex;
   std::string _dynKey;
   std::string _grandmaKey;
+  bool _isLdependent;
 private:
 
 };

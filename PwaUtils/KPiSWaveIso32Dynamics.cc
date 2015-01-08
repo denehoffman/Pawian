@@ -42,6 +42,7 @@ KPiSWaveIso32Dynamics::KPiSWaveIso32Dynamics(std::string& name, std::vector<Part
   AbsDynamics(name, fsParticles, mother)
 {
   _kMatr =  std::shared_ptr<KMatrixKPiSFocus> (new KMatrixKPiSFocus(3));
+  _isLdependent=false;
 }
 
 KPiSWaveIso32Dynamics::~KPiSWaveIso32Dynamics()

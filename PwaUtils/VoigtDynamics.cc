@@ -40,6 +40,7 @@ VoigtDynamics::VoigtDynamics(std::string& name, std::vector<Particle*>& fsPartic
   _voigtPtr(new Voigtian())
 {
   if(0!=mother) _massSigmaKey=_massKey+"Sigma";
+  _isLdependent=false;
 }
 
 VoigtDynamics::~VoigtDynamics()

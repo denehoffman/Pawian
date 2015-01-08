@@ -38,6 +38,7 @@ BreitWignerBlattWRelDynamics::BreitWignerBlattWRelDynamics(std::string& name, st
   BreitWignerRelDynamics(name, fsParticles, mother, massSumDaughter1, massSumDaughter2)
   ,_qR(qR)
 {
+  _isLdependent=true;
 }
 
 BreitWignerBlattWRelDynamics::~BreitWignerBlattWRelDynamics()

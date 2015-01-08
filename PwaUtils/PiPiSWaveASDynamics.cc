@@ -53,6 +53,7 @@ PiPiSWaveASDynamics::PiPiSWaveASDynamics(std::string& name, std::vector<Particle
   ,_kPoles(_KmatrixPiPiS->kpoles())
 {
   DebugMsg << "projection index is " << _projectionIndex << endmsg;
+  _isLdependent=false;
 }
 
 PiPiSWaveASDynamics::~PiPiSWaveASDynamics()
