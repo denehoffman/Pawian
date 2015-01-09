@@ -115,7 +115,7 @@ public:
   double massSumFsParticlesDec1();
   double massSumFsParticlesDec2();
   int orbMomMin() {return _Lmin;}
-
+  ChannelID channelId() {return _channelId;}
 protected:
 
   virtual void extractLmin();

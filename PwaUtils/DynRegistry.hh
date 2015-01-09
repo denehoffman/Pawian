@@ -34,6 +34,7 @@
 
 #include <cassert>
 #include <memory>
+#include "PwaUtils/AbsChannelEnv.hh"
 
 class AbsDecay;
 class AbsDynamics;
@@ -57,7 +58,7 @@ protected:
   static DynRegistry* _instance;
 
 private:
-
+  std::map<ChannelID, std::map<std::string, std::shared_ptr<AbsDynamics> > > _dynMapChannel;
   std::map<std::string, std::shared_ptr<AbsDynamics> > _dynMap;
   std::vector<std::shared_ptr<AbsDynamics> > _dynVec;
 

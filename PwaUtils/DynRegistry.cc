@@ -84,8 +84,18 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 
   std::shared_ptr<AbsDynamics> result;
 
-  std::map<std::string, std::shared_ptr<AbsDynamics> >::iterator it = _dynMap.find(theName);
-  if (it !=_dynMap.end()){
+  ChannelID currentChannelId = theDec->channelId();
+  std::map<std::string, std::shared_ptr<AbsDynamics> > currentDynMap;
+
+  std::map<ChannelID, std::map<std::string, std::shared_ptr<AbsDynamics> > >::iterator itChannelId =_dynMapChannel.find(currentChannelId);
+
+  if (itChannelId !=_dynMapChannel.end()){
+    currentDynMap=itChannelId->second;
+  }
+  else _dynMapChannel[currentChannelId]=currentDynMap;
+
+  std::map<std::string, std::shared_ptr<AbsDynamics> >::iterator it = currentDynMap.find(theName);
+  if (it !=currentDynMap.end()){
     result=it->second;
     Info << "Dynamics\t" << theName << "\tfound!!!" << endmsg;
   }
@@ -156,7 +166,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 
     Info << "add dynamics for " <<  theName << endmsg;
 
-    _dynMap[theName]=result;
+    _dynMapChannel[currentChannelId][theName]=result;
     _dynVec.push_back(result);
   }
 
