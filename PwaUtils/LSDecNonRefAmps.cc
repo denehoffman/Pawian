@@ -148,6 +148,13 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
   complex<double> result(0.,0.);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  std::map< std::shared_ptr<const LScomb>,  complex<double> > dynLSs;
+  if (_absDyn->isLdependent()){ 
+    for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+      dynLSs[*it]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+    }
+  }
+
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
 
   for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
@@ -161,7 +168,9 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
 	double theMag=_currentParamMags.at(*it);
 	double thePhi=_currentParamPhis.at(*it);
 	complex<double> expi(cos(thePhi), sin(thePhi));
-	if (_absDyn->isLdependent()) amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2)*_absDyn->eval(theData, grandmaAmp, (*it)->L);
+	// if (_absDyn->isLdependent()) amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2)*_absDyn->eval(theData, grandmaAmp, (*it)->L);
+	// else amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2);
+	if (_absDyn->isLdependent()) amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2)*dynLSs.at(*it);
 	else amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2);
       }
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
