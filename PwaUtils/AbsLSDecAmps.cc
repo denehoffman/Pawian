@@ -152,6 +152,8 @@ void  AbsLSDecAmps::updateFitParams(fitParams& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMags[*it]=theMag;
      _currentParamPhis[*it]=thePhi;
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     _currentParamMagExpi[*it]=theMag*expi;
    }
 
    _absDyn->updateFitParams(theParamVal);
@@ -171,6 +173,10 @@ void  AbsLSDecAmps::fillCgPreFactor(){
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
 
 	_cgPreFactor[*it][lambda1][lambda2]=sqrt(2.*(*it)->L+1)
+	  *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
+	  *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
+
+	_cgPreFactor_LamLamLSMap[lambda1][lambda2][*it]=sqrt(2.*(*it)->L+1)
 	  *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
 	  *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
       }

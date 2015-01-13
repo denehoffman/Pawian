@@ -149,9 +149,10 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
 
     map<Spin,map<Spin, double > >& currentCgFactor=_cgPreFactor.at(*it);
 
-    double theMag=_currentParamMags.at(*it);
-    double thePhi=_currentParamPhis.at(*it);
-    complex<double> expi(cos(thePhi), sin(thePhi));
+    // double theMag=_currentParamMags.at(*it);
+    // double thePhi=_currentParamPhis.at(*it);
+    // complex<double> expi(cos(thePhi), sin(thePhi));
+    complex<double> currentMagExpi=_currentParamMagExpi.at(*it);
 
     complex<double> tmpResult(0.,0.);
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
@@ -159,8 +160,8 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
 	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
-
+	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
+	complex<double> amp = currentMagExpi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	tmpResult+=amp;
       }
