@@ -59,11 +59,12 @@ public:
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
-
+  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
 protected:
   virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
 
   Spin _Smax;
+  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
 
 private:
 

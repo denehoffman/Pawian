@@ -154,6 +154,7 @@ void  AbsLSDecAmps::updateFitParams(fitParams& theParamVal){
      _currentParamPhis[*it]=thePhi;
      complex<double> expi(cos(thePhi), sin(thePhi));
      _currentParamMagExpi[*it]=theMag*expi;
+     _currentParamPreFacMagExpi[*it]=_preFactor*_isospinCG*theMag*expi;
    }
 
    _absDyn->updateFitParams(theParamVal);

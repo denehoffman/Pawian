@@ -123,8 +123,8 @@ complex<double> LSDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lam
 
 
   result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
-  result*=_preFactor*_isospinCG;
-  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
+  //  result*=_preFactor*_isospinCG;
+  //  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -148,12 +148,12 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
   complex<double> result(0.,0.);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
-  std::map< Spin,  complex<double> > dynLSs;
-  if (_absDyn->isLdependent()){ 
-    for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-      dynLSs[(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
-    }
-  }
+  // std::map< Spin,  complex<double> > dynLSs;
+  // if (_absDyn->isLdependent()){ 
+  //   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+  //     dynLSs[(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+  //   }
+  // }
 
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
 
@@ -174,7 +174,8 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
 	// else amp+=theMag*expi*_cgPreFactor.at(*it).at(lambda1).at(lambda2);
 	// if (_absDyn->isLdependent()) amp+=theMag*expi*cgPre_LSMap.at(*it)*dynLSs.at((*it)->L);
 	// else amp+=theMag*expi*cgPre_LSMap.at(*it);
-	if (_absDyn->isLdependent()) amp+=_currentParamMagExpi.at(*it)*cgPre_LSMap.at(*it)*dynLSs.at((*it)->L);
+	//	if (_absDyn->isLdependent()) amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*dynLSs.at((*it)->L);
+	if (_absDyn->isLdependent()) amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*_cachedDynLSMap[std::this_thread::get_id()][(*it)->L];
 	else amp+=_currentParamMagExpi.at(*it)*cgPre_LSMap.at(*it);
       }
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
@@ -183,8 +184,39 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
       result+=amp;    
     }
   }
-  
+  //  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
+  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
   return result;
 }
 
+void LSDecNonRefAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
+  if(!_recalculate) return; 
+
+  if(!_absDyn->isLdependent()){
+    AbsXdecAmp::calcDynamics(theData, grandmaAmp);
+    return;
+  }
+
+ std::vector< std::shared_ptr<const LScomb> >::iterator it;
+ for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+   theMutex.lock();
+   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+   theMutex.unlock();
+ }  
+
+ if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
+ if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
+ return;
+}
+
+// void LSDecNonRefAmps::resetRecalcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
+//   if(!_absDyn->isLdependent()){
+//     AbsXdecAmp::resetRecalcDynamics(theData, grandmaAmp);
+//     return;
+//   }
+//   _cachedDynRecalcLSMap[std::this_thread::get_id()][(*it)->L]=true;
+//   if(!_daughter1IsStable) _decAmpDaughter1->resetRecalcDynamics(theData, this);
+//   if(!_daughter2IsStable) _decAmpDaughter2->resetRecalcDynamics(theData, this);
+//   return;
+// }
 

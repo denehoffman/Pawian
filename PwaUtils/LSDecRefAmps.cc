@@ -152,7 +152,7 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
     // double theMag=_currentParamMags.at(*it);
     // double thePhi=_currentParamPhis.at(*it);
     // complex<double> expi(cos(thePhi), sin(thePhi));
-    complex<double> currentMagExpi=_currentParamMagExpi.at(*it);
+    complex<double> currentPreMagExpi=_currentParamPreFacMagExpi.at(*it);
 
     complex<double> tmpResult(0.,0.);
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
@@ -161,7 +161,7 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
 	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
-	complex<double> amp = currentMagExpi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
+	complex<double> amp = currentPreMagExpi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	tmpResult+=amp;
       }
@@ -172,7 +172,7 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
     result+=tmpResult; 
   }
 
-  result*=_preFactor*_isospinCG;
+  //  result*=_preFactor*_isospinCG;
   // if(result.real()!=result.real()){
   //   Alert << "result:\t" << result << endmsg;
   //   exit(0);

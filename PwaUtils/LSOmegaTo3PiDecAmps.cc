@@ -92,24 +92,21 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( fabs(lamX) > _JPCPtr->J ) continue;
-    double theMag=_currentParamMags[*it];
-    double thePhi=_currentParamPhis[*it];
-    complex<double> expi(cos(thePhi), sin(thePhi));
 
-    complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
+    complex<double> amp = _currentParamMagExpi.at(*it)*sqrt(2*(*it)->L+1)
       *conj( theData->WignerDsStringString.at(_wignerDKey).at(refKey).at(_JPCPtr->J).at(lamX).at(0));
-
+    if (_absDyn->isLdependent()) amp*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
     result+=amp;
   }
   result*=sqrt( theData->DoubleStringString[_lambdaDecKey][refKey] );
-
+  if (!_absDyn->isLdependent()) result*=_absDyn->eval(theData, grandmaAmp);
   if ( _cacheAmps){
      theMutex.lock();
      _cachedAmpMapNew[evtNo][refKey][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 
-  result*=_absDyn->eval(theData, grandmaAmp);
+  //  result*=_absDyn->eval(theData, grandmaAmp);
   return result;
 }
 

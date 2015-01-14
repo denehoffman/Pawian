@@ -34,6 +34,7 @@
 #include <mutex>
 #include <memory>
 #include <boost/unordered_map.hpp>
+#include <thread>
 
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -68,6 +69,7 @@ public:
   const std::string wignerDKey() const {return _wignerDKey;}
   const std::string refKey() const {return _refKey;}
   virtual void cacheAmplitudes();
+  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
 
 protected:
 
@@ -98,6 +100,7 @@ protected:
   Spin _J;
   intStringShortComplFloatMap _cachedAmpMap;
   intStringStringShortComplFloatMap _cachedAmpMapNew;
+  std::map<std::thread::id, std::map<std::string, complex<float> > > _cachedDynMap;
 
   virtual void initialize();
 };

@@ -149,6 +149,11 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
   double result=0.;
 
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+  for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+    (*itDecAll)->calcDynamics(theData);
+  }
+
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >::iterator it;
 
   Spin lamSteps=1;
