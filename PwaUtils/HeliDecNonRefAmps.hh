@@ -34,6 +34,7 @@
 
 #include <cassert>
 #include <memory>
+#include <thread>
 
 #include "PwaUtils/AbsHeliDecAmps.hh"
 
@@ -58,8 +59,9 @@ public:
   virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
-
+  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp);
 protected:
+  std::map<std::thread::id, complex<double> > _cachedDynLMap;
 
 private:
 

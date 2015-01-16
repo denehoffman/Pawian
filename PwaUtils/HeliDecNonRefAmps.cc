@@ -154,3 +154,20 @@ complex<double> HeliDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& l
   return result;
 }
 
+void HeliDecNonRefAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
+  if(!_recalculate) return; 
+
+  if(!_absDyn->isLdependent()){
+    AbsXdecAmp::calcDynamics(theData, grandmaAmp);
+    return;
+  }
+
+  theMutex.lock();
+  _cachedDynLMap[std::this_thread::get_id()]=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
+  theMutex.unlock();
+
+ if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
+ if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
+ return;
+}
+

@@ -113,9 +113,7 @@ void AbsXdecAmp::cacheAmplitudes(){
 
 void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   if(!_recalculate) return;
-  
-  //  Info << "threadID: " << std::this_thread::get_id() << endmsg;
-  //  if(!_recalculate) return;
+
   if(!_absDyn->isLdependent()){
     theMutex.lock();
     _cachedDynMap[std::this_thread::get_id()][_absDyn->grandMaKey(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
