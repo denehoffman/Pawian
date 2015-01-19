@@ -45,6 +45,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiTo
 
   _currentParamLocalMags.resize(_noOfAmps);
   _currentParamLocalPhis.resize(_noOfAmps);
+  _currentParamLocalMagExpi.resize(_noOfAmps);
   _MagParamNames.resize(_noOfAmps);
   _PhiParamNames.resize(_noOfAmps);
   _MagParamNames[0]=_key+"Mag1";
@@ -128,10 +129,11 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
   for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
     complex<double> tmpResult(0.,0.);
     for(int i=0; i<_noOfAmps; ++i){
-      double theMag=_currentParamLocalMags.at(i);
-      double thePhi=_currentParamLocalPhis.at(i);
-      complex<double> expi(cos(thePhi), sin(thePhi));
-      tmpResult+=theMag*expi*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
+      // double theMag=_currentParamLocalMags.at(i);
+      // double thePhi=_currentParamLocalPhis.at(i);
+      // complex<double> expi(cos(thePhi), sin(thePhi));
+      // tmpResult+=theMag*expi*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
+      tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
     }
 
     result+=tmpResult*daughterAmp(lambda2, theData, lamFs);    
@@ -200,8 +202,13 @@ bool TensorPsiToGamXDecAmps::checkRecalculation(fitParams& theParamVal){
 void  TensorPsiToGamXDecAmps::updateFitParams(fitParams& theParamVal){
 
   for (int i=0; i<_noOfAmps; ++i){
-    _currentParamLocalMags[i]=theParamVal.otherParams.at(_MagParamNames.at(i));
-    _currentParamLocalPhis[i]=theParamVal.otherParams.at(_PhiParamNames.at(i));
+    double theMag=theParamVal.otherParams.at(_MagParamNames.at(i));
+    _currentParamLocalMags[i]=theMag;
+    double thePhi=theParamVal.otherParams.at(_PhiParamNames.at(i));
+    _currentParamLocalPhis[i]=thePhi;
+
+    complex<double> expi(cos(thePhi), sin(thePhi));
+    _currentParamLocalMagExpi[i]=theMag*expi;
   }
   _absDyn->updateFitParams(theParamVal);
   

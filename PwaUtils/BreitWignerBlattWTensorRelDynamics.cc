@@ -38,10 +38,12 @@ BreitWignerBlattWTensorRelDynamics::BreitWignerBlattWTensorRelDynamics(std::stri
   BreitWignerRelDynamics(name, fsParticles, mother, massSumDaughter1, massSumDaughter2)
   ,_qR(qR)
 {
+  _isLdependent=true;
 }
 
 BreitWignerBlattWTensorRelDynamics::~BreitWignerBlattWTensorRelDynamics()
 {
+  _isLdependent=true;
 }
 
 complex<double> BreitWignerBlattWTensorRelDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){

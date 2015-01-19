@@ -104,7 +104,6 @@ complex<double> HeliDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& l
 
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    //    result*=_absDyn->eval(theData, grandmaAmp);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
   }
@@ -121,24 +120,20 @@ complex<double> HeliDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& l
     if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
 
-    double theMag=it->second;
-    double thePhi=_currentParamPhiLamLams.at(it->first);
-    complex<double> expi(cos(thePhi), sin(thePhi));
+    // double theMag=it->second;
+    // double thePhi=_currentParamPhiLamLams.at(it->first);
+    // complex<double> expi(cos(thePhi), sin(thePhi));
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 
-    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
+    //    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
+    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
-  result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
+  //  result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
 
-  // if(absDec()->useProdBarrier()){
-  //   result *= BarrierFactor::BlattWeisskopf(absDec()->orbMomMin(), theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
-  //     BarrierFactor::BlattWeisskopf(absDec()->orbMomMin(), theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
-  // }
-  // else result*=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
-
-  result*=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
+  if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
+  else result*=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
   
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;

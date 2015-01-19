@@ -156,12 +156,18 @@ void  AbsHeliDecAmps::updateFitParams(fitParams& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMagLamLams[*it]=theMag;
      _currentParamPhiLamLams[*it]=thePhi;
+     complex<double> expi(cos(thePhi), sin(thePhi));
+
+     _currentParamMagExpi[*it]=theMag*expi;
+     _currentParamPreFacMagExpi[*it]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
 
      std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];
      std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
        _currentParamMagLamLams[*itLamLam]=theMag;
        _currentParamPhiLamLams[*itLamLam]=thePhi;
+       _currentParamMagExpi[*itLamLam]=theMag*expi;
+       _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
      }
    }
 

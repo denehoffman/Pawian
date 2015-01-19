@@ -65,12 +65,15 @@ public:
   virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
   virtual bool checkRecalculation(fitParams& theParamVal);
   virtual void updateFitParams(fitParams& theParamVal);
+  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
 
 protected:
   std::vector< std::shared_ptr<const LScomb> > _LSs;
   double _factorMag;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+  std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
+  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
 
   virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
 private:

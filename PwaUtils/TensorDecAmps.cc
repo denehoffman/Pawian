@@ -133,24 +133,26 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
 
 complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
   complex<double> result(0.,0.);
+
+  map<Spin,map<Spin,map<Spin, map<Spin, map<Spin,complex<double> > > > > >& current5SpinsComplexDf=theData->ComplexDouble5SpinString.at(_name);
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-    double theMag=_currentParamMags.at(*it);
-    double thePhi=_currentParamPhis.at(*it);
-    complex<double> expi(cos(thePhi), sin(thePhi));
-
+    map<Spin, map<Spin,complex<double> > >& currentLam1Lam2Df=current5SpinsComplexDf.at((*it)->L).at((*it)->S).at(lamX);
+    complex<double> theMagExpi=_currentParamMagExpi.at(*it);
     complex<double> tmpResult(0.,0.);
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
+      map<Spin,complex<double> >& currentLam2Df=currentLam1Lam2Df.at(lambda1);
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-       complex<double> amp = theMag*expi*theData->ComplexDouble5SpinString.at(_name).at((*it)->L).at((*it)->S).at(lamX).at(lambda1).at(lambda2);
+	complex<double> amp = theMagExpi*currentLam2Df.at(lambda2);
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	tmpResult+=amp;
       }
     }
-    tmpResult*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+    if (_absDyn->isLdependent()) tmpResult*=_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
     result+=tmpResult;
   }
-
+  
+  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
   result*=_isospinCG;
   return result;
 }
@@ -234,6 +236,9 @@ void  TensorDecAmps::updateFitParams(fitParams& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMags[*it]=theMag;
      _currentParamPhis[*it]=thePhi;
+
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     _currentParamMagExpi[*it]=theMag*expi;
    }
 
    _absDyn->updateFitParams(theParamVal);
@@ -242,4 +247,25 @@ void  TensorDecAmps::updateFitParams(fitParams& theParamVal){
   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
 
 }
+
+void TensorDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
+  if(!_recalculate) return; 
+
+  if(!_absDyn->isLdependent()){
+    AbsXdecAmp::calcDynamics(theData, grandmaAmp);
+    return;
+  }
+
+ std::vector< std::shared_ptr<const LScomb> >::iterator it;
+ for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+   theMutex.lock();
+   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+   theMutex.unlock();
+ }  
+
+ if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
+ if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
+ return;
+}
+
 

@@ -73,6 +73,7 @@ protected:
   std::vector<std::string> _PhiParamNames;
   std::vector<double> _currentParamLocalMags;
   std::vector<double> _currentParamLocalPhis;
+  std::vector< complex<double> > _currentParamLocalMagExpi;
 
   complex<double> daughterAmp(Spin& lam2, EvtData* theData, Spin& lamFs);
   std::map<int, int> _ampLMap;
