@@ -83,6 +83,7 @@ protected:
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > _currentParamIsos;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+  std::map< std::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
 
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess> _currentParamJPCIsos1;
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess> _currentParamJPCIsos0;

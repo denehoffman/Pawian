@@ -178,14 +178,11 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        double isoFactor=0;
        if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
        else isoFactor=iso0Val;
-
+ 
        tmpAmp+= isoFactor*currentDecAmp;
      }
 
-     double theMag=_currentParamMags[theJPCLS];
-     double thePhi=_currentParamPhis[theJPCLS];
-     complex<double> expi(cos(thePhi), sin(thePhi));
-     tmpAmp*=theJPCLS->preFactor*theMag*expi;
+     tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
      singletAmp+=tmpAmp;
   }
 
@@ -209,10 +206,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        tmpAmp+=isoFactor*currentDecAmp;
      }
 
-     double theMag=_currentParamMags[theJPCLS];
-     double thePhi=_currentParamPhis[theJPCLS];
-     complex<double> expi(cos(thePhi), sin(thePhi));
-     tmpAmp*=theJPCLS->preFactor*theMag*expi;
+     tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
      triplet0Amp+=tmpAmp;
   }
 
@@ -236,10 +230,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
        tmpAmp+=isoFactor*currentDecAmp;
      }
 
-     double theMag=_currentParamMags[theJPCLS];
-     double thePhi=_currentParamPhis[theJPCLS];
-     complex<double> expi(cos(thePhi), sin(thePhi));
-     tmpAmp*=theJPCLS->preFactor*theMag*expi;
+     tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
      tripletp1Amp+=tmpAmp;
   }
 
@@ -263,10 +254,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 	tmpAmp+=isoFactor*currentDecAmp;
      }
 
-     double theMag=_currentParamMags[theJPCLS];
-     double thePhi=_currentParamPhis[theJPCLS];
-     complex<double> expi(cos(thePhi), sin(thePhi));
-     tmpAmp*=theJPCLS->preFactor*theMag*expi;
+     tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
      tripletm1Amp+=tmpAmp;
   }
 
@@ -362,6 +350,9 @@ void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
      double thePhi=phiMap[*it];
      _currentParamMags[*it]=theMag;
      _currentParamPhis[*it]=thePhi;
+
+     complex<double> expi(cos(thePhi), sin(thePhi));
+     _currentParamMagExpi[*it]=theMag*expi;
    }
 
 }
