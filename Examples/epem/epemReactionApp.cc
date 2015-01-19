@@ -363,14 +363,12 @@ int main(int __argc,char *__argv[]){
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
 
   if (mode=="plotMode"){
-    std::shared_ptr<AbsHist> theHistPtr( new epemHist());
-    theAppBase.plotMode(eventsData, mcData, eventListPtr, theHistPtr);
+    theAppBase.plotMode(eventsData, mcData, eventListPtr);
     return 1;
   }
 
   if (mode=="qaModeSimple"){
-    std::shared_ptr<AbsHist> theHistPtr( new epemHist());
-    theAppBase.qaModeSimple(eventsData, mcData, theStartparams, eventListPtr, theHistPtr, noOfFreeFitParams);
+    theAppBase.qaModeSimple(eventsData, mcData, theStartparams, eventListPtr, noOfFreeFitParams);
     return 1;
   }
 
@@ -390,7 +388,8 @@ int main(int __argc,char *__argv[]){
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
     theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams);
-    epemHist theHist(theLhPtr, theStartparams);
+    epemHist theHist;
+    theHist.fillFromLhData(theLhPtr, theStartparams);
     end= clock();
     double cpuTime= (end-start)/(CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;

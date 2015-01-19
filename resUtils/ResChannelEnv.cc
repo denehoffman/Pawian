@@ -27,6 +27,7 @@
 #include "Particle/ParticleTable.hh"
 #include "resUtils/ResChannelEnv.hh"
 #include "ConfigParser/resParser.hh"
+#include "resUtils/resHist.hh"
 #include "resUtils/resReaction.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -150,4 +151,11 @@ void ResChannelEnv::setup(ChannelID id){
    for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
      (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp);    
    }
+}
+
+
+
+std::shared_ptr<AbsHist> ResChannelEnv::CreateHistInstance(std::string additionalSuffix){
+
+  return std::shared_ptr<AbsHist>(new resHist(additionalSuffix));
 }

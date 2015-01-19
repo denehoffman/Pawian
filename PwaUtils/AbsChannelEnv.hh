@@ -67,7 +67,7 @@ public:
    ChannelID channelID(){return _channelID;}
    short channelType(){return _channelType;}
    virtual const std::string  channelTypeName()=0;
-   virtual void CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix){};
+   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="")=0;
 
    static short CHANNEL_PBARP;
    static short CHANNEL_EPEM;

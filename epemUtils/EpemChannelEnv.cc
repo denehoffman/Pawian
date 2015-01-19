@@ -194,7 +194,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
 
 
-void EpemChannelEnv::CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix){
+std::shared_ptr<AbsHist> EpemChannelEnv::CreateHistInstance(std::string additionalSuffix){
 
-   epemHist(theLh, theFitParams, additionalSuffix);
+  return std::shared_ptr<AbsHist>(new epemHist(additionalSuffix));
 }

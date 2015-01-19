@@ -35,7 +35,6 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/FitParamsBase.hh"
-//#include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsHist.hh"
@@ -193,95 +192,118 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
   theQaStream.close();
 }
 
-void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr, int noOfFreeFitParams){
+void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
+
   std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
-  absLh->updateFitParams(theStartParams);
   LHData theLHData;
+  std::shared_ptr<WaveContribution> theWaveContribution(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams));
+
+  fitParams currentParams = theStartParams;
+
+  for(int i=-1; i<static_cast<int>(theWaveContribution->NoOfContributions());i++){
+
+    std::string contributionName="";
+
+    if(i!=-1){
+      contributionName = theWaveContribution->GetContributionName(i);
+      MnUserParameters uPar = theWaveContribution->GetParametersForContribution(i);
+      GlobalEnv::instance()->fitParamsBase()->getFitParamVal(uPar.Params(), currentParams);
+    }
+ 
+    std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance(contributionName);
+
+    absLh->updateFitParams(currentParams);
   
-  //loop over data events
-  Event* anEvent;
-  int evtCount = 0;
+    //loop over data events
+    Event* anEvent;
+    int evtCount = 0;
   
-  dataEventList.rewind();
-  while ((anEvent = dataEventList.nextEvent())){
-    EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-    absLh->addDataToLogLh(currentDataEvt, theStartParams, theLHData);
-    histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
-    delete currentDataEvt;
-    evtCount++;
-    if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
-  }
+    dataEventList.rewind();
+    while ((anEvent = dataEventList.nextEvent())){
+      EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+      absLh->addDataToLogLh(currentDataEvt, currentParams, theLHData);
+      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+      delete currentDataEvt;
+      evtCount++;
+      if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
+    }
 
-  //loop over mc events
-  int evtCountMc = 0;
+    //loop over mc events
+    int evtCountMc = 0;
 
-  double integralFitWeight=0.;
+    double integralFitWeight=0.;
 
-  mcEventList.rewind();
-  while ((anEvent = mcEventList.nextEvent())){
-    EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-    double currentIntensity=absLh->addMcToLogLh(currentMcEvt, theStartParams, theLHData);
-    histPtr->fillEvt(currentMcEvt, 1., "mc");
-    histPtr->fillEvt(currentMcEvt, currentIntensity, "fit");
+    mcEventList.rewind();
+    while ((anEvent = mcEventList.nextEvent())){
+      EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+      double currentIntensity=absLh->addMcToLogLh(currentMcEvt,currentParams, theLHData);
+      histPtr->fillEvt(currentMcEvt, 1., "mc");
+      histPtr->fillEvt(currentMcEvt, currentIntensity, "fit");
 
-    integralFitWeight+=currentIntensity;
+      integralFitWeight+=currentIntensity;
 
-    delete currentMcEvt;
-    evtCount++;
-    evtCountMc++;
-    if (evtCountMc%1000 == 0) Info << evtCountMc << " MC events calculated" << endmsg ;
-  }
+      delete currentMcEvt;
+      evtCount++;
+      evtCountMc++;
+      if (evtCountMc%1000 == 0) Info << evtCountMc << " MC events calculated" << endmsg ;
+    }
 
-  double scaleFactor=theLHData.weightSum/theLHData.num_mc;
-  histPtr->scaleFitHists(scaleFactor);
-  //  double scaleFactor = integralDataWWeight/integralMC;
+    double scaleFactor=theLHData.weightSum/theLHData.num_mc;
+    histPtr->scaleFitHists(scaleFactor);
 
-  double theLh=absLh->mergeLogLhData(theLHData);
-  double evtWeightSumData=theLHData.weightSum;
-  double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
-  double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-  double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-  double integralDataWoWeight=(double) dataEventList.size();
+    if(i!=-1)
+      continue;
 
-  std::ostringstream qaSummaryFileName;
-  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-  qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
-  std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
-
-  Info        << "logLh\t" << theLh;
-  theQaStream << "logLh\t" << theLh << "\n";
-
-  Info        << "noOfFreeFitParams:\t" << noOfFreeFitParams;
-  theQaStream << "noOfFreeFitParams\t" << noOfFreeFitParams << "\n";
-
-  Info        << "BIC:\t" << BICcriterion;
-  theQaStream << "BIC:\t" << BICcriterion << "\n";
+    double theLh=absLh->mergeLogLhData(theLHData);
+    double evtWeightSumData=theLHData.weightSum;
+    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+    double integralDataWoWeight=(double) dataEventList.size();
+    
+    std::ostringstream qaSummaryFileName;
+    std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+    qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
+    std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+    
+    Info        << "logLh\t" << theLh;
+    theQaStream << "logLh\t" << theLh << "\n";
+    
+    Info        << "noOfFreeFitParams:\t" << noOfFreeFitParams;
+    theQaStream << "noOfFreeFitParams\t" << noOfFreeFitParams << "\n";
+    
+    Info        << "BIC:\t" << BICcriterion;
+    theQaStream << "BIC:\t" << BICcriterion << "\n";
   
-  Info        << "AICa:\t" << AICcriterion;
-  theQaStream << "AICa:\t" << AICcriterion << "\n";
+    Info        << "AICa:\t" << AICcriterion;
+    theQaStream << "AICa:\t" << AICcriterion << "\n";
 
-  Info        << "AICc:\t" << AICccriterion;
-  theQaStream << "AICc:\t" << AICccriterion << "\n";
+    Info        << "AICc:\t" << AICccriterion;
+    theQaStream << "AICc:\t" << AICccriterion << "\n";
 
-  Info        << "No of data events without weight " << integralDataWoWeight;
-  theQaStream << "No of data events without weight " << integralDataWoWeight << "\n";
+    Info        << "No of data events without weight " << integralDataWoWeight;
+    theQaStream << "No of data events without weight " << integralDataWoWeight << "\n";
 
-  Info        << "No of data events with weight " << evtWeightSumData;
-  theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
+    Info        << "No of data events with weight " << evtWeightSumData;
+    theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
 
-  Info        << "No of MC events " << theLHData.num_mc;
-  theQaStream << "No of MC events " << theLHData.num_mc << "\n";
+    Info        << "No of MC events " << theLHData.num_mc;
+    theQaStream << "No of MC events " << theLHData.num_mc << "\n";
 
-  Info        << "scaling factor " << scaleFactor;
-  theQaStream << "scaling factor " << scaleFactor << "\n";
+    Info        << "scaling factor " << scaleFactor;
+    theQaStream << "scaling factor " << scaleFactor << "\n";
 
-  Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
-  theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
+    Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
+    theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
 
-  theQaStream.close();
+    theQaStream.close();
+  } // loop over contributions
+
 }
 
-void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList, std::shared_ptr<AbsHist> histPtr){
+void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList){
+
+  std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance();
 
   //loop over data events
   Event* anEvent;

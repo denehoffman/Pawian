@@ -42,7 +42,6 @@ WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theF
     , _theFitParamsOriginal(&theFitParams)
 {
    _MCDataList=_theLh->getMcVec();
-   _theFitParamsBase.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
 }
 
 
@@ -55,7 +54,6 @@ WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theF
    , _theFitParamsOriginal(&theFitParams)
 {
    _MCDataList=_theLh->getMcVec();
-   _theFitParamsBase.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
 }
 
 
@@ -65,6 +63,8 @@ WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theF
 double WaveContribution::CalcContribution(fitParams& theFitParams){
 
    double result=0;
+
+   _theLh->updateFitParams(theFitParams);
 
    for(auto it=_MCDataList.begin(); it!=_MCDataList.end(); ++it){
       result +=_theLh->calcEvtIntensity( (*it), theFitParams);
@@ -80,96 +80,91 @@ std::pair<double,double> WaveContribution::CalcContribution(){
    double result=CalcContribution(*_theFitParamsOriginal);
    double resultErr=0;
 
-   if(!_calcError)
+   if(!_calcError){
       return std::pair<double,double>(result, resultErr);
-   else
-      return std::pair<double,double>(result, CalcError(result));
+   }
+   else{
+      MnUserParameters theMnUserParameters;
+      _theFitParamsBase.setMnUsrParams(theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);      
+      return std::pair<double,double>(result, CalcError(result, theMnUserParameters));
+   }
 }
 
 
 
 std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::CalcSingleContributions(){
+
    std::vector<std::pair<std::string,std::pair<double,double>>> retValues;
-
    std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
-   std::vector<std::shared_ptr<calcContributionData> >::iterator itContribVec;
-   ROOT::Minuit2::MnUserParameters mnUserParamsOrig = _theMnUserParameters;
-   unsigned int nPar = _theMnUserParameters.Params().size();
 
-   for (itContribVec=calcContributionDataVec.begin(); itContribVec!=calcContributionDataVec.end(); ++itContribVec){ // loop over "calcContribution"-lines in cfg file
-      std::string tmpContribName= (*itContribVec)->_contribName;
-      std::vector<std::string> tmpZeroAmp = (*itContribVec)->_contribZeroAmpVec;
-      std::vector<std::string>::iterator itZeroAmpVec;
-      for(itZeroAmpVec=tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
-        for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
-           std::string parName = _theMnUserParameters.GetName(i);
-	   if(parName.find(*itZeroAmpVec) != std::string::npos){
-	      Info << "setting parameter to 0.0: " << parName << endmsg;
-              _theMnUserParameters.SetValue(i, 0.);
-           }
-        }
-      }
-      fitParams newFitParams = *_theFitParamsOriginal;
-      _theFitParamsBase.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
-      _theLh->updateFitParams(newFitParams);
+   for(unsigned int i=0; i<NoOfContributions(); i++){
 
-      if(GlobalEnv::instance()->parser()->saveContributionHistos()){
-	 GlobalEnv::instance()->Channel()->CreateHistInstance(_theLh, newFitParams, tmpContribName);
-      }
+     std::string tmpContribName = GetContributionName(i);
+     MnUserParameters currentMnUserParameters = GetParametersForContribution(i); 
 
-      double newContribution = CalcContribution(newFitParams);
-      if(!_calcError)
-         retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, 0)));
-      else
-         retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, CalcError(newContribution))));
-      Info << "calculated contribution for " << tmpContribName << " = " << newContribution << " +- " << retValues.back().second.second << endmsg;
-      _theMnUserParameters = mnUserParamsOrig;
+     fitParams newFitParams = *_theFitParamsOriginal;
+     _theFitParamsBase.getFitParamVal(currentMnUserParameters.Params(), newFitParams);
+     double newContribution = CalcContribution(newFitParams); // calls updateFitParams
+
+     if(!_calcError){
+       retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, 0)));
+     }
+     else{
+       double error = CalcError(newContribution, currentMnUserParameters);
+       retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, error)));
+     }
+     if(GlobalEnv::instance()->parser()->saveContributionHistos()){
+       auto hist = GlobalEnv::instance()->Channel()->CreateHistInstance(tmpContribName);
+       hist->fillFromLhData(_theLh, newFitParams);
+     }
+
+     Info << "calculated contribution for " << tmpContribName << " = " << newContribution << " +- " << retValues.back().second.second << endmsg;
    }
 
-   _theLh->updateFitParams(*_theFitParamsOriginal);
    return retValues;
 }
 
-double WaveContribution::CalcError(double result) {
+
+
+double WaveContribution::CalcError(double result, ROOT::Minuit2::MnUserParameters currentMnUserParameters){
    double resultErr=0;
    double stepSize = 0.0001;
    std::map< std::string, double > derivatives;
 
-   unsigned int nPar = _theMnUserParameters.Params().size();
+   unsigned int nPar = currentMnUserParameters.Params().size();
 
    for(unsigned int i=0; i<nPar; i++){
-      double parOrig = _theMnUserParameters.Value(i);
-      std::string parName = _theMnUserParameters.GetName(i);
+      double parOrig = currentMnUserParameters.Value(i);
+      std::string parName = currentMnUserParameters.GetName(i);
 
-      _theMnUserParameters.SetValue(i, parOrig + stepSize);
+      currentMnUserParameters.SetValue(i, parOrig + stepSize);
 
       fitParams newFitParams = *_theFitParamsOriginal;
-      _theFitParamsBase.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
-      _theLh->updateFitParams(newFitParams);
+      _theFitParamsBase.getFitParamVal(currentMnUserParameters.Params(), newFitParams);
 
       double newContribution = CalcContribution(newFitParams);
       double newDerivative = (newContribution - result) / stepSize;
       derivatives[parName] = newDerivative;
 
-      _theMnUserParameters.SetValue(i, parOrig);
+      currentMnUserParameters.SetValue(i, parOrig);
    }
 
    for(unsigned int i=0; i<nPar; i++){
 
-      if(_theLh->CheckDoubleEquality(_theMnUserParameters.Value(i), 0) ||
-	 _theLh->CheckDoubleEquality(_thePwaCovMatrix->GetElement(_theMnUserParameters.GetName(i),
-       								  _theMnUserParameters.GetName(i)), 0))
+      if(_theLh->CheckDoubleEquality(currentMnUserParameters.Value(i), 0) ||
+	 _theLh->CheckDoubleEquality(_thePwaCovMatrix->GetElement(currentMnUserParameters.GetName(i),
+       								  currentMnUserParameters.GetName(i)), 0))
 	 continue;
 
-      Info << "Param used in contribution error calculation: " << _theMnUserParameters.GetName(i) << endmsg;
+      Info << "Param used in contribution error calculation: " << currentMnUserParameters.GetName(i) << endmsg;
 
       for(unsigned int j=0; j<nPar; j++){
 
-	 if(_theLh->CheckDoubleEquality(_theMnUserParameters.Value(j), 0))
+	 if(_theLh->CheckDoubleEquality(currentMnUserParameters.Value(j), 0))
 	    continue;
 
-         std::string name1 = _theMnUserParameters.GetName(i);
-         std::string name2 = _theMnUserParameters.GetName(j);
+         std::string name1 = currentMnUserParameters.GetName(i);
+         std::string name2 = currentMnUserParameters.GetName(j);
 
 	 resultErr += derivatives[name1] *
 	    _thePwaCovMatrix->GetElement(name1, name2) *
@@ -181,3 +176,47 @@ double WaveContribution::CalcError(double result) {
    return resultErr;
 }
 
+
+
+unsigned int WaveContribution::NoOfContributions(){
+  return GlobalEnv::instance()->Channel()->calcContributionDataVec().size();
+}
+
+
+
+std::string WaveContribution::GetContributionName(unsigned int index){
+  
+  if(index >= NoOfContributions()){
+     Alert << "index > NoOfContributions()" << endmsg;
+  }
+
+  return GlobalEnv::instance()->Channel()->calcContributionDataVec().at(index)->_contribName;
+}
+
+
+
+ROOT::Minuit2::MnUserParameters WaveContribution::GetParametersForContribution(unsigned int index){
+
+  if(index >= NoOfContributions()){
+     Alert << "index > NoOfContributions()" << endmsg;
+  }
+
+  MnUserParameters newMnUserParameters;
+  _theFitParamsBase.setMnUsrParams(newMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
+  unsigned int nPar = newMnUserParameters.Params().size();
+
+  std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
+  std::vector<std::string> tmpZeroAmp = calcContributionDataVec.at(index)->_contribZeroAmpVec;
+
+  for(auto itZeroAmpVec = tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
+     for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
+	std::string parName = newMnUserParameters.GetName(i);
+	if(parName.find(*itZeroAmpVec) != std::string::npos){
+	   Info << "setting parameter to 0.0: " << parName << endmsg;
+	   newMnUserParameters.SetValue(i, 0.);
+	}
+     }
+  }
+
+  return newMnUserParameters;
+}

@@ -282,7 +282,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 
 
 
-void PbarpChannelEnv::CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix){
+std::shared_ptr<AbsHist> PbarpChannelEnv::CreateHistInstance(std::string additionalSuffix){
 
-   pbarpHist(theLh, theFitParams, additionalSuffix);
+  return std::shared_ptr<AbsHist>(new pbarpHist(additionalSuffix));
 }

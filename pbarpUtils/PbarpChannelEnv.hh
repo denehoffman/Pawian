@@ -45,7 +45,7 @@ public:
   std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
   std::map<std::string, std::vector<short> > dropPbarpLForParticleData(){ return _dropPbarpLForParticleData; }
   virtual const std::string  channelTypeName() {return "pbarp";}
-  void CreateHistInstance(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix);
+  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
   
 private:
   int _lmax;

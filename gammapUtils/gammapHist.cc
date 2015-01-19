@@ -47,23 +47,20 @@
 #include "TNtuple.h"
 //#include "TMath.h"
 
-gammapHist::gammapHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  AbsHist()
+gammapHist::gammapHist(std::string additionalSuffix) :
+  AbsHist(additionalSuffix)
 {
   initRootStuff();
-  fillIt(theLh, theFitParams);
 }
 
-gammapHist::gammapHist() :
-  AbsHist()
-{
-  initRootStuff();
-}
+
 
 gammapHist::~gammapHist(){
   // _theTFile->Write();
   // _theTFile->Close();
 }
+
+
 
 void gammapHist::initRootStuff(){
 

@@ -45,8 +45,7 @@
 class gammapHist : public AbsHist{
 
 public:
-  gammapHist(std::shared_ptr<AbsLh>, fitParams& theFitParams);
-  gammapHist();
+  gammapHist(std::string additionalSuffix="");
   virtual ~gammapHist();
 
 protected:

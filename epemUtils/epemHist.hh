@@ -46,8 +46,7 @@
 class epemHist : public AbsHist{
 
 public:
-  epemHist(std::shared_ptr<AbsLh>, fitParams& theFitParams, std::string additionalSuffix = "");
-  epemHist();
+  epemHist(std::string additionalSuffix = "");
   virtual ~epemHist();
 
 protected:

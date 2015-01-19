@@ -29,6 +29,7 @@
 #include "gammapUtils/GammapChannelEnv.hh"
 #include "ConfigParser/gammapParser.hh"
 #include "gammapUtils/gammapReaction.hh"
+#include "gammapUtils/gammapHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -50,13 +51,6 @@ GammapChannelEnv::GammapChannelEnv(gammapParser* theParser) : AbsChannelEnv(theP
 void GammapChannelEnv::setup(ChannelID id){
 
    AbsChannelEnv::setup(id);
-
-   //Antiproton momentum
-   //   _gammaMomentum = _theParser->getpbarMomentum();
-
-   // double pMass=GlobalEnv::instance()->particleTable()->particle("proton")->mass();
-   // double antipMass=GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
-   // _initial4Vec = Vector4<double>(pMass+sqrt(antipMass*antipMass+_pbarMomentum*_pbarMomentum), 0., 0., _pbarMomentum);
 
    //Lmax
    _lmax=_theParser->getLMax();
@@ -165,7 +159,6 @@ void GammapChannelEnv::setup(ChannelID id){
    for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
       _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
       _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-      //    std::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
    }
 
 
@@ -230,4 +223,11 @@ void GammapChannelEnv::setup(ChannelID id){
    // spin density particles
    _spinDensity = _theParser->spinDensityNames();
 
+}
+
+
+
+std::shared_ptr<AbsHist> GammapChannelEnv::CreateHistInstance(std::string additionalSuffix){
+
+  return std::shared_ptr<AbsHist>(new gammapHist(additionalSuffix));
 }

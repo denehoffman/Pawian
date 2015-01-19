@@ -65,16 +65,18 @@ class WaveContribution{
     WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams,
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
+    std::string GetContributionName(unsigned int index);
+    ROOT::Minuit2::MnUserParameters GetParametersForContribution(unsigned int index);
+    unsigned int NoOfContributions();
     std::pair<double,double> CalcContribution();
     std::vector<std::pair<std::string,std::pair<double,double>>> CalcSingleContributions();
-    double CalcError(double result);
+    double CalcError(double result, ROOT::Minuit2::MnUserParameters currentMnUserParameters);
 
    private:
     bool _calcError;
     std::shared_ptr<AbsLh> _theLh;
     std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
     FitParamsBase _theFitParamsBase;
-    ROOT::Minuit2::MnUserParameters _theMnUserParameters;
     fitParams* _theFitParamsOriginal;
     std::vector<EvtData*> _MCDataList;
 

@@ -343,8 +343,7 @@ int main(int __argc,char *__argv[]){
 
  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
  if (mode=="plotMode"){
-   std::shared_ptr<AbsHist> theHistPtr( new gammapHist());
-   theAppBase.plotMode(eventsData, mcData, eventListPtr, theHistPtr);
+   theAppBase.plotMode(eventsData, mcData, eventListPtr);
    return 1;
  }
 
@@ -365,7 +364,8 @@ int main(int __argc,char *__argv[]){
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
     theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
-    gammapHist theHist(theLhPtr, theStartparams);
+    gammapHist theHist;
+    theHist.fillFromLhData(theLhPtr, theStartparams);
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;

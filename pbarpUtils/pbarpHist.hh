@@ -46,8 +46,7 @@
 class pbarpHist : public AbsHist{
 
 public:
-  pbarpHist(std::shared_ptr<AbsLh>, fitParams& theFitParams, std::string additionalSuffix = "");
-  pbarpHist();
+  pbarpHist(std::string additionalSuffix = "");
   virtual ~pbarpHist();
 
 protected:

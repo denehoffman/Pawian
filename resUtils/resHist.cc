@@ -45,11 +45,10 @@
 #include "TH2F.h"
 #include "TNtuple.h"
 
-resHist::resHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
-  AbsHist()
+resHist::resHist(std::string additionalSuffix) :
+  AbsHist(additionalSuffix)
 {
   initRootStuff();
-  fillIt(theLh, theFitParams);
 }
 
 resHist::~resHist(){

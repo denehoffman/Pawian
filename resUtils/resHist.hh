@@ -45,7 +45,7 @@
 class resHist : public AbsHist{
 
 public:
-  resHist(std::shared_ptr<AbsLh>, fitParams& theFitParams);
+  resHist(std::string additionalSuffix="");
   virtual ~resHist();
 
 protected:

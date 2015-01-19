@@ -45,6 +45,7 @@ public:
    std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
    std::map<std::string, std::vector<short> > dropGammapLForParticleData(){ return _dropGammapLForParticleData; }
   virtual const std::string  channelTypeName() {return "gammap";}
+  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
 
 private:
    int _lmax;
@@ -52,6 +53,6 @@ private:
    gammapParser* _theParser;
 
   std::shared_ptr<gammapReaction> _gammapReaction;
-   std::vector<std::string> _spinDensity;
-   std::map<std::string, std::vector<short> > _dropGammapLForParticleData;
+  std::vector<std::string> _spinDensity;
+  std::map<std::string, std::vector<short> > _dropGammapLForParticleData;
 };

@@ -262,7 +262,8 @@ int main(int __argc,char *__argv[]){
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
     theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
-    resHist theHist(theLhPtr, theStartparams);
+    resHist theHist;
+    theHist.fillFromLhData(theLhPtr, theStartparams);
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
     Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;

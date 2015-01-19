@@ -45,21 +45,18 @@
 #include "TH2F.h"
 #include "TNtuple.h"
 
-epemHist::epemHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix) :
+epemHist::epemHist(std::string additionalSuffix) :
   AbsHist(additionalSuffix)
 {
   initRootStuff();
-  fillIt(theLh, theFitParams);
 }
 
-epemHist::epemHist() :
-  AbsHist()
-{
-  initRootStuff();
-}
+
 
 epemHist::~epemHist(){
 }
+
+
 
 void epemHist::initRootStuff(){
 

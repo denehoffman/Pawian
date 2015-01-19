@@ -186,7 +186,7 @@ AbsHist::~AbsHist(){
   _theTFile->Close();
 }
 
-void AbsHist::fillIt(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
+void AbsHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
 
   if(0==theLh){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;

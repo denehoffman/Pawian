@@ -47,18 +47,13 @@
 #include "TNtuple.h"
 //#include "TMath.h"
 
-pbarpHist::pbarpHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams, std::string additionalSuffix) :
+pbarpHist::pbarpHist(std::string additionalSuffix) :
   AbsHist(additionalSuffix)
 {
   initRootStuff();
-  fillIt(theLh, theFitParams);
 }
 
-pbarpHist::pbarpHist() :
-  AbsHist()
-{
-  initRootStuff();
-}
+
 
 pbarpHist::~pbarpHist(){
   // _theTFile->Write();
