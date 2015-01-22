@@ -161,8 +161,8 @@ complex<double> LSDecNonRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtD
       complex<double> amp(0.,0.);     
       for (it=_LSs.begin(); it!=_LSs.end(); ++it){
 	if( fabs(lambda)>(*it)->S) continue;
-	if (_absDyn->isLdependent()) amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*_cachedDynLSMap[std::this_thread::get_id()][(*it)->L];
-	else amp+=_currentParamMagExpi.at(*it)*cgPre_LSMap.at(*it);
+	if (_absDyn->isLdependent()) amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
+	else amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it);
       }
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
       amp *= conj(currentWignerDMap.at(IdJLamXLam12));
