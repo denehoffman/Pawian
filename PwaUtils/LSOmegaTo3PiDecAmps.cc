@@ -85,7 +85,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
   
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    result*=_absDyn->eval(theData, grandmaAmp);
+//    result*=_absDyn->eval(theData, grandmaAmp);
     return result;
   }
 
