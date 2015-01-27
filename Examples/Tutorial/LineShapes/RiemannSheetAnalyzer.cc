@@ -26,12 +26,11 @@
 #include "TH2F.h"
 #include "ErrLogger/ErrLogger.hh"
 
-const unsigned int NUM_BINS = 500;
-
 RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels, 
 					   std::shared_ptr<TMatrixBase> tMatrix,
 					   std::complex<double> massMin, 
-					   std::complex<double> massMax)
+					   std::complex<double> massMax,
+					   int numSteps)
 {
    unsigned int signCollection = 0;
 
@@ -47,8 +46,8 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       Info << "Scanning " << histoname.str() << endmsg;
 
       TH2F* scan = new TH2F(histoname.str().c_str(), histoname.str().c_str(), 
-			    NUM_BINS, massMin.real(), massMax.real(), 
-			    NUM_BINS, massMin.imag(), massMax.imag());
+			    numSteps, massMin.real(), massMax.real(), 
+			    numSteps, massMin.imag(), massMax.imag());
 
       tMatrix->SetBumImPartSigns(signs);
       

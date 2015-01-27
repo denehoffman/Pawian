@@ -35,30 +35,66 @@
 
 int main(int __argc,char *__argv[]){
   ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-  if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
+  if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
+                    strcmp( __argv[1], "--help" ) == 0 ) ){
+    Info << "USAGE:" << endmsg;
+    Info << "-p, --path: path to kmatrix config file" << endmsg;
+    Info << "-s, --steps: number of steps in either direction in the complex energy plane" << endmsg;
+    Info << "--maxImagMass: max imaginary part of the mass" << endmsg;
+    Info << "--maxRealMass: max real part of the mass" << endmsg;
+    Info << "--minImagMass: min imaginary part of the mass" << endmsg;
+    Info << "--minRealMass: min reak part of the mass" << endmsg;
     return 0;
   }
 
+  int numStepsForSheetScan = 500;
   std::string pathToConfigParser;
 
-  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
-    bool found=false;
-    std::string sw = __argv[optind];
-    if (sw=="--path" || sw=="-path"){
-      optind++;
-      pathToConfigParser = __argv[optind];
-      found=true;
-    }
-    if (!found){
-      Warning << "Unknown switch: " 
-            << __argv[optind] << endmsg;
-      optind++;
-    }
+  std::vector<double> energyPlaneBorders;
+  energyPlaneBorders.resize(4);
+  energyPlaneBorders[0] = 0;    // Re min
+  energyPlaneBorders[1] = -0.2; // Im min
+  energyPlaneBorders[2] = 0;    // Re max
+  energyPlaneBorders[3] = 0;    // Im max
+
+  for(;optind < (__argc-1); optind++){
+
+     std::string ws = __argv[optind];
+
+     if(ws[0]!='-'){
+       continue;
+     }
+     else if (ws == "--path" || ws == "-p"){
+	pathToConfigParser = __argv[optind+1];
+     }
+     else if(ws == "--steps" || ws == "-s"){
+	std::istringstream stream(__argv[optind+1]);
+	stream >> numStepsForSheetScan;
+     }
+     else if(ws == "--minImagMass"){
+	std::istringstream stream(__argv[optind+1]);
+	stream >> energyPlaneBorders[1];
+     }
+     else if(ws == "--maxImagMass"){
+	std::istringstream stream(__argv[optind+1]);
+	stream >> energyPlaneBorders[3];
+     }
+     else if(ws == "--minRealMass"){
+	std::istringstream stream(__argv[optind+1]);
+	stream >> energyPlaneBorders[0];
+     }
+     else if(ws == "--maxRealMass"){
+	std::istringstream stream(__argv[optind+1]);
+	stream >> energyPlaneBorders[2];
+     }
+     else{
+	Alert << "Unknown switch: " << __argv[optind] << endmsg;
+	return 0;
+     }
   }
 
-  TMatrixGeneral tMatrixGeneral(pathToConfigParser);
+  TMatrixGeneral tMatrixGeneral(pathToConfigParser, numStepsForSheetScan, energyPlaneBorders);
 
   return 0;
 }

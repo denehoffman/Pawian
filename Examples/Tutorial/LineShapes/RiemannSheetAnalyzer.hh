@@ -32,7 +32,7 @@ class RiemannSheetAnalyzer
 
 public:
    RiemannSheetAnalyzer(unsigned int noOfChannels, std::shared_ptr<TMatrixBase> tMatrix, 
-			std::complex<double> massMin, std::complex<double> massMax);
+			std::complex<double> massMin, std::complex<double> massMax, int numSteps);
 
 private:
    void FindPolePositions(TH2F* histo);

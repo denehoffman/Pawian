@@ -20,7 +20,8 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-
+//TMatrixGeneral class definition file. -*- C++ -*-
+// Copyright 2013 Bertram Kopf
 
 #pragma once
 
@@ -30,14 +31,8 @@
 #include <vector>
 #include <map>
 
-#include <cassert>
-
-
-
 #include "TROOT.h"
-// #include <TSystem.h>
-//TMatrixGeneral class definition file. -*- C++ -*-
-// Copyright 2013 Bertram Kopf
+
 
 class TFile;
 class TH1F;
@@ -56,7 +51,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixGeneral(std::string pathToConfigParser);
+  TMatrixGeneral(std::string pathToConfigParser, int numStepsForSheetScan, std::vector<double> energyPlaneBorders);
 
 
   /** Destructor */

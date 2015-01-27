@@ -54,7 +54,7 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
+TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSheetScan, std::vector<double> energyPlaneBorders) :
   _noOfSteps(1000)
   ,_stepSize(0.)
   ,_massMin(100000.)
@@ -154,8 +154,15 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser) :
     }    
   }
 
+  if(energyPlaneBorders[0] == 0)
+    energyPlaneBorders[0] = _massMin;
+  if(energyPlaneBorders[2] == 0)
+    energyPlaneBorders[2] = _massMax;
+
   RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
-		       std::complex<double>(_massMin, -0.2), std::complex<double>(_massMax, 0.0));
+		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
+		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
+		       numStepsForSheetScan);
 }
 
 TMatrixGeneral::~TMatrixGeneral()
