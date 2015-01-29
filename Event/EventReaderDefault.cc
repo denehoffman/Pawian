@@ -88,15 +88,26 @@ bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
 	else currentStream >> px >> py >> pz >> e;
         newEvent->addParticle(e/_unitScaleFactor, px/_unitScaleFactor, py/_unitScaleFactor, pz/_unitScaleFactor);
 	Vector4<double> tmp = newEvent->p4(parts);
-	if(isMassrangeParticle(parts)) fvX= fvX+tmp;
       }
+
+      bool acceptEvt=true;
       if(_useMassRange){
-	if(fvX.Mass()<_massMin || fvX.Mass()>_massMax  ){
-	  delete newEvent;
-	  continue;
+	std::vector< std::shared_ptr<MassRangeCut> >::iterator itMassRangeCut;
+	for (itMassRangeCut=_massRangeCuts.begin(); itMassRangeCut!=_massRangeCuts.end(); ++itMassRangeCut){
+	  Vector4<float> particleSystem4Vec;
+	  std::vector<unsigned int> particleIndices=(*itMassRangeCut)->particleIds();
+	  for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
+	    particleSystem4Vec += *(newEvent->p4(*it));
+	  }
+	  double invMass = particleSystem4Vec.Mass();
+	  if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
+           acceptEvt=false;
+           break;
+	  } 
 	}
       }
-      if(currentEvtNo<evtStart || currentEvtNo>evtStop){
+
+      if( !acceptEvt || currentEvtNo<evtStart || currentEvtNo>evtStop){
 	currentEvtNo++;
 	delete newEvent;
 	continue;

@@ -96,10 +96,9 @@ public:
   const std::vector<std::string>& preFactor() const { return _preFactor;}
   const std::vector<std::string>& histMassNames() const { return _histMass; }
   const std::vector<std::string>& histAngleNames() const { return _histAngles;}
-  const std::string& massRange() const { return _massRange;} 
   const std::vector<std::string>& histAngleNames2D() const { return _histAngles2D;}
   const std::vector<std::string>& calcContribution() const { return _calcContribution;}
-
+  const std::vector<std::string>& massRangeCuts() const {return _massRangeCuts;}
   const int randomSeed() const {return _randomSeed;}
   const bool generateWithModel() const {return _genWithModel;}
   const int noOfGenEvts() const {return _noOfGenEvts;}
@@ -159,7 +158,7 @@ protected:
   std::vector<std::string> _preFactor;
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
-  std::string  _massRange;
+  std::vector<std::string>  _massRangeCuts;
   std::vector<std::string> _histAngles2D;
   std::vector<std::string> _calcContribution;
   int _randomSeed;

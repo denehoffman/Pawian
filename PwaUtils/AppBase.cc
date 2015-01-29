@@ -86,13 +86,13 @@ void AppBase::generate(fitParams& theParams){
 
 void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight, int evtStart, int evtStop){
   int noFinalStateParticles=GlobalEnv::instance()->Channel(channelID)->noFinalStateParticles();
+  std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel()->massRangeCuts();
   EventReaderDefault eventReader(fileNames, noFinalStateParticles, 0, withEvtWeight);
   eventReader.setUnit(GlobalEnv::instance()->parser()->unitInFile());
   eventReader.setOrder(GlobalEnv::instance()->parser()->orderInFile());
 
   if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
-   eventReader.setMassRange(theEventList, GlobalEnv::instance()->Channel(channelID)->massRangeMin(),
-                                          GlobalEnv::instance()->Channel(channelID)->massRangeMax(), GlobalEnv::instance()->Channel(channelID)->particleIndicesMassRange());
+   eventReader.setMassRange(massRangeCuts);
   }
 
   eventReader.fill(theEventList, evtStart, evtStop);

@@ -21,20 +21,28 @@
 //									  //
 //************************************************************************//
 
-#include <algorithm>   
+#pragma once
 
-#include "Event/EventReader.hh"
+#include "ErrLogger/ErrLogger.hh"
+#include <string>
+#include <vector>
 
-EventReader::EventReader():
-_useWeight(false)
-{
-}
-EventReader::EventReader(bool useWeight):
-_useWeight(useWeight)
-,_useMassRange(false)
-{
-}
-EventReader::~EventReader()
-{
-}
+class Particle;
 
+class MassRangeCut
+{
+public:
+  MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles);
+  ~MassRangeCut();
+
+  const double massMin() const {return _massMin;}
+  const double massMax() const {return _massMax;}
+  bool isMassRangeParticle(Particle* compParticle);
+  std::vector<unsigned int> particleIds() {return _iDparticlesMassRange;}
+
+private:
+  double _massMin;
+  double _massMax;
+  std::vector<unsigned int> _iDparticlesMassRange;
+  std::vector<Particle*> _particlesMassRange;
+};

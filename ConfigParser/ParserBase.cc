@@ -131,14 +131,13 @@ ParserBase::ParserBase(int argc,char **argv)
       ("replaceProdKey",po::value< vector<string> >(&_replaceProdKey),  "replace key for specific fit parameter of the production")
       ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
       ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
-      //      ("useProductionBarrier",po::value<bool>(&_useProductionBarrier), "use barrier factors for the production, not supported for helicity formalism")
       ("useProductionBarrier",po::value<string>(&_withProductionBarrier), "use barrier factors for the production, not supported for helicity formalism, first argument yes/false; second argument optional qR value (default 0.197) ")
       ("fitqRProduction",po::value<bool>(&_fitqRProduction), "enable/disable fir parameter for individual qR prduction values")
       ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
       ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
       ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
       ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
-      ("massRange",po::value< string >(&_massRange), "mass Range min max particle1 particle2 ...")
+       ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...") 
       ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
       ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
       ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
@@ -344,8 +343,13 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 	std::cout << (*it) << "\n";
       }
 
-      std::cout << "\nmass range" << std::endl;
-      std::cout << _massRange << "\n";
+      // std::cout << "\nmass range" << std::endl;
+      // std::cout << _massRange << "\n";
+
+      std::cout << "\nmass range cuts:" << std::endl;
+      for (it = _massRangeCuts.begin(); it!=_massRangeCuts.end(); ++it){
+	  std::cout << (*it) << "\n";
+      }
 
 
       std::cout << "\n2Dhistogram decay angles for systems" << std::endl;

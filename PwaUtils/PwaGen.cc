@@ -2,7 +2,7 @@
 //                                                                        //
 //  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 Julian Pychy (julian@ep1.rub.de)                       //
-//                 - Ruhr-Universität Bochum                              //
+//                 - Ruhr-Universit??t Bochum                              //
 //                                                                        //
 //  This file is part of Pawian.                                          //
 //                                                                        //
@@ -43,6 +43,7 @@
 
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
+#include "Event/MassRangeCut.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -115,9 +116,12 @@ PwaGen::~PwaGen()
 
 std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
   bool useMassRange = GlobalEnv::instance()->Channel()->useMassRange();
-  double massMin = GlobalEnv::instance()->Channel()->massRangeMin();
-  double massMax = GlobalEnv::instance()->Channel()->massRangeMax();
-  std::vector<unsigned int> particleIndices = GlobalEnv::instance()->Channel()->particleIndicesMassRange();
+  //  double massMin = GlobalEnv::instance()->Channel()->massRangeMin();
+  //  double massMax = GlobalEnv::instance()->Channel()->massRangeMax();
+  //  std::vector<unsigned int> particleIndices = GlobalEnv::instance()->Channel()->particleIndicesMassRange();
+
+  std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts= GlobalEnv::instance()->Channel()->massRangeCuts();
+  std::vector< std::shared_ptr<MassRangeCut> >::iterator itMassRangeCut;
 
   std::shared_ptr<EventList> eventList(new EventList);
 
@@ -128,28 +132,40 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 	p4[j].applyBoostTo(_initial4Vec);
      }
 
+     bool acceptEvt=true;
      if(useMassRange){
-	EvtVector4R particleSystem(0,0,0,0);
-	for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
+       for (itMassRangeCut=massRangeCuts.begin(); itMassRangeCut!=massRangeCuts.end(); ++itMassRangeCut){
+	 EvtVector4R particleSystem(0,0,0,0);
+	 std::vector<unsigned int> particleIndices=(*itMassRangeCut)->particleIds();
+	 for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
 	   particleSystem = particleSystem + p4[*it];
-	}
+	 }
+	 double invMass = particleSystem.mass();
+//         Info << "invMass: " << invMass << endmsg; 
+	 if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
+	   acceptEvt=false;
+//	   Info << "event not accepted" << endmsg; 
+	   break;
+	 }
+       }
+     } 
 
-	double invMass = particleSystem.mass();
-	if(invMass < massMin || invMass > massMax){
-	   i--;
-	   continue;
-	}
+     if(acceptEvt){
+       Info << "event no " << i << " accepted" << endmsg;
+       AddEventToEventList(eventList, p4, i);
+       
+       inv01MassH1->Fill((p4[0]+p4[1]).mass());
+       if(_finalStateParticles.size()>2){
+	 inv02MassH1->Fill((p4[0]+p4[2]).mass());
+	 inv12MassH1->Fill((p4[1]+p4[2]).mass());
+       }
      }
-
-     AddEventToEventList(eventList, p4, i);
-
-     inv01MassH1->Fill((p4[0]+p4[1]).mass());
-     if(_finalStateParticles.size()>2){
-	inv02MassH1->Fill((p4[0]+p4[2]).mass());
-	inv12MassH1->Fill((p4[1]+p4[2]).mass());
+     else{
+       i--;
      }
   }
-  eventList->rewind();
+     
+    eventList->rewind();
   return eventList;
 }
 

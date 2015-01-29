@@ -37,6 +37,7 @@ class AbsDecayList;
 class IsobarDecayList;
 class ParserBase;
 class AbsLh;
+class MassRangeCut;
 
 typedef short ChannelID;
 
@@ -57,9 +58,7 @@ public:
    std::vector<std::shared_ptr<calcContributionData> >& calcContributionDataVec() {return _calcContributionDataVec;}
    bool useMassRange() {return _useMassRange;}
    bool useEvtWeight(){return _useEvtWeight;}
-   double massRangeMin() {return _massMin;}
-   double massRangeMax() {return _massMax;}
-   std::vector<unsigned int>& particleIndicesMassRange() {return _particleIndicesMassRange;}
+  std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts() {return _massRangeCuts;}
    Vector4<double>&  initial4Vec() {return _initial4Vec;}
    ParserBase* parser(){ return _theParser;}
    void SetLh(std::shared_ptr<AbsLh> theLh){ _theLh = theLh; }
@@ -89,7 +88,6 @@ protected:
    std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
    std::vector<std::shared_ptr<calcContributionData> > _calcContributionDataVec;
-   std::vector<unsigned int> _particleIndicesMassRange;
    bool _useMassRange;
    double _massMin;
    double _massMax;
@@ -97,4 +95,5 @@ protected:
    std::map<std::string, double> _preFactorMap;
    ParserBase* _theParser;
    std::shared_ptr<AbsLh> _theLh;
+  std::vector< std::shared_ptr<MassRangeCut> > _massRangeCuts;
 };

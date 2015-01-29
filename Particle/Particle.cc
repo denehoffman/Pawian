@@ -282,6 +282,10 @@ Particle::Particle()
 {
 }
 
+bool Particle::sameName(Particle& compare){
+  return ( name()==compare.name() );
+}
+
 bool Particle::operator<(Particle& compare){
  bool result=false;
  if( type() < compare.type()) result=true;

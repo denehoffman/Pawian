@@ -38,7 +38,8 @@
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "Particle/Particle.hh"
-#include "Particle/PdtParser.hh"
+#include "Particle/PdtParser.hh" 
+#include "Event/MassRangeCut.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -55,8 +56,8 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_absDecList(new AbsDecayList())
   ,_prodDecList(new AbsDecayList())
   ,_useMassRange(false)
-  ,_massMin(0.)
-  ,_massMax(100.)
+  //  ,_massMin(0.)
+  //  ,_massMax(100.)
   ,_theParser(theParser)
 {
    _theLh.reset();
@@ -261,32 +262,14 @@ void AbsChannelEnv::setup(ChannelID id){
     _histMassSystems.push_back(currentStringVec);
   }
 
-  //mass range
-  int counter=0;
-  std::string massRangeStr=_theParser->massRange();
-  if(massRangeStr.size()>0) _useMassRange=true;
-
-  std::stringstream stringStrMassRange;
-  stringStrMassRange << massRangeStr;
-  std::string tmpNameMassRange;
-
-  while(stringStrMassRange >> tmpNameMassRange){
-    Info <<"\nMassRangeCont:\t" << tmpNameMassRange << endmsg;
-    if (counter==0) _massMin=atof(tmpNameMassRange.c_str());
-    else if(counter==1) _massMax=atof(tmpNameMassRange.c_str());
-    else{
-      //find index
-      for(size_t idex=0; idex<_finalStateParticles.size(); ++idex){
-         Particle* currentParticle=_finalStateParticles[idex];
-         if(currentParticle->name() == tmpNameMassRange){
-            _particleIndicesMassRange.push_back(idex);
-            Info << "\nFound particle\t" << currentParticle->name() << "\t index:\t" << idex << endmsg;
-            break;
-         }
-      }
-    }
-    counter++;
-  }
+  //mass range cuts
+  std::vector<std::string> massRangeCuts=_theParser->massRangeCuts();
+  if(massRangeCuts.size()>0) _useMassRange=true;
+  for ( itStr = massRangeCuts.begin(); itStr != massRangeCuts.end(); ++itStr){
+    std::string currentString=*itStr;
+    std::shared_ptr<MassRangeCut> currentMassRangeCut(new MassRangeCut( currentString, _finalStateParticles));
+    _massRangeCuts.push_back(currentMassRangeCut);
+  }  
 
  // hist angles
   std::vector<std::string> theHistAngleNames=_theParser->histAngleNames();

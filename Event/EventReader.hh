@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+#include "Event/MassRangeCut.hh"
+
 class EventList;
 
 class EventReader
@@ -39,20 +41,14 @@ public:
 
   virtual bool fill(EventList& evtList, int evtStart=0, int evtStop=1000000) = 0;
 
-  virtual void setMassRange(EventList& evtList, double massMin, double massMax, std::vector<unsigned int>& particleIndices){
+  virtual void setMassRange(std::vector< std::shared_ptr<MassRangeCut> >& massRangeCuts){
     _useMassRange=true;
-    _massMin = massMin;
-    _massMax = massMax;
-    _particleIdxesMassRange=particleIndices;
-    //   return fillAll(evtList);
+    _massRangeCuts=massRangeCuts;
   };
+
 
 protected:
   bool _useWeight;
   bool _useMassRange;
-  double _massMin;
-  double _massMax;
-  std::vector<unsigned int> _particleIdxesMassRange;
-
-  bool isMassrangeParticle(int index); 
+  std::vector< std::shared_ptr<MassRangeCut> > _massRangeCuts;
 };
