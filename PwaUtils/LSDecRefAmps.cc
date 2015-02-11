@@ -94,8 +94,9 @@ complex<double> LSDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDau
 
 complex<double> LSDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
-  std::string& refKey=_refKey;
+  std::string refKey=_refKey;
   if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
+  
   
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
@@ -141,7 +142,6 @@ complex<double> LSDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs,
 complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& refKey, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
  
   complex<double> result(0.,0.);
-
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(refKey);
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;

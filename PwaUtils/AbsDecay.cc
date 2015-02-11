@@ -104,9 +104,9 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
+
  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
  _refKey=FunctionUtils::particleListName(_finalStateParticles);
-
 
  _idaughter1=Spin(_daughter1->twoIso(), 2);
  _i3daughter1=Spin(_daughter1->twoIso3(), 2);
@@ -372,6 +372,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     }
   }
   if (whichDecayLevel()!=decayLevel::isProdAmp && whichDecayLevel()!=decayLevel::firstLevel){
+
     for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
       for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
 	double thePhi=0.;
