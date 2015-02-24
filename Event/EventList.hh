@@ -37,6 +37,7 @@ public:
 
   void add(Event*);
   void removeEvents(unsigned int nBegin, unsigned int nEnd);
+  void removeAndDeleteEvents(unsigned int nBegin, unsigned int nEnd);
 
   Event* nextEvent();
   void rewind();

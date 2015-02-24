@@ -116,9 +116,6 @@ PwaGen::~PwaGen()
 
 std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
   bool useMassRange = GlobalEnv::instance()->Channel()->useMassRange();
-  //  double massMin = GlobalEnv::instance()->Channel()->massRangeMin();
-  //  double massMax = GlobalEnv::instance()->Channel()->massRangeMax();
-  //  std::vector<unsigned int> particleIndices = GlobalEnv::instance()->Channel()->particleIndicesMassRange();
 
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts= GlobalEnv::instance()->Channel()->massRangeCuts();
   std::vector< std::shared_ptr<MassRangeCut> >::iterator itMassRangeCut;
@@ -235,7 +232,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
     Info << "Iteration " << noOfIterations << " finished. Accepted events:\t" << noOfAcceptedEvts << endmsg;
 
     currentEvtList->rewind();
-    currentEvtList->removeEvents(0,currentEvtList->size()); 
+    currentEvtList->removeAndDeleteEvents(0,currentEvtList->size()); 
   }
 }
 
