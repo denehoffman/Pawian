@@ -36,9 +36,10 @@
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
-#include "Minuit2/MnUserParameters.h"
+#include "FitParams/AbsPawianParameters.hh"
 
-using namespace ROOT::Minuit2;
+//using namespace ROOT::Minuit2;
+
 typedef std::map<std::string, std::map< std::shared_ptr<const LScomb>, double,
 					pawian::Collection::SharedPtrLess > > mapStrLS;
 typedef std::map<std::string, std::map< std::shared_ptr<const jpcRes>, double,
@@ -71,7 +72,7 @@ public:
 
   virtual ~FitParamsBase();
 
-  virtual void setMnUsrParams(MnUserParameters& upar, fitParams& theValParams, fitParams& theErrParams);
+  virtual void setAbsPawianParams(std::shared_ptr<AbsPawianParameters> upar, fitParams& theValParams, fitParams& theErrParams);
   virtual void getFitParamVal(const std::vector<double>& par, fitParams& theParams);
   virtual void printParams(fitParams& theParams);
   virtual void dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs);
@@ -86,17 +87,17 @@ protected:
   const std::string _otherParamSuffix;
 
 private:
-  virtual void setMnUsrParamsJPC(MnUserParameters& upar,
-				 mapStrJPC& startJPCMap,
-				 mapStrJPC& errJPCMap,
-				 const std::string& suffix);
-  virtual void setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix);
-  virtual void setMnUsrParamsJPCLamLam(MnUserParameters& upar,
+  virtual void setAbsPawianParamsJPC(std::shared_ptr<AbsPawianParameters> upar,
+				     mapStrJPC& startJPCMap,
+				     mapStrJPC& errJPCMap,
+				     const std::string& suffix);
+  virtual void setAbsPawianParamsLS(std::shared_ptr<AbsPawianParameters> upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix);
+  virtual void setAbsPawianParamsJPCLamLam(std::shared_ptr<AbsPawianParameters> upar,
 				       mapStrJPCLamLam& startLamLamMagMap,
 				       mapStrJPCLamLam& errLamLamMagMap,
 				       const std::string& suffix);
-  virtual void setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix);
-  virtual void setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
+  virtual void setAbsPawianParamsJPCLS(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix);
+  virtual void setAbsPawianParamsDouble(std::shared_ptr<AbsPawianParameters> upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix);
   virtual void printJPCParams(fitParams& theParams, mapStrJPC& jpcMap, const std::string& suffix);
   virtual void printLSParams(fitParams& theParams, mapStrLS& LSMagMap, const std::string& suffix);
   virtual void printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& lamLamMagMap, const std::string& suffix);

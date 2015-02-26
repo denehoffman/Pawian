@@ -40,7 +40,7 @@ const double EvoMinimizer::LHSPREADEXIT = 0.01;
 
 // Constructor takes AbsFcn to minimze, start parameters upar, population and iteration
 // sizes and the output file name suffix
-EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int population, int iterations) :
+EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, std::shared_ptr<AbsPawianParameters> upar, int population, int iterations) :
   _population(population)
   , _iterations(iterations)
   , _theAbsFcn(&theAbsFcn)
@@ -56,7 +56,7 @@ EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int populat
 // Minimization takes place here
 std::vector<double> EvoMinimizer::Minimize(){
 
-   double startlh = (*_theAbsFcn)(_bestParamsGlobal.Params());
+   double startlh = (*_theAbsFcn)(_bestParamsGlobal->Params());
    double minlh = startlh;
    int numnoimprovement = 0;
 
@@ -67,17 +67,17 @@ std::vector<double> EvoMinimizer::Minimize(){
       int numbetterlh = 0;
       double maxitlhspread=0;
       double itlh = minlh;
-      _iterationParamBackup = _bestParamsGlobal;
-      _bestParamsIteration = _bestParamsGlobal;
+      _iterationParamBackup = std::shared_ptr<AbsPawianParameters>(_bestParamsGlobal->Clone());
+      _bestParamsIteration = std::shared_ptr<AbsPawianParameters>(_bestParamsGlobal->Clone());
 
       for(int j = 0; j<_population; j++){
 
          // Get iteration start parameters and shuffle them
-         _tmpParams = _bestParamsGlobal;
+	_tmpParams = std::shared_ptr<AbsPawianParameters>(_bestParamsGlobal);
          ShuffleParams();
 
          // Calc likelihood
-         double currentlh = (*_theAbsFcn)(_tmpParams.Params());
+         double currentlh = (*_theAbsFcn)(_tmpParams->Params());
 
          // Get information for break condition
          if(fabs(currentlh - minlh) > maxitlhspread){
@@ -87,7 +87,7 @@ std::vector<double> EvoMinimizer::Minimize(){
          // Test for new best lh in iteration;
          if(currentlh < itlh){
             itlh = currentlh;
-            _bestParamsIteration = _tmpParams;
+            _bestParamsIteration = std::shared_ptr<AbsPawianParameters>(_tmpParams->Clone());
          }
 
          // Count number of lh improvements in the iteration
@@ -103,11 +103,11 @@ std::vector<double> EvoMinimizer::Minimize(){
       // If a new minimum has been found, store information
       // and print parameters
       if(numbetterlh > 0){
-         _bestParamsGlobal = _bestParamsIteration;
+	_bestParamsGlobal = std::shared_ptr<AbsPawianParameters>(_bestParamsIteration->Clone());
          minlh = itlh;
          numnoimprovement=0;
 
-        GlobalEnv::instance()->fitParamsBase()->getFitParamVal(_bestParamsGlobal.Params(), _currentBestParams);
+        GlobalEnv::instance()->fitParamsBase()->getFitParamVal(_bestParamsGlobal->Params(), _currentBestParams);
         std::ofstream theStream(_currentResultFileName.c_str());
         GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
       }
@@ -141,7 +141,7 @@ std::vector<double> EvoMinimizer::Minimize(){
 
    } // Iterations
 
-   return _bestParamsGlobal.Params();
+   return _bestParamsGlobal->Params();
 }
 
 
@@ -156,10 +156,10 @@ void EvoMinimizer::ShuffleParams(){
    static RandomGenerator rng(static_cast<unsigned> (time(0)));
 
 
-   for(unsigned int i=0; i<_tmpParams.Params().size(); i++){
+   for(unsigned int i=0; i<_tmpParams->Params().size(); i++){
 
       // Don't touch fixed parameters
-      if(_tmpParams.Parameter(i).IsFixed()){
+      if(_tmpParams->IsFixed(i)){
          continue;
       }
 
@@ -168,15 +168,15 @@ void EvoMinimizer::ShuffleParams(){
       bool c = coin(rng);
 
       // Initialize gaussian width as parameter error
-      double sigma = _tmpParams.Parameter(i).Error();
+      double sigma = _tmpParams->Error(i);
 
       // If gaussian collides with parameter limit, reduce width
-      if(_tmpParams.Parameter(i).HasLimits()){
-         if(c && (2*sigma > (_tmpParams.Parameter(i).UpperLimit() - _tmpParams.Value(i)))){
-            sigma = (_tmpParams.Parameter(i).UpperLimit() - _tmpParams.Value(i)) / 2.0;
+      if(_tmpParams->HasLimits(i)){
+         if(c && (2*sigma > (_tmpParams->UpperLimit(i) - _tmpParams->Value(i)))){
+            sigma = (_tmpParams->UpperLimit(i) - _tmpParams->Value(i)) / 2.0;
          }
-         else if(!c && (2*sigma > (_tmpParams.Value(i) - _tmpParams.Parameter(i).LowerLimit()))){
-            sigma = (_tmpParams.Value(i) - _tmpParams.Parameter(i).LowerLimit()) / 2.0;
+         else if(!c && (2*sigma > (_tmpParams->Value(i) - _tmpParams->LowerLimit(i)))){
+            sigma = (_tmpParams->Value(i) - _tmpParams->LowerLimit(i)) / 2.0;
          }
       }
 
@@ -185,15 +185,15 @@ void EvoMinimizer::ShuffleParams(){
       GaussianGenerator generator(rng, gaussian_dist);
       double val = fabs(generator());
 
-      if(c) _tmpParams.SetValue(i, _tmpParams.Value(i) + val);
-      else  _tmpParams.SetValue(i, _tmpParams.Value(i) - val);
+      if(c) _tmpParams->SetValue(i, _tmpParams->Value(i) + val);
+      else  _tmpParams->SetValue(i, _tmpParams->Value(i) - val);
 
       // Check for limits
-      if(_tmpParams.Parameter(i).HasLimits()){
-        if(_tmpParams.Value(i) < _tmpParams.Parameter(i).LowerLimit())
-	    _tmpParams.SetValue(i, _tmpParams.Parameter(i).LowerLimit());
-        if(_tmpParams.Value(i) > _tmpParams.Parameter(i).UpperLimit())
-	    _tmpParams.SetValue(i, _tmpParams.Parameter(i).UpperLimit());
+      if(_tmpParams->HasLimits(i)){
+        if(_tmpParams->Value(i) < _tmpParams->LowerLimit(i))
+	    _tmpParams->SetValue(i, _tmpParams->LowerLimit(i));
+        if(_tmpParams->Value(i) > _tmpParams->UpperLimit(i))
+	    _tmpParams->SetValue(i, _tmpParams->UpperLimit(i));
       }
    }
 
@@ -204,17 +204,17 @@ void EvoMinimizer::ShuffleParams(){
 // Increase or decrease parameter errors by a factor
 void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
 
-   for(unsigned int i=0; i<_bestParamsGlobal.Params().size(); i++){
+   for(unsigned int i=0; i<_bestParamsGlobal->Params().size(); i++){
 
       // Don't touch fixed parameters
-      if(_bestParamsGlobal.Parameter(i).IsFixed()){
+      if(_bestParamsGlobal->IsFixed(i)){
          continue;
       }
 
       // When a lh improvement was achieved, don't decrease errors of parameters
       // that changed rapidly, also add a bonus to increasements.
       double afactor=factor;
-      double pardiffsigmas = fabs(_bestParamsGlobal.Value(i) - _iterationParamBackup.Value(i)) / _bestParamsGlobal.Error(i);
+      double pardiffsigmas = fabs(_bestParamsGlobal->Value(i) - _iterationParamBackup->Value(i)) / _bestParamsGlobal->Error(i);
 
       if(numimprovements > 0 && pardiffsigmas > 1.5){
          if(factor < 1)        afactor = 1.0;
@@ -222,7 +222,7 @@ void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
       }
 
       // Set new error
-      _bestParamsGlobal.SetError(i, _bestParamsGlobal.Error(i) * afactor);
+      _bestParamsGlobal->SetError(i, _bestParamsGlobal->Error(i) * afactor);
    }
 
 }

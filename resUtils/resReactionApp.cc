@@ -71,6 +71,9 @@
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnScan.h"
 
+#include "FitParams/AbsPawianParameters.hh"
+#include "FitParams/MnPawianParameters.hh"
+#include "FitParams/ParamFactory.hh"
 
 int main(int __argc,char *__argv[]){
   clock_t start, end;
@@ -141,16 +144,16 @@ int main(int __argc,char *__argv[]){
   bool withEvtWeight=theAppParams->useEvtWeight();
   Info << "EvtWeight: " << withEvtWeight << endmsg;
 
-  MnUserParameters upar;
-  GlobalEnv::instance()->fitParamsBase()->setMnUsrParams(upar, theStartparams, theErrorparams);
+  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
+  GlobalEnv::instance()->fitParamsBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-  for (int i=0; i<int(upar.Params().size()); ++i){
-    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  for (int i=0; i<int(upar->Params().size()); ++i){
+    std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
   }
 
   const std::vector<std::string> fixedParams=theAppParams->fixedParams();
-  const unsigned int noOfFreeFitParams = upar.Params().size()-fixedParams.size();
+  const unsigned int noOfFreeFitParams = upar->Params().size()-fixedParams.size();
 
   if(mode == "client"){
 

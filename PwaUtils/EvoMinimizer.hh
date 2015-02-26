@@ -24,18 +24,22 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "PwaUtils/FitParamsBase.hh"
 #include "PwaUtils/AbsFcn.hh"
+
 #include "Minuit2/MnUserParameters.h"
+
+#include "FitParams/AbsPawianParameters.hh"
 
 #include <boost/random/normal_distribution.hpp>
 
-
+using namespace ROOT::Minuit2;
 
 class EvoMinimizer
 {
 public:
-   EvoMinimizer(AbsFcn& theAbsFcn, MnUserParameters upar, int iterations, int population);
+  EvoMinimizer(AbsFcn& theAbsFcn, std::shared_ptr<AbsPawianParameters> upar, int iterations, int population);
 
    std::vector<double> Minimize();
 
@@ -47,10 +51,10 @@ private:
    fitParams _defaultFitErrParms;
 
    std::string _currentResultFileName;
-   MnUserParameters _bestParamsGlobal;
-   MnUserParameters _bestParamsIteration;
-   MnUserParameters _tmpParams;
-   MnUserParameters _iterationParamBackup;
+   std::shared_ptr<AbsPawianParameters> _bestParamsGlobal;
+   std::shared_ptr<AbsPawianParameters> _bestParamsIteration;
+   std::shared_ptr<AbsPawianParameters> _tmpParams;
+   std::shared_ptr<AbsPawianParameters> _iterationParamBackup;
 
    void ShuffleParams();
    void AdjustSigma(double factor, int numimprovements);

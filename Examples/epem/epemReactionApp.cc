@@ -75,7 +75,8 @@
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnScan.h"
 
-
+#include "FitParams/ParamFactory.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 int main(int __argc,char *__argv[]){
   clock_t start, end;
@@ -151,12 +152,12 @@ int main(int __argc,char *__argv[]){
 
 
   // Set minuit parameters
-  MnUserParameters upar;
-  GlobalEnv::instance()->fitParamsBase()->setMnUsrParams(upar, theStartparams, theErrorparams);
+  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
+  GlobalEnv::instance()->fitParamsBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
-  for (int i=0; i<int(upar.Params().size()); ++i){
-    std::cout << upar.Name(i) << "\t" << upar.Value(i) << "\t" << upar.Error(i) << std::endl;
+  for (int i=0; i<int(upar->Params().size()); ++i){
+    std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
   }
 
   if (theAppParams->doScaling()) theAppBase.fixAllReleaseScaleParams(upar);
@@ -170,7 +171,7 @@ int main(int __argc,char *__argv[]){
     theAppBase.fixParams(upar,fixedParams);
   }
 
-  const unsigned int noOfFreeFitParams = upar.VariableParameters();
+  const unsigned int noOfFreeFitParams = upar->VariableParameters();
 
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);

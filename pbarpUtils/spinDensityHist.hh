@@ -31,13 +31,14 @@
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include <memory> 
-#include "Minuit2/MnUserParameters.h"
+//#include "Minuit2/MnUserParameters.h"
 #include "PwaUtils/FitParamsBase.hh"
 
 class AbsLh;
 class fitParams;
 class EvtData;
 class PwaCovMatrix;
+class AbsPawianParameters;
 
 class TH1F;
 class TFile;
@@ -66,7 +67,9 @@ class spinDensityHist{
    std::shared_ptr<AbsLh> _theLh;
    fitParams* _theFitParamsOriginal;
    std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
-   ROOT::Minuit2::MnUserParameters _theMnUserParameters;
+  //   ROOT::Minuit2::MnUserParameters _theMnUserParameters;
+
+  std::shared_ptr<AbsPawianParameters> _theParameters;
 
    void calcSpinDensityMatrix(std::string& particleName);
    void calcSpinDensityMatrixNorm(std::string& particleName, int J);

@@ -47,6 +47,7 @@ build-project Utils ;
 build-project ErrLogger ;
 build-project qft++Extension ;
 build-project ConfigParser ;
+build-project FitParams ;
 build-project PwaDynamics ;
 build-project PwaUtils ;
 build-project pbarpUtils ;

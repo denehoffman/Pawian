@@ -21,6 +21,7 @@ lib epem :
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
         $(TOP)/ConfigParser//ConfigParser
+	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
         $(TOP)/epemUtils//epemUtils
         $(TOP)/Particle//Particle

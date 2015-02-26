@@ -21,6 +21,7 @@ lib pbarp :
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
         $(TOP)/ConfigParser//ConfigParser
+	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
         $(TOP)/pbarpUtils//pbarpUtils
         $(TOP)/Particle//Particle

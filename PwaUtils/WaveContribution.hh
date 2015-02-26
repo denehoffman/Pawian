@@ -28,7 +28,7 @@
 
 #include <memory>
 #include "PwaUtils/FitParamsBase.hh"
-#include "Minuit2/MnUserParameters.h"
+#include "FitParams/AbsPawianParameters.hh"
 
 struct calcContributionData {
    calcContributionData(std::string contribName, std::vector<std::string>& contribZeroAmpVec) :
@@ -66,11 +66,11 @@ class WaveContribution{
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::string GetContributionName(unsigned int index);
-    ROOT::Minuit2::MnUserParameters GetParametersForContribution(unsigned int index);
+    std::shared_ptr<AbsPawianParameters> GetParametersForContribution(unsigned int index);
     unsigned int NoOfContributions();
     std::pair<double,double> CalcContribution();
     std::vector<std::pair<std::string,std::pair<double,double>>> CalcSingleContributions();
-    double CalcError(double result, ROOT::Minuit2::MnUserParameters currentMnUserParameters);
+    double CalcError(double result, std::shared_ptr<AbsPawianParameters> currentParameters);
 
    private:
     bool _calcError;

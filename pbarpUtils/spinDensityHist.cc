@@ -38,6 +38,8 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
+#include "FitParams/AbsPawianParameters.hh"
+#include "FitParams/ParamFactory.hh"
 
 #include "TH1F.h"
 #include "TFile.h"
@@ -50,6 +52,7 @@ spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFit
    _calcErrors(false)
   , _nBins(101)
   ,_theLh(theLh)
+   ,_theParameters(ParamFactory::instance()->getParametersPointer("Minuit2"))
 {
    _theFitParamsOriginal = &theFitParams;
    _dataList=_theLh->getMcVec();
@@ -75,7 +78,7 @@ void spinDensityHist::SetCovarianceMatrix(std::shared_ptr<PwaCovMatrix> thePwaCo
 
 void spinDensityHist::Calculate(){
 
-   theFitParamsBaseClass.setMnUsrParams(_theMnUserParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
+   theFitParamsBaseClass.setAbsPawianParams(_theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
    
    std::stringstream spinDensityRootFileName;
    spinDensityRootFileName << "./spinDensity" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
@@ -237,12 +240,12 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
    std::map< std::string, complex<double> > derivatives;
 
-   unsigned int nPar = _theMnUserParameters.Params().size();
+   unsigned int nPar = _theParameters->Params().size();
 
    for(unsigned int i=0; i<nPar; i++){
 
-      double parOrig = _theMnUserParameters.Value(i);
-      std::string parName = _theMnUserParameters.GetName(i);
+      double parOrig = _theParameters->Value(i);
+      std::string parName = _theParameters->GetName(i);
       double stepSize = sqrt(_thePwaCovMatrix->GetElement(parName, parName)) * 0.01;
 
       if(AbsParamHandler::CheckDoubleEquality(stepSize, 0)){
@@ -250,10 +253,10 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 	 continue;
       }
 
-      _theMnUserParameters.SetValue(i, parOrig + stepSize);
+      _theParameters->SetValue(i, parOrig + stepSize);
       
       fitParams newFitParams = *_theFitParamsOriginal;
-      theFitParamsBaseClass.getFitParamVal(_theMnUserParameters.Params(), newFitParams);
+      theFitParamsBaseClass.getFitParamVal(_theParameters->Params(), newFitParams);
       _theLh->updateFitParams(newFitParams);
       
       complex<double> tempSpinDensity  = 
@@ -262,7 +265,7 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
       complex<double> newDerivative = (tempSpinDensity - sdmValue) / stepSize;
       derivatives[parName] = newDerivative;
       
-      _theMnUserParameters.SetValue(i, parOrig);
+      _theParameters->SetValue(i, parOrig);
    }
 
    double errorReal=0;
@@ -271,8 +274,8 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
    for(unsigned int i=0; i<nPar; i++)
       for(unsigned int j=0; j<nPar; j++){
 	 
-	 std::string name1 = _theMnUserParameters.GetName(i);
-	 std::string name2 = _theMnUserParameters.GetName(j);
+	 std::string name1 = _theParameters->GetName(i);
+	 std::string name2 = _theParameters->GetName(j);
 	 
 	 errorReal += derivatives[name1].real() * _thePwaCovMatrix->GetElement(name1, name2) * derivatives[name2].real();
 	 errorImag += derivatives[name1].imag() * _thePwaCovMatrix->GetElement(name1, name2) * derivatives[name2].imag();

@@ -45,43 +45,43 @@ FitParamsBase::~FitParamsBase()
 {
 }
 
-void FitParamsBase::setMnUsrParams(MnUserParameters& upar, fitParams& theValParams, fitParams& theErrParams){
+void FitParamsBase::setAbsPawianParams(std::shared_ptr<AbsPawianParameters> upar, fitParams& theValParams, fitParams& theErrParams){
 
   // 0.: set magnitudes of all JPC amplitudes
-   setMnUsrParamsJPC(upar, theValParams.MagsJPC, theErrParams.MagsJPC, _magSuffix);
+   setAbsPawianParamsJPC(upar, theValParams.MagsJPC, theErrParams.MagsJPC, _magSuffix);
 
   // 0a.: set phi of all JPC amplitudes
-   setMnUsrParamsJPC(upar, theValParams.PhisJPC, theErrParams.PhisJPC, _phiSuffix);
+   setAbsPawianParamsJPC(upar, theValParams.PhisJPC, theErrParams.PhisJPC, _phiSuffix);
 
   // 1.: set magnitudes of all JPCLS amplitudes
-  setMnUsrParamsJPCLS(upar, theValParams.Mags, theErrParams.Mags, _magSuffix);
+  setAbsPawianParamsJPCLS(upar, theValParams.Mags, theErrParams.Mags, _magSuffix);
 
    // 2.: set phases of all JPCLS amplitudes
-  setMnUsrParamsJPCLS(upar, theValParams.Phis, theErrParams.Phis, _phiSuffix);
+  setAbsPawianParamsJPCLS(upar, theValParams.Phis, theErrParams.Phis, _phiSuffix);
 
   // 3.: set magnitudes of all lamlam amplitudes
-  setMnUsrParamsJPCLamLam(upar, theValParams.MagLamLams, theErrParams.MagLamLams, _magSuffix);
+  setAbsPawianParamsJPCLamLam(upar, theValParams.MagLamLams, theErrParams.MagLamLams, _magSuffix);
 
   // 4.: set phases of all lam lamlam amplitudes
-  setMnUsrParamsJPCLamLam(upar, theValParams.PhiLamLams, theErrParams.PhiLamLams, _phiSuffix);
+  setAbsPawianParamsJPCLamLam(upar, theValParams.PhiLamLams, theErrParams.PhiLamLams, _phiSuffix);
 
   // 5.: set magnitudes of all ls amplitudes
-  setMnUsrParamsLS(upar, theValParams.MagsLS, theErrParams.MagsLS, _magSuffix);
+  setAbsPawianParamsLS(upar, theValParams.MagsLS, theErrParams.MagsLS, _magSuffix);
 
   // 6.: set phases of all ls amplitudes
-  setMnUsrParamsLS(upar, theValParams.PhisLS, theErrParams.PhisLS, _phiSuffix);
+  setAbsPawianParamsLS(upar, theValParams.PhisLS, theErrParams.PhisLS, _phiSuffix);
 
    // 7.: set all masses
-  setMnUsrParamsDouble(upar, theValParams.Masses, theErrParams.Masses, _massSuffix);
+  setAbsPawianParamsDouble(upar, theValParams.Masses, theErrParams.Masses, _massSuffix);
 
    // 8.: set all widths
-   setMnUsrParamsDouble(upar, theValParams.Widths, theErrParams.Widths, _widthSuffix);
+   setAbsPawianParamsDouble(upar, theValParams.Widths, theErrParams.Widths, _widthSuffix);
 
    // 9.: set all gFactors
-  setMnUsrParamsDouble(upar, theValParams.gFactors, theErrParams.gFactors, _gFactorSuffix);
+  setAbsPawianParamsDouble(upar, theValParams.gFactors, theErrParams.gFactors, _gFactorSuffix);
 
    // 10.: set all other parameters
-  setMnUsrParamsDouble(upar, theValParams.otherParams, theErrParams.otherParams, _otherParamSuffix);
+  setAbsPawianParamsDouble(upar, theValParams.otherParams, theErrParams.otherParams, _otherParamSuffix);
 
 }
 
@@ -152,7 +152,7 @@ void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& th
 }
 
 
-void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
+void FitParamsBase::setAbsPawianParamsJPC(std::shared_ptr<AbsPawianParameters> upar, mapStrJPC& startJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
 
   mapStrJPC::iterator itJPCMap;
   for (itJPCMap=startJPCMap.begin(); itJPCMap!=startJPCMap.end(); ++itJPCMap){
@@ -171,13 +171,13 @@ void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startJP
       std::string jpcStr = theJPC->name() + itJPCMap->first +suffix;
 
       if (suffix==_phiSuffix){
-	 upar.Add(jpcStr, theStartVal, theErrVal);
+	 upar->Add(jpcStr, theStartVal, theErrVal);
       }
       else{
 	double valMin=0.0;
 	double valMax=theStartVal+30.*theErrVal;
 
-	upar.Add(jpcStr, theStartVal, theErrVal, valMin, valMax);
+	upar->Add(jpcStr, theStartVal, theErrVal, valMin, valMax);
       }
      }
 
@@ -185,7 +185,7 @@ void FitParamsBase::setMnUsrParamsJPC(MnUserParameters& upar, mapStrJPC& startJP
 
 }
 
-void FitParamsBase::setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix){
+void FitParamsBase::setAbsPawianParamsLS(std::shared_ptr<AbsPawianParameters> upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix){
 
   mapStrLS::iterator itMagMap;
   for (itMagMap=startMagMap.begin(); itMagMap!=startMagMap.end(); ++itMagMap){
@@ -208,7 +208,7 @@ void FitParamsBase::setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagM
       if (suffix==_phiSuffix){
 	 //valMin=-4.*M_PI;
 	 //valMax=4.*M_PI;
-	 upar.Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
+	 upar->Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
       }
       else{
 	valMin=theStartVal-6.*theErrVal;
@@ -216,7 +216,7 @@ void FitParamsBase::setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagM
 	valMin=0.0;
 	valMax=theStartVal+30.*theErrVal;
 
-	upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
+	upar->Add(magStr, theStartVal, theErrVal, valMin, valMax);
       }
     }
 
@@ -225,7 +225,7 @@ void FitParamsBase::setMnUsrParamsLS(MnUserParameters& upar, mapStrLS& startMagM
 }
 
 
-void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLamLam& startLamLamMagMap, mapStrJPCLamLam& errLamLamMagMap, const std::string& suffix){
+void FitParamsBase::setAbsPawianParamsJPCLamLam(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLamLam& startLamLamMagMap, mapStrJPCLamLam& errLamLamMagMap, const std::string& suffix){
 
   mapStrJPCLamLam::iterator itLamLamMagMap;
   for (itLamLamMagMap=startLamLamMagMap.begin(); itLamLamMagMap!=startLamLamMagMap.end(); ++itLamLamMagMap){
@@ -248,7 +248,7 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
       if (suffix==_phiSuffix){
 	 //valMin=-4.*M_PI;
 	 //valMax=4.*M_PI;
-	 upar.Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
+	 upar->Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
       }
       else{
 	valMin=theStartVal-6.*theErrVal;
@@ -256,7 +256,7 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
 	valMin = 0.0;
 	valMax=theStartVal+30.*theErrVal;
 
-	upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
+	upar->Add(magStr, theStartVal, theErrVal, valMin, valMax);
       }
     }
 
@@ -264,7 +264,7 @@ void FitParamsBase::setMnUsrParamsJPCLamLam(MnUserParameters& upar, mapStrJPCLam
 
 }
 
-void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix){
+void FitParamsBase::setAbsPawianParamsJPCLS(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix){
 
   mapStrJPCLS::iterator itMagMap;
   for (itMagMap=startMagMap.begin(); itMagMap!=startMagMap.end(); ++itMagMap){
@@ -287,7 +287,7 @@ void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& sta
       if (suffix==_phiSuffix){
 	 //valMin=-4.*M_PI;
 	 //valMax=4.*M_PI;
-	 upar.Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
+	 upar->Add(magStr, theStartVal, theErrVal);//, valMin, valMax);
       }
       else{
 	valMin=theStartVal-6.*theErrVal;
@@ -295,7 +295,7 @@ void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& sta
 	valMin=0.0;
 	valMax=theStartVal+30.*theErrVal;
 
-	upar.Add(magStr, theStartVal, theErrVal, valMin, valMax);
+	upar->Add(magStr, theStartVal, theErrVal, valMin, valMax);
       }
     }
 
@@ -303,7 +303,7 @@ void FitParamsBase::setMnUsrParamsJPCLS(MnUserParameters& upar, mapStrJPCLS& sta
 
 }
 
-void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix){
+void FitParamsBase::setAbsPawianParamsDouble(std::shared_ptr<AbsPawianParameters> upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix){
 
   mapStrDouble::iterator it;
   for (it=startDoubleMap.begin(); it!=startDoubleMap.end(); ++it){
@@ -324,39 +324,39 @@ void FitParamsBase::setMnUsrParamsDouble(MnUserParameters& upar, mapStrDouble& s
       maxVal=theStartVal+5.*theErrVal;
       if(minVal<0.) minVal=0.;
 
-      upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+      upar->Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }
     // for complex fit parameter; phi component; quick workaround
     else if(theName.size()>9 && (theName.compare(theName.size()-8, theName.size(), "PhiOther")==0)){
 	minVal=-4.*M_PI;
 	maxVal=4.*M_PI;
-	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
+	upar->Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
     // for parameter where pos and neg values are allowed
     else if(theName.size()>12 && (theName.compare(theName.size()-11, theName.size(), "PosNegOther")==0)){
 	minVal = -fabs(theStartVal)-30.*theErrVal;
 	maxVal = fabs(theStartVal)+30.*theErrVal;;
-	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
+	upar->Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
     else if(theName.size()>9 && (theName.compare(theName.size()-8, theName.size(), "PosOther")==0)){
 	minVal = 0.;
 	maxVal = fabs(theStartVal)+10.*theErrVal;;
-	upar.Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
+	upar->Add(theName, theStartVal, theErrVal);//, minVal, maxVal);
     }
     // for parameter where pos and neg values are allowed
     else if(theName.size()>13 && (theName.compare(theName.size()-12, theName.size(), "Range01Other")==0)){
 	minVal = 0.;
 	maxVal = 1.;
-	upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+	upar->Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }
     // channel scaling params
     else if(theName.size()>20 && (theName.compare(theName.size()-19, theName.size(), "channelScalingOther")==0)){
       minVal = 0.;
       //      maxVal = theStartVal+30.*theErrVal;
-       upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+       upar->Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }
     else{
-       upar.Add(theName, theStartVal, theErrVal, minVal, maxVal);
+       upar->Add(theName, theStartVal, theErrVal, minVal, maxVal);
     }
   }
 

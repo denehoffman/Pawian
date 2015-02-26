@@ -1,7 +1,7 @@
 alias install : install-lib ;
 explicit install ;
 
-install install-lib : pbarpUtils
+install install-lib : FitParams
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
@@ -10,14 +10,9 @@ install install-lib : pbarpUtils
 project : 
 	;
 
-lib pbarpUtils : 
+lib FitParams : 
 	[ glob *.cc : *App.cc ] 
-	$(TOP)/Utils//Utils 
-	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
-	$(TOP)/ConfigParser//ConfigParser
-	$(TOP)/FitParams//FitParams
-	$(TOP)/PwaUtils//PwaUtils 
 	: <use>$(TOP)//Minuit2
 	: 
 	: <library>$(TOP)//Minuit2 ;

@@ -52,6 +52,8 @@
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnUserCovariance.h"
 
+#include "FitParams/AbsPawianParameters.hh"
+
 AppBase::AppBase()
 {
    // Check mode for coupled channel analyses
@@ -206,8 +208,8 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fit
 
     if(i!=-1){
       contributionName = theWaveContribution->GetContributionName(i);
-      MnUserParameters uPar = theWaveContribution->GetParametersForContribution(i);
-      GlobalEnv::instance()->fitParamsBase()->getFitParamVal(uPar.Params(), currentParams);
+      std::shared_ptr<AbsPawianParameters> uPar = theWaveContribution->GetParametersForContribution(i);
+      GlobalEnv::instance()->fitParamsBase()->getFitParamVal(uPar->Params(), currentParams);
     }
  
     std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance(contributionName);
@@ -338,24 +340,26 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
   histPtr->scaleFitHists(histScaleFactor);
 }
 
-void AppBase::fixParams(MnUserParameters& upar, std::vector<std::string> fixedParams){
+void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams){
 
   // Always fix the primary channel's scaling parameters
   std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
   fixedParams.push_back(fixedScaleParam);
   Info << "Fixing scaling parameter " << fixedScaleParam << endmsg;
 
-  const std::vector<MinuitParameter> theParams= upar.Parameters();
-  std::vector<std::string> parNames;
-  std::vector<MinuitParameter>::const_iterator itPar;
-  for (itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
-    parNames.push_back(itPar->GetName());
-  }
+  // const std::vector<MinuitParameter> theParams= upar->Parameters();
+  // std::vector<std::string> parNames;
+  // std::vector<MinuitParameter>::const_iterator itPar;
+  // for (itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
+  //   parNames.push_back(itPar->GetName());
+  // }
+  
+  const std::vector<std::string> parNames=upar->ParamNames();
 
   std::vector<std::string>::const_iterator itFix;
   for (itFix=fixedParams.begin(); itFix!=fixedParams.end(); ++itFix){
     //check if name exisists
-    if(std::find(parNames.begin(), parNames.end(), (*itFix)) != parNames.end()) upar.Fix( (*itFix) );
+    if(std::find(parNames.begin(), parNames.end(), (*itFix)) != parNames.end()) upar->Fix( (*itFix) );
     else{
       Alert << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg;
       exit(0);
@@ -363,23 +367,21 @@ void AppBase::fixParams(MnUserParameters& upar, std::vector<std::string> fixedPa
   }
 }
 
-void AppBase::fixAllReleaseScaleParams(MnUserParameters& upar){
+void AppBase::fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar){
   std::string scaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
-  const std::vector<MinuitParameter> theParams= upar.Parameters();
+ 
+  const std::vector<std::string> parNames=upar->ParamNames();
 
-  std::vector< MinuitParameter >::const_iterator itPar;
-  for(itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
-    //   if (scaleParam != itPar->GetName()) itPar->Fix();
-    if (scaleParam != itPar->GetName()) upar.Fix( itPar->GetName() );
-    else upar.Release( itPar->GetName() );
-    // upar.Fix( itPar->GetName() );
-    // if (scaleParam == itPar->GetName()) upar.Release( itPar->GetName() );
+  std::vector<std::string>::const_iterator itFix;
+  for (itFix=parNames.begin(); itFix!=parNames.end(); ++itFix){
+    if (scaleParam != (*itFix)) upar->Fix( (*itFix) );
+    else upar->Release((*itFix)  );
   }
 
 }
 
-FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
-  MnMigrad migrad(theFcn, upar);
+FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, std::shared_ptr<AbsPawianParameters> upar){
+  MnMigrad migrad(theFcn, upar->mnUserParameters());
   Info <<"start migrad "<< endmsg;
   FunctionMinimum funcMin = migrad(0, GlobalEnv::instance()->parser()->tolerance());
 
@@ -399,7 +401,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
 
      if(badCovarianceDiagonal){
        Warning << "Using default errors" << endmsg;
-       MnUserParameters newParams = upar;
+       MnUserParameters newParams = upar->mnUserParameters();
        for(unsigned int i=0; i< funcMin.UserParameters().Params().size();i++){
 	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
        }
@@ -407,7 +409,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, MnUserParameters& upar){
        funcMin = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
     }
     else{
-       MnUserParameters newParams = upar;
+       MnUserParameters newParams = upar->mnUserParameters();
        for(unsigned int i=0; i< funcMin.UserParameters().Params().size();i++){
 	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
 	  newParams.SetError(i, funcMin.UserParameters().Errors().at(i));
