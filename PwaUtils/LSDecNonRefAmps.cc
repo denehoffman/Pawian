@@ -88,8 +88,8 @@ complex<double> LSDecNonRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fix
   }
 
   result=lsLoop( grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, false);
-  result*=_preFactor*_isospinCG;
-  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
+  //  result*=_preFactor*_isospinCG;
+  //  if (!_absDyn->isLdependent()) result *=_absDyn->eval(theData, grandmaAmp);
 
   return result;
 }

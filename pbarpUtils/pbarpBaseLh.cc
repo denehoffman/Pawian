@@ -105,6 +105,12 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
 					     std::map <std::shared_ptr<const JPCLS>,
 					     std::vector< std::shared_ptr<AbsXdecAmp> >,
 					     pawian::Collection::SharedPtrLess > pbarpAmps){
+
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+  for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+    (*itDecAll)->calcDynamics(theData);
+  }
+
    complex<double> resultAmp(0.,0.);
 
    std::map <std::shared_ptr<const JPCLS>,
