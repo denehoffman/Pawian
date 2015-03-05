@@ -1,0 +1,23 @@
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : PwaUtils
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+project : 
+	;
+
+lib PwaUtils : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/FitParams//FitParams
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/PspGen//PspGen
+	: <use>$(TOP)//Minuit2
+	: 
+	: <library>$(TOP)//Minuit2 ;
