@@ -24,6 +24,8 @@ lib resUtils :
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/MinFunctions//MinFunctions
+	$(TOP)/AppUtils//AppUtils
 	$(TOP)/Particle//Particle
         $(TOP)/Event//Event 
 	: <use>$(TOP)//Minuit2

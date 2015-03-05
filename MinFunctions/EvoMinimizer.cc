@@ -26,8 +26,9 @@
 #include <iostream>
 #include <fstream>
 #include <boost/random.hpp>
+
+#include "MinFunctions/EvoMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/EvoMinimizer.hh"
 #include "PwaUtils/FitParamsBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 

@@ -38,7 +38,7 @@
 #include <memory>
 
 #include "Event/EventList.hh"
-#include "PwaUtils/AbsFcn.hh"
+#include "MinFunctions/AbsFcn.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"

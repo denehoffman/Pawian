@@ -1,7 +1,7 @@
 alias install : install-lib ;
 explicit install ;
 
-install install-lib : PwaUtils
+install install-lib : AppUtils
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
@@ -9,7 +9,7 @@ install install-lib : PwaUtils
 project : 
 	;
 
-lib PwaUtils : 
+lib AppUtils : 
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
@@ -18,6 +18,8 @@ lib PwaUtils :
 	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/PspGen//PspGen
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/MinFunctions//MinFunctions
 	: <use>$(TOP)//Minuit2
 	: 
 	: <library>$(TOP)//Minuit2 ;

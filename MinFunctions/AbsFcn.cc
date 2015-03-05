@@ -25,10 +25,10 @@
 #include <stdio.h>
 #include <boost/timer/timer.hpp>
 
+#include "MinFunctions/AbsFcn.hh"
 #include "Minuit2/MnUserParameters.h"
 
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/AbsFcn.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "ErrLogger/ErrLogger.hh"

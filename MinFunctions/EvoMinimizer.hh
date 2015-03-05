@@ -25,8 +25,9 @@
 
 #include <vector>
 #include <memory>
+
+#include "MinFunctions/AbsFcn.hh"
 #include "PwaUtils/FitParamsBase.hh"
-#include "PwaUtils/AbsFcn.hh"
 
 #include "Minuit2/MnUserParameters.h"
 

@@ -23,6 +23,8 @@ lib gammap :
         $(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
+	$(TOP)/MinFunctions//MinFunctions
+	$(TOP)/AppUtils//AppUtils
         $(TOP)/gammapUtils//gammapUtils
         $(TOP)/Particle//Particle
         $(TOP)/Event//Event

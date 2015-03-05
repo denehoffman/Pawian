@@ -29,22 +29,23 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/AbsFcn.hh"
+#include "MinFunctions/AbsFcn.hh"
 
 class AbsLh;
+class NetworkServer;
 
 namespace ROOT {
   namespace Minuit2 {
-    class PwaFcnBase : public AbsFcn {
+    class PwaFcnServer : public AbsFcn {
 
     public:
-      PwaFcnBase();
-      virtual ~PwaFcnBase();
+      PwaFcnServer(std::shared_ptr<NetworkServer> netServer);
+      virtual ~PwaFcnServer();
 
       virtual double operator()(const std::vector<double>& par) const;
 
-    private:
-      std::shared_ptr<AbsLh> _absLhPtr;
+    protected:
+      std::shared_ptr<NetworkServer> _networkServerPtr;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

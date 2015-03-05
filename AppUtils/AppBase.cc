@@ -31,7 +31,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
-#include "PwaUtils/AppBase.hh"
+#include "AppUtils/AppBase.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/FitParamsBase.hh"

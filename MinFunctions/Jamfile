@@ -1,0 +1,24 @@
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : MinFunctions
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+project : 
+	;
+
+lib MinFunctions : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/FitParams//FitParams
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/PspGen//PspGen
+	$(TOP)/PwaUtils//PwaUtils
+	: <use>$(TOP)//Minuit2
+	: 
+	: <library>$(TOP)//Minuit2 ;

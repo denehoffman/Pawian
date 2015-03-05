@@ -24,54 +24,38 @@
 #include <math.h>
 #include <stdio.h>
 #include <iomanip>
+#include <boost/timer/timer.hpp>
 
-#include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/PwaFcnServer.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "MinFunctions/PwaFcnBase.hh"
+#include "Minuit2/MnUserParameters.h"
+
 #include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/NetworkServer.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
 
-PwaFcnServer::PwaFcnServer(std::shared_ptr<NetworkServer> netServer) :
+
+PwaFcnBase::PwaFcnBase() :
   AbsFcn()
-  , _networkServerPtr(netServer)
 {
    _defaultFitValParms = GlobalEnv::instance()->DefaultParamVal();
    _defaultFitErrParms = GlobalEnv::instance()->DefaultParamErr();
 }
 
-PwaFcnServer::~PwaFcnServer()
+PwaFcnBase::~PwaFcnBase()
 {
 }
 
-double PwaFcnServer::operator()(const std::vector<double>& par) const
+double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   double result=0;
+  fitParams theFitParmValTmp=_defaultFitValParms;
 
-  std::map<ChannelID, LHData> theLHDataMap;
-  _networkServerPtr->BroadcastParams(par);
-  if(!_networkServerPtr->WaitForLH(theLHDataMap))
-    result = 0;
-  else{
-      // Add LLHs of different channels
-      std::ostringstream output;
-      output << "current LH = ";
-      for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
-         (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
-         (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
-         double channelLH = AbsLh::mergeLogLhData((*it).second);
-         result += channelLH;
-	 output << std::setprecision(16) << channelLH << "\t";
-      }
-      if(theLHDataMap.size() > 1){
-         output << "sum = " << result;
-      }
+  GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
 
-      Info << output.str() << endmsg;
-  }
+  result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theFitParmValTmp);
+  Info << "current LH = " << std::setprecision(16) << result << endmsg;
 
   _fcnCounter++;
 
