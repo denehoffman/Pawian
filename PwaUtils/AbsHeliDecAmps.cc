@@ -81,7 +81,7 @@ AbsHeliDecAmps::~AbsHeliDecAmps()
 {
 }
 
-void  AbsHeliDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  AbsHeliDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -112,7 +112,7 @@ void AbsHeliDecAmps::print(std::ostream& os) const{
 }
 
 
-bool AbsHeliDecAmps::checkRecalculation(fitParams& theParamVal){
+bool AbsHeliDecAmps::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
@@ -146,7 +146,7 @@ bool AbsHeliDecAmps::checkRecalculation(fitParams& theParamVal){
 }
 
 
-void  AbsHeliDecAmps::updateFitParams(fitParams& theParamVal){
+void  AbsHeliDecAmps::updateFitParams(fitParCol& theParamVal){
    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
 

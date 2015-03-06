@@ -113,7 +113,7 @@ complex<double> result(0.,0.);
   return result;
 }
 
-void  KMatrixDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  KMatrixDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   //beta factor for production  
   std::map<std::string, std::map<std::string, double> >::iterator it1;
@@ -165,7 +165,7 @@ void  KMatrixDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
   }
 }
 
-bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
+bool KMatrixDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached;
@@ -241,7 +241,7 @@ bool KMatrixDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void KMatrixDynamics::updateFitParams(fitParams& theParamVal){
+void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
 
   //beta factor for production  
   std::map<std::string, std::map<std::string, double> >::iterator it1;

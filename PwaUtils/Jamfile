@@ -18,6 +18,6 @@ lib PwaUtils :
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/PspGen//PspGen
-	: <use>$(TOP)//Minuit2
+	:
 	: 
-	: <library>$(TOP)//Minuit2 ;
+	: ;

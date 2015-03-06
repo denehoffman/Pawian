@@ -30,7 +30,7 @@
 #include <memory>
 
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 
 class AbsParamHandler {
 
@@ -38,10 +38,10 @@ public:
   AbsParamHandler();
   virtual ~AbsParamHandler();
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr)=0;
-  virtual bool checkRecalculation(fitParams& theParamVal)=0;
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr)=0;
+  virtual bool checkRecalculation(fitParCol& theParamVal)=0;
   virtual void cacheAmplitudes()=0;
-  virtual void updateFitParams(fitParams& theParamVal)=0;
+  virtual void updateFitParams(fitParCol& theParamVal)=0;
   static bool CheckDoubleEquality(double a, double b);
 
 protected:

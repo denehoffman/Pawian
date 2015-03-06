@@ -148,7 +148,7 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
   return result;
 }
 
-void  TensorPsiToGamXDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  TensorPsiToGamXDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   for (int i=0; i<_noOfAmps; ++i){
     fitVal.otherParams[_MagParamNames.at(i)]=1.;
@@ -167,7 +167,7 @@ void TensorPsiToGamXDecAmps::print(std::ostream& os) const{
 }
 
 
-bool TensorPsiToGamXDecAmps::checkRecalculation(fitParams& theParamVal){
+bool TensorPsiToGamXDecAmps::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
@@ -199,7 +199,7 @@ bool TensorPsiToGamXDecAmps::checkRecalculation(fitParams& theParamVal){
 }
 
 
-void  TensorPsiToGamXDecAmps::updateFitParams(fitParams& theParamVal){
+void  TensorPsiToGamXDecAmps::updateFitParams(fitParCol& theParamVal){
 
   for (int i=0; i<_noOfAmps; ++i){
     double theMag=theParamVal.otherParams.at(_MagParamNames.at(i));

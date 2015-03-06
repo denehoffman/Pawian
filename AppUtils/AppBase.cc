@@ -34,12 +34,12 @@
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
-#include "PwaUtils/PwaCovMatrix.hh"
+#include "FitParams/PwaCovMatrix.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
@@ -70,19 +70,19 @@ AppBase::~AppBase()
 
 void AppBase::dumpDefaultParams(){
 
-    fitParams paramVal = GlobalEnv::instance()->DefaultParamVal();
-    fitParams paramErr = GlobalEnv::instance()->DefaultParamErr();
+    fitParCol paramVal = GlobalEnv::instance()->DefaultParamVal();
+    fitParCol paramErr = GlobalEnv::instance()->DefaultParamErr();
 
     std::stringstream defaultparamsname;
     defaultparamsname << "defaultparams" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
 
-    GlobalEnv::instance()->fitParamsBase()->dumpParams(theStreamDefault, paramVal, paramErr);
+    GlobalEnv::instance()->fitParColBase()->dumpParams(theStreamDefault, paramVal, paramErr);
 }
 
-void AppBase::generate(fitParams& theParams){
+void AppBase::generate(fitParCol& theParams){
     std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen());
-    GlobalEnv::instance()->fitParamsBase()->printParams(theParams);
+    GlobalEnv::instance()->fitParColBase()->printParams(theParams);
     pwaGenPtr->generate(GlobalEnv::instance()->Channel()->Lh(), theParams);
 }
 
@@ -116,7 +116,7 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   theEventList.rewind();
 }
 
-void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
+void AppBase::qaMode(fitParCol& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
   
   double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theStartParams);
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
@@ -194,13 +194,13 @@ void AppBase::qaMode(fitParams& theStartParams, double evtWeightSumData, int noO
   theQaStream.close();
 }
 
-void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
+void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParCol& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
 
   std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
   LHData theLHData;
   std::shared_ptr<WaveContribution> theWaveContribution(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams));
 
-  fitParams currentParams = theStartParams;
+  fitParCol currentParams = theStartParams;
 
   for(int i=-1; i<static_cast<int>(theWaveContribution->NoOfContributions());i++){
 
@@ -209,7 +209,7 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fit
     if(i!=-1){
       contributionName = theWaveContribution->GetContributionName(i);
       std::shared_ptr<AbsPawianParameters> uPar = theWaveContribution->GetParametersForContribution(i);
-      GlobalEnv::instance()->fitParamsBase()->getFitParamVal(uPar->Params(), currentParams);
+      GlobalEnv::instance()->fitParColBase()->getFitParamVal(uPar->Params(), currentParams);
     }
  
     std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance(contributionName);
@@ -426,7 +426,7 @@ FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, std::shared_ptr<AbsPawian
   return funcMin;
 }
 
-void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, double evtWeightSumData, int noOfFreeFitParams){
+void AppBase::printFitResult(FunctionMinimum& min, fitParCol& theStartparams, std::ostream& os, double evtWeightSumData, int noOfFreeFitParams){
 
     double theLh = min.Fval();
 
@@ -453,18 +453,18 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
 
     MnUserParameters finalUsrParameters=min.UserParameters();
     const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    fitParams finalFitParams=theStartparams;
-    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(finalParamVec, finalFitParams);
+    fitParCol finalFitParams=theStartparams;
+    GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
 
     const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    fitParams finalFitErrs=theStartparams;
-    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(finalParamErrorVec, finalFitErrs);
+    fitParCol finalFitErrs=theStartparams;
+    GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitErrs);
 
     std::ostringstream finalResultname;
     finalResultname << "finalResult" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
 
     std::ofstream theStream ( finalResultname.str().c_str() );
-    GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+    GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
 
     MnUserCovariance theCovMatrix = min.UserCovariance();
     std::ostringstream serializationFileName;
@@ -492,14 +492,14 @@ void AppBase::printFitResult(FunctionMinimum& min, fitParams& theStartparams, st
     Info << "AICc:\t" << AICccriterion << endmsg;
 }
 
-bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams, ChannelID channelID){
+bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID){
 
   while(true){
     if(!theClient.WaitForParams()) return false;
 
     const std::vector<double> currentParamVec=theClient.GetParams();
-    fitParams currentFitParams=theStartparams;
-    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(currentParamVec, currentFitParams);
+    fitParCol currentFitParams=theStartparams;
+    GlobalEnv::instance()->fitParColBase()->getFitParamVal(currentParamVec, currentFitParams);
 
     LHData theLHData;
     GlobalEnv::instance()->Channel(channelID)->Lh()->calcLogLhDataClient(currentFitParams, theLHData);

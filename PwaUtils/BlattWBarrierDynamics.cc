@@ -61,13 +61,13 @@ complex<double> BlattWBarrierDynamics::eval(EvtData* theData, AbsXdecAmp* grandm
   return result;
 }
 
-void  BlattWBarrierDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  BlattWBarrierDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   if(!_fitqRVals) return;
   fitVal.otherParams[_fitqRKey]=_qR;
   fitErr.otherParams[_fitqRKey]=0.3;
 }
 
-bool BlattWBarrierDynamics::checkRecalculation(fitParams& theParamVal){
+bool BlattWBarrierDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
  
   if(_fitqRVals){
@@ -77,7 +77,7 @@ bool BlattWBarrierDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void BlattWBarrierDynamics::updateFitParams(fitParams& theParamVal){
+void BlattWBarrierDynamics::updateFitParams(fitParCol& theParamVal){
   if(!_fitqRVals) return;
   _qR=theParamVal.otherParams.at(_fitqRKey);
 }

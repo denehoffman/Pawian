@@ -36,7 +36,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
@@ -63,7 +63,7 @@ void pbarpTensorLh::print(std::ostream& os) const{
 
 }
 
-double pbarpTensorLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
+double pbarpTensorLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
 
   double result=0.;
 

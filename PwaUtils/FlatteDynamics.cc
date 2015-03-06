@@ -86,7 +86,7 @@ complex<double> FlatteDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, S
   return result;
 }
 
-void  FlatteDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  FlatteDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     fitVal.Masses[_massKey]=_mother->mass();
     fitErr.Masses[_massKey]=0.03;
     fitVal.gFactors[_g11Key]=1.;
@@ -95,7 +95,7 @@ void  FlatteDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     fitErr.gFactors[_g22Key]=1.;
 }
 
-bool FlatteDynamics::checkRecalculation(fitParams& theParamVal){
+bool FlatteDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   double mass=theParamVal.Masses[_massKey];
@@ -115,7 +115,7 @@ bool FlatteDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void FlatteDynamics::updateFitParams(fitParams& theParamVal){
+void FlatteDynamics::updateFitParams(fitParCol& theParamVal){
   _currentMass=theParamVal.Masses[_massKey];
   _currentg11=theParamVal.gFactors[_g11Key];
   _currentg22=theParamVal.gFactors[_g22Key];

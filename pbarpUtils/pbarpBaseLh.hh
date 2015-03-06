@@ -56,7 +56,7 @@ public:
 
   virtual AbsLh* clone_() const =0;
 
-  virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
+  virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
@@ -65,8 +65,8 @@ public:
 virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData, int J);
 virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J);
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void updateFitParams(fitParCol& theParamVal);
 
   virtual void print(std::ostream& os) const;
 

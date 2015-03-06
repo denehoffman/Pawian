@@ -23,10 +23,10 @@
 
 #include <fstream>
 
-#include "PwaUtils/AbsFitParamStreamer.hh"
+#include "FitParams/AbsFitParColStreamer.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsFitParamStreamer::AbsFitParamStreamer(std::string& filePath)
+AbsFitParColStreamer::AbsFitParColStreamer(std::string& filePath)
 {
 
   std::ifstream ifs(filePath.c_str());
@@ -61,16 +61,16 @@ AbsFitParamStreamer::AbsFitParamStreamer(std::string& filePath)
 
 }
 
-AbsFitParamStreamer::~AbsFitParamStreamer(){;}
+AbsFitParColStreamer::~AbsFitParColStreamer(){;}
 
 
-void AbsFitParamStreamer::StringParameterMap(const std::string &theName, const double firstVal, const double secondVal)
+void AbsFitParColStreamer::StringParameterMap(const std::string &theName, const double firstVal, const double secondVal)
 {
   std::pair <double,double> thePair=make_pair(firstVal, secondVal);
   _stringPairMap[theName]=thePair;
 }
 
-void AbsFitParamStreamer::fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, std::string& suffix, std::map< std::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& toFill){
+void AbsFitParColStreamer::fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, std::string& suffix, std::map< std::shared_ptr<const JPCLS>, pair<double, double>, pawian::Collection::SharedPtrLess >& toFill){
 
   std::vector< std::shared_ptr<const JPCLS> >::const_iterator itJPCLS;
   StringPairMap::const_iterator stringPairIter;
@@ -95,7 +95,7 @@ void AbsFitParamStreamer::fillParamMapAmps(std::vector< std::shared_ptr<const JP
   }
 }
 
-void AbsFitParamStreamer::fillParamMapMass(std::string& name, pair<double, double>& toFill){
+void AbsFitParColStreamer::fillParamMapMass(std::string& name, pair<double, double>& toFill){
 
   StringPairMap::const_iterator stringPairIter;
   stringPairIter=_stringPairMap.find(name);
@@ -113,7 +113,7 @@ void AbsFitParamStreamer::fillParamMapMass(std::string& name, pair<double, doubl
 
 }
 
-void AbsFitParamStreamer::fillParamFlatte(std::string& name, double& toFill){
+void AbsFitParColStreamer::fillParamFlatte(std::string& name, double& toFill){
   StringPairMap::const_iterator stringPairIter;
   stringPairIter=_stringPairMap.find(name);
   if ( stringPairIter != _stringPairMap.end() ){

@@ -61,9 +61,9 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual bool checkRecalculation(fitParams& theParamVal);
-  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual bool checkRecalculation(fitParCol& theParamVal);
+  virtual void updateFitParams(fitParCol& theParamVal);
 
 protected:
   std::map< int, double> _currentParamMags;

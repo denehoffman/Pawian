@@ -37,7 +37,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -79,7 +79,7 @@ complex<double> gammapBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::strin
 }
 
 
-double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
+double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
 
   double result=0.;
   std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
@@ -164,7 +164,7 @@ double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
 }
 
-void gammapBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void gammapBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   AbsLh::getDefaultParams(fitVal, fitErr);
 
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
@@ -244,7 +244,7 @@ void gammapBaseLh::fillIsos(){
 
 }
 
-void gammapBaseLh::updateFitParams(fitParams& theParamVal){
+void gammapBaseLh::updateFitParams(fitParCol& theParamVal){
   AbsLh::updateFitParams(theParamVal);
 
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;

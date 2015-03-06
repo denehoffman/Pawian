@@ -55,12 +55,12 @@ public:
 
   // Getters:
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void print(std::ostream& os) const;
-  virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual bool checkRecalculation(fitParCol& theParamVal);
   // std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< std::shared_ptr<const JPClamlam> >& jpclamlamVec() {return _JPClamlams;}
-  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void updateFitParams(fitParCol& theParamVal);
 
 protected:
   std::vector< std::shared_ptr<const JPClamlam> > _JPClamlams;

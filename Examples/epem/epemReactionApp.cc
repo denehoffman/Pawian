@@ -39,9 +39,9 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/FitParamsBase.hh"
-#include "PwaUtils/StreamFitParmsBase.hh"
-#include "PwaUtils/PwaCovMatrix.hh"
+#include "FitParams/FitParColBase.hh"
+#include "FitParams/StreamFitParColBase.hh"
+#include "FitParams/PwaCovMatrix.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/NetworkClient.hh"
@@ -143,8 +143,8 @@ int main(int __argc,char *__argv[]){
   std::string paramStreamerPath=theAppParams->fitParamFile();
   std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath);
-  fitParams theStartparams=theParamStreamer.getFitParamVal();
-  fitParams theErrorparams=theParamStreamer.getFitParamErr();
+  fitParCol theStartparams=theParamStreamer.getFitParamVal();
+  fitParCol theErrorparams=theParamStreamer.getFitParamErr();
 
   if (mode=="gen"){
     theAppBase.generate(theStartparams);
@@ -154,7 +154,7 @@ int main(int __argc,char *__argv[]){
 
   // Set minuit parameters
   std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
-  GlobalEnv::instance()->fitParamsBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
+  GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Minuit Fit parameter **************************" << std::endl;
   for (int i=0; i<int(upar->Params().size()); ++i){
@@ -320,16 +320,16 @@ int main(int __argc,char *__argv[]){
    theServer->BroadcastClosingMessage();
    Info << "Closing server." << endmsg;
 
-   fitParams finalFitParams=theStartparams;
-   GlobalEnv::instance()->fitParamsBase()->getFitParamVal(finalParamVec, finalFitParams);
+   fitParCol finalFitParams=theStartparams;
+   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
 
-   fitParams finalFitErrs=theErrorparams;
+   fitParCol finalFitErrs=theErrorparams;
 
    std::ostringstream finalResultname;
    finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
 
    std::ofstream theStream ( finalResultname.str().c_str() );
-   GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+   GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
 
    return 1;
  }
@@ -382,10 +382,10 @@ int main(int __argc,char *__argv[]){
 
   PwaFcnBase theFcn;
   Info << "\nThe parameter values are: " << "\n" << endmsg;
-  GlobalEnv::instance()->fitParamsBase()->printParams(theStartparams);
+  GlobalEnv::instance()->fitParColBase()->printParams(theStartparams);
 
   Info << "\nThe parameter errors are: " << "\n" << endmsg;
-  GlobalEnv::instance()->fitParamsBase()->printParams(theErrorparams);
+  GlobalEnv::instance()->fitParColBase()->printParams(theErrorparams);
 
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
@@ -421,16 +421,16 @@ int main(int __argc,char *__argv[]){
      Info <<"start evolutionary minimizer "<< endmsg;
      std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
 
-     fitParams finalFitParams=theStartparams;
-     GlobalEnv::instance()->fitParamsBase()->getFitParamVal(finalParamVec, finalFitParams);
+     fitParCol finalFitParams=theStartparams;
+     GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
 
-     fitParams finalFitErrs=theErrorparams;
+     fitParCol finalFitErrs=theErrorparams;
 
      std::ostringstream finalResultname;
      finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
 
      std::ofstream theStream ( finalResultname.str().c_str() );
-     GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+     GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
 
      return 1;
   }

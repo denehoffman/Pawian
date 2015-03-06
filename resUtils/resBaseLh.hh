@@ -60,7 +60,7 @@ public:
     return theClone;
   }
 
-  virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
+  virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,

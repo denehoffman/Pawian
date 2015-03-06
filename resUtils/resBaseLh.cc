@@ -36,7 +36,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -80,7 +80,7 @@ complex<double> resBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string n
 }
 
 
-double resBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
+double resBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
 
   double result=0.;
 

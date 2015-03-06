@@ -32,7 +32,7 @@
 #include <memory>
 
 #include "PspGen/EvtVector4R.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 
 #include "TROOT.h"
 
@@ -53,7 +53,7 @@ class PwaGen{
 public:
   PwaGen();
   virtual ~PwaGen();
-  virtual void generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+  virtual void generate(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
 
 protected:
 

@@ -114,7 +114,7 @@ void TensorOmegaTo3PiDecAmps::print(std::ostream& os) const{
 }
 
 
-void TensorOmegaTo3PiDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void TensorOmegaTo3PiDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -142,7 +142,7 @@ void TensorOmegaTo3PiDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fit
 }
 
 
-bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
+bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
@@ -178,7 +178,7 @@ bool TensorOmegaTo3PiDecAmps::checkRecalculation(fitParams& theParamVal){
 }
 
 
-void TensorOmegaTo3PiDecAmps::updateFitParams(fitParams& theParamVal){
+void TensorOmegaTo3PiDecAmps::updateFitParams(fitParCol& theParamVal){
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 

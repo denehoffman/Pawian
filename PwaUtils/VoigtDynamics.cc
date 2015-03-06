@@ -64,7 +64,7 @@ complex<double> VoigtDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   return result;
 }
 
-void  VoigtDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  VoigtDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     fitVal.Masses[_massKey]=_mother->mass();
     fitErr.Masses[_massKey]=0.03;
     fitVal.Widths[_massKey]=_mother->width();
@@ -73,7 +73,7 @@ void  VoigtDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
     fitErr.Widths[_massSigmaKey]=0.4*0.01;
 }
 
-bool VoigtDynamics::checkRecalculation(fitParams& theParamVal){
+bool VoigtDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   double mass=theParamVal.Masses[_massKey];
@@ -91,7 +91,7 @@ bool VoigtDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void VoigtDynamics::updateFitParams(fitParams& theParamVal){
+void VoigtDynamics::updateFitParams(fitParCol& theParamVal){
   _currentMass0=theParamVal.Masses[_massKey];
   _currentWidth=theParamVal.Widths[_massKey];
   _currentSigma=theParamVal.Widths[_massSigmaKey];

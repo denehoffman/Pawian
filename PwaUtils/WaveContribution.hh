@@ -27,7 +27,7 @@
 #pragma once
 
 #include <memory>
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
 struct calcContributionData {
@@ -53,7 +53,7 @@ struct calcContributionData {
 };
 
 class AbsLh;
-class fitParams;
+class fitParCol;
 class EvtData;
 class PwaCovMatrix;
 
@@ -61,8 +61,8 @@ class PwaCovMatrix;
 class WaveContribution{
   
   public:
-    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
-    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams,
+    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
+    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams,
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::string GetContributionName(unsigned int index);
@@ -76,9 +76,9 @@ class WaveContribution{
     bool _calcError;
     std::shared_ptr<AbsLh> _theLh;
     std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
-    FitParamsBase _theFitParamsBase;
-    fitParams* _theFitParamsOriginal;
+    FitParColBase _theFitParColBase;
+    fitParCol* _theFitParamsOriginal;
     std::vector<EvtData*> _MCDataList;
 
-    double CalcContribution(fitParams& theFitParams);
+    double CalcContribution(fitParCol& theFitParams);
 };

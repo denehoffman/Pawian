@@ -70,7 +70,7 @@ complex<double> K0star1430LassDynamics::eval(EvtData* theData, AbsXdecAmp* grand
   return result;
 }
 
-void  K0star1430LassDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  K0star1430LassDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     fitVal.Masses[_massKey]=_mother->mass();
     fitErr.Masses[_massKey]=0.03;
     fitVal.Widths[_massKey]=_mother->width();
@@ -89,7 +89,7 @@ void  K0star1430LassDynamics::getDefaultParams(fitParams& fitVal, fitParams& fit
     fitErr.otherParams[_phiRKey]=0.05;
 }
 
-bool K0star1430LassDynamics::checkRecalculation(fitParams& theParamVal){
+bool K0star1430LassDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   double mass=theParamVal.Masses[_massKey];
@@ -143,7 +143,7 @@ bool K0star1430LassDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void K0star1430LassDynamics::updateFitParams(fitParams& theParamVal){
+void K0star1430LassDynamics::updateFitParams(fitParCol& theParamVal){
   _currentMass=theParamVal.Masses.at(_massKey);
   _currentWidth=theParamVal.Widths.at(_massKey);
   _currentaLASS=theParamVal.otherParams.at(_aLASSKey);

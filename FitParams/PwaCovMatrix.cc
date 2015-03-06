@@ -24,7 +24,7 @@
 // PwaCovMatrix class definition file. -*- C++ -*-
 // Copyright 2013 Julian Pychy
 
-#include "PwaUtils/PwaCovMatrix.hh"
+#include "FitParams/PwaCovMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Minuit2/MnUserCovariance.h"
 #include "Minuit2/MinuitParameter.h"
@@ -41,7 +41,7 @@ PwaCovMatrix::PwaCovMatrix(){
 
 PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
 			   ROOT::Minuit2::MnUserParameters &theMinuitParameters,
-			   fitParams &theFitParams)
+			   fitParCol &theFitParams)
 {
    DiagonalIsValid(theMinuitCovMatrix);
 

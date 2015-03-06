@@ -38,7 +38,7 @@
 
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "Utils/FunctionUtils.hh"

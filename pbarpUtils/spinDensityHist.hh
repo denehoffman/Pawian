@@ -32,10 +32,10 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include <memory> 
 //#include "Minuit2/MnUserParameters.h"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 
 class AbsLh;
-class fitParams;
+class fitParCol;
 class EvtData;
 class PwaCovMatrix;
 class AbsPawianParameters;
@@ -51,7 +51,7 @@ typedef std::map<int, std::map<int, TH1F*> > spinDensityHistMatrix;
 class spinDensityHist{
 
   public:
-   spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams);
+   spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
    ~spinDensityHist();
    void SetCovarianceMatrix(std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
    void Calculate();
@@ -62,10 +62,10 @@ class spinDensityHist{
    bool _calcErrors;
    short _nBins;
    TFile* _spinDensityRootFile;
-   FitParamsBase theFitParamsBaseClass;
+   FitParColBase theFitParColBaseClass;
    std::vector<EvtData*> _dataList;
    std::shared_ptr<AbsLh> _theLh;
-   fitParams* _theFitParamsOriginal;
+   fitParCol* _theFitParamsOriginal;
    std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
   //   ROOT::Minuit2::MnUserParameters _theMnUserParameters;
 

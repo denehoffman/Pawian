@@ -29,18 +29,18 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/AbsFitParamStreamer.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/AbsFitParColStreamer.hh"
+#include "FitParams/FitParColBase.hh"
 
 
-class StreamFitParmsBase : public AbsFitParamStreamer {
+class StreamFitParmsBase : public AbsFitParColStreamer {
 
 public:
   StreamFitParmsBase(std::string&);
   virtual ~StreamFitParmsBase();
 
-  fitParams getFitParamVal() { return _paramVal;}
-  fitParams getFitParamErr() { return _paramErr;}
+  fitParCol getFitParamVal() { return _paramVal;}
+  fitParCol getFitParamErr() { return _paramErr;}
 
   virtual void fillParamMap() {return;}
 
@@ -58,8 +58,8 @@ protected:
   virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
 			   const std::string& suffix);
 private:
-  fitParams _paramVal;
-  fitParams _paramErr;
+  fitParCol _paramVal;
+  fitParCol _paramErr;
 
   void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap,
 		     std::string& suffix, int index);

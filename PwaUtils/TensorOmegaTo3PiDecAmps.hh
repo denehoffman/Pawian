@@ -62,9 +62,9 @@ public:
   virtual void print(std::ostream& os) const;
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual bool checkRecalculation(fitParams& theParamVal);
-  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual bool checkRecalculation(fitParCol& theParamVal);
+  virtual void updateFitParams(fitParCol& theParamVal);
 protected:
   std::vector< std::shared_ptr<const LScomb> > _LSs;
   double _factorMag;

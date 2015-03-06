@@ -38,7 +38,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"

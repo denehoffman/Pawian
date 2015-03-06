@@ -61,7 +61,7 @@ public:
     return theClone;
   }
 
-  virtual double calcEvtIntensity( EvtData* theData, fitParams& theParamVal);
+  virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
   virtual void print(std::ostream& os) const;
 
 

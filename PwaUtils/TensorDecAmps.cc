@@ -158,7 +158,7 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
 }
 
 
-void  TensorDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  TensorDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -190,7 +190,7 @@ void TensorDecAmps::print(std::ostream& os) const{
 }
 
 
-bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
+bool TensorDecAmps::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
@@ -226,7 +226,7 @@ bool TensorDecAmps::checkRecalculation(fitParams& theParamVal){
 }
 
 
-void  TensorDecAmps::updateFitParams(fitParams& theParamVal){
+void  TensorDecAmps::updateFitParams(fitParCol& theParamVal){
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 

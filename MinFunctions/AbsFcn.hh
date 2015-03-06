@@ -31,7 +31,7 @@
 
 #include "Minuit2/FCNBase.h"
 #include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "Minuit2/MnUserParameters.h"
 
 namespace ROOT {
@@ -44,13 +44,13 @@ namespace ROOT {
 
       virtual double operator()(const std::vector<double>& par) const=0;
       virtual double Up() const;
-      fitParams defaultFitValParms() {return _defaultFitValParms;}
-      fitParams defaultFitErrParms() {return _defaultFitErrParms;}
+      fitParCol defaultFitValParms() {return _defaultFitValParms;}
+      fitParCol defaultFitErrParms() {return _defaultFitErrParms;}
 
     protected:
       mutable unsigned int _fcnCounter;
-      fitParams _defaultFitValParms;
-      fitParams _defaultFitErrParms;
+      fitParCol _defaultFitValParms;
+      fitParCol _defaultFitErrParms;
       std::string _currentResFileName;
 
       virtual void printTimer() const;

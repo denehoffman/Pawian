@@ -39,7 +39,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/AbsHist.hh"
 
 class gammapHist : public AbsHist{

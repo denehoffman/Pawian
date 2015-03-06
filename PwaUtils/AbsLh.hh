@@ -35,7 +35,7 @@
 
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -50,12 +50,12 @@ public:
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
 
-  virtual double calcLogLh(fitParams& theParamVal);
+  virtual double calcLogLh(fitParCol& theParamVal);
   static  double mergeLogLhData(LHData& theLHData);
-  virtual double addDataToLogLh(EvtData* dataEvt, fitParams& theParamVal, LHData& theLHData);
-  virtual double addMcToLogLh(EvtData* mcEvt, fitParams& theParamVal, LHData& theLHData);
-  virtual void calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData);
-  virtual double calcEvtIntensity(EvtData* theData, fitParams& theParamVal)=0;
+  virtual double addDataToLogLh(EvtData* dataEvt, fitParCol& theParamVal, LHData& theLHData);
+  virtual double addMcToLogLh(EvtData* mcEvt, fitParCol& theParamVal, LHData& theLHData);
+  virtual void calcLogLhDataClient(fitParCol& theParamVal, LHData& theLHData);
+  virtual double calcEvtIntensity(EvtData* theData, fitParCol& theParamVal)=0;
 
   virtual void setDataVec(std::vector<EvtData*> theVec);
   virtual void setMcVec(std::vector<EvtData*> theVec);
@@ -63,10 +63,10 @@ public:
   virtual std::vector<EvtData*> getDataVec() {return _evtDataVec;}
   virtual std::vector<EvtData*> getMcVec() {return _evtMCVec;}
 
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual bool checkRecalculation(fitParams& theParamVal);
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual bool checkRecalculation(fitParCol& theParamVal);
   virtual void cacheAmplitudes();
-  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void updateFitParams(fitParCol& theParamVal);
 
   virtual void print(std::ostream& os) const=0;
 
@@ -91,7 +91,7 @@ protected:
 			bool& theHyp, std::string& theKey);
 
   virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			      LHData& theLHData, fitParams& theParamVal);
+			      LHData& theLHData, fitParCol& theParamVal);
   virtual void ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			     LHData& theLHData, fitParams& theParamVal);
+			     LHData& theLHData, fitParCol& theParamVal);
 };

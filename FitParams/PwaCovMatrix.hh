@@ -21,32 +21,44 @@
 //									  //
 //************************************************************************//
 
+// PwaCovMatrix class definition file. -*- C++ -*-
+// Copyright 2013 Julian Pychy
+
 #pragma once
 
-#include <iostream>
-#include <vector>
 #include <map>
-#include <string>
-#include <memory>
-#include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/DataUtils.hh"
 
-typedef map<std::string, pair<double, double> > StringPairMap;
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/map.hpp>
 
-class AbsFitParamStreamer {
-public:
-  AbsFitParamStreamer(std::string& filePath);
-  virtual ~AbsFitParamStreamer();
+#include "Minuit2/MnUserCovariance.h"
+#include "Minuit2/MnUserParameters.h"
 
-protected:
-  StringPairMap _stringPairMap;
-  virtual void fillParamMap() = 0;
-  virtual void StringParameterMap(const std::string &theName, const double firstVal,
-				  const double secondVal);
-  virtual void fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, 
-				std::string& suffix, std::map< std::shared_ptr<const JPCLS>,
-				pair<double, double>, 
-				pawian::Collection::SharedPtrLess >& toFill);
-  virtual void fillParamMapMass(std::string& name, pair<double, double>& toFill);
-  virtual void fillParamFlatte(std::string& name, double& toFill);
+
+struct fitParCol;
+
+
+class PwaCovMatrix
+{
+  private:
+   friend class boost::serialization::access;
+   unsigned short _n;
+   std::map<std::string, std::map<std::string, double> > _covMatrix;
+
+  public:
+   PwaCovMatrix();
+   PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
+		ROOT::Minuit2::MnUserParameters &theMinuitParameters,
+		fitParCol &theFitParams);
+   double GetElement(std::string parameter1, std::string parameter2);
+   static bool DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix);
+
+
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int version){
+     ar & _n;
+     ar & _covMatrix;
+   }
+
 };

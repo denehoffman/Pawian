@@ -89,20 +89,20 @@ void AbsLh::initialize(){
 
 
 void  AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			    LHData& theLHData, fitParams& theParamVal){
+			    LHData& theLHData, fitParCol& theParamVal){
   for (unsigned int i=minEvent; i<=maxEvent; ++i){
     addDataToLogLh(_evtDataVec.at(i), theParamVal, theLHData);
   }
 }
 
 void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			  LHData& theLHData, fitParams& theParamVal){
+			  LHData& theLHData, fitParCol& theParamVal){
   for (unsigned int i=minEvent; i<=maxEvent; ++i){
      addMcToLogLh(_evtMCVec.at(i), theParamVal, theLHData);
   }
 }
 
-double AbsLh::calcLogLh(fitParams& theParamVal){
+double AbsLh::calcLogLh(fitParCol& theParamVal){
 
   _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
@@ -157,21 +157,21 @@ double AbsLh::calcLogLh(fitParams& theParamVal){
 }
 
 
-double AbsLh::addDataToLogLh(EvtData* dataEvt, fitParams& theParamVal, LHData& theLHData){
+double AbsLh::addDataToLogLh(EvtData* dataEvt, fitParCol& theParamVal, LHData& theLHData){
   double intensity=calcEvtIntensity(dataEvt, theParamVal);
   theLHData.logLH_data+=(dataEvt->evtWeight)*log(intensity);
   theLHData.weightSum+= dataEvt->evtWeight;
   return intensity;
 }
 
-double AbsLh::addMcToLogLh(EvtData* mcEvt, fitParams& theParamVal, LHData& theLHData){
+double AbsLh::addMcToLogLh(EvtData* mcEvt, fitParCol& theParamVal, LHData& theLHData){
   double intensity=calcEvtIntensity(mcEvt, theParamVal);
   theLHData.LH_mc+=intensity;
   theLHData.num_mc++;
   return intensity;
 }
 
-void AbsLh::calcLogLhDataClient(fitParams& theParamVal, LHData& theLHData){
+void AbsLh::calcLogLhDataClient(fitParCol& theParamVal, LHData& theLHData){
 
   _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
@@ -260,7 +260,7 @@ void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theH
   }
 }
 
-void AbsLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void AbsLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   if(_usePhasespace){
     fitVal.otherParams[_phasespaceKey]=0.01;
@@ -284,14 +284,14 @@ void AbsLh::cacheAmplitudes(){
   }
 }
 
-void AbsLh::updateFitParams(fitParams& theParamVal){
+void AbsLh::updateFitParams(fitParCol& theParamVal){
 std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     (*it)->updateFitParams(theParamVal);
   }
 }
 
-bool AbsLh::checkRecalculation(fitParams& theParamVal){
+bool AbsLh::checkRecalculation(fitParCol& theParamVal){
   bool result=true;
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){

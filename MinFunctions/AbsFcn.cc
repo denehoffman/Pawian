@@ -65,18 +65,18 @@ void AbsFcn::printTimer() const{
 
 void AbsFcn::printFitParams(const std::vector<double>& par) const{
   if (  _fcnCounter%1000 == 0) {
-    fitParams theFitParmValTmp=_defaultFitValParms;
-    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
-    GlobalEnv::instance()->fitParamsBase()->printParams(theFitParmValTmp);
+    fitParCol theFitParmValTmp=_defaultFitValParms;
+    GlobalEnv::instance()->fitParColBase()->getFitParamVal(par, theFitParmValTmp);
+    GlobalEnv::instance()->fitParColBase()->printParams(theFitParmValTmp);
   }
 }
 
 void AbsFcn::dumpFitParams(const std::vector<double>& par) const{
   if (  _fcnCounter%200 == 0) {
-    fitParams theFitParmValTmp=_defaultFitValParms;
-    GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
+    fitParCol theFitParmValTmp=_defaultFitValParms;
+    GlobalEnv::instance()->fitParColBase()->getFitParamVal(par, theFitParmValTmp);
     std::ofstream theStream (_currentResFileName.c_str());
-    GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, theFitParmValTmp, (fitParams&)_defaultFitErrParms);
+    GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, theFitParmValTmp, (fitParCol&)_defaultFitErrParms);
   }
 }
 

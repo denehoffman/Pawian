@@ -27,7 +27,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 

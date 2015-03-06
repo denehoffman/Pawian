@@ -74,7 +74,7 @@ AbsLSDecAmps::~AbsLSDecAmps()
 {
 }
 
-void  AbsLSDecAmps::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  AbsLSDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
@@ -106,7 +106,7 @@ void AbsLSDecAmps::print(std::ostream& os) const{
 }
 
 
-bool AbsLSDecAmps::checkRecalculation(fitParams& theParamVal){
+bool AbsLSDecAmps::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
@@ -142,7 +142,7 @@ bool AbsLSDecAmps::checkRecalculation(fitParams& theParamVal){
 }
 
 
-void  AbsLSDecAmps::updateFitParams(fitParams& theParamVal){
+void  AbsLSDecAmps::updateFitParams(fitParCol& theParamVal){
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 

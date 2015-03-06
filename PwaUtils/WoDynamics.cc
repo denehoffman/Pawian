@@ -48,13 +48,13 @@ complex<double> WoDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin 
   return result;
 }
 
-void  WoDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  WoDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 }
 
-bool WoDynamics::checkRecalculation(fitParams& theParamVal){
+bool WoDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
   return _recalculate;
 }
 
-void WoDynamics::updateFitParams(fitParams& theParamVal){
+void WoDynamics::updateFitParams(fitParCol& theParamVal){
 }

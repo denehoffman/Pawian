@@ -112,7 +112,7 @@ complex<double> result(0.,0.);
   return result;
 }
 
-void  PiPiSWaveASDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  PiPiSWaveASDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
     
@@ -135,7 +135,7 @@ void  PiPiSWaveASDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr
   }
 }
 
-bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
+bool PiPiSWaveASDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
   std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached;
   for(itAlreadyCached=_alreadyCached.begin(); itAlreadyCached!=_alreadyCached.end(); ++itAlreadyCached){
@@ -181,7 +181,7 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void PiPiSWaveASDynamics::updateFitParams(fitParams& theParamVal){
+void PiPiSWaveASDynamics::updateFitParams(fitParCol& theParamVal){
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){

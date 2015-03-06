@@ -29,7 +29,7 @@
 
 #include "MinFunctions/EvoMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
@@ -108,9 +108,9 @@ std::vector<double> EvoMinimizer::Minimize(){
          minlh = itlh;
          numnoimprovement=0;
 
-        GlobalEnv::instance()->fitParamsBase()->getFitParamVal(_bestParamsGlobal->Params(), _currentBestParams);
+        GlobalEnv::instance()->fitParColBase()->getFitParamVal(_bestParamsGlobal->Params(), _currentBestParams);
         std::ofstream theStream(_currentResultFileName.c_str());
-        GlobalEnv::instance()->fitParamsBase()->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
+        GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
       }
       else{
          numnoimprovement++;

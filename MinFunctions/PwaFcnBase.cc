@@ -50,9 +50,9 @@ PwaFcnBase::~PwaFcnBase()
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   double result=0;
-  fitParams theFitParmValTmp=_defaultFitValParms;
+  fitParCol theFitParmValTmp=_defaultFitValParms;
 
-  GlobalEnv::instance()->fitParamsBase()->getFitParamVal(par, theFitParmValTmp);
+  GlobalEnv::instance()->fitParColBase()->getFitParamVal(par, theFitParmValTmp);
 
   result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theFitParmValTmp);
   Info << "current LH = " << std::setprecision(16) << result << endmsg;

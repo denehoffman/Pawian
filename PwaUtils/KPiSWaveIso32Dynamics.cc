@@ -76,7 +76,7 @@ complex<double> result(0.,0.);
   return result;
 }
 
-void  KPiSWaveIso32Dynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  KPiSWaveIso32Dynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
     
@@ -108,7 +108,7 @@ void  KPiSWaveIso32Dynamics::getDefaultParams(fitParams& fitVal, fitParams& fitE
   }
 }
 
-bool KPiSWaveIso32Dynamics::checkRecalculation(fitParams& theParamVal){
+bool KPiSWaveIso32Dynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
@@ -154,7 +154,7 @@ bool KPiSWaveIso32Dynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void KPiSWaveIso32Dynamics::updateFitParams(fitParams& theParamVal){
+void KPiSWaveIso32Dynamics::updateFitParams(fitParCol& theParamVal){
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){

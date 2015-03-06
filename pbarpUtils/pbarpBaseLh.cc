@@ -35,7 +35,7 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -151,7 +151,7 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
 }
 
 
-double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
+double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
 
   double result=0.;
 
@@ -277,7 +277,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
 
 
 
-void pbarpBaseLh::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void pbarpBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   AbsLh::getDefaultParams(fitVal, fitErr);
 
@@ -336,7 +336,7 @@ void  pbarpBaseLh::initialize(){
   _igjpcStates=_pbarpReactionPtr->igjpcStates();
 }
 
-void pbarpBaseLh::updateFitParams(fitParams& theParamVal){
+void pbarpBaseLh::updateFitParams(fitParCol& theParamVal){
 
   AbsLh::updateFitParams(theParamVal);
 

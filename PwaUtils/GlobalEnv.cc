@@ -105,8 +105,8 @@ void GlobalEnv::AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short envType){
 
 
 void GlobalEnv::CreateDefaultParameterSet(){
-   fitParams defaultVal;
-   fitParams defaultErr;
+   fitParCol defaultVal;
+   fitParCol defaultErr;
    for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
       (*it).first->Lh()->getDefaultParams(defaultVal, defaultErr);
    }
@@ -124,7 +124,7 @@ void GlobalEnv::setup(ParserBase* theParser){
 
    _alreadySetUp = true;
 
-   _theFitParamsBase = std::shared_ptr<FitParamsBase>(new FitParamsBase());
+   _theFitParColBase = std::shared_ptr<FitParColBase>(new FitParColBase());
    _theParser = theParser;
    _outputFileNameSuffix = theParser->outputFileNameSuffix();
    _serializationFileName = theParser->serializationFile();

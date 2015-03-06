@@ -45,7 +45,7 @@
 #include "Minuit2/FunctionMinimum.h"
 
 class AbsLh;
-class fitParams;
+class fitParCol;
 class AbsHist;
 class NetworkClient;
 class EvtDataBaseList;
@@ -63,16 +63,16 @@ public:
   virtual ~AppBase();
 
   virtual void dumpDefaultParams();
-  virtual void generate(fitParams& theParams);
+  virtual void generate(fitParCol& theParams);
   virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
-  virtual void qaMode(fitParams& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
-  virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParams& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams);
+  virtual void qaMode(fitParCol& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
+  virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParCol& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams);
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList);
   virtual void fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams);
   virtual void fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar);
   virtual FunctionMinimum migradDefault(AbsFcn& theFcn, std::shared_ptr<AbsPawianParameters> upar);
-  virtual void printFitResult(FunctionMinimum& min, fitParams& theStartparams, std::ostream& os, double evtWeightSumData=0, int noOfFreeFitParams=0);
-  virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParams& theStartparams, ChannelID channelID);
+  virtual void printFitResult(FunctionMinimum& min, fitParCol& theStartparams, std::ostream& os, double evtWeightSumData=0, int noOfFreeFitParams=0);
+  virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID);
 
 };
 

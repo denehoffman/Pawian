@@ -46,9 +46,9 @@ public:
   virtual std::string type() {return "FlatteDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
-  virtual void getDefaultParams(fitParams& fitVal, fitParams& fitErr);
-  virtual bool checkRecalculation(fitParams& theParamVal);
-  virtual void updateFitParams(fitParams& theParamVal);
+  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual bool checkRecalculation(fitParCol& theParamVal);
+  virtual void updateFitParams(fitParCol& theParamVal);
   virtual void setMassKey(std::string& theMassKey);
 
 protected:

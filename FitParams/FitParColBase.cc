@@ -26,11 +26,11 @@
 #include <string>
 #include <iomanip>
 
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 //#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-FitParamsBase::FitParamsBase() :
+FitParColBase::FitParColBase() :
   _magSuffix("Mag")
   ,_phiSuffix("Phi")
   ,_massSuffix("Mass")
@@ -41,11 +41,11 @@ FitParamsBase::FitParamsBase() :
 }
 
 
-FitParamsBase::~FitParamsBase()
+FitParColBase::~FitParColBase()
 {
 }
 
-void FitParamsBase::setAbsPawianParams(std::shared_ptr<AbsPawianParameters> upar, fitParams& theValParams, fitParams& theErrParams){
+void FitParColBase::setAbsPawianParams(std::shared_ptr<AbsPawianParameters> upar, fitParCol& theValParams, fitParCol& theErrParams){
 
   // 0.: set magnitudes of all JPC amplitudes
    setAbsPawianParamsJPC(upar, theValParams.MagsJPC, theErrParams.MagsJPC, _magSuffix);
@@ -87,7 +87,7 @@ void FitParamsBase::setAbsPawianParams(std::shared_ptr<AbsPawianParameters> upar
 
 
 
-void FitParamsBase::printParams(fitParams& theParams){
+void FitParColBase::printParams(fitParCol& theParams){
 
   printJPCParams(theParams, theParams.MagsJPC, _magSuffix);
   printJPCParams(theParams, theParams.PhisJPC, _phiSuffix);
@@ -107,7 +107,7 @@ void FitParamsBase::printParams(fitParams& theParams){
   printDoubleParams(theParams, theParams.otherParams, _otherParamSuffix);
 }
 
-void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams& theErrs){
+void FitParColBase::dumpParams(std::ostream& os, fitParCol& theVals,  fitParCol& theErrs){
 
   os << std::setprecision(16);
   dumpJPCParams(os, theVals.MagsJPC, theErrs.MagsJPC, _magSuffix);
@@ -129,7 +129,7 @@ void FitParamsBase::dumpParams(std::ostream& os, fitParams& theVals,  fitParams&
 
 }
 
-void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& theParams){
+void FitParColBase::getFitParamVal(const std::vector<double>& par, fitParCol& theParams){
 
   unsigned int counter=0;
   getFitParamValJPC(par, theParams.MagsJPC, counter);
@@ -146,13 +146,13 @@ void FitParamsBase::getFitParamVal(const std::vector<double>& par, fitParams& th
   getFitParamValDouble(par, theParams.otherParams, counter);
 
   if(counter!=par.size()){
-   Alert << "Parameter vector size does not match the fitParams parameter count." << endmsg;
+   Alert << "Parameter vector size does not match the fitParCol parameter count." << endmsg;
   }
 
 }
 
 
-void FitParamsBase::setAbsPawianParamsJPC(std::shared_ptr<AbsPawianParameters> upar, mapStrJPC& startJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
+void FitParColBase::setAbsPawianParamsJPC(std::shared_ptr<AbsPawianParameters> upar, mapStrJPC& startJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
 
   mapStrJPC::iterator itJPCMap;
   for (itJPCMap=startJPCMap.begin(); itJPCMap!=startJPCMap.end(); ++itJPCMap){
@@ -185,7 +185,7 @@ void FitParamsBase::setAbsPawianParamsJPC(std::shared_ptr<AbsPawianParameters> u
 
 }
 
-void FitParamsBase::setAbsPawianParamsLS(std::shared_ptr<AbsPawianParameters> upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix){
+void FitParColBase::setAbsPawianParamsLS(std::shared_ptr<AbsPawianParameters> upar, mapStrLS& startMagMap, mapStrLS& errMagMap, const std::string& suffix){
 
   mapStrLS::iterator itMagMap;
   for (itMagMap=startMagMap.begin(); itMagMap!=startMagMap.end(); ++itMagMap){
@@ -225,7 +225,7 @@ void FitParamsBase::setAbsPawianParamsLS(std::shared_ptr<AbsPawianParameters> up
 }
 
 
-void FitParamsBase::setAbsPawianParamsJPCLamLam(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLamLam& startLamLamMagMap, mapStrJPCLamLam& errLamLamMagMap, const std::string& suffix){
+void FitParColBase::setAbsPawianParamsJPCLamLam(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLamLam& startLamLamMagMap, mapStrJPCLamLam& errLamLamMagMap, const std::string& suffix){
 
   mapStrJPCLamLam::iterator itLamLamMagMap;
   for (itLamLamMagMap=startLamLamMagMap.begin(); itLamLamMagMap!=startLamLamMagMap.end(); ++itLamLamMagMap){
@@ -264,7 +264,7 @@ void FitParamsBase::setAbsPawianParamsJPCLamLam(std::shared_ptr<AbsPawianParamet
 
 }
 
-void FitParamsBase::setAbsPawianParamsJPCLS(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix){
+void FitParColBase::setAbsPawianParamsJPCLS(std::shared_ptr<AbsPawianParameters> upar, mapStrJPCLS& startMagMap, mapStrJPCLS& errMagMap, const std::string& suffix){
 
   mapStrJPCLS::iterator itMagMap;
   for (itMagMap=startMagMap.begin(); itMagMap!=startMagMap.end(); ++itMagMap){
@@ -303,7 +303,7 @@ void FitParamsBase::setAbsPawianParamsJPCLS(std::shared_ptr<AbsPawianParameters>
 
 }
 
-void FitParamsBase::setAbsPawianParamsDouble(std::shared_ptr<AbsPawianParameters> upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix){
+void FitParColBase::setAbsPawianParamsDouble(std::shared_ptr<AbsPawianParameters> upar, mapStrDouble& startDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix){
 
   mapStrDouble::iterator it;
   for (it=startDoubleMap.begin(); it!=startDoubleMap.end(); ++it){
@@ -362,7 +362,7 @@ void FitParamsBase::setAbsPawianParamsDouble(std::shared_ptr<AbsPawianParameters
 
 }
 
-void FitParamsBase::printJPCParams(fitParams& theParams, mapStrJPC& jpcMap, const std::string& suffix){
+void FitParColBase::printJPCParams(fitParCol& theParams, mapStrJPC& jpcMap, const std::string& suffix){
 
   mapStrJPC::const_iterator it;
 
@@ -380,7 +380,7 @@ void FitParamsBase::printJPCParams(fitParams& theParams, mapStrJPC& jpcMap, cons
    }
 }
 
-void FitParamsBase::printLSParams(fitParams& theParams, mapStrLS& LSMagMap, const std::string& suffix){
+void FitParColBase::printLSParams(fitParCol& theParams, mapStrLS& LSMagMap, const std::string& suffix){
 
   mapStrLS::const_iterator it;
 
@@ -397,7 +397,7 @@ void FitParamsBase::printLSParams(fitParams& theParams, mapStrLS& LSMagMap, cons
 
 }
 
-void FitParamsBase::printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& lamLamMap, const std::string& suffix){
+void FitParColBase::printJPCLamLamParams(fitParCol& theParams, mapStrJPCLamLam& lamLamMap, const std::string& suffix){
 
   mapStrJPCLamLam::const_iterator it;
 
@@ -416,7 +416,7 @@ void FitParamsBase::printJPCLamLamParams(fitParams& theParams, mapStrJPCLamLam& 
 }
 
 
-void FitParamsBase::printJPCLSParams(fitParams& theParams, mapStrJPCLS& JPCLSMagMap, const std::string& suffix){
+void FitParColBase::printJPCLSParams(fitParCol& theParams, mapStrJPCLS& JPCLSMagMap, const std::string& suffix){
 
   mapStrJPCLS::const_iterator it;
 
@@ -433,7 +433,7 @@ void FitParamsBase::printJPCLSParams(fitParams& theParams, mapStrJPCLS& JPCLSMag
 
 }
 
-void FitParamsBase::printDoubleParams(fitParams& theParams, mapStrDouble& doubleMap, const std::string& suffix){
+void FitParColBase::printDoubleParams(fitParCol& theParams, mapStrDouble& doubleMap, const std::string& suffix){
   mapStrDouble::const_iterator it;
 
   for (it=doubleMap.begin(); it!=doubleMap.end(); ++it){
@@ -444,7 +444,7 @@ void FitParamsBase::printDoubleParams(fitParams& theParams, mapStrDouble& double
 
 }
 
-void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC& jpcMap, unsigned int& counter){
+void FitParColBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC& jpcMap, unsigned int& counter){
 
   mapStrJPC::iterator it;
   for (it=jpcMap.begin(); it!=jpcMap.end(); ++it){
@@ -458,7 +458,7 @@ void FitParamsBase::getFitParamValJPC(const std::vector<double>& par, mapStrJPC&
   }
 }
 
-void FitParamsBase::getFitParamValLS(const std::vector<double>& par, mapStrLS& lsMap, unsigned int& counter){
+void FitParColBase::getFitParamValLS(const std::vector<double>& par, mapStrLS& lsMap, unsigned int& counter){
   mapStrLS::iterator it;
   for (it=lsMap.begin(); it!=lsMap.end(); ++it){
 
@@ -471,7 +471,7 @@ void FitParamsBase::getFitParamValLS(const std::vector<double>& par, mapStrLS& l
   }
 }
 
-void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& lamLamMagMap, unsigned int& counter){
+void FitParColBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapStrJPCLamLam& lamLamMagMap, unsigned int& counter){
 
   mapStrJPCLamLam::iterator it;
   for (it=lamLamMagMap.begin(); it!=lamLamMagMap.end(); ++it){
@@ -485,7 +485,7 @@ void FitParamsBase::getFitParamValJPCLamLam(const std::vector<double>& par, mapS
   }
 }
 
-void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, unsigned int& counter){
+void FitParColBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJPCLS& jpclsMap, unsigned int& counter){
   mapStrJPCLS::iterator it;
   for (it=jpclsMap.begin(); it!=jpclsMap.end(); ++it){
     std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >::iterator itjpcls;
@@ -498,7 +498,7 @@ void FitParamsBase::getFitParamValJPCLS(const std::vector<double>& par, mapStrJP
 }
 
 
-void FitParamsBase::getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, unsigned int& counter){
+void FitParColBase::getFitParamValDouble(const std::vector<double>& par, mapStrDouble& doubleMap, unsigned int& counter){
   //  Info << "getFitParamValDouble par[" << counter << "]=\t" << par.at(counter) << endmsg;
   mapStrDouble::iterator it;
   for (it=doubleMap.begin(); it!=doubleMap.end(); ++it){
@@ -507,7 +507,7 @@ void FitParamsBase::getFitParamValDouble(const std::vector<double>& par, mapStrD
   }
 }
 
-void  FitParamsBase::dumpJPCParams(std::ostream& os, mapStrJPC& valJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
+void  FitParColBase::dumpJPCParams(std::ostream& os, mapStrJPC& valJPCMap, mapStrJPC& errJPCMap, const std::string& suffix){
 
   mapStrJPC::const_iterator it;
 
@@ -527,7 +527,7 @@ void  FitParamsBase::dumpJPCParams(std::ostream& os, mapStrJPC& valJPCMap, mapSt
 
 }
 
-void FitParamsBase::dumpLSParams(std::ostream& os, mapStrLS& valLSMap, mapStrLS& errLSMap, const std::string& suffix){
+void FitParColBase::dumpLSParams(std::ostream& os, mapStrLS& valLSMap, mapStrLS& errLSMap, const std::string& suffix){
 
   mapStrLS::const_iterator it;
 
@@ -546,7 +546,7 @@ void FitParamsBase::dumpLSParams(std::ostream& os, mapStrLS& valLSMap, mapStrLS&
    }
 }
 
-void  FitParamsBase::dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, mapStrJPCLamLam& errLamLamMap, const std::string& suffix){
+void  FitParColBase::dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamLamMap, mapStrJPCLamLam& errLamLamMap, const std::string& suffix){
 
   mapStrJPCLamLam::const_iterator it;
 
@@ -566,7 +566,7 @@ void  FitParamsBase::dumpLamLamParams(std::ostream& os, mapStrJPCLamLam& valLamL
 
 }
 
-void FitParamsBase::dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, mapStrJPCLS& errLSMap, const std::string& suffix){
+void FitParColBase::dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, mapStrJPCLS& errLSMap, const std::string& suffix){
 
   mapStrJPCLS::const_iterator it;
 
@@ -585,7 +585,7 @@ void FitParamsBase::dumpJPCLSParams(std::ostream& os, mapStrJPCLS& valLSMap, map
    }
 }
 
-void FitParamsBase::dumpDoubleParams(std::ostream& os, mapStrDouble& valDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix){
+void FitParColBase::dumpDoubleParams(std::ostream& os, mapStrDouble& valDoubleMap, mapStrDouble& errDoubleMap, const std::string& suffix){
 
   mapStrDouble::const_iterator it;
 

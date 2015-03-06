@@ -37,7 +37,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -80,7 +80,7 @@ complex<double> epemBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string 
 }
 
 
-double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParams& theParamVal){
+double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
 
   double result=0.;
 

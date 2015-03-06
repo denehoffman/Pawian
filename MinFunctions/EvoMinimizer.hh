@@ -27,7 +27,7 @@
 #include <memory>
 
 #include "MinFunctions/AbsFcn.hh"
-#include "PwaUtils/FitParamsBase.hh"
+#include "FitParams/FitParColBase.hh"
 
 #include "Minuit2/MnUserParameters.h"
 
@@ -48,8 +48,8 @@ private:
    int _population;
    int _iterations;
    AbsFcn* _theAbsFcn;
-   fitParams _currentBestParams;
-   fitParams _defaultFitErrParms;
+   fitParCol _currentBestParams;
+   fitParCol _defaultFitErrParms;
 
    std::string _currentResultFileName;
    std::shared_ptr<AbsPawianParameters> _bestParamsGlobal;

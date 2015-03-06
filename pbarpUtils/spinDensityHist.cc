@@ -34,7 +34,7 @@
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/PwaCovMatrix.hh"
+#include "FitParams/PwaCovMatrix.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
@@ -48,7 +48,7 @@
 const int spinDensityHist::MAX_EVENTS = 10000;
 
 
-spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams) :
+spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams) :
    _calcErrors(false)
   , _nBins(101)
   ,_theLh(theLh)
@@ -78,7 +78,7 @@ void spinDensityHist::SetCovarianceMatrix(std::shared_ptr<PwaCovMatrix> thePwaCo
 
 void spinDensityHist::Calculate(){
 
-   theFitParamsBaseClass.setAbsPawianParams(_theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
+   theFitParColBaseClass.setAbsPawianParams(_theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
    
    std::stringstream spinDensityRootFileName;
    spinDensityRootFileName << "./spinDensity" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
@@ -255,8 +255,8 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
       _theParameters->SetValue(i, parOrig + stepSize);
       
-      fitParams newFitParams = *_theFitParamsOriginal;
-      theFitParamsBaseClass.getFitParamVal(_theParameters->Params(), newFitParams);
+      fitParCol newFitParams = *_theFitParamsOriginal;
+      theFitParColBaseClass.getFitParamVal(_theParameters->Params(), newFitParams);
       _theLh->updateFitParams(newFitParams);
       
       complex<double> tempSpinDensity  = 

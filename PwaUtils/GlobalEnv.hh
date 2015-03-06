@@ -32,7 +32,7 @@
 
 class ParserBase;
 class ParticleTable;
-class FitParamsBase;
+class FitParColBase;
 
 typedef std::vector<std::pair<std::shared_ptr<AbsChannelEnv>, short> > ChannelEnvList;
 
@@ -49,7 +49,7 @@ public:
 
    ParticleTable* particleTable() {return _particleTable;}
    ParserBase* parser() {return _theParser;}
-   std::shared_ptr<FitParamsBase> fitParamsBase(){ return _theFitParamsBase;}
+   std::shared_ptr<FitParColBase> fitParColBase(){ return _theFitParColBase;}
    const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
    const std::string serializationFileName() const {return _serializationFileName;}
    const std::shared_ptr<AbsChannelEnv> Channel(int id=0) const;
@@ -60,20 +60,20 @@ public:
    const ChannelEnvList ChannelEnvs() const {return _channelEnvs;}
    void CreateDefaultParameterSet();
    const short NoChannels() const {return _channelEnvs.size();}
-   fitParams DefaultParamVal(){ return _defaultVal;}
-   fitParams DefaultParamErr(){ return _defaultErr;}
+   fitParCol DefaultParamVal(){ return _defaultVal;}
+   fitParCol DefaultParamErr(){ return _defaultErr;}
 
 private:
    static GlobalEnv* _instance;
    bool _alreadySetUp;
    ParticleTable* _particleTable;
    ParserBase* _theParser;
-   std::shared_ptr<FitParamsBase> _theFitParamsBase;
+   std::shared_ptr<FitParColBase> _theFitParColBase;
    std::string _outputFileNameSuffix;
    std::string _serializationFileName;
 
    ChannelEnvList _channelEnvs;
 
-   fitParams _defaultVal;
-   fitParams _defaultErr;
+   fitParCol _defaultVal;
+   fitParCol _defaultErr;
 };

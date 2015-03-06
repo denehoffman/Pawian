@@ -167,7 +167,7 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 }
 
 
-void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParams& theFitParams){
+void PwaGen::generate(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams){
 
   Info << "\n******** PAWIAN Event Generator **********\n" << endmsg;
 

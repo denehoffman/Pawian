@@ -23,12 +23,12 @@
 
 #include <fstream>
 
-#include "PwaUtils/StreamFitParmsBase.hh"
+#include "FitParams/StreamFitParColBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 StreamFitParmsBase::StreamFitParmsBase(std::string& filePath) :
-  AbsFitParamStreamer(filePath)
+  AbsFitParColStreamer(filePath)
 {
   _paramVal = GlobalEnv::instance()->DefaultParamVal();
   _paramErr = GlobalEnv::instance()->DefaultParamErr();

@@ -60,14 +60,14 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaA
   return result;
 }
 
-void  BreitWignerDynamics::getDefaultParams(fitParams& fitVal, fitParams& fitErr){
+void  BreitWignerDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     fitVal.Masses[_massKey]=_mother->mass();
     fitErr.Masses[_massKey]=0.03;
     fitVal.Widths[_massKey]=_mother->width();
     fitErr.Widths[_massKey]=0.2*_mother->width();
 }
 
-bool BreitWignerDynamics::checkRecalculation(fitParams& theParamVal){
+bool BreitWignerDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   double mass=theParamVal.Masses[_massKey];
@@ -82,7 +82,7 @@ bool BreitWignerDynamics::checkRecalculation(fitParams& theParamVal){
   return _recalculate;
 }
 
-void BreitWignerDynamics::updateFitParams(fitParams& theParamVal){
+void BreitWignerDynamics::updateFitParams(fitParCol& theParamVal){
   _currentMass=theParamVal.Masses[_massKey];
   _currentWidth=theParamVal.Widths[_massKey];
 }
