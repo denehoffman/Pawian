@@ -23,8 +23,8 @@ lib gammapUtils :
 	$(TOP)/ErrLogger//ErrLogger
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils 
-	: <use>$(TOP)//Minuit2
+	:
 	: 
-	: <library>$(TOP)//Minuit2 ;
+	: ;
 
 exe gammapStatesApp : gammapStatesApp.cc gammapUtils : ;

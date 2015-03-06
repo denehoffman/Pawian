@@ -40,7 +40,6 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "epemUtils/EpemChannelEnv.hh"
-#include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
 class epemReaction;

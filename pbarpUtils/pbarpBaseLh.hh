@@ -39,7 +39,6 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
 class pbarpReaction;

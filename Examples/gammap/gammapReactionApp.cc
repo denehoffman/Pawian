@@ -66,14 +66,6 @@
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
-#include "Minuit2/MnUserParameters.h"
-#include "Minuit2/MnMigrad.h"
-#include "Minuit2/FunctionMinimum.h"
-#include "Minuit2/MnMinos.h"
-#include "Minuit2/MnStrategy.h"
-#include "Minuit2/MnPrint.h"
-#include "Minuit2/MnScan.h"
-
 #include "FitParams/ParamFactory.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
@@ -147,7 +139,7 @@ int main(int __argc,char *__argv[]){
   std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
   GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
-  Info << "\n\n**************** Minuit Fit parameter **************************" << endmsg;
+  Info << "\n\n**************** Fit parameter **************************" << endmsg;
   for (int i=0; i<int(upar->Params().size()); ++i){
     Info << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << endmsg;
   }

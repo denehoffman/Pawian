@@ -28,8 +28,8 @@ lib resUtils :
 	$(TOP)/AppUtils//AppUtils
 	$(TOP)/Particle//Particle
         $(TOP)/Event//Event 
-	: <use>$(TOP)//Minuit2
 	: 
-	: <library>$(TOP)//Minuit2 ;
+	: 
+	: ;
 
 exe resReactionApp : resReactionApp.cc resUtils : ;

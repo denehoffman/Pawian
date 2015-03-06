@@ -40,7 +40,6 @@
 #include "pbarpUtils/pbarpBaseLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
-#include "Minuit2/MnUserParameters.h"
 
 class AbsXdecAmp;
 class pbarpReaction;

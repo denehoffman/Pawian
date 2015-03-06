@@ -18,6 +18,6 @@ lib pbarpUtils :
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaUtils//PwaUtils 
-	: <use>$(TOP)//Minuit2
+	:
 	: 
-	: <library>$(TOP)//Minuit2 ;
+	: ;

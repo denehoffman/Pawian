@@ -31,7 +31,6 @@
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include <memory> 
-//#include "Minuit2/MnUserParameters.h"
 #include "FitParams/FitParColBase.hh"
 
 class AbsLh;
@@ -67,7 +66,6 @@ class spinDensityHist{
    std::shared_ptr<AbsLh> _theLh;
    fitParCol* _theFitParamsOriginal;
    std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
-  //   ROOT::Minuit2::MnUserParameters _theMnUserParameters;
 
   std::shared_ptr<AbsPawianParameters> _theParameters;
 
