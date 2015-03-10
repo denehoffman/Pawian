@@ -38,7 +38,7 @@ MnPawianParameters::MnPawianParameters() :
 {
 }
 
-MnPawianParameters::MnPawianParameters(MnUserParameters& mnUserParameters) :
+MnPawianParameters::MnPawianParameters(const MnUserParameters& mnUserParameters) :
   AbsPawianParameters()
   ,_mnUserParameters(mnUserParameters)
 {

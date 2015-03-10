@@ -40,7 +40,7 @@ class MnPawianParameters : public AbsPawianParameters {
 public:
 
   MnPawianParameters();
-  MnPawianParameters(MnUserParameters& mnUserParameters);
+  MnPawianParameters(const MnUserParameters& mnUserParameters);
 
   //   PawianParameters(const std::vector<double>&, const std::vector<double>&);
 

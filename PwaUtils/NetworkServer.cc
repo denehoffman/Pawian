@@ -42,7 +42,7 @@ const short NetworkServer::SERVERMESSAGE_CLOSE = 2;
 const short NetworkServer::SERVERMESSAGE_OK = 3;
 
 
-NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<ChannelID, std::tuple<long, double, long> > numEventMap, std::string clientNumberWeights) :
+NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<ChannelID, std::tuple<long, double, long> >& numEventMap, std::string clientNumberWeights) :
      _port(port)
    , _clientTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
    , _globalTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
@@ -323,7 +323,7 @@ void NetworkServer::BroadcastClosingMessage(){
 
 // This function distributes the events of the respective channels to the
 // available clients and stores the information in the _eventDistribution vector
-void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,double,long> > numEventMap){
+void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,double,long> >& numEventMap){
 
    _eventDistribution.clear();
 

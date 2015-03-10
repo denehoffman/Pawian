@@ -40,9 +40,9 @@
 #include "Event/EventList.hh"
 #include "MinFunctions/AbsFcn.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
-#include "Minuit2/MnUserParameters.h"
-#include "Minuit2/MnMigrad.h"
-#include "Minuit2/FunctionMinimum.h"
+// #include "Minuit2/MnUserParameters.h"
+// #include "Minuit2/MnMigrad.h"
+// #include "Minuit2/FunctionMinimum.h"
 
 class AbsLh;
 class fitParCol;
@@ -52,7 +52,7 @@ class EvtDataBaseList;
 class AbsHist;
 class AbsPawianParameters;
 
-using namespace ROOT::Minuit2;
+//using namespace ROOT::Minuit2;
 
 class AppBase{
 
@@ -70,10 +70,9 @@ public:
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList);
   virtual void fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams);
   virtual void fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar);
-  virtual FunctionMinimum migradDefault(AbsFcn& theFcn, std::shared_ptr<AbsPawianParameters> upar);
-  virtual void printFitResult(FunctionMinimum& min, fitParCol& theStartparams, std::ostream& os, double evtWeightSumData=0, int noOfFreeFitParams=0);
   virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID);
-
+  virtual void fitServerMode(std::shared_ptr<AbsPawianParameters> upar);
+  virtual void fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData);
 };
 
 

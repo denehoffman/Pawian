@@ -31,6 +31,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "FitParams/FitParColBase.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "PwaUtils/GlobalEnv.hh"
 
 const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
 const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
@@ -41,23 +42,21 @@ const double EvoMinimizer::LHSPREADEXIT = 0.01;
 
 // Constructor takes AbsFcn to minimze, start parameters upar, population and iteration
 // sizes and the output file name suffix
-EvoMinimizer::EvoMinimizer(AbsFcn& theAbsFcn, std::shared_ptr<AbsPawianParameters> upar, int population, int iterations) :
-  _population(population)
+EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, int population, int iterations) :
+  AbsPawianMinimizer(theAbsFcnPtr, upar)
+  ,_population(population)
   , _iterations(iterations)
-  , _theAbsFcn(&theAbsFcn)
-  , _currentBestParams(theAbsFcn.defaultFitValParms())
-  , _defaultFitErrParms(theAbsFcn.defaultFitErrParms())
+  , _currentBestParams(theAbsFcnPtr->defaultFitValParms())
+  , _defaultFitErrParms(theAbsFcnPtr->defaultFitErrParms())
   , _currentResultFileName("currentEvoResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
 {
-   // Initialize the best global parameters
-   _bestParamsGlobal = upar;
 }
 
 
 // Minimization takes place here
-std::vector<double> EvoMinimizer::Minimize(){
+void EvoMinimizer::minimize(){
 
-   double startlh = (*_theAbsFcn)(_bestParamsGlobal->Params());
+   double startlh = (*_absFcn)(_bestPawianParams->Params());
    double minlh = startlh;
    int numnoimprovement = 0;
 
@@ -68,17 +67,17 @@ std::vector<double> EvoMinimizer::Minimize(){
       int numbetterlh = 0;
       double maxitlhspread=0;
       double itlh = minlh;
-      _iterationParamBackup = std::shared_ptr<AbsPawianParameters>(_bestParamsGlobal->Clone());
-      _bestParamsIteration = std::shared_ptr<AbsPawianParameters>(_bestParamsGlobal->Clone());
+      _iterationParamBackup = std::shared_ptr<AbsPawianParameters>(_bestPawianParams->Clone());
+      _bestParamsIteration = std::shared_ptr<AbsPawianParameters>(_bestPawianParams->Clone());
 
       for(int j = 0; j<_population; j++){
 
          // Get iteration start parameters and shuffle them
-	_tmpParams = std::shared_ptr<AbsPawianParameters>(_bestParamsGlobal);
+	_tmpParams = std::shared_ptr<AbsPawianParameters>(_bestPawianParams);
          ShuffleParams();
 
          // Calc likelihood
-         double currentlh = (*_theAbsFcn)(_tmpParams->Params());
+         double currentlh = (*_absFcn)(_tmpParams->Params());
 
          // Get information for break condition
          if(fabs(currentlh - minlh) > maxitlhspread){
@@ -104,11 +103,11 @@ std::vector<double> EvoMinimizer::Minimize(){
       // If a new minimum has been found, store information
       // and print parameters
       if(numbetterlh > 0){
-	_bestParamsGlobal = std::shared_ptr<AbsPawianParameters>(_bestParamsIteration->Clone());
+	_bestPawianParams = std::shared_ptr<AbsPawianParameters>(_bestParamsIteration->Clone());
          minlh = itlh;
          numnoimprovement=0;
 
-        GlobalEnv::instance()->fitParColBase()->getFitParamVal(_bestParamsGlobal->Params(), _currentBestParams);
+        GlobalEnv::instance()->fitParColBase()->getFitParamVal(_bestPawianParams->Params(), _currentBestParams);
         std::ofstream theStream(_currentResultFileName.c_str());
         GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
       }
@@ -142,7 +141,8 @@ std::vector<double> EvoMinimizer::Minimize(){
 
    } // Iterations
 
-   return _bestParamsGlobal->Params();
+   //   return _bestParamsGlobal->Params();
+   _minimumReached=true;
 }
 
 
@@ -197,7 +197,30 @@ void EvoMinimizer::ShuffleParams(){
 	    _tmpParams->SetValue(i, _tmpParams->UpperLimit(i));
       }
    }
+}
 
+void EvoMinimizer::printFitResult(double evtWeightSumData){
+  if(!_minimumReached){
+    Alert << "minimum has not been reached!!!" << endmsg;
+    exit(1);
+  }
+
+
+  double finalLh = (*_absFcn)(_bestPawianParams->Params());
+  Info <<"final result theLh = "<< finalLh << endmsg;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // calculate AIC, BIC criteria and output selected wave contrib
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  unsigned int noOfFreeFitParams=_bestPawianParams->VariableParameters();
+
+    double BICcriterion=2.*finalLh+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*finalLh+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    Info << "evtWeightSumData:\t" <<evtWeightSumData;
+    Info << "BIC:\t" << BICcriterion << endmsg;
+    Info << "AIC:\t" << AICcriterion << endmsg;
+    Info << "AICc:\t" << AICccriterion << endmsg;
 }
 
 
@@ -205,17 +228,17 @@ void EvoMinimizer::ShuffleParams(){
 // Increase or decrease parameter errors by a factor
 void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
 
-   for(unsigned int i=0; i<_bestParamsGlobal->Params().size(); i++){
+   for(unsigned int i=0; i<_bestPawianParams->Params().size(); i++){
 
       // Don't touch fixed parameters
-      if(_bestParamsGlobal->IsFixed(i)){
+      if(_bestPawianParams->IsFixed(i)){
          continue;
       }
 
       // When a lh improvement was achieved, don't decrease errors of parameters
       // that changed rapidly, also add a bonus to increasements.
       double afactor=factor;
-      double pardiffsigmas = fabs(_bestParamsGlobal->Value(i) - _iterationParamBackup->Value(i)) / _bestParamsGlobal->Error(i);
+      double pardiffsigmas = fabs(_bestPawianParams->Value(i) - _iterationParamBackup->Value(i)) / _bestPawianParams->Error(i);
 
       if(numimprovements > 0 && pardiffsigmas > 1.5){
          if(factor < 1)        afactor = 1.0;
@@ -223,7 +246,26 @@ void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
       }
 
       // Set new error
-      _bestParamsGlobal->SetError(i, _bestParamsGlobal->Error(i) * afactor);
+      _bestPawianParams->SetError(i, _bestPawianParams->Error(i) * afactor);
    }
 
 }
+
+// void EvoMinimizer::dumpFitResult(){
+
+//   fitParCol finalFitParams=_absFcn->defaultFitValParms();
+//   std::vector<double> finalParamVec=_bestPawianParams->Params();
+//   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
+
+//   fitParCol finalFitErrs=_absFcn->defaultFitValParms();
+//   std::vector<double> finalParamErrorVec=_bestPawianParams->Errors();  
+//   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitParams);
+
+//   std::ostringstream finalResultname;
+
+//   std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+//   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+  
+//   std::ofstream theStream ( finalResultname.str().c_str() );
+//   GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+// }

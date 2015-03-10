@@ -48,8 +48,12 @@
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/NetworkServer.hh"
+
+#include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/PwaFcnServer.hh"
+#include "MinFunctions/AbsPawianMinimizer.hh"
 #include "MinFunctions/EvoMinimizer.hh"
+#include "MinFunctions/MinuitMinimizer.hh"
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -192,6 +196,9 @@ int main(int __argc,char *__argv[]){
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
   theLhPtr->setMcVec(eventListPtr->getMcVecs());
 
+  std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+  std::shared_ptr<AbsFcn> absFcn;
+  
   if(mode == "server"){
     theAppBase.fixParams(upar,fixedParams);
 
@@ -202,17 +209,19 @@ int main(int __argc,char *__argv[]){
  							       theAppParams->noOfClients(),
  							       numEventMap, theAppParams->clientNumberWeights()));
 
-
-    PwaFcnServer theFcnServer(theServer);
     theServer->WaitForFirstClientLogin();
+    // PwaFcnServer theFcnServer(theServer);
+    // FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
 
-    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
-
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr->minimize();
     theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+    absMinimizerPtr->printFitResult(evtWeightSumData);
+    absMinimizerPtr->dumpFitResult();
+    //theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
 
     return 1;
  }
@@ -226,33 +235,26 @@ int main(int __argc,char *__argv[]){
     std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(),
  							       theAppParams->noOfClients(),
  							       numEventMap, theAppParams->clientNumberWeights()));
+    theServer->WaitForFirstClientLogin();
 
-   PwaFcnServer theFcnServer(theServer);
-   theServer->WaitForFirstClientLogin();
+    std::shared_ptr<AbsFcn> theFcnServer(new PwaFcnServer(theServer));
 
-   EvoMinimizer theEvoMinimizer(theFcnServer, upar, GlobalEnv::instance()->parser()->evoPopulation(),
+    EvoMinimizer theEvoMinimizer(theFcnServer, upar, GlobalEnv::instance()->parser()->evoPopulation(),
                                 GlobalEnv::instance()->parser()->evoIterations());
    Info <<"start evolutionary minimizer "<< endmsg;
-   std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
+   theEvoMinimizer.minimize();
 
    theServer->BroadcastClosingMessage();
    Info << "Closing server." << endmsg;
 
-   fitParCol finalFitParams=theStartparams;
-   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-   fitParCol finalFitErrs=theErrorparams;
-
-   std::ostringstream finalResultname;
-   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-
-   std::ofstream theStream ( finalResultname.str().c_str() );
-   GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+   theEvoMinimizer.printFitResult(evtWeightSumData);
+   theEvoMinimizer.dumpFitResult();
    return 1;
  }
 
 
-  PwaFcnBase theFcn;
+ //  PwaFcnBase theFcn;
 
   if (mode=="qaMode"){
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
@@ -266,7 +268,7 @@ int main(int __argc,char *__argv[]){
     return 1;
   }
 
-
+  absFcn= std::shared_ptr<AbsFcn>(new PwaFcnBase());
   if (mode=="pwa"){
     bool cacheAmps = theAppParams->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
@@ -274,11 +276,14 @@ int main(int __argc,char *__argv[]){
 
     theAppBase.fixParams(upar, fixedParams);
 
-    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    // FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
 
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
-
+    // theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+    absMinimizerPtr->printFitResult(evtWeightSumData);
+    absMinimizerPtr->dumpFitResult();
+    
     return 1;
  }
 

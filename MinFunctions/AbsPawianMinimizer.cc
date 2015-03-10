@@ -21,47 +21,41 @@
 //                                                                        //
 //************************************************************************//
 
-#pragma once
 
-#include <vector>
-#include <memory>
+#include <iostream>
+#include <fstream>
 
-#include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "FitParams/FitParColBase.hh"
+#include "ErrLogger/ErrLogger.hh"
+#include "PwaUtils/GlobalEnv.hh"
 
-#include <boost/random/normal_distribution.hpp>
-
-using namespace ROOT::Minuit2;
-
-class EvoMinimizer : public AbsPawianMinimizer
+AbsPawianMinimizer::AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
+  _absFcn(theAbsFcnPtr)
+  ,_startPawianParams(upar)
+  ,_bestPawianParams(upar)
+  ,_minimumReached(false)
+  ,_finalLh(10000000.)
 {
-public:
-  EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, int iterations, int population);
+}
 
-  virtual std::string type() {return "EvoMinimizer";};
-  virtual void minimize();
-  virtual void printFitResult(double evtWeightSumData);
-  // virtual void dumpFitResult();
 
-private:
-   int _population;
-   int _iterations;
-   fitParCol _currentBestParams;
-   fitParCol _defaultFitErrParms;
+void AbsPawianMinimizer::dumpFitResult(){
 
-   std::string _currentResultFileName;
-  //   std::shared_ptr<AbsPawianParameters> _bestParamsGlobal;
-   std::shared_ptr<AbsPawianParameters> _bestParamsIteration;
-   std::shared_ptr<AbsPawianParameters> _tmpParams;
-   std::shared_ptr<AbsPawianParameters> _iterationParamBackup;
+  fitParCol finalFitParams=_absFcn->defaultFitValParms();
+  std::vector<double> finalParamVec=_bestPawianParams->Params();
+  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
 
-   void ShuffleParams();
-   void AdjustSigma(double factor, int numimprovements);
+  fitParCol finalFitErrs=_absFcn->defaultFitErrParms();
+  std::vector<double> finalParamErrorVec=_bestPawianParams->Errors();  
+  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitParams);
 
-   static const double DECREASESIGMAFACTOR;
-   static const double INCREASESIGMAFACTOR;
-   static const double DECREASELOWTHRESH;
-   static const double INCREASEHIGHTHRESH;
-   static const double LHSPREADEXIT;
-};
+  std::ostringstream finalResultname;
+
+  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+  finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
+  
+  std::ofstream theStream ( finalResultname.str().c_str() );
+  GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+}

@@ -44,8 +44,8 @@ public:
   static const short SERVERMESSAGE_CLOSE;
   static const short SERVERMESSAGE_OK;
 
-   NetworkServer(int port, unsigned short noOfClients,  std::map<ChannelID, std::tuple<long, double, long> > numEventVec, std::string clientNumberWeights);
-  void CalcEventDistribution(std::map<short, std::tuple<long,double,long> > numEventMap);
+   NetworkServer(int port, unsigned short noOfClients,  std::map<ChannelID, std::tuple<long, double, long> >& numEventVec, std::string clientNumberWeights);
+  void CalcEventDistribution(std::map<short, std::tuple<long,double,long> >& numEventMap);
   bool WaitForLH(std::map<short, LHData>& theLHDataMap);
   bool WaitForFirstClientLogin();
   void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<std::pair<unsigned int, double> >& par);

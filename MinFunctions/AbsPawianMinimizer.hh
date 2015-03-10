@@ -21,47 +21,40 @@
 //                                                                        //
 //************************************************************************//
 
+// AbsPawianMinimizer class definition file. -*- C++ -*-
+// Copyright 2015 Bertram Kopf
+
 #pragma once
 
+//#include <iostream>
+//#include <fstream>
 #include <vector>
 #include <memory>
 
 #include "MinFunctions/AbsFcn.hh"
-#include "MinFunctions/AbsPawianMinimizer.hh"
-#include "FitParams/FitParColBase.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
-#include <boost/random/normal_distribution.hpp>
+class AbsPawianMinimizer {
 
-using namespace ROOT::Minuit2;
-
-class EvoMinimizer : public AbsPawianMinimizer
-{
 public:
-  EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, int iterations, int population);
 
-  virtual std::string type() {return "EvoMinimizer";};
-  virtual void minimize();
-  virtual void printFitResult(double evtWeightSumData);
-  // virtual void dumpFitResult();
+  AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
+
+  ~AbsPawianMinimizer() {}
+
+  virtual std::string type()=0;
+  virtual void minimize()=0;
+  virtual void printFitResult(double evtWeightSumData)=0;
+  virtual void dumpFitResult();
+
+protected:
+  std::shared_ptr<AbsFcn> _absFcn;
+  std::shared_ptr<AbsPawianParameters> _startPawianParams;
+  std::shared_ptr<AbsPawianParameters> _bestPawianParams;
+  bool _minimumReached;
+  double _finalLh;  
 
 private:
-   int _population;
-   int _iterations;
-   fitParCol _currentBestParams;
-   fitParCol _defaultFitErrParms;
 
-   std::string _currentResultFileName;
-  //   std::shared_ptr<AbsPawianParameters> _bestParamsGlobal;
-   std::shared_ptr<AbsPawianParameters> _bestParamsIteration;
-   std::shared_ptr<AbsPawianParameters> _tmpParams;
-   std::shared_ptr<AbsPawianParameters> _iterationParamBackup;
-
-   void ShuffleParams();
-   void AdjustSigma(double factor, int numimprovements);
-
-   static const double DECREASESIGMAFACTOR;
-   static const double INCREASESIGMAFACTOR;
-   static const double DECREASELOWTHRESH;
-   static const double INCREASEHIGHTHRESH;
-   static const double LHSPREADEXIT;
 };
+

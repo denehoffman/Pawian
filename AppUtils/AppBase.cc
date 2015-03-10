@@ -34,23 +34,27 @@
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "FitParams/FitParColBase.hh"
+#include "PwaUtils/EvtWeightList.hh"
 #include "PwaUtils/PwaGen.hh"
-#include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
-#include "FitParams/PwaCovMatrix.hh"
+#include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+
+#include "FitParams/FitParColBase.hh"
+#include "ConfigParser/ParserBase.hh"
+#include "FitParams/PwaCovMatrix.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
 #include "Event/EventReaderDefault.hh"
 
-#include "Minuit2/MnMigrad.h"
-#include "Minuit2/MnUserParameters.h"
-#include "Minuit2/MnPrint.h"
-#include "Minuit2/MnUserCovariance.h"
+#include "MinFunctions/PwaFcnBase.hh"
+#include "MinFunctions/PwaFcnServer.hh"
+#include "MinFunctions/AbsPawianMinimizer.hh"
+#include "MinFunctions/EvoMinimizer.hh"
+#include "MinFunctions/MinuitMinimizer.hh"
 
 #include "FitParams/AbsPawianParameters.hh"
 
@@ -347,13 +351,6 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
   fixedParams.push_back(fixedScaleParam);
   Info << "Fixing scaling parameter " << fixedScaleParam << endmsg;
 
-  // const std::vector<MinuitParameter> theParams= upar->Parameters();
-  // std::vector<std::string> parNames;
-  // std::vector<MinuitParameter>::const_iterator itPar;
-  // for (itPar=theParams.begin(); itPar!=theParams.end(); ++itPar){
-  //   parNames.push_back(itPar->GetName());
-  // }
-  
   const std::vector<std::string> parNames=upar->ParamNames();
 
   std::vector<std::string>::const_iterator itFix;
@@ -380,118 +377,6 @@ void AppBase::fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar
 
 }
 
-FunctionMinimum AppBase::migradDefault(AbsFcn& theFcn, std::shared_ptr<AbsPawianParameters> upar){
-  MnMigrad migrad(theFcn, upar->mnUserParameters());
-  Info <<"start migrad "<< endmsg;
-  FunctionMinimum funcMin = migrad(0, GlobalEnv::instance()->parser()->tolerance());
-
-  if(funcMin.IsValid()){
-     return funcMin;
-  }
-
-  // Two more tries to get a valid result unsing strategy 2
-  for(int j=0; j<2; j++){
-     Warning <<"FM is invalid, try with strategy = 2."<< endmsg;
-
-     // Check minimum covariance matrix
-     bool badCovarianceDiagonal=false;
-     if(funcMin.HasCovariance()){
-	badCovarianceDiagonal = !PwaCovMatrix::DiagonalIsValid(funcMin.UserCovariance());
-     }
-
-     if(badCovarianceDiagonal){
-       Warning << "Using default errors" << endmsg;
-       MnUserParameters newParams = upar->mnUserParameters();
-       for(unsigned int i=0; i< funcMin.UserParameters().Params().size();i++){
-	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
-       }
-       MnMigrad migrad2(theFcn, newParams, MnStrategy(2));
-       funcMin = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
-    }
-    else{
-       MnUserParameters newParams = upar->mnUserParameters();
-       for(unsigned int i=0; i< funcMin.UserParameters().Params().size();i++){
-	  newParams.SetValue(i, funcMin.UserParameters().Params().at(i));
-	  newParams.SetError(i, funcMin.UserParameters().Errors().at(i));
-       }
-       MnMigrad migrad2(theFcn, newParams, MnStrategy(2));
-       funcMin = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
-    }
-
-    if(funcMin.IsValid()){
-       break;
-    }
-  }
-
-  return funcMin;
-}
-
-void AppBase::printFitResult(FunctionMinimum& min, fitParCol& theStartparams, std::ostream& os, double evtWeightSumData, int noOfFreeFitParams){
-
-    double theLh = min.Fval();
-
-    os << "\n\n********************** Final fit parameters *************************\n";
-    os << "\n" << min.UserParameters() << "\n";
-    os << "\n\n**************** Minuit FunctionMinimum information ******************" << std::endl;
-    if(min.IsValid())             os << "\n Function minimum is valid.\n";
-    else                          os << "\n WARNING: Function minimum is invalid!" << std::endl;
-    if(min.HasValidCovariance())  os << "\n Covariance matrix is valid." << std::endl;
-    else                          os << "\n WARNING: Covariance matrix is invalid!" << std::endl;
-    os <<"\n Final LH: "<< std::setprecision(10) << theLh << "\n" << std::endl;
-    os <<" # of function calls: " << min.NFcn() << std::endl;
-    os <<" minimum edm: " << std::setprecision(10) << min.Edm()<<std::endl;
-    if(!min.HasValidParameters()) os << " hasValidParameters() returned FALSE" << std::endl;
-    if(!min.HasAccurateCovar())   os << " hasAccurateCovar() returned FALSE" << std::endl;
-    if(!min.HasPosDefCovar()){    os << " hasPosDefCovar() returned FALSE" << std::endl;
-                                  if(min.HasMadePosDefCovar()) os << " hasMadePosDefCovar() returned TRUE" << std::endl;
-    }
-    if(!min.HasCovariance())      os << " hasCovariance() returned FALSE" << std::endl;
-    if(min.HasReachedCallLimit()) os << " hasReachedCallLimit() returned TRUE" << std::endl;
-    if(min.IsAboveMaxEdm())       os << " isAboveMaxEdm() returned TRUE" << std::endl;
-    if(min.HesseFailed())         os << " hesseFailed() returned TRUE" << std::endl;
-    os << std::endl;
-
-    MnUserParameters finalUsrParameters=min.UserParameters();
-    const std::vector<double> finalParamVec=finalUsrParameters.Params();
-    fitParCol finalFitParams=theStartparams;
-    GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-    const std::vector<double> finalParamErrorVec=finalUsrParameters.Errors();
-    fitParCol finalFitErrs=theStartparams;
-    GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitErrs);
-
-    std::ostringstream finalResultname;
-    finalResultname << "finalResult" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
-
-    std::ofstream theStream ( finalResultname.str().c_str() );
-    GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
-
-    MnUserCovariance theCovMatrix = min.UserCovariance();
-    std::ostringstream serializationFileName;
-    serializationFileName << "serializedOutput" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
-    std::ofstream serializationStream(serializationFileName.str().c_str());
-    boost::archive::text_oarchive boostOutputArchive(serializationStream);
-
-    if(min.HasValidCovariance()){
-        const PwaCovMatrix thePwaCovMatrix(theCovMatrix, finalUsrParameters, finalFitParams);
-        boostOutputArchive << thePwaCovMatrix;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // calculate AIC, BIC criteria and output selected wave contrib
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Info <<"theLh = "<< theLh << endmsg;
-
-    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
-    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData;
-    Info << "BIC:\t" << BICcriterion << endmsg;
-    Info << "AIC:\t" << AICcriterion << endmsg;
-    Info << "AICc:\t" << AICccriterion << endmsg;
-}
-
 bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID){
 
   while(true){
@@ -507,5 +392,80 @@ bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartp
     if(!theClient.SendLH(theLHData.logLH_data, theLHData.LH_mc)) return false;
   }
   return true;
+}
+
+void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
+  double evtWeightSumData=0;
+  ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
+  std::map<short, std::tuple<long, double, long> > numEventMap;
+
+  for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+    const std::string datFile=(*it).first->parser()->dataFile();
+    const std::string mcFile=(*it).first->parser()->mcFile();
+    Info << "data file: " << datFile ;  // << endmsg;
+    Info << "mc file: " << mcFile ;  // << endmsg;
+    
+    int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
+    int ratioMcToData=(*it).first->parser()->ratioMcToData();
+    
+    std::vector<std::string> dataFileNames;
+    dataFileNames.push_back(datFile);
+    
+    std::vector<std::string> mcFileNames;
+    mcFileNames.push_back(mcFile);
+    
+    EventList eventsData;
+    readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
+    
+    EventList mcData;
+    int maxMcEvts=eventsData.size()*ratioMcToData;
+    readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
+    
+    std::shared_ptr<EvtWeightList> evtWeightListPtr(new EvtWeightList((*it).first->channelID()));
+    evtWeightListPtr->read(eventsData, mcData);
+    evtWeightSumData+=evtWeightListPtr->NoOfWeightedDataEvts();
+    
+    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), evtWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
+    }
+
+  std::shared_ptr<AbsFcn> absFcn;
+  std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), GlobalEnv::instance()->parser()->noOfClients(), numEventMap, GlobalEnv::instance()->parser()->clientNumberWeights()));
+  theServer->WaitForFirstClientLogin();
+
+  absFcn=std::shared_ptr<AbsFcn>(new PwaFcnServer(theServer));
+
+  std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+  if(GlobalEnv::instance()->parser()->mode()=="server") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+  else if (GlobalEnv::instance()->parser()->mode()=="evoserver") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new EvoMinimizer(absFcn, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations()));
+  else{
+    Alert << "only the options server or evoserver are supported for the fitServerMode" << endmsg;
+    Alert << "thus " << GlobalEnv::instance()->parser()->mode() << " is not supported" << endmsg;
+    exit(1);  
+  }
+  
+  absMinimizerPtr->minimize();
+  
+  theServer->BroadcastClosingMessage();
+  Info << "Closing server." << endmsg;
+  
+  absMinimizerPtr->printFitResult(evtWeightSumData);
+  absMinimizerPtr->dumpFitResult();
+}
+
+
+void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData){
+  std::shared_ptr<AbsFcn> absFcn(new PwaFcnBase());
+  std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+  if(GlobalEnv::instance()->parser()->mode()=="pwa") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+  else if (GlobalEnv::instance()->parser()->mode()=="evo") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new EvoMinimizer(absFcn, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations()));
+  else{
+    Alert << "fitNonServerMode only the options pwa or evo are supported for the fitNonServerMode" << endmsg;
+    Alert << "thus " << GlobalEnv::instance()->parser()->mode() << " is not supported" << endmsg;
+    exit(1);  
+  }
+  
+  absMinimizerPtr->minimize();
+  absMinimizerPtr->printFitResult(evtWeightSumData);
+  absMinimizerPtr->dumpFitResult();
 }
 

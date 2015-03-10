@@ -49,9 +49,13 @@
 #include "PwaUtils/WelcomeScreen.hh"
 #include "PwaUtils/EvtWeightList.hh"
 
+#include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/PwaFcnBase.hh"
 #include "MinFunctions/PwaFcnServer.hh"
+
+#include "MinFunctions/AbsPawianMinimizer.hh"
 #include "MinFunctions/EvoMinimizer.hh"
+#include "MinFunctions/MinuitMinimizer.hh"
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -203,6 +207,8 @@ int main(int __argc,char *__argv[]){
   }
 
 
+  std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+  std::shared_ptr<AbsFcn> absFcn;
 
   if(mode == "server"){
 
@@ -241,13 +247,18 @@ int main(int __argc,char *__argv[]){
     PwaFcnServer theFcnServer(theServer);
     theServer->WaitForFirstClientLogin();
 
-    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
+    //    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
 
-    theServer->BroadcastClosingMessage();
+    absFcn=std::shared_ptr<AbsFcn>(new PwaFcnServer(theServer));
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr->minimize();
+    //    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+
+   theServer->BroadcastClosingMessage();
     Info << "Closing server." << endmsg;
 
-    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
-
+    absMinimizerPtr->printFitResult(evtWeightSumData);
+    absMinimizerPtr->dumpFitResult();
     return 1;
   }
 
@@ -346,7 +357,8 @@ int main(int __argc,char *__argv[]){
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
   theLhPtr->setMcVec(eventListPtr->getMcVecs());
 
-  PwaFcnBase theFcn;
+  //  PwaFcnBase theFcn;
+  absFcn= std::shared_ptr<AbsFcn>(new PwaFcnBase());
   Info << "\nThe parameter values are: " << "\n" << endmsg;
   GlobalEnv::instance()->fitParColBase()->printParams(theStartparams);
 
@@ -373,9 +385,13 @@ int main(int __argc,char *__argv[]){
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
 
-    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr->minimize();
+    //    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
     double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+    //    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
+    absMinimizerPtr->printFitResult(evtWeightSumData);
+    absMinimizerPtr->dumpFitResult();
 
     return 1;
  }

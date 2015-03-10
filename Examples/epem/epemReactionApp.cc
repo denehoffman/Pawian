@@ -49,10 +49,6 @@
 #include "PwaUtils/WelcomeScreen.hh"
 #include "PwaUtils/EvtWeightList.hh"
 
-#include "MinFunctions/PwaFcnBase.hh"
-#include "MinFunctions/PwaFcnServer.hh"
-#include "MinFunctions/EvoMinimizer.hh"
-
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
 
@@ -212,121 +208,11 @@ int main(int __argc,char *__argv[]){
   return 1;
  }
 
-
-  if(mode == "server"){
-
-    double evtWeightSumData=0;
-    ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
-    std::map<short, std::tuple<long, double, long> > numEventMap;
-
-    for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-      const std::string datFile=(*it).first->parser()->dataFile();
-      const std::string mcFile=(*it).first->parser()->mcFile();
-      Info << "data file: " << datFile ;  // << endmsg;
-      Info << "mc file: " << mcFile ;  // << endmsg;
-
-      int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
-      int ratioMcToData=(*it).first->parser()->ratioMcToData();
-      std::vector<std::string> dataFileNames;
-      dataFileNames.push_back(datFile);
-
-      std::vector<std::string> mcFileNames;
-      mcFileNames.push_back(mcFile);
-
-      EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
-
-      EventList mcData;
-      int maxMcEvts=eventsData.size()*ratioMcToData;
-      //      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
-      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
-
-      std::shared_ptr<EvtWeightList> epemWeightListPtr(new EvtWeightList((*it).first->channelID()));
-      epemWeightListPtr->read(eventsData, mcData);
-      evtWeightSumData+=epemWeightListPtr->NoOfWeightedDataEvts();
-
-      numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), epemWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
-    }
-
-    std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(), theAppParams->noOfClients(), numEventMap, theAppParams->clientNumberWeights()));
-
-    PwaFcnServer theFcnServer(theServer);
-    theServer->WaitForFirstClientLogin();
-
-    FunctionMinimum min=theAppBase.migradDefault(theFcnServer, upar);
-
-    theServer->BroadcastClosingMessage();
-    Info << "Closing server." << endmsg;
-
-    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
-
+  if(mode == "server" || mode == "evoserver"){
+    theAppBase.fitServerMode(upar);
     return 1;
- }
-
- if(mode == "evoserver"){
-   double evtWeightSumData=0;
-   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
-   std::map<short, std::tuple<long, double, long> > numEventMap;
-
-    for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-      const std::string datFile=(*it).first->parser()->dataFile();
-      const std::string mcFile=(*it).first->parser()->mcFile();
-      Info << "data file: " << datFile ;  // << endmsg;
-      Info << "mc file: " << mcFile ;  // << endmsg;
-
-      int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
-      int ratioMcToData=(*it).first->parser()->ratioMcToData();
-
-      std::vector<std::string> dataFileNames;
-      dataFileNames.push_back(datFile);
-
-      std::vector<std::string> mcFileNames;
-      mcFileNames.push_back(mcFile);
-
-      EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
-
-      EventList mcData;
-      int maxMcEvts=eventsData.size()*ratioMcToData;
-      //      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
-      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
-
-
-      std::shared_ptr<EvtWeightList> epemWeightListPtr(new EvtWeightList((*it).first->channelID()));
-      epemWeightListPtr->read(eventsData, mcData);
-      evtWeightSumData+=epemWeightListPtr->NoOfWeightedDataEvts();
-
-      numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), epemWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
-    }
-
-   std::shared_ptr<NetworkServer> theServer(new NetworkServer(theAppParams->serverPort(), theAppParams->noOfClients(), numEventMap, theAppParams->clientNumberWeights()));
-
-
-   PwaFcnServer theFcnServer(theServer);
-   theServer->WaitForFirstClientLogin();
-
-   EvoMinimizer theEvoMinimizer(theFcnServer, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations());
-   Info <<"start evolutionary minimizer "<< endmsg;
-   std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
-
-   theServer->BroadcastClosingMessage();
-   Info << "Closing server." << endmsg;
-
-   fitParCol finalFitParams=theStartparams;
-   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-   fitParCol finalFitErrs=theErrorparams;
-
-   std::ostringstream finalResultname;
-   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-
-   std::ofstream theStream ( finalResultname.str().c_str() );
-   GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
-
-   return 1;
- }
-
-
+  }
+ 
   // The following modes only need the primary channel data/mc and lh ptr
   std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
 
@@ -372,15 +258,18 @@ int main(int __argc,char *__argv[]){
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
   theLhPtr->setMcVec(eventListPtr->getMcVecs());
 
-  PwaFcnBase theFcn;
+  // //  PwaFcnBase theFcn;
+  // absFcn=std::shared_ptr<AbsFcn>(new PwaFcnBase());
+
   Info << "\nThe parameter values are: " << "\n" << endmsg;
   GlobalEnv::instance()->fitParColBase()->printParams(theStartparams);
 
   Info << "\nThe parameter errors are: " << "\n" << endmsg;
   GlobalEnv::instance()->fitParColBase()->printParams(theErrorparams);
 
+  double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+  
   if (mode=="qaMode"){
-    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
     theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams);
     epemHist theHist;
     theHist.fillFromLhData(theLhPtr, theStartparams);
@@ -390,42 +279,15 @@ int main(int __argc,char *__argv[]){
     
     return 1;
   }
-  
 
-  if (mode=="pwa"){
-    bool cacheAmps = theAppParams->cacheAmps();
-    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
-    if (cacheAmps) theLhPtr->cacheAmplitudes();
+  bool cacheAmps = theAppParams->cacheAmps();
+  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  if (cacheAmps) theLhPtr->cacheAmplitudes();
 
-    FunctionMinimum min=theAppBase.migradDefault(theFcn, upar);
-    double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
-    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
-
+  if(mode=="pwa" || mode=="evo"){
+    theAppBase.fitNonServerMode(upar, evtWeightSumData);
     return 1;
-  }
-  
-  if (mode=="evo"){
-    bool cacheAmps = theAppParams->cacheAmps();
-    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
-    if (cacheAmps) theLhPtr->cacheAmplitudes();
-
-     EvoMinimizer theEvoMinimizer(theFcn, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations());
-     Info <<"start evolutionary minimizer "<< endmsg;
-     std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
-
-     fitParCol finalFitParams=theStartparams;
-     GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-     fitParCol finalFitErrs=theErrorparams;
-
-     std::ostringstream finalResultname;
-     finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-
-     std::ofstream theStream ( finalResultname.str().c_str() );
-     GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
-
-     return 1;
-  }
+  }  
 
    return 1;
 }

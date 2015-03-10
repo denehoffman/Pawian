@@ -23,7 +23,6 @@ lib pbarp :
         $(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
-        $(TOP)/MinFunctions//MinFunctions
 	$(TOP)/AppUtils//AppUtils
         $(TOP)/pbarpUtils//pbarpUtils
         $(TOP)/Particle//Particle

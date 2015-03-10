@@ -20,6 +20,6 @@ lib AppUtils :
 	$(TOP)/PspGen//PspGen
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/MinFunctions//MinFunctions
-	: <use>$(TOP)//Minuit2
+	:
 	: 
-	: <library>$(TOP)//Minuit2 ;
+	: ;

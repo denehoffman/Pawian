@@ -23,7 +23,6 @@ lib epem :
         $(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
-	$(TOP)/MinFunctions//MinFunctions
 	$(TOP)/AppUtils//AppUtils
         $(TOP)/epemUtils//epemUtils
         $(TOP)/Particle//Particle

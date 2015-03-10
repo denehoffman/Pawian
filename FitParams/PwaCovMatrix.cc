@@ -40,7 +40,7 @@ PwaCovMatrix::PwaCovMatrix(){
 
 
 PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
-			   ROOT::Minuit2::MnUserParameters &theMinuitParameters,
+			   const ROOT::Minuit2::MnUserParameters &theMinuitParameters,
 			   fitParCol &theFitParams)
 {
    DiagonalIsValid(theMinuitCovMatrix);

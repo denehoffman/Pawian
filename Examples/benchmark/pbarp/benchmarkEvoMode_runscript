@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo Starting evoserver ...
+
+$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode evo --paramFile defaultparams.dat --noOfThreads 4 !>& evo.log &
+
+echo done

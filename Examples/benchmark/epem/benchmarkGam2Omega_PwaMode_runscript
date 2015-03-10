@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo Starting pwa ...
+
+$TOP_DIR/bin/epemReactionApp -c $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode pwa --noOfThreads 4 !>& pwa.log &
+
+echo done
