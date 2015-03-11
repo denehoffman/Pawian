@@ -251,21 +251,3 @@ void EvoMinimizer::AdjustSigma(double factor, int numimprovements){
 
 }
 
-// void EvoMinimizer::dumpFitResult(){
-
-//   fitParCol finalFitParams=_absFcn->defaultFitValParms();
-//   std::vector<double> finalParamVec=_bestPawianParams->Params();
-//   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-//   fitParCol finalFitErrs=_absFcn->defaultFitValParms();
-//   std::vector<double> finalParamErrorVec=_bestPawianParams->Errors();  
-//   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitParams);
-
-//   std::ostringstream finalResultname;
-
-//   std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-//   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
-  
-//   std::ofstream theStream ( finalResultname.str().c_str() );
-//   GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
-// }

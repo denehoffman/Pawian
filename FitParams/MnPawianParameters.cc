@@ -91,7 +91,7 @@ void MnPawianParameters::SetValue(unsigned int idx, double val){
 }
 
 void MnPawianParameters::SetError(unsigned int idx, double err){
-  _mnUserParameters.SetValue(idx, err);
+  _mnUserParameters.SetError(idx, err);
 }
 
 void MnPawianParameters::SetLimits(unsigned int idx, double low, double up){
@@ -131,7 +131,7 @@ void MnPawianParameters::SetValue(const std::string & pname, double val){
 }
 
 void  MnPawianParameters::SetError(const std::string & pname, double err){
- _mnUserParameters.SetValue(pname, err);
+ _mnUserParameters.SetError(pname, err);
 }
 
 void  MnPawianParameters::SetLimits(const std::string & pname, double low, double up){
