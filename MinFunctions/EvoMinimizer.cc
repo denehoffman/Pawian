@@ -2,7 +2,7 @@
 //                                                                        //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 Julian Pychy (julian@ep1.rub.de)                       //
-//                 - Ruhr-Universität Bochum                              //
+//                 - Ruhr-Universit??t Bochum                              //
 //                                                                        //
 //  This file is part of Pawian.                                          //
 //                                                                        //
@@ -73,7 +73,7 @@ void EvoMinimizer::minimize(){
       for(int j = 0; j<_population; j++){
 
          // Get iteration start parameters and shuffle them
-	_tmpParams = std::shared_ptr<AbsPawianParameters>(_bestPawianParams);
+	_tmpParams = std::shared_ptr<AbsPawianParameters>(_bestPawianParams->Clone());
          ShuffleParams();
 
          // Calc likelihood

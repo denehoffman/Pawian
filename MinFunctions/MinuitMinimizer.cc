@@ -134,7 +134,7 @@ void MinuitMinimizer::dumpFitResult(){
 
   fitParCol finalFitErrs=_absFcn->defaultFitErrParms();
   std::vector<double> finalParamErrorVec=_bestPawianParams->Errors();  
-  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitParams);
+  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitErrs);
 
   std::ostringstream finalResultname;
 
