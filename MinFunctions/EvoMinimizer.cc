@@ -32,6 +32,7 @@
 #include "FitParams/FitParColBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "ConfigParser/ParserBase.hh"
 
 const double EvoMinimizer::DECREASESIGMAFACTOR = 0.9;
 const double EvoMinimizer::INCREASESIGMAFACTOR = 1.1;
@@ -46,10 +47,19 @@ EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr
   AbsPawianMinimizer(theAbsFcnPtr, upar)
   ,_population(population)
   , _iterations(iterations)
+  , _evoRatioOfModParams(GlobalEnv::instance()->parser()->evoRatioOfModParams())
   , _currentBestParams(theAbsFcnPtr->defaultFitValParms())
   , _defaultFitErrParms(theAbsFcnPtr->defaultFitErrParms())
   , _currentResultFileName("currentEvoResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
 {
+  if (_evoRatioOfModParams <= 0. || _evoRatioOfModParams>1.){
+    Alert << "_evoRatioOfModParams = " << _evoRatioOfModParams << " not possible\n"
+  	  << "value must be set between 0. and 1. !!!!" << endmsg;
+    exit(1);
+  }
+  Info << "population: " << _population
+       <<"\niterations: " << _iterations
+       << "\nratio of parameters to be modified: " << _evoRatioOfModParams << endmsg;
 }
 
 
@@ -156,46 +166,53 @@ void EvoMinimizer::ShuffleParams(){
    typedef boost::variate_generator<RandomGenerator&,	NormalDistribution> GaussianGenerator;
    static RandomGenerator rng(static_cast<unsigned> (time(0)));
 
-
-   for(unsigned int i=0; i<_tmpParams->Params().size(); i++){
-
-      // Don't touch fixed parameters
-      if(_tmpParams->IsFixed(i)){
+   bool acceptNewParams=false;
+   while(!acceptNewParams){
+     for(unsigned int i=0; i<_tmpParams->Params().size(); i++){
+       
+       // Don't touch fixed parameters
+       if(_tmpParams->IsFixed(i)){
          continue;
-      }
+       }
 
-      // Decide whether parameter is increased or decreased
-      boost::random::uniform_int_distribution<> coin(0,1);
-      bool c = coin(rng);
-
-      // Initialize gaussian width as parameter error
-      double sigma = _tmpParams->Error(i);
-
-      // If gaussian collides with parameter limit, reduce width
-      if(_tmpParams->HasLimits(i)){
+       boost::random::uniform_real_distribution<> coinReal(0.,1.);
+       double c01 = coinReal(rng);
+       if (c01 > _evoRatioOfModParams) continue; //only 10% of the parameters changed 
+       acceptNewParams=true;
+       
+       // Decide whether parameter is increased or decreased
+       boost::random::uniform_int_distribution<> coin(0,1);
+       bool c = coin(rng);
+       
+       // Initialize gaussian width as parameter error
+       double sigma = _tmpParams->Error(i);
+       
+       // If gaussian collides with parameter limit, reduce width
+       if(_tmpParams->HasLimits(i)){
          if(c && (2*sigma > (_tmpParams->UpperLimit(i) - _tmpParams->Value(i)))){
-            sigma = (_tmpParams->UpperLimit(i) - _tmpParams->Value(i)) / 2.0;
+	   sigma = (_tmpParams->UpperLimit(i) - _tmpParams->Value(i)) / 2.0;
          }
          else if(!c && (2*sigma > (_tmpParams->Value(i) - _tmpParams->LowerLimit(i)))){
-            sigma = (_tmpParams->Value(i) - _tmpParams->LowerLimit(i)) / 2.0;
+	   sigma = (_tmpParams->Value(i) - _tmpParams->LowerLimit(i)) / 2.0;
          }
-      }
-
-      // Get random number and set new parameter
-      NormalDistribution gaussian_dist(0, sigma);
-      GaussianGenerator generator(rng, gaussian_dist);
-      double val = fabs(generator());
-
-      if(c) _tmpParams->SetValue(i, _tmpParams->Value(i) + val);
-      else  _tmpParams->SetValue(i, _tmpParams->Value(i) - val);
-
-      // Check for limits
-      if(_tmpParams->HasLimits(i)){
-        if(_tmpParams->Value(i) < _tmpParams->LowerLimit(i))
-	    _tmpParams->SetValue(i, _tmpParams->LowerLimit(i));
-        if(_tmpParams->Value(i) > _tmpParams->UpperLimit(i))
-	    _tmpParams->SetValue(i, _tmpParams->UpperLimit(i));
-      }
+       }
+       
+       // Get random number and set new parameter
+       NormalDistribution gaussian_dist(0, sigma);
+       GaussianGenerator generator(rng, gaussian_dist);
+       double val = fabs(generator());
+       
+       if(c) _tmpParams->SetValue(i, _tmpParams->Value(i) + val);
+       else  _tmpParams->SetValue(i, _tmpParams->Value(i) - val);
+       
+       // Check for limits
+       if(_tmpParams->HasLimits(i)){
+	 if(_tmpParams->Value(i) < _tmpParams->LowerLimit(i))
+	   _tmpParams->SetValue(i, _tmpParams->LowerLimit(i));
+	 if(_tmpParams->Value(i) > _tmpParams->UpperLimit(i))
+	   _tmpParams->SetValue(i, _tmpParams->UpperLimit(i));
+       }
+     }
    }
 }
 

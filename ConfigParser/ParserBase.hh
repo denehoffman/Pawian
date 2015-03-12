@@ -73,6 +73,7 @@ public:
   const int ratioMcToData() const {return _ratioMcToData;}
   const int evoPopulation() const {return _evoPopulation;}
   const int evoIterations() const {return _evoIterations;}
+  const double evoRatioOfModParams() const {return _evoRatioOfModParams;}
   const bool cacheAmps() const {return _cacheAmps;}
   const bool calcContributionError() const {return _calcContributionError;}
   const bool saveContributionHistos() const {return _saveContributionHistos;}
@@ -130,6 +131,7 @@ protected:
   int _ratioMcToData;
   int _evoIterations;
   int _evoPopulation;
+  double _evoRatioOfModParams;
   bool _cacheAmps;
   bool _calcContributionError;
   bool _saveContributionHistos;

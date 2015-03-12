@@ -47,6 +47,8 @@ public:
 private:
    int _population;
    int _iterations;
+  double _evoRatioOfModParams;
+
    fitParCol _currentBestParams;
    fitParCol _defaultFitErrParms;
 

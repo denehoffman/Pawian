@@ -52,6 +52,7 @@ ParserBase::ParserBase(int argc,char **argv)
       , _ratioMcToData(100000)
       , _evoIterations(100)
       , _evoPopulation(20)
+      , _evoRatioOfModParams(1.)
       , _cacheAmps(true)
       , _calcContributionError(false)
       , _saveContributionHistos(false)
@@ -108,6 +109,7 @@ ParserBase::ParserBase(int argc,char **argv)
       ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
       ("evoPopulation",po::value<int>(&_evoPopulation),  "iteration population for evo minimizer")
       ("evoIterations",po::value<int>(&_evoIterations),  "number of iterations for evo minimizer")
+      ("evoRatioOfModParams",po::value<double>(&_evoRatioOfModParams),  "chosen (avereaged) ratio of fit parameters to be changed for each population (value between 0. and 1.")
       ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
       ("contributionError",po::value<bool>(&_calcContributionError),  "calculate the wave contribution error")
       ("saveContributionHistos",po::value<bool>(&_saveContributionHistos),  "creates a histogram root-file for each contribution of Option: calcContribution")
@@ -215,6 +217,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " ;  // << endmsg;
     }
 
+    if (_evoRatioOfModParams<=0. || _evoRatioOfModParams>1.){
+      Alert << "_evoRatioOfModParams = " << _evoRatioOfModParams << " not possible\n"
+    	    << "value must be between 0. and 1. !!!!" << endmsg;
+      exit(1);
+    }
 
     if(_verbose){
       std::cout << "\nRunning with the following options using " << _configFile << ":\n\n"
