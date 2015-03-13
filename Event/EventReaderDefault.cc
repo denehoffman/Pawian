@@ -61,7 +61,7 @@ EventReaderDefault::~EventReaderDefault()
 
 bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
 {
-  int currentEvtNo=0;
+  int currentEvtNo=-1;
 
   while (currentFile != fileNames.end()) {
     currentStream.open(currentFile->c_str());
@@ -71,7 +71,7 @@ bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
     }
 
     while (!currentStream.eof()) {
-      //      currentEvtNo++;
+      currentEvtNo++;
       double e,px,py,pz;
       Event* newEvent = new Event();
       int parts;
@@ -108,11 +108,11 @@ bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
       }
 
       if( !acceptEvt || currentEvtNo<evtStart || currentEvtNo>evtStop){
-	currentEvtNo++;
+	if (!acceptEvt) currentEvtNo--;
 	delete newEvent;
 	continue;
       }
-      currentEvtNo++; 
+ 
       if (!currentStream.fail()) {
 	evtList.add(newEvent);
 	for (parts = 0; parts < linesToSkip; parts++)
