@@ -1,0 +1,35 @@
+alias install : install-bin install-lib ;
+explicit install ;
+
+install install-bin : coupledCannelApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+install install-lib : PwaApps
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
+project : 
+        ;
+
+lib PwaApps : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/ConfigParser//ConfigParser
+	$(TOP)/FitParams//FitParams
+        $(TOP)/PwaUtils//PwaUtils
+	$(TOP)/AppUtils//AppUtils
+        $(TOP)/pbarpUtils//pbarpUtils
+        $(TOP)/epemUtils//epemUtils
+        $(TOP)/Particle//Particle
+        $(TOP)/Event//Event
+        :  
+        : 
+        :   ;
+
+exe coupledCannelApp : coupledCannelApp.cc PwaApps : ;
