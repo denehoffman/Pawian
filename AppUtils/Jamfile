@@ -20,6 +20,8 @@ lib AppUtils :
 	$(TOP)/PspGen//PspGen
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/MinFunctions//MinFunctions
+	$(TOP)/pbarpUtils//pbarpUtils
+	$(TOP)/epemUtils//epemUtils
 	:
 	: 
 	: ;

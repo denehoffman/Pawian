@@ -32,6 +32,9 @@
 #include <boost/archive/text_iarchive.hpp>
 
 #include "AppUtils/AppBase.hh"
+
+#include "AppUtils/LhFactory.hh"
+
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtWeightList.hh"
@@ -94,8 +97,8 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   int noFinalStateParticles=GlobalEnv::instance()->Channel(channelID)->noFinalStateParticles();
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel()->massRangeCuts();
   EventReaderDefault eventReader(fileNames, noFinalStateParticles, 0, withEvtWeight);
-  eventReader.setUnit(GlobalEnv::instance()->parser()->unitInFile());
-  eventReader.setOrder(GlobalEnv::instance()->parser()->orderInFile());
+  eventReader.setUnit(GlobalEnv::instance()->Channel(channelID)->parser()->unitInFile());
+  eventReader.setOrder(GlobalEnv::instance()->Channel(channelID)->parser()->orderInFile());
 
   if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
    eventReader.setMassRange(massRangeCuts);
@@ -118,6 +121,19 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
     ++evtCount;
   }
   theEventList.rewind();
+}
+
+void AppBase::createLhObjects(){
+
+  ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
+  for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+    std::string prodFormalism=(*it).first->parser()->productionFormalism();
+    std::shared_ptr<AbsLh> theLhPtr=LhFactory::instance()->getLh((*it).first->channelType(),(*it).first->channelID(), prodFormalism );
+    (*it).first->SetLh(theLhPtr);
+  }
+  
+  // Generate the full parameter set using the likelihood list
+  GlobalEnv::instance()->CreateDefaultParameterSet();
 }
 
 void AppBase::qaMode(fitParCol& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
@@ -430,9 +446,10 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 
   std::shared_ptr<AbsFcn> absFcn;
   std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), GlobalEnv::instance()->parser()->noOfClients(), numEventMap, GlobalEnv::instance()->parser()->clientNumberWeights()));
-  theServer->WaitForFirstClientLogin();
+  //  theServer->WaitForFirstClientLogin();
 
   absFcn=std::shared_ptr<AbsFcn>(new PwaFcnServer(theServer));
+  theServer->WaitForFirstClientLogin();
 
   std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
   if(GlobalEnv::instance()->parser()->mode()=="server") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));

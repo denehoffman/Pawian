@@ -40,19 +40,11 @@
 #include "Event/EventList.hh"
 #include "MinFunctions/AbsFcn.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
-// #include "Minuit2/MnUserParameters.h"
-// #include "Minuit2/MnMigrad.h"
-// #include "Minuit2/FunctionMinimum.h"
 
-class AbsLh;
 class fitParCol;
-class AbsHist;
 class NetworkClient;
 class EvtDataBaseList;
-class AbsHist;
 class AbsPawianParameters;
-
-//using namespace ROOT::Minuit2;
 
 class AppBase{
 
@@ -65,6 +57,7 @@ public:
   virtual void dumpDefaultParams();
   virtual void generate(fitParCol& theParams);
   virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
+  virtual void createLhObjects();
   virtual void qaMode(fitParCol& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
   virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParCol& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams);
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList);

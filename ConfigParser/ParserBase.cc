@@ -32,125 +32,127 @@ using namespace std;
 
 
 ParserBase::ParserBase(int argc,char **argv)
-      : _configFile("./JpsiGamEtaPiPi.cfg")
-      , _errLogMode(debug)
-      , _dataFile("")
-      , _mcFile("")
-      , _unitInFile("GEV")
-      , _orderInFile("Px Py Pz E")
-      , _paramFile("")
-      , _serializationFile("")
-      , _startHypo("base")
-      , _mode("plotmode")
-      , _outputFileNameSuffix("")
-      , _serverAddress("localhost")
-      , _clientNumberWeights("")
-      , _verbose(true)
-      , _noOfThreads(16)
-      , _noOfClients(1)
-      , _serverPort(22222)
-      , _ratioMcToData(100000)
-      , _evoIterations(100)
-      , _evoPopulation(20)
-      , _evoRatioOfModParams(1.)
-      , _cacheAmps(true)
-      , _calcContributionError(false)
-      , _saveContributionHistos(false)
-      , _strErrLogMode("debug")
-      , _desc(0)
-      , _common(new po::options_description("Common Options"))
-      , _config(new po::options_description("Configuration file options"))
-      ,_useEvtWeight(false)
-      ,_usePhaseSpaceHyp(false)
-      ,_doScaling(false)
-      ,_pdgTableFile("/Particle/pdtNew.table")
-      ,_productionFormalism("Cano")
-      ,_useProductionBarrier(false)
-      ,_withProductionBarrier("false")
-      ,_qRProduction(0.1973)
-      ,_fitqRProduction(false)
-      ,_randomSeed(44123)
-      ,_genWithModel(true)
-      ,_noOfGenEvts(10000)
-      ,_noOfDataEvts(1000000)
-      ,_tolerance(0.1)
-     {
-       string strErrLogMode="debug";
-    // Check the command line options. Uses the Boost program options library.
-    string strAppName(argv[0]);
-    size_t found = strAppName.rfind("/")+1;
-    if (found != string::npos) strAppName=strAppName.substr(found);
+  : _configFile("")
+  , _errLogMode(debug)
+  , _dataFile("")
+  , _mcFile("")
+  , _unitInFile("GEV")
+  , _orderInFile("Px Py Pz E")
+  , _paramFile("")
+  , _serializationFile("")
+  , _startHypo("base")
+  , _mode("plotmode")
+  , _outputFileNameSuffix("")
+  , _serverAddress("localhost")
+  , _clientNumberWeights("")
+  , _verbose(true)
+  , _noOfThreads(16)
+  , _noOfClients(1)
+  , _serverPort(22222)
+  , _ratioMcToData(100000)
+  , _evoIterations(100)
+  , _evoPopulation(20)
+  , _evoRatioOfModParams(1.)
+  , _cacheAmps(true)
+  , _calcContributionError(false)
+  , _saveContributionHistos(false)
+  , _strErrLogMode("debug")
+  , _desc(0)
+  , _common(new po::options_description("Common Options"))
+  , _config(new po::options_description("Configuration file options"))
+  ,_useEvtWeight(false)
+  ,_usePhaseSpaceHyp(false)
+  ,_doScaling(false)
+  ,_pdgTableFile("/Particle/pdtNew.table")
+  ,_productionFormalism("Cano")
+  ,_useProductionBarrier(false)
+  ,_withProductionBarrier("false")
+  ,_qRProduction(0.1973)
+  ,_fitqRProduction(false)
+  ,_randomSeed(44123)
+  ,_genWithModel(true)
+  ,_noOfGenEvts(10000)
+  ,_noOfDataEvts(1000000)
+  ,_tolerance(0.1)
+{
+  string globalCofigFilePath="/ConfigParser/global.cfg";
+  _configFile=getenv("TOP_DIR")+globalCofigFilePath;
+  string strErrLogMode="debug";
+  // Check the command line options. Uses the Boost program options library.
+  string strAppName(argv[0]);
+  size_t found = strAppName.rfind("/")+1;
+  if (found != string::npos) strAppName=strAppName.substr(found);
+  
+  string strDesc="Usage: " + strAppName + " [options]";
+  _desc= new po::options_description(strDesc);
+  
+  _desc->add_options()
+    ("help,h", "emit help message")
+    ("configFile,c",po::value<std::string>(&_configFile)->default_value(_configFile),
+     "The name of the configuration file holding further configuration options")
+    ("coupledChannelConfigFile,C",po::value< vector<string> >(&_coupledChannelCfgs),  "Configuration files for coupled channels")
+    ("configPbarpFiles,Cpbarp",po::value< vector<string> >(&_pbarpCfgs),  "Configuration files for pbarp channels")
+    ("configEpemFiles,Cepem",po::value< vector<string> >(&_epemCfgs),  "Configuration files for epem channels")
+    ;
+  
+  _common->add_options()
+    ("errLogMode,e", po::value<string>(&_strErrLogMode)->default_value(_strErrLogMode),"choose mode for Error logger.")
+    ("datFile",po::value<string>(&_dataFile), "full path of data file")
+    ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
+    ("unitInFile",po::value<string>(&_unitInFile),"chosen unit in input files")
+    ("orderInFile",po::value<string>(&_orderInFile),"chosen order in input files")
+    ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
+    ("serializationFile", po::value<string>(&_serializationFile), "serialized pwa i/o file")
+    ("serverAddress", po::value<string>(&_serverAddress), "server address for client mode")
+    ("clientNumberWeights", po::value<string>(&_clientNumberWeights), "weights to assign client numbers to channels")
+    ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
+    ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaultParams, qaMode, plotmode, spinDensity")
+    ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
+    ("noOfClients",po::value<int>(&_noOfClients),  "number of clients/worker nodes for server mode")
+    ("serverPort",po::value<int>(&_serverPort),  "port for client/server mode")
+    ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
+    ("evoPopulation",po::value<int>(&_evoPopulation),  "iteration population for evo minimizer")
+    ("evoIterations",po::value<int>(&_evoIterations),  "number of iterations for evo minimizer")
+    ("evoRatioOfModParams",po::value<double>(&_evoRatioOfModParams),  "chosen (avereaged) ratio of fit parameters to be changed for each population (value between 0. and 1.")
+    ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
+    ("contributionError",po::value<bool>(&_calcContributionError),  "calculate the wave contribution error")
+    ("saveContributionHistos",po::value<bool>(&_saveContributionHistos),  "creates a histogram root-file for each contribution of Option: calcContribution")
+    ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
+    ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
+    ("doScaling",po::value<bool>(&_doScaling), "enable/disable prefit with free scaling factor")
+    ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
+    ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
+    ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
+    ;
+  
+  _config->add_options()
+    ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
+    ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
+    ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
+    ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
+    ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
+    ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
+    ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
+    ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
+    ("replaceProdKey",po::value< vector<string> >(&_replaceProdKey),  "replace key for specific fit parameter of the production")
+    ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
+    ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
+    ("useProductionBarrier",po::value<string>(&_withProductionBarrier), "use barrier factors for the production, not supported for helicity formalism, first argument yes/false; second argument optional qR value (default 0.197) ")
+    ("fitqRProduction",po::value<bool>(&_fitqRProduction), "enable/disable fir parameter for individual qR prduction values")
+    ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
+    ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
+    ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
+    ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
+    ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...") 
+    ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
+    ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
+    ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
+    ("noOfDataEvents",po::value<int>(&_noOfDataEvts),  "number of data events for PWA and qa")
+    ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
+    ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
+    ;
 
-    string strDesc="Usage: " + strAppName + " [options]";
-    _desc= new po::options_description(strDesc);
-
-    _desc->add_options()
-      ("help,h", "emit help message")
-      ("configFile,c",po::value<std::string>(&_configFile)->default_value(_configFile),
-	    "The name of the configuration file holding further configuration options")
-      ("coupledChannelConfigFile,C",po::value< vector<string> >(&_coupledChannelCfgs),  "Configuration files for coupled channels")
-      ;
-
-    _common->add_options()
-      ("errLogMode,e", po::value<string>(&_strErrLogMode)->default_value(_strErrLogMode),"choose mode for Error logger.")
-      ("datFile",po::value<string>(&_dataFile), "full path of data file")
-      ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
-      ("unitInFile",po::value<string>(&_unitInFile),"chosen unit in input files")
-      ("orderInFile",po::value<string>(&_orderInFile),"chosen order in input files")
-      ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
-      ("serializationFile", po::value<string>(&_serializationFile), "serialized pwa i/o file")
-      ("serverAddress", po::value<string>(&_serverAddress), "server address for client mode")
-      ("clientNumberWeights", po::value<string>(&_clientNumberWeights), "weights to assign client numbers to channels")
-      ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
-      ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaultParams, qaMode, plotmode, spinDensity")
-      ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
-      ("noOfClients",po::value<int>(&_noOfClients),  "number of clients/worker nodes for server mode")
-      ("serverPort",po::value<int>(&_serverPort),  "port for client/server mode")
-      ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
-      ("evoPopulation",po::value<int>(&_evoPopulation),  "iteration population for evo minimizer")
-      ("evoIterations",po::value<int>(&_evoIterations),  "number of iterations for evo minimizer")
-      ("evoRatioOfModParams",po::value<double>(&_evoRatioOfModParams),  "chosen (avereaged) ratio of fit parameters to be changed for each population (value between 0. and 1.")
-      ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
-      ("contributionError",po::value<bool>(&_calcContributionError),  "calculate the wave contribution error")
-      ("saveContributionHistos",po::value<bool>(&_saveContributionHistos),  "creates a histogram root-file for each contribution of Option: calcContribution")
-      ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
-      ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
-      ("doScaling",po::value<bool>(&_doScaling), "enable/disable prefit with free scaling factor")
-      ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
-      ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
-      ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
-      ;
-
-    _config->add_options()
-      ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
-      ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
-      ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
-      ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
-      ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
-      ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
-      ("replaceParamSuffix",po::value< vector<string> >(&_replaceParSuffix),  "replace suffix for fit parameter name")
-      ("replaceMassKey",po::value< vector<string> >(&_replaceMassKey),  "replace Key for the fit parameter of the mass")
-      ("replaceProdKey",po::value< vector<string> >(&_replaceProdKey),  "replace key for specific fit parameter of the production")
-      ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
-      ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
-      ("useProductionBarrier",po::value<string>(&_withProductionBarrier), "use barrier factors for the production, not supported for helicity formalism, first argument yes/false; second argument optional qR value (default 0.197) ")
-      ("fitqRProduction",po::value<bool>(&_fitqRProduction), "enable/disable fir parameter for individual qR prduction values")
-      ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
-      ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
-      ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
-      ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
-       ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...") 
-      ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
-      ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
-      ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
-      ("noOfDataEvents",po::value<int>(&_noOfDataEvts),  "number of data events for PWA and qa")
-      ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
-      ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
-      ;
-
-
-
-  }
+}
 
 /************************************************************************************************/
 /************************************************************************************************/
@@ -248,6 +250,12 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       for (it = _coupledChannelCfgs.begin(); it!=_coupledChannelCfgs.end(); ++it){
 	  std::cout << "Coupled channel configuration file: " << (*it) << "\n";
+      }
+      for (it = _pbarpCfgs.begin(); it!=_pbarpCfgs.end(); ++it){
+         std::cout << "pbarp channel configuration file: " << (*it) << "\n";
+      }
+      for (it = _epemCfgs.begin(); it!=_epemCfgs.end(); ++it){
+         std::cout << "epem channel configuration file: " << (*it) << "\n";
       }
       for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
 	  std::cout << "clone particles: " << (*it) << "\n";
