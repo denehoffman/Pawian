@@ -2,6 +2,6 @@
 
 echo Starting evo ...
 
-$TOP_DIR/bin/epemReactionApp -c $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode evo --noOfThreads 4 !>& evo.log &
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode evo --noOfThreads 4 !>& evo.log &
 
 echo done

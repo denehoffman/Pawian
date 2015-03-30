@@ -141,6 +141,7 @@ int main(int __argc,char *__argv[]){
     GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_EPEM);
   }
 
+  GlobalEnv::instance()->replaceParser(channelParser);
   // Set the desired error logging mode
   setErrLogMode(channelParser->getErrLogMode());
 

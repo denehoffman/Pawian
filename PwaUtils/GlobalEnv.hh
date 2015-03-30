@@ -45,6 +45,7 @@ public:
    ~GlobalEnv();
 
    void setup(ParserBase* theParser);
+  void replaceParser(ParserBase* theParser);
    void AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short channelType);
 
    ParticleTable* particleTable() {return _particleTable;}

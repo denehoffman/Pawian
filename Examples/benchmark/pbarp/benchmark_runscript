@@ -2,14 +2,14 @@
 
 echo Starting server ...
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode server --paramFile defaultparams.dat !>& server.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode server --paramFile defaultparams.dat !>& server.log &
 
 sleep 5
 
 echo Starting clients ...
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& client1.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& client1.log &
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& client2.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& client2.log &
 
 echo done

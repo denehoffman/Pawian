@@ -2,14 +2,14 @@
 
 echo Starting evoserver ...
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode evoserver --paramFile defaultparams.dat !>& evoserver.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode evoserver --paramFile defaultparams.dat !>& evoserver.log &
 
 sleep 5
 
 echo Starting clients ...
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& evoclient1.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& evoclient1.log &
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& evoclient2.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile defaultparams.dat !>& evoclient2.log &
 
 echo done

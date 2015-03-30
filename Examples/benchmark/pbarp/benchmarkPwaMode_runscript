@@ -2,6 +2,6 @@
 
 echo Starting pwa ...
 
-$TOP_DIR/bin/pbarpReactionApp -c pbarpReactionDefault.cfg --mode pwa --paramFile defaultparams.dat --noOfThreads 4 !>& pwa.log &
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode pwa --paramFile defaultparams.dat --noOfThreads 4 !>& pwa.log &
 
 echo done
