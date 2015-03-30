@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : coupledCannelApp
+install install-bin : coupledChannelApp singleChannelApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -32,4 +32,5 @@ lib PwaApps :
         : 
         :   ;
 
-exe coupledCannelApp : coupledCannelApp.cc PwaApps : ;
+exe coupledChannelApp : coupledChannelApp.cc PwaApps : ;
+exe singleChannelApp : singleChannelApp.cc PwaApps : ;

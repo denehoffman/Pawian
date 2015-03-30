@@ -30,8 +30,6 @@
 #include <iterator>
 #include <memory>
 
-#include "TROOT.h"
-
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"

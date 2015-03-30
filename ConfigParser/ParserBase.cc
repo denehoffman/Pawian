@@ -91,8 +91,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("configFile,c",po::value<std::string>(&_configFile)->default_value(_configFile),
      "The name of the configuration file holding further configuration options")
     ("coupledChannelConfigFile,C",po::value< vector<string> >(&_coupledChannelCfgs),  "Configuration files for coupled channels")
-    ("configPbarpFiles,Cpbarp",po::value< vector<string> >(&_pbarpCfgs),  "Configuration files for pbarp channels")
-    ("configEpemFiles,Cepem",po::value< vector<string> >(&_epemCfgs),  "Configuration files for epem channels")
+    ("pbarpFiles",po::value< vector<string> >(&_pbarpCfgs),  "Configuration files for pbarp channels")
+    ("epemFiles",po::value< vector<string> >(&_epemCfgs),  "Configuration files for epem channels")
     ;
   
   _common->add_options()
