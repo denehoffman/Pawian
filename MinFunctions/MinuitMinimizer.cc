@@ -125,6 +125,21 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     if(_mnFunctionMinimumFinalPtr->HasReachedCallLimit()) Info << " hasReachedCallLimit() returned TRUE" << endmsg;
     if(_mnFunctionMinimumFinalPtr->IsAboveMaxEdm())       Info << " isAboveMaxEdm() returned TRUE" << endmsg;
     if(_mnFunctionMinimumFinalPtr->HesseFailed())         Info << " hesseFailed() returned TRUE\n" << endmsg;
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // calculate AIC, BIC criteria and output selected wave contrib
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    unsigned int noOfFreeFitParams=_bestPawianParams->VariableParameters();
+
+    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    Info << "evtWeightSumData:\t" <<evtWeightSumData;
+    Info << "BIC:\t" << BICcriterion << endmsg;
+    Info << "AIC:\t" << AICcriterion << endmsg;
+    Info << "AICc:\t" << AICccriterion << endmsg;
 }
 
 void MinuitMinimizer::dumpFitResult(){

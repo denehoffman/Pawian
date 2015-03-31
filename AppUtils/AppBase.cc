@@ -462,11 +462,11 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   
   absMinimizerPtr->minimize();
   
-  theServer->BroadcastClosingMessage();
-  Info << "Closing server." << endmsg;
-  
   absMinimizerPtr->printFitResult(evtWeightSumData);
   absMinimizerPtr->dumpFitResult();
+
+  theServer->BroadcastClosingMessage();
+  Info << "Closing server." << endmsg;
 }
 
 
