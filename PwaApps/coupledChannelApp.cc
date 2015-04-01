@@ -32,7 +32,6 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "FitParams/FitParColBase.hh"
-#include "FitParams/StreamFitParColBase.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -108,11 +107,9 @@ int main(int __argc,char *__argv[]){
   }
 
   // Read start param file
-  std::string paramStreamerPath=globalAppParams->fitParamFile();
-  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-  StreamFitParmsBase theParamStreamer(paramStreamerPath);
-  fitParCol theStartparams=theParamStreamer.getFitParamVal();
-  fitParCol theErrorparams=theParamStreamer.getFitParamErr();
+  fitParCol theStartparams;
+  fitParCol theErrorparams;
+  theAppBase.streamParams(theStartparams, theErrorparams); 
 
   // Set minuit parameters
   std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");

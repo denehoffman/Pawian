@@ -46,6 +46,7 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 
 #include "FitParams/FitParColBase.hh"
+#include "FitParams/StreamFitParColBase.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "FitParams/PwaCovMatrix.hh"
 
@@ -361,6 +362,13 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
 
   double histScaleFactor=evtWeightSumData/evtCountMc;
   histPtr->scaleFitHists(histScaleFactor);
+}
+
+void AppBase::streamParams(fitParCol& startparams, fitParCol& errparams){
+  std::string paramStreamerPath=GlobalEnv::instance()->parser()->fitParamFile();
+  StreamFitParmsBase theParamStreamer(paramStreamerPath);
+  startparams=theParamStreamer.getFitParamVal();
+  errparams=theParamStreamer.getFitParamErr();
 }
 
 void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams){

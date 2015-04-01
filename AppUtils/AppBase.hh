@@ -61,6 +61,7 @@ public:
   virtual void qaMode(fitParCol& theStartParams, double evtWeightSumData, int noOfFreeFitParams);
   virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParCol& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams);
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList);
+  virtual void streamParams(fitParCol& startparams, fitParCol& errparams);
   virtual void fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams);
   virtual void fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar);
   virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID);

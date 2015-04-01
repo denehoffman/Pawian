@@ -32,7 +32,6 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "FitParams/FitParColBase.hh"
-#include "FitParams/StreamFitParColBase.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -111,23 +110,23 @@ int main(int __argc,char *__argv[]){
    for (int i=0; i<argcWoCfgFile ; ++i)  argvWCfgFile[i]=argvWoCfgFile[i];
 
    for(auto it=pbarpCfgs.begin(); it!=pbarpCfgs.end();++it){
-    argvWCfgFile[argcWoCfgFile]=(char*)"-c";
-    argvWCfgFile[argcWoCfgFile+1]=(char*)(*it).c_str();
-    for (int i=0; i<argcWoCfgFile+2 ; ++i) Info << argvWCfgFile[i] << endmsg;
-    pbarpParser* currentParser = new pbarpParser(argcWoCfgFile+2, argvWCfgFile);
+     argvWCfgFile[argcWoCfgFile]=(char*)"-c";
+     argvWCfgFile[argcWoCfgFile+1]=(char*)(*it).c_str();
+     for (int i=0; i<argcWoCfgFile+2 ; ++i) Info << argvWCfgFile[i] << endmsg;
+     pbarpParser* currentParser = new pbarpParser(argcWoCfgFile+2, argvWCfgFile);
      channelEnv = std::shared_ptr<AbsChannelEnv>(new PbarpChannelEnv(currentParser));
-    channelParser=currentParser;
-    GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_PBARP);
-    isPbarpChannel=true;
-  }
-  for(auto it=epemCfgs.begin(); it!=epemCfgs.end();++it){
-    argvWCfgFile[argcWoCfgFile]=(char*)"-c";
-    argvWCfgFile[argcWoCfgFile+1]=(char*)(*it).c_str();
-    epemParser* currentParser = new epemParser(argcWoCfgFile+2, argvWCfgFile);
-    channelEnv = std::shared_ptr<AbsChannelEnv>(new EpemChannelEnv(currentParser));
-    channelParser=currentParser;
-    GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_EPEM);
-  }
+     channelParser=currentParser;
+     GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_PBARP);
+     isPbarpChannel=true;
+   }
+   for(auto it=epemCfgs.begin(); it!=epemCfgs.end();++it){
+     argvWCfgFile[argcWoCfgFile]=(char*)"-c";
+     argvWCfgFile[argcWoCfgFile+1]=(char*)(*it).c_str();
+     epemParser* currentParser = new epemParser(argcWoCfgFile+2, argvWCfgFile);
+     channelEnv = std::shared_ptr<AbsChannelEnv>(new EpemChannelEnv(currentParser));
+     channelParser=currentParser;
+     GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_EPEM);
+   }
 
   GlobalEnv::instance()->replaceParser(channelParser);
 
@@ -146,11 +145,9 @@ int main(int __argc,char *__argv[]){
   }
 
   // Read start param file
-  std::string paramStreamerPath=channelParser->fitParamFile();
-  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-  StreamFitParmsBase theParamStreamer(paramStreamerPath);
-  fitParCol theStartparams=theParamStreamer.getFitParamVal();
-  fitParCol theErrorparams=theParamStreamer.getFitParamErr();
+  fitParCol theStartparams;
+  fitParCol theErrorparams;
+  theAppBase.streamParams(theStartparams, theErrorparams); 
 
   if (mode=="gen"){
     theAppBase.generate(theStartparams);
