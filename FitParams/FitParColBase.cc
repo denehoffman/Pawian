@@ -353,7 +353,7 @@ void FitParColBase::setAbsPawianParamsDouble(std::shared_ptr<AbsPawianParameters
     else if(theName.size()>20 && (theName.compare(theName.size()-19, theName.size(), "channelScalingOther")==0)){
       minVal = 0.;
       //      maxVal = theStartVal+30.*theErrVal;
-       upar->Add(theName, theStartVal, theErrVal, minVal, maxVal);
+       upar->Add(theName, theStartVal, theErrVal, minVal, maxVal*10.);
     }
     else{
        upar->Add(theName, theStartVal, theErrVal, minVal, maxVal);

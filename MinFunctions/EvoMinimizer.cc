@@ -225,7 +225,7 @@ void EvoMinimizer::printFitResult(double evtWeightSumData){
   Info <<"Final fit params:" << endmsg;
   std::vector<double> pVals=_bestPawianParams->Params();  
   std::vector<double> pErrs=_bestPawianParams->Errors();
-  for(int i=0; i < pVals.size(); ++i){
+  for(unsigned int i=0; i < pVals.size(); ++i){
     Info << _bestPawianParams->GetName(i) << " : " << pVals.at(i) << "\t" << pErrs.at(i) << endmsg;
   }
 
