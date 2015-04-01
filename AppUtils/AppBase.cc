@@ -212,6 +212,9 @@ void AppBase::qaMode(fitParCol& theStartParams, double evtWeightSumData, int noO
   }
 
   theQaStream.close();
+
+  std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance();
+  histPtr->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), theStartParams);
 }
 
 void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParCol& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
@@ -484,5 +487,46 @@ void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double
   absMinimizerPtr->minimize();
   absMinimizerPtr->printFitResult(evtWeightSumData);
   absMinimizerPtr->dumpFitResult();
+}
+
+void AppBase::fitClientMode(fitParCol& theStartparams){
+  std::ostringstream portStringStream;
+  portStringStream << GlobalEnv::instance()->parser()->serverPort();
+  
+  NetworkClient theClient(GlobalEnv::instance()->parser()->serverAddress(), portStringStream.str());
+  if(!theClient.Login()){
+    Alert << "login of the client failed!!!" << endmsg;
+    exit(1);
+  }
+
+  ChannelID channelID = theClient.channelID();
+  bool cacheAmps = GlobalEnv::instance()->Channel(channelID)->parser()->cacheAmps();
+  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  if (cacheAmps) GlobalEnv::instance()->Channel(channelID)->Lh()->cacheAmplitudes();
+
+  const std::string datFile=GlobalEnv::instance()->Channel(channelID)->parser()->dataFile();
+  const std::string mcFile=GlobalEnv::instance()->Channel(channelID)->parser()->mcFile();
+  Info << "data file: " << datFile ;  // << endmsg;
+  Info << "mc file: " << mcFile ;  // << endmsg;
+  
+  std::vector<std::string> dataFileNames;
+  dataFileNames.push_back(datFile);
+
+  std::vector<std::string> mcFileNames;
+  mcFileNames.push_back(mcFile);
+
+  EventList eventsDataClient;
+  readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+
+  EventList mcDataClient;
+  readEvents(mcDataClient, mcFileNames, channelID, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+
+  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(channelID));
+  eventListPtr->read(eventsDataClient, mcDataClient);
+
+  GlobalEnv::instance()->Channel(channelID)->Lh()->setDataVec(eventListPtr->getDataVecs());
+  GlobalEnv::instance()->Channel(channelID)->Lh()->setMcVec(eventListPtr->getMcVecs());
+
+  calcAndSendClientLh(theClient, theStartparams, channelID);
 }
 

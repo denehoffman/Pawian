@@ -30,10 +30,6 @@
 #include <iterator>
 #include <memory>
 
-#include "Particle/ParticleTable.hh"
-#include "Particle/Particle.hh"
-#include "Particle/PdtParser.hh"
-
 #include "PwaUtils/AbsLh.hh"
 #include "FitParams/FitParColBase.hh"
 #include "FitParams/StreamFitParColBase.hh"
@@ -44,16 +40,8 @@
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/WelcomeScreen.hh"
 
-
-#include "pbarpUtils/pbarpStatesLS.hh"
 #include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/PbarpChannelEnv.hh"
-#include "pbarpUtils/pbarpReaction.hh"
-#include "pbarpUtils/pbarpBaseLh.hh"
-#include "pbarpUtils/pbarpHeliLh.hh"
-#include "pbarpUtils/pbarpCanoLh.hh"
-#include "pbarpUtils/pbarpTensorLh.hh"
-#include "pbarpUtils/pbarpHist.hh"
 #include "pbarpUtils/spinDensityHist.hh"
 
 #include "ConfigParser/globalParser.hh"
@@ -111,7 +99,7 @@ int main(int __argc,char *__argv[]){
        Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
        exit(1); 
      }
-     else if(currentArgv !=(char*)"--configPbarpFiles"){
+     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles"){
        argvWoCfgFile[argcWoCfgFile]=__argv[i];
        argcWoCfgFile++;
      }
@@ -142,6 +130,7 @@ int main(int __argc,char *__argv[]){
   }
 
   GlobalEnv::instance()->replaceParser(channelParser);
+
   // Set the desired error logging mode
   setErrLogMode(channelParser->getErrLogMode());
 
@@ -150,9 +139,6 @@ int main(int __argc,char *__argv[]){
   
   AppBase theAppBase;
   theAppBase.createLhObjects();
-
-  // Create likelihood objects
-  //  ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
 
   if (mode=="dumpDefaultParams"){
     theAppBase.dumpDefaultParams();
@@ -198,44 +184,7 @@ int main(int __argc,char *__argv[]){
   }
 
   if(mode == "client"){
-
-  std::ostringstream portStringStream;
-  portStringStream << channelParser->serverPort();
-
-  NetworkClient theClient(channelParser->serverAddress(), portStringStream.str());
-  if(!theClient.Login())
-    return 0;
-
-  ChannelID channelID = theClient.channelID();
-
-  bool cacheAmps = channelParser->cacheAmps();
-  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
-  if (cacheAmps) GlobalEnv::instance()->Channel(channelID)->Lh()->cacheAmplitudes();
-
-  const std::string datFile=channelParser->dataFile();
-  const std::string mcFile=channelParser->mcFile();
-  Info << "data file: " << datFile ;  // << endmsg;
-  Info << "mc file: " << mcFile ;  // << endmsg;
-  std::vector<std::string> dataFileNames;
-  dataFileNames.push_back(datFile);
-
-  std::vector<std::string> mcFileNames;
-  mcFileNames.push_back(mcFile);
-
-  EventList eventsDataClient;
-  theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
-
-  EventList mcDataClient;
-  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
-
-  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(channelID));
-  eventListPtr->read(eventsDataClient, mcDataClient);
-
-  GlobalEnv::instance()->Channel(channelID)->Lh()->setDataVec(eventListPtr->getDataVecs());
-  GlobalEnv::instance()->Channel(channelID)->Lh()->setMcVec(eventListPtr->getMcVecs());
-
-  theAppBase.calcAndSendClientLh(theClient, theStartparams, channelID);
-
+    theAppBase.fitClientMode(theStartparams);
   return 1;
   }
 
@@ -326,8 +275,6 @@ int main(int __argc,char *__argv[]){
   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
   if (mode=="qaMode"){
       theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
-      pbarpHist theHist;
-      theHist.fillFromLhData(theLhPtr, theStartparams);
       end= clock();
       double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
       Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;

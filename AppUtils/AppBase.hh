@@ -66,6 +66,7 @@ public:
   virtual bool calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID);
   virtual void fitServerMode(std::shared_ptr<AbsPawianParameters> upar);
   virtual void fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData);
+  virtual void fitClientMode(fitParCol& theStartparams);
 };
 
 
