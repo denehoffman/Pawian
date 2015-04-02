@@ -36,16 +36,12 @@
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/WelcomeScreen.hh"
 
 #include "ConfigParser/pbarpParser.hh"
-#include "pbarpUtils/PbarpChannelEnv.hh"
 #include "pbarpUtils/spinDensityHist.hh"
 
 #include "ConfigParser/globalParser.hh"
-#include "ConfigParser/epemParser.hh"
-#include "epemUtils/EpemChannelEnv.hh"
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -58,7 +54,6 @@
 #include "FitParams/AbsPawianParameters.hh"
 
 #include "ErrLogger/ErrLogger.hh"
-
 
 
 int main(int __argc,char *__argv[]){
@@ -86,13 +81,11 @@ int main(int __argc,char *__argv[]){
    }
 
    GlobalEnv::instance()->setup(globalAppParams);
-   ParserBase* channelParser=0; 
-   std::shared_ptr<AbsChannelEnv> channelEnv;
+ 
    char* argvWoCfgFile[__argc];
    int argcWoCfgFile=0;
    for (int i=0; i<__argc ; ++i){
      Info << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
-     // if(__argv[i] ==(char*)"-c"){
      std::string currentArgv(__argv[i]);
      if(currentArgv =="-c" || currentArgv =="--configFile"){
        Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
@@ -106,37 +99,19 @@ int main(int __argc,char *__argv[]){
    }
 
    bool isPbarpChannel=false;
-   char* argvWCfgFile[argcWoCfgFile+2];
-   for (int i=0; i<argcWoCfgFile ; ++i)  argvWCfgFile[i]=argvWoCfgFile[i];
+   if (pbarpCfgs.size()==1) isPbarpChannel=true;
 
-   for(auto it=pbarpCfgs.begin(); it!=pbarpCfgs.end();++it){
-     argvWCfgFile[argcWoCfgFile]=(char*)"-c";
-     argvWCfgFile[argcWoCfgFile+1]=(char*)(*it).c_str();
-     for (int i=0; i<argcWoCfgFile+2 ; ++i) Info << argvWCfgFile[i] << endmsg;
-     pbarpParser* currentParser = new pbarpParser(argcWoCfgFile+2, argvWCfgFile);
-     channelEnv = std::shared_ptr<AbsChannelEnv>(new PbarpChannelEnv(currentParser));
-     channelParser=currentParser;
-     GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_PBARP);
-     isPbarpChannel=true;
-   }
-   for(auto it=epemCfgs.begin(); it!=epemCfgs.end();++it){
-     argvWCfgFile[argcWoCfgFile]=(char*)"-c";
-     argvWCfgFile[argcWoCfgFile+1]=(char*)(*it).c_str();
-     epemParser* currentParser = new epemParser(argcWoCfgFile+2, argvWCfgFile);
-     channelEnv = std::shared_ptr<AbsChannelEnv>(new EpemChannelEnv(currentParser));
-     channelParser=currentParser;
-     GlobalEnv::instance()->AddEnv(channelEnv, AbsChannelEnv::CHANNEL_EPEM);
-   }
+   AppBase theAppBase;
+   theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
 
-  GlobalEnv::instance()->replaceParser(channelParser);
+   GlobalEnv::instance()->replaceParser(GlobalEnv::instance()->Channel(0)->parser());
 
   // Set the desired error logging mode
-  setErrLogMode(channelParser->getErrLogMode());
+  setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());
 
   // Get mode
-  std::string mode=channelParser->mode();
-  
-  AppBase theAppBase;
+  std::string mode=GlobalEnv::instance()->parser()->mode();
+ 
   theAppBase.createLhObjects();
 
   if (mode=="dumpDefaultParams"){
@@ -165,7 +140,7 @@ int main(int __argc,char *__argv[]){
 
   // Fix params for all channels
   std::vector<std::string> fixedParams;
-  std::vector<std::string> fixedChannelParams = channelParser->fixedParams();
+  std::vector<std::string> fixedChannelParams = GlobalEnv::instance()->parser()->fixedParams();
   fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
 
 
@@ -188,8 +163,8 @@ int main(int __argc,char *__argv[]){
   // The following modes only need the primary channel data/mc and lh ptr
   std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
 
-  const std::string datFile=channelParser->dataFile();
-  const std::string mcFile=channelParser->mcFile();
+  const std::string datFile=GlobalEnv::instance()->parser()->dataFile();
+  const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
   Info << "data file: " << datFile ;  // << endmsg;
   Info << "mc file: " << mcFile ;  // << endmsg;
 
@@ -200,7 +175,7 @@ int main(int __argc,char *__argv[]){
   mcFileNames.push_back(mcFile);
 
   if(mode == "spinDensity" && isPbarpChannel){
-    bool cacheAmps = channelParser->cacheAmps();
+    bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
     Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) GlobalEnv::instance()->Channel()->Lh()->cacheAmplitudes();
     
@@ -234,8 +209,8 @@ int main(int __argc,char *__argv[]){
     return 1;    
   }
 
-  int noOfDataEvents = channelParser->noOfDataEvts();
-  int ratioMcToData= channelParser->ratioMcToData();
+  int noOfDataEvents = GlobalEnv::instance()->parser()->noOfDataEvts();
+  int ratioMcToData= GlobalEnv::instance()->parser()->ratioMcToData();
 
   EventList eventsData;
   theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, noOfDataEvents);
@@ -280,7 +255,7 @@ int main(int __argc,char *__argv[]){
   }
 
 
-  bool cacheAmps = channelParser->cacheAmps();
+  bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
   Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
   if (cacheAmps) theLhPtr->cacheAmplitudes();
 
