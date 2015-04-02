@@ -32,21 +32,12 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "FitParams/FitParColBase.hh"
-#include "FitParams/PwaCovMatrix.hh"
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/WelcomeScreen.hh"
 
-
-#include "pbarpUtils/pbarpStatesLS.hh"
-#include "ConfigParser/pbarpParser.hh"
-#include "pbarpUtils/PbarpChannelEnv.hh"
-
 #include "ConfigParser/globalParser.hh"
-#include "ConfigParser/epemParser.hh"
-#include "epemUtils/EpemChannelEnv.hh"
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/ErrLogUtils.hh"
@@ -59,7 +50,6 @@
 #include "FitParams/AbsPawianParameters.hh"
 
 #include "ErrLogger/ErrLogger.hh"
-
 
 
 int main(int __argc,char *__argv[]){
@@ -76,26 +66,14 @@ int main(int __argc,char *__argv[]){
   // Setup the global environment and add the primary pbarp channel
   GlobalEnv::instance()->setup(globalAppParams);
 
-  // Create environments for coupled channels
-  // Currently secondary channels need to be of the same type(pbarp, epem,..) as the primary one
-  std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
-  for(auto it=pbarpCfgs.begin(); it!=pbarpCfgs.end();++it){
-    char* argv[] = {__argv[0], (char*)"-c", (char*)(*it).c_str()};
-    pbarpParser* ccParser = new pbarpParser(3, argv);
-    GlobalEnv::instance()->AddEnv(std::shared_ptr<PbarpChannelEnv>(new PbarpChannelEnv(ccParser)), AbsChannelEnv::CHANNEL_PBARP);
-  }
-
-  std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
-  for(auto it=epemCfgs.begin(); it!=epemCfgs.end();++it){
-    char* argv[] = {__argv[0], (char*)"-c", (char*)(*it).c_str()};
-    epemParser* ccParser = new epemParser(3, argv);
-    GlobalEnv::instance()->AddEnv(std::shared_ptr<EpemChannelEnv>(new EpemChannelEnv(ccParser)), AbsChannelEnv::CHANNEL_EPEM);
-  }
-
+  char* argv[3];
+  int argc=3;
+  AppBase theAppBase;
+  theAppBase.addChannelEnvs(argc, argv);
+  
   // Get mode
   std::string mode=globalAppParams->mode();
   
-  AppBase theAppBase;
   theAppBase.createLhObjects();
 
   // Create likelihood objects

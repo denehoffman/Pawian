@@ -47,8 +47,11 @@
 
 #include "FitParams/FitParColBase.hh"
 #include "FitParams/StreamFitParColBase.hh"
-#include "ConfigParser/ParserBase.hh"
 #include "FitParams/PwaCovMatrix.hh"
+
+#include "ConfigParser/ParserBase.hh"
+#include "ConfigParser/pbarpParser.hh"
+#include "ConfigParser/epemParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
@@ -61,6 +64,9 @@
 #include "MinFunctions/MinuitMinimizer.hh"
 
 #include "FitParams/AbsPawianParameters.hh"
+
+#include "pbarpUtils/PbarpChannelEnv.hh"
+#include "epemUtils/EpemChannelEnv.hh"
 
 AppBase::AppBase()
 {
@@ -538,3 +544,34 @@ void AppBase::fitClientMode(fitParCol& theStartparams){
   calcAndSendClientLh(theClient, theStartparams, channelID);
 }
 
+void AppBase::addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile){
+  int argcWCfgFile=argcWoCfgFile+2;
+  char* argvWCfgFile[argcWCfgFile];
+  for (int i=0; i<argcWoCfgFile ; ++i){
+    if (i==0) argvWCfgFile[i]=argvWoCfgFile[i];
+    else argvWCfgFile[i+2]=argvWoCfgFile[i];
+  }
+
+  std::vector<std::string> pbarpCfgs = GlobalEnv::instance()->parser()->pbarpCfgs();
+  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pbarpCfgs, AbsChannelEnv::CHANNEL_PBARP);
+  std::vector<std::string> epemCfgs = GlobalEnv::instance()->parser()->epemCfgs();
+  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, epemCfgs, AbsChannelEnv::CHANNEL_EPEM);
+}
+
+void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::vector<std::string>& reactionCfgs, short channelType){
+  for(auto it=reactionCfgs.begin(); it!=reactionCfgs.end();++it){
+     argvWCfgFile[1]=(char*)"-c";
+     argvWCfgFile[2]=(char*)(*it).c_str();
+     for (int i=0; i<argcWCfgFile ; ++i) Info << argvWCfgFile[i] << endmsg;
+     std::shared_ptr<AbsChannelEnv> channelEnv=0;
+     if(channelType==AbsChannelEnv::CHANNEL_PBARP){
+       pbarpParser* currentParser = new pbarpParser(argcWCfgFile, argvWCfgFile);
+       channelEnv = std::shared_ptr<AbsChannelEnv>(new PbarpChannelEnv(currentParser));
+     }
+     else if(channelType==AbsChannelEnv::CHANNEL_EPEM){
+        epemParser* currentParser = new epemParser(argcWCfgFile, argvWCfgFile);
+	channelEnv = std::shared_ptr<AbsChannelEnv>(new EpemChannelEnv(currentParser));
+   }
+     GlobalEnv::instance()->AddEnv(channelEnv, channelType);
+  }
+}

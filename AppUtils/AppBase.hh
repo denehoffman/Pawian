@@ -68,6 +68,8 @@ public:
   virtual void fitServerMode(std::shared_ptr<AbsPawianParameters> upar);
   virtual void fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData);
   virtual void fitClientMode(fitParCol& theStartparams);
+  virtual void addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile);
+  virtual void loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::vector<std::string>& reactionCfgs, short channelType);
 };
 
 
