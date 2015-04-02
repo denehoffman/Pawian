@@ -243,7 +243,7 @@ int main(int __argc,char *__argv[]){
   int maxMcEvts=eventsData.size()*ratioMcToData;
 
   EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, maxMcEvts-1);
+  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
 
