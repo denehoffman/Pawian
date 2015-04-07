@@ -139,12 +139,14 @@ int main(int __argc,char *__argv[]){
   }
 
   // Fix params for all channels
-  std::vector<std::string> fixedParams;
-  std::vector<std::string> fixedChannelParams = GlobalEnv::instance()->parser()->fixedParams();
-  fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
+  if (GlobalEnv::instance()->parser()->doScaling()) theAppBase.fixAllReleaseScaleParams(upar);
+  else{
+    std::vector<std::string> fixedParams;
+    std::vector<std::string> fixedChannelParams = GlobalEnv::instance()->parser()->fixedParams();
+    fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
+    theAppBase.fixParams(upar,fixedParams);
+  }
 
-
-  theAppBase.fixParams(upar,fixedParams);
   const unsigned int noOfFreeFitParams = upar->VariableParameters();
 
   // Disable output buffering

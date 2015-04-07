@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
 
    allCanvas->cd(5);
    qValCanvas->DrawClonePad();
-
+   complex<double> q0Dec = breakupMomQ(resonanceMass, decayParticle1Mass, decayParticle2Mass).real();
 
    // Barrier factors for decay
    TCanvas* decOnlyCanvas = new TCanvas("decOnlyCanvas", "decOnlyCanvas", 800, 600);
@@ -223,8 +223,10 @@ int main(int argc, char *argv[])
       dHist->SetLineWidth(2);
 
       for(int i=1; i<= dHist->GetNbinsX(); i++){
-	 double q = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
-	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRdec);
+	complex<double> q = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
+	 //	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRdec);
+	 std::complex<double> value = BarrierFactor::BlattWeisskopfRatio(l, q, q0Dec, qRdec);
+	 // std::cout << "BarrierFactor::BlattWeisskopf(l, q, qRdec) = " << BarrierFactor::BlattWeisskopf(l, q, qRdec) << "\t BarrierFactor::BlattWeisskopfRatio(l, q, q0Dec, qRdec) = " << BarrierFactor::BlattWeisskopfRatio(l, q, q0Dec, qRdec) << std::endl;
    	 dHist->SetBinContent(i, std::abs(value));
       }
       dHist->Scale(1./dHist->GetBinContent(dHist->GetNbinsX()));
@@ -252,8 +254,8 @@ int main(int argc, char *argv[])
       dHist->SetLineWidth(2);
 
       for(int i=1; i<= dHist->GetNbinsX(); i++){
-	 double q = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	 double qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	 std::complex<double> q = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
+	 std::complex<double> qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
 	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRprod)/BarrierFactor::BlattWeisskopf(l, qNorm, qRprod);
    	 dHist->SetBinContent(i, std::abs(value.real()));
       }
@@ -287,20 +289,22 @@ int main(int argc, char *argv[])
 	 combinedHistVec.push_back(dHist);
 
 	 for(int i=1; i<= dHist->GetNbinsX(); i++){
-	    double qDec = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
-	    double qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	    double qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
-	    std::complex<double> valueDec = BarrierFactor::BlattWeisskopf(ld, qDec, qRdec);
+	   complex<double> qDec = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
+	   complex<double> qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
+	   complex<double> qNorm= breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	    std::complex<double> valueDec = BarrierFactor::BlattWeisskopfRatio(ld, qDec, q0Dec, qRdec);
   	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qRprod)/BarrierFactor::BlattWeisskopf(lp, qNorm, qRprod);
-	    dHist->SetBinContent(i, std::abs(valueDec.real() * valueProd.real()));
+	    //	    std::cout << "valueDec: " << valueDec << "\tvalueProd: " << valueProd << "\t(valueDec* valueProd).real(): " << (valueDec*valueProd).real() << std::endl; 
+	    //	    dHist->SetBinContent(i, std::abs(valueDec.real() * valueProd.real()));
+	    dHist->SetBinContent(i, (valueDec*valueProd).real());
 	 }
 
-	 if(normMass > 0){
-	    dHist->Scale(1./dHist->GetBinContent(dHist->FindBin(normMass)));
-	 }
-	 else{
-	    dHist->Scale(1./dHist->GetBinContent(250));
-	 }
+	 // if(normMass > 0){
+	 //    dHist->Scale(1./dHist->GetBinContent(dHist->FindBin(normMass)));
+	 // }
+	 // else{
+	 //    dHist->Scale(1./dHist->GetBinContent(250));
+	 // }
 	 double currentMax = dHist->GetMaximum();
 	 if(currentMax>maxValCombined) maxValCombined=currentMax;
 
@@ -344,14 +348,17 @@ int main(int argc, char *argv[])
 	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qRprod)/BarrierFactor::BlattWeisskopf(lp, qNorm, qRprod);
 	    std::complex<double> breitWigner = BreitWignerFunction::BlattWRel(ld, dHist->GetBinCenter(i), resonanceMass, 
 									      resonanceWidth,decayParticle1Mass, decayParticle2Mass, qRdec );
+
 	    dHist->SetBinContent(i, std::norm(breitWigner * valueProd));
 	 }
 
 	 if(normMass > 0){
-	    dHist->Scale(1./dHist->GetBinContent(dHist->FindBin(normMass)));
+	   double bcont=dHist->GetBinContent(dHist->FindBin(normMass));
+	   if(bcont > 0.) dHist->Scale(1./bcont);
 	 }
 	 else{
-	    dHist->Scale(1./dHist->GetBinContent(dHist->FindBin(resonanceMass)));
+	   double bcont=dHist->GetBinContent(dHist->FindBin(resonanceMass));
+	   if(bcont > 0.) dHist->Scale(1./bcont);
 	 }
 	 double currentMax = dHist->GetMaximum();
 	 if(currentMax>maxValRes) maxValRes=currentMax;
