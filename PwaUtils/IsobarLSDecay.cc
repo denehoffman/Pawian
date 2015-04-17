@@ -37,13 +37,13 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-IsobarLSDecay::IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
-  AbsDecay(mother, daughter1, daughter2, channelID)
+IsobarLSDecay::IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string typeName) :
+  AbsDecay(mother, daughter1, daughter2, channelID, typeName)
 {
 }
 
-IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName) :
-  AbsDecay(motherIGJPCPtr, daughter1, daughter2, motherName, channelID)
+IsobarLSDecay::IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName, std::string typeName) :
+  AbsDecay(motherIGJPCPtr, daughter1, daughter2, motherName, channelID, typeName)
 {
 }
 

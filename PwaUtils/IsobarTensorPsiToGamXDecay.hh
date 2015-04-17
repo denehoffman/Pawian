@@ -49,7 +49,6 @@ public:
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   virtual void print(std::ostream& os) const;
-  virtual std::string type() {return "IsobarTensorPsiToGamXDecay";}
 
   virtual void enableProdBarrier(double qRValue);
   virtual short noOfAmplitudes() const {return _noOfAmps;}

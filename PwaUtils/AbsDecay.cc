@@ -44,8 +44,9 @@
 #include "PwaDynamics/BarrierFactor.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId) :
-   _channelId(channelId)
+AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId, std::string typeName) :
+  _typeName(typeName)
+  ,_channelId(channelId)
   ,_mother(mother)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)
@@ -141,8 +142,9 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   }
 }
 
-AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId) :
-  _channelId(channelId)
+AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId, std::string typeName) :
+  _typeName(typeName)
+  ,_channelId(channelId)
   ,_mother(0)
   ,_daughter1(daughter1)
   ,_daughter2(daughter2)

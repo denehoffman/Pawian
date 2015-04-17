@@ -66,9 +66,11 @@ void EpemChannelEnv::setup(ChannelID id){
   std::vector<std::string> additionalStringVecDummy;
   std::string dynTypeDefault="WoDynamics";
 
-  std::vector< std::shared_ptr<AbsDecay> > prodDecs;
-  if (_theParser->productionFormalism()=="Heli"){
-    std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _epemReaction->productionHeliDecays();
+  //  std::vector< std::shared_ptr<AbsDecay> > prodDecs;
+  if (_theParser->productionFormalism()=="Heli" || _theParser->productionFormalism()=="HeliMultipole"){
+    std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs;
+    if (_theParser->productionFormalism()=="Heli") prodDecs = _epemReaction->productionHeliDecays();
+    else prodDecs = _epemReaction->productionHeliMultipoleDecays();
     std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
       if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
@@ -104,10 +106,10 @@ void EpemChannelEnv::setup(ChannelID id){
       exit(0);
    }
 
-  std::vector< std::shared_ptr<AbsDecay> >::iterator itDec;
-  for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-    _prodDecList->addDecay(*itDec);
-  }
+  // std::vector< std::shared_ptr<AbsDecay> >::iterator itDec;
+  // for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+  //   _prodDecList->addDecay(*itDec);
+  // }
 
   //set suffixes
   std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();

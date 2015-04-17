@@ -70,7 +70,7 @@ std::shared_ptr<AbsLh> LhFactory::getLh(short channelType, ChannelID id, std::st
     }
   }
   else if( channelType == AbsChannelEnv::CHANNEL_EPEM){
-    if (formalism=="Heli") result = std::shared_ptr<AbsLh>(new epemHeliLh(id));
+    if (formalism=="Heli" || formalism=="HeliMultipole") result = std::shared_ptr<AbsLh>(new epemHeliLh(id));
     else if (formalism=="Tensor") result = std::shared_ptr<AbsLh>(new epemTensorLh(id));
     else {
       Alert << "prodFormalism\t" << formalism << "\tfor channel type AbsChannelEnv::CHANNEL_EPEM doesn't exist!!!" << endmsg;

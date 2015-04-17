@@ -53,8 +53,10 @@ public:
   virtual void print(std::ostream& os) const;
   std::vector< std::shared_ptr<IsobarLSDecay> >& productionCanoDecays() {return _prodCanoDecs;}
   std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
+  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliMultipoleDecays() {return _prodHeliMultipoleDecs;}
   std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorDecays() {return _prodTensorDecs;}
   std::vector< std::shared_ptr<IsobarTensorDecay> >& productionTensorZouDecays() {return _prodTensorZouDecs;}
+
 protected:
 
 private:
@@ -63,6 +65,7 @@ private:
 
   std::vector< std::shared_ptr<IsobarLSDecay> > _prodCanoDecs;
   std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
+  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliMultipoleDecs;
   std::vector< std::shared_ptr<IsobarTensorDecay> > _prodTensorDecs;
   std::vector< std::shared_ptr<IsobarTensorDecay> > _prodTensorZouDecs;
 };

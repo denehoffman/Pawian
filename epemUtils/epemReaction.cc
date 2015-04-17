@@ -42,7 +42,6 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
 {
     std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
     for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
-      //      std::string decName=(*itJPC)->name();
       std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _epemIGJPC, itPartPairs->first, itPartPairs->second, _channelID, "epem"));
       currentDec->setProductionAmp();
       currentDec->extractStates();
@@ -50,13 +49,6 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
 	std::shared_ptr<IsobarTensorDecay> currentTensorDec;
-	// if(itPartPairs->first->name()=="photon"){
-	//   currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
-	// }
-	// else if(itPartPairs->second->name()=="photon"){
-	//   currentTensorDec=std::shared_ptr<IsobarTensorPsiToGamXDecay> (new IsobarTensorPsiToGamXDecay( _epemIGJPC,itPartPairs->second, itPartPairs->first, _channelID, "epem"));
-	// } 
-	// else currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem"));
 
 	currentTensorDec=std::shared_ptr<IsobarTensorDecay> (new IsobarTensorDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem")); //workaround
 	
@@ -84,6 +76,19 @@ epemReaction::epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPa
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
 
+	if(itPartPairs->first->name()=="photon" || itPartPairs->second->name()=="photon"){
+	  std::shared_ptr<IsobarHeliDecay> currentHeliMultipoleDec;
+	  if(itPartPairs->first->name()=="photon"){
+	    currentHeliMultipoleDec=std::shared_ptr<IsobarHeliDecay>(new IsobarHeliDecay( _epemIGJPC,itPartPairs->first, itPartPairs->second, _channelID, "epem", "IsobarHeliMultipoleDecay"));
+	  }
+	  else{
+	    currentHeliMultipoleDec=std::shared_ptr<IsobarHeliDecay>(new IsobarHeliDecay( _epemIGJPC,itPartPairs->second, itPartPairs->first, _channelID, "epem", "IsobarHeliMultipoleDecay"));
+	  }
+	    currentHeliMultipoleDec->setProductionAmp();
+	    currentHeliMultipoleDec->extractStates();
+	    _prodHeliMultipoleDecs.push_back(currentHeliMultipoleDec); 
+	}
+	else _prodHeliMultipoleDecs.push_back(currentHeliDec); 
       }
     }
 

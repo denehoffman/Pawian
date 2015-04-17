@@ -41,8 +41,8 @@
 #include "PwaUtils/DynRegistry.hh"
 #include "ConfigParser/ParserBase.hh"
 
-IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID) :
-  IsobarLSDecay(mother, daughter1, daughter2, channelID)
+IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string typeName) :
+  IsobarLSDecay(mother, daughter1, daughter2, channelID, typeName)
   ,_polMother(PolVector(_motherIGJPCPtr->J))
   ,_polDaughter1(PolVector(_daughter1IGJPCPtr->J))
   ,_polDaughter2(PolVector(_daughter2IGJPCPtr->J))
@@ -51,8 +51,8 @@ IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Part
 {
 }
 
-IsobarTensorDecay::IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName) :
-  IsobarLSDecay(motherIGJPCPtr, daughter1, daughter2, channelID, motherName)
+IsobarTensorDecay::IsobarTensorDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName, std::string typeName) :
+  IsobarLSDecay(motherIGJPCPtr, daughter1, daughter2, channelID, motherName, typeName)
   ,_polMother(PolVector(_motherIGJPCPtr->J))
   ,_polDaughter1(PolVector(_daughter1IGJPCPtr->J))
   ,_polDaughter2(PolVector(_daughter2IGJPCPtr->J))

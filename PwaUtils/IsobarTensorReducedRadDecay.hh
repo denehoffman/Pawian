@@ -51,7 +51,6 @@ public:
 
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   virtual void print(std::ostream& os) const;
-  virtual std::string type() {return "IsobarTensorReducedRadDecay";}
 
 protected:
   bool _XisEven;

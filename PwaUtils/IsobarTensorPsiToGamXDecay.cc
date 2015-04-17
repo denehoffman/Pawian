@@ -42,7 +42,7 @@
 #include "ConfigParser/ParserBase.hh"
 
 IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID) :
-  IsobarTensorDecay(mother, daughter1_gamma, daughter2, channelID)
+  IsobarTensorDecay(mother, daughter1_gamma, daughter2, channelID, "IsobarTensorPsiToGamXDecay")
   ,_XisEven(false)
   ,_noOfAmps(0)
 {
@@ -51,7 +51,7 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particl
     exit(0); 
   } 
 
-  if(daughter1_gamma->twoJ() != 2 || daughter1_gamma->theParity() != -1 ||  daughter1_gamma->theCParity() || daughter1_gamma->mass() < 1.e-6){
+  if(daughter1_gamma->twoJ() != 2 || daughter1_gamma->theParity() != -1 ||  daughter1_gamma->theCParity() || daughter1_gamma->mass() > 1.e-6){
     Alert << "daughter particle 1 is not a photon" << endmsg;
     exit(0); 
   } 
@@ -76,7 +76,7 @@ IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particl
 }
 
 IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID, std::string motherName) :
-  IsobarTensorDecay(motherIGJPCPtr, daughter1_gamma, daughter2, channelID, motherName)
+  IsobarTensorDecay(motherIGJPCPtr, daughter1_gamma, daughter2, channelID, motherName, "IsobarTensorPsiToGamXDecay")
   ,_XisEven(false)
 { 
   if(motherIGJPCPtr->I != 0 || motherIGJPCPtr->G != -1 ||  motherIGJPCPtr->J != 1 || motherIGJPCPtr->P != -1 || motherIGJPCPtr->C != -1 ){

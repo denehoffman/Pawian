@@ -46,14 +46,13 @@ class EvtData;
 class IsobarLSDecay : public AbsDecay{
 
 public:
-  IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
-  IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
+  IsobarLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string typeName="IsobarLSDecay");
+  IsobarLSDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp", std::string typeName="IsobarLSDecay");
   virtual ~IsobarLSDecay();
   //  virtual IsobarLSDecay* clone_() const = 0;
   std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   std::vector< std::shared_ptr<const LScomb> > LSAmps(){ return _LSDecAmps;}
   virtual void print(std::ostream& os) const;
-  virtual std::string type() {return "IsobarLSDecay";}
   virtual void extractStates();
 
 protected:

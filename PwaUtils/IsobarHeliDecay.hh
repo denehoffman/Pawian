@@ -45,15 +45,13 @@ class EvtData;
 class IsobarHeliDecay : public AbsDecay{
 
 public:
-  IsobarHeliDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
-  IsobarHeliDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
+  IsobarHeliDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string typeName="IsobarHeliDecay");
+  IsobarHeliDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp", std::string typeName="IsobarHeliDecay");
   virtual ~IsobarHeliDecay();
   //  virtual IsobarHeliDecay* clone_() const = 0;
   std::vector< std::shared_ptr<const JPClamlam> > JPClamlamAmps(){ return _JPClamlamDecAmps;}
   virtual void print(std::ostream& os) const;
-  virtual std::string type() {return "IsobarHeliDecay";}
   virtual void extractStates();
-
 protected:
   std::vector< std::shared_ptr<const JPClamlam> > _JPClamlamDecAmps;
 

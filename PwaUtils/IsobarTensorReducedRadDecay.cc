@@ -42,7 +42,7 @@
 #include "ConfigParser/ParserBase.hh"
 
 IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(Particle* mother, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID) :
-  IsobarTensorDecay(mother, daughter1_gamma, daughter2, channelID)
+  IsobarTensorDecay(mother, daughter1_gamma, daughter2, channelID, "IsobarTensorReducedRadDecay")
   ,_XisEven(false)
   ,_noOfAmps(0)
 {
@@ -72,7 +72,7 @@ IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(Particle* mother, Parti
 }
 
 IsobarTensorReducedRadDecay::IsobarTensorReducedRadDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID, std::string motherName) :
-  IsobarTensorDecay(motherIGJPCPtr, daughter1_gamma, daughter2, channelID, motherName)
+  IsobarTensorDecay(motherIGJPCPtr, daughter1_gamma, daughter2, channelID, motherName, "IsobarTensorReducedRadDecay")
   ,_XisEven(false)
   ,_noOfAmps(0)
 {

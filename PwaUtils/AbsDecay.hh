@@ -48,8 +48,8 @@ class AbsDecay : public std::enable_shared_from_this<AbsDecay>{
 public:
   typedef enum decayLevel {noLevel=-1, isProdAmp, firstLevel, secondLevel, thirdLevel, fourthLevel, fifthLevel, severalLevels} decLevel;
   
-  AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId);
-  AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId);
+  AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId, std::string typeName="AbsDecay");
+  AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId, std::string typeName="AbsDecay");
   virtual ~AbsDecay();
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
@@ -93,7 +93,7 @@ public:
   virtual std::pair<Particle*, Particle*>& firstDecayChannel() { return _decPair1stChannel;}
   virtual std::pair<Particle*, Particle*>& secondDecayChannel() { return _decPair2ndChannel;}
   virtual std::shared_ptr<AbsDecay> absDecPtr() {return shared_from_this();}
-  virtual std::string type() =0;
+  virtual std::string type() {return _typeName;}
   virtual void extractStates() =0;
 
   double isospinCG() {return _isospinClebschG;}
@@ -120,6 +120,7 @@ protected:
 
   virtual void extractLmin();
 
+  std::string _typeName;
   ChannelID _channelId;
 
   Particle* _mother;
