@@ -55,7 +55,7 @@ HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHel
   if(JgammaMin<0) JgammaMin=Spin(_daughter2->J()-_JPCPtr->J);
   if(JgammaMin==0) JgammaMin=Spin(1);
 
-  int parityPiPf=_JPCPtr->P*_daughter2->theCParity();
+  int parityPiPf=_JPCPtr->P*_daughter2->theParity();
 
   Spin JgammaMax=Spin(_JPCPtr->J+_daughter2->J());
   
@@ -75,7 +75,7 @@ HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHel
     std::stringstream tmpSpinStr;
     tmpSpinStr << currentSpin;
     int currentSpinInt=currentSpin;
-    if(parityPiPf<0){
+     if(parityPiPf<0){
       if(int(currentSpinInt)%2 ==0 ) currentKey+="M"+tmpSpinStr.str();
       else currentKey+="E"+tmpSpinStr.str();
     }
@@ -103,7 +103,7 @@ HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<AbsDecay>
   if(JgammaMin<0) JgammaMin=Spin(_daughter2->J()-_JPCPtr->J);
   if(JgammaMin==0) JgammaMin=Spin(1);
 
-  int parityPiPf=_JPCPtr->P*_daughter2->theCParity();
+  int parityPiPf=_JPCPtr->P*_daughter2->theParity();
 
   Spin JgammaMax=Spin(_JPCPtr->J+_daughter2->J());
   
