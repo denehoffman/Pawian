@@ -137,8 +137,10 @@ int main(int __argc,char *__argv[]){
   std::vector<std::string> mcFileNames;
   mcFileNames.push_back(mcFile);
 
-  bool withEvtWeight=theAppParams->useEvtWeight();
-  Info << "EvtWeight: " << withEvtWeight << endmsg;
+  bool withDataEvtWeight=theAppParams->useDataEvtWeight();
+  bool withMCEvtWeight=theAppParams->useMCEvtWeight();
+  Info << "DataEvtWeight: " << withDataEvtWeight << endmsg;
+  Info << "MCEvtWeight: " << withMCEvtWeight << endmsg;
 
   std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
   GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
@@ -166,10 +168,10 @@ int main(int __argc,char *__argv[]){
 
 
   EventList eventsDataClient;
-  theAppBase.readEvents(eventsDataClient, dataFileNames, withEvtWeight, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  theAppBase.readEvents(eventsDataClient, dataFileNames, withDataEvtWeight, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
 
   EventList mcDataClient;
-  theAppBase.readEvents(mcDataClient, mcFileNames, withEvtWeight, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  theAppBase.readEvents(mcDataClient, mcFileNames, withMCEvtWeight, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
 
   std::shared_ptr<EvtDataBaseList> epemEventListPtr(new EvtDataBaseList(0));
   epemEventListPtr->read(eventsDataClient, mcDataClient);
@@ -183,12 +185,12 @@ int main(int __argc,char *__argv[]){
  }
 
   EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, withEvtWeight);
+  theAppBase.readEvents(eventsData, dataFileNames, withDataEvtWeight);
 
   int ratioMcToData=theAppParams->ratioMcToData();
   int maxMcEvts=eventsData.size()*ratioMcToData;
   EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, withEvtWeight, 0, maxMcEvts-1);
+  theAppBase.readEvents(mcData, mcFileNames, withMCEvtWeight, 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
   eventListPtr->read(eventsData, mcData);

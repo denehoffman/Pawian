@@ -196,10 +196,10 @@ int main(int __argc,char *__argv[]){
   mcFileNames.push_back(mcFile);
 
   EventList eventsDataClient;
-  theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
 
   EventList mcDataClient;
-  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
 
   std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(channelID));
   pbarpEventListPtr->read(eventsDataClient, mcDataClient);
@@ -243,10 +243,10 @@ int main(int __argc,char *__argv[]){
    if (cacheAmps) GlobalEnv::instance()->Channel()->Lh()->cacheAmplitudes();
 
    EventList eventsData;
-   theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
+   theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
 
    EventList mcData;
-   theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, spinDensityHist::MAX_EVENTS);
+   theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
 
    std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(0));
    pbarpEventListPtr->read(eventsData, mcData);
@@ -277,12 +277,12 @@ int main(int __argc,char *__argv[]){
 
 
   EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, noOfDataEvents);
+  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, noOfDataEvents);
 
   int maxMcEvts=eventsData.size()*ratioMcToData;
 
   EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, maxMcEvts-1);
+  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> pbarpEventListPtr(new EvtDataBaseList(0));
 

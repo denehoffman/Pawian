@@ -190,10 +190,10 @@ int main(int __argc,char *__argv[]){
   mcFileNames.push_back(mcFile);
 
   EventList eventsDataClient;
-  theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  theAppBase.readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
 
   EventList mcDataClient;
-  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  theAppBase.readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
 
   std::shared_ptr<EvtDataBaseList> gammapEventListPtr(new EvtDataBaseList(channelID));
   gammapEventListPtr->read(eventsDataClient, mcDataClient);
@@ -228,12 +228,12 @@ int main(int __argc,char *__argv[]){
       mcFileNames.push_back(mcFile);
 
       EventList eventsData;
-      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight());
+      theAppBase.readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight());
 
       EventList mcData;
       int ratioMcToData=(*it).first->parser()->ratioMcToData();
       int maxMcEvts=eventsData.size()*ratioMcToData;
-      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, maxMcEvts-1);
+      theAppBase.readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
 
       std::shared_ptr<EvtWeightList> gammapWeightListPtr(new EvtWeightList((*it).first->channelID()));
       gammapWeightListPtr->read(eventsData, mcData);
@@ -337,14 +337,14 @@ int main(int __argc,char *__argv[]){
 
 
  EventList eventsData;
- theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight());
+ theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight());
  // theAppBase.readEvents(eventsData, dataFileNames, 0, 100000);
 
  int ratioMcToData=theAppParams->ratioMcToData();
  int maxMcEvts=eventsData.size()*ratioMcToData;
 
  EventList mcData;
- theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, maxMcEvts-1);
+ theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
 
  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
  if (mode=="plotMode"){

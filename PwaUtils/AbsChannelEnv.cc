@@ -56,8 +56,6 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_absDecList(new AbsDecayList())
   ,_prodDecList(new AbsDecayList())
   ,_useMassRange(false)
-  //  ,_massMin(0.)
-  //  ,_massMax(100.)
   ,_theParser(theParser)
 {
    _theLh.reset();
@@ -85,7 +83,8 @@ void AbsChannelEnv::setup(ChannelID id){
    _channelID = id;
 
    // Event weights for data?
-   _useEvtWeight = _theParser->useEvtWeight();
+   _useDataEvtWeight = _theParser->useDataEvtWeight();
+   _useMCEvtWeight = _theParser->useMCEvtWeight();
 
    // cloned particles
    const std::vector<std::string> cloneParticle=_theParser->cloneParticle();

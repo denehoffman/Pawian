@@ -182,10 +182,10 @@ int main(int __argc,char *__argv[]){
     if (cacheAmps) GlobalEnv::instance()->Channel()->Lh()->cacheAmplitudes();
     
     EventList eventsData;
-    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
+    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
     
     EventList mcData;
-    theAppBase.readEvents(mcData, mcFileNames, 0, false, 0, spinDensityHist::MAX_EVENTS);
+    theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
     
     std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
     eventListPtr->read(eventsData, mcData);
@@ -215,12 +215,12 @@ int main(int __argc,char *__argv[]){
   int ratioMcToData= GlobalEnv::instance()->parser()->ratioMcToData();
 
   EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, noOfDataEvents);
+  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, noOfDataEvents);
 
   int maxMcEvts=eventsData.size()*ratioMcToData;
 
   EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useEvtWeight(), 0, maxMcEvts-1);
+  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
 

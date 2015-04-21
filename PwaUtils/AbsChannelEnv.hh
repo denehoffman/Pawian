@@ -46,38 +46,40 @@ class AbsChannelEnv
 {
 public:
 
-   virtual void setup(ChannelID id);
-   const int noFinalStateParticles() {return _noFinalStateParticles;}
-   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
-   std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
-   std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
-   std::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
-   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;}
-   std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
-   std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
-   std::vector<std::shared_ptr<calcContributionData> >& calcContributionDataVec() {return _calcContributionDataVec;}
-   bool useMassRange() {return _useMassRange;}
-   bool useEvtWeight(){return _useEvtWeight;}
+  virtual void setup(ChannelID id);
+  const int noFinalStateParticles() {return _noFinalStateParticles;}
+  std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
+  std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
+  std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
+  std::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
+  std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;}
+  std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
+  std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
+  std::vector<std::shared_ptr<calcContributionData> >& calcContributionDataVec() {return _calcContributionDataVec;}
+  bool useMassRange() {return _useMassRange;}
+  bool useDataEvtWeight(){return _useDataEvtWeight;}
+  bool useMCEvtWeight(){return _useMCEvtWeight;}
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts() {return _massRangeCuts;}
-   Vector4<double>&  initial4Vec() {return _initial4Vec;}
-   ParserBase* parser(){ return _theParser;}
-   void SetLh(std::shared_ptr<AbsLh> theLh){ _theLh = theLh; }
-   std::shared_ptr<AbsLh> Lh();
-   ChannelID channelID(){return _channelID;}
-   short channelType(){return _channelType;}
-   virtual const std::string  channelTypeName()=0;
-   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="")=0;
+  Vector4<double>&  initial4Vec() {return _initial4Vec;}
+  ParserBase* parser(){ return _theParser;}
+  void SetLh(std::shared_ptr<AbsLh> theLh){ _theLh = theLh; }
+  std::shared_ptr<AbsLh> Lh();
+  ChannelID channelID(){return _channelID;}
+  short channelType(){return _channelType;}
+  virtual const std::string  channelTypeName()=0;
+  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="")=0;
 
-   static short CHANNEL_PBARP;
-   static short CHANNEL_EPEM;
-   static short CHANNEL_RES;
-   static short CHANNEL_GAMMAP;
-
+  static short CHANNEL_PBARP;
+  static short CHANNEL_EPEM;
+  static short CHANNEL_RES;
+  static short CHANNEL_GAMMAP;
+  
 protected:
    int _channelID;
    short _channelType;
    bool _alreadySetUp;
-   bool _useEvtWeight;
+   bool _useDataEvtWeight;
+  bool _useMCEvtWeight;
   AbsChannelEnv(ParserBase* theParser, short channelType);
    int _noFinalStateParticles;
    std::vector<Particle*> _finalStateParticles;

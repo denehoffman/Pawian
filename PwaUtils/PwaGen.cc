@@ -52,7 +52,7 @@ const unsigned int EVENTS_PER_ITERATION = 100000;
 
 PwaGen::PwaGen() :
    _energyFirst(false)
-  ,_useEvtWeight(GlobalEnv::instance()->parser()->useEvtWeight())
+  ,_useEvtWeight(GlobalEnv::instance()->parser()->useDataEvtWeight())
   ,_genWithModel(GlobalEnv::instance()->parser()->generateWithModel())
   ,_unitScaleFactor(1.)
   , _maxFitWeight(0.)

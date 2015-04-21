@@ -77,7 +77,8 @@ public:
   const bool cacheAmps() const {return _cacheAmps;}
   const bool calcContributionError() const {return _calcContributionError;}
   const bool saveContributionHistos() const {return _saveContributionHistos;}
-  const bool useEvtWeight() const {return _useEvtWeight; }
+  const bool useDataEvtWeight() const {return _useDataEvtWeight; }
+  const bool useMCEvtWeight() const {return _useMCEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const bool doScaling() const {return _doScaling;}
   const std::string pdgTableFile() const {return _pdgTableFile;}
@@ -141,7 +142,8 @@ protected:
   po::options_description* _desc;
   po::options_description* _common;
   po::options_description* _config;
-  bool _useEvtWeight;
+  bool _useDataEvtWeight;
+  bool _useMCEvtWeight;
   bool _usePhaseSpaceHyp;
   bool _doScaling;
   std::string _pdgTableFile;

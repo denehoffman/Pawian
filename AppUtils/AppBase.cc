@@ -448,11 +448,11 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     mcFileNames.push_back(mcFile);
     
     EventList eventsData;
-    readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useEvtWeight(), 0, noOfDataEvents);
+    readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight(), 0, noOfDataEvents);
     
     EventList mcData;
     int maxMcEvts=eventsData.size()*ratioMcToData;
-    readEvents(mcData, mcFileNames, (*it).first->channelID(), false, 0, maxMcEvts-1);
+    readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
     
     std::shared_ptr<EvtWeightList> evtWeightListPtr(new EvtWeightList((*it).first->channelID()));
     evtWeightListPtr->read(eventsData, mcData);
@@ -530,10 +530,10 @@ void AppBase::fitClientMode(fitParCol& theStartparams){
   mcFileNames.push_back(mcFile);
 
   EventList eventsDataClient;
-  readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
 
   EventList mcDataClient;
-  readEvents(mcDataClient, mcFileNames, channelID, false, theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(channelID));
   eventListPtr->read(eventsDataClient, mcDataClient);

@@ -60,7 +60,8 @@ ParserBase::ParserBase(int argc,char **argv)
   , _desc(0)
   , _common(new po::options_description("Common Options"))
   , _config(new po::options_description("Configuration file options"))
-  ,_useEvtWeight(false)
+  ,_useDataEvtWeight(false)
+  ,_useMCEvtWeight(false)
   ,_usePhaseSpaceHyp(false)
   ,_doScaling(false)
   ,_pdgTableFile("/Particle/pdtNew.table")
@@ -117,7 +118,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("cacheAmps",po::value<bool>(&_cacheAmps),  "cache amplitudes")
     ("contributionError",po::value<bool>(&_calcContributionError),  "calculate the wave contribution error")
     ("saveContributionHistos",po::value<bool>(&_saveContributionHistos),  "creates a histogram root-file for each contribution of Option: calcContribution")
-    ("useEventWeight",po::value<bool>(&_useEvtWeight), "enable/disable input for event weight")
+    ("useDataEventWeight",po::value<bool>(&_useDataEvtWeight), "enable/disable input for data event weight")
+    ("useMCEventWeight",po::value<bool>(&_useMCEvtWeight), "enable/disable input for Monte Carlo event weight")
     ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
     ("doScaling",po::value<bool>(&_doScaling), "enable/disable prefit with free scaling factor")
     ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
@@ -238,7 +240,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
-		<< "use event weight: " << _useEvtWeight  << "\n\n"
+		<< "use data event weight: " << _useDataEvtWeight  << "\n\n"
+		<< "use Monte Carlo event weight: " << _useMCEvtWeight  << "\n\n"
 		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
 		<< "prefit with free scaling factor: " << _doScaling << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
