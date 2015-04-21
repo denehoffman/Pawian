@@ -1,5 +1,7 @@
-setenv ROOTSYS /cluster/bes3/lcg/external/ROOT/5.24.00b/x86_64-slc5-gcc43-opt/root
-
+#setenv ROOTSYS /cluster/bes3/lcg/external/ROOT/5.24.00b/x86_64-slc5-gcc43-opt/root
+#setenv ROOTSYS /cluster/scratch/root
+#setenv ROOTSYS /cluster/bes3/external/ROOT/5.34.09/x86_64-slc6-gcc46-opt/root
+setenv ROOTSYS /data/work/kphpbb/kopf/PWA/rootInstall
 setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
 setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${TOP_DIR}/lib:/data/work/kphpbb/kopf/PWA/lib:/data/work/kphpbb/kopf/PWA/localSys/lib
 setenv PATH ${PATH}:${ROOTSYS}/bin:/data/work/kphpbb/kopf/PWA/bin:/data/work/kphpbb/kopf/PWA/localSys/bin

@@ -563,7 +563,7 @@ void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::
      argvWCfgFile[1]=(char*)"-c";
      argvWCfgFile[2]=(char*)(*it).c_str();
      for (int i=0; i<argcWCfgFile ; ++i) Info << argvWCfgFile[i] << endmsg;
-     std::shared_ptr<AbsChannelEnv> channelEnv=0;
+     std::shared_ptr<AbsChannelEnv> channelEnv;
      if(channelType==AbsChannelEnv::CHANNEL_PBARP){
        pbarpParser* currentParser = new pbarpParser(argcWCfgFile, argvWCfgFile);
        channelEnv = std::shared_ptr<AbsChannelEnv>(new PbarpChannelEnv(currentParser));

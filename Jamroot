@@ -12,9 +12,16 @@ rule split-stack-cond ( properties * )
     local gcc-ver = [ MATCH <toolset-gcc:version>(.*) : $(properties) ] ;
     local major = [ MATCH (.)\..* : $(gcc-ver) ] ;
     local minor = [ MATCH .\.(.).* : $(gcc-ver) ] ;
-    if $(major) > 4 | ( $(major) = 4 & $(minor) >= 7 )
+#    ECHO "gcc-ver: $(gcc-ver)" ;
+#    ECHO "major: $(major)" ;
+#    ECHO "minor: $(minor)" ;
+    if ( $(major) > 4 | ( $(major) = 4 & $(minor) >= 7 ) )
     {
       return <cxxflags>-ftemplate-depth=256 ;
+    }
+    if ( $(major) = 4 & $(minor) = 4 )
+    {
+      return <cxxflags>-ftemplate-depth-256 ;
     }
   }
 } 
