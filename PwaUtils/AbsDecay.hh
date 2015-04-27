@@ -77,6 +77,7 @@ public:
   virtual decLevel whichDecayLevel() {return _decLevel;}
 
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
+  std::vector<Particle*> finalStateParticlesDaughter1() {return _finalStateParticlesDaughter1;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);

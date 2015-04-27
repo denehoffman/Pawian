@@ -35,6 +35,7 @@
 #include "PwaUtils/IsobarTensorPsiToGamXDecay.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiToGamXDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
@@ -160,6 +161,28 @@ void  TensorPsiToGamXDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fit
   _absDyn->getDefaultParams(fitVal, fitErr);
 
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
+}
+
+void  TensorPsiToGamXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  for (int i=0; i<_noOfAmps; ++i){
+    //fill magnitude
+    std::string magName=_MagParamNames.at(i);
+    double valMag=1.;
+    double errMag=0.5;
+    double minMag=0.;
+    double maxMag=30;
+
+    fitPar->Add(magName, valMag, errMag);
+    fitPar->SetLimits(magName, minMag, maxMag);
+
+    //fill phi
+    std::string phiName=_PhiParamNames.at(i);
+    fitPar->Add(phiName, 0., 0.2);
+  }
+
+  _absDyn->fillDefaultParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
 void TensorPsiToGamXDecAmps::print(std::ostream& os) const{

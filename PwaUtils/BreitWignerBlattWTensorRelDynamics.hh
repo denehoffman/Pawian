@@ -39,7 +39,7 @@
 class BreitWignerBlattWTensorRelDynamics : public BreitWignerRelDynamics{
 
 public:
-  BreitWignerBlattWTensorRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2, double qR=BarrierFactor::qRDefault);
+  BreitWignerBlattWTensorRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double qR=BarrierFactor::qRDefault);
   virtual ~BreitWignerBlattWTensorRelDynamics();
 
   virtual std::string type() {return "BreitWignerBlattWTensorRelDynamics";}

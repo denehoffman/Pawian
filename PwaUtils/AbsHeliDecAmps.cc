@@ -116,9 +116,9 @@ void  AbsHeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     double valMag=_factorMag;
     double errMag=_factorMag/2.;
-    double minMag=_factorMag-6.*errMag;
-    if (minMag<0.) minMag=0.;
+    double minMag=0.;
     double maxMag=_factorMag+30.*errMag;
+
     fitPar->Add(magName, valMag, errMag);
     fitPar->SetLimits(magName, minMag, maxMag);
 

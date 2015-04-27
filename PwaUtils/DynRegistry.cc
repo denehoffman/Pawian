@@ -101,24 +101,26 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   }
   else{
     std::vector<Particle*> fsParticles=theDec->finalStateParticles();
+    std::vector<Particle*> fsParticlesDaughter1=theDec->finalStateParticlesDaughter1();
+    std::vector<Particle*> fsParticlesDaughter2=theDec->finalStateParticlesDaughter2();
 
     if(theDec->dynType()=="BreitWigner")
       result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
     else if(theDec->dynType()=="BreitWignerRel")
-      result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2() ));
+      result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2));
     else if(theDec->dynType()=="BreitWignerBlattWRel"){
       if(theDec->isTensorAmp()){
 	Alert << "dynamics BreitWignerBlattWRel is not allowed for non tensor amplitudes (amp name: " << theDec->name() << endmsg;
 	exit(0);
       }
-      result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->barrierqR()));
+      result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->barrierqR()));
     }
     else if(theDec->dynType()=="BreitWignerBlattWTensorRel"){
       if(!theDec->isTensorAmp()){
 	Alert << "dynamics BreitWignerBlattWTensorRel is not allowed for tensor amplitudes (amp name: " << theDec->name() << endmsg;
 	exit(0);
       }
-      result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWTensorRelDynamics(theName, fsParticles, theDec->motherPart(), theDec->massSumFsParticlesDec1(), theDec->massSumFsParticlesDec2(), theDec->barrierqR()));
+      result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWTensorRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->barrierqR()));
     }
     else if(theDec->dynType()=="KMatrix"){
       std::string pathToConfigFile=theDec->pathToConfigParser();

@@ -34,12 +34,14 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 
-BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2) :
+BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2) :
   BreitWignerDynamics(name, fsParticles, mother)
+  ,_fsParticlesDaughter1(fsParticlesDaughter1)
+  ,_fsParticlesDaughter2(fsParticlesDaughter2)
+  ,_dynMassKeyDaughter1(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1))
+  ,_dynMassKeyDaughter2(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter2))
 {
-  _fsp1Mass=massSumDaughter1;
-  _fsp2Mass=massSumDaughter2;
-  Info << "BreitWignerRelDynamics for " << _name << " with  massSumDaughter1= " << _fsp1Mass << " and  massSumDaughter2= " << _fsp2Mass <<endmsg;
+  Info << "BreitWignerRelDynamics for " << _name << " with  mass key daughter1 " << _dynMassKeyDaughter1 << " and mass key daughter2 " << _dynMassKeyDaughter2 << endmsg;
 }
 
 BreitWignerRelDynamics::~BreitWignerRelDynamics()
@@ -52,7 +54,7 @@ complex<double> BreitWignerRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=BreitWignerFunction::Rel(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, _fsp1Mass, _fsp2Mass);  
+  complex<double> result=BreitWignerFunction::Rel(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, theData->DoubleString.at(_dynMassKeyDaughter1), theData->DoubleString.at(_dynMassKeyDaughter2));  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedMap[evtNo]=result;
@@ -60,5 +62,22 @@ complex<double> BreitWignerRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
   }  
 
   return result;
+}
+
+void BreitWignerRelDynamics::fillMasses(EvtData* theData){
+  AbsDynamics::fillMasses(theData);
+
+  Vector4<double> mass4VecD1(0.,0.,0.,0.);
+  std::vector<Particle*>::iterator it;
+  for (it=_fsParticlesDaughter1.begin(); it !=_fsParticlesDaughter1.end(); ++it){
+    mass4VecD1+=theData->FourVecsString[(*it)->name()];
+  }
+  theData->DoubleString[_dynMassKeyDaughter1]=mass4VecD1.Mass();
+
+  Vector4<double> mass4VecD2(0.,0.,0.,0.);
+  for (it=_fsParticlesDaughter2.begin(); it !=_fsParticlesDaughter2.end(); ++it){
+    mass4VecD2+=theData->FourVecsString[(*it)->name()];
+  }
+  theData->DoubleString[_dynMassKeyDaughter2]=mass4VecD2.Mass();
 }
 

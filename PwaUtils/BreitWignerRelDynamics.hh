@@ -38,16 +38,19 @@
 class BreitWignerRelDynamics : public BreitWignerDynamics{
 
 public:
-  BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double massSumDaughter1, double massSumDaughter2);
+  BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2);
   virtual ~BreitWignerRelDynamics();
 
   virtual std::string type() {return "BreitWignerRelDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
-  
+  virtual void fillMasses(EvtData* theData);  
 
 protected:
-  double _fsp1Mass;
-  double _fsp2Mass;
+  std::vector<Particle*> _fsParticlesDaughter1;
+  std::vector<Particle*> _fsParticlesDaughter2;
+  std::string _dynMassKeyDaughter1;
+  std::string _dynMassKeyDaughter2;
+
 private:
 
 };
