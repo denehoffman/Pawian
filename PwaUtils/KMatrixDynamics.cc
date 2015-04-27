@@ -46,6 +46,7 @@
 #include "PwaDynamics/PPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
   AbsDynamics(name, fsParticles, mother)
@@ -161,6 +162,63 @@ void  KMatrixDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     if(_withKMatAdler){
       fitVal.otherParams["s0"+_kMatName]=_currentAdler0;
       fitErr.otherParams["s0"+_kMatName]=fabs(_currentAdler0)+0.2;
+    }
+  }
+}
+
+void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  //beta factor for production
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+    std::string theName=it1->first;
+    std::map<std::string, double>& bFactors = it1->second;
+    for(unsigned int i=0; i<_poleNames.size(); ++i){ 
+      std::string currentName="b_"+_poleNames.at(i);
+      //     std::cout << "currentName: " << currentName << std::endl;
+      std::string magName=currentName+"Mag";
+      fitPar->Add(theName+magName, bFactors.at(magName) , 1.);
+      fitPar->SetLimits(theName+magName, 0., bFactors.at(magName)+30.);
+
+      std::string phiName=currentName+"Phi";
+      fitPar->Add(theName+phiName, bFactors.at(phiName) , 0.2);
+      
+    }
+  }
+  
+  //pole positions
+  std::vector<double >::iterator itPoleVec;
+  for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
+    double valMass=_currentPoleMasses.at(i);
+    double errMass=0.02;
+    double minMass=valMass-5.*errMass;
+    if(minMass<0.) minMass=0.;
+    double maxMass=valMass+5.*errMass;
+    fitPar->Add(_poleNames.at(i)+"Mass", valMass, errMass);
+    fitPar->SetLimits(_poleNames.at(i)+"Mass", minMass, maxMass);
+  }
+
+    //g-factors
+  for(unsigned int i=0; i<_poleNames.size(); ++i){
+    std::vector<double> currentgFactorVec=_currentgFactorMap.at(i);
+    for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
+      std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
+      fitPar->Add(currentName, currentgFactorVec.at(j), currentgFactorVec.at(j)/3.);
+    }
+  }
+
+    //k-matrix bg-terms
+  if(_orderKMatBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+  	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+  	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
+  	  fitPar->Add(currentName, _currentBgTerms.at(i).at(j).at(k), fabs(_currentBgTerms.at(i).at(j).at(k))+0.3);
+  	}
+      }
+    }
+    //Adler-term
+    if(_withKMatAdler){
+      fitPar->Add("s0"+_kMatName, _currentAdler0, fabs(_currentAdler0)+0.2);
     }
   }
 }

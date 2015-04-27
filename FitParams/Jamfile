@@ -13,6 +13,9 @@ project :
 lib FitParams : 
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/ConfigParser//ConfigParser
 	: <use>$(TOP)//Minuit2
 	: 
 	: <library>$(TOP)//Minuit2 ;
+
+exe StreamerTestApp : StreamerTestApp.cc FitParams : ;

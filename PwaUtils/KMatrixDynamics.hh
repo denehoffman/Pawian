@@ -43,6 +43,7 @@ class PVectorKPiSFocus;
 class KMatrixParser;
 class AbsPhaseSpace;
 class PVectorRel;
+class AbsPawianParameters;
 
 class KMatrixDynamics : public AbsDynamics{
 
@@ -54,6 +55,8 @@ public:
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  
   virtual bool checkRecalculation(fitParCol& theParamVal);
   virtual void updateFitParams(fitParCol& theParamVal);
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);

@@ -67,6 +67,31 @@ void  BreitWignerDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr
     fitErr.Widths[_massKey]=0.2*_mother->width();
 }
 
+void BreitWignerDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  //fill mass
+  std::string massName=_massKey+"Mass";
+  double valMass=_mother->mass();
+  double errMass=0.03;
+  double minMass=valMass-5.*errMass;
+  if(minMass<0.) minMass=0.;
+  double maxMass=valMass+5.*errMass;
+  
+  fitPar->Add(massName, valMass, errMass);
+  fitPar->SetLimits(massName, minMass, maxMass);
+  
+  //fill width
+  std::string widthName=_massKey+"Width";
+  double valWidth=_mother->width();
+  double errWidth=0.2*_mother->width();
+  double minWidth=valWidth-5.*errWidth;
+  if(minWidth<0.) minWidth=0.;
+  double maxWidth=valWidth+5.*errWidth;
+
+  fitPar->Add(widthName, valWidth, errWidth);
+  fitPar->SetLimits(widthName, minWidth, maxWidth);
+}
+
+
 bool BreitWignerDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 

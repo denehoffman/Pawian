@@ -33,6 +33,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "PwaDynamics/Voigtian.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 VoigtDynamics::VoigtDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother),
@@ -71,6 +72,35 @@ void  VoigtDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     fitErr.Widths[_massKey]=0.2*_mother->width();
     fitVal.Widths[_massSigmaKey]=0.01;
     fitErr.Widths[_massSigmaKey]=0.4*0.01;
+}
+
+void  VoigtDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  //fill mass
+  std::string massName=_massKey+"Mass";
+  double valMass=_mother->mass();
+  double errMass=0.03;
+  double minMass=valMass-5.*errMass;
+  if(minMass<0.) minMass=0.;
+  double maxMass=valMass+5.*errMass;
+  
+  fitPar->Add(massName, valMass, errMass);
+  fitPar->SetLimits(massName, minMass, maxMass);
+
+  //fill width
+  std::string widthName=_massKey+"Width";
+  double valWidth=_mother->width();
+  double errWidth=0.2*_mother->width();
+  double minWidth=valWidth-5.*errWidth;
+  if(minWidth<0.) minWidth=0.;
+  double maxWidth=valWidth+5.*errWidth;
+
+  fitPar->Add(widthName, valWidth, errWidth);
+  fitPar->SetLimits(widthName, minWidth, maxWidth);
+
+  //fill sigma width
+  fitPar->Add(_massSigmaKey, 0.01, 0.4*0.01);
+  fitPar->SetLimits(_massSigmaKey, 0., 0.06);
+
 }
 
 bool VoigtDynamics::checkRecalculation(fitParCol& theParamVal){

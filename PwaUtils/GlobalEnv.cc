@@ -30,6 +30,9 @@
 #include "Particle/PdtParser.hh"
 #include "ErrLogger/ErrLogger.hh"
 
+#include "FitParams/AbsPawianParameters.hh"
+#include "FitParams/ParamFactory.hh"
+
 
 GlobalEnv* GlobalEnv::_instance=0;
 
@@ -41,6 +44,7 @@ GlobalEnv* GlobalEnv::instance(){
 
 GlobalEnv::GlobalEnv() :
    _alreadySetUp(false) ,
+   _channelEnvsAlredySetup(false),
    _theParser(0)
 {
 }
@@ -99,9 +103,21 @@ const std::shared_ptr<AbsChannelEnv> GlobalEnv::ResChannel(int id) const
 
 void GlobalEnv::AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short envType){
    _channelEnvs.push_back(std::pair<std::shared_ptr<AbsChannelEnv>, short>(newEnv, envType));
-   newEnv->setup(_channelEnvs.size() - 1);
 }
 
+void GlobalEnv::setupChannelEnvs(){
+  if(_channelEnvsAlredySetup){
+    Alert << "channel environments already setup!!!" << endmsg;
+    exit(1);
+  }
+
+  int id=0;
+  for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
+      (*it).first->setup(id);
+      ++id;
+   }
+  _channelEnvsAlredySetup=true;
+}
 
 
 void GlobalEnv::CreateDefaultParameterSet(){
@@ -114,7 +130,13 @@ void GlobalEnv::CreateDefaultParameterSet(){
    _defaultErr = defaultErr;
 }
 
-
+std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
+  std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Minuit2");
+  for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
+    (*it).first->Lh()->fillDefaultParams(result);
+   }
+  return result;
+}
 
 void GlobalEnv::setup(ParserBase* theParser){
    if(_alreadySetUp){
@@ -145,5 +167,6 @@ void GlobalEnv::setup(ParserBase* theParser){
 
 void GlobalEnv::replaceParser(ParserBase* theParser){
   _alreadySetUp = false;
+  Info << "Now replace the parser!!!" << endmsg;
   setup(theParser);  
 }

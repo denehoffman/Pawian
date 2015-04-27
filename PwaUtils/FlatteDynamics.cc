@@ -35,6 +35,7 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/Flatte.hh"
 #include "Utils/FunctionUtils.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParticles, Particle* mother, std::pair<Particle*, Particle*>& decPair1stChannel, std::pair<Particle*, Particle*>& decPair2ndChannel) :
   AbsDynamics(key, fsParticles, mother)
@@ -93,6 +94,32 @@ void  FlatteDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
     fitErr.gFactors[_g11Key]=1.;
     fitVal.gFactors[_g22Key]=1.;
     fitErr.gFactors[_g22Key]=1.;
+}
+
+void FlatteDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  //fill mass
+  std::string massName=_massKey+"Mass";
+  double valMass=_mother->mass();
+  double errMass=0.03;
+  double minMass=valMass-5.*errMass;
+  if(minMass<0.) minMass=0.;
+  double maxMass=valMass+5.*errMass;
+  
+  fitPar->Add(massName, valMass, errMass);
+  fitPar->SetLimits(massName, minMass, maxMass);
+  
+  //fill g-Factors
+  std::string g11Name=_g11Key+"gFactor";
+  double valgii=1.;
+  double errgii=0.5;
+  double mingii=valgii-5.*errgii;
+  double maxgii=valgii+20.*errgii;
+  fitPar->Add(g11Name, valgii, errgii);
+  fitPar->SetLimits(g11Name, mingii, maxgii);
+
+  std::string g22Name=_g22Key+"gFactor";
+  fitPar->Add(g22Name, valgii, errgii);
+  fitPar->SetLimits(g22Name, mingii, maxgii);
 }
 
 bool FlatteDynamics::checkRecalculation(fitParCol& theParamVal){

@@ -70,7 +70,8 @@ int main(int __argc,char *__argv[]){
   int argc=3;
   AppBase theAppBase;
   theAppBase.addChannelEnvs(argc, argv);
-  
+  GlobalEnv::instance()->setupChannelEnvs(); 
+ 
   // Get mode
   std::string mode=globalAppParams->mode();
   

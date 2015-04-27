@@ -38,7 +38,6 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-
 AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   AbsParamHandler()
   , _channelID(theAbsLhPtr->getChannelID())
@@ -274,6 +273,23 @@ void AbsLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   fitVal.otherParams[_channelScaleParam] = 1.;
   fitErr.otherParams[_channelScaleParam] = 0.01;
+}
+
+
+void AbsLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  if(_usePhasespace){
+    fitPar->Add(_phasespaceKey, 0.01, 0.05);
+    fitPar->SetLimits(_phasespaceKey, 0., 3.);     
+  }
+
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecs;
+  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
+    (*itDecs)->fillDefaultParams(fitPar);
+  }
+
+  fitPar->Add(_channelScaleParam, 1., 0.01);
+  fitPar->SetLimits(_channelScaleParam, 0., 20.);
 }
 
 void AbsLh::cacheAmplitudes(){

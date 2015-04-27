@@ -43,6 +43,7 @@
 class AbsXdecAmp;
 class pbarpReaction;
 class LSDecAmps;
+class AbsPawianParameters;
 
 class pbarpBaseLh : public AbsLh {
 
@@ -65,6 +66,8 @@ virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, 
 virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J);
 
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  
   virtual void updateFitParams(fitParCol& theParamVal);
 
   virtual void print(std::ostream& os) const;

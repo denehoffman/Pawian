@@ -36,6 +36,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "FitParams/FitParColBase.hh"
+#include "FitParams/AbsPawianParameters.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -306,6 +307,38 @@ void pbarpBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   fitErr.Mags["pbarp"].insert(currentMagErrMap.begin(), currentMagErrMap.end());
   fitErr.Phis["pbarp"].insert(currentPhiErrMap.begin(), currentPhiErrMap.end());
 
+}
+
+void pbarpBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  AbsLh::fillDefaultParams(fitPar);
+
+  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
+  for(itIso=_currentParamJPCIsos1.begin(); itIso!=_currentParamJPCIsos1.end(); ++itIso){
+    fitPar->Add("Iso1"+(*itIso).first->name(), (*itIso).second, 0.5);
+    fitPar->SetLimits("Iso1"+(*itIso).first->name(), 0., 1.);
+   }
+
+  double magFactor=1./sqrt(_jpclsStates.size());
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
+  for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
+    //fill magnitude
+    std::string magName=(*it)->name()+"pbarp"+"Mag";
+    double valMag=magFactor;
+    double errMag=magFactor/2.;
+    double minMag=magFactor-6.*errMag;
+    if (minMag<0.) minMag=0.;
+    double maxMag=magFactor+30.*errMag;
+    fitPar->Add(magName, valMag, errMag);
+    fitPar->SetLimits(magName, minMag, maxMag);
+
+    std::string phiName=(*it)->name()+"pbarp"+"Phi";
+    double valPhi=0.;
+    double errPhi=0.2;
+    //no limits for phi parameter
+    fitPar->Add(phiName, valPhi, errPhi);
+  }
+  
 }
 
 void pbarpBaseLh::print(std::ostream& os) const{

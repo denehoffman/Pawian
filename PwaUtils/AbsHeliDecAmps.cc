@@ -38,6 +38,7 @@
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
@@ -105,6 +106,33 @@ void  AbsHeliDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
+}
+
+void  AbsHeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
+  for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
+    //fill magnitude
+    std::string magName=(*itlamlam)->name()+_key+"Mag";
+    double valMag=_factorMag;
+    double errMag=_factorMag/2.;
+    double minMag=_factorMag-6.*errMag;
+    if (minMag<0.) minMag=0.;
+    double maxMag=_factorMag+30.*errMag;
+    fitPar->Add(magName, valMag, errMag);
+    fitPar->SetLimits(magName, minMag, maxMag);
+
+    std::string phiName=(*itlamlam)->name()+_key+"Phi";
+    double valPhi=0.;
+    double errPhi=0.2;
+    //no limits for phi parameter
+    fitPar->Add(phiName, valPhi, errPhi);
+  }
+
+  _absDyn->fillDefaultParams(fitPar);
+
+  if(!_daughter1IsStable) _decAmpDaughter1->fillDefaultParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
 void AbsHeliDecAmps::print(std::ostream& os) const{

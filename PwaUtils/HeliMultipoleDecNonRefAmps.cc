@@ -38,6 +38,7 @@
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID) :
   HeliDecNonRefAmps(theDec, channelID)
@@ -152,6 +153,19 @@ void HeliMultipoleDecNonRefAmps::getDefaultParams(fitParCol& fitVal, fitParCol& 
 
   _absDyn->getDefaultParams(fitVal, fitErr);
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
+}
+
+void  HeliMultipoleDecNonRefAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  for (int i=0; i<_noOfAmps; ++i){
+    fitPar->Add(_MagParamNames.at(i), 1., 0.5);
+    fitPar->SetLimits(_MagParamNames.at(i), 0., 20.);
+
+    fitPar->Add(_PhiParamNames.at(i), 0., 0.2); 
+  }
+
+  _absDyn->fillDefaultParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
 bool HeliMultipoleDecNonRefAmps::checkRecalculation(fitParCol& theParamVal){

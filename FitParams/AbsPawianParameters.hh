@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <iostream> 
 #include <vector>
 #include "Minuit2/MnUserParameters.h"
 
@@ -36,11 +37,11 @@ class AbsPawianParameters {
 
 public:
 
-   AbsPawianParameters() {}
+  AbsPawianParameters();
 
   //   AbsPawianParameters(const std::vector<double>&, const std::vector<double>&);
 
-   ~AbsPawianParameters() {}
+  ~AbsPawianParameters();
 
    // AbsPawianParameters(const AbsPawianParameters& par) : 
    //    fTransformation(par.fTransformation) {}
@@ -119,6 +120,8 @@ public:
 
    // const MnMachinePrecision& Precision() const;
   virtual void SetPrecision(double eps)=0;
+
+  virtual void print(std::ostream& os);
 
 private:
 

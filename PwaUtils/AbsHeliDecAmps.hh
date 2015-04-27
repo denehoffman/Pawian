@@ -37,6 +37,7 @@
 
 #include "PwaUtils/AbsXdecAmp.hh"
 
+class AbsPawianParameters;
 class IsobarHeliDecay;
 class AbsDecay;
 
@@ -56,6 +57,7 @@ public:
   // Getters:
 
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void print(std::ostream& os) const;
   virtual bool checkRecalculation(fitParCol& theParamVal);
   // std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}

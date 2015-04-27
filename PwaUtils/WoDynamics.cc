@@ -51,6 +51,9 @@ complex<double> WoDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin 
 void  WoDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 }
 
+void  WoDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+}
+
 bool WoDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
   return _recalculate;

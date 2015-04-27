@@ -105,6 +105,7 @@ int main(int __argc,char *__argv[]){
    theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
 
    GlobalEnv::instance()->replaceParser(GlobalEnv::instance()->Channel(0)->parser());
+   GlobalEnv::instance()->setupChannelEnvs();
 
   // Set the desired error logging mode
   setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());

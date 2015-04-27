@@ -40,6 +40,7 @@
 
 class IsobarHeliDecay;
 class AbsDecay;
+class AbsPawianParameters;
 
 class HeliMultipoleDecNonRefAmps : public HeliDecNonRefAmps{
 
@@ -56,16 +57,13 @@ public:
 
   // Getters:
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   //  virtual void print(std::ostream& os) const;
   virtual bool checkRecalculation(fitParCol& theParamVal);
   virtual void updateFitParams(fitParCol& theParamVal);
 
-  // virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
-  // virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
-  // 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
-  //  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp);
 protected:
-  //  std::map<std::thread::id, complex<double> > _cachedDynLMap;
+
   std::map< int, double> _currentParamMags;
   std::map< int, double> _currentParamPhis;
   short _noOfAmps;

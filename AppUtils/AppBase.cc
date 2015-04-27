@@ -92,6 +92,12 @@ void AppBase::dumpDefaultParams(){
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
 
     GlobalEnv::instance()->fitParColBase()->dumpParams(theStreamDefault, paramVal, paramErr);
+
+    std::stringstream defaultparamsnameNew;
+    defaultparamsnameNew << "defaultparams" << GlobalEnv::instance()->outputFileNameSuffix() << ".datNew";
+    std::shared_ptr<AbsPawianParameters> defaultParams=GlobalEnv::instance()->defaultPawianParams();
+    std::ofstream theStreamDefaultNew ( defaultparamsnameNew.str().c_str() );
+    defaultParams->print(theStreamDefaultNew);
 }
 
 void AppBase::generate(fitParCol& theParams){

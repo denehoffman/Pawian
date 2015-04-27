@@ -33,6 +33,7 @@
 class ParserBase;
 class ParticleTable;
 class FitParColBase;
+class AbsPawianParameters;
 
 typedef std::vector<std::pair<std::shared_ptr<AbsChannelEnv>, short> > ChannelEnvList;
 
@@ -47,8 +48,9 @@ public:
    void setup(ParserBase* theParser);
   void replaceParser(ParserBase* theParser);
    void AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short channelType);
-
-   ParticleTable* particleTable() {return _particleTable;}
+  void setupChannelEnvs();
+   
+  ParticleTable* particleTable() {return _particleTable;}
    ParserBase* parser() {return _theParser;}
    std::shared_ptr<FitParColBase> fitParColBase(){ return _theFitParColBase;}
    const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
@@ -63,10 +65,11 @@ public:
    const short NoChannels() const {return _channelEnvs.size();}
    fitParCol DefaultParamVal(){ return _defaultVal;}
    fitParCol DefaultParamErr(){ return _defaultErr;}
-
+  std::shared_ptr<AbsPawianParameters> defaultPawianParams();
 private:
    static GlobalEnv* _instance;
    bool _alreadySetUp;
+  bool _channelEnvsAlredySetup;
    ParticleTable* _particleTable;
    ParserBase* _theParser;
    std::shared_ptr<FitParColBase> _theFitParColBase;

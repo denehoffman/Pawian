@@ -36,6 +36,7 @@
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "FitParams/FitParColBase.hh"
+#include "FitParams/AbsPawianParameters.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/DataUtils.hh"
 
@@ -64,6 +65,9 @@ public:
   virtual std::vector<EvtData*> getMcVec() {return _evtMCVec;}
 
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  
   virtual bool checkRecalculation(fitParCol& theParamVal);
   virtual void cacheAmplitudes();
   virtual void updateFitParams(fitParCol& theParamVal);

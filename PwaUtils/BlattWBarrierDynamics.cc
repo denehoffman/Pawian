@@ -46,6 +46,15 @@ BlattWBarrierDynamics::BlattWBarrierDynamics(std::string& name, std::vector<Part
   Info << "BlattWBarrierDynamics for " << _name <<endmsg;
   if(GlobalEnv::instance()->parser()->fitqRProduction()) _fitqRVals=true;
   _isLdependent=true;
+  // _qR should be between 0.02  and 20. 
+  if (_qR<0.02){
+    Warning << "_qR value of " << _qR << " to low! Set it to 0.02!!!" << endmsg;
+    _qR=0.02;
+  }
+  if (_qR>20.){
+    Warning << "_qR value of " << _qR << " to high! Set it to 20.!!!" << endmsg;
+    _qR=20.;
+  }
 }
 
 BlattWBarrierDynamics::~BlattWBarrierDynamics()
@@ -65,6 +74,12 @@ void  BlattWBarrierDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitE
   if(!_fitqRVals) return;
   fitVal.otherParams[_fitqRKey]=_qR;
   fitErr.otherParams[_fitqRKey]=0.3;
+}
+
+void  BlattWBarrierDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  if(!_fitqRVals) return;
+  fitPar->Add(_fitqRKey, _qR, 0.05);
+  fitPar->SetLimits(_fitqRKey, 0.02, 20.);
 }
 
 bool BlattWBarrierDynamics::checkRecalculation(fitParCol& theParamVal){

@@ -35,6 +35,7 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/LASS.hh"
 #include "Utils/FunctionUtils.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 K0star1430LassDynamics::K0star1430LassDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
@@ -88,6 +89,36 @@ void  K0star1430LassDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fit
     fitVal.otherParams[_phiRKey]=-5.356;
     fitErr.otherParams[_phiRKey]=0.05;
 }
+
+void  K0star1430LassDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  std::string massName=_massKey+"Mass";
+  double valMass=_mother->mass();
+  double errMass=0.03;
+  double minMass=valMass-5.*errMass;
+  if(minMass<0.) minMass=0.;
+  double maxMass=valMass+5.*errMass;
+  fitPar->Add( massName, valMass, errMass);
+  fitPar->SetLimits( massName, minMass, maxMass);
+
+  //fill width
+  std::string widthName=_massKey+"Width";
+  double valWidth=_mother->width();
+  double errWidth=0.2*_mother->width();
+  double minWidth=valWidth-5.*errWidth;
+  if(minWidth<0.) minWidth=0.;
+  double maxWidth=valWidth+5.*errWidth;
+
+  fitPar->Add(widthName, valWidth, errWidth);
+  fitPar->SetLimits(widthName, minWidth, maxWidth);
+
+  fitPar->Add(_aLASSKey, 1.07, 0.05);
+  fitPar->Add(_rLASSKey, -2.852, 0.05);
+  fitPar->Add(_BLASSKey, 0.7, 0.05);
+  fitPar->Add(_phiBKey, 0.7, 0.05);
+  fitPar->Add(_RLASSKey, 1., 0.05);
+  fitPar->Add(_phiRKey, -5.356, 0.05);
+}
+
 
 bool K0star1430LassDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
