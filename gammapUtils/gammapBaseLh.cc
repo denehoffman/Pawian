@@ -194,6 +194,19 @@ void gammapBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   fitErr.PhisJPC["gammap"]=currentPhiErrMap;
 }
 
+void gammapBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  AbsLh::fillDefaultParams(fitPar);
+
+  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
+  for(itIso=_currentParamJPCIsos12.begin(); itIso!=_currentParamJPCIsos12.end(); ++itIso){
+    fitPar->Add("Iso12"+(*itIso).first->name(), (*itIso).second, 0.5);
+    fitPar->SetLimits("Iso12"+(*itIso).first->name(), 0., 1.);
+   }
+
+  //  double magFactor=1./sqrt(_jpcToIGJPCMap.size());
+  //attention: missing things have to be added !!!!
+}
+
 void gammapBaseLh::fillIsos(){
   //first look for iso0 decay amplitudes and fill it in the map
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;

@@ -37,6 +37,7 @@
 #include "PwaDynamics/KMatrixKPiSFocus.hh"
 #include "PwaDynamics/FVector.hh"
 #include "PwaDynamics/PVectorKPiSFocus.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 KPiSWaveIso32Dynamics::KPiSWaveIso32Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
@@ -106,6 +107,43 @@ void  KPiSWaveIso32Dynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitE
       fitErr.otherParams[it1->first+it2->first]=1.;
     }
   }
+}
+
+void KPiSWaveIso32Dynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+  for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
+    std::string theName=it1->first;    
+    std::map<std::string, double>::iterator it2;
+ 
+    // a prod factors pure real   
+    std::map<std::string, double>& aProds=it1->second;
+    for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
+      std::string aProdName=theName+it2->first;
+      fitPar->Add(aProdName, it2->second , 0.5);
+    }
+
+    // b prod factors pure real
+    std::map<std::string, double>& bProds=_currentbProdMap.at(it1->first);
+    for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
+      std::string bProdName=theName+it2->first;
+      fitPar->Add(bProdName, it2->second , 0.5);    
+    }
+
+    // c prod factors pure real
+    std::map<std::string, double>& cProds=_currentcProdMap.at(it1->first);
+    for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
+      std::string cProdName=theName+it2->first;
+      fitPar->Add(cProdName, it2->second , 0.5);    
+    }
+
+    // phase prod factors
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap.at(it1->first);
+    for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
+      std::string phaseName=theName+it2->first;
+      fitPar->Add(phaseName, it2->second , 0.2);    
+    }
+  }
+
 }
 
 bool KPiSWaveIso32Dynamics::checkRecalculation(fitParCol& theParamVal){

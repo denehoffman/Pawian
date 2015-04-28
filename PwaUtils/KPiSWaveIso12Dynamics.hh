@@ -39,6 +39,7 @@ class AbsXdecAmp;
 class KMatrixKPiSFocus;
 class FVector;
 class PVectorKPiSFocus;
+class AbsPawianParameters;
 
 class KPiSWaveIso12Dynamics : public AbsDynamics{
 
@@ -50,6 +51,8 @@ public:
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  
   virtual bool checkRecalculation(fitParCol& theParamVal);
   virtual void updateFitParams(fitParCol& theParamVal);
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
@@ -64,7 +67,8 @@ protected:
   std::map<std::string, std::shared_ptr<FVector> > _fVecMap;
   std::map<std::string, std::shared_ptr<PVectorKPiSFocus> > _pVecMap;
 
-  std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
+  std::map<std::string, std::map<std::string, double> > _currentbFactorMagMap;
+  std::map<std::string, std::map<std::string, double> > _currentbFactorPhiMap;
   std::map<std::string, std::map<std::string, double> > _currentaProdMap; 
   std::map<std::string, std::map<std::string, double> > _currentbProdMap; 
   std::map<std::string, std::map<std::string, double> > _currentcProdMap;

@@ -63,6 +63,8 @@ public:
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  
   virtual bool checkRecalculation(fitParCol& theParamVal);
   virtual void updateFitParams(fitParCol& theParamVal);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);

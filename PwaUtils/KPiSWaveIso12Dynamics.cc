@@ -37,6 +37,7 @@
 #include "PwaDynamics/KMatrixKPiSFocus.hh"
 #include "PwaDynamics/FVector.hh"
 #include "PwaDynamics/PVectorKPiSFocus.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 KPiSWaveIso12Dynamics::KPiSWaveIso12Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
@@ -76,12 +77,18 @@ complex<double> result(0.,0.);
 
 void  KPiSWaveIso12Dynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
     
     std::map<std::string, double>::iterator it2;
     
-    std::map<std::string, double>& bFactors=it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
+    std::map<std::string, double>& bMagFactors=it1->second;
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
+      fitVal.otherParams[it1->first+it2->first]=it2->second;
+      fitErr.otherParams[it1->first+it2->first]=1.;
+    }
+
+    std::map<std::string, double>& bPhiFactors=_currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.;
     }
@@ -112,18 +119,75 @@ void  KPiSWaveIso12Dynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitE
   }
 }
 
+void KPiSWaveIso12Dynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
+    std::string theName=it1->first;
+    std::map<std::string, double>& bMagFactors = it1->second;
+    
+    std::map<std::string, double>::iterator it2;
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
+      std::string magName=theName+it2->first;
+      fitPar->Add(magName, it2->second , 1.);
+      fitPar->SetLimits(magName, 0., it2->second+30.);
+    }
+
+    std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
+      std::string phiName=theName+it2->first;
+      fitPar->Add(phiName, 0. , 0.2);
+    }
+
+    // a prod factors pure real
+    std::map<std::string, double>& aProds=_currentaProdMap.at(it1->first);
+    for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
+      std::string aProdName=theName+it2->first;
+      fitPar->Add(aProdName, it2->second , 0.5);    
+    }
+
+    // b prod factors pure real
+    std::map<std::string, double>& bProds=_currentbProdMap.at(it1->first);
+    for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
+      std::string bProdName=theName+it2->first;
+      fitPar->Add(bProdName, it2->second , 0.5);    
+    }
+
+    // c prod factors pure real
+    std::map<std::string, double>& cProds=_currentcProdMap.at(it1->first);
+    for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
+      std::string cProdName=theName+it2->first;
+      fitPar->Add(cProdName, it2->second , 0.5);    
+    }
+
+    // phase prod factors
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap.at(it1->first);
+    for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
+      std::string phaseName=theName+it2->first;
+      fitPar->Add(phaseName, it2->second , 0.2);    
+    }
+  }
+}
+
 bool KPiSWaveIso12Dynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
 
     _recalcMap[it1->first]=false;    
     
      std::map<std::string, double>::iterator it2;
     
-    std::map<std::string, double>& bFactors=it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
+    std::map<std::string, double>& bMagFactors=it1->second;
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
+      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
+	_recalculate=true;
+	_recalcMap[it1->first]=true;
+      }
+    }
+
+    std::map<std::string, double>& bPhiFactors=_currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
       if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap[it1->first]=true;
@@ -169,14 +233,16 @@ bool KPiSWaveIso12Dynamics::checkRecalculation(fitParCol& theParamVal){
 void KPiSWaveIso12Dynamics::updateFitParams(fitParCol& theParamVal){
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
 
     std::map<std::string, double>::iterator it2;
 
     it1->second["b_pole1Mag"]=theParamVal.otherParams[it1->first+"b_pole1Mag"];
-    it1->second["b_pole1Phi"]=theParamVal.otherParams[it1->first+"b_pole1Phi"];
+    
+    double currentbFactorPhi=theParamVal.otherParams[it1->first+"b_pole1Phi"];
+    _currentbFactorPhiMap[it1->first]["b_pole1Phi"]=currentbFactorPhi;
 
-    complex<double> b_pole1=it1->second["b_pole1Mag"]*complex<double>(cos(it1->second["b_pole1Phi"]), sin(it1->second["b_pole1Phi"]));
+    complex<double> b_pole1=it1->second["b_pole1Mag"]*complex<double>(cos(currentbFactorPhi), sin(currentbFactorPhi));
 
     std::map<std::string, double>& aProds=_currentaProdMap[it1->first];
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
@@ -241,10 +307,10 @@ void KPiSWaveIso12Dynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   _currentphaseProdMap[theName]["KpiPhi"]=0.;
   _currentphaseProdMap[theName]["KetapPhi"]=0.;
 
-  _currentbFactorMap[theName]["b_pole1Mag"]=1.;
-  _currentbFactorMap[theName]["b_pole1Phi"]=0.;
+  _currentbFactorMagMap[theName]["b_pole1Mag"]=1.;
+  _currentbFactorPhiMap[theName]["b_pole1Phi"]=0.;
 
-  complex<double> b_pole1=_currentbFactorMap[theName]["b_pole1Mag"]*complex<double>(cos(_currentbFactorMap[theName]["b_pole1Phi"]), sin(_currentbFactorMap[theName]["b_pole1Phi"]));
+  complex<double> b_pole1=_currentbFactorMagMap[theName]["b_pole1Mag"]*complex<double>(cos(_currentbFactorPhiMap[theName]["b_pole1Phi"]), sin(_currentbFactorPhiMap[theName]["b_pole1Phi"]));
   currentPVector->updateBeta(0, b_pole1);
   currentPVector->updateAprod(0, _currentaProdMap[theName]["a_KpiPosNeg"]);
   currentPVector->updateBprod(0, _currentbProdMap[theName]["b_KpiPosNeg"]);

@@ -185,6 +185,34 @@ void  TensorDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
 }
 
+
+void  TensorDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
+  for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
+    //fill magnitude
+    std::string magName=(*itLS)->name()+_key+"Mag";
+    double valMag=_factorMag;
+    double errMag=_factorMag/2.;
+    double minMag=0.;
+    double maxMag=_factorMag+30.*errMag;
+
+    fitPar->Add(magName, valMag, errMag);
+    fitPar->SetLimits(magName, minMag, maxMag);
+
+    std::string phiName=(*itLS)->name()+_key+"Phi";
+    double valPhi=0.;
+    double errPhi=0.2;
+    //no limits for phi parameter
+    fitPar->Add(phiName, valPhi, errPhi);
+  }
+
+  _absDyn->fillDefaultParams(fitPar);
+
+  if(!_daughter1IsStable) _decAmpDaughter1->fillDefaultParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
+}
+
 void TensorDecAmps::print(std::ostream& os) const{
   return; //dummy
 }

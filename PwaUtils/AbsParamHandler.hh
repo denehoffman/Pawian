@@ -41,10 +41,11 @@ public:
   virtual ~AbsParamHandler();
 
   virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr)=0;
-  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar) {;}
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar)=0;
   virtual bool checkRecalculation(fitParCol& theParamVal)=0;
   virtual void cacheAmplitudes()=0;
   virtual void updateFitParams(fitParCol& theParamVal)=0;
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){;}
   static bool CheckDoubleEquality(double a, double b);
 
 protected:

@@ -43,6 +43,7 @@
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/PPole.hh"
 #include "Particle/ParticleTable.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 PiPiSWaveASDynamics::PiPiSWaveASDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, ParticleTable* thePdtTable) :
   AbsDynamics(name, fsParticles, mother)
@@ -114,18 +115,29 @@ complex<double> result(0.,0.);
 
 void  PiPiSWaveASDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
     
     std::map<std::string, double>::iterator it2;
     
-    std::map<std::string, double>& bFactors=it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
+    std::map<std::string, double>& bMagFactors=it1->second;
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
+      fitVal.otherParams[it1->first+it2->first]=it2->second;
+      fitErr.otherParams[it1->first+it2->first]=1.;
+    }
+    std::map<std::string, double>& bPhiFactors=_currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.;
     }
 
-    std::map<std::string, double>& fProds=_currentfProdMap[it1->first];
-    for(it2=fProds.begin(); it2!=fProds.end(); ++it2){
+    std::map<std::string, double>& fMagProds=_currentfProdMagMap[it1->first];
+    for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
+      fitVal.otherParams[it1->first+it2->first]=it2->second;
+      fitErr.otherParams[it1->first+it2->first]=1.; 
+    }
+
+    std::map<std::string, double>& fPhiProds=_currentfProdPhiMap[it1->first];
+    for(it2=fPhiProds.begin(); it2!=fPhiProds.end(); ++it2){
       fitVal.otherParams[it1->first+it2->first]=it2->second;
       fitErr.otherParams[it1->first+it2->first]=1.; 
     }
@@ -135,6 +147,45 @@ void  PiPiSWaveASDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr
   }
 }
 
+void PiPiSWaveASDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+//beta factor for production
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
+    std::string theName=it1->first;
+    std::map<std::string, double>& bMagFactors = it1->second;
+
+    std::map<std::string, double>::iterator it2;    
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
+      std::string magName=theName+it2->first;
+      fitPar->Add(magName, it2->second , 1.);
+      fitPar->SetLimits(magName, 0., it2->second+30.);
+    }
+
+    std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
+      std::string phiName=theName+it2->first;
+      fitPar->Add(phiName, 0. , 0.2);
+    }
+
+    //fProd factors
+    std::map<std::string, double>& fMagProds=_currentfProdMagMap.at(it1->first);
+    for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
+      std::string magName=theName+it2->first;
+      fitPar->Add(magName, it2->second , 1.);
+      fitPar->SetLimits(magName, 0., it2->second+30.);
+    }
+
+    std::map<std::string, double>& fPhiProds=_currentfProdPhiMap.at(it1->first);
+    for(it2=fPhiProds.begin(); it2!=fPhiProds.end(); ++it2){
+      std::string phiName=theName+it2->first;
+      fitPar->Add(phiName, 0., 0.2);
+    }
+
+    //s0 factors
+    std::string s0Name=theName+"S0";
+    fitPar->Add(s0Name, _currentS0Map.at(it1->first) , 0.2);
+  }
+}
 bool PiPiSWaveASDynamics::checkRecalculation(fitParCol& theParamVal){
   _recalculate=false;
   std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached;
@@ -147,14 +198,14 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParCol& theParamVal){
 
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
 
     _recalcMap[it1->first]=false;    
     
      std::map<std::string, double>::iterator it2;
     
-    std::map<std::string, double>& bFactors=it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
+    std::map<std::string, double>& bMagFactors=it1->second;
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
        if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
 	_recalculate=true;
 	_recalcMap.at(it1->first)=true;
@@ -162,8 +213,26 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParCol& theParamVal){
       }
     }
 
-   std::map<std::string, double>& fProds=_currentfProdMap[it1->first];
-   for(it2=fProds.begin(); it2!=fProds.end(); ++it2){
+    std::map<std::string, double>& bPhiFactors=_currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
+       if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
+	_recalculate=true;
+	_recalcMap.at(it1->first)=true;
+	continue;
+      }
+    }
+
+   std::map<std::string, double>& fMagProds=_currentfProdMagMap[it1->first];
+   for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
+     if(_recalcMap.at(it1->first)) continue;
+     if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
+       _recalculate=true;
+       _recalcMap.at(it1->first)=true;
+     }
+   }
+
+   std::map<std::string, double>& fPhiProds=_currentfProdPhiMap[it1->first];
+   for(it2=fPhiProds.begin(); it2!=fPhiProds.end(); ++it2){
      if(_recalcMap.at(it1->first)) continue;
      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
        _recalculate=true;
@@ -184,17 +253,27 @@ bool PiPiSWaveASDynamics::checkRecalculation(fitParCol& theParamVal){
 void PiPiSWaveASDynamics::updateFitParams(fitParCol& theParamVal){
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+  for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
 
     std::map<std::string, double>::iterator it2;
 
-    std::map<std::string, double>& bFactors = it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
+    std::map<std::string, double>& bMagFactors = it1->second;
+    for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
+      it2->second = theParamVal.otherParams.at(it1->first+it2->first);
+    }
+
+    std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
+    for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
+      it2->second = theParamVal.otherParams.at(it1->first+it2->first);
+    }
+
+    std::map<std::string, double>& fMagProds=_currentfProdMagMap[it1->first];
+    for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
 
-    std::map<std::string, double>& fProds=_currentfProdMap[it1->first];
-    for(it2=fProds.begin(); it2!=fProds.end(); ++it2){
+    std::map<std::string, double>& fPhiProds=_currentfProdPhiMap[it1->first];
+    for(it2=fPhiProds.begin(); it2!=fPhiProds.end(); ++it2){
       it2->second = theParamVal.otherParams[it1->first+it2->first];
     }
 
@@ -204,22 +283,22 @@ void PiPiSWaveASDynamics::updateFitParams(fitParCol& theParamVal){
     std::shared_ptr<PVectorSlowCorRel> currentPVec=_pVecMap[it1->first];
 
     //update _pipiSFVec
-    complex<double> b_pole1=bFactors["b_pole1Mag"]*complex<double>(cos(bFactors["b_pole1Phi"]), sin(bFactors["b_pole1Phi"]));
-    complex<double> b_pole2=bFactors["b_pole2Mag"]*complex<double>(cos(bFactors["b_pole2Phi"]), sin(bFactors["b_pole2Phi"])); 
-    complex<double> b_pole3=bFactors["b_pole3Mag"]*complex<double>(cos(bFactors["b_pole3Phi"]), sin(bFactors["b_pole3Phi"]));
-    complex<double> b_pole4=bFactors["b_pole4Mag"]*complex<double>(cos(bFactors["b_pole4Phi"]), sin(bFactors["b_pole4Phi"]));
-    complex<double> b_pole5=bFactors["b_pole5Mag"]*complex<double>(cos(bFactors["b_pole5Phi"]), sin(bFactors["b_pole5Phi"]));
+    complex<double> b_pole1=bMagFactors["b_pole1Mag"]*complex<double>(cos(bPhiFactors["b_pole1Phi"]), sin(bPhiFactors["b_pole1Phi"]));
+    complex<double> b_pole2=bMagFactors["b_pole2Mag"]*complex<double>(cos(bPhiFactors["b_pole2Phi"]), sin(bPhiFactors["b_pole2Phi"])); 
+    complex<double> b_pole3=bMagFactors["b_pole3Mag"]*complex<double>(cos(bPhiFactors["b_pole3Phi"]), sin(bPhiFactors["b_pole3Phi"]));
+    complex<double> b_pole4=bMagFactors["b_pole4Mag"]*complex<double>(cos(bPhiFactors["b_pole4Phi"]), sin(bPhiFactors["b_pole4Phi"]));
+    complex<double> b_pole5=bMagFactors["b_pole5Mag"]*complex<double>(cos(bPhiFactors["b_pole5Phi"]), sin(bPhiFactors["b_pole5Phi"]));
     currentPVec->updateBeta(0, b_pole1);
     currentPVec->updateBeta(1, b_pole2);
     currentPVec->updateBeta(2, b_pole3);
     currentPVec->updateBeta(3, b_pole4);
     currentPVec->updateBeta(4, b_pole5);
 
-    complex<double> fProdPiPi=fProds["fprod_PiPiMag"]*complex<double>(cos(fProds["fprod_PiPiPhi"]), sin(fProds["fprod_PiPiPhi"]));
-    complex<double> fProdKK=fProds["fprod_KKMag"]*complex<double>(cos(fProds["fprod_KKPhi"]), sin(fProds["fprod_KKPhi"]));
-    complex<double> fProd4Pi=fProds["fprod_4PiMag"]*complex<double>(cos(fProds["fprod_4PiPhi"]), sin(fProds["fprod_4PiPhi"]));
-    complex<double> fProdEtaEta=fProds["fprod_EtaEtaMag"]*complex<double>(cos(fProds["fprod_EtaEtaPhi"]), sin(fProds["fprod_EtaEtaPhi"]));
-    complex<double> fProdEtaEtap=fProds["fprod_EtaEtapMag"]*complex<double>(cos(fProds["fprod_EtaEtapPhi"]), sin(fProds["fprod_EtaEtapPhi"]));
+    complex<double> fProdPiPi=fMagProds["fprod_PiPiMag"]*complex<double>(cos(fPhiProds["fprod_PiPiPhi"]), sin(fPhiProds["fprod_PiPiPhi"]));
+    complex<double> fProdKK=fMagProds["fprod_KKMag"]*complex<double>(cos(fPhiProds["fprod_KKPhi"]), sin(fPhiProds["fprod_KKPhi"]));
+    complex<double> fProd4Pi=fMagProds["fprod_4PiMag"]*complex<double>(cos(fPhiProds["fprod_4PiPhi"]), sin(fPhiProds["fprod_4PiPhi"]));
+    complex<double> fProdEtaEta=fMagProds["fprod_EtaEtaMag"]*complex<double>(cos(fPhiProds["fprod_EtaEtaPhi"]), sin(fPhiProds["fprod_EtaEtaPhi"]));
+    complex<double> fProdEtaEtap=fMagProds["fprod_EtaEtapMag"]*complex<double>(cos(fPhiProds["fprod_EtaEtapPhi"]), sin(fPhiProds["fprod_EtaEtapPhi"]));
     currentPVec->updateFprod(0, fProdPiPi);
     currentPVec->updateFprod(1, fProdKK);
     currentPVec->updateFprod(2, fProd4Pi);
@@ -247,46 +326,48 @@ void PiPiSWaveASDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   std::shared_ptr<PVectorSlowCorRel> currentPVector=makeNewPVec();
   std::shared_ptr<FVector> currentFVector(new FVector(_KmatrixPiPiS, currentPVector));
 
-  _currentbFactorMap[theName]["b_pole1Mag"]=1.;
-  _currentbFactorMap[theName]["b_pole1Phi"]=0.;
-  _currentbFactorMap[theName]["b_pole2Mag"]=1.;
-  _currentbFactorMap[theName]["b_pole2Phi"]=0.;
-  _currentbFactorMap[theName]["b_pole3Mag"]=1.;
-  _currentbFactorMap[theName]["b_pole3Phi"]=0.;
-  _currentbFactorMap[theName]["b_pole4Mag"]=1.;
-  _currentbFactorMap[theName]["b_pole4Phi"]=0.;
-  _currentbFactorMap[theName]["b_pole5Mag"]=1.;
-  _currentbFactorMap[theName]["b_pole5Phi"]=0.;
+  _currentbFactorMagMap[theName]["b_pole1Mag"]=1.;
+  _currentbFactorPhiMap[theName]["b_pole1Phi"]=0.;
+  _currentbFactorMagMap[theName]["b_pole2Mag"]=1.;
+  _currentbFactorPhiMap[theName]["b_pole2Phi"]=0.;
+  _currentbFactorMagMap[theName]["b_pole3Mag"]=1.;
+  _currentbFactorPhiMap[theName]["b_pole3Phi"]=0.;
+  _currentbFactorMagMap[theName]["b_pole4Mag"]=1.;
+  _currentbFactorPhiMap[theName]["b_pole4Phi"]=0.;
+  _currentbFactorMagMap[theName]["b_pole5Mag"]=1.;
+  _currentbFactorPhiMap[theName]["b_pole5Phi"]=0.;
 
-  std::map<std::string, double>& bFactors = _currentbFactorMap[theName];
-  complex<double> b_pole1=bFactors["b_pole1Mag"]*complex<double>(cos(bFactors["b_pole1Phi"]), sin(bFactors["b_pole1Phi"]));
-  complex<double> b_pole2=bFactors["b_pole2Mag"]*complex<double>(cos(bFactors["b_pole2Phi"]), sin(bFactors["b_pole2Phi"])); 
-  complex<double> b_pole3=bFactors["b_pole3Mag"]*complex<double>(cos(bFactors["b_pole3Phi"]), sin(bFactors["b_pole3Phi"]));
-  complex<double> b_pole4=bFactors["b_pole4Mag"]*complex<double>(cos(bFactors["b_pole4Phi"]), sin(bFactors["b_pole4Phi"]));
-  complex<double> b_pole5=bFactors["b_pole5Mag"]*complex<double>(cos(bFactors["b_pole5Phi"]), sin(bFactors["b_pole5Phi"]));
+  std::map<std::string, double>& bMagFactors = _currentbFactorMagMap[theName];
+  std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap[theName];
+  complex<double> b_pole1=bMagFactors["b_pole1Mag"]*complex<double>(cos(bPhiFactors["b_pole1Phi"]), sin(bPhiFactors["b_pole1Phi"]));
+  complex<double> b_pole2=bMagFactors["b_pole2Mag"]*complex<double>(cos(bPhiFactors["b_pole2Phi"]), sin(bPhiFactors["b_pole2Phi"])); 
+  complex<double> b_pole3=bMagFactors["b_pole3Mag"]*complex<double>(cos(bPhiFactors["b_pole3Phi"]), sin(bPhiFactors["b_pole3Phi"]));
+  complex<double> b_pole4=bMagFactors["b_pole4Mag"]*complex<double>(cos(bPhiFactors["b_pole4Phi"]), sin(bPhiFactors["b_pole4Phi"]));
+  complex<double> b_pole5=bMagFactors["b_pole5Mag"]*complex<double>(cos(bPhiFactors["b_pole5Phi"]), sin(bPhiFactors["b_pole5Phi"]));
   currentPVector->updateBeta(0, b_pole1);
   currentPVector->updateBeta(1, b_pole2);
   currentPVector->updateBeta(2, b_pole3);
   currentPVector->updateBeta(3, b_pole4);
   currentPVector->updateBeta(4, b_pole5);
 
-  _currentfProdMap[theName]["fprod_PiPiMag"]=1.;
-  _currentfProdMap[theName]["fprod_PiPiPhi"]=0.;
-  _currentfProdMap[theName]["fprod_KKMag"]=1.;
-  _currentfProdMap[theName]["fprod_KKPhi"]=0.;
-  _currentfProdMap[theName]["fprod_4PiMag"]=1.;
-  _currentfProdMap[theName]["fprod_4PiPhi"]=0.;
-  _currentfProdMap[theName]["fprod_EtaEtaMag"]=1.;
-  _currentfProdMap[theName]["fprod_EtaEtaPhi"]=0.;
-  _currentfProdMap[theName]["fprod_EtaEtapMag"]=1.;
-  _currentfProdMap[theName]["fprod_EtaEtapPhi"]=0.;
+  _currentfProdMagMap[theName]["fprod_PiPiMag"]=1.;
+  _currentfProdPhiMap[theName]["fprod_PiPiPhi"]=0.;
+  _currentfProdMagMap[theName]["fprod_KKMag"]=1.;
+  _currentfProdPhiMap[theName]["fprod_KKPhi"]=0.;
+  _currentfProdMagMap[theName]["fprod_4PiMag"]=1.;
+  _currentfProdPhiMap[theName]["fprod_4PiPhi"]=0.;
+  _currentfProdMagMap[theName]["fprod_EtaEtaMag"]=1.;
+  _currentfProdPhiMap[theName]["fprod_EtaEtaPhi"]=0.;
+  _currentfProdMagMap[theName]["fprod_EtaEtapMag"]=1.;
+  _currentfProdPhiMap[theName]["fprod_EtaEtapPhi"]=0.;
 
-  std::map<std::string, double>& fProds=_currentfProdMap[theName];
-  complex<double> fProdPiPi=fProds["fprod_PiPiMag"]*complex<double>(cos(fProds["fprod_PiPiPhi"]), sin(fProds["fprod_PiPiPhi"]));
-  complex<double> fProdKK=fProds["fprod_KKMag"]*complex<double>(cos(fProds["fprod_KKPhi"]), sin(fProds["fprod_KKPhi"]));
-  complex<double> fProd4Pi=fProds["fprod_4PiMag"]*complex<double>(cos(fProds["fprod_4PiPhi"]), sin(fProds["fprod_4PiPhi"]));
-  complex<double> fProdEtaEta=fProds["fprod_EtaEtaMag"]*complex<double>(cos(fProds["fprod_EtaEtaPhi"]), sin(fProds["fprod_EtaEtaPhi"]));
-  complex<double> fProdEtaEtap=fProds["fprod_EtaEtapMag"]*complex<double>(cos(fProds["fprod_EtaEtapPhi"]), sin(fProds["fprod_EtaEtapPhi"]));
+  std::map<std::string, double>& fMagProds=_currentfProdMagMap[theName];
+  std::map<std::string, double>& fPhiProds=_currentfProdPhiMap[theName];
+  complex<double> fProdPiPi=fMagProds["fprod_PiPiMag"]*complex<double>(cos(fPhiProds["fprod_PiPiPhi"]), sin(fPhiProds["fprod_PiPiPhi"]));
+  complex<double> fProdKK=fMagProds["fprod_KKMag"]*complex<double>(cos(fPhiProds["fprod_KKPhi"]), sin(fPhiProds["fprod_KKPhi"]));
+  complex<double> fProd4Pi=fMagProds["fprod_4PiMag"]*complex<double>(cos(fPhiProds["fprod_4PiPhi"]), sin(fPhiProds["fprod_4PiPhi"]));
+  complex<double> fProdEtaEta=fMagProds["fprod_EtaEtaMag"]*complex<double>(cos(fPhiProds["fprod_EtaEtaPhi"]), sin(fPhiProds["fprod_EtaEtaPhi"]));
+  complex<double> fProdEtaEtap=fMagProds["fprod_EtaEtapMag"]*complex<double>(cos(fPhiProds["fprod_EtaEtapPhi"]), sin(fPhiProds["fprod_EtaEtapPhi"]));
 
   currentPVector->updateFprod(0, fProdPiPi);
   currentPVector->updateFprod(1, fProdKK);
