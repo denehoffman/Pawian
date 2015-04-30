@@ -43,6 +43,7 @@
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"
 #include "PwaUtils/BlattWBarrierDynamics.hh"
+#include "PwaUtils/RadM1Dynamics.hh"
 #include "PwaUtils/BlattWBarrierTensorDynamics.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
@@ -74,7 +75,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   //  if(theDec->dynType()=="BlattWBarrier") theName=theDec->wignerDKey();
   if(0==theDec->motherPart()){
     if(theDec->dynType()=="WoDynamics") theName=theDec->motherIGJPC()->jpcname();
-    else if (theDec->dynType()!="BlattWBarrier" && theDec->dynType()!="BlattWBarrierTensor"){
+    else if (theDec->dynType()!="BlattWBarrier" && theDec->dynType()!="BlattWBarrierTensor" && theDec->dynType()!="RadM1"){
       Alert << "dynamics with type " << theDec->dynType() << " is not allowed for annihilation amplitude!!!" << endmsg;
       exit(0); 
     }
@@ -157,6 +158,9 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       result= std::shared_ptr<AbsDynamics>(new BlattWBarrierTensorDynamics(blattWBarrierName, fsParticles, theDec->motherPart(), theDec->wignerDKey(), theDec->barrierqR()));
     }
     else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="RadM1") {
+      result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2));
+    }
     else{
       Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
       exit(1);
@@ -164,7 +168,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     
     result->setMassKey(theDec->massParKey());
 
-    if(theDec->isProductionAmp() &&  (theDec->dynType()=="BlattWBarrier" || theDec->dynType()=="BlattWBarrierTensor")) result->setMassKey(theDec->prodParKey()); 
+    if(theDec->isProductionAmp() &&  (theDec->dynType()=="BlattWBarrier" || theDec->dynType()=="BlattWBarrierTensor" || theDec->dynType()=="RadM1")) result->setMassKey(theDec->prodParKey()); 
 
     result->fillParamNameList();
     Info << "add dynamics for " <<  theName << endmsg;
