@@ -56,11 +56,11 @@ public:
 
 
   // Getters:
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   //  virtual void print(std::ostream& os) const;
-  virtual bool checkRecalculation(fitParCol& theParamVal);
-  virtual void updateFitParams(fitParCol& theParamVal);
+  // virtual bool checkRecalculation(fitParCol& theParamVal);
+  // virtual void updateFitParams(fitParCol& theParamVal);
 
 protected:
 

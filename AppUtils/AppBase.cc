@@ -45,8 +45,7 @@
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 
-#include "FitParams/FitParColBase.hh"
-#include "FitParams/StreamFitParColBase.hh"
+#include "FitParams/AbsPawianParamStreamer.hh"
 #include "FitParams/PwaCovMatrix.hh"
 
 #include "ConfigParser/ParserBase.hh"
@@ -84,25 +83,18 @@ AppBase::~AppBase()
 
 void AppBase::dumpDefaultParams(){
 
-    fitParCol paramVal = GlobalEnv::instance()->DefaultParamVal();
-    fitParCol paramErr = GlobalEnv::instance()->DefaultParamErr();
 
     std::stringstream defaultparamsname;
     defaultparamsname << "defaultparams" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
     std::ofstream theStreamDefault ( defaultparamsname.str().c_str() );
 
-    GlobalEnv::instance()->fitParColBase()->dumpParams(theStreamDefault, paramVal, paramErr);
-
-    std::stringstream defaultparamsnameNew;
-    defaultparamsnameNew << "defaultparams" << GlobalEnv::instance()->outputFileNameSuffix() << ".datNew";
     std::shared_ptr<AbsPawianParameters> defaultParams=GlobalEnv::instance()->defaultPawianParams();
-    std::ofstream theStreamDefaultNew ( defaultparamsnameNew.str().c_str() );
-    defaultParams->print(theStreamDefaultNew);
+    defaultParams->print(theStreamDefault);
 }
 
-void AppBase::generate(fitParCol& theParams){
+void AppBase::generate(std::shared_ptr<AbsPawianParameters> theParams){
     std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen());
-    GlobalEnv::instance()->fitParColBase()->printParams(theParams);
+    theParams->print(std::cout);
     pwaGenPtr->generate(GlobalEnv::instance()->Channel()->Lh(), theParams);
 }
 
@@ -146,12 +138,12 @@ void AppBase::createLhObjects(){
   }
   
   // Generate the full parameter set using the likelihood list
-  GlobalEnv::instance()->CreateDefaultParameterSet();
+  //  GlobalEnv::instance()->CreateDefaultParameterSet();
 }
 
-void AppBase::qaMode(fitParCol& theStartParams, double evtWeightSumData, int noOfFreeFitParams){
+void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData, int noOfFreeFitParams){
   
-  double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theStartParams);
+  double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(startParams);
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
   double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
   double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
@@ -170,11 +162,11 @@ void AppBase::qaMode(fitParCol& theStartParams, double evtWeightSumData, int noO
     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
     boostInputArchive >> *thePwaCovMatrix;
     theWaveContribution = std::shared_ptr<WaveContribution>
-      (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams, thePwaCovMatrix));
+      (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), startParams, thePwaCovMatrix));
   }
   else{
     theWaveContribution = std::shared_ptr<WaveContribution>
-      (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams));
+      (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), startParams));
   }
   std::pair<double, double> contValue = theWaveContribution->CalcContribution();
   std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues = theWaveContribution->CalcSingleContributions();
@@ -227,16 +219,16 @@ void AppBase::qaMode(fitParCol& theStartParams, double evtWeightSumData, int noO
   theQaStream.close();
 
   std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance();
-  histPtr->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), theStartParams);
+  histPtr->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), startParams);
 }
 
-void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fitParCol& theStartParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
+void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
 
   std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
   LHData theLHData;
-  std::shared_ptr<WaveContribution> theWaveContribution(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), theStartParams));
+  std::shared_ptr<WaveContribution> theWaveContribution(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), startParams));
 
-  fitParCol currentParams = theStartParams;
+  std::shared_ptr<AbsPawianParameters> currentParams = std::shared_ptr<AbsPawianParameters>(startParams->Clone());
 
   for(int i=-1; i<static_cast<int>(theWaveContribution->NoOfContributions());i++){
 
@@ -244,8 +236,7 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, fit
 
     if(i!=-1){
       contributionName = theWaveContribution->GetContributionName(i);
-      std::shared_ptr<AbsPawianParameters> uPar = theWaveContribution->GetParametersForContribution(i);
-      GlobalEnv::instance()->fitParColBase()->getFitParamVal(uPar->Params(), currentParams);
+      currentParams = theWaveContribution->GetParametersForContribution(i);
     }
  
     std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance(contributionName);
@@ -376,17 +367,17 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
   histPtr->scaleFitHists(histScaleFactor);
 }
 
-void AppBase::streamParams(fitParCol& startparams, fitParCol& errparams){
+std::shared_ptr<AbsPawianParameters> AppBase::streamPawianParams(){
   std::string paramStreamerPath=GlobalEnv::instance()->parser()->fitParamFile();
-  StreamFitParmsBase theParamStreamer(paramStreamerPath);
-  startparams=theParamStreamer.getFitParamVal();
-  errparams=theParamStreamer.getFitParamErr();
+  AbsPawianParamStreamer thePawianStreamer(paramStreamerPath);
+  return thePawianStreamer.paramList();
 }
 
 void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams){
 
   // Always fix the primary channel's scaling parameters
-  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
+  //  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
+  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam();
   fixedParams.push_back(fixedScaleParam);
   Info << "Fixing scaling parameter " << fixedScaleParam << endmsg;
 
@@ -404,8 +395,8 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
 }
 
 void AppBase::fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar){
-  std::string scaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
- 
+  //  std::string scaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
+  std::string scaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam(); 
   const std::vector<std::string> parNames=upar->ParamNames();
 
   std::vector<std::string>::const_iterator itFix;
@@ -416,14 +407,15 @@ void AppBase::fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar
 
 }
 
-bool AppBase::calcAndSendClientLh(NetworkClient& theClient, fitParCol& theStartparams, ChannelID channelID){
+bool AppBase::calcAndSendClientLh(NetworkClient& theClient, std::shared_ptr<AbsPawianParameters> startParams, ChannelID channelID){
 
   while(true){
     if(!theClient.WaitForParams()) return false;
 
     const std::vector<double> currentParamVec=theClient.GetParams();
-    fitParCol currentFitParams=theStartparams;
-    GlobalEnv::instance()->fitParColBase()->getFitParamVal(currentParamVec, currentFitParams);
+
+    std::shared_ptr<AbsPawianParameters> currentFitParams= std::shared_ptr<AbsPawianParameters>(startParams->Clone());
+    currentFitParams->SetAllValues(currentParamVec);
 
     LHData theLHData;
     GlobalEnv::instance()->Channel(channelID)->Lh()->calcLogLhDataClient(currentFitParams, theLHData);
@@ -509,7 +501,7 @@ void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double
   absMinimizerPtr->dumpFitResult();
 }
 
-void AppBase::fitClientMode(fitParCol& theStartparams){
+void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams){
   std::ostringstream portStringStream;
   portStringStream << GlobalEnv::instance()->parser()->serverPort();
   

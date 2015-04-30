@@ -111,6 +111,22 @@ void AbsXdecAmp::cacheAmplitudes(){
   if(!_daughter2IsStable) _decAmpDaughter2->cacheAmplitudes();
 }
 
+bool AbsXdecAmp::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+  _recalculate=false;
+  if(_absDyn->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
+  
+  if(!_daughter1IsStable) {
+    if(_decAmpDaughter1->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
+  }
+  if(!_daughter2IsStable){
+    if(_decAmpDaughter2->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
+  }
+  
+  if (!_recalculate) _recalculate=AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
+
+  return _recalculate;
+}
+
 void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   if(!_recalculate) return;
 

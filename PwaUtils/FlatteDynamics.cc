@@ -87,15 +87,6 @@ complex<double> FlatteDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, S
   return result;
 }
 
-void  FlatteDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-    fitVal.Masses[_massKey]=_mother->mass();
-    fitErr.Masses[_massKey]=0.03;
-    fitVal.gFactors[_g11Key]=1.;
-    fitErr.gFactors[_g11Key]=1.;
-    fitVal.gFactors[_g22Key]=1.;
-    fitErr.gFactors[_g22Key]=1.;
-}
-
 void FlatteDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   //fill mass
   std::string massName=_massKey+"Mass";
@@ -122,30 +113,29 @@ void FlatteDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitP
   fitPar->SetLimits(g22Name, mingii, maxgii);
 }
 
-bool FlatteDynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+void FlatteDynamics::fillParamNameList(){
+ std::string massName=_massKey+"Mass";
+  _paramNameList.push_back(massName);  
+  
+  //g-Factors
+  std::string g11Name=_g11Key+"gFactor";
+  _paramNameList.push_back(g11Name);  
 
-  double mass=theParamVal.Masses[_massKey];
-  if (!CheckDoubleEquality(mass, _currentMass)){
-    _recalculate=true;
-  }
-
-  double g11=theParamVal.gFactors[_g11Key];
-  if (!CheckDoubleEquality(g11, _currentg11)){
-    _recalculate=true;
-  }
-
-  double g22=theParamVal.gFactors[_g22Key];
-  if (!CheckDoubleEquality(g22, _currentg22)){
-    _recalculate=true;
-  }
-  return _recalculate;
+  std::string g22Name=_g22Key+"gFactor";
+  _paramNameList.push_back(g22Name);  
 }
 
-void FlatteDynamics::updateFitParams(fitParCol& theParamVal){
-  _currentMass=theParamVal.Masses[_massKey];
-  _currentg11=theParamVal.gFactors[_g11Key];
-  _currentg22=theParamVal.gFactors[_g22Key];
+void  FlatteDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  std::string massName=_massKey+"Mass";
+  _currentMass=fitPar->Value(massName);
+  
+  //g-Factors
+  std::string g11Name=_g11Key+"gFactor";
+  _currentg11=fitPar->Value(g11Name);
+
+  std::string g22Name=_g22Key+"gFactor";
+  _currentg22=fitPar->Value(g22Name);  
 }
 
 void FlatteDynamics::setMassKey(std::string& theMassKey){

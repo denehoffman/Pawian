@@ -27,7 +27,6 @@
 
 #include "MinFunctions/AbsPawianMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "FitParams/FitParColBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
 
@@ -43,19 +42,11 @@ AbsPawianMinimizer::AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std
 
 void AbsPawianMinimizer::dumpFitResult(){
 
-  fitParCol finalFitParams=_absFcn->defaultFitValParms();
-  std::vector<double> finalParamVec=_bestPawianParams->Params();
-  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-  fitParCol finalFitErrs=_absFcn->defaultFitErrParms();
-  std::vector<double> finalParamErrorVec=_bestPawianParams->Errors();  
-  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitParams);
-
   std::ostringstream finalResultname;
 
   std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
   
   std::ofstream theStream ( finalResultname.str().c_str() );
-  GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
+  _bestPawianParams->print(theStream);
 }

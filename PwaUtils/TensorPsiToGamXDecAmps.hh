@@ -62,11 +62,9 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
-  
-  virtual bool checkRecalculation(fitParCol& theParamVal);
-  virtual void updateFitParams(fitParCol& theParamVal);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();
 
 protected:
   std::map< int, double> _currentParamMags;

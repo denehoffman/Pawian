@@ -29,7 +29,6 @@
 
 #include "MinFunctions/EvoMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "FitParams/FitParColBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ConfigParser/ParserBase.hh"
@@ -48,8 +47,6 @@ EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr
   ,_population(population)
   , _iterations(iterations)
   , _evoRatioOfModParams(GlobalEnv::instance()->parser()->evoRatioOfModParams())
-  , _currentBestParams(theAbsFcnPtr->defaultFitValParms())
-  , _defaultFitErrParms(theAbsFcnPtr->defaultFitErrParms())
   , _currentResultFileName("currentEvoResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
 {
   if (_evoRatioOfModParams <= 0. || _evoRatioOfModParams>1.){
@@ -117,10 +114,9 @@ void EvoMinimizer::minimize(){
          minlh = itlh;
          numnoimprovement=0;
 
-        GlobalEnv::instance()->fitParColBase()->getFitParamVal(_bestPawianParams->Params(), _currentBestParams);
-        std::ofstream theStream(_currentResultFileName.c_str());
-        GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, _currentBestParams, _defaultFitErrParms);
-      }
+         std::ofstream theStream(_currentResultFileName.c_str());
+	_bestPawianParams->print(theStream);
+       }
       else{
          numnoimprovement++;
       }

@@ -32,7 +32,6 @@
 
 class ParserBase;
 class ParticleTable;
-class FitParColBase;
 class AbsPawianParameters;
 
 typedef std::vector<std::pair<std::shared_ptr<AbsChannelEnv>, short> > ChannelEnvList;
@@ -52,7 +51,6 @@ public:
    
   ParticleTable* particleTable() {return _particleTable;}
    ParserBase* parser() {return _theParser;}
-   std::shared_ptr<FitParColBase> fitParColBase(){ return _theFitParColBase;}
    const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
    const std::string serializationFileName() const {return _serializationFileName;}
    const std::shared_ptr<AbsChannelEnv> Channel(int id=0) const;
@@ -61,23 +59,18 @@ public:
    const std::shared_ptr<AbsChannelEnv> GammapChannel(int id=0) const;
    const std::shared_ptr<AbsChannelEnv> ResChannel(int id=0) const;
    const ChannelEnvList ChannelEnvs() const {return _channelEnvs;}
-   void CreateDefaultParameterSet();
    const short NoChannels() const {return _channelEnvs.size();}
-   fitParCol DefaultParamVal(){ return _defaultVal;}
-   fitParCol DefaultParamErr(){ return _defaultErr;}
-  std::shared_ptr<AbsPawianParameters> defaultPawianParams();
+   std::shared_ptr<AbsPawianParameters> defaultPawianParams();
+
 private:
    static GlobalEnv* _instance;
    bool _alreadySetUp;
-  bool _channelEnvsAlredySetup;
+   bool _channelEnvsAlredySetup;
    ParticleTable* _particleTable;
    ParserBase* _theParser;
-   std::shared_ptr<FitParColBase> _theFitParColBase;
    std::string _outputFileNameSuffix;
    std::string _serializationFileName;
 
    ChannelEnvList _channelEnvs;
 
-   fitParCol _defaultVal;
-   fitParCol _defaultErr;
 };

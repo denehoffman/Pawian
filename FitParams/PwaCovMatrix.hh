@@ -49,8 +49,7 @@ class PwaCovMatrix
   public:
    PwaCovMatrix();
    PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
-		const ROOT::Minuit2::MnUserParameters &theMinuitParameters,
-		fitParCol &theFitParams);
+		const ROOT::Minuit2::MnUserParameters &theMinuitParameters);
    double GetElement(std::string parameter1, std::string parameter2);
    static bool DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix);
 

@@ -114,58 +114,6 @@ complex<double> result(0.,0.);
   return result;
 }
 
-void  KMatrixDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-  //beta factor for production  
-  std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
-    
-    std::map<std::string, double>::iterator it2;
-    
-    std::map<std::string, double>& bFactors=it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
-      fitVal.otherParams[it1->first+it2->first]=it2->second;
-      fitErr.otherParams[it1->first+it2->first]=1.;
-    }
-  }
-
-  //pole positions
-  std::vector<double >::iterator itPoleVec;
-  for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
-    //  for(itPoleVec=_currentPoleMasses.begin(); itPoleVec!=_currentPoleMasses.end(); ++itPoleVec){
-    fitVal.Masses[_poleNames.at(i)]=_currentPoleMasses.at(i);
-    fitErr.Masses[_poleNames.at(i)]=0.02;
-  }
-
-  //g-factors
-  for(unsigned int i=0; i<_poleNames.size(); ++i){
-    std::vector<double> currentgFactorVec=_currentgFactorMap.at(i);
-    for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
-      std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-      fitVal.gFactors[currentName]=currentgFactorVec.at(j);
-      fitErr.gFactors[currentName]=currentgFactorVec.at(j);
-    }
-  }
-
-  //k-matrix bg-terms
-  if(_orderKMatBg>=0){
-    for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
-      for(unsigned int j=0; j<_phpVecs.size(); ++j){
-	for(unsigned int k=j; k<_phpVecs.size(); ++k){
-	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
-	  fitVal.otherParams[currentName]=_currentBgTerms.at(i).at(j).at(k);
-	  fitErr.otherParams[currentName]=fabs(_currentBgTerms.at(i).at(j).at(k))+0.3;
-	}
-      }
-    }
-    //Adler-term
-    if(_withKMatAdler){
-      fitVal.otherParams["s0"+_kMatName]=_currentAdler0;
-      fitErr.otherParams["s0"+_kMatName]=fabs(_currentAdler0)+0.2;
-    }
-  }
-}
-
 void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   //beta factor for production
   std::map<std::string, std::map<std::string, double> >::iterator it1;
@@ -223,98 +171,73 @@ void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
   }
 }
 
-bool KMatrixDynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+void KMatrixDynamics::fillParamNameList(){
+  _paramNameList.clear();
 
-  std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached;
-  for(itAlreadyCached=_alreadyCached.begin(); itAlreadyCached!=_alreadyCached.end(); ++itAlreadyCached){
-    std::map<std::string, bool >::iterator itAlreadyCached2;
-    for(itAlreadyCached2=itAlreadyCached->second.begin(); itAlreadyCached2!=itAlreadyCached->second.end(); ++itAlreadyCached2){
-      itAlreadyCached2->second=false;     
-    }
-  }
-
-  //beta factor for production  
+  //beta factor for production
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
-    _recalcMap[it1->first]=false;    
-    std::map<std::string, double>::iterator it2;
-    
-    std::map<std::string, double>& bFactors=it1->second;
-    for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
-      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams.at(it1->first+it2->first))){
-	_recalcMap[it1->first]=true;
-	_recalculate=true;
-      }
+    std::string theName=it1->first;
+    std::map<std::string, double>& bFactors = it1->second;
+    for(unsigned int i=0; i<_poleNames.size(); ++i){ 
+      std::string currentName="b_"+_poleNames.at(i);
+      //     std::cout << "currentName: " << currentName << std::endl;
+      std::string magName=currentName+"Mag";
+      _paramNameList.push_back(theName+magName);
+  
+      std::string phiName=currentName+"Phi";
+      _paramNameList.push_back(theName+phiName);
     }
   }
-
+  
   //pole positions
   std::vector<double >::iterator itPoleVec;
   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
-    if (!CheckDoubleEquality( _currentPoleMasses.at(i), theParamVal.Masses[_poleNames.at(i)])){
-      _recalculate=true;
-    }
+    _paramNameList.push_back(_poleNames.at(i)+"Mass");
   }
 
-  //g-factors
+    //g-factors
   for(unsigned int i=0; i<_poleNames.size(); ++i){
     std::vector<double> currentgFactorVec=_currentgFactorMap.at(i);
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-      if (!CheckDoubleEquality( currentgFactorVec.at(j), theParamVal.gFactors.at(currentName))){
-	_recalculate=true;
-      }
+      _paramNameList.push_back(currentName);
     }
   }
 
-  //k-matrix bg-terms
+    //k-matrix bg-terms
   if(_orderKMatBg>=0){
     for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
       for(unsigned int j=0; j<_phpVecs.size(); ++j){
-	for(unsigned int k=j; k<_phpVecs.size(); ++k){
-	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
-	  if (!CheckDoubleEquality(_currentBgTerms.at(i).at(j).at(k), theParamVal.otherParams.at(currentName))){
-	    _recalculate=true;
-	  }
-	}
+  	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+  	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
+	  _paramNameList.push_back(currentName);
+  	}
       }
     }
-
     //Adler-term
     if(_withKMatAdler){
-      if (!CheckDoubleEquality(_currentAdler0, theParamVal.otherParams.at("s0"+_kMatName))){
-	_recalculate=true;
-      }
+      _paramNameList.push_back("s0"+_kMatName);
     }
   }
 
-  if (_recalculate){
-    std::map<std::string, bool >::iterator itRecalcMap;
-    for(itRecalcMap=_recalcMap.begin(); itRecalcMap!=_recalcMap.end(); ++itRecalcMap){
-      itRecalcMap->second=true;
-    } 
-  }
-
-  return _recalculate;
 }
 
-void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
-
+void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   //beta factor for production  
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+    std::string theName=it1->first;
     std::map<std::string, double>::iterator it2;
     std::map<std::string, double>& bFactors=it1->second;
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
-      it2->second=theParamVal.otherParams.at(it1->first+it2->first);
+      it2->second=fitPar->Value(it1->first+it2->first);
     }
 
-    std::shared_ptr<PVectorRel> currentPVec=_pVecMap[it1->first];
+    std::shared_ptr<PVectorRel> currentPVec=_pVecMap.at(it1->first);
 
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
       std::string currentName="b_"+_poleNames.at(i);
-      //      std::cout << "currentName: " << currentName << std::endl;
       complex<double> currentbFactor=bFactors.at(currentName+"Mag")*complex<double>(cos(bFactors.at(currentName+"Phi")), sin(bFactors.at(currentName+"Phi")));
       currentPVec->updateBeta(i, currentbFactor);
     }
@@ -323,7 +246,8 @@ void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
   //pole positions
   std::vector<double >::iterator itPoleVec;
   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
-    double currentPoleMass=theParamVal.Masses[_poleNames.at(i)];
+    std::string currentPoleName=_poleNames.at(i)+"Mass";
+    double currentPoleMass=fitPar->Value(currentPoleName);
     _currentPoleMasses.at(i)=currentPoleMass;
     _kPoles.at(i)->updatePoleMass(currentPoleMass);
 
@@ -338,7 +262,7 @@ void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
     std::vector<double>& currentgFactorVec=_currentgFactorMap.at(i);
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-      currentgFactorVec.at(j)=theParamVal.gFactors.at(currentName);
+      currentgFactorVec.at(j)=fitPar->Value(currentName);
     }
     _kPoles.at(i)->updategFactors(currentgFactorVec);
     
@@ -353,7 +277,8 @@ void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
     for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
       for(unsigned int j=0; j<_phpVecs.size(); ++j){
 	for(unsigned int k=j; k<_phpVecs.size(); ++k){
-	  double newVal=theParamVal.otherParams.at(_bgTermNames.at(i).at(j).at(k));
+	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
+	  double newVal=fitPar->Value(_bgTermNames.at(i).at(j).at(k));
 	  _currentBgTerms.at(i).at(j).at(k)=newVal;
 	  _kMatr->updateBgTerms(i,j,k,newVal);
 	}
@@ -362,11 +287,80 @@ void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
 
     //Adler-term
     if(_withKMatAdler){
-      _currentAdler0=theParamVal.otherParams.at("s0"+_kMatName);
+      _currentAdler0=fitPar->Value("s0"+_kMatName);
       _kMatr->updates0Adler(_currentAdler0);
     }
   }
+
 }
+
+// void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
+
+//   //beta factor for production  
+//   std::map<std::string, std::map<std::string, double> >::iterator it1;
+//   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
+//     std::map<std::string, double>::iterator it2;
+//     std::map<std::string, double>& bFactors=it1->second;
+//     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
+//       it2->second=theParamVal.otherParams.at(it1->first+it2->first);
+//     }
+
+//     std::shared_ptr<PVectorRel> currentPVec=_pVecMap.at(it1->first);
+
+//     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
+//       std::string currentName="b_"+_poleNames.at(i);
+//       complex<double> currentbFactor=bFactors.at(currentName+"Mag")*complex<double>(cos(bFactors.at(currentName+"Phi")), sin(bFactors.at(currentName+"Phi")));
+//       currentPVec->updateBeta(i, currentbFactor);
+//     }
+//   }
+
+//   //pole positions
+//   std::vector<double >::iterator itPoleVec;
+//   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
+//     double currentPoleMass=theParamVal.Masses[_poleNames.at(i)];
+//     _currentPoleMasses.at(i)=currentPoleMass;
+//     _kPoles.at(i)->updatePoleMass(currentPoleMass);
+
+//     std::map<std::string, std::shared_ptr<PVectorRel> >::iterator itPVec;
+//     for(itPVec=_pVecMap.begin(); itPVec!=_pVecMap.end(); ++itPVec){
+//       itPVec->second->updatePoleMass(i, currentPoleMass);
+//     }
+//   }
+
+  // //g-factors
+  // for(unsigned int i=0; i<_poleNames.size(); ++i){
+  //   std::vector<double>& currentgFactorVec=_currentgFactorMap.at(i);
+  //   for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
+  //     std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
+  //     currentgFactorVec.at(j)=theParamVal.gFactors.at(currentName);
+  //   }
+  //   _kPoles.at(i)->updategFactors(currentgFactorVec);
+    
+  //   std::map<std::string, std::shared_ptr<PVectorRel> >::iterator itPVec;
+  //   for(itPVec=_pVecMap.begin(); itPVec!=_pVecMap.end(); ++itPVec){
+  //     itPVec->second->updategFactors(i, currentgFactorVec);
+  //   }
+  // }
+
+  // //k-matrix bg-terms
+  // if(_orderKMatBg>=0){
+  //   for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
+  //     for(unsigned int j=0; j<_phpVecs.size(); ++j){
+  // 	for(unsigned int k=j; k<_phpVecs.size(); ++k){
+  // 	  double newVal=theParamVal.otherParams.at(_bgTermNames.at(i).at(j).at(k));
+  // 	  _currentBgTerms.at(i).at(j).at(k)=newVal;
+  // 	  _kMatr->updateBgTerms(i,j,k,newVal);
+  // 	}
+  //     }
+  //   }
+
+//     //Adler-term
+//     if(_withKMatAdler){
+//       _currentAdler0=theParamVal.otherParams.at("s0"+_kMatName);
+//       _kMatr->updates0Adler(_currentAdler0);
+//     }
+//   }
+// }
 
 void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   if(0==theDec){

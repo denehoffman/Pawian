@@ -27,7 +27,7 @@
 #pragma once
 
 #include <memory>
-#include "FitParams/FitParColBase.hh"
+//#include "FitParams/FitParColBase.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
 struct calcContributionData {
@@ -53,7 +53,7 @@ struct calcContributionData {
 };
 
 class AbsLh;
-class fitParCol;
+//class fitParCol;
 class EvtData;
 class PwaCovMatrix;
 
@@ -61,8 +61,12 @@ class PwaCovMatrix;
 class WaveContribution{
   
   public:
-    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
-    WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams,
+    // WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
+    // WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams,
+    //  		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
+
+  WaveContribution(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams);
+  WaveContribution(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams,
 		     std::shared_ptr<PwaCovMatrix> thePwaCovMatrix);
 
     std::string GetContributionName(unsigned int index);
@@ -76,9 +80,12 @@ class WaveContribution{
     bool _calcError;
     std::shared_ptr<AbsLh> _theLh;
     std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
-    FitParColBase _theFitParColBase;
-    fitParCol* _theFitParamsOriginal;
+    // FitParColBase _theFitParColBase;
+    // fitParCol* _theFitParamsOriginal;
     std::vector<EvtData*> _MCDataList;
 
-    double CalcContribution(fitParCol& theFitParams);
+  std::shared_ptr<AbsPawianParameters> _fitParamsOriginal;
+ 
+    // double CalcContribution(fitParCol& theFitParams);
+  double CalcContribution(std::shared_ptr<AbsPawianParameters> theParams);
 };

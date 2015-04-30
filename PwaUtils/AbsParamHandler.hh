@@ -28,9 +28,11 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "FitParams/FitParColBase.hh"
+//#include "FitParams/FitParColBase.hh"
 
 class AbsPawianParameters;
 
@@ -40,17 +42,20 @@ public:
   AbsParamHandler();
   virtual ~AbsParamHandler();
 
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr)=0;
+  // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr)=0;
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar)=0;
-  virtual bool checkRecalculation(fitParCol& theParamVal)=0;
+  // virtual bool checkRecalculation(fitParCol& theParamVal)=0;
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void cacheAmplitudes()=0;
-  virtual void updateFitParams(fitParCol& theParamVal)=0;
+  // virtual void updateFitParams(fitParCol& theParamVal)=0;
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){;}
   static bool CheckDoubleEquality(double a, double b);
-
+  std::vector<std::string> paramNames() {return _paramNameList;}
+  virtual void fillParamNameList(){;}
 protected:
   bool _cacheAmps;
   bool _recalculate;
+  std::vector<std::string> _paramNameList;
 
 private:
 

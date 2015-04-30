@@ -31,7 +31,6 @@
 #include <memory>
 
 #include "PwaUtils/AbsLh.hh"
-#include "FitParams/FitParColBase.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -61,7 +60,7 @@ int main(int __argc,char *__argv[]){
   start= clock();
 
   for (int i=0; i<__argc ; ++i) Info << __argv[i] << endmsg;
-  
+ 
   Info << welcomeScreen << endmsg;
   Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
@@ -121,45 +120,47 @@ int main(int __argc,char *__argv[]){
   }
 
   // Read start param file
-  fitParCol theStartparams;
-  fitParCol theErrorparams;
-  theAppBase.streamParams(theStartparams, theErrorparams); 
+  std::shared_ptr<AbsPawianParameters> startPawianParams=theAppBase.streamPawianParams();
+  // fitParCol theStartparams;
+  // fitParCol theErrorparams;
+  // theAppBase.streamParams(theStartparams, theErrorparams); 
 
   if (mode=="gen"){
-    theAppBase.generate(theStartparams);
+    theAppBase.generate(startPawianParams);
     return 1;
   }
 
   // Set minuit parameters
-  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
-  GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
+  //  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
+  //  GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;
-  for (int i=0; i<int(upar->Params().size()); ++i){
-    std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
-  }
+  startPawianParams->print(std::cout);
+  // for (int i=0; i<int(upar->Params().size()); ++i){
+  //   std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
+  // }
 
   // Fix params for all channels
-  if (GlobalEnv::instance()->parser()->doScaling()) theAppBase.fixAllReleaseScaleParams(upar);
+  if (GlobalEnv::instance()->parser()->doScaling()) theAppBase.fixAllReleaseScaleParams(startPawianParams);
   else{
     std::vector<std::string> fixedParams;
     std::vector<std::string> fixedChannelParams = GlobalEnv::instance()->parser()->fixedParams();
     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
-    theAppBase.fixParams(upar,fixedParams);
+    theAppBase.fixParams(startPawianParams,fixedParams);
   }
 
-  const unsigned int noOfFreeFitParams = upar->VariableParameters();
+  const unsigned int noOfFreeFitParams = startPawianParams->VariableParameters();
 
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);
 
   if(mode == "server" || mode == "evoserver"){
-    theAppBase.fitServerMode(upar);
+    theAppBase.fitServerMode(startPawianParams);
     return 1;
   }
 
   if(mode == "client"){
-    theAppBase.fitClientMode(theStartparams);
+    theAppBase.fitClientMode(startPawianParams);
   return 1;
   }
 
@@ -194,7 +195,7 @@ int main(int __argc,char *__argv[]){
     GlobalEnv::instance()->Channel()->Lh()->setDataVec(eventListPtr->getDataVecs());
     GlobalEnv::instance()->Channel()->Lh()->setMcVec(eventListPtr->getMcVecs());
     
-    std::shared_ptr<spinDensityHist> theSpinDensityHist(new spinDensityHist(GlobalEnv::instance()->Channel()->Lh(), theStartparams));
+    std::shared_ptr<spinDensityHist> theSpinDensityHist(new spinDensityHist(GlobalEnv::instance()->Channel()->Lh(), startPawianParams));
     
     std::string serializationFileName = GlobalEnv::instance()->serializationFileName();
     std::ifstream serializationStream(serializationFileName.c_str());
@@ -231,7 +232,7 @@ int main(int __argc,char *__argv[]){
   }
 
   if (mode=="qaModeSimple"){
-    theAppBase.qaModeSimple(eventsData, mcData, theStartparams, eventListPtr, noOfFreeFitParams);
+    theAppBase.qaModeSimple(eventsData, mcData, startPawianParams, eventListPtr, noOfFreeFitParams);
     return 1;
   }
 
@@ -240,16 +241,12 @@ int main(int __argc,char *__argv[]){
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
   theLhPtr->setMcVec(eventListPtr->getMcVecs());
 
-  Info << "\nThe parameter values are: " << "\n" << endmsg;
-  GlobalEnv::instance()->fitParColBase()->printParams(theStartparams);
-
-  Info << "\nThe parameter errors are: " << "\n" << endmsg;
-  GlobalEnv::instance()->fitParColBase()->printParams(theErrorparams);
-
+  Info << "\nThe parameter values and errors are: " << "\n" << endmsg;
+  startPawianParams->print(std::cout);
 
   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
   if (mode=="qaMode"){
-      theAppBase.qaMode(theStartparams, evtWeightSumData, noOfFreeFitParams );
+      theAppBase.qaMode(startPawianParams, evtWeightSumData, noOfFreeFitParams );
       end= clock();
       double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
       Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
@@ -263,7 +260,7 @@ int main(int __argc,char *__argv[]){
   if (cacheAmps) theLhPtr->cacheAmplitudes();
 
   if(mode=="pwa" || mode=="evo"){
-    theAppBase.fitNonServerMode(upar, evtWeightSumData);
+    theAppBase.fitNonServerMode(startPawianParams, evtWeightSumData);
     return 1;
   }
   return 1;

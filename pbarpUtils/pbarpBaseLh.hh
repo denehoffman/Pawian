@@ -56,19 +56,22 @@ public:
 
   virtual AbsLh* clone_() const =0;
 
-  virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
-  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
+  // virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
+  virtual double calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
+  
+   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
 					  pawian::Collection::SharedPtrLess > pbarpAmps);
 
-virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData, int J);
-virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J);
+  virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData, int J);
+  virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J);
 
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   
-  virtual void updateFitParams(fitParCol& theParamVal);
+  // virtual void updateFitParams(fitParCol& theParamVal);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
 
   virtual void print(std::ostream& os) const;
 

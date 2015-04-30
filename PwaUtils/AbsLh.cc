@@ -87,25 +87,24 @@ void AbsLh::initialize(){
 
 
 
-void  AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			    LHData& theLHData, fitParCol& theParamVal){
+void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
+		    std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
   for (unsigned int i=minEvent; i<=maxEvent; ++i){
-    addDataToLogLh(_evtDataVec.at(i), theParamVal, theLHData);
+    addDataToLogLh(_evtDataVec.at(i), fitPar, theLHData);
   }
 }
 
 void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			  LHData& theLHData, fitParCol& theParamVal){
+			  std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
   for (unsigned int i=minEvent; i<=maxEvent; ++i){
-     addMcToLogLh(_evtMCVec.at(i), theParamVal, theLHData);
+     addMcToLogLh(_evtMCVec.at(i), fitPar, theLHData);
   }
 }
 
-double AbsLh::calcLogLh(fitParCol& theParamVal){
-
+double AbsLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar){
   _calcCounter++;
-  if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
-  updateFitParams(theParamVal);
+  if (_cacheAmps && _calcCounter>1) checkRecalculation(fitPar, _oldFitPar);
+  updateFitParams(fitPar);
 
   LHData theLHData;
   theLHData.logLH_data = theLHData.weightSum = theLHData.LH_mc = 0.0;
@@ -123,7 +122,7 @@ double AbsLh::calcLogLh(fitParCol& theParamVal){
      int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
 
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
+				      fitPar, std::ref(threadDataVec.at(i))));
   }
 
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
@@ -138,7 +137,7 @@ double AbsLh::calcLogLh(fitParCol& theParamVal){
      int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
 
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
+				      fitPar, std::ref(threadDataVec.at(i))));
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
@@ -152,29 +151,29 @@ double AbsLh::calcLogLh(fitParCol& theParamVal){
   }
 
   //  theLHData.num_mc = _evtMCVec.size();
+  _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
+
   return mergeLogLhData(theLHData);
 }
 
-
-double AbsLh::addDataToLogLh(EvtData* dataEvt, fitParCol& theParamVal, LHData& theLHData){
-  double intensity=calcEvtIntensity(dataEvt, theParamVal);
+double AbsLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  double intensity=calcEvtIntensity(dataEvt, fitPar);
   theLHData.logLH_data+=(dataEvt->evtWeight)*log(intensity);
   theLHData.weightSum+= dataEvt->evtWeight;
   return intensity;
 }
 
-double AbsLh::addMcToLogLh(EvtData* mcEvt, fitParCol& theParamVal, LHData& theLHData){
-  double intensity=calcEvtIntensity(mcEvt, theParamVal);
+double AbsLh::addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  double intensity=calcEvtIntensity(mcEvt, fitPar);
   theLHData.LH_mc+=intensity;
   theLHData.num_mc++;
   return intensity;
 }
 
-void AbsLh::calcLogLhDataClient(fitParCol& theParamVal, LHData& theLHData){
-
+void AbsLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
   _calcCounter++;
-  if (_cacheAmps && _calcCounter>1) checkRecalculation(theParamVal);
-  updateFitParams(theParamVal);
+  if (_cacheAmps && _calcCounter>1) checkRecalculation(fitPar, _oldFitPar);
+  updateFitParams(fitPar);
 
   int numData = _evtDataVec.size();
   int numMC = _evtMCVec.size();
@@ -190,28 +189,21 @@ void AbsLh::calcLogLhDataClient(fitParCol& theParamVal, LHData& theLHData){
      int eventMin = i*eventStepData;
      int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
 
-     // theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-     // 				      std::ref(threadDataVec.at(i).logLH_data),
-     // 				      std::ref(threadDataVec.at(i).weightSum), std::ref(theParamVal)));
      theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
+				      fitPar, std::ref(threadDataVec.at(i))));
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
      (*it).join();
   }
 
   theThreads.clear();
-
   for(int i = 0; i<_noOfThreads;i++){
 
     int eventMin = i*eventStepMC;
     int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
 
-
-    // theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-    // 				     std::ref(threadDataVec.at(i).LH_mc), std::ref(theParamVal)));
     theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-				     std::ref(threadDataVec.at(i)), std::ref(theParamVal)));
+				     fitPar, std::ref(threadDataVec.at(i))));
 
   }
   for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
@@ -225,10 +217,8 @@ void AbsLh::calcLogLhDataClient(fitParCol& theParamVal, LHData& theLHData){
      theLHData.num_mc += (*it).num_mc;
   }
 
-  //  theLHData.num_mc = _evtMCVec.size();
+  _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
 }
-
-
 
 double AbsLh::mergeLogLhData(LHData& theLHData){
 
@@ -259,23 +249,6 @@ void AbsLh::setHyps( const std::map<const std::string, bool>& theMap, bool& theH
   }
 }
 
-void AbsLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-  if(_usePhasespace){
-    fitVal.otherParams[_phasespaceKey]=0.01;
-    fitErr.otherParams[_phasespaceKey]=0.05;
-  }
-
-  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecs;
-  for(itDecs=_decAmps.begin(); itDecs!=_decAmps.end(); ++itDecs){
-    (*itDecs)->getDefaultParams(fitVal, fitErr);
-  }
-
-  fitVal.otherParams[_channelScaleParam] = 1.;
-  fitErr.otherParams[_channelScaleParam] = 0.01;
-}
-
-
 void AbsLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   if(_usePhasespace){
@@ -300,18 +273,18 @@ void AbsLh::cacheAmplitudes(){
   }
 }
 
-void AbsLh::updateFitParams(fitParCol& theParamVal){
+void AbsLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    (*it)->updateFitParams(theParamVal);
+    (*it)->updateFitParams(fitPar);
   }
 }
 
-bool AbsLh::checkRecalculation(fitParCol& theParamVal){
+bool AbsLh::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
   bool result=true;
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-    if(!(*it)->checkRecalculation(theParamVal)) result=false;
+    if(!(*it)->checkRecalculation(fitParNew, fitParOld)) result=false;
   }
 
   return result;

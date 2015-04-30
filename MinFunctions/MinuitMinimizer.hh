@@ -28,7 +28,6 @@
 
 #include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
-#include "FitParams/FitParColBase.hh"
 #include "Minuit2/FunctionMinimum.h"
 
 #include <boost/random/normal_distribution.hpp>

@@ -28,7 +28,6 @@
 
 #include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
-#include "FitParams/FitParColBase.hh"
 
 #include <boost/random/normal_distribution.hpp>
 
@@ -48,9 +47,6 @@ private:
    int _population;
    int _iterations;
   double _evoRatioOfModParams;
-
-   fitParCol _currentBestParams;
-   fitParCol _defaultFitErrParms;
 
    std::string _currentResultFileName;
   //   std::shared_ptr<AbsPawianParameters> _bestParamsGlobal;

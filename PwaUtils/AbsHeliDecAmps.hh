@@ -56,13 +56,15 @@ public:
 
   // Getters:
 
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void print(std::ostream& os) const;
-  virtual bool checkRecalculation(fitParCol& theParamVal);
+  // virtual bool checkRecalculation(fitParCol& theParamVal);
   // std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
   std::vector< std::shared_ptr<const JPClamlam> >& jpclamlamVec() {return _JPClamlams;}
-  virtual void updateFitParams(fitParCol& theParamVal);
+  // virtual void updateFitParams(fitParCol& theParamVal);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();
 
 protected:
   std::vector< std::shared_ptr<const JPClamlam> > _JPClamlams;
@@ -73,6 +75,7 @@ protected:
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;
   std::map< std::shared_ptr<const JPClamlam>, std::vector< std::shared_ptr<const JPClamlam> >, pawian::Collection::SharedPtrLess > _JPClamlamSymMap;
+
 private:
 
 

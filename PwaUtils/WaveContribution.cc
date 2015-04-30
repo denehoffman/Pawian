@@ -32,26 +32,42 @@
 #include "epemUtils/epemHist.hh"
 #include "pbarpUtils/pbarpHist.hh"
 #include "ErrLogger/ErrLogger.hh"
-#include "FitParams/ParamFactory.hh"
+//#include "FitParams/ParamFactory.hh"
 
 #include <iostream>
 
-WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams) :
-      _calcError(false)
+// WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams) :
+//       _calcError(false)
+//     , _theLh(theLh)
+//     , _theFitParamsOriginal(&theFitParams)
+// {
+//    _MCDataList=_theLh->getMcVec();
+// }
+
+WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams) :
+     _calcError(false)
     , _theLh(theLh)
-    , _theFitParamsOriginal(&theFitParams)
+    , _fitParamsOriginal(theFitParams)
 {
    _MCDataList=_theLh->getMcVec();
 }
 
+// WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams,
+// 				   std::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
+//      _calcError(true)
+//    , _theLh(theLh)
+//    , _thePwaCovMatrix(thePwaCovMatrix)
+//    , _theFitParamsOriginal(&theFitParams)
+// {
+//    _MCDataList=_theLh->getMcVec();
+// }
 
-
-WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams,
+WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams,
 				   std::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
      _calcError(true)
    , _theLh(theLh)
    , _thePwaCovMatrix(thePwaCovMatrix)
-   , _theFitParamsOriginal(&theFitParams)
+   , _fitParamsOriginal(theFitParams)
 {
    _MCDataList=_theLh->getMcVec();
 }
@@ -59,8 +75,20 @@ WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, fitParCol& theF
 
 
 
+// double WaveContribution::CalcContribution(fitParCol& theFitParams){
 
-double WaveContribution::CalcContribution(fitParCol& theFitParams){
+//    double result=0;
+
+//    _theLh->updateFitParams(theFitParams);
+
+//    for(auto it=_MCDataList.begin(); it!=_MCDataList.end(); ++it){
+//       result +=_theLh->calcEvtIntensity( (*it), theFitParams);
+//    }
+
+//    return result;
+// }
+
+double WaveContribution::CalcContribution(std::shared_ptr<AbsPawianParameters> theFitParams){
 
    double result=0;
 
@@ -74,18 +102,19 @@ double WaveContribution::CalcContribution(fitParCol& theFitParams){
 }
 
 
-
 std::pair<double,double> WaveContribution::CalcContribution(){
 
-   double result=CalcContribution(*_theFitParamsOriginal);
+  //   double result=CalcContribution(*_theFitParamsOriginal);
+   double result=CalcContribution(_fitParamsOriginal);
    double resultErr=0;
 
    if(!_calcError){
       return std::pair<double,double>(result, resultErr);
    }
    else{
-     std::shared_ptr<AbsPawianParameters> theParameters=ParamFactory::instance()->getParametersPointer("Minuit2");
-      _theFitParColBase.setAbsPawianParams(theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);      
+     // std::shared_ptr<AbsPawianParameters> theParameters=ParamFactory::instance()->getParametersPointer("Minuit2");
+     //  _theFitParColBase.setAbsPawianParams(theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal); 
+     std::shared_ptr<AbsPawianParameters> theParameters=std::shared_ptr<AbsPawianParameters>(_fitParamsOriginal->Clone());      
       return std::pair<double,double>(result, CalcError(result, theParameters));
    }
 }
@@ -102,8 +131,7 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
      std::string tmpContribName = GetContributionName(i);
      std::shared_ptr<AbsPawianParameters> currentParameters = GetParametersForContribution(i); 
 
-     fitParCol newFitParams = *_theFitParamsOriginal;
-     _theFitParColBase.getFitParamVal(currentParameters->Params(), newFitParams);
+     std::shared_ptr<AbsPawianParameters> newFitParams =std::shared_ptr<AbsPawianParameters>(_fitParamsOriginal->Clone());
      double newContribution = CalcContribution(newFitParams); // calls updateFitParams
 
      if(!_calcError){
@@ -139,9 +167,8 @@ double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParam
 
       currentParameters->SetValue(i, parOrig + stepSize);
 
-      fitParCol newFitParams = *_theFitParamsOriginal;
-      _theFitParColBase.getFitParamVal(currentParameters->Params(), newFitParams);
-
+      std::shared_ptr<AbsPawianParameters> newFitParams = std::shared_ptr<AbsPawianParameters>(_fitParamsOriginal->Clone());
+ 
       double newContribution = CalcContribution(newFitParams);
       double newDerivative = (newContribution - result) / stepSize;
       derivatives[parName] = newDerivative;
@@ -201,8 +228,8 @@ std::shared_ptr<AbsPawianParameters> WaveContribution::GetParametersForContribut
      Alert << "index > NoOfContributions()" << endmsg;
   }
 
-  std::shared_ptr<AbsPawianParameters> newParameters = ParamFactory::instance()->getParametersPointer("Minuit2");
-  _theFitParColBase.setAbsPawianParams(newParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
+  std::shared_ptr<AbsPawianParameters> newParameters = std::shared_ptr<AbsPawianParameters>(_fitParamsOriginal->Clone());
+  //  _theFitParColBase.setAbsPawianParams(newParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
   unsigned int nPar = newParameters->Params().size();
 
   std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();

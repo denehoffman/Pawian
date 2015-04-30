@@ -27,7 +27,6 @@
 
 #include "MinFunctions/MinuitMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "FitParams/FitParColBase.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "FitParams/MnPawianParameters.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -143,22 +142,13 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
 }
 
 void MinuitMinimizer::dumpFitResult(){
-  fitParCol finalFitParams=_absFcn->defaultFitValParms();
-  std::vector<double> finalParamVec=_bestPawianParams->Params();
-  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
-
-  fitParCol finalFitErrs=_absFcn->defaultFitErrParms();
-  std::vector<double> finalParamErrorVec=_bestPawianParams->Errors();  
-  GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamErrorVec, finalFitErrs);
 
   std::ostringstream finalResultname;
-
   std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
   
   std::ofstream theStream ( finalResultname.str().c_str() );
-  GlobalEnv::instance()->fitParColBase()->dumpParams(theStream, finalFitParams, finalFitErrs);
-
+  _bestPawianParams->print(theStream);
 
   //dump covariance matrix
   MnUserCovariance theCovMatrix = _mnFunctionMinimumFinalPtr->UserCovariance();
@@ -168,7 +158,7 @@ void MinuitMinimizer::dumpFitResult(){
   boost::archive::text_oarchive boostOutputArchive(serializationStream);
   
   if(_mnFunctionMinimumFinalPtr->HasValidCovariance()){
-    const PwaCovMatrix thePwaCovMatrix(theCovMatrix, _mnFunctionMinimumFinalPtr->UserParameters(), finalFitParams);
+    const PwaCovMatrix thePwaCovMatrix(theCovMatrix, _mnFunctionMinimumFinalPtr->UserParameters());
     boostOutputArchive << thePwaCovMatrix;
   }
 }

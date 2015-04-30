@@ -44,6 +44,7 @@
 class AbsXdecAmp;
 class pbarpReaction;
 class LSDecAmps;
+class AbsPawianParameters;
 
 class pbarpTensorLh : public pbarpBaseLh {
 
@@ -60,7 +61,7 @@ public:
     return theClone;
   }
 
-  virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
+  virtual double calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void print(std::ostream& os) const;
 
 

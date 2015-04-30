@@ -35,7 +35,6 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
-#include "FitParams/FitParColBase.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -152,7 +151,7 @@ complex<double> pbarpBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string
 }
 
 
-double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
+double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
 
   double result=0.;
 
@@ -218,7 +217,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
   }
 
    complex<double> tripletp1Amp(0.,0.);
-   lampbarp=1;
+    lampbarp=1;
   for(it=_decAmpsTripletp1.begin(); it!=_decAmpsTripletp1.end(); ++it){
     complex<double> tmpAmp(0.,0.);
     const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
@@ -252,60 +251,27 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
      std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
      std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
      for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData, lamHigestJFsp);
+  	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData, lamHigestJFsp);
 
         double isoFactor=0;
-	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
-	else isoFactor=iso0Val;
+  	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
+  	else isoFactor=iso0Val;
 
-	tmpAmp+=isoFactor*currentDecAmp;
+  	tmpAmp+=isoFactor*currentDecAmp;
      }
 
      tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
      tripletm1Amp+=tmpAmp;
   }
 
-  result += norm(singletAmp)+ norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp);
+    result += norm(singletAmp)+ norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp);
   }
 
-  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+  if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
 
-  result *= theParamVal.otherParams.at(_channelScaleParam);
+  result *= fitPar->Value(_channelScaleParam);
 
   return result;
-
-}
-
-
-
-void pbarpBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-  AbsLh::getDefaultParams(fitVal, fitErr);
-
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
-  for(itIso=_currentParamJPCIsos1.begin(); itIso!=_currentParamJPCIsos1.end(); ++itIso){
-    fitVal.otherParams["Iso1"+(*itIso).first->name()+"Range01"]=(*itIso).second;
-    fitErr.otherParams["Iso1"+(*itIso).first->name()+"Range01"]=0.5;
-   }
-
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
-
-  double magFactor=1./sqrt(_jpclsStates.size());
-  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-  for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
-    currentMagValMap[*it] = magFactor;
-    currentPhiValMap[*it] = 0.;
-    currentMagErrMap[*it] = magFactor;
-    currentPhiErrMap[*it] = 0.3;
-  }
-
-  fitVal.Mags["pbarp"].insert(currentMagValMap.begin(), currentMagValMap.end());
-  fitVal.Phis["pbarp"].insert(currentPhiValMap.begin(), currentPhiValMap.end());
-  fitErr.Mags["pbarp"].insert(currentMagErrMap.begin(), currentMagErrMap.end());
-  fitErr.Phis["pbarp"].insert(currentPhiErrMap.begin(), currentPhiErrMap.end());
 
 }
 
@@ -369,31 +335,29 @@ void  pbarpBaseLh::initialize(){
   _igjpcStates=_pbarpReactionPtr->igjpcStates();
 }
 
-void pbarpBaseLh::updateFitParams(fitParCol& theParamVal){
-
-  AbsLh::updateFitParams(theParamVal);
+void pbarpBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  AbsLh::updateFitParams(fitPar);
 
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
-  for(itIso=_currentParamJPCIsos1.begin(); itIso!=_currentParamJPCIsos1.end(); ++ itIso){
-    double theVal=theParamVal.otherParams["Iso1"+(*itIso).first->name()+"Range01"];
+  for(itIso=_currentParamJPCIsos1.begin(); itIso!=_currentParamJPCIsos1.end(); ++itIso){
+    double theVal=fitPar->Value("Iso1"+(*itIso).first->name());   
     (*itIso).second=theVal;
     _currentParamJPCIsos0[(*itIso).first]=sqrt(1.-theVal*theVal);
-  }
-
-
-   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.Mags["pbarp"];
-   std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.Phis["pbarp"];
-   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-   for (it=_jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
-     double theMag=magMap[*it];
-     double thePhi=phiMap[*it];
-     _currentParamMags[*it]=theMag;
-     _currentParamPhis[*it]=thePhi;
-
-     complex<double> expi(cos(thePhi), sin(thePhi));
-     _currentParamMagExpi[*it]=theMag*expi;
    }
 
+  std::vector< std::shared_ptr<const JPCLS> >::iterator it;
+  for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
+    std::string magName=(*it)->name()+"pbarp"+"Mag";
+    std::string phiName=(*it)->name()+"pbarp"+"Phi";
+    double theMag=fitPar->Value(magName);
+    double thePhi=fitPar->Value(phiName);
+
+    _currentParamMags[*it]=theMag;
+    _currentParamPhis[*it]=thePhi; 
+
+    complex<double> expi(cos(thePhi), sin(thePhi));
+    _currentParamMagExpi[*it]=theMag*expi;
+   }
 }
 
 void pbarpBaseLh::fillMap(std::vector< std::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<std::shared_ptr<AbsXdecAmp> >& decs, std::map< std::shared_ptr<const JPCLS>, std::vector<std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill){

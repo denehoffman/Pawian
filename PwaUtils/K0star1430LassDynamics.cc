@@ -71,25 +71,6 @@ complex<double> K0star1430LassDynamics::eval(EvtData* theData, AbsXdecAmp* grand
   return result;
 }
 
-void  K0star1430LassDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-    fitVal.Masses[_massKey]=_mother->mass();
-    fitErr.Masses[_massKey]=0.03;
-    fitVal.Widths[_massKey]=_mother->width();
-    fitErr.Widths[_massKey]=0.2*_mother->width();
-    fitVal.otherParams[_aLASSKey]=1.07;
-    fitErr.otherParams[_aLASSKey]=0.05;    
-    fitVal.otherParams[_rLASSKey]=-2.852;
-    fitErr.otherParams[_rLASSKey]=0.05;  
-    fitVal.otherParams[_BLASSKey]=0.7;
-    fitErr.otherParams[_BLASSKey]=0.05;  
-    fitVal.otherParams[_phiBKey]=0.7;
-    fitErr.otherParams[_phiBKey]=0.05;
-    fitVal.otherParams[_RLASSKey]=1.;
-    fitErr.otherParams[_RLASSKey]=0.05;
-    fitVal.otherParams[_phiRKey]=-5.356;
-    fitErr.otherParams[_phiRKey]=0.05;
-}
-
 void  K0star1430LassDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   std::string massName=_massKey+"Mass";
   double valMass=_mother->mass();
@@ -119,70 +100,36 @@ void  K0star1430LassDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParamet
   fitPar->Add(_phiRKey, -5.356, 0.05);
 }
 
+void K0star1430LassDynamics::fillParamNameList(){
+  _paramNameList.clear();  
 
-bool K0star1430LassDynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+  std::string massName=_massKey+"Mass";
+  _paramNameList.push_back(massName);
 
-  double mass=theParamVal.Masses[_massKey];
-  if (!CheckDoubleEquality(mass, _currentMass)){
-    _recalculate=true;
-    return _recalculate;
-  }
+  std::string widthName=_massKey+"Width";
+  _paramNameList.push_back(widthName);
 
-  double width=theParamVal.Widths[_massKey];
-  if (!CheckDoubleEquality(width, _currentWidth)){
-    _recalculate=true;
-    return _recalculate;
-  }
+  _paramNameList.push_back(_aLASSKey);
+  _paramNameList.push_back(_rLASSKey);
+  _paramNameList.push_back(_BLASSKey);
+  _paramNameList.push_back(_RLASSKey);
+  _paramNameList.push_back(_phiRKey);
+} 
 
-  double aLASS=theParamVal.otherParams[_aLASSKey];
-  if (!CheckDoubleEquality(aLASS, _currentaLASS)){
-    _recalculate=true;
-    return _recalculate;
-  }
+void K0star1430LassDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  std::string massName=_massKey+"Mass";
+  _currentMass=fitPar->Value(massName);
 
-  double rLASS=theParamVal.otherParams[_rLASSKey];
-  if (!CheckDoubleEquality(rLASS, _currentrLASS)){
-    _recalculate=true;
-    return _recalculate;
-  }
+  std::string widthName=_massKey+"Width";
+  _currentWidth=fitPar->Value(widthName);
 
-  double BLASS=theParamVal.otherParams[_BLASSKey];
-  if (!CheckDoubleEquality(BLASS, _currentBLASS)){
-    _recalculate=true;
-    return _recalculate;
-  }
+  _currentaLASS=fitPar->Value(_aLASSKey);
+  _currentrLASS=fitPar->Value(_rLASSKey);
+  _currentBLASS=fitPar->Value(_BLASSKey);
+  _currentphiB=fitPar->Value(_phiBKey);
+  _currentRLASS=fitPar->Value(_RLASSKey);
+  _currentphiR=fitPar->Value(_phiRKey);
 
-  double phiB=theParamVal.otherParams[_phiBKey];
-  if (!CheckDoubleEquality(phiB, _currentphiB)){
-    _recalculate=true;
-    return _recalculate;
-  }
-
-  double RLASS=theParamVal.otherParams[_RLASSKey];
-  if (!CheckDoubleEquality(RLASS, _currentRLASS)){
-    _recalculate=true;
-    return _recalculate;
-  }
-
-  double phiR=theParamVal.otherParams[_phiRKey];
-  if (!CheckDoubleEquality(phiR, _currentphiR)){
-    _recalculate=true;
-    return _recalculate;
-  }
-
-  return _recalculate;
-}
-
-void K0star1430LassDynamics::updateFitParams(fitParCol& theParamVal){
-  _currentMass=theParamVal.Masses.at(_massKey);
-  _currentWidth=theParamVal.Widths.at(_massKey);
-  _currentaLASS=theParamVal.otherParams.at(_aLASSKey);
-  _currentrLASS=theParamVal.otherParams.at(_rLASSKey);
-  _currentBLASS=theParamVal.otherParams.at(_BLASSKey);
-  _currentphiB=theParamVal.otherParams.at(_phiBKey);
-  _currentRLASS=theParamVal.otherParams.at(_RLASSKey);
-  _currentphiR=theParamVal.otherParams.at(_phiRKey);
 }
 
 void K0star1430LassDynamics::setMassKey(std::string& theMassKey){

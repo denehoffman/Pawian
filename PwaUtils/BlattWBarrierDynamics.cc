@@ -70,31 +70,21 @@ complex<double> BlattWBarrierDynamics::eval(EvtData* theData, AbsXdecAmp* grandm
   return result;
 }
 
-void  BlattWBarrierDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-  if(!_fitqRVals) return;
-  fitVal.otherParams[_fitqRKey]=_qR;
-  fitErr.otherParams[_fitqRKey]=0.3;
-}
-
 void  BlattWBarrierDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   if(!_fitqRVals) return;
   fitPar->Add(_fitqRKey, _qR, 0.05);
   fitPar->SetLimits(_fitqRKey, 0.02, 20.);
 }
 
-bool BlattWBarrierDynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
- 
-  if(_fitqRVals){
-    if (!CheckDoubleEquality( _qR, theParamVal.otherParams.at(_fitqRKey))) _recalculate=true;
-  }
-
-  return _recalculate;
+void BlattWBarrierDynamics::fillParamNameList(){
+  if(!_fitqRVals) return;
+  _paramNameList.clear();
+  _paramNameList.push_back(_fitqRKey);
 }
 
-void BlattWBarrierDynamics::updateFitParams(fitParCol& theParamVal){
+void BlattWBarrierDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   if(!_fitqRVals) return;
-  _qR=theParamVal.otherParams.at(_fitqRKey);
+  _qR = fitPar->Value(_fitqRKey);
 }
 
 void BlattWBarrierDynamics::setMassKey(std::string& theMassKey){

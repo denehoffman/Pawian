@@ -77,38 +77,6 @@ complex<double> result(0.,0.);
   return result;
 }
 
-void  KPiSWaveIso32Dynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-  std::map<std::string, std::map<std::string, double> >::iterator it1;
-  for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
-    
-    std::map<std::string, double>::iterator it2;
-    
-    std::map<std::string, double>& aProds=it1->second;
-    for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
-      fitVal.otherParams[it1->first+it2->first]=it2->second;
-      fitErr.otherParams[it1->first+it2->first]=1.;
-    }
-
-    std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
-    for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
-      fitVal.otherParams[it1->first+it2->first]=it2->second;
-      fitErr.otherParams[it1->first+it2->first]=1.; 
-    }
-
-    std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
-    for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
-      fitVal.otherParams[it1->first+it2->first]=it2->second;
-      fitErr.otherParams[it1->first+it2->first]=1.;
-    }
-
-    std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
-    for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
-      fitVal.otherParams[it1->first+it2->first]=it2->second;
-      fitErr.otherParams[it1->first+it2->first]=1.;
-    }
-  }
-}
-
 void KPiSWaveIso32Dynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
@@ -146,84 +114,83 @@ void KPiSWaveIso32Dynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameter
 
 }
 
-bool KPiSWaveIso32Dynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
-
+void KPiSWaveIso32Dynamics::fillParamNameList(){
+  _paramNameList.clear();
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
-
-    _recalcMap[it1->first]=false;    
-    
-     std::map<std::string, double>::iterator it2;
-    
+    std::string theName=it1->first;    
+    std::map<std::string, double>::iterator it2;
+ 
+    // a prod factors pure real   
     std::map<std::string, double>& aProds=it1->second;
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
-      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
-	_recalculate=true;
-	_recalcMap[it1->first]=true;
-      }
+      std::string aProdName=theName+it2->first;
+      _paramNameList.push_back(aProdName);
     }
 
-    std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
+    // b prod factors pure real
+    std::map<std::string, double>& bProds=_currentbProdMap.at(it1->first);
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
-      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
-	_recalculate=true;
-	_recalcMap[it1->first]=true;
-      }
+      std::string bProdName=theName+it2->first;
+      _paramNameList.push_back(bProdName);
     }
 
-    std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
+    // c prod factors pure real
+    std::map<std::string, double>& cProds=_currentcProdMap.at(it1->first);
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
-      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
-	_recalculate=true;
-	_recalcMap[it1->first]=true;
-      }
+      std::string cProdName=theName+it2->first;
+      _paramNameList.push_back(cProdName);
     }
 
-    std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
+    // phase prod factors
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap.at(it1->first);
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
-      if (!CheckDoubleEquality(it2->second, theParamVal.otherParams[it1->first+it2->first])){
-	_recalculate=true;
-	_recalcMap[it1->first]=true;
-      }
+      std::string phaseName=theName+it2->first;
+      _paramNameList.push_back(phaseName);
     }
-
   }
-  return _recalculate;
 }
 
-void KPiSWaveIso32Dynamics::updateFitParams(fitParCol& theParamVal){
+void KPiSWaveIso32Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
-
+    std::string theName=it1->first;    
     std::map<std::string, double>::iterator it2;
-
-    std::map<std::string, double>& aProds = it1->second;
+ 
+    // a prod factors pure real   
+    std::map<std::string, double>& aProds=it1->second;
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
-      it2->second = theParamVal.otherParams[it1->first+it2->first];
+      std::string aProdName=theName+it2->first;
+      it2->second = fitPar->Value(aProdName);
     }
 
-    std::map<std::string, double>& bProds=_currentbProdMap[it1->first];
+    // b prod factors pure real
+    std::map<std::string, double>& bProds=_currentbProdMap.at(it1->first);
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
-      it2->second = theParamVal.otherParams[it1->first+it2->first];
+      std::string bProdName=theName+it2->first;
+      it2->second = fitPar->Value(bProdName);
     }
 
-    std::map<std::string, double>& cProds=_currentcProdMap[it1->first];
+    // c prod factors pure real
+    std::map<std::string, double>& cProds=_currentcProdMap.at(it1->first);
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
-      it2->second = theParamVal.otherParams[it1->first+it2->first];
+      std::string cProdName=theName+it2->first;
+      it2->second = fitPar->Value(cProdName);
     }
 
-    std::map<std::string, double>& phaseProds=_currentphaseProdMap[it1->first];
+    // phase prod factors
+    std::map<std::string, double>& phaseProds=_currentphaseProdMap.at(it1->first);
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
-      it2->second = theParamVal.otherParams[it1->first+it2->first];
+      std::string phaseName=theName+it2->first;
+      it2->second = fitPar->Value(phaseName);
     }
 
-    std::shared_ptr<PVectorKPiSFocus> currentPVec=_pVecMap[it1->first];
-    currentPVec->updateAprod(0, aProds["a_PosNeg"]);
-    currentPVec->updateBprod(0, bProds["b_PosNeg"]);
-    currentPVec->updateCprod(0, cProds["c_PosNeg"]);
-    currentPVec->updatePhaseprod(0, phaseProds["Phi"]);
+    std::shared_ptr<PVectorKPiSFocus> currentPVec=_pVecMap.at(it1->first);
+    currentPVec->updateAprod(0, aProds.at("a_PosNeg"));
+    currentPVec->updateBprod(0, bProds.at("b_PosNeg"));
+    currentPVec->updateCprod(0, cProds.at("c_PosNeg"));
+    currentPVec->updatePhaseprod(0, phaseProds.at("Phi"));
   }
 }
 

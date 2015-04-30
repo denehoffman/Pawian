@@ -47,11 +47,10 @@ public:
   virtual std::string type() {return "VoigtDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
-virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
-  
-  virtual bool checkRecalculation(fitParCol& theParamVal);
-  virtual void updateFitParams(fitParCol& theParamVal);
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();   
+
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void setMassKey(std::string& theMassKey);
 
 protected:

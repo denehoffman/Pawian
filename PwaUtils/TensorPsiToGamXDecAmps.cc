@@ -59,7 +59,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiTo
     _MagParamNames[2]=_key+"Mag3";
     _PhiParamNames[2]=_key+"_3Phi";
   }
-
+  fillParamNameList();
 }
 
 TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -67,6 +67,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<AbsDecay> theDec,
   ,_noOfAmps(0)
 {
   //_noOfAmps=???
+  fillParamNameList();
 }
 
 TensorPsiToGamXDecAmps::~TensorPsiToGamXDecAmps()
@@ -149,20 +150,6 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
   return result;
 }
 
-void  TensorPsiToGamXDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-  for (int i=0; i<_noOfAmps; ++i){
-    fitVal.otherParams[_MagParamNames.at(i)]=1.;
-    fitErr.otherParams[_MagParamNames.at(i)]=0.5;
-    fitVal.otherParams[_PhiParamNames.at(i)]=0.;
-    fitErr.otherParams[_PhiParamNames.at(i)]=0.3;
-  }
-
-  _absDyn->getDefaultParams(fitVal, fitErr);
-
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-}
-
 void  TensorPsiToGamXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   for (int i=0; i<_noOfAmps; ++i){
@@ -185,58 +172,41 @@ void  TensorPsiToGamXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParamet
   if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
+void TensorPsiToGamXDecAmps::fillParamNameList(){
+
+  for (int i=0; i<_noOfAmps; ++i){
+    //fill magnitude
+    std::string magName=_MagParamNames.at(i);
+    _paramNameList.push_back(magName);
+
+    //fill phi
+    std::string phiName=_PhiParamNames.at(i);
+    _paramNameList.push_back(phiName);
+  }
+}
+
 void TensorPsiToGamXDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
 
-bool TensorPsiToGamXDecAmps::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
-
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
-
-   if(!_daughter2IsStable){
-     if(_decAmpDaughter2->checkRecalculation(theParamVal)){
-       _recalculate=true;
-       return _recalculate;
-     }
-   }
-
-   if(!_recalculate){
-     for (int i=0; i<_noOfAmps; ++i){
-       double theMag=theParamVal.otherParams[_MagParamNames.at(i)];
-       if(!CheckDoubleEquality(theMag, _currentParamLocalMags.at(i))){
-	 _recalculate=true;
-	 return _recalculate;
-       }
-
-       double thePhi=theParamVal.otherParams[_PhiParamNames.at(i)];
-       if(!CheckDoubleEquality(thePhi, _currentParamLocalPhis.at(i))){
-	 _recalculate=true;
-	 return _recalculate;
-       }
-     }
-   }
-
-   return _recalculate;
-}
-
-
-void  TensorPsiToGamXDecAmps::updateFitParams(fitParCol& theParamVal){
+void TensorPsiToGamXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   for (int i=0; i<_noOfAmps; ++i){
-    double theMag=theParamVal.otherParams.at(_MagParamNames.at(i));
+    std::string magName=_MagParamNames.at(i);
+    double theMag=fitPar->Value(magName);
     _currentParamLocalMags[i]=theMag;
-    double thePhi=theParamVal.otherParams.at(_PhiParamNames.at(i));
+
+    std::string phiName=_PhiParamNames.at(i);
+    double thePhi=fitPar->Value(phiName);
     _currentParamLocalPhis[i]=thePhi;
 
     complex<double> expi(cos(thePhi), sin(thePhi));
     _currentParamLocalMagExpi[i]=theMag*expi;
   }
-  _absDyn->updateFitParams(theParamVal);
-  
-  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
 
+  _absDyn->updateFitParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
 complex<double> TensorPsiToGamXDecAmps::daughterAmp(Spin& lam2, EvtData* theData, Spin& lamFs){

@@ -60,12 +60,6 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaA
   return result;
 }
 
-void  BreitWignerDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-    fitVal.Masses[_massKey]=_mother->mass();
-    fitErr.Masses[_massKey]=0.03;
-    fitVal.Widths[_massKey]=_mother->width();
-    fitErr.Widths[_massKey]=0.2*_mother->width();
-}
 
 void BreitWignerDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   //fill mass
@@ -92,22 +86,21 @@ void BreitWignerDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters>
 }
 
 
-bool BreitWignerDynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+void BreitWignerDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  std::string massName=_massKey+"Mass";
+  _currentMass=fitPar->Value(massName);
 
-  double mass=theParamVal.Masses[_massKey];
-  if (!CheckDoubleEquality(mass, _currentMass)){
-    _recalculate=true;
-  }
-  double width=theParamVal.Widths[_massKey];
-  if (!CheckDoubleEquality(width, _currentWidth)){
-    _recalculate=true;
-  }
-
-  return _recalculate;
+  std::string widthName=_massKey+"Width";
+  _currentWidth=fitPar->Value(widthName);
 }
 
-void BreitWignerDynamics::updateFitParams(fitParCol& theParamVal){
-  _currentMass=theParamVal.Masses[_massKey];
-  _currentWidth=theParamVal.Widths[_massKey];
+void BreitWignerDynamics::fillParamNameList(){
+  _paramNameList.clear();
+  //fill mass
+  std::string massName=_massKey+"Mass";
+  _paramNameList.push_back(massName);
+   
+  //fill width
+  std::string widthName=_massKey+"Width";
+  _paramNameList.push_back(widthName); 
 }

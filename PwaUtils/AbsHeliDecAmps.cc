@@ -67,6 +67,7 @@ AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelI
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart2);
     }
   }
+  fillParamNameList();
 }
 
 AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -76,37 +77,38 @@ AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID chann
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
+  fillParamNameList();
 }
 
 AbsHeliDecAmps::~AbsHeliDecAmps()
 {
 }
 
-void  AbsHeliDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
+// void  AbsHeliDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
-  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
-  for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
-    currentMagValMap[*itlamlam]=_factorMag;
-    currentPhiValMap[*itlamlam]=0.;
-    currentMagErrMap[*itlamlam]=_factorMag;
-    currentPhiErrMap[*itlamlam]=0.3;
-  }
+//   std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
+//   for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
+//     currentMagValMap[*itlamlam]=_factorMag;
+//     currentPhiValMap[*itlamlam]=0.;
+//     currentMagErrMap[*itlamlam]=_factorMag;
+//     currentPhiErrMap[*itlamlam]=0.3;
+//   }
 
-  fitVal.MagLamLams[_key]=currentMagValMap;
-  fitVal.PhiLamLams[_key]=currentPhiValMap;
-  fitErr.MagLamLams[_key]=currentMagErrMap;
-  fitErr.PhiLamLams[_key]=currentPhiErrMap;
+//   fitVal.MagLamLams[_key]=currentMagValMap;
+//   fitVal.PhiLamLams[_key]=currentPhiValMap;
+//   fitErr.MagLamLams[_key]=currentMagErrMap;
+//   fitErr.PhiLamLams[_key]=currentPhiErrMap;
 
-  _absDyn->getDefaultParams(fitVal, fitErr);
+//   _absDyn->getDefaultParams(fitVal, fitErr);
 
-  if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-}
+//   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
+//   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
+// }
 
 void  AbsHeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
@@ -135,74 +137,124 @@ void  AbsHeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
   if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
+void AbsHeliDecAmps::fillParamNameList(){
+  _paramNameList.clear();
+  std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
+  for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
+    //magnitude
+    std::string magName=(*itlamlam)->name()+_key+"Mag";
+    _paramNameList.push_back(magName);
+
+    //phase
+    std::string phiName=(*itlamlam)->name()+_key+"Phi";
+    _paramNameList.push_back(phiName);
+  }
+
+}
+
+
 void AbsHeliDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
 
-bool AbsHeliDecAmps::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+// bool AbsHeliDecAmps::checkRecalculation(fitParCol& theParamVal){
+//   _recalculate=false;
 
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
+//    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
 
-   if(!_daughter1IsStable) {
-     if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
-   }
-   if(!_daughter2IsStable){
-     if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
-   }
+//    if(!_daughter1IsStable) {
+//      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
+//    }
+//    if(!_daughter2IsStable){
+//      if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
+//    }
 
-   if(!_recalculate){
-     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
-     std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
-     std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-     for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-       double theMag=magMap[*it];
-       double thePhi=phiMap[*it];
+//    if(!_recalculate){
+//      std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
+//      std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
+//      std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
+//      for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+//        double theMag=magMap[*it];
+//        double thePhi=phiMap[*it];
 
-       if (!CheckDoubleEquality(theMag, _currentParamMagLamLams[*it])){
-	 _recalculate=true;
-	 return _recalculate;
-       }
-       if (!CheckDoubleEquality(thePhi, _currentParamPhiLamLams[*it])){
-	 _recalculate=true;
-	 return _recalculate;
-       }
+//        if (!CheckDoubleEquality(theMag, _currentParamMagLamLams[*it])){
+// 	 _recalculate=true;
+// 	 return _recalculate;
+//        }
+//        if (!CheckDoubleEquality(thePhi, _currentParamPhiLamLams[*it])){
+// 	 _recalculate=true;
+// 	 return _recalculate;
+//        }
+//      }
+//    }
+//    return _recalculate;
+// }
+
+
+// void  AbsHeliDecAmps::updateFitParams(fitParCol& theParamVal){
+//    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
+//    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
+
+//    std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
+//    for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+//      double theMag=magMap[*it];
+//      double thePhi=phiMap[*it];
+//      _currentParamMagLamLams[*it]=theMag;
+//      _currentParamPhiLamLams[*it]=thePhi;
+//      complex<double> expi(cos(thePhi), sin(thePhi));
+
+//      _currentParamMagExpi[*it]=theMag*expi;
+//      _currentParamPreFacMagExpi[*it]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
+
+//      std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];
+//      std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
+//      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
+//        _currentParamMagLamLams[*itLamLam]=theMag;
+//        _currentParamPhiLamLams[*itLamLam]=thePhi;
+//        _currentParamMagExpi[*itLamLam]=theMag*expi;
+//        _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
+//      }
+//    }
+
+
+//    _absDyn->updateFitParams(theParamVal);
+
+//    if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
+//    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
+
+// }
+
+void AbsHeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
+  for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
+
+    std::string magName=(*itlamlam)->name()+_key+"Mag";
+    std::string phiName=(*itlamlam)->name()+_key+"Phi";
+
+    double theMag=fitPar->Value(magName);
+    double thePhi=fitPar->Value(phiName);
+
+    _currentParamMagLamLams[*itlamlam]=theMag;
+    _currentParamPhiLamLams[*itlamlam]=thePhi;
+    complex<double> expi(cos(thePhi), sin(thePhi));
+    
+    _currentParamMagExpi[*itlamlam]=theMag*expi;
+    _currentParamPreFacMagExpi[*itlamlam]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
+
+    std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamSymVec=_JPClamlamSymMap.at(*itlamlam);
+     std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLamSym;
+     for (itLamLamSym=currentLPClamlamSymVec.begin(); itLamLamSym!=currentLPClamlamSymVec.end(); ++itLamLamSym){
+       _currentParamMagLamLams[*itLamLamSym]=theMag;
+       _currentParamPhiLamLams[*itLamLamSym]=thePhi;
+       _currentParamMagExpi[*itLamLamSym]=theMag*expi;
+       _currentParamPreFacMagExpi[*itLamLamSym]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
      }
-   }
-   return _recalculate;
-}
+  }
 
+   _absDyn->updateFitParams(fitPar);
 
-void  AbsHeliDecAmps::updateFitParams(fitParCol& theParamVal){
-   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
-   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
-
-   std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-   for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-     double theMag=magMap[*it];
-     double thePhi=phiMap[*it];
-     _currentParamMagLamLams[*it]=theMag;
-     _currentParamPhiLamLams[*it]=thePhi;
-     complex<double> expi(cos(thePhi), sin(thePhi));
-
-     _currentParamMagExpi[*it]=theMag*expi;
-     _currentParamPreFacMagExpi[*it]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
-
-     std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];
-     std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
-     for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
-       _currentParamMagLamLams[*itLamLam]=theMag;
-       _currentParamPhiLamLams[*itLamLam]=thePhi;
-       _currentParamMagExpi[*itLamLam]=theMag*expi;
-       _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
-     }
-   }
-
-
-   _absDyn->updateFitParams(theParamVal);
-
-   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
-   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
-
+   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(fitPar);
+   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }

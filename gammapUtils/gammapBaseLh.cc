@@ -79,120 +79,120 @@ complex<double> gammapBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::strin
 }
 
 
-double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
+// double gammapBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
 
-  double result=0.;
-  std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-  std::map< Spin, std::map< Spin, std::map< Spin, complex<double> > > > mapPinGamiPout;
-  for (Spin mzPin=-1./2; mzPin<=1./2; mzPin++){
-  	for (Spin mzGam=-1.; mzGam<=1.; mzGam+=2){
-  	  for (Spin lamPout=-1./2; lamPout<=1./2; lamPout++){
-  	    mapPinGamiPout[mzPin][mzGam][lamPout]=complex<double> (0.,0.);
-  	  }
-  	}
-  } 
+//   double result=0.;
+//   std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+//   std::map< Spin, std::map< Spin, std::map< Spin, complex<double> > > > mapPinGamiPout;
+//   for (Spin mzPin=-1./2; mzPin<=1./2; mzPin++){
+//   	for (Spin mzGam=-1.; mzGam<=1.; mzGam+=2){
+//   	  for (Spin lamPout=-1./2; lamPout<=1./2; lamPout++){
+//   	    mapPinGamiPout[mzPin][mzGam][lamPout]=complex<double> (0.,0.);
+//   	  }
+//   	}
+//   } 
 
-  std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess>::iterator itjpc;
-  std::vector< std::shared_ptr<const JPCLS> >::iterator itJPClj;
+//   std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const JPCLS> >, pawian::Collection::SharedPtrLess>::iterator itjpc;
+//   std::vector< std::shared_ptr<const JPCLS> >::iterator itJPClj;
  
 
-  for(itDec=_decAmps.begin(); itDec !=_decAmps.end(); ++itDec){
-    std::shared_ptr<const jpcRes> currentJPC=(*itDec)->jpcPtr();
-    double iso12Val=_currentParamJPCIsos12.at(currentJPC);
-    double iso32Val=_currentParamJPCIsos32.at(currentJPC);
-    double isoFactor=iso12Val;
-    if( int(2.*(*itDec)->absDec()->motherIGJPC()->I)==3) isoFactor=iso32Val;
+//   for(itDec=_decAmps.begin(); itDec !=_decAmps.end(); ++itDec){
+//     std::shared_ptr<const jpcRes> currentJPC=(*itDec)->jpcPtr();
+//     double iso12Val=_currentParamJPCIsos12.at(currentJPC);
+//     double iso32Val=_currentParamJPCIsos32.at(currentJPC);
+//     double isoFactor=iso12Val;
+//     if( int(2.*(*itDec)->absDec()->motherIGJPC()->I)==3) isoFactor=iso32Val;
 
-    double theMag=_currentParamMags.at(currentJPC);
-    double thePhi=0.;
-    if( 2.*currentJPC->J > 1.) thePhi=_currentParamPhis.at(currentJPC);
-    else if(currentJPC->P == 1){ // 1/2+ M1 
-      thePhi=M_PI/2.;
-    }
+//     double theMag=_currentParamMags.at(currentJPC);
+//     double thePhi=0.;
+//     if( 2.*currentJPC->J > 1.) thePhi=_currentParamPhis.at(currentJPC);
+//     else if(currentJPC->P == 1){ // 1/2+ M1 
+//       thePhi=M_PI/2.;
+//     }
 
-    complex<double> current_amp_prod(0.,0.);
-    std::vector< std::shared_ptr<const JPCLS> > currentJPCljVec = _jpcToJPCljMap.at(currentJPC);
-    for(itJPClj=currentJPCljVec.begin(); itJPClj!=currentJPCljVec.end(); ++itJPClj){
-      int lmp=(*itJPClj)->L;
-      Spin jmp=(*itJPClj)->S;
-      Spin J=(*itJPClj)->J;
+//     complex<double> current_amp_prod(0.,0.);
+//     std::vector< std::shared_ptr<const JPCLS> > currentJPCljVec = _jpcToJPCljMap.at(currentJPC);
+//     for(itJPClj=currentJPCljVec.begin(); itJPClj!=currentJPCljVec.end(); ++itJPClj){
+//       int lmp=(*itJPClj)->L;
+//       Spin jmp=(*itJPClj)->S;
+//       Spin J=(*itJPClj)->J;
 
-      double elMagFactor=1.;
-      if(currentJPC->P == pow(-1.,(int)(J + 1./2))){ // 1/2-,3/2+,5/2-,...
-	if(jmp==J+Spin(1./2)){ //el. multipole
-	  elMagFactor=cos(thePhi);
-	} 
-	else elMagFactor=sin(thePhi); //mag multipole
-      }
-      else{ // 1/2+,3/2-,5/2+,...
-	if(jmp==J+Spin(1./2)){ //mag. multipole
-	  elMagFactor=sin(thePhi);
-	}
-	else elMagFactor=cos(thePhi);  //el. multipole
-      }
+//       double elMagFactor=1.;
+//       if(currentJPC->P == pow(-1.,(int)(J + 1./2))){ // 1/2-,3/2+,5/2-,...
+// 	if(jmp==J+Spin(1./2)){ //el. multipole
+// 	  elMagFactor=cos(thePhi);
+// 	} 
+// 	else elMagFactor=sin(thePhi); //mag multipole
+//       }
+//       else{ // 1/2+,3/2-,5/2+,...
+// 	if(jmp==J+Spin(1./2)){ //mag. multipole
+// 	  elMagFactor=sin(thePhi);
+// 	}
+// 	else elMagFactor=cos(thePhi);  //el. multipole
+//       }
 
-      for (Spin mzPin=-1./2; mzPin<=1./2; mzPin++){
-	for (Spin mzGam=-1.; mzGam<=1.; mzGam+=2.){
-  	  Spin mz = mzGam + mzPin; // spin-j projection
-	  if( J < fabs(mz) || jmp < fabs(mzGam) ) continue; 
-  	  complex<double> current_amp_prod=theMag*elMagFactor*isoFactor*sqrt(2*lmp+1)*Clebsch(1, mzGam,lmp,0,jmp,mzGam)*Clebsch(jmp, mzGam,1/2., mzPin,J,mz);
-	  for (Spin lamPout=-1./2; lamPout<=1./2; lamPout++){
-  	    mapPinGamiPout.at(mzPin).at(mzGam).at(lamPout)+=current_amp_prod*(*itDec)->XdecAmp(mz, theData, lamPout);
-  	  }
-  	}
-      }
-    }
-  }
+//       for (Spin mzPin=-1./2; mzPin<=1./2; mzPin++){
+// 	for (Spin mzGam=-1.; mzGam<=1.; mzGam+=2.){
+//   	  Spin mz = mzGam + mzPin; // spin-j projection
+// 	  if( J < fabs(mz) || jmp < fabs(mzGam) ) continue; 
+//   	  complex<double> current_amp_prod=theMag*elMagFactor*isoFactor*sqrt(2*lmp+1)*Clebsch(1, mzGam,lmp,0,jmp,mzGam)*Clebsch(jmp, mzGam,1/2., mzPin,J,mz);
+// 	  for (Spin lamPout=-1./2; lamPout<=1./2; lamPout++){
+//   	    mapPinGamiPout.at(mzPin).at(mzGam).at(lamPout)+=current_amp_prod*(*itDec)->XdecAmp(mz, theData, lamPout);
+//   	  }
+//   	}
+//       }
+//     }
+//   }
 
-  std::map< Spin, std::map< Spin, std::map< Spin, complex<double> > > >::iterator itAmpMap;
-    for(itAmpMap=mapPinGamiPout.begin(); itAmpMap!=mapPinGamiPout.end(); ++itAmpMap){
-      std::map< Spin, std::map< Spin, complex<double> > >::iterator itAmpMap2;
-      for(itAmpMap2=itAmpMap->second.begin(); itAmpMap2!=itAmpMap->second.end(); ++itAmpMap2){
-  	std::map< Spin, complex<double> >::iterator itAmpMap3;
-  	for(itAmpMap3=itAmpMap2->second.begin(); itAmpMap3!=itAmpMap2->second.end(); ++itAmpMap3){
-  	  result+=norm(itAmpMap3->second);
-  	}
-      }
-  } 
+//   std::map< Spin, std::map< Spin, std::map< Spin, complex<double> > > >::iterator itAmpMap;
+//     for(itAmpMap=mapPinGamiPout.begin(); itAmpMap!=mapPinGamiPout.end(); ++itAmpMap){
+//       std::map< Spin, std::map< Spin, complex<double> > >::iterator itAmpMap2;
+//       for(itAmpMap2=itAmpMap->second.begin(); itAmpMap2!=itAmpMap->second.end(); ++itAmpMap2){
+//   	std::map< Spin, complex<double> >::iterator itAmpMap3;
+//   	for(itAmpMap3=itAmpMap2->second.begin(); itAmpMap3!=itAmpMap2->second.end(); ++itAmpMap3){
+//   	  result+=norm(itAmpMap3->second);
+//   	}
+//       }
+//   } 
   
   
-  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+//   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
 
-  result *= theParamVal.otherParams.at(_channelScaleParam);
+//   result *= theParamVal.otherParams.at(_channelScaleParam);
 
-  return result;
+//   return result;
 
-}
+// }
 
-void gammapBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-  AbsLh::getDefaultParams(fitVal, fitErr);
+// void gammapBaseLh::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
+//   AbsLh::getDefaultParams(fitVal, fitErr);
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
-  for(itIso=_currentParamJPCIsos12.begin(); itIso!=_currentParamJPCIsos12.end(); ++itIso){
-    fitVal.otherParams["Iso12"+(*itIso).first->name()+"Range01"]=(*itIso).second;
-    fitErr.otherParams["Iso12"+(*itIso).first->name()+"Range01"]=0.5;
-   }
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
+//   for(itIso=_currentParamJPCIsos12.begin(); itIso!=_currentParamJPCIsos12.end(); ++itIso){
+//     fitVal.otherParams["Iso12"+(*itIso).first->name()+"Range01"]=(*itIso).second;
+//     fitErr.otherParams["Iso12"+(*itIso).first->name()+"Range01"]=0.5;
+//    }
 
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  double magFactor=1./sqrt(_jpcToIGJPCMap.size());
-  for ( std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess>::iterator it = _jpcToIGJPCMap.begin(); it!=_jpcToIGJPCMap.end(); ++it){
-    currentMagValMap[it->first] = magFactor;
-    currentMagErrMap[it->first] = magFactor;
-    if(it->first->J > 1./2){
-      currentPhiValMap[it->first] = 0.;
-      currentPhiErrMap[it->first] = 0.3;
-    }    
-  }
-  fitVal.MagsJPC["gammap"]=currentMagValMap;
-  fitVal.PhisJPC["gammap"]=currentPhiValMap;
-  fitErr.MagsJPC["gammap"]=currentMagErrMap;
-  fitErr.PhisJPC["gammap"]=currentPhiErrMap;
-}
+//   double magFactor=1./sqrt(_jpcToIGJPCMap.size());
+//   for ( std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess>::iterator it = _jpcToIGJPCMap.begin(); it!=_jpcToIGJPCMap.end(); ++it){
+//     currentMagValMap[it->first] = magFactor;
+//     currentMagErrMap[it->first] = magFactor;
+//     if(it->first->J > 1./2){
+//       currentPhiValMap[it->first] = 0.;
+//       currentPhiErrMap[it->first] = 0.3;
+//     }    
+//   }
+//   fitVal.MagsJPC["gammap"]=currentMagValMap;
+//   fitVal.PhisJPC["gammap"]=currentPhiValMap;
+//   fitErr.MagsJPC["gammap"]=currentMagErrMap;
+//   fitErr.PhisJPC["gammap"]=currentPhiErrMap;
+// }
 
 void gammapBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   AbsLh::fillDefaultParams(fitPar);
@@ -257,28 +257,28 @@ void gammapBaseLh::fillIsos(){
 
 }
 
-void gammapBaseLh::updateFitParams(fitParCol& theParamVal){
-  AbsLh::updateFitParams(theParamVal);
+// void gammapBaseLh::updateFitParams(fitParCol& theParamVal){
+//   AbsLh::updateFitParams(theParamVal);
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
-  for(itIso=_currentParamJPCIsos12.begin(); itIso!=_currentParamJPCIsos12.end(); ++ itIso){
-    double theVal=theParamVal.otherParams.at("Iso12"+(*itIso).first->name()+"Range01");
-    (*itIso).second=theVal;
-    _currentParamJPCIsos32[(*itIso).first]=sqrt(1.-theVal*theVal);
-  }
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
+//   for(itIso=_currentParamJPCIsos12.begin(); itIso!=_currentParamJPCIsos12.end(); ++ itIso){
+//     double theVal=theParamVal.otherParams.at("Iso12"+(*itIso).first->name()+"Range01");
+//     (*itIso).second=theVal;
+//     _currentParamJPCIsos32[(*itIso).first]=sqrt(1.-theVal*theVal);
+//   }
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsJPC.at("gammap");
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisJPC.at("gammap");
-  std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess>::iterator it;
-  for (it= _jpcToIGJPCMap.begin(); it!=_jpcToIGJPCMap.end(); ++it){
-    double theMag=magMap.at(it->first);
-    _currentParamMags[it->first]=theMag;
-    if(it->first->J > 1./2){
-      double thePhi=phiMap.at(it->first);
-      _currentParamPhis[it->first]=thePhi;
-    }
-  }
-}
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsJPC.at("gammap");
+//   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisJPC.at("gammap");
+//   std::map< std::shared_ptr<const jpcRes>, std::vector< std::shared_ptr<const IGJPC> >, pawian::Collection::SharedPtrLess>::iterator it;
+//   for (it= _jpcToIGJPCMap.begin(); it!=_jpcToIGJPCMap.end(); ++it){
+//     double theMag=magMap.at(it->first);
+//     _currentParamMags[it->first]=theMag;
+//     if(it->first->J > 1./2){
+//       double thePhi=phiMap.at(it->first);
+//       _currentParamPhis[it->first]=thePhi;
+//     }
+//   }
+// }
 
 void gammapBaseLh::print(std::ostream& os) const{
 

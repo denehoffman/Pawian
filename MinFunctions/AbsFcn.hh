@@ -31,7 +31,7 @@
 
 #include "Minuit2/FCNBase.h"
 #include "PwaUtils/DataUtils.hh"
-#include "FitParams/FitParColBase.hh"
+#include "FitParams/AbsPawianParameters.hh"
 #include "Minuit2/MnUserParameters.h"
 
 namespace ROOT {
@@ -44,19 +44,16 @@ namespace ROOT {
 
       virtual double operator()(const std::vector<double>& par) const=0;
       virtual double Up() const;
-      fitParCol defaultFitValParms() {return _defaultFitValParms;}
-      fitParCol defaultFitErrParms() {return _defaultFitErrParms;}
-
+      std::shared_ptr<AbsPawianParameters> defaultFitParms() {return _defaultPawianParms;}
     protected:
       mutable unsigned int _fcnCounter;
-      fitParCol _defaultFitValParms;
-      fitParCol _defaultFitErrParms;
+      std::shared_ptr<AbsPawianParameters> _defaultPawianParms;
+      std::shared_ptr<AbsPawianParameters> _currentPawianParms;
       std::string _currentResFileName;
 
       virtual void printTimer() const;
-      virtual void printFitParams(const std::vector<double>& par) const;
-      virtual void dumpFitParams(const std::vector<double>& par) const;
-
+      virtual void printFitParams(std::shared_ptr<AbsPawianParameters> par) const;
+      virtual void dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const;
     private:
     };
   }  // namespace Minuit2

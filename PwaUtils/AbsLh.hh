@@ -35,11 +35,11 @@
 
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "FitParams/FitParColBase.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/DataUtils.hh"
 
+class AbsPawianParameters;
 
 class AbsLh : public AbsParamHandler{
 
@@ -51,12 +51,12 @@ public:
   virtual ~AbsLh();
   virtual AbsLh* clone_() const = 0;
 
-  virtual double calcLogLh(fitParCol& theParamVal);
+  virtual double calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar);
   static  double mergeLogLhData(LHData& theLHData);
-  virtual double addDataToLogLh(EvtData* dataEvt, fitParCol& theParamVal, LHData& theLHData);
-  virtual double addMcToLogLh(EvtData* mcEvt, fitParCol& theParamVal, LHData& theLHData);
-  virtual void calcLogLhDataClient(fitParCol& theParamVal, LHData& theLHData);
-  virtual double calcEvtIntensity(EvtData* theData, fitParCol& theParamVal)=0;
+  virtual double addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
+  virtual double addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
+  virtual void calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
+  virtual double calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar)=0;
 
   virtual void setDataVec(std::vector<EvtData*> theVec);
   virtual void setMcVec(std::vector<EvtData*> theVec);
@@ -64,13 +64,12 @@ public:
   virtual std::vector<EvtData*> getDataVec() {return _evtDataVec;}
   virtual std::vector<EvtData*> getMcVec() {return _evtMCVec;}
 
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
-  
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
-  
-  virtual bool checkRecalculation(fitParCol& theParamVal);
+
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
+
   virtual void cacheAmplitudes();
-  virtual void updateFitParams(fitParCol& theParamVal);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
 
   virtual void print(std::ostream& os) const=0;
 
@@ -91,11 +90,13 @@ protected:
   unsigned int _calcCounter;
   unsigned short _noOfThreads;
 
+  std::shared_ptr<AbsPawianParameters> _oldFitPar;
+
   virtual void setHyps( const std::map<const std::string, bool>& theMap,
 			bool& theHyp, std::string& theKey);
 
   virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			      LHData& theLHData, fitParCol& theParamVal);
+			      std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
   virtual void ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			     LHData& theLHData, fitParCol& theParamVal);
+			    std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
 };

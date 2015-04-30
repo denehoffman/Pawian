@@ -38,7 +38,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "FitParams/FitParColBase.hh"
+//#include "FitParams/FitParColBase.hh"
 
 
 class AbsLh;
@@ -188,6 +188,7 @@ class TH2F;
 class TH1F;
 class TTree;
 class Particle;
+class AbsPawianParameters;
 
 class AbsHist {
 
@@ -195,7 +196,7 @@ public:
   AbsHist(std::string additionalSuffix = "");
   virtual ~AbsHist();
   void fillEvt(EvtData* theData, double weight, std::string evtType);
-  void fillFromLhData(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
+  void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams);
   void scaleFitHists(double scaleFactor);
 
 protected:

@@ -24,4 +24,4 @@ eta(2225)Mass	2.15	0.03
 f2(1910)Mass	1.97	0.03
 eta(2225)Width	0.14	0.03
 f2(1910)Width	0.16	0.034
-channelType2Tophotonpion1+pion1-pion10pion2+pion2-pion20channelScalingOther	1	0.01
+channelType2Tophotonpion1+pion1-pion10pion2+pion2-pion20channelScaling	1	0.01

@@ -36,11 +36,11 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
-#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 #include <boost/bind.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -63,7 +63,7 @@ void pbarpTensorLh::print(std::ostream& os) const{
 
 }
 
-double pbarpTensorLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
+double pbarpTensorLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
 
   double result=0.;
 
@@ -195,9 +195,9 @@ double pbarpTensorLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal)
   result += 2.*norm(singletAmp)+ 2.*norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp);
   }
 
-  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+  if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
 
-  result *= theParamVal.otherParams.at(_channelScaleParam);
+  result *= fitPar->Value(_channelScaleParam);
 
   return result;
 

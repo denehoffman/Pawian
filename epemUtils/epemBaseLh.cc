@@ -37,7 +37,6 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -80,7 +79,49 @@ complex<double> epemBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string 
 }
 
 
-double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
+// double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
+
+//   double result=0.;
+
+//   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+//   for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+//     (*itDecAll)->calcDynamics(theData);
+//   }
+
+//   Spin lamSteps=1;
+//   if(_isHighestJaPhoton) lamSteps=2;
+
+//   for (Spin lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
+
+//     complex<double> lamp1Amp(0.,0.);
+
+//     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+//     Spin lamepem=1;
+//     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
+//       complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData, lamHigestJFsp);
+//       lamp1Amp+=currentDecAmp;
+//     }
+
+
+//     complex<double> lamm1Amp(0.,0.);
+//     lamepem=-1;
+//     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
+//       complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData, lamHigestJFsp);
+//       lamm1Amp+=currentDecAmp;
+//     }
+
+//     result += norm(lamp1Amp) + norm(lamm1Amp);
+//   }
+
+//   if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+
+//   result *= theParamVal.otherParams.at(_channelScaleParam);
+
+//   return result;
+
+// }
+
+double epemBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
 
   double result=0.;
 
@@ -114,12 +155,11 @@ double epemBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
     result += norm(lamp1Amp) + norm(lamm1Amp);
   }
 
-  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+  if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
 
-  result *= theParamVal.otherParams.at(_channelScaleParam);
+  result *= fitPar->Value(_channelScaleParam);
 
   return result;
-
 }
 
 void epemBaseLh::print(std::ostream& os) const{

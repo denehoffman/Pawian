@@ -119,17 +119,6 @@ void GlobalEnv::setupChannelEnvs(){
   _channelEnvsAlredySetup=true;
 }
 
-
-void GlobalEnv::CreateDefaultParameterSet(){
-   fitParCol defaultVal;
-   fitParCol defaultErr;
-   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
-      (*it).first->Lh()->getDefaultParams(defaultVal, defaultErr);
-   }
-   _defaultVal = defaultVal;
-   _defaultErr = defaultErr;
-}
-
 std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
   std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Minuit2");
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
@@ -146,7 +135,6 @@ void GlobalEnv::setup(ParserBase* theParser){
 
    _alreadySetUp = true;
 
-   _theFitParColBase = std::shared_ptr<FitParColBase>(new FitParColBase());
    _theParser = theParser;
    _outputFileNameSuffix = theParser->outputFileNameSuffix();
    _serializationFileName = theParser->serializationFile();

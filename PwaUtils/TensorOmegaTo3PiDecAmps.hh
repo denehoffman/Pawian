@@ -63,11 +63,10 @@ public:
   virtual void print(std::ostream& os) const;
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
-  virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();
 
-  virtual bool checkRecalculation(fitParCol& theParamVal);
-  virtual void updateFitParams(fitParCol& theParamVal);
 protected:
   std::vector< std::shared_ptr<const LScomb> > _LSs;
   double _factorMag;

@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -21,46 +21,32 @@
 //									  //
 //************************************************************************//
 
-#pragma once
-
 #include <iostream>
+#include <string>
+#include <cstdlib>
 #include <vector>
 #include <map>
-#include <string>
+#include <tuple>
+#include <iterator>
 #include <memory>
 
-#include "FitParams/AbsFitParColStreamer.hh"
-#include "FitParams/FitParColBase.hh"
+#include "FitParams/AbsPawianParamStreamer.hh"
+#include "ConfigParser/globalParser.hh"
+#include "Utils/ErrLogUtils.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 
-class StreamFitParmsBase : public AbsFitParColStreamer {
+int main(int __argc,char *__argv[]){
+  for (int i=0; i<__argc ; ++i) Info << __argv[i] << endmsg;
+  
+  Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
-public:
-  StreamFitParmsBase(std::string&);
-  virtual ~StreamFitParmsBase();
+  // Parse the command line
+   globalParser* globalAppParams=new globalParser(__argc, __argv);
+   std::string paramFilePath=globalAppParams->fitParamFile();
+   AbsPawianParamStreamer theStreamer(paramFilePath);   
 
-  fitParCol getFitParamVal() { return _paramVal;}
-  fitParCol getFitParamErr() { return _paramErr;}
+  return 1;
+}
 
-  virtual void fillParamMap() {return;}
 
-protected:
-  virtual void fillParams();
-
-  virtual void fillJPCAmps(mapStrJPC& valMap, mapStrJPC& errMap,
-			  const std::string& suffix);
- virtual void fillLSAmps(mapStrLS& valMap, mapStrLS& errMap,
-			  const std::string& suffix);
-  virtual void fillJPCLamLamAmps(mapStrJPCLamLam& valMap, mapStrJPCLamLam& errMap,
-			      const std::string& suffix);
-  virtual void fillJPCLSAmps(mapStrJPCLS& valMap, mapStrJPCLS& errMap,
-			  const std::string& suffix);
-  virtual void fillDoubles(mapStrDouble& valMap, mapStrDouble& errMap,
-			   const std::string& suffix);
-private:
-  fitParCol _paramVal;
-  fitParCol _paramErr;
-
-  void fillParameter(std::map<int, double>& theValMap, std::map<int, double>& theErrMap,
-		     std::string& suffix, int index);
-};

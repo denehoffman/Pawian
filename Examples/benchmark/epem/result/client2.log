@@ -1,3 +1,9 @@
+INFO: /data/jollyj/bertram/NewPawian150319/Pawian/bin/singleChannelApp
+INFO: --epemFiles
+INFO: /data/jollyj/bertram/NewPawian150319/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+INFO: --mode
+INFO: client
+INFO: !
 INFO: 
                                        MMMMM
                                       M8NO  +M
@@ -82,9 +88,98 @@ INFO:
 //************************************************************************//
 
    
-INFO: Compiled Feb 10 2015 13:41:47
+INFO: Compiled Apr 24 2015 15:18:30
 
-Running with the following options using /data/jollyj/bertram/NewPawian150113/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
+Running with the following options using /data/jollyj/bertram/NewPawian150319/Pawian/ConfigParser/global.cfg:
+
+Error log mode: 1
+
+data file: 
+
+mc file: 
+
+chosen unit in input file: GEV
+
+chosen order in file: Px Py Pz E
+
+file with start parameters for fit or qa: ./defaultparams.dat
+
+startHypo: base
+
+mode: client
+
+number of threads: 2
+
+ratioMcToData: 100000
+
+cache amplitudes: 1
+
+use data event weight: 0
+
+use Monte Carlo event weight: 0
+
+use phase space hyp: 0
+
+prefit with free scaling factor: 0
+
+pdg table: /Particle/pdtNew.table
+
+minimumTolerance: 0.1
+
+
+epem channel configuration file: /data/jollyj/bertram/NewPawian150319/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+
+
+the final state particles are:
+
+decay system:
+
+decay dynamics:
+
+replaced suffix for fit parameter name
+
+replaced mass key
+
+replaced prod key
+
+production system:
+
+production formalism:	Cano
+useProductionBarrier:	0
+withProductionBarrier:	false
+fitqRProduction:	0
+useProductionBarrier:	0
+qRProduction:	0.1973
+
+histograms inv mass for systems
+
+histograms decay angles for systems
+
+mass range cuts:
+
+2Dhistogram decay angles for systems
+
+random seed:	44123
+
+generate with model:	1
+
+number of generated events:	10000
+
+number of data events:	1000000
+INFO: numReactions: 1
+INFO: __argv[0]: /data/jollyj/bertram/NewPawian150319/Pawian/bin/singleChannelApp
+INFO: __argv[1]: --epemFiles
+INFO: __argv[3]: --mode
+INFO: __argv[4]: client
+INFO: __argv[5]: !
+INFO: /data/jollyj/bertram/NewPawian150319/Pawian/bin/singleChannelApp
+INFO: -c
+INFO: /data/jollyj/bertram/NewPawian150319/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+INFO: --mode
+INFO: client
+INFO: !
+
+Running with the following options using /data/jollyj/bertram/NewPawian150319/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
 
 Error log mode: 1
 
@@ -108,7 +203,9 @@ ratioMcToData: 6
 
 cache amplitudes: 1
 
-use event weight: 0
+use data event weight: 0
+
+use Monte Carlo event weight: 0
 
 use phase space hyp: 0
 
@@ -207,6 +304,7 @@ spin density matrix calculation for particles
 
 productionTensorRadType: Default
 
+INFO: Now replace the parser!!!
 INFO: added decay omega1Topion1+_pion1-_pion10 to decay list
 INFO: added decay omega2Topion2+_pion2-_pion20 to decay list
 
@@ -413,6 +511,32 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 
 
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPClamlam amplitudes for decay	I0G-1J1P-1C-1Tophoton_eta(2225):
+suffix for fit parameter name:	J1P-1C-1Tophoton_eta(2225)
+JPC=1--	Lam1,Lam2=1,0	parityFactor=1
+with further decay:
+JPCLS amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
 f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 
@@ -544,60 +668,14 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 
 
-INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Toeta(2225)_photon enabled!
-INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Toeta(2225)_photon
-INFO: add dynamics for I0G-1J1P-1C-1Toeta(2225)_photon
-INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Tof2(1910)_photon enabled!
-INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Tof2(1910)_photon
-INFO: add dynamics for I0G-1J1P-1C-1Tof2(1910)_photon
-INFO: AmpName: eta(2225)Toomega1_omega2  radius for barrier factor qr= 0.1973
-INFO: BreitWignerRelDynamics for eta(2225)Toomega1_omega2 with  massSumDaughter1= 0.27914 and  massSumDaughter2= 0.27914
-INFO: add dynamics for eta(2225)Toomega1_omega2
-INFO: AmpName: f2(1910)Toomega1_omega2  radius for barrier factor qr= 0.1973
-INFO: BreitWignerRelDynamics for f2(1910)Toomega1_omega2 with  massSumDaughter1= 0.27914 and  massSumDaughter2= 0.27914
-INFO: add dynamics for f2(1910)Toomega1_omega2
-INFO: I0G-1J1P-1C-1Toeta(2225)_photon set decay level to 0
-INFO: eta(2225)Toomega1_omega2 set decay level to 1
-INFO: omega1Topion1+_pion1-_pion10 set decay level to 2
-INFO: omega2Topion2+_pion2-_pion20 set decay level to 2
-INFO: I0G-1J1P-1C-1Tof2(1910)_photon set decay level to 0
-INFO: f2(1910)Toomega1_omega2 set decay level to 1
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 
- e+e- reaction
-
- ***** decay chains *******
-
-JPCLS amplitudes for decay	I0G-1J1P-1C-1Toeta(2225)_photon:
-suffix for fit parameter name:	J1P-1C-1Toeta(2225)_photon
-JPC=1--	L,S=1,1	preFactorLS=0
-with further decay:
-JPCLS amplitudes for decay	eta(2225)Toomega1_omega2:
-suffix for fit parameter name:	eta(2225)Toomega1_omega2
-JPC=0-+	L,S=1,1	preFactorLS=0
-with further decay:
-LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
-suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
-	L,S=1,0
-
-
-with further decay:
-LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
-suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
-	L,S=1,0
-
-
-
-
-
-
-
-JPCLS amplitudes for decay	I0G-1J1P-1C-1Tof2(1910)_photon:
-suffix for fit parameter name:	J1P-1C-1Tof2(1910)_photon
-JPC=1--	L,S=0,1	preFactorLS=0
-JPC=1--	L,S=2,1	preFactorLS=0
-JPC=1--	L,S=2,2	preFactorLS=0
-JPC=1--	L,S=2,3	preFactorLS=0
-JPC=1--	L,S=4,3	preFactorLS=0
+JPClamlam amplitudes for decay	I0G-1J1P-1C-1Tophoton_f2(1910):
+suffix for fit parameter name:	J1P-1C-1Tophoton_f2(1910)
+JPC=1--	Lam1,Lam2=1,1	parityFactor=1
+JPC=1--	Lam1,Lam2=1,0	parityFactor=1
+JPC=1--	Lam1,Lam2=-1,-2	parityFactor=1
 with further decay:
 JPCLS amplitudes for decay	f2(1910)Toomega1_omega2:
 suffix for fit parameter name:	f2(1910)Toomega1_omega2
@@ -621,6 +699,24 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 
 
+INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Toeta(2225)_photon enabled!
+INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Toeta(2225)_photon
+INFO: add dynamics for I0G-1J1P-1C-1Toeta(2225)_photon
+INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Tof2(1910)_photon enabled!
+INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Tof2(1910)_photon
+INFO: add dynamics for I0G-1J1P-1C-1Tof2(1910)_photon
+INFO: AmpName: eta(2225)Toomega1_omega2  radius for barrier factor qr= 0.1973
+INFO: BreitWignerRelDynamics for eta(2225)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
+INFO: add dynamics for eta(2225)Toomega1_omega2
+INFO: AmpName: f2(1910)Toomega1_omega2  radius for barrier factor qr= 0.1973
+INFO: BreitWignerRelDynamics for f2(1910)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
+INFO: add dynamics for f2(1910)Toomega1_omega2
+INFO: I0G-1J1P-1C-1Toeta(2225)_photon set decay level to 0
+INFO: eta(2225)Toomega1_omega2 set decay level to 1
+INFO: omega1Topion1+_pion1-_pion10 set decay level to 2
+INFO: omega2Topion2+_pion2-_pion20 set decay level to 2
+INFO: I0G-1J1P-1C-1Tof2(1910)_photon set decay level to 0
+INFO: f2(1910)Toomega1_omega2 set decay level to 1
 INFO: Dynamics	I0G-1J1P-1C-1Toeta(2225)_photon	found!!!
 INFO: Dynamics	eta(2225)Toomega1_omega2	found!!!
 WARN: /AbsXdecAmp.cc:77: no dynamics for	omega1Topion1+_pion1-_pion10
@@ -747,7 +843,7 @@ INFO: replace val by 1
 INFO: replace err by 0.01
 
 
-**************** Minuit Fit parameter **************************
+**************** Fit parameter **************************
 J1P-1C-1Lama0Lamb-1_J1P-1C-1Toeta(2225)_photonMag	1	1
 J1P-1C-1Lama0Lamb-1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.57735
 J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.57735
@@ -777,7 +873,7 @@ f2(1910)Width	0.16	0.034
 channelType2Tophotonpion1+pion1-pion10pion2+pion2-pion20channelScalingOther	1	0.01
 INFO: Fixing scaling parameter channelType2Tophotonpion1+pion1-pion10pion2+pion2-pion20channelScalingOther
 INFO: ************* Client mode ****************
-INFO: Connecting to server localhost:25374
+INFO: Connecting to server localhost:50003
 INFO: Received client id: 0
 INFO: Received channel id: 0
 INFO: Received data event range 0 - 2499

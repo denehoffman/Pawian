@@ -35,7 +35,6 @@
 #include <memory>
 
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/AbsParamHandler.hh"
 
 class Particle;

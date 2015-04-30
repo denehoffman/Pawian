@@ -122,7 +122,7 @@ public:
   virtual void SetPrecision(double eps)=0;
 
   virtual void print(std::ostream& os);
-
+  virtual void SetAllValues(const std::vector<double>& values);
 private:
 
   //   MnUserTransformation fTransformation;

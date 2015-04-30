@@ -38,7 +38,6 @@
 
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "Utils/FunctionUtils.hh"
@@ -69,6 +68,7 @@ public:
   const std::string wignerDKey() const {return _wignerDKey;}
   const std::string refKey() const {return _refKey;}
   virtual void cacheAmplitudes();
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
 
 protected:

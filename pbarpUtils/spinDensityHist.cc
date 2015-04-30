@@ -48,13 +48,14 @@
 const int spinDensityHist::MAX_EVENTS = 10000;
 
 
-spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams) :
+spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams) :
    _calcErrors(false)
   , _nBins(101)
   ,_theLh(theLh)
+   ,_theFitParamsOriginal(theFitParams)
    ,_theParameters(ParamFactory::instance()->getParametersPointer("Minuit2"))
 {
-   _theFitParamsOriginal = &theFitParams;
+  //   _theFitParamsOriginal = &theFitParams;
    _dataList=_theLh->getMcVec();
 }
 
@@ -77,8 +78,8 @@ void spinDensityHist::SetCovarianceMatrix(std::shared_ptr<PwaCovMatrix> thePwaCo
 
 
 void spinDensityHist::Calculate(){
-
-   theFitParColBaseClass.setAbsPawianParams(_theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
+  _theParameters=std::shared_ptr<AbsPawianParameters>(_theFitParamsOriginal->Clone());
+  //  theFitParColBaseClass.setAbsPawianParams(_theParameters, *_theFitParamsOriginal, *_theFitParamsOriginal);
    
    std::stringstream spinDensityRootFileName;
    spinDensityRootFileName << "./spinDensity" << GlobalEnv::instance()->outputFileNameSuffix() << ".root";
@@ -157,7 +158,7 @@ void spinDensityHist::calcSpinDensityMatrixNorm(std::string& particleName, int J
 
       entries.at(histIndex-1)++;
 
-      _theLh->updateFitParams(*_theFitParamsOriginal);
+      _theLh->updateFitParams(_theFitParamsOriginal);
       double tempSpinDensityNorm =
 	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensityNorm(particleName, *it, J);
 
@@ -200,7 +201,7 @@ void spinDensityHist::calcSpinDensityMatrixElement(std::string& particleName, Sp
 
       entries.at(histIndex-1)++;
 
-      _theLh->updateFitParams(*_theFitParamsOriginal);
+      _theLh->updateFitParams(_theFitParamsOriginal);
       complex<double> tempSpinDensity =
 	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, *it, J);
 
@@ -255,9 +256,11 @@ spinDensityHist::calcSpinDensityMatrixError(std::string& particleName,
 
       _theParameters->SetValue(i, parOrig + stepSize);
       
-      fitParCol newFitParams = *_theFitParamsOriginal;
-      theFitParColBaseClass.getFitParamVal(_theParameters->Params(), newFitParams);
-      _theLh->updateFitParams(newFitParams);
+      //      std::shared_ptr<AbsPawianParameters> newFitParams = std::shared_ptr<AbsPawianParameters>(_theFitParamsOriginal->Clone());
+      //      theFitParColBaseClass.getFitParamVal(_theParameters->Params(), newFitParams);
+      //      _theLh->updateFitParams(newFitParams);
+      
+      _theLh->updateFitParams(_theParameters);
       
       complex<double> tempSpinDensity  = 
 	 std::dynamic_pointer_cast<pbarpBaseLh>(_theLh)->calcSpinDensity(M1, M2, particleName, evtData, J);

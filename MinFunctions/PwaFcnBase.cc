@@ -39,8 +39,7 @@ using namespace ROOT::Minuit2;
 PwaFcnBase::PwaFcnBase() :
   AbsFcn()
 {
-   _defaultFitValParms = GlobalEnv::instance()->DefaultParamVal();
-   _defaultFitErrParms = GlobalEnv::instance()->DefaultParamErr();
+   _currentPawianParms = GlobalEnv::instance()->defaultPawianParams();
 }
 
 PwaFcnBase::~PwaFcnBase()
@@ -50,18 +49,20 @@ PwaFcnBase::~PwaFcnBase()
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   double result=0;
-  fitParCol theFitParmValTmp=_defaultFitValParms;
+  _currentPawianParms->SetAllValues(par);
+  //  fitParCol theFitParmValTmp=_defaultFitValParms;
+  //theFitParmValTmp=_defaultFitValParms;
+  //  GlobalEnv::instance()->fitParColBase()->getFitParamVal(par, theFitParmValTmp);
 
-  GlobalEnv::instance()->fitParColBase()->getFitParamVal(par, theFitParmValTmp);
-
-  result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theFitParmValTmp);
+  //  result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theFitParmValTmp);
+  result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(_currentPawianParms);
   Info << "current LH = " << std::setprecision(16) << result << endmsg;
 
   _fcnCounter++;
 
   if(_fcnCounter%20 == 0) printTimer();
-  printFitParams(par);
-  dumpFitParams(par);
+  printFitParams(_currentPawianParms);
+  dumpFitParams(_currentPawianParms);
 
   return result;
 }

@@ -31,7 +31,6 @@
 #include <memory>
 
 #include "PwaUtils/AbsLh.hh"
-#include "FitParams/FitParColBase.hh"
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -86,18 +85,20 @@ int main(int __argc,char *__argv[]){
   }
 
   // Read start param file
-  fitParCol theStartparams;
-  fitParCol theErrorparams;
-  theAppBase.streamParams(theStartparams, theErrorparams); 
+  std::shared_ptr<AbsPawianParameters> startPawianParams=theAppBase.streamPawianParams();
+  // fitParCol theStartparams;
+  // fitParCol theErrorparams;
+  // theAppBase.streamParams(theStartparams, theErrorparams); 
 
   // Set minuit parameters
-  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
-  GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
+  // std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
+  // GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;
-  for (int i=0; i<int(upar->Params().size()); ++i){
-    std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
-  }
+  startPawianParams->print(std::cout);
+  // for (int i=0; i<int(upar->Params().size()); ++i){
+  //   std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
+  // }
 
   // Fix params for all channels
   std::vector<std::string> fixedParams;
@@ -105,18 +106,18 @@ int main(int __argc,char *__argv[]){
     std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
   }
-  theAppBase.fixParams(upar,fixedParams);
+  theAppBase.fixParams(startPawianParams,fixedParams);
 
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);
 
   if(mode == "client"){
-    theAppBase.fitClientMode(theStartparams);
+    theAppBase.fitClientMode(startPawianParams);
   return 1;
  }
 
  if(mode == "server" || mode == "evoserver"){
-   theAppBase.fitServerMode(upar);
+   theAppBase.fitServerMode(startPawianParams);
    return 1;
  }
 

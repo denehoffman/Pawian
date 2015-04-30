@@ -39,8 +39,8 @@ PwaFcnServer::PwaFcnServer(std::shared_ptr<NetworkServer> netServer) :
   AbsFcn()
   , _networkServerPtr(netServer)
 {
-   _defaultFitValParms = GlobalEnv::instance()->DefaultParamVal();
-   _defaultFitErrParms = GlobalEnv::instance()->DefaultParamErr();
+  _defaultPawianParms = GlobalEnv::instance()->defaultPawianParams();
+   _currentPawianParms = GlobalEnv::instance()->defaultPawianParams();
 }
 
 PwaFcnServer::~PwaFcnServer()
@@ -74,10 +74,11 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
   }
 
   _fcnCounter++;
-
+  _currentPawianParms->SetAllValues(par);
   if(_fcnCounter%20 == 0) printTimer();
-  printFitParams(par);
-  dumpFitParams(par);
+  printFitParams(_currentPawianParms);
+
+  dumpFitParams(_currentPawianParms);
 
   return result;
 }

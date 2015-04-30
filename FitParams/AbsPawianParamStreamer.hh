@@ -25,28 +25,21 @@
 
 #include <iostream>
 #include <vector>
-#include <map>
 #include <string>
 #include <memory>
 #include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/DataUtils.hh"
 
-typedef map<std::string, pair<double, double> > StringPairMap;
+class AbsPawianParameters;
 
-class AbsFitParColStreamer {
+class AbsPawianParamStreamer {
 public:
-  AbsFitParColStreamer(std::string& filePath);
-  virtual ~AbsFitParColStreamer();
+  AbsPawianParamStreamer(std::string& filePath);
+  virtual ~AbsPawianParamStreamer();
+
+  std::shared_ptr<AbsPawianParameters> paramList() {return _pawianParams;} 
 
 protected:
-  StringPairMap _stringPairMap;
-  virtual void fillParamMap() = 0;
-  virtual void StringParameterMap(const std::string &theName, const double firstVal,
-				  const double secondVal);
-  virtual void fillParamMapAmps(std::vector< std::shared_ptr<const JPCLS> >& theJPCLSs, 
-				std::string& suffix, std::map< std::shared_ptr<const JPCLS>,
-				pair<double, double>, 
-				pawian::Collection::SharedPtrLess >& toFill);
-  virtual void fillParamMapMass(std::string& name, pair<double, double>& toFill);
-  virtual void fillParamFlatte(std::string& name, double& toFill);
+  virtual void fillDefault(const std::string &theName, double val, double err, double min, double max);
+  std::shared_ptr<AbsPawianParameters> _pawianParams; 
 };

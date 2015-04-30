@@ -65,15 +65,6 @@ complex<double> VoigtDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   return result;
 }
 
-void  VoigtDynamics::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-    fitVal.Masses[_massKey]=_mother->mass();
-    fitErr.Masses[_massKey]=0.03;
-    fitVal.Widths[_massKey]=_mother->width();
-    fitErr.Widths[_massKey]=0.2*_mother->width();
-    fitVal.Widths[_massSigmaKey]=0.01;
-    fitErr.Widths[_massSigmaKey]=0.4*0.01;
-}
-
 void  VoigtDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   //fill mass
   std::string massName=_massKey+"Mass";
@@ -103,28 +94,28 @@ void  VoigtDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitP
 
 }
 
-bool VoigtDynamics::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+void VoigtDynamics::fillParamNameList(){
+  _paramNameList.clear();
 
-  double mass=theParamVal.Masses[_massKey];
-  if (!CheckDoubleEquality(mass, _currentMass0)){
-    _recalculate=true;
-  }
-  double width=theParamVal.Widths[_massKey];
-  if (!CheckDoubleEquality(width, _currentWidth)){
-    _recalculate=true;
-  }
-  double sigma=theParamVal.Widths[_massSigmaKey];
-  if (!CheckDoubleEquality(sigma, _currentSigma)){
-    _recalculate=true;
-  }
-  return _recalculate;
+  std::string massName=_massKey+"Mass";
+  _paramNameList.push_back(massName);
+
+  //fill width
+  std::string widthName=_massKey+"Width";
+  _paramNameList.push_back(widthName);
+
+  //fill sigma width
+  _paramNameList.push_back(_massSigmaKey);
 }
 
-void VoigtDynamics::updateFitParams(fitParCol& theParamVal){
-  _currentMass0=theParamVal.Masses[_massKey];
-  _currentWidth=theParamVal.Widths[_massKey];
-  _currentSigma=theParamVal.Widths[_massSigmaKey];
+void VoigtDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  std::string massName=_massKey+"Mass";
+  _currentMass0=fitPar->Value(massName);
+
+  std::string widthName=_massKey+"Width";
+  _currentWidth=fitPar->Value(widthName);
+
+  _currentSigma=fitPar->Value(_massSigmaKey);
 }
 
 void VoigtDynamics::setMassKey(std::string& theMassKey){

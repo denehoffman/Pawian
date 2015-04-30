@@ -42,6 +42,7 @@ TensorDecAmps::TensorDecAmps(std::shared_ptr<IsobarTensorDecay> theDec, ChannelI
   ,_factorMag(1.)
 {
   if(_LSs.size()>0) _factorMag/=sqrt(_LSs.size());
+  fillParamNameList();
 }
 
 TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -49,6 +50,7 @@ TensorDecAmps::TensorDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channel
   ,_factorMag(1.)
 {
   if(_LSs.size()>0) _factorMag/=sqrt(_LSs.size());
+  fillParamNameList();
 }
 
 TensorDecAmps::~TensorDecAmps()
@@ -158,32 +160,32 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
 }
 
 
-void  TensorDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
+// void  TensorDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
 
-  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
+//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
+//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
+//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
 
-  std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
-  for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
-    currentMagValMap[*itLS]=_factorMag;
-    currentPhiValMap[*itLS]=0.;
-    currentMagErrMap[*itLS]=_factorMag/3.;
-    currentPhiErrMap[*itLS]=0.3;
-  }
+//   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
+//   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
+//     currentMagValMap[*itLS]=_factorMag;
+//     currentPhiValMap[*itLS]=0.;
+//     currentMagErrMap[*itLS]=_factorMag/3.;
+//     currentPhiErrMap[*itLS]=0.3;
+//   }
 
-  fitVal.MagsLS[_key]=currentMagValMap;
-  fitVal.PhisLS[_key]=currentPhiValMap;
-  fitErr.MagsLS[_key]=currentMagErrMap;
-  fitErr.PhisLS[_key]=currentPhiErrMap;
+//   fitVal.MagsLS[_key]=currentMagValMap;
+//   fitVal.PhisLS[_key]=currentPhiValMap;
+//   fitErr.MagsLS[_key]=currentMagErrMap;
+//   fitErr.PhisLS[_key]=currentPhiErrMap;
 
-  _absDyn->getDefaultParams(fitVal, fitErr);
+//   _absDyn->getDefaultParams(fitVal, fitErr);
 
 
-  if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-  if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-}
+//   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
+//   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
+// }
 
 
 void  TensorDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
@@ -213,68 +215,103 @@ void  TensorDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitP
   if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
+void TensorDecAmps::fillParamNameList(){
+ 
+  std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
+  for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
+    std::string magName=(*itLS)->name()+_key+"Mag";
+    _paramNameList.push_back(magName);
+
+    std::string phiName=(*itLS)->name()+_key+"Phi";
+    _paramNameList.push_back(phiName);
+  }
+}
+
 void TensorDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
 
-bool TensorDecAmps::checkRecalculation(fitParCol& theParamVal){
-  _recalculate=false;
+// bool TensorDecAmps::checkRecalculation(fitParCol& theParamVal){
+//   _recalculate=false;
 
-   if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
+//    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
 
-   if(!_daughter1IsStable) {
-     if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
-   }
-   if(!_daughter2IsStable){
-     if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
-   }
+//    if(!_daughter1IsStable) {
+//      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
+//    }
+//    if(!_daughter2IsStable){
+//      if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
+//    }
 
-   if(!_recalculate){
-     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
-     std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
+//    if(!_recalculate){
+//      std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
+//      std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
 
-     std::vector< std::shared_ptr<const LScomb> >::iterator it;
-     for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-       double theMag=magMap[*it];
-       double thePhi=phiMap[*it];
+//      std::vector< std::shared_ptr<const LScomb> >::iterator it;
+//      for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+//        double theMag=magMap[*it];
+//        double thePhi=phiMap[*it];
 
-       if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
-	 _recalculate=true;
-	 return _recalculate;
-       }
-       if(!CheckDoubleEquality(thePhi, _currentParamPhis[*it])){
-	 _recalculate=true;
-	 return _recalculate;
-       }
-     }
-   }
+//        if(!CheckDoubleEquality(theMag, _currentParamMags[*it])){
+// 	 _recalculate=true;
+// 	 return _recalculate;
+//        }
+//        if(!CheckDoubleEquality(thePhi, _currentParamPhis[*it])){
+// 	 _recalculate=true;
+// 	 return _recalculate;
+//        }
+//      }
+//    }
 
-   return _recalculate;
+//    return _recalculate;
+// }
+
+
+// void  TensorDecAmps::updateFitParams(fitParCol& theParamVal){
+//    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
+//    std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
+
+//    std::vector< std::shared_ptr<const LScomb> >::iterator it;
+//    for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+//      double theMag=magMap[*it];
+//      double thePhi=phiMap[*it];
+//      _currentParamMags[*it]=theMag;
+//      _currentParamPhis[*it]=thePhi;
+
+//      complex<double> expi(cos(thePhi), sin(thePhi));
+//      _currentParamMagExpi[*it]=theMag*expi;
+//    }
+
+//    _absDyn->updateFitParams(theParamVal);
+
+//   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
+//   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
+
+// }
+
+void TensorDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
+  for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
+    //magnitude
+    std::string magName=(*itLS)->name()+_key+"Mag";
+    std::string phiName=(*itLS)->name()+_key+"Phi";
+    double theMag=fitPar->Value(magName);
+    double thePhi=fitPar->Value(phiName);
+
+    _currentParamMags[*itLS]=theMag;
+    _currentParamPhis[*itLS]=thePhi;
+    
+    complex<double> expi(cos(thePhi), sin(thePhi));
+    _currentParamMagExpi[*itLS]=theMag*expi;
+  }
+
+  _absDyn->updateFitParams(fitPar);
+  if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
-
-void  TensorDecAmps::updateFitParams(fitParCol& theParamVal){
-   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagsLS[_key];
-   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhisLS[_key];
-
-   std::vector< std::shared_ptr<const LScomb> >::iterator it;
-   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-     double theMag=magMap[*it];
-     double thePhi=phiMap[*it];
-     _currentParamMags[*it]=theMag;
-     _currentParamPhis[*it]=thePhi;
-
-     complex<double> expi(cos(thePhi), sin(thePhi));
-     _currentParamMagExpi[*it]=theMag*expi;
-   }
-
-   _absDyn->updateFitParams(theParamVal);
-
-  if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
-  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
-
-}
 
 void TensorDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   if(!_recalculate) return; 

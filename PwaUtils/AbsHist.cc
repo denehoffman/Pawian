@@ -39,6 +39,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
 //#include "PwaUtils/EvtDataBaseList.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -186,14 +187,14 @@ AbsHist::~AbsHist(){
   _theTFile->Close();
 }
 
-void AbsHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams){
+void AbsHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams){
 
   if(0==theLh){
     Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
     exit(1);
   }
 
-  theLh->updateFitParams(theFitParams);
+  theLh->updateFitParams(fitParams);
 
   const std::vector<EvtData*> dataList=theLh->getDataVec();
   double integralDataWWeight=0.;
@@ -219,7 +220,7 @@ void AbsHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, fitParCol& theFitPara
       integralMC+=evtWeight;
       fillEvt((*it), evtWeight, "mc");
 
-      double fitWeight= theLh->calcEvtIntensity( (*it), theFitParams );
+      double fitWeight= theLh->calcEvtIntensity( (*it), fitParams );
       integralFitWeight+=fitWeight;
       fillEvt((*it), evtWeight*fitWeight, "fit");
 

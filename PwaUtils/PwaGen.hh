@@ -32,7 +32,7 @@
 #include <memory>
 
 #include "PspGen/EvtVector4R.hh"
-#include "FitParams/FitParColBase.hh"
+//#include "FitParams/FitParColBase.hh"
 
 #include "TROOT.h"
 
@@ -43,7 +43,7 @@ class Particle;
 class TFile;
 class TH1F;
 class EventList;
-
+class AbsPawianParameters;
 
 
 
@@ -53,7 +53,7 @@ class PwaGen{
 public:
   PwaGen();
   virtual ~PwaGen();
-  virtual void generate(std::shared_ptr<AbsLh> theLh, fitParCol& theFitParams);
+  virtual void generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams);
 
 protected:
 
