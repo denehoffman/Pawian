@@ -32,7 +32,7 @@ a2(1320)0ABMass	1.318	0.03
 f2(1270)Mass	1.275	0.03
 a2(1320)0ABWidth	0.107	0.0214
 f2(1270)Width	0.185	0.037
-Iso1J0P-1C1Range01Other	0	0.5
-Iso1J1P1C1Range01Other	0	0.5
-Iso1J2P1C1Range01Other	0	0.5
-channelType1Topion0Apion0BetachannelScalingOther	1	0.01
+Iso1J0P-1C1	0	0.5
+Iso1J1P1C1	0	0.5
+Iso1J2P1C1	0	0.5
+channelType1Topion0Apion0BetachannelScaling	1	0.01
