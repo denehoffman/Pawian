@@ -56,16 +56,19 @@ RadM1Dynamics::~RadM1Dynamics()
 complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   int evtNo=theData->evtNo;
   if ( _cacheAmps && !_recalculate){
-    return _cachedMap[evtNo];
+    return _cachedMap.at(evtNo);
   }
   
   // Which Daughter particle is the radiative photon?
-  double massB = 1.; // DUMMY VALUE - needs to be mass of non-gamma dacay particle, e.g. eta_c
+  double massB = theData->DoubleString.at(_dynMassKeyDaughter2); // DUMMY VALUE - needs to be mass of non-gamma dacay particle, e.g. eta_c
+  if (!_isP1Gamma) massB = theData->DoubleString.at(_dynMassKeyDaughter1);
+
   double currentMassB = 1.; // DUMMY VALUE - needs to be current mass (fit parameter!) of non-gamma decay particle, e.g. eta_c
   double Egamma = theData->DoubleString.at(_dynEgammaCMmotherKey); // how to access Egamma?
 
   complex<double> result(1.,0.);
   result=RadMultipoleFormFactor::PureM1(theData->DoubleString.at(_dynKey), massB, currentMassB, Egamma);
+  if ( _cacheAmps) _cachedMap[evtNo]=result;
 
   return result;
 }
