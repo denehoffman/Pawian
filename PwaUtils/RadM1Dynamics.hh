@@ -60,6 +60,8 @@ protected:
   std::vector<Particle*> _fsParticlesDaughter2;
   std::string _dynMassKeyDaughter1;
   std::string _dynMassKeyDaughter2;
+  std::string _dynEgammaCMmotherKey;
+  bool _isP1Gamma;
 
 private:
 

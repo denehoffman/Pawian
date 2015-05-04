@@ -42,6 +42,8 @@ RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsPartic
   ,_fsParticlesDaughter2(fsParticlesDaughter2)
   ,_dynMassKeyDaughter1(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1))
   ,_dynMassKeyDaughter2(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter2))
+  ,_dynEgammaCMmotherKey(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1)+"Gamma")
+  ,_isP1Gamma(true)
 {
   Info << "RadM1Dynamics for " << _name <<endmsg;
   _isLdependent=false;
@@ -60,7 +62,7 @@ complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   // Which Daughter particle is the radiative photon?
   double massB = 1.; // DUMMY VALUE - needs to be mass of non-gamma dacay particle, e.g. eta_c
   double currentMassB = 1.; // DUMMY VALUE - needs to be current mass (fit parameter!) of non-gamma decay particle, e.g. eta_c
-  double Egamma = 1.; // how to access Egamma?
+  double Egamma = theData->DoubleString.at(_dynEgammaCMmotherKey); // how to access Egamma?
 
   complex<double> result(1.,0.);
   result=RadMultipoleFormFactor::PureM1(theData->DoubleString.at(_dynKey), massB, currentMassB, Egamma);
@@ -99,4 +101,25 @@ void RadM1Dynamics::fillMasses(EvtData* theData){
     mass4VecD2+=theData->FourVecsString[(*it)->name()];
   }
   theData->DoubleString[_dynMassKeyDaughter2]=mass4VecD2.Mass();
+
+  Vector4<double> mother4Vec(0.,0.,0.,0.);
+  mother4Vec=mass4VecD1+mass4VecD2;
+
+  Vector4<double> photonCMmother4Vec(0.,0.,0.,0.);
+  if( mass4VecD1.Mass() < 1.e-6){  //this is the photon work around
+    photonCMmother4Vec=mass4VecD1;
+  }    
+  else if ( mass4VecD2.Mass() < 1.e-6){  //this is the photon work around 
+    _dynEgammaCMmotherKey=_dynMassKeyDaughter2+"Gamma";
+    _isP1Gamma=false;
+    photonCMmother4Vec=mass4VecD2;
+  }
+  else{
+    Alert << "neither particle 1 with mass " << mass4VecD1.Mass() 
+	  << "\tnor particle 2 with mass " << mass4VecD2.Mass()
+	  << "\tcan be assigned to the photon!!!" << endmsg;
+    exit(1); 
+  }
+  photonCMmother4Vec.Boost(mother4Vec);
+  theData->DoubleString[_dynEgammaCMmotherKey]=photonCMmother4Vec.E();
 }
