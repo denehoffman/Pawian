@@ -27,6 +27,7 @@
 #include <float.h>
 #include "PwaUtils/AbsParamHandler.hh"
 #include "FitParams/AbsPawianParameters.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 AbsParamHandler::AbsParamHandler() :
   _cacheAmps(false)
@@ -44,6 +45,8 @@ bool AbsParamHandler::checkRecalculation(std::shared_ptr<AbsPawianParameters> fi
 
   std::vector<std::string>::iterator it;
   for(it=_paramNameList.begin(); it!=_paramNameList.end(); ++it){
+    //    Info << "checkRecalculation for " << (*it) << endmsg;
+
     if (!CheckDoubleEquality(fitParNew->Value(*it), fitParOld->Value(*it))){
       _recalculate=true;
       return _recalculate;

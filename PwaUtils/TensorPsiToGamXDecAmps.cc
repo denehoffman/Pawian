@@ -59,7 +59,6 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiTo
     _MagParamNames[2]=_key+"Mag3";
     _PhiParamNames[2]=_key+"_3Phi";
   }
-  fillParamNameList();
 }
 
 TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -67,7 +66,6 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<AbsDecay> theDec,
   ,_noOfAmps(0)
 {
   //_noOfAmps=???
-  fillParamNameList();
 }
 
 TensorPsiToGamXDecAmps::~TensorPsiToGamXDecAmps()

@@ -46,7 +46,6 @@ TensorOmegaTo3PiDecAmps::TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTenso
   _daughter1=_decay->daughter1Part();
   _daughter2=_decay->daughter2Part();
   _daughter3=theDec->daughter3Part();
-  fillParamNameList();
 }
 
 TensorOmegaTo3PiDecAmps::~TensorOmegaTo3PiDecAmps()

@@ -111,7 +111,7 @@ std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(short channelID, std::sh
       Alert << "can nor create XdecAmp object for theAbsXDec->name():\t" << theAbsXDec->name() << endmsg;
       exit(1);
     }
-
+    result->fillParamNameList();
     _xDecAmpMap[channelID][result->name()]=result;
   }
   return result;

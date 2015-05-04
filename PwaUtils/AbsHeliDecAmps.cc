@@ -67,7 +67,6 @@ AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelI
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart2);
     }
   }
-  fillParamNameList();
 }
 
 AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -77,38 +76,11 @@ AbsHeliDecAmps::AbsHeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID chann
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
-  fillParamNameList();
 }
 
 AbsHeliDecAmps::~AbsHeliDecAmps()
 {
 }
-
-// void  AbsHeliDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-//   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
-
-//   std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
-//   for(itlamlam=_JPClamlams.begin(); itlamlam!=_JPClamlams.end(); ++itlamlam){
-//     currentMagValMap[*itlamlam]=_factorMag;
-//     currentPhiValMap[*itlamlam]=0.;
-//     currentMagErrMap[*itlamlam]=_factorMag;
-//     currentPhiErrMap[*itlamlam]=0.3;
-//   }
-
-//   fitVal.MagLamLams[_key]=currentMagValMap;
-//   fitVal.PhiLamLams[_key]=currentPhiValMap;
-//   fitErr.MagLamLams[_key]=currentMagErrMap;
-//   fitErr.PhiLamLams[_key]=currentPhiErrMap;
-
-//   _absDyn->getDefaultParams(fitVal, fitErr);
-
-//   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-//   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-// }
 
 void  AbsHeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
@@ -145,9 +117,13 @@ void AbsHeliDecAmps::fillParamNameList(){
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     _paramNameList.push_back(magName);
 
+    //    Info << "AbsHeliDecAmps add parameter " << magName << " to paramNameList" << endmsg;
+
     //phase
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
     _paramNameList.push_back(phiName);
+
+    //    Info << "AbsHeliDecAmps add parameter " << phiName << " to paramNameList" << endmsg;
   }
 
 }

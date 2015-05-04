@@ -55,7 +55,6 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID chan
   _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
   fillCgPreFactor();
-  fillParamNameList();
 }
 
 AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
@@ -70,7 +69,6 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID
   _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   Info << "_parityFactor=\t" << _parityFactor << endmsg;
   fillCgPreFactor();
-  fillParamNameList();
 }
 
 AbsLSDecAmps::~AbsLSDecAmps()

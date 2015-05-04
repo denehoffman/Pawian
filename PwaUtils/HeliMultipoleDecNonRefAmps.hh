@@ -61,6 +61,8 @@ public:
   //  virtual void print(std::ostream& os) const;
   // virtual bool checkRecalculation(fitParCol& theParamVal);
   // virtual void updateFitParams(fitParCol& theParamVal);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();
 
 protected:
 

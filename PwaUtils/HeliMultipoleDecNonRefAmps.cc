@@ -142,19 +142,6 @@ HeliMultipoleDecNonRefAmps::~HeliMultipoleDecNonRefAmps()
 }
 
 
-// void HeliMultipoleDecNonRefAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-//   for (int i=0; i<_noOfAmps; ++i){
-//     fitVal.otherParams[_MagParamNames.at(i)]=1.;
-//     fitErr.otherParams[_MagParamNames.at(i)]=0.5;
-//     fitVal.otherParams[_PhiParamNames.at(i)]=0.;
-//     fitErr.otherParams[_PhiParamNames.at(i)]=0.3;
-//   }
-
-//   _absDyn->getDefaultParams(fitVal, fitErr);
-//   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-// }
-
 void  HeliMultipoleDecNonRefAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   for (int i=0; i<_noOfAmps; ++i){
@@ -168,78 +155,55 @@ void  HeliMultipoleDecNonRefAmps::fillDefaultParams(std::shared_ptr<AbsPawianPar
   if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
-// bool HeliMultipoleDecNonRefAmps::checkRecalculation(fitParCol& theParamVal){
+void HeliMultipoleDecNonRefAmps::fillParamNameList(){
+  _paramNameList.clear();
 
-//   _recalculate=false;
+  for (int i=0; i<_noOfAmps; ++i){
+    _paramNameList.push_back(_MagParamNames.at(i));
+    //    Info << "HeliMultipoleDecNonRefAmps: add parameter " << _MagParamNames.at(i) << " to paramNameList" << endmsg;
+    _paramNameList.push_back(_PhiParamNames.at(i));
+    //    Info << "HeliMultipoleDecNonRefAmps: add parameter " << _PhiParamNames.at(i) << " to paramNameList" << endmsg;
+  }
 
-//    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
+}
 
-//    if(!_daughter2IsStable){
-//      if(_decAmpDaughter2->checkRecalculation(theParamVal)){
-//        _recalculate=true;
-//        return _recalculate;
-//      }
-//    }
+void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
-//    if(!_recalculate){
-//      for (int i=0; i<_noOfAmps; ++i){
-//        double theMag=theParamVal.otherParams[_MagParamNames.at(i)];
-//        if(!CheckDoubleEquality(theMag, _currentParamLocalMags.at(i))){
-//          _recalculate=true;
-//          return _recalculate;
-//        }
-
-//        double thePhi=theParamVal.otherParams[_PhiParamNames.at(i)];
-//        if(!CheckDoubleEquality(thePhi, _currentParamLocalPhis.at(i))){
-//          _recalculate=true;
-//          return _recalculate;
-//        }
-//      }
-//    }
-
-//    return _recalculate;
-// }
-
-
-// void  HeliMultipoleDecNonRefAmps::updateFitParams(fitParCol& theParamVal){
-
-//   for (int i=0; i<_noOfAmps; ++i){
-//     double theLocalMag=theParamVal.otherParams.at(_MagParamNames.at(i));
-//     _currentParamLocalMags[i]=theLocalMag;
-//     double theLocalPhi=theParamVal.otherParams.at(_PhiParamNames.at(i));
-//     _currentParamLocalPhis[i]=theLocalPhi;
+  for (int i=0; i<_noOfAmps; ++i){
+    double theLocalMag=fitPar->Value(_MagParamNames.at(i));
+    _currentParamLocalMags[i]=theLocalMag;
+    double theLocalPhi=fitPar->Value(_PhiParamNames.at(i));
+    _currentParamLocalPhis[i]=theLocalPhi;
     
-//     complex<double> expiLocal(cos(theLocalPhi), sin(theLocalPhi));
-//     _currentParamLocalMagExpi[i]=theLocalMag*expiLocal;
-//   }
+    complex<double> expiLocal(cos(theLocalPhi), sin(theLocalPhi));
+    _currentParamLocalMagExpi[i]=theLocalMag*expiLocal;
+  }
 
-//   std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-//    for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-//      Spin lamGamma=Spin(1);
-//      Spin lam2=(*it)->lam2;
-//      if (lam2<0) lam2=-(*it)->lam2;
-//      _currentParamMagExpi[*it]=complex<double> (0.,0.);
-//      for (int i=0; i<_noOfAmps; ++i){
-//        _currentParamMagExpi[*it]+= sqrt(2.*_JgammaMap.at(i)+1.)*Clebsch(_JgammaMap.at(i), lamGamma, _JPCPtr->J, lam2-1, _daughter2->J(), lam2)*_currentParamLocalMagExpi.at(i);
-//      }
+  std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
+   for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+     Spin lamGamma=Spin(1);
+     Spin lam2=(*it)->lam2;
+     if (lam2<0) lam2=-(*it)->lam2;
+     _currentParamMagExpi[*it]=complex<double> (0.,0.);
+     for (int i=0; i<_noOfAmps; ++i){
+       _currentParamMagExpi[*it]+= sqrt(2.*_JgammaMap.at(i)+1.)*Clebsch(_JgammaMap.at(i), lamGamma, _JPCPtr->J, lam2-1, _daughter2->J(), lam2)*_currentParamLocalMagExpi.at(i);
+     }
 
-//      _currentParamPreFacMagExpi[*it]=_preFactor*_currentParamMagExpi[*it];
-//      _currentParamMagLamLams[*it]=1.; //dummy
-//      _currentParamPhiLamLams[*it]=0.; //dummy     
-//      std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap.at(*it);
-//      std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
-//      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
-//        _currentParamMagExpi[*itLamLam]=_currentParamMagExpi.at(*it);
-//        _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_currentParamMagExpi.at(*it);
-//        _currentParamMagLamLams[*itLamLam]=1.; //dummy
-//        _currentParamPhiLamLams[*itLamLam]=0.; //dummy
-//      }
-//    }
+     _currentParamPreFacMagExpi[*it]=_preFactor*_currentParamMagExpi[*it];
+     _currentParamMagLamLams[*it]=1.; //dummy
+     _currentParamPhiLamLams[*it]=0.; //dummy     
+     std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap.at(*it);
+     std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
+     for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
+       _currentParamMagExpi[*itLamLam]=_currentParamMagExpi.at(*it);
+       _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_currentParamMagExpi.at(*it);
+       _currentParamMagLamLams[*itLamLam]=1.; //dummy
+       _currentParamPhiLamLams[*itLamLam]=0.; //dummy
+     }
+   }
+
+    _absDyn->updateFitParams(fitPar);
+    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
+}
 
 
-//    _absDyn->updateFitParams(theParamVal);
-
-//    if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
-//    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
-
-// }
