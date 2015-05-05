@@ -59,15 +59,16 @@ complex<double> result(0.,0.);
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
-  if ( _cacheAmps && !_recalcMap[currentKey]){
-    result=_cachedStringMap[evtNo][currentKey];
+  if ( _cacheAmps && !_recalcMap.at(currentKey)){
+    result=_cachedStringMap.at(evtNo).at(currentKey);
   }
 
   else{
       theMutex.lock();
       std::shared_ptr<FVector> currentFVec=_fVecMap.at(currentKey);
-      currentFVec->evalMatrix(theData->DoubleString.at(_dynKey));
-      result=(*currentFVec)[0];
+      // currentFVec->evalMatrix(theData->DoubleString.at(_dynKey));
+      // result=(*currentFVec)[0];
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), 0);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }
@@ -118,7 +119,9 @@ void KPiSWaveIso32Dynamics::fillParamNameList(){
   _paramNameList.clear();
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentaProdMap.begin(); it1!=_currentaProdMap.end(); ++it1){
-    std::string theName=it1->first;    
+    std::string theName=it1->first;
+    std::vector<std::string> currentNameList;    
+    
     std::map<std::string, double>::iterator it2;
  
     // a prod factors pure real   
@@ -126,6 +129,7 @@ void KPiSWaveIso32Dynamics::fillParamNameList(){
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
       std::string aProdName=theName+it2->first;
       _paramNameList.push_back(aProdName);
+      currentNameList.push_back(aProdName);
     }
 
     // b prod factors pure real
@@ -133,6 +137,7 @@ void KPiSWaveIso32Dynamics::fillParamNameList(){
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
       std::string bProdName=theName+it2->first;
       _paramNameList.push_back(bProdName);
+      currentNameList.push_back(bProdName);
     }
 
     // c prod factors pure real
@@ -140,6 +145,7 @@ void KPiSWaveIso32Dynamics::fillParamNameList(){
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
       std::string cProdName=theName+it2->first;
       _paramNameList.push_back(cProdName);
+      currentNameList.push_back(cProdName);
     }
 
     // phase prod factors
@@ -147,8 +153,28 @@ void KPiSWaveIso32Dynamics::fillParamNameList(){
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
       std::string phaseName=theName+it2->first;
       _paramNameList.push_back(phaseName);
+      currentNameList.push_back(phaseName);
+    }
+    _paramNameListMap[theName]=currentNameList;
+  }
+}
+
+bool KPiSWaveIso32Dynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+
+  std::map<std::string, std::vector<std::string> >::iterator itMap;
+  for(itMap= _paramNameListMap.begin(); itMap !=_paramNameListMap.end(); ++itMap){
+    _recalcMap.at(itMap->first)=false;
+    std::vector<std::string>::iterator itStr;
+    for (itStr=itMap->second.begin(); itStr!=itMap->second.end(); ++itStr){
+      std::string currentParamName=*itStr;
+      if(!CheckDoubleEquality(fitParNew->Value(currentParamName), fitParOld->Value(currentParamName))){
+        _recalcMap.at(itMap->first)=true;
+        continue;
+      }
     }
   }
+
+  return AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
 }
 
 void KPiSWaveIso32Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
@@ -187,9 +213,9 @@ void KPiSWaveIso32Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters>
     }
 
     std::shared_ptr<PVectorKPiSFocus> currentPVec=_pVecMap.at(it1->first);
-    currentPVec->updateAprod(0, aProds.at("a_PosNeg"));
-    currentPVec->updateBprod(0, bProds.at("b_PosNeg"));
-    currentPVec->updateCprod(0, cProds.at("c_PosNeg"));
+    currentPVec->updateAprod(0, aProds.at("a"));
+    currentPVec->updateBprod(0, bProds.at("b"));
+    currentPVec->updateCprod(0, cProds.at("c"));
     currentPVec->updatePhaseprod(0, phaseProds.at("Phi"));
   }
 }
@@ -211,17 +237,17 @@ void KPiSWaveIso32Dynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   std::shared_ptr<PVectorKPiSFocus> currentPVector=std::shared_ptr<PVectorKPiSFocus>(new PVectorKPiSFocus(_kMatr));
   _pVecMap[theName]=currentPVector;
 
-  _currentaProdMap[theName]["a_PosNeg"]=1.;
+  _currentaProdMap[theName]["a"]=1.;
 
-  _currentbProdMap[theName]["b_PosNeg"]=0.5;
+  _currentbProdMap[theName]["b"]=0.5;
   
-  _currentcProdMap[theName]["c_PosNeg"]=0.1;
+  _currentcProdMap[theName]["c"]=0.1;
   
   _currentphaseProdMap[theName]["Phi"]=0.;
 
-  currentPVector->updateAprod(0, _currentaProdMap[theName]["a_PosNeg"]);
-  currentPVector->updateBprod(0, _currentbProdMap[theName]["b_PosNeg"]);
-  currentPVector->updateCprod(0, _currentcProdMap[theName]["c_PosNeg"]);
+  currentPVector->updateAprod(0, _currentaProdMap[theName]["a"]);
+  currentPVector->updateBprod(0, _currentbProdMap[theName]["b"]);
+  currentPVector->updateCprod(0, _currentcProdMap[theName]["c"]);
   currentPVector->updatePhaseprod(0, _currentphaseProdMap[theName]["Phi"]);
 
   std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));

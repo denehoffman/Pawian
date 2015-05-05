@@ -54,6 +54,8 @@ public:
   
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
+  
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
 
@@ -75,6 +77,8 @@ protected:
 
   CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;
   std::map<std::string, bool > _recalcMap;
+  std::map<std::string, std::vector<std::string> > _paramNameListMap;
+
 private:
 
 };

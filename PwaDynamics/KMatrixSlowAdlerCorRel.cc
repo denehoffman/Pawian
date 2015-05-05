@@ -49,7 +49,7 @@ KMatrixSlowAdlerCorRel::~KMatrixSlowAdlerCorRel(){
 
 
 void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
-   evalMatrixTemplate(mass);
+  evalMatrixTemplate(mass);
 }
 
 void KMatrixSlowAdlerCorRel::evalMatrix(const complex<double> mass){
@@ -58,7 +58,6 @@ void KMatrixSlowAdlerCorRel::evalMatrix(const complex<double> mass){
 
 template<typename MassType>
 void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const MassType mass){
-
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){
       this->operator()(i,j)=0.;

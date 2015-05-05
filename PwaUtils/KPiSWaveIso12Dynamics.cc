@@ -59,13 +59,13 @@ complex<double> result(0.,0.);
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
-  if ( _cacheAmps && !_recalcMap[currentKey]){
-    result=_cachedStringMap[evtNo][currentKey];
+  if ( _cacheAmps && !_recalcMap.at(currentKey)){
+    result=_cachedStringMap.at(evtNo).at(currentKey);
   }
 
   else{
       theMutex.lock();
-      result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), 0);
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), 0);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }
@@ -131,18 +131,23 @@ void KPiSWaveIso12Dynamics::fillParamNameList(){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
     std::string theName=it1->first;
+
+    std::vector<std::string> currentNameList;
+    
     std::map<std::string, double>& bMagFactors = it1->second;
     
     std::map<std::string, double>::iterator it2;
     for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
       std::string magName=theName+it2->first;
       _paramNameList.push_back(magName);
+      currentNameList.push_back(magName);
     }
 
     std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
     for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
       std::string phiName=theName+it2->first;
       _paramNameList.push_back(phiName);
+      currentNameList.push_back(phiName);
     }
 
     // a prod factors pure real
@@ -150,6 +155,7 @@ void KPiSWaveIso12Dynamics::fillParamNameList(){
     for(it2=aProds.begin(); it2!=aProds.end(); ++it2){
       std::string aProdName=theName+it2->first;
       _paramNameList.push_back(aProdName);
+      currentNameList.push_back(aProdName);
     }
 
     // b prod factors pure real
@@ -157,12 +163,14 @@ void KPiSWaveIso12Dynamics::fillParamNameList(){
     for(it2=bProds.begin(); it2!=bProds.end(); ++it2){
       std::string bProdName=theName+it2->first;
       _paramNameList.push_back(bProdName);
+      currentNameList.push_back(bProdName);
     } 
    // c prod factors pure real
     std::map<std::string, double>& cProds=_currentcProdMap.at(it1->first);
     for(it2=cProds.begin(); it2!=cProds.end(); ++it2){
       std::string cProdName=theName+it2->first;
       _paramNameList.push_back(cProdName);
+      currentNameList.push_back(cProdName);
     }
 
     // phase prod factors
@@ -170,10 +178,31 @@ void KPiSWaveIso12Dynamics::fillParamNameList(){
     for(it2=phaseProds.begin(); it2!=phaseProds.end(); ++it2){
       std::string phaseName=theName+it2->first;
       _paramNameList.push_back(phaseName);
+      currentNameList.push_back(phaseName);
     }
+    _paramNameListMap[theName]=currentNameList;
   }
 
 }
+
+bool KPiSWaveIso12Dynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+
+  std::map<std::string, std::vector<std::string> >::iterator itMap;
+  for(itMap= _paramNameListMap.begin(); itMap !=_paramNameListMap.end(); ++itMap){
+    _recalcMap.at(itMap->first)=false;
+    std::vector<std::string>::iterator itStr;
+    for (itStr=itMap->second.begin(); itStr!=itMap->second.end(); ++itStr){
+      std::string currentParamName=*itStr;
+      if(!CheckDoubleEquality(fitParNew->Value(currentParamName), fitParOld->Value(currentParamName))){
+        _recalcMap.at(itMap->first)=true;
+        continue;
+      }
+    }
+  }
+
+  return AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
+}
+
 
 void KPiSWaveIso12Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
@@ -219,13 +248,13 @@ void KPiSWaveIso12Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters>
 
     std::shared_ptr<PVectorKPiSFocus> currentPVec=_pVecMap.at(it1->first);
     currentPVec->updateBeta(0, b_pole1);
-    currentPVec->updateAprod(0, aProds["a_KpiPosNeg"]);
-    currentPVec->updateBprod(0, bProds["b_KpiPosNeg"]);
-    currentPVec->updateCprod(0, cProds["c_KpiPosNeg"]);
+    currentPVec->updateAprod(0, aProds["a_Kpi"]);
+    currentPVec->updateBprod(0, bProds["b_Kpi"]);
+    currentPVec->updateCprod(0, cProds["c_Kpi"]);
     currentPVec->updatePhaseprod(0, phaseProds["KpiPhi"]);
-    currentPVec->updateAprod(1, aProds["a_KetapPosNeg"]);
-    currentPVec->updateBprod(1, bProds["b_KetapPosNeg"]);
-    currentPVec->updateCprod(1, cProds["c_KetapPosNeg"]);
+    currentPVec->updateAprod(1, aProds["a_Ketap"]);
+    currentPVec->updateBprod(1, bProds["b_Ketap"]);
+    currentPVec->updateCprod(1, cProds["c_Ketap"]);
     currentPVec->updatePhaseprod(1, phaseProds["KetapPhi"]);
   }
 }
@@ -249,14 +278,14 @@ void KPiSWaveIso12Dynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   std::shared_ptr<PVectorKPiSFocus> currentPVector=std::shared_ptr<PVectorKPiSFocus>(new PVectorKPiSFocus(_kMatr));
   _pVecMap[theName]=currentPVector;
 
-  _currentaProdMap[theName]["a_KpiPosNeg"]=1.;
-  _currentaProdMap[theName]["a_KetapPosNeg"]=1.;  
+  _currentaProdMap[theName]["a_Kpi"]=1.;
+  _currentaProdMap[theName]["a_Ketap"]=1.;  
 
-  _currentbProdMap[theName]["b_KpiPosNeg"]=0.5;
-  _currentbProdMap[theName]["b_KetapPosNeg"]=0.5;
+  _currentbProdMap[theName]["b_Kpi"]=0.5;
+  _currentbProdMap[theName]["b_Ketap"]=0.5;
   
-  _currentcProdMap[theName]["c_KpiPosNeg"]=0.1;
-  _currentcProdMap[theName]["c_KetapPosNeg"]=0.1;  
+  _currentcProdMap[theName]["c_Kpi"]=0.1;
+  _currentcProdMap[theName]["c_Ketap"]=0.1;  
   
   _currentphaseProdMap[theName]["KpiPhi"]=0.;
   _currentphaseProdMap[theName]["KetapPhi"]=0.;
@@ -266,13 +295,13 @@ void KPiSWaveIso12Dynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
 
   complex<double> b_pole1=_currentbFactorMagMap[theName]["b_pole1Mag"]*complex<double>(cos(_currentbFactorPhiMap[theName]["b_pole1Phi"]), sin(_currentbFactorPhiMap[theName]["b_pole1Phi"]));
   currentPVector->updateBeta(0, b_pole1);
-  currentPVector->updateAprod(0, _currentaProdMap[theName]["a_KpiPosNeg"]);
-  currentPVector->updateBprod(0, _currentbProdMap[theName]["b_KpiPosNeg"]);
-  currentPVector->updateCprod(0, _currentcProdMap[theName]["c_KpiPosNeg"]);
+  currentPVector->updateAprod(0, _currentaProdMap[theName]["a_Kpi"]);
+  currentPVector->updateBprod(0, _currentbProdMap[theName]["b_Kpi"]);
+  currentPVector->updateCprod(0, _currentcProdMap[theName]["c_Kpi"]);
   currentPVector->updatePhaseprod(0, _currentphaseProdMap[theName]["KpiPhi"]);
-  currentPVector->updateAprod(1, _currentaProdMap[theName]["a_KetapPosNeg"]);
-  currentPVector->updateBprod(1, _currentbProdMap[theName]["b_KetapPosNeg"]);
-  currentPVector->updateCprod(1, _currentcProdMap[theName]["c_KetapPosNeg"]);
+  currentPVector->updateAprod(1, _currentaProdMap[theName]["a_Ketap"]);
+  currentPVector->updateBprod(1, _currentbProdMap[theName]["b_Ketap"]);
+  currentPVector->updateCprod(1, _currentcProdMap[theName]["c_Ketap"]);
   currentPVector->updatePhaseprod(1, _currentphaseProdMap[theName]["KetapPhi"]);
 
   std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
