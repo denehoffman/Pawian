@@ -86,7 +86,9 @@ int main(int __argc,char *__argv[]){
   }
 
   // Read start param file
-  std::shared_ptr<AbsPawianParameters> startPawianParams=theAppBase.streamPawianParams();
+  std::shared_ptr<AbsPawianParameters> unsortedStartPawianParams=theAppBase.streamPawianParams();
+  GlobalEnv::instance()->setStartPawianParams(unsortedStartPawianParams);
+  std::shared_ptr<AbsPawianParameters> startPawianParams=GlobalEnv::instance()->startPawianParams();
 
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;
   startPawianParams->print(std::cout);
@@ -97,7 +99,8 @@ int main(int __argc,char *__argv[]){
     std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
   }
-  theAppBase.fixParams(startPawianParams,fixedParams);
+  theAppBase.fixParams(unsortedStartPawianParams,fixedParams);
+
 
   //fill param list names for dynamics
   std::vector<std::shared_ptr<AbsDynamics> > dynVec=DynRegistry::instance()->getDynVec();

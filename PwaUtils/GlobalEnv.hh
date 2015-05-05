@@ -61,6 +61,8 @@ public:
    const ChannelEnvList ChannelEnvs() const {return _channelEnvs;}
    const short NoChannels() const {return _channelEnvs.size();}
    std::shared_ptr<AbsPawianParameters> defaultPawianParams();
+  std::shared_ptr<AbsPawianParameters> startPawianParams() {return _startParams;}
+  void setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams);
 
 private:
    static GlobalEnv* _instance;
@@ -72,5 +74,6 @@ private:
    std::string _serializationFileName;
 
    ChannelEnvList _channelEnvs;
+   std::shared_ptr<AbsPawianParameters> _startParams;
 
 };

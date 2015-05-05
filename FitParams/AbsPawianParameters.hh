@@ -28,6 +28,7 @@
 
 #include <iostream> 
 #include <vector>
+#include <memory>
 #include "Minuit2/MnUserParameters.h"
 
 using namespace ROOT::Minuit2;
@@ -123,6 +124,8 @@ public:
 
   virtual void print(std::ostream& os);
   virtual void SetAllValues(const std::vector<double>& values);
+  virtual std::shared_ptr<AbsPawianParameters> paramsWithSameOrder(std::shared_ptr<AbsPawianParameters> toSort);
+
 private:
 
   //   MnUserTransformation fTransformation;

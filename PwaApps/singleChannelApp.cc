@@ -121,7 +121,10 @@ int main(int __argc,char *__argv[]){
   }
 
   // Read start param file
-  std::shared_ptr<AbsPawianParameters> startPawianParams=theAppBase.streamPawianParams();
+  std::shared_ptr<AbsPawianParameters> unsortedStartPawianParams=theAppBase.streamPawianParams();
+  GlobalEnv::instance()->setStartPawianParams(unsortedStartPawianParams);
+  std::shared_ptr<AbsPawianParameters> startPawianParams=GlobalEnv::instance()->startPawianParams();
+
   // fitParCol theStartparams;
   // fitParCol theErrorparams;
   // theAppBase.streamParams(theStartparams, theErrorparams); 

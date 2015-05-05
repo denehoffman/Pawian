@@ -127,6 +127,11 @@ std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
   return result;
 }
 
+void GlobalEnv::setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams){
+  std::shared_ptr<AbsPawianParameters> defaultParams=GlobalEnv::defaultPawianParams();
+  _startParams=defaultParams->paramsWithSameOrder(startParams);
+}
+
 void GlobalEnv::setup(ParserBase* theParser){
    if(_alreadySetUp){
       Alert << "GlobalEnv already set up!" << endmsg;
