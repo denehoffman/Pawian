@@ -35,6 +35,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/WelcomeScreen.hh"
+#include "PwaUtils/DynRegistry.hh"
 
 #include "ConfigParser/globalParser.hh"
 
@@ -86,19 +87,9 @@ int main(int __argc,char *__argv[]){
 
   // Read start param file
   std::shared_ptr<AbsPawianParameters> startPawianParams=theAppBase.streamPawianParams();
-  // fitParCol theStartparams;
-  // fitParCol theErrorparams;
-  // theAppBase.streamParams(theStartparams, theErrorparams); 
-
-  // Set minuit parameters
-  // std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
-  // GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;
   startPawianParams->print(std::cout);
-  // for (int i=0; i<int(upar->Params().size()); ++i){
-  //   std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
-  // }
 
   // Fix params for all channels
   std::vector<std::string> fixedParams;
@@ -107,6 +98,13 @@ int main(int __argc,char *__argv[]){
     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
   }
   theAppBase.fixParams(startPawianParams,fixedParams);
+
+  //fill param list names for dynamics
+  std::vector<std::shared_ptr<AbsDynamics> > dynVec=DynRegistry::instance()->getDynVec();
+  std::vector<std::shared_ptr<AbsDynamics> >::iterator itDyn;
+  for(itDyn=dynVec.begin(); itDyn!=dynVec.end(); ++itDyn){
+    (*itDyn)->fillParamNameList();
+  }
 
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);

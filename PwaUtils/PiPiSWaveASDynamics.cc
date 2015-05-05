@@ -70,45 +70,55 @@ complex<double> result(0.,0.);
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
-  //  Info << "thread Id:\t" <<  std::this_thread::get_id() << endmsg; 
- 
-  bool readFromCachedMap=false;
-
-  theMutex.lock();
-  if( _cacheAmps){
-    if(_recalcMap.at(currentKey)){
-      bool currentEvtAlreadyCached=false;
-      
-      std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
-      if( itAlreadyCached != _alreadyCached.end()){
-	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
-	if( itAlreadyCached2 != itAlreadyCached->second.end()){
-	  currentEvtAlreadyCached=itAlreadyCached2->second;     
-	}
-	else{
-	  _alreadyCached.at(evtNo)[currentKey]=false;
-	}   
-      }
+  if ( _cacheAmps){
+    if (!_recalcMap.at(currentKey)) result= _cachedStringMap.at(evtNo).at(currentKey); 
       else{ 
-	_alreadyCached[evtNo][currentKey]=false;
-      } 
-  
-      if(currentEvtAlreadyCached) readFromCachedMap=true;
-    }
-    else readFromCachedMap=true; 
-  }
-
-  if ( readFromCachedMap){
-    result=_cachedStringMap.at(evtNo).at(currentKey);
-  }  
-  else{
-      result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
-      if ( _cacheAmps){
-	_cachedStringMap[evtNo][currentKey]=result;
-	_alreadyCached.at(evtNo).at(currentKey)=true;
+	theMutex.lock();
+	result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
+	_cachedStringMap[evtNo][currentKey]=result; 
+	theMutex.unlock();
       }
   }
-  theMutex.unlock();
+  else if (!_cacheAmps) result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
+  
+  //  Info << "thread Id:\t" <<  std::this_thread::get_id() << endmsg; 
+  // bool readFromCachedMap=false;
+
+  // theMutex.lock();
+  // if( _cacheAmps){
+  //   if(_recalcMap.at(currentKey)){
+  //     bool currentEvtAlreadyCached=false;
+      
+  //     std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
+  //     if( itAlreadyCached != _alreadyCached.end()){
+  // 	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
+  // 	if( itAlreadyCached2 != itAlreadyCached->second.end()){
+  // 	  currentEvtAlreadyCached=itAlreadyCached2->second;     
+  // 	}
+  // 	else{
+  // 	  _alreadyCached.at(evtNo)[currentKey]=false;
+  // 	}   
+  //     }
+  //     else{ 
+  // 	_alreadyCached[evtNo][currentKey]=false;
+  //     } 
+  
+  //     if(currentEvtAlreadyCached) readFromCachedMap=true;
+  //   }
+  //   else readFromCachedMap=true; 
+  // }
+
+  // if ( readFromCachedMap){
+  //   result=_cachedStringMap.at(evtNo).at(currentKey);
+  // }  
+  // else{
+  //     result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
+  //     if ( _cacheAmps){
+  // 	_cachedStringMap[evtNo][currentKey]=result;
+  // 	_alreadyCached.at(evtNo).at(currentKey)=true;
+  //     }
+  // }
+  // theMutex.unlock();
   
   return result;
 }
@@ -154,24 +164,30 @@ void PiPiSWaveASDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters>
 }
 
 void PiPiSWaveASDynamics::fillParamNameList(){
-  _paramNameList.clear();
+  //  _paramNameList.clear();
 
   //beta factor for production
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
     std::string theName=it1->first;
+    Info <<  "PiPiSWaveASDynamics::fillParamNameList: theName: " <<  theName << endmsg; 
+
+    std::vector<std::string> currentNameList;
+    
     std::map<std::string, double>& bMagFactors = it1->second;
 
     std::map<std::string, double>::iterator it2;    
     for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
       std::string magName=theName+it2->first;
       _paramNameList.push_back(magName);
+      currentNameList.push_back(magName);
     }
 
     std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
     for(it2=bPhiFactors.begin(); it2!=bPhiFactors.end(); ++it2){
       std::string phiName=theName+it2->first;
       _paramNameList.push_back(phiName);
+      currentNameList.push_back(phiName);
     }
 
     //fProd factors
@@ -179,18 +195,46 @@ void PiPiSWaveASDynamics::fillParamNameList(){
     for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
       std::string magName=theName+it2->first;
       _paramNameList.push_back(magName);
+      currentNameList.push_back(magName);
     }
 
     std::map<std::string, double>& fPhiProds=_currentfProdPhiMap.at(it1->first);
     for(it2=fPhiProds.begin(); it2!=fPhiProds.end(); ++it2){
       std::string phiName=theName+it2->first;
       _paramNameList.push_back(phiName);
+      currentNameList.push_back(phiName);
     }
 
     //s0 factors
     std::string s0Name=theName+"S0";
     _paramNameList.push_back(s0Name);
+    currentNameList.push_back(s0Name);
+    _paramNameListMap[theName]=currentNameList;  
   }
+
+  Info << "***** list of parameter names for PiPiSWaveASDynamics ******" << endmsg;
+  std::vector<std::string>::iterator itstr;
+  for (itstr=_paramNameList.begin(); itstr!=_paramNameList.end(); ++itstr){
+    Info << (*itstr) << endmsg;
+  } 
+}
+
+bool PiPiSWaveASDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+
+  std::map<std::string, std::vector<std::string> >::iterator itMap;
+  for(itMap= _paramNameListMap.begin(); itMap !=_paramNameListMap.end(); ++itMap){
+    _recalcMap[itMap->first]=false;
+    std::vector<std::string>::iterator itStr;
+    for (itStr=itMap->second.begin(); itStr!=itMap->second.end(); ++itStr){
+      std::string currentParamName=*itStr;
+      if(!CheckDoubleEquality(fitParNew->Value(currentParamName), fitParOld->Value(currentParamName))){
+	_recalcMap[itMap->first]=true;
+	continue;
+      }
+    }
+  }
+
+ return AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
 }
 
 void PiPiSWaveASDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){

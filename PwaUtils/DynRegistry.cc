@@ -170,7 +170,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 
     if(theDec->isProductionAmp() &&  (theDec->dynType()=="BlattWBarrier" || theDec->dynType()=="BlattWBarrierTensor" || theDec->dynType()=="RadM1")) result->setMassKey(theDec->prodParKey()); 
 
-    result->fillParamNameList();
+    //    result->fillParamNameList();
     Info << "add dynamics for " <<  theName << endmsg;
 
     _dynMapChannel[currentChannelId][theName]=result;

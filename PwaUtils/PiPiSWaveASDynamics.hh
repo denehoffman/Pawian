@@ -55,7 +55,8 @@ public:
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList(); 
-
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
+  
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar); 
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
@@ -84,7 +85,8 @@ protected:
   std::map<std::string, std::shared_ptr<PVectorSlowCorRel> > _pVecMap;
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
   vector<std::shared_ptr<KPole> > _kPoles;
-
+  std::map<std::string, std::vector<std::string> > _paramNameListMap;
+  
 private:
   std::shared_ptr<PVectorSlowCorRel> makeNewPVec();
 };

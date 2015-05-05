@@ -48,6 +48,7 @@ bool AbsParamHandler::checkRecalculation(std::shared_ptr<AbsPawianParameters> fi
     //    Info << "checkRecalculation for " << (*it) << endmsg;
 
     if (!CheckDoubleEquality(fitParNew->Value(*it), fitParOld->Value(*it))){
+      //      Info << "parameter " << (*it) << " has been changed and relvant amplitudes/dynamics have to be recalculated!!!" << endmsg;
       _recalculate=true;
       return _recalculate;
     }

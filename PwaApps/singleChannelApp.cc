@@ -36,6 +36,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/WelcomeScreen.hh"
+#include "PwaUtils/DynRegistry.hh"
 
 #include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/spinDensityHist.hh"
@@ -148,6 +149,13 @@ int main(int __argc,char *__argv[]){
     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
     theAppBase.fixParams(startPawianParams,fixedParams);
   }
+
+  //fill param list names for dynamics
+  std::vector<std::shared_ptr<AbsDynamics> > dynVec=DynRegistry::instance()->getDynVec();
+  std::vector<std::shared_ptr<AbsDynamics> >::iterator itDyn;
+  for(itDyn=dynVec.begin(); itDyn!=dynVec.end(); ++itDyn){
+    (*itDyn)->fillParamNameList();
+  } 
 
   const unsigned int noOfFreeFitParams = startPawianParams->VariableParameters();
 
