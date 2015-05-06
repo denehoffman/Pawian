@@ -39,7 +39,7 @@ using namespace ROOT::Minuit2;
 PwaFcnBase::PwaFcnBase() :
   AbsFcn()
 {
-   _currentPawianParms = GlobalEnv::instance()->defaultPawianParams();
+   _currentPawianParms = GlobalEnv::instance()->startPawianParams();
 }
 
 PwaFcnBase::~PwaFcnBase()

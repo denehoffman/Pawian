@@ -86,7 +86,7 @@ void KPiSWaveIso12Dynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameter
     for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
       std::string magName=theName+it2->first;
       fitPar->Add(magName, it2->second , 1.);
-      fitPar->SetLimits(magName, 0., it2->second+30.);
+      //      fitPar->SetLimits(magName, 0., it2->second+30.);
     }
 
     std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
@@ -212,7 +212,7 @@ void KPiSWaveIso12Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters>
     std::string bmagName=theName+"b_pole1Mag";
     std::string bphiName=theName+"b_pole1Phi";
 
-    it1->second["b_pole1Mag"]=fitPar->Value(bmagName);
+    it1->second["b_pole1Mag"]=fabs(fitPar->Value(bmagName));
 
     double currentbFactorPhi=fitPar->Value(bphiName);
     _currentbFactorPhiMap.at(it1->first).at("b_pole1Phi")=currentbFactorPhi;

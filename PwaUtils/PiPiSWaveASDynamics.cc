@@ -134,7 +134,7 @@ void PiPiSWaveASDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters>
     for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
       std::string magName=theName+it2->first;
       fitPar->Add(magName, it2->second , 1.);
-      fitPar->SetLimits(magName, 0., it2->second+30.);
+      //      fitPar->SetLimits(magName, 0., it2->second+30.);
     }
 
     std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
@@ -148,7 +148,7 @@ void PiPiSWaveASDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters>
     for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
       std::string magName=theName+it2->first;
       fitPar->Add(magName, it2->second , 1.);
-      fitPar->SetLimits(magName, 0., it2->second+30.);
+      //      fitPar->SetLimits(magName, 0., it2->second+30.);
     }
 
     std::map<std::string, double>& fPhiProds=_currentfProdPhiMap.at(it1->first);
@@ -247,7 +247,7 @@ void PiPiSWaveASDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> f
     std::map<std::string, double>::iterator it2;    
     for(it2=bMagFactors.begin(); it2!=bMagFactors.end(); ++it2){
       std::string magName=theName+it2->first;
-      it2->second = fitPar->Value(magName);
+      it2->second = fabs(fitPar->Value(magName));
     }
 
     std::map<std::string, double>& bPhiFactors = _currentbFactorPhiMap.at(it1->first);
@@ -260,7 +260,7 @@ void PiPiSWaveASDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> f
     std::map<std::string, double>& fMagProds=_currentfProdMagMap.at(it1->first);
     for(it2=fMagProds.begin(); it2!=fMagProds.end(); ++it2){
       std::string magName=theName+it2->first;
-      it2->second = fitPar->Value(magName);
+      it2->second = fabs(fitPar->Value(magName));
     }
 
     std::map<std::string, double>& fPhiProds=_currentfProdPhiMap.at(it1->first);

@@ -149,9 +149,6 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
 
     map<Spin,map<Spin, double > >& currentCgFactor=_cgPreFactor.at(*it);
 
-    // double theMag=_currentParamMags.at(*it);
-    // double thePhi=_currentParamPhis.at(*it);
-    // complex<double> expi(cos(thePhi), sin(thePhi));
     complex<double> currentPreMagExpi=_currentParamPreFacMagExpi.at(*it);
 
     complex<double> tmpResult(0.,0.);

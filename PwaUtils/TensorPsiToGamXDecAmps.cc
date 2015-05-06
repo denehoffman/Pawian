@@ -155,11 +155,11 @@ void  TensorPsiToGamXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParamet
     std::string magName=_MagParamNames.at(i);
     double valMag=1.;
     double errMag=0.5;
-    double minMag=0.;
-    double maxMag=30;
+    //    double minMag=0.;
+    //    double maxMag=30;
 
     fitPar->Add(magName, valMag, errMag);
-    fitPar->SetLimits(magName, minMag, maxMag);
+    //    fitPar->SetLimits(magName, minMag, maxMag);
 
     //fill phi
     std::string phiName=_PhiParamNames.at(i);
@@ -192,7 +192,7 @@ void TensorPsiToGamXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters
 
   for (int i=0; i<_noOfAmps; ++i){
     std::string magName=_MagParamNames.at(i);
-    double theMag=fitPar->Value(magName);
+    double theMag=fabs(fitPar->Value(magName));
     _currentParamLocalMags[i]=theMag;
 
     std::string phiName=_PhiParamNames.at(i);

@@ -125,7 +125,7 @@ void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
       //     std::cout << "currentName: " << currentName << std::endl;
       std::string magName=currentName+"Mag";
       fitPar->Add(theName+magName, bFactors.at(magName) , 1.);
-      fitPar->SetLimits(theName+magName, 0., bFactors.at(magName)+30.);
+      //      fitPar->SetLimits(theName+magName, 0., bFactors.at(magName)+30.);
 
       std::string phiName=currentName+"Phi";
       fitPar->Add(theName+phiName, bFactors.at(phiName) , 0.2);
@@ -238,7 +238,7 @@ void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
 
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
       std::string currentName="b_"+_poleNames.at(i);
-      complex<double> currentbFactor=bFactors.at(currentName+"Mag")*complex<double>(cos(bFactors.at(currentName+"Phi")), sin(bFactors.at(currentName+"Phi")));
+      complex<double> currentbFactor=fabs(bFactors.at(currentName+"Mag"))*complex<double>(cos(bFactors.at(currentName+"Phi")), sin(bFactors.at(currentName+"Phi")));
       currentPVec->updateBeta(i, currentbFactor);
     }
   }

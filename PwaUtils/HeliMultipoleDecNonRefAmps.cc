@@ -146,7 +146,7 @@ void  HeliMultipoleDecNonRefAmps::fillDefaultParams(std::shared_ptr<AbsPawianPar
 
   for (int i=0; i<_noOfAmps; ++i){
     fitPar->Add(_MagParamNames.at(i), 1., 0.5);
-    fitPar->SetLimits(_MagParamNames.at(i), 0., 20.);
+    //    fitPar->SetLimits(_MagParamNames.at(i), 0., 20.);
 
     fitPar->Add(_PhiParamNames.at(i), 0., 0.2); 
   }
@@ -170,7 +170,7 @@ void HeliMultipoleDecNonRefAmps::fillParamNameList(){
 void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   for (int i=0; i<_noOfAmps; ++i){
-    double theLocalMag=fitPar->Value(_MagParamNames.at(i));
+    double theLocalMag=fabs(fitPar->Value(_MagParamNames.at(i)));
     _currentParamLocalMags[i]=theLocalMag;
     double theLocalPhi=fitPar->Value(_PhiParamNames.at(i));
     _currentParamLocalPhis[i]=theLocalPhi;

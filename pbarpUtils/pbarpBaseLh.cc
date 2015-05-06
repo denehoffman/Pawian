@@ -292,11 +292,11 @@ void pbarpBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar)
     std::string magName=(*it)->name()+"pbarp"+"Mag";
     double valMag=magFactor;
     double errMag=magFactor/2.;
-    double minMag=magFactor-6.*errMag;
-    if (minMag<0.) minMag=0.;
-    double maxMag=magFactor+30.*errMag;
+    //    double minMag=magFactor-6.*errMag;
+    // if (minMag<0.) minMag=0.;
+    // double maxMag=magFactor+30.*errMag;
     fitPar->Add(magName, valMag, errMag);
-    fitPar->SetLimits(magName, minMag, maxMag);
+    //    fitPar->SetLimits(magName, minMag, maxMag);
 
     std::string phiName=(*it)->name()+"pbarp"+"Phi";
     double valPhi=0.;
@@ -349,7 +349,7 @@ void pbarpBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
     std::string magName=(*it)->name()+"pbarp"+"Mag";
     std::string phiName=(*it)->name()+"pbarp"+"Phi";
-    double theMag=fitPar->Value(magName);
+    double theMag=fabs(fitPar->Value(magName));
     double thePhi=fitPar->Value(phiName);
 
     _currentParamMags[*it]=theMag;

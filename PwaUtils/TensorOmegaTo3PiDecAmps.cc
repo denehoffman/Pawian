@@ -56,17 +56,6 @@ TensorOmegaTo3PiDecAmps::~TensorOmegaTo3PiDecAmps()
 complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  // std::vector< std::shared_ptr<const JPCLS> >::iterator it;
-  // for (it=_JPCLSs.begin(); it!=_JPCLSs.end(); ++it){
-  //   if( fabs(lamX) > (*it)->J ) continue;
-  //   double theMag=_currentParamMags[*it];
-  //   double thePhi=_currentParamPhis[*it];
-  //   complex<double> expi(cos(thePhi), sin(thePhi));
-
-  //       complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-  // 	  *conj( theData->WignerDsString[_wignerDKey][(*it)->J][lamX][0]);
-  //       result+=amp;
-  // }
 
   return result;
 }
@@ -123,11 +112,11 @@ void TensorOmegaTo3PiDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParamet
     std::string magName=(*itLS)->name()+_key+"Mag";
     double valMag=_factorMag;
     double errMag=_factorMag/2.;
-    double minMag=0.;
-    double maxMag=_factorMag+30.*errMag;
+    //    double minMag=0.;
+    //    double maxMag=_factorMag+30.*errMag;
 
     fitPar->Add(magName, valMag, errMag);
-    fitPar->SetLimits(magName, minMag, maxMag);
+    //    fitPar->SetLimits(magName, minMag, maxMag);
 
     std::string phiName=(*itLS)->name()+_key+"Phi";
     double valPhi=0.;
@@ -159,7 +148,7 @@ void TensorOmegaTo3PiDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameter
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
     //fill magnitude
     std::string magName=(*itLS)->name()+_key+"Mag";
-    double theMag= fitPar->Value(magName);
+    double theMag= fabs(fitPar->Value(magName));
     _currentParamMags[*itLS]=theMag;
 
     std::string phiName=(*itLS)->name()+_key+"Phi";

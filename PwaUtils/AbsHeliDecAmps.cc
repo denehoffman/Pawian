@@ -90,11 +90,11 @@ void  AbsHeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     double valMag=_factorMag;
     double errMag=_factorMag/2.;
-    double minMag=0.;
-    double maxMag=_factorMag+30.*errMag;
+    // double minMag=0.;
+    // double maxMag=_factorMag+30.*errMag;
 
     fitPar->Add(magName, valMag, errMag);
-    fitPar->SetLimits(magName, minMag, maxMag);
+    //    fitPar->SetLimits(magName, minMag, maxMag);
 
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
     double valPhi=0.;
@@ -133,74 +133,6 @@ void AbsHeliDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
-
-// bool AbsHeliDecAmps::checkRecalculation(fitParCol& theParamVal){
-//   _recalculate=false;
-
-//    if(_absDyn->checkRecalculation(theParamVal)) _recalculate=true;
-
-//    if(!_daughter1IsStable) {
-//      if(_decAmpDaughter1->checkRecalculation(theParamVal)) _recalculate=true;
-//    }
-//    if(!_daughter2IsStable){
-//      if(_decAmpDaughter2->checkRecalculation(theParamVal)) _recalculate=true;
-//    }
-
-//    if(!_recalculate){
-//      std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
-//      std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
-//      std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-//      for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-//        double theMag=magMap[*it];
-//        double thePhi=phiMap[*it];
-
-//        if (!CheckDoubleEquality(theMag, _currentParamMagLamLams[*it])){
-// 	 _recalculate=true;
-// 	 return _recalculate;
-//        }
-//        if (!CheckDoubleEquality(thePhi, _currentParamPhiLamLams[*it])){
-// 	 _recalculate=true;
-// 	 return _recalculate;
-//        }
-//      }
-//    }
-//    return _recalculate;
-// }
-
-
-// void  AbsHeliDecAmps::updateFitParams(fitParCol& theParamVal){
-//    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& magMap=theParamVal.MagLamLams[_key];
-//    std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >& phiMap=theParamVal.PhiLamLams[_key];
-
-//    std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-//    for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-//      double theMag=magMap[*it];
-//      double thePhi=phiMap[*it];
-//      _currentParamMagLamLams[*it]=theMag;
-//      _currentParamPhiLamLams[*it]=thePhi;
-//      complex<double> expi(cos(thePhi), sin(thePhi));
-
-//      _currentParamMagExpi[*it]=theMag*expi;
-//      _currentParamPreFacMagExpi[*it]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
-
-//      std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap[*it];
-//      std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
-//      for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
-//        _currentParamMagLamLams[*itLamLam]=theMag;
-//        _currentParamPhiLamLams[*itLamLam]=thePhi;
-//        _currentParamMagExpi[*itLamLam]=theMag*expi;
-//        _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
-//      }
-//    }
-
-
-//    _absDyn->updateFitParams(theParamVal);
-
-//    if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(theParamVal);
-//    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(theParamVal);
-
-// }
-
 void AbsHeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   std::vector< std::shared_ptr<const JPClamlam> >::const_iterator itlamlam;
@@ -209,7 +141,7 @@ void AbsHeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
 
-    double theMag=fitPar->Value(magName);
+    double theMag=fabs(fitPar->Value(magName));
     double thePhi=fitPar->Value(phiName);
 
     _currentParamMagLamLams[*itlamlam]=theMag;

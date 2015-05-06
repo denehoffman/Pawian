@@ -40,7 +40,7 @@ PwaFcnServer::PwaFcnServer(std::shared_ptr<NetworkServer> netServer) :
   , _networkServerPtr(netServer)
 {
   _defaultPawianParms = GlobalEnv::instance()->defaultPawianParams();
-   _currentPawianParms = GlobalEnv::instance()->defaultPawianParams();
+   _currentPawianParms = GlobalEnv::instance()->startPawianParams();
 }
 
 PwaFcnServer::~PwaFcnServer()
