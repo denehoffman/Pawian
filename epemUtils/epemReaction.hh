@@ -42,11 +42,12 @@ class Particle;
 class IsobarLSDecay;
 class IsobarHeliDecay;
 class IsobarTensorDecay;
+class ProdChannelInfo;
 
 class epemReaction {
 
 public:
-  epemReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID);
+  epemReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID);
 
   virtual ~epemReaction();
 

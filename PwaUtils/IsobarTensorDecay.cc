@@ -39,6 +39,7 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/DynRegistry.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ConfigParser/ParserBase.hh"
 
 IsobarTensorDecay::IsobarTensorDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string typeName) :
@@ -405,18 +406,27 @@ void IsobarTensorDecay::calcLSpart(OrbitalTensor& orbTensor, Tensor<complex<doub
     }
 }
 
-void IsobarTensorDecay::enableProdBarrier(double qRValue){
+void IsobarTensorDecay::enableProdBarrier(){
   if(_dynEnabled){
     Alert << "dynamics already enabled for " << name() << endmsg;
-    exit(0);
+    exit(1);
   }
-  if(!_isProdAmp){
-    Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+  if(!_prodChannelInfo->isProductionChannel()){
+    Warning << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    return;
+  }
+  if(!_prodChannelInfo->withProdBarrier()){
+    Warning << name() << "production barrier disabled" << endmsg;
+    return;
+  }
+  if(_prodChannelInfo->prodBarrierType()!="BlattWBarrierTensor"){
+    Alert << name() << "production barrier enabled with type " << _prodChannelInfo->prodBarrierType() 
+	  << "\tIsobarTensorDecay only supports type BlattWBarrierTensor" << endmsg;
     exit(1);
   }
   _useProdBarrier=true;
   _dynType="BlattWBarrierTensor";
-  _qR=qRValue;
+  _qR=_prodChannelInfo->qRPod();
   Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
   _dynEnabled=true;

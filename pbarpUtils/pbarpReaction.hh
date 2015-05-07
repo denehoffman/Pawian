@@ -43,11 +43,12 @@ class Particle;
 class IsobarLSDecay;
 class IsobarHeliDecay;
 class IsobarTensorDecay;
+class ProdChannelInfo;
 
 class pbarpReaction {
 
 public:
-  pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID, int lmax=3);
+  pbarpReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int lmax=3);
 
   virtual ~pbarpReaction();
 

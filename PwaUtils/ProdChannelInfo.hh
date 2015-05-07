@@ -21,42 +21,35 @@
 //									  //
 //************************************************************************//
 
-// IsobarTensorPsiToGamXDecay class definition file. -*- C++ -*-
-// Copyright 2014 Bertram Kopf
+// ProdChannelInfo class definition file. -*- C++ -*-
+// Copyright 2015 Bertram Kopf
 
 #pragma once
 
 #include <iostream>
 #include <vector>
-#include <complex>
-#include <map>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <memory>
-
-#include "PwaUtils/IsobarTensorDecay.hh"
 
 class Particle;
-class EvtData;
 
-class IsobarTensorPsiToGamXDecay : public IsobarTensorDecay{
+class ProdChannelInfo {
 
 public:
-  IsobarTensorPsiToGamXDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelID);
-  IsobarTensorPsiToGamXDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, ChannelID channelID, std::string motherName="pbarp");
-  virtual ~IsobarTensorPsiToGamXDecay();
-
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
+  ProdChannelInfo();
+  ProdChannelInfo(std::string& stringFromParser); //constructor by making use of the string provided by the parser (very specific!!!)
+  virtual ~ProdChannelInfo();
+  const bool isProductionChannel() const {return _isProdChannel;}
+  std::pair<Particle*, Particle*> productionPair() const {return _prodPair;}
+  const bool withProdBarrier() const {return _withProBarrier;}
+  const std::string prodBarrierType() const {return _prodBarrierType;}
+  const double qRPod() const {return _qRProd;}
+  const double m0decRadM1Prod() const {return _m0decRadM1Production;}
   virtual void print(std::ostream& os) const;
 
-  virtual void enableProdBarrier();
-  virtual short noOfAmplitudes() const {return _noOfAmps;}
-  virtual std::map<int, int> ampLMap() {return _ampLMap;}
-protected:
-  bool _XisEven;
-  short _noOfAmps;
-  std::map<int, int> _ampLMap;
-
-  void fillAmpLMap();
+ protected:
+  bool _isProdChannel;
+  std::pair<Particle*, Particle*> _prodPair;
+  bool _withProBarrier;
+  std::string _prodBarrierType;
+  double _qRProd;
+  double _m0decRadM1Production;
 };

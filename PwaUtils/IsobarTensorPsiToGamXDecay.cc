@@ -39,6 +39,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/DynRegistry.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ConfigParser/ParserBase.hh"
 
 IsobarTensorPsiToGamXDecay::IsobarTensorPsiToGamXDecay(Particle* mother, Particle* daughter1_gamma, Particle* daughter2, ChannelID channelID) :
@@ -392,18 +393,33 @@ void IsobarTensorPsiToGamXDecay::fillAmpLMap(){
   }
 }
 
-void IsobarTensorPsiToGamXDecay::enableProdBarrier(double qRValue){
+void IsobarTensorPsiToGamXDecay::enableProdBarrier(){
   if(_dynEnabled){
     Alert << "dynamics already enabled for " << name() << endmsg;
-    exit(0);
+    exit(1);
   }
+  if(!_prodChannelInfo->isProductionChannel()){
+    Warning << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    return;
+  }
+  if(!_prodChannelInfo->withProdBarrier()){
+    Warning << name() << "production barrier disabled" << endmsg;
+    return;
+  }
+  if(_prodChannelInfo->prodBarrierType()!="BlattWBarrierTensor"){
+    Alert << name() << "production barrier enabled with type " << _prodChannelInfo->prodBarrierType() 
+	  << "\tIsobarTensorPsiToGamXDecay only supports type BlattWBarrierTensor" << endmsg;
+    exit(1);
+  }
+
+
   if(!_isProdAmp){
     Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
     exit(1);
   }
   _useProdBarrier=true;
   _dynType="BlattWBarrierTensor";
-  _qR=qRValue;
+  _qR=_prodChannelInfo->qRPod();
   Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
   _dynEnabled=true;

@@ -36,6 +36,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -79,7 +80,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 
 
    //pbarp reaction
-   _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_producedParticlePairs, id,_lmax));
+   _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_prodChannelInfoList, id,_lmax));
 
    //preparations for prod key replacements
    std::vector<std::string> replProdKeyVec = _theParser->replaceProdKey();
@@ -157,7 +158,7 @@ void PbarpChannelEnv::setup(ChannelID id){
    std::vector< std::shared_ptr<AbsDecay> > theProdDecs=_prodDecList->getList();
    std::vector< std::shared_ptr<AbsDecay> >::iterator itAbsDec;
    for (itAbsDec=theProdDecs.begin(); itAbsDec!=theProdDecs.end(); ++itAbsDec){
-     if(_theParser->useProductionBarrier()) (*itAbsDec)->enableProdBarrier(_theParser->qRProduction());
+     if((*itAbsDec)->prodChannelInfo()->withProdBarrier()) (*itAbsDec)->enableProdBarrier();
      else (*itAbsDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
    }
 

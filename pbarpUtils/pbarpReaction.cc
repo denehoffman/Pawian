@@ -33,13 +33,14 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "pbarpUtils/pbarpStatesLS.hh"
 
-pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID, int lmax) :
+pbarpReaction::pbarpReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int lmax) :
    _channelID(channelID)
   ,_lmax(lmax)
 {
@@ -60,11 +61,15 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
   for(itIGJPC = pbarpIGJPCStatesAll.begin(); itIGJPC!=pbarpIGJPCStatesAll.end(); ++itIGJPC){
     bool acceptJPC=false;
-    std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
-    for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
+
+    std::vector<std::shared_ptr<ProdChannelInfo> >::iterator itProd;
+    //   std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
+    for (itProd=prodChannelInfoList.begin(); itProd!= prodChannelInfoList.end(); ++itProd){
       std::string decName=(*itIGJPC)->name();
-      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, _channelID, decName));
+      std::pair<Particle*, Particle*> particlePair=(*itProd)->productionPair();
+      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( (*itIGJPC), particlePair.first, particlePair.second, _channelID, decName));
       currentDec->setProductionAmp();
+      currentDec->setProdChannelInfo( *itProd );
       currentDec->extractStates();
 
       if(!currentDec->JPCLSAmps().size()>0 || fabs(currentDec->isospinCG())<1.e-10){
@@ -74,8 +79,8 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
 
       bool acceptProd=false;
       for(auto lIt = _jpcToJPCLSMap[*itIGJPC].begin(); lIt != _jpcToJPCLSMap[*itIGJPC].end(); ++lIt){
-	if(CheckJPCLSForParticle((std::string&)(*itPartPairs).first->name(), *lIt) &&
-	   CheckJPCLSForParticle((std::string&)(*itPartPairs).second->name(), *lIt)){
+	if(CheckJPCLSForParticle((std::string&)particlePair.first->name(), *lIt) &&
+	   CheckJPCLSForParticle((std::string&)particlePair.second->name(), *lIt)){
 	  if(std::find(_pbarpJPCLSs.begin(), _pbarpJPCLSs.end(), *lIt) == _pbarpJPCLSs.end())
 	    _pbarpJPCLSs.push_back(*lIt);
 	  acceptProd = true;
@@ -91,14 +96,16 @@ pbarpReaction::pbarpReaction(std::vector<std::pair<Particle*, Particle*> >& prod
       }
 
       else if(GlobalEnv::instance()->parser()->productionFormalism() == "Tensor"){
-	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, _channelID, decName));
+	std::shared_ptr<IsobarTensorDecay> currentTensorDec(new IsobarTensorDecay( (*itIGJPC), particlePair.first, particlePair.second, _channelID, decName));
 	currentTensorDec->setProductionAmp();
+	currentDec->setProdChannelInfo( *itProd );
 	currentTensorDec->extractStates();
 	_prodTensorDecs.push_back(currentTensorDec);
       }
       else if(GlobalEnv::instance()->parser()->productionFormalism() == "Heli"){
-	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itIGJPC),itPartPairs->first, itPartPairs->second, _channelID, decName));
+	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( (*itIGJPC),particlePair.first, particlePair.second, _channelID, decName));
 	currentHeliDec->setProductionAmp();
+	currentDec->setProdChannelInfo( *itProd );
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
       }

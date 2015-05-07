@@ -42,6 +42,7 @@
 class Particle;
 class EvtData;
 class AbsDynamics;
+class ProdChannelInfo;
 
 class AbsDecay : public std::enable_shared_from_this<AbsDecay>{
 
@@ -106,11 +107,13 @@ public:
   virtual void disableIsospin(){_useIsospin=false;}
   bool useIsospin(){ return _useIsospin;}
   virtual std::string pathToConfigParser() {return _pathParserFile;}
+  std::shared_ptr<ProdChannelInfo> prodChannelInfo() {return _prodChannelInfo;}
+  void setProdChannelInfo(std::shared_ptr<ProdChannelInfo> prodChannelInfo) { _prodChannelInfo=prodChannelInfo;}
   void setProductionAmp() {_isProdAmp=true;}
   bool isProductionAmp() {return _isProdAmp;}
 
   void resetFilledMap();
-  virtual void enableProdBarrier(double qRValue);
+  virtual void enableProdBarrier();
   bool useProdBarrier() {return _useProdBarrier;}
   double massSumFsParticles() {return _massSumFsParticles;}
   double massSumFsParticlesDec1();
@@ -183,4 +186,5 @@ protected:
 
   int _Lmin;
   decLevel _decLevel;
+  std::shared_ptr<ProdChannelInfo> _prodChannelInfo;
 };

@@ -38,6 +38,7 @@ class IsobarDecayList;
 class ParserBase;
 class AbsLh;
 class MassRangeCut;
+class ProdChannelInfo;
 
 typedef short ChannelID;
 
@@ -52,6 +53,7 @@ public:
   std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
   std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
   std::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
+  std::vector< std::shared_ptr<ProdChannelInfo> > prodChannelInfoList() {return _prodChannelInfoList;}
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;}
   std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
   std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
@@ -86,6 +88,7 @@ protected:
    std::vector<std::pair<Particle*, Particle*> > _producedParticlePairs;
    std::shared_ptr<AbsDecayList> _absDecList;
    std::shared_ptr<AbsDecayList> _prodDecList;
+  std::vector< std::shared_ptr<ProdChannelInfo> > _prodChannelInfoList;
    std::vector<std::vector<std::string> > _histMassSystems;
    std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;

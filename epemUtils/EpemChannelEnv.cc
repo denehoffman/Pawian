@@ -36,6 +36,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -62,7 +63,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
 
   //epem reaction
-  _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_producedParticlePairs, id));
+  _epemReaction=std::shared_ptr<epemReaction>(new epemReaction(_prodChannelInfoList, id));
   std::vector<std::string> additionalStringVecDummy;
   std::string dynTypeDefault="WoDynamics";
 
@@ -73,7 +74,7 @@ void EpemChannelEnv::setup(ChannelID id){
     else prodDecs = _epemReaction->productionHeliMultipoleDecays();
     std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
       else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
     }
@@ -96,7 +97,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
     std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-      if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
       else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
     }

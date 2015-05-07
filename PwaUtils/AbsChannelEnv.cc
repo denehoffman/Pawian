@@ -37,6 +37,7 @@
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh" 
 #include "Event/MassRangeCut.hh"
@@ -202,6 +203,10 @@ void AbsChannelEnv::setup(ChannelID id){
   std::vector<std::string> productionSystem = _theParser->productionSystem();
 
   for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
+    std::string currentLine= (*itStr);
+    std::shared_ptr<ProdChannelInfo> currentChannelInfo(new ProdChannelInfo(currentLine) );
+    currentChannelInfo->print(std::cout);
+    _prodChannelInfoList.push_back(currentChannelInfo);
     std::stringstream stringStr;
     stringStr << (*itStr);
     std::string firstParticleStr;

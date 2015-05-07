@@ -66,9 +66,6 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_doScaling(false)
   ,_pdgTableFile("/Particle/pdtNew.table")
   ,_productionFormalism("Cano")
-  ,_useProductionBarrier(false)
-  ,_withProductionBarrier("false")
-  ,_qRProduction(0.1973)
   ,_fitqRProduction(false)
   ,_randomSeed(44123)
   ,_genWithModel(true)
@@ -139,7 +136,6 @@ ParserBase::ParserBase(int argc,char **argv)
     ("replaceProdKey",po::value< vector<string> >(&_replaceProdKey),  "replace key for specific fit parameter of the production")
     ("production",po::value< vector<string> >(&_productionSystem),  "pair of produced particles")
     ("productionFormalism",po::value< string >(&_productionFormalism),  "used formalism for the production")
-    ("useProductionBarrier",po::value<string>(&_withProductionBarrier), "use barrier factors for the production, not supported for helicity formalism, first argument yes/false; second argument optional qR value (default 0.197) ")
     ("fitqRProduction",po::value<bool>(&_fitqRProduction), "enable/disable fir parameter for individual qR prduction values")
     ("cloneParticle",po::value< vector<string> >(&_cloneParticle),  "particles to be cloned")
     ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
@@ -314,42 +310,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
 
       std::cout << "\nproduction formalism:\t" << _productionFormalism << std::endl;
-      std::cout << "useProductionBarrier:\t" << _useProductionBarrier  << std::endl;
-      std::cout << "withProductionBarrier:\t" << _withProductionBarrier  << std::endl;
       std::cout << "fitqRProduction:\t" << _fitqRProduction << std::endl;
 
-      std::string tmpName;
-      std::stringstream stringStr;
-      stringStr << _withProductionBarrier;
-      bool firstArgument=true;
-
-      while(stringStr >> tmpName){
-	if(firstArgument){
-	  firstArgument=false;
-	  if(tmpName=="false" || tmpName=="no" || tmpName=="0"){
-	    _useProductionBarrier=false;
-	    break;
-	  }
-	  else if(tmpName=="true" || tmpName=="yes" || tmpName=="1"){
-	    _useProductionBarrier=true;
-	  }
-	  else{
-	    Alert <<"withProductionBarrier: "  << tmpName << " not supported for the first argument" << endmsg;
-	    exit(0); 
-	  }  
-	}
-	else{
-	  _qRProduction=atof(tmpName.c_str());
-	  if(_qRProduction<0. || _qRProduction>10.){
-	    Alert <<"withProductionBarrier: qR value " << _qRProduction << " not supported! Must be between 0 an 10." << endmsg;
-	    exit(0);
-	  }
-	  break;
-	}
-      }
-
-      std::cout << "useProductionBarrier:\t" << _useProductionBarrier  << std::endl;
-      std::cout << "qRProduction:\t" << _qRProduction  << std::endl;
 
       std::cout << "\nhistograms inv mass for systems" << std::endl;
       for (it=_histMass.begin(); it!=_histMass.end();++it){

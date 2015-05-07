@@ -36,7 +36,7 @@
 #include "PwaDynamics/RadMultipoleFormFactor.hh"
 #include "ConfigParser/ParserBase.hh"
 
-RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2) :
+RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double massB0) :
   AbsDynamics(name, fsParticles, mother)
   ,_fsParticlesDaughter1(fsParticlesDaughter1)
   ,_fsParticlesDaughter2(fsParticlesDaughter2)
@@ -44,6 +44,7 @@ RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsPartic
   ,_dynMassKeyDaughter2(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter2))
   ,_dynEgammaCMmotherKey(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1)+"Gamma")
   ,_isP1Gamma(true)
+  ,_massB0(massB0)
 {
   Info << "RadM1Dynamics for " << _name <<endmsg;
   _isLdependent=false;
@@ -63,11 +64,11 @@ complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   double massB = theData->DoubleString.at(_dynMassKeyDaughter2); // DUMMY VALUE - needs to be mass of non-gamma dacay particle, e.g. eta_c
   if (!_isP1Gamma) massB = theData->DoubleString.at(_dynMassKeyDaughter1);
 
-  double currentMassB = 1.; // DUMMY VALUE - needs to be current mass (fit parameter!) of non-gamma decay particle, e.g. eta_c
+  //  double currentMassB = 1.; // DUMMY VALUE - needs to be current mass (fit parameter!) of non-gamma decay particle, e.g. eta_c
   double Egamma = theData->DoubleString.at(_dynEgammaCMmotherKey); // how to access Egamma?
 
   complex<double> result(1.,0.);
-  result=RadMultipoleFormFactor::PureM1(theData->DoubleString.at(_dynKey), massB, currentMassB, Egamma);
+  result=RadMultipoleFormFactor::PureM1(theData->DoubleString.at(_dynKey), massB, _massB0, Egamma);
   if ( _cacheAmps) _cachedMap[evtNo]=result;
 
   return result;

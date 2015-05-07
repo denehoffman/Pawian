@@ -41,6 +41,7 @@
 #include "PwaUtils/DynRegistry.hh"
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -77,7 +78,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_useProdBarrier(false)
    ,_massSumFsParticles(0.)
    ,_Lmin(0)
-   ,_decLevel(decayLevel::noLevel)
+  ,_decLevel(decayLevel::noLevel)
+  ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -176,6 +178,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_massSumFsParticles(0.)
   ,_Lmin(0)
   ,_decLevel(decayLevel::noLevel)
+  ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -468,18 +471,27 @@ void AbsDecay::print(std::ostream& os) const{
    }
 }
 
-void AbsDecay::enableProdBarrier(double qRValue){
+void AbsDecay::enableProdBarrier(){
   if(_dynEnabled){
     Alert << "dynamics already enabled for " << name() << endmsg;
-    exit(0);
-  }
-  if(!_isProdAmp){
-    Alert << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
     exit(1);
   }
+  if(!_prodChannelInfo->isProductionChannel()){
+    Warning << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    return;
+  }
+  if(!_prodChannelInfo->withProdBarrier()){
+    Warning << name() << "production barrier disabled" << endmsg;
+    return;
+  }
   _useProdBarrier=true;
-  _dynType="BlattWBarrier";
-  _qR=qRValue;
+  if(_prodChannelInfo->prodBarrierType()=="BlattWBarrier"){
+    _dynType="BlattWBarrier";
+    _qR=_prodChannelInfo->qRPod();
+  }
+  else if(_prodChannelInfo->prodBarrierType()=="RadM1"){
+    _dynType="RadM1";
+  }
 
   Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 

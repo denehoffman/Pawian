@@ -41,7 +41,7 @@ class AbsPawianParameters;
 class RadM1Dynamics : public AbsDynamics{
 
 public:
-  RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2);
+  RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double massB=1.);
   virtual ~RadM1Dynamics();
 
   virtual std::string type() {return "RadM1Dynamics";}
@@ -62,6 +62,7 @@ protected:
   std::string _dynMassKeyDaughter2;
   std::string _dynEgammaCMmotherKey;
   bool _isP1Gamma;
+  double _massB0;
 
 private:
 

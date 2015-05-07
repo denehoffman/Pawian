@@ -45,6 +45,7 @@
 #include "PwaUtils/BlattWBarrierDynamics.hh"
 #include "PwaUtils/RadM1Dynamics.hh"
 #include "PwaUtils/BlattWBarrierTensorDynamics.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/WoDynamics.hh"
@@ -159,7 +160,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     }
     else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
     else if(theDec->dynType()=="RadM1") {
-      result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2));
+      result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->prodChannelInfo()->m0decRadM1Prod()));
     }
     else{
       Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
