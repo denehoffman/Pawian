@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : pbarpStatesApp pbarpReactionApp pbarpTensorAmpApp
+install install-bin : pbarpStatesApp pbarpTensorAmpApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -32,5 +32,4 @@ lib pbarp :
         :   ;
 
 exe pbarpStatesApp : pbarpStatesApp.cc pbarp : ;
-exe pbarpReactionApp : pbarpReactionApp.cc pbarp : ;
 exe pbarpTensorAmpApp : pbarpTensorAmpApp.cc pbarp : ;

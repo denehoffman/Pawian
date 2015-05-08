@@ -199,7 +199,7 @@ void AbsChannelEnv::setup(ChannelID id){
   }
 
 
-  //produced particle pairs
+  //produce particle pairs
   std::vector<std::string> productionSystem = _theParser->productionSystem();
 
   for ( itStr = productionSystem.begin(); itStr != productionSystem.end(); ++itStr){
@@ -207,30 +207,6 @@ void AbsChannelEnv::setup(ChannelID id){
     std::shared_ptr<ProdChannelInfo> currentChannelInfo(new ProdChannelInfo(currentLine) );
     currentChannelInfo->print(std::cout);
     _prodChannelInfoList.push_back(currentChannelInfo);
-    std::stringstream stringStr;
-    stringStr << (*itStr);
-    std::string firstParticleStr;
-    stringStr >> firstParticleStr;
-    std::cout << "first particle:\t" << firstParticleStr << std::endl;
-
-    std::string secondParticleStr;
-    stringStr >> secondParticleStr;
-    std::cout << "second particle:\t" << secondParticleStr << std::endl;
-
-    Particle* firstParticle = GlobalEnv::instance()->particleTable()->particle(firstParticleStr);
-    if( 0==firstParticle){
-      Alert << "particle\t" << firstParticleStr << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
-    }
-
-    Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
-    if( 0==secondParticle){
-      Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
-      exit(1);
-    }
-
-    _producedParticlePairs.push_back(make_pair(firstParticle, secondParticle));
-
   }
 
   //set prefactor

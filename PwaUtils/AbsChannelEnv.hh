@@ -50,7 +50,6 @@ public:
   virtual void setup(ChannelID id);
   const int noFinalStateParticles() {return _noFinalStateParticles;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
-  std::vector<std::pair<Particle*, Particle*> > producedParticlePairs() {return _producedParticlePairs;}
   std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
   std::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
   std::vector< std::shared_ptr<ProdChannelInfo> > prodChannelInfoList() {return _prodChannelInfoList;}
@@ -85,7 +84,6 @@ protected:
   AbsChannelEnv(ParserBase* theParser, short channelType);
    int _noFinalStateParticles;
    std::vector<Particle*> _finalStateParticles;
-   std::vector<std::pair<Particle*, Particle*> > _producedParticlePairs;
    std::shared_ptr<AbsDecayList> _absDecList;
    std::shared_ptr<AbsDecayList> _prodDecList;
   std::vector< std::shared_ptr<ProdChannelInfo> > _prodChannelInfoList;
