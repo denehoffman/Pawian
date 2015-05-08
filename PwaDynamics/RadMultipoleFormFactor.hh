@@ -40,6 +40,6 @@
 //_____________________________________________________________________________
 
 namespace RadMultipoleFormFactor { 
-  complex<double> PureM1(double massA, double massB, double currentMassB, double Egamma);
+  complex<double> PureM1(double massA, double currentMassB, double massB0, double Egamma);
 
 }; // namespace RadMultipoleFormFactor

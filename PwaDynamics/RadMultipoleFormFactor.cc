@@ -24,9 +24,9 @@
 #include "PwaDynamics/RadMultipoleFormFactor.hh"
 
 // Considering a decay of the form: A -> gamma B
-complex<double> RadMultipoleFormFactor::PureM1(double massA, double massB, double currentMassB, double Egamma){
+complex<double> RadMultipoleFormFactor::PureM1(double massA, double currentMassB, double massB0, double Egamma){
   complex<double> i(0.,1.);
-  double E0 = (massA*massA - massB*massB)/(2.*massA);
+  double E0 = (massA*massA - massB0*massB0)/(2.*massA);
   double fD = (E0*E0)/(Egamma*E0 + ((Egamma-E0)*(Egamma-E0)));
   complex<double> M1(Egamma*Egamma*Egamma*fD,0.0);
 

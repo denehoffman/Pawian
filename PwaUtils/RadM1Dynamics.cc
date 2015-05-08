@@ -110,10 +110,10 @@ void RadM1Dynamics::fillMasses(EvtData* theData){
   mother4Vec=mass4VecD1+mass4VecD2;
 
   Vector4<double> photonCMmother4Vec(0.,0.,0.,0.);
-  if( mass4VecD1.Mass() < 1.e-6){  //this is the photon work around
+  if( mass4VecD1.Mass2() < 1.e-12){  //this is the photon work around
     photonCMmother4Vec=mass4VecD1;
   }    
-  else if ( mass4VecD2.Mass() < 1.e-6){  //this is the photon work around 
+  else if ( mass4VecD2.Mass2() < 1.e-12){  //this is the photon work around 
     _dynEgammaCMmotherKey=_dynMassKeyDaughter2+"Gamma";
     _isP1Gamma=false;
     photonCMmother4Vec=mass4VecD2;
