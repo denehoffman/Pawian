@@ -73,43 +73,56 @@ complex<double> result(0.,0.);
 
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
-  bool readFromCachedMap=false;
-
-  theMutex.lock();
-  if( _cacheAmps){
-    if(_recalculate){
-      bool currentEvtAlreadyCached=false;
-      
-      std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
-      if( itAlreadyCached != _alreadyCached.end()){
-	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
-	if( itAlreadyCached2 != itAlreadyCached->second.end()){
-	  currentEvtAlreadyCached=itAlreadyCached2->second;     
-	}
-	else{
-	  _alreadyCached[evtNo][currentKey]=false;
-	}   
-      }
-      else{ 
-	_alreadyCached[evtNo][currentKey]=false;
-      } 
-  
-      if(currentEvtAlreadyCached) readFromCachedMap=true;
-    }
-    else readFromCachedMap=true; 
-  }
-
-  if ( readFromCachedMap){
+  if ( _cacheAmps && !_recalcMap.at(currentKey)){
     result=_cachedStringMap.at(evtNo).at(currentKey);
-  }  
-  else{
-    result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
-      if ( _cacheAmps){
-	_cachedStringMap[evtNo][currentKey]=result;
-	_alreadyCached.at(evtNo).at(currentKey)=true;
-      }
   }
-  theMutex.unlock();
+  
+  else{
+      theMutex.lock();
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
+      if ( _cacheAmps){
+        _cachedStringMap[evtNo][currentKey]=result;
+      }
+      theMutex.unlock();
+  }
+
+  // bool readFromCachedMap=false;
+
+  // theMutex.lock();
+  // if( _cacheAmps){
+  //   if(_recalculate){
+  //     bool currentEvtAlreadyCached=false;
+      
+  //     std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
+  //     if( itAlreadyCached != _alreadyCached.end()){
+  // 	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
+  // 	if( itAlreadyCached2 != itAlreadyCached->second.end()){
+  // 	  currentEvtAlreadyCached=itAlreadyCached2->second;     
+  // 	}
+  // 	else{
+  // 	  _alreadyCached[evtNo][currentKey]=false;
+  // 	}   
+  //     }
+  //     else{ 
+  // 	_alreadyCached[evtNo][currentKey]=false;
+  //     } 
+  
+  //     if(currentEvtAlreadyCached) readFromCachedMap=true;
+  //   }
+  //   else readFromCachedMap=true; 
+  // }
+
+  // if ( readFromCachedMap){
+  //   result=_cachedStringMap.at(evtNo).at(currentKey);
+  // }  
+  // else{
+  //   result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
+  //     if ( _cacheAmps){
+  // 	_cachedStringMap[evtNo][currentKey]=result;
+  // 	_alreadyCached.at(evtNo).at(currentKey)=true;
+  //     }
+  // }
+  // theMutex.unlock();
 
   return result;
 }
@@ -178,22 +191,31 @@ void KMatrixDynamics::fillParamNameList(){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
     std::string theName=it1->first;
+    std::vector<std::string> currentNameList;
+    
     std::map<std::string, double>& bFactors = it1->second;
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
       std::string currentName="b_"+_poleNames.at(i);
       //     std::cout << "currentName: " << currentName << std::endl;
       std::string magName=currentName+"Mag";
       _paramNameList.push_back(theName+magName);
+      currentNameList.push_back(theName+magName);
   
       std::string phiName=currentName+"Phi";
       _paramNameList.push_back(theName+phiName);
+      currentNameList.push_back(theName+phiName);
     }
+    _paramNameListMap[theName]=currentNameList;
   }
-  
+
+  std::map<std::string, std::vector<std::string> >::iterator itNameMap;  
   //pole positions
   std::vector<double >::iterator itPoleVec;
   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
     _paramNameList.push_back(_poleNames.at(i)+"Mass");
+    for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
+      itNameMap->second.push_back(_poleNames.at(i)+"Mass");
+    }
   }
 
     //g-factors
@@ -202,6 +224,9 @@ void KMatrixDynamics::fillParamNameList(){
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
       _paramNameList.push_back(currentName);
+      for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
+	itNameMap->second.push_back(currentName);
+      }
     }
   }
 
@@ -212,15 +237,38 @@ void KMatrixDynamics::fillParamNameList(){
   	for(unsigned int k=j; k<_phpVecs.size(); ++k){
   	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
 	  _paramNameList.push_back(currentName);
+          for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
+	    itNameMap->second.push_back(currentName);
+	  }
   	}
       }
     }
     //Adler-term
     if(_withKMatAdler){
       _paramNameList.push_back("s0"+_kMatName);
+      for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
+	itNameMap->second.push_back("s0"+_kMatName);
+      }
+    }
+  }
+}
+
+bool KMatrixDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+
+  std::map<std::string, std::vector<std::string> >::iterator itMap;
+  for(itMap= _paramNameListMap.begin(); itMap !=_paramNameListMap.end(); ++itMap){
+    _recalcMap.at(itMap->first)=false;
+    std::vector<std::string>::iterator itStr;
+    for (itStr=itMap->second.begin(); itStr!=itMap->second.end(); ++itStr){
+      std::string currentParamName=*itStr;
+      if(!CheckDoubleEquality(fitParNew->Value(currentParamName), fitParOld->Value(currentParamName))){
+        _recalcMap.at(itMap->first)=true;
+        continue;
+      }
     }
   }
 
+  return AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
 }
 
 void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){

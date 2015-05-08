@@ -55,7 +55,8 @@ public:
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
-  virtual void fillParamNameList(); 
+  virtual void fillParamNameList();
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
  
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
@@ -88,6 +89,7 @@ protected:
   std::map<int, std::map<std::string, bool > > _alreadyCached;
   std::map<std::string, bool > _recalcMap;
   std::shared_ptr<KMatrixParser> _kMatrixParser;
+  std::map<std::string, std::vector<std::string> > _paramNameListMap;
 
   virtual void init();
   std::shared_ptr<PVectorRel> makeNewPVec();
