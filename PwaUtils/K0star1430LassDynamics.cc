@@ -39,12 +39,12 @@
 
 K0star1430LassDynamics::K0star1430LassDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
-  ,_aLASSKey(_massKey+"aLASS_PosNeg")
-  ,_rLASSKey(_massKey+"rLASS_PosNeg")
-  ,_BLASSKey(_massKey+"BLASS_PosNeg")
-  ,_phiBKey(_massKey+"phiB_PosNeg")
-  ,_RLASSKey(_massKey+"RLASS_PosNeg")
-  ,_phiRKey(_massKey+"phiR_PosNeg")
+  ,_aLASSKey(_massKey+"aLASS")
+  ,_rLASSKey(_massKey+"rLASS")
+  ,_BLASSKey(_massKey+"BLASS")
+  ,_phiBKey(_massKey+"phiB")
+  ,_RLASSKey(_massKey+"RLASS")
+  ,_phiRKey(_massKey+"phiR")
 {
   _isLdependent=false;
 }

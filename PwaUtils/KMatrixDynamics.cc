@@ -547,7 +547,7 @@ void KMatrixDynamics::init(){
 	  std::stringstream keyOrderStrStr;
 	  keyOrderStrStr << i << j << k;
 	  std::string keyOrder=keyOrderStrStr.str();
-	  std::string currentName="bg"+keyOrder+_kMatName+"PosNeg";
+	  std::string currentName="bg"+keyOrder+_kMatName;
 	  _bgTermNames.at(i).at(j).at(k)=currentName;
 	}
       }

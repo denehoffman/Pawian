@@ -66,10 +66,21 @@ int main(int __argc,char *__argv[]){
   // Setup the global environment and add the primary pbarp channel
   GlobalEnv::instance()->setup(globalAppParams);
 
-  char* argv[3];
-  int argc=3;
+  char* argvWoCfgFile[__argc];
+  int argcWoCfgFile=0;
+  for (int i=0; i<__argc ; ++i){
+    Info << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
+    std::string currentArgv(__argv[i]);
+     if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" 
+       && currentArgv !="-c" && currentArgv !="--configFile"){
+      argvWoCfgFile[argcWoCfgFile]=__argv[i];
+      argcWoCfgFile++;
+    }
+    else ++i;
+  }
+
   AppBase theAppBase;
-  theAppBase.addChannelEnvs(argc, argv);
+  theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
   GlobalEnv::instance()->setupChannelEnvs(); 
  
   // Get mode

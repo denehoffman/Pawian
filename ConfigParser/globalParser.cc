@@ -54,7 +54,7 @@ globalParser::globalParser(int argc,char **argv):
 
 bool globalParser::parseCommandLine(int argc, char **argv)
 {
-  ParserBase::parseCommandLine(argc, argv);
+  return ParserBase::parseCommandLine(argc, argv);
 
-  return true;
+  //  return true;
 }
