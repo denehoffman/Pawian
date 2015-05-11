@@ -150,9 +150,8 @@ double AbsLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar){
      theLHData.num_mc += (*it).num_mc; 
   }
 
-  //  theLHData.num_mc = _evtMCVec.size();
-  _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
-
+  if(_calcCounter<2) _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
+  else _oldFitPar->SetAllValues(fitPar->Params());
   return mergeLogLhData(theLHData);
 }
 
@@ -217,7 +216,8 @@ void AbsLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHD
      theLHData.num_mc += (*it).num_mc;
   }
 
-  _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
+   if(_calcCounter<2) _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
+   else _oldFitPar->SetAllValues(fitPar->Params());
 }
 
 double AbsLh::mergeLogLhData(LHData& theLHData){

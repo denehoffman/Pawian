@@ -54,7 +54,6 @@ AbsPawianParameters* MnPawianParameters::Clone(){
   return result;
 }
 
-
 const std::vector<std::string> MnPawianParameters::ParamNames(){
   const std::vector<MinuitParameter> theParams= _mnUserParameters.Parameters();
   std::vector<std::string> parNames;
