@@ -409,12 +409,12 @@ void AppBase::fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar
 
 bool AppBase::calcAndSendClientLh(NetworkClient& theClient, std::shared_ptr<AbsPawianParameters> startParams, ChannelID channelID){
 
+  std::shared_ptr<AbsPawianParameters> currentFitParams= std::shared_ptr<AbsPawianParameters>(startParams->Clone());
+  
   while(true){
     if(!theClient.WaitForParams()) return false;
 
     const std::vector<double> currentParamVec=theClient.GetParams();
-
-    std::shared_ptr<AbsPawianParameters> currentFitParams= std::shared_ptr<AbsPawianParameters>(startParams->Clone());
     currentFitParams->SetAllValues(currentParamVec);
 
     LHData theLHData;
