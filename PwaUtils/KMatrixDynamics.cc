@@ -163,7 +163,9 @@ void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
     std::vector<double> currentgFactorVec=_currentgFactorMap.at(i);
     for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
       std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-      fitPar->Add(currentName, currentgFactorVec.at(j), currentgFactorVec.at(j)/3.);
+      double currentError=currentgFactorVec.at(j)/3.;
+      if (currentError<1.e-5) currentError=0.01;
+      fitPar->Add(currentName, currentgFactorVec.at(j), currentError);
     }
   }
 
