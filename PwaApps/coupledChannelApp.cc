@@ -110,7 +110,7 @@ int main(int __argc,char *__argv[]){
     std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
     fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
   }
-  theAppBase.fixParams(unsortedStartPawianParams,fixedParams);
+  theAppBase.fixParams(startPawianParams,fixedParams);
 
 
   //fill param list names for dynamics
