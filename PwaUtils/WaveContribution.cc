@@ -123,20 +123,19 @@ double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParam
    std::map< std::string, double > derivatives;
 
    unsigned int nPar = currentParameters->Params().size();
+   std::shared_ptr<AbsPawianParameters> newFitParams = std::shared_ptr<AbsPawianParameters>(currentParameters->Clone());
 
    for(unsigned int i=0; i<nPar; i++){
       double parOrig = currentParameters->Value(i);
       std::string parName = currentParameters->GetName(i);
 
-      currentParameters->SetValue(i, parOrig + stepSize);
-
-      std::shared_ptr<AbsPawianParameters> newFitParams = std::shared_ptr<AbsPawianParameters>(_fitParamsOriginal->Clone());
+      newFitParams->SetValue(i, parOrig + stepSize);
  
       double newContribution = CalcContribution(newFitParams);
       double newDerivative = (newContribution - result) / stepSize;
       derivatives[parName] = newDerivative;
 
-      currentParameters->SetValue(i, parOrig);
+      newFitParams->SetValue(i, parOrig);
    }
 
    for(unsigned int i=0; i<nPar; i++){
