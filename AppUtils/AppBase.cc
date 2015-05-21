@@ -142,11 +142,20 @@ void AppBase::createLhObjects(){
 }
 
 void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData, int noOfFreeFitParams){
+
+  if(evtWeightSumData<=(noOfFreeFitParams+1)){
+    Warning << "number of data events less or equal to the number of free parameters!!!"
+	    << "\n be careful with the fit result!!!"
+	    << endmsg; 
+      }  
   
   double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(startParams);
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
   double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-  double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+  double AICccDenom = evtWeightSumData-noOfFreeFitParams-1;
+  if ( fabs(AICccDenom) < 1.e-10) AICccDenom=1.e-10;
+  double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/AICccDenom;
+
 
   std::shared_ptr<WaveContribution> theWaveContribution;
   if(GlobalEnv::instance()->parser()->calcContributionError()){
