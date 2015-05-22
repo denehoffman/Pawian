@@ -60,6 +60,10 @@ void AbsPawianParameters::SetAllValues(const std::vector<double>& values){
   }
 
   for(unsigned int i=0; i<values.size(); ++i){
+    if(values.at(i) != values.at(i)) {
+       Alert << "Parameter vector returned from Minuit conains NAN! Exiting..." << endmsg;
+       exit(0);
+    }
     SetValue(i, values.at(i));
   }
 }
