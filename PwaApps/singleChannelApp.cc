@@ -134,10 +134,6 @@ int main(int __argc,char *__argv[]){
     return 1;
   }
 
-  // Set minuit parameters
-  //  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
-  //  GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
-
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;
   startPawianParams->print(std::cout);
   // for (int i=0; i<int(upar->Params().size()); ++i){

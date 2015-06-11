@@ -27,65 +27,51 @@
 #pragma once
 
 #include "FitParams/AbsPawianParameters.hh"
-#include "Minuit2/MnUserParameters.h"
-#include "Minuit2/MnUserTransformation.h"
+#include "FitParams/PawianParameter.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include <vector>
 
-//class MnMachinePrecision;
-using namespace ROOT::Minuit2;
-
-class MnPawianParameters : public AbsPawianParameters {
+class PawianParameters : public AbsPawianParameters {
 
 public:
 
-  MnPawianParameters();
-  MnPawianParameters(const MnUserParameters& mnUserParameters);
+  PawianParameters();
+  PawianParameters(std::vector<PawianParameter>& parameters);
 
-  //   PawianParameters(const std::vector<double>&, const std::vector<double>&);
+  ~PawianParameters();
 
-  ~MnPawianParameters();
-
-  virtual std::string type(){return "Minuit2";}
-
-  //access to Minuit tools
-  const MnUserTransformation& Trafo() const {return _mnUserParameters.Trafo();}
+  virtual std::string type(){return "Pawian";}
 
   virtual unsigned int VariableParameters() const{
-       return _mnUserParameters.Trafo().VariableParameters();
+    return _parameters.size();
    }
 
-  const MnUserParameters& mnUserParameters() const {return _mnUserParameters;}
-
+  // virtual const ROOT::Minuit2::MnUserParameters& mnUserParameters() const { 
+  //   MnUserParameters mnUserParameters;
+  //    return  mnUserParameters;}
+  
   virtual AbsPawianParameters* Clone();
 
   virtual AbsPawianParameters& operator=(AbsPawianParameters& par){
-    if(par.type() != "Minuit2"){
+    if(par.type() != "Pawian"){
       Alert << "cannot copy AbsPawianParameters is type " << par.type() << " instead of type " << type() << endmsg;
       exit(1);
     }
-     MnPawianParameters& mnPar = dynamic_cast<MnPawianParameters&>(par);
-    _mnUserParameters = mnPar._mnUserParameters;
+     PawianParameters& mnPar = dynamic_cast<PawianParameters&>(par);
+    _parameters = mnPar._parameters;
     return *this;
   }
 
-  virtual MnPawianParameters& operator=(MnPawianParameters& par){
-    _mnUserParameters = par._mnUserParameters;
+  virtual PawianParameters& operator=(PawianParameters& par){
+    _parameters = par._parameters;
     return *this;
   }
-  //  const MnUserTransformation& Trafo() const {return fTransformation;}
 
-   // unsigned int VariableParameters() const {
-   //    return fTransformation.VariableParameters();
-   // }
-
-   /// access to parameters (row-wise)
-   // const std::vector<ROOT::Minuit2::MinuitParameter>& Parameters() const;
   virtual const std::vector<std::string> ParamNames();
 
    /// access to parameters and errors in column-wise representation 
-  virtual std::vector<double> Params() const {return _mnUserParameters.Params();}
-  virtual std::vector<double> Errors() const {return _mnUserParameters.Errors();}
+  virtual std::vector<double> Params() const;
+  virtual std::vector<double> Errors() const;
 
    /// access to single Parameter
    // const MinuitParameter& Parameter(unsigned int) const;
@@ -136,12 +122,8 @@ public:
    // mantain interface with const char * for backward compatibility
    virtual const char* Name(unsigned int) const;
 
-   // const MnMachinePrecision& Precision() const;
-  virtual void SetPrecision(double eps);
-
 private:
 
-  //   MnUserTransformation fTransformation;
-  MnUserParameters _mnUserParameters;
+  std::vector<PawianParameter> _parameters;
 };
 

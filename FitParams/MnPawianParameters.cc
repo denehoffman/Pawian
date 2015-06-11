@@ -29,6 +29,7 @@
 
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MinuitParameter.h"
+#include "Minuit2/MnMachinePrecision.h"
 
 using namespace ROOT::Minuit2;
 
@@ -36,12 +37,14 @@ MnPawianParameters::MnPawianParameters() :
   AbsPawianParameters()
   ,_mnUserParameters()
 {
+  //  _mnUserParameters.SetPrecision(GetPrecision());
 }
 
 MnPawianParameters::MnPawianParameters(const MnUserParameters& mnUserParameters) :
   AbsPawianParameters()
   ,_mnUserParameters(mnUserParameters)
 {
+  //  _mnUserParameters.SetPrecision(mnUserParameters.Precision().Eps());
 }
 
 MnPawianParameters::~MnPawianParameters()

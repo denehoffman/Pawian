@@ -53,7 +53,7 @@ spinDensityHist::spinDensityHist(std::shared_ptr<AbsLh> theLh, std::shared_ptr<A
   , _nBins(101)
   ,_theLh(theLh)
    ,_theFitParamsOriginal(theFitParams)
-   ,_theParameters(ParamFactory::instance()->getParametersPointer("Minuit2"))
+   ,_theParameters(ParamFactory::instance()->getParametersPointer("Pawian"))
 {
   //   _theFitParamsOriginal = &theFitParams;
    _dataList=_theLh->getMcVec();

@@ -142,7 +142,7 @@ int main(int __argc,char *__argv[]){
   Info << "DataEvtWeight: " << withDataEvtWeight << endmsg;
   Info << "MCEvtWeight: " << withMCEvtWeight << endmsg;
 
-  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
+  std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Pawian");
   GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;

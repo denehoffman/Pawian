@@ -120,7 +120,7 @@ void GlobalEnv::setupChannelEnvs(){
 }
 
 std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
-  std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Minuit2");
+  std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Pawian");
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
     (*it).first->Lh()->fillDefaultParams(result);
    }

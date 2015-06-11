@@ -40,13 +40,17 @@
 
 MinuitMinimizer::MinuitMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
   AbsPawianMinimizer(theAbsFcnPtr, upar)
+  ,_startMnUserParametersPtr(_startPawianParams->mnUserParametersPtr())
 {
 }
 
 
 // Minimization takes place here
 void MinuitMinimizer::minimize(){
-  MnMigrad migrad(*_absFcn, _startPawianParams->mnUserParameters());
+  //  MnMigrad migrad(*_absFcn, _startPawianParams->mnUserParameters());
+  //  MnUserParameters startMnUserP(*_startMnUserParametersPtr);
+ MnMigrad migrad(*_absFcn, *_startMnUserParametersPtr);
+ //    MnMigrad migrad(*_absFcn, startMnUserP);
   Info <<"start migrad "<< endmsg;
   FunctionMinimum currentFunctionMinimum = migrad(0, GlobalEnv::instance()->parser()->tolerance());
 
@@ -70,20 +74,20 @@ void MinuitMinimizer::minimize(){
 
      if(badCovarianceDiagonal){
        Warning << "Using default errors" << endmsg;
-       MnUserParameters newParams = _startPawianParams->mnUserParameters();
+       std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
        for(unsigned int i=0; i< currentFunctionMinimum.UserParameters().Params().size();i++){
-          newParams.SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
+          newMnUserParams->SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
        }
-       MnMigrad migrad2(*_absFcn, newParams, MnStrategy(2));
+       MnMigrad migrad2(*_absFcn, *newMnUserParams, MnStrategy(2));
        currentFunctionMinimum = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
     }
     else{
-       MnUserParameters newParams = _startPawianParams->mnUserParameters();
+       std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
        for(unsigned int i=0; i< currentFunctionMinimum.UserParameters().Params().size();i++){
-          newParams.SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
-          newParams.SetError(i, currentFunctionMinimum.UserParameters().Errors().at(i));
+          newMnUserParams->SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
+          newMnUserParams->SetError(i, currentFunctionMinimum.UserParameters().Errors().at(i));
        }
-       MnMigrad migrad2(*_absFcn, newParams, MnStrategy(2));
+       MnMigrad migrad2(*_absFcn, *newMnUserParams, MnStrategy(2));
        currentFunctionMinimum = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
     }
 

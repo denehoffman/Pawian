@@ -29,6 +29,7 @@
 #include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
 #include "Minuit2/FunctionMinimum.h"
+#include "Minuit2/MnUserParameters.h"
 
 #include <boost/random/normal_distribution.hpp>
 
@@ -47,6 +48,7 @@ public:
 protected:
 
   std::shared_ptr<FunctionMinimum> _mnFunctionMinimumFinalPtr;
+  std::shared_ptr<MnUserParameters> _startMnUserParametersPtr;
 
 private:
 };

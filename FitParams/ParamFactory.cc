@@ -30,6 +30,7 @@
 
 #include "FitParams/ParamFactory.hh"
 #include "FitParams/AbsPawianParameters.hh"
+#include "FitParams/PawianParameters.hh"
 #include "FitParams/MnPawianParameters.hh"
 
 #include "ErrLogger/ErrLogger.hh"
@@ -54,6 +55,7 @@ ParamFactory::~ParamFactory()
 std::shared_ptr<AbsPawianParameters> ParamFactory::getParametersPointer(std::string type){
   std::shared_ptr<AbsPawianParameters> result;
   if(type=="Minuit2") result= std::shared_ptr<AbsPawianParameters>(new MnPawianParameters());
+  else if(type=="Pawian") result= std::shared_ptr<AbsPawianParameters>(new PawianParameters());
   else{
     Alert << "type:\t" << type << "\tdoes not exist" << endmsg;
     exit(1);

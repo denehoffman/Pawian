@@ -32,7 +32,8 @@
 #include "Minuit2/MnUserParameters.h"
 
 using namespace ROOT::Minuit2;
-//class MnMachinePrecision;
+
+//class MnUserParameters;
 
 class AbsPawianParameters {
 
@@ -40,43 +41,31 @@ public:
 
   AbsPawianParameters();
 
-  //   AbsPawianParameters(const std::vector<double>&, const std::vector<double>&);
-
   ~AbsPawianParameters();
-
-   // AbsPawianParameters(const AbsPawianParameters& par) : 
-   //    fTransformation(par.fTransformation) {}
 
   virtual AbsPawianParameters& operator=(AbsPawianParameters& par)=0;
   virtual AbsPawianParameters* Clone()=0;
 
   virtual std::string type()=0;
 
-  virtual const MnUserParameters& mnUserParameters() const=0;
+  virtual std::shared_ptr<MnUserParameters> mnUserParametersPtr();
 
-  //  const MnUserTransformation& Trafo() const {return fTransformation;}
 
   virtual unsigned int VariableParameters() const=0;
-  // {
-   //    return fTransformation.VariableParameters();
-   // }
 
-   /// access to parameters (row-wise)
-   // const std::vector<ROOT::Minuit2::MinuitParameter>& Parameters() const;
   virtual const std::vector<std::string> ParamNames()=0;
 
-   /// access to parameters and errors in column-wise representation 
+   // access to parameters and errors in column-wise representation 
    virtual std::vector<double> Params() const=0;
    virtual std::vector<double> Errors() const=0;
 
-   /// access to single Parameter
-   // const MinuitParameter& Parameter(unsigned int) const;
+   // access to single Parameter
 
-   /// Add free Parameter Name, Value, Error
+   // Add free Parameter Name, Value, Error
    virtual bool Add(const std::string &, double, double)=0;
-   /// Add limited Parameter Name, Value, Lower bound, Upper bound
+   // Add limited Parameter Name, Value, Lower bound, Upper bound
    virtual bool Add(const std::string &, double, double, double, double)=0;
-   /// Add const Parameter Name, vale
+   // Add const Parameter Name, value
    virtual bool Add(const std::string &, double)=0;
 
    /// interaction via external number of Parameter
@@ -119,15 +108,10 @@ public:
    // mantain interface with const char * for backward compatibility
    virtual const char* Name(unsigned int) const=0;
 
-   // const MnMachinePrecision& Precision() const;
-  virtual void SetPrecision(double eps)=0;
-
   virtual void print(std::ostream& os);
   virtual void SetAllValues(const std::vector<double>& values);
   virtual std::shared_ptr<AbsPawianParameters> paramsWithSameOrder(std::shared_ptr<AbsPawianParameters> toSort);
 
 private:
-
-  //   MnUserTransformation fTransformation;
 };
 

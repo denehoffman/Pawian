@@ -26,7 +26,7 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "FitParams/ParamFactory.hh"
 #include "ErrLogger/ErrLogger.hh"
-
+#include "Minuit2/MnUserParameters.h"
 
 
 
@@ -37,6 +37,26 @@ AbsPawianParameters::AbsPawianParameters()
 
 
 AbsPawianParameters::~AbsPawianParameters(){;}
+
+std::shared_ptr<MnUserParameters> AbsPawianParameters::mnUserParametersPtr(){
+  std::shared_ptr<MnUserParameters> result(new MnUserParameters());
+  for(unsigned int i=0; i<Params().size(); ++i){
+    const std::string currentName=GetName(i);
+    const double currentVal=Value(i);
+    const double currentErr=Error(i);
+    if(HasLimits(i)){
+      const double currentLoLimit=LowerLimit(i);
+      const double currentUpLimit=UpperLimit(i);
+      result->Add(currentName, currentVal, currentErr, currentLoLimit, currentUpLimit);  
+    }
+    else{
+      result->Add(currentName, currentVal, currentErr);  
+    }
+
+    if(IsFixed(i)) result->Fix(currentName); 
+  }
+  return result;
+}
 
 void AbsPawianParameters::print(std::ostream& os){
   std::vector<std::string> nameVec=ParamNames();
