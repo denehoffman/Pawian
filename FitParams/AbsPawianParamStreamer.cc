@@ -31,7 +31,7 @@
 
 AbsPawianParamStreamer::AbsPawianParamStreamer(std::string& filePath)
 {
-  _pawianParams=ParamFactory::instance()->getParametersPointer("Minuit2");
+  _pawianParams=ParamFactory::instance()->getParametersPointer("Pawian");
   std::ifstream ifs(filePath.c_str());
   if(!ifs.good()) 
     {

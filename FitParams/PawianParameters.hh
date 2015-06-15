@@ -42,13 +42,7 @@ public:
 
   virtual std::string type(){return "Pawian";}
 
-  virtual unsigned int VariableParameters() const{
-    return _parameters.size();
-   }
-
-  // virtual const ROOT::Minuit2::MnUserParameters& mnUserParameters() const { 
-  //   MnUserParameters mnUserParameters;
-  //    return  mnUserParameters;}
+  virtual unsigned int VariableParameters() const;
   
   virtual AbsPawianParameters* Clone();
 

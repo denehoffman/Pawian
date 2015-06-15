@@ -46,12 +46,17 @@ PawianParameters::~PawianParameters()
 {
 }
 
+unsigned int PawianParameters::VariableParameters() const{
+  unsigned int result=0;
+  std::vector<PawianParameter>::const_iterator itPar;
+  for (itPar=_parameters.begin(); itPar!=_parameters.end(); ++itPar){
+    if (!(itPar->IsFixed())) ++result;
+  }
+  return result;
+}
 
 AbsPawianParameters* PawianParameters::Clone(){
-  // PawianParameters* result = new PawianParameters(_mnUserParameters); 
-  // return result;
   PawianParameters* result = new PawianParameters(_parameters);
-  //  PawianParameters* result = 0; 
   return result;
 }
 
