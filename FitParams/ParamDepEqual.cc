@@ -1,0 +1,46 @@
+//************************************************************************//
+//                                                                        //
+//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)                      //
+//                 Julian Pychy (julian@ep1.rub.de)                       //
+//                 - Ruhr-Universität Bochum                              //
+//                                                                        //
+//  This file is part of Pawian.                                          //
+//                                                                        //
+//  Pawian is free software: you can redistribute it and/or modify        //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or     //
+//  (at your option) any later version.                                   //
+//                                                                        //
+//  Pawian is distributed in the hope that it will be useful,             //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of        //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         //
+//  GNU General Public License for more details.                          //
+//                                                                        //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.       //
+//                                                                        //
+//************************************************************************//
+
+// Copyright 2014 Julian Pychy
+
+
+#include "FitParams/ParamDepEqual.hh"
+#include "FitParams/AbsPawianParameters.hh"
+
+void ParamDepEqual::FillDerived(std::istringstream& configLine, 
+				std::shared_ptr<AbsPawianParameters> params){
+  std::string parNameRef;
+  configLine >> parNameRef;
+  _idRef = params->Index(parNameRef);
+}
+
+
+
+void ParamDepEqual::Apply(std::vector<double>& par){
+    par.at(_idTarget) = par.at(_idRef);
+}
+
+
+
+
+

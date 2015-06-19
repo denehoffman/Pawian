@@ -63,6 +63,7 @@
 #include "MinFunctions/MinuitMinimizer.hh"
 
 #include "FitParams/AbsPawianParameters.hh"
+#include "FitParams/ParamDepHandler.hh"
 
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "epemUtils/EpemChannelEnv.hh"
@@ -383,6 +384,11 @@ std::shared_ptr<AbsPawianParameters> AppBase::streamPawianParams(){
 }
 
 void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams){
+
+  // Evaluate parameter dependencies and add fixes
+  ParamDepHandler::instance()->Fill(GlobalEnv::instance()->parser()->parameterDependencies(), upar);
+  std::vector<std::string> dependentParameters = ParamDepHandler::instance()->DependentParameterNames();
+  fixedParams.insert(fixedParams.end(), dependentParameters.begin(), dependentParameters.end());
 
   // Always fix the primary channel's scaling parameters
   //  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";

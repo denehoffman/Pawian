@@ -1,0 +1,79 @@
+//************************************************************************//
+//                                                                        //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
+//                 Julian Pychy (julian@ep1.rub.de)                       //
+//                 - Ruhr-Universität Bochum                              //
+//                                                                        //
+//  This file is part of Pawian.                                          //
+//                                                                        //
+//  Pawian is free software: you can redistribute it and/or modify        //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or     //
+//  (at your option) any later version.                                   //
+//                                                                        //
+//  Pawian is distributed in the hope that it will be useful,             //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of        //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         //
+//  GNU General Public License for more details.                          //
+//                                                                        //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.       //
+//                                                                        //
+//************************************************************************//
+
+#include "FitParams/ParamDepHandler.hh"
+#include "FitParams/ParamDepEqual.hh"
+#include "FitParams/ParamDepGFactorToFixFullWidth.hh"
+
+#include "ErrLogger/ErrLogger.hh"
+
+ParamDepHandler* ParamDepHandler::_instance = 0;
+
+ParamDepHandler* ParamDepHandler::instance(){
+  if(_instance == 0){
+     _instance = new ParamDepHandler();
+  }
+  return _instance;
+}
+
+
+
+void ParamDepHandler::Fill(const std::vector<std::string>& configLines, 
+				      std::shared_ptr<AbsPawianParameters> params){
+
+  for(auto it = configLines.begin(); it!=configLines.end(); ++it){
+     std::istringstream currentStream(*it);
+     
+     std::shared_ptr<ParamDep> newDependency;
+     std::string targetParameter;
+     std::string type;
+     currentStream >> targetParameter >> type;
+     
+     if(type == "equals"){
+	newDependency = std::shared_ptr<ParamDep>(new ParamDepEqual);
+     }
+     else if(type == "gFactorToFixFullWidth"){
+	newDependency = std::shared_ptr<ParamDep>(new ParamDepGFactorToFixFullWidth);
+     }
+     else{
+	Alert << "Dependency type not found: " << type << endmsg;
+	exit(0);
+     }
+     
+     Info << "Adding parameter dependency for " << targetParameter << " type "
+	  << type << " arguments " << currentStream.str() << endmsg;
+
+     newDependency->Fill(targetParameter, currentStream, params);
+     _dependentParameterNames.push_back(targetParameter);
+     _dependencies.push_back(newDependency);
+  }
+}
+
+
+
+void ParamDepHandler::ApplyDependencies(std::vector<double>& par){
+  for(auto it = _dependencies.begin(); it!= _dependencies.end(); ++it){
+     (*it)->Apply(par);
+  }
+}
+

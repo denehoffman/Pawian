@@ -128,6 +128,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
     ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
     ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
+    ("parameterDependency",po::value< vector<string> >(&_parameterDependencies),  "parameter dependencies")
     ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
     ("decay",po::value< vector<string> >(&_decaySystem),  "decay: mother and pair of decay particles")
     ("addDynamics",po::value< vector<string> >(&_dynamics), "add dynamics/line shape for resonances")
@@ -272,7 +273,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
           std::cout << "minuit parameter\t" << (*it) << "\t fixed\n";
       }
       std::cout << std::endl;
+      for (it=_parameterDependencies.begin(); it!=_parameterDependencies.end();++it){
+	std::cout << "parameter dependencies:\t" << (*it) << "\n";
+      }
 
+      std::cout << std::endl;
       std::cout << "the final state particles are:" << std::endl;
       //      std::vector<std::string>::const_iterator it;
       for (it=_finalStateParticles.begin(); it!=_finalStateParticles.end();++it){

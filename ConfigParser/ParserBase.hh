@@ -67,6 +67,7 @@ public:
   const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }
+  const std::vector<std::string>& parameterDependencies() const { return _parameterDependencies; }
   const int noOfThreads() const {return _noOfThreads;}
   const int noOfClients() const {return _noOfClients;}
   const int serverPort() const {return _serverPort;}
@@ -125,6 +126,7 @@ protected:
   std::string _clientNumberWeights;
   std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
+  std::vector<std::string> _parameterDependencies;
   bool _verbose;
   int _noOfThreads;
   int _noOfClients;

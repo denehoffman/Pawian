@@ -27,14 +27,11 @@
 #include <boost/timer/timer.hpp>
 
 #include "MinFunctions/PwaFcnBase.hh"
-#include "Minuit2/MnUserParameters.h"
+#include "FitParams/ParamDepHandler.hh"
 
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
-
-using namespace ROOT::Minuit2;
-
 
 PwaFcnBase::PwaFcnBase() :
   AbsFcn()
@@ -49,15 +46,13 @@ PwaFcnBase::~PwaFcnBase()
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   double result=0;
-  _currentPawianParms->SetAllValues(par);
-  //  fitParCol theFitParmValTmp=_defaultFitValParms;
-  //theFitParmValTmp=_defaultFitValParms;
-  //  GlobalEnv::instance()->fitParColBase()->getFitParamVal(par, theFitParmValTmp);
+  std::vector<double> modifiedParams = par;
+  ParamDepHandler::instance()->ApplyDependencies(modifiedParams);
 
-  //  result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(theFitParmValTmp);
+  _currentPawianParms->SetAllValues(modifiedParams);
   result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(_currentPawianParms);
   Info << "current LH = " << std::setprecision(16) << result << endmsg;
-
+  
   _fcnCounter++;
 
   if(_fcnCounter%20 == 0) printTimer();
