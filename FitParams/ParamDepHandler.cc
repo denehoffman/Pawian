@@ -74,3 +74,12 @@ void ParamDepHandler::ApplyDependencies(std::shared_ptr<AbsPawianParameters> par
      (*it)->Apply(params);
   }
 }
+
+std::vector<unsigned int> ParamDepHandler::RefIds(std::string parName){
+  std::vector<unsigned int> result;
+  for(auto it = _dependencies.begin(); it!= _dependencies.end(); ++it){
+    if( (*it)->targetName()==parName) result=(*it)->idRefs();
+    continue;
+  }
+  return result;
+} 

@@ -28,7 +28,7 @@
 
 void ParamDep::Fill(std::string targetParameter, std::istringstream& configLine, 
 	  std::shared_ptr<AbsPawianParameters> params){
-
+  _targetName=targetParameter;
   _idTarget = params->Index(targetParameter);
   FillDerived(configLine, params);
 }

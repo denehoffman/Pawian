@@ -49,10 +49,12 @@ void ParamDepGFactorToFixFullWidth::FillDerived(std::istringstream& configLine,
      configLine >> massParamName;
 
      newChannelData.massParamId = params->Index(massParamName);
+     _idRefs.push_back(params->Index(massParamName));
      std::string gParamName;
      configLine >> gParamName;
 
      newChannelData.gParamId = params->Index(gParamName);
+     _idRefs.push_back(params->Index(gParamName));
      configLine >> newChannelData.m1 >> newChannelData.m2;
      _refChannelData.push_back(newChannelData);
 

@@ -57,6 +57,10 @@ unsigned int PawianParameters::VariableParameters() const{
 
 AbsPawianParameters* PawianParameters::Clone(){
   PawianParameters* result = new PawianParameters(_parameters);
+  std::map<unsigned int, std::vector<unsigned int> >::iterator it;
+  for(it=_depMap.begin(); it!=_depMap.end(); ++it){
+    result->SetDependencies(it->first, it->second);
+  }
   return result;
 }
 

@@ -81,12 +81,20 @@ void AbsPawianParameters::print(std::ostream& os, bool extended){
     
     int smallwidth = 5;
     int mediumwidth = 15;
-    //  int largewidth = 25;
+    int largewidth = 25;
     os << std::setw(smallwidth) << "no " << std::setw(maxNameLength+1) << "Name" << std::setw(mediumwidth) << "Value" << std::setw(smallwidth+1) << "type" << std::setw(mediumwidth) << "Error +-" << std::setw(mediumwidth) << "Low" << std::setw(mediumwidth) << "High\n";
     for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
       int idx=Index(*it);
       os << std::setw(smallwidth-1) << idx << " " << std::setw(maxNameLength+1) << GetName(idx) << std::setw(mediumwidth) << Value(idx);
-      if (IsFixed(idx)) os << std::setw(smallwidth+1) << "fixed";
+      if (IsFixed(idx)){
+	os << std::setw(smallwidth+1) << "fixed";
+	std::map<unsigned int, std::vector<unsigned int> >::const_iterator itFound=_depMap.find(idx);
+	if(itFound!=_depMap.end()){
+	  os << "\t dependent on id:";
+	  std::vector<unsigned int> depIds=_depMap.at(idx);
+          for( unsigned int i=0; i< depIds.size(); ++i) os << " " << depIds.at(i);           
+	}
+      }
       else{
 	os << std::setw(smallwidth+1) << "free" << std::setw(mediumwidth) << Error(idx);
 	if(HasLimits(idx)) os << std::setw(mediumwidth) << LowerLimit(idx) << std::setw(mediumwidth) << UpperLimit(idx);
@@ -136,6 +144,16 @@ std::shared_ptr<AbsPawianParameters> AbsPawianParameters::paramsWithSameOrder(st
   }
 
   return sortedList;
+}
+
+void  AbsPawianParameters::SetDependencies(unsigned int id, std::vector<unsigned int>& depVec){
+  Fix(id);
+  _depMap[id]=depVec;
+}
+
+void AbsPawianParameters::SetDependencies(const std::string & name, std::vector<unsigned int>& depVec){
+  unsigned int id=Index(name);
+  SetDependencies(id, depVec);
 }
 
 

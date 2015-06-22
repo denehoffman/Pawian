@@ -29,6 +29,7 @@
 #include <iostream> 
 #include <vector>
 #include <memory>
+#include <map>
 #include "Minuit2/MnUserParameters.h"
 
 using namespace ROOT::Minuit2;
@@ -111,6 +112,11 @@ public:
   virtual void print(std::ostream& os, bool extended=false);
   virtual void SetAllValues(const std::vector<double>& values);
   virtual std::shared_ptr<AbsPawianParameters> paramsWithSameOrder(std::shared_ptr<AbsPawianParameters> toSort);
+  virtual void SetDependencies(const std::string &, std::vector<unsigned int>& depVec);
+  virtual void SetDependencies(unsigned int, std::vector<unsigned int>& depVec);
+
+protected:
+  std::map<unsigned int, std::vector<unsigned int> > _depMap;
 
 private:
 };

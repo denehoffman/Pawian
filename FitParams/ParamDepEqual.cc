@@ -33,6 +33,7 @@ void ParamDepEqual::FillDerived(std::istringstream& configLine,
   std::string parNameRef;
   configLine >> parNameRef;
   _idRef = params->Index(parNameRef);
+  _idRefs.push_back(_idRef);
 }
 
 void ParamDepEqual::Apply(std::shared_ptr<AbsPawianParameters> params){

@@ -53,7 +53,11 @@ MnPawianParameters::~MnPawianParameters()
 
 
 AbsPawianParameters* MnPawianParameters::Clone(){
-  MnPawianParameters* result = new MnPawianParameters(_mnUserParameters); 
+  MnPawianParameters* result = new MnPawianParameters(_mnUserParameters);
+  std::map<unsigned int, std::vector<unsigned int> >::iterator it;
+  for(it=_depMap.begin(); it!=_depMap.end(); ++it){
+    result->SetDependencies(it->first, it->second);
+  } 
   return result;
 }
 

@@ -39,8 +39,13 @@ public:
   void Fill(std::string targetParameter, std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
   virtual void FillDerived(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params) = 0;
   virtual void Apply(std::shared_ptr<AbsPawianParameters> params) = 0;
+  const int targetId() const {return _idTarget;}
+  const std::string targetName() {return _targetName;}
+  std::vector<unsigned int> const idRefs() {return _idRefs;}  
 
 protected:
   int _idTarget;
+  std::string _targetName;
+  std::vector<unsigned int> _idRefs;
 };
 

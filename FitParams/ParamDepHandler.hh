@@ -40,6 +40,7 @@ public:
   void Fill(const std::vector<std::string>& configLines, std::shared_ptr<AbsPawianParameters> params);
   void ApplyDependencies(std::shared_ptr<AbsPawianParameters> params);
   const std::vector<std::string>& DependentParameterNames() const {return _dependentParameterNames;}
+  std::vector<unsigned int> RefIds(std::string parName); 
 
 protected:
   ParamDepHandler(){}
