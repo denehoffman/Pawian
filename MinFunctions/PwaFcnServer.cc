@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <iomanip>
 #include "MinFunctions/PwaFcnServer.hh"
+#include "FitParams/ParamDepHandler.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
@@ -50,9 +51,11 @@ PwaFcnServer::~PwaFcnServer()
 double PwaFcnServer::operator()(const std::vector<double>& par) const
 {
   double result=0;
+  _currentPawianParms->SetAllValues(par);
+  ParamDepHandler::instance()->ApplyDependencies(_currentPawianParms);
 
   std::map<ChannelID, LHData> theLHDataMap;
-  _networkServerPtr->BroadcastParams(par);
+  _networkServerPtr->BroadcastParams(_currentPawianParms->Params());
   if(!_networkServerPtr->WaitForLH(theLHDataMap))
     result = 0;
   else{
@@ -74,7 +77,6 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
   }
 
   _fcnCounter++;
-  _currentPawianParms->SetAllValues(par);
   if(_fcnCounter%20 == 0) printTimer();
   printFitParams(_currentPawianParms);
 

@@ -48,7 +48,7 @@ class ParamDepGFactorToFixFullWidth : public ParamDep
 public:
   virtual void FillDerived(std::istringstream& configLine,
 		    std::shared_ptr<AbsPawianParameters> params);
-  virtual void Apply(std::vector<double>& par);
+  virtual void Apply(std::shared_ptr<AbsPawianParameters> params);
 
 private:
   ChannelData _targetChannelData;

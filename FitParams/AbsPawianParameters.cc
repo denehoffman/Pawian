@@ -22,6 +22,7 @@
 //************************************************************************//
 
 #include <fstream>
+#include <iomanip>
 
 #include "FitParams/AbsPawianParameters.hh"
 #include "FitParams/ParamFactory.hh"
@@ -58,18 +59,41 @@ std::shared_ptr<MnUserParameters> AbsPawianParameters::mnUserParametersPtr(){
   return result;
 }
 
-void AbsPawianParameters::print(std::ostream& os){
+void AbsPawianParameters::print(std::ostream& os, bool extended){
   std::vector<std::string> nameVec=ParamNames();
 
   std::vector<std::string>::const_iterator it;
-  for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
-    //    std::cout << *it;
-    // std::cout << "\tidx: " << Index(*it) << std::endl;
-    int idx=Index(*it);
-    os << GetName(idx) << "\t" << Value(idx) << "\t" << Error(idx);
-    if(HasLimits(idx)) os << "\t" << LowerLimit(idx) << "\t" << UpperLimit(idx);
-    os << "\n"; 
+  if(!extended){
+    for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
+      //    std::cout << *it;
+      // std::cout << "\tidx: " << Index(*it) << std::endl;
+      int idx=Index(*it);
+      os << GetName(idx) << "\t" << Value(idx) << "\t" << Error(idx);
+      if(HasLimits(idx)) os << "\t" << LowerLimit(idx) << "\t" << UpperLimit(idx);
+      os << "\n"; 
     }
+  }
+  else{
+    unsigned int maxNameLength=10;
+    for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
+      if ( it->size()>maxNameLength ) maxNameLength=it->size();
+    }
+    
+    int smallwidth = 5;
+    int mediumwidth = 15;
+    //  int largewidth = 25;
+    os << std::setw(smallwidth) << "no " << std::setw(maxNameLength+1) << "Name" << std::setw(mediumwidth) << "Value" << std::setw(smallwidth+1) << "type" << std::setw(mediumwidth) << "Error +-" << std::setw(mediumwidth) << "Low" << std::setw(mediumwidth) << "High\n";
+    for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
+      int idx=Index(*it);
+      os << std::setw(smallwidth-1) << idx << " " << std::setw(maxNameLength+1) << GetName(idx) << std::setw(mediumwidth) << Value(idx);
+      if (IsFixed(idx)) os << std::setw(smallwidth+1) << "fixed";
+      else{
+	os << std::setw(smallwidth+1) << "free" << std::setw(mediumwidth) << Error(idx);
+	if(HasLimits(idx)) os << std::setw(mediumwidth) << LowerLimit(idx) << std::setw(mediumwidth) << UpperLimit(idx);
+      }
+      os << "\n";
+    }
+  }
 }
 
 void AbsPawianParameters::SetAllValues(const std::vector<double>& values){

@@ -108,7 +108,7 @@ public:
    // mantain interface with const char * for backward compatibility
    virtual const char* Name(unsigned int) const=0;
 
-  virtual void print(std::ostream& os);
+  virtual void print(std::ostream& os, bool extended=false);
   virtual void SetAllValues(const std::vector<double>& values);
   virtual std::shared_ptr<AbsPawianParameters> paramsWithSameOrder(std::shared_ptr<AbsPawianParameters> toSort);
 

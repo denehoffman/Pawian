@@ -59,21 +59,18 @@ void ParamDepGFactorToFixFullWidth::FillDerived(std::istringstream& configLine,
   }
 }
 
-
-
-void ParamDepGFactorToFixFullWidth::Apply(std::vector<double>& par){
-
+void ParamDepGFactorToFixFullWidth::Apply(std::shared_ptr<AbsPawianParameters> params){
   double result = 0;
 
   double partialWidthSum = 0;
   for(auto it = _refChannelData.begin(); it!= _refChannelData.end(); ++it){
      // Gamma_i = g*g*rho(m,m1,m2)/m
-     double m = par.at((*it).massParamId);
-     partialWidthSum += (par.at((*it).gParamId) * par.at((*it).gParamId) * phaseSpaceFac(m, (*it).m1, (*it).m2) / m).real();
+    double m = params->Value((*it).massParamId);
+    partialWidthSum += (params->Value((*it).gParamId) * params->Value((*it).gParamId) * phaseSpaceFac(m, (*it).m1, (*it).m2) / m).real();
   }
 
   double targetPartialWidth = _targetFullWidth - partialWidthSum;
-  double mTarget = par.at(_targetChannelData.massParamId);
+  double mTarget = params->Value(_targetChannelData.massParamId);
   
   result = (mTarget / phaseSpaceFac(mTarget, _targetChannelData.m1, _targetChannelData.m2)).real() * targetPartialWidth;
 
@@ -85,14 +82,13 @@ void ParamDepGFactorToFixFullWidth::Apply(std::vector<double>& par){
 	   << " g^2 = " << result << endmsg;
 
      for(auto it = _refChannelData.begin(); it!= _refChannelData.end(); ++it){
-	Alert << "Independent Channel: g = " << par.at((*it).gParamId) << " m = " << par.at((*it).massParamId) << endmsg;
+	Alert << "Independent Channel: g = " << params->Value((*it).gParamId) << " m = " << params->Value((*it).massParamId) << endmsg;
      }
 
      exit(0);
   }
-  par.at(_targetChannelData.gParamId) = sqrt(result);
+  params->SetValue(_targetChannelData.gParamId, sqrt(result));
 }
-
 
 
 

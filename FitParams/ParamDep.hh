@@ -38,7 +38,8 @@ class ParamDep
 public:
   void Fill(std::string targetParameter, std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
   virtual void FillDerived(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params) = 0;
-  virtual void Apply(std::vector<double>& par) = 0;
+  virtual void Apply(std::shared_ptr<AbsPawianParameters> params) = 0;
+
 protected:
   int _idTarget;
 };

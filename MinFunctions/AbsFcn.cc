@@ -65,7 +65,7 @@ void AbsFcn::printTimer() const{
 
 void AbsFcn::printFitParams(std::shared_ptr<AbsPawianParameters> par) const{
   if (  _fcnCounter%1000 == 0) {
-    par->print(std::cout);
+    par->print(std::cout, true);
   }
 }
 

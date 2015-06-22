@@ -69,11 +69,8 @@ void ParamDepHandler::Fill(const std::vector<std::string>& configLines,
   }
 }
 
-
-
-void ParamDepHandler::ApplyDependencies(std::vector<double>& par){
+void ParamDepHandler::ApplyDependencies(std::shared_ptr<AbsPawianParameters> params){
   for(auto it = _dependencies.begin(); it!= _dependencies.end(); ++it){
-     (*it)->Apply(par);
+     (*it)->Apply(params);
   }
 }
-

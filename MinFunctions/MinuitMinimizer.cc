@@ -29,6 +29,8 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "FitParams/MnPawianParameters.hh"
+#include "FitParams/ParamDepHandler.hh"
+
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ConfigParser/ParserBase.hh"
@@ -59,6 +61,7 @@ void MinuitMinimizer::minimize(){
     _minimumReached=true;
     _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
     _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
+    ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);
     return;
   }
 
@@ -98,6 +101,7 @@ void MinuitMinimizer::minimize(){
   _minimumReached=true;
   _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
   _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
+  ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);  
 }
 
 
@@ -110,7 +114,7 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     double theLh = _mnFunctionMinimumFinalPtr->Fval();
 
     Info << "\n\n********************** Final fit parameters *************************\n";
-    Info << "\n" << _mnFunctionMinimumFinalPtr->UserParameters() << "\n";
+    _bestPawianParams->print(std::cout, true);
     Info << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
     if(_mnFunctionMinimumFinalPtr->IsValid())             Info << "\n Function minimum is valid.\n";
     else                          Info << "\n WARNING: Function minimum is invalid!" << endmsg;

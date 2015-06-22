@@ -46,10 +46,9 @@ PwaFcnBase::~PwaFcnBase()
 double PwaFcnBase::operator()(const std::vector<double>& par) const
 {
   double result=0;
-  std::vector<double> modifiedParams = par;
-  ParamDepHandler::instance()->ApplyDependencies(modifiedParams);
+  _currentPawianParms->SetAllValues(par);
+  ParamDepHandler::instance()->ApplyDependencies(_currentPawianParms);
 
-  _currentPawianParms->SetAllValues(modifiedParams);
   result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(_currentPawianParms);
   Info << "current LH = " << std::setprecision(16) << result << endmsg;
   

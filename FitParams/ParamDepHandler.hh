@@ -38,7 +38,7 @@ public:
   static ParamDepHandler* instance();
 
   void Fill(const std::vector<std::string>& configLines, std::shared_ptr<AbsPawianParameters> params);
-  void ApplyDependencies(std::vector<double>& par);
+  void ApplyDependencies(std::shared_ptr<AbsPawianParameters> params);
   const std::vector<std::string>& DependentParameterNames() const {return _dependentParameterNames;}
 
 protected:

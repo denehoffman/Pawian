@@ -26,6 +26,7 @@
 
 #include "FitParams/ParamDepEqual.hh"
 #include "FitParams/AbsPawianParameters.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 void ParamDepEqual::FillDerived(std::istringstream& configLine, 
 				std::shared_ptr<AbsPawianParameters> params){
@@ -34,10 +35,8 @@ void ParamDepEqual::FillDerived(std::istringstream& configLine,
   _idRef = params->Index(parNameRef);
 }
 
-
-
-void ParamDepEqual::Apply(std::vector<double>& par){
-    par.at(_idTarget) = par.at(_idRef);
+void ParamDepEqual::Apply(std::shared_ptr<AbsPawianParameters> params){
+  params->SetValue(_idTarget, params->Value(_idRef));
 }
 
 
