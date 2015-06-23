@@ -33,7 +33,7 @@
 AbsPawianMinimizer::AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
   _absFcn(theAbsFcnPtr)
   ,_startPawianParams(upar)
-  ,_bestPawianParams(upar)
+  ,_bestPawianParams(upar->Clone())
   ,_minimumReached(false)
   ,_finalLh(10000000.)
 {

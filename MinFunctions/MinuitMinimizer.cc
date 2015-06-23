@@ -60,7 +60,8 @@ void MinuitMinimizer::minimize(){
     //     return funcMin;
     _minimumReached=true;
     _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
-    _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
+    //    _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
+    _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
     ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);
     return;
   }
@@ -100,7 +101,8 @@ void MinuitMinimizer::minimize(){
   }
   _minimumReached=true;
   _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
-  _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
+  //  _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
+  _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
   ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);  
 }
 

@@ -6,6 +6,7 @@
 #
 # type name             texName               3*Q 2*J P  C  G   2*I 2*I3 S  C      mass              width  dyn.f   comment
 #
+Meson etaMatrix	        etaMatrix               0  0 -1  1  1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
 Meson f2Matrix	 	f_2Matrix  		0  4  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]
 Meson h1Matrix          h_1Matrix               0  2  1 -1 -1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
 Meson eta 		\eta  			0  0 -1  1  1	0  0  0  0 	0.547(+0.01-0.01) 0.0001 relBW	[PDG nonett 1^1S_0]
