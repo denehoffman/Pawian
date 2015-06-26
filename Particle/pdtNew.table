@@ -63,6 +63,7 @@ Meson etaHat(1600) 	\hat{\eta}_(1600)  	0  0 -1 -1  1  	0  0  0  0 	1.600 	0.300
 Meson f0Hat(1600) 	\hat{f}_0(1600)  	0  0  1 -1  1  	0  0  0  0 	1.600 	0.3000 	relBW	[0^{+-} state]
 Meson f2Hat(1800) 	\hat{f}_2(1800)  	0  4  1 -1  1   0  0  0  0 	1.800 	0.3000 	relBW	[2^{+-} state]
 Meson eta1(1400) 	\eta1(1400)  	        0  2 -1  1  1   0  0  0  0 	1.400 	0.300 	relBW	[exotic state]
+Meson f0(2540) 		f_0(2540)  		0  0  1  1  1   0  0  0  0 	2.539 	0.274 	relBW	[PDG no idea]
 #
 # End light unflavoured mesons with Isospin 0    
 #
