@@ -106,11 +106,16 @@ int main(int __argc,char *__argv[]){
 
   // Fix params for all channels
   std::vector<std::string> fixedParams;
-  for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-    std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
-    fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
-  }
-  theAppBase.fixParams(startPawianParams,fixedParams);
+  // for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
+  //   std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
+  //   fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
+  // }
+
+  //mnParFix must be set in global cfg file
+  std::vector<std::string> fixedGlobalParams = globalAppParams->fixedParams();
+  fixedParams.insert(fixedParams.end(), fixedGlobalParams.begin(), fixedGlobalParams.end());
+ 
+   theAppBase.fixParams(startPawianParams,fixedParams);
 
 
   //fill param list names for dynamics

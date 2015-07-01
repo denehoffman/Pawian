@@ -101,7 +101,7 @@ void AppBase::generate(std::shared_ptr<AbsPawianParameters> theParams){
 
 void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight, int evtStart, int evtStop){
   int noFinalStateParticles=GlobalEnv::instance()->Channel(channelID)->noFinalStateParticles();
-  std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel()->massRangeCuts();
+  std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel(channelID)->massRangeCuts();
   EventReaderDefault eventReader(fileNames, noFinalStateParticles, 0, withEvtWeight);
   eventReader.setUnit(GlobalEnv::instance()->Channel(channelID)->parser()->unitInFile());
   eventReader.setOrder(GlobalEnv::instance()->Channel(channelID)->parser()->orderInFile());
@@ -240,6 +240,11 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
 
   std::shared_ptr<AbsPawianParameters> currentParams = std::shared_ptr<AbsPawianParameters>(startParams->Clone());
 
+  std::ostringstream qaSummaryFileName;
+  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+  qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
+  std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+
   for(int i=-1; i<static_cast<int>(theWaveContribution->NoOfContributions());i++){
 
     std::string contributionName="";
@@ -256,7 +261,10 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     //loop over data events
     Event* anEvent;
     int evtCount = 0;
-  
+
+    double integralDataWoWeight=(double) dataEventList.size();
+    double evtWeightSumData=theLHData.weightSum;
+    
     dataEventList.rewind();
     while ((anEvent = dataEventList.nextEvent())){
       EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
@@ -290,20 +298,20 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     double scaleFactor=theLHData.weightSum/theLHData.num_mc;
     histPtr->scaleFitHists(scaleFactor);
 
-    if(i!=-1)
-      continue;
-
+    // if(i!=-1)
+    //   continue;
+    if(i==-1){
     double theLh=absLh->mergeLogLhData(theLHData);
-    double evtWeightSumData=theLHData.weightSum;
+    //    double evtWeightSumData=theLHData.weightSum;
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    double integralDataWoWeight=(double) dataEventList.size();
+    //    double integralDataWoWeight=(double) dataEventList.size();
     
-    std::ostringstream qaSummaryFileName;
-    std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-    qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
-    std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+    // std::ostringstream qaSummaryFileName;
+    // std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+    // qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
+    // std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
     
     Info        << "logLh\t" << theLh;
     theQaStream << "logLh\t" << theLh << "\n";
@@ -334,10 +342,18 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
 
     Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
     theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
-
-    theQaStream.close();
+  }
+    else{ //i>-1
+      Info        << "contribution no " << i;
+      Info        << "No of data events without weight " << integralDataWoWeight;
+      Info        << "No of data events with weight " << evtWeightSumData;
+      Info        << "No of MC events " << theLHData.num_mc;
+      Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
+      theQaStream << "contribution no " << i << "\n";
+      theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
+    }
   } // loop over contributions
-
+  theQaStream.close();
 }
 
 void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList){
@@ -523,10 +539,10 @@ void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double
 }
 
 void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams){
+  //  ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
   std::ostringstream portStringStream;
   portStringStream << GlobalEnv::instance()->parser()->serverPort();
-  
-  NetworkClient theClient(GlobalEnv::instance()->parser()->serverAddress(), portStringStream.str());
+    NetworkClient theClient(GlobalEnv::instance()->parser()->serverAddress(), portStringStream.str());
   if(!theClient.Login()){
     Alert << "login of the client failed!!!" << endmsg;
     exit(1);

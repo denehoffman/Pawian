@@ -121,29 +121,25 @@ void AbsPawianParameters::SetAllValues(const std::vector<double>& values){
 }
 
 std::shared_ptr<AbsPawianParameters> AbsPawianParameters::paramsWithSameOrder(std::shared_ptr<AbsPawianParameters> toSort){
-  if(Params().size() != toSort->Params().size() ){
+  if(Params().size() > toSort->Params().size() ){
     Alert << "parameter lists exhibit differnet sizes: Params().size(): " << Params().size() 
-	  << " toSort->Params().size(): " << toSort->Params().size() << endmsg;
+  	  << " toSort->Params().size(): " << toSort->Params().size() << endmsg;
     exit(1); 
   }
   
-  std::shared_ptr<AbsPawianParameters> sortedList=ParamFactory::instance()->getParametersPointer(toSort->type());
+  std::shared_ptr<AbsPawianParameters> resultList=ParamFactory::instance()->getParametersPointer(toSort->type());
 
   for(unsigned int id=0; id<Params().size(); ++id){
     const std::string currentName=GetName(id);
     unsigned int toSortId=toSort->Index(currentName);
-    if(toSortId >= Params().size()){
-      Alert << "toSort list does not contain parameter with the name " << currentName << endmsg;
-      exit(1); 
-    }
-    sortedList->Add(currentName, toSort->Value(toSortId), toSort->Error(toSortId));
+    resultList->Add(currentName, toSort->Value(toSortId), toSort->Error(toSortId));
     if(toSort->HasLimits(toSortId)){
-      sortedList->SetLimits(id, toSort->LowerLimit(toSortId), toSort->UpperLimit(toSortId));
+      resultList->SetLimits(id, toSort->LowerLimit(toSortId), toSort->UpperLimit(toSortId));
     }
-    if(toSort->IsFixed(toSortId)) sortedList->Fix(id);    
+    if(toSort->IsFixed(toSortId)) resultList->Fix(id);    
   }
 
-  return sortedList;
+  return resultList;
 }
 
 void  AbsPawianParameters::SetDependencies(unsigned int id, std::vector<unsigned int>& depVec){

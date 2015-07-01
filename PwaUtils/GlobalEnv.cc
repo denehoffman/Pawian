@@ -128,7 +128,7 @@ std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
 }
 
 void GlobalEnv::setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams){
-  std::shared_ptr<AbsPawianParameters> defaultParams=GlobalEnv::defaultPawianParams();
+  std::shared_ptr<AbsPawianParameters> defaultParams=GlobalEnv::instance()->defaultPawianParams();
   _startParams=defaultParams->paramsWithSameOrder(startParams);
 }
 
