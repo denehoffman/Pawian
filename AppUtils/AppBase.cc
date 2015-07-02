@@ -263,13 +263,14 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     int evtCount = 0;
 
     double integralDataWoWeight=(double) dataEventList.size();
-    double evtWeightSumData=theLHData.weightSum;
+    double evtWeightSumData=0.;
     
     dataEventList.rewind();
     while ((anEvent = dataEventList.nextEvent())){
       EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       absLh->addDataToLogLh(currentDataEvt, currentParams, theLHData);
       histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+      evtWeightSumData += currentDataEvt->evtWeight;
       delete currentDataEvt;
       evtCount++;
       if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
@@ -301,48 +302,48 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     // if(i!=-1)
     //   continue;
     if(i==-1){
-    double theLh=absLh->mergeLogLhData(theLHData);
-    //    double evtWeightSumData=theLHData.weightSum;
-    double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
-    double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    //    double integralDataWoWeight=(double) dataEventList.size();
-    
-    // std::ostringstream qaSummaryFileName;
-    // std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-    // qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
-    // std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
-    
-    Info        << "logLh\t" << theLh;
-    theQaStream << "logLh\t" << theLh << "\n";
-    
-    Info        << "noOfFreeFitParams:\t" << noOfFreeFitParams;
-    theQaStream << "noOfFreeFitParams\t" << noOfFreeFitParams << "\n";
-    
-    Info        << "BIC:\t" << BICcriterion;
-    theQaStream << "BIC:\t" << BICcriterion << "\n";
-  
-    Info        << "AICa:\t" << AICcriterion;
-    theQaStream << "AICa:\t" << AICcriterion << "\n";
-
-    Info        << "AICc:\t" << AICccriterion;
-    theQaStream << "AICc:\t" << AICccriterion << "\n";
-
-    Info        << "No of data events without weight " << integralDataWoWeight;
-    theQaStream << "No of data events without weight " << integralDataWoWeight << "\n";
-
-    Info        << "No of data events with weight " << evtWeightSumData;
-    theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
-
-    Info        << "No of MC events " << theLHData.num_mc;
-    theQaStream << "No of MC events " << theLHData.num_mc << "\n";
-
-    Info        << "scaling factor " << scaleFactor;
-    theQaStream << "scaling factor " << scaleFactor << "\n";
-
-    Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
-    theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
-  }
+      double theLh=absLh->mergeLogLhData(theLHData);
+      //    double evtWeightSumData=theLHData.weightSum;
+      double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
+      double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
+      double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+      //    double integralDataWoWeight=(double) dataEventList.size();
+      
+      // std::ostringstream qaSummaryFileName;
+      // std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+      // qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
+      // std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+      
+      Info        << "logLh\t" << theLh;
+      theQaStream << "logLh\t" << theLh << "\n";
+      
+      Info        << "noOfFreeFitParams:\t" << noOfFreeFitParams;
+      theQaStream << "noOfFreeFitParams\t" << noOfFreeFitParams << "\n";
+      
+      Info        << "BIC:\t" << BICcriterion;
+      theQaStream << "BIC:\t" << BICcriterion << "\n";
+      
+      Info        << "AICa:\t" << AICcriterion;
+      theQaStream << "AICa:\t" << AICcriterion << "\n";
+      
+      Info        << "AICc:\t" << AICccriterion;
+      theQaStream << "AICc:\t" << AICccriterion << "\n";
+      
+      Info        << "No of data events without weight " << integralDataWoWeight;
+      theQaStream << "No of data events without weight " << integralDataWoWeight << "\n";
+      
+      Info        << "No of data events with weight " << evtWeightSumData;
+      theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
+      
+      Info        << "No of MC events " << theLHData.num_mc;
+      theQaStream << "No of MC events " << theLHData.num_mc << "\n";
+      
+      Info        << "scaling factor " << scaleFactor;
+      theQaStream << "scaling factor " << scaleFactor << "\n";
+      
+      Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
+      theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
+    }
     else{ //i>-1
       Info        << "contribution no " << i;
       Info        << "No of data events without weight " << integralDataWoWeight;
