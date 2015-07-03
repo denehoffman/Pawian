@@ -106,17 +106,15 @@ int main(int __argc,char *__argv[]){
 
   // Fix params for all channels
   std::vector<std::string> fixedParams;
-  // for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-  //   std::vector<std::string> fixedChannelParams = (*it).first->parser()->fixedParams();
-  //   fixedParams.insert(fixedParams.end(), fixedChannelParams.begin(), fixedChannelParams.end());
-  // }
 
   //mnParFix must be set in global cfg file
   std::vector<std::string> fixedGlobalParams = globalAppParams->fixedParams();
   fixedParams.insert(fixedParams.end(), fixedGlobalParams.begin(), fixedGlobalParams.end());
- 
-   theAppBase.fixParams(startPawianParams,fixedParams);
 
+  if(mode == "qaModeSimple")
+    theAppBase.fixParams(startPawianParams,fixedParams, false);
+  else
+    theAppBase.fixParams(startPawianParams,fixedParams, true);
 
   //fill param list names for dynamics
   std::vector<std::shared_ptr<AbsDynamics> > dynVec=DynRegistry::instance()->getDynVec();
@@ -135,6 +133,40 @@ int main(int __argc,char *__argv[]){
 
  if(mode == "server" || mode == "evoserver"){
    theAppBase.fitServerMode(startPawianParams);
+   return 1;
+ }
+
+ if(mode == "qaModeSimple"){
+   if (GlobalEnv::instance()->NoChannels() !=1){
+     Alert << "qaModeSimple only working with one channel!!!" << endmsg;
+     return 1;
+   }
+   std::shared_ptr<AbsPawianParameters> theParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
+   std::shared_ptr<AbsPawianParameters> orderedParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
+   orderedParams=theParams->paramsWithSameOrder(startPawianParams);
+
+  const std::string datFile=GlobalEnv::instance()->Channel(0)->parser()->dataFile();
+  const std::string mcFile=GlobalEnv::instance()->Channel(0)->parser()->mcFile();
+  Info << "data file: " << datFile ;  // << endmsg;
+  Info << "mc file: " << mcFile ;  // << endmsg;
+  
+  std::vector<std::string> dataFileNames;
+  dataFileNames.push_back(datFile);
+
+  std::vector<std::string> mcFileNames;
+  mcFileNames.push_back(mcFile);
+
+  int noOfDataEvents = GlobalEnv::instance()->Channel(0)->parser()->noOfDataEvts();
+  int ratioMcToData= GlobalEnv::instance()->Channel(0)->parser()->ratioMcToData();
+
+  EventList eventsData;
+  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel(0)->useDataEvtWeight(), 0, noOfDataEvents);
+
+  int maxMcEvts=eventsData.size()*ratioMcToData;
+  EventList mcData;
+  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel(0)->useMCEvtWeight(), 0, maxMcEvts-1);
+
+   theAppBase.qaModeSimple(eventsData, mcData, orderedParams);
    return 1;
  }
 

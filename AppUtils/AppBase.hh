@@ -57,12 +57,12 @@ public:
   virtual void generate(std::shared_ptr<AbsPawianParameters> theParams);
   virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
   virtual void createLhObjects();
-  virtual void qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData, int noOfFreeFitParams);
-  virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams);
+  virtual void qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData);
+  virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams);
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList);
   //  virtual void streamParams(fitParCol& startparams, fitParCol& errparams);
   virtual std::shared_ptr<AbsPawianParameters> streamPawianParams();
-  virtual void fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams);
+  virtual void fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams, bool mustMatch=true);
   virtual void fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar);
   virtual bool calcAndSendClientLh(NetworkClient& theClient, std::shared_ptr<AbsPawianParameters> startParams, ChannelID channelID);
   virtual void fitServerMode(std::shared_ptr<AbsPawianParameters> upar);

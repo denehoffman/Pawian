@@ -142,8 +142,8 @@ void AppBase::createLhObjects(){
   //  GlobalEnv::instance()->CreateDefaultParameterSet();
 }
 
-void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData, int noOfFreeFitParams){
-
+void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData){
+  int noOfFreeFitParams=startParams->VariableParameters();
   if(evtWeightSumData<=(noOfFreeFitParams+1)){
     Warning << "number of data events less or equal to the number of free parameters!!!"
 	    << "\n be careful with the fit result!!!"
@@ -232,8 +232,9 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   histPtr->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), startParams);
 }
 
-void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams, std::shared_ptr<EvtDataBaseList> evtDataBaseList, int noOfFreeFitParams){
-
+void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams){
+  std::shared_ptr<EvtDataBaseList> evtDataBaseList(new EvtDataBaseList(0));
+  int noOfFreeFitParams=startParams->VariableParameters();
   std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
   LHData theLHData;
   std::shared_ptr<WaveContribution> theWaveContribution(new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), startParams));
@@ -400,7 +401,7 @@ std::shared_ptr<AbsPawianParameters> AppBase::streamPawianParams(){
   return thePawianStreamer.paramList();
 }
 
-void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams){
+void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams, bool mustMatch){
 
   // Evaluate parameter dependencies and add fixes
   ParamDepHandler::instance()->Fill(GlobalEnv::instance()->parser()->parameterDependencies(), upar);
@@ -426,8 +427,11 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
     //check if name exisists
     if(std::find(parNames.begin(), parNames.end(), (*itFix)) != parNames.end()) upar->Fix( (*itFix) );
     else{
-      Alert << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg;
-      exit(0);
+      if(mustMatch){
+	Alert << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg;
+	exit(0);
+      }
+      else Warning << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg; 
     }
   }
 }

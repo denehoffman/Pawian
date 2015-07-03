@@ -69,6 +69,7 @@ public:
   short channelType(){return _channelType;}
   virtual const std::string  channelTypeName()=0;
   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="")=0;
+  std::shared_ptr<AbsPawianParameters> defaultPawianParams();
 
   static short CHANNEL_PBARP;
   static short CHANNEL_EPEM;

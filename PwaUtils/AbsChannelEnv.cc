@@ -39,7 +39,8 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 #include "Particle/Particle.hh"
-#include "Particle/PdtParser.hh" 
+#include "Particle/PdtParser.hh"
+#include "FitParams/ParamFactory.hh" 
 #include "Event/MassRangeCut.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -340,3 +341,11 @@ void AbsChannelEnv::setup(ChannelID id){
 
 
 }
+
+
+std::shared_ptr<AbsPawianParameters> AbsChannelEnv::defaultPawianParams(){
+  std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Pawian");
+  Lh()->fillDefaultParams(result);
+  return result;
+}
+

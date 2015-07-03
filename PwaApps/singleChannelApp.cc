@@ -156,8 +156,6 @@ int main(int __argc,char *__argv[]){
     (*itDyn)->fillParamNameList();
   } 
 
-  const unsigned int noOfFreeFitParams = startPawianParams->VariableParameters();
-
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);
 
@@ -239,7 +237,7 @@ int main(int __argc,char *__argv[]){
   }
 
   if (mode=="qaModeSimple"){
-    theAppBase.qaModeSimple(eventsData, mcData, startPawianParams, eventListPtr, noOfFreeFitParams);
+    theAppBase.qaModeSimple(eventsData, mcData, startPawianParams);
     return 1;
   }
 
@@ -253,7 +251,7 @@ int main(int __argc,char *__argv[]){
 
   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
   if (mode=="qaMode"){
-      theAppBase.qaMode(startPawianParams, evtWeightSumData, noOfFreeFitParams );
+      theAppBase.qaMode(startPawianParams, evtWeightSumData );
       end= clock();
       double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
       Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
