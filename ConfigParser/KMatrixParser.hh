@@ -64,7 +64,12 @@ public:
   const bool useAdler() const {return _useAdler0;}
   const double s0Adler() const {return _s0Adler;}
   const double snormAdler() const {return _snormAdler;}
- 
+  const std::vector<std::string> gFactorFixPoles() {return _gFactorFixPoles;}
+  const std::vector<std::string> gFactorFixReleaseGFactor() {return _gFactorFixReleaseGFactor;}
+  const std::vector<std::string> gFactorFixKeepGRatio() {return _gFactorFixKeepGRatio;}
+  const std::vector<std::string> gFactorFixMassPol() {return _gFactorFixMassPol;}
+  const std::vector<std::string> gFactorFixWidthPol() {return _gFactorFixWidthPol;}  
+
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
   virtual bool parseCommandLine();
@@ -82,6 +87,12 @@ protected:
   bool _useAdler0;
   double _s0Adler;
   double _snormAdler;
+
+  std::vector<std::string> _gFactorFixPoles;
+  std::vector<std::string> _gFactorFixReleaseGFactor;
+  std::vector<std::string> _gFactorFixKeepGRatio;
+  std::vector<std::string> _gFactorFixMassPol;
+  std::vector<std::string> _gFactorFixWidthPol;
  
   po::options_description* _config;
 };

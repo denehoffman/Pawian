@@ -36,8 +36,10 @@ class AbsPawianParameters;
 class ParamDepEqual : public ParamDep
 {
 public:
-  virtual void FillDerived(std::istringstream& configLine,
-		    std::shared_ptr<AbsPawianParameters> params);
+  ParamDepEqual(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
+  ~ParamDepEqual();
+  
+  virtual void FillDerived(std::istringstream& configLine);
   virtual void Apply(std::shared_ptr<AbsPawianParameters> params);
 
 private:

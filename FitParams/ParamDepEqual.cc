@@ -28,16 +28,28 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-void ParamDepEqual::FillDerived(std::istringstream& configLine, 
-				std::shared_ptr<AbsPawianParameters> params){
+ParamDepEqual::ParamDepEqual(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params){
+  std::string targetParameter;
+  configLine >> targetParameter;
+
+  std::vector<std::string> targetParameterVec;
+  targetParameterVec.push_back(targetParameter);
+  Fill(targetParameterVec, params);
+  FillDerived(configLine);     
+}
+
+ParamDepEqual::~ParamDepEqual(){
+}
+
+void ParamDepEqual::FillDerived(std::istringstream& configLine){
   std::string parNameRef;
   configLine >> parNameRef;
-  _idRef = params->Index(parNameRef);
+  _idRef = _params->Index(parNameRef);
   _idRefs.push_back(_idRef);
 }
 
 void ParamDepEqual::Apply(std::shared_ptr<AbsPawianParameters> params){
-  params->SetValue(_idTarget, params->Value(_idRef));
+  params->SetValue(_idsTarget.at(0), params->Value(_idRef));
 }
 
 

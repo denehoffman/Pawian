@@ -61,9 +61,12 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("useAdler0",po::value<bool>(&_useAdler0),  "use adler0 term")
       ("s0Adler",po::value<double>(&_s0Adler),  "s0Adler parameter")
       ("snormAdler",po::value<double>(&_snormAdler),  "snormAdler parameter")
-       ;
-
-
+      ("gFactorFixPoles",po::value< vector<string> >(&_gFactorFixPoles), "poles with fixed g-factor ratios, total widths and total mass")
+      ("gFactorFixReleaseGFactor",po::value< vector<string> >(&_gFactorFixReleaseGFactor), "free g-factor for fixing g-factor ratios, total widths and total mass")
+      ("gFactorFixKeepGRatio",po::value< vector<string> >(&_gFactorFixKeepGRatio), "g-factors to be scaled for fixing g-factor ratios, total widths and total mass")
+      ("gFactorFixMassPol",po::value< vector<string> >(&_gFactorFixMassPol), "3rd order polynomial to correct the pole mass for fixing g-factor ratios, total widths and total mass")  
+      ("gFactorFixWidthPol",po::value< vector<string> >(&_gFactorFixWidthPol), "3rd order polynomial to correct the pole width for fixing g-factor ratios, total widths and total mass")
+	;
     parseCommandLine();
   }
 

@@ -24,6 +24,7 @@
 #include "FitParams/ParamDepHandler.hh"
 #include "FitParams/ParamDepEqual.hh"
 #include "FitParams/ParamDepGFactorToFixFullWidth.hh"
+#include "FitParams/ParamDepGFacToFixGFacsWidthMass.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
@@ -47,13 +48,16 @@ void ParamDepHandler::Fill(const std::vector<std::string>& configLines,
      std::shared_ptr<ParamDep> newDependency;
      std::string targetParameter;
      std::string type;
-     currentStream >> targetParameter >> type;
+     currentStream >> type;
      
      if(type == "equals"){
-	newDependency = std::shared_ptr<ParamDep>(new ParamDepEqual);
+       newDependency = std::shared_ptr<ParamDep>(new ParamDepEqual(currentStream, params));
      }
      else if(type == "gFactorToFixFullWidth"){
-	newDependency = std::shared_ptr<ParamDep>(new ParamDepGFactorToFixFullWidth);
+	newDependency = std::shared_ptr<ParamDep>(new ParamDepGFactorToFixFullWidth(currentStream, params));
+     }
+     else if(type == "gFacToFixGFacsWidthMass"){
+       newDependency = std::shared_ptr<ParamDep>(new ParamDepGFacToFixGFacsWidthMass(currentStream, params));
      }
      else{
 	Alert << "Dependency type not found: " << type << endmsg;
@@ -63,8 +67,13 @@ void ParamDepHandler::Fill(const std::vector<std::string>& configLines,
      Info << "Adding parameter dependency for " << targetParameter << " type "
 	  << type << " arguments " << currentStream.str() << endmsg;
 
-     newDependency->Fill(targetParameter, currentStream, params);
-     _dependentParameterNames.push_back(targetParameter);
+     std::vector<std::string> targetParameterVec=newDependency->targetNames();
+     std::vector<std::string>::iterator itParam;
+     for(itParam= targetParameterVec.begin(); itParam!= targetParameterVec.end(); ++itParam){
+       std::vector<std::string>::iterator foundParam;
+       foundParam=std::find(_dependentParameterNames.begin(), _dependentParameterNames.end(), (*itParam));
+       if(foundParam == _dependentParameterNames.end()) _dependentParameterNames.push_back(*itParam);
+     }
      _dependencies.push_back(newDependency);
   }
 }
@@ -78,8 +87,12 @@ void ParamDepHandler::ApplyDependencies(std::shared_ptr<AbsPawianParameters> par
 std::vector<unsigned int> ParamDepHandler::RefIds(std::string parName){
   std::vector<unsigned int> result;
   for(auto it = _dependencies.begin(); it!= _dependencies.end(); ++it){
-    if( (*it)->targetName()==parName) result=(*it)->idRefs();
-    continue;
+    std::vector<std::string> currentNames=(*it)->targetNames();
+    std::vector<std::string>::const_iterator itNames;
+    for(itNames=currentNames.begin(); itNames!=currentNames.end(); ++itNames){
+      if( (*itNames)==parName) result=(*it)->idRefs();
+      continue;
+    }
   }
   return result;
 } 

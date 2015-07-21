@@ -30,15 +30,27 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
-void ParamDepGFactorToFixFullWidth::FillDerived(std::istringstream& configLine, 
-						std::shared_ptr<AbsPawianParameters> params){
+ParamDepGFactorToFixFullWidth::ParamDepGFactorToFixFullWidth(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params){
+  std::string targetParameter;
+  configLine >> targetParameter;
+
+  std::vector<std::string> targetParameterVec;
+  targetParameterVec.push_back(targetParameter);
+  Fill(targetParameterVec, params);
+  FillDerived(configLine);
+}
+
+ParamDepGFactorToFixFullWidth::~ParamDepGFactorToFixFullWidth(){
+}
+
+void ParamDepGFactorToFixFullWidth::FillDerived(std::istringstream& configLine){
 
   configLine >> _targetFullWidth;
 
   std::string massParamName;
   configLine >> massParamName;
-  _targetChannelData.massParamId = params->Index(massParamName);
-  _targetChannelData.gParamId = _idTarget;
+  _targetChannelData.massParamId = _params->Index(massParamName);
+  _targetChannelData.gParamId = _idsTarget.at(0);
   configLine >> _targetChannelData.m1 >> _targetChannelData.m2;
 
   int numRefChannels;
@@ -48,13 +60,13 @@ void ParamDepGFactorToFixFullWidth::FillDerived(std::istringstream& configLine,
      ChannelData newChannelData;
      configLine >> massParamName;
 
-     newChannelData.massParamId = params->Index(massParamName);
-     _idRefs.push_back(params->Index(massParamName));
+     newChannelData.massParamId = _params->Index(massParamName);
+     _idRefs.push_back(_params->Index(massParamName));
      std::string gParamName;
      configLine >> gParamName;
 
-     newChannelData.gParamId = params->Index(gParamName);
-     _idRefs.push_back(params->Index(gParamName));
+     newChannelData.gParamId = _params->Index(gParamName);
+     _idRefs.push_back(_params->Index(gParamName));
      configLine >> newChannelData.m1 >> newChannelData.m2;
      _refChannelData.push_back(newChannelData);
 

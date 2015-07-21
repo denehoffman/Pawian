@@ -26,9 +26,29 @@
 #include "FitParams/ParamDep.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
-void ParamDep::Fill(std::string targetParameter, std::istringstream& configLine, 
-	  std::shared_ptr<AbsPawianParameters> params){
-  _targetName=targetParameter;
-  _idTarget = params->Index(targetParameter);
-  FillDerived(configLine, params);
+// ParamDep::ParamDep(std::vector<std::string> targetParameter, std::shared_ptr<AbsPawianParameters> params){
+//   _params=params;
+//   std::vector<std::string>::iterator it;
+//   for(it=targetParameter.begin(); it!=targetParameter.end(); ++it){
+//     _targetNames.push_back(*it);
+//     _idsTarget.push_back(params->Index(*it));      
+//   }  
+// }
+
+void ParamDep::Fill(std::vector<std::string> targetParameter, std::shared_ptr<AbsPawianParameters> params){
+ _params=params;
+  std::vector<std::string>::iterator it;
+  for(it=targetParameter.begin(); it!=targetParameter.end(); ++it){
+    _targetNames.push_back(*it);
+    _idsTarget.push_back(params->Index(*it));      
+  }
 }
+// void ParamDep::Fill(std::vector<std::string> targetParameter, std::istringstream& configLine, 
+// 	  std::shared_ptr<AbsPawianParameters> params){
+//   std::vector<std::string>::iterator it;
+//   for(it=targetParameter.begin(); it!=targetParameter.end(); ++it){
+//       _targetNames.push_back(*it);
+//       _idsTarget.push_back(params->Index(*it));      
+//   }
+//   FillDerived(configLine, params);
+// }

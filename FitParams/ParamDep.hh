@@ -36,16 +36,21 @@ class AbsPawianParameters;
 class ParamDep
 {
 public:
-  void Fill(std::string targetParameter, std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
-  virtual void FillDerived(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params) = 0;
+  ParamDep(){;}
+  ~ParamDep(){;}
+
+  void Fill(std::vector<std::string> targetParameter, std::shared_ptr<AbsPawianParameters> params);
+  //  void Fill(std::vector<std::string> targetParameter, std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
+  virtual void FillDerived(std::istringstream& configLine) = 0;
   virtual void Apply(std::shared_ptr<AbsPawianParameters> params) = 0;
-  const int targetId() const {return _idTarget;}
-  const std::string targetName() {return _targetName;}
+  std::vector<unsigned int> const targetIds() const {return _idsTarget;}
+  std::vector<std::string> const targetNames() {return _targetNames;}
   std::vector<unsigned int> const idRefs() {return _idRefs;}  
 
 protected:
-  int _idTarget;
-  std::string _targetName;
+  std::vector<unsigned int> _idsTarget;
+  std::vector<std::string> _targetNames;
   std::vector<unsigned int> _idRefs;
+  std::shared_ptr<AbsPawianParameters> _params;
 };
 

@@ -21,7 +21,7 @@
 //                                                                        //
 //************************************************************************//
 
-// ParamDepGFactorToFixFullWidth class definition file. -*- C++ -*-
+// ParamDepGFacToFixGFacsWidthMass class definition file. -*- C++ -*-
 // Copyright 2014 Julian Pychy
 
 #include "FitParams/ParamDep.hh"
@@ -30,32 +30,59 @@
 #include <string>
 #include <memory>
 #include <sstream>
+#include <map>
 
 class AbsPawianParameters; 
+class KMatrixParser;
 
-struct ChannelData
+struct FixGFacsWidthMassData
 {
-  int massParamId;
-  int gParamId;
-  double m1;
-  double m2;
-  
+  std::string poleMass;
+  std::string gFacReleaseName;
+  std::vector<std::string> gFacScaleNames;
+  std::vector<double> massCorPol;
+  std::vector<double> widthCorPol;
+
+  void print(std::ostream& os) const {
+    os <<"pole: " << poleMass
+       <<"\t released g-factor: " << gFacReleaseName << std::endl;
+
+    os <<"g factors to be scaled:";
+    std::vector<std::string>::const_iterator itStr;
+
+    for(itStr=gFacScaleNames.begin(); itStr != gFacScaleNames.end(); ++itStr){
+      os << "\t" << (*itStr);
+    } 
+
+    os << "\nparameter for pole mass correction: ";
+    std::vector<double>::const_iterator itDouble;
+    for(itDouble=massCorPol.begin(); itDouble!=massCorPol.end(); ++itDouble){    
+      os<<"\t" << (*itDouble);
+    }
+
+    os << "\nparameter for pole width correction: ";
+    for(itDouble=widthCorPol.begin(); itDouble!=widthCorPol.end(); ++itDouble){    
+      os<<"\t" << (*itDouble);
+    }
+    os<<"\n" << std::endl;
+  }
 };
 
 
-class ParamDepGFactorToFixFullWidth : public ParamDep
+class ParamDepGFacToFixGFacsWidthMass : public ParamDep
 {
 public:
-  ParamDepGFactorToFixFullWidth(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
-  ~ParamDepGFactorToFixFullWidth();
+  ParamDepGFacToFixGFacsWidthMass(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params);
+  ~ParamDepGFacToFixGFacsWidthMass();
 
   virtual void FillDerived(std::istringstream& configLine);
   virtual void Apply(std::shared_ptr<AbsPawianParameters> params);
 
 private:
-  ChannelData _targetChannelData;
-  std::vector<ChannelData> _refChannelData;
   double _targetFullWidth;
+  std::shared_ptr<KMatrixParser> _kMatrixParser;
+  std::vector<std::string> _poleNames;
+  std::map<std::string, FixGFacsWidthMassData> _dataMap;
 };
 
 
