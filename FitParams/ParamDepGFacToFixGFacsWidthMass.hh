@@ -91,6 +91,7 @@ private:
   std::shared_ptr<KMatrixParser> _kMatrixParser;
   std::vector<std::string> _poleNames;
   std::map<std::string, FixGFacsWidthMassData> _dataMap;
+  std::map<std::string, double> _gFactorStartMap;
 };
 
 

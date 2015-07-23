@@ -37,6 +37,7 @@ ParamDepGFacToFixGFacsWidthMass::ParamDepGFacToFixGFacsWidthMass(std::istringstr
   std::string pathToKMatrixConfig;
   configLine >> pathToKMatrixConfig;
   _kMatrixParser=std::shared_ptr<KMatrixParser>(new KMatrixParser(pathToKMatrixConfig));
+  _gFactorStartMap=_kMatrixParser->gFactorMap();
 
   const std::vector<std::string> gFactorFixPoles= _kMatrixParser->gFactorFixPoles();
   std::vector<std::string>::const_iterator it;
@@ -144,7 +145,6 @@ ParamDepGFacToFixGFacsWidthMass::ParamDepGFacToFixGFacsWidthMass(std::istringstr
   Info << "*****ParamDepGFacToFixGFacsWidthMass*****" << endmsg; 
   std::map<std::string, FixGFacsWidthMassData>::iterator itMap;
   for(itMap=_dataMap.begin(); itMap!=_dataMap.end(); ++itMap) itMap->second.print(std::cout);  
-
 }
 
 ParamDepGFacToFixGFacsWidthMass::~ParamDepGFacToFixGFacsWidthMass(){
@@ -175,7 +175,8 @@ void ParamDepGFacToFixGFacsWidthMass::Apply(std::shared_ptr<AbsPawianParameters>
 
     std::vector<std::string>::iterator itStr;
     for(itStr=itMap->second.gFacScaleNames.begin(); itStr!=itMap->second.gFacScaleNames.end(); ++itStr){
-      double newVal= params->Value(*itStr)*newgFacorScaler;
+      //      double newVal= params->Value(*itStr)*newgFacorScaler;
+      double newVal= _gFactorStartMap.at(*itStr)*newgFacorScaler;
       params->SetValue((*itStr), newVal);
     } 
    

@@ -113,6 +113,36 @@ bool KMatrixParser::parseCommandLine()
     std::vector<std::string>::const_iterator it;
     for(it=_gFactors.begin(); it!=_gFactors.end(); ++it){
       std::cout << (*it) << "\n";
+      std::istringstream particles(*it);
+      std::string firstParticleName;
+      std::string secondParticleName;
+      particles >> firstParticleName >> secondParticleName;
+
+      std::vector<std::string>::const_iterator itPoles;
+      for(itPoles=_poles.begin(); itPoles!=_poles.end(); ++itPoles){
+
+	std::istringstream poleIString(*itPoles);
+	std::string currentPoleName;
+
+	poleIString >> currentPoleName;
+
+	std::string currentgFacName=currentPoleName+firstParticleName+secondParticleName+"gFactor";
+
+	std::string currentgValueStr;
+	if(!(particles >> currentgValueStr)){
+	  Alert << "g-factors " << currentgFacName << " does not exist!" << endmsg;
+	  exit(0);
+	}
+	std::istringstream currentgValueiStr(currentgValueStr);
+	double currentGValue;
+	if (!(currentgValueiStr >> currentGValue)){
+	  Alert << "cannot convert " << currentgValueStr << " to a double value" << endmsg;
+	  exit(0);
+	}
+
+	_gFactorMap[currentgFacName]=currentGValue;
+
+      }
     }
 
     std::cout << "\npoles: name and mass" << std::endl;
@@ -120,6 +150,11 @@ bool KMatrixParser::parseCommandLine()
       std::cout << (*it) << "\n";
     }
 
+    std::map<std::string, double>::iterator itgMap;
+    for (itgMap=_gFactorMap.begin(); itgMap!=_gFactorMap.end(); ++itgMap){
+      std::cout << "\n"<< itgMap->first  << "\t" << itgMap->second;      
+    }
+    std::cout << "\n"; 
   return true;
 }
 
