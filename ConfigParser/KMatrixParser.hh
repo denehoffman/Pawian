@@ -68,7 +68,8 @@ public:
   const std::vector<std::string> gFactorFixReleaseGFactor() {return _gFactorFixReleaseGFactor;}
   const std::vector<std::string> gFactorFixKeepGRatio() {return _gFactorFixKeepGRatio;}
   const std::vector<std::string> gFactorFixMassPol() {return _gFactorFixMassPol;}
-  const std::vector<std::string> gFactorFixWidthPol() {return _gFactorFixWidthPol;}  
+  const std::vector<std::string> gFactorFixWidthPol() {return _gFactorFixWidthPol;}
+  const std::vector<std::string> gFactorFixSeparateScale() {return _gFactorFixSeparateScale;}  
 
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
@@ -93,6 +94,7 @@ protected:
   std::vector<std::string> _gFactorFixKeepGRatio;
   std::vector<std::string> _gFactorFixMassPol;
   std::vector<std::string> _gFactorFixWidthPol;
+  std::vector<std::string> _gFactorFixSeparateScale;
  
   po::options_description* _config;
 };

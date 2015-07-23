@@ -122,6 +122,23 @@ ParamDepGFacToFixGFacsWidthMass::ParamDepGFacToFixGFacsWidthMass(std::istringstr
     _dataMap.at(currentPoleName).widthCorPol[3] = atof(p3Str.c_str());
   }
 
+  const std::vector<std::string> gFactorFixSeparateScale = _kMatrixParser->gFactorFixSeparateScale();
+  for(it=gFactorFixSeparateScale.begin(); it!=gFactorFixSeparateScale.end(); ++it){
+    std::istringstream currentStream(*it);
+    std::string currentPoleName;
+    currentStream >> currentPoleName;
+
+    std::string currentgFacNameToBeScaled;
+    currentStream >> currentgFacNameToBeScaled;
+
+    std::string scaleStr;
+    currentStream >> scaleStr;
+
+    _dataMap.at(currentPoleName).gFacSeparateScales[currentgFacNameToBeScaled] = atof(scaleStr.c_str());
+    targetParameterVec.push_back(currentgFacNameToBeScaled);
+
+  }
+
   Fill(targetParameterVec, params);
 
   Info << "*****ParamDepGFacToFixGFacsWidthMass*****" << endmsg; 
@@ -161,7 +178,14 @@ void ParamDepGFacToFixGFacsWidthMass::Apply(std::shared_ptr<AbsPawianParameters>
       double newVal= params->Value(*itStr)*newgFacorScaler;
       params->SetValue((*itStr), newVal);
     } 
-    
+   
+    std::map<std::string, double>::iterator itStrD;
+    for (itStrD=itMap->second.gFacSeparateScales.begin(); itStrD!=itMap->second.gFacSeparateScales.end(); ++itStrD){
+      std::string currentgFacName=itStrD->first;
+      double newVal=currengFacVal*itStrD->second;
+      params->SetValue(currentgFacName, newVal);
+    } 
+ 
   }
 }
 

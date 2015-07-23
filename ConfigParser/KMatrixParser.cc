@@ -66,6 +66,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("gFactorFixKeepGRatio",po::value< vector<string> >(&_gFactorFixKeepGRatio), "g-factors to be scaled for fixing g-factor ratios, total widths and total mass")
       ("gFactorFixMassPol",po::value< vector<string> >(&_gFactorFixMassPol), "3rd order polynomial to correct the pole mass for fixing g-factor ratios, total widths and total mass")  
       ("gFactorFixWidthPol",po::value< vector<string> >(&_gFactorFixWidthPol), "3rd order polynomial to correct the pole width for fixing g-factor ratios, total widths and total mass")
+      ("gFactorFixSeparateScale",po::value< vector<string> >(&_gFactorFixSeparateScale), "g-factors to be scaled separately related to free g-factor")
 	;
     parseCommandLine();
   }

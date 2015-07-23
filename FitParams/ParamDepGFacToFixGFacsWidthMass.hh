@@ -42,6 +42,7 @@ struct FixGFacsWidthMassData
   std::vector<std::string> gFacScaleNames;
   std::vector<double> massCorPol;
   std::vector<double> widthCorPol;
+  std::map<std::string, double> gFacSeparateScales;  
 
   void print(std::ostream& os) const {
     os <<"pole: " << poleMass
@@ -64,6 +65,13 @@ struct FixGFacsWidthMassData
     for(itDouble=widthCorPol.begin(); itDouble!=widthCorPol.end(); ++itDouble){    
       os<<"\t" << (*itDouble);
     }
+
+    os << "\ng factor with separate scaling to released g-factor: ";
+    std::map<std::string, double>::const_iterator itMap;
+    for(itMap=gFacSeparateScales.begin(); itMap!=gFacSeparateScales.end(); ++itMap){    
+      os<<"\t" << itMap->first << "\t factor to " << gFacReleaseName << "\t" << itMap->second << std::endl;
+    }
+
     os<<"\n" << std::endl;
   }
 };
