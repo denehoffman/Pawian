@@ -24,10 +24,11 @@
 #include "PwaDynamics/PPoleBarrier.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 
-PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom):
+PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier):
   PPole(beta, g_i, mass_0)
   , _phpVecs(phpVecs)
   , _orbMom(orbMom)
+  ,_truncatedBarrier(truncatedBarrier)
 {
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
@@ -42,7 +43,12 @@ PPoleBarrier::~PPoleBarrier(){
 void PPoleBarrier::evalMatrix(const double mass){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
-    _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+  
+    if(_truncatedBarrier){
+          _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+                                                                                _breakUpM0.at(i), BarrierFactor::qRDefault);
+                                                                                    }
+    else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
 							      _breakUpM0.at(i), BarrierFactor::qRDefault);
   }
 

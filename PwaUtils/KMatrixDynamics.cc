@@ -195,7 +195,7 @@ void KMatrixDynamics::fillParamNameList(){
     std::string theName=it1->first;
     std::vector<std::string> currentNameList;
     
-    std::map<std::string, double>& bFactors = it1->second;
+//    std::map<std::string, double>& bFactors = it1->second;
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
       std::string currentName="b_"+_poleNames.at(i);
       //     std::cout << "currentName: " << currentName << std::endl;
@@ -593,7 +593,7 @@ std::shared_ptr<PVectorRel> KMatrixDynamics::makeNewPVec(){
    for (it=_kPoles.begin(); it!=_kPoles.end(); ++it){ 
      std::vector<double> currentGFactors=(*it)->gFactors();
      std::shared_ptr<PPole> currentPPole;
-     if (_kMatrixParser->useBarrierFactors()) currentPPole=std::shared_ptr<PPole>(new PPoleBarrier(defaultBeta, currentGFactors, (*it)->poleMass(), _phpVecs, _kMatrixParser->orbitalMom()));
+     if (_kMatrixParser->useBarrierFactors()) currentPPole=std::shared_ptr<PPole>(new PPoleBarrier(defaultBeta, currentGFactors, (*it)->poleMass(), _phpVecs, _kMatrixParser->orbitalMom(), _kMatrixParser->useTruncatedBarrierFactors()));
      else currentPPole=std::shared_ptr<PPole>(new PPole(defaultBeta, currentGFactors, (*it)->poleMass())); 
      thePpoles.push_back(currentPPole);     
    }

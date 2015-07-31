@@ -53,7 +53,7 @@ public:
 //   PPoleBarrier() : Matrix<double>::Matrix() {}
 
   /// Constructor 
-  PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom); 
+  PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier=false); 
 
   /// Copy Constructor
 
@@ -72,6 +72,7 @@ public:
 protected:
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
   int _orbMom;
+  bool _truncatedBarrier;
   std::vector< complex<double> > _breakUpM0;
   std::vector< complex<double> > _barrierFactor;
 };
