@@ -65,7 +65,7 @@ public:
 
   // functions:
 
-  virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom);
 
   virtual void updatePoleMass (double newPoleMass);
   

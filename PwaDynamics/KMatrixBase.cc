@@ -55,7 +55,7 @@ KMatrixBase::KMatrixBase(int numCols, int numRows) :
 KMatrixBase::~KMatrixBase(){
 }
 
-void KMatrixBase::evalMatrix(const double mass){
+void KMatrixBase::evalMatrix(const double mass, Spin OrbMom){
   //dummy
 }
 

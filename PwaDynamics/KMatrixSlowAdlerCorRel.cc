@@ -48,16 +48,16 @@ KMatrixSlowAdlerCorRel::~KMatrixSlowAdlerCorRel(){
 }
 
 
-void KMatrixSlowAdlerCorRel::evalMatrix(const double mass){
+void KMatrixSlowAdlerCorRel::evalMatrix(const double mass, Spin OrbMom){
   evalMatrixTemplate(mass);
 }
 
-void KMatrixSlowAdlerCorRel::evalMatrix(const complex<double> mass){
+void KMatrixSlowAdlerCorRel::evalMatrix(const complex<double> mass, Spin OrbMom){
    evalMatrixTemplate(mass);
 }
 
 template<typename MassType>
-void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const MassType mass){
+void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const MassType mass, Spin OrbMom){
   for (int i=0; i<NumRows(); ++i){
     for (int j=0; j<NumCols(); ++j){
       this->operator()(i,j)=0.;
@@ -65,7 +65,7 @@ void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const MassType mass){
   }
   vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-    (*it)->evalMatrix(mass);
+    (*it)->evalMatrix(mass, OrbMom);
     (*this)+= *(*it);
   }
 
@@ -93,5 +93,5 @@ void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const MassType mass){
   }
 }
 
-template void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const double mass);
-template void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const complex<double> mass);
+template void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void KMatrixSlowAdlerCorRel::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);

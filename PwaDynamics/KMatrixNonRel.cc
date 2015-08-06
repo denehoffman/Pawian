@@ -36,16 +36,16 @@ KMatrixNonRel::KMatrixNonRel(vector<std::shared_ptr<KPole> > Kpoles, vector<std:
 KMatrixNonRel::~KMatrixNonRel(){
 }
 
-void KMatrixNonRel::evalMatrix(const double mass){
-   return evalMatrixTemplate(mass);
+void KMatrixNonRel::evalMatrix(const double mass, Spin OrbMom){
+  return evalMatrixTemplate(mass, OrbMom);
 }
 
-void KMatrixNonRel::evalMatrix(const complex<double> mass){
-   return evalMatrixTemplate(mass);
+void KMatrixNonRel::evalMatrix(const complex<double> mass, Spin OrbMom){
+   return evalMatrixTemplate(mass, OrbMom);
 }
 
 template<typename MassType>
-void KMatrixNonRel::evalMatrixTemplate(const MassType mass){
+void KMatrixNonRel::evalMatrixTemplate(const MassType mass, Spin OrbMom){
 
   vector< complex<double> > rhoFactors;
 
@@ -56,7 +56,7 @@ void KMatrixNonRel::evalMatrixTemplate(const MassType mass){
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-    (*it)->evalMatrix(mass);
+    (*it)->evalMatrix(mass, OrbMom);
     theKMatrix += *(*it);
   }
 
@@ -67,5 +67,5 @@ void KMatrixNonRel::evalMatrixTemplate(const MassType mass){
   }
 }
 
-template void KMatrixNonRel::evalMatrixTemplate(const double mass);
-template void KMatrixNonRel::evalMatrixTemplate(const complex<double> mass);
+template void KMatrixNonRel::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void KMatrixNonRel::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);

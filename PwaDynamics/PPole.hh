@@ -31,6 +31,7 @@
 //_____________________________________________________________________________
 
 #include "qft++/matrix/Matrix.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaDynamics/KPole.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include <iostream>
@@ -66,7 +67,7 @@ public:
 
   // functions:
 
-  virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
 
   void updateBeta (complex<double> beta) {_beta=beta;}
 

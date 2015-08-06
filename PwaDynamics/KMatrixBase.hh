@@ -35,6 +35,7 @@
 #include <vector>
 #include <memory>
 #include "PwaDynamics/AbsPhaseSpace.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 class KPole;
 
@@ -54,8 +55,8 @@ public:
   /// Destructor
   virtual ~KMatrixBase();
 
-  virtual void evalMatrix(const double mass);
-  virtual void evalMatrix(const complex<double> mass) {return;}
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0) {return;}
   virtual vector<std::shared_ptr<AbsPhaseSpace> > phaseSpaceVec() {return _phpVecs;}
   virtual vector<std::shared_ptr<KPole> > kpoles() {return _KPoles;}
   virtual void updateBgTerms(unsigned int order, unsigned int row,  unsigned int column, double theVal);

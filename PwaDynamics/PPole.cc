@@ -33,7 +33,7 @@ PPole::PPole(complex<double>& beta, vector<double>& g_i, double mass_0):
 PPole::~PPole(){
 }
 
-void PPole::evalMatrix(const double mass){
+void PPole::evalMatrix(const double mass, Spin OrbMom){
   double denom=_poleMass*_poleMass-mass*mass;
   if(fabs(denom)<1e-10){
     if(denom<0.) denom=-1e-10; 

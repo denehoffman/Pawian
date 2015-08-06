@@ -31,6 +31,7 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixBase.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -53,7 +54,7 @@ public:
   /// Destructor
   virtual ~PVectorRel();
 
-  virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
 
   virtual void updateBeta(int i, complex<double> beta);
   virtual void updatePoleMass(int i, double mass);

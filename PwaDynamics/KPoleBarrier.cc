@@ -43,24 +43,24 @@ KPoleBarrier::~KPoleBarrier(){
 
 
 
-void KPoleBarrier::evalMatrix(const double mass){
-   evalMatrixTemplate(mass);
+void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
-void KPoleBarrier::evalMatrix(const complex<double> mass){
-   evalMatrixTemplate(mass);
+void KPoleBarrier::evalMatrix(const complex<double> mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
  
 template<typename MassType>
-void KPoleBarrier::evalMatrixTemplate(const MassType mass){
+void KPoleBarrier::evalMatrixTemplate(const MassType mass, Spin OrbMom){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
     if(_truncatedBarrier){
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
 								      _breakUpM0.at(i), BarrierFactor::qRDefault);
     }
     else{
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
 							       _breakUpM0.at(i), BarrierFactor::qRDefault);
     }
   }
@@ -78,8 +78,8 @@ void KPoleBarrier::evalMatrixTemplate(const MassType mass){
    }
 }
 
-template void KPoleBarrier::evalMatrixTemplate(const double mass);
-template void KPoleBarrier::evalMatrixTemplate(const complex<double> mass);
+template void KPoleBarrier::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void KPoleBarrier::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);
 
 void KPoleBarrier::updatePoleMass (double newPoleMass){
   _poleMass=newPoleMass;

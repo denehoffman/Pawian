@@ -68,7 +68,7 @@ void AbsPawianParameters::print(std::ostream& os, bool extended){
       //    std::cout << *it;
       // std::cout << "\tidx: " << Index(*it) << std::endl;
       int idx=Index(*it);
-      os << GetName(idx) << "\t" << Value(idx) << "\t" << Error(idx);
+      os << GetName(idx) << "\t" << std::setprecision(16) << Value(idx) << "\t" << Error(idx);
       if(HasLimits(idx)) os << "\t" << LowerLimit(idx) << "\t" << UpperLimit(idx);
       os << "\n"; 
     }
@@ -85,7 +85,7 @@ void AbsPawianParameters::print(std::ostream& os, bool extended){
     os << std::setw(smallwidth) << "no " << std::setw(maxNameLength+1) << "Name" << std::setw(mediumwidth) << "Value" << std::setw(smallwidth+1) << "type" << std::setw(mediumwidth) << "Error +-" << std::setw(mediumwidth) << "Low" << std::setw(mediumwidth) << "High\n";
     for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
       int idx=Index(*it);
-      os << std::setw(smallwidth-1) << idx << " " << std::setw(maxNameLength+1) << GetName(idx) << std::setw(mediumwidth) << Value(idx);
+      os << std::setw(smallwidth-1) << idx << " " << std::setw(maxNameLength+1) << GetName(idx) << std::setw(mediumwidth) << std::setprecision(16) << Value(idx);
       if (IsFixed(idx)){
 	os << std::setw(smallwidth+1) << "fixed";
 	std::map<unsigned int, std::vector<unsigned int> >::const_iterator itFound=_depMap.find(idx);

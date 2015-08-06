@@ -66,16 +66,16 @@ KMatrixKPiSFocus::KMatrixKPiSFocus(int isospin2) :
 KMatrixKPiSFocus::~KMatrixKPiSFocus(){
 }
 
-void KMatrixKPiSFocus::evalMatrix(const double mass){
+void KMatrixKPiSFocus::evalMatrix(const double mass, Spin OrbMom){
    evalMatrixTemplate(mass);
 }
 
-void KMatrixKPiSFocus::evalMatrix(const complex<double> mass){
+void KMatrixKPiSFocus::evalMatrix(const complex<double> mass, Spin OrbMom){
    evalMatrixTemplate(mass);
 }
 
 template<typename MassType>
-void KMatrixKPiSFocus::evalMatrixTemplate(const MassType mass){
+void KMatrixKPiSFocus::evalMatrixTemplate(const MassType mass, Spin OrbMom){
  
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
@@ -94,8 +94,8 @@ void KMatrixKPiSFocus::evalMatrixTemplate(const MassType mass){
   }
 }
 
-template void KMatrixKPiSFocus::evalMatrixTemplate(const double mass);
-template void KMatrixKPiSFocus::evalMatrixTemplate(const complex<double> mass);
+template void KMatrixKPiSFocus::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void KMatrixKPiSFocus::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);
 
 void KMatrixKPiSFocus::init2IsoSpin1(){
 

@@ -52,13 +52,13 @@ public:
   /// Destructor
   virtual ~KMatrixNonRel();
 
-  virtual void evalMatrix(const double mass);
-  virtual void evalMatrix(const complex<double> mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
 protected:
 
 private:
   template<typename MassType>
-  void evalMatrixTemplate(const MassType mass);
+  void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 };
 //_____________________________________________________________________________
 

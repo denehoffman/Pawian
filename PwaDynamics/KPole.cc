@@ -43,16 +43,16 @@ KPole::KPole(vector<double>& g_i, double mass_0, int numRow, int numCol):
 KPole::~KPole(){
 }
 
-void KPole::evalMatrix(const double mass){
+void KPole::evalMatrix(const double mass, Spin OrbMom){
    evalMatrixTemplate(mass);
 }
 
-void KPole::evalMatrix(const complex<double> mass){
+void KPole::evalMatrix(const complex<double> mass, Spin OrbMom){
    evalMatrixTemplate(mass);
 }
 
 template<typename MassType>
-void KPole::evalMatrixTemplate(const MassType mass){
+void KPole::evalMatrixTemplate(const MassType mass, Spin OrbMom){
   MassType denom=_poleMass*_poleMass-mass*mass;
 
   double absDenom = abs(denom);
@@ -67,5 +67,5 @@ void KPole::evalMatrixTemplate(const MassType mass){
   }
 }
 
-template void KPole::evalMatrixTemplate(const double mass);
-template void KPole::evalMatrixTemplate(const complex<double> mass);
+template void KPole::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void KPole::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);

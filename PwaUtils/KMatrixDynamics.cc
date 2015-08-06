@@ -57,7 +57,7 @@ KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
   init();
-  _isLdependent=false;
+  _isLdependent=true;
 }
 
 KMatrixDynamics::~KMatrixDynamics()
@@ -74,14 +74,16 @@ complex<double> result(0.,0.);
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
   if ( _cacheAmps && !_recalcMap.at(currentKey)){
-    result=_cachedStringMap.at(evtNo).at(currentKey);
+    //    result=_cachedStringMap.at(evtNo).at(currentKey);
+    result=_cachedStringOrbMap.at(evtNo).at(currentKey).at(OrbMom);
   }
   
   else{
       theMutex.lock();
-      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex, OrbMom);
       if ( _cacheAmps){
-        _cachedStringMap[evtNo][currentKey]=result;
+	//        _cachedStringMap[evtNo][currentKey]=result;
+	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
       }
       theMutex.unlock();
   }

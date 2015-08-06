@@ -40,15 +40,15 @@ PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double ma
 PPoleBarrier::~PPoleBarrier(){
 }
 
-void PPoleBarrier::evalMatrix(const double mass){
+void PPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
   
     if(_truncatedBarrier){
-          _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+          _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
                                                                                 _breakUpM0.at(i), BarrierFactor::qRDefault);
                                                                                     }
-    else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(_orbMom, _phpVecs.at(i)->breakUpMom(mass), 
+    else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
 							      _breakUpM0.at(i), BarrierFactor::qRDefault);
   }
 

@@ -58,7 +58,7 @@ public:
   /// Destructor
   virtual ~PVectorKPiSFocus();
 
-  virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
   virtual void updateAprod (int i, double aProd);
   virtual void updateBprod (int i, double bProd);
   virtual void updateCprod (int i, double cProd);

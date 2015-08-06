@@ -55,7 +55,7 @@ public:
   /// Destructor
   virtual ~PVectorSlowCorRel();
 
-  virtual void evalMatrix(const double mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
   virtual void updateFprod (int i, complex<double> fProd);
   virtual void updateS0prod (double s0prod) {_s0prod=s0prod;}
 

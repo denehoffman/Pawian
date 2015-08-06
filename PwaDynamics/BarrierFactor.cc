@@ -2,7 +2,7 @@
 //                                                                        //
 //  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 Julian Pychy (julian@ep1.rub.de)                       //
-//                 - Ruhr-Universität Bochum                              //
+//                 - Ruhr-Universit??t Bochum                              //
 //                                                                        //
 //  This file is part of Pawian.                                          //
 //                                                                        //
@@ -38,17 +38,23 @@ BarrierFactor::BarrierFactor(int l, std::complex<double> q0, double qR) :
 
 
 std::complex<double> BarrierFactor::BlattWeisskopf(std::complex<double> q){
-   return BlattWeisskopf(_l, q*q/_qR/_qR);
+   std::complex<double> z0(std::norm(q)/std::norm(_qR));
+   return BlattWeisskopf(_l, z0);
+//   return BlattWeisskopf(_l, q*q/_qR/_qR);
 }
 
 
 
 std::complex<double> BarrierFactor::BlattWeisskopf(int l, std::complex<double> q, double qR){
-   return BlattWeisskopf(l, q*q/qR/qR);
+   std::complex<double> z(std::norm(q)/std::norm(qR));
+   return BlattWeisskopf(l, z);
+//   return BlattWeisskopf(l, q*q/qR/qR);
 }
 
 std::complex<double> BarrierFactor::BlattWeisskopfTensor(int l, std::complex<double> q, double qR){
-   return BlattWeisskopf(l, q*q/qR/qR)/pow(q,l);
+   std::complex<double> z(std::norm(q)/std::norm(qR));
+   return BlattWeisskopf(l, z)/pow(q,l);
+//   return BlattWeisskopf(l, q*q/qR/qR)/pow(q,l);
 }
 
 

@@ -42,12 +42,12 @@ PVectorRel::PVectorRel(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
 PVectorRel::~PVectorRel(){
 }
 
-void PVectorRel::evalMatrix(const double mass){
+void PVectorRel::evalMatrix(const double mass, Spin OrbMom){
 
   Matrix< complex<double> > thePVector(NumRows(), 1);
   vector<std::shared_ptr<PPole> >::iterator it;
   for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
-    (*it)->evalMatrix(mass);
+    (*it)->evalMatrix(mass, OrbMom);
     thePVector += *(*it);
   }
 

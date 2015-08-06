@@ -58,10 +58,10 @@ FVector::FVector(int numRows) :
 FVector::~FVector(){
 }
 
-void FVector::evalMatrix(const double mass){
+void FVector::evalMatrix(const double mass, Spin OrbMom){
 
-  _Kmatrix->evalMatrix(mass);
-  _Pvector->evalMatrix(mass);
+  _Kmatrix->evalMatrix(mass, OrbMom);
+  _Pvector->evalMatrix(mass, OrbMom);
 
  for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
 
@@ -76,9 +76,9 @@ void FVector::evalMatrix(const double mass){
 
 }
 
-complex<double> FVector::evalProjMatrix(const double mass, int index){
-  _Kmatrix->evalMatrix(mass);
-  _Pvector->evalMatrix(mass);
+complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMom){
+  _Kmatrix->evalMatrix(mass, OrbMom);
+  _Pvector->evalMatrix(mass, OrbMom);
 
   for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
  

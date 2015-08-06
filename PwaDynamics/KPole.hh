@@ -31,6 +31,7 @@
 //_____________________________________________________________________________
 
 #include "qft++/matrix/Matrix.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include <iostream>
 #include <vector>
 #include <complex>
@@ -65,8 +66,8 @@ public:
 
   // functions:
 
-  virtual void evalMatrix(const double mass);
-  virtual void evalMatrix(const complex<double> mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
 
   virtual double poleMass() {return _poleMass;}
   virtual vector<double> gFactors() {return _g_i;}
@@ -80,7 +81,7 @@ protected:
 
 private:
   template<typename MassType>
-  void evalMatrixTemplate(const MassType mass);
+  void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 
 };
 //_____________________________________________________________________________

@@ -54,8 +54,8 @@ public:
   /// Destructor
   virtual ~FVector();
 
-  virtual void evalMatrix(const double mass);
-  virtual complex<double> evalProjMatrix(const double mass, int index);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual complex<double> evalProjMatrix(const double mass, int index, Spin OrbMom=0);
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 
 protected:

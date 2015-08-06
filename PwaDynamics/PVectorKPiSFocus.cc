@@ -52,7 +52,7 @@ PVectorKPiSFocus::PVectorKPiSFocus(std::shared_ptr<KMatrixKPiSFocus> kMatrix) :
 PVectorKPiSFocus::~PVectorKPiSFocus(){
 }
 
-void PVectorKPiSFocus::evalMatrix(const double mass){
+void PVectorKPiSFocus::evalMatrix(const double mass, Spin OrbMom){
 
   double s_hat=mass*mass/(_kMatrix->sNorm())-1.;
   

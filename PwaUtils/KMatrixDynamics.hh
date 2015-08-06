@@ -86,6 +86,7 @@ protected:
   double _currentAdler0;
   
   CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;
+  CacheVector<std::map<std::string, std::map<Spin, complex<float> > > > _cachedStringOrbMap;
   std::map<int, std::map<std::string, bool > > _alreadyCached;
   std::map<std::string, bool > _recalcMap;
   std::shared_ptr<KMatrixParser> _kMatrixParser;

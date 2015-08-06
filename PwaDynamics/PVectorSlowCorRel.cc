@@ -38,12 +38,12 @@ PVectorSlowCorRel::PVectorSlowCorRel(vector<std::shared_ptr<PPole> > Ppoles, vec
 PVectorSlowCorRel::~PVectorSlowCorRel(){
 }
 
-void PVectorSlowCorRel::evalMatrix(const double mass){
+void PVectorSlowCorRel::evalMatrix(const double mass, Spin OrbMom){
 
   Matrix< complex<double> > thePVector(NumRows(), 1);
   vector<std::shared_ptr<PPole> >::iterator it;
   for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
-    (*it)->evalMatrix(mass);
+    (*it)->evalMatrix(mass, OrbMom);
     thePVector += *(*it);
   }
 
