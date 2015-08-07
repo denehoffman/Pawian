@@ -50,9 +50,23 @@ complex<double> PhaseSpace4Pi::factor(const double mass){
 }
 
 complex<double> PhaseSpace4Pi::factor(const complex<double> mass){
-   Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
-   exit(EXIT_FAILURE);
-   return 0;
+  complex<double> mass_sqr=mass*mass;
+  complex<double> result(0.,0.);
+  if( norm(mass_sqr) <= 1. ){
+    complex<double> real = 1.2274 + .00370909 / ( mass_sqr * mass_sqr ) - .111203 / mass_sqr - 6.39017 * mass_sqr + 
+	 16.8358*mass_sqr*mass_sqr - 21.8845*mass_sqr*mass_sqr*mass_sqr + 11.3153*mass_sqr*mass_sqr*mass_sqr*mass_sqr;
+
+      double cont32 = sqrt(1.0-(16.0*_piMass*_piMass));
+      result = cont32*real;
+      //      result = complex<double>( cont32 * real, 0 );
+    }
+  //  else result = complex<double>( sqrt( 1. - 16. * _piMass * _piMass / mass_sqr ), 0. );
+ else result = sqrt( 1. - 16. * _piMass * _piMass / mass_sqr );
+  CorrectForChosenSign(result);
+  return result;
+   // Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
+   // exit(EXIT_FAILURE);
+   // return 0;
 }
 
 complex<double> PhaseSpace4Pi::breakUpMom(const double mass){
@@ -60,8 +74,10 @@ complex<double> PhaseSpace4Pi::breakUpMom(const double mass){
 }
 
 complex<double> PhaseSpace4Pi::breakUpMom(const complex<double> mass){
-   Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
-   exit(EXIT_FAILURE);
-   return 0;
+  complex<double> result = factor(mass)*mass/2.;
+  return result;
+   // Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
+   // exit(EXIT_FAILURE);
+   // return 0;
 }
 

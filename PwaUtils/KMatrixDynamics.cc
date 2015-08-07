@@ -46,6 +46,7 @@
 #include "PwaDynamics/PPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
+#include "PwaDynamics/PhaseSpace4Pi.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
 KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
@@ -501,7 +502,9 @@ void KMatrixDynamics::init(){
       Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName << " doesn't exist in pdg-table" << endmsg;
       exit(0);
     }
-    std::shared_ptr<AbsPhaseSpace> currentPhp(new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
+    std::shared_ptr<AbsPhaseSpace> currentPhp;
+    if(firstParticleName=="rho0" && secondParticleName=="rho0") currentPhp = std::shared_ptr<AbsPhaseSpace> (new PhaseSpace4Pi());
+    else currentPhp = std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
     _phpVecs.push_back(currentPhp);
 
     std::string gFactorKey=firstParticleName+secondParticleName;    

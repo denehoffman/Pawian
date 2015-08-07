@@ -40,6 +40,7 @@
 #include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
+#include "PwaDynamics/PhaseSpace4Pi.hh"
 #include "ConfigParser/KMatrixParser.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/PdtParser.hh"
@@ -227,7 +228,10 @@ void TMatrixGeneral::init(){
     double currentMassSum=firstParticle->mass()+secondParticle->mass();
     if(currentMassSum<_massMin) _massMin=currentMassSum;
 
-    std::shared_ptr<AbsPhaseSpace> currentPhp(new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
+    std::shared_ptr<AbsPhaseSpace> currentPhp;
+    if(firstParticleName=="rho0" && secondParticleName=="rho0") currentPhp = std::shared_ptr<AbsPhaseSpace> (new PhaseSpace4Pi());
+    else currentPhp = std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
+    (new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
     _phpVecs.push_back(currentPhp);
 
     std::string gFactorKey=firstParticleName+secondParticleName;    
