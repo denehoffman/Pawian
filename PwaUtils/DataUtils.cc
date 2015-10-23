@@ -182,10 +182,10 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
 
   for (Spin lam1=Jdaughter1; lam1>=-Jdaughter1; --lam1){
     if(isDaughter1Photon && fabs(lam1)!=1) continue;
-    for (Spin lam2=lam1; lam2>=-Jdaughter2; --lam2){
+    for (Spin lam2=-lam1; lam2<=Jdaughter2; ++lam2){
       if (fabs(lam2)>Jdaughter2) continue;
       if(lam1==0 && lam2==0 && parityFactor <0) continue; //parity conservation
-      if( identicalDaughters && parityFactor <0 && lam1==-lam2 && lam2==-lam1) continue; //parity conservation + identical particles 
+      if( identicalDaughters && parityFactor <0 && fabs(lam1)==fabs(lam2)) continue; //parity conservation + identical particles 
       if(isDaughter2Photon && fabs(lam2)!=1) continue;
       if(lam1==lam2 && lam1<0) continue;
       Spin lambda=lam1-lam2;

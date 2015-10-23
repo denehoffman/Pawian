@@ -328,17 +328,25 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   }
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
+  Vector4<double> daughter1HelMother(0.,0.,0.,0.);
   if(_hasMotherPart){
     if(fabs(mother4Vec==all4Vec)){
       daughter2HelMother=daughter2_4Vec;
       daughter2HelMother.Boost(daughter2HelMother); //is this correct????
+      daughter1HelMother=daughter1_4Vec;
+      daughter1HelMother.Boost(daughter1HelMother); //is this correct????
     }
     //    else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
-    else daughter2HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
+    else{
+      daughter2HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
+      daughter1HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter1_4Vec);
+    }
   }
   else{
     daughter2HelMother=daughter2_4Vec;
     daughter2HelMother.Boost(mother4Vec);
+    daughter1HelMother=daughter1_4Vec;
+    daughter1HelMother.Boost(mother4Vec);
   }
 
   Spin spinMother=_motherIGJPCPtr->J;
@@ -363,8 +371,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
 	double thePhi=0.;
 	if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
-	Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12); 
-	evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+	Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
+	if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM && whichDecayLevel()==decayLevel::isProdAmp){
+	  evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
+	} 
+	else evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
 	if(evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]){
 	  DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
 	  DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
