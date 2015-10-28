@@ -62,6 +62,7 @@ void MinuitMinimizer::minimize(){
     _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
     //    _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
     _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
+    _bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
     ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);
     return;
   }
@@ -103,6 +104,7 @@ void MinuitMinimizer::minimize(){
   _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
   //  _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
   _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
+  _bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
   ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);  
 }
 

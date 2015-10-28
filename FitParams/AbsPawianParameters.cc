@@ -82,10 +82,10 @@ void AbsPawianParameters::print(std::ostream& os, bool extended){
     int smallwidth = 5;
     int mediumwidth = 15;
     int largewidth = 25;
-    os << std::setw(smallwidth) << "no " << std::setw(maxNameLength+1) << "Name" << std::setw(mediumwidth) << "Value" << std::setw(smallwidth+1) << "type" << std::setw(mediumwidth) << "Error +-" << std::setw(mediumwidth) << "Low" << std::setw(mediumwidth) << "High\n";
+    os << std::setw(smallwidth) << "no " << std::setw(maxNameLength+1) << "Name" << std::setw(largewidth) << "Value" << std::setw(smallwidth+1) << "type" << std::setw(largewidth) << "Error +-" << std::setw(mediumwidth) << "Low" << std::setw(mediumwidth) << "High\n";
     for(it=nameVec.begin(); it!=nameVec.end() ; ++it){
       int idx=Index(*it);
-      os << std::setw(smallwidth-1) << idx << " " << std::setw(maxNameLength+1) << GetName(idx) << std::setw(mediumwidth) << std::setprecision(16) << Value(idx);
+      os << std::setw(smallwidth-1) << idx << " " << std::setw(maxNameLength+1) << GetName(idx) << std::setw(largewidth) << std::setprecision(16) << Value(idx);
       if (IsFixed(idx)){
 	os << std::setw(smallwidth+1) << "fixed";
 	std::map<unsigned int, std::vector<unsigned int> >::const_iterator itFound=_depMap.find(idx);
@@ -96,7 +96,7 @@ void AbsPawianParameters::print(std::ostream& os, bool extended){
 	}
       }
       else{
-	os << std::setw(smallwidth+1) << "free" << std::setw(mediumwidth) << Error(idx);
+	os << std::setw(smallwidth+1) << "free" << std::setw(largewidth) << Error(idx);
 	if(HasLimits(idx)) os << std::setw(mediumwidth) << LowerLimit(idx) << std::setw(mediumwidth) << UpperLimit(idx);
       }
       os << "\n";
@@ -113,10 +113,26 @@ void AbsPawianParameters::SetAllValues(const std::vector<double>& values){
 
   for(unsigned int i=0; i<values.size(); ++i){
     if(values.at(i) != values.at(i)) {
-       Alert << "Parameter vector returned from Minuit conains NAN! Exiting..." << endmsg;
+       Alert << "Parameter vector returned from minimization procedure contains NAN! Exiting..." << endmsg;
        exit(0);
     }
     SetValue(i, values.at(i));
+  }
+}
+
+void AbsPawianParameters::SetAllErrors(const std::vector<double>& errors){
+  if(errors.size() != Errors().size()){
+    Alert << "different number of parameter/errors!!!"
+	  << "\nerrors.size(): " << errors.size() << "\tErrors().size(): " << Errors().size() <<endmsg;
+    exit(0);
+  }
+
+  for(unsigned int i=0; i<errors.size(); ++i){
+    if(errors.at(i) != errors.at(i)) {
+       Alert << "Parameter vector returned from minimization procedure contains NAN! Exiting..." << endmsg;
+       exit(0);
+    }
+    SetError(i, errors.at(i));
   }
 }
 

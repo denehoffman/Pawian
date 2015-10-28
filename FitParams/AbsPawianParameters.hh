@@ -111,6 +111,7 @@ public:
 
   virtual void print(std::ostream& os, bool extended=false);
   virtual void SetAllValues(const std::vector<double>& values);
+  virtual void SetAllErrors(const std::vector<double>& errors);
   virtual std::shared_ptr<AbsPawianParameters> paramsWithSameOrder(std::shared_ptr<AbsPawianParameters> toSort);
   virtual void SetDependencies(const std::string &, std::vector<unsigned int>& depVec);
   virtual void SetDependencies(unsigned int, std::vector<unsigned int>& depVec);
