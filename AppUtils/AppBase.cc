@@ -491,12 +491,13 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     // std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
     // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
      double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), 0, noOfDataEvents);
+     int noDataEvts=eventsData.size();
     evtWeightSumData+=noOfWeightedDataEvts;
+    int maxMcEvts=eventsData.size()*ratioMcToData;
     eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
     
     EventList mcData;
-    int maxMcEvts=eventsData.size()*ratioMcToData;
-    readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
+     readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
     
     //   std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
     //    evtWeightListPtr->read(eventsData, mcData);
@@ -505,7 +506,7 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
     // evtWeightSumData+=noOfWeightedDataEvts;  
    
-    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), noOfWeightedDataEvts, mcData.size());
+    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
     }
 
