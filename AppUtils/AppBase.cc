@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -43,6 +43,7 @@
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/EvtWeightList.hh"
 
 #include "FitParams/AbsPawianParamStreamer.hh"
 #include "FitParams/PwaCovMatrix.hh"
@@ -488,25 +489,28 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     
     EventList eventsData;
     readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight(), 0, noOfDataEvents);
+
     // std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
     // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
-     double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), 0, noOfDataEvents);
+//     double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), 0, noOfDataEvents);
      int noDataEvts=eventsData.size();
-    evtWeightSumData+=noOfWeightedDataEvts;
+//    evtWeightSumData+=noOfWeightedDataEvts;
     int maxMcEvts=eventsData.size()*ratioMcToData;
-    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
+//    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
     
     EventList mcData;
      readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
     
-    //   std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
-    //    evtWeightListPtr->read(eventsData, mcData);
-    //    evtWeightSumData+=evtWeightListPtr->NoOfWeightedDataEvts();
+    std::shared_ptr<EvtDataBaseList> evtWeightListPtr(new EvtWeightList((*it).first->channelID()));
+    evtWeightListPtr->read(eventsData, mcData);
+    evtWeightSumData+=evtWeightListPtr->NoOfWeightedDataEvts();
 
     // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
-    // evtWeightSumData+=noOfWeightedDataEvts;  
+//    evtWeightSumData+=noOfWeightedDataEvts;  
    
-    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
+    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, evtWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
+
+    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);    
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
     }
 
