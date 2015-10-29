@@ -91,7 +91,8 @@ public:
   double NoOfWeightedMcEvts() const {return _noOfWeightedMcEvts;}
   virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo);
   virtual EvtData* convertEvent(Event* theEvent, int evtNo=1);
-
+  static double noOfWeightedEvts(EventList& evtList, ChannelID channelID, int maxEvts, int startNo);
+ 
 protected:
   ChannelID _channelID;
   std::vector<EvtData*> _evtDataList;

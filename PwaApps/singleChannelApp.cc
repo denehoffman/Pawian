@@ -242,6 +242,8 @@ int main(int __argc,char *__argv[]){
   }
 
   eventListPtr->read(eventsData, mcData);
+  eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
+  mcData.removeAndDeleteEvents(0, mcData.size()-1);
 
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
   theLhPtr->setMcVec(eventListPtr->getMcVecs());

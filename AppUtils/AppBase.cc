@@ -37,7 +37,6 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
-#include "PwaUtils/EvtWeightList.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
@@ -489,16 +488,25 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     
     EventList eventsData;
     readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight(), 0, noOfDataEvents);
+    // std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
+    // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
+     double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), 0, noOfDataEvents);
+    evtWeightSumData+=noOfWeightedDataEvts;
+    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
     
     EventList mcData;
     int maxMcEvts=eventsData.size()*ratioMcToData;
     readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
     
-    std::shared_ptr<EvtWeightList> evtWeightListPtr(new EvtWeightList((*it).first->channelID()));
-    evtWeightListPtr->read(eventsData, mcData);
-    evtWeightSumData+=evtWeightListPtr->NoOfWeightedDataEvts();
-    
-    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), evtWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
+    //   std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
+    //    evtWeightListPtr->read(eventsData, mcData);
+    //    evtWeightSumData+=evtWeightListPtr->NoOfWeightedDataEvts();
+
+    // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
+    // evtWeightSumData+=noOfWeightedDataEvts;  
+   
+    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(eventsData.size(), noOfWeightedDataEvts, mcData.size());
+    mcData.removeAndDeleteEvents(0, mcData.size()-1);
     }
 
   std::shared_ptr<AbsFcn> absFcn;
@@ -577,6 +585,9 @@ void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams)
 
   std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(channelID));
   eventListPtr->read(eventsDataClient, mcDataClient);
+
+  eventsDataClient.removeAndDeleteEvents(0, eventsDataClient.size()-1);
+  mcDataClient.removeAndDeleteEvents(0, mcDataClient.size()-1);
 
   GlobalEnv::instance()->Channel(channelID)->Lh()->setDataVec(eventListPtr->getDataVecs());
   GlobalEnv::instance()->Channel(channelID)->Lh()->setMcVec(eventListPtr->getMcVecs());

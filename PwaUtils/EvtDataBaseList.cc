@@ -156,6 +156,41 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     return evtData;
 }
 
+double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID, int maxEvts, int startNo){
+  double result=0.;
+  Event* anEvent;
+  int evtCount = 0;
+  while ((anEvent = evtList.nextEvent())){
+    if (evtCount>= maxEvts) break;
+    if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
+
+    Vector4<double> V4_all_lab(0.,0.,0.,0.);
+
+    std::vector<Particle*>  finalStateParticles=GlobalEnv::instance()->Channel(channelID)->finalStateParticles();
+
+    std::vector<Particle*>::iterator itPart;
+    int counter=0;
+    for (itPart=finalStateParticles.begin(); itPart != finalStateParticles.end(); ++itPart){
+      Vector4<float> current4VecFloat=*(anEvent->p4(counter));
+      Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
+      V4_all_lab += current4Vec;
+      counter++;
+    }
+
+    if (evtCount%10000 == 0){
+      Info << "4vec all in lab system" << "\n"
+           << " px: " << V4_all_lab.Px() <<"\t"
+           << " py: " << V4_all_lab.Py() <<"\t"
+           << " pz: " << V4_all_lab.Pz() <<"\t"
+           << " e : " << V4_all_lab.E() << "\t"
+           << " m : " << V4_all_lab.M() ;  // << endmsg;
+    }
+
+    result += anEvent->Weight();
+    ++evtCount;
+  }
+  return result;
+}
 
 std::string EvtDataBaseList::getName(std::vector<Particle*>& theVec){
   std::string result;

@@ -36,9 +36,6 @@
 #include "Minuit2/MnUserParameters.h"
 
 
-struct fitParCol;
-
-
 class PwaCovMatrix
 {
   private:
