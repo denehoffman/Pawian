@@ -43,7 +43,6 @@
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/EvtWeightList.hh"
 
 #include "FitParams/AbsPawianParamStreamer.hh"
 #include "FitParams/PwaCovMatrix.hh"
@@ -490,27 +489,18 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     EventList eventsData;
     readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight(), 0, noOfDataEvents);
 
-    // std::shared_ptr<EvtDataBaseList> evtDataBaseListPtr(new EvtWeightList((*it).first->channelID()));
-    // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
-//     double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), 0, noOfDataEvents);
-     int noDataEvts=eventsData.size();
-//    evtWeightSumData+=noOfWeightedDataEvts;
-    int maxMcEvts=eventsData.size()*ratioMcToData;
-//    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
+     double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), noOfDataEvents, 0);
+    int noDataEvts=eventsData.size();
+    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);        
+
+    int maxMcEvts=noDataEvts*ratioMcToData;
     
     EventList mcData;
-     readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
+    readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
     
-    std::shared_ptr<EvtDataBaseList> evtWeightListPtr(new EvtWeightList((*it).first->channelID()));
-    evtWeightListPtr->read(eventsData, mcData);
-    evtWeightSumData+=evtWeightListPtr->NoOfWeightedDataEvts();
+    evtWeightSumData+=noOfWeightedDataEvts;  
 
-    // double noOfWeightedDataEvts=evtDataBaseListPtr->noOfWeightedEvts(eventsData, 0, noOfDataEvents);
-//    evtWeightSumData+=noOfWeightedDataEvts;  
-   
-    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, evtWeightListPtr->NoOfWeightedDataEvts(), mcData.size());
-
-    eventsData.removeAndDeleteEvents(0, eventsData.size()-1);    
+    numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
     }
 

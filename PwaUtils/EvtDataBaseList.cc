@@ -183,7 +183,8 @@ double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID
            << " py: " << V4_all_lab.Py() <<"\t"
            << " pz: " << V4_all_lab.Pz() <<"\t"
            << " e : " << V4_all_lab.E() << "\t"
-           << " m : " << V4_all_lab.M() ;  // << endmsg;
+           << " m : " << V4_all_lab.M() <<"\n"
+	   << "weight: " <<  anEvent->Weight();  // << endmsg;
     }
 
     result += anEvent->Weight();
