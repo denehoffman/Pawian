@@ -148,11 +148,12 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
 	tmpResult+=amp;
       }
     }
-    if (_absDyn->isLdependent()) tmpResult*=_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
+    if (_absDyn->isLdependent())  tmpResult*=_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
     result+=tmpResult;
   }
   
   if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  
   result*=_isospinCG;
   return result;
 }
@@ -214,7 +215,7 @@ void  TensorDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitP
 }
 
 void TensorDecAmps::fillParamNameList(){
- 
+  _paramNameList.clear(); 
   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
     std::string magName=(*itLS)->name()+_key+"Mag";

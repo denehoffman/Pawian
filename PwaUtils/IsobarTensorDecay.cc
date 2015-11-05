@@ -144,17 +144,21 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   motherTensor4Vec.Boost(all4Vec);
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
-  if(_hasMotherPart){
-    if(fabs(mother_4Vec==all4Vec)){
-      daughter2HelMother=daughter2_4Vec;
-      daughter2HelMother.Boost(daughter2HelMother); //is this correct????
-    }
-    else daughter2HelMother=helicityVec(prodParticle4Vec, mother_4Vec, daughter2_4Vec);
-  }
-  else{
-    daughter2HelMother=daughter2_4Vec;
+  // if(_hasMotherPart){
+  //   if(mother_4Vec==prodParticle4Vec){
+  //     daughter2HelMother=daughter2_4Vec;
+  //     daughter2HelMother.Boost(daughter2HelMother); //is this correct????
+  //   }
+  //   else{
+  //     daughter2HelMother=helicityVec(prodParticle4Vec, mother_4Vec, daughter2_4Vec);
+  //   }
+  // }
+  // else{
+  daughter2HelMother=daughter2_4Vec;    //only needed for prod amps
     daughter2HelMother.Boost(mother_4Vec);
-  }
+    //  }
+
+
   //rotate everything into the cms flight direction 
   // Vector4<double> allRot4Vec=all4Vec;
 
