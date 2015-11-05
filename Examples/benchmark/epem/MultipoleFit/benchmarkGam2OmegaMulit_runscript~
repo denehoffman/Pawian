@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo Starting server ...
+
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode server !>& server.log &
+
+sleep 5
+
+echo Starting clients ...
+
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode client  !>& client1.log &
+
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode client  !>& client2.log &
+
+echo done

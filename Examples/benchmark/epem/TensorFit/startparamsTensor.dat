@@ -1,0 +1,27 @@
+_J1P-1C-1Tophoton_eta(2225)Mag1	1	0.5
+_J1P-1C-1Tophoton_eta(2225)_1Phi	0	0.2
+L1S1_eta(2225)Toomega1_omega2Mag	1	0.5
+L1S1_eta(2225)Toomega1_omega2Phi	0	0.2
+eta(2225)Mass	2.15	0.03	2.08	2.38
+eta(2225)Width	0.14	0.03	0.04	0.3
+L1S0_omega1Topion1+_pion1-_pion10Mag	1	0.5
+L1S0_omega1Topion1+_pion1-_pion10Phi	0	0.2
+L1S0_omega2Topion2+_pion2-_pion20Mag	1	0.5
+L1S0_omega2Topion2+_pion2-_pion20Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag1	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_1Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag2	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_2Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag3	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_3Phi	0	0.2
+L2S0_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L2S0_f2(1910)Toomega1_omega2Phi	0	0.2
+L0S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L0S2_f2(1910)Toomega1_omega2Phi	0	0.2
+L2S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L2S2_f2(1910)Toomega1_omega2Phi	0	0.2
+L4S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
+f2(1910)Mass	1.97	0.03	1.791	2.091
+f2(1910)Width	0.16	0.034	0.08	0.34
+channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20

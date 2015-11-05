@@ -1,0 +1,1267 @@
+INFO: /data/jollyj/bertram/NewPawian151023/Pawian/bin/singleChannelApp
+INFO: --epemFiles
+INFO: /data/jollyj/bertram/NewPawian151023/Pawian/Examples/benchmark/epem/TensorFit/JpsiGamOmegaOmegaTensor.cfg
+INFO: --mode
+INFO: client
+INFO: !
+INFO: 
+                                       MMMMM
+                                      M8NO  +M
+                                    NO       M         ,MM
+                                    MM     ?MN,   D8MMMO  :NMM
+                               :MZ            ZM  MZ            NM,  M
+                              M,          :M   MMN            DMMN M  ~
+                             M        8MMM M  M,    7O: :M, M+     N:
+                            M  =NMZ M     ,M8 M    ,O     MM   :    M
+                            D  DM   M    $8        I= MM  $M   7    M
+                           Z~ M M  O 8   8          M     N MM    DM
+                           8, O    MM    M           :MM8,     ,, MMD
+                           O:       M    87MMO ,  MM~                ,M,
+                           I=O  M   M   M        M                     M
+                           :M   M   N   M N,     M                    M~
+                           :M  ?~  N    8I+  M    MMMMMMMMMMMMMMMOM? 7,
+                            M  ++  M   8MZ7  M     M                MM
+                            M   D  M  N   N   M,    ND          DM8,
+                            M   M  M M~M               DMNM88= 8,
+                            M    8  ?M?       M                 M~
+                            M      N~8       ?$    :             M
+                            NN      M     M  M     M             8:
+                            D M    M   DDM   M     M               M,
+                            D     ,D  D?M    N     M                 ND
+                            M     M  ,O8$   ,7     M    M    M         M~
+                            NN  8IO  M M    I=     =    M    M          ,M
+                                 M  M                   M    M I          M
+                                ~M ?8                 M M    M +M   MM     N
+        N+I8MMM~                MM M ,      M         M D    M   M   MON   ~$
+        M       NM              M8   M      O     D   M Z+  M:    M,  M M   M
+         ,MMMD    88            8M   N     M      M         M      ~M  M M+  M
+               7M, MI          +ZM  M      M      M        I$ $NI    M ,O M8 ?O
+                 ?N M          I:   M      M       8       M     ,    M M     M
+                  M +?         8,          N       M       N    :MMMMM7D M    M
+                   D M         8,                  N,     ,$   M       M 8    8:
+                   N,D,        ?:    =MMMMMZ               D  M         M  M  8ZMM
+                    M ND       :Z=MO,                      N    MM8ZN8  M  M  M+ ,:~MMM 8~
+                     M  DMMMMMNZ             D    ~MM        :MM        M   M MM    MNMM M
+                     $7           DMMZZNOMMNMZ       M     =M       MZ  :7 MM   MM$ M8   N$ M
+                       MO      MMZ        Z                +   ,MMD   +  D M~8  N  M       M
+                          ?I=    D         8                        ,NMMMMO MM M 8  M     ID
+                                  8        D                     MN,     M  ~,  MM       8N
+     ,MNZ,  ,8MM         :~ZMMM,  :8       D                   8         ,M      N
+   88           :M   M+         M  ,D       D                $            M      M
+  M:       M      M ,7           D  8N$     8~             :D             M      M ?M,
+  M    7   M      M M   +MM?     M ,8  D8    D=          ,D              Z?     ,O
+  $I~ ~?  Z8     M  M      M     M 7+  M  :,   D$      8Z  M? M          M$D+M  7M?
+   Z:  MMN       N, M     M?     M D   M          =$~   M :+  D,      NMMMMM OMM  MM          MMM
+   O:           :M $Z    D8      M M   M          M     M O:  N      M     ,O     M M        M   N
+   $~          M:  M  D  DM      O N   M   MM     M    :N M   M     +7      M     M  M       D   D
+   ~=  MNMMMM8    D: $     M    ?Z M   D   M M    M    M  M   M     M M M   7,    M   M     D~   7=
+   ~I     M       N  O     :$   N  M   D   8 Z=   M   M~  M   M     Z   N    M    M   D,    M    Z
+    M     M      M   D     $~   M  M   N   M  M   M   M   Z   M    M         D    M    N    M    M
+    M     M      O   M     M    M  M   M  M     ,M   Z7  N~   N    M  NM     M    N    M    M    M
+ M  M     M     M    M     D    M  M   MMM   M M     M   M    M    N M  N    M   7$     D   M    M
+  MMM7  MN     O$   M     M    N   M          +      M   M    $   N +I  ~+   M   M  ,   M   M    M
+                MMM+      M    M   M       M,        N   M   O=   M M   ~?   M   M M~NN  M  8    M
+                           N  $$   7M      M+       D    8   M    M M   D,   M   M M  M  ,N 8    D
+                            D8:     M      OM      MN    D   M  , M M   M    M   O $  +~  $MZ    D
+                                     :M88DM  N +MM+      MMM$M  N~+~N   D,   M  :8  D  M         N
+                                                                 MMM     M   M  Z=  M  M         D
+
+//************************************************************************//
+//									  //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//          	   - Ruhr-Universität Bochum 				  //
+//									  //
+//  Pawian is free software: you can redistribute it and/or modify	  //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or 	  //
+//  (at your option) any later version.	 	      	  	   	  //
+//									  //
+//  Pawian is distributed in the hope that it will be useful,		  //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
+//  GNU General Public License for more details.	      		  //
+//									  //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
+//									  //
+//************************************************************************//
+
+   
+INFO: Compiled Oct 30 2015 11:55:27
+
+Running with the following options using /data/jollyj/bertram/NewPawian151023/Pawian/ConfigParser/global.cfg:
+
+Error log mode: 1
+
+data file: 
+
+mc file: 
+
+chosen unit in input file: GEV
+
+chosen order in file: Px Py Pz E
+
+file with start parameters for fit or qa: ./defaultparams.dat
+
+startHypo: base
+
+mode: client
+
+number of threads: 2
+
+ratioMcToData: 100000
+
+cache amplitudes: 1
+
+use data event weight: 0
+
+use Monte Carlo event weight: 0
+
+use phase space hyp: 0
+
+prefit with free scaling factor: 0
+
+pdg table: /Particle/pdtNew.table
+
+minimumTolerance: 0.1
+
+
+epem channel configuration file: /data/jollyj/bertram/NewPawian151023/Pawian/Examples/benchmark/epem/TensorFit/JpsiGamOmegaOmegaTensor.cfg
+
+
+
+the final state particles are:
+
+decay system:
+
+decay dynamics:
+
+replaced suffix for fit parameter name
+
+replaced mass key
+
+replaced prod key
+
+production system:
+
+production formalism:	Cano
+fitqRProduction:	0
+
+histograms inv mass for systems
+
+histograms decay angles for systems
+
+mass range cuts:
+
+2Dhistogram decay angles for systems
+
+random seed:	44123
+
+generate with model:	1
+
+number of generated events:	10000
+
+number of data events:	1000000
+INFO: numReactions: 1
+INFO: __argv[0]: /data/jollyj/bertram/NewPawian151023/Pawian/bin/singleChannelApp
+INFO: __argv[1]: --epemFiles
+INFO: __argv[3]: --mode
+INFO: __argv[4]: client
+INFO: __argv[5]: !
+INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian151023/Pawian/bin/singleChannelApp
+INFO: argvWCfgFile[1]= -c
+INFO: argvWCfgFile[2]= /data/jollyj/bertram/NewPawian151023/Pawian/Examples/benchmark/epem/TensorFit/JpsiGamOmegaOmegaTensor.cfg
+INFO: argvWCfgFile[3]= --mode
+INFO: argvWCfgFile[4]= client
+INFO: argvWCfgFile[5]= !
+
+Running with the following options using /data/jollyj/bertram/NewPawian151023/Pawian/Examples/benchmark/epem/TensorFit/JpsiGamOmegaOmegaTensor.cfg:
+
+Error log mode: 1
+
+data file: ../toyDataSignal.dat
+
+mc file: ../toyMC.dat
+
+chosen unit in input file: GEV
+
+chosen order in file: Px Py Pz E
+
+file with start parameters for fit or qa: ./startparamsTensor.dat
+
+startHypo: base
+
+mode: client
+
+number of threads: 2
+
+ratioMcToData: 6
+
+cache amplitudes: 1
+
+use data event weight: 0
+
+use Monte Carlo event weight: 0
+
+use phase space hyp: 0
+
+prefit with free scaling factor: 0
+
+pdg table: /Particle/pdtNew.table
+
+minimumTolerance: 0.1
+
+
+clone particles: pion+ pion1+
+clone particles: pion- pion1-
+clone particles: pion0 pion10
+clone particles: pion+ pion2+
+clone particles: pion- pion2-
+clone particles: pion0 pion20
+clone particles: omega omega1
+clone particles: omega omega2
+
+minuit parameter	_J1P-1C-1Tophoton_eta(2225)_1Phi	 fixed
+minuit parameter	L1S1_eta(2225)Toomega1_omega2Mag	 fixed
+minuit parameter	L1S1_eta(2225)Toomega1_omega2Phi	 fixed
+minuit parameter	L0S2_f2(1910)Toomega1_omega2Mag	 fixed
+minuit parameter	L0S2_f2(1910)Toomega1_omega2Phi	 fixed
+minuit parameter	L1S0_omega1Topion1+_pion1-_pion10Mag	 fixed
+minuit parameter	L1S0_omega1Topion1+_pion1-_pion10Phi	 fixed
+minuit parameter	L1S0_omega2Topion2+_pion2-_pion20Mag	 fixed
+minuit parameter	L1S0_omega2Topion2+_pion2-_pion20Phi	 fixed
+
+
+the final state particles are:
+photon
+pion1+
+pion1-
+pion10
+pion2+
+pion2-
+pion20
+
+decay system:
+Tensor omega1 To pion1+ pion1- pion10
+Tensor omega2 To pion2+ pion2- pion20
+Tensor eta(2225) To omega1 omega2
+Tensor f2(1910) To omega1 omega2
+
+decay dynamics:
+eta(2225) BreitWignerBlattWTensorRel
+f2(1910) BreitWignerBlattWTensorRel
+
+replaced suffix for fit parameter name
+
+replaced mass key
+
+replaced prod key
+
+production system:
+eta(2225) photon BlattWBarrierTensor 0.66
+f2(1910) photon BlattWBarrierTensor 0.66
+
+production formalism:	Tensor
+fitqRProduction:	0
+
+histograms inv mass for systems
+pion1+ pion1- pion10
+pion1+ pion1- pion10 pion2+ pion2- pion20
+photon pion1+ pion1- pion10
+photon pion2+ pion2- pion20
+
+histograms decay angles for systems
+photon from pion1+ pion1- pion10 pion2+ pion2- pion20 photon
+pion1+ pion1- pion10 from pion1+ pion1- pion10 pion2+ pion2- pion20
+pion1+ and pion1- from pion1+ pion1- pion10
+pion2+ and pion2- from pion2+ pion2- pion20
+
+mass range cuts:
+1.4 3.2 pion1+ pion1- pion10 pion2+ pion2- pion20
+0.762 0.802 pion1+ pion1- pion10
+0.762 0.802 pion2+ pion2- pion20
+
+2Dhistogram decay angles for systems
+
+random seed:	44123
+
+generate with model:	1
+
+number of generated events:	10000
+
+number of data events:	5000
+
+cms mass:	3.09692
+
+spin density matrix calculation for particles
+
+productionTensorRadType: Zou
+
+INFO: Now replace the parser!!!
+INFO: added decay omega1Topion1+_pion1-_pion10 to decay list
+INFO: added decay omega2Topion2+_pion2-_pion20 to decay list
+
+JPCLS tensor amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+INFO: added decay eta(2225)Toomega1_omega2 to decay list
+
+JPCLS tensor amplitudes for decay	f2(1910)Toomega1_omega2:
+suffix for fit parameter name:	f2(1910)Toomega1_omega2
+JPC=2++	L,S=2,0	preFactorLS=0
+JPC=2++	L,S=0,2	preFactorLS=0
+JPC=2++	L,S=2,2	preFactorLS=0
+JPC=2++	L,S=4,2	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+INFO: added decay f2(1910)Toomega1_omega2 to decay list
+
+***ProdChannelInfo***
+***ProdChannelInfo***
+particle1: eta(2225)	particle2: photon
+with production barrier: 1
+prod barrier type: BlattWBarrierTensor
+with qR = 0.66
+
+***ProdChannelInfo***
+***ProdChannelInfo***
+particle1: f2(1910)	particle2: photon
+with production barrier: 1
+prod barrier type: BlattWBarrierTensor
+with qR = 0.66
+INFO: 
+MassRangeCont:	1.4
+INFO: 
+MassRangeCont:	3.2
+INFO: 
+MassRangeCont:	pion1+
+INFO: 
+MassRangeCont:	pion1-
+INFO: 
+MassRangeCont:	pion10
+INFO: 
+MassRangeCont:	pion2+
+INFO: 
+MassRangeCont:	pion2-
+INFO: 
+MassRangeCont:	pion20
+INFO: mass cut on inv mass of the final state particles:
+INFO: pion1+
+INFO: pion1-
+INFO: pion10
+INFO: pion2+
+INFO: pion2-
+INFO: pion20
+INFO: 	massMin = 1.4	massmax = 3.2
+INFO: 
+MassRangeCont:	0.762
+INFO: 
+MassRangeCont:	0.802
+INFO: 
+MassRangeCont:	pion1+
+INFO: 
+MassRangeCont:	pion1-
+INFO: 
+MassRangeCont:	pion10
+INFO: mass cut on inv mass of the final state particles:
+INFO: pion1+
+INFO: pion1-
+INFO: pion10
+INFO: 	massMin = 0.762	massmax = 0.802
+INFO: 
+MassRangeCont:	0.762
+INFO: 
+MassRangeCont:	0.802
+INFO: 
+MassRangeCont:	pion2+
+INFO: 
+MassRangeCont:	pion2-
+INFO: 
+MassRangeCont:	pion20
+INFO: mass cut on inv mass of the final state particles:
+INFO: pion2+
+INFO: pion2-
+INFO: pion20
+INFO: 	massMin = 0.762	massmax = 0.802
+eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G-1J1P-1C-1Toeta(2225)_photon:
+suffix for fit parameter name:	J1P-1C-1Toeta(2225)_photon
+JPC=1--	L,S=1,1	preFactorLS=0
+with further decay:
+JPCLS tensor amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS tensor amplitudes for decay	I0G-1J1P-1C-1Toeta(2225)_photon:
+suffix for fit parameter name:	J1P-1C-1Toeta(2225)_photon
+JPC=1--	L,S=1,1	preFactorLS=0
+with further decay:
+JPCLS tensor amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+INFO: daughter2->twoJ()%2 = 0_XisEven: 1  daughter2->theParity(): -1
+
+JPCLS tensor amplitudes for decay	I0G-1J1P-1C-1Tophoton_eta(2225):
+suffix for fit parameter name:	J1P-1C-1Tophoton_eta(2225)
+JPC=1--	L,S=1,1	preFactorLS=0
+with further decay:
+JPCLS tensor amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPClamlam amplitudes for decay	I0G-1J1P-1C-1Toeta(2225)_photon:
+suffix for fit parameter name:	J1P-1C-1Toeta(2225)_photon
+JPC=1--	Lam1,Lam2=0,1	parityFactor=1
+with further decay:
+JPCLS tensor amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPClamlam amplitudes for decay	I0G-1J1P-1C-1Tophoton_eta(2225):
+suffix for fit parameter name:	J1P-1C-1Tophoton_eta(2225)
+JPC=1--	Lam1,Lam2=1,0	parityFactor=1
+with further decay:
+JPCLS tensor amplitudes for decay	eta(2225)Toomega1_omega2:
+suffix for fit parameter name:	eta(2225)Toomega1_omega2
+JPC=0-+	L,S=1,1	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G-1J1P-1C-1Tof2(1910)_photon:
+suffix for fit parameter name:	J1P-1C-1Tof2(1910)_photon
+JPC=1--	L,S=0,1	preFactorLS=0
+JPC=1--	L,S=2,1	preFactorLS=0
+JPC=1--	L,S=2,2	preFactorLS=0
+JPC=1--	L,S=2,3	preFactorLS=0
+JPC=1--	L,S=4,3	preFactorLS=0
+with further decay:
+JPCLS tensor amplitudes for decay	f2(1910)Toomega1_omega2:
+suffix for fit parameter name:	f2(1910)Toomega1_omega2
+JPC=2++	L,S=2,0	preFactorLS=0
+JPC=2++	L,S=0,2	preFactorLS=0
+JPC=2++	L,S=2,2	preFactorLS=0
+JPC=2++	L,S=4,2	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS tensor amplitudes for decay	I0G-1J1P-1C-1Tof2(1910)_photon:
+suffix for fit parameter name:	J1P-1C-1Tof2(1910)_photon
+JPC=1--	L,S=0,1	preFactorLS=0
+JPC=1--	L,S=2,1	preFactorLS=0
+JPC=1--	L,S=2,2	preFactorLS=0
+JPC=1--	L,S=2,3	preFactorLS=0
+JPC=1--	L,S=4,3	preFactorLS=0
+with further decay:
+JPCLS tensor amplitudes for decay	f2(1910)Toomega1_omega2:
+suffix for fit parameter name:	f2(1910)Toomega1_omega2
+JPC=2++	L,S=2,0	preFactorLS=0
+JPC=2++	L,S=0,2	preFactorLS=0
+JPC=2++	L,S=2,2	preFactorLS=0
+JPC=2++	L,S=4,2	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+INFO: daughter2->twoJ()%2 = 0_XisEven: 1  daughter2->theParity(): 1
+
+JPCLS tensor amplitudes for decay	I0G-1J1P-1C-1Tophoton_f2(1910):
+suffix for fit parameter name:	J1P-1C-1Tophoton_f2(1910)
+JPC=1--	L,S=0,1	preFactorLS=0
+JPC=1--	L,S=2,1	preFactorLS=0
+JPC=1--	L,S=2,2	preFactorLS=0
+JPC=1--	L,S=2,3	preFactorLS=0
+JPC=1--	L,S=4,3	preFactorLS=0
+with further decay:
+JPCLS tensor amplitudes for decay	f2(1910)Toomega1_omega2:
+suffix for fit parameter name:	f2(1910)Toomega1_omega2
+JPC=2++	L,S=2,0	preFactorLS=0
+JPC=2++	L,S=0,2	preFactorLS=0
+JPC=2++	L,S=2,2	preFactorLS=0
+JPC=2++	L,S=4,2	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPClamlam amplitudes for decay	I0G-1J1P-1C-1Tof2(1910)_photon:
+suffix for fit parameter name:	J1P-1C-1Tof2(1910)_photon
+JPC=1--	Lam1,Lam2=2,1	parityFactor=1
+JPC=1--	Lam1,Lam2=1,1	parityFactor=1
+JPC=1--	Lam1,Lam2=0,1	parityFactor=1
+with further decay:
+JPCLS tensor amplitudes for decay	f2(1910)Toomega1_omega2:
+suffix for fit parameter name:	f2(1910)Toomega1_omega2
+JPC=2++	L,S=2,0	preFactorLS=0
+JPC=2++	L,S=0,2	preFactorLS=0
+JPC=2++	L,S=2,2	preFactorLS=0
+JPC=2++	L,S=4,2	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPClamlam amplitudes for decay	I0G-1J1P-1C-1Tophoton_f2(1910):
+suffix for fit parameter name:	J1P-1C-1Tophoton_f2(1910)
+JPC=1--	Lam1,Lam2=1,0	parityFactor=1
+JPC=1--	Lam1,Lam2=1,1	parityFactor=1
+JPC=1--	Lam1,Lam2=1,2	parityFactor=1
+with further decay:
+JPCLS tensor amplitudes for decay	f2(1910)Toomega1_omega2:
+suffix for fit parameter name:	f2(1910)Toomega1_omega2
+JPC=2++	L,S=2,0	preFactorLS=0
+JPC=2++	L,S=0,2	preFactorLS=0
+JPC=2++	L,S=2,2	preFactorLS=0
+JPC=2++	L,S=4,2	preFactorLS=0
+with further decay:
+LS amplitudes for decay	omega1Topion1+_pion1-_pion10:
+suffix for fit parameter name:	omega1Topion1+_pion1-_pion10
+	L,S=1,0
+
+
+with further decay:
+LS amplitudes for decay	omega2Topion2+_pion2-_pion20:
+suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
+	L,S=1,0
+
+
+
+
+
+
+INFO: use productionTensorRadType Zou
+INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Tophoton_eta(2225) enabled!
+INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Tophoton_eta(2225)
+INFO: add dynamics for I0G-1J1P-1C-1Tophoton_eta(2225)
+INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Tophoton_f2(1910) enabled!
+INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Tophoton_f2(1910)
+INFO: add dynamics for I0G-1J1P-1C-1Tophoton_f2(1910)
+INFO: AmpName: eta(2225)Toomega1_omega2  radius for barrier factor qr= 0.1973
+INFO: BreitWignerRelDynamics for eta(2225)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
+INFO: add dynamics for eta(2225)Toomega1_omega2
+INFO: AmpName: f2(1910)Toomega1_omega2  radius for barrier factor qr= 0.1973
+INFO: BreitWignerRelDynamics for f2(1910)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
+INFO: add dynamics for f2(1910)Toomega1_omega2
+INFO: I0G-1J1P-1C-1Tophoton_eta(2225) set decay level to 0
+INFO: eta(2225)Toomega1_omega2 set decay level to 1
+INFO: omega1Topion1+_pion1-_pion10 set decay level to 2
+INFO: omega2Topion2+_pion2-_pion20 set decay level to 2
+INFO: I0G-1J1P-1C-1Tophoton_f2(1910) set decay level to 0
+INFO: f2(1910)Toomega1_omega2 set decay level to 1
+INFO: Dynamics	I0G-1J1P-1C-1Tophoton_eta(2225)	found!!!
+INFO: Dynamics	eta(2225)Toomega1_omega2	found!!!
+WARN: /AbsXdecAmp.cc:77: no dynamics for	omega1Topion1+_pion1-_pion10
+INFO: add dynamics for omega1Topion1+_pion1-_pion10
+WARN: /AbsXdecAmp.cc:88: no dynamics for	omega2Topion2+_pion2-_pion20
+INFO: add dynamics for omega2Topion2+_pion2-_pion20
+INFO: Dynamics	I0G-1J1P-1C-1Tophoton_f2(1910)	found!!!
+INFO: Dynamics	f2(1910)Toomega1_omega2	found!!!
+WARN: /AbsXdecAmp.cc:77: no dynamics for	omega1Topion1+_pion1-_pion10
+WARN: /AbsXdecAmp.cc:88: no dynamics for	omega2Topion2+_pion2-_pion20
+INFO: _J1P-1C-1Tophoton_eta(2225)Mag1	1	0.5
+INFO: paramName: _J1P-1C-1Tophoton_eta(2225)Mag1	val: 1	err:0.5	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_eta(2225)_1Phi	0	0.2
+INFO: paramName: _J1P-1C-1Tophoton_eta(2225)_1Phi	val: 0	err:0.2	min:0	max:-1
+INFO: L1S1_eta(2225)Toomega1_omega2Mag	1	0.5
+INFO: paramName: L1S1_eta(2225)Toomega1_omega2Mag	val: 1	err:0.5	min:0	max:-1
+INFO: L1S1_eta(2225)Toomega1_omega2Phi	0	0.2
+INFO: paramName: L1S1_eta(2225)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
+INFO: eta(2225)Mass	2.15	0.03	2.08	2.38
+INFO: paramName: eta(2225)Mass	val: 2.15	err:0.03	min:2.08	max:2.38
+INFO: eta(2225)Width	0.14	0.03	0.04	0.3
+INFO: paramName: eta(2225)Width	val: 0.14	err:0.03	min:0.04	max:0.3
+INFO: L1S0_omega1Topion1+_pion1-_pion10Mag	1	0.5
+INFO: paramName: L1S0_omega1Topion1+_pion1-_pion10Mag	val: 1	err:0.5	min:0	max:-1
+INFO: L1S0_omega1Topion1+_pion1-_pion10Phi	0	0.2
+INFO: paramName: L1S0_omega1Topion1+_pion1-_pion10Phi	val: 0	err:0.2	min:0	max:-1
+INFO: L1S0_omega2Topion2+_pion2-_pion20Mag	1	0.5
+INFO: paramName: L1S0_omega2Topion2+_pion2-_pion20Mag	val: 1	err:0.5	min:0	max:-1
+INFO: L1S0_omega2Topion2+_pion2-_pion20Phi	0	0.2
+INFO: paramName: L1S0_omega2Topion2+_pion2-_pion20Phi	val: 0	err:0.2	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_f2(1910)Mag1	1	0.5
+INFO: paramName: _J1P-1C-1Tophoton_f2(1910)Mag1	val: 1	err:0.5	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_f2(1910)_1Phi	0	0.2
+INFO: paramName: _J1P-1C-1Tophoton_f2(1910)_1Phi	val: 0	err:0.2	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_f2(1910)Mag2	1	0.5
+INFO: paramName: _J1P-1C-1Tophoton_f2(1910)Mag2	val: 1	err:0.5	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_f2(1910)_2Phi	0	0.2
+INFO: paramName: _J1P-1C-1Tophoton_f2(1910)_2Phi	val: 0	err:0.2	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_f2(1910)Mag3	1	0.5
+INFO: paramName: _J1P-1C-1Tophoton_f2(1910)Mag3	val: 1	err:0.5	min:0	max:-1
+INFO: _J1P-1C-1Tophoton_f2(1910)_3Phi	0	0.2
+INFO: paramName: _J1P-1C-1Tophoton_f2(1910)_3Phi	val: 0	err:0.2	min:0	max:-1
+INFO: L2S0_f2(1910)Toomega1_omega2Mag	0.5	0.25
+INFO: paramName: L2S0_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
+INFO: L2S0_f2(1910)Toomega1_omega2Phi	0	0.2
+INFO: paramName: L2S0_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
+INFO: L0S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+INFO: paramName: L0S2_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
+INFO: L0S2_f2(1910)Toomega1_omega2Phi	0	0.2
+INFO: paramName: L0S2_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
+INFO: L2S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+INFO: paramName: L2S2_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
+INFO: L2S2_f2(1910)Toomega1_omega2Phi	0	0.2
+INFO: paramName: L2S2_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
+INFO: L4S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+INFO: paramName: L4S2_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
+INFO: L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
+INFO: paramName: L4S2_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
+INFO: f2(1910)Mass	1.97	0.03	1.791	2.091
+INFO: paramName: f2(1910)Mass	val: 1.97	err:0.03	min:1.791	max:2.091
+INFO: f2(1910)Width	0.16	0.034	0.08	0.34
+INFO: paramName: f2(1910)Width	val: 0.16	err:0.034	min:0.08	max:0.34
+INFO: channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20
+INFO: paramName: channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	val: 1	err:0.01	min:0	max:20
+
+
+ parameters in pawianParams are: 
+
+_J1P-1C-1Tophoton_eta(2225)Mag1	1	0.5
+_J1P-1C-1Tophoton_eta(2225)_1Phi	0	0.2
+L1S1_eta(2225)Toomega1_omega2Mag	1	0.5
+L1S1_eta(2225)Toomega1_omega2Phi	0	0.2
+eta(2225)Mass	2.15	0.03	2.08	2.38
+eta(2225)Width	0.14	0.03	0.04	0.3
+L1S0_omega1Topion1+_pion1-_pion10Mag	1	0.5
+L1S0_omega1Topion1+_pion1-_pion10Phi	0	0.2
+L1S0_omega2Topion2+_pion2-_pion20Mag	1	0.5
+L1S0_omega2Topion2+_pion2-_pion20Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag1	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_1Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag2	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_2Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag3	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_3Phi	0	0.2
+L2S0_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L2S0_f2(1910)Toomega1_omega2Phi	0	0.2
+L0S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L0S2_f2(1910)Toomega1_omega2Phi	0	0.2
+L2S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L2S2_f2(1910)Toomega1_omega2Phi	0	0.2
+L4S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
+f2(1910)Mass	1.97	0.03	1.791	2.091
+f2(1910)Width	0.16	0.034	0.08	0.34
+channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20
+
+
+**************** Fit parameter **************************
+_J1P-1C-1Tophoton_eta(2225)Mag1	1	0.5
+_J1P-1C-1Tophoton_eta(2225)_1Phi	0	0.2
+L1S1_eta(2225)Toomega1_omega2Mag	1	0.5
+L1S1_eta(2225)Toomega1_omega2Phi	0	0.2
+eta(2225)Mass	2.15	0.03	2.08	2.38
+eta(2225)Width	0.14	0.03	0.04	0.3
+L1S0_omega1Topion1+_pion1-_pion10Mag	1	0.5
+L1S0_omega1Topion1+_pion1-_pion10Phi	0	0.2
+L1S0_omega2Topion2+_pion2-_pion20Mag	1	0.5
+L1S0_omega2Topion2+_pion2-_pion20Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag1	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_1Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag2	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_2Phi	0	0.2
+_J1P-1C-1Tophoton_f2(1910)Mag3	1	0.5
+_J1P-1C-1Tophoton_f2(1910)_3Phi	0	0.2
+L2S0_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L2S0_f2(1910)Toomega1_omega2Phi	0	0.2
+L0S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L0S2_f2(1910)Toomega1_omega2Phi	0	0.2
+L2S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L2S2_f2(1910)Toomega1_omega2Phi	0	0.2
+L4S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
+f2(1910)Mass	1.97	0.03	1.791	2.091
+f2(1910)Width	0.16	0.034	0.08	0.34
+channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20
+INFO: Fixing scaling parameter channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling
+INFO: ************* Client mode ****************
+INFO: Connecting to server localhost:50003
+INFO: Received client id: 0
+INFO: Received channel id: 0
+INFO: Received data event range 0 - 2499
+INFO: Received mc event range 0 - 14999
+INFO: caching amplitudes enabled / disabled:	1
+INFO: data file: ../toyDataSignal.dat
+INFO: mc file: ../toyMC.dat
+INFO: 
+File has 2500 events. Each event has 7 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.828506,-0.822296,-0.0558318,-0.0844656) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.198786,-0.111887,0.0645689,0.057863) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.531265,0.299653,-0.369917,0.190086) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.313005,-0.0210905,-0.09619,0.264679) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.206927,-0.059017,0.036835,-0.136011) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.297685,0.180724,0.17538,0.0756097) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.721002,0.533913,0.285154,-0.36776) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.645691,-0.404247,0.172397,0.473055) } 	m = 0.000272958
+
+INFO: {Rank = 1 ( 0.387388,0.32432,0.136372,0.0825185) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.325194,0.264189,0.00710824,-0.128161) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.488736,0.223044,-0.0205375,0.412884) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.20516,-0.0743298,-0.109734,0.0710226) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.686987,-0.136551,-0.136737,-0.644304) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.358019,-0.196424,-0.00886753,-0.267015) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.761275,-0.429694,0.525208,-0.34505) } 	m = 0.00025895
+
+INFO: {Rank = 1 ( 0.360562,0.00783304,0.165166,0.288416) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.617786,0.39168,-0.066419,0.452056) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.335633,0.11019,-0.232337,0.168248) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.442473,-0.200412,-0.322696,-0.1789) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.155086,-0.0587153,-0.0228142,-0.0245746) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.42436,0.179118,-0.00610729,-0.360196) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 1.01811,0.94145,0.385188,0.0430919) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.235898,0.133591,-0.0463494,0.127174) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.363953,-0.112548,-0.28359,0.141037) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.212792,-0.0164612,0.140579,-0.0838279) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.283174,-0.0640223,-0.227919,-0.0682768) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.54462,-0.486611,0.182442,-0.084001) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.438624,-0.395398,-0.110351,-0.0751972) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.788139,0.467838,0.472927,-0.422648) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.322321,0.141547,0.251591,0.0328315) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.171038,-0.0618922,0.0024429,0.0770567) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.427869,-0.201533,0.217106,-0.277673) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.309201,-0.222572,-0.0214295,0.161642) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.51764,0.0250003,-0.491286,0.0805261) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.560965,-0.148388,-0.39135,0.348264) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.835868,0.0737384,-0.100785,-0.826487) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.550484,-0.0993631,0.490439,0.18207) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.188646,0.069782,-0.0190354,0.104286) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.447307,0.296999,0.241957,0.187382) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.404659,-0.0224646,-0.376199,-0.0473095) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.437604,-0.152451,-0.224462,0.313676) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.232607,-0.166241,0.0280858,0.0863811) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.915255,-0.756047,0.133869,-0.498161) } 	m = 0.000244141
+
+INFO: {Rank = 1 ( 0.244782,0.0767254,0.0020127,0.18587) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.420405,0.387213,-0.0674337,-0.0527212) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.689473,0.481403,0.162876,0.445955) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.148019,0.0304432,0.0218562,0.0320207) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.328501,-0.129111,0.0600417,-0.261072) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.35074,-0.0906266,-0.273221,0.148108) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.78439,-0.138904,-0.723086,-0.270406) } 	m = 0.000172633
+
+INFO: {Rank = 1 ( 0.253355,0.0107637,0.166106,0.13039) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.316817,0.280133,0.0433157,0.0232974) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.564123,0.25051,-0.163627,0.458788) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.426566,-0.151762,0.229621,-0.294485) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.294245,-0.148214,0.0882671,-0.193241) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.457678,-0.102527,0.399402,0.145656) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.773546,0.554757,0.230454,0.487349) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.291334,-0.156069,-0.110349,-0.169886) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.199374,-0.110986,0.0358131,0.0816689) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.928514,-0.714142,-0.167362,-0.553092) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.509407,0.404456,-0.167142,0.220216) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.242906,0.0610329,0.18849,-0.0164379) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.152092,-0.039048,0.0300953,-0.0498184) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.75222,0.618658,0.400225,-0.151383) } 	m = 0.000167152
+
+INFO: {Rank = 1 ( 0.280949,-0.11035,0.00186224,0.21742) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.460479,-0.343417,0.220537,-0.161213) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.513397,-0.459945,0.0966507,0.156414) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.426754,-0.0835052,-0.375949,-0.119703) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.526625,0.387959,-0.322911,0.0554202) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.136751,-0.00939914,0.0195847,0.00304392) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+File has 15000 events. Each event has 7 final state particles.
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.993071,-0.988404,0.0716432,-0.0641566) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.284326,-0.144769,-0.137783,-0.146353) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.397285,0.251602,0.0884462,-0.259286) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.176928,-0.00724506,0.0810219,0.0804167) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.351626,0.0993939,0.168634,0.256601) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.310488,0.241348,-0.134964,0.0214179) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.583451,0.548074,-0.0969989,0.11136) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.117567,-0.0991835,-0.0203352,0.0597589) } 	m = 3.41197e-05
+
+INFO: {Rank = 1 ( 0.494739,0.00408478,0.391599,0.26818) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.516193,0.155084,0.433949,-0.186044) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.506754,0.143461,0.373508,0.280162) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.276729,-0.118173,-0.126809,-0.16448) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.952657,-0.191947,-0.912416,-0.136852) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.232536,0.106674,-0.099496,-0.120725) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.933144,-0.367474,0.372375,0.772695) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.515612,0.213951,0.0404016,-0.44606) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.348315,0.261933,0.17291,-0.0577689) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.20993,-0.0181831,0.15614,0.0337736) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.602313,0.144941,-0.560291,-0.0914771) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.156493,-0.0530739,0.0272214,-0.0381107) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.331366,-0.182094,-0.168757,-0.173052) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.93226,0.444729,-0.55871,-0.599307) } 	m = 0.000244141
+
+INFO: {Rank = 1 ( 0.27683,0.138253,0.00175103,0.195034) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.226265,0.0334471,0.0959014,-0.146289) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.519654,0.146582,0.172643,0.447805) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.499261,-0.369723,0.0420622,0.302188) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.313296,-0.217286,0.176438,0.0181982) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.329606,-0.176002,0.109914,-0.21763) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.833679,-0.234453,-0.773007,-0.206184) } 	m = 6.10352e-05
+
+INFO: {Rank = 1 ( 0.291179,0.112338,0.20953,-0.0937169) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.147707,0.0238223,0.00113789,-0.0420554) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.457975,0.0890468,-0.377197,-0.203261) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.180032,-0.0652277,0.0691176,-0.0624484) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.522169,0.164847,0.448008,0.159043) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.664434,-0.0903728,0.46241,0.448623) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.555584,-0.292726,-0.279998,-0.380244) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.25953,-0.065807,0.0702878,-0.196482) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.466722,-0.102672,0.282155,-0.328932) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.355778,-0.201187,-0.240563,-0.100059) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.361322,0.289996,0.13224,0.0974096) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.192185,-0.00358735,0.0915139,0.0952243) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.906053,0.375983,-0.0156352,0.813084) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 0.308593,0.0669855,-0.169051,-0.249328) } 	m = 0.000105716
+
+INFO: {Rank = 1 ( 0.28008,-0.187188,0.0112262,0.154271) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.843288,-0.38738,0.186885,0.711804) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.401656,-0.0422091,0.341979,0.156129) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.387675,0.0846502,0.123427,-0.32926) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.502605,0.289977,-0.16978,-0.346727) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.373277,0.175164,-0.284686,-0.0968886) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 1.04089,0.59529,-0.0751921,-0.850551) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.267242,-0.00808274,-0.0785535,-0.213782) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.379397,-0.244795,0.155947,0.200545) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.308773,-0.256481,-0.0120746,0.105798) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.21485,-0.03079,0.114362,0.112489) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.642715,0.0611649,0.0986406,0.616548) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.243303,-0.116307,-0.16313,0.0289517) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 1.02352,0.549008,0.64665,0.572743) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.208077,-0.0801221,-0.129182,0.0266266) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.322481,0.26025,0.124457,-0.0359765) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.296164,-0.0730944,-0.24903,0.0462019) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.162914,-0.0791197,-0.0222872,0.0174522) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.868299,-0.542027,-0.166731,-0.64255) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.215716,-0.0348955,-0.163877,0.0155034) } 	m = 0.13498
+
+INFO: 
+
+INFO: 
+
+INFO: {Rank = 1 ( 1.12353,-0.500071,0.943047,-0.350577) } 	m = -nan
+
+INFO: {Rank = 1 ( 0.161073,0.0608035,-0.0525926,0.00128989) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.19553,0.00924841,0.0933658,-0.0997474) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.613949,0.395664,-0.35007,0.282162) } 	m = 0.13498
+
+INFO: {Rank = 1 ( 0.250668,0.171869,-0.085621,0.0805265) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.571987,-0.24157,-0.498555,0.0278705) } 	m = 0.13957
+
+INFO: {Rank = 1 ( 0.180439,0.104056,-0.00957404,0.0584758) } 	m = 0.13498
+
+INFO: 
+
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 0	 py: 0.04	 pz: 0	 e : 3.09717	 m : 3.09692
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 0
+INFO: 4vec all in lab system
+ px: 4.51691e-08	 py: 0.04	 pz: 2.98023e-08	 e : 3.09717	 m : 3.09692
+INFO: 4vec calculation for event 500
+INFO: 4vec calculation for event 1000
+INFO: 4vec calculation for event 1500
+INFO: 4vec calculation for event 2000
+INFO: 4vec calculation for event 2500
+INFO: 4vec calculation for event 3000
+INFO: 4vec calculation for event 3500
+INFO: 4vec calculation for event 4000
+INFO: 4vec calculation for event 4500
+INFO: 4vec calculation for event 5000
+INFO: 4vec calculation for event 5500
+INFO: 4vec calculation for event 6000
+INFO: 4vec calculation for event 6500
+INFO: 4vec calculation for event 7000
+INFO: 4vec calculation for event 7500
+INFO: 4vec calculation for event 8000
+INFO: 4vec calculation for event 8500
+INFO: 4vec calculation for event 9000
+INFO: 4vec calculation for event 9500
+INFO: 4vec calculation for event 10000
+INFO: 4vec all in lab system
+ px: 3.72529e-09	 py: 0.04	 pz: 2.98023e-08	 e : 3.09717	 m : 3.09692
+INFO: 4vec calculation for event 10500
+INFO: 4vec calculation for event 11000
+INFO: 4vec calculation for event 11500
+INFO: 4vec calculation for event 12000
+INFO: 4vec calculation for event 12500
+INFO: 4vec calculation for event 13000
+INFO: 4vec calculation for event 13500
+INFO: 4vec calculation for event 14000
+INFO: 4vec calculation for event 14500
+INFO: Received goodbye. Exiting.

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo Starting server ...
+
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/MultipoleFit/JpsiGamOmegaOmegaMultipole.cfg --mode server !>& serverMulti.log &
+
+sleep 5
+
+echo Starting clients ...
+
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/MultipoleFit/JpsiGamOmegaOmegaMultipole.cfg --mode client  !>& clientMulti1.log &
+
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/MultipoleFit/JpsiGamOmegaOmegaMultipole.cfg --mode client  !>& clientMulti2.log &
+
+echo done
