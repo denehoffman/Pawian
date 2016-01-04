@@ -1,5 +1,6 @@
 import os ;
 path-constant TOP : . ;
+path-constant ROOTSYS : /opt/root/5.34-15/Linux26SL6_x86_64_gcc447/ ;
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_test_exec_monitor -lboost_timer -lboost_chrono -lrt ;
