@@ -34,6 +34,11 @@
 KMatrixPiPiS::KMatrixPiPiS() :
   KMatrixSlowAdlerCorRel(5)
   ,_oldMass(0.)
+  ,_piMass(0.1349766)
+  ,_KplusMass(0.493677)
+  ,_K0Mass(0.497614)
+  ,_etaMass(0.547853)
+  ,_etaprimeMass(0.95778)
 {
   initASParam1900();
 }
@@ -43,12 +48,6 @@ KMatrixPiPiS::~KMatrixPiPiS(){
 }
 
 void  KMatrixPiPiS::initASParam1900(){
-  const double piMass=0.1349766;
-  const double KplusMass=0.493677;
-  const double K0Mass= 0.497614;
-  const double etaMass= 0.547853;
-  const double etaprimeMass= 0.95778;
-
   std::map<int, std::vector<double> > gFactorsMap;
   std::vector<double> poleMasses;
   poleMasses.resize(5);
@@ -88,11 +87,11 @@ void  KMatrixPiPiS::initASParam1900(){
   gFactorsMap[4].push_back(-0.00355); //eta eta
   gFactorsMap[4].push_back(0.22358); //eta eta'  
 
-  std::shared_ptr<AbsPhaseSpace> pipiPhp(new PhaseSpaceIsobarAS(piMass, piMass));
-  std::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobarAS(KplusMass, K0Mass));
+  std::shared_ptr<AbsPhaseSpace> pipiPhp(new PhaseSpaceIsobarAS(_piMass, _piMass));
+  std::shared_ptr<AbsPhaseSpace> kkPhp(new PhaseSpaceIsobarAS(_KplusMass, _K0Mass));
   std::shared_ptr<AbsPhaseSpace> pipipipiPhp(new PhaseSpace4Pi());
-  std::shared_ptr<AbsPhaseSpace> etaetaPhp(new PhaseSpaceIsobarAS(etaMass, etaMass));
-  std::shared_ptr<AbsPhaseSpace> etaetapPhp(new PhaseSpaceIsobarAS(etaMass, etaprimeMass));
+  std::shared_ptr<AbsPhaseSpace> etaetaPhp(new PhaseSpaceIsobarAS(_etaMass, _etaMass));
+  std::shared_ptr<AbsPhaseSpace> etaetapPhp(new PhaseSpaceIsobarAS(_etaMass, _etaprimeMass));
 
   _phpVecs.push_back(pipiPhp);
   _phpVecs.push_back(kkPhp);

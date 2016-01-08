@@ -21,47 +21,32 @@
 //									  //
 //************************************************************************//
 
-//KMatrixPiPiS class definition file. -*- C++ -*-
-// Copyright 2010 Bertram Kopf
+//KMatrixPiPiSsimple4piPhp class definition file. -*- C++ -*-
+// Copyright 2016 Bertram Kopf
 
 #pragma once 
 
 //_____________________________________________________________________________
-// @file KMatrixPiPiS.h
+// @file KMatrixPiPiSsimple4piPhp.h
 //_____________________________________________________________________________
 
-#include "PwaDynamics/KMatrixSlowAdlerCorRel.hh"
-#include <iostream>
-#include <vector>
-#include <memory>
-#include <boost/multi_array.hpp>
+#include "PwaDynamics/KMatrixPiPiS.hh"
 
-
-typedef boost::multi_array< double, 2> array_type_2d;
-
-using namespace std;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class KMatrixPiPiS : public KMatrixSlowAdlerCorRel {
+class KMatrixPiPiSsimple4piPhp : public KMatrixPiPiS {
 
 public:
 
   /// Constructor 
- KMatrixPiPiS(); 
+ KMatrixPiPiSsimple4piPhp(); 
 
   /// Destructor
-  virtual ~KMatrixPiPiS();
+  virtual ~KMatrixPiPiSsimple4piPhp();
 
 protected:
-  void initASParam1900();
-  double _oldMass;
 
-  const double _piMass;
-  const double _KplusMass;
-  const double _K0Mass;
-  const double _etaMass;
-  const double _etaprimeMass;
 private:
 };
 //_____________________________________________________________________________

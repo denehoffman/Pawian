@@ -39,21 +39,22 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       std::ostringstream histoname;
     
       histoname << "sheet_";
-      bool fillSheet=true;
-      bool lastSignIsNeg=true;
+      // bool fillSheet=true;
+      // bool lastSignIsNeg=true;
      
       for(auto it = signs.begin(); it!= signs.end();++it){
 	 histoname << ((*it) == 1 ? "+" : "-");
-	 bool currentSignIsNeg=true;
-         if( (*it) > 0. ) currentSignIsNeg=false;
-         if ( (!lastSignIsNeg) && currentSignIsNeg ) fillSheet=false;
+	 // bool currentSignIsNeg=true;
+         // if( (*it) > 0. ) currentSignIsNeg=false;
+         // if ( (!lastSignIsNeg) && currentSignIsNeg ) fillSheet=false;
 	 
-         lastSignIsNeg=currentSignIsNeg; 
-      }
+         // lastSignIsNeg=currentSignIsNeg;
+	 
+      // }
 
-      if( !fillSheet ){
-	signCollection++;
-	continue;
+      // if( !fillSheet ){
+      // 	signCollection++;
+      // 	continue;
       }
 
       Info << "Scanning " << histoname.str() << endmsg;      
