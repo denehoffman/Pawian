@@ -35,7 +35,7 @@ struct EvtPartData {
   float pidVector[maxPid];
   EvtPartData(double e, double px, double py, double pz) {
     vector4 = new Vector4<float>(e,px,py,pz);
-  }
+   }
   ~EvtPartData() {
     delete vector4;
   }

@@ -255,7 +255,7 @@ public:
   /** Assignment operator
    * Note: Legal if @a Tp = @a T is a legal assignment.
    */
-  template<typename T> Tensor<_Tp>& operator=(const Tensor<T> &__tensor){
+  template<typename T> Tensor<_Tp>& operator=(const Tensor<T>& __tensor){
     if(!this->RankCheck(__tensor)) this->SetRank(__tensor.Rank());
     this->Tensor_Base::operator=(__tensor);
     this->_Copy(__tensor);

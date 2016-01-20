@@ -132,7 +132,7 @@ public:
    *
    *  Note: Asserts @a matrix and @a this be the same size.
    */
-  template <typename V> Matrix<_Tp>& operator=(const Matrix<V> &__matrix);
+  template <typename V> Matrix<_Tp>& operator=(const Matrix<V>& __matrix);
    
   /// Assignment operator (for 1 x 1 matrix only) 
   Matrix<_Tp>& operator=(typename Type<_Tp>::ParamType __val){

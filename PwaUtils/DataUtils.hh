@@ -66,18 +66,20 @@ struct LScomb {
   Spin S;
   unsigned short idnumberLS;
 
-  LScomb(const int theL, const Spin& theS){
-    L=theL;
-    S=theS;
+  LScomb(const int theL, const Spin& theS):
+    L(theL),
+    S(theS)
+  {
     idnumberLS=2*L*1e2+2*S;
   }
 
-  LScomb(std::shared_ptr<const LScomb> theLScomb){
-    L=theLScomb->L;
-    S=theLScomb->S;
+  LScomb(std::shared_ptr<const LScomb> theLScomb):
+    L(theLScomb->L),
+    S(theLScomb->S)
+  {
     idnumberLS=2*L*1e2+2*S;
   }
-
+  
   virtual bool operator==(const LScomb& compare) const {
     return (idnumberLS==compare.idnumberLS);
   }
@@ -107,17 +109,19 @@ struct jpcRes {
   int P;
   int C;
   unsigned short idnumberJPC;
-  jpcRes(Spin j=0, int p=1, int c=1) {
-    J=j;
-    P=p;
-    C=c;
+  jpcRes(Spin j=0, int p=1, int c=1) :
+    J(j),
+    P(p),
+    C(c)
+    {
     idnumberJPC=2*J*1e2+(P+2)*1e1+(C+2);
   }
 
-  jpcRes(std::shared_ptr<const jpcRes> theJPC) {
-    J=theJPC->J;
-    P=theJPC->P;
-    C=theJPC->C;
+  jpcRes(std::shared_ptr<const jpcRes> theJPC) :
+    J(theJPC->J),
+    P(theJPC->P),
+    C(theJPC->C)
+    {
     idnumberJPC=2*J*1e2+(P+2)*1e1+(C+2);
   }
 
@@ -167,29 +171,34 @@ struct IGJPC : public jpcRes {
   double parityFactor;
   unsigned long idnumberIGJPC;
 
-  IGJPC(const Spin j, const int p, const int c, const Spin& theI,
-	    int theG, const double theParityFactor=0.): jpcRes(j, p, c) {
-    I=theI;
-    G=theG;
-    parityFactor=theParityFactor;
+  IGJPC(const Spin& j, const int p, const int c, const Spin& theI,
+	    int theG, const double theParityFactor=0.): 
+    jpcRes(j, p, c),
+    I(theI),
+    G(theG),
+    parityFactor(theParityFactor)
+  {
     idnumberIGJPC=2*I*1e5+(G+2)*1e4+idnumberJPC;
    }
 
   IGJPC(std::shared_ptr<const jpcRes> theJPC, const Spin& theI,
-	    int theG, const double theParityFactor=0.): jpcRes(theJPC) {
-    I=theI;
-    G=theG;
-    parityFactor=theParityFactor;
+	int theG, const double theParityFactor=0.): 
+    jpcRes(theJPC),
+    I(theI),
+    G(theG),
+    parityFactor(theParityFactor)
+  {
     idnumberIGJPC=2*I*1e5+(G+2)*1e4+idnumberJPC;
   }
 
 
 
   IGJPC(std::shared_ptr<const IGJPC> theIGJPC):
-    jpcRes(theIGJPC->J, theIGJPC->P, theIGJPC->C) {
-    I=theIGJPC->I;
-    G=theIGJPC->G;
-    parityFactor=theIGJPC->parityFactor;
+    jpcRes(theIGJPC->J, theIGJPC->P, theIGJPC->C), 
+    I(theIGJPC->I),
+    G(theIGJPC->G),
+    parityFactor(theIGJPC->parityFactor)
+  {
     idnumberIGJPC=2*I*1e5+(G+2)*1e4+idnumberJPC; 
   }
 
@@ -231,27 +240,32 @@ struct JPClamlam : public jpcRes {
   double parityFactor;
   unsigned long idnumberJPClamlam;
 
-  JPClamlam(const Spin j, const int p, const int c, const Spin& theLam1,
-	    const Spin& theLam2, const double theParityFactor=0.): jpcRes(j, p, c) {
-    lam1=theLam1;
-    lam2=theLam2;
-    parityFactor=theParityFactor;
+  JPClamlam(const Spin& j, const int p, const int c, const Spin& theLam1,
+	    const Spin& theLam2, const double theParityFactor=0.): 
+    jpcRes(j, p, c),
+    lam1(theLam1),
+    lam2(theLam2),
+    parityFactor(theParityFactor)
+  {
     idnumberJPClamlam=idnumberJPC*1e4+2*lam2*1e2+2*lam1;
-   }
+  }
 
   JPClamlam(std::shared_ptr<const jpcRes> theJPC, const Spin& theLam1,
-	    const Spin& theLam2, const double theParityFactor=0.): jpcRes(theJPC) {
-    lam1=theLam1;
-    lam2=theLam2;
-    parityFactor=theParityFactor;
+	    const Spin& theLam2, const double theParityFactor=0.): 
+    jpcRes(theJPC), 
+    lam1(theLam1),
+    lam2(theLam2),
+    parityFactor(theParityFactor)
+  {
     idnumberJPClamlam=idnumberJPC*1e4+2*lam2*1e2+2*lam1;
   }
 
   JPClamlam(std::shared_ptr<const JPClamlam> theJPClamlam):
-    jpcRes(theJPClamlam->J, theJPClamlam->P, theJPClamlam->C) {
-    lam1=theJPClamlam->lam1;
-    lam2=theJPClamlam->lam2;
-    parityFactor=theJPClamlam->parityFactor;
+    jpcRes(theJPClamlam->J, theJPClamlam->P, theJPClamlam->C),
+    lam1(theJPClamlam->lam1),
+    lam2(theJPClamlam->lam2),
+    parityFactor(theJPClamlam->parityFactor)
+  {
     idnumberJPClamlam=idnumberJPC*1e4+2*lam2*1e2+2*lam1;
   }
 
@@ -292,27 +306,31 @@ struct JPCLS : public jpcRes {
   double preFactor;
   unsigned long idnumberJPCLS;
 
-  JPCLS(const Spin j, const int p, const int c, const Spin& theL, const Spin& theS,
-	const double thePreFactor=0.): jpcRes(j, p, c) {
-    L=theL;
-    S=theS;
-    preFactor=thePreFactor;
+  JPCLS(const Spin& j, const int p, const int c, const Spin& theL, const Spin& theS,
+	const double thePreFactor=0.): 
+    jpcRes(j, p, c), 
+    L(theL),
+    S(theS),
+    preFactor(thePreFactor)
+  {
     idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
   }
 
-  JPCLS(std::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS,
-	const double thePreFactor=0.): jpcRes(theJPC) {
-    L=theL;
-    S=theS;
-    preFactor=thePreFactor;
+  JPCLS(std::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS, const double thePreFactor=0.) : 
+    jpcRes(theJPC), 
+    L(theL),
+    S(theS),
+    preFactor(thePreFactor)
+  {
     idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
   }
 
   JPCLS(std::shared_ptr<const JPCLS> theJPCLS):
-    jpcRes(theJPCLS->J, theJPCLS->P, theJPCLS->C) {
-    L=theJPCLS->L;
-    S=theJPCLS->S;
-    preFactor=theJPCLS->preFactor;
+    jpcRes(theJPCLS->J, theJPCLS->P, theJPCLS->C),
+    L(theJPCLS->L),
+    S(theJPCLS->S),
+    preFactor(theJPCLS->preFactor)
+  {
     idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
   }
 
@@ -361,25 +379,27 @@ struct JPCLSJJ : public JPCLS {
 
   JPCLSJJ(std::shared_ptr<const JPCLS> theJPCLS, const Spin& theJ1,
 	  const Spin& theLambda1, const Spin& theJ2, const Spin& theLambda2):
-    JPCLS(theJPCLS) {
-    J1=theJ1;
-    Lambda1=theLambda1;
-    J2=theJ2;
-    Lambda2=theLambda2;
+    JPCLS(theJPCLS),
+    J1(theJ1),
+    Lambda1(theLambda1),
+    J2(theJ2),
+    Lambda2(theLambda2)
+  {
     CGLS=Clebsch(L,0,S, Lambda1-Lambda2, J, Lambda1-Lambda2);
     CGJJ=Clebsch(J1, Lambda1, J2, -Lambda2, S, Lambda1-Lambda2);
     prefactorAll = sqrt( (2.*L+1)/(2.*J+1)  ) * CGLS * CGJJ;
   }
 
-  JPCLSJJ(std::shared_ptr<const JPCLSJJ> theJPCLSJJ): JPCLS(theJPCLSJJ) {
-    J1=theJPCLSJJ->J1;
-    Lambda1=theJPCLSJJ->Lambda1;
-    J2=theJPCLSJJ->J2;
-    Lambda2=theJPCLSJJ->Lambda2;
-    CGLS=theJPCLSJJ->CGLS;
-    CGJJ=theJPCLSJJ->CGJJ;
-    prefactorAll=theJPCLSJJ->prefactorAll;
-  }
+  JPCLSJJ(std::shared_ptr<const JPCLSJJ> theJPCLSJJ): 
+    JPCLS(theJPCLSJJ),
+    J1(theJPCLSJJ->J1),
+    Lambda1(theJPCLSJJ->Lambda1),
+    J2(theJPCLSJJ->J2),
+    Lambda2(theJPCLSJJ->Lambda2),
+    CGLS(theJPCLSJJ->CGLS),
+    CGJJ(theJPCLSJJ->CGJJ),
+    prefactorAll(theJPCLSJJ->prefactorAll)
+  {}
 
   virtual bool operator==(const jpcRes& compare) const {
     return jpcRes::operator==(compare);

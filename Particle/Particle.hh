@@ -67,7 +67,8 @@ struct ParticleData {
     parity(other->parity),
     theCParity(other->theCParity),
     gParity(other->gParity),
-    theGParity(other->theGParity)
+    theGParity(other->theGParity),
+    dynamicFunction(other->dynamicFunction)
   { }
 };
 

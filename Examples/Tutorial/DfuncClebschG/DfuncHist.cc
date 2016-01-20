@@ -74,12 +74,17 @@ DfuncHist::DfuncHist(Spin J, Spin lam1, Spin lam2) :
   _dcostHist = new TH1F("_dcostHist",histName.c_str(),100, -1., 1.);
   _dcostHist->SetXTitle("cos(#Theta)"); 
 
-  for (double cost=-1.; cost<1.; cost+=.02){
+  std::string histName2="d^2("+Jstrstr.str()+","+lam1strstr.str()+","+lam2strstr.str()+")";
+  _d2costHist= new TH1F("_d2costHist",histName2.c_str(),100, -1., 1.);
+  _dcostHist->SetXTitle("cos(#Theta)");
+  
+    for (double cost=-1.; cost<1.; cost+=.02){
     double theta = acos(cost);
     complex<double> currentd = Wigner_D(0., theta,0, _J, _lam1, _lam2);
     // double weight=norm(currentd);
     double weight=currentd.real();
-    _dcostHist->Fill( cost, weight );    
+    _dcostHist->Fill( cost, weight );
+    _d2costHist->Fill( cost, weight*weight );    
   }
 }
 

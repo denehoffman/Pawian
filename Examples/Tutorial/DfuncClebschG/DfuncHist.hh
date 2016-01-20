@@ -63,6 +63,7 @@ private:
   Spin _lam2;
   TFile* _theTFile;
   TH1F* _dcostHist;
+  TH1F* _d2costHist;
 };
 
 #endif
