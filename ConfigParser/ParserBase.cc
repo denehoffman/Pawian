@@ -75,7 +75,7 @@ ParserBase::ParserBase(int argc,char **argv)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
-  string strErrLogMode="debug";
+
   // Check the command line options. Uses the Boost program options library.
   string strAppName(argv[0]);
   size_t found = strAppName.rfind("/")+1;

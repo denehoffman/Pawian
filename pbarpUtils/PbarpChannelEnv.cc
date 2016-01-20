@@ -46,7 +46,7 @@
 PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_PBARP)
   ,_lmax(0)
   ,_pbarMomentum(0)
-  ,_theParser(theParser)
+  ,_thePbarpParser(theParser)
 {
 }
 
@@ -55,17 +55,17 @@ void PbarpChannelEnv::setup(ChannelID id){
    AbsChannelEnv::setup(id);
 
    //Antiproton momentum
-   _pbarMomentum = _theParser->getpbarMomentum();
+  _pbarMomentum = _thePbarpParser->getpbarMomentum();
 
    double pMass=GlobalEnv::instance()->particleTable()->particle("proton")->mass();
    double antipMass=GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
    _initial4Vec = Vector4<double>(pMass+sqrt(antipMass*antipMass+_pbarMomentum*_pbarMomentum), 0., 0., _pbarMomentum);
 
    //Lmax
-   _lmax=_theParser->getLMax();
+   _lmax=_thePbarpParser->getLMax();
 
    // individual Lmax settings
-   std::vector<std::string> theDropPbarpLForParticles = _theParser->dropPbarpLForParticle();
+   std::vector<std::string> theDropPbarpLForParticles = _thePbarpParser->dropPbarpLForParticle();
    for(auto ldropIt = theDropPbarpLForParticles.begin(); ldropIt != theDropPbarpLForParticles.end(); ++ldropIt){
       std::string particle;
       short l;
@@ -83,7 +83,7 @@ void PbarpChannelEnv::setup(ChannelID id){
    _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_prodChannelInfoList, id,_lmax));
 
    //preparations for prod key replacements
-   std::vector<std::string> replProdKeyVec = _theParser->replaceProdKey();
+   std::vector<std::string> replProdKeyVec = _thePbarpParser->replaceProdKey();
    std::map<std::string, std::string> repProdKeyNames;
 
    for ( itStr = replProdKeyVec.begin(); itStr != replProdKeyVec.end(); ++itStr){
@@ -118,7 +118,7 @@ void PbarpChannelEnv::setup(ChannelID id){
    std::string dynTypeDefault="WoDynamics";
 
    additionalStringVecDummy.push_back("0.197");
-   if(_theParser->productionFormalism()=="Cano"){
+   if(_thePbarpParser->productionFormalism()=="Cano"){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _pbarpReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
@@ -127,7 +127,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 	 _prodDecList->addDecay(*itDec);
       }
    }
-   else if(_theParser->productionFormalism()=="Tensor"){
+   else if(_thePbarpParser->productionFormalism()=="Tensor"){
       std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _pbarpReaction->productionTensorDecays();
       std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
@@ -135,7 +135,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 	 //	 (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       }
    }
-   else if(_theParser->productionFormalism()=="Heli"){
+   else if(_thePbarpParser->productionFormalism()=="Heli"){
       std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _pbarpReaction->productionHeliDecays();
       std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
@@ -145,7 +145,7 @@ void PbarpChannelEnv::setup(ChannelID id){
       }
    }
    else{
-      Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+      Alert <<"production formalism\t" << _thePbarpParser->productionFormalism() << "\t is not supported!!!" << endmsg;
       exit(0);
    }
 
@@ -194,7 +194,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 
 
    //set suffixes
-   std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
+   std::vector<std::string> suffixVec = _thePbarpParser->replaceSuffixNames();
    std::map<std::string, std::string> decSuffixNames;
 
    for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -218,7 +218,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 
 
    //replace mass key for decays
-   std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
+   std::vector<std::string> replMassKeyVec = _thePbarpParser->replaceMassKey();
    std::map<std::string, std::string> decRepMassKeyNames;
 
    for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -239,7 +239,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 
    //add dynamics
    std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-   std::vector<std::string> decDynVec = _theParser->decayDynamics();
+   std::vector<std::string> decDynVec = _thePbarpParser->decayDynamics();
    for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
       std::stringstream stringStr;
       stringStr << (*itStr);
@@ -277,7 +277,7 @@ void PbarpChannelEnv::setup(ChannelID id){
    } 
 
    // spin density particles
-   _spinDensity = _theParser->spinDensityNames();
+   _spinDensity = _thePbarpParser->spinDensityNames();
 
 }
 

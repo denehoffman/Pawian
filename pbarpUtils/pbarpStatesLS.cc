@@ -73,8 +73,8 @@ bool pbarpStatesLS::calcStates(){
 	  std::shared_ptr<const IGJPC> i0gjpcPtr(new IGJPC(jpcPtr, 0, jpcPtr->C)); //G=C*(-1)^I
 	  std::shared_ptr<const IGJPC> i1gjpcPtr(new IGJPC(jpcPtr, 1, -jpcPtr->C)); //G=C*(-1)^I
 
-	  for(Spin lampbar = -0.5; lampbar <= 0.5; lampbar++){
-	    for(Spin lamp = -0.5; lamp <= 0.5; lamp++){
+	  for(Spin lampbar = -0.5; lampbar <= 0.5; ++lampbar){
+	    for(Spin lamp = -0.5; lamp <= 0.5; ++lamp){
  
 	      double preFactorLS=sqrt(2.*L+1)*Clebsch(L,0,S, lampbar-lamp, j, lampbar-lamp);
 	      std::shared_ptr<const JPCLS> tmpJPCLS( new JPCLS(jpcPtr,L, S, preFactorLS) );              

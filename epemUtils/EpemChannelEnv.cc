@@ -44,7 +44,7 @@
 
 
 EpemChannelEnv::EpemChannelEnv(epemParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_EPEM)
-  ,_theParser(theParser)
+  ,_theEpEmParser(theParser)
 {
 }
 
@@ -53,7 +53,7 @@ void EpemChannelEnv::setup(ChannelID id){
    AbsChannelEnv::setup(id);
 
 
-   _cmsMass=_theParser->cmsMass();
+   _cmsMass=_theEpEmParser->cmsMass();
 
   // has to be set via parser !!!!
   double totalyMom=0.04;
@@ -68,9 +68,9 @@ void EpemChannelEnv::setup(ChannelID id){
   std::string dynTypeDefault="WoDynamics";
 
   //  std::vector< std::shared_ptr<AbsDecay> > prodDecs;
-  if (_theParser->productionFormalism()=="Heli" || _theParser->productionFormalism()=="HeliMultipole"){
+  if (_theEpEmParser->productionFormalism()=="Heli" || _theEpEmParser->productionFormalism()=="HeliMultipole"){
     std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs;
-    if (_theParser->productionFormalism()=="Heli") prodDecs = _epemReaction->productionHeliDecays();
+    if (_theEpEmParser->productionFormalism()=="Heli") prodDecs = _epemReaction->productionHeliDecays();
     else prodDecs = _epemReaction->productionHeliMultipoleDecays();
     std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
@@ -79,18 +79,18 @@ void EpemChannelEnv::setup(ChannelID id){
       _prodDecList->addDecay(*itDec);
     }
   }
-  else if (_theParser->productionFormalism()=="Tensor"){
+  else if (_theEpEmParser->productionFormalism()=="Tensor"){
     std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs;
-    if(_theParser->productionTensorRadType() == "Zou"){
-      Info << "use productionTensorRadType " << _theParser->productionTensorRadType() << endmsg;
+    if(_theEpEmParser->productionTensorRadType() == "Zou"){
+      Info << "use productionTensorRadType " << _theEpEmParser->productionTensorRadType() << endmsg;
       prodDecs=_epemReaction->productionTensorZouDecays();
     } 
-    else if(_theParser->productionTensorRadType() == "Default"){
-      Info << "use productionTensorRadType " << _theParser->productionTensorRadType() << endmsg;
+    else if(_theEpEmParser->productionTensorRadType() == "Default"){
+      Info << "use productionTensorRadType " << _theEpEmParser->productionTensorRadType() << endmsg;
       prodDecs=_epemReaction->productionTensorDecays(); //default
     } 
     else{
-      Alert <<"productionTensorRadType with the name " << _theParser->productionTensorRadType() << " doesn't exist!!!" << endmsg;
+      Alert <<"productionTensorRadType with the name " << _theEpEmParser->productionTensorRadType() << " doesn't exist!!!" << endmsg;
       exit(0);
     }
 
@@ -103,7 +103,7 @@ void EpemChannelEnv::setup(ChannelID id){
     }
   }
    else{
-      Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+      Alert <<"production formalism\t" << _theEpEmParser->productionFormalism() << "\t is not supported!!!" << endmsg;
       exit(0);
    }
 
@@ -113,7 +113,7 @@ void EpemChannelEnv::setup(ChannelID id){
   // }
 
   //set suffixes
-  std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
+  std::vector<std::string> suffixVec = _theEpEmParser->replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;
 
   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -136,7 +136,7 @@ void EpemChannelEnv::setup(ChannelID id){
   }
 
   //replace mass key
-  std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
+  std::vector<std::string> replMassKeyVec = _theEpEmParser->replaceMassKey();
   std::map<std::string, std::string> decRepMassKeyNames;
 
   for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -156,7 +156,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
   //add dynamics
   std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-  std::vector<std::string> decDynVec = _theParser->decayDynamics();
+  std::vector<std::string> decDynVec = _theEpEmParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);

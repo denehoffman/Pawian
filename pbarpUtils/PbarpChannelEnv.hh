@@ -50,7 +50,7 @@ public:
 private:
   int _lmax;
   float _pbarMomentum;
-  pbarpParser* _theParser;
+  pbarpParser* _thePbarpParser;
   
   std::shared_ptr<pbarpReaction> _pbarpReaction;
   std::vector<std::string> _spinDensity;

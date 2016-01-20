@@ -69,7 +69,7 @@ public:
       _upLimValid(par._upLimValid), 
       _name(par._name ) 
    {}
-  
+
    PawianParameter& operator=(const PawianParameter& par) {
       _num = par._num;
       _name = par._name;

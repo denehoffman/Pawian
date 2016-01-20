@@ -29,9 +29,10 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "FitParams/ParamFactory.hh"
 
-AbsPawianParamStreamer::AbsPawianParamStreamer(std::string& filePath)
+AbsPawianParamStreamer::AbsPawianParamStreamer(std::string& filePath) :
+  _pawianParams(ParamFactory::instance()->getParametersPointer("Pawian"))
 {
-  _pawianParams=ParamFactory::instance()->getParametersPointer("Pawian");
+  //  _pawianParams=ParamFactory::instance()->getParametersPointer("Pawian");
   std::ifstream ifs(filePath.c_str());
   if(!ifs.good()) 
     {

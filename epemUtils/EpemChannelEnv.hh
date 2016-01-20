@@ -46,7 +46,7 @@ public:
   std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
 
 private:
-   epemParser* _theParser;
+   epemParser* _theEpEmParser;
    double _cmsMass;
    std::shared_ptr<epemReaction> _epemReaction;
    std::vector<std::string> _spinDensity;

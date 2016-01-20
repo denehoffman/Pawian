@@ -49,6 +49,8 @@ KMatrixBase::KMatrixBase(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int nu
 KMatrixBase::KMatrixBase(int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
   ,_orderBg(0)
+  ,_s0Adler(0.)
+  ,_snormAdler(1.)
 {
  }
 

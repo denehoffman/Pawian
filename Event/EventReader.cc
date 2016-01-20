@@ -27,6 +27,7 @@
 
 EventReader::EventReader():
 _useWeight(false)
+,_useMassRange(false)
 {
 }
 EventReader::EventReader(bool useWeight):

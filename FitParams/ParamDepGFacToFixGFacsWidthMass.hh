@@ -87,7 +87,7 @@ public:
   virtual void Apply(std::shared_ptr<AbsPawianParameters> params);
 
 private:
-  double _targetFullWidth;
+  //  double _targetFullWidth;
   std::shared_ptr<KMatrixParser> _kMatrixParser;
   std::vector<std::string> _poleNames;
   std::map<std::string, FixGFacsWidthMassData> _dataMap;

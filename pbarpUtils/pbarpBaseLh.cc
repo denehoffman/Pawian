@@ -88,7 +88,7 @@ double pbarpBaseLh::calcSpinDensityNorm(std::string& nameDec, EvtData* theData, 
 
    double result = 0;
 
-   for (Spin M=-J; M<=J; M++){
+   for (Spin M=-J; M<=J; ++M){
      complex<double> singletAmpM1   = calcProdPartAmp( 0, M, nameDec, theData, _decAmpsSinglet);
      complex<double> triplet0AmpM1  = calcProdPartAmp( 0, M, nameDec, theData, _decAmpsTriplet0);
      complex<double> triplet1AmpM1  = calcProdPartAmp( 1, M, nameDec, theData, _decAmpsTripletp1);

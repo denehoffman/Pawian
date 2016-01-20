@@ -142,8 +142,8 @@ int main(int __argc,char *__argv[]){
      return 1;
    }
    std::shared_ptr<AbsPawianParameters> theParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
-   std::shared_ptr<AbsPawianParameters> orderedParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
-   orderedParams=theParams->paramsWithSameOrder(startPawianParams);
+   //   std::shared_ptr<AbsPawianParameters> orderedParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
+   std::shared_ptr<AbsPawianParameters> orderedParams=theParams->paramsWithSameOrder(startPawianParams);
 
   const std::string datFile=GlobalEnv::instance()->Channel(0)->parser()->dataFile();
   const std::string mcFile=GlobalEnv::instance()->Channel(0)->parser()->mcFile();

@@ -83,7 +83,6 @@ bool KMatrixParser::parseCommandLine()
     std::ifstream ifs(_configFile.c_str());
     if(!ifs.good())
       {
-    	stringstream strError;
 	std::cout << "Error accessing configuration file " << _configFile << std::endl;
  	exit(0);
       }

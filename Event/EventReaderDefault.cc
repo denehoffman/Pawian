@@ -31,6 +31,9 @@
 #include "ErrLogger/ErrLogger.hh"
 
 EventReaderDefault::EventReaderDefault() :
+  EventReader(false),
+  numParticles(0),
+  linesToSkip(0),
   _unit("GEV"),
   _order("Px Py Pz E"),
   _unitScaleFactor(1.),
