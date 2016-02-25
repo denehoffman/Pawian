@@ -166,3 +166,20 @@ void AbsHeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar
    if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(fitPar);
    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
+
+void AbsHeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
+  Info << "Amp name: " << name() << endmsg;
+  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
+    for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
+      Spin lambda1= it->first->lam1;
+      Spin lambda2= it->first->lam2;
+      Spin lambda = lambda1-lambda2;
+      if( fabs(lambda) > it->first->J) continue;
+      
+      if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
+      if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
+      it->first->print(std::cout);
+      Info << " it->first->parityFactor: " << it->first->parityFactor << endmsg;
+      Info << "_currentParamPreFacMagExpi.at(it->first): " << _currentParamPreFacMagExpi.at(it->first) << endmsg;
+    }
+}

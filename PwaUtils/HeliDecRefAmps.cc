@@ -139,16 +139,11 @@ complex<double> HeliDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamF
 
   result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
 
-  // if(absDec()->useProdBarrier()){
-  //   result *= BarrierFactor::BlattWeisskopf(absDec()->orbMomMin(), theData->DoubleString.at(_wignerDKey), BarrierFactor::qRDefault) /
-  //     BarrierFactor::BlattWeisskopf(absDec()->orbMomMin(), theData->DoubleString.at(_wignerDKey + "qNorm"), BarrierFactor::qRDefault);
-  // }
-  // else result*=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
-
   result*=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
   
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;
+    printCurrentAmpParams(lamX, lamFs);
     exit(0);
   }
 

@@ -120,12 +120,7 @@ complex<double> HeliDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& l
     if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
 
-    // double theMag=it->second;
-    // double thePhi=_currentParamPhiLamLams.at(it->first);
-    // complex<double> expi(cos(thePhi), sin(thePhi));
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-    //    Info << "_currentParamPreFacMagExpi.at(it->first): " << _currentParamPreFacMagExpi.at(it->first) << endmsg;
-    //    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
     complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
@@ -137,6 +132,7 @@ complex<double> HeliDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& l
   
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;
+    printCurrentAmpParams(lamX, lamFs); 
     exit(0);
   }
 
