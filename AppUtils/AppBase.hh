@@ -66,7 +66,7 @@ public:
   virtual void fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar);
   virtual bool calcAndSendClientLh(NetworkClient& theClient, std::shared_ptr<AbsPawianParameters> startParams, ChannelID channelID);
   virtual void fitServerMode(std::shared_ptr<AbsPawianParameters> upar);
-  virtual void fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData);
+  virtual void fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData, double evtWeightSumMc);
   virtual void fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams);
   virtual void addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile);
   virtual void loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::vector<std::string>& reactionCfgs, short channelType);

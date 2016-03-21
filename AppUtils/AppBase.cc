@@ -111,8 +111,22 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
 
   eventReader.fill(theEventList, evtStart, evtStop);
 
-  Info  << "\nFile has " << theEventList.size() << " events. Each event has "
-        <<  theEventList.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  unsigned int numOfEvtsInFile=theEventList.size();
+  Info  << "\nFile has " << numOfEvtsInFile << " events.";
+  if (numOfEvtsInFile==0){
+    Alert << "0 events in the file; abort!!!" << endmsg;
+    exit(1);
+  }
+
+  Event* currentNextEvent = theEventList.nextEvent();
+  if (0!=currentNextEvent){ 
+    Info  << " Each event has "
+	  <<  theEventList.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  }
+  else{
+    Warning  << "\n currentNextEvent does not exist.\n" << endmsg;
+  }
+
   theEventList.rewind();
 
   Event* anEvent;
@@ -497,11 +511,21 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     
     EventList mcData;
     readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
-    
+    double noOfMcEvts=EvtDataBaseList::noOfWeightedEvts(mcData, (*it).first->channelID(), maxMcEvts-1, 0);    
+
     evtWeightSumData+=noOfWeightedDataEvts;  
 
     numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
+
+    if(noOfWeightedDataEvts<10.){
+      Alert << "number of wieghted data events too small: " << noOfWeightedDataEvts << endmsg;
+      exit(1);
+    }
+    if(noOfMcEvts<10.){
+      Alert << "number of wieghted Monte Carlo events too small: " << noOfMcEvts << endmsg;
+      exit(1);
+    }
     }
 
   std::shared_ptr<AbsFcn> absFcn;
@@ -530,7 +554,15 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 }
 
 
-void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData){
+void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData, double evtWeightSumMc){
+    if(evtWeightSumData<10.){
+      Alert << "number of wieghted data events too small: " << evtWeightSumData << endmsg;
+      exit(1);
+    }
+    if(evtWeightSumMc<10.){
+      Alert << "number of wieghted Monte Carlo events too small: " << evtWeightSumMc << endmsg;
+      exit(1);
+    }
   std::shared_ptr<AbsFcn> absFcn(new PwaFcnBase());
   std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
   if(GlobalEnv::instance()->parser()->mode()=="pwa") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));

@@ -252,6 +252,7 @@ int main(int __argc,char *__argv[]){
   startPawianParams->print(std::cout);
 
   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+  double evtWeightSumMc = eventListPtr->NoOfWeightedMcEvts();
   if (mode=="qaMode"){
       theAppBase.qaMode(startPawianParams, evtWeightSumData );
       end= clock();
@@ -267,7 +268,7 @@ int main(int __argc,char *__argv[]){
   if (cacheAmps) theLhPtr->cacheAmplitudes();
 
   if(mode=="pwa" || mode=="evo"){
-    theAppBase.fitNonServerMode(startPawianParams, evtWeightSumData);
+    theAppBase.fitNonServerMode(startPawianParams, evtWeightSumData, evtWeightSumMc);
     return 1;
   }
   return 1;
