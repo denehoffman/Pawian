@@ -38,6 +38,9 @@
 VoigtDynamics::VoigtDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother),
   _massSigmaKey("defaultMassSigmaKey"),
+  _currentMass0(1.),
+  _currentWidth(1.),
+  _currentSigma(1.),
   _voigtPtr(new Voigtian())
 {
   if(0!=mother) _massSigmaKey=_massKey+"Sigma";

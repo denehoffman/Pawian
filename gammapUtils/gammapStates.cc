@@ -55,7 +55,7 @@ bool gammapStates::calcStates(){
   std::cout << "jmax: " << jmax << std::endl;
   std::cout << "lmax: " << _lmax << std::endl; 
  
-  for (Spin j=Spin(1./2); j<=jmax; j++){
+  for (Spin j=Spin(1./2); j<=jmax; ++j){
     for (int p=-1; p<=1; p+=2){
 
       std::shared_ptr<const jpcRes> jpcPtr(new jpcRes(j,p,0));

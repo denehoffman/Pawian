@@ -84,8 +84,8 @@ void DiracSpinor::SetP4(const Vector4<double> &__p4,double __mass){
     PolVector eps(j); 
     u.SetP4(__p4,__mass);
     eps.SetP4(__p4,__mass);
-    for(Spin mf = -1/2.; mf <= 1/2.; mf++){
-      for(Spin mb = -j; mb <= j; mb++){
+    for(Spin mf = -1/2.; mf <= 1/2.; ++mf){
+      for(Spin mb = -j; mb <= j; ++mb){
 	for(int i = 0; i < (int)(2*_spin + 1); i++){
 	  Spin mz = i - _spin;
 	  _spinors[i] += u(mf)*Clebsch(j,mb,1/2.,mf,_spin,mz)*eps(mb);
@@ -149,8 +149,8 @@ void DiracSpinor::Boost(double __bx,double __by,double __bz){
     PolVector eps(j); 
     u.SetP4(_p4,_mass); u.Boost(__bx,__by,__bz);
     eps.SetP4(_p4,_mass); eps.Boost(__bx,__by,__bz);
-    for(Spin mf = -1/2.; mf <= 1/2.; mf++){
-      for(Spin mb = -j; mb <= j; mb++){
+    for(Spin mf = -1/2.; mf <= 1/2.; ++mf){
+      for(Spin mb = -j; mb <= j; ++mb){
 	for(int i = 0; i < (int)(2*_spin + 1); i++){
 	  Spin mz = i - _spin;
 	  _spinors[i] += u(mf)*Clebsch(j,mb,1/2.,mf,_spin,mz)*eps(mb);
@@ -189,8 +189,8 @@ void DiracSpinor::Projector(const Spin &__j,int __rank,
   for(int i = 0; i < num_states; i++) {
     psi.Zero();
     Spin m = -__j + i;
-    for(Spin m1 = -1/2.; m1 <= 1/2.; m1++){
-      for(Spin mj = -j; mj <= j; mj++){
+    for(Spin m1 = -1/2.; m1 <= 1/2.; ++m1){
+      for(Spin mj = -j; mj <= j; ++mj){
 	psi += u(m1)*Clebsch(1/2.,m1,j,mj,__j,m)*eps(mj);
       }
     }

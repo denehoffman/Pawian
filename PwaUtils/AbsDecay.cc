@@ -158,6 +158,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
   ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
   ,_isospinClebschG(1.)
+  ,_qR(BarrierFactor::qRDefault)
   ,_name(_motherIGJPCPtr->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name()+"_"+daughter2->name())
   // ,_massParamKey(motherIGJPCPtr->name())
@@ -277,7 +278,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   else if(_dynType=="BlattWBarrier" || _dynType=="BlattWBarrierTensor" || _dynType=="BreitWignerBlattWRel" || _dynType=="BreitWignerBlattWTensorRel"){
     if(additionalStringVec.size()>0){
-      std::istringstream currentqRIstr(additionalStringVec[0]);
+
       _qR=stof(additionalStringVec[0]);
       if ( _qR <1.e-5 || _qR > 20.){
 	Alert << "radius for barrier factor too high or too low qr=" << _qR << endmsg;
@@ -414,22 +415,12 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   }
 
 
-  if(_isProdAmp){
-     if (!_daughter1IsStable){
-       _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey); 
-     }
-     if (!_daughter2IsStable){
-       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
-     }
+  if (!_daughter1IsStable){
+    _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey); 
   }
-   else{
-     if (!_daughter1IsStable){
-       _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
-     }
-     if (!_daughter2IsStable){
-       _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
-     }
-   }
+  if (!_daughter2IsStable){
+    _absDecDaughter2->fillWignerDs(fsMap, mother4Vec, evtData, _refKey);
+  }
 
   bool fillqVals=false;
   if(_isProdAmp && _useProdBarrier) fillqVals=true;
@@ -464,22 +455,13 @@ void AbsDecay::print(std::ostream& os) const{
  void AbsDecay::resetFilledMap() {
    _alreadyFilledMap.clear();
 
-   if(_isProdAmp){
-     if (!_daughter1IsStable){
-       _absDecDaughter1->resetFilledMap();
-     }
-     if (!_daughter2IsStable){
-       _absDecDaughter2->resetFilledMap();
-     }
+   if (!_daughter1IsStable){
+     _absDecDaughter1->resetFilledMap();
    }
-   else{
-     if (!_daughter1IsStable){
-       _absDecDaughter1->resetFilledMap();
-     }
-     if (!_daughter2IsStable){
-       _absDecDaughter2->resetFilledMap();
-     }
+   if (!_daughter2IsStable){
+     _absDecDaughter2->resetFilledMap();
    }
+   
 }
 
 void AbsDecay::enableProdBarrier(){

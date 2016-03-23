@@ -71,7 +71,7 @@ double WaveContribution::CalcContribution(std::shared_ptr<AbsPawianParameters> t
 std::pair<double,double> WaveContribution::CalcContribution(){
 
    double result=CalcContribution(_fitParamsOriginal);
-   double resultErr=0;
+   double resultErr=0.;
 
    if(!_calcError){
       return std::pair<double,double>(result, resultErr);
@@ -87,7 +87,6 @@ std::pair<double,double> WaveContribution::CalcContribution(){
 std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::CalcSingleContributions(){
 
    std::vector<std::pair<std::string,std::pair<double,double>>> retValues;
-   std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
 
    for(unsigned int i=0; i<NoOfContributions(); i++){
 

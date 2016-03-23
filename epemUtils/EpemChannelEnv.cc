@@ -43,8 +43,10 @@
 
 
 
-EpemChannelEnv::EpemChannelEnv(epemParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_EPEM)
+EpemChannelEnv::EpemChannelEnv(epemParser* theParser) : 
+  AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_EPEM)
   ,_theEpEmParser(theParser)
+  ,_cmsMass(1.)
 {
 }
 

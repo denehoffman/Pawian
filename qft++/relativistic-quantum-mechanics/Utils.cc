@@ -61,8 +61,8 @@ vector<LS> GetValidLS(const Spin &__j,int __parity,const Spin &__s1,int __p1,
   vector<LS> valid_ls;
   LS ls;
 
-  for(Spin S = abs(__s1 - __s2); S <= (__s1 + __s2); S++){
-    for(int L = (int)abs(__j - S); L <= (int)(__j + S); L++){
+  for(Spin S = abs(__s1 - __s2); S <= (__s1 + __s2); ++S){
+    for(int L = (int)abs(__j - S); L <= (int)(__j + S); ++L){
       // check the parity
       if(abs(__p1*__p2*pow(-1.,L) - __parity) < 1.e-5) {
 	ls.L = L;
@@ -528,12 +528,12 @@ void Wigner_d(const Spin &__jmax,double __beta,
     jmin = 3/2.;
   }
 
-  for(Spin j = jmin; j <= __jmax; j++){
-    for(Spin m = -j; m <= j; m++){
-      for(Spin n = -j; n <= j; n++){
+  for(Spin j = jmin; j <= __jmax; ++j){
+    for(Spin m = -j; m <= j; ++m){
+      for(Spin n = -j; n <= j; ++n){
 	double djmn = 0.;
-	for(Spin mm = -1; mm <= 1; mm++){
-	  for(Spin nn = -1; nn <= 1; nn++){
+	for(Spin mm = -1; mm <= 1; ++mm){
+	  for(Spin nn = -1; nn <= 1; ++nn){
 	    djmn += Clebsch(j-1,m-mm,1,mm,j,m)*Clebsch(j-1,n-nn,1,nn,j,n)
 	      *__d[j-1][m-mm][n-nn]*d1[mm][nn];
 	  }
@@ -554,9 +554,9 @@ void Wigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
   Spin jmin;
   if(d.find(0) != d.end()) jmin = 0;
   else jmin = 1/2.;
-  for(Spin j = jmin; j <= __jmax; j++){
-    for(Spin m = -j; m <= j; m++){
-      for(Spin n = -j; n <= j; n++) 
+  for(Spin j = jmin; j <= __jmax; ++j){
+    for(Spin m = -j; m <= j; ++m){
+      for(Spin n = -j; n <= j; ++n) 
 	__D[j][m][n] = exp(-i*(m*__alpha + n*__gamma))*d[j][m][n];
     }
   }

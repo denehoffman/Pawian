@@ -145,7 +145,7 @@ Tensor<_Tp>::Contract(const Tensor<T> &__tensor,int __num_indicies) const {
 	if(nterm == 1) ret() = element;
 	else ret() += element;	  
       }
-      indSummed++;
+      ++indSummed;
     } 
   }      
   return ret;
@@ -335,7 +335,7 @@ Tensor<_Tp>::operator%(const Tensor<T> &__tensor) const {
       
       // set element to product of this and __tensor elements
       ret(index) = (this->Element(ind1))*(__tensor(ind2));
-      index++;
+      ++index;
     }
   }
   return ret;
@@ -358,7 +358,7 @@ Tensor<_Tp> Tensor<_Tp>::operator>>(int __shift) const {
 	ind.SetIndex(i,index[j]);
       }
       ret(index) = this->Element(ind);
-      index++;
+      ++index;
     }
   }
   else ret = (*this);
@@ -382,7 +382,7 @@ Tensor<_Tp> Tensor<_Tp>::operator<<(int __shift) const {
 	ind.SetIndex(i,index[j]);
       }
       ret(index) = this->Element(ind);
-      index++;
+      ++index;
     }
   }
   else ret = (*this);
@@ -404,7 +404,7 @@ Tensor<_Tp> Tensor<_Tp>::Permute(int __mu,int __nu) const {
       ind.SetIndex(__mu,index[__nu]);
       ind.SetIndex(__nu,index[__mu]);
       ret(index) = this->Element(ind);
-      index++;
+      ++index;
     }
   }
   else ret = (*this);
@@ -430,7 +430,7 @@ Tensor<_Tp> Tensor<_Tp>::Order(const TensorIndexOrder &__order) const {
       for(int i = 0; i < _rank; i++) ind.SetIndex(i,index[__order[i]]);
       
       ret(index) = this->Element(ind);
-      index++;
+      ++index;
     }  
   }
   return ret;

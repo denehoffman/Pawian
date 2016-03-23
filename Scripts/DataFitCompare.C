@@ -40,7 +40,7 @@ void DataFitCompare(std::string rootFileName, std::string histname, bool createc
    TH1F* histoFit = (TH1F*)tFile->Get(fitName.c_str());
 
    if(createcanvas)
-     TCanvas* canvas = new TCanvas("canvas","c1",1000,1000);
+     //     TCanvas* canvas = new TCanvas("canvas","c1",1000,1000);
 
    CalcHistoChi2(histoData, histoFit);
 

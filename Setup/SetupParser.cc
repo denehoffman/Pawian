@@ -94,11 +94,10 @@ bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
     setupGrammar::edgeList.print(std::cout);
 
     std::vector<std::string>::iterator cmdLine;
-    ParticleData* pData;
     PdtParser pdtParser;
     for (cmdLine = thisDecay->addParticle.begin(); cmdLine != thisDecay->addParticle.end(); ++cmdLine) {
       std::cout << "add: " << *cmdLine << std::endl;
-      pData = new ParticleData;
+      ParticleData* pData = new ParticleData;
       if (pdtParser.parse(cmdLine->begin(), cmdLine->end(), *pData)) { // success
   	Particle* newParticle = new Particle(*pData);
   	newParticle->print(std::cout);

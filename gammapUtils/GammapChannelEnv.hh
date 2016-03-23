@@ -50,7 +50,7 @@ public:
 private:
    int _lmax;
   //  float _gammaMomentum;
-   gammapParser* _theParser;
+   gammapParser* _theGamPParser;
 
   std::shared_ptr<gammapReaction> _gammapReaction;
   std::vector<std::string> _spinDensity;

@@ -121,7 +121,6 @@ void KMatrixKPiSFocus::init2IsoSpin1(){
   std::vector<double> poleMasses;
   poleMasses.resize(1);
   poleMasses[0]=sqrt(1.7919);
-  std::vector< std::shared_ptr<KPole> > kPoles;
 
   std::map<int, std::vector<double> >::iterator itgFac;
   for (itgFac=gFactorsMap.begin(); itgFac!=gFactorsMap.end(); ++itgFac){
@@ -155,7 +154,6 @@ void KMatrixKPiSFocus::init2IsoSpin3(){
   std::vector<double> poleMasses;
    poleMasses.resize(1);
    poleMasses[0]=sqrt(100.);
-  std::vector< std::shared_ptr<KPole> > kPoles;
 
   std::map<int, std::vector<double> >::iterator itgFac;
   for (itgFac=gFactorsMap.begin(); itgFac!=gFactorsMap.end(); ++itgFac){

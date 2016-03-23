@@ -211,7 +211,7 @@ void AbsHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPa
   //  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
   const std::vector<EvtData*> mcList=theLh->getMcVec();
   double integralMC=0.;
-  double integralFitWeight=0.;
+  //  double integralFitWeight=0.;
 
   it=mcList.begin();
   while(it!=mcList.end())
@@ -221,7 +221,7 @@ void AbsHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPa
       fillEvt((*it), evtWeight, "mc");
 
       double fitWeight= theLh->calcEvtIntensity( (*it), fitParams );
-      integralFitWeight+=fitWeight;
+      //      integralFitWeight+=fitWeight;
       fillEvt((*it), evtWeight*fitWeight, "fit");
 
       ++it;

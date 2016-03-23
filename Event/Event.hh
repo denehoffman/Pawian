@@ -36,6 +36,10 @@ struct EvtPartData {
   EvtPartData(double e, double px, double py, double pz) {
     vector4 = new Vector4<float>(e,px,py,pz);
    }
+  EvtPartData(const EvtPartData& evtPartData) {
+    vector4 = new Vector4<float>(evtPartData.vector4);
+    for(unsigned int i=0; i<maxPid; ++i) pidVector[i]=evtPartData.pidVector[i];
+   }
   ~EvtPartData() {
     delete vector4;
   }

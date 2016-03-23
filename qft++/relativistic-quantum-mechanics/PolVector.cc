@@ -84,9 +84,9 @@ void PolVector::SetP4(const Vector4<double> &__p4,double __mass){
     PolVector epsJ(J); // spin S-1 polarization vector
     epsJ.SetP4(__p4,__mass);
 
-    for(m1 = -1; m1 <= 1; m1++){
-      for(mJ = -J; mJ <=J; mJ++){
-	for(int i = 0; i < (2*_spin + 1); i++){
+    for(m1 = -1; m1 <= 1; ++m1){
+      for(mJ = -J; mJ <=J; ++mJ){
+	for(int i = 0; i < (2*_spin + 1); ++i){
 	  M = i - _spin; // mz
 	  _pols[i] += Clebsch(1,m1,J,mJ,_spin,M)*(eps1(m1)%epsJ(mJ));
 	}
@@ -149,8 +149,8 @@ void PolVector::Projector(const Spin &__j,int __rank,
   for(int i = 0; i < num_states; i++) {
     Tensor<complex<double> > epsJ(__rank);
     Spin m = -__j + i;
-    for(Spin m1 = -1; m1 <= 1; m1++){
-      for(Spin mj = -j; mj <= j; mj++)
+    for(Spin m1 = -1; m1 <= 1; ++m1){
+      for(Spin mj = -j; mj <= j; ++mj)
 	epsJ += Clebsch(1,m1,j,mj,__j,m)*(eps1(m1)%epsj(mj));
     }
     __projector += epsJ%(epsJ.Conjugate());

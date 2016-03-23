@@ -54,7 +54,7 @@ public:
   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
 
 protected:
-  resParser* _theParser;
+  resParser* _theResParser;
   Particle* _motherParticle;
   std::shared_ptr<resReaction> _resReaction;
 };

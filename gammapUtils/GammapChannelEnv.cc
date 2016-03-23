@@ -44,7 +44,7 @@
 
 GammapChannelEnv::GammapChannelEnv(gammapParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GAMMAP)
   ,_lmax(0)
-  ,_theParser(theParser)
+  ,_theGamPParser(theParser)
 {
 }
 
@@ -53,10 +53,10 @@ void GammapChannelEnv::setup(ChannelID id){
    AbsChannelEnv::setup(id);
 
    //Lmax
-   _lmax=_theParser->getLMax();
+   _lmax=_theGamPParser->getLMax();
 
    // individual Lmax settings
-   std::vector<std::string> theDropGammapLForParticles = _theParser->dropGammapLForParticle();
+   std::vector<std::string> theDropGammapLForParticles = _theGamPParser->dropGammapLForParticle();
    for(auto ldropIt = theDropGammapLForParticles.begin(); ldropIt != theDropGammapLForParticles.end(); ++ldropIt){
       std::string particle;
       short l;
@@ -77,16 +77,16 @@ void GammapChannelEnv::setup(ChannelID id){
    std::vector<std::string> additionalStringVecDummy;
    std::string dynTypeDefault="WoDynamics";
    
-   if(_theParser->productionFormalism()=="Cano"){
+   if(_theGamPParser->productionFormalism()=="Cano"){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _gammapReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	if(_theGamPParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theGamPParser->qRProduction());
 	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	_prodDecList->addDecay(*itDec);
       }
    }
-   else if(_theParser->productionFormalism()=="Tensor"){
+   else if(_theGamPParser->productionFormalism()=="Tensor"){
       std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs= _gammapReaction->productionTensorDecays();
       std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
@@ -94,17 +94,17 @@ void GammapChannelEnv::setup(ChannelID id){
          _prodDecList->addDecay(*itDec);
       }
    }
-   else if(_theParser->productionFormalism()=="Heli"){
+   else if(_theGamPParser->productionFormalism()=="Heli"){
       std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _gammapReaction->productionHeliDecays();
       std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theParser->qRProduction());
+	if(_theGamPParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theGamPParser->qRProduction());
 	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	_prodDecList->addDecay(*itDec);
       }
    }
    else{
-      Alert <<"production formalism\t" << _theParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+      Alert <<"production formalism\t" << _theGamPParser->productionFormalism() << "\t is not supported!!!" << endmsg;
       exit(0);
    }
 
@@ -140,7 +140,7 @@ void GammapChannelEnv::setup(ChannelID id){
 
 
    //set suffixes
-   std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
+   std::vector<std::string> suffixVec = _theGamPParser->replaceSuffixNames();
    std::map<std::string, std::string> decSuffixNames;
 
    for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -163,7 +163,7 @@ void GammapChannelEnv::setup(ChannelID id){
 
 
    //replace mass key
-   std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
+   std::vector<std::string> replMassKeyVec = _theGamPParser->replaceMassKey();
    std::map<std::string, std::string> decRepMassKeyNames;
 
    for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -184,7 +184,7 @@ void GammapChannelEnv::setup(ChannelID id){
 
    //add dynamics
    std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-   std::vector<std::string> decDynVec = _theParser->decayDynamics();
+   std::vector<std::string> decDynVec = _theGamPParser->decayDynamics();
    for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
       std::stringstream stringStr;
       stringStr << (*itStr);
@@ -221,7 +221,7 @@ void GammapChannelEnv::setup(ChannelID id){
    }
    
    // spin density particles
-   _spinDensity = _theParser->spinDensityNames();
+   _spinDensity = _theGamPParser->spinDensityNames();
 
 }
 

@@ -128,7 +128,6 @@ int main(int __argc,char *__argv[]){
 
   // Read start param file
   std::string paramStreamerPath=theAppParams->fitParamFile();
-  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath);
   fitParCol theStartparams=theParamStreamer.getFitParamVal();
   fitParCol theErrorparams=theParamStreamer.getFitParamErr();

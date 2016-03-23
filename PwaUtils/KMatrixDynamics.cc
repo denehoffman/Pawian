@@ -54,6 +54,7 @@ KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_kMatName("")
   , _orderKMatBg(-1)
   ,_withKMatAdler(false)
+  ,_currentMass(1.)
   ,_currentAdler0(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
@@ -150,7 +151,6 @@ void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
   }
   
   //pole positions
-  std::vector<double >::iterator itPoleVec;
   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
     double valMass=_currentPoleMasses.at(i);
     double errMass=0.02;
@@ -215,7 +215,6 @@ void KMatrixDynamics::fillParamNameList(){
 
   std::map<std::string, std::vector<std::string> >::iterator itNameMap;  
   //pole positions
-  std::vector<double >::iterator itPoleVec;
   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
     _paramNameList.push_back(_poleNames.at(i)+"Mass");
     for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
@@ -280,7 +279,6 @@ void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
   //beta factor for production  
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
-    std::string theName=it1->first;
     std::map<std::string, double>::iterator it2;
     std::map<std::string, double>& bFactors=it1->second;
     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
@@ -297,7 +295,6 @@ void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
   }
 
   //pole positions
-  std::vector<double >::iterator itPoleVec;
   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
     std::string currentPoleName=_poleNames.at(i)+"Mass";
     double currentPoleMass=fitPar->Value(currentPoleName);
@@ -330,7 +327,6 @@ void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
     for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
       for(unsigned int j=0; j<_phpVecs.size(); ++j){
 	for(unsigned int k=j; k<_phpVecs.size(); ++k){
-	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
 	  double newVal=fitPar->Value(_bgTermNames.at(i).at(j).at(k));
 	  _currentBgTerms.at(i).at(j).at(k)=newVal;
 	  _kMatr->updateBgTerms(i,j,k,newVal);
@@ -523,7 +519,6 @@ void KMatrixDynamics::init(){
 	Alert << "cannot convert " << currentgValueStr << " to a double value" << endmsg;
 	exit(0);
       }
-      std::string gFactorKey=firstParticleName+secondParticleName;
       _currentgFactorMap[i].push_back(currentGValue);
     }
   }

@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     
     // variables for the first decay Psi2s->Chi_c0+gamma
     int firstNdaug = 2;
-    double firstMass[8];
+    double firstMass[11];
     EvtVector4R firstP4[8]; 
     double firstMp = 3.68609;
     

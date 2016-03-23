@@ -155,7 +155,7 @@ protected:
   double _preFactor;
   std::string _pathParserFile;
 
-  std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
+  //  std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
 
   std::shared_ptr<AbsDecay> _absDecDaughter1;
   std::shared_ptr<AbsDecay> _absDecDaughter2;

@@ -41,6 +41,9 @@ FlatteDynamics::FlatteDynamics(std::string& key, std::vector<Particle*>& fsParti
   AbsDynamics(key, fsParticles, mother)
   ,_g11Key(_massKey+decPair1stChannel.first->name()+decPair1stChannel.second->name())
   ,_g22Key(_massKey+decPair2ndChannel.first->name()+decPair2ndChannel.second->name())
+  ,_currentMass(1.)
+  ,_currentg11(1.)
+  ,_currentg22(1.)
 {
   std::string firstPair1stPartStr=decPair1stChannel.first->name();
   boost::replace_all(firstPair1stPartStr,"+", "");

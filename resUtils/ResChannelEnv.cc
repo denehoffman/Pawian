@@ -36,7 +36,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 ResChannelEnv::ResChannelEnv(resParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_RES)
-   ,_theParser(theParser)
+   ,_theResParser(theParser)
 {
 }
 
@@ -50,9 +50,9 @@ void ResChannelEnv::setup(ChannelID id){
   // double totalyMom=0.04;
   // _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
 
-  _motherParticle = GlobalEnv::instance()->particleTable()->particle(_theParser->motherResName());
+  _motherParticle = GlobalEnv::instance()->particleTable()->particle(_theResParser->motherResName());
   if(0==_motherParticle){
-    Alert << "mother particle with name\t" << _theParser->motherResName() << "\tdoesn't exist" << endmsg;
+    Alert << "mother particle with name\t" << _theResParser->motherResName() << "\tdoesn't exist" << endmsg;
     exit(0);
   }
 
@@ -72,7 +72,7 @@ void ResChannelEnv::setup(ChannelID id){
 
 
   //set suffixes
-  std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
+  std::vector<std::string> suffixVec = _theResParser->replaceSuffixNames();
   std::map<std::string, std::string> decSuffixNames;
 
   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
@@ -95,7 +95,7 @@ void ResChannelEnv::setup(ChannelID id){
   }
 
   //replace mass key
-  std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
+  std::vector<std::string> replMassKeyVec = _theResParser->replaceMassKey();
   std::map<std::string, std::string> decRepMassKeyNames;
 
   for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
@@ -115,7 +115,7 @@ void ResChannelEnv::setup(ChannelID id){
 
   //add dynamics
   std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-  std::vector<std::string> decDynVec = _theParser->decayDynamics();
+  std::vector<std::string> decDynVec = _theResParser->decayDynamics();
   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
     std::stringstream stringStr;
     stringStr << (*itStr);

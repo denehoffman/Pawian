@@ -102,8 +102,7 @@ int main(int __argc,char *__argv[]){
  std::string mode=theAppParams->mode();
 
 
- std::string prodFormalism=theAppParams->productionFormalism();
- std::shared_ptr<AbsLh> theLhPtr;
+  std::shared_ptr<AbsLh> theLhPtr;
  theLhPtr = std::shared_ptr<AbsLh>(new resBaseLh(0));
 
  AppBase theAppBase;
@@ -115,7 +114,6 @@ int main(int __argc,char *__argv[]){
 
 
  std::string paramStreamerPath=theAppParams->fitParamFile();
-  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
   StreamFitParmsBase theParamStreamer(paramStreamerPath);
   fitParCol theStartparams=theParamStreamer.getFitParamVal();
   fitParCol theErrorparams=theParamStreamer.getFitParamErr();

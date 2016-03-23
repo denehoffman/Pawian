@@ -126,8 +126,8 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
    }
 
    calcSpinDensityMatrixNorm(particleName, J);
-   for(Spin M1 = -J; M1 <= J; M1++){
-      for(Spin M2 = -J; M2 <= J; M2++){
+   for(Spin M1 = -J; M1 <= J; ++M1){
+      for(Spin M2 = -J; M2 <= J; ++M2){
 	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
 	calcSpinDensityMatrixElement(particleName, M1, M2, J);
       }
