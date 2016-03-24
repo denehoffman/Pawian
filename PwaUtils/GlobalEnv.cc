@@ -114,6 +114,10 @@ void GlobalEnv::setupChannelEnvs(){
   int id=0;
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
       (*it).first->setup(id);
+      if (!(*it).first->checkReactionChain()){
+	Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
+	exit(1);
+      }
       ++id;
    }
   _channelEnvsAlredySetup=true;

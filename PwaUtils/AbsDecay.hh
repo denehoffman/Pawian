@@ -74,12 +74,17 @@ public:
   bool isDaughter2Stable() {return _daughter2IsStable;}
   virtual bool isTensorAmp() {return false;}
   virtual void setDecayLevel(decLevel theLevel);
-  virtual void setDecayLevelTree(decLevel theLevel); 
+  virtual void setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr); 
   virtual decLevel whichDecayLevel() {return _decLevel;}
 
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::vector<Particle*> finalStateParticlesDaughter1() {return _finalStateParticlesDaughter1;}
   std::vector<Particle*> finalStateParticlesDaughter2() {return _finalStateParticlesDaughter2;}
+  std::vector< std::shared_ptr<AbsDecay> > prodAmpRefList() {return _prodAmpRefList;}
+  std::vector< std::shared_ptr<AbsDecay> > motherAmpRefList() {return _motherAmpRefList;}
+  std::vector<std::string> fsParticleNameList() {return _fsParticleNameList;}
+  virtual void addToFsParticleNameList(const std::string& name);
+
   virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
@@ -123,7 +128,6 @@ public:
 protected:
 
   virtual void extractLmin();
-
   std::string _typeName;
   ChannelID _channelId;
 
@@ -151,12 +155,13 @@ protected:
   std::string _refKey;
   std::string _dynType;
   bool _dynEnabled;
-  //  std::string _dynKey;
+
   double _preFactor;
   std::string _pathParserFile;
 
-  //  std::vector< std::shared_ptr<const JPCLS> > _JPCLSDecAmps;
-
+  std::vector<std::string> _fsParticleNameList;
+  std::vector< std::shared_ptr<AbsDecay> > _prodAmpRefList;
+  std::vector< std::shared_ptr<AbsDecay> > _motherAmpRefList;
   std::shared_ptr<AbsDecay> _absDecDaughter1;
   std::shared_ptr<AbsDecay> _absDecDaughter2;
 

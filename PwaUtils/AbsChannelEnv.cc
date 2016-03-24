@@ -349,3 +349,63 @@ std::shared_ptr<AbsPawianParameters> AbsChannelEnv::defaultPawianParams(){
   return result;
 }
 
+bool AbsChannelEnv::checkReactionChain(){
+  Info << "check complete reaction chains" << endmsg;
+
+  // first check: unique names for final state particles
+  for(unsigned int i=0; i<_finalStateParticles.size()-1; ++i){
+    Particle* currentParticlei=_finalStateParticles.at(i);
+    for(unsigned int j=i+1; j<_finalStateParticles.size(); ++j){
+      Particle* currentParticlej=_finalStateParticles.at(j);
+      if(currentParticlei->name() == currentParticlej->name()){
+	Alert << "Unique names are requested for particles in the final state particle list!!!!"
+	      << "\n there are at least two particles with the name: " << currentParticlei->name() 
+	      << endmsg;
+	exit(1);
+      }
+    }
+  }
+
+  // second check: each decay amplitude must contain at least one mother amplitude and at least on production amplitude
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
+  std::vector<std::shared_ptr<AbsDecay> > theDecVec=_absDecList->getList();
+  for (it=theDecVec.begin(); it!=theDecVec.end(); ++it){
+    std::vector< std::shared_ptr<AbsDecay> > prodAmpRefList=(*it)->prodAmpRefList();
+    if( prodAmpRefList.size() < 1 ){
+      Alert << "decay amplitude: " << (*it)->name() << " does not contain at least one production amplitude!!!!" << endmsg;
+      exit(1);
+    }
+    std::vector< std::shared_ptr<AbsDecay> > motherAmpRefList=(*it)->motherAmpRefList();
+    if( motherAmpRefList.size() < 1 ){
+      Alert << "decay amplitude: " << (*it)->name() << " does not contain at least one mother amplitude!!!!" << endmsg;
+      exit(1);
+    }
+  }
+
+  std::vector<Particle*>::iterator itParticle;
+  for (itParticle=_finalStateParticles.begin(); itParticle!=_finalStateParticles.end(); ++itParticle){
+    Info << "paricle name: " << (*itParticle)->name() << endmsg;
+  }
+ 
+  // third check: each production amplitude must finally decay in all final state particles
+  std::vector<std::shared_ptr<AbsDecay> > theProdVec=_prodDecList->getList();
+  for (it=theProdVec.begin(); it!=theProdVec.end(); ++it){
+    std::vector<std::string> fsPartListNames = (*it)->fsParticleNameList();
+    Info << "fsPartListNames.size(): " << fsPartListNames.size() << endmsg;
+    for (itParticle=_finalStateParticles.begin(); itParticle!=_finalStateParticles.end(); ++itParticle){
+      std::vector<std::string>::const_iterator itToFind = std::find(fsPartListNames.begin(), fsPartListNames.end(), (*itParticle)->name());
+      if (itToFind != fsPartListNames.end()){
+	//found
+       fsPartListNames.erase(itToFind);
+      }
+      else{
+        Alert << "production amplitude " << (*it)->name() << " does finally not decay in exactly all final state particles!!!" << endmsg;
+      	exit(1);
+      }
+    }
+  }
+
+  Info << "reaction chains have been successfully checked!!!" << endmsg;
+  return true;
+}
+

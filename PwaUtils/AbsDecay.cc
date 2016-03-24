@@ -90,6 +90,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   else{
     _finalStateParticles.push_back(daughter1);
     _finalStateParticlesDaughter1.push_back(daughter1);
+    addToFsParticleNameList(daughter1->name());
   }
 
   _absDecDaughter2=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter2);
@@ -102,6 +103,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   else{
     _finalStateParticles.push_back(daughter2);
     _finalStateParticlesDaughter2.push_back(daughter2);
+    addToFsParticleNameList(daughter2->name());
   }
 
   pawian::Collection::PtrLess thePtrLess;
@@ -190,7 +192,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   }
   else{
     _finalStateParticles.push_back(daughter1);
-    _finalStateParticlesDaughter1.push_back(daughter1);
+    _finalStateParticlesDaughter1.push_back(daughter1); 
+    addToFsParticleNameList(daughter1->name());
   }
 
   _absDecDaughter2=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter2);
@@ -202,7 +205,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   }
   else{
     _finalStateParticles.push_back(daughter2);
-    _finalStateParticlesDaughter2.push_back(daughter2);
+    _finalStateParticlesDaughter2.push_back(daughter2); 
+    addToFsParticleNameList(daughter2->name());
   }
 
   pawian::Collection::PtrLess thePtrLess;
@@ -537,14 +541,62 @@ void AbsDecay::setDecayLevel(decLevel theLevel){
   Info << name() << " set decay level to " << _decLevel << endmsg; 
 }
 
-void AbsDecay::setDecayLevelTree(decLevel theLevel){
-
+void AbsDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr){
   setDecayLevel(theLevel);
+  if(prodDecPtr->whichDecayLevel() != AbsDecay::decayLevel::isProdAmp){
+    Alert << "prodDecPtr with the name " << prodDecPtr->name() << " is not a production amplitude!!!" << endmsg;
+    exit(1);
+  }
+
+  //check if prod decay already exists
+  const std::string key = prodDecPtr->name();
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
+  for(it=_prodAmpRefList.begin(); it!=_prodAmpRefList.end();++it){
+    if (key==(*it)->name()){
+      //prod decay already exists
+      Alert << "production amplitude " << key << " aleady exists in the reference list!!!" << endmsg;
+      Alert << "It is not allowed to refer to the same production amplitude more than once!!!!" << endmsg;
+      exit(1);
+    }
+  }
+
+  _prodAmpRefList.push_back(prodDecPtr);
+
+  const std::string keyMotherDec = motherDecPtr->name();
+  for(it=_motherAmpRefList.begin(); it!=_motherAmpRefList.end();++it){
+    if (key==(*it)->name()){
+      //prod decay already exists
+      Alert << "mother amplitude " << keyMotherDec << " aleady exists in the reference list!!!" << endmsg;
+      Alert << "It is not allowed to refer to the same mother amplitude more than once!!!!" << endmsg;
+      exit(1);
+    }
+  }
+
+  if(whichDecayLevel() != AbsDecay::decayLevel::isProdAmp) _motherAmpRefList.push_back(motherDecPtr);
 
   if (!_daughter1IsStable){
-    _absDecDaughter1->setDecayLevelTree(decayLevel(theLevel+1));
+    _absDecDaughter1->setDecayLevelTree(decayLevel(theLevel+1), shared_from_this(), prodDecPtr);
   }
+  else{
+    prodDecPtr->addToFsParticleNameList(_daughter1->name());
+    motherDecPtr->addToFsParticleNameList(_daughter1->name());
+  }
+
   if (!_daughter2IsStable){
-    _absDecDaughter2->setDecayLevelTree(decayLevel(theLevel+1));
+    _absDecDaughter2->setDecayLevelTree(decayLevel(theLevel+1), shared_from_this(), prodDecPtr);
   }
+  else{
+    prodDecPtr->addToFsParticleNameList(_daughter2->name());
+    motherDecPtr->addToFsParticleNameList(_daughter2->name());
+  }
+}
+
+void AbsDecay::addToFsParticleNameList(const std::string& name){
+  std::vector<std::string>::iterator it;
+  bool alreadyThere=false;
+  for(it = _fsParticleNameList.begin(); it!=_fsParticleNameList.end(); ++it){
+    if (name==(*it)) alreadyThere=true;
+  }
+  if( !alreadyThere ) _fsParticleNameList.push_back(name);
+  
 }
