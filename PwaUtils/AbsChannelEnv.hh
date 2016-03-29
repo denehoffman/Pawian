@@ -53,6 +53,7 @@ public:
   std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
   std::shared_ptr<AbsDecayList> prodDecayList() {return _prodDecList;}
   bool checkReactionChain();
+  void setWignerDRefs();
   std::vector< std::shared_ptr<ProdChannelInfo> > prodChannelInfoList() {return _prodChannelInfoList;}
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;}
   std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}

@@ -349,6 +349,15 @@ std::shared_ptr<AbsPawianParameters> AbsChannelEnv::defaultPawianParams(){
   return result;
 }
 
+void AbsChannelEnv::setWignerDRefs(){
+  std::vector<std::shared_ptr<AbsDecay> > theProdVec=_prodDecList->getList();
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
+  std::string prodKey="prod";
+  for (it=theProdVec.begin(); it!=theProdVec.end(); ++it){
+    (*it)->setWigDRefKey(prodKey);
+  }
+}
+
 bool AbsChannelEnv::checkReactionChain(){
   Info << "check complete reaction chains" << endmsg;
 
@@ -391,7 +400,6 @@ bool AbsChannelEnv::checkReactionChain(){
   std::vector<std::shared_ptr<AbsDecay> > theProdVec=_prodDecList->getList();
   for (it=theProdVec.begin(); it!=theProdVec.end(); ++it){
     std::vector<std::string> fsPartListNames = (*it)->fsParticleNameList();
-    Info << "fsPartListNames.size(): " << fsPartListNames.size() << endmsg;
     for (itParticle=_finalStateParticles.begin(); itParticle!=_finalStateParticles.end(); ++itParticle){
       std::vector<std::string>::const_iterator itToFind = std::find(fsPartListNames.begin(), fsPartListNames.end(), (*itParticle)->name());
       if (itToFind != fsPartListNames.end()){
@@ -399,7 +407,8 @@ bool AbsChannelEnv::checkReactionChain(){
        fsPartListNames.erase(itToFind);
       }
       else{
-        Alert << "production amplitude " << (*it)->name() << " does finally not decay in exactly all final state particles!!!" << endmsg;
+        Alert << "production amplitude " << (*it)->name() << " does finally not decay in exactly all final state particles!!!"
+	      << "\nparticle with the name " << (*itParticle)->name() << " not found!!!" << endmsg;
       	exit(1);
       }
     }

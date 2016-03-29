@@ -43,6 +43,7 @@ OmegaTo3PiDecay::OmegaTo3PiDecay(Particle* mother, Particle* daughter1, Particle
 {
   _finalStateParticles.push_back(daughter3);
   _finalStateParticlesDaughter3.push_back(daughter3);
+  addToFsParticleNameList(daughter3->name());
 
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
@@ -73,6 +74,13 @@ void OmegaTo3PiDecay::extractStates(){
 
 OmegaTo3PiDecay::~OmegaTo3PiDecay(){
 }
+
+void OmegaTo3PiDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr){
+  AbsDecay::setDecayLevelTree(theLevel, motherDecPtr, prodDecPtr);
+  prodDecPtr->addToFsParticleNameList(_daughter3->name());
+  motherDecPtr->addToFsParticleNameList(_daughter3->name());
+}
+
 
 void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
   return;

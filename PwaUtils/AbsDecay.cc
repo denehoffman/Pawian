@@ -64,6 +64,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
    ,_prodParamKey("")
+  ,_wignerDRefKey("default")
   ,_dynType("WoDynamics")
    ,_dynEnabled(false)
   ,_preFactor(1.)
@@ -166,6 +167,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
+  ,_wignerDRefKey("default")
   ,_dynType("WoDynamics")
   ,_dynEnabled(false)
   ,_preFactor(1.)
@@ -599,4 +601,24 @@ void AbsDecay::addToFsParticleNameList(const std::string& name){
   }
   if( !alreadyThere ) _fsParticleNameList.push_back(name);
   
+}
+
+void  AbsDecay::setWigDRefKey(std::string& ref){
+  if(ref == _wignerDRefKey) return;
+  if (_wignerDRefKey != "default"){
+    Alert << "two different reference keys for the WignerD functions not allowed!!!"
+	  << "\n which are: " <<  _wignerDRefKey << " and: " << ref 
+	  << "\n clone particle(s) for at least one decay chain" << endmsg;
+    exit(1);
+  }
+  _wignerDRefKey=ref;
+
+  Info << "wignerDRefKey for amplitude " << _name << " set to: " << _wignerDRefKey << endmsg;
+
+  if (!_daughter1IsStable){
+    _absDecDaughter1->setWigDRefKey(_refKey);
+  }
+  if (!_daughter2IsStable){
+    _absDecDaughter2->setWigDRefKey(_refKey);
+  }
 }

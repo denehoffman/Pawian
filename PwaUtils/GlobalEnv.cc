@@ -118,6 +118,7 @@ void GlobalEnv::setupChannelEnvs(){
 	Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
 	exit(1);
       }
+      (*it).first->setWignerDRefs();
       ++id;
    }
   _channelEnvsAlredySetup=true;

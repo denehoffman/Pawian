@@ -70,6 +70,7 @@ public:
   virtual void cacheAmplitudes();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
+  //  virtual void retrieveWignerDs(EvtData* theData) { return;}
 
 protected:
 

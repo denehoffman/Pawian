@@ -116,6 +116,7 @@ public:
   void setProdChannelInfo(std::shared_ptr<ProdChannelInfo> prodChannelInfo) { _prodChannelInfo=prodChannelInfo;}
   void setProductionAmp() {_isProdAmp=true;}
   bool isProductionAmp() {return _isProdAmp;}
+  void setWigDRefKey(std::string& ref);
 
   void resetFilledMap();
   virtual void enableProdBarrier();
@@ -153,6 +154,7 @@ protected:
   std::string _prodParamKey;
   std::string _wignerDKey;
   std::string _refKey;
+  std::string _wignerDRefKey;
   std::string _dynType;
   bool _dynEnabled;
 

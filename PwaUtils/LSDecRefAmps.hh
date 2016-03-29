@@ -59,7 +59,6 @@ public:
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
-
 protected:
   virtual complex<double> lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& refKey, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
 
