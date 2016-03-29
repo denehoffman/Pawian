@@ -220,13 +220,20 @@ double PawianParameters::LowerLimit(unsigned int idx){
   return _parameters[idx].LowerLimit();
 }
 unsigned int PawianParameters::Index(const std::string & name) const{
-
+  const unsigned int outOfRangeParNums=1000000;
+  unsigned int result=outOfRangeParNums;
   std::vector<PawianParameter>::const_iterator itPar;
-  for (itPar=_parameters.begin(); itPar!=_parameters.end(); ++itPar){
-    if(itPar->Name()==name) break;
+  for (itPar=_parameters.begin(); itPar != _parameters.end(); ++itPar){
+    if(itPar->Name()==name){
+      result=(*itPar).Number();
+      break;
+    }
   }
-  assert(itPar != _parameters.end());
-  return (*itPar).Number();
+  if(result==outOfRangeParNums){
+    Alert << "parameter with name: " << name << " does not exist!!!" << endmsg;
+    exit(1);
+  }
+  return result;
 }
 
 const std::string & PawianParameters::GetName(unsigned int idx) const{
