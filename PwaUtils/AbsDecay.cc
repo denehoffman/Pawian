@@ -388,7 +388,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 	evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
       } 
       else evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-      if(evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringId[_wignerDKey][IdSpinMotherLamMotherLam12]){
+      if(evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12]){
 	DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
 	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
 	DebugMsg << "thePhi:\t" << thePhi << endmsg;
