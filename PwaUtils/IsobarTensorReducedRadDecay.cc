@@ -108,7 +108,7 @@ void IsobarTensorReducedRadDecay::print(std::ostream& os) const{
   //dummy
 }
 
-void IsobarTensorReducedRadDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
+void IsobarTensorReducedRadDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   //dummy
 }
 

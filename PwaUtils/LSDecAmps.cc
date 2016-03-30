@@ -163,7 +163,8 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
 
-  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
+  //std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
+  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
 
   for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
 

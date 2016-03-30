@@ -35,12 +35,13 @@
 #include <cassert>
 #include <memory>
 
-#include "PwaUtils/LSDecRefAmps.hh"
+//#include "PwaUtils/LSDecRefAmps.hh"
+#include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 //class OmegaTo3PiLSDecay;
 
-class LSOmegaTo3PiDecAmps : public LSDecRefAmps{
-
+//class LSOmegaTo3PiDecAmps : public LSDecRefAmps{
+class LSOmegaTo3PiDecAmps : public LSDecAmps{
 public:
 
   // create/copy/destroy:

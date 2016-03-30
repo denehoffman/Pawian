@@ -39,7 +39,7 @@
 
 
 LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theDec, ChannelID channelID) :
-  LSDecRefAmps( (std::shared_ptr<AbsDecay>) theDec, channelID)
+  LSDecAmps( (std::shared_ptr<AbsDecay>) theDec, channelID)
   ,_lambdaDecKey(theDec->lambdaDecKey())
 {
   _LSs=theDec->LSAmps();

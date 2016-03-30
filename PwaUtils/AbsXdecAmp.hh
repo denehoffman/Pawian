@@ -66,7 +66,7 @@ public:
   const std::string jpcDecsName() const {return _jpcDecsName;}
   const std::string isoKey() const {return _isoKey;}
   const std::string wignerDKey() const {return _wignerDKey;}
-  const std::string refKey() const {return _refKey;}
+  //  const std::string refKey() const {return _refKey;}
   virtual void cacheAmplitudes();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
@@ -90,7 +90,7 @@ protected:
   const double _preFactor;
   std::string _key;
   const std::string _wignerDKey;
-  std::string _refKey;
+  //  std::string _refKey;
   std::mutex theMutex;
 
   bool _daughter1IsStable;

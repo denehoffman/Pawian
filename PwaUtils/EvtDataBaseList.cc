@@ -137,7 +137,6 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     std::vector<std::shared_ptr<AbsDecay> > theDecays=absChannelEnvPtr->prodDecayList()->getList();
     std::vector<std::shared_ptr<AbsDecay> >::iterator itIso;
     for (itIso=theDecays.begin(); itIso!=theDecays.end(); ++itIso){
-      //      std::string theRefKey=(*itIso)->refKey();
       (*itIso)->fillWignerDs(particle4VecMap, V4_all_lab, evtData);
     }
 
