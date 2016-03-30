@@ -79,7 +79,7 @@ void IsobarTensorDecay::print(std::ostream& os) const{
   os << "\n";
 }
 
-void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
+void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   int evtNo=evtData->evtNo;
   std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
   if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
@@ -121,12 +121,12 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
   }
 
   if(_isProdAmp){
-    if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData, _name);
-    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData, _name);
+    if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, daughter1_4Vec, evtData);
+    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, daughter2_4Vec, evtData);
   }
   else{
-    if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData, _name);
-    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData, _name);
+    if (!_daughter1IsStable) _absDecDaughter1->fillWignerDs(fsMap, prodParticle4Vec, evtData);
+    if (!_daughter2IsStable) _absDecDaughter2->fillWignerDs(fsMap, prodParticle4Vec, evtData);
   }
 
 

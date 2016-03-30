@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// AbsLSDecAmps class definition file. -*- C++ -*-
+// LSDecAmps class definition file. -*- C++ -*-
 // Copyright 2014 Bertram Kopf
 
 #include <getopt.h>
@@ -29,7 +29,7 @@
 #include <string>
 #include <mutex>
 
-#include "PwaUtils/AbsLSDecAmps.hh"
+#include "PwaUtils/LSDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -40,7 +40,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
-AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
+LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
   ,_LSs(theDec->LSAmps())
   ,_factorMag(1.)
@@ -48,7 +48,13 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID chan
   ,_lam1Max(_Jdaughter1)
   ,_lam2Min(-_Jdaughter2)
   ,_lam2Max(_Jdaughter2)
+  ,_Smax(0)
 {
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( (*it)->S > _Smax ) _Smax=(*it)->S;
+  }
+
   if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
@@ -57,13 +63,19 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID chan
   fillCgPreFactor();
 }
 
-AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
+LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
   ,_lam1Min(-_Jdaughter1)
   ,_lam1Max(_Jdaughter1)
   ,_lam2Min(-_Jdaughter2)
   ,_lam2Max(_Jdaughter2)
+  ,_Smax(0)
 {
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    if( (*it)->S > _Smax ) _Smax=(*it)->S;
+  }
+
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
@@ -71,38 +83,134 @@ AbsLSDecAmps::AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID
   fillCgPreFactor();
 }
 
-AbsLSDecAmps::~AbsLSDecAmps()
+LSDecAmps::~LSDecAmps()
 {
 }
 
-// void  AbsLSDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
+complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
+  complex<double> result(0.,0.);
 
-//   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
-//   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
-//     currentMagValMap[*itLS]=_factorMag;
-//     currentPhiValMap[*itLS]=0.;
-//     currentMagErrMap[*itLS]=_factorMag;
-//     currentPhiErrMap[*itLS]=0.3;
-//   }
+  if(fixDaughterNr == 1){
+     _lam1Min = _lam1Max = lamDec;
+  }
+  else if(fixDaughterNr == 2){
+     _lam2Min = _lam2Max = lamDec;
+  }
+  else{
+     Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
+  }
 
-//   fitVal.MagsLS[_key]=currentMagValMap;
-//   fitVal.PhisLS[_key]=currentPhiValMap;
-//   fitErr.MagsLS[_key]=currentMagErrMap;
-//   fitErr.PhisLS[_key]=currentPhiErrMap;
+  if(_enabledlamFsDaughter1){
+    _lam1Min=lamFs;
+    _lam1Max=lamFs;
+  }
+  else if(_enabledlamFsDaughter2){
+    _lam2Min=lamFs;
+    _lam2Max=lamFs;
+  }
 
-//   _absDyn->getDefaultParams(fitVal, fitErr);
+  result=lsLoop( grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, false);
+
+  return result;
+}
+
+complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+
+  complex<double> result(0.,0.);
+  if( fabs(lamX) > _JPCPtr->J) return result;
+
+  int evtNo=theData->evtNo;
+
+  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs); 
+
+  if ( _cacheAmps && !_recalculate){
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
+    return result;
+  }
+
+  if(_enabledlamFsDaughter1){
+    _lam1Min=lamFs;
+    _lam1Max=lamFs;
+  }
+  else if(_enabledlamFsDaughter2){
+    _lam2Min=lamFs;
+    _lam2Max=lamFs;
+  }
 
 
-//   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-//   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-// }
+  result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
 
-void  AbsLSDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  if ( _cacheAmps){
+     theMutex.lock();
+     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
+     theMutex.unlock();
+  }
+
+  if(result.real()!=result.real()){
+    Info << "dyn name: " << _absDyn->name() 
+	 << "\nname(): " << name()
+	 << endmsg;
+    Alert << "result:\t" << result << endmsg;
+    exit(0);
+  }
+  return result;
+}
+
+complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
+ 
+  complex<double> result(0.,0.);
+
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+
+  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
+
+  for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
+
+    for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
+      Spin lambda = lambda1-lambda2;
+      if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>_Smax) continue;
+
+      map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& cgPre_LSMap=_cgPreFactor_LamLamLSMap.at(lambda1).at(lambda2);    
+      complex<double> amp(0.,0.);     
+      for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+	if( fabs(lambda)>(*it)->S) continue;
+	if (_absDyn->isLdependent()) amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
+	else amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it);
+      }
+      Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+      amp *= conj(currentWignerDMap.at(IdJLamXLam12));
+      //      amp *= conj(_currentWignerDMap->at(IdJLamXLam12));
+      //      amp *= conj(_currentWignerDMap.at(IdJLamXLam12));
+      if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
+      result+=amp;    
+    }
+  }
+  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  return result;
+}
+
+void LSDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
+  if(!_recalculate) return; 
+
+  if(!_absDyn->isLdependent()){
+    AbsXdecAmp::calcDynamics(theData, grandmaAmp);
+    return;
+  }
+
+ std::vector< std::shared_ptr<const LScomb> >::iterator it;
+ for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+   theMutex.lock();
+   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+   theMutex.unlock();
+ }  
+
+ if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
+ if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
+ return;
+}
+
+void  LSDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
@@ -129,7 +237,7 @@ void  AbsLSDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPa
   if(!_daughter2IsStable) _decAmpDaughter2->fillDefaultParams(fitPar);
 }
 
-void AbsLSDecAmps::fillParamNameList(){
+void LSDecAmps::fillParamNameList(){
   _paramNameList.clear();
   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
@@ -143,12 +251,12 @@ void AbsLSDecAmps::fillParamNameList(){
 
 }
 
-void AbsLSDecAmps::print(std::ostream& os) const{
+void LSDecAmps::print(std::ostream& os) const{
   return; //dummy
 }
 
 
-void AbsLSDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+void LSDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
@@ -172,7 +280,7 @@ void AbsLSDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
-void  AbsLSDecAmps::fillCgPreFactor(){
+void  LSDecAmps::fillCgPreFactor(){
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
@@ -192,3 +300,8 @@ void  AbsLSDecAmps::fillCgPreFactor(){
     }
   }
 }
+
+// void LSDecAmps::retrieveWignerDs(EvtData* theData){
+//   //  _currentWignerDMap = &theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
+//   // _currentWignerDMap = theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
+// }

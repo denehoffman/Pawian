@@ -40,12 +40,12 @@
 #include "ErrLogger/ErrLogger.hh"
 
 LSDecRefAmps::LSDecRefAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID) :
-  AbsLSDecAmps(theDec, channelID)
+  LSDecAmps(theDec, channelID)
 {
 }
 
 LSDecRefAmps::LSDecRefAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
-  AbsLSDecAmps(theDec, channelID)
+  LSDecAmps(theDec, channelID)
 {
 }
 
@@ -55,8 +55,6 @@ LSDecRefAmps::~LSDecRefAmps()
 
 
 complex<double> LSDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
 
   complex<double> result(0.,0.);
 
@@ -84,65 +82,16 @@ complex<double> LSDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDau
     lam2Max=lamFs;
   }
 
-  result=lsLoopRef(grandmaAmp, refKey, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
+  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
 
   return result;
 }
 
 
-
-
-complex<double> LSDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
-
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
-  
-  
-  complex<double> result(0.,0.);
-  if( fabs(lamX) > _JPCPtr->J) return result;
-
-  int evtNo=theData->evtNo;
-
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs); 
-
-  if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    return result;
-  }
-
-  if(_enabledlamFsDaughter1){
-    _lam1Min=lamFs;
-    _lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    _lam2Min=lamFs;
-    _lam2Max=lamFs;
-  }
-
-
-  result=lsLoopRef(grandmaAmp, refKey, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
-
-  if ( _cacheAmps){
-     theMutex.lock();
-     _cachedAmpMapNew[evtNo][refKey][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
-     theMutex.unlock();
-  }
-
-  if(result.real()!=result.real()){
-    Info << "dyn name: " << _absDyn->name() 
-	 << "\nname(): " << name()
-	 << endmsg;
-    Alert << "result:\t" << result << endmsg;
-    exit(0);
-  }
-  return result;
-}
-
-
-complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& refKey, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
+complex<double> LSDecRefAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
  
   complex<double> result(0.,0.);
-  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(refKey);
+  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
@@ -157,8 +106,9 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
 	Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-	//	complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
+	//complex<double> amp = theMag*expi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
 	complex<double> amp = currentPreMagExpi*currentCgFactor.at(lambda1).at(lambda2)*conj(currentWignerDMap.at(IdJLamXLam12));
+	//	complex<double> amp = currentPreMagExpi*currentCgFactor.at(lambda1).at(lambda2)*conj(_currentWignerDMap->at(IdJLamXLam12));
       	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
 	tmpResult+=amp;
       }
@@ -169,14 +119,12 @@ complex<double> LSDecRefAmps::lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& ref
     result+=tmpResult; 
   }
 
-  //  result*=_preFactor*_isospinCG;
-  // if(result.real()!=result.real()){
-  //   Alert << "result:\t" << result << endmsg;
-  //   exit(0);
-  // }
   return result;
 }
 
+// void LSDecRefAmps::retrieveWignerDs(EvtData* theData){
+//   _currentWignerDMap = &theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
+// }
 
 
 

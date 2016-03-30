@@ -57,10 +57,6 @@ HeliDecRefAmps::~HeliDecRefAmps()
 complex<double> HeliDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
 
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
-
-
   bool lamFs_daughter1=false;
   if( _daughter1IsStable && _Jdaughter1>0) lamFs_daughter1=true;
 
@@ -86,7 +82,7 @@ complex<double> HeliDecRefAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixD
     double thePhi=_currentParamPhiLamLams[currentJPClamlam];
     complex<double> expi(cos(thePhi), sin(thePhi));
     Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDStringStringId.at(_wignerDKey).at(refKey).at(IdJLamXLam12));
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey()).at(IdJLamXLam12));
     result+=amp;
   }
 
@@ -101,16 +97,13 @@ complex<double> HeliDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamF
 
   complex<double> result(0.,0.);
 
-  std::string refKey=_refKey;
-  if (0!=grandmaAmp) refKey=grandmaAmp->refKey();
-
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
 
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMapNew.at(evtNo).at(refKey).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
+    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     //    result*=_absDyn->eval(theData, grandmaAmp);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
@@ -133,7 +126,7 @@ complex<double> HeliDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamF
     complex<double> expi(cos(thePhi), sin(thePhi));
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 
-    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDStringStringId.at(_wignerDKey).at(refKey).at(IdJLamXLam12));
+    complex<double> amp = it->first->parityFactor*theMag*expi*conj( theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey()).at(IdJLamXLam12));
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
@@ -149,7 +142,7 @@ complex<double> HeliDecRefAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamF
 
   if ( _cacheAmps){
     theMutex.lock();
-    _cachedAmpMapNew[evtNo][refKey][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
+    _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
     theMutex.unlock();
   }
 

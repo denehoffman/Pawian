@@ -55,6 +55,7 @@ public:
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
   const std::string wignerDKey() {return _wignerDKey;}
+  const std::string wignerDRefKey() {return _wignerDRefKey;}
   const std::string refKey() {return _refKey;}
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
@@ -85,7 +86,8 @@ public:
   std::vector<std::string> fsParticleNameList() {return _fsParticleNameList;}
   virtual void addToFsParticleNameList(const std::string& name);
 
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
+  //  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
   double barrierqR() {return _qR;}

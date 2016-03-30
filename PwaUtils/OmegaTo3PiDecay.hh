@@ -50,7 +50,7 @@ public:
   virtual std::vector< std::shared_ptr<const JPCLS> > JPCLSAmps(){ return _JPCLSDecAmps;}
   virtual std::vector< std::shared_ptr<const LScomb> > LSAmps(){ return _LSDecAmps;}
   virtual void setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr);
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey);
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
   virtual void print(std::ostream& os) const;
   Particle* daughter3Part() {return _daughter3;}
   virtual std::string type() {return "OmegaTo3PiDecay";}

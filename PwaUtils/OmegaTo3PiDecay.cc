@@ -82,7 +82,7 @@ void OmegaTo3PiDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDe
 }
 
 
-void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
+void OmegaTo3PiDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   return;
 }
 

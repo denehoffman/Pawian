@@ -38,7 +38,7 @@
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
-#include "PwaUtils/LSDecNonRefAmps.hh"
+#include "PwaUtils/LSDecAmps.hh"
 #include "PwaUtils/LSDecRefAmps.hh"
 #include "PwaUtils/HeliDecNonRefAmps.hh"
 #include "PwaUtils/HeliDecRefAmps.hh"
@@ -75,7 +75,7 @@ std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(short channelID, std::sh
   else{
     if(theAbsXDec->type()=="IsobarLSDecay"){
       std::shared_ptr<IsobarLSDecay> decLS =  std::dynamic_pointer_cast<IsobarLSDecay>(theAbsXDec);
-      if(theAbsXDec->whichDecayLevel()==AbsDecay::decayLevel::isProdAmp || theAbsXDec->whichDecayLevel()==AbsDecay::decayLevel::firstLevel) result=std::shared_ptr<AbsXdecAmp>(new LSDecNonRefAmps(decLS, channelID)); 
+      if(theAbsXDec->whichDecayLevel()==AbsDecay::decayLevel::isProdAmp || theAbsXDec->whichDecayLevel()==AbsDecay::decayLevel::firstLevel) result=std::shared_ptr<AbsXdecAmp>(new LSDecAmps(decLS, channelID)); 
       else result=std::shared_ptr<AbsXdecAmp>(new LSDecRefAmps(decLS, channelID));
     }
     else if(theAbsXDec->type()=="IsobarHeliDecay"){

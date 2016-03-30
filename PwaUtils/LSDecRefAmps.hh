@@ -35,12 +35,12 @@
 #include <cassert>
 #include <memory>
 
-#include "PwaUtils/AbsLSDecAmps.hh"
+#include "PwaUtils/LSDecAmps.hh"
 
 class IsobarLSDecay;
 class AbsDecay;
 
-class LSDecRefAmps : public AbsLSDecAmps{
+class LSDecRefAmps : public LSDecAmps{
 
 public:
 
@@ -55,12 +55,15 @@ public:
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  //  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  //  virtual void retrieveWignerDs(EvtData* theData);
 
 protected:
-  virtual complex<double> lsLoopRef(AbsXdecAmp* grandmaAmp, std::string& refKey, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
+  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
+
+  //  std::map<Id3StringType, complex<double> >* _currentWignerDMap;
 
 private:
 

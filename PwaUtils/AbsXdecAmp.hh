@@ -100,7 +100,7 @@ protected:
 
   Spin _J;
   intStringShortComplFloatMap _cachedAmpMap;
-  intStringStringShortComplFloatMap _cachedAmpMapNew;
+  //  intStringStringShortComplFloatMap _cachedAmpMapNew;
   std::map<std::thread::id, std::map<std::string, complex<float> > > _cachedDynMap;
 
   virtual void initialize();

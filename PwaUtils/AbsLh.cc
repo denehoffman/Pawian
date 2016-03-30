@@ -156,6 +156,7 @@ double AbsLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar){
 }
 
 double AbsLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  //  extractWignerDs(dataEvt);
   double intensity=calcEvtIntensity(dataEvt, fitPar);
   theLHData.logLH_data+=(dataEvt->evtWeight)*log(intensity);
   theLHData.weightSum+= dataEvt->evtWeight;
@@ -163,6 +164,7 @@ double AbsLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParamete
 }
 
 double AbsLh::addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  //  extractWignerDs(mcEvt);
   double intensity=calcEvtIntensity(mcEvt, fitPar);
   theLHData.LH_mc+=intensity;
   theLHData.num_mc++;
@@ -289,6 +291,16 @@ bool AbsLh::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, s
 
   return result;
 }
+
+// bool AbsLh::extractWignerDs(EvtData* theData){
+//   bool result=true;
+//   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
+//   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
+//     (*it)->retrieveWignerDs(theData);
+//   }
+
+//   return result;
+// }
 
 void AbsLh::setDataVec(std::vector<EvtData*> theVec) {
   if(_evtDataVec.size()>0){

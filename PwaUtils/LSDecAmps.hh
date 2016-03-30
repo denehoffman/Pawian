@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// AbsLSDecAmps class definition file. -*- C++ -*-
+// LSDecAmps class definition file. -*- C++ -*-
 // Copyright 2014 Bertram Kopf
 
 #pragma once
@@ -41,17 +41,17 @@ class IsobarLSDecay;
 class AbsDecay;
 class AbsPawianParameters;
 
-class AbsLSDecAmps : public AbsXdecAmp{
+class LSDecAmps : public AbsXdecAmp{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor
-  AbsLSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID);
-  AbsLSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
+  LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID);
+  LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
-  virtual ~AbsLSDecAmps();
+  virtual ~LSDecAmps();
 
 
   // Getters:
@@ -60,11 +60,17 @@ public:
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
   // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   // virtual bool checkRecalculation(fitParCol& theParamVal);
   // virtual void updateFitParams(fitParCol& theParamVal);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
+  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
+  // virtual void retrieveWignerDs(EvtData* theData);
 
 protected:
   //  std::vector< std::shared_ptr<const JPCLS> > _JPCLSs;
@@ -83,9 +89,14 @@ protected:
   Spin _lam1Max;
   Spin _lam2Min;
   Spin _lam2Max;
+  Spin _Smax;
+  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
+  //  std::map<Id3StringType, complex<double> >* _currentWignerDMap;
+ std::map<Id3StringType, complex<double> > _currentWignerDMap;
 
   void  fillCgPreFactor();
-  //  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 )=0;
+  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs=0 );
+
 
 private:
 

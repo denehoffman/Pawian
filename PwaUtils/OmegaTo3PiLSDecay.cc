@@ -47,7 +47,7 @@ OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Part
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
 }
 
-void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData, std::string& refKey){
+void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
   //  int evtNo=evtData->evtNo;
   // std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
   // if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
@@ -93,14 +93,12 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   double theQ=daughter1_HeliOmega.E()-daughter1_HeliOmega.M()+daughter2_HeliOmega.E()-daughter2_HeliOmega.M()+daughter3_HeliOmega.E()-daughter3_HeliOmega.M();
   double lambdaNorm=theQ*theQ*(theQ*theQ/108.+daughter1_HeliOmega.M()*theQ/9.+daughter1_HeliOmega.M()*daughter1_HeliOmega.M()/3.);
   double lambdaOmegaDec=normOmegaDecHeliOmega_4V.P()*normOmegaDecHeliOmega_4V.P()/lambdaNorm;
-  evtData->DoubleStringString[_lambdaDecKey][refKey]=lambdaOmegaDec;
+  evtData->DoubleStringString[_lambdaDecKey][_wignerDRefKey]=lambdaOmegaDec;
 
   for(Spin lamOmega=-1;  lamOmega<=1; ++lamOmega){
-    //    evtData->WignerDsString[_wignerDKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
-    evtData->WignerDsStringString[_wignerDKey][refKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
+     evtData->WignerDsStringString[_wignerDKey][_wignerDRefKey][1][lamOmega][0]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);
   }
 
-  //  _alreadyFilledMap[evtNo]=true;
 }
 
 

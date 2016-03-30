@@ -92,6 +92,7 @@ protected:
 
   std::shared_ptr<AbsPawianParameters> _oldFitPar;
 
+  //  virtual bool extractWignerDs(EvtData* theData);
   virtual void setHyps( const std::map<const std::string, bool>& theMap,
 			bool& theHyp, std::string& theKey);
 
