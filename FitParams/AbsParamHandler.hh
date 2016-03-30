@@ -31,9 +31,6 @@
 #include <string>
 #include <vector>
 
-#include "PwaUtils/EvtDataBaseList.hh"
-//#include "FitParams/FitParColBase.hh"
-
 class AbsPawianParameters;
 
 class AbsParamHandler {

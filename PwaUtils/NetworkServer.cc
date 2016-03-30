@@ -33,7 +33,7 @@
 
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
-#include "PwaUtils/AbsParamHandler.hh"
+#include "FitParams/AbsParamHandler.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 

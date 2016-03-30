@@ -33,9 +33,9 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "FitParams/AbsPawianParameters.hh"
+#include "FitParams/AbsParamHandler.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/DataUtils.hh"
 

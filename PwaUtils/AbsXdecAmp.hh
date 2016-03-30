@@ -38,8 +38,8 @@
 
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/AbsParamHandler.hh"
 #include "PwaUtils/AbsDynamics.hh"
+#include "FitParams/AbsParamHandler.hh"
 #include "Utils/FunctionUtils.hh"
 
 class AbsDecay;

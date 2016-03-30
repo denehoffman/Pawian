@@ -35,7 +35,7 @@
 #include <memory>
 
 #include "PwaUtils/EvtDataBaseList.hh"
-#include "PwaUtils/AbsParamHandler.hh"
+#include "FitParams/AbsParamHandler.hh"
 
 class Particle;
 class AbsDecay;

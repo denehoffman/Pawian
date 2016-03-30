@@ -25,7 +25,7 @@
 // Copyright 2012 Bertram Kopf
 
 #include <float.h>
-#include "PwaUtils/AbsParamHandler.hh"
+#include "FitParams/AbsParamHandler.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "ErrLogger/ErrLogger.hh"
 
