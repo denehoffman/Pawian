@@ -41,7 +41,7 @@
 #include "FitParams/AbsPawianParameters.hh"
 
 HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID) :
-  HeliDecNonRefAmps(theDec, channelID)
+  HeliDecAmps(theDec, channelID)
   ,_noOfAmps(0)
 {
   _daughterGamma=theDec->daughter1Part();
@@ -90,7 +90,7 @@ HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHel
 }
 
 HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
-  HeliDecNonRefAmps(theDec, channelID)
+  HeliDecAmps(theDec, channelID)
   ,_noOfAmps(0)
 {
   _daughterGamma=theDec->daughter1Part();

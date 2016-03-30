@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-// AbsHeliDecAmps class definition file. -*- C++ -*-
+// HeliDecAmps class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
 #pragma once
@@ -41,17 +41,17 @@ class AbsPawianParameters;
 class IsobarHeliDecay;
 class AbsDecay;
 
-class AbsHeliDecAmps : public AbsXdecAmp{
+class HeliDecAmps : public AbsXdecAmp{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor
-  AbsHeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
-  AbsHeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
+  HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
+  HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
-  virtual ~AbsHeliDecAmps();
+  virtual ~HeliDecAmps();
 
 
   // Getters:
@@ -66,6 +66,11 @@ public:
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
 
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+                                      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp);
+
 protected:
   std::vector< std::shared_ptr<const JPClamlam> > _JPClamlams;
   double _factorMag;
@@ -75,6 +80,8 @@ protected:
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;
   std::map< std::shared_ptr<const JPClamlam>, std::vector< std::shared_ptr<const JPClamlam> >, pawian::Collection::SharedPtrLess > _JPClamlamSymMap;
+  std::map<std::thread::id, complex<double> > _cachedDynLMap;
+
   virtual void printCurrentAmpParams(Spin& lamX, Spin& lamFs);
 
 private:

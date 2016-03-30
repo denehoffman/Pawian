@@ -36,13 +36,13 @@
 #include <memory>
 #include <thread>
 
-#include "PwaUtils/HeliDecNonRefAmps.hh"
+#include "PwaUtils/HeliDecAmps.hh"
 
 class IsobarHeliDecay;
 class AbsDecay;
 class AbsPawianParameters;
 
-class HeliMultipoleDecNonRefAmps : public HeliDecNonRefAmps{
+class HeliMultipoleDecNonRefAmps : public HeliDecAmps{
 
 public:
 
