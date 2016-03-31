@@ -36,6 +36,7 @@
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/FunctionUtils.hh"
+#include "Utils/IdStringMapRegistry.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/DynRegistry.hh"
@@ -65,6 +66,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_massParamKey(_mother->name())
    ,_prodParamKey("")
   ,_wignerDRefKey("default")
+  ,_wigDWigDRefId(0)
   ,_dynType("WoDynamics")
    ,_dynEnabled(false)
   ,_preFactor(1.)
@@ -168,6 +170,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_wignerDRefKey("default")
+  ,_wigDWigDRefId(0)
   ,_dynType("WoDynamics")
   ,_dynEnabled(false)
   ,_preFactor(1.)
@@ -379,17 +382,18 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
       
-      std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey].find(IdSpinMotherLamMotherLam12);
-      if(found != evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey].end()){
+      std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
+      if(found != evtData->WignerDIdId3[_wigDWigDRefId].end()){
 	continue;
       }
+
       
       if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM && whichDecayLevel()==decayLevel::isProdAmp){
-	evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
+	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
       } 
-      else evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-      if(evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12] != evtData->WignerDStringStringId[_wignerDKey][_wignerDRefKey][IdSpinMotherLamMotherLam12]){
-	DebugMsg << "WignerDsString nan:\t" << evtData->WignerDsString[_wignerDKey][spinMother][lamMother][lam12] << endmsg;
+      else evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+      if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] != evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]){
+	DebugMsg << "WignerDIdId nan:\t" << evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] << endmsg;
 	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
 	DebugMsg << "thePhi:\t" << thePhi << endmsg;
 	DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
@@ -599,4 +603,10 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   if (!_daughter2IsStable){
     _absDecDaughter2->setWigDRefKey(_refKey);
   }
+
+  _wigDWigDRefId=IdStringMapRegistry::instance()->stringStringId(_wignerDKey, _wignerDRefKey);
+  Info << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
+
+  std::pair<std::string, std::string > wigDWigDRefPair=IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
+  Info << "_wigDWigDRefId = " << _wigDWigDRefId << " with wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " << wigDWigDRefPair.second << endmsg;   
 }

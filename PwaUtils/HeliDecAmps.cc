@@ -213,7 +213,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     double thePhi=_currentParamPhiLamLams[currentJPClamlam];
     complex<double> expi(cos(thePhi), sin(thePhi));
     Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey()).at(IdJLamXLam12));
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12));
     result+=amp;
   }
 
@@ -250,10 +250,9 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
 
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-    //    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDStringId.at(_wignerDKey).at(IdJLamXLam12));
-    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey()).at(IdJLamXLam12) );
 
-    //    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey()).at(IdJLamXLam12));
+    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
+
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 

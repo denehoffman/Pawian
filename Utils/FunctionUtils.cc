@@ -24,6 +24,12 @@ namespace FunctionUtils{
 
   return result;
   }
+
+  Id1StringType spin1Index(Spin& spin1){//only for spin<=9 particles
+    Id1StringType result=spin1.ToIndex();
+    return result;
+  }
+
  
   Id2StringType spin2Index(Spin& spin1, Spin& spin2){//only for spin<=9 particles
     Id2StringType result=spin1.ToIndex()*36+spin2.ToIndex();

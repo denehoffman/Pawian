@@ -55,6 +55,7 @@ LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
 complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
+  Id1StringType IdLamOmega=FunctionUtils::spin1Index(lamX);
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( fabs(lamX) > _JPCPtr->J ) continue;
@@ -63,10 +64,11 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
     complex<double> expi(cos(thePhi), sin(thePhi));
 
         complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-	  *conj(theData->WignerDsStringString.at(_wignerDKey).at(_decay->wignerDRefKey()).at(_JPCPtr->J).at(lamX).at(0));
+	  *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
         result+=amp;
   }
-  result*=sqrt( theData->DoubleStringString[_lambdaDecKey][_decay->wignerDRefKey()] );
+  //result*=sqrt( theData->DoubleStringString[_lambdaDecKey][_decay->wignerDRefKey()] );
+  result*=sqrt(theData->DoubleId.at(_decay->wigDWigDRefId()));
   return result;
 }
 
@@ -79,22 +81,26 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
 
   int evtNo=theData->evtNo;
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
-  
+ 
   if ( _cacheAmps && !_recalculate){
     result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
+  Id1StringType IdLamOmega=FunctionUtils::spin1Index(lamX);
+ 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( fabs(lamX) > _JPCPtr->J ) continue;
 
     complex<double> amp = _currentParamMagExpi.at(*it)*sqrt(2*(*it)->L+1)
-      *conj( theData->WignerDsStringString.at(_wignerDKey).at(_decay->wignerDRefKey()).at(_JPCPtr->J).at(lamX).at(0));
+      *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
+
     if (_absDyn->isLdependent()) amp*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
     result+=amp;
   }
-  result*=sqrt( theData->DoubleStringString[_lambdaDecKey][_decay->wignerDRefKey()] );
+  //  result*=sqrt( theData->DoubleStringString[_lambdaDecKey][_decay->wignerDRefKey()] );
+  result*=sqrt(theData->DoubleId.at(_decay->wigDWigDRefId()));
   if (!_absDyn->isLdependent()) result*=_absDyn->eval(theData, grandmaAmp);
   if ( _cacheAmps){
      theMutex.lock();

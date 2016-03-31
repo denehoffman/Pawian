@@ -56,6 +56,7 @@ public:
   virtual const std::string name() const {return _name;}
   const std::string wignerDKey() {return _wignerDKey;}
   const std::string wignerDRefKey() {return _wignerDRefKey;}
+  const unsigned int wigDWigDRefId() {return _wigDWigDRefId;}
   const std::string refKey() {return _refKey;}
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
@@ -118,7 +119,7 @@ public:
   void setProdChannelInfo(std::shared_ptr<ProdChannelInfo> prodChannelInfo) { _prodChannelInfo=prodChannelInfo;}
   void setProductionAmp() {_isProdAmp=true;}
   bool isProductionAmp() {return _isProdAmp;}
-  void setWigDRefKey(std::string& ref);
+  virtual void setWigDRefKey(std::string& ref);
 
   void resetFilledMap();
   virtual void enableProdBarrier();
@@ -157,6 +158,7 @@ protected:
   std::string _wignerDKey;
   std::string _refKey;
   std::string _wignerDRefKey;
+  unsigned int _wigDWigDRefId;
   std::string _dynType;
   bool _dynEnabled;
 

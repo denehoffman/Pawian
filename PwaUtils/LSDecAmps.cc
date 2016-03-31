@@ -163,9 +163,7 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
 
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
 
-  //std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringId.at(_wignerDKey);
-  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
-
+  std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDIdId3.at(_decay->wigDWigDRefId());
   for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
 
     for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
@@ -181,8 +179,6 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
       }
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
       amp *= conj(currentWignerDMap.at(IdJLamXLam12));
-      //      amp *= conj(_currentWignerDMap->at(IdJLamXLam12));
-      //      amp *= conj(_currentWignerDMap.at(IdJLamXLam12));
       if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
       result+=amp;    
     }
@@ -303,6 +299,4 @@ void  LSDecAmps::fillCgPreFactor(){
 }
 
 // void LSDecAmps::retrieveWignerDs(EvtData* theData){
-//   //  _currentWignerDMap = &theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
-//   // _currentWignerDMap = theData->WignerDStringStringId.at(_wignerDKey).at(_decay->wignerDRefKey());
 // }

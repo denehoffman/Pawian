@@ -10,4 +10,8 @@ install install-lib : Utils
 project : 
 	;
 
-lib Utils : [ glob *.cc : *App.cc ] : : : ;
+lib Utils : [ glob *.cc : *App.cc ]
+    $(TOP)/ErrLogger//ErrLogger 
+    : 
+    : 
+    : ;
