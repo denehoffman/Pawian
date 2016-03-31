@@ -42,8 +42,6 @@ OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Part
   OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, channelID)
 {
   _wignerDKey="omegaTo3piLS_"+FunctionUtils::particleListName(_finalStateParticles);
-  //  _wignerDKey="omegaTo3piLS_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
-  //  _lambdaDecKey="lambdaOmega_"+_motherIGJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
 }
 
 OmegaTo3PiLSDecay::~OmegaTo3PiLSDecay(){
@@ -91,10 +89,8 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   double theQ=daughter1_HeliOmega.E()-daughter1_HeliOmega.M()+daughter2_HeliOmega.E()-daughter2_HeliOmega.M()+daughter3_HeliOmega.E()-daughter3_HeliOmega.M();
   double lambdaNorm=theQ*theQ*(theQ*theQ/108.+daughter1_HeliOmega.M()*theQ/9.+daughter1_HeliOmega.M()*daughter1_HeliOmega.M()/3.);
   double lambdaOmegaDec=normOmegaDecHeliOmega_4V.P()*normOmegaDecHeliOmega_4V.P()/lambdaNorm;
-  //  evtData->DoubleStringString[_lambdaDecKey][_wignerDRefKey]=lambdaOmegaDec;
   evtData->DoubleId[_wigDWigDRefId]=lambdaOmegaDec;
-  // Spin lam1lam2Dec(0);
-  // Spin motherJ=_motherIGJPCPtr->J;
+
   for(Spin lamOmega=-1;  lamOmega<=1; ++lamOmega){
     Id1StringType IdLamOmega=FunctionUtils::spin1Index(lamOmega);
      evtData->WignerDIdId1[_wigDWigDRefId][IdLamOmega]=Wigner_D(normOmegaDecHeliOmega_4V.Phi(), normOmegaDecHeliOmega_4V.Theta(),0, 1,lamOmega,0);

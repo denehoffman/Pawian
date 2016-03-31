@@ -56,7 +56,7 @@ public:
   virtual const std::string name() const {return _name;}
   const std::string wignerDKey() {return _wignerDKey;}
   const std::string wignerDRefKey() {return _wignerDRefKey;}
-  const unsigned int wigDWigDRefId() {return _wigDWigDRefId;}
+  const unsigned short wigDWigDRefId() {return _wigDWigDRefId;}
   const std::string refKey() {return _refKey;}
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
@@ -158,7 +158,7 @@ protected:
   std::string _wignerDKey;
   std::string _refKey;
   std::string _wignerDRefKey;
-  unsigned int _wigDWigDRefId;
+  unsigned short _wigDWigDRefId;
   std::string _dynType;
   bool _dynEnabled;
 

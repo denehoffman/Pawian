@@ -67,7 +67,6 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
 	  *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
         result+=amp;
   }
-  //result*=sqrt( theData->DoubleStringString[_lambdaDecKey][_decay->wignerDRefKey()] );
   result*=sqrt(theData->DoubleId.at(_decay->wigDWigDRefId()));
   return result;
 }
@@ -99,7 +98,6 @@ complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin&
     if (_absDyn->isLdependent()) amp*=_absDyn->eval(theData, grandmaAmp, (*it)->L);
     result+=amp;
   }
-  //  result*=sqrt( theData->DoubleStringString[_lambdaDecKey][_decay->wignerDRefKey()] );
   result*=sqrt(theData->DoubleId.at(_decay->wigDWigDRefId()));
   if (!_absDyn->isLdependent()) result*=_absDyn->eval(theData, grandmaAmp);
   if ( _cacheAmps){

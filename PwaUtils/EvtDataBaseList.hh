@@ -40,27 +40,22 @@
 //typedef unsigned int Id3StringType;
 
 typedef std::map<std::string, Vector4<double> > mapString4Vec;
-//typedef std::map<std::string, map<std::string, map<Spin,map<Spin,map<Spin,complex<double> > > > > > mapStringStringSpinComplex;
-//typedef std::map<std::string, std::map<std::string, std::map<Id3StringType, complex<double> > > > mapStringStringIntComplex;
 typedef std::map<std::string, double> mapStringDouble;
-typedef std::map<std::string, map<std::string, double> > mapStringStringDouble;
 typedef std::map<std::string, map<Spin,map<Spin, complex<double> > > > mapStringComplDouble;
 typedef std::map<std::string, map<Spin,map<Spin,map<Spin, map<Spin, map<Spin,complex<double> > > > > > > mapString5SpinsComplex;
 typedef std::map<std::string, map<int,map<Spin, map<Spin, map<Spin,complex<double> > > > > > mapStringInt3SpinsComplex;
-typedef std::map<unsigned int, std::map<Id3StringType, complex<double> > > mapIntInt3Complex;
-typedef std::map<unsigned int, std::map<Id1StringType, complex<double> > > mapIntInt1Complex;
-typedef std::map<unsigned int, double> mapIntDouble;
+typedef std::map<unsigned short, std::map<Id3StringType, complex<double> > > mapShortInt3Complex;
+typedef std::map<unsigned short, std::map<Id1StringType, complex<double> > > mapShortInt1Complex;
+typedef std::map<unsigned short, double> mapIntDouble;
+
 struct EvtData {
   mapString4Vec FourVecsString;
-  //  mapStringStringSpinComplex WignerDsStringString;
-  //  mapStringStringIntComplex WignerDStringStringId;
   mapStringDouble DoubleString;
-  mapStringStringDouble DoubleStringString;
   mapStringComplDouble ComplexDoubleString;
   mapString5SpinsComplex ComplexDouble5SpinString;
   mapStringInt3SpinsComplex ComplexDoubleInt3SpinString;
-  mapIntInt3Complex WignerDIdId3;
-  mapIntInt1Complex WignerDIdId1;
+  mapShortInt3Complex WignerDIdId3;
+  mapShortInt1Complex WignerDIdId1;
   mapIntDouble DoubleId;
   double evtWeight;
   int evtNo;
