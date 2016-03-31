@@ -36,6 +36,8 @@
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 
+#include "Utils/IdStringMapRegistry.hh"
+
 #include "PspGen/EvtGenKine.hh"
 #include "PspGen/EvtRandom.hh"
 #include "PspGen/EvtMTRandomEngine.hh"
@@ -259,7 +261,8 @@ void PwaGen::DumpEventToAsciiFile(std::shared_ptr<EvtData> evtData, double weigh
   }
 
   for(auto fspIter = fsParticles.begin(); fspIter != fsParticles.end(); ++fspIter ) {
-    Vector4<double> tmp4vec = evtData->FourVecsString[ (*fspIter)->name() ];
+    std::string currentName=(*fspIter)->name();
+    Vector4<double> tmp4vec = evtData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
     current4Vecs.push_back(tmp4vec);
     if(_energyFirst){
       *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor  << "\t" 

@@ -38,6 +38,7 @@ IdStringMapRegistry* IdStringMapRegistry::instance()
 
 IdStringMapRegistry::IdStringMapRegistry() :
   _stringPairMapCounter(0)
+  ,_stringMapCounter(0)
 {
 }
 
@@ -75,5 +76,37 @@ std::pair<std::string, std::string > IdStringMapRegistry::stringPair(unsigned sh
     exit(1); 
   }
   return _stringPairMap.at(id); 
+}
+
+
+unsigned short IdStringMapRegistry::stringId(std::string& str1){
+  bool found=false;
+  unsigned short result=0;
+
+  std::map<unsigned short, std::string >::iterator it; 
+  for(it=_stringMap.begin(); it!=_stringMap.end(); ++it){
+    std::string currentString = it->second;
+    if(str1==currentString){
+      found=true;
+      result=it->first;
+      break;
+    }   
+  }
+
+  if(!found){
+    _stringMapCounter++;
+    result=_stringMapCounter;        
+    _stringMap[result]=str1;
+  }
+
+  return result;
+}
+
+std::string IdStringMapRegistry::getString(unsigned short id){
+  if(id > _stringMapCounter){
+    Alert << "id=" << id << " > _stringMapCounter=" <<  _stringMapCounter << endmsg;
+    exit(1); 
+  }
+  return _stringMap.at(id); 
 }
 

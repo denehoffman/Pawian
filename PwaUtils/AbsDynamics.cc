@@ -32,6 +32,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Utils/FunctionUtils.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsParamHandler()
@@ -59,7 +60,8 @@ void AbsDynamics::fillMasses(EvtData* theData){
   Vector4<double> mass4Vec(0.,0.,0.,0.);
   std::vector<Particle*>::iterator it;
   for (it=_fsParticles.begin(); it != _fsParticles.end(); ++it){
-    mass4Vec+=theData->FourVecsString[(*it)->name()];
+    std::string currentName=(*it)->name();
+    mass4Vec+=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
 
   theData->DoubleString[_dynKey]=mass4Vec.Mass();

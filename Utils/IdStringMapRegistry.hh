@@ -48,6 +48,9 @@ public:
   unsigned short stringStringId(std::string&, std::string&);
   std::pair<std::string, std::string > stringPair(unsigned short id);
 
+  unsigned short stringId(std::string&);
+  std::string getString(unsigned short id);
+
 protected:
  ///Constructor
   IdStringMapRegistry();
@@ -58,7 +61,8 @@ private:
   std::map<unsigned short, std::pair<std::string, std::string > > _stringPairMap;
   unsigned short _stringPairMapCounter;
 
-
+  std::map<unsigned short, std::string > _stringMap;
+  unsigned short _stringMapCounter;
 };
 
 

@@ -39,24 +39,24 @@
 
 //typedef unsigned int Id3StringType;
 
-typedef std::map<std::string, Vector4<double> > mapString4Vec;
 typedef std::map<std::string, double> mapStringDouble;
 typedef std::map<std::string, map<Spin,map<Spin, complex<double> > > > mapStringComplDouble;
 typedef std::map<std::string, map<Spin,map<Spin,map<Spin, map<Spin, map<Spin,complex<double> > > > > > > mapString5SpinsComplex;
 typedef std::map<std::string, map<int,map<Spin, map<Spin, map<Spin,complex<double> > > > > > mapStringInt3SpinsComplex;
 typedef std::map<unsigned short, std::map<Id3StringType, complex<double> > > mapShortInt3Complex;
 typedef std::map<unsigned short, std::map<Id1StringType, complex<double> > > mapShortInt1Complex;
-typedef std::map<unsigned short, double> mapIntDouble;
+typedef std::map<unsigned short, double> mapShortDouble;
+typedef std::map<unsigned short, Vector4<double> > mapShort4Vec;
 
 struct EvtData {
-  mapString4Vec FourVecsString;
   mapStringDouble DoubleString;
   mapStringComplDouble ComplexDoubleString;
   mapString5SpinsComplex ComplexDouble5SpinString;
   mapStringInt3SpinsComplex ComplexDoubleInt3SpinString;
   mapShortInt3Complex WignerDIdId3;
   mapShortInt1Complex WignerDIdId1;
-  mapIntDouble DoubleId;
+  mapShortDouble DoubleId;
+  mapShort4Vec FourVecsId;
   double evtWeight;
   int evtNo;
 };

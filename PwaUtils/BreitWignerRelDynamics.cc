@@ -33,6 +33,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2) :
   BreitWignerDynamics(name, fsParticles, mother)
@@ -70,13 +71,15 @@ void BreitWignerRelDynamics::fillMasses(EvtData* theData){
   Vector4<double> mass4VecD1(0.,0.,0.,0.);
   std::vector<Particle*>::iterator it;
   for (it=_fsParticlesDaughter1.begin(); it !=_fsParticlesDaughter1.end(); ++it){
-    mass4VecD1+=theData->FourVecsString[(*it)->name()];
+    std::string currentName=(*it)->name();
+    mass4VecD1+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
   theData->DoubleString[_dynMassKeyDaughter1]=mass4VecD1.Mass();
 
   Vector4<double> mass4VecD2(0.,0.,0.,0.);
   for (it=_fsParticlesDaughter2.begin(); it !=_fsParticlesDaughter2.end(); ++it){
-    mass4VecD2+=theData->FourVecsString[(*it)->name()];
+    std::string currentName=(*it)->name();
+    mass4VecD2+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
   theData->DoubleString[_dynMassKeyDaughter2]=mass4VecD2.Mass();
 }

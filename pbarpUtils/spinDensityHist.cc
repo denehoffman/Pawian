@@ -40,6 +40,7 @@
 #include "Particle/Particle.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "FitParams/ParamFactory.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 #include "TH1F.h"
 #include "TFile.h"
@@ -297,7 +298,9 @@ double spinDensityHist::ParticleCosTheta(std::string& particleName, EvtData* the
    std::shared_ptr<AbsDecayList> absDecayList = static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel())->absDecayList();
    std::vector<std::shared_ptr<AbsDecay> > absDecays = absDecayList->getList();
    
-   Vector4<double> all4Vec=theData->FourVecsString["all"];
+   std::string stringAll="all";
+   Vector4<double> all4Vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(stringAll));
+
    Vector4<double> particle4Vec(0.,0.,0.,0.);
    
    for(auto it=absDecays.begin(); it!=absDecays.end(); ++it){
@@ -307,7 +310,8 @@ double spinDensityHist::ParticleCosTheta(std::string& particleName, EvtData* the
 	 Vector4<double> allDaughters4Vec(0., 0., 0., 0.);
 
 	 for(auto it2 = fsParticles.begin(); it2!=fsParticles.end(); ++it2){
-	    allDaughters4Vec += theData->FourVecsString[(*it2)->name()];
+	    std::string currentName=(*it2)->name();
+	    allDaughters4Vec += theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
 	 }
 	 
 	 particle4Vec = allDaughters4Vec;

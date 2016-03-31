@@ -41,6 +41,7 @@
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 #include "ConfigParser/ParserBase.hh"
 
@@ -82,7 +83,8 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     EvtData* currentEvt=convertEvent(anEvent, startNo+evtCount);
 
     if (evtCount%10000 == 0){
-      Vector4<double> V4_all_lab=currentEvt->FourVecsString.at("all");
+      std::string stringAll="all";
+      Vector4<double> V4_all_lab=currentEvt->FourVecsId.at(IdStringMapRegistry::instance()->stringId(stringAll));
       Info << "4vec all in lab system" << "\n"
            << " px: " << V4_all_lab.Px() <<"\t"
            << " py: " << V4_all_lab.Py() <<"\t"
@@ -124,12 +126,16 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     evtData->evtNo=evtNo;
     evtData->evtWeight=theEvent->Weight();
 
-    evtData->FourVecsString.insert(mapString4Vec::value_type("all",V4_all_lab));
+    std::string allString="all";
+    unsigned short fourVecIdAll = IdStringMapRegistry::instance()->stringId(allString); 
+
+    evtData->FourVecsId.insert(mapShort4Vec::value_type(fourVecIdAll,V4_all_lab));
 
     //cache 4 vectors of inital state particles
     std::map<std::string, Vector4<double> >::iterator it4VecMap;
     for (it4VecMap=particle4VecMap.begin(); it4VecMap!=particle4VecMap.end(); ++it4VecMap){
-      evtData->FourVecsString.insert(mapString4Vec::value_type(it4VecMap->first, it4VecMap->second));
+      std::string currentName=it4VecMap->first;
+       evtData->FourVecsId.insert(mapShort4Vec::value_type(IdStringMapRegistry::instance()->stringId(currentName),  it4VecMap->second));
     }
 
    //fill WignerD functions

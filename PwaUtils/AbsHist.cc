@@ -35,6 +35,7 @@
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "Utils/IdStringMapRegistry.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -299,7 +300,7 @@ void AbsHist::fillEvt(EvtData* theData, double weight, std::string evtType){
   if(evtType=="data" || evtType=="fit"){
     for(auto fsIt = _fsParticles.begin(); fsIt != _fsParticles.end(); ++fsIt){
       std::string particleName = (*fsIt)->name();
-      Vector4<double> tmp4vec=theData->FourVecsString[particleName];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(particleName));
       _fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
     }
     _weightToWrite = weight;
@@ -318,7 +319,7 @@ void AbsHist::fillMassHists(EvtData* theData, double weight, std::map<std::share
     std::vector<std::string> fspNames=it->first->_fspNames;
     std::vector<std::string>::iterator itStr;
     for(itStr=fspNames.begin(); itStr!=fspNames.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combined4Vec+=tmp4vec;
     }
     it->second->Fill(combined4Vec.M(), weight);
@@ -336,24 +337,24 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shar
     Vector4<double> combinedDec4Vec2(0.,0.,0.,0.);
 
     Vector4<double> combinedMother4Vec(0.,0.,0.,0.);
-    Vector4<double> all4Vec=theData->FourVecsString["all"];
-
+    std::string stringAll="all";
+    Vector4<double> all4Vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(stringAll));
     std::vector<std::string> decNames=it->first->_decPNames;
     std::vector<std::string> decNames2=it->first->_decPNames2;
     std::vector<std::string>::iterator itStr;
     for(itStr=decNames.begin(); itStr!=decNames.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedDec4Vec+=tmp4vec;
     }
     for(itStr=decNames2.begin(); itStr!=decNames2.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedDec4Vec2+=tmp4vec;
     }
 
     std::vector<std::string> motherNames=it->first->_motherPNames;
 
     for(itStr=motherNames.begin(); itStr!=motherNames.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedMother4Vec+=tmp4vec;
     }
 
@@ -410,7 +411,8 @@ void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::sh
     Vector4<double> combinedMother4Vec(0.,0.,0.,0.);
     Vector4<double> combinedDec4Vec_2(0.,0.,0.,0.);
     Vector4<double> combinedMother4Vec_2(0.,0.,0.,0.);
-    Vector4<double> all4Vec=theData->FourVecsString["all"];
+    std::string stringAll="all";
+    Vector4<double> all4Vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(stringAll));
 
     std::vector<std::string> decNames=it->first->_decPNames;
     std::vector<std::string> decNames_2=it->first->_decPNames_2;
@@ -419,12 +421,12 @@ void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::sh
 
     std::vector<std::string>::iterator itStr;
     for(itStr=decNames.begin(); itStr!=decNames.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedDec4Vec+=tmp4vec;
     }
 
     for(itStr=motherNames.begin(); itStr!=motherNames.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedMother4Vec+=tmp4vec;
     }
 
@@ -441,12 +443,12 @@ void AbsHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::sh
     }
 
     for(itStr=decNames_2.begin(); itStr!=decNames_2.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedDec4Vec_2+=tmp4vec;
     }
 
     for(itStr=motherNames_2.begin(); itStr!=motherNames_2.end(); ++itStr){
-      Vector4<double> tmp4vec=theData->FourVecsString[*itStr];
+      Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(*itStr));
       combinedMother4Vec_2+=tmp4vec;
     }
 
