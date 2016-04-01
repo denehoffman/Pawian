@@ -33,6 +33,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
+#include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "FitParams/AbsPawianParameters.hh"
@@ -68,29 +69,26 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, S
   complex<double> result(0.,0.);
 
   int evtNo=theData->evtNo;
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  // Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  Id1StringType currentSpinIndex=FunctionUtils::spin1Index(lamX);
   
   if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
+    result=_cachedLocalAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
+  Spin motherJ(_JPCPtr->J);
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-    //    if( fabs(lamX) > _JPCPtr->J ) continue;
-    double theMag=_currentParamMags[*it];
-    double thePhi=_currentParamPhis[*it];
-    complex<double> expi(cos(thePhi), sin(thePhi));
-
-    complex<double> amp = theMag*expi*theData->ComplexDoubleString[_wignerDKey][_JPCPtr->J][lamX];
-
+    Id2StringType IdJLamX=FunctionUtils::spin2Index(motherJ,lamX);
+    complex<double> amp = _currentMagExpi[*it]*theData->Complex2Spin.at(_decay->wignerDId()).at(IdJLamX);
     result+=amp;
   }
 
   result*=100.;
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
+     _cachedLocalAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 
@@ -149,11 +147,14 @@ void TensorOmegaTo3PiDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameter
     //fill magnitude
     std::string magName=(*itLS)->name()+_key+"Mag";
     double theMag= fabs(fitPar->Value(magName));
-    _currentParamMags[*itLS]=theMag;
+    //    _currentParamMags[*itLS]=theMag;
 
     std::string phiName=(*itLS)->name()+_key+"Phi";
     double thePhi= fitPar->Value(phiName);
-    _currentParamPhis[*itLS]=thePhi;
+    //    _currentParamPhis[*itLS]=thePhi;
+
+    complex<double> expi(cos(thePhi), sin(thePhi));
+    _currentMagExpi[*itLS]=theMag*expi;
   }
 
   _absDyn->updateFitParams(fitPar);

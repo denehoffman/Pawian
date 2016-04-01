@@ -111,13 +111,17 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
   PolVector omega; // spin-1 particle is the default constructor
   //  omega.SetP4(P_3particle_4Vec, P_3particle_4Vec.M());
   omega.SetP4(motherTensor4Vec, motherTensor4Vec.M());
+  Spin motherJ(_motherIGJPCPtr->J);
 
   for (Spin mz=-1; mz<=1; ++mz){
     Tensor<complex<double> >  ampTensor;
     //    ampTensor = eps|(daughter1_4Vec%daughter2_4Vec%daughter3_4Vec%omega(mz));
     ampTensor = eps|(daughter1Tensor4Vec%daughter2Tensor4Vec%daughter3Tensor4Vec%omega(mz));
     // DebugMsg << "mz: " << mz << "\t" << ampTensor << endmsg;
-    evtData->ComplexDoubleString[_wignerDKey][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
+
+    Id2StringType IdJLamX=FunctionUtils::spin2Index(motherJ,mz);
+    evtData->Complex2Spin[_wignerDId][IdJLamX]=(complex<double>) ampTensor(0);
+      //    evtData->ComplexDoubleString[_wignerDKey][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
   }
   _alreadyFilledMap[evtNo]=true;
 }

@@ -305,6 +305,7 @@ struct JPCLS : public jpcRes {
   Spin S;
   double preFactor;
   unsigned long idnumberJPCLS;
+  unsigned short idnumberLS;
 
   JPCLS(const Spin& j, const int p, const int c, const Spin& theL, const Spin& theS,
 	const double thePreFactor=0.): 
@@ -314,6 +315,7 @@ struct JPCLS : public jpcRes {
     preFactor(thePreFactor)
   {
     idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
+    idnumberLS=2*L*1e2+2*S;
   }
 
   JPCLS(std::shared_ptr<const jpcRes> theJPC, const Spin& theL, const Spin& theS, const double thePreFactor=0.) : 
@@ -323,6 +325,7 @@ struct JPCLS : public jpcRes {
     preFactor(thePreFactor)
   {
     idnumberJPCLS=idnumberJPC*1e4+2*L*1e2+2*S;
+    idnumberLS=2*L*1e2+2*S;
   }
 
   JPCLS(std::shared_ptr<const JPCLS> theJPCLS):

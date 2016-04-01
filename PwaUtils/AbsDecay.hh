@@ -54,7 +54,9 @@ public:
   virtual ~AbsDecay();
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
+  const unsigned short nameId() const {return _nameId;}
   const std::string wignerDKey() {return _wignerDKey;}
+  const unsigned short wignerDId() {return _wignerDId;}
   const std::string wignerDRefKey() {return _wignerDRefKey;}
   const unsigned short wigDWigDRefId() {return _wigDWigDRefId;}
   const std::string refKey() {return _refKey;}
@@ -152,10 +154,12 @@ protected:
   double _qR;
 
   std::string _name;
+  unsigned short _nameId;
   std::string _fitParamSuffix;
   std::string _massParamKey;
   std::string _prodParamKey;
   std::string _wignerDKey;
+  unsigned short _wignerDId;
   std::string _refKey;
   std::string _wignerDRefKey;
   unsigned short _wigDWigDRefId;

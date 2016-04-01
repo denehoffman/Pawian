@@ -41,6 +41,8 @@ class OmegaTo3PiTensorDecay;
 class Particle;
 class AbsPawianParameters;
 
+typedef CacheVector<std::map<std::string,std::map<Id1StringType, complex<float> > > >  tensorOmegaTo3PiCachedMap;
+
 class TensorOmegaTo3PiDecAmps : public AbsXdecAmp{
 
 public:
@@ -70,13 +72,14 @@ public:
 protected:
   std::vector< std::shared_ptr<const LScomb> > _LSs;
   double _factorMag;
-  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
-  std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+  // std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
+  // std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+  std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentMagExpi;
 
   Particle* _daughter1;
   Particle* _daughter2;
   Particle* _daughter3;
-
+  tensorOmegaTo3PiCachedMap _cachedLocalAmpMap;
 private:
 
 

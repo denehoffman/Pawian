@@ -18,5 +18,4 @@ namespace FunctionUtils {
   Id1StringType spin1Index(Spin& spin1);
   Id2StringType spin2Index(Spin& spin1, Spin& spin2);
   Id3StringType spin3Index(Spin& spin1, Spin& spin2, Spin& spin3);
-
 }

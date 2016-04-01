@@ -37,26 +37,25 @@
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "Particle/Particle.hh"
 
-//typedef unsigned int Id3StringType;
-
 typedef std::map<std::string, double> mapStringDouble;
-typedef std::map<std::string, map<Spin,map<Spin, complex<double> > > > mapStringComplDouble;
-typedef std::map<std::string, map<Spin,map<Spin,map<Spin, map<Spin, map<Spin,complex<double> > > > > > > mapString5SpinsComplex;
 typedef std::map<std::string, map<int,map<Spin, map<Spin, map<Spin,complex<double> > > > > > mapStringInt3SpinsComplex;
 typedef std::map<unsigned short, std::map<Id3StringType, complex<double> > > mapShortInt3Complex;
+//typedef CacheVector<std::map<Id3StringType, complex<double> > > mapShortInt3Complex;
 typedef std::map<unsigned short, std::map<Id1StringType, complex<double> > > mapShortInt1Complex;
 typedef std::map<unsigned short, double> mapShortDouble;
 typedef std::map<unsigned short, Vector4<double> > mapShort4Vec;
+typedef std::map<unsigned short, map<Id2StringType, complex<double> > > mapShortInt2Complex;
+typedef std::map<unsigned short, map<unsigned short, map<Id3StringType, complex<double> > > > mapShortShortInt3Complex;  
 
 struct EvtData {
   mapStringDouble DoubleString;
-  mapStringComplDouble ComplexDoubleString;
-  mapString5SpinsComplex ComplexDouble5SpinString;
   mapStringInt3SpinsComplex ComplexDoubleInt3SpinString;
   mapShortInt3Complex WignerDIdId3;
   mapShortInt1Complex WignerDIdId1;
   mapShortDouble DoubleId;
   mapShort4Vec FourVecsId;
+  mapShortInt2Complex Complex2Spin;
+  mapShortShortInt3Complex ComplexLS3Spin;
   double evtWeight;
   int evtNo;
 };

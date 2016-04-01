@@ -40,4 +40,5 @@ namespace FunctionUtils{
     Id3StringType result=spin1.ToIndex()*36*36+spin2.ToIndex()*36+spin3.ToIndex();
     return result;
   }
+
 }

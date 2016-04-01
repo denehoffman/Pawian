@@ -62,9 +62,11 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_isospinClebschG(1.)
    ,_qR(BarrierFactor::qRDefault)
   ,_name(mother->name()+"To"+daughter1->name()+"_"+daughter2->name())
+  ,_nameId(0)
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
    ,_prodParamKey("")
+  ,_wignerDId(0)
   ,_wignerDRefKey("default")
   ,_wigDWigDRefId(0)
   ,_dynType("WoDynamics")
@@ -165,10 +167,12 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_isospinClebschG(1.)
   ,_qR(BarrierFactor::qRDefault)
   ,_name(_motherIGJPCPtr->name()+"To"+daughter1->name()+"_"+daughter2->name())
+  ,_nameId(0)
   ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name()+"_"+daughter2->name())
   // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
+  ,_wignerDId(0)
   ,_wignerDRefKey("default")
   ,_wigDWigDRefId(0)
   ,_dynType("WoDynamics")
@@ -595,7 +599,7 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   }
   _wignerDRefKey=ref;
 
-  Info << _name << ":\twignerDKey= " << _wignerDKey << "\twignerDRefKey= " << _wignerDRefKey << endmsg;
+  //  Info << _name << ":\twignerDKey= " << _wignerDKey << "\twignerDRefKey= " << _wignerDRefKey << endmsg;
 
   if (!_daughter1IsStable){
     _absDecDaughter1->setWigDRefKey(_refKey);
@@ -603,10 +607,13 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   if (!_daughter2IsStable){
     _absDecDaughter2->setWigDRefKey(_refKey);
   }
-
+  _nameId=IdStringMapRegistry::instance()->stringId(_name);
+  _wignerDId=IdStringMapRegistry::instance()->stringId(_wignerDKey);
   _wigDWigDRefId=IdStringMapRegistry::instance()->stringStringId(_wignerDKey, _wignerDRefKey);
   Info << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
 
   std::pair<std::string, std::string > wigDWigDRefPair=IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
-  Info << "_wigDWigDRefId = " << _wigDWigDRefId << " with wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " << wigDWigDRefPair.second << endmsg;   
+  Info << "name of amplitude: " << _name << "\tnameId: " << _nameId
+       <<"\n_wigDWigDRefId = " << _wigDWigDRefId << "\t_wignerDId = " << _wignerDId 
+       << "\nwith wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " << wigDWigDRefPair.second << endmsg;   
 }

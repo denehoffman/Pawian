@@ -286,8 +286,13 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	    DebugMsg << "norm(result(0)) (L="<< L << ", S=" << S << ", lamMother=" << lamMother << ", lamDaughter1=" << lamDaughter1
 		     << ", lamDaughter2=" << lamDaughter2  << ")= " << norm(result(0)) << endmsg;
 	  }
-	  evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
-	  
+	  //	  evtData->ComplexDouble5SpinString[_name][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
+	  //	  evtData->Complex5Spin[_nameId][L][S][lamMother][lamDaughter1][lamDaughter2]=result(0);
+	  // Id5StringType IdLSLamXLam1Lam2=FunctionUtils::spin5Index(L, S, lamMother, lamDaughter1, lamDaughter2);
+	  // evtData->Complex5Spin[_nameId][IdLSLamXLam1Lam2]=result(0);
+	  Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamMother, lamDaughter1, lamDaughter2);
+	  unsigned short currentLSId=(*itJPCLS)->idnumberLS;
+	  evtData->ComplexLS3Spin[_nameId][currentLSId][IdLamXLam1Lam2]=result(0);	  
 	}
       }
     }
