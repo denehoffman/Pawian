@@ -103,23 +103,9 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
     return result;
   }
 
-  //  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Min=-_Jdaughter1;
-  Spin lam1Max= _Jdaughter1;
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-
-  if(_enabledlamFsDaughter1){
-    lam1Min=lamFs;
-    lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    lam2Min=lamFs;
-    lam2Max=lamFs;
-  }
-
-
-  result=lsLoop(grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, true, lamFs );
+  if(_enabledlamFsDaughter1) result=lsLoop(grandmaAmp, lamX, theData, lamFs, lamFs, _lam2Min, _lam2Max, true, lamFs );
+  else if(_enabledlamFsDaughter2) result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, lamFs, lamFs, true, lamFs ); 
+  else result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs );
 
   if ( _cacheAmps){
      theMutex.lock();

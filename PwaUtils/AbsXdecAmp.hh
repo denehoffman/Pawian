@@ -98,6 +98,11 @@ protected:
   bool _enabledlamFsDaughter2;
 
   Spin _J;
+  Spin _lam1Min;
+  Spin _lam1Max;
+  Spin _lam2Min;
+  Spin _lam2Max;
+
   intStringShortComplFloatMap _cachedAmpMap;
   std::map<std::thread::id, std::map<std::string, complex<float> > > _cachedDynMap;
 

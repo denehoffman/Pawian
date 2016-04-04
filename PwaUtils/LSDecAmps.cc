@@ -44,11 +44,7 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID)
   AbsXdecAmp(theDec, channelID)
   ,_LSs(theDec->LSAmps())
   ,_factorMag(1.)
-  ,_lam1Min(-_Jdaughter1)
-  ,_lam1Max(_Jdaughter1)
-  ,_lam2Min(-_Jdaughter2)
-  ,_lam2Max(_Jdaughter2)
-  ,_Smax(0)
+   ,_Smax(0)
 {
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
@@ -65,10 +61,6 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID)
 
 LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
-  ,_lam1Min(-_Jdaughter1)
-  ,_lam1Max(_Jdaughter1)
-  ,_lam2Min(-_Jdaughter2)
-  ,_lam2Max(_Jdaughter2)
   ,_Smax(0)
 {
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
@@ -90,27 +82,31 @@ LSDecAmps::~LSDecAmps()
 complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
+  Spin lam1Min=-_Jdaughter1;
+  Spin lam1Max= _Jdaughter1;
+  Spin lam2Min=-_Jdaughter2;
+  Spin lam2Max=_Jdaughter2;
 
   if(fixDaughterNr == 1){
-     _lam1Min = _lam1Max = lamDec;
+     lam1Min = lam1Max = lamDec;
   }
   else if(fixDaughterNr == 2){
-     _lam2Min = _lam2Max = lamDec;
+     lam2Min = lam2Max = lamDec;
   }
   else{
      Alert << "Invalid fixDaughterNr in XdecPartAmp." << endmsg;
   }
 
   if(_enabledlamFsDaughter1){
-    _lam1Min=lamFs;
-    _lam1Max=lamFs;
+    lam1Min=lamFs;
+    lam1Max=lamFs;
   }
   else if(_enabledlamFsDaughter2){
-    _lam2Min=lamFs;
-    _lam2Max=lamFs;
+    lam2Min=lamFs;
+    lam2Max=lamFs;
   }
 
-  result=lsLoop( grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, false);
+   result=lsLoop( grandmaAmp, lamX, theData, lam1Min, lam1Max, lam2Min, lam2Max, false);
 
   return result;
 }
@@ -129,17 +125,9 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
     return result;
   }
 
-  if(_enabledlamFsDaughter1){
-    _lam1Min=lamFs;
-    _lam1Max=lamFs;
-  }
-  else if(_enabledlamFsDaughter2){
-    _lam2Min=lamFs;
-    _lam2Max=lamFs;
-  }
-
-
-  result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
+  if(_enabledlamFsDaughter1) result=lsLoop(grandmaAmp, lamX, theData, lamFs, lamFs, _lam2Min, _lam2Max, true, lamFs);
+  else if(_enabledlamFsDaughter2) result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, lamFs, lamFs, true, lamFs);
+  else result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
 
   if ( _cacheAmps){
      theMutex.lock();

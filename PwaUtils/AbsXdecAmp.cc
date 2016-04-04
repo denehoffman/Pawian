@@ -92,6 +92,11 @@ void AbsXdecAmp::initialize(){
 
   _Jdaughter1=(Spin) _decay->daughter1Part()->J();
   _Jdaughter2=(Spin) _decay->daughter2Part()->J();
+  
+  _lam1Min = -_Jdaughter1;
+  _lam1Max = _Jdaughter1;
+  _lam2Min = -_Jdaughter2;
+  _lam2Max = _Jdaughter2;
 
   if( _daughter1IsStable && _Jdaughter1>0) _enabledlamFsDaughter1=true;
   if( _daughter2IsStable && _Jdaughter2>0) _enabledlamFsDaughter2=true;
