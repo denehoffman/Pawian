@@ -51,6 +51,9 @@ public:
   unsigned short stringId(std::string&);
   std::string getString(unsigned short id);
 
+  unsigned short keyStringId(const std::string& key, std::string& str);
+  std::string getKeyString(const std::string& key, unsigned short id);
+
 protected:
  ///Constructor
   IdStringMapRegistry();
@@ -63,6 +66,9 @@ private:
 
   std::map<unsigned short, std::string > _stringMap;
   unsigned short _stringMapCounter;
+
+  std::map<std::string, std::map<unsigned short, std::string > > _keyStringMap;
+  std::map<std::string, unsigned short > _keyStringMapCounter;
 };
 
 

@@ -50,7 +50,7 @@ complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaA
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=BreitWignerFunction::NonRel(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth);  
+  complex<double> result=BreitWignerFunction::NonRel(theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth);  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedMap[evtNo]=result;

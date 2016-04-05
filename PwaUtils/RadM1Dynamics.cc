@@ -44,6 +44,9 @@ RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsPartic
   ,_dynMassKeyDaughter1(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1))
   ,_dynMassKeyDaughter2(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter2))
   ,_dynEgammaCMmotherKey(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1)+"Gamma")
+  ,_dynMassIdDaughter1(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynMassKeyDaughter1)) 
+  ,_dynMassIdDaughter2(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynMassKeyDaughter2))
+  ,_dynEgammaCMmotherId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynEgammaCMmotherKey))  
   ,_isP1Gamma(true)
   ,_massB0(massB0)
 {
@@ -62,14 +65,14 @@ complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   }
   
   // Which Daughter particle is the radiative photon?
-  double massB = theData->DoubleString.at(_dynMassKeyDaughter2); // DUMMY VALUE - needs to be mass of non-gamma dacay particle, e.g. eta_c
-  if (!_isP1Gamma) massB = theData->DoubleString.at(_dynMassKeyDaughter1);
+  double massB = theData->DoubleMassId.at(_dynMassIdDaughter2); // DUMMY VALUE - needs to be mass of non-gamma dacay particle, e.g. eta_c
+  if (!_isP1Gamma) massB = theData->DoubleMassId.at(_dynMassIdDaughter1);
 
   //  double currentMassB = 1.; // DUMMY VALUE - needs to be current mass (fit parameter!) of non-gamma decay particle, e.g. eta_c
-  double Egamma = theData->DoubleString.at(_dynEgammaCMmotherKey); // how to access Egamma?
+  double Egamma = theData->DoubleMassId.at(_dynEgammaCMmotherId); // how to access Egamma?
 
   complex<double> result(1.,0.);
-  result=RadMultipoleFormFactor::PureM1(theData->DoubleString.at(_dynKey), massB, _massB0, Egamma);
+  result=RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
   if ( _cacheAmps) _cachedMap[evtNo]=result;
 
   return result;
@@ -100,14 +103,14 @@ void RadM1Dynamics::fillMasses(EvtData* theData){
     std::string currentName=(*it)->name();
     mass4VecD1+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
-  theData->DoubleString[_dynMassKeyDaughter1]=mass4VecD1.Mass();
+  theData->DoubleMassId[_dynMassIdDaughter1]=mass4VecD1.Mass();
 
   Vector4<double> mass4VecD2(0.,0.,0.,0.);
   for (it=_fsParticlesDaughter2.begin(); it !=_fsParticlesDaughter2.end(); ++it){
     std::string currentName=(*it)->name();
     mass4VecD2+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
-  theData->DoubleString[_dynMassKeyDaughter2]=mass4VecD2.Mass();
+  theData->DoubleMassId[_dynMassIdDaughter2]=mass4VecD2.Mass();
 
   Vector4<double> mother4Vec(0.,0.,0.,0.);
   mother4Vec=mass4VecD1+mass4VecD2;
@@ -128,5 +131,5 @@ void RadM1Dynamics::fillMasses(EvtData* theData){
     exit(1); 
   }
   photonCMmother4Vec.Boost(mother4Vec);
-  theData->DoubleString[_dynEgammaCMmotherKey]=photonCMmother4Vec.E();
+  theData->DoubleMassId[_dynEgammaCMmotherId]=photonCMmother4Vec.E();
 }

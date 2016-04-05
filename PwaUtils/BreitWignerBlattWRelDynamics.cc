@@ -33,6 +33,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 BreitWignerBlattWRelDynamics::BreitWignerBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double qR) :
   BreitWignerRelDynamics(name, fsParticles, mother, fsParticlesDaughter1, fsParticlesDaughter2)
@@ -52,7 +53,7 @@ complex<double> BreitWignerBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp*
     return _cachedLMap.at(evtNo).at(orbMom);
   }
 
-  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, theData->DoubleString.at(_dynMassKeyDaughter1), theData->DoubleString.at(_dynMassKeyDaughter2), _qR);  
+  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR);  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedLMap[evtNo][orbMom]=result;

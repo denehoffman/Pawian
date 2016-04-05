@@ -35,10 +35,14 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 #include "ConfigParser/ParserBase.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 BlattWBarrierDynamics::BlattWBarrierDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, const std::string& wignerDKey, double qR) :
   AbsDynamics(name, fsParticles, mother)
   ,_wignerDKey(wignerDKey)
+  ,_wignerDqNormKey(_wignerDKey+"qNorm")
+  ,_wignerDqId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _wignerDKey))
+  ,_wignerDqNormId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _wignerDqNormKey))
   ,_qR(qR)
   ,_fitqRVals(false)
   ,_fitqRKey(_massKey+"qRPosOther")
@@ -64,8 +68,8 @@ BlattWBarrierDynamics::~BlattWBarrierDynamics()
 complex<double> BlattWBarrierDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   complex<double> result(1.,0.);
   if(OrbMom==0) return result;
-  result=BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleString.at(_wignerDKey), _qR) /
-    BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleString.at(_wignerDKey + "qNorm"), _qR);
+  result=BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) /
+    BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR);
 
   return result;
 }

@@ -67,6 +67,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_massParamKey(_mother->name())
    ,_prodParamKey("")
   ,_wignerDId(0)
+  ,_wignerDqNormId(0)
   ,_wignerDRefKey("default")
   ,_wigDWigDRefId(0)
   ,_dynType("WoDynamics")
@@ -173,6 +174,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_wignerDId(0)
+  ,_wignerDqNormId(0)
   ,_wignerDRefKey("default")
   ,_wigDWigDRefId(0)
   ,_dynType("WoDynamics")
@@ -423,8 +425,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   if(fillqVals){
        double qVal=daughter2HelMother.P();
     double qValNorm=breakupMomQ(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
-    evtData->DoubleString[_wignerDKey]=qVal;
-    evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
+    evtData->DoubleMassId[_wignerDqId]=qVal;
+    evtData->DoubleMassId[_wignerDqNormId] = qValNorm;
   } 
   //   _alreadyFilledMap[evtNo]=true;
 }
@@ -609,6 +611,10 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   }
   _nameId=IdStringMapRegistry::instance()->stringId(_name);
   _wignerDId=IdStringMapRegistry::instance()->stringId(_wignerDKey);
+  std::string wignerDqNormKey=_wignerDKey+"qNorm";
+  std::string keyForMassList="Mass";
+  _wignerDqId=IdStringMapRegistry::instance()->keyStringId(keyForMassList,_wignerDKey); 
+  _wignerDqNormId = IdStringMapRegistry::instance()->keyStringId(keyForMassList, wignerDqNormKey);
   _wigDWigDRefId=IdStringMapRegistry::instance()->stringStringId(_wignerDKey, _wignerDRefKey);
   Info << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
 

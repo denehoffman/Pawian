@@ -372,8 +372,8 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
   if(fillqVals){
     double qVal=daughter2HelMother.P();
     double qValNorm=breakupMomQ(mother_4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
-    evtData->DoubleString[_wignerDKey]=qVal;
-    evtData->DoubleString[_wignerDKey+"qNorm"] = qValNorm;
+    evtData->DoubleMassId[_wignerDqId]=qVal;
+    evtData->DoubleMassId[_wignerDqNormId]=qValNorm;
   }
 }
 

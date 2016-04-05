@@ -61,6 +61,9 @@ protected:
   std::string _dynMassKeyDaughter1;
   std::string _dynMassKeyDaughter2;
   std::string _dynEgammaCMmotherKey;
+  unsigned short _dynMassIdDaughter1;
+  unsigned short _dynMassIdDaughter2;
+  unsigned short _dynEgammaCMmotherId;
   bool _isP1Gamma;
   double _massB0;
 

@@ -55,6 +55,9 @@ public:
 
 protected:
   std::string _wignerDKey;
+  std::string _wignerDqNormKey;
+  unsigned short _wignerDqId;
+  unsigned short _wignerDqNormId;
   double _qR;
   bool _fitqRVals;
   std::string _fitqRKey;

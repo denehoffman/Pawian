@@ -65,7 +65,7 @@ complex<double> result(0.,0.);
 
   else{
       theMutex.lock();
-      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), 0);
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), 0);
       if ( _cacheAmps){
 	_cachedStringMap[evtNo][currentKey]=result;
       }

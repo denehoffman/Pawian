@@ -76,57 +76,17 @@ complex<double> result(0.,0.);
   if(0!=grandmaAmp) currentKey=_massKey+grandmaAmp->absDec()->massParKey();
 
   if ( _cacheAmps && !_recalcMap.at(currentKey)){
-    //    result=_cachedStringMap.at(evtNo).at(currentKey);
-    result=_cachedStringOrbMap.at(evtNo).at(currentKey).at(OrbMom);
+     result=_cachedStringOrbMap.at(evtNo).at(currentKey).at(OrbMom);
   }
   
   else{
       theMutex.lock();
-      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex, OrbMom);
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _projectionIndex, OrbMom);
       if ( _cacheAmps){
-	//        _cachedStringMap[evtNo][currentKey]=result;
 	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
       }
       theMutex.unlock();
   }
-
-  // bool readFromCachedMap=false;
-
-  // theMutex.lock();
-  // if( _cacheAmps){
-  //   if(_recalculate){
-  //     bool currentEvtAlreadyCached=false;
-      
-  //     std::map<int, std::map<std::string, bool > >::iterator itAlreadyCached=_alreadyCached.find(evtNo);
-  //     if( itAlreadyCached != _alreadyCached.end()){
-  // 	std::map<std::string, bool >::iterator itAlreadyCached2= itAlreadyCached->second.find(currentKey);
-  // 	if( itAlreadyCached2 != itAlreadyCached->second.end()){
-  // 	  currentEvtAlreadyCached=itAlreadyCached2->second;     
-  // 	}
-  // 	else{
-  // 	  _alreadyCached[evtNo][currentKey]=false;
-  // 	}   
-  //     }
-  //     else{ 
-  // 	_alreadyCached[evtNo][currentKey]=false;
-  //     } 
-  
-  //     if(currentEvtAlreadyCached) readFromCachedMap=true;
-  //   }
-  //   else readFromCachedMap=true; 
-  // }
-
-  // if ( readFromCachedMap){
-  //   result=_cachedStringMap.at(evtNo).at(currentKey);
-  // }  
-  // else{
-  //   result=_fVecMap[currentKey]->evalProjMatrix(theData->DoubleString.at(_dynKey), _projectionIndex);
-  //     if ( _cacheAmps){
-  // 	_cachedStringMap[evtNo][currentKey]=result;
-  // 	_alreadyCached.at(evtNo).at(currentKey)=true;
-  //     }
-  // }
-  // theMutex.unlock();
 
   return result;
 }

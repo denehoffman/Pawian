@@ -50,6 +50,8 @@ protected:
   std::vector<Particle*> _fsParticlesDaughter2;
   std::string _dynMassKeyDaughter1;
   std::string _dynMassKeyDaughter2;
+  unsigned short _dynMassIdDaughter1;
+  unsigned short _dynMassIdDaughter2;
 
 private:
 

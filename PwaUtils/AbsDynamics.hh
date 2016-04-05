@@ -60,11 +60,13 @@ public:
 protected:
   std::string _name;
   std::string _massKey;
+  const std::string _keyForMassList;
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
   CacheVector<complex<float> >  _cachedMap;
   std::mutex theMutex;
   std::string _dynKey;
+  unsigned short _dynId;
   std::string _grandmaKey;
   bool _isLdependent;
 private:

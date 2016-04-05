@@ -160,6 +160,8 @@ protected:
   std::string _prodParamKey;
   std::string _wignerDKey;
   unsigned short _wignerDId;
+  unsigned short _wignerDqId;
+  unsigned short _wignerDqNormId;
   std::string _refKey;
   std::string _wignerDRefKey;
   unsigned short _wigDWigDRefId;

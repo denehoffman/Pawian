@@ -110,3 +110,58 @@ std::string IdStringMapRegistry::getString(unsigned short id){
   return _stringMap.at(id); 
 }
 
+
+unsigned short IdStringMapRegistry::keyStringId(const std::string& key, std::string& str){
+  bool foundKey=false;
+  bool foundEntry=false;
+  unsigned short result=0;
+
+  //findmap with key
+  std::map< std::string, std::map<unsigned short, std::string > >::iterator itKey = _keyStringMap.find(key);
+  if (itKey != _keyStringMap.end()){
+    foundKey=true;
+  }
+
+  if(foundKey){
+    std::map<unsigned short, std::string >::iterator it; 
+    for(it=_keyStringMap.at(key).begin(); it!=_keyStringMap.at(key).end(); ++it){
+      std::string currentString = it->second;
+      if(str==currentString){
+	foundEntry=true;
+	result=it->first;
+	break;
+      }   
+    }
+  }
+
+
+  if(!foundKey){
+    _keyStringMapCounter[key]=1;
+    result=1;
+    _keyStringMap[key][1]=str;
+  }
+  else if(!foundEntry){
+    _keyStringMapCounter.at(key)++;
+    result=_keyStringMapCounter.at(key);
+    _keyStringMap[key][_keyStringMapCounter.at(key)]=str;
+    
+  }
+
+  return result;
+}
+
+std::string IdStringMapRegistry::getKeyString(const std::string& key, unsigned short id){
+
+  std::map< std::string, std::map<unsigned short, std::string > >::iterator itKey = _keyStringMap.find(key);
+  if (itKey == _keyStringMap.end()){
+    Alert << "key " << key  << " not found!!!" << endmsg;
+    exit(1);
+  }
+
+  if(id > _keyStringMapCounter.at(key)){
+    Alert << "id=" << id << " > _keyStringMapCounter.at(" <<  key << ") = " <<  _keyStringMapCounter.at(key) << endmsg;
+    exit(1); 
+  }
+  return _keyStringMap.at(key).at(id); 
+}
+

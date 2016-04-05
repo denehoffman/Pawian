@@ -46,8 +46,8 @@ BlattWBarrierTensorDynamics::~BlattWBarrierTensorDynamics()
 complex<double> BlattWBarrierTensorDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   complex<double> result(1.,0.);
   if(OrbMom==0) return result;
-  result=BarrierFactor::BlattWeisskopfTensor(OrbMom, theData->DoubleString.at(_wignerDKey), _qR) /
-    BarrierFactor::BlattWeisskopfTensor(OrbMom, theData->DoubleString.at(_wignerDKey + "qNorm"), _qR);
+  result=BarrierFactor::BlattWeisskopfTensor(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) /
+    BarrierFactor::BlattWeisskopfTensor(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR);
 
   return result;
 }

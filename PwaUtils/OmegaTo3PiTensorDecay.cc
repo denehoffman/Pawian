@@ -121,7 +121,6 @@ void OmegaTo3PiTensorDecay::fillWignerDs(std::map<std::string , Vector4<double> 
 
     Id2StringType IdJLamX=FunctionUtils::spin2Index(motherJ,mz);
     evtData->Complex2Spin[_wignerDId][IdJLamX]=(complex<double>) ampTensor(0);
-      //    evtData->ComplexDoubleString[_wignerDKey][_motherIGJPCPtr->J][mz]=(complex<double>) ampTensor(0);
   }
   _alreadyFilledMap[evtNo]=true;
 }

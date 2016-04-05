@@ -38,9 +38,11 @@ AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles,
   AbsParamHandler()
   ,_name(name)
   ,_massKey("defaultMassKey")
+  ,_keyForMassList("Mass")
   ,_fsParticles(fsParticles)
   ,_mother(mother)
   ,_dynKey(FunctionUtils::particleListName(fsParticles))
+  ,_dynId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynKey))
   ,_grandmaKey("default")
   ,_isLdependent(true)
 {
@@ -64,6 +66,6 @@ void AbsDynamics::fillMasses(EvtData* theData){
     mass4Vec+=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
 
-  theData->DoubleString[_dynKey]=mass4Vec.Mass();
+  theData->DoubleMassId[_dynId]=mass4Vec.Mass();
 }
 

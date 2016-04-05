@@ -41,6 +41,8 @@ BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Pa
   ,_fsParticlesDaughter2(fsParticlesDaughter2)
   ,_dynMassKeyDaughter1(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter1))
   ,_dynMassKeyDaughter2(_dynKey+FunctionUtils::particleListName(fsParticlesDaughter2))
+  ,_dynMassIdDaughter1(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynMassKeyDaughter1))
+  ,_dynMassIdDaughter2(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynMassKeyDaughter2))
 {
   Info << "BreitWignerRelDynamics for " << _name << " with  mass key daughter1 " << _dynMassKeyDaughter1 << " and mass key daughter2 " << _dynMassKeyDaughter2 << endmsg;
 }
@@ -55,7 +57,7 @@ complex<double> BreitWignerRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=BreitWignerFunction::Rel(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, theData->DoubleString.at(_dynMassKeyDaughter1), theData->DoubleString.at(_dynMassKeyDaughter2));  
+  complex<double> result=BreitWignerFunction::Rel(theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2));  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedMap[evtNo]=result;
@@ -74,13 +76,16 @@ void BreitWignerRelDynamics::fillMasses(EvtData* theData){
     std::string currentName=(*it)->name();
     mass4VecD1+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
-  theData->DoubleString[_dynMassKeyDaughter1]=mass4VecD1.Mass();
+
+  theData->DoubleMassId[_dynMassIdDaughter1]=mass4VecD1.Mass();
 
   Vector4<double> mass4VecD2(0.,0.,0.,0.);
   for (it=_fsParticlesDaughter2.begin(); it !=_fsParticlesDaughter2.end(); ++it){
     std::string currentName=(*it)->name();
     mass4VecD2+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
-  theData->DoubleString[_dynMassKeyDaughter2]=mass4VecD2.Mass();
+
+  theData->DoubleMassId[_dynMassIdDaughter2]=mass4VecD2.Mass();
+
 }
 

@@ -37,7 +37,6 @@
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "Particle/Particle.hh"
 
-typedef std::map<std::string, double> mapStringDouble;
 typedef std::map<std::string, map<int,map<Spin, map<Spin, map<Spin,complex<double> > > > > > mapStringInt3SpinsComplex;
 typedef std::map<unsigned short, std::map<Id3StringType, complex<double> > > mapShortInt3Complex;
 //typedef CacheVector<std::map<Id3StringType, complex<double> > > mapShortInt3Complex;
@@ -48,11 +47,11 @@ typedef std::map<unsigned short, map<Id2StringType, complex<double> > > mapShort
 typedef std::map<unsigned short, map<unsigned short, map<Id3StringType, complex<double> > > > mapShortShortInt3Complex;  
 
 struct EvtData {
-  mapStringDouble DoubleString;
   mapStringInt3SpinsComplex ComplexDoubleInt3SpinString;
   mapShortInt3Complex WignerDIdId3;
   mapShortInt1Complex WignerDIdId1;
   mapShortDouble DoubleId;
+  mapShortDouble DoubleMassId;
   mapShort4Vec FourVecsId;
   mapShortInt2Complex Complex2Spin;
   mapShortShortInt3Complex ComplexLS3Spin;

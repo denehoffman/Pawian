@@ -59,7 +59,7 @@ complex<double> K0star1430LassDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     return _cachedMap[evtNo];
   }
 
-  complex<double> result=LASS::K0star_1430(theData->DoubleString.at(_dynKey), _currentMass, _currentWidth, _currentaLASS, _currentrLASS, _currentBLASS, _currentphiB, _currentRLASS, _currentphiR);
+  complex<double> result=LASS::K0star_1430(theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, _currentaLASS, _currentrLASS, _currentBLASS, _currentphiB, _currentRLASS, _currentphiR);
 
   
   if ( _cacheAmps){
