@@ -259,21 +259,23 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
 
 	  DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1 << endmsg;
 
-	  evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);	  
-
+	  Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamMother, lam1Gam, mX);
+	  //	  evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);	  
+	  evtData->ComplexN3Spin[_nameId][0][IdLamMotherLamGamLamX]=currentAmp1(0);
 	  if(_noOfAmps>1){
 	    //second amplitude
 	    currentAmp2=(_polMother(lamMother)*daughter1GamTensor4Vec)*( conj(_polDaughter1(lam1Gam)) | PpsySpinProjX_jg1 ); 
 
 	    DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2 << endmsg;
 	    
-	    evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);	    
-
+	    //evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);	    
+	    evtData->ComplexN3Spin[_nameId][1][IdLamMotherLamGamLamX]=currentAmp2(0);
 	    if(_noOfAmps>2){
 	      //3. amplitude
 	      currentAmp3= PsiGamPolProj | PpsySpinProjX_jg2;
 	      DebugMsg << "currentAmp3.Rank(): " << currentAmp3.Rank() << "\nval: " << currentAmp3 << endmsg;
-	      evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+	      //	      evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+	      evtData->ComplexN3Spin[_nameId][2][IdLamMotherLamGamLamX]=currentAmp3(0);
 	    }
 	  }  	  
 	}
@@ -308,21 +310,27 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
             U_numu1 = S_alpha_beta*PpsySpinProjX_jg0;
 	    currentAmp1=PsiGamPolProj | U_numu1;
 	    DebugMsg << "currentAmp1.Rank(): " << currentAmp1.Rank() << "\nval: " << currentAmp1(0) << endmsg;
-	    evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
+	    //	    evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);
 
+	    Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamMother, lam1Gam, mX);
+	  //	  evtData->ComplexDoubleInt3SpinString[_name][0][lamMother][lam1Gam][mX]=currentAmp1(0);	  
+	    evtData->ComplexN3Spin[_nameId][0][IdLamMotherLamGamLamX]=currentAmp1(0);
+	    
 	    if(spinDaughter2>0){
 	      //2. amplitude 
 	      Tensor<complex<double> > U_numu2= daughter1GamTensor4Vec % (S_alpha_beta*PpsySpinProjX_jg1);
 	      currentAmp2=PsiGamPolProj | U_numu2;
 	      DebugMsg << "currentAmp2.Rank(): " << currentAmp2.Rank() << "\nval: " << currentAmp2(0) << endmsg;
-	      evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
+	      //	      evtData->ComplexDoubleInt3SpinString[_name][1][lamMother][lam1Gam][mX]=currentAmp2(0);
+	      evtData->ComplexN3Spin[_nameId][1][IdLamMotherLamGamLamX]=currentAmp2(0);
 
 	      if(spinDaughter2>1){	      
 		//3. amplitude ?????
 		Tensor<complex<double> > U_numu3= (_lctTensor*(PpsySpinProjX_jg2*daughter1GamTensor4Vec))*motherTensor4Vec;
 		//		Tensor<complex<double> > U_numu3= _lctTensor | PpsySpinProjX_jg2;
 		currentAmp3=PsiGamPolProj | U_numu3;
-		evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+		//		evtData->ComplexDoubleInt3SpinString[_name][2][lamMother][lam1Gam][mX]=currentAmp3(0);
+		evtData->ComplexN3Spin[_nameId][2][IdLamMotherLamGamLamX]=currentAmp3(0);
 	      }
 	    }
 	}

@@ -127,13 +127,15 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
   Spin lam2Max=_Jdaughter2;
   
   for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
+    Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamX, lamFs, lambda2);
     complex<double> tmpResult(0.,0.);
     for(int i=0; i<_noOfAmps; ++i){
       // double theMag=_currentParamLocalMags.at(i);
       // double thePhi=_currentParamLocalPhis.at(i);
       // complex<double> expi(cos(thePhi), sin(thePhi));
       // tmpResult+=theMag*expi*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
-      tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
+      //      tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
+      tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexN3Spin.at(_decay->nameId()).at(i).at(IdLamMotherLamGamLamX)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
     }
 
     result+=tmpResult*daughterAmp(lambda2, theData, lamFs);    
