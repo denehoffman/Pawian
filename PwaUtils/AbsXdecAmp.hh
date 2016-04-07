@@ -45,7 +45,6 @@
 class AbsDecay;
 //class AbsDynamics;
 
-//typedef CacheVector<std::map<std::string,std::map<Id2StringType, complex<float> > > >  intStringShortComplFloatMap;
 typedef CacheVector<std::map<unsigned short, std::map<Id2StringType, complex<float> > > >  intUShortId2StringComplFloatMap;
 
 class AbsXdecAmp : public AbsParamHandler{

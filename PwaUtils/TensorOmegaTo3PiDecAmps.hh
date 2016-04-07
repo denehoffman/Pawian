@@ -41,7 +41,7 @@ class OmegaTo3PiTensorDecay;
 class Particle;
 class AbsPawianParameters;
 
-typedef CacheVector<std::map<std::string,std::map<Id1StringType, complex<float> > > >  tensorOmegaTo3PiCachedMap;
+typedef CacheVector<std::map<unsigned short,std::map<Id1StringType, complex<float> > > >  tensorOmegaTo3PiCachedIdMap;
 
 class TensorOmegaTo3PiDecAmps : public AbsXdecAmp{
 
@@ -79,7 +79,7 @@ protected:
   Particle* _daughter1;
   Particle* _daughter2;
   Particle* _daughter3;
-  tensorOmegaTo3PiCachedMap _cachedLocalAmpMap;
+  tensorOmegaTo3PiCachedIdMap _cachedLocalAmpIdMap;
 private:
 
 
