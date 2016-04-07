@@ -173,7 +173,8 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
       result+=amp;    
     }
   }
-  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  //  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
   return result;
 }
 

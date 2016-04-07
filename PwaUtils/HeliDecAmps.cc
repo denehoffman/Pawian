@@ -260,7 +260,8 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
   //  result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
 
   if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
-  else result*=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  //  else result*=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  else result*=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
 
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;

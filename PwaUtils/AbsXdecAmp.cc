@@ -137,7 +137,8 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   if(!_absDyn->isLdependent()){
     theMutex.lock();
-    _cachedDynMap[std::this_thread::get_id()][_absDyn->grandMaKey(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
+    //    _cachedDynMap[std::this_thread::get_id()][_absDyn->grandMaKey(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
+    _cachedDynIdMap[std::this_thread::get_id()][_absDyn->grandMaId(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
     theMutex.unlock();
   }
   if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
