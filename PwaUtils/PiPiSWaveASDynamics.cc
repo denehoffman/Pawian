@@ -404,6 +404,11 @@ const std::string& PiPiSWaveASDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   return grandmaAmp->absDec()->massParKey();
 }
 
+const unsigned short PiPiSWaveASDynamics::grandMaId(AbsXdecAmp* grandmaAmp){
+  if(0==grandmaAmp) return _grandmaId;
+  return grandmaAmp->absDec()->massParId(); 
+}
+
 int PiPiSWaveASDynamics::projectionIndex(std::vector<Particle*>& fsParticles){
 
   int result=-1;

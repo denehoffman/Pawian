@@ -413,6 +413,10 @@ const std::string& KMatrixDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   return grandmaAmp->absDec()->massParKey();
 }
 
+const unsigned short KMatrixDynamics::grandMaId(AbsXdecAmp* grandmaAmp){
+  if(0==grandmaAmp) return _grandmaId;
+  return grandmaAmp->absDec()->massParId(); 
+}
 
 
 void KMatrixDynamics::init(){

@@ -58,6 +58,7 @@ public:
   
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
+  virtual const unsigned short grandMaId(AbsXdecAmp* grandmaAmp);
 
 protected:
   //  std::string _massKey;

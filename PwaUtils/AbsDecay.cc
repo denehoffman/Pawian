@@ -65,6 +65,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_nameId(0)
   ,_fitParamSuffix(_name)
   ,_massParamKey(_mother->name())
+  ,_massParamId(IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey))
    ,_prodParamKey("")
   ,_wignerDId(0)
   ,_wignerDqNormId(0)
@@ -172,6 +173,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name()+"_"+daughter2->name())
   // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
+  ,_massParamId(IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey))
   ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_wignerDId(0)
   ,_wignerDqNormId(0)
@@ -622,4 +624,9 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   Info << "name of amplitude: " << _name << "\tnameId: " << _nameId
        <<"\n_wigDWigDRefId = " << _wigDWigDRefId << "\t_wignerDId = " << _wignerDId 
        << "\nwith wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " << wigDWigDRefPair.second << endmsg;   
+}
+
+ void AbsDecay::setMassParKey(const std::string& newKey){
+   _massParamKey = newKey;
+   _massParamId = IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey);
 }

@@ -256,3 +256,8 @@ const std::string& KPiSWaveIso32Dynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
   if(0==grandmaAmp) return _grandmaKey;
   return grandmaAmp->absDec()->massParKey();
 }
+
+const unsigned short KPiSWaveIso32Dynamics::grandMaId(AbsXdecAmp* grandmaAmp){
+  if(0==grandmaAmp) return _grandmaId;
+  return grandmaAmp->absDec()->massParId(); 
+}

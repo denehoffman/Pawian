@@ -46,6 +46,7 @@ class AbsDecay;
 //class AbsDynamics;
 
 typedef CacheVector<std::map<std::string,std::map<Id2StringType, complex<float> > > >  intStringShortComplFloatMap;
+typedef CacheVector<std::map<unsigned short, std::map<Id2StringType, complex<float> > > >  intUShortId2StringComplFloatMap;
 
 class AbsXdecAmp : public AbsParamHandler{
 
@@ -103,8 +104,11 @@ protected:
   Spin _lam2Min;
   Spin _lam2Max;
 
-  intStringShortComplFloatMap _cachedAmpMap;
+  // intStringShortComplFloatMap _cachedAmpMap;
+  intUShortId2StringComplFloatMap _cachedAmpIdMap;
   std::map<std::thread::id, std::map<std::string, complex<float> > > _cachedDynMap;
+
+
 
   virtual void initialize();
 };

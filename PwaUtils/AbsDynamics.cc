@@ -44,6 +44,7 @@ AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles,
   ,_dynKey(FunctionUtils::particleListName(fsParticles))
   ,_dynId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynKey))
   ,_grandmaKey("default")
+  ,_grandmaId(IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _grandmaKey))
   ,_isLdependent(true)
 {
   if(0!=mother) _massKey=mother->name(); 

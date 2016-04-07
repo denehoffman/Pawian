@@ -63,7 +63,8 @@ public:
   virtual std::string fitParSuffix() const {return _fitParamSuffix;}
   void setFitParSuffix(std::string& suffix) {_fitParamSuffix = suffix;}
   virtual std::string& massParKey() {return _massParamKey;}
-  void setMassParKey(const std::string& newKey) {_massParamKey = newKey;}
+  virtual unsigned short massParId() {return _massParamId;}
+  void setMassParKey(const std::string& newKey);
   virtual std::string& prodParKey() {return _prodParamKey;}
   void setProdParKey(const std::string& newKey) {_prodParamKey = newKey;}
   void setPreFactor(double thePreFactor) {_preFactor=thePreFactor;}
@@ -157,6 +158,7 @@ protected:
   unsigned short _nameId;
   std::string _fitParamSuffix;
   std::string _massParamKey;
+  unsigned short _massParamId;
   std::string _prodParamKey;
   std::string _wignerDKey;
   unsigned short _wignerDId;
