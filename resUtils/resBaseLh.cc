@@ -36,7 +36,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-#include "FitParams/FitParColBase.hh"
+//#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -73,16 +73,22 @@ complex<double> resBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDe
 complex<double> resBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					     std::map <std::shared_ptr<const JPCLS>,
 					     std::vector< std::shared_ptr<AbsXdecAmp> >,
-					     pawian::Collection::SharedPtrLess > pbarpAmps){
+					     pawian::Collection::SharedPtrLess > resAmps){
    complex<double> resultAmp(0.,0.);
 
    return resultAmp;
 }
 
 
-double resBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
+double resBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
 
   double result=0.;
+
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+  for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+    (*itDecAll)->calcDynamics(theData);
+  }
+
 
   Spin lamSteps=1;
   if(_isHighestJaPhoton) lamSteps=2;
@@ -101,9 +107,9 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, fitParCol& theParamVal){
     }
   }
 
-  if(_usePhasespace) result+=theParamVal.otherParams[_phasespaceKey];
+  if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
 
-  result *= theParamVal.otherParams.at(_channelScaleParam);
+  result *= fitPar->Value(_channelScaleParam);
 
   return result;
 
@@ -146,6 +152,15 @@ void  resBaseLh::initialize(){
   }
 
 }
+
+// void resBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+//   AbsLh::fillDefaultParams(fitPar);
+
+//   std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+//   for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
+//     (*itDec)->fillDefaultParams(fitPar);
+//   }
+// }
 
 
 

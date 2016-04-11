@@ -59,14 +59,16 @@ public:
     return theClone;
   }
 
-  virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
+  virtual double calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
-					  pawian::Collection::SharedPtrLess > pbarpAmps);
+					  pawian::Collection::SharedPtrLess > resAmps);
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
-
+  
+  // virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  
   virtual void print(std::ostream& os) const;
 
 

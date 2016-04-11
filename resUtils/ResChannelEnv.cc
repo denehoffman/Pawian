@@ -60,7 +60,7 @@ void ResChannelEnv::setup(ChannelID id){
 
 
   //epem reaction
-  _resReaction=std::shared_ptr<resReaction>(new resReaction(_motherParticle, _producedParticlePairs, id));
+  _resReaction=std::shared_ptr<resReaction>(new resReaction(_motherParticle, _prodChannelInfoList, id));
 
   //fill prodDecayList
   std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _resReaction->productionHeliDecays();
@@ -149,7 +149,8 @@ void ResChannelEnv::setup(ChannelID id){
    std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
    std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
    for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
-     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp);    
+     std::shared_ptr<AbsDecay> currentProdAmp= (*itProdDecList);
+     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, currentProdAmp, currentProdAmp);    
    }
 }
 

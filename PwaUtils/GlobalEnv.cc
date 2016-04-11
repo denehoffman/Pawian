@@ -127,6 +127,11 @@ void GlobalEnv::setupChannelEnvs(){
 std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
   std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Pawian");
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
+    if(0==(*it).first->Lh()){
+      Alert << "for channel id: " << (*it).first->channelID() << " typeName: " << (*it).first->channelTypeName() << endmsg; 
+      Alert << "likelihood object is a NULL pou=inter!!!!" << endmsg;
+      exit(1);
+    }
     (*it).first->Lh()->fillDefaultParams(result);
    }
   return result;

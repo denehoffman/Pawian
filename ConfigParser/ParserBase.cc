@@ -91,6 +91,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("coupledChannelConfigFile,C",po::value< vector<string> >(&_coupledChannelCfgs),  "Configuration files for coupled channels")
     ("pbarpFiles",po::value< vector<string> >(&_pbarpCfgs),  "Configuration files for pbarp channels")
     ("epemFiles",po::value< vector<string> >(&_epemCfgs),  "Configuration files for epem channels")
+    ("resFiles",po::value< vector<string> >(&_resCfgs),  "Configuration files for single resonance decay channels")
     ;
   
   _common->add_options()
@@ -256,6 +257,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
       for (it = _epemCfgs.begin(); it!=_epemCfgs.end(); ++it){
          std::cout << "epem channel configuration file: " << (*it) << "\n";
+      }
+      for (it = _resCfgs.begin(); it!=_resCfgs.end(); ++it){
+         std::cout << "res channel configuration file: " << (*it) << "\n";
       }
       for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
 	  std::cout << "clone particles: " << (*it) << "\n";

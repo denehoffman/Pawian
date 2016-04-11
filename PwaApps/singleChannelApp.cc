@@ -38,7 +38,6 @@
 #include "PwaUtils/WelcomeScreen.hh"
 #include "PwaUtils/DynRegistry.hh"
 
-#include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/spinDensityHist.hh"
 
 #include "ConfigParser/globalParser.hh"
@@ -70,9 +69,10 @@ int main(int __argc,char *__argv[]){
 
    std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
    std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
+   std::vector<std::string> resCfgs = globalAppParams->resCfgs();
 
    //requirement single channel  sum reactionCfgs.size() == 1
-   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size();
+   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size();
    Info << "numReactions: " << numReactions << endmsg;
    if (numReactions != 1){
      Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
@@ -91,7 +91,7 @@ int main(int __argc,char *__argv[]){
        Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
        exit(1); 
      }
-     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles"){
+     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" && currentArgv !=(char*)"--resFiles"){
        argvWoCfgFile[argcWoCfgFile]=__argv[i];
        argcWoCfgFile++;
      }

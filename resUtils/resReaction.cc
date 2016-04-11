@@ -30,24 +30,27 @@
 #include "resUtils/resReaction.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 
-resReaction::resReaction(Particle* motherParticle, std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID) :
+resReaction::resReaction(Particle* motherParticle, std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID) :
    _channelID(channelID)
   ,_motherParticle(motherParticle)
 {
-    std::vector<std::pair<Particle*, Particle*> >::iterator itPartPairs;
-    for (itPartPairs=prodPairs.begin(); itPartPairs!= prodPairs.end(); ++itPartPairs){
-      //      std::string decName=(*itJPC)->name();
-      std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _motherParticle, itPartPairs->first, itPartPairs->second, _channelID));
+
+  std::vector<std::shared_ptr<ProdChannelInfo> >::iterator itProd;
+  for (itProd=prodChannelInfoList.begin(); itProd!= prodChannelInfoList.end(); ++itProd){
+   std::pair<Particle*, Particle*> particlePair = (*itProd)->productionPair();
+
+   std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _motherParticle, particlePair.first, particlePair.second, _channelID));
       currentDec->setProductionAmp();
       currentDec->extractStates();
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
-	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _motherParticle,itPartPairs->first, itPartPairs->second, _channelID));
+	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _motherParticle, particlePair.first, particlePair.second, _channelID));
 	currentHeliDec->setProductionAmp();
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);

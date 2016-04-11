@@ -1,12 +1,6 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : resReactionApp
-                 : <location>$(TOP)/bin
-                   <install-dependencies>on 
-                   <install-type>EXE
-                   ;
-
 install install-lib : resUtils
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
@@ -22,14 +16,9 @@ lib resUtils :
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
 	$(TOP)/ConfigParser//ConfigParser
-	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaUtils//PwaUtils
-	$(TOP)/MinFunctions//MinFunctions
-	$(TOP)/AppUtils//AppUtils
 	$(TOP)/Particle//Particle
-        $(TOP)/Event//Event 
 	: 
 	: 
 	: ;
 
-exe resReactionApp : resReactionApp.cc resUtils : ;

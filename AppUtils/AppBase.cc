@@ -50,6 +50,7 @@
 #include "ConfigParser/ParserBase.hh"
 #include "ConfigParser/pbarpParser.hh"
 #include "ConfigParser/epemParser.hh"
+#include "ConfigParser/resParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
@@ -66,6 +67,7 @@
 
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "epemUtils/EpemChannelEnv.hh"
+#include "resUtils/ResChannelEnv.hh"
 
 AppBase::AppBase()
 {
@@ -634,6 +636,8 @@ void AppBase::addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile){
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pbarpCfgs, AbsChannelEnv::CHANNEL_PBARP);
   std::vector<std::string> epemCfgs = GlobalEnv::instance()->parser()->epemCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, epemCfgs, AbsChannelEnv::CHANNEL_EPEM);
+  std::vector<std::string> resCfgs = GlobalEnv::instance()->parser()->resCfgs();
+  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, resCfgs, AbsChannelEnv::CHANNEL_RES);
 }
 
 void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::vector<std::string>& reactionCfgs, short channelType){
@@ -651,6 +655,10 @@ void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::
      else if(channelType==AbsChannelEnv::CHANNEL_EPEM){
         epemParser* currentParser = new epemParser(argcWCfgFile, argvWCfgFile);
 	channelEnv = std::shared_ptr<AbsChannelEnv>(new EpemChannelEnv(currentParser));
+   }
+     else if(channelType==AbsChannelEnv::CHANNEL_RES){
+        resParser* currentParser = new resParser(argcWCfgFile, argvWCfgFile);
+	channelEnv = std::shared_ptr<AbsChannelEnv>(new ResChannelEnv(currentParser));
    }
      GlobalEnv::instance()->AddEnv(channelEnv, channelType);
   }

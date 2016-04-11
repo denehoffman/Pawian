@@ -41,11 +41,12 @@
 class Particle;
 class IsobarLSDecay;
 class IsobarHeliDecay;
+class ProdChannelInfo;
 
 class resReaction {
 
 public:
-  resReaction(Particle* motherParticle, std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID);
+  resReaction(Particle* motherParticle, std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID);
 
   virtual ~resReaction();
 
