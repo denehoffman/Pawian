@@ -34,6 +34,7 @@
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "Particle/Particle.hh"
 
 ResChannelEnv::ResChannelEnv(resParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_RES)
    ,_theResParser(theParser)
@@ -56,6 +57,8 @@ void ResChannelEnv::setup(ChannelID id){
     exit(0);
   }
 
+  //  double theMotherMass=_motherParticle->mass();
+  _initial4Vec = Vector4<double>(_motherParticle->mass(), 0. ,0. ,0.);
   std::vector<std::string>::const_iterator itStr;
 
 

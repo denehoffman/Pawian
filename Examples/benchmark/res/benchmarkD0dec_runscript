@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo Starting pwa ...
+
+$TOP_DIR/bin/singleChannelApp --resFiles ./D0Fit.cfg --mode server !>& server.log &
+
+sleep 5
+
+echo Starting clients ...
+
+$TOP_DIR/bin/singleChannelApp --resFiles ./D0Fit.cfg --mode client --noOfThreads 2 !>& client1.log &
+
+$TOP_DIR/bin/singleChannelApp --resFiles ./D0Fit.cfg --mode client --noOfThreads 2 !>& client2.log &
+
+echo done

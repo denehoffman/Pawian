@@ -1,0 +1,32 @@
+J0P-1C0Lama0Lamb0_D0TopipiS_KshortMag	1	0.5
+J0P-1C0Lama0Lamb0_D0TopipiS_KshortPhi	0	0.2
+L0S0_pipiSTopion+_pion-Mag	1	0.5
+L0S0_pipiSTopion+_pion-Phi	0	0.2
+pipiSD0b_pole1Mag	1	1
+pipiSD0b_pole2Mag	1	1
+pipiSD0b_pole3Mag	1	1
+pipiSD0b_pole4Mag	1	1
+pipiSD0b_pole5Mag	0	1
+pipiSD0b_pole1Phi	0	0.2
+pipiSD0b_pole2Phi	0	0.2
+pipiSD0b_pole3Phi	0	0.2
+pipiSD0b_pole4Phi	0	0.2
+pipiSD0b_pole5Phi	0	0.2
+pipiSD0fprod_4PiMag	1	1
+pipiSD0fprod_EtaEtaMag	1	1
+pipiSD0fprod_EtaEtapMag	1	1
+pipiSD0fprod_KKMag	1	1
+pipiSD0fprod_PiPiMag	1	1
+pipiSD0fprod_4PiPhi	0	0.2
+pipiSD0fprod_EtaEtaPhi	0	0.2
+pipiSD0fprod_EtaEtapPhi	0	0.2
+pipiSD0fprod_KKPhi	0	0.2
+pipiSD0fprod_PiPiPhi	0	0.2
+pipiSD0S0	-3	0.2
+J0P-1C0Lama0Lamb0_D0ToK*-_pion+Mag	1	0.5
+J0P-1C0Lama0Lamb0_D0ToK*-_pion+Phi	0	0.2
+L1S0_K*-ToKshort_pion-Mag	1	0.5
+L1S0_K*-ToKshort_pion-Phi	0	0.2
+K*-Mass	0.8955	0.03	0.75	0.95
+K*-Width	0.05081	0.010162	0.2	0.1
+channelType3Kshortpion+pion-Scaling	1	0.01	0	20
