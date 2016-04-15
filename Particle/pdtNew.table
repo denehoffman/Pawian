@@ -214,6 +214,7 @@ Meson K(1830) 		K(1830)  		0  0 -1  0  0   1  0  0  0  	1.830 	0.250   relBW	[PD
 Meson D0 		D^0  			0  0 -1  0  0   1   0	0  1	1.86486 0.0001  relBW	[PDG nonett 1^1S_0]
 Meson D+ 		D^+  			3  0 -1  0  0   1   1	0  1  	1.86962 0.0001  relBW	[PDG nonett 1^1S_0]
 Meson D- 		D^-  			-3 0 -1  0  0   1  -1 	0  -1	1.86962 0.0001  relBW	[PDG nonett 1^1S_0]
+
 # Start c cbar mesons
 #
 # type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass      width   dyn.f   comment
@@ -244,3 +245,6 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 #
 Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
 Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none] 	
+Baryon Lambda_c+ 	Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
+Baryon Lambda(1405)0 	Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
+Baryon Sigma+ 		Sigma^+  		3  1  1  0  0   2    1  -1 0  	1.18937 0.0001  relBW		[PDG]

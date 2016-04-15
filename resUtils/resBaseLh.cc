@@ -135,7 +135,7 @@ void  resBaseLh::initialize(){
 	Alert << "final states with more than 1 particles with J>0 not supported!!!!" << endmsg;
 	exit(1);
       }
-      _highestJFsp=int(current2J/2);
+      _highestJFsp=Spin(current2J, 2);
       if( (*itParticle)->name() != "photon" ) _isHighestJaPhoton=false;
     }
   }
@@ -153,14 +153,6 @@ void  resBaseLh::initialize(){
 
 }
 
-// void resBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-//   AbsLh::fillDefaultParams(fitPar);
-
-//   std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-//   for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-//     (*itDec)->fillDefaultParams(fitPar);
-//   }
-// }
 
 
 

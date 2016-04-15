@@ -348,13 +348,13 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   Vector4<double> daughter1HelMother(0.,0.,0.,0.);
   if(_hasMotherPart){
-    if(fabs(mother4Vec==all4Vec)){
+    if(mother4Vec==all4Vec){
       daughter2HelMother=daughter2_4Vec;
-      daughter2HelMother.Boost(daughter2HelMother); //is this correct????
-      daughter1HelMother=daughter1_4Vec;
-      daughter1HelMother.Boost(daughter1HelMother); //is this correct????
+      if( fabs(mother4Vec.P()) > 1.e-9 ){ 
+	daughter2HelMother.Boost(mother4Vec);
+	daughter1HelMother.Boost(mother4Vec);
+      }
     }
-    //    else daughter2HelMother=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
     else{
       daughter2HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter1_4Vec);
@@ -362,9 +362,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   }
   else{
     daughter2HelMother=daughter2_4Vec;
-    daughter2HelMother.Boost(mother4Vec);
     daughter1HelMother=daughter1_4Vec;
-    daughter1HelMother.Boost(mother4Vec);
+    if( fabs(mother4Vec.P()) > 1.e-6 ){
+      daughter2HelMother.Boost(mother4Vec);
+      daughter1HelMother.Boost(mother4Vec);
+    }
   }
 
   Spin spinMother=_motherIGJPCPtr->J;
@@ -389,7 +391,6 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       double thePhi=0.;
       if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
-      
       std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
       if(found != evtData->WignerDIdId3[_wigDWigDRefId].end()){
 	continue;
@@ -400,13 +401,19 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
       } 
       else evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-      if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] != evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]){
-	DebugMsg << "WignerDIdId nan:\t" << evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] << endmsg;
-	DebugMsg << "daughter2HelMother.Theta():\t" << daughter2HelMother.Theta() << endmsg;
-	DebugMsg << "thePhi:\t" << thePhi << endmsg;
-	DebugMsg << "daughter2_4Vec:\t" << daughter2_4Vec << endmsg;
-	DebugMsg << "daughter2HelMother:\t" << daughter2HelMother << endmsg;
-	DebugMsg << "mother4Vec:\t" << mother4Vec << "\tP:" << mother4Vec.P() << endmsg;
+      if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real() != evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real()){
+	Alert << "WignerD function of event No: " << evtData->evtNo << " is nan!!! " << endmsg;
+	Alert << "Set it manually to complex<double>(1.e-10, 1.e-10)" << endmsg;
+	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]= complex<double>(1.e-10, 1.e-10);
+	Alert << "daughter2HelMother phi: " << daughter2HelMother.Phi() << "\ttheta: " << daughter2HelMother.Theta() << endmsg;
+	Alert << "spinMother: " << spinMother << "\tlam12: " << lam12 << endmsg;
+	Alert << "daughter2HelMother: Mass: " << daughter2HelMother.Mass() 
+		<< "\tE: " << daughter2HelMother.E()
+		<< "\tPx: " << daughter2HelMother.Px()
+		<< "\tPy: " << daughter2HelMother.Py()
+		<< "\tPz: " << daughter2HelMother.Pz()  
+		<< endmsg;
+	exit(1); 
       }
     }
   }

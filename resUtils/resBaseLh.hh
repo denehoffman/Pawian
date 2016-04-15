@@ -75,7 +75,7 @@ public:
 protected:
   std::shared_ptr<resReaction> _resReactionPtr;
 
-  int _highestJFsp;
+  Spin _highestJFsp;
   bool _isHighestJaPhoton;
   Spin _Jmother;
 private:

@@ -245,6 +245,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
     Spin lambda1= it->first->lam1;
     Spin lambda2= it->first->lam2;
     Spin lambda = lambda1-lambda2;
+
     if( fabs(lambda) > it->first->J) continue;
 
     if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
