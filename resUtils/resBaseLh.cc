@@ -94,7 +94,6 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianPa
   if(_isHighestJaPhoton) lamSteps=2;
 
   for (Spin lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
-
     for( Spin itLam=-_Jmother; itLam<=_Jmother; ++itLam){
       complex<double> lamItAmp(0.,0.);
 

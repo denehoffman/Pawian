@@ -350,9 +350,10 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   if(_hasMotherPart){
     if(mother4Vec==all4Vec){
       daughter2HelMother=daughter2_4Vec;
-      if( fabs(mother4Vec.P()) > 1.e-9 ){ 
-	daughter2HelMother.Boost(mother4Vec);
-	daughter1HelMother.Boost(mother4Vec);
+      daughter1HelMother=daughter1_4Vec;
+      if( fabs(mother4Vec.P()) > 1.e-6 ){ 
+    	daughter2HelMother.Boost(mother4Vec);
+    	daughter1HelMother.Boost(mother4Vec);
       }
     }
     else{
@@ -376,7 +377,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   if(lam12Max>spinMother) lam12Max=spinMother;
 
   Spin lamMotherMax=spinMother;
-  if (!_hasMotherPart && spinMother>1){
+  if (whichDecayLevel()==decayLevel::isProdAmp && spinMother>1){
     if ( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_PBARP 
 	 ||  GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
       lamMotherMax=1; //attention
@@ -389,7 +390,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
       double thePhi=0.;
-      if(_hasMotherPart) thePhi=daughter2HelMother.Phi();
+      if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter2HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
       std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
       if(found != evtData->WignerDIdId3[_wigDWigDRefId].end()){
@@ -401,6 +402,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
       } 
       else evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+
       if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real() != evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real()){
 	Alert << "WignerD function of event No: " << evtData->evtNo << " is nan!!! " << endmsg;
 	Alert << "Set it manually to complex<double>(1.e-10, 1.e-10)" << endmsg;

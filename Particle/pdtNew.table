@@ -221,9 +221,9 @@ Meson D- 		D^-  			-3 0 -1  0  0   1  -1 	0  -1	1.86962 0.0001  relBW	[PDG nonet
 #
 Meson etac 		\eta_c  		0  0 -1  1  1  	0  0  0  0 	2.9836 	  0.0322 relBW	[PDG]
 Meson Jpsi 		J/\psi  		0  2 -1 -1 -1   0  0  0  0 	3.096916  0.0929 relBW	[PDG]
-Meson Chic0 		chi_{c0}  		0  0 1	1  1   0  0  0  0 	3414.75	  0.0103	relBW	[PDG]
-Meson Chic1 		chi_{c1}  		0  2 1	1  1   0  0  0  0 	3.51066	  0.00086	relBW	[PDG]
-Meson Chic2             chi_{c2}                0  4 1  1  1   0  0  0  0       3.55562   0.00198       relBW   [PDG]
+Meson Chic0 		\chi_{c0}  		0  0 1	1  1   0  0  0  0 	3414.75	  0.0103	relBW	[PDG]
+Meson Chic1 		\chi_{c1}  		0  2 1	1  1   0  0  0  0 	3.51066	  0.00086	relBW	[PDG]
+Meson Chic2             \chi_{c2}                0  4 1  1  1   0  0  0  0       3.55562   0.00198       relBW   [PDG]
 #
 # End strange mesons
 #
@@ -245,8 +245,9 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 #
 Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
 Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none] 	
-Baryon Lambda_c+ 	Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
-Baryon Lambda(1405)0 	Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
-Baryon Sigma+ 		Sigma^+  		3  1  1  0  0   2    2  -1 0  	1.18937 0.0001  relBW		[PDG]
-Baryon Sigma(1620)0 	Sigma(1620)^0  		0  1  -1 0  0   2    0  -1 0  	1.62    0.17    relBW		[PDG]
-Baryon Sigma(1670)0 	Sigma(1670)^0  		0  3  -1 0  0   2    0  -1 0  	1.67    0.06    relBW		[PDG]
+Baryon Lambda_c+ 	\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
+Baryon Lambda(1405)0 	\Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
+Baryon Sigma+ 		\Sigma^+  		3  1  1  0  0   2    2  -1 0  	1.18937 0.0001  relBW		[PDG]
+Baryon Sigma(1620)0 	\Sigma(1620)^0  		0  1  -1 0  0   2    0  -1 0  	1.62    0.17    relBW		[PDG]
+Baryon Sigma(1670)0 	\Sigma(1670)^0  		0  3  -1 0  0   2    0  -1 0  	1.67    0.06    relBW		[PDG]
+Baryon Lambda_c(2625)+ 	\Lambda_c(2625)^+        3  3  -1 0  0   0    0 	0  1	2.262811 0.01   relBW	        [PDG]

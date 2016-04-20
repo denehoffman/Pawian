@@ -75,6 +75,7 @@ protected:
   std::vector< std::shared_ptr<const JPClamlam> > _JPClamlams;
   double _factorMag;
   double _parityFactor;
+  bool _isWeakDecay;
   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamMagLamLams;
   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess > _currentParamPhiLamLams;
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;

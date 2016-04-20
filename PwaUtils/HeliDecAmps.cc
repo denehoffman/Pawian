@@ -44,33 +44,58 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
   AbsXdecAmp(theDec, channelID)
   ,_JPClamlams(theDec->JPClamlamAmps())
   ,_factorMag(1.)
+  ,_isWeakDecay(false)
 {
   if(_JPClamlams.size()>0) _factorMag=1./sqrt(_JPClamlams.size());
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-  Info << "_parityFactor=\t" << _parityFactor << endmsg;
 
-  bool identicalDaughters=false;
-  if( (*daughter1)==(*daughter2)) identicalDaughters=true;
+  //look wheter it is a weak decay or not
+  Particle* motherParticle=_decay->motherPart();
+  if(0!=motherParticle){
+    if( motherParticle->strange() != (daughter1->strange()+daughter1->strange())) _isWeakDecay=true;
+    else if ( motherParticle->charm() != (daughter1->charm()+daughter1->charm())) _isWeakDecay=true;     
+  }
 
-  //fill JPClamlamSymMap
-  std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-  for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-    std::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2, _parityFactor));
-    //    std::vector< std::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];
-    _JPClamlamSymMap[*it].push_back(currentSym);
-    if(identicalDaughters && ( fabs((*it)->lam1) != fabs((*it)->lam2) ) ){
+  if(_isWeakDecay){
+    _isospinCG=1.;
+    _parityFactor=1.;
+    Info << "decay " << _name << " is a weak decay; parity conservation etc. disabled!!!!" << endmsg;
+
+    unsigned int JPClamlamsSize=_JPClamlams.size();
+    for (unsigned int i=0; i<JPClamlamsSize; ++i){
+      std::shared_ptr<const JPClamlam> currentJPClamlam=_JPClamlams.at(i);
+      std::shared_ptr<const JPClamlam> toBeAddedJPClamlam(new JPClamlam(currentJPClamlam, -currentJPClamlam->lam1, -currentJPClamlam->lam2, _parityFactor));
+      _JPClamlams.push_back(toBeAddedJPClamlam);      
+    }
+  }
+
+  else{
+    _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
+    Info << "_parityFactor=\t" << _parityFactor << endmsg;
+    
+    bool identicalDaughters=false;
+    if( (*daughter1)==(*daughter2)) identicalDaughters=true;
+    
+    //fill JPClamlamSymMap
+    std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
+    for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+      std::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2, _parityFactor));
+      //    std::vector< std::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];
+      _JPClamlamSymMap[*it].push_back(currentSym);
+      if(identicalDaughters && ( fabs((*it)->lam1) != fabs((*it)->lam2) ) ){
     	std::shared_ptr<const JPClamlam> currentSymIdPart1(new JPClamlam(*it, (*it)->lam2, (*it)->lam1, (*it)->parityFactor));
     	std::shared_ptr<const JPClamlam> currentSymIdPart2(new JPClamlam(*it, -(*it)->lam2, -(*it)->lam1, _parityFactor));
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart1);
     	_JPClamlamSymMap[*it].push_back(currentSymIdPart2);
+      }
     }
   }
 }
 
 HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
+  ,_isWeakDecay(false)
 {
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
@@ -151,16 +176,17 @@ void HeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
     _currentParamMagExpi[*itlamlam]=theMag*expi;
     _currentParamPreFacMagExpi[*itlamlam]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
 
-    std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamSymVec=_JPClamlamSymMap.at(*itlamlam);
-     std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLamSym;
-     for (itLamLamSym=currentLPClamlamSymVec.begin(); itLamLamSym!=currentLPClamlamSymVec.end(); ++itLamLamSym){
-       _currentParamMagLamLams[*itLamLamSym]=theMag;
-       _currentParamPhiLamLams[*itLamLamSym]=thePhi;
-       _currentParamMagExpi[*itLamLamSym]=theMag*expi;
-       _currentParamPreFacMagExpi[*itLamLamSym]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
-     }
+    if(!_isWeakDecay){
+      std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamSymVec=_JPClamlamSymMap.at(*itlamlam);
+      std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLamSym;
+      for (itLamLamSym=currentLPClamlamSymVec.begin(); itLamLamSym!=currentLPClamlamSymVec.end(); ++itLamLamSym){
+	_currentParamMagLamLams[*itLamLamSym]=theMag;
+	_currentParamPhiLamLams[*itLamLamSym]=thePhi;
+	_currentParamMagExpi[*itLamLamSym]=theMag*expi;
+	_currentParamPreFacMagExpi[*itLamLamSym]=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*theMag*expi;
+      }
+    }
   }
-
    _absDyn->updateFitParams(fitPar);
 
    if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(fitPar);
@@ -252,9 +278,11 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
 
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-
+    // Info << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
+ 
     complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
-
+    // Info << "amp: " << amp << endmsg;
+    // Info << "amp*daughterAmp(lambda1, lambda2, theData, lamFs): " << amp*daughterAmp(lambda1, lambda2, theData, lamFs) << endmsg;
     result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
   }
 
