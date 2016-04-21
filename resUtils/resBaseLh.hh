@@ -67,17 +67,21 @@ public:
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
   
-  // virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
-  
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);  
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+
   virtual void print(std::ostream& os) const;
 
 
 protected:
   std::shared_ptr<resReaction> _resReactionPtr;
-
   Spin _highestJFsp;
   bool _isHighestJaPhoton;
   Spin _Jmother;
+  bool _withPolarization;
+  std::map<Spin, double> _currentPolVec;
+  std::map<Spin, std::string> _polParamNames;
+
 private:
 
   void initialize();

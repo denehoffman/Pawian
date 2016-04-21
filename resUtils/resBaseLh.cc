@@ -50,6 +50,7 @@ resBaseLh::resBaseLh(ChannelID channelID) :
   AbsLh(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
+  ,_withPolarization(false)
 {
   initialize();
 }
@@ -102,7 +103,7 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianPa
 	complex<double> currentDecAmp=(*itDec)->XdecAmp(itLam, theData, lamHigestJFsp);
 	lamItAmp+=currentDecAmp;
       }
-      result += norm(lamItAmp);
+      result += fabs(_currentPolVec.at(itLam))*norm(lamItAmp);
     }
   }
 
@@ -120,8 +121,8 @@ void resBaseLh::print(std::ostream& os) const{
 
 
 void  resBaseLh::initialize(){
-
-  _Jmother = Spin(std::static_pointer_cast<ResChannelEnv>(GlobalEnv::instance()->ResChannel(_channelID))->motherParticle()->twoJ(), 2);
+  const std::shared_ptr<ResChannelEnv> resEnv=std::static_pointer_cast<ResChannelEnv>(GlobalEnv::instance()->ResChannel(_channelID));
+  _Jmother = Spin(resEnv->motherParticle()->twoJ(), 2);
 
   std::vector<Particle*> fsParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
   std::vector<Particle*>::iterator itParticle;
@@ -150,9 +151,45 @@ void  resBaseLh::initialize(){
     _decAmps.push_back(currentAmp);
   }
 
+  _withPolarization=resEnv->polarizedMother();
+
+
+  for( Spin itLam=-_Jmother; itLam<=_Jmother; ++itLam){
+    std::string currentName=resEnv->motherParticle()->name();
+    std::stringstream tmpStrStreamlamJ;
+    tmpStrStreamlamJ << itLam;
+    currentName+= tmpStrStreamlamJ.str();   
+    _polParamNames[itLam]=currentName;
+    _currentPolVec[itLam]=1.;
+  }
 }
 
 
+void resBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
+  AbsLh::fillDefaultParams(fitPar);
+
+  if (!_withPolarization) return;
+
+  std::map<Spin, std::string>::iterator it;
+  for(it=_polParamNames.begin(); it!=_polParamNames.end(); ++it){
+    std::string currentName=it->second;
+    double currentVal=_currentPolVec.at(it->first);
+    fitPar->Add(currentName, currentVal, 0.05);    
+  } 
+
+}
+
+void resBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  AbsLh::updateFitParams(fitPar);
+  if (!_withPolarization) return;
+
+  std::map<Spin, std::string>::iterator it;
+  for(it=_polParamNames.begin(); it!=_polParamNames.end(); ++it){
+    std::string currentName=it->second;
+    double newVal=fitPar->Value(currentName);
+    _currentPolVec.at(it->first)=newVal;    
+  }
+}
 
 

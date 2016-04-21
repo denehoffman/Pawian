@@ -51,10 +51,12 @@ public:
   std::shared_ptr<resReaction> reaction() {return _resReaction;}
   Particle* motherParticle() {return _motherParticle;}
   virtual const std::string  channelTypeName() {return "res";}
+  virtual const bool polarizedMother() const { return _polarizedMother;}
   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
 
 protected:
   resParser* _theResParser;
   Particle* _motherParticle;
+  bool _polarizedMother;
   std::shared_ptr<resReaction> _resReaction;
 };

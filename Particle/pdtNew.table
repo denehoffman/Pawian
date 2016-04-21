@@ -244,10 +244,12 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 # type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C    mass    width   dyn.f   	comment
 #
 Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
-Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none] 	
+Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none]
+Baryon Delta++ 		\Delta^{++}  		6  3 1   0  0   3    3 	0  0	1.231 	0.111	relBW	        [PDG] 	
 Baryon Lambda_c+ 	\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
 Baryon Lambda(1405)0 	\Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
+Baryon Lambda(1520)0 	\Lambda(1520)^0  	0  3 -1  0  0   0    0  -1 0	1.5195  0.0156  relBW		[PDG]
 Baryon Sigma+ 		\Sigma^+  		3  1  1  0  0   2    2  -1 0  	1.18937 0.0001  relBW		[PDG]
-Baryon Sigma(1620)0 	\Sigma(1620)^0  		0  1  -1 0  0   2    0  -1 0  	1.62    0.17    relBW		[PDG]
-Baryon Sigma(1670)0 	\Sigma(1670)^0  		0  3  -1 0  0   2    0  -1 0  	1.67    0.06    relBW		[PDG]
+Baryon Sigma(1620)0 	\Sigma(1620)^0  	0  1  -1 0  0   2    0  -1 0  	1.62    0.17    relBW		[PDG]
+Baryon Sigma(1670)0 	\Sigma(1670)^0  	0  3  -1 0  0   2    0  -1 0  	1.67    0.06    relBW		[PDG]
 Baryon Lambda_c(2625)+ 	\Lambda_c(2625)^+        3  3  -1 0  0   0    0 	0  1	2.262811 0.01   relBW	        [PDG]

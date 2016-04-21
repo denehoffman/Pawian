@@ -65,6 +65,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
     unsigned int JPClamlamsSize=_JPClamlams.size();
     for (unsigned int i=0; i<JPClamlamsSize; ++i){
       std::shared_ptr<const JPClamlam> currentJPClamlam=_JPClamlams.at(i);
+      if(currentJPClamlam->lam1 == 0 && currentJPClamlam->lam2 == 0) continue; 
       std::shared_ptr<const JPClamlam> toBeAddedJPClamlam(new JPClamlam(currentJPClamlam, -currentJPClamlam->lam1, -currentJPClamlam->lam2, _parityFactor));
       _JPClamlams.push_back(toBeAddedJPClamlam);      
     }

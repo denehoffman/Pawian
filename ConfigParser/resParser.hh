@@ -40,11 +40,13 @@ class resParser : public ParserBase
   virtual ~resParser(){;}
 
   const std::string motherResName() const { return _motherResName;}
+  const bool polarizedMother() const { return _polarizedMother;}
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
   std::string _motherResName;
+  bool _polarizedMother;
 };
 
 

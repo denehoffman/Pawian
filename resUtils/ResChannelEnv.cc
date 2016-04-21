@@ -36,8 +36,10 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 
-ResChannelEnv::ResChannelEnv(resParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_RES)
-   ,_theResParser(theParser)
+ResChannelEnv::ResChannelEnv(resParser* theParser) 
+  : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_RES)
+  ,_theResParser(theParser)
+  ,_polarizedMother(false)
 {
 }
 
@@ -55,6 +57,11 @@ void ResChannelEnv::setup(ChannelID id){
   if(0==_motherParticle){
     Alert << "mother particle with name\t" << _theResParser->motherResName() << "\tdoesn't exist" << endmsg;
     exit(0);
+  }
+
+  _polarizedMother=_theResParser->polarizedMother();
+  if(_polarizedMother) {
+    Info << "polarization of the mother particle will be taken into accout!!!" << endmsg;
   }
 
   //  double theMotherMass=_motherParticle->mass();

@@ -37,6 +37,7 @@ using namespace std;
 resParser::resParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_motherResName("Jpsi")
+  ,_polarizedMother(false)
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -47,6 +48,7 @@ resParser::resParser(int argc,char **argv):
   po::options_description config("Configuration file options");
   config.add_options()
     ("motherRes",po::value<string>(&_motherResName),"mother resonance of the complete decay tree")
+    ("polarizedMother",po::value<bool>(&_polarizedMother),  "fir with polarized mother resonance")
     ;
   _config->add(config);
   
