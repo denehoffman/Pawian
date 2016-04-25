@@ -153,14 +153,15 @@ void  resBaseLh::initialize(){
 
   _withPolarization=resEnv->polarizedMother();
 
-
+  int noOfHelStates(2.*_Jmother+1);
   for( Spin itLam=-_Jmother; itLam<=_Jmother; ++itLam){
     std::string currentName=resEnv->motherParticle()->name();
     std::stringstream tmpStrStreamlamJ;
     tmpStrStreamlamJ << itLam;
     currentName+= tmpStrStreamlamJ.str();   
     _polParamNames[itLam]=currentName;
-    _currentPolVec[itLam]=1.;
+    if(_withPolarization) _currentPolVec[itLam]=1./noOfHelStates;
+    else _currentPolVec[itLam]=1.;
   }
 }
 
