@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -61,8 +61,9 @@ public:
    const ChannelEnvList ChannelEnvs() const {return _channelEnvs;}
    const short NoChannels() const {return _channelEnvs.size();}
    std::shared_ptr<AbsPawianParameters> defaultPawianParams();
-  std::shared_ptr<AbsPawianParameters> startPawianParams() {return _startParams;}
-  void setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams);
+   std::shared_ptr<AbsPawianParameters> startPawianParams() {return _startParams;}
+   void setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams);
+   std::vector<std::string> fixedParams();
 
 private:
    static GlobalEnv* _instance;

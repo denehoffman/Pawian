@@ -108,8 +108,13 @@ int main(int __argc,char *__argv[]){
   std::vector<std::string> fixedParams;
 
   //mnParFix must be set in global cfg file
-  std::vector<std::string> fixedGlobalParams = globalAppParams->fixedParams();
+//  std::vector<std::string> fixedGlobalParams = globalAppParams->fixedParams();
+  std::vector<std::string> fixedGlobalParams = GlobalEnv::instance()->fixedParams();
   fixedParams.insert(fixedParams.end(), fixedGlobalParams.begin(), fixedGlobalParams.end());
+
+ Info << "the fixed params are:" << endmsg; 
+ std::vector<std::string>::iterator itStr;
+for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) Info << *itStr <<endmsg;
 
   if(mode == "qaModeSimple")
     theAppBase.fixParams(startPawianParams,fixedParams, false);

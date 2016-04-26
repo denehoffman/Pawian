@@ -77,7 +77,8 @@ protected:
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
   std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
-  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
+  //  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
+  std::map<std::thread::id, std::map<unsigned short, std::map<Spin, complex<double> > > > _cachedDynIdLSMap;
 
   virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs=0 );
 private:

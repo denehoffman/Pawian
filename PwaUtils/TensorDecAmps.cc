@@ -99,7 +99,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
   Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
   
   if ( _cacheAmps && !_recalculate){
-    //result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
+    //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
@@ -136,11 +136,14 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
 	tmpResult+=amp;
       }
     }
-    if (_absDyn->isLdependent())  tmpResult*=_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
+    if (_absDyn->isLdependent()){
+      //      tmpResult*=_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
+      tmpResult*=_cachedDynIdLSMap.at(std::this_thread::get_id()).at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
+    }
     result+=tmpResult;
   }
   
-  //if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
+  //  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
   if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
   
   result*=_isospinCG;
@@ -253,7 +256,8 @@ void TensorDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
  std::vector< std::shared_ptr<const LScomb> >::iterator it;
  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
    theMutex.lock();
-   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+   //   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+   _cachedDynIdLSMap[std::this_thread::get_id()][(*it)->L][_absDyn->grandMaId(grandmaAmp)]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
    theMutex.unlock();
  }  
 

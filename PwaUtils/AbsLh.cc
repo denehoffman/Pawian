@@ -288,7 +288,13 @@ bool AbsLh::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, s
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     if(!(*it)->checkRecalculation(fitParNew, fitParOld)) result=false;
   }
-
+  // for(unsigned int i=0; i<fitParOld->Params().size(); ++i){
+  //   if( fabs(fitParOld->Params().at(i)-fitParNew->Params().at(i))> 1.e-6){
+  //     Info << "Parameter with the name: " << fitParNew->Name(i) 
+  // 	   << " has been changed from " << fitParOld->Params().at(i) 
+  // 	   << " to " << fitParNew->Params().at(i) << endmsg;
+  //   }
+  // }
   return result;
 }
 

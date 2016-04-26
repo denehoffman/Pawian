@@ -51,6 +51,7 @@ public:
   static DynRegistry* instance();
   std::shared_ptr<AbsDynamics> getDynamics(std::shared_ptr<AbsDecay> theDec);
   std::vector<std::shared_ptr<AbsDynamics> > getDynVec(){return _dynVec;}
+  std::vector<std::shared_ptr<AbsDynamics> > getDynVecChannelId(ChannelID theId){return _dynVecChannel.at(theId);}
 
 protected:
  ///Constructor 
@@ -61,6 +62,7 @@ private:
   std::map<ChannelID, std::map<std::string, std::shared_ptr<AbsDynamics> > > _dynMapChannel;
   std::map<std::string, std::shared_ptr<AbsDynamics> > _dynMap;
   std::vector<std::shared_ptr<AbsDynamics> > _dynVec;
+  std::map<ChannelID, std::vector<std::shared_ptr<AbsDynamics> > > _dynVecChannel;
 
 };
 

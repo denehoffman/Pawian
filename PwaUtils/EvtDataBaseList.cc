@@ -147,7 +147,7 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     }
 
    //fill 4Vecs for dynamics
-    std::vector<std::shared_ptr<AbsDynamics> > theDynVec=DynRegistry::instance()->getDynVec();
+    std::vector<std::shared_ptr<AbsDynamics> > theDynVec=DynRegistry::instance()->getDynVecChannelId(_channelID);
     std::vector<std::shared_ptr<AbsDynamics> >::iterator itDyn;
     for (itDyn=theDynVec.begin(); itDyn!=theDynVec.end(); ++itDyn){
       (*itDyn)->fillMasses(evtData);

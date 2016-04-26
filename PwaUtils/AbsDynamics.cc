@@ -59,14 +59,12 @@ void AbsDynamics::cacheAmplitudes(){
 }
 
 void AbsDynamics::fillMasses(EvtData* theData){
-
   Vector4<double> mass4Vec(0.,0.,0.,0.);
   std::vector<Particle*>::iterator it;
   for (it=_fsParticles.begin(); it != _fsParticles.end(); ++it){
     std::string currentName=(*it)->name();
     mass4Vec+=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
-
   theData->DoubleMassId[_dynId]=mass4Vec.Mass();
 }
 

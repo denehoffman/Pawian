@@ -83,11 +83,10 @@ complex<double> result(0.,0.);
       theMutex.lock();
       result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _projectionIndex, OrbMom);
       if ( _cacheAmps){
-	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
+      	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
       }
       theMutex.unlock();
   }
-
   return result;
 }
 

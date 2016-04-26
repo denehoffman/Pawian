@@ -175,6 +175,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     Info << "add dynamics for " <<  theName << endmsg;
 
     _dynMapChannel[currentChannelId][theName]=result;
+    _dynVecChannel[currentChannelId].push_back(result);
     _dynVec.push_back(result);
   }
 

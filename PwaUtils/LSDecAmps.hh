@@ -86,7 +86,8 @@ protected:
   std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;
 
   Spin _Smax;
-  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
+  //  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
+  std::map<std::thread::id, std::map<unsigned short, std::map<Spin, complex<double> > > > _cachedDynIdLSMap;
   //  std::map<Id3StringType, complex<double> >* _currentWignerDMap;
   // std::map<Id3StringType, complex<double> > _currentWignerDMap;
 
