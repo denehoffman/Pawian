@@ -71,8 +71,11 @@ int main(int __argc,char *__argv[]){
   for (int i=0; i<__argc ; ++i){
     Info << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
     std::string currentArgv(__argv[i]);
-     if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" 
-       && currentArgv !="-c" && currentArgv !="--configFile"){
+     if(currentArgv !=(char*)"--pbarpFiles" 
+	&& currentArgv !=(char*)"--epemFiles"
+	&& currentArgv !=(char*)"--resFiles" 
+	&& currentArgv !="-c" 
+	&& currentArgv !="--configFile"){
       argvWoCfgFile[argcWoCfgFile]=__argv[i];
       argcWoCfgFile++;
     }
