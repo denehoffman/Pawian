@@ -1,0 +1,22 @@
+#!/bin/sh
+
+echo "download data and Monte Carlo events for reaction pbar p -> eta eta pi0"
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/genPbarpToEtaEtaPi0Data.dat
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/genPbarpToEtaEtaPi0Mc.dat
+
+echo "download data and Monte Carlo events for reaction pbar p -> K+ K- pi0"
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenPbarpToKKPiData.dat
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenPbarpToKKPiMc.dat
+
+echo "download data and Monte Carlo events for e+ e- -> J/psi -> chi_c1 gamma -> (K+ K- pi0) gamma"
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenChic1ToKKpiData.dat
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenChic1ToKKpiMc.dat
+
+echo "download data and Monte Carlo events for D0 -> K- pi+ pi0"
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenD0ToKmPipPi0Data.dat
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenD0ToKmPipPi0Mc.dat
+
+echo "download the server log file"
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/home/tau/bertram/WWW/benchmarkCoupledChannel/logOutput.server
+
+echo done

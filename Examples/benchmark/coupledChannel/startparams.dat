@@ -1,0 +1,128 @@
+L0S0_J0P-1C1TopipiS_pion0Mag	1	0.5
+L0S0_J0P-1C1TopipiS_pion0Phi	0	0.2
+L0S0_pipiSToetaA_etaBMag	1	0.5
+L0S0_pipiSToetaA_etaBPhi	0	0.2
+pipiSJ0P-1C1b_pole1Mag	1	1
+pipiSJ0P-1C1b_pole2Mag	1	1
+pipiSJ0P-1C1b_pole3Mag	1	1
+pipiSJ0P-1C1b_pole4Mag	1	1
+pipiSJ0P-1C1b_pole5Mag	1	1
+pipiSJ0P-1C1b_pole1Phi	0	0.2
+pipiSJ0P-1C1b_pole2Phi	0	0.2
+pipiSJ0P-1C1b_pole3Phi	0	0.2
+pipiSJ0P-1C1b_pole4Phi	0	0.2
+pipiSJ0P-1C1b_pole5Phi	0	0.2
+pipiSJ0P-1C1fprod_4PiMag	0	1
+pipiSJ0P-1C1fprod_EtaEtaMag	1	1
+pipiSJ0P-1C1fprod_EtaEtapMag	0	1
+pipiSJ0P-1C1fprod_KKMag	1	1
+pipiSJ0P-1C1fprod_PiPiMag	0	1
+pipiSJ0P-1C1fprod_4PiPhi	0	0.2
+pipiSJ0P-1C1fprod_EtaEtaPhi	0	0.2
+pipiSJ0P-1C1fprod_EtaEtapPhi	0	0.2
+pipiSJ0P-1C1fprod_KKPhi	0	0.2
+pipiSJ0P-1C1fprod_PiPiPhi	0	0.2
+pipiSJ0P-1C1S0	-3	0.2
+pipiSJ1P1C1b_pole1Mag	1	1
+pipiSJ1P1C1b_pole2Mag	1	1
+pipiSJ1P1C1b_pole3Mag	1	1
+pipiSJ1P1C1b_pole4Mag	1	1
+pipiSJ1P1C1b_pole5Mag	1	1
+pipiSJ1P1C1b_pole1Phi	0	0.2
+pipiSJ1P1C1b_pole2Phi	0	0.2
+pipiSJ1P1C1b_pole3Phi	0	0.2
+pipiSJ1P1C1b_pole4Phi	0	0.2
+pipiSJ1P1C1b_pole5Phi	0	0.2
+pipiSJ1P1C1fprod_4PiMag	0	1
+pipiSJ1P1C1fprod_EtaEtaMag	1	1
+pipiSJ1P1C1fprod_EtaEtapMag	0	1
+pipiSJ1P1C1fprod_KKMag	1	1
+pipiSJ1P1C1fprod_PiPiMag	0	1
+pipiSJ1P1C1fprod_4PiPhi	0	0.2
+pipiSJ1P1C1fprod_EtaEtaPhi	0	0.2
+pipiSJ1P1C1fprod_EtaEtapPhi	0	0.2
+pipiSJ1P1C1fprod_KKPhi	0	0.2
+pipiSJ1P1C1fprod_PiPiPhi	0	0.2
+pipiSJ1P1C1S0	-3	0.2
+L0S0_J0P-1C1ToaMatrix0_etaMag	1	0.5
+L0S0_J0P-1C1ToaMatrix0_etaPhi	0	0.2
+L0S0_aMatrix0Topion0_etaMag	1	0.5
+L0S0_aMatrix0Topion0_etaPhi	0	0.2
+aMatrix0J0P-1C1b_a980Mag	1	1
+aMatrix0J0P-1C1b_a980Phi	0	0.2
+aMatrix0J0P-1C1b_a1450Mag	1	1
+aMatrix0J0P-1C1b_a1450Phi	0	0.2
+aMatrix0J1P1C1b_a980Mag	1	1
+aMatrix0J1P1C1b_a980Phi	0	0.2
+aMatrix0J1P1C1b_a1450Mag	1	1
+aMatrix0J1P1C1b_a1450Phi	0	0.2
+a980Mass	1	0.02	0.9	1.1
+a1450Mass	1.49	0.02	1.39	1.59
+a980pion0etagFactor	0.4701	0.1567	0.05    3.0
+a980K+K-gFactor	0.50632	0.1687733333333333	0.05    3.0
+a1450pion0etagFactor	0.68	0.2266666666666667	0.05    3.0
+a1450K+K-gFactor	0	0.01			0.05    3.0
+L1S0_J1P1C1TopipiS_pion0Mag	1	0.5
+L1S0_J1P1C1TopipiS_pion0Phi	0	0.2
+L1S0_J1P1C1ToaMatrix0_etaMag	1	0.5
+L1S0_J1P1C1ToaMatrix0_etaPhi	0	0.2
+channelType1pion0etaAetaBScaling	1	0.01	0	20
+Iso1J0P-1C1	0.707	0.5	0	1
+Iso1J1P1C1	0.707	0.5	0	1
+J0P-1C1L0S0pbarpMag	0.7071067811865475	0.3535533905932737
+J0P-1C1L0S0pbarpPhi	0	0.2
+J1P1C1L1S1pbarpMag	0.7071067811865475	0.3535533905932737
+J1P1C1L1S1pbarpPhi	0	0.2
+L0S0_J0P-1C1ToaMatrix0_pion0Mag	1	0.5
+L0S0_J0P-1C1ToaMatrix0_pion0Phi	0	0.2
+L0S0_aMatrix0ToK+_K-Mag	1	0.5
+L0S0_aMatrix0ToK+_K-Phi	0	0.2
+L0S0_pipiSToK+_K-Mag	1	0.5
+L0S0_pipiSToK+_K-Phi	0	0.2
+L1S0_J1P1C1ToaMatrix0_pion0Mag	1	0.5
+L1S0_J1P1C1ToaMatrix0_pion0Phi	0	0.2
+channelType1K+K-pion0Scaling	1	0.01	0	20
+J1P-1C-1Lama1Lamb1_J1P-1C-1ToChic1_photonMag	0.7071067811865475	0.3535533905932737
+J1P-1C-1Lama1Lamb1_J1P-1C-1ToChic1_photonPhi	0	0.2
+J1P-1C-1Lama0Lamb1_J1P-1C-1ToChic1_photonMag	0.7071067811865475	0.3535533905932737
+J1P-1C-1Lama0Lamb1_J1P-1C-1ToChic1_photonPhi	0	0.2
+L1S0_Chic1ToaMatrix0_pion0Mag	1	0.5
+L1S0_Chic1ToaMatrix0_pion0Phi	0	0.2
+L0S0_aMatrix0ToK_KMag	1	0.5
+L0S0_aMatrix0ToK_KPhi	0	0.2
+aMatrix0Chic1a0b_a980Mag	1	1
+aMatrix0Chic1a0b_a980Phi	0	0.2
+aMatrix0Chic1a0b_a1450Mag	1	1
+aMatrix0Chic1a0b_a1450Phi	0	0.2
+L0S1_Chic1ToK*_KMag	0.7071067811865475	0.3535533905932737
+L0S1_Chic1ToK*_KPhi	0	0.2
+L2S1_Chic1ToK*_KMag	0.7071067811865475	0.3535533905932737
+L2S1_Chic1ToK*_KPhi	0	0.2
+L1S0_K*ToK_pion0Mag	1	0.5
+L1S0_K*ToK_pion0Phi	0	0.2
+K*Mass	0.8955	0.03	0.85	0.95
+K*Width	0.05081	0.010162	0.03	0.08
+L1S0_Chic1KPiS12ToKPiS12_KMag	1	0.5
+L1S0_Chic1KPiS12ToKPiS12_KPhi	0	0.2
+L0S0_KPiS12ToK_pion0Mag	1	0.5
+L0S0_KPiS12ToK_pion0Phi	0	0.2
+KpiS12Chic1KPiS12b_pole1Mag	1	1
+KpiS12Chic1KPiS12b_pole1Phi	0	0.2
+KpiS12Chic1KPiS12a_Ketap	0	0.5
+KpiS12Chic1KPiS12a_Kpi	1	0.5
+KpiS12Chic1KPiS12b_Ketap	0.	0.5
+KpiS12Chic1KPiS12b_Kpi	0.5	0.5
+KpiS12Chic1KPiS12c_Ketap	0.	0.5
+KpiS12Chic1KPiS12c_Kpi	0.1	0.5
+KpiS12Chic1KPiS12KetapPhi	0	0.2
+KpiS12Chic1KPiS12KpiPhi	0	0.2
+channelType2K+K-pion0photonScaling	1	0.01	0	20
+J0P-1C0Lama0Lamb0_D0ToK*_pion+Mag	1	0.5
+J0P-1C0Lama0Lamb0_D0ToK*_pion+Phi	0	0.2
+J0P-1C0Lama0Lamb0_D0ToK_rho+Mag	1	0.5
+J0P-1C0Lama0Lamb0_D0ToK_rho+Phi	0	0.2
+L1S0_rho+Topion+_pion0Mag	1	0.5
+L1S0_rho+Topion+_pion0Phi	0	0.2
+rho+Mass	0.769	0.03	0.72	0.82
+rho+Width	0.151	0.0302	0.03	0.302
+channelType3K-pion+pion0Scaling	1	0.01	0	20
