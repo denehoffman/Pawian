@@ -30,7 +30,8 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
 					   std::shared_ptr<TMatrixBase> tMatrix,
 					   std::complex<double> massMin, 
 					   std::complex<double> massMax,
-					   int numSteps)
+					   int numSteps,
+					   unsigned int projectionIndex)
 {
    unsigned int signCollection = 0;
 
@@ -67,7 +68,7 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       for(int i=1;i<=scan->GetNbinsX(); i++){
 	 for(int j=1;j<=scan->GetNbinsY(); j++){
 	    tMatrix->evalMatrix(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
-	    scan->SetBinContent(i,j, std::abs((*tMatrix)(0,0)));		 
+	    scan->SetBinContent(i,j, std::abs((*tMatrix)(projectionIndex,projectionIndex)));
 	 }
       }
 

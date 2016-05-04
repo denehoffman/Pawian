@@ -160,10 +160,34 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSh
   if(energyPlaneBorders[2] == 0)
     energyPlaneBorders[2] = _massMax;
 
+  //search projection index
+
+  const std::string porjectionParticleNames=_kMatrixParser->projection();
+  std::istringstream projParticles(porjectionParticleNames);
+  std::string firstProjParticleName;
+  std::string secondProjParticleName;
+  projParticles >> firstProjParticleName >> secondProjParticleName;
+  std::string projKey=firstProjParticleName+secondProjParticleName;
+
+  unsigned int projectionIndex=0;   
+  bool found=false;
+  for(unsigned int i=0; i<_gFactorNames.size();++i){
+    if(projKey==_gFactorNames[i]){
+      projectionIndex=i;
+      found=true;
+    }
+  }
+
+  if (!found){
+    Alert << "projection index for key " << projKey << " not found" << endmsg;
+    exit(0);
+  }
+
   RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
 		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
 		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
-		       numStepsForSheetScan);
+		       numStepsForSheetScan, 
+		       projectionIndex);
 }
 
 TMatrixGeneral::~TMatrixGeneral()
