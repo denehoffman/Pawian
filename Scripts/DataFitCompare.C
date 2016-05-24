@@ -7,8 +7,8 @@
 #include "TKey.h"
 #include <algorithm>    // std::max
 
-void DataFitCompare(std::string rootFileName, std::string histname, bool createcanvas=true);
 double CalcHistoChi2(TH1F* histoData, TH1F* histoFit);
+void DataFitCompare(std::string rootFileName, std::string histname, bool createcanvas=true);
 void DataFitComp2(TH1F* histoData, TH1F* histoFit);
 void DataFitCompareAll(std::string rootFileName, bool saveImage=false);
 
@@ -42,6 +42,7 @@ void DataFitCompare(std::string rootFileName, std::string histname, bool createc
    if(createcanvas)
      //     TCanvas* canvas = new TCanvas("canvas","c1",1000,1000);
 
+     std::cout << "\n" << std::endl;
    CalcHistoChi2(histoData, histoFit);
 
    DataFitComp2(histoData, histoFit);
@@ -68,9 +69,8 @@ double CalcHistoChi2(TH1F* histoData, TH1F* histoFit){
       //      std::cout << pow(histoData->GetBinContent(i) - histoFit->GetBinContent(i), 2)/(error*error) << std::endl;
       nonzerobins++;
    }
-   
-   std::cout << "Chi2 for histo " << histoData->GetName() << "\t" << chi2/nonzerobins 
-	     << "p =" << TMath::Prob(chi2, nonzerobins) << std::endl;
+    std::cout << "Chi2 for histo " << histoData->GetName() << "\t" << chi2/nonzerobins 
+	     << "\tp =" << TMath::Prob(chi2, nonzerobins) << std::endl;
 
 
    return chi2;
