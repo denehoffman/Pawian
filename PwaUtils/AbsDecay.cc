@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -352,8 +352,13 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       daughter2HelMother=daughter2_4Vec;
       daughter1HelMother=daughter1_4Vec;
       if( fabs(mother4Vec.P()) > 1.e-6 ){ 
-    	daughter2HelMother.Boost(mother4Vec);
-    	daughter1HelMother.Boost(mother4Vec);
+    	//daughter2HelMother.Boost(mother4Vec);
+    	//daughter1HelMother.Boost(mother4Vec);
+  
+        Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.1)
+				      , 0., 0., 1.); //z-axis = quantisation axis
+        daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
+        daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);
       }
     }
     else{
@@ -365,8 +370,13 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     daughter2HelMother=daughter2_4Vec;
     daughter1HelMother=daughter1_4Vec;
     if( fabs(mother4Vec.P()) > 1.e-6 ){
-      daughter2HelMother.Boost(mother4Vec);
-      daughter1HelMother.Boost(mother4Vec);
+      //daughter2HelMother.Boost(mother4Vec);
+      //daughter1HelMother.Boost(mother4Vec);
+
+      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.1)
+				    , 0., 0., 1.); //z-axis = quantisation axis
+      daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
+      daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);
     }
   }
 
