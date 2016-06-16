@@ -17,6 +17,6 @@ wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenD0ToKmPipPi0Da
 wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/evtGenD0ToKmPipPi0Mc.dat
 
 echo "download the server log file"
-wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/benchmarkCoupledChannel/logOutput.server
+wget http://www.ep1.rub.de/~bertram/benchmarkCoupledChannel/logOutput.server
 
 echo done
