@@ -56,7 +56,7 @@ public:
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
@@ -76,7 +76,7 @@ protected:
   std::vector<double> _currentParamLocalPhis;
   std::vector< complex<double> > _currentParamLocalMagExpi;
 
-  complex<double> daughterAmp(Spin& lam2, EvtData* theData, Spin& lamFs);
+  complex<double> daughterAmp(Spin& lam2, EvtData* theData);
   std::map<int, int> _ampLMap;
 private:
 

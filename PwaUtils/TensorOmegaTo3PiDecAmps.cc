@@ -64,7 +64,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, s
 
 
 
-complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
 

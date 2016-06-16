@@ -111,28 +111,24 @@ complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaught
   return result;
 }
 
-complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
 
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs); 
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
 
   if ( _cacheAmps && !_recalculate){
-    //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
-  if(_enabledlamFsDaughter1) result=lsLoop(grandmaAmp, lamX, theData, lamFs, lamFs, _lam2Min, _lam2Max, true, lamFs);
-  else if(_enabledlamFsDaughter2) result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, lamFs, lamFs, true, lamFs);
-  else result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs);
+  result=lsLoop(grandmaAmp, lamX, theData, _lam1MinThreadMap.at(std::this_thread::get_id()), _lam1MaxThreadMap.at(std::this_thread::get_id()), _lam2MinThreadMap.at(std::this_thread::get_id()), _lam2MaxThreadMap.at(std::this_thread::get_id()), true);
 
   if ( _cacheAmps){
      theMutex.lock();
-     //     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
@@ -147,7 +143,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, Ab
   return result;
 }
 
-complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs, Spin lamFs ){
+complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs){
  
   complex<double> result(0.,0.);
 
@@ -172,7 +168,7 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
       }
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
       amp *= conj(currentWignerDMap.at(IdJLamXLam12));
-      if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
+      if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData);
       result+=amp;    
     }
   }

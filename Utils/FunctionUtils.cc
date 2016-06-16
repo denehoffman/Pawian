@@ -41,4 +41,13 @@ namespace FunctionUtils{
     return result;
   }
 
+  short spin1IdIndex(unsigned short id, Spin& spin1){//only for spin<=9 particles and ids<500
+    if(id>500){
+      std::cout << "id value: " << id << " is not less than 500!!!" << std::endl;
+      exit(1);
+    }
+    short result=id*72+spin1.ToIndex();
+    return result;
+  }
+
 }

@@ -249,14 +249,14 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
 }
 
 
-complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
 
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
 
   if ( _cacheAmps && !_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
@@ -275,16 +275,17 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 
     if( fabs(lambda) > it->first->J) continue;
 
-    if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
-    if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
+    if(_daughter1IsStable && _lam1MinThreadMap.at(std::this_thread::get_id())!=lambda1) continue;
+    if(_daughter2IsStable && _lam2MinThreadMap.at(std::this_thread::get_id())!=lambda2) continue;
 
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+
     // Info << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
  
     complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
     // Info << "amp: " << amp << endmsg;
     // Info << "amp*daughterAmp(lambda1, lambda2, theData, lamFs): " << amp*daughterAmp(lambda1, lambda2, theData, lamFs) << endmsg;
-    result+=amp*daughterAmp(lambda1, lambda2, theData, lamFs);
+    result+=amp*daughterAmp(lambda1, lambda2, theData);
   }
 
   //  result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
@@ -295,7 +296,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, 
 
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;
-    printCurrentAmpParams(lamX, lamFs); 
+    //    printCurrentAmpParams(lamX, lamFs); 
     exit(0);
   }
 

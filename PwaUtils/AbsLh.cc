@@ -33,6 +33,7 @@
 #include <boost/thread.hpp>
 
 #include "PwaUtils/AbsLh.hh"
+#include "PwaUtils/FsParticleProjections.hh"
 #include "GlobalEnv.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -83,6 +84,7 @@ void AbsLh::initialize(){
     channelScaleParamStream << "Scaling";
 
     _channelScaleParam = channelScaleParamStream.str();
+    _fsParticleProjections=GlobalEnv::instance()->Channel(_channelID)->getFsParticleProjectionsPtr();
 }
 
 

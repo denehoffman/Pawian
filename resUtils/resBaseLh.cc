@@ -36,7 +36,7 @@
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
-//#include "FitParams/FitParColBase.hh"
+#include "PwaUtils/FsParticleProjections.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -91,22 +91,25 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianPa
   }
 
 
-  Spin lamSteps=1;
-  if(_isHighestJaPhoton) lamSteps=2;
+  std::vector< std::vector<Spin> > spinProjections=_fsParticleProjections->spinProjections();
+  
+  for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
+    for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+      (*itDecAll)->setSpinProjections(projId);
+    }
 
-  for (Spin lamHigestJFsp=-_highestJFsp; lamHigestJFsp<=_highestJFsp; lamHigestJFsp=lamHigestJFsp+lamSteps){
     for( Spin itLam=-_Jmother; itLam<=_Jmother; ++itLam){
       complex<double> lamItAmp(0.,0.);
-
+      
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-	complex<double> currentDecAmp=(*itDec)->XdecAmp(itLam, theData, lamHigestJFsp);
+	complex<double> currentDecAmp=(*itDec)->XdecAmp(itLam, theData);
 	lamItAmp+=currentDecAmp;
       }
       result += fabs(_currentPolVec.at(itLam))*norm(lamItAmp);
     }
   }
-
+  
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
 
   result *= fitPar->Value(_channelScaleParam);

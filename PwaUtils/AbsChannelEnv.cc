@@ -38,6 +38,7 @@
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
+#include "PwaUtils/FsParticleProjections.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
 #include "FitParams/ParamFactory.hh" 
@@ -113,6 +114,8 @@ void AbsChannelEnv::setup(ChannelID id){
 
    _noFinalStateParticles= (int) _finalStateParticles.size();
 
+
+   _fsParticleProjections = std::shared_ptr<FsParticleProjections>(new FsParticleProjections(_finalStateParticles)); 
   //decays
 
   std::vector<std::string> decaySystem= _theParser->decaySystem();

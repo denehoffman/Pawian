@@ -56,7 +56,7 @@ TensorDecAmps::~TensorDecAmps()
 }
 
 
-complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs,AbsXdecAmp* grandmaAmp){
 
   Spin lam1Min=-_Jdaughter1;
   Spin lam1Max= _Jdaughter1;
@@ -90,13 +90,13 @@ complex<double> TensorDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDa
 
 
 
-complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);  
   
   if ( _cacheAmps && !_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
@@ -104,9 +104,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
     return result;
   }
 
-  if(_enabledlamFsDaughter1) result=lsLoop(grandmaAmp, lamX, theData, lamFs, lamFs, _lam2Min, _lam2Max, true, lamFs );
-  else if(_enabledlamFsDaughter2) result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, lamFs, lamFs, true, lamFs ); 
-  else result=lsLoop(grandmaAmp, lamX, theData, _lam1Min, _lam1Max, _lam2Min, _lam2Max, true, lamFs );
+  result=lsLoop(grandmaAmp, lamX, theData, _lam1MinThreadMap.at(std::this_thread::get_id()), _lam1MaxThreadMap.at(std::this_thread::get_id()), _lam2MinThreadMap.at(std::this_thread::get_id()), _lam2MaxThreadMap.at(std::this_thread::get_id()), true);
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -118,7 +116,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs
 }
 
 
-complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs, Spin lamFs ){
+complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs){
   complex<double> result(0.,0.);
 
   map<unsigned short, map<Id3StringType, complex<double> > >& currentLS3SpinMap=theData->ComplexLS3Spin.at(_decay->nameId());
@@ -132,7 +130,7 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
 	Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamX, lambda1, lambda2);
 	complex<double> amp = theMagExpi*current3SpinMap.at(IdLamXLam1Lam2);
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData, lamFs);
+      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData);
 	tmpResult+=amp;
       }
     }

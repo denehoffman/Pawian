@@ -43,20 +43,22 @@
 #include "Utils/FunctionUtils.hh"
 
 class AbsDecay;
+class FsParticleProjections;
 //class AbsDynamics;
-typedef CacheVector<std::map<unsigned short, std::map<Id2StringType, complex<float> > > >  intUShortId2StringComplFloatMap;
+//typedef CacheVector<std::map<unsigned short, std::map<Id2StringType, complex<float> > > >  intUShortId2StringComplFloatMap;
 
+typedef CacheVector<std::map<unsigned short, std::map<short, complex<float> > > >  intUShortShortComplFloatMap;
 class AbsXdecAmp : public AbsParamHandler{
 
 public:
   AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   virtual ~AbsXdecAmp();
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp=0)=0;
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp=0)=0;
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
                                       EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp=0)=0;
 
-  virtual complex<double> daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData, Spin& lamFs);
+  virtual complex<double> daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData);
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   virtual std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}
@@ -68,6 +70,7 @@ public:
   virtual void cacheAmplitudes();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
+  virtual void setSpinProjections(int projId);
   //  virtual void retrieveWignerDs(EvtData* theData) { return;}
 
 protected:
@@ -84,6 +87,17 @@ protected:
   std::shared_ptr<AbsXdecAmp> _decAmpDaughter2;
   Spin _Jdaughter1;
   Spin _Jdaughter2;
+  std::shared_ptr<FsParticleProjections> _fsParticleProjections; 
+  std::string _daughter1Name;
+  std::string _daughter2Name;
+  unsigned int _daughter1ProjId;
+  unsigned int _daughter2ProjId;
+  std::map<std::thread::id, unsigned short> _projIdThreadMap;
+  std::map<std::thread::id, Spin> _lam1MinThreadMap;
+  std::map<std::thread::id, Spin> _lam1MaxThreadMap;
+  std::map<std::thread::id, Spin> _lam2MinThreadMap;
+  std::map<std::thread::id, Spin> _lam2MaxThreadMap;
+
   double _isospinCG;
   const double _preFactor;
   std::string _key;
@@ -102,7 +116,8 @@ protected:
   Spin _lam2Min;
   Spin _lam2Max;
 
-  intUShortId2StringComplFloatMap _cachedAmpIdMap;
+  //  intUShortId2StringComplFloatMap _cachedAmpIdMap;
+  intUShortShortComplFloatMap _cachedAmpIdMap;
   std::map<std::thread::id, std::map<unsigned short, complex<float> > > _cachedDynIdMap;
 
   virtual void initialize();

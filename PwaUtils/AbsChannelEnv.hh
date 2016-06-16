@@ -39,6 +39,7 @@ class ParserBase;
 class AbsLh;
 class MassRangeCut;
 class ProdChannelInfo;
+class FsParticleProjections;
 
 typedef short ChannelID;
 
@@ -72,6 +73,7 @@ public:
   virtual const std::string  channelTypeName()=0;
   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="")=0;
   std::shared_ptr<AbsPawianParameters> defaultPawianParams();
+  std::shared_ptr<FsParticleProjections> getFsParticleProjectionsPtr() {return _fsParticleProjections;}
 
   static short CHANNEL_PBARP;
   static short CHANNEL_EPEM;
@@ -90,6 +92,7 @@ protected:
    std::shared_ptr<AbsDecayList> _absDecList;
    std::shared_ptr<AbsDecayList> _prodDecList;
   std::vector< std::shared_ptr<ProdChannelInfo> > _prodChannelInfoList;
+  std::shared_ptr<FsParticleProjections> _fsParticleProjections;
    std::vector<std::vector<std::string> > _histMassSystems;
    std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;

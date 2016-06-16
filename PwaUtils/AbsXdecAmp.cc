@@ -32,6 +32,9 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/DynRegistry.hh"
+#include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
+#include "PwaUtils/FsParticleProjections.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -46,6 +49,9 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   , _jpcDecsName(_JPCPtr->jpcname()+"To"+theDec->daughter1Part()->name()+"_"+theDec->daughter2Part()->name())
   , _isoKey(_JPCPtr->jpcname()+theDec->fitParSuffix())
   ,_absDyn(theDec->getDynamics())
+  ,_fsParticleProjections(GlobalEnv::instance()->Channel(channelID)->getFsParticleProjectionsPtr())
+  ,_daughter1ProjId(10000)
+  ,_daughter2ProjId(10000)
   ,_isospinCG(theDec->isospinCG())
   ,_preFactor(theDec->preFactor())
   ,_key("_"+theDec->fitParSuffix())
@@ -98,14 +104,18 @@ void AbsXdecAmp::initialize(){
   _lam2Min = -_Jdaughter2;
   _lam2Max = _Jdaughter2;
 
+  _daughter1Name=_decay->daughter1Part()->name();
+  _daughter2Name=_decay->daughter2Part()->name();
+  if( _daughter1IsStable) _daughter1ProjId=_fsParticleProjections->fsParticleId(_daughter1Name);
+  if( _daughter2IsStable) _daughter2ProjId=_fsParticleProjections->fsParticleId(_daughter2Name);  
   if( _daughter1IsStable && _Jdaughter1>0) _enabledlamFsDaughter1=true;
   if( _daughter2IsStable && _Jdaughter2>0) _enabledlamFsDaughter2=true;
 }
 
-complex<double> AbsXdecAmp::daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData, Spin& lamFs){
+complex<double> AbsXdecAmp::daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData){
   complex<double> result(1.,0.);
-  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, lamFs, this);
-  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs, this);
+  if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, this);
+  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, this);
   return result;
 }
 
@@ -144,6 +154,33 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
   if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
   
+  return;
+}
+
+void AbsXdecAmp::setSpinProjections(int projId){
+  std::vector<Spin> projections=_fsParticleProjections->spinProjections().at(projId);
+  _projIdThreadMap[std::this_thread::get_id()]=projId;
+
+  _lam1MinThreadMap[std::this_thread::get_id()]=_lam1Min;
+  _lam1MaxThreadMap[std::this_thread::get_id()]=_lam1Max;
+  _lam2MinThreadMap[std::this_thread::get_id()]=_lam2Min;
+  _lam2MaxThreadMap[std::this_thread::get_id()]=_lam2Max;
+
+
+  if(_daughter1IsStable){
+    Spin currentProjection=projections.at(_daughter1ProjId);
+    _lam1MinThreadMap[std::this_thread::get_id()]=currentProjection;
+    _lam1MaxThreadMap[std::this_thread::get_id()]=currentProjection;
+  }
+  else _decAmpDaughter1->setSpinProjections(projId);
+  
+  
+  if(_daughter2IsStable){
+    Spin currentProjection=projections.at(_daughter2ProjId);
+    _lam2MinThreadMap[std::this_thread::get_id()]=currentProjection;
+    _lam2MaxThreadMap[std::this_thread::get_id()]=currentProjection;
+  }
+  else _decAmpDaughter2->setSpinProjections(projId);
   return;
 }
 

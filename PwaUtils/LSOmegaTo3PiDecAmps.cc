@@ -52,7 +52,7 @@ LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
 }
 
 
-complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs,AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   Id1StringType IdLamOmega=FunctionUtils::spin1Index(lamX);
@@ -74,12 +74,12 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
 
 
 
-complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
 
   int evtNo=theData->evtNo;
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
  
   if ( _cacheAmps && !_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);

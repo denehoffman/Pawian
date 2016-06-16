@@ -109,13 +109,13 @@ complex<double> TensorPsiToGamXDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, sh
 
 
 
-complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
  
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   int evtNo=theData->evtNo;
-  Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);
   
   if ( _cacheAmps && !_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
@@ -124,11 +124,8 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
     return result;
   }
 
-  Spin lam2Min=-_Jdaughter2;
-  Spin lam2Max=_Jdaughter2;
-  
-  for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-    Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamX, lamFs, lambda2);
+  for(Spin lambda2=_lam2MinThreadMap.at(std::this_thread::get_id()); lambda2<=_lam2MaxThreadMap.at(std::this_thread::get_id()); ++lambda2){
+    Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamX, _lam1MinThreadMap.at(std::this_thread::get_id()), lambda2);
     complex<double> tmpResult(0.,0.);
     for(int i=0; i<_noOfAmps; ++i){
       // double theMag=_currentParamLocalMags.at(i);
@@ -139,7 +136,7 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Sp
       tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexN3Spin.at(_decay->nameId()).at(i).at(IdLamMotherLamGamLamX)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
     }
 
-    result+=tmpResult*daughterAmp(lambda2, theData, lamFs);    
+    result+=tmpResult*daughterAmp(lambda2, theData);    
   }
 
   if ( _cacheAmps){
@@ -211,9 +208,9 @@ void TensorPsiToGamXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters
   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
-complex<double> TensorPsiToGamXDecAmps::daughterAmp(Spin& lam2, EvtData* theData, Spin& lamFs){
+complex<double> TensorPsiToGamXDecAmps::daughterAmp(Spin& lam2, EvtData* theData){
   complex<double> result(1.,0.);
-  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, lamFs, this);
+  if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, this);
   return result;
 }
 

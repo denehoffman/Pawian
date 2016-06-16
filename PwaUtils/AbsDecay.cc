@@ -355,7 +355,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     	//daughter2HelMother.Boost(mother4Vec);
     	//daughter1HelMother.Boost(mother4Vec);
   
-        Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.1)
+        Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0)
 				      , 0., 0., 1.); //z-axis = quantisation axis
         daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
         daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);
@@ -373,7 +373,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       //daughter2HelMother.Boost(mother4Vec);
       //daughter1HelMother.Boost(mother4Vec);
 
-      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.1)
+      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0)
 				    , 0., 0., 1.); //z-axis = quantisation axis
       daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);

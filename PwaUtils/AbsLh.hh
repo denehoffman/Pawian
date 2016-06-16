@@ -40,6 +40,7 @@
 #include "PwaUtils/DataUtils.hh"
 
 class AbsPawianParameters;
+class FsParticleProjections;
 
 class AbsLh : public AbsParamHandler{
 
@@ -91,6 +92,7 @@ protected:
   unsigned short _noOfThreads;
 
   std::shared_ptr<AbsPawianParameters> _oldFitPar;
+  std::shared_ptr<FsParticleProjections> _fsParticleProjections; 
 
   //  virtual bool extractWignerDs(EvtData* theData);
   virtual void setHyps( const std::map<const std::string, bool>& theMap,
