@@ -184,9 +184,9 @@ int main(int __argc,char *__argv[]){
   JPCdecays theDecays(motherJPC, daughter1JPC, daughter2JPC);
   theDecays.print(std::cout);
 
-  DecAngularDist theDecAngularDist(motherJPC, daughter1JPC, daughter2JPC);
+  //  DecAngularDist theDecAngularDist(motherJPC, daughter1JPC, daughter2JPC);
 
-  SphericalHarmonicsPolts sphericalHarmonicsPolts(motherJPC->J+2); 
+  //  SphericalHarmonicsPolts sphericalHarmonicsPolts(motherJPC->J+2); 
   return 0;
 }
 
