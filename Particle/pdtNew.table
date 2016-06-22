@@ -204,6 +204,7 @@ Meson K2(1770)- 	K_2(1770)^-  		0  4 -1  0  0   1  -1 -1 0  	1.773 	0.186   relB
 Meson K*3(1780) 	K_3^\ast(1780)  	0  6 -1  0  0   1  0  0  0  	1.770 	0.164   relBW	[PDG nonett 3^3D_3]
 Meson K2(1820) 		K_2(1820)  		0  4 -1  0  0   1  0  0  0  	1.816 	0.276   relBW	[PDG no idea]
 Meson K(1830) 		K(1830)  		0  0 -1  0  0   1  0  0  0  	1.830 	0.250   relBW	[PDG nonett 3^1S_0]
+Meson K2(2250)+		K_2(2250)^+  		3  4 -1  0  0   1  1  1  0  	2.247 	0.180   relBW	[PDG no idea]
 #
 # End strange mesons
 #
@@ -245,6 +246,7 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 #
 Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
 Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none]
+Baryon N(1650)-         N(1650)^-              -3  1 -1  0  0   1   -1  0  0    1.655   0.14    relBW	        [PDG]
 Baryon DeltaP33++Matrix \DeltaP33^{++}Matrix  	6  3 1   0  0   3    3 	0  0	1.0 	0.1	undefined	[none]
 Baryon Delta++ 		\Delta^{++}  		6  3 1   0  0   3    3 	0  0	1.231 	0.111	relBW	        [PDG]
 Baryon Delta(1600)++ 	\Delta(1600)^{++}  	6  3 1   0  0   3    3 	0  0	1.6 	0.32	relBW	        [PDG]
@@ -255,6 +257,7 @@ Baryon Delta(1910)++ 	\Delta(1910)^{++}  	6  1 1   0  0   3    3 	0  0	1.89 	0.3
 Baryon LambdaS01Matrix 	\LambdaS01Matrix  	0  1 -1  0  0   0    0  -1 0	1.       0.1    undefined	[none] 	
 Baryon Lambda_c+ 	\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
 Baryon Lambda 		\Lambda  		0  1 1   0  0   0    0 	-1  0	1.115683 0.0001 relBW	        [PDG]
+Baryon Lambdabar 	\bar{\Lambda} 		0  1 1   0  0   0    0 	1  0	1.115683 0.0001 relBW	        [PDG]
 Baryon Lambda(1405)0 	\Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
 Baryon Lambda(1520)0 	\Lambda(1520)^0  	0  3 -1  0  0   0    0  -1 0	1.5195  0.0156  relBW		[PDG]
 Baryon Lambda(1600)0    \Lambda(1600)^0         0  1 1   0  0   0    0  -1 0    1.600   0.150   relBW           [PDG]

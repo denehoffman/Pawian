@@ -180,14 +180,19 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
   bool isDaughter2Photon=false;
   if(daughter2->name()=="photon") isDaughter2Photon=true;
 
-  for (Spin lam1=Jdaughter1; lam1>=-Jdaughter1; --lam1){
-    if(isDaughter1Photon && fabs(lam1)!=1) continue;
+  //  for (Spin lam1=Jdaughter1; lam1>=-Jdaughter1; --lam1){
+  for (Spin lam1=Jdaughter1; lam1>=Spin(0); --lam1){
+     if(isDaughter1Photon && fabs(lam1)!=1) continue;
     Spin lam2start=-lam1;
     if( Jdaughter1.Denominator() != Jdaughter2.Denominator() ){
       lam2start=-lam1+Spin(1,2);
     }
      for (Spin lam2=lam2start; lam2<=Jdaughter2; ++lam2){
        if (fabs(lam2)>Jdaughter2) continue;
+       // Info << " Jmother: " << Jmother << " Jdaughter1" << Jdaughter1 << " Jdaughter2" << Jdaughter2
+       // 	    << " lam1: " << lam1 << " lam2: " << lam2 << endmsg;
+       
+
       if(lam1==0 && lam2==0 && parityFactor <0) continue; //parity conservation
       if( identicalDaughters && parityFactor <0 && fabs(lam1)==fabs(lam2)) continue; //parity conservation + identical particles 
       if(isDaughter2Photon && fabs(lam2)!=1) continue;
@@ -208,6 +213,8 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
       if(fillIt){
 	std::shared_ptr<const JPClamlam> tmpJPClamlam(new JPClamlam(motherRes, lam1, lam2, 1.));
 	theJPClamlamVec.push_back(tmpJPClamlam);
+	// Info << "filled: " << Jmother << " Jdaughter1" << Jdaughter1 << " Jdaughter2" << Jdaughter2
+	//     << " lam1: " << lam1 << " lam2: " << lam2 << endmsg;
       }
     }
   }  
