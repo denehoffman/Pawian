@@ -134,28 +134,28 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
 	   << "\nenergyPlaneBorders 2:" << energyPlaneBorders[2] 
 	   << "\nenergyPlaneBorders 3:" << energyPlaneBorders[3] 
   	   << endmsg;
+  std::vector<std::shared_ptr<AbsPhaseSpace> > phpVecs=_tMatr->kMatrix()->phaseSpaceVec();
 
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
-
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
-      // complex<double> currentRho=_phpVecs.at(i)->factor(mass);
+      complex<double> currentRho=phpVecs.at(i)->factor(mass);
 
-      // _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
-      // _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
+      _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
+      _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
       
-      // _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
+      _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
       double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
       _PhaseH2Vec.at(i)->Fill(mass, currentphase);
-      // double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
-      // double currentElasticity=2.*sqrt(sqrtFactor);
-      //      complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
-      //      _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
+      double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
+      double currentElasticity=2.*sqrt(sqrtFactor);
+           complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
+           _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
 
-      // _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i)));
+      _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i)));
 
-      // _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
+      _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
       
     }    
   }
