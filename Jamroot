@@ -5,28 +5,6 @@ local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_test_exec_monitor -lboost_timer -lboost_chrono -lrt ;
 
-rule split-stack-cond ( properties * )
-{
-  local toolset = [ MATCH <toolset>(.*) : $(properties) ] ;
-  if $(toolset) = gcc
-  {
-    local gcc-ver = [ MATCH <toolset-gcc:version>(.*) : $(properties) ] ;
-    local major = [ MATCH (.)\..* : $(gcc-ver) ] ;
-    local minor = [ MATCH .\.(.).* : $(gcc-ver) ] ;
-#    ECHO "gcc-ver: $(gcc-ver)" ;
-#    ECHO "major: $(major)" ;
-#    ECHO "minor: $(minor)" ;
-    if ( $(major) > 4 | ( $(major) = 4 & $(minor) >= 7 ) )
-    {
-      return <cxxflags>-ftemplate-depth=256 ;
-    }
-    if ( $(major) = 4 & $(minor) = 4 )
-    {
-      return <cxxflags>-ftemplate-depth-256 ;
-    }
-  }
-} 
-
 
 project :
 	requirements <include>./  
@@ -34,8 +12,8 @@ project :
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
 	<link>static
-	<cxxflags>-std=gnu++0x
-  <conditional>@split-stack-cond
+	<cxxflags>-std=gnu++11
+	<cxxflags>-ftemplate-depth=256
 	<linkflags>$(ROOTLIBS)
 	<linkflags>-L$(BOOSTLIBPATH)
 	<linkflags>$(BOOSTLIBS)
