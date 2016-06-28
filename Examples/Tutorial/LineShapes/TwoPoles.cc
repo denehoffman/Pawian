@@ -189,7 +189,7 @@ TwoPoles::TwoPoles(double MassRes1, double Width1, double MassRes2, double Width
 
     theTMatrixNonRel.evalMatrix(massIt);
     complex<double> currentTmatrix=theTMatrixNonRel(0,0);
-    cout << "TMatrix:\t" <<  currentTmatrix << endl;
+    //    cout << "TMatrix:\t" <<  currentTmatrix << endl;
     weight=norm(currentTmatrix); 
     _massShapeKmatrHist->Fill(massIt,weight);
     _argandKmatrHist->Fill(currentTmatrix.real(),currentTmatrix.imag()); 
@@ -197,7 +197,7 @@ TwoPoles::TwoPoles(double MassRes1, double Width1, double MassRes2, double Width
 
     theTMatrixRel.evalMatrix(massIt);
     complex<double> currentTmatrixRel=theTMatrixRel(0,0);
-    cout << "TMatrixRel:\t" <<  currentTmatrixRel << endl;
+    //    cout << "TMatrixRel:\t" <<  currentTmatrixRel << endl;
     weight=norm(currentTmatrixRel); 
     _massShapeKmatrHistRel->Fill(massIt,weight);
     _argandKmatrHistRel->Fill(currentTmatrixRel.real(),currentTmatrixRel.imag()); 

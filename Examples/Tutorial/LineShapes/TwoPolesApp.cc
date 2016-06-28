@@ -36,22 +36,80 @@
 int main(int __argc,char *__argv[]){
   ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
 
-  double mass1=1.35;
-  double width1=0.3;
+  if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
+                    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-  double mass2=1.5;
-  double width2=0.1; 
+    Info << "\nThis is a test application for histogramming the mass shapes of two resonances obtained by the Breit-Wigner parameterization and by the T-matrix calculation\n" 
+	 << "The switches are:\n\n"
+         << "-mass1 (mass of the resonance1;default 1.318)\n\n" 
+         << "-width1 (width1 of the resonance1;default 0.1)\n\n"
+         << "-mass2 (mass of the resonance2;default 1.5)\n\n" 
+         << "-delta (delta=mass range for histograms;default 0.4)\n\n" 
+         << endmsg;
+    return 0;
+  }
 
-  
-  // double mass1=1.2;
-  // double width1=0.1;
+  std::string mass1Str="1.318";
+  std::string width1Str="0.1";
+  std::string mass2Str="1.5";
+  std::string width2Str="0.1";
+  std::string deltaStr="0.1";
 
-  // double mass2=1.8;
-  // double width2=0.1; 
+  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
+    bool found=false;
+    std::string sw = __argv[optind];
+    if (sw=="-mass1"){
+      optind++;
+      mass1Str = __argv[optind];
+      found=true;
+    }
+    if (sw=="-width1"){
+      optind++;
+      width1Str = __argv[optind];
+      found=true;
+    }
+    if (sw=="-mass2"){
+      optind++;
+      mass2Str = __argv[optind];
+      found=true;
+    }
+    if (sw=="-width2"){
+      optind++;
+      width2Str = __argv[optind];
+      found=true;
+    }
+    if (sw=="-delta"){
+      optind++;
+      deltaStr = __argv[optind];
+      found=true;
+    }
+    if (!found){
+      Warning << "Unknown switch: " 
+	      << __argv[optind] << endmsg;
+      optind++;
+    }
+  }
 
 
+  std::stringstream mass1StrStr(mass1Str);
+  double mass1=0.;
+  mass1StrStr >> mass1;
 
-  double delta=0.4;
+  std::stringstream width1StrStr(width1Str);
+  double width1=0.;
+  width1StrStr >> width1;
+
+  std::stringstream mass2StrStr(mass2Str);
+  double mass2=0.;
+  mass2StrStr >> mass2;
+
+  std::stringstream width2StrStr(width2Str);
+  double width2=0.;
+  width2StrStr >> width2;
+
+  std::stringstream deltaStrStr(deltaStr);
+  double delta=0.;
+  deltaStrStr >> delta;  
 
   TwoPoles twoPoles(mass1, width1, mass2, width2, delta);
 

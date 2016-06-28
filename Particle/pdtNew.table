@@ -205,6 +205,7 @@ Meson K*3(1780) 	K_3^\ast(1780)  	0  6 -1  0  0   1  0  0  0  	1.770 	0.164   re
 Meson K2(1820) 		K_2(1820)  		0  4 -1  0  0   1  0  0  0  	1.816 	0.276   relBW	[PDG no idea]
 Meson K(1830) 		K(1830)  		0  0 -1  0  0   1  0  0  0  	1.830 	0.250   relBW	[PDG nonett 3^1S_0]
 Meson K2(2250)+		K_2(2250)^+  		3  4 -1  0  0   1  1  1  0  	2.247 	0.180   relBW	[PDG no idea]
+Meson K3(2230)+		K_3(2320)^+  		3  6  1  0  0   1  1  1  0  	2.324 	0.150   relBW	[PDG no idea]
 #
 # End strange mesons
 #
@@ -254,6 +255,7 @@ Baryon Delta(1620)++ 	\Delta(1620)^{++}  	6  1 -1  0  0   3    3 	0  0	1.63 	0.1
 Baryon Delta(1700)++ 	\Delta(1700)^{++}  	6  3 -1  0  0   3    3 	0  0	1.7 	0.3	relBW	        [PDG]
 Baryon Delta(1750)++ 	\Delta(1750)^{++}  	6  1 1   0  0   3    3 	0  0	1.75 	0.52	relBW	        [PDG]
 Baryon Delta(1910)++ 	\Delta(1910)^{++}  	6  1 1   0  0   3    3 	0  0	1.89 	0.3	relBW	        [PDG]
+Baryon Delta(2000)++    \Delta(2000)^{++}       6  5 1   0  0   3    3  0  0    2.0     0.3     relBW           [PDG]
 Baryon LambdaS01Matrix 	\LambdaS01Matrix  	0  1 -1  0  0   0    0  -1 0	1.       0.1    undefined	[none] 	
 Baryon Lambda_c+ 	\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
 Baryon Lambda 		\Lambda  		0  1 1   0  0   0    0 	-1  0	1.115683 0.0001 relBW	        [PDG]
@@ -276,3 +278,6 @@ Baryon Sigma(1670)0 	\Sigma(1670)^0  	0  3  -1 0  0   2    0  -1 0  	1.67    0.0
 Baryon Sigma(1915)0     \Sigma(1915)^0          0  5  1  0  0   2    0  -1 0    1.915   0.12    relBW           [PDG]
 Baryon Sigma(1940)0     \Sigma(1940)^0          0  3  -1 0  0   2    0  -1 0    1.940   0.2     relBW           [PDG]
 Baryon Lambda_c(2625)+ 	\Lambda_c(2625)^+       3  3  -1 0  0   0    0 	0  1	2.262811 0.01   relBW	        [PDG]
+Baryon Xibar+           \bar{\Xi}^+             3  1  1 0  0    1    1  2  0    1.32171  0.0001 relBW           [PDG]
+Baryon Xi(1690)-        \Xi(1690)^-             3  1  1 0  0    1    -1 -2  0   1.69    0.02    relBW           [PDG]
+Baryon Xi(1690)1m-      \Xi(1690)1m^-           3  1  -1 0  0    1    -1 -2  0   1.69    0.02    relBW           [PDG]

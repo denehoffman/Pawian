@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp
+install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE

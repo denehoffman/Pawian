@@ -55,7 +55,7 @@ FsParticleProjections::FsParticleProjections(std::vector<Particle*>& fsParticles
     Spin currentProjection(-currentSpin);
     while (currentProjection <= currentSpin){
       //      if(currentProjection==Spin(0) && _fsParticles.at(i)->mass() < 1.e-10) continue;
-      if(currentProjection!=Spin(0)) currentProjections.push_back(currentProjection);
+      if(currentProjection != Spin(0)) currentProjections.push_back(currentProjection);
       else if (_fsParticles.at(i)->mass() > 1.e-9) currentProjections.push_back(currentProjection);
       currentProjection++;
     }

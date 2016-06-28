@@ -55,20 +55,20 @@ BwShape::BwShape(double MassRes, double MassWidth, double MassDec1, double MassD
 
     std::stringstream Lstrstr;
     Lstrstr << i;
-    std::string histName="BreitWigner_L"+Lstrstr.str();
+    // std::string histName="BreitWigner_L"+Lstrstr.str();
 
 
-   _histMap[i]= new TH1F(histName.c_str(),histName.c_str(),301, MassRes-deltaMass, MassRes+deltaMass);
+   // _histMap[i]= new TH1F(histName.c_str(),histName.c_str(),301, MassRes-deltaMass, MassRes+deltaMass);
 
    std::string histNameNew="BreitWigner_Lnew"+Lstrstr.str();
    _histMapNew[i]= new TH1F(histNameNew.c_str(),histNameNew.c_str(),301, MassRes-deltaMass, MassRes+deltaMass);
 
-    histName="Argand_L"+Lstrstr.str();
-    TH2F* currentArgandHist=new TH2F(histName.c_str(),histName.c_str(),301, -1., 1., 301, 0., 1.3);
-    currentArgandHist->SetXTitle("Re(Bw)");
-    currentArgandHist->SetYTitle("Im(Bw)");
-    currentArgandHist->SetMarkerStyle(6);
-    _argandHistMap[i]=currentArgandHist;
+    // histName="Argand_L"+Lstrstr.str();
+    // TH2F* currentArgandHist=new TH2F(histName.c_str(),histName.c_str(),301, -1., 1., 301, 0., 1.3);
+    // currentArgandHist->SetXTitle("Re(Bw)");
+    // currentArgandHist->SetYTitle("Im(Bw)");
+    // currentArgandHist->SetMarkerStyle(6);
+    // _argandHistMap[i]=currentArgandHist;
     
     histNameNew="Argand_Lnew"+Lstrstr.str();
     TH2F* currentArgandHistNew=new TH2F(histNameNew.c_str(),histNameNew.c_str(),301, -1., 1., 301, 0., 1.3);
@@ -84,9 +84,9 @@ BwShape::BwShape(double MassRes, double MassWidth, double MassDec1, double MassD
   
   for (unsigned int lIt=0; lIt<=Lmax; ++lIt){
     
-    TH1F* currentHist=_histMap[lIt];
+    // TH1F* currentHist=_histMap[lIt];
     TH1F* currentHistNew=_histMapNew[lIt];
-    TH2F* currentArgandHist=_argandHistMap[lIt];
+    // TH2F* currentArgandHist=_argandHistMap[lIt];
 
     TH2F* currentArgandHistNew=_argandHistMapNew[lIt];
 
@@ -94,13 +94,13 @@ BwShape::BwShape(double MassRes, double MassWidth, double MassDec1, double MassD
       
       Vector4<double>  res4V(massIt, 0., 0., 0.);
       
-      complex<double> currentBW=BreitWignerBlattW(res4V, MassDec1, MassDec2, MassRes, MassWidth, lIt);
+      //      complex<double> currentBW=BreitWignerBlattW(res4V, MassDec1, MassDec2, MassRes, MassWidth, lIt);
       complex<double> currentBWnew=BreitWignerFunction::BlattWRel(lIt, res4V.Mass(), MassRes, MassWidth, MassDec1, MassDec2);
-      double weight=norm(currentBW);
-      currentHist->Fill(massIt,weight);
+      //     double weight=norm(currentBW);
+      //      currentHist->Fill(massIt,weight);
       currentHistNew->Fill(massIt,norm(currentBWnew));
       
-      currentArgandHist->Fill(currentBW.real(),currentBW.imag());
+      //      currentArgandHist->Fill(currentBW.real(),currentBW.imag());
 
       currentArgandHistNew->Fill(currentBWnew.real(),currentBWnew.imag());
       
