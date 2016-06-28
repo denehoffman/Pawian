@@ -53,8 +53,8 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
   //look wheter it is a weak decay or not
   Particle* motherParticle=_decay->motherPart();
   if(0!=motherParticle){
-    if( motherParticle->strange() != (daughter1->strange()+daughter1->strange())) _isWeakDecay=true;
-    else if ( motherParticle->charm() != (daughter1->charm()+daughter1->charm())) _isWeakDecay=true;     
+    if( motherParticle->strange() != (daughter1->strange()+daughter2->strange())) _isWeakDecay=true;
+    else if ( motherParticle->charm() != (daughter1->charm()+daughter2->charm())) _isWeakDecay=true;     
   }
 
   if(_isWeakDecay){
