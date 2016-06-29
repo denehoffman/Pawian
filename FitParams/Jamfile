@@ -18,4 +18,4 @@ lib FitParams :
 	: 
 	: <library>$(TOP)//Minuit2 ;
 
-exe StreamerTestApp : StreamerTestApp.cc FitParams : ;
+exe StreamerTestApp : StreamerTestApp.cc FitParams $(TOP)/qft++//qft++ : ;
