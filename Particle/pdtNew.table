@@ -214,8 +214,46 @@ Meson K3(2230)+		K_3(2320)^+  		3  6  1  0  0   1  1  1  0  	2.324 	0.150   relB
 # type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C	mass    width   dyn.f   comment
 #
 Meson D0 		D^0  			0  0 -1  0  0   1   0	0  1	1.86486 0.0001  relBW	[PDG nonett 1^1S_0]
+Meson D0bar             \bar{D}^0		0  0 -1	 0  0	1   1	0  -1	1.86486 0.0001     relBW     [PDG nonett 1^1S_0]
 Meson D+ 		D^+  			3  0 -1  0  0   1   1	0  1  	1.86962 0.0001  relBW	[PDG nonett 1^1S_0]
 Meson D- 		D^-  			-3 0 -1  0  0   1  -1 	0  -1	1.86962 0.0001  relBW	[PDG nonett 1^1S_0]
+# D*
+Meson D*+               D^{*+}                          3     2    -1  0  0   1   1  0  1  2.01027 0.0000834  relBW     [PDG nonett 1^3S_1]
+Meson D*0               D^{*0}                          0     2    -1  0  0   1  -1  0  1  2.00697 0.0000834  relBW     [PDG nonett 1^3S_1, width PDG < 2.1 MeV]
+Meson D*0bar            bar{D}^{*0}                     0     2    -1  0  0   1   1  0 -1  2.00697 0.0000834  relBW     [PDG nonett 1^3S_1, width PDG < 2.1 MeV]
+Meson D*-               D^{*-}                         -3     2    -1  0  0   1  -1  0 -1  2.01027 0.0000834  relBW     [PDG nonett 1^3S_1]
+  
+# D0*(2400)
+Meson D0*(2400)+        D^{*}_{0}(2400)^{+}             3     0     1  0  0   1   1  0  1  2.403   0.283      relBW     [HFAG14]
+Meson D0*(2400)0        D^{*}_{0}(2400)^{0}             0     0     1  0  0   1  -1  0  1  2.3182  0.2674     relBW     [HFAG14]
+Meson Dbar0*(2400)0     \bar{D}^{*}_{0}(2400)^{0}       0     0     1  0  0   1   1  0 -1  2.3182  0.2674     relBW     [HFAG14]
+Meson D0*(2400)-        D^{*}_{0}(2400)^{+}            -3     0     1  0  0   1  -1  0 -1  2.403   0.283      relBW     [HFAG14]
+
+# D1(2420)
+Meson D1(2420)+         D_{1}(2420)^{+}                 3     2     1  0  0   1   1  0  1  2.4232  0.0252     relBW     [HFAG14]
+Meson D1(2420)0         D_{1}(2420)^{0}                 0     2     1  0  0   1  -1  0  1  2.4205  0.0317     relBW     [HFAG14]
+Meson Dbar1(2420)0      \bar{D}_{1}(2420)^{0}           0     2     1  0  0   1   1  0 -1  2.4205  0.0317     relBW     [HFAG14]
+Meson D1(2420)-         D_{1}(2420)^{-}                -3     2     1  0  0   1  -1  0 -1  2.4232  0.0252     relBW     [HFAG14]
+
+# D1(2430)
+Meson D1(2430)0         D_{1}(2430)^{0}                 0     2     1  0  0   1  -1  0  1  2.427   0.384      relBW     [HFAG14]
+Meson Dbar1(2430)0      \bar{D}_{1}(2430)^{0}           0     2     1  0  0   1   1  0 -1  2.427   0.384      relBW     [HFAG14]
+
+# D2(2460)
+Meson D2*(2460)+        D_{2}(2460)^{+}                 3     4     1  0  0   1   1  0  1  2.4638  0.0459     relBW     [HFAG14]
+Meson D2*(2460)0        D^{*}_{2}(2460)^{0}             0     4     1  0  0   1  -1  0  1  2.46047 0.0477     relBW     [HFAG14]
+Meson Dbar2*(2460)0     \bar{D}^{*}_{2}(2460)^{0}       0     4     1  0  0   1   1  0 -1  2.46047 0.0477     relBW     [HFAG14]
+Meson D2*(2460)-        D_{2}(2460)^{-}                -3     4     1  0  0   1  -1  0 -1  2.4638  0.0459     relBW     [HFAG14]
+
+
+# D(2550)
+Meson D(2550)0          D(2550)^{0}                     0     0    -1  0  0   1  -1  0  1  2.5394  0.130      relBW     [HFAG14]
+Meson Dbar(2550)0       \bar{D}(2550)^{0}               0     0    -1  0  0   1   1  0 -1  2.5394  0.130      relBW     [HFAG14]
+
+# Zc
+Meson Zc+               Z_{c}(3885)^{+}                 3     2     1  0  0   2   2  0  0  3.8887  0.035      relBW     [PDG14]
+Meson Zc0               Z_{c}(3885)^{+}                 0     2     1  0  0   2   0  0  0  3.8887  0.035      relBW     [PDG14]
+Meson Zc-               Z_{c}(3885)^{-}                -3     2     1  0  0   2  -2  0  0  3.8887  0.035      relBW     [PDG14]
 
 # Start c cbar mesons
 #
@@ -248,6 +286,9 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
 Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none]
 Baryon N(1650)-         N(1650)^-              -3  1 -1  0  0   1   -1  0  0    1.655   0.14    relBW	        [PDG]
+Baryon N(1720)-         N(1720)^-              -3  3 1   0  0   1   -1  0  0    1.720   0.25    relBW           [PDG]
+Baryon N(1895)-        N(1895)^-       -3  1 -1  0  0   1   -1  0  0    1.895   0.15    relBW       [PDG] 
+Baryon N(1900)-        N(1900)^-       -3  3 1   0  0   1   -1  0  0    1.900   0.2     relBW       [PDG]
 Baryon DeltaP33++Matrix \DeltaP33^{++}Matrix  	6  3 1   0  0   3    3 	0  0	1.0 	0.1	undefined	[none]
 Baryon Delta++ 		\Delta^{++}  		6  3 1   0  0   3    3 	0  0	1.231 	0.111	relBW	        [PDG]
 Baryon Delta(1600)++ 	\Delta(1600)^{++}  	6  3 1   0  0   3    3 	0  0	1.6 	0.32	relBW	        [PDG]
@@ -259,7 +300,7 @@ Baryon Delta(2000)++    \Delta(2000)^{++}       6  5 1   0  0   3    3  0  0    
 Baryon LambdaS01Matrix 	\LambdaS01Matrix  	0  1 -1  0  0   0    0  -1 0	1.       0.1    undefined	[none] 	
 Baryon Lambda_c+ 	\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
 Baryon Lambda 		\Lambda  		0  1 1   0  0   0    0 	-1  0	1.115683 0.0001 relBW	        [PDG]
-Baryon Lambdabar 	\bar{\Lambda} 		0  1 1   0  0   0    0 	1  0	1.115683 0.0001 relBW	        [PDG]
+Baryon Lambdabar 	\bar{\Lambda} 		0  1 -1  0  0   0    0 	1  0	1.115683 0.0001 relBW	        [PDG]
 Baryon Lambda(1405)0 	\Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
 Baryon Lambda(1520)0 	\Lambda(1520)^0  	0  3 -1  0  0   0    0  -1 0	1.5195  0.0156  relBW		[PDG]
 Baryon Lambda(1600)0    \Lambda(1600)^0         0  1 1   0  0   0    0  -1 0    1.600   0.150   relBW           [PDG]
@@ -268,6 +309,7 @@ Baryon Lambda(1690)0    \Lambda(1690)^0         0  3 -1  0  0   0    0  -1 0    
 Baryon Lambda(1800)0    \Lambda(1800)^0         0  1 -1  0  0   0    0  -1 0    1.8     0.300   relBW           [PDG]
 Baryon Lambda(1810)0 	\Lambda(1810)^0  	0  1 1   0  0   0    0  -1 0	1.81    0.15    relBW		[PDG]
 Baryon Lambda(1820)0 	\Lambda(1820)^0  	0  5 1   0  0   0    0  -1 0	1.82    0.08    relBW		[PDG]
+Baryon Lambda(1830)0    \Lambda(1830)^0         0  5 -1  0  0   0    0  -1 0    1.83    0.095   relBW           [PDG]
 Baryon Lambda(1890)0 	\Lambda(1890)^0  	0  3 1   0  0   0    0  -1 0	1.89    0.12    relBW		[PDG]
 Baryon SigmaS110Matrix 	\SigmaS11^0Matrix  	0  1  -1 0  0   2    0  -1 0  	1.      0.1     undefined	[none]
 Baryon Sigma+ 		\Sigma^+  		3  1  1  0  0   2    2  -1 0  	1.18937 0.0001  relBW		[PDG]
@@ -278,6 +320,6 @@ Baryon Sigma(1670)0 	\Sigma(1670)^0  	0  3  -1 0  0   2    0  -1 0  	1.67    0.0
 Baryon Sigma(1915)0     \Sigma(1915)^0          0  5  1  0  0   2    0  -1 0    1.915   0.12    relBW           [PDG]
 Baryon Sigma(1940)0     \Sigma(1940)^0          0  3  -1 0  0   2    0  -1 0    1.940   0.2     relBW           [PDG]
 Baryon Lambda_c(2625)+ 	\Lambda_c(2625)^+       3  3  -1 0  0   0    0 	0  1	2.262811 0.01   relBW	        [PDG]
-Baryon Xibar+           \bar{\Xi}^+             3  1  1 0  0    1    1  2  0    1.32171  0.0001 relBW           [PDG]
+Baryon Xibar+           \bar{\Xi}^+             3  1  -1 0  0   1    1  2  0    1.32171  0.0001 relBW           [PDG]
 Baryon Xi(1690)-        \Xi(1690)^-             3  1  1 0  0    1    -1 -2  0   1.69    0.02    relBW           [PDG]
-Baryon Xi(1690)1m-      \Xi(1690)1m^-           3  1  -1 0  0    1    -1 -2  0   1.69    0.02    relBW           [PDG]
+Baryon Xi(1690)1m-      \Xi(1690)1m^-           3  1  -1 0  0   1    -1 -2  0   1.69    0.02    relBW           [PDG]
