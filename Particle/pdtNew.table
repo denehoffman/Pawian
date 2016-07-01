@@ -323,3 +323,4 @@ Baryon Lambda_c(2625)+ 	\Lambda_c(2625)^+       3  3  -1 0  0   0    0 	0  1	2.2
 Baryon Xibar+           \bar{\Xi}^+             3  1  -1 0  0   1    1  2  0    1.32171  0.0001 relBW           [PDG]
 Baryon Xi(1690)-        \Xi(1690)^-             3  1  1 0  0    1    -1 -2  0   1.69    0.02    relBW           [PDG]
 Baryon Xi(1690)1m-      \Xi(1690)1m^-           3  1  -1 0  0   1    -1 -2  0   1.69    0.02    relBW           [PDG]
+Baryon Xi(1820)-        \Xi(1820)^-             3  3  -1 0  0   1    -1 -2  0   1.823   0.024   relBW           [PDG]

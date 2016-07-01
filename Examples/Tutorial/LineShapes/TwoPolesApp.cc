@@ -49,67 +49,44 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
-  std::string mass1Str="1.318";
-  std::string width1Str="0.1";
-  std::string mass2Str="1.5";
-  std::string width2Str="0.1";
-  std::string deltaStr="0.1";
+  double mass1=1.318;
+  double width1=0.1;
+  double mass2=1.5;
+  double width2=0.1;
+  double delta = 0.1;
 
-  while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
-    bool found=false;
-    std::string sw = __argv[optind];
-    if (sw=="-mass1"){
-      optind++;
-      mass1Str = __argv[optind];
-      found=true;
-    }
-    if (sw=="-width1"){
-      optind++;
-      width1Str = __argv[optind];
-      found=true;
-    }
-    if (sw=="-mass2"){
-      optind++;
-      mass2Str = __argv[optind];
-      found=true;
-    }
-    if (sw=="-width2"){
-      optind++;
-      width2Str = __argv[optind];
-      found=true;
-    }
-    if (sw=="-delta"){
-      optind++;
-      deltaStr = __argv[optind];
-      found=true;
-    }
-    if (!found){
-      Warning << "Unknown switch: " 
-	      << __argv[optind] << endmsg;
-      optind++;
-    }
+  for(;optind < (__argc-1); optind++){
+
+     std::string ws = __argv[optind];
+
+     if(ws[0]!='-'){
+       continue;
+     }
+     else if (ws == "-mass1" || ws == "--mass1"){
+        std::istringstream mass1IStr(__argv[optind+1]);
+	mass1IStr >> mass1;
+     }
+     else if (ws == "-width1" || ws == "--width1"){
+        std::istringstream width1IStr(__argv[optind+1]);
+	width1IStr >> width1;
+     }
+     else if (ws == "-mass2" || ws == "--mass2"){
+        std::istringstream mass2IStr(__argv[optind+1]);
+	mass2IStr >> mass2;
+     }
+     else if (ws == "-width2" || ws == "--width2"){
+        std::istringstream width2IStr(__argv[optind+1]);
+	width2IStr >> width2;
+     }
+     else if (ws == "-delta" || ws == "--delta"){
+        std::istringstream deltaIStr(__argv[optind+1]);
+	deltaIStr >> delta;
+     }
+     else{
+        Alert << "Unknown switch: " << __argv[optind] << endmsg;
+        return 0;
+     }
   }
-
-
-  std::stringstream mass1StrStr(mass1Str);
-  double mass1=0.;
-  mass1StrStr >> mass1;
-
-  std::stringstream width1StrStr(width1Str);
-  double width1=0.;
-  width1StrStr >> width1;
-
-  std::stringstream mass2StrStr(mass2Str);
-  double mass2=0.;
-  mass2StrStr >> mass2;
-
-  std::stringstream width2StrStr(width2Str);
-  double width2=0.;
-  width2StrStr >> width2;
-
-  std::stringstream deltaStrStr(deltaStr);
-  double delta=0.;
-  deltaStrStr >> delta;  
 
   TwoPoles twoPoles(mass1, width1, mass2, width2, delta);
 
