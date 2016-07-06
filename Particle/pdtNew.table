@@ -205,7 +205,7 @@ Meson K*3(1780) 	K_3^\ast(1780)  	0  6 -1  0  0   1  0  0  0  	1.770 	0.164   re
 Meson K2(1820) 		K_2(1820)  		0  4 -1  0  0   1  0  0  0  	1.816 	0.276   relBW	[PDG no idea]
 Meson K(1830) 		K(1830)  		0  0 -1  0  0   1  0  0  0  	1.830 	0.250   relBW	[PDG nonett 3^1S_0]
 Meson K2(2250)+		K_2(2250)^+  		3  4 -1  0  0   1  1  1  0  	2.247 	0.180   relBW	[PDG no idea]
-Meson K3(2230)+		K_3(2320)^+  		3  6  1  0  0   1  1  1  0  	2.324 	0.150   relBW	[PDG no idea]
+Meson K3(2320)+		K_3(2320)^+  		3  6  1  0  0   1  1  1  0  	2.324 	0.150   relBW	[PDG no idea]
 #
 # End strange mesons
 #
