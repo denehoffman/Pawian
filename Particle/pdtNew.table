@@ -222,39 +222,31 @@ Meson D*+               D^{*+}                          3     2    -1  0  0   1 
 Meson D*0               D^{*0}                          0     2    -1  0  0   1  -1  0  1  2.00697 0.0000834  relBW     [PDG nonett 1^3S_1, width PDG < 2.1 MeV]
 Meson D*0bar            bar{D}^{*0}                     0     2    -1  0  0   1   1  0 -1  2.00697 0.0000834  relBW     [PDG nonett 1^3S_1, width PDG < 2.1 MeV]
 Meson D*-               D^{*-}                         -3     2    -1  0  0   1  -1  0 -1  2.01027 0.0000834  relBW     [PDG nonett 1^3S_1]
-  
 # D0*(2400)
 Meson D0*(2400)+        D^{*}_{0}(2400)^{+}             3     0     1  0  0   1   1  0  1  2.403   0.283      relBW     [HFAG14]
 Meson D0*(2400)0        D^{*}_{0}(2400)^{0}             0     0     1  0  0   1  -1  0  1  2.3182  0.2674     relBW     [HFAG14]
 Meson Dbar0*(2400)0     \bar{D}^{*}_{0}(2400)^{0}       0     0     1  0  0   1   1  0 -1  2.3182  0.2674     relBW     [HFAG14]
 Meson D0*(2400)-        D^{*}_{0}(2400)^{+}            -3     0     1  0  0   1  -1  0 -1  2.403   0.283      relBW     [HFAG14]
-
 # D1(2420)
 Meson D1(2420)+         D_{1}(2420)^{+}                 3     2     1  0  0   1   1  0  1  2.4232  0.0252     relBW     [HFAG14]
 Meson D1(2420)0         D_{1}(2420)^{0}                 0     2     1  0  0   1  -1  0  1  2.4205  0.0317     relBW     [HFAG14]
 Meson Dbar1(2420)0      \bar{D}_{1}(2420)^{0}           0     2     1  0  0   1   1  0 -1  2.4205  0.0317     relBW     [HFAG14]
 Meson D1(2420)-         D_{1}(2420)^{-}                -3     2     1  0  0   1  -1  0 -1  2.4232  0.0252     relBW     [HFAG14]
-
 # D1(2430)
 Meson D1(2430)0         D_{1}(2430)^{0}                 0     2     1  0  0   1  -1  0  1  2.427   0.384      relBW     [HFAG14]
 Meson Dbar1(2430)0      \bar{D}_{1}(2430)^{0}           0     2     1  0  0   1   1  0 -1  2.427   0.384      relBW     [HFAG14]
-
 # D2(2460)
 Meson D2*(2460)+        D_{2}(2460)^{+}                 3     4     1  0  0   1   1  0  1  2.4638  0.0459     relBW     [HFAG14]
 Meson D2*(2460)0        D^{*}_{2}(2460)^{0}             0     4     1  0  0   1  -1  0  1  2.46047 0.0477     relBW     [HFAG14]
 Meson Dbar2*(2460)0     \bar{D}^{*}_{2}(2460)^{0}       0     4     1  0  0   1   1  0 -1  2.46047 0.0477     relBW     [HFAG14]
 Meson D2*(2460)-        D_{2}(2460)^{-}                -3     4     1  0  0   1  -1  0 -1  2.4638  0.0459     relBW     [HFAG14]
-
-
 # D(2550)
 Meson D(2550)0          D(2550)^{0}                     0     0    -1  0  0   1  -1  0  1  2.5394  0.130      relBW     [HFAG14]
 Meson Dbar(2550)0       \bar{D}(2550)^{0}               0     0    -1  0  0   1   1  0 -1  2.5394  0.130      relBW     [HFAG14]
-
 # Zc
 Meson Zc+               Z_{c}(3885)^{+}                 3     2     1  0  0   2   2  0  0  3.8887  0.035      relBW     [PDG14]
 Meson Zc0               Z_{c}(3885)^{+}                 0     2     1  0  0   2   0  0  0  3.8887  0.035      relBW     [PDG14]
 Meson Zc-               Z_{c}(3885)^{-}                -3     2     1  0  0   2  -2  0  0  3.8887  0.035      relBW     [PDG14]
-
 # Start c cbar mesons
 #
 # type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass      width   dyn.f   comment
