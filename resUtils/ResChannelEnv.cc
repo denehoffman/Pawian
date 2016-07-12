@@ -33,6 +33,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 
@@ -73,10 +74,15 @@ void ResChannelEnv::setup(ChannelID id){
   _resReaction=std::shared_ptr<resReaction>(new resReaction(_motherParticle, _prodChannelInfoList, id));
 
   //fill prodDecayList
+  std::vector<std::string> additionalStringVecDummy;
+  std::string dynTypeDefault="WoDynamics";
+
   std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _resReaction->productionHeliDecays();
   std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
   for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
     (*itDec)->disableIsospin();
+    if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
+    else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
     _prodDecList->addDecay(*itDec);
   }
 
