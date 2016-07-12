@@ -278,6 +278,7 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
 Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none]
 Baryon N(1650)-         N(1650)^-              -3  1 1  0  0   1   -1  0  0    1.655   0.14    relBW	        [PDG]
+Baryon N(1710)-         N(1710)^-              -3  1 -1  0  0   1   -1  0  0    1.710   0.14    relBW           [PDG]
 Baryon N(1720)-         N(1720)^-              -3  3 -1   0  0   1   -1  0  0    1.720   0.25    relBW           [PDG]
 Baryon N(1895)-        N(1895)^-       -3  1 1  0  0   1   -1  0  0    1.895   0.15    relBW       [PDG] 
 Baryon N(1900)-        N(1900)^-       -3  3 -1   0  0   1   -1  0  0    1.900   0.2     relBW       [PDG]

@@ -2,7 +2,7 @@
 //                                                                        //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 Julian Pychy (julian@ep1.rub.de)                       //
-//                 - Ruhr-Universität Bochum                              //
+//                 - Ruhr-Universit??t Bochum                              //
 //                                                                        //
 //  This file is part of Pawian.                                          //
 //                                                                        //
@@ -68,7 +68,9 @@ void MinuitMinimizer::minimize(){
   }
 
   // Two more tries to get a valid result unsing strategy 2
-  for(int j=0; j<2; j++){
+//  for(int j=0; j<2; j++){
+   // workaround fix; only one trial
+     for(int j=0; j<1; j++){
      Warning <<"FM is invalid, try with strategy = 2."<< endmsg;
 
      // Check minimum covariance matrix
