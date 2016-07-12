@@ -46,12 +46,14 @@ resReaction::resReaction(Particle* motherParticle, std::vector<std::shared_ptr<P
 
    std::shared_ptr<IsobarLSDecay> currentDec(new IsobarLSDecay( _motherParticle, particlePair.first, particlePair.second, _channelID));
       currentDec->setProductionAmp();
+      currentDec->setProdChannelInfo( *itProd );
       currentDec->extractStates();
 
       if (currentDec->JPCLSAmps().size()>0){
 	_prodCanoDecs.push_back(currentDec);
 	std::shared_ptr<IsobarHeliDecay> currentHeliDec(new IsobarHeliDecay( _motherParticle, particlePair.first, particlePair.second, _channelID));
 	currentHeliDec->setProductionAmp();
+	currentHeliDec->setProdChannelInfo( *itProd );
 	currentHeliDec->extractStates();
 	_prodHeliDecs.push_back(currentHeliDec);
       }
