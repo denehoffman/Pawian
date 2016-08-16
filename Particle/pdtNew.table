@@ -117,6 +117,9 @@ Meson rho(1270) 	\rho(1270)  		0  2 -1 -1  1   2  0  0  0 	1.270 	0.300  	relBW	
 Meson rho(1450)0 	\rho(1450)^0  		0  2 -1 -1  1   2  0  0  0 	1.465 	0.400  	relBW	[PDG nonett 2^3S_1]
 Meson rho(1450)+ 	\rho(1450)^+  		3  2 -1  0  1   2  2  0  0 	1.465 	0.400  	relBW	[PDG nonett 2^3S_1]
 Meson rho(1450)- 	\rho(1450)^-  	        -3 2 -1  0  1   2  -2 0  0 	1.465 	0.400  	relBW	[PDG nonett 2^3S_1]
+Meson rho(1570)0 	\rho(1570)^0  		0  2 -1 -1  1   2  0  0  0 	1.570 	0.144  	relBW	[PDG nonett 3^3D_1]
+Meson rho(1570)+ 	\rho(1570)^+  		3  2 -1  0  1   2  2  0  0 	1.570 	0.144  	relBW	[PDG nonett 3^3D_1]
+Meson rho(1570)- 	\rho(1570)^-  		-3 2 -1  0  1   2  -2 0  0 	1.570 	0.144  	relBW	[PDG nonett 3^3D_1]
 Meson pi1(1600)0 	\pi_1(1600)^0  		0  2 -1  1 -1   2  0  0  0 	1.662 	0.241  	relBW	[PDG hybrid candidate]
 Meson pi1(1600)+ 	\pi_1(1600)^+  		3  2 -1  0 -1   2  +2  0  0 	1.662 	0.241  	relBW	[PDG hybrid candidate]
 Meson pi1(1600)- 	\pi_1(1600)^-  		-3  2 -1  0 -1   2  -2  0  0 	1.662 	0.241  	relBW	[PDG hybrid candidate]
@@ -131,6 +134,9 @@ Meson rho(1700)+ 	\rho(1700)^+  		3  2 -1  0  1   2  2  0  0 	1.720 	0.250  	rel
 Meson rho(1700)- 	\rho(1700)^-  		-3 2 -1  0  1   2  -2 0  0 	1.720 	0.250  	relBW	[PDG nonett 3^3D_1]
 Meson pi(1800) 		\pi(1800)  		0  0 -1  1 -1   2  0  0  0 	1.795 	0.212  	relBW	[PDG nonett 3^1S_0]
 Meson a4(2040) 		a_4(2040)  		0  8  1  1 -1   2  0  0  0 	2.037 	0.427  	relBW	[PDG no idea]
+Meson rho(1900)0 	\rho(1900)^0  		0  2 -1 -1  1   2  0  0  0 	1.900 	0.100  	relBW	[PDG nonett 3^3D_1]
+Meson rho(1900)+ 	\rho(1900)^+  		3  2 -1  0  1   2  2  0  0 	1.900 	0.100  	relBW	[PDG nonett 3^3D_1]
+Meson rho(1900)- 	\rho(1900)^-  		-3 2 -1  0  1   2  -2 0  0 	1.900 	0.100  	relBW	[PDG nonett 3^3D_1]
 Meson pi2(2100) 	\pi_2(2100)  		0  4 -1  1 -1   2  0  0  0 	2.100 	0.651  	relBW	[PDG nonett 4^1D_2]
 Meson rho(2150)0 	\rho(2150)^0  		0  2 -1 -1  1   2  0  0  0 	2.150 	0.200  	relBW	[PDG nonett 4^3D_1]
 Meson rho(2150)+	\rho(2150)^+  		3  2 -1	0   1   2  2  0  0 	2.150 	0.200  	relBW	[PDG nonett 4^3D_1]
@@ -168,7 +174,8 @@ Meson I12-+(2000)- 	\I12-+(2000)^-  	-3 4 -1  0  -1  2  -2 0  0 	2.000 	0.200  	
 #
 # type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C      mass    width   dyn.f   comment
 #
-Meson kappa 		\kappa  		0  0  1  0  0   1  0  -1 0 	0.75 	  0.05	  relBW	  [PDG nonett 1^3P_0]
+Meson kappa0 		\kappa^0  		0  0  1  0  0   1  -1   1 0 	0.75 	  0.5	  relBW	  [PDG nonett 1^3P_0]
+Meson kappa0bar 	\bar{\kappa}^0  	0  0  1  0  0   1  1  -1 0 	0.75 	  0.5	  relBW	  [PDG nonett 1^3P_0]
 Meson K0 		K^0  			0  0 -1  0  0   1  -1  1 0  	0.497614  0.0001  relBW	  [PDG nonett 1^1S_0]
 Meson K0bar 		\bar{K}^0  		0  0 -1  0  0   1  1  -1 0  	0.497614  0.0001  relBW	  [PDG nonett 1^1S_0]
 Meson K+ 		K^+  			3  0 -1  0  0   1  1  1  0  	0.49367   0.0001  relBW	  [PDG nonett 1^1S_0]
