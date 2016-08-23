@@ -61,6 +61,7 @@ public:
   const bool useTruncatedBarrierFactors() const {return _useTruncatedBarrierFactors;}
   const unsigned int orbitalMom() const {return _orbitalMom;}
   const int orderBg() const {return _orderKMatrixBackground;}
+  const int orderPVecBg() const {return _orderPVectorBackground;}
   const bool useAdler() const {return _useAdler0;}
   const double s0Adler() const {return _s0Adler;}
   const double snormAdler() const {return _snormAdler;}
@@ -86,6 +87,7 @@ protected:
   bool _useTruncatedBarrierFactors;
   unsigned int _orbitalMom;
   int _orderKMatrixBackground;
+  int _orderPVectorBackground;
   bool _useAdler0;
   double _s0Adler;
   double _snormAdler;

@@ -370,11 +370,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     daughter2HelMother=daughter2_4Vec;
     daughter1HelMother=daughter1_4Vec;
     if( fabs(mother4Vec.P()) > 1.e-6 ){
-      //daughter2HelMother.Boost(mother4Vec);
-      //daughter1HelMother.Boost(mother4Vec);
+      // daughter2HelMother.Boost(mother4Vec);
+      // daughter1HelMother.Boost(mother4Vec);
 
       Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0)
-				    , 0., 0., 1.); //z-axis = quantisation axis
+      				    , 0., 0., 1.); //z-axis = quantisation axis
       daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);
     }
@@ -400,7 +400,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
       double thePhi=0.;
-      if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter2HelMother.Phi();
+      //if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter2HelMother.Phi();
+      if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter1HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
       std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
       if(found != evtData->WignerDIdId3[_wigDWigDRefId].end()){
@@ -408,22 +409,24 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       }
 
       
-      if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM && whichDecayLevel()==decayLevel::isProdAmp){
-	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
-      } 
-      else evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-
+      // if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM && whichDecayLevel()==decayLevel::isProdAmp && type()=="IsobarHeliMultipoleDecay"){
+      // 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
+      // 	//	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
+      // }
+      
+      evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
+      
       if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real() != evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real()){
 	Alert << "WignerD function of event No: " << evtData->evtNo << " is nan!!! " << endmsg;
 	Alert << "Set it manually to complex<double>(1.e-10, 1.e-10)" << endmsg;
 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]= complex<double>(1.e-10, 1.e-10);
-	Alert << "daughter2HelMother phi: " << daughter2HelMother.Phi() << "\ttheta: " << daughter2HelMother.Theta() << endmsg;
+	Alert << "daughter1HelMother phi: " << daughter1HelMother.Phi() << "\ttheta: " << daughter1HelMother.Theta() << endmsg;
 	Alert << "spinMother: " << spinMother << "\tlam12: " << lam12 << endmsg;
-	Alert << "daughter2HelMother: Mass: " << daughter2HelMother.Mass() 
-		<< "\tE: " << daughter2HelMother.E()
-		<< "\tPx: " << daughter2HelMother.Px()
-		<< "\tPy: " << daughter2HelMother.Py()
-		<< "\tPz: " << daughter2HelMother.Pz()  
+	Alert << "daughter1HelMother: Mass: " << daughter1HelMother.Mass() 
+		<< "\tE: " << daughter1HelMother.E()
+		<< "\tPx: " << daughter1HelMother.Px()
+		<< "\tPy: " << daughter1HelMother.Py()
+		<< "\tPz: " << daughter1HelMother.Pz()  
 		<< endmsg;
 	exit(1); 
       }

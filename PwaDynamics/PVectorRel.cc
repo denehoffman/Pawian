@@ -31,11 +31,13 @@
 PVectorRel::PVectorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   KMatrixBase(phpVecs, int(phpVecs.size()), 1)
   ,_Ppoles(Ppoles)
+  ,_nOfChannels(phpVecs.size())
  {
  }
 
 PVectorRel::PVectorRel(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   KMatrixBase(phpVecs, int(phpVecs.size()), 1)
+  ,_nOfChannels(phpVecs.size())
  {
  }
 

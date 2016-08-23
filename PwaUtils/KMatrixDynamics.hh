@@ -68,6 +68,7 @@ protected:
   int _projectionIndex;
   int _orderKMatBg;
   bool _withKMatAdler;
+  int _orderPVecBg;
   double _currentMass;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
   
@@ -84,6 +85,8 @@ protected:
   std::map<int, std::vector<double> > _currentgFactorMap;
   std::vector< std::vector< std::vector<double> > > _currentBgTerms;
   std::vector< std::vector< std::vector<std::string> > > _bgTermNames;
+  std::vector< std::vector<double> >  _currentPVecBgTerms;
+  std::vector< std::vector<std::string> >  _bgPVecTermNames;
   double _currentAdler0;
   
   CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;

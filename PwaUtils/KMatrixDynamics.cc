@@ -37,6 +37,7 @@
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "PwaDynamics/FVector.hh"
+#include "PwaDynamics/PVectorRelBg.hh"
 #include "ConfigParser/KMatrixParser.hh"
 #include "PwaDynamics/KMatrixRel.hh"
 #include "PwaDynamics/KMatrixRelBg.hh"
@@ -146,6 +147,16 @@ void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
       fitPar->Add("s0"+_kMatName, _currentAdler0, fabs(_currentAdler0)+0.2);
     }
   }
+
+    //p-vector bgterms bg-terms
+  if(_orderPVecBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderPVecBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	std::string currentName=_bgPVecTermNames.at(i).at(j);
+	fitPar->Add(currentName, _currentPVecBgTerms.at(i).at(j), fabs(_currentPVecBgTerms.at(i).at(j))+0.3);
+      }
+    }
+  }
 }
 
 void KMatrixDynamics::fillParamNameList(){
@@ -211,6 +222,19 @@ void KMatrixDynamics::fillParamNameList(){
       _paramNameList.push_back("s0"+_kMatName);
       for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
 	itNameMap->second.push_back("s0"+_kMatName);
+      }
+    }
+  }
+
+ //p-vector bg-terms
+  if(_orderPVecBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderPVecBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+  	  std::string currentName=_bgPVecTermNames.at(i).at(j);
+	  _paramNameList.push_back(currentName);
+          for(itNameMap=_paramNameListMap.begin(); itNameMap!=_paramNameListMap.end(); ++itNameMap){
+	    itNameMap->second.push_back(currentName);
+  	}
       }
     }
   }
@@ -300,75 +324,21 @@ void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
     }
   }
 
+  //p-vector bg-terms
+  if(_orderPVecBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderPVecBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	  double newVal=fitPar->Value(_bgPVecTermNames.at(i).at(j));
+	  _currentPVecBgTerms.at(i).at(j)=newVal;
+	  std::map<std::string, std::shared_ptr<PVectorRel> >::iterator itPVec;
+	  for(itPVec=_pVecMap.begin(); itPVec!=_pVecMap.end(); ++itPVec){
+	    itPVec->second->updateBgTerms(i, j, newVal);
+	  }
+      }
+    }
+  }
 }
 
-// void KMatrixDynamics::updateFitParams(fitParCol& theParamVal){
-
-//   //beta factor for production  
-//   std::map<std::string, std::map<std::string, double> >::iterator it1;
-//   for(it1=_currentbFactorMap.begin(); it1!=_currentbFactorMap.end(); ++it1){
-//     std::map<std::string, double>::iterator it2;
-//     std::map<std::string, double>& bFactors=it1->second;
-//     for(it2=bFactors.begin(); it2!=bFactors.end(); ++it2){
-//       it2->second=theParamVal.otherParams.at(it1->first+it2->first);
-//     }
-
-//     std::shared_ptr<PVectorRel> currentPVec=_pVecMap.at(it1->first);
-
-//     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
-//       std::string currentName="b_"+_poleNames.at(i);
-//       complex<double> currentbFactor=bFactors.at(currentName+"Mag")*complex<double>(cos(bFactors.at(currentName+"Phi")), sin(bFactors.at(currentName+"Phi")));
-//       currentPVec->updateBeta(i, currentbFactor);
-//     }
-//   }
-
-//   //pole positions
-//   std::vector<double >::iterator itPoleVec;
-//   for(unsigned int i=0; i<_currentPoleMasses.size(); ++i){
-//     double currentPoleMass=theParamVal.Masses[_poleNames.at(i)];
-//     _currentPoleMasses.at(i)=currentPoleMass;
-//     _kPoles.at(i)->updatePoleMass(currentPoleMass);
-
-//     std::map<std::string, std::shared_ptr<PVectorRel> >::iterator itPVec;
-//     for(itPVec=_pVecMap.begin(); itPVec!=_pVecMap.end(); ++itPVec){
-//       itPVec->second->updatePoleMass(i, currentPoleMass);
-//     }
-//   }
-
-  // //g-factors
-  // for(unsigned int i=0; i<_poleNames.size(); ++i){
-  //   std::vector<double>& currentgFactorVec=_currentgFactorMap.at(i);
-  //   for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
-  //     std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-  //     currentgFactorVec.at(j)=theParamVal.gFactors.at(currentName);
-  //   }
-  //   _kPoles.at(i)->updategFactors(currentgFactorVec);
-    
-  //   std::map<std::string, std::shared_ptr<PVectorRel> >::iterator itPVec;
-  //   for(itPVec=_pVecMap.begin(); itPVec!=_pVecMap.end(); ++itPVec){
-  //     itPVec->second->updategFactors(i, currentgFactorVec);
-  //   }
-  // }
-
-  // //k-matrix bg-terms
-  // if(_orderKMatBg>=0){
-  //   for(unsigned int i=0; i<=fabs(_orderKMatBg); ++i){
-  //     for(unsigned int j=0; j<_phpVecs.size(); ++j){
-  // 	for(unsigned int k=j; k<_phpVecs.size(); ++k){
-  // 	  double newVal=theParamVal.otherParams.at(_bgTermNames.at(i).at(j).at(k));
-  // 	  _currentBgTerms.at(i).at(j).at(k)=newVal;
-  // 	  _kMatr->updateBgTerms(i,j,k,newVal);
-  // 	}
-  //     }
-  //   }
-
-//     //Adler-term
-//     if(_withKMatAdler){
-//       _currentAdler0=theParamVal.otherParams.at("s0"+_kMatName);
-//       _kMatr->updates0Adler(_currentAdler0);
-//     }
-//   }
-// }
 
 void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   if(0==theDec){
@@ -402,6 +372,25 @@ void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
     currentPVector->updateBeta(i, currentbFactor);
   }
 
+  if(_orderPVecBg>=0) {
+    _currentPVecBgTerms.resize(_orderPVecBg+1);
+    _bgPVecTermNames.resize(_orderPVecBg+1);
+    for(unsigned int i=0; i<= fabs(_orderPVecBg); ++i){
+      _currentPVecBgTerms.at(i).resize(_phpVecs.size());
+      _bgPVecTermNames.at(i).resize(_phpVecs.size());
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+	_currentPVecBgTerms.at(i).at(j)=0.;
+
+	  std::stringstream keyOrderStrStr;
+	  keyOrderStrStr << i << j;
+	  std::string keyOrder=keyOrderStrStr.str();
+	  std::string currentName="bgPVec"+keyOrder+_kMatName;
+	  _bgPVecTermNames.at(i).at(j)=currentName;
+      }
+    }
+  }
+
+
   std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
   _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
@@ -420,7 +409,8 @@ const unsigned short KMatrixDynamics::grandMaId(AbsXdecAmp* grandmaAmp){
 
 void KMatrixDynamics::init(){
   _kMatName=_kMatrixParser->keyName();
-  _orderKMatBg=_kMatrixParser->orderBg();  
+  _orderKMatBg=_kMatrixParser->orderBg();
+  _orderPVecBg=_kMatrixParser->orderPVecBg();   
   _withKMatAdler=_kMatrixParser->useAdler();  
 
   std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
@@ -561,6 +551,8 @@ std::shared_ptr<PVectorRel> KMatrixDynamics::makeNewPVec(){
      thePpoles.push_back(currentPPole);     
    }
 
-   std::shared_ptr<PVectorRel> thePVector(new PVectorRel(thePpoles, _phpVecs));
+   std::shared_ptr<PVectorRel> thePVector;
+   if(_orderPVecBg<0) thePVector=std::shared_ptr<PVectorRel>(new PVectorRel(thePpoles, _phpVecs));
+   else thePVector=std::shared_ptr<PVectorRel>(new PVectorRelBg(thePpoles, _phpVecs, _orderPVecBg)); 
    return thePVector;
 }
