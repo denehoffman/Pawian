@@ -104,6 +104,17 @@ void EpemChannelEnv::setup(ChannelID id){
       _prodDecList->addDecay(*itDec);
     }
   }
+  else if (_theEpEmParser->productionFormalism()=="Cano"){
+    std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs;
+    if (_theEpEmParser->productionFormalism()=="Cano") prodDecs = _epemReaction->productionCanoDecays();
+
+    std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+    if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
+    else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+     _prodDecList->addDecay(*itDec);
+   }
+  }
    else{
       Alert <<"production formalism\t" << _theEpEmParser->productionFormalism() << "\t is not supported!!!" << endmsg;
       exit(0);
@@ -140,7 +151,7 @@ void EpemChannelEnv::setup(ChannelID id){
             exit(0);
          }
       }
-   }
+  }
   
   //set suffixes
   std::vector<std::string> suffixVec = _theEpEmParser->replaceSuffixNames();

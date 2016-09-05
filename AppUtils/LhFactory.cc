@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -38,6 +38,7 @@
 #include "pbarpUtils/pbarpTensorLh.hh"
 #include "epemUtils/epemHeliLh.hh"
 #include "epemUtils/epemTensorLh.hh"
+#include "epemUtils/epemCanoLh.hh"
 #include "resUtils/resBaseLh.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -72,6 +73,7 @@ std::shared_ptr<AbsLh> LhFactory::getLh(short channelType, ChannelID id, std::st
   else if( channelType == AbsChannelEnv::CHANNEL_EPEM){
     if (formalism=="Heli" || formalism=="HeliMultipole") result = std::shared_ptr<AbsLh>(new epemHeliLh(id));
     else if (formalism=="Tensor") result = std::shared_ptr<AbsLh>(new epemTensorLh(id));
+    else if (formalism=="Cano") result = std::shared_ptr<AbsLh>(new epemCanoLh(id));
     else {
       Alert << "prodFormalism\t" << formalism << "\tfor channel type AbsChannelEnv::CHANNEL_EPEM doesn't exist!!!" << endmsg;
       exit(1);

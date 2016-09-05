@@ -62,7 +62,6 @@ public:
 
 
 protected:
- virtual void initialize();
 
 private:
 };

@@ -379,7 +379,7 @@ int main(int argc, char *argv[])
    allCanvas->cd(4);
    resshapeCanvas->DrawClonePad();
    allCanvas->Write();
-
+   file->Write();
    file->Close();
    return 0;
 }

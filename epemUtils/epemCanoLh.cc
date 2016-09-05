@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,48 +20,45 @@
 //									  //
 //************************************************************************//
 
-// epemBaseLh class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// epemCanoLh class definition file. -*- C++ -*-
+// Copyright 2016 Bertram Kopf
 
-#pragma once
-
-#include <iostream>
+#include <getopt.h>
 #include <fstream>
 #include <string>
-#include <vector>
-#include <complex>
-#include <memory>
-#include <boost/function.hpp>
-
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 #include "epemUtils/epemBaseLh.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "epemUtils/epemCanoLh.hh"
+#include "epemUtils/epemReaction.hh"
+#include "epemUtils/EpemChannelEnv.hh"
+#include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/AbsXdecAmp.hh"
+#include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
+#include "PwaUtils/XdecAmpRegistry.hh"
+#include "Particle/Particle.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-class AbsXdecAmp;
-class epemReaction;
-class LSDecAmps;
-
-class epemHeliLh : public epemBaseLh {
-
-public:
-  epemHeliLh(ChannelID channelID);
-
-  virtual ~epemHeliLh();
-
-  virtual AbsLh* clone_() const{
-    AbsLh* theClone=new epemHeliLh(_channelID);
-    theClone->setDataVec(_evtDataVec);
-    theClone->setMcVec(_evtMCVec);
-    return theClone;
-  }
-
-  virtual void print(std::ostream& os) const;
+#include <boost/bind.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
 
 
-protected:
+epemCanoLh::epemCanoLh(ChannelID channelID) : 
+  epemBaseLh(channelID)
+{
+  initialize();
+}
 
-private:
 
-};
+epemCanoLh::~epemCanoLh()
+{;
+}
+
+
+void epemCanoLh::print(std::ostream& os) const{
+
+}
+
+

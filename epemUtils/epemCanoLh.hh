@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,8 +20,8 @@
 //									  //
 //************************************************************************//
 
-// epemBaseLh class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// epemTensorLh class definition file. -*- C++ -*-
+// Copyright 2016 Bertram Kopf
 
 #pragma once
 
@@ -44,15 +43,15 @@ class AbsXdecAmp;
 class epemReaction;
 class LSDecAmps;
 
-class epemHeliLh : public epemBaseLh {
+class epemCanoLh : public epemBaseLh {
 
 public:
-  epemHeliLh(ChannelID channelID);
+  epemCanoLh(ChannelID channelID);
 
-  virtual ~epemHeliLh();
+  virtual ~epemCanoLh();
 
   virtual AbsLh* clone_() const{
-    AbsLh* theClone=new epemHeliLh(_channelID);
+    AbsLh* theClone=new epemCanoLh(_channelID);
     theClone->setDataVec(_evtDataVec);
     theClone->setMcVec(_evtMCVec);
     return theClone;
@@ -64,5 +63,4 @@ public:
 protected:
 
 private:
-
 };

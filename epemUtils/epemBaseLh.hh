@@ -77,9 +77,6 @@ protected:
   //  std::shared_ptr<epemReaction> _epemReactionPtr;
   const std::shared_ptr<EpemChannelEnv> _epemChannelEnv;
 
-  int _highestJFsp;
-  bool _isHighestJaPhoton;
-
   virtual void initialize();
 private:
 };

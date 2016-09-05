@@ -64,23 +64,3 @@ void epemTensorLh::print(std::ostream& os) const{
 }
 
 
-void  epemTensorLh::initialize(){
-  epemBaseLh::initialize();
-  //  std::vector< std::shared_ptr<IsobarTensorDecay> > theDecs = _epemReactionPtr->productionTensorDecays();
-  // std::vector< std::shared_ptr<IsobarTensorDecay> >::iterator it;
-  // for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-  //   std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
-  //   _decAmps.push_back(currentAmp);
-  // }
-
-  // std::vector< std::shared_ptr<AbsDecay> > theDecs = _epemChannelEnv->prodDecayList()->getList();
-  // std::vector< std::shared_ptr<AbsDecay> >::iterator it;
-  // for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-  //   std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
-  //   _decAmps.push_back(currentAmp);
-  // }
-}
-
-
-
-
