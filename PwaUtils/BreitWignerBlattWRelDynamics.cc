@@ -52,8 +52,8 @@ complex<double> BreitWignerBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp*
   if ( _cacheAmps && !_recalculate){
     return _cachedLMap.at(evtNo).at(orbMom);
   }
+  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR);
 
-  complex<double> result=BreitWignerFunction::BlattWRel(orbMom, theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR);  
   if ( _cacheAmps){
      theMutex.lock();
      _cachedLMap[evtNo][orbMom]=result;

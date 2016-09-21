@@ -77,7 +77,15 @@ void BreitWignerRelDynamics::fillMasses(EvtData* theData){
     mass4VecD1+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
 
-  theData->DoubleMassId[_dynMassIdDaughter1]=mass4VecD1.Mass();
+  double sqrMassDaughter1=mass4VecD1.Mass2();
+  if (sqrMassDaughter1>0.) theData->DoubleMassId[_dynMassIdDaughter1]=mass4VecD1.Mass();
+  else if( sqrMassDaughter1 > -1.e-6) theData->DoubleMassId[_dynMassIdDaughter1]=0.;
+  else{
+    Alert << "mass4VecD1.Mass2() is " << mass4VecD1.Mass2() << " and thus < -1e-6 !!!" 
+	  << "\nexit !!!" << endmsg;
+    exit(0); 
+  }  
+
 
   Vector4<double> mass4VecD2(0.,0.,0.,0.);
   for (it=_fsParticlesDaughter2.begin(); it !=_fsParticlesDaughter2.end(); ++it){
@@ -85,7 +93,13 @@ void BreitWignerRelDynamics::fillMasses(EvtData* theData){
     mass4VecD2+= theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
   }
 
-  theData->DoubleMassId[_dynMassIdDaughter2]=mass4VecD2.Mass();
-
+  double sqrMassDaughter2=mass4VecD2.Mass2();
+  if (sqrMassDaughter2>0.) theData->DoubleMassId[_dynMassIdDaughter2]=mass4VecD2.Mass();
+  else if( sqrMassDaughter2 > -1.e-6) theData->DoubleMassId[_dynMassIdDaughter2]=0.;
+  else{
+    Alert << "mass4VecD2.Mass2() is " << mass4VecD2.Mass2() << " and thus < -1e-6 !!!" 
+	  << "\nexit !!!" << endmsg;
+    exit(0); 
+  }
 }
 

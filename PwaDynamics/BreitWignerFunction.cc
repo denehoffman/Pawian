@@ -22,6 +22,7 @@
 //************************************************************************//
 
 #include "PwaDynamics/BreitWignerFunction.hh"
+#include "ErrLogger/ErrLogger.hh"
 //#include "PwaDynamics/BarrierFactor.hh"
 
 complex<double>  BreitWignerFunction::NonRel(double currentMass,double mass0, double width){
@@ -43,7 +44,6 @@ complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,d
   complex<double> momQ=breakupMomQ(currentMass, massA, massB);
 
   std::complex<double> bwkFactor=BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, qR);
-
 
   return mass0*width*bwkFactor/(mass0*mass0 - currentMass*currentMass- i*(rho/rho0)*mass0*width*bwkFactor*bwkFactor);
 }

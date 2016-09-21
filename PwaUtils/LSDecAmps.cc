@@ -151,7 +151,6 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
 
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDIdId3.at(_decay->wigDWigDRefId());
   for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-
     for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
       Spin lambda = lambda1-lambda2;
       if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>_Smax) continue;
@@ -189,10 +188,9 @@ void LSDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
  std::vector< std::shared_ptr<const LScomb> >::iterator it;
  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
    theMutex.lock();
-   //   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
    _cachedDynIdLSMap[std::this_thread::get_id()][(*it)->L][_absDyn->grandMaId(grandmaAmp)]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
    theMutex.unlock();
- }  
+ }
 
  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
  if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
