@@ -246,6 +246,8 @@ Meson K3(2320)0		K_3(2320)^0  		0  6  1  0  0   1  -1 1  0  	2.324 	0.150   relB
 Meson K3(2320)0bar	\bar{K_3(2320)}^0  	0  6  1  0  0   1  1  -1 0  	2.324 	0.150   relBW	[PDG no idea]
 Meson K3(2320)-		K_3(2320)^-  		-3 6  1  0  0   1  -1 -1 0  	2.324 	0.150   relBW	[PDG no idea]
 Meson K3(2320)+		K_3(2320)^+  		3  6  1  0  0   1  1  1  0  	2.324 	0.150   relBW	[PDG no idea]
+Meson K*5(2380)+	K_2^\ast(2380)^+	3  10 -1 0  0	1  1  1	 0	2.38	0.178	relBW	[PDG no idea]
+Meson K4(2500)+		K_4(2500)^+		3  8  -1 0  0	1  1  1	 0	2.5	0.150	relBW	[PDG no idea]
 #
 # End strange mesons
 #
