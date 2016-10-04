@@ -12,10 +12,10 @@ pipiSD0b_pole2Phi	0	0.2
 pipiSD0b_pole3Phi	0	0.2
 pipiSD0b_pole4Phi	0	0.2
 pipiSD0b_pole5Phi	0	0.2
-pipiSD0fprod_4PiMag	1	1
-pipiSD0fprod_EtaEtaMag	1	1
-pipiSD0fprod_EtaEtapMag	1	1
-pipiSD0fprod_KKMag	1	1
+pipiSD0fprod_4PiMag	0	1
+pipiSD0fprod_EtaEtaMag	0	1
+pipiSD0fprod_EtaEtapMag	0	1
+pipiSD0fprod_KKMag	0	1
 pipiSD0fprod_PiPiMag	1	1
 pipiSD0fprod_4PiPhi	0	0.2
 pipiSD0fprod_EtaEtaPhi	0	0.2
