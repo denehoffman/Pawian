@@ -1,6 +1,6 @@
-INFO: /data/jollyj/bertram/NewPawian160329/Pawian/bin/singleChannelApp
+INFO: /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
 INFO: --epemFiles
-INFO: /data/jollyj/bertram/NewPawian160329/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+INFO: /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 INFO: --mode
 INFO: server
 INFO: !
@@ -88,9 +88,9 @@ INFO:
 //************************************************************************//
 
    
-INFO: Compiled Mar 29 2016 15:00:04
+INFO: Compiled Oct  4 2016 13:54:51
 
-Running with the following options using /data/jollyj/bertram/NewPawian160329/Pawian/ConfigParser/global.cfg:
+Running with the following options using /data/jollyj/bertram/NewPawian160712/Pawian/ConfigParser/global.cfg:
 
 Error log mode: 1
 
@@ -127,7 +127,7 @@ pdg table: /Particle/pdtNew.table
 minimumTolerance: 0.1
 
 
-epem channel configuration file: /data/jollyj/bertram/NewPawian160329/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+epem channel configuration file: /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 
 
 
@@ -164,19 +164,20 @@ number of generated events:	10000
 
 number of data events:	1000000
 INFO: numReactions: 1
-INFO: __argv[0]: /data/jollyj/bertram/NewPawian160329/Pawian/bin/singleChannelApp
+ERROR: /ParticleGrammar.hh:133: failed parsing at: 
+INFO: __argv[0]: /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
 INFO: __argv[1]: --epemFiles
 INFO: __argv[3]: --mode
 INFO: __argv[4]: server
 INFO: __argv[5]: !
-INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian160329/Pawian/bin/singleChannelApp
+INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
 INFO: argvWCfgFile[1]= -c
-INFO: argvWCfgFile[2]= /data/jollyj/bertram/NewPawian160329/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+INFO: argvWCfgFile[2]= /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 INFO: argvWCfgFile[3]= --mode
 INFO: argvWCfgFile[4]= server
 INFO: argvWCfgFile[5]= !
 
-Running with the following options using /data/jollyj/bertram/NewPawian160329/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
+Running with the following options using /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
 
 Error log mode: 1
 
@@ -299,6 +300,34 @@ spin density matrix calculation for particles
 productionTensorRadType: Default
 
 INFO: Now replace the parser!!!
+ERROR: /ParticleGrammar.hh:133: failed parsing at: 
+INFO: 
+The spins of the final state particles are:
+INFO: photon : 1
+INFO: pion1+ : 0
+INFO: pion1- : 0
+INFO: pion10 : 0
+INFO: pion2+ : 0
+INFO: pion2- : 0
+INFO: pion20 : 0
+INFO: 
+current projection is:
+INFO: 0	lambda: -1
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 
+current projection is:
+INFO: 1	lambda: 1
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
+INFO: 0	lambda: 0
 INFO: added decay omega1Topion1+_pion1-_pion10 to decay list
 INFO: added decay omega2Topion2+_pion2-_pion20 to decay list
 
@@ -730,27 +759,63 @@ INFO: paricle name: pion2+
 INFO: paricle name: pion2-
 INFO: paricle name: pion20
 INFO: reaction chains have been successfully checked!!!
-INFO: wignerDRefKey for amplitude I0G-1J1P-1C-1Toeta(2225)_photon set to: prod
-INFO: wignerDRefKey for amplitude eta(2225)Toomega1_omega2 set to: photonpion1+pion1-pion10pion2+pion2-pion20
-INFO: wignerDRefKey for amplitude omega1Topion1+_pion1-_pion10 set to: pion1+pion1-pion10pion2+pion2-pion20
-INFO: wignerDRefKey for amplitude omega2Topion2+_pion2-_pion20 set to: pion1+pion1-pion10pion2+pion2-pion20
-INFO: wignerDRefKey for amplitude I0G-1J1P-1C-1Tof2(1910)_photon set to: prod
-INFO: wignerDRefKey for amplitude f2(1910)Toomega1_omega2 set to: photonpion1+pion1-pion10pion2+pion2-pion20
+INFO: wigDWigDRefId = 1
+INFO: name of amplitude: omega1Topion1+_pion1-_pion10	nameId: 1
+_wigDWigDRefId = 1	_wignerDId = 2
+with wignerDKey: omegaTo3piLS_pion1+pion1-pion10	wignerDRefKey: pion1+pion1-pion10pion2+pion2-pion20
+INFO: wigDWigDRefId = 2
+INFO: name of amplitude: omega2Topion2+_pion2-_pion20	nameId: 3
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: omegaTo3piLS_pion2+pion2-pion20	wignerDRefKey: pion1+pion1-pion10pion2+pion2-pion20
+INFO: wigDWigDRefId = 3
+INFO: name of amplitude: eta(2225)Toomega1_omega2	nameId: 5
+_wigDWigDRefId = 3	_wignerDId = 6
+with wignerDKey: pion2+pion2-pion20_pion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: photonpion1+pion1-pion10pion2+pion2-pion20
+INFO: wigDWigDRefId = 4
+INFO: name of amplitude: I0G-1J1P-1C-1Toeta(2225)_photon	nameId: 7
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: photon_photonpion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: prod
+INFO: wigDWigDRefId = 3
+INFO: name of amplitude: f2(1910)Toomega1_omega2	nameId: 9
+_wigDWigDRefId = 3	_wignerDId = 6
+with wignerDKey: pion2+pion2-pion20_pion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: photonpion1+pion1-pion10pion2+pion2-pion20
+INFO: wigDWigDRefId = 4
+INFO: name of amplitude: I0G-1J1P-1C-1Tof2(1910)_photon	nameId: 10
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: photon_photonpion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: prod
 INFO: Dynamics	I0G-1J1P-1C-1Toeta(2225)_photon	found!!!
 INFO: Dynamics	eta(2225)Toomega1_omega2	found!!!
-WARN: /AbsXdecAmp.cc:77: no dynamics for	omega1Topion1+_pion1-_pion10
+WARN: /AbsXdecAmp.cc:83: no dynamics for	omega1Topion1+_pion1-_pion10
 INFO: add dynamics for omega1Topion1+_pion1-_pion10
+INFO: _fsParticleNames.at(0): photon
+INFO: _fsParticleNames.at(1): pion1+
+INFO: _fsParticleNames.at(0): photon
+INFO: _fsParticleNames.at(1): pion1+
+INFO: _fsParticleNames.at(2): pion1-
 INFO: _parityFactor=	-1
-WARN: /AbsXdecAmp.cc:88: no dynamics for	omega2Topion2+_pion2-_pion20
+WARN: /AbsXdecAmp.cc:94: no dynamics for	omega2Topion2+_pion2-_pion20
 INFO: add dynamics for omega2Topion2+_pion2-_pion20
+INFO: _fsParticleNames.at(0): photon
+INFO: _fsParticleNames.at(1): pion1+
+INFO: _fsParticleNames.at(2): pion1-
+INFO: _fsParticleNames.at(3): pion10
+INFO: _fsParticleNames.at(4): pion2+
+INFO: _fsParticleNames.at(0): photon
+INFO: _fsParticleNames.at(1): pion1+
+INFO: _fsParticleNames.at(2): pion1-
+INFO: _fsParticleNames.at(3): pion10
+INFO: _fsParticleNames.at(4): pion2+
+INFO: _fsParticleNames.at(5): pion2-
 INFO: _parityFactor=	-1
 INFO: _parityFactor=	1
+INFO: _fsParticleNames.at(0): photon
 INFO: _parityFactor=	-1
 INFO: Dynamics	I0G-1J1P-1C-1Tof2(1910)_photon	found!!!
 INFO: Dynamics	f2(1910)Toomega1_omega2	found!!!
-WARN: /AbsXdecAmp.cc:77: no dynamics for	omega1Topion1+_pion1-_pion10
-WARN: /AbsXdecAmp.cc:88: no dynamics for	omega2Topion2+_pion2-_pion20
+WARN: /AbsXdecAmp.cc:83: no dynamics for	omega1Topion1+_pion1-_pion10
+WARN: /AbsXdecAmp.cc:94: no dynamics for	omega2Topion2+_pion2-_pion20
 INFO: _parityFactor=	1
+INFO: _fsParticleNames.at(0): photon
 INFO: _parityFactor=	1
 INFO: J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag	1	0.5
 INFO: paramName: J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag	val: 1	err:0.5	min:0	max:-1
@@ -1328,1590 +1393,2637 @@ INFO: Client pc14 logged in (ID 0).
 INFO: Client pc14 logged in (ID 1).
 INFO: All clients ready.
 INFO: start migrad 
-INFO: current LH = -3042.555140986589	
-INFO: current LH = -3089.141821818941	
-INFO: current LH = -2994.84235772351	
-INFO: current LH = -3047.263816516508	
-INFO: current LH = -3037.835204493369	
-INFO: current LH = -3063.894008698793	
-INFO: current LH = -3021.206904696201	
-INFO: current LH = -3050.954679853961	
-INFO: current LH = -3034.1541557111	
-INFO: current LH = -3056.266589434304	
-INFO: current LH = -3028.690270018672	
-INFO: current LH = -3043.933170737475	
-INFO: current LH = -3041.175580914932	
-INFO: current LH = -3040.235646921646	
-INFO: current LH = -3044.753700435142	
-INFO: current LH = -3042.306919037384	
-INFO: current LH = -3042.801904239282	
-INFO: current LH = -3043.321256758075	
-INFO: current LH = -3041.808019606973	
-INFO: current LH = -3042.764992294631	
-INFO: Wall time: 17.1558s User: 0.65s System: 0.03s
+INFO: current LH = -3000.973943590971	
+INFO: current LH = -3047.248087433341	
+INFO: current LH = -2953.603129893007	
+INFO: current LH = -3005.650078496667	
+INFO: current LH = -2996.286844508419	
+INFO: current LH = -3021.460696957251	
+INFO: current LH = -2980.47257974662	
+INFO: current LH = -3007.387876555476	
+INFO: current LH = -2994.558583098672	
+INFO: current LH = -3014.727701878369	
+INFO: current LH = -2987.070687361256	
+INFO: current LH = -3002.356029714062	
+INFO: current LH = -2999.590365658047	
+INFO: current LH = -2999.012768422518	
+INFO: current LH = -3002.850669836625	
+INFO: current LH = -3000.723353834515	
+INFO: current LH = -3001.223103232163	
+INFO: current LH = -3001.584444478199	
+INFO: current LH = -3000.387952128516	
+INFO: current LH = -3001.119232871343	
+INFO: Wall time: 17.7915s User: 0.67s System: 0.08s
 
-INFO: current LH = -3042.346733853527	
-INFO: current LH = -3039.644758086218	
-INFO: current LH = -3045.271117246723	
-INFO: current LH = -3042.272767471688	
-INFO: current LH = -3042.835562900691	
-INFO: current LH = -3042.772323309448	
-INFO: current LH = -3042.347105103561	
-INFO: current LH = -3042.640548142295	
-INFO: current LH = -3042.471178612939	
+INFO: current LH = -3000.830086807152	
+INFO: current LH = -2998.369865711209	
+INFO: current LH = -3003.408582879047	
+INFO: current LH = -3000.721102010914	
+INFO: current LH = -3001.225091966367	
+INFO: current LH = -3001.023849007999	
+INFO: current LH = -3000.937585311091	
+INFO: current LH = -3000.988678404571	
+INFO: current LH = -3000.960641178889	
 INFO: Client timing information: 
 INFO: Client id 1 channel id 0  response time +0 s
-INFO: Client id 0 channel id 0  response time +0.014616 s
-INFO: current LH = -3039.489688186974	
-INFO: current LH = -3045.457017788255	
-INFO: current LH = -3042.255891102015	
-INFO: current LH = -3042.852747586837	
-INFO: current LH = -3042.578075555471	
-INFO: current LH = -3042.539633144188	
-INFO: current LH = -3042.564359654858	
-INFO: current LH = -3042.547367381379	
-INFO: current LH = -3038.801820674479	
-INFO: current LH = -3046.188699525585	
-INFO: current LH = -3042.147939957926	
-INFO: Wall time: 5.34186s User: 0s System: 0s
+INFO: Client id 0 channel id 0  response time +0.0669 s
+INFO: current LH = -2997.336210943985	
+INFO: current LH = -3004.47232865743	
+INFO: current LH = -3000.611595593506	
+INFO: current LH = -3001.334861336427	
+INFO: current LH = -3000.964172732522	
+INFO: current LH = -3000.997788928041	
+INFO: current LH = -3000.969299955712	
+INFO: current LH = -3000.980019653438	
+INFO: current LH = -2997.368868435079	
+INFO: current LH = -3004.492499886181	
+INFO: current LH = -3000.515249223477	
+INFO: Wall time: 5.8804s User: 0s System: 0s
 
-INFO: current LH = -3042.960864345708	
-INFO: current LH = -3042.835638771015	
-INFO: current LH = -3042.287211129181	
-INFO: current LH = -3042.649039659444	
-INFO: current LH = -3042.462670757145	
-INFO: current LH = -3041.359257098457	
-INFO: current LH = -3043.691947321405	
-INFO: current LH = -3042.371633035529	
-INFO: current LH = -3042.737171225306	
-INFO: current LH = -3042.834969741412	
-INFO: current LH = -3042.28654881018	
-INFO: current LH = -3042.654400640721	
-INFO: current LH = -3042.457309948231	
-INFO: current LH = -3041.330395387957	
-INFO: current LH = -3043.729965236812	
-INFO: current LH = -3042.349735807486	
-INFO: current LH = -3042.759070407337	
-INFO: current LH = -3042.430703934504	
-INFO: current LH = -3042.69263737717	
-INFO: current LH = -3042.512182142917	
-INFO: Wall time: 26.2786s User: 0s System: 0.01s
+INFO: current LH = -3001.431185744477	
+INFO: current LH = -3001.278611751891	
+INFO: current LH = -3000.688482485531	
+INFO: current LH = -3001.055197757807	
+INFO: current LH = -3000.894098439437	
+INFO: current LH = -2999.312261322532	
+INFO: current LH = -3002.610211075214	
+INFO: current LH = -3000.581899614477	
+INFO: current LH = -3001.364535059259	
+INFO: current LH = -3001.175803945037	
+INFO: current LH = -3000.788057576537	
+INFO: current LH = -3001.032682597978	
+INFO: current LH = -3000.916613637013	
+INFO: current LH = -2999.353089526446	
+INFO: current LH = -3002.594922739393	
+INFO: current LH = -2995.470244457696	
+INFO: current LH = -3006.416930072405	
+INFO: current LH = -3000.662641459916	
+INFO: current LH = -3001.304789941421	
+INFO: current LH = -3000.887748985036	
+INFO: Wall time: 15.0303s User: 0s System: 0.01s
 
-INFO: current LH = -3042.59952841922	
-INFO: current LH = -3039.188680578523	
-INFO: current LH = -3045.866501046498	
-INFO: current LH = -3042.01251683157	
-INFO: current LH = -3043.096300635214	
-INFO: current LH = -3046.352072531179	
-INFO: current LH = -3038.73884119082	
-INFO: current LH = -3043.596332840018	
-INFO: current LH = -3041.512485213183	
-INFO: current LH = -3042.764989082974	
-INFO: current LH = -3043.618875108061	
-INFO: current LH = -3045.853887614389	
-INFO: current LH = -3053.390201355083	
-INFO: current LH = -3082.450149618512	
-INFO: current LH = -3191.000010633054	
-INFO: current LH = -3229.815960636814	
-INFO: current LH = -3260.9759848588	
-INFO: current LH = -3262.664610345703	
-INFO: current LH = -3259.285837748685	
-INFO: current LH = -3269.126724321996	
-INFO: Wall time: 13.0793s User: 0.01s System: 0s
+INFO: current LH = -3001.061547677619	
+INFO: current LH = -2998.069387863986	
+INFO: current LH = -3003.821797292685	
+INFO: current LH = -3000.516223304305	
+INFO: current LH = -3001.430220496709	
+INFO: current LH = -3004.887971995776	
+INFO: current LH = -2997.042555773424	
+INFO: current LH = -3002.099573087608	
+INFO: current LH = -2999.846871364322	
+INFO: current LH = -3001.119225956871	
+INFO: current LH = -3001.714639502757	
+INFO: current LH = -3003.301926068386	
+INFO: current LH = -3008.87874512976	
+INFO: current LH = -3031.816508394266	
+INFO: current LH = -3123.252086990529	
+INFO: current LH = -3202.778178598462	
+INFO: current LH = -3204.469515021526	
+INFO: current LH = -3201.085323094757	
+INFO: current LH = -3209.085729311088	
+INFO: current LH = -3196.468847921306	
+INFO: Wall time: 10.6047s User: 0.01s System: 0s
 
-INFO: current LH = -3252.822492638012	
-INFO: current LH = -3267.102667027244	
-INFO: current LH = -3254.84775024714	
-INFO: current LH = -3262.334592588571	
-INFO: current LH = -3259.615854842351	
-INFO: current LH = -3261.07847471781	
-INFO: current LH = -3260.871392950051	
-INFO: current LH = -3260.942475488934	
-INFO: current LH = -3261.008248875118	
-INFO: current LH = -3260.644009775091	
-INFO: current LH = -3261.306529750597	
-INFO: current LH = -3261.102011527151	
-INFO: current LH = -3260.85010708051	
-INFO: current LH = -3261.383815889077	
-INFO: current LH = -3260.569708972704	
-INFO: current LH = -3260.617425954861	
-INFO: current LH = -3261.332919931146	
-INFO: current LH = -3261.15935896884	
-INFO: current LH = -3260.792190532808	
-INFO: current LH = -3261.328381305453	
-INFO: Wall time: 2.6013s User: 0s System: 0.01s
+INFO: current LH = -3204.119732940796	
+INFO: current LH = -3201.435135136127	
+INFO: current LH = -3202.825857689572	
+INFO: current LH = -3202.727712778244	
+INFO: current LH = -3202.813744300643	
+INFO: current LH = -3202.74108475293	
+INFO: current LH = -3202.686492812938	
+INFO: current LH = -3202.869151217898	
+INFO: current LH = -3202.643756685628	
+INFO: current LH = -3202.911073070356	
+INFO: current LH = -3202.496114765807	
+INFO: current LH = -3203.058625022346	
+INFO: current LH = -3202.856354156823	
+INFO: current LH = -3202.700129115476	
+INFO: current LH = -3203.050818657001	
+INFO: current LH = -3202.507065947366	
+INFO: current LH = -3202.356832625834	
+INFO: current LH = -3203.197673820178	
+INFO: current LH = -3202.860155033432	
+INFO: current LH = -3202.696038164783	
+INFO: Wall time: 4.81222s User: 0s System: 0.01s
 
-INFO: current LH = -3260.622033231331	
-INFO: current LH = -3260.521577267235	
-INFO: current LH = -3261.428914385502	
-INFO: current LH = -3261.070138290262	
-INFO: current LH = -3260.88190777542	
-INFO: current LH = -3260.968036726189	
-INFO: current LH = -3260.982226594528	
-INFO: current LH = -3260.992133217685	
-INFO: current LH = -3260.959205948267	
-INFO: current LH = -3261.001068735139	
-INFO: current LH = -3260.949359062885	
-INFO: current LH = -3260.809829244615	
-INFO: current LH = -3261.140384921713	
-INFO: current LH = -3261.032662576216	
-INFO: current LH = -3260.919456425807	
-INFO: current LH = -3261.159530631998	
-INFO: current LH = -3260.794074440345	
-INFO: current LH = -3260.58794618349	
-INFO: current LH = -3261.362323798124	
-INFO: current LH = -3262.198768700793	
-INFO: Wall time: 25.3897s User: 0s System: 0s
+INFO: current LH = -3203.027839462868	
+INFO: current LH = -3202.526990311451	
+INFO: current LH = -3202.250082511589	
+INFO: current LH = -3203.304361887418	
+INFO: current LH = -3202.809839337066	
+INFO: current LH = -3202.746630935758	
+INFO: current LH = -3202.895194740306	
+INFO: current LH = -3202.662832023757	
+INFO: current LH = -3202.673185626717	
+INFO: current LH = -3202.879768057982	
+INFO: current LH = -3202.708216127137	
+INFO: current LH = -3202.846607289566	
+INFO: current LH = -3202.794867115725	
+INFO: current LH = -3202.761217005952	
+INFO: current LH = -3202.817238072368	
+INFO: current LH = -3202.737643968049	
+INFO: current LH = -3202.121184539485	
+INFO: current LH = -3203.426787475427	
+INFO: current LH = -3202.498742543971	
+INFO: current LH = -3203.056078642218	
+INFO: Wall time: 14.0178s User: 0.01s System: 0s
 
-INFO: current LH = -3259.751227389594	
-INFO: current LH = -3261.383816899786	
-INFO: current LH = -3263.028978406617	
-INFO: current LH = -3267.208019628211	
-INFO: current LH = -3279.513851587584	
-INFO: current LH = -3298.001801459567	
-INFO: current LH = -3297.573003059806	
-INFO: current LH = -3299.704290792885	
-INFO: current LH = -3296.297748333582	
-INFO: current LH = -3304.0733402481	
-INFO: current LH = -3291.928686207175	
-INFO: current LH = -3299.379580646908	
-INFO: current LH = -3296.622448465429	
-INFO: current LH = -3298.046726858795	
-INFO: current LH = -3297.955418262353	
-INFO: current LH = -3298.034871930362	
-INFO: current LH = -3297.967743075414	
-INFO: current LH = -3297.713847073377	
-INFO: current LH = -3298.288153426977	
-INFO: current LH = -3298.000463108528	
-INFO: Wall time: 4.75521s User: 0.01s System: 0.01s
+INFO: current LH = -3202.738281904094	
+INFO: current LH = -3202.818322983588	
+INFO: current LH = -3202.679580649831	
+INFO: current LH = -3202.878362742371	
+INFO: current LH = -3202.398670725367	
+INFO: current LH = -3203.156214534492	
+INFO: current LH = -3204.073062517144	
+INFO: current LH = -3201.481266304571	
+INFO: current LH = -3203.050818354582	
+INFO: current LH = -3204.155295211486	
+INFO: current LH = -3206.989609689395	
+INFO: current LH = -3215.489315886565	
+INFO: current LH = -3227.346076685185	
+INFO: current LH = -3227.030126467429	
+INFO: current LH = -3227.498094373304	
+INFO: current LH = -3229.183174206996	
+INFO: current LH = -3225.811493695926	
+INFO: current LH = -3233.295439873285	
+INFO: current LH = -3221.699146787962	
+INFO: current LH = -3228.859212128629	
+INFO: Wall time: 9.70637s User: 0s System: 0.01s
 
-INFO: current LH = -3297.999044354488	
-INFO: current LH = -3298.001451727314	
-INFO: current LH = -3298.00057832792	
-INFO: current LH = -3297.672214579964	
-INFO: current LH = -3298.329732468625	
-INFO: current LH = -3298.239110621831	
-INFO: current LH = -3297.759391300809	
-INFO: current LH = -3298.13420568122	
-INFO: current LH = -3297.86782437801	
-INFO: current LH = -3297.538477818874	
-INFO: current LH = -3298.463534979292	
-INFO: current LH = -3298.449443883716	
-INFO: current LH = -3297.55725275789	
-INFO: current LH = -3297.998211894826	
-INFO: current LH = -3298.003868796065	
-INFO: current LH = -3297.975518291725	
-INFO: current LH = -3298.026372422567	
-INFO: current LH = -3297.891225724384	
-INFO: current LH = -3298.110767523941	
-INFO: current LH = -3298.083813585452	
-INFO: Wall time: 14.084s User: 0s System: 0s
+INFO: current LH = -3226.135445609811	
+INFO: current LH = -3227.514110033542	
+INFO: current LH = -3227.480634615032	
+INFO: current LH = -3227.509191683232	
+INFO: current LH = -3227.485928661562	
+INFO: current LH = -3227.268691468555	
+INFO: current LH = -3227.725913066685	
+INFO: current LH = -3227.494017623361	
+INFO: current LH = -3227.498486797315	
+INFO: current LH = -3227.495878557883	
+INFO: current LH = -3227.498770932294	
+INFO: current LH = -3227.127422194108	
+INFO: current LH = -3227.867181524801	
+INFO: current LH = -3227.520334393424	
+INFO: current LH = -3227.470431615685	
+INFO: current LH = -3227.510618267503	
+INFO: current LH = -3227.484031233687	
+INFO: current LH = -3227.048291978666	
+INFO: current LH = -3227.946546214435	
+INFO: current LH = -3227.600237860477	
+INFO: Wall time: 6.20909s User: 0s System: 0s
 
-INFO: current LH = -3297.921178588434	
-INFO: current LH = -3297.674618775612	
-INFO: current LH = -3298.327533372722	
-INFO: current LH = -3299.125509398121	
-INFO: current LH = -3296.876464463728	
-INFO: current LH = -3298.44944930892	
-INFO: current LH = -3300.267493416407	
-INFO: current LH = -3304.623235539869	
-INFO: current LH = -3307.476975680846	
-INFO: current LH = -3308.746110830865	
-INFO: current LH = -3310.453492025366	
-INFO: current LH = -3307.037153456897	
-INFO: current LH = -3314.833821132818	
-INFO: current LH = -3302.656893814212	
-INFO: current LH = -3310.121108968217	
-INFO: current LH = -3307.369539484759	
-INFO: current LH = -3308.790113246847	
-INFO: current LH = -3308.700623412766	
-INFO: current LH = -3308.755265481766	
-INFO: current LH = -3308.735375492467	
-INFO: Wall time: 14.2178s User: 0s System: 0.01s
+INFO: current LH = -3227.395869134888	
+INFO: current LH = -3227.946897514538	
+INFO: current LH = -3227.048152887307	
+INFO: current LH = -3227.466785758336	
+INFO: current LH = -3227.527982654874	
+INFO: current LH = -3227.51456546476	
+INFO: current LH = -3227.478839472534	
+INFO: current LH = -3227.510599287474	
+INFO: current LH = -3227.484045377512	
+INFO: current LH = -3227.238506028212	
+INFO: current LH = -3227.756941869144	
+INFO: current LH = -3227.123709894046	
+INFO: current LH = -3227.870948889179	
+INFO: current LH = -3227.427462857266	
+INFO: current LH = -3227.569912663115	
+INFO: current LH = -3227.155770031	
+INFO: current LH = -3227.838887964274	
+INFO: current LH = -3228.635066999989	
+INFO: current LH = -3226.35961238356	
+INFO: current LH = -3227.569918021802	
+INFO: Wall time: 15.6732s User: 0.01s System: 0.01s
 
-INFO: current LH = -3308.46569761013	
-INFO: current LH = -3309.024991869212	
-INFO: current LH = -3308.770040797816	
-INFO: current LH = -3308.720680552118	
-INFO: current LH = -3308.429526043937	
-INFO: current LH = -3309.06119128885	
-INFO: current LH = -3308.876499522112	
-INFO: current LH = -3308.614242954677	
-INFO: current LH = -3308.285530819364	
-INFO: current LH = -3309.204786804518	
-INFO: current LH = -3308.725435943395	
-INFO: current LH = -3308.75472069523	
-INFO: current LH = -3308.740030920721	
-INFO: current LH = -3308.750612738419	
-INFO: current LH = -3308.701603471945	
-INFO: current LH = -3308.789031573698	
-INFO: current LH = -3308.734719425352	
-INFO: current LH = -3308.753949607262	
-INFO: current LH = -3308.738914197842	
-INFO: current LH = -3308.751729490527	
-INFO: Wall time: 16.2515s User: 0.01s System: 0s
+INFO: current LH = -3227.873235351036	
+INFO: current LH = -3228.789418787501	
+INFO: current LH = -3231.297824166667	
+INFO: current LH = -3210.551406735541	
+INFO: current LH = -3227.315969322945	
+INFO: current LH = -3230.751676881367	
+INFO: current LH = -3231.405051770822	
+INFO: current LH = -3233.0990706222	
+INFO: current LH = -3229.709485154015	
+INFO: current LH = -3237.118423639279	
+INFO: current LH = -3225.690155127485	
+INFO: current LH = -3232.771376212857	
+INFO: current LH = -3230.037175739862	
+INFO: current LH = -3231.41039981942	
+INFO: current LH = -3231.398237577892	
+INFO: current LH = -3231.447906516516	
+INFO: current LH = -3231.360768033598	
+INFO: current LH = -3231.175342425114	
+INFO: current LH = -3231.633267199234	
+INFO: current LH = -3231.405199069039	
+INFO: Wall time: 8.76637s User: 0s System: 0.01s
 
-INFO: current LH = -3308.610142372284	
-INFO: current LH = -3308.879422953371	
-INFO: current LH = -3309.001853288614	
-INFO: current LH = -3308.4719460013	
-INFO: current LH = -3308.822856265578	
-INFO: current LH = -3308.667787382724	
-INFO: current LH = -3308.41804827585	
-INFO: current LH = -3309.072609562123	
-INFO: current LH = -3309.863851650641	
-INFO: current LH = -3307.626794122204	
-INFO: current LH = -4365.692696250596	
-INFO: current LH = -4218.761000315055	
-INFO: current LH = -5684.913495692312	
-INFO: current LH = -4357.400289457419	
-INFO: current LH = -5685.770829208647	
-INFO: current LH = -5684.054886093776	
-INFO: current LH = -5686.162681609049	
-INFO: current LH = -5683.661599510968	
-INFO: current LH = -5685.569323869669	
-INFO: current LH = -5684.203999510666	
-INFO: Wall time: 20.4388s User: 0s System: 0.01s
+INFO: current LH = -3231.403427808518	
+INFO: current LH = -3231.059217202687	
+INFO: current LH = -3231.749424559293	
+INFO: current LH = -3231.417029088138	
+INFO: current LH = -3231.391670475665	
+INFO: current LH = -3230.921882994153	
+INFO: current LH = -3231.886196292573	
+INFO: current LH = -3231.924233404332	
+INFO: current LH = -3230.642416066401	
+INFO: current LH = -3231.468116603466	
+INFO: current LH = -3231.339549712881	
+INFO: current LH = -3231.308432443821	
+INFO: current LH = -3231.500003339297	
+INFO: current LH = -3231.376689677257	
+INFO: current LH = -3231.430395803761	
+INFO: current LH = -3231.385092991556	
+INFO: current LH = -3231.423469454611	
+INFO: current LH = -3230.992503377321	
+INFO: current LH = -3231.810390292585	
+INFO: current LH = -3231.215214898311	
+INFO: Wall time: 12.2377s User: 0.01s System: 0.01s
 
-INFO: current LH = -5685.065574863009	
-INFO: current LH = -5684.758706414298	
-INFO: current LH = -5685.248077527042	
-INFO: current LH = -5684.578102302701	
-INFO: current LH = -5685.524400007038	
-INFO: current LH = -5684.299878062087	
-INFO: current LH = -5685.937061744486	
-INFO: current LH = -5683.886827926059	
-INFO: current LH = -5684.887711927783	
-INFO: Client timing information: 
-INFO: Client id 1 channel id 0  response time +0 s
-INFO: Client id 0 channel id 0  response time +0.014118 s
-INFO: current LH = -5684.938613222771	
-INFO: current LH = -5684.860818074461	
-INFO: current LH = -5684.963496792991	
-INFO: current LH = -5685.650054364345	
-INFO: current LH = -5684.175651850004	
-INFO: current LH = -5685.98285286747	
-INFO: current LH = -5683.841440048489	
-INFO: current LH = -5684.804126002327	
-INFO: current LH = -5685.023956476664	
-INFO: current LH = -5684.741616519244	
-INFO: current LH = -5685.088102444444	
-INFO: Wall time: 2.62677s User: 0s System: 0.01s
-
-INFO: current LH = -5685.636803560792	
-INFO: current LH = -5684.188663232873	
-INFO: current LH = -5684.988257821215	
-INFO: current LH = -5684.837315027309	
-INFO: current LH = -5685.520508417191	
-INFO: current LH = -5684.306604729472	
-INFO: current LH = -5687.778805266081	
-INFO: current LH = -5682.051149019664	
-INFO: current LH = -5684.946431619068	
-INFO: current LH = -5684.879715489131	
-INFO: current LH = -5684.971921895834	
-INFO: current LH = -5684.852384812983	
-INFO: current LH = -5685.787054849376	
-INFO: current LH = -5684.039656337096	
-INFO: current LH = -5687.629804507953	
-INFO: current LH = -5682.194578737339	
-INFO: current LH = -5684.890657972721	
-INFO: current LH = -5684.936482394547	
-INFO: current LH = -5684.81706480852	
-INFO: current LH = -5685.012838077243	
-INFO: Wall time: 21.0007s User: 0.01s System: 0s
-
-INFO: current LH = -5685.752985891442	
-INFO: current LH = -5684.072690642102	
-INFO: current LH = -5686.118517139222	
-INFO: current LH = -5683.705775931012	
-INFO: current LH = -5684.927097935017	
-INFO: current LH = -5684.899230806655	
-INFO: current LH = -5684.940353216773	
-INFO: current LH = -5684.883963943445	
-INFO: current LH = -5685.16214150083	
-INFO: current LH = -5684.662449787387	
-INFO: current LH = -5685.040006647618	
-INFO: current LH = -5684.786146743094	
-INFO: current LH = -5685.140457766292	
-INFO: current LH = -5684.683850732818	
-INFO: current LH = 3960.102592935021	
-INFO: current LH = -5815.488714939117	
-INFO: current LH = -5816.704914619841	
-INFO: current LH = -5814.268854897761	
-INFO: current LH = -5815.099254526422	
-INFO: current LH = -5815.875565887814	
-INFO: Wall time: 21.061s User: 0s System: 0s
-
-INFO: current LH = -5815.987936220994	
-INFO: current LH = -5814.986682697631	
-INFO: current LH = -5816.106240158767	
-INFO: current LH = -5814.868048464496	
-INFO: current LH = -5815.473779937859	
-INFO: current LH = -5815.499832869992	
-INFO: current LH = -5816.227108948849	
-INFO: current LH = -5814.746478384822	
-INFO: current LH = -5815.297686185559	
-INFO: current LH = -5815.681421585132	
-INFO: current LH = -5816.164957803412	
-INFO: current LH = -5814.80885512422	
-INFO: current LH = -5815.590366653476	
-INFO: current LH = -5815.38423328728	
-INFO: current LH = -5817.425868749799	
-INFO: current LH = -5813.539884743875	
-INFO: current LH = -5816.434289627703	
-INFO: current LH = -5814.540370363882	
-INFO: current LH = -5815.538895004858	
-INFO: current LH = -5815.435749380121	
-INFO: Wall time: 8.81624s User: 0s System: 0.01s
-
-INFO: current LH = -5817.277167895978	
-INFO: current LH = -5813.682445015565	
-INFO: current LH = -5816.196464232311	
-INFO: current LH = -5814.778196025678	
-INFO: current LH = -5815.355008722709	
-INFO: current LH = -5815.622247804633	
-INFO: current LH = -5814.942842320072	
-INFO: current LH = -5816.030790422678	
-INFO: current LH = -5816.358768224792	
-INFO: current LH = -5814.614463166462	
-INFO: current LH = -5815.553477267577	
-INFO: current LH = -5815.420417621927	
-INFO: current LH = -5815.733712375593	
-INFO: current LH = -5815.240968957057	
-INFO: current LH = -5815.661160856587	
-INFO: current LH = -5815.314047214261	
-INFO: current LH = -3105.7184376984	
-INFO: current LH = -5968.17603422912	
-INFO: current LH = -5969.046434996693	
-INFO: current LH = -5967.30207419043	
-INFO: Wall time: 22.8226s User: 0.01s System: 0.01s
-
-INFO: current LH = -5967.953820758839	
-INFO: current LH = -5968.395397916818	
-INFO: current LH = -5968.45567206163	
-INFO: current LH = -5967.89385030229	
-INFO: current LH = -5968.386362679407	
-INFO: current LH = -5967.962070130739	
-INFO: current LH = -5968.176625421441	
-INFO: current LH = -5968.172551234148	
-INFO: current LH = -5968.478993354882	
-INFO: current LH = -5967.868936901683	
-INFO: current LH = -5967.923137509071	
-INFO: current LH = -5968.431465969651	
-INFO: current LH = -5968.484891027724	
-INFO: current LH = -5967.863244725037	
-INFO: current LH = -5968.265052454077	
-INFO: current LH = -5968.083910992719	
-INFO: current LH = -5968.629913106204	
-INFO: current LH = -5967.715148270561	
-INFO: current LH = -5968.466111687419	
-INFO: current LH = -5967.88310874084	
-INFO: Wall time: 7.5422s User: 0s System: 0s
-
-INFO: current LH = -5968.219827558954	
-INFO: current LH = -5968.129203769111	
-INFO: current LH = -5968.392047010278	
-INFO: current LH = -5967.953736260233	
-INFO: current LH = -5968.322086421937	
-INFO: current LH = -5968.027134157376	
-INFO: current LH = -5967.670957108915	
-INFO: current LH = -5968.644166759566	
-INFO: current LH = -5968.514180226189	
-INFO: current LH = -5967.83358081272	
-INFO: current LH = -5968.233805691723	
-INFO: current LH = -5968.114674756354	
-INFO: current LH = -5968.4164787428	
-INFO: current LH = -5967.932591147952	
-INFO: current LH = -5968.255161289322	
-INFO: current LH = -5968.095318201053	
-INFO: current LH = -6073.459421695259	
-INFO: current LH = -6083.212466679587	
-INFO: current LH = -6083.251881010385	
-INFO: current LH = -6083.16926638299	
-INFO: Wall time: 24.5497s User: 0s System: 0.01s
-
-INFO: current LH = -6083.094995863225	
-INFO: current LH = -6083.327118151288	
-INFO: current LH = -6082.983580409251	
-INFO: current LH = -6083.438947119633	
-INFO: current LH = -6083.035008464522	
-INFO: current LH = -6083.386290949766	
-INFO: current LH = -6083.221648425046	
-INFO: current LH = -6083.198212782353	
-INFO: current LH = -6083.21987679606	
-INFO: current LH = -6083.202153526708	
-INFO: current LH = -6083.078150046636	
-INFO: current LH = -6083.342704243155	
-INFO: current LH = -6083.010621569586	
-INFO: current LH = -6083.406558762501	
-INFO: current LH = -6083.08988494695	
-INFO: current LH = -6083.332144186838	
-INFO: current LH = -6083.047995974154	
-INFO: current LH = -6083.373034161166	
-INFO: current LH = -6083.292066939252	
-INFO: current LH = -6083.130680414175	
-INFO: Wall time: 2.79296s User: 0.01s System: 0.01s
-
-INFO: current LH = -6083.145160838256	
-INFO: current LH = -6083.274015275693	
-INFO: current LH = -6083.165283817846	
-INFO: current LH = -6083.256747474748	
-INFO: current LH = -6083.185626324605	
-INFO: current LH = -6083.23581059615	
-INFO: current LH = -6082.912821100535	
-INFO: current LH = -6083.507287260937	
-INFO: current LH = -6083.135056462455	
-INFO: current LH = -6083.276608039776	
-INFO: current LH = -6083.17793318147	
-INFO: current LH = -6083.244098422032	
-INFO: current LH = -6083.030609170877	
-INFO: current LH = -6083.389400829334	
-INFO: current LH = -6083.07331116608	
-INFO: current LH = -6083.348720318756	
-INFO: current LH = -6083.269817395696	
-INFO: current LH = -6083.151592216073	
-INFO: current LH = -6083.122801339617	
-INFO: current LH = -6083.299130320669	
-INFO: Wall time: 27.1519s User: 0s System: 0.01s
-
-INFO: current LH = -6083.128022205236	
-INFO: current LH = -6083.297184776942	
-INFO: current LH = -6082.938877425641	
-INFO: current LH = -6083.488987688309	
-INFO: current LH = -6105.449825487085	
-INFO: current LH = -6108.697503120353	
-INFO: current LH = -6108.723982103591	
-INFO: current LH = -6108.668216161901	
-INFO: current LH = -6108.771658311068	
-INFO: current LH = -6108.620335467946	
-INFO: current LH = -6108.540970414986	
-INFO: current LH = -6108.850394329253	
-INFO: current LH = -6108.727534444481	
-INFO: current LH = -6108.665040811975	
-INFO: current LH = -6108.703471718239	
-INFO: current LH = -6108.688261631166	
-INFO: current LH = -6108.744548463637	
-INFO: current LH = -6108.64803404075	
-INFO: current LH = -6108.684479121164	
-INFO: current LH = -6108.704594964512	
-INFO: Wall time: 11.8501s User: 0.01s System: 0s
-
-INFO: current LH = -6108.688994130373	
-INFO: current LH = -6108.703099622297	
-INFO: current LH = -6108.71096512014	
-INFO: current LH = -6108.681773113386	
-INFO: current LH = -6108.814231708512	
-INFO: current LH = -6108.578708480037	
-INFO: current LH = -6108.775376691467	
-INFO: current LH = -6108.61643581612	
-INFO: current LH = -6108.684187652868	
+INFO: current LH = -3231.593347634663	
+INFO: current LH = -3231.39381213877	
+INFO: current LH = -3231.409825248939	
+INFO: current LH = -3231.400367350295	
+INFO: current LH = -3231.408195047306	
+INFO: current LH = -3231.075706736963	
+INFO: current LH = -3231.732888749507	
+INFO: current LH = -3232.555198864072	
+INFO: current LH = -3230.253377937421	
 INFO: Client timing information: 
 INFO: Client id 0 channel id 0  response time +0 s
-INFO: Client id 1 channel id 0  response time +0.407765 s
-INFO: current LH = -6108.707706724325	
-INFO: current LH = -6108.726164578204	
-INFO: current LH = -6108.666758003315	
-INFO: current LH = -6108.742348688636	
-INFO: current LH = -6108.650002744484	
-INFO: current LH = -6108.716519588364	
-INFO: current LH = -6108.675684790063	
-INFO: current LH = -6108.733489422571	
-INFO: current LH = -6108.659206204712	
-INFO: current LH = -6108.654834915303	
-INFO: current LH = -6108.737118803166	
-INFO: Wall time: 20.2817s User: 0s System: 0.01s
+INFO: Client id 1 channel id 0  response time +0.238967 s
+INFO: current LH = -5565.387534606792	
+INFO: current LH = -3740.534698048261	
+INFO: current LH = -1468.572023849294	
+INFO: current LH = 2826.465468777878	
+INFO: current LH = -3882.400142239329	
+INFO: current LH = -4351.267226036738	
+INFO: current LH = 39672.15574549608	
+INFO: current LH = 4706.541231255168	
+INFO: current LH = -2825.31233157803	
+INFO: current LH = -5007.763453029775	
+INFO: current LH = -4110.840349768829	
+INFO: Wall time: 16.8423s User: 0s System: 0s
 
-INFO: current LH = -6108.687555527907	
-INFO: current LH = -6108.695587903861	
-INFO: current LH = -6108.693928227615	
-INFO: current LH = -6108.698167513755	
-INFO: current LH = -6117.210671770975	
-INFO: current LH = -6120.549323991097	
-INFO: current LH = -6120.745250962887	
-INFO: current LH = -6120.721035412574	
-INFO: current LH = -6120.766533157747	
-INFO: current LH = -6120.742893822515	
-INFO: current LH = -6120.74447822262	
-INFO: current LH = -6120.595073133537	
-INFO: current LH = -6120.89151195299	
-INFO: current LH = -6120.69903567632	
-INFO: current LH = -6120.788448696593	
-INFO: current LH = -6120.783303242322	
-INFO: current LH = -6120.704541043168	
-INFO: current LH = -6120.708793829444	
-INFO: current LH = -6120.778414055185	
-INFO: current LH = -6120.789691220798	
-INFO: Wall time: 10.6682s User: 0s System: 0s
+INFO: current LH = -5566.121665700544	
+INFO: current LH = -5564.651966930905	
+INFO: current LH = -5564.090268992588	
+INFO: current LH = -5566.641974609516	
+INFO: current LH = -5565.068586744495	
+INFO: current LH = -5565.703827113588	
+INFO: current LH = -5565.685391497917	
+INFO: current LH = -5565.088870836805	
+INFO: current LH = -5565.927143353837	
+INFO: current LH = -5564.845275049704	
+INFO: current LH = -5566.320015594762	
+INFO: current LH = -5564.452986480592	
+INFO: current LH = -5565.381904976895	
+INFO: current LH = -5565.393952985232	
+INFO: current LH = -5565.377817339458	
+INFO: current LH = -5565.399912450832	
+INFO: current LH = -5566.176815204965	
+INFO: current LH = -5564.597404578206	
+INFO: current LH = -5566.782100919665	
+INFO: current LH = -5563.990320304596	
+INFO: Wall time: 5.76295s User: 0s System: 0.01s
 
-INFO: current LH = -6120.696360492283	
-INFO: current LH = -6120.731533159616	
-INFO: current LH = -6120.756052119489	
-INFO: current LH = -6120.832822091275	
-INFO: current LH = -6120.655714804767	
-INFO: current LH = -6120.670480122007	
-INFO: current LH = -6120.816558759026	
-INFO: current LH = -6120.816864661029	
-INFO: current LH = -6120.672636828492	
-INFO: current LH = -6120.866894339471	
-INFO: current LH = -6120.62069654013	
-INFO: current LH = -6120.771882466542	
-INFO: current LH = -6120.715986303021	
-INFO: current LH = -6120.830587481976	
-INFO: current LH = -6120.658251138848	
-INFO: current LH = -6120.744916201118	
-INFO: current LH = -6120.742899772385	
-INFO: current LH = -6120.775667916104	
-INFO: current LH = -6120.713475351801	
-INFO: current LH = -6120.789392769898	
-INFO: Wall time: 19.6622s User: 0s System: 0.01s
+INFO: current LH = -5565.227069797027	
+INFO: current LH = -5565.546794997411	
+INFO: current LH = -5565.148913183806	
+INFO: current LH = -5565.623505486736	
+INFO: current LH = -5566.092420657525	
+INFO: current LH = -5564.682369997143	
+INFO: current LH = -5567.56236516776	
+INFO: current LH = -5563.210074640369	
+INFO: current LH = -5565.397333979966	
+INFO: current LH = -5565.376922859386	
+INFO: current LH = -5565.404656164555	
+INFO: current LH = -5565.367765476354	
+INFO: current LH = -5566.072219377143	
+INFO: current LH = -5564.70437625126	
+INFO: current LH = -5565.400930631666	
+INFO: current LH = -5565.373501454079	
+INFO: current LH = -5565.414202528907	
+INFO: current LH = -5565.358233369891	
+INFO: current LH = -5566.230005942327	
+INFO: current LH = -5564.546907679956	
+INFO: Wall time: 9.67776s User: 0.01s System: 0.01s
 
-INFO: current LH = -6120.698194920813	
-INFO: current LH = -6120.787670730004	
-INFO: current LH = -6120.699932353418	
-INFO: current LH = -6120.619652016313	
-INFO: current LH = -6120.871160663812	
-INFO: current LH = -6120.3623977425	
-INFO: current LH = -6121.130988821289	
-INFO: current LH = -6128.713748611295	
-INFO: current LH = -6132.22541349163	
-INFO: current LH = -6132.415345330058	
-INFO: current LH = -6132.494230076759	
-INFO: current LH = -6132.333861934672	
-INFO: current LH = -6132.340544183468	
-INFO: current LH = -6132.48696155584	
-INFO: current LH = -6132.461709641503	
-INFO: current LH = -6132.364935931317	
-INFO: current LH = -6132.491903354302	
-INFO: current LH = -6132.335897056091	
-INFO: current LH = -6132.439036004992	
-INFO: current LH = -6132.388961691117	
-INFO: Wall time: 14.5387s User: 0.01s System: 0.01s
+INFO: current LH = -5565.399441428567	
+INFO: current LH = -5565.376256756498	
+INFO: current LH = -5565.412677452234	
+INFO: current LH = -5565.365066636748	
+INFO: current LH = -5566.355390742528	
+INFO: current LH = -5564.420389316381	
+INFO: current LH = -5567.258275172706	
+INFO: current LH = -5563.519466923637	
+INFO: current LH = -5565.344788289452	
+INFO: current LH = -5565.429668377501	
+INFO: current LH = -5565.297892953484	
+INFO: current LH = -5565.474544161692	
+INFO: current LH = -5565.582456406624	
+INFO: current LH = -5565.191022794919	
+INFO: current LH = -5565.420675097553	
+INFO: current LH = -5565.353727546864	
+INFO: current LH = -5565.453005255344	
+INFO: current LH = -5565.319417273297	
+INFO: current LH = -2784.526208312354	
+INFO: current LH = -5846.509927896691	
+INFO: Wall time: 15.9774s User: 0s System: 0.01s
 
-INFO: current LH = -6132.434747170286	
-INFO: current LH = -6132.392798651206	
-INFO: current LH = -6132.372115082879	
-INFO: current LH = -6132.455301507065	
-INFO: current LH = -6132.473948044044	
-INFO: current LH = -6132.353779595644	
-INFO: current LH = -6132.480032344037	
-INFO: current LH = -6132.349343476813	
-INFO: current LH = -6132.51133452741	
-INFO: current LH = -6132.3164191547	
-INFO: current LH = -6132.432109449725	
-INFO: current LH = -6132.396102004287	
-INFO: current LH = -6132.439142182208	
-INFO: current LH = -6132.384030975908	
-INFO: current LH = -6132.431105725451	
-INFO: current LH = -6132.396667784917	
-INFO: current LH = -6132.490963255143	
-INFO: current LH = -6132.337056763843	
-INFO: current LH = -6132.444286387354	
-INFO: current LH = -6132.382731124848	
-INFO: Wall time: 13.9105s User: 0s System: 0s
+INFO: current LH = -5847.266738399365	
+INFO: current LH = -5845.749355886543	
+INFO: current LH = -5846.645904781133	
+INFO: current LH = -5846.371167886727	
+INFO: current LH = -5846.769504543083	
+INFO: current LH = -5846.248149998759	
+INFO: current LH = -5847.159976105472	
+INFO: current LH = -5845.855460814688	
+INFO: current LH = -5846.595241238023	
+INFO: current LH = -5846.4271577078	
+INFO: current LH = -5847.483707275012	
+INFO: current LH = -5845.529805976988	
+INFO: current LH = -5847.156264972853	
+INFO: current LH = -5845.860801553358	
+INFO: current LH = -5846.23366055422	
+INFO: current LH = -5846.781820414139	
+INFO: current LH = -5848.063763583456	
+INFO: current LH = -5844.94187619747	
+INFO: current LH = -5847.199826428218	
+INFO: current LH = -5845.817239515537	
+INFO: Wall time: 4.40128s User: 0s System: 0s
 
-INFO: current LH = -6132.479602800096	
-INFO: current LH = -6132.348558201759	
-INFO: current LH = -6132.435742674144	
-INFO: current LH = -6132.388823646429	
-INFO: current LH = -6132.430087560914	
-INFO: current LH = -6132.397685205236	
-INFO: current LH = -6132.48184657222	
-INFO: current LH = -6132.345841320098	
-INFO: current LH = -6132.364797768528	
-INFO: current LH = -6132.428660726487	
-INFO: current LH = -6132.404557890736	
-INFO: current LH = -6132.423225037287	
-INFO: current LH = -6137.534094102157	
-INFO: current LH = -6137.540581048346	
-INFO: current LH = -6137.584331675622	
-INFO: current LH = -6137.493974585581	
-INFO: current LH = -6137.524848933956	
-INFO: current LH = -6137.553306931777	
-INFO: current LH = -6137.578847491691	
-INFO: current LH = -6137.499038881372	
-INFO: Wall time: 21.8842s User: 0s System: 0.01s
+INFO: current LH = -5846.544667242953	
+INFO: current LH = -5846.471536309313	
+INFO: current LH = -5847.119640250896	
+INFO: current LH = -5845.899810388877	
+INFO: current LH = -5848.108445139414	
+INFO: current LH = -5844.908658510886	
+INFO: current LH = -5846.490906685211	
+INFO: current LH = -5846.524619143241	
+INFO: current LH = -5847.186081555972	
+INFO: current LH = -5845.831248670371	
+INFO: current LH = -5846.554871094722	
+INFO: current LH = -5846.464593042198	
+INFO: current LH = -5846.628709671808	
+INFO: current LH = -5846.388402187063	
+INFO: current LH = -5847.828675522161	
+INFO: current LH = -5845.181962553887	
+INFO: current LH = -5847.236360838552	
+INFO: current LH = -5845.780702498871	
+INFO: current LH = -5846.461244614685	
+INFO: current LH = -5846.552943559018	
+INFO: Wall time: 13.8344s User: 0s System: 0.01s
 
-INFO: current LH = -6137.592180714468	
-INFO: current LH = -6137.485872216228	
-INFO: current LH = -6137.472519221802	
-INFO: current LH = -6137.605561521292	
-INFO: current LH = -6137.548363875843	
-INFO: current LH = -6137.529706775559	
-INFO: current LH = -6137.598196681724	
-INFO: current LH = -6137.479711059199	
-INFO: current LH = -6137.579234277779	
-INFO: current LH = -6137.498762877723	
-INFO: current LH = -6137.553737367009	
-INFO: current LH = -6137.523424892144	
-INFO: current LH = -6137.544896074425	
-INFO: current LH = -6137.533353543387	
-INFO: current LH = -6137.499661385877	
-INFO: current LH = -6137.5776772897	
-INFO: current LH = -6137.612710741189	
-INFO: current LH = -6137.465261547437	
-INFO: current LH = -6137.525239178965	
-INFO: current LH = -6137.551813611412	
-INFO: Wall time: 11.6271s User: 0.01s System: 0s
+INFO: current LH = -5846.476367023075	
+INFO: current LH = -5846.540697512004	
+INFO: current LH = -5846.822227317817	
+INFO: current LH = -5846.194065117073	
+INFO: current LH = -5846.544395442637	
+INFO: current LH = -5846.47374310985	
+INFO: current LH = 3131.239296985717	
+INFO: current LH = -5902.808038338711	
+INFO: current LH = -5903.374825526571	
+INFO: current LH = -5902.238120159546	
+INFO: current LH = -5902.794602199787	
+INFO: current LH = -5902.818672426787	
+INFO: current LH = -5902.981839904373	
+INFO: current LH = -5902.631593635213	
+INFO: current LH = -5903.125817961492	
+INFO: current LH = -5902.487045724558	
+INFO: current LH = -5902.883442813329	
+INFO: current LH = -5902.735037659499	
+INFO: current LH = -5903.282530485854	
+INFO: current LH = -5902.330167157007	
+INFO: Wall time: 9.345s User: 0.01s System: 0.01s
 
-INFO: current LH = -6137.554205903733	
-INFO: current LH = -6137.523876096981	
-INFO: current LH = -6137.555484466342	
-INFO: current LH = -6137.521627866655	
-INFO: current LH = -6137.543563931711	
-INFO: current LH = -6137.534502257611	
-INFO: current LH = -6137.541240989407	
-INFO: current LH = -6137.535996711564	
-INFO: current LH = -6139.508117674538	
-INFO: current LH = -6139.509596094026	
-INFO: current LH = -6139.503663710906	
-INFO: current LH = -6139.525302052258	
-INFO: current LH = -6139.488036150204	
-INFO: current LH = -6139.496595374646	
-INFO: current LH = -6139.516784106499	
-INFO: current LH = -6139.523863573357	
-INFO: current LH = -6139.489344529514	
-INFO: current LH = -6139.481150978057	
-INFO: current LH = -6139.532257019313	
-INFO: current LH = -6139.51381796436	
-INFO: Wall time: 15.7857s User: 0s System: 0.01s
+INFO: current LH = -5902.598919814233	
+INFO: current LH = -5903.013793007215	
+INFO: current LH = -5903.318649788822	
+INFO: current LH = -5902.293786482887	
+INFO: current LH = -5902.842101937415	
+INFO: current LH = -5902.771104991582	
+INFO: current LH = -5904.000178120194	
+INFO: current LH = -5901.60589295927	
+INFO: current LH = -5903.441640648958	
+INFO: current LH = -5902.171625624151	
+INFO: current LH = -5902.775648579175	
+INFO: current LH = -5902.837386529196	
+INFO: current LH = -5903.217593610455	
+INFO: current LH = -5902.393657778166	
+INFO: current LH = -5903.121289648023	
+INFO: current LH = -5902.491974739509	
+INFO: current LH = -5902.883288761619	
+INFO: current LH = -5902.722494290192	
+INFO: current LH = -5902.848796361547	
+INFO: current LH = -5902.764467771093	
+INFO: Wall time: 11.6753s User: 0s System: 0s
 
-INFO: current LH = -6139.499483628681	
-INFO: current LH = -6139.495724745312	
-INFO: current LH = -6139.517688054556	
-INFO: current LH = -6139.511978845641	
-INFO: current LH = -6139.50121774854	
-INFO: current LH = -6139.550711500431	
-INFO: current LH = -6139.463404254448	
-INFO: current LH = -6139.498189838931	
-INFO: current LH = -6139.515174135459	
-INFO: current LH = -6139.477683936953	
-INFO: current LH = -6139.535979923633	
-INFO: current LH = -6139.522898546664	
-INFO: current LH = -6139.490146635504	
-INFO: current LH = -6139.493298082986	
-INFO: current LH = -6139.52030310801	
-INFO: current LH = -6139.501306645341	
-INFO: current LH = -6139.511920034334	
-INFO: current LH = -6139.506060985203	
-INFO: current LH = -6139.507352947573	
-INFO: current LH = -6139.483446407365	
-INFO: Wall time: 18.1356s User: 0.01s System: 0s
+INFO: current LH = -5903.325239231754	
+INFO: current LH = -5902.286957090083	
+INFO: current LH = -5902.804497614646	
+INFO: current LH = -5902.808358514185	
+INFO: current LH = -5903.067965099238	
+INFO: current LH = -5902.5452182806	
+INFO: current LH = -5902.833635257402	
+INFO: current LH = -5902.780697215309	
+INFO: current LH = -5973.978062002769	
+INFO: current LH = -5990.27432969206	
+INFO: current LH = -5990.350722257666	
+INFO: current LH = -5990.194403115043	
+INFO: current LH = -5990.318153434338	
+INFO: current LH = -5990.227732085887	
+INFO: current LH = -5990.070836855285	
+INFO: current LH = -5990.475293407093	
+INFO: current LH = -5990.181728764586	
+INFO: current LH = -5990.363204024688	
+INFO: current LH = -5990.164075669672	
+INFO: current LH = -5990.382096242703	
+INFO: Wall time: 10.8286s User: 0s System: 0.01s
 
-INFO: current LH = -6139.529867270581	
-INFO: current LH = -6139.493112284792	
-INFO: current LH = -6139.520297484422	
-INFO: current LH = -6140.278997427199	
-INFO: current LH = -6140.759761670508	
-INFO: current LH = -6140.747534342931	
-INFO: current LH = -6140.769092387363	
-INFO: current LH = -6140.752532922369	
-INFO: current LH = -6140.763993509624	
-INFO: current LH = -6140.747683368088	
-INFO: current LH = -6140.768693001973	
-INFO: current LH = -6140.755269058321	
-INFO: current LH = -6140.761272155932	
-INFO: current LH = -6140.74138023973	
-INFO: current LH = -6140.775125431514	
-INFO: current LH = -6140.772230615863	
-INFO: current LH = -6140.744400762916	
-INFO: current LH = -6140.766197158816	
-INFO: current LH = -6140.750296039532	
-INFO: current LH = -6140.761270199415	
-INFO: Wall time: 8.82713s User: 0s System: 0.01s
+INFO: current LH = -5990.235893050097	
+INFO: current LH = -5990.30837160495	
+INFO: current LH = -5990.315583992397	
+INFO: current LH = -5990.22856310418	
+INFO: current LH = -5990.224949302026	
+INFO: current LH = -5990.318953859923	
+INFO: current LH = -5990.36065850295	
+INFO: current LH = -5990.186095150773	
+INFO: current LH = -5990.36448505017	
+INFO: current LH = -5990.175222190395	
+INFO: current LH = -5990.326361900236	
+INFO: current LH = -5990.219439747199	
+INFO: current LH = -5990.220605213513	
+INFO: current LH = -5990.324502511859	
+INFO: current LH = -5990.040787229377	
+INFO: current LH = -5990.502546650826	
+INFO: current LH = -5990.103806982139	
+INFO: current LH = -5990.441995025247	
+INFO: current LH = -5990.348356683752	
+INFO: current LH = -5990.192459235816	
+INFO: Wall time: 11.5688s User: 0s System: 0.01s
 
-INFO: current LH = -6140.755292826431	
-INFO: current LH = -6140.788627784149	
-INFO: current LH = -6140.726560483713	
-INFO: current LH = -6140.738906856831	
-INFO: current LH = -6140.777845119918	
-INFO: current LH = -6140.734996886718	
-INFO: current LH = -6140.78241030032	
-INFO: current LH = -6140.737387050298	
-INFO: current LH = -6140.779042694022	
+INFO: current LH = -5990.319957840249	
+INFO: current LH = -5990.225843932929	
+INFO: current LH = -5990.152753272061	
+INFO: current LH = -5990.390217754913	
+INFO: current LH = -5990.188762467243	
+INFO: current LH = -5990.357039479218	
+INFO: current LH = -5990.310242587333	
+INFO: current LH = -5990.234991453854	
+INFO: current LH = -5990.259993062408	
+INFO: Client timing information: 
+INFO: Client id 0 channel id 0  response time +0 s
+INFO: Client id 1 channel id 0  response time +0.021909 s
+INFO: current LH = -5990.28521563562	
+INFO: current LH = -5990.252443210638	
+INFO: current LH = -5990.298214291632	
+INFO: current LH = -6008.410218355954	
+INFO: current LH = -6014.124626065914	
+INFO: current LH = -6014.286561529898	
+INFO: current LH = -6014.212073527487	
+INFO: current LH = -6014.358054272263	
+INFO: current LH = -6014.201437533602	
+INFO: current LH = -6014.368661727079	
+INFO: current LH = -6014.016107957772	
+INFO: Wall time: 13.9178s User: 0.01s System: 0s
+
+INFO: current LH = -6014.553249194338	
+INFO: current LH = -6014.237833099613	
+INFO: current LH = -6014.332793824877	
+INFO: current LH = -6014.340636364968	
+INFO: current LH = -6014.22651143871	
+INFO: current LH = -6014.324662253486	
+INFO: current LH = -6014.245599629243	
+INFO: current LH = -6014.215474415167	
+INFO: current LH = -6014.355092564093	
+INFO: current LH = -6014.207257141352	
+INFO: current LH = -6014.363848441217	
+INFO: current LH = -6014.238058691467	
+INFO: current LH = -6014.332469293104	
+INFO: current LH = -6014.262776906902	
+INFO: current LH = -6014.306965693931	
+INFO: current LH = -6014.2755809762	
+INFO: current LH = -6014.292972275927	
+INFO: current LH = -6014.358603421811	
+INFO: current LH = -6014.211797659846	
+INFO: current LH = -6014.199081466465	
+INFO: Wall time: 7.75014s User: 0s System: 0.01s
+
+INFO: current LH = -6014.371966466907	
+INFO: current LH = -6014.294368094598	
+INFO: current LH = -6014.2773818547	
+INFO: current LH = -6014.297387840702	
+INFO: current LH = -6014.272848860764	
+INFO: current LH = -6014.212519642186	
+INFO: current LH = -6014.357716166752	
+INFO: current LH = -6014.185804995819	
+INFO: current LH = -6014.385694281688	
+INFO: current LH = -6014.237897576548	
+INFO: current LH = -6014.332562314162	
+INFO: current LH = -6014.259341367842	
+INFO: current LH = -6014.31666224048	
+INFO: current LH = -6027.76054885953	
+INFO: current LH = -6032.545272352702	
+INFO: current LH = -6032.593374759506	
+INFO: current LH = -6032.494505409872	
+INFO: current LH = -6032.56453592029	
+INFO: current LH = -6032.522898682364	
+INFO: current LH = -6032.519945272709	
+INFO: Wall time: 14.1678s User: 0s System: 0.01s
+
+INFO: current LH = -6032.566215525685	
+INFO: current LH = -6032.50315546701	
+INFO: current LH = -6032.584595535126	
+INFO: current LH = -6032.503683783798	
+INFO: current LH = -6032.583009093967	
+INFO: current LH = -6032.513429867266	
+INFO: current LH = -6032.574437884745	
+INFO: current LH = -6032.580416853742	
+INFO: current LH = -6032.507553118879	
+INFO: current LH = -6032.528139406096	
+INFO: current LH = -6032.559677446664	
+INFO: current LH = -6032.626779516481	
+INFO: current LH = -6032.46053612365	
+INFO: current LH = -6032.470490240993	
+INFO: current LH = -6032.616192815808	
+INFO: current LH = -6032.570713103456	
+INFO: current LH = -6032.51250093952	
+INFO: current LH = -6032.562072239068	
+INFO: current LH = -6032.525597472692	
+INFO: current LH = -6032.556403612681	
+INFO: Wall time: 8.64778s User: 0.01s System: 0.01s
+
+INFO: current LH = -6032.532374617267	
+INFO: current LH = -6032.564785939347	
+INFO: current LH = -6032.524455035486	
+INFO: current LH = -6032.573783667599	
+INFO: current LH = -6032.513880675777	
+INFO: current LH = -6032.491417527879	
+INFO: current LH = -6032.596799305115	
+INFO: current LH = -6032.489503496632	
+INFO: current LH = -6032.59363267115	
+INFO: current LH = -6032.511388004064	
+INFO: current LH = -6032.576281732773	
+INFO: current LH = -6032.534654085608	
+INFO: current LH = -6032.553028967622	
+INFO: current LH = -6032.506076326787	
+INFO: current LH = -6032.587955634211	
+INFO: current LH = -6034.005153402245	
+INFO: current LH = -6034.720620782339	
+INFO: current LH = -6034.762012907093	
+INFO: current LH = -6034.676380228546	
+INFO: current LH = -6034.737145837401	
+INFO: Wall time: 14.2484s User: 0s System: 0.01s
+
+INFO: current LH = -6034.701185886897	
+INFO: current LH = -6034.711084632516	
+INFO: current LH = -6034.727175020151	
+INFO: current LH = -6034.746179145191	
+INFO: current LH = -6034.692366400302	
+INFO: current LH = -6034.720761301632	
+INFO: current LH = -6034.717752771087	
+INFO: current LH = -6034.753531669408	
+INFO: current LH = -6034.685005578255	
+INFO: current LH = -6034.736484156982	
+INFO: current LH = -6034.701861057032	
+INFO: current LH = -6034.763399227064	
+INFO: current LH = -6034.675130572454	
+INFO: current LH = -6034.764824878068	
+INFO: current LH = -6034.673565042986	
+INFO: current LH = -6034.725028220046	
+INFO: current LH = -6034.713366277379	
+INFO: current LH = -6034.690882867405	
+INFO: current LH = -6034.747345938512	
+INFO: current LH = -6034.716704465507	
+INFO: Wall time: 7.48295s User: 0s System: 0.01s
+
+INFO: current LH = -6034.722147633623	
+INFO: current LH = -6034.746290522109	
+INFO: current LH = -6034.692561937193	
+INFO: current LH = -6034.732278649613	
+INFO: current LH = -6034.706269136298	
+INFO: current LH = -6034.74314546405	
+INFO: current LH = -6034.695200792262	
+INFO: current LH = -6034.726716431395	
+INFO: current LH = -6034.711669255302	
+INFO: current LH = -6034.696788393339	
+INFO: current LH = -6034.746159939523	
+INFO: current LH = -6036.169254204575	
+INFO: current LH = -6036.379568149841	
+INFO: current LH = -6036.364445420375	
+INFO: current LH = -6036.391777603229	
+INFO: current LH = -6036.367925254305	
+INFO: current LH = -6036.388277780392	
+INFO: current LH = -6036.344211041665	
+INFO: current LH = -6036.411785741843	
+INFO: current LH = -6036.384370855423	
+INFO: Wall time: 12.1457s User: 0.01s System: 0s
+
+INFO: current LH = -6036.371973672571	
+INFO: current LH = -6036.423504718131	
+INFO: current LH = -6036.332849443187	
+INFO: current LH = -6036.391811219272	
+INFO: current LH = -6036.364519354474	
+INFO: current LH = -6036.363678254411	
+INFO: current LH = -6036.39254113156	
+INFO: current LH = -6036.387998968035	
+INFO: current LH = -6036.368256304693	
+INFO: current LH = -6036.384042115538	
+INFO: current LH = -6036.372407347591	
+INFO: current LH = -6036.352500998964	
+INFO: current LH = -6036.403526355449	
+INFO: current LH = -6036.378568437852	
+INFO: current LH = -6036.377763813099	
+INFO: current LH = -6036.384154492548	
+INFO: current LH = -6036.372127887199	
+INFO: current LH = -6036.41068088301	
+INFO: current LH = -6036.346780682522	
+INFO: current LH = -6036.378525201399	
+INFO: Wall time: 9.07595s User: 0s System: 0.02s
+
+INFO: current LH = -6036.377803865695	
+INFO: current LH = -6036.384306390164	
+INFO: current LH = -6036.372140611947	
+INFO: current LH = -6036.383912962036	
+INFO: current LH = -6036.372427887904	
+INFO: current LH = -6036.33322727137	
+INFO: current LH = -6036.429875678828	
+INFO: current LH = -6037.126625783648	
+INFO: current LH = -6038.032569414731	
+INFO: current LH = -6038.034171408391	
+INFO: current LH = -6038.028191209394	
+INFO: current LH = -6038.043357114359	
+INFO: current LH = -6038.018847257151	
+INFO: current LH = -6038.036350405369	
+INFO: current LH = -6038.025680561185	
+INFO: current LH = -6038.097577474839	
+INFO: current LH = -6037.965018872595	
+INFO: current LH = -6038.063341843915	
+INFO: current LH = -6037.999174147761	
+INFO: current LH = -6038.089252207454	
+INFO: Wall time: 10.5534s User: 0.01s System: 0s
+
+INFO: current LH = -6037.973286000099	
+INFO: current LH = -6038.031313959315	
+INFO: current LH = -6038.030864873081	
+INFO: current LH = -6038.074258982346	
+INFO: current LH = -6037.988252562583	
+INFO: current LH = -6038.049882097044	
+INFO: current LH = -6038.01218200683	
+INFO: current LH = -6038.085277007875	
+INFO: current LH = -6037.976907720386	
+INFO: current LH = -6038.067891003131	
+INFO: current LH = -6037.994682154269	
+INFO: current LH = -6038.102438661703	
+INFO: current LH = -6037.960195473224	
+INFO: current LH = -6038.071366362608	
+INFO: current LH = -6037.990337327179	
+INFO: current LH = -6038.059059853362	
+INFO: current LH = -6038.003126513998	
+INFO: current LH = -6037.993474529281	
+INFO: current LH = -6038.068985142907	
+INFO: current LH = -6038.0306824809	
+INFO: Wall time: 11.2128s User: 0s System: 0.01s
+
+INFO: current LH = -6038.031546124167	
+INFO: current LH = -6038.001484676423	
+INFO: current LH = -6038.06511952355	
+INFO: current LH = -6038.685407521139	
+INFO: current LH = -6040.71051267038	
+INFO: current LH = -6041.766941881558	
+INFO: current LH = -6041.808921499901	
+INFO: current LH = -6041.83107698356	
+INFO: current LH = -6041.783990502428	
 INFO: Client timing information: 
 INFO: Client id 1 channel id 0  response time +0 s
-INFO: Client id 0 channel id 0  response time +0.315331 s
-INFO: current LH = -6140.797126539828	
-INFO: current LH = -6140.720045363872	
-INFO: current LH = -6140.763025343686	
-INFO: current LH = -6140.753692915912	
-INFO: current LH = -6140.723764807347	
-INFO: current LH = -6140.793218271204	
-INFO: current LH = -6140.770352281818	
-INFO: current LH = -6140.746267772267	
-INFO: current LH = -6140.722212631001	
-INFO: current LH = -6140.794350888656	
-INFO: current LH = -6141.912426681347	
-INFO: Wall time: 22.9225s User: 0.01s System: 0s
+INFO: Client id 0 channel id 0  response time +0.097242 s
+INFO: current LH = -6041.821586281824	
+INFO: current LH = -6041.793245563732	
+INFO: current LH = -6041.859548114487	
+INFO: current LH = -6041.754915746478	
+INFO: current LH = -6041.854827820291	
+INFO: current LH = -6041.760443513716	
+INFO: current LH = -6041.829480036885	
+INFO: current LH = -6041.785688853368	
+INFO: current LH = -6041.827733956678	
+INFO: current LH = -6041.78743776244	
+INFO: current LH = -6041.841931305878	
+INFO: Wall time: 11.3206s User: 0.01s System: 0.01s
 
-INFO: current LH = -6141.151991712492	
-INFO: current LH = -6143.293293143925	
-INFO: current LH = -6143.296608249347	
-INFO: current LH = -6143.287190271131	
-INFO: current LH = -6143.281092243426	
-INFO: current LH = -6143.302455425637	
-INFO: current LH = -6143.322574366001	
-INFO: current LH = -6143.260742936732	
-INFO: current LH = -6143.29029041315	
-INFO: current LH = -6143.293415907647	
-INFO: current LH = -6143.32132709922	
-INFO: current LH = -6143.261788662242	
-INFO: current LH = -6143.286451224244	
-INFO: current LH = -6143.297251642239	
-INFO: current LH = -6143.289591561074	
-INFO: current LH = -6143.294099599335	
-INFO: current LH = -6143.299545090153	
-INFO: current LH = -6143.284166331398	
-INFO: current LH = -6143.292532723494	
-INFO: current LH = -6143.287403447574	
-INFO: Wall time: 5.52064s User: 0s System: 0.01s
+INFO: current LH = -6041.772735918993	
+INFO: current LH = -6041.825708581333	
+INFO: current LH = -6041.789445255136	
+INFO: current LH = -6041.828933747776	
+INFO: current LH = -6041.785314584436	
+INFO: current LH = -6041.806299379393	
+INFO: current LH = -6041.808062318048	
+INFO: current LH = -6041.759035365975	
+INFO: current LH = -6041.855520292699	
+INFO: current LH = -6041.896296954939	
+INFO: current LH = -6041.718233901681	
+INFO: current LH = -6041.814823424591	
+INFO: current LH = -6041.800315110749	
+INFO: current LH = -6041.817881858073	
+INFO: current LH = -6041.796655650846	
+INFO: current LH = -6041.854505968882	
+INFO: current LH = -6041.760621210283	
+INFO: current LH = -6041.792331857708	
+INFO: current LH = -6041.822585000334	
+INFO: current LH = -6041.716734142639	
+INFO: Wall time: 12.7704s User: 0s System: 0.01s
 
-INFO: current LH = -6143.293540180107	
-INFO: current LH = -6143.290116984293	
-INFO: current LH = -6143.289907632067	
-INFO: current LH = -6143.293670352856	
-INFO: current LH = -6143.188904772497	
-INFO: current LH = -6143.394816956843	
-INFO: current LH = -6143.280096430734	
-INFO: current LH = -6143.303150900926	
-INFO: current LH = -6143.374803476191	
-INFO: current LH = -6143.207305946445	
-INFO: current LH = -6143.262974017098	
-INFO: current LH = -6143.320299941121	
-INFO: current LH = -6143.262674520236	
-INFO: current LH = -6143.320687907129	
-INFO: current LH = -6143.320332816258	
-INFO: current LH = -6143.263175071128	
-INFO: current LH = -6143.253782654216	
-INFO: current LH = -6143.328834079842	
-INFO: current LH = -6142.83611073754	
-INFO: current LH = -6143.674643827949	
-INFO: Wall time: 23.9548s User: 0.01s System: 0.01s
+INFO: current LH = -6041.904461483572	
+INFO: current LH = -6042.436511791989	
+INFO: current LH = -6044.905320745764	
+INFO: current LH = -6050.230691356493	
+INFO: current LH = -6032.018988009881	
+INFO: current LH = -6051.183159432767	
+INFO: current LH = -6052.385352452625	
+INFO: current LH = -6052.391425423949	
+INFO: current LH = -6052.376497317114	
+INFO: current LH = -6052.382142968533	
+INFO: current LH = -6052.385630481513	
+INFO: current LH = -6052.387598102284	
+INFO: current LH = -6052.380190607717	
+INFO: current LH = -6052.454739503743	
+INFO: current LH = -6052.313671584543	
+INFO: current LH = -6052.332732831583	
+INFO: current LH = -6052.432836572059	
+INFO: current LH = -6052.346389464872	
+INFO: current LH = -6052.421432782185	
+INFO: current LH = -6052.373547119329	
+INFO: Wall time: 9.78273s User: 0s System: 0.01s
 
-INFO: current LH = -6143.682212889258	
-INFO: current LH = -6143.664153757274	
-INFO: current LH = -6143.661304406556	
-INFO: current LH = -6143.685015574591	
-INFO: current LH = -6143.714127156131	
-INFO: current LH = -6143.632135683298	
-INFO: current LH = -6143.672983954883	
-INFO: current LH = -6143.673403140957	
-INFO: current LH = -6143.723466029329	
-INFO: current LH = -6143.622689430198	
-INFO: current LH = -6143.661018113446	
-INFO: current LH = -6143.68537294514	
-INFO: current LH = -6143.667672575383	
-INFO: current LH = -6143.678769542716	
-INFO: current LH = -6143.684743011991	
-INFO: current LH = -6143.661648408556	
-INFO: current LH = -6143.652357297435	
-INFO: current LH = -6143.693321680761	
-INFO: current LH = -6143.680668001788	
-INFO: current LH = -6143.665676135421	
-INFO: Wall time: 5.18562s User: 0s System: 0.01s
+INFO: current LH = -6052.394749996981	
+INFO: current LH = -6052.351010321628	
+INFO: current LH = -6052.416485069583	
+INFO: current LH = -6052.399484691085	
+INFO: current LH = -6052.36883561187	
+INFO: current LH = -6052.420347198285	
+INFO: current LH = -6052.346985320012	
+INFO: current LH = -6052.403447256076	
+INFO: current LH = -6052.364429601243	
+INFO: current LH = -6052.315711609171	
+INFO: current LH = -6052.452725553804	
+INFO: current LH = -6052.388051829485	
+INFO: current LH = -6052.376351984019	
+INFO: current LH = -6052.387876283942	
+INFO: current LH = -6052.379945855532	
+INFO: current LH = -6052.356455500347	
+INFO: current LH = -6052.395173334828	
+INFO: current LH = -6052.376399289546	
+INFO: current LH = -6052.391424596241	
+INFO: current LH = -6052.409440029745	
+INFO: Wall time: 11.4153s User: 0.01s System: 0.02s
 
-INFO: current LH = -6143.556421220411	
-INFO: current LH = -6143.789828998564	
-INFO: current LH = -6143.667823994618	
-INFO: current LH = -6143.678428745614	
-INFO: current LH = -6143.739962470821	
-INFO: current LH = -6143.605894420902	
-INFO: current LH = -6143.635370262248	
-INFO: current LH = -6143.71089879388	
-INFO: current LH = -6143.650937059113	
-INFO: current LH = -6143.695312630118	
-INFO: current LH = -6143.704288854106	
-INFO: current LH = -6143.642023962541	
-INFO: current LH = -6143.641826652371	
-INFO: current LH = -6143.704239940512	
-INFO: current LH = -6144.276347534564	
-INFO: current LH = -6144.994414459039	
-INFO: current LH = -6145.022124229831	
-INFO: current LH = -6145.046294310557	
-INFO: current LH = -6144.995053734744	
-INFO: current LH = -6145.014955400807	
-INFO: Wall time: 24.9452s User: 0s System: 0s
+INFO: current LH = -6052.358129262043	
+INFO: current LH = -6052.381053794777	
+INFO: current LH = -6052.387645824093	
+INFO: current LH = -6052.390393299504	
+INFO: current LH = -6052.377227857748	
+INFO: current LH = -6052.271851634651	
+INFO: current LH = -6052.496876117866	
+INFO: current LH = -6055.237274011608	
+INFO: current LH = -6055.766849167658	
+INFO: current LH = -6055.763513600741	
+INFO: current LH = -6055.767327767931	
+INFO: current LH = -6055.763141545866	
+INFO: current LH = -6055.767637983407	
+INFO: current LH = -6055.753197029277	
+INFO: current LH = -6055.777530477249	
+INFO: current LH = -6055.783296160135	
+INFO: current LH = -6055.747571116868	
+INFO: current LH = -6055.742340036019	
+INFO: current LH = -6055.788583851499	
+INFO: current LH = -6055.753577711274	
+INFO: Wall time: 10.0073s User: 0s System: 0s
 
-INFO: current LH = -6145.026361108714	
-INFO: current LH = -6145.073435439397	
-INFO: current LH = -6144.967896618589	
-INFO: current LH = -6145.032298244472	
-INFO: current LH = -6145.00920450851	
-INFO: current LH = -6145.095025402423	
-INFO: current LH = -6144.946256632967	
-INFO: current LH = -6145.003591739454	
-INFO: current LH = -6145.037886153377	
-INFO: current LH = -6145.008245088265	
-INFO: current LH = -6145.033112042106	
-INFO: current LH = -6145.032966032091	
-INFO: current LH = -6145.008517018836	
-INFO: current LH = -6145.008594149741	
-INFO: current LH = -6145.03234187539	
-INFO: current LH = -6145.064596896547	
-INFO: current LH = -6144.976618402878	
-INFO: current LH = -6144.91706284694	
-INFO: current LH = -6145.124199153915	
-INFO: current LH = -6145.046534824181	
-INFO: Wall time: 9.38758s User: 0.01s System: 0.01s
+INFO: current LH = -6055.777410476968	
+INFO: current LH = -6055.768464996546	
+INFO: current LH = -6055.762067422293	
+INFO: current LH = -6055.757820828162	
+INFO: current LH = -6055.773148248022	
+INFO: current LH = -6055.729377048329	
+INFO: current LH = -6055.801529914301	
+INFO: current LH = -6055.768792918179	
+INFO: current LH = -6055.762158421757	
+INFO: current LH = -6055.74723253055	
+INFO: current LH = -6055.784226690783	
+INFO: current LH = -6055.736190136588	
+INFO: current LH = -6055.793579311257	
+INFO: current LH = -6055.796730399768	
+INFO: current LH = -6055.732873716395	
+INFO: current LH = -6055.779792836558	
+INFO: current LH = -6055.751051430038	
+INFO: current LH = -6055.712511927807	
+INFO: current LH = -6055.818838405417	
+INFO: current LH = -6055.769008439957	
+INFO: Wall time: 11.1898s User: 0s System: 0.01s
 
-INFO: current LH = -6144.994589287769	
-INFO: current LH = -6145.041922115673	
-INFO: current LH = -6144.998641419022	
-INFO: current LH = -6144.96501536825	
-INFO: current LH = -6145.076062636223	
-INFO: current LH = -6145.049554750653	
-INFO: current LH = -6144.991778228497	
-INFO: current LH = -6145.035348643934	
-INFO: current LH = -6145.005905043226	
-INFO: current LH = -6145.004760453049	
-INFO: current LH = -6145.035981706998	
-INFO: current LH = -6145.53917117895	
-INFO: current LH = -6147.304414197592	
-INFO: current LH = -6149.662630569106	
-INFO: current LH = -6149.823039272217	
-INFO: current LH = -6149.832514769311	
-INFO: current LH = -6149.810621575184	
-INFO: current LH = -6149.841037508503	
-INFO: current LH = -6149.802132442902	
-INFO: current LH = -6149.860160524818	
-INFO: Wall time: 21.5286s User: 0s System: 0s
+INFO: current LH = -6055.76170649896	
+INFO: current LH = -6055.556099547566	
+INFO: current LH = -6055.970638351619	
+INFO: current LH = -6055.631810452035	
+INFO: current LH = -6055.898996790634	
+INFO: current LH = -6056.911264993346	
+INFO: current LH = -6056.946107726058	
+INFO: current LH = -6056.950962924959	
+INFO: current LH = -6056.938371865149	
+INFO: current LH = -6056.944629802139	
+INFO: current LH = -6056.944697403523	
+INFO: current LH = -6056.94214713136	
+INFO: current LH = -6056.94718648818	
+INFO: current LH = -6056.956966758595	
+INFO: current LH = -6056.932312973558	
+INFO: current LH = -6056.966682642542	
+INFO: current LH = -6056.922917725692	
+INFO: current LH = -6056.964481802631	
+INFO: current LH = -6056.924892394622	
+INFO: current LH = -6056.957399315043	
+INFO: Wall time: 8.84195s User: 0s System: 0.01s
 
-INFO: current LH = -6149.783017608675	
-INFO: current LH = -6149.850809423401	
-INFO: current LH = -6149.792621297803	
-INFO: current LH = -6149.828221543896	
-INFO: current LH = -6149.81481220672	
-INFO: current LH = -6149.808839554509	
-INFO: current LH = -6149.834578544423	
-INFO: current LH = -6149.823262133518	
-INFO: current LH = -6149.819871320816	
-INFO: current LH = -6149.846864176873	
-INFO: current LH = -6149.796542554554	
-INFO: current LH = -6149.845088369748	
-INFO: current LH = -6149.798207740273	
-INFO: current LH = -6149.828592756064	
-INFO: current LH = -6149.814356113001	
-INFO: current LH = -6149.807973517229	
-INFO: current LH = -6149.837233463408	
-INFO: current LH = -6149.794654846743	
-INFO: current LH = -6149.848473526589	
-INFO: current LH = -6149.830911208339	
-INFO: Wall time: 9.85046s User: 0s System: 0.01s
+INFO: current LH = -6056.931858567372	
+INFO: current LH = -6056.952362008372	
+INFO: current LH = -6056.937021753723	
+INFO: current LH = -6056.902770489274	
+INFO: current LH = -6056.986852951956	
+INFO: current LH = -6056.955041433069	
+INFO: current LH = -6056.934227513421	
+INFO: current LH = -6056.96488488485	
+INFO: current LH = -6056.924519480211	
+INFO: current LH = -6056.959414849897	
+INFO: current LH = -6056.930370582734	
+INFO: current LH = -6056.981503356833	
+INFO: current LH = -6056.908123515679	
+INFO: current LH = -6056.958833258606	
+INFO: current LH = -6056.930470305406	
+INFO: current LH = -6056.877365657661	
+INFO: current LH = -6057.011628455548	
+INFO: current LH = -6056.931729119004	
+INFO: current LH = -6056.957569243409	
+INFO: current LH = -6056.817936409851	
+INFO: Wall time: 12.4117s User: 0.01s System: 0s
 
-INFO: current LH = -6149.812125833638	
-INFO: current LH = -6149.874981246358	
-INFO: current LH = -6149.768509903724	
-INFO: current LH = -6149.849692871988	
-INFO: current LH = -6149.793878965339	
-INFO: current LH = -6149.803157159933	
-INFO: current LH = -6149.840957566354	
-INFO: current LH = -6149.809009672664	
-INFO: current LH = -6149.834199497261	
-INFO: current LH = -6149.819713604457	
-INFO: current LH = -6149.822385541202	
-INFO: current LH = -6150.870072727917	
-INFO: current LH = -6150.882280898007	
-INFO: current LH = -6150.876031174857	
-INFO: current LH = -6150.885566431173	
-INFO: current LH = -6150.883208604276	
-INFO: current LH = -6150.878412301354	
-INFO: current LH = -6150.903297296736	
-INFO: current LH = -6150.85830460979	
-INFO: current LH = -6150.888067063239	
-INFO: Wall time: 17.3112s User: 0.01s System: 0.01s
+INFO: current LH = -6057.070885401849	
+INFO: current LH = -6058.040647148536	
+INFO: current LH = -6059.081335457313	
+INFO: current LH = -6059.17752049462	
+INFO: current LH = -6059.20970357976	
+INFO: current LH = -6059.142521989548	
+INFO: current LH = -6059.195336113324	
+INFO: current LH = -6059.156728029923	
+INFO: current LH = -6059.22545813785	
+INFO: current LH = -6059.126435817022	
+INFO: current LH = -6059.191176164438	
+INFO: current LH = -6059.161202639405	
+INFO: current LH = -6059.164607743868	
+INFO: current LH = -6059.187331941936	
+INFO: current LH = -6059.22336080276	
+INFO: current LH = -6059.12915532367	
+INFO: current LH = -6059.166381673343	
+INFO: current LH = -6059.186010201393	
+INFO: current LH = -6059.196003398342	
+INFO: current LH = -6059.156568411455	
+INFO: Wall time: 7.03842s User: 0s System: 0.01s
 
-INFO: current LH = -6150.87365146751	
-INFO: current LH = -6150.892756132116	
-INFO: current LH = -6150.868702027583	
-INFO: current LH = -6150.864032087087	
-INFO: current LH = -6150.897767783447	
-INFO: current LH = -6150.886150605465	
-INFO: current LH = -6150.875760957465	
-INFO: current LH = -6150.883773182855	
-INFO: current LH = -6150.877945837525	
-INFO: current LH = -6150.870137021601	
-INFO: current LH = -6150.891208870401	
-INFO: current LH = -6150.890715542076	
-INFO: current LH = -6150.87085098933	
-INFO: current LH = -6150.897763172788	
-INFO: current LH = -6150.862477170858	
-INFO: current LH = -6150.877409638795	
-INFO: current LH = -6150.884004911036	
-INFO: current LH = -6150.882337324763	
-INFO: current LH = -6150.878155475529	
-INFO: current LH = -6150.88539693151	
-INFO: Wall time: 11.6774s User: 0.01s System: 0.01s
+INFO: current LH = -6059.145853279653	
+INFO: current LH = -6059.206732473333	
+INFO: current LH = -6059.217230678189	
+INFO: current LH = -6059.134958360456	
+INFO: current LH = -6059.177710570309	
+INFO: current LH = -6059.174829291417	
+INFO: current LH = -6059.227770718415	
+INFO: current LH = -6059.124152120128	
+INFO: current LH = -6059.136321077683	
+INFO: current LH = -6059.21528614333	
+INFO: current LH = -6059.168766296768	
+INFO: current LH = -6059.18301240636	
+INFO: current LH = -6059.141473237785	
+INFO: current LH = -6059.210772136995	
+INFO: current LH = -6059.168407181377	
+INFO: current LH = -6059.183595051594	
+INFO: current LH = -6059.100379864083	
+INFO: current LH = -6059.24637217593	
+INFO: current LH = -6059.132954588642	
+INFO: current LH = -6059.219204498349	
+INFO: Wall time: 14.3266s User: 0.01s System: 0s
 
-INFO: current LH = -6150.876188240274	
-INFO: current LH = -6150.884004115822	
-INFO: current LH = -6150.877152050864	
-INFO: current LH = -6150.872442067952	
-INFO: current LH = -6150.889154397955	
-INFO: current LH = -6150.863942831139	
-INFO: current LH = -6150.897378858802	
-INFO: current LH = -6151.281495617538	
-INFO: current LH = -6151.283146990432	
+INFO: current LH = -6059.994320593711	
+INFO: current LH = -6060.650808808607	
+INFO: current LH = -6060.660613607751	
+INFO: current LH = -6060.638059226609	
+INFO: current LH = -6060.653666349984	
+INFO: current LH = -6060.645087130767	
+INFO: current LH = -6060.659066531035	
+INFO: current LH = -6060.639734990357	
+INFO: current LH = -6060.600471745287	
 INFO: Client timing information: 
-INFO: Client id 1 channel id 0  response time +0 s
-INFO: Client id 0 channel id 0  response time +0.029527 s
-INFO: current LH = -6151.268554000744	
-INFO: current LH = -6151.294767844493	
-INFO: current LH = -6151.275552178089	
-INFO: current LH = -6151.287844940479	
-INFO: current LH = -6151.285119431782	
-INFO: current LH = -6151.27834989033	
-INFO: current LH = -6151.274117340924	
-INFO: current LH = -6151.289211246424	
-INFO: current LH = -6151.272787627693	
-INFO: current LH = -6151.290662044251	
-INFO: current LH = -6151.273740186722	
-INFO: Wall time: 13.2603s User: 0s System: 0s
+INFO: Client id 0 channel id 0  response time +0 s
+INFO: Client id 1 channel id 0  response time +0.055029 s
+INFO: current LH = -6060.698136212884	
+INFO: current LH = -6060.638436356411	
+INFO: current LH = -6060.660294295152	
+INFO: current LH = -6060.662900693061	
+INFO: current LH = -6060.635765888327	
+INFO: current LH = -6060.616461478005	
+INFO: current LH = -6060.682286243577	
+INFO: current LH = -6060.634126307616	
+INFO: current LH = -6060.66461155801	
+INFO: current LH = -6060.659314257215	
+INFO: current LH = -6060.63982944601	
+INFO: Wall time: 6.46172s User: 0s System: 0.01s
 
-INFO: current LH = -6151.289642801857	
-INFO: current LH = -6151.284407185995	
-INFO: current LH = -6151.278928134319	
-INFO: current LH = -6151.271288399095	
-INFO: current LH = -6151.292036193558	
-INFO: current LH = -6151.300231257061	
-INFO: current LH = -6151.263364309265	
-INFO: current LH = -6151.284977534976	
-INFO: current LH = -6151.278338470794	
-INFO: current LH = -6151.285328568352	
-INFO: current LH = -6151.278127523493	
-INFO: current LH = -6151.276665360703	
-INFO: current LH = -6151.286757309372	
-INFO: current LH = -6151.285789362599	
-INFO: current LH = -6151.277684538151	
-INFO: current LH = -6151.277900514166	
-INFO: current LH = -6151.2854321353	
-INFO: current LH = -6151.283631821769	
-INFO: current LH = -6151.279764849352	
-INFO: current LH = -6151.278989729697	
-INFO: Wall time: 17.5343s User: 0s System: 0.01s
+INFO: current LH = -6060.631780013638	
+INFO: current LH = -6060.666878773422	
+INFO: current LH = -6060.66577738918	
+INFO: current LH = -6060.632846856853	
+INFO: current LH = -6060.631810521999	
+INFO: current LH = -6060.666383350077	
+INFO: current LH = -6060.61327299511	
+INFO: current LH = -6060.685180574741	
+INFO: current LH = -6060.613717210879	
+INFO: current LH = -6060.684962889907	
+INFO: current LH = -6060.630144059828	
+INFO: current LH = -6060.668417584704	
+INFO: current LH = -6060.634922440685	
+INFO: current LH = -6060.663709138929	
+INFO: current LH = -6060.561406624239	
+INFO: current LH = -6060.73661586796	
+INFO: current LH = -6061.340039127649	
+INFO: current LH = -6061.946865735009	
+INFO: current LH = -6061.948349613591	
+INFO: current LH = -6061.94249050432	
+INFO: Wall time: 14.7971s User: 0s System: 0s
 
-INFO: current LH = -6151.284389157199	
-INFO: current LH = -6151.255035749745	
-INFO: current LH = -6151.308478437586	
-INFO: current LH = -6151.447947905151	
-INFO: current LH = -6151.601268337665	
-INFO: current LH = -6151.604736400554	
-INFO: current LH = -6151.594860216482	
-INFO: current LH = -6151.606992140009	
-INFO: current LH = -6151.592630485598	
-INFO: current LH = -6151.615686986614	
-INFO: current LH = -6151.583984495865	
-INFO: current LH = -6151.595885756462	
-INFO: current LH = -6151.60372081325	
-INFO: current LH = -6151.596498564864	
-INFO: current LH = -6151.603046974506	
-INFO: current LH = -6151.612562689463	
-INFO: current LH = -6151.587123940387	
-INFO: current LH = -6151.595642642092	
-INFO: current LH = -6151.604110711192	
-INFO: current LH = -6151.601304151689	
-INFO: Wall time: 9.3419s User: 0.01s System: 0.01s
+INFO: current LH = -6061.937180264672	
+INFO: current LH = -6061.953613817866	
+INFO: current LH = -6061.96427461024	
+INFO: current LH = -6061.92644931216	
+INFO: current LH = -6061.920546177736	
+INFO: current LH = -6061.970499492558	
+INFO: current LH = -6061.924415770399	
+INFO: current LH = -6061.966653593621	
+INFO: current LH = -6061.982946833999	
+INFO: current LH = -6061.908088633515	
+INFO: current LH = -6061.933059753447	
+INFO: current LH = -6061.957857249501	
+INFO: current LH = -6061.957222509333	
+INFO: current LH = -6061.933885934095	
+INFO: current LH = -6061.955457731337	
+INFO: current LH = -6061.935558773225	
+INFO: current LH = -6061.931573324855	
+INFO: current LH = -6061.959244910799	
+INFO: current LH = -6061.961388788179	
+INFO: current LH = -6061.929687461847	
+INFO: Wall time: 7.43213s User: 0s System: 0.01s
 
-INFO: current LH = -6151.59834298965	
-INFO: current LH = -6151.602583015797	
-INFO: current LH = -6151.596857321236	
-INFO: current LH = -6151.603408081492	
-INFO: current LH = -6151.596180880453	
-INFO: current LH = -6151.6080489371	
-INFO: current LH = -6151.591332409456	
-INFO: current LH = -6151.613730288645	
-INFO: current LH = -6151.586041480337	
-INFO: current LH = -6151.598393913418	
-INFO: current LH = -6151.60109111089	
-INFO: current LH = -6151.605228110135	
-INFO: current LH = -6151.594507408779	
-INFO: current LH = -6151.600952267003	
-INFO: current LH = -6151.598601507992	
-INFO: current LH = -6151.608377723273	
-INFO: current LH = -6151.591217415576	
-INFO: current LH = -6151.583280240635	
-INFO: current LH = -6151.615965337825	
-INFO: current LH = -6151.831511617452	
-INFO: Wall time: 24.4986s User: 0s System: 0.01s
+INFO: current LH = -6061.958789403599	
+INFO: current LH = -6061.932171074013	
+INFO: current LH = -6061.952027147876	
+INFO: current LH = -6061.93902900687	
+INFO: current LH = -6061.973439698621	
+INFO: current LH = -6061.917689500586	
+INFO: current LH = -6061.955886225652	
+INFO: current LH = -6061.935299676032	
+INFO: current LH = -6061.935535480704	
+INFO: current LH = -6061.955236633099	
+INFO: current LH = -6061.904560450764	
+INFO: current LH = -6061.984675381558	
+INFO: current LH = -6062.475321744961	
+INFO: current LH = -6063.338898666593	
+INFO: current LH = -6063.322605612827	
+INFO: current LH = -6063.352233216301	
+INFO: current LH = -6063.33196121907	
+INFO: current LH = -6063.342968794098	
+INFO: current LH = -6063.329011904666	
+INFO: current LH = -6063.345993734836	
+INFO: Wall time: 12.7064s User: 0.01s System: 0.01s
 
-INFO: current LH = -6151.884528357798	
-INFO: current LH = -6151.882076543333	
-INFO: current LH = -6151.883988895141	
-INFO: current LH = -6151.88070439096	
-INFO: current LH = -6151.885465467866	
-INFO: current LH = -6151.878823428381	
-INFO: current LH = -6151.88744298542	
-INFO: current LH = -6151.875475916563	
-INFO: current LH = -6151.890566841535	
-INFO: current LH = -6151.888606726408	
-INFO: current LH = -6151.877468499611	
-INFO: current LH = -6151.888294365602	
-INFO: current LH = -6151.877737750576	
-INFO: current LH = -6151.877622795668	
-INFO: current LH = -6151.888523091786	
-INFO: current LH = -6151.884332450501	
-INFO: current LH = -6151.881703270776	
-INFO: current LH = -6151.87190124935	
-INFO: current LH = -6151.894105662128	
-INFO: current LH = -6151.885603571357	
-INFO: Wall time: 5.36044s User: 0s System: 0.01s
+INFO: current LH = -6063.326795832636	
+INFO: current LH = -6063.348210655126	
+INFO: current LH = -6063.319957428584	
+INFO: current LH = -6063.355156137276	
+INFO: current LH = -6063.359034794556	
+INFO: current LH = -6063.315799619441	
+INFO: current LH = -6063.336120538344	
+INFO: current LH = -6063.338749790682	
+INFO: current LH = -6063.344826206231	
+INFO: current LH = -6063.330112181492	
+INFO: current LH = -6063.349715817488	
+INFO: current LH = -6063.325528377344	
+INFO: current LH = -6063.355063326243	
+INFO: current LH = -6063.320065315111	
+INFO: current LH = -6063.322767326185	
+INFO: current LH = -6063.35205621033	
+INFO: current LH = -6063.333392113415	
+INFO: current LH = -6063.341338266037	
+INFO: current LH = -6063.336376023832	
+INFO: current LH = -6063.338231089385	
+INFO: Wall time: 9.25564s User: 0s System: 0.01s
 
-INFO: current LH = -6151.880607024901	
-INFO: current LH = -6151.884683327693	
-INFO: current LH = -6151.879895300244	
-INFO: current LH = -6151.881602973782	
-INFO: current LH = -6151.884582451137	
-INFO: current LH = -6151.890401291363	
-INFO: current LH = -6151.875526083746	
-INFO: current LH = -6151.88251612052	
-INFO: current LH = -6151.883744917774	
-INFO: current LH = -6151.8736928333	
-INFO: current LH = -6151.89205773928	
-INFO: current LH = -6151.876842938547	
-INFO: current LH = -6151.889248817894	
-INFO: current LH = -6151.873007163807	
-INFO: current LH = -6151.892733750286	
-INFO: current LH = -6151.98262810906	
-INFO: current LH = -6151.994833188438	
-INFO: current LH = -6151.99786133967	
-INFO: current LH = -6151.988858952738	
-INFO: current LH = -6151.993885085593	
-INFO: Wall time: 24.7774s User: 0s System: 0.01s
+INFO: current LH = -6063.319628219064	
+INFO: current LH = -6063.355036069083	
+INFO: current LH = -6063.369535959182	
+INFO: current LH = -6063.305013685555	
+INFO: current LH = -6063.330570848522	
+INFO: current LH = -6063.344186940576	
+INFO: current LH = -6063.323458770769	
+INFO: current LH = -6063.350714188097	
+INFO: current LH = -6064.003756085339	
+INFO: current LH = -6064.14902397159	
+INFO: current LH = -6064.152716207824	
+INFO: current LH = -6064.142471809425	
+INFO: current LH = -6064.162426899077	
+INFO: current LH = -6064.132732081082	
+INFO: current LH = -6064.155820108504	
+INFO: current LH = -6064.139337708519	
+INFO: current LH = -6064.148736356732	
+INFO: current LH = -6064.146517470365	
+INFO: current LH = -6064.132928778949	
+INFO: current LH = -6064.162471050855	
+INFO: Wall time: 10.8557s User: 0.01s System: 0.01s
 
-INFO: current LH = -6151.992859246743	
-INFO: current LH = -6151.990704463969	
-INFO: current LH = -6151.99607307994	
-INFO: current LH = -6151.996735290587	
-INFO: current LH = -6151.990029021445	
-INFO: current LH = -6151.988773248938	
-INFO: current LH = -6151.998004643424	
-INFO: current LH = -6151.991552059603	
-INFO: current LH = -6151.995159237804	
-INFO: current LH = -6151.99545764164	
-INFO: current LH = -6151.99125800968	
-INFO: current LH = -6151.993324007221	
-INFO: current LH = -6151.993426056853	
-INFO: current LH = -6151.986881845619	
-INFO: current LH = -6151.999970951504	
-INFO: current LH = -6151.99777402175	
-INFO: current LH = -6151.989021919033	
-INFO: current LH = -6151.994984971119	
-INFO: current LH = -6151.991173247063	
-INFO: current LH = -6151.996635469699	
-INFO: Wall time: 7.92007s User: 0s System: 0.01s
+INFO: current LH = -6064.147924313161	
+INFO: current LH = -6064.147119136591	
+INFO: current LH = -6064.158158594225	
+INFO: current LH = -6064.136810650562	
+INFO: current LH = -6064.153671469124	
+INFO: current LH = -6064.141438315128	
+INFO: current LH = -6064.15102969376	
+INFO: current LH = -6064.144193087702	
+INFO: current LH = -6064.146898376056	
+INFO: current LH = -6064.148250537486	
+INFO: current LH = -6064.1378548556	
+INFO: current LH = -6064.157252960896	
+INFO: current LH = -6064.144496109841	
+INFO: current LH = -6064.150666711278	
+INFO: current LH = -6064.181569368221	
+INFO: current LH = -6064.113639660916	
+INFO: current LH = -6064.148434322114	
+INFO: current LH = -6064.146963819949	
+INFO: current LH = -6064.166573258375	
+INFO: current LH = -6064.128808879385	
+INFO: Wall time: 10.9304s User: 0s System: 0.01s
 
-INFO: current LH = -6151.990193497361	
-INFO: current LH = -6151.993469293718	
-INFO: current LH = -6151.993180741048	
-INFO: current LH = -6151.992575372036	
-INFO: current LH = -6151.994291280485	
-INFO: current LH = -6151.990109658684	
-INFO: current LH = -6151.996531102711	
-INFO: current LH = -6151.992345169101	
-INFO: current LH = -6151.99440515564	
-INFO: current LH = -6151.988885890903	
-INFO: current LH = -6151.997685567791	
-INFO: current LH = -6152.029230244267	
-INFO: current LH = -6152.083623327292	
-INFO: current LH = -6152.082066860304	
-INFO: current LH = -6152.082245868	
-INFO: current LH = -6152.082175913738	
-INFO: current LH = -6152.082121230428	
-INFO: current LH = -6152.079002562369	
-INFO: current LH = -6152.085272741122	
-INFO: current LH = -6152.080749776104	
-INFO: Wall time: 18.4214s User: 0.01s System: 0s
+INFO: current LH = -6064.163096557137	
+INFO: current LH = -6064.132022063947	
+INFO: current LH = -6064.13899963818	
+INFO: current LH = -6064.15575312517	
+INFO: current LH = -6064.549630139221	
+INFO: current LH = -6064.587224959577	
+INFO: current LH = -6064.600842521583	
+INFO: current LH = -6064.570732594809	
+INFO: current LH = -6064.586839954255	
+INFO: current LH = -6064.584697410573	
+INFO: current LH = -6064.608738740335	
+INFO: current LH = -6064.562780653314	
+INFO: current LH = -6064.601941380403	
+INFO: current LH = -6064.569816827927	
+INFO: current LH = -6064.568136703752	
+INFO: current LH = -6064.603608282115	
+INFO: current LH = -6064.597363833822	
+INFO: current LH = -6064.57428105972	
+INFO: current LH = -6064.580289722893	
+INFO: current LH = -6064.591126073828	
+INFO: Wall time: 8.87824s User: 0s System: 0s
 
-INFO: current LH = -6152.083530696308	
-INFO: current LH = -6152.085194488451	
-INFO: current LH = -6152.079152884933	
-INFO: current LH = -6152.078539301586	
-INFO: current LH = -6152.085744560403	
-INFO: current LH = -6152.079218477294	
-INFO: current LH = -6152.085110246564	
-INFO: current LH = -6152.082891455226	
-INFO: current LH = -6152.081398312012	
-INFO: current LH = -6152.081056034029	
-INFO: current LH = -6152.083296857955	
-INFO: current LH = -6152.080508129755	
-INFO: current LH = -6152.083834039861	
-INFO: current LH = -6152.082241805946	
-INFO: current LH = -6152.081068289194	
-INFO: current LH = -6152.080092983166	
-INFO: current LH = -6152.084217502903	
-INFO: current LH = -6152.085238869087	
-INFO: current LH = -6152.078932254796	
-INFO: current LH = -6152.081229649983	
-INFO: Wall time: 12.6289s User: 0s System: 0s
+INFO: current LH = -6064.598298337327	
+INFO: current LH = -6064.57343252677	
+INFO: current LH = -6064.604402607508	
+INFO: current LH = -6064.567493095052	
+INFO: current LH = -6064.600885135475	
+INFO: current LH = -6064.570723094404	
+INFO: current LH = -6064.582127762041	
+INFO: current LH = -6064.589656412969	
+INFO: current LH = -6064.601017960526	
+INFO: current LH = -6064.570497504948	
+INFO: current LH = -6064.618195653014	
+INFO: current LH = -6064.553227088392	
+INFO: current LH = -6064.598216701895	
+INFO: current LH = -6064.573441091519	
+INFO: current LH = -6064.593736736637	
+INFO: current LH = -6064.578212091154	
+INFO: current LH = -6064.582406920629	
+INFO: current LH = -6064.58905459747	
+INFO: current LH = -6064.619017618337	
+INFO: current LH = -6064.551780436573	
+INFO: Wall time: 13.4321s User: 0.01s System: 0.01s
 
   no                                                           Name                    Value  type                 Error +-            Low          High
-   0               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag        2.162823661340386  free                      0.5
+   0               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag        2.172778957498815  free                      0.5
    1               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonPhi                        0 fixed
    2                               L1S1_eta(2225)Toomega1_omega2Mag                        1 fixed
    3                               L1S1_eta(2225)Toomega1_omega2Phi                        0 fixed
-   4                                                  eta(2225)Mass         2.23514455557155  free                     0.03           2.08           2.38
-   5                                                 eta(2225)Width       0.1926274367057791  free                     0.03              0            0.3
+   4                                                  eta(2225)Mass        2.235221183088919  free                     0.03           2.08           2.38
+   5                                                 eta(2225)Width       0.1951867952368956  free                     0.03              0            0.3
    6                           L1S0_omega1Topion1+_pion1-_pion10Mag                        1 fixed
    7                           L1S0_omega1Topion1+_pion1-_pion10Phi                        0 fixed
    8                           L1S0_omega2Topion2+_pion2-_pion20Mag                        1 fixed
    9                           L1S0_omega2Topion2+_pion2-_pion20Phi                        0 fixed
-  10                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.7853219030094049  free                 0.288675
-  11                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.786613217167901  free                      0.2
-  12                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.6103887501925191  free                 0.288675
-  13                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi       0.5185788121903314  free                      0.2
-  14                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.5500942217279872  free                 0.288675
-  15                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi        2.596833526699292  free                      0.2
-  16                                L2S0_f2(1910)Toomega1_omega2Mag       0.4162115955690797  free                     0.25
-  17                                L2S0_f2(1910)Toomega1_omega2Phi       0.0173790127013608  free                      0.2
+  10                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag         1.01671089749611  free                 0.288675
+  11                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi        2.582279283991398  free                      0.2
+  12                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.9042258997906365  free                 0.288675
+  13                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi        0.275086993404178  free                      0.2
+  14                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.7710810216575159  free                 0.288675
+  15                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.597494930076714  free                      0.2
+  16                                L2S0_f2(1910)Toomega1_omega2Mag        0.337487265862044  free                     0.25
+  17                                L2S0_f2(1910)Toomega1_omega2Phi      -0.3907111508277238  free                      0.2
   18                                L0S2_f2(1910)Toomega1_omega2Mag                      0.5 fixed
   19                                L0S2_f2(1910)Toomega1_omega2Phi                        0 fixed
-  20                                L2S2_f2(1910)Toomega1_omega2Mag       0.5153694536265013  free                     0.25
-  21                                L2S2_f2(1910)Toomega1_omega2Phi          0.6442350980531  free                      0.2
-  22                                L4S2_f2(1910)Toomega1_omega2Mag       0.4994546457060703  free                     0.25
-  23                                L4S2_f2(1910)Toomega1_omega2Phi       0.3578657993021796  free                      0.2
-  24                                                   f2(1910)Mass        1.943023601037235  free                     0.03          1.791          2.091
-  25                                                  f2(1910)Width        0.279858349672414  free                    0.034              0           0.34
+  20                                L2S2_f2(1910)Toomega1_omega2Mag       0.3023788967917939  free                     0.25
+  21                                L2S2_f2(1910)Toomega1_omega2Phi         0.73128489105715  free                      0.2
+  22                                L4S2_f2(1910)Toomega1_omega2Mag       0.2045181549167811  free                     0.25
+  23                                L4S2_f2(1910)Toomega1_omega2Phi      -0.8400114714367399  free                      0.2
+  24                                                   f2(1910)Mass        1.937188944782291  free                     0.03          1.791          2.091
+  25                                                  f2(1910)Width       0.2457732167276824  free                    0.034              0           0.34
   26  channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling                        1 fixed
-INFO: current LH = -6152.083245644609	
-INFO: current LH = -6152.085021258814	
-INFO: current LH = -6152.07910708893	
-INFO: current LH = -6152.088351719031	
-INFO: current LH = -6152.075950171057	
-INFO: current LH = -6152.074918423625	
-INFO: current LH = -6152.089197728905	
-INFO: current LH = -6152.106353405669	
-INFO: current LH = -6152.106698985561	
-INFO: current LH = -6152.105670227933	
-INFO: current LH = -6152.104800995718	
-INFO: current LH = -6152.104728742906	
-INFO: current LH = -6152.105732967326	
-INFO: current LH = -6152.105610429362	
-INFO: current LH = -6152.104834925243	
-INFO: current LH = -6152.105324914964	
-INFO: current LH = -6152.105142184595	
-INFO: current LH = -6152.104404398658	
-INFO: current LH = -6152.106054383304	
-INFO: current LH = -6152.105192034746	
-INFO: Wall time: 13.2297s User: 0.01s System: 0.01s
+INFO: current LH = -6064.898886728858	
+INFO: current LH = -6065.145513476074	
+INFO: current LH = -6065.140612580558	
+INFO: current LH = -6065.147471964682	
+INFO: current LH = -6065.126086354169	
+INFO: current LH = -6065.162067821205	
+INFO: current LH = -6065.143792596531	
+INFO: current LH = -6065.144391235128	
+INFO: current LH = -6065.138649143667	
+INFO: current LH = -6065.149480043698	
+INFO: current LH = -6065.143562373312	
+INFO: current LH = -6065.144836294789	
+INFO: current LH = -6065.127450442896	
+INFO: current LH = -6065.160550384122	
+INFO: current LH = -6065.134361670057	
+INFO: current LH = -6065.153590631905	
+INFO: current LH = -6065.132374739303	
+INFO: current LH = -6065.155636281554	
+INFO: current LH = -6065.162696549814	
+INFO: current LH = -6065.125467323248	
+INFO: Wall time: 5.77539s User: 0s System: 0s
 
-INFO: current LH = -6152.105290614601	
-INFO: current LH = -6152.104040306661	
-INFO: current LH = -6152.106458186902	
-INFO: current LH = -6152.106192571136	
-INFO: current LH = -6152.104278120993	
-INFO: current LH = -6152.103982713536	
-INFO: current LH = -6152.106498317567	
-INFO: current LH = -6152.104574585586	
-INFO: current LH = -6152.105903935627	
+INFO: current LH = -6065.135691748358	
+INFO: current LH = -6065.152326094821	
+INFO: current LH = -6065.142773801912	
+INFO: current LH = -6065.14539376313	
+INFO: current LH = -6065.145779369673	
+INFO: current LH = -6065.142303697367	
+INFO: current LH = -6065.174893361614	
+INFO: current LH = -6065.113178487638	
+INFO: current LH = -6065.140535888846	
+INFO: Client timing information: 
+INFO: Client id 1 channel id 0  response time +0 s
+INFO: Client id 0 channel id 0  response time +0.230038 s
+INFO: current LH = -6065.147557387812	
+INFO: current LH = -6065.135900521014	
+INFO: current LH = -6065.152603793602	
+INFO: current LH = -6065.129407067841	
+INFO: current LH = -6065.158809203297	
+INFO: current LH = -6065.139215840682	
+INFO: current LH = -6065.14915899883	
+INFO: current LH = -6065.415414587821	
+INFO: current LH = -6066.317852238353	
+INFO: current LH = -6062.458192730722	
+INFO: current LH = -6066.134245122212	
+INFO: Wall time: 15.7641s User: 0.01s System: 0.01s
+
+INFO: current LH = -6066.508192835735	
+INFO: current LH = -6066.485324216093	
+INFO: current LH = -6066.528101989188	
+INFO: current LH = -6066.508471648663	
+INFO: current LH = -6066.50503217423	
+INFO: current LH = -6066.496639661372	
+INFO: current LH = -6066.516850190053	
+INFO: current LH = -6066.465280715712	
+INFO: current LH = -6066.548459232219	
+INFO: current LH = -6066.498277483714	
+INFO: current LH = -6066.515351008222	
+INFO: current LH = -6066.454528356326	
+INFO: current LH = -6066.558965313001	
+INFO: current LH = -6066.487908567972	
+INFO: current LH = -6066.525882882052	
+INFO: current LH = -6066.466978116348	
+INFO: current LH = -6066.54665556286	
+INFO: current LH = -6066.539253888121	
+INFO: current LH = -6066.473501206206	
+INFO: current LH = -6066.468831636586	
+INFO: Wall time: 6.55009s User: 0s System: 0s
+
+INFO: current LH = -6066.544534002578	
+INFO: current LH = -6066.478042577235	
+INFO: current LH = -6066.536371941693	
+INFO: current LH = -6066.50392968601	
+INFO: current LH = -6066.509133801543	
+INFO: current LH = -6066.488954797222	
+INFO: current LH = -6066.523935025861	
+INFO: current LH = -6066.466311382499	
+INFO: current LH = -6066.546977473269	
+INFO: current LH = -6066.502656612028	
+INFO: current LH = -6066.512211152829	
+INFO: current LH = -6066.503096950341	
+INFO: current LH = -6066.510317693129	
+INFO: current LH = -6066.48924841343	
+INFO: current LH = -6066.523360127686	
+INFO: current LH = -6066.064348827681	
+INFO: current LH = -6066.993973248575	
+INFO: current LH = -6066.968783087334	
+INFO: current LH = -6067.016238482381	
+INFO: current LH = -6066.996865013863	
+INFO: Wall time: 14.4278s User: 0.01s System: 0.01s
+
+INFO: current LH = -6066.988185835239	
+INFO: current LH = -6066.980435654951	
+INFO: current LH = -6067.004622068752	
+INFO: current LH = -6066.937279680765	
+INFO: current LH = -6067.047868269678	
+INFO: current LH = -6066.99025493214	
+INFO: current LH = -6066.994686266688	
+INFO: current LH = -6066.931202828834	
+INFO: current LH = -6067.053879111107	
+INFO: current LH = -6066.966991159282	
+INFO: current LH = -6067.018414921286	
+INFO: current LH = -6066.94562992674	
+INFO: current LH = -6067.039479441727	
+INFO: current LH = -6067.007672027246	
+INFO: current LH = -6066.976797167537	
+INFO: current LH = -6066.950865476662	
+INFO: current LH = -6067.034175551593	
+INFO: current LH = -6066.938829570666	
+INFO: current LH = -6067.046955034158	
+INFO: current LH = -6066.980564071014	
+INFO: Wall time: 7.53173s User: 0s System: 0.01s
+
+INFO: current LH = -6067.004270400783	
+INFO: current LH = -6066.95483749641	
+INFO: current LH = -6067.029937056132	
+INFO: current LH = -6066.945111825656	
+INFO: current LH = -6067.039838365254	
+INFO: current LH = -6067.003524524287	
+INFO: current LH = -6066.982405128049	
+INFO: current LH = -6066.99500990564	
+INFO: current LH = -6066.990010187135	
+INFO: current LH = -6066.98042577942	
+INFO: current LH = -6067.004300291139	
+INFO: current LH = -6067.904624630254	
+INFO: current LH = -6067.689711149911	
+INFO: current LH = -6068.164662868314	
+INFO: current LH = -6068.13928582535	
+INFO: current LH = -6068.187125977944	
+INFO: current LH = -6068.172686555171	
+INFO: current LH = -6068.153761572727	
+INFO: current LH = -6068.145964291487	
+INFO: current LH = -6068.18052456469	
+INFO: Wall time: 12.6777s User: 0.01s System: 0s
+
+INFO: current LH = -6068.093457572001	
+INFO: current LH = -6068.233047359617	
+INFO: current LH = -6068.183337457676	
+INFO: current LH = -6068.142820013113	
+INFO: current LH = -6068.105831053489	
+INFO: current LH = -6068.220649512558	
+INFO: current LH = -6068.127675821678	
+INFO: current LH = -6068.199489604668	
+INFO: current LH = -6068.111769739837	
+INFO: current LH = -6068.214724763209	
+INFO: current LH = -6068.139053416291	
+INFO: current LH = -6068.186631854534	
+INFO: current LH = -6068.13415344755	
+INFO: current LH = -6068.192300319037	
+INFO: current LH = -6068.082966350796	
+INFO: current LH = -6068.244115879462	
+INFO: current LH = -6068.135923192936	
+INFO: current LH = -6068.190118384733	
+INFO: current LH = -6068.093501102185	
+INFO: current LH = -6068.232267273881	
+INFO: Wall time: 9.00947s User: 0s System: 0.01s
+
+INFO: current LH = -6068.116292703385	
+INFO: current LH = -6068.209988507005	
+INFO: current LH = -6068.207057866309	
+INFO: current LH = -6068.120579921229	
+INFO: current LH = -6068.179524852014	
+INFO: current LH = -6068.146880149488	
+INFO: current LH = -6068.160008085297	
+INFO: current LH = -6068.166102743668	
+INFO: current LH = -6068.977820948867	
+INFO: current LH = -6071.123196985855	
+INFO: current LH = -6071.334566960381	
+INFO: current LH = -6071.405297112457	
+INFO: current LH = -6071.395456314021	
+INFO: current LH = -6071.412226131954	
+INFO: current LH = -6071.416501721122	
+INFO: current LH = -6071.391245507528	
+INFO: current LH = -6071.376212225742	
+INFO: current LH = -6071.431682152065	
+INFO: current LH = -6071.326831742796	
+INFO: current LH = -6071.480702979164	
+INFO: Wall time: 11.8524s User: 0s System: 0s
+
+INFO: current LH = -6071.452568794617	
+INFO: current LH = -6071.354217343038	
+INFO: current LH = -6071.391031562162	
+INFO: current LH = -6071.416670553494	
+INFO: current LH = -6071.365035576522	
+INFO: current LH = -6071.443385166702	
+INFO: current LH = -6071.354299124305	
+INFO: current LH = -6071.453413533681	
+INFO: current LH = -6071.356476613225	
+INFO: current LH = -6071.450659807115	
+INFO: current LH = -6071.42570317298	
+INFO: current LH = -6071.382329564728	
+INFO: current LH = -6071.352263132455	
+INFO: current LH = -6071.455171816825	
+INFO: current LH = -6071.37125043082	
+INFO: current LH = -6071.43593413955	
+INFO: current LH = -6071.339057897053	
+INFO: current LH = -6071.467346246168	
+INFO: current LH = -6071.380527136971	
+INFO: current LH = -6071.427314517792	
+INFO: Wall time: 9.52958s User: 0.01s System: 0.01s
+
+INFO: current LH = -6071.486788475432	
+INFO: current LH = -6071.322237937994	
+INFO: current LH = -6071.445286654831	
+INFO: current LH = -6071.362427969285	
+INFO: current LH = -6071.41470468291	
+INFO: current LH = -6071.392969352552	
+INFO: current LH = -6072.0956355652	
+INFO: current LH = -6073.759161677612	
+INFO: current LH = -6073.926015098485	
+INFO: current LH = -6073.932494571537	
+INFO: current LH = -6073.916659872471	
+INFO: current LH = -6073.932128839027	
+INFO: current LH = -6073.917027822749	
+INFO: current LH = -6073.903373360578	
+INFO: current LH = -6073.945841682195	
+INFO: current LH = -6073.885535321815	
+INFO: current LH = -6073.963472978427	
+INFO: current LH = -6073.942645214719	
+INFO: current LH = -6073.906348863871	
+INFO: current LH = -6073.940305833356	
+INFO: Wall time: 10.0971s User: 0s System: 0.01s
+
+INFO: current LH = -6073.908704731332	
+INFO: current LH = -6073.941006190052	
+INFO: current LH = -6073.908105864268	
+INFO: current LH = -6073.906611660207	
+INFO: current LH = -6073.942440779511	
+INFO: current LH = -6073.927352768927	
+INFO: current LH = -6073.921963944375	
+INFO: current LH = -6073.945843546747	
+INFO: current LH = -6073.903515436878	
+INFO: current LH = -6073.871572163427	
+INFO: current LH = -6073.97833998587	
+INFO: current LH = -6073.937757578667	
+INFO: current LH = -6073.911568101275	
+INFO: current LH = -6073.961968809594	
+INFO: current LH = -6073.887260761669	
+INFO: current LH = -6073.917905172148	
+INFO: current LH = -6073.931575151531	
+INFO: current LH = -6074.007708415092	
+INFO: current LH = -6073.841307145987	
+INFO: current LH = -6073.949599275196	
+INFO: Wall time: 11.4861s User: 0.01s System: 0s
+
+INFO: current LH = -6073.89961976508	
+INFO: current LH = -6073.937241695706	
+INFO: current LH = -6073.912296005728	
+INFO: current LH = -6074.55246104059	
+INFO: current LH = -6076.466886857202	
+INFO: current LH = -6077.064036022747	
+INFO: current LH = -6077.224537029682	
+INFO: current LH = -6077.232903350236	
+INFO: current LH = -6077.213256909174	
 INFO: Client timing information: 
 INFO: Client id 0 channel id 0  response time +0 s
-INFO: Client id 1 channel id 0  response time +0.457809 s
-INFO: current LH = -6152.10493374512	
-INFO: current LH = -6152.105352330412	
-INFO: current LH = -6152.104930891191	
-INFO: current LH = -6152.105536242695	
-INFO: current LH = -6152.104614805793	
-INFO: current LH = -6152.105800166652	
-INFO: current LH = -6152.104760856763	
-INFO: current LH = -6152.105743375379	
-INFO: current LH = -6152.108276943009	
-INFO: current LH = -6152.102127114005	
-INFO: current LH = -6152.10487561495	
-INFO: Wall time: 17.3252s User: 0s System: 0s
+INFO: Client id 1 channel id 0  response time +0.049672 s
+INFO: current LH = -6077.219056374108	
+INFO: current LH = -6077.227158365194	
+INFO: current LH = -6077.200458781299	
+INFO: current LH = -6077.245799281035	
+INFO: current LH = -6077.169183152293	
+INFO: current LH = -6077.276807937518	
+INFO: current LH = -6077.269498474232	
+INFO: current LH = -6077.176649237596	
+INFO: current LH = -6077.202568163809	
+INFO: current LH = -6077.243022326688	
+INFO: current LH = -6077.252557385752	
+INFO: Wall time: 9.39112s User: 0s System: 0.01s
 
-INFO: current LH = -6152.105579346188	
-INFO: current LH = -6152.10437106411	
-INFO: current LH = -6152.105961984312	
-INFO: current LH = -6152.109854155089	
-INFO: current LH = -6152.110346793254	
-INFO: current LH = -6152.108378275526	
-INFO: current LH = -6152.109377522091	
-INFO: current LH = -6152.109262076125	
-INFO: current LH = -6152.10849176434	
-INFO: current LH = -6152.109252170868	
-INFO: current LH = -6152.108495831936	
-INFO: current LH = -6152.109704764302	
-INFO: current LH = -6152.108057418894	
-INFO: current LH = -6152.108037915553	
-INFO: current LH = -6152.109710674708	
-INFO: current LH = -6152.110046494908	
-INFO: current LH = -6152.107710379164	
-INFO: current LH = -6152.10937291103	
-INFO: current LH = -6152.108367222218	
-INFO: current LH = -6152.109492907171	
-INFO: Wall time: 9.49131s User: 0s System: 0.01s
+INFO: current LH = -6077.194444081872	
+INFO: current LH = -6077.194691087754	
+INFO: current LH = -6077.250954963152	
+INFO: current LH = -6077.186594277142	
+INFO: current LH = -6077.259493296505	
+INFO: current LH = -6077.209708866295	
+INFO: current LH = -6077.236507465291	
+INFO: current LH = -6077.213978209596	
+INFO: current LH = -6077.23143420793	
+INFO: current LH = -6077.223888085637	
+INFO: current LH = -6077.222305134588	
+INFO: current LH = -6077.229535164116	
+INFO: current LH = -6077.216164414752	
+INFO: current LH = -6077.256696289031	
+INFO: current LH = -6077.189315541441	
+INFO: current LH = -6077.295504260904	
+INFO: current LH = -6077.151607855545	
+INFO: current LH = -6077.205549436788	
+INFO: current LH = -6077.240785399537	
+INFO: current LH = -6077.205499774144	
+INFO: Wall time: 12.5722s User: 0s System: 0s
 
-INFO: current LH = -6152.108257514894	
-INFO: current LH = -6152.108098019674	
-INFO: current LH = -6152.109647785835	
-INFO: current LH = -6152.108869673446	
-INFO: current LH = -6152.108874574917	
-INFO: current LH = -6152.110543514843	
-INFO: current LH = -6152.107308807091	
-INFO: current LH = -6152.109180740589	
-INFO: current LH = -6152.108560640919	
-INFO: current LH = -6152.110497963131	
-INFO: current LH = -6152.107261178846	
-INFO: current LH = -6152.109425143773	
-INFO: current LH = -6152.108308169234	
-INFO: current LH = -6152.110112736597	
-INFO: current LH = -6152.10765205292	
-INFO: current LH = -6152.108123123085	
-INFO: current LH = -6152.109622535238	
-INFO: current LH = -6152.108315608321	
-INFO: current LH = -6152.109443412462	
-INFO: current LH = -6152.112083606085	
-INFO: Wall time: 23.7859s User: 0.01s System: 0.01s
+INFO: current LH = -6077.241130723315	
+INFO: current LH = -6079.054711459322	
+INFO: current LH = -6079.380093583867	
+INFO: current LH = -6079.405534353466	
+INFO: current LH = -6079.35177504585	
+INFO: current LH = -6079.379429090605	
+INFO: current LH = -6079.377849474356	
+INFO: current LH = -6079.388348602663	
+INFO: current LH = -6079.368887954522	
+INFO: current LH = -6079.389513339328	
+INFO: current LH = -6079.367770650313	
+INFO: current LH = -6079.38338001042	
+INFO: current LH = -6079.373908470331	
+INFO: current LH = -6079.368665322764	
+INFO: current LH = -6079.388143373217	
+INFO: current LH = -6079.433495570274	
+INFO: current LH = -6079.323729306239	
+INFO: current LH = -6079.395130453894	
+INFO: current LH = -6079.361770645623	
+INFO: current LH = -6079.384973118487	
+INFO: Wall time: 6.22786s User: 0.01s System: 0.01s
 
-INFO: current LH = -6152.115627746109	
-INFO: current LH = -6152.115684926875	
-INFO: current LH = -6152.114012865339	
-INFO: current LH = -6152.114427002432	
-INFO: current LH = -6152.115215131207	
-INFO: current LH = -6152.113222512088	
-INFO: current LH = -6152.114477108174	
-INFO: current LH = -6152.113963909736	
-INFO: current LH = -6152.115684024267	
-INFO: current LH = -6152.112758962475	
-INFO: current LH = -6152.113724316338	
-INFO: current LH = -6152.114718595632	
-INFO: current LH = -6152.115836101622	
-INFO: current LH = -6152.112609332896	
-INFO: current LH = -6152.115102430524	
-INFO: current LH = -6152.113345629904	
-INFO: current LH = -6152.113901114251	
-INFO: current LH = -6152.114539302083	
-INFO: current LH = -6152.114376406406	
-INFO: current LH = -6152.114067836925	
-INFO: Wall time: 5.0068s User: 0s System: 0.01s
+INFO: current LH = -6079.372553392988	
+INFO: current LH = -6079.384594424201	
+INFO: current LH = -6079.372942763034	
+INFO: current LH = -6079.377040620316	
+INFO: current LH = -6079.380274444133	
+INFO: current LH = -6079.407640190317	
+INFO: current LH = -6079.349984694369	
+INFO: current LH = -6079.376660755418	
+INFO: current LH = -6079.380604457647	
+INFO: current LH = -6079.366803154127	
+INFO: current LH = -6079.390937614798	
+INFO: current LH = -6079.471056478352	
+INFO: current LH = -6079.287197649185	
+INFO: current LH = -6079.360114405144	
+INFO: current LH = -6079.397223498172	
+INFO: current LH = -6079.376107148255	
+INFO: current LH = -6079.381496918448	
+INFO: current LH = -6080.313283467246	
+INFO: current LH = -6080.437024597551	
+INFO: current LH = -6080.42991596321	
+INFO: Wall time: 14.2954s User: 0s System: 0.01s
 
-INFO: current LH = -6152.115337536653	
-INFO: current LH = -6152.113099659082	
-INFO: current LH = -6152.114054151381	
-INFO: current LH = -6152.114293852208	
-INFO: current LH = -6152.113592874873	
-INFO: current LH = -6152.114838033734	
-INFO: current LH = -6152.115165415156	
-INFO: current LH = -6152.113255865533	
-INFO: current LH = -6152.113991256078	
-INFO: current LH = -6152.11445035833	
-INFO: current LH = -6152.114942889675	
-INFO: current LH = -6152.113441346607	
-INFO: current LH = -6152.115406930771	
-INFO: current LH = -6152.113025282531	
-INFO: current LH = -6152.114591916351	
-INFO: current LH = -6152.113779942571	
-INFO: current LH = -6152.120176095221	
-INFO: current LH = -6152.122976259637	
-INFO: current LH = -6152.122147717823	
-INFO: current LH = -6152.120854791118	
-INFO: Wall time: 25.764s User: 0s System: 0.01s
+INFO: current LH = -6080.441214188505	
+INFO: current LH = -6080.437411039987	
+INFO: current LH = -6080.433721085163	
+INFO: current LH = -6080.417559444872	
+INFO: current LH = -6080.45351753711	
+INFO: current LH = -6080.417863570518	
+INFO: current LH = -6080.453145508628	
+INFO: current LH = -6080.403342363677	
+INFO: current LH = -6080.467725284284	
+INFO: current LH = -6080.395642748259	
+INFO: current LH = -6080.475337696251	
+INFO: current LH = -6080.463485958626	
+INFO: current LH = -6080.406919984316	
+INFO: current LH = -6080.414283930919	
+INFO: current LH = -6080.45658751781	
+INFO: current LH = -6080.467826695904	
+INFO: current LH = -6080.403367098218	
+INFO: current LH = -6080.419932765823	
+INFO: current LH = -6080.451309975378	
+INFO: current LH = -6080.43099448381	
+INFO: Wall time: 6.36919s User: 0s System: 0.01s
 
-INFO: current LH = -6152.120379753838	
-INFO: current LH = -6152.122639922033	
-INFO: current LH = -6152.122116101391	
-INFO: current LH = -6152.120906746341	
-INFO: current LH = -6152.121969821759	
-INFO: current LH = -6152.121070991233	
-INFO: current LH = -6152.121706164308	
-INFO: current LH = -6152.121307467411	
-INFO: current LH = -6152.122192704493	
-INFO: current LH = -6152.120839653225	
-INFO: current LH = -6152.121184377843	
-INFO: current LH = -6152.121832461172	
-INFO: current LH = -6152.121342937806	
-INFO: current LH = -6152.121696635202	
-INFO: current LH = -6152.122231593299	
-INFO: current LH = -6152.120772952108	
-INFO: current LH = -6152.121418868687	
-INFO: current LH = -6152.12154661556	
-INFO: current LH = -6152.124324017647	
-INFO: current LH = -6152.118782913074	
-INFO: Wall time: 8.79586s User: 0.01s System: 0s
+INFO: current LH = -6080.440758689971	
+INFO: current LH = -6080.418681330857	
+INFO: current LH = -6080.452265586529	
+INFO: current LH = -6080.428720499817	
+INFO: current LH = -6080.442449884526	
+INFO: current LH = -6080.424617777654	
+INFO: current LH = -6080.446638686374	
+INFO: current LH = -6080.512537129041	
+INFO: current LH = -6080.357983938356	
+INFO: current LH = -6080.434695220611	
+INFO: current LH = -6080.436475647884	
+INFO: current LH = -6080.402212466592	
+INFO: current LH = -6080.469072117065	
+INFO: current LH = -6080.976477241301	
+INFO: current LH = -6081.218284746719	
+INFO: current LH = -6081.210473421685	
+INFO: current LH = -6081.223219866961	
+INFO: current LH = -6081.223113637085	
+INFO: current LH = -6081.210550626934	
+INFO: current LH = -6081.206669359428	
+INFO: Wall time: 12.8134s User: 0s System: 0s
 
-INFO: current LH = -6152.121348348959	
-INFO: current LH = -6152.121649883949	
-INFO: current LH = -6152.121404866891	
-INFO: current LH = -6152.121604114569	
-INFO: current LH = -6152.120915764816	
-INFO: current LH = -6152.122072655634	
-INFO: current LH = -6152.120688537764	
-INFO: current LH = -6152.122326655212	
-INFO: current LH = -6152.121915477504	
-INFO: current LH = -6152.121082412635	
-INFO: current LH = -6152.121736235486	
-INFO: current LH = -6152.121220884475	
-INFO: current LH = -6152.12500683322	
-INFO: current LH = -6152.125871003695	
-INFO: current LH = -6152.12362937854	
-INFO: current LH = -6152.125181069312	
-INFO: current LH = -6152.125248282337	
-INFO: current LH = -6152.123563717565	
-INFO: current LH = -6152.123783192696	
-INFO: current LH = -6152.125029952432	
-INFO: Wall time: 20.9292s User: 0s System: 0.01s
+INFO: current LH = -6081.226982732162	
+INFO: current LH = -6081.232798685714	
+INFO: current LH = -6081.200813081577	
+INFO: current LH = -6081.218810712155	
+INFO: current LH = -6081.214912167444	
+INFO: current LH = -6081.215040145237	
+INFO: current LH = -6081.218475173616	
+INFO: current LH = -6081.215313406167	
+INFO: current LH = -6081.218176078517	
+INFO: current LH = -6081.21690139923	
+INFO: current LH = -6081.216531372252	
+INFO: current LH = -6081.218342169805	
+INFO: current LH = -6081.215268112171	
+INFO: current LH = -6081.22727089165	
+INFO: current LH = -6081.206672039561	
+INFO: current LH = -6081.245865660694	
+INFO: current LH = -6081.187327130718	
+INFO: current LH = -6081.223697183093	
+INFO: current LH = -6081.210136574596	
+INFO: current LH = -6081.21464961263	
+INFO: Wall time: 7.82171s User: 0s System: 0.02s
 
-INFO: current LH = -6152.124422608835	
-INFO: current LH = -6152.124399696674	
-INFO: current LH = -6152.12465117689	
-INFO: current LH = -6152.124171855075	
-INFO: current LH = -6152.12407820542	
-INFO: current LH = -6152.124752592244	
-INFO: current LH = -6152.124037221085	
-INFO: current LH = -6152.124781707158	
-INFO: current LH = -6152.125266477143	
-INFO: current LH = -6152.123571208149	
-INFO: current LH = -6152.125003076443	
-INFO: current LH = -6152.123819212015	
-INFO: current LH = -6152.124183736085	
-INFO: current LH = -6152.124629735227	
-INFO: current LH = -6152.125656508065	
-INFO: current LH = -6152.123124979968	
-INFO: current LH = -6152.124292271444	
-INFO: current LH = -6152.124527764947	
-INFO: current LH = -6152.124001522812	
-INFO: current LH = -6152.124828472415	
-INFO: Wall time: 11.4659s User: 0s System: 0.01s
+INFO: current LH = -6081.218968516357	
+INFO: current LH = -6081.222628732715	
+INFO: current LH = -6081.211511994175	
+INFO: current LH = -6081.274521064483	
+INFO: current LH = -6081.158291513799	
+INFO: current LH = -6081.231481336374	
+INFO: current LH = -6081.202176341447	
+INFO: current LH = -6081.21244351679	
+INFO: current LH = -6081.221116698784	
+INFO: current LH = -6081.495955440282	
+INFO: current LH = -6081.525381520855	
+INFO: current LH = -6081.52951095099	
+INFO: current LH = -6081.518378495882	
+INFO: current LH = -6081.522424558564	
+INFO: current LH = -6081.525418290604	
+INFO: current LH = -6081.527869855684	
+INFO: current LH = -6081.519928948694	
+INFO: current LH = -6081.534578786572	
+INFO: current LH = -6081.513186598419	
+INFO: current LH = -6081.527825761174	
+INFO: Wall time: 11.4124s User: 0.01s System: 0s
 
-INFO: current LH = -6152.123542159033	
-INFO: current LH = -6152.125279234463	
-INFO: current LH = -6152.123631942104	
-INFO: current LH = -6152.125190266624	
-INFO: current LH = -6152.123763022893	
-INFO: current LH = -6152.125064486361	
-INFO: current LH = -6152.124277629412	
-INFO: current LH = -6152.124544917908	
-INFO: current LH = -6152.127238589039	
-INFO: current LH = -6152.128495580143	
-INFO: current LH = -6152.126771587336	
-INFO: current LH = -6152.127289017713	
-INFO: current LH = -6152.126799849175	
-INFO: current LH = -6152.12725310402	
-INFO: current LH = -6152.126977417838	
-INFO: current LH = -6152.127074139347	
-INFO: current LH = -6152.127508971222	
-INFO: current LH = -6152.126576437492	
-INFO: current LH = -6152.127252546142	
-INFO: current LH = -6152.12681485643	
-INFO: Wall time: 15.3269s User: 0s System: 0.01s
+INFO: current LH = -6081.519970358485	
+INFO: current LH = -6081.525443562068	
+INFO: current LH = -6081.522419706206	
+INFO: current LH = -6081.50082416739	
+INFO: current LH = -6081.546906554305	
+INFO: current LH = -6081.520772500116	
+INFO: current LH = -6081.52704647669	
+INFO: current LH = -6081.522820318662	
+INFO: current LH = -6081.52490489209	
+INFO: current LH = -6081.527979087115	
+INFO: current LH = -6081.519915069441	
+INFO: current LH = -6081.539266586611	
+INFO: current LH = -6081.509413562399	
+INFO: current LH = -6081.530314472762	
+INFO: current LH = -6081.51754625554	
+INFO: current LH = -6081.528369219488	
+INFO: current LH = -6081.519628481202	
+INFO: current LH = -6081.528405872145	
+INFO: current LH = -6081.519604618275	
+INFO: current LH = -6081.569721706992	
+INFO: Wall time: 10.226s User: 0.01s System: 0.01s
 
-INFO: current LH = -6152.127746150019	
-INFO: current LH = -6152.126348027276	
-INFO: current LH = -6152.127677648897	
-INFO: current LH = -6152.126393939642	
-INFO: current LH = -6152.127872268745	
-INFO: current LH = -6152.126215049017	
-INFO: current LH = -6152.126775785574	
-INFO: current LH = -6152.127287259645	
-INFO: current LH = -6152.127616607067	
-INFO: current LH = -6152.126433476359	
-INFO: current LH = -6152.127102123008	
-INFO: current LH = -6152.126860570985	
-INFO: current LH = -6152.127702869468	
-INFO: current LH = -6152.126338314278	
-INFO: current LH = -6152.126257716844	
-INFO: current LH = -6152.127791594418	
-INFO: current LH = -6152.127440786207	
-INFO: current LH = -6152.126627527515	
-INFO: current LH = -6152.127580484102	
-INFO: current LH = -6152.126486874328	
-INFO: Wall time: 15.4797s User: 0s System: 0s
+INFO: current LH = -6081.477897957742	
+INFO: current LH = -6081.524305481508	
+INFO: current LH = -6081.523547342015	
+INFO: current LH = -6081.525228801905	
+INFO: current LH = -6081.522623579467	
+INFO: current LH = -6081.67376524959	
+INFO: current LH = -6081.869182507745	
+INFO: current LH = -6081.882454558392	
+INFO: current LH = -6081.853035047608	
+INFO: current LH = -6081.861379129939	
+INFO: current LH = -6081.874090412067	
+INFO: current LH = -6081.879642555343	
+INFO: current LH = -6081.855824910974	
+INFO: current LH = -6081.87935568254	
+INFO: current LH = -6081.8558495995	
+INFO: current LH = -6081.866427343844	
+INFO: current LH = -6081.868910698296	
+INFO: current LH = -6081.872628052148	
+INFO: current LH = -6081.86263479708	
+INFO: current LH = -6081.861859548278	
+INFO: Wall time: 9.27456s User: 0s System: 0.01s
 
-INFO: current LH = -6152.127197014434	
-INFO: current LH = -6152.126872510108	
-INFO: current LH = -6152.12692896154	
-INFO: current LH = -6152.127129657264	
-INFO: current LH = -6152.128937093424	
-INFO: current LH = -6152.128960133064	
-INFO: current LH = -6152.12766608681	
-INFO: current LH = -6152.127317002902	
-INFO: current LH = -6152.127557796006	
+INFO: current LH = -6081.873933487832	
+INFO: current LH = -6081.862266190245	
+INFO: current LH = -6081.872977132453	
+INFO: current LH = -6081.866718405271	
+INFO: current LH = -6081.868743005162	
+INFO: current LH = -6081.875571198599	
+INFO: current LH = -6081.860085152793	
+INFO: current LH = -6081.905402662953	
+INFO: current LH = -6081.830043226003	
 INFO: Client timing information: 
 INFO: Client id 0 channel id 0  response time +0 s
-INFO: Client id 1 channel id 0  response time +0.054568 s
-INFO: current LH = -6152.127427229385	
-INFO: current LH = -6152.127583597029	
-INFO: current LH = -6152.127401447279	
-INFO: current LH = -6152.127476231295	
-INFO: current LH = -6152.127509675998	
-INFO: current LH = -6152.127448079549	
-INFO: current LH = -6152.127531147414	
-INFO: current LH = -6152.127594400059	
-INFO: current LH = -6152.127387191894	
-INFO: current LH = -6152.127584506039	
-INFO: current LH = -6152.127395223969	
-INFO: Wall time: 10.3369s User: 0.01s System: 0.01s
+INFO: Client id 1 channel id 0  response time +0.275848 s
+INFO: current LH = -6081.870646198586	
+INFO: current LH = -6081.864828348426	
+INFO: current LH = -6081.866686906698	
+INFO: current LH = -6081.868705113097	
+INFO: current LH = -6081.885650012599	
+INFO: current LH = -6081.850339049055	
+INFO: current LH = -6081.89888224228	
+INFO: current LH = -6081.835542507211	
+INFO: current LH = -6081.843817327555	
+INFO: current LH = -6081.891671117462	
+INFO: current LH = -6081.872882727876	
+INFO: Wall time: 13.2513s User: 0s System: 0.01s
 
-INFO: current LH = -6152.127490164266	
-INFO: current LH = -6152.127489536568	
-INFO: current LH = -6152.127562361327	
-INFO: current LH = -6152.127415674133	
-INFO: current LH = -6152.127376668206	
-INFO: current LH = -6152.12760384374	
-INFO: current LH = -6152.127541391571	
-INFO: current LH = -6152.12744046816	
-INFO: current LH = -6152.127370888329	
-INFO: current LH = -6152.127605881026	
-INFO: current LH = -6152.127082710395	
-INFO: current LH = -6152.127901090716	
-INFO: current LH = -6152.127549567823	
-INFO: current LH = -6152.127432202698	
-INFO: current LH = -6152.127396865932	
-INFO: current LH = -6152.127586480758	
-INFO: current LH = -6152.12748844271	
-INFO: current LH = -6152.127491154281	
-INFO: current LH = -6152.126928021011	
-INFO: current LH = -6152.128052070052	
-INFO: Wall time: 19.9284s User: 0s System: 0s
+INFO: current LH = -6081.862686188986	
+INFO: current LH = -6082.001585580048	
+INFO: current LH = -6082.494352483861	
+INFO: current LH = -6083.266934441202	
+INFO: current LH = -6082.905123489705	
+INFO: current LH = -6083.264950993032	
+INFO: current LH = -6083.265997197695	
+INFO: current LH = -6083.263473953981	
+INFO: current LH = -6083.267495980879	
+INFO: current LH = -6083.26773250409	
+INFO: current LH = -6083.263238077226	
+INFO: current LH = -6083.290422432924	
+INFO: current LH = -6083.239940719274	
+INFO: current LH = -6083.272648262951	
+INFO: current LH = -6083.258095972485	
+INFO: current LH = -6083.279410086517	
+INFO: current LH = -6083.251209337845	
+INFO: current LH = -6083.253272548191	
+INFO: current LH = -6083.277945330868	
+INFO: current LH = -6083.276312219558	
+INFO: Wall time: 8.90198s User: 0s System: 0s
 
-INFO: current LH = -6152.129062894221	
-INFO: current LH = -6152.129105774545	
-INFO: current LH = -6152.127744780009	
-INFO: current LH = -6152.127551372199	
-INFO: current LH = -6152.127675947493	
-INFO: current LH = -6152.12760843831	
-INFO: current LH = -6152.127580834761	
-INFO: current LH = -6152.127704666884	
-INFO: current LH = -6152.128018048282	
-INFO: current LH = -6152.127258486084	
-INFO: current LH = -6152.127867492261	
-INFO: current LH = -6152.127401814551	
-INFO: current LH = -6152.12786111032	
-INFO: current LH = -6152.127411205347	
-INFO: current LH = -6152.127473192901	
-INFO: current LH = -6152.127795964132	
-INFO: current LH = -6152.12776763057	
-INFO: current LH = -6152.127504558916	
-INFO: current LH = -6152.127661616433	
-INFO: current LH = -6152.127605264111	
-INFO: Wall time: 4.98227s User: 0.01s System: 0.01s
+INFO: current LH = -6083.254366308965	
+INFO: current LH = -6083.25192500742	
+INFO: current LH = -6083.278934513674	
+INFO: current LH = -6083.28727004036	
+INFO: current LH = -6083.244094463606	
+INFO: current LH = -6083.27143013886	
+INFO: current LH = -6083.257024218226	
+INFO: current LH = -6083.270772818636	
+INFO: current LH = -6083.2601979299	
+INFO: current LH = -6083.281450972719	
+INFO: current LH = -6083.249669873421	
+INFO: current LH = -6083.271958083308	
+INFO: current LH = -6083.25910389713	
+INFO: current LH = -6083.306901675512	
+INFO: current LH = -6083.225315759759	
+INFO: current LH = -6083.23428990864	
+INFO: current LH = -6083.292989663473	
+INFO: current LH = -6083.246019096788	
+INFO: current LH = -6083.284951964281	
+INFO: current LH = -6083.246716256876	
+INFO: Wall time: 13.2412s User: 0.01s System: 0.01s
 
-INFO: current LH = -6152.127789044581	
-INFO: current LH = -6152.127478611477	
-INFO: current LH = -6152.127768597084	
-INFO: current LH = -6152.12750117181	
-INFO: current LH = -6152.127747669385	
-INFO: current LH = -6152.127521436171	
-INFO: current LH = -6152.127667733995	
-INFO: current LH = -6152.127603978605	
-INFO: current LH = -6152.128085978006	
-INFO: current LH = -6152.127183122128	
-INFO: current LH = -6152.12749550815	
-INFO: current LH = -6152.127777343165	
-INFO: current LH = -6152.127433884719	
-INFO: current LH = -6152.127835619864	
-INFO: current LH = -6152.127610325416	
-INFO: current LH = -6152.127646522654	
-INFO: current LH = -6152.129197279775	
-INFO: current LH = -6152.129250687301	
-INFO: current LH = -6152.127581489955	
-INFO: current LH = -6152.127974538732	
-INFO: Wall time: 24.3829s User: 0s System: 0s
+INFO: current LH = -6083.284292691225	
+INFO: current LH = -6083.277046808404	
+INFO: current LH = -6083.254052933575	
+INFO: current LH = -6083.81888190962	
+INFO: current LH = -6083.844810035456	
+INFO: current LH = -6083.834598603245	
+INFO: current LH = -6083.852085633395	
+INFO: current LH = -6083.841951786081	
+INFO: current LH = -6083.844775400186	
+INFO: current LH = -6083.831639594781	
+INFO: current LH = -6083.855110972778	
+INFO: current LH = -6083.836669891824	
+INFO: current LH = -6083.849742460339	
+INFO: current LH = -6083.843587763938	
+INFO: current LH = -6083.842951218166	
+INFO: current LH = -6083.840938257341	
+INFO: current LH = -6083.845782485307	
+INFO: current LH = -6083.843460030885	
+INFO: current LH = -6083.843119398521	
+INFO: current LH = -6083.840686905606	
+INFO: Wall time: 7.48408s User: 0s System: 0.01s
 
-INFO: current LH = -6152.12780039839	
-INFO: current LH = -6152.127765839957	
-INFO: current LH = -6152.127639596093	
-INFO: current LH = -6152.127924988356	
-INFO: current LH = -6152.127754001715	
-INFO: current LH = -6152.127815893386	
-INFO: current LH = -6152.12779656025	
-INFO: current LH = -6152.127767889648	
-INFO: current LH = -6152.127736885484	
-INFO: current LH = -6152.127831943597	
-INFO: current LH = -6152.127739641337	
-INFO: current LH = -6152.127827381377	
-INFO: current LH = -6152.127607889321	
-INFO: current LH = -6152.127960604199	
-INFO: current LH = -6152.127717693664	
-INFO: current LH = -6152.127848960575	
-INFO: current LH = -6152.127659864337	
-INFO: current LH = -6152.127900172508	
-INFO: current LH = -6152.12784373529	
-INFO: current LH = -6152.127724062871	
-INFO: Wall time: 7.58139s User: 0s System: 0.01s
+INFO: current LH = -6083.846110694481	
+INFO: current LH = -6083.833555759833	
+INFO: current LH = -6083.853076361525	
+INFO: current LH = -6083.855238182162	
+INFO: current LH = -6083.831527869474	
+INFO: current LH = -6083.818622281173	
+INFO: current LH = -6083.867057616389	
+INFO: current LH = -6083.837505215845	
+INFO: current LH = -6083.84922859476	
+INFO: current LH = -6083.854804717414	
+INFO: current LH = -6083.831812602342	
+INFO: current LH = -6083.8922686231	
+INFO: current LH = -6083.794475066197	
+INFO: current LH = -6083.814471515986	
+INFO: current LH = -6083.871032465369	
+INFO: current LH = -6083.843046635741	
+INFO: current LH = -6083.843637273812	
+INFO: current LH = -6083.841529747552	
+INFO: current LH = -6083.845052338731	
+INFO: current LH = -6084.20658513975	
+INFO: Wall time: 13.4132s User: 0s System: 0.01s
 
-INFO: current LH = -6152.127704573825	
-INFO: current LH = -6152.127855403214	
-INFO: current LH = -6152.127705627586	
-INFO: current LH = -6152.127856563046	
-INFO: current LH = -6152.127745042878	
-INFO: current LH = -6152.127812175435	
-INFO: current LH = -6152.127775662338	
-INFO: current LH = -6152.127789417826	
-INFO: current LH = -6152.12785353736	
-INFO: current LH = -6152.127709332152	
-INFO: current LH = -6152.127616559332	
-INFO: current LH = -6152.127940185587	
-INFO: current LH = -6152.129270581242	
-INFO: current LH = -6152.129271275673	
-INFO: current LH = -6152.127811855254	
-INFO: current LH = -6152.127804066288	
-INFO: current LH = -6152.127798188999	
-INFO: current LH = -6152.127804908447	
-INFO: current LH = -6152.127809656637	
-INFO: current LH = -6152.127793583234	
-INFO: Wall time: 22.4453s User: 0.01s System: 0s
+INFO: current LH = -6084.227170365579	
+INFO: current LH = -6084.221397832388	
+INFO: current LH = -6084.23004486728	
+INFO: current LH = -6084.228555869247	
+INFO: current LH = -6084.222884114853	
+INFO: current LH = -6084.21974479311	
+INFO: current LH = -6084.231700254188	
+INFO: current LH = -6084.223573553419	
+INFO: current LH = -6084.227925427513	
+INFO: current LH = -6084.220089404757	
+INFO: current LH = -6084.231361769791	
+INFO: current LH = -6084.219980183158	
+INFO: current LH = -6084.231506895889	
+INFO: current LH = -6084.229349646622	
+INFO: current LH = -6084.222294247764	
+INFO: current LH = -6084.225464204833	
+INFO: current LH = -6084.226086986375	
+INFO: current LH = -6084.225671501586	
+INFO: current LH = -6084.225826181137	
+INFO: current LH = -6084.228153434857	
+INFO: Wall time: 5.43381s User: 0.01s System: 0.01s
 
-INFO: current LH = -6152.127816167057	
-INFO: current LH = -6152.127808219174	
-INFO: current LH = -6152.127831085482	
-INFO: current LH = -6152.127805247591	
-INFO: current LH = -6152.127830765639	
-INFO: current LH = -6152.127805787825	
-INFO: current LH = -6152.127806550559	
-INFO: current LH = -6152.127828945318	
-INFO: current LH = -6152.127793699245	
-INFO: current LH = -6152.127843228133	
-INFO: current LH = -6152.127823588789	
-INFO: current LH = -6152.127813418992	
-INFO: current LH = -6152.127812003582	
-INFO: current LH = -6152.127817819704	
-INFO: current LH = -6152.127799957279	
-INFO: current LH = -6152.12783319104	
-INFO: current LH = -6152.127834649223	
-INFO: current LH = -6152.127795063337	
-INFO: current LH = -6152.127811961021	
-INFO: current LH = -6152.127818232902	
-INFO: Wall time: 11.5241s User: 0s System: 0.01s
+INFO: current LH = -6084.223206110284	
+INFO: current LH = -6084.220187129034	
+INFO: current LH = -6084.23202279644	
+INFO: current LH = -6084.228394865784	
+INFO: current LH = -6084.223145506608	
+INFO: current LH = -6084.226070018844	
+INFO: current LH = -6084.225422284338	
+INFO: current LH = -6084.249421648477	
+INFO: current LH = -6084.201981812986	
+INFO: current LH = -6084.228228378	
+INFO: current LH = -6084.222970567085	
+INFO: current LH = -6084.240909810922	
+INFO: current LH = -6084.210511110038	
+INFO: current LH = -6084.224880091636	
+INFO: current LH = -6084.22644968882	
+INFO: current LH = -6084.44851720665	
+INFO: current LH = -6084.476049924538	
+INFO: current LH = -6084.484340900372	
+INFO: current LH = -6084.490083894072	
+INFO: current LH = -6084.475699069534	
+INFO: Wall time: 14.1701s User: 0s System: 0s
 
-INFO: current LH = -6152.127799682373	
-INFO: current LH = -6152.127828312097	
-INFO: current LH = -6152.127825049073	
-INFO: current LH = -6152.127804808968	
-INFO: current LH = -6152.127803860692	
-INFO: current LH = -6152.127828632635	
-INFO: current LH = -6152.127813365431	
-INFO: current LH = -6152.127818170339	
+INFO: current LH = -6084.488810674169	
+INFO: current LH = -6084.476971632315	
+INFO: current LH = -6084.491295545862	
+INFO: current LH = -6084.474489753686	
+INFO: current LH = -6084.503184523836	
+INFO: current LH = -6084.462390873599	
+INFO: current LH = -6084.474998632731	
+INFO: current LH = -6084.490729580879	
+INFO: current LH = -6084.498264321788	
+INFO: current LH = -6084.467378629365	
+INFO: current LH = -6084.491485805824	
+INFO: current LH = -6084.474192467545	
+INFO: current LH = -6084.503943406115	
+INFO: current LH = -6084.461747325484	
+INFO: current LH = -6084.486370924703	
+INFO: current LH = -6084.479435672619	
+INFO: current LH = -6084.49997878618	
+INFO: current LH = -6084.466002880737	
+INFO: current LH = -6084.477383743683	
+INFO: current LH = -6084.488194749126	
+INFO: Wall time: 6.29094s User: 0.01s System: 0.01s
+
+INFO: current LH = -6084.507068020952	
+INFO: current LH = -6084.458923553182	
+INFO: current LH = -6084.488025372458	
+INFO: current LH = -6084.477754592008	
+INFO: current LH = -6084.515886917517	
+INFO: current LH = -6084.450485172324	
+INFO: current LH = -6084.467264795775	
+INFO: current LH = -6084.497581730351	
+INFO: current LH = -6084.497965259166	
+INFO: current LH = -6084.467812330852	
+INFO: current LH = -6084.502203997108	
+INFO: current LH = -6084.463562885436	
+INFO: current LH = -6084.6358303424	
+INFO: current LH = -6084.804479356553	
+INFO: current LH = -6084.81332722817	
+INFO: current LH = -6084.792738540649	
+INFO: current LH = -6084.805992831773	
+INFO: current LH = -6084.800068962609	
+INFO: current LH = -6084.810991481045	
+INFO: current LH = -6084.79507648919	
+INFO: Wall time: 12.1633s User: 0s System: 0.01s
+
+INFO: current LH = -6084.801541872951	
+INFO: current LH = -6084.804259883767	
+INFO: current LH = -6084.807128099005	
+INFO: current LH = -6084.798830535517	
+INFO: current LH = -6084.80515544986	
+INFO: current LH = -6084.800795988986	
+INFO: current LH = -6084.804975504007	
+INFO: current LH = -6084.800972563175	
+INFO: current LH = -6084.805924782406	
+INFO: current LH = -6084.800029068267	
+INFO: current LH = -6084.799058188573	
+INFO: current LH = -6084.806977928805	
+INFO: current LH = -6084.805501144029	
+INFO: current LH = -6084.800591991636	
+INFO: current LH = -6084.797631563589	
+INFO: current LH = -6084.808572498835	
+INFO: current LH = -6084.809554907114	
+INFO: current LH = -6084.79658133949	
+INFO: current LH = -6084.801380891657	
+INFO: current LH = -6084.804584283169	
+INFO: Wall time: 8.36712s User: 0.01s System: 0s
+
+INFO: current LH = -6084.813034922676	
+INFO: current LH = -6084.7930536559	
+INFO: current LH = -6084.796385657363	
+INFO: current LH = -6084.808680339419	
+INFO: current LH = -6084.796658965523	
+INFO: current LH = -6084.809348000493	
+INFO: current LH = -6084.81327547881	
+INFO: current LH = -6084.792760051135	
+INFO: current LH = -6084.915859942658	
+INFO: Client timing information: 
+INFO: Client id 1 channel id 0  response time +0 s
+INFO: Client id 0 channel id 0  response time +0.208104 s
+INFO: current LH = -6084.939662567696	
+INFO: current LH = -6084.938826963476	
+INFO: current LH = -6084.937575340993	
+INFO: current LH = -6084.938266560577	
+INFO: current LH = -6084.938157284167	
+INFO: current LH = -6084.938577148184	
+INFO: current LH = -6084.937848767406	
+INFO: current LH = -6084.94285397312	
+INFO: current LH = -6084.933460409527	
+INFO: current LH = -6084.936484214276	
+INFO: current LH = -6084.9399050067	
+INFO: Wall time: 10.6433s User: 0s System: 0.01s
+
+INFO: current LH = -6084.942867383102	
+INFO: current LH = -6084.933422617329	
+INFO: current LH = -6084.938045821165	
+INFO: current LH = -6084.938311385539	
+INFO: current LH = -6084.93993041007	
+INFO: current LH = -6084.936336905732	
+INFO: current LH = -6084.94560472276	
+INFO: current LH = -6084.930820079897	
+INFO: current LH = -6084.945713693363	
+INFO: current LH = -6084.930809763633	
+INFO: current LH = -6084.938406952756	
+INFO: current LH = -6084.93827025575	
+INFO: current LH = -6084.945416823458	
+INFO: current LH = -6084.931093890209	
+INFO: current LH = -6084.937799965601	
+INFO: current LH = -6084.93858674668	
+INFO: current LH = -6084.939373734706	
+INFO: current LH = -6084.937214773532	
+INFO: current LH = -6084.932558767446	
+INFO: current LH = -6084.943509683212	
+INFO: Wall time: 10.3435s User: 0s System: 0.01s
+
+INFO: current LH = -6084.936149388625	
+INFO: current LH = -6084.940297796661	
+INFO: current LH = -6084.942605293259	
+INFO: current LH = -6084.933985308033	
+INFO: current LH = -6084.963570239879	
+INFO: current LH = -6084.972585859702	
+INFO: current LH = -6084.971385186855	
+INFO: current LH = -6084.970882549801	
+INFO: current LH = -6084.970601554321	
+INFO: current LH = -6084.971666181429	
+INFO: current LH = -6084.970114936406	
+INFO: current LH = -6084.972149583405	
+INFO: current LH = -6084.969028882222	
+INFO: current LH = -6084.973162599375	
+INFO: current LH = -6084.975006297111	
+INFO: current LH = -6084.967251558647	
+INFO: current LH = -6084.969544325792	
+INFO: current LH = -6084.972666627108	
+INFO: current LH = -6084.972258662222	
+INFO: current LH = -6084.969977071457	
+INFO: Wall time: 7.9728s User: 0.01s System: 0.01s
+
+INFO: current LH = -6084.968280095313	
+INFO: current LH = -6084.97394506242	
+INFO: current LH = -6084.973700010769	
+INFO: current LH = -6084.968589037268	
+INFO: current LH = -6084.974165609293	
+INFO: current LH = -6084.968155727789	
+INFO: current LH = -6084.97556865123	
+INFO: current LH = -6084.966722022376	
+INFO: current LH = -6084.97045025455	
+INFO: current LH = -6084.97184950664	
+INFO: current LH = -6084.972639177868	
+INFO: current LH = -6084.969618221369	
+INFO: current LH = -6084.966942486492	
+INFO: current LH = -6084.975352407809	
+INFO: current LH = -6084.966284084027	
+INFO: current LH = -6084.975866128256	
+INFO: current LH = -6084.973029171402	
+INFO: current LH = -6084.969238536582	
+INFO: current LH = -6084.970132957088	
+INFO: current LH = -6084.972146998841	
+INFO: Wall time: 12.7959s User: 0.01s System: 0s
+
+INFO: current LH = -6084.995465733043	
+INFO: current LH = -6085.007989353005	
+INFO: current LH = -6085.006009854776	
+INFO: current LH = -6085.007088996352	
+INFO: current LH = -6085.007972495217	
+INFO: current LH = -6085.005096151628	
+INFO: current LH = -6085.009376775747	
+INFO: current LH = -6085.003662278588	
+INFO: current LH = -6085.003634196121	
+INFO: current LH = -6085.009336934778	
+INFO: current LH = -6085.004402577091	
+INFO: current LH = -6085.008644593137	
+INFO: current LH = -6085.006223803653	
+INFO: current LH = -6085.006766670733	
+INFO: current LH = -6085.006359200513	
+INFO: current LH = -6085.006678266042	
+INFO: current LH = -6085.005560433585	
+INFO: current LH = -6085.007441111483	
+INFO: current LH = -6085.008638558284	
+INFO: current LH = -6085.004432991201	
+INFO: Wall time: 5.61688s User: 0s System: 0.01s
+
+INFO: current LH = -6085.007065741526	
+INFO: current LH = -6085.006055772383	
+INFO: current LH = -6085.014604388851	
+INFO: current LH = -6084.998466262577	
+INFO: current LH = -6085.006701853365	
+INFO: current LH = -6085.00640598031	
+INFO: current LH = -6085.004226278362	
+INFO: current LH = -6085.008844116254	
+INFO: current LH = -6085.00374021805	
+INFO: current LH = -6085.009433806051	
+INFO: current LH = -6084.999981200784	
+INFO: current LH = -6085.013042306442	
+INFO: current LH = -6085.007325148206	
+INFO: current LH = -6085.005751741708	
+INFO: current LH = -6085.005539990798	
+INFO: current LH = -6085.007582494209	
+INFO: current LH = -6085.028519868817	
+INFO: current LH = -6085.030337396856	
+INFO: current LH = -6085.027922619143	
+INFO: current LH = -6085.029842048065	
+INFO: Wall time: 14.3946s User: 0.01s System: 0.01s
+
+INFO: current LH = -6085.029274867481	
+INFO: current LH = -6085.028499461942	
+INFO: current LH = -6085.031988173043	
+INFO: current LH = -6085.025784898909	
+INFO: current LH = -6085.0303718278	
+INFO: current LH = -6085.027402010458	
+INFO: current LH = -6085.029986236753	
+INFO: current LH = -6085.02781551935	
+INFO: current LH = -6085.02584717934	
+INFO: current LH = -6085.031874512171	
+INFO: current LH = -6085.028790656843	
+INFO: current LH = -6085.028993133345	
+INFO: current LH = -6085.032080840713	
+INFO: current LH = -6085.025661243969	
+INFO: current LH = -6085.028567180732	
+INFO: current LH = -6085.029233960209	
+INFO: current LH = -6085.028553478302	
+INFO: current LH = -6085.02925557518	
+INFO: current LH = -6085.037432742675	
+INFO: current LH = -6085.020250241197	
+INFO: Wall time: 7.18195s User: 0s System: 0s
+
+INFO: current LH = -6085.031955719528	
+INFO: current LH = -6085.025845259988	
+INFO: current LH = -6085.031139786842	
+INFO: current LH = -6085.026669356653	
+INFO: current LH = -6085.026135248964	
+INFO: current LH = -6085.031697069227	
+INFO: current LH = -6085.024739054905	
+INFO: current LH = -6085.033117804749	
+INFO: current LH = -6085.027370170991	
+INFO: current LH = -6085.030407440313	
+INFO: current LH = -6085.028863387825	
+INFO: current LH = -6085.028921034183	
+INFO: current LH = -6085.044354433928	
+INFO: current LH = -6085.066055189253	
+INFO: current LH = -6085.066276592026	
+INFO: current LH = -6085.063531408056	
+INFO: current LH = -6085.06611982456	
+INFO: current LH = -6085.062933855462	
+INFO: current LH = -6085.066723160192	
+INFO: current LH = -6085.065976057708	
+INFO: Wall time: 13.187s User: 0s System: 0.01s
+
+INFO: current LH = -6085.063698337538	
+INFO: current LH = -6085.065567255039	
+INFO: current LH = -6085.06399278509	
+INFO: current LH = -6085.066383418513	
+INFO: current LH = -6085.06325261881	
+INFO: current LH = -6085.067554045577	
+INFO: current LH = -6085.062050592478	
+INFO: current LH = -6085.069053249268	
+INFO: current LH = -6085.060571025588	
+INFO: current LH = -6085.0708677275	
+INFO: current LH = -6085.058723079073	
+INFO: current LH = -6085.06297977627	
+INFO: current LH = -6085.066651076403	
+INFO: current LH = -6085.066941115138	
+INFO: current LH = -6085.062797906028	
+INFO: current LH = -6085.06745861594	
+INFO: current LH = -6085.061683228575	
+INFO: current LH = -6085.070153363258	
+INFO: current LH = -6085.059560330673	
+INFO: current LH = -6085.071262255179	
+INFO: Wall time: 8.26955s User: 0.01s System: 0.01s
+
+INFO: current LH = -6085.058428777879	
+INFO: current LH = -6085.066378295276	
+INFO: current LH = -6085.063320633434	
+INFO: current LH = -6085.063571018762	
+INFO: current LH = -6085.066164433086	
+INFO: current LH = -6085.064171105534	
+INFO: current LH = -6085.065488363424	
+INFO: current LH = -6085.066454810732	
+INFO: current LH = -6085.063211427717	
+INFO: current LH = -6085.095523521382	
+INFO: current LH = -6085.103751962254	
+INFO: current LH = -6085.101626963815	
+INFO: current LH = -6085.10295962641	
+INFO: current LH = -6085.101011948855	
+INFO: current LH = -6085.103593545932	
+INFO: current LH = -6085.102314170375	
+INFO: current LH = -6085.102306898982	
+INFO: current LH = -6085.102861537457	
+INFO: current LH = -6085.101721074261	
+INFO: current LH = -6085.102962870554	
+INFO: Wall time: 10.723s User: 0s System: 0s
+
+INFO: current LH = -6085.101705108836	
+INFO: current LH = -6085.102308147269	
+INFO: current LH = -6085.102237108858	
+INFO: current LH = -6085.100172350172	
+INFO: current LH = -6085.104456169676	
+INFO: current LH = -6085.103281707944	
+INFO: current LH = -6085.101208210006	
+INFO: current LH = -6085.098796945231	
+INFO: current LH = -6085.105849507217	
+INFO: Client timing information: 
+INFO: Client id 0 channel id 0  response time +0 s
+INFO: Client id 1 channel id 0  response time +0.219271 s
+INFO: current LH = -6085.103882442289	
+INFO: current LH = -6085.100804560527	
+INFO: current LH = -6085.097472581525	
+INFO: current LH = -6085.106670015834	
+INFO: current LH = -6085.103762305223	
+INFO: current LH = -6085.10090432064	
+INFO: current LH = -6085.102225468971	
+INFO: current LH = -6085.102415423803	
+INFO: current LH = -6085.102231586939	
+INFO: current LH = -6085.102331194483	
+INFO: current LH = -6085.103410635525	
+INFO: Wall time: 9.89012s User: 0s System: 0.01s
+
+INFO: current LH = -6085.101329232748	
+INFO: current LH = -6085.104470454101	
+INFO: current LH = -6085.100174572511	
+INFO: current LH = -6085.102242760837	
+INFO: current LH = -6085.10240265924	
+INFO: current LH = -6085.112846362278	
+INFO: current LH = -6085.112888756417	
+INFO: current LH = -6085.112561003368	
+INFO: current LH = -6085.110318003705	
+INFO: current LH = -6085.112329323273	
+INFO: current LH = -6085.110554136517	
+INFO: current LH = -6085.112936775251	
+INFO: current LH = -6085.109951898219	
+INFO: current LH = -6085.11468229297	
+INFO: current LH = -6085.108148262267	
+INFO: current LH = -6085.111433730172	
+INFO: current LH = -6085.111414199517	
+INFO: current LH = -6085.113844320632	
+INFO: current LH = -6085.108966875604	
+INFO: current LH = -6085.111024760708	
+INFO: Wall time: 8.73704s User: 0.01s System: 0s
+
+INFO: current LH = -6085.111822497288	
+INFO: current LH = -6085.113725581888	
+INFO: current LH = -6085.10908130491	
+INFO: current LH = -6085.10975078908	
+INFO: current LH = -6085.113111094111	
+INFO: current LH = -6085.115380516192	
+INFO: current LH = -6085.107519147678	
+INFO: current LH = -6085.110739039294	
+INFO: current LH = -6085.112165949774	
+INFO: current LH = -6085.114203972353	
+INFO: current LH = -6085.10868789881	
+INFO: current LH = -6085.110633536251	
+INFO: current LH = -6085.112224144285	
+INFO: current LH = -6085.112022079737	
+INFO: current LH = -6085.110915471017	
+INFO: current LH = -6085.112210268629	
+INFO: current LH = -6085.110599218217	
+INFO: current LH = -6085.111923945768	
+INFO: current LH = -6085.110925399071	
+INFO: current LH = -6085.113863789238	
+INFO: Wall time: 12.2698s User: 0s System: 0.01s
+
+INFO: current LH = -6085.108984084016	
+INFO: current LH = -6085.11525116922	
+INFO: current LH = -6085.115471630028	
+INFO: current LH = -6085.114315517464	
+INFO: current LH = -6085.1137276723	
+INFO: current LH = -6085.11454336563	
+INFO: current LH = -6085.113499361555	
+INFO: current LH = -6085.114097226992	
+INFO: current LH = -6085.113947374907	
+INFO: current LH = -6085.114122005099	
+INFO: current LH = -6085.113909486456	
+INFO: current LH = -6085.113415415977	
+INFO: current LH = -6085.114623422127	
+INFO: current LH = -6085.113837670109	
+INFO: current LH = -6085.114200162354	
+INFO: current LH = -6085.114512987762	
+INFO: current LH = -6085.113531200827	
+INFO: current LH = -6085.113817433805	
+INFO: current LH = -6085.114219893049	
+INFO: current LH = -6085.113623895887	
+INFO: Wall time: 6.19728s User: 0s System: 0s
+
+INFO: current LH = -6085.114418043263	
+INFO: current LH = -6085.115395239853	
+INFO: current LH = -6085.11264559661	
+INFO: current LH = -6085.113923088196	
+INFO: current LH = -6085.114126192394	
+INFO: current LH = -6085.113735245497	
+INFO: current LH = -6085.114304562101	
+INFO: current LH = -6085.112968383696	
+INFO: current LH = -6085.115074740477	
+INFO: current LH = -6085.112534534678	
+INFO: current LH = -6085.115494131232	
+INFO: current LH = -6085.115543966277	
+INFO: current LH = -6085.112497704385	
+INFO: current LH = -6085.113666170202	
+INFO: current LH = -6085.11437359069	
+INFO: current LH = -6085.114445058429	
+INFO: current LH = -6085.113591026647	
+INFO: current LH = -6085.11678260716	
+INFO: current LH = -6085.117110629193	
+INFO: current LH = -6085.115716042539	
+INFO: Wall time: 14.2158s User: 0s System: 0.01s
+
+INFO: current LH = -6085.115594546274	
+INFO: current LH = -6085.115661283028	
+INFO: current LH = -6085.115657838227	
+INFO: current LH = -6085.115445250041	
+INFO: current LH = -6085.115875401562	
+INFO: current LH = -6085.115773134871	
+INFO: current LH = -6085.115515234364	
+INFO: current LH = -6085.115236207524	
+INFO: current LH = -6085.116079234404	
+INFO: current LH = -6085.115346568558	
+INFO: current LH = -6085.115944696461	
+INFO: current LH = -6085.116390126589	
+INFO: current LH = -6085.114913749224	
+INFO: current LH = -6085.115855041802	
+INFO: current LH = -6085.115438338605	
+INFO: current LH = -6085.115455984125	
+INFO: current LH = -6085.115864975515	
+INFO: current LH = -6085.116513715965	
+INFO: current LH = -6085.114833412545	
+INFO: current LH = -6085.114709270868	
+INFO: Wall time: 5.86589s User: 0.01s System: 0.01s
+
+INFO: current LH = -6085.116535249736	
+INFO: current LH = -6085.115382641795	
+INFO: current LH = -6085.115962952018	
+INFO: current LH = -6085.115987020205	
+INFO: current LH = -6085.115341430796	
+INFO: current LH = -6085.114971723631	
+INFO: current LH = -6085.116367272723	
+INFO: current LH = -6085.115235747497	
+INFO: current LH = -6085.116067361015	
+INFO: current LH = -6085.115319314605	
+INFO: current LH = -6085.116000163232	
+INFO: current LH = -6085.116180743292	
+INFO: current LH = -6085.115139287195	
+INFO: current LH = -6085.117716678435	
+INFO: current LH = -6085.117920502075	
+INFO: current LH = -6085.116485884044	
+INFO: current LH = -6085.116454728726	
+INFO: current LH = -6085.116260527447	
+INFO: current LH = -6085.116678335528	
+INFO: current LH = -6085.116421462375	
+INFO: Wall time: 12.7128s User: 0s System: 0s
+
+INFO: current LH = -6085.116516497363	
+INFO: current LH = -6085.116422614319	
+INFO: current LH = -6085.116505833967	
+INFO: current LH = -6085.116490694586	
+INFO: current LH = -6085.116447739617	
+INFO: current LH = -6085.116544526623	
+INFO: current LH = -6085.116383968742	
+INFO: current LH = -6085.116371063362	
+INFO: current LH = -6085.116572252415	
+INFO: current LH = -6085.116261625945	
+INFO: current LH = -6085.11666206316	
+INFO: current LH = -6085.116188612586	
+INFO: current LH = -6085.116750802878	
+INFO: current LH = -6085.116577545181	
+INFO: current LH = -6085.116364393681	
+INFO: current LH = -6085.116469871621	
+INFO: current LH = -6085.11646422779	
+INFO: current LH = -6085.116380480181	
+INFO: current LH = -6085.116563264233	
+INFO: current LH = -6085.116434736173	
+INFO: Wall time: 7.92683s User: 0.01s System: 0.01s
+
+INFO: current LH = -6085.116507829514	
+INFO: current LH = -6085.116003812706	
+INFO: current LH = -6085.116945474382	
+INFO: current LH = -6085.116615729484	
+INFO: current LH = -6085.116339518921	
+INFO: current LH = -6085.116563993363	
+INFO: current LH = -6085.116377346009	
+INFO: current LH = -6085.116542819671	
+INFO: current LH = -6085.116404999336	
+INFO: current LH = -6085.11802059872	
+INFO: current LH = -6085.118031698231	
+INFO: current LH = -6085.116563871613	
+INFO: current LH = -6085.11660307481	
+INFO: current LH = -6085.116671628597	
+INFO: current LH = -6085.116491837133	
+INFO: current LH = -6085.116512436211	
+INFO: current LH = -6085.116651055184	
+INFO: current LH = -6085.116541410339	
+INFO: current LH = -6085.116622102966	
+INFO: current LH = -6085.116556248486	
+INFO: Wall time: 10.5983s User: 0s System: 0s
+
+  no                                                           Name                    Value  type                 Error +-            Low          High
+   0               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag        2.153883769337968  free                      0.5
+   1               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonPhi                        0 fixed
+   2                               L1S1_eta(2225)Toomega1_omega2Mag                        1 fixed
+   3                               L1S1_eta(2225)Toomega1_omega2Phi                        0 fixed
+   4                                                  eta(2225)Mass         2.23467821380392  free                     0.03           2.08           2.38
+   5                                                 eta(2225)Width       0.2042917635236784  free                     0.03              0            0.3
+   6                           L1S0_omega1Topion1+_pion1-_pion10Mag                        1 fixed
+   7                           L1S0_omega1Topion1+_pion1-_pion10Phi                        0 fixed
+   8                           L1S0_omega2Topion2+_pion2-_pion20Mag                        1 fixed
+   9                           L1S0_omega2Topion2+_pion2-_pion20Phi                        0 fixed
+  10                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.5917157941677906  free                 0.288675
+  11                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.887698646663005  free                      0.2
+  12                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.5849006759552516  free                 0.288675
+  13                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi       -1.120575840008697  free                      0.2
+  14                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.4853198928706936  free                 0.288675
+  15                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.957894524373207  free                      0.2
+  16                                L2S0_f2(1910)Toomega1_omega2Mag       0.5491195696242216  free                     0.25
+  17                                L2S0_f2(1910)Toomega1_omega2Phi       -0.593256391940611  free                      0.2
+  18                                L0S2_f2(1910)Toomega1_omega2Mag                      0.5 fixed
+  19                                L0S2_f2(1910)Toomega1_omega2Phi                        0 fixed
+  20                                L2S2_f2(1910)Toomega1_omega2Mag       0.8057379354378678  free                     0.25
+  21                                L2S2_f2(1910)Toomega1_omega2Phi        1.474587202832261  free                      0.2
+  22                                L4S2_f2(1910)Toomega1_omega2Mag        0.256310862773958  free                     0.25
+  23                                L4S2_f2(1910)Toomega1_omega2Phi       0.5252967184576723  free                      0.2
+  24                                                   f2(1910)Mass        1.936194199532775  free                     0.03          1.791          2.091
+  25                                                  f2(1910)Width       0.2479024674318825  free                    0.034              0           0.34
+  26  channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling                        1 fixed
+INFO: current LH = -6085.116602074303	
+INFO: current LH = -6085.116467627007	
+INFO: current LH = -6085.116691395877	
+INFO: current LH = -6085.116592859897	
+INFO: current LH = -6085.116566456439	
+INFO: current LH = -6085.116486809758	
+INFO: current LH = -6085.11667360203	
+INFO: current LH = -6085.11650395924	
+INFO: current LH = -6085.116654035997	
+INFO: current LH = -6085.116397844577	
+INFO: current LH = -6085.116746564914	
+INFO: current LH = -6085.116679785579	
+INFO: current LH = -6085.116468632446	
+INFO: current LH = -6085.116558119063	
+INFO: current LH = -6085.116587603139	
+INFO: current LH = -6085.116611685697	
+INFO: current LH = -6085.116538504955	
+INFO: current LH = -6085.11639290021	
+INFO: current LH = -6085.116752554911	
+INFO: current LH = -6085.116520427597	
+INFO: Wall time: 9.89955s User: 0s System: 0.01s
+
+INFO: current LH = -6085.116638981578	
+INFO: current LH = -6085.116593198959	
+INFO: current LH = -6085.116562750932	
+INFO: current LH = -6085.116494479103	
+INFO: current LH = -6085.116662030749	
+INFO: current LH = -6085.11804442676	
+INFO: current LH = -6085.118045858851	
+INFO: current LH = -6085.116618882433	
+INFO: current LH = -6085.116547903051	
+INFO: Client timing information: 
+INFO: Client id 0 channel id 0  response time +0 s
+INFO: Client id 1 channel id 0  response time +0.062709 s
+INFO: current LH = -6085.116569513393	
+INFO: current LH = -6085.116616725711	
+INFO: current LH = -6085.116557878196	
+INFO: current LH = -6085.11662849136	
+INFO: current LH = -6085.116597871373	
+INFO: current LH = -6085.116597411618	
+INFO: current LH = -6085.116554638847	
+INFO: current LH = -6085.116643299893	
+INFO: current LH = -6085.116625586123	
+INFO: current LH = -6085.116573974627	
+INFO: current LH = -6085.116659352363	
+INFO: Wall time: 8.52093s User: 0s System: 0.01s
+
+INFO: current LH = -6085.1165387392	
+INFO: current LH = -6085.116576521885	
+INFO: current LH = -6085.116622936266	
+INFO: current LH = -6085.116580755416	
+INFO: current LH = -6085.116616817218	
+INFO: current LH = -6085.116557763794	
+INFO: current LH = -6085.116646014243	
+INFO: current LH = -6085.11664536901	
+INFO: current LH = -6085.116557418923	
+INFO: current LH = -6085.116644699695	
+INFO: current LH = -6085.116558880514	
+INFO: current LH = -6085.116632481712	
+INFO: current LH = -6085.116572279817	
+INFO: current LH = -6085.116606050021	
+INFO: current LH = -6085.11659743012	
+INFO: current LH = -6085.116555842847	
+INFO: current LH = -6085.116652983692	
+INFO: current LH = -6085.116587980982	
+INFO: current LH = -6085.116609787476	
+INFO: current LH = -6085.116605830547	
+INFO: Wall time: 12.2586s User: 0.01s System: 0s
+
+INFO: current LH = -6085.116591306163	
+INFO: current LH = -6085.118046373582	
+INFO: current LH = -6085.116618882433	
+INFO: current LH = -6085.116547903051	
+INFO: current LH = -6085.116569513393	
+INFO: current LH = -6085.116616725711	
+INFO: current LH = -6085.116557878196	
+INFO: current LH = -6085.11662849136	
+INFO: current LH = -6085.116597871373	
+INFO: current LH = -6085.116597411618	
+INFO: current LH = -6085.116554638847	
+INFO: current LH = -6085.116643299893	
+INFO: current LH = -6085.116625586123	
+INFO: current LH = -6085.116573974627	
+INFO: current LH = -6085.116659352363	
+INFO: current LH = -6085.1165387392	
+INFO: current LH = -6085.116576521885	
+INFO: current LH = -6085.116622936266	
+INFO: current LH = -6085.116580755416	
+INFO: current LH = -6085.116616817218	
+INFO: Wall time: 5.5897s User: 0s System: 0.01s
+
+INFO: current LH = -6085.116557763794	
+INFO: current LH = -6085.116646014243	
+INFO: current LH = -6085.11664536901	
+INFO: current LH = -6085.116557418923	
+INFO: current LH = -6085.116644699695	
+INFO: current LH = -6085.116558880514	
+INFO: current LH = -6085.116632481712	
+INFO: current LH = -6085.116572279817	
+INFO: current LH = -6085.116606050021	
+INFO: current LH = -6085.11659743012	
+INFO: current LH = -6085.116555842847	
+INFO: current LH = -6085.116652983692	
+INFO: current LH = -6085.116587980982	
+INFO: current LH = -6085.116609787476	
+INFO: current LH = -6085.116605830547	
+INFO: current LH = -6085.116591306163	
+INFO: current LH = -6085.117984738823	
+INFO: current LH = -6085.117969714623	
+INFO: current LH = -6085.118034068199	
+INFO: current LH = -6085.118031195941	
+INFO: Wall time: 13.6581s User: 0.01s System: 0s
+
+INFO: current LH = -6085.117982400257	
+INFO: current LH = -6085.117991813234	
+INFO: current LH = -6085.117979731833	
+INFO: current LH = -6085.117994486997	
+INFO: current LH = -6085.11798800026	
+INFO: current LH = -6085.117987740163	
+INFO: current LH = -6085.118043816564	
+INFO: current LH = -6085.118043656963	
+INFO: current LH = -6085.117979391998	
+INFO: current LH = -6085.117996948401	
+INFO: current LH = -6085.117993563466	
+INFO: current LH = -6085.117982842221	
+INFO: current LH = -6085.118000397155	
+INFO: current LH = -6085.117975949523	
+INFO: current LH = -6085.117984004504	
+INFO: current LH = -6085.117992397032	
+INFO: current LH = -6085.118042903996	
+INFO: current LH = -6085.118044575385	
+INFO: current LH = -6085.117984431364	
+INFO: current LH = -6085.117991893266	
+INFO: Wall time: 4.92993s User: 0s System: 0.01s
+
+INFO: current LH = -6085.117979981502	
+INFO: current LH = -6085.117997261933	
+INFO: current LH = -6085.118000159562	
+INFO: current LH = -6085.117977045496	
+INFO: current LH = -6085.118046423784	
+INFO: current LH = -6085.118041756762	
+INFO: current LH = -6085.117997408189	
+INFO: current LH = -6085.117979827345	
+INFO: current LH = -6085.117994710146	
+INFO: current LH = -6085.117982572472	
+INFO: current LH = -6085.117989681718	
+INFO: current LH = -6085.117987553859	
+INFO: current LH = -6085.118044305307	
+INFO: current LH = -6085.118043876496	
+INFO: current LH = -6085.117979584873	
+INFO: current LH = -6085.117997858508	
+INFO: current LH = -6085.118042272296	
+INFO: current LH = -6085.118045917779	
+INFO: current LH = -6085.117986363032	
+INFO: current LH = -6085.117990584718	
+INFO: Wall time: 14.9116s User: 0.01s System: 0s
+
+INFO: current LH = -6085.117988988101	
+INFO: current LH = -6085.117987935071	
+INFO: current LH = -6085.118044155004	
+INFO: current LH = -6085.11804395923	
+INFO: current LH = -6085.115068648314	
+INFO: current LH = -6085.112859093062	
+INFO: current LH = -6085.114438348677	
+INFO: current LH = -6085.115109324315	
+INFO: current LH = -6085.114578506188	
+INFO: current LH = -6085.115205194404	
+INFO: current LH = -6085.114472187165	
+INFO: current LH = -6085.115127384878	
+INFO: current LH = -6085.114726820749	
+INFO: current LH = -6085.115192047416	
+INFO: current LH = -6085.11438127026	
+INFO: current LH = -6085.11538544986	
+INFO: current LH = -6085.114781282358	
+INFO: current LH = -6085.114997361432	
+INFO: current LH = -6085.114836988032	
+INFO: current LH = -6085.114318076631	
+INFO: Wall time: 12.1092s User: 0s System: 0.01s
+
+INFO: current LH = -6085.114805179875	
+INFO: current LH = -6085.114705822979	
+INFO: current LH = -6085.11523835912	
+INFO: current LH = -6085.114836009096	
+INFO: current LH = -6085.115217745314	
+INFO: current LH = -6085.114742741659	
+INFO: current LH = -6085.115082865158	
+INFO: current LH = -6085.114888352876	
+INFO: current LH = -6085.115183295836	
+INFO: current LH = -6085.114713329929	
+INFO: current LH = -6085.115404383498	
+INFO: current LH = -6085.114981284168	
+INFO: current LH = -6085.11502275364	
+INFO: current LH = -6085.114841715159	
+INFO: current LH = -6085.114846376842	
+INFO: current LH = -6085.114004610538	
+INFO: current LH = -6085.115133055107	
+INFO: current LH = -6085.114208122528	
+INFO: current LH = -6085.115196779646	
+INFO: current LH = -6085.114078473797	
+INFO: Wall time: 10.0886s User: 0s System: 0s
+
+INFO: current LH = -6085.115047094177	
+INFO: current LH = -6085.114494820561	
+INFO: current LH = -6085.115055216555	
+INFO: current LH = -6085.113920667422	
+INFO: current LH = -6085.115554895015	
+INFO: current LH = -6085.114519227356	
+INFO: current LH = -6085.114867629353	
+INFO: current LH = -6085.11478284924	
+INFO: current LH = -6085.113941595083	
+INFO: current LH = -6085.115173666473	
+INFO: current LH = -6085.113471312447	
+INFO: current LH = -6085.115258398821	
+INFO: current LH = -6085.113025892307	
+INFO: current LH = -6085.114973190434	
+INFO: current LH = -6085.113046210759	
+INFO: current LH = -6085.11527351401	
+INFO: current LH = -6085.112764323342	
+INFO: current LH = -6085.114790354398	
+INFO: current LH = -6085.113944118446	
+INFO: current LH = -6085.115317868945	
+INFO: Wall time: 12.219s User: 0.01s System: 0.01s
+
+INFO: current LH = -6085.115003485284	
+INFO: current LH = -6085.113172274439	
+INFO: current LH = -6085.11515760587	
+INFO: current LH = -6085.115907411933	
+INFO: current LH = -6085.115209643315	
+INFO: current LH = -6085.117019848787	
+INFO: current LH = -6085.115121201848	
+INFO: current LH = -6085.114990412349	
+INFO: current LH = -6085.115222026232	
+INFO: current LH = -6085.114292989713	
+INFO: current LH = -6085.115037973062	
+INFO: current LH = -6085.114770236128	
+INFO: current LH = -6085.115295113796	
+INFO: current LH = -6085.115310072239	
+INFO: current LH = -6085.115259257382	
+INFO: current LH = -6085.113793547971	
+INFO: current LH = -6085.115144272934	
+INFO: current LH = -6085.113239266728	
+INFO: current LH = -6085.115129504905	
+INFO: current LH = -6085.113074211436	
+INFO: Wall time: 12.2963s User: 0s System: 0.01s
+
+INFO: current LH = -6085.115070253221	
+INFO: current LH = -6085.1135660093	
+INFO: current LH = -6085.115222868239	
+INFO: current LH = -6085.115049408137	
+INFO: current LH = -6085.113312668472	
+INFO: current LH = -6085.114979735024	
+INFO: current LH = -6085.114467790143	
+INFO: current LH = -6085.115082765565	
+INFO: current LH = -6085.114996614076	
+INFO: Client timing information: 
+INFO: Client id 0 channel id 0  response time +0 s
+INFO: Client id 1 channel id 0  response time +0.198619 s
+INFO: current LH = -6085.11524430979	
+INFO: current LH = -6085.114461402326	
+INFO: current LH = -6085.115079277833	
+INFO: current LH = -6085.115157710406	
+INFO: current LH = -6085.115581010296	
+INFO: current LH = -6085.11522880374	
+INFO: current LH = -6085.115087814943	
+INFO: current LH = -6085.113326352051	
+INFO: current LH = -6085.115385616661	
+INFO: current LH = -6085.112991727816	
+INFO: current LH = -6085.114665001494	
+INFO: Wall time: 14.2913s User: 0s System: 0s
+
+INFO: current LH = -6085.113535898838	
+INFO: current LH = -6085.115219155866	
+INFO: current LH = -6085.115132830855	
+INFO: current LH = -6085.113358470467	
+INFO: current LH = -6085.115087824825	
+INFO: current LH = -6085.115282557827	
+INFO: current LH = -6085.115111235184	
+INFO: current LH = -6085.115111818459	
+INFO: current LH = -6085.115321995032	
+INFO: current LH = -6085.115139215243	
+INFO: current LH = -6085.115140924458	
+INFO: current LH = -6085.115181333767	
+INFO: current LH = -6085.115840030448	
+INFO: current LH = -6085.113725552122	
+INFO: current LH = -6085.115150419498	
+INFO: current LH = -6085.113980599543	
+INFO: current LH = -6085.114808306355	
+INFO: current LH = -6085.115002521638	
+INFO: current LH = -6085.11335412769	
+INFO: current LH = -6085.115040162104	
+INFO: Wall time: 15.3279s User: 0.01s System: 0.01s
+
+INFO: current LH = -6085.115630328652	
+INFO: current LH = -6085.115358801665	
+INFO: current LH = -6085.115304032291	
+INFO: current LH = -6085.115286102723	
+INFO: current LH = -6085.115265856023	
+INFO: current LH = -6085.114735747815	
+INFO: current LH = -6085.113837668889	
+INFO: current LH = -6085.115369600007	
+INFO: current LH = -6085.115092347486	
+INFO: current LH = -6085.113273067965	
+INFO: current LH = -6085.11477240773	
+INFO: current LH = -6085.116175926064	
+INFO: current LH = -6085.115480334596	
+INFO: current LH = -6085.114995973824	
+INFO: current LH = -6085.11598977061	
+INFO: current LH = -6085.114978799296	
+INFO: current LH = -6085.113897950387	
+INFO: current LH = -6085.115143361973	
+INFO: current LH = -6085.11532889894	
+INFO: current LH = -6085.115588093518	
+INFO: Wall time: 15.6229s User: 0s System: 0.01s
+
 INFO: 
 
 ********************** Final fit parameters *************************
 
   no                                                           Name                    Value  type                 Error +-            Low          High
-   0               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag        2.165146632420106  free      0.03225167439636963
+   0               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag        2.153863903461891  free      0.03103895318700591
    1               J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonPhi                        0 fixed
    2                               L1S1_eta(2225)Toomega1_omega2Mag                        1 fixed
    3                               L1S1_eta(2225)Toomega1_omega2Phi                        0 fixed
-   4                                                  eta(2225)Mass        2.235178251910138  free     0.002404990597006496           2.08           2.38
-   5                                                 eta(2225)Width       0.1922243067349895  free     0.006704161270668751              0            0.3
+   4                                                  eta(2225)Mass        2.234673343945514  free     0.002413124727734806           2.08           2.38
+   5                                                 eta(2225)Width        0.204293660889674  free      0.00689031560434647              0            0.3
    6                           L1S0_omega1Topion1+_pion1-_pion10Mag                        1 fixed
    7                           L1S0_omega1Topion1+_pion1-_pion10Phi                        0 fixed
    8                           L1S0_omega2Topion2+_pion2-_pion20Mag                        1 fixed
    9                           L1S0_omega2Topion2+_pion2-_pion20Phi                        0 fixed
-  10                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.7968121787751765  free      0.07459371499589375
-  11                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.763525219280392  free       0.1560019957211097
-  12                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.6163249633849901  free      0.05826703690421667
-  13                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi       0.4907369592213163  free       0.1704701382644733
-  14                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.5592185057397997  free      0.05629139415284607
-  15                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi        2.572860068185634  free        0.211582532329693
-  16                                L2S0_f2(1910)Toomega1_omega2Mag       0.4133705412532362  free       0.0538089773138279
-  17                                L2S0_f2(1910)Toomega1_omega2Phi      0.03835819269842414  free       0.1700051517929266
+  10                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.5918703809902035  free       0.1136846262516784
+  11                J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.882707768699302  free       0.1635121911265198
+  12                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.5849828954851478  free       0.1019807853374401
+  13                J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi       -1.120676449167277  free       0.2626718276954021
+  14                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag       0.4854235699258557  free      0.09315409193720393
+  15                J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi        1.957539181832368  free       0.2342814876023006
+  16                                L2S0_f2(1910)Toomega1_omega2Mag       0.5489613809928171  free        0.118932240322798
+  17                                L2S0_f2(1910)Toomega1_omega2Phi      -0.5932075790690329  free       0.1626668161238324
   18                                L0S2_f2(1910)Toomega1_omega2Mag                      0.5 fixed
   19                                L0S2_f2(1910)Toomega1_omega2Phi                        0 fixed
-  20                                L2S2_f2(1910)Toomega1_omega2Mag       0.5098295949942305  free       0.0627407779846406
-  21                                L2S2_f2(1910)Toomega1_omega2Phi       0.6755117144965771  free       0.1625003381261938
-  22                                L4S2_f2(1910)Toomega1_omega2Mag       0.4862014522344953  free      0.07498228879725963
-  23                                L4S2_f2(1910)Toomega1_omega2Phi       0.3877662317692475  free       0.1618635584080362
-  24                                                   f2(1910)Mass        1.943319442268614  free     0.005324279541058408          1.791          2.091
-  25                                                  f2(1910)Width       0.2763780770125254  free      0.02097645072812712              0           0.34
+  20                                L2S2_f2(1910)Toomega1_omega2Mag       0.8055660034762291  free       0.1604848665367998
+  21                                L2S2_f2(1910)Toomega1_omega2Phi        1.474651942688433  free       0.1132696706393785
+  22                                L4S2_f2(1910)Toomega1_omega2Mag       0.2560540652699234  free      0.09926238206767279
+  23                                L4S2_f2(1910)Toomega1_omega2Phi       0.5252188699312611  free       0.1794120446234202
+  24                                                   f2(1910)Mass        1.936196268209765  free      0.00531919156088756          1.791          2.091
+  25                                                  f2(1910)Width       0.2478944927537593  free      0.01612560989434123              0           0.34
   26  channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling                        1 fixed
 INFO: 
 
@@ -2922,30 +4034,30 @@ INFO:
 INFO: 
  Covariance matrix is valid.
 INFO: 
- Final LH: -6152.129271
+ Final LH: -6085.118046
 
-INFO:  # of function calls: 1368
-INFO:  minimum edm: 5.444705612e-07
+INFO:  # of function calls: 2280
+INFO:  minimum edm: 6.914650593e-06
 INFO: noOfFreeFitParams:	17
 INFO: evtWeightSumData:	5000
-INFO: BIC:	-12159.5
-INFO: AIC:	-12270.3
-INFO: AICc:	-12270.1
-INFO: Diagonal sqrt(cov) element (0, 0) / param error: 0.0322517 / 0.0322517
-INFO: Diagonal sqrt(cov) element (4, 4) / param error: 0.00240509 / 0.00240499
-INFO: Diagonal sqrt(cov) element (5, 5) / param error: 0.00670659 / 0.00670416
-INFO: Diagonal sqrt(cov) element (10, 10) / param error: 0.0745937 / 0.0745937
-INFO: Diagonal sqrt(cov) element (11, 11) / param error: 0.156002 / 0.156002
-INFO: Diagonal sqrt(cov) element (12, 12) / param error: 0.058267 / 0.058267
-INFO: Diagonal sqrt(cov) element (13, 13) / param error: 0.17047 / 0.17047
-INFO: Diagonal sqrt(cov) element (14, 14) / param error: 0.0562914 / 0.0562914
-INFO: Diagonal sqrt(cov) element (15, 15) / param error: 0.211583 / 0.211583
-INFO: Diagonal sqrt(cov) element (16, 16) / param error: 0.053809 / 0.053809
-INFO: Diagonal sqrt(cov) element (17, 17) / param error: 0.170005 / 0.170005
-INFO: Diagonal sqrt(cov) element (20, 20) / param error: 0.0627408 / 0.0627408
-INFO: Diagonal sqrt(cov) element (21, 21) / param error: 0.1625 / 0.1625
-INFO: Diagonal sqrt(cov) element (22, 22) / param error: 0.0749823 / 0.0749823
-INFO: Diagonal sqrt(cov) element (23, 23) / param error: 0.161864 / 0.161864
-INFO: Diagonal sqrt(cov) element (24, 24) / param error: 0.0053254 / 0.00532428
-INFO: Diagonal sqrt(cov) element (25, 25) / param error: 0.0210649 / 0.0209765
+INFO: BIC:	-12025.4
+INFO: AIC:	-12136.2
+INFO: AICc:	-12136.1
+INFO: Diagonal sqrt(cov) element (0, 0) / param error: 0.031039 / 0.031039
+INFO: Diagonal sqrt(cov) element (4, 4) / param error: 0.00241323 / 0.00241312
+INFO: Diagonal sqrt(cov) element (5, 5) / param error: 0.00689311 / 0.00689032
+INFO: Diagonal sqrt(cov) element (10, 10) / param error: 0.113685 / 0.113685
+INFO: Diagonal sqrt(cov) element (11, 11) / param error: 0.163512 / 0.163512
+INFO: Diagonal sqrt(cov) element (12, 12) / param error: 0.101981 / 0.101981
+INFO: Diagonal sqrt(cov) element (13, 13) / param error: 0.262672 / 0.262672
+INFO: Diagonal sqrt(cov) element (14, 14) / param error: 0.0931541 / 0.0931541
+INFO: Diagonal sqrt(cov) element (15, 15) / param error: 0.234281 / 0.234281
+INFO: Diagonal sqrt(cov) element (16, 16) / param error: 0.118932 / 0.118932
+INFO: Diagonal sqrt(cov) element (17, 17) / param error: 0.162667 / 0.162667
+INFO: Diagonal sqrt(cov) element (20, 20) / param error: 0.160485 / 0.160485
+INFO: Diagonal sqrt(cov) element (21, 21) / param error: 0.11327 / 0.11327
+INFO: Diagonal sqrt(cov) element (22, 22) / param error: 0.0992624 / 0.0992624
+INFO: Diagonal sqrt(cov) element (23, 23) / param error: 0.179412 / 0.179412
+INFO: Diagonal sqrt(cov) element (24, 24) / param error: 0.00532031 / 0.00531919
+INFO: Diagonal sqrt(cov) element (25, 25) / param error: 0.0161564 / 0.0161256
 INFO: Closing server.
