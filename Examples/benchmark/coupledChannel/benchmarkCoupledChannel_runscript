@@ -21,6 +21,6 @@ $TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReactio
 sleep 5
 
 echo "Starting first client for D0 -> K- pi+ pi0 ..."
-$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode client !>& log.client3 &
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode client !>& log.client4 &
 
 echo done
