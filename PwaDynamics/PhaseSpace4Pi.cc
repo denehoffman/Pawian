@@ -21,13 +21,45 @@
 //									  //
 //************************************************************************//
 
+// this paramererizaton of this 4pi phasespce factor has been taken over from 
+// the Laura++ software package:
+// 
+// Copyright University of Warwick 2008 - 2013.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+// Authors:
+// Thomas Latham
+// John Back
+// Paul Harrison
+//
+// Calculate the 4pi phase space factor. This uses a 6th-order polynomial 
+// parameterisation that approximates the multi-body phase space double integral
+// defined in Eq 4 of the A&S paper hep-ph/0204328. This form agrees with the 
+// BaBar model (another 6th order polynomial from s^4 down to 1/s^2), but avoids the
+// exponential increase at small values of s (~< 0.1) arising from 1/s and 1/s^2.
+// Eq 4 is evaluated for each value of s by assuming incremental steps of 1e-3 GeV^2 
+// for s1 and s2, the invariant energy squared of each of the di-pion states,
+// with the integration limits of s1 = (2*mpi)^2 to (sqrt(s) - 2*mpi)^2 and
+// s2 = (2*mpi)^2 to (sqrt(s) - sqrt(s1))^2. The mass M of the rho is taken to be
+// 0.775 GeV and the energy-dependent width of the 4pi system 
+// Gamma(s) = gamma_0*rho1^3(s), where rho1 = sqrt(1.0 - 4*mpiSq/s) and gamma_0 is 
+// the "width" of the 4pi state at s = 1, which is taken to be 0.3 GeV 
+// (~75% of the total width from PDG estimates of the f0(1370) -> 4pi state).
+// The normalisation term rho_0 is found by ensuring that the phase space integral
+// at s = 1 is equal to sqrt(1.0 - 16*mpiSq/s). Note that the exponent for this 
+// factor in hep-ph/0204328 is wrong; it should be 0.5, i.e. sqrt, not n = 1 to 5.
+// Plotting the value of this double integral as a function of s can then be fitted
+// to a 6th-order polynomial (for s < 1), which is the result used below
+
+
 #include "PwaDynamics/PhaseSpace4Pi.hh"
+#include "Utils/PawianConstants.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 PhaseSpace4Pi::PhaseSpace4Pi():
   AbsPhaseSpace()
-  , _piMass(0.13957)
+  ,_fourPiFactor1(16.0*PawianConstants::mPiSq)
 {
 }
 
@@ -38,14 +70,20 @@ PhaseSpace4Pi::~PhaseSpace4Pi(){
 complex<double> PhaseSpace4Pi::factor(const double mass){
   double mass_sqr=mass*mass;
   complex<double> result(0.,0.);
-  if( mass_sqr <= 1 ){
-      double real = 1.2274 + .00370909 / ( mass_sqr * mass_sqr ) - .111203 / mass_sqr - 6.39017 * mass_sqr + 
-	 16.8358*mass_sqr*mass_sqr - 21.8845*mass_sqr*mass_sqr*mass_sqr + 11.3153*mass_sqr*mass_sqr*mass_sqr*mass_sqr;
 
-      double cont32 = sqrt(1.0-(16.0*_piMass*_piMass));
-      result = complex<double>( cont32 * real, 0 );
-    }
-  else result = complex<double>( sqrt( 1. - 16. * _piMass * _piMass / mass_sqr ), 0. );
+  if (fabs(mass_sqr) < 1e-10) {return result;}
+
+  if (mass_sqr <= 1.0) {
+    double rhoTerm = ((1.07885*mass_sqr + 0.13655)*mass_sqr - 0.29744)*mass_sqr - 0.20840;
+    rhoTerm = ((rhoTerm*mass_sqr + 0.13851)*mass_sqr - 0.01933)*mass_sqr + 0.00051;
+    // For some values of s (below 2*mpi), this term is a very small 
+    // negative number. Check for this and set the rho term to zero.
+    if (rhoTerm < 0.0) {rhoTerm = 0.0;}
+    result= complex<double>( rhoTerm, 0. );
+  } else {
+    result= complex<double>( sqrt(1.0 - (_fourPiFactor1/mass_sqr)), 0. );
+  }  
+
   return result;
 }
 
@@ -53,20 +91,13 @@ complex<double> PhaseSpace4Pi::factor(const complex<double> mass){
   complex<double> mass_sqr=mass*mass;
   complex<double> result(0.,0.);
   if( norm(mass_sqr) <= 1. ){
-    complex<double> real = 1.2274 + .00370909 / ( mass_sqr * mass_sqr ) - .111203 / mass_sqr - 6.39017 * mass_sqr + 
-	 16.8358*mass_sqr*mass_sqr - 21.8845*mass_sqr*mass_sqr*mass_sqr + 11.3153*mass_sqr*mass_sqr*mass_sqr*mass_sqr;
-
-      double cont32 = sqrt(1.0-(16.0*_piMass*_piMass));
-      result = cont32*real;
-      //      result = complex<double>( cont32 * real, 0 );
+    complex<double> rhoTerm = ((1.07885*mass_sqr + 0.13655)*mass_sqr - 0.29744)*mass_sqr - 0.20840;
+    rhoTerm = ((rhoTerm*mass_sqr + 0.13851)*mass_sqr - 0.01933)*mass_sqr + 0.00051;
+    result = rhoTerm;
     }
-  //  else result = complex<double>( sqrt( 1. - 16. * _piMass * _piMass / mass_sqr ), 0. );
- else result = sqrt( 1. - 16. * _piMass * _piMass / mass_sqr );
+  else result = sqrt(1.0 - (_fourPiFactor1/mass_sqr));
   CorrectForChosenSign(result);
   return result;
-   // Alert << "PhaseSpace4Pi does currently not support complex masses" << endmsg;
-   // exit(EXIT_FAILURE);
-   // return 0;
 }
 
 complex<double> PhaseSpace4Pi::breakUpMom(const double mass){

@@ -61,7 +61,7 @@ public:
 protected:
 
 private:
-  const double _piMass;
+  const double _fourPiFactor1;
 };
 //_____________________________________________________________________________
 

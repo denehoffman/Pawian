@@ -41,7 +41,6 @@ class GlobalEnv
 
 public:
    static GlobalEnv* instance();
-   GlobalEnv();
    ~GlobalEnv();
 
    void setup(ParserBase* theParser);
@@ -66,6 +65,7 @@ public:
    std::vector<std::string> fixedParams();
 
 private:
+  GlobalEnv();
    static GlobalEnv* _instance;
    bool _alreadySetUp;
    bool _channelEnvsAlredySetup;
