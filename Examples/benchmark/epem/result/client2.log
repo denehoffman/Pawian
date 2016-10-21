@@ -1,6 +1,6 @@
-INFO: /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
+INFO: /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
 INFO: --epemFiles
-INFO: /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+INFO: /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 INFO: --mode
 INFO: client
 INFO: !
@@ -88,9 +88,9 @@ INFO:
 //************************************************************************//
 
    
-INFO: Compiled Oct  4 2016 13:54:51
+INFO: Compiled Oct 20 2016 16:17:17
 
-Running with the following options using /data/jollyj/bertram/NewPawian160712/Pawian/ConfigParser/global.cfg:
+Running with the following options using /data/jollyj/bertram/NewPawian161020/Pawian/ConfigParser/global.cfg:
 
 Error log mode: 1
 
@@ -127,7 +127,7 @@ pdg table: /Particle/pdtNew.table
 minimumTolerance: 0.1
 
 
-epem channel configuration file: /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+epem channel configuration file: /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 
 
 
@@ -165,19 +165,19 @@ number of generated events:	10000
 number of data events:	1000000
 INFO: numReactions: 1
 ERROR: /ParticleGrammar.hh:133: failed parsing at: 
-INFO: __argv[0]: /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
+INFO: __argv[0]: /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
 INFO: __argv[1]: --epemFiles
 INFO: __argv[3]: --mode
 INFO: __argv[4]: client
 INFO: __argv[5]: !
-INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
+INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
 INFO: argvWCfgFile[1]= -c
-INFO: argvWCfgFile[2]= /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+INFO: argvWCfgFile[2]= /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 INFO: argvWCfgFile[3]= --mode
 INFO: argvWCfgFile[4]= client
 INFO: argvWCfgFile[5]= !
 
-Running with the following options using /data/jollyj/bertram/NewPawian160712/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
+Running with the following options using /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
 
 Error log mode: 1
 

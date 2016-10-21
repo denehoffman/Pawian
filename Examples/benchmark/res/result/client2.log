@@ -1,4 +1,4 @@
-INFO: /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
+INFO: /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
 INFO: --resFiles
 INFO: ./D0Fit.cfg
 INFO: --mode
@@ -90,9 +90,9 @@ INFO:
 //************************************************************************//
 
    
-INFO: Compiled Oct  4 2016 13:54:51
+INFO: Compiled Oct 20 2016 16:17:17
 
-Running with the following options using /data/jollyj/bertram/NewPawian160712/Pawian/ConfigParser/global.cfg:
+Running with the following options using /data/jollyj/bertram/NewPawian161020/Pawian/ConfigParser/global.cfg:
 
 Error log mode: 1
 
@@ -167,14 +167,14 @@ number of generated events:	10000
 number of data events:	1000000
 INFO: numReactions: 1
 ERROR: /ParticleGrammar.hh:133: failed parsing at: 
-INFO: __argv[0]: /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
+INFO: __argv[0]: /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
 INFO: __argv[1]: --resFiles
 INFO: __argv[3]: --mode
 INFO: __argv[4]: client
 INFO: __argv[5]: --noOfThreads
 INFO: __argv[6]: 2
 INFO: __argv[7]: !
-INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian160712/Pawian/bin/singleChannelApp
+INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
 INFO: argvWCfgFile[1]= -c
 INFO: argvWCfgFile[2]= ./D0Fit.cfg
 INFO: argvWCfgFile[3]= --mode

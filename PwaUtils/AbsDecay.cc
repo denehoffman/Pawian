@@ -348,35 +348,32 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   Vector4<double> daughter1HelMother(0.,0.,0.,0.);
   if(_hasMotherPart){
-    if(mother4Vec==all4Vec){
-      daughter2HelMother=daughter2_4Vec;
-      daughter1HelMother=daughter1_4Vec;
-      if( fabs(mother4Vec.P()) > 1.e-6 ){ 
-    	//daughter2HelMother.Boost(mother4Vec);
-    	//daughter1HelMother.Boost(mother4Vec);
-  
-        Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0)
-				      , 0., 0., 1.); //z-axis = quantisation axis
-        daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
-        daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);
-      }
+    if(whichDecayLevel()==decayLevel::isProdAmp){
+      Alert << "this amplitude " << name() <<" has got a mother and is a production amplitude!!!" << endmsg;
+      exit(1); 
     }
+    Vector4<double> motherRefVec;
+    if(whichDecayLevel()==decayLevel::firstLevel) motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
+    else if(whichDecayLevel()==decayLevel::secondLevel) motherRefVec=all4Vec;
     else{
-      daughter2HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
-      daughter1HelMother=helicityVec(prodParticle4Vec, mother4Vec, daughter1_4Vec);
-    }
+      Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
+      exit(0); 
+    }  
+    daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
+    daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
   }
   else{
+    if(whichDecayLevel()!=decayLevel::isProdAmp){
+      Alert << "this amlpitude " << name() << " hasn't got a mother and is not a production amplitude!!!" << endmsg;
+      exit(1); 
+    }
     daughter2HelMother=daughter2_4Vec;
     daughter1HelMother=daughter1_4Vec;
     if( fabs(mother4Vec.P()) > 1.e-6 ){
-      // daughter2HelMother.Boost(mother4Vec);
-      // daughter1HelMother.Boost(mother4Vec);
-
-      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0)
-      				    , 0., 0., 1.); //z-axis = quantisation axis
-      daughter2HelMother=helicityVec(defaultRefVec, mother4Vec, daughter2_4Vec);
-      daughter1HelMother=helicityVec(defaultRefVec, mother4Vec, daughter1_4Vec);
+      Vector4<double> defaultMotherRefVec=Vector4<double>(0., 0., 0., 2.);
+      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      daughter2HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
+      daughter1HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
     }
   }
 
@@ -549,6 +546,7 @@ void AbsDecay::extractLmin(){
 void AbsDecay::setDecayLevel(decLevel theLevel){
   if (_decLevel==decayLevel::noLevel){
     _decLevel=theLevel;
+    if(_decLevel==decayLevel::isProdAmp) _hasMotherPart=false;
   }
   else if(_decLevel != theLevel) _decLevel=decayLevel::severalLevels;
   else return;

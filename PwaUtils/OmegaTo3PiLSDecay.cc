@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -76,9 +76,58 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   //  Vector4<double> daughter2_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter2_4Vec);
   //  Vector4<double> daughter3_HeliOmega=helicityVec(all4Vec, mother4Vec, daughter3_4Vec);
 
-  Vector4<double> daughter1_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter1_4Vec);
-  Vector4<double> daughter2_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
-  Vector4<double> daughter3_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter3_4Vec);
+  // Vector4<double> daughter1_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter1_4Vec);
+  // Vector4<double> daughter2_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter2_4Vec);
+  // Vector4<double> daughter3_HeliOmega=helicityVec(prodParticle4Vec, mother4Vec, daughter3_4Vec);
+
+  Vector4<double> daughter1_HeliOmega;
+  Vector4<double> daughter2_HeliOmega;
+  Vector4<double> daughter3_HeliOmega;
+
+  if(whichDecayLevel()==decayLevel::isProdAmp){
+    daughter1_HeliOmega=daughter1_4Vec;
+    daughter2_HeliOmega=daughter2_4Vec;
+    daughter3_HeliOmega=daughter3_4Vec;
+    if( fabs(mother4Vec.P()) > 1.e-6 ){
+      Vector4<double> defaulltMotherRefVec=Vector4<double>(0., 0., 0., 2.);
+      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      daughter1_HeliOmega=KinUtils::heliVec(defaulltMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
+      daughter2_HeliOmega=KinUtils::heliVec(defaulltMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
+      daughter3_HeliOmega=KinUtils::heliVec(defaulltMotherRefVec, defaultRefVec, mother4Vec, daughter3_4Vec);
+    }
+  }
+  else if (whichDecayLevel()==decayLevel::firstLevel){ //mother4Vec==all4Vec
+    Vector4<double> motherRefVec(0., 0., 0., 1.); //set direction onto the z-axis
+    daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
+    daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
+    daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec); 
+  } 
+  else if (whichDecayLevel()==decayLevel::secondLevel){ //mother4Vec==all4Vec
+    Vector4<double> motherRefVec=all4Vec; //set direction onto the z-axis
+    daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
+    daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
+    daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec); 
+  }
+  else{
+    Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
+      exit(0);
+  }
+
+  // if(mother4Vec==all4Vec){
+  //   Vector4<double> motherRefVec(0., 0., 0., 1.); //z-axis = quantisation axis
+  //   daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
+  //   daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
+  //   daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec);
+  // }
+  // else{
+  //   //      Vector4<double> motherRefVec(0., 0., 0., 1.); //z-axis = quantisation axis
+  //   Vector4<double> motherRefVec=all4Vec;
+  //   if(all4Vec==prodParticle4Vec) motherRefVec=Vector4<double>(0., 0., 0., 1.);
+  //   daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
+  //   daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
+  //   daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec);
+  // }
+
 
   //calculate normal of the decay plane
   Vector4<float> normOmegaDecHeliOmega_4V(0.5*(daughter1_HeliOmega.T()+daughter2_HeliOmega.T()+daughter3_HeliOmega.T()),
