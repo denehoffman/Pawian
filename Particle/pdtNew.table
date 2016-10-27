@@ -351,6 +351,7 @@ Baryon Lambda(1690)0    \Lambda(1690)^0         0  3 -1  0  0   0    0  -1 0    
 Baryon antiLambda(1690)0    \bar\Lambda(1690)^0 0  3  1  0  0   0    0   1 0    1.69    0.06    relBW           [PDG]
 Baryon Lambda(1800)0    \Lambda(1800)^0         0  1 -1  0  0   0    0  -1 0    1.8     0.300   relBW           [PDG]
 Baryon Lambda(1810)0 	\Lambda(1810)^0  	0  1 1   0  0   0    0  -1 0	1.81    0.15    relBW		[PDG]
+Baryon antiLambda(1810)0 \bar\Lambda(1810)^0  	0  1 1   0  0   0    0  1  0	1.81    0.15    relBW		[PDG]
 Baryon Lambda(1820)0 	\Lambda(1820)^0  	0  5 1   0  0   0    0  -1 0	1.82    0.08    relBW		[PDG]
 Baryon Lambda(1830)0    \Lambda(1830)^0         0  5 -1  0  0   0    0  -1 0    1.83    0.095   relBW           [PDG]
 Baryon Lambda(1890)0 	\Lambda(1890)^0  	0  3 1   0  0   0    0  -1 0	1.89    0.12    relBW		[PDG]

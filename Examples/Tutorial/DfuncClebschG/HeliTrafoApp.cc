@@ -2,7 +2,7 @@
 //                                                                        //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 Julian Pychy (julian@ep1.rub.de)                       //
-//                 - Ruhr-Universität Bochum                              //
+//                 - Ruhr-Universit??t Bochum                              //
 //                                                                        //
 //  This file is part of Pawian.                                          //
 //                                                                        //
@@ -145,6 +145,24 @@ int main(int __argc,char *__argv[]){
   Vector4<double> decA1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
   Print4Vec(decA1HeliVecNew, "decA1HeliVecNew");
 
+  cout << "************************************" << endl;
+  cout << "************************************" << endl;
+
+  Vector4<double> motherRef2Vec(sqrt(3.1*3.1+1.), 0., 0., 1.);
+  KinUtils::SetTheta(motherRef2Vec, 55./PawianConstants::radToDeg);
+  KinUtils::SetPhi(motherRef2Vec, -100./PawianConstants::radToDeg); 
+  Vector4<double> ref2Vec(2., -0.1, 0.2, .3);
+  Vector4<double> ref2VecRecoil=motherRef2Vec-ref2Vec;
+  Vector4<double> mother2Vec(1., 0.1, 0.3, -0.2);
+  Vector4<double> daughter2Vec(1., 0.1, 0.1, 0.1);
+
+
+  Vector4<double> ref2VecHeli = KinUtils::heliVec(motherRef2Vec, ref2Vec, mother2Vec, ref2Vec);
+  Vector4<double> ref2VecRecoilHeli = KinUtils::heliVec(motherRef2Vec, ref2Vec, mother2Vec, ref2VecRecoil);
+  Vector4<double> mother2VecHeli = KinUtils::heliVec(motherRef2Vec, ref2Vec, mother2Vec, mother2Vec);
+  Print4Vec(ref2VecHeli, "ref2VecHeli");
+  Print4Vec(ref2VecRecoilHeli, "ref2VecRecoilHeli");
+  Print4Vec(mother2VecHeli, "mother2VecHeli");
   return EXIT_SUCCESS;
 }
 
