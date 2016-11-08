@@ -98,6 +98,7 @@ protected:
   std::map<std::thread::id, Spin> _lam2MinThreadMap;
   std::map<std::thread::id, Spin> _lam2MaxThreadMap;
 
+  bool _isWeakDecay;
   double _isospinCG;
   const double _preFactor;
   std::string _key;

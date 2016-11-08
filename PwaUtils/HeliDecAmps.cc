@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -280,7 +280,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 
-    // Info << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
+ //   Info << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
  
     complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
     // Info << "amp: " << amp << endmsg;

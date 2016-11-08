@@ -369,7 +369,7 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shar
     result4Vec.Boost(all4Vec);
     }
     else{
-       result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
+      result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
        if(nBodyDecay==3)
 	  result4Vec2=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec2);
     }

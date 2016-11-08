@@ -117,6 +117,7 @@ public:
   Spin i3Daughter2() {return _i3daughter2;}
   virtual void disableIsospin(){_useIsospin=false;}
   bool useIsospin(){ return _useIsospin;}
+  bool isWeakDeacy() {return _isWeakDecay;}
   virtual std::string pathToConfigParser() {return _pathParserFile;}
   std::shared_ptr<ProdChannelInfo> prodChannelInfo() {return _prodChannelInfo;}
   void setProdChannelInfo(std::shared_ptr<ProdChannelInfo> prodChannelInfo) { _prodChannelInfo=prodChannelInfo;}
@@ -199,6 +200,7 @@ protected:
   int _gParity;
 
   bool _useIsospin;
+  bool _isWeakDecay;
   bool _isProdAmp;
   bool _useProdBarrier;
   double _massSumFsParticles;

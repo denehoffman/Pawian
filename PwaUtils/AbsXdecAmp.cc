@@ -2,7 +2,7 @@
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -52,6 +52,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   ,_fsParticleProjections(GlobalEnv::instance()->Channel(channelID)->getFsParticleProjectionsPtr())
   ,_daughter1ProjId(10000)
   ,_daughter2ProjId(10000)
+  ,_isWeakDecay(theDec->isWeakDeacy())
   ,_isospinCG(theDec->isospinCG())
   ,_preFactor(theDec->preFactor())
   ,_key("_"+theDec->fitParSuffix())
@@ -167,12 +168,13 @@ void AbsXdecAmp::setSpinProjections(int projId){
   _lam2MinThreadMap[std::this_thread::get_id()]=_lam2Min;
   _lam2MaxThreadMap[std::this_thread::get_id()]=_lam2Max;
   theMutex.unlock();
-  
+
   if(_daughter1IsStable){
     Spin currentProjection=projections.at(_daughter1ProjId);
     theMutex.lock();
     _lam1MinThreadMap[std::this_thread::get_id()]=currentProjection;
     _lam1MaxThreadMap[std::this_thread::get_id()]=currentProjection;
+    DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam1MaxThreadMap[std::this_thread::get_id()] << endmsg;
     theMutex.unlock();
   }
   else _decAmpDaughter1->setSpinProjections(projId);
@@ -183,9 +185,11 @@ void AbsXdecAmp::setSpinProjections(int projId){
     theMutex.lock();
     _lam2MinThreadMap[std::this_thread::get_id()]=currentProjection;
     _lam2MaxThreadMap[std::this_thread::get_id()]=currentProjection;
+    DebugMsg << "set spin projection: " << _daughter2Name << " _lam1Min: " << _lam2MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam2MaxThreadMap[std::this_thread::get_id()] << endmsg;
     theMutex.unlock();
   }
   else _decAmpDaughter2->setSpinProjections(projId);
+
   return;
 }
 

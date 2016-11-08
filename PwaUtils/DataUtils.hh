@@ -539,6 +539,10 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Parti
 
 void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec,  bool useCParity=true, int gParityMother=0, bool useIsospin=false);
 
+void validJPCLSWeak(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec);
+
+void validLSWeak(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const LScomb> >& theLSVec);
+
 std::shared_ptr<jpcRes> getJPCPtr(Particle* theParticle);
 std::shared_ptr<IGJPC> getIGJPCPtr(Particle* theParticle);
 

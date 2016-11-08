@@ -13,6 +13,7 @@ lib PwaUtils :
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
+	$(TOP)/qft++Extension//qft++Extension
 	$(TOP)/ErrLogger//ErrLogger
 	$(TOP)/Event//Event
 	$(TOP)/FitParams//FitParams

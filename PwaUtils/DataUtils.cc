@@ -29,6 +29,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 
 
@@ -135,6 +136,33 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Parti
   }
 }
 
+void validJPCLSWeak(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPCLS> >& theJPCLSVec){
+
+  std::vector< std::shared_ptr<const LScomb> > LSVec;
+  validLSWeak(motherRes, daughter1, daughter2, LSVec);
+
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for(it=LSVec.begin(); it!=LSVec.end(); ++it){
+    std::shared_ptr<const JPCLS> tmpJPCLS(new JPCLS(motherRes, (*it)->L, (*it)->S));
+    theJPCLSVec.push_back(tmpJPCLS);
+  }
+}
+
+void validLSWeak(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const LScomb> >& theLSVec){ //C*P is not taken into account; this should be changed soon
+
+  vector<LS> LSs = PawianQFT::GetValidLSWeak(motherRes->J, daughter1->J(), daughter2->J());
+  int num_LS = (int) LSs.size();
+
+  for(int ls = 0; ls < num_LS; ls++){
+    int L= LSs[ls].L; 
+    Spin S= LSs[ls].S;
+    std::shared_ptr<const LScomb> tmpLS(new LScomb(L, S));
+    theLSVec.push_back(tmpLS);
+  }
+
+  if(LSs.size()==0) Info << "size for decay " << motherRes->name() << " to " << daughter1->name() << " and " << daughter2->name()
+                         << " =0!!!" << endmsg;
+}
 
 void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec, bool useCParity, int gParityMother, bool useIsospin){
   std::vector< std::shared_ptr<const JPCLS> > currentJPCLSDecAmps;

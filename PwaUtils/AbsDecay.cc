@@ -81,6 +81,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_isDaughter2Photon(false)
   ,_gParity(mother->theGParity())
   ,_useIsospin(true)
+  ,_isWeakDecay(false)
    ,_isProdAmp(false)
    ,_useProdBarrier(false)
    ,_massSumFsParticles(0.)
@@ -99,9 +100,9 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
     _finalStateParticlesDaughter1.push_back(daughter1);
     addToFsParticleNameList(daughter1->name());
   }
-
+  
   _absDecDaughter2=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter2);
-
+  
   if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
     _finalStateParticlesDaughter2=_absDecDaughter2->finalStateParticles();
@@ -112,42 +113,49 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
     _finalStateParticlesDaughter2.push_back(daughter2);
     addToFsParticleNameList(daughter2->name());
   }
-
+  
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
 
- _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
- _refKey=FunctionUtils::particleListName(_finalStateParticles);
-
- _idaughter1=Spin(_daughter1->twoIso(), 2);
- _i3daughter1=Spin(_daughter1->twoIso3(), 2);
- _idaughter2=Spin(_daughter2->twoIso(), 2);
- _i3daughter2=Spin(_daughter2->twoIso3(), 2);
- Spin Imother(_mother->twoIso(), 2);
- Spin I3mother(_mother->twoIso3(), 2);
-
- _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
-
- if(fabs(_isospinClebschG)<1.e-8){
-   Warning << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
-   Warning << "Imother: " << Imother << "\tI3mother: " << I3mother << endmsg;
-   Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
-   Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
- }
- // if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
-
- if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 && daughter1->mass() < 1.e-6){
-   _isDaughter1Photon=true;   
- }
- if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 && daughter1->mass() < 1.e-6){
-   _isDaughter2Photon=true;   
- }
-
- if( _isDaughter1Photon || _isDaughter2Photon) disableIsospin();
+  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+  _refKey=FunctionUtils::particleListName(_finalStateParticles);
   
- //fill mass sum of final state particles
- std::vector<Particle*>::iterator itP;
+  _idaughter1=Spin(_daughter1->twoIso(), 2);
+  _i3daughter1=Spin(_daughter1->twoIso3(), 2);
+  _idaughter2=Spin(_daughter2->twoIso(), 2);
+  _i3daughter2=Spin(_daughter2->twoIso3(), 2);
+  
+  //check whether it's a weak decay 
+  if( _mother->strange() != (_daughter1->strange()+_daughter2->strange())) _isWeakDecay=true;
+  else if ( _mother->charm() != (_daughter1->charm()+_daughter2->charm())) _isWeakDecay=true;
+  if(_isWeakDecay) disableIsospin(); 
+  else {  
+    Spin Imother(_mother->twoIso(), 2);
+    Spin I3mother(_mother->twoIso3(), 2);
+    
+    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
+  
+    if(fabs(_isospinClebschG)<1.e-8){
+      Warning << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
+      Warning << "Imother: " << Imother << "\tI3mother: " << I3mother << endmsg;
+      Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
+      Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
+    }
+    // if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
+    
+    if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 && daughter1->mass() < 1.e-6){
+      _isDaughter1Photon=true;   
+    }
+    if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 && daughter1->mass() < 1.e-6){
+      _isDaughter2Photon=true;   
+    }
+    
+    if( _isDaughter1Photon || _isDaughter2Photon) disableIsospin();
+  }
+
+  //fill mass sum of final state particles
+  std::vector<Particle*>::iterator itP;
   for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
     _massSumFsParticles+=(*itP)->mass();
   }
@@ -189,6 +197,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_isDaughter2Photon(false)
   ,_gParity(motherIGJPCPtr->G)
   ,_useIsospin(true)
+  ,_isWeakDecay(false)
   ,_isProdAmp(false)
   ,_useProdBarrier(false)
   ,_massSumFsParticles(0.)
@@ -359,6 +368,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
       exit(0); 
     }  
+    //    motherRefVec=Vector4<double>(0., 0., 0., 1.); //must be removed!!!!
     daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
   }
