@@ -1,7 +1,6 @@
 //************************************************************************//
 //                                                                        //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
-//                 Julian Pychy (julian@ep1.rub.de)                       //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)                      //
 //                 - Ruhr-Universit??t Bochum                              //
 //                                                                        //
 //  This file is part of Pawian.                                          //
@@ -104,7 +103,6 @@ int main(int __argc,char *__argv[]){
   Print4Vec(decC1Vec, "decC1Vec || to mother1");
   Print4Vec(decC2Vec, "decC2Vec");
 
-  
   Vector4<double> ref1HeliVec = helicityVec(ref1Vec, mother1Vec, ref1Vec);
   Vector4<double> mother1HeliVec = helicityVec(ref1Vec, mother1Vec, mother1Vec);
   Vector4<double> recoilMother1HeliVec = helicityVec(ref1Vec, mother1Vec, recoilMother1Vec);
@@ -142,8 +140,40 @@ int main(int __argc,char *__argv[]){
   cout << "phiA1Heli1a EvtGen: " << phiA1Heli1a*PawianConstants::radToDeg << endl;  
 
   Vector4<double> refAxisPawian(0., 0., 0., 1.);
+  Vector4<double> ref1RecoilVec=refAxisPawian-ref1Vec;
+  Print4Vec(ref1RecoilVec, "ref1RecoilVec");
   Vector4<double> decA1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
+  Vector4<double> recoilMother1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, recoilMother1Vec);
+  Vector4<double> ref1HeliVecNew = KinUtils::heliVec(refAxisPawian,ref1Vec, mother1Vec, ref1Vec);
+  Vector4<double> ref1RecoilHeliVecNew = KinUtils::heliVec(refAxisPawian,ref1Vec, mother1Vec, ref1RecoilVec);
+  Vector4<double> motherref1HeliVecNew = ref1HeliVecNew+ref1RecoilHeliVecNew;
+
   Print4Vec(decA1HeliVecNew, "decA1HeliVecNew");
+  Print4Vec(recoilMother1HeliVecNew, "recoilMother1HeliVecNew");
+  Print4Vec(ref1HeliVecNew, "ref1HeliVecNew");
+  Print4Vec(ref1RecoilHeliVecNew, "ref1RecoilHeliVecNew");
+
+  Vector4<double> crossMotherRefMotherHeli=KinUtils::perpTo(motherref1HeliVecNew, refAxisPawian); 
+  Vector4<double> crossNormMotherRefMother_MotherHeli=KinUtils::perpTo(crossMotherRefMotherHeli, refAxisPawian);
+  cout << "crossMotherRefMotherHeli (y-direction): " << crossMotherRefMotherHeli << "\n" << endl;
+  cout << "crossNormMotherRefMother_MotherHeli (x-direction): " << crossNormMotherRefMother_MotherHeli << "\n" << endl; 
+    
+  Vector4<double> decA1HeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
+  Vector4<double> recoilMother1HeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, recoilMother1Vec);
+  Vector4<double> ref1HeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian,ref1Vec, mother1Vec, ref1Vec);
+  Vector4<double> ref1RecoilHeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian,ref1Vec, mother1Vec, ref1RecoilVec);
+  Vector4<double> motherref1HeliVecEvtGenNew = ref1HeliVecEvtGenNew+ref1RecoilHeliVecEvtGenNew;
+  Print4Vec(decA1HeliVecEvtGenNew, "decA1HeliVecEvtGenNew");
+  Print4Vec(recoilMother1HeliVecEvtGenNew, "recoilMother1HeliVecEvtGenNew");
+  Print4Vec(ref1HeliVecEvtGenNew, "ref1HeliVecEvtGenNew");
+  Print4Vec(ref1RecoilHeliVecEvtGenNew, "ref1RecoilHeliVecEvtGenNew");
+  Print4Vec(motherref1HeliVecEvtGenNew, "motherref1HeliVecEvtGenNew");
+
+  Vector4<double> crossMotherRefMotherHeli1=KinUtils::perpTo(motherref1HeliVecEvtGenNew, refAxisPawian); 
+  Vector4<double> cross_crossMotherRefMotherHeli_MotherHeli1=KinUtils::perpTo(crossMotherRefMotherHeli1, refAxisPawian);
+  cout << "crossMotherRefMotherHeli1 (y-direction): " << crossMotherRefMotherHeli1 << "\n" << endl;
+  cout << "cross_crossMotherRefMotherHeli_MotherHeli1 (x-direction): " << cross_crossMotherRefMotherHeli_MotherHeli1 << "\n" << endl; 
+
 
   cout << "************************************" << endl;
   cout << "************************************" << endl;
@@ -163,6 +193,14 @@ int main(int __argc,char *__argv[]){
   Print4Vec(ref2VecHeli, "ref2VecHeli");
   Print4Vec(ref2VecRecoilHeli, "ref2VecRecoilHeli");
   Print4Vec(mother2VecHeli, "mother2VecHeli");
+
+
+  Vector4<double> ref2VecHeliNew = KinUtils::heliEvtGenVec(motherRef2Vec, ref2Vec, mother2Vec, ref2Vec);
+  Vector4<double> ref2VecRecoilHeliNew = KinUtils::heliEvtGenVec(motherRef2Vec, ref2Vec, mother2Vec, ref2VecRecoil);
+  Vector4<double> mother2VecHeliNew = KinUtils::heliEvtGenVec(motherRef2Vec, ref2Vec, mother2Vec, mother2Vec);
+  Print4Vec(ref2VecHeliNew, "ref2VecHeliNew");
+  Print4Vec(ref2VecRecoilHeliNew, "ref2VecRecoilHeliNew");
+  Print4Vec(mother2VecHeliNew, "mother2VecHeliNew");
   return EXIT_SUCCESS;
 }
 

@@ -26,9 +26,14 @@
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 namespace KinUtils{
+  template<typename T> 
+  Vector4<T> heliVec(const Vector4<T>& motherRef,  const Vector4<T>& ref,const Vector4<T>& mother, const Vector4<T>& daughter);
+  template<typename T>
+  Vector4<T> perpTo(const Vector4<T>& vecA,  const Vector4<T>& vecB);
+
   void SetTheta(Vector4<double>& the4Vec, double theta);
   void SetPhi(Vector4<double>& the4Vec, double phi);
-  Vector4<double> heliVec(Vector4<double>& motherRef, Vector4<double>& ref, Vector4<double>& mother, Vector4<double>& daughter);
+  Vector4<double> heliEvtGenVec(Vector4<double>& motherRef, Vector4<double>& ref, Vector4<double>& mother, Vector4<double>& daughter); 
 }
 
 

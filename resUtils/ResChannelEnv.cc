@@ -33,6 +33,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
+#include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -77,15 +78,30 @@ void ResChannelEnv::setup(ChannelID id){
   std::vector<std::string> additionalStringVecDummy;
   std::string dynTypeDefault="WoDynamics";
 
-  std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _resReaction->productionHeliDecays();
-  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
-  for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-    (*itDec)->disableIsospin();
-    if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
-    else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
-    _prodDecList->addDecay(*itDec);
+  if(_theResParser->productionFormalism()=="Heli"){
+    std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _resReaction->productionHeliDecays();
+    std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      (*itDec)->disableIsospin();
+      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
+      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+      _prodDecList->addDecay(*itDec);
+    }
   }
-
+  else if(_theResParser->productionFormalism()=="Cano"){
+    std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _resReaction->productionCanoDecays();
+    std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      (*itDec)->disableIsospin();
+      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
+      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+      _prodDecList->addDecay(*itDec);
+    }
+  }
+  else{
+    Alert << "production formalism: " << _theResParser->productionFormalism() << " is not supported for res reactions" << endmsg;
+    exit(0); 
+  }
 
   //set suffixes
   std::vector<std::string> suffixVec = _theResParser->replaceSuffixNames();

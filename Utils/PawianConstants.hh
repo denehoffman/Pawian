@@ -13,8 +13,11 @@ namespace PawianConstants {
   //square of pi0 mass 
   const double mPi0Sq           = mPi0*mPi0;
 
-  //square of pi 
+  //constant pi 
   const double pi           = M_PI;
+
+  //constant 2*pi 
+  const double twopi           = 2.*M_PI;
 
   //rad to deg 
   const double radToDeg = 180.0/M_PI;

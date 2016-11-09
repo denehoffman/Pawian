@@ -35,6 +35,7 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/FsParticleProjections.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
@@ -145,15 +146,22 @@ void  resBaseLh::initialize(){
 
   _resReactionPtr = std::static_pointer_cast<ResChannelEnv>(GlobalEnv::instance()->ResChannel(_channelID))->reaction();
 
-  std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _resReactionPtr->productionHeliDecays();
-  std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
+  // std::vector< std::shared_ptr<IsobarHeliDecay> > theDecs = _resReactionPtr->productionHeliDecays();
+  // std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator it;
+  // for (it=theDecs.begin(); it!=theDecs.end(); ++it){
+  //   //    std::shared_ptr<AbsDecay> currentDec((*it).get() );
+  //   //    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
+  //   std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
+  //   _decAmps.push_back(currentAmp);
+  // }
+
+  std::vector< std::shared_ptr<AbsDecay> > theDecs = resEnv->prodDecayList()->getList();
+  std::vector< std::shared_ptr<AbsDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-    //    std::shared_ptr<AbsDecay> currentDec((*it).get() );
-    //    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(currentDec);
     std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
-
+  
   _withPolarization=resEnv->polarizedMother();
 
   int noOfHelStates(2.*_Jmother+1);
