@@ -75,20 +75,6 @@ int main(int __argc,char *__argv[]){
   Vector4<double> decA2Vec=mother1Vec-decA1Vec;
   
 
-  double mDecB1=1.;
-  double pDecB1=0.3;
-  Vector4<double> decB1Vec(sqrt(mDecB1*mDecB1+pDecB1*pDecB1), 0., 0., pDecB1);
-  Vector4<double> decB2Vec = mother1Vec-decB1Vec;
-
-  double eDecC1=sqrt(1.+0.5*0.5);
-  double pDecC1=0.5;
-
-  
-  Vector4<double> decC1Vec(eDecC1, 0., 0., pDecC1); //parallel to mother1Vec 
-  KinUtils::SetTheta(decC1Vec, mother1Vec.Theta());
-  KinUtils::SetPhi(decC1Vec, mother1Vec.Phi());
-  Vector4<double> decC2Vec = mother1Vec-decC1Vec;
-
   cout << "************************************" << endl;
   Print4Vec(ref1Vec, "ref1Vec");
   Print4Vec(mother1Vec, "mother1Vec");
@@ -96,29 +82,55 @@ int main(int __argc,char *__argv[]){
   cout << endl;
   Print4Vec(decA1Vec, "decA1Vec");
   Print4Vec(decA2Vec, "decA2Vec");
-  cout << endl;
-  Print4Vec(decB1Vec, "decB1Vec || to z ref axis");
-  Print4Vec(decB2Vec, "decB2Vec");
-  cout << endl;
-  Print4Vec(decC1Vec, "decC1Vec || to mother1");
-  Print4Vec(decC2Vec, "decC2Vec");
 
   Vector4<double> ref1HeliVec = helicityVec(ref1Vec, mother1Vec, ref1Vec);
   Vector4<double> mother1HeliVec = helicityVec(ref1Vec, mother1Vec, mother1Vec);
   Vector4<double> recoilMother1HeliVec = helicityVec(ref1Vec, mother1Vec, recoilMother1Vec);
   Vector4<double> decA1HeliVec = helicityVec(ref1Vec, mother1Vec, decA1Vec);
   Vector4<double> decA2HeliVec = helicityVec(ref1Vec, mother1Vec, decA2Vec);
-  Vector4<double> decB1HeliVec = helicityVec(ref1Vec, mother1Vec, decB1Vec);
-  Vector4<double> decB2HeliVec = helicityVec(ref1Vec, mother1Vec, decB2Vec);
-  Vector4<double> decC1HeliVec = helicityVec(ref1Vec, mother1Vec, decC1Vec);
-  Vector4<double> decC2HeliVec = helicityVec(ref1Vec, mother1Vec, decC2Vec);
 
+  Vector4<double> refAxisPawian(0., 0., 0., 1.);
+  Vector4<double> ref1RecoilVec=refAxisPawian-ref1Vec;
+  Print4Vec(ref1RecoilVec, "ref1RecoilVec");
+  
+  Vector4<double> ref1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, ref1Vec);
+  Vector4<double> mother1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, mother1Vec);
+  Vector4<double> recoilMother1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, recoilMother1Vec);
+  Vector4<double> decA1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
+  Vector4<double> decA2HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, decA2Vec);
+
+  Vector4<double> ref1RecoilHeliVecNew = KinUtils::heliVec(refAxisPawian,ref1Vec, mother1Vec, ref1RecoilVec);
+  Vector4<double> motherref1HeliVecNew = ref1HeliVecNew+ref1RecoilHeliVecNew;
+
+  Vector4<double> ref1HeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, ref1Vec);
+  Vector4<double> mother1HeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, mother1Vec);
+  Vector4<double> recoilMother1HeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, recoilMother1Vec);
+  Vector4<double> decA1HeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
+  Vector4<double> decA2HeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, decA2Vec);
+
+  Vector4<double> ref1RecoilHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian,ref1Vec, mother1Vec, ref1RecoilVec);
+  Vector4<double> motherref1HeliVecEvtGen = ref1HeliVecEvtGen+ref1RecoilHeliVecEvtGen;
+  
+  cout << endl;
   Print4Vec(ref1HeliVec, "ref1HeliVec");
+  Print4Vec(ref1HeliVecEvtGen, "ref1HeliVecEvtGen");
+  Print4Vec(ref1HeliVecNew, "ref1HeliVecNew");
+  cout << endl;
   Print4Vec(mother1HeliVec, "mother1HeliVec");
+  Print4Vec(mother1HeliVecEvtGen, "mother1HeliVecEvtGen");
+  Print4Vec(mother1HeliVecNew, "mother1HeliVecNew");
+  cout << endl;
   Print4Vec(recoilMother1HeliVec, "recoilMother1HeliVec: anti || to z-axis");
+  Print4Vec(recoilMother1HeliVecEvtGen, "recoilMother1HeliVecEvtGen: anti || to z-axis");
+  Print4Vec(recoilMother1HeliVecNew, "recoilMother1HeliVec: anti || to z-axis");
   cout << endl;
   Print4Vec(decA1HeliVec, "decA1HeliVec");
+  Print4Vec(decA1HeliVecEvtGen, "decA1HeliVecEvtGen");
+  Print4Vec(decA1HeliVecNew, "decA1HeliVecNew");
+  cout << endl;
   Print4Vec(decA2HeliVec, "decA2HeliVec");
+  Print4Vec(decA2HeliVecEvtGen, "decA2HeliVecEvtGen");
+  Print4Vec(decA2HeliVecNew, "decA2HeliVecNew");
 
   cout << "\ncheck theta and Phi with EvtGen:" << endl;
   EvtVector4R ref1EvtGen(ref1Vec.E(), ref1Vec.Px(), ref1Vec.Py(), ref1Vec.Pz());
@@ -139,68 +151,150 @@ int main(int __argc,char *__argv[]){
   double phiA1Heli1a =  EvtDecayAnglePhi(ref1aEvtGen, ref1EvtGen, mother1VecEvtGen, decA1VecEvtGen);
   cout << "phiA1Heli1a EvtGen: " << phiA1Heli1a*PawianConstants::radToDeg << endl;  
 
-  Vector4<double> refAxisPawian(0., 0., 0., 1.);
-  Vector4<double> ref1RecoilVec=refAxisPawian-ref1Vec;
-  Print4Vec(ref1RecoilVec, "ref1RecoilVec");
-  Vector4<double> decA1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
-  Vector4<double> recoilMother1HeliVecNew = KinUtils::heliVec(refAxisPawian, ref1Vec, mother1Vec, recoilMother1Vec);
-  Vector4<double> ref1HeliVecNew = KinUtils::heliVec(refAxisPawian,ref1Vec, mother1Vec, ref1Vec);
-  Vector4<double> ref1RecoilHeliVecNew = KinUtils::heliVec(refAxisPawian,ref1Vec, mother1Vec, ref1RecoilVec);
-  Vector4<double> motherref1HeliVecNew = ref1HeliVecNew+ref1RecoilHeliVecNew;
-
-  Print4Vec(decA1HeliVecNew, "decA1HeliVecNew");
-  Print4Vec(recoilMother1HeliVecNew, "recoilMother1HeliVecNew");
-  Print4Vec(ref1HeliVecNew, "ref1HeliVecNew");
-  Print4Vec(ref1RecoilHeliVecNew, "ref1RecoilHeliVecNew");
-
-  Vector4<double> crossMotherRefMotherHeli=KinUtils::perpTo(motherref1HeliVecNew, refAxisPawian); 
-  Vector4<double> crossNormMotherRefMother_MotherHeli=KinUtils::perpTo(crossMotherRefMotherHeli, refAxisPawian);
-  cout << "crossMotherRefMotherHeli (y-direction): " << crossMotherRefMotherHeli << "\n" << endl;
-  cout << "crossNormMotherRefMother_MotherHeli (x-direction): " << crossNormMotherRefMother_MotherHeli << "\n" << endl; 
+  Vector4<double> crossMotherRefMotherHeliNew=KinUtils::perpTo(motherref1HeliVecNew, refAxisPawian); 
+  Vector4<double> crossNormMotherRefMother_MotherHeliNew=KinUtils::perpTo(crossMotherRefMotherHeliNew, refAxisPawian);
+  cout << "\ncrossMotherRefMotherHeliNew (y-direction): " << crossMotherRefMotherHeliNew << endl;
+  cout << "crossNormMotherRefMother_MotherHeliNew (x-direction): " << crossNormMotherRefMother_MotherHeliNew << "\n" << endl; 
     
-  Vector4<double> decA1HeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, decA1Vec);
-  Vector4<double> recoilMother1HeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian, ref1Vec, mother1Vec, recoilMother1Vec);
-  Vector4<double> ref1HeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian,ref1Vec, mother1Vec, ref1Vec);
-  Vector4<double> ref1RecoilHeliVecEvtGenNew = KinUtils::heliEvtGenVec(refAxisPawian,ref1Vec, mother1Vec, ref1RecoilVec);
-  Vector4<double> motherref1HeliVecEvtGenNew = ref1HeliVecEvtGenNew+ref1RecoilHeliVecEvtGenNew;
-  Print4Vec(decA1HeliVecEvtGenNew, "decA1HeliVecEvtGenNew");
-  Print4Vec(recoilMother1HeliVecEvtGenNew, "recoilMother1HeliVecEvtGenNew");
-  Print4Vec(ref1HeliVecEvtGenNew, "ref1HeliVecEvtGenNew");
-  Print4Vec(ref1RecoilHeliVecEvtGenNew, "ref1RecoilHeliVecEvtGenNew");
-  Print4Vec(motherref1HeliVecEvtGenNew, "motherref1HeliVecEvtGenNew");
 
-  Vector4<double> crossMotherRefMotherHeli1=KinUtils::perpTo(motherref1HeliVecEvtGenNew, refAxisPawian); 
-  Vector4<double> cross_crossMotherRefMotherHeli_MotherHeli1=KinUtils::perpTo(crossMotherRefMotherHeli1, refAxisPawian);
-  cout << "crossMotherRefMotherHeli1 (y-direction): " << crossMotherRefMotherHeli1 << "\n" << endl;
-  cout << "cross_crossMotherRefMotherHeli_MotherHeli1 (x-direction): " << cross_crossMotherRefMotherHeli_MotherHeli1 << "\n" << endl; 
+  cout << "\n************************************" << endl;
+  cout << "rotate reference vector!!!!" << endl; 
 
+  Vector4<double> refRotRefVec=ref1Vec;
+  KinUtils::SetTheta(refRotRefVec, 25./PawianConstants::radToDeg);
+  KinUtils::SetPhi(refRotRefVec, -23./PawianConstants::radToDeg);
+
+  Vector4<double> motherRotRefVec(2., 0.3, 0.4, 0.5);
+  Vector4<double> recoilMotherRotRefVec = refRotRefVec-motherRotRefVec;
+
+  Vector4<double> decA1RotRefVec=decA1Vec;
+  Vector4<double> decA2RotRefVec=motherRotRefVec-decA1RotRefVec;
+  cout << "************************************" << endl;
+  Print4Vec(refRotRefVec, "refRotRefVec");
+  Print4Vec(motherRotRefVec, "motherRotRefVec");
+  Print4Vec(recoilMotherRotRefVec, "recoilMotherRotRefVec");
+  cout << "************************************" << endl;
+  cout << endl;
+  Print4Vec(decA1RotRefVec, "decA1RotRefVec");
+  Print4Vec(decA2RotRefVec, "decA2RotRefVec");
+
+
+  Vector4<double> refRotRefHeliVec = helicityVec(refRotRefVec, motherRotRefVec, refRotRefVec);
+  Vector4<double> motherRotRefHeliVec = helicityVec(refRotRefVec, motherRotRefVec, motherRotRefVec);
+  Vector4<double> recoilMotherRotRefHeliVec = helicityVec(refRotRefVec, motherRotRefVec, recoilMotherRotRefVec);
+  Vector4<double> decA1RotRefHeliVec = helicityVec(refRotRefVec, motherRotRefVec, decA1RotRefVec);
+  Vector4<double> decA2RotRefHeliVec = helicityVec(refRotRefVec, motherRotRefVec, decA2RotRefVec);
+
+  Vector4<double> refRotRefRecoilVec=refAxisPawian-refRotRefVec;
+  Print4Vec(refRotRefRecoilVec, "refRotRefRecoilVec");
+  
+  Vector4<double> refRotRefHeliVecNew = KinUtils::heliVec(refAxisPawian, refRotRefVec, motherRotRefVec, refRotRefVec);
+  Vector4<double> motherRotRefHeliVecNew = KinUtils::heliVec(refAxisPawian, refRotRefVec, motherRotRefVec, motherRotRefVec);
+  Vector4<double> recoilMotherRotRefHeliVecNew = KinUtils::heliVec(refAxisPawian, refRotRefVec, motherRotRefVec, recoilMotherRotRefVec);
+  Vector4<double> decA1RotRefHeliVecNew = KinUtils::heliVec(refAxisPawian, refRotRefVec, motherRotRefVec, decA1RotRefVec);
+  Vector4<double> decA2RotRefHeliVecNew = KinUtils::heliVec(refAxisPawian, refRotRefVec, motherRotRefVec, decA2RotRefVec);
+
+  Vector4<double> refRotRefRecoilHeliVecNew = KinUtils::heliVec(refAxisPawian,refRotRefVec, motherRotRefVec, refRotRefRecoilVec);
+  Vector4<double> motherrefRotRefHeliVecNew = refRotRefHeliVecNew+refRotRefRecoilHeliVecNew;
+
+  Vector4<double> refRotRefHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, refRotRefVec, motherRotRefVec, refRotRefVec);
+  Vector4<double> motherRotRefHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, refRotRefVec, motherRotRefVec, motherRotRefVec);
+  Vector4<double> recoilMotherRotRefHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, refRotRefVec, motherRotRefVec, recoilMotherRotRefVec);
+  Vector4<double> decA1RotRefHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, refRotRefVec, motherRotRefVec, decA1RotRefVec);
+  Vector4<double> decA2RotRefHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian, refRotRefVec, motherRotRefVec, decA2RotRefVec);
+
+  Vector4<double> refRotRefRecoilHeliVecEvtGen = KinUtils::heliEvtGenVec(refAxisPawian,refRotRefVec, motherRotRefVec, refRotRefRecoilVec);
+  Vector4<double> motherrefRotRefHeliVecEvtGen = refRotRefHeliVecEvtGen+refRotRefRecoilHeliVecEvtGen;
+  
+  cout << endl;
+  Print4Vec(refRotRefHeliVec, "refRotRefHeliVec");
+  Print4Vec(refRotRefHeliVecEvtGen, "refRotRefHeliVecEvtGen");
+  Print4Vec(refRotRefHeliVecNew, "refRotRefHeliVecNew");
+  cout << endl;
+  Print4Vec(motherRotRefHeliVec, "motherRotRefHeliVec");
+  Print4Vec(motherRotRefHeliVecEvtGen, "motherRotRefHeliVecEvtGen");
+  Print4Vec(motherRotRefHeliVecNew, "motherRotRefHeliVecNew");
+  cout << endl;
+  Print4Vec(recoilMotherRotRefHeliVec, "recoilMotherRotRefHeliVec: anti || to z-axis");
+  Print4Vec(recoilMotherRotRefHeliVecEvtGen, "recoilMotherRotRefHeliVecEvtGen: anti || to z-axis");
+  Print4Vec(recoilMotherRotRefHeliVecNew, "recoilMotherRotRefHeliVec: anti || to z-axis");
+  cout << endl;
+  Print4Vec(decA1RotRefHeliVec, "decA1RotRefHeliVec");
+  Print4Vec(decA1RotRefHeliVecEvtGen, "decA1RotRefHeliVecEvtGen");
+  Print4Vec(decA1RotRefHeliVecNew, "decA1RotRefHeliVecNew");
+  cout << endl;
+  Print4Vec(decA2RotRefHeliVec, "decA2RotRefHeliVec");
+  Print4Vec(decA2RotRefHeliVecEvtGen, "decA2RotRefHeliVecEvtGen");
+  Print4Vec(decA2RotRefHeliVecNew, "decA2RotRefHeliVecNew");
+
+  Vector4<double> crossMotherRefMotherRotRefHeliNew=KinUtils::perpTo(motherrefRotRefHeliVecNew, refAxisPawian); 
+  Vector4<double> crossNormMotherRefMother_MotherRotRefHeliNew=KinUtils::perpTo(crossMotherRefMotherRotRefHeliNew, refAxisPawian);
+
+  cout << "\ncrossMotherRefMotherRotRefHeliNew (y-direction): " << crossMotherRefMotherRotRefHeliNew << endl;
+  cout << "crossNormMotherRefMother_MotherRotRefHeliNew (x-direction): " << crossNormMotherRefMother_MotherRotRefHeliNew << "\n" << endl;
+
+
+   cout << "\n************************************" << endl;
+  cout << "rotate mother reference vector!!!!" << endl;
+  Vector4<double> mother_MotherRefRot_Axis=ref1Vec+Vector4<double>(1., 0.2, 0.2, 0.);
 
   cout << "************************************" << endl;
-  cout << "************************************" << endl;
+  Print4Vec(ref1Vec, "ref1Vec");
+  Print4Vec(mother1Vec, "mother1Vec");
+  Print4Vec(recoilMother1Vec, "recoilMother1Vec");
+  cout << endl;
+  Print4Vec(decA1Vec, "decA1Vec");
+  Print4Vec(decA2Vec, "decA2Vec");
 
-  Vector4<double> motherRef2Vec(sqrt(3.1*3.1+1.), 0., 0., 1.);
-  KinUtils::SetTheta(motherRef2Vec, 55./PawianConstants::radToDeg);
-  KinUtils::SetPhi(motherRef2Vec, -100./PawianConstants::radToDeg); 
-  Vector4<double> ref2Vec(2., -0.1, 0.2, .3);
-  Vector4<double> ref2VecRecoil=motherRef2Vec-ref2Vec;
-  Vector4<double> mother2Vec(1., 0.1, 0.3, -0.2);
-  Vector4<double> daughter2Vec(1., 0.1, 0.1, 0.1);
+  Vector4<double> ref1Recoil_MotherRefRot_Vec=mother_MotherRefRot_Axis-ref1Vec;
+  Print4Vec(mother_MotherRefRot_Axis, "mother_MotherRefRot_Axis");
+  Print4Vec(ref1Recoil_MotherRefRot_Vec, "ref1RecoilRotVec");
 
+  Vector4<double> ref1_MotherRefRot_HeliVecNew = KinUtils::heliVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, ref1Vec);
+  Vector4<double> mother1_MotherRefRot_HeliVecNew = KinUtils::heliVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, mother1Vec);
+  Vector4<double> recoilMother1_MotherRefRot_HeliVecNew = KinUtils::heliVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, recoilMother1Vec);
+  Vector4<double> decA1_MotherRefRot_HeliVecNew = KinUtils::heliVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, decA1Vec);
+  Vector4<double> decA2_MotherRefRot_HeliVecNew = KinUtils::heliVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, decA2Vec);
 
-  Vector4<double> ref2VecHeli = KinUtils::heliVec(motherRef2Vec, ref2Vec, mother2Vec, ref2Vec);
-  Vector4<double> ref2VecRecoilHeli = KinUtils::heliVec(motherRef2Vec, ref2Vec, mother2Vec, ref2VecRecoil);
-  Vector4<double> mother2VecHeli = KinUtils::heliVec(motherRef2Vec, ref2Vec, mother2Vec, mother2Vec);
-  Print4Vec(ref2VecHeli, "ref2VecHeli");
-  Print4Vec(ref2VecRecoilHeli, "ref2VecRecoilHeli");
-  Print4Vec(mother2VecHeli, "mother2VecHeli");
+  Vector4<double> ref1Recoil_MotherRefRot_HeliVecNew = KinUtils::heliVec(mother_MotherRefRot_Axis,ref1Vec, mother1Vec, ref1Recoil_MotherRefRot_Vec);
+  Vector4<double> motherref1_MotherRefRot_HeliVecNew = ref1_MotherRefRot_HeliVecNew+ref1Recoil_MotherRefRot_HeliVecNew;
 
+  Vector4<double> ref1Heli_MotherRefRot_VecEvtGen = KinUtils::heliEvtGenVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, ref1Vec);
+  Vector4<double> mother1Heli_MotherRefRot_VecEvtGen = KinUtils::heliEvtGenVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, mother1Vec);
+  Vector4<double> recoilMother1_MotherRefRot_HeliVecEvtGen = KinUtils::heliEvtGenVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, recoilMother1Vec);
+  Vector4<double> decA1Heli_MotherRefRot_VecEvtGen = KinUtils::heliEvtGenVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, decA1Vec);
+  Vector4<double> decA2Heli_MotherRefRot_VecEvtGen = KinUtils::heliEvtGenVec(mother_MotherRefRot_Axis, ref1Vec, mother1Vec, decA2Vec);
 
-  Vector4<double> ref2VecHeliNew = KinUtils::heliEvtGenVec(motherRef2Vec, ref2Vec, mother2Vec, ref2Vec);
-  Vector4<double> ref2VecRecoilHeliNew = KinUtils::heliEvtGenVec(motherRef2Vec, ref2Vec, mother2Vec, ref2VecRecoil);
-  Vector4<double> mother2VecHeliNew = KinUtils::heliEvtGenVec(motherRef2Vec, ref2Vec, mother2Vec, mother2Vec);
-  Print4Vec(ref2VecHeliNew, "ref2VecHeliNew");
-  Print4Vec(ref2VecRecoilHeliNew, "ref2VecRecoilHeliNew");
-  Print4Vec(mother2VecHeliNew, "mother2VecHeliNew");
+  Vector4<double> ref1Recoil_MotherRefRot_HeliVecEvtGen = KinUtils::heliEvtGenVec(mother_MotherRefRot_Axis,ref1Vec, mother1Vec, ref1RecoilVec);
+  Vector4<double> motherref1_MotherRefRot_HeliVecEvtGen = ref1HeliVecEvtGen+ref1RecoilHeliVecEvtGen;
+
+  cout << endl;
+  Print4Vec(ref1HeliVec, "ref1HeliVec");
+  Print4Vec(ref1Heli_MotherRefRot_VecEvtGen, "ref1Heli_MotherRefRot_VecEvtGen");
+  Print4Vec(ref1_MotherRefRot_HeliVecNew, "ref1_MotherRefRot_HeliVecNew");
+  cout << endl;
+  Print4Vec(mother1HeliVec, "mother1HeliVec");
+  Print4Vec(mother1Heli_MotherRefRot_VecEvtGen, "mother1Heli_MotherRefRot_VecEvtGen");
+  Print4Vec(mother1_MotherRefRot_HeliVecNew, "mother1_MotherRefRot_HeliVecNew");
+  cout << endl;
+  Print4Vec(recoilMother1HeliVec, "recoilMother1HeliVec: anti || to z-axis");
+  Print4Vec(recoilMother1_MotherRefRot_HeliVecEvtGen, "recoilMother1_MotherRefRot_HeliVecEvtGen: anti || to z-axis");
+  Print4Vec(recoilMother1_MotherRefRot_HeliVecNew, "recoilMother1_MotherRefRot_HeliVecNew: anti || to z-axis");
+  cout << endl;
+  Print4Vec(decA1HeliVec, "decA1HeliVec");
+  Print4Vec(decA1Heli_MotherRefRot_VecEvtGen, "decA1Heli_MotherRefRot_VecEvtGen");
+  Print4Vec(decA1_MotherRefRot_HeliVecNew, "decA1_MotherRefRot_HeliVecNew");
+  cout << endl;
+  Print4Vec(decA2HeliVec, "decA2HeliVec");
+  Print4Vec(decA2Heli_MotherRefRot_VecEvtGen, "decA2Heli_MotherRefRot_VecEvtGen");
+  Print4Vec(decA2_MotherRefRot_HeliVecNew, "decA2_MotherRefRot_HeliVecNew");
+
+  Vector4<double> crossMotherRefMother_MotherRefRot_HeliNew=KinUtils::perpTo(ref1Recoil_MotherRefRot_HeliVecNew, refAxisPawian); //refAxisPawian = z-axis
+  Vector4<double> crossNormMotherRefMother_Mother_MotherRefRot_HeliNew=KinUtils::perpTo(crossMotherRefMother_MotherRefRot_HeliNew, refAxisPawian);
+  // Vector4<double> crossMotherRefMother_MotherRefRot_HeliNew=KinUtils::perpTo(recoilMother1_MotherRefRot_HeliVecNew, motherref1_MotherRefRot_HeliVecNew); 
+  // Vector4<double> crossNormMotherRefMother_Mother_MotherRefRot_HeliNew=KinUtils::perpTo(crossMotherRefMother_MotherRefRot_HeliNew, motherref1_MotherRefRot_HeliVecNew);
+  cout << "\ncrossMotherRefMother_MotherRefRot_HeliNew (y-direction): " << crossMotherRefMother_MotherRefRot_HeliNew << endl;
+  cout << "crossNormMotherRefMother_Mother_MotherRefRot_HeliNew (x-direction): " << crossNormMotherRefMother_Mother_MotherRefRot_HeliNew << "\n" << endl;  
   return EXIT_SUCCESS;
 }
 
