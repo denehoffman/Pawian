@@ -95,6 +95,30 @@ Vector4<T> KinUtils::heliVec(const Vector4<T>& motherRef,  const Vector4<T>& ref
   return result;
 }
 
+template<typename T> 
+Vector4<T> KinUtils::gottfriedJacksonVec(const Vector4<T>& motherRef,  const Vector4<T>& ref,const Vector4<T>& mother, const Vector4<T>& daughter){
+  Vector4<T> result=daughter;
+  Vector4<T> refTrafo=ref;
+  Vector4<T> motherRefTrafo=motherRef;
+
+  //boost all vectors into the mother rest frame
+  result.Boost(mother);
+  refTrafo.Boost(mother);
+  motherRefTrafo.Boost(mother);
+
+  //rotate vectors so that motherRefTrafo moves in the direction of the z-axis
+  result.RotateZ(-motherRefTrafo.Phi());
+  result.RotateY(-motherRefTrafo.Theta());  
+
+  refTrafo.RotateZ(-motherRefTrafo.Phi());
+  refTrafo.RotateY(-motherRefTrafo.Theta());
+  //rotate around the z-axis so that refTrafo lies in the x-z plain
+  result.RotateZ(PawianConstants::pi-refTrafo.Phi());
+
+  return result;
+}
+
+
 template<typename T>
 Vector4<T> KinUtils::perpTo(const Vector4<T>& vecA,  const Vector4<T>& vecB){
 
@@ -109,5 +133,7 @@ Vector4<T> KinUtils::perpTo(const Vector4<T>& vecA,  const Vector4<T>& vecB){
 
 template Vector4<double> KinUtils::heliVec(const Vector4<double>&,  const Vector4<double>&,const Vector4<double>& , const Vector4<double>& );  
 template Vector4<float> KinUtils::heliVec(const Vector4<float>&,  const Vector4<float>&,const Vector4<float>& , const Vector4<float>& );
+template Vector4<double> KinUtils::gottfriedJacksonVec(const Vector4<double>&,  const Vector4<double>&,const Vector4<double>&, const Vector4<double>&);
+template Vector4<float> KinUtils::gottfriedJacksonVec(const Vector4<float>&,  const Vector4<float>&,const Vector4<float>&, const Vector4<float>&);
 template Vector4<double> KinUtils::perpTo(const Vector4<double>& vecA,  const Vector4<double>& vecB);
 template Vector4<float> KinUtils::perpTo(const Vector4<float>& vecA,  const Vector4<float>& vecB);

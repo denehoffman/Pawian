@@ -294,7 +294,74 @@ int main(int __argc,char *__argv[]){
   // Vector4<double> crossMotherRefMother_MotherRefRot_HeliNew=KinUtils::perpTo(recoilMother1_MotherRefRot_HeliVecNew, motherref1_MotherRefRot_HeliVecNew); 
   // Vector4<double> crossNormMotherRefMother_Mother_MotherRefRot_HeliNew=KinUtils::perpTo(crossMotherRefMother_MotherRefRot_HeliNew, motherref1_MotherRefRot_HeliVecNew);
   cout << "\ncrossMotherRefMother_MotherRefRot_HeliNew (y-direction): " << crossMotherRefMother_MotherRefRot_HeliNew << endl;
-  cout << "crossNormMotherRefMother_Mother_MotherRefRot_HeliNew (x-direction): " << crossNormMotherRefMother_Mother_MotherRefRot_HeliNew << "\n" << endl;  
+  cout << "crossNormMotherRefMother_Mother_MotherRefRot_HeliNew (x-direction): " << crossNormMotherRefMother_Mother_MotherRefRot_HeliNew << "\n" << endl;
+
+
+
+  cout << "\n************************************" << endl;
+  cout << "\n now look into the reaction pbar p -> phi eta at 2 GeV/c with eta -> gamma gamma\n" << endl;
+  Vector4<double> pLabVec(PawianConstants::mProton, 0., 0., 0.);
+  Vector4<double> pbarLabVec(sqrt(PawianConstants::mProton*PawianConstants::mProton+2.0*2.0), 0., 0., 2.0);
+  Vector4<double> pbarpLabVec=pLabVec+pbarLabVec;
+
+  Vector4<double> phiLabVec(sqrt(1.02*1.02+1.729*1.729), 0. ,0., 1.729);
+  KinUtils::SetTheta(phiLabVec, 30./PawianConstants::radToDeg);
+  KinUtils::SetPhi(phiLabVec, -45./PawianConstants::radToDeg);
+
+  Vector4<double> etaLabVec= pLabVec+pbarLabVec-phiLabVec;
+
+  Vector4<double> gamma1LabVec(0.19176106, 0. ,0., 0.19176106);
+  KinUtils::SetTheta(gamma1LabVec, 10./PawianConstants::radToDeg);
+  KinUtils::SetPhi(gamma1LabVec, -20./PawianConstants::radToDeg);
+
+  Vector4<double> gamma2LabVec=etaLabVec-gamma1LabVec;
+  
+  Print4Vec(pLabVec, "pLabVec");
+  Print4Vec(pbarLabVec, "pbarLabVec");
+  Print4Vec(pbarpLabVec, "pbarpLabVec");
+  Print4Vec(phiLabVec, "phiLabVec");
+  Print4Vec(etaLabVec, "etaLabVec");
+  Print4Vec(gamma1LabVec, "gamma1LabVec");
+  Print4Vec(gamma2LabVec, "gamma2LabVec");
+
+
+  Vector4<double> gamma1HeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma1LabVec);
+  Vector4<double> gamma2HeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma2LabVec);
+  Vector4<double> phiHeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, phiLabVec);
+  Vector4<double> pbarHeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, pbarLabVec);
+  Vector4<double> pHeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, pLabVec);
+  Vector4<double> pbarpHeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, pbarpLabVec);
+
+  cout << "\n" << endl;
+  Print4Vec(pHeliVec, "pHeliVec");
+  Print4Vec(pbarHeliVec, "pbarHeliVec");
+  Print4Vec(pbarpHeliVec, "pbarpHeliVec");
+  Print4Vec(phiHeliVec, "phiHeliVec");
+  Print4Vec(gamma1HeliVec, "gamma1HeliVec");
+  Print4Vec(gamma2HeliVec, "gamma2HeliVec");
+
+  cout << "\n the same vectors transformed into the Gottfried Jackson frame\n" << endl;
+  Vector4<double> gamma1GfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma1LabVec);
+  Vector4<double> gamma2GfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma2LabVec);
+  Vector4<double> phiGfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, phiLabVec);
+  Vector4<double> pGfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, pLabVec);
+  Vector4<double> pbarGfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, pbarLabVec);
+  Vector4<double> pbarpGfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, pbarpLabVec);
+
+  Print4Vec(pGfVec, "pGfVec");
+  Print4Vec(pbarGfVec, "pbarGfVec");
+  Print4Vec(pbarpGfVec, "pbarpGfVec");
+  Print4Vec(phiGfVec, "phiGfVec");  
+  Print4Vec(gamma1GfVec, "gamma1GfVec");
+  Print4Vec(gamma2GfVec, "gamma2GfVec");
+
+  Vector4<double> phiGfNegVec(phiGfVec.E(), -phiGfVec.Px(), -phiGfVec.Py(), -phiGfVec.Pz());
+ 
+  Vector4<double> crossPbarGf_phiNegDirGf=KinUtils::perpTo(pbarGfVec, phiGfNegVec);
+  cout << "\ncrossPbarGf_phiNegDirGf (y-direction): " << crossPbarGf_phiNegDirGf << endl;
+
+  Vector4<double> cross_crossPbarGf_phiNegDirGf_zAxis=KinUtils::perpTo(crossPbarGf_phiNegDirGf, refAxisPawian);
+  cout << "\ncross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;      
   return EXIT_SUCCESS;
 }
 

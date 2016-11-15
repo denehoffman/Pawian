@@ -335,6 +335,7 @@ Baryon Delta(1600)++ 	\Delta(1600)^{++}  	6  3 1   0  0   3    3 	0  0	1.6 	0.32
 Baryon Delta(1620)++ 	\Delta(1620)^{++}  	6  1 -1  0  0   3    3 	0  0	1.63 	0.14	relBW	        [PDG]
 Baryon Delta(1700)++ 	\Delta(1700)^{++}  	6  3 -1  0  0   3    3 	0  0	1.7 	0.3	relBW	        [PDG]
 Baryon Delta(1750)++ 	\Delta(1750)^{++}  	6  1 1   0  0   3    3 	0  0	1.75 	0.52	relBW	        [PDG]
+Baryon Delta(1900)++ 	\Delta(1900)^{++}  	6  1 -1  0  0   3    3 	0  0	1.86 	0.250	relBW	        [PDG]
 Baryon Delta(1910)++ 	\Delta(1910)^{++}  	6  1 1   0  0   3    3 	0  0	1.89 	0.3	relBW	        [PDG]
 Baryon Delta(2000)++    \Delta(2000)^{++}       6  5 1   0  0   3    3  0  0    2.0     0.3     relBW           [PDG]
 Baryon LambdaS01Matrix 	\LambdaS01Matrix  	0  1 -1  0  0   0    0  -1 0	1.       0.1    undefined	[none] 	

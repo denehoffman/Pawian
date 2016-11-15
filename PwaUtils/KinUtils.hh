@@ -28,6 +28,10 @@
 namespace KinUtils{
   template<typename T> 
   Vector4<T> heliVec(const Vector4<T>& motherRef,  const Vector4<T>& ref,const Vector4<T>& mother, const Vector4<T>& daughter);
+  
+  template<typename T>   
+  Vector4<T> gottfriedJacksonVec(const Vector4<T>& motherRef,  const Vector4<T>& ref,const Vector4<T>& mother, const Vector4<T>& daughter);
+  
   template<typename T>
   Vector4<T> perpTo(const Vector4<T>& vecA,  const Vector4<T>& vecB);
 
