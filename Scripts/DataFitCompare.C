@@ -1,3 +1,26 @@
+//************************************************************************//
+//									  //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//          	   - Ruhr-Universität Bochum 				  //
+//									  //
+//  This file is part of Pawian.					  //
+//									  //
+//  Pawian is free software: you can redistribute it and/or modify	  //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or 	  //
+//  (at your option) any later version.	 	      	  	   	  //
+//									  //
+//  Pawian is distributed in the hope that it will be useful,		  //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
+//  GNU General Public License for more details.	      		  //
+//									  //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
+//									  //
+//************************************************************************//
+
 #include <iostream>
 #include <sstream>
 #include "TFile.h"
@@ -93,7 +116,13 @@ double CalcKolmogorov(TH1F* histoData, TH1F* histoFit){
 
 void DataFitCompareAll(std::string rootFileName, bool saveImage){
   TFile* tFile= new TFile(rootFileName.c_str());   
-   std::vector<std::string> histnames;
+   std::vector<std::string> histnamesMasses;
+   std::vector<std::string> histnamesAnglesHeli;
+   std::vector<std::string> histnamesAnglesGJ;
+
+   std::string strTheta("Theta");
+   std::string strPhi("Phi");
+   std::string strGJ("GJ");
 
    TIter nextkey(tFile->GetListOfKeys());
    TKey *key;
@@ -108,22 +137,44 @@ void DataFitCompareAll(std::string rootFileName, bool saveImage){
       std::string aname = sname.substr(4);
       
       if(pname == "Data"){
-	 histnames.push_back(aname);
+	//sort angle hists
+	if ( (aname.find("Theta") != string::npos) || (aname.find("Phi") != string::npos) ){
+	  //angle hists in GJ system
+	  if ( aname.find("GJ") != string::npos) histnamesAnglesGJ.push_back(aname);
+	  else histnamesAnglesHeli.push_back(aname);      
+	}
+	else histnamesMasses.push_back(aname);
       }
    }
 
-   TCanvas* canvas = new TCanvas("canvas","c1",1000,1000);
-   int numhists = histnames.size();
+   TCanvas* canvasMass = new TCanvas("Masses","Masses",20, 20, 900,900);
+   int numhistsMasses = histnamesMasses.size();
+   canvasMass->Divide(std::ceil(sqrt(numhistsMasses)), std::ceil(sqrt(numhistsMasses)));
+   for(int i=0; i<numhistsMasses; i++){
+      canvasMass->cd(i+1);
+      DataFitCompare(rootFileName, histnamesMasses.at(i), false);
+   }
 
-   canvas->Divide(std::ceil(sqrt(numhists)), std::ceil(sqrt(numhists)));
+   TCanvas* canvasHeliAngles = new TCanvas("Angles helicity stystem","Angles helicity stystem",50, 70, 900,900);
+   int numhistsHeliAngles = histnamesAnglesHeli.size();
+   canvasHeliAngles->Divide(std::ceil(sqrt(numhistsHeliAngles)), std::ceil(sqrt(numhistsHeliAngles)));
+   for(int i=0; i<numhistsHeliAngles; i++){
+      canvasHeliAngles->cd(i+1);
+      DataFitCompare(rootFileName, histnamesAnglesHeli.at(i), false);
+   }
 
-   for(int i=0; i<numhists; i++){
-      canvas->cd(i+1);
-      DataFitCompare(rootFileName, histnames.at(i), false);
+   TCanvas* canvasGJAngles = new TCanvas("Angles Gottfried Jackson stystem","Angles Gottfried Jackson stystem",80, 120,900,900);
+   int numhistsGJAngles = histnamesAnglesGJ.size();
+   canvasGJAngles->Divide(std::ceil(sqrt(numhistsGJAngles)), std::ceil(sqrt(numhistsGJAngles)));
+   for(int i=0; i<numhistsGJAngles; i++){
+      canvasGJAngles->cd(i+1);
+      DataFitCompare(rootFileName, histnamesAnglesGJ.at(i), false);
    }
 
    if(saveImage){
-      canvas->SaveAs("DataFitCompFile.png");
+      canvasMass->SaveAs("DataFitCompFileMasses.png");
+      canvasHeliAngles->SaveAs("DataFitCompFileHeliAngles.png");
+      canvasGJAngles->SaveAs("DataFitCompFileGJAngles.png");
    }
 }
 

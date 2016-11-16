@@ -93,7 +93,7 @@ struct angleHistData {
       _name+=(*it);
     }
 
-    _name+="_Heli";
+    _name+="_From";
 
     for(it=motherPNames.begin(); it!=motherPNames.end(); ++it){
       _name+=(*it);
@@ -202,7 +202,7 @@ public:
 protected:
 
   void fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
-  void fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill);
+  void fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill, std::string frame="heli");
   void fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill);
 
  TFile* _theTFile;
@@ -220,6 +220,11 @@ protected:
  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap2D;
  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap2D;
  std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap2D;
+
+  //angles in the Gottfried Jackson system
+  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleGJDataHistMap;
+ std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleGJMcHistMap;
+ std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleGJFitHistMap;
 
  virtual void initRootStuff()=0;
 

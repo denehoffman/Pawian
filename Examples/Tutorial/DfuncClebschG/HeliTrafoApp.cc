@@ -325,6 +325,7 @@ int main(int __argc,char *__argv[]){
   Print4Vec(gamma2LabVec, "gamma2LabVec");
 
 
+  cout << "\n vectors transformed into the helicity frame of the eta resonance\n" << endl;
   Vector4<double> gamma1HeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma1LabVec);
   Vector4<double> gamma2HeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma2LabVec);
   Vector4<double> phiHeliVec = KinUtils::heliVec(pbarLabVec, pbarpLabVec, etaLabVec, phiLabVec);
@@ -340,7 +341,7 @@ int main(int __argc,char *__argv[]){
   Print4Vec(gamma1HeliVec, "gamma1HeliVec");
   Print4Vec(gamma2HeliVec, "gamma2HeliVec");
 
-  cout << "\n the same vectors transformed into the Gottfried Jackson frame\n" << endl;
+  cout << "\n the same vectors transformed into the Gottfried Jackson frame of the eta resonance\n" << endl;
   Vector4<double> gamma1GfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma1LabVec);
   Vector4<double> gamma2GfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, gamma2LabVec);
   Vector4<double> phiGfVec = KinUtils::gottfriedJacksonVec(pbarLabVec, pbarpLabVec, etaLabVec, phiLabVec);
@@ -361,7 +362,7 @@ int main(int __argc,char *__argv[]){
   cout << "\ncrossPbarGf_phiNegDirGf (y-direction): " << crossPbarGf_phiNegDirGf << endl;
 
   Vector4<double> cross_crossPbarGf_phiNegDirGf_zAxis=KinUtils::perpTo(crossPbarGf_phiNegDirGf, refAxisPawian);
-  cout << "\ncross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;      
+  cout << "cross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;      
   return EXIT_SUCCESS;
 }
 
