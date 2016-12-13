@@ -89,6 +89,8 @@ private:
   std::vector<TH1F*> _ElasticityH1Vec;
   std::vector<TH1F*> _SqrT11H1Vec;
   std::vector<TH1F*> _phpH1Vec;
+  std::vector<TH1F*> _phpH1RealVec;
+  std::vector<TH1F*> _phpH1ImagVec;
 
   void init();
 };

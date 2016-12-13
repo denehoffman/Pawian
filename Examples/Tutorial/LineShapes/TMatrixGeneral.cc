@@ -131,6 +131,18 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSh
     currentphpH1->SetYTitle("#rho");
     currentphpH1->SetXTitle("mass/GeV");
     _phpH1Vec.push_back(currentphpH1);
+
+    std::string currentphpRealKey="phase space factor (real)"+key;
+    TH1F* currentphpRealH1=new TH1F(currentphpRealKey.c_str(), currentphpRealKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentphpRealH1->SetYTitle("Re #rho");
+    currentphpRealH1->SetXTitle("mass/GeV");
+    _phpH1RealVec.push_back(currentphpRealH1);
+
+    std::string currentphpImagKey="phase space factor (imag)"+key;
+    TH1F* currentphpImagH1=new TH1F(currentphpImagKey.c_str(), currentphpImagKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentphpImagH1->SetYTitle("Imag #rho");
+    currentphpImagH1->SetXTitle("mass/GeV");
+    _phpH1ImagVec.push_back(currentphpImagH1);
   }
 
   DebugMsg << "_massMin: "<< _massMin
@@ -163,7 +175,9 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSh
 
       _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i)));
 
-      _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho))); 
+      _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
+      _phpH1RealVec.at(i)->Fill(mass, currentRho.real());
+      _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag()); 
     }    
   }
 
