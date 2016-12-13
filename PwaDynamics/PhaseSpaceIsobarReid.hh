@@ -21,32 +21,33 @@
 //									  //
 //************************************************************************//
 
-// PhaseSpaceIsobar class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// PhaseSpaceIsobarReid class definition file. -*- C++ -*-
+// Copyright 2016 Bertram Kopf
+// phase space factor which fulfils the analytic continuation and unitarity
 
 #pragma once 
 //_____________________________________________________________________________
-// @file PhaseSpaceIsobar.h
+// @file PhaseSpaceIsobarReid.h
 //_____________________________________________________________________________
 
 #include <iostream>
 #include <vector>
-#include "PwaDynamics/AbsPhaseSpace.hh"
+#include "PwaDynamics/PhaseSpaceIsobar.hh"
 
 using namespace std;
 
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class PhaseSpaceIsobar: public AbsPhaseSpace {
+class PhaseSpaceIsobarReid: public PhaseSpaceIsobar {
 
 public:
 
   /// Constructor 
-  PhaseSpaceIsobar(double mass1, double mass2); 
+  PhaseSpaceIsobarReid(double mass1, double mass2); 
 
   /// Destructor
-  virtual ~PhaseSpaceIsobar();
+  virtual ~PhaseSpaceIsobarReid();
 
   // operators:
 
@@ -59,9 +60,7 @@ public:
   virtual complex<double> breakUpMom(const complex<double> mass);
 
 protected:
-  double _mass1;
-  double _mass2;
-
+  virtual void CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
 private:
 };
 //_____________________________________________________________________________

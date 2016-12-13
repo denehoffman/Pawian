@@ -23,6 +23,8 @@
 // Copyright 2016 Bertram Kopf
 
 #include "qft++Extension/PawianUtils.hh"
+#include "Utils/PawianConstants.hh"
+#include <math.h>
 
 vector<LS> PawianQFT::GetValidLSWeak(const Spin &__j, const Spin &__s1, const Spin &__s2){
   vector<LS> valid_ls;
@@ -37,3 +39,90 @@ vector<LS> PawianQFT::GetValidLSWeak(const Spin &__j, const Spin &__s1, const Sp
   }
   return valid_ls;
 }
+
+complex<double> PawianQFT::phaseSpaceFacAsner(double s, double massDec1, double massDec2){
+  complex<double> i(0.,1.);
+
+  double rho_i=rhoiAsner(s, massDec1, massDec2);
+  std::cout << "s: " << s << " rho_i: " << rho_i << std::endl;
+  complex<double> irhoComplex(-rho_i/PawianConstants::pi,0.);
+  if(s<0 || s > (massDec1+massDec2)*(massDec1+massDec2)){
+    double multTerm= fabs((1.+rho_i)/(1.-rho_i));
+    irhoComplex*=log(multTerm);
+    if(s > (massDec1+massDec2)*(massDec1+massDec2)) irhoComplex+=i*rho_i; 
+  }
+  else{
+    irhoComplex*=2.*atan(1/rho_i);
+  }
+
+  //  complex<double> result=irhoComplex/i;
+  complex<double> result=irhoComplex;
+  return result;  
+}
+
+double PawianQFT::rhoiAsner(double s, double massDec1, double massDec2){
+  double resultSqr=fabs(1.-(massDec1+massDec2)*(massDec1+massDec2)/s);
+  double result=sqrt(resultSqr);
+  return result;  
+}
+
+complex<double> PawianQFT::phaseSpaceFacPennington(complex<double> s, double massDec1, double massDec2){
+  //Chew-Mandelstam parametrization
+  //fulfils analyticity and unitarity
+  // Basevant/Berger: ANL-HEP-PR-78-27 
+ complex<double> i(0.,1.);
+  complex<double> sqrrho_a=complex<double>(1.,0.)-(massDec1+massDec2)*(massDec1+massDec2)/s;
+  complex<double> rho_a = sqrt(sqrrho_a);
+  //  std::cout << "s: " << s << " rho_a Pennington: " << rho_a << " sqrrho_a: " << sqrrho_a << std::endl;
+  complex<double> result=-rho_a/PawianConstants::pi*log((rho_a+1.)/(rho_a-1.));
+  return result;
+}
+
+complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1, double massDec2){
+  if(norm(s)<1.e-8) s=complex<double>(1.e-10,0.);
+  complex<double> m1_2_m_m2_2(massDec1*massDec1-massDec2*massDec2, 0.);
+  complex<double> m1_2_p_m2_2(massDec1*massDec1+massDec2*massDec2, 0.); 
+
+  complex<double> m1_p_m2_2((massDec1+massDec2)*(massDec1+massDec2), 0.);
+  complex<double> m1_m_m2_2((massDec1-massDec2)*(massDec1-massDec2), 0.);
+
+  complex<double> m1_p_m2_2_m_s=m1_p_m2_2-s;
+  complex<double> m1_m_m2_2_m_s=m1_m_m2_2-s;
+
+  complex<double> term1(1., 0.);
+  term1*=sqrt(m1_p_m2_2_m_s)*sqrt(m1_m_m2_2_m_s)*log((sqrt(m1_p_m2_2_m_s)+sqrt( m1_m_m2_2_m_s))/(2.*sqrt(massDec1*massDec2)))/s;
+
+
+  complex<double> term2(0.5, 0.);
+  term2*=m1_2_m_m2_2*log(massDec1/massDec2)/s;
+
+
+  complex<double> term34(0.5, 0.);
+  if( norm(m1_2_m_m2_2) > 1.e-15) term34+=log(massDec1/massDec2)*m1_2_p_m2_2/(2.*m1_2_m_m2_2);
+  else term34+=complex<double>(0.5, 0.);  
+
+  //  complex<double> result=-2./PawianConstants::pi*(term2-term1-term34);
+  complex<double> result=-2./PawianConstants::pi*(term2-term1-term34);
+  return result;
+}
+
+complex<double> PawianQFT::phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2){
+  complex<double> i(0.,1);
+  complex<double> s=mass*mass;
+  complex<double> result=-PawianQFT::ChewMandelstamReid(s, massDec1, massDec2)/i;
+  return result; 
+}
+
+complex<double> PawianQFT::phaseSpaceFacReid(double mass, double massDec1, double massDec2){
+  complex<double> massCompl(mass, 0.);
+  return PawianQFT::phaseSpaceFacReid(massCompl, massDec1, massDec2); 
+}
+
+complex<double> PawianQFT::phaseSpaceFacPenningtonsqrts(complex<double> sqrts, double massDec1, double massDec2){
+  complex<double> s=sqrts*sqrts;
+  complex<double> result=PawianQFT::phaseSpaceFacPennington(s, massDec1, massDec2);
+  //if( sqrts.real() > (massDec1+massDec2) ) result=complex<double>(0., result.imag());
+  return result;
+}
+
+

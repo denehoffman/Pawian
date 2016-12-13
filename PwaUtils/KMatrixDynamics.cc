@@ -46,8 +46,7 @@
 #include "PwaDynamics/PPole.hh"
 #include "PwaDynamics/PPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
-#include "PwaDynamics/PhaseSpaceIsobar.hh"
-#include "PwaDynamics/PhaseSpace4Pi.hh"
+#include "PwaDynamics/PhaseSpaceFactory.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
 KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
@@ -438,6 +437,8 @@ void KMatrixDynamics::init(){
   }
 
   const std::vector<std::string> gFacStringVec=_kMatrixParser->gFactors();
+  std::map<std::pair<std::string, std::string>, std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
+
   std::vector<std::string>::const_iterator itStrConst;
   for(itStrConst=gFacStringVec.begin(); itStrConst!=gFacStringVec.end(); ++itStrConst){
     std::istringstream particles(*itStrConst);
@@ -451,9 +452,15 @@ void KMatrixDynamics::init(){
       Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName << " doesn't exist in pdg-table" << endmsg;
       exit(0);
     }
-    std::shared_ptr<AbsPhaseSpace> currentPhp;
-    if(firstParticleName=="rho0" && secondParticleName=="rho0") currentPhp = std::shared_ptr<AbsPhaseSpace> (new PhaseSpace4Pi());
-    else currentPhp = std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
+
+  std::pair<std::string, std::string> currentParticlePair=make_pair(firstParticleName, secondParticleName);
+    std::string currentPhpDescription = phpDescriptionVec.at(currentParticlePair);
+
+    std::vector<double> fsParticleMasses;
+    fsParticleMasses.push_back(firstParticle->mass());
+    fsParticleMasses.push_back(secondParticle->mass()); 
+
+    std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, fsParticleMasses);
     _phpVecs.push_back(currentPhp);
 
     std::string gFactorKey=firstParticleName+secondParticleName;    

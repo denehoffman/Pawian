@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp PiPiSWaveApp
+install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp PiPiSWaveApp PhpFactorApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -18,7 +18,8 @@ project :
 
 lib LineShapes : 
         [ glob *.cc : *App.cc ]  
-        $(TOP)/qft++//qft++ 
+        $(TOP)/qft++//qft++
+	$(TOP)/qft++Extension//qft++Extension
         $(TOP)/ErrLogger//ErrLogger
 	$(TOP)/Particle//Particle
 	$(TOP)/PwaDynamics//PwaDynamics
@@ -36,3 +37,4 @@ exe TMatrixGeneralApp : TMatrixGeneralApp.cc LineShapes : ;
 exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc LineShapes : ;
 exe VoigtShapeApp : VoigtShapeApp.cc LineShapes : ;
 exe BarrierFactorApp : BarrierFactorApp.cc LineShapes : ;
+exe PhpFactorApp : PhpFactorApp.cc LineShapes : ;

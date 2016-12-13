@@ -21,41 +21,44 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/PhaseSpaceIsobar.hh"
+#include "PwaDynamics/PhaseSpaceIsobarReid.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-PhaseSpaceIsobar::PhaseSpaceIsobar(double mass1, double mass2):
-  AbsPhaseSpace()
-  , _mass1(mass1)
-  ,_mass2(mass2)
+PhaseSpaceIsobarReid::PhaseSpaceIsobarReid(double mass1, double mass2):
+  PhaseSpaceIsobar(mass1, mass2)
 {
 }
 
-PhaseSpaceIsobar::~PhaseSpaceIsobar(){
+PhaseSpaceIsobarReid::~PhaseSpaceIsobarReid(){
 
 }
 
-complex<double> PhaseSpaceIsobar::factor(const double mass){
-   return phaseSpaceFac(mass,_mass1, _mass2);
+complex<double> PhaseSpaceIsobarReid::factor(const double mass){
+   return PawianQFT::phaseSpaceFacReid(mass, _mass1, _mass2);
 }
 
-complex<double> PhaseSpaceIsobar::breakUpMom(const double mass){
+complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
   return breakupMomQ(mass,_mass1, _mass2);
 }
 
-complex<double> PhaseSpaceIsobar::factor(const complex<double> mass){
- //    Calc from the breakup momentum to account for chosen sign
- complex<double> q = breakupMomQ(mass,_mass1, _mass2);
- complex<double> rho=2.*q/mass;
- CorrectForChosenSign(rho, rho);
- return rho;
+complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
+  complex<double> rho = PawianQFT::phaseSpaceFacReid(mass, _mass1, _mass2);
+  complex<double> mom=rho*mass/2.;
+  //  CorrectForChosenSign(mom, rho);
+  CorrectForChosenSign(rho, rho);
+  return rho;
 }
 
-complex<double> PhaseSpaceIsobar::breakUpMom(const complex<double> mass){
+complex<double> PhaseSpaceIsobarReid::breakUpMom(const complex<double> mass){
   complex<double> q = breakupMomQ(mass,_mass1, _mass2);
   CorrectForChosenSign(q, q);
   return q;
 }
 
+void PhaseSpaceIsobarReid::CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
+    if( (_bumImPartSign > 0 && breakUpMom.real()>0.) || (_bumImPartSign < 0 && fabs(breakUpMom.real())<1.e-10 ) ){
+      toChange *= -1; // for Reid php factors
+    }
+  }
 

@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,39 +20,37 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/PhaseSpaceIsobarAS.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+// PhaseSpaceFactory class definition file. -*- C++ -*-
+// Copyright 2016 Bertram Kopf
 
-PhaseSpaceIsobarAS::PhaseSpaceIsobarAS(double mass1, double mass2):
-  AbsPhaseSpace()
-  , _mass1(mass1)
-  ,_mass2(mass2)
-{
-}
+#pragma once
 
-PhaseSpaceIsobarAS::~PhaseSpaceIsobarAS(){
+#include <iostream>
+#include <string>
 
-}
+// #include <cassert>
+#include <memory>
+#include "PwaDynamics/AbsPhaseSpace.hh"
 
-complex<double> PhaseSpaceIsobarAS::factor(const double mass){
-  return phaseSpaceFacAS(mass,_mass1, _mass2);
-}
+class AbsPhaseSpace;
 
-complex<double> PhaseSpaceIsobarAS::breakUpMom(const double mass){
-  return breakupMomQAS(mass,_mass1, _mass2);
-}
+class PhaseSpaceFactory{
 
-complex<double> PhaseSpaceIsobarAS::factor(const complex<double> mass){
-  // Calc from the breakup momentum to account for chosen sign
-  complex<double> q = breakupMomQAS(mass,_mass1, _mass2);
-  CorrectForChosenSign(q,q);
-  return q * 2. / mass;
-}
+public:
 
-complex<double> PhaseSpaceIsobarAS::breakUpMom(const complex<double> mass){
-   
-  complex<double> q = breakupMomQAS(mass,_mass1, _mass2);
-  CorrectForChosenSign(q, q);
-  return q;
-}
+  /** Destructor */
+  virtual ~PhaseSpaceFactory();
+
+  static PhaseSpaceFactory* instance();
+  std::shared_ptr<AbsPhaseSpace> getPhpPointer(std::string type, std::vector<double> masses);
+
+protected:
+ ///Constructor 
+  PhaseSpaceFactory();
+  static PhaseSpaceFactory* _instance;
+
+private:
+};
+
+
 

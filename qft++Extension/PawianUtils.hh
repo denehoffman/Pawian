@@ -23,9 +23,17 @@
 #pragma once
 
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include <complex>
 
 namespace PawianQFT{
 /// Returns all valid @a LS combos for weak decays; non partity conservation
   vector<LS> GetValidLSWeak(const Spin &__j, const Spin &__s1, const Spin &__s2);
+  complex<double> phaseSpaceFacAsner(double s, double massDec1, double massDec2);
+  double rhoiAsner(double s, double massDec1, double massDec2);
+  complex<double> phaseSpaceFacPennington(complex<double> s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamReid(complex<double> s, double massDec1, double massDec2);
+  complex<double> phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2);
+  complex<double> phaseSpaceFacReid(double mass, double massDec1, double massDec2);
+  complex<double> phaseSpaceFacPenningtonsqrts(complex<double> sqrts, double massDec1, double massDec2);
 //
 }

@@ -53,6 +53,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("noOfChannels",po::value<unsigned int>(&_noOfChannels),  "number of channels")
       ("noOfPoles",po::value<unsigned int>(&_noOfPoles),  "number of poles")
       ("gFactor",po::value< vector<string> >(&_gFactors),  "g-factors for the individual channels")
+      ("phpDescription",po::value< vector<string> >(&_phpDescriptions),  "description of the phasespace factors for the individual channels") 
       ("pole",po::value< vector<string> >(&_poles),  "pole: name and mass")
       ("projection",po::value< string>(&_projection),  "projection of the P-vector via pair of decay particles")
       ("useBarrierFactors",po::value<bool>(&_useBarrierFactors),  "calculation with or without barrier factors")
@@ -110,8 +111,8 @@ bool KMatrixParser::parseCommandLine()
 	      << "s0Adler: " << _s0Adler << "\n\n"
 	      << "snormAdler: " << _snormAdler << "\n\n" 
 	      << endl;
-    
-    std::cout << "g-factors are defined as follows:" << std::endl;
+
+    std::cout << "g-factors are defined as follows:" << "size: " << _gFactors.size() << std::endl;
     std::vector<std::string>::const_iterator it;
     for(it=_gFactors.begin(); it!=_gFactors.end(); ++it){
       std::cout << (*it) << "\n";
@@ -119,7 +120,8 @@ bool KMatrixParser::parseCommandLine()
       std::string firstParticleName;
       std::string secondParticleName;
       particles >> firstParticleName >> secondParticleName;
-
+      std::pair<std::string, std::string > currentParticlePair=make_pair(firstParticleName,secondParticleName);
+      _particlePairs.push_back(currentParticlePair);
       std::vector<std::string>::const_iterator itPoles;
       for(itPoles=_poles.begin(); itPoles!=_poles.end(); ++itPoles){
 
@@ -143,9 +145,36 @@ bool KMatrixParser::parseCommandLine()
 	}
 
 	_gFactorMap[currentgFacName]=currentGValue;
-
       }
     }
+
+
+    for(it=_phpDescriptions.begin(); it!=_phpDescriptions.end(); ++it){
+      std::istringstream particles(*it);
+      std::string firstParticleName;
+      std::string secondParticleName;
+      std::string phpDescription;
+      particles >> firstParticleName >> secondParticleName >> phpDescription;
+      std::pair<std::string, std::string > particlePair=make_pair(firstParticleName,secondParticleName);
+      _phpDescriptionMap[particlePair]=phpDescription;        
+      }
+
+   // fill remaining parts with default description
+   if ( _phpDescriptions.size() < _particlePairs.size() ){ //fill remaining with default description
+     std::vector< std::pair<std::string, std::string> >::iterator itPPair;
+     for(itPPair= _particlePairs.begin(); itPPair!= _particlePairs.end(); ++itPPair){
+     // check if phpDescription already exists
+     std::map<std::pair<std::string, std::string>, std::string>::iterator found=_phpDescriptionMap.find(*itPPair);
+     if ( !(found!=_phpDescriptionMap.end()) ) _phpDescriptionMap[*itPPair]="Default";
+   }
+}
+  
+
+   std::cout << "\nthe descriptions for the phase space factors are defined as follows:" << std::endl;
+   std::map<std::pair<std::string, std::string>, std::string>::iterator itPhpDesc;
+   for(itPhpDesc= _phpDescriptionMap.begin(); itPhpDesc!= _phpDescriptionMap.end(); ++itPhpDesc){
+   std::cout << itPhpDesc->first.first << "\t" << itPhpDesc->first.second << "\t" << itPhpDesc->second << std::endl; 
+}
 
     std::cout << "\npoles: name and mass" << std::endl;
     for(it=_poles.begin(); it!=_poles.end(); ++it){

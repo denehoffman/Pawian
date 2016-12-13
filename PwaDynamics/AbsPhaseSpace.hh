@@ -32,6 +32,7 @@
 #include <iostream>
 #include <vector>
 #include <complex>
+
 using namespace std;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
@@ -59,15 +60,15 @@ public:
   void SetBumImPartSign(double sign){_bumImPartSign = sign;}
 
 protected:
-  void CorrectForChosenSign(complex<double>& breakUpMom){
-     if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
-	(_bumImPartSign < 0 && breakUpMom.imag() > 0)){
-	breakUpMom *= -1;
-     }
-  }
-
-private:
+  virtual void CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
+   if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
+       (_bumImPartSign < 0 && breakUpMom.imag() > 0)){
+      toChange *= -1;
+    }
+   }
   double _bumImPartSign;
+private:
+  //  double _bumImPartSign;
 };
 //_____________________________________________________________________________
 

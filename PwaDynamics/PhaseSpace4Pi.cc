@@ -96,7 +96,7 @@ complex<double> PhaseSpace4Pi::factor(const complex<double> mass){
     result = rhoTerm;
     }
   else result = sqrt(1.0 - (_fourPiFactor1/mass_sqr));
-  CorrectForChosenSign(result);
+  CorrectForChosenSign(result, result);
   return result;
 }
 

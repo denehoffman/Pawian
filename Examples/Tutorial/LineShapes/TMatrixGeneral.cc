@@ -25,7 +25,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <boost/multi_array.hpp>
+//#include <boost/multi_array.hpp>
 #include "Examples/Tutorial/LineShapes/TMatrixGeneral.hh"
 #include "Examples/Tutorial/LineShapes/RiemannSheetAnalyzer.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
@@ -39,8 +39,7 @@
 #include "PwaDynamics/KMatrixRel.hh"
 #include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
-#include "PwaDynamics/PhaseSpaceIsobar.hh"
-#include "PwaDynamics/PhaseSpace4Pi.hh"
+#include "PwaDynamics/PhaseSpaceFactory.hh"
 #include "ConfigParser/KMatrixParser.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/PdtParser.hh"
@@ -75,6 +74,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSh
   std::string argandKey="Argand";
   std::string phaseKey="Phase";
   std::string inelasticityKey="Elasticity";
+  std::string ImagT11m1Key="Imag(T_{11}^{-1}";
 
   for(unsigned int i=0; i<_gFactorNames.size(); ++i){
     std::string key=_gFactorNames.at(i);
@@ -89,6 +89,13 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSh
     currentAmpImagH1->SetYTitle(currentAmpImagKey.c_str());
     currentAmpImagH1->SetXTitle("mass");
     _AmpImagH1Vec.push_back(currentAmpImagH1);
+
+
+    std::string currentImagT11m1Key=ImagT11m1Key+" "+key;
+    TH1F* currentImagT11m1H1=new TH1F(currentImagT11m1Key.c_str(), currentImagT11m1Key.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentImagT11m1H1->SetYTitle(currentImagT11m1Key.c_str());
+    currentImagT11m1H1->SetXTitle("mass");
+    _ImagT11m1H1Vec.push_back(currentImagT11m1H1);
 
     std::string currentArgandKey=argandKey+key;
     TH2F* currentArgandH2=new TH2F(currentArgandKey.c_str(), currentArgandKey.c_str(), 200, -1., 1., 200, -.5, 1.5);
@@ -135,12 +142,17 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSh
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
 
+   std::shared_ptr<TMatrixRel> tMatrInv=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
+   tMatrInv->evalMatrix(mass);
+   tMatrInv->invert();
+
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
       complex<double> currentRho=_phpVecs.at(i)->factor(mass);
 
       _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
       _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
-      
+      _ImagT11m1H1Vec.at(i)->Fill(mass, -(*tMatrInv)(i,i).imag());
+       
       _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
       double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
       _PhaseH2Vec.at(i)->Fill(mass, currentphase);
@@ -236,13 +248,15 @@ void TMatrixGeneral::init(){
 
   const std::vector<std::string> gFacStringVec=_kMatrixParser->gFactors();
   DebugMsg << "gFacStringVec.size(): " << gFacStringVec.size() << endmsg;
+  std::map<std::pair<std::string, std::string>, std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
+std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::endl;
   std::vector<std::string>::const_iterator itStrConst;
   for(itStrConst=gFacStringVec.begin(); itStrConst!=gFacStringVec.end(); ++itStrConst){
     std::istringstream particles(*itStrConst);
     std::string firstParticleName;
     std::string secondParticleName;
     particles >> firstParticleName >> secondParticleName;
-
+    std::pair<std::string, std::string> currentParticlePair=make_pair(firstParticleName, secondParticleName);
     Particle* firstParticle = _particleTable->particle(firstParticleName);
     Particle* secondParticle = _particleTable->particle(secondParticleName);
     if(0==firstParticle || 0==secondParticle){
@@ -252,10 +266,14 @@ void TMatrixGeneral::init(){
     double currentMassSum=firstParticle->mass()+secondParticle->mass();
     if(currentMassSum<_massMin) _massMin=currentMassSum;
 
-    std::shared_ptr<AbsPhaseSpace> currentPhp;
-    if(firstParticleName=="rho0" && secondParticleName=="rho0") currentPhp = std::shared_ptr<AbsPhaseSpace> (new PhaseSpace4Pi());
-    else currentPhp = std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
-    (new PhaseSpaceIsobar(firstParticle->mass(), secondParticle->mass()));
+    std::string currentPhpDescription = phpDescriptionVec.at(currentParticlePair);
+
+    std::vector<double> fsParticleMasses;
+    fsParticleMasses.push_back(firstParticle->mass());
+    fsParticleMasses.push_back(secondParticle->mass()); 
+   
+    std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, fsParticleMasses);
+
     _phpVecs.push_back(currentPhp);
 
     std::string gFactorKey=firstParticleName+secondParticleName;    

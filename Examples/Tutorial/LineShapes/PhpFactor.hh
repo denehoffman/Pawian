@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -20,8 +19,6 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-//TMatrixGeneral class definition file. -*- C++ -*-
-// Copyright 2013 Bertram Kopf
 
 #pragma once
 
@@ -30,34 +27,29 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cassert>
+
 #include <memory>
 
 #include "TROOT.h"
-
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 class TFile;
 class TH1F;
 class TH2F;
-class KMatrixParser;
-class AbsPhaseSpace;
-class TMatrixRel;
-class KMatrixRel;
-class KPole;
-class ParticleTable;
-class KMatrixParser;
 
-class TMatrixGeneral {
+class PhpFactor {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixGeneral(std::string pathToConfigParser, int numStepsForSheetScan, std::vector<double> energyPlaneBorders);
+  PhpFactor(double mass1, double mass2, double massMax);
 
 
   /** Destructor */
-  virtual ~TMatrixGeneral();
+  virtual ~PhpFactor();
 
   // Getters:
  
@@ -65,32 +57,40 @@ protected:
 
 
 private:
-  const int _noOfSteps;
-  double _stepSize;
-  double _massMin;
-  double _massMax;
-  std::shared_ptr<KMatrixParser> _kMatrixParser;
-  std::vector< std::string> _poleNames;
-  std::vector<double> _poleMasses;
-  std::vector< std::string> _gFactorNames;
-  std::map<int, std::vector<double> > _gFactorMap;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  std::shared_ptr<TMatrixRel> _tMatr;
-  std::shared_ptr<KMatrixRel> _kMatr;
-  std::vector< std::shared_ptr<KPole> > _kPoles;
-  ParticleTable* _particleTable;
-  
   TFile* _theTFile;
-  std::vector<TH1F*> _AmpRealH1Vec;
-  std::vector<TH1F*> _AmpImagH1Vec;
-  std::vector<TH1F*> _ImagT11m1H1Vec;
-  std::vector<TH2F*> _ArgandH2Vec;
-  std::vector<TH2F*> _PhaseH2Vec;
-  std::vector<TH1F*> _ElasticityH1Vec;
-  std::vector<TH1F*> _SqrT11H1Vec;
-  std::vector<TH1F*> _phpH1Vec;
+  TH1F* _phpRealHist;
+  TH1F* _phpImagHist;
 
-  void init();
+  TH2F* _phpDefaultComplRealHist2;
+  TH2F* _phpDefaultComplImagHist2;
+  TH2F* _phpPenningtonRealHist2;
+  TH2F* _phpPenningtonImagHist2;
+  TH2F* _phpReidRealHist2;
+  TH2F* _phpReidImagHist2;
+
+  TH1F* _phpAsnerRealHist;
+  TH1F* _phpAsnerImagHist;
+  TH1F* _phpPenningtonRealHist;
+  TH1F* _phpPenningtonImagHist;
+  TH1F* _phpReidRealHist;
+  TH1F* _phpReidImagHist;
+  TH1F* _phpDefaultRealHist;
+  TH1F* _phpDefaultImagHist;
+  TH1F* _phpDefaultComplRealHist;
+  TH1F* _phpDefaultComplImagHist;
+
+  TH1F* _phpMAsnerRealHist;
+  TH1F* _phpMAsnerImagHist;
+  TH1F* _phpMPenningtonRealHist;
+  TH1F* _phpMPenningtonImagHist;
+  TH1F* _phpMReidRealHist;
+  TH1F* _phpMReidImagHist;
+  TH1F* _phpMDefaultComplRealHist;
+  TH1F* _phpMDefaultComplImagHist;
+
+  const double _mass1;
+  const double _mass2;
+  const double _massMax;
 };
 
 

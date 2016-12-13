@@ -55,6 +55,7 @@ public:
   const unsigned int noOfChannels() const {return _noOfChannels;}
   const unsigned int noOfPoles() const {return _noOfPoles;}
   const std::vector<std::string>& gFactors() const { return _gFactors; }
+  const std::vector<std::string>& phpFactors() const { return _phpDescriptions;}
   const std::vector<std::string>& poles() const { return _poles; }
   const std::string projection() const { return _projection; }
   const int useBarrierFactors() const {return _useBarrierFactors;}
@@ -72,6 +73,7 @@ public:
   const std::vector<std::string> gFactorFixWidthPol() {return _gFactorFixWidthPol;}
   const std::vector<std::string> gFactorFixSeparateScale() {return _gFactorFixSeparateScale;}
   std::map<std::string, double> gFactorMap() {return _gFactorMap;} 
+  std::map<std::pair<std::string, std::string>, std::string> phpDescriptionMap()& {return _phpDescriptionMap;}
 
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
@@ -81,6 +83,7 @@ protected:
   unsigned int _noOfChannels;
   unsigned int _noOfPoles;
   std::vector<std::string> _gFactors;
+  std::vector<std::string> _phpDescriptions;
   std::vector<std::string> _poles;
   std::string _projection;
   bool _useBarrierFactors;
@@ -101,6 +104,9 @@ protected:
 
   std::map<std::string, double> _gFactorMap;
   std::map<std::string, double> _poleMap;
+
+  std::map<std::pair<std::string, std::string>, std::string> _phpDescriptionMap;
+  std::vector<std::pair<std::string, std::string>> _particlePairs;
   
   po::options_description* _config;
 };
