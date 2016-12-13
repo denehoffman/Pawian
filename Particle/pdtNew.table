@@ -48,6 +48,7 @@ Meson f2(1950) 		f_2(1950)  		0  4  1  1  1  	0  0  0  0 	1.944 	0.472 	relBW	[P
 Meson f2'(2010) 	f_2^{\prime}(2010)  	0  4  1  1  1   0  0  0  0 	2.011 	0.2020 	relBW	[PDG nonett 3^3P_2]
 Meson f0(2020)          f_0(2020)               0  0  1  1  1   0  0  0  0      1.992   0.4420  relBW   [PDG no idea]
 Meson f4(2050) 		f_4(2050)  		0  8  1  1  1  	0  0  0  0 	2.044 	0.2080 	relBW	[PDG nonett 4^3F_4]
+Meson f0(2100)          f_0(2100)               0  0  1  1  1   0  0  0  0      2.101   0.224   relBW   [PDG no idea]
 Meson f2(2150) 		f_2(2150)  		0  4  1  1  1  	0  0  0  0 	2.200 	0.2500 	relBW	[PDG no idea]
 Meson f0(2200) 		f_0(2200)  		0  0  1  1  1   0  0  0  0 	2.189 	0.2380 	relBW	[PDG no idea]
 Meson eta(2225) 	\eta(2225)  		0  0 -1  1  1  	0  0  0  0 	2.230 	0.1500 	relBW	[PDG nonett 4^1S_0]
