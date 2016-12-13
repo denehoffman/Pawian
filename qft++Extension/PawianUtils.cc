@@ -44,7 +44,6 @@ complex<double> PawianQFT::phaseSpaceFacAsner(double s, double massDec1, double 
   complex<double> i(0.,1.);
 
   double rho_i=rhoiAsner(s, massDec1, massDec2);
-  std::cout << "s: " << s << " rho_i: " << rho_i << std::endl;
   complex<double> irhoComplex(-rho_i/PawianConstants::pi,0.);
   if(s<0 || s > (massDec1+massDec2)*(massDec1+massDec2)){
     double multTerm= fabs((1.+rho_i)/(1.-rho_i));
@@ -73,7 +72,6 @@ complex<double> PawianQFT::phaseSpaceFacPennington(complex<double> s, double mas
  complex<double> i(0.,1.);
   complex<double> sqrrho_a=complex<double>(1.,0.)-(massDec1+massDec2)*(massDec1+massDec2)/s;
   complex<double> rho_a = sqrt(sqrrho_a);
-  //  std::cout << "s: " << s << " rho_a Pennington: " << rho_a << " sqrrho_a: " << sqrrho_a << std::endl;
   complex<double> result=-rho_a/PawianConstants::pi*log((rho_a+1.)/(rho_a-1.));
   return result;
 }
@@ -101,7 +99,6 @@ complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1
   if( norm(m1_2_m_m2_2) > 1.e-15) term34+=log(massDec1/massDec2)*m1_2_p_m2_2/(2.*m1_2_m_m2_2);
   else term34+=complex<double>(0.5, 0.);  
 
-  //  complex<double> result=-2./PawianConstants::pi*(term2-term1-term34);
   complex<double> result=-2./PawianConstants::pi*(term2-term1-term34);
   return result;
 }
@@ -121,7 +118,6 @@ complex<double> PawianQFT::phaseSpaceFacReid(double mass, double massDec1, doubl
 complex<double> PawianQFT::phaseSpaceFacPenningtonsqrts(complex<double> sqrts, double massDec1, double massDec2){
   complex<double> s=sqrts*sqrts;
   complex<double> result=PawianQFT::phaseSpaceFacPennington(s, massDec1, massDec2);
-  //if( sqrts.real() > (massDec1+massDec2) ) result=complex<double>(0., result.imag());
   return result;
 }
 

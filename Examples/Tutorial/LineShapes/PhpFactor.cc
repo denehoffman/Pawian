@@ -85,8 +85,6 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   _phpPenningtonImagHist= new TH1F("_phpPenningtonImagHist", "#rho imag Pennington",301, -massMaxSqr, massMaxSqr);
   _phpPenningtonImagHist->GetYaxis()->SetTitle("i #rho");
   _phpPenningtonImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
-  _phpDefaultRealHist= new TH1F("_phpDefaultRealHist", "#rho real default",301, -massMaxSqr, massMaxSqr);
-  _phpDefaultImagHist= new TH1F("_phpDefaultImagHist", "#rho imag default",301, -massMaxSqr, massMaxSqr);
 
   _phpReidRealHist= new TH1F("_phpReidRealHist", "#rho real Reid",301, -massMaxSqr, massMaxSqr);
   _phpReidRealHist->GetYaxis()->SetTitle("i #rho");
@@ -158,7 +156,7 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     _phpMPenningtonRealHist->Fill(massIt, currentPenningtonFac.real());
     _phpMPenningtonImagHist->Fill(massIt, currentPenningtonFac.imag());
 
-    complex<double> currentReidFac = PawianQFT::phaseSpaceFacReid(massIt, _mass1, _mass2);
+    complex<double> currentReidFac = i*PawianQFT::phaseSpaceFacReid(massIt, _mass1, _mass2);
     //    if ( fabs(currentReidFac.real()) <1000. &&  fabs(currentReidFac.imag()) <1000.){ 
       _phpMReidRealHist->Fill(massIt, currentReidFac.real());
       _phpMReidImagHist->Fill(massIt, currentReidFac.imag());    
@@ -178,7 +176,7 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
       _phpPenningtonRealHist2->Fill(massRealIt, massImagIt, currentPenningtonFac.real());
       _phpPenningtonImagHist2->Fill(massRealIt, massImagIt, currentPenningtonFac.imag());
 
-      complex<double> currentReidFac = PawianQFT::phaseSpaceFacReid(currentMass, _mass1, _mass2);
+      complex<double> currentReidFac = i*PawianQFT::phaseSpaceFacReid(currentMass, _mass1, _mass2);
       _phpReidRealHist2->Fill(massRealIt, massImagIt, currentReidFac.real());
       _phpReidImagHist2->Fill(massRealIt, massImagIt, currentReidFac.imag());
     }
@@ -187,9 +185,9 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   stepSize=2.*massMaxSqr/301.;
   for (double massSqrIt=-massMaxSqr+stepSize/2.; massSqrIt<massMaxSqr; massSqrIt+=stepSize){
     complex<double> currentFac = PawianQFT::phaseSpaceFacAsner(massSqrIt, _mass1, _mass2);
-    std::cout << "massSqrIt: " << massSqrIt << std::endl; 
-    std::cout << "currentFac.real(): " << currentFac.real() << std::endl;
-    std::cout << "currentFac.imag(): " << currentFac.imag() << std::endl;
+    // std::cout << "massSqrIt: " << massSqrIt << std::endl; 
+    // std::cout << "currentFac.real(): " << currentFac.real() << std::endl;
+    // std::cout << "currentFac.imag(): " << currentFac.imag() << std::endl;
     if(currentFac.real()==currentFac.real() && currentFac.imag()==currentFac.imag()){ 
     _phpAsnerRealHist->Fill(massSqrIt, currentFac.real());
     _phpAsnerImagHist->Fill(massSqrIt, currentFac.imag());
@@ -217,8 +215,6 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     }
 
     complex<double> currentPenningtonFac = PawianQFT::phaseSpaceFacPennington(massSqrItCompl, _mass1, _mass2);
-    std::cout << "currentPenningtonFac.real(): " << currentPenningtonFac.real() << std::endl;
-    std::cout << "currentPenningtonFac.imag(): " << currentPenningtonFac.imag() << std::endl;
     if(currentPenningtonFac.real()==currentPenningtonFac.real() && currentPenningtonFac.imag()==currentPenningtonFac.imag() && fabs(currentPenningtonFac.real())>1.e-3){
       _phpPenningtonRealHist->Fill(massSqrItCompl.real(), currentPenningtonFac.real());
       _phpPenningtonImagHist->Fill(massSqrItCompl.real(), currentPenningtonFac.imag());
