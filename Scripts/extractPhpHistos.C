@@ -7,15 +7,17 @@
 #include "TMath.h"
 #include "TKey.h"
 #include "TLegend.h"
-#include <algorithm> 
 
+#include <algorithm> 
+#include <vector> 
 //void extractPhpComplexHistos(std::string rootFileName);
 
-void extractPhpHistos(std::string rootFileName="PhpFactor.root"){
+void extractPhpHistos(std::string rootFileName="PhpFactor.root", double setyMin1d=-1.2, double setyMax1d=1){
  TFile* tFile= new TFile(rootFileName.c_str());
-
+ 
  TCanvas* canvasRealS = new TCanvas("RealS","RealS",20, 20, 900,900);
  canvasRealS->Divide(2,2);
+
  // TLegend *legend=new TLegend(0.6,0.65,0.88,0.85);
  // legend->AddEntry("","real","lpe");
  // legend->AddEntry("","imad","lpe");
@@ -23,39 +25,52 @@ void extractPhpHistos(std::string rootFileName="PhpFactor.root"){
  TH1F* phpAsnerImagHist = (TH1F*)tFile->Get("_phpAsnerImagHist");
  phpAsnerImagHist->SetLineColor(kRed);
  phpAsnerImagHist->SetLineWidth(3);
- phpAsnerImagHist->SetMinimum(-1.2);
  phpAsnerImagHist->SetStats(false);
+ phpAsnerImagHist->SetMaximum(setyMax1d);
+ phpAsnerImagHist->SetMinimum(setyMin1d);
+
  TH1F* phpAsnerRealHist = (TH1F*)tFile->Get("_phpAsnerRealHist");
  phpAsnerRealHist->SetLineColor(kBlue);
  phpAsnerRealHist->SetLineWidth(3);
  phpAsnerRealHist->SetStats(false);
+ phpAsnerRealHist->SetMaximum(setyMax1d);
+ phpAsnerRealHist->SetMinimum(setyMin1d);
 
  TH1F* phpPenningtonImagHist = (TH1F*)tFile->Get("_phpPenningtonImagHist");
  phpPenningtonImagHist->SetLineColor(kRed);
  phpPenningtonImagHist->SetLineWidth(3);
- phpPenningtonImagHist->SetMinimum(-1.2);
  phpPenningtonImagHist->SetStats(false);
+ phpPenningtonImagHist->SetMaximum(setyMax1d);
+ phpPenningtonImagHist->SetMinimum(setyMin1d);
+
  TH1F* phpPenningtonRealHist = (TH1F*)tFile->Get("_phpPenningtonRealHist");
  phpPenningtonRealHist->SetLineColor(kBlue);
  phpPenningtonRealHist->SetLineWidth(3);
  phpPenningtonRealHist->SetStats(false);
+ phpPenningtonRealHist->SetMaximum(setyMax1d);
+ phpPenningtonRealHist->SetMinimum(setyMin1d);
 
  TH1F* phpDefaultComplImagHist = (TH1F*)tFile->Get("_phpDefaultComplImagHist");
  phpDefaultComplImagHist->SetLineColor(kRed);
  phpDefaultComplImagHist->SetLineWidth(3);
- phpDefaultComplImagHist->SetMaximum(4.0);
+ phpDefaultComplImagHist->SetMaximum(setyMax1d);
  phpDefaultComplImagHist->SetStats(false);
- phpDefaultComplImagHist->SetMinimum(-1.2);
+ phpDefaultComplImagHist->SetMinimum(setyMin1d);
+
  TH1F* phpDefaultComplRealHist = (TH1F*)tFile->Get("_phpDefaultComplRealHist");
  phpDefaultComplRealHist->SetLineColor(kBlue);
  phpDefaultComplRealHist->SetLineWidth(3);
  phpDefaultComplRealHist->SetStats(false);
+ phpDefaultComplRealHist->SetMaximum(setyMax1d);
+ phpDefaultComplRealHist->SetMinimum(setyMin1d);
 
  TH1F* phpReidImagHist = (TH1F*)tFile->Get("_phpReidImagHist");
  phpReidImagHist->SetLineColor(kRed);
  phpReidImagHist->SetLineWidth(3);
- phpReidImagHist->SetMinimum(-1.2);
+ phpReidImagHist->SetMaximum(setyMax1d);
+ phpReidImagHist->SetMinimum(setyMin1d);
  phpReidImagHist->SetStats(false);
+
  TH1F* phpReidRealHist = (TH1F*)tFile->Get("_phpReidRealHist");
  phpReidRealHist->SetLineColor(kBlue);
  phpReidRealHist->SetLineWidth(3);
@@ -84,46 +99,58 @@ void extractPhpHistos(std::string rootFileName="PhpFactor.root"){
  TH1F* phpMAsnerImagHist = (TH1F*)tFile->Get("_phpMAsnerImagHist");
  phpMAsnerImagHist->SetLineColor(kRed);
  phpMAsnerImagHist->SetLineWidth(3);
- phpMAsnerImagHist->SetMinimum(-1.2);
+ phpMAsnerImagHist->SetMaximum(setyMax1d);
+ phpMAsnerImagHist->SetMinimum(setyMin1d);
  phpMAsnerImagHist->SetStats(false);
+
  TH1F* phpMAsnerRealHist = (TH1F*)tFile->Get("_phpMAsnerRealHist");
  phpMAsnerRealHist->SetLineColor(kBlue);
  phpMAsnerRealHist->SetLineWidth(3);
  phpMAsnerRealHist->SetStats(false);
+ phpMAsnerRealHist->SetMaximum(setyMax1d);
+ phpMAsnerRealHist->SetMinimum(setyMin1d);
 
  TH1F* phpMPenningtonImagHist = (TH1F*)tFile->Get("_phpMPenningtonImagHist");
  phpMPenningtonImagHist->SetLineColor(kRed);
  phpMPenningtonImagHist->SetLineWidth(3);
- phpMPenningtonImagHist->SetMinimum(-1.2);
+ phpMPenningtonImagHist->SetMaximum(setyMax1d);
+ phpMPenningtonImagHist->SetMinimum(setyMin1d);
  phpMPenningtonImagHist->SetStats(false);
+
  TH1F* phpMPenningtonRealHist = (TH1F*)tFile->Get("_phpMPenningtonRealHist");
  phpMPenningtonRealHist->SetLineColor(kBlue);
  phpMPenningtonRealHist->SetLineWidth(3);
+ phpMPenningtonRealHist->SetMaximum(setyMax1d);
+ phpMPenningtonRealHist->SetMinimum(setyMin1d);
  phpMPenningtonRealHist->SetStats(false);
 
  TH1F* phpMDefaultComplImagHist = (TH1F*)tFile->Get("_phpMDefaultComplImagHist");
  phpMDefaultComplImagHist->SetLineColor(kRed);
  phpMDefaultComplImagHist->SetLineWidth(3);
- phpMDefaultComplImagHist->SetMaximum(2.0);
  phpMDefaultComplImagHist->SetStats(false);
- phpMDefaultComplImagHist->SetMinimum(-1.2);
+ phpMDefaultComplImagHist->SetMaximum(setyMax1d);
+ phpMDefaultComplImagHist->SetMinimum(setyMin1d);
 
  TH1F* phpMDefaultComplRealHist = (TH1F*)tFile->Get("_phpMDefaultComplRealHist");
  phpMDefaultComplRealHist->SetLineColor(kBlue);
  phpMDefaultComplRealHist->SetLineWidth(3);
  phpMDefaultComplRealHist->SetStats(false);
+ phpMDefaultComplRealHist->SetMaximum(setyMax1d);
+ phpMDefaultComplRealHist->SetMinimum(setyMin1d);
  
 TH1F* phpMReidImagHist = (TH1F*)tFile->Get("_phpMReidImagHist");
  phpMReidImagHist->SetLineColor(kRed);
  phpMReidImagHist->SetLineWidth(3);
- phpMReidImagHist->SetMaximum(1.2);
- phpMReidImagHist->SetMinimum(-1.2);
+ phpMReidImagHist->SetMaximum(setyMax1d);
+ phpMReidImagHist->SetMinimum(setyMin1d);
  phpMReidImagHist->SetStats(false);
 
  TH1F* phpMReidRealHist = (TH1F*)tFile->Get("_phpMReidRealHist");
  phpMReidRealHist->SetLineColor(kBlue);
  phpMReidRealHist->SetLineWidth(3);
  phpMReidRealHist->SetStats(false);
+ phpMReidRealHist->SetMaximum(setyMax1d);
+ phpMReidRealHist->SetMinimum(setyMin1d);
 
  canvasRealM->cd(1);
  phpMAsnerImagHist->Draw();

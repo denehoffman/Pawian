@@ -183,7 +183,7 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   }
 
   stepSize=2.*massMaxSqr/301.;
-  for (double massSqrIt=-massMaxSqr+stepSize/2.; massSqrIt<massMaxSqr; massSqrIt+=stepSize){
+  for (double massSqrIt=-massMaxSqr+stepSize/2.; massSqrIt < massMaxSqr+stepSize/2.; massSqrIt+=stepSize){
     complex<double> currentFac = PawianQFT::phaseSpaceFacAsner(massSqrIt, _mass1, _mass2);
     // std::cout << "massSqrIt: " << massSqrIt << std::endl; 
     // std::cout << "currentFac.real(): " << currentFac.real() << std::endl;

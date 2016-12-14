@@ -152,22 +152,40 @@ AbsHist::AbsHist(std::string additionalSuffix) :
 
     if( (*itAngleVec)->_nBodyDecay == 3){
       std::string histLambdaName="DataLambda"+tmpBaseName;
-      std::string histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli) (data)";
+      std::string histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli (data)";
       TH1F* currentLambdaDataHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
       currentLambdaDataHist->Sumw2();
       _angleDataHistMap[*itAngleVec].push_back(currentLambdaDataHist);
 
       histLambdaName="MCLambda"+tmpBaseName;
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli) (MC)";
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli (MC)";
       TH1F* currentLambdaMcHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
       currentLambdaMcHist->Sumw2();
       _angleMcHistMap[*itAngleVec].push_back(currentLambdaMcHist);
 
       histLambdaName="FitLambda"+tmpBaseName;
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli) (fit)";
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli (fit)";
       TH1F* currentLambdaFitHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
       currentLambdaFitHist->Sumw2();
       _angleFitHistMap[*itAngleVec].push_back(currentLambdaFitHist);
+
+      histLambdaName="DataLambdaGJ"+tmpBaseName;
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "GJ (data)";
+      TH1F* currentLambdaDataGJHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaDataGJHist->Sumw2();
+      _angleGJDataHistMap[*itAngleVec].push_back(currentLambdaDataGJHist);
+
+      histLambdaName="McLambdaGJ"+tmpBaseName;
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "GJ (MC)";
+      TH1F* currentLambdaMcGJHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaMcGJHist->Sumw2();
+      _angleGJMcHistMap[*itAngleVec].push_back(currentLambdaMcGJHist);
+
+      histLambdaName="FitLambdaGJ"+tmpBaseName;      
+      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "GJ (fit)";
+      TH1F* currentLambdaFitGJHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaFitGJHist->Sumw2();
+      _angleGJFitHistMap[*itAngleVec].push_back(currentLambdaFitGJHist);
     }
   }
   // 2D-Histograms
@@ -418,12 +436,12 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shar
     Vector4<double>  result4Vec2(0.,0.,0.,0.);
 
     if (frame=="heli"){
-      if(nBodyDecay==3) result4Vec=KinUtils::heliVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
-      else result4Vec=KinUtils::heliVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
+      result4Vec=KinUtils::heliVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
+      if(nBodyDecay==3) result4Vec2=KinUtils::heliVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
     }
     else if (frame=="GottfriedJackson"){
-      if(nBodyDecay==3) result4Vec=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
-      else result4Vec=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
+      result4Vec=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
+      if(nBodyDecay==3) result4Vec2=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
     }
     else {
       Alert << "transformation into the frame " << frame << " not supported!!!" << endmsg;
@@ -449,23 +467,26 @@ void AbsHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shar
     else if(nBodyDecay == 3){
       Vector4<double> result4VecPart1 = result4Vec;
       Vector4<double> result4VecPart2 = result4Vec2;
-      Vector4<float> normVec(0,
-			     result4VecPart1.Y()*result4VecPart2.Z()-result4VecPart1.Z()*result4VecPart2.Y(),
-			     result4VecPart1.Z()*result4VecPart2.X()-result4VecPart1.X()*result4VecPart2.Z(),
-			     result4VecPart1.X()*result4VecPart2.Y()-result4VecPart1.Y()*result4VecPart2.X());
+      //      std::cout << "\nresult4Vec: " << result4Vec << std::endl;
+      //      std::cout << "result4Vec2: " << result4Vec2 << std::endl;
+      Vector4<double> normVec(0,
+      			     result4VecPart1.Y()*result4VecPart2.Z()-result4VecPart1.Z()*result4VecPart2.Y(),
+      			     result4VecPart1.Z()*result4VecPart2.X()-result4VecPart1.X()*result4VecPart2.Z(),
+      			     result4VecPart1.X()*result4VecPart2.Y()-result4VecPart1.Y()*result4VecPart2.X());
 
       it->second[0]->Fill( normVec.CosTheta(), weight);
       it->second[1]->Fill( normVec.Phi(), weight);
-
-      Vector4<double> result4VecPart3(combinedMother4Vec.M()-result4VecPart1.E()-result4VecPart2.E()
-				      ,-result4VecPart1.Px()-result4VecPart2.Px()
-				      ,-result4VecPart1.Py()-result4VecPart2.Py()
-				      ,-result4VecPart1.Pz()-result4VecPart2.Pz());
-
-      double theQ=result4VecPart1.E()-result4VecPart1.M()+result4VecPart2.E()-result4VecPart2.M()+result4VecPart3.E()-result4VecPart3.M();
-      double lambdaNorm=theQ*theQ*(theQ*theQ/108.+result4VecPart1.M()*theQ/9.+result4VecPart1.M()*result4VecPart1.M()/3.);
-      double lambda=normVec.P()*normVec.P()/lambdaNorm;
-      it->second[2]->Fill( lambda, weight);
+      //      if (frame=="heli"){
+	Vector4<double> combinedMotherHeli4Vec(combinedMother4Vec.M(), 0., 0., 0.);
+	Vector4<double> result4VecPart3(combinedMotherHeli4Vec.E()-result4VecPart1.E()-result4VecPart2.E()
+					,combinedMotherHeli4Vec.Px()-result4VecPart1.Px()-result4VecPart2.Px()
+					,combinedMotherHeli4Vec.Py()-result4VecPart1.Py()-result4VecPart2.Py()
+					,combinedMotherHeli4Vec.Pz()-result4VecPart1.Pz()-result4VecPart2.Pz());
+	double theQ=result4VecPart1.E()-result4VecPart1.M()+result4VecPart2.E()-result4VecPart2.M()+result4VecPart3.E()-result4VecPart3.M();
+	double lambdaNorm=theQ*theQ*(theQ*theQ/108.+result4VecPart1.M()*theQ/9.+result4VecPart1.M()*result4VecPart1.M()/3.);
+	double lambda=normVec.P()*normVec.P()/lambdaNorm;
+	it->second[2]->Fill( lambda, weight);
+	// }
     }
   }
 }
