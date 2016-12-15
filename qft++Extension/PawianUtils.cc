@@ -121,4 +121,126 @@ complex<double> PawianQFT::phaseSpaceFacPenningtonsqrts(complex<double> sqrts, d
   return result;
 }
 
+complex<double> PawianQFT::phaseSpaceFacDefault(double mass, double massDec1, double massDec2){
+
+  complex<double> result(0.,0.);
+
+  if(fabs(mass) < 1e-8) {
+     std::cout << "mass " << mass 
+	       << " very close to 0; not possible to calculate phasespace factor: \n set mass to 1.*e-10 !!!" 
+	       << std::endl;
+     mass=1.e-10;
+  }
+
+  double termPlus=(massDec1+massDec2)/mass;
+  double termMinus=(massDec1-massDec2)/mass;
+  double tmpVal=(1.-termPlus*termPlus) * (1.-termMinus*termMinus);
+  if(tmpVal>=0.) result = std::complex<double>(std::sqrt(tmpVal), 0.);
+  else result = std::complex<double>(0., std::sqrt(-tmpVal));   
+  return result;
+}
+
+complex<double> PawianQFT::phaseSpaceFacDefault(complex<double> mass, double massDec1, double massDec2){
+
+  complex<double> result(0.,0.);
+
+  if(norm(mass) < 1e-8) {
+     std::cout << "mass " << mass 
+	       << " very close to 0; not possible to calculate phasespace factor: \n set real part of the mass to 1.*e-10 !!!" 
+	       << std::endl;
+     mass=complex<double>(1.e-10,0.);
+  }
+
+  complex<double> termPlus=(massDec1+massDec2)/mass;
+  complex<double> termMinus=(massDec1-massDec2)/mass;
+  complex<double> tmpVal=(1.-termPlus*termPlus) * (1.-termMinus*termMinus);
+  result = std::sqrt(tmpVal);
+  return result;
+}
+
+complex<double> PawianQFT::phaseSpaceFacAS(double mass, double massDec1, double massDec2){
+
+  complex<double> result(0.,0.);
+
+  if(fabs(mass) < 1e-8) {
+     std::cout << "mass " << mass 
+	       << " very close to 0; not possible to calculate phasespace factor: \n set mass to 1.*e-10 !!!" 
+	       << std::endl;
+     mass=1.e-10;
+  }
+
+  double termPlus=(massDec1+massDec2)/mass;
+  double tmpVal=(1.-termPlus*termPlus);
+  if(tmpVal>=0.) result = std::complex<double>(std::sqrt(tmpVal), 0.);
+  else result = std::complex<double>(0., std::sqrt(-tmpVal));   
+  return result;
+}
+
+complex<double> PawianQFT::phaseSpaceFacAS(complex<double> mass, double massDec1, double massDec2){
+
+  complex<double> result(0.,0.);
+
+  if(norm(mass) < 1e-8) {
+     std::cout << "mass " << mass 
+	       << " very close to 0; not possible to calculate phasespace factor: \n set real part of the mass to 1.*e-10 !!!" 
+	       << std::endl;
+     mass=complex<double>(1.e-10,0.);
+  }
+
+  complex<double> termPlus=(massDec1+massDec2)/mass;
+  complex<double> tmpVal=(1.-termPlus*termPlus);
+  result = std::sqrt(tmpVal);
+  return result;
+}
+
+template<typename MassType>
+complex<double> PawianQFT::breakupMomQDefault(MassType mass, double massDec1, double massDec2){
+  complex<double> result=PawianQFT::phaseSpaceFacDefault(mass, massDec1, massDec2)*mass/2.;
+  return result;  
+}
+
+template<typename MassType>
+complex<double> PawianQFT::breakupMomQReid(MassType mass, double massDec1, double massDec2){
+  complex<double> result=PawianQFT::phaseSpaceFacReid(mass, massDec1, massDec2)*mass/2.;
+  return result;  
+}
+
+template<typename MassType>
+complex<double> PawianQFT::breakupMomQAS(MassType mass, double massDec1, double massDec2){
+  complex<double> result=PawianQFT::phaseSpaceFacAS(mass, massDec1, massDec2)*mass/2.;
+  return result;  
+}
+
+template complex<double> PawianQFT::breakupMomQDefault(double, double, double);
+template complex<double> PawianQFT::breakupMomQDefault(complex<double>, double, double);
+template complex<double> PawianQFT::breakupMomQReid(double, double, double);
+template complex<double> PawianQFT::breakupMomQReid(complex<double>, double, double);
+template complex<double> PawianQFT::breakupMomQAS(double, double, double);
+template complex<double> PawianQFT::breakupMomQAS(complex<double>, double, double);
+
+
+complex<double> PawianQFT::FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
+		       , const double>& decPair2, double __mass0, double g1, double g2){
+
+  complex<double> i(0.,1.);
+  const double m1a=decPair1.first;
+  const double m1b=decPair1.second;
+  const double m2a=decPair2.first;
+  const double m2b=decPair2.second;
+
+  double mAB=__p4.Mass();
+
+  //calculate gammas with phase-space factors 
+  complex<double> gamma11=g1*PawianQFT::breakupMomQDefault(mAB, m1a, m1b);
+  complex<double> gamma22=g2*PawianQFT::breakupMomQDefault(mAB, m2a, m2b);
+
+  complex<double> gammaLow(0.,0.);
+  if( (m1a+m1b) < (m2a+m2b) ) gammaLow=gamma11;
+  else gammaLow=gamma22;
+
+  complex<double>  result=__mass0*sqrt(gammaLow*gamma11)/( __mass0*__mass0 - mAB*mAB - i * __mass0 * (gamma11+gamma22) );
+
+  return result;
+
+}
 

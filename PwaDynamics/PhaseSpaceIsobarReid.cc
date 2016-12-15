@@ -39,7 +39,7 @@ complex<double> PhaseSpaceIsobarReid::factor(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
-  return breakupMomQ(mass,_mass1, _mass2);
+  return PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
 }
 
 complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
@@ -51,7 +51,7 @@ complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
 }
 
 complex<double> PhaseSpaceIsobarReid::breakUpMom(const complex<double> mass){
-  complex<double> q = breakupMomQ(mass,_mass1, _mass2);
+  complex<double> q = PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
   CorrectForChosenSign(q, q);
   return q;
 }

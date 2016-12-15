@@ -32,6 +32,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++Extension/PawianUtils.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -455,7 +456,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 
   if(fillqVals){
        double qVal=daughter2HelMother.P();
-    double qValNorm=breakupMomQ(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
+    double qValNorm=PawianQFT::breakupMomQDefault(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
     evtData->DoubleMassId[_wignerDqId]=qVal;
     evtData->DoubleMassId[_wignerDqNormId] = qValNorm;
   } 

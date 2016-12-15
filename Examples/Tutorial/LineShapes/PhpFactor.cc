@@ -139,11 +139,13 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     complex<double> currentMass(massIt,0.);
     //    if (norm(currentMass) < 1.e-5) continue;
   
-    std::complex<double> currentFac = phaseSpaceFac(currentMass, _mass1, _mass2);
-    _phpRealHist->Fill(massIt, currentFac.real());
-    _phpImagHist->Fill(massIt, currentFac.imag());
-
+    //    std::complex<double> currentFac = phaseSpaceFac(currentMass, _mass1, _mass2);
+    std::complex<double> currentFac = PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
     std::complex<double> currentFaci = i*currentFac;
+
+    _phpRealHist->Fill(massIt, currentFaci.real());
+    _phpImagHist->Fill(massIt, currentFaci.imag());
+
     _phpMDefaultComplRealHist->Fill(massIt,currentFaci.real());
     _phpMDefaultComplImagHist->Fill(massIt,currentFaci.imag());
 
@@ -167,7 +169,8 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   for (double massRealIt=-_massMax+stepSize/2.; massRealIt<_massMax; massRealIt+=stepSize){
     for (double massImagIt=-_massMax+stepSize/2.; massImagIt<_massMax; massImagIt+=stepSize){
       complex<double> currentMass(massRealIt, massImagIt);
-      std::complex<double> currentFac = i*phaseSpaceFac(currentMass, _mass1, _mass2);
+      //      std::complex<double> currentFac = i*phaseSpaceFac(currentMass, _mass1, _mass2);
+      std::complex<double> currentFac = i*PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
       _phpDefaultComplRealHist2->Fill(massRealIt, massImagIt, currentFac.real());
       _phpDefaultComplImagHist2->Fill(massRealIt, massImagIt, currentFac.imag());
 
@@ -193,14 +196,16 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     _phpAsnerImagHist->Fill(massSqrIt, currentFac.imag());
     }
 
-    complex<double> currentDefaultFac = i*phaseSpaceFac(massSqrIt, _mass1, _mass2);
+    //    complex<double> currentDefaultFac = i*phaseSpaceFac(massSqrIt, _mass1, _mass2);
+    complex<double> currentDefaultFac = i*PawianQFT::phaseSpaceFacDefault(massSqrIt, _mass1, _mass2);
     if(currentDefaultFac.real()==currentDefaultFac.real() && currentDefaultFac.imag()==currentDefaultFac.imag() && fabs(massSqrIt)>1.e-3){
       _phpDefaultRealHist->Fill(massSqrIt, currentDefaultFac.real());
       _phpDefaultImagHist->Fill(massSqrIt, currentDefaultFac.imag());
     }
 
     complex<double> massSqrItCompl(massSqrIt, 0.);
-    complex<double> currentDefaultComplFac = i*phaseSpaceFac(massSqrItCompl, _mass1, _mass2);
+    //    complex<double> currentDefaultComplFac = i*phaseSpaceFac(massSqrItCompl, _mass1, _mass2);
+    complex<double> currentDefaultComplFac = i*PawianQFT::phaseSpaceFacDefault(massSqrItCompl, _mass1, _mass2);
     if(currentDefaultComplFac.real()==currentDefaultComplFac.real() && currentDefaultComplFac.imag()==currentDefaultComplFac.imag()){
       double currentDefaultComplFacReal=currentDefaultComplFac.real();
       if (currentDefaultComplFacReal<-1000.) currentDefaultComplFacReal=-1000.;

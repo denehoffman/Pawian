@@ -25,7 +25,7 @@
 
 #include "Particle/Particle.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-
+#include "qft++Extension/PawianUtils.hh"
 
 Flatte::Flatte(std::pair<Particle*, Particle*>& decPair1, std::pair<Particle*, Particle*>& decPair2) :
   _mass11(decPair1.first->mass())
@@ -50,8 +50,8 @@ complex<double> Flatte::calcFirstChannel(double currentMass, double mass0, doubl
   complex<double> i(0.,1.);
   
   //calculate gammas with phase-space factors 
-  complex<double> gamma11=g1*breakupMomQ(currentMass, _mass11, _mass12);
-  complex<double> gamma22=g2*breakupMomQ(currentMass, _mass21, _mass22);
+  complex<double> gamma11=g1*PawianQFT::breakupMomQDefault(currentMass, _mass11, _mass12);
+  complex<double> gamma22=g2*PawianQFT::breakupMomQDefault(currentMass, _mass21, _mass22);
 
   complex<double> gammaLow(0.,0.);
   if( (_mass11+_mass12) < (_mass21+_mass22) ) gammaLow=gamma11;
@@ -66,8 +66,8 @@ complex<double> Flatte::calcSecondChannel(double currentMass, double mass0, doub
   complex<double> i(0.,1.);
   
   //calculate gammas with phase-space factors 
-  complex<double> gamma11=g1*breakupMomQ(currentMass, _mass11, _mass12);
-  complex<double> gamma22=g2*breakupMomQ(currentMass, _mass21, _mass22);
+  complex<double> gamma11=g1*PawianQFT::breakupMomQDefault(currentMass, _mass11, _mass12);
+  complex<double> gamma22=g2*PawianQFT::breakupMomQDefault(currentMass, _mass21, _mass22);
 
   complex<double> gammaLow(0.,0.);
   if( (_mass11+_mass12) < (_mass21+_mass22) ) gammaLow=gamma11;

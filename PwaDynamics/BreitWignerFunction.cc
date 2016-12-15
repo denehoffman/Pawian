@@ -23,7 +23,7 @@
 
 #include "PwaDynamics/BreitWignerFunction.hh"
 #include "ErrLogger/ErrLogger.hh"
-//#include "PwaDynamics/BarrierFactor.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 complex<double>  BreitWignerFunction::NonRel(double currentMass,double mass0, double width){
   complex<double> i(0.,1.);
@@ -32,16 +32,16 @@ complex<double>  BreitWignerFunction::NonRel(double currentMass,double mass0, do
 
 complex<double> BreitWignerFunction::Rel(double currentMass,double mass0, double width, double massA, double massB){
   complex<double> i(0.,1.);
-  complex<double> rho0_m=phaseSpaceFac(mass0, massA, massB);
+  complex<double> rho0_m=PawianQFT::phaseSpaceFacDefault(mass0, massA, massB);
   return mass0*width/(mass0*mass0 - currentMass*currentMass- i*rho0_m*mass0*width);
 }
 
 complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB, double qR){
   complex<double> i(0.,1.);
-  complex<double> rho0=phaseSpaceFac(mass0, massA, massB);
-  complex<double> rho=phaseSpaceFac(currentMass, massA, massB);
-  complex<double> momQ0=breakupMomQ(mass0, massA, massB);
-  complex<double> momQ=breakupMomQ(currentMass, massA, massB);
+  complex<double> rho0=PawianQFT::phaseSpaceFacDefault(mass0, massA, massB);
+  complex<double> rho=PawianQFT::phaseSpaceFacDefault(currentMass, massA, massB);
+  complex<double> momQ0=PawianQFT::breakupMomQDefault(mass0, massA, massB);
+  complex<double> momQ=PawianQFT::breakupMomQDefault(currentMass, massA, massB);
 
   std::complex<double> bwkFactor=BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, qR);
 
@@ -50,10 +50,10 @@ complex<double>  BreitWignerFunction::BlattWRel(int orbMom, double currentMass,d
 
 complex<double>  BreitWignerFunction::BlattWTensorRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB, double qR){
   complex<double> i(0.,1.);
-  complex<double> rho0=phaseSpaceFac(mass0, massA, massB);
-  complex<double> rho=phaseSpaceFac(currentMass, massA, massB);
-  complex<double> momQ0=breakupMomQ(mass0, massA, massB);
-  complex<double> momQ=breakupMomQ(currentMass, massA, massB);
+  complex<double> rho0=PawianQFT::phaseSpaceFacDefault(mass0, massA, massB);
+  complex<double> rho=PawianQFT::phaseSpaceFacDefault(currentMass, massA, massB);
+  complex<double> momQ0=PawianQFT::breakupMomQDefault(mass0, massA, massB);
+  complex<double> momQ=PawianQFT::breakupMomQDefault(currentMass, massA, massB);
 
   std::complex<double> bwkFactor=BarrierFactor::BlattWeisskopfTensorRatio(orbMom, momQ, momQ0, qR);
 

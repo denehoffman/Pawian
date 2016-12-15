@@ -22,6 +22,7 @@
 //************************************************************************//
 
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 #include "PwaDynamics/LASS.hh"
 
@@ -32,7 +33,7 @@ complex<double>  LASS::K0star_1430(double currentMass, double m0, double gammaM,
   double KMass=0.49367;
   double piMass=0.13498;
 
-  double breakupQ=breakupMomQ(currentMass, KMass, piMass).real();
+  double breakupQ=PawianQFT::breakupMomQDefault(currentMass, KMass, piMass).real();
 
   //calculate the background phase motion
   double cot_deltaB = 1.0/(aLASS*breakupQ) + 0.5*rLASS*breakupQ;

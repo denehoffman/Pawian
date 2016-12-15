@@ -104,19 +104,6 @@ void Wigner_D(const Spin &__jmax,double __alpha,double __beta,double __gamma,
 complex<double> BreitWigner(const Vector4<double> &__p4,double __mass,
 				   double __width);
 
-//
-complex<double> BreitWignerRel(const Vector4<double> &__p4,double __mass,
-			       double __width, double __massA, double __massB);
-
-complex<double> BreitWignerBlattW(const Vector4<double> &__p4, double __massA, 
-                                  double __massB, double __mass0, double __width, int __LL);
-
-//
-
-complex<double> FlatteA980(const Vector4<double> &__p4, double __mass0, double g_KK, double g_EtaPi);
-
-complex<double> FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
-		       , const double>& decPair2, double __mass0, double g1, double g2);
 //_____________________________________________________________________________
 /// Returns \f$ \frac{\Lambda^2 - m^2}{\Lambda^2 - p^2} \f$
 inline double MonopoleFormFactor(double __lambda,double __mass,double __p2){
@@ -152,15 +139,5 @@ complex<double> ReggePropagator(double __t,double __s,double __a,double __b,
 /// Gets spin from a string (ex. "1/2" returns a spin of 0.5)
 Spin GetSpin(const string &__spin);
 //_____________________________________________________________________________
-
-template<typename MassType>
-complex<double> phaseSpaceFac(MassType mass, double massDec1, double massDec2);
-template<typename MassType>
-complex<double> breakupMomQ(MassType mass, double massDec1, double massDec2);
-
-template<typename MassType>
-complex<double> phaseSpaceFacAS(MassType mass, double massDec1, double massDec2);
-template<typename MassType>
-complex<double> breakupMomQAS(MassType mass, double massDec1, double massDec2);
 
 #endif /* _Utils_H */

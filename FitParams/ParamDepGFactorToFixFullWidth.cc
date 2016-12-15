@@ -29,6 +29,7 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 ParamDepGFactorToFixFullWidth::ParamDepGFactorToFixFullWidth(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params){
   std::string targetParameter;
@@ -80,13 +81,13 @@ void ParamDepGFactorToFixFullWidth::Apply(std::shared_ptr<AbsPawianParameters> p
   for(auto it = _refChannelData.begin(); it!= _refChannelData.end(); ++it){
      // Gamma_i = g*g*rho(m,m1,m2)/m
     double m = params->Value((*it).massParamId);
-    partialWidthSum += (params->Value((*it).gParamId) * params->Value((*it).gParamId) * phaseSpaceFac(m, (*it).m1, (*it).m2) / m).real();
+    partialWidthSum += (params->Value((*it).gParamId) * params->Value((*it).gParamId) * PawianQFT::phaseSpaceFacDefault(m, (*it).m1, (*it).m2) / m).real();
   }
 
   double targetPartialWidth = _targetFullWidth - partialWidthSum;
   double mTarget = params->Value(_targetChannelData.massParamId);
   
-  result = (mTarget / phaseSpaceFac(mTarget, _targetChannelData.m1, _targetChannelData.m2)).real() * targetPartialWidth;
+  result = (mTarget / PawianQFT::phaseSpaceFacDefault(mTarget, _targetChannelData.m1, _targetChannelData.m2)).real() * targetPartialWidth;
 
   if((targetPartialWidth < 0) || (result < 0)){
      Alert << "Invalid g-Factor value! "

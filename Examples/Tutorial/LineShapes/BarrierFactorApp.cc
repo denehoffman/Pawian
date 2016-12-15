@@ -24,6 +24,7 @@
 #include "PwaDynamics/BarrierFactor.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 #include "TH1F.h"
 #include "TFile.h"
@@ -190,8 +191,8 @@ int main(int argc, char *argv[])
    dHistqValDec->SetLineWidth(2);
 
    for(int i=1; i<= dHistqValProd->GetNbinsX(); i++){
-     double qProd = breakupMomQ(motherMass, recoilMass, dHistqValProd->GetBinCenter(i)).real();
-     double qDec = breakupMomQ(dHistqValDec->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
+     double qProd = PawianQFT::breakupMomQDefault(motherMass, recoilMass, dHistqValProd->GetBinCenter(i)).real();
+     double qDec = PawianQFT::breakupMomQDefault(dHistqValDec->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
      dHistqValProd->SetBinContent(i, qProd);
      dHistqValDec->SetBinContent(i, qDec);
 
@@ -207,7 +208,7 @@ int main(int argc, char *argv[])
 
    allCanvas->cd(5);
    qValCanvas->DrawClonePad();
-   complex<double> q0Dec = breakupMomQ(resonanceMass, decayParticle1Mass, decayParticle2Mass).real();
+   complex<double> q0Dec = PawianQFT::breakupMomQDefault(resonanceMass, decayParticle1Mass, decayParticle2Mass).real();
 
    // Barrier factors for decay
    TCanvas* decOnlyCanvas = new TCanvas("decOnlyCanvas", "decOnlyCanvas", 800, 600);
@@ -223,7 +224,7 @@ int main(int argc, char *argv[])
       dHist->SetLineWidth(2);
 
       for(int i=1; i<= dHist->GetNbinsX(); i++){
-	complex<double> q = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
+	complex<double> q = PawianQFT::breakupMomQDefault(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
 	 //	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRdec);
 	 std::complex<double> value = BarrierFactor::BlattWeisskopfRatio(l, q, q0Dec, qRdec);
 	 // std::cout << "BarrierFactor::BlattWeisskopf(l, q, qRdec) = " << BarrierFactor::BlattWeisskopf(l, q, qRdec) << "\t BarrierFactor::BlattWeisskopfRatio(l, q, q0Dec, qRdec) = " << BarrierFactor::BlattWeisskopfRatio(l, q, q0Dec, qRdec) << std::endl;
@@ -254,8 +255,8 @@ int main(int argc, char *argv[])
       dHist->SetLineWidth(2);
 
       for(int i=1; i<= dHist->GetNbinsX(); i++){
-	 std::complex<double> q = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	 std::complex<double> qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	 std::complex<double> q = PawianQFT::breakupMomQDefault(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
+	 std::complex<double> qNorm=PawianQFT::breakupMomQDefault(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
 	 std::complex<double> value = BarrierFactor::BlattWeisskopf(l, q, qRprod)/BarrierFactor::BlattWeisskopf(l, qNorm, qRprod);
    	 dHist->SetBinContent(i, std::abs(value.real()));
       }
@@ -289,9 +290,9 @@ int main(int argc, char *argv[])
 	 combinedHistVec.push_back(dHist);
 
 	 for(int i=1; i<= dHist->GetNbinsX(); i++){
-	   complex<double> qDec = breakupMomQ(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
-	   complex<double> qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	   complex<double> qNorm= breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	   complex<double> qDec = PawianQFT::breakupMomQDefault(dHist->GetBinCenter(i), decayParticle1Mass, decayParticle2Mass).real();
+	   complex<double> qProd = PawianQFT::breakupMomQDefault(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
+	   complex<double> qNorm= PawianQFT::breakupMomQDefault(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
 	    std::complex<double> valueDec = BarrierFactor::BlattWeisskopfRatio(ld, qDec, q0Dec, qRdec);
   	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qRprod)/BarrierFactor::BlattWeisskopf(lp, qNorm, qRprod);
 	    //	    std::cout << "valueDec: " << valueDec << "\tvalueProd: " << valueProd << "\t(valueDec* valueProd).real(): " << (valueDec*valueProd).real() << std::endl; 
@@ -343,8 +344,8 @@ int main(int argc, char *argv[])
 	 resHistVec.push_back(dHist);
 
 	 for(int i=1; i<= dHist->GetNbinsX(); i++){
-	    double qProd = breakupMomQ(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
-	    double qNorm=breakupMomQ(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
+	    double qProd = PawianQFT::breakupMomQDefault(motherMass, recoilMass, dHist->GetBinCenter(i)).real();
+	    double qNorm=PawianQFT::breakupMomQDefault(motherMass, recoilMass, decayParticle1Mass+decayParticle2Mass).real();
 	    std::complex<double> valueProd = BarrierFactor::BlattWeisskopf(lp, qProd, qRprod)/BarrierFactor::BlattWeisskopf(lp, qNorm, qRprod);
 	    std::complex<double> breitWigner = BreitWignerFunction::BlattWRel(ld, dHist->GetBinCenter(i), resonanceMass, 
 									      resonanceWidth,decayParticle1Mass, decayParticle2Mass, qRdec );

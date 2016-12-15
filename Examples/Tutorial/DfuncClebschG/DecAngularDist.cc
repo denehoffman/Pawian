@@ -33,6 +33,7 @@
 #include "Examples/Tutorial/DfuncClebschG/DecAngularDist.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "qft++Extension/SphericalHarmonic.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 
 #include "ErrLogger/ErrLogger.hh"
@@ -150,7 +151,7 @@ DecAngularDist::DecAngularDist(std::shared_ptr<const jpcRes> motherJPC, std::sha
 
   //fill heli
   _polMother.SetP4(_mother4Vec, _mother4Vec.Mass());
-  complex<double> qCMS=breakupMomQ(1., .135, .135);
+  complex<double> qCMS=PawianQFT::breakupMomQDefault(1., .135, .135);
   Info << "breakup momentum: " << qCMS.real() << endmsg;
   _qCMSReal=qCMS.real();
 

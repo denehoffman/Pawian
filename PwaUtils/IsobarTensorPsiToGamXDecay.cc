@@ -30,6 +30,7 @@
 
 #include "PwaUtils/IsobarTensorPsiToGamXDecay.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++Extension/PawianUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Utils/PawianCollectionUtils.hh"
@@ -379,7 +380,7 @@ void IsobarTensorPsiToGamXDecay::fillWignerDs(std::map<std::string, Vector4<doub
   
   if(fillqVals){
     double qVal=daughter2HelMother.P();
-    double qValNorm=breakupMomQ(mother_4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
+    double qValNorm=PawianQFT::breakupMomQDefault(mother_4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
     evtData->DoubleMassId[_wignerDqId]=qVal;
     evtData->DoubleMassId[_wignerDqNormId]=qValNorm;
   }

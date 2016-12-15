@@ -34,6 +34,7 @@
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 //#include "qft++/matrix/KpoleMatrix.hh"
 //#include "qft++/matrix/TMatrix.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -157,13 +158,13 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
   
    for (double mass=massMin; mass<massMax; mass+=stepSize){
      Vector4<double> mass4Vec(mass, 0.,0.,0.);
-     complex<double> flatteLow=FlatteFkt(mass4Vec, decPairLow, decPairHigh, 0.98, g1, g2);
+     complex<double> flatteLow=PawianQFT::FlatteFkt(mass4Vec, decPairLow, decPairHigh, 0.98, g1, g2);
      cout << "flatteLow" << flatteLow << "  norm: " << norm(flatteLow) << endl;
      _histShapeLow->Fill(mass4Vec.M(), norm(flatteLow));
      
      _argandKmatrFlatteLowHist->Fill(flatteLow.real(),flatteLow.imag());
     
-     complex<double> flatteHigh=FlatteFkt(mass4Vec, decPairHigh, decPairLow, 0.98, g2, g1);
+     complex<double> flatteHigh=PawianQFT::FlatteFkt(mass4Vec, decPairHigh, decPairLow, 0.98, g2, g1);
 
      cout << "flatteHigh" << flatteHigh << "  norm: " << norm(flatteHigh) << endl;
      _histShapeHigh->Fill(mass4Vec.M(), norm(flatteHigh));
@@ -207,8 +208,8 @@ FlatteShape::FlatteShape(std::string ptype, double g1, double g2) :
      _histShapeHighKmatrRel->Fill(mass4Vec.M(), norm(currentValHighRel)*norm(sqrt(rhoFactors[0]*rhoFactors[1])) );
      _argandKmatrHighRelHist->Fill(currentValHighRel.real()*sqrt(abs(rhoFactors[0]*rhoFactors[1])),currentValHighRel.imag()*sqrt(abs(rhoFactors[0]*rhoFactors[1])));
 
-     complex<double> rhoPoleFactor1=phaseSpaceFac(mass4Vec.M(),decPairLow.first, decPairLow.second); 
-     complex<double> rhoPoleFactor2=phaseSpaceFac(mass4Vec.M(),decPairHigh.first, decPairHigh.second);
+     complex<double> rhoPoleFactor1=PawianQFT::phaseSpaceFacDefault(mass4Vec.M(),decPairLow.first, decPairLow.second); 
+     complex<double> rhoPoleFactor2=PawianQFT::phaseSpaceFacDefault(mass4Vec.M(),decPairHigh.first, decPairHigh.second);
 
      complex<double> imag(0.,1.);
      complex<double> denom=0.98*0.98-mass4Vec.M()*mass4Vec.M()-imag*(rhoPoleFactor1*g1*g1+rhoPoleFactor2*g2*g2);

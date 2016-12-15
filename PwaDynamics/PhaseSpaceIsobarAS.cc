@@ -22,7 +22,7 @@
 //************************************************************************//
 
 #include "PwaDynamics/PhaseSpaceIsobarAS.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 PhaseSpaceIsobarAS::PhaseSpaceIsobarAS(double mass1, double mass2):
   AbsPhaseSpace()
@@ -36,23 +36,23 @@ PhaseSpaceIsobarAS::~PhaseSpaceIsobarAS(){
 }
 
 complex<double> PhaseSpaceIsobarAS::factor(const double mass){
-  return phaseSpaceFacAS(mass,_mass1, _mass2);
+  return PawianQFT::phaseSpaceFacAS(mass,_mass1, _mass2);
 }
 
 complex<double> PhaseSpaceIsobarAS::breakUpMom(const double mass){
-  return breakupMomQAS(mass,_mass1, _mass2);
+  return PawianQFT::breakupMomQAS(mass,_mass1, _mass2);
 }
 
 complex<double> PhaseSpaceIsobarAS::factor(const complex<double> mass){
   // Calc from the breakup momentum to account for chosen sign
-  complex<double> q = breakupMomQAS(mass,_mass1, _mass2);
+  complex<double> q = PawianQFT::breakupMomQAS(mass,_mass1, _mass2);
   CorrectForChosenSign(q,q);
   return q * 2. / mass;
 }
 
 complex<double> PhaseSpaceIsobarAS::breakUpMom(const complex<double> mass){
    
-  complex<double> q = breakupMomQAS(mass,_mass1, _mass2);
+  complex<double> q = PawianQFT::breakupMomQAS(mass,_mass1, _mass2);
   CorrectForChosenSign(q, q);
   return q;
 }
