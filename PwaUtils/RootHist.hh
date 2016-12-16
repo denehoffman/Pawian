@@ -91,5 +91,6 @@ private:
   float _weightToWrite;
   std::map<std::string, std::shared_ptr<TLorentzVector> > _fourVecMap;
 
+  virtual void initAngleHists(std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& theMap, std::shared_ptr<angleHistData> theHistData, std::string dataType, std::string systemType="Heli");
 };
 

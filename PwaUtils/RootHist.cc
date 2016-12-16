@@ -62,127 +62,25 @@ RootHist::RootHist(std::string additionalSuffix) :
 
   std::vector<std::shared_ptr<angleHistData> >::iterator itAngleVec;
   for (itAngleVec=_angleHistDataVec.begin(); itAngleVec!=_angleHistDataVec.end(); ++itAngleVec){
-    std::string tmpBaseName= (*itAngleVec)->_name;
-    boost::replace_all(tmpBaseName,"+","p");
-    boost::replace_all(tmpBaseName,"-","m");
 
-    //helicity data
-    std::string histThetaName="DataTheta"+tmpBaseName;
-    std::string histPhiName="DataPhi"+tmpBaseName;
-    std::string histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + "Heli) (data)";
-    std::string histPhiDescription = "#phi(" +(*itAngleVec)->_name + "Heli) (data)";
-
-    TH1F* currentThetaAngleDataHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentPhiAngleDataHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentThetaAngleDataHist->Sumw2();
-    currentPhiAngleDataHist->Sumw2();
-    _angleDataHistMap[*itAngleVec].push_back(currentThetaAngleDataHist);
-    _angleDataHistMap[*itAngleVec].push_back(currentPhiAngleDataHist);
-
+    //Heli data
+    initAngleHists(_angleDataHistMap, (*itAngleVec), "Data", "Heli");
 
     //Gottfried Jackson data
-    std::string histGJThetaName="DataThetaGJ"+tmpBaseName;
-    std::string histGJPhiName="DataPhiGJ"+tmpBaseName;
-    std::string histGJThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + "GJ) (data)";
-    std::string histGJPhiDescription = "#phi(" +(*itAngleVec)->_name + "GJ) (data)";
-
-    TH1F* currentGJThetaAngleDataHist=new TH1F(histGJThetaName.c_str(), histGJThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentGJPhiAngleDataHist=new TH1F(histGJPhiName.c_str(), histGJPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentGJThetaAngleDataHist->Sumw2();
-    currentGJPhiAngleDataHist->Sumw2();
-    _angleGJDataHistMap[*itAngleVec].push_back(currentGJThetaAngleDataHist);
-    _angleGJDataHistMap[*itAngleVec].push_back(currentGJPhiAngleDataHist);
+    initAngleHists(_angleGJDataHistMap, (*itAngleVec), "Data", "GJ");
 
     //helicity MC
-    histThetaName="MCTheta"+tmpBaseName;
-    histPhiName="MCPhi"+tmpBaseName;
-    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + "Heli) (MC)";
-    histPhiDescription = "#phi(" +(*itAngleVec)->_name + "Heli) (MC)";
+    initAngleHists(_angleMcHistMap, (*itAngleVec), "Mc", "Heli");
 
-    TH1F* currentThetaAngleMcHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentPhiAngleMcHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentThetaAngleMcHist->Sumw2();
-    currentPhiAngleMcHist->Sumw2();
-    _angleMcHistMap[*itAngleVec].push_back(currentThetaAngleMcHist);
-    _angleMcHistMap[*itAngleVec].push_back(currentPhiAngleMcHist);
-
-    //Gottfried Jackson data
-    histGJThetaName="MCThetaGJ"+tmpBaseName;
-    histGJPhiName="MCPhiGJ"+tmpBaseName;
-    histGJThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + "GJ) (MC)";
-    histGJPhiDescription = "#phi(" +(*itAngleVec)->_name + "GJ) (MC)";
-
-    TH1F* currentGJThetaAngleMcHist=new TH1F(histGJThetaName.c_str(), histGJThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentGJPhiAngleMcHist=new TH1F(histGJPhiName.c_str(), histGJPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentGJThetaAngleMcHist->Sumw2();
-    currentGJPhiAngleMcHist->Sumw2();
-    _angleGJMcHistMap[*itAngleVec].push_back(currentGJThetaAngleMcHist);
-    _angleGJMcHistMap[*itAngleVec].push_back(currentGJPhiAngleMcHist);
+    //Gottfried Jackson MC
+    initAngleHists(_angleGJMcHistMap, (*itAngleVec), "Mc", "GJ");
 
     //helicity fit
-    histThetaName="FitTheta"+tmpBaseName;
-    histPhiName="FitPhi"+tmpBaseName;
-    histThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + "Heli) (fit)";
-    histPhiDescription = "#phi(" +(*itAngleVec)->_name + "Heli) (fit)";
-
-    TH1F* currentThetaAngleFitHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentPhiAngleFitHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentThetaAngleFitHist->Sumw2();
-    currentPhiAngleFitHist->Sumw2();
-    _angleFitHistMap[*itAngleVec].push_back(currentThetaAngleFitHist);
-    _angleFitHistMap[*itAngleVec].push_back(currentPhiAngleFitHist);
+    initAngleHists(_angleFitHistMap, (*itAngleVec), "Fit", "Heli");
 
     //Gottfried Jackson fit
-    histGJThetaName="FitThetaGJ"+tmpBaseName;
-    histGJPhiName="FitPhiGJ"+tmpBaseName;
-    histGJThetaDescription = "cos#Theta(" +(*itAngleVec)->_name + "GJ) (fit)";
-    histGJPhiDescription = "#phi(" +(*itAngleVec)->_name + "GJ) (fit)";
+    initAngleHists(_angleGJFitHistMap, (*itAngleVec), "Fit", "GJ");
 
-    TH1F* currentGJThetaAngleFitHist=new TH1F(histGJThetaName.c_str(), histGJThetaDescription.c_str(), 100., -1., 1.);
-    TH1F* currentGJPhiAngleFitHist=new TH1F(histGJPhiName.c_str(), histGJPhiDescription.c_str(), 100., -3.14159, 3.14159);
-    currentGJThetaAngleFitHist->Sumw2();
-    currentGJPhiAngleFitHist->Sumw2();
-    _angleGJFitHistMap[*itAngleVec].push_back(currentGJThetaAngleFitHist);
-    _angleGJFitHistMap[*itAngleVec].push_back(currentGJPhiAngleFitHist);
-
-
-    if( (*itAngleVec)->_nBodyDecay == 3){
-      std::string histLambdaName="DataLambda"+tmpBaseName;
-      std::string histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli (data)";
-      TH1F* currentLambdaDataHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
-      currentLambdaDataHist->Sumw2();
-      _angleDataHistMap[*itAngleVec].push_back(currentLambdaDataHist);
-
-      histLambdaName="MCLambda"+tmpBaseName;
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli (MC)";
-      TH1F* currentLambdaMcHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
-      currentLambdaMcHist->Sumw2();
-      _angleMcHistMap[*itAngleVec].push_back(currentLambdaMcHist);
-
-      histLambdaName="FitLambda"+tmpBaseName;
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "Heli (fit)";
-      TH1F* currentLambdaFitHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
-      currentLambdaFitHist->Sumw2();
-      _angleFitHistMap[*itAngleVec].push_back(currentLambdaFitHist);
-
-      histLambdaName="DataLambdaGJ"+tmpBaseName;
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "GJ (data)";
-      TH1F* currentLambdaDataGJHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
-      currentLambdaDataGJHist->Sumw2();
-      _angleGJDataHistMap[*itAngleVec].push_back(currentLambdaDataGJHist);
-
-      histLambdaName="McLambdaGJ"+tmpBaseName;
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "GJ (MC)";
-      TH1F* currentLambdaMcGJHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
-      currentLambdaMcGJHist->Sumw2();
-      _angleGJMcHistMap[*itAngleVec].push_back(currentLambdaMcGJHist);
-
-      histLambdaName="FitLambdaGJ"+tmpBaseName;      
-      histLambdaDescription = "#Lambda(" +(*itAngleVec)->_name + "GJ (fit)";
-      TH1F* currentLambdaFitGJHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
-      currentLambdaFitGJHist->Sumw2();
-      _angleGJFitHistMap[*itAngleVec].push_back(currentLambdaFitGJHist);
-    }
   }
   // 2D-Histograms
   std::vector<std::shared_ptr<angleHistData2D> >::iterator itAngleVec2D;
@@ -581,6 +479,33 @@ void RootHist::scaleFitHists(double scaleFactor){
       (*itTH2F)->Scale(scaleFactor);
     }
   }
+}
+
+void RootHist::initAngleHists(std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& theMap, std::shared_ptr<angleHistData> theHistData, std::string dataType, std::string systemType){
+    std::string tmpBaseName= theHistData->_name;
+    boost::replace_all(tmpBaseName,"+","p");
+    boost::replace_all(tmpBaseName,"-","m");
+
+    //helicity data
+    std::string histThetaName=dataType+"Theta"+systemType+"_"+tmpBaseName;
+    std::string histPhiName=dataType+"Phi"+systemType+"_"+tmpBaseName;
+    std::string histThetaDescription = "cos#Theta " +theHistData->_name +systemType+dataType;
+    std::string histPhiDescription = "#phi " +theHistData->_name +systemType+dataType;
+
+    TH1F* currentThetaAngleDataHist=new TH1F(histThetaName.c_str(), histThetaDescription.c_str(), 100., -1., 1.);
+    TH1F* currentPhiAngleDataHist=new TH1F(histPhiName.c_str(), histPhiDescription.c_str(), 100., -3.14159, 3.14159);
+    currentThetaAngleDataHist->Sumw2();
+    currentPhiAngleDataHist->Sumw2();
+    theMap[theHistData].push_back(currentThetaAngleDataHist);
+    theMap[theHistData].push_back(currentPhiAngleDataHist);
+
+    if( theHistData->_nBodyDecay == 3){
+      std::string histLambdaName="Lambda"+dataType+systemType+tmpBaseName;
+      std::string histLambdaDescription = "#Lambda(" +theHistData->_name+dataType+systemType;
+      TH1F* currentLambdaDataHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
+      currentLambdaDataHist->Sumw2();
+      theMap[theHistData].push_back(currentLambdaDataHist);
+    }
 }
 
 
