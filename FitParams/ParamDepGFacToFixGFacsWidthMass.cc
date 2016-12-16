@@ -43,7 +43,7 @@ ParamDepGFacToFixGFacsWidthMass::ParamDepGFacToFixGFacsWidthMass(std::istringstr
   std::vector<std::string>::const_iterator it;
 
   for(it=gFactorFixPoles.begin(); it!=gFactorFixPoles.end(); ++it){
-    Info << (*it) <<endmsg;
+    InfoMsg << (*it) <<endmsg;
     FixGFacsWidthMassData newData;
     std::string poleMassName=(*it)+"Mass";
     newData.poleMass=poleMassName;
@@ -142,7 +142,7 @@ ParamDepGFacToFixGFacsWidthMass::ParamDepGFacToFixGFacsWidthMass(std::istringstr
 
   Fill(targetParameterVec, params);
 
-  Info << "*****ParamDepGFacToFixGFacsWidthMass*****" << endmsg; 
+  InfoMsg << "*****ParamDepGFacToFixGFacsWidthMass*****" << endmsg; 
   std::map<std::string, FixGFacsWidthMassData>::iterator itMap;
   for(itMap=_dataMap.begin(); itMap!=_dataMap.end(); ++itMap) itMap->second.print(std::cout);  
 }

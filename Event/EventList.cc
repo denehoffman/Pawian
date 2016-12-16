@@ -132,7 +132,7 @@ bool EventList::findParticleTypes(ParticleTable& pdtTable)
     thisParticle = pdtTable.particle(eventList[0]->p4(i)->Mass());
     particleRefs.push_back(thisParticle);
     if (0 == thisParticle) {
-      Warning << "did not find a particle with mass " 
+      WarningMsg << "did not find a particle with mass " 
 	      << eventList[0]->p4(i)->Mass() << endmsg;
       result = false;
     }

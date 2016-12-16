@@ -78,14 +78,14 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
-    if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
+    if (evtCount%500 == 0) InfoMsg << "4vec calculation for event " << evtCount ;  // << endmsg;
 
     EvtData* currentEvt=convertEvent(anEvent, startNo+evtCount);
 
     if (evtCount%10000 == 0){
       std::string stringAll="all";
       Vector4<double> V4_all_lab=currentEvt->FourVecsId.at(IdStringMapRegistry::instance()->stringId(stringAll));
-      Info << "4vec all in lab system" << "\n"
+      InfoMsg << "4vec all in lab system" << "\n"
            << " px: " << V4_all_lab.Px() <<"\t"
            << " py: " << V4_all_lab.Py() <<"\t"
            << " pz: " << V4_all_lab.Pz() <<"\t"
@@ -167,7 +167,7 @@ double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
-    if (evtCount%500 == 0) Info << "4vec calculation for event " << evtCount ;  // << endmsg;
+    if (evtCount%500 == 0) InfoMsg << "4vec calculation for event " << evtCount ;  // << endmsg;
 
     Vector4<double> V4_all_lab(0.,0.,0.,0.);
 
@@ -183,7 +183,7 @@ double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID
     }
 
     if (evtCount%10000 == 0){
-      Info << "4vec all in lab system" << "\n"
+      InfoMsg << "4vec all in lab system" << "\n"
            << " px: " << V4_all_lab.Px() <<"\t"
            << " py: " << V4_all_lab.Py() <<"\t"
            << " pz: " << V4_all_lab.Pz() <<"\t"

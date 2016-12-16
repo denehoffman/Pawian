@@ -39,7 +39,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application for histogramming the mass shapes of two resonances obtained by the Breit-Wigner parameterization and by the T-matrix calculation\n" 
+    InfoMsg << "\nThis is a test application for histogramming the mass shapes of two resonances obtained by the Breit-Wigner parameterization and by the T-matrix calculation\n" 
 	 << "The switches are:\n\n"
          << "-mass1 (mass of the resonance1;default 1.318)\n\n" 
          << "-width1 (width1 of the resonance1;default 0.1)\n\n"

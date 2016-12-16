@@ -160,9 +160,9 @@ void HeliMultipoleDecNonRefAmps::fillParamNameList(){
 
   for (int i=0; i<_noOfAmps; ++i){
     _paramNameList.push_back(_MagParamNames.at(i));
-    //    Info << "HeliMultipoleDecNonRefAmps: add parameter " << _MagParamNames.at(i) << " to paramNameList" << endmsg;
+    //    InfoMsg << "HeliMultipoleDecNonRefAmps: add parameter " << _MagParamNames.at(i) << " to paramNameList" << endmsg;
     _paramNameList.push_back(_PhiParamNames.at(i));
-    //    Info << "HeliMultipoleDecNonRefAmps: add parameter " << _PhiParamNames.at(i) << " to paramNameList" << endmsg;
+    //    InfoMsg << "HeliMultipoleDecNonRefAmps: add parameter " << _PhiParamNames.at(i) << " to paramNameList" << endmsg;
   }
 
 }

@@ -53,7 +53,7 @@ void MinuitMinimizer::minimize(){
   //  MnUserParameters startMnUserP(*_startMnUserParametersPtr);
  MnMigrad migrad(*_absFcn, *_startMnUserParametersPtr);
  //    MnMigrad migrad(*_absFcn, startMnUserP);
-  Info <<"start migrad "<< endmsg;
+  InfoMsg <<"start migrad "<< endmsg;
   FunctionMinimum currentFunctionMinimum = migrad(0, GlobalEnv::instance()->parser()->tolerance());
 
   if(currentFunctionMinimum.IsValid()){
@@ -71,7 +71,7 @@ void MinuitMinimizer::minimize(){
 //  for(int j=0; j<2; j++){
    // workaround fix; only one trial
      for(int j=0; j<1; j++){
-     Warning <<"FM is invalid, try with strategy = 2."<< endmsg;
+     WarningMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
 
      // Check minimum covariance matrix
      bool badCovarianceDiagonal=false;
@@ -80,7 +80,7 @@ void MinuitMinimizer::minimize(){
      }
 
      if(badCovarianceDiagonal){
-       Warning << "Using default errors" << endmsg;
+       WarningMsg << "Using default errors" << endmsg;
        std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
        for(unsigned int i=0; i< currentFunctionMinimum.UserParameters().Params().size();i++){
           newMnUserParams->SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
@@ -119,25 +119,25 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
 
     double theLh = _mnFunctionMinimumFinalPtr->Fval();
 
-    Info << "\n\n********************** Final fit parameters *************************\n";
+    InfoMsg << "\n\n********************** Final fit parameters *************************\n";
     _bestPawianParams->print(std::cout, true);
-    Info << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->IsValid())             Info << "\n Function minimum is valid.\n";
-    else                          Info << "\n WARNING: Function minimum is invalid!" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->HasValidCovariance())  Info << "\n Covariance matrix is valid." << endmsg;
-    else                          Info << "\n WARNING: Covariance matrix is invalid!" << endmsg;
-    Info <<"\n Final LH: "<< std::setprecision(10) << theLh << "\n" << endmsg;
-    Info <<" # of function calls: " << _mnFunctionMinimumFinalPtr->NFcn() << endmsg;
-    Info <<" minimum edm: " << std::setprecision(10) << _mnFunctionMinimumFinalPtr->Edm()<<endmsg;
-    if(!_mnFunctionMinimumFinalPtr->HasValidParameters()) Info << " hasValidParameters() returned FALSE" << endmsg;
-    if(!_mnFunctionMinimumFinalPtr->HasAccurateCovar())   Info << " hasAccurateCovar() returned FALSE" << endmsg;
-    if(!_mnFunctionMinimumFinalPtr->HasPosDefCovar()){    Info << " hasPosDefCovar() returned FALSE" << endmsg;
-                                  if(_mnFunctionMinimumFinalPtr->HasMadePosDefCovar()) Info << " hasMadePosDefCovar() returned TRUE" << endmsg;
+    InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
+    if(_mnFunctionMinimumFinalPtr->IsValid())             InfoMsg << "\n Function minimum is valid.\n";
+    else                          InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
+    if(_mnFunctionMinimumFinalPtr->HasValidCovariance())  InfoMsg << "\n Covariance matrix is valid." << endmsg;
+    else                          InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
+    InfoMsg <<"\n Final LH: "<< std::setprecision(10) << theLh << "\n" << endmsg;
+    InfoMsg <<" # of function calls: " << _mnFunctionMinimumFinalPtr->NFcn() << endmsg;
+    InfoMsg <<" minimum edm: " << std::setprecision(10) << _mnFunctionMinimumFinalPtr->Edm()<<endmsg;
+    if(!_mnFunctionMinimumFinalPtr->HasValidParameters()) InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
+    if(!_mnFunctionMinimumFinalPtr->HasAccurateCovar())   InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
+    if(!_mnFunctionMinimumFinalPtr->HasPosDefCovar()){    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
+                                  if(_mnFunctionMinimumFinalPtr->HasMadePosDefCovar()) InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
     }
-    if(!_mnFunctionMinimumFinalPtr->HasCovariance())      Info << " hasCovariance() returned FALSE" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->HasReachedCallLimit()) Info << " hasReachedCallLimit() returned TRUE" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->IsAboveMaxEdm())       Info << " isAboveMaxEdm() returned TRUE" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->HesseFailed())         Info << " hesseFailed() returned TRUE\n" << endmsg;
+    if(!_mnFunctionMinimumFinalPtr->HasCovariance())      InfoMsg << " hasCovariance() returned FALSE" << endmsg;
+    if(_mnFunctionMinimumFinalPtr->HasReachedCallLimit()) InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
+    if(_mnFunctionMinimumFinalPtr->IsAboveMaxEdm())       InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
+    if(_mnFunctionMinimumFinalPtr->HesseFailed())         InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,11 +148,11 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData;
-    Info << "BIC:\t" << BICcriterion << endmsg;
-    Info << "AIC:\t" << AICcriterion << endmsg;
-    Info << "AICc:\t" << AICccriterion << endmsg;
+    InfoMsg << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    InfoMsg << "evtWeightSumData:\t" <<evtWeightSumData;
+    InfoMsg << "BIC:\t" << BICcriterion << endmsg;
+    InfoMsg << "AIC:\t" << AICcriterion << endmsg;
+    InfoMsg << "AICc:\t" << AICccriterion << endmsg;
 }
 
 void MinuitMinimizer::dumpFitResult(){

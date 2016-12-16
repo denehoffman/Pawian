@@ -184,6 +184,6 @@ void GlobalEnv::setup(ParserBase* theParser){
 
 void GlobalEnv::replaceParser(ParserBase* theParser){
   _alreadySetUp = false;
-  Info << "Now replace the parser!!!" << endmsg;
+  InfoMsg << "Now replace the parser!!!" << endmsg;
   setup(theParser);  
 }

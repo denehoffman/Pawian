@@ -216,7 +216,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     else
     {
       _errLogMode = debug;
-      Warning << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " ;  // << endmsg;
+      WarningMsg << "ErrorLogger not (properly) set -> Use mode 'DEBUG' " ;  // << endmsg;
     }
 
     if (_evoRatioOfModParams<=0. || _evoRatioOfModParams>1.){

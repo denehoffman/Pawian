@@ -81,7 +81,7 @@ void AbsXdecAmp::initialize(){
     std::shared_ptr<AbsDynamics> currentDyn=decDaughter1->getDynamics();
     if (0!=currentDyn) decDaughter1->getDynamics()->addGrandMa(_decay);
     else{
-      Warning <<"no dynamics for\t" << decDaughter1->name() << endmsg;
+      WarningMsg <<"no dynamics for\t" << decDaughter1->name() << endmsg;
     }
     _decAmpDaughter1=XdecAmpRegistry::instance()->getXdecAmp(_channelID, decDaughter1);
   }
@@ -92,7 +92,7 @@ void AbsXdecAmp::initialize(){
     std::shared_ptr<AbsDynamics> currentDyn=decDaughter2->getDynamics();
     if (0!=currentDyn) decDaughter2->getDynamics()->addGrandMa(_decay);
     else{
-      Warning <<"no dynamics for\t" << decDaughter2->name() << endmsg;
+      WarningMsg <<"no dynamics for\t" << decDaughter2->name() << endmsg;
     }
     _decAmpDaughter2=XdecAmpRegistry::instance()->getXdecAmp(_channelID, decDaughter2);
   }

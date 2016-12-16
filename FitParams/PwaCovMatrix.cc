@@ -64,14 +64,14 @@ PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix,
 	 double errValue = theMinuitParameters.Error(i);
 
 	 if(iCov==jCov){
-	    Info << "Diagonal sqrt(cov) element (" << i << ", " << i << ") / param error: "
+	    InfoMsg << "Diagonal sqrt(cov) element (" << i << ", " << i << ") / param error: "
 		 << sqrt(covValue) << " / " << errValue << endmsg;
 	 }
 	 else{
 	    double correlationCoeff = covValue / sqrt( theMinuitCovMatrix(iCov, iCov) * theMinuitCovMatrix(jCov, jCov));
 
 	    if(fabs(correlationCoeff) > 0.99){
-	       Warning << "Correlation between parameter " << i << " and " << j << " = " << correlationCoeff << endmsg;
+	       WarningMsg << "Correlation between parameter " << i << " and " << j << " = " << correlationCoeff << endmsg;
 	    }
 	 }
 
@@ -114,7 +114,7 @@ bool PwaCovMatrix::DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMin
    bool result = true;
    for(unsigned int i=0; i<theMinuitCovMatrix.Nrow(); i++){
       if(theMinuitCovMatrix(i, i) < 0){
-	 Warning << "Covariance element (" << i << "," << i << ")"
+	 WarningMsg << "Covariance element (" << i << "," << i << ")"
 		 << " = " << theMinuitCovMatrix(i,i) << " < 0" << endmsg;
 	 result = false;
       }

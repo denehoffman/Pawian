@@ -90,7 +90,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application which calculates all allowed LS combinations for the decay a((2J)PC) -> b((2J)PC) + c((2J)PC)\n"
+    InfoMsg << "\nThis is a test application which calculates all allowed LS combinations for the decay a((2J)PC) -> b((2J)PC) + c((2J)PC)\n"
 	 << "The switches are:\n\n"
          << "-mother  (default 2+-)\n\n" 
          << "-daughter1  (default 4--)\n\n"
@@ -122,7 +122,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      Warning << "Unknown switch: " 
+      WarningMsg << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
@@ -130,7 +130,7 @@ int main(int __argc,char *__argv[]){
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
     }
 
-  Info << "the JPC combinations of the particles are:\n\n"
+  InfoMsg << "the JPC combinations of the particles are:\n\n"
        << "mother:\t" << motherStr
        << "\ndaughter1:\t" << daughter1Str
        << "\ndaughter2:\t" << daughter2Str << endmsg;
@@ -153,7 +153,7 @@ int main(int __argc,char *__argv[]){
   std::stringstream mother2JStrStr(motherStr);
   double mother2J=0.;
   mother2JStrStr >> mother2J;
-  Info << "mother:\tJ: " << mother2J << "/2\tP: " << motherP << "\tC: " << motherC << endmsg;
+  InfoMsg << "mother:\tJ: " << mother2J << "/2\tP: " << motherP << "\tC: " << motherC << endmsg;
 
   found=findPCAndRemove(daughter1Str, daughter1P, daughter1C);
   if (!found) {
@@ -163,7 +163,7 @@ int main(int __argc,char *__argv[]){
   std::stringstream daughter1_2JStrStr(daughter1Str);
   double daughter1_2J=0.;
   daughter1_2JStrStr >> daughter1_2J;
-  Info << "daughter1:\tJ: " << daughter1_2J << "/2\tP: " << daughter1P << "\tC: " << daughter1C << endmsg;
+  InfoMsg << "daughter1:\tJ: " << daughter1_2J << "/2\tP: " << daughter1P << "\tC: " << daughter1C << endmsg;
 
   found=findPCAndRemove(daughter2Str, daughter2P, daughter2C);
   if (!found) {
@@ -173,7 +173,7 @@ int main(int __argc,char *__argv[]){
   std::stringstream daughter2_2JStrStr(daughter2Str);
   double daughter2_2J=0.;
   daughter2_2JStrStr >> daughter2_2J;
-  Info << "daughter2:\tJ: " << daughter2_2J << "/2\tP: " << daughter2P << "\tC: " << daughter2C << endmsg;
+  InfoMsg << "daughter2:\tJ: " << daughter2_2J << "/2\tP: " << daughter2P << "\tC: " << daughter2C << endmsg;
 
 
   

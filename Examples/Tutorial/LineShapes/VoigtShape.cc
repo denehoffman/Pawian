@@ -61,7 +61,7 @@ VoigtShape::VoigtShape(double mass0, double gamma, double sigma) :
     
     Vector4<double>  res4V(massIt, 0., 0., 0.);
     double currentVoigtian=theVoigtian.calc(massIt, mass0, gamma, sigma);
-    Info << "currentVoigtian(" << massIt << ")= " << currentVoigtian << endmsg;    
+    InfoMsg << "currentVoigtian(" << massIt << ")= " << currentVoigtian << endmsg;    
     double weight=currentVoigtian;
     _voigtMassH1->Fill(massIt,weight);
     

@@ -55,7 +55,7 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID)
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-  Info << "_parityFactor=\t" << _parityFactor << endmsg;
+  InfoMsg << "_parityFactor=\t" << _parityFactor << endmsg;
   fillCgPreFactor();
 }
 
@@ -71,7 +71,7 @@ LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-  Info << "_parityFactor=\t" << _parityFactor << endmsg;
+  InfoMsg << "_parityFactor=\t" << _parityFactor << endmsg;
   fillCgPreFactor();
 }
 
@@ -134,7 +134,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* gra
   }
 
   if(result.real()!=result.real()){
-    Info << "dyn name: " << _absDyn->name() 
+    InfoMsg << "dyn name: " << _absDyn->name() 
 	 << "\nname(): " << name()
 	 << endmsg;
     Alert << "result:\t" << result << endmsg;

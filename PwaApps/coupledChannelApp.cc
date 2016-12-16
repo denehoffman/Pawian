@@ -54,8 +54,8 @@
 
 int main(int __argc,char *__argv[]){
 
-  Info << welcomeScreen << endmsg;
-  Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
+  InfoMsg << welcomeScreen << endmsg;
+  InfoMsg << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
   // Parse the command line
    globalParser* globalAppParams=new globalParser(__argc, __argv);
@@ -69,7 +69,7 @@ int main(int __argc,char *__argv[]){
   char* argvWoCfgFile[__argc];
   int argcWoCfgFile=0;
   for (int i=0; i<__argc ; ++i){
-    Info << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
+    InfoMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
     std::string currentArgv(__argv[i]);
      if(currentArgv !=(char*)"--pbarpFiles" 
 	&& currentArgv !=(char*)"--epemFiles"
@@ -115,9 +115,9 @@ int main(int __argc,char *__argv[]){
   std::vector<std::string> fixedGlobalParams = GlobalEnv::instance()->fixedParams();
   fixedParams.insert(fixedParams.end(), fixedGlobalParams.begin(), fixedGlobalParams.end());
 
- Info << "the fixed params are:" << endmsg; 
+ InfoMsg << "the fixed params are:" << endmsg; 
  std::vector<std::string>::iterator itStr;
-for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) Info << *itStr <<endmsg;
+for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) InfoMsg << *itStr <<endmsg;
 
   if(mode == "qaModeSimple")
     theAppBase.fixParams(startPawianParams,fixedParams, false);
@@ -155,8 +155,8 @@ for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) Info << *itSt
 
   const std::string datFile=GlobalEnv::instance()->Channel(0)->parser()->dataFile();
   const std::string mcFile=GlobalEnv::instance()->Channel(0)->parser()->mcFile();
-  Info << "data file: " << datFile ;  // << endmsg;
-  Info << "mc file: " << mcFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile ;  // << endmsg;
+  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
   
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);

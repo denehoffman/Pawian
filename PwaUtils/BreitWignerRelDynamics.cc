@@ -44,7 +44,7 @@ BreitWignerRelDynamics::BreitWignerRelDynamics(std::string& name, std::vector<Pa
   ,_dynMassIdDaughter1(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynMassKeyDaughter1))
   ,_dynMassIdDaughter2(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynMassKeyDaughter2))
 {
-  Info << "BreitWignerRelDynamics for " << _name << " with  mass key daughter1 " << _dynMassKeyDaughter1 << " and mass key daughter2 " << _dynMassKeyDaughter2 << endmsg;
+  InfoMsg << "BreitWignerRelDynamics for " << _name << " with  mass key daughter1 " << _dynMassKeyDaughter1 << " and mass key daughter2 " << _dynMassKeyDaughter2 << endmsg;
 }
 
 BreitWignerRelDynamics::~BreitWignerRelDynamics()

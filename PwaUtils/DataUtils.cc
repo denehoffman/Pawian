@@ -50,7 +50,7 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcR
 {
   // first: check C-parity
   if ( motherRes->C != daughterRes1->C*daughterRes2->C){
-    Warning << "C-Parity not valid for the reaction: JPC= " 
+    WarningMsg << "C-Parity not valid for the reaction: JPC= " 
             << motherRes->J << " " << motherRes->P << " " << motherRes->C
             << " --> "
             << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
@@ -72,7 +72,7 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcR
     theLSVec.push_back(tmpLS);
   }
 
-  if(LSs.size()==0) Info << "size for decay " << motherRes->name() << " to " << daughterRes1->name() << " and " << daughterRes2->name()
+  if(LSs.size()==0) InfoMsg << "size for decay " << motherRes->name() << " to " << daughterRes1->name() << " and " << daughterRes2->name()
                          << " =0!!!" << endmsg;
 }
 
@@ -94,7 +94,7 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Parti
   // first: check C-parity
   if (useCParity){
     if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()){
-      Warning << "C-Parity not valid for the reaction: JPC= " 
+      WarningMsg << "C-Parity not valid for the reaction: JPC= " 
               << motherRes->J << " " << motherRes->P << " " << motherRes->C
               << " --> "
               << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
@@ -108,7 +108,7 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Parti
   if(useIsospin){
     // second: check G-parity
     if (gParityMother != daughter1->theGParity()*daughter2->theGParity() ){
-      Warning << "G-Parity not valid for:" 
+      WarningMsg << "G-Parity not valid for:" 
               << gParityMother 
               << " --> "
               << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
@@ -160,7 +160,7 @@ void validLSWeak(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, P
     theLSVec.push_back(tmpLS);
   }
 
-  if(LSs.size()==0) Info << "size for decay " << motherRes->name() << " to " << daughter1->name() << " and " << daughter2->name()
+  if(LSs.size()==0) InfoMsg << "size for decay " << motherRes->name() << " to " << daughter1->name() << " and " << daughter2->name()
                          << " =0!!!" << endmsg;
 }
 
@@ -172,7 +172,7 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
   //  validJPCLS(motherRes, daughterRes1, daughterRes2, currentJPCLSDecAmps, useCParity, gParityMother, useIsospin);
   validJPCLS(motherRes, daughter1, daughter2, currentJPCLSDecAmps, useCParity, gParityMother, useIsospin);
   if(currentJPCLSDecAmps.size()==0){
-    Warning << "decay JPC= " 
+    WarningMsg << "decay JPC= " 
 	  << motherRes->J << " " << motherRes->P << " " << motherRes->C
 	  << " --> "
 	  << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
@@ -217,7 +217,7 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
     }
      for (Spin lam2=lam2start; lam2<=Jdaughter2; ++lam2){
        if (fabs(lam2)>Jdaughter2) continue;
-       // Info << " Jmother: " << Jmother << " Jdaughter1" << Jdaughter1 << " Jdaughter2" << Jdaughter2
+       // InfoMsg << " Jmother: " << Jmother << " Jdaughter1" << Jdaughter1 << " Jdaughter2" << Jdaughter2
        // 	    << " lam1: " << lam1 << " lam2: " << lam2 << endmsg;
        
 
@@ -241,7 +241,7 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
       if(fillIt){
 	std::shared_ptr<const JPClamlam> tmpJPClamlam(new JPClamlam(motherRes, lam1, lam2, 1.));
 	theJPClamlamVec.push_back(tmpJPClamlam);
-	// Info << "filled: " << Jmother << " Jdaughter1" << Jdaughter1 << " Jdaughter2" << Jdaughter2
+	// InfoMsg << "filled: " << Jmother << " Jdaughter1" << Jdaughter1 << " Jdaughter2" << Jdaughter2
 	//     << " lam1: " << lam1 << " lam2: " << lam2 << endmsg;
       }
     }

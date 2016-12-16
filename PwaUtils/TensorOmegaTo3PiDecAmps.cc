@@ -93,7 +93,7 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, A
   }
 
   result*=_absDyn->eval(theData, grandmaAmp);
-  //  Info <<"TensorOmegaTo3PiDecAmps result: " << result << endmsg; 
+  //  InfoMsg <<"TensorOmegaTo3PiDecAmps result: " << result << endmsg; 
   return result;
 }
 

@@ -84,11 +84,11 @@ void EpemChannelEnv::setup(ChannelID id){
   else if (_theEpEmParser->productionFormalism()=="Tensor"){
     std::vector< std::shared_ptr<IsobarTensorDecay> > prodDecs;
     if(_theEpEmParser->productionTensorRadType() == "Zou"){
-      Info << "use productionTensorRadType " << _theEpEmParser->productionTensorRadType() << endmsg;
+      InfoMsg << "use productionTensorRadType " << _theEpEmParser->productionTensorRadType() << endmsg;
       prodDecs=_epemReaction->productionTensorZouDecays();
     } 
     else if(_theEpEmParser->productionTensorRadType() == "Default"){
-      Info << "use productionTensorRadType " << _theEpEmParser->productionTensorRadType() << endmsg;
+      InfoMsg << "use productionTensorRadType " << _theEpEmParser->productionTensorRadType() << endmsg;
       prodDecs=_epemReaction->productionTensorDecays(); //default
     } 
     else{
@@ -134,9 +134,9 @@ void EpemChannelEnv::setup(ChannelID id){
       std::shared_ptr<AbsDecay> currentDec=_prodDecList->decay(currentAmplitudeName);
       if(0!=currentDec){
          currentDec->setPreFactor(currentPrefactor);
-         // Info << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
+         // InfoMsg << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
          currentDec->disableIsospin();
-         Info << "Disable isospin coupling and set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
+         InfoMsg << "Disable isospin coupling and set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
 
       }
       else{
@@ -144,7 +144,7 @@ void EpemChannelEnv::setup(ChannelID id){
          currentDec=_absDecList->decay(currentAmplitudeName);
          if(0!=currentDec){
             currentDec->setPreFactor(currentPrefactor);
-            Info << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
+            InfoMsg << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
          }
          else{
             Alert << "Amplitude with name\t" << currentAmplitudeName << "\tnot found!!!" << endmsg;

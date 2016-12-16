@@ -57,7 +57,7 @@ void AbsFcn::printTimer() const{
   theTimer1.stop();
   boost::timer::cpu_times elapsed(theTimer1.elapsed());
   if(elapsed.wall > 0){
-    Info << "Wall time: " << elapsed.wall / 1E9 << "s User: "
+    InfoMsg << "Wall time: " << elapsed.wall / 1E9 << "s User: "
 	 << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
   }
   theTimer1.start();

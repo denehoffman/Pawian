@@ -38,12 +38,12 @@ int main(int __argc,char *__argv[]){
 
   if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
                     strcmp( __argv[1], "--help" ) == 0 ) ){
-    Info << "USAGE:" << endmsg;
-    Info << "-s, --steps: number of steps in either direction in the complex energy plane" << endmsg;
-    Info << "--maxImagMass: max imaginary part of the mass" << endmsg;
-    Info << "--maxRealMass: max real part of the mass" << endmsg;
-    Info << "--minImagMass: min imaginary part of the mass" << endmsg;
-    Info << "--minRealMass: min reak part of the mass" << endmsg;
+    InfoMsg << "USAGE:" << endmsg;
+    InfoMsg << "-s, --steps: number of steps in either direction in the complex energy plane" << endmsg;
+    InfoMsg << "--maxImagMass: max imaginary part of the mass" << endmsg;
+    InfoMsg << "--maxRealMass: max real part of the mass" << endmsg;
+    InfoMsg << "--minImagMass: min imaginary part of the mass" << endmsg;
+    InfoMsg << "--minRealMass: min reak part of the mass" << endmsg;
     return 0;
   }
 

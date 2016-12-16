@@ -55,7 +55,7 @@ int main()
     exit(1);
   }
 
-  Info << "Input file has " << eventList->size() << " events. Each event has "
+  InfoMsg << "Input file has " << eventList->size() << " events. Each event has "
        <<  eventList->nextEvent()->size() << " final state particles.\n" << endmsg;
   eventList->rewind();
 
@@ -65,15 +65,15 @@ int main()
     exit(1);
   }
 
-  Info << "MC Input file has " << mcEventList->size() << " events. Each event has "
+  InfoMsg << "MC Input file has " << mcEventList->size() << " events. Each event has "
        <<  mcEventList->nextEvent()->size() << " final state particles.\n" << endmsg;
   mcEventList->rewind();
 
   Event* anEvent;
   int evtCount = 0;
-  Info << "======== beam events ========" << endmsg;
+  InfoMsg << "======== beam events ========" << endmsg;
   while ((anEvent = eventList->nextEvent()) != 0 && evtCount < 20) {
-    Info << "\n" 
+    InfoMsg << "\n" 
 	 << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
 	 << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
 	 << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"
@@ -82,9 +82,9 @@ int main()
   }
 
   evtCount = 0;
-  Info << "======== MC events ========" << endmsg;
+  InfoMsg << "======== MC events ========" << endmsg;
   while ((anEvent = mcEventList->nextEvent()) != 0 && evtCount < 20) {
-    Info << "\n" 
+    InfoMsg << "\n" 
 	 << *(anEvent->p4(0)) << "\tm = " << anEvent->p4(0)->Mass() << "\n"
 	 << *(anEvent->p4(1)) << "\tm = " << anEvent->p4(1)->Mass() << "\n"
 	 << *(anEvent->p4(2)) << "\tm = " << anEvent->p4(2)->Mass() << "\n"

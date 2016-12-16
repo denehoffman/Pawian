@@ -138,10 +138,10 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
     _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
   
     if(fabs(_isospinClebschG)<1.e-8){
-      Warning << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
-      Warning << "Imother: " << Imother << "\tI3mother: " << I3mother << endmsg;
-      Warning << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
-      Warning << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
+      WarningMsg << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
+      WarningMsg << "Imother: " << Imother << "\tI3mother: " << I3mother << endmsg;
+      WarningMsg << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
+      WarningMsg << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
     }
     // if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
     
@@ -312,7 +312,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
 	exit(0);
       }
     }
-    Info << "AmpName: " << name() << "  radius for barrier factor qr= " << _qR << endmsg;
+    InfoMsg << "AmpName: " << name() << "  radius for barrier factor qr= " << _qR << endmsg;
   }
   
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
@@ -496,11 +496,11 @@ void AbsDecay::enableProdBarrier(){
     exit(1);
   }
   if(!_prodChannelInfo->isProductionChannel()){
-    Warning << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    WarningMsg << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
     return;
   }
   if(!_prodChannelInfo->withProdBarrier()){
-    Warning << name() << "production barrier disabled" << endmsg;
+    WarningMsg << name() << "production barrier disabled" << endmsg;
     return;
   }
   _useProdBarrier=true;
@@ -512,7 +512,7 @@ void AbsDecay::enableProdBarrier(){
     _dynType="RadM1";
   }
 
-  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
+  InfoMsg << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
   _dynEnabled=true;
 }
@@ -561,7 +561,7 @@ void AbsDecay::setDecayLevel(decLevel theLevel){
   }
   else if(_decLevel != theLevel) _decLevel=decayLevel::severalLevels;
   else return;
-  Info << name() << " set decay level to " << _decLevel << endmsg; 
+  InfoMsg << name() << " set decay level to " << _decLevel << endmsg; 
 }
 
 void AbsDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr){
@@ -634,7 +634,7 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   }
   _wignerDRefKey=ref;
 
-  //  Info << _name << ":\twignerDKey= " << _wignerDKey << "\twignerDRefKey= " << _wignerDRefKey << endmsg;
+  //  InfoMsg << _name << ":\twignerDKey= " << _wignerDKey << "\twignerDRefKey= " << _wignerDRefKey << endmsg;
 
   if (!_daughter1IsStable){
     _absDecDaughter1->setWigDRefKey(_refKey);
@@ -649,10 +649,10 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   _wignerDqId=IdStringMapRegistry::instance()->keyStringId(keyForMassList,_wignerDKey); 
   _wignerDqNormId = IdStringMapRegistry::instance()->keyStringId(keyForMassList, wignerDqNormKey);
   _wigDWigDRefId=IdStringMapRegistry::instance()->stringStringId(_wignerDKey, _wignerDRefKey);
-  Info << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
+  InfoMsg << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
 
   std::pair<std::string, std::string > wigDWigDRefPair=IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
-  Info << "name of amplitude: " << _name << "\tnameId: " << _nameId
+  InfoMsg << "name of amplitude: " << _name << "\tnameId: " << _nameId
        <<"\n_wigDWigDRefId = " << _wigDWigDRefId << "\t_wignerDId = " << _wignerDId 
        << "\nwith wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " << wigDWigDRefPair.second << endmsg;   
 }

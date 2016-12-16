@@ -47,7 +47,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application for histogramming the Argand plot, the phase shift and the mass shape of the relativistic Breit-Wigner function with Blatt-Weisskopf barrier factors\n"
+    InfoMsg << "\nThis is a test application for histogramming the Argand plot, the phase shift and the mass shape of the relativistic Breit-Wigner function with Blatt-Weisskopf barrier factors\n"
 	 << "The switches are:\n\n"
          << "-p0 (parameter p0 of test distribution; default -10.)\n\n" 
          << "-p1 (parameter p1 of test distribution; default 10.)\n\n"
@@ -99,7 +99,7 @@ int main(int __argc,char *__argv[]){
     }
 
     if (!found){
-      Warning << "Unknown switch: " 
+      WarningMsg << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
@@ -141,17 +141,17 @@ int main(int __argc,char *__argv[]){
 
   MnMigrad migrad(minuitFitFcn, upar);
   cout << endl;
-  Info <<"Start Migrad "<< endmsg;
+  InfoMsg <<"Start Migrad "<< endmsg;
   FunctionMinimum min = migrad();
   
   if(!min.IsValid()) {
     // Try with higher strategy
-    Info <<"FM is invalid, try with strategy = 2."<< endmsg;
+    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
     MnMigrad migrad2(minuitFitFcn, min.UserState(), MnStrategy(2));
     min = migrad2();
   }
   
-  Info << "Function value of minimization: " << min.Fval() << endmsg;
+  InfoMsg << "Function value of minimization: " << min.Fval() << endmsg;
   
   // Save final fit parameters and their errors in variables
   double final_a = min.UserState().Value("a");
@@ -163,10 +163,10 @@ int main(int __argc,char *__argv[]){
   double ec = min.UserState().Error("c");
   double ed = min.UserState().Error("d");
   cout << endl;
-  Info << "final a:\t" << final_a << " +- " << ea << endmsg;
-  Info << "final b:\t" << final_b << " +- " << eb << endmsg; 
-  Info << "final c:\t" << final_c << " +- " << ec << endmsg;
-  Info << "final d:\t" << final_d << " +- " << ed << endmsg; 
+  InfoMsg << "final a:\t" << final_a << " +- " << ea << endmsg;
+  InfoMsg << "final b:\t" << final_b << " +- " << eb << endmsg; 
+  InfoMsg << "final c:\t" << final_c << " +- " << ec << endmsg;
+  InfoMsg << "final d:\t" << final_d << " +- " << ed << endmsg; 
   
   // Draw the graph and the fit in one canvas
   minuitFit->drawGraph(final_a, final_b, final_c, final_d);

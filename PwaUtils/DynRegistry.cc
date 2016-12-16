@@ -99,7 +99,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   std::map<std::string, std::shared_ptr<AbsDynamics> >::iterator it = currentDynMap.find(theName);
   if (it !=currentDynMap.end()){
     result=it->second;
-    Info << "Dynamics\t" << theName << "\tfound!!!" << endmsg;
+    InfoMsg << "Dynamics\t" << theName << "\tfound!!!" << endmsg;
   }
   else{
     std::vector<Particle*> fsParticles=theDec->finalStateParticles();
@@ -172,7 +172,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     if(theDec->isProductionAmp() &&  (theDec->dynType()=="BlattWBarrier" || theDec->dynType()=="BlattWBarrierTensor" || theDec->dynType()=="RadM1")) result->setMassKey(theDec->prodParKey()); 
 
     //    result->fillParamNameList();
-    Info << "add dynamics for " <<  theName << endmsg;
+    InfoMsg << "add dynamics for " <<  theName << endmsg;
 
     _dynMapChannel[currentChannelId][theName]=result;
     _dynVecChannel[currentChannelId].push_back(result);

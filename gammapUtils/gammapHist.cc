@@ -48,7 +48,7 @@
 //#include "TMath.h"
 
 gammapHist::gammapHist(std::string additionalSuffix) :
-  AbsHist(additionalSuffix)
+  RootHist(additionalSuffix)
 {
   initRootStuff();
 }

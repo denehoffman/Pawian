@@ -114,7 +114,7 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   eventReader.fill(theEventList, evtStart, evtStop);
 
   unsigned int numOfEvtsInFile=theEventList.size();
-  Info  << "\nFile has " << numOfEvtsInFile << " events.";
+  InfoMsg << "\nFile has " << numOfEvtsInFile << " events.";
   if (numOfEvtsInFile==0){
     Alert << "0 events in the file; abort!!!" << endmsg;
     exit(1);
@@ -122,11 +122,11 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
 
   Event* currentNextEvent = theEventList.nextEvent();
   if (0!=currentNextEvent){ 
-    Info  << " Each event has "
+    InfoMsg << " Each event has "
 	  <<  theEventList.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
   }
   else{
-    Warning  << "\n currentNextEvent does not exist.\n" << endmsg;
+    WarningMsg << "\n currentNextEvent does not exist.\n" << endmsg;
   }
 
   theEventList.rewind();
@@ -134,11 +134,11 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = theEventList.nextEvent()) != 0 && evtCount < 10) {
-    Info        << "\n";
+    InfoMsg << "\n";
     for(int i=0; i<noFinalStateParticles; ++i){
-      Info        << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
+      InfoMsg << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
     }
-    Info        << "\n" << endmsg;
+    InfoMsg << "\n" << endmsg;
     ++evtCount;
   }
   theEventList.rewind();
@@ -160,7 +160,7 @@ void AppBase::createLhObjects(){
 void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData){
   int noOfFreeFitParams=startParams->VariableParameters();
   if(evtWeightSumData<=(noOfFreeFitParams+1)){
-    Warning << "number of data events less or equal to the number of free parameters!!!"
+    WarningMsg << "number of data events less or equal to the number of free parameters!!!"
 	    << "\n be careful with the fit result!!!"
 	    << endmsg; 
       }  
@@ -201,43 +201,43 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
   std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
 
-  Info        << "logLh\t" << theLh;
+  InfoMsg << "logLh\t" << theLh;
   theQaStream << "logLh\t" << theLh << "\n";
 
-  Info        << "noOfFreeFitParams:\t" << noOfFreeFitParams;
+  InfoMsg << "noOfFreeFitParams:\t" << noOfFreeFitParams;
   theQaStream << "noOfFreeFitParams:\t" << noOfFreeFitParams << "\n";
 
-  Info        << "BIC:\t" << BICcriterion;
+  InfoMsg << "BIC:\t" << BICcriterion;
   theQaStream << "BIC:\t" << BICcriterion << "\n";
 
-  Info        << "AICa:\t" << AICcriterion;
+  InfoMsg << "AICa:\t" << AICcriterion;
   theQaStream << "AICa:\t" << AICcriterion << "\n";
 
-  Info        << "AICc:\t" << AICccriterion;
+  InfoMsg << "AICc:\t" << AICccriterion;
   theQaStream << "AICc:\t" << AICccriterion << "\n";
 
-  Info        << "No of data events without weight " << GlobalEnv::instance()->Channel()->Lh()->getDataVec().size();
+  InfoMsg << "No of data events without weight " << GlobalEnv::instance()->Channel()->Lh()->getDataVec().size();
   theQaStream << "No of data events without weight " << GlobalEnv::instance()->Channel()->Lh()->getDataVec().size() << "\n";
 
-  Info        << "No of data events with weight " << evtWeightSumData;
+  InfoMsg << "No of data events with weight " << evtWeightSumData;
   theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
 
-  Info        << "No of MC events " << GlobalEnv::instance()->Channel()->Lh()->getMcVec().size();
+  InfoMsg << "No of MC events " << GlobalEnv::instance()->Channel()->Lh()->getMcVec().size();
   theQaStream << "No of MC events " << GlobalEnv::instance()->Channel()->Lh()->getMcVec().size() << "\n";
 
   double scaleFactor = evtWeightSumData/GlobalEnv::instance()->Channel()->Lh()->getMcVec().size();
-  Info        << "scaling factor " << scaleFactor;
+  InfoMsg << "scaling factor " << scaleFactor;
   theQaStream << "scaling factor " << scaleFactor << "\n";
 
-  Info        << "no of fitted events with scaling factor: " << contValue.first*scaleFactor;
+  InfoMsg << "no of fitted events with scaling factor: " << contValue.first*scaleFactor;
   theQaStream << "no of fitted events with scaling factor: " << contValue.first*scaleFactor << "\n";
 
-  Info        << "Selected wave contribution:\t" << contValue.first << " +- " << contValue.second;
+  InfoMsg << "Selected wave contribution:\t" << contValue.first << " +- " << contValue.second;
   theQaStream << "Selected wave contribution:\t" << contValue.first << " +- " << contValue.second <<  "\n";
 
   std::vector<std::pair<std::string,std::pair<double,double>>>::iterator it;
   for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
-    Info        << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second;
+    InfoMsg << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second;
     theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  "\n";
   }
 
@@ -289,7 +289,7 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
       evtWeightSumData += currentDataEvt->evtWeight;
       delete currentDataEvt;
       evtCount++;
-      if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
+      if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
     }
 
     //loop over mc events
@@ -309,7 +309,7 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
       delete currentMcEvt;
       evtCount++;
       evtCountMc++;
-      if (evtCountMc%1000 == 0) Info << evtCountMc << " MC events calculated" << endmsg ;
+      if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
     }
 
     double scaleFactor=theLHData.weightSum/theLHData.num_mc;
@@ -330,42 +330,42 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
       // qaSummaryFileName << "qaSummarySimple" << outputFileNameSuffix << ".dat";
       // std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
       
-      Info        << "logLh\t" << theLh;
+      InfoMsg << "logLh\t" << theLh;
       theQaStream << "logLh\t" << theLh << "\n";
       
-      Info        << "noOfFreeFitParams:\t" << noOfFreeFitParams;
+      InfoMsg << "noOfFreeFitParams:\t" << noOfFreeFitParams;
       theQaStream << "noOfFreeFitParams\t" << noOfFreeFitParams << "\n";
       
-      Info        << "BIC:\t" << BICcriterion;
+      InfoMsg << "BIC:\t" << BICcriterion;
       theQaStream << "BIC:\t" << BICcriterion << "\n";
       
-      Info        << "AICa:\t" << AICcriterion;
+      InfoMsg << "AICa:\t" << AICcriterion;
       theQaStream << "AICa:\t" << AICcriterion << "\n";
       
-      Info        << "AICc:\t" << AICccriterion;
+      InfoMsg << "AICc:\t" << AICccriterion;
       theQaStream << "AICc:\t" << AICccriterion << "\n";
       
-      Info        << "No of data events without weight " << integralDataWoWeight;
+      InfoMsg << "No of data events without weight " << integralDataWoWeight;
       theQaStream << "No of data events without weight " << integralDataWoWeight << "\n";
       
-      Info        << "No of data events with weight " << evtWeightSumData;
+      InfoMsg << "No of data events with weight " << evtWeightSumData;
       theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
       
-      Info        << "No of MC events " << theLHData.num_mc;
+      InfoMsg << "No of MC events " << theLHData.num_mc;
       theQaStream << "No of MC events " << theLHData.num_mc << "\n";
       
-      Info        << "scaling factor " << scaleFactor;
+      InfoMsg << "scaling factor " << scaleFactor;
       theQaStream << "scaling factor " << scaleFactor << "\n";
       
-      Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
+      InfoMsg << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
       theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
     }
     else{ //i>-1
-      Info        << "contribution no " << i;
-      Info        << "No of data events without weight " << integralDataWoWeight;
-      Info        << "No of data events with weight " << evtWeightSumData;
-      Info        << "No of MC events " << theLHData.num_mc;
-      Info        << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
+      InfoMsg << "contribution no " << i;
+      InfoMsg << "No of data events without weight " << integralDataWoWeight;
+      InfoMsg << "No of data events with weight " << evtWeightSumData;
+      InfoMsg << "No of MC events " << theLHData.num_mc;
+      InfoMsg << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
       theQaStream << "contribution no " << i << "\n";
       theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
     }
@@ -389,7 +389,7 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
     evtWeightSumData+=currentDataEvt->evtWeight;
     delete currentDataEvt;
     evtCount++;
-    if (evtCount%1000 == 0) Info << evtCount << " data events calculated" << endmsg;
+    if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
   }
 
   //loop over mc events
@@ -403,7 +403,7 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
     delete currentMcEvt;
     evtCount++;
     evtCountMc++;
-    if (evtCountMc%1000 == 0) Info << evtCountMc << " MC events calculated" << endmsg ;
+    if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
   }
 
   double histScaleFactor=evtWeightSumData/evtCountMc;
@@ -433,7 +433,7 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
   //  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam() + "Other";
   std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam();
   fixedParams.push_back(fixedScaleParam);
-  Info << "Fixing scaling parameter " << fixedScaleParam << endmsg;
+  InfoMsg << "Fixing scaling parameter " << fixedScaleParam << endmsg;
 
   const std::vector<std::string> parNames=upar->ParamNames();
 
@@ -446,7 +446,7 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
 	Alert << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg;
 	exit(0);
       }
-      else Warning << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg; 
+      else WarningMsg << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg; 
     }
   }
 }
@@ -490,8 +490,8 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
     const std::string datFile=(*it).first->parser()->dataFile();
     const std::string mcFile=(*it).first->parser()->mcFile();
-    Info << "data file: " << datFile ;  // << endmsg;
-    Info << "mc file: " << mcFile ;  // << endmsg;
+    InfoMsg << "data file: " << datFile ;  // << endmsg;
+    InfoMsg << "mc file: " << mcFile ;  // << endmsg;
     
     int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
     int ratioMcToData=(*it).first->parser()->ratioMcToData();
@@ -552,7 +552,7 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   absMinimizerPtr->dumpFitResult();
 
   theServer->BroadcastClosingMessage();
-  Info << "Closing server." << endmsg;
+  InfoMsg << "Closing server." << endmsg;
 }
 
 
@@ -592,13 +592,13 @@ void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams)
 
   ChannelID channelID = theClient.channelID();
   bool cacheAmps = GlobalEnv::instance()->Channel(channelID)->parser()->cacheAmps();
-  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
   if (cacheAmps) GlobalEnv::instance()->Channel(channelID)->Lh()->cacheAmplitudes();
 
   const std::string datFile=GlobalEnv::instance()->Channel(channelID)->parser()->dataFile();
   const std::string mcFile=GlobalEnv::instance()->Channel(channelID)->parser()->mcFile();
-  Info << "data file: " << datFile ;  // << endmsg;
-  Info << "mc file: " << mcFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile ;  // << endmsg;
+  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
   
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
@@ -645,7 +645,7 @@ void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::
      argvWCfgFile[1]=(char*)"-c";
      argvWCfgFile[2]=(char*)(*it).c_str();
      for (int i=0; i<argcWCfgFile ; ++i){
-       Info << "argvWCfgFile[" << i << "]= " << argvWCfgFile[i] << endmsg;
+       InfoMsg << "argvWCfgFile[" << i << "]= " << argvWCfgFile[i] << endmsg;
      }
      std::shared_ptr<AbsChannelEnv> channelEnv;
      if(channelType==AbsChannelEnv::CHANNEL_PBARP){

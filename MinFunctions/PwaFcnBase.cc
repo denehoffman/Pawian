@@ -50,7 +50,7 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
   ParamDepHandler::instance()->ApplyDependencies(_currentPawianParms);
 
   result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(_currentPawianParms);
-  Info << "current LH = " << std::setprecision(16) << result << endmsg;
+  InfoMsg << "current LH = " << std::setprecision(16) << result << endmsg;
   
   _fcnCounter++;
 

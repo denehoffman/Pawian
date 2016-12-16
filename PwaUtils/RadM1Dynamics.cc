@@ -50,7 +50,7 @@ RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsPartic
   ,_isP1Gamma(true)
   ,_massB0(massB0)
 {
-  Info << "RadM1Dynamics for " << _name <<endmsg;
+  InfoMsg << "RadM1Dynamics for " << _name <<endmsg;
   _isLdependent=false;
 }
 

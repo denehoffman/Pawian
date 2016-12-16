@@ -46,11 +46,11 @@ MinuitFit::MinuitFit(double p0, double p1, double p2, double p3, double sigma) :
   // Display parameters for test distribution 
 
   cout << endl;
-  Info <<"Set p0 as "<< p0 << endmsg;
-  Info <<"Set p1 as "<< p1 << endmsg;
-  Info <<"Set p2 as "<< p2 << endmsg;
-  Info <<"Set p3 as "<< p3 << endmsg;
-  Info <<"Set sigma as "<< sigma << endmsg;
+  InfoMsg <<"Set p0 as "<< p0 << endmsg;
+  InfoMsg <<"Set p1 as "<< p1 << endmsg;
+  InfoMsg <<"Set p2 as "<< p2 << endmsg;
+  InfoMsg <<"Set p3 as "<< p3 << endmsg;
+  InfoMsg <<"Set sigma as "<< sigma << endmsg;
 
   // Generate test distribution and smear them with a gaussian
   TRandom randomNumber;

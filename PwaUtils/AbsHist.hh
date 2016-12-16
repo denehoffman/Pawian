@@ -34,14 +34,11 @@
 #include <sstream>
 #include <memory>
 
-#include "TROOT.h"
-
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 class AbsLh;
 class EvtData;
-class TLorentzVector; 
 
 struct massHistData {
   massHistData(std::vector<std::string>& fspNames) :
@@ -181,10 +178,6 @@ struct angleHistData2D {
 };
 
 
-class TFile;
-class TH2F;
-class TH1F;
-class TTree;
 class Particle;
 class AbsPawianParameters;
 
@@ -193,43 +186,17 @@ class AbsHist {
 public:
   AbsHist(std::string additionalSuffix = "");
   virtual ~AbsHist();
-  void fillEvt(EvtData* theData, double weight, std::string evtType);
-  void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams);
-  void scaleFitHists(double scaleFactor);
+  virtual void fillEvt(EvtData* theData, double weight, std::string evtType) = 0;
+  virtual void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams) = 0;
+  virtual void scaleFitHists(double scaleFactor) = 0;
 
 protected:
-
-  void fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill);
-  void fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill, std::string frame="heli");
-  void fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill);
-
- TFile* _theTFile;
- TTree* _dataFourvecs;
- TTree* _fittedFourvecs;
-
- std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massDataHistMap;
- std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massMcHistMap;
- std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess > _massFitHistMap;
-
- std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap;
- std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap;
- std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap;
-
- std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleDataHistMap2D;
- std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleMcHistMap2D;
- std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess > _angleFitHistMap2D;
-
-  //angles in the Gottfried Jackson system
-  std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleGJDataHistMap;
- std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleGJMcHistMap;
- std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess > _angleGJFitHistMap;
-
- virtual void initRootStuff()=0;
-
-private:
+  std::string _additionalSuffix;
   float _weightToWrite;
   std::vector<Particle*> _fsParticles;
-  std::map<std::string, std::shared_ptr<TLorentzVector> > _fourVecMap;
+  std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
+  std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
 
+private:
 };
 

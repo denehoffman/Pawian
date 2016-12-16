@@ -73,7 +73,7 @@ pbarpReaction::pbarpReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prod
       currentDec->extractStates();
 
       if(!currentDec->JPCLSAmps().size()>0 || fabs(currentDec->isospinCG())<1.e-10){
-	Info << "Skip amplitude " << currentDec->name() << "\tJPCLSAmps().size(): " << currentDec->JPCLSAmps().size() <<"\tisospinCG(): " << currentDec->isospinCG() << endmsg;
+	InfoMsg << "Skip amplitude " << currentDec->name() << "\tJPCLSAmps().size(): " << currentDec->JPCLSAmps().size() <<"\tisospinCG(): " << currentDec->isospinCG() << endmsg;
 	continue;
       }
 

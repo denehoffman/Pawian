@@ -47,7 +47,7 @@ AbsPawianParamStreamer::AbsPawianParamStreamer(std::string& filePath) :
     max=-1.;
     err=0.;
 
-    Info << lineStr << endmsg;
+    InfoMsg << lineStr << endmsg;
     istringstream lineIss(lineStr);
     
     lineIss >> paramName;
@@ -69,7 +69,7 @@ AbsPawianParamStreamer::AbsPawianParamStreamer(std::string& filePath) :
       max=atof(strTmp.c_str());
     }
  
-    Info << "paramName: "<< paramName << "\tval: " << val << "\terr:" << err << "\tmin:" << min << "\tmax:" << max << endmsg;
+    InfoMsg << "paramName: "<< paramName << "\tval: " << val << "\terr:" << err << "\tmin:" << min << "\tmax:" << max << endmsg;
 
     fillDefault(paramName, val, err, min, max); 
   }

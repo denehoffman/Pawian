@@ -59,10 +59,10 @@ int main(int __argc,char *__argv[]){
   clock_t start, end;
   start= clock();
 
-  for (int i=0; i<__argc ; ++i) Info << __argv[i] << endmsg;
+  for (int i=0; i<__argc ; ++i) InfoMsg << __argv[i] << endmsg;
  
-  Info << welcomeScreen << endmsg;
-  Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
+  InfoMsg << welcomeScreen << endmsg;
+  InfoMsg << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
   // Parse the command line
    globalParser* globalAppParams=new globalParser(__argc, __argv);
@@ -73,7 +73,7 @@ int main(int __argc,char *__argv[]){
 
    //requirement single channel  sum reactionCfgs.size() == 1
    unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size();
-   Info << "numReactions: " << numReactions << endmsg;
+   InfoMsg << "numReactions: " << numReactions << endmsg;
    if (numReactions != 1){
      Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
 	   << "\n number of reactions here: " << numReactions << endmsg;
@@ -85,7 +85,7 @@ int main(int __argc,char *__argv[]){
    char* argvWoCfgFile[__argc];
    int argcWoCfgFile=0;
    for (int i=0; i<__argc ; ++i){
-     Info << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
+     InfoMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
      std::string currentArgv(__argv[i]);
      if(currentArgv =="-c" || currentArgv =="--configFile"){
        Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
@@ -174,8 +174,8 @@ int main(int __argc,char *__argv[]){
 
   const std::string datFile=GlobalEnv::instance()->parser()->dataFile();
   const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
-  Info << "data file: " << datFile ;  // << endmsg;
-  Info << "mc file: " << mcFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile ;  // << endmsg;
+  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
 
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
@@ -185,7 +185,7 @@ int main(int __argc,char *__argv[]){
 
   if(mode == "spinDensity" && isPbarpChannel){
     bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
-    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) GlobalEnv::instance()->Channel()->Lh()->cacheAmplitudes();
     
     EventList eventsData;
@@ -206,7 +206,7 @@ int main(int __argc,char *__argv[]){
     std::ifstream serializationStream(serializationFileName.c_str());
     
     if(!serializationStream.is_open()){
-      Warning << "Could not open serialization file." << endmsg;
+      WarningMsg << "Could not open serialization file." << endmsg;
     }
     else{
       boost::archive::text_iarchive boostInputArchive(serializationStream);
@@ -248,7 +248,7 @@ int main(int __argc,char *__argv[]){
   theLhPtr->setDataVec(eventListPtr->getDataVecs());
   theLhPtr->setMcVec(eventListPtr->getMcVecs());
 
-  Info << "\nThe parameter values and errors are: " << "\n" << endmsg;
+  InfoMsg << "\nThe parameter values and errors are: " << "\n" << endmsg;
   startPawianParams->print(std::cout);
 
   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
@@ -257,14 +257,14 @@ int main(int __argc,char *__argv[]){
       theAppBase.qaMode(startPawianParams, evtWeightSumData );
       end= clock();
       double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-      Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+      InfoMsg << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
       return 1;
   }
 
 
   bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
-  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
   if (cacheAmps) theLhPtr->cacheAmplitudes();
 
   if(mode=="pwa" || mode=="evo"){

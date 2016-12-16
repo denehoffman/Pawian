@@ -60,7 +60,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
   if(_isWeakDecay){
     _isospinCG=1.;
     _parityFactor=1.;
-    Info << "decay " << _name << " is a weak decay; parity conservation etc. disabled!!!!" << endmsg;
+    InfoMsg << "decay " << _name << " is a weak decay; parity conservation etc. disabled!!!!" << endmsg;
 
     unsigned int JPClamlamsSize=_JPClamlams.size();
     for (unsigned int i=0; i<JPClamlamsSize; ++i){
@@ -73,7 +73,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
 
   else{
     _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-    Info << "_parityFactor=\t" << _parityFactor << endmsg;
+    InfoMsg << "_parityFactor=\t" << _parityFactor << endmsg;
     
     bool identicalDaughters=false;
     if( (*daughter1)==(*daughter2)) identicalDaughters=true;
@@ -101,7 +101,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) 
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
-  Info << "_parityFactor=\t" << _parityFactor << endmsg;
+  InfoMsg << "_parityFactor=\t" << _parityFactor << endmsg;
 }
 
 HeliDecAmps::~HeliDecAmps()
@@ -143,13 +143,13 @@ void HeliDecAmps::fillParamNameList(){
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     _paramNameList.push_back(magName);
 
-    //    Info << "HeliDecAmps add parameter " << magName << " to paramNameList" << endmsg;
+    //    InfoMsg << "HeliDecAmps add parameter " << magName << " to paramNameList" << endmsg;
 
     //phase
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
     _paramNameList.push_back(phiName);
 
-    //    Info << "HeliDecAmps add parameter " << phiName << " to paramNameList" << endmsg;
+    //    InfoMsg << "HeliDecAmps add parameter " << phiName << " to paramNameList" << endmsg;
   }
 
 }
@@ -195,7 +195,7 @@ void HeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 }
 
 void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
-  Info << "Amp name: " << name() << endmsg;
+  InfoMsg << "Amp name: " << name() << endmsg;
   std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
     for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
       Spin lambda1= it->first->lam1;
@@ -206,8 +206,8 @@ void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
       if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
       if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
       it->first->print(std::cout);
-      Info << " it->first->parityFactor: " << it->first->parityFactor << endmsg;
-      Info << "_currentParamPreFacMagExpi.at(it->first): " << _currentParamPreFacMagExpi.at(it->first) << endmsg;
+      InfoMsg << " it->first->parityFactor: " << it->first->parityFactor << endmsg;
+      InfoMsg << "_currentParamPreFacMagExpi.at(it->first): " << _currentParamPreFacMagExpi.at(it->first) << endmsg;
     }
 }
 
@@ -280,11 +280,11 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 
- //   Info << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
+ //   InfoMsg << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
  
     complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
-    // Info << "amp: " << amp << endmsg;
-    // Info << "amp*daughterAmp(lambda1, lambda2, theData, lamFs): " << amp*daughterAmp(lambda1, lambda2, theData, lamFs) << endmsg;
+    // InfoMsg << "amp: " << amp << endmsg;
+    // InfoMsg << "amp*daughterAmp(lambda1, lambda2, theData, lamFs): " << amp*daughterAmp(lambda1, lambda2, theData, lamFs) << endmsg;
     result+=amp*daughterAmp(lambda1, lambda2, theData);
   }
 

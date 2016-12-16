@@ -40,9 +40,9 @@
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
 #include "FitParams/FitParColBase.hh"
-#include "PwaUtils/AbsHist.hh"
+#include "PwaUtils/RootHist.hh"
 
-class gammapHist : public AbsHist{
+class gammapHist : public RootHist{
 
 public:
   gammapHist(std::string additionalSuffix="");

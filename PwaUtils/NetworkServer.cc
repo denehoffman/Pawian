@@ -62,8 +62,8 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
       theStreams.push_back( std::shared_ptr<tcp::iostream>(new tcp::iostream) );
    }
 
-   Info << "************* Server mode ****************" << endmsg;
-   Info << "Listening on port " << port << endmsg;
+   InfoMsg << "************* Server mode ****************" << endmsg;
+   InfoMsg << "Listening on port " << port << endmsg;
 
    CalcEventDistribution(numEventMap);
 }
@@ -72,7 +72,7 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
 
 bool NetworkServer::WaitForFirstClientLogin(){
 
-   Info << "Waiting for " << _noOfClients << " clients ..." << endmsg;
+   InfoMsg << "Waiting for " << _noOfClients << " clients ..." << endmsg;
 
    for(int i=0; i<_noOfClients; i++){
 
@@ -100,7 +100,7 @@ bool NetworkServer::WaitForFirstClientLogin(){
       std::string nodeName;
       *theStreams.at(i) >> nodeName;
 
-      Info << "Client " << nodeName << " logged in (ID " << i << ")." << endmsg;
+      InfoMsg << "Client " << nodeName << " logged in (ID " << i << ")." << endmsg;
 
       // Send initial client information
       *theStreams.at(i) << i << "\n"                                      // client id
@@ -114,7 +114,7 @@ bool NetworkServer::WaitForFirstClientLogin(){
       _clientChannelMap[i] = _eventDistribution.at(i).first;
    }
 
-   Info << "All clients ready." << endmsg;
+   InfoMsg << "All clients ready." << endmsg;
 
    return true;
 }
@@ -215,13 +215,13 @@ void NetworkServer::EvalClientTiming(){
 
    boost::posix_time::time_duration maxdiff = now - lastLhTimes.at(0).second;
 
-   Info << "Client timing information: " << endmsg;
+   InfoMsg << "Client timing information: " << endmsg;
    for(auto it = lastLhTimes.begin(); it!= lastLhTimes.end(); ++it){
       boost::posix_time::time_duration diff = now - (*it).second.second;
 
       int clientID = (*it).second.first;
 
-      Info << "Client id " << clientID << " channel id " << _clientChannelMap.at(clientID) << " "
+      InfoMsg << "Client id " << clientID << " channel id " << _clientChannelMap.at(clientID) << " "
 	   << " response time +" 
 	   << std::setprecision(10) << ((double)(maxdiff.total_microseconds() - diff.total_microseconds()))/1E6 << " s" << endmsg;
    }
@@ -407,7 +407,7 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
    }
 
    for(unsigned int i=0; i<numClVec.size();i++){
-      Info << "Number of clients for channel " << i << " : " << numClVec.at(i) << endmsg;
+      InfoMsg << "Number of clients for channel " << i << " : " << numClVec.at(i) << endmsg;
    }
    
 
@@ -464,7 +464,7 @@ bool NetworkServer::ReadNumClientsFromConfig(std::vector<short>& numClVec){
    for(int i=0; i<_noOfChannels; i++){
       double currentweight;
       if(!(stream >> currentweight)){
-	 Info << "Could not read client number weights" << endmsg;
+	 InfoMsg << "Could not read client number weights" << endmsg;
 	 return false;
       }
       weights.push_back(currentweight);
@@ -477,7 +477,7 @@ bool NetworkServer::ReadNumClientsFromConfig(std::vector<short>& numClVec){
       numClVec.push_back((short)(_noOfClients * (*it) / sumOfWeights));
    }
 
-   Info << "Read client number weights from configuration file." << endmsg;
+   InfoMsg << "Read client number weights from configuration file." << endmsg;
 
    return true;
 }

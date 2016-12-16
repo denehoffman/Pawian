@@ -49,14 +49,14 @@ int main()
     if (0 != omega)
       omega->print(std::cout);
     else
-      Warning << name << " not found" << endmsg;
+      WarningMsg << name << " not found" << endmsg;
 
     name = std::string("oohps");
     Particle* dummy = pTable.particle(name);
     if (0 != dummy)
       dummy->print(std::cout);
     else
-      Warning << name << " not found" << endmsg;
+      WarningMsg << name << " not found" << endmsg;
 
     // try clone error handling
     pTable.clone(std::string("omegaNew"), std::string("omeGa")); // syntax here is clone(new, old);

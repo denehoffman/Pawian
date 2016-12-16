@@ -58,7 +58,7 @@ void AbsDecayList::addDecay(std::shared_ptr<AbsDecay> theIsoDec){
   
   if(!alreadyThere) _absDecList.push_back(theIsoDec);
   else{
-    Warning << "decay of the particle " << key << " already exists\n"
+    WarningMsg << "decay of the particle " << key << " already exists\n"
 	    << "new decay cannot be added!!!" << endmsg;  
   }
   

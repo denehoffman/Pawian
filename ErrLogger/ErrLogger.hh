@@ -28,7 +28,7 @@ private:
 
 #define endmsg log4cpp::eol
 #define DebugMsg ErrLogger::instance()->logger()<<log4cpp::Priority::DEBUG<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
-#define Info     ErrLogger::instance()->logger()<<log4cpp::Priority::INFO
-#define Warning  ErrLogger::instance()->logger()<<log4cpp::Priority::WARN<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
+#define InfoMsg     ErrLogger::instance()->logger()<<log4cpp::Priority::INFO
+#define WarningMsg  ErrLogger::instance()->logger()<<log4cpp::Priority::WARN<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
 #define ErrMsg   ErrLogger::instance()->logger()<<log4cpp::Priority::ERROR<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "
 #define Alert    ErrLogger::instance()->logger()<<log4cpp::Priority::ALERT<<strrchr(__FILE__ ,(int)'/')<< ":"<<__LINE__<<": "

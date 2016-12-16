@@ -418,11 +418,11 @@ void IsobarTensorDecay::enableProdBarrier(){
     exit(1);
   }
   if(!_prodChannelInfo->isProductionChannel()){
-    Warning << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    WarningMsg << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
     return;
   }
   if(!_prodChannelInfo->withProdBarrier()){
-    Warning << name() << "production barrier disabled" << endmsg;
+    WarningMsg << name() << "production barrier disabled" << endmsg;
     return;
   }
   if(_prodChannelInfo->prodBarrierType()!="BlattWBarrierTensor"){
@@ -433,7 +433,7 @@ void IsobarTensorDecay::enableProdBarrier(){
   _useProdBarrier=true;
   _dynType="BlattWBarrierTensor";
   _qR=_prodChannelInfo->qRPod();
-  Info << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
+  InfoMsg << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
   _dynEnabled=true;
 }

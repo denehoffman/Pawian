@@ -85,7 +85,7 @@ bool SetupParser::parse(std::string& fileName, ParticleTable* pdtTable)
   bool r = phrase_parse(iter, end, setupGrammar, space, *thisDecay);
   
    if (r && iter == end) {
-    Info << "\n\n"
+    InfoMsg << "\n\n"
   	 << "-------------------------\n"
   	 << "Parsing succeeded\n"
   	 << "-------------------------\n" << endmsg;

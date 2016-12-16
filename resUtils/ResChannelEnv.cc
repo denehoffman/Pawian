@@ -63,7 +63,7 @@ void ResChannelEnv::setup(ChannelID id){
 
   _polarizedMother=_theResParser->polarizedMother();
   if(_polarizedMother) {
-    Info << "polarization of the mother particle will be taken into accout!!!" << endmsg;
+    InfoMsg << "polarization of the mother particle will be taken into accout!!!" << endmsg;
   }
 
   //  double theMotherMass=_motherParticle->mass();

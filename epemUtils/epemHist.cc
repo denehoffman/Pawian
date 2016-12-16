@@ -46,7 +46,7 @@
 #include "TNtuple.h"
 
 epemHist::epemHist(std::string additionalSuffix) :
-  AbsHist(additionalSuffix)
+  RootHist(additionalSuffix)
 {
   initRootStuff();
 }

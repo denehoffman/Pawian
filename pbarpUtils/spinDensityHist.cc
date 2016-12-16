@@ -91,7 +91,7 @@ void spinDensityHist::Calculate(){
       static_pointer_cast<PbarpChannelEnv>(GlobalEnv::instance()->PbarpChannel())->spinDensityNames();
 
    for(auto it=spinDensityParticles.begin(); it!=spinDensityParticles.end(); ++it){
-      Info << "Calculating spin density matrix for particle " << (*it) << endmsg;
+      InfoMsg << "Calculating spin density matrix for particle " << (*it) << endmsg;
       calcSpinDensityMatrix(*it);
    }
 }
@@ -108,7 +108,7 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
    }
 
    if(J>1){
-       Warning << "Spin density calculation for J!=1 experimental." << endmsg;
+       WarningMsg << "Spin density calculation for J!=1 experimental." << endmsg;
    }
 
    std::shared_ptr<AbsDecayList> prodDecayList = 
@@ -129,7 +129,7 @@ void spinDensityHist::calcSpinDensityMatrix(std::string& particleName){
    calcSpinDensityMatrixNorm(particleName, J);
    for(Spin M1 = -J; M1 <= J; ++M1){
       for(Spin M2 = -J; M2 <= J; ++M2){
-	Info << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
+	InfoMsg << "Calculating Element (" << M1 << ", " << M2 << ")" << endmsg;
 	calcSpinDensityMatrixElement(particleName, M1, M2, J);
       }
    }

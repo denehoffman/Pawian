@@ -108,7 +108,7 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
        hist->fillFromLhData(_theLh, currentParameters);
      }
 
-     Info << "calculated contribution for " << tmpContribName << " = " << newContribution << " +- " << retValues.back().second.second << endmsg;
+     InfoMsg << "calculated contribution for " << tmpContribName << " = " << newContribution << " +- " << retValues.back().second.second << endmsg;
    }
 
    return retValues;
@@ -144,7 +144,7 @@ double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParam
        								  currentParameters->GetName(i)), 0))
 	 continue;
 
-      Info << "Param used in contribution error calculation: " << currentParameters->GetName(i) << endmsg;
+      InfoMsg << "Param used in contribution error calculation: " << currentParameters->GetName(i) << endmsg;
 
       for(unsigned int j=0; j<nPar; j++){
 
@@ -198,7 +198,7 @@ std::shared_ptr<AbsPawianParameters> WaveContribution::GetParametersForContribut
      for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
 	std::string parName = newParameters->GetName(i);
 	if(parName.find(*itZeroAmpVec) != std::string::npos){
-	   Info << "setting parameter to 0.0: " << parName << endmsg;
+	   InfoMsg << "setting parameter to 0.0: " << parName << endmsg;
 	   newParameters->SetValue(i, 0.);
 	}
      }

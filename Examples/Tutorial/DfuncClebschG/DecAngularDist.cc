@@ -152,7 +152,7 @@ DecAngularDist::DecAngularDist(std::shared_ptr<const jpcRes> motherJPC, std::sha
   //fill heli
   _polMother.SetP4(_mother4Vec, _mother4Vec.Mass());
   complex<double> qCMS=PawianQFT::breakupMomQDefault(1., .135, .135);
-  Info << "breakup momentum: " << qCMS.real() << endmsg;
+  InfoMsg << "breakup momentum: " << qCMS.real() << endmsg;
   _qCMSReal=qCMS.real();
 
 

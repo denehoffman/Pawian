@@ -199,7 +199,7 @@ void AbsChannelEnv::setup(ChannelID id){
     if(!useIsospin) tmpDec->disableIsospin();
     tmpDec->extractStates();
     _absDecList->addDecay(tmpDec);
-    Info << "added decay " << tmpDec->name() << " to decay list" << endmsg;
+    InfoMsg << "added decay " << tmpDec->name() << " to decay list" << endmsg;
   }
 
 
@@ -362,7 +362,7 @@ void AbsChannelEnv::setWignerDRefs(){
 }
 
 bool AbsChannelEnv::checkReactionChain(){
-  Info << "check complete reaction chains" << endmsg;
+  InfoMsg << "check complete reaction chains" << endmsg;
 
   // first check: unique names for final state particles
   for(unsigned int i=0; i<_finalStateParticles.size()-1; ++i){
@@ -396,7 +396,7 @@ bool AbsChannelEnv::checkReactionChain(){
 
   std::vector<Particle*>::iterator itParticle;
   for (itParticle=_finalStateParticles.begin(); itParticle!=_finalStateParticles.end(); ++itParticle){
-    Info << "paricle name: " << (*itParticle)->name() << endmsg;
+    InfoMsg << "paricle name: " << (*itParticle)->name() << endmsg;
   }
  
   // third check: each production amplitude must finally decay in all final state particles
@@ -417,7 +417,7 @@ bool AbsChannelEnv::checkReactionChain(){
     }
   }
 
-  Info << "reaction chains have been successfully checked!!!" << endmsg;
+  InfoMsg << "reaction chains have been successfully checked!!!" << endmsg;
   return true;
 }
 

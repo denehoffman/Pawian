@@ -77,8 +77,8 @@ int main(int __argc,char *__argv[]){
   clock_t start, end;
   start= clock();
 
-  Info << welcomeScreen << endmsg;
-  Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
+  InfoMsg << welcomeScreen << endmsg;
+  InfoMsg << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
   // Parse the command line
   gammapParser* theAppParams=new gammapParser(__argc, __argv);
@@ -142,9 +142,9 @@ int main(int __argc,char *__argv[]){
   std::shared_ptr<AbsPawianParameters> upar=ParamFactory::instance()->getParametersPointer("Minuit2");
   GlobalEnv::instance()->fitParColBase()->setAbsPawianParams(upar, theStartparams, theErrorparams);
 
-  Info << "\n\n**************** Fit parameter **************************" << endmsg;
+  InfoMsg << "\n\n**************** Fit parameter **************************" << endmsg;
   for (int i=0; i<int(upar->Params().size()); ++i){
-    Info << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << endmsg;
+    InfoMsg << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << endmsg;
   }
 
   if (theAppParams->doScaling()) theAppBase.fixAllReleaseScaleParams(upar);
@@ -175,13 +175,13 @@ int main(int __argc,char *__argv[]){
   ChannelID channelID = theClient.channelID();
 
   bool cacheAmps = theAppParams->cacheAmps();
-  Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+  InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
   if (cacheAmps) GlobalEnv::instance()->Channel(channelID)->Lh()->cacheAmplitudes();
 
   const std::string datFile=GlobalEnv::instance()->Channel(channelID)->parser()->dataFile();
   const std::string mcFile=GlobalEnv::instance()->Channel(channelID)->parser()->mcFile();
-  Info << "data file: " << datFile ;  // << endmsg;
-  Info << "mc file: " << mcFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile ;  // << endmsg;
+  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
@@ -218,8 +218,8 @@ int main(int __argc,char *__argv[]){
     for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
       const std::string datFile=(*it).first->parser()->dataFile();
       const std::string mcFile=(*it).first->parser()->mcFile();
-      Info << "data file: " << datFile ;  // << endmsg;
-      Info << "mc file: " << mcFile ;  // << endmsg;
+      InfoMsg << "data file: " << datFile ;  // << endmsg;
+      InfoMsg << "mc file: " << mcFile ;  // << endmsg;
       std::vector<std::string> dataFileNames;
       dataFileNames.push_back(datFile);
 
@@ -254,7 +254,7 @@ int main(int __argc,char *__argv[]){
     //    theAppBase.printFitResult(min, theStartparams, std::cout, evtWeightSumData, noOfFreeFitParams);
 
    theServer->BroadcastClosingMessage();
-    Info << "Closing server." << endmsg;
+    InfoMsg << "Closing server." << endmsg;
 
     absMinimizerPtr->printFitResult(evtWeightSumData);
     absMinimizerPtr->dumpFitResult();
@@ -269,8 +269,8 @@ int main(int __argc,char *__argv[]){
  //    for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
  //      const std::string datFile=(*it).first->parser()->dataFile();
  //      const std::string mcFile=(*it).first->parser()->mcFile();
- //      Info << "data file: " << datFile ;  // << endmsg;
- //      Info << "mc file: " << mcFile ;  // << endmsg;
+ //      InfoMsg << "data file: " << datFile ;  // << endmsg;
+ //      InfoMsg << "mc file: " << mcFile ;  // << endmsg;
  //      std::vector<std::string> dataFileNames;
  //      dataFileNames.push_back(datFile);
 
@@ -299,11 +299,11 @@ int main(int __argc,char *__argv[]){
  //   theServer->WaitForFirstClientLogin();
 
  //   EvoMinimizer theEvoMinimizer(theFcnServer, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations());
- //   Info <<"start evolutionary minimizer "<< endmsg;
+ //   InfoMsg <<"start evolutionary minimizer "<< endmsg;
  //   std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
 
  //   theServer->BroadcastClosingMessage();
- //   Info << "Closing server." << endmsg;
+ //   InfoMsg << "Closing server." << endmsg;
 
  //   fitParCol finalFitParams=theStartparams;
  //   GlobalEnv::instance()->fitParColBase()->getFitParamVal(finalParamVec, finalFitParams);
@@ -325,8 +325,8 @@ int main(int __argc,char *__argv[]){
 
   const std::string datFile=theAppParams->dataFile();
   const std::string mcFile=theAppParams->mcFile();
-  Info << "data file: " << datFile ;  // << endmsg;
-  Info << "mc file: " << mcFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile ;  // << endmsg;
+  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
 
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
@@ -358,10 +358,10 @@ int main(int __argc,char *__argv[]){
 
   //  PwaFcnBase theFcn;
   absFcn= std::shared_ptr<AbsFcn>(new PwaFcnBase());
-  Info << "\nThe parameter values are: " << "\n" << endmsg;
+  InfoMsg << "\nThe parameter values are: " << "\n" << endmsg;
   GlobalEnv::instance()->fitParColBase()->printParams(theStartparams);
 
-  Info << "\nThe parameter errors are: " << "\n" << endmsg;
+  InfoMsg << "\nThe parameter errors are: " << "\n" << endmsg;
   GlobalEnv::instance()->fitParColBase()->printParams(theErrorparams);
 
 
@@ -373,7 +373,7 @@ int main(int __argc,char *__argv[]){
     theHist.fillFromLhData(theLhPtr, theStartparams);
     end= clock();
     double cpuTime= (end-start)/ (CLOCKS_PER_SEC);
-    Info << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
+    InfoMsg << "cpuTime:\t" << cpuTime << "\tsec" << endmsg;
 
     return 1;
   }
@@ -381,7 +381,7 @@ int main(int __argc,char *__argv[]){
 
   if (mode=="pwa"){
     bool cacheAmps = theAppParams->cacheAmps();
-    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+    InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
     if (cacheAmps) theLhPtr->cacheAmplitudes();
 
     absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
@@ -397,11 +397,11 @@ int main(int __argc,char *__argv[]){
 
  //  if (mode=="evo"){
  //    bool cacheAmps = theAppParams->cacheAmps();
- //    Info << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
+ //    InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
  //    if (cacheAmps) theLhPtr->cacheAmplitudes();
 
  //     EvoMinimizer theEvoMinimizer(theFcn, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations());
- //     Info <<"start evolutionary minimizer "<< endmsg;
+ //     InfoMsg <<"start evolutionary minimizer "<< endmsg;
  //     std::vector<double> finalParamVec = theEvoMinimizer.Minimize();
 
  //     fitParCol finalFitParams=theStartparams;

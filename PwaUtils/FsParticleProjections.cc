@@ -66,9 +66,9 @@ FsParticleProjections::FsParticleProjections(std::vector<Particle*>& fsParticles
     currentSpinProjections[i]=0;    
   }
 
-  Info << "\nThe spins of the final state particles are:" << endmsg;
+  InfoMsg << "\nThe spins of the final state particles are:" << endmsg;
   for(unsigned int i=0; i<_fsParticles.size(); ++i){
-    Info << _fsParticleNames.at(i) << " : " << _fsSpins.at(i) << endmsg; 
+    InfoMsg << _fsParticleNames.at(i) << " : " << _fsSpins.at(i) << endmsg; 
   }
 
   unsigned int currentPIndex=0;
@@ -76,9 +76,9 @@ FsParticleProjections::FsParticleProjections(std::vector<Particle*>& fsParticles
 
     std::vector<Spin> currentSpinHelicities;
     currentSpinHelicities.resize(_fsParticles.size());
-    Info <<"\ncurrent projection is:" << endmsg;
+    InfoMsg <<"\ncurrent projection is:" << endmsg;
     for (unsigned int ii=0; ii<_fsParticles.size(); ++ii){
-      Info << currentSpinProjections.at(ii) << "\tlambda: " << fsSpinProjectionsInverse.at(ii).at(currentSpinProjections.at(ii)) << endmsg;
+      InfoMsg << currentSpinProjections.at(ii) << "\tlambda: " << fsSpinProjectionsInverse.at(ii).at(currentSpinProjections.at(ii)) << endmsg;
       currentSpinHelicities[ii]=fsSpinProjectionsInverse.at(ii).at(currentSpinProjections.at(ii));
     }
     _fsSpinProjections.push_back(currentSpinHelicities);
@@ -113,7 +113,7 @@ bool FsParticleProjections::increaseCurrentSpinIndex(std::vector<unsigned int >&
   for(unsigned int idReset=0; idReset< currentPIndex; ++idReset){
     currentSpinProjections.at(idReset) = 0;
   } 
-  Info << "currentPIndex: " << currentPIndex << endmsg;
+  InfoMsg << "currentPIndex: " << currentPIndex << endmsg;
   result = true; 
   return result; 
 }
@@ -121,7 +121,7 @@ bool FsParticleProjections::increaseCurrentSpinIndex(std::vector<unsigned int >&
 unsigned int FsParticleProjections::fsParticleId(std::string& name){
   unsigned int result=_fsParticleNames.size()+1;
   for(unsigned int id=0; id<_fsParticleNames.size(); ++id){
-    Info << "_fsParticleNames.at(" << id <<"): " << _fsParticleNames.at(id) << endmsg;
+    InfoMsg << "_fsParticleNames.at(" << id <<"): " << _fsParticleNames.at(id) << endmsg;
     if(name == _fsParticleNames.at(id)){
       result=id;
       break;

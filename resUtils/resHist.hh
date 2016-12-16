@@ -39,10 +39,10 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/AbsHist.hh"
+#include "PwaUtils/RootHist.hh"
 
 
-class resHist : public AbsHist{
+class resHist : public RootHist{
 
 public:
   resHist(std::string additionalSuffix="");

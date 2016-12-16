@@ -38,7 +38,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application histograms the d functions depending on cos(theta) for a specific J lam1 and lam2\n"
+    InfoMsg << "\nThis is a test application histograms the d functions depending on cos(theta) for a specific J lam1 and lam2\n"
 	 << "\nd(J,lam1,lam2)\n"
          << "-2J   (default 4)\n"
          << "-2lam1   (default 0)\n"
@@ -71,7 +71,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      Warning << "Unknown switch: " 
+      WarningMsg << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
@@ -95,9 +95,9 @@ int main(int __argc,char *__argv[]){
   Spin lam1( double(twolam1)/2. );
   Spin lam2( double(twolam2)/2. );
 
-  Info <<"J= " << J << endmsg;
-  Info <<"lam1= " << lam1 << endmsg;
-  Info <<"lam2= " << lam2 << endmsg;
+  InfoMsg <<"J= " << J << endmsg;
+  InfoMsg <<"lam1= " << lam1 << endmsg;
+  InfoMsg <<"lam2= " << lam2 << endmsg;
 
    DfuncHist dfuncHist(J, lam1, lam2);
   

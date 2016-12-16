@@ -38,7 +38,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application for histogramming the line shape of an Voigtian\n"
+    InfoMsg << "\nThis is a test application for histogramming the line shape of an Voigtian\n"
 	 << "The switches are:\n\n"
          << "-mass (mass of the resonance;default 1.318)\n\n" 
          << "-width (width of the resonance;default 0.1)\n\n"

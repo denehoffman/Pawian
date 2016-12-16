@@ -35,15 +35,15 @@ MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Parti
   stringStrMassRange << rangeAndParticleNames;
   std::string tmpNameMassRange;
   while(stringStrMassRange >> tmpNameMassRange){
-    Info <<"\nMassRangeCont:\t" << tmpNameMassRange << endmsg;
+    InfoMsg <<"\nMassRangeCont:\t" << tmpNameMassRange << endmsg;
     if (counter==0) _massMin=atof(tmpNameMassRange.c_str());
     else if(counter==1) _massMax=atof(tmpNameMassRange.c_str());
     else{
       unsigned int index=0;
       for (itParticle=finalStateParticles.begin(); itParticle != finalStateParticles.end(); ++itParticle){
-	//	Info << "tmpNameMassRange: " << tmpNameMassRange << "\t(*itParticle)->name(): " << (*itParticle)->name() <<endmsg;
+	//	InfoMsg << "tmpNameMassRange: " << tmpNameMassRange << "\t(*itParticle)->name(): " << (*itParticle)->name() <<endmsg;
 	if( tmpNameMassRange==(*itParticle)->name()){
-	  //	  Info << "particle " << tmpNameMassRange  << " added to list of mass range cuts " <<endmsg;
+	  //	  InfoMsg << "particle " << tmpNameMassRange  << " added to list of mass range cuts " <<endmsg;
 	  _particlesMassRange.push_back(*itParticle);
 	  _iDparticlesMassRange.push_back(index);
 	  break;	  
@@ -65,12 +65,12 @@ MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Parti
     exit(0);
   }
 
-  Info << "mass cut on inv mass of the final state particles:" <<endmsg;
+  InfoMsg << "mass cut on inv mass of the final state particles:" <<endmsg;
   for (itParticle=_particlesMassRange.begin(); itParticle!=_particlesMassRange.end(); ++itParticle){
-    Info << (*itParticle)->name() << endmsg;
+    InfoMsg << (*itParticle)->name() << endmsg;
   }
 
-  Info << "\tmassMin = " << _massMin 
+  InfoMsg << "\tmassMin = " << _massMin 
        << "\tmassmax = " << _massMax
        << endmsg;
 }

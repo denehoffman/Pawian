@@ -54,7 +54,7 @@ EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr
   	  << "value must be set between 0. and 1. !!!!" << endmsg;
     exit(1);
   }
-  Info << "population: " << _population
+  InfoMsg << "population: " << _population
        <<"\niterations: " << _iterations
        << "\nratio of parameters to be modified: " << _evoRatioOfModParams << endmsg;
 }
@@ -67,7 +67,7 @@ void EvoMinimizer::minimize(){
    double minlh = startlh;
    int numnoimprovement = 0;
 
-   Info << "Start LH = " << startlh << endmsg;
+   InfoMsg << "Start LH = " << startlh << endmsg;
 
    for(int i = 0; i<_iterations; i++){
 
@@ -138,12 +138,12 @@ void EvoMinimizer::minimize(){
       }
 
       // Print iteration summary
-      Info << "===============================================" << endmsg;
-      Info << "Iteration " << i+1 << " / " << _iterations << " done. Best LH " << minlh << endmsg;
-      Info << "Likelihood improvements " << numbetterlh << " / " << _population << endmsg;
-      Info << "Likelihood spread " << maxitlhspread << endmsg;
-      Info << logmessage << endmsg;
-      Info << "===============================================" << endmsg;
+      InfoMsg << "===============================================" << endmsg;
+      InfoMsg << "Iteration " << i+1 << " / " << _iterations << " done. Best LH " << minlh << endmsg;
+      InfoMsg << "Likelihood improvements " << numbetterlh << " / " << _population << endmsg;
+      InfoMsg << "Likelihood spread " << maxitlhspread << endmsg;
+      InfoMsg << logmessage << endmsg;
+      InfoMsg << "===============================================" << endmsg;
 
    } // Iterations
 
@@ -218,15 +218,15 @@ void EvoMinimizer::printFitResult(double evtWeightSumData){
     exit(1);
   }
 
-  Info <<"Final fit params:" << endmsg;
+  InfoMsg <<"Final fit params:" << endmsg;
   std::vector<double> pVals=_bestPawianParams->Params();  
   std::vector<double> pErrs=_bestPawianParams->Errors();
   for(unsigned int i=0; i < pVals.size(); ++i){
-    Info << _bestPawianParams->GetName(i) << " : " << pVals.at(i) << "\t" << pErrs.at(i) << endmsg;
+    InfoMsg << _bestPawianParams->GetName(i) << " : " << pVals.at(i) << "\t" << pErrs.at(i) << endmsg;
   }
 
   double finalLh = (*_absFcn)(_bestPawianParams->Params());
-  Info <<"final result theLh = "<< finalLh << endmsg;
+  InfoMsg <<"final result theLh = "<< finalLh << endmsg;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // calculate AIC, BIC criteria and output selected wave contrib
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,11 +235,11 @@ void EvoMinimizer::printFitResult(double evtWeightSumData){
     double BICcriterion=2.*finalLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*finalLh+2.*noOfFreeFitParams;
     double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    Info << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    Info << "evtWeightSumData:\t" <<evtWeightSumData;
-    Info << "BIC:\t" << BICcriterion << endmsg;
-    Info << "AIC:\t" << AICcriterion << endmsg;
-    Info << "AICc:\t" << AICccriterion << endmsg;
+    InfoMsg << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
+    InfoMsg << "evtWeightSumData:\t" <<evtWeightSumData;
+    InfoMsg << "BIC:\t" << BICcriterion << endmsg;
+    InfoMsg << "AIC:\t" << AICcriterion << endmsg;
+    InfoMsg << "AICc:\t" << AICccriterion << endmsg;
 }
 
 

@@ -65,7 +65,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      Warning << "Unknown switch: " 
+      WarningMsg << "Unknown switch: " 
 	      << __argv[optind] << endmsg;
       optind++;
     }
@@ -80,7 +80,7 @@ int main(int __argc,char *__argv[]){
   else if(msgModeStr == "error")   ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
   else {
     ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-    Warning << "ErrorLogger not (properly) set -> Use mode 'WARN' " << endmsg;  
+    WarningMsg << "ErrorLogger not (properly) set -> Use mode 'WARN' " << endmsg;  
   }
 
 
@@ -89,7 +89,7 @@ int main(int __argc,char *__argv[]){
  int lmax=0;
  lmaxStrStr >> lmax;
 
-  Info << "lmax: " << lmax << endmsg;
+  InfoMsg << "lmax: " << lmax << endmsg;
 
   pbarpStatesLS thepbarpState(lmax);
 

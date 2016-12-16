@@ -37,9 +37,9 @@
 
 
 int main(int __argc,char *__argv[]){
-  for (int i=0; i<__argc ; ++i) Info << __argv[i] << endmsg;
+  for (int i=0; i<__argc ; ++i) InfoMsg << __argv[i] << endmsg;
   
-  Info << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
+  InfoMsg << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 
   // Parse the command line
    globalParser* globalAppParams=new globalParser(__argc, __argv);

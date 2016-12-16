@@ -64,7 +64,7 @@ void ParamDepHandler::Fill(const std::vector<std::string>& configLines,
 	exit(0);
      }
      
-     Info << "Adding parameter dependency for " << targetParameter << " type "
+     InfoMsg << "Adding parameter dependency for " << targetParameter << " type "
 	  << type << " arguments " << currentStream.str() << endmsg;
 
      std::vector<std::string> targetParameterVec=newDependency->targetNames();

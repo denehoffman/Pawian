@@ -50,7 +50,7 @@ NetworkClient::NetworkClient(std::string serverAddress, std::string port) :
    , _serverAddress(serverAddress)
 {
    _eventLimits.resize(4, 0);
-   Info << "************* Client mode ****************" << endmsg;
+   InfoMsg << "************* Client mode ****************" << endmsg;
 }
 
 
@@ -67,7 +67,7 @@ ChannelID NetworkClient::channelID(){
 
 bool NetworkClient::Login(){
 
-   Info << "Connecting to server " << _serverAddress << ":" << _port << endmsg;
+   InfoMsg << "Connecting to server " << _serverAddress << ":" << _port << endmsg;
    _theStream.connect(_serverAddress, _port);
 
    if(!_theStream){
@@ -85,10 +85,10 @@ bool NetworkClient::Login(){
       return false;
    }
 
-   Info << "Received client id: " << _clientID << endmsg;
-   Info << "Received channel id: " << _channelID << endmsg;
-   Info << "Received data event range " << _eventLimits[0] << " - " << _eventLimits[1] << endmsg;
-   Info << "Received mc event range " << _eventLimits[2] << " - " << _eventLimits[3] << endmsg;
+   InfoMsg << "Received client id: " << _clientID << endmsg;
+   InfoMsg << "Received channel id: " << _channelID << endmsg;
+   InfoMsg << "Received data event range " << _eventLimits[0] << " - " << _eventLimits[1] << endmsg;
+   InfoMsg << "Received mc event range " << _eventLimits[2] << " - " << _eventLimits[3] << endmsg;
 
    std::thread timerthread(&NetworkClient::SendHeartbeat, this);
    timerthread.detach();
@@ -106,8 +106,8 @@ bool NetworkClient::SendLH(double llh_data, double lh_mc){
      //try it serveral times
      int counter=1;
      while(!_theStream){
-       Warning << "Could not send LH " << counter << " time!" << endmsg;
-       Warning << "current error message " << _theStream.error().message() << endmsg;
+       WarningMsg << "Could not send LH " << counter << " time!" << endmsg;
+       WarningMsg << "current error message " << _theStream.error().message() << endmsg;
        std::this_thread::sleep_for(  std::chrono::seconds(5));  
 
        _theStream.clear();
@@ -117,7 +117,7 @@ bool NetworkClient::SendLH(double llh_data, double lh_mc){
 	 Alert << "Could not send LH last time." << endmsg;
 	 return false;
        }
-       Warning << "Try to send LH again!!!" << endmsg;
+       WarningMsg << "Try to send LH again!!!" << endmsg;
      }
    }
 
@@ -143,8 +143,8 @@ bool NetworkClient::SendHeartbeat(){
 
       int counter=0;
       while(!_theHeartbeatStream){
-	Warning << "Could not send heartbeat " << counter << " time!" << endmsg; 
-	Warning << "current error message " << _theHeartbeatStream.error().message() << endmsg; 
+	WarningMsg << "Could not send heartbeat " << counter << " time!" << endmsg; 
+	WarningMsg << "current error message " << _theHeartbeatStream.error().message() << endmsg; 
 	std::this_thread::sleep_for(  std::chrono::seconds(1));	
 	_theHeartbeatStream.clear();
 	_theHeartbeatStream.connect(_serverAddress, _port);
@@ -153,7 +153,7 @@ bool NetworkClient::SendHeartbeat(){
 	  Alert << "Could not send heartbeat last time" << endmsg;
 	  exit(0);
 	}
-	Warning << "Try to send heartbeat again!!!" << endmsg;
+	WarningMsg << "Try to send heartbeat again!!!" << endmsg;
       }
 
       // if(!_theStream){
@@ -184,7 +184,7 @@ bool NetworkClient::WaitForParams(){
    _theStream >> serverMessage;
 
    if(serverMessage == NetworkServer::SERVERMESSAGE_CLOSE){
-      Info << "Received goodbye. Exiting." << endmsg;
+      InfoMsg << "Received goodbye. Exiting." << endmsg;
       return false;
    }
    else if(serverMessage != NetworkServer::SERVERMESSAGE_PARAMS){

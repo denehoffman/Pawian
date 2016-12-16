@@ -48,7 +48,7 @@
 //#include "TMath.h"
 
 pbarpHist::pbarpHist(std::string additionalSuffix) :
-  AbsHist(additionalSuffix)
+  RootHist(additionalSuffix)
 {
   initRootStuff();
 }

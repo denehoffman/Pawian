@@ -39,7 +39,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "This is a test application for scanning the real and imaginary part of the phase space factor\n"
+    InfoMsg << "This is a test application for scanning the real and imaginary part of the phase space factor\n"
 	 << "The switches are:\n\n" 
          << "-m1 mass of the first decay particle (default: 0.135)\n\n"
          << "-m2 mass of the second decay particle (default: 0.547)\n\n"

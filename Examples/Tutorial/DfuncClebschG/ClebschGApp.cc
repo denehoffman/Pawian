@@ -37,7 +37,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application calculates the Clebsch-Gordan coefficients C(j1, lambda_j1, j2, lambda_j2, J, lambda_J) with lambda_ji= -ji, -ji+1, ... , ji\n"
+    InfoMsg << "\nThis is a test application calculates the Clebsch-Gordan coefficients C(j1, lambda_j1, j2, lambda_j2, J, lambda_J) with lambda_ji= -ji, -ji+1, ... , ji\n"
 	 << "The switches are:\n\n"
          << "-2j1  (default 1)\n\n" 
          << "-2j2  (default 3)\n\n"
@@ -70,7 +70,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      Warning << "Unknown switch: " 
+      WarningMsg << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }
@@ -113,7 +113,7 @@ int main(int __argc,char *__argv[]){
     for (Spin lamj2=-j2;lamj2<=j2; ++lamj2){
       Spin lamJ=lamj1+lamj2;
       if (fabs(lamJ) > J) continue;
-      Info << "C(j1=" << j1 << ", lamj1=" << lamj1 
+      InfoMsg << "C(j1=" << j1 << ", lamj1=" << lamj1 
 	   << ", j2=" << j2 << ", lamj2=" << lamj2
 	   << ", J=" << J << ", lamJ=" << lamJ << ")\t"
 	   << Clebsch(j1, lamj1, j2, lamj2, J, lamJ)

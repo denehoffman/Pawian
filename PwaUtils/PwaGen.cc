@@ -140,17 +140,17 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 	   particleSystem = particleSystem + p4[*it];
 	 }
 	 double invMass = particleSystem.mass();
-//         Info << "invMass: " << invMass << endmsg; 
+//         InfoMsg << "invMass: " << invMass << endmsg; 
 	 if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
 	   acceptEvt=false;
-//	   Info << "event not accepted" << endmsg; 
+//	   InfoMsg << "event not accepted" << endmsg; 
 	   break;
 	 }
        }
      } 
 
      if(acceptEvt){
-       Info << "event no " << i << " accepted" << endmsg;
+       InfoMsg << "event no " << i << " accepted" << endmsg;
        AddEventToEventList(eventList, p4, i);
        
        inv01MassH1->Fill((p4[0]+p4[1]).mass());
@@ -171,7 +171,7 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 
 void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams){
 
-  Info << "\n******** PAWIAN Event Generator **********\n" << endmsg;
+  InfoMsg << "\n******** PAWIAN Event Generator **********\n" << endmsg;
 
   EvtMTRandomEngine myRandom(GlobalEnv::instance()->parser()->randomSeed());
   EvtRandom::setRandomEngine(&myRandom);
@@ -189,10 +189,10 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianPar
     
     if(((!_genWithModel || _useEvtWeight) && noOfIterations == 1) || 
        (_genWithModel && !_useEvtWeight && noOfIterations == 2)){
-       Info << "Starting event generation" << endmsg;
+       InfoMsg << "Starting event generation" << endmsg;
     }
     if(_genWithModel && !_useEvtWeight && noOfIterations == 1){
-       Info << "Getting max weight" << endmsg;
+       InfoMsg << "Getting max weight" << endmsg;
     }   
 
     Event* anEvent;
@@ -231,7 +231,7 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianPar
       }
     }
 
-    Info << "Iteration " << noOfIterations << " finished. Accepted events:\t" << noOfAcceptedEvts << endmsg;
+    InfoMsg << "Iteration " << noOfIterations << " finished. Accepted events:\t" << noOfAcceptedEvts << endmsg;
 
     currentEvtList->rewind();
     currentEvtList->removeAndDeleteEvents(0,currentEvtList->size()); 
@@ -290,10 +290,10 @@ void PwaGen::UpdateMaxFitWeight(double weight, int currentIteration){
       _maxFitWeight = weight;
 
       if(currentIteration <= 1){
-	 Info << "Current max weight = " << _maxFitWeight << endmsg;
+	 InfoMsg << "Current max weight = " << _maxFitWeight << endmsg;
       }
       else{
-	 Warning << "Raised max weight to " << _maxFitWeight << " while generating!" << endmsg;
+	 WarningMsg << "Raised max weight to " << _maxFitWeight << " while generating!" << endmsg;
       }
    }
 }

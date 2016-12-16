@@ -46,7 +46,7 @@
 #include "TNtuple.h"
 
 resHist::resHist(std::string additionalSuffix) :
-  AbsHist(additionalSuffix)
+  RootHist(additionalSuffix)
 {
   initRootStuff();
 }

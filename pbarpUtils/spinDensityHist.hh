@@ -29,7 +29,7 @@
 #include <map>
 #include <vector>
 
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include <memory> 
 //#include "FitParams/FitParColBase.hh"
 

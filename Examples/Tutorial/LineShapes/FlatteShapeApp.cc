@@ -38,7 +38,7 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    Info << "\nThis is a test application for histogramming the Flatte shape\n"
+    InfoMsg << "\nThis is a test application for histogramming the Flatte shape\n"
 	 << "The switches are:\n\n"
          << "-ptype particle type (so far: a0, f0) (default a0)\n\n" 
          << "-g11 g(pi,eta) for a0; or g(pi,pi) for f0 (default 0.5857)\n\n"
@@ -77,7 +77,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      Warning << "Unknown switch: " 
+      WarningMsg << "Unknown switch: " 
             << __argv[optind] << endmsg;
       optind++;
     }

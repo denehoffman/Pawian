@@ -73,7 +73,7 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
          output << "sum = " << result;
       }
 
-      Info << output.str() << endmsg;
+      InfoMsg << output.str() << endmsg;
   }
 
   _fcnCounter++;

@@ -46,7 +46,7 @@ int main()
     evtCount++;
   }
 
-  Info << "HepMCEventList contains " << evtCount << " events" << endmsg;
+  InfoMsg << "HepMCEventList contains " << evtCount << " events" << endmsg;
 
 
   exit(0);

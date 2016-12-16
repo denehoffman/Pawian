@@ -58,7 +58,7 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       // 	continue;
       }
 
-      Info << "Scanning " << histoname.str() << endmsg;      
+      InfoMsg << "Scanning " << histoname.str() << endmsg;      
       TH2F* scan = new TH2F(histoname.str().c_str(), histoname.str().c_str(), 
 			    numSteps, massMin.real(), massMax.real(), 
 			    numSteps, massMin.imag(), massMax.imag());
@@ -74,7 +74,7 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
 
       FindPolePositions(scan);
 
-      Info << "\n" << endmsg;
+      InfoMsg << "\n" << endmsg;
 
       signCollection++;
    }
@@ -113,7 +113,7 @@ void RiemannSheetAnalyzer::FindPolePositions(TH2F* histo){
 	 double val = histo->GetBinContent(i, j);
 	 if( (val > histo->GetBinContent(i+1, j)) && (val > histo->GetBinContent(i-1, j)) &&
 	     (val > histo->GetBinContent(i, j+1)) && (val > histo->GetBinContent(i, j-1))){
-	    Info << "Found possible pole at (" 
+	    InfoMsg << "Found possible pole at (" 
 		 << histo->GetXaxis()->GetBinCenter(i) << ", "
 		 << -1*2*histo->GetYaxis()->GetBinCenter(j) << ") GeV" << endmsg;
 	    numPolesFound++;
@@ -122,7 +122,7 @@ void RiemannSheetAnalyzer::FindPolePositions(TH2F* histo){
    }
 
    if(numPolesFound > 0){
-      Info << "[binning uncertainty (" << histo->GetXaxis()->GetBinWidth(1) << ", "
+      InfoMsg << "[binning uncertainty (" << histo->GetXaxis()->GetBinWidth(1) << ", "
 	   << histo->GetYaxis()->GetBinUpEdge(1) - histo->GetYaxis()->GetBinLowEdge(1) << ")]" << endmsg;
    }
 }
