@@ -59,6 +59,7 @@ public:
   virtual void createLhObjects();
   virtual void qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData);
   virtual void qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams);
+  virtual void qaModeEffCorrection(EventList& dataEventList, EventList& mcEventList,  EventList& truthEventList, std::shared_ptr<AbsPawianParameters> startParams);
   virtual void plotMode(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<EvtDataBaseList> evtDataBaseList);
   //  virtual void streamParams(fitParCol& startparams, fitParCol& errparams);
   virtual std::shared_ptr<AbsPawianParameters> streamPawianParams();

@@ -184,18 +184,20 @@ class AbsPawianParameters;
 class AbsHist {
 
 public:
-  AbsHist(std::string additionalSuffix = "");
+  AbsHist(std::string additionalSuffix = "", bool withTruth=false);
   virtual ~AbsHist();
   virtual void fillEvt(EvtData* theData, double weight, std::string evtType) = 0;
   virtual void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams) = 0;
   virtual void scaleFitHists(double scaleFactor) = 0;
 
 protected:
+  bool _fillTruths;
   std::string _additionalSuffix;
   float _weightToWrite;
   std::vector<Particle*> _fsParticles;
   std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
   std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
+  double _cmMass;
 
 private:
 };

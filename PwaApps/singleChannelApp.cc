@@ -241,6 +241,17 @@ int main(int __argc,char *__argv[]){
     return 1;
   }
 
+  if (mode=="qaModeEffCorrection"){
+    const std::string truthFile=GlobalEnv::instance()->parser()->truthFile();
+    InfoMsg << "truth file: " << truthFile ;  // << endmsg;
+    std::vector<std::string> truthFileNames;
+    truthFileNames.push_back(truthFile);
+    EventList truthData;
+    theAppBase.readEvents(truthData, truthFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);      
+    theAppBase.qaModeEffCorrection(eventsData, mcData, truthData, startPawianParams);
+    return 1;
+  }
+
   eventListPtr->read(eventsData, mcData);
   eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
   mcData.removeAndDeleteEvents(0, mcData.size()-1);

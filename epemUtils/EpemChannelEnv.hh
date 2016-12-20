@@ -43,7 +43,7 @@ public:
    std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
    const double cmsMass() {return _cmsMass;}
    virtual const std::string  channelTypeName() {return "epem";}
-  std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
+  //  std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
 
 private:
    epemParser* _theEpEmParser;

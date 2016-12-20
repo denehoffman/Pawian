@@ -50,8 +50,8 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "TTree.h"
 
-RootHist::RootHist(std::string additionalSuffix) :
-  AbsHist(additionalSuffix)
+RootHist::RootHist(std::string additionalSuffix, bool withTruth) :
+  AbsHist(additionalSuffix, withTruth)
  {
   std::ostringstream rootFileName;
   rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << _additionalSuffix.c_str() <<  ".root";
@@ -59,7 +59,8 @@ RootHist::RootHist(std::string additionalSuffix) :
   
   _dataFourvecs = new TTree("_dataFourvecs", "_dataFourvecs");
   _fittedFourvecs = new TTree("_fittedFourvecs", "_fittedFourvecs");
-
+  if (_fillTruths) _truthFourvecs = new TTree("_truthFourvecs", "_truthFourvecs");
+ 
   std::vector<std::shared_ptr<angleHistData> >::iterator itAngleVec;
   for (itAngleVec=_angleHistDataVec.begin(); itAngleVec!=_angleHistDataVec.end(); ++itAngleVec){
 
@@ -81,7 +82,21 @@ RootHist::RootHist(std::string additionalSuffix) :
     //Gottfried Jackson fit
     initAngleHists(_angleGJFitHistMap, (*itAngleVec), "Fit", "GJ");
 
+    if(_fillTruths){
+    //helicity truth
+    initAngleHists(_angleTruthHistMap, (*itAngleVec), "TruthWoWeight", "Heli");
+
+    //Gottfried Jackson truth
+    initAngleHists(_angleGJTruthHistMap, (*itAngleVec), "TruthWoWeight", "GJ");
+
+    //helicity fit
+    initAngleHists(_angleTruthFitHistMap, (*itAngleVec), "TruthWWeight", "Heli");
+
+    //Gottfried Jackson fit
+    initAngleHists(_angleGJTruthFitHistMap, (*itAngleVec), "TruthWWeigth", "GJ");
+    }
   }
+
   // 2D-Histograms
   std::vector<std::shared_ptr<angleHistData2D> >::iterator itAngleVec2D;
   for (itAngleVec2D=_angleHistDataVec2D.begin(); itAngleVec2D!=_angleHistDataVec2D.end(); ++itAngleVec2D){
@@ -125,17 +140,86 @@ RootHist::RootHist(std::string additionalSuffix) :
     _angleFitHistMap2D[*itAngleVec2D].push_back(currentPhiAngleFitHist);
   }
 
+
+  //invariant masses
+  std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
+  std::vector<std::vector<std::string> >::iterator itVecStr;
+  for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
+    std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
+    std::string tmpBaseName=tmpMassHistData->_name;
+    boost::replace_all(tmpBaseName,"+","p");
+    boost::replace_all(tmpBaseName,"-","m");
+    std::string histName="Data"+tmpBaseName;
+    std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
+
+        double massMin = 0.;
+    double massMax=_cmMass;
+
+      
+    std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
+    std::vector<Particle*> allFsp = GlobalEnv::instance()->Channel()->finalStateParticles();
+    std::vector<Particle*>::iterator itAllFsp;
+
+        for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
+       bool isObserver = true;
+       std::vector<std::string>::iterator itStr2;
+       for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
+	  if(*itStr2 == (*itAllFsp)->name())
+	     isObserver = false;
+       }
+       if(isObserver)
+	  massMax -= (*itAllFsp)->mass();
+       else
+	  massMin += (*itAllFsp)->mass();
+    }
+
+    massMax += (massMax - massMin) * 0.02;
+    massMin -= (massMax - massMin) * 0.02;
+
+        TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+    currentMassDataHist->Sumw2();
+    _massDataHistMap[tmpMassHistData]=currentMassDataHist;
+
+    histName="MC"+tmpBaseName;
+    histDescription = "M("+tmpMassHistData->_name+") (MC)";
+    TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+    currentMassMcHist->Sumw2();
+    _massMcHistMap[tmpMassHistData]=currentMassMcHist;
+
+    histName="Fit"+tmpBaseName;
+    histDescription = "M("+tmpMassHistData->_name+") (fit)";
+    TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+    currentMassFitHist->Sumw2();
+    _massFitHistMap[tmpMassHistData]=currentMassFitHist;
+
+    if (_fillTruths){
+      histName="TruthWoWeight"+tmpBaseName;
+      histDescription = "M("+tmpMassHistData->_name+") (truthWoWeight)";
+      TH1F* currentMassTruthHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+      currentMassTruthHist->Sumw2();
+      _massTruthHistMap[tmpMassHistData]=currentMassTruthHist;
+      
+      histName="TruthWWeight"+tmpBaseName;
+      histDescription = "M("+tmpMassHistData->_name+") (truthWWeight)";
+      TH1F* currentMassTruthFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+      currentMassTruthFitHist->Sumw2();
+      _massTruthFitHistMap[tmpMassHistData]=currentMassTruthFitHist;
+    }
+  }
+  
   //tree
   for(auto fsIt = _fsParticles.begin(); fsIt != _fsParticles.end(); ++fsIt){
      std::string particleName = (*fsIt)->name();
      _fourVecMap[particleName] = std::shared_ptr<TLorentzVector>(new TLorentzVector(0,0,0,0));
      _dataFourvecs->Branch(particleName.c_str(), "TLorentzVector", _fourVecMap[particleName].get());
      _fittedFourvecs->Branch(particleName.c_str(), "TLorentzVector", _fourVecMap[particleName].get());
+     if(_fillTruths) _truthFourvecs->Branch(particleName.c_str(), "TLorentzVector", _fourVecMap[particleName].get()); 
   }
 
   _dataFourvecs->Branch("weight", &_weightToWrite, "weight");
   _fittedFourvecs->Branch("weight", &_weightToWrite, "weight");
-}
+  if(_fillTruths) _truthFourvecs->Branch("weight", &_weightToWrite, "weight");
+ }
 
 RootHist::~RootHist(){
   _theTFile->Write();
@@ -261,7 +345,20 @@ void RootHist::fillEvt(EvtData* theData, double weight, std::string evtType){
     fillAngleHists(theData, weight, _angleGJMcHistMap, "GottfriedJackson");
     fillAngleHists2D(theData, weight, _angleMcHistMap2D);
   }
-  if(evtType=="data" || evtType=="fit"){
+  else if(evtType=="truthWoWeight"){
+    fillMassHists(theData, weight, _massTruthHistMap);
+    fillAngleHists(theData, weight, _angleTruthHistMap, "heli");
+    fillAngleHists(theData, weight, _angleGJTruthHistMap, "GottfriedJackson");
+    //    fillAngleHists2D(theData, weight, _angleMcHistMap2D);
+  }
+  else if(evtType=="truthWWeight"){
+    theTree=_truthFourvecs;
+    fillMassHists(theData, weight, _massTruthFitHistMap);
+    fillAngleHists(theData, weight, _angleTruthFitHistMap, "heli");
+    fillAngleHists(theData, weight, _angleGJTruthFitHistMap, "GottfriedJackson");
+    //    fillAngleHists2D(theData, weight, _angleMcHistMap2D);
+  }  
+  if(evtType=="data" || evtType=="fit" || evtType=="truthWWeight"){
     for(auto fsIt = _fsParticles.begin(); fsIt != _fsParticles.end(); ++fsIt){
       std::string particleName = (*fsIt)->name();
       Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(particleName));

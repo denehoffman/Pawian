@@ -39,6 +39,8 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 #include "PwaUtils/FsParticleProjections.hh"
+#include "PwaUtils/AbsHist.hh"
+#include "PwaUtils/RootHist.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
 #include "FitParams/ParamFactory.hh" 
@@ -60,6 +62,7 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_prodDecList(new AbsDecayList())
   ,_useMassRange(false)
   ,_theParser(theParser)
+  ,_cmEnergy(0.)
 {
    _theLh.reset();
 }
@@ -419,5 +422,11 @@ bool AbsChannelEnv::checkReactionChain(){
 
   InfoMsg << "reaction chains have been successfully checked!!!" << endmsg;
   return true;
+}
+
+
+std::shared_ptr<AbsHist> AbsChannelEnv::CreateHistInstance(std::string additionalSuffix, bool withTruth){
+
+  return std::shared_ptr<AbsHist>(new RootHist(additionalSuffix, withTruth));
 }
 

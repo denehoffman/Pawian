@@ -56,6 +56,7 @@ public:
   const enErrLogMode& getErrLogMode() const { return _errLogMode; }
   const std::string dataFile() const {return _dataFile;}
   const std::string mcFile() const {return _mcFile;}
+  const std::string truthFile() const {return _truthFile;}
   const std::string unitInFile() const {return _unitInFile;}
   const std::string orderInFile() const {return _orderInFile;}
   const std::string fitParamFile() const {return _paramFile;}
@@ -116,6 +117,7 @@ protected:
   enErrLogMode _errLogMode;
   std::string _dataFile;
   std::string _mcFile;
+  std::string _truthFile;
   std::string _unitInFile;
   std::string _orderInFile;
   std::string _paramFile;

@@ -71,9 +71,10 @@ public:
   ChannelID channelID(){return _channelID;}
   short channelType(){return _channelType;}
   virtual const std::string  channelTypeName()=0;
-  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="")=0;
+  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="", bool withTruth=false);
   std::shared_ptr<AbsPawianParameters> defaultPawianParams();
   std::shared_ptr<FsParticleProjections> getFsParticleProjectionsPtr() {return _fsParticleProjections;}
+  double cmEnergy() {return _cmEnergy;}
 
   static short CHANNEL_PBARP;
   static short CHANNEL_EPEM;
@@ -105,4 +106,5 @@ protected:
    ParserBase* _theParser;
    std::shared_ptr<AbsLh> _theLh;
   std::vector< std::shared_ptr<MassRangeCut> > _massRangeCuts;
+  double _cmEnergy;
 };

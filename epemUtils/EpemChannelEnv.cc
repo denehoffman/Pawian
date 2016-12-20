@@ -29,7 +29,7 @@
 #include "epemUtils/EpemChannelEnv.hh"
 #include "ConfigParser/epemParser.hh"
 #include "epemUtils/epemReaction.hh"
-#include "epemUtils/epemHist.hh"
+//#include "epemUtils/epemHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -56,7 +56,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
 
    _cmsMass=_theEpEmParser->cmsMass();
-
+   _cmEnergy = _cmsMass;
   // has to be set via parser !!!!
   double totalyMom=0.04;
   _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
@@ -239,7 +239,7 @@ void EpemChannelEnv::setup(ChannelID id){
 
 
 
-std::shared_ptr<AbsHist> EpemChannelEnv::CreateHistInstance(std::string additionalSuffix){
+// std::shared_ptr<AbsHist> EpemChannelEnv::CreateHistInstance(std::string additionalSuffix){
 
-  return std::shared_ptr<AbsHist>(new epemHist(additionalSuffix));
-}
+//   return std::shared_ptr<AbsHist>(new epemHist(additionalSuffix));
+// }

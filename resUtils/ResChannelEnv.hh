@@ -27,14 +27,6 @@
 
 #pragma once
 
-//#include <iostream>
-//#include <vector>
-//#include <map>
-//#include <vector>
-//#include <string>
-//#include <sstream>
-//#include <memory>
-
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 
@@ -52,7 +44,6 @@ public:
   Particle* motherParticle() {return _motherParticle;}
   virtual const std::string  channelTypeName() {return "res";}
   virtual const bool polarizedMother() const { return _polarizedMother;}
-  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
 
 protected:
   resParser* _theResParser;

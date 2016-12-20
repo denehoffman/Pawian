@@ -40,10 +40,12 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-AbsHist::AbsHist(std::string additionalSuffix) :
-  _additionalSuffix(additionalSuffix)
-  , _weightToWrite(1.)
+AbsHist::AbsHist(std::string additionalSuffix, bool withTruth) :
+  _fillTruths(withTruth)
+  ,_additionalSuffix(additionalSuffix)
+  ,_weightToWrite(1.)
   ,_fsParticles(GlobalEnv::instance()->Channel()->finalStateParticles())
+  ,_cmMass(GlobalEnv::instance()->Channel()->cmEnergy())
 {
   _angleHistDataVec=GlobalEnv::instance()->Channel()->angleHistDataVec();
   _angleHistDataVec2D=GlobalEnv::instance()->Channel()->angleHistDataVec2D();

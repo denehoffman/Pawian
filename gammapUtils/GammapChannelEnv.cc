@@ -52,6 +52,10 @@ void GammapChannelEnv::setup(ChannelID id){
 
    AbsChannelEnv::setup(id);
 
+   double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
+   double gammaMomMax=10.;
+   _cmEnergy = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
+   
    //Lmax
    _lmax=_theGamPParser->getLMax();
 

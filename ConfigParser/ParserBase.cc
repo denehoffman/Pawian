@@ -36,6 +36,7 @@ ParserBase::ParserBase(int argc,char **argv)
   , _errLogMode(debug)
   , _dataFile("")
   , _mcFile("")
+  , _truthFile("")
   , _unitInFile("GEV")
   , _orderInFile("Px Py Pz E")
   , _paramFile("")
@@ -98,6 +99,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("errLogMode,e", po::value<string>(&_strErrLogMode)->default_value(_strErrLogMode),"choose mode for Error logger.")
     ("datFile",po::value<string>(&_dataFile), "full path of data file")
     ("mcFile",po::value<string>(&_mcFile), "full path of Monte Carlo file")
+    ("truthFile",po::value<string>(&_truthFile), "full path of phasespace generated truth file")
     ("unitInFile",po::value<string>(&_unitInFile),"chosen unit in input files")
     ("orderInFile",po::value<string>(&_orderInFile),"chosen order in input files")
     ("paramFile",po::value<string>(&_paramFile), "file with start parameters for fit or QA (full path)")
@@ -230,6 +232,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "Error log mode: " << _errLogMode <<"\n\n"
                 << "data file: " << _dataFile <<"\n\n"
                 << "mc file: " << _mcFile <<"\n\n"
+		<< "truth file: " << _truthFile <<"\n\n"
 		<< "chosen unit in input file: " << _unitInFile << "\n\n"
 		<< "chosen order in file: " << _orderInFile << "\n\n"
                 << "file with start parameters for fit or qa: " << _paramFile << "\n\n"

@@ -29,7 +29,7 @@
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/pbarpReaction.hh"
-#include "pbarpUtils/pbarpHist.hh"
+//#include "pbarpUtils/pbarpHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -60,7 +60,8 @@ void PbarpChannelEnv::setup(ChannelID id){
    double pMass=GlobalEnv::instance()->particleTable()->particle("proton")->mass();
    double antipMass=GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
    _initial4Vec = Vector4<double>(pMass+sqrt(antipMass*antipMass+_pbarMomentum*_pbarMomentum), 0., 0., _pbarMomentum);
-
+   _cmEnergy = _initial4Vec.M();
+     
    //Lmax
    _lmax=_thePbarpParser->getLMax();
 
@@ -283,7 +284,7 @@ void PbarpChannelEnv::setup(ChannelID id){
 
 
 
-std::shared_ptr<AbsHist> PbarpChannelEnv::CreateHistInstance(std::string additionalSuffix){
+// std::shared_ptr<AbsHist> PbarpChannelEnv::CreateHistInstance(std::string additionalSuffix){
 
-  return std::shared_ptr<AbsHist>(new pbarpHist(additionalSuffix));
-}
+//   return std::shared_ptr<AbsHist>(new pbarpHist(additionalSuffix));
+// }

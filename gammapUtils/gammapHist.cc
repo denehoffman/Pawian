@@ -63,60 +63,62 @@ gammapHist::~gammapHist(){
 
 
 void gammapHist::initRootStuff(){
+    // double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
+    // double gammaMomMax=10.;
+    // _cmMass = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
 
+  // std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
+  // std::vector<std::vector<std::string> >::iterator itVecStr;
+  // for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
+  //   std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
+  //   std::string tmpBaseName=tmpMassHistData->_name;
+  //   boost::replace_all(tmpBaseName,"+","p");
+  //   boost::replace_all(tmpBaseName,"-","m");
+  //   std::string histName="Data"+tmpBaseName;
+  //   std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
-  std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
-  std::vector<std::vector<std::string> >::iterator itVecStr;
-  for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
-    std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
-    std::string tmpBaseName=tmpMassHistData->_name;
-    boost::replace_all(tmpBaseName,"+","p");
-    boost::replace_all(tmpBaseName,"-","m");
-    std::string histName="Data"+tmpBaseName;
-    std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
-
-    double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
+  //   double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
     //    double pbarMom = static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel())->pbarMomentum();
-    double gammaMomMax=10.;
-    double massMin = 0;
-    double massMax = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
+    // double gammaMomMax=10.;
+    // double massMin = 0;
+    // double massMax = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
 
-    std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    std::vector<Particle*> allFsp = GlobalEnv::instance()->Channel()->finalStateParticles();
-    std::vector<Particle*>::iterator itAllFsp;
+    // std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
+    // std::vector<Particle*> allFsp = GlobalEnv::instance()->Channel()->finalStateParticles();
+    // std::vector<Particle*>::iterator itAllFsp;
 
-    for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
-       bool isObserver = true;
-       std::vector<std::string>::iterator itStr2;
-       for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
-	  if(*itStr2 == (*itAllFsp)->name())
-	     isObserver = false;
-       }
-       if(isObserver)
-	  massMax -= (*itAllFsp)->mass();
-       else
-	  massMin += (*itAllFsp)->mass();
-    }
+    // for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
+    //    bool isObserver = true;
+    //    std::vector<std::string>::iterator itStr2;
+    //    for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
+    // 	  if(*itStr2 == (*itAllFsp)->name())
+    // 	     isObserver = false;
+    //    }
+    //    if(isObserver)
+    // 	  massMax -= (*itAllFsp)->mass();
+    //    else
+  // 	  massMin += (*itAllFsp)->mass();
+  //   }
 
-    massMax += (massMax - massMin) * 0.02;
-    massMin -= (massMax - massMin) * 0.02;
+  //   massMax += (massMax - massMin) * 0.02;
+  //   massMin -= (massMax - massMin) * 0.02;
 
-    TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
-    currentMassDataHist->Sumw2();
-    _massDataHistMap[tmpMassHistData]=currentMassDataHist;
+  //   TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+  //   currentMassDataHist->Sumw2();
+  //   _massDataHistMap[tmpMassHistData]=currentMassDataHist;
 
-    histName="MC"+tmpBaseName;
-    histDescription = "M("+tmpMassHistData->_name+") (MC)";
-    TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
-    currentMassMcHist->Sumw2();
-    _massMcHistMap[tmpMassHistData]=currentMassMcHist;
+  //   histName="MC"+tmpBaseName;
+  //   histDescription = "M("+tmpMassHistData->_name+") (MC)";
+  //   TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+  //   currentMassMcHist->Sumw2();
+  //   _massMcHistMap[tmpMassHistData]=currentMassMcHist;
 
-    histName="Fit"+tmpBaseName;
-    histDescription = "M("+tmpMassHistData->_name+") (fit)";
-    TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
-    currentMassFitHist->Sumw2();
-    _massFitHistMap[tmpMassHistData]=currentMassFitHist;
-  }
+  //   histName="Fit"+tmpBaseName;
+  //   histDescription = "M("+tmpMassHistData->_name+") (fit)";
+  //   TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+  //   currentMassFitHist->Sumw2();
+  //   _massFitHistMap[tmpMassHistData]=currentMassFitHist;
+  // }
 
 }
 

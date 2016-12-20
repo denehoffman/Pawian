@@ -27,7 +27,6 @@
 #include "Particle/ParticleTable.hh"
 #include "resUtils/ResChannelEnv.hh"
 #include "ConfigParser/resParser.hh"
-#include "resUtils/resHist.hh"
 #include "resUtils/resReaction.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -60,6 +59,8 @@ void ResChannelEnv::setup(ChannelID id){
     Alert << "mother particle with name\t" << _theResParser->motherResName() << "\tdoesn't exist" << endmsg;
     exit(0);
   }
+
+  _cmEnergy=_motherParticle->mass();
 
   _polarizedMother=_theResParser->polarizedMother();
   if(_polarizedMother) {
@@ -188,7 +189,3 @@ void ResChannelEnv::setup(ChannelID id){
 
 
 
-std::shared_ptr<AbsHist> ResChannelEnv::CreateHistInstance(std::string additionalSuffix){
-
-  return std::shared_ptr<AbsHist>(new resHist(additionalSuffix));
-}
