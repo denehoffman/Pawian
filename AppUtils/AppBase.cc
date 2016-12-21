@@ -444,8 +444,8 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
       }
     }
     
-    //    double scaleFactor=theLHData.weightSum/theLHData.num_mc;
-    //    histPtr->scaleFitHists(scaleFactor);
+    double scaleFactor=theLHData.weightSum/theLHData.num_mc;
+    histPtr->scaleFitHists(scaleFactor);
 }
 
 

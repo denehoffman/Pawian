@@ -54,7 +54,8 @@ const unsigned int EVENTS_PER_ITERATION = 100000;
 
 PwaGen::PwaGen() :
    _energyFirst(false)
-  ,_useEvtWeight(GlobalEnv::instance()->parser()->useDataEvtWeight())
+  ,_useDataEvtWeight(GlobalEnv::instance()->parser()->useDataEvtWeight())
+  ,_useMcEvtWeight(GlobalEnv::instance()->parser()->useMCEvtWeight())
   ,_genWithModel(GlobalEnv::instance()->parser()->generateWithModel())
   ,_unitScaleFactor(1.)
   , _maxFitWeight(0.)
@@ -187,11 +188,12 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianPar
   while(generateEvents){
     noOfIterations++;
     
-    if(((!_genWithModel || _useEvtWeight) && noOfIterations == 1) || 
-       (_genWithModel && !_useEvtWeight && noOfIterations == 2)){
+    if( ((!_genWithModel) && noOfIterations == 1) ||
+	((_genWithModel) && _useDataEvtWeight && noOfIterations == 1) ||
+	(_genWithModel && !_useDataEvtWeight && noOfIterations == 2)){
        InfoMsg << "Starting event generation" << endmsg;
     }
-    if(_genWithModel && !_useEvtWeight && noOfIterations == 1){
+    else if(_genWithModel && !_useDataEvtWeight && noOfIterations == 1){
        InfoMsg << "Getting max weight" << endmsg;
     }   
 
@@ -207,12 +209,12 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianPar
 	  DumpEventToAsciiFile(currentEvtData); 
 	  noOfAcceptedEvts++;
       }
-      else if(_genWithModel && _useEvtWeight){
+      else if(_genWithModel && _useDataEvtWeight){
 	 double fitWeight= theLh->calcEvtIntensity(currentEvtData.get(), theFitParams);
 	 DumpEventToAsciiFile(currentEvtData, fitWeight);
 	 noOfAcceptedEvts++;
       }
-      else if(_genWithModel && !_useEvtWeight){
+      else if(_genWithModel && !_useDataEvtWeight){
 	 double fitWeight= theLh->calcEvtIntensity(currentEvtData.get(), theFitParams);
 	 UpdateMaxFitWeight(fitWeight, noOfIterations);
 	 
@@ -256,7 +258,10 @@ void PwaGen::DumpEventToAsciiFile(std::shared_ptr<EvtData> evtData, double weigh
   std::vector<Particle* > fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
   std::vector<Vector4<double>> current4Vecs;
 
-  if(_useEvtWeight && _genWithModel){
+  if(_useDataEvtWeight && _genWithModel){
+      *_stream << weight << std::endl;
+  }
+  else if(_useMcEvtWeight && (!_genWithModel)){
       *_stream << weight << std::endl;
   }
 

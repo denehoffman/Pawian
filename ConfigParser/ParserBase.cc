@@ -51,6 +51,7 @@ ParserBase::ParserBase(int argc,char **argv)
   , _noOfClients(1)
   , _serverPort(22222)
   , _ratioMcToData(100000)
+  , _ratioTruthToMc(100000)
   , _evoIterations(100)
   , _evoPopulation(20)
   , _evoRatioOfModParams(1.)
@@ -112,6 +113,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("noOfClients",po::value<int>(&_noOfClients),  "number of clients/worker nodes for server mode")
     ("serverPort",po::value<int>(&_serverPort),  "port for client/server mode")
     ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
+    ("ratioTruthToMc",po::value<int>(&_ratioTruthToMc),  "number of truth events defined by ratio #truths/#Mcs; needed only for qaModeEffCorrection")
     ("evoPopulation",po::value<int>(&_evoPopulation),  "iteration population for evo minimizer")
     ("evoIterations",po::value<int>(&_evoIterations),  "number of iterations for evo minimizer")
     ("evoRatioOfModParams",po::value<double>(&_evoRatioOfModParams),  "chosen (avereaged) ratio of fit parameters to be changed for each population (value between 0. and 1.")
@@ -240,6 +242,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "mode: " << _mode << "\n\n"
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
+		<< "ratioTruthToMc: " << _ratioTruthToMc  << "\n\n"
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
 		<< "use data event weight: " << _useDataEvtWeight  << "\n\n"
 		<< "use Monte Carlo event weight: " << _useMCEvtWeight  << "\n\n"

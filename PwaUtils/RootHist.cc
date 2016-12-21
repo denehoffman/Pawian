@@ -568,7 +568,7 @@ void RootHist::scaleFitHists(double scaleFactor){
       (*itTH1F)->Scale(scaleFactor);
     }
   }
-
+    
   std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
   for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
     std::vector<TH2F*>::iterator itTH2F;
@@ -576,6 +576,37 @@ void RootHist::scaleFitHists(double scaleFactor){
       (*itTH2F)->Scale(scaleFactor);
     }
   }
+  
+  if(_fillTruths){
+    for(itMassMap=_massTruthFitHistMap.begin(); itMassMap!= _massTruthFitHistMap.end(); ++itMassMap){
+      itMassMap->second->Scale(scaleFactor);
+    }
+    
+    std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap;
+    for(itAngleMap= _angleTruthFitHistMap.begin(); itAngleMap!=_angleTruthFitHistMap.end(); ++itAngleMap){
+      std::vector<TH1F*>::iterator itTH1F;
+      for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){
+	(*itTH1F)->Scale(scaleFactor);
+      }
+    }
+    
+    for(itAngleMap= _angleGJTruthFitHistMap.begin(); itAngleMap!=_angleGJTruthFitHistMap.end(); ++itAngleMap){
+      std::vector<TH1F*>::iterator itTH1F;
+      for(itTH1F=itAngleMap->second.begin(); itTH1F!=itAngleMap->second.end(); ++itTH1F){
+	(*itTH1F)->Scale(scaleFactor);
+      }
+    }
+
+    // std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
+    // for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
+    //   std::vector<TH2F*>::iterator itTH2F;
+    //   for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){
+    // 	(*itTH2F)->Scale(scaleFactor);
+    //   }
+    // }
+
+  }
+
 }
 
 void RootHist::initAngleHists(std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& theMap, std::shared_ptr<angleHistData> theHistData, std::string dataType, std::string systemType){

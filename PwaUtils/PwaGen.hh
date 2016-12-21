@@ -63,7 +63,8 @@ protected:
   std::shared_ptr<EventList> GeneratePspEventList(unsigned int numEvents);
 
   bool _energyFirst;
-  bool _useEvtWeight;
+  bool _useDataEvtWeight;
+  bool _useMcEvtWeight;
   bool _genWithModel;
 
   double _unitScaleFactor;
