@@ -93,7 +93,7 @@ RootHist::RootHist(std::string additionalSuffix, bool withTruth) :
     initAngleHists(_angleTruthFitHistMap, (*itAngleVec), "TruthWWeight", "Heli");
 
     //Gottfried Jackson fit
-    initAngleHists(_angleGJTruthFitHistMap, (*itAngleVec), "TruthWWeigth", "GJ");
+    initAngleHists(_angleGJTruthFitHistMap, (*itAngleVec), "TruthWWeight", "GJ");
     }
   }
 

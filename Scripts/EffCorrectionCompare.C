@@ -62,12 +62,12 @@ void EffCorrectionCompare(std::string rootFileName, std::string histname, bool c
 
    TH1F* histoDataH1 = (TH1F*)tFile->Get(dataName.c_str());
    TH1F* histoMcH1 = (TH1F*)tFile->Get(mcName.c_str());
-   //   histoMcH1->Sumw2();
    histoMcH1->SetLineColor(kRed);
 
-   TH1F* histoTruthH1 = (TH1F*)tFile->Get(truthName.c_str());
+   TH1F* histoTruthH1 = (TH1F*) tFile->Get(truthName.c_str());
+   cout << "truthName: " << truthName << endl;
+   if(0==histoTruthH1) return;
    histoTruthH1->SetLineColor(kRed);
-   //   histoTruthH1->Scale( histoMcH1->Integral()/ histoTruthH1->Integral());
 
    std::string effName ="Efficiency"+histname; 
    TH1F* histoEffH1 = (TH1F*) histoMcH1->Clone();
@@ -75,16 +75,12 @@ void EffCorrectionCompare(std::string rootFileName, std::string histname, bool c
    histoEffH1->SetTitle(effName.c_str());
    histoEffH1->Divide(histoTruthH1);
 
-   //   histoMcH1->Scale(histoDataH1->Integral()/ histoMcH1->Integral());
-   //   histoTruthH1->Scale( histoMcH1->Integral() / histoTruthH1->Integral());
-   
    std::string effCorrDataName ="DataEffCor"+histname;
    TH1F* effCorrDataH1 = (TH1F*) histoDataH1->Clone();
    effCorrDataH1->Sumw2();
    effCorrDataH1->SetTitle(effCorrDataName.c_str());
    effCorrDataH1->Divide(histoEffH1);
    
-   //   histoTruthH1->Scale( effCorrDataH1->Integral()/ histoTruthH1->Integral()); 
 
    if(createcanvas){
      TCanvas* canvas = new TCanvas("canvas","c1",1000,1000);
@@ -180,7 +176,10 @@ void EffCorrectionCompareAll(std::string rootFileName, bool saveImage){
 	//sort angle hists
 	if ( (aname.find("Theta") != string::npos) || (aname.find("Phi") != string::npos) ){
 	  //angle hists in GJ system
-	  if ( aname.find("GJ") != string::npos) histnamesAnglesGJ.push_back(aname);
+	  if ( aname.find("GJ") != string::npos){
+	    histnamesAnglesGJ.push_back(aname);
+	    std::cout << "GJ angles: " << aname << endl;
+	  }
 	  else histnamesAnglesHeli.push_back(aname);      
 	}
 	else histnamesMasses.push_back(aname);
@@ -203,18 +202,18 @@ void EffCorrectionCompareAll(std::string rootFileName, bool saveImage){
       EffCorrectionCompare(rootFileName, histnamesAnglesHeli.at(i), false);
    }
 
-   // TCanvas* canvasGJAngles = new TCanvas("Angles Gottfried Jackson stystem","Angles Gottfried Jackson stystem",80, 120,900,900);
-   // int numhistsGJAngles = histnamesAnglesGJ.size();
-   // canvasGJAngles->Divide(std::ceil(sqrt(numhistsGJAngles)), std::ceil(sqrt(numhistsGJAngles)));
-   // for(int i=0; i<numhistsGJAngles; i++){
-   //    canvasGJAngles->cd(i+1);
-   //    EffCorrectionCompare(rootFileName, histnamesAnglesGJ.at(i), false);
-   // }
+   TCanvas* canvasGJAngles = new TCanvas("Angles Gottfried Jackson stystem","Angles Gottfried Jackson stystem",80, 120,900,900);
+   int numhistsGJAngles = histnamesAnglesGJ.size();
+   canvasGJAngles->Divide(std::ceil(sqrt(numhistsGJAngles)), std::ceil(sqrt(numhistsGJAngles)));
+   for(int i=0; i<numhistsGJAngles; i++){
+      canvasGJAngles->cd(i+1);
+      EffCorrectionCompare(rootFileName, histnamesAnglesGJ.at(i), false);
+   }
 
    if(saveImage){
       canvasMass->SaveAs("DataFitCompFileMasses.png");
       canvasHeliAngles->SaveAs("DataFitCompFileHeliAngles.png");
-      // canvasGJAngles->SaveAs("DataFitCompFileGJAngles.png");
+      canvasGJAngles->SaveAs("DataFitCompFileGJAngles.png");
    }
 }
 
