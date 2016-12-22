@@ -82,6 +82,7 @@ public:
   const bool saveContributionHistos() const {return _saveContributionHistos;}
   const bool useDataEvtWeight() const {return _useDataEvtWeight; }
   const bool useMCEvtWeight() const {return _useMCEvtWeight; }
+  const bool useTruthEvtWeight() const {return _useTruthEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const bool doScaling() const {return _doScaling;}
   const std::string pdgTableFile() const {return _pdgTableFile;}
@@ -150,6 +151,7 @@ protected:
   po::options_description* _config;
   bool _useDataEvtWeight;
   bool _useMCEvtWeight;
+  bool _useTruthEvtWeight;
   bool _usePhaseSpaceHyp;
   bool _doScaling;
   std::string _pdgTableFile;
