@@ -32,6 +32,7 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/PhpGenDynamics.hh"
 
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -53,10 +54,12 @@
 const unsigned int EVENTS_PER_ITERATION = 100000;
 
 PwaGen::PwaGen() :
-   _energyFirst(false)
+  _energyFirst(false)
   ,_useDataEvtWeight(GlobalEnv::instance()->parser()->useDataEvtWeight())
   ,_useMcEvtWeight(GlobalEnv::instance()->parser()->useMCEvtWeight())
   ,_genWithModel(GlobalEnv::instance()->parser()->generateWithModel())
+  ,_useMassRange(GlobalEnv::instance()->Channel()->useMassRange())
+  ,_usePhpDynamics(GlobalEnv::instance()->Channel()->usePhpGenDynamics())
   ,_unitScaleFactor(1.)
   , _maxFitWeight(0.)
   ,_initial4Vec(EvtVector4R(GlobalEnv::instance()->Channel()->initial4Vec().E(), GlobalEnv::instance()->Channel()->initial4Vec().Px(),
@@ -118,7 +121,6 @@ PwaGen::~PwaGen()
 
 
 std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
-  bool useMassRange = GlobalEnv::instance()->Channel()->useMassRange();
 
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts= GlobalEnv::instance()->Channel()->massRangeCuts();
   std::vector< std::shared_ptr<MassRangeCut> >::iterator itMassRangeCut;
@@ -133,7 +135,7 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
      }
 
      bool acceptEvt=true;
-     if(useMassRange){
+     if(_useMassRange){
        for (itMassRangeCut=massRangeCuts.begin(); itMassRangeCut!=massRangeCuts.end(); ++itMassRangeCut){
 	 EvtVector4R particleSystem(0,0,0,0);
 	 std::vector<unsigned int> particleIndices=(*itMassRangeCut)->particleIds();
@@ -149,6 +151,29 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 	 }
        }
      } 
+
+     if(acceptEvt){
+       if(_usePhpDynamics){
+	 std::vector< std::shared_ptr<PhpGenDynamics> > phpGenDynamics= GlobalEnv::instance()->Channel()->phpGenDynamics();
+	 std::vector< std::shared_ptr<PhpGenDynamics> >::iterator itPhpGenDynamics;
+	 for (itPhpGenDynamics=phpGenDynamics.begin(); itPhpGenDynamics!=phpGenDynamics.end(); ++itPhpGenDynamics){
+	   double randWeightPhp = EvtRandom::Flat(0., _maxFitWeight );
+
+	   EvtVector4R decParticleSystem(0,0,0,0);
+	   std::vector<unsigned int> particleIndices=(*itPhpGenDynamics)->particleIds();
+	   for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
+	     decParticleSystem = decParticleSystem + p4[*it];
+	   }
+	   double invMass = decParticleSystem.mass();
+	   double currentEvtWeight= (*itPhpGenDynamics)->eval(invMass);
+	   if (currentEvtWeight < randWeightPhp){
+	     acceptEvt=false;
+	     break;
+	   }
+	 }
+       }
+     }
+
 
      if(acceptEvt){
        InfoMsg << "event no " << i << " accepted" << endmsg;

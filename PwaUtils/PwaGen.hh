@@ -66,6 +66,8 @@ protected:
   bool _useDataEvtWeight;
   bool _useMcEvtWeight;
   bool _genWithModel;
+  const bool _useMassRange;
+  const bool _usePhpDynamics;
 
   double _unitScaleFactor;
   double _fspMasses[30];

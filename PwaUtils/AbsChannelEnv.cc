@@ -41,6 +41,7 @@
 #include "PwaUtils/FsParticleProjections.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/RootHist.hh"
+#include "PwaUtils/PhpGenDynamics.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
 #include "FitParams/ParamFactory.hh" 
@@ -61,6 +62,7 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_absDecList(new AbsDecayList())
   ,_prodDecList(new AbsDecayList())
   ,_useMassRange(false)
+  ,_usePhpGenDynamics(false)
   ,_theParser(theParser)
   ,_cmEnergy(0.)
 {
@@ -256,6 +258,15 @@ void AbsChannelEnv::setup(ChannelID id){
     std::string currentString=*itStr;
     std::shared_ptr<MassRangeCut> currentMassRangeCut(new MassRangeCut( currentString, _finalStateParticles));
     _massRangeCuts.push_back(currentMassRangeCut);
+  }
+
+  //php gen dynamics
+  std::vector<std::string> phpGenDynamics=_theParser->phpGenDynamics();
+  if(phpGenDynamics.size()>0) _usePhpGenDynamics=true;
+  for ( itStr = phpGenDynamics.begin(); itStr != phpGenDynamics.end(); ++itStr){
+    std::string currentString=*itStr;
+    std::shared_ptr<PhpGenDynamics> currentPhpGenDynamic(new PhpGenDynamics( currentString, _finalStateParticles));
+    _phpGenDynamics.push_back(currentPhpGenDynamic);
   }  
 
  // hist angles

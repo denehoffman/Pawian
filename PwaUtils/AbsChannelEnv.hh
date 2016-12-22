@@ -38,6 +38,7 @@ class IsobarDecayList;
 class ParserBase;
 class AbsLh;
 class MassRangeCut;
+class PhpGenDynamics;
 class ProdChannelInfo;
 class FsParticleProjections;
 
@@ -60,10 +61,12 @@ public:
   std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
   std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
   std::vector<std::shared_ptr<calcContributionData> >& calcContributionDataVec() {return _calcContributionDataVec;}
-  bool useMassRange() {return _useMassRange;}
+  const bool useMassRange() const {return _useMassRange;}
+  const bool usePhpGenDynamics() const {return _usePhpGenDynamics;}
   bool useDataEvtWeight(){return _useDataEvtWeight;}
   bool useMCEvtWeight(){return _useMCEvtWeight;}
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts() {return _massRangeCuts;}
+  std::vector< std::shared_ptr<PhpGenDynamics> > phpGenDynamics() {return _phpGenDynamics;}
   Vector4<double>&  initial4Vec() {return _initial4Vec;}
   ParserBase* parser(){ return _theParser;}
   void SetLh(std::shared_ptr<AbsLh> theLh){ _theLh = theLh; }
@@ -99,6 +102,7 @@ protected:
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
    std::vector<std::shared_ptr<calcContributionData> > _calcContributionDataVec;
    bool _useMassRange;
+  bool _usePhpGenDynamics;
    double _massMin;
    double _massMax;
    Vector4<double> _initial4Vec;
@@ -106,5 +110,6 @@ protected:
    ParserBase* _theParser;
    std::shared_ptr<AbsLh> _theLh;
   std::vector< std::shared_ptr<MassRangeCut> > _massRangeCuts;
+  std::vector< std::shared_ptr<PhpGenDynamics> > _phpGenDynamics;
   double _cmEnergy;
 };
