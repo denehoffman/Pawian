@@ -362,7 +362,24 @@ int main(int __argc,char *__argv[]){
   cout << "\ncrossPbarGf_phiNegDirGf (y-direction): " << crossPbarGf_phiNegDirGf << endl;
 
   Vector4<double> cross_crossPbarGf_phiNegDirGf_zAxis=KinUtils::perpTo(crossPbarGf_phiNegDirGf, refAxisPawian);
-  cout << "cross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;      
+  cout << "cross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;
+
+
+  cout << "\n************************************" << endl;
+  cout << "\n now look into the reaction e+ e- -> J/psi -> phi f2(1270)" << endl;
+  const double mJpsi = 3.096916;
+  Vector4<double> epLabVec(sqrt(PawianConstants::mElectron*PawianConstants::mElectron+mJpsi*mJpsi/4.), 0., 0.03, mJpsi/2.);
+  Vector4<double> emLabVec(sqrt(PawianConstants::mElectron*PawianConstants::mElectron+mJpsi*mJpsi/4.), 0., 0.03, -mJpsi/2.);
+  Vector4<double> epemLabVec=epLabVec+emLabVec;
+  Print4Vec(epLabVec, "epLabVec");
+  Print4Vec(epemLabVec, "epemLabVec");
+
+  Vector4<double> epHeliepemVec = KinUtils::heliVec(refAxisPawian, refAxisPawian, epemLabVec, epLabVec);  
+  Print4Vec(epHeliepemVec, "epHeliepemVec");
+
+  Vector4<double> refzAxisPawian(0., 0., 0., 1.);
+  Vector4<double> emHeliepemVec = KinUtils::heliVec(refzAxisPawian, refzAxisPawian, epemLabVec, emLabVec);  
+  Print4Vec(emHeliepemVec, "emHeliepemVec");      
   return EXIT_SUCCESS;
 }
 

@@ -422,10 +422,17 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     Vector4<double>  motherRef4Vec(0.,0.,0.,1.);
     Vector4<double>  result4Vec(0.,0.,0.,0.);
     Vector4<double>  result4Vec2(0.,0.,0.,0.);
-
+    Vector4<double>  refVec=all4Vec;
+    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-6 &&
+	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-6 &&
+	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-6 &&
+	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-6){
+      //is production vector
+      refVec=Vector4<double>(sqrt(combinedMother4Vec.M()*combinedMother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+    }
     if (frame=="heli"){
-      result4Vec=KinUtils::heliVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
-      if(nBodyDecay==3) result4Vec2=KinUtils::heliVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
+      result4Vec=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec);
+      if(nBodyDecay==3) result4Vec2=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec2);
     }
     else if (frame=="GottfriedJackson"){
       result4Vec=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
