@@ -635,7 +635,7 @@ void RootHist::initAngleHists(std::map<std::shared_ptr<angleHistData>, std::vect
     theMap[theHistData].push_back(currentPhiAngleDataHist);
 
     if( theHistData->_nBodyDecay == 3){
-      std::string histLambdaName="Lambda"+dataType+systemType+tmpBaseName;
+      std::string histLambdaName=dataType+"Lambda"+systemType+tmpBaseName;
       std::string histLambdaDescription = "#Lambda(" +theHistData->_name+dataType+systemType;
       TH1F* currentLambdaDataHist=new TH1F(histLambdaName.c_str(), histLambdaDescription.c_str(), 100., 0., 1.);
       currentLambdaDataHist->Sumw2();
