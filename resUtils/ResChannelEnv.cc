@@ -104,87 +104,20 @@ void ResChannelEnv::setup(ChannelID id){
     exit(0); 
   }
 
-  //set suffixes
-  std::vector<std::string> suffixVec = _theResParser->replaceSuffixNames();
-  std::map<std::string, std::string> decSuffixNames;
-
-  for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
-    std::string classStr;
-    stringStr >> classStr;
-
-    std::string suffixStr;
-    stringStr >> suffixStr;
-    decSuffixNames[classStr]=suffixStr;
-  }
-
-  //set suffixes for decay classes
-  std::map<std::string, std::string>::iterator itMapStrStr;
-  for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
-    _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-    _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-    //    std::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
-  }
-
+  //set prefactor for production and decay amplitudes
+   AbsChannelEnv::setPrefactors();
+  
+   //replace suffixes for fit parameter
+  AbsChannelEnv::replaceParameterSuffixes();
+ 
   //replace mass key
-  std::vector<std::string> replMassKeyVec = _theResParser->replaceMassKey();
-  std::map<std::string, std::string> decRepMassKeyNames;
-
-  for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
-    std::string oldStr;
-    stringStr >> oldStr;
-
-    std::string newStr;
-    stringStr >> newStr;
-    decRepMassKeyNames[oldStr]=newStr;
-  }
-
-  for (itMapStrStr=decRepMassKeyNames.begin(); itMapStrStr!=decRepMassKeyNames.end(); ++itMapStrStr){
-    _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
-  }
+  AbsChannelEnv::replaceMassKeys();
 
   //add dynamics
-  std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-  std::vector<std::string> decDynVec = _theResParser->decayDynamics();
-  for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
+  AbsChannelEnv::addDynamics();
 
-    std::string particleStr;
-    stringStr >> particleStr;
-
-    std::string dynStr;
-    stringStr >> dynStr;
-
-    std::string tmpName;
-    std::vector<std::string> additionalStringVec;
-    while(stringStr >> tmpName){
-      additionalStringVec.push_back(tmpName);
-    }
-
-    std::vector<std::shared_ptr<AbsDecay> >::iterator itDec;
-    for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
-      std::string theDecName=(*itDec)->name();
-      std::string toFind=particleStr+"To";
-      size_t found;
-      found = theDecName.find(toFind);
-
-      if (found!=string::npos && found==0){
-	(*itDec)->enableDynamics(dynStr, additionalStringVec);
-      }
-    }
-  }
-
-   //set decay levels
-   std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
-   std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
-   for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
-     std::shared_ptr<AbsDecay> currentProdAmp= (*itProdDecList);
-     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, currentProdAmp, currentProdAmp);    
-   }
+  //set decay levels
+  AbsChannelEnv::setDecayLevels();
 }
 
 

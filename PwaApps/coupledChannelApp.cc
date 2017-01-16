@@ -94,6 +94,12 @@ int main(int __argc,char *__argv[]){
   // Create likelihood objects
   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
 
+  //check replacements of parameter suffixes
+  if (!GlobalEnv::instance()->areSuffixMapsIdentical()) return 0;
+  
+  //print out all replacements
+  GlobalEnv::instance()->printFitParameterReplacements();
+  
   if (mode=="dumpDefaultParams"){
     theAppBase.dumpDefaultParams();
     return 1;

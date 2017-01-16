@@ -136,6 +136,13 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
     Spin I3mother(_mother->twoIso3(), 2);
     
     _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
+
+    //check z-component of the isospin
+    if( I3mother != (_i3daughter1+_i3daughter2)){
+      Alert << "electric charge is not conserved for the decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
+      Alert << "I3(mother): " << I3mother << " != " << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  _i3daughter2 << endmsg;
+      exit(1); 
+    } 
   
     if(fabs(_isospinClebschG)<1.e-8){
       WarningMsg << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
@@ -251,9 +258,19 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   if ( GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_PBARP 
        ||  GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
     _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
+    if ( (_i3daughter1+_i3daughter2) != Spin(0) ){
+      Alert << "electric charge is not conserved for the production of the two daughters " << _daughter1->name() << " and " << _daughter2->name() << endmsg;
+      Alert << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  _i3daughter2 << "  !=  0" << endmsg;
+      exit(1);
+    }
   }
   else if (GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMMAP){
     _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 1./2); //p gamma
+    if ( (_i3daughter1+_i3daughter2) != Spin(1./2) ){
+      Alert << "electric charge is not conserved for the production of the two daughters " << _daughter1->name() << " and " << _daughter2->name() << endmsg;
+      Alert << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  _i3daughter2 << "  !=  1/2" << endmsg;
+      exit(1);
+    }
   }
   else{
     Alert << "AbsDecay cannot be set up for channel type " <<  GlobalEnv::instance()->Channel(channelId)->channelType() << endmsg;

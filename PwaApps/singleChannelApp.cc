@@ -115,6 +115,13 @@ int main(int __argc,char *__argv[]){
  
   theAppBase.createLhObjects();
 
+  //check replacements of parameter suffixes
+  if (!GlobalEnv::instance()->areSuffixMapsIdentical()) return 0;
+  
+  //print out all replacements
+  GlobalEnv::instance()->printFitParameterReplacements();
+
+
   if (mode=="dumpDefaultParams"){
     theAppBase.dumpDefaultParams();
     return 1;

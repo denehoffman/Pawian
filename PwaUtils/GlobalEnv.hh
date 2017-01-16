@@ -28,6 +28,8 @@
 
 #include <string>
 #include <memory>
+#include <vector>
+#include <map>
 #include "AbsChannelEnv.hh"
 
 class ParserBase;
@@ -64,6 +66,14 @@ public:
    void setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams);
    std::vector<std::string> fixedParams();
 
+  std::map<std::string, std::string>& toBeReplacedSuffixMap() {return _toBeReplacedSuffixMap;}
+  std::map<std::string, std::string>& alreadyReplacedSuffixMap() {return _alreadyReplacedSuffixMap;}
+  std::map<std::string, std::string>& fitParamReplacementMap() {return _fitParamReplacementMap;}
+  void addIntoToBeReplacedSuffixMap(std::string& toBeReplaced, std::string& replacedBy);
+  void addToStringStringMap(const std::string& firstString, const std::string& secondString, std::map<std::string, std::string>& theMap);  
+  bool areSuffixMapsIdentical();
+  void printFitParameterReplacements();
+
 private:
   GlobalEnv();
    static GlobalEnv* _instance;
@@ -76,5 +86,7 @@ private:
 
    ChannelEnvList _channelEnvs;
    std::shared_ptr<AbsPawianParameters> _startParams;
-
+  std::map<std::string, std::string> _toBeReplacedSuffixMap;
+  std::map<std::string, std::string> _alreadyReplacedSuffixMap;
+  std::map<std::string, std::string> _fitParamReplacementMap;
 };

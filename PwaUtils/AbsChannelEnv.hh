@@ -91,6 +91,11 @@ protected:
    bool _useDataEvtWeight;
   bool _useMCEvtWeight;
   AbsChannelEnv(ParserBase* theParser, short channelType);
+  virtual void replaceParameterSuffixes();
+  virtual void replaceMassKeys();
+  virtual void addDynamics();
+  virtual void setDecayLevels();
+  virtual void setPrefactors();
    int _noFinalStateParticles;
    std::vector<Particle*> _finalStateParticles;
    std::shared_ptr<AbsDecayList> _absDecList;
