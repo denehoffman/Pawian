@@ -66,6 +66,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_useMCEvtWeight(false)
   ,_useTruthEvtWeight(false)
   ,_usePhaseSpaceHyp(false)
+  ,_useCohPhaseSpaceHyp(false)
   ,_doScaling(false)
   ,_pdgTableFile("/Particle/pdtNew.table")
   ,_productionFormalism("Cano")
@@ -125,6 +126,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("useMCEventWeight",po::value<bool>(&_useMCEvtWeight), "enable/disable input for Monte Carlo event weight")
     ("useTruthEventWeight",po::value<bool>(&_useTruthEvtWeight), "enable/disable input for truth event weight")
     ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
+    ("useCohPhaseSpaceHyp",po::value<bool>(&_useCohPhaseSpaceHyp), "use hypothesis for coherent phase space")
     ("doScaling",po::value<bool>(&_doScaling), "enable/disable prefit with free scaling factor")
     ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
     ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
@@ -251,6 +253,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "use Monte Carlo event weight: " << _useMCEvtWeight  << "\n\n"
 		<< "use truth event weight: " << _useTruthEvtWeight  << "\n\n"
 		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
+                << "use coherent phase space hyp: " << _useCohPhaseSpaceHyp  << "\n\n"
 		<< "prefit with free scaling factor: " << _doScaling << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
 	        << "minimumTolerance: " << _tolerance << "\n\n"

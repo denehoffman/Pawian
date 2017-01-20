@@ -104,9 +104,12 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianPa
       
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-	complex<double> currentDecAmp=(*itDec)->XdecAmp(itLam, theData);
-	lamItAmp+=currentDecAmp;
+	complex<double> currentDecAmp = (*itDec)->XdecAmp(itLam, theData);
+	lamItAmp += currentDecAmp;
       }
+
+      if(_useCohPhasespace) lamItAmp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
+
       result += fabs(_currentPolVec.at(itLam))*norm(lamItAmp);
     }
   }

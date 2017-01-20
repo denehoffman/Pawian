@@ -86,7 +86,9 @@ protected:
   std::vector< std::shared_ptr<AbsXdecAmp> > _decAmps;
 
   bool _usePhasespace;
+  bool _useCohPhasespace;
   const std::string _phasespaceKey;
+  const std::string _CohPhasespaceKey;
   std::map<const std::string, bool> _hypMap;
   unsigned int _calcCounter;
   unsigned short _noOfThreads;

@@ -84,6 +84,7 @@ public:
   const bool useMCEvtWeight() const {return _useMCEvtWeight; }
   const bool useTruthEvtWeight() const {return _useTruthEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
+  const bool useCohPhaseSpaceHyp() const {return _useCohPhaseSpaceHyp; }
   const bool doScaling() const {return _doScaling;}
   const std::string pdgTableFile() const {return _pdgTableFile;}
   const std::vector<std::string>& coupledChannelCfgs() const { return _coupledChannelCfgs; }
@@ -153,6 +154,7 @@ protected:
   bool _useMCEvtWeight;
   bool _useTruthEvtWeight;
   bool _usePhaseSpaceHyp;
+  bool _useCohPhaseSpaceHyp;
   bool _doScaling;
   std::string _pdgTableFile;
   std::vector<std::string> _coupledChannelCfgs;

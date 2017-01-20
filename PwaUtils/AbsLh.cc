@@ -45,7 +45,9 @@ AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   ,_evtDataVec(theAbsLhPtr->getDataVec())
   ,_evtMCVec(theAbsLhPtr->getMcVec())
   ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
+  ,_useCohPhasespace(GlobalEnv::instance()->parser()->useCohPhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
+  ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 
@@ -57,7 +59,9 @@ AbsLh::AbsLh(ChannelID channelID) :
   AbsParamHandler()
   , _channelID(channelID)
   ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
+  ,_useCohPhasespace(GlobalEnv::instance()->parser()->useCohPhaseSpaceHyp())
   ,_phasespaceKey("Phasespace")
+  ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 {
@@ -258,6 +262,13 @@ void AbsLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   if(_usePhasespace){
     fitPar->Add(_phasespaceKey, 0.01, 0.05);
     fitPar->SetLimits(_phasespaceKey, 0., 3.);     
+  }
+
+  if(_useCohPhasespace){
+    fitPar->Add(_CohPhasespaceKey+"Mag", 0.01, 0.05);
+    fitPar->SetLimits(_CohPhasespaceKey+"Mag", 0., 3.);
+
+    fitPar->Add(_CohPhasespaceKey+"Phi", 0., 0.2);
   }
 
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecs;
