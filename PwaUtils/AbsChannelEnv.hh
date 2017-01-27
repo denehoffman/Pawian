@@ -49,7 +49,8 @@ class AbsChannelEnv
 {
 public:
 
-  virtual void setup(ChannelID id);
+  //  virtual void setup(ChannelID id);
+  virtual void setupChannel(ChannelID id)=0;
   const int noFinalStateParticles() {return _noFinalStateParticles;}
   std::vector<Particle*> finalStateParticles() {return _finalStateParticles;}
   std::shared_ptr<AbsDecayList> absDecayList() {return _absDecList;}
@@ -83,6 +84,7 @@ public:
   static short CHANNEL_EPEM;
   static short CHANNEL_RES;
   static short CHANNEL_GAMMAP;
+  static short CHANNEL_PIPISCATTERING;
   
 protected:
    int _channelID;
@@ -91,6 +93,12 @@ protected:
    bool _useDataEvtWeight;
   bool _useMCEvtWeight;
   AbsChannelEnv(ParserBase* theParser, short channelType);
+  virtual void setupGlobal(ChannelID id);
+  virtual void replaceParameterSuffixes();
+  virtual void replaceMassKeys();
+  virtual void addDynamics();
+  virtual void setDecayLevels();
+  virtual void setPrefactors();
    int _noFinalStateParticles;
    std::vector<Particle*> _finalStateParticles;
    std::shared_ptr<AbsDecayList> _absDecList;

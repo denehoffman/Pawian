@@ -28,6 +28,8 @@
 #include "qft++/topincludes/c++-template-utils.hh"
 #include "PspGen/EvtKine.hh"
 #include "PspGen/EvtVector4R.hh"
+#include "Examples/Tutorial/DfuncClebschG/RootUtils.hh"
+#include "TLorentzVector.h"
 
 using namespace std;
 //_____________________________________________________________________________
@@ -362,7 +364,68 @@ int main(int __argc,char *__argv[]){
   cout << "\ncrossPbarGf_phiNegDirGf (y-direction): " << crossPbarGf_phiNegDirGf << endl;
 
   Vector4<double> cross_crossPbarGf_phiNegDirGf_zAxis=KinUtils::perpTo(crossPbarGf_phiNegDirGf, refAxisPawian);
-  cout << "cross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;      
+  cout << "cross_crossPbarGf_phiNegDirGf_zAxis (x-direction): " << cross_crossPbarGf_phiNegDirGf_zAxis << endl;
+
+  cout << "\nTLorentz vectors transformed into the helicity frame of the eta resonance\n" << endl;
+  TLorentzVector pLabTLVec(0., 0., 0., PawianConstants::mProton);
+  TLorentzVector pbarLabTLVec(0., 0., 2.0,sqrt(PawianConstants::mProton*PawianConstants::mProton+2.0*2.0));
+  TLorentzVector pbarpLabTLVec=pLabTLVec+pbarLabTLVec;
+
+  TLorentzVector phiLabTLVec(0. ,0., 1.729, sqrt(1.02*1.02+1.729*1.729) );
+  phiLabTLVec.SetTheta(30./PawianConstants::radToDeg);
+  phiLabTLVec.SetPhi(-45./PawianConstants::radToDeg);
+
+  TLorentzVector etaLabTLVec= pLabTLVec+pbarLabTLVec-phiLabTLVec;
+
+  TLorentzVector gamma1LabTLVec(0. ,0., 0.19176106, 0.19176106);
+  gamma1LabTLVec.SetTheta(10./PawianConstants::radToDeg);
+  gamma1LabTLVec.SetPhi(-20./PawianConstants::radToDeg);
+
+  cout << "pLabTLVec: ";
+  pLabTLVec.Print();
+  Print4Vec(pLabVec, "pLabVec");
+  cout << "pbarLabTLVec: ";
+  pbarLabTLVec.Print();
+  Print4Vec(pbarLabVec, "pbarLabVec");
+  cout << "pbarpLabTLVec: ";
+  pbarpLabTLVec.Print();
+  Print4Vec(pbarpLabVec, "pbarpLabVec");
+  cout << "phiLabTLVec: ";
+  phiLabTLVec.Print();
+  Print4Vec(phiLabVec, "phiLabVec");
+  cout << "etaLabTLVec: ";
+  etaLabTLVec.Print();
+  Print4Vec(etaLabVec, "etaLabVec");
+  cout << "gamma1LabTLVec: ";
+  gamma1LabTLVec.Print();
+  Print4Vec(gamma1LabVec, "gamma1LabVec");
+
+  TLorentzVector gamma1HeliTLVec = RootUtils::heliVec(pbarLabTLVec, pbarpLabTLVec, etaLabTLVec, gamma1LabTLVec);
+ cout << "gamma1HeliTLVec: ";
+  gamma1HeliTLVec.Print();
+  Print4Vec(gamma1HeliVec, "gamma1HeliVec");
+
+  TLorentzVector phiHeliTLVec = RootUtils::heliVec(pbarLabTLVec, pbarpLabTLVec, etaLabTLVec, phiLabTLVec);
+  cout << "phiHeliTLVec: ";
+  phiHeliTLVec.Print();
+  Print4Vec(phiHeliVec, "phiHeliVec");
+
+
+  cout << "\n************************************" << endl;
+  cout << "\n now look into the reaction e+ e- -> J/psi -> phi f2(1270)" << endl;
+  const double mJpsi = 3.096916;
+  Vector4<double> epLabVec(sqrt(PawianConstants::mElectron*PawianConstants::mElectron+mJpsi*mJpsi/4.), 0., 0.03, mJpsi/2.);
+  Vector4<double> emLabVec(sqrt(PawianConstants::mElectron*PawianConstants::mElectron+mJpsi*mJpsi/4.), 0., 0.03, -mJpsi/2.);
+  Vector4<double> epemLabVec=epLabVec+emLabVec;
+  Print4Vec(epLabVec, "epLabVec");
+  Print4Vec(epemLabVec, "epemLabVec");
+
+  Vector4<double> epHeliepemVec = KinUtils::heliVec(refAxisPawian, refAxisPawian, epemLabVec, epLabVec);  
+  Print4Vec(epHeliepemVec, "epHeliepemVec");
+
+  Vector4<double> emHeliepemVec = KinUtils::heliVec(refAxisPawian, refAxisPawian, epemLabVec, emLabVec);  
+  Print4Vec(emHeliepemVec, "emHeliepemVec");
+  
   return EXIT_SUCCESS;
 }
 

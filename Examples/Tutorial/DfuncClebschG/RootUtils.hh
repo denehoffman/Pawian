@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2016 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,33 +20,13 @@
 //									  //
 //************************************************************************//
 
-// ResChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
-
-
 #pragma once
 
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+#include "TLorentzVector.h"
 
-class resReaction;
-class resParser;
-class Particle;
+namespace RootUtils{
+  TLorentzVector heliVec(const TLorentzVector& motherRef,  const TLorentzVector& ref,const TLorentzVector& mother, const TLorentzVector& daughter);
+  
+}
 
-class ResChannelEnv : public AbsChannelEnv{
-
-public:
-  virtual void setupChannel(ChannelID id);
-  ResChannelEnv(resParser* theResParser);
-
-  std::shared_ptr<resReaction> reaction() {return _resReaction;}
-  Particle* motherParticle() {return _motherParticle;}
-  virtual const std::string  channelTypeName() {return "res";}
-  virtual const bool polarizedMother() const { return _polarizedMother;}
-
-protected:
-  resParser* _theResParser;
-  Particle* _motherParticle;
-  bool _polarizedMother;
-  std::shared_ptr<resReaction> _resReaction;
-};

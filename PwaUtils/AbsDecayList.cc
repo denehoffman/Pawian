@@ -32,6 +32,7 @@
 
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
@@ -102,26 +103,49 @@ void AbsDecayList::replaceSuffix(const std::string& oldPart, const std::string& 
   std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
     std::string theSuffix= (*it)->fitParSuffix();
-    std::cout << "theSuffix:\t" << theSuffix << std::endl;
+    std::string oldSuffix=theSuffix;
     boost::replace_all(theSuffix, oldPart, newPart);
-    (*it)->setFitParSuffix(theSuffix); 
+    (*it)->setFitParSuffix(theSuffix);
+    if(theSuffix != oldSuffix){
+      GlobalEnv::instance()->addToStringStringMap(oldPart, newPart, GlobalEnv::instance()->alreadyReplacedSuffixMap());
+      GlobalEnv::instance()->addToStringStringMap(oldSuffix, theSuffix, GlobalEnv::instance()->fitParamReplacementMap());      
+    }
   }
+
 }
 
 void AbsDecayList::replaceMassKey(const std::string& oldPart, const std::string& newPart){
+  bool noReplacement=true;
+  bool alreadyReplaced=false;
   std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
-    if(oldPart== (*it)->massParKey()){
+    if(newPart == (*it)->massParKey()) alreadyReplaced=true;
+    if(oldPart == (*it)->massParKey()){
       (*it)->setMassParKey(newPart);
+      noReplacement=false;
     } 
+  }
+
+  if(noReplacement && !alreadyReplaced){
+    Alert << "mass key: " << oldPart << " does not exist and cannot be replaced by the new key: " << newPart << endmsg;
+    exit(1); 
   }
 }
 
 void AbsDecayList::replaceProdKey(const std::string& oldPart, const std::string& newPart){
+  bool noReplacement=true;
+  bool alreadyReplaced=false;
   std::vector<std::shared_ptr<AbsDecay> >::iterator it;
   for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
+    if(newPart == (*it)->prodParKey()) alreadyReplaced=true;
     if(oldPart== (*it)->prodParKey()){
       (*it)->setProdParKey(newPart);
+      noReplacement=false;
     } 
+  }
+
+  if(noReplacement && !alreadyReplaced){
+    Alert << "production key: " << oldPart << " does not exist and cannot be replaced by the new key: " << newPart << endmsg;
+    exit(1); 
   }
 }

@@ -66,6 +66,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_useMCEvtWeight(false)
   ,_useTruthEvtWeight(false)
   ,_usePhaseSpaceHyp(false)
+  ,_useCohPhaseSpaceHyp(false)
   ,_doScaling(false)
   ,_pdgTableFile("/Particle/pdtNew.table")
   ,_productionFormalism("Cano")
@@ -95,6 +96,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("pbarpFiles",po::value< vector<string> >(&_pbarpCfgs),  "Configuration files for pbarp channels")
     ("epemFiles",po::value< vector<string> >(&_epemCfgs),  "Configuration files for epem channels")
     ("resFiles",po::value< vector<string> >(&_resCfgs),  "Configuration files for single resonance decay channels")
+    ("pipiScatteringFiles",po::value< vector<string> >(&_pipiScatteringCfgs),  "Configuration scattering channels")
     ;
   
   _common->add_options()
@@ -125,6 +127,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("useMCEventWeight",po::value<bool>(&_useMCEvtWeight), "enable/disable input for Monte Carlo event weight")
     ("useTruthEventWeight",po::value<bool>(&_useTruthEvtWeight), "enable/disable input for truth event weight")
     ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
+    ("useCohPhaseSpaceHyp",po::value<bool>(&_useCohPhaseSpaceHyp), "use hypothesis for coherent phase space")
     ("doScaling",po::value<bool>(&_doScaling), "enable/disable prefit with free scaling factor")
     ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
     ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
@@ -251,6 +254,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "use Monte Carlo event weight: " << _useMCEvtWeight  << "\n\n"
 		<< "use truth event weight: " << _useTruthEvtWeight  << "\n\n"
 		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
+                << "use coherent phase space hyp: " << _useCohPhaseSpaceHyp  << "\n\n"
 		<< "prefit with free scaling factor: " << _doScaling << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
 	        << "minimumTolerance: " << _tolerance << "\n\n"
@@ -270,6 +274,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
       for (it = _resCfgs.begin(); it!=_resCfgs.end(); ++it){
          std::cout << "res channel configuration file: " << (*it) << "\n";
+      }
+      for (it = _pipiScatteringCfgs.begin(); it!=_pipiScatteringCfgs.end(); ++it){
+         std::cout << "pipi scattering channel configuration file: " << (*it) << "\n";
       }
       for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
 	  std::cout << "clone particles: " << (*it) << "\n";

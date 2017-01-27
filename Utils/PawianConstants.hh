@@ -3,6 +3,9 @@
 #include <math.h>
 
 namespace PawianConstants {
+
+  //mass of electron (GeV/c^2)                      
+  const double mElectron           = 0.0005109989;
   //mass of proton (GeV/c^2)                      
   const double mProton              = 0.938272081; 
   //mass of pi+- (GeV/c^2)                      

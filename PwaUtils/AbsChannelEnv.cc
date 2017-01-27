@@ -54,6 +54,7 @@ short AbsChannelEnv::CHANNEL_PBARP = 1;
 short AbsChannelEnv::CHANNEL_EPEM = 2;
 short AbsChannelEnv::CHANNEL_RES = 3;
 short AbsChannelEnv::CHANNEL_GAMMAP = 4;
+short AbsChannelEnv::CHANNEL_PIPISCATTERING = 5;
 
 AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   _channelType(channelType)
@@ -80,7 +81,7 @@ std::shared_ptr<AbsLh> AbsChannelEnv::Lh(){
 
 
 
-void AbsChannelEnv::setup(ChannelID id){
+void AbsChannelEnv::setupGlobal(ChannelID id){
    if(_alreadySetUp){
       Alert << "PbarpChannelEnv already set up!" << endmsg;
       exit(1);
@@ -356,6 +357,19 @@ void AbsChannelEnv::setup(ChannelID id){
     _calcContributionDataVec.push_back(currentCalcContributionData);
   }
 
+  //create global map for fit parameter suffixes to be replaced
+  std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
+  for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    std::string classStr;
+    stringStr >> classStr;
+
+    std::string suffixStr;
+    stringStr >> suffixStr;
+
+    GlobalEnv::instance()->addIntoToBeReplacedSuffixMap(classStr, suffixStr);
+  }
 
 }
 
@@ -439,5 +453,108 @@ bool AbsChannelEnv::checkReactionChain(){
 std::shared_ptr<AbsHist> AbsChannelEnv::CreateHistInstance(std::string additionalSuffix, bool withTruth){
 
   return std::shared_ptr<AbsHist>(new RootHist(additionalSuffix, withTruth));
+}
+
+void AbsChannelEnv::replaceParameterSuffixes(){
+  std::map<std::string, std::string> decSuffixNames=GlobalEnv::instance()->toBeReplacedSuffixMap();
+  std::map<std::string, std::string>::iterator itMapStrStr;
+  for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
+    _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
+    _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
+  }
+}
+
+void AbsChannelEnv::replaceMassKeys(){
+  std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
+  std::map<std::string, std::string> decRepMassKeyNames;
+
+  std::vector<std::string>::const_iterator itStr;
+  for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    std::string oldStr;
+    stringStr >> oldStr;
+
+    std::string newStr;
+    stringStr >> newStr;
+    decRepMassKeyNames[oldStr]=newStr;
+  }
+
+  std::map<std::string, std::string>::iterator itMapStrStr;
+  for (itMapStrStr=decRepMassKeyNames.begin(); itMapStrStr!=decRepMassKeyNames.end(); ++itMapStrStr){
+    _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
+  }
+}
+
+void AbsChannelEnv::addDynamics(){
+  std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
+  std::vector<std::string> decDynVec = _theParser->decayDynamics();
+
+  std::vector<std::string>::const_iterator itStr;
+  for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+
+    std::string particleStr;
+    stringStr >> particleStr;
+
+    std::string dynStr;
+    stringStr >> dynStr;
+
+    std::string tmpName;
+    std::vector<std::string> additionalStringVec;
+    while(stringStr >> tmpName){
+      additionalStringVec.push_back(tmpName);
+    }
+
+    std::vector<std::shared_ptr<AbsDecay> >::iterator itDec;
+    for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
+      std::string theDecName=(*itDec)->name();
+      std::string toFind=particleStr+"To";
+      size_t found;
+      found = theDecName.find(toFind);
+
+      if (found!=string::npos && found==0){
+	(*itDec)->enableDynamics(dynStr, additionalStringVec);
+      }
+    }
+  }
+}
+
+void AbsChannelEnv::setDecayLevels(){
+   std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
+   std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
+   for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
+     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, *itProdDecList, *itProdDecList);    
+   }
+}
+
+void AbsChannelEnv::setPrefactors(){
+ //set prefactor for production and decay amplitudes
+  std::map<std::string, double>::iterator strDoubleIt;
+  for(strDoubleIt=_preFactorMap.begin(); strDoubleIt!=_preFactorMap.end(); ++strDoubleIt){
+    std::string currentAmplitudeName=strDoubleIt->first;
+    double currentPrefactor=strDoubleIt->second;
+    
+    std::shared_ptr<AbsDecay> currentDec=_prodDecList->decay(currentAmplitudeName);
+    if(0!=currentDec){
+      currentDec->setPreFactor(currentPrefactor);
+      // InfoMsg << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
+      currentDec->disableIsospin();
+      InfoMsg << "Disable isospin coupling and set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
+    }
+    else{
+      // look in decay amplitudes
+      currentDec=_absDecList->decay(currentAmplitudeName);
+      if(0!=currentDec){
+	currentDec->setPreFactor(currentPrefactor);
+	InfoMsg << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
+      }
+      else{
+	Alert << "Amplitude with name\t" << currentAmplitudeName << "\tnot found!!!" << endmsg;
+	exit(0);
+      }
+    }
+  }
 }
 

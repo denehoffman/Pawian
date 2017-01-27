@@ -41,6 +41,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<IsobarTensorPsiTo
   AbsXdecAmp(theDec, channelID)
   ,_noOfAmps(0)
 {
+  initialize();
   _noOfAmps=theDec->noOfAmplitudes();
   _ampLMap=theDec->ampLMap();
 
@@ -65,6 +66,7 @@ TensorPsiToGamXDecAmps::TensorPsiToGamXDecAmps(std::shared_ptr<AbsDecay> theDec,
   AbsXdecAmp(theDec, channelID)
   ,_noOfAmps(0)
 {
+  initialize();
   //_noOfAmps=???
 }
 

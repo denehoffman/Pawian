@@ -110,7 +110,12 @@ double epemBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawian
       complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
       lamm1Amp+=currentDecAmp;
     }
-    
+   
+    if(_useCohPhasespace){
+      lamp1Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
+      lamm1Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
+    }
+ 
     result += norm(lamp1Amp) + norm(lamm1Amp);
   }
   

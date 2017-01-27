@@ -158,7 +158,7 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 	 std::vector< std::shared_ptr<PhpGenDynamics> > phpGenDynamics= GlobalEnv::instance()->Channel()->phpGenDynamics();
 	 std::vector< std::shared_ptr<PhpGenDynamics> >::iterator itPhpGenDynamics;
 	 for (itPhpGenDynamics=phpGenDynamics.begin(); itPhpGenDynamics!=phpGenDynamics.end(); ++itPhpGenDynamics){
-	   double randWeightPhp = EvtRandom::Flat(0., _maxFitWeight );
+	   double randWeightPhp = EvtRandom::Flat(0., (*itPhpGenDynamics)->maxWeight());
 
 	   EvtVector4R decParticleSystem(0,0,0,0);
 	   std::vector<unsigned int> particleIndices=(*itPhpGenDynamics)->particleIds();

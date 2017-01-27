@@ -70,9 +70,10 @@ int main(int __argc,char *__argv[]){
    std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
    std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
    std::vector<std::string> resCfgs = globalAppParams->resCfgs();
+   std::vector<std::string> pipiScatteringCfgs = globalAppParams->pipiScatteringCfgs();
 
    //requirement single channel  sum reactionCfgs.size() == 1
-   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size();
+   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size()+pipiScatteringCfgs.size();
    InfoMsg << "numReactions: " << numReactions << endmsg;
    if (numReactions != 1){
      Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
@@ -91,7 +92,7 @@ int main(int __argc,char *__argv[]){
        Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
        exit(1); 
      }
-     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" && currentArgv !=(char*)"--resFiles"){
+     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" && currentArgv !=(char*)"--resFiles" && currentArgv !=(char*)"--pipiScatteringFiles"){
        argvWoCfgFile[argcWoCfgFile]=__argv[i];
        argcWoCfgFile++;
      }
@@ -99,12 +100,15 @@ int main(int __argc,char *__argv[]){
    }
 
    bool isPbarpChannel=false;
+   bool isPiPiScatteringChannel=false;
    if (pbarpCfgs.size()==1) isPbarpChannel=true;
+   else if (pipiScatteringCfgs.size()==1) isPiPiScatteringChannel=true;
 
    AppBase theAppBase;
    theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
 
    GlobalEnv::instance()->replaceParser(GlobalEnv::instance()->Channel(0)->parser());
+
    GlobalEnv::instance()->setupChannelEnvs();
 
   // Set the desired error logging mode
@@ -112,11 +116,22 @@ int main(int __argc,char *__argv[]){
 
   // Get mode
   std::string mode=GlobalEnv::instance()->parser()->mode();
- 
+
   theAppBase.createLhObjects();
+
+  //check replacements of parameter suffixes
+  if (!GlobalEnv::instance()->areSuffixMapsIdentical()) return 0;
+
+  //print out all replacements
+  GlobalEnv::instance()->printFitParameterReplacements();
 
   if (mode=="dumpDefaultParams"){
     theAppBase.dumpDefaultParams();
+    return 1;
+  }
+
+  if(isPiPiScatteringChannel){
+    InfoMsg << "is pipi scattering process; exit!!!" << endmsg;
     return 1;
   }
 

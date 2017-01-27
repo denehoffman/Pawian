@@ -99,6 +99,16 @@ const std::shared_ptr<AbsChannelEnv> GlobalEnv::ResChannel(int id) const
    return _channelEnvs.at(id).first;
 }
 
+const std::shared_ptr<AbsChannelEnv> GlobalEnv::PiPiScatteringChannel(int id) const
+{
+
+   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+      Alert << "Faultily accessing pipi scattering channel environment." << endmsg;
+   }
+
+   return _channelEnvs.at(id).first;
+}
+
 
 
 void GlobalEnv::AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short envType){
@@ -113,14 +123,16 @@ void GlobalEnv::setupChannelEnvs(){
 
   int id=0;
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
-      (*it).first->setup(id);
-      if (!(*it).first->checkReactionChain()){
-	Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
-	exit(1);
+      (*it).first->setupChannel(id);
+      if((*it).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+	if (!(*it).first->checkReactionChain()){
+	  Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
+	  exit(1);
+	}
+	(*it).first->setWignerDRefs();
       }
-      (*it).first->setWignerDRefs();
       ++id;
-   }
+  }
   _channelEnvsAlredySetup=true;
 }
 
@@ -187,3 +199,66 @@ void GlobalEnv::replaceParser(ParserBase* theParser){
   InfoMsg << "Now replace the parser!!!" << endmsg;
   setup(theParser);  
 }
+
+void GlobalEnv::addIntoToBeReplacedSuffixMap(std::string& toBeReplaced, std::string& replacedBy){
+
+  //check if replacement still does not exist
+  std::map<std::string, std::string>::iterator it;
+  for(it=_toBeReplacedSuffixMap.begin(); it!=_toBeReplacedSuffixMap.end(); ++it){
+    if(it->first == toBeReplaced){
+      if(it->second != replacedBy){
+	Alert <<"ambiguous replacement of replaceParamSuffixes!!!" 
+	      << it->first << " cannot replaced by " << replacedBy 
+	      <<"/nsince replacement of " <<  it->first << " by " << it->second << " already exists!!!" << endmsg;
+	exit(1); 
+      }
+      else return;
+    }
+  }
+
+  _toBeReplacedSuffixMap[toBeReplaced]=replacedBy; 
+}
+
+bool GlobalEnv::areSuffixMapsIdentical(){
+  //check if _toBeReplacedSuffixMap ==  _alreadyReplacedSuffixMap
+  std::map<std::string, std::string>::iterator itToFind;
+  std::map<std::string, std::string>::iterator it;
+  for(it=_toBeReplacedSuffixMap.begin(); it!=_toBeReplacedSuffixMap.end(); ++it){
+    itToFind = _alreadyReplacedSuffixMap.find(it->first);
+    if(itToFind != _alreadyReplacedSuffixMap.end()){
+      DebugMsg << "found replacement of parameter suffix from " << it->first << " to " << it->second << endmsg; 
+    }
+    else{
+      Alert << "It is not possible to replace of parameter suffix " << it->first << " by " << it->second << endmsg;
+      Alert << "the already replaced map contains " << endmsg;
+      for(itToFind=_alreadyReplacedSuffixMap.begin(); itToFind!=_alreadyReplacedSuffixMap.end(); ++itToFind){
+	Alert << itToFind->first << "\t" << itToFind->second << endmsg;
+      }
+
+      std::map<std::string, std::string>::iterator it2;
+     Alert << "\nthe to be replaced map contains " << endmsg;
+     for(it2=_toBeReplacedSuffixMap.begin(); it2!=_toBeReplacedSuffixMap.end(); ++it2){
+       Alert << it2->first << "\t" << it2->second << endmsg;
+     }
+      exit(1);
+    }
+  }
+  return true;
+}
+
+void GlobalEnv::addToStringStringMap(const std::string& firstString, const std::string& secondString, std::map<std::string, std::string>& theMap){
+  //check if replacement still does not exist
+  std::map<std::string, std::string>::iterator it;
+  for(it=theMap.begin(); it!=theMap.end(); ++it){
+    if(it->first == firstString) return;
+  }
+  theMap[firstString]=secondString;
+}
+
+void GlobalEnv::printFitParameterReplacements(){
+  InfoMsg << "\n*** The fit parameter replacements are ***" << endmsg;
+  std::map<std::string, std::string>::iterator it;
+  for(it=_fitParamReplacementMap.begin(); it!=_fitParamReplacementMap.end(); ++it){
+    InfoMsg << it->first << "\treplaced by\t" << it->second << endmsg;
+  }
+}  

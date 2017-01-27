@@ -46,6 +46,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
   ,_factorMag(1.)
   ,_isWeakDecay(false)
 {
+  initialize();
   if(_JPClamlams.size()>0) _factorMag=1./sqrt(_JPClamlams.size());
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
@@ -98,6 +99,7 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) 
   AbsXdecAmp(theDec, channelID)
   ,_isWeakDecay(false)
 {
+  initialize();
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
   _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());

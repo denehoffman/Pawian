@@ -50,9 +50,9 @@ PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(thePars
 {
 }
 
-void PbarpChannelEnv::setup(ChannelID id){
+void PbarpChannelEnv::setupChannel(ChannelID id){
 
-   AbsChannelEnv::setup(id);
+   AbsChannelEnv::setupGlobal(id);
 
    //Antiproton momentum
   _pbarMomentum = _thePbarpParser->getpbarMomentum();
@@ -97,22 +97,6 @@ void PbarpChannelEnv::setup(ChannelID id){
       stringStr >> newStr;
       repProdKeyNames[oldStr]=newStr;
    }
-
-
-   // //preparations for mass key replacements
-   // std::vector<std::string> replMassKeyVec = _theParser->replaceMassKey();
-   // std::map<std::string, std::string> decRepMassKeyNames;
-
-   // for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
-   //    std::stringstream stringStr;
-   //    stringStr << (*itStr);
-   //    std::string oldStr;
-   //    stringStr >> oldStr;
-
-   //    std::string newStr;
-   //    stringStr >> newStr;
-   //    decRepMassKeyNames[oldStr]=newStr;
-   // }
 
    //fill prodDecayList
    std::vector<std::string> additionalStringVecDummy;
@@ -165,117 +149,19 @@ void PbarpChannelEnv::setup(ChannelID id){
 
 
    //set prefactor for production and decay amplitudes
-   std::map<std::string, double>::iterator strDoubleIt;
-   for(strDoubleIt=_preFactorMap.begin(); strDoubleIt!=_preFactorMap.end(); ++strDoubleIt){
-      std::string currentAmplitudeName=strDoubleIt->first;
-      double currentPrefactor=strDoubleIt->second;
+   AbsChannelEnv::setPrefactors();
 
-      std::shared_ptr<AbsDecay> currentDec=_prodDecList->decay(currentAmplitudeName);
-      if(0!=currentDec){
-	 currentDec->setPreFactor(currentPrefactor);
-	 // InfoMsg << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
-	 currentDec->disableIsospin();
-	 InfoMsg << "Disable isospin coupling and set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
-
-      }
-      else{
-	 // look in decay amplitudes
-	 currentDec=_absDecList->decay(currentAmplitudeName);
-	 if(0!=currentDec){
-	    currentDec->setPreFactor(currentPrefactor);
-	    InfoMsg << "Set prefactor " << currentPrefactor << " for amplitude " << currentAmplitudeName << endmsg;
-	 }
-	 else{
-	    Alert << "Amplitude with name\t" << currentAmplitudeName << "\tnot found!!!" << endmsg;
-	    exit(0);
-	 }
-      }
-   }
-
-
-
-   //set suffixes
-   std::vector<std::string> suffixVec = _thePbarpParser->replaceSuffixNames();
-   std::map<std::string, std::string> decSuffixNames;
-
-   for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
-      std::stringstream stringStr;
-      stringStr << (*itStr);
-      std::string classStr;
-      stringStr >> classStr;
-
-      std::string suffixStr;
-      stringStr >> suffixStr;
-      decSuffixNames[classStr]=suffixStr;
-   }
-
-   //set suffixes for decay classes
-   //   std::map<std::string, std::string>::iterator itMapStrStr;
-   for (itMapStrStr=decSuffixNames.begin(); itMapStrStr!=decSuffixNames.end(); ++itMapStrStr){
-      _absDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-      _prodDecList->replaceSuffix(itMapStrStr->first, itMapStrStr->second);
-      //    std::shared_ptr<IsobarDecay> theDec=_decList->decay(itMapStrStr->first);
-   }
-
+  //replace suffixes for fit parameter
+  AbsChannelEnv::replaceParameterSuffixes();
 
    //replace mass key for decays
-   std::vector<std::string> replMassKeyVec = _thePbarpParser->replaceMassKey();
-   std::map<std::string, std::string> decRepMassKeyNames;
-
-   for ( itStr = replMassKeyVec.begin(); itStr != replMassKeyVec.end(); ++itStr){
-      std::stringstream stringStr;
-      stringStr << (*itStr);
-      std::string oldStr;
-      stringStr >> oldStr;
-
-      std::string newStr;
-      stringStr >> newStr;
-      decRepMassKeyNames[oldStr]=newStr;
-   }
-
-   for (itMapStrStr=decRepMassKeyNames.begin(); itMapStrStr!=decRepMassKeyNames.end(); ++itMapStrStr){
-      _absDecList->replaceMassKey(itMapStrStr->first, itMapStrStr->second);
-   }
-
+  AbsChannelEnv::replaceMassKeys();
 
    //add dynamics
-   std::vector<std::shared_ptr<AbsDecay> > absDecList= _absDecList->getList();
-   std::vector<std::string> decDynVec = _thePbarpParser->decayDynamics();
-   for ( itStr = decDynVec.begin(); itStr != decDynVec.end(); ++itStr){
-      std::stringstream stringStr;
-      stringStr << (*itStr);
-
-      std::string particleStr;
-      stringStr >> particleStr;
-
-      std::string dynStr;
-      stringStr >> dynStr;
-
-      std::string tmpName;
-      std::vector<std::string> additionalStringVec;
-      while(stringStr >> tmpName){
-	 additionalStringVec.push_back(tmpName);
-      }
-
-      std::vector<std::shared_ptr<AbsDecay> >::iterator itDec;
-      for (itDec=absDecList.begin(); itDec!=absDecList.end(); ++itDec){
-	 std::string theDecName=(*itDec)->name();
-	 std::string toFind=particleStr+"To";
-	 size_t found;
-	 found = theDecName.find(toFind);
-	 if (found!=string::npos && found==0){
-	    (*itDec)->enableDynamics(dynStr, additionalStringVec);
-	 }
-      }
-   }
-
+  AbsChannelEnv::addDynamics();
 
    //set decay levels
-   std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
-   std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
-   for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
-     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, *itProdDecList, *itProdDecList);    
-   } 
+  AbsChannelEnv::setDecayLevels();
 
    // spin density particles
    _spinDensity = _thePbarpParser->spinDensityNames();
@@ -283,8 +169,3 @@ void PbarpChannelEnv::setup(ChannelID id){
 }
 
 
-
-// std::shared_ptr<AbsHist> PbarpChannelEnv::CreateHistInstance(std::string additionalSuffix){
-
-//   return std::shared_ptr<AbsHist>(new pbarpHist(additionalSuffix));
-// }

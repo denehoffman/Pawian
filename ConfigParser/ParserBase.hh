@@ -84,12 +84,14 @@ public:
   const bool useMCEvtWeight() const {return _useMCEvtWeight; }
   const bool useTruthEvtWeight() const {return _useTruthEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
+  const bool useCohPhaseSpaceHyp() const {return _useCohPhaseSpaceHyp; }
   const bool doScaling() const {return _doScaling;}
   const std::string pdgTableFile() const {return _pdgTableFile;}
   const std::vector<std::string>& coupledChannelCfgs() const { return _coupledChannelCfgs; }
   const std::vector<std::string>& pbarpCfgs() const {return _pbarpCfgs; }
   const std::vector<std::string>& epemCfgs() const {return _epemCfgs; }
   const std::vector<std::string>& resCfgs() const {return _resCfgs; }
+  const std::vector<std::string>& pipiScatteringCfgs() const {return _pipiScatteringCfgs; }
   const std::vector<std::string>& finalStateParticles() const { return _finalStateParticles; }
   const std::vector<std::string>& decaySystem() const { return _decaySystem; }
   const std::vector<std::string>& replaceSuffixNames() const { return _replaceParSuffix; }
@@ -153,12 +155,14 @@ protected:
   bool _useMCEvtWeight;
   bool _useTruthEvtWeight;
   bool _usePhaseSpaceHyp;
+  bool _useCohPhaseSpaceHyp;
   bool _doScaling;
   std::string _pdgTableFile;
   std::vector<std::string> _coupledChannelCfgs;
   std::vector<std::string> _pbarpCfgs;
   std::vector<std::string> _epemCfgs;
   std::vector<std::string> _resCfgs;
+  std::vector<std::string> _pipiScatteringCfgs;
   std::vector<std::string> _finalStateParticles;
   std::vector<std::string> _decaySystem;
   std::vector<std::string> _dynamics;

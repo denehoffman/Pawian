@@ -36,7 +36,7 @@ class pbarpReaction;
 class PbarpChannelEnv : public AbsChannelEnv
 {
 public:
-  void setup(ChannelID id);
+  virtual void setupChannel(ChannelID id);
   PbarpChannelEnv(pbarpParser* theParser);
   const float pbarMomentum() const {return _pbarMomentum;}
   const int lmax() const {return _lmax;}

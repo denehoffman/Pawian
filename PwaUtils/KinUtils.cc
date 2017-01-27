@@ -91,7 +91,6 @@ Vector4<T> KinUtils::heliVec(const Vector4<T>& motherRef,  const Vector4<T>& ref
 
   //rotate around the z-axis so that refRecoil lies in the x-z plain
   result.RotateZ(PawianConstants::pi-refRecoilTrafo.Phi()); 
-  
   return result;
 }
 
