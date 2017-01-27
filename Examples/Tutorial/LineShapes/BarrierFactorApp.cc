@@ -25,6 +25,7 @@
 #include "PwaDynamics/BreitWignerFunction.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 #include "TH1F.h"
 #include "TFile.h"
@@ -33,9 +34,30 @@
 
 #include <sstream>
 #include <vector>
+#include <getopt.h>
 
-int main(int argc, char *argv[])
-{
+int main(int __argc, char *__argv[]) {
+  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+      
+  if( __argc>1 && ( strcmp( __argv[1], "-h") == 0 ||
+	                  strcmp( __argv[1], "--help" ) == 0 ) ){
+	  InfoMsg << "USAGE:" << endmsg;
+	  InfoMsg << "Definition of decay tree: mother -> recoil + X (-> dec1 + dec2)\n" << endmsg;
+	  InfoMsg << "-dec1:\t\tmass of decay particle 1 [GeV]" << endmsg;
+	  InfoMsg << "-dec2:\t\tmass of decay particle 2 [GeV]" << endmsg;
+	  InfoMsg << "-mother:\tmass of (dec1, dec2)'s mother system [GeV]" << endmsg;
+	  InfoMsg << "-recoil:\tmass of recoil system [GeV]" << endmsg;
+	  InfoMsg << "-min:\t\tmaximum mass in plots [GeV]" << endmsg;
+	  InfoMsg << "-max:\t\tminimum mass in plots [GeV]" << endmsg;
+	  InfoMsg << "-resmass:\tmass of Breit-Wigner resonance [GeV]" << endmsg;
+	  InfoMsg << "-reswidth:\twidth of Breit-Wigner resonance [GeV]" << endmsg;
+    InfoMsg << "-qRdec:\t\tqRdec value [GeV]" << endmsg;
+	  InfoMsg << "-qRprod:\t\tqRprod value [GeV]" << endmsg;
+    InfoMsg << "-lprod:\t\tfix l of production [GeV]" << endmsg;
+    InfoMsg << "-ldec:\t\tfix l of decay [GeV]" << endmsg;
+    return 0;
+  }
+
   std::vector<TH1F*>::iterator it;
   
   double decayParticle1Mass = 0.135;
@@ -52,90 +74,80 @@ int main(int argc, char *argv[])
    int lprod=-1;
    int ldec=-1;
 
-   for(int i = 0; i < argc; i++){
-      if((std::string(argv[i]).compare(std::string("-h")) == 0) ||
-	 (std::string(argv[i]).compare(std::string("--help")) == 0))
-      {
-	 std::cout << "USAGE:" << std::endl;
-	 std::cout << "Definition of decay tree: mother -> recoil + X (-> dec1 + dec2)\n" << std::endl;
-	 std::cout << "-dec1:\t\tmass of decay particle 1 [GeV]" << std::endl;
-	 std::cout << "-dec2:\t\tmass of decay particle 2 [GeV]" << std::endl;
-	 std::cout << "-mother:\tmass of (dec1, dec2)'s mother system [GeV]" << std::endl;
-	 std::cout << "-recoil:\tmass of recoil system [GeV]" << std::endl;
-	 std::cout << "-min:\t\tmaximum mass in plots [GeV]" << std::endl;
-	 std::cout << "-max:\t\tminimum mass in plots [GeV]" << std::endl;
-	 std::cout << "-resmass:\tmass of Breit-Wigner resonance [GeV]" << std::endl;
-	 std::cout << "-reswidth:\twidth of Breit-Wigner resonance [GeV]" << std::endl;
-         std::cout << "-qRdec:\t\tqRdec value [GeV]" << std::endl;
-	 std::cout << "-qRprod:\t\tqRprod value [GeV]" << std::endl;
-         std::cout << "-lprod:\t\tfix l of production [GeV]" << std::endl;
-         std::cout << "-ldec:\t\tfix l of decay [GeV]" << std::endl;
-         return 0;
+   for(;optind < (__argc-1); optind++){
+      std::string sw = __argv[optind];
+
+      if(sw[0]!='-') { 
+         continue;
       }
-      else if(std::string(argv[i]).compare(std::string("-dec1")) == 0)
+      else if(sw == "-dec1")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> decayParticle1Mass;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> decayParticle1Mass;
       }
-      else if(std::string(argv[i]).compare(std::string("-dec2")) == 0)
+      else if(sw == "-dec2")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> decayParticle2Mass;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> decayParticle2Mass;
       }
-      else if(std::string(argv[i]).compare(std::string("-mother")) == 0)
+      else if(sw == "-mother")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> motherMass;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> motherMass;
       }
-      else if(std::string(argv[i]).compare(std::string("-recoil")) == 0)
+      else if(sw == "-recoil")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> recoilMass;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> recoilMass;
       }
-      else if(std::string(argv[i]).compare(std::string("-max")) == 0)
+      else if(sw == "-max")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> massMax;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> massMax;
       }
-      else if(std::string(argv[i]).compare(std::string("-min")) == 0)
+      else if(sw == "-min")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> massMin;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> massMin;
       }
-      else if(std::string(argv[i]).compare(std::string("-resmass")) == 0)
+      else if(sw == "-resmass")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> resonanceMass;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> resonanceMass;
       }
-      else if(std::string(argv[i]).compare(std::string("-reswidth")) == 0)
+      else if(sw == "-reswidth")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> resonanceWidth;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> resonanceWidth;
       }
-      else if(std::string(argv[i]).compare(std::string("-ldec")) == 0)
+      else if(sw == "-ldec")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> ldec;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> ldec;
       }
-      else if(std::string(argv[i]).compare(std::string("-lprod")) == 0)
+      else if(sw == "-lprod")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> lprod;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> lprod;
       }
-      else if(std::string(argv[i]).compare(std::string("-norm")) == 0)
+      else if(sw == "-norm")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> normMass;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> normMass;
       }
-      else if(std::string(argv[i]).compare(std::string("-qRdec")) == 0)
+      else if(sw == "-qRdec")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> qRdec;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> qRdec;
       }
-      else if(std::string(argv[i]).compare(std::string("-qRprod")) == 0)
+      else if(sw == "-qRprod")
       {
-         std::stringstream strStream(std::string(argv[i+1]));
-         strStream >> qRprod;
+         std::istringstream stream(__argv[optind+1]);
+         stream >> qRprod;
+      }
+      else {
+        Alert << "Unknown switch: " << __argv[optind] << endmsg;
+        return 0;
       }
    }
 

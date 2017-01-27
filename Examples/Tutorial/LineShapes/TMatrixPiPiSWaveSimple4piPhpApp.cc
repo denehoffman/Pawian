@@ -27,6 +27,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <getopt.h>
 
 #include <memory>
 

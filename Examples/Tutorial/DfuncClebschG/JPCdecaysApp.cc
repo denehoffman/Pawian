@@ -25,6 +25,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+#include <getopt.h>
 
 #include "Examples/Tutorial/DfuncClebschG/JPCdecays.hh"
 #include "Examples/Tutorial/DfuncClebschG/DecAngularDist.hh"

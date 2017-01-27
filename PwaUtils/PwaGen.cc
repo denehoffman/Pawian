@@ -26,6 +26,7 @@
 #include <string>
 #include <iomanip>
 #include <vector>
+#include <array>
 
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AbsLh.hh"
@@ -128,7 +129,7 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
   std::shared_ptr<EventList> eventList(new EventList);
 
   for(unsigned int i=0; i<numEvents; i++){
-     EvtVector4R p4[_finalStateParticles.size()];
+     EvtVector4R *p4 = new EvtVector4R[_finalStateParticles.size()] ();
      EvtGenKine::PhaseSpace(_finalStateParticles.size(), _fspMasses, p4, _initial4Vec.mass());
      for(unsigned int j=0; j<_finalStateParticles.size(); j++){
 	p4[j].applyBoostTo(_initial4Vec);
@@ -188,6 +189,7 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
      else{
        i--;
      }
+     delete[] p4;
   }
      
     eventList->rewind();
