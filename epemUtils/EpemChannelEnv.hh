@@ -36,7 +36,7 @@ class epemReaction;
 class EpemChannelEnv : public AbsChannelEnv
 {
 public:
-   void setup(ChannelID id);
+   virtual void setupChannel(ChannelID id);
    EpemChannelEnv(epemParser* theParser);
 
    std::shared_ptr<epemReaction> reaction() {return _epemReaction;}

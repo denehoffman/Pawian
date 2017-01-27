@@ -46,6 +46,7 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID)
   ,_factorMag(1.)
    ,_Smax(0)
 {
+  initialize();
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( (*it)->S > _Smax ) _Smax=(*it)->S;
@@ -63,6 +64,7 @@ LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   AbsXdecAmp(theDec, channelID)
   ,_Smax(0)
 {
+  initialize();
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( (*it)->S > _Smax ) _Smax=(*it)->S;

@@ -64,7 +64,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   ,_enabledlamFsDaughter2(false)
   ,_J(theDec->motherJPC()->J)
 {
-  initialize();
+  //  initialize();
 }
 
 AbsXdecAmp::~AbsXdecAmp()

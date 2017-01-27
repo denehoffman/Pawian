@@ -46,9 +46,9 @@ ResChannelEnv::ResChannelEnv(resParser* theParser)
 
 
 
-void ResChannelEnv::setup(ChannelID id){
+void ResChannelEnv::setupChannel(ChannelID id){
 
-   AbsChannelEnv::setup(id);
+   AbsChannelEnv::setupGlobal(id);
 
    //  // has to be set via parser !!!!
   // double totalyMom=0.04;

@@ -131,7 +131,7 @@ void PiPiSWaveASDynamics::fillParamNameList(){
   std::map<std::string, std::map<std::string, double> >::iterator it1;
   for(it1=_currentbFactorMagMap.begin(); it1!=_currentbFactorMagMap.end(); ++it1){
     std::string theName=it1->first;
-    InfoMsg <<  "PiPiSWaveASDynamics::fillParamNameList: theName: " <<  theName << endmsg; 
+    //    InfoMsg <<  "PiPiSWaveASDynamics::fillParamNameList: theName: " <<  theName << endmsg; 
 
     std::vector<std::string> currentNameList;
     

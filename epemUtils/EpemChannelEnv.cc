@@ -50,9 +50,9 @@ EpemChannelEnv::EpemChannelEnv(epemParser* theParser) :
 {
 }
 
-void EpemChannelEnv::setup(ChannelID id){
+void EpemChannelEnv::setupChannel(ChannelID id){
 
-  AbsChannelEnv::setup(id);
+  AbsChannelEnv::setupGlobal(id);
   
   
   _cmsMass=_theEpEmParser->cmsMass();

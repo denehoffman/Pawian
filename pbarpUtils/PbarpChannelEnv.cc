@@ -50,9 +50,9 @@ PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(thePars
 {
 }
 
-void PbarpChannelEnv::setup(ChannelID id){
+void PbarpChannelEnv::setupChannel(ChannelID id){
 
-   AbsChannelEnv::setup(id);
+   AbsChannelEnv::setupGlobal(id);
 
    //Antiproton momentum
   _pbarMomentum = _thePbarpParser->getpbarMomentum();

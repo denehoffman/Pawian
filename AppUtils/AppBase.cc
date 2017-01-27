@@ -51,6 +51,7 @@
 #include "ConfigParser/pbarpParser.hh"
 #include "ConfigParser/epemParser.hh"
 #include "ConfigParser/resParser.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
@@ -68,6 +69,7 @@
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "epemUtils/EpemChannelEnv.hh"
 #include "resUtils/ResChannelEnv.hh"
+#include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
 
 AppBase::AppBase()
 {
@@ -149,6 +151,8 @@ void AppBase::createLhObjects(){
   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
     std::string prodFormalism=(*it).first->parser()->productionFormalism();
+    InfoMsg <<"create likelihood object for channelType " << (*it).first->channelType()
+	    <<"\t and channelID: " << (*it).first->channelID() << endmsg;
     std::shared_ptr<AbsLh> theLhPtr=LhFactory::instance()->getLh((*it).first->channelType(),(*it).first->channelID(), prodFormalism );
     (*it).first->SetLh(theLhPtr);
   }
@@ -714,6 +718,8 @@ void AppBase::addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile){
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, epemCfgs, AbsChannelEnv::CHANNEL_EPEM);
   std::vector<std::string> resCfgs = GlobalEnv::instance()->parser()->resCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, resCfgs, AbsChannelEnv::CHANNEL_RES);
+  std::vector<std::string> pipiScatteringCfgs = GlobalEnv::instance()->parser()->pipiScatteringCfgs();
+  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pipiScatteringCfgs, AbsChannelEnv::CHANNEL_PIPISCATTERING);
 }
 
 void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::vector<std::string>& reactionCfgs, short channelType){
@@ -735,6 +741,10 @@ void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::
      else if(channelType==AbsChannelEnv::CHANNEL_RES){
         resParser* currentParser = new resParser(argcWCfgFile, argvWCfgFile);
 	channelEnv = std::shared_ptr<AbsChannelEnv>(new ResChannelEnv(currentParser));
+   }
+     else if(channelType==AbsChannelEnv::CHANNEL_PIPISCATTERING){
+        pipiScatteringParser* currentParser = new pipiScatteringParser(argcWCfgFile, argvWCfgFile);
+	channelEnv = std::shared_ptr<AbsChannelEnv>(new PiPiScatteringChannelEnv(currentParser));
    }
      GlobalEnv::instance()->AddEnv(channelEnv, channelType);
   }

@@ -99,6 +99,16 @@ const std::shared_ptr<AbsChannelEnv> GlobalEnv::ResChannel(int id) const
    return _channelEnvs.at(id).first;
 }
 
+const std::shared_ptr<AbsChannelEnv> GlobalEnv::PiPiScatteringChannel(int id) const
+{
+
+   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+      Alert << "Faultily accessing pipi scattering channel environment." << endmsg;
+   }
+
+   return _channelEnvs.at(id).first;
+}
+
 
 
 void GlobalEnv::AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short envType){
@@ -113,14 +123,16 @@ void GlobalEnv::setupChannelEnvs(){
 
   int id=0;
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
-      (*it).first->setup(id);
-      if (!(*it).first->checkReactionChain()){
-	Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
-	exit(1);
+      (*it).first->setupChannel(id);
+      if((*it).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+	if (!(*it).first->checkReactionChain()){
+	  Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
+	  exit(1);
+	}
+	(*it).first->setWignerDRefs();
       }
-      (*it).first->setWignerDRefs();
       ++id;
-   }
+  }
   _channelEnvsAlredySetup=true;
 }
 

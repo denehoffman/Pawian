@@ -75,7 +75,6 @@ AbsLh::~AbsLh()
 
 
 void AbsLh::initialize(){
-
     std::vector<Particle*> fsParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
     std::vector<Particle*>::iterator itParticle;
 

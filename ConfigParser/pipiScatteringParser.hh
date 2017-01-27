@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,33 +20,28 @@
 //									  //
 //************************************************************************//
 
-// ResChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
-
+// pipiScatteringParser class definition file. -*- C++ -*-
+// Copyright 2017 Bertram Kopf
 
 #pragma once
 
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "ConfigParser/ParserBase.hh"
+// Boost headers go here
 
-class resReaction;
-class resParser;
-class Particle;
 
-class ResChannelEnv : public AbsChannelEnv{
 
-public:
-  virtual void setupChannel(ChannelID id);
-  ResChannelEnv(resParser* theResParser);
+class pipiScatteringParser : public ParserBase 
+{
 
-  std::shared_ptr<resReaction> reaction() {return _resReaction;}
-  Particle* motherParticle() {return _motherParticle;}
-  virtual const std::string  channelTypeName() {return "res";}
-  virtual const bool polarizedMother() const { return _polarizedMother;}
+  public:
+
+  pipiScatteringParser(int argc,char **argv);
+  virtual ~pipiScatteringParser(){;}
 
 protected:
-  resParser* _theResParser;
-  Particle* _motherParticle;
-  bool _polarizedMother;
-  std::shared_ptr<resReaction> _resReaction;
+  virtual bool parseCommandLine(int argc,char **argv); 
+  float _scatterDummy;
 };
+
+
+

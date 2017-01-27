@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,8 +20,8 @@
 //									  //
 //************************************************************************//
 
-// ResChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
+// PiPiScatteringChannelEnv class definition file. -*- C++ -*-
+// Copyright 2017 Bertram Kopf
 
 
 #pragma once
@@ -30,24 +29,21 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 
-class resReaction;
-class resParser;
+class pipiScatteringParser;
 class Particle;
 
-class ResChannelEnv : public AbsChannelEnv{
+class PiPiScatteringChannelEnv : public AbsChannelEnv{
 
 public:
   virtual void setupChannel(ChannelID id);
-  ResChannelEnv(resParser* theResParser);
+  PiPiScatteringChannelEnv(pipiScatteringParser* thePiPiScatteringParser);
 
-  std::shared_ptr<resReaction> reaction() {return _resReaction;}
-  Particle* motherParticle() {return _motherParticle;}
-  virtual const std::string  channelTypeName() {return "res";}
-  virtual const bool polarizedMother() const { return _polarizedMother;}
+  virtual const std::string  channelTypeName() {return "pipiScattering";}
 
+  std::string pathToKMatrixParser() {return _pathKMatrixParserFile;}
 protected:
-  resParser* _theResParser;
-  Particle* _motherParticle;
-  bool _polarizedMother;
-  std::shared_ptr<resReaction> _resReaction;
+  virtual void setupGlobal(ChannelID id);
+  virtual void addDynamics();
+  pipiScatteringParser* _thePiPiScatteringParser;
+  std::string _pathKMatrixParserFile;
 };

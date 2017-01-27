@@ -54,6 +54,7 @@ short AbsChannelEnv::CHANNEL_PBARP = 1;
 short AbsChannelEnv::CHANNEL_EPEM = 2;
 short AbsChannelEnv::CHANNEL_RES = 3;
 short AbsChannelEnv::CHANNEL_GAMMAP = 4;
+short AbsChannelEnv::CHANNEL_PIPISCATTERING = 5;
 
 AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   _channelType(channelType)
@@ -80,7 +81,7 @@ std::shared_ptr<AbsLh> AbsChannelEnv::Lh(){
 
 
 
-void AbsChannelEnv::setup(ChannelID id){
+void AbsChannelEnv::setupGlobal(ChannelID id){
    if(_alreadySetUp){
       Alert << "PbarpChannelEnv already set up!" << endmsg;
       exit(1);

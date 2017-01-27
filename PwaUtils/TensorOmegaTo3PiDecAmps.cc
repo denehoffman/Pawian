@@ -43,6 +43,7 @@ TensorOmegaTo3PiDecAmps::TensorOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiTenso
   ,_LSs(theDec->LSAmps())
   ,_factorMag(1.)
 {
+  initialize();
   if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
   _daughter1=_decay->daughter1Part();
   _daughter2=_decay->daughter2Part();

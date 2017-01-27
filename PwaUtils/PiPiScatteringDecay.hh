@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,33 +20,36 @@
 //									  //
 //************************************************************************//
 
-// ResChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
-
+// PiPiScatteringDecay class definition file. -*- C++ -*-
+// Copyright 2017 Bertram Kopf
 
 #pragma once
 
+#include <iostream>
+#include <vector>
+#include <complex>
+#include <map>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <memory>
+
+#include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "Utils/PawianCollectionUtils.hh"
 
-class resReaction;
-class resParser;
 class Particle;
+class EvtData;
 
-class ResChannelEnv : public AbsChannelEnv{
+class PiPiScatteringDecay : public AbsDecay{
 
 public:
-  virtual void setupChannel(ChannelID id);
-  ResChannelEnv(resParser* theResParser);
-
-  std::shared_ptr<resReaction> reaction() {return _resReaction;}
-  Particle* motherParticle() {return _motherParticle;}
-  virtual const std::string  channelTypeName() {return "res";}
-  virtual const bool polarizedMother() const { return _polarizedMother;}
+  PiPiScatteringDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId);
+  virtual ~PiPiScatteringDecay();
+  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
+  virtual void print(std::ostream& os) const;
+  virtual std::string type() {return "PiPiScatteringDecay";}
+  virtual void extractStates();
 
 protected:
-  resParser* _theResParser;
-  Particle* _motherParticle;
-  bool _polarizedMother;
-  std::shared_ptr<resReaction> _resReaction;
 };

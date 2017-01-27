@@ -1,29 +1,25 @@
-alias install : install-lib ;
+alias install : install-bin install-lib ;
 explicit install ;
 
-install install-lib : AppUtils
+install install-lib : pipiScatteringUtils
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
                    ;
+
 project : 
 	;
 
-lib AppUtils : 
+lib pipiScatteringUtils : 
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
 	$(TOP)/ConfigParser//ConfigParser
-	$(TOP)/FitParams//FitParams
-	$(TOP)/PwaDynamics//PwaDynamics
-	$(TOP)/PspGen//PspGen
 	$(TOP)/PwaUtils//PwaUtils
-	$(TOP)/MinFunctions//MinFunctions
-	$(TOP)/pbarpUtils//pbarpUtils
-	$(TOP)/epemUtils//epemUtils
-	$(TOP)/resUtils//resUtils
-	$(TOP)/pipiScatteringUtils//pipiScatteringUtils
-	:
+	$(TOP)/Particle//Particle
+	: 
 	: 
 	: ;
+
+

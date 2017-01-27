@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
 //  	      	   Julian Pychy (julian@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
@@ -21,33 +21,44 @@
 //									  //
 //************************************************************************//
 
-// ResChannelEnv class definition file. -*- C++ -*-
-// Copyright 2013 Julian Pychy
+// pipiScatteringParser class definition file. -*- C++ -*-
+// Copyright 2017 Bertram Kopf
 
 
-#pragma once
+#include "ConfigParser/pipiScatteringParser.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include <iterator>
+#include <iostream>
+#include <fstream>
+using namespace std;
 
-class resReaction;
-class resParser;
-class Particle;
 
-class ResChannelEnv : public AbsChannelEnv{
+pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
+  ParserBase(argc,argv)
+{
+  po::options_description common("Common Options");
+  common.add_options()
+    ("scatterDummy", po::value<float>(&_scatterDummy)->default_value(_scatterDummy),"antiproton momentum")
+    ;
+  
+  _common->add(common);
+  
+  po::options_description config("Configuration file options");
+  config.add_options()
+    ;
+  _config->add(config);
+  
+  parseCommandLine(argc, argv);
+}
 
-public:
-  virtual void setupChannel(ChannelID id);
-  ResChannelEnv(resParser* theResParser);
+bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
+{
+  ParserBase::parseCommandLine(argc, argv);
 
-  std::shared_ptr<resReaction> reaction() {return _resReaction;}
-  Particle* motherParticle() {return _motherParticle;}
-  virtual const std::string  channelTypeName() {return "res";}
-  virtual const bool polarizedMother() const { return _polarizedMother;}
+  std::cout << "scatterDummy = " << _scatterDummy << std::endl;
 
-protected:
-  resParser* _theResParser;
-  Particle* _motherParticle;
-  bool _polarizedMother;
-  std::shared_ptr<resReaction> _resReaction;
-};
+  std::cout << std::endl;
+
+  return true;
+}
