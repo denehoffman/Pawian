@@ -38,6 +38,7 @@
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/FunctionUtils.hh"
 #include "Utils/IdStringMapRegistry.hh"
+#include "Utils/PawianConstants.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/DynRegistry.hh"
@@ -380,7 +381,10 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       exit(1); 
     }
     Vector4<double> motherRefVec;
-    if(whichDecayLevel()==decayLevel::firstLevel) motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
+    if(whichDecayLevel()==decayLevel::firstLevel){
+      motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=beamVecCollider(all4Vec, PawianConstants::mElectron);
+    }
     else if(whichDecayLevel()==decayLevel::secondLevel) motherRefVec=all4Vec;
     else{
       Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
@@ -678,3 +682,17 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
    _massParamKey = newKey;
    _massParamId = IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey);
 }
+
+Vector4<double> AbsDecay::beamVecCollider(Vector4<double>& sqrts, double massBeam){
+  //assuption sqrts= 4vector in the lab frame
+  //both beam particles have the same masses (massBeam), such like e+e- or pbar p
+  //main direction of the beam is in z direction, only minor part goes in x-y direction
+  
+  double pBeam=0.5*sqrt(sqrts.Mass()*sqrts.Mass()+sqrts.P()*sqrts.P()-4.*massBeam*massBeam);
+  double pxBeam=0.5*sqrts.Px();
+  double pyBeam=0.5*sqrts.Py();   
+  double pzBeam=sqrt(pBeam*pBeam-pxBeam*pxBeam-pyBeam*pyBeam);
+  double eBeam=sqrt(massBeam*massBeam+pBeam*pBeam);
+  Vector4<double> result(eBeam, pxBeam, pyBeam, pzBeam);
+  return result;
+} 

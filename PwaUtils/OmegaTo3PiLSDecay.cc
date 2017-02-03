@@ -36,7 +36,9 @@
 #include "Utils/FunctionUtils.hh"
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "Utils/FunctionUtils.hh"
+#include "Utils/PawianConstants.hh"
 
 OmegaTo3PiLSDecay::OmegaTo3PiLSDecay(Particle* mother, Particle* daughter1, Particle* daughter2, Particle* daughter3, ChannelID channelID) :
   OmegaTo3PiDecay(mother, daughter1, daughter2, daughter3, channelID)
@@ -98,6 +100,7 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   }
   else if (whichDecayLevel()==decayLevel::firstLevel){ //mother4Vec==all4Vec
     Vector4<double> motherRefVec(0., 0., 0., 1.); //set direction onto the z-axis
+    if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=beamVecCollider(all4Vec, PawianConstants::mElectron);
     daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
     daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec); 
