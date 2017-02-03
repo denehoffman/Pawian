@@ -29,6 +29,10 @@ Event::Event() : weight(1.),
 {}
 Event::Event(int evtNumber) : 
   weight(1.),
+  phase(0.),
+  phaseErr(0.),
+  eta(0.),
+  etaErr(0.),
   evtNo(evtNumber)
 {}
 Event::~Event()
@@ -68,6 +72,13 @@ void Event::addParticle(double e, double px, double py, double pz)
   EvtPartData* evtData = new EvtPartData(e,px,py,pz);
   particles.push_back(evtData);
   return;
+}
+
+void Event::addScatterInfo(double thePhase, double thePhaseErr, double theEta, double theEtaErr){
+  phase=thePhase;
+  phaseErr=thePhaseErr;
+  eta=theEta;
+  etaErr=theEtaErr;
 }
 
 void Event::addWeight(double theWeight)

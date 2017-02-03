@@ -186,7 +186,7 @@ class AbsHist {
 public:
   AbsHist(std::string additionalSuffix = "", bool withTruth=false);
   virtual ~AbsHist();
-  virtual void fillEvt(EvtData* theData, double weight, std::string evtType) = 0;
+  virtual void fillEvt(EvtData* theData, double weight, std::string evtType, int pointNr) = 0;
   virtual void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams) = 0;
   virtual void scaleFitHists(double scaleFactor) = 0;
 

@@ -16,6 +16,7 @@ lib AppUtils :
 	$(TOP)/ErrLogger//ErrLogger
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
+	$(TOP)/Event//Event
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/PspGen//PspGen
 	$(TOP)/PwaUtils//PwaUtils

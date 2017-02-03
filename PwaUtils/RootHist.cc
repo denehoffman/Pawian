@@ -239,12 +239,14 @@ void RootHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsP
   double integralDataWWeight=0.;
 
   std::vector<EvtData*>::const_iterator it=dataList.begin();
+  int dataPoint=1;
   while(it!=dataList.end())
     {
       double weight = (*it)->evtWeight;
       integralDataWWeight+=weight;
-      fillEvt((*it), weight, "data");
+      fillEvt((*it), weight, "data", dataPoint);
       ++it;
+      ++dataPoint;
     }
 
   //  const std::vector<EvtData*> mcList=theEvtList->getMcVecs();
@@ -252,17 +254,18 @@ void RootHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsP
   double integralMC=0.;
   //  double integralFitWeight=0.;
 
+  dataPoint=1;
   it=mcList.begin();
   while(it!=mcList.end())
     {
       double evtWeight = (*it)->evtWeight;
       integralMC+=evtWeight;
-      fillEvt((*it), evtWeight, "mc");
+      fillEvt((*it), evtWeight, "mc", dataPoint);
 
       double fitWeight= theLh->calcEvtIntensity( (*it), fitParams );
       //      integralFitWeight+=fitWeight;
-      fillEvt((*it), evtWeight*fitWeight, "fit");
-
+      fillEvt((*it), evtWeight*fitWeight, "fit", dataPoint);
+      ++dataPoint;
       ++it;
     }
 
@@ -323,7 +326,7 @@ void RootHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsP
 
 }
 
-void RootHist::fillEvt(EvtData* theData, double weight, std::string evtType){
+void RootHist::fillEvt(EvtData* theData, double weight, std::string evtType, int pointNr){
   TTree* theTree=0;
   if(evtType=="data"){
     theTree=_dataFourvecs;

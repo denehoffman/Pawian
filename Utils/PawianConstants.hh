@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math.h>
+#include <complex>
 
 namespace PawianConstants {
 
@@ -26,4 +27,10 @@ namespace PawianConstants {
 
   //rad to deg 
   const double radToDeg = 180.0/M_PI;
+
+  //deg to rad 
+  const double degToRad = M_PI/180.0;
+
+  //complex number i
+  const complex<double> i(0.,1.); 
 }

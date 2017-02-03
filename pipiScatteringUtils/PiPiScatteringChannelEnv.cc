@@ -32,6 +32,7 @@
 #include "PwaUtils/PiPiScatteringDecay.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 #include "PwaUtils/FsParticleProjections.hh"
+#include "PwaUtils/RootPiPiScatteringHist.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 
@@ -198,6 +199,10 @@ void PiPiScatteringChannelEnv::addDynamics(){
   std::shared_ptr<AbsDecay> theDecay=absDecList.at(0);
   theDecay->enableDynamics(dynStr, additionalStringVec);
 
+}
+
+std::shared_ptr<AbsHist> PiPiScatteringChannelEnv::CreateHistInstance(std::string additionalSuffix, bool withTruth){
+  return std::shared_ptr<AbsHist>(new RootPiPiScatteringHist(additionalSuffix, withTruth));
 }
 
 

@@ -50,13 +50,8 @@
 #include "FitParams/AbsPawianParameters.hh"
 
 KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
-  AbsDynamics(name, fsParticles, mother)
-  ,_kMatName("")
-  , _orderKMatBg(-1)
-  ,_withKMatAdler(false)
+  TMatrixDynamics(name, fsParticles, mother, pathToConfigParser)
   ,_currentMass(1.)
-  ,_currentAdler0(0.)
-  ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
   init();
   _isLdependent=true;
@@ -81,7 +76,7 @@ complex<double> result(0.,0.);
   
   else{
       theMutex.lock();
-      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _projectionIndex, OrbMom);
+      result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _decProjectionIndex, OrbMom);
       if ( _cacheAmps){
       	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
       }
@@ -407,140 +402,7 @@ const unsigned short KMatrixDynamics::grandMaId(AbsXdecAmp* grandmaAmp){
 
 
 void KMatrixDynamics::init(){
-  _kMatName=_kMatrixParser->keyName();
-  _orderKMatBg=_kMatrixParser->orderBg();
   _orderPVecBg=_kMatrixParser->orderPVecBg();   
-  _withKMatAdler=_kMatrixParser->useAdler();  
-
-  std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
-  std::vector<std::string>::iterator itString;
-  for (itString=poleNameAndMassVecs.begin(); itString!=poleNameAndMassVecs.end(); ++itString){
-    std::istringstream poleIString(*itString);
-    std::string currentPoleName;
-    std::string currentPoleMassStr;
-    poleIString >> currentPoleName >> currentPoleMassStr;
-
-    std::istringstream currentPoleMassiStr(currentPoleMassStr);
-    double currentValue;
-    if(!(currentPoleMassiStr >> currentValue)){
-      Alert << "cannot convert " << currentPoleMassStr << " to a double value" << endmsg;
-      exit(0);
-    }
-
-    _currentPoleMasses.push_back(currentValue);
-    _poleNames.push_back(currentPoleName);
-  }
-
-  if(_currentPoleMasses.size()!= _kMatrixParser->noOfPoles()){
-    Alert << "number of poles != number of pole masses" << endmsg;
-    exit(0);
-  }
-
-  const std::vector<std::string> gFacStringVec=_kMatrixParser->gFactors();
-  std::map<std::pair<std::string, std::string>, std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
-
-  std::vector<std::string>::const_iterator itStrConst;
-  for(itStrConst=gFacStringVec.begin(); itStrConst!=gFacStringVec.end(); ++itStrConst){
-    std::istringstream particles(*itStrConst);
-    std::string firstParticleName;
-    std::string secondParticleName;
-    particles >> firstParticleName >> secondParticleName;
-
-    Particle* firstParticle = GlobalEnv::instance()->particleTable()->particle(firstParticleName);
-    Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleName);
-    if(0==firstParticle || 0==secondParticle){
-      Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName << " doesn't exist in pdg-table" << endmsg;
-      exit(0);
-    }
-
-  std::pair<std::string, std::string> currentParticlePair=make_pair(firstParticleName, secondParticleName);
-    std::string currentPhpDescription = phpDescriptionVec.at(currentParticlePair);
-
-    std::vector<double> fsParticleMasses;
-    fsParticleMasses.push_back(firstParticle->mass());
-    fsParticleMasses.push_back(secondParticle->mass()); 
-
-    std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, fsParticleMasses);
-    _phpVecs.push_back(currentPhp);
-
-    std::string gFactorKey=firstParticleName+secondParticleName;    
-    _gFactorNames.push_back(gFactorKey);   
-
-    for (int i=0; i<int(_kMatrixParser->noOfPoles()); ++i){
-      std::string currentPoleName=_poleNames[i];
-      std::string currentgValueStr;
-      if(!(particles >> currentgValueStr)){
-	Alert << "g-factors for pole " << currentPoleName << " does not exist!" << endmsg;
-	exit(0);
-      }
-      std::istringstream currentgValueiStr(currentgValueStr);
-      double currentGValue;
-      if (!(currentgValueiStr >> currentGValue)){
-	Alert << "cannot convert " << currentgValueStr << " to a double value" << endmsg;
-	exit(0);
-      }
-      _currentgFactorMap[i].push_back(currentGValue);
-    }
-  }
-
-
-  std::map<int, std::vector<double> >::iterator itgFac;
-  for (itgFac=_currentgFactorMap.begin(); itgFac!=_currentgFactorMap.end(); ++itgFac){
-    std::vector<double> currentgVector=itgFac->second;
-    std::shared_ptr<KPole> currentPole;
-    if (_kMatrixParser->useBarrierFactors()) currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), _phpVecs, _kMatrixParser->orbitalMom(), _kMatrixParser->useTruncatedBarrierFactors()));
-    else currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
-    _kPoles.push_back(currentPole);
-  }
-
-  if(_orderKMatBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
-  else {
-    _currentBgTerms.resize(_orderKMatBg+1);
-    _bgTermNames.resize(_orderKMatBg+1);
-    for(unsigned int i=0; i<= fabs(_orderKMatBg); ++i){
-      _currentBgTerms.at(i).resize(_phpVecs.size());
-      _bgTermNames.at(i).resize(_phpVecs.size());
-      for(unsigned int j=0; j<_phpVecs.size(); ++j){
-	_currentBgTerms.at(i).at(j).resize(_phpVecs.size());
-	_bgTermNames.at(i).at(j).resize(_phpVecs.size());
-	for(unsigned int k=j; k<_phpVecs.size(); ++k){
-	  _currentBgTerms.at(i).at(j).at(k)=0.;
-
-	  std::stringstream keyOrderStrStr;
-	  keyOrderStrStr << i << j << k;
-	  std::string keyOrder=keyOrderStrStr.str();
-	  std::string currentName="bg"+keyOrder+_kMatName;
-	  _bgTermNames.at(i).at(j).at(k)=currentName;
-	}
-      }
-    }
-
-    _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, _orderKMatBg, _withKMatAdler ));
-    if(_withKMatAdler){
-      _currentAdler0=_kMatrixParser->s0Adler();
-      _kMatr->updates0Adler(_currentAdler0);
-      _kMatr->updatesnormAdler(_kMatrixParser->snormAdler());
-    }
-  }
- 
-  const std::string porjectionParticleNames=_kMatrixParser->projection();
-  std::istringstream projParticles(porjectionParticleNames);
-  std::string firstProjParticleName;
-  std::string secondProjParticleName;
-  projParticles >> firstProjParticleName >> secondProjParticleName;
-  std::string projKey=firstProjParticleName+secondProjParticleName;    
-
-  bool found=false;
-  for(unsigned int i=0; i<_gFactorNames.size();++i){
-    if(projKey==_gFactorNames[i]){
-      _projectionIndex=i;
-      found=true;
-    }
-  }
-  if (!found){
-    Alert << "projection index for key " << projKey << " not found" << endmsg;
-    exit(0);
-  }  
 }
 
 

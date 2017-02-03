@@ -306,7 +306,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   _dynType=dynString;
 
-  if(_dynType=="KMatrix") _pathParserFile=additionalStringVec[0];
+  if(_dynType=="KMatrix" || _dynType=="TMatrix") _pathParserFile=additionalStringVec[0];
   else if(_dynType=="Flatte"){ //fill second decay channel (Flatte)
     Particle* firstParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[0]);
     if(0==firstParticle){

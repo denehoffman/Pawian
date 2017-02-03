@@ -33,7 +33,7 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/AbsDynamics.hh"
+#include "PwaUtils/TMatrixDynamics.hh"
 
 class AbsXdecAmp;
 class KMatrixRel;
@@ -45,7 +45,7 @@ class AbsPhaseSpace;
 class PVectorRel;
 class AbsPawianParameters;
 
-class KMatrixDynamics : public AbsDynamics{
+class KMatrixDynamics : public TMatrixDynamics{
 
 public:
   KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser);
@@ -64,37 +64,20 @@ public:
   virtual const unsigned short grandMaId(AbsXdecAmp* grandmaAmp);
 
 protected:
-  std::string _kMatName;
-  int _projectionIndex;
-  int _orderKMatBg;
-  bool _withKMatAdler;
   int _orderPVecBg;
   double _currentMass;
   std::map<std::string, std::shared_ptr<AbsXdecAmp> >  _grandMaAmpMap;
   
-  std::shared_ptr<KMatrixRel> _kMatr;
-  std::vector< std::shared_ptr<KPole> > _kPoles;
   std::map<std::string, std::shared_ptr<FVector> > _fVecMap;
   std::map<std::string, std::shared_ptr<PVectorRel> > _pVecMap;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  std::vector< std::string> _poleNames;
-  std::vector< std::string> _gFactorNames;
 
   std::map<std::string, std::map<std::string, double> > _currentbFactorMap;
-  std::vector<double> _currentPoleMasses;
-  std::map<int, std::vector<double> > _currentgFactorMap;
-  std::vector< std::vector< std::vector<double> > > _currentBgTerms;
-  std::vector< std::vector< std::vector<std::string> > > _bgTermNames;
   std::vector< std::vector<double> >  _currentPVecBgTerms;
   std::vector< std::vector<std::string> >  _bgPVecTermNames;
-  double _currentAdler0;
   
   CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;
   CacheVector<std::map<std::string, std::map<Spin, complex<float> > > > _cachedStringOrbMap;
   std::map<int, std::map<std::string, bool > > _alreadyCached;
-  std::map<std::string, bool > _recalcMap;
-  std::shared_ptr<KMatrixParser> _kMatrixParser;
-  std::map<std::string, std::vector<std::string> > _paramNameListMap;
 
   virtual void init();
   std::shared_ptr<PVectorRel> makeNewPVec();

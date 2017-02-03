@@ -56,6 +56,7 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Event/Event.hh"
 #include "Event/EventReaderDefault.hh"
+#include "Event/EventReaderScattering.hh"
 
 #include "MinFunctions/PwaFcnBase.hh"
 #include "MinFunctions/PwaFcnServer.hh"
@@ -144,6 +145,16 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
     ++evtCount;
   }
   theEventList.rewind();
+}
+
+void AppBase::readScatteringEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID){
+  std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel(channelID)->massRangeCuts();
+  EventReaderScattering evtScatterReader(fileNames, 2, 0, false);
+  if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
+    evtScatterReader.setMassRange(massRangeCuts);
+  }
+
+  evtScatterReader.fill(theEventList);
 }
 
 void AppBase::createLhObjects(){
@@ -286,13 +297,15 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     double evtWeightSumData=0.;
     
     dataEventList.rewind();
+    int dataPoint=1;
     while ((anEvent = dataEventList.nextEvent())){
       EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       absLh->addDataToLogLh(currentDataEvt, currentParams, theLHData);
-      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data", dataPoint);
       evtWeightSumData += currentDataEvt->evtWeight;
       delete currentDataEvt;
       evtCount++;
+      dataPoint++;
       if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
     }
 
@@ -302,17 +315,19 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     double integralFitWeight=0.;
 
     mcEventList.rewind();
+    dataPoint=1;
     while ((anEvent = mcEventList.nextEvent())){
       EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       double currentIntensity=absLh->addMcToLogLh(currentMcEvt,currentParams, theLHData);
-      histPtr->fillEvt(currentMcEvt, 1., "mc");
-      histPtr->fillEvt(currentMcEvt, currentIntensity, "fit");
+      histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
+      histPtr->fillEvt(currentMcEvt, currentIntensity, "fit", dataPoint);
 
       integralFitWeight+=currentIntensity;
 
       delete currentMcEvt;
       evtCount++;
       evtCountMc++;
+      dataPoint++;
       if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
     }
 
@@ -395,13 +410,15 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
     double evtWeightSumData=0.;
     
     dataEventList.rewind();
+    int dataPoint=1;
     while ((anEvent = dataEventList.nextEvent())){
       EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       absLh->addDataToLogLh(currentDataEvt, currentParams, theLHData);
-      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data", dataPoint);
       evtWeightSumData += currentDataEvt->evtWeight;
       delete currentDataEvt;
       evtCount++;
+      dataPoint++;
       if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
     }
 
@@ -411,17 +428,19 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
     double integralFitWeight=0.;
 
     mcEventList.rewind();
+    dataPoint=1;
     while ((anEvent = mcEventList.nextEvent())){
       EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       double currentIntensity=absLh->addMcToLogLh(currentMcEvt,currentParams, theLHData);
-      histPtr->fillEvt(currentMcEvt, 1., "mc");
-      histPtr->fillEvt(currentMcEvt, currentIntensity, "fit");
+      histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
+      histPtr->fillEvt(currentMcEvt, currentIntensity, "fit", dataPoint);
 
       integralFitWeight+=currentIntensity;
       
       delete currentMcEvt;
       evtCount++;
       evtCountMc++;
+      dataPoint++;
       if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
     }
 
@@ -431,17 +450,19 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
     double integralTruthFitWeight=0.;
 
     truthEventList.rewind();
+    dataPoint=1;
     while ((anEvent = truthEventList.nextEvent())){
       EvtData* currentTruthEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       double currentIntensity=absLh->calcEvtIntensity(currentTruthEvt, currentParams);
-      histPtr->fillEvt(currentTruthEvt, 1., "truthWoWeight");
-      histPtr->fillEvt(currentTruthEvt, currentIntensity, "truthWWeight");
+      histPtr->fillEvt(currentTruthEvt, 1., "truthWoWeight", dataPoint);
+      histPtr->fillEvt(currentTruthEvt, currentIntensity, "truthWWeight", dataPoint);
 
       integralTruthFitWeight+=currentIntensity;
       
       delete currentTruthEvt;
       evtCount++;
       evtCountTruth++;
+      dataPoint++;
       if (evtCountTruth%1000 == 0){
 	InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
 	//	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
@@ -462,27 +483,31 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
   int evtCount = 0;
   double evtWeightSumData=0.;
   dataEventList.rewind();
+  int dataPoint=1;
   while ((anEvent = dataEventList.nextEvent())){
     // EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-    EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent);
-    histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data");
+    EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, anEvent->eventNo());
+    histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data", dataPoint);
     evtWeightSumData+=currentDataEvt->evtWeight;
     delete currentDataEvt;
     evtCount++;
+    dataPoint++;
     if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
   }
 
   //loop over mc events
   int evtCountMc = 0;
   mcEventList.rewind();
+  dataPoint=1;
   while ((anEvent = mcEventList.nextEvent())){
     // EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
     EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent);
-    histPtr->fillEvt(currentMcEvt, 1., "fit");
-    histPtr->fillEvt(currentMcEvt, 1., "mc");
+    histPtr->fillEvt(currentMcEvt, 1., "fit", dataPoint);
+    histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
     delete currentMcEvt;
     evtCount++;
     evtCountMc++;
+    dataPoint++;
     if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
   }
 

@@ -54,7 +54,7 @@ class RootHist : public AbsHist{
 public:
   RootHist(std::string additionalSuffix="", bool withTruth=false);
   virtual ~RootHist();
-  virtual void fillEvt(EvtData* theData, double weight, std::string evtType);
+  virtual void fillEvt(EvtData* theData, double weight, std::string evtType, int pointNr);
   virtual void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams);
   virtual void scaleFitHists(double scaleFactor);
   

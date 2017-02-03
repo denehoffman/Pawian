@@ -53,32 +53,34 @@ void EventList::add(Event* newEvent)
   return;
 }
 
-void EventList::removeEvents(unsigned int nBegin, unsigned int nEnd)
+void EventList::removeEvents(unsigned int nBegin,unsigned int nEnd)
 {
+  if( eventList.size() ==0) return;
   if ( nBegin > nEnd || eventList.size()<nEnd) {
     Alert << "can not remove event no " << nBegin << " - " << nEnd 
 	  << " from list" << endmsg; 
     exit(1);  
   }
-
+  
   eventList.erase(eventList.begin()+nBegin, eventList.begin()+nEnd);
 }
 
-void EventList::removeAndDeleteEvents(unsigned int nBegin, unsigned int nEnd)
+void EventList::removeAndDeleteEvents(unsigned int nBegin,unsigned int nEnd)
 {
+  if( eventList.size() ==0) return;
   if ( nBegin > nEnd || eventList.size()<nEnd) {
     Alert << "can not remove event no " << nBegin << " - " << nEnd 
 	  << " from list" << endmsg; 
     exit(1);  
   }
-
+  
   std::vector<Event*>::iterator currentNonConstEvent;
   for (currentNonConstEvent = eventList.begin();
-        currentNonConstEvent != eventList.end();
-        ++currentNonConstEvent){
-     delete *currentNonConstEvent;
-     (*currentNonConstEvent)=0;
-   }
+       currentNonConstEvent != eventList.end();
+       ++currentNonConstEvent){
+    delete *currentNonConstEvent;
+    (*currentNonConstEvent)=0;
+  }
   eventList.erase(eventList.begin()+nBegin, eventList.begin()+nEnd);
 }
 

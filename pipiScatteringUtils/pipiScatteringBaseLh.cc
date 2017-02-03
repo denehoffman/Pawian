@@ -88,6 +88,7 @@ void pipiScatteringBaseLh::print(std::ostream& os) const{
 
 
 void  pipiScatteringBaseLh::initialize(){
+  AbsLh::initialize();
   const std::shared_ptr<PiPiScatteringChannelEnv> pipiScatteringEnv=std::static_pointer_cast<PiPiScatteringChannelEnv>(GlobalEnv::instance()->PiPiScatteringChannel(_channelID));
 
   std::vector<std::shared_ptr<AbsDecay> > absDecList=pipiScatteringEnv->absDecayList()->getList();
@@ -98,6 +99,8 @@ void  pipiScatteringBaseLh::initialize(){
 
 void pipiScatteringBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   _XdecAmp->fillDefaultParams(fitPar);
+  fitPar->Add(_channelScaleParam, 1., 0.01);
+  fitPar->SetLimits(_channelScaleParam, 0., 3.);
 }
 
 void pipiScatteringBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){

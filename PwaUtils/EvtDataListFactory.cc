@@ -20,32 +20,40 @@
 //									  //
 //************************************************************************//
 
-// PiPiScatteringChannelEnv class definition file. -*- C++ -*-
+// EvtDataListFactory class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
+#include <getopt.h>
+#include <fstream>
+#include <string>
 
-#pragma once
-
-#include "PwaUtils/DataUtils.hh"
+#include "PwaUtils/EvtDataListFactory.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
+#include "EvtDataScatteringList.hh"
+#include "ErrLogger/ErrLogger.hh"
 
-class pipiScatteringParser;
-class Particle;
 
-class PiPiScatteringChannelEnv : public AbsChannelEnv{
+EvtDataListFactory* EvtDataListFactory::_instance=0;
 
-public:
-  virtual void setupChannel(ChannelID id);
-  PiPiScatteringChannelEnv(pipiScatteringParser* thePiPiScatteringParser);
+EvtDataListFactory* EvtDataListFactory::instance()
+{
+  if (0==_instance) _instance = new EvtDataListFactory();
+  return _instance;
+}
 
-  virtual const std::string  channelTypeName() {return "pipiScattering";}
+EvtDataListFactory::EvtDataListFactory()
+{
+}
 
-  std::string pathToKMatrixParser() {return _pathKMatrixParserFile;}
-  virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="", bool withTruth=false);
+EvtDataListFactory::~EvtDataListFactory()
+{
+}
 
-protected:
-  virtual void setupGlobal(ChannelID id);
-  virtual void addDynamics();
-  pipiScatteringParser* _thePiPiScatteringParser;
-  std::string _pathKMatrixParserFile;
-};
+std::shared_ptr<EvtDataBaseList> EvtDataListFactory::evtDataListPtr(std::shared_ptr<AbsChannelEnv> absChannelEnv){
+  std::shared_ptr<EvtDataBaseList> eventListPtr;
+  if(absChannelEnv->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING) eventListPtr=std::shared_ptr<EvtDataBaseList>(new EvtDataScatteringList(0));
+  else eventListPtr=std::shared_ptr<EvtDataBaseList>(new EvtDataBaseList(0));
+  return eventListPtr; 
+}

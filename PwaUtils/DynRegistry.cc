@@ -40,6 +40,7 @@
 #include "PwaUtils/KPiSWaveIso32Dynamics.hh"
 #include "PwaUtils/PiPiSWaveASDynamics.hh"
 #include "PwaUtils/KMatrixDynamics.hh"
+#include "PwaUtils/TMatrixDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"
 #include "PwaUtils/BlattWBarrierDynamics.hh"
@@ -105,8 +106,20 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     std::vector<Particle*> fsParticles=theDec->finalStateParticles();
     std::vector<Particle*> fsParticlesDaughter1=theDec->finalStateParticlesDaughter1();
     std::vector<Particle*> fsParticlesDaughter2=theDec->finalStateParticlesDaughter2();
+    
+    //spectial treatment of pipiScattering
+    if( theDec->type() =="PiPiScatteringDecay" ){
+      if(theDec->dynType()=="TMatrix"){
+	std::string pathToConfigFile=theDec->pathToConfigParser();
+	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile));
+      }
+      else{
+	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;
+	exit(1);
+      } 
+    }
 
-    if(theDec->dynType()=="BreitWigner")
+    else if(theDec->dynType()=="BreitWigner")
       result= std::shared_ptr<AbsDynamics>(new BreitWignerDynamics(theName, fsParticles, theDec->motherPart()));
     else if(theDec->dynType()=="BreitWignerRel")
       result= std::shared_ptr<AbsDynamics>(new BreitWignerRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2));

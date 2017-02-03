@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,45 +20,41 @@
 //									  //
 //************************************************************************//
 
-// epemEvtReader class definition file. -*- C++ -*-
-// Copyright 2013 Bertram Kopf
+// EvtDataListFactory class definition file. -*- C++ -*-
+// Copyright 2017 Bertram Kopf
 
 #pragma once
 
-#include "Event/EventReader.hh"
-
-#include <string>
-#include <vector>
 #include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <utility>
+#include <vector>
+#include <complex>
+#include <map>
+#include <string>
 
+#include <cassert>
+#include <memory>
+//#include "PwaUtils/AbsChannelEnv.hh"
 
-class EventList;
+class EvtDataBaseList;
+class AbsChannelEnv;
 
-class EventReaderDefault : public EventReader
-{
+class EvtDataListFactory{
+
 public:
-  EventReaderDefault();
-  EventReaderDefault(const std::vector<std::string>& files, int particles, int skip, bool useWeight=false);
 
-  virtual ~EventReaderDefault();
+  /** Destructor */
+  virtual ~EvtDataListFactory();
 
-  virtual bool fill(EventList& evtList, int evtStart=0, int evtStop=1000000);
-  virtual void setUnit(const std::string& theUnit);
-  virtual void setOrder(const std::string& theOrder);
-  
+  static EvtDataListFactory* instance();
+  std::shared_ptr<EvtDataBaseList> evtDataListPtr(std::shared_ptr<AbsChannelEnv> absChannelEnv);
+
 protected:
-  std::vector<std::string> fileNames;
-  std::vector<std::string>::const_iterator currentFile;
-  std::ifstream currentStream;
-  int numParticles;
-  int linesToSkip;
-  std::string _unit;
-  std::string _order;
-  double _unitScaleFactor;
-  bool _energyFirst;
+ ///Constructor 
+  EvtDataListFactory();
+  static EvtDataListFactory* _instance;
+
+private:
 };
+
 
 

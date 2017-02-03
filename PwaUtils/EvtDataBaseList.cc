@@ -68,8 +68,8 @@ void EvtDataBaseList::read(EventList& evtListData, EventList& evtListMc){
     exit(1);
   }
   read4Vecs(evtListData, _evtDataList, _noOfWeightedDataEvts, evtListData.size(), 0 );
-
   read4Vecs(evtListMc, _mcDataList, _noOfWeightedMcEvts, evtListMc.size(), evtListData.size() );
+
   _alreadyRead=true;
 }
 

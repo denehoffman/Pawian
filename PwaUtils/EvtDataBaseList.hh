@@ -68,7 +68,7 @@ public:
   EvtDataBaseList(ChannelID channelID);
   virtual ~EvtDataBaseList();
 
-  void read(EventList& evtListData, EventList& evtListMc);
+  virtual void read(EventList& evtListData, EventList& evtListMc);
 
 
   const std::vector<EvtData*> getDataVecs() const { return _evtDataList; }

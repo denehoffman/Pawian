@@ -35,6 +35,7 @@
 #include "AppUtils/AppBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/EvtDataListFactory.hh"
 #include "PwaUtils/WelcomeScreen.hh"
 #include "PwaUtils/DynRegistry.hh"
 
@@ -130,21 +131,18 @@ int main(int __argc,char *__argv[]){
     return 1;
   }
 
-  if(isPiPiScatteringChannel){
-    InfoMsg << "is pipi scattering process; exit!!!" << endmsg;
-    return 1;
-  }
-
   // Read start param file
   std::shared_ptr<AbsPawianParameters> unsortedStartPawianParams=theAppBase.streamPawianParams();
   GlobalEnv::instance()->setStartPawianParams(unsortedStartPawianParams);
   std::shared_ptr<AbsPawianParameters> startPawianParams=GlobalEnv::instance()->startPawianParams();
 
-  // fitParCol theStartparams;
-  // fitParCol theErrorparams;
-  // theAppBase.streamParams(theStartparams, theErrorparams); 
 
   if (mode=="gen"){
+    if(isPiPiScatteringChannel){
+      Alert << "gen mode is not supported for pipi scattering reactions!!!" << endmsg;
+      exit(1);
+    }
+
     theAppBase.generate(startPawianParams);
     return 1;
   }
@@ -156,7 +154,14 @@ int main(int __argc,char *__argv[]){
   // }
 
   // Fix params for all channels
-  if (GlobalEnv::instance()->parser()->doScaling()) theAppBase.fixAllReleaseScaleParams(startPawianParams);
+  if (GlobalEnv::instance()->parser()->doScaling()){
+    if(isPiPiScatteringChannel){
+      Alert << "scaling fits are not supported for pipi scattering reactions!!!" << endmsg;
+      exit(1);
+    }
+
+    theAppBase.fixAllReleaseScaleParams(startPawianParams);
+  }
   else{
     std::vector<std::string> fixedParams;
     std::vector<std::string> fixedChannelParams = GlobalEnv::instance()->parser()->fixedParams();
@@ -188,16 +193,20 @@ int main(int __argc,char *__argv[]){
   std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
 
   const std::string datFile=GlobalEnv::instance()->parser()->dataFile();
-  const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
   InfoMsg << "data file: " << datFile ;  // << endmsg;
-  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
-
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
-  std::vector<std::string> mcFileNames;
-  mcFileNames.push_back(mcFile);
 
+  const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
+  std::vector<std::string> mcFileNames;
+  if(!isPiPiScatteringChannel){
+    InfoMsg << "mc file: " << mcFile ;  // << endmsg;
+    mcFileNames.push_back(mcFile);
+  }
+
+  std::shared_ptr<EvtDataBaseList> eventListPtr=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel());
+  
   if(mode == "spinDensity" && isPbarpChannel){
     bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
     InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;
@@ -209,7 +218,6 @@ int main(int __argc,char *__argv[]){
     EventList mcData;
     theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
     
-    std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
     eventListPtr->read(eventsData, mcData);
     
     GlobalEnv::instance()->Channel()->Lh()->setDataVec(eventListPtr->getDataVecs());
@@ -237,14 +245,18 @@ int main(int __argc,char *__argv[]){
   int ratioMcToData= GlobalEnv::instance()->parser()->ratioMcToData();
 
   EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, noOfDataEvents);
-
-  int maxMcEvts=eventsData.size()*ratioMcToData;
-
   EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
+  if(isPiPiScatteringChannel){
+    theAppBase.readScatteringEvents(eventsData, dataFileNames, 0);
+  }
+  else{
+    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, noOfDataEvents);
+    
+    int maxMcEvts=eventsData.size()*ratioMcToData;
+    theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
+  }
 
-  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
+  //  std::shared_ptr<EvtDataBaseList> eventListPtr=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel());
 
   if (mode=="plotMode"){
     theAppBase.plotMode(eventsData, mcData, eventListPtr);
@@ -270,6 +282,7 @@ int main(int __argc,char *__argv[]){
   }
 
   eventListPtr->read(eventsData, mcData);
+
   eventsData.removeAndDeleteEvents(0, eventsData.size()-1);
   mcData.removeAndDeleteEvents(0, mcData.size()-1);
 
@@ -280,7 +293,15 @@ int main(int __argc,char *__argv[]){
   startPawianParams->print(std::cout);
 
   double evtWeightSumData = eventListPtr->NoOfWeightedDataEvts();
+  InfoMsg << "evtWeightSumData: " << evtWeightSumData << endmsg;
   double evtWeightSumMc = eventListPtr->NoOfWeightedMcEvts();
+  InfoMsg << "evtWeightSumMc: " << evtWeightSumMc << endmsg;
+
+  if(isPiPiScatteringChannel){
+    InfoMsg << "is pipi scattering process; exit!!!" << endmsg;
+    return 1;
+  }
+
   if (mode=="qaMode"){
       theAppBase.qaMode(startPawianParams, evtWeightSumData );
       end= clock();
