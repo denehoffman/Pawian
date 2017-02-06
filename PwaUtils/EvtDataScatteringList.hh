@@ -58,6 +58,8 @@ public:
   static std::string PHIERR_PIPISCAT_NAME;
   static std::string ETA_PIPISCAT_NAME;
   static std::string ETAERR_PIPISCAT_NAME;
+  static std::string PHIFIT_PIPISCAT_NAME;
+  static std::string ETAFIT_PIPISCAT_NAME;
 
 protected:
 };

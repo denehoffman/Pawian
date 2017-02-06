@@ -34,8 +34,11 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
+#include "PwaUtils/EvtDataScatteringList.hh"
+#include "PwaUtils/PiPiScatteringXdecAmps.hh"
 #include "ErrLogger/ErrLogger.hh"
 
+#include "Utils/IdStringMapRegistry.hh"
 #include <boost/bind.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
@@ -52,6 +55,21 @@ pipiScatteringBaseLh::~pipiScatteringBaseLh()
 {;
 }
 
+double pipiScatteringBaseLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar){
+  _calcCounter++;
+  updateFitParams(fitPar);
+
+  double chi2All=0.;
+
+  //loop over all data points
+  std::vector<EvtData*>::iterator it;
+  for(it=_evtDataVec.begin(); it!=_evtDataVec.end(); ++it){
+    chi2All+=calcEvtIntensity( (*it), fitPar);
+     // double currenMass=(*itFit)->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
+     // _PiPiScatteringXdecAmp->XdecAmp(dummylamX, (*itFit));
+  }
+  return chi2All;
+}
 
 complex<double> pipiScatteringBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData){
 
@@ -76,9 +94,24 @@ complex<double> pipiScatteringBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, st
 double pipiScatteringBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
   // chi2 fit must be included here
   // each point represtes one event???
-  double result=0.;
 
-  return result;
+  Spin dummylamX(0);
+   _PiPiScatteringXdecAmp->XdecAmp(dummylamX, theData);
+
+  double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME)); 
+  double phiErrData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIERR_PIPISCAT_NAME));
+  double phiFit=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME));
+
+  double chi2_phi= (phiData-phiFit)*(phiData-phiFit)/(phiErrData*phiErrData);  
+
+  double etaData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETA_PIPISCAT_NAME)); 
+  double etaErrData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAERR_PIPISCAT_NAME));
+  double etaFit=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME));
+
+  double chi2_eta= (etaData-etaFit)*(etaData-etaFit)/(etaErrData*etaErrData);
+
+  double result=0.5*(chi2_phi+chi2_eta);
+   return result;
 
 }
 
@@ -94,6 +127,7 @@ void  pipiScatteringBaseLh::initialize(){
   std::vector<std::shared_ptr<AbsDecay> > absDecList=pipiScatteringEnv->absDecayList()->getList();
   _XdecAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, absDecList.at(0)->absDecPtr());
   _decAmps.push_back(_XdecAmp);
+  _PiPiScatteringXdecAmp=std::dynamic_pointer_cast<PiPiScatteringXdecAmps>(_XdecAmp);
 }
 
 

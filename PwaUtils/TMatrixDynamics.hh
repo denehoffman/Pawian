@@ -49,7 +49,7 @@ public:
   virtual ~TMatrixDynamics();
 
   virtual std::string type() {return "TMatrixDynamics";}
-  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp=0, Spin OrbMom=0);
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();

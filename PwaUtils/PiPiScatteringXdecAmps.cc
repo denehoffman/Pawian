@@ -34,6 +34,7 @@
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/DynRegistry.hh"
+#include "PwaUtils/TMatrixDynamics.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
@@ -64,7 +65,7 @@ complex<double> PiPiScatteringXdecAmps::XdecAmp(Spin& lamX, EvtData* theData, Ab
 
   complex<double> result(0.,0.);
   int evtNo=theData->evtNo;
-
+  _tMatDyn->eval(theData);
   return result;
 }
 
@@ -96,5 +97,6 @@ void PiPiScatteringXdecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters
 void PiPiScatteringXdecAmps::initialize(){
   _absDyn = DynRegistry::instance()->getDynamics(_decay);
   _absDyn->addGrandMa(_decay);
+  _tMatDyn=std::dynamic_pointer_cast<TMatrixDynamics>(_absDyn);
 }
 

@@ -39,6 +39,7 @@
 class AbsDecay;
 class AbsPawianParameters;
 class PiPiScatteringDecay;
+class TMatrixDynamics;
 
 class PiPiScatteringXdecAmps : public AbsXdecAmp{
 
@@ -61,7 +62,7 @@ public:
   // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
                                       EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp=0);
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp=0);
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
@@ -71,7 +72,7 @@ public:
 protected:
 
   virtual void initialize();
-
+  std::shared_ptr<TMatrixDynamics> _tMatDyn;
 private:
 
 

@@ -37,12 +37,14 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
+#include "PwaUtils/EvtDataListFactory.hh"
 
 #include "FitParams/AbsPawianParamStreamer.hh"
 #include "FitParams/PwaCovMatrix.hh"
@@ -173,6 +175,7 @@ void AppBase::createLhObjects(){
 }
 
 void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData){
+
   int noOfFreeFitParams=startParams->VariableParameters();
   if(evtWeightSumData<=(noOfFreeFitParams+1)){
     WarningMsg << "number of data events less or equal to the number of free parameters!!!"
@@ -187,6 +190,12 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   if ( fabs(AICccDenom) < 1.e-10) AICccDenom=1.e-10;
   double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/AICccDenom;
 
+  if(GlobalEnv::instance()->Channel()->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
+    std::shared_ptr<AbsHist> histPtr1 = GlobalEnv::instance()->Channel()->CreateHistInstance();
+    histPtr1->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), startParams);
+    return;
+  }
+  
 
   std::shared_ptr<WaveContribution> theWaveContribution;
   if(GlobalEnv::instance()->parser()->calcContributionError()){
@@ -263,7 +272,8 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
 }
 
 void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std::shared_ptr<AbsPawianParameters> startParams){
-  std::shared_ptr<EvtDataBaseList> evtDataBaseList(new EvtDataBaseList(0));
+  std::shared_ptr<EvtDataBaseList> evtDataBaseList=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel());
+
   int noOfFreeFitParams=startParams->VariableParameters();
   std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
   LHData theLHData;
@@ -488,6 +498,9 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
     // EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
     EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, anEvent->eventNo());
     histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data", dataPoint);
+    if(GlobalEnv::instance()->Channel()->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
+      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "fit", dataPoint);
+    }
     evtWeightSumData+=currentDataEvt->evtWeight;
     delete currentDataEvt;
     evtCount++;
@@ -497,18 +510,20 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
 
   //loop over mc events
   int evtCountMc = 0;
-  mcEventList.rewind();
-  dataPoint=1;
-  while ((anEvent = mcEventList.nextEvent())){
-    // EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-    EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent);
-    histPtr->fillEvt(currentMcEvt, 1., "fit", dataPoint);
-    histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
-    delete currentMcEvt;
-    evtCount++;
-    evtCountMc++;
-    dataPoint++;
-    if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
+  if(GlobalEnv::instance()->Channel()->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+    mcEventList.rewind();
+    dataPoint=1;
+    while ((anEvent = mcEventList.nextEvent())){
+      // EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+      EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent);
+      histPtr->fillEvt(currentMcEvt, 1., "fit", dataPoint);
+      histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
+      delete currentMcEvt;
+      evtCount++;
+      evtCountMc++;
+      dataPoint++;
+      if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
+    }
   }
 
   double histScaleFactor=evtWeightSumData/evtCountMc;
@@ -666,8 +681,8 @@ void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double
       Alert << "number of wieghted data events too small: " << evtWeightSumData << endmsg;
       exit(1);
     }
-    if(evtWeightSumMc<10.){
-      Alert << "number of wieghted Monte Carlo events too small: " << evtWeightSumMc << endmsg;
+    if( (GlobalEnv::instance()->Channel()->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING) && evtWeightSumMc<10.){
+      Alert << "number of weighted Monte Carlo events too small: " << evtWeightSumMc << endmsg;
       exit(1);
     }
   std::shared_ptr<AbsFcn> absFcn(new PwaFcnBase());

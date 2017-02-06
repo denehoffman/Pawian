@@ -256,19 +256,27 @@ int main(int __argc,char *__argv[]){
     theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
   }
 
-  //  std::shared_ptr<EvtDataBaseList> eventListPtr=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel());
-
   if (mode=="plotMode"){
     theAppBase.plotMode(eventsData, mcData, eventListPtr);
     return 1;
   }
 
   if (mode=="qaModeSimple"){
+    if(isPiPiScatteringChannel){
+      Alert << "mode qaModeSimple is not supported for pipi scattering reactions!!!" 
+	    << "\nuse qaMode instead!!!" << endmsg;
+      exit(1);
+    }
     theAppBase.qaModeSimple(eventsData, mcData, startPawianParams);
     return 1;
   }
 
   if (mode=="qaModeEffCorrection"){
+    if(isPiPiScatteringChannel){
+      Alert << "mode qaModeEffCorrection is not supported for pipi scattering reactions!!!" 
+	    << endmsg;
+      exit(1);
+    }
     const std::string truthFile=GlobalEnv::instance()->parser()->truthFile();
     int ratioTruthToMc= GlobalEnv::instance()->parser()->ratioTruthToMc();
     int maxTruthEvts=eventsData.size()*ratioMcToData*ratioTruthToMc;
@@ -297,11 +305,6 @@ int main(int __argc,char *__argv[]){
   double evtWeightSumMc = eventListPtr->NoOfWeightedMcEvts();
   InfoMsg << "evtWeightSumMc: " << evtWeightSumMc << endmsg;
 
-  if(isPiPiScatteringChannel){
-    InfoMsg << "is pipi scattering process; exit!!!" << endmsg;
-    return 1;
-  }
-
   if (mode=="qaMode"){
       theAppBase.qaMode(startPawianParams, evtWeightSumData );
       end= clock();
@@ -310,7 +313,6 @@ int main(int __argc,char *__argv[]){
 
       return 1;
   }
-
 
   bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
   InfoMsg << "caching amplitudes enabled / disabled:\t" <<  cacheAmps << endmsg;

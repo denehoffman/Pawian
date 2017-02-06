@@ -687,6 +687,8 @@ Vector4<double> AbsDecay::beamVecCollider(Vector4<double>& sqrts, double massBea
   //assuption sqrts= 4vector in the lab frame
   //both beam particles have the same masses (massBeam), such like e+e- or pbar p
   //main direction of the beam is in z direction, only minor part goes in x-y direction
+  //with pbeam1_z = -pbeam2_z
+
   
   double pBeam=0.5*sqrt(sqrts.Mass()*sqrts.Mass()+sqrts.P()*sqrts.P()-4.*massBeam*massBeam);
   double pxBeam=0.5*sqrts.Px();

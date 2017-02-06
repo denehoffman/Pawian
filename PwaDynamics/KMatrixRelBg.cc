@@ -26,6 +26,7 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 KMatrixRelBg::KMatrixRelBg(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg, bool withAdler) :
   KMatrixRel(Kpoles, phpVecs)
@@ -48,17 +49,16 @@ KMatrixRelBg::KMatrixRelBg(vector<std::shared_ptr<KPole> > Kpoles, vector<std::s
 KMatrixRelBg::~KMatrixRelBg(){
 }
 
-void KMatrixRelBg::evalMatrix(const double mass){
-   evalMatrixTemplate(mass);
+void KMatrixRelBg::evalMatrix(const double mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
-void KMatrixRelBg::evalMatrix(const complex<double> mass){
-   evalMatrixTemplate(mass);
+void KMatrixRelBg::evalMatrix(const complex<double> mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
 template<typename MassType>
-void KMatrixRelBg::evalMatrixTemplate(const MassType mass){
-
+void KMatrixRelBg::evalMatrixTemplate(const MassType mass, Spin OrbMom){
   MassType adlerTerm=1.;
   MassType s_hat=mass*mass;
   if(_withAdler){
@@ -79,6 +79,7 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass){
       for (unsigned int k=0; k<=_orderBg; ++k){
 	currentBg+=complex<double>(_bgTerms.at(k).at(i).at(j)*pow(s_hat,k));
       }
+      //      InfoMsg << "currentBg: " << currentBg << endmsg;
       this->operator()(i,j)=theKMatrix(i,j)+currentBg;
       this->operator()(i,j)*=adlerTerm;
       this->operator()(j,i)=this->operator()(i,j);
@@ -86,5 +87,5 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass){
   }
 }
 
-template void KMatrixRelBg::evalMatrixTemplate(const double mass);
-template void KMatrixRelBg::evalMatrixTemplate(const complex<double> mass);
+template void KMatrixRelBg::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void KMatrixRelBg::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);

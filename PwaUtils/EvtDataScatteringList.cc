@@ -51,6 +51,8 @@ std::string EvtDataScatteringList::PHI_PIPISCAT_NAME= "pipiScatphi";
 std::string EvtDataScatteringList::PHIERR_PIPISCAT_NAME= "pipiScatphiErr";
 std::string EvtDataScatteringList::ETA_PIPISCAT_NAME= "pipiScateta";
 std::string EvtDataScatteringList::ETAERR_PIPISCAT_NAME= "pipiScateatErr";
+std::string EvtDataScatteringList::PHIFIT_PIPISCAT_NAME= "pipiScatphiFit";
+std::string EvtDataScatteringList::ETAFIT_PIPISCAT_NAME= "pipiScatetaFit";
 
 EvtDataScatteringList::EvtDataScatteringList(ChannelID channelID) :
   EvtDataBaseList(channelID)
@@ -102,10 +104,10 @@ void EvtDataScatteringList::readScatteringDefaultFit(std::vector<EvtData*>& data
     {
       EvtData* evtData=new EvtData();
       evtData->evtNo=startNo+evtCount;
-      evtData->DoubleMassId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME),  (*it)->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME))));
+      evtData->DoubleMassId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME), (*it)->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME))));
       //filled now with default 0 value
 
-      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME), 0.));
+      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME), (*it)->DoubleId.at(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME))));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHIERR_PIPISCAT_NAME), 0.));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETA_PIPISCAT_NAME), 0.));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETAERR_PIPISCAT_NAME), 0.));
@@ -132,7 +134,8 @@ EvtData* EvtDataScatteringList::convertEvent(Event* theEvent, int evtNo){
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHIERR_PIPISCAT_NAME), theEvent->PhaseErr()));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETA_PIPISCAT_NAME), theEvent->Eta()));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETAERR_PIPISCAT_NAME), theEvent->EtaErr()));
-
+  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHIFIT_PIPISCAT_NAME), 0.));
+  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETAFIT_PIPISCAT_NAME), 0.));
   return evtData;
 }
 

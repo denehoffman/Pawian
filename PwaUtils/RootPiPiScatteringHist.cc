@@ -138,10 +138,23 @@ void RootPiPiScatteringHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::s
     {
       //      integralDataWWeight+=weight;
       fillEvt((*it), weight, "data", dataPoint);
+      fillEvt((*it), weight, "fit", dataPoint);
       InfoMsg << "data No " << (*it)->evtNo << " filled!!!" << endmsg;
       ++dataPoint;
       ++it;
     }
+
+  // const std::vector<EvtData*> fitList=theLh->getMcVec();
+  // it=fitList.begin();
+  // dataPoint=1;
+  // while(it!=fitList.end())
+  //   {
+  //     //      integralDataWWeight+=weight;
+  //     fillEvt((*it), weight, "fit", dataPoint);
+  //     InfoMsg << "fit No " << (*it)->evtNo << " filled!!!" << endmsg;
+  //     ++dataPoint;
+  //     ++it;
+  //   }
 
 }
 
@@ -171,26 +184,34 @@ void RootPiPiScatteringHist::fillEvt(EvtData* theData, double weight, std::strin
   }
 
   if(evtType=="data" || evtType=="fit"){
-    int evtNo=pointNr;
     _massVal=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME)) ;
-    _phiVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
-    _phiErrVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIERR_PIPISCAT_NAME));
-    _etaVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETA_PIPISCAT_NAME));
-    _etaErrVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAERR_PIPISCAT_NAME));
-    _phaseGraph->SetPoint(evtNo, _massVal, _phiVal);
-    _phaseGraph->SetPointError(evtNo, 0., _phiErrVal);
+    if(evtType=="data"){
+      _phiVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
+      _phiErrVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIERR_PIPISCAT_NAME));
+      _etaVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETA_PIPISCAT_NAME));
+      _etaErrVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAERR_PIPISCAT_NAME));
+    }
+    else{
+      _phiVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME));
+      _phiErrVal=0.;
+      _etaVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME));
+      _etaErrVal=0.;
+    }
 
-    _etaGraph->SetPoint(evtNo, _massVal, _etaVal);
-    _etaGraph->SetPointError(evtNo, 0., _etaErrVal);
+    _phaseGraph->SetPoint(pointNr, _massVal, _phiVal);
+    _phaseGraph->SetPointError(pointNr, 0., _phiErrVal);
+
+    _etaGraph->SetPoint(pointNr, _massVal, _etaVal);
+    _etaGraph->SetPointError(pointNr, 0., _etaErrVal);
 
     double twoDeltaRad=2.*_phiVal*PawianConstants::degToRad-PawianConstants::pi/2.;
     double mag=_etaVal/2.;
     complex<double> argendPoint= complex<double>(mag*cos(twoDeltaRad), mag*sin(twoDeltaRad)+0.5);
-    _ArgandGraph->SetPoint(evtNo, argendPoint.real(), argendPoint.imag());
+    _ArgandGraph->SetPoint(pointNr, argendPoint.real(), argendPoint.imag());
 
     complex<double> etaVec2EiDelta11(_etaVal*cos(2.*_phiVal*PawianConstants::degToRad), _etaVal*sin(2.*_phiVal*PawianConstants::degToRad));
     complex<double> currentT11 = (etaVec2EiDelta11-complex<double>(1.,0.))/(2.*PawianConstants::i);
-    _TijSqrGraphErr->SetPoint(evtNo, _massVal, norm(currentT11));
+    _TijSqrGraphErr->SetPoint(pointNr, _massVal, norm(currentT11));
     theTree->Fill();
   }
 }

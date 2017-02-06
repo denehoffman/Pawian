@@ -40,6 +40,7 @@
 #include "PwaUtils/AbsChannelEnv.hh"
 
 class AbsXdecAmp;
+class PiPiScatteringXdecAmps;
 class resReaction;
 
 
@@ -58,6 +59,7 @@ public:
     return theClone;
   }
 
+  virtual double calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual double calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
@@ -75,6 +77,7 @@ public:
 protected:
   //  std::shared_ptr<resReaction> _resReactionPtr;
   std::shared_ptr<AbsXdecAmp> _XdecAmp;
+  std::shared_ptr<PiPiScatteringXdecAmps> _PiPiScatteringXdecAmp;
 private:
 
   void initialize();
