@@ -149,14 +149,14 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   theEventList.rewind();
 }
 
-void AppBase::readScatteringEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID){
+void AppBase::readScatteringEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, int evtStart, int evtStop){
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel(channelID)->massRangeCuts();
   EventReaderScattering evtScatterReader(fileNames, 2, 0, false);
   if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
     evtScatterReader.setMassRange(massRangeCuts);
   }
 
-  evtScatterReader.fill(theEventList);
+  evtScatterReader.fill(theEventList, evtStart, evtStop);
 }
 
 void AppBase::createLhObjects(){
@@ -603,6 +603,7 @@ bool AppBase::calcAndSendClientLh(NetworkClient& theClient, std::shared_ptr<AbsP
 }
 
 void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
+
   double evtWeightSumData=0;
   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
   std::map<short, std::tuple<long, double, long> > numEventMap;
@@ -621,35 +622,46 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     
     std::vector<std::string> mcFileNames;
     mcFileNames.push_back(mcFile);
-    
-    EventList eventsData;
-    readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight(), 0, noOfDataEvents);
 
-     double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), noOfDataEvents, 0);
+    double noOfMcEvts=0.;
+
+    EventList eventsData;
+    EventList mcData;
+    if(GlobalEnv::instance()->Channel((*it).first->channelID())->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
+      readScatteringEvents(eventsData, dataFileNames, (*it).first->channelID(), 0, noOfDataEvents);
+    }
+    else{
+      readEvents(eventsData, dataFileNames, (*it).first->channelID(), (*it).first->useDataEvtWeight(), 0, noOfDataEvents);
+    }
+
     int noDataEvts=eventsData.size();
+    double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, (*it).first->channelID(), noOfDataEvents, 0);
+    evtWeightSumData+=noOfWeightedDataEvts; 
     eventsData.removeAndDeleteEvents(0, eventsData.size()-1);        
 
-    int maxMcEvts=noDataEvts*ratioMcToData;
-    
-    EventList mcData;
-    readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
-    double noOfMcEvts=EvtDataBaseList::noOfWeightedEvts(mcData, (*it).first->channelID(), maxMcEvts-1, 0);    
+    if(GlobalEnv::instance()->Channel((*it).first->channelID())->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+      int maxMcEvts=noDataEvts*ratioMcToData;
+      
+      readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
+      noOfMcEvts=EvtDataBaseList::noOfWeightedEvts(mcData, (*it).first->channelID(), maxMcEvts-1, 0);    
+    }
 
-    evtWeightSumData+=noOfWeightedDataEvts;  
 
     numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
 
     if(noOfWeightedDataEvts<10.){
-      Alert << "number of wieghted data events too small: " << noOfWeightedDataEvts << endmsg;
+      Alert << "number of weighted data events too small: " << noOfWeightedDataEvts << endmsg;
       exit(1);
     }
-    if(noOfMcEvts<10.){
-      Alert << "number of wieghted Monte Carlo events too small: " << noOfMcEvts << endmsg;
-      exit(1);
+    if(GlobalEnv::instance()->Channel((*it).first->channelID())->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING && noOfMcEvts<10.){
+      if(noOfMcEvts<10.){
+	Alert << "number of weighted Monte Carlo events too small: " << noOfMcEvts << endmsg;
+	exit(1);
+      }
     }
-    }
-
+  }
+ 
   std::shared_ptr<AbsFcn> absFcn;
   std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), GlobalEnv::instance()->parser()->noOfClients(), numEventMap, GlobalEnv::instance()->parser()->clientNumberWeights()));
   //  theServer->WaitForFirstClientLogin();

@@ -73,7 +73,8 @@ int main(int __argc,char *__argv[]){
     std::string currentArgv(__argv[i]);
      if(currentArgv !=(char*)"--pbarpFiles" 
 	&& currentArgv !=(char*)"--epemFiles"
-	&& currentArgv !=(char*)"--resFiles" 
+	&& currentArgv !=(char*)"--resFiles"
+	&& currentArgv !=(char*)"--pipiScatteringFiles" 
 	&& currentArgv !="-c" 
 	&& currentArgv !="--configFile"){
       argvWoCfgFile[argcWoCfgFile]=__argv[i];
