@@ -44,8 +44,8 @@ const short NetworkServer::SERVERMESSAGE_OK = 3;
 
 NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<ChannelID, std::tuple<long, double, long> >& numEventMap, std::string clientNumberWeights) :
      _port(port)
-   , _clientTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
-   , _globalTimeout(3*NetworkClient::HEARTBEAT_INTERVAL)
+   , _clientTimeout(100*NetworkClient::HEARTBEAT_INTERVAL)
+   , _globalTimeout(100*NetworkClient::HEARTBEAT_INTERVAL)
    , _noOfClients(noOfClients)
    , _noOfChannels(numEventMap.size()) 
    , _closed(false)

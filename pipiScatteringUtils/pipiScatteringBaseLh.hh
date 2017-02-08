@@ -60,6 +60,9 @@ public:
   }
 
   virtual double calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual double addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
+  virtual double addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
+  virtual void calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
   virtual double calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
@@ -78,6 +81,11 @@ protected:
   //  std::shared_ptr<resReaction> _resReactionPtr;
   std::shared_ptr<AbsXdecAmp> _XdecAmp;
   std::shared_ptr<PiPiScatteringXdecAmps> _PiPiScatteringXdecAmp;
+
+  virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
+                              std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
+  virtual void ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
+                            std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
 private:
 
   void initialize();

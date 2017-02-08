@@ -53,7 +53,7 @@ public:
   virtual AbsLh* clone_() const = 0;
 
   virtual double calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar);
-  static  double mergeLogLhData(LHData& theLHData);
+  static  double mergeLogLhData(LHData& theLHData, ChannelID channelId=0);
   virtual double addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
   virtual double addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
   virtual void calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);

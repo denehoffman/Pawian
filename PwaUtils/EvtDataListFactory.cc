@@ -53,7 +53,7 @@ EvtDataListFactory::~EvtDataListFactory()
 
 std::shared_ptr<EvtDataBaseList> EvtDataListFactory::evtDataListPtr(std::shared_ptr<AbsChannelEnv> absChannelEnv){
   std::shared_ptr<EvtDataBaseList> eventListPtr;
-  if(absChannelEnv->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING) eventListPtr=std::shared_ptr<EvtDataBaseList>(new EvtDataScatteringList(0));
-  else eventListPtr=std::shared_ptr<EvtDataBaseList>(new EvtDataBaseList(0));
+  if(absChannelEnv->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING) eventListPtr=std::shared_ptr<EvtDataBaseList>(new EvtDataScatteringList(absChannelEnv->channelID()));
+  else eventListPtr=std::shared_ptr<EvtDataBaseList>(new EvtDataBaseList(absChannelEnv->channelID()));
   return eventListPtr; 
 }

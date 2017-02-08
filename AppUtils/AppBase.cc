@@ -739,12 +739,17 @@ void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams)
   mcFileNames.push_back(mcFile);
 
   EventList eventsDataClient;
-  readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
-
   EventList mcDataClient;
-  readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+  if(GlobalEnv::instance()->Channel(channelID)->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
+     readScatteringEvents(eventsDataClient, dataFileNames, channelID, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+   }
+   else{
+    readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+    
+    readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+      }
 
-  std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(channelID));
+  std::shared_ptr<EvtDataBaseList> eventListPtr=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel(channelID));
   eventListPtr->read(eventsDataClient, mcDataClient);
 
   eventsDataClient.removeAndDeleteEvents(0, eventsDataClient.size()-1);

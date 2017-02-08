@@ -65,7 +65,7 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
       for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
          (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
          (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
-         double channelLH = AbsLh::mergeLogLhData((*it).second);
+         double channelLH = AbsLh::mergeLogLhData((*it).second, (*it).first);
          result += channelLH;
 	 output << std::setprecision(16) << channelLH << "\t";
       }

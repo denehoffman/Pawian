@@ -1,7 +1,7 @@
 //************************************************************************//
 //									  //
 //  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -111,6 +111,11 @@ double pipiScatteringBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<
   double chi2_eta= (etaData-etaFit)*(etaData-etaFit)/(etaErrData*etaErrData);
 
   double result=0.5*(chi2_phi+chi2_eta);
+// if(chi2_phi>1000.){
+//   InfoMsg << "chi2_phi: " << chi2_phi << "\tchi2_eta: " << chi2_eta << endmsg;
+//   InfoMsg << "phiData: " << phiData << "\tphiFit: " << phiFit << "\tphiErrData: " << phiErrData 
+//           << "\netaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
+// }
    return result;
 
 }
@@ -139,6 +144,69 @@ void pipiScatteringBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters
 
 void pipiScatteringBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   _XdecAmp->updateFitParams(fitPar);
+}
+
+double pipiScatteringBaseLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  double intensity=calcEvtIntensity(dataEvt, fitPar);
+  theLHData.logLH_data+=intensity;
+  theLHData.weightSum+= dataEvt->evtWeight;
+  return intensity;
+}
+
+double pipiScatteringBaseLh::addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  double intensity=0.;
+  theLHData.LH_mc+=intensity;
+  theLHData.num_mc++;
+  return intensity;
+}
+
+void pipiScatteringBaseLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+ _calcCounter++;
+  if (_cacheAmps && _calcCounter>1) checkRecalculation(fitPar, _oldFitPar);
+  updateFitParams(fitPar);
+
+  int numData = _evtDataVec.size();
+  int numMC = 0;
+
+  int eventStepData = numData / _noOfThreads;
+
+  std::vector<std::thread> theThreads;
+  std::vector<LHData> threadDataVec;
+  threadDataVec.resize(_noOfThreads);
+
+  for(int i = 0; i<_noOfThreads;i++){
+     int eventMin = i*eventStepData;
+     int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
+
+     theThreads.push_back(std::thread(&pipiScatteringBaseLh::ThreadfuncData, this, eventMin, eventMax,
+                                      fitPar, std::ref(threadDataVec.at(i))));
+  }
+  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
+     (*it).join();
+  }
+
+  theThreads.clear();
+  for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it){
+     theLHData.logLH_data += (*it).logLH_data;
+     theLHData.weightSum += (*it).weightSum;
+     theLHData.LH_mc += 0.;
+     theLHData.num_mc += 0.;
+  }
+
+   if(_calcCounter<2) _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
+   else _oldFitPar->SetAllValues(fitPar->Params());
+}
+
+void pipiScatteringBaseLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
+                    std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  for (unsigned int i=minEvent; i<=maxEvent; ++i){
+    addDataToLogLh(_evtDataVec.at(i), fitPar, theLHData);
+  }
+}
+
+void pipiScatteringBaseLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
+                          std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+  return;
 }
 
 

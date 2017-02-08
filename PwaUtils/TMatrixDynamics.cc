@@ -1,7 +1,7 @@
 //************************************************************************//
 //									  //
 //  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -85,9 +85,9 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
   double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
   if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
-  //  while( fabs(deltaRel-phiData) > 180.) deltaRel+=180.;
-  while( (phiData-deltaRel) > 180.) deltaRel+=180.;
-  while( (deltaRel-phiData) > 180.) deltaRel-=180.;
+
+  while( (phiData-deltaRel) > 90.) deltaRel+=180.;
+  while( (deltaRel-phiData) > 90.) deltaRel-=180.;
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
 

@@ -227,15 +227,20 @@ void AbsLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHD
    else _oldFitPar->SetAllValues(fitPar->Params());
 }
 
-double AbsLh::mergeLogLhData(LHData& theLHData){
+double AbsLh::mergeLogLhData(LHData& theLHData, ChannelID channelId){
 
   double logLH=0.;
-  double logLH_mc_Norm=0.;
-
-  if (theLHData.LH_mc>0.) logLH_mc_Norm=log(theLHData.LH_mc/theLHData.num_mc);
-  logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/theLHData.num_mc-1.)*(theLHData.LH_mc/theLHData.num_mc-1.)
-    -theLHData.logLH_data
-    +theLHData.weightSum*logLH_mc_Norm;
+  if(GlobalEnv::instance()->Channel(channelId)->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
+    logLH=theLHData.logLH_data;
+  }
+  else{
+    double logLH_mc_Norm=0.;
+    
+    if (theLHData.LH_mc>0.) logLH_mc_Norm=log(theLHData.LH_mc/theLHData.num_mc);
+    logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/theLHData.num_mc-1.)*(theLHData.LH_mc/theLHData.num_mc-1.)
+      -theLHData.logLH_data
+      +theLHData.weightSum*logLH_mc_Norm;
+  }
   return logLH;
 }
 
