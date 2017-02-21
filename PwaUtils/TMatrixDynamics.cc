@@ -74,23 +74,28 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   _tMatr->evalMatrix(currentMass);
 
   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
-  complex<double> S00Rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*currentTijRel;
-  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(S00Rel));
+  complex<double> SijRel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass)*thePhpVecs[_decProjectionIndex]->factor(currentMass))*currentTijRel;
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
 
   //phase
-  complex<double> currentT00Rel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
-  double currentReERel = currentT00Rel_rho.real();
-  double currentImERel = currentT00Rel_rho.imag() - 0.5;
 
-  double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
-  double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
-  if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
-
-  while( (phiData-deltaRel) > 90.) deltaRel+=180.;
-  while( (deltaRel-phiData) > 90.) deltaRel-=180.;
-
-  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
-
+  //note: this is a workaround
+  if(_prodProjectionIndex!=_decProjectionIndex){
+    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
+  } 
+  else{
+    complex<double> currentTijRel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
+    double currentReERel = currentTijRel_rho.real();
+    double currentImERel = currentTijRel_rho.imag() - 0.5;
+    
+    double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
+    double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
+    if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
+    
+    while( (phiData-deltaRel) > 90.) deltaRel+=180.;
+    while( (deltaRel-phiData) > 90.) deltaRel-=180.;
+    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
+  }
   return (*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 }
 

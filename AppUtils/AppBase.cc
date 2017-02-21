@@ -176,6 +176,11 @@ void AppBase::createLhObjects(){
 
 void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double evtWeightSumData){
 
+  std::ostringstream qaSummaryFileName;
+  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
+  qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
+  std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
+
   int noOfFreeFitParams=startParams->VariableParameters();
   if(evtWeightSumData<=(noOfFreeFitParams+1)){
     WarningMsg << "number of data events less or equal to the number of free parameters!!!"
@@ -193,6 +198,9 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   if(GlobalEnv::instance()->Channel()->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
     std::shared_ptr<AbsHist> histPtr1 = GlobalEnv::instance()->Channel()->CreateHistInstance();
     histPtr1->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), startParams);
+
+    InfoMsg << "chi2\t" << theLh;
+    theQaStream << "chi2\t" << theLh << "\n";
     return;
   }
   
@@ -219,11 +227,6 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   }
   std::pair<double, double> contValue = theWaveContribution->CalcContribution();
   std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues = theWaveContribution->CalcSingleContributions();
-
-  std::ostringstream qaSummaryFileName;
-  std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
-  qaSummaryFileName << "qaSummary" << outputFileNameSuffix << ".dat";
-  std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
 
   InfoMsg << "logLh\t" << theLh;
   theQaStream << "logLh\t" << theLh << "\n";

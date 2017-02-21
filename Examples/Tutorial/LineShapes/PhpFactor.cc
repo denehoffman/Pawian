@@ -142,12 +142,13 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     //    std::complex<double> currentFac = phaseSpaceFac(currentMass, _mass1, _mass2);
     std::complex<double> currentFac = PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
     std::complex<double> currentFaci = i*currentFac;
-
+    double currentImag = currentFaci.imag();
+    if (currentImag>1000.) currentImag=1000.;
     _phpRealHist->Fill(massIt, currentFaci.real());
-    _phpImagHist->Fill(massIt, currentFaci.imag());
+    _phpImagHist->Fill(massIt, currentImag);
 
     _phpMDefaultComplRealHist->Fill(massIt,currentFaci.real());
-    _phpMDefaultComplImagHist->Fill(massIt,currentFaci.imag());
+    _phpMDefaultComplImagHist->Fill(massIt,currentImag);
 
     complex<double> currentFacAsner = PawianQFT::phaseSpaceFacAsner(massIt*massIt, _mass1, _mass2);
     _phpMAsnerRealHist->Fill(massIt, currentFacAsner.real());

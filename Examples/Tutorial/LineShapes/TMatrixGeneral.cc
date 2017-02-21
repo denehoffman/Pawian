@@ -326,19 +326,19 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
   else{
     bool withAdler=_kMatrixParser->useAdler();
     _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, orderBg, withAdler));
-    _kMatr->updateBgTerms(0, 0, 0,2.420422828649453);
-    _kMatr->updateBgTerms(0, 0, 1,0.9134263692474104);
-    _kMatr->updateBgTerms(0, 1, 1,0.9134546802616772);
-    _kMatr->updateBgTerms(0, 0, 2,0.);
-    _kMatr->updateBgTerms(0, 1, 2,0.);
-    _kMatr->updateBgTerms(0, 2, 2,0.);
+    _kMatr->updateBgTerms(0, 0, 0, 1.029808115305069);
+    _kMatr->updateBgTerms(0, 0, 1, 1.080890663199942);
+    _kMatr->updateBgTerms(0, 1, 1, 0.2549586402456113);
+    // _kMatr->updateBgTerms(0, 0, 2,0.);
+    // _kMatr->updateBgTerms(0, 1, 2,0.);
+    // _kMatr->updateBgTerms(0, 2, 2,0.);
     // _kMatr->updateBgTerms(0, 0, 0, 0.0);
     // _kMatr->updateBgTerms(0, 0, 1, 0.0);
     // _kMatr->updateBgTerms(0, 1, 1, 0.0);
     if(orderBg>0){
-      _kMatr->updateBgTerms(1, 0, 0, -0.15099);
-      _kMatr->updateBgTerms(1, 0, 1, -0.038266);
-      _kMatr->updateBgTerms(1, 1, 1, -0.0219);
+      _kMatr->updateBgTerms(1, 0, 0, -0.2606979491197727);
+      _kMatr->updateBgTerms(1, 0, 1, -0.5237009601726191);
+      _kMatr->updateBgTerms(1, 1, 1, -5.924304113418307);
     }
     if(orderBg>1){
       _kMatr->updateBgTerms(2, 0, 0, 0.00811);
