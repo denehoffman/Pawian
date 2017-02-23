@@ -25,6 +25,7 @@ lib LineShapes :
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/FitParams//FitParams
 	:  
 	: 
 	:   ;

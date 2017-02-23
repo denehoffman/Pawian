@@ -45,6 +45,8 @@
 #include "Particle/PdtParser.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
+#include "FitParams/AbsPawianParamStreamer.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -54,13 +56,17 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, int numStepsForSheetScan, std::vector<double> energyPlaneBorders) :
+TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathToFitParams, int numStepsForSheetScan, std::vector<double> energyPlaneBorders) :
   _noOfSteps(1000)
   ,_stepSize(0.)
   ,_massMin(100000.)
   ,_massMax(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
   ,_theTFile(0)
+  ,_kMatName("")
+  ,_orderBg(0)
+  ,_withKMatAdler(false)
+  ,_pathToFitParams(pathToFitParams)
 { 
   init();
   std::string rootFileName="./TMatrixGeneral.root";
@@ -259,7 +265,7 @@ void TMatrixGeneral::init(){
     _poleNames.push_back(currentPoleName);
   }
 
-
+  _kMatName=_kMatrixParser->keyName();
   const std::vector<std::string> gFacStringVec=_kMatrixParser->gFactors();
   DebugMsg << "gFacStringVec.size(): " << gFacStringVec.size() << endmsg;
   std::map<std::pair<std::string, std::string>, std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
@@ -285,6 +291,9 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
     std::vector<double> fsParticleMasses;
     fsParticleMasses.push_back(firstParticle->mass());
     fsParticleMasses.push_back(secondParticle->mass()); 
+
+    InfoMsg << "set phase space factor for particle pairs: " << firstParticleName << " " << secondParticleName 
+	    << " and description: " << currentPhpDescription << endmsg;
    
     std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, fsParticleMasses);
 
@@ -321,38 +330,68 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
     _kPoles.push_back(currentPole);
   }
 
-  int orderBg=_kMatrixParser->orderBg();
-  if(orderBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
+  int _orderBg=_kMatrixParser->orderBg();
+  if(_orderBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
   else{
-    bool withAdler=_kMatrixParser->useAdler();
-    _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, orderBg, withAdler));
-    _kMatr->updateBgTerms(0, 0, 0, 1.029808115305069);
-    _kMatr->updateBgTerms(0, 0, 1, 1.080890663199942);
-    _kMatr->updateBgTerms(0, 1, 1, 0.2549586402456113);
-    // _kMatr->updateBgTerms(0, 0, 2,0.);
-    // _kMatr->updateBgTerms(0, 1, 2,0.);
-    // _kMatr->updateBgTerms(0, 2, 2,0.);
-    // _kMatr->updateBgTerms(0, 0, 0, 0.0);
-    // _kMatr->updateBgTerms(0, 0, 1, 0.0);
-    // _kMatr->updateBgTerms(0, 1, 1, 0.0);
-    if(orderBg>0){
-      _kMatr->updateBgTerms(1, 0, 0, -0.2606979491197727);
-      _kMatr->updateBgTerms(1, 0, 1, -0.5237009601726191);
-      _kMatr->updateBgTerms(1, 1, 1, -5.924304113418307);
-    }
-    if(orderBg>1){
-      _kMatr->updateBgTerms(2, 0, 0, 0.00811);
-      _kMatr->updateBgTerms(2, 0, 1, 0.0022596);
-      _kMatr->updateBgTerms(2, 1, 1, 0.00085655);
-    }
-
-    if(withAdler){
-      _kMatr->updates0Adler(_kMatrixParser->s0Adler());
-      _kMatr->updatesnormAdler(_kMatrixParser->snormAdler());
-    }
+    _withKMatAdler=_kMatrixParser->useAdler();
+    _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, _orderBg, _withKMatAdler));
   }
+
+  AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
+  _params = thePawianStreamer.paramList();
+
+  InfoMsg << "The k-Matrix input parameter are: " << endmsg;
+  _params->print(std::cout);
+
+  fillParams(_params);
   _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
 
 
+}
+
+void TMatrixGeneral::fillParams(std::shared_ptr<AbsPawianParameters> theParams){
+  //pole positions
+  for(unsigned int i=0; i<_poleNames.size(); ++i){
+    std::string currentPoleName=_poleNames.at(i)+"Mass";
+    double currentPoleMass=_params->Value(currentPoleName);
+    _kPoles.at(i)->updatePoleMass(currentPoleMass);
+    InfoMsg << "set pole mass for " << _poleNames.at(i) << ": " << currentPoleMass << endmsg;
+  }
+
+  //g-factors
+  for(unsigned int i=0; i<_poleNames.size(); ++i){
+    std::vector<double> currentgFactorVec=_gFactorMap.at(i);
+    for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
+      std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
+      currentgFactorVec.at(j)=_params->Value(currentName);
+      InfoMsg << "set g factor " << currentName << ": " << currentgFactorVec.at(j) << endmsg;
+    }
+    _kPoles.at(i)->updategFactors(currentgFactorVec);
+  }
+
+
+  //k-matrix bg-terms
+  if(_orderBg>=0){
+    for(unsigned int i=0; i<=fabs(_orderBg); ++i){
+      for(unsigned int j=0; j<_phpVecs.size(); ++j){
+        for(unsigned int k=j; k<_phpVecs.size(); ++k){
+	  std::stringstream keyOrderStrStr;
+	  keyOrderStrStr << i << j << k;
+	  std::string keyOrder=keyOrderStrStr.str();
+	  std::string currentName="bg"+keyOrder+_kMatName;
+          double newVal=_params->Value(currentName);
+          _kMatr->updateBgTerms(i,j,k,newVal);
+	  InfoMsg << "set background term " << currentName << ": " << newVal << endmsg;
+        }
+      }
+    }
+  }
+
+  //Adler-term
+  if(_withKMatAdler){
+    std::string adler0Name=("s0"+_kMatName);
+    double newVal=_params->Value(adler0Name);
+    _kMatr->updates0Adler(newVal);
+  }
 }
 

@@ -45,6 +45,7 @@ class KMatrixRel;
 class KPole;
 class ParticleTable;
 class KMatrixParser;
+class AbsPawianParameters;
 
 class TMatrixGeneral {
 
@@ -53,7 +54,7 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixGeneral(std::string pathToConfigParser, int numStepsForSheetScan, std::vector<double> energyPlaneBorders);
+  TMatrixGeneral(std::string pathToConfigParser, std::string pathToFitParams, int numStepsForSheetScan, std::vector<double> energyPlaneBorders);
 
 
   /** Destructor */
@@ -92,7 +93,14 @@ private:
   std::vector<TH1F*> _phpH1RealVec;
   std::vector<TH1F*> _phpH1ImagVec;
 
+  std::shared_ptr<AbsPawianParameters> _params;
+  std::string _kMatName;
+  int _orderBg;
+  bool _withKMatAdler;
+  std::string _pathToFitParams;
+
   void init();
+  void fillParams(std::shared_ptr<AbsPawianParameters> theParams);
 };
 
 

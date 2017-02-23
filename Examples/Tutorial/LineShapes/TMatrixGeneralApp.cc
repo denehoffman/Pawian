@@ -41,6 +41,7 @@ int main(int __argc,char *__argv[]){
                     strcmp( __argv[1], "--help" ) == 0 ) ){
     InfoMsg << "USAGE:" << endmsg;
     InfoMsg << "-p, --path: path to kmatrix config file" << endmsg;
+    InfoMsg << "-f, --fitparams: path to fit parameter file" << endmsg;
     InfoMsg << "-s, --steps: number of steps in either direction in the complex energy plane" << endmsg;
     InfoMsg << "--maxImagMass: max imaginary part of the mass" << endmsg;
     InfoMsg << "--maxRealMass: max real part of the mass" << endmsg;
@@ -51,6 +52,7 @@ int main(int __argc,char *__argv[]){
 
   int numStepsForSheetScan = 500;
   std::string pathToConfigParser;
+  std::string pathToFitParams;
 
   std::vector<double> energyPlaneBorders;
   energyPlaneBorders.resize(4);
@@ -68,6 +70,9 @@ int main(int __argc,char *__argv[]){
      }
      else if (ws == "--path" || ws == "-p"){
 	pathToConfigParser = __argv[optind+1];
+     }
+     else if (ws == "--fitparams" || ws == "-f"){
+	pathToFitParams = __argv[optind+1];
      }
      else if(ws == "--steps" || ws == "-s"){
 	std::istringstream stream(__argv[optind+1]);
@@ -95,7 +100,7 @@ int main(int __argc,char *__argv[]){
      }
   }
 
-  TMatrixGeneral tMatrixGeneral(pathToConfigParser, numStepsForSheetScan, energyPlaneBorders);
+  TMatrixGeneral tMatrixGeneral(pathToConfigParser, pathToFitParams, numStepsForSheetScan, energyPlaneBorders);
 
   return 0;
 }
