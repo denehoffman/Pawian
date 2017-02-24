@@ -74,14 +74,15 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   _tMatr->evalMatrix(currentMass);
 
   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
-  //  complex<double> SijRel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass)*thePhpVecs[_decProjectionIndex]->factor(currentMass))*currentTijRel;
-  complex<double> SijRel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+  complex<double> SijRel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass)*thePhpVecs[_decProjectionIndex]->factor(currentMass))*currentTijRel;
+  // complex<double> SijRel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
 
   //phase
 
   //note: this is a workaround
   if(_prodProjectionIndex!=_decProjectionIndex){
+    SijRel=PawianConstants::i*2.*complex<double>(0.,1.)*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass)*thePhpVecs[_decProjectionIndex]->factor(currentMass))*currentTijRel;
     theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
   } 
   else{

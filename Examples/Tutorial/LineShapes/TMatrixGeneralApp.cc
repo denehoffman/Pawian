@@ -52,7 +52,7 @@ int main(int __argc,char *__argv[]){
 
   int numStepsForSheetScan = 500;
   std::string pathToConfigParser;
-  std::string pathToFitParams;
+  std::string pathToFitParams="";
 
   std::vector<double> energyPlaneBorders;
   energyPlaneBorders.resize(4);

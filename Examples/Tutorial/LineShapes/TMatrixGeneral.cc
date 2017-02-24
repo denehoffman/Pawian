@@ -343,7 +343,7 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
   InfoMsg << "The k-Matrix input parameter are: " << endmsg;
   _params->print(std::cout);
 
-  fillParams(_params);
+  if(_pathToFitParams != "") fillParams(_params);
   _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
 
 
