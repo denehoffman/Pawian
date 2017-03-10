@@ -141,7 +141,7 @@ void extractPhpHistos(std::string rootFileName="PhpFactor.root", double setyMin1
  phpMDefaultComplImagHist->SetLineColor(kRed);
  phpMDefaultComplImagHist->SetLineWidth(3);
  phpMDefaultComplImagHist->SetStats(false);
- phpMDefaultComplImagHist->SetMaximum(setyMax1d);
+ phpMDefaultComplImagHist->SetMaximum(setyMax1d+5.);
  phpMDefaultComplImagHist->SetMinimum(setyMin1d);
 
  TH1F* phpMDefaultComplRealHist = (TH1F*)tFile->Get("_phpMDefaultComplRealHist");

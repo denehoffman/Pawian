@@ -47,6 +47,7 @@
 #include "Particle/ParticleTable.hh"
 #include "FitParams/AbsPawianParamStreamer.hh"
 #include "FitParams/AbsPawianParameters.hh"
+#include "Utils/PawianConstants.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -57,7 +58,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathToFitParams, int numStepsForSheetScan, std::vector<double> energyPlaneBorders) :
-  _noOfSteps(1000)
+  _noOfSteps(500)
   ,_stepSize(0.)
   ,_massMin(100000.)
   ,_massMax(0.)
@@ -156,6 +157,12 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   	   << "\n_stepSize: " << _stepSize
   	   << endmsg;
 
+  std::ofstream oStream;
+  oStream.open("scatteringOut.txt");
+ double oldT00RelReal=1.;
+  int n180ShiftRel(0);
+  double oldDelta=0.;
+ 
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
@@ -183,10 +190,39 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 
       _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
       _phpH1RealVec.at(i)->Fill(mass, currentRho.real());
-      _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag()); 
-    }    
+      _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag());
+      if (i==0){
+	complex<double> currentTijRel_rho= (*_tMatr)(i,i)*currentRho.real();
+	double currentReE = currentTijRel_rho.real();
+	double currentImE = currentTijRel_rho.imag()- 0.5;
+	double theDelta = 0.5*atan2( currentImE, fabs(currentReE) )*PawianConstants::radToDeg + 45.0;
+	if (currentReE   < 0.0) {theDelta = 180.0 - theDelta;}
+	//double theDelta = 0.5*atan2( currentImE, currentReE )*PawianConstants::radToDeg;
+	 // Have we gone through 180 deg (or 2*delta through 360 deg)?
+	 // if (oldT00RelReal < 0.0 && currentReE > 0.0) {n180ShiftRel = 1;}
+	theDelta += 180.0*n180ShiftRel;
+	if (oldT00RelReal < 0.0 && currentReE > 0.0) {n180ShiftRel += 1;}
+	// if ( oldDelta > 1.e-8 && fabs(theDelta-oldDelta) > 90.) {
+	//   n180ShiftRel += 1;
+	// }
+	//	 theDelta += 180.0*n180ShiftRel; 
+	  //	if (oldT00RelReal < 0.0 && currentReE > 0.0) {n180ShiftRel += 1;}
+	// thePhitheDelta += 180.0*n180ShiftRel;
+	//theDelta += 180.0*n180ShiftRel;
+	//	double thePhi=0.5*currentphase+ 45.0;
+	complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(currentRho.real())*(*_tMatr)(i,i);
+	oStream << mass << "\t" 
+			<< theDelta << "\t" << 0.01 << "\t" 
+		<<  sqrt(norm(SijRel)) << "\t" << 0.001 
+			<< endl;
+	oldT00RelReal = currentReE;
+        oldDelta=theDelta; 
+      }
+    }
   }
-
+  
+  oStream.close();
+  
   if(energyPlaneBorders[0] == 0)
     energyPlaneBorders[0] = _massMin;
   if(energyPlaneBorders[2] == 0)
