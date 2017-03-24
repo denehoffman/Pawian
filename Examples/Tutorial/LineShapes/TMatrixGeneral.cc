@@ -366,7 +366,7 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
     _kPoles.push_back(currentPole);
   }
 
-  int _orderBg=_kMatrixParser->orderBg();
+  _orderBg=_kMatrixParser->orderBg();
   if(_orderBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
   else{
     _withKMatAdler=_kMatrixParser->useAdler();
