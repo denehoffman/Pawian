@@ -1,6 +1,5 @@
 import os ;
 path-constant TOP : . ;
-local extern = [ os.environ extern ] ; 
 local ROOTSYS = [ os.environ ROOTSYS ] ; 
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
@@ -12,9 +11,9 @@ project :
 	<include>$(BOOSTINCLUDE)
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
+	<link>static
 	<cxxflags>-std=gnu++11
 	<cxxflags>-ftemplate-depth=256
-	<link>static
 	<linkflags>$(ROOTLIBS)
 	<linkflags>-L$(BOOSTLIBPATH)
 	<linkflags>$(BOOSTLIBS)
@@ -26,8 +25,8 @@ actions rootlibs
 	$(ROOTSYS)/bin/root-config --libs
 }
 
-lib HepMc : : <file>$(extern)/libgcc610/libHepMC.so : : ;
-lib Minuit2 : : <file>$(extern)/libgcc610/libMinuit2.so : : ;
+lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
+lib Minuit2 : : <file>$(extern)/lib/libMinuit2.so : : ;
  
 build-project qft++ ;
 build-project Utils ;
@@ -43,6 +42,7 @@ build-project pbarpUtils ;
 build-project epemUtils ;
 build-project resUtils ;
 #build-project gammapUtils ;
+build-project pipiScatteringUtils ;
 build-project Particle ;
 build-project Event ;
 build-project PspGen ;

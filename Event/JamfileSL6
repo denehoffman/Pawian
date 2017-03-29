@@ -16,12 +16,12 @@ install install-lib : Event
 project :       
         requirements
         <include>./
-        <include>/usr/include/python2.7
+        <include>/usr/include/python2.6
         <include>$(ROOTSYS)/include
         <include>$(TOP)/Server
         <linkflags>$(ROOTLIBS)
         <linkflags>$(BOOSTLIBS) 
-        <linkflags>-lpython2.7
+        <linkflags>-lpython2.6
         ;
 
 project : 

@@ -1,0 +1,11 @@
+setenv ROOTSYS /opt/root/5.34-36/Linux26SL6_x86_64_gcc492
+
+setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${TOP_DIR}/lib:/data/sleipnir/PANDA/PWA/lib
+setenv PATH ${PATH}:${ROOTSYS}/bin:/data/sleipnir/PANDA/bin
+setenv BOOST_BUILD_PATH /data/sleipnir/PANDA/PWA/boost-build-SL6
+setenv PATH /data/sleipnir/PANDA/boost-build/bin:${PATH}
+
+echo "\n ROOTSYS: " $ROOTSYS 
+echo "\n BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
+echo "\n"
