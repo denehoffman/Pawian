@@ -96,8 +96,14 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
     while( (deltaRel-phiData) > 90.) deltaRel-=180.;
     theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
   }
-
-  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
+  if(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()<1.e-12){//protection against calculations below threshold
+    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=0.;
+    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=0.;
+  }
+  else{
+    double normSijRel=sqrt(norm(SijRel));
+    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
+  }
   return (*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 }
 

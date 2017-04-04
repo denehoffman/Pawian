@@ -112,9 +112,11 @@ double pipiScatteringBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<
 
   double result=0.5*(chi2_phi+chi2_eta);
 // if(chi2_phi>1000.){
-//   InfoMsg << "chi2_phi: " << chi2_phi << "\tchi2_eta: " << chi2_eta << endmsg;
-//   InfoMsg << "phiData: " << phiData << "\tphiFit: " << phiFit << "\tphiErrData: " << phiErrData 
-//           << "\netaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
+  // InfoMsg << "etaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
+  // InfoMsg << "etaErrData: " << etaErrData << endmsg;
+  //  InfoMsg << "chi2_phi: " << chi2_phi << "\tchi2_eta: " << chi2_eta << endmsg;
+  //  InfoMsg << "phiData: " << phiData << "\tphiFit: " << phiFit << "\tphiErrData: " << phiErrData 
+  //          << "\netaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
 // }
    return result;
 
