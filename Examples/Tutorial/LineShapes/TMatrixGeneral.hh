@@ -92,6 +92,8 @@ private:
   std::vector<TH1F*> _phpH1Vec;
   std::vector<TH1F*> _phpH1RealVec;
   std::vector<TH1F*> _phpH1ImagVec;
+  std::vector<TH1F*> _SqrT1iH1Vec;
+  std::vector<TH1F*> _delta1iVec;
 
   std::shared_ptr<AbsPawianParameters> _params;
   std::string _kMatName;

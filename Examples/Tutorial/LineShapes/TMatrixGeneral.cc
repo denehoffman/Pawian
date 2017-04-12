@@ -150,6 +150,18 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     currentphpImagH1->SetYTitle("Imag #rho");
     currentphpImagH1->SetXTitle("mass/GeV");
     _phpH1ImagVec.push_back(currentphpImagH1);
+
+    std::string currentSqrT1iKey="sqrT1i"+key;
+    TH1F* currentSqrT1iH1=new TH1F(currentSqrT1iKey.c_str(), currentSqrT1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentSqrT1iH1->SetYTitle("|#sqrt{#rho_{1}}#sqrt{#rho_{i}} T_{1i}|^{2}");
+    currentSqrT1iH1->SetXTitle("mass/GeV");
+    _SqrT1iH1Vec.push_back(currentSqrT1iH1);
+
+    std::string currentdelta1iKey="delta1i"+key;
+    TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentDelta1iH1->SetYTitle("#delta1i/grad");
+    currentDelta1iH1->SetXTitle("mass/GeV");
+    _delta1iVec.push_back(currentDelta1iH1);
   }
 
   DebugMsg << "_massMin: "<< _massMin
@@ -170,19 +182,22 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
    std::shared_ptr<TMatrixRel> tMatrInv=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
    tMatrInv->evalMatrix(mass);
    tMatrInv->invert();
+   double delta1=0.;
 
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
       complex<double> currentRho=_phpVecs.at(i)->factor(mass);
 
-      _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
-      _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
-      _ImagT11m1H1Vec.at(i)->Fill(mass, -(*tMatrInv)(i,i).imag());
-       
-      _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
-      double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
-      _PhaseH2Vec.at(i)->Fill(mass, currentphase);
-      // double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
-      // double currentElasticity=2.*sqrt(sqrtFactor);
+      if(currentRho.real() > 1.e-8){ 
+	_AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
+	_AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
+	_ImagT11m1H1Vec.at(i)->Fill(mass, -(*tMatrInv)(i,i).imag());
+	
+	_ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
+	double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
+	_PhaseH2Vec.at(i)->Fill(mass, currentphase);
+	// double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
+	// double currentElasticity=2.*sqrt(sqrtFactor);
+      }
       complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
       _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
 
@@ -191,6 +206,22 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
       _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
       _phpH1RealVec.at(i)->Fill(mass, currentRho.real());
       _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag());
+
+      _SqrT1iH1Vec.at(i)->Fill(mass, norm(sqrt(_phpVecs.at(i)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
+
+      complex<double> currentTiiRel_rho= (*_tMatr)(i,i)*currentRho.real();
+      //complex<double> currentTiiRel_rho= (*_tMatr)(i,i);
+      double currentReEiiRel = currentTiiRel_rho.real();
+      double currentImEiiRel = currentTiiRel_rho.imag() - 0.5;
+      // InfoMsg << "currentReEiiRel: " << currentReEiiRel << "\tcurrentImEiiRel: " << currentImEiiRel << endmsg;
+      double deltaiiRel = 0.5*atan2(currentImEiiRel, fabs(currentReEiiRel))*PawianConstants::radToDeg + 45.0;
+      if (currentReEiiRel  < 0.0) {deltaiiRel = 180.0 - deltaiiRel;}
+      if(i==0){
+	delta1=deltaiiRel;
+	_delta1iVec.at(i)->Fill(mass, delta1);
+      }
+      else if(currentRho.real() > 1.e-8) _delta1iVec.at(i)->Fill(mass, delta1+deltaiiRel);
+
       if (i==0){
 	complex<double> currentTijRel_rho= (*_tMatr)(i,i)*currentRho.real();
 	double currentReE = currentTijRel_rho.real();

@@ -84,8 +84,12 @@ private:
   std::vector<TH2F*> _PhaseH2Vec;
   std::vector<TH1F*> _ElasticityH1Vec;
   std::vector<TH1F*> _SqrT11H1Vec;
+  std::vector<TH1F*> _SqrT1iH1Vec;
+  std::vector<TH1F*> _T1iH1Vec;
+  std::vector<TH1F*> _SqrS1iH1Vec;
   std::vector<TH1F*> _phpH1Vec;
-
+  std::vector<TH1F*> _deltaiiVec; 
+  std::vector<TH1F*> _delta1iVec;
   void init();
 };
 

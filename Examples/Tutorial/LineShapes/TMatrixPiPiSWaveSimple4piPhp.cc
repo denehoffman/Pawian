@@ -46,6 +46,7 @@
 #include "Particle/PdtParser.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
+#include "Utils/PawianConstants.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -119,11 +120,42 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
     currentSqrT11H1->SetXTitle("mass/GeV");
     _SqrT11H1Vec.push_back(currentSqrT11H1);
 
+    std::string currentSqrT1iKey="sqrT1i"+key;
+    TH1F* currentSqrT1iH1=new TH1F(currentSqrT1iKey.c_str(), currentSqrT1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentSqrT1iH1->SetYTitle("|T_{1i}|^{2}");
+    currentSqrT1iH1->SetXTitle("mass/GeV");
+    _SqrT1iH1Vec.push_back(currentSqrT1iH1);
+
+    std::string currentT1iKey="absT1i"+key;
+    TH1F* currentT1iH1=new TH1F(currentT1iKey.c_str(), currentT1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentT1iH1->SetYTitle("|T_{1i}|");
+    currentT1iH1->SetXTitle("mass/GeV");
+    _T1iH1Vec.push_back(currentT1iH1);
+
+    std::string currentS1iKey="sqrS1i"+key;
+    TH1F* currentSqrS1iH1=new TH1F(currentS1iKey.c_str(), currentS1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentSqrS1iH1->SetYTitle("|S_{1i}|^{2}");
+    currentSqrS1iH1->SetXTitle("mass/GeV");
+    _SqrS1iH1Vec.push_back(currentSqrS1iH1);
+
     std::string currentphpKey="phase space factor"+key;
     TH1F* currentphpH1=new TH1F(currentphpKey.c_str(), currentphpKey.c_str(), _noOfSteps-1, _massMin, _massMax);
     currentphpH1->SetYTitle("#rho");
     currentphpH1->SetXTitle("mass/GeV");
     _phpH1Vec.push_back(currentphpH1);
+
+    std::string currentdeltaiiKey="delta"+key;
+    TH1F* currentDeltaiiH1=new TH1F(currentdeltaiiKey.c_str(), currentdeltaiiKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentDeltaiiH1->SetYTitle("#deltaii/grad");
+    currentDeltaiiH1->SetXTitle("mass/GeV");
+    _deltaiiVec.push_back(currentDeltaiiH1);
+
+    std::string currentdelta1iKey="delta1i"+key;
+    TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentDelta1iH1->SetYTitle("#delta1i/grad");
+    currentDelta1iH1->SetXTitle("mass/GeV");
+    _delta1iVec.push_back(currentDelta1iH1);
+
   }
 
   DebugMsg << "_massMin: "<< _massMin
@@ -139,6 +171,7 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
+    double delta1=0.;
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
       complex<double> currentRho=phpVecs.at(i)->factor(mass);
 
@@ -155,8 +188,26 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
 
       _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i)));
 
-      _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
+      _T1iH1Vec.at(i)->Fill(mass,sqrt(currentRho.real()*norm((*_tMatr)(0,i))));
+
+      _SqrT1iH1Vec.at(i)->Fill(mass, sqrt(currentRho.real()*phpVecs.at(i)->factor(mass).real())*norm((*_tMatr)(0,i)));
       
+      _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
+
+      complex<double> currentTijRel=(*_tMatr)(i,i);
+      complex<double> currentTijRel_rho=currentTijRel*phpVecs.at(i)->factor(mass).real();
+      double currentReERel = currentTijRel_rho.real();
+      double currentImERel = currentTijRel_rho.imag() - 0.5;
+      double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
+      if (currentTijRel_rho.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
+      _deltaiiVec.at(i)->Fill(mass, deltaRel);
+
+      if(i==0) delta1=deltaRel;
+      _delta1iVec.at(i)->Fill(mass, delta1+deltaRel);
+
+      complex<double> SijRel=2.*PawianConstants::i*sqrt(phpVecs.at(0)->factor(mass).real()*currentRho.real())*currentTijRel;
+      if (i==0) SijRel+=complex<double>(1.,0.); 
+      _SqrS1iH1Vec.at(i)->Fill(mass, norm(SijRel));
     }    
   }
 
