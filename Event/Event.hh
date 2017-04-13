@@ -53,7 +53,7 @@ public:
   ~Event();
 
   void addParticle(double e, double px, double py, double pz);
-  void addScatterInfo(double phase, double phaseErr, double nu, double nuErr);
+  void addScatterInfo(double theDataPoint, double theDataPointErr);
   void addWeight(double);
 
   Vector4<float>* p4(unsigned int i);
@@ -62,18 +62,22 @@ public:
   int size();
   double Weight(){ return weight; }
   int eventNo() const {return evtNo; }
-  double Phase() {return phase;}
-  double PhaseErr() {return phaseErr;}
-  double Eta() {return eta;}
-  double EtaErr() {return etaErr;} 
+  // double Phase() {return phase;}
+  // double PhaseErr() {return phaseErr;}
+  // double Eta() {return eta;}
+  // double EtaErr() {return etaErr;}
+  double DataPoint() {return dataPoint;}
+  double DataPointErr() {return dataPointErr;} 
   bool operator<(const Event& compare) const;
 
 private:
   std::vector<EvtPartData*> particles;
   double weight;
-  double phase;
-  double phaseErr;
-  double eta;
-  double etaErr;
+  // double phase;
+  // double phaseErr;
+  // double eta;
+  // double etaErr;
+  double dataPoint;
+  double dataPointErr;
   int evtNo;
 };

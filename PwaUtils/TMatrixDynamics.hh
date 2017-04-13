@@ -45,12 +45,11 @@ class AbsPawianParameters;
 class TMatrixDynamics : public AbsDynamics{
 
 public:
-  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser);
+  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType="Elasticity");
   virtual ~TMatrixDynamics();
 
   virtual std::string type() {return "TMatrixDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp=0, Spin OrbMom=0);
-  
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
@@ -62,6 +61,7 @@ protected:
   int _decProjectionIndex;
   int _orderKMatBg;
   bool _withKMatAdler;
+  short _dataTypeID;
   
   std::shared_ptr<KMatrixRel> _kMatr;
   std::shared_ptr<TMatrixRel> _tMatr;
@@ -81,7 +81,10 @@ protected:
   std::map<std::string, std::vector<std::string> > _paramNameListMap;
 
   virtual void init();
-
+  virtual void evalElasticity(EvtData* theData, double currentMass);
+  virtual void evalPhase(EvtData* theData, double currentMass);
+  virtual void evalRelativePhase(EvtData* theData, double currentMass);
+  virtual void evalArgandUnits(EvtData* theData, double currentMass);
 private:
 
 };

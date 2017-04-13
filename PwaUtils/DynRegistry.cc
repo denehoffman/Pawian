@@ -49,6 +49,9 @@
 #include "PwaUtils/ProdChannelInfo.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
+#include "ConfigParser/ParserBase.hh"
+
 #include "PwaUtils/WoDynamics.hh"
 
 #include "Particle/ParticleTable.hh"
@@ -111,7 +114,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     if( theDec->type() =="PiPiScatteringDecay" ){
       if(theDec->dynType()=="TMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
-	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile));
+	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
+	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType));
       }
       else{
 	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;

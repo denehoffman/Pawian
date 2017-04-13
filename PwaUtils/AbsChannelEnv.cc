@@ -66,6 +66,7 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_usePhpGenDynamics(false)
   ,_theParser(theParser)
   ,_cmEnergy(0.)
+  ,_channelSubTypeName("")
 {
    _theLh.reset();
 }

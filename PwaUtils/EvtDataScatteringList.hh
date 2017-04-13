@@ -54,12 +54,9 @@ public:
   virtual EvtData* convertEvent(Event* theEvent, int evtNo=1);
  
   static std::string M_PIPISCAT_NAME;
-  static std::string PHI_PIPISCAT_NAME;
-  static std::string PHIERR_PIPISCAT_NAME;
-  static std::string ETA_PIPISCAT_NAME;
-  static std::string ETAERR_PIPISCAT_NAME;
-  static std::string PHIFIT_PIPISCAT_NAME;
-  static std::string ETAFIT_PIPISCAT_NAME;
+  static std::string DATA_PIPISCAT_NAME;
+  static std::string DATAERR_PIPISCAT_NAME;
+  static std::string FIT_PIPISCAT_NAME;
 
 protected:
 };

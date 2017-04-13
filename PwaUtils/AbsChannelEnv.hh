@@ -75,6 +75,7 @@ public:
   ChannelID channelID(){return _channelID;}
   short channelType(){return _channelType;}
   virtual const std::string  channelTypeName()=0;
+  virtual const std::string  channelSubTypeName(){return _channelSubTypeName;}
   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="", bool withTruth=false);
   std::shared_ptr<AbsPawianParameters> defaultPawianParams();
   std::shared_ptr<FsParticleProjections> getFsParticleProjectionsPtr() {return _fsParticleProjections;}
@@ -120,4 +121,5 @@ protected:
   std::vector< std::shared_ptr<MassRangeCut> > _massRangeCuts;
   std::vector< std::shared_ptr<PhpGenDynamics> > _phpGenDynamics;
   double _cmEnergy;
+  std::string _channelSubTypeName;
 };

@@ -47,12 +47,9 @@
 #include "ErrLogger/ErrLogger.hh"
 
 std::string EvtDataScatteringList::M_PIPISCAT_NAME = "pipiScatm";
-std::string EvtDataScatteringList::PHI_PIPISCAT_NAME= "pipiScatphi";
-std::string EvtDataScatteringList::PHIERR_PIPISCAT_NAME= "pipiScatphiErr";
-std::string EvtDataScatteringList::ETA_PIPISCAT_NAME= "pipiScateta";
-std::string EvtDataScatteringList::ETAERR_PIPISCAT_NAME= "pipiScateatErr";
-std::string EvtDataScatteringList::PHIFIT_PIPISCAT_NAME= "pipiScatphiFit";
-std::string EvtDataScatteringList::ETAFIT_PIPISCAT_NAME= "pipiScatetaFit";
+std::string EvtDataScatteringList::DATA_PIPISCAT_NAME = "pipiScatData";
+std::string EvtDataScatteringList::DATAERR_PIPISCAT_NAME = "pipiScatDataErr";
+std::string EvtDataScatteringList::FIT_PIPISCAT_NAME = "pipiScatFit";
 
 EvtDataScatteringList::EvtDataScatteringList(ChannelID channelID) :
   EvtDataBaseList(channelID)
@@ -91,8 +88,7 @@ void EvtDataScatteringList::readScatteringData(EventList& evtList, std::vector<E
     _noOfWeightedDataEvts++;
     InfoMsg << "added data point for pi pi scattering in PAWIAN EvtData list" 
 	    << "\nevtNo: " << evtData->evtNo << "\tsqrt(s): " << evtData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME)) 
-	    << "\nphi: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME)) <<  "\tphi error: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(PHIERR_PIPISCAT_NAME))
-	    << "\neta: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(ETA_PIPISCAT_NAME)) <<  "\teta error: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(ETAERR_PIPISCAT_NAME))
+	    << "\ndataPoint: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME)) <<  "\tndataPoint error: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME))
 	    << "\n" << endmsg;
   }
 }
@@ -107,16 +103,18 @@ void EvtDataScatteringList::readScatteringDefaultFit(std::vector<EvtData*>& data
       evtData->DoubleMassId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME), (*it)->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME))));
       //filled now with default 0 value
 
-      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME), (*it)->DoubleId.at(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME))));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHIERR_PIPISCAT_NAME), 0.));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETA_PIPISCAT_NAME), 0.));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETAERR_PIPISCAT_NAME), 0.));
-      fitEvtList.push_back(evtData)
-;    InfoMsg << "added data point for pi pi scattering in PAWIAN EvtFit list" 
-	    << "\nevtNo: " << evtData->evtNo << "\tsqrt(s): " << evtData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME)) 
-	    << "\nphi: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME)) <<  "\tphi error: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(PHIERR_PIPISCAT_NAME))
-	    << "\neta: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(ETA_PIPISCAT_NAME)) <<  "\teta error: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(ETAERR_PIPISCAT_NAME))
-	    << "\n" << endmsg;
+      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME), (*it)->DoubleId.at(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME))));
+
+      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME), (*it)->DoubleId.at(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME))));
+ 
+      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FIT_PIPISCAT_NAME), 0.));
+
+      fitEvtList.push_back(evtData); 
+
+      InfoMsg << "added data point for pi pi scattering in PAWIAN EvtFit list" 
+	      << "\nevtNo: " << evtData->evtNo << "\tsqrt(s): " << evtData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME)) 
+	      << "\ndataPoint: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME)) <<  "\tdataPoint error: " << evtData->DoubleId.at(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME))
+	      << "\n" << endmsg;
       ++it;
       ++evtCount;
     }
@@ -130,12 +128,9 @@ EvtData* EvtDataScatteringList::convertEvent(Event* theEvent, int evtNo){
   Vector4<float> current4VecFloat=*(theEvent->p4(0));
   Vector4<double> current4Vec(current4VecFloat.E(), current4VecFloat.Px(), current4VecFloat.Py(), current4VecFloat.Pz());
   evtData->DoubleMassId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(M_PIPISCAT_NAME),  current4Vec.Mass()));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHI_PIPISCAT_NAME), theEvent->Phase()));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHIERR_PIPISCAT_NAME), theEvent->PhaseErr()));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETA_PIPISCAT_NAME), theEvent->Eta()));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETAERR_PIPISCAT_NAME), theEvent->EtaErr()));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(PHIFIT_PIPISCAT_NAME), 0.));
-  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(ETAFIT_PIPISCAT_NAME), 0.));
+  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME), theEvent->DataPoint()));
+  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME), theEvent->DataPointErr()));
+  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FIT_PIPISCAT_NAME), 0.));
   return evtData;
 }
 

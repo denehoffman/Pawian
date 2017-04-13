@@ -65,20 +65,18 @@ protected:
 
   TGraphErrors* _phaseDataGraphErr;
   TGraphErrors* _etaDataGraphErr;
-  TGraphErrors* _TijSqrDataGraphErr;
-  TGraph* _ArgandDataGraph;
+  TGraphErrors* _argandUnitsDataGraphErr;
 
   TGraphErrors* _phaseFitGraphErr;
   TGraphErrors* _etaFitGraphErr;
-  TGraphErrors* _TijSqrFitGraphErr;
-  TGraph* _ArgandFitGraph;
+  TGraphErrors* _argandUnitsFitGraphErr;
+
   //  virtual void initRootStuff()=0;
   
 private:
   float _massVal;
-  float _phiVal;
-  float _phiErrVal;
-  float _etaVal;
-  float _etaErrVal;
+  float _dataVal;
+  float _dataErrVal;
+  float _fitVal;
 };
 

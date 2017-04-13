@@ -161,6 +161,8 @@ void PiPiScatteringChannelEnv::setupGlobal(ChannelID id){
 
     GlobalEnv::instance()->addIntoToBeReplacedSuffixMap(classStr, suffixStr);
   }
+
+  _channelSubTypeName=motherParticle->name()+_theParser->productionFormalism();
 }
 
 void PiPiScatteringChannelEnv::addDynamics(){

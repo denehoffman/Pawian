@@ -60,13 +60,14 @@ bool EventReaderScattering::fill(EventList& evtList, int evtStart, int evtStop)
 
     while (!currentStream.eof()) {
       currentEvtNo++;
-      double m,phi,phiErr,mu,muErr;
+      // double m,phi,phiErr,mu,muErr;
+      double m, dataPoint, dataPointErr;      
       Event* newEvent = new Event(currentEvtNo);
       
-      currentStream >> m >> phi >> phiErr >> mu >> muErr;
+      currentStream >> m >> dataPoint >> dataPointErr;
       double scaledMass=m/_unitScaleFactor;
       newEvent->addParticle(scaledMass, 0., 0., 0.);
-      newEvent->addScatterInfo(phi, phiErr, mu, muErr);
+      newEvent->addScatterInfo(dataPoint, dataPointErr);
       Vector4<double> tmp = newEvent->p4(0);
 
       bool acceptEvt=true;
@@ -89,8 +90,7 @@ bool EventReaderScattering::fill(EventList& evtList, int evtStart, int evtStop)
       if (!currentStream.fail()) {
 	InfoMsg << "added data point (event) for pi pi scattering no: " << newEvent->eventNo() 
 		<< "\nm: " << newEvent->p4(0)->Mass() 
-		<< "\nphi: " << newEvent->Phase() <<  "\tphi error: " << newEvent->PhaseErr()
-		<< "\neta: " << newEvent->Eta() <<  "\teta error: " << newEvent->EtaErr()
+		<< "\ndataPoint: " << newEvent->DataPoint() <<  "\t error: " << newEvent->DataPointErr()
 		<< "\n" << endmsg; 
       	evtList.add(newEvent);
       	// for (parts = 0; parts < linesToSkip; parts++)

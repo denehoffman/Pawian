@@ -91,35 +91,50 @@ complex<double> pipiScatteringBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, st
 }
 
 
+// double pipiScatteringBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
+//   // chi2 fit must be included here
+
+//   Spin dummylamX(0);
+//    _PiPiScatteringXdecAmp->XdecAmp(dummylamX, theData);
+
+//   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME)); 
+//   double phiErrData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIERR_PIPISCAT_NAME));
+//   double phiFit=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME));
+
+//   double chi2_phi= (phiData-phiFit)*(phiData-phiFit)/(phiErrData*phiErrData);  
+
+//   double etaData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETA_PIPISCAT_NAME)); 
+//   double etaErrData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAERR_PIPISCAT_NAME));
+//   double etaFit=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME));
+
+//   double chi2_eta= (etaData-etaFit)*(etaData-etaFit)/(etaErrData*etaErrData);
+
+//   double result=0.5*(chi2_phi+chi2_eta);
+// // if(chi2_phi>1000.){
+//   // InfoMsg << "etaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
+//   // InfoMsg << "etaErrData: " << etaErrData << endmsg;
+//   //  InfoMsg << "chi2_phi: " << chi2_phi << "\tchi2_eta: " << chi2_eta << endmsg;
+//   //  InfoMsg << "phiData: " << phiData << "\tphiFit: " << phiFit << "\tphiErrData: " << phiErrData 
+//   //          << "\netaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
+// // }
+//    return result;
+
+// }
+
 double pipiScatteringBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
   // chi2 fit must be included here
-  // each point represtes one event???
+  // each point represents one event???
 
   Spin dummylamX(0);
-   _PiPiScatteringXdecAmp->XdecAmp(dummylamX, theData);
+  _PiPiScatteringXdecAmp->XdecAmp(dummylamX, theData);
 
-  double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME)); 
-  double phiErrData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIERR_PIPISCAT_NAME));
-  double phiFit=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME));
+  double dataPoint=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
+  double dataPointError=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATAERR_PIPISCAT_NAME));
+  double fitPoint=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME));
 
-  double chi2_phi= (phiData-phiFit)*(phiData-phiFit)/(phiErrData*phiErrData);  
-
-  double etaData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETA_PIPISCAT_NAME)); 
-  double etaErrData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAERR_PIPISCAT_NAME));
-  double etaFit=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME));
-
-  double chi2_eta= (etaData-etaFit)*(etaData-etaFit)/(etaErrData*etaErrData);
-
-  double result=0.5*(chi2_phi+chi2_eta);
-// if(chi2_phi>1000.){
-  // InfoMsg << "etaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
-  // InfoMsg << "etaErrData: " << etaErrData << endmsg;
-  //  InfoMsg << "chi2_phi: " << chi2_phi << "\tchi2_eta: " << chi2_eta << endmsg;
-  //  InfoMsg << "phiData: " << phiData << "\tphiFit: " << phiFit << "\tphiErrData: " << phiErrData 
-  //          << "\netaData: " << etaData << "\tetaFit: " << etaFit << endmsg;
-// }
-   return result;
-
+  double chi2 = (dataPoint-fitPoint)*(dataPoint-fitPoint)/(dataPointError*dataPointError);
+  double result=0.5*chi2;
+  return result; 
 }
 
 void pipiScatteringBaseLh::print(std::ostream& os) const{

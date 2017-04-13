@@ -50,16 +50,25 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
+TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType) :
   AbsDynamics(name, fsParticles, mother)
   ,_kMatName("")
   ,_prodProjectionIndex(0)
   ,_decProjectionIndex(0)
   , _orderKMatBg(-1)
   ,_withKMatAdler(false)
+  ,_dataTypeID(0)
   ,_currentAdler0(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
+  if(dataType=="Elasticity") _dataTypeID=1;
+  else if(dataType=="Phase") _dataTypeID=2;
+  else if(dataType=="ArgandUnits") _dataTypeID=3;
+  else{
+    Alert << "production formalism/data type with the name" << dataType << " is not supported for pi pi scattering fits! \n It is working for: Elasticity, ArgandUnits or Phase!!!" << endmsg;
+    exit(1); 
+  }
+
   init();
   _isLdependent=true;
 }
@@ -69,41 +78,57 @@ TMatrixDynamics::~TMatrixDynamics()
 }
 
 complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
+
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
   _tMatr->evalMatrix(currentMass);
 
-  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
-  complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
-
-  //phase
-
-  //note: this is a workaround
-  if(_prodProjectionIndex!=_decProjectionIndex){
-    SijRel=2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
-    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
-  } 
-  else{
-    complex<double> currentTijRel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
-    double currentReERel = currentTijRel_rho.real();
-    double currentImERel = currentTijRel_rho.imag() - 0.5;
-    
-    double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
-    double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
-    if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
-    
-    while( (phiData-deltaRel) > 90.) deltaRel+=180.;
-    while( (deltaRel-phiData) > 90.) deltaRel-=180.;
-    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
+  if(_dataTypeID==1) evalElasticity(theData, currentMass);   
+  else if(_dataTypeID==2){
+    if(_prodProjectionIndex == _decProjectionIndex) evalPhase(theData, currentMass);
+    else evalRelativePhase(theData, currentMass);
   }
-  if(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()<1.e-12){//protection against calculations below threshold
-    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=0.;
-    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=0.;
+  else if(_dataTypeID==3){
+    evalArgandUnits(theData, currentMass);
   }
   else{
-    double normSijRel=sqrt(norm(SijRel));
-    theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
+    Alert << "_dataTypeID = " <<_dataTypeID << " is not supported!!!" << endmsg;
+    exit(1); 
   }
+
+  // else{
+  //   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+  //   complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+    
+  //   //phase
+    
+  //   //note: this is a workaround
+  //   if(_prodProjectionIndex!=_decProjectionIndex){
+  //     SijRel=2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+  //     theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
+  //   } 
+  //   else{
+    //   complex<double> currentTijRel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
+    //   double currentReERel = currentTijRel_rho.real();
+    //   double currentImERel = currentTijRel_rho.imag() - 0.5;
+      
+    //   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
+    //   double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
+    //   if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
+      
+    //   while( (phiData-deltaRel) > 90.) deltaRel+=180.;
+    //   while( (deltaRel-phiData) > 90.) deltaRel-=180.;
+    //   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
+    // }
+    // if(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()<1.e-12){//protection against calculations below threshold
+    //   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=0.;
+    //   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=0.;
+    // }
+    // else{
+  //     double normSijRel=sqrt(norm(SijRel));
+  //     theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
+  //   }
+  // }
   return (*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 }
 
@@ -377,7 +402,76 @@ void TMatrixDynamics::init(){
     exit(0);
   }
 
-  _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));  
+  _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
+
+}
+
+void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+  complex<double> SijRel;
+
+  //note: this is a workaround
+  if(_prodProjectionIndex == _decProjectionIndex){
+    SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+  }
+  else{
+    SijRel=2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+    }
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
+}
+
+
+void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+
+  complex<double> currentTijRel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
+  double currentReERel = currentTijRel_rho.real();
+  double currentImERel = currentTijRel_rho.imag() - 0.5;
+
+  double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
+  if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
+
+  double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
+
+  while( (phiData-deltaRel) > 90.) deltaRel+=180.;
+  while( (deltaRel-phiData) > 90.) deltaRel-=180.;
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaRel;
+
+}
+
+void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass){
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  complex<double> currentTiiRel=(*_tMatr)(_prodProjectionIndex, _prodProjectionIndex);
+  complex<double> currentTjjRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
+
+  complex<double> currentTiiRel_rho= currentTiiRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
+  complex<double> currentTjjRel_rho= currentTjjRel*thePhpVecs[_decProjectionIndex]->factor(currentMass).real();
+
+  double currentReEiiRel = currentTiiRel_rho.real();
+  double currentImEiiRel = currentTiiRel_rho.imag() - 0.5;
+  double deltaiiRel = 0.5*atan2(currentImEiiRel, fabs(currentReEiiRel))*PawianConstants::radToDeg + 45.0;
+  if (currentReEiiRel  < 0.0) {deltaiiRel = 180.0 - deltaiiRel;}
+
+  double currentReEjjRel = currentTjjRel_rho.real();
+  double currentImEjjRel = currentTjjRel_rho.imag() - 0.5;
+  double deltajjRel = 0.5*atan2(currentImEjjRel, fabs(currentReEjjRel))*PawianConstants::radToDeg + 45.0;
+  if (currentReEjjRel  < 0.0) {deltajjRel = 180.0 - deltajjRel;}
+
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaiiRel+deltajjRel;
+}
+
+void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+
+  double sqrTij=0.;
+  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() > 1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass).real() > 1.e-10){
+    sqrTij=norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real())*currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()));
+  }
+
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;
 }
 
 

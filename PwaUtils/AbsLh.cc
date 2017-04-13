@@ -80,6 +80,7 @@ void AbsLh::initialize(){
 
     std::ostringstream channelScaleParamStream;
     channelScaleParamStream << "channelType" << GlobalEnv::instance()->Channel(_channelID)->channelType();
+    channelScaleParamStream << GlobalEnv::instance()->Channel(_channelID)->channelSubTypeName();
     //    channelScaleParamStream << "Id" << _channelID;    
     for (itParticle=fsParticles.begin(); itParticle != fsParticles.end(); ++itParticle){
        channelScaleParamStream << (*itParticle)->name();
