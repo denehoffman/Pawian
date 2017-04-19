@@ -168,10 +168,6 @@ void PiPiScatteringChannelEnv::setupGlobal(ChannelID id){
 
   //mass range cuts
   std::vector<std::string> massRangeCuts=_theParser->massRangeCuts();
-  InfoMsg << "was ist hier los?????" << _theParser->dataFile() << endmsg;
-  InfoMsg << "dataFile(): " << _theParser->dataFile() << endmsg;
-  InfoMsg << "theParser->massRangeCuts().size(): " << _theParser->massRangeCuts().size() << endmsg;
-  InfoMsg << "massRangeCuts.size(): " << massRangeCuts.size() << endmsg;
   if(massRangeCuts.size()>0) _useMassRange=true;
   for ( itStr = massRangeCuts.begin(); itStr != massRangeCuts.end(); ++itStr){
     std::string currentString=*itStr;
