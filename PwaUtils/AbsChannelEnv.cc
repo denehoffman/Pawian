@@ -84,7 +84,7 @@ std::shared_ptr<AbsLh> AbsChannelEnv::Lh(){
 
 void AbsChannelEnv::setupGlobal(ChannelID id){
    if(_alreadySetUp){
-      Alert << "PbarpChannelEnv already set up!" << endmsg;
+      Alert << "ChannelEnv already set up!" << endmsg;
       exit(1);
    }
    _alreadySetUp = true;

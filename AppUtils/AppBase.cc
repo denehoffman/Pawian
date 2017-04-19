@@ -653,7 +653,7 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     numEventMap[(*it).first->channelID()] = std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
 
-    if(noOfWeightedDataEvts<10.){
+    if(noOfWeightedDataEvts<5.){
       Alert << "number of weighted data events too small: " << noOfWeightedDataEvts << endmsg;
       exit(1);
     }

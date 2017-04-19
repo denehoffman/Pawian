@@ -62,6 +62,9 @@ protected:
   int _orderKMatBg;
   bool _withKMatAdler;
   short _dataTypeID;
+  bool _prodIsNotDecChannel;
+  std::string _paramNameRelPhase;
+  double _currentRelPhase; 
   
   std::shared_ptr<KMatrixRel> _kMatr;
   std::shared_ptr<TMatrixRel> _tMatr;

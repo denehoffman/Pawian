@@ -58,6 +58,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   , _orderKMatBg(-1)
   ,_withKMatAdler(false)
   ,_dataTypeID(0)
+  ,_prodIsNotDecChannel(false)
   ,_currentAdler0(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
@@ -70,6 +71,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   }
 
   init();
+  if(_prodProjectionIndex != _decProjectionIndex) _prodIsNotDecChannel=true;
   _isLdependent=true;
 }
 
@@ -85,7 +87,7 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
 
   if(_dataTypeID==1) evalElasticity(theData, currentMass);   
   else if(_dataTypeID==2){
-    if(_prodProjectionIndex == _decProjectionIndex) evalPhase(theData, currentMass);
+    if(!_prodIsNotDecChannel) evalPhase(theData, currentMass);
     else evalRelativePhase(theData, currentMass);
   }
   else if(_dataTypeID==3){
@@ -170,6 +172,13 @@ void TMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
     if(_withKMatAdler){
       fitPar->Add("s0"+_kMatName, _currentAdler0, fabs(_currentAdler0)+0.2);
     }
+  }
+
+  if(_dataTypeID==2 && _prodIsNotDecChannel){
+    _paramNameRelPhase="deltaRel"+_kMatName+"to"+_gFactorNames.at(_decProjectionIndex);
+    fitPar->Add(_paramNameRelPhase, 90., 10.);
+    fitPar->SetLimits(_paramNameRelPhase, 0., 360.);
+    _currentRelPhase = fitPar->Value(_paramNameRelPhase);
   }
 }
 
@@ -262,6 +271,10 @@ void TMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
       _currentAdler0=fitPar->Value("s0"+_kMatName);
       _kMatr->updates0Adler(_currentAdler0);
     }
+  }
+
+  if(_dataTypeID==2 && _prodIsNotDecChannel){
+    _currentRelPhase=fitPar->Value(_paramNameRelPhase);
   }
 }
 
@@ -459,7 +472,7 @@ void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass){
   double deltajjRel = 0.5*atan2(currentImEjjRel, fabs(currentReEjjRel))*PawianConstants::radToDeg + 45.0;
   if (currentReEjjRel  < 0.0) {deltajjRel = 180.0 - deltajjRel;}
 
-  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaiiRel+deltajjRel;
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaiiRel+deltajjRel+_currentRelPhase;
 }
 
 void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){

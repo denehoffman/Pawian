@@ -16,6 +16,7 @@ lib pipiScatteringUtils :
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
 	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/Event//Event
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/Particle//Particle
 	: 

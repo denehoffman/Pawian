@@ -110,7 +110,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     std::vector<Particle*> fsParticlesDaughter1=theDec->finalStateParticlesDaughter1();
     std::vector<Particle*> fsParticlesDaughter2=theDec->finalStateParticlesDaughter2();
     
-    //spectial treatment of pipiScattering
+    //special treatment of pipiScattering
     if( theDec->type() =="PiPiScatteringDecay" ){
       if(theDec->dynType()=="TMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
