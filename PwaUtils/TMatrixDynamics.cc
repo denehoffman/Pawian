@@ -99,39 +99,6 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
     exit(1); 
   }
 
-  // else{
-  //   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
-  //   complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
-    
-  //   //phase
-    
-  //   //note: this is a workaround
-  //   if(_prodProjectionIndex!=_decProjectionIndex){
-  //     SijRel=2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
-  //     theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
-  //   } 
-  //   else{
-    //   complex<double> currentTijRel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
-    //   double currentReERel = currentTijRel_rho.real();
-    //   double currentImERel = currentTijRel_rho.imag() - 0.5;
-      
-    //   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHI_PIPISCAT_NAME));
-    //   double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
-    //   if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
-      
-    //   while( (phiData-deltaRel) > 90.) deltaRel+=180.;
-    //   while( (deltaRel-phiData) > 90.) deltaRel-=180.;
-    //   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=deltaRel;
-    // }
-    // if(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()<1.e-12){//protection against calculations below threshold
-    //   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=0.;
-    //   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::PHIFIT_PIPISCAT_NAME))=0.;
-    // }
-    // else{
-  //     double normSijRel=sqrt(norm(SijRel));
-  //     theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::ETAFIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
-  //   }
-  // }
   return (*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 }
 
@@ -155,6 +122,7 @@ void TMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
       double currentError=currentgFactorVec.at(j)/3.;
       if (currentError<1.e-5) currentError=0.01;
       fitPar->Add(currentName, currentgFactorVec.at(j), currentError);
+      fitPar->SetLimits(currentName, 0., 3.);
     }
   }
 
@@ -165,6 +133,7 @@ void TMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
   	for(unsigned int k=j; k<_phpVecs.size(); ++k){
   	  std::string currentName=_bgTermNames.at(i).at(j).at(k);
   	  fitPar->Add(currentName, _currentBgTerms.at(i).at(j).at(k), fabs(_currentBgTerms.at(i).at(j).at(k))+0.3);
+	  fitPar->SetLimits(currentName, -20., 20.);
   	}
       }
     }

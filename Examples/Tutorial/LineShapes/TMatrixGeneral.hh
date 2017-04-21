@@ -100,6 +100,7 @@ private:
   int _orderBg;
   bool _withKMatAdler;
   std::string _pathToFitParams;
+  int _orbitalL;
 
   void init();
   void fillParams(std::shared_ptr<AbsPawianParameters> theParams);

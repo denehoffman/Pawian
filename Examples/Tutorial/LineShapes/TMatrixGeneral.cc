@@ -68,6 +68,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   ,_orderBg(0)
   ,_withKMatAdler(false)
   ,_pathToFitParams(pathToFitParams)
+  ,_orbitalL(0)
 { 
   init();
   std::string rootFileName="./TMatrixGeneral.root";
@@ -207,7 +208,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
       _phpH1RealVec.at(i)->Fill(mass, currentRho.real());
       _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag());
 
-      _SqrT1iH1Vec.at(i)->Fill(mass, norm(sqrt(_phpVecs.at(i)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
+      _SqrT1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(i)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
 
       complex<double> currentTiiRel_rho= (*_tMatr)(i,i)*currentRho.real();
       //complex<double> currentTiiRel_rho= (*_tMatr)(i,i);
@@ -403,6 +404,8 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
     _withKMatAdler=_kMatrixParser->useAdler();
     _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, _orderBg, _withKMatAdler));
   }
+
+  _orbitalL=_kMatrixParser->orbitalMom();
 
   AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
   _params = thePawianStreamer.paramList();
