@@ -64,7 +64,8 @@ protected:
   short _dataTypeID;
   bool _prodIsNotDecChannel;
   std::string _paramNameRelPhase;
-  double _currentRelPhase; 
+  double _currentRelPhase;
+  int _orbitalL; 
   
   std::shared_ptr<KMatrixRel> _kMatr;
   std::shared_ptr<TMatrixRel> _tMatr;

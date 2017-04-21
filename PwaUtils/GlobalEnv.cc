@@ -139,6 +139,14 @@ void GlobalEnv::setupChannelEnvs(){
 std::vector<std::string> GlobalEnv::fixedParams(){
   std::vector<std::string> result;
   std::vector<std::string>::iterator itStr;
+
+  //fix it for global configurations
+  std::vector<std::string> globalFixedParmaList=_theParser->fixedParams();
+  for(itStr=globalFixedParmaList.begin(); itStr!=globalFixedParmaList.end(); ++itStr){
+    result.push_back(*itStr);
+  }
+
+  //fix it for individual channels
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
    std::vector<std::string> currentFixedParmaList=(*it).first->parser()->fixedParams();
    for(itStr=currentFixedParmaList.begin(); itStr!=currentFixedParmaList.end(); ++itStr){

@@ -59,6 +59,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_withKMatAdler(false)
   ,_dataTypeID(0)
   ,_prodIsNotDecChannel(false)
+  ,_orbitalL(0)
   ,_currentAdler0(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
 {
@@ -284,6 +285,7 @@ void TMatrixDynamics::init(){
   _kMatName=_kMatrixParser->keyName();
   _orderKMatBg=_kMatrixParser->orderBg();
   _withKMatAdler=_kMatrixParser->useAdler();  
+  _orbitalL=_kMatrixParser->orbitalMom(); 
 
   std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
   std::vector<std::string>::iterator itString;
@@ -481,7 +483,7 @@ void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
 
   double sqrTij=0.;
   if( thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() > 1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass).real() > 1.e-10){
-    sqrTij=norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real())*currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()));
+    sqrTij=(2.*_orbitalL+1.)*norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real())*currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()));
   }
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;
