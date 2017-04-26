@@ -83,12 +83,14 @@ protected:
   std::map<std::string, bool > _recalcMap;  
   std::shared_ptr<KMatrixParser> _kMatrixParser;
   std::map<std::string, std::vector<std::string> > _paramNameListMap;
+  std::map<unsigned int, double > _noRotationMap;
 
   virtual void init();
   virtual void evalElasticity(EvtData* theData, double currentMass);
   virtual void evalPhase(EvtData* theData, double currentMass);
   virtual void evalRelativePhase(EvtData* theData, double currentMass);
   virtual void evalArgandUnits(EvtData* theData, double currentMass);
+  unsigned int noOfRotations(double currentMass);
 private:
 
 };

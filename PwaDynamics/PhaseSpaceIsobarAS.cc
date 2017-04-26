@@ -57,3 +57,7 @@ complex<double> PhaseSpaceIsobarAS::breakUpMom(const complex<double> mass){
   return q;
 }
 
+double PhaseSpaceIsobarAS::thresholdMass(){
+  return _mass1+_mass2;
+}
+

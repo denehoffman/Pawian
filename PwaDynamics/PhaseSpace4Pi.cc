@@ -112,3 +112,7 @@ complex<double> PhaseSpace4Pi::breakUpMom(const complex<double> mass){
    // return 0;
 }
 
+double PhaseSpace4Pi::thresholdMass(){
+  return 4.*PawianConstants::mPi;
+}
+

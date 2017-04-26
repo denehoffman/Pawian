@@ -56,6 +56,7 @@ public:
   virtual complex<double> factor(const complex<double> mass)=0;
   virtual complex<double> breakUpMom(const double mass)=0;
   virtual complex<double> breakUpMom(const complex<double> mass)=0;
+  virtual double thresholdMass()=0;
 
   void SetBumImPartSign(double sign){_bumImPartSign = sign;}
 

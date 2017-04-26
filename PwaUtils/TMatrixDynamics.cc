@@ -46,6 +46,7 @@
 #include "PwaDynamics/PPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceFactory.hh"
+#include "PwaDynamics/KMatrixFunctions.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
@@ -246,6 +247,12 @@ void TMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
   if(_dataTypeID==2 && _prodIsNotDecChannel){
     _currentRelPhase=fitPar->Value(_paramNameRelPhase);
   }
+
+  // if( _dataTypeID==2  && !_prodIsNotDecChannel){
+  //   //update noOfRotationMap
+  //   _noRotationMap.clear();
+  //   KMatrixFunctions::fillRotationArgandMap(_tMatr, _prodProjectionIndex, _noRotationMap);
+  // }
 }
 
 
@@ -407,43 +414,53 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
 
 
 void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
-  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
-  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 
-  complex<double> currentTijRel_rho=currentTijRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
-  double currentReERel = currentTijRel_rho.real();
-  double currentImERel = currentTijRel_rho.imag() - 0.5;
-
-  double deltaRel = 0.5*atan2(currentImERel, fabs(currentReERel))*PawianConstants::radToDeg + 45.0;
-  if (currentTijRel.real()  < 0.0) {deltaRel = 180.0 - deltaRel;}
+  double deltaRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
 
   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
 
   while( (phiData-deltaRel) > 90.) deltaRel+=180.;
   while( (deltaRel-phiData) > 90.) deltaRel-=180.;
+
+  // unsigned int noOfRots=noOfRotations(currentMass);
+  // InfoMsg << "currentMass: " << currentMass << "\tnoOfRots: " << noOfRots << endmsg;  
+  // deltaRel+=noOfRots*180.;
+  
+
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaRel;
 
 }
 
 void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass){
-  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
-  complex<double> currentTiiRel=(*_tMatr)(_prodProjectionIndex, _prodProjectionIndex);
-  complex<double> currentTjjRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
+  // vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  // complex<double> currentTiiRel=(*_tMatr)(_prodProjectionIndex, _prodProjectionIndex);
+  // complex<double> currentTjjRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
 
-  complex<double> currentTiiRel_rho= currentTiiRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
-  complex<double> currentTjjRel_rho= currentTjjRel*thePhpVecs[_decProjectionIndex]->factor(currentMass).real();
+  // complex<double> currentTiiRel_rho= currentTiiRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
+  // complex<double> currentTjjRel_rho= currentTjjRel*thePhpVecs[_decProjectionIndex]->factor(currentMass).real();
 
-  double currentReEiiRel = currentTiiRel_rho.real();
-  double currentImEiiRel = currentTiiRel_rho.imag() - 0.5;
-  double deltaiiRel = 0.5*atan2(currentImEiiRel, fabs(currentReEiiRel))*PawianConstants::radToDeg + 45.0;
-  if (currentReEiiRel  < 0.0) {deltaiiRel = 180.0 - deltaiiRel;}
+  // double currentReEiiRel = currentTiiRel_rho.real();
+  // double currentImEiiRel = currentTiiRel_rho.imag() - 0.5;
+  // double deltaiiRel = 0.5*atan2(currentImEiiRel, fabs(currentReEiiRel))*PawianConstants::radToDeg + 45.0;
 
-  double currentReEjjRel = currentTjjRel_rho.real();
-  double currentImEjjRel = currentTjjRel_rho.imag() - 0.5;
-  double deltajjRel = 0.5*atan2(currentImEjjRel, fabs(currentReEjjRel))*PawianConstants::radToDeg + 45.0;
-  if (currentReEjjRel  < 0.0) {deltajjRel = 180.0 - deltajjRel;}
+  // if (currentReEiiRel  < 0.0) {deltaiiRel = 180.0 - deltaiiRel;}
 
-  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaiiRel+deltajjRel+_currentRelPhase;
+  // double currentReEjjRel = currentTjjRel_rho.real();
+  // double currentImEjjRel = currentTjjRel_rho.imag() - 0.5;
+  // double deltajjRel = 0.5*atan2(currentImEjjRel, fabs(currentReEjjRel))*PawianConstants::radToDeg + 45.0;
+
+  // if (currentReEjjRel  < 0.0) {deltajjRel = 180.0 - deltajjRel;}
+
+  double deltaiiRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
+  double deltajjRel = KMatrixFunctions::deltaArgand(_tMatr, _decProjectionIndex, currentMass); 
+  double phiRelFit=deltaiiRel+deltajjRel+_currentRelPhase;
+
+  double phiRelData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
+
+  while( (phiRelData-phiRelFit) >  90.) phiRelFit+=180.;
+  while( (phiRelFit-phiRelData) >  90.) phiRelFit-=180.;
+
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=phiRelFit;
 }
 
 void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
@@ -456,6 +473,16 @@ void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
   }
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;
+}
+
+unsigned int TMatrixDynamics::noOfRotations(double currentMass){
+  unsigned int noOfLoops=0;
+  std::map<unsigned int, double >::iterator it;
+  for(it=_noRotationMap.begin(); it!=_noRotationMap.end(); ++it){
+    if(it->second > currentMass) break;
+    noOfLoops=it->first; 
+  } 
+  return noOfLoops;
 }
 
 

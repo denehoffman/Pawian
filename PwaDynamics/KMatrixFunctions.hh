@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,49 +20,34 @@
 //									  //
 //************************************************************************//
 
-// PhaseSpaceIsobarAS class definition file. -*- C++ -*-
-// Copyright 2014 Julian Pychy
+// Copyright 2017 Bertram Kopf
 
 #pragma once 
+
 //_____________________________________________________________________________
-// @file PhaseSpaceIsobarAS.h
+// @file KMatrixFunctions.hh
 //_____________________________________________________________________________
 
 #include <iostream>
-#include <vector>
-#include "PwaDynamics/AbsPhaseSpace.hh"
+#include <complex>
+#include <utility>
+#include <memory>
+#include <map>
 
-using namespace std;
+#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 
+
+class TMatrixRel;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class PhaseSpaceIsobarAS: public AbsPhaseSpace {
+namespace KMatrixFunctions { 
+  double twoDeltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
+  double deltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
+  unsigned int noOfPhaseRotationsArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
+  void fillRotationArgandMap(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, std::map<unsigned int, double>& toFill, double massMax=4.0);
+}; // namespace KMatrixFunctions
 
-public:
-
-  /// Constructor 
-  PhaseSpaceIsobarAS(double mass1, double mass2); 
-
-  /// Destructor
-  virtual ~PhaseSpaceIsobarAS();
-
-  // operators:
-
-
-  // functions:
-
-  virtual complex<double> factor(const double mass);
-  virtual complex<double> breakUpMom(const double mass);
-  virtual complex<double> factor(const complex<double> mass);
-  virtual complex<double> breakUpMom(const complex<double> mass);
-  virtual double thresholdMass();
-protected:
-
-private:
-  double _mass1;
-  double _mass2;
-};
-//_____________________________________________________________________________
 
 
