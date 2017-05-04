@@ -114,6 +114,7 @@ void AbsPawianParameters::SetAllValues(const std::vector<double>& values){
   for(unsigned int i=0; i<values.size(); ++i){
     if(values.at(i) != values.at(i)) {
        Alert << "Parameter vector returned from minimization procedure contains NAN! Exiting..." << endmsg;
+       Alert << "The name of the parameter is: " << GetName(i) << endmsg;
        exit(0);
     }
     SetValue(i, values.at(i));

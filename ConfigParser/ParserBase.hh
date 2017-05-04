@@ -114,6 +114,7 @@ public:
   const int noOfGenEvts() const {return _noOfGenEvts;}
   const int noOfDataEvts() const {return _noOfDataEvts;}
   const double tolerance() const {return _tolerance;}
+  const int noOfInterpolatedScattPoints() const {return _noInterScattPoints;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -185,4 +186,5 @@ protected:
   int _noOfGenEvts;
   int _noOfDataEvts;
   double _tolerance;
+  int _noInterScattPoints;
 };

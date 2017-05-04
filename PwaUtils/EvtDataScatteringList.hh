@@ -50,8 +50,11 @@ public:
   virtual void read(EventList& evtListData, EventList& evtListMc);
 
   virtual void readScatteringData(EventList& evtList, std::vector<EvtData*>& theEvtList, int startNo);
+  virtual void readScatteringDataInterpol(EventList& evtList, std::vector<EvtData*>& theEvtList, int startNo);
   virtual void readScatteringDefaultFit(std::vector<EvtData*>& dataEvtList, std::vector<EvtData*>& fitEvtList, int startNo);
   virtual EvtData* convertEvent(Event* theEvent, int evtNo=1);
+  virtual EvtData* convertEventInterpol(Event* oldEvent, Event* newEvent, int evtNo);
+  virtual std::vector<EvtData*> convertEventInterpol(Event* oldEvent, Event* newEvent, int evtNo, unsigned int noOfPoints);
  
   static std::string M_PIPISCAT_NAME;
   static std::string DATA_PIPISCAT_NAME;
@@ -59,4 +62,5 @@ public:
   static std::string FIT_PIPISCAT_NAME;
 
 protected:
+  int _noOfInterPolData;
 };

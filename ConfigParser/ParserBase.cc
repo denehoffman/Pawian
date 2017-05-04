@@ -75,7 +75,8 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_genWithModel(true)
   ,_noOfGenEvts(10000)
   ,_noOfDataEvts(1000000)
-  ,_tolerance(0.1)
+  ,_tolerance(0.1) 
+  ,_noInterScattPoints(0)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -160,6 +161,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("noOfDataEvents",po::value<int>(&_noOfDataEvts),  "number of data events for PWA and qa")
     ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
     ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
+    ("noOfInterpolatedScatteringPoints", po::value<int>(&_noInterScattPoints), "number of interpolated scattering points")
     ;
 
 }
@@ -258,7 +260,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "prefit with free scaling factor: " << _doScaling << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
 	        << "minimumTolerance: " << _tolerance << "\n\n"
-            << endl;
+                << "no of interpolated scattering points" << _noInterScattPoints << "\n\n"
+                << endl;
 
 
       std::vector<std::string>::const_iterator it;

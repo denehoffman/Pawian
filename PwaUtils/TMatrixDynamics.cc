@@ -408,14 +408,36 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
   }
   else{
     SijRel=2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
-    }
+  }
+  
+  //protection against numerical instabilities
+  if(norm(SijRel) != norm(SijRel)){
+    WarningMsg << "numerical instability of norm(SijRel) yields to NAN ... redo calculation for mass+0.0001" << endmsg;
+    double newCurrentMass=currentMass+0.0001;
+    _tMatr->evalMatrix(newCurrentMass);
+    evalElasticity(theData, newCurrentMass);
+    return;
+  } 
+
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
+  // InfoMsg << "currentMass: " << currentMass << endmsg;
+  // InfoMsg << "sqrt(norm(SijRel)): " << sqrt(norm(SijRel)) << endmsg;
+  // InfoMsg << "SijRel: " << SijRel << endmsg;
+  // InfoMsg << "norm(SijRel): " << norm(SijRel) << endmsg;
 }
 
 
 void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
+  // double deltaRel=KMatrixFunctions::deltaArgandWSigma(_tMatr, _prodProjectionIndex, currentMass, 0.005, 4);
+  // double deltaRel=KMatrixFunctions::deltaArgandWSigma(_tMatr, _prodProjectionIndex, currentMass, 0.001, 4);
+  // while(deltaRel>180.) deltaRel-=180.;
+  // while(deltaRel<0.) deltaRel+=180.;
 
   double deltaRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
+  while(deltaRel>180.) deltaRel-=180.;
+  while(deltaRel<0.) deltaRel+=180.;
+
+  // InfoMsg << "\ncurrentMass: " << currentMass << "\tdeltaRel: " << deltaRel << "\tdeltaRelNew: " << deltaRelNew << endmsg;
 
   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
 
@@ -423,7 +445,7 @@ void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
   while( (deltaRel-phiData) > 90.) deltaRel-=180.;
 
   // unsigned int noOfRots=noOfRotations(currentMass);
-  // InfoMsg << "currentMass: " << currentMass << "\tnoOfRots: " << noOfRots << endmsg;  
+  // // InfoMsg << "currentMass: " << currentMass << "\tnoOfRots: " << noOfRots << endmsg;  
   // deltaRel+=noOfRots*180.;
   
 
