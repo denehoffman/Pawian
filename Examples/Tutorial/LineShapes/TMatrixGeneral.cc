@@ -158,6 +158,12 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     currentSqrT1iH1->SetXTitle("mass/GeV");
     _SqrT1iH1Vec.push_back(currentSqrT1iH1);
 
+    std::string currentSqrS1iKey="sqrS1i"+key;
+    TH1F* currentSqrS1iH1=new TH1F(currentSqrS1iKey.c_str(), currentSqrS1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentSqrS1iH1->SetYTitle("|#sqrt{#rho_{1}}#sqrt{#rho_{i}} S_{1i}|^{2}");
+    currentSqrS1iH1->SetXTitle("mass/GeV");
+    _SqrS1iH1Vec.push_back(currentSqrS1iH1);
+
     std::string currentdelta1iKey="delta1i"+key;
     TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
     currentDelta1iH1->SetYTitle("#delta1i/grad");
@@ -209,6 +215,13 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
       _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag());
 
       _SqrT1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(i)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
+
+
+      if(currentRho.real()>0.){
+	complex<double> S0iRel=2.*PawianConstants::i*sqrt(_phpVecs.at(0)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i);
+	if(i==0) S0iRel+=complex<double>(1.,0.);  
+	_SqrS1iH1Vec.at(i)->Fill(mass, norm(S0iRel));
+      }
 
       complex<double> currentTiiRel_rho= (*_tMatr)(i,i)*currentRho.real();
       //complex<double> currentTiiRel_rho= (*_tMatr)(i,i);
