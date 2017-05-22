@@ -9,6 +9,7 @@
 Meson pipieff            pipieff                0  0  1  1  1   0  0  0  0      0.26996 0.0001     relBW   [PDG no idea]
 Meson etaMatrix	        etaMatrix               0  0 -1  1  1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
 Meson f2Matrix	 	f_2Matrix  		0  4  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]
+Meson f4Matrix	 	f_4Matrix  		0  8  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]
 Meson h1Matrix          h_1Matrix               0  2  1 -1 -1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
 Meson f0Matrix          f_0Matrix               0  0  1  1  1   0  0  0  0      1.      0.1     relBW   [PDG no idea]
 Meson eta 		\eta  			0  0 -1  1  1	0  0  0  0 	0.547(+0.01-0.01) 0.0001 relBW	[PDG nonett 1^1S_0]
@@ -71,7 +72,8 @@ Meson f0(2540) 		f_0(2540)  		0  0  1  1  1   0  0  0  0 	2.539 	0.274 	relBW	[P
 #some additional isospin 0 mesons which are which are speculative and not listed in the PDG 
 Meson h2(1600)          h_2(1600)               0  4  1 -1 -1   0  0  0  0      1.6     0.1     relBW   [PDG no idea]
 Meson h3(1600)          h_3(1600)               0  6  1 -1 -1   0  0  0  0      1.6     0.1     relBW   [PDG no idea]
-
+#
+Meson omegaeff 		\omegaeff  		0  2 -1 -1 -1   0  0  0  0 	0.77401  0.00849 relBW	[PDG nonett 1^3S_1]
 # End light unflavoured mesons with Isospin 0    
 #
 # Start light unflavoured mesons with Isospin 1
@@ -200,11 +202,14 @@ Meson KPiS12- 		K{\pi}S12^-  		-3 0  1  0  0   1  -1 -1  0 	1. 	1.   	relBW	[PDG
 Meson KPiS320 		K{\pi}S32^0  		0  0  1  0  0   3  0  1 0 	1. 	1.   	relBW	[PDG no idea]
 Meson KPiS32+ 		K{\pi}S32^+  		3  0  1  0  0   3  1  1 0 	1. 	1.   	relBW	[PDG no idea]
 Meson KPiS32- 		K{\pi}S32^-  		-3 0  1  0  0   3  -1 -1  0 	1. 	1.   	relBW	[PDG no idea]
-Meson K1(1270) 		K_1(1270)  		0  2  1  0  0   1  0  0  0  	1.273 	0.090   relBW	[PDG nonett 2^1P_1]
+Meson K1(1270)0         K_1(1270)^0             0  2  1  0  0   1  -1 1  0      1.272   0.090   relBW   [PDG no idea]
+Meson K1(1270)0bar      \bar{K_1(1270)}^0       0  2  1  0  0   1  1  -1 0      1.272   0.090   relBW   [PDG no idea]
+Meson K1(1270)+         K_1(1270)^+             3  2  1  0  0   1  1  1  0      1.272   0.090   relBW   [PDG no idea]
+Meson K1(1270)-         K_1(1270)^-             -3  2  1  0  0   1  -1 -1  0    1.272   0.090   relBW   [PDG no idea]
 Meson K1(1400)0         K_1(1400)^0             0  2  1  0  0   1  -1 1  0      1.403   0.174   relBW   [PDG no idea]
 Meson K1(1400)0bar      \bar{K_1(1400)}^0       0  2  1  0  0   1  1  -1 0      1.403   0.174   relBW   [PDG no idea]
 Meson K1(1400)+         K_1(1400)^+             3  2  1  0  0   1  1  1  0      1.403   0.174   relBW   [PDG no idea]
-Meson K1(1400)-         K_1(1400)^-             3  2  1  0  0   1  -1 -1  0     1.403   0.174   relBW   [PDG no idea]
+Meson K1(1400)-         K_1(1400)^-             -3  2  1  0  0   1  -1 -1  0     1.403   0.174   relBW   [PDG no idea]
 Meson K*1(1410)0 	K_1^\ast(1410)^0  	0  2  -1 0  0   1  0  1  0  	1.412 	0.227   relBW	[PDG no idea]
 Meson K*1(1410)+ 	K_1^\ast(1410)^+  	3  2  -1 0  0   1  1  1  0  	1.412 	0.227   relBW	[PDG no idea]
 Meson K*1(1410)- 	K_1^\ast(1410)^-  	-3 2  -1 0  0   1  -1 -1 0  	1.412 	0.227   relBW	[PDG no idea]
@@ -221,7 +226,7 @@ Meson K2(1580) 		K_2(1580)  		0  4 -1  0  0   1  0  0  0  	1.580 	0.110   relBW	
 Meson K1(1650)0 	K_1(1650)^0  		0  2  1  0  0   1  -1 1  0  	1.650 	0.150   relBW	[PDG no idea]
 Meson K1(1650)0bar 	\bar{K_1(1650)}^0  	0  2  1  0  0   1  1  -1 0  	1.650 	0.150   relBW	[PDG no idea]
 Meson K1(1650)+ 	K_1(1650)^+  		3  2  1  0  0   1  1  1  0  	1.650 	0.150   relBW	[PDG no idea]
-Meson K1(1650)- 	K_1(1650)^-  		3  2  1  0  0   1  -1 -1  0  	1.650 	0.150   relBW	[PDG no idea]
+Meson K1(1650)- 	K_1(1650)^-  		-3  2  1  0  0   1  -1 -1  0  	1.650 	0.150   relBW	[PDG no idea]
 Meson K*1(1680)0 	K_1^\ast(1680)^0  	0  2 -1  0  0   1  -1 1  0  	1.714 	0.323   relBW	[PDG nonett 3^3D_1]
 Meson K*1(1680)0bar 	\bar{K_1^\ast(1680)}^0  0  2 -1  0  0   1  1 -1 0  	1.714 	0.323   relBW	[PDG nonett 3^3D_1]
 Meson K*1(1680)+ 	K_1^\ast(1680)^+  	3  2 -1  0  0   1  1  1  0  	1.714 	0.323   relBW	[PDG nonett 3^3D_1]
@@ -256,6 +261,11 @@ Meson K3(2320)-		K_3(2320)^-  		-3 6  1  0  0   1  -1 -1 0  	2.324 	0.150   relB
 Meson K3(2320)+		K_3(2320)^+  		3  6  1  0  0   1  1  1  0  	2.324 	0.150   relBW	[PDG no idea]
 Meson K*5(2380)+	K_2^\ast(2380)^+	3  10 -1 0  0	1  1  1	 0	2.38	0.178	relBW	[PDG no idea]
 Meson K4(2500)+		K_4(2500)^+		3  8  -1 0  0	1  1  1	 0	2.5	0.150	relBW	[PDG no idea]
+#
+Meson K*0eff 		K^\asteff  		0  2 -1  0  0   1  -1  1  0  	0.84841 0.0474	relBW	[PDG nonett 1^3S_1]
+Meson K*0bareff 	bar{K}^\asteff  	0  2 -1  0  0   1  1  -1  0  	0.84841 0.0474  relBW	[PDG nonett 1^3S_1]
+Meson K*+eff 		K^{\ast+}eff  		3  2 -1  0  0   1  1  1  0  	0.84469 0.05081 relBW	[PDG nonett 1^3S_1]
+Meson K*-eff 		K^{\ast-}eff  		-3 2 -1  0  0   1  -1  -1  0  	0.84469 0.05081 relBW	[PDG nonett 1^3S_1]
 #
 # End strange mesons
 #

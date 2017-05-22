@@ -66,6 +66,7 @@ public:
    std::shared_ptr<AbsPawianParameters> startPawianParams() {return _startParams;}
    void setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams);
    std::vector<std::string> fixedParams();
+  std::vector<std::string> paramDependencies();
 
   std::map<std::string, std::string>& toBeReplacedSuffixMap() {return _toBeReplacedSuffixMap;}
   std::map<std::string, std::string>& alreadyReplacedSuffixMap() {return _alreadyReplacedSuffixMap;}

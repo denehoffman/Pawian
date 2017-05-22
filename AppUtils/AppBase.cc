@@ -542,7 +542,9 @@ std::shared_ptr<AbsPawianParameters> AppBase::streamPawianParams(){
 void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<std::string> fixedParams, bool mustMatch){
 
   // Evaluate parameter dependencies and add fixes
-  ParamDepHandler::instance()->Fill(GlobalEnv::instance()->Channel()->parser()->parameterDependencies(), upar);
+  std::vector<std::string> paramDependencies = GlobalEnv::instance()->paramDependencies();
+  //  ParamDepHandler::instance()->Fill(GlobalEnv::instance()->Channel()->parser()->parameterDependencies(), upar);
+  ParamDepHandler::instance()->Fill(paramDependencies, upar);
   std::vector<std::string> dependentParameters = ParamDepHandler::instance()->DependentParameterNames();
   // fixedParams.insert(fixedParams.end(), dependentParameters.begin(), dependentParameters.end());
 

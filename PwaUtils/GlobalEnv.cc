@@ -153,9 +153,29 @@ std::vector<std::string> GlobalEnv::fixedParams(){
  //   std::vector<std::string>::iterator itFindStr = result.find(*itStr);
  //    if (itFindStr == result.end()) result.push_back(*itStr);
    result.push_back(*itStr);
+   }
   }
- }
  return result;
+}
+
+std::vector<std::string> GlobalEnv::paramDependencies(){
+  std::vector<std::string> result;
+  std::vector<std::string>::iterator itStr;
+
+  //param dependencies for global configurations
+  std::vector<std::string> globalParamDepList=_theParser->parameterDependencies();
+  for(itStr=globalParamDepList.begin(); itStr!=globalParamDepList.end(); ++itStr){
+    result.push_back(*itStr);
+  }
+
+  //param dependencies for individual channels
+  for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
+    std::vector<std::string> currentParamDepList=(*it).first->parser()->parameterDependencies();
+    for(itStr=currentParamDepList.begin(); itStr!=currentParamDepList.end(); ++itStr){
+      result.push_back(*itStr);
+    }
+  }
+  return result;
 }
 
 std::shared_ptr<AbsPawianParameters> GlobalEnv::defaultPawianParams(){
