@@ -33,12 +33,14 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/AbsChannelEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 #include "PwaDynamics/FVector.hh"
 #include "PwaDynamics/PVectorRelBg.hh"
 #include "ConfigParser/KMatrixParser.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "PwaDynamics/KMatrixRel.hh"
 #include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/KPole.hh"
@@ -49,12 +51,15 @@
 #include "PwaDynamics/PhaseSpaceFactory.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
-KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser) :
+KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, ChannelID channelID) :
   TMatrixDynamics(name, fsParticles, mother, pathToConfigParser)
   ,_currentMass(1.)
+  ,_pVecSuffix("")
 {
   init();
   _isLdependent=true;
+  ParserBase* currentParser=GlobalEnv::instance()->Channel(channelID)->parser();
+  _pVecSuffix=currentParser->kMatrixProdSuffix();
 }
 
 KMatrixDynamics::~KMatrixDynamics()
@@ -92,7 +97,7 @@ void KMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
     std::string theName=it1->first;
     std::map<std::string, double>& bFactors = it1->second;
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
-      std::string currentName="b_"+_poleNames.at(i);
+      std::string currentName="b"+_pVecSuffix+"_"+_poleNames.at(i);
       //     std::cout << "currentName: " << currentName << std::endl;
       std::string magName=currentName+"Mag";
       fitPar->Add(theName+magName, bFactors.at(magName) , 1.);
@@ -164,7 +169,7 @@ void KMatrixDynamics::fillParamNameList(){
     
 //    std::map<std::string, double>& bFactors = it1->second;
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
-      std::string currentName="b_"+_poleNames.at(i);
+      std::string currentName="b"+_pVecSuffix+"_"+_poleNames.at(i);
       //     std::cout << "currentName: " << currentName << std::endl;
       std::string magName=currentName+"Mag";
       _paramNameList.push_back(theName+magName);
@@ -265,7 +270,7 @@ void KMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
     std::shared_ptr<PVectorRel> currentPVec=_pVecMap.at(it1->first);
 
     for(unsigned int i=0; i<_poleNames.size(); ++i){ 
-      std::string currentName="b_"+_poleNames.at(i);
+      std::string currentName="b"+_pVecSuffix+"_"+_poleNames.at(i);
       complex<double> currentbFactor=fabs(bFactors.at(currentName+"Mag"))*complex<double>(cos(bFactors.at(currentName+"Phi")), sin(bFactors.at(currentName+"Phi")));
       currentPVec->updateBeta(i, currentbFactor);
     }
@@ -353,14 +358,14 @@ void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
 
   std::vector< std::string>::iterator poleNameIt;
   for (poleNameIt=_poleNames.begin(); poleNameIt!=_poleNames.end(); ++poleNameIt){  
-    std::string currentName="b_"+(*poleNameIt);
+    std::string currentName="b"+_pVecSuffix+"_"+(*poleNameIt);
     _currentbFactorMap[theName][currentName+"Mag"]=1.;
     _currentbFactorMap[theName][currentName+"Phi"]=0.;
   } 
 
   std::map<std::string, double>& bFactors = _currentbFactorMap[theName];
   for(unsigned int i=0; i<_poleNames.size(); ++i){ 
-    std::string currentName="b_"+_poleNames[i];
+    std::string currentName="b"+_pVecSuffix+"_"+_poleNames[i];
     std::cout << "currentName: " << currentName << std::endl;
     complex<double> currentbFactor=bFactors[currentName+"Mag"]*complex<double>(cos(bFactors[currentName+"Phi"]), sin(bFactors[currentName+"Phi"]));
     currentPVector->updateBeta(i, currentbFactor);
@@ -378,7 +383,7 @@ void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
 	  std::stringstream keyOrderStrStr;
 	  keyOrderStrStr << i << j;
 	  std::string keyOrder=keyOrderStrStr.str();
-	  std::string currentName="bgPVec"+keyOrder+_kMatName;
+	  std::string currentName="bgPVec"+_pVecSuffix+keyOrder+_kMatName;
 	  _bgPVecTermNames.at(i).at(j)=currentName;
       }
     }
@@ -402,7 +407,7 @@ const unsigned short KMatrixDynamics::grandMaId(AbsXdecAmp* grandmaAmp){
 
 
 void KMatrixDynamics::init(){
-  _orderPVecBg=_kMatrixParser->orderPVecBg();   
+  _orderPVecBg=_kMatrixParser->orderPVecBg();
 }
 
 

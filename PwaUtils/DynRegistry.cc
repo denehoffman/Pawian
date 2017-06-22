@@ -143,7 +143,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     }
     else if(theDec->dynType()=="KMatrix"){
       std::string pathToConfigFile=theDec->pathToConfigParser();
-      result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile)); 
+      result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId)); 
     }
     else if(theDec->dynType()=="Flatte")
       result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
