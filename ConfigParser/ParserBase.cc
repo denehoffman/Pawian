@@ -77,7 +77,6 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_noOfDataEvts(1000000)
   ,_tolerance(0.1) 
   ,_noInterScattPoints(0)
-  ,_kMatrixProdSuffix("")
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -163,7 +162,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
     ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
     ("noOfInterpolatedScatteringPoints", po::value<int>(&_noInterScattPoints), "number of interpolated scattering points")
-    ("kMatrixProdSuffix", po::value<std::string>(&_kMatrixProdSuffix),"suffix for fit parameter of the P-vectors in the K-matrix approach")
+    ("kMatrixProdSuffix", po::value< vector<string> >(&_kMatrixProdSuffix),"suffix for fit parameter of the P-vectors in the K-matrix approach")
     ;
 
 }
@@ -263,7 +262,6 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "pdg table: " << _pdgTableFile << "\n\n"
 	        << "minimumTolerance: " << _tolerance << "\n\n"
                 << "no of interpolated scattering points" << _noInterScattPoints << "\n\n"
-		<< "suffix for P-vector parameter in the K-matrix approach" << _kMatrixProdSuffix << "\n\n"
                 << endl;
 
 
@@ -338,6 +336,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::cout << "\nproduction system:" << std::endl;
       for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
+      std::cout << "\nK-matrix prod suffix:" << std::endl;
+      for (it=_kMatrixProdSuffix.begin(); it!=_kMatrixProdSuffix.end();++it){
 	std::cout << (*it) << "\n";
       }
 

@@ -59,7 +59,26 @@ KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   init();
   _isLdependent=true;
   ParserBase* currentParser=GlobalEnv::instance()->Channel(channelID)->parser();
-  _pVecSuffix=currentParser->kMatrixProdSuffix();
+  const std::vector<std::string> kMatProdSuffixes=currentParser->addKmatrixProdSuffix();
+  std::map<std::string, std::string> kMatKeyProdSuffNames;
+
+  std::vector<std::string>::const_iterator itStr;
+  for ( itStr = kMatProdSuffixes.begin(); itStr != kMatProdSuffixes.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+
+    std::string keyStr;
+    stringStr >> keyStr;
+
+    std::string suffStr;
+    stringStr >> suffStr;
+    kMatKeyProdSuffNames[keyStr]=suffStr;
+  }
+
+  std::map<std::string, std::string>::const_iterator it = kMatKeyProdSuffNames.find(_kMatName);
+  if(it!=kMatKeyProdSuffNames.end()){
+    _pVecSuffix=kMatKeyProdSuffNames.at(_kMatName);;
+  }
 }
 
 KMatrixDynamics::~KMatrixDynamics()
