@@ -120,6 +120,8 @@ void GlobalEnv::setupChannelEnvs(){
     Alert << "channel environments already setup!!!" << endmsg;
     exit(1);
   }
+  //suffix map for global replacement
+  GlobalEnv::instance()->fillReplacedSuffixMap(_theParser);
 
   int id=0;
   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
@@ -133,6 +135,7 @@ void GlobalEnv::setupChannelEnvs(){
       }
       ++id;
   }
+
   _channelEnvsAlredySetup=true;
 }
 
@@ -226,6 +229,23 @@ void GlobalEnv::replaceParser(ParserBase* theParser){
   _alreadySetUp = false;
   InfoMsg << "Now replace the parser!!!" << endmsg;
   setup(theParser);  
+}
+
+void GlobalEnv::fillReplacedSuffixMap(ParserBase* theParser){
+  std::vector<std::string> suffixVec = theParser->replaceSuffixNames();
+
+  std::vector<std::string>::const_iterator itStr;
+  for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    std::string classStr;
+    stringStr >> classStr;
+
+    std::string suffixStr;
+    stringStr >> suffixStr;
+
+    addIntoToBeReplacedSuffixMap(classStr, suffixStr);
+  }
 }
 
 void GlobalEnv::addIntoToBeReplacedSuffixMap(std::string& toBeReplaced, std::string& replacedBy){

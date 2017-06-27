@@ -71,6 +71,7 @@ public:
   std::map<std::string, std::string>& toBeReplacedSuffixMap() {return _toBeReplacedSuffixMap;}
   std::map<std::string, std::string>& alreadyReplacedSuffixMap() {return _alreadyReplacedSuffixMap;}
   std::map<std::string, std::string>& fitParamReplacementMap() {return _fitParamReplacementMap;}
+  void fillReplacedSuffixMap(ParserBase* theParser);
   void addIntoToBeReplacedSuffixMap(std::string& toBeReplaced, std::string& replacedBy);
   void addToStringStringMap(const std::string& firstString, const std::string& secondString, std::map<std::string, std::string>& theMap);  
   bool areSuffixMapsIdentical();
