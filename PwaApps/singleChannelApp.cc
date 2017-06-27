@@ -21,6 +21,9 @@
 //									  //
 //************************************************************************//
 
+#include <stdio.h>
+#include <unistd.h>
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -61,9 +64,12 @@ int main(int __argc,char *__argv[]){
   start= clock();
 
   for (int i=0; i<__argc ; ++i) InfoMsg << __argv[i] << endmsg;
- 
+
+  char hostname[1024];
+  gethostname(hostname, 1024); 
   InfoMsg << welcomeScreen << endmsg;
   InfoMsg << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
+  InfoMsg << "Hostname: " << hostname << endmsg;
 
   // Parse the command line
    globalParser* globalAppParams=new globalParser(__argc, __argv);
