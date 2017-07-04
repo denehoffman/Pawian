@@ -199,6 +199,27 @@ void GlobalEnv::setStartPawianParams(std::shared_ptr<AbsPawianParameters> startP
   _startParams=defaultParams->paramsWithSameOrder(startParams);
 }
 
+void GlobalEnv::setup(){
+  //only for stand alone apps needed
+  //prper setup must be done with method GlobalEnv::setup(ParserBase* theParser) 
+  if(_alreadySetUp){
+    Alert << "GlobalEnv already set up!" << endmsg;
+    exit(1);
+   }
+  
+  // pdtTable
+  PdtParser pdtParser;
+  std::string theSourcePath=getenv("TOP_DIR");
+  std::string pdtFileRelPath="/Particle/pdtNew.table";
+  std::string pdtFile(theSourcePath+pdtFileRelPath);
+  _particleTable = new ParticleTable;
+
+  if (!pdtParser.parse(pdtFile, *_particleTable)) {
+      Alert << "can not parse particle table " << pdtFile << endmsg;
+      exit(1);
+   }
+}
+
 void GlobalEnv::setup(ParserBase* theParser){
    if(_alreadySetUp){
       Alert << "GlobalEnv already set up!" << endmsg;

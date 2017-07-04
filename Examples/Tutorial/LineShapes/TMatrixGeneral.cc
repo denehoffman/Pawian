@@ -49,6 +49,11 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "Utils/PawianConstants.hh"
 
+#include "ConfigParser/ParserBase.hh"
+#include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/TMatrixDynamics.hh"
+#include "FitParams/ParamFactory.hh"
+
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -64,9 +69,6 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   ,_massMax(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
   ,_theTFile(0)
-  ,_kMatName("")
-  ,_orderBg(0)
-  ,_withKMatAdler(false)
   ,_pathToFitParams(pathToFitParams)
   ,_orbitalL(0)
 { 
@@ -311,20 +313,39 @@ TMatrixGeneral::~TMatrixGeneral()
 
 
 void TMatrixGeneral::init(){
-   PdtParser pdtParser;
-   std::string theSourcePath=getenv("TOP_DIR");
-   std::string pdtFileRelPath="/Particle/pdtNew.table";
-   std::string pdtFile(theSourcePath+pdtFileRelPath);
-   _particleTable = new ParticleTable;
+  GlobalEnv::instance()->setup();
+  _particleTable=GlobalEnv::instance()->particleTable();
+  std::shared_ptr<TMatrixDynamics> tMatDynPtr= std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParser));
 
-   if (!pdtParser.parse(pdtFile, *_particleTable)) {
-      Alert << "can not parse particle table " << pdtFile << endmsg;
-      exit(1);
-   }
+    std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
+    tMatDynPtr->fillDefaultParams(params);
+ 
+    std::ifstream ifs(_pathToFitParams);
+    if(!ifs.good()) 
+      { //file doesn't exist; dum default params
+	WarningMsg << "could not parse " << _pathToFitParams << endmsg;
+	WarningMsg << "dump defaut parameter " << _pathToFitParams << endmsg;
+	std::string defaultparamsname="defaultParams.dat";
+	std::ofstream theStreamDefault ( defaultparamsname );
+	params->print(theStreamDefault);
+	theStreamDefault.close();
+	exit(1);        
+      }   
 
 
-  std::vector< std::string> poleNames;
-  std::vector<double> currentPoleMasses;
+  AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
+  _params = thePawianStreamer.paramList();
+
+  InfoMsg << "The k-Matrix input parameter are: " << endmsg;
+  _params->print(std::cout);
+  if(_pathToFitParams != "") tMatDynPtr->updateFitParams(_params); 
+
+  _kMatr = tMatDynPtr->getKMatix(); 
+  _tMatr = tMatDynPtr->getTMatix();  
+
+  _phpVecs=_kMatr->phaseSpaceVec();
+  _gFactorNames= tMatDynPtr->gFactorNames();
+  _orbitalL= tMatDynPtr->orbitalL();
 
   std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
   std::vector<std::string>::iterator itString;
@@ -342,15 +363,12 @@ void TMatrixGeneral::init(){
     }
     if (currentValue>_massMax) _massMax=currentValue;
     
-    _poleMasses.push_back(currentValue);
-    _poleNames.push_back(currentPoleName);
   }
 
-  _kMatName=_kMatrixParser->keyName();
   const std::vector<std::string> gFacStringVec=_kMatrixParser->gFactors();
   DebugMsg << "gFacStringVec.size(): " << gFacStringVec.size() << endmsg;
   std::map<std::pair<std::string, std::string>, std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
-std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::endl;
+  std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::endl;
   std::vector<std::string>::const_iterator itStrConst;
   for(itStrConst=gFacStringVec.begin(); itStrConst!=gFacStringVec.end(); ++itStrConst){
     std::istringstream particles(*itStrConst);
@@ -366,115 +384,7 @@ std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::en
     }
     double currentMassSum=firstParticle->mass()+secondParticle->mass();
     if(currentMassSum<_massMin) _massMin=currentMassSum;
-
-    std::string currentPhpDescription = phpDescriptionVec.at(currentParticlePair);
-
-    std::vector<double> fsParticleMasses;
-    fsParticleMasses.push_back(firstParticle->mass());
-    fsParticleMasses.push_back(secondParticle->mass()); 
-
-    InfoMsg << "set phase space factor for particle pairs: " << firstParticleName << " " << secondParticleName 
-	    << " and description: " << currentPhpDescription << endmsg;
-   
-    std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, fsParticleMasses);
-
-    _phpVecs.push_back(currentPhp);
-
-    std::string gFactorKey=firstParticleName+secondParticleName;    
-    _gFactorNames.push_back(gFactorKey); 
-    
-
-    for (int i=0; i<int(_kMatrixParser->noOfPoles()); ++i){
-      std::string currentPoleName=_poleNames[i];
-      std::string currentgValueStr;
-      if(!(particles >> currentgValueStr)){
-        Alert << "g-factors for pole " << currentPoleName << " does not exist!" << endmsg;
-        exit(0);
-      }
-      std::istringstream currentgValueiStr(currentgValueStr);
-      double currentGValue;
-      if (!(currentgValueiStr >> currentGValue)){
-        Alert << "cannot convert " << currentgValueStr << " to a double value" << endmsg;
-        exit(0);
-      }
-      std::string gFactorKey=firstParticleName+secondParticleName;
-      _gFactorMap[i].push_back(currentGValue);
-    }
   }
 
-  std::map<int, std::vector<double> >::iterator itgFac;
-  for (itgFac=_gFactorMap.begin(); itgFac!=_gFactorMap.end(); ++itgFac){
-    std::vector<double> currentgVector=itgFac->second;
-    std::shared_ptr<KPole> currentPole;
-    if (_kMatrixParser->useBarrierFactors()) currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _poleMasses.at(itgFac->first), _phpVecs, _kMatrixParser->orbitalMom()));
-    else currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _poleMasses.at(itgFac->first)));
-    _kPoles.push_back(currentPole);
-  }
-
-  _orderBg=_kMatrixParser->orderBg();
-  if(_orderBg<0) _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRel(_kPoles,_phpVecs ));
-  else{
-    _withKMatAdler=_kMatrixParser->useAdler();
-    _kMatr=std::shared_ptr<KMatrixRel>(new KMatrixRelBg(_kPoles,_phpVecs, _orderBg, _withKMatAdler));
-  }
-
-  _orbitalL=_kMatrixParser->orbitalMom();
-
-  AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
-  _params = thePawianStreamer.paramList();
-
-  InfoMsg << "The k-Matrix input parameter are: " << endmsg;
-  _params->print(std::cout);
-
-  if(_pathToFitParams != "") fillParams(_params);
-  _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
-
-
-}
-
-void TMatrixGeneral::fillParams(std::shared_ptr<AbsPawianParameters> theParams){
-  //pole positions
-  for(unsigned int i=0; i<_poleNames.size(); ++i){
-    std::string currentPoleName=_poleNames.at(i)+"Mass";
-    double currentPoleMass=_params->Value(currentPoleName);
-    _kPoles.at(i)->updatePoleMass(currentPoleMass);
-    InfoMsg << "set pole mass for " << _poleNames.at(i) << ": " << currentPoleMass << endmsg;
-  }
-
-  //g-factors
-  for(unsigned int i=0; i<_poleNames.size(); ++i){
-    std::vector<double> currentgFactorVec=_gFactorMap.at(i);
-    for(unsigned int j=0; j<currentgFactorVec.size(); ++j){
-      std::string currentName=_poleNames.at(i)+_gFactorNames.at(j)+"gFactor";
-      currentgFactorVec.at(j)=_params->Value(currentName);
-      InfoMsg << "set g factor " << currentName << ": " << currentgFactorVec.at(j) << endmsg;
-    }
-    _kPoles.at(i)->updategFactors(currentgFactorVec);
-  }
-
-
-  //k-matrix bg-terms
-  if(_orderBg>=0){
-    for(unsigned int i=0; i<=fabs(_orderBg); ++i){
-      for(unsigned int j=0; j<_phpVecs.size(); ++j){
-        for(unsigned int k=j; k<_phpVecs.size(); ++k){
-	  std::stringstream keyOrderStrStr;
-	  keyOrderStrStr << i << j << k;
-	  std::string keyOrder=keyOrderStrStr.str();
-	  std::string currentName="bg"+keyOrder+_kMatName;
-          double newVal=_params->Value(currentName);
-          _kMatr->updateBgTerms(i,j,k,newVal);
-	  InfoMsg << "set background term " << currentName << ": " << newVal << endmsg;
-        }
-      }
-    }
-  }
-
-  //Adler-term
-  if(_withKMatAdler){
-    std::string adler0Name=("s0"+_kMatName);
-    double newVal=_params->Value(adler0Name);
-    _kMatr->updates0Adler(newVal);
-  }
 }
 

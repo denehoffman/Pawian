@@ -77,6 +77,13 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   _isLdependent=true;
 }
 
+TMatrixDynamics::TMatrixDynamics(std::shared_ptr<KMatrixParser> kMatrixParser) :
+  AbsDynamics()
+  ,_kMatrixParser(kMatrixParser) 
+{
+  init();
+
+}
 TMatrixDynamics::~TMatrixDynamics()
 {
 }
