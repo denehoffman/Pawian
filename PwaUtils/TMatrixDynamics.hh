@@ -46,7 +46,8 @@ class TMatrixDynamics : public AbsDynamics{
 
 public:
   TMatrixDynamics(std::shared_ptr<KMatrixParser> kMatrixParser);
-  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType="Elasticity");
+  //  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType="Elasticity");
+  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames="");
   virtual ~TMatrixDynamics();
 
   virtual std::string type() {return "TMatrixDynamics";}
@@ -90,7 +91,7 @@ protected:
   std::shared_ptr<KMatrixParser> _kMatrixParser;
   std::map<std::string, std::vector<std::string> > _paramNameListMap;
   std::map<unsigned int, double > _noRotationMap;
-
+  std::string _projectionParticleNames;
   virtual void init();
   virtual void evalElasticity(EvtData* theData, double currentMass);
   virtual void evalPhase(EvtData* theData, double currentMass);

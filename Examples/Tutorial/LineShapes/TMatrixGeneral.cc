@@ -182,7 +182,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   oStream.open("scatteringOut.txt");
  double oldT00RelReal=1.;
   int n180ShiftRel(0);
-  double oldDelta=0.;
+  //  double oldDelta=0.;
  
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
@@ -263,7 +263,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 		<<  sqrt(norm(SijRel)) << "\t" << 0.001 
 			<< endl;
 	oldT00RelReal = currentReE;
-        oldDelta=theDelta; 
+	//        oldDelta=theDelta; 
       }
     }
   }

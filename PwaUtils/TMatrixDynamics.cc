@@ -51,7 +51,7 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType) :
+TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames) :
   AbsDynamics(name, fsParticles, mother)
   ,_kMatName("")
   ,_prodProjectionIndex(0)
@@ -63,10 +63,12 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_orbitalL(0)
   ,_currentAdler0(0.)
   ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
+  ,_projectionParticleNames(projectionParticleNames)
 {
   if(dataType=="Elasticity") _dataTypeID=1;
   else if(dataType=="Phase") _dataTypeID=2;
   else if(dataType=="ArgandUnits") _dataTypeID=3;
+  else if(dataType=="Data") _dataTypeID=4;
   else{
     Alert << "production formalism/data type with the name" << dataType << " is not supported for pi pi scattering fits! \n It is working for: Elasticity, ArgandUnits or Phase!!!" << endmsg;
     exit(1); 
@@ -380,9 +382,14 @@ void TMatrixDynamics::init(){
       _kMatr->updatesnormAdler(_kMatrixParser->snormAdler());
     }
   }
- 
-  const std::string porjectionParticleNames=_kMatrixParser->projection();
-  std::istringstream projParticles(porjectionParticleNames);
+
+  if (_projectionParticleNames == "") _projectionParticleNames = _kMatrixParser->projection();
+  else InfoMsg << _kMatName << " K-matrix projection changed!!!" 
+	       << "\nfrom k-Matrix parser configuration: " << _kMatrixParser->projection()
+	       << "\nto: " << _projectionParticleNames << "\n"<< endmsg;
+   
+  //  const std::string porjectionParticleNames=_kMatrixParser->projection();
+  std::istringstream projParticles(_projectionParticleNames);
   std::string firstProjParticleName;
   std::string secondProjParticleName;
   projParticles >> firstProjParticleName >> secondProjParticleName;
@@ -399,7 +406,7 @@ void TMatrixDynamics::init(){
     Alert << "decay projection index for key " << projKey << " not found" << endmsg;
     exit(0);
   }
-
+  InfoMsg << _kMatName << ": decay projection index: " << _decProjectionIndex <<endmsg;
   _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
 
 }

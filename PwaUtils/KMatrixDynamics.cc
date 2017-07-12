@@ -51,8 +51,8 @@
 #include "PwaDynamics/PhaseSpaceFactory.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
-KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, ChannelID channelID) :
-  TMatrixDynamics(name, fsParticles, mother, pathToConfigParser)
+KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, ChannelID channelID, std::string projectionParticleNames) :
+  TMatrixDynamics(name, fsParticles, mother, pathToConfigParser, "Data", projectionParticleNames)
   ,_currentMass(1.)
   ,_pVecSuffix("")
 {
