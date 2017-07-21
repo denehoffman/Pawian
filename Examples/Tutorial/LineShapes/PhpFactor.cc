@@ -226,7 +226,8 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
       _phpPenningtonImagHist->Fill(massSqrItCompl.real(), currentPenningtonFac.imag());
     }
 
-    complex<double> currentReidFac = -PawianQFT::ChewMandelstamReid(massSqrIt, _mass1, _mass2);
+    complex<double> massSqrItComplCM=massSqrItCompl+complex<double>(0., 0.0000001); 
+    complex<double> currentReidFac = PawianQFT::ChewMandelstamReid(massSqrItComplCM, _mass1, _mass2);
     _phpReidRealHist->Fill(massSqrItCompl.real(), currentReidFac.real());
     _phpReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());        
   }  

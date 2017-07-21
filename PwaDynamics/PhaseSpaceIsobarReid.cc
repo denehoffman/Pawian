@@ -21,6 +21,7 @@
 //									  //
 //************************************************************************//
 
+#include "ErrLogger/ErrLogger.hh"
 #include "PwaDynamics/PhaseSpaceIsobarReid.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
@@ -39,26 +40,35 @@ complex<double> PhaseSpaceIsobarReid::factor(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
-  return PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
+  //return PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
+  //  return PawianQFT::breakupMomQDefault(mass,_mass1, _mass2);
+  return PawianQFT::breakupMomQDefaultAS(mass,_mass1, _mass2);
 }
 
 complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
   complex<double> rho = PawianQFT::phaseSpaceFacReid(mass, _mass1, _mass2);
-  complex<double> mom=rho*mass/2.;
-  //  CorrectForChosenSign(mom, rho);
-  CorrectForChosenSign(rho, rho);
+  complex<double> mom = PawianQFT::breakupMomQReid(mass, _mass1, _mass2);
+  CorrectForChosenSign(mom, rho);
   return rho;
 }
 
 complex<double> PhaseSpaceIsobarReid::breakUpMom(const complex<double> mass){
-  complex<double> q = PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
-  CorrectForChosenSign(q, q);
+  //  complex<double> q = PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
+  complex<double> momReid = PawianQFT::breakupMomQReid(mass, _mass1, _mass2);
+  //  complex<double> q = PawianQFT::breakupMomQDefault(mass,_mass1, _mass2);
+  complex<double> q = PawianQFT::breakupMomQDefaultAS(mass,_mass1, _mass2);
+  CorrectForChosenSign(momReid, q);
   return q;
 }
 
 void PhaseSpaceIsobarReid::CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
-    if( (_bumImPartSign > 0 && breakUpMom.real()>0.) || (_bumImPartSign < 0 && fabs(breakUpMom.real())<1.e-10 ) ){
-      toChange *= -1; // for Reid php factors
-    }
-  }
+  //assumption relevant imaginary part of the relevant mass is negative
+  if(_bumImPartSign > 0 && breakUpMom.imag() > 0.) toChange *= -1;
+  if(_bumImPartSign < 0 && !(breakUpMom.imag() > 0.)) toChange *= -1;
+  
+  //assumption relevant imaginary part of the relevant mass is positive
+  // if(_bumImPartSign > 0 && breakUpMom.imag() < 0.) toChange *= -1;
+  // if(_bumImPartSign < 0 && !(breakUpMom.imag() < 0.)) toChange *= -1; 
+}
+
 

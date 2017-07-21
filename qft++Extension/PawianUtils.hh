@@ -45,6 +45,8 @@ namespace PawianQFT{
   complex<double> breakupMomQReid(MassType mass, double massDec1, double massDec2);
   template<typename MassType>
   complex<double> breakupMomQAS(MassType mass, double massDec1, double massDec2);
+  template<typename MassType>
+  complex<double> breakupMomQDefaultAS(MassType mass, double massDec1, double massDec2);
   complex<double> FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, 
 			    std::pair<const double, const double>& decPair2, double __mass0, double g1, double g2);
 //
