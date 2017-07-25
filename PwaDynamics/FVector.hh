@@ -63,7 +63,7 @@ protected:
   std::shared_ptr<PVectorRel> _Pvector;
   complex<double> _imagCompl;
   IdentityMatrix< complex<double> > _idMatrix;
-  Matrix< complex<double> > _rhoMatrix;
+  Matrix< complex<double> > _CMMatrix;
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
 };
 //_____________________________________________________________________________

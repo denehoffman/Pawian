@@ -23,6 +23,7 @@
 
 #include "PwaDynamics/TMatrixRel.hh"
 #include "PwaDynamics/KMatrixBase.hh"
+#include "Utils/PawianConstants.hh"
 #include "qft++/matrix/IdentityMatrix.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
@@ -51,22 +52,22 @@ void TMatrixRel::evalMatrixTemplate(const MassType mass){
    TMatrixBase::evalMatrix(mass);
 
    vector<std::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
-   Matrix< complex<double> > theRhoMatrix(NumRows(),NumRows());
+   //   Matrix< complex<double> > theRhoMatrix(NumRows(),NumRows());
+   Matrix< complex<double> > ChewMMatrix(NumRows(),NumRows());
 
    for (int i=0; i<NumRows(); ++i){
       for (int j=0; j<NumRows(); ++j){
-	 theRhoMatrix(i,j)=complex<double> (0.,0.);
+	 ChewMMatrix(i,j)=complex<double> (0.,0.);
 	 if (i==j){
-	    theRhoMatrix(i,j) = phpVec[j]->factor(mass);
+	   //	    theRhoMatrix(i,j) = phpVec[j]->factor(mass);
+	   ChewMMatrix(i,j) = phpVec[j]->ChewM(mass);
 	 }
       }
    }
 
-   complex<double> imagCompl(0.,1.);
    IdentityMatrix< complex<double> > theIdMatrix(NumRows());
-   Matrix< complex< double > > tmpDenomMatrCompl = theIdMatrix-imagCompl*(*_Kmatrix)*theRhoMatrix;
+   Matrix< complex< double > > tmpDenomMatrInv = theIdMatrix-(*_Kmatrix)*ChewMMatrix;
 
-   Matrix< complex< double > > tmpDenomMatrInv=tmpDenomMatrCompl;
    tmpDenomMatrInv.invert();
 
    Matrix< complex <double> > currentTMatr=tmpDenomMatrInv*(*_Kmatrix);

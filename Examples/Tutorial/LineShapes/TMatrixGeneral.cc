@@ -171,6 +171,12 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     currentDelta1iH1->SetYTitle("#delta1i/grad");
     currentDelta1iH1->SetXTitle("mass/GeV");
     _delta1iVec.push_back(currentDelta1iH1);
+
+    std::string currentSppediiKey="speedii"+key;
+    TH1F* currentSpeediiH1=new TH1F(currentSppediiKey.c_str(), currentSppediiKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentSpeediiH1->SetYTitle("speed");
+    currentSpeediiH1->SetXTitle("mass/GeV");
+    _speedPlotH1Vec.push_back(currentSpeediiH1);
   }
 
   DebugMsg << "_massMin: "<< _massMin
@@ -182,7 +188,10 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   oStream.open("scatteringOut.txt");
  double oldT00RelReal=1.;
   int n180ShiftRel(0);
-  //  double oldDelta=0.;
+
+  double massOld=0.;
+  vector< complex<double> > TiiOld;
+  TiiOld.resize(_gFactorNames.size());
  
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
@@ -218,6 +227,19 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 
       _SqrT1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(i)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
 
+      complex<double> currentTii=currentRho.real()*(*_tMatr)(i,i);
+
+    if (mass > _massMin+_stepSize){
+      complex<double> deltaTii = currentTii-TiiOld.at(i);
+      double deltaMass=mass-massOld;
+      double speed = std::abs(deltaTii/deltaMass);
+      //    InfoMsg << "speed(" << mass << "): " << speed << endmsg;
+      // InfoMsg << "deltaT1i: " << deltaT1i << endmsg;
+      // InfoMsg << "deltaMass: " << deltaMass << endmsg;
+      _speedPlotH1Vec.at(i)->Fill(mass,speed); 
+    }
+    
+    TiiOld[i]=currentTii;
 
       if(currentRho.real()>0.){
 	complex<double> S0iRel=2.*PawianConstants::i*sqrt(_phpVecs.at(0)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i);
@@ -266,6 +288,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 	//        oldDelta=theDelta; 
       }
     }
+    massOld=mass;
   }
   
   oStream.close();

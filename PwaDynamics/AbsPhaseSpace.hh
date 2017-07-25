@@ -33,6 +33,8 @@
 #include <vector>
 #include <complex>
 
+#include "Utils/PawianConstants.hh"
+
 using namespace std;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
@@ -56,6 +58,8 @@ public:
   virtual complex<double> factor(const complex<double> mass)=0;
   virtual complex<double> breakUpMom(const double mass)=0;
   virtual complex<double> breakUpMom(const complex<double> mass)=0;
+  virtual complex<double> ChewM(const double mass) {return PawianConstants::i*factor(mass);}
+  virtual complex<double> ChewM(const complex<double> mass) {return PawianConstants::i*factor(mass);}
   virtual double thresholdMass()=0;
 
   void SetBumImPartSign(double sign){_bumImPartSign = sign;}

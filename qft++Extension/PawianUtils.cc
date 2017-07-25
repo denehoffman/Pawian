@@ -202,7 +202,7 @@ complex<double> PawianQFT::breakupMomQDefault(MassType mass, double massDec1, do
 template<typename MassType>
 complex<double> PawianQFT::breakupMomQReid(MassType mass, double massDec1, double massDec2){
   double rho = PawianQFT::ChewMandelstamReid(mass*mass, massDec1, massDec2).imag();
-  if(rho < 0) rho*=-1.; 
+  //  if(rho < 0) rho*=-1.; 
   complex<double> result=rho*mass/2.;
   return result;  
 }
