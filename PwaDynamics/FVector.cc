@@ -93,6 +93,10 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
 
   if(result.real() != result.real()){
     Alert << "result:\t" << result << endmsg;
+    for(int i=0;i<NumRows(); ++i){
+      Alert <<"(*_Pvector)(i,0): " << (*_Pvector)(i,0) << endmsg;
+      Alert <<"denomMatrInv(index,i): " << denomMatrInv(index,i) << endmsg;
+    }
     exit(0);
   }
   return result; 
