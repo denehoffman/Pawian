@@ -104,9 +104,8 @@ complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1
 }
 
 complex<double> PawianQFT::phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2){
-  complex<double> i(0.,1);
   complex<double> s=mass*mass;
-  complex<double> result=PawianQFT::ChewMandelstamReid(s, massDec1, massDec2)/i;
+  complex<double> result=PawianQFT::ChewMandelstamReid(s, massDec1, massDec2).imag();
   return result; 
 }
 
