@@ -34,7 +34,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TMath.h"
-
+#include "Utils/PawianConstants.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
@@ -44,193 +44,174 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   ,_mass2(mass2)
   ,_massMax(massMax)
 {
-  complex<double> i(0.,1.);
   _theTFile=new TFile("PhpFactor.root","recreate");
  
-  _phpRealHist= new TH1F("_phpRealHist", "#rho real",301, -_massMax, _massMax);
-  _phpImagHist= new TH1F("_phpImagHist", "#rho imag",301, -_massMax, _massMax);
+  // _phpRealHist= new TH1F("_phpRealHist", "#rho real",301, -_massMax, _massMax);
+  // _phpImagHist= new TH1F("_phpImagHist", "#rho imag",301, -_massMax, _massMax);
 
-  _phpDefaultComplRealHist2= new TH2F("_phpDefaultComplRealHist2", "#rho real default",601, -_massMax, _massMax, 601, -_massMax, _massMax);
-  _phpDefaultComplRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _phpDefaultComplRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
-  _phpDefaultComplImagHist2= new TH2F("_phpDefaultComplImagHist2", "#rho imag default",601, -_massMax, _massMax, 601, -_massMax, _massMax);
-  _phpDefaultComplImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _phpDefaultComplImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMDefaultComplRealHist2= new TH2F("_CMDefaultComplRealHist2", "CM real default",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMDefaultComplRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMDefaultComplRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMDefaultComplImagHist2= new TH2F("_CMDefaultComplImagHist2", "CM imag default",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMDefaultComplImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMDefaultComplImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
 
-  _phpPenningtonRealHist2= new TH2F("_phpPenningtonRealHist2", "#rho real Pennington",601, -_massMax, _massMax, 601, -_massMax, _massMax);
-  _phpPenningtonRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _phpPenningtonRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
-  _phpPenningtonImagHist2= new TH2F("_phpPenningtonImagHist2", "#rho imag Pennington",601, -_massMax, _massMax, 601, -_massMax, _massMax);
-  _phpPenningtonImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _phpPenningtonImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMPenningtonRealHist2= new TH2F("_CMPenningtonRealHist2", "CM real Pennington",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMPenningtonRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMPenningtonRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMPenningtonImagHist2= new TH2F("_CMPenningtonImagHist2", "CM imag Pennington",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMPenningtonImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMPenningtonImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
 
-  _phpReidRealHist2= new TH2F("_phpReidRealHist2", "#rho real Reid",601, -_massMax, _massMax, 601, -_massMax, _massMax);
-  _phpReidRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _phpReidRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
-  _phpReidImagHist2= new TH2F("_phpReidImagHist2", "#rho imag Reid",601, -_massMax, _massMax, 601, -_massMax, _massMax);
-  _phpReidImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _phpReidImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMReidRealHist2= new TH2F("_CMReidRealHist2", "CM real Reid",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMReidRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMReidRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMReidImagHist2= new TH2F("_CMReidImagHist2", "CM imag Reid",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMReidImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMReidImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
 
   double massMaxSqr= _massMax* _massMax;  
-  _phpAsnerRealHist= new TH1F("_phpAsnerRealHist", "#rho real Asner",301, -massMaxSqr, massMaxSqr);
-  _phpAsnerRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpAsnerRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
-  _phpAsnerImagHist= new TH1F("_phpAsnerImagHist", "#rho imag Asner",301, -massMaxSqr, massMaxSqr);
-  _phpAsnerImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpAsnerImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMAsnerRealHist= new TH1F("_CMAsnerRealHist", "CM real Asner",301, -massMaxSqr, massMaxSqr);
+  _CMAsnerRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMAsnerRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMAsnerImagHist= new TH1F("_CMAsnerImagHist", "CM imag Asner",301, -massMaxSqr, massMaxSqr);
+  _CMAsnerImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMAsnerImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
-  _phpPenningtonRealHist= new TH1F("_phpPenningtonRealHist", "#rho real Pennington",301, -massMaxSqr, massMaxSqr);
-  _phpPenningtonRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpPenningtonRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
-  _phpPenningtonImagHist= new TH1F("_phpPenningtonImagHist", "#rho imag Pennington",301, -massMaxSqr, massMaxSqr);
-  _phpPenningtonImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpPenningtonImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMPenningtonRealHist= new TH1F("_CMPenningtonRealHist", "CM real Pennington",301, -massMaxSqr, massMaxSqr);
+  _CMPenningtonRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMPenningtonRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMPenningtonImagHist= new TH1F("_CMPenningtonImagHist", "CM imag Pennington",301, -massMaxSqr, massMaxSqr);
+  _CMPenningtonImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMPenningtonImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
-  _phpReidRealHist= new TH1F("_phpReidRealHist", "#rho real Reid",301, -massMaxSqr, massMaxSqr);
-  _phpReidRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpReidRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
-  _phpReidImagHist= new TH1F("_phpReidImagHist", "#rho imag Reid",301, -massMaxSqr, massMaxSqr);
-  _phpReidImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpReidImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMReidRealHist= new TH1F("_CMReidRealHist", "CM Reid",301, -massMaxSqr, massMaxSqr);
+  _CMReidRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMReidRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMReidImagHist= new TH1F("_CMReidImagHist", "CM imag Reid",301, -massMaxSqr, massMaxSqr);
+  _CMReidImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMReidImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
-  _phpDefaultRealHist= new TH1F("_phpDefaultRealHist", "#rho real default",301, -massMaxSqr, massMaxSqr);
-  _phpDefaultImagHist= new TH1F("_phpDefaultImagHist", "#rho imag default",301, -massMaxSqr, massMaxSqr);
-  _phpDefaultComplRealHist= new TH1F("_phpDefaultComplRealHist", "#rho real default",301, -massMaxSqr, massMaxSqr);
-  _phpDefaultComplRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpDefaultComplRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
-  _phpDefaultComplImagHist= new TH1F("_phpDefaultComplImagHist", "#rho imag default",301, -massMaxSqr, massMaxSqr);
-  _phpDefaultComplImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpDefaultComplImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMDefaultRealHist= new TH1F("_CMDefaultRealHist", "CM real default",301, -massMaxSqr, massMaxSqr);
+  _CMDefaultRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMDefaultRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMDefaultImagHist= new TH1F("_CMDefaultImagHist", "CM imag default",301, -massMaxSqr, massMaxSqr);
+  _CMDefaultImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMDefaultImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+
+  _CMDefaultComplRealHist= new TH1F("_CMDefaultComplRealHist", "CM real default",301, -massMaxSqr, massMaxSqr);
+  _CMDefaultComplRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMDefaultComplRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMDefaultComplImagHist= new TH1F("_CMDefaultComplImagHist", "#rho imag default",301, -massMaxSqr, massMaxSqr);
+  _CMDefaultComplImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMDefaultComplImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
 
 
 
-  _phpMAsnerRealHist= new TH1F("_phpMAsnerRealHist", "#rho real Asner",301, -massMax, massMax);
-  _phpMAsnerRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpMAsnerRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
-  _phpMAsnerImagHist= new TH1F("_phpMAsnerImagHist", "#rho imag Asner",301, -massMax, massMax);
-  _phpMAsnerImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpMAsnerImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMAsnerRealHist= new TH1F("_CMMAsnerRealHist", "CM real Asner",301, -massMax, massMax);
+  _CMMAsnerRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMMAsnerRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMAsnerImagHist= new TH1F("_CMMAsnerImagHist", "CM imag Asner",301, -massMax, massMax);
+  _CMMAsnerImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMMAsnerImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
-  _phpMPenningtonRealHist= new TH1F("_phpMPenningtonRealHist", "#rho real Pennington",301, -massMax, massMax);
-  _phpMPenningtonRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpMPenningtonRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
-  _phpMPenningtonImagHist= new TH1F("_phpMPenningtonImagHist", "#rho imag Pennington",301, -massMax, massMax);
-  _phpMPenningtonImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpMPenningtonImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMPenningtonRealHist= new TH1F("_CMMPenningtonRealHist", "CM real Pennington",301, -massMax, massMax);
+  _CMMPenningtonRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMMPenningtonRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMPenningtonImagHist= new TH1F("_CMMPenningtonImagHist", "CM imag Pennington",301, -massMax, massMax);
+  _CMMPenningtonImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMMPenningtonImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
-  _phpMReidRealHist= new TH1F("_phpMReidRealHist", "#rho real Reid",301, -massMax, massMax);
-  _phpMReidRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpMReidRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
-  _phpMReidImagHist= new TH1F("_phpMReidImagHist", "#rho imag Reid",301, -massMax, massMax);
-  _phpMReidImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpMReidImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMReidRealHist= new TH1F("_CMMReidRealHist", "CM real Reid",301, -massMax, massMax);
+  _CMMReidRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMMReidRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMReidImagHist= new TH1F("_CMMReidImagHist", "CM imag Reid",301, -massMax, massMax);
+  _CMMReidImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMMReidImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
-  _phpMDefaultComplRealHist= new TH1F("_phpMDefaultComplRealHist", "#rho real default",301, -massMax, massMax);
-  _phpMDefaultComplRealHist->GetYaxis()->SetTitle("i #rho");
-  _phpMDefaultComplRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
-  _phpMDefaultComplImagHist= new TH1F("_phpMDefaultComplImagHist", "#rho imag default",301, -massMax, massMax);
-  _phpMDefaultComplImagHist->GetYaxis()->SetTitle("i #rho");
-  _phpMDefaultComplImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMDefaultComplRealHist= new TH1F("_CMMDefaultComplRealHist", "CM real default",301, -massMax, massMax);
+  _CMMDefaultComplRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMMDefaultComplRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMDefaultComplImagHist= new TH1F("_CMMDefaultComplImagHist", "CM imag default",301, -massMax, massMax);
+  _CMMDefaultComplImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMMDefaultComplImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
   double stepSize=(2.*massMax)/301.;  
 
   for (double massIt=-_massMax+stepSize/2.; massIt<_massMax; massIt+=stepSize){
     complex<double> currentMass(massIt,0.);
-    //    if (norm(currentMass) < 1.e-5) continue;
-  
-    //    std::complex<double> currentFac = phaseSpaceFac(currentMass, _mass1, _mass2);
-    std::complex<double> currentFac = PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
-    std::complex<double> currentFaci = i*currentFac;
-    double currentImag = currentFaci.imag();
-    if (currentImag>1000.) currentImag=1000.;
-    _phpRealHist->Fill(massIt, currentFaci.real());
-    _phpImagHist->Fill(massIt, currentImag);
 
-    _phpMDefaultComplRealHist->Fill(massIt,currentFaci.real());
-    _phpMDefaultComplImagHist->Fill(massIt,currentImag);
+    std::complex<double> currentCMFac = PawianConstants::i*PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
+    _CMMDefaultComplRealHist->Fill(massIt, currentCMFac.real());
+    _CMMDefaultComplImagHist->Fill(massIt, currentCMFac.imag());
 
-    complex<double> currentFacAsner = PawianQFT::phaseSpaceFacAsner(massIt*massIt, _mass1, _mass2);
-    _phpMAsnerRealHist->Fill(massIt, currentFacAsner.real());
-    _phpMAsnerImagHist->Fill(massIt, currentFacAsner.imag());
+    complex<double> currentCMFacAsner = PawianQFT::ChewMandelstamAsner(massIt*massIt, _mass1, _mass2);
+    _CMMAsnerRealHist->Fill(massIt, currentCMFacAsner.real());
+    _CMMAsnerImagHist->Fill(massIt, currentCMFacAsner.imag());
 
     complex<double> currentMassSqr=currentMass*currentMass;
-    complex<double> currentPenningtonFac = PawianQFT::phaseSpaceFacPennington(currentMassSqr, _mass1, _mass2);
-    _phpMPenningtonRealHist->Fill(massIt, currentPenningtonFac.real());
-    _phpMPenningtonImagHist->Fill(massIt, currentPenningtonFac.imag());
+    complex<double> currentCMPenningtonFac = PawianQFT::ChewMandelstamPennington(currentMassSqr, _mass1, _mass2);
+    _CMMPenningtonRealHist->Fill(massIt, currentCMPenningtonFac.real());
+    _CMMPenningtonImagHist->Fill(massIt, currentCMPenningtonFac.imag());
 
-    complex<double> currentReidFac = i*PawianQFT::phaseSpaceFacReid(massIt, _mass1, _mass2);
-    //    if ( fabs(currentReidFac.real()) <1000. &&  fabs(currentReidFac.imag()) <1000.){ 
-      _phpMReidRealHist->Fill(massIt, currentReidFac.real());
-      _phpMReidImagHist->Fill(massIt, currentReidFac.imag());    
-      //    }
+    currentMass+=complex<double>(0.,1.e-10);
+    complex<double> currentCMReidFac = PawianQFT::ChewMandelstamReid(currentMass*currentMass, _mass1, _mass2);
+    _CMMReidRealHist->Fill(massIt, currentCMReidFac.real());
+    _CMMReidImagHist->Fill(massIt, currentCMReidFac.imag());    
   }
 
   stepSize=2.*massMax/601.;  
   for (double massRealIt=-_massMax+stepSize/2.; massRealIt<_massMax; massRealIt+=stepSize){
     for (double massImagIt=-_massMax+stepSize/2.; massImagIt<_massMax; massImagIt+=stepSize){
       complex<double> currentMass(massRealIt, massImagIt);
-      //      std::complex<double> currentFac = i*phaseSpaceFac(currentMass, _mass1, _mass2);
-      std::complex<double> currentFac = i*PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
-      _phpDefaultComplRealHist2->Fill(massRealIt, massImagIt, currentFac.real());
-      _phpDefaultComplImagHist2->Fill(massRealIt, massImagIt, currentFac.imag());
+
+      std::complex<double> currentCMFac = PawianConstants::i*PawianQFT::phaseSpaceFacDefault(currentMass, _mass1, _mass2);
+      _CMDefaultComplRealHist2->Fill(massRealIt, massImagIt, currentCMFac.real());
+      _CMDefaultComplImagHist2->Fill(massRealIt, massImagIt, currentCMFac.imag());
 
       complex<double> currentMassSqr=currentMass*currentMass;
-      complex<double> currentPenningtonFac = PawianQFT::phaseSpaceFacPennington(currentMassSqr, _mass1, _mass2);
-      _phpPenningtonRealHist2->Fill(massRealIt, massImagIt, currentPenningtonFac.real());
-      _phpPenningtonImagHist2->Fill(massRealIt, massImagIt, currentPenningtonFac.imag());
+      complex<double> currentCMPenningtonFac = PawianQFT::ChewMandelstamPennington(currentMassSqr, _mass1, _mass2);
+      _CMPenningtonRealHist2->Fill(massRealIt, massImagIt, currentCMPenningtonFac.real());
+      _CMPenningtonImagHist2->Fill(massRealIt, massImagIt, currentCMPenningtonFac.imag());
 
-      complex<double> currentReidFac = i*PawianQFT::phaseSpaceFacReid(currentMass, _mass1, _mass2);
-      _phpReidRealHist2->Fill(massRealIt, massImagIt, currentReidFac.real());
-      _phpReidImagHist2->Fill(massRealIt, massImagIt, currentReidFac.imag());
+      complex<double> currentCMReidFac = PawianQFT::ChewMandelstamReid(currentMassSqr, _mass1, _mass2);
+      _CMReidRealHist2->Fill(massRealIt, massImagIt, currentCMReidFac.real());
+      _CMReidImagHist2->Fill(massRealIt, massImagIt, currentCMReidFac.imag());
     }
   }
 
   stepSize=2.*massMaxSqr/301.;
   for (double massSqrIt=-massMaxSqr+stepSize/2.; massSqrIt < massMaxSqr+stepSize/2.; massSqrIt+=stepSize){
-    complex<double> currentFac = PawianQFT::phaseSpaceFacAsner(massSqrIt, _mass1, _mass2);
-    // std::cout << "massSqrIt: " << massSqrIt << std::endl; 
-    // std::cout << "currentFac.real(): " << currentFac.real() << std::endl;
-    // std::cout << "currentFac.imag(): " << currentFac.imag() << std::endl;
-    if(currentFac.real()==currentFac.real() && currentFac.imag()==currentFac.imag()){ 
-    _phpAsnerRealHist->Fill(massSqrIt, currentFac.real());
-    _phpAsnerImagHist->Fill(massSqrIt, currentFac.imag());
+    complex<double> currentCMFac = PawianQFT::ChewMandelstamAsner(massSqrIt, _mass1, _mass2);
+    if(currentCMFac.real()==currentCMFac.real() && currentCMFac.imag()==currentCMFac.imag()){ 
+    _CMAsnerRealHist->Fill(massSqrIt, currentCMFac.real());
+    _CMAsnerImagHist->Fill(massSqrIt, currentCMFac.imag());
     }
 
-    //    complex<double> currentDefaultFac = i*phaseSpaceFac(massSqrIt, _mass1, _mass2);
-    complex<double> currentDefaultFac = i*PawianQFT::phaseSpaceFacDefault(massSqrIt, _mass1, _mass2);
-    if(currentDefaultFac.real()==currentDefaultFac.real() && currentDefaultFac.imag()==currentDefaultFac.imag() && fabs(massSqrIt)>1.e-3){
-      _phpDefaultRealHist->Fill(massSqrIt, currentDefaultFac.real());
-      _phpDefaultImagHist->Fill(massSqrIt, currentDefaultFac.imag());
+    complex<double> currentCMDefaultFac = PawianConstants::i*PawianQFT::phaseSpaceFacDefault(massSqrIt, _mass1, _mass2);
+    if(currentCMDefaultFac.real()==currentCMDefaultFac.real() && currentCMDefaultFac.imag()==currentCMDefaultFac.imag() && fabs(massSqrIt)>1.e-3){
+      _CMDefaultRealHist->Fill(massSqrIt, currentCMDefaultFac.real());
+      _CMDefaultImagHist->Fill(massSqrIt, currentCMDefaultFac.imag());
     }
 
     complex<double> massSqrItCompl(massSqrIt, 0.);
-    //    complex<double> currentDefaultComplFac = i*phaseSpaceFac(massSqrItCompl, _mass1, _mass2);
-    complex<double> currentDefaultComplFac = i*PawianQFT::phaseSpaceFacDefault(massSqrItCompl, _mass1, _mass2);
-    if(currentDefaultComplFac.real()==currentDefaultComplFac.real() && currentDefaultComplFac.imag()==currentDefaultComplFac.imag()){
-      double currentDefaultComplFacReal=currentDefaultComplFac.real();
-      if (currentDefaultComplFacReal<-1000.) currentDefaultComplFacReal=-1000.;
-      else if (currentDefaultComplFacReal>1000.) currentDefaultComplFacReal=1000.;
-
-      double currentDefaultComplFacImag=currentDefaultComplFac.imag();
-      if (currentDefaultComplFacImag<-1000.) currentDefaultComplFacImag=-1000.;
-      else if (currentDefaultComplFacImag>1000.) currentDefaultComplFacImag=1000.;
+    complex<double> currentCMDefaultComplFac =  PawianConstants::i*PawianQFT::phaseSpaceFacDefault(massSqrItCompl, _mass1, _mass2);
   
-      _phpDefaultComplRealHist->Fill(massSqrItCompl.real(), currentDefaultComplFacReal);
-      _phpDefaultComplImagHist->Fill(massSqrItCompl.real(), currentDefaultComplFacImag);
-    }
+    _CMDefaultComplRealHist->Fill(massSqrItCompl.real(), currentCMDefaultComplFac.real());
+    _CMDefaultComplImagHist->Fill(massSqrItCompl.real(), currentCMDefaultComplFac.imag());
 
-    complex<double> currentPenningtonFac = PawianQFT::phaseSpaceFacPennington(massSqrItCompl, _mass1, _mass2);
-    if(currentPenningtonFac.real()==currentPenningtonFac.real() && currentPenningtonFac.imag()==currentPenningtonFac.imag() && fabs(currentPenningtonFac.real())>1.e-3){
-      _phpPenningtonRealHist->Fill(massSqrItCompl.real(), currentPenningtonFac.real());
-      _phpPenningtonImagHist->Fill(massSqrItCompl.real(), currentPenningtonFac.imag());
-    }
+
+    complex<double> currentCMPenningtonFac = PawianQFT::ChewMandelstamPennington(massSqrItCompl, _mass1, _mass2);
+    _CMPenningtonRealHist->Fill(massSqrItCompl.real(), currentCMPenningtonFac.real());
+    _CMPenningtonImagHist->Fill(massSqrItCompl.real(), currentCMPenningtonFac.imag());
 
     complex<double> massSqrItComplCM=massSqrItCompl+complex<double>(0., 0.0000001); 
     complex<double> currentReidFac = PawianQFT::ChewMandelstamReid(massSqrItComplCM, _mass1, _mass2);
-    _phpReidRealHist->Fill(massSqrItCompl.real(), currentReidFac.real());
-    _phpReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());        
-  }  
+    _CMReidRealHist->Fill(massSqrItCompl.real(), currentReidFac.real());
+    _CMReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());        
+  }
+  
 }
 
 PhpFactor::~PhpFactor()
