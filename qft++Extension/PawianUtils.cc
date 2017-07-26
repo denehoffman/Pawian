@@ -40,21 +40,18 @@ vector<LS> PawianQFT::GetValidLSWeak(const Spin &__j, const Spin &__s1, const Sp
   return valid_ls;
 }
 
-complex<double> PawianQFT::phaseSpaceFacAsner(double s, double massDec1, double massDec2){
-  complex<double> i(0.,1.);
-
+complex<double> PawianQFT::ChewMandelstamAsner(double s, double massDec1, double massDec2){
   double rho_i=rhoiAsner(s, massDec1, massDec2);
   complex<double> irhoComplex(-rho_i/PawianConstants::pi,0.);
   if(s<0 || s > (massDec1+massDec2)*(massDec1+massDec2)){
     double multTerm= fabs((1.+rho_i)/(1.-rho_i));
     irhoComplex*=log(multTerm);
-    if(s > (massDec1+massDec2)*(massDec1+massDec2)) irhoComplex+=i*rho_i; 
+    if(s > (massDec1+massDec2)*(massDec1+massDec2)) irhoComplex+=PawianConstants::i*rho_i; 
   }
   else{
     irhoComplex*=2.*atan(1/rho_i);
   }
 
-  //  complex<double> result=irhoComplex/i;
   complex<double> result=irhoComplex;
   return result;  
 }
@@ -65,11 +62,10 @@ double PawianQFT::rhoiAsner(double s, double massDec1, double massDec2){
   return result;  
 }
 
-complex<double> PawianQFT::phaseSpaceFacPennington(complex<double> s, double massDec1, double massDec2){
+complex<double> PawianQFT::ChewMandelstamPennington(complex<double> s, double massDec1, double massDec2){
   //Chew-Mandelstam parametrization
   //fulfils analyticity and unitarity
   // Basevant/Berger: ANL-HEP-PR-78-27 
- complex<double> i(0.,1.);
   complex<double> sqrrho_a=complex<double>(1.,0.)-(massDec1+massDec2)*(massDec1+massDec2)/s;
   complex<double> rho_a = sqrt(sqrrho_a);
   complex<double> result=-rho_a/PawianConstants::pi*log((rho_a+1.)/(rho_a-1.));
@@ -113,12 +109,6 @@ complex<double> PawianQFT::phaseSpaceFacReid(double mass, double massDec1, doubl
   complex<double> massCompl(mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
   return PawianQFT::phaseSpaceFacReid(massCompl, massDec1, massDec2);
 } 
-
-complex<double> PawianQFT::phaseSpaceFacPenningtonsqrts(complex<double> sqrts, double massDec1, double massDec2){
-  complex<double> s=sqrts*sqrts;
-  complex<double> result=PawianQFT::phaseSpaceFacPennington(s, massDec1, massDec2);
-  return result;
-}
 
 complex<double> PawianQFT::phaseSpaceFacDefault(double mass, double massDec1, double massDec2){
 
