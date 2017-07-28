@@ -58,7 +58,7 @@ protected:
 
 private:
   TFile* _theTFile;
-
+  
   TH2F* _CMDefaultComplRealHist2;
   TH2F* _CMDefaultComplImagHist2;
   TH2F* _CMPenningtonRealHist2;
@@ -72,6 +72,8 @@ private:
   TH1F* _CMPenningtonImagHist;
   TH1F* _CMReidRealHist;
   TH1F* _CMReidImagHist;
+  TH1F* _CMBBUnstableRhoPiRealHist;
+  TH1F* _CMBBUnstableRhoPiImagHist;
   TH1F* _CMDefaultRealHist;
   TH1F* _CMDefaultImagHist;
   TH1F* _CMDefaultComplRealHist;

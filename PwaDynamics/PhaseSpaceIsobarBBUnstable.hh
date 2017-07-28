@@ -64,8 +64,8 @@ public:
   virtual complex<double> ChewM(const complex<double> mass);
 
 
-
 protected:
+  void* obj;
 
 private:
   jl_module_t* m_mod;

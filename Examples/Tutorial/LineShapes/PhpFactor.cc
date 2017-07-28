@@ -35,6 +35,7 @@
 #include "TH2F.h"
 #include "TMath.h"
 #include "Utils/PawianConstants.hh"
+#include "PwaDynamics/PhaseSpaceIsobarBBUnstable.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
@@ -45,7 +46,9 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   ,_massMax(massMax)
 {
   _theTFile=new TFile("PhpFactor.root","recreate");
- 
+
+  PhaseSpaceIsobarBBUnstable* phpBBUnstableRhoPi = new PhaseSpaceIsobarBBUnstable(0.77, 0.135, "BBUnstable"); 
+
   // _phpRealHist= new TH1F("_phpRealHist", "#rho real",301, -_massMax, _massMax);
   // _phpImagHist= new TH1F("_phpImagHist", "#rho imag",301, -_massMax, _massMax);
 
@@ -85,12 +88,19 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   _CMPenningtonImagHist->GetYaxis()->SetTitle("Im(CM)");
   _CMPenningtonImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
-  _CMReidRealHist= new TH1F("_CMReidRealHist", "CM Reid",301, -massMaxSqr, massMaxSqr);
+  _CMReidRealHist= new TH1F("_CMReidRealHist", "CM real Reid",301, -massMaxSqr, massMaxSqr);
   _CMReidRealHist->GetYaxis()->SetTitle("Re(CM)");
   _CMReidRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
   _CMReidImagHist= new TH1F("_CMReidImagHist", "CM imag Reid",301, -massMaxSqr, massMaxSqr);
   _CMReidImagHist->GetYaxis()->SetTitle("Im(CM)");
   _CMReidImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+
+  _CMBBUnstableRhoPiRealHist = new TH1F("_CMBBUnstableRhoPiRealHist", "CM real BB unstable rho pi",301, -massMaxSqr, massMaxSqr);
+  _CMBBUnstableRhoPiRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMBBUnstableRhoPiRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMBBUnstableRhoPiImagHist = new TH1F("_CMBUnstableRhoPiImagHist", "CM imag BB unstable rho pi",301, -massMaxSqr, massMaxSqr);
+  _CMBBUnstableRhoPiImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMBBUnstableRhoPiImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
   _CMDefaultRealHist= new TH1F("_CMDefaultRealHist", "CM real default",301, -massMaxSqr, massMaxSqr);
   _CMDefaultRealHist->GetYaxis()->SetTitle("Re(CM)");
@@ -209,9 +219,14 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     complex<double> massSqrItComplCM=massSqrItCompl+complex<double>(0., 0.0000001); 
     complex<double> currentReidFac = PawianQFT::ChewMandelstamReid(massSqrItComplCM, _mass1, _mass2);
     _CMReidRealHist->Fill(massSqrItCompl.real(), currentReidFac.real());
-    _CMReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());        
+    _CMReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());
+
+    complex<double> currentCMBBUnstableRhoPiFac = phpBBUnstableRhoPi->ChewM(massSqrItComplCM);
+    _CMBBUnstableRhoPiRealHist->Fill(massSqrItCompl.real(), currentCMBBUnstableRhoPiFac.real());
+    _CMBBUnstableRhoPiImagHist->Fill(massSqrItCompl.real(), currentCMBBUnstableRhoPiFac.imag()); 
+    
   }
-  
+  delete phpBBUnstableRhoPi; 
 }
 
 PhpFactor::~PhpFactor()
