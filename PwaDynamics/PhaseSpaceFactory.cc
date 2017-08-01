@@ -31,6 +31,7 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "PwaDynamics/PhaseSpaceIsobarReid.hh"
+#include "PwaDynamics/PhaseSpaceIsobarBBUnstable.hh"
 #include "PwaDynamics/PhaseSpaceIsobarAS.hh"
 #include "PwaDynamics/PhaseSpace4Pi.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -75,6 +76,9 @@ std::shared_ptr<AbsPhaseSpace> PhaseSpaceFactory::getPhpPointer(std::string type
  else if(type=="4pi"){
 	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpace4Pi());
  }
+ else if(type.substr (0,10)=="BBUnstable"){
+	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarBBUnstable(mass1, mass2, type));
+ }
  else{
     Alert << "phase space description of the type:\t" << type << "\tdoes not exist" << endmsg;
     exit(1);
@@ -82,5 +86,4 @@ std::shared_ptr<AbsPhaseSpace> PhaseSpaceFactory::getPhpPointer(std::string type
 
   return result;
 }
-
 

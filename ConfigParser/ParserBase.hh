@@ -115,6 +115,7 @@ public:
   const int noOfDataEvts() const {return _noOfDataEvts;}
   const double tolerance() const {return _tolerance;}
   const int noOfInterpolatedScattPoints() const {return _noInterScattPoints;}
+  const std::vector<std::string>& addKmatrixProdSuffix() const {return _kMatrixProdSuffix;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -187,4 +188,5 @@ protected:
   int _noOfDataEvts;
   double _tolerance;
   int _noInterScattPoints;
+  std::vector<std::string> _kMatrixProdSuffix;
 };

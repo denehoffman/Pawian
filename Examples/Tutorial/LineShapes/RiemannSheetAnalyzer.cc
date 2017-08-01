@@ -25,6 +25,8 @@
 #include "Examples/Tutorial/LineShapes/RiemannSheetAnalyzer.hh"
 #include "TH2F.h"
 #include "ErrLogger/ErrLogger.hh"
+#include "PwaDynamics/KMatrixBase.hh"
+#include "PwaDynamics/AbsPhaseSpace.hh"
 
 RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels, 
 					   std::shared_ptr<TMatrixBase> tMatrix,
@@ -68,7 +70,9 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       for(int i=1;i<=scan->GetNbinsX(); i++){
 	 for(int j=1;j<=scan->GetNbinsY(); j++){
 	    tMatrix->evalMatrix(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
-	    scan->SetBinContent(i,j, std::abs((*tMatrix)(projectionIndex,projectionIndex)));
+	    // scan->SetBinContent(i,j, std::abs((*tMatrix)(projectionIndex,projectionIndex)));
+	    complex<double> currentrho=tMatrix->kMatrix()->phaseSpaceVec().at(projectionIndex)->factor(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
+	    scan->SetBinContent(i,j, std::abs(sqrt(currentrho)*(*tMatrix)(projectionIndex,projectionIndex)*sqrt(currentrho)));
 	 }
       }
 

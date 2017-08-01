@@ -40,21 +40,18 @@ vector<LS> PawianQFT::GetValidLSWeak(const Spin &__j, const Spin &__s1, const Sp
   return valid_ls;
 }
 
-complex<double> PawianQFT::phaseSpaceFacAsner(double s, double massDec1, double massDec2){
-  complex<double> i(0.,1.);
-
+complex<double> PawianQFT::ChewMandelstamAsner(double s, double massDec1, double massDec2){
   double rho_i=rhoiAsner(s, massDec1, massDec2);
   complex<double> irhoComplex(-rho_i/PawianConstants::pi,0.);
   if(s<0 || s > (massDec1+massDec2)*(massDec1+massDec2)){
     double multTerm= fabs((1.+rho_i)/(1.-rho_i));
     irhoComplex*=log(multTerm);
-    if(s > (massDec1+massDec2)*(massDec1+massDec2)) irhoComplex+=i*rho_i; 
+    if(s > (massDec1+massDec2)*(massDec1+massDec2)) irhoComplex+=PawianConstants::i*rho_i; 
   }
   else{
     irhoComplex*=2.*atan(1/rho_i);
   }
 
-  //  complex<double> result=irhoComplex/i;
   complex<double> result=irhoComplex;
   return result;  
 }
@@ -65,11 +62,10 @@ double PawianQFT::rhoiAsner(double s, double massDec1, double massDec2){
   return result;  
 }
 
-complex<double> PawianQFT::phaseSpaceFacPennington(complex<double> s, double massDec1, double massDec2){
+complex<double> PawianQFT::ChewMandelstamPennington(complex<double> s, double massDec1, double massDec2){
   //Chew-Mandelstam parametrization
   //fulfils analyticity and unitarity
   // Basevant/Berger: ANL-HEP-PR-78-27 
- complex<double> i(0.,1.);
   complex<double> sqrrho_a=complex<double>(1.,0.)-(massDec1+massDec2)*(massDec1+massDec2)/s;
   complex<double> rho_a = sqrt(sqrrho_a);
   complex<double> result=-rho_a/PawianConstants::pi*log((rho_a+1.)/(rho_a-1.));
@@ -77,7 +73,7 @@ complex<double> PawianQFT::phaseSpaceFacPennington(complex<double> s, double mas
 }
 
 complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1, double massDec2){
-  if(norm(s)<1.e-8) s=complex<double>(1.e-10,0.);
+  if(norm(s)<1.e-8) s=complex<double>(1.e-10, 1.e-10);
   complex<double> m1_2_m_m2_2(massDec1*massDec1-massDec2*massDec2, 0.);
   complex<double> m1_2_p_m2_2(massDec1*massDec1+massDec2*massDec2, 0.); 
 
@@ -104,22 +100,15 @@ complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1
 }
 
 complex<double> PawianQFT::phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2){
-  complex<double> i(0.,1);
   complex<double> s=mass*mass;
-  complex<double> result=-PawianQFT::ChewMandelstamReid(s, massDec1, massDec2)/i;
+  complex<double> result=PawianQFT::ChewMandelstamReid(s, massDec1, massDec2).imag();
   return result; 
 }
 
 complex<double> PawianQFT::phaseSpaceFacReid(double mass, double massDec1, double massDec2){
-  complex<double> massCompl(mass, 0.);
-  return PawianQFT::phaseSpaceFacReid(massCompl, massDec1, massDec2); 
-}
-
-complex<double> PawianQFT::phaseSpaceFacPenningtonsqrts(complex<double> sqrts, double massDec1, double massDec2){
-  complex<double> s=sqrts*sqrts;
-  complex<double> result=PawianQFT::phaseSpaceFacPennington(s, massDec1, massDec2);
-  return result;
-}
+  complex<double> massCompl(mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+  return PawianQFT::phaseSpaceFacReid(massCompl, massDec1, massDec2);
+} 
 
 complex<double> PawianQFT::phaseSpaceFacDefault(double mass, double massDec1, double massDec2){
 
@@ -201,7 +190,9 @@ complex<double> PawianQFT::breakupMomQDefault(MassType mass, double massDec1, do
 
 template<typename MassType>
 complex<double> PawianQFT::breakupMomQReid(MassType mass, double massDec1, double massDec2){
-  complex<double> result=PawianQFT::phaseSpaceFacReid(mass, massDec1, massDec2)*mass/2.;
+  double rho = PawianQFT::ChewMandelstamReid(mass*mass, massDec1, massDec2).imag();
+  //  if(rho < 0) rho*=-1.; 
+  complex<double> result=rho*mass/2.;
   return result;  
 }
 
@@ -211,13 +202,21 @@ complex<double> PawianQFT::breakupMomQAS(MassType mass, double massDec1, double 
   return result;  
 }
 
+template<typename MassType>
+complex<double> PawianQFT::breakupMomQDefaultAS(MassType mass, double massDec1, double massDec2){
+  complex<double> result=PawianQFT::breakupMomQAS(mass, massDec1, massDec2);
+  if( result.imag() < -1.e-10 ) result=PawianQFT::breakupMomQDefault(mass, massDec1, massDec2);
+  return result; 
+}
+
 template complex<double> PawianQFT::breakupMomQDefault(double, double, double);
 template complex<double> PawianQFT::breakupMomQDefault(complex<double>, double, double);
 template complex<double> PawianQFT::breakupMomQReid(double, double, double);
 template complex<double> PawianQFT::breakupMomQReid(complex<double>, double, double);
 template complex<double> PawianQFT::breakupMomQAS(double, double, double);
 template complex<double> PawianQFT::breakupMomQAS(complex<double>, double, double);
-
+template complex<double> PawianQFT::breakupMomQDefaultAS(double, double, double);
+template complex<double> PawianQFT::breakupMomQDefaultAS(complex<double>, double, double);
 
 complex<double> PawianQFT::FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, std::pair<const double
 		       , const double>& decPair2, double __mass0, double g1, double g2){

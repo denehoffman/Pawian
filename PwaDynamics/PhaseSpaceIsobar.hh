@@ -32,6 +32,7 @@
 #include <iostream>
 #include <vector>
 #include "PwaDynamics/AbsPhaseSpace.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 using namespace std;
 
@@ -57,6 +58,8 @@ public:
   virtual complex<double> breakUpMom(const double mass);
   virtual complex<double> factor(const complex<double> mass);
   virtual complex<double> breakUpMom(const complex<double> mass);
+  virtual complex<double> breakUpMomDefaultAS(const double mass){return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);}
+  virtual complex<double> breakUpMomDefaultAS(const complex<double> mass){return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);} 
   virtual double thresholdMass();
 protected:
   double _mass1;

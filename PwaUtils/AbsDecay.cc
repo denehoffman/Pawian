@@ -77,6 +77,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_dynEnabled(false)
   ,_preFactor(1.)
    ,_pathParserFile("")
+  ,_projectionParticleNames("")
   //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
    ,_isDaughter1Photon(false)
@@ -200,6 +201,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_dynEnabled(false)
   ,_preFactor(1.)
   ,_pathParserFile("")
+  ,_projectionParticleNames("")
   //  ,_dynKey(motherJPCPtr->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
   ,_isDaughter1Photon(false)
@@ -307,7 +309,10 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   _dynType=dynString;
 
-  if(_dynType=="KMatrix" || _dynType=="TMatrix") _pathParserFile=additionalStringVec[0];
+  if(_dynType=="KMatrix" || _dynType=="TMatrix"){
+    _pathParserFile=additionalStringVec[0];
+    if (additionalStringVec.size() == 3) _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);
+  }
   else if(_dynType=="Flatte"){ //fill second decay channel (Flatte)
     Particle* firstParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[0]);
     if(0==firstParticle){

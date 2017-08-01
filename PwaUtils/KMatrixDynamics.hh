@@ -48,7 +48,7 @@ class AbsPawianParameters;
 class KMatrixDynamics : public TMatrixDynamics{
 
 public:
-  KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser);
+  KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, ChannelID channelID, std::string projectionParticleNames="");
   virtual ~KMatrixDynamics();
 
   virtual std::string type() {return "KMatrixDynamics";}
@@ -78,6 +78,7 @@ protected:
   CacheVector<std::map<std::string, complex<float> > > _cachedStringMap;
   CacheVector<std::map<std::string, std::map<Spin, complex<float> > > > _cachedStringOrbMap;
   std::map<int, std::map<std::string, bool > > _alreadyCached;
+  std::string _pVecSuffix;
 
   virtual void init();
   std::shared_ptr<PVectorRel> makeNewPVec();

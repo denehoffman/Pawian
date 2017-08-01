@@ -119,6 +119,7 @@ public:
   bool useIsospin(){ return _useIsospin;}
   bool isWeakDeacy() {return _isWeakDecay;}
   virtual std::string pathToConfigParser() {return _pathParserFile;}
+  virtual std::string projectionParticleNames() {return _projectionParticleNames;}
   std::shared_ptr<ProdChannelInfo> prodChannelInfo() {return _prodChannelInfo;}
   void setProdChannelInfo(std::shared_ptr<ProdChannelInfo> prodChannelInfo) { _prodChannelInfo=prodChannelInfo;}
   void setProductionAmp() {_isProdAmp=true;}
@@ -173,6 +174,7 @@ protected:
 
   double _preFactor;
   std::string _pathParserFile;
+  std::string _projectionParticleNames;
 
   std::vector<std::string> _fsParticleNameList;
   std::vector< std::shared_ptr<AbsDecay> > _prodAmpRefList;

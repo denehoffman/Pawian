@@ -58,9 +58,11 @@ public:
   virtual complex<double> breakUpMom(const double mass);
   virtual complex<double> factor(const complex<double> mass);
   virtual complex<double> breakUpMom(const complex<double> mass);
+  virtual complex<double> ChewM(const double mass);
+  virtual complex<double> ChewM(const complex<double> mass);
 
 protected:
-  virtual void CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
+
 private:
 };
 //_____________________________________________________________________________

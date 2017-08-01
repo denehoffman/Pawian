@@ -34,7 +34,7 @@ KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::share
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
-    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(mass_0);
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(mass_0);
   }
 }
 
@@ -54,17 +54,28 @@ void KPoleBarrier::evalMatrix(const complex<double> mass, Spin OrbMom){
 template<typename MassType>
 void KPoleBarrier::evalMatrixTemplate(const MassType mass, Spin OrbMom){
 
+  // for (int i=0; i< int(_phpVecs.size()); ++i){
+  //   if(_truncatedBarrier){
+  //     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
+  // 								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+  //   }
+  //   else{
+  //     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
+  // 							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+  //   }
+  // }
+
   for (int i=0; i< int(_phpVecs.size()); ++i){
     if(_truncatedBarrier){
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
-								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
     }
     else{
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
-							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
     }
   }
-
+  
   MassType denom=_poleMass*_poleMass-mass*mass;
   double absDenom=abs(denom);
   if(absDenom < 1e-10){
@@ -84,7 +95,7 @@ template void KPoleBarrier::evalMatrixTemplate(const complex<double> mass, Spin 
 void KPoleBarrier::updatePoleMass (double newPoleMass){
   _poleMass=newPoleMass;
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
-    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(_poleMass);
   }
 }
 

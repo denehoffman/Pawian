@@ -162,6 +162,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
     ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
     ("noOfInterpolatedScatteringPoints", po::value<int>(&_noInterScattPoints), "number of interpolated scattering points")
+    ("kMatrixProdSuffix", po::value< vector<string> >(&_kMatrixProdSuffix),"suffix for fit parameter of the P-vectors in the K-matrix approach")
     ;
 
 }
@@ -335,6 +336,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::cout << "\nproduction system:" << std::endl;
       for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
+	std::cout << (*it) << "\n";
+      }
+
+      std::cout << "\nK-matrix prod suffix:" << std::endl;
+      for (it=_kMatrixProdSuffix.begin(); it!=_kMatrixProdSuffix.end();++it){
 	std::cout << (*it) << "\n";
       }
 

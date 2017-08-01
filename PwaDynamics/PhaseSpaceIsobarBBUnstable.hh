@@ -21,50 +21,75 @@
 //									  //
 //************************************************************************//
 
-// FVector class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// PhaseSpaceIsobarBBUnstable class definition file. -*- C++ -*-
+// Copyright 2016 Bertram Kopf
+// phase space factor which fulfils the analytic continuation and unitarity
 
 #pragma once 
+//_____________________________________________________________________________
+// @file PhaseSpaceIsobarBBUnstable.h
+//_____________________________________________________________________________
 
-//_____________________________________________________________________________
-// @file FVector.h
-//_____________________________________________________________________________
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "qft++/matrix/Matrix.hh"
-#include "PwaDynamics/KMatrixBase.hh"
-#include "PwaDynamics/PVectorRel.hh"
 #include <iostream>
 #include <vector>
-#include <memory>
+#include "PwaDynamics/PhaseSpaceIsobar.hh"
+#include <julia.h>
 
 using namespace std;
 
-class AbsPhaseSpace;
 //_____________________________________________________________________________
 //_____________________________________________________________________________
 
-class FVector : public Matrix< complex<double> > {
+
+class PhaseSpaceIsobarBBUnstable: public PhaseSpaceIsobar {
 
 public:
-
-  /// Constructor 
-  FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRel> Pvector);
-  FVector(int numRows); 
+  
+  /// Constructor
+  PhaseSpaceIsobarBBUnstable(double mass1, double mass2, string type); 
 
   /// Destructor
-  virtual ~FVector();
+  virtual ~PhaseSpaceIsobarBBUnstable();
 
-  virtual void evalMatrix(const double mass, Spin OrbMom=0);
-  virtual complex<double> evalProjMatrix(const double mass, int index, Spin OrbMom=0);
-  virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
+  // operators:
+
+
+  // functions:
+
+  virtual complex<double> factor(const double mass);
+  virtual complex<double> breakUpMom(const double mass);
+  virtual complex<double> factor(const complex<double> mass);
+  virtual complex<double> breakUpMom(const complex<double> mass);
+  virtual complex<double> ChewM(const double mass);
+  virtual complex<double> ChewM(const complex<double> mass);
+
 
 protected:
-  std::shared_ptr<KMatrixBase> _Kmatrix; 
-  std::shared_ptr<PVectorRel> _Pvector;
-  complex<double> _imagCompl;
-  IdentityMatrix< complex<double> > _idMatrix;
-  Matrix< complex<double> > _CMMatrix;
-  vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
+  void* obj;
+
+private:
+  jl_module_t* m_mod;
+  jl_function_t* m_func;
+  jl_value_t* m_srealHO;
+  jl_value_t* m_simagHO;
+  jl_value_t* m_m1_1HO;
+  jl_value_t* m_m1_2HO;
+  jl_value_t* m_m2_1HO;
+  jl_value_t* m_m2_2HO;
+  jl_value_t* m_mR1HO;
+  jl_value_t* m_mR2HO;
+  jl_value_t* m_f1HO;
+  jl_value_t* m_f2HO;
+  jl_value_t* m_epsilonHO;
+
+  std::string m_pathToModule;
+
+  bool loadModule(std::string _moduleDefinitionPath);
+  double* computeFactor(double* _inS);
+  double* computeFactor(double _inSreal);
+  double* computeFactor();
+  bool setArgs(double* _inArgs);
+  bool setS(double* _inS);
 };
 //_____________________________________________________________________________
 

@@ -45,7 +45,9 @@ class AbsPawianParameters;
 class TMatrixDynamics : public AbsDynamics{
 
 public:
-  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType="Elasticity");
+  TMatrixDynamics(std::shared_ptr<KMatrixParser> kMatrixParser);
+  //  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType="Elasticity");
+  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames="");
   virtual ~TMatrixDynamics();
 
   virtual std::string type() {return "TMatrixDynamics";}
@@ -54,6 +56,11 @@ public:
   virtual void fillParamNameList();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+
+  virtual std::shared_ptr<KMatrixRel> getKMatix() {return _kMatr;}
+  virtual std::shared_ptr<TMatrixRel> getTMatix() {return _tMatr;}
+  virtual std::vector< std::string>   gFactorNames() {return _gFactorNames;}
+  virtual int orbitalL() {return _orbitalL;} 
  
 protected:
   std::string _kMatName;
@@ -84,7 +91,7 @@ protected:
   std::shared_ptr<KMatrixParser> _kMatrixParser;
   std::map<std::string, std::vector<std::string> > _paramNameListMap;
   std::map<unsigned int, double > _noRotationMap;
-
+  std::string _projectionParticleNames;
   virtual void init();
   virtual void evalElasticity(EvtData* theData, double currentMass);
   virtual void evalPhase(EvtData* theData, double currentMass);

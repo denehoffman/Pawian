@@ -33,7 +33,7 @@ PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double ma
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
-    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(_poleMass);
   }
 }
 
@@ -44,12 +44,22 @@ void PPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
 
   for (int i=0; i< int(_phpVecs.size()); ++i){
   
+  //   if(_truncatedBarrier){
+  //         _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
+  //                                                                               _breakUpM0.at(i), BarrierFactor::qRDefault);
+  //                                                                                   }
+  //   else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
+  // 							      _breakUpM0.at(i), BarrierFactor::qRDefault);
+  // }
+
     if(_truncatedBarrier){
-          _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
-                                                                                _breakUpM0.at(i), BarrierFactor::qRDefault);
-                                                                                    }
-    else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
-							      _breakUpM0.at(i), BarrierFactor::qRDefault);
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
+    else{
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
   }
 
   double denom=_poleMass*_poleMass-mass*mass;
@@ -65,7 +75,7 @@ void PPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
 void PPoleBarrier::updatePoleMass (double newPoleMass){
   _poleMass=newPoleMass;
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
-    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
+    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(_poleMass);
   }
 }
 

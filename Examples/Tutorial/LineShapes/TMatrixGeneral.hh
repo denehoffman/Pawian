@@ -71,14 +71,10 @@ private:
   double _massMin;
   double _massMax;
   std::shared_ptr<KMatrixParser> _kMatrixParser;
-  std::vector< std::string> _poleNames;
-  std::vector<double> _poleMasses;
   std::vector< std::string> _gFactorNames;
-  std::map<int, std::vector<double> > _gFactorMap;
   std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
   std::shared_ptr<TMatrixRel> _tMatr;
   std::shared_ptr<KMatrixRel> _kMatr;
-  std::vector< std::shared_ptr<KPole> > _kPoles;
   ParticleTable* _particleTable;
   
   TFile* _theTFile;
@@ -95,16 +91,13 @@ private:
   std::vector<TH1F*> _SqrT1iH1Vec;
   std::vector<TH1F*> _delta1iVec;
   std::vector<TH1F*> _SqrS1iH1Vec;
+  std::vector<TH1F*> _speedPlotH1Vec;
 
   std::shared_ptr<AbsPawianParameters> _params;
-  std::string _kMatName;
-  int _orderBg;
-  bool _withKMatAdler;
   std::string _pathToFitParams;
   int _orbitalL;
 
   void init();
-  void fillParams(std::shared_ptr<AbsPawianParameters> theParams);
 };
 
 

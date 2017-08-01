@@ -28,13 +28,12 @@
 namespace PawianQFT{
 /// Returns all valid @a LS combos for weak decays; non partity conservation
   vector<LS> GetValidLSWeak(const Spin &__j, const Spin &__s1, const Spin &__s2);
-  complex<double> phaseSpaceFacAsner(double s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamAsner(double s, double massDec1, double massDec2);
   double rhoiAsner(double s, double massDec1, double massDec2);
-  complex<double> phaseSpaceFacPennington(complex<double> s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamPennington(complex<double> s, double massDec1, double massDec2);
   complex<double> ChewMandelstamReid(complex<double> s, double massDec1, double massDec2);
   complex<double> phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacReid(double mass, double massDec1, double massDec2);
-  complex<double> phaseSpaceFacPenningtonsqrts(complex<double> sqrts, double massDec1, double massDec2);
   complex<double> phaseSpaceFacDefault(double mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacDefault(complex<double> mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacAS(double mass, double massDec1, double massDec2);
@@ -45,6 +44,8 @@ namespace PawianQFT{
   complex<double> breakupMomQReid(MassType mass, double massDec1, double massDec2);
   template<typename MassType>
   complex<double> breakupMomQAS(MassType mass, double massDec1, double massDec2);
+  template<typename MassType>
+  complex<double> breakupMomQDefaultAS(MassType mass, double massDec1, double massDec2);
   complex<double> FlatteFkt(const Vector4<double> &__p4, std::pair<const double, const double>& decPair1, 
 			    std::pair<const double, const double>& decPair2, double __mass0, double g1, double g2);
 //

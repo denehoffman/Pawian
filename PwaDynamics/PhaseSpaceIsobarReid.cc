@@ -21,7 +21,9 @@
 //									  //
 //************************************************************************//
 
+#include "ErrLogger/ErrLogger.hh"
 #include "PwaDynamics/PhaseSpaceIsobarReid.hh"
+#include "Utils/PawianConstants.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
 
@@ -35,7 +37,7 @@ PhaseSpaceIsobarReid::~PhaseSpaceIsobarReid(){
 }
 
 complex<double> PhaseSpaceIsobarReid::factor(const double mass){
-   return PawianQFT::phaseSpaceFacReid(mass, _mass1, _mass2);
+   return ChewM(mass).imag();
 }
 
 complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
@@ -43,22 +45,26 @@ complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
-  complex<double> rho = PawianQFT::phaseSpaceFacReid(mass, _mass1, _mass2);
-  complex<double> mom=rho*mass/2.;
-  //  CorrectForChosenSign(mom, rho);
-  CorrectForChosenSign(rho, rho);
+  complex<double> rho = ChewM(mass).imag(); 
   return rho;
 }
 
 complex<double> PhaseSpaceIsobarReid::breakUpMom(const complex<double> mass){
-  complex<double> q = PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
-  CorrectForChosenSign(q, q);
-  return q;
+  complex<double> momReid = PawianQFT::breakupMomQReid(mass, _mass1, _mass2);
+  CorrectForChosenSign(momReid, momReid);
+  return momReid;
 }
 
-void PhaseSpaceIsobarReid::CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
-    if( (_bumImPartSign > 0 && breakUpMom.real()>0.) || (_bumImPartSign < 0 && fabs(breakUpMom.real())<1.e-10 ) ){
-      toChange *= -1; // for Reid php factors
-    }
-  }
+complex<double> PhaseSpaceIsobarReid::ChewM(const double mass){
+  complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+  return PawianQFT::ChewMandelstamReid(massSqrCompl, _mass1, _mass2);  
+}
+
+complex<double> PhaseSpaceIsobarReid::ChewM(const complex<double> mass){
+  complex<double> s=mass*mass;
+  complex<double> result = PawianQFT::ChewMandelstamReid(s, _mass1, _mass2);
+  complex<double> momReid = PawianQFT::breakupMomQReid(mass, _mass1, _mass2);
+  CorrectForChosenSign(momReid, result);
+  return result;
+}
 

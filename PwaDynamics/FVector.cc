@@ -32,12 +32,12 @@ FVector::FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRe
   ,_Pvector(Pvector)
   ,_imagCompl(0.,1.)
   ,_idMatrix(NumRows())
-  ,_rhoMatrix(NumRows(),NumRows())
+  ,_CMMatrix(NumRows(),NumRows())
   ,_phpVec(Kmatrix->phaseSpaceVec())
  {
    for (int i=0; i<NumRows(); ++i){
      for (int j=0; j<NumRows(); ++j){
-       _rhoMatrix(i,j)=complex<double> (0.,0.);
+       _CMMatrix(i,j)=complex<double> (0.,0.);
      }
    }
  }
@@ -46,11 +46,11 @@ FVector::FVector(int numRows) :
   Matrix< complex<double> >::Matrix(numRows, 1)
   ,_imagCompl(0.,1.)
   ,_idMatrix(NumRows())
-  ,_rhoMatrix(NumRows(),NumRows())
+  ,_CMMatrix(NumRows(),NumRows())
  {
    for (int i=0; i<NumRows(); ++i){
      for (int j=0; j<NumRows(); ++j){
-       _rhoMatrix(i,j)=complex<double> (0.,0.);
+       _CMMatrix(i,j)=complex<double> (0.,0.);
      }
    }
  }
@@ -63,9 +63,10 @@ void FVector::evalMatrix(const double mass, Spin OrbMom){
   _Kmatrix->evalMatrix(mass, OrbMom);
   _Pvector->evalMatrix(mass, OrbMom);
 
- for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
+ // for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
+  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
 
-  Matrix< complex< double > > denomMatrComplInv = _idMatrix-_imagCompl*(*_Kmatrix)*_rhoMatrix;
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix-(*_Kmatrix)*_CMMatrix;
   denomMatrComplInv.invert();
   
   Matrix< complex <double> > currentTMatr=denomMatrComplInv*(*_Pvector);
@@ -80,9 +81,9 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
   _Kmatrix->evalMatrix(mass, OrbMom);
   _Pvector->evalMatrix(mass, OrbMom);
 
-  for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
+  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
  
-  Matrix< complex< double > > denomMatrInv=_idMatrix-_imagCompl*(*_Kmatrix)*_rhoMatrix;
+  Matrix< complex< double > > denomMatrInv=_idMatrix-(*_Kmatrix)*_CMMatrix;
   denomMatrInv.invert();
   
   complex <double> result(0.,0.);
@@ -92,6 +93,10 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
 
   if(result.real() != result.real()){
     Alert << "result:\t" << result << endmsg;
+    for(int i=0;i<NumRows(); ++i){
+      Alert <<"(*_Pvector)(i,0): " << (*_Pvector)(i,0) << endmsg;
+      Alert <<"denomMatrInv(index,i): " << denomMatrInv(index,i) << endmsg;
+    }
     exit(0);
   }
   return result; 

@@ -53,7 +53,6 @@
 
 
 #include "PwaDynamics/PhaseSpace4Pi.hh"
-#include "Utils/PawianConstants.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 

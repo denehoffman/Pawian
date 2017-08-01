@@ -44,6 +44,7 @@ class AbsXdecAmp;
 class AbsDynamics : public AbsParamHandler{
 
 public:
+  AbsDynamics();
   AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother );
   virtual ~AbsDynamics();
 

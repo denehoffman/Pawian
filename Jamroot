@@ -19,6 +19,14 @@ project :
 	<linkflags>-L$(BOOSTLIBPATH)
 	<linkflags>$(BOOSTLIBS)
 	<linkflags>-llog4cpp
+	<cxxflags>-I$JULIA_DIR/include/julia
+	<cxxflags>-fPIC
+	<cxxflags>-Wall 
+#	<linkflags>-L$JULIA_DIR/lib
+#	<linkflags>-ljulia
+        <linkflags>-L$JULIA_DIR/lib/julia/libstdc++.so.6
+	<linkflags>-Wl,--export-dynamic
+#	<cxxflags>-DJULIA_ENABLE_THREADING=0
 	;
 
 actions rootlibs

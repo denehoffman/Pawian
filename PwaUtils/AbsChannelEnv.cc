@@ -358,22 +358,8 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
     _calcContributionDataVec.push_back(currentCalcContributionData);
   }
 
-  //create global map for fit parameter suffixes to be replaced
-  std::vector<std::string> suffixVec = _theParser->replaceSuffixNames();
-  for ( itStr = suffixVec.begin(); itStr != suffixVec.end(); ++itStr){
-    std::stringstream stringStr;
-    stringStr << (*itStr);
-    std::string classStr;
-    stringStr >> classStr;
-
-    std::string suffixStr;
-    stringStr >> suffixStr;
-
-    GlobalEnv::instance()->addIntoToBeReplacedSuffixMap(classStr, suffixStr);
-  }
-
+  GlobalEnv::instance()->fillReplacedSuffixMap(_theParser);
 }
-
 
 std::shared_ptr<AbsPawianParameters> AbsChannelEnv::defaultPawianParams(){
   std::shared_ptr<AbsPawianParameters> result=ParamFactory::instance()->getParametersPointer("Pawian");

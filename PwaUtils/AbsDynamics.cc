@@ -34,6 +34,21 @@
 #include "Utils/FunctionUtils.hh"
 #include "Utils/IdStringMapRegistry.hh"
 
+AbsDynamics::AbsDynamics() :
+  AbsParamHandler()
+  ,_name("AbsDynamics")
+  ,_massKey("AbsDynamicsKey")
+  ,_keyForMassList("Mass")
+  ,_fsParticles(0)
+  ,_mother(0)
+  ,_dynKey("")
+  ,_dynId(0)
+  ,_grandmaKey("")
+  ,_grandmaId(0)
+  ,_isLdependent(true) 
+{
+}
+
 AbsDynamics::AbsDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsParamHandler()
   ,_name(name)

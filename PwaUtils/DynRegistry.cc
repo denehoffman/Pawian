@@ -114,8 +114,9 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     if( theDec->type() =="PiPiScatteringDecay" ){
       if(theDec->dynType()=="TMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
+	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
-	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType));
+	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
       }
       else{
 	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;
@@ -143,7 +144,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     }
     else if(theDec->dynType()=="KMatrix"){
       std::string pathToConfigFile=theDec->pathToConfigParser();
-      result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile)); 
+      std::string projectionParticleNames = theDec->projectionParticleNames();
+      result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId, projectionParticleNames)); 
     }
     else if(theDec->dynType()=="Flatte")
       result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
