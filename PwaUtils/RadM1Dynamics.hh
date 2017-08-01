@@ -35,13 +35,14 @@
 
 #include "PwaUtils/AbsDynamics.hh"
 #include "PwaDynamics/RadMultipoleFormFactor.hh"
+#include "PwaDynamics/BarrierFactor.hh"
 
 class AbsPawianParameters;
 
 class RadM1Dynamics : public AbsDynamics{
 
 public:
-  RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double massB=1.);
+  RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, const std::string& wignerDKey, double qR, double massB=1.);
   virtual ~RadM1Dynamics();
 
   virtual std::string type() {return "RadM1Dynamics";}
@@ -66,6 +67,14 @@ protected:
   unsigned short _dynEgammaCMmotherId;
   bool _isP1Gamma;
   double _massB0;
+  
+  std::string _wignerDKey;
+  std::string _wignerDqNormKey;
+  unsigned short _wignerDqId;
+  unsigned short _wignerDqNormId;
+  double _qR;
+  bool _fitqRVals;
+  std::string _fitqRKey;
 
 private:
 

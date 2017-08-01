@@ -177,7 +177,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     }
     else if(theDec->dynType()=="WoDynamics") result= std::shared_ptr<AbsDynamics>(new WoDynamics(theName, fsParticles, theDec->motherPart()));
     else if(theDec->dynType()=="RadM1") {
-      result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->prodChannelInfo()->m0decRadM1Prod()));
+      result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->wignerDKey(), theDec->barrierqR(), theDec->prodChannelInfo()->m0decRadM1Prod()));
     }
     else{
       Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;

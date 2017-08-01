@@ -27,7 +27,14 @@
 complex<double> RadMultipoleFormFactor::PureM1(double massA, double currentMassB, double massB0, double Egamma){
   complex<double> i(0.,1.);
   double E0 = (massA*massA - massB0*massB0)/(2.*massA);
-  double fD = (E0*E0)/(Egamma*E0 + ((Egamma-E0)*(Egamma-E0)));
+
+//  double fD = (E0*E0)/(Egamma*E0 + ((Egamma-E0)*(Egamma-E0))); // KEDR, original
+//  double fD = exp(-(Egamma*Egamma)/(8*0.065*0.065));            // CLEO ERRATUM VERSION
+//
+  double fD = exp(-(Egamma*Egamma)/(8*0.065*0.065))/exp(-(E0*E0)/(8*0.065*0.065)); 
+   // CLEO ERRATUM VERSION, normalized as in eta_c->phiphi paper - version used in BESIII
+
+
   complex<double> M1(Egamma*Egamma*Egamma*fD,0.0);
 
   return sqrt(M1);

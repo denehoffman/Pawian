@@ -37,7 +37,7 @@
 #include "ConfigParser/ParserBase.hh"
 #include "Utils/IdStringMapRegistry.hh"
 
-RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double massB0) :
+RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, const std::string& wignerDKey, double qR, double massB0) :
   AbsDynamics(name, fsParticles, mother)
   ,_fsParticlesDaughter1(fsParticlesDaughter1)
   ,_fsParticlesDaughter2(fsParticlesDaughter2)
@@ -49,9 +49,26 @@ RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsPartic
   ,_dynEgammaCMmotherId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _dynEgammaCMmotherKey))  
   ,_isP1Gamma(true)
   ,_massB0(massB0)
+  ,_wignerDKey(wignerDKey)
+  ,_wignerDqNormKey(_wignerDKey+"qNorm")
+  ,_wignerDqId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _wignerDKey))
+  ,_wignerDqNormId(IdStringMapRegistry::instance()->keyStringId(_keyForMassList, _wignerDqNormKey))
+  ,_qR(qR)
+  ,_fitqRVals(false)
+  ,_fitqRKey(_massKey+"qRPosOther")
 {
   InfoMsg << "RadM1Dynamics for " << _name <<endmsg;
   _isLdependent=false;
+  if(GlobalEnv::instance()->parser()->fitqRProduction()) _fitqRVals=true;
+  // _qR should be between 0.02  and 20. 
+  if (_qR<0.02){
+    WarningMsg << "_qR value of " << _qR << " to low! Set it to 0.02!!!" << endmsg;
+    _qR=0.02;
+  }
+  if (_qR>20.){
+    WarningMsg << "_qR value of " << _qR << " to high! Set it to 20.!!!" << endmsg;
+    _qR=20.;
+  }
 }
 
 RadM1Dynamics::~RadM1Dynamics()
@@ -72,26 +89,38 @@ complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   double Egamma = theData->DoubleMassId.at(_dynEgammaCMmotherId); // how to access Egamma?
 
   complex<double> result(1.,0.);
-  result=RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+  if(OrbMom==0) result=RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+  else result = BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) / 
+                BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR) *
+                RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+
   if ( _cacheAmps) _cachedMap[evtNo]=result;
 
   return result;
 }
 
 void  RadM1Dynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  return;
+  if(!_fitqRVals) return;
+  fitPar->Add(_fitqRKey, _qR, 0.05);
+  fitPar->SetLimits(_fitqRKey, 0.02, 20.);
 }
 
 void RadM1Dynamics::fillParamNameList(){
+  if(!_fitqRVals) return;
+  _paramNameList.clear();
+  _paramNameList.push_back(_fitqRKey);
   return;
 }
 
 void RadM1Dynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  if(!_fitqRVals) return;
+  _qR = fitPar->Value(_fitqRKey);
   return;
 }
 
 void RadM1Dynamics::setMassKey(std::string& theMassKey){
-//  _massKey=theMassKey;
+  _massKey=theMassKey;
+  _fitqRKey=_massKey+"qRPosOther";
 }
 
 void RadM1Dynamics::fillMasses(EvtData* theData){

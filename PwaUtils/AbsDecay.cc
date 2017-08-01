@@ -396,7 +396,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   }
   else{
     if(whichDecayLevel()!=decayLevel::isProdAmp){
-      Alert << "this amlpitude " << name() << " hasn't got a mother and is not a production amplitude!!!" << endmsg;
+      Alert << "this amplitude " << name() << " hasn't got a mother and is not a production amplitude!!!" << endmsg;
       exit(1); 
     }
     daughter2HelMother=daughter2_4Vec;
