@@ -1,4 +1,4 @@
-source /opt/root/6-08.00-SL7-64-gcc6.1.0/bin/thisroot.csh
+source /opt/root/5.34-36-SL7-64-gcc6.1.0/bin/thisroot.csh
 
 setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
 setenv extern /data/sleipnir/PANDA/PWA
