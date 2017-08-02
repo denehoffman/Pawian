@@ -1,5 +1,6 @@
 import os ;
 path-constant TOP : . ;
+local external = /lustre/nyx/panda/malte/extern/ ; 
 local ROOTSYS = [ os.environ ROOTSYS ] ; 
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
@@ -7,27 +8,28 @@ BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboos
 
 
 project :
-   requirements <include>./  
-<include>$(BOOSTINCLUDE)
-   <include>$(extern)/include
-   <include>$(ROOTSYS)/include
-   <link>static
-   <cxxflags>-std=gnu++11
-   <cxxflags>-ftemplate-depth=256
-   <linkflags>$(ROOTLIBS)
-   <linkflags>-L$(BOOSTLIBPATH)
-<linkflags>$(BOOSTLIBS)
-   <linkflags>-llog4cpp
-   ;
+	requirements <include>./  
+	<include>$(BOOSTINCLUDE)
+	<include>$(external)/include
+	<include>$(ROOTSYS)/include
+	<link>static
+	<cxxflags>-std=gnu++11
+	<cxxflags>-ftemplate-depth=256
+	<linkflags>$(ROOTLIBS)
+	<linkflags>-L$(BOOSTLIBPATH)
+	<linkflags>$(BOOSTLIBS)
+  <linkflags>-L/lustre/nyx/panda/malte/extern/lib/
+	<linkflags>-llog4cpp
+	;
 
-   actions rootlibs
+actions rootlibs
 {
-   $(ROOTSYS)/bin/root-config --libs
+	$(ROOTSYS)/bin/root-config --libs
 }
 
-lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
-lib Minuit2 : : <file>$(extern)/lib/libMinuit2.so : : ;
-
+lib HepMc : : <file>/lustre/nyx/panda/malte/extern/lib/libHepMC.so : : ;
+lib Minuit2 : : <file>/lustre/nyx/panda/malte/extern/lib/libMinuit2.so : : ;
+ 
 build-project qft++ ;
 build-project Utils ;
 build-project ErrLogger ;
@@ -42,7 +44,6 @@ build-project pbarpUtils ;
 build-project epemUtils ;
 build-project resUtils ;
 #build-project gammapUtils ;
-build-project pipiScatteringUtils ;
 build-project Particle ;
 build-project Event ;
 build-project PspGen ;
