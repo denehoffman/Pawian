@@ -1,0 +1,16 @@
+setenv ROOTSYS /lustre/nyx/panda/malte/extern/rootInstall
+
+setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
+setenv extern /lustre/nyx/panda/malte/extern
+setenv LD_LIBRARY_PATH ${TOP_DIR}/lib:${extern}/lib:${ROOTSYS}/lib
+setenv BOOST_BUILD_PATH /lustre/nyx/panda/malte/extern/boost-build/
+setenv PATH ${ROOTSYS}/bin:${TOP_DIR}/bin:${PATH}
+
+rm Jamroot
+ln -s JamrootSL6_gsi Jamroot
+rm Event/Jamfile
+ln -s JamfilePython27 Event/Jamfile
+
+echo "\n ROOTSYS: " $ROOTSYS 
+echo "\n BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
+echo "\n"

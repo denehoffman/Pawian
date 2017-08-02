@@ -9,6 +9,11 @@ setenv JULIA_DIR /usr/local/julia
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JULIA_DIR/lib/julia
 setenv JULIA_HOME $JULIA_DIR/bin
 
+rm Jamroot
+ln -s JamrootSL7 Jamroot
+rm Event/Jamfile
+ln -s JamfilePython27 Event/Jamfile
+
 echo "\n ROOTSYS: " $ROOTSYS 
 echo "\n BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
 echo "\n"
