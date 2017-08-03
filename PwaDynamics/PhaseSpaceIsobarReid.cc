@@ -63,8 +63,15 @@ complex<double> PhaseSpaceIsobarReid::ChewM(const double mass){
 complex<double> PhaseSpaceIsobarReid::ChewM(const complex<double> mass){
   complex<double> s=mass*mass;
   complex<double> result = PawianQFT::ChewMandelstamReid(s, _mass1, _mass2);
-  complex<double> momReid = PawianQFT::breakupMomQReid(mass, _mass1, _mass2);
-  CorrectForChosenSign(momReid, result);
+  complex<double> momReid = result.imag()*mass/2.;
+  CorrectCMForChosenSign(momReid, result);
   return result;
+}
+
+void PhaseSpaceIsobarReid::CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
+  if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
+     (_bumImPartSign < 0 && breakUpMom.imag() > 0)){
+     toChange = conj(toChange);
+  }
 }
 

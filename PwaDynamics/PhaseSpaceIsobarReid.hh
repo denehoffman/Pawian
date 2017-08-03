@@ -62,6 +62,7 @@ public:
   virtual complex<double> ChewM(const complex<double> mass);
 
 protected:
+  void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
 
 private:
 };

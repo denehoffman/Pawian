@@ -221,10 +221,13 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     _CMReidRealHist->Fill(massSqrItCompl.real(), currentReidFac.real());
     _CMReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());
 
-    complex<double> currentCMBBUnstableRhoPiFac = phpBBUnstableRhoPi->ChewM(massSqrItComplCM);
+    if(massSqrItComplCM.real()>0.){
+      double currentMass=sqrt(massSqrItComplCM.real());
+      InfoMsg << "currentMass: " << currentMass << endmsg;
+    complex<double> currentCMBBUnstableRhoPiFac = phpBBUnstableRhoPi->ChewM(currentMass);
     _CMBBUnstableRhoPiRealHist->Fill(massSqrItCompl.real(), currentCMBBUnstableRhoPiFac.real());
     _CMBBUnstableRhoPiImagHist->Fill(massSqrItCompl.real(), currentCMBBUnstableRhoPiFac.imag()); 
-    
+    }
   }
   delete phpBBUnstableRhoPi; 
 }
