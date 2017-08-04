@@ -92,17 +92,16 @@ complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const complex<double> mas
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const double mass){
-  complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
-  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
+  complex<double> massCompl(mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+  double sHO[] = {real(massCompl), imag(massCompl)};
   double* res = computeFactor(sHO);
   complex<double> result(res[0], res[1]);
   return result;  
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const complex<double> mass){
-  complex<double> s=mass*mass;
-  double sHO[] = {real(s), imag(s)};
-  double* res = computeFactor(sHO);
+  double sHO[] = {real(mass), imag(mass)};
+  double* res = computeFactor(sHO);  
   complex<double> result (res[0], res[1]);
   complex<double> momReid = imag(result)*mass/2.0;
   CorrectForChosenSign(momReid, result);

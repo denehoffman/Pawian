@@ -72,8 +72,6 @@ private:
   TH1F* _CMPenningtonImagHist;
   TH1F* _CMReidRealHist;
   TH1F* _CMReidImagHist;
-  TH1F* _CMBBUnstableRhoPiRealHist;
-  TH1F* _CMBBUnstableRhoPiImagHist;
   TH1F* _CMDefaultRealHist;
   TH1F* _CMDefaultImagHist;
   TH1F* _CMDefaultComplRealHist;
@@ -87,6 +85,8 @@ private:
   TH1F* _CMMReidImagHist;
   TH1F* _CMMDefaultComplRealHist;
   TH1F* _CMMDefaultComplImagHist;
+  TH1F* _CMMBBUnstableRhoPiRealHist;
+  TH1F* _CMMBBUnstableRhoPiImagHist;
 
   const double _mass1;
   const double _mass2;
