@@ -58,8 +58,8 @@ complex<double> PhaseSpaceIsobarBBUnstable::factor(const double mass){
   complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
   double sHO[] = {std::real(massSqrCompl), std::imag(massSqrCompl)};
   double* res = computeFactor(sHO);
-  complex<double> result(res[0], res[1]);
-  return imag(result);
+  complex<double> result( res[1], 0);
+  return result;
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const double mass){
@@ -76,9 +76,8 @@ complex<double> PhaseSpaceIsobarBBUnstable::factor(const complex<double> mass){
   complex<double> s=mass*mass;
   double sHO[] = {real(s), imag(s)};
   double* res = computeFactor(sHO);
-  complex<double> resC (res[0], res[1]); 
-  complex<double> rho = imag(resC); 
-  return rho;
+  complex<double> resC (res[1], 0.); 
+  return resC;
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const complex<double> mass){
@@ -92,15 +91,16 @@ complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const complex<double> mas
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const double mass){
-  complex<double> massCompl(mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
-  double sHO[] = {real(massCompl), imag(massCompl)};
+  complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
   double* res = computeFactor(sHO);
   complex<double> result(res[0], res[1]);
   return result;  
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const complex<double> mass){
-  double sHO[] = {real(mass), imag(mass)};
+  complex<double> massSqrCompl=mass*mass;
+  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
   double* res = computeFactor(sHO);  
   complex<double> result (res[0], res[1]);
   complex<double> momReid = imag(result)*mass/2.0;
