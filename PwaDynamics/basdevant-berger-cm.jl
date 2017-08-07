@@ -26,15 +26,15 @@ function bbcm(sreal,simag,m11,m21,m12,m22,mR1,fR1,mR2,fR2,epsilon)
 	a1 = (m11+m21)^2
 	a2 = (m12+m22)^2
 	function scaler(u)
-		if u == 1.0
-			return (1.0/((1.0000000000001-u)^2))
-		end
+		#if u == 1.0
+		#	return (1.0/((1.0000000000001-u)^2))
+		#end
 		return (1.0/((1.0-u)^2))
 	end
 	function sprime(a, t)
-		if t == 1.0
-			return (a+(t/(1.00000000001-t)))
-		end
+		#if t == 1.0
+		#	return (a+(t/(1.0000000000001-t)))
+		#end
 		return (a+(t/(1.0-t)))
 	end
 	function ds(t, m1, m2, fR, mR, a)
@@ -44,10 +44,14 @@ function bbcm(sreal,simag,m11,m21,m12,m22,mR1,fR1,mR2,fR2,epsilon)
 		return (sprime(a, t)-a)*cm(sprime(a, t), epsilon,m1,m2)
 	end
 	function integrand(x,f)
+		if abs(x[1]-1.0) < 0.000000000000001
+				return 0.0
+			end
 		if fR1 == 0.0
-			tmp = (((1.0/pi)*fR2^2*imag(Sigma(a2,x[2], m12, m22)))/abs2(ds(x[2],m12, m22, fR2, mR2, a2)))*cm(sreal, simag, sqrt(sprime(a2, x[2])), mR1)*scaler(x[1])
+			tmp = (((1.0/pi)*fR2^2*imag(Sigma(a2,x[2], m12, m22)))/abs2(ds(x[2],m12, m22, fR2, mR2, a2)))*cm(sreal, simag, sqrt(sprime(a2, x[2])), mR1)*scaler(x[2])
 		elseif fR2 == 0.0
-			tmp = (((1.0/pi)*fR1^2*imag(Sigma(a1,x[1], m11, m21)))/abs2(ds(x[1],m11, m21, fR1, mR1, a1)))*cm(sreal, simag, sqrt(sprime(a1, x[1])), mR2)*scaler(x[2])
+			
+			tmp = (((1.0/pi)*fR1^2*imag(Sigma(a1,x[1], m11, m21)))/abs2(ds(x[1],m11, m21, fR1, mR1, a1)))*cm(sreal, simag, sqrt(sprime(a1, x[1])), mR2)*scaler(x[1])
 		else
 			tmp = ((1.0/(pi^2))*fR1^2*imag(Sigma(a1,x[1], m11, m21)))/abs2(ds(x[1],m11, m21, fR1, mR1, a1))*cm(sreal, simag, sqrt(sprime(a1, x[1])), sqrt(sprime(a2, x[2])))*scaler(x[1])*scaler(x[2])*fR2^2*imag(Sigma(a2,x[2], m12, m22))/abs2(ds(x[2],m12, m22, fR2, mR2, a2))
 		end
@@ -64,8 +68,6 @@ function bbcm(sreal,simag,m11,m21,m12,m22,mR1,fR1,mR2,fR2,epsilon)
 	end
 	
 	resultCmplx = Float64[ real(complex(result[1]...)), imag(complex(result[1]...)) ]
-	
 	return resultCmplx
 end
 end
-
