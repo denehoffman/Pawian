@@ -73,5 +73,9 @@ public:
 
   std::vector< std::shared_ptr<const JPCLS> > _JPCLS_States; //l;momentum between gamma and gamma
   std::vector< std::shared_ptr<const JPClamlam> > _JPClamlam_States;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1m1Lam2m1_States;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1m1Lam2p1_States;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1p1Lam2m1_States;
+  std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1p1Lam2p1_States;
                                                    
 };
