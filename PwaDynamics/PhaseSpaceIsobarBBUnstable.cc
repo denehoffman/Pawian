@@ -173,12 +173,14 @@ void PhaseSpaceIsobarBBUnstable::fillMap(){
   double KstarKArgs[9] = {0.493667, 0.13957, 0.13957, 0.13957, 0.903880523, 0.425440948, 0.493667, 0.0, 0.0};
   double KstarPiArgs[9] = {0.493667, 0.13957, 0.13957, 0.13957, 0.903880523, 0.425440948, 0.13957, 0.0, 0.0};
   double KstarKstarArgs[9] = {0.493667, 0.13957, 0.493667, 0.13957, 0.903880523, 0.425440948, 0.903880523, 0.425440948, 0.0};
+  double KstarRhoArgs[9] = {0.493667, 0.13957, 0.493667, 0.13957, 0.903880523, 0.425440948, 0.758287544, 0.442718872, 0.0};
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableRhoPi",RhoPiArgs) );
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableRhoK",RhoKArgs) );
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableRhoRho",RhoRhoArgs) );
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarK",KstarKArgs) );
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarPi",KstarPiArgs) );
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarKstar",KstarKstarArgs) );
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarRho",KstarRhoArgs) );
   return;
 }
 
