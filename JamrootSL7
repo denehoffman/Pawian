@@ -50,6 +50,7 @@ build-project AppUtils ;
 build-project pbarpUtils ;
 build-project epemUtils ;
 build-project resUtils ;
+build-project gamgamUtils ;
 #build-project gammapUtils ;
 build-project Particle ;
 build-project Event ;

@@ -1,0 +1,25 @@
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : gamgamUtils
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
+project : 
+	;
+
+lib gamgamUtils : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils 
+	$(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/FitParams//FitParams
+	$(TOP)/PwaUtils//PwaUtils 
+	:
+	: 
+	: ;
+
+exe gamgamStatesApp : gamgamStatesApp.cc gamgamUtils : ;
