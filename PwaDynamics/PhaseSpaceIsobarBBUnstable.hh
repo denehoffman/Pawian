@@ -34,6 +34,7 @@
 #include <vector>
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include <julia.h>
+#include <map>
 
 using namespace std;
 
@@ -83,6 +84,7 @@ private:
   jl_value_t* m_epsilonHO;
 
   std::string m_pathToModule;
+  std::map<std::string, double*> m_knownCombinations;
 
   bool loadModule(std::string _moduleDefinitionPath);
   double* computeFactor(double* _inS);
@@ -90,6 +92,7 @@ private:
   double* computeFactor();
   bool setArgs(double* _inArgs);
   bool setS(double* _inS);
+  void fillMap();
 };
 //_____________________________________________________________________________
 

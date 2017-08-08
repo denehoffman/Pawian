@@ -30,6 +30,7 @@
 PhaseSpaceIsobarBBUnstable::PhaseSpaceIsobarBBUnstable(double mass1, double mass2, std::string type):
   PhaseSpaceIsobar(mass1, mass2)
 {
+  m_knownCombinations.clear();
   m_pathToModule+= getenv("TOP_DIR");
   m_pathToModule+="/PwaDynamics/basdevant-berger-cm.jl";
   jl_init();
@@ -45,9 +46,9 @@ PhaseSpaceIsobarBBUnstable::PhaseSpaceIsobarBBUnstable(double mass1, double mass
   m_f2HO = jl_box_float64(0.0);
   m_epsilonHO = jl_box_float64(0.0);
   loadModule(m_pathToModule.c_str());
-  double RhoPiArgs[9] = {0.14, 0.14, 0.14, 0.14, 0.758287544, 0.442718872, 0.14, 0.0, 0.0};
-  setArgs(RhoPiArgs);
-  //fillMap();
+  fillMap();
+  setArgs(m_knownCombinations.find(type)->second);
+  
 }
 
 PhaseSpaceIsobarBBUnstable::~PhaseSpaceIsobarBBUnstable(){
@@ -164,5 +165,20 @@ bool PhaseSpaceIsobarBBUnstable::setS(double* _inS){
   return result;
 }
 
-
+void PhaseSpaceIsobarBBUnstable::fillMap(){
+  
+  double RhoPiArgs[9] = {0.13957, 0.13957, 0.13957, 0.13957, 0.758287544, 0.442718872, 0.13957, 0.0, 0.0};
+  double RhoKArgs[9] = {0.13957, 0.13957, 0.13957, 0.13957, 0.758287544, 0.442718872, 0.493667, 0.0, 0.0};
+  double RhoRhoArgs[9] = {0.13957, 0.13957, 0.13957, 0.13957, 0.758287544, 0.442718872, 0.758287544, 0.442718872, 0.0};
+  double KstarKArgs[9] = {0.493667, 0.13957, 0.13957, 0.13957, 0.903880523, 0.425440948, 0.493667, 0.0, 0.0};
+  double KstarPiArgs[9] = {0.493667, 0.13957, 0.13957, 0.13957, 0.903880523, 0.425440948, 0.13957, 0.0, 0.0};
+  double KstarKstarArgs[9] = {0.493667, 0.13957, 0.493667, 0.13957, 0.903880523, 0.425440948, 0.903880523, 0.425440948, 0.0};
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableRhoPi",RhoPiArgs) );
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableRhoK",RhoKArgs) );
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableRhoRho",RhoRhoArgs) );
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarK",KstarKArgs) );
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarPi",KstarPiArgs) );
+  m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarKstar",KstarKstarArgs) );
+  return;
+}
 
