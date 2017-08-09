@@ -86,6 +86,7 @@ public:
   static short CHANNEL_RES;
   static short CHANNEL_GAMMAP;
   static short CHANNEL_PIPISCATTERING;
+  static short CHANNEL_GAMGAM;
   
 protected:
    int _channelID;

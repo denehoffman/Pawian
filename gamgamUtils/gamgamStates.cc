@@ -54,6 +54,28 @@ gamgamStates::gamgamStates(int jmax):
 gamgamStates::~gamgamStates(){
 }
 
+std::vector< std::shared_ptr<const JPCLS> > gamgamStates::jpcLSStates(Spin lamGam1, Spin lamGam2) const{
+  if(lamGam1==-1 && lamGam2==-1) return _JPCLSLam1m1Lam2m1_States;
+  else if(lamGam1==-1 && lamGam2==1) return _JPCLSLam1m1Lam2p1_States;
+  else if(lamGam1==1 && lamGam2==-1) return _JPCLSLam1p1Lam2m1_States;
+  else if(lamGam1==1 && lamGam2==1) return _JPCLSLam1p1Lam2p1_States;
+  else{
+    Alert << "lamGam1= " << lamGam1 << " and lamGam2= " << lamGam2 << " are not allowed for two initial real photons!!!" << endmsg;
+    exit(1);
+  } 
+}
+
+std::vector< std::shared_ptr<const JPClamlam> > gamgamStates::jpcLamLamStates(Spin lamGam1, Spin lamGam2) const{
+  if(lamGam1==-1 && lamGam2==-1) return _JPClamlamLam1m1Lam2m1_States;
+  else if(lamGam1==-1 && lamGam2==1) return _JPClamlamLam1m1Lam2p1_States;
+  else if(lamGam1==1 && lamGam2==-1) return _JPClamlamLam1p1Lam2m1_States;
+  else if(lamGam1==1 && lamGam2==1) return _JPClamlamLam1p1Lam2p1_States;
+  else{
+    Alert << "lamGam1= " << lamGam1 << " and lamGam2= " << lamGam2 << " are not allowed for two initial real photons!!!" << endmsg;
+    exit(1);
+  } 
+}
+
 bool gamgamStates::calcStates(){
   std::cout << "jmax: " << _jmax << std::endl;
   for (int j=0; j<=_jmax; j++){
@@ -77,17 +99,30 @@ bool gamgamStates::calcStates(){
 	      double preFactorLS=sqrt(2.*(*it)->L+1)*Clebsch((*it)->S, lam1-lam2, (*it)->L, 0, jpcPtr->J,  lam1-lam2);
 	      if( fabs(preFactorLS) > 1.e-10){
 		std::shared_ptr<const JPCLS> currentJPCLSPtr(new JPCLS(jpcPtr, (*it)->L, (*it)->S, preFactorLS)); 
-		double preFactorLamLam=Clebsch(1, lam1, 1, -lam2, (*it)->S,  lam1-lam2);
-		if(fabs(preFactorLamLam) > 1.e-10){
+		double cgFactorLamLam = Clebsch(1, lam1, 1, -lam2, (*it)->S,  lam1-lam2);
+		double parityFactorLamLam = jpcPtr->P*pow(-1., jpcPtr->J);
+		if(fabs(cgFactorLamLam) > 1.e-10){
 		  fillVec(currentJPCLSPtr,_JPCLS_States);
 		  fillVec(currentIGJPCPtr, _allIGjpcRes);
-		  std::shared_ptr<const JPClamlam> currentJPClamlamPtr(new JPClamlam(jpcPtr, lam1, lam2, preFactorLamLam));
+		  std::shared_ptr<const JPClamlam> currentJPClamlamPtr(new JPClamlam(jpcPtr, lam1, lam2, parityFactorLamLam));
 		  fillVec(currentJPClamlamPtr, _JPClamlam_States);
 		  fillVec(jpcPtr, _alljpcRes);
-		  if(lam1==-1 && lam2==-1) fillVec(currentJPCLSPtr, _JPCLSLam1m1Lam2m1_States);
-		  else if(lam1==-1 && lam2==1) fillVec(currentJPCLSPtr, _JPCLSLam1m1Lam2p1_States);
-		  else if(lam1==1 && lam2==-1) fillVec(currentJPCLSPtr, _JPCLSLam1p1Lam2m1_States);
-		  else if(lam1==1 && lam2==1) fillVec(currentJPCLSPtr, _JPCLSLam1p1Lam2p1_States); 
+		  if(lam1==-1 && lam2==-1){
+		    fillVec(currentJPCLSPtr, _JPCLSLam1m1Lam2m1_States);
+		    fillVec(currentJPClamlamPtr, _JPClamlamLam1m1Lam2m1_States);
+		  }
+		  else if(lam1==-1 && lam2==1){
+		    fillVec(currentJPCLSPtr, _JPCLSLam1m1Lam2p1_States);
+		    fillVec(currentJPClamlamPtr, _JPClamlamLam1m1Lam2p1_States);
+		  }
+		  else if(lam1==1 && lam2==-1){
+		    fillVec(currentJPCLSPtr, _JPCLSLam1p1Lam2m1_States);
+		    fillVec(currentJPClamlamPtr, _JPClamlamLam1p1Lam2m1_States);
+		  }
+		  else if(lam1==1 && lam2==1){
+		    fillVec(currentJPCLSPtr, _JPCLSLam1p1Lam2p1_States);
+		    fillVec(currentJPClamlamPtr, _JPClamlamLam1p1Lam2p1_States);
+		  } 
 		}
 	      }
 	    }
@@ -132,29 +167,26 @@ void gamgamStates::print(std::ostream& os) const{
    os << std::endl;
  }
 
- os << "\n******** JPCLS states  for lamGam1=-1 and lamGam2=-1************ " << std::endl;
- for ( itJPCLS=_JPCLSLam1m1Lam2m1_States.begin(); itJPCLS!=_JPCLSLam1m1Lam2m1_States.end(); ++itJPCLS){
-    (*itJPCLS)->print(os);
-    os << std::endl;
-  }
+ for (Spin lam1=-1; lam1<=1; lam1+=2){
+   for (Spin lam2=-1; lam2<=1; lam2+=2){
+     os << "\n******** JPCLS states  for lamGam1= " << lam1 << " and lamGam2= " << lam2 <<" ===> lamX= " << lam1-lam2 << " ************ " << std::endl;
+     std::vector< std::shared_ptr<const JPCLS> > currentJPCLSStates=jpcLSStates(lam1, lam2);
+     for ( itJPCLS=currentJPCLSStates.begin(); itJPCLS!=currentJPCLSStates.end(); ++itJPCLS){
+       (*itJPCLS)->print(os);
+       os << std::endl;
+     }
+   }
+ }
 
- os << "\n******** JPCLS states  for lamGam1=-1 and lamGam2=1************ " << std::endl;
- for ( itJPCLS=_JPCLSLam1m1Lam2p1_States.begin(); itJPCLS!=_JPCLSLam1m1Lam2p1_States.end(); ++itJPCLS){
-    (*itJPCLS)->print(os);
-    os << std::endl;
-  }
-
-
- os << "\n******** JPCLS states  for lamGam1=1 and lamGam2=-1************ " << std::endl;
- for ( itJPCLS=_JPCLSLam1p1Lam2m1_States.begin(); itJPCLS!=_JPCLSLam1p1Lam2m1_States.end(); ++itJPCLS){
-    (*itJPCLS)->print(os);
-    os << std::endl;
-  }
-
- os << "\n******** JPCLS states  for lamGam1=1 and lamGam2=1************ " << std::endl;
- for ( itJPCLS=_JPCLSLam1p1Lam2p1_States.begin(); itJPCLS!=_JPCLSLam1p1Lam2p1_States.end(); ++itJPCLS){
-    (*itJPCLS)->print(os);
-    os << std::endl;
-  }
+ for (Spin lam1=-1; lam1<=1; lam1+=2){
+   for (Spin lam2=-1; lam2<=1; lam2+=2){
+     os << "\n******** JPClamlam states  for lamGam1= " << lam1 << " and lamGam2= " << lam2 <<" ===> lamX= " << lam1-lam2 << " ************ " << std::endl;
+     std::vector< std::shared_ptr<const JPClamlam> > currentJPClamalamStates=jpcLamLamStates(lam1, lam2);
+     for ( itJPCLamLam=currentJPClamalamStates.begin(); itJPCLamLam!=currentJPClamalamStates.end(); ++itJPCLamLam){
+       (*itJPCLamLam)->print(os);
+       os << std::endl;
+     }
+   }
+ }
 }
 
