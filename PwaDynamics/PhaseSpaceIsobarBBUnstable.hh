@@ -1,8 +1,7 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
+//  Copyright 2017 Markus Kuhlmann (mkuhlmann@ep1.rub.de)		  //
+//  	      	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -21,20 +20,15 @@
 //									  //
 //************************************************************************//
 
-// PhaseSpaceIsobarBBUnstable class definition file. -*- C++ -*-
-// Copyright 2016 Bertram Kopf
-// phase space factor which fulfils the analytic continuation and unitarity
-
 #pragma once 
-//_____________________________________________________________________________
-// @file PhaseSpaceIsobarBBUnstable.h
-//_____________________________________________________________________________
 
 #include <iostream>
 #include <vector>
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include <julia.h>
 #include <map>
+#include <string>
+#include <sstream>
 
 using namespace std;
 

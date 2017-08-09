@@ -1,8 +1,7 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universit??t Bochum 				  //
+//  Copyright 2017 Markus Kuhlmann (mkuhlmann@ep1.rub.de)		  //
+//  	      	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -47,7 +46,19 @@ PhaseSpaceIsobarBBUnstable::PhaseSpaceIsobarBBUnstable(double mass1, double mass
   m_epsilonHO = jl_box_float64(0.0);
   loadModule(m_pathToModule.c_str());
   fillMap();
-  setArgs(m_knownCombinations.find(type)->second);
+  std::map<std::string, double*>::iterator it = m_knownCombinations.find(type);
+  if(it != m_knownCombinations.end()){
+    setArgs(m_knownCombinations.find(type)->second);
+  }
+  else{
+    double paramsGiven[9];
+    std::stringstream paramStream(type.substr(11));
+    for(unsigned int i = 0; i < 9; i++){
+      paramStream >> paramsGiven[i];
+    }
+    setArgs(paramsGiven);
+  }
+  
   
 }
 
