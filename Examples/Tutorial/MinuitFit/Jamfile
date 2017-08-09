@@ -7,19 +7,7 @@ install install-bin : MinuitFitApp
                    <install-type>EXE
                    ;
 
-install install-bin : BBUnstableParFitApp
-                 : <location>$(TOP)/bin
-                   <install-dependencies>on 
-                   <install-type>EXE
-                   ;
-
 install install-lib : MinuitFit
-                 : <location>$(TOP)/lib 
-                   <install-dependencies>on 
-                   <install-type>LIB
-                   ;
-
-install install-lib : BBUnstableParFit
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
@@ -36,15 +24,5 @@ lib MinuitFit :
 	: 
 	: <library>$(TOP)//Minuit2 ;
 
-lib BBUnstableParFit : 
-        [ glob *.cc : *App.cc ]  
-        $(TOP)/qft++//qft++
-        $(TOP)/qft++Extension//qft++Extension 
-        $(TOP)/ErrLogger//ErrLogger
-	: <use>$(TOP)//Minuit2 
-	: 
-	: <library>$(TOP)//Minuit2 ;
-
 exe MinuitFitApp : MinuitFitApp.cc MinuitFit : ;
-exe BBUnstableParFitApp : BBUnstableParFitApp.cc BBUnstableParFit : ;
 
