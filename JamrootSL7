@@ -26,7 +26,7 @@ project :
 	<linkflags>-ljulia
         <linkflags>-L$JULIA_DIR/lib/julia/libstdc++.so.6
 	<linkflags>-Wl,--export-dynamic
-	<cxxflags>-DJULIA_ENABLE_THREADING=1
+#	<cxxflags>-DJULIA_ENABLE_THREADING=1
 	;
 
 actions rootlibs
@@ -36,7 +36,8 @@ actions rootlibs
 
 lib HepMc : : <file>$(extern)/libgcc610/libHepMC.so : : ;
 lib Minuit2 : : <file>$(extern)/libgcc610/libMinuit2.so : : ;
- 
+
+
 build-project qft++ ;
 build-project Utils ;
 build-project ErrLogger ;
