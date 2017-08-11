@@ -20,49 +20,34 @@
 //									  //
 //************************************************************************//
 
-// gamgamReaction class definition file. -*- C++ -*-
+// FormationDecay class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
-#pragma once
+#include <getopt.h>
+#include <fstream>
+#include <algorithm>
 
-#include <iostream>
-#include <vector>
-#include <complex>
-#include <map>
-#include <vector>
-#include <string>
-#include <memory>
-
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "PwaUtils/FormationDecay.hh"
+#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "ErrLogger/ErrLogger.hh"
+#include "Particle/Particle.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "Utils/FunctionUtils.hh"
+#include "PwaUtils/KinUtils.hh"
+#include "PwaUtils/EvtDataBaseList.hh"
 
+FormationDecay::FormationDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, ChannelID channelID, std::string motherName, std::string typeName) :
+  AbsDecay(motherIGJPCPtr, daughter1, motherName, channelID, typeName)
+{
+}
 
-class Particle;
-class FormationDecay;
-class IsobarHeliDecay;
-class FormationDecay;
-class ProdChannelInfo;
-class gamgamStates;
+void FormationDecay::extractStates(){
+}
 
-class gamgamReaction {
+FormationDecay::~FormationDecay(){
+}
 
-public:
-  gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int jmax);
-
-  virtual ~gamgamReaction();
-
-  virtual void print(std::ostream& os) const;
-  std::shared_ptr<gamgamStates> GamGamStates() {return _gamgamStates;}
-  std::vector< std::shared_ptr<FormationDecay> >& formationDecays() {return _prodFormationDecs;}
-  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
-
-protected:
-
-private:
-  ChannelID _channelID;
-  unsigned int _jmax;
-  std::shared_ptr<gamgamStates> _gamgamStates;
-  std::vector< std::shared_ptr<FormationDecay> > _prodFormationDecs;
-  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
-};
+void FormationDecay::print(std::ostream& os) const{
+  AbsDecay::print(os);
+  os << "\n";
+}

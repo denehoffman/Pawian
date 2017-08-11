@@ -28,7 +28,7 @@
 
 #include "gamgamUtils/gamgamReaction.hh"
 #include "gamgamUtils/gamgamStates.hh"
-#include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/FormationDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -40,10 +40,29 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
    ,_jmax(jmax)
    ,_gamgamStates(new gamgamStates(_jmax))
 {
+  std::vector<std::string> additionalStringVecDummy;  
      std::vector<std::shared_ptr<ProdChannelInfo> >::iterator itProd;
     for (itProd=prodChannelInfoList.begin(); itProd!= prodChannelInfoList.end(); ++itProd){
+      if( (*itProd)->isFormation() ){
+	Particle* formationParticle=(*itProd)->formationParticle();
+	if(0==formationParticle){
+	  Alert << "formation particle does not exist!!!" << endmsg;
+	  exit(1);
+	}
+	std::shared_ptr<const IGJPC> currentIGJPC=getIGJPCPtr(formationParticle);
+	std::shared_ptr<FormationDecay> currentDec(new FormationDecay(currentIGJPC, formationParticle, _channelID, "gamgam"));
+      currentDec->setProductionAmp();
+      currentDec->setProdChannelInfo( *itProd );
+      currentDec->extractStates();
+      std::string currentFormDynType=(*itProd)->formationDynType();
+      currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+      _prodFormationDecs.push_back(currentDec);
+      }
+      else{
+	Alert << "gamma gamma production mode is not supported so far" << endmsg;
+	exit(1);
+      }
     }
-
 }
 
 gamgamReaction::~gamgamReaction(){

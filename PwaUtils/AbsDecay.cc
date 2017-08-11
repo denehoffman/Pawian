@@ -171,6 +171,80 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   }
 }
 
+AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, std::string motherName, ChannelID channelId, std::string typeName) :
+  _typeName(typeName)
+  ,_channelId(channelId)
+  ,_mother(0)
+  ,_daughter1(daughter1)
+  ,_daughter2(0)
+  ,_daughter1IsStable(true)
+  ,_daughter2IsStable(true)
+  ,_hasMotherPart(false)
+  ,_motherJPCPtr(std::shared_ptr<const jpcRes>(new jpcRes(motherIGJPCPtr->J, motherIGJPCPtr->P, motherIGJPCPtr->C)) )
+  ,_motherIGJPCPtr(motherIGJPCPtr)
+  ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
+  ,_daughter2IGJPCPtr(0)
+  ,_isospinClebschG(1.)
+  ,_qR(BarrierFactor::qRDefault)
+  ,_name(_motherIGJPCPtr->name()+"To"+daughter1->name())
+  ,_nameId(0)
+  ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name())
+  // ,_massParamKey(motherIGJPCPtr->name())
+  ,_massParamKey(motherIGJPCPtr->jpcname())
+  ,_massParamId(IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey))
+  ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name())
+  ,_wignerDId(0)
+  ,_wignerDqNormId(0)
+  ,_wignerDRefKey("default")
+  ,_wigDWigDRefId(0)
+  ,_dynType("WoDynamics")
+  ,_dynEnabled(false)
+  ,_preFactor(1.)
+  ,_pathParserFile("")
+  ,_projectionParticleNames("")
+  ,_isDaughter1Photon(false)
+  ,_isDaughter2Photon(false)
+  ,_gParity(motherIGJPCPtr->G)
+  ,_useIsospin(true)
+  ,_isWeakDecay(false)
+  ,_isProdAmp(true)
+  ,_useProdBarrier(false)
+  ,_massSumFsParticles(0.)
+  ,_Lmin(0)
+  ,_decLevel(decayLevel::isProdAmp)
+  ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
+{
+  _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
+
+  if(0 != _absDecDaughter1){
+    _daughter1IsStable=false;
+    _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
+  }
+  else{
+    Alert << "formed particle " << _daughter1->name()  << " can not be a stable particle!!!" << endmsg;
+    exit(1);
+  }
+
+  pawian::Collection::PtrLess thePtrLess;
+  std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
+
+  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+  _refKey=FunctionUtils::particleListName(_finalStateParticles);
+ 
+  _daughter1->print(std::cout);
+
+  _idaughter1=Spin(_daughter1->twoIso(), 2);
+
+  _i3daughter1=Spin(_daughter1->twoIso3(), 2);
+
+  //fill mass sum of final state particles
+  std::vector<Particle*>::iterator itP;
+  for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
+    _massSumFsParticles+=(*itP)->mass();
+  }
+}
+
 AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId, std::string typeName) :
   _typeName(typeName)
   ,_channelId(channelId)
@@ -297,6 +371,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     _massSumFsParticles+=(*itP)->mass();
   }
 }
+
 
 AbsDecay::~AbsDecay(){
 }

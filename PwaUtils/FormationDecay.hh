@@ -20,7 +20,7 @@
 //									  //
 //************************************************************************//
 
-// gamgamReaction class definition file. -*- C++ -*-
+// FormationDecay class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #pragma once
@@ -31,38 +31,26 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <memory>
 
+#include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
-
 class Particle;
-class FormationDecay;
-class IsobarHeliDecay;
-class FormationDecay;
-class ProdChannelInfo;
-class gamgamStates;
+class EvtData;
 
-class gamgamReaction {
+class FormationDecay : public AbsDecay{
 
 public:
-  gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int jmax);
-
-  virtual ~gamgamReaction();
+  FormationDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, ChannelID channelID, std::string motherName="gamgam", std::string typeName="FormationDecay");
+  virtual ~FormationDecay();
+  //  virtual FormationDecay* clone_() const = 0;
 
   virtual void print(std::ostream& os) const;
-  std::shared_ptr<gamgamStates> GamGamStates() {return _gamgamStates;}
-  std::vector< std::shared_ptr<FormationDecay> >& formationDecays() {return _prodFormationDecs;}
-  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
+  virtual void extractStates();
 
 protected:
-
-private:
-  ChannelID _channelID;
-  unsigned int _jmax;
-  std::shared_ptr<gamgamStates> _gamgamStates;
-  std::vector< std::shared_ptr<FormationDecay> > _prodFormationDecs;
-  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
 };

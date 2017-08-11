@@ -51,7 +51,10 @@ public:
   
   AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId, std::string typeName="AbsDecay");
   AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId, std::string typeName="AbsDecay");
+  AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, std::string motherName, ChannelID channelId, std::string typeName="AbsDecay");
+
   virtual ~AbsDecay();
+
   //  virtual AbsDecay* clone_() const = 0;
   virtual const std::string name() const {return _name;}
   const unsigned short nameId() const {return _nameId;}

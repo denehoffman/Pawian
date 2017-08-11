@@ -22,7 +22,6 @@
 
 // GamgamChannelEnv class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
-
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
 #include "gamgamUtils/GamgamChannelEnv.hh"
@@ -32,7 +31,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
-#include "PwaUtils/IsobarLSDecay.hh"
+#include "PwaUtils/FormationDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
@@ -58,22 +57,20 @@ void GamgamChannelEnv::setupChannel(ChannelID id){
   _jmax = _theGamGamParser->jMax();
   _cmEnergy = _cmsMass;
   _initial4Vec = Vector4<double>( _cmsMass, 0., 0., 0.);
-  
   std::vector<std::string>::const_iterator itStr;
   
   
-  //epem reaction
+  //gamgam reaction
   _gamgamReaction=std::shared_ptr<gamgamReaction>(new gamgamReaction(_prodChannelInfoList, id, _jmax));
-  std::vector<std::string> additionalStringVecDummy;
   std::string dynTypeDefault="WoDynamics";
   
   if (_theGamGamParser->productionFormalism()=="Formation"){
-    std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs = _gamgamReaction->productionHeliDecays();
-    std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
+    std::vector< std::shared_ptr<FormationDecay> > prodDecs = _gamgamReaction->formationDecays();
+    std::vector< std::shared_ptr<FormationDecay> >::iterator itDec;
 
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
-      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+      //      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
+      //      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
     }
   }

@@ -32,8 +32,11 @@
 
 ProdChannelInfo::ProdChannelInfo() :
   _isProdChannel(false)
+  ,_isFormation(false)
+  , _formationParticle(0)
   , _withProBarrier(false)
   ,_prodBarrierType("non")
+  ,_formationDynType("non")
   ,_qRProd(0.1973)
   ,_m0decRadM1Production(1.5)
 {
@@ -41,6 +44,8 @@ ProdChannelInfo::ProdChannelInfo() :
 
 ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
   _isProdChannel(true)
+  ,_isFormation(false)
+  ,_formationParticle(0)
   , _withProBarrier(false)
   ,_prodBarrierType("non")
   ,_qRProd(0.1973)
@@ -87,6 +92,11 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
       if( strStrFromParser >> m0DecStr){
       _m0decRadM1Production=atof(m0DecStr.c_str());
       }
+    }
+    else if(typeStr=="FormPol3"){
+      _formationParticle = firstParticle;
+      _isFormation=true;
+      _formationDynType=typeStr;
     }
     else{
       Alert << "production barrier type: " << typeStr << " doesn't exist for PAWIAN!!!" 
