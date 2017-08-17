@@ -57,7 +57,7 @@ public:
   virtual complex<double> breakUpMom(const complex<double> mass);
   virtual complex<double> ChewM(const double mass);
   virtual complex<double> ChewM(const complex<double> mass);
-
+  double* computeFactor(complex<double> inS);
 
 
 protected:
@@ -83,6 +83,7 @@ private:
   bool loadModule(std::string _moduleDefinitionPath);
   double* computeFactor(double* _inS);
   double* computeFactor(double _inSreal);
+  
   double* computeFactor();
   bool setArgs(double* _inArgs);
   bool setS(double* _inS);

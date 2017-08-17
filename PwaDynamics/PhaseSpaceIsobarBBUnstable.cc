@@ -104,8 +104,9 @@ complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const complex<double> mas
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const double mass){
   complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
-  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
-  double* res = computeFactor(sHO);
+//  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
+ // double* res = computeFactor(sHO);
+	double* res = computeFactor(massSqrCompl);
   complex<double> result(res[0], res[1]);
   return result;  
 }
@@ -131,6 +132,16 @@ bool PhaseSpaceIsobarBBUnstable::loadModule(std::string _moduleDefinitionPath){
 double* PhaseSpaceIsobarBBUnstable::computeFactor(double* _inS){
   m_srealHO = jl_box_float64(_inS[0]);
   m_simagHO = jl_box_float64(_inS[1]);
+  jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
+  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
+  double *retVal = (double*) jl_array_data(ret);
+  return retVal;
+}
+
+double* PhaseSpaceIsobarBBUnstable::computeFactor(complex<double> inS){
+  std::cout << "HERE " << inS << std::endl;
+  m_srealHO = jl_box_float64(inS.real());
+  m_simagHO = jl_box_float64(inS.imag());
   jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
   jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
   double *retVal = (double*) jl_array_data(ret);

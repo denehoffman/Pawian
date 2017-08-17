@@ -25,8 +25,8 @@ project :
 	<linkflags>-L$JULIA_DIR/lib
 	<linkflags>-ljulia
         <linkflags>-L$JULIA_DIR/lib/julia/libstdc++.so.6
-	<linkflags>-Wl,--export-dynamic
-	<cxxflags>-DJULIA_ENABLE_THREADING=1
+	#<linkflags>-Wl,--export-dynamic
+	#<cxxflags>-DJULIA_ENABLE_THREADING=1
 	;
 
 actions rootlibs
