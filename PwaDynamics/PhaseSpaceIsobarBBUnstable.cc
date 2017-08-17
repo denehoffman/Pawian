@@ -44,7 +44,6 @@ PhaseSpaceIsobarBBUnstable::PhaseSpaceIsobarBBUnstable(double mass1, double mass
   m_f1HO = jl_box_float64(0.0);
   m_f2HO = jl_box_float64(0.0);
   m_epsilonHO = jl_box_float64(0.0);
-  loadModule(m_pathToModule.c_str());
   fillMap();
   std::map<std::string, double*>::iterator it = m_knownCombinations.find(type);
   if(it != m_knownCombinations.end()){
@@ -58,8 +57,7 @@ PhaseSpaceIsobarBBUnstable::PhaseSpaceIsobarBBUnstable(double mass1, double mass
     }
     setArgs(paramsGiven);
   }
-  
-  
+  loadModule(m_pathToModule.c_str());
 }
 
 PhaseSpaceIsobarBBUnstable::~PhaseSpaceIsobarBBUnstable(){
@@ -125,6 +123,9 @@ bool PhaseSpaceIsobarBBUnstable::loadModule(std::string _moduleDefinitionPath){
   bool result = false;
   m_mod = (jl_module_t*) jl_load(_moduleDefinitionPath.c_str());
   m_func = jl_get_function(m_mod, "bbcm");
+  m_setfunc = jl_get_function(m_mod, "setArgs");
+  jl_value_t* allargs[] = {m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
+  jl_array_t *ret = (jl_array_t*) jl_call(m_setfunc, allargs, 9);
   if (!jl_exception_occurred())result = true;
   return result;
 }
@@ -132,18 +133,17 @@ bool PhaseSpaceIsobarBBUnstable::loadModule(std::string _moduleDefinitionPath){
 double* PhaseSpaceIsobarBBUnstable::computeFactor(double* _inS){
   m_srealHO = jl_box_float64(_inS[0]);
   m_simagHO = jl_box_float64(_inS[1]);
-  jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
-  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
+  jl_value_t* allargs[] = {m_srealHO, m_simagHO};
+  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 2);
   double *retVal = (double*) jl_array_data(ret);
   return retVal;
 }
 
 double* PhaseSpaceIsobarBBUnstable::computeFactor(complex<double> inS){
-  std::cout << "HERE " << inS << std::endl;
   m_srealHO = jl_box_float64(inS.real());
   m_simagHO = jl_box_float64(inS.imag());
-  jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
-  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
+  jl_value_t* allargs[] = {m_srealHO, m_simagHO};
+  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 2);
   double *retVal = (double*) jl_array_data(ret);
   return retVal;
 }
@@ -151,15 +151,15 @@ double* PhaseSpaceIsobarBBUnstable::computeFactor(complex<double> inS){
 double* PhaseSpaceIsobarBBUnstable::computeFactor(double _inSreal){
   m_srealHO = jl_box_float64(_inSreal);
   m_simagHO = jl_box_float64(0.0);
-  jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
-  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
+  jl_value_t* allargs[] = {m_srealHO, m_simagHO};
+  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 2);
   double *retVal = (double*) jl_array_data(ret);
   return retVal;
 }
 
 double* PhaseSpaceIsobarBBUnstable::computeFactor(){
-  jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
-  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
+  jl_value_t* allargs[] = {m_srealHO, m_simagHO};
+  jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 2);
   double *retVal = (double*) jl_array_data(ret);
   return retVal;
 }
