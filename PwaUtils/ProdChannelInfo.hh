@@ -38,18 +38,24 @@ public:
   ProdChannelInfo(std::string& stringFromParser); //constructor by making use of the string provided by the parser (very specific!!!)
   virtual ~ProdChannelInfo();
   const bool isProductionChannel() const {return _isProdChannel;}
+  const bool isFormation() const {return _isFormation;}
   std::pair<Particle*, Particle*> productionPair() const {return _prodPair;}
+  Particle*  formationParticle() const {return _formationParticle;}
   const bool withProdBarrier() const {return _withProBarrier;}
   const std::string prodBarrierType() const {return _prodBarrierType;}
   const double qRPod() const {return _qRProd;}
   const double m0decRadM1Prod() const {return _m0decRadM1Production;}
+  const std::string formationDynType() const {return _formationDynType;}
   virtual void print(std::ostream& os) const;
 
  protected:
   bool _isProdChannel;
+  bool _isFormation;
   std::pair<Particle*, Particle*> _prodPair;
+  Particle* _formationParticle;
   bool _withProBarrier;
   std::string _prodBarrierType;
+  std::string _formationDynType;
   double _qRProd;
   double _m0decRadM1Production;
 };

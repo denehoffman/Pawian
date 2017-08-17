@@ -57,6 +57,9 @@ public:
     return _JPCLS_States;
   }
 
+  virtual std::vector< std::shared_ptr<const JPCLS> > jpcLSStates(Spin lamGam1, Spin lamGam2) const;
+  virtual std::vector< std::shared_ptr<const JPClamlam> > jpcLamLamStates(Spin lamGam1, Spin lamGam2) const;
+ 
   virtual void print(std::ostream& os) const;
 
  protected:
@@ -77,5 +80,9 @@ public:
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1m1Lam2p1_States;
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1p1Lam2m1_States;
   std::vector< std::shared_ptr<const JPCLS> > _JPCLSLam1p1Lam2p1_States;
+  std::vector< std::shared_ptr<const JPClamlam> > _JPClamlamLam1m1Lam2m1_States;
+  std::vector< std::shared_ptr<const JPClamlam> > _JPClamlamLam1m1Lam2p1_States;
+  std::vector< std::shared_ptr<const JPClamlam> > _JPClamlamLam1p1Lam2m1_States;
+  std::vector< std::shared_ptr<const JPClamlam> > _JPClamlamLam1p1Lam2p1_States;
                                                    
 };

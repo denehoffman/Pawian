@@ -204,8 +204,9 @@ complex<double> PawianQFT::breakupMomQAS(MassType mass, double massDec1, double 
 
 template<typename MassType>
 complex<double> PawianQFT::breakupMomQDefaultAS(MassType mass, double massDec1, double massDec2){
-  complex<double> result=PawianQFT::breakupMomQAS(mass, massDec1, massDec2);
-  if( result.imag() < -1.e-10 ) result=PawianQFT::breakupMomQDefault(mass, massDec1, massDec2);
+  complex<double> result=PawianQFT::breakupMomQDefault(mass, massDec1, massDec2);
+  complex<double> qAS=PawianQFT::breakupMomQAS(mass, massDec1, massDec2);
+  if( fabs(qAS.real()) < 1.e-10 ) result=qAS;
   return result; 
 }
 

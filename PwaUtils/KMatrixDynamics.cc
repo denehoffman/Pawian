@@ -101,6 +101,7 @@ complex<double> result(0.,0.);
   else{
       theMutex.lock();
       result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _decProjectionIndex, OrbMom);
+      //      InfoMsg << name() << "\t_decProjectionIndex: " << "\t currentKey: " << currentKey << "\t" << _decProjectionIndex << "\tresult: " << result << endmsg;
       if ( _cacheAmps){
       	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
       }

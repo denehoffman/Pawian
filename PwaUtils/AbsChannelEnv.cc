@@ -55,6 +55,7 @@ short AbsChannelEnv::CHANNEL_EPEM = 2;
 short AbsChannelEnv::CHANNEL_RES = 3;
 short AbsChannelEnv::CHANNEL_GAMMAP = 4;
 short AbsChannelEnv::CHANNEL_PIPISCATTERING = 5;
+short AbsChannelEnv::CHANNEL_GAMGAM = 6;
 
 AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   _channelType(channelType)
