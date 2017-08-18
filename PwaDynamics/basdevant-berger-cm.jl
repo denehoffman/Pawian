@@ -21,27 +21,7 @@
 #************************************************************************#
 module PhaseSpace
 using Cuba
-m11 = Float64(0.0)
-m12 = Float64(0.0)
-m21 = Float64(0.0)
-m22 = Float64(0.0)
-mR1 = Float64(0.0)
-mR2 = Float64(0.0)
-fR1 = Float64(0.0)
-fR2 = Float64(0.0)
-epsilon = Float64(0.0)
-export cm, bbcm, setArgs
-function setArgs(_m11,_m21,_m12,_m22,_mR1,_fR1,_mR2,_fR2,_epsilon)
-	m11 = _m11
-	m12 = _m12
-	m21 = _m21
-	m22 = _m22
-	mR1 = _mR1
-	mR2 = _mR2
-	fR1 = _fR1
-	fR2 = _fR2
-	return;
-end
+export cm, bbcm
 function cm(real, imag, m, µ)
 		if real == 0.0 && imag == 0.0
     			return 0.0
@@ -63,7 +43,7 @@ function cm(real, imag, m, µ)
 		
 		return (-2.0/pi)*(A(s,m,µ)*B(s,m,µ)+C(s,m,µ))
 	end
-function bbcm(sreal,simag)
+function bbcm(sreal,simag,m11,m21,m12,m22,mR1,fR1,mR2,fR2,epsilon)
 	a1 = (m11+m21)^2
 	a2 = (m12+m22)^2
 	function scaler(u)

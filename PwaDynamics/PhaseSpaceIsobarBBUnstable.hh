@@ -65,7 +65,6 @@ protected:
 private:
   jl_module_t* m_mod;
   jl_function_t* m_func;
-  jl_function_t* m_setfunc;
   jl_value_t* m_srealHO;
   jl_value_t* m_simagHO;
   jl_value_t* m_m1_1HO;
