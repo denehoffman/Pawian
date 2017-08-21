@@ -521,4 +521,28 @@ unsigned int TMatrixDynamics::noOfRotations(double currentMass){
   return noOfLoops;
 }
 
+void TMatrixDynamics::fillMasses(EvtData* theData){
+  Vector4<double> mass4Vec(0.,0.,0.,0.);
+  std::vector<Particle*>::iterator it;
+  for (it=_fsParticles.begin(); it != _fsParticles.end(); ++it){
+    std::string currentName=(*it)->name();
+    mass4Vec+=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
+  }
+  
+  double sqrMass=mass4Vec.Mass2();
+  if (sqrMass>0.) theData->DoubleMassId[_dynId]=mass4Vec.Mass();
+  else if( sqrMass > -1.e-6) theData->DoubleMassId[_dynId]=0.;
+  else{
+    Alert << "mass4Vec.Mass2() is " << mass4Vec.Mass2() << " and thus < -1e-6 !!!" 
+          << "\nexit !!!" << endmsg;
+    exit(0); 
+  }
+
+  std::vector<std::shared_ptr<AbsPhaseSpace> >::iterator phpIt;
+  for(phpIt=_phpVecs.begin(); phpIt!=_phpVecs.end(); ++phpIt){
+    (*phpIt)->cacheFactors(mass4Vec.Mass());
+  }
+
+}
+
 

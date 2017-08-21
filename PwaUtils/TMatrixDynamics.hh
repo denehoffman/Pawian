@@ -61,6 +61,7 @@ public:
   virtual std::shared_ptr<TMatrixRel> getTMatix() {return _tMatr;}
   virtual std::vector< std::string>   gFactorNames() {return _gFactorNames;}
   virtual int orbitalL() {return _orbitalL;} 
+  virtual void fillMasses(EvtData* theData);
  
 protected:
   std::string _kMatName;

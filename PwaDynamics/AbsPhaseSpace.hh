@@ -32,6 +32,7 @@
 #include <iostream>
 #include <vector>
 #include <complex>
+#include <map>
 
 #include "Utils/PawianConstants.hh"
 
@@ -63,6 +64,7 @@ public:
   virtual complex<double> ChewM(const double mass) {return PawianConstants::i*factor(mass);}
   virtual complex<double> ChewM(const complex<double> mass) {return PawianConstants::i*factor(mass);}
   virtual double thresholdMass()=0;
+  virtual void cacheFactors(const double mass) {return;}
 
   void SetBumImPartSign(double sign){_bumImPartSign = sign;}
 
@@ -74,6 +76,8 @@ protected:
     }
    }
   double _bumImPartSign;
+  std::map<unsigned int, complex<double> > _CMCache; //resolution 100 keV
+
 private:
   //  double _bumImPartSign;
 };

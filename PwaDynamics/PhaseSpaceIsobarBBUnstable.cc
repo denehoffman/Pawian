@@ -103,12 +103,22 @@ complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const complex<double> mas
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const double mass){
-  complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
-//  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
- // double* res = computeFactor(sHO);
-	double* res = computeFactor(massSqrCompl);
-  complex<double> result(res[0], res[1]);
-  return result;  
+  unsigned int massInt100keV=mass*10000.;
+  std::map<unsigned int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
+  if( it == _CMCache.end()){
+    Alert << "_CMCache not found for mass/100keV: " << massInt100keV << endmsg;
+    exit(1); 
+  }
+  return it->second;
+  //  return _CMCache.at(massInt100keV); 
+
+//   complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+// //  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
+//  // double* res = computeFactor(sHO);
+// 	double* res = computeFactor(massSqrCompl);
+//   complex<double> result(res[0], res[1]);
+//   return result;
+  
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const complex<double> mass){
@@ -138,14 +148,15 @@ double* PhaseSpaceIsobarBBUnstable::computeFactor(double* _inS){
   return retVal;
 }
 
-double* PhaseSpaceIsobarBBUnstable::computeFactor(complex<double> inS){
+complex<double> PhaseSpaceIsobarBBUnstable::computeFactor(complex<double> inS){
   std::cout << "HERE " << inS << std::endl;
   m_srealHO = jl_box_float64(inS.real());
   m_simagHO = jl_box_float64(inS.imag());
   jl_value_t* allargs[] = {m_srealHO, m_simagHO, m_m1_1HO, m_m1_2HO, m_m2_1HO, m_m2_2HO, m_mR1HO, m_f1HO, m_mR2HO, m_f2HO, m_epsilonHO};
   jl_array_t *ret = (jl_array_t*) jl_call(m_func, allargs, 11);
   double *retVal = (double*) jl_array_data(ret);
-  return retVal;
+  complex<double> result( retVal[0], retVal[1]);
+  return result;
 }
 
 double* PhaseSpaceIsobarBBUnstable::computeFactor(double _inSreal){
@@ -204,5 +215,15 @@ void PhaseSpaceIsobarBBUnstable::fillMap(){
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarKstar",KstarKstarArgs) );
   m_knownCombinations.insert ( std::pair<std::string,double*>("BBUnstableKstarRho",KstarRhoArgs) );
   return;
+}
+
+void PhaseSpaceIsobarBBUnstable::cacheFactors(const double mass){
+  unsigned int massInt100keV=mass*10000.;
+  std::map<unsigned int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
+  if( it == _CMCache.end()){
+      complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+      complex<double> currentCM=computeFactor(massSqrCompl);
+      _CMCache[massInt100keV]=currentCM;
+    }
 }
 
