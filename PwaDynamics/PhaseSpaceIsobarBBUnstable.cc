@@ -67,7 +67,7 @@ PhaseSpaceIsobarBBUnstable::~PhaseSpaceIsobarBBUnstable(){
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::factor(const double mass){
-  complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+  complex<double> massSqrCompl(mass*mass, 1.e-10);
   double sHO[] = {std::real(massSqrCompl), std::imag(massSqrCompl)};
   double* res = computeFactor(sHO);
   complex<double> result( res[1], 0);
@@ -221,7 +221,7 @@ void PhaseSpaceIsobarBBUnstable::cacheFactors(const double mass){
   unsigned int massInt100keV=mass*10000.;
   std::map<unsigned int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
   if( it == _CMCache.end()){
-      complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+      complex<double> massSqrCompl(mass*mass, 1.e-10);
       complex<double> currentCM=computeFactor(massSqrCompl);
       _CMCache[massInt100keV]=currentCM;
     }
