@@ -103,22 +103,21 @@ complex<double> PhaseSpaceIsobarBBUnstable::breakUpMom(const complex<double> mas
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const double mass){
+  complex<double> result(0.,0.);
   unsigned int massInt100keV=mass*10000.;
   std::map<unsigned int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
-  if( it == _CMCache.end()){
-    Alert << "_CMCache not found for mass/100keV: " << massInt100keV << endmsg;
-    exit(1); 
+  if(it != _CMCache.end()){
+    result=it->second;
   }
-  return it->second;
-  //  return _CMCache.at(massInt100keV); 
+  else{
+    WarningMsg << "_CMCache not found for mass/100keV: " << massInt100keV 
+	    << "\t cach it now!!!" << endmsg;
+    //    exit(1);
+    cacheFactors(mass);
+    result=_CMCache.at(massInt100keV); 
+  }
 
-//   complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
-// //  double sHO[] = {real(massSqrCompl), imag(massSqrCompl)};
-//  // double* res = computeFactor(sHO);
-// 	double* res = computeFactor(massSqrCompl);
-//   complex<double> result(res[0], res[1]);
-//   return result;
-  
+  return result;
 }
 
 complex<double> PhaseSpaceIsobarBBUnstable::ChewM(const complex<double> mass){
