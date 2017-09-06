@@ -76,7 +76,7 @@ protected:
     }
    }
   double _bumImPartSign;
-  std::map<unsigned int, complex<double> > _CMCache; //resolution 100 keV
+  std::map<int, complex<double> > _CMCache; //resolution 100 keV
 
 private:
   //  double _bumImPartSign;
