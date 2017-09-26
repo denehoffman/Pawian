@@ -1,5 +1,11 @@
-alias install : install-lib ;
+alias install : install-bin install-lib ;
 explicit install ;
+
+install install-bin : BBUnstableParFitApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
 
 install install-lib : PwaDynamics
                  : <location>$(TOP)/lib 
@@ -15,7 +21,10 @@ lib PwaDynamics :
 	$(TOP)/Utils//Utils
 	$(TOP)/Particle//Particle 
 	$(TOP)/qft++//qft++
+	$(TOP)/qft++Extension//qft++Extension
 	$(TOP)/ErrLogger//ErrLogger
-	: 
-	: 
-	:  ;
+	: <use>$(TOP)//Minuit2 
+        : 
+        : <library>$(TOP)//Minuit2 ;
+
+exe BBUnstableParFitApp : BBUnstableParFitApp.cc PwaDynamics : ;

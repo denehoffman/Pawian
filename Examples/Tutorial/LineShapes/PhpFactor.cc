@@ -35,7 +35,7 @@
 #include "TH2F.h"
 #include "TMath.h"
 #include "Utils/PawianConstants.hh"
-#include "PwaDynamics/PhaseSpaceIsobarBBUnstable.hh"
+#include "PwaDynamics/PhaseSpaceIsobarLUT.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
@@ -47,7 +47,7 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
 {
   _theTFile=new TFile("PhpFactor.root","recreate");
 
-  PhaseSpaceIsobarBBUnstable* phpBBUnstableRhoPi = new PhaseSpaceIsobarBBUnstable(0.77, 0.135, "BBUnstable 0.14 0.14 0.14 0.14 0.749535 0.450249 0.14 0.0 0.0"); 
+  PhaseSpaceIsobarLUT* phpBBUnstableRhoPi = new PhaseSpaceIsobarLUT(0.77, 0.135, "LUT/data/jollyj/mkuhlmann/PWA/LUT/pipi.bin"); 
 
   _CMDefaultComplRealHist2= new TH2F("_CMDefaultComplRealHist2", "CM real default",601, -_massMax, _massMax, 601, -_massMax, _massMax);
   _CMDefaultComplRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
@@ -137,10 +137,10 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   _CMMDefaultComplImagHist->GetYaxis()->SetTitle("Im(CM)");
   _CMMDefaultComplImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
-  _CMMBBUnstableRhoPiRealHist = new TH1F("_CMMBBUnstableRhoPiRealHist", "CM real BB unstable rho pi",301, -massMax, massMax);
+  _CMMBBUnstableRhoPiRealHist = new TH1F("_CMMBBUnstablePiPiRealHist", "CM real BB unstable pi pi",301, -massMax, massMax);
   _CMMBBUnstableRhoPiRealHist->GetYaxis()->SetTitle("Re(CM)");
   _CMMBBUnstableRhoPiRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
-  _CMMBBUnstableRhoPiImagHist = new TH1F("_CMMBUnstableRhoPiImagHist", "CM imag BB unstable rho pi",301, -massMax, massMax);
+  _CMMBBUnstableRhoPiImagHist = new TH1F("_CMMBUnstablePiPiImagHist", "CM imag BB unstable pi pi",301, -massMax, massMax);
   _CMMBBUnstableRhoPiImagHist->GetYaxis()->SetTitle("Im(CM)");
   _CMMBBUnstableRhoPiImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
