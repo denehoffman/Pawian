@@ -7,6 +7,7 @@ setenv BOOST_BUILD_PATH /lustre/nyx/panda/malte/extern/boost-build/
 setenv PATH ${ROOTSYS}/bin:${TOP_DIR}/bin:${PATH}
 setenv JULIA_DIR /lustre/nyx/panda/malte/extern/juliaInstall/
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JULIA_DIR/lib/julia
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JULIA_DIR/lib
 setenv JULIA_HOME $JULIA_DIR/bin
 
 rm Jamroot

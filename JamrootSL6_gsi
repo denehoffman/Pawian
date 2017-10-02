@@ -9,19 +9,21 @@ BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboos
 
 project :
 	requirements <include>./  
-	<include>$(BOOSTINCLUDE)
-	<include>$(external)/include
-	<include>$(ROOTSYS)/include
-	<link>static
-	<cxxflags>-std=gnu++11
-	<cxxflags>-ftemplate-depth=256
-	<linkflags>$(ROOTLIBS)
-	<linkflags>-L$(BOOSTLIBPATH)
-	<linkflags>$(BOOSTLIBS)
-  <linkflags>-L/lustre/nyx/panda/malte/extern/lib/
-	<linkflags>-llog4cpp
-	;
-
+        <include>$(BOOSTINCLUDE)
+        <include>$(external)/include
+        <include>$(ROOTSYS)/include
+        <include>$JULIA_DIR/include/julia
+        <link>static
+        <cxxflags>-std=gnu++11
+        <cxxflags>-ftemplate-depth=256
+        <linkflags>$(ROOTLIBS)
+        <linkflags>-L$(BOOSTLIBPATH)
+        <linkflags>$(BOOSTLIBS)
+        <linkflags>-L/lustre/nyx/panda/malte/extern/lib/
+        <linkflags>-llog4cpp
+        <linkflags>-L$JULIA_DIR/lib
+        <linkflags>-ljulia
+        ;
 actions rootlibs
 {
 	$(ROOTSYS)/bin/root-config --libs

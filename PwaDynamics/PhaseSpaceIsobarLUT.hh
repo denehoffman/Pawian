@@ -57,6 +57,7 @@ public:
   virtual complex<double> breakUpMom(const complex<double> mass);
   virtual complex<double> ChewM(const double mass);
   virtual complex<double> ChewM(const complex<double> mass);
+  virtual void cacheFactors(const double mass);
 
 protected:
 
