@@ -47,7 +47,7 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
 {
   _theTFile=new TFile("PhpFactor.root","recreate");
 
-  PhaseSpaceIsobarLUT* phpBBUnstableRhoPi = new PhaseSpaceIsobarLUT(0.77, 0.135, "LUT/data/jollyj/mkuhlmann/PWA/LUT/pipi.bin"); 
+  PhaseSpaceIsobarLUT* phpBBUnstableRhoPi = new PhaseSpaceIsobarLUT(0.77, 0.135, "LUT/data/jollyj/mkuhlmann/PWA/LUT/KK.bin"); 
 
   _CMDefaultComplRealHist2= new TH2F("_CMDefaultComplRealHist2", "CM real default",601, -_massMax, _massMax, 601, -_massMax, _massMax);
   _CMDefaultComplRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");

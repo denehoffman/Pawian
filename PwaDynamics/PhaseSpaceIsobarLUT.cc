@@ -46,69 +46,46 @@ PhaseSpaceIsobarLUT::~PhaseSpaceIsobarLUT(){
 complex<double> PhaseSpaceIsobarLUT::factor(const double mass){
   complex<double> massSqrCompl(mass*mass, 0.0);
   complex<double> result = getFactor(massSqrCompl);
- return result;
+ return result.imag();
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const double mass){
-  complex<double> s=mass*mass;
-  complex<double> result = getFactor(s);
+  complex<double> massSqrCompl(mass*mass, 0.0);
+  complex<double> result = getFactor(massSqrCompl);
   complex<double> momReid = imag(result)*mass/2.0;
-  CorrectForChosenSign(momReid, momReid);
   return momReid;
 }
 
 complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass){
-  complex<double> s=mass*mass;
-  complex<double> res = getFactor(s);
-  return res;
+  complex<double> massSqrCompl=mass*mass;
+  complex<double> res = getFactor(massSqrCompl);
+  return res.imag();
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const complex<double> mass){
-  complex<double> s=mass*mass;
-  complex<double> result = getFactor(s);
+  complex<double> massSqrCompl=mass*mass;
+  complex<double> result = getFactor(massSqrCompl);
   complex<double> momReid = imag(result)*mass/2.0;
-  CorrectForChosenSign(momReid, momReid);
   return momReid;
 }
 
 complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass){
-  complex<double> result(0.,0.);
-  int massInt100keV=mass*10000.;
-  std::map<int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
-  if(it != _CMCache.end()){
-    result=it->second;
-  }
-  else{
-    WarningMsg << "_CMCache not found for mass/100keV: " << massInt100keV 
-	    << "\t cach it now!!!" << endmsg;
-    //    exit(1);
-    cacheFactors(mass);
-    result=_CMCache.at(massInt100keV); 
-  }
-
+  complex<double> massSqrCompl(mass*mass, 0.0);
+  complex<double> result = getFactor(massSqrCompl);
   return result;
 }
 
 complex<double> PhaseSpaceIsobarLUT::ChewM(const complex<double> mass){
   complex<double> massSqrCompl=mass*mass;
-  complex<double> result = getFactor(massSqrCompl);  
-  complex<double> momReid = imag(result)*mass/2.0;
-  CorrectForChosenSign(momReid, result);
+  complex<double> result = getFactor(massSqrCompl); 
   return result;
 }
 
 
-void PhaseSpaceIsobarLUT::cacheFactors(const double mass){
-  int massInt100keV=mass*10000.;
-  std::map<int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
-  if( it == _CMCache.end()){
-      complex<double> massSqrCompl(mass*mass, 0.0);
-      complex<double> currentCM=getFactor(massSqrCompl);
-      _CMCache[massInt100keV]=currentCM;
-    }
-}
+
 
 complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
+  //std::cout << "HERE: " << _s << std::endl;
   int lineOffset = 0;
   double deltaRe = (m_sHigh.real()-m_sLow.real())/m_nRe;
   double deltaIm = (m_sHigh.imag()-m_sLow.imag())/m_nIm;
@@ -135,6 +112,7 @@ complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
   m_lutfile.close();
   complex<double> result = complex<double>(Re, Im);
   complex<double> in = complex<double>(reS, imS);
+  //std::cout << "req: " << _s << " giv: " << in << " Res: " << result << std::endl;
   return result;
 }
 
