@@ -107,7 +107,6 @@ void PhaseSpaceIsobarLUT::cacheFactors(const double mass){
 
 
 complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
-  //std::cout << "HERE: " << _s << std::endl;
   int lineOffset = 0;
   double deltaRe = (m_sHigh.real()-m_sLow.real())/m_nRe;
   double deltaIm = (m_sHigh.imag()-m_sLow.imag())/m_nIm;
@@ -133,7 +132,7 @@ complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
   double Im = *res;
   m_lutfile.close();
   complex<double> result = complex<double>(Re, Im);
-  complex<double> in = complex<double>(reS, imS);
+  //complex<double> in = complex<double>(reS, imS);
   //std::cout << "req: " << _s << " giv: " << in << " Res: " << result << std::endl;
   return result;
 }
