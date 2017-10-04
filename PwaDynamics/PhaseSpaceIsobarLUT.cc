@@ -46,7 +46,8 @@ PhaseSpaceIsobarLUT::~PhaseSpaceIsobarLUT(){
 complex<double> PhaseSpaceIsobarLUT::factor(const double mass){
   complex<double> massSqrCompl(mass*mass, 0.0);
   complex<double> result = getFactor(massSqrCompl);
- return result.imag();
+  complex<double> rho = result.imag(); 
+  return rho;
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const double mass){
@@ -58,8 +59,9 @@ complex<double> PhaseSpaceIsobarLUT::breakUpMom(const double mass){
 
 complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass){
   complex<double> massSqrCompl=mass*mass;
-  complex<double> res = getFactor(massSqrCompl);
-  return res.imag();
+  complex<double> result = getFactor(massSqrCompl);
+  complex<double> rho = result.imag(); 
+  return rho;
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const complex<double> mass){
