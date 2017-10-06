@@ -46,28 +46,28 @@ PhaseSpaceIsobarLUT::~PhaseSpaceIsobarLUT(){
 complex<double> PhaseSpaceIsobarLUT::factor(const double mass){
   complex<double> massSqrCompl(mass*mass, 0.0);
   complex<double> result = getFactor(massSqrCompl);
-  complex<double> rho = result.imag(); 
+  complex<double> rho(result.imag(), 0.); 
   return rho;
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const double mass){
   complex<double> massSqrCompl(mass*mass, 0.0);
   complex<double> result = getFactor(massSqrCompl);
-  complex<double> momReid = imag(result)*mass/2.0;
+  complex<double> momReid(imag(result)*mass/2.0, 0.);
   return momReid;
 }
 
 complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass){
   complex<double> massSqrCompl=mass*mass;
   complex<double> result = getFactor(massSqrCompl);
-  complex<double> rho = result.imag(); 
+  complex<double> rho(result.imag(), 0.); 
   return rho;
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const complex<double> mass){
   complex<double> massSqrCompl=mass*mass;
   complex<double> result = getFactor(massSqrCompl);
-  complex<double> momReid = imag(result)*mass/2.0;
+  complex<double> momReid= imag(result)*mass/2.0;
   return momReid;
 }
 
@@ -120,10 +120,8 @@ complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
   char *memblock = new char [dSize];
   m_lutfile.read(memblock, dSize);
   double *res=reinterpret_cast<double*>(memblock);
-  double reS = *res;
-  m_lutfile.read(memblock, dSize);
+   m_lutfile.read(memblock, dSize);
   res=reinterpret_cast<double*>(memblock);
-  double imS = *res;
   m_lutfile.read(memblock, dSize);
   res=reinterpret_cast<double*>(memblock);
   double Re = *res;
@@ -132,9 +130,7 @@ complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
   double Im = *res;
   m_lutfile.close();
   complex<double> result = complex<double>(Re, Im);
-  //complex<double> in = complex<double>(reS, imS);
-  //std::cout << "req: " << _s << " giv: " << in << " Res: " << result << std::endl;
-  return result;
+   return result;
 }
 
 

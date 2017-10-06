@@ -37,7 +37,7 @@ PhaseSpaceIsobarReid::~PhaseSpaceIsobarReid(){
 }
 
 complex<double> PhaseSpaceIsobarReid::factor(const double mass){
-  complex<double> rho = ChewM(mass).imag(); 
+  complex<double> rho(ChewM(mass).imag(), 0.); 
   return rho;
 }
 
@@ -46,7 +46,7 @@ complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
-  complex<double> rho = ChewM(mass).imag(); 
+  complex<double> rho(ChewM(mass).imag(), 0.); 
   return rho;
 }
 
