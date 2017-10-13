@@ -75,7 +75,7 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
     secondParticle=GlobalEnv::instance()->particleTable()->particle("photon");
   }
   else{
-    Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
+    secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
     if( 0==secondParticle){
       Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
       exit(1);
