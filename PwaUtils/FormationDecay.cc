@@ -41,13 +41,75 @@ FormationDecay::FormationDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Part
 {
 }
 
-void FormationDecay::extractStates(){
-}
-
 FormationDecay::~FormationDecay(){
 }
 
 void FormationDecay::print(std::ostream& os) const{
   AbsDecay::print(os);
   os << "\n";
+}
+
+void FormationDecay::extractStates(){
+}
+
+void FormationDecay::setDecayLevel(decLevel theLevel){
+  if (_decLevel==decayLevel::noLevel){
+    _decLevel=theLevel;
+    if(_decLevel==decayLevel::isProdAmp) _hasMotherPart=false;
+  }
+  else if(_decLevel != theLevel) _decLevel=decayLevel::severalLevels;
+  else return;
+  InfoMsg << name() << " set decay level to " << _decLevel << endmsg; 
+}
+
+void FormationDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr){
+  setDecayLevel(theLevel);
+  if(prodDecPtr->whichDecayLevel() != AbsDecay::decayLevel::isProdAmp){
+    Alert << "prodDecPtr with the name " << prodDecPtr->name() << " is not a production amplitude!!!" << endmsg;
+    exit(1);
+  }
+
+  //check if prod decay already exists
+  const std::string key = prodDecPtr->name();
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
+  for(it=_prodAmpRefList.begin(); it!=_prodAmpRefList.end();++it){
+    if (key==(*it)->name()){
+      //prod decay already exists
+      Alert << "production amplitude " << key << " aleady exists in the reference list!!!" << endmsg;
+      Alert << "It is not allowed to refer to the same production amplitude more than once!!!!" << endmsg;
+      exit(1);
+    }
+  }
+
+  _prodAmpRefList.push_back(prodDecPtr);
+
+  const std::string keyMotherDec = motherDecPtr->name();
+  for(it=_motherAmpRefList.begin(); it!=_motherAmpRefList.end();++it){
+    if (key==(*it)->name()){
+      //prod decay already exists
+      Alert << "mother amplitude " << keyMotherDec << " aleady exists in the reference list!!!" << endmsg;
+      Alert << "It is not allowed to refer to the same mother amplitude more than once!!!!" << endmsg;
+      exit(1);
+    }
+  }
+
+  if(whichDecayLevel() != AbsDecay::decayLevel::isProdAmp) _motherAmpRefList.push_back(motherDecPtr);
+
+  _absDecDaughter1->setDecayLevelTree(decayLevel(theLevel+1), shared_from_this(), prodDecPtr);
+}
+
+void FormationDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
+
+  std::vector<Particle*>::iterator itP;
+  std::map<std::string, Vector4<double> >::iterator itMap;
+  
+  Vector4<double> mother4Vec(0.,0.,0.,0.);
+  
+  //fill mother4Vec
+  for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
+    itMap=fsMap.find((*itP)->name());
+    mother4Vec+=itMap->second;
+  }
+
+  _absDecDaughter1->fillWignerDs(fsMap, mother4Vec, evtData); 
 }

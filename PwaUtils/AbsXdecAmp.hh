@@ -79,7 +79,7 @@ protected:
   std::shared_ptr<AbsDecay> _decay;
   const std::string _name;
   std::shared_ptr<const jpcRes> _JPCPtr;
-  const std::string _jpcDecsName;
+  std::string _jpcDecsName;
   const std::string _isoKey;
   std::shared_ptr<AbsDynamics> _absDyn;
   const std::vector<std::string> _hypVec;
@@ -116,6 +116,8 @@ protected:
   Spin _lam1Max;
   Spin _lam2Min;
   Spin _lam2Max;
+
+  bool _isFormationAmp;
 
   //  intUShortId2StringComplFloatMap _cachedAmpIdMap;
   intUShortShortComplFloatMap _cachedAmpIdMap;

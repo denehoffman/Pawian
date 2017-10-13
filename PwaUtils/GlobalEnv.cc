@@ -88,6 +88,16 @@ const std::shared_ptr<AbsChannelEnv> GlobalEnv::GammapChannel(int id) const
    return _channelEnvs.at(id).first;
 }
 
+const std::shared_ptr<AbsChannelEnv> GlobalEnv::GamgamChannel(int id) const
+{
+
+   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GAMGAM){
+      Alert << "Faultily accessing non-gamgam channel environment." << endmsg;
+   }
+
+   return _channelEnvs.at(id).first;
+}
+
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::ResChannel(int id) const
 {
@@ -225,7 +235,6 @@ void GlobalEnv::setup(ParserBase* theParser){
       Alert << "GlobalEnv already set up!" << endmsg;
       exit(1);
    }
-
    _alreadySetUp = true;
 
    _theParser = theParser;

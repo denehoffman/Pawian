@@ -212,5 +212,6 @@ protected:
 
   int _Lmin;
   decLevel _decLevel;
+  std::string _motherName;
   std::shared_ptr<ProdChannelInfo> _prodChannelInfo;
 };

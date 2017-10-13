@@ -44,19 +44,19 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
      std::vector<std::shared_ptr<ProdChannelInfo> >::iterator itProd;
     for (itProd=prodChannelInfoList.begin(); itProd!= prodChannelInfoList.end(); ++itProd){
       if( (*itProd)->isFormation() ){
-	Particle* formationParticle=(*itProd)->formationParticle();
+ 	Particle* formationParticle=(*itProd)->formationParticle();
 	if(0==formationParticle){
 	  Alert << "formation particle does not exist!!!" << endmsg;
 	  exit(1);
 	}
 	std::shared_ptr<const IGJPC> currentIGJPC=getIGJPCPtr(formationParticle);
 	std::shared_ptr<FormationDecay> currentDec(new FormationDecay(currentIGJPC, formationParticle, _channelID, "gamgam"));
-      currentDec->setProductionAmp();
-      currentDec->setProdChannelInfo( *itProd );
-      currentDec->extractStates();
-      std::string currentFormDynType=(*itProd)->formationDynType();
-      currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
-      _prodFormationDecs.push_back(currentDec);
+	currentDec->setProductionAmp();
+	currentDec->setProdChannelInfo( *itProd );
+	currentDec->extractStates();
+	//.	std::string currentFormDynType=(*itProd)->formationDynType();
+	//	currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+	_prodFormationDecs.push_back(currentDec);
       }
       else{
 	Alert << "gamma gamma production mode is not supported so far" << endmsg;

@@ -66,13 +66,22 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
     Alert << "particle\t" << firstParticleStr << "\tdoes not exist in pdtTable" << endmsg;
     exit(1);
   }
-  
-  Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
-  if( 0==secondParticle){
-    Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
-    exit(1);
+
+  Particle* secondParticle=0;
+  if(secondParticleStr=="formation"){
+    _isFormation=true;
+    _formationParticle=firstParticle;
+    //    secondParticle=firstParticle;
+    secondParticle=GlobalEnv::instance()->particleTable()->particle("photon");
   }
-  
+  else{
+    Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
+    if( 0==secondParticle){
+      Alert << "particle\t" << secondParticleStr << "\tdoes not exist in pdtTable" << endmsg;
+      exit(1);
+    }
+  }
+
   _prodPair=make_pair(firstParticle, secondParticle);
   
   //look for additional options

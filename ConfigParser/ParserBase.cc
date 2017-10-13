@@ -97,6 +97,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("pbarpFiles",po::value< vector<string> >(&_pbarpCfgs),  "Configuration files for pbarp channels")
     ("epemFiles",po::value< vector<string> >(&_epemCfgs),  "Configuration files for epem channels")
     ("resFiles",po::value< vector<string> >(&_resCfgs),  "Configuration files for single resonance decay channels")
+    ("gamgamFiles",po::value< vector<string> >(&_gamgamCfgs),  "Configuration files for single resonance decay channels")
     ("pipiScatteringFiles",po::value< vector<string> >(&_pipiScatteringCfgs),  "Configuration scattering channels")
     ;
   
@@ -278,6 +279,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
       for (it = _resCfgs.begin(); it!=_resCfgs.end(); ++it){
          std::cout << "res channel configuration file: " << (*it) << "\n";
+      }
+      for (it = _gamgamCfgs.begin(); it!=_gamgamCfgs.end(); ++it){
+         std::cout << "gamgam channel configuration file: " << (*it) << "\n";
       }
       for (it = _pipiScatteringCfgs.begin(); it!=_pipiScatteringCfgs.end(); ++it){
          std::cout << "pipi scattering channel configuration file: " << (*it) << "\n";

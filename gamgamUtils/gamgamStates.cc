@@ -35,7 +35,7 @@ gamgamStates::gamgamStates():
   _jmax(10),
   _gammaJPC(1,-1,-1)
 {
-  GlobalEnv::instance()->setup();
+  //  GlobalEnv::instance()->setup();
   _gammaParticle=GlobalEnv::instance()->particleTable()->particle("photon");
    calcStates();
 }
@@ -46,7 +46,7 @@ gamgamStates::gamgamStates(int jmax):
   _jmax(jmax),
   _gammaJPC(1,-1,-1)
 {
-   GlobalEnv::instance()->setup();
+  //   GlobalEnv::instance()->setup();
    _gammaParticle=GlobalEnv::instance()->particleTable()->particle("photon");
     calcStates();
 }

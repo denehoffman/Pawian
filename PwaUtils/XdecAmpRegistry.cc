@@ -46,6 +46,8 @@
 #include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "PwaUtils/PiPiScatteringDecay.hh"
 #include "PwaUtils/PiPiScatteringXdecAmps.hh"
+#include "PwaUtils/FormationDecay.hh"
+#include "PwaUtils/FormXDecAmps.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -108,6 +110,10 @@ std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(short channelID, std::sh
     else if(theAbsDecay->type()=="PiPiScatteringDecay"){
       std::shared_ptr<PiPiScatteringDecay> pipiScatteringDecay =  std::dynamic_pointer_cast<PiPiScatteringDecay>(theAbsDecay);
       result=std::shared_ptr<AbsXdecAmp>(new PiPiScatteringXdecAmps(pipiScatteringDecay, channelID));
+    }
+    else if(theAbsDecay->type()=="FormationDecay"){
+      std::shared_ptr<FormationDecay> formationDecay =  std::dynamic_pointer_cast<FormationDecay>(theAbsDecay);
+      result=std::shared_ptr<FormXDecAmps>(new FormXDecAmps(formationDecay, channelID));
     }
     else{
       Alert << "can nor create XdecAmp object for theAbsDecay->name():\t" << theAbsDecay->name() << endmsg;

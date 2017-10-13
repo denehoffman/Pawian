@@ -24,6 +24,7 @@ lib AppUtils :
 	$(TOP)/pbarpUtils//pbarpUtils
 	$(TOP)/epemUtils//epemUtils
 	$(TOP)/resUtils//resUtils
+	$(TOP)/gamgamUtils//gamgamUtils
 	$(TOP)/pipiScatteringUtils//pipiScatteringUtils
 	:
 	: 

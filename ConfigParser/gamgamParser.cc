@@ -46,9 +46,9 @@ gamgamParser::gamgamParser(int argc,char **argv):
   
   po::options_description config("Configuration file options");
   config.add_options()
-    ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
-    ("jMax", po::value<unsigned int>(&_jMax), "maximal spin of the formed resonances")
-    ;
+     ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
+    ("jMax", po::value<unsigned int>(&_jMax), "jMax")
+     ;
   _config->add(config);
   
   parseCommandLine(argc, argv);
@@ -61,7 +61,5 @@ bool gamgamParser::parseCommandLine(int argc, char **argv)
   std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
   std::cout << "\njMax:\t" << _jMax << std::endl;
   
-  std::cout << std::endl;
-  
-  return true;
+   return true;
 }

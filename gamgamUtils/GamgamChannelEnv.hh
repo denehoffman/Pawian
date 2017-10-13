@@ -41,7 +41,8 @@ public:
    std::shared_ptr<gamgamReaction> reaction() {return _gamgamReaction;}
    const double cmsMass() {return _cmsMass;}
    virtual const std::string  channelTypeName() {return "gamgam";}
-  //  std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix);
+
+protected:
 
 private:
    gamgamParser* _theGamGamParser;

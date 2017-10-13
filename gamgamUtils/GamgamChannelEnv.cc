@@ -45,6 +45,7 @@ GamgamChannelEnv::GamgamChannelEnv(gamgamParser* theParser) :
   AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GAMGAM)
   ,_theGamGamParser(theParser)
   ,_cmsMass(1.)
+  ,_jmax(4)
 {
 }
 
@@ -54,8 +55,8 @@ void GamgamChannelEnv::setupChannel(ChannelID id){
   
   
   _cmsMass=_theGamGamParser->cmsMass();
-  _jmax = _theGamGamParser->jMax();
   _cmEnergy = _cmsMass;
+  _jmax=_theGamGamParser->jMax();
   _initial4Vec = Vector4<double>( _cmsMass, 0., 0., 0.);
   std::vector<std::string>::const_iterator itStr;
   
@@ -72,6 +73,7 @@ void GamgamChannelEnv::setupChannel(ChannelID id){
       //      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
       //      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
+      InfoMsg <<"added production dacay " << (*itDec)->name() << endmsg;
     }
   }
   else{

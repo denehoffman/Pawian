@@ -59,6 +59,7 @@ public:
    const std::shared_ptr<AbsChannelEnv> PbarpChannel(int id=0) const;
    const std::shared_ptr<AbsChannelEnv> EpemChannel(int id=0) const;
    const std::shared_ptr<AbsChannelEnv> GammapChannel(int id=0) const;
+  const std::shared_ptr<AbsChannelEnv> GamgamChannel(int id=0) const;
    const std::shared_ptr<AbsChannelEnv> ResChannel(int id=0) const;
   const std::shared_ptr<AbsChannelEnv> PiPiScatteringChannel(int id) const;
    const ChannelEnvList ChannelEnvs() const {return _channelEnvs;}

@@ -20,7 +20,7 @@
 //									  //
 //************************************************************************//
 
-// gamParser class definition file. -*- C++ -*-
+// gamgamParser class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #pragma once
@@ -38,9 +38,9 @@ class gamgamParser : public ParserBase
   gamgamParser(int argc,char **argv);
   virtual ~gamgamParser(){;}
 
-  //  const std::vector<std::string>& spinDensityNames() const { return _spinDensity;}
   const double cmsMass() {return _cmsMass;}
-  const unsigned int jMax() const { return _jMax; }
+  const unsigned int jMax() {return _jMax;}
+
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 

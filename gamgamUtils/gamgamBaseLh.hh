@@ -20,40 +20,58 @@
 //									  //
 //************************************************************************//
 
-// FormationDecay class definition file. -*- C++ -*-
+// gamgamBaseLh class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #pragma once
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <complex>
-#include <map>
-#include <vector>
-#include <string>
-#include <sstream>
 #include <memory>
+#include <boost/function.hpp>
 
-#include "PwaUtils/AbsDecay.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
+
+#include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
-#include "Utils/PawianCollectionUtils.hh"
+#include "gamgamUtils/GamgamChannelEnv.hh"
 
-class Particle;
-class EvtData;
+class AbsXdecAmp;
+class gamgamReaction;
+class LSDecAmps;
 
-class FormationDecay : public AbsDecay{
+class gamgamBaseLh : public AbsLh {
 
 public:
-  FormationDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, ChannelID channelID, std::string motherName="gamgam", std::string typeName="FormationDecay");
-  virtual ~FormationDecay();
-  //  virtual FormationDecay* clone_() const = 0;
+  gamgamBaseLh(ChannelID channelID);
+
+  virtual ~gamgamBaseLh();
+
+  virtual AbsLh* clone_() const{
+    AbsLh* theClone=new gamgamBaseLh(_channelID);
+    theClone->setDataVec(_evtDataVec);
+    theClone->setMcVec(_evtMCVec);
+    return theClone;
+  }
+
+  virtual double calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
+					  std::map <std::shared_ptr<const JPCLS>,
+					  std::vector< std::shared_ptr<AbsXdecAmp> >,
+					  pawian::Collection::SharedPtrLess > pbarpAmps);
+
+  virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
 
   virtual void print(std::ostream& os) const;
 
-  virtual void extractStates();
-  virtual void setDecayLevel(decLevel theLevel);
-  virtual void setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr);
-  virtual void fillWignerDs(std::map<std::string , Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData);
+
 protected:
+  const std::shared_ptr<GamgamChannelEnv> _gamgamChannelEnv;
+
+  virtual void initialize();
+private:
 };

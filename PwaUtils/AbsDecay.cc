@@ -90,6 +90,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
    ,_massSumFsParticles(0.)
    ,_Lmin(0)
   ,_decLevel(decayLevel::noLevel)
+  ,_motherName("")
   ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
@@ -212,6 +213,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_massSumFsParticles(0.)
   ,_Lmin(0)
   ,_decLevel(decayLevel::isProdAmp)
+  ,_motherName(motherName)
   ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
@@ -453,6 +455,12 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     daughter2_4Vec+=itMap->second;
   }
 
+  // InfoMsg << "\nevtData->evtNo: " << evtData->evtNo << endmsg;
+  // // InfoMsg << "all4Vec: " << all4Vec << endmsg;
+  // // InfoMsg << "mother4Vec: " << mother4Vec   << endmsg;
+  // InfoMsg << "daughter1_4Vec: " << daughter1_4Vec << endmsg;
+  // InfoMsg << "daughter2_4Vec: " << daughter2_4Vec << endmsg;
+
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   Vector4<double> daughter1HelMother(0.,0.,0.,0.);
   if(_hasMotherPart){
@@ -537,7 +545,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 		<< "\tPy: " << daughter1HelMother.Py()
 		<< "\tPz: " << daughter1HelMother.Pz()  
 		<< endmsg;
-	exit(1); 
+       	exit(1); 
       }
     }
   }
