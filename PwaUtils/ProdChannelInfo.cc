@@ -72,7 +72,7 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
     _isFormation=true;
     _formationParticle=firstParticle;
     //    secondParticle=firstParticle;
-    secondParticle=GlobalEnv::instance()->particleTable()->particle("photon");
+    secondParticle=GlobalEnv::instance()->particleTable()->particle("photon"); //just needed to make the compiler happy; must be changed
   }
   else{
     secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleStr);
@@ -102,10 +102,12 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
       _m0decRadM1Production=atof(m0DecStr.c_str());
       }
     }
-    else if(typeStr=="FormPol3"){
-      _formationParticle = firstParticle;
-      _isFormation=true;
-      _formationDynType=typeStr;
+    else if(typeStr=="FormPol2"){
+      if(!_isFormation){
+	Alert << "dynamics " << typeStr
+	    << "\tis only allowed for the formation process" << endmsg;
+      }
+       _formationDynType=typeStr;
     }
     else{
       Alert << "production barrier type: " << typeStr << " doesn't exist for PAWIAN!!!" 

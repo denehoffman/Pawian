@@ -479,6 +479,15 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       exit(0); 
     }  
     //    motherRefVec=Vector4<double>(0., 0., 0., 1.); //must be removed!!!!
+    // if(evtData->evtNo == 1036){
+    //    InfoMsg<< "prodParticle4Vec: "   << prodParticle4Vec << endmsg;
+    //   InfoMsg<< "mother4Vec: "   << mother4Vec << endmsg;
+    // }
+    Vector4<double> diffProdParticleMother4Vec=prodParticle4Vec-mother4Vec;
+     //very special for gam gam processes
+    if(diffProdParticleMother4Vec.M2() < 1.e-6 && fabs(diffProdParticleMother4Vec.Px())< 1.e-6 && fabs(diffProdParticleMother4Vec.Py())< 1.e-6 && fabs(diffProdParticleMother4Vec.Pz())< 1.e-6){
+      prodParticle4Vec=Vector4<double>(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+    }
     daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
   }

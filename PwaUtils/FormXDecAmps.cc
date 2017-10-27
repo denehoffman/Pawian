@@ -67,9 +67,21 @@ complex<double> FormXDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDau
 complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
   if(_J<fabs(lamX)) return result;
+
+  int evtNo=theData->evtNo;
+
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);
+  if ( _cacheAmps && !_recalculate){
+    result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
+    return result;
+  }
+
   Spin absLamX(lamX);
   if(lamX<0) absLamX=-lamX;
-  result=_currentParamMap.at(absLamX)*_decAmpDaughter1->XdecAmp(lamX, theData, this);
+  theMutex.lock();
+  complex<double> currentDyn=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
+  theMutex.unlock();
+  result=_currentParamMap.at(absLamX)*_decAmpDaughter1->XdecAmp(lamX, theData, this)*currentDyn;
 
   if(result.real()!=result.real()){
     InfoMsg << "dyn name: " << _absDyn->name() 
@@ -78,13 +90,22 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
     Alert << "result:\t" << result << endmsg;
     exit(0);
   }
+
+  if ( _cacheAmps){
+    theMutex.lock();
+    _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+    theMutex.unlock();
+  }
   return result;
 }
 
 void FormXDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
-  if(!_recalculate) return; 
-
- if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
+  if(!_recalculate) return;
+  theMutex.lock();
+  _cachedDynIdMap[std::this_thread::get_id()][_absDyn->grandMaId(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
+  theMutex.unlock();
+ 
+  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
  return;
 }
 
@@ -99,18 +120,26 @@ void  FormXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPa
       fitPar->Add(currentName, 0., 0.2);
       _currentParamMap[it->first]=complex<double>(1.,0.);
     }
-  } 
+  }
+  _absDyn->fillDefaultParams(fitPar); 
   if(!_daughter1IsStable) _decAmpDaughter1->fillDefaultParams(fitPar);
 }
 
 void FormXDecAmps::fillParamNameList(){
+  _paramNameList.clear();
   Spin lamRes(0);
   _paramNameMap[lamRes]=absDec()->name()+"lam0";
+  _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+  _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
   if(_J> 1){
     lamRes=-2;
     _paramNameMap[lamRes]=absDec()->name()+"lam2";
+    _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+    _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
     lamRes=2;
     _paramNameMap[lamRes]=absDec()->name()+"lam2";
+    _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+    _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
   }
 }
 
@@ -131,7 +160,8 @@ void FormXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
       complex<double> expi(cos(thePhi), sin(thePhi)); 
       _currentParamMap.at(it->first)=theMag*expi;
     }
-  } 
+  }
+  _absDyn->updateFitParams(fitPar);  
   if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(fitPar);
 }
 
@@ -176,6 +206,7 @@ bool FormXDecAmps::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitPa
   _recalculate=false;
   if(_decAmpDaughter1->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
   if (!_recalculate) _recalculate=AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
+  if (!_recalculate) _recalculate=_absDyn->checkRecalculation(fitParNew, fitParOld);
 
   return _recalculate;
 }

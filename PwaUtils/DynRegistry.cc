@@ -46,6 +46,7 @@
 #include "PwaUtils/BlattWBarrierDynamics.hh"
 #include "PwaUtils/RadM1Dynamics.hh"
 #include "PwaUtils/BlattWBarrierTensorDynamics.hh"
+#include "PwaUtils/ProdParamDynamics.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
@@ -80,7 +81,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   //  if(theDec->dynType()=="BlattWBarrier") theName=theDec->wignerDKey();
   if(0==theDec->motherPart()){
     if(theDec->dynType()=="WoDynamics") theName=theDec->motherIGJPC()->jpcname();
-    else if (theDec->dynType()!="BlattWBarrier" && theDec->dynType()!="BlattWBarrierTensor" && theDec->dynType()!="RadM1"){
+    else if (theDec->dynType()!="BlattWBarrier" && theDec->dynType()!="BlattWBarrierTensor" && theDec->dynType()!="RadM1" && theDec->dynType()!="FormPol0" && theDec->dynType()!="FormPol1" && theDec->dynType()!="FormPol2"){
       Alert << "dynamics for " << theDec->name() << " with type " << theDec->dynType() << " is not allowed for annihilation amplitude!!!" << endmsg;
       exit(0); 
     }
@@ -181,6 +182,10 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     else if(theDec->dynType()=="RadM1") {
       result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->wignerDKey(), theDec->barrierqR(), theDec->prodChannelInfo()->m0decRadM1Prod()));
     }
+    else if(theDec->dynType()=="FormPol0" || theDec->dynType()=="FormPol1" || theDec->dynType()=="FormPol2") {
+      result= std::shared_ptr<AbsDynamics>(new ProdParamDynamics(theName, fsParticles, theDec->motherPart(), theDec->dynType()));
+    }
+
     else{
       Alert << "Dyn type:\t" << theDec->dynType() << "\tdoes not exist" << endmsg;
       exit(1);

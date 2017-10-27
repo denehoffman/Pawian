@@ -54,8 +54,12 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
 	currentDec->setProductionAmp();
 	currentDec->setProdChannelInfo( *itProd );
 	currentDec->extractStates();
-	//.	std::string currentFormDynType=(*itProd)->formationDynType();
-	//	currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+	std::string currentFormDynType=(*itProd)->formationDynType();
+	if(currentFormDynType !="non"){
+	  if(currentFormDynType =="FormPol0" || currentFormDynType =="FormPol1" || currentFormDynType =="FormPol2"){
+	  currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+	  }
+	}
 	_prodFormationDecs.push_back(currentDec);
       }
       else{
