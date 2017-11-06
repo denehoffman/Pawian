@@ -80,7 +80,7 @@ complex<double> gamgamBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::strin
 
 double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
 
-  double result=1.;
+  double result=0.;
 
   //  InfoMsg << "_decAmps.size(): " << _decAmps.size() << endmsg;
 
