@@ -223,6 +223,9 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
     _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
   }
+  else if(_daughter1->name() == "GamGam"){
+   _daughter1IsStable=true;
+  }
   else{
     Alert << "formed particle " << _daughter1->name()  << " can not be a stable particle!!!" << endmsg;
     exit(1);

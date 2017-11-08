@@ -82,6 +82,8 @@ Meson omegaeff 		\omegaeff  		0  2 -1 -1 -1   0  0  0  0 	0.77401  0.00849 relBW
 # Isospin-1
 #
 # type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C      mass    width   dyn.f   comment
+#needed for gam gam reactions
+Meson GamGam            GamGam                  0  0  1  1 -1   2  0  0  0      0.8      0.2    relBW [no Idea]
 #
 Meson aMatrix0 		aMatrix^0  		0  0  1  1 -1   2  0  0  0 	1. 	0.2 	relBW	[PDG no idea]
 Meson aMatrix+ 		aMatrix^+  		3  0  1  0 -1   2  2  0  0 	1. 	0.2 	relBW	[PDG no idea]

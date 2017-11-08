@@ -66,11 +66,16 @@ public:
 
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
 
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+// virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void print(std::ostream& os) const;
 
 
 protected:
   const std::shared_ptr<GamgamChannelEnv> _gamgamChannelEnv;
+  bool _useProdDynamics;
+  std::shared_ptr<AbsDynamics> _dyn;
 
   virtual void initialize();
 private:

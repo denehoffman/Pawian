@@ -183,7 +183,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       result= std::shared_ptr<AbsDynamics>(new RadM1Dynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->wignerDKey(), theDec->barrierqR(), theDec->prodChannelInfo()->m0decRadM1Prod()));
     }
     else if(theDec->dynType()=="FormPol0" || theDec->dynType()=="FormPol1" || theDec->dynType()=="FormPol2") {
-      result= std::shared_ptr<AbsDynamics>(new ProdParamDynamics(theName, fsParticles, theDec->motherPart(), theDec->dynType()));
+      result= std::shared_ptr<AbsDynamics>(new ProdParamDynamics(theName, fsParticles, theDec->motherPart(), currentChannelId, theDec->dynType()));
     }
 
     else{

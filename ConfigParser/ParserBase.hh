@@ -100,6 +100,7 @@ public:
   const std::vector<std::string>& replaceProdKey() const { return _replaceProdKey; }
   const std::vector<std::string>& decayDynamics() const { return _dynamics;}
   const std::vector<std::string>& productionSystem() const { return _productionSystem; }
+  const std::string productionDynamics() const {return _productionDynamics;}
   const std::string productionFormalism() const { return _productionFormalism; }
    const bool fitqRProduction() const {return _fitqRProduction;}
   const std::vector<std::string>& cloneParticle() const { return _cloneParticle; }
@@ -174,6 +175,7 @@ protected:
   std::vector<std::string>  _replaceMassKey;
   std::vector<std::string>  _replaceProdKey;
   std::vector<std::string> _productionSystem;
+  std::string _productionDynamics;
   std::string _productionFormalism;
   bool _fitqRProduction;
   std::vector<std::string> _cloneParticle;

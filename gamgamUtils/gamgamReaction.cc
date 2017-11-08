@@ -31,9 +31,11 @@
 #include "PwaUtils/FormationDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
+#include "Particle/ParticleTable.hh"
 
 gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int jmax) :
    _channelID(channelID)
@@ -54,12 +56,14 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
 	currentDec->setProductionAmp();
 	currentDec->setProdChannelInfo( *itProd );
 	currentDec->extractStates();
-	std::string currentFormDynType=(*itProd)->formationDynType();
-	if(currentFormDynType !="non"){
-	  if(currentFormDynType =="FormPol0" || currentFormDynType =="FormPol1" || currentFormDynType =="FormPol2"){
-	  currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
-	  }
-	}
+        std::string currentFormDynType="WoDynamics";
+        currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+//	std::string currentFormDynType=(*itProd)->formationDynType();
+//	if(currentFormDynType !="non"){
+//	  if(currentFormDynType =="FormPol0" || currentFormDynType =="FormPol1" || currentFormDynType =="FormPol2"){
+//	  currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+//	  }
+//	}
 	_prodFormationDecs.push_back(currentDec);
       }
       else{
@@ -67,6 +71,10 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
 	exit(1);
       }
     }
+
+  Particle* motherProdParticle = GlobalEnv::instance()->particleTable()->particle("GamGam");
+  std::shared_ptr<const IGJPC> motherProdIGJPC=getIGJPCPtr(motherProdParticle);  
+  _motherProdDec = std::shared_ptr<FormationDecay>(new FormationDecay(motherProdIGJPC,motherProdParticle, _channelID, "gamgam"));
 }
 
 gamgamReaction::~gamgamReaction(){

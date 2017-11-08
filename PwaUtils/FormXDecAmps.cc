@@ -82,7 +82,7 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
   complex<double> currentDyn=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
   theMutex.unlock();
   result=_currentParamMap.at(absLamX)*_decAmpDaughter1->XdecAmp(lamX, theData, this)*currentDyn;
-
+  //  result=_currentParamMap.at(absLamX)*_decAmpDaughter1->XdecAmp(lamX, theData, this);
   if(result.real()!=result.real()){
     InfoMsg << "dyn name: " << _absDyn->name() 
 	 << "\nname(): " << name()

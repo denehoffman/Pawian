@@ -35,13 +35,12 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
+#include "PwaUtils/FormationDecay.hh"
 #include "Utils/PawianCollectionUtils.hh"
 
 
 class Particle;
-class FormationDecay;
 class IsobarHeliDecay;
-class FormationDecay;
 class ProdChannelInfo;
 class gamgamStates;
 
@@ -56,6 +55,7 @@ public:
   std::shared_ptr<gamgamStates> GamGamStates() {return _gamgamStates;}
   std::vector< std::shared_ptr<FormationDecay> >& formationDecays() {return _prodFormationDecs;}
   std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
+  std::shared_ptr<FormationDecay> motherProdDec(){return _motherProdDec;}
 
 protected:
 
@@ -65,4 +65,5 @@ private:
   std::shared_ptr<gamgamStates> _gamgamStates;
   std::vector< std::shared_ptr<FormationDecay> > _prodFormationDecs;
   std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
+  std::shared_ptr<FormationDecay> _motherProdDec;
 };

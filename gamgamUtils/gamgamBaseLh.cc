@@ -40,6 +40,7 @@
 #include "PwaUtils/FsParticleProjections.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "ConfigParser/ParserBase.hh"
 
 #include <boost/bind.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -48,6 +49,7 @@
 gamgamBaseLh::gamgamBaseLh(ChannelID channelID) :
   AbsLh(channelID)
   ,_gamgamChannelEnv(std::static_pointer_cast<GamgamChannelEnv> (GlobalEnv::instance()->GamgamChannel(channelID)))
+  ,_useProdDynamics(false)
 {
   initialize();
 }
@@ -83,8 +85,7 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   double result=0.;
 
   //  InfoMsg << "_decAmps.size(): " << _decAmps.size() << endmsg;
-
-  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
   for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
     (*itDecAll)->calcDynamics(theData);
   }
@@ -134,7 +135,7 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   }
   
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
-
+  if(_useProdDynamics) result*=_dyn->eval(theData,0).real();
   result *= fitPar->Value(_channelScaleParam);
   //  InfoMsg << "result: " << result << endmsg;
   return result;
@@ -144,7 +145,6 @@ void gamgamBaseLh::print(std::ostream& os) const{
 
 }
 
-
 void  gamgamBaseLh::initialize(){
   std::vector< std::shared_ptr<AbsDecay> > theDecs = _gamgamChannelEnv->prodDecayList()->getList();
   std::vector< std::shared_ptr<AbsDecay> >::iterator it;
@@ -153,8 +153,34 @@ void  gamgamBaseLh::initialize(){
     std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
+
+ std::string dynString=_gamgamChannelEnv->parser()->productionDynamics();
+  if(dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2"){
+    _useProdDynamics=true;
+    std::shared_ptr<FormationDecay> motherFormDec = _gamgamChannelEnv->reaction()->motherProdDec();
+    std::vector<std::string> additionalStringVecDummy;
+    motherFormDec->enableDynamics(dynString, additionalStringVecDummy);
+   _dyn=motherFormDec->getDynamics();
+    //retrieve dyn from first amp
+//    _dyn=_decAmps.at(0)->getDyn();  
+  }
 }
 
+void gamgamBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+ _dyn->fillDefaultParams(fitPar);
+ AbsLh::fillDefaultParams(fitPar);
+}
 
+void gamgamBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  _dyn->updateFitParams(fitPar);
+  AbsLh::updateFitParams(fitPar);
+}
 
+//bool gamgamBaseLh::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, 
+//std::shared_ptr<AbsPawianParameters> fitParOld){
+//  bool result=true;
+//  if(!_dyn->checkRecalculation(fitParNew, fitParOld)) result=false;
+//  if(!checkRecalculation(fitParNew, fitParOld)) result=false;
+//  return result;
+//}
 

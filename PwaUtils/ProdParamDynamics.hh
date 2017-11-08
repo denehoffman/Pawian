@@ -37,7 +37,7 @@
 class ProdParamDynamics : public AbsDynamics{
 
 public:
-  ProdParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string type);
+  ProdParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, ChannelID channelID, std::string type);
   virtual ~ProdParamDynamics();
 
   virtual std::string type() {return "ProdParamDynamics";}
@@ -47,12 +47,16 @@ public:
   // virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
+
 protected:
 
   vector<double> _currentPolParams;
   double _currentExpParam;
   vector<std::string> _fitPolParNames;
+  std::string _fitExpParName;
   unsigned int _polOrder;
+  ChannelID _channelID;
+
 private:
 
 };

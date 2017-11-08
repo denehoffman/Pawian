@@ -34,9 +34,10 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 
-ProdParamDynamics::ProdParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string type) :
+ProdParamDynamics::ProdParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, ChannelID channelID, std::string type) :
   AbsDynamics(name, fsParticles, mother)
   ,_polOrder(0)
+  ,_channelID(channelID)
 {
   if(type=="FormPol0") _polOrder=0;
   else if(type=="FormPol1") _polOrder=1;
@@ -80,12 +81,12 @@ complex<double> ProdParamDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp
 
 
 void ProdParamDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  
+  fillParamNameList();  
   for(unsigned int i=0; i<=_polOrder; ++i){
-    std::stringstream stringStr;
-    stringStr << i;
-    std::string fitParName="ProdPol"+stringStr.str();
-    _fitPolParNames[i]=fitParName;
+    //   std::stringstream stringStr;
+    //    stringStr << i;
+    //   std::string fitParName="ProdPol"+stringStr.str();
+    //    _fitPolParNames[i]=fitParName;
     if(i==0){
       fitPar->Add(_fitPolParNames.at(i), 1., 0.1);
       _currentPolParams[i]=1.;
@@ -95,7 +96,8 @@ void ProdParamDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> f
       _currentPolParams[i]=0.;
     } 
   }
- fitPar->Add("ExpProd", 0., 0.1);
+  // fitPar->Add("ExpProd", 0., 0.1);
+ fitPar->Add(_fitExpParName, 0., 0.1);
  _currentExpParam=0.;
 }
 
@@ -103,20 +105,25 @@ void ProdParamDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> f
 void ProdParamDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   for(unsigned int i=0; i<=_polOrder; ++i){
     _currentPolParams.at(i)=fitPar->Value(_fitPolParNames.at(i));
+//    InfoMsg << "updated par " << _fitPolParNames.at(i) << ": " << fitPar->Value(_fitPolParNames.at(i)) << endmsg;
   }
-  _currentExpParam=fitPar->Value("ExpProd");
+  _currentExpParam=fitPar->Value(_fitExpParName);
+//  InfoMsg << "updated par " << _fitExpParName << ": " << fitPar->Value(_fitExpParName) << endmsg;
 }
 
 void ProdParamDynamics::fillParamNameList(){
   _paramNameList.clear();
+  std::stringstream stringStrChannelId;
+    stringStrChannelId << _channelID;
   for(unsigned int i=0; i<=_polOrder; ++i){
     std::stringstream stringStr;
     stringStr << i;
-    std::string fitParName="ProdPol"+stringStr.str();
+    std::string fitParName="ProdPol"+stringStr.str()+"Channel"+stringStrChannelId.str();
     _fitPolParNames[i]=fitParName;
     _paramNameList.push_back(fitParName);
   }
-  _paramNameList.push_back("ExpProd");
+  _fitExpParName="ExpProdChannel"+stringStrChannelId.str();
+  _paramNameList.push_back(_fitExpParName);
 }
 
 // bool ProdParamDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
