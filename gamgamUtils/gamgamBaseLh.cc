@@ -135,7 +135,7 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   }
   
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
-  if(_useProdDynamics) result*=_dyn->eval(theData,0).real();
+  if(_useProdDynamics) result*=fabs(_dyn->eval(theData,0).real());
   result *= fitPar->Value(_channelScaleParam);
   //  InfoMsg << "result: " << result << endmsg;
   return result;

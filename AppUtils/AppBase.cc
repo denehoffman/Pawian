@@ -780,10 +780,10 @@ void AppBase::addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile){
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pbarpCfgs, AbsChannelEnv::CHANNEL_PBARP);
   std::vector<std::string> epemCfgs = GlobalEnv::instance()->parser()->epemCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, epemCfgs, AbsChannelEnv::CHANNEL_EPEM);
-  std::vector<std::string> resCfgs = GlobalEnv::instance()->parser()->resCfgs();
-  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, resCfgs, AbsChannelEnv::CHANNEL_RES);
   std::vector<std::string> gamgamCfgs = GlobalEnv::instance()->parser()->gamgamCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, gamgamCfgs, AbsChannelEnv::CHANNEL_GAMGAM);
+  std::vector<std::string> resCfgs = GlobalEnv::instance()->parser()->resCfgs();
+  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, resCfgs, AbsChannelEnv::CHANNEL_RES);
   std::vector<std::string> pipiScatteringCfgs = GlobalEnv::instance()->parser()->pipiScatteringCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pipiScatteringCfgs, AbsChannelEnv::CHANNEL_PIPISCATTERING);
 }

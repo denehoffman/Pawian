@@ -44,27 +44,35 @@ AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   , _channelID(theAbsLhPtr->getChannelID())
   ,_evtDataVec(theAbsLhPtr->getDataVec())
   ,_evtMCVec(theAbsLhPtr->getMcVec())
-  ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
-  ,_useCohPhasespace(GlobalEnv::instance()->parser()->useCohPhaseSpaceHyp())
-  ,_phasespaceKey("Phasespace")
+  ,_usePhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->usePhaseSpaceHyp())
+  ,_useCohPhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->useCohPhaseSpaceHyp())
+  // ,_phasespaceKey("Phasespace")
   ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 
 {
+   std::stringstream stringStrChannelId;
+   stringStrChannelId << _channelID;
+   _phasespaceKey="Phasespace"+stringStrChannelId.str();
+   _CohPhasespaceKey="CohPhasespace"+stringStrChannelId.str();
    initialize();
 }
 
 AbsLh::AbsLh(ChannelID channelID) :
   AbsParamHandler()
   , _channelID(channelID)
-  ,_usePhasespace(GlobalEnv::instance()->parser()->usePhaseSpaceHyp())
-  ,_useCohPhasespace(GlobalEnv::instance()->parser()->useCohPhaseSpaceHyp())
-  ,_phasespaceKey("Phasespace")
-  ,_CohPhasespaceKey("CohPhasespace")
+  ,_usePhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->usePhaseSpaceHyp())
+  ,_useCohPhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->useCohPhaseSpaceHyp())
+  // ,_phasespaceKey("Phasespace")
+  // ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 {
+  std::stringstream stringStrChannelId;
+   stringStrChannelId << _channelID;
+   _phasespaceKey="Phasespace"+stringStrChannelId.str();
+   _CohPhasespaceKey="CohPhasespace"+stringStrChannelId.str();
    initialize();
 }
 
