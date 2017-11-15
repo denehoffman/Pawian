@@ -30,6 +30,8 @@
 #include "TKey.h"
 #include <algorithm>    // std::max
 
+int rebinFactor=1;
+void DataFitRebin(int factor) {rebinFactor=factor;}
 double CalcHistoChi2(TH1F* histoData, TH1F* histoFit);
 double CalcKolmogorov(TH1F* histoData, TH1F* histoFit);
 void DataFitCompare(std::string rootFileName, std::string histname, bool createcanvas=true);
@@ -62,7 +64,8 @@ void DataFitCompare(std::string rootFileName, std::string histname, bool createc
 
    TH1F* histoData = (TH1F*)tFile->Get(dataName.c_str());
    TH1F* histoFit = (TH1F*)tFile->Get(fitName.c_str());
-
+   histoData->Rebin(rebinFactor);
+   histoFit->Rebin(rebinFactor);
    if(createcanvas)
      //     TCanvas* canvas = new TCanvas("canvas","c1",1000,1000);
 
