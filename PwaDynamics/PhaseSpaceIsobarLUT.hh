@@ -60,6 +60,7 @@ public:
   virtual void cacheFactors(const double mass);
 
 protected:
+  void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
 
 private:
   std::ifstream m_lutfile;

@@ -89,8 +89,17 @@ complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarLUT::ChewM(const complex<double> mass){
-  complex<double> result = getFactor(mass); 
+  complex<double> result = getFactor(mass);
+  complex<double> momReid = result.imag()*mass/2.;
+  CorrectCMForChosenSign(momReid, result); 
   return result;
+}
+
+void PhaseSpaceIsobarLUT::CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
+  if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
+     (_bumImPartSign < 0 && breakUpMom.imag() > 0)){
+     toChange = conj(toChange);
+  }
 }
 
 void PhaseSpaceIsobarLUT::cacheFactors(const double mass){
