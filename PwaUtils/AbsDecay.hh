@@ -138,7 +138,7 @@ public:
   int orbMomMin() {return _Lmin;}
   ChannelID channelId() {return _channelId;}
 protected:
-  virtual Vector4<double> beamVecCollider(Vector4<double>& sqrts, double massBeam); 
+  //  virtual Vector4<double> beamVecCollider(Vector4<double>& sqrts, double massBeam); 
   virtual void extractLmin();
   std::string _typeName;
   ChannelID _channelId;

@@ -57,7 +57,6 @@ void GamgamChannelEnv::setupChannel(ChannelID id){
   _cmsMass=_theGamGamParser->cmsMass();
   _cmEnergy = _cmsMass;
   _jmax=_theGamGamParser->jMax();
-  _initial4Vec = Vector4<double>( _cmsMass, 0., 0., 0.);
   std::vector<std::string>::const_iterator itStr;
   
   

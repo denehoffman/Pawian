@@ -31,6 +31,7 @@
 #include "PwaUtils/AbsHist.hh"
 #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/DataUtils.hh"
+#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 class Particle;
 class AbsDecayList;
@@ -80,6 +81,8 @@ public:
   std::shared_ptr<AbsPawianParameters> defaultPawianParams();
   std::shared_ptr<FsParticleProjections> getFsParticleProjectionsPtr() {return _fsParticleProjections;}
   double cmEnergy() {return _cmEnergy;}
+  const Vector4<double> initial4Vec() const {return _initial4Vec;}
+  const Vector4<double> projectile4Vec() const {return _projectile4Vec;}
 
   static short CHANNEL_PBARP;
   static short CHANNEL_EPEM;
@@ -111,11 +114,12 @@ protected:
    std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
    std::vector<std::shared_ptr<calcContributionData> > _calcContributionDataVec;
+  Vector4<double> extract4Vec(std::string theString);   
+
    bool _useMassRange;
   bool _usePhpGenDynamics;
    double _massMin;
    double _massMax;
-   Vector4<double> _initial4Vec;
    std::map<std::string, double> _preFactorMap;
    ParserBase* _theParser;
    std::shared_ptr<AbsLh> _theLh;
@@ -123,4 +127,6 @@ protected:
   std::vector< std::shared_ptr<PhpGenDynamics> > _phpGenDynamics;
   double _cmEnergy;
   std::string _channelSubTypeName;
+  Vector4<double> _initial4Vec;
+  Vector4<double> _projectile4Vec;
 };

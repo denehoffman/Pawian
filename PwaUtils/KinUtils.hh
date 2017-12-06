@@ -37,7 +37,10 @@ namespace KinUtils{
 
   void SetTheta(Vector4<double>& the4Vec, double theta);
   void SetPhi(Vector4<double>& the4Vec, double phi);
-  Vector4<double> heliEvtGenVec(Vector4<double>& motherRef, Vector4<double>& ref, Vector4<double>& mother, Vector4<double>& daughter); 
+  Vector4<double> heliEvtGenVec(Vector4<double>& motherRef, Vector4<double>& ref, Vector4<double>& mother, Vector4<double>& daughter);
+
+  template<typename T>
+  Vector4<T> beamVecCollider(Vector4<T>& sqrts, T massBeam); 
 }
 
 
@@ -75,3 +78,4 @@ T costDecHeli(const Vector4<T>& parent,const Vector4<T>& resonance,
 
   return cost;
 }
+

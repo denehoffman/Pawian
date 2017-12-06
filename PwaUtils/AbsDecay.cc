@@ -474,9 +474,19 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     Vector4<double> motherRefVec;
     if(whichDecayLevel()==decayLevel::firstLevel){
       motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=beamVecCollider(all4Vec, PawianConstants::mElectron);
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMGAM ){
+	//z-axis=beam axis y-axis perpendicular to e+ e- initial state
+	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
+	prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+      }
     }
-    else if(whichDecayLevel()==decayLevel::secondLevel) motherRefVec=all4Vec;
+    else if(whichDecayLevel()==decayLevel::secondLevel){
+      motherRefVec=all4Vec;
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMGAM ){
+ 	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+      }
+    }
     else{
       Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
       exit(0); 
@@ -490,6 +500,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
      //very special for gam gam processes
     if(diffProdParticleMother4Vec.M2() < 1.e-6 && fabs(diffProdParticleMother4Vec.Px())< 1.e-6 && fabs(diffProdParticleMother4Vec.Py())< 1.e-6 && fabs(diffProdParticleMother4Vec.Pz())< 1.e-6){
       prodParticle4Vec=Vector4<double>(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) prodParticle4Vec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
     }
     daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
@@ -504,6 +515,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     if( fabs(mother4Vec.P()) > 1.e-6 ){
       Vector4<double> defaultMotherRefVec=Vector4<double>(0., 0., 0., 2.);
       Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) defaultRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
       daughter2HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
     }
@@ -783,18 +795,18 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
    _massParamId = IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey);
 }
 
-Vector4<double> AbsDecay::beamVecCollider(Vector4<double>& sqrts, double massBeam){
-  //assuption sqrts= 4vector in the lab frame
-  //both beam particles have the same masses (massBeam), such like e+e- or pbar p
-  //main direction of the beam is in z direction, only minor part goes in x-y direction
-  //with pbeam1_z = -pbeam2_z
+// Vector4<double> AbsDecay::beamVecCollider(Vector4<double>& sqrts, double massBeam){
+//   //assuption sqrts= 4vector in the lab frame
+//   //both beam particles have the same masses (massBeam), such like e+e- or pbar p
+//   //main direction of the beam is in z direction, only minor part goes in x-y direction
+//   //with pbeam1_z = -pbeam2_z
 
   
-  double pBeam=0.5*sqrt(sqrts.Mass()*sqrts.Mass()+sqrts.P()*sqrts.P()-4.*massBeam*massBeam);
-  double pxBeam=0.5*sqrts.Px();
-  double pyBeam=0.5*sqrts.Py();   
-  double pzBeam=sqrt(pBeam*pBeam-pxBeam*pxBeam-pyBeam*pyBeam);
-  double eBeam=sqrt(massBeam*massBeam+pBeam*pBeam);
-  Vector4<double> result(eBeam, pxBeam, pyBeam, pzBeam);
-  return result;
-} 
+//   double pBeam=0.5*sqrt(sqrts.Mass()*sqrts.Mass()+sqrts.P()*sqrts.P()-4.*massBeam*massBeam);
+//   double pxBeam=0.5*sqrts.Px();
+//   double pyBeam=0.5*sqrts.Py();   
+//   double pzBeam=sqrt(pBeam*pBeam-pxBeam*pxBeam-pyBeam*pyBeam);
+//   double eBeam=sqrt(massBeam*massBeam+pBeam*pBeam);
+//   Vector4<double> result(eBeam, pxBeam, pyBeam, pzBeam);
+//   return result;
+// } 

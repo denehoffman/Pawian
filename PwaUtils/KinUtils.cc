@@ -129,6 +129,21 @@ Vector4<T> KinUtils::perpTo(const Vector4<T>& vecA,  const Vector4<T>& vecB){
  return result;
 } 
 
+template<typename T>
+Vector4<T> KinUtils::beamVecCollider(Vector4<T>& sqrts, T massBeam){
+  //assuption sqrts= 4vector in the lab frame
+  //both beam particles have the same masses (massBeam), such like e+e- or pbar p
+  //main direction of the beam is in z direction, only minor part goes in x-y direction
+  //with pbeam1_z = -pbeam2_z
+
+  T pBeam=0.5*sqrt(sqrts.Mass()*sqrts.Mass()+sqrts.P()*sqrts.P()-4.*massBeam*massBeam);
+  T pxBeam=0.5*sqrts.Px();
+  T pyBeam=0.5*sqrts.Py();   
+  T pzBeam=sqrt(pBeam*pBeam-pxBeam*pxBeam-pyBeam*pyBeam);
+  T eBeam=sqrt(massBeam*massBeam+pBeam*pBeam);
+  Vector4<T> result(eBeam, pxBeam, pyBeam, pzBeam);
+  return result;
+} 
 
 template Vector4<double> KinUtils::heliVec(const Vector4<double>&,  const Vector4<double>&,const Vector4<double>& , const Vector4<double>& );  
 template Vector4<float> KinUtils::heliVec(const Vector4<float>&,  const Vector4<float>&,const Vector4<float>& , const Vector4<float>& );
@@ -136,3 +151,5 @@ template Vector4<double> KinUtils::gottfriedJacksonVec(const Vector4<double>&,  
 template Vector4<float> KinUtils::gottfriedJacksonVec(const Vector4<float>&,  const Vector4<float>&,const Vector4<float>&, const Vector4<float>&);
 template Vector4<double> KinUtils::perpTo(const Vector4<double>& vecA,  const Vector4<double>& vecB);
 template Vector4<float> KinUtils::perpTo(const Vector4<float>& vecA,  const Vector4<float>& vecB);
+template Vector4<double> KinUtils::beamVecCollider(Vector4<double>& sqrts, double massBeam);
+template Vector4<float> KinUtils::beamVecCollider(Vector4<float>& sqrts, float massBeam);

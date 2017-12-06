@@ -68,8 +68,17 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_theParser(theParser)
   ,_cmEnergy(0.)
   ,_channelSubTypeName("")
+  ,_initial4Vec(Vector4<double>(0.,0.,0.,0.))
+  ,_projectile4Vec(Vector4<double>(0.,0.,0.,0.))
 {
-   _theLh.reset();
+  std::string init4VecStr=theParser->intitial4Vec();
+  _initial4Vec=extract4Vec(init4VecStr);
+  InfoMsg << "initial4Vec: " << _initial4Vec << endmsg;
+
+  std::string projectile4VecStr=theParser->projectile4Vec();
+  _projectile4Vec=extract4Vec(projectile4VecStr);
+  InfoMsg << "projectile4Vec: " << _projectile4Vec << endmsg;
+  _theLh.reset();
 }
 
 
@@ -544,5 +553,33 @@ void AbsChannelEnv::setPrefactors(){
       }
     }
   }
+}
+
+Vector4<double> AbsChannelEnv::extract4Vec(std::string theString){
+   std::stringstream stringStr;
+  stringStr << theString;
+ 
+  std::string eValStr;
+  stringStr >> eValStr;
+  double eVal;
+  eVal=atof(eValStr.c_str());
+ 
+  std::string pxValStr;
+  stringStr >> pxValStr;
+  double pxVal;
+  pxVal=atof(pxValStr.c_str()); 
+
+  std::string pyValStr;
+  stringStr >> pyValStr;
+  double pyVal;
+  pyVal=atof(pyValStr.c_str());
+
+  std::string pzValStr;
+  stringStr >> pzValStr;
+  double pzVal;
+  pzVal=atof(pzValStr.c_str());
+
+  Vector4<double> result(eVal, pxVal, pyVal, pzVal);
+  return result;   
 }
 

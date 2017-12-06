@@ -93,6 +93,7 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
     if( fabs(mother4Vec.P()) > 1.e-6 ){
       Vector4<double> defaulltMotherRefVec=Vector4<double>(0., 0., 0., 2.);
       Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) defaultRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
       daughter1_HeliOmega=KinUtils::heliVec(defaulltMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
       daughter2_HeliOmega=KinUtils::heliVec(defaulltMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter3_HeliOmega=KinUtils::heliVec(defaulltMotherRefVec, defaultRefVec, mother4Vec, daughter3_4Vec);
@@ -100,13 +101,23 @@ void OmegaTo3PiLSDecay::fillWignerDs(std::map<std::string , Vector4<double> >& f
   }
   else if (whichDecayLevel()==decayLevel::firstLevel){ //mother4Vec==all4Vec
     Vector4<double> motherRefVec(0., 0., 0., 1.); //set direction onto the z-axis
-    if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=beamVecCollider(all4Vec, PawianConstants::mElectron);
+    if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+    if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMGAM ){
+      //z-axis=beam axis y-axis perpendicular to e+ e- initial state
+      motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
+      prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+    }
+
     daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
     daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec); 
   } 
   else if (whichDecayLevel()==decayLevel::secondLevel){ //mother4Vec==all4Vec
     Vector4<double> motherRefVec=all4Vec; //set direction onto the z-axis
+    if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMGAM ){
+      motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+    }
+
     daughter1_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
     daughter2_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter3_HeliOmega=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter3_4Vec); 

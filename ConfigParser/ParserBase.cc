@@ -78,6 +78,8 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_noOfDataEvts(1000000)
   ,_tolerance(0.1) 
   ,_noInterScattPoints(0)
+  ,_intitial4VecStr("")
+  ,_projectile4VecStr("")
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -166,6 +168,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
     ("noOfInterpolatedScatteringPoints", po::value<int>(&_noInterScattPoints), "number of interpolated scattering points")
     ("kMatrixProdSuffix", po::value< vector<string> >(&_kMatrixProdSuffix),"suffix for fit parameter of the P-vectors in the K-matrix approach")
+    ("initial4Vec", po::value<string>(&_intitial4VecStr),"initial 4 Vector (order: E, px, py, pz")
+    ("projectile4Vec", po::value<string>(&_projectile4VecStr),"4 Vector of the projectile (order: E, px, py, pz")
     ;
 
 }
@@ -264,7 +268,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "prefit with free scaling factor: " << _doScaling << "\n\n"
 		<< "pdg table: " << _pdgTableFile << "\n\n"
 	        << "minimumTolerance: " << _tolerance << "\n\n"
-                << "no of interpolated scattering points" << _noInterScattPoints << "\n\n"
+                << "no of interpolated scattering points: " << _noInterScattPoints << "\n\n"
+		<< "initial 4vector: " << _intitial4VecStr << "\n\n"
+		<< "projectile 4vector: " << _projectile4VecStr << "\n\n"
                 << endl;
 
 

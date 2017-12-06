@@ -40,6 +40,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 //#include "PwaUtils/EvtDataBaseList.hh"
 #include "FitParams/AbsPawianParameters.hh"
+#include "Utils/PawianConstants.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -432,8 +433,15 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
 	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-6){
       //is production vector
       refVec=Vector4<double>(sqrt(combinedMother4Vec.M()*combinedMother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+	refVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+      }
     }
     if (frame=="heli"){
+      if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GAMGAM){
+	motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec();
+	refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
+      }
       result4Vec=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec);
       if(nBodyDecay==3) result4Vec2=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec2);
     }
