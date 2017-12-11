@@ -36,7 +36,12 @@ PhaseSpaceIsobarLUT::PhaseSpaceIsobarLUT(double mass1, double mass2, string type
   m_lutfilepath = type.substr(3, type.length());
   m_sortedByReS = true;
   std::cout << "LUTFile: " << m_lutfilepath << std::endl;
-  
+  if (FILE *file = fopen(m_lutfilepath.c_str(), "r")) {
+    fclose(file);
+  } else {
+    Alert << "file: " << m_lutfilepath << " does not exist!!!!" << endmsg;
+    exit(1);  
+  } 
   loadParams();
 }
 
