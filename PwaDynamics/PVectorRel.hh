@@ -60,6 +60,7 @@ public:
   virtual void updatePoleMass(int i, double mass);
   virtual void updategFactors(int i, vector<double>& newg_i);
   virtual void updateBgTerms(unsigned int order, unsigned int channel, double theVal) {return;}
+  virtual void printElements();
 
 protected:
   vector<std::shared_ptr<PPole> > _Ppoles;

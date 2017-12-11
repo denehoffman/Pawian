@@ -53,10 +53,17 @@ void KMatrixRel::evalMatrixTemplate(const MassType mass, Spin OrbMom){
     (*it)->evalMatrix(mass, OrbMom);
     theKMatrix += *(*it);
   }
+  
+  // for (int i=0; i<theKMatrix.NumRows(); ++i){
+  //   for (int j=0; j<theKMatrix.NumCols(); ++j){
+  //     this->operator()(i,j)=theKMatrix(i,j);
+  //   }
+  // }
 
   for (int i=0; i<theKMatrix.NumRows(); ++i){
-    for (int j=0; j<theKMatrix.NumCols(); ++j){
+    for (int j=i; j<theKMatrix.NumCols(); ++j){
       this->operator()(i,j)=theKMatrix(i,j);
+      this->operator()(j,i)=this->operator()(i,j);
     }
   }
 }

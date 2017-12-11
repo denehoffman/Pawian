@@ -69,7 +69,7 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass, Spin OrbMom){
   Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
   for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-    (*it)->evalMatrix(mass);
+    (*it)->evalMatrix(mass, OrbMom);
     theKMatrix += *(*it);
   }
 
@@ -79,7 +79,6 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass, Spin OrbMom){
       for (unsigned int k=0; k<=_orderBg; ++k){
 	currentBg+=complex<double>(_bgTerms.at(k).at(i).at(j)*pow(s_hat,k));
       }
-      //      InfoMsg << "currentBg: " << currentBg << endmsg;
       this->operator()(i,j)=theKMatrix(i,j)+currentBg;
       this->operator()(i,j)*=adlerTerm;
       this->operator()(j,i)=this->operator()(i,j);

@@ -24,6 +24,7 @@
 #include "PwaDynamics/KPoleBarrier.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/BarrierFactor.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier):
   KPole(g_i, mass_0)

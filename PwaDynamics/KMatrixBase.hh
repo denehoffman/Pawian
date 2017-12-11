@@ -64,6 +64,7 @@ public:
   virtual void updatesnormAdler(double snormAdler) {_snormAdler=snormAdler;}
 
   void SetBumImPartSigns(std::vector<double> signs);
+  virtual void printElements();
 
 protected:
   vector<std::shared_ptr<KPole> > _KPoles;

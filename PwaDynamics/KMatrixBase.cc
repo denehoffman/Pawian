@@ -90,3 +90,18 @@ void KMatrixBase::SetBumImPartSigns(std::vector<double> signs){
       _phpVecs.at(i)->SetBumImPartSign(signs.at(i));
    }
 }
+
+void KMatrixBase::printElements(){
+  std::cout << "\n***K-Poles***" << std::endl;
+  vector<std::shared_ptr<KPole> >::iterator it;
+  for (it=_KPoles.begin(); it!=_KPoles.end(); ++it){
+    std::cout << (*(*it))(0,0) << std::endl;
+  }
+
+  std::cout << "\n***K-matrix***" << std::endl;
+  for(int i=0; i<NumCols(); ++i){
+    for(int j=0; j<NumRows(); ++j){
+      std::cout << i << " " << j << " = " << this->operator()(i,j) << std::endl;
+    }
+  }
+}

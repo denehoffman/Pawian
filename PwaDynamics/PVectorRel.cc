@@ -84,3 +84,10 @@ void PVectorRel::updategFactors(int i, vector<double>& newg_i){
   }
   _Ppoles[i]->updategFactors(newg_i);
 }
+
+void PVectorRel::printElements(){
+  std::cout << "\n***P-vector*****" << std::endl;
+  for(int i=0; i< NumRows(); ++i){
+      std::cout << i << " = " << this->operator()(i,0) << std::endl;
+  }
+}
