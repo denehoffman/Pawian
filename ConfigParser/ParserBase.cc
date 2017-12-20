@@ -80,6 +80,8 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_noInterScattPoints(0)
   ,_intitial4VecStr("")
   ,_projectile4VecStr("")
+  ,_prePathDataFiles("")
+  ,_prePathKMatrixFiles("")
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -137,6 +139,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
     ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
     ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
+    ("prePathDataFiles",po::value<string>(&_prePathDataFiles), "option to set a pre path to the data files")
+    ("prePathKMatrixFiles",po::value<string>(&_prePathKMatrixFiles), "option to set a pre path to the K-matrix files")
     ;
   
   _config->add_options()
@@ -271,6 +275,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "no of interpolated scattering points: " << _noInterScattPoints << "\n\n"
 		<< "initial 4vector: " << _intitial4VecStr << "\n\n"
 		<< "projectile 4vector: " << _projectile4VecStr << "\n\n"
+		<< "prePathDataFiles: " << _prePathDataFiles << "\n\n"
+		<< "prePathKMatrixFiles: " << _prePathKMatrixFiles << "\n\n"
                 << endl;
 
 

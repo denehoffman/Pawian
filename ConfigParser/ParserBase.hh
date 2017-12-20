@@ -119,7 +119,10 @@ public:
   const int noOfInterpolatedScattPoints() const {return _noInterScattPoints;}
   const std::vector<std::string>& addKmatrixProdSuffix() const {return _kMatrixProdSuffix;}
   const std::string intitial4Vec() const {return _intitial4VecStr;}
-  const std::string projectile4Vec() const {return _projectile4VecStr;} 
+  const std::string projectile4Vec() const {return _projectile4VecStr;}
+  const std::string prePathDataFiles() const {return _prePathDataFiles;}
+  const std::string prePathKMatrixFiles() const {return _prePathKMatrixFiles;}
+ 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
@@ -196,4 +199,6 @@ protected:
   std::vector<std::string> _kMatrixProdSuffix;
   std::string _intitial4VecStr;
   std::string _projectile4VecStr;
+  std::string _prePathDataFiles;
+  std::string _prePathKMatrixFiles;
 };

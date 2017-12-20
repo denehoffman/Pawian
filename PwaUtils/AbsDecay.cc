@@ -47,6 +47,7 @@
 #include "PwaUtils/ProdChannelInfo.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 #include "ErrLogger/ErrLogger.hh"
+#include "ConfigParser/ParserBase.hh"
 
 AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId, std::string typeName) :
   _typeName(typeName)
@@ -390,7 +391,8 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   _dynType=dynString;
 
   if(_dynType=="KMatrix" || _dynType=="TMatrix"){
-    _pathParserFile=additionalStringVec[0];
+    std::string prePathKMat=GlobalEnv::instance()->Channel(_channelId)->parser()->prePathKMatrixFiles();
+    _pathParserFile=prePathKMat+additionalStringVec[0];
     if (additionalStringVec.size() == 3) _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);
   }
   else if(_dynType=="Flatte"){ //fill second decay channel (Flatte)

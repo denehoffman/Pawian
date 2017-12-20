@@ -108,9 +108,15 @@ void AppBase::generate(std::shared_ptr<AbsPawianParameters> theParams){
 }
 
 void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight, int evtStart, int evtStop){
+  std::vector<std::string> completeFileNames;
+  std::vector<std::string>::iterator itStr;
+  for(itStr=fileNames.begin(); itStr!=fileNames.end(); ++itStr){
+    std::string currentFile=GlobalEnv::instance()->Channel(channelID)->parser()->prePathDataFiles()+(*itStr);
+    completeFileNames.push_back(currentFile);
+  }
   int noFinalStateParticles=GlobalEnv::instance()->Channel(channelID)->noFinalStateParticles();
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel(channelID)->massRangeCuts();
-  EventReaderDefault eventReader(fileNames, noFinalStateParticles, 0, withEvtWeight);
+  EventReaderDefault eventReader(completeFileNames, noFinalStateParticles, 0, withEvtWeight);
   eventReader.setUnit(GlobalEnv::instance()->Channel(channelID)->parser()->unitInFile());
   eventReader.setOrder(GlobalEnv::instance()->Channel(channelID)->parser()->orderInFile());
 
@@ -152,8 +158,15 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
 }
 
 void AppBase::readScatteringEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, int evtStart, int evtStop){
+  std::vector<std::string> completeFileNames;
+  std::vector<std::string>::iterator itStr;
+  for(itStr=fileNames.begin(); itStr!=fileNames.end(); ++itStr){
+    std::string currentFile=GlobalEnv::instance()->Channel(channelID)->parser()->prePathDataFiles()+(*itStr);
+    completeFileNames.push_back(currentFile);
+  }
+
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts=GlobalEnv::instance()->Channel(channelID)->massRangeCuts();
-  EventReaderScattering evtScatterReader(fileNames, 2, 0, false);
+  EventReaderScattering evtScatterReader(completeFileNames, 2, 0, false);
   if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
     evtScatterReader.setMassRange(massRangeCuts);
   }

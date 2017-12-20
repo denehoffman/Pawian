@@ -159,36 +159,11 @@ for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) InfoMsg << *i
  }
 
  if(mode == "qaModeSimple"){
-   if (GlobalEnv::instance()->NoChannels() !=1){
-     Alert << "qaModeSimple only working with one channel!!!" << endmsg;
+     Alert << "qaModeSimple only working with singleChannelApp!!!" << endmsg;
      return 1;
-   }
-   std::shared_ptr<AbsPawianParameters> theParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
-   //   std::shared_ptr<AbsPawianParameters> orderedParams=GlobalEnv::instance()->Channel(0)->defaultPawianParams();
-   std::shared_ptr<AbsPawianParameters> orderedParams=theParams->paramsWithSameOrder(startPawianParams);
-
-  const std::string datFile=GlobalEnv::instance()->Channel(0)->parser()->dataFile();
-  const std::string mcFile=GlobalEnv::instance()->Channel(0)->parser()->mcFile();
-  InfoMsg << "data file: " << datFile ;  // << endmsg;
-  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
-  
-  std::vector<std::string> dataFileNames;
-  dataFileNames.push_back(datFile);
-
-  std::vector<std::string> mcFileNames;
-  mcFileNames.push_back(mcFile);
-
-  int noOfDataEvents = GlobalEnv::instance()->Channel(0)->parser()->noOfDataEvts();
-  int ratioMcToData= GlobalEnv::instance()->Channel(0)->parser()->ratioMcToData();
-
-  EventList eventsData;
-  theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel(0)->useDataEvtWeight(), 0, noOfDataEvents);
-
-  int maxMcEvts=eventsData.size()*ratioMcToData;
-  EventList mcData;
-  theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel(0)->useMCEvtWeight(), 0, maxMcEvts-1);
-
-   theAppBase.qaModeSimple(eventsData, mcData, orderedParams);
+ }
+ else{
+   Alert << "mode: " << mode << " is not supported in the coupled channel app!!!"<< endmsg;
    return 1;
  }
 
