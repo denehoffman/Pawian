@@ -163,6 +163,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
     ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...")
+    ("genRange", po::value<string> (&_genRange), "Range of W for generator (to be used if W<=sqrt(s), e.g. in gamma gamma or central production reactions)")
     ("phpGenDynamics", po::value< vector<string> > (&_phpGenDynamics), "dynamics for phase space generated events (only BreitWigner supported so far); order: dynType mass0 width0 particle1 particle2 ...") 
     ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
     ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
@@ -383,6 +384,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it = _massRangeCuts.begin(); it!=_massRangeCuts.end(); ++it){
 	  std::cout << (*it) << "\n";
       }
+
+      std::cout << "\ngenerator range:\t" << _genRange << std::endl;
 
       std::cout << "\nphp dynamics:" << std::endl;
       for (it = _phpGenDynamics.begin(); it!=_phpGenDynamics.end(); ++it){

@@ -110,6 +110,7 @@ public:
   const std::vector<std::string>& histAngleNames2D() const { return _histAngles2D;}
   const std::vector<std::string>& calcContribution() const { return _calcContribution;}
   const std::vector<std::string>& massRangeCuts() const {return _massRangeCuts;}
+  const std::string& genRange() const {return _genRange;}
   const std::vector<std::string>& phpGenDynamics() const {return _phpGenDynamics;}
   const int randomSeed() const {return _randomSeed;}
   const bool generateWithModel() const {return _genWithModel;}
@@ -187,6 +188,7 @@ protected:
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
   std::vector<std::string>  _massRangeCuts;
+  std::string  _genRange;
   std::vector<std::string>  _phpGenDynamics;
   std::vector<std::string> _histAngles2D;
   std::vector<std::string> _calcContribution;

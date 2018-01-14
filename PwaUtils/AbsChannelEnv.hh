@@ -81,6 +81,7 @@ public:
   std::shared_ptr<AbsPawianParameters> defaultPawianParams();
   std::shared_ptr<FsParticleProjections> getFsParticleProjectionsPtr() {return _fsParticleProjections;}
   double cmEnergy() {return _cmEnergy;}
+  const std::pair<float,float> genRange() const {return _genRange;}
   const Vector4<double> initial4Vec() const {return _initial4Vec;}
   const Vector4<double> projectile4Vec() const {return _projectile4Vec;}
 
@@ -128,5 +129,6 @@ protected:
   double _cmEnergy;
   std::string _channelSubTypeName;
   Vector4<double> _initial4Vec;
+  std::pair <float,float> _genRange;
   Vector4<double> _projectile4Vec;
 };

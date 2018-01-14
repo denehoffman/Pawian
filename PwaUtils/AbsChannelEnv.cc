@@ -69,6 +69,7 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   ,_cmEnergy(0.)
   ,_channelSubTypeName("")
   ,_initial4Vec(Vector4<double>(0.,0.,0.,0.))
+  ,_genRange(std::pair<float,float>(0.,0.))
   ,_projectile4Vec(Vector4<double>(0.,0.,0.,0.))
 {
   std::string init4VecStr=theParser->intitial4Vec();
@@ -271,6 +272,14 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
     std::shared_ptr<MassRangeCut> currentMassRangeCut(new MassRangeCut( currentString, _finalStateParticles));
     _massRangeCuts.push_back(currentMassRangeCut);
   }
+
+  //generator range
+  std::string genRange=_theParser->genRange();
+  std::string _minGenMass, _maxGenMass;
+  std::istringstream iss(genRange);
+  iss >> _minGenMass;
+  iss >> _maxGenMass;
+  _genRange = std::make_pair(atof(_minGenMass.c_str()), atof(_maxGenMass.c_str()));
 
   //php gen dynamics
   std::vector<std::string> phpGenDynamics=_theParser->phpGenDynamics();
