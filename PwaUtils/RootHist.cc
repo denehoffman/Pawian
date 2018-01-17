@@ -442,6 +442,10 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
 	motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec();
 	refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
       }
+      if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+	motherRef4Vec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+      }
+
       result4Vec=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec);
       if(nBodyDecay==3) result4Vec2=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec2);
     }
