@@ -29,12 +29,16 @@
 #include <sstream>
 #include <fstream>
 #include <stdlib.h>
+#include <math.h>
 
 using namespace std;
 
 //_____________________________________________________________________________
 //_____________________________________________________________________________
-
+struct LUTLine {
+  complex<double> requested;
+  complex<double> cm;
+} ;
 
 class PhaseSpaceIsobarLUT: public PhaseSpaceIsobar {
 
@@ -63,9 +67,13 @@ protected:
   void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
 
 private:
+  LUTLine readLine(int);
+  complex<double> interpolateCM(LUTLine, LUTLine, LUTLine, LUTLine, complex<double>);
+  complex<double> interpolateCM(LUTLine, LUTLine);
   std::ifstream m_lutfile;
   std::string m_lutfilepath;
   complex<double> getFactor(complex<double>);
+  int m_dSize;
   int m_nRe;
   int m_nIm;
   complex<double> m_sLow;
