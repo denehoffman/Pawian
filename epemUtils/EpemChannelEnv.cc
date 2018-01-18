@@ -29,7 +29,6 @@
 #include "epemUtils/EpemChannelEnv.hh"
 #include "ConfigParser/epemParser.hh"
 #include "epemUtils/epemReaction.hh"
-//#include "epemUtils/epemHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -57,9 +56,15 @@ void EpemChannelEnv::setupChannel(ChannelID id){
   
   _cmsMass=_theEpEmParser->cmsMass();
   _cmEnergy = _cmsMass;
-  // has to be set via parser !!!!
-  double totalyMom=0.04;
-  _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
+
+  //! Only if the user did not specify the initial 4-vector in the config file, use a default value. 
+  //! Here, a default boost of 0.04 GeV/c in x-direction is used, default for BESIII J/Psi data!
+  if(_initial4Vec == Vector4<double>(0.,0.,0.,0.)) {
+    double totalxMom=0.04;
+    _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalxMom*totalxMom), 0., totalxMom, 0.);
+    WarningMsg << "NO initial 4-vector set in config file! Using px=" 
+       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!";
+  }
   
   std::vector<std::string>::const_iterator itStr;
   

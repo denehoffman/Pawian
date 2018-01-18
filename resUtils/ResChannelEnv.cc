@@ -50,9 +50,6 @@ void ResChannelEnv::setupChannel(ChannelID id){
 
    AbsChannelEnv::setupGlobal(id);
 
-   //  // has to be set via parser !!!!
-  // double totalyMom=0.04;
-  // _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalyMom*totalyMom), 0., totalyMom, 0.);
 
   _motherParticle = GlobalEnv::instance()->particleTable()->particle(_theResParser->motherResName());
   if(0==_motherParticle){
@@ -67,8 +64,14 @@ void ResChannelEnv::setupChannel(ChannelID id){
     InfoMsg << "polarization of the mother particle will be taken into accout!!!" << endmsg;
   }
 
-  //  double theMotherMass=_motherParticle->mass();
-  _initial4Vec = Vector4<double>(_motherParticle->mass(), 0. ,0. ,0.);
+  //! Only if the user did not specify the initial 4-vector in the config file, use a default value. 
+  //! Here, by default the initial 4-vector is set to: (E, px, py, pz) = (M(motherParticle), 0. ,0. ,0.) 
+  if(_initial4Vec == Vector4<double>(0.,0.,0.,0.)) {
+    _initial4Vec = Vector4<double>(_motherParticle->mass(), 0. ,0. ,0.);
+    WarningMsg << "NO initial 4-vector set in config file! Using px=" 
+       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!";
+  }
+
   std::vector<std::string>::const_iterator itStr;
 
 

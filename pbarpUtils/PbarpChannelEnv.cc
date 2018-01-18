@@ -57,9 +57,15 @@ void PbarpChannelEnv::setupChannel(ChannelID id){
    //Antiproton momentum
   _pbarMomentum = _thePbarpParser->getpbarMomentum();
 
+  //! Only if the user did not specify the initial 4-vector in the config file, use a default value. 
+  //! Here, by default the initial 4-vector is calculated as: (E, px, py, pz) = (M(p)+sqrt(M(pbar)*M(pbar)+p(pbar)*p(pbar)), 0., 0., p(pbar)) 
+  if(_initial4Vec == Vector4<double>(0.,0.,0.,0.)) {
    double pMass=GlobalEnv::instance()->particleTable()->particle("proton")->mass();
    double antipMass=GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
    _initial4Vec = Vector4<double>(pMass+sqrt(antipMass*antipMass+_pbarMomentum*_pbarMomentum), 0., 0., _pbarMomentum);
+    WarningMsg << "NO initial 4-vector set in config file! Using px=" 
+       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!";
+  }
    _cmEnergy = _initial4Vec.M();
      
    //Lmax
