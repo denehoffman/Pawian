@@ -426,7 +426,7 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
   LHData theLHData;
   std::shared_ptr<AbsPawianParameters> currentParams = std::shared_ptr<AbsPawianParameters>(startParams->Clone());
 
-  std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance("", true);
+  std::shared_ptr<AbsHist> histPtr= GlobalEnv::instance()->Channel()->CreateHistInstance("", true);
 
     absLh->updateFitParams(currentParams);
   
@@ -485,16 +485,16 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
       histPtr->fillEvt(currentTruthEvt, 1., "truthWoWeight", dataPoint);
       histPtr->fillEvt(currentTruthEvt, currentIntensity, "truthWWeight", dataPoint);
 
-      integralTruthFitWeight+=currentIntensity;
+    integralTruthFitWeight+=currentIntensity;
       
-      delete currentTruthEvt;
-      evtCount++;
-      evtCountTruth++;
-      dataPoint++;
-      if (evtCountTruth%1000 == 0){
-	InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
-	//	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
-      }
+    delete currentTruthEvt;
+    evtCount++;
+    evtCountTruth++;
+    dataPoint++;
+    if (evtCountTruth%1000 == 0){
+      InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
+      //	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
+    }
     }
     
     double scaleFactor=theLHData.weightSum/theLHData.num_mc;

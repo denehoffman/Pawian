@@ -291,7 +291,7 @@ int main(int __argc,char *__argv[]){
     std::vector<std::string> truthFileNames;
     truthFileNames.push_back(truthFile);
     EventList truthData;
-    theAppBase.readEvents(truthData, truthFileNames, 0, GlobalEnv::instance()->parser()->useTruthEvtWeight(), 0, maxTruthEvts-1);      
+    theAppBase.readEvents(truthData, truthFileNames, 0, GlobalEnv::instance()->parser()->useTruthEvtWeight(), 0, maxTruthEvts-1);
     theAppBase.qaModeEffCorrection(eventsData, mcData, truthData, startPawianParams);
     return 1;
   }

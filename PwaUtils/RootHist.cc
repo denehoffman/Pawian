@@ -54,6 +54,7 @@
 RootHist::RootHist(std::string additionalSuffix, bool withTruth) :
   AbsHist(additionalSuffix, withTruth)
  {
+  _fillTruths=withTruth;
   std::ostringstream rootFileName;
   rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << _additionalSuffix.c_str() <<  ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
@@ -368,8 +369,8 @@ void RootHist::fillEvt(EvtData* theData, double weight, std::string evtType, int
       Vector4<double> tmp4vec=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(particleName));
       _fourVecMap[particleName]->SetPxPyPzE(tmp4vec.X(), tmp4vec.Y(), tmp4vec.Z(), tmp4vec.E());
     }
-    _weightToWrite = weight;
-    theTree->Fill();
+     _weightToWrite = weight;
+     theTree->Fill();
   }
 }
 
