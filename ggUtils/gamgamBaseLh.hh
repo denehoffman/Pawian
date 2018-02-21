@@ -38,10 +38,10 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
-#include "gamgamUtils/GamgamChannelEnv.hh"
+#include "ggUtils/GGChannelEnv.hh"
 
 class AbsXdecAmp;
-class gamgamReaction;
+class ggReaction;
 class LSDecAmps;
 
 class gamgamBaseLh : public AbsLh {
@@ -73,7 +73,7 @@ public:
 
 
 protected:
-  const std::shared_ptr<GamgamChannelEnv> _gamgamChannelEnv;
+  const std::shared_ptr<GGChannelEnv> _ggChannelEnv;
   bool _useProdDynamics;
   std::shared_ptr<AbsDynamics> _dyn;
 

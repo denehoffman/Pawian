@@ -53,7 +53,7 @@
 #include "ConfigParser/pbarpParser.hh"
 #include "ConfigParser/epemParser.hh"
 #include "ConfigParser/resParser.hh"
-#include "ConfigParser/gamgamParser.hh"
+#include "ConfigParser/ggParser.hh"
 #include "ConfigParser/pipiScatteringParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
@@ -73,7 +73,7 @@
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "epemUtils/EpemChannelEnv.hh"
 #include "resUtils/ResChannelEnv.hh"
-#include "gamgamUtils/GamgamChannelEnv.hh"
+#include "ggUtils/GGChannelEnv.hh"
 #include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
 
 AppBase::AppBase()
@@ -793,8 +793,8 @@ void AppBase::addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile){
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pbarpCfgs, AbsChannelEnv::CHANNEL_PBARP);
   std::vector<std::string> epemCfgs = GlobalEnv::instance()->parser()->epemCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, epemCfgs, AbsChannelEnv::CHANNEL_EPEM);
-  std::vector<std::string> gamgamCfgs = GlobalEnv::instance()->parser()->gamgamCfgs();
-  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, gamgamCfgs, AbsChannelEnv::CHANNEL_GAMGAM);
+  std::vector<std::string> ggCfgs = GlobalEnv::instance()->parser()->ggCfgs();
+  loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, ggCfgs, AbsChannelEnv::CHANNEL_GG);
   std::vector<std::string> resCfgs = GlobalEnv::instance()->parser()->resCfgs();
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, resCfgs, AbsChannelEnv::CHANNEL_RES);
   std::vector<std::string> pipiScatteringCfgs = GlobalEnv::instance()->parser()->pipiScatteringCfgs();
@@ -821,9 +821,9 @@ void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::
         resParser* currentParser = new resParser(argcWCfgFile, argvWCfgFile);
 	channelEnv = std::shared_ptr<AbsChannelEnv>(new ResChannelEnv(currentParser));
    }
-     else if(channelType==AbsChannelEnv::CHANNEL_GAMGAM){
-        gamgamParser* currentParser = new gamgamParser(argcWCfgFile, argvWCfgFile);
-	channelEnv = std::shared_ptr<AbsChannelEnv>(new GamgamChannelEnv(currentParser));
+     else if(channelType==AbsChannelEnv::CHANNEL_GG){
+        ggParser* currentParser = new ggParser(argcWCfgFile, argvWCfgFile);
+	channelEnv = std::shared_ptr<AbsChannelEnv>(new GGChannelEnv(currentParser));
    }
      else if(channelType==AbsChannelEnv::CHANNEL_PIPISCATTERING){
         pipiScatteringParser* currentParser = new pipiScatteringParser(argcWCfgFile, argvWCfgFile);

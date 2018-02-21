@@ -1,7 +1,7 @@
 alias install : install-lib ;
 explicit install ;
 
-install install-lib : gamgamUtils
+install install-lib : ggUtils
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
@@ -10,7 +10,7 @@ install install-lib : gamgamUtils
 project : 
 	;
 
-lib gamgamUtils : 
+lib ggUtils : 
 	[ glob *.cc : *App.cc ] 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
@@ -22,4 +22,4 @@ lib gamgamUtils :
 	: 
 	: ;
 
-exe gamgamStatesApp : gamgamStatesApp.cc gamgamUtils : ;
+exe ggStatesApp : ggStatesApp.cc ggUtils : ;

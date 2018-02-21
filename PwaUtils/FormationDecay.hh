@@ -45,7 +45,7 @@ class EvtData;
 class FormationDecay : public AbsDecay{
 
 public:
-  FormationDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, ChannelID channelID, std::string motherName="gamgam", std::string typeName="FormationDecay");
+  FormationDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, ChannelID channelID, std::string motherName="gg", std::string typeName="FormationDecay");
   virtual ~FormationDecay();
   //  virtual FormationDecay* clone_() const = 0;
 

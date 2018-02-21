@@ -27,9 +27,9 @@
 #include <fstream>
 #include <string>
 
-#include "gamgamUtils/gamgamBaseLh.hh"
-#include "gamgamUtils/gamgamReaction.hh"
-#include "gamgamUtils/GamgamChannelEnv.hh"
+#include "ggUtils/gamgamBaseLh.hh"
+#include "ggUtils/ggReaction.hh"
+#include "ggUtils/GGChannelEnv.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -48,7 +48,7 @@
 
 gamgamBaseLh::gamgamBaseLh(ChannelID channelID) :
   AbsLh(channelID)
-  ,_gamgamChannelEnv(std::static_pointer_cast<GamgamChannelEnv> (GlobalEnv::instance()->GamgamChannel(channelID)))
+  ,_ggChannelEnv(std::static_pointer_cast<GGChannelEnv> (GlobalEnv::instance()->GGChannel(channelID)))
   ,_useProdDynamics(false)
 {
   initialize();
@@ -146,7 +146,7 @@ void gamgamBaseLh::print(std::ostream& os) const{
 }
 
 void  gamgamBaseLh::initialize(){
-  std::vector< std::shared_ptr<AbsDecay> > theDecs = _gamgamChannelEnv->prodDecayList()->getList();
+  std::vector< std::shared_ptr<AbsDecay> > theDecs = _ggChannelEnv->prodDecayList()->getList();
   std::vector< std::shared_ptr<AbsDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
@@ -154,10 +154,10 @@ void  gamgamBaseLh::initialize(){
     _decAmps.push_back(currentAmp);
   }
 
- std::string dynString=_gamgamChannelEnv->parser()->productionDynamics();
+ std::string dynString=_ggChannelEnv->parser()->productionDynamics();
   if(dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2"){
     _useProdDynamics=true;
-    std::shared_ptr<FormationDecay> motherFormDec = _gamgamChannelEnv->reaction()->motherProdDec();
+    std::shared_ptr<FormationDecay> motherFormDec = _ggChannelEnv->reaction()->motherProdDec();
     std::vector<std::string> additionalStringVecDummy;
     motherFormDec->enableDynamics(dynString, additionalStringVecDummy);
    _dyn=motherFormDec->getDynamics();

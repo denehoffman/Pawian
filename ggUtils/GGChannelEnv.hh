@@ -20,33 +20,33 @@
 //									  //
 //************************************************************************//
 
-// gamgamParser class definition file. -*- C++ -*-
+// GGChannelEnv class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #pragma once
 
-#include "ConfigParser/ParserBase.hh"
-// Boost headers go here
+#include "PwaUtils/AbsChannelEnv.hh"
 
 
+class ggParser;
+class ggReaction;
 
-class gamgamParser : public ParserBase 
+
+class GGChannelEnv : public AbsChannelEnv
 {
+public:
+   virtual void setupChannel(ChannelID id);
+   GGChannelEnv(ggParser* theParser);
 
-  public:
-
-  gamgamParser(int argc,char **argv);
-  virtual ~gamgamParser(){;}
-
-  const double cmsMass() {return _cmsMass;}
-  const unsigned int jMax() {return _jMax;}
+   std::shared_ptr<ggReaction> reaction() {return _ggReaction;}
+   const double cmsMass() {return _cmsMass;}
+   virtual const std::string  channelTypeName() {return "gg";}
 
 protected:
-  virtual bool parseCommandLine(int argc,char **argv); 
 
-  double _cmsMass;
-  unsigned int _jMax;
+private:
+   ggParser* _theGGParser;
+   double _cmsMass;
+  unsigned _jmax;
+   std::shared_ptr<ggReaction> _ggReaction;
 };
-
-
-

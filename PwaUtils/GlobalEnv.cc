@@ -88,11 +88,11 @@ const std::shared_ptr<AbsChannelEnv> GlobalEnv::GammapChannel(int id) const
    return _channelEnvs.at(id).first;
 }
 
-const std::shared_ptr<AbsChannelEnv> GlobalEnv::GamgamChannel(int id) const
+const std::shared_ptr<AbsChannelEnv> GlobalEnv::GGChannel(int id) const
 {
 
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GAMGAM){
-      Alert << "Faultily accessing non-gamgam channel environment." << endmsg;
+   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GG){
+      Alert << "Faultily accessing non-gg channel environment." << endmsg;
    }
 
    return _channelEnvs.at(id).first;

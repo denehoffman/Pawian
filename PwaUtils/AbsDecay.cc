@@ -477,7 +477,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     if(whichDecayLevel()==decayLevel::firstLevel){
       motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMGAM ){
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
 	//z-axis=beam axis y-axis perpendicular to e+ e- initial state
 	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
 	prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
@@ -485,7 +485,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     }
     else if(whichDecayLevel()==decayLevel::secondLevel){
       motherRefVec=all4Vec;
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMGAM ){
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
  	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
       }
     }

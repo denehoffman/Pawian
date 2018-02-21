@@ -20,17 +20,17 @@
 //									  //
 //************************************************************************//
 
-// gamgamStates class definition file. -*- C++ -*-
+// ggStates class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
-#include "gamgamUtils/gamgamStates.hh"
+#include "ggUtils/ggStates.hh"
 #include "Utils/MathUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 
-gamgamStates::gamgamStates():
+ggStates::ggStates():
   AbsStates(),
   _jmax(10),
   _gammaJPC(1,-1,-1)
@@ -41,7 +41,7 @@ gamgamStates::gamgamStates():
 }
 
 
-gamgamStates::gamgamStates(int jmax):
+ggStates::ggStates(int jmax):
   AbsStates(),
   _jmax(jmax),
   _gammaJPC(1,-1,-1)
@@ -51,10 +51,10 @@ gamgamStates::gamgamStates(int jmax):
     calcStates();
 }
 
-gamgamStates::~gamgamStates(){
+ggStates::~ggStates(){
 }
 
-std::vector< std::shared_ptr<const JPCLS> > gamgamStates::jpcLSStates(Spin lamGam1, Spin lamGam2) const{
+std::vector< std::shared_ptr<const JPCLS> > ggStates::jpcLSStates(Spin lamGam1, Spin lamGam2) const{
   if(lamGam1==-1 && lamGam2==-1) return _JPCLSLam1m1Lam2m1_States;
   else if(lamGam1==-1 && lamGam2==1) return _JPCLSLam1m1Lam2p1_States;
   else if(lamGam1==1 && lamGam2==-1) return _JPCLSLam1p1Lam2m1_States;
@@ -65,7 +65,7 @@ std::vector< std::shared_ptr<const JPCLS> > gamgamStates::jpcLSStates(Spin lamGa
   } 
 }
 
-std::vector< std::shared_ptr<const JPClamlam> > gamgamStates::jpcLamLamStates(Spin lamGam1, Spin lamGam2) const{
+std::vector< std::shared_ptr<const JPClamlam> > ggStates::jpcLamLamStates(Spin lamGam1, Spin lamGam2) const{
   if(lamGam1==-1 && lamGam2==-1) return _JPClamlamLam1m1Lam2m1_States;
   else if(lamGam1==-1 && lamGam2==1) return _JPClamlamLam1m1Lam2p1_States;
   else if(lamGam1==1 && lamGam2==-1) return _JPClamlamLam1p1Lam2m1_States;
@@ -76,7 +76,7 @@ std::vector< std::shared_ptr<const JPClamlam> > gamgamStates::jpcLamLamStates(Sp
   } 
 }
 
-bool gamgamStates::calcStates(){
+bool ggStates::calcStates(){
   std::cout << "jmax: " << _jmax << std::endl;
   for (int j=0; j<=_jmax; j++){
     for(int parity=-1; parity<=1; parity+=2){
@@ -138,7 +138,7 @@ bool gamgamStates::calcStates(){
 }
 
 
-void gamgamStates::print(std::ostream& os) const{
+void ggStates::print(std::ostream& os) const{
    std::vector< std::shared_ptr<const JPCLS > >::const_iterator itJPCLS;
    std::vector< std::shared_ptr<const jpcRes > >::const_iterator itjpcRes;
    std::vector< std::shared_ptr<const IGJPC > >::const_iterator itIGJPC;

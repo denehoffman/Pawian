@@ -20,13 +20,13 @@
 //									  //
 //************************************************************************//
 
-// GamgamChannelEnv class definition file. -*- C++ -*-
+// GGChannelEnv class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 #include "Particle/ParticleTable.hh"
 #include "Particle/Particle.hh"
-#include "gamgamUtils/GamgamChannelEnv.hh"
-#include "ConfigParser/gamgamParser.hh"
-#include "gamgamUtils/gamgamReaction.hh"
+#include "ggUtils/GGChannelEnv.hh"
+#include "ConfigParser/ggParser.hh"
+#include "ggUtils/ggReaction.hh"
 //#include "epemUtils/epemHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -41,31 +41,31 @@
 
 
 
-GamgamChannelEnv::GamgamChannelEnv(gamgamParser* theParser) : 
-  AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GAMGAM)
-  ,_theGamGamParser(theParser)
+GGChannelEnv::GGChannelEnv(ggParser* theParser) : 
+  AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GG)
+  ,_theGGParser(theParser)
   ,_cmsMass(1.)
   ,_jmax(4)
 {
 }
 
-void GamgamChannelEnv::setupChannel(ChannelID id){
+void GGChannelEnv::setupChannel(ChannelID id){
 
   AbsChannelEnv::setupGlobal(id);
   
   
-  _cmsMass=_theGamGamParser->cmsMass();
+  _cmsMass=_theGGParser->cmsMass();
   _cmEnergy = _cmsMass;
-  _jmax=_theGamGamParser->jMax();
+  _jmax=_theGGParser->jMax();
   std::vector<std::string>::const_iterator itStr;
   
   
-  //gamgam reaction
-  _gamgamReaction=std::shared_ptr<gamgamReaction>(new gamgamReaction(_prodChannelInfoList, id, _jmax));
+  //gg reaction
+  _ggReaction=std::shared_ptr<ggReaction>(new ggReaction(_prodChannelInfoList, id, _jmax));
   std::string dynTypeDefault="WoDynamics";
   
-  if (_theGamGamParser->productionFormalism()=="Formation"){
-    std::vector< std::shared_ptr<FormationDecay> > prodDecs = _gamgamReaction->formationDecays();
+  if (_theGGParser->productionFormalism()=="Formation"){
+    std::vector< std::shared_ptr<FormationDecay> > prodDecs = _ggReaction->formationDecays();
     std::vector< std::shared_ptr<FormationDecay> >::iterator itDec;
 
     for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
@@ -76,7 +76,7 @@ void GamgamChannelEnv::setupChannel(ChannelID id){
     }
   }
   else{
-    Alert <<"production formalism with the name " << _theGamGamParser->productionFormalism() << " doesn't exist for gam gam reactions!!!" << endmsg;
+    Alert <<"production formalism with the name " << _theGGParser->productionFormalism() << " doesn't exist for gg reactions!!!" << endmsg;
     exit(1);
   }
   

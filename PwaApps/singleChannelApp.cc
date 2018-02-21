@@ -77,11 +77,11 @@ int main(int __argc,char *__argv[]){
    std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
    std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
    std::vector<std::string> resCfgs = globalAppParams->resCfgs();
-   std::vector<std::string> gamgamCfgs = globalAppParams->gamgamCfgs();
+   std::vector<std::string> ggCfgs = globalAppParams->ggCfgs();
    std::vector<std::string> pipiScatteringCfgs = globalAppParams->pipiScatteringCfgs();
 
    //requirement single channel  sum reactionCfgs.size() == 1
-   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size()+gamgamCfgs.size()+pipiScatteringCfgs.size();
+   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size()+ggCfgs.size()+pipiScatteringCfgs.size();
    InfoMsg << "numReactions: " << numReactions << endmsg;
    if (numReactions != 1){
      Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
@@ -100,7 +100,7 @@ int main(int __argc,char *__argv[]){
        Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
        exit(1); 
      }
-     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" && currentArgv !=(char*)"--resFiles" && currentArgv !=(char*)"--gamgamFiles" && currentArgv !=(char*)"--pipiScatteringFiles"){
+     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" && currentArgv !=(char*)"--resFiles" && currentArgv !=(char*)"--ggFiles" && currentArgv !=(char*)"--pipiScatteringFiles"){
        argvWoCfgFile[argcWoCfgFile]=__argv[i];
        argcWoCfgFile++;
      }

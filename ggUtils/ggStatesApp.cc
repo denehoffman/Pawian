@@ -27,7 +27,7 @@
 #include <vector>
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/AbsStates.hh"
-#include "gamgamUtils/gamgamStates.hh"
+#include "ggUtils/ggStates.hh"
 #include "PwaUtils/DataUtils.hh"
 
 int main(int __argc,char *__argv[]){
@@ -35,11 +35,11 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
 		    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    std::cout << "test application which calculates all initial gamma gamma states\n"
+    std::cout << "test application which calculates all initial gamma gamma / GG states\n"
 	      << "The application can be started with two flags: \n"
 	      << "with -msg <errorLogMode>: choose the mode for the error logger \n"
 	      << "with -jmax <value>: choose the maximum Spin J \n"
-              << "e.g. type: ./gamgamStatesApp -jmax 6 -msg debugging \n"
+              << "e.g. type: ./ggStatesApp -jmax 6 -msg debugging \n"
 	      << std::endl;
     return 0;
   }
@@ -89,9 +89,9 @@ int main(int __argc,char *__argv[]){
 
   InfoMsg << "jmax: " << jmax << endmsg;
 
-  gamgamStates thegamgamState(jmax);
+  ggStates theggState(jmax);
 
-  thegamgamState.print(std::cout);
+  theggState.print(std::cout);
 
   return 0;
 }

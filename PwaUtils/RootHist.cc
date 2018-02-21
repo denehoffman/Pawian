@@ -439,7 +439,7 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
       }
     }
     if (frame=="heli"){
-      if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GAMGAM){
+      if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GG){
 	motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec();
 	refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
       }

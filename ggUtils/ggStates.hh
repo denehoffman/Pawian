@@ -20,7 +20,7 @@
 //									  //
 //************************************************************************//
 
-// gamgamStates class definition file. -*- C++ -*-
+// ggStates class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #pragma once
@@ -37,13 +37,13 @@
 
 class Particle;
 
-class gamgamStates : public AbsStates {
+class ggStates : public AbsStates {
 
 public:
 
-  gamgamStates();
-  gamgamStates(int lmax);
-  virtual ~gamgamStates();
+  ggStates();
+  ggStates(int lmax);
+  virtual ~ggStates();
 
   virtual std::vector< std::shared_ptr<const IGJPC> > igjpcStates(){
     return _allIGjpcRes; 

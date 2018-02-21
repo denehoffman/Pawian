@@ -20,14 +20,14 @@
 //									  //
 //************************************************************************//
 
-// gamgamReaction class definition file. -*- C++ -*-
+// ggReaction class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 
-#include "gamgamUtils/gamgamReaction.hh"
-#include "gamgamUtils/gamgamStates.hh"
+#include "ggUtils/ggReaction.hh"
+#include "ggUtils/ggStates.hh"
 #include "PwaUtils/FormationDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
@@ -37,10 +37,10 @@
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
 
-gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int jmax) :
+ggReaction::ggReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int jmax) :
    _channelID(channelID)
    ,_jmax(jmax)
-   ,_gamgamStates(new gamgamStates(_jmax))
+   ,_ggStates(new ggStates(_jmax))
 {
   std::vector<std::string> additionalStringVecDummy;  
      std::vector<std::shared_ptr<ProdChannelInfo> >::iterator itProd;
@@ -52,7 +52,7 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
 	  exit(1);
 	}
 	std::shared_ptr<const IGJPC> currentIGJPC=getIGJPCPtr(formationParticle);
-	std::shared_ptr<FormationDecay> currentDec(new FormationDecay(currentIGJPC, formationParticle, _channelID, "gamgam"));
+	std::shared_ptr<FormationDecay> currentDec(new FormationDecay(currentIGJPC, formationParticle, _channelID, "gg"));
 	currentDec->setProductionAmp();
 	currentDec->setProdChannelInfo( *itProd );
 	currentDec->extractStates();
@@ -74,14 +74,14 @@ gamgamReaction::gamgamReaction(std::vector<std::shared_ptr<ProdChannelInfo> > pr
 
   Particle* motherProdParticle = GlobalEnv::instance()->particleTable()->particle("GamGam");
   std::shared_ptr<const IGJPC> motherProdIGJPC=getIGJPCPtr(motherProdParticle);  
-  _motherProdDec = std::shared_ptr<FormationDecay>(new FormationDecay(motherProdIGJPC,motherProdParticle, _channelID, "gamgam"));
+  _motherProdDec = std::shared_ptr<FormationDecay>(new FormationDecay(motherProdIGJPC,motherProdParticle, _channelID, "gg"));
 }
 
-gamgamReaction::~gamgamReaction(){
+ggReaction::~ggReaction(){
 }
 
-void gamgamReaction::print(std::ostream& os) const{
-  os << "\n gamma gamma reaction\n";
+void ggReaction::print(std::ostream& os) const{
+  os << "\n gamma gamma / GG reaction\n";
 
   os << "\n ***** decay chains *******\n";
   // std::vector< std::shared_ptr<IsobarLSDecay> >::const_iterator itIso;

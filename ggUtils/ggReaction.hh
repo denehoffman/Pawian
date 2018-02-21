@@ -20,33 +20,50 @@
 //									  //
 //************************************************************************//
 
-// GamgamChannelEnv class definition file. -*- C++ -*-
+// ggReaction class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
 #pragma once
 
+#include <iostream>
+#include <vector>
+#include <complex>
+#include <map>
+#include <vector>
+#include <string>
+#include <memory>
+
+#include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
+#include "PwaUtils/FormationDecay.hh"
+#include "Utils/PawianCollectionUtils.hh"
 
 
-class gamgamParser;
-class gamgamReaction;
+class Particle;
+class IsobarHeliDecay;
+class ProdChannelInfo;
+class ggStates;
 
+class ggReaction {
 
-class GamgamChannelEnv : public AbsChannelEnv
-{
 public:
-   virtual void setupChannel(ChannelID id);
-   GamgamChannelEnv(gamgamParser* theParser);
+  ggReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int jmax);
 
-   std::shared_ptr<gamgamReaction> reaction() {return _gamgamReaction;}
-   const double cmsMass() {return _cmsMass;}
-   virtual const std::string  channelTypeName() {return "gamgam";}
+  virtual ~ggReaction();
+
+  virtual void print(std::ostream& os) const;
+  std::shared_ptr<ggStates> GGStates() {return _ggStates;}
+  std::vector< std::shared_ptr<FormationDecay> >& formationDecays() {return _prodFormationDecs;}
+  std::vector< std::shared_ptr<IsobarHeliDecay> >& productionHeliDecays() {return _prodHeliDecs;}
+  std::shared_ptr<FormationDecay> motherProdDec(){return _motherProdDec;}
 
 protected:
 
 private:
-   gamgamParser* _theGamGamParser;
-   double _cmsMass;
-  unsigned _jmax;
-   std::shared_ptr<gamgamReaction> _gamgamReaction;
+  ChannelID _channelID;
+  unsigned int _jmax;
+  std::shared_ptr<ggStates> _ggStates;
+  std::vector< std::shared_ptr<FormationDecay> > _prodFormationDecs;
+  std::vector< std::shared_ptr<IsobarHeliDecay> > _prodHeliDecs;
+  std::shared_ptr<FormationDecay> _motherProdDec;
 };

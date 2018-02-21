@@ -79,7 +79,7 @@ int main(int __argc,char *__argv[]){
     std::string currentArgv(__argv[i]);
      if(currentArgv !=(char*)"--pbarpFiles" 
 	&& currentArgv !=(char*)"--epemFiles"
-	&& currentArgv !=(char*)"--gamgamFiles"
+	&& currentArgv !=(char*)"--ggFiles"
 	&& currentArgv !=(char*)"--resFiles"
 	&& currentArgv !=(char*)"--pipiScatteringFiles" 
 	&& currentArgv !="-c" 
