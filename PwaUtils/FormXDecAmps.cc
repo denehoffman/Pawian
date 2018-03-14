@@ -34,6 +34,7 @@
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/FormationDecay.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 #include "Utils/FunctionUtils.hh"
@@ -127,19 +128,27 @@ void  FormXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPa
 
 void FormXDecAmps::fillParamNameList(){
   _paramNameList.clear();
-  Spin lamRes(0);
-  _paramNameMap[lamRes]=absDec()->name()+"lam0";
-  _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
-  _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
-  if(_J> 1){
-    lamRes=-2;
-    _paramNameMap[lamRes]=absDec()->name()+"lam2";
+  if(GlobalEnv::instance()->parser()->productionFormalism() == "FormationGamGam") {
+    Spin lamRes(0);
+    _paramNameMap[lamRes]=absDec()->name()+"lam0";
     _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
     _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
-    lamRes=2;
-    _paramNameMap[lamRes]=absDec()->name()+"lam2";
-    _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
-    _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
+    if(_J> 1){
+      lamRes=-2;
+      _paramNameMap[lamRes]=absDec()->name()+"lam2";
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
+      lamRes=2;
+      _paramNameMap[lamRes]=absDec()->name()+"lam2";
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
+    }
+  } else if(GlobalEnv::instance()->parser()->productionFormalism() == "Formation") {
+    for(int lamRes=(-1*_J); lamRes<=_J; lamRes++) {
+      _paramNameMap[lamRes]=absDec()->name()+"lam"+(std::to_string(abs(lamRes)));
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
+    }
   }
 }
 
@@ -167,7 +176,7 @@ void FormXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
 void FormXDecAmps::initialize(){
   if( _daughter1IsStable){
-    Alert << "for the formation amplitude the daughter1 must be an unstable paticle!!!" << endmsg;
+    Alert << "for the formation amplitude the daughter1 must be an unstable particle!!!" << endmsg;
     exit(1);
   }
 

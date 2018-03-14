@@ -64,7 +64,7 @@ void GGChannelEnv::setupChannel(ChannelID id){
   _ggReaction=std::shared_ptr<ggReaction>(new ggReaction(_prodChannelInfoList, id, _jmax));
   std::string dynTypeDefault="WoDynamics";
   
-  if (_theGGParser->productionFormalism()=="Formation"){
+  if (_theGGParser->productionFormalism()=="Formation" || _theGGParser->productionFormalism()=="FormationGamGam"){
     std::vector< std::shared_ptr<FormationDecay> > prodDecs = _ggReaction->formationDecays();
     std::vector< std::shared_ptr<FormationDecay> >::iterator itDec;
 
@@ -72,7 +72,7 @@ void GGChannelEnv::setupChannel(ChannelID id){
       //      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
       //      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       _prodDecList->addDecay(*itDec);
-      InfoMsg <<"added production dacay " << (*itDec)->name() << endmsg;
+      InfoMsg <<"added production decay " << (*itDec)->name() << endmsg;
     }
   }
   else{

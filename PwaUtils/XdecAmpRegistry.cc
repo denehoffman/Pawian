@@ -116,7 +116,7 @@ std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(short channelID, std::sh
       result=std::shared_ptr<FormXDecAmps>(new FormXDecAmps(formationDecay, channelID));
     }
     else{
-      Alert << "can nor create XdecAmp object for theAbsDecay->name():\t" << theAbsDecay->name() << endmsg;
+      Alert << "can not create XdecAmp object for theAbsDecay->name():\t" << theAbsDecay->name() << endmsg;
       exit(1);
     }
     result->fillParamNameList();

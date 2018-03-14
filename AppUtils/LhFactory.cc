@@ -40,6 +40,7 @@
 #include "epemUtils/epemTensorLh.hh"
 #include "epemUtils/epemCanoLh.hh"
 #include "ggUtils/gamgamBaseLh.hh"
+#include "ggUtils/centralProdBaseLh.hh"
 #include "resUtils/resBaseLh.hh"
 #include "pipiScatteringUtils/pipiScatteringBaseLh.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -82,7 +83,14 @@ std::shared_ptr<AbsLh> LhFactory::getLh(short channelType, ChannelID id, std::st
     }
   }
   else if( channelType == AbsChannelEnv::CHANNEL_GG){
-    result = std::shared_ptr<AbsLh>(new gamgamBaseLh(id));
+     if(formalism=="FormationGamGam")
+        result = std::shared_ptr<AbsLh>(new gamgamBaseLh(id));
+     else if(formalism=="Formation")
+        result = std::shared_ptr<AbsLh>(new centralProdBaseLh(id));
+     else {
+      Alert << "prodFormalism\t" << formalism << "\tfor channel type AbsChannelEnv::CHANNEL_GG doesn't exist!!!" << endmsg;
+      exit(1);
+    }
   }
   else if( channelType == AbsChannelEnv::CHANNEL_RES){
     result = std::shared_ptr<AbsLh>(new resBaseLh(id));
