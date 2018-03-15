@@ -101,6 +101,17 @@ void AppBase::dumpDefaultParams(){
     defaultParams->print(theStreamDefault);
 }
 
+void AppBase::dumpRandomParams(){
+
+
+    std::stringstream randomparamsname;
+    randomparamsname << "randomParams" << GlobalEnv::instance()->outputFileNameSuffix() << ".dat";
+    std::ofstream theStreamRandom ( randomparamsname.str().c_str() );
+
+    std::shared_ptr<AbsPawianParameters> randomParams=GlobalEnv::instance()->randomPawianParams();
+    randomParams->print(theStreamRandom);
+}
+
 void AppBase::generate(std::shared_ptr<AbsPawianParameters> theParams){
     std::shared_ptr<PwaGen> pwaGenPtr(new PwaGen());
     theParams->print(std::cout);

@@ -54,6 +54,7 @@ public:
   virtual ~AppBase();
 
   virtual void dumpDefaultParams();
+  virtual void dumpRandomParams();
   virtual void generate(std::shared_ptr<AbsPawianParameters> theParams);
   virtual void readEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, bool withEvtWeight=false, int evtStart=0, int evtStop=1000000);
   virtual void readScatteringEvents(EventList& theEventList, std::vector<std::string>& fileNames, ChannelID channelID, int evtStart=0, int evtStop=1000000);

@@ -137,6 +137,11 @@ int main(int __argc,char *__argv[]){
     theAppBase.dumpDefaultParams();
     return 1;
   }
+  
+  if (mode=="dumpRandomParams"){
+    theAppBase.dumpRandomParams();
+    return 1;
+  }
 
   // Read start param file
   std::shared_ptr<AbsPawianParameters> unsortedStartPawianParams=theAppBase.streamPawianParams();
@@ -195,6 +200,7 @@ int main(int __argc,char *__argv[]){
     theAppBase.fitClientMode(startPawianParams);
   return 1;
   }
+
 
   // The following modes only need the primary channel data/mc and lh ptr
   std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();

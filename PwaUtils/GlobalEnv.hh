@@ -65,6 +65,7 @@ public:
    const ChannelEnvList ChannelEnvs() const {return _channelEnvs;}
    const short NoChannels() const {return _channelEnvs.size();}
    std::shared_ptr<AbsPawianParameters> defaultPawianParams();
+   std::shared_ptr<AbsPawianParameters> randomPawianParams();
    std::shared_ptr<AbsPawianParameters> startPawianParams() {return _startParams;}
    void setStartPawianParams(std::shared_ptr<AbsPawianParameters> startParams);
    std::vector<std::string> fixedParams();

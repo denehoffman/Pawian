@@ -112,6 +112,11 @@ int main(int __argc,char *__argv[]){
     theAppBase.dumpDefaultParams();
     return 1;
   }
+  
+  if (mode=="dumpRandomParams"){
+    theAppBase.dumpRandomParams();
+    return 1;
+  }
 
   // Read start param file
   std::shared_ptr<AbsPawianParameters> unsortedStartPawianParams=theAppBase.streamPawianParams();
