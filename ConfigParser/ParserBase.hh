@@ -123,6 +123,7 @@ public:
   const std::string projectile4Vec() const {return _projectile4VecStr;}
   const std::string prePathDataFiles() const {return _prePathDataFiles;}
   const std::string prePathKMatrixFiles() const {return _prePathKMatrixFiles;}
+  const bool scalingWChannelID() const {return _scalingWithChannelID;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -203,4 +204,5 @@ protected:
   std::string _projectile4VecStr;
   std::string _prePathDataFiles;
   std::string _prePathKMatrixFiles;
+  bool _scalingWithChannelID;
 };

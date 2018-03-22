@@ -128,7 +128,7 @@ void  FormXDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPa
 
 void FormXDecAmps::fillParamNameList(){
   _paramNameList.clear();
-  if(GlobalEnv::instance()->parser()->productionFormalism() == "FormationGamGam") {
+  if(GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() == "FormationGamGam") {
     Spin lamRes(0);
     _paramNameMap[lamRes]=absDec()->name()+"lam0";
     _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
@@ -143,13 +143,17 @@ void FormXDecAmps::fillParamNameList(){
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
     }
-  } else if(GlobalEnv::instance()->parser()->productionFormalism() == "Formation") {
+  } else if(GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() == "Formation") {
     for(int lamRes=(-1*_J); lamRes<=_J; lamRes++) {
       _paramNameMap[lamRes]=absDec()->name()+"lam"+(std::to_string(abs(lamRes)));
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
     }
-  }
+  } else {
+    Alert << "productionFormalism: " << GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() << " is not supported!!!" << endmsg;
+    exit(1);
+  } 
+
 }
 
 void FormXDecAmps::print(std::ostream& os) const{

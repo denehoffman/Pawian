@@ -82,6 +82,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_projectile4VecStr("")
   ,_prePathDataFiles("")
   ,_prePathKMatrixFiles("")
+  ,_scalingWithChannelID(false)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -141,6 +142,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
     ("prePathDataFiles",po::value<string>(&_prePathDataFiles), "option to set a pre path to the data files")
     ("prePathKMatrixFiles",po::value<string>(&_prePathKMatrixFiles), "option to set a pre path to the K-matrix files")
+    ("scalingWithChannelID",po::value<bool>(&_scalingWithChannelID), "scaling with suffix for channel IDs")
     ;
   
   _config->add_options()
@@ -278,6 +280,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "projectile 4vector: " << _projectile4VecStr << "\n\n"
 		<< "prePathDataFiles: " << _prePathDataFiles << "\n\n"
 		<< "prePathKMatrixFiles: " << _prePathKMatrixFiles << "\n\n"
+		<< "scalingWithChannelID: " <<  _scalingWithChannelID << "\n\n"
                 << endl;
 
 
