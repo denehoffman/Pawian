@@ -30,9 +30,11 @@
 #include <math.h> 
 
 #include "PwaUtils/ProdParamDynamics.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
+#include "Utils/IdStringMapRegistry.hh"
 
 ProdParamDynamics::ProdParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, ChannelID channelID, std::string type) :
   AbsDynamics(name, fsParticles, mother)
@@ -65,6 +67,13 @@ complex<double> ProdParamDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp
   complex<double> result(0.,0.);
   for(unsigned int i=0; i<=_polOrder; ++i){
     complex<double> currentResult(_currentPolParams.at(i)*pow(theData->DoubleMassId.at(_dynId), i), 0.);
+      // InfoMsg << "pol(" << i << "): " << currentResult
+      // 	      <<"\ttheData->DoubleMassId.at(" << _dynId << "): " << theData->DoubleMassId.at(_dynId) 
+      // 	      << "\tcurrentPolParams.at(i): " << _currentPolParams.at(i) 
+      // 	      << "\tpow(theData->DoubleMassId.at(_dynId), i), 0.): " << pow(theData->DoubleMassId.at(_dynId), i) 
+      // 	      << endmsg; 
+      
+
     result+=currentResult;
   }
   result*=exp(_currentExpParam*theData->DoubleMassId.at(_dynId));
@@ -132,3 +141,22 @@ void ProdParamDynamics::fillParamNameList(){
 //     if(
 //   } 
 // }
+
+void ProdParamDynamics::fillMasses(EvtData* theData){
+  std::vector<Particle*> theFinalStateParticles=GlobalEnv::instance()->Channel(_channelID)->finalStateParticles();
+  Vector4<double> mass4Vec(0.,0.,0.,0.);
+  std::vector<Particle*>::iterator it;
+  for (it=theFinalStateParticles.begin(); it != theFinalStateParticles.end(); ++it){
+    std::string currentName=(*it)->name();
+    mass4Vec+=theData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
+  }
+
+  double sqrMass=mass4Vec.Mass2();
+  if (sqrMass>0.) theData->DoubleMassId[_dynId]=mass4Vec.Mass();
+  else if( sqrMass > -1.e-6) theData->DoubleMassId[_dynId]=0.;
+  else{
+    Alert << "mass4Vec.Mass2() is " << mass4Vec.Mass2() << " and thus < -1e-6 !!!" 
+	  << "\nexit !!!" << endmsg;
+    exit(0); 
+  }
+}

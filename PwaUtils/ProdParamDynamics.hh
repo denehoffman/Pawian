@@ -47,6 +47,7 @@ public:
   // virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
+  virtual void fillMasses(EvtData* theData);
 
 protected:
 

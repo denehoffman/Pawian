@@ -89,6 +89,5 @@ void AbsDynamics::fillMasses(EvtData* theData){
 	  << "\nexit !!!" << endmsg;
     exit(0); 
   }
-
 }
 
