@@ -130,16 +130,19 @@ void FormXDecAmps::fillParamNameList(){
   _paramNameList.clear();
   if(GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() == "FormationGamGam") {
     Spin lamRes(0);
-    _paramNameMap[lamRes]=absDec()->name()+"lam0";
+    // _paramNameMap[lamRes]=absDec()->name()+"lam0"; 
+    _paramNameMap[lamRes]=_key+"lam0";    
     _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
     _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
     if(_J> 1){
       lamRes=-2;
-      _paramNameMap[lamRes]=absDec()->name()+"lam2";
+      //      _paramNameMap[lamRes]=absDec()->name()+"lam2";
+      _paramNameMap[lamRes]=_key+"lam2";
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
       lamRes=2;
-      _paramNameMap[lamRes]=absDec()->name()+"lam2";
+      //_paramNameMap[lamRes]=absDec()->name()+"lam2";
+      _paramNameMap[lamRes]=_key+"lam2";
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
     }

@@ -54,7 +54,8 @@ public:
   void replaceMassKey(const std::string& oldPart, const std::string& newPart);
   void replaceProdKey(const std::string& oldPart, const std::string& newPart);
   std::vector<std::shared_ptr<AbsDecay> >& getList() {return _absDecList;}
-  //  const std::vector<std::string> getReplacedSuffixes() {return _replacedSuffixes;}    
+  //  const std::vector<std::string> getReplacedSuffixes() {return _replacedSuffixes;}
+  void print();    
 protected:  
 
   std::vector<std::shared_ptr<AbsDecay> > _absDecList;

@@ -344,7 +344,7 @@ bool GlobalEnv::areSuffixMapsIdentical(){
          for(it2=_toBeReplacedSuffixMap.begin(); it2!=_toBeReplacedSuffixMap.end(); ++it2){
             Alert << it2->first << "\t" << it2->second << endmsg;
          }
-         exit(1);
+	exit(1);
       }
    }
    return true;

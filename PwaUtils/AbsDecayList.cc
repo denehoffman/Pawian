@@ -149,3 +149,11 @@ void AbsDecayList::replaceProdKey(const std::string& oldPart, const std::string&
     exit(1); 
   }
 }
+
+void AbsDecayList::print(){
+  InfoMsg <<"***** the decay channels are ******** " << endmsg;
+  std::vector<std::shared_ptr<AbsDecay> >::iterator it;
+  for (it= _absDecList.begin(); it!=_absDecList.end(); ++it){
+    InfoMsg << (*it)->name() << endmsg;
+  }
+}
