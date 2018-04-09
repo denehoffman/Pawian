@@ -1,11 +1,11 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : BBUnstableParFitApp
-                 : <location>$(TOP)/bin
-                   <install-dependencies>on 
-                   <install-type>EXE
-                   ;
+#install install-bin : BBUnstableParFitApp
+#                 : <location>$(TOP)/bin
+#                   <install-dependencies>on 
+#                   <install-type>EXE
+#                   ;
 
 install install-lib : PwaDynamics
                  : <location>$(TOP)/lib 
@@ -27,4 +27,4 @@ lib PwaDynamics :
         : 
         : <library>$(TOP)//Minuit2 ;
 
-exe BBUnstableParFitApp : BBUnstableParFitApp.cc PwaDynamics : ;
+#exe BBUnstableParFitApp : BBUnstableParFitApp.cc PwaDynamics : ;
