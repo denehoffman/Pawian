@@ -59,7 +59,7 @@ int main(int __argc,char *__argv[]){
   energyPlaneBorders[0] = 0;    // Re min
   energyPlaneBorders[1] = -0.2; // Im min
   energyPlaneBorders[2] = 0;    // Re max
-  energyPlaneBorders[3] = 0;    // Im max
+  energyPlaneBorders[3] = -0.0001;    // Im max
 
   for(;optind < (__argc-1); optind++){
 
