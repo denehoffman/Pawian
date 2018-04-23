@@ -7,9 +7,6 @@ setenv extern /data/sleipnir/PANDA/PWA
 setenv LD_LIBRARY_PATH ${TOP_DIR}/lib:${extern}/libgcc610:${ROOTSYS}/lib
 setenv BOOST_BUILD_PATH /data/sleipnir/PANDA/boost-build
 setenv PATH $BOOST_BUILD_PATH/bin:${TOP_DIR}/bin:${ROOTSYS}/bin:${PATH}
-setenv JULIA_DIR /usr/local/julia
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JULIA_DIR/lib/julia:$JULIA_DIR/lib
-setenv JULIA_HOME $JULIA_DIR/bin
 
 rm Jamroot
 ln -s JamrootSL7 Jamroot
