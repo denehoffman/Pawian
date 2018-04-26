@@ -297,7 +297,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     energyPlaneBorders[0] = _massMin;
   if(energyPlaneBorders[2] == 0)
     energyPlaneBorders[2] = _massMax;
-
+  if(energyPlaneBorders[1] > 0.) energyPlaneBorders[1]=-energyPlaneBorders[1]; //minImagMass should be nagative
   //search projection index
 
   const std::string porjectionParticleNames=_kMatrixParser->projection();
