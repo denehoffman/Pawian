@@ -26,9 +26,9 @@ lib LineShapes :
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/FitParams//FitParams
-	:  
 	: 
-	:   ;
+	: 
+	:  ;
 
 exe BwShapeApp : BwShapeApp.cc LineShapes : ;
 exe FlatteShapeApp : FlatteShapeApp.cc LineShapes : ;

@@ -1,0 +1,33 @@
+alias install : install-bin install-lib ;
+explicit install ;
+
+install install-bin : TMatrixFitApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+install install-lib : KMatrixExtract
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
+project : 
+        ;
+
+lib KMatrixExtract : 
+        [ glob *.cc : *App.cc ]  
+        $(TOP)/qft++//qft++
+	$(TOP)/qft++Extension//qft++Extension
+        $(TOP)/ErrLogger//ErrLogger
+	$(TOP)/Particle//Particle
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/FitParams//FitParams
+	: <use>$(TOP)//Minuit2  
+	: 
+	: <library>$(TOP)//Minuit2  ;
+
+exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract : ;

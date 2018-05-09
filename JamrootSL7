@@ -52,4 +52,5 @@ build-project Particle ;
 build-project Event ;
 build-project PspGen ;
 build-project Examples ;
+build-project KMatrixExtract ;
 build-project PwaApps ;
