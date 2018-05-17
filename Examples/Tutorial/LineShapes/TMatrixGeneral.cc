@@ -154,11 +154,17 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     currentphpImagH1->SetXTitle("mass/GeV");
     _phpH1ImagVec.push_back(currentphpImagH1);
 
-    std::string currentSqrT1iKey="sqrT1i"+key;
-    TH1F* currentSqrT1iH1=new TH1F(currentSqrT1iKey.c_str(), currentSqrT1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
-    currentSqrT1iH1->SetYTitle("|#sqrt{#rho_{1}}#sqrt{#rho_{i}} T_{1i}|^{2}");
-    currentSqrT1iH1->SetXTitle("mass/GeV");
-    _SqrT1iH1Vec.push_back(currentSqrT1iH1);
+    std::string currentSqrtT1iKey="sqrtT1i"+key;
+    TH1F* currentSqrtT1iH1=new TH1F(currentSqrtT1iKey.c_str(), currentSqrtT1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentSqrtT1iH1->SetYTitle("#sqrt{#rho_{1}}#sqrt{#rho_{i}} |T_{1i}|");
+    currentSqrtT1iH1->SetXTitle("mass/GeV");
+    _SqrtT1iH1Vec.push_back(currentSqrtT1iH1);
+
+    std::string currentArgandUnits1iKey="ArgandUnit1i"+key;
+    TH1F* currentArgandUnits1iH1=new TH1F(currentArgandUnits1iKey.c_str(), currentArgandUnits1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    currentArgandUnits1iH1->SetYTitle("|#sqrt{#rho_{1}}#sqrt{#rho_{i}} T_{1i}|");
+    currentArgandUnits1iH1->SetXTitle("mass/GeV");
+    _ArgandUnits1iH1Vec.push_back(currentArgandUnits1iH1);
 
     std::string currentSqrS1iKey="sqrS1i"+key;
     TH1F* currentSqrS1iH1=new TH1F(currentSqrS1iKey.c_str(), currentSqrS1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
@@ -225,7 +231,9 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
       _phpH1RealVec.at(i)->Fill(mass, currentRho.real());
       _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag());
 
-      _SqrT1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(i)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
+      _SqrtT1iH1Vec.at(i)->Fill(mass, sqrt(_phpVecs.at(0)->factor(mass).real()*currentRho.real())*sqrt(norm((*_tMatr)(0,i))) );
+
+      _ArgandUnits1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(0)->factor(mass).real()*currentRho.real())*(*_tMatr)(0,i)));
 
       complex<double> currentTii=currentRho.real()*(*_tMatr)(i,i);
 

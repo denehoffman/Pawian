@@ -88,7 +88,8 @@ private:
   std::vector<TH1F*> _phpH1Vec;
   std::vector<TH1F*> _phpH1RealVec;
   std::vector<TH1F*> _phpH1ImagVec;
-  std::vector<TH1F*> _SqrT1iH1Vec;
+  std::vector<TH1F*> _SqrtT1iH1Vec;
+  std::vector<TH1F*> _ArgandUnits1iH1Vec;
   std::vector<TH1F*> _delta1iVec;
   std::vector<TH1F*> _SqrS1iH1Vec;
   std::vector<TH1F*> _speedPlotH1Vec;
