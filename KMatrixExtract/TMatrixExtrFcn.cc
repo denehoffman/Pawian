@@ -42,6 +42,11 @@ TMatrixExtrFcn::TMatrixExtrFcn(std::shared_ptr<TMatrixExtrFit> tMatFit) :
 { 
 }
 
+TMatrixExtrFcn::TMatrixExtrFcn(std::shared_ptr<TMatrixErrorExtr> tMatErrorExtr) :
+  _tMatErrorExtr(tMatErrorExtr)
+{ 
+}
+
 TMatrixExtrFcn::~TMatrixExtrFcn()
 {
 }

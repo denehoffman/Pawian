@@ -54,8 +54,8 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-TMatrixExtrFit::TMatrixExtrFit(std::string pathToConfigParser, std::string pathToFitParams, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams) :
-  TMatrixExtrBase(pathToConfigParser, pathToFitParams)
+TMatrixExtrFit::TMatrixExtrFit(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams) :
+  TMatrixExtrBase(pathToConfigParser, pathToFitParams, sheet)
   ,_energyMin(energyBorderMin)
   ,_energyMax(energyBorderMax)
   ,_energyStart(energyStartParams)

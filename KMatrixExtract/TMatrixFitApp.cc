@@ -94,8 +94,9 @@ int main(int __argc,char *__argv[]){
 	pathToFitParams = __argv[optind+1];
      }
      else if (ws == "--sheet"){
-       std::istringstream stream(__argv[optind+1]);
-       stream >> sheetStr; 
+//       std::istringstream stream(__argv[optind+1]);
+//       stream >> sheetStr; 
+	sheetStr = __argv[optind+1];
      }
      else if(ws == "--minImagMass"){
 	std::istringstream stream(__argv[optind+1]);
@@ -151,7 +152,7 @@ int main(int __argc,char *__argv[]){
     InfoMsg << "switched to energyStart: " << energyStart << endmsg;
   }
 
-  std::shared_ptr<TMatrixExtrFit> tMatFit(new TMatrixExtrFit(pathToConfigParser, pathToFitParams, energyMin, energyMax, energyStart));
+  std::shared_ptr<TMatrixExtrFit> tMatFit(new TMatrixExtrFit(pathToConfigParser, pathToFitParams, sheetStr, energyMin, energyMax, energyStart));
   TMatrixExtrFcn fitFcn(tMatFit);
   
   // Set user parameters for MinuitFitFcn

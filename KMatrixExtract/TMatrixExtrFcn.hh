@@ -34,6 +34,7 @@
 #include "Minuit2/FCNBase.h"
 
 class TMatrixExtrFit;
+class TMatrixErrorExtr;
 
 namespace ROOT {
 
@@ -46,6 +47,7 @@ public:
 
   ///Constructor 
   TMatrixExtrFcn(std::shared_ptr<TMatrixExtrFit> tMatFit);
+  TMatrixExtrFcn(std::shared_ptr<TMatrixErrorExtr> tMatErrorExtr);
 
 
   /** Destructor */
@@ -62,6 +64,7 @@ protected:
 
 private:
   std::shared_ptr<TMatrixExtrFit> _tMatFit;
+  std::shared_ptr<TMatrixErrorExtr> _tMatErrorExtr;
 };
 
   }  // namespace Minuit2

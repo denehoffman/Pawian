@@ -40,6 +40,7 @@ class KPole;
 class ParticleTable;
 class KMatrixParser;
 class AbsPawianParameters;
+class TMatrixDynamics;
 
 class TMatrixExtrBase {
 
@@ -48,11 +49,12 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixExtrBase(std::string pathToConfigParser, std::string pathToFitParams);
+  TMatrixExtrBase(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet);
 
 
   /** Destructor */
   virtual ~TMatrixExtrBase();
+  void updateTMatDy(std::shared_ptr<AbsPawianParameters> params);
 
   // Getters:
 
@@ -63,9 +65,13 @@ protected:
   std::shared_ptr<TMatrixRel> _tMatr;
   std::shared_ptr<KMatrixRel> _kMatr;
   ParticleTable* _particleTable;
-  
+ 
+  std::shared_ptr<TMatrixDynamics> _tMatDynPtr;
+ 
   std::shared_ptr<AbsPawianParameters> _params;
+  std::vector<std::string> _kMatrixParamNames;
   std::string _pathToFitParams;
+  std::string _sheet;
   int _orbitalL;
   std::vector<double> _signs;
 
