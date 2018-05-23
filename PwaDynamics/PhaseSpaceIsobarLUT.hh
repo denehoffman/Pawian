@@ -62,6 +62,12 @@ public:
   virtual complex<double> ChewM(const double mass);
   virtual complex<double> ChewM(const complex<double> mass);
   virtual void cacheFactors(const double mass);
+  complex<double> sLow(){
+    return m_sLow;
+  };
+  complex<double> sHigh(){
+    return m_sHigh;
+  };
 
 protected:
   void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
