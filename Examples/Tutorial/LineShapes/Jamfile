@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp PiPiSWaveApp PhpFactorApp
+install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp PiPiSWaveApp PhpFactorApp LUTPlotApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -39,3 +39,4 @@ exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc LineSha
 exe VoigtShapeApp : VoigtShapeApp.cc LineShapes : ;
 exe BarrierFactorApp : BarrierFactorApp.cc LineShapes : ;
 exe PhpFactorApp : PhpFactorApp.cc LineShapes : ;
+exe LUTPlotApp : LUTPlotApp.cc LineShapes : ;
