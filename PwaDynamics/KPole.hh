@@ -72,12 +72,14 @@ public:
   virtual double poleMass() {return _poleMass;}
   virtual vector<double> gFactors() {return _g_i;}
 
-  virtual void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
+  //  virtual void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
+  virtual void updatePoleMass (double newPoleMass);
   virtual void updategFactors (vector<double>& newg_i) {_g_i=newg_i;}
   
 protected:
   vector<double> _g_i;
   double _poleMass;
+  complex<double> _poleMassCompl;
 
 private:
   template<typename MassType>

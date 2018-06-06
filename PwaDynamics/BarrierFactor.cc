@@ -33,6 +33,10 @@ BarrierFactor::BarrierFactor(int l, std::complex<double> q0, double qR) :
    _q0(q0)
 {
    _B0 = BlattWeisskopf(_q0);
+   if (abs(_B0)<1.E-8){
+     if(_B0.real()>0) _B0+=std::complex<double>(1.E-8,0.);
+     else _B0+=std::complex<double>(0.,1.E-8);
+   }
 }
 
 
@@ -112,9 +116,21 @@ std::complex<double> BarrierFactor::BlattWeisskopfRatio(std::complex<double> q){
 
 
 std::complex<double> BarrierFactor::BlattWeisskopfRatio(int l, std::complex<double> q, std::complex<double> q0, double qR){
-   return BlattWeisskopf(l, q, qR) / BlattWeisskopf(l, q0, qR);
+  std::complex<double> denom=BlattWeisskopf(l, q0, qR);
+  if (abs(denom)<1.E-8){
+    if(denom.real()>0.) denom+=std::complex<double>(1.E-8,0.);
+    else denom+=std::complex<double>(0.,1.E-8);
+  }
+  return BlattWeisskopf(l, q, qR) / denom;
+  //   return BlattWeisskopf(l, q, qR) / BlattWeisskopf(l, q0, qR);
 }
 
 std::complex<double> BarrierFactor::BlattWeisskopfTensorRatio(int l, std::complex<double> q, std::complex<double> q0, double qR){
-   return BlattWeisskopfTensor(l, q, qR) / BlattWeisskopfTensor(l, q0, qR);
+ std::complex<double> denom=BlattWeisskopfTensor(l, q0, qR);
+  if (abs(denom)<1.E-8){
+    if(denom.real()>0.) denom+=std::complex<double>(1.E-8,0.);
+    else denom+=std::complex<double>(0.,1.E-8);
+  }
+  return BlattWeisskopfTensor(l, q, qR) / denom;
+  //   return BlattWeisskopfTensor(l, q, qR) / BlattWeisskopfTensor(l, q0, qR);
 }

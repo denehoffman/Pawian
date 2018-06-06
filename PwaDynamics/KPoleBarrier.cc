@@ -45,11 +45,54 @@ KPoleBarrier::~KPoleBarrier(){
 
 
 void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
-  evalMatrixTemplate(mass, OrbMom);
+  //  evalMatrixTemplate(mass, OrbMom);
+  for (int i=0; i< int(_phpVecs.size()); ++i){
+    if(_truncatedBarrier){
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
+    else{
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
+  }
+  
+  double denom=_poleMass*_poleMass-mass*mass;
+  if(std::abs(denom) < 1e-10){
+     denom = 1.E-10;
+  }
+
+  for (int i=0; i< int(_g_i.size()); ++i){
+    for (int j=0; j< int(_g_i.size()); ++j){
+      this->operator()(i,j)= ( _g_i.at(i)*_barrierFactor.at(i)*_g_i.at(j)*_barrierFactor.at(j))/denom;
+     }
+   }
 }
 
 void KPoleBarrier::evalMatrix(const complex<double> mass, Spin OrbMom){
-  evalMatrixTemplate(mass, OrbMom);
+  //  evalMatrixTemplate(mass, OrbMom);
+
+  for (int i=0; i< int(_phpVecs.size()); ++i){
+    if(_truncatedBarrier){
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
+    else{
+      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+    }
+  }
+  
+  complex<double> denom=_poleMassCompl*_poleMassCompl-mass*mass;
+  if(std::abs(denom) < 1e-10){
+    denom = complex<double>(1.E-10, 0.);
+  }
+
+  for (int i=0; i< int(_g_i.size()); ++i){
+    for (int j=0; j< int(_g_i.size()); ++j){
+      this->operator()(i,j)= ( _g_i.at(i)*_barrierFactor.at(i)*_g_i.at(j)*_barrierFactor.at(j))/denom;
+     }
+   }
 }
  
 template<typename MassType>
@@ -95,6 +138,7 @@ template void KPoleBarrier::evalMatrixTemplate(const complex<double> mass, Spin 
 
 void KPoleBarrier::updatePoleMass (double newPoleMass){
   _poleMass=newPoleMass;
+  _poleMassCompl=complex<double>(_poleMass, 0.);
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
     _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(_poleMass);
   }

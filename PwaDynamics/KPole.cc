@@ -30,6 +30,7 @@ KPole::KPole(vector<double>& g_i, double mass_0):
   Matrix< complex<double> >::Matrix(int(g_i.size()), int(g_i.size()))
   , _g_i(g_i)
   , _poleMass(mass_0)
+  ,_poleMassCompl(complex<double>(mass_0, 0.))
 {
 }
 
@@ -37,6 +38,7 @@ KPole::KPole(vector<double>& g_i, double mass_0, int numRow, int numCol):
   Matrix< complex<double> >::Matrix(numRow, numCol)
   , _g_i(g_i)
   , _poleMass(mass_0)
+  ,_poleMassCompl(complex<double>(mass_0, 0.))
 {
 }
 
@@ -44,11 +46,38 @@ KPole::~KPole(){
 }
 
 void KPole::evalMatrix(const double mass, Spin OrbMom){
-   evalMatrixTemplate(mass);
+  //   evalMatrixTemplate(mass);
+  double denom=_poleMass*_poleMass-mass*mass;
+
+  if( std::abs(denom) < 1.e-10){
+     denom = 1.e-10;
+  }
+
+  for (int i=0; i< int(_g_i.size()); ++i){
+    for (int j=0; j< int(_g_i.size()); ++j){
+      this->operator()(i,j)= ( _g_i[i]*_g_i[j])/denom;
+     }
+  }
 }
 
 void KPole::evalMatrix(const complex<double> mass, Spin OrbMom){
-   evalMatrixTemplate(mass);
+  //   evalMatrixTemplate(mass);
+  complex<double> denom=_poleMassCompl*_poleMassCompl-mass*mass;
+
+  if( std::abs(denom) < 1.e-10){
+     denom = complex<double>(1.E-10, 0.);
+  }
+
+  for (int i=0; i< int(_g_i.size()); ++i){
+    for (int j=0; j< int(_g_i.size()); ++j){
+      this->operator()(i,j)= ( _g_i[i]*_g_i[j])/denom;
+     }
+  }
+}
+
+void KPole::updatePoleMass (double newPoleMass){
+  _poleMass=newPoleMass;
+  _poleMassCompl=complex<double>(_poleMass, 0.);
 }
 
 template<typename MassType>
