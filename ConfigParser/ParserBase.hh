@@ -124,6 +124,7 @@ public:
   const std::string prePathDataFiles() const {return _prePathDataFiles;}
   const std::string prePathKMatrixFiles() const {return _prePathKMatrixFiles;}
   const bool scalingWChannelID() const {return _scalingWithChannelID;}
+  const bool fixAllPhases() const {return _fixAllPhases;}
  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -205,4 +206,5 @@ protected:
   std::string _prePathDataFiles;
   std::string _prePathKMatrixFiles;
   bool _scalingWithChannelID;
+  bool _fixAllPhases;
 };

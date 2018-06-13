@@ -600,6 +600,15 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
       else WarningMsg << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg; 
     }
   }
+
+  if(GlobalEnv::instance()->parser()->fixAllPhases()){
+    for (itFix=parNames.begin(); itFix!=parNames.end(); ++itFix){
+      if( itFix->substr( itFix->length() - 3 ) == "Phi"){
+	upar->Fix( (*itFix) );
+	InfoMsg << "Fixing phase " << (*itFix) << endmsg;
+      }
+    }
+  }
 }
 
 void AppBase::fixAllReleaseScaleParams(std::shared_ptr<AbsPawianParameters> upar){

@@ -83,6 +83,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_prePathDataFiles("")
   ,_prePathKMatrixFiles("")
   ,_scalingWithChannelID(false)
+  ,_fixAllPhases(false)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -143,6 +144,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("prePathDataFiles",po::value<string>(&_prePathDataFiles), "option to set a pre path to the data files")
     ("prePathKMatrixFiles",po::value<string>(&_prePathKMatrixFiles), "option to set a pre path to the K-matrix files")
     ("scalingWithChannelID",po::value<bool>(&_scalingWithChannelID), "scaling with suffix for channel IDs")
+    ("fixAllPhases",po::value<bool>(&_fixAllPhases), "option to fix all phases")
     ;
   
   _config->add_options()
@@ -281,6 +283,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "prePathDataFiles: " << _prePathDataFiles << "\n\n"
 		<< "prePathKMatrixFiles: " << _prePathKMatrixFiles << "\n\n"
 		<< "scalingWithChannelID: " <<  _scalingWithChannelID << "\n\n"
+		<< "fixAllPhases: " << _fixAllPhases << "\n\n"
                 << endl;
 
 
