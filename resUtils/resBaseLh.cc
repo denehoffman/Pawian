@@ -117,7 +117,6 @@ double resBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianPa
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
 
   result *= fitPar->Value(_channelScaleParam);
-
   return result;
 
 }

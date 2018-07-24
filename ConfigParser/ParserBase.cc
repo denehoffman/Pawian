@@ -84,6 +84,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_prePathKMatrixFiles("")
   ,_scalingWithChannelID(false)
   ,_fixAllPhases(false)
+  ,_nllScalingFactor(1.)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -179,6 +180,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("kMatrixProdSuffix", po::value< vector<string> >(&_kMatrixProdSuffix),"suffix for fit parameter of the P-vectors in the K-matrix approach")
     ("initial4Vec", po::value<string>(&_intitial4VecStr),"initial 4 Vector (order: E, px, py, pz")
     ("projectile4Vec", po::value<string>(&_projectile4VecStr),"4 Vector of the projectile (order: E, px, py, pz")
+    ("nllScalingFactor", po::value<double>(&_nllScalingFactor), "NLL scaling factor for individual channels")
     ;
 
 }
@@ -284,6 +286,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "prePathKMatrixFiles: " << _prePathKMatrixFiles << "\n\n"
 		<< "scalingWithChannelID: " <<  _scalingWithChannelID << "\n\n"
 		<< "fixAllPhases: " << _fixAllPhases << "\n\n"
+		<< "nllScalingFactor: " << _nllScalingFactor << "\n\n"
                 << endl;
 
 

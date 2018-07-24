@@ -94,7 +94,6 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
     }
 
     theEvtList.push_back(currentEvt);
-
     evtWeightSum += anEvent->Weight();
     ++evtCount;
   }

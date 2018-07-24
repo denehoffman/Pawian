@@ -50,7 +50,6 @@ AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
-
 {
    std::stringstream stringStrChannelId;
    stringStrChannelId << _channelID;
@@ -249,7 +248,7 @@ double AbsLh::mergeLogLhData(LHData& theLHData, ChannelID channelId){
       -theLHData.logLH_data
       +theLHData.weightSum*logLH_mc_Norm;
   }
-  return logLH;
+  return GlobalEnv::instance()->Channel(channelId)->parser()->nllScalingFactor()*logLH;
 }
 
 

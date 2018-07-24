@@ -93,6 +93,7 @@ protected:
   unsigned int _calcCounter;
   unsigned short _noOfThreads;
 
+
   std::shared_ptr<AbsPawianParameters> _oldFitPar;
   std::shared_ptr<FsParticleProjections> _fsParticleProjections; 
 
