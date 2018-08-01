@@ -266,7 +266,6 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
       tripletm1Amp+=tmpAmp;
     }
-
     result += norm(singletAmp)+ norm(triplet0Amp)+ norm(tripletp1Amp)+ norm(tripletm1Amp);
   }
   

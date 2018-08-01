@@ -93,6 +93,9 @@ void AbsLh::initialize(){
        channelScaleParamStream << (*itParticle)->name();
     }
     channelScaleParamStream << "Scaling";
+    if(GlobalEnv::instance()->Channel(_channelID)->parser()->addChannelScalingId()){
+      channelScaleParamStream << _channelID;
+    }
     _channelScaleParam = channelScaleParamStream.str();
     _fsParticleProjections=GlobalEnv::instance()->Channel(_channelID)->getFsParticleProjectionsPtr();
 }

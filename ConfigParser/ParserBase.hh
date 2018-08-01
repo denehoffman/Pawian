@@ -126,7 +126,7 @@ public:
   const bool scalingWChannelID() const {return _scalingWithChannelID;}
   const bool fixAllPhases() const {return _fixAllPhases;}
   const double nllScalingFactor() const {return _nllScalingFactor;}
- 
+  const bool addChannelScalingId() const{return _addChannelScalingId;} 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
@@ -209,4 +209,5 @@ protected:
   bool _scalingWithChannelID;
   bool _fixAllPhases;
   double _nllScalingFactor;
+  bool _addChannelScalingId;
 };

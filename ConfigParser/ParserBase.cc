@@ -85,6 +85,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_scalingWithChannelID(false)
   ,_fixAllPhases(false)
   ,_nllScalingFactor(1.)
+  ,_addChannelScalingId(false)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -181,6 +182,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("initial4Vec", po::value<string>(&_intitial4VecStr),"initial 4 Vector (order: E, px, py, pz")
     ("projectile4Vec", po::value<string>(&_projectile4VecStr),"4 Vector of the projectile (order: E, px, py, pz")
     ("nllScalingFactor", po::value<double>(&_nllScalingFactor), "NLL scaling factor for individual channels")
+    ("addChannelScalingId",po::value<bool>(&_addChannelScalingId), "add Id to parameter name for channel scaling")
     ;
 
 }
@@ -287,6 +289,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "scalingWithChannelID: " <<  _scalingWithChannelID << "\n\n"
 		<< "fixAllPhases: " << _fixAllPhases << "\n\n"
 		<< "nllScalingFactor: " << _nllScalingFactor << "\n\n"
+		<< "addChannelScalingId: " <<_addChannelScalingId << "\n\n"
                 << endl;
 
 
