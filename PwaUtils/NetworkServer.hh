@@ -82,6 +82,7 @@ private:
    std::vector<double> _cachedParams;
   std::vector<double> _delayTimesClients; //time in seconds
    std::vector<double> _delayTimesChannels; //time in seconds
+  std::vector<int> _noOfClientsPerChannel; 
   std::string _currentTimeDelayFileName;
 
    void Timeout(const boost::system::error_code& err);

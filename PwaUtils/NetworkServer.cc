@@ -66,6 +66,7 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
 
    _delayTimesClients.resize(_noOfClients);
    _delayTimesChannels.resize(_noOfChannels);
+   _noOfClientsPerChannel.resize(_noOfChannels);
 
    InfoMsg << "************* Server mode ****************" << endmsg;
    InfoMsg << "Listening on port " << port << endmsg;
@@ -117,6 +118,7 @@ bool NetworkServer::WaitForFirstClientLogin(){
 
       // Store clientId->channel assignment
       _clientChannelMap[i] = _eventDistribution.at(i).first;
+      _noOfClientsPerChannel.at(_eventDistribution.at(i).first)++;
    }
 
    InfoMsg << "All clients ready." << endmsg;
@@ -494,13 +496,13 @@ bool NetworkServer::ReadNumClientsFromConfig(std::vector<short>& numClVec){
 
 void  NetworkServer::dumpTimeDelays() const{
   std::ofstream theStream (_currentTimeDelayFileName);
-  theStream << "Channel Id\tdelay time [s] " << std::endl;
+  theStream << "ChannelId\tdelaytime[s]\delaytime/noClinets[s]" << std::endl;
 
   for (unsigned int i=0; i<_delayTimesChannels.size(); ++i){
-    theStream << i << "\t" << std::setprecision(10) << _delayTimesChannels.at(i) << std::endl;   
+    theStream << i << "\t" << std::setprecision(10) << _delayTimesChannels.at(i) << "\t" << std::setprecision(10) << _delayTimesChannels.at(i)/_noOfClientsPerChannel.at(i) << std::endl;   
   }
 
-  theStream << "\n\nClient Id\tdelay time [s] " << std::endl;
+  theStream << "\n\nClientId\tdelay time [s] " << std::endl;
   for (unsigned int i=0; i<_delayTimesClients.size(); ++i){
     theStream << i << "\t" << std::setprecision(10) << _delayTimesClients.at(i) << std::endl;   
   }
