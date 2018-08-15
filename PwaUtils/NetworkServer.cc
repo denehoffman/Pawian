@@ -496,7 +496,7 @@ bool NetworkServer::ReadNumClientsFromConfig(std::vector<short>& numClVec){
 
 void  NetworkServer::dumpTimeDelays() const{
   std::ofstream theStream (_currentTimeDelayFileName);
-  theStream << "ChannelId\tdelaytime[s]\delaytime/noClinets[s]" << std::endl;
+  theStream << "Channel Id\tdelay time [s]\tdelay time/noClients [s]" << std::endl;
 
   for (unsigned int i=0; i<_delayTimesChannels.size(); ++i){
     theStream << i << "\t" << std::setprecision(10) << _delayTimesChannels.at(i) << "\t" << std::setprecision(10) << _delayTimesChannels.at(i)/_noOfClientsPerChannel.at(i) << std::endl;   
