@@ -33,6 +33,7 @@
 
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
+#include "PwaUtils/GlobalEnv.hh"
 #include "FitParams/AbsParamHandler.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -53,6 +54,7 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
    , _numBroadcasted(0)
    , _clientNumberWeights(clientNumberWeights)
    , _numEventMap(numEventMap)
+  , _currentTimeDelayFileName("currentTimeDelay"+GlobalEnv::instance()->outputFileNameSuffix()+".out")
 {
    theIOService = std::shared_ptr<boost::asio::io_service>(new  boost::asio::io_service);
    theAcceptor = std::shared_ptr<tcp::acceptor>(new tcp::acceptor(*theIOService, tcp::endpoint(tcp::v4(), _port)));
@@ -61,6 +63,9 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
    for(int i=0; i<_noOfClients; i++){
       theStreams.push_back( std::shared_ptr<tcp::iostream>(new tcp::iostream) );
    }
+
+   _delayTimesClients.resize(_noOfClients);
+   _delayTimesChannels.resize(_noOfChannels);
 
    InfoMsg << "************* Server mode ****************" << endmsg;
    InfoMsg << "Listening on port " << port << endmsg;
@@ -220,11 +225,16 @@ void NetworkServer::EvalClientTiming(){
       boost::posix_time::time_duration diff = now - (*it).second.second;
 
       int clientID = (*it).second.first;
+      int channelID = _clientChannelMap.at(clientID);
+      double diffInSeconds=((double)(maxdiff.total_microseconds() - diff.total_microseconds()))/1E6;
 
-      InfoMsg << "Client id " << clientID << " channel id " << _clientChannelMap.at(clientID) << " "
+      InfoMsg << "Client id " << clientID << " channel id " << channelID << " "
 	   << " response time +" 
-	   << std::setprecision(10) << ((double)(maxdiff.total_microseconds() - diff.total_microseconds()))/1E6 << " s" << endmsg;
+	   << std::setprecision(10) << diffInSeconds << " s" << endmsg;
+      _delayTimesClients.at(clientID)+=diffInSeconds;
+      _delayTimesChannels.at(channelID)+=diffInSeconds;
    }
+   dumpTimeDelays();
 }
 
 
@@ -481,3 +491,18 @@ bool NetworkServer::ReadNumClientsFromConfig(std::vector<short>& numClVec){
 
    return true;
 }
+
+void  NetworkServer::dumpTimeDelays() const{
+  std::ofstream theStream (_currentTimeDelayFileName);
+  theStream << "Channel Id\tdelay time [s] " << std::endl;
+
+  for (unsigned int i=0; i<_delayTimesChannels.size(); ++i){
+    theStream << i << "\t" << std::setprecision(10) << _delayTimesChannels.at(i) << std::endl;   
+  }
+
+  theStream << "\n\nClient Id\tdelay time [s] " << std::endl;
+  for (unsigned int i=0; i<_delayTimesClients.size(); ++i){
+    theStream << i << "\t" << std::setprecision(10) << _delayTimesClients.at(i) << std::endl;   
+  }
+}
+

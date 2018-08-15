@@ -75,14 +75,19 @@ private:
    std::vector<std::shared_ptr<tcp::iostream>> theStreams;
    std::map<short, boost::posix_time::ptime > lastHeartbeats;
    std::map<short, std::pair<short, boost::posix_time::ptime > > lastLhTimes;
+
    std::map<short, ChannelID> _clientChannelMap;
    std::map<ChannelID, std::tuple<long, double, long> > _numEventMap;
    std::vector<std::pair<ChannelID, std::vector<long> > > _eventDistribution;
    std::vector<double> _cachedParams;
+  std::vector<double> _delayTimesClients; //time in seconds
+   std::vector<double> _delayTimesChannels; //time in seconds
+  std::string _currentTimeDelayFileName;
 
    void Timeout(const boost::system::error_code& err);
    void AcceptHandler(const boost::system::error_code& err);
    void EvalClientTiming();
    bool UpdateHeartbeats(short clientID);
    bool ReadNumClientsFromConfig(std::vector<short>& numClVec);
+  void  dumpTimeDelays() const;
 };
