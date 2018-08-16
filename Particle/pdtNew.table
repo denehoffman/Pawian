@@ -250,7 +250,7 @@ Meson K2(1820)+ 	K_2(1820)^+  		3  4 -1  0  0   1  1  1  0  	1.816 	0.276   relB
 Meson K2(1820)- 	K_2(1820)^-  		-3  4 -1  0  0   1  -1 -1 0  	1.816 	0.276   relBW	[PDG no idea]
 Meson K(1830)0 		K(1830)^0  		0  0 -1  0  0   1  -1  1  0  	1.830 	0.250   relBW	[PDG nonett 3^1S_0]
 Meson K(1830)0bar       \bar{K(1830)}^0         0  0 -1  0  0   1  1  -1  0     1.830   0.250   relBW   [PDG nonett 3^1S_0]
-Meson K(1830)+          K(1830)^+               0  0 -1  0  0   1  1  1  0      1.830   0.250   relBW   [PDG nonett 3^1S_0]
+Meson K(1830)+          K(1830)^+               3  0 -1  0  0   1  1  1  0      1.830   0.250   relBW   [PDG nonett 3^1S_0]
 Meson K(1830)-          K(1830)^-               -3 0 -1  0  0   1  -1 -1  0     1.830   0.250   relBW   [PDG nonett 3^1S_0]
 Meson K*0(1950)0 	K_0(1950)^0  		0  0  1  0  0   1  -1  1  0  	1.945 	0.201   relBW	[PDG no idea]
 Meson K*0(1950)0bar     \bar{K_0(1950)}^0       0  0  1  0  0   1  1  -1  0     1.945   0.201   relBW  [PDG no idea]
