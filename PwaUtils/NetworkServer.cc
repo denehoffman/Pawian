@@ -506,5 +506,30 @@ void  NetworkServer::dumpTimeDelays() const{
   for (unsigned int i=0; i<_delayTimesClients.size(); ++i){
     theStream << i << "\t" << std::setprecision(10) << _delayTimesClients.at(i) << std::endl;   
   }
+
+  int noOfClientsWoScattering = 0;
+  double totalDelayTimeWoScattering = 0.;
+
+  theStream << "\n\ncurrent client number weights" << std::endl;
+  theStream << "clientNumberWeights = ";
+  for (unsigned int i=0; i<_noOfClientsPerChannel.size(); ++i){
+    theStream << _noOfClientsPerChannel.at(i) << " ";
+    if (_noOfClientsPerChannel.at(i) > 1){
+      noOfClientsWoScattering+=_noOfClientsPerChannel.at(i); 
+      totalDelayTimeWoScattering+=_delayTimesChannels.at(i);
+    }
+  }
+  theStream << std::endl;
+
+  theStream << "\n\nproposed client number weights" << std::endl;
+  theStream << "clientNumberWeights = ";
+  for (unsigned int i=0; i<_noOfClientsPerChannel.size(); ++i){
+    double noOfProposedClients(_noOfClientsPerChannel.at(i));
+   if (noOfProposedClients > 1.5){
+     noOfProposedClients = _delayTimesChannels.at(i)/totalDelayTimeWoScattering * noOfClientsWoScattering;      
+   }
+   theStream << noOfProposedClients << " ";
+  }
+ theStream << std::endl;
 }
 
