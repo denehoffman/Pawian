@@ -100,10 +100,9 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp*
   int evtNo=theData->evtNo;
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);  
   
-  if ( _cacheAmps && !_recalculate){
+  if (!_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
-    return result;
+    return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
   }
 
   result=lsLoop(grandmaAmp, lamX, theData, _lam1MinThreadMap.at(std::this_thread::get_id()), _lam1MaxThreadMap.at(std::this_thread::get_id()), _lam2MinThreadMap.at(std::this_thread::get_id()), _lam2MaxThreadMap.at(std::this_thread::get_id()), true);
@@ -111,7 +110,7 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp*
   if ( _cacheAmps){
      theMutex.lock();
      //     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
-     _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
   return result;

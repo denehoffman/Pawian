@@ -50,7 +50,6 @@ namespace ROOT {
       std::shared_ptr<AbsPawianParameters> _defaultPawianParms;
       std::shared_ptr<AbsPawianParameters> _currentPawianParms;
       std::string _currentResFileName;
-
       virtual void printTimer() const;
       virtual void printFitParams(std::shared_ptr<AbsPawianParameters> par) const;
       virtual void dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const;

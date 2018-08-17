@@ -45,15 +45,16 @@ BreitWignerDynamics::~BreitWignerDynamics()
 }
 
 complex<double> BreitWignerDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
-  int evtNo=theData->evtNo;
-  if ( _cacheAmps && !_recalculate){
-    return _cachedMap[evtNo];
+  // int evtNo=theData->evtNo;
+  // if ( _cacheAmps && !_recalculate){
+  if ( !_recalculate){
+    return _cachedMap[theData->evtNo];
   }
 
   complex<double> result=BreitWignerFunction::NonRel(theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth);  
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedMap[evtNo]=result;
+     _cachedMap[theData->evtNo]=result;
      theMutex.unlock();
   }  
 

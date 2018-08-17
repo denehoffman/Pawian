@@ -69,11 +69,11 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
   complex<double> result(0.,0.);
   if(_J<fabs(lamX)) return result;
 
-  int evtNo=theData->evtNo;
+  //  int evtNo=theData->evtNo;
 
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);
-  if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
+  if (!_recalculate){
+    result=_cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
     return result;
   }
 
@@ -94,7 +94,7 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
 
   if ( _cacheAmps){
     theMutex.lock();
-    _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+    _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
     theMutex.unlock();
   }
   return result;
@@ -220,7 +220,10 @@ void FormXDecAmps::cacheAmplitudes(){
 
 bool FormXDecAmps::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
   _recalculate=false;
+
   if(_decAmpDaughter1->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
+  else if(!_cacheAmps) _recalculate=true;
+
   if (!_recalculate) _recalculate=AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
   if (!_recalculate) _recalculate=_absDyn->checkRecalculation(fitParNew, fitParOld);
 

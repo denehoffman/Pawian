@@ -118,20 +118,17 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* gra
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
-  int evtNo=theData->evtNo;
-
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
 
-  if ( _cacheAmps && !_recalculate){
-    result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
-    return result;
+  if (!_recalculate){
+    return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
   }
 
   result=lsLoop(grandmaAmp, lamX, theData, _lam1MinThreadMap.at(std::this_thread::get_id()), _lam1MaxThreadMap.at(std::this_thread::get_id()), _lam2MinThreadMap.at(std::this_thread::get_id()), _lam2MaxThreadMap.at(std::this_thread::get_id()), true);
 
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 

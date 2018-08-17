@@ -139,15 +139,16 @@ void AbsXdecAmp::cacheAmplitudes(){
 
 bool AbsXdecAmp::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
   _recalculate=false;
+  if(!_cacheAmps) _recalculate=true; 
   if(_absDyn->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
-  
+
   if(!_daughter1IsStable) {
     if(_decAmpDaughter1->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
   }
-  
   if(!_daughter2IsStable){
     if(_decAmpDaughter2->checkRecalculation(fitParNew, fitParOld)) _recalculate=true;
   }
+
   
   if (!_recalculate) _recalculate=AbsParamHandler::checkRecalculation(fitParNew, fitParOld);
 
@@ -173,10 +174,11 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 }
 
 void AbsXdecAmp::setSpinProjections(int projId){
-  std::vector<Spin> projections=_fsParticleProjections->spinProjections().at(projId);
+
+ std::vector<Spin> projections = _fsParticleProjections->spinProjection(projId);
+  
   theMutex.lock();
   _projIdThreadMap[std::this_thread::get_id()]=projId;
-  
   _lam1MinThreadMap[std::this_thread::get_id()]=_lam1Min;
   _lam1MaxThreadMap[std::this_thread::get_id()]=_lam1Max;
   _lam2MinThreadMap[std::this_thread::get_id()]=_lam2Min;

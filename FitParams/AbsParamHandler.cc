@@ -42,17 +42,19 @@ AbsParamHandler::~AbsParamHandler()
 
 bool AbsParamHandler::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
   _recalculate=false;
-
-  std::vector<std::string>::iterator it;
-  for(it=_paramNameList.begin(); it!=_paramNameList.end(); ++it){
-    //    InfoMsg << "checkRecalculation for " << (*it) << endmsg;
-
-    if (!CheckDoubleEquality(fitParNew->Value(*it), fitParOld->Value(*it))){
-      //      InfoMsg << "parameter " << (*it) << " has been changed and relvant amplitudes/dynamics have to be recalculated!!!" << endmsg;
-      _recalculate=true;
-      return _recalculate;
-    }
-  } 
+  if(!_cacheAmps) _recalculate=true;
+  else{ 
+    std::vector<std::string>::iterator it;
+    for(it=_paramNameList.begin(); it!=_paramNameList.end(); ++it){
+      //    InfoMsg << "checkRecalculation for " << (*it) << endmsg;
+      
+      if (!CheckDoubleEquality(fitParNew->Value(*it), fitParOld->Value(*it))){
+	//      InfoMsg << "parameter " << (*it) << " has been changed and relvant amplitudes/dynamics have to be recalculated!!!" << endmsg;
+	_recalculate=true;
+	return _recalculate;
+      }
+    } 
+  }
   return _recalculate;
 }
 

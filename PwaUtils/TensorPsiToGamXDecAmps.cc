@@ -116,14 +116,14 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Ab
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
-  int evtNo=theData->evtNo;
+  //  int evtNo=theData->evtNo;
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);
   
-  if ( _cacheAmps && !_recalculate){
+  if (!_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
+    return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
     //    result*=_absDyn->eval(theData, grandmaAmp);
-    return result;
+    //    return result;
   }
 
   for(Spin lambda2=_lam2MinThreadMap.at(std::this_thread::get_id()); lambda2<=_lam2MaxThreadMap.at(std::this_thread::get_id()); ++lambda2){
@@ -144,7 +144,7 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Ab
   if ( _cacheAmps){
      theMutex.lock();
      //_cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
-     _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
      theMutex.unlock();
   }
 

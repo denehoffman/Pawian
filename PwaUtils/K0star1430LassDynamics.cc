@@ -54,9 +54,10 @@ K0star1430LassDynamics::~K0star1430LassDynamics()
 }
 
 complex<double> K0star1430LassDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
-  int evtNo=theData->evtNo;
-  if ( _cacheAmps && !_recalculate){
-    return _cachedMap[evtNo];
+  //  int evtNo=theData->evtNo;
+  //  if ( _cacheAmps && !_recalculate){
+  if (!_recalculate){
+    return _cachedMap.at(theData->evtNo);
   }
 
   complex<double> result=LASS::K0star_1430(theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, _currentaLASS, _currentrLASS, _currentBLASS, _currentphiB, _currentRLASS, _currentphiR);
@@ -64,7 +65,7 @@ complex<double> K0star1430LassDynamics::eval(EvtData* theData, AbsXdecAmp* grand
   
   if ( _cacheAmps){
       theMutex.lock();
-      _cachedMap[evtNo]=result;
+      _cachedMap[theData->evtNo]=result;
       theMutex.unlock();
   }  
 

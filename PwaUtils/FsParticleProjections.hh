@@ -25,7 +25,6 @@
 // Copyright 2013 Bertram Kopf
 
 #pragma once
-
 #include <iostream>
 #include <vector>
 #include <map>
@@ -44,6 +43,7 @@ public:
   unsigned int fsParticleId(std::string& name);
   std::vector<std::string> finalStateNames() const {return _fsParticleNames;}
   std::vector< std::vector<Spin> > spinProjections() {return _fsSpinProjections;}
+  std::vector<Spin> spinProjection(unsigned int i) {return _fsSpinProjections.at(i);}
 
 protected:
 

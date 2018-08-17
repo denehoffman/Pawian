@@ -76,9 +76,9 @@ RadM1Dynamics::~RadM1Dynamics()
 }
 
 complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
-  int evtNo=theData->evtNo;
-  if ( _cacheAmps && !_recalculate){
-    return _cachedMap.at(evtNo);
+  //  int evtNo=theData->evtNo;
+  if (!_recalculate){
+    return _cachedMap.at(theData->evtNo);
   }
   
   // Which Daughter particle is the radiative photon?
@@ -94,7 +94,7 @@ complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
                 BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR) *
                 RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
 
-  if ( _cacheAmps) _cachedMap[evtNo]=result;
+  if ( _cacheAmps) _cachedMap[theData->evtNo]=result;
 
   return result;
 }

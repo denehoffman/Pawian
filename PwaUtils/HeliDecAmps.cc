@@ -254,15 +254,12 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
 complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-
   if( fabs(lamX) > _JPCPtr->J) return result;
 
-  int evtNo=theData->evtNo;
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
 
-  if ( _cacheAmps && !_recalculate){
-    //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
-    result=_cachedAmpIdMap.at(evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
+  if (!_recalculate){
+    result=_cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
     if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
     return result;
   }
@@ -305,7 +302,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
   if ( _cacheAmps){
     theMutex.lock();
     //    _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
-    _cachedAmpIdMap[evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+    _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
     theMutex.unlock();
   }
 

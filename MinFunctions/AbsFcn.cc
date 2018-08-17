@@ -36,6 +36,7 @@
 using namespace ROOT::Minuit2;
 
 boost::timer::cpu_timer theTimer1;
+boost::timer::cpu_timer theTimerAll;
 
 AbsFcn::AbsFcn() :
     _fcnCounter(0)
@@ -58,7 +59,12 @@ void AbsFcn::printTimer() const{
   boost::timer::cpu_times elapsed(theTimer1.elapsed());
   if(elapsed.wall > 0){
     InfoMsg << "Wall time: " << elapsed.wall / 1E9 << "s User: "
-	 << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 << "s\n" << endmsg;
+	 << elapsed.user/1E9 << "s System: " << elapsed.system/1E9 <<"s\n" << endmsg;
+  }
+  boost::timer::cpu_times elapsedAll(theTimerAll.elapsed());
+  if(elapsedAll.wall > 0){
+    InfoMsg << "Wtotal time: " << elapsedAll.wall / 1E9 << "s User: "
+	 << elapsedAll.user/1E9 << "s System: " << elapsedAll.system/1E9 << "s\n" << endmsg;
   }
   theTimer1.start();
 }

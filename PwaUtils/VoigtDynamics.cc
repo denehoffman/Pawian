@@ -52,16 +52,16 @@ VoigtDynamics::~VoigtDynamics()
 }
 
 complex<double> VoigtDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
-  int evtNo=theData->evtNo;
-  if ( _cacheAmps && !_recalculate){
-    return _cachedMap[evtNo];
+  //  int evtNo=theData->evtNo;
+  if (!_recalculate){
+    return _cachedMap[theData->evtNo];
   }
 
   complex<double> result(sqrt(_voigtPtr->calc(theData->DoubleMassId.at(_dynId), _currentMass0, _currentWidth, _currentSigma)), 0.);
   
   if ( _cacheAmps){
      theMutex.lock();
-     _cachedMap[evtNo]=result;
+     _cachedMap[theData->evtNo]=result;
      theMutex.unlock();
   }  
 
