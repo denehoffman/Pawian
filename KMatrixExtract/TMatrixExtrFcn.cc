@@ -55,7 +55,9 @@ double TMatrixExtrFcn::operator()(const std::vector<double>& par) const
 {
   double result=-log(_tMatFit->calcTMatrix(par.at(0), par.at(1)));
   //double result=1./_tMatFit->calcTMatrix(par.at(0), par.at(1));  
-  InfoMsg << "par0: " << par.at(0) << "\tpar1: " << par.at(1) << "\tresult: " << result << endmsg;
+  InfoMsg << "par0: " << par.at(0) << "\tpar1: " << par.at(1) 
+	  << "\tabs(tMat): " << abs(_tMatFit->calcTMatrix(par.at(0), par.at(1)))
+	  << "\tresult: " << result << endmsg;
   return result;
 }
 

@@ -19,7 +19,7 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-//TMatrixExtrBase class definition file. -*- C++ -*-
+//TMatrixResidueExtr class definition file. -*- C++ -*-
 // Copyright 2018 Bertram Kopf
 
 #pragma once
@@ -31,53 +31,42 @@
 #include <complex>
 #include <map>
 #include <memory>
+#include "math.h" 
 
-class KMatrixParser;
-class AbsPhaseSpace;
-class TMatrixRel;
-class KMatrixRel;
-class KPole;
-class ParticleTable;
-class KMatrixParser;
 class AbsPawianParameters;
-class TMatrixDynamics;
+class AbsPhaseSpace;
+class PwaCovMatrix;
+class TMatrixExtrFit;
 
-class TMatrixExtrBase {
+class TMatrixResidueExtr {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixExtrBase(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet);
+  TMatrixResidueExtr(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet, std::string pathToSerialzationFile, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams);
 
 
   /** Destructor */
-  virtual ~TMatrixExtrBase();
-  void updateTMatDy(std::shared_ptr<AbsPawianParameters> params);
-  std::shared_ptr<TMatrixRel> getNewTMat();
-  std::vector<std::shared_ptr<AbsPhaseSpace> > getPhps() {return _phpVecs;}
+  virtual ~TMatrixResidueExtr();
+
   // Getters:
+  std::complex<double>  CalcResidue();
+  void CalcResidueAll();
+  std::complex<double>  CalcMassWidth();
+  double  calcPartialWidth(double gFac, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);
+  void GetCovMatrix();
 
 protected:
-  std::shared_ptr<KMatrixParser> _kMatrixParser;
-  std::vector< std::string> _gFactorNames;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  std::shared_ptr<TMatrixRel> _tMatr;
-  std::shared_ptr<KMatrixRel> _kMatr;
-  ParticleTable* _particleTable;
- 
-  std::shared_ptr<TMatrixDynamics> _tMatDynPtr;
- 
-  std::shared_ptr<AbsPawianParameters> _params;
-  std::vector<std::string> _kMatrixParamNames;
-  std::string _pathToFitParams;
-  std::string _sheet;
-  int _orbitalL;
-  std::vector<double> _signs;
+
 
 private:
-  void init();
+  std::string _pathToSerialzationFile;
+  std::complex<double> _energyMin;
+  std::complex<double> _energyMax;
+  std::complex<double> _energyStart;
+  std::shared_ptr<TMatrixExtrFit> _tMatFit;
+  std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
+  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
 };
-
-

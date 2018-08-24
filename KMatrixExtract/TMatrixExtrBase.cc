@@ -157,3 +157,11 @@ void TMatrixExtrBase::updateTMatDy(std::shared_ptr<AbsPawianParameters> params) 
   _tMatr = _tMatDynPtr->getTMatix();  
   return;
 }
+
+std::shared_ptr<TMatrixRel> TMatrixExtrBase::getNewTMat(){
+ std::shared_ptr<TMatrixDynamics> currentTMatDyn(new TMatrixDynamics(_kMatrixParser));
+ currentTMatDyn->updateFitParams(_params);
+ std::shared_ptr<TMatrixRel> currentTMat=currentTMatDyn->getTMatix();
+ currentTMat->SetBumImPartSigns(_signs);
+ return currentTMat; 
+}
