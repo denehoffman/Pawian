@@ -56,6 +56,7 @@ public:
   void CalcResidueAll();
   std::complex<double>  CalcMassWidth();
   double  calcPartialWidth(double gFac, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);
+  double  calcPartialWidth(std::complex<double> am1, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);
   void GetCovMatrix();
 
 protected:

@@ -39,6 +39,7 @@
 #include "KMatrixExtract/TMatrixExtrFit.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
+#include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "PwaDynamics/TMatrixBase.hh"
 #include "PwaDynamics/TMatrixRel.hh"
 #include "PwaDynamics/TMatrixNonRel.hh"
@@ -231,7 +232,8 @@ void  TMatrixResidueExtr::CalcResidueAll(){
 
   std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
   currentTMatRealm->evalMatrix(polePosEpsilonRealm);
-  
+
+  InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;  
   for(int i=0 ; i<_phpVecs.size(); ++i){
     std::complex<double> resultEpsilonRealpInv= 1./(*currentTMatRealp)(i,i);
     std::complex<double> resultEpsilonRealmInv= 1./(*currentTMatRealm)(i,i);
@@ -240,22 +242,60 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     double resAbsRi=abs(1./resultApprox*rhoi);
     double resThetai=-M_PI+atan(imag(1./resultApprox*rhoi)/real(1./resultApprox*rhoi));
 
-    InfoMsg << "resAbsR(" << i << "): " << resAbsRi << endmsg; 
+    InfoMsg << "\nresAbsR(" << i << "): " << resAbsRi << endmsg; 
     InfoMsg << "resTheta(" << i << "): " << resThetai << " rad\t" << resThetai*180./M_PI << " deg" << endmsg;
 
     double g_i=sqrt(resAbsRi);
-    double gammai=calcPartialWidth(g_i, polePos, _phpVecs.at(i));
-    InfoMsg << "Gamma(" << i << "): " << gammai << endmsg;     
+    //double gammai=calcPartialWidth(g_i, polePos, _phpVecs.at(i));
+    double gammai=calcPartialWidth(1./resultApprox, polePos, _phpVecs.at(i));
+    InfoMsg << "Gamma(" << i << "): " << gammai << endmsg;
+    InfoMsg << "BR(" << i << "): " << gammai/(-2.*polePos.imag()) << endmsg;     
   }
 }
 
 double TMatrixResidueExtr::calcPartialWidth(double gFac, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php){
   double result=0.;
-  double decMass12=php->thresholdMass()/2.;
+  std::shared_ptr<PhaseSpaceIsobar> phpIso =  std::dynamic_pointer_cast<PhaseSpaceIsobar>(php);
+
+  double decMass1=phpIso->mass1();
+  double decMass2=phpIso->mass2();
   complex<double> breakUmMom = php->breakUpMom(poleMass);
   //  double breakUmMom = real(php->breakUpMom(poleMass));  
-  double energy12 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass12*decMass12);
-  double gTildeFac = 2.*M_PI*gFac*sqrt(energy12*energy12/decMass12);
-  result=gTildeFac*gTildeFac/(2.*M_PI)*decMass12*breakUmMom.real()/poleMass.real(); 
+  double energy1 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass1*decMass1);
+  double energy2 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass2*decMass2);
+
+  double gTildeFac = 2.*M_PI*gFac*sqrt(energy1*energy2/decMass1);
+  result=gTildeFac*gTildeFac/(2.*M_PI)*decMass1*breakUmMom.real()/poleMass.real();
+  result*=2.; //result seems to be Gamma/2
+  // double decMass12=php->thresholdMass()/2.;
+  // complex<double> breakUmMom = php->breakUpMom(poleMass);
+  // //  double breakUmMom = real(php->breakUpMom(poleMass));  
+  // double energy12 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass12*decMass12);
+  // double gTildeFac = 2.*M_PI*gFac*sqrt(energy12*energy12/decMass12);
+  // result=gTildeFac*gTildeFac/(2.*M_PI)*decMass12*breakUmMom.real()/poleMass.real();
+  
   return result;  
+}
+
+
+double  TMatrixResidueExtr::calcPartialWidth(std::complex<double> am1, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php){
+  double result=0.;
+  complex<double> gFac=sqrt(am1);
+  std::shared_ptr<PhaseSpaceIsobar> phpIso =  std::dynamic_pointer_cast<PhaseSpaceIsobar>(php);
+
+  // double decMass1=phpIso->mass1();
+  // double decMass2=phpIso->mass2();
+  complex<double> decMass1(phpIso->mass1(),0.);
+  complex<double> decMass2(phpIso->mass2(),0.);
+  complex<double> breakUmMom = php->breakUpMom(poleMass);
+  //  double breakUmMom = real(php->breakUpMom(poleMass));  
+  // double energy1 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass1*decMass1);
+  // double energy2 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass2*decMass2);
+  //  complex<double> breakUmMom = php->breakUpMom(poleMass);  
+  complex<double> energy1 = sqrt(breakUmMom*breakUmMom+decMass1*decMass1);
+  complex<double> energy2 = sqrt(breakUmMom*breakUmMom+decMass2*decMass2);
+  complex<double> gTildeFac = 2.*M_PI*gFac*sqrt(energy1*energy2/decMass1);
+  result=norm(gTildeFac)/(2.*M_PI)*decMass1.real()*breakUmMom.real()/poleMass.real();
+  //  result*=2.; //result seems to be Gamma/2
+  return result;
 }

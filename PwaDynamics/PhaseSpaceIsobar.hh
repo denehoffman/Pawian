@@ -61,6 +61,9 @@ public:
   virtual complex<double> breakUpMomDefaultAS(const double mass){return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);}
   virtual complex<double> breakUpMomDefaultAS(const complex<double> mass){return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);} 
   virtual double thresholdMass();
+  virtual double mass1() {return _mass1;}
+  virtual double mass2() {return _mass2;}
+
 protected:
   double _mass1;
   double _mass2;
