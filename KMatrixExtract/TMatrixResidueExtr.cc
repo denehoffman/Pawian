@@ -204,18 +204,19 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     double resAbsRi=abs(1./resultApprox*rhoi);
     double resThetai=-M_PI+atan(imag(1./resultApprox*rhoi)/real(1./resultApprox*rhoi));
 
+    InfoMsg << "\nrho(" << i << "): " << rhoi << endmsg; 
     InfoMsg << "\nresAbsR(" << i << "): " << resAbsRi << endmsg; 
     InfoMsg << "resTheta(" << i << "): " << resThetai << " rad\t" << resThetai*180./M_PI << " deg" << endmsg;
 
     double g_i=sqrt(resAbsRi);
     //double gammai=calcPartialWidth(g_i, polePos, _phpVecs.at(i));
     double gammai=calcPartialWidth(1./resultApprox, polePos, _phpVecs.at(i));
-    //    if(gammai>0.) gammaSum+=gammai;
-    gammaSum+=gammai;
+    //if(gammai>0.) gammaSum+=gammai;
+    gammaSum+=fabs(gammai);
     InfoMsg << "Gamma(" << i << "): " << gammai << endmsg;
     InfoMsg << "BR(" << i << "): " << gammai/(-2.*polePos.imag()) << endmsg;
-    //   if(gammai>0.) brSum+=gammai/(-2.*polePos.imag());
-    brSum+=gammai/(-2.*polePos.imag());     
+    //    if(gammai>0.) brSum+=gammai/(-2.*polePos.imag());
+    brSum+=fabs(gammai/(-2.*polePos.imag()));     
   }
   InfoMsg << "GammaSum: " << gammaSum << "\tBR Sum: " << brSum << endmsg;
 }
@@ -269,6 +270,7 @@ double  TMatrixResidueExtr::calcPartialWidth(std::complex<double> am1, std::comp
   InfoMsg << "breakUmMom: " <<  breakUmMom << endmsg;
   InfoMsg << "energy1: " <<  energy1 << "\tenergy2: " << energy2  << endmsg;
 
+  result/=0.5*M_PI*energy1*energy2;
   //  result*=0.2*M_PI/energy2;
   //  result*=decMass1*M_PI/energy2;  
   return result;
