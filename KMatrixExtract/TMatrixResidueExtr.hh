@@ -52,7 +52,6 @@ public:
   virtual ~TMatrixResidueExtr();
 
   // Getters:
-  std::complex<double>  CalcResidue();
   void CalcResidueAll();
   std::complex<double>  CalcMassWidth();
   double  calcPartialWidth(double gFac, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);

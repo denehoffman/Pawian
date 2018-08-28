@@ -149,95 +149,57 @@ std::complex<double> TMatrixResidueExtr::CalcMassWidth(){
   return std::complex<double>(final_eReal, final_eImag);
 }
 
-std::complex<double>  TMatrixResidueExtr::CalcResidue(){
-  std::complex<double> result(0.,0.);
-  const double epsilon=0.0001;
-  std::complex<double> polePos = CalcMassWidth();
-  std::complex<double> polePosEpsilonImag = polePos + std::complex<double>(0., epsilon);
-  std::complex<double> polePosEpsilonReal = polePos + std::complex<double>(epsilon, 0.);
-  std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
-
-  std::shared_ptr<TMatrixRel> currentTMat=_tMatFit->getNewTMat();
-  currentTMat->evalMatrix(polePos);
-  //  currentTMat->invert();
-  std::complex<double> resultPole= (*currentTMat)(0,0);
-  std::complex<double> resultPoleInv= 1./resultPole;
-  
-  std::shared_ptr<TMatrixRel> currentTMatImag=_tMatFit->getNewTMat();
-  currentTMatImag->evalMatrix(polePosEpsilonImag);
-  //  currentTMatImag->invert();
-  std::complex<double> resultEpsilonImag= (*currentTMatImag)(0,0);
-  std::complex<double> resultEpsilonImagInv= 1./resultEpsilonImag;
-
-  std::shared_ptr<TMatrixRel> currentTMatReal=_tMatFit->getNewTMat();
-  currentTMatReal->evalMatrix(polePosEpsilonReal);
-  //  currentTMatReal->invert();
-  std::complex<double> resultEpsilonReal= (*currentTMatReal)(0,0);
-  std::complex<double> resultEpsilonRealInv= 1./(*currentTMatReal)(0,0);
-
-  std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
-  currentTMatRealm->evalMatrix(polePosEpsilonRealm);
-  //  currentTMatReal->invert();
-  std::complex<double> resultEpsilonRealm= (*currentTMatRealm)(0,0);
-  std::complex<double> resultEpsilonRealmInv= 1./(*currentTMatRealm)(0,0);
-
-  InfoMsg << "polePos:              " << polePos << endmsg;
-  InfoMsg << "polePosEpsilonImag:   " << polePosEpsilonImag << endmsg;
-  InfoMsg << "polePosEpsilonReal:   " << polePosEpsilonReal << endmsg;
-  InfoMsg << "resultPole:           " << resultPole << "\tabs(resultPole): " << abs(resultPole) << endmsg;
-  InfoMsg << "resultEpsilonImag:    " << resultEpsilonImag << "\tabs(resultEpsilonImag): " << abs(resultEpsilonImag) << endmsg;
-  InfoMsg << "resultEpsilonReal:    " << resultEpsilonReal << "\tabs(resultEpsilonReal): " << abs(resultEpsilonReal) << endmsg;
-  InfoMsg << "resultEpsilonRealm:    " << resultEpsilonRealm << "\tabs(resultEpsilonRealm): " << abs(resultEpsilonRealm) << endmsg;
-  InfoMsg << "resultPoleInv       : " << resultPoleInv << endmsg;
-  InfoMsg << "resultEpsilonImagInv: " << resultEpsilonImagInv << endmsg;
-  InfoMsg << "resultEpsilonRealInv: " << resultEpsilonRealInv << endmsg;
-  InfoMsg << "resultEpsilonRealmInv: " << resultEpsilonRealmInv << endmsg;
-  currentTMat->invert();
-  InfoMsg << "resultPoleMatrInv       : " << (*currentTMat)(0,0) << "\tabs(): " << abs((*currentTMat)(0,0)) << endmsg;
-  currentTMatImag->invert();
-  InfoMsg << "resultEpsilonImagMatrInv: " << (*currentTMatImag)(0,0) << "\tabs(): " << abs((*currentTMatImag)(0,0)) << endmsg;
-  currentTMatReal->invert();
-  InfoMsg << "resultEpsilonRealMatrInv: " << (*currentTMatReal)(0,0)  << "\tabs(): " << abs((*currentTMatReal)(0,0)) << endmsg;
-  currentTMatRealm->invert();
-  InfoMsg << "resultEpsilonRealmMatrInv: " << (*currentTMatRealm)(0,0)  << "\tabs(): " << abs((*currentTMatRealm)(0,0)) << endmsg;
-  //  result= (resultPole-resultEpsilonImag)/resultEpsilonImag*std::complex<double>(0.,0.00001);
-  //  +  (resultPole-resultEpsilonReal)/resultEpsilonReal*std::complex<double>(0.00001,0.);
-  //  result= (resultPole-resultEpsilonImag)/std::complex<double>(0.,0.00001);
-  //  +  (resultPole-resultEpsilonReal)/std::complex<double>(0.00001,0.);
-
-  std::complex<double> resultApprox=(resultEpsilonRealmInv-resultEpsilonRealInv)/(2.*epsilon);
-  InfoMsg << "resultApprox: " << resultApprox << endmsg;
-  double rho0=imag(_phpVecs.at(0)->ChewM(polePos));
-  double resAbsR=abs(1./resultApprox*rho0);
-  double resTheta=-M_PI+atan(imag(1./resultApprox*rho0)/real(1./resultApprox*rho0));
-
-  InfoMsg << "resAbsR: " << resAbsR << endmsg; 
-  InfoMsg << "resTheta: " << resTheta << " rad\t" << resTheta*180./M_PI << " deg" << endmsg; 
- 
-  result= (resultPoleInv-resultEpsilonImagInv)/epsilon;
-  +  (resultPoleInv-resultEpsilonRealInv)/epsilon;      
-  return result; 
-}
-
 void  TMatrixResidueExtr::CalcResidueAll(){
   std::complex<double> result(0.,0.);
   const double epsilon=0.000001;
   std::complex<double> polePos = CalcMassWidth();
-  std::complex<double> polePosEpsilonImag = polePos + std::complex<double>(0., epsilon);
+  std::complex<double> polePosEpsilonImagp = polePos + std::complex<double>(0., epsilon);
+  std::complex<double> polePosEpsilonImagm = polePos + std::complex<double>(0., -epsilon);
   std::complex<double> polePosEpsilonRealp = polePos + std::complex<double>(epsilon, 0.);
   std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
-
+  // std::complex<double> polePosEpsilonImagp(-polePos.imag()+epsilon, -polePos.real()+epsilon);
+  // std::complex<double> polePosEpsilonImagm(-polePos.imag()-epsilon, -polePos.real()-epsilon);
+  // std::complex<double> polePosEpsilonRealp(polePos.real()+epsilon, polePos.imag()+epsilon);
+  // std::complex<double> polePosEpsilonRealm(polePos.real()-epsilon, polePos.imag()-epsilon);
+  
   std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
   currentTMatRealp->evalMatrix(polePosEpsilonRealp);
+  // currentTMatRealp->invert();
 
   std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
   currentTMatRealm->evalMatrix(polePosEpsilonRealm);
+  // currentTMatRealm->invert();
 
-  InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;  
+  std::shared_ptr<TMatrixRel> currentTMatImagp=_tMatFit->getNewTMat();
+  currentTMatImagp->evalMatrix(polePosEpsilonImagp);
+  // currentTMatImagp->invert();
+
+  std::shared_ptr<TMatrixRel> currentTMatImagm=_tMatFit->getNewTMat();
+  currentTMatImagm->evalMatrix(polePosEpsilonImagm);
+  // currentTMatImagm->invert();
+
+  InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
+  double gammaSum=0.;
+  double brSum=0.;  
   for(int i=0 ; i<_phpVecs.size(); ++i){
     std::complex<double> resultEpsilonRealpInv= 1./(*currentTMatRealp)(i,i);
     std::complex<double> resultEpsilonRealmInv= 1./(*currentTMatRealm)(i,i);
-    std::complex<double> resultApprox=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
+    // std::complex<double> resultEpsilonRealpInv= (*currentTMatRealp)(i,i);
+    // std::complex<double> resultEpsilonRealmInv= (*currentTMatRealm)(i,i);        
+    std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
+    InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
+
+    std::complex<double> resultEpsilonImagpInv= 1./(*currentTMatImagp)(i,i);
+    std::complex<double> resultEpsilonImagmInv= 1./(*currentTMatImagm)(i,i);
+    // std::complex<double> resultEpsilonImagpInv= (*currentTMatImagp)(i,i);
+    // std::complex<double> resultEpsilonImagmInv= (*currentTMatImagm)(i,i);
+    std::complex<double> resultApproxImag=1./PawianConstants::i*(resultEpsilonImagpInv-resultEpsilonImagmInv)/(2.*epsilon);
+    InfoMsg << "resultApproxImag: " << resultApproxImag << endmsg;
+
+    std::complex<double> resultApprox = (resultApproxReal+resultApproxImag)/2.;
+    //    std::complex<double> resultApprox = resultApproxReal;
+    InfoMsg << "resultApprox: " << resultApprox << endmsg;
+    
     double rhoi=imag(_phpVecs.at(i)->ChewM(polePos));
     double resAbsRi=abs(1./resultApprox*rhoi);
     double resThetai=-M_PI+atan(imag(1./resultApprox*rhoi)/real(1./resultApprox*rhoi));
@@ -248,9 +210,14 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     double g_i=sqrt(resAbsRi);
     //double gammai=calcPartialWidth(g_i, polePos, _phpVecs.at(i));
     double gammai=calcPartialWidth(1./resultApprox, polePos, _phpVecs.at(i));
+    //    if(gammai>0.) gammaSum+=gammai;
+    gammaSum+=gammai;
     InfoMsg << "Gamma(" << i << "): " << gammai << endmsg;
-    InfoMsg << "BR(" << i << "): " << gammai/(-2.*polePos.imag()) << endmsg;     
+    InfoMsg << "BR(" << i << "): " << gammai/(-2.*polePos.imag()) << endmsg;
+    //   if(gammai>0.) brSum+=gammai/(-2.*polePos.imag());
+    brSum+=gammai/(-2.*polePos.imag());     
   }
+  InfoMsg << "GammaSum: " << gammaSum << "\tBR Sum: " << brSum << endmsg;
 }
 
 double TMatrixResidueExtr::calcPartialWidth(double gFac, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php){
@@ -259,7 +226,9 @@ double TMatrixResidueExtr::calcPartialWidth(double gFac, std::complex<double> po
 
   double decMass1=phpIso->mass1();
   double decMass2=phpIso->mass2();
+
   complex<double> breakUmMom = php->breakUpMom(poleMass);
+  //  complex<double> breakUmMom = php->breakUpMom(poleMass.real());
   //  double breakUmMom = real(php->breakUpMom(poleMass));  
   double energy1 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass1*decMass1);
   double energy2 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass2*decMass2);
@@ -280,22 +249,27 @@ double TMatrixResidueExtr::calcPartialWidth(double gFac, std::complex<double> po
 
 double  TMatrixResidueExtr::calcPartialWidth(std::complex<double> am1, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php){
   double result=0.;
+  //  complex<double> am1Mod(am1.real(), 2.*am1.imag());
   complex<double> gFac=sqrt(am1);
+  //  complex<double> gFac=sqrt(am1);
   std::shared_ptr<PhaseSpaceIsobar> phpIso =  std::dynamic_pointer_cast<PhaseSpaceIsobar>(php);
 
-  // double decMass1=phpIso->mass1();
-  // double decMass2=phpIso->mass2();
-  complex<double> decMass1(phpIso->mass1(),0.);
-  complex<double> decMass2(phpIso->mass2(),0.);
-  complex<double> breakUmMom = php->breakUpMom(poleMass);
-  //  double breakUmMom = real(php->breakUpMom(poleMass));  
-  // double energy1 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass1*decMass1);
-  // double energy2 = sqrt(breakUmMom.real()*breakUmMom.real()+decMass2*decMass2);
-  //  complex<double> breakUmMom = php->breakUpMom(poleMass);  
-  complex<double> energy1 = sqrt(breakUmMom*breakUmMom+decMass1*decMass1);
-  complex<double> energy2 = sqrt(breakUmMom*breakUmMom+decMass2*decMass2);
+  double decMass1=phpIso->mass1();
+  double decMass2=phpIso->mass2();
+  double breakUmMom = real(php->breakUpMom(poleMass));
+  double energy1 = sqrt(breakUmMom*breakUmMom+decMass1*decMass1);
+  double energy2 = sqrt(breakUmMom*breakUmMom+decMass2*decMass2);
+
   complex<double> gTildeFac = 2.*M_PI*gFac*sqrt(energy1*energy2/decMass1);
-  result=norm(gTildeFac)/(2.*M_PI)*decMass1.real()*breakUmMom.real()/poleMass.real();
-  //  result*=2.; //result seems to be Gamma/2
+
+  result=norm(gTildeFac)/(2.*M_PI)*decMass1*breakUmMom/poleMass.real();
+  //  result=norm(gTildeFac)/(2.*M_PI)*decMass1/poleMass.real();
+    
+  InfoMsg << "\ndecMass1: " <<  decMass1 << "\tdecMass2: " <<  decMass2 << endmsg;
+  InfoMsg << "breakUmMom: " <<  breakUmMom << endmsg;
+  InfoMsg << "energy1: " <<  energy1 << "\tenergy2: " << energy2  << endmsg;
+
+  //  result*=0.2*M_PI/energy2;
+  //  result*=decMass1*M_PI/energy2;  
   return result;
 }

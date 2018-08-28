@@ -150,8 +150,8 @@ int main(int __argc,char *__argv[]){
 
   std::shared_ptr<TMatrixResidueExtr> tMatResidue(new TMatrixResidueExtr(pathToConfigParser, pathToFitParams, sheet, pathToSerialzationFile, energyMin, energyMax, energyStart));
   //  std::complex<double> polePos = tMatResidue->CalcMassWidth();
-  std::complex<double> residue = tMatResidue->CalcResidue();
-  InfoMsg << "residue:      " << residue << endmsg;
+  //  std::complex<double> residue = tMatResidue->CalcResidue();
+  //  InfoMsg << "residue:      " << residue << endmsg;
 
   tMatResidue->CalcResidueAll();
   //  tMatResidue->CalcResidueAll1();
