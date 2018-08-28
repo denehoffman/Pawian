@@ -211,12 +211,12 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     double g_i=sqrt(resAbsRi);
     //double gammai=calcPartialWidth(g_i, polePos, _phpVecs.at(i));
     double gammai=calcPartialWidth(1./resultApprox, polePos, _phpVecs.at(i));
-    //if(gammai>0.) gammaSum+=gammai;
-    gammaSum+=fabs(gammai);
+    if(gammai>0.) gammaSum+=gammai;
+    //gammaSum+=fabs(gammai);
     InfoMsg << "Gamma(" << i << "): " << gammai << endmsg;
     InfoMsg << "BR(" << i << "): " << gammai/(-2.*polePos.imag()) << endmsg;
-    //    if(gammai>0.) brSum+=gammai/(-2.*polePos.imag());
-    brSum+=fabs(gammai/(-2.*polePos.imag()));     
+    if(gammai>0.) brSum+=gammai/(-2.*polePos.imag());
+    //brSum+=fabs(gammai/(-2.*polePos.imag()));     
   }
   InfoMsg << "GammaSum: " << gammaSum << "\tBR Sum: " << brSum << endmsg;
 }

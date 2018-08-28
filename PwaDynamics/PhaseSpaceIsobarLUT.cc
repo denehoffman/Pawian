@@ -72,6 +72,7 @@ complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass){
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const complex<double> mass){
   complex<double> result = getFactor(mass);
   complex<double> momReid= imag(result)*mass/2.0;
+  CorrectForChosenSign(momReid, momReid);
   return momReid;
 }
 
