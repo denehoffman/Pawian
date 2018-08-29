@@ -54,7 +54,6 @@ public:
   // Getters:
   void CalcResidueAll();
   std::complex<double>  CalcMassWidth();
-  double  calcPartialWidth(double gFac, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);
   double  calcPartialWidth(std::complex<double> am1, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);
   void GetCovMatrix();
 
@@ -62,6 +61,8 @@ protected:
 
 
 private:
+  void dumpResult(std::complex<double> polePos, std::vector<double> r, std::vector<double> theta, std::vector<double> gammai);
+
   std::string _pathToSerialzationFile;
   std::complex<double> _energyMin;
   std::complex<double> _energyMax;
