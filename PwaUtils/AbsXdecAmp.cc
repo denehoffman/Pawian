@@ -190,7 +190,7 @@ void AbsXdecAmp::setSpinProjections(int projId){
     theMutex.lock();
     _lam1MinThreadMap[std::this_thread::get_id()]=currentProjection;
     _lam1MaxThreadMap[std::this_thread::get_id()]=currentProjection;
-//    DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam1MaxThreadMap[std::this_thread::get_id()] << endmsg;
+    DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam1MaxThreadMap[std::this_thread::get_id()] << endmsg;
     theMutex.unlock();
   }
   else _decAmpDaughter1->setSpinProjections(projId);
@@ -201,7 +201,7 @@ void AbsXdecAmp::setSpinProjections(int projId){
       theMutex.lock();
       _lam2MinThreadMap[std::this_thread::get_id()]=currentProjection;
       _lam2MaxThreadMap[std::this_thread::get_id()]=currentProjection;
-//      DebugMsg << "set spin projection: " << _daughter2Name << " _lam1Min: " << _lam2MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam2MaxThreadMap[std::this_thread::get_id()] << endmsg;
+      DebugMsg << "set spin projection: " << _daughter2Name << " _lam1Min: " << _lam2MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam2MaxThreadMap[std::this_thread::get_id()] << endmsg;
       theMutex.unlock();
     }
     else _decAmpDaughter2->setSpinProjections(projId);
