@@ -57,15 +57,14 @@ complex<double> PhaseSpaceIsobarLUT::factor(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarLUT::breakUpMom(const double mass){
-  complex<double> SqrtSCompl(mass, 0.0);
-  complex<double> result = getFactor(SqrtSCompl);
-  complex<double> momReid(imag(result)*mass/2.0, 0.);
-  return momReid;
+  complex<double> currentQ=2.*ChewM(mass)/mass;
+  complex<double> result(currentQ.imag(), 0.);
+  return result;  
 }
 
 complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass){
-  complex<double> result = getFactor(mass);
-  complex<double> rho(result.imag(), 0.); 
+  complex<double> currentCM=ChewM(mass);
+  complex<double> rho(currentCM.imag(), 0.); 
   return rho;
 }
 

@@ -258,19 +258,25 @@ double  TMatrixResidueExtr::calcPartialWidth(std::complex<double> am1, std::comp
   double decMass1=phpIso->mass1();
   double decMass2=phpIso->mass2();
   double breakUmMom = real(php->breakUpMom(poleMass));
-  double energy1 = sqrt(breakUmMom*breakUmMom+decMass1*decMass1);
-  double energy2 = sqrt(breakUmMom*breakUmMom+decMass2*decMass2);
+  // double energy1 = sqrt(breakUmMom*breakUmMom+decMass1*decMass1);
+  // double energy2 = sqrt(breakUmMom*breakUmMom+decMass2*decMass2);
 
-  complex<double> gTildeFac = 2.*M_PI*gFac*sqrt(energy1*energy2/decMass1);
+  // complex<double> gTildeFac = 2.*M_PI*gFac*sqrt(energy1*energy2/decMass1);
 
-  result=norm(gTildeFac)/(2.*M_PI)*decMass1*breakUmMom/poleMass.real();
-  //  result=norm(gTildeFac)/(2.*M_PI)*decMass1/poleMass.real();
+  // result=norm(gTildeFac)/(2.*M_PI)*decMass1*breakUmMom/poleMass.real();
+  // //  result=norm(gTildeFac)/(2.*M_PI)*decMass1/poleMass.real();
     
   InfoMsg << "\ndecMass1: " <<  decMass1 << "\tdecMass2: " <<  decMass2 << endmsg;
   InfoMsg << "breakUmMom: " <<  breakUmMom << endmsg;
-  InfoMsg << "energy1: " <<  energy1 << "\tenergy2: " << energy2  << endmsg;
+  // InfoMsg << "energy1: " <<  energy1 << "\tenergy2: " << energy2  << endmsg;
 
-  result/=0.5*M_PI*energy1*energy2;
+  // result/=0.5*M_PI*energy1*energy2;
+
+   double rho = real(php->factor(poleMass));
+   InfoMsg << "rho: " <<  rho << endmsg;
+   result=2.*norm(gFac)*rho;
+   
+
   //  result*=0.2*M_PI/energy2;
   //  result*=decMass1*M_PI/energy2;  
   return result;
