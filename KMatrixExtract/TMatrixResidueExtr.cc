@@ -151,13 +151,13 @@ std::complex<double> TMatrixResidueExtr::CalcMassWidth(){
 }
 
 void  TMatrixResidueExtr::CalcResidueAll(){
-  vector<double> rAbsVec;
-  rAbsVec.resize(_phpVecs.size());
-  vector<double> thetaVec;
-  thetaVec.resize(_phpVecs.size());
-  vector<double> gammaVec;
-  gammaVec.resize(_phpVecs.size());
-  
+  vector<ResidueProperties> resPropReal;
+  resPropReal.resize(_phpVecs.size());
+  vector<ResidueProperties> resPropImag;
+  resPropImag.resize(_phpVecs.size());
+  vector<ResidueProperties> resPropAverage;
+  resPropAverage.resize(_phpVecs.size());
+
   std::complex<double> result(0.,0.);
   const double epsilon=0.000001;
   std::complex<double> polePos = CalcMassWidth();
@@ -168,98 +168,86 @@ void  TMatrixResidueExtr::CalcResidueAll(){
   
   std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
   currentTMatRealp->evalMatrix(polePosEpsilonRealp);
-
+  
   std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
   currentTMatRealm->evalMatrix(polePosEpsilonRealm);
-
+  
   std::shared_ptr<TMatrixRel> currentTMatImagp=_tMatFit->getNewTMat();
   currentTMatImagp->evalMatrix(polePosEpsilonImagp);
-
+  
   std::shared_ptr<TMatrixRel> currentTMatImagm=_tMatFit->getNewTMat();
   currentTMatImagm->evalMatrix(polePosEpsilonImagm);
-
+  
   InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
-
-
+  
+  
   double gammaSum=0.;
   double brSum=0.;  
   for(unsigned int i=0 ; i<_phpVecs.size(); ++i){
+    ResidueProperties  currentResPropReal;
+    ResidueProperties  currentResPropImag;
+    ResidueProperties  currentResPropAverage;
+
     std::complex<double> resultEpsilonRealpInv= 1./(*currentTMatRealp)(i,i);
     std::complex<double> resultEpsilonRealmInv= 1./(*currentTMatRealm)(i,i);
     std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
     InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
-
+    
     std::complex<double> resultEpsilonImagpInv= 1./(*currentTMatImagp)(i,i);
     std::complex<double> resultEpsilonImagmInv= 1./(*currentTMatImagm)(i,i);
     std::complex<double> resultApproxImag=1./PawianConstants::i*(resultEpsilonImagpInv-resultEpsilonImagmInv)/(2.*epsilon);
     InfoMsg << "resultApproxImag: " << resultApproxImag << endmsg;
-
+    
     std::complex<double> resultApprox = (resultApproxReal+resultApproxImag)/2.;
     InfoMsg << "resultApprox: " << resultApprox << endmsg;
     
     double rhoi=imag(_phpVecs.at(i)->ChewM(polePos));
-    double resAbsRi=abs(1./resultApprox*rhoi);
-    rAbsVec.at(i)=resAbsRi;
-    double resThetai=-M_PI+atan(imag(1./resultApprox*rhoi)/real(1./resultApprox*rhoi));
-    thetaVec.at(i)=resThetai*180./M_PI;
+  
+    currentResPropReal.absR=abs(1./resultApproxReal*rhoi);
+    currentResPropImag.absR=abs(1./resultApproxImag*rhoi);
+    currentResPropAverage.absR=abs(1./resultApprox*rhoi);
 
-    InfoMsg << "\nrho(" << i << "): " << rhoi << endmsg; 
-    InfoMsg << "\nresAbsR(" << i << "): " << resAbsRi << endmsg; 
-    InfoMsg << "resTheta(" << i << "): " << resThetai << " rad\t" << resThetai*180./M_PI << " deg" << endmsg;
+    currentResPropReal.theta=atan2(imag(1./resultApproxReal),real(1./resultApproxReal));
+    currentResPropImag.theta=atan2(imag(1./resultApproxImag),real(1./resultApproxImag));
+    currentResPropAverage.theta=atan2(imag(1./resultApprox),real(1./resultApprox));
 
-    double gammai=calcPartialWidth(1./resultApprox, polePos, _phpVecs.at(i));
-    if(gammai>0.) gammaSum+=gammai;
-    InfoMsg << "Gamma(" << i << "): " << gammai << endmsg;
-    InfoMsg << "BR(" << i << "): " << gammai/(-2.*polePos.imag()) << endmsg;
-    if(gammai>0.) brSum+=gammai/(-2.*polePos.imag());
+    currentResPropReal.gammai=2.*abs(1./resultApproxReal*rhoi);
+    currentResPropImag.gammai=2.*abs(1./resultApproxImag*rhoi);
+    currentResPropAverage.gammai=2.*abs(1./resultApprox*rhoi);
 
-    gammaVec.at(i)=gammai;
+     resPropReal.at(i)=currentResPropReal;
+    resPropImag.at(i)=currentResPropImag;
+    resPropAverage.at(i)=currentResPropAverage;
   }
-  InfoMsg << "GammaSum: " << gammaSum << "\tBR Sum: " << brSum << endmsg;
-  dumpResult(polePos, rAbsVec, thetaVec, gammaVec);
+  
+  dumpResult(polePos, resPropReal, resPropImag, resPropAverage);
 }
 
-double  TMatrixResidueExtr::calcPartialWidth(std::complex<double> am1, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php){
-  double result=0.;
-  complex<double> gFac=sqrt(am1);
-  std::shared_ptr<PhaseSpaceIsobar> phpIso =  std::dynamic_pointer_cast<PhaseSpaceIsobar>(php);
-
-  double decMass1=phpIso->mass1();
-  double decMass2=phpIso->mass2();
-  double breakUmMom = real(php->breakUpMom(poleMass));
-  // double energy1 = sqrt(breakUmMom*breakUmMom+decMass1*decMass1);
-  // double energy2 = sqrt(breakUmMom*breakUmMom+decMass2*decMass2);
-
-  // complex<double> gTildeFac = 2.*M_PI*gFac*sqrt(energy1*energy2/decMass1);
-
-  // result=norm(gTildeFac)/(2.*M_PI)*decMass1*breakUmMom/poleMass.real();
-  // //  result=norm(gTildeFac)/(2.*M_PI)*decMass1/poleMass.real();
-    
-  InfoMsg << "\ndecMass1: " <<  decMass1 << "\tdecMass2: " <<  decMass2 << endmsg;
-  InfoMsg << "breakUmMom: " <<  breakUmMom << endmsg;
-  // InfoMsg << "energy1: " <<  energy1 << "\tenergy2: " << energy2  << endmsg;
-
-  // result/=0.5*M_PI*energy1*energy2;
-
-   double rho = real(php->factor(poleMass));
-   InfoMsg << "rho: " <<  rho << endmsg;
-   result=2.*norm(gFac)*rho;
-
-  return result;
-}
-
-void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<double> r, std::vector<double> theta, std::vector<double> gammai){
+void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv){
   std::string oFileName("residues.out");
   std::ofstream theStream(oFileName);
-  double gammaTotal=0.;
-
+  double gammaTotalr=0.;
+  double gammaTotali=0.;
+  double gammaTotalav=0.;
   theStream << "m - i/2. Gamma = " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << std::endl << std::endl;
-  theStream << setw(7) << "channel" << setw(15) << "|r|"  << setw(15) << "Theta[grad]" << setw(15) << "Gamma_i" << setw(15) << "BR[%]"  << std::endl;
+  theStream << setw(7) << "channel" 
+	    << setw(12) << "Theta(r)"  << setw(12) << "Gamma_i(r)" << setw(12) << "BR[%](r)"
+	    << setw(12) << "Theta(i)"  << setw(12) << "Gamma_i(i)" << setw(12) << "BR[%](i)" 
+	    << setw(12) << "Theta(av)" << setw(12) << "Gamma_i(av)" << setw(12) << "BR[%](av)"  << std::endl;
 
-  for (unsigned int i=0; i<r.size(); ++i){
-    theStream << setw(7) << i <<  setw(15) << r.at(i) << setw(15) << theta.at(i) << setw(15) << gammai.at(i) << setw(15) << -gammai.at(i)/(2.*polePos.imag()) << std::endl;
-    if(gammai.at(i)>0.) gammaTotal+=gammai.at(i);   
-  }
-
-  theStream << setw(7) << "total" << setw(45)  << gammaTotal << setw(15) << -gammaTotal/(2.*polePos.imag()) << std::endl;
+ for (unsigned int i=0; i<resPropReal.size(); ++i){
+   theStream << setw(7) << i  
+	     << setw(12) << resPropReal.at(i).theta*180./M_PI << setw(12) << resPropReal.at(i).gammai << setw(12) << -resPropReal.at(i).gammai/(2.*polePos.imag())
+	     << setw(12) << resPropImag.at(i).theta*180./M_PI << setw(12) << resPropImag.at(i).gammai << setw(12) << -resPropImag.at(i).gammai/(2.*polePos.imag())
+	     << setw(12) << resPropAv.at(i).theta*180./M_PI << setw(12) << resPropAv.at(i).gammai << setw(12) << -resPropAv.at(i).gammai/(2.*polePos.imag())
+	     << std::endl;
+   gammaTotalr+=resPropReal.at(i).gammai;
+   gammaTotali+=resPropImag.at(i).gammai;
+   gammaTotalav+=resPropAv.at(i).gammai; 
+ }  
+   theStream << setw(7) << "all" 
+	     << setw(36) << -gammaTotalr/(2.*polePos.imag())
+	     << setw(36) << -gammaTotali/(2.*polePos.imag())
+	     << setw(36) << -gammaTotalav/(2.*polePos.imag()) 
+	     << std::endl;
 }

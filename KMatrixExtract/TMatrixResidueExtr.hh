@@ -38,6 +38,12 @@ class AbsPhaseSpace;
 class PwaCovMatrix;
 class TMatrixExtrFit;
 
+struct ResidueProperties {
+  double absR;
+  double theta;
+  double gammai;
+};
+
 class TMatrixResidueExtr {
 
 public:
@@ -54,14 +60,13 @@ public:
   // Getters:
   void CalcResidueAll();
   std::complex<double>  CalcMassWidth();
-  double  calcPartialWidth(std::complex<double> am1, std::complex<double> poleMass, std::shared_ptr<AbsPhaseSpace> php);
   void GetCovMatrix();
 
 protected:
 
 
 private:
-  void dumpResult(std::complex<double> polePos, std::vector<double> r, std::vector<double> theta, std::vector<double> gammai);
+  void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
 
   std::string _pathToSerialzationFile;
   std::complex<double> _energyMin;
