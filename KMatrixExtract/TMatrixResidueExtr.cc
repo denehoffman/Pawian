@@ -167,16 +167,16 @@ void  TMatrixResidueExtr::CalcResidueAll(){
   std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
   
   std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
-  currentTMatRealp->evalMatrix(polePosEpsilonRealp);
+  currentTMatRealp->evalLorenzInvMatrix(polePosEpsilonRealp);
   
   std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
-  currentTMatRealm->evalMatrix(polePosEpsilonRealm);
+  currentTMatRealm->evalLorenzInvMatrix(polePosEpsilonRealm);
   
   std::shared_ptr<TMatrixRel> currentTMatImagp=_tMatFit->getNewTMat();
-  currentTMatImagp->evalMatrix(polePosEpsilonImagp);
+  currentTMatImagp->evalLorenzInvMatrix(polePosEpsilonImagp);
   
   std::shared_ptr<TMatrixRel> currentTMatImagm=_tMatFit->getNewTMat();
-  currentTMatImagm->evalMatrix(polePosEpsilonImagm);
+  currentTMatImagm->evalLorenzInvMatrix(polePosEpsilonImagm);
   
   InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
   
@@ -201,21 +201,19 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     std::complex<double> resultApprox = (resultApproxReal+resultApproxImag)/2.;
     InfoMsg << "resultApprox: " << resultApprox << endmsg;
     
-    double rhoi=imag(_phpVecs.at(i)->ChewM(polePos));
-  
-    currentResPropReal.absR=abs(1./resultApproxReal*rhoi);
-    currentResPropImag.absR=abs(1./resultApproxImag*rhoi);
-    currentResPropAverage.absR=abs(1./resultApprox*rhoi);
+    currentResPropReal.absR=abs(1./resultApproxReal);
+    currentResPropImag.absR=abs(1./resultApproxImag);
+    currentResPropAverage.absR=abs(1./resultApprox);
 
     currentResPropReal.theta=atan2(imag(1./resultApproxReal),real(1./resultApproxReal));
     currentResPropImag.theta=atan2(imag(1./resultApproxImag),real(1./resultApproxImag));
     currentResPropAverage.theta=atan2(imag(1./resultApprox),real(1./resultApprox));
 
-    currentResPropReal.gammai=2.*abs(1./resultApproxReal*rhoi);
-    currentResPropImag.gammai=2.*abs(1./resultApproxImag*rhoi);
-    currentResPropAverage.gammai=2.*abs(1./resultApprox*rhoi);
+    currentResPropReal.gammai=2.*abs(1./resultApproxReal);
+    currentResPropImag.gammai=2.*abs(1./resultApproxImag);
+    currentResPropAverage.gammai=2.*abs(1./resultApprox);   
 
-     resPropReal.at(i)=currentResPropReal;
+    resPropReal.at(i)=currentResPropReal;
     resPropImag.at(i)=currentResPropImag;
     resPropAverage.at(i)=currentResPropAverage;
   }

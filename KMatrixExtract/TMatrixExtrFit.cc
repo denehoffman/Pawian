@@ -67,7 +67,7 @@ TMatrixExtrFit::~TMatrixExtrFit()
 }
 
 double TMatrixExtrFit::calcTMatrix(double eReal, double eImag){
-  _tMatr->evalMatrix( std::complex<double>(eReal, eImag) );
+  _tMatr->evalLorenzInvMatrix( std::complex<double>(eReal, eImag) );
   return std::abs((*_tMatr)(0,0));
 }
 
