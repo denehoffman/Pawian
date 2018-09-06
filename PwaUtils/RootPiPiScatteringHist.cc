@@ -121,6 +121,8 @@ void RootPiPiScatteringHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::s
 
   theLh->updateFitParams(fitParams);
 
+  double weightFit = fitParams->Value(theLh->getChannelScaleParam());
+
   const std::vector<EvtData*> dataList=theLh->getDataVec();
   double integralDataWWeight=0.;
 
@@ -130,7 +132,7 @@ void RootPiPiScatteringHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::s
     {
       //      integralDataWWeight+=weight;
       fillEvt((*it), weight, "data", dataPoint);
-      fillEvt((*it), weight, "fit", dataPoint);
+      fillEvt((*it), weightFit, "fit", dataPoint);
       InfoMsg << "data No " << (*it)->evtNo << " filled!!!" << endmsg;
       ++dataPoint;
       ++it;
@@ -181,6 +183,7 @@ void RootPiPiScatteringHist::fillEvt(EvtData* theData, double weight, std::strin
     }
     else{
       _fitVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME));
+      _fitVal*=weight;
       _dataGraph->SetPoint(pointNr, _massVal, _fitVal);
       _dataGraph->SetPointError(pointNr, 0., 0.);
     }
