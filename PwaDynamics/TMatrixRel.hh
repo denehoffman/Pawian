@@ -54,7 +54,7 @@ public:
 
   virtual void evalMatrix(const double mass);
   virtual void evalMatrix(const complex<double> mass);
-  virtual void evalLorenzInvMatrix(const complex<double> mass);
+  virtual void evalNonRelMatrix(const complex<double> mass);
 
 private:
   template<typename MassType>

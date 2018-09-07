@@ -81,7 +81,7 @@ void TMatrixRel::evalMatrixTemplate(const MassType mass){
 
 
 
-void TMatrixRel::evalLorenzInvMatrix(const complex<double> mass){
+void TMatrixRel::evalNonRelMatrix(const complex<double> mass){
    vector<std::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
    evalMatrix(mass);
    for (int i=0; i<NumRows(); ++i){

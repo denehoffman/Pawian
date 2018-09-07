@@ -167,16 +167,16 @@ void  TMatrixResidueExtr::CalcResidueAll(){
   std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
   
   std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
-  currentTMatRealp->evalLorenzInvMatrix(polePosEpsilonRealp);
+  currentTMatRealp->evalNonRelMatrix(polePosEpsilonRealp);
   
   std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
-  currentTMatRealm->evalLorenzInvMatrix(polePosEpsilonRealm);
+  currentTMatRealm->evalNonRelMatrix(polePosEpsilonRealm);
   
   std::shared_ptr<TMatrixRel> currentTMatImagp=_tMatFit->getNewTMat();
-  currentTMatImagp->evalLorenzInvMatrix(polePosEpsilonImagp);
+  currentTMatImagp->evalNonRelMatrix(polePosEpsilonImagp);
   
   std::shared_ptr<TMatrixRel> currentTMatImagm=_tMatFit->getNewTMat();
-  currentTMatImagm->evalLorenzInvMatrix(polePosEpsilonImagm);
+  currentTMatImagm->evalNonRelMatrix(polePosEpsilonImagm);
   
   InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
   
