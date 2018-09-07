@@ -59,7 +59,8 @@ void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
   
   double denom=_poleMass*_poleMass-mass*mass;
   if(std::abs(denom) < 1e-10){
-     denom = 1.E-10;
+    if(denom<0.) denom = -1.E-10;
+    else denom = 1.E-10;
   }
 
   for (int i=0; i< int(_g_i.size()); ++i){
