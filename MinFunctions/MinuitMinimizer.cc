@@ -51,15 +51,32 @@ MinuitMinimizer::MinuitMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shar
 void MinuitMinimizer::minimize(){
   //  MnMigrad migrad(*_absFcn, _startPawianParams->mnUserParameters());
   //  MnUserParameters startMnUserP(*_startMnUserParametersPtr);
- MnMigrad migrad(*_absFcn, *_startMnUserParametersPtr);
- //    MnMigrad migrad(*_absFcn, startMnUserP);
-  InfoMsg <<"start migrad "<< endmsg;
-  FunctionMinimum currentFunctionMinimum = migrad(0, GlobalEnv::instance()->parser()->tolerance());
+  unsigned int stratLevel=GlobalEnv::instance()->parser()->minuitStrategyLevel();
+  MnMigrad migrad(*_absFcn, *_startMnUserParametersPtr);
+  FunctionMinimum* currentFunctionMinimum=0;
 
-  if(currentFunctionMinimum.IsValid()){
+  if(stratLevel==1){
+    currentFunctionMinimum= new FunctionMinimum(migrad(0, GlobalEnv::instance()->parser()->tolerance()));
+    InfoMsg <<"start migrad with strategy level " << 1 << endmsg;
+  }
+  else if(stratLevel==2){
+    MnMigrad migrad2a(*_absFcn, *_startMnUserParametersPtr, MnStrategy(2));
+    InfoMsg <<"start migrad with strategy level " << stratLevel << endmsg;
+    currentFunctionMinimum = new FunctionMinimum(migrad2a(0, GlobalEnv::instance()->parser()->tolerance()));
+  }
+  else{
+    Alert << "MIGRAD strategy level " << GlobalEnv::instance()->parser()->minuitStrategyLevel() << " is not supported!!!" << endmsg;
+    exit(1);
+  }
+
+ //    MnMigrad migrad(*_absFcn, startMnUserP);
+  InfoMsg <<"start migrad " << endmsg;
+  //  FunctionMinimum currentFunctionMinimum = migrad(0, GlobalEnv::instance()->parser()->tolerance());
+
+  if(currentFunctionMinimum->IsValid()){
     //     return funcMin;
     _minimumReached=true;
-    _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
+    _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(*currentFunctionMinimum));
     //    _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
     _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
     _bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
@@ -73,39 +90,42 @@ void MinuitMinimizer::minimize(){
     
     // Check minimum covariance matrix
     bool badCovarianceDiagonal=false;
-    if(currentFunctionMinimum.HasCovariance()){
-      badCovarianceDiagonal = !PwaCovMatrix::DiagonalIsValid(currentFunctionMinimum.UserCovariance());
+    if(currentFunctionMinimum->HasCovariance()){
+      badCovarianceDiagonal = !PwaCovMatrix::DiagonalIsValid(currentFunctionMinimum->UserCovariance());
     }
     
     if(badCovarianceDiagonal){
       InfoMsg << "bad covariance diagonal matrix: Using default errors" << endmsg;
       std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
-      for(unsigned int i=0; i< currentFunctionMinimum.UserParameters().Params().size();i++){
-	newMnUserParams->SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
+      for(unsigned int i=0; i< currentFunctionMinimum->UserParameters().Params().size();i++){
+	newMnUserParams->SetValue(i, currentFunctionMinimum->UserParameters().Params().at(i));
       }
       MnMigrad migrad2(*_absFcn, *newMnUserParams, MnStrategy(2));
-      currentFunctionMinimum = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
+      if(0!=currentFunctionMinimum) delete currentFunctionMinimum;
+      currentFunctionMinimum = new FunctionMinimum(migrad2(0, GlobalEnv::instance()->parser()->tolerance()));
     }
     else{
       std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
-      for(unsigned int i=0; i< currentFunctionMinimum.UserParameters().Params().size();i++){
-	newMnUserParams->SetValue(i, currentFunctionMinimum.UserParameters().Params().at(i));
-	newMnUserParams->SetError(i, currentFunctionMinimum.UserParameters().Errors().at(i));
+      for(unsigned int i=0; i< currentFunctionMinimum->UserParameters().Params().size();i++){
+	newMnUserParams->SetValue(i, currentFunctionMinimum->UserParameters().Params().at(i));
+	newMnUserParams->SetError(i, currentFunctionMinimum->UserParameters().Errors().at(i));
       }
       MnMigrad migrad2(*_absFcn, *newMnUserParams, MnStrategy(2));
-      currentFunctionMinimum = migrad2(0, GlobalEnv::instance()->parser()->tolerance());
+      if(0!=currentFunctionMinimum) delete currentFunctionMinimum;
+      currentFunctionMinimum = new FunctionMinimum(migrad2(0, GlobalEnv::instance()->parser()->tolerance()));
     }
     
-    if(currentFunctionMinimum.IsValid()){
+    if(currentFunctionMinimum->IsValid()){
       break;
     }
   }
   _minimumReached=true;
-  _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(currentFunctionMinimum));
+  _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(*currentFunctionMinimum));
   //  _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
   _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
   _bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
-  ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);  
+  ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);
+  if(0!=currentFunctionMinimum) delete currentFunctionMinimum;  
 }
 
 

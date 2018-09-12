@@ -86,6 +86,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_fixAllPhases(false)
   ,_nllScalingFactor(1.)
   ,_addChannelScalingId(false)
+  ,_minuitStrategyLevel(1)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -147,6 +148,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("prePathKMatrixFiles",po::value<string>(&_prePathKMatrixFiles), "option to set a pre path to the K-matrix files")
     ("scalingWithChannelID",po::value<bool>(&_scalingWithChannelID), "scaling with suffix for channel IDs")
     ("fixAllPhases",po::value<bool>(&_fixAllPhases), "option to fix all phases")
+    ("minuitStrategyLevel",po::value<unsigned int>(&_minuitStrategyLevel),  "set strategy level for minuit fit (1 and 2 are supported)")
     ;
   
   _config->add_options()
@@ -290,6 +292,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "fixAllPhases: " << _fixAllPhases << "\n\n"
 		<< "nllScalingFactor: " << _nllScalingFactor << "\n\n"
 		<< "addChannelScalingId: " <<_addChannelScalingId << "\n\n"
+		<< "minuitStrategyLevel: " << _minuitStrategyLevel << "\n\n"
                 << endl;
 
 
