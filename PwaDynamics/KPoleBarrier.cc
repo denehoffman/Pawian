@@ -35,7 +35,8 @@ KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::share
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
-    _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(mass_0);
+    // _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(mass_0);
+    _phpVecs.at(i)->breakUpMom(mass_0);
   }
 }
 
@@ -46,16 +47,27 @@ KPoleBarrier::~KPoleBarrier(){
 
 void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
   //  evalMatrixTemplate(mass, OrbMom);
+
   for (int i=0; i< int(_phpVecs.size()); ++i){
     if(_truncatedBarrier){
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+          _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
+                                                                                _breakUpM0.at(i), BarrierFactor::qRDefault);
     }
-    else{
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
-    }
+    else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
+  							      _breakUpM0.at(i), BarrierFactor::qRDefault);
+
+    //    if(OrbMom==0) _barrierFactor.at(i) = 1.; 
   }
+
+    // if(_truncatedBarrier){
+    //   _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+    // 								      _breakUpM0.at(i), BarrierFactor::qRDefault);
+    // }
+    // else{
+    //   _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
+    // 							       _breakUpM0.at(i), BarrierFactor::qRDefault);
+    // }
+  // }
   
   double denom=_poleMass*_poleMass-mass*mass;
   if(std::abs(denom) < 1e-10){

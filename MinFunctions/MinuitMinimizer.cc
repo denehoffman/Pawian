@@ -56,12 +56,12 @@ void MinuitMinimizer::minimize(){
   FunctionMinimum* currentFunctionMinimum=0;
 
   if(stratLevel==1){
-    currentFunctionMinimum= new FunctionMinimum(migrad(0, GlobalEnv::instance()->parser()->tolerance()));
     InfoMsg <<"start migrad with strategy level " << 1 << endmsg;
+    currentFunctionMinimum= new FunctionMinimum(migrad(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else if(stratLevel==2){
     MnMigrad migrad2a(*_absFcn, *_startMnUserParametersPtr, MnStrategy(2));
-    InfoMsg <<"start migrad with strategy level " << stratLevel << endmsg;
+    InfoMsg <<"start migrad with strategy level " << 2 << endmsg;
     currentFunctionMinimum = new FunctionMinimum(migrad2a(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else{

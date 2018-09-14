@@ -75,11 +75,19 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
   _KPiAmpRealH1->SetYTitle("K #pi amp Re");
   _KPiAmpImagH1= new TH1F("_KPiAmpImagH1","K #pi amp Im",size+1, massMin, massMax);
   _KPiAmpImagH1->SetYTitle("K #pi amp Im");
+  
+  _KPiArgandUnitH1 = new TH1F("_KPiArgandUnitH1","K #pi Argand Unit Iso 1/2",size+1, massMin, massMax);
+  _KPiArgandUnitH1->SetYTitle("K #pi Argand Unit Iso 1/2");
 
+  _KPiPhaseH1 = new TH1F("_KPiPhaseH1","#phi [grad] Iso 1/2",size+1, massMin, massMax);
+  _KPiPhaseH1->SetYTitle("#phi [grad] Iso 1/2");
+  
   _KPiAmpRealLASSH1= new TH1F("_KPiAmpRealLASSH1","K #pi amp Re LASS",size+1, massMin, massMax);
   _KPiAmpRealLASSH1->SetYTitle("K #pi amp Re");
   _KPiAmpImagLASSH1= new TH1F("_KPiAmpImagLASSH1","K #pi amp Im LASS",size+1, massMin, massMax);
   _KPiAmpImagLASSH1->SetYTitle("K #pi amp Im");
+
+
 
   std::shared_ptr<KMatrixBase> theKMatrixIso12(new KMatrixKPiSFocus(1));
   std::shared_ptr<KMatrixBase> theKMatrixIso32(new KMatrixKPiSFocus(3));
@@ -104,6 +112,10 @@ KPiSWaveTMatrix::KPiSWaveTMatrix() :
     //    complex<double> currentVal=(*theTMatrix12)(0,0);
        _KPiAmpRealH1->Fill(mass, sqrt(thePhpVecs[0]->factor(mass4Vec.M()).real())*currentVal.real());    
        _KPiAmpImagH1->Fill(mass, sqrt(thePhpVecs[0]->factor(mass4Vec.M()).real())*currentVal.imag());
+       //       _KPiArgandUnitH1->Fill(mass, std::abs(thePhpVecs[0]->factor(mass4Vec.M()).real()*currentVal));
+       _KPiArgandUnitH1->Fill(mass, std::abs(thePhpVecs[0]->factor(mass4Vec.M()).real()*(*theTMatrix12)(0,0)));
+       //       _KPiArgandUnitH1->Fill(mass, std::abs(currentVal));
+       _KPiPhaseH1->Fill(mass, std::arg((*theTMatrix12)(0,0))*180./M_PI);
   }
 }
 

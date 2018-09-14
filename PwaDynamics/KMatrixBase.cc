@@ -33,7 +33,7 @@ KMatrixBase::KMatrixBase(vector<std::shared_ptr<KPole> > Kpoles, vector<std::sha
   ,_phpVecs(phpVecs)
   ,_orderBg(0)
   ,_s0Adler(0.)
-  ,_snormAdler(1.)
+  ,_snormAdler(0.036437581) //2.*m(pi0)^2
 {
  }
 
@@ -42,7 +42,7 @@ KMatrixBase::KMatrixBase(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int nu
   ,_phpVecs(phpVecs)
   ,_orderBg(0)
   ,_s0Adler(0.)
-  ,_snormAdler(1.)
+  ,_snormAdler(0.036437581) //2.*m(pi0)^2
 {
  }
 
@@ -50,7 +50,7 @@ KMatrixBase::KMatrixBase(int numCols, int numRows) :
   Matrix< complex<double> >::Matrix(numCols, numRows)
   ,_orderBg(0)
   ,_s0Adler(0.)
-  ,_snormAdler(1.)
+  ,_snormAdler(0.036437581) //2.*m(pi0)^2
 {
  }
 

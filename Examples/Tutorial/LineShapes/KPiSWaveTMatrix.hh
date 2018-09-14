@@ -68,6 +68,8 @@ private:
   TH1F* _KPiAmpImagH1;
   TH1F* _KPiAmpRealLASSH1;
   TH1F* _KPiAmpImagLASSH1;
+  TH1F* _KPiArgandUnitH1;
+  TH1F* _KPiPhaseH1;
 };
 
 

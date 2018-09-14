@@ -150,7 +150,8 @@ void TMatrixDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fit
 
     //Adler-term
     if(_withKMatAdler){
-      fitPar->Add("s0"+_kMatName, _currentAdler0, fabs(_currentAdler0)+0.2);
+      //      fitPar->Add("s0"+_kMatName, _currentAdler0, 0.005, 0., 0.036437);
+      fitPar->Add("s0"+_kMatName, _currentAdler0, 0.005, 0., 0.3);
     }
   }
 
