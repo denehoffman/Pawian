@@ -123,6 +123,7 @@ Meson a2(1320)-		a_2(1320)^-  		-3 4  1  0 -1   2  -2 0  0 	1.318 	0.107 	relBW	
 Meson rhoHat(1405)0 	\hat{\rho}(1405)^0  	0  2 -1  1 -1   2  0  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
 Meson rhoHat(1405)+ 	\hat{\rho}(1405)^+  	3  2 -1  0 -1   2  +2  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
 Meson rhoHat(1405)- 	\hat{\rho}(1405)^-  	-3  2 -1  0 -1   2  -2  0  0 	1.406 	0.180  	relBW	[PDG hybrid candidate]
+Meson pi(1400)0         \pi(1400)               0  2 -1  1 -1   2  0  0  0      1.354   0.330   relBW   [PDG no idea]
 Meson a0(1450)0 	a_0(1450)^0  		0  0  1  1 -1   2  0  0  0 	1.474 	0.265  	relBW	[PDG nonett 2^3P_0]
 Meson a0(1450)+ 	a_0(1450)^+  		3  0  1  0 -1   2  2  0  0 	1.474 	0.265  	relBW	[PDG nonett 2^3P_0]
 Meson a0(1450)- 	a_0(1450)^-  		-3 0  1  0 -1   2  -2 0  0 	1.474 	0.265  	relBW	[PDG nonett 2^3P_0] 
