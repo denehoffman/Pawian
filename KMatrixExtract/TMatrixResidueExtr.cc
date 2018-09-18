@@ -167,16 +167,20 @@ void  TMatrixResidueExtr::CalcResidueAll(){
   std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
   
   std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
-  currentTMatRealp->evalNonRelMatrix(polePosEpsilonRealp);
+  //  currentTMatRealp->evalNonRelMatrix(polePosEpsilonRealp);
+  currentTMatRealp->evalMatrix(polePosEpsilonRealp);
   
   std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
-  currentTMatRealm->evalNonRelMatrix(polePosEpsilonRealm);
+  //  currentTMatRealm->evalNonRelMatrix(polePosEpsilonRealm);
+  currentTMatRealm->evalMatrix(polePosEpsilonRealm);
   
   std::shared_ptr<TMatrixRel> currentTMatImagp=_tMatFit->getNewTMat();
-  currentTMatImagp->evalNonRelMatrix(polePosEpsilonImagp);
+  //  currentTMatImagp->evalNonRelMatrix(polePosEpsilonImagp);
+  currentTMatImagp->evalMatrix(polePosEpsilonImagp);
   
   std::shared_ptr<TMatrixRel> currentTMatImagm=_tMatFit->getNewTMat();
-  currentTMatImagm->evalNonRelMatrix(polePosEpsilonImagm);
+  //  currentTMatImagm->evalNonRelMatrix(polePosEpsilonImagm);
+  currentTMatImagm->evalMatrix(polePosEpsilonImagm);
   
   InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
   
@@ -188,13 +192,13 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     ResidueProperties  currentResPropImag;
     ResidueProperties  currentResPropAverage;
 
-    std::complex<double> resultEpsilonRealpInv= 1./(*currentTMatRealp)(i,i);
-    std::complex<double> resultEpsilonRealmInv= 1./(*currentTMatRealm)(i,i);
+    std::complex<double> resultEpsilonRealpInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()*(*currentTMatRealp)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonRealp).real());
+    std::complex<double> resultEpsilonRealmInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()*(*currentTMatRealm)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonRealm).real());
     std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
     InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
     
-    std::complex<double> resultEpsilonImagpInv= 1./(*currentTMatImagp)(i,i);
-    std::complex<double> resultEpsilonImagmInv= 1./(*currentTMatImagm)(i,i);
+    std::complex<double> resultEpsilonImagpInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()*(*currentTMatImagp)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonImagp).real());
+    std::complex<double> resultEpsilonImagmInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()*(*currentTMatImagm)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonImagm).real());
     std::complex<double> resultApproxImag=1./PawianConstants::i*(resultEpsilonImagpInv-resultEpsilonImagmInv)/(2.*epsilon);
     InfoMsg << "resultApproxImag: " << resultApproxImag << endmsg;
     
@@ -209,9 +213,18 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     currentResPropImag.theta=atan2(imag(1./resultApproxImag),real(1./resultApproxImag));
     currentResPropAverage.theta=atan2(imag(1./resultApprox),real(1./resultApprox));
 
+    // currentResPropReal.gammai=2.*_phpVecs.at(i)->factor(polePos).real()*abs(1./resultApproxReal);
+    // currentResPropImag.gammai=2.*_phpVecs.at(i)->factor(polePos).real()*abs(1./resultApproxImag);
+    // currentResPropAverage.gammai=2.*_phpVecs.at(i)->factor(polePos).real()*abs(1./resultApprox); 
+    
+    // currentResPropReal.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApprox);
+
     currentResPropReal.gammai=2.*abs(1./resultApproxReal);
     currentResPropImag.gammai=2.*abs(1./resultApproxImag);
-    currentResPropAverage.gammai=2.*abs(1./resultApprox);   
+    currentResPropAverage.gammai=2.*abs(1./resultApprox);
+    
 
     resPropReal.at(i)=currentResPropReal;
     resPropImag.at(i)=currentResPropImag;
