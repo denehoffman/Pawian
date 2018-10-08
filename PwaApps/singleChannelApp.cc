@@ -116,8 +116,11 @@ int main(int __argc,char *__argv[]){
    theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
 
    GlobalEnv::instance()->replaceParser(GlobalEnv::instance()->Channel(0)->parser());
+   std::vector<int> channelIDs; 
+   channelIDs.push_back(GlobalEnv::instance()->parser()->singleChannelId());
 
-   GlobalEnv::instance()->setupChannelEnvs();
+   Alert << "trying to set channel ID to " << channelIDs[0] << endmsg;
+   GlobalEnv::instance()->setupChannelEnvs(channelIDs);
 
   // Set the desired error logging mode
   setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());

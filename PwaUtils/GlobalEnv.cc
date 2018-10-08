@@ -53,57 +53,96 @@ GlobalEnv::GlobalEnv() :
 
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::Channel(int id) const {
-   return _channelEnvs.at(id).first;
+   if(_channelEnvs.size()==1) {
+     return _channelEnvs.at(0).first;
+   } else {
+     return _channelEnvs.at(id).first;
+   }
 }
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::PbarpChannel(int id) const {
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_PBARP){
-      Alert << "Faultily accessing non-pbarp channel environment." << endmsg;
+   if(_channelEnvs.size()==1) {
+     if(_channelEnvs.at(0).second != AbsChannelEnv::CHANNEL_PBARP){
+       Alert << "Faultily accessing non-pbarp channel environment." << endmsg;
+     }
+     return _channelEnvs.at(0).first;
+   } else {
+     if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_PBARP){
+       Alert << "Faultily accessing non-pbarp channel environment." << endmsg;
+     }
+     return _channelEnvs.at(id).first;
    }
-   return _channelEnvs.at(id).first;
 }
 
-
-
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::EpemChannel(int id) const {
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_EPEM){
-      Alert << "Faultily accessing non-epem channel environment." << endmsg;
+   if(_channelEnvs.size()==1) {
+     if(_channelEnvs.at(0).second != AbsChannelEnv::CHANNEL_EPEM){
+       Alert << "Faultily accessing non-epem channel environment." << endmsg;
+     }
+     return _channelEnvs.at(0).first;
+   } else {
+     if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_EPEM){
+       Alert << "Faultily accessing non-epem channel environment." << endmsg;
+     }
+     return _channelEnvs.at(id).first;
    }
-
-   return _channelEnvs.at(id).first;
 }
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::GammapChannel(int id) const {
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GAMMAP){
-      Alert << "Faultily accessing non-epem channel environment." << endmsg;
+   if(_channelEnvs.size()==1) {
+     if(_channelEnvs.at(0).second != AbsChannelEnv::CHANNEL_GAMMAP){
+       Alert << "Faultily accessing non-gammap channel environment." << endmsg;
+     }
+     return _channelEnvs.at(0).first;
+   } else {
+     if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GAMMAP){
+       Alert << "Faultily accessing non-gammap channel environment." << endmsg;
+     }
+     return _channelEnvs.at(id).first;
    }
-
-   return _channelEnvs.at(id).first;
 }
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::GGChannel(int id) const {
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GG){
-      Alert << "Faultily accessing non-gg channel environment." << endmsg;
+   if(_channelEnvs.size()==1) {
+     if(_channelEnvs.at(0).second != AbsChannelEnv::CHANNEL_GG){
+       Alert << "Faultily accessing non-gg channel environment." << endmsg;
+     }
+     return _channelEnvs.at(0).first;
+   } else {
+     if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_GG){
+       Alert << "Faultily accessing non-gg channel environment." << endmsg;
+     }
+     return _channelEnvs.at(id).first;
    }
-
-   return _channelEnvs.at(id).first;
 }
 
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::ResChannel(int id) const {
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_RES){
-      Alert << "Faultily accessing non-res channel environment." << endmsg;
+   if(_channelEnvs.size()==1) {
+     if(_channelEnvs.at(0).second != AbsChannelEnv::CHANNEL_RES){
+       Alert << "Faultily accessing non-res channel environment." << endmsg;
+     }
+     return _channelEnvs.at(0).first;
+   } else {
+     if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_RES){
+       Alert << "Faultily accessing non-res channel environment." << endmsg;
+     }
+     return _channelEnvs.at(id).first;
    }
-
-   return _channelEnvs.at(id).first;
 }
 
 const std::shared_ptr<AbsChannelEnv> GlobalEnv::PiPiScatteringChannel(int id) const {
-   if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
-      Alert << "Faultily accessing pipi scattering channel environment." << endmsg;
+   if(_channelEnvs.size()==1) {
+     if(_channelEnvs.at(0).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+       Alert << "Faultily accessing pipi scattering channel environment." << endmsg;
+     }
+     return _channelEnvs.at(0).first;
+   } else {
+     if(_channelEnvs.at(id).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+       Alert << "Faultily accessing pipi scattering channel environment." << endmsg;
+     }
+     return _channelEnvs.at(id).first;
    }
-
-   return _channelEnvs.at(id).first;
 }
 
 
@@ -123,6 +162,35 @@ void GlobalEnv::setupChannelEnvs(){
    int id=0;
    for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
       (*it).first->setupChannel(id);
+      if((*it).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
+         if (!(*it).first->checkReactionChain()){
+            Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;
+            exit(1);
+         }
+         (*it).first->setWignerDRefs();
+      }
+      ++id;
+   }
+
+   _channelEnvsAlredySetup=true;
+}
+
+void GlobalEnv::setupChannelEnvs(std::vector<int> channelIDs){
+   if(_channelEnvsAlredySetup){
+      Alert << "channel environments already setup!!!" << endmsg;
+      exit(1);
+   }
+   if(channelIDs.size() != _channelEnvs.size()) {
+      Alert << "Number of preferred channel IDs does not match number of channels to be set up!" << endmsg;
+      exit(1);
+   }
+   //suffix map for global replacement
+   GlobalEnv::instance()->fillReplacedSuffixMap(_theParser);
+
+   int id = 0;
+   for(auto it = _channelEnvs.begin(); it!=_channelEnvs.end();++it){
+      (*it).first->setupChannel(channelIDs[id]);
+      Alert << "setting up channel " << channelIDs[id] << endmsg;
       if((*it).second != AbsChannelEnv::CHANNEL_PIPISCATTERING){
          if (!(*it).first->checkReactionChain()){
             Alert << "Something wrong with the reaction chain for channelTypeName: " << (*it).first->channelTypeName() << endmsg;

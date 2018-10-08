@@ -50,6 +50,7 @@ public:
   void replaceParser(ParserBase* theParser);
    void AddEnv(std::shared_ptr<AbsChannelEnv> newEnv, short channelType);
   void setupChannelEnvs();
+  void setupChannelEnvs(std::vector<int> channelIDs);
    
   ParticleTable* particleTable() {return _particleTable;}
    ParserBase* parser() {return _theParser;}
