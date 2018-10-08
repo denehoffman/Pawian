@@ -192,22 +192,38 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     ResidueProperties  currentResPropImag;
     ResidueProperties  currentResPropAverage;
 
-    std::complex<double> resultEpsilonRealpInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()*(*currentTMatRealp)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonRealp).real());
-    std::complex<double> resultEpsilonRealmInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()*(*currentTMatRealm)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonRealm).real());
+  //   std::complex<double> resultEpsilonRealpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()/polePosEpsilonRealp.real())*(*currentTMatRealp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()/polePosEpsilonRealp.real()));
+  //   std::complex<double> resultEpsilonRealmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()/polePosEpsilonRealm.real())*(*currentTMatRealm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()*polePosEpsilonRealm.real()));
+  //   std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
+  //   InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
+    
+  //   std::complex<double> resultEpsilonImagpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()/polePosEpsilonImagp.real())*(*currentTMatImagp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()/polePosEpsilonImagp.real()));
+  // std::complex<double> resultEpsilonImagmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()/polePosEpsilonImagm.real())*(*currentTMatImagm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()/polePosEpsilonImagm.real()));
+
+    // std::complex<double> resultEpsilonRealpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()/polePosEpsilonRealp)*(*currentTMatRealp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()/polePosEpsilonRealp));
+    // std::complex<double> resultEpsilonRealmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()/polePosEpsilonRealm)*(*currentTMatRealm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()*polePosEpsilonRealm));
+    // std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
+    // InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
+    
+    // std::complex<double> resultEpsilonImagpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()/polePosEpsilonImagp)*(*currentTMatImagp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()/polePosEpsilonImagp));
+    // std::complex<double> resultEpsilonImagmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()/polePosEpsilonImagm)*(*currentTMatImagm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()/polePosEpsilonImagm));
+    
+    std::complex<double> resultEpsilonRealpInv= 1./(*currentTMatRealp)(i,i);
+    std::complex<double> resultEpsilonRealmInv= 1./(*currentTMatRealm)(i,i);
     std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
     InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
     
-    std::complex<double> resultEpsilonImagpInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()*(*currentTMatImagp)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonImagp).real());
-    std::complex<double> resultEpsilonImagmInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()*(*currentTMatImagm)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonImagm).real());
+    std::complex<double> resultEpsilonImagpInv= 1./(*currentTMatImagp)(i,i);
+    std::complex<double> resultEpsilonImagmInv= 1./(*currentTMatImagm)(i,i);    
     std::complex<double> resultApproxImag=1./PawianConstants::i*(resultEpsilonImagpInv-resultEpsilonImagmInv)/(2.*epsilon);
     InfoMsg << "resultApproxImag: " << resultApproxImag << endmsg;
     
     std::complex<double> resultApprox = (resultApproxReal+resultApproxImag)/2.;
     InfoMsg << "resultApprox: " << resultApprox << endmsg;
     
-    currentResPropReal.absR=abs(1./resultApproxReal);
-    currentResPropImag.absR=abs(1./resultApproxImag);
-    currentResPropAverage.absR=abs(1./resultApprox);
+    currentResPropReal.absR=abs(sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)/resultApproxReal);
+    currentResPropImag.absR=abs(sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)/resultApproxImag);
+    currentResPropAverage.absR=abs(sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)/resultApprox);
 
     currentResPropReal.theta=atan2(imag(1./resultApproxReal),real(1./resultApproxReal));
     currentResPropImag.theta=atan2(imag(1./resultApproxImag),real(1./resultApproxImag));
@@ -221,11 +237,37 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     // currentResPropImag.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApproxImag);
     // currentResPropAverage.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApprox);
 
-    currentResPropReal.gammai=2.*abs(1./resultApproxReal);
-    currentResPropImag.gammai=2.*abs(1./resultApproxImag);
-    currentResPropAverage.gammai=2.*abs(1./resultApprox);
-    
+    // currentResPropReal.gammai=2.*abs(1./resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(1./resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(1./resultApprox);
+    // currentResPropReal.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)*sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)*sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)*sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)/resultApprox);
+    // currentResPropReal.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)*sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)*sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)*sqrt(_phpVecs.at(i)->factor(polePos).real()/polePos)/resultApprox);
 
+    // currentResPropReal.gammai=2.*abs(sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos)/polePos)/resultApprox);
+
+    // currentResPropReal.gammai=2.*abs(sqrt(1./polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos))*sqrt(_phpVecs.at(i)->ChewM(polePos))/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(sqrt(1./polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos))*sqrt(_phpVecs.at(i)->ChewM(polePos))/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(sqrt(1./polePos)*sqrt(_phpVecs.at(i)->ChewM(polePos))*sqrt(_phpVecs.at(i)->ChewM(polePos))/resultApprox);
+
+    // currentResPropReal.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos))*sqrt(_phpVecs.at(i)->factor(polePos))/polePos.real()/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos))*sqrt(_phpVecs.at(i)->factor(polePos))/polePos.real()/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos))*sqrt(_phpVecs.at(i)->factor(polePos))/polePos.real()/resultApprox);
+
+    currentResPropReal.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos))*sqrt(_phpVecs.at(i)->factor(polePos))/resultApproxReal);
+    currentResPropImag.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos))*sqrt(_phpVecs.at(i)->factor(polePos))/resultApproxImag);
+    currentResPropAverage.gammai=2.*abs(sqrt(_phpVecs.at(i)->factor(polePos))*sqrt(_phpVecs.at(i)->factor(polePos))/resultApprox);
+
+    
+    // currentResPropReal.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)*_phpVecs.at(i)->factor(polePos)/polePos.real()/resultApproxReal);
+    // currentResPropImag.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)*_phpVecs.at(i)->factor(polePos)/polePos.real()/resultApproxImag);
+    // currentResPropAverage.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)*_phpVecs.at(i)->factor(polePos)/polePos.real()/resultApprox); 
+    
     resPropReal.at(i)=currentResPropReal;
     resPropImag.at(i)=currentResPropImag;
     resPropAverage.at(i)=currentResPropAverage;
