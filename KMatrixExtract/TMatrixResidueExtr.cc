@@ -192,13 +192,13 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     ResidueProperties  currentResPropImag;
     ResidueProperties  currentResPropAverage;
 
-    std::complex<double> resultEpsilonRealpInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonRealp).real()*(*currentTMatRealp)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonRealp).real());
-    std::complex<double> resultEpsilonRealmInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonRealm).real()*(*currentTMatRealm)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonRealm).real());
+    std::complex<double> resultEpsilonRealpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos))*(*currentTMatRealp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
+    std::complex<double> resultEpsilonRealmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos))*(*currentTMatRealm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
     std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
     InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
     
-    std::complex<double> resultEpsilonImagpInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonImagp).real()*(*currentTMatImagp)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonImagp).real());
-    std::complex<double> resultEpsilonImagmInv= 1./(_phpVecs.at(i)->factor(polePosEpsilonImagm).real()*(*currentTMatImagm)(i,i)*_phpVecs.at(i)->factor(polePosEpsilonImagm).real());
+    std::complex<double> resultEpsilonImagpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos))*(*currentTMatImagp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
+    std::complex<double> resultEpsilonImagmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos))*(*currentTMatImagm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));    
     std::complex<double> resultApproxImag=1./PawianConstants::i*(resultEpsilonImagpInv-resultEpsilonImagmInv)/(2.*epsilon);
     InfoMsg << "resultApproxImag: " << resultApproxImag << endmsg;
     
@@ -213,18 +213,9 @@ void  TMatrixResidueExtr::CalcResidueAll(){
     currentResPropImag.theta=atan2(imag(1./resultApproxImag),real(1./resultApproxImag));
     currentResPropAverage.theta=atan2(imag(1./resultApprox),real(1./resultApprox));
 
-    // currentResPropReal.gammai=2.*_phpVecs.at(i)->factor(polePos).real()*abs(1./resultApproxReal);
-    // currentResPropImag.gammai=2.*_phpVecs.at(i)->factor(polePos).real()*abs(1./resultApproxImag);
-    // currentResPropAverage.gammai=2.*_phpVecs.at(i)->factor(polePos).real()*abs(1./resultApprox); 
-    
-    // currentResPropReal.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApproxReal);
-    // currentResPropImag.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApproxImag);
-    // currentResPropAverage.gammai=2.*abs(_phpVecs.at(i)->factor(polePos)/resultApprox);
-
     currentResPropReal.gammai=2.*abs(1./resultApproxReal);
     currentResPropImag.gammai=2.*abs(1./resultApproxImag);
-    currentResPropAverage.gammai=2.*abs(1./resultApprox);
-    
+    currentResPropAverage.gammai=2.*abs(1./resultApprox);    
 
     resPropReal.at(i)=currentResPropReal;
     resPropImag.at(i)=currentResPropImag;
