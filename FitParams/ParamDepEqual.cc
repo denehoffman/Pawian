@@ -21,7 +21,7 @@
 //                                                                        //
 //************************************************************************//
 
-// Copyright 2014 Julian Pychy
+// Copyright 2014 Julian Pychy, 2018 Malte Albrecht
 
 
 #include "FitParams/ParamDepEqual.hh"
@@ -29,11 +29,22 @@
 #include "ErrLogger/ErrLogger.hh"
 
 ParamDepEqual::ParamDepEqual(std::istringstream& configLine, std::shared_ptr<AbsPawianParameters> params){
-  std::string targetParameter;
-  configLine >> targetParameter;
-
+  std::string refParameter;
   std::vector<std::string> targetParameterVec;
-  targetParameterVec.push_back(targetParameter);
+  configLine >> refParameter;
+  _idRef = params->Index(refParameter);
+  _idRefs.push_back(_idRef);
+//  InfoMsg << "ParamDepEquals called with refParamId=" << _idRefs.at(0) << " and name=" << refParameter << endmsg;
+  
+  while(configLine) { 
+    std::string parNameTarget;
+    configLine >> parNameTarget;
+    if(parNameTarget!="") {
+      targetParameterVec.push_back(parNameTarget);
+//      InfoMsg << "Target params are: " << parNameTarget << endmsg;
+    }
+  }
+
   Fill(targetParameterVec, params);
   FillDerived(configLine);     
 }
@@ -42,17 +53,12 @@ ParamDepEqual::~ParamDepEqual(){
 }
 
 void ParamDepEqual::FillDerived(std::istringstream& configLine){
-  std::string parNameRef;
-  configLine >> parNameRef;
-  _idRef = _params->Index(parNameRef);
-  _idRefs.push_back(_idRef);
-}
+} 
 
 void ParamDepEqual::Apply(std::shared_ptr<AbsPawianParameters> params){
-  params->SetValue(_idsTarget.at(0), params->Value(_idRef));
+
+  for(int it=0; it< _idsTarget.size(); it++) {
+    params->SetValue(_idsTarget.at(it), params->Value(_idRefs.at(0)));
+//    InfoMsg << "Apply: setting _idsTarget.at(" << it << ")=" << _idsTarget.at(it) << " to Value(" << _idRefs.at(0) << ")=" << params->Value(_idRefs.at(0)) << endmsg;
+  }
 }
-
-
-
-
-
