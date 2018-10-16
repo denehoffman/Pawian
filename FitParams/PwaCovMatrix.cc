@@ -121,3 +121,14 @@ bool PwaCovMatrix::DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMin
    }
    return result;
 }
+
+void PwaCovMatrix::printElements(){
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+  std::map<std::string, double>::iterator it2;
+
+  for(it1=_covMatrix.begin(); it1!=_covMatrix.end(); ++it1){
+    for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
+      std::cout << std::setw(20) << it1->first << std::setw(45) << it2->first << std::setw(20) << it2->second << std::endl;
+    }
+  }
+}

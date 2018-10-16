@@ -1,6 +1,12 @@
 alias install : install-lib ;
 explicit install ;
 
+install install-bin : StreamerTestApp PwaCovMatrixApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
 install install-lib : FitParams
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
@@ -19,3 +25,4 @@ lib FitParams :
 	: <library>$(TOP)//Minuit2 ;
 
 exe StreamerTestApp : StreamerTestApp.cc FitParams $(TOP)/qft++//qft++ : ;
+exe PwaCovMatrixApp : PwaCovMatrixApp.cc FitParams : ;
