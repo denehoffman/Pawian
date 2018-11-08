@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : TMatrixFitApp  TMatrixErrorExtrApp TMatrixResidueExtrApp
+install install-bin : TMatrixFitApp  TMatrixErrorExtrApp TMatrixResidueExtrApp ArgandModuloConverterApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -33,3 +33,4 @@ lib KMatrixExtract :
 exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract : ;
 exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract : ;
 exe TMatrixResidueExtrApp : TMatrixResidueExtrApp.cc KMatrixExtract : ;
+exe ArgandModuloConverterApp : ArgandModuloConverterApp.cc KMatrixExtract : ;

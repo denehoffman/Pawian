@@ -94,8 +94,8 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
   _dataFourvecs->Branch("dataErrVal", &_dataErrVal, "dataErrVal");
 
   _fittedFourvecs->Branch("mass", &_massVal, "mass");
-  _fittedFourvecs->Branch("dataVal", &_dataVal, "dataVal");
-  _fittedFourvecs->Branch("dataErrVal", &_dataErrVal, "dataErrVal");
+  _fittedFourvecs->Branch("fitVal", &_fitVal, "fitVal");
+  //  _fittedFourvecs->Branch("dataErrVal", &_dataErrVal, "dataErrVal");
  }
 
 RootPiPiScatteringHist::~RootPiPiScatteringHist(){
