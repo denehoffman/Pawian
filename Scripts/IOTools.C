@@ -68,11 +68,13 @@ class IOTools
   while (!inputStream.eof()){
     std::string currentLine;
     getline (inputStream, currentLine);
-    std::size_t pos = currentLine.find(" "); 
-    std::string parname = currentLine.substr(1,pos);
-    inputStream >> parname;
+    std::size_t pos = currentLine.find("\t"); 
+    std::string parname = currentLine.substr(0,pos);
+    if(parname=="") break;
+    //    inputStream >> parname;
+    std::cout << "parname: " << parname << std::endl;
     if(withMnParFix) oStream << mnParFixStr;  
-    oStream << parname << std::endl;    
+    oStream << parname << std::endl;
   }
 
   inputStream.close();
