@@ -25,6 +25,7 @@
 // Copyright 2013,2018 Julian Pychy, Malte Albrecht
 
 #include <boost/random.hpp>
+#include <chrono>
 #include "PwaUtils/GlobalEnv.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsLh.hh"
@@ -272,7 +273,8 @@ std::shared_ptr<AbsPawianParameters> GlobalEnv::randomPawianParams(){
 
    typedef boost::normal_distribution<double> NormalDistribution;
    typedef boost::mt19937 RandomGenerator;
-   static RandomGenerator rng(static_cast<unsigned> (time(0)));
+   auto seed = chrono::high_resolution_clock::now().time_since_epoch().count();
+   static RandomGenerator rng(static_cast<unsigned> (seed));
 
    std::vector<std::string> _fixedParams = fixedParams();
 
