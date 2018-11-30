@@ -153,7 +153,8 @@ int main(int __argc,char *__argv[]){
   //  std::complex<double> residue = tMatResidue->CalcResidue();
   //  InfoMsg << "residue:      " << residue << endmsg;
 
-  tMatResidue->CalcResidueAll();
+//  tMatResidue->CalcResidueAll();
+  tMatResidue->Calculation();
   //  tMatResidue->CalcResidueAll1();
 
   // tMatFit->Calculation();

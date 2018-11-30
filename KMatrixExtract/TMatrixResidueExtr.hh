@@ -1,6 +1,7 @@
 //************************************************************************//
 //									  //
 //  Copyright 2018 Bertram Kopf (bertram@ep1.rub.de)			  //
+//                 Xiaoshuai Qin (xqin@ep1.rub.de)  
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -33,6 +34,7 @@
 #include <memory>
 #include "math.h" 
 
+#include "KMatrixExtract/TMatrixExtrBase.hh"
 class AbsPawianParameters;
 class AbsPhaseSpace;
 class PwaCovMatrix;
@@ -42,9 +44,12 @@ struct ResidueProperties {
   double absR;
   double theta;
   double gammai;
+  double errAbsR;
+  double errTheta;
+  double errGammai;
 };
 
-class TMatrixResidueExtr {
+class TMatrixResidueExtr : public TMatrixExtrBase {
 
 public:
 
@@ -58,9 +63,11 @@ public:
   virtual ~TMatrixResidueExtr();
 
   // Getters:
-  void CalcResidueAll();
-  std::complex<double>  CalcMassWidth();
-  void GetCovMatrix();
+  void Calculation();
+  void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
+  //  std::complex<double>  CalcMassWidth();
+  std::complex<double> CalcMassWidth(std::shared_ptr<AbsPawianParameters> currentParameters);
+  bool GetCovMatrix();
 
 protected:
 
