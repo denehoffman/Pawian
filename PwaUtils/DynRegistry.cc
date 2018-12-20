@@ -42,6 +42,7 @@
 #include "PwaUtils/KMatrixDynamics.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
+#include "PwaUtils/JohnsonDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"
 #include "PwaUtils/BlattWBarrierDynamics.hh"
 #include "PwaUtils/RadM1Dynamics.hh"
@@ -158,6 +159,8 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       result= std::shared_ptr<AbsDynamics>(new PiPiSWaveASDynamics(theName, fsParticles, theDec->motherPart(), GlobalEnv::instance()->particleTable()));
     else if(theDec->dynType()=="Voigt") 
       result= std::shared_ptr<AbsDynamics>(new VoigtDynamics(theName, fsParticles, theDec->motherPart()));
+    else if(theDec->dynType()=="Johnson") 
+      result= std::shared_ptr<AbsDynamics>(new JohnsonDynamics(theName, fsParticles, theDec->motherPart()));
     else if(theDec->dynType()=="K0star1430Lass") 
       result= std::shared_ptr<AbsDynamics>(new K0star1430LassDynamics(theName, fsParticles, theDec->motherPart()));
     else if(theDec->dynType()=="BlattWBarrier"){
