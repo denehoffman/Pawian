@@ -287,7 +287,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 	// thePhitheDelta += 180.0*n180ShiftRel;
 	//theDelta += 180.0*n180ShiftRel;
 	//	double thePhi=0.5*currentphase+ 45.0;
-	complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(currentRho.real())*(*_tMatr)(i,i);
+	complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*currentRho.real()*(*_tMatr)(i,i);
 	oStream << mass << "\t" 
 			<< theDelta << "\t" << 0.01 << "\t" 
 		<<  sqrt(norm(SijRel)) << "\t" << 0.001 
