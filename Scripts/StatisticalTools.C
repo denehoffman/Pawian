@@ -49,6 +49,6 @@ class StatisticalTools
   }
 
   static double BIC(double NLL, int ndf, int nEvts){
-    return 2.*NLL+2.*ndf*log(nEvts);
+    return 2.*NLL+ndf*log(nEvts);
   } 
 };
