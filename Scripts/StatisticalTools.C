@@ -29,18 +29,26 @@
 class StatisticalTools
 {
  public:
-  static double sigmaFromLikelihoodRatio(unsigned double diffLH, unsigned int diffParams){
-    return ROOT::Math::chisquared_quantile_c(TMath::Prob(2.*diffLH, diffParams), 1);
+  static double sigmaFromLikelihoodRatio(unsigned double diffNLL, unsigned int diffParams){
+    return ROOT::Math::chisquared_quantile_c(TMath::Prob(2.*diffNLL, diffParams), 1);
   }
 
-  static double sigmaFromLikelihoodRatio(double LH1, int ndf1, double LH2, int ndf2){
-    double diffLH=fabs(LH1-LH2);
+  static double sigmaFromLikelihoodRatio(double NLL1, int ndf1, double NLL2, int ndf2){
+    double diffNLL=fabs(NLL1-NLL2);
     int diffParams=ndf1-ndf2;
     if(diffParams<0){
       cout << "ndf2 > ndf1 !!!!\n" 
            << "this is not supported!!!" << endl;
       return -10000000000000.;
     }
-    return sigmaFromLikelihoodRatio(diffLH, diffParams);    
+    return sigmaFromLikelihoodRatio(diffNLL, diffParams);    
 }
+
+  static double AIC(double NLL, int ndf){
+    return 2.*NLL+2.*ndf;
+  }
+
+  static double BIC(double NLL, int ndf, int nEvts){
+    return 2.*NLL+2.*ndf*log(nEvts);
+  } 
 };
