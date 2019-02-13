@@ -195,12 +195,20 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   // MnMigrad migrad3(fitFcn, min.UserState(), MnStrategy(3));
   // min = migrad3();
 
+  //start second iteration
+  // MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(1));  
+  // min = migrad2();
+
   if(!min.IsValid()) {
 	// Try with higher strategy
 	InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-	MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
-	min = migrad2();
+	MnMigrad migrad2b(fitFcn, min.UserState(), MnStrategy(2));
+	min = migrad2b();
   }
+
+  // //start second iteration
+  // MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(1));  
+  // min = migrad2();
 
   // Save final fit parameters and their errors in variables
   double final_eReal = min.UserState().Value("eReal");
@@ -222,5 +230,13 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   if(min.HasReachedCallLimit()) InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
   if(min.IsAboveMaxEdm())       InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
   if(min.HesseFailed())         InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+
+  double final_eRealError = min.UserState().Error("eReal");
+  double final_eImagError = min.UserState().Error("eImag");
+
+  InfoMsg << "\n\n****** fit error for pole position  ********" << endmsg;  
+  InfoMsg << "Real error: " <<  final_eRealError << endmsg;
+  InfoMsg << "eImag error: " <<  final_eImagError << endmsg;
+  InfoMsg << "\n***********************\n"  << endmsg;
   return std::complex<double>(final_eReal, final_eImag);
 }
