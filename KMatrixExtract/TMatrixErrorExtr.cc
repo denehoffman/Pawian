@@ -206,9 +206,9 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
 	min = migrad2b();
   }
 
-  // //start second iteration
-  // MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(1));  
-  // min = migrad2();
+  //start second iteration
+  //  MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(1));  
+  //  min = migrad2();
 
   // Save final fit parameters and their errors in variables
   double final_eReal = min.UserState().Value("eReal");
