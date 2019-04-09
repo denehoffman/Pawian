@@ -483,6 +483,9 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 	//	prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
 	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
         prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
+
+	//workaround: prodParticle4Vec must be slightly rotated it flight directions is exactly the z-axis     
+	if( fabs(prodParticle4Vec.Px()) < 1.e-8 && fabs(prodParticle4Vec.Py()) < 1.e-8) prodParticle4Vec.SetV4(prodParticle4Vec.E(), prodParticle4Vec.Px()+1.e-8, prodParticle4Vec.Py()-1.e-8, prodParticle4Vec.Pz()); 	
       }
     }
     else if(whichDecayLevel()==decayLevel::secondLevel){
