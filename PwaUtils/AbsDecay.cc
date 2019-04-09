@@ -468,31 +468,28 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   Vector4<double> daughter1HelMother(0.,0.,0.,0.);
+  Vector4<double> motherRefVec;
   if(_hasMotherPart){
     if(whichDecayLevel()==decayLevel::isProdAmp){
       Alert << "this amplitude " << name() <<" has got a mother and is a production amplitude!!!" << endmsg;
       exit(1); 
     }
-    Vector4<double> motherRefVec;
     if(whichDecayLevel()==decayLevel::firstLevel){
       motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) motherRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
 	//z-axis=beam axis y-axis perpendicular to e+ e- initial state
-	//	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
-	//	prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-        prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
-
-	//workaround: prodParticle4Vec must be slightly rotated it flight directions is exactly the z-axis     
-	if( fabs(prodParticle4Vec.Px()) < 1.e-8 && fabs(prodParticle4Vec.Py()) < 1.e-8) prodParticle4Vec.SetV4(prodParticle4Vec.E(), prodParticle4Vec.Px()+1.e-8, prodParticle4Vec.Py()-1.e-8, prodParticle4Vec.Pz()); 	
+	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
+	prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+	// motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+        // prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
       }
     }
     else if(whichDecayLevel()==decayLevel::secondLevel){
       motherRefVec=all4Vec;
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
- 	//motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
+ 	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+	//	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
       }
     }
     else{
@@ -577,6 +574,13 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 		<< "\tPy: " << daughter1HelMother.Py()
 		<< "\tPz: " << daughter1HelMother.Pz()  
 		<< endmsg;
+
+	Alert << "motherRefVec: " << motherRefVec << endmsg;
+	Alert << "prodParticle4Vec: " << prodParticle4Vec << endmsg;
+	Alert << "mother4Vec: " << mother4Vec << endmsg;
+	Alert << "daughter1_4Vec: " << daughter1_4Vec << endmsg;
+	Alert << "daughter2_4Vec: " << daughter2_4Vec << endmsg;
+	//	daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
        	exit(1); 
       }
     }
