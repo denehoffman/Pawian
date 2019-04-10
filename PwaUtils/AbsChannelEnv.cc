@@ -75,10 +75,21 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
   std::string init4VecStr=theParser->intitial4Vec();
   _initial4Vec=extract4Vec(init4VecStr);
   InfoMsg << "initial4Vec: " << _initial4Vec << endmsg;
-
+  if(_initial4Vec.E() < _initial4Vec.P() ){
+    Alert << "something is wrong with initial4Vec: energy>momentum"
+	  << "\ncorrect order in the cfg-file is 'E Px Py Pz' "
+	  << endmsg;
+    exit(1); 
+  } 
   std::string projectile4VecStr=theParser->projectile4Vec();
   _projectile4Vec=extract4Vec(projectile4VecStr);
   InfoMsg << "projectile4Vec: " << _projectile4Vec << endmsg;
+  if(_projectile4Vec.E() < _projectile4Vec.P() ){
+    Alert << "something is wrong with projectile4Vec: energy>momentum"
+	  << "\ncorrect order in the cfg-file is 'E Px Py Pz' "
+	  << endmsg;
+    exit(1); 
+  } 
   _theLh.reset();
 }
 

@@ -489,7 +489,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       motherRefVec=all4Vec;
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
  	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-	//	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
+	// motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
       }
     }
     else{
