@@ -428,6 +428,7 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     Vector4<double>  result4Vec(0.,0.,0.,0.);
     Vector4<double>  result4Vec2(0.,0.,0.,0.);
     Vector4<double>  refVec=all4Vec;
+
     if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-6 &&
 	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-6 &&
 	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-6 &&
@@ -440,8 +441,31 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     }
     if (frame=="heli"){
       if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GG){
-	motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec();
-	refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
+	// motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec();
+	// refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
+
+
+	//quantization axis defined by gamma gamma axis; 
+	//assumption: boths gamma direction on z-axis in lab frame (approximation for real gammas)
+	double all4VecMass = all4Vec.Mass();
+	double all4VecP = all4Vec.P();
+
+	double Gam1E=0.5*sqrt(all4VecMass*all4VecMass+all4VecP*all4VecP)+0.5*all4VecP;
+	double Gam2E=0.5*sqrt(all4VecMass*all4VecMass+all4VecP*all4VecP)-0.5*all4VecP;
+        
+	Vector4<double> gam1Lab(Gam1E,0.,0.,Gam1E);
+        Vector4<double> gam2Lab(Gam2E,0.,0.,-Gam2E);
+	if(all4Vec.Pz() < 0.){
+	  gam1Lab = Vector4<double>(Gam1E, 0., 0., -Gam1E);
+	  gam1Lab = Vector4<double>(Gam2E, 0., 0., Gam2E);
+	}
+
+
+	Vector4<double> gamgamLab=gam1Lab+gam2Lab;
+
+	motherRef4Vec=gamgamLab;
+	refVec=gam1Lab;
+
 	// motherRef4Vec=GlobalEnv::instance()->Channel()->projectile4Vec();
 	// refVec=GlobalEnv::instance()->Channel()->initial4Vec();
       }
