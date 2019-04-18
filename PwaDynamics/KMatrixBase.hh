@@ -62,7 +62,6 @@ public:
   virtual void updateBgTerms(unsigned int order, unsigned int row,  unsigned int column, double theVal);
   virtual void updates0Adler(double s0Adler) {_s0Adler=s0Adler;}
   virtual void updatesnormAdler(double snormAdler) {_snormAdler=snormAdler;}
-
   void SetBumImPartSigns(std::vector<double> signs);
   virtual void printElements();
 

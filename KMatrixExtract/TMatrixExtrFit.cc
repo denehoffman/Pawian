@@ -67,7 +67,7 @@ TMatrixExtrFit::~TMatrixExtrFit()
 }
 
 double TMatrixExtrFit::calcTMatrix(double eReal, double eImag){
-  _tMatr->evalNonRelMatrix( std::complex<double>(eReal, eImag) );
+  _tMatr->evalMatrix( std::complex<double>(eReal, eImag) );
   return std::abs((*_tMatr)(0,0));
   //return std::abs((*_tMatr)(1,1));
 }

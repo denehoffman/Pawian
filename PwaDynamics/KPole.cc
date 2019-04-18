@@ -81,21 +81,3 @@ void KPole::updatePoleMass (double newPoleMass){
   _poleMassCompl=complex<double>(_poleMass, 0.);
 }
 
-template<typename MassType>
-void KPole::evalMatrixTemplate(const MassType mass, Spin OrbMom){
-  MassType denom=_poleMass*_poleMass-mass*mass;
-
-  double absDenom = abs(denom);
-  if(absDenom < 1e-10){
-     denom *= 1e-10 / absDenom;
-  }
-
-  for (int i=0; i< int(_g_i.size()); ++i){
-    for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i[i]*_g_i[j])/denom;
-     }
-  }
-}
-
-template void KPole::evalMatrixTemplate(const double mass, Spin OrbMom);
-template void KPole::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);

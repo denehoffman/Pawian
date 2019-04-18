@@ -227,7 +227,7 @@ void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
   std::complex<double> polePosEpsilonImagm = polePos + std::complex<double>(0., -epsilon);
   std::complex<double> polePosEpsilonRealp = polePos + std::complex<double>(epsilon, 0.);
   std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
-
+ 
   std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
   //  currentTMatRealp->evalNonRelMatrix(polePosEpsilonRealp);
   currentTMatRealp->evalMatrix(polePosEpsilonRealp);

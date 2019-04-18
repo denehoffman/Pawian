@@ -82,8 +82,6 @@ protected:
   complex<double> _poleMassCompl;
 
 private:
-  template<typename MassType>
-  void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 
 };
 //_____________________________________________________________________________

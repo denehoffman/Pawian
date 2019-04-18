@@ -79,17 +79,5 @@ void TMatrixRel::evalMatrixTemplate(const MassType mass){
    }
 }
 
-
-
-void TMatrixRel::evalNonRelMatrix(const complex<double> mass){
-   vector<std::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
-   evalMatrix(mass);
-   for (int i=0; i<NumRows(); ++i){
-      for (int j=0; j<NumCols(); ++j){
-	this->operator()(i,j)=std::sqrt(phpVec.at(i)->factor(mass))*this->operator()(i,j)*std::sqrt(phpVec.at(j)->factor(mass));
-      }
-   }
-}
-
 template void TMatrixRel::evalMatrixTemplate(const double);
 template void TMatrixRel::evalMatrixTemplate(const complex<double>);

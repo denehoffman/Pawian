@@ -82,72 +82,8 @@ void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
    }
 }
 
-void KPoleBarrier::evalMatrix(const complex<double> mass, Spin OrbMom){
-  //  evalMatrixTemplate(mass, OrbMom);
-
-  for (int i=0; i< int(_phpVecs.size()); ++i){
-    if(_truncatedBarrier){
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
-    }
-    else{
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
-    }
-  }
-  
-  complex<double> denom=_poleMassCompl*_poleMassCompl-mass*mass;
-  if(std::abs(denom) < 1e-10){
-    denom = complex<double>(1.E-10, 0.);
-  }
-
-  for (int i=0; i< int(_g_i.size()); ++i){
-    for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i.at(i)*_barrierFactor.at(i)*_g_i.at(j)*_barrierFactor.at(j))/denom;
-     }
-   }
-}
- 
-template<typename MassType>
-void KPoleBarrier::evalMatrixTemplate(const MassType mass, Spin OrbMom){
-
-  // for (int i=0; i< int(_phpVecs.size()); ++i){
-  //   if(_truncatedBarrier){
-  //     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
-  // 								      _breakUpM0.at(i), BarrierFactor::qRDefault);
-  //   }
-  //   else{
-  //     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
-  // 							       _breakUpM0.at(i), BarrierFactor::qRDefault);
-  //   }
-  // }
-
-  for (int i=0; i< int(_phpVecs.size()); ++i){
-    if(_truncatedBarrier){
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  								      _breakUpM0.at(i), BarrierFactor::qRDefault);
-    }
-    else{
-      _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  							       _breakUpM0.at(i), BarrierFactor::qRDefault);
-    }
-  }
-  
-  MassType denom=_poleMass*_poleMass-mass*mass;
-  double absDenom=abs(denom);
-  if(absDenom < 1e-10){
-     denom *= 1E-10/absDenom;
-  }
-
-  for (int i=0; i< int(_g_i.size()); ++i){
-    for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i.at(i)*_barrierFactor.at(i)*_g_i.at(j)*_barrierFactor.at(j))/denom;
-     }
-   }
-}
-
-template void KPoleBarrier::evalMatrixTemplate(const double mass, Spin OrbMom);
-template void KPoleBarrier::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);
+//barrier factors not needed for the scan in the complex energy plane
+//void KPoleBarrier::evalMatrix(const complex<double> mass, Spin OrbMom){
 
 void KPoleBarrier::updatePoleMass (double newPoleMass){
   _poleMass=newPoleMass;

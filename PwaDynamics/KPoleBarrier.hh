@@ -67,7 +67,6 @@ public:
   // functions:
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
-  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
   virtual void updatePoleMass (double newPoleMass);
 
   
@@ -79,7 +78,5 @@ protected:
   bool _truncatedBarrier;
 
 private:
-  template<typename MassType>
-  void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 };
 //_____________________________________________________________________________
