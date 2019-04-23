@@ -81,7 +81,14 @@ AbsPawianParamStreamer::~AbsPawianParamStreamer(){;}
 
 void AbsPawianParamStreamer::fillDefault(const std::string &theName, double val, double err, double min, double max){
   _pawianParams->Add(theName, val, err);
-  if(min<max)  _pawianParams->SetLimits(theName, min, max); 
+  if(min<max){
+    if(val<min || val> max){ 
+      Alert << "startparameter " << theName  << " with value " << val 
+	    << " is not within the range [" << min << "," << max << "]"  << endmsg;
+      exit(1);
+    }
+    _pawianParams->SetLimits(theName, min, max);
+  } 
   return;
 }
 
