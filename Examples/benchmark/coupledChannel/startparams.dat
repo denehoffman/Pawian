@@ -61,7 +61,7 @@ a1450Mass	1.49	0.02	1.39	1.59
 a980pion0etagFactor	0.4701	0.1567	0.05    3.0
 a980K+K-gFactor	0.50632	0.1687733333333333	0.05    3.0
 a1450pion0etagFactor	0.68	0.2266666666666667	0.05    3.0
-a1450K+K-gFactor	0	0.01			0.05    3.0
+a1450K+K-gFactor	0.1	0.01			0.05    3.0
 L1S0_J1P1C1TopipiS_pion0Mag	1	0.5
 L1S0_J1P1C1TopipiS_pion0Phi	0	0.2
 L1S0_J1P1C1ToaMatrix0_etaMag	1	0.5

@@ -428,16 +428,21 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     Vector4<double>  result4Vec(0.,0.,0.,0.);
     Vector4<double>  result4Vec2(0.,0.,0.,0.);
     Vector4<double>  refVec=all4Vec;
+    motherRef4Vec=GlobalEnv::instance()->Channel()->projectile4Vec();
 
     if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-6 &&
 	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-6 &&
 	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-6 &&
 	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-6){
       //is production vector
-      refVec=Vector4<double>(sqrt(combinedMother4Vec.M()*combinedMother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
-      if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-	refVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
-      }
+      //refVec=Vector4<double>(sqrt(combinedMother4Vec.M()*combinedMother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
+      refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
+      motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec(); //arbitrary
+      // if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+      // 	// refVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+      // 	refVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+      // 	motherRef4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+      // }
     }
     if (frame=="heli"){
       if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GG){
@@ -470,7 +475,8 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
 	// refVec=GlobalEnv::instance()->Channel()->initial4Vec();
       }
       if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-	motherRef4Vec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+	//	motherRef4Vec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+	motherRef4Vec=GlobalEnv::instance()->Channel()->projectile4Vec();
       }
 
       result4Vec=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec);
