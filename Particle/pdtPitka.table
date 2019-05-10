@@ -88,6 +88,7 @@ Meson a2Matrix-         a2Matrix^-              -3 4  1  0 -1   2  -2 0  0      
 Meson rhoMatrix0 	\rhoMatrix^0  		0  2 -1	 -1 1   2  0  0  0 	1. 	0.2 	relBW	[PDG nonett 1^3S_1]
 Meson rhoMatrix+ 	\rhoMatrix^+  		3  2 -1	 0  1   2  2  0  0 	1. 	0.2 	relBW	[PDG nonett 1^3S_1]
 Meson rhoMatrix- 	\rhooMatrix^-  		-3 2 -1	 0  1   2  -2 0  0 	1. 	0.2 	relBW	[PDG nonett 1^3S_1]
+Meson rho3Matrix-       \rho3Matrix^-           -3 6 -1  0  1   2  -2 0  0      1.      0.2     relBW   [PDG nonett 1^3S_1]
 Meson pion0 		\pi^0  			0  0 -1  1 -1   2  0  0  0 	0.13498	0.0001 	relBW	[PDG nonett 1^1S_0]
 
 Meson pion0I 		\eta  			0  0 -1  1  1	0  0  0  0 	0.13498 0.0001 relBW	[PDG nonett 1^1S_0]

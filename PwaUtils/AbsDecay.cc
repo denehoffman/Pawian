@@ -547,7 +547,9 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     if( fabs(mother4Vec.P()) > 1.e-6 ){
       Vector4<double> defaultMotherRefVec=Vector4<double>(0., 0., 0., 2.);
       Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) defaultRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
+      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
+	defaultRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
+      }
       daughter2HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
     }
