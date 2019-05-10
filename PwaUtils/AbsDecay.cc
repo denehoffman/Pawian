@@ -545,7 +545,7 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     daughter2HelMother=daughter2_4Vec;
     daughter1HelMother=daughter1_4Vec;
     if( fabs(mother4Vec.P()) > 1.e-6 ){
-      Vector4<double> defaultMotherRefVec=Vector4<double>(0., 0., 0., 2.);
+      Vector4<double> defaultMotherRefVec=Vector4<double>(10., 3., 0., 0.);
       Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
 	defaultRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
@@ -574,9 +574,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
-      double thePhi=0.;
       //if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter2HelMother.Phi();
-      if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter1HelMother.Phi();
+      double thePhi=daughter1HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
       std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
       if(found != evtData->WignerDIdId3[_wigDWigDRefId].end()){
