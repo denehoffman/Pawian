@@ -470,21 +470,6 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   Vector4<double> daughter1HelMother(0.,0.,0.,0.);
   Vector4<double> motherRefVec;
 
-  //start: only relevant for gam gam reaction
-  double all4VecMass = all4Vec.Mass();
-  double all4VecP = all4Vec.P();
-  double Gam1E=0.5*sqrt(all4VecMass*all4VecMass+all4VecP*all4VecP)+0.5*all4VecP;
-  double Gam2E=0.5*sqrt(all4VecMass*all4VecMass+all4VecP*all4VecP)-0.5*all4VecP;
-
-  Vector4<double> gam1Lab(Gam1E, 0., 0., Gam1E);
-  Vector4<double> gam2Lab(Gam2E, 0., 0., -Gam2E);
-  if(all4Vec.Pz() < 0.){
-    gam1Lab = Vector4<double>(Gam1E, 0., 0., -Gam1E);
-    gam1Lab = Vector4<double>(Gam2E, 0., 0., Gam2E);
-  }                             
-                                 
-  Vector4<double> gamgamLab=gam1Lab+gam2Lab;
- //end: only relevant for gam gam reaction
 
   if(_hasMotherPart){
     if(whichDecayLevel()==decayLevel::isProdAmp){
@@ -492,47 +477,32 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       exit(1); 
     }
     if(whichDecayLevel()==decayLevel::firstLevel){
-      motherRefVec=Vector4<double>(0., 0., 0., 1.); //set motherRevVec parallel to the z-axis
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-	//	motherRefVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
-	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-      }
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
-	//z-axis=beam axis y-axis perpendicular to e+ e- initial state
-	//	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
-	// prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-
-	// motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-        // prodParticle4Vec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
-
-	//quantization axis defined by gamma gamma axis; 
-	//assumption: boths gamma direction on z-axis in lab frame (approximation for real gammas) 
-        motherRefVec=gamgamLab;
-	prodParticle4Vec=gam1Lab;
+      motherRefVec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
+;
+ if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
+	motherRefVec=Vector4<double>(10., 3., 0., 0.);
+	prodParticle4Vec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
       }
     }
     else if(whichDecayLevel()==decayLevel::secondLevel){
       motherRefVec=all4Vec;
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
-	// 	motherRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-	
-	// motherRefVec=GlobalEnv::instance()->Channel(_channelId)->initial4Vec();
-	motherRefVec=gam1Lab;
+	motherRefVec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
+				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
+				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
+				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
       }
     }
     else{
       Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
       exit(0); 
     }  
-
-    // not needed anymore???
-    // Vector4<double> diffProdParticleMother4Vec=prodParticle4Vec-mother4Vec;
-    //  //very special for gam gam processes
-    // if(diffProdParticleMother4Vec.M2() < 1.e-6 && fabs(diffProdParticleMother4Vec.Px())< 1.e-6 && fabs(diffProdParticleMother4Vec.Py())< 1.e-6 && fabs(diffProdParticleMother4Vec.Pz())< 1.e-6){
-    //   WarningMsg << "Was ist hier los???????" << endmsg;
-    //   prodParticle4Vec=Vector4<double>(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
-    //   if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ) prodParticle4Vec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
-    // }
 
     daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
@@ -546,10 +516,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     daughter1HelMother=daughter1_4Vec;
     if( fabs(mother4Vec.P()) > 1.e-6 ){
       Vector4<double> defaultMotherRefVec=Vector4<double>(10., 3., 0., 0.);
-      Vector4<double> defaultRefVec(sqrt(mother4Vec.M()*mother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
-      if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-	defaultRefVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-      }
+      Vector4<double> defaultRefVec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
+       				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
+       				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
+      				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
+
       daughter2HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
     }

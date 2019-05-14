@@ -428,57 +428,32 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     Vector4<double>  result4Vec(0.,0.,0.,0.);
     Vector4<double>  result4Vec2(0.,0.,0.,0.);
     Vector4<double>  refVec=all4Vec;
-    motherRef4Vec=GlobalEnv::instance()->Channel()->projectile4Vec();
+    motherRef4Vec=Vector4<double>(GlobalEnv::instance()->Channel()->projectile4Vec().E(),
+				  GlobalEnv::instance()->Channel()->projectile4Vec().Px(),
+				  GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
+				  GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
 
-    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-6 &&
-	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-6 &&
-	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-6 &&
-	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-6){
+    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-4 &&
+	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-4 &&
+	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-4 &&
+	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-4){
       //is production vector
-      //refVec=Vector4<double>(sqrt(combinedMother4Vec.M()*combinedMother4Vec.M()+1.0), 0., 0., 1.); //z-axis = quantisation axis
-      refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
-      motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec(); //arbitrary
-      // if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-      // 	// refVec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
-      // 	refVec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-      // 	motherRef4Vec=GlobalEnv::instance()->Channel(_channelId)->projectile4Vec();
-      // }
+      motherRef4Vec=Vector4<double>(10., 3., 0., 0.);
+      Vector4<double> refVec=Vector4<double>(GlobalEnv::instance()->Channel()->projectile4Vec().E(),
+					     GlobalEnv::instance()->Channel()->projectile4Vec().Px(),
+					     GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
+					     GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
     }
     if (frame=="heli"){
       if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GG){
-	// motherRef4Vec=GlobalEnv::instance()->Channel()->initial4Vec();
-	// refVec=GlobalEnv::instance()->Channel()->projectile4Vec();
+	motherRef4Vec=Vector4<double>(10., 3., 0., 0.);
+	refVec=Vector4<double>(GlobalEnv::instance()->Channel()->projectile4Vec().E(),
+			       GlobalEnv::instance()->Channel()->projectile4Vec().Px(),
+			       GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
+			       GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
 
-
-	//quantization axis defined by gamma gamma axis; 
-	//assumption: boths gamma direction on z-axis in lab frame (approximation for real gammas)
-	double all4VecMass = all4Vec.Mass();
-	double all4VecP = all4Vec.P();
-
-	double Gam1E=0.5*sqrt(all4VecMass*all4VecMass+all4VecP*all4VecP)+0.5*all4VecP;
-	double Gam2E=0.5*sqrt(all4VecMass*all4VecMass+all4VecP*all4VecP)-0.5*all4VecP;
-        
-	Vector4<double> gam1Lab(Gam1E,0.,0.,Gam1E);
-        Vector4<double> gam2Lab(Gam2E,0.,0.,-Gam2E);
-	if(all4Vec.Pz() < 0.){
-	  gam1Lab = Vector4<double>(Gam1E, 0., 0., -Gam1E);
-	  gam1Lab = Vector4<double>(Gam2E, 0., 0., Gam2E);
-	}
-
-
-	Vector4<double> gamgamLab=gam1Lab+gam2Lab;
-
-	motherRef4Vec=gamgamLab;
-	refVec=gam1Lab;
-
-	// motherRef4Vec=GlobalEnv::instance()->Channel()->projectile4Vec();
-	// refVec=GlobalEnv::instance()->Channel()->initial4Vec();
       }
-      if( GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-	//	motherRef4Vec=KinUtils::beamVecCollider(all4Vec, PawianConstants::mElectron);
-	motherRef4Vec=GlobalEnv::instance()->Channel()->projectile4Vec();
-      }
-
+      
       result4Vec=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec);
       if(nBodyDecay==3) result4Vec2=KinUtils::heliVec(motherRef4Vec, refVec, combinedMother4Vec, combinedDec4Vec2);
     }
@@ -490,18 +465,6 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
       Alert << "transformation into the frame " << frame << " not supported!!!" << endmsg;
       exit(0);
     }
-    // if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1e-5
-    // 	&& fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1e-5
-    // 	&& fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1e-5
-    // 	&& fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1e-5  ){
-    // result4Vec=combinedDec4Vec;
-    // result4Vec.Boost(all4Vec);
-    // }
-    // else{
-    //   result4Vec=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec);
-    //    if(nBodyDecay==3)
-    // 	  result4Vec2=helicityVec(all4Vec, combinedMother4Vec, combinedDec4Vec2);
-    // }
 
     if(nBodyDecay == 2){
       it->second[0]->Fill( result4Vec.CosTheta(), weight);
@@ -510,8 +473,6 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     else if(nBodyDecay == 3){
       Vector4<double> result4VecPart1 = result4Vec;
       Vector4<double> result4VecPart2 = result4Vec2;
-      //      std::cout << "\nresult4Vec: " << result4Vec << std::endl;
-      //      std::cout << "result4Vec2: " << result4Vec2 << std::endl;
       Vector4<double> normVec(0,
       			     result4VecPart1.Y()*result4VecPart2.Z()-result4VecPart1.Z()*result4VecPart2.Y(),
       			     result4VecPart1.Z()*result4VecPart2.X()-result4VecPart1.X()*result4VecPart2.Z(),
