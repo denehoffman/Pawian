@@ -483,20 +483,23 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
 ;
  if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
+   // real photons: quantization axis is assumed to be the z-axis 
 	motherRefVec=Vector4<double>(10., 3., 0., 0.);
 	prodParticle4Vec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
-				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
-				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
-				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
+				   0.,
+				   0.,
+				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().P());	
       }
     }
     else if(whichDecayLevel()==decayLevel::secondLevel){
       motherRefVec=all4Vec;
       if( GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_GG ){
+	// real photons: quantization axis is assumed to be the z-axis 
 	motherRefVec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
-				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
-				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
-				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
+				     0.,
+				     0.,
+				     GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().P());	
+
       }
     }
     else{

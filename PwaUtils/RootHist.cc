@@ -446,11 +446,12 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     }
     if (frame=="heli"){
       if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GG){
+	// real photons: quantization axis is assumed to be the z-axis 
 	motherRef4Vec=Vector4<double>(10., 3., 0., 0.);
 	refVec=Vector4<double>(GlobalEnv::instance()->Channel()->projectile4Vec().E(),
-			       GlobalEnv::instance()->Channel()->projectile4Vec().Px(),
-			       GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
-			       GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
+			       0.,
+			       0.,
+			       GlobalEnv::instance()->Channel()->projectile4Vec().P());
 
       }
       
