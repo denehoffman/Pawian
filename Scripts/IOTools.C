@@ -29,6 +29,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <math.h>
 
 #include "TMath.h"
 
@@ -112,7 +113,7 @@ class IOTools
 	lineRemain1stDigitiString >> d;
 	std::cout << "d: " << std::setprecision(16) << d << std::endl;
 
-        int factor = std::round(d/(2.*TMath::Pi()));
+        int factor = round(d/(2.*TMath::Pi()));
         double newPhase = d - factor*(2.*TMath::Pi()); 
 
 	std::string remainingDigits;
