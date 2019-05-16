@@ -28,6 +28,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iomanip>
+
+#include "TMath.h"
 
 class IOTools
 {
@@ -80,4 +83,50 @@ class IOTools
   inputStream.close();
   oStream.close();  
   }
+
+  static void moduloPhaseParams(std::string iFileName, std::string oFileName){
+    std::ifstream inputStream(iFileName.c_str());
+    if(!inputStream.is_open()){
+      std::cout << "Could not open input file: " << iFileName << std::endl;
+      exit(0);
+    }
+    
+    std::ofstream oStream(oFileName.c_str());
+    
+    while (!inputStream.eof()){
+      std::string currentLine;
+      getline (inputStream, currentLine);
+
+      std::size_t  pos= currentLine.find("Phi\t"); 
+      if (pos != string::npos){
+       	std::string parname = currentLine.substr(0,pos+3);
+	std::string lineRemain = currentLine.substr(pos+3, string::npos);
+
+      	// find the first digit:
+      	std::size_t startPos = 0;
+      	for (; startPos < lineRemain.size(); ++startPos) if (std::isdigit(lineRemain[startPos])) break;
+	std::string lineRemain1stDigit = lineRemain.substr(startPos-1, string::npos);
+	
+	istringstream  lineRemain1stDigitiString(lineRemain1stDigit);
+       	double d;
+	lineRemain1stDigitiString >> d;
+	std::cout << "d: " << std::setprecision(16) << d << std::endl;
+
+        int factor = std::round(d/(2.*TMath::Pi()));
+        double newPhase = d - factor*(2.*TMath::Pi()); 
+
+	std::string remainingDigits;
+	lineRemain1stDigitiString >> remainingDigits;
+	std::cout <<"\n" << currentLine << std::endl;
+	std::cout << "is replaced by: " << std::endl;
+	std::cout << parname << "\t"  << std::setprecision(16) << newPhase << "\t" << remainingDigits << std::endl;
+	oStream << parname << "\t"  << std::setprecision(16) << newPhase << "\t" << remainingDigits << std::endl;
+      }
+      else{
+	oStream << currentLine << std::endl;  
+      }
+ 
+    }
+  }
 };
+
