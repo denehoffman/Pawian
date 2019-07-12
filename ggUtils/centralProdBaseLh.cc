@@ -146,16 +146,18 @@ void  centralProdBaseLh::initialize(){
       InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
       std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
       _decAmps.push_back(currentAmp);
-      bool hasEvenJ=false;
-      bool hasPosParity=false;
+      // bool hasEvenJ=false;
+      // int spinJ=currentAmp->jpcPtr()->J;      
+      // if ( (spinJ%2) ==0 ) hasEvenJ=true;
+      
+      // bool hasPosParity=false;
+      // if ( currentAmp->jpcPtr()->P == -1)  hasPosParity=true;
+      
       bool hasPosCparity=false;
-
-      int spinJ=currentAmp->jpcPtr()->J;      
-      if ( (spinJ%2) ==0 ) hasEvenJ=true;
-      if ( currentAmp->jpcPtr()->P == -1)  hasPosParity=true;
       if ( currentAmp->jpcPtr()->C == -1)  hasPosCparity=true;
 
-      if( !(hasEvenJ) && hasPosParity && hasPosCparity) _gampomAmps.push_back(currentAmp);
+
+      if(hasPosCparity) _gampomAmps.push_back(currentAmp);
       else _pompomAmps.push_back(currentAmp);
  
       if(currentAmp->jpcPtr()->J > maxJ) maxJ = currentAmp->jpcPtr()->J;
