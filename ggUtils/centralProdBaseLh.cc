@@ -92,25 +92,37 @@ double centralProdBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<Ab
          (*itDecAll)->setSpinProjections(projId);
       }
 
-      std::vector< complex<double> > lamXAmps;
+      std::vector< complex<double> > lamXPomPomAmps;
+      std::vector< complex<double> > lamXGamPomAmps;
 
       std::vector<Spin>::iterator itLamX;
       for(itLamX=_lamX.begin(); itLamX!=_lamX.end(); ++itLamX) {
-         lamXAmps.push_back(complex<double>(0.,0.));
+         lamXPomPomAmps.push_back(complex<double>(0.,0.));
+	 lamXGamPomAmps.push_back(complex<double>(0.,0.));
 //         InfoMsg << "itLamX=" << *itLamX << endmsg;
 
          std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-         for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
+         for( itDec=_pompomAmps.begin(); itDec!=_pompomAmps.end(); ++itDec){
             complex<double> currentDecAmp=(*itDec)->XdecAmp((*itLamX), theData);
 //            InfoMsg << "_lamX=" << (*itLamX) << "currentDecAmpX: " << currentDecAmp << endmsg;
-            lamXAmps.back() += currentDecAmp;
+            lamXPomPomAmps.back() += currentDecAmp;
          }
-         if(_useCohPhasespace)
-            lamXAmps.back() += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
+
+	 for( itDec=_gampomAmps.begin(); itDec!=_gampomAmps.end(); ++itDec){
+	   complex<double> currentDecAmp=(*itDec)->XdecAmp((*itLamX), theData);
+	   lamXGamPomAmps.back() += currentDecAmp;
+	 }
+         if(_useCohPhasespace) //coherent phases space only for pompom events
+            lamXPomPomAmps.back() += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
       }
 
+   
+
       std::vector< complex<double> >::iterator itLamXAmps;
-      for(itLamXAmps=lamXAmps.begin(); itLamXAmps!=lamXAmps.end(); ++itLamXAmps) {
+      for(itLamXAmps=lamXPomPomAmps.begin(); itLamXAmps!=lamXPomPomAmps.end(); ++itLamXAmps) {
+         result += norm(*itLamXAmps);
+      }
+      for(itLamXAmps=lamXGamPomAmps.begin(); itLamXAmps!=lamXGamPomAmps.end(); ++itLamXAmps) {
          result += norm(*itLamXAmps);
       }
    }                                                                                  // END Outer incoherent sum over spinProjections of FS particles.
@@ -134,6 +146,18 @@ void  centralProdBaseLh::initialize(){
       InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
       std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
       _decAmps.push_back(currentAmp);
+      bool hasEvenJ=false;
+      bool hasPosParity=false;
+      bool hasPosCparity=false;
+
+      int spinJ=currentAmp->jpcPtr()->J;      
+      if ( (spinJ%2) ==0 ) hasEvenJ=true;
+      if ( currentAmp->jpcPtr()->P == -1)  hasPosParity=true;
+      if ( currentAmp->jpcPtr()->C == -1)  hasPosCparity=true;
+
+      if( !(hasEvenJ) && hasPosParity && hasPosCparity) _gampomAmps.push_back(currentAmp);
+      else _pompomAmps.push_back(currentAmp);
+ 
       if(currentAmp->jpcPtr()->J > maxJ) maxJ = currentAmp->jpcPtr()->J;
    }
    for(int i = (-1*maxJ); i<= maxJ; i++) _lamX.push_back(Spin(i));

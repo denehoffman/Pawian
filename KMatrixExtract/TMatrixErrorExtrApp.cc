@@ -165,6 +165,7 @@ int main(int __argc,char *__argv[]){
   InfoMsg << "      " << endmsg;
   InfoMsg << "      " << endmsg;
   InfoMsg << "      " << endmsg;
-  InfoMsg << "result: " << result.real() << " +/- " << error.real() << "\t" << result.imag() << " +/- " << error.imag() << endmsg;
+  InfoMsg << "result (M  -i/2 Gamma): " << result.real() << " +/- " << error.real() << "\t" << result.imag() << " +/- " << error.imag() << endmsg;
+  InfoMsg << "result (M  Gamma): " << result.real() << " +/- " << error.real() << "\t" << -2.*result.imag() << " +/- " << 2.*error.imag() << endmsg;
   return 0;
 }

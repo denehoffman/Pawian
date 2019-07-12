@@ -76,6 +76,8 @@ protected:
   bool _useProdDynamics;
   std::vector<Spin> _lamX;
   std::shared_ptr<AbsDynamics> _dyn;
+  std::vector< std::shared_ptr<AbsXdecAmp> > _pompomAmps;
+  std::vector< std::shared_ptr<AbsXdecAmp> > _gampomAmps;
 
   virtual void initialize();
 private:
