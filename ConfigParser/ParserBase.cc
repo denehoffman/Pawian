@@ -172,7 +172,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
     ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
-    ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...")
+    ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...; only events within min and max are accepted")
+    ("massRangeAntiCuts", po::value< vector<string> > (&_massRangeAntiCuts), "multiple mass range anti cuts; order: min max particle1 particle2 ...; events within min and max are rejected")
     ("genRange", po::value<string> (&_genRange), "Range of W for generator (to be used if W<=sqrt(s), e.g. in gamma gamma or central production reactions)")
     ("phpGenDynamics", po::value< vector<string> > (&_phpGenDynamics), "dynamics for phase space generated events (only BreitWigner supported so far); order: dynType mass0 width0 particle1 particle2 ...") 
     ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
@@ -400,6 +401,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::cout << "\nmass range cuts:" << std::endl;
       for (it = _massRangeCuts.begin(); it!=_massRangeCuts.end(); ++it){
+	  std::cout << (*it) << "\n";
+      }
+
+      std::cout << "\nmass range anti-cuts:" << std::endl;
+      for (it = _massRangeAntiCuts.begin(); it!=_massRangeAntiCuts.end(); ++it){
 	  std::cout << (*it) << "\n";
       }
 

@@ -32,17 +32,19 @@ class Particle;
 class MassRangeCut
 {
 public:
-  MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles);
+  MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles, bool anticut=false);
   ~MassRangeCut();
 
   const double massMin() const {return _massMin;}
   const double massMax() const {return _massMax;}
+  const double isAntiCut() const {return _isAntiCut;}
   bool isMassRangeParticle(Particle* compParticle);
   std::vector<unsigned int> particleIds() {return _iDparticlesMassRange;}
 
 private:
   double _massMin;
   double _massMax;
+  bool _isAntiCut;
   std::vector<unsigned int> _iDparticlesMassRange;
   std::vector<Particle*> _particlesMassRange;
 };

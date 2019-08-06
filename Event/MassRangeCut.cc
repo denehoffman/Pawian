@@ -24,9 +24,10 @@
 #include "Event/MassRangeCut.hh"
 #include "Particle/Particle.hh"
 
-MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles) : 
+MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles, bool anticut) : 
   _massMin(0.),
-  _massMax(0.)
+  _massMax(0.),
+  _isAntiCut(anticut)
 {
   // required order for the string: massMin massMax particleName1 particleName2 ...
   std::vector<Particle*>::iterator itParticle;
@@ -53,12 +54,10 @@ MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Parti
     }
     ++counter;
   }
-
-  if(_massMin<0. || _massMin > _massMax){
-    Alert << "massMin<0. or massMin>massMax !!!!!" << endmsg;
+  if(_massMin<0. || _massMin>_massMax){
+    Alert << "massMin<0. or min>massMax !!!!!" << endmsg;
     exit(0);
   }
-
   if(_particlesMassRange.size()<2){
     Alert << "It is required to cut on an invariant mass of at least 2 final state particles!" 
 	  << "\n here particlesMassRange.size()= " <<  _particlesMassRange.size() << endmsg;

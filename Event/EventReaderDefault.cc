@@ -103,10 +103,18 @@ bool EventReaderDefault::fill(EventList& evtList, int evtStart, int evtStop)
 	    particleSystem4Vec += *(newEvent->p4(*it));
 	  }
 	  double invMass = particleSystem4Vec.Mass();
-	  if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
-           acceptEvt=false;
-           break;
-	  } 
+	  if( !((*itMassRangeCut)->isAntiCut()) ){
+	    if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
+	      acceptEvt=false;
+	      break;
+	    } 
+	  }
+	  else{ //anti-cut
+	    if(invMass > (*itMassRangeCut)->massMin() && invMass < (*itMassRangeCut)->massMax()){
+	      acceptEvt=false;
+	      break;
+	    }
+	  }
 	}
       }
 

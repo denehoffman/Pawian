@@ -155,12 +155,21 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
                particleSystem = particleSystem + p4[*it];
             }
             double invMass = particleSystem.mass();
-//            InfoMsg << "invMass: " << invMass << endmsg; 
-            if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
-               acceptEvt=false;
-//               InfoMsg << "event not accepted" << endmsg; 
-               break;
-            }
+//            InfoMsg << "invMass: " << invMass << endmsg;
+	    if( !((*itMassRangeCut)->isAntiCut()) ){ 
+	      if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
+		acceptEvt=false;
+		//               InfoMsg << "event not accepted" << endmsg; 
+		break;
+	      }
+	    }
+	    else{
+	      if(invMass > (*itMassRangeCut)->massMin() && invMass < (*itMassRangeCut)->massMax()){
+		acceptEvt=false;
+		//               InfoMsg << "event not accepted" << endmsg; 
+		break;
+	      }
+	    }
          }
       } 
 
