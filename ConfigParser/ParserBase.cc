@@ -50,8 +50,8 @@ ParserBase::ParserBase(int argc,char **argv)
   , _noOfThreads(16)
   , _noOfClients(1)
   , _serverPort(22222)
-  , _ratioMcToData(100000)
-  , _ratioTruthToMc(100000)
+  , _ratioMcToData(100)
+  , _ratioTruthToMc(100)
   , _evoIterations(100)
   , _evoPopulation(20)
   , _evoRatioOfModParams(1.)
@@ -128,8 +128,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
     ("noOfClients",po::value<int>(&_noOfClients),  "number of clients/worker nodes for server mode")
     ("serverPort",po::value<int>(&_serverPort),  "port for client/server mode")
-    ("ratioMcToData",po::value<int>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
-    ("ratioTruthToMc",po::value<int>(&_ratioTruthToMc),  "number of truth events defined by ratio #truths/#Mcs; needed only for qaModeEffCorrection")
+    ("ratioMcToData",po::value<short>(&_ratioMcToData),  "number of MC events defined by ratio #MCs/#Data")
+    ("ratioTruthToMc",po::value<short>(&_ratioTruthToMc),  "number of truth events defined by ratio #truths/#Mcs; needed only for qaModeEffCorrection")
     ("evoPopulation",po::value<int>(&_evoPopulation),  "iteration population for evo minimizer")
     ("evoIterations",po::value<int>(&_evoIterations),  "number of iterations for evo minimizer")
     ("evoRatioOfModParams",po::value<double>(&_evoRatioOfModParams),  "chosen (avereaged) ratio of fit parameters to be changed for each population (value between 0. and 1.")
@@ -172,7 +172,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("preFactor",po::value< vector<string> >(&_preFactor),  "set prefactor for amplitude")
     ("histMass",po::value< vector<string> >(&_histMass),  "histograms inv mass for the selected final state paricles")
     ("histAngles",po::value< vector<string> >(&_histAngles),  "histograms decay angles")
-    ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...")
+    ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...; only events within min and max are accepted")
+    ("massRangeAntiCuts", po::value< vector<string> > (&_massRangeAntiCuts), "multiple mass range anti cuts; order: min max particle1 particle2 ...; events within min and max are rejected")
     ("genRange", po::value<string> (&_genRange), "Range of W for generator (to be used if W<=sqrt(s), e.g. in gamma gamma or central production reactions)")
     ("phpGenDynamics", po::value< vector<string> > (&_phpGenDynamics), "dynamics for phase space generated events (only BreitWigner supported so far); order: dynType mass0 width0 particle1 particle2 ...") 
     ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
@@ -400,6 +401,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       std::cout << "\nmass range cuts:" << std::endl;
       for (it = _massRangeCuts.begin(); it!=_massRangeCuts.end(); ++it){
+	  std::cout << (*it) << "\n";
+      }
+
+      std::cout << "\nmass range anti-cuts:" << std::endl;
+      for (it = _massRangeAntiCuts.begin(); it!=_massRangeAntiCuts.end(); ++it){
 	  std::cout << (*it) << "\n";
       }
 

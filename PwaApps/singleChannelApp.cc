@@ -269,6 +269,13 @@ int main(int __argc,char *__argv[]){
     theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, noOfDataEvents);
     
     int maxMcEvts=eventsData.size()*ratioMcToData;
+    // InfoMsg << "eventsData.size(): " << eventsData.size() << endmsg;
+    // InfoMsg << "ratioMcToData: " << ratioMcToData << endmsg;
+    // InfoMsg << "eventsData.size()*ratioMcToData: " << eventsData.size()*ratioMcToData << endmsg;
+    // InfoMsg << "double(eventsData.size()*ratioMcToData): " << double(eventsData.size()*ratioMcToData) << endmsg;
+    // InfoMsg << "double(eventsData.size())*double(ratioMcToData): " << double(eventsData.size())*double(ratioMcToData) << endmsg;
+    // InfoMsg << "maxMcEvts: " << maxMcEvts << endmsg;
+
     theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
   }
 

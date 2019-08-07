@@ -419,7 +419,14 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
     }
     InfoMsg << "AmpName: " << name() << "  radius for barrier factor qr= " << _qR << endmsg;
   }
-  
+  else if(_dynType=="LinearDynamics"){
+    if (additionalStringVec.size() != 1){
+      Alert << "for dynamics LinearDynamics value for reference mass must be set" << endmsg;
+	exit(0);
+    }
+    _refMassLinearDyn=stof(additionalStringVec.at(0));
+    InfoMsg << "AmpName: " << name() << "  reference mass for linear dynamics = " << _refMassLinearDyn << endmsg;
+  }  
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
   _dynEnabled=true;
 }

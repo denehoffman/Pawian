@@ -48,6 +48,7 @@
 #include "PwaUtils/RadM1Dynamics.hh"
 #include "PwaUtils/BlattWBarrierTensorDynamics.hh"
 #include "PwaUtils/ProdParamDynamics.hh"
+#include "PwaUtils/LinearDynamics.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
@@ -187,6 +188,9 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     }
     else if(theDec->dynType()=="FormPol0" || theDec->dynType()=="FormPol1" || theDec->dynType()=="FormPol2") {
       result= std::shared_ptr<AbsDynamics>(new ProdParamDynamics(theName, fsParticles, theDec->motherPart(), currentChannelId, theDec->dynType()));
+    }
+    else if(theDec->dynType()=="LinearDynamics"){
+      result= std::shared_ptr<AbsDynamics>(new LinearDynamics(theName, fsParticles, theDec->motherPart(), theDec->refMassLinearDyn()));
     }
 
     else{

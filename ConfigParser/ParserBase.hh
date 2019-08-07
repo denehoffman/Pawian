@@ -72,8 +72,8 @@ public:
   const int noOfThreads() const {return _noOfThreads;}
   const int noOfClients() const {return _noOfClients;}
   const int serverPort() const {return _serverPort;}
-  const int ratioMcToData() const {return _ratioMcToData;}
-  const int ratioTruthToMc() const {return _ratioTruthToMc;}
+  const short ratioMcToData() const {return _ratioMcToData;}
+  const short ratioTruthToMc() const {return _ratioTruthToMc;}
   const int evoPopulation() const {return _evoPopulation;}
   const int evoIterations() const {return _evoIterations;}
   const double evoRatioOfModParams() const {return _evoRatioOfModParams;}
@@ -110,6 +110,7 @@ public:
   const std::vector<std::string>& histAngleNames2D() const { return _histAngles2D;}
   const std::vector<std::string>& calcContribution() const { return _calcContribution;}
   const std::vector<std::string>& massRangeCuts() const {return _massRangeCuts;}
+  const std::vector<std::string>& massRangeAntiCuts() const {return _massRangeAntiCuts;}
   const std::string& genRange() const {return _genRange;}
   const std::vector<std::string>& phpGenDynamics() const {return _phpGenDynamics;}
   const int randomSeed() const {return _randomSeed;}
@@ -154,8 +155,8 @@ protected:
   int _noOfThreads;
   int _noOfClients;
   int _serverPort;
-  int _ratioMcToData;
-  int _ratioTruthToMc;
+  short _ratioMcToData;
+  short _ratioTruthToMc;
   int _evoIterations;
   int _evoPopulation;
   double _evoRatioOfModParams;
@@ -194,6 +195,7 @@ protected:
   std::vector<std::string> _histMass;
   std::vector<std::string> _histAngles;
   std::vector<std::string>  _massRangeCuts;
+  std::vector<std::string>  _massRangeAntiCuts;
   std::string  _genRange;
   std::vector<std::string>  _phpGenDynamics;
   std::vector<std::string> _histAngles2D;

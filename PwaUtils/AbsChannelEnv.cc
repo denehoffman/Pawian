@@ -284,6 +284,15 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
     _massRangeCuts.push_back(currentMassRangeCut);
   }
 
+  //mass range anti-cuts
+  std::vector<std::string> massRangeAntiCuts=_theParser->massRangeAntiCuts();
+  if(massRangeAntiCuts.size()>0) _useMassRange=true;
+  for ( itStr = massRangeAntiCuts.begin(); itStr != massRangeAntiCuts.end(); ++itStr){
+    std::string currentString=*itStr;
+    std::shared_ptr<MassRangeCut> currentMassRangeAntiCut(new MassRangeCut( currentString, _finalStateParticles, true));
+    _massRangeCuts.push_back(currentMassRangeAntiCut);
+  }
+
   //generator range
   std::string genRange=_theParser->genRange();
   std::string _minGenMass, _maxGenMass;

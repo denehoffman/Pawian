@@ -74,10 +74,18 @@ bool EventReaderScattering::fill(EventList& evtList, int evtStart, int evtStop)
       if(_useMassRange){
 	std::vector< std::shared_ptr<MassRangeCut> >::iterator itMassRangeCut;
 	for (itMassRangeCut=_massRangeCuts.begin(); itMassRangeCut!=_massRangeCuts.end(); ++itMassRangeCut){
-	  if(scaledMass < (*itMassRangeCut)->massMin() || scaledMass > (*itMassRangeCut)->massMax()){
-	    acceptEvt=false;
-	    break;
-	  } 
+	  if( !((*itMassRangeCut)->isAntiCut()) ){
+	    if(scaledMass < (*itMassRangeCut)->massMin() || scaledMass > (*itMassRangeCut)->massMax()){
+	      acceptEvt=false;
+	      break;
+	    } 
+	  }
+	  else{ //anti-cut
+	    if(scaledMass > (*itMassRangeCut)->massMin() && scaledMass < (*itMassRangeCut)->massMax()){
+	      acceptEvt=false;
+	      break;
+	    }
+	  }
 	}
       }
 

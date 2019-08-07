@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2019 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,30 +20,43 @@
 //									  //
 //************************************************************************//
 
+// LinearDynamics class definition file. -*- C++ -*-
+// Copyright 2019 Bertram Kopf
+
 #pragma once
 
-#include "ErrLogger/ErrLogger.hh"
-#include <string>
+#include <iostream>
 #include <vector>
+#include <complex>
+#include <map>
+#include <string>
+#include <memory>
 
-class Particle;
+#include "PwaUtils/AbsDynamics.hh"
 
-class MassRangeCut
-{
+
+class AbsPawianParameters;
+
+class LinearDynamics : public AbsDynamics{
+
 public:
-  MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles, bool anticut=false);
-  ~MassRangeCut();
+  LinearDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, double refMass);
+  virtual ~LinearDynamics();
 
-  const double massMin() const {return _massMin;}
-  const double massMax() const {return _massMax;}
-  const double isAntiCut() const {return _isAntiCut;}
-  bool isMassRangeParticle(Particle* compParticle);
-  std::vector<unsigned int> particleIds() {return _iDparticlesMassRange;}
+  virtual std::string type() {return "LinearDynamics";}
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
+  
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();   
+
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void setMassKey(std::string& theMassKey);
+
+protected:
+  double _refMass;
+  double _currentSlopeMag;
+  double _currentSlopePhase;
 
 private:
-  double _massMin;
-  double _massMax;
-  bool _isAntiCut;
-  std::vector<unsigned int> _iDparticlesMassRange;
-  std::vector<Particle*> _particlesMassRange;
+
 };

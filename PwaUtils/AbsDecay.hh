@@ -98,6 +98,7 @@ public:
   void enableDynamics(std::string& dynString, std::vector<std::string>& additionalStringVec);
   std::shared_ptr<AbsDynamics> getDynamics(){return _absDynPtr;}
   double barrierqR() {return _qR;}
+  double refMassLinearDyn() {return _refMassLinearDyn;}
   virtual void print(std::ostream& os) const;
 
   Particle* motherPart() {return _mother;}
@@ -158,6 +159,7 @@ protected:
 
   double _isospinClebschG;
   double _qR;
+  double _refMassLinearDyn;
 
   std::string _name;
   unsigned short _nameId;

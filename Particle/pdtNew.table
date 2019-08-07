@@ -243,6 +243,7 @@ Meson K*1(1680)0bar 	\bar{K_1^\ast(1680)}^0  0  2 -1  0  0   1  1 -1 0  	1.714 	
 Meson K*1(1680)+ 	K_1^\ast(1680)^+  	3  2 -1  0  0   1  1  1  0  	1.714 	0.323   relBW	[PDG nonett 3^3D_1]
 Meson K*1(1680)- 	K_1^\ast(1680)^-  	-3 2 -1  0  0   1 -1  -1 0  	1.714 	0.323   relBW	[PDG nonett 3^3D_1]
 Meson K2(1770)0 	K_2(1770)^0  		0  4 -1  0  0   1  -1 1  0  	1.773 	0.186   relBW	[PDG nonett 3^1D_2]
+Meson K2(1770)0bar 	\bar{K_2(1770)}^0  	0  4 -1  0  0   1  1 -1  0  	1.773 	0.186   relBW	[PDG nonett 3^1D_2]
 Meson K2(1770)+ 	K_2(1770)^+  		3  4 -1  0  0   1  1  1  0  	1.773 	0.186   relBW	[PDG nonett 3^1D_2]
 Meson K2(1770)- 	K_2(1770)^-  		-3  4 -1  0  0   1  -1 -1 0  	1.773 	0.186   relBW	[PDG nonett 3^1D_2]
 Meson K*3(1780)0 	K_3^\ast(1780)0  	0  6 -1  0  0   1  -1  1  0  	1.770 	0.164   relBW	[PDG nonett 3^3D_3]
