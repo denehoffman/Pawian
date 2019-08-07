@@ -149,7 +149,7 @@ void RootPiPiScatteringHist::fillEvt(EvtData* theData, double weight, std::strin
 
   if(evtType=="data"){
     theTree=_dataFourvecs;
-    if(GlobalEnv::instance()->parser()->productionFormalism()=="Phase"){
+    if(GlobalEnv::instance()->parser()->productionFormalism()=="Phase" || GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
     _dataGraph = _phaseDataGraphErr;
     }
     else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
@@ -162,7 +162,7 @@ void RootPiPiScatteringHist::fillEvt(EvtData* theData, double weight, std::strin
 
   else if(evtType=="fit"){
     theTree=_fittedFourvecs;
-    if(GlobalEnv::instance()->parser()->productionFormalism()=="Phase"){
+    if(GlobalEnv::instance()->parser()->productionFormalism()=="Phase" || GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
       _dataGraph = _phaseFitGraphErr;
     }
     else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
