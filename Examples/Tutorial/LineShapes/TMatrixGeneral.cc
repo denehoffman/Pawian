@@ -192,6 +192,8 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 
   std::ofstream oStream;
   oStream.open("scatteringOut.txt");
+  std::ofstream oStream_phi;
+  oStream_phi.open("scatteringOut_phi.txt");
  double oldT00RelReal=1.;
   int n180ShiftRel(0);
 
@@ -217,7 +219,14 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 	_ImagT11m1H1Vec.at(i)->Fill(mass, -(*tMatrInv)(i,i).imag());
 	
 	_ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
-	double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
+	double currentphase=180.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
+	complex<double> SijRel_phi=complex<double>(1.,0.)+2.*PawianConstants::i*currentRho.real()*(*_tMatr)(i,i);
+  if(i==0) {
+	oStream_phi << mass << "\t" 
+			<< currentphase << "\t" << 0.01 << "\t" 
+		<<  sqrt(norm(SijRel_phi)) << "\t" << 0.001 
+			<< endl;
+  }
 	_PhaseH2Vec.at(i)->Fill(mass, currentphase);
 	// double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
 	// double currentElasticity=2.*sqrt(sqrtFactor);
@@ -288,11 +297,12 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 	//theDelta += 180.0*n180ShiftRel;
 	//	double thePhi=0.5*currentphase+ 45.0;
 	complex<double> SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*currentRho.real()*(*_tMatr)(i,i);
-	//	theDelta=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
+  if(abs((*_tMatr)(i,i))>0.1) {
 	oStream << mass << "\t" 
 			<< theDelta << "\t" << 0.01 << "\t" 
 		<<  sqrt(norm(SijRel)) << "\t" << 0.001 
 			<< endl;
+  }
 	oldT00RelReal = currentReE;
 	//        oldDelta=theDelta; 
       }
@@ -301,6 +311,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   }
   
   oStream.close();
+  oStream_phi.close();
   
   if(energyPlaneBorders[0] == 0)
     energyPlaneBorders[0] = _massMin;

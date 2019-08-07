@@ -6,6 +6,10 @@
 #
 # type name             texName               3*Q 2*J P  C  G   2*I 2*I3 S  C      mass              width  dyn.f   comment
 #
+Meson 0mpPHSP 	0^{-+}PHSP 		0  0 -1  1  1  	0  0  0  0 	2.230 	0.1500 	relBW	[PDG nonett 4^1S_0]
+Meson X(1835) 	X(1835) 		0  0 -1  1  1  	0  0  0  0 	1.8265 	0.242 	relBW	[PDG nonett 4^1S_0]
+Meson X(2500) 	X(2500)  		0  0 -1  1  1  	0  0  0  0 	2.488 	0.2150 	relBW	[PDG no idea]
+Meson f1(1800) 	f_1(1800)  	0  2  1  1  1  	0  0  0  0 	1.800 	0.400 	relBW	[PDG nonett 2^3P_1]
 Meson pipieff            pipieff                0  0  1  1  1   0  0  0  0      0.26996 0.0001     relBW   [PDG no idea]
 Meson etaMatrix	        etaMatrix               0  0 -1  1  1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
 Meson f2Matrix	 	f_2Matrix  		0  4  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]
