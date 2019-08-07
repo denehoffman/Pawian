@@ -210,6 +210,7 @@ void PiPiScatteringChannelEnv::addDynamics(){
   }
 
   std::shared_ptr<AbsDecay> theDecay=absDecList.at(0);
+
   theDecay->enableDynamics(dynStr, additionalStringVec);
 
 }

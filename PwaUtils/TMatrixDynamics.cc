@@ -69,6 +69,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   else if(dataType=="Phase") _dataTypeID=2;
   else if(dataType=="ArgandUnits") _dataTypeID=3;
   else if(dataType=="Data") _dataTypeID=4;
+  else if(dataType=="PhaseDiff") _dataTypeID=5; //in TMatrixCompareDynamics only 
   else{
     Alert << "production formalism/data type with the name" << dataType << " is not supported for pi pi scattering fits! \n It is working for: Elasticity, ArgandUnits or Phase!!!" << endmsg;
     exit(1); 

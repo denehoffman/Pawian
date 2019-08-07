@@ -60,6 +60,7 @@ public:
   virtual std::shared_ptr<KMatrixRel> getKMatix() {return _kMatr;}
   virtual std::shared_ptr<TMatrixRel> getTMatix() {return _tMatr;}
   virtual std::vector< std::string>   gFactorNames() {return _gFactorNames;}
+  virtual std::string KMatixName() {return _kMatName;}
   virtual int orbitalL() {return _orbitalL;} 
   virtual void fillMasses(EvtData* theData);
  

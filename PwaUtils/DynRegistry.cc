@@ -41,6 +41,7 @@
 #include "PwaUtils/PiPiSWaveASDynamics.hh"
 #include "PwaUtils/KMatrixDynamics.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
+#include "PwaUtils/TMatrixCompareDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/JohnsonDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"
@@ -121,9 +122,15 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
 	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
       }
+      else if(theDec->dynType()=="TMatrixCompare"){
+	std::string pathToConfigFile=theDec->pathToConfigParser();
+	std::string projectionParticleNames = theDec->projectionParticleNames();
+	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
+	result= std::shared_ptr<AbsDynamics>(new TMatrixCompareDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
+      }
       else{
-	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;
-	exit(1);
+      	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;
+      	exit(1);
       } 
     }
 
