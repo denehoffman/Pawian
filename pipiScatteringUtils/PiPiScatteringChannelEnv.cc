@@ -137,8 +137,8 @@ void PiPiScatteringChannelEnv::setupGlobal(ChannelID id){
    }   
 
    if(daughterParticles.size()!=2){
-     Alert << "it is required to define exactly 2 dauhgter particles!!!"
-	   <<"\nths number of dauhter particles here are " << daughterParticles.size() 
+     Alert << "it is required to define exactly 2 daughter particles!!!"
+	   <<"\nths number of daughter particles here are " << daughterParticles.size() 
 	   << endmsg;
      exit(1);
    }
