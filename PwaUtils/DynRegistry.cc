@@ -55,6 +55,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "ConfigParser/ParserBase.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
 
 #include "PwaUtils/WoDynamics.hh"
 
@@ -95,6 +96,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
   std::shared_ptr<AbsDynamics> result;
 
   ChannelID currentChannelId = theDec->channelId();
+  ParserBase* parserBase=GlobalEnv::instance()->Channel(currentChannelId)->parser();
   std::map<std::string, std::shared_ptr<AbsDynamics> > currentDynMap;
 
   std::map<ChannelID, std::map<std::string, std::shared_ptr<AbsDynamics> > >::iterator itChannelId =_dynMapChannel.find(currentChannelId);
@@ -116,6 +118,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     
     //special treatment of pipiScattering
     if( theDec->type() =="PiPiScatteringDecay" ){
+      pipiScatteringParser* thePiPiScatteringParser = dynamic_cast<pipiScatteringParser*>(parserBase);
       if(theDec->dynType()=="TMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
 	std::string projectionParticleNames = theDec->projectionParticleNames();
@@ -124,9 +127,10 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       }
       else if(theDec->dynType()=="TMatrixCompare"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
+	std::string pathToConfigCompareFile=thePiPiScatteringParser->pathToKMatrixCompareFile();
 	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
-	result= std::shared_ptr<AbsDynamics>(new TMatrixCompareDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
+	result= std::shared_ptr<AbsDynamics>(new TMatrixCompareDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, pathToConfigCompareFile, currentDataType, projectionParticleNames));
       }
       else{
       	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;

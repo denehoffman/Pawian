@@ -37,7 +37,7 @@
 class TMatrixCompareDynamics : public TMatrixDynamics{
 
 public:
-  TMatrixCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames="");
+  TMatrixCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string& pathToKMatrCompareConfigFile, std::string dataType, std::string projectionParticleNames="");
   virtual ~TMatrixCompareDynamics();
 
   virtual std::string type() {return "TMatrixDynamics";}

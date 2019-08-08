@@ -38,9 +38,11 @@ class pipiScatteringParser : public ParserBase
   pipiScatteringParser(int argc,char **argv);
   virtual ~pipiScatteringParser(){;}
 
+  const std::string pathToKMatrixCompareFile() const {return _pathToKMatrixCompareFile;}
+
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
-  float _scatterDummy;
+  std::string _pathToKMatrixCompareFile;
 };
 
 

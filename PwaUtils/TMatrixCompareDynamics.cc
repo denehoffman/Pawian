@@ -51,13 +51,12 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-TMatrixCompareDynamics::TMatrixCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames) :
+TMatrixCompareDynamics::TMatrixCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  std::string& pathToKMatrCompareConfigFile, std::string dataType, std::string projectionParticleNames) :
   TMatrixDynamics(name, fsParticles, mother, pathToConfigParser, dataType, projectionParticleNames)
   ,_projectionCompareIndex(0)
   ,_currentOffset(0.)
 {
-  std::string pathToConfigParserCompare=_kMatrixParser->pathToKMatrixCompareFile();
-  _kMatrixParserCompare= std::shared_ptr<KMatrixParser>(new KMatrixParser(pathToConfigParserCompare));
+  _kMatrixParserCompare= std::shared_ptr<KMatrixParser>(new KMatrixParser(pathToKMatrCompareConfigFile));
   _tMatrDynCompare=std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParserCompare));
   _tMatrCompare=_tMatrDynCompare->getTMatix();  
 

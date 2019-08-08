@@ -36,10 +36,11 @@ using namespace std;
 
 pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ParserBase(argc,argv)
+  ,_pathToKMatrixCompareFile("")
 {
   po::options_description common("Common Options");
   common.add_options()
-    ("scatterDummy", po::value<float>(&_scatterDummy)->default_value(_scatterDummy),"antiproton momentum")
+    ("pathToKMatrixCompareFile", po::value<std::string>(&_pathToKMatrixCompareFile)->default_value(_pathToKMatrixCompareFile),"path to another KMatrix-cfg file for comparison purposes")
     ;
   
   _common->add(common);
@@ -56,7 +57,7 @@ bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
 
-  std::cout << "scatterDummy = " << _scatterDummy << std::endl;
+  std::cout << "pathToKMatrixCompareFile = " << _pathToKMatrixCompareFile << std::endl;
 
   std::cout << std::endl;
 

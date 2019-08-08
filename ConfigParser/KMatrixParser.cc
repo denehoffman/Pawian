@@ -46,8 +46,6 @@ KMatrixParser::KMatrixParser(std::string& path)
       ,_s0Adler(1.)
       ,_snormAdler(1.)
       ,_config(new po::options_description("Configuration file options"))
-      ,_pathToKMatrixCompareFile("")
-
      {
     _config->add_options()
       ("keyName",po::value<std::string>(&_keyName), "name for this specific k-matrix")
@@ -71,7 +69,6 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("gFactorFixMassPol",po::value< vector<string> >(&_gFactorFixMassPol), "3rd order polynomial to correct the pole mass for fixing g-factor ratios, total widths and total mass")  
       ("gFactorFixWidthPol",po::value< vector<string> >(&_gFactorFixWidthPol), "3rd order polynomial to correct the pole width for fixing g-factor ratios, total widths and total mass")
       ("gFactorFixSeparateScale",po::value< vector<string> >(&_gFactorFixSeparateScale), "g-factors to be scaled separately related to free g-factor")
-      ("pathToKMatrixCompareFile", po::value<string>(& _pathToKMatrixCompareFile), "path to another KMatrix-cfg file for comparison purposes")
 	;
     parseCommandLine();
   }
@@ -112,7 +109,6 @@ bool KMatrixParser::parseCommandLine()
 	      << "use Adler0 term: " << _useAdler0 << "\n\n"
 	      << "s0Adler: " << _s0Adler << "\n\n"
 	      << "snormAdler: " << _snormAdler << "\n\n"
-	      << "pathToKMatrixCompareFile: " << _pathToKMatrixCompareFile << "\n\n" 
 	      << endl;
 
     std::cout << "g-factors are defined as follows:" << "size: " << _gFactors.size() << std::endl;
