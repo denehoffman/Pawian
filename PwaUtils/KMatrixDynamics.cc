@@ -374,6 +374,11 @@ void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   
   if (it != _fVecMap.end()) return;
 
+  addOneGrandMa(theName);
+
+}
+
+void KMatrixDynamics::addOneGrandMa(std::string theName){
   std::shared_ptr<PVectorRel> currentPVector=makeNewPVec();
   _pVecMap[theName]=currentPVector;
 

@@ -82,6 +82,8 @@ protected:
 
   virtual void init();
   std::shared_ptr<PVectorRel> makeNewPVec();
+  void addOneGrandMa(std::string theName);
+
 private:
 
 };

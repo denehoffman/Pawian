@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2017 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2019 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -20,8 +20,8 @@
 //									  //
 //************************************************************************//
 
-// RootPiPiScatteringHist class definition file. -*- C++ -*-
-// Copyright 2017 Bertram Kopf
+// KMatrixPVecIntensityDynamics class definition file. -*- C++ -*-
+// Copyright 2019 Bertram Kopf
 
 #pragma once
 
@@ -30,48 +30,24 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <sstream>
 #include <memory>
 
-#include "TROOT.h"
+#include "PwaUtils/KMatrixDynamics.hh"
 
-#include "PwaUtils/AbsHist.hh"
-#include "Utils/PawianCollectionUtils.hh"
-
-class AbsLh;
-class EvtData;
-class TLorentzVector; 
-
-class TFile;
-class TGraphErrors;
-class TGraph;
-class TTree;
-class Particle;
-class AbsPawianParameters;
-
-class RootPiPiScatteringHist : public AbsHist{
+class KMatrixPVecIntensityDynamics : public KMatrixDynamics{
 
 public:
-  RootPiPiScatteringHist(std::string additionalSuffix="", bool withTruth=false);
-  virtual ~RootPiPiScatteringHist();
-  virtual void fillEvt(EvtData* theData, double weight, std::string evtType, int pointNr);
-  virtual void fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams);
-  virtual void scaleFitHists(double scaleFactor) {;}
-  
+  KMatrixPVecIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  ChannelID channelID, std::string projectionParticleNames="");
+  virtual ~KMatrixPVecIntensityDynamics();
+
+  virtual std::string type() {return "KMatrixPVecIntensityDynamics";}
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp=0, Spin OrbMom=0);
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
+  virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) { return;} //dummy
 protected:
-  TFile* _theTFile;
-  TTree* _dataFourvecs;
-  TTree* _fittedFourvecs;
+  int _projectionCompareIndex;
+  std::string _nameOfFVector;
 
-  TGraphErrors* _dataGraphErr;
-  TGraphErrors* _fitGraphErr;
-
-  //  virtual void initRootStuff()=0;
-  
 private:
-  float _massVal;
-  float _dataVal;
-  float _dataErrVal;
-  float _fitVal;
-};
 
+};

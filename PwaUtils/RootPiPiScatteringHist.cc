@@ -63,28 +63,51 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
   rootFileName << "./pawianHists" << GlobalEnv::instance()->outputFileNameSuffix() << _additionalSuffix.c_str() <<  ".root";
   _theTFile=new TFile(rootFileName.str().c_str(),"recreate");
 
-  _phaseDataGraphErr = new TGraphErrors();
-  _phaseDataGraphErr->SetName("deltaData");
-  _phaseDataGraphErr->SetTitle("#delta_{ij} (data)");
-  _etaDataGraphErr = new TGraphErrors();
-  _etaDataGraphErr->SetName("etaData");
-  _etaDataGraphErr->SetTitle("#eta_{ij} (data)");
+  std::string graphNameData("DeltaData");
+  std::string graphNameFit("DeltaFit");
 
-  _argandUnitsDataGraphErr = new TGraphErrors();
-  _argandUnitsDataGraphErr->SetName("ArgandUnitsData");
-  _argandUnitsDataGraphErr->SetTitle("ArgandUnits (data)");
+  std::string graphTitleData="#{delta}^{o} (data)";
+  std::string graphTitleFit("#{delta}^{o} (fit)");
+
+  if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
+    graphNameData="ElasticityData";
+    graphNameFit="ElasticityFit";
+    graphTitleData="#{eta} (data)";
+    graphTitleFit="#{eta} (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="ArgandUnits"){
+    graphNameData="ArgandUnitsData";
+    graphNameFit="ArgandUnitsFit";
+    graphTitleData="#{rho}_{i) #{rho)_{j} |T_{ij}|^{2} (data)";
+    graphTitleFit="#{rho}_{i) #{rho)_{j} |T_{ij}|^{2} (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
+    graphNameData="PhaseDiffData";
+    graphNameFit="PhaseDiffFit";
+    graphTitleData="#{phi}_{i}-#{phi}_{j}  (data)";
+    graphTitleFit="#{phi}_{i}-#{phi}_{j} (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="PVecIntensity"){
+    graphNameData="PVecIntensityData";
+    graphNameFit="PVecIntensityFit";
+    graphTitleData="intensity (data)";
+    graphTitleFit="intensity (fit)";
+  }
+  else{
+    Alert <<"production formalism " 
+	  << GlobalEnv::instance()->parser()->productionFormalism() 
+	  << " is not supported here!!!" << endmsg;
+    exit(1);
+  }
 
 
-  _phaseFitGraphErr = new TGraphErrors();
-  _phaseFitGraphErr->SetName("deltaFit");
-  _phaseFitGraphErr->SetTitle("#delta_{ij} (fit)");
-  _etaFitGraphErr = new TGraphErrors();
-  _etaFitGraphErr->SetName("etaFit");
-  _etaFitGraphErr->SetTitle("#eta_{ij} (fit)");
-  _argandUnitsFitGraphErr = new TGraphErrors();
-  _argandUnitsFitGraphErr->SetName("ArgandUnitsFit");
-  _argandUnitsFitGraphErr->SetTitle("ArgandUnits (fit)");
+  _dataGraphErr = new TGraphErrors();
+  _dataGraphErr->SetName(graphNameData.c_str());
+  _dataGraphErr->SetTitle(graphTitleData.c_str());
 
+  _fitGraphErr = new TGraphErrors();
+  _fitGraphErr->SetName(graphNameFit.c_str());
+  _fitGraphErr->SetTitle(graphTitleFit.c_str());
 
   _dataFourvecs = new TTree("_dataFourvecs", "_dataFourvecs");
   _fittedFourvecs = new TTree("_fittedFourvecs", "_fittedFourvecs");
@@ -99,13 +122,8 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
  }
 
 RootPiPiScatteringHist::~RootPiPiScatteringHist(){
-  _phaseDataGraphErr->Write();
-  _etaDataGraphErr->Write();
-  _argandUnitsDataGraphErr->Write();
-
-  _phaseFitGraphErr->Write();
-  _etaFitGraphErr->Write();
-  _argandUnitsFitGraphErr->Write();
+  _dataGraphErr->Write();
+  _fitGraphErr->Write();
 
   _theTFile->Write();
   _theTFile->Close();
@@ -124,13 +142,11 @@ void RootPiPiScatteringHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::s
   double weightFit = fitParams->Value(theLh->getChannelScaleParam());
 
   const std::vector<EvtData*> dataList=theLh->getDataVec();
-  double integralDataWWeight=0.;
 
   std::vector<EvtData*>::const_iterator it=dataList.begin();
   int dataPoint=1;
   while(it!=dataList.end())
     {
-      //      integralDataWWeight+=weight;
       fillEvt((*it), weight, "data", dataPoint);
       fillEvt((*it), weightFit, "fit", dataPoint);
       InfoMsg << "data No " << (*it)->evtNo << " filled!!!" << endmsg;
@@ -145,47 +161,22 @@ void RootPiPiScatteringHist::fillEvt(EvtData* theData, double weight, std::strin
   if(evtType=="mc") return; // no MC data available
 
   TTree* theTree=0;
-  TGraphErrors* _dataGraph=0;
-
-  if(evtType=="data"){
-    theTree=_dataFourvecs;
-    if(GlobalEnv::instance()->parser()->productionFormalism()=="Phase" || GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
-    _dataGraph = _phaseDataGraphErr;
-    }
-    else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
-    _dataGraph =_etaDataGraphErr;
-    }
-    else if (GlobalEnv::instance()->parser()->productionFormalism()=="ArgandUnits"){
-    _dataGraph =_argandUnitsDataGraphErr;
-    }
-  }
-
-  else if(evtType=="fit"){
-    theTree=_fittedFourvecs;
-    if(GlobalEnv::instance()->parser()->productionFormalism()=="Phase" || GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
-      _dataGraph = _phaseFitGraphErr;
-    }
-    else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
-    _dataGraph =_etaFitGraphErr;
-    }
-    else if (GlobalEnv::instance()->parser()->productionFormalism()=="ArgandUnits"){
-      _dataGraph = _argandUnitsFitGraphErr;
-    }
-  }
 
   if(evtType=="data" || evtType=="fit"){
     _massVal=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME)) ;
     if(evtType=="data"){
+      theTree=_dataFourvecs;
       _dataVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
       _dataErrVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATAERR_PIPISCAT_NAME));
-      _dataGraph->SetPoint(pointNr, _massVal, _dataVal);
-      _dataGraph->SetPointError(pointNr, 0., _dataErrVal);
+	_dataGraphErr->SetPoint(pointNr, _massVal, _dataVal);
+	_dataGraphErr->SetPointError(pointNr, 0., _dataErrVal);
     }
-    else{
+    else{  //evtType=="fit"
+      theTree=_fittedFourvecs;
       _fitVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME));
       _fitVal*=weight;
-      _dataGraph->SetPoint(pointNr, _massVal, _fitVal);
-      _dataGraph->SetPointError(pointNr, 0., 0.);
+      _fitGraphErr->SetPoint(pointNr, _massVal, _fitVal);
+      _fitGraphErr->SetPointError(pointNr, 0., 0.);
     }
     theTree->Fill();
   }
