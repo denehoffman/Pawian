@@ -20,6 +20,7 @@ lib AppUtils :
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/PspGen//PspGen
 	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/qaErrorExtract//qaErrorExtract
 	$(TOP)/MinFunctions//MinFunctions
 	$(TOP)/pbarpUtils//pbarpUtils
 	$(TOP)/epemUtils//epemUtils

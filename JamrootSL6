@@ -36,6 +36,7 @@ build-project ConfigParser ;
 build-project FitParams ;
 build-project PwaDynamics ;
 build-project PwaUtils ;
+build-project qaErrorExtract ;
 build-project MinFunctions ;
 build-project AppUtils ;
 build-project pbarpUtils ;

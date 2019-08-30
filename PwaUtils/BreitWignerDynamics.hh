@@ -34,6 +34,7 @@
 #include <memory>
 
 #include "PwaUtils/AbsDynamics.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 class BreitWignerDynamics : public AbsDynamics{
 

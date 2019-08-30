@@ -36,6 +36,7 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
+#include "FitParams/AbsPawianParameters.hh"
 
 class AbsLh;
 class EvtData;
@@ -179,7 +180,6 @@ struct angleHistData2D {
 
 
 class Particle;
-class AbsPawianParameters;
 
 class AbsHist {
 

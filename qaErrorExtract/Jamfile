@@ -1,0 +1,21 @@
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : qaErrorExtract
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
+project : 
+	;
+
+lib qaErrorExtract : 
+    [ glob *.cc : *App.cc ]
+    $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/ConfigParser//ConfigParser
+    $(TOP)/FitParams//FitParams
+    $(TOP)/PwaUtils//PwaUtils 
+    : 
+    : 
+    : ;

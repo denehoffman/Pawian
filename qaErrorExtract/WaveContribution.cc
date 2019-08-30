@@ -24,7 +24,7 @@
 // WaveContribution class definition file. -*- C++ -*-
 // Copyright 2013 Julian Pychy
 
-#include "PwaUtils/WaveContribution.hh"
+#include "qaErrorExtract/WaveContribution.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "FitParams/PwaCovMatrix.hh"
@@ -37,21 +37,18 @@
 #include <iostream>
 
 WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams) :
-     _calcError(false)
-    , _theLh(theLh)
-    , _fitParamsOriginal(theFitParams)
+  AbsCovMatErrorExtract(theLh, theFitParams)
 {
    _MCDataList=_theLh->getMcVec();
+   initContribs();
 }
 
 WaveContribution::WaveContribution(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> theFitParams,
 				   std::shared_ptr<PwaCovMatrix> thePwaCovMatrix) :
-     _calcError(true)
-   , _theLh(theLh)
-   , _thePwaCovMatrix(thePwaCovMatrix)
-   , _fitParamsOriginal(theFitParams)
+  AbsCovMatErrorExtract(theLh, theFitParams, thePwaCovMatrix)
 {
    _MCDataList=_theLh->getMcVec();
+   initContribs();
 }
 
 double WaveContribution::CalcContribution(std::shared_ptr<AbsPawianParameters> theFitParams){
@@ -167,7 +164,7 @@ double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParam
 
 
 unsigned int WaveContribution::NoOfContributions(){
-  return GlobalEnv::instance()->Channel()->calcContributionDataVec().size();
+  return _calcContributionDataVec.size();
 }
 
 
@@ -178,7 +175,7 @@ std::string WaveContribution::GetContributionName(unsigned int index){
      Alert << "index > NoOfContributions()" << endmsg;
   }
 
-  return GlobalEnv::instance()->Channel()->calcContributionDataVec().at(index)->_contribName;
+  return _calcContributionDataVec.at(index)->_contribName;
 }
 
 
@@ -191,8 +188,7 @@ std::shared_ptr<AbsPawianParameters> WaveContribution::GetParametersForContribut
   std::shared_ptr<AbsPawianParameters> newParameters = std::shared_ptr<AbsPawianParameters>(_fitParamsOriginal->Clone());
   unsigned int nPar = newParameters->Params().size();
 
-  std::vector<std::shared_ptr<calcContributionData> > calcContributionDataVec = GlobalEnv::instance()->Channel()->calcContributionDataVec();
-  std::vector<std::string> tmpZeroAmp = calcContributionDataVec.at(index)->_contribZeroAmpVec;
+  std::vector<std::string> tmpZeroAmp = _calcContributionDataVec.at(index)->_contribZeroAmpVec;
 
   for(auto itZeroAmpVec = tmpZeroAmp.begin(); itZeroAmpVec!=tmpZeroAmp.end(); ++itZeroAmpVec) {      // loop over to be zeroed amplitudes in ONE "calcContribution"-line
      for(unsigned int i=0; i<nPar; i++){  // loop over all existing fitParameters
@@ -205,4 +201,29 @@ std::shared_ptr<AbsPawianParameters> WaveContribution::GetParametersForContribut
   }
 
   return newParameters;
+}
+
+void WaveContribution::initContribs(){
+  std::vector<std::string> theCalcContribution=GlobalEnv::instance()->Channel()->parser()->calcContribution();
+
+  std::vector<std::string>::const_iterator itStr;
+  for ( itStr = theCalcContribution.begin(); itStr != theCalcContribution.end(); ++itStr){
+    std::stringstream stringStr;
+    stringStr << (*itStr);
+    
+    std::string tmpName;
+    std::string contribName;
+    std::vector<std::string> currentStringZeroAmp;
+    bool isContribName = true;
+    while(stringStr >> tmpName){
+      if(tmpName=="withZeroAmp") {
+        isContribName = false;
+        continue;
+      }
+      if(isContribName) contribName = tmpName;
+      else currentStringZeroAmp.push_back(tmpName);
+    }
+    std::shared_ptr<calcContributionData> currentCalcContributionData(new calcContributionData(contribName, currentStringZeroAmp));
+    _calcContributionDataVec.push_back(currentCalcContributionData);
+  }
 }

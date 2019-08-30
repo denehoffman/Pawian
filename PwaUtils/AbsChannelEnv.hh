@@ -29,7 +29,7 @@
 #include <vector>
 #include <memory>
 #include "PwaUtils/AbsHist.hh"
-#include "PwaUtils/WaveContribution.hh"
+// #include "PwaUtils/WaveContribution.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
@@ -62,7 +62,6 @@ public:
   std::vector<std::vector<std::string> >& histMassSystems() {return _histMassSystems;}
   std::vector<std::shared_ptr<angleHistData> >& angleHistDataVec() {return _angleHistDataVec;}
   std::vector<std::shared_ptr<angleHistData2D> >& angleHistDataVec2D() {return _angleHistDataVec2D;}
-  std::vector<std::shared_ptr<calcContributionData> >& calcContributionDataVec() {return _calcContributionDataVec;}
   const bool useMassRange() const {return _useMassRange;}
   const bool usePhpGenDynamics() const {return _usePhpGenDynamics;}
   bool useDataEvtWeight(){return _useDataEvtWeight;}
@@ -114,7 +113,6 @@ protected:
    std::vector<std::vector<std::string> > _histMassSystems;
    std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
-   std::vector<std::shared_ptr<calcContributionData> > _calcContributionDataVec;
   Vector4<double> extract4Vec(std::string theString);   
 
    bool _useMassRange;

@@ -40,7 +40,7 @@
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AbsHist.hh"
-#include "PwaUtils/WaveContribution.hh"
+#include "qaErrorExtract/WaveContribution.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
