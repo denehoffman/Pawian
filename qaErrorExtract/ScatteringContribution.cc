@@ -63,7 +63,6 @@ void ScatteringContribution::CalcErrorFromData(EvtData* theData){
   double result=_pipiScatteringBaseLh->calcFitVal(theData, _fitParamsOriginal);
 
   double resultErr=0;
-  double stepSize = 0.00001;
   std::map<std::string, double > derivatives;
   
   unsigned int nPar = _fitParamsOriginal->Params().size();
@@ -72,7 +71,10 @@ void ScatteringContribution::CalcErrorFromData(EvtData* theData){
   for(unsigned int i=0; i<nPar; i++){
     double parOrig = _fitParamsOriginal->Value(i);
     std::string parName = _fitParamsOriginal->GetName(i);
-    
+
+    double stepSize = 0.0001;
+    double currentError=sqrt(_thePwaCovMatrix->GetElement(_fitParamsOriginal->GetName(i),(_fitParamsOriginal->GetName(i))));
+    if( currentError > 1.e-10) stepSize = currentError/1000.;    
     newFitParams->SetValue(i, parOrig + stepSize);
     
     double newVal = _pipiScatteringBaseLh->calcFitVal(theData, newFitParams);
