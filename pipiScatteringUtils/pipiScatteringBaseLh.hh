@@ -75,7 +75,7 @@ public:
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
 
   virtual void print(std::ostream& os) const;
-
+  virtual double calcFitVal( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
 
 protected:
   //  std::shared_ptr<resReaction> _resReactionPtr;

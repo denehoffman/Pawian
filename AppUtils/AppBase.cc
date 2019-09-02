@@ -41,6 +41,7 @@
 #include "PwaUtils/PwaGen.hh"
 #include "PwaUtils/AbsHist.hh"
 #include "qaErrorExtract/WaveContribution.hh"
+#include "qaErrorExtract/ScatteringContribution.hh"
 #include "PwaUtils/NetworkServer.hh"
 #include "PwaUtils/NetworkClient.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -221,17 +222,7 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   if ( fabs(AICccDenom) < 1.e-10) AICccDenom=1.e-10;
   double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/AICccDenom;
 
-  if(GlobalEnv::instance()->Channel()->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
-    std::shared_ptr<AbsHist> histPtr1 = GlobalEnv::instance()->Channel()->CreateHistInstance();
-    histPtr1->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), startParams);
-
-    InfoMsg << "chi2\t" << theLh;
-    theQaStream << "chi2\t" << theLh << "\n";
-    return;
-  }
-  
-
-  std::shared_ptr<WaveContribution> theWaveContribution;
+  std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
   if(GlobalEnv::instance()->parser()->calcContributionError()){
     std::string serializationFileName = GlobalEnv::instance()->serializationFileName();
     std::ifstream serializationStream(serializationFileName.c_str());
@@ -241,9 +232,25 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
       exit(0);
     }
     boost::archive::text_iarchive boostInputArchive(serializationStream);
-    
-    std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
     boostInputArchive >> *thePwaCovMatrix;
+  }
+
+  if(GlobalEnv::instance()->Channel()->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
+    if(GlobalEnv::instance()->parser()->calcContributionError()){
+      std::shared_ptr<ScatteringContribution> theScatteringContribution(new ScatteringContribution(GlobalEnv::instance()->Channel()->Lh(), startParams, thePwaCovMatrix));
+      theScatteringContribution->CalcError();
+    }
+
+    std::shared_ptr<AbsHist> histPtr1 = GlobalEnv::instance()->Channel()->CreateHistInstance();
+    histPtr1->fillFromLhData(GlobalEnv::instance()->Channel()->Lh(), startParams);
+    InfoMsg << "chi2\t" << theLh;
+    theQaStream << "chi2\t" << theLh << "\n";
+    return;
+  }
+  
+
+  std::shared_ptr<WaveContribution> theWaveContribution;
+  if(GlobalEnv::instance()->parser()->calcContributionError()){
     theWaveContribution = std::shared_ptr<WaveContribution>
       (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), startParams, thePwaCovMatrix));
   }

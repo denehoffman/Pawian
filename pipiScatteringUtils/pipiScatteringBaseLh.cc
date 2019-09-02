@@ -227,4 +227,12 @@ void pipiScatteringBaseLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxE
   return;
 }
 
+double pipiScatteringBaseLh::calcFitVal( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
+  _XdecAmp->updateFitParams(fitPar);
+  Spin dummylamX(0);
+  _PiPiScatteringXdecAmp->XdecAmp(dummylamX, theData);
+  double fitPoint=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME));
+  return fitPoint;
+}
+
 

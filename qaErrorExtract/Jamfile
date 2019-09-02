@@ -15,7 +15,8 @@ lib qaErrorExtract :
     $(TOP)/ErrLogger//ErrLogger
     $(TOP)/ConfigParser//ConfigParser
     $(TOP)/FitParams//FitParams
-    $(TOP)/PwaUtils//PwaUtils 
+    $(TOP)/PwaUtils//PwaUtils
+    $(TOP)/pipiScatteringUtils//pipiScatteringUtils 
     : 
     : 
     : ;

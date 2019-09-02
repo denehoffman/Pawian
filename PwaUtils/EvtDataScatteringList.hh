@@ -60,6 +60,7 @@ public:
   static std::string DATA_PIPISCAT_NAME;
   static std::string DATAERR_PIPISCAT_NAME;
   static std::string FIT_PIPISCAT_NAME;
+  static std::string FITERR_PIPISCAT_NAME;
 
 protected:
   int _noOfInterPolData;

@@ -69,7 +69,13 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
   std::string graphTitleData="#{delta}^{o} (data)";
   std::string graphTitleFit("#{delta}^{o} (fit)");
 
-  if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
+  if (GlobalEnv::instance()->parser()->productionFormalism()=="Phase"){
+    graphNameData="PhaseData";
+    graphNameFit="PhaseFit";
+    graphTitleData="#{eta} (data)";
+    graphTitleFit="#{eta} (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
     graphNameData="ElasticityData";
     graphNameFit="ElasticityFit";
     graphTitleData="#{eta} (data)";
@@ -174,9 +180,10 @@ void RootPiPiScatteringHist::fillEvt(EvtData* theData, double weight, std::strin
     else{  //evtType=="fit"
       theTree=_fittedFourvecs;
       _fitVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME));
+      _fitErrVal=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FITERR_PIPISCAT_NAME));
       _fitVal*=weight;
       _fitGraphErr->SetPoint(pointNr, _massVal, _fitVal);
-      _fitGraphErr->SetPointError(pointNr, 0., 0.);
+      _fitGraphErr->SetPointError(pointNr, 0., _fitErrVal);
     }
     theTree->Fill();
   }

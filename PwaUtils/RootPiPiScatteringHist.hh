@@ -73,5 +73,6 @@ private:
   float _dataVal;
   float _dataErrVal;
   float _fitVal;
+  float _fitErrVal;
 };
 

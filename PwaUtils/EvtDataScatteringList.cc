@@ -50,6 +50,7 @@ std::string EvtDataScatteringList::M_PIPISCAT_NAME = "pipiScatm";
 std::string EvtDataScatteringList::DATA_PIPISCAT_NAME = "pipiScatData";
 std::string EvtDataScatteringList::DATAERR_PIPISCAT_NAME = "pipiScatDataErr";
 std::string EvtDataScatteringList::FIT_PIPISCAT_NAME = "pipiScatFit";
+std::string EvtDataScatteringList::FITERR_PIPISCAT_NAME = "pipiScatFitErr";
 
 EvtDataScatteringList::EvtDataScatteringList(ChannelID channelID) :
   EvtDataBaseList(channelID)
@@ -158,6 +159,8 @@ void EvtDataScatteringList::readScatteringDefaultFit(std::vector<EvtData*>& data
  
       evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FIT_PIPISCAT_NAME), 0.));
 
+      evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FITERR_PIPISCAT_NAME), 0.));
+
       fitEvtList.push_back(evtData); 
 
       InfoMsg << "added data point for pi pi scattering in PAWIAN EvtFit list" 
@@ -180,6 +183,7 @@ EvtData* EvtDataScatteringList::convertEvent(Event* theEvent, int evtNo){
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME), theEvent->DataPoint()));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME), theEvent->DataPointErr()));
   evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FIT_PIPISCAT_NAME), 0.));
+  evtData->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FITERR_PIPISCAT_NAME), 0.));
   return evtData;
 }
 
@@ -200,6 +204,7 @@ EvtData* EvtDataScatteringList::convertEvent(Event* theEvent, int evtNo){
    evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME), interpolDataPoint));
    evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME), interpolDataErr));
   evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FIT_PIPISCAT_NAME), 0.));
+evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FITERR_PIPISCAT_NAME), 0.));
 
 
   return evtDataInterpol;
@@ -233,6 +238,7 @@ std::vector<EvtData*> EvtDataScatteringList::convertEventInterpol(Event* oldEven
     evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATA_PIPISCAT_NAME), currentDataPoint));
     evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(DATAERR_PIPISCAT_NAME), dataErrCurrent));
     evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FIT_PIPISCAT_NAME), 0.));
+    evtDataInterpol->DoubleId.insert(mapShortDouble::value_type(IdStringMapRegistry::instance()->stringId(FITERR_PIPISCAT_NAME), 0.));
     result.push_back(evtDataInterpol);
     currentEvtNo++;      
   }

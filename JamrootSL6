@@ -44,6 +44,7 @@ build-project epemUtils ;
 build-project resUtils ;
 #build-project gammapUtils ;
 build-project pipiScatteringUtils ;
+build-project qaErrorExtract ;
 build-project Particle ;
 build-project Event ;
 build-project PspGen ;

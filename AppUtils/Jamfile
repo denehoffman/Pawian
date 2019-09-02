@@ -20,13 +20,13 @@ lib AppUtils :
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/PspGen//PspGen
 	$(TOP)/PwaUtils//PwaUtils
-	$(TOP)/qaErrorExtract//qaErrorExtract
 	$(TOP)/MinFunctions//MinFunctions
 	$(TOP)/pbarpUtils//pbarpUtils
 	$(TOP)/epemUtils//epemUtils
 	$(TOP)/resUtils//resUtils
 	$(TOP)/ggUtils//ggUtils
 	$(TOP)/pipiScatteringUtils//pipiScatteringUtils
+	$(TOP)/qaErrorExtract//qaErrorExtract
 	:
 	: 
 	: ;
