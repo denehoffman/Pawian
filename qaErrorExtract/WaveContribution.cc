@@ -96,6 +96,7 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
        retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, 0)));
      }
      else{
+       InfoMsg << "calculating errors for contribution: " << tmpContribName << endmsg;
        double error = CalcError(newContribution, currentParameters);
        retValues.push_back(std::pair<std::string,std::pair<double,double>>(tmpContribName, std::pair<double,double>(newContribution, error)));
      }
@@ -115,7 +116,6 @@ std::vector<std::pair<std::string,std::pair<double,double>>> WaveContribution::C
 
 double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParameters> currentParameters){
    double resultErr=0;
-   double stepSize = 0.0001;
    std::map< std::string, double > derivatives;
 
    unsigned int nPar = currentParameters->Params().size();
@@ -125,12 +125,19 @@ double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParam
       double parOrig = currentParameters->Value(i);
       std::string parName = currentParameters->GetName(i);
 
+      double stepSize = 0.0001;
+      double currentError=sqrt(_thePwaCovMatrix->GetElement(_fitParamsOriginal->GetName(i),(_fitParamsOriginal->GetName(i))));
+      if( currentError > 1.) stepSize = currentError/100000.;
+      else if( currentError > 1.e-7) stepSize = currentError/1000.;
+      else if( currentError > 1.e-10) stepSize = currentError/100.;
+
       newFitParams->SetValue(i, parOrig + stepSize);
- 
+      
       double newContribution = CalcContribution(newFitParams);
       double newDerivative = (newContribution - result) / stepSize;
       derivatives[parName] = newDerivative;
 
+      InfoMsg << "derivation for parameter " << parName << ": " << newDerivative <<endmsg;      
       newFitParams->SetValue(i, parOrig);
    }
 
@@ -151,9 +158,12 @@ double WaveContribution::CalcError(double result, std::shared_ptr<AbsPawianParam
          std::string name1 = currentParameters->GetName(i);
          std::string name2 = currentParameters->GetName(j);
 
-	 resultErr += derivatives[name1] *
+	 double currentTerm=derivatives[name1] *
 	    _thePwaCovMatrix->GetElement(name1, name2) *
 	    derivatives[name2];
+         
+	 InfoMsg << "calculation finished for term " << name1 << " " << name2 << ": " << currentTerm << endmsg;
+	 resultErr += currentTerm;
       }
    }
 

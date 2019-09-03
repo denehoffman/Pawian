@@ -58,8 +58,6 @@ double ScatteringContribution::CalcError(double result, std::shared_ptr<AbsPawia
 
 void ScatteringContribution::CalcErrorFromData(EvtData* theData){
 
-  double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME)); 
-
   double result=_pipiScatteringBaseLh->calcFitVal(theData, _fitParamsOriginal);
 
   double resultErr=0;
@@ -74,13 +72,16 @@ void ScatteringContribution::CalcErrorFromData(EvtData* theData){
 
     double stepSize = 0.0001;
     double currentError=sqrt(_thePwaCovMatrix->GetElement(_fitParamsOriginal->GetName(i),(_fitParamsOriginal->GetName(i))));
-    if( currentError > 1.e-10) stepSize = currentError/1000.;    
+    if( currentError > 1.) stepSize = currentError/100000.;
+    else if( currentError > 1.e-7) stepSize = currentError/1000.;
+    else if( currentError > 1.e-10) stepSize = currentError/100.;    
     newFitParams->SetValue(i, parOrig + stepSize);
     
     double newVal = _pipiScatteringBaseLh->calcFitVal(theData, newFitParams);
     double newDerivative = (newVal - result) / stepSize;
     derivatives[parName] = newDerivative;
 
+    InfoMsg << "derivation for parameter " << parName << ": " << newDerivative <<endmsg;
        newFitParams->SetValue(i, parOrig);
    }
 
@@ -102,8 +103,11 @@ void ScatteringContribution::CalcErrorFromData(EvtData* theData){
 	derivatives[name2];
     }
   }
-  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FITERR_PIPISCAT_NAME))=resultErr;
-  InfoMsg << "calculated error for:\t" << "m: " << currentMass << "\tval: " << result << "\terr: " << resultErr <<endmsg;
+  //  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=result;
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FITERR_PIPISCAT_NAME))=sqrt(resultErr);
+
+  double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
+  InfoMsg << "calculated error for:\t" << "m: " << currentMass << "\tval: " << result << "\terr: " << sqrt(resultErr) <<endmsg;
 }
 
 void ScatteringContribution::initScatContrib(){
