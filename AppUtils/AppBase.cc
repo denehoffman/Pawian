@@ -427,11 +427,13 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
     }
     else{ //i>-1
       InfoMsg << "contribution no " << i;
+      InfoMsg << "contribution name " << contributionName;
       InfoMsg << "No of data events without weight " << integralDataWoWeight;
       InfoMsg << "No of data events with weight " << evtWeightSumData;
       InfoMsg << "No of MC events " << theLHData.num_mc;
       InfoMsg << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor;
       theQaStream << "contribution no " << i << "\n";
+      theQaStream << "contribution name " << contributionName << "\n";
       theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
     }
   } // loop over contributions
