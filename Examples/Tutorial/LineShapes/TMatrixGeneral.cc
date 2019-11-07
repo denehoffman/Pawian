@@ -344,11 +344,11 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     exit(0);
   }
 
-  // RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
-  // 		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
-  // 		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
-  // 		       numStepsForSheetScan, 
-  // 		       projectionIndex);
+  RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
+   		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
+   		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
+   		       numStepsForSheetScan, 
+   		       projectionIndex);
 }
 
 TMatrixGeneral::~TMatrixGeneral()
