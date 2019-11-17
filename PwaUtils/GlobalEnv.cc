@@ -279,21 +279,21 @@ std::shared_ptr<AbsPawianParameters> GlobalEnv::randomPawianParams(){
    std::vector<std::string> _fixedParams = fixedParams();
 
    std::vector<std::string> paramNames = result->ParamNames();
-   for(int i=0; i<result->Params().size(); i++) {
+   for(size_t i=0; i<result->Params().size(); i++) {
       bool skipParam = false;
-      for(auto it=_fixedParams.begin(); it!=_fixedParams.end(); ++it){
+      for(auto it=_fixedParams.begin(); it!=_fixedParams.end(); ++it) {
          if(paramNames[i] == *it) 
             skipParam = true;
       }
 
-      if(!skipParam){     
-         if(paramNames[i].find("Mag") != std::string::npos) {
-            boost::random::uniform_real_distribution<> rndMag(0.01,5.);
-            result->SetValue(i, rndMag(rng));
-         } else if(paramNames[i].find("Phi") != std::string::npos) {
-            boost::random::uniform_real_distribution<> rndPhi(0.,6.29);
-            result->SetValue(i, rndPhi(rng));
-         }
+      if(!skipParam) {  
+	if(paramNames[i].find("Mag") != std::string::npos) {
+	  boost::random::uniform_real_distribution<> rndMag(0.01,5.);
+	  result->SetValue(i, rndMag(rng));
+	} else if(paramNames[i].find("Phi") != std::string::npos) {
+	  boost::random::uniform_real_distribution<> rndPhi(0.,6.29);
+	  result->SetValue(i, rndPhi(rng));
+	}
       }
    }
 

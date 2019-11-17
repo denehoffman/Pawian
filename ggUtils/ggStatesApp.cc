@@ -71,13 +71,13 @@ int main(int __argc,char *__argv[]){
    while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
   }
 
-  if(msgModeStr == "debugging") ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-  else if(msgModeStr == "trace") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-  else if(msgModeStr == "routine") ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
-  else if(msgModeStr == "warning") ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
-  else if(msgModeStr == "error")   ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+  if(msgModeStr == "debugging") ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
+  else if(msgModeStr == "trace") ErrLogger::instance().setThreshold(logging::log_level::INFO);
+  else if(msgModeStr == "routine") ErrLogger::instance().setThreshold(logging::log_level::INFO);
+  else if(msgModeStr == "warning") ErrLogger::instance().setThreshold(logging::log_level::WARN);
+  else if(msgModeStr == "error")   ErrLogger::instance().setThreshold(logging::log_level::ERROR);
   else {
-    ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+    ErrLogger::instance().setThreshold(logging::log_level::INFO);
     WarningMsg << "ErrorLogger not set -> Use mode 'INFO' " << endmsg;  
   }
 

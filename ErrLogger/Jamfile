@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : ErrLoggerTestApp Log4CppTestApp
+install install-bin : ErrLoggerTestApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -21,4 +21,5 @@ project :
 lib ErrLogger : [ glob *.cc : *App.cc ] : : : ;
 
 exe ErrLoggerTestApp : ErrLoggerTestApp.cc ErrLogger : ;
-exe Log4CppTestApp : Log4CppTestApp.cc ErrLogger : ;
+# exe Log4CppTestApp : Log4CppTestApp.cc ErrLogger : ;
+exe testLogger : TestLogger.cpp : ;

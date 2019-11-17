@@ -233,9 +233,11 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 
       part12PolVec.SetP4(motherTensor4Vec, motherMass);
       s12SpinProjector=part12PolVec.Projector();
-      DebugMsg << "s12SpinProjector:\t" << "should have rank " << 2*(*itJPCLS)->S <<"\trank: " << s12SpinProjector.Rank() << endmsg;
-      if(s12SpinProjector.Rank()<=2) DebugMsg << s12SpinProjector << endmsg;
-
+      DebugMsg << "s12SpinProjector:\t" << "should have rank " << 2*(*itJPCLS)->S 
+	       <<"\trank: " << s12SpinProjector.Rank() << endmsg;
+      if(s12SpinProjector.Rank()<=2) {
+	DebugMsg << s12SpinProjector << endmsg;
+      }
 
       for (Spin lamDaughter1=-spinDaughter1; lamDaughter1 <= spinDaughter1; ++lamDaughter1){
 	DebugMsg << "lamDaughter1:\t" << lamDaughter1 << endmsg;
@@ -270,10 +272,14 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	  calcLSpart(orbTensor, chi12, S, motherTensor4Vec, lsPartTensorNew);
 
 	  DebugMsg << "epsilonDaughter2Project rank:\t" << epsilonDaughter2Project.Rank() << endmsg;
-	  if(epsilonDaughter2Project.Rank()<3) DebugMsg << epsilonDaughter2Project << endmsg;
+	  if(epsilonDaughter2Project.Rank()<3) {
+	    DebugMsg << epsilonDaughter2Project << endmsg;
+	  }
 
 	  DebugMsg << "lsPartTensorNew rank:\t" << lsPartTensorNew.Rank() << endmsg;
-	  if(lsPartTensorNew.Rank()<3) DebugMsg << lsPartTensorNew << endmsg;
+	  if(lsPartTensorNew.Rank()<3) {
+	    DebugMsg << lsPartTensorNew << endmsg;
+	  }
  
 	  Tensor<complex<double> > result=epsilonMotherProject|lsPartTensorNew;
 	  DebugMsg << "result " << name()<<": " << result << "\n" << endmsg;

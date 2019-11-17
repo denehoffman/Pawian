@@ -86,8 +86,8 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_fixAllPhases(false)
   ,_nllScalingFactor(1.)
   ,_addChannelScalingId(false)
-  ,_singleChannelId(0)
   ,_minuitStrategyLevel(1)
+  ,_singleChannelId(0)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;

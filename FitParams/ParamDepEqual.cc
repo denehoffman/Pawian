@@ -57,7 +57,7 @@ void ParamDepEqual::FillDerived(std::istringstream& configLine){
 
 void ParamDepEqual::Apply(std::shared_ptr<AbsPawianParameters> params){
 
-  for(int it=0; it< _idsTarget.size(); it++) {
+  for(size_t it=0; it< _idsTarget.size(); it++) {
     params->SetValue(_idsTarget.at(it), params->Value(_idRefs.at(0)));
 //    InfoMsg << "Apply: setting _idsTarget.at(" << it << ")=" << _idsTarget.at(it) << " to Value(" << _idRefs.at(0) << ")=" << params->Value(_idRefs.at(0)) << endmsg;
   }

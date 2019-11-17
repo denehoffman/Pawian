@@ -390,10 +390,13 @@ void TMatrixDynamics::init(){
     }
   }
 
-  if (_projectionParticleNames == "") _projectionParticleNames = _kMatrixParser->projection();
-  else InfoMsg << _kMatName << " K-matrix projection changed!!!" 
-	       << "\nfrom k-Matrix parser configuration: " << _kMatrixParser->projection()
-	       << "\nto: " << _projectionParticleNames << "\n"<< endmsg;
+  if (_projectionParticleNames == "") {
+    _projectionParticleNames = _kMatrixParser->projection();
+  } else {
+    InfoMsg << _kMatName << " K-matrix projection changed!!!" 
+	    << "\nfrom k-Matrix parser configuration: " << _kMatrixParser->projection()
+	    << "\nto: " << _projectionParticleNames << "\n"<< endmsg;
+  }
    
   //  const std::string porjectionParticleNames=_kMatrixParser->projection();
   std::istringstream projParticles(_projectionParticleNames);
@@ -413,7 +416,7 @@ void TMatrixDynamics::init(){
     Alert << "decay projection index for key " << projKey << " not found" << endmsg;
     exit(0);
   }
-  InfoMsg << _kMatName << ": decay projection index: " << _decProjectionIndex <<endmsg;
+  InfoMsg << _kMatName << ": decay projection index: " << _decProjectionIndex << endmsg;
   _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
 
 }
@@ -432,8 +435,9 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
   }
   
   //protection against numerical instabilities
-  if(norm(SijRel) != norm(SijRel)){
-    WarningMsg << "numerical instability of norm(SijRel) yields to NAN ... redo calculation for mass+0.0001" << endmsg;
+  if(norm(SijRel) != norm(SijRel)) {
+    WarningMsg << "numerical instability of norm(SijRel) yields to NAN ... redo calculation for mass+0.0001"
+	       << endmsg;
     double newCurrentMass=currentMass+0.0001;
     _tMatr->evalMatrix(newCurrentMass);
     evalElasticity(theData, newCurrentMass);

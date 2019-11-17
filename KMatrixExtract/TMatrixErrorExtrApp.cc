@@ -47,8 +47,8 @@
 using namespace ROOT::Minuit2;
 
 int main(int __argc,char *__argv[]){
-  // ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
-  ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  // ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
+  ErrLogger::instance().setThreshold(logging::log_level::INFO);
 
   if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
 		strcmp( __argv[1], "--help" ) == 0 ) ){

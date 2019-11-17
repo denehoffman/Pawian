@@ -56,7 +56,7 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcR
             << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
             << " and "
             << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C
-            ;  // << endmsg;
+            << endmsg;
     if( fabs(motherRes->C)==1 && fabs(daughterRes1->C)==1 && fabs(daughterRes2->C)==1) return; 
   }
 
@@ -72,8 +72,10 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcR
     theLSVec.push_back(tmpLS);
   }
 
-  if(LSs.size()==0) InfoMsg << "size for decay " << motherRes->name() << " to " << daughterRes1->name() << " and " << daughterRes2->name()
-                         << " =0!!!" << endmsg;
+  if(LSs.size()==0) {
+    InfoMsg << "size for decay " << motherRes->name() << " to " << daughterRes1->name() 
+	    << " and " << daughterRes2->name() << " =0!!!" << endmsg;
+  }
 }
 
 
@@ -93,26 +95,27 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Pa
 void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const LScomb> >& theLSVec, bool useCParity, int gParityMother, bool useIsospin){
   // first: check C-parity
   if (useCParity){
-    if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()){
+    if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()) {
       WarningMsg << "C-Parity not valid for the reaction: JPC= " 
-              << motherRes->J << " " << motherRes->P << " " << motherRes->C
-              << " --> "
-              << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
-              << " and "
-              << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theCParity()
-        ;  // << endmsg;
+		 << motherRes->J << " " << motherRes->P << " " << motherRes->C
+		 << " --> "
+		 << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " 
+		 << daughter1->theCParity() << " and "
+		 << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " 
+		 << daughter2->theCParity()
+		 << endmsg;
       if( fabs(motherRes->C)==1 && fabs(daughter1->theCParity())==1 && fabs(daughter2->theCParity())==1) return; 
     }
   }
 
   if(useIsospin){
     // second: check G-parity
-    if (gParityMother != daughter1->theGParity()*daughter2->theGParity() ){
+    if (gParityMother != daughter1->theGParity()*daughter2->theGParity() ) {
       WarningMsg << "G-Parity not valid for:" 
-              << gParityMother 
-              << " --> "
-              << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
-              << endmsg;
+		 << gParityMother 
+		 << " --> "
+		 << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
+		 << endmsg;
       
       if( fabs(gParityMother)==1 && fabs(daughter1->theGParity())==1 && fabs(daughter2->theGParity())==1) return; 
     }
@@ -160,8 +163,10 @@ void validLSWeak(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, P
     theLSVec.push_back(tmpLS);
   }
 
-  if(LSs.size()==0) InfoMsg << "size for decay " << motherRes->name() << " to " << daughter1->name() << " and " << daughter2->name()
-                         << " =0!!!" << endmsg;
+  if(LSs.size()==0) {
+    InfoMsg << "size for decay " << motherRes->name() << " to " << daughter1->name() 
+	    << " and " << daughter2->name() << " =0!!!" << endmsg;
+  }
 }
 
 void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const JPClamlam> >& theJPClamlamVec, bool useCParity, int gParityMother, bool useIsospin){
@@ -171,15 +176,15 @@ void validJPClamlam(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1
 
   //  validJPCLS(motherRes, daughterRes1, daughterRes2, currentJPCLSDecAmps, useCParity, gParityMother, useIsospin);
   validJPCLS(motherRes, daughter1, daughter2, currentJPCLSDecAmps, useCParity, gParityMother, useIsospin);
-  if(currentJPCLSDecAmps.size()==0){
+  if(currentJPCLSDecAmps.size()==0) {
     WarningMsg << "decay JPC= " 
-	  << motherRes->J << " " << motherRes->P << " " << motherRes->C
-	  << " --> "
-	  << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
-	  << " and "
-	  << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C 
-	  << " not allowed!!!" 
-	  << endmsg;
+	       << motherRes->J << " " << motherRes->P << " " << motherRes->C
+	       << " --> "
+	       << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
+	       << " and "
+	       << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C 
+	       << " not allowed!!!" 
+	       << endmsg;
     return;
   }
 

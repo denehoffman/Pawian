@@ -34,7 +34,7 @@
 int main()
 {
 
-  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
 
   ParticleTable pTable;
   PdtParser parser;

@@ -1,39 +1,35 @@
 #include "ErrLogger.hh"
 
 ErrLogger* ErrLogger::theErrLogger = NULL;
+std::ostringstream ErrLogger::buffer;
 
-ErrLogger* ErrLogger::instance()
-{
-  if (0==theErrLogger)
+ErrLogger& ErrLogger::instance() {
+  if (0 == theErrLogger)
     theErrLogger = new ErrLogger();
-  return theErrLogger;
+  return *theErrLogger;
 }
 
-ErrLogger::ErrLogger()
-{
-  app = new log4cpp::OstreamAppender("FileAppender", &std::cout);
-  layout = new log4cpp::PatternLayout();
-  layout->setConversionPattern(std::string("%p: %m%n"));
-  app->setLayout(layout);
-  category = std::shared_ptr<log4cpp::Category>(&(log4cpp::Category::getInstance("ErrLogger")));
-  category->setAdditivity(false);
-  category->setAppender(app);
-  category->setPriority(log4cpp::Priority::INFO);
+ErrLogger::ErrLogger() {
+  setLevel(logging::log_level::TRACE);
+  setThreshold(logging::log_level::ERROR);
 }
 
-ErrLogger::~ErrLogger()
-{
-//   delete category;
-//   delete app;
-//   delete layout;
+ErrLogger::~ErrLogger() {
 }
 
-log4cpp::Category& ErrLogger::logger()
-{
-  return *category.get();
+void ErrLogger::setLevel(logging::log_level newLevel) {
+  logLevel = newLevel;
 }
 
-void ErrLogger::setLevel(log4cpp::Priority::PriorityLevel level)
-{
-  category->setPriority(level);
+void ErrLogger::setThreshold(logging::log_level newLevel) {
+  logThreshold = newLevel;
 }
+
+logging::log_level ErrLogger::threshold() {
+  return logThreshold;
+}
+
+logging::log_level ErrLogger::level() {
+  return logLevel;
+}
+

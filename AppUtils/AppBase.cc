@@ -146,11 +146,10 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   }
 
   Event* currentNextEvent = theEventList.nextEvent();
-  if (0!=currentNextEvent){ 
+  if (0!=currentNextEvent) { 
     InfoMsg << " Each event has "
-	  <<  theEventList.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
-  }
-  else{
+	    <<  theEventList.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+  } else {
     WarningMsg << "\n currentNextEvent does not exist.\n" << endmsg;
   }
 
@@ -209,11 +208,11 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   std::ofstream theQaStream ( qaSummaryFileName.str().c_str() );
 
   int noOfFreeFitParams=startParams->VariableParameters();
-  if(evtWeightSumData<=(noOfFreeFitParams+1)){
+  if(evtWeightSumData<=(noOfFreeFitParams+1)) {
     WarningMsg << "number of data events less or equal to the number of free parameters!!!"
-	    << "\n be careful with the fit result!!!"
-	    << endmsg; 
-      }  
+	       << "\n be careful with the fit result!!!"
+	       << endmsg; 
+  }  
   
   double theLh=GlobalEnv::instance()->Channel()->Lh()->calcLogLh(startParams);
   double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
@@ -297,8 +296,10 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
 
   std::vector<std::pair<std::string,std::pair<double,double>>>::iterator it;
   for(it=singleContValues.begin(); it!=singleContValues.end(); ++it) {
-    InfoMsg << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second;
-    theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first << " +- " << (*it).second.second <<  "\n";
+    InfoMsg << "Single wave contribution " << (*it).first << "\t" << (*it).second.first 
+	    << " +- " << (*it).second.second;
+    theQaStream << "Single wave contribution " << (*it).first << "\t" << (*it).second.first 
+		<< " +- " << (*it).second.second <<  "\n";
   }
 
   theQaStream.close();
@@ -352,7 +353,9 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
       delete currentDataEvt;
       evtCount++;
       dataPoint++;
-      if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
+      if (evtCount%1000 == 0) {
+	InfoMsg << evtCount << " data events calculated" << endmsg;
+      }
     }
 
     //loop over mc events
@@ -374,7 +377,9 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
       evtCount++;
       evtCountMc++;
       dataPoint++;
-      if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
+      if (evtCountMc%1000 == 0) {
+	InfoMsg << evtCountMc << " MC events calculated" << endmsg;
+      }
     }
 
     double scaleFactor=theLHData.weightSum/theLHData.num_mc;
@@ -467,7 +472,9 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
       delete currentDataEvt;
       evtCount++;
       dataPoint++;
-      if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
+      if (evtCount%1000 == 0) {
+	InfoMsg << evtCount << " data events calculated" << endmsg;
+      }
     }
 
     //loop over mc events
@@ -489,7 +496,9 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
       evtCount++;
       evtCountMc++;
       dataPoint++;
-      if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
+      if (evtCountMc%1000 == 0) {
+	InfoMsg << evtCountMc << " MC events calculated" << endmsg;
+      }
     }
 
     //loop over truth events
@@ -499,22 +508,22 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
 
     truthEventList.rewind();
     dataPoint=1;
-    while ((anEvent = truthEventList.nextEvent())){
+    while ((anEvent = truthEventList.nextEvent())) {
       EvtData* currentTruthEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
       double currentIntensity=absLh->calcEvtIntensity(currentTruthEvt, currentParams);
       histPtr->fillEvt(currentTruthEvt, 1., "truthWoWeight", dataPoint);
       histPtr->fillEvt(currentTruthEvt, currentIntensity, "truthWWeight", dataPoint);
-
-    integralTruthFitWeight+=currentIntensity;
       
-    delete currentTruthEvt;
-    evtCount++;
-    evtCountTruth++;
-    dataPoint++;
-    if (evtCountTruth%1000 == 0){
-      InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
-      //	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
-    }
+      integralTruthFitWeight+=currentIntensity;
+      
+      delete currentTruthEvt;
+      evtCount++;
+      evtCountTruth++;
+      dataPoint++;
+      if (evtCountTruth%1000 == 0) {
+	InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
+	//	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
+      }
     }
     
     double scaleFactor=theLHData.weightSum/theLHData.num_mc;
@@ -543,7 +552,9 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
     delete currentDataEvt;
     evtCount++;
     dataPoint++;
-    if (evtCount%1000 == 0) InfoMsg << evtCount << " data events calculated" << endmsg;
+    if (evtCount%1000 == 0) {
+      InfoMsg << evtCount << " data events calculated" << endmsg;
+    }
   }
 
   //loop over mc events
@@ -560,7 +571,9 @@ void AppBase::plotMode(EventList& dataEventList, EventList& mcEventList, std::sh
       evtCount++;
       evtCountMc++;
       dataPoint++;
-      if (evtCountMc%1000 == 0) InfoMsg << evtCountMc << " MC events calculated" << endmsg ;
+      if (evtCountMc%1000 == 0) {
+	InfoMsg << evtCountMc << " MC events calculated" << endmsg;
+      }
     }
   }
 
@@ -602,11 +615,12 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar, std::vector<s
     //check if name exisists
     if(std::find(parNames.begin(), parNames.end(), (*itFix)) != parNames.end()) upar->Fix( (*itFix) );
     else{
-      if(mustMatch){
+      if(mustMatch) {
 	Alert << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg;
 	exit(0);
+      } else {
+	WarningMsg << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg; 
       }
-      else WarningMsg << "parameter with name\t" << (*itFix) <<"\tdoes not exist!!!" << endmsg; 
     }
   }
 

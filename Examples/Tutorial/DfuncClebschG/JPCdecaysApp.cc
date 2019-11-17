@@ -86,7 +86,7 @@ bool findPCAndRemove(std::string& theString, int& theP, int& theC){
 
 int main(int __argc,char *__argv[]){
 
-  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){

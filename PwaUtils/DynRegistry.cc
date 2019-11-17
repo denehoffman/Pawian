@@ -42,7 +42,7 @@
 #include "PwaUtils/KMatrixDynamics.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
 #include "PwaUtils/TMatrixCompareDynamics.hh"
-#include "PwaUtils/KMatrixPVecIntensityDynamics.cc"
+#include "PwaUtils/KMatrixPVecIntensityDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/JohnsonDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"

@@ -36,7 +36,7 @@
 
 int main()
 {
-  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   
   std::string theSourcePath=getenv("TOP_DIR"); 
   std::string setupFile(theSourcePath + "/Setup/test.setup");

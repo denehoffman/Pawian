@@ -209,7 +209,8 @@ void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
       if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
       it->first->print(std::cout);
       InfoMsg << " it->first->parityFactor: " << it->first->parityFactor << endmsg;
-      InfoMsg << "_currentParamPreFacMagExpi.at(it->first): " << _currentParamPreFacMagExpi.at(it->first) << endmsg;
+      InfoMsg << "_currentParamPreFacMagExpi.at(it->first): " 
+	      << _currentParamPreFacMagExpi.at(it->first) << endmsg;
     }
 }
 
@@ -260,7 +261,9 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 
   if (!_recalculate){
     result=_cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
-    if(result.real()!=result.real()) DebugMsg << "result:\t" << result << endmsg;
+    if(result.real()!=result.real()) {
+      DebugMsg << "result:\t" << result << endmsg;
+    }
     return result;
   }
 

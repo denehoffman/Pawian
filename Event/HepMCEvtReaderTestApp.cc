@@ -29,7 +29,7 @@
 
 int main()
 {
-  ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+  ErrLogger::instance().setThreshold(logging::log_level::INFO);
   std::vector<std::string> fileNames;
 
   std::string theSourcePath=getenv("TOP_DIR"); 

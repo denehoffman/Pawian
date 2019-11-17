@@ -1,23 +1,22 @@
-#include "ErrLogger/ErrLogger.hh"
+#include "ErrLogger.hh"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 
-  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  ErrLogger::instance().setThreshold(logging::log_level::TRACE);
 
-  DebugMsg << "Debug Message";
-  InfoMsg << "An Info";
-  WarningMsg << "A Warning";
-  ErrMsg << "Error Message";
-  Alert << "A Fatal Error";
+  InfoMsg << "An Info" << endmsg;
+  DebugMsg << "Debug Message" << endmsg;
+  WarningMsg << "A Warning" << endmsg;
+  ErrMsg << "Error Message" << endmsg;
+  Alert << "A Fatal Error" << endmsg;
 
-  ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+  ErrLogger::instance().setThreshold(logging::log_level::ERROR);
 
-  DebugMsg << "2nd Debug Message";
-  InfoMsg << "2nd Info";
-  WarningMsg << "2nd Warning";
-  ErrMsg << "2nd Error Message";
-  Alert << "2nd Fatal Error";
+  DebugMsg << "2nd Debug Message" << endmsg;
+  InfoMsg << "2nd Info" << endmsg;
+  WarningMsg << "2nd Warning" << endmsg;
+  ErrMsg << "2nd Error Message" << endmsg;
+  Alert << "2nd Fatal Error" << endmsg;
 
   return 0;
 }

@@ -36,7 +36,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 int main(int __argc,char *__argv[]){
-  ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+  ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
 
   PiPiSWaveTMatrix pipiSWaveTMatrix;
   KPiSWaveTMatrix kPiSWaveTMatrix;

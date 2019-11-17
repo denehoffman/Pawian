@@ -6,25 +6,25 @@
 void setErrLogMode( const ParserBase::enErrLogMode& erlMode ) {
 	switch(erlMode) {
 	case ParserBase::debug :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+		ErrLogger::instance().setLevel(logging::log_level::DEBUG);
 		break;
 	case ParserBase::trace :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+		ErrLogger::instance().setLevel(logging::log_level::INFO);
 		break;
 	case ParserBase::routine :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::INFO);
+		ErrLogger::instance().setLevel(logging::log_level::INFO);
 		break;
 	case ParserBase::warning :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::WARN);
+		ErrLogger::instance().setLevel(logging::log_level::WARN);
 		break;
 	case ParserBase::error :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::ERROR);
+		ErrLogger::instance().setLevel(logging::log_level::ERROR);
 		break;
 	case ParserBase::alert :
-		ErrLogger::instance()->setLevel(log4cpp::Priority::ALERT);
+		ErrLogger::instance().setLevel(logging::log_level::ALERT);
 		break;
 	default:
-		ErrLogger::instance()->setLevel(log4cpp::Priority::DEBUG);
+		ErrLogger::instance().setLevel(logging::log_level::DEBUG);
 	}
 }
 

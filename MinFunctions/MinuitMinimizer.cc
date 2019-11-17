@@ -56,12 +56,12 @@ void MinuitMinimizer::minimize(){
   FunctionMinimum* currentFunctionMinimum=0;
 
   if(stratLevel==1){
-    InfoMsg <<"start migrad with strategy level " << 1 << endmsg;
+    InfoMsg << "start migrad with strategy level " << 1 << endmsg;
     currentFunctionMinimum= new FunctionMinimum(migrad(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else if(stratLevel==2){
     MnMigrad migrad2a(*_absFcn, *_startMnUserParametersPtr, MnStrategy(2));
-    InfoMsg <<"start migrad with strategy level " << 2 << endmsg;
+    InfoMsg << "start migrad with strategy level " << 2 << endmsg;
     currentFunctionMinimum = new FunctionMinimum(migrad2a(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else{
@@ -70,7 +70,7 @@ void MinuitMinimizer::minimize(){
   }
 
  //    MnMigrad migrad(*_absFcn, startMnUserP);
-  InfoMsg <<"start migrad " << endmsg;
+  InfoMsg << "start migrad " << endmsg;
   //  FunctionMinimum currentFunctionMinimum = migrad(0, GlobalEnv::instance()->parser()->tolerance());
 
   if(currentFunctionMinimum->IsValid()){
@@ -140,27 +140,48 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     InfoMsg << "\n\n********************** Final fit parameters *************************\n";
     _bestPawianParams->print(std::cout, true);
     InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->IsValid())             InfoMsg << "\n Function minimum is valid.\n";
-    else                          InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->HasValidCovariance())  InfoMsg << "\n Covariance matrix is valid." << endmsg;
-    else                          InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
+    if(_mnFunctionMinimumFinalPtr->IsValid()) {
+      InfoMsg << "\n Function minimum is valid.\n";
+    } else {
+      InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
+    }
+    if (_mnFunctionMinimumFinalPtr->HasValidCovariance()) {
+      InfoMsg << "\n Covariance matrix is valid." << endmsg;
+    } else {
+      InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
+    }
     InfoMsg <<"\n Final LH: "<< std::setprecision(10) << theLh << "\n" << endmsg;
     InfoMsg <<" # of function calls: " << _mnFunctionMinimumFinalPtr->NFcn() << endmsg;
     InfoMsg <<" minimum edm: " << std::setprecision(10) << _mnFunctionMinimumFinalPtr->Edm()<<endmsg;
-    if(!_mnFunctionMinimumFinalPtr->HasValidParameters()) InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
-    if(!_mnFunctionMinimumFinalPtr->HasAccurateCovar())   InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
-    if(!_mnFunctionMinimumFinalPtr->HasPosDefCovar()){    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
-                                  if(_mnFunctionMinimumFinalPtr->HasMadePosDefCovar()) InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
+    if (!_mnFunctionMinimumFinalPtr->HasValidParameters()) {
+      InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
     }
-    if(!_mnFunctionMinimumFinalPtr->HasCovariance())      InfoMsg << " hasCovariance() returned FALSE" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->HasReachedCallLimit()) InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->IsAboveMaxEdm())       InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
-    if(_mnFunctionMinimumFinalPtr->HesseFailed())         InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+    if (!_mnFunctionMinimumFinalPtr->HasAccurateCovar()) {
+      InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
+    }
+    if (!_mnFunctionMinimumFinalPtr->HasPosDefCovar()) {
+      InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
+      if(_mnFunctionMinimumFinalPtr->HasMadePosDefCovar()) {
+	InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
+      }
+    }
+    if (!_mnFunctionMinimumFinalPtr->HasCovariance()) {
+      InfoMsg << " hasCovariance() returned FALSE" << endmsg;
+    }
+    if (_mnFunctionMinimumFinalPtr->HasReachedCallLimit()) {
+      InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
+    }
+    if (_mnFunctionMinimumFinalPtr->IsAboveMaxEdm()) {
+      InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
+    }
+    if (_mnFunctionMinimumFinalPtr->HesseFailed()) {
+      InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+    }
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     // calculate AIC, BIC criteria and output selected wave contrib
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     unsigned int noOfFreeFitParams=_bestPawianParams->VariableParameters();
 
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
