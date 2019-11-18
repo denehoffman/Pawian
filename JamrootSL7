@@ -13,13 +13,12 @@ project :
 	<include>$(BOOSTINCLUDE)
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
-	<cxxflags>--std=c++14
+	<cxxflags>--std=c++17
 	<cxxflags>-ftemplate-depth=256
 	<linkflags>$(ROOTLIBS)
 	<linkflags>-lvdt
 	<linkflags>-L$(BOOSTLIBPATH)
 	<linkflags>$(BOOSTLIBS)
-	<linkflags>-llog4cpp
 	<cxxflags>-fPIC
 	<cxxflags>-Wall 
 	;
