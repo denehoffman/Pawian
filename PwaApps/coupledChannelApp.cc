@@ -74,7 +74,7 @@ int main(int __argc,char *__argv[]){
 
   char* argvWoCfgFile[__argc];
   int argcWoCfgFile=0;
-  for (int i=0; i<__argc ; ++i){
+  for (int i=0; i<__argc ; ++i) {
     InfoMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
     std::string currentArgv(__argv[i]);
      if(currentArgv !=(char*)"--pbarpFiles" 
@@ -134,9 +134,11 @@ int main(int __argc,char *__argv[]){
   std::vector<std::string> fixedGlobalParams = GlobalEnv::instance()->fixedParams();
   fixedParams.insert(fixedParams.end(), fixedGlobalParams.begin(), fixedGlobalParams.end());
 
- InfoMsg << "the fixed params are:" << endmsg; 
- std::vector<std::string>::iterator itStr;
-for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) InfoMsg << *itStr <<endmsg;
+  InfoMsg << "the fixed params are:" << endmsg; 
+  std::vector<std::string>::iterator itStr;
+  for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) {
+    InfoMsg << *itStr <<endmsg;
+  }
 
   if(mode == "qaModeSimple")
     theAppBase.fixParams(startPawianParams,fixedParams, false);
@@ -146,7 +148,7 @@ for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) InfoMsg << *i
   //fill param list names for dynamics
   std::vector<std::shared_ptr<AbsDynamics> > dynVec=DynRegistry::instance()->getDynVec();
   std::vector<std::shared_ptr<AbsDynamics> >::iterator itDyn;
-  for(itDyn=dynVec.begin(); itDyn!=dynVec.end(); ++itDyn){
+  for(itDyn=dynVec.begin(); itDyn!=dynVec.end(); ++itDyn) {
     (*itDyn)->fillParamNameList();
   }
 
@@ -163,11 +165,10 @@ for (itStr=fixedParams.begin(); itStr!=fixedParams.end(); ++itStr) InfoMsg << *i
    return 1;
  }
 
- if(mode == "qaModeSimple"){
-     Alert << "qaModeSimple only working with singleChannelApp!!!" << endmsg;
-     return 1;
- }
- else{
+ if(mode == "qaModeSimple") {
+   Alert << "qaModeSimple only working with singleChannelApp!!!" << endmsg;
+   return 1;
+ } else {
    Alert << "mode: " << mode << " is not supported in the coupled channel app!!!"<< endmsg;
    return 1;
  }

@@ -445,7 +445,8 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
   theQaStream.close();
 }
 
-void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventList,  EventList& truthEventList, std::shared_ptr<AbsPawianParameters> startParams){
+void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventList,
+				  EventList& truthEventList, std::shared_ptr<AbsPawianParameters> startParams) {
   std::shared_ptr<EvtDataBaseList> evtDataBaseList(new EvtDataBaseList(0));
   std::shared_ptr<AbsLh> absLh=GlobalEnv::instance()->Channel()->Lh();
   LHData theLHData;
@@ -453,81 +454,80 @@ void AppBase::qaModeEffCorrection(EventList& dataEventList, EventList& mcEventLi
 
   std::shared_ptr<AbsHist> histPtr= GlobalEnv::instance()->Channel()->CreateHistInstance("", true);
 
-    absLh->updateFitParams(currentParams);
+  absLh->updateFitParams(currentParams);
   
-    //loop over data events
-    Event* anEvent;
-    int evtCount = 0;
-
-    double integralDataWoWeight=(double) dataEventList.size();
-    double evtWeightSumData=0.;
+  //loop over data events
+  Event* anEvent;
+  int evtCount = 0;
+  
+  double evtWeightSumData=0.;
+  
+  dataEventList.rewind();
+  int dataPoint=1;
+  while ((anEvent = dataEventList.nextEvent())){
+    EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    absLh->addDataToLogLh(currentDataEvt, currentParams, theLHData);
+    histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data", dataPoint);
+    evtWeightSumData += currentDataEvt->evtWeight;
+    delete currentDataEvt;
+    evtCount++;
+    dataPoint++;
+    if (evtCount%1000 == 0) {
+      InfoMsg << evtCount << " data events calculated" << endmsg;
+    }
+  }
+  
+  //loop over mc events
+  int evtCountMc = 0;
+  
+  double integralFitWeight=0.;
+  
+  mcEventList.rewind();
+  dataPoint=1;
+  while ((anEvent = mcEventList.nextEvent())) {
+    EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    double currentIntensity=absLh->addMcToLogLh(currentMcEvt,currentParams, theLHData);
+    histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
+    histPtr->fillEvt(currentMcEvt, currentIntensity, "fit", dataPoint);
     
-    dataEventList.rewind();
-    int dataPoint=1;
-    while ((anEvent = dataEventList.nextEvent())){
-      EvtData* currentDataEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-      absLh->addDataToLogLh(currentDataEvt, currentParams, theLHData);
-      histPtr->fillEvt(currentDataEvt, currentDataEvt->evtWeight, "data", dataPoint);
-      evtWeightSumData += currentDataEvt->evtWeight;
-      delete currentDataEvt;
-      evtCount++;
-      dataPoint++;
-      if (evtCount%1000 == 0) {
-	InfoMsg << evtCount << " data events calculated" << endmsg;
-      }
-    }
-
-    //loop over mc events
-    int evtCountMc = 0;
-
-    double integralFitWeight=0.;
-
-    mcEventList.rewind();
-    dataPoint=1;
-    while ((anEvent = mcEventList.nextEvent())){
-      EvtData* currentMcEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-      double currentIntensity=absLh->addMcToLogLh(currentMcEvt,currentParams, theLHData);
-      histPtr->fillEvt(currentMcEvt, 1., "mc", dataPoint);
-      histPtr->fillEvt(currentMcEvt, currentIntensity, "fit", dataPoint);
-
-      integralFitWeight+=currentIntensity;
-      
-      delete currentMcEvt;
-      evtCount++;
-      evtCountMc++;
-      dataPoint++;
-      if (evtCountMc%1000 == 0) {
-	InfoMsg << evtCountMc << " MC events calculated" << endmsg;
-      }
-    }
-
-    //loop over truth events
-    int evtCountTruth = 0;
-
-    double integralTruthFitWeight=0.;
-
-    truthEventList.rewind();
-    dataPoint=1;
-    while ((anEvent = truthEventList.nextEvent())) {
-      EvtData* currentTruthEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
-      double currentIntensity=absLh->calcEvtIntensity(currentTruthEvt, currentParams);
-      histPtr->fillEvt(currentTruthEvt, 1., "truthWoWeight", dataPoint);
-      histPtr->fillEvt(currentTruthEvt, currentIntensity, "truthWWeight", dataPoint);
-      
-      integralTruthFitWeight+=currentIntensity;
-      
-      delete currentTruthEvt;
-      evtCount++;
-      evtCountTruth++;
-      dataPoint++;
-      if (evtCountTruth%1000 == 0) {
-	InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
-	//	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
-      }
-    }
+    integralFitWeight+=currentIntensity;
     
-    double scaleFactor=theLHData.weightSum/theLHData.num_mc;
-    histPtr->scaleFitHists(scaleFactor);
+    delete currentMcEvt;
+    evtCount++;
+    evtCountMc++;
+    dataPoint++;
+    if (evtCountMc%1000 == 0) {
+      InfoMsg << evtCountMc << " MC events calculated" << endmsg;
+    }
+  }
+  
+  //loop over truth events
+  int evtCountTruth = 0;
+  
+  double integralTruthFitWeight=0.;
+  
+  truthEventList.rewind();
+  dataPoint=1;
+  while ((anEvent = truthEventList.nextEvent())) {
+    EvtData* currentTruthEvt=evtDataBaseList->convertEvent(anEvent, evtCount);
+    double currentIntensity=absLh->calcEvtIntensity(currentTruthEvt, currentParams);
+    histPtr->fillEvt(currentTruthEvt, 1., "truthWoWeight", dataPoint);
+    histPtr->fillEvt(currentTruthEvt, currentIntensity, "truthWWeight", dataPoint);
+    
+    integralTruthFitWeight+=currentIntensity;
+    
+    delete currentTruthEvt;
+    evtCount++;
+    evtCountTruth++;
+    dataPoint++;
+    if (evtCountTruth%1000 == 0) {
+      InfoMsg << evtCountTruth << " Truth events calculated" << endmsg ;
+      //	InfoMsg << "currentIntensity: " << currentIntensity << endmsg;
+    }
+  }
+  
+  double scaleFactor=theLHData.weightSum/theLHData.num_mc;
+  histPtr->scaleFitHists(scaleFactor);
 }
 
 

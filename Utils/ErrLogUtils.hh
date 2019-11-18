@@ -21,7 +21,7 @@ void setErrLogMode( const ParserBase::enErrLogMode& erlMode ) {
 		ErrLogger::instance().setLevel(logging::log_level::ERROR);
 		break;
 	case ParserBase::alert :
-		ErrLogger::instance().setLevel(logging::log_level::ALERT);
+		ErrLogger::instance().setLevel(logging::log_level::ERROR);
 		break;
 	default:
 		ErrLogger::instance().setLevel(logging::log_level::DEBUG);

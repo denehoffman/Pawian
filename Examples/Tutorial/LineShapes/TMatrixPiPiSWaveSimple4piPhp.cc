@@ -168,11 +168,11 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
   	   << endmsg;
   std::vector<std::shared_ptr<AbsPhaseSpace> > phpVecs=_tMatr->kMatrix()->phaseSpaceVec();
 
-  for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
+  for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize) {
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
     double delta1=0.;
-    for(unsigned int i=0; i<_gFactorNames.size(); ++i){
+    for(unsigned int i=0; i<_gFactorNames.size(); ++i) {
       complex<double> currentRho=phpVecs.at(i)->factor(mass);
 
       _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
@@ -181,16 +181,15 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
       _ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
       double currentphase=360.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
       _PhaseH2Vec.at(i)->Fill(mass, currentphase);
-      double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
-      double currentElasticity=2.*sqrt(sqrtFactor);
-           complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
-           _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
+      complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
+      _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
 
       _SqrT11H1Vec.at(i)->Fill(mass,currentRho.real()*norm((*_tMatr)(i,i)));
 
       _T1iH1Vec.at(i)->Fill(mass,sqrt(currentRho.real()*norm((*_tMatr)(0,i))));
 
-      _SqrT1iH1Vec.at(i)->Fill(mass, sqrt(currentRho.real()*phpVecs.at(i)->factor(mass).real())*norm((*_tMatr)(0,i)));
+      _SqrT1iH1Vec.at(i)->Fill(mass, sqrt(currentRho.real()*phpVecs.at(i)->factor(mass).real())*
+			       norm((*_tMatr)(0,i)));
       
       _phpH1Vec.at(i)->Fill(mass, sqrt(norm(currentRho)));
 
@@ -205,31 +204,31 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
       if(i==0) delta1=deltaRel;
       _delta1iVec.at(i)->Fill(mass, delta1+deltaRel);
 
-      complex<double> SijRel=2.*PawianConstants::i*sqrt(phpVecs.at(0)->factor(mass).real()*currentRho.real())*currentTijRel;
+      complex<double> SijRel=2.*PawianConstants::i*sqrt(phpVecs.at(0)->factor(mass).real()*
+							currentRho.real())*currentTijRel;
       if (i==0) SijRel+=complex<double>(1.,0.); 
       _SqrS1iH1Vec.at(i)->Fill(mass, norm(SijRel));
     }    
   }
-
+  
   if(energyPlaneBorders[0] == 0)
     energyPlaneBorders[0] = _massMin;
   if(energyPlaneBorders[2] == 0)
     energyPlaneBorders[2] = _massMax;
-
+  
   RiemannSheetAnalyzer(_noOfChannels, _tMatr,
 		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
 		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
 		       numStepsForSheetScan);
 }
 
-MatrixPiPiSWaveSimple4piPhp::~MatrixPiPiSWaveSimple4piPhp()
-{
+MatrixPiPiSWaveSimple4piPhp::~MatrixPiPiSWaveSimple4piPhp() {
   _theTFile->Write();
   _theTFile->Close();
 }
 
 
-void MatrixPiPiSWaveSimple4piPhp::init(){
+void MatrixPiPiSWaveSimple4piPhp::init() {
    PdtParser pdtParser;
    std::string theSourcePath=getenv("TOP_DIR");
    std::string pdtFileRelPath="/Particle/pdtNew.table";

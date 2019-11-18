@@ -178,13 +178,12 @@ double pipiScatteringBaseLh::addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPaw
   return intensity;
 }
 
-void pipiScatteringBaseLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
- _calcCounter++;
+void pipiScatteringBaseLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData) {
+  _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(fitPar, _oldFitPar);
   updateFitParams(fitPar);
 
   int numData = _evtDataVec.size();
-  int numMC = 0;
 
   int eventStepData = numData / _noOfThreads;
 
@@ -199,12 +198,12 @@ void pipiScatteringBaseLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParamete
      theThreads.push_back(std::thread(&pipiScatteringBaseLh::ThreadfuncData, this, eventMin, eventMax,
                                       fitPar, std::ref(threadDataVec.at(i))));
   }
-  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
+  for(auto it = theThreads.begin(); it != theThreads.end(); ++it) {
      (*it).join();
   }
 
   theThreads.clear();
-  for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it){
+  for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it) {
      theLHData.logLH_data += (*it).logLH_data;
      theLHData.weightSum += (*it).weightSum;
      theLHData.LH_mc += 0.;
@@ -216,18 +215,18 @@ void pipiScatteringBaseLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParamete
 }
 
 void pipiScatteringBaseLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-                    std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
-  for (unsigned int i=minEvent; i<=maxEvent; ++i){
+					  std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData) {
+  for (unsigned int i=minEvent; i<=maxEvent; ++i) {
     addDataToLogLh(_evtDataVec.at(i), fitPar, theLHData);
   }
 }
 
 void pipiScatteringBaseLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-                          std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
+					std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData) {
   return;
 }
 
-double pipiScatteringBaseLh::calcFitVal( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
+double pipiScatteringBaseLh::calcFitVal( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar) {
   _XdecAmp->updateFitParams(fitPar);
   Spin dummylamX(0);
   _PiPiScatteringXdecAmp->XdecAmp(dummylamX, theData);

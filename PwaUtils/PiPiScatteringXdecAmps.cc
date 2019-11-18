@@ -57,46 +57,41 @@ PiPiScatteringXdecAmps::~PiPiScatteringXdecAmps()
 }
 
 complex<double> PiPiScatteringXdecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
-				    EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+						    EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp) {
   complex<double> result(0.,0.);
   return result;
 }
-complex<double> PiPiScatteringXdecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
+complex<double> PiPiScatteringXdecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp) {
   complex<double> result(0.,0.);
-  int evtNo=theData->evtNo;
   _tMatDyn->eval(theData);
   return result;
 }
 
-void PiPiScatteringXdecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
-
+void PiPiScatteringXdecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp) {
   AbsXdecAmp::calcDynamics(theData, grandmaAmp);
-
  return;
 }
 
-void  PiPiScatteringXdecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+void  PiPiScatteringXdecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar) {
   _absDyn->fillDefaultParams(fitPar);
-
 }
 
-void PiPiScatteringXdecAmps::fillParamNameList(){
+void PiPiScatteringXdecAmps::fillParamNameList() {
   _absDyn->fillParamNameList();
 }
 
-void PiPiScatteringXdecAmps::print(std::ostream& os) const{
+void PiPiScatteringXdecAmps::print(std::ostream& os) const {
   return; //dummy
 }
 
 
-void PiPiScatteringXdecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+void PiPiScatteringXdecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar) {
   _absDyn->updateFitParams(fitPar);
 }
 
-void PiPiScatteringXdecAmps::initialize(){
+void PiPiScatteringXdecAmps::initialize() {
   _absDyn = DynRegistry::instance()->getDynamics(_decay);
   _absDyn->addGrandMa(_decay);
   _tMatDyn=std::dynamic_pointer_cast<TMatrixDynamics>(_absDyn);
 }
-

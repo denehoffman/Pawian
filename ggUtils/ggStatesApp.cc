@@ -68,7 +68,7 @@ int main(int __argc,char *__argv[]){
       optind++;
     }
     
-   while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
+    while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
   }
 
   if(msgModeStr == "debugging") ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
@@ -80,7 +80,6 @@ int main(int __argc,char *__argv[]){
     ErrLogger::instance().setThreshold(logging::log_level::INFO);
     WarningMsg << "ErrorLogger not set -> Use mode 'INFO' " << endmsg;  
   }
-
 
 
  std::stringstream jmaxStrStr(jmaxStr);

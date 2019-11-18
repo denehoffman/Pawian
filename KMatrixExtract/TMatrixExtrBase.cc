@@ -124,13 +124,13 @@ void TMatrixExtrBase::init(){
 	const std::vector<std::string> gFacStringVec=_kMatrixParser->gFactors();
 	DebugMsg << "gFacStringVec.size(): " << gFacStringVec.size() << endmsg;
 	_signs.resize(gFacStringVec.size());
-	for (int idx=0; idx<gFacStringVec.size(); ++idx) _signs[idx]=-1.;
+	for (size_t idx=0; idx<gFacStringVec.size(); ++idx) _signs[idx]=-1.;
 	unsigned int iSize = _sheet.size();
-	for(unsigned int i = 0; i < iSize; i++)
-	{
+	for(unsigned int i = 0; i < iSize; i++) {
 	  if(_sheet[i]=='p')  {  _signs[i] = 1;} 
 	}
-	std::map<std::pair<std::string, std::string>, std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
+	std::map<std::pair<std::string, std::string>, 
+		 std::string> phpDescriptionVec=_kMatrixParser->phpDescriptionMap();
 	std::cout << "phpDescriptionVec.size(): " << phpDescriptionVec.size() << std::endl;
 	std::vector<std::string>::const_iterator itStrConst;
 	for(itStrConst=gFacStringVec.begin(); itStrConst!=gFacStringVec.end(); ++itStrConst){
@@ -141,9 +141,10 @@ void TMatrixExtrBase::init(){
 	  std::pair<std::string, std::string> currentParticlePair=make_pair(firstParticleName, secondParticleName);
 	  Particle* firstParticle = _particleTable->particle(firstParticleName);
 	  Particle* secondParticle = _particleTable->particle(secondParticleName);
-	  if(0==firstParticle || 0==secondParticle){
-		Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName << " doesn't exist in pdg-table" << endmsg;
-		exit(0);
+	  if(0==firstParticle || 0==secondParticle) {
+	    Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName 
+		  << " doesn't exist in pdg-table" << endmsg;
+	    exit(0);
 	  }
 	}
 	_tMatr->SetBumImPartSigns(_signs);

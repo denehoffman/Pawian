@@ -13,7 +13,7 @@ project :
 	<include>$(BOOSTINCLUDE)
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
-	<cxxflags>--std=gnu++11
+	<cxxflags>--std=c++14
 	<cxxflags>-ftemplate-depth=256
 	<linkflags>$(ROOTLIBS)
 	<linkflags>-lvdt
@@ -33,9 +33,9 @@ lib HepMc : : <file>$(extern)/libgcc610/libHepMC.so : : ;
 lib Minuit2 : : <file>$(extern)/libgcc610/libMinuit2.so : : ;
 
 
+build-project ErrLogger ;
 build-project qft++ ;
 build-project Utils ;
-build-project ErrLogger ;
 build-project qft++Extension ;
 build-project ConfigParser ;
 build-project FitParams ;

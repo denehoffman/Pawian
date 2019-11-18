@@ -271,7 +271,6 @@ std::shared_ptr<AbsPawianParameters> GlobalEnv::randomPawianParams(){
       (*it).first->Lh()->fillDefaultParams(result);
    }
 
-   typedef boost::normal_distribution<double> NormalDistribution;
    typedef boost::mt19937 RandomGenerator;
    auto seed = chrono::high_resolution_clock::now().time_since_epoch().count();
    static RandomGenerator rng(static_cast<unsigned> (seed));

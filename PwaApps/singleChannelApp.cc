@@ -63,7 +63,9 @@ int main(int __argc,char *__argv[]){
   clock_t start, end;
   start= clock();
 
-  for (int i=0; i<__argc ; ++i) InfoMsg << __argv[i] << endmsg;
+  for (int i=0; i<__argc ; ++i) {
+    InfoMsg << __argv[i] << endmsg;
+  }
 
   char hostname[1024];
   gethostname(hostname, 1024); 
@@ -72,70 +74,72 @@ int main(int __argc,char *__argv[]){
   InfoMsg << "Hostname: " << hostname << endmsg;
 
   // Parse the command line
-   globalParser* globalAppParams=new globalParser(__argc, __argv);
+  globalParser* globalAppParams=new globalParser(__argc, __argv);
 
-   std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
-   std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
-   std::vector<std::string> resCfgs = globalAppParams->resCfgs();
-   std::vector<std::string> ggCfgs = globalAppParams->ggCfgs();
-   std::vector<std::string> pipiScatteringCfgs = globalAppParams->pipiScatteringCfgs();
-
-   //requirement single channel  sum reactionCfgs.size() == 1
-   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size()+ggCfgs.size()+pipiScatteringCfgs.size();
-   InfoMsg << "numReactions: " << numReactions << endmsg;
-   if (numReactions != 1){
-     Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
-	   << "\n number of reactions here: " << numReactions << endmsg;
-     exit(1);
-   }
-
-   GlobalEnv::instance()->setup(globalAppParams);
- 
-   char* argvWoCfgFile[__argc];
-   int argcWoCfgFile=0;
-   for (int i=0; i<__argc ; ++i){
-     InfoMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
-     std::string currentArgv(__argv[i]);
-     if(currentArgv =="-c" || currentArgv =="--configFile"){
-       Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
-       exit(1); 
-     }
-     else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" && currentArgv !=(char*)"--resFiles" && currentArgv !=(char*)"--ggFiles" && currentArgv !=(char*)"--pipiScatteringFiles"){
-       argvWoCfgFile[argcWoCfgFile]=__argv[i];
-       argcWoCfgFile++;
-     }
-     else ++i;
-   }
-
-   bool isPbarpChannel=false;
-   bool isPiPiScatteringChannel=false;
-   if (pbarpCfgs.size()==1) isPbarpChannel=true;
-   else if (pipiScatteringCfgs.size()==1) isPiPiScatteringChannel=true;
-
-   AppBase theAppBase;
-   theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
-
-   GlobalEnv::instance()->replaceParser(GlobalEnv::instance()->Channel(0)->parser());
-   std::vector<int> channelIDs; 
-   channelIDs.push_back(GlobalEnv::instance()->parser()->singleChannelId());
-
-   Alert << "trying to set channel ID to " << channelIDs[0] << endmsg;
-   GlobalEnv::instance()->setupChannelEnvs(channelIDs);
-
+  std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
+  std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
+  std::vector<std::string> resCfgs = globalAppParams->resCfgs();
+  std::vector<std::string> ggCfgs = globalAppParams->ggCfgs();
+  std::vector<std::string> pipiScatteringCfgs = globalAppParams->pipiScatteringCfgs();
+  
+  //requirement single channel  sum reactionCfgs.size() == 1
+  unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size()+ggCfgs.size()+pipiScatteringCfgs.size();
+  InfoMsg << "numReactions: " << numReactions << endmsg;
+  if (numReactions != 1){
+    Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
+	  << "\n number of reactions here: " << numReactions << endmsg;
+    exit(1);
+  }
+  
+  GlobalEnv::instance()->setup(globalAppParams);
+  
+  char* argvWoCfgFile[__argc];
+  int argcWoCfgFile=0;
+  for (int i=0; i<__argc ; ++i) {
+    InfoMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
+    std::string currentArgv(__argv[i]);
+    if(currentArgv =="-c" || currentArgv =="--configFile"){
+      Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
+      exit(1); 
+    }
+    else if(currentArgv !=(char*)"--pbarpFiles" && currentArgv !=(char*)"--epemFiles" 
+	    && currentArgv !=(char*)"--resFiles" && currentArgv !=(char*)"--ggFiles" 
+	    && currentArgv !=(char*)"--pipiScatteringFiles"){
+      argvWoCfgFile[argcWoCfgFile]=__argv[i];
+      argcWoCfgFile++;
+    }
+    else ++i;
+  }
+  
+  bool isPbarpChannel=false;
+  bool isPiPiScatteringChannel=false;
+  if (pbarpCfgs.size()==1) isPbarpChannel=true;
+  else if (pipiScatteringCfgs.size()==1) isPiPiScatteringChannel=true;
+  
+  AppBase theAppBase;
+  theAppBase.addChannelEnvs(argcWoCfgFile, argvWoCfgFile);
+  
+  GlobalEnv::instance()->replaceParser(GlobalEnv::instance()->Channel(0)->parser());
+  std::vector<int> channelIDs; 
+  channelIDs.push_back(GlobalEnv::instance()->parser()->singleChannelId());
+  
+  Alert << "trying to set channel ID to " << channelIDs[0] << endmsg;
+  GlobalEnv::instance()->setupChannelEnvs(channelIDs);
+  
   // Set the desired error logging mode
   setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());
-
+  
   // Get mode
   std::string mode=GlobalEnv::instance()->parser()->mode();
-
+  
   theAppBase.createLhObjects();
-
+  
   //check replacements of parameter suffixes
   if (!GlobalEnv::instance()->areSuffixMapsIdentical()) return 0;
-
+  
   //print out all replacements
   GlobalEnv::instance()->printFitParameterReplacements();
-
+  
   if (mode=="dumpDefaultParams"){
     theAppBase.dumpDefaultParams();
     return 1;
@@ -145,13 +149,13 @@ int main(int __argc,char *__argv[]){
     theAppBase.dumpRandomParams();
     return 1;
   }
-
+  
   // Read start param file
   std::shared_ptr<AbsPawianParameters> unsortedStartPawianParams=theAppBase.streamPawianParams();
   GlobalEnv::instance()->setStartPawianParams(unsortedStartPawianParams);
   std::shared_ptr<AbsPawianParameters> startPawianParams=GlobalEnv::instance()->startPawianParams();
-
-
+  
+  
   if (mode=="gen"){
     if(isPiPiScatteringChannel){
       Alert << "gen mode is not supported for pipi scattering reactions!!!" << endmsg;
@@ -216,12 +220,13 @@ int main(int __argc,char *__argv[]){
 
   const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
   std::vector<std::string> mcFileNames;
-  if(!isPiPiScatteringChannel){
+  if(!isPiPiScatteringChannel) {
     InfoMsg << "mc file: " << mcFile ;  // << endmsg;
     mcFileNames.push_back(mcFile);
   }
 
-  std::shared_ptr<EvtDataBaseList> eventListPtr=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel());
+  std::shared_ptr<EvtDataBaseList> eventListPtr = 
+    EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel());
   
   if(mode == "spinDensity" && isPbarpChannel){
     bool cacheAmps = GlobalEnv::instance()->parser()->cacheAmps();
@@ -229,7 +234,8 @@ int main(int __argc,char *__argv[]){
     if (cacheAmps) GlobalEnv::instance()->Channel()->Lh()->cacheAmplitudes();
     
     EventList eventsData;
-    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
+    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 
+			  0, spinDensityHist::MAX_EVENTS);
     
     EventList mcData;
     theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, spinDensityHist::MAX_EVENTS);
@@ -244,10 +250,9 @@ int main(int __argc,char *__argv[]){
     std::string serializationFileName = GlobalEnv::instance()->serializationFileName();
     std::ifstream serializationStream(serializationFileName.c_str());
     
-    if(!serializationStream.is_open()){
+    if(!serializationStream.is_open()) {
       WarningMsg << "Could not open serialization file." << endmsg;
-    }
-    else{
+    } else {
       boost::archive::text_iarchive boostInputArchive(serializationStream);
       std::shared_ptr<PwaCovMatrix> thePwaCovMatrix(new PwaCovMatrix);
       boostInputArchive >> *thePwaCovMatrix;
@@ -262,11 +267,11 @@ int main(int __argc,char *__argv[]){
 
   EventList eventsData;
   EventList mcData;
-  if(isPiPiScatteringChannel){
+  if(isPiPiScatteringChannel) {
     theAppBase.readScatteringEvents(eventsData, dataFileNames, 0);
-  }
-  else{
-    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 0, noOfDataEvents);
+  } else {
+    theAppBase.readEvents(eventsData, dataFileNames, 0, GlobalEnv::instance()->Channel()->useDataEvtWeight(), 
+			  0, noOfDataEvents);
     
     int maxMcEvts=eventsData.size()*ratioMcToData;
     // InfoMsg << "eventsData.size(): " << eventsData.size() << endmsg;
@@ -307,7 +312,8 @@ int main(int __argc,char *__argv[]){
     std::vector<std::string> truthFileNames;
     truthFileNames.push_back(truthFile);
     EventList truthData;
-    theAppBase.readEvents(truthData, truthFileNames, 0, GlobalEnv::instance()->parser()->useTruthEvtWeight(), 0, maxTruthEvts-1);
+    theAppBase.readEvents(truthData, truthFileNames, 0, GlobalEnv::instance()->parser()->useTruthEvtWeight(), 
+			  0, maxTruthEvts-1);
     theAppBase.qaModeEffCorrection(eventsData, mcData, truthData, startPawianParams);
     return 1;
   }

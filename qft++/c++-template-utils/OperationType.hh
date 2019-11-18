@@ -45,7 +45,7 @@ protected:
   static _U _u_type;
 
 public:
-  typedef typeof(_v_type * _u_type) Type; ///< Return type of V * U
+  typedef decltype(_v_type * _u_type) Type; ///< Return type of V * U
 };
 //_____________________________________________________________________________
 
@@ -66,7 +66,7 @@ protected:
   static _U _u_type;
  
 public:
-  typedef typeof(_v_type / _u_type) Type; ///< Return type of V / U
+  typedef decltype(_v_type / _u_type) Type; ///< Return type of V / U
 };
 //_____________________________________________________________________________
 
@@ -87,7 +87,7 @@ protected:
   static _U _u_type;
  
 public:
-  typedef typeof(_v_type + _u_type) Type; ///< Return type of V + U
+  typedef decltype(_v_type + _u_type) Type; ///< Return type of V + U
 };
 //_____________________________________________________________________________
 
@@ -108,7 +108,7 @@ protected:
   static _U _u_type;
  
 public:
-  typedef typeof(_v_type - _u_type) Type; ///< Return type of V - U
+  typedef decltype(_v_type - _u_type) Type; ///< Return type of V - U
 };
 //_____________________________________________________________________________
 

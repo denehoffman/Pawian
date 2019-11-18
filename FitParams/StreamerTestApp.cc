@@ -36,8 +36,10 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-int main(int __argc,char *__argv[]){
-  for (int i=0; i<__argc ; ++i) InfoMsg << __argv[i] << endmsg;
+int main(int __argc,char *__argv[]) {
+  for (int i=0; i<__argc ; ++i) {
+    InfoMsg << __argv[i] << endmsg;
+  }
   
   InfoMsg << "Compiled " << __DATE__ << " " << __TIME__ << endmsg;
 

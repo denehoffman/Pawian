@@ -117,36 +117,38 @@ void TMatrixErrorExtr::Calculation(){
   unsigned int nKMatrixPar = _kMatrixParamNames.size();
   InfoMsg << "KMatrix Params Size " << nKMatrixPar << endmsg;
 
-  for(unsigned int i=0; i<nKMatrixPar; i++){
+  for(unsigned int i=0; i<nKMatrixPar; i++) {
 
-	std::string parName = _kMatrixParamNames[i];
-	unsigned int index = _params->Index(parName);
-	double parOrig = _params->Value(index);
-
-	newFitParams->SetValue(index, parOrig + stepSize);
-
-	std::complex<double> resultDelta = CalcMassWidth(newFitParams);
-	std::complex<double> newDerivative = (resultDelta - _result) / stepSize;
-	_derivatives[parName] = newDerivative;
-	_realDerivatives.push_back(std::make_pair( parName, newDerivative.real() ) );
-	_imagDerivatives.push_back(std::make_pair( parName, newDerivative.imag() ) );
-
-	newFitParams->SetValue(index, parOrig);
+    std::string parName = _kMatrixParamNames[i];
+    unsigned int index = _params->Index(parName);
+    double parOrig = _params->Value(index);
+    
+    newFitParams->SetValue(index, parOrig + stepSize);
+    
+    std::complex<double> resultDelta = CalcMassWidth(newFitParams);
+    std::complex<double> newDerivative = (resultDelta - _result) / stepSize;
+    _derivatives[parName] = newDerivative;
+    _realDerivatives.push_back(std::make_pair( parName, newDerivative.real() ) );
+    _imagDerivatives.push_back(std::make_pair( parName, newDerivative.imag() ) );
+    
+    newFitParams->SetValue(index, parOrig);
   }
-
+  
   for(unsigned int i=0; i<nKMatrixPar; i++){
-	for(unsigned int j=0; j<nKMatrixPar; j++){
-	  std::string name1 = _kMatrixParamNames[i];
-	  std::string name2 = _kMatrixParamNames[j];
-	  double err_real = std::real(_derivatives[name1] ) * _thePwaCovMatrix->GetElement(name1, name2) * std::real(_derivatives[name2] );
-	  double err_imag = std::imag(_derivatives[name1] ) * _thePwaCovMatrix->GetElement(name1, name2) * std::imag(_derivatives[name2] );
-	  std::string name = name1 + " " + name2;
-	  _realError.push_back(std::make_pair( name, err_real ) );
-	  _imagError.push_back(std::make_pair( name, err_imag ) );
-	  resultErr += std::complex<double> (err_real, err_imag );
-	}
+    for(unsigned int j=0; j<nKMatrixPar; j++){
+      std::string name1 = _kMatrixParamNames[i];
+      std::string name2 = _kMatrixParamNames[j];
+      double err_real = std::real(_derivatives[name1] ) * 
+	_thePwaCovMatrix->GetElement(name1, name2) * std::real(_derivatives[name2] );
+      double err_imag = std::imag(_derivatives[name1] ) * 
+	_thePwaCovMatrix->GetElement(name1, name2) * std::imag(_derivatives[name2] );
+      std::string name = name1 + " " + name2;
+      _realError.push_back(std::make_pair( name, err_real ) );
+      _imagError.push_back(std::make_pair( name, err_imag ) );
+      resultErr += std::complex<double> (err_real, err_imag );
+    }
   }
-
+  
   resultErr = std::complex<double>(sqrt(std::real(resultErr) ), sqrt(std::imag(resultErr) ) );
   _error = resultErr;
   return;
@@ -176,7 +178,7 @@ void TMatrixErrorExtr::printErrors(){
   }
 }
 
-std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianParameters> theFitParams){
+std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianParameters> theFitParams) {
   _tMatFit->updateTMatDy(theFitParams);
   TMatrixExtrFcn fitFcn(_tMatFit);
 
@@ -200,10 +202,10 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   // min = migrad2();
 
   if(!min.IsValid()) {
-	// Try with higher strategy
-	InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-	MnMigrad migrad2b(fitFcn, min.UserState(), MnStrategy(2));
-	min = migrad2b();
+    // Try with higher strategy
+    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
+    MnMigrad migrad2b(fitFcn, min.UserState(), MnStrategy(2));
+    min = migrad2b();
   }
 
   //start second iteration
@@ -215,21 +217,42 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   double final_eImag = min.UserState().Value("eImag");
 
   InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
-  if(min.IsValid())             InfoMsg << "\n Function minimum is valid.\n";
-  else                          InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
-  if(min.HasValidCovariance())  InfoMsg << "\n Covariance matrix is valid." << endmsg;
-  else                          InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
+  if(min.IsValid()) {
+    InfoMsg << "\n Function minimum is valid.\n";
+  } else {
+    InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
+  }
+  if(min.HasValidCovariance()) {
+    InfoMsg << "\n Covariance matrix is valid." << endmsg;
+  } else {
+    InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
+  }
   InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
   InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm()<<endmsg;
-  if(!min.HasValidParameters()) InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
-  if(!min.HasAccurateCovar())   InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
-  if(!min.HasPosDefCovar()){    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
-	if(min.HasMadePosDefCovar()) InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
+  if(!min.HasValidParameters()) {
+    InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
   }
-  if(!min.HasCovariance())      InfoMsg << " hasCovariance() returned FALSE" << endmsg;
-  if(min.HasReachedCallLimit()) InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
-  if(min.IsAboveMaxEdm())       InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
-  if(min.HesseFailed())         InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+  if(!min.HasAccurateCovar()) {
+    InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
+  }
+  if(!min.HasPosDefCovar()) {
+    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
+    if(min.HasMadePosDefCovar()) {
+      InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
+    }
+  }
+  if(!min.HasCovariance()) {
+    InfoMsg << " hasCovariance() returned FALSE" << endmsg;
+  }
+  if(min.HasReachedCallLimit()) {
+    InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
+  }
+  if(min.IsAboveMaxEdm()) {
+    InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
+  }
+  if(min.HesseFailed()) {
+    InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+  }
 
   double final_eRealError = min.UserState().Error("eReal");
   double final_eImagError = min.UserState().Error("eImag");

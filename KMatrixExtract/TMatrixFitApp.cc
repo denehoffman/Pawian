@@ -49,7 +49,7 @@ int main(int __argc,char *__argv[]){
   ErrLogger::instance().setThreshold(logging::log_level::INFO);
   
   if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
-                    strcmp( __argv[1], "--help" ) == 0 ) ){
+                    strcmp( __argv[1], "--help" ) == 0 ) ) {
     InfoMsg << "USAGE:" << endmsg;
     InfoMsg << "--path: path to kmatrix config file" << endmsg;
     InfoMsg << "--fitparams: path to fit parameter file" << endmsg;
@@ -138,21 +138,22 @@ int main(int __argc,char *__argv[]){
   InfoMsg << "energyMin: " << energyMin << endmsg;
   InfoMsg << "energyMax: " << energyMax << endmsg;
   InfoMsg << "energyStart: " << energyStart << endmsg;
-  if(energyStart.real() < energyMin.real() || energyStart.real() > energyMax.real()){
+  if(energyStart.real() < energyMin.real() || energyStart.real() > energyMax.real()) {
     InfoMsg << "energyStart.real() is not inside the energy plane!!!" << endmsg;
     double newVal= (energyMax.real()+energyMin.real())/2.;
     energyStart= std::complex<double>(newVal, energyStart.imag()); 
     InfoMsg << "switched to energyStart: " << energyStart << endmsg;    
   }
 
-  if(energyStart.imag() < energyMin.imag() || energyStart.imag() > energyMax.imag()){
+  if(energyStart.imag() < energyMin.imag() || energyStart.imag() > energyMax.imag()) {
     InfoMsg << "energyStart.imag() is not inside the energy plane!!!" << endmsg;
     double newVal= (energyMax.imag()+energyMin.imag())/2.;
     energyStart= std::complex<double>(energyStart.real(), newVal); 
     InfoMsg << "switched to energyStart: " << energyStart << endmsg;
   }
 
-  std::shared_ptr<TMatrixExtrFit> tMatFit(new TMatrixExtrFit(pathToConfigParser, pathToFitParams, sheetStr, energyMin, energyMax, energyStart));
+  std::shared_ptr<TMatrixExtrFit> tMatFit(new TMatrixExtrFit(pathToConfigParser, pathToFitParams, 
+							     sheetStr, energyMin, energyMax, energyStart));
   TMatrixExtrFcn fitFcn(tMatFit);
   
   // Set user parameters for MinuitFitFcn
@@ -189,21 +190,42 @@ int main(int __argc,char *__argv[]){
   InfoMsg << std::setprecision(16) << "final eImag:\t" << final_eImag << " +- " << errEImag << endmsg;
 
   InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
-    if(min.IsValid())             InfoMsg << "\n Function minimum is valid.\n";
-    else                          InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
-    if(min.HasValidCovariance())  InfoMsg << "\n Covariance matrix is valid." << endmsg;
-    else                          InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
-    InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
-    InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm()<<endmsg;
-    if(!min.HasValidParameters()) InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
-    if(!min.HasAccurateCovar())   InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
-    if(!min.HasPosDefCovar()){    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
-                                  if(min.HasMadePosDefCovar()) InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
+  if(min.IsValid()) {
+    InfoMsg << "\n Function minimum is valid.\n";
+  } else {
+    InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
+  }
+  if(min.HasValidCovariance()) {
+    InfoMsg << "\n Covariance matrix is valid." << endmsg;
+  } else {
+    InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
+  }
+  InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
+  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm()<<endmsg;
+  if(!min.HasValidParameters()) {
+    InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
+  }
+  if(!min.HasAccurateCovar()) {
+    InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
+  }
+  if(!min.HasPosDefCovar()) {
+    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
+    if(min.HasMadePosDefCovar()) {
+      InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
     }
-    if(!min.HasCovariance())      InfoMsg << " hasCovariance() returned FALSE" << endmsg;
-    if(min.HasReachedCallLimit()) InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
-    if(min.IsAboveMaxEdm())       InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
-    if(min.HesseFailed())         InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+  }
+  if(!min.HasCovariance()) {
+    InfoMsg << " hasCovariance() returned FALSE" << endmsg;
+  }
+  if(min.HasReachedCallLimit()) {
+    InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
+  }
+  if(min.IsAboveMaxEdm()) {
+    InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
+  }
+  if(min.HesseFailed()) {
+    InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
+  }
   return 0;
 }
 
