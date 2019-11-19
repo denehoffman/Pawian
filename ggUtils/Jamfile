@@ -12,14 +12,15 @@ project :
 
 lib ggUtils : 
 	[ glob *.cc : *App.cc ] 
+	: 
+	: 
+	: ;
+
+exe ggStatesApp : ggStatesApp.cc ggUtils 
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaUtils//PwaUtils 
 	$(TOP)/Utils//Utils 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
-	:
-	: 
-	: ;
-
-exe ggStatesApp : ggStatesApp.cc ggUtils : ;
+    	: ;

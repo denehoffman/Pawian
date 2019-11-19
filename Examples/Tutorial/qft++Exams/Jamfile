@@ -17,11 +17,9 @@ project :
         ;
 
 lib qft++Exams : 
-        [ glob *.cc : *App.cc ]  
+        [ glob *.cc : *App.cc ]  : : :  ;
+
+exe TensorApp : TensorApp.cc qft++Exams 
         $(TOP)/qft++//qft++ 
         $(TOP)/ErrLogger//ErrLogger
-	:  
-	: 
-	:   ;
-
-exe TensorApp : TensorApp.cc qft++Exams : ;
+	: ;

@@ -34,4 +34,7 @@ lib Event :
 	: 
 	: <library>$(TOP)//HepMc ;
 
-exe HepMCEvtReaderTestApp : HepMCEvtReaderTestApp.cc Event : ;
+exe HepMCEvtReaderTestApp : HepMCEvtReaderTestApp.cc Event 
+    			  $(TOP)/ErrLogger//ErrLogger
+			  $(TOP)/Utils//Utils
+    			  : ;

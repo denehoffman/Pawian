@@ -17,26 +17,113 @@ project :
         ;
 
 lib LineShapes : 
-        [ glob *.cc : *App.cc ]  
-        $(TOP)/qft++//qft++
-	$(TOP)/qft++Extension//qft++Extension
-        $(TOP)/ErrLogger//ErrLogger
-	$(TOP)/Particle//Particle
-	$(TOP)/PwaDynamics//PwaDynamics
-	$(TOP)/ConfigParser//ConfigParser
-	$(TOP)/PwaUtils//PwaUtils
-	$(TOP)/FitParams//FitParams
-	: 
-	: 
-	:  ;
+        [ glob *.cc : *App.cc ]  : : :  ;
 
-exe BwShapeApp : BwShapeApp.cc LineShapes : ;
-exe FlatteShapeApp : FlatteShapeApp.cc LineShapes : ;
-exe TwoPolesApp : TwoPolesApp.cc LineShapes : ;
-exe PiPiSWaveApp : PiPiSWaveApp.cc LineShapes : ;
-exe TMatrixGeneralApp : TMatrixGeneralApp.cc LineShapes : ;
-exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc LineShapes : ;
-exe VoigtShapeApp : VoigtShapeApp.cc LineShapes : ;
-exe BarrierFactorApp : BarrierFactorApp.cc LineShapes : ;
-exe PhpFactorApp : PhpFactorApp.cc LineShapes : ;
-exe LUTPlotApp : LUTPlotApp.cc LineShapes : ;
+exe BwShapeApp : BwShapeApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+    	  : ;
+
+exe FlatteShapeApp : FlatteShapeApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe TwoPolesApp : TwoPolesApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe PiPiSWaveApp : PiPiSWaveApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe TMatrixGeneralApp : TMatrixGeneralApp.cc LineShapes     	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe VoigtShapeApp : VoigtShapeApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe BarrierFactorApp : BarrierFactorApp.cc LineShapes
+     	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe PhpFactorApp : PhpFactorApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe LUTPlotApp : LUTPlotApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;

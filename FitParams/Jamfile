@@ -18,11 +18,20 @@ project :
 
 lib FitParams : 
 	[ glob *.cc : *App.cc ] 
-	$(TOP)/ErrLogger//ErrLogger
-	$(TOP)/ConfigParser//ConfigParser
 	: <use>$(TOP)//Minuit2
 	: 
 	: <library>$(TOP)//Minuit2 ;
 
-exe StreamerTestApp : StreamerTestApp.cc FitParams $(TOP)/qft++//qft++ : ;
-exe PwaCovMatrixApp : PwaCovMatrixApp.cc FitParams : ;
+exe StreamerTestApp : StreamerTestApp.cc FitParams $(TOP)/qft++//qft++ 
+	$(TOP)/ConfigParser//ConfigParser
+        $(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	: ;
+
+exe PwaCovMatrixApp : PwaCovMatrixApp.cc FitParams 
+	$(TOP)/ConfigParser//ConfigParser
+        $(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+	$(TOP)/ErrLogger//ErrLogger
+	: ;

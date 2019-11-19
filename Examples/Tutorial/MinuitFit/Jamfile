@@ -24,5 +24,8 @@ lib MinuitFit :
 	: 
 	: <library>$(TOP)//Minuit2 ;
 
-exe MinuitFitApp : MinuitFitApp.cc MinuitFit : ;
+exe MinuitFitApp : MinuitFitApp.cc MinuitFit 
+        	   $(TOP)/qft++//qft++ 
+       		   $(TOP)/ErrLogger//ErrLogger
+    		 : ;
 

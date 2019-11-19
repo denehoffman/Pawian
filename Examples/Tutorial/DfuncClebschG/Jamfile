@@ -46,6 +46,7 @@ exe DfuncApp : DfuncApp.cc DfuncClebschG
     : ;
 exe HeliTrafoApp : HeliTrafoApp.cc DfuncClebschG
     $(TOP)/PwaUtils//PwaUtils
+    $(TOP)/PspGen//PspGen
     $(TOP)/qft++Extension//qft++Extension
     $(TOP)/qft++//qft++ 
     $(TOP)/ErrLogger//ErrLogger 

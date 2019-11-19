@@ -17,20 +17,30 @@ project :
         ;
 
 lib PwaApps : 
-        [ glob *.cc : *App.cc ]  
-        $(TOP)/qft++//qft++ 
-        $(TOP)/ErrLogger//ErrLogger
+        [ glob *.cc : *App.cc ] : : : ;
+
+exe coupledChannelApp : coupledChannelApp.cc PwaApps 
+        $(TOP)/pbarpUtils//pbarpUtils
+        $(TOP)/epemUtils//epemUtils
         $(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
 	$(TOP)/AppUtils//AppUtils
-        $(TOP)/pbarpUtils//pbarpUtils
-        $(TOP)/epemUtils//epemUtils
         $(TOP)/Particle//Particle
         $(TOP)/Event//Event
-        :  
-        : 
-        :   ;
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+	: ;
 
-exe coupledChannelApp : coupledChannelApp.cc PwaApps : ;
-exe singleChannelApp : singleChannelApp.cc PwaApps : ;
+exe singleChannelApp : singleChannelApp.cc PwaApps 
+        $(TOP)/pbarpUtils//pbarpUtils
+        $(TOP)/epemUtils//epemUtils
+        $(TOP)/ConfigParser//ConfigParser
+	$(TOP)/FitParams//FitParams
+        $(TOP)/PwaUtils//PwaUtils
+	$(TOP)/AppUtils//AppUtils
+        $(TOP)/Particle//Particle
+        $(TOP)/Event//Event
+        $(TOP)/qft++//qft++ 
+        $(TOP)/ErrLogger//ErrLogger
+	: ;

@@ -13,7 +13,7 @@ project :
 	<include>$(BOOSTINCLUDE)
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
-	<cxxflags>--std=c++17
+	<cxxflags>--std=c++14
 	<cxxflags>-ftemplate-depth=256
 	<linkflags>$(ROOTLIBS)
 	<linkflags>-lvdt

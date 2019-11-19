@@ -16,6 +16,9 @@ install install-lib : Particle
 project : 
 	;
 
-lib Particle : [ glob *.cc : *App.cc ] $(TOP)/Utils//Utils $(TOP)/ErrLogger//ErrLogger : : : ;
+lib Particle : [ glob *.cc : *App.cc ] : : : ;
 
-exe PdtTestApp : PdtTestApp.cc Particle : ;
+exe PdtTestApp : PdtTestApp.cc Particle 
+    	       $(TOP)/Utils//Utils 
+	       $(TOP)/ErrLogger//ErrLogger 
+	       : ;

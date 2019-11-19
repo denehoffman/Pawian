@@ -18,18 +18,31 @@ project :
 
 lib pbarp : 
         [ glob *.cc : *App.cc ]  
-        $(TOP)/qft++//qft++ 
-        $(TOP)/ErrLogger//ErrLogger
-        $(TOP)/ConfigParser//ConfigParser
-	$(TOP)/FitParams//FitParams
-        $(TOP)/PwaUtils//PwaUtils
-	$(TOP)/AppUtils//AppUtils
-        $(TOP)/pbarpUtils//pbarpUtils
-        $(TOP)/Particle//Particle
-        $(TOP)/Event//Event
         :  
         : 
         :   ;
 
-exe pbarpStatesApp : pbarpStatesApp.cc pbarp : ;
-exe pbarpTensorAmpApp : pbarpTensorAmpApp.cc pbarp : ;
+exe pbarpStatesApp : pbarpStatesApp.cc pbarp 
+        	     $(TOP)/Event//Event
+        	     $(TOP)/ConfigParser//ConfigParser
+		     $(TOP)/FitParams//FitParams
+        	     $(TOP)/PwaUtils//PwaUtils
+		     $(TOP)/AppUtils//AppUtils
+        	     $(TOP)/pbarpUtils//pbarpUtils
+        	     $(TOP)/Particle//Particle
+        	     $(TOP)/qft++//qft++ 
+        	     $(TOP)/ErrLogger//ErrLogger
+    		   : ;
+
+
+exe pbarpTensorAmpApp : pbarpTensorAmpApp.cc pbarp 
+        	      	$(TOP)/Event//Event
+			$(TOP)/ConfigParser//ConfigParser
+		     	$(TOP)/FitParams//FitParams
+        	     	$(TOP)/PwaUtils//PwaUtils
+		     	$(TOP)/AppUtils//AppUtils
+        	     	$(TOP)/pbarpUtils//pbarpUtils
+        	     	$(TOP)/Particle//Particle
+        	     	$(TOP)/qft++//qft++ 
+        	     	$(TOP)/ErrLogger//ErrLogger
+    		      : ;

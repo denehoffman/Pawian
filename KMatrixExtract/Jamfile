@@ -18,19 +18,50 @@ project :
 
 lib KMatrixExtract : 
         [ glob *.cc : *App.cc ]  
-        $(TOP)/qft++//qft++
-	$(TOP)/qft++Extension//qft++Extension
-        $(TOP)/ErrLogger//ErrLogger
-	$(TOP)/Particle//Particle
-	$(TOP)/PwaDynamics//PwaDynamics
-	$(TOP)/ConfigParser//ConfigParser
-	$(TOP)/PwaUtils//PwaUtils
-	$(TOP)/FitParams//FitParams
 	: <use>$(TOP)//Minuit2  
 	: 
 	: <library>$(TOP)//Minuit2  ;
 
-exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract : ;
-exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract : ;
-exe TMatrixResidueExtrApp : TMatrixResidueExtrApp.cc KMatrixExtract : ;
-exe ArgandModuloConverterApp : ArgandModuloConverterApp.cc KMatrixExtract : ;
+exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract 
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/FitParams//FitParams
+	$(TOP)/Particle//Particle
+	$(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+        $(TOP)/ErrLogger//ErrLogger
+	: ;
+
+exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/FitParams//FitParams
+	$(TOP)/Particle//Particle
+	$(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+        $(TOP)/ErrLogger//ErrLogger
+	: ;
+
+exe TMatrixResidueExtrApp : TMatrixResidueExtrApp.cc KMatrixExtract
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/FitParams//FitParams
+	$(TOP)/Particle//Particle
+	$(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+        $(TOP)/ErrLogger//ErrLogger
+	: ;
+
+exe ArgandModuloConverterApp : ArgandModuloConverterApp.cc KMatrixExtract
+	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/FitParams//FitParams
+	$(TOP)/Particle//Particle
+	$(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+        $(TOP)/ErrLogger//ErrLogger
+	: ;
