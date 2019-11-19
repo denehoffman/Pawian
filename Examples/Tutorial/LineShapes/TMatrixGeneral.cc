@@ -213,9 +213,11 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
       complex<double> currentRho=_phpVecs.at(i)->factor(mass);
 
-      if(currentRho.real() > 1.e-8){ 
-	_AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
-	_AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
+      //      if(currentRho.real() > 1.e-8){ 
+	// _AmpRealH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).real());
+	// _AmpImagH1Vec.at(i)->Fill(mass, sqrt(currentRho.real())*(*_tMatr)(i,i).imag());
+	_AmpRealH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).real());
+	_AmpImagH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).imag());	
 	_ImagT11m1H1Vec.at(i)->Fill(mass, -(*tMatrInv)(i,i).imag());
 	
 	_ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), currentRho.real()*(*_tMatr)(i,i).imag());
@@ -230,7 +232,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 	_PhaseH2Vec.at(i)->Fill(mass, currentphase);
 	// double sqrtFactor=(*_tMatr)(i,i).real()*(*_tMatr)(i,i).real()+((*_tMatr)(i,i).imag()-0.5)*((*_tMatr)(i,i).imag()-0.5);
 	// double currentElasticity=2.*sqrt(sqrtFactor);
-      }
+	//      }
       complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*currentRho.real()*(*_tMatr)(i,i);
       _ElasticityH1Vec.at(i)->Fill(mass, sqrt(norm(S00_rel)));
 
@@ -343,10 +345,10 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   }
 
   RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
-		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
-		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
-		       numStepsForSheetScan, 
-		       projectionIndex);
+   		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
+   		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
+   		       numStepsForSheetScan, 
+   		       projectionIndex);
 }
 
 TMatrixGeneral::~TMatrixGeneral()

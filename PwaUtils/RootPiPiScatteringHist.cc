@@ -66,32 +66,32 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
   std::string graphNameData("DeltaData");
   std::string graphNameFit("DeltaFit");
 
-  std::string graphTitleData="#{delta}^{o} (data)";
-  std::string graphTitleFit("#{delta}^{o} (fit)");
+  std::string graphTitleData="#delta^{o} (data)";
+  std::string graphTitleFit("#delta^{o} (fit)");
 
   if (GlobalEnv::instance()->parser()->productionFormalism()=="Phase"){
     graphNameData="PhaseData";
     graphNameFit="PhaseFit";
-    graphTitleData="#{eta} (data)";
-    graphTitleFit="#{eta} (fit)";
+    graphTitleData="#eta (data)";
+    graphTitleFit="#eta (fit)";
   }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
     graphNameData="ElasticityData";
     graphNameFit="ElasticityFit";
-    graphTitleData="#{eta} (data)";
-    graphTitleFit="#{eta} (fit)";
+    graphTitleData="#eta (data)";
+    graphTitleFit="#eta (fit)";
   }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="ArgandUnits"){
     graphNameData="ArgandUnitsData";
     graphNameFit="ArgandUnitsFit";
-    graphTitleData="#{rho}_{i) #{rho)_{j} |T_{ij}|^{2} (data)";
-    graphTitleFit="#{rho}_{i) #{rho)_{j} |T_{ij}|^{2} (fit)";
+    graphTitleData="#rho_{i} #rho_{j} |T_{ij}|^{2} (data)";                                
+    graphTitleFit="#rho_{i} #rho_{j} |T_{ij}|^{2} (fit)"; 
   }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
     graphNameData="PhaseDiffData";
     graphNameFit="PhaseDiffFit";
-    graphTitleData="#{phi}_{i}-#{phi}_{j}  (data)";
-    graphTitleFit="#{phi}_{i}-#{phi}_{j} (fit)";
+    graphTitleData="#phi_{i} - #phi_{j}  (data)";
+    graphTitleFit="#phi_{i} - #phi_{j} (fit)";
   }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="PVecIntensity"){
     graphNameData="PVecIntensityData";
