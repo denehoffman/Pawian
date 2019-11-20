@@ -37,7 +37,8 @@ int main(int __argc,char *__argv[]){
 		    || strcmp( __argv[1], "--help" ) == 0 ) ){
 
     std::cout << "test application which calculates all initial pbar p states\n"
-	      << "output: JPC states with contributed LS combinations + helicicty + corresponding Clebsch-Gordan coefficient\n"
+	      << "output: JPC states with contributed LS combinations + helicicty "
+	      << "+ corresponding Clebsch-Gordan coefficient\n"
 	      << "The application can be started with two flags: \n"
 	      << "with -msg <errorLogMode>: choose the mode for the error logger \n"
 	      << "with -lmax <value>: choose the maximum Spin J \n"
@@ -65,8 +66,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      WarningMsg << "Unknown switch: " 
-	      << __argv[optind] << endmsg;
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     
@@ -83,12 +83,10 @@ int main(int __argc,char *__argv[]){
     WarningMsg << "ErrorLogger not (properly) set -> Use mode 'WARN' " << endmsg;  
   }
 
-
-
- std::stringstream lmaxStrStr(lmaxStr);
- int lmax=0;
- lmaxStrStr >> lmax;
-
+  std::stringstream lmaxStrStr(lmaxStr);
+  int lmax=0;
+  lmaxStrStr >> lmax;
+  
   InfoMsg << "lmax: " << lmax << endmsg;
 
   pbarpStatesLS thepbarpState(lmax);

@@ -42,9 +42,9 @@ int main(int __argc,char *__argv[]){
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
     
     InfoMsg << "switch\n"
-         << "-inputPath   path and name of the input file\n"
-         << "-outputPath   path and name of the output file"
-         << endmsg;
+	    << "-inputPath   path and name of the input file\n"
+	    << "-outputPath   path and name of the output file"
+	    << endmsg;
     return 1;
   }
 
@@ -67,8 +67,7 @@ int main(int __argc,char *__argv[]){
 	found=true;
       }
       if (!found){
-	WarningMsg << "Unknown switch: " 
-		<< __argv[optind] << endmsg;
+	WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
 	optind++;
       }
       while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;

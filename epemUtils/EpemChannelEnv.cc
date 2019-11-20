@@ -39,9 +39,6 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-
-
-
 EpemChannelEnv::EpemChannelEnv(epemParser* theParser) : 
   AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_EPEM)
   ,_theEpEmParser(theParser)
@@ -63,7 +60,8 @@ void EpemChannelEnv::setupChannel(ChannelID id){
     double totalxMom=0.04;
     _initial4Vec = Vector4<double>( sqrt(_cmsMass*_cmsMass+totalxMom*totalxMom), 0., totalxMom, 0.);
     WarningMsg << "NO initial 4-vector set in config file! Using px=" 
-       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!";
+	       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" 
+	       << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!" << endmsg;
   }
   
   std::vector<std::string>::const_iterator itStr;
@@ -97,7 +95,8 @@ void EpemChannelEnv::setupChannel(ChannelID id){
       prodDecs=_epemReaction->productionTensorDecays(); //default
     } 
     else{
-      Alert <<"productionTensorRadType with the name " << _theEpEmParser->productionTensorRadType() << " doesn't exist!!!" << endmsg;
+      Alert <<"productionTensorRadType with the name " << _theEpEmParser->productionTensorRadType() 
+	    << " doesn't exist!!!" << endmsg;
       exit(0);
     }
     

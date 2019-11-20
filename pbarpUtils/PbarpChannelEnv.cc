@@ -29,7 +29,6 @@
 #include "pbarpUtils/PbarpChannelEnv.hh"
 #include "ConfigParser/pbarpParser.hh"
 #include "pbarpUtils/pbarpReaction.hh"
-//#include "pbarpUtils/pbarpHist.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -40,9 +39,6 @@
 #include "ErrLogger/ErrLogger.hh"
 
 
-
-
-
 PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_PBARP)
   ,_lmax(0)
   ,_pbarMomentum(0)
@@ -50,7 +46,7 @@ PbarpChannelEnv::PbarpChannelEnv(pbarpParser* theParser) : AbsChannelEnv(thePars
 {
 }
 
-void PbarpChannelEnv::setupChannel(ChannelID id){
+void PbarpChannelEnv::setupChannel(ChannelID id) {
 
    AbsChannelEnv::setupGlobal(id);
 
@@ -58,13 +54,15 @@ void PbarpChannelEnv::setupChannel(ChannelID id){
   _pbarMomentum = _thePbarpParser->getpbarMomentum();
 
   //! Only if the user did not specify the initial 4-vector in the config file, use a default value. 
-  //! Here, by default the initial 4-vector is calculated as: (E, px, py, pz) = (M(p)+sqrt(M(pbar)*M(pbar)+p(pbar)*p(pbar)), 0., 0., p(pbar)) 
+  //! Here, by default the initial 4-vector is calculated as: 
+  //! (E, px, py, pz) = (M(p)+sqrt(M(pbar)*M(pbar)+p(pbar)*p(pbar)), 0., 0., p(pbar)) 
   if(_initial4Vec == Vector4<double>(0.,0.,0.,0.)) {
    double pMass=GlobalEnv::instance()->particleTable()->particle("proton")->mass();
    double antipMass=GlobalEnv::instance()->particleTable()->particle("antiproton")->mass();
    _initial4Vec = Vector4<double>(pMass+sqrt(antipMass*antipMass+_pbarMomentum*_pbarMomentum), 0., 0., _pbarMomentum);
     WarningMsg << "NO initial 4-vector set in config file! Using px=" 
-       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!";
+	       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()
+	       << ", E=" << _initial4Vec.E() << " instead!" << endmsg;
   }
    _cmEnergy = _initial4Vec.M();
      
@@ -82,9 +80,7 @@ void PbarpChannelEnv::setupChannel(ChannelID id){
       _dropPbarpLForParticleData[particle].push_back(l);
    }
 
-
    std::vector<std::string>::const_iterator itStr;
-
 
    //pbarp reaction
    _pbarpReaction=std::shared_ptr<pbarpReaction>(new pbarpReaction(_prodChannelInfoList, id,_lmax));
@@ -136,7 +132,8 @@ void PbarpChannelEnv::setupChannel(ChannelID id){
       }
    }
    else{
-      Alert <<"production formalism\t" << _thePbarpParser->productionFormalism() << "\t is not supported!!!" << endmsg;
+      Alert << "production formalism\t" << _thePbarpParser->productionFormalism() 
+	    << "\t is not supported!!!" << endmsg;
       exit(0);
    }
 

@@ -24,7 +24,9 @@
 #include "Event/MassRangeCut.hh"
 #include "Particle/Particle.hh"
 
-MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Particle*>& finalStateParticles, bool anticut) : 
+MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, 
+			   std::vector<Particle*>& finalStateParticles, 
+			   bool anticut) : 
   _massMin(0.),
   _massMax(0.),
   _isAntiCut(anticut)
@@ -41,7 +43,7 @@ MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Parti
     else if(counter==1) _massMax=atof(tmpNameMassRange.c_str());
     else{
       unsigned int index=0;
-      for (itParticle=finalStateParticles.begin(); itParticle != finalStateParticles.end(); ++itParticle){
+      for (itParticle=finalStateParticles.begin(); itParticle != finalStateParticles.end(); ++itParticle) {
 	//	InfoMsg << "tmpNameMassRange: " << tmpNameMassRange << "\t(*itParticle)->name(): " << (*itParticle)->name() <<endmsg;
 	if( tmpNameMassRange==(*itParticle)->name()){
 	  //	  InfoMsg << "particle " << tmpNameMassRange  << " added to list of mass range cuts " <<endmsg;
@@ -70,8 +72,8 @@ MassRangeCut::MassRangeCut(std::string& rangeAndParticleNames, std::vector<Parti
   }
 
   InfoMsg << "\tmassMin = " << _massMin 
-       << "\tmassmax = " << _massMax
-       << endmsg;
+	  << "\tmassmax = " << _massMax
+	  << endmsg;
 }
 
 MassRangeCut::~MassRangeCut()

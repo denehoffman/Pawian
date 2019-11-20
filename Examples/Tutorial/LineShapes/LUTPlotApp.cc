@@ -37,14 +37,15 @@
 int main(int __argc,char *__argv[]){
   ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+                    || strcmp( __argv[1], "--help" ) == 0 ) ) {
 
-    InfoMsg << "This is a test application for plotting various features of a BBUnstable phasespace factor lookup table\n"
-	 << "The switches are:\n\n" 
-         << "-LUTFile path to the binary LUT file (string)\n\n"
-	 << "-realGran granularity of the scan for the real part of sqrt(s) (double/GeV)\n\n"
-	 << "-imagGran granularity of the scan for the imaginary part of sqrt(s) (double/GeV)\n\n"
-         << endmsg;
+    InfoMsg << "This is a test application for plotting various features of a "
+	    << "BBUnstable phasespace factor lookup table\n"
+	    << "The switches are:\n\n" 
+	    << "-LUTFile path to the binary LUT file (string)\n\n"
+	    << "-realGran granularity of the scan for the real part of sqrt(s) (double/GeV)\n\n"
+	    << "-imagGran granularity of the scan for the imaginary part of sqrt(s) (double/GeV)\n\n"
+	    << endmsg;
 
     return 0;
   }
@@ -59,15 +60,15 @@ int main(int __argc,char *__argv[]){
      if(ws[0]!='-'){
        continue;
      } 
-    if (ws=="-LUTFile"){
+    if (ws=="-LUTFile") {
       std::istringstream mass1IStr(__argv[optind+1]); 
       mass1IStr >> LUTFilePath; 
     }
-    else if (ws=="-realGran"){
+    else if (ws=="-realGran") {
       std::istringstream mass2IStr(__argv[optind+1]); 
       mass2IStr >> realGranularity; 
     }
-    else if (ws=="-imagGran"){
+    else if (ws=="-imagGran") {
       std::istringstream mass3IStr(__argv[optind+1]); 
       mass3IStr >> imagGranularity; 
     }
@@ -76,7 +77,7 @@ int main(int __argc,char *__argv[]){
       return 1;
     }
   }
-  if(LUTFilePath == ""){
+  if(LUTFilePath == "") {
     Alert << "You have to specify path to LUTFile with the -LUTFile switch! Exiting" << endmsg;
     return 1;
   }

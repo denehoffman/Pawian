@@ -65,7 +65,8 @@ void MinuitMinimizer::minimize(){
     currentFunctionMinimum = new FunctionMinimum(migrad2a(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else{
-    Alert << "MIGRAD strategy level " << GlobalEnv::instance()->parser()->minuitStrategyLevel() << " is not supported!!!" << endmsg;
+    Alert << "MIGRAD strategy level " << GlobalEnv::instance()->parser()->minuitStrategyLevel() 
+	  << " is not supported!!!" << endmsg;
     exit(1);
   }
 
@@ -86,7 +87,7 @@ void MinuitMinimizer::minimize(){
 
   // Two more tries to get a valid result unsing strategy 2
   for(int j=0; j<2; j++){
-    WarningMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
+    WarningMsg << "FM is invalid, try with strategy = 2." << endmsg;
     
     // Check minimum covariance matrix
     bool badCovarianceDiagonal=false;
@@ -137,11 +138,11 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
 
     double theLh = _mnFunctionMinimumFinalPtr->Fval();
 
-    InfoMsg << "\n\n********************** Final fit parameters *************************\n";
+    InfoMsg << "\n\n********************** Final fit parameters *************************" << endmsg;
     _bestPawianParams->print(std::cout, true);
     InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
     if(_mnFunctionMinimumFinalPtr->IsValid()) {
-      InfoMsg << "\n Function minimum is valid.\n";
+      InfoMsg << "\n Function minimum is valid." << endmsg;
     } else {
       InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
     }
@@ -152,7 +153,7 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     }
     InfoMsg <<"\n Final LH: "<< std::setprecision(10) << theLh << "\n" << endmsg;
     InfoMsg <<" # of function calls: " << _mnFunctionMinimumFinalPtr->NFcn() << endmsg;
-    InfoMsg <<" minimum edm: " << std::setprecision(10) << _mnFunctionMinimumFinalPtr->Edm()<<endmsg;
+    InfoMsg <<" minimum edm: " << std::setprecision(10) << _mnFunctionMinimumFinalPtr->Edm() << endmsg;
     if (!_mnFunctionMinimumFinalPtr->HasValidParameters()) {
       InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
     }
@@ -186,9 +187,10 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
 
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
-    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    InfoMsg << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    InfoMsg << "evtWeightSumData:\t" <<evtWeightSumData;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)
+      / (evtWeightSumData-noOfFreeFitParams-1);
+    InfoMsg << "noOfFreeFitParams:\t" <<noOfFreeFitParams << endmsg;
+    InfoMsg << "evtWeightSumData:\t" <<evtWeightSumData << endmsg;
     InfoMsg << "BIC:\t" << BICcriterion << endmsg;
     InfoMsg << "AIC:\t" << AICcriterion << endmsg;
     InfoMsg << "AICc:\t" << AICccriterion << endmsg;

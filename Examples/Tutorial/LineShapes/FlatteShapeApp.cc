@@ -40,12 +40,12 @@ int main(int __argc,char *__argv[]){
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
     InfoMsg << "\nThis is a test application for histogramming the Flatte shape\n"
-	 << "The switches are:\n\n"
-         << "-ptype particle type (so far: a0, f0) (default a0)\n\n" 
-         << "-g11 g(pi,eta) for a0; or g(pi,pi) for f0 (default 0.5857)\n\n"
-         << "-g22 g(K,K) for a0 and f0 (default 1.86243)\n\n"
-         << "-mass for a0 or f0  (default 0.982)\n"  
-         << endmsg;
+	    << "The switches are:\n\n"
+	    << "-ptype particle type (so far: a0, f0) (default a0)\n\n" 
+	    << "-g11 g(pi,eta) for a0; or g(pi,pi) for f0 (default 0.5857)\n\n"
+	    << "-g22 g(K,K) for a0 and f0 (default 1.86243)\n\n"
+	    << "-mass for a0 or f0  (default 0.982)\n"  
+	    << endmsg;
     return 0;
   }
 
@@ -78,13 +78,12 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      WarningMsg << "Unknown switch: " 
-            << __argv[optind] << endmsg;
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
-    }
+  }
 
   std::stringstream g11StrStr(g11Str);
   double g11=0.;
@@ -98,11 +97,6 @@ int main(int __argc,char *__argv[]){
   double mass=0.;
   massStrStr >> mass;
   
-
-//   std::string resStr="a0";
-//  std::string resStr="f0";
-
-
   FlatteShape flatteShape(ptypeStr, g11, g22);
 
   return 0;

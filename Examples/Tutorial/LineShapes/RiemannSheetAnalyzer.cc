@@ -37,7 +37,7 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
 {
    unsigned int signCollection = 0;
 
-   for(unsigned int i=0; i<pow(2, noOfChannels); i++){ 
+   for(unsigned int i=0; i<pow(2, noOfChannels); i++) { 
       std::vector<double> signs = GetSignsFromInteger(noOfChannels, signCollection);
       std::ostringstream histoname;
     
@@ -69,10 +69,13 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       
       for(int i=1;i<=scan->GetNbinsX(); i++){
 	 for(int j=1;j<=scan->GetNbinsY(); j++){
-	    tMatrix->evalMatrix(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
+	    tMatrix->evalMatrix(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), 
+						     scan->GetYaxis()->GetBinCenter(j)));
 	    // scan->SetBinContent(i,j, std::abs((*tMatrix)(projectionIndex,projectionIndex)));
-	    complex<double> currentrho=tMatrix->kMatrix()->phaseSpaceVec().at(projectionIndex)->factor(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
-	    scan->SetBinContent(i,j, std::abs(sqrt(currentrho)*(*tMatrix)(projectionIndex,projectionIndex)*sqrt(currentrho)));
+	    complex<double> currentrho
+	      = tMatrix->kMatrix()->phaseSpaceVec().at(projectionIndex)->factor(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
+	    scan->SetBinContent(i,j, std::abs(sqrt(currentrho)
+					      * (*tMatrix)(projectionIndex,projectionIndex)*sqrt(currentrho)));
 	 }
       }
 
@@ -83,7 +86,6 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
       signCollection++;
    }
 }
-
 
 
 std::vector<double> RiemannSheetAnalyzer::GetSignsFromInteger(unsigned int noOfChannels, unsigned int signCollection){
@@ -104,7 +106,6 @@ std::vector<double> RiemannSheetAnalyzer::GetSignsFromInteger(unsigned int noOfC
 }
 
 
-
 void RiemannSheetAnalyzer::FindPolePositions(TH2F* histo){
 
    unsigned int numPolesFound=0;
@@ -118,8 +119,8 @@ void RiemannSheetAnalyzer::FindPolePositions(TH2F* histo){
 	 if( (val > histo->GetBinContent(i+1, j)) && (val > histo->GetBinContent(i-1, j)) &&
 	     (val > histo->GetBinContent(i, j+1)) && (val > histo->GetBinContent(i, j-1))){
 	    InfoMsg << "Found possible pole at (" 
-		 << histo->GetXaxis()->GetBinCenter(i) << ", "
-		 << -1*2*histo->GetYaxis()->GetBinCenter(j) << ") GeV" << endmsg;
+		    << histo->GetXaxis()->GetBinCenter(i) << ", "
+		    << -1*2*histo->GetYaxis()->GetBinCenter(j) << ") GeV" << endmsg;
 	    numPolesFound++;
 	 }
       }
@@ -127,6 +128,6 @@ void RiemannSheetAnalyzer::FindPolePositions(TH2F* histo){
 
    if(numPolesFound > 0){
       InfoMsg << "[binning uncertainty (" << histo->GetXaxis()->GetBinWidth(1) << ", "
-	   << histo->GetYaxis()->GetBinUpEdge(1) - histo->GetYaxis()->GetBinLowEdge(1) << ")]" << endmsg;
+	      << histo->GetYaxis()->GetBinUpEdge(1) - histo->GetYaxis()->GetBinLowEdge(1) << ")]" << endmsg;
    }
 }

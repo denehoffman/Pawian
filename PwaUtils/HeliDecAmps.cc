@@ -73,7 +73,8 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
   }
 
   else{
-    _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
+    _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()
+      * pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
     InfoMsg << "_parityFactor=\t" << _parityFactor << endmsg;
     
     bool identicalDaughters=false;
@@ -102,7 +103,8 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) 
   initialize();
   Particle* daughter1=_decay->daughter1Part();
   Particle* daughter2=_decay->daughter2Part();
-  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()*pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
+  _parityFactor=_JPCPtr->P*daughter1->theParity()*daughter2->theParity()
+    * pow(-1,_JPCPtr->J-daughter1->J()-daughter2->J());
   InfoMsg << "_parityFactor=\t" << _parityFactor << endmsg;
 }
 

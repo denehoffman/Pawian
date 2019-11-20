@@ -25,7 +25,6 @@
 #include <sstream>
 #include <string>
 #include <iomanip>  // std::setprecision
-//#include <boost/multi_array.hpp>
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
 #include "KMatrixExtract/TMatrixExtrFit.hh"
 #include "ErrLogger/ErrLogger.hh"

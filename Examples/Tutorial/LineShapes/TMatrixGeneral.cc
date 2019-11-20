@@ -167,19 +167,22 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     _ArgandUnits1iH1Vec.push_back(currentArgandUnits1iH1);
 
     std::string currentSqrS1iKey="sqrS1i"+key;
-    TH1F* currentSqrS1iH1=new TH1F(currentSqrS1iKey.c_str(), currentSqrS1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    TH1F* currentSqrS1iH1=new TH1F(currentSqrS1iKey.c_str(), currentSqrS1iKey.c_str(), 
+				   _noOfSteps-1, _massMin, _massMax);
     currentSqrS1iH1->SetYTitle("|#sqrt{#rho_{1}}#sqrt{#rho_{i}} S_{1i}|^{2}");
     currentSqrS1iH1->SetXTitle("mass/GeV");
     _SqrS1iH1Vec.push_back(currentSqrS1iH1);
 
     std::string currentdelta1iKey="delta1i"+key;
-    TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), 
+				    _noOfSteps-1, _massMin, _massMax);
     currentDelta1iH1->SetYTitle("#delta1i/grad");
     currentDelta1iH1->SetXTitle("mass/GeV");
     _delta1iVec.push_back(currentDelta1iH1);
 
     std::string currentSppediiKey="speedii"+key;
-    TH1F* currentSpeediiH1=new TH1F(currentSppediiKey.c_str(), currentSppediiKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    TH1F* currentSpeediiH1=new TH1F(currentSppediiKey.c_str(), currentSppediiKey.c_str(), 
+				    _noOfSteps-1, _massMin, _massMax);
     currentSpeediiH1->SetYTitle("speed");
     currentSpeediiH1->SetXTitle("mass/GeV");
     _speedPlotH1Vec.push_back(currentSpeediiH1);
@@ -194,7 +197,7 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   oStream.open("scatteringOut.txt");
   std::ofstream oStream_phi;
   oStream_phi.open("scatteringOut_phi.txt");
- double oldT00RelReal=1.;
+  double oldT00RelReal=1.;
   int n180ShiftRel(0);
 
   double massOld=0.;
@@ -425,7 +428,8 @@ void TMatrixGeneral::init(){
     Particle* firstParticle = _particleTable->particle(firstParticleName);
     Particle* secondParticle = _particleTable->particle(secondParticleName);
     if(0==firstParticle || 0==secondParticle){
-      Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName << " doesn't exist in pdg-table" << endmsg;
+      Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName 
+	    << " doesn't exist in pdg-table" << endmsg;
       exit(0);
     }
     double currentMassSum=firstParticle->mass()+secondParticle->mass();

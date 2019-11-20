@@ -69,7 +69,8 @@ void ResChannelEnv::setupChannel(ChannelID id){
   if(_initial4Vec == Vector4<double>(0.,0.,0.,0.)) {
     _initial4Vec = Vector4<double>(_motherParticle->mass(), 0. ,0. ,0.);
     WarningMsg << "NO initial 4-vector set in config file! Using px=" 
-       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()<< ", E=" << _initial4Vec.E() << " instead!";
+	       << _initial4Vec.Px() << ", py=" << _initial4Vec.Py() << ", pz=" << _initial4Vec.Pz()
+	       << ", E=" << _initial4Vec.E() << " instead!" << endmsg;
   }
 
   std::vector<std::string>::const_iterator itStr;
@@ -102,8 +103,9 @@ void ResChannelEnv::setupChannel(ChannelID id){
       _prodDecList->addDecay(*itDec);
     }
   }
-  else{
-    Alert << "production formalism: " << _theResParser->productionFormalism() << " is not supported for res reactions" << endmsg;
+  else {
+    Alert << "production formalism: " << _theResParser->productionFormalism() 
+	  << " is not supported for res reactions" << endmsg;
     exit(0); 
   }
 

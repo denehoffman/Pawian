@@ -63,8 +63,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      WarningMsg << "Unknown switch: " 
-	      << __argv[optind] << endmsg;
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     
@@ -80,8 +79,6 @@ int main(int __argc,char *__argv[]){
     ErrLogger::instance().setThreshold(logging::log_level::INFO);
     WarningMsg << "ErrorLogger not (properly) set -> Use mode 'WARN' " << endmsg;  
   }
-
-
 
  std::stringstream lmaxStrStr(lmaxStr);
  int lmax=2;

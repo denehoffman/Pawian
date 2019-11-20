@@ -38,15 +38,16 @@ int main(int __argc,char *__argv[]){
   ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
 
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+                    || strcmp( __argv[1], "--help" ) == 0 ) ) {
 
-    InfoMsg << "\nThis is a test application for histogramming the mass shapes of two resonances obtained by the Breit-Wigner parameterization and by the T-matrix calculation\n" 
-	 << "The switches are:\n\n"
-         << "-mass1 (mass of the resonance1;default 1.318)\n\n" 
-         << "-width1 (width1 of the resonance1;default 0.1)\n\n"
-         << "-mass2 (mass of the resonance2;default 1.5)\n\n" 
-         << "-delta (delta=mass range for histograms;default 0.4)\n\n" 
-         << endmsg;
+    InfoMsg << "\nThis is a test application for histogramming the mass shapes of two resonances "
+	    << "obtained by the Breit-Wigner parameterization and by the T-matrix calculation\n" 
+	    << "The switches are:\n\n"
+	    << "-mass1 (mass of the resonance1;default 1.318)\n\n" 
+	    << "-width1 (width1 of the resonance1;default 0.1)\n\n"
+	    << "-mass2 (mass of the resonance2;default 1.5)\n\n" 
+	    << "-delta (delta=mass range for histograms;default 0.4)\n\n" 
+	    << endmsg;
     return 0;
   }
 
@@ -56,34 +57,34 @@ int main(int __argc,char *__argv[]){
   double width2=0.1;
   double delta = 0.1;
 
-  for(;optind < (__argc-1); optind++){
+  for(;optind < (__argc-1); optind++) {
 
      std::string ws = __argv[optind];
 
      if(ws[0]!='-'){
        continue;
      }
-     else if (ws == "-mass1" || ws == "--mass1"){
+     else if (ws == "-mass1" || ws == "--mass1") {
         std::istringstream mass1IStr(__argv[optind+1]);
 	mass1IStr >> mass1;
      }
-     else if (ws == "-width1" || ws == "--width1"){
+     else if (ws == "-width1" || ws == "--width1") {
         std::istringstream width1IStr(__argv[optind+1]);
 	width1IStr >> width1;
      }
-     else if (ws == "-mass2" || ws == "--mass2"){
+     else if (ws == "-mass2" || ws == "--mass2") {
         std::istringstream mass2IStr(__argv[optind+1]);
 	mass2IStr >> mass2;
      }
-     else if (ws == "-width2" || ws == "--width2"){
+     else if (ws == "-width2" || ws == "--width2") {
         std::istringstream width2IStr(__argv[optind+1]);
 	width2IStr >> width2;
      }
-     else if (ws == "-delta" || ws == "--delta"){
+     else if (ws == "-delta" || ws == "--delta") {
         std::istringstream deltaIStr(__argv[optind+1]);
 	deltaIStr >> delta;
      }
-     else{
+     else {
         Alert << "Unknown switch: " << __argv[optind] << endmsg;
         return 0;
      }

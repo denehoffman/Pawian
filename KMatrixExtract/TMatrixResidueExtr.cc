@@ -35,7 +35,6 @@
 #include <algorithm> 
 #include <cmath>
 
-//#include <boost/multi_array.hpp>
 #include "KMatrixExtract/TMatrixResidueExtr.hh"
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
 #include "KMatrixExtract/TMatrixExtrFit.hh"
@@ -126,10 +125,10 @@ std::complex<double> TMatrixResidueExtr::CalcMassWidth(std::shared_ptr<AbsPawian
   // min = migrad3();
 
   if(!min.IsValid()) {
-	// Try with higher strategy
-	InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-	MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
-	min = migrad2();
+    // Try with higher strategy
+    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
+    MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
+    min = migrad2();
   }
 
   // Save final fit parameters and their errors in variables
@@ -138,7 +137,7 @@ std::complex<double> TMatrixResidueExtr::CalcMassWidth(std::shared_ptr<AbsPawian
 
   InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
   if(min.IsValid()) {
-    InfoMsg << "\n Function minimum is valid.\n";
+    InfoMsg << "\n Function minimum is valid.\n" << endmsg;
   } else {
     InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
   }
@@ -148,7 +147,7 @@ std::complex<double> TMatrixResidueExtr::CalcMassWidth(std::shared_ptr<AbsPawian
     InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
   }
   InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
-  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm()<<endmsg;
+  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm() << endmsg;
   if(!min.HasValidParameters()) {
     InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
   }

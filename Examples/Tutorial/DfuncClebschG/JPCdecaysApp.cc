@@ -89,14 +89,15 @@ int main(int __argc,char *__argv[]){
   ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+                    || strcmp( __argv[1], "--help" ) == 0 ) ) {
 
-    InfoMsg << "\nThis is a test application which calculates all allowed LS combinations for the decay a((2J)PC) -> b((2J)PC) + c((2J)PC)\n"
-	 << "The switches are:\n\n"
-         << "-mother  (default 2+-)\n\n" 
-         << "-daughter1  (default 4--)\n\n"
-         << "-daughter2   (default 2-+)"
-         << endmsg;
+    InfoMsg << "\nThis is a test application which calculates all allowed LS combinations "
+	    << "for the decay a((2J)PC) -> b((2J)PC) + c((2J)PC)\n"
+	    << "The switches are:\n\n"
+	    << "-mother  (default 2+-)\n\n" 
+	    << "-daughter1  (default 4--)\n\n"
+	    << "-daughter2   (default 2-+)"
+	    << endmsg;
     return 0;
   }
 
@@ -123,8 +124,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      WarningMsg << "Unknown switch: " 
-            << __argv[optind] << endmsg;
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     
@@ -132,10 +132,9 @@ int main(int __argc,char *__argv[]){
     }
 
   InfoMsg << "the JPC combinations of the particles are:\n\n"
-       << "mother:\t" << motherStr
-       << "\ndaughter1:\t" << daughter1Str
-       << "\ndaughter2:\t" << daughter2Str << endmsg;
-
+	  << "mother:\t" << motherStr
+	  << "\ndaughter1:\t" << daughter1Str
+	  << "\ndaughter2:\t" << daughter2Str << endmsg;
 
   int motherP=0;
   int motherC=0;

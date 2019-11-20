@@ -52,36 +52,36 @@ PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix,
 
    for(unsigned int i=0; i<_nPar; i++){
 
-      if(theMinuitParameters.Parameter(i).IsFixed())
+     if(theMinuitParameters.Parameter(i).IsFixed())
+       continue;
+     
+     for(unsigned int j=0; j<_nPar; j++){
+       
+       if(theMinuitParameters.Parameter(j).IsFixed())
 	 continue;
-
-      for(unsigned int j=0; j<_nPar; j++){
-
-	 if(theMinuitParameters.Parameter(j).IsFixed())
-	    continue;
- 
-	 double covValue = theMinuitCovMatrix(iCov, jCov);
-	 double errValue = theMinuitParameters.Error(i);
-
-	 if(iCov==jCov){
-	    InfoMsg << "Diagonal sqrt(cov) element (" << i << ", " << i << ") / param error: "
+       
+       double covValue = theMinuitCovMatrix(iCov, jCov);
+       double errValue = theMinuitParameters.Error(i);
+       
+       if(iCov==jCov){
+	 InfoMsg << "Diagonal sqrt(cov) element (" << i << ", " << i << ") / param error: "
 		 << sqrt(covValue) << " / " << errValue << endmsg;
+       }
+       else{
+	 double correlationCoeff = covValue / sqrt( theMinuitCovMatrix(iCov, iCov) * theMinuitCovMatrix(jCov, jCov));
+	 
+	 if(fabs(correlationCoeff) > 0.99){
+	   WarningMsg << "Correlation between parameter " << i << " and " << j << " = " << correlationCoeff << endmsg;
 	 }
-	 else{
-	    double correlationCoeff = covValue / sqrt( theMinuitCovMatrix(iCov, iCov) * theMinuitCovMatrix(jCov, jCov));
-
-	    if(fabs(correlationCoeff) > 0.99){
-	       WarningMsg << "Correlation between parameter " << i << " and " << j << " = " << correlationCoeff << endmsg;
-	    }
-	 }
-
-	 _covMatrix[theMinuitParameters.GetName(i)][theMinuitParameters.GetName(j)] = covValue;
-
-	 jCov++;
-      }
-
-      iCov++;
-      jCov=0;
+       }
+       
+       _covMatrix[theMinuitParameters.GetName(i)][theMinuitParameters.GetName(j)] = covValue;
+       
+       jCov++;
+     }
+     
+     iCov++;
+     jCov=0;
    }
 }
 
@@ -93,14 +93,12 @@ double PwaCovMatrix::GetElement(std::string parameter1, std::string parameter2){
    std::map<std::string, double>::iterator it2;
 
    it1 = _covMatrix.find(parameter1);
-
-   if(it1==_covMatrix.end()){
+   if(it1 == _covMatrix.end()) {
       return 0;
    }
 
    it2 = (*it1).second.find(parameter2);
-
-   if(it2== (*it1).second.end()){
+   if(it2 == (*it1).second.end()) {
       return 0;
    }
 
@@ -128,7 +126,8 @@ void PwaCovMatrix::printElements(){
 
   for(it1=_covMatrix.begin(); it1!=_covMatrix.end(); ++it1){
     for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
-      std::cout << std::setw(20) << it1->first << std::setw(45) << it2->first << std::setw(20) << it2->second << std::endl;
+      std::cout << std::setw(20) << it1->first << std::setw(45) << it2->first 
+		<< std::setw(20) << it2->second << std::endl;
     }
   }
 }

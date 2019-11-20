@@ -48,14 +48,15 @@ int main(int __argc,char *__argv[]){
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
-    InfoMsg << "\nThis is a test application for histogramming the Argand plot, the phase shift and the mass shape of the relativistic Breit-Wigner function with Blatt-Weisskopf barrier factors\n"
-	 << "The switches are:\n\n"
-         << "-p0 (parameter p0 of test distribution; default -10.)\n\n" 
-         << "-p1 (parameter p1 of test distribution; default 10.)\n\n"
-         << "-p2 (parameter p2 of test distribution; default 1.)\n\n" 
-         << "-p3 (parameter p3 of test distribution; default -0.01)\n\n"
-         << "-sigma (sigma of gaussian smearing; default 3)\n\n"
-         << endmsg;
+    InfoMsg << "\nThis is a test application for histogramming the Argand plot, the phase shift "
+	    << "and the mass shape of the relativistic Breit-Wigner function with Blatt-Weisskopf barrier factors\n"
+	    << "The switches are:\n\n"
+	    << "-p0 (parameter p0 of test distribution; default -10.)\n\n" 
+	    << "-p1 (parameter p1 of test distribution; default 10.)\n\n"
+	    << "-p2 (parameter p2 of test distribution; default 1.)\n\n" 
+	    << "-p3 (parameter p3 of test distribution; default -0.01)\n\n"
+	    << "-sigma (sigma of gaussian smearing; default 3)\n\n"
+	    << endmsg;
     return 0;
   }
 
@@ -100,12 +101,11 @@ int main(int __argc,char *__argv[]){
     }
 
     if (!found){
-      WarningMsg << "Unknown switch: " 
-            << __argv[optind] << endmsg;
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
-    }
+  }
 
   // Convert argument strings to doubles
   std::stringstream p0StrStr(p0Str);

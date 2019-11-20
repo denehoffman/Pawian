@@ -139,7 +139,7 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   eventReader.fill(theEventList, evtStart, evtStop);
 
   unsigned int numOfEvtsInFile=theEventList.size();
-  InfoMsg << "\nFile has " << numOfEvtsInFile << " events.";
+  InfoMsg << "\nFile has " << numOfEvtsInFile << " events." << endmsg;
   if (numOfEvtsInFile==0){
     Alert << "0 events in the file; abort!!!" << endmsg;
     exit(1);
@@ -148,7 +148,7 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   Event* currentNextEvent = theEventList.nextEvent();
   if (0!=currentNextEvent) { 
     InfoMsg << " Each event has "
-	    <<  theEventList.nextEvent()->size() << " final state particles.\n" ;  // << endmsg;
+	    <<  theEventList.nextEvent()->size() << " final state particles.\n" << endmsg;
   } else {
     WarningMsg << "\n currentNextEvent does not exist.\n" << endmsg;
   }
@@ -192,7 +192,8 @@ void AppBase::createLhObjects(){
     std::string prodFormalism=(*it).first->parser()->productionFormalism();
     InfoMsg <<"create likelihood object for channelType " << (*it).first->channelType()
 	    <<"\t and channelID: " << (*it).first->channelID() << endmsg;
-    std::shared_ptr<AbsLh> theLhPtr=LhFactory::instance()->getLh((*it).first->channelType(),(*it).first->channelID(), prodFormalism );
+    std::shared_ptr<AbsLh> theLhPtr=LhFactory::instance()->getLh((*it).first->channelType(),
+								 (*it).first->channelID(), prodFormalism );
     (*it).first->SetLh(theLhPtr);
   }
   
@@ -258,7 +259,8 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
       (new WaveContribution(GlobalEnv::instance()->Channel()->Lh(), startParams));
   }
   std::pair<double, double> contValue = theWaveContribution->CalcContribution();
-  std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues = theWaveContribution->CalcSingleContributions();
+  std::vector<std::pair<std::string,std::pair<double,double>>> singleContValues 
+    = theWaveContribution->CalcSingleContributions();
 
   InfoMsg << "logLh\t" << theLh;
   theQaStream << "logLh\t" << theLh << "\n";
@@ -276,7 +278,8 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
   theQaStream << "AICc:\t" << AICccriterion << "\n";
 
   InfoMsg << "No of data events without weight " << GlobalEnv::instance()->Channel()->Lh()->getDataVec().size();
-  theQaStream << "No of data events without weight " << GlobalEnv::instance()->Channel()->Lh()->getDataVec().size() << "\n";
+  theQaStream << "No of data events without weight " 
+	      << GlobalEnv::instance()->Channel()->Lh()->getDataVec().size() << "\n";
 
   InfoMsg << "No of data events with weight " << evtWeightSumData;
   theQaStream << "No of data events with weight " << evtWeightSumData << "\n";
@@ -302,6 +305,7 @@ void AppBase::qaMode(std::shared_ptr<AbsPawianParameters> startParams, double ev
 		<< " +- " << (*it).second.second <<  "\n";
   }
 
+  InfoMsg << endmsg;
   theQaStream.close();
 
   std::shared_ptr<AbsHist> histPtr = GlobalEnv::instance()->Channel()->CreateHistInstance();
@@ -442,6 +446,7 @@ void AppBase::qaModeSimple(EventList& dataEventList, EventList& mcEventList, std
       theQaStream << "no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
     }
   } // loop over contributions
+  InfoMsg << endmsg;
   theQaStream.close();
 }
 
@@ -674,8 +679,8 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
     const std::string datFile=(*it).first->parser()->dataFile();
     const std::string mcFile=(*it).first->parser()->mcFile();
-    InfoMsg << "data file: " << datFile ;  // << endmsg;
-    InfoMsg << "mc file: " << mcFile ;  // << endmsg;
+    InfoMsg << "data file: " << datFile << endmsg;
+    InfoMsg << "mc file: " << mcFile << endmsg;
     
     int noOfDataEvents =(*it).first->parser()->noOfDataEvts();
     int ratioMcToData=(*it).first->parser()->ratioMcToData();
@@ -751,20 +756,25 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 }
 
 
-void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, double evtWeightSumData, double evtWeightSumMc){
+void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, 
+			       double evtWeightSumData, double evtWeightSumMc){
     if(evtWeightSumData<10.){
       Alert << "number of wieghted data events too small: " << evtWeightSumData << endmsg;
       exit(1);
     }
-    if( (GlobalEnv::instance()->Channel()->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING) && evtWeightSumMc<10.){
+    if( (GlobalEnv::instance()->Channel()->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING) 
+	&& evtWeightSumMc<10.){
       Alert << "number of weighted Monte Carlo events too small: " << evtWeightSumMc << endmsg;
       exit(1);
     }
   std::shared_ptr<AbsFcn> absFcn(new PwaFcnBase());
   std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
-  if(GlobalEnv::instance()->parser()->mode()=="pwa") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
-  else if (GlobalEnv::instance()->parser()->mode()=="evo") absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new EvoMinimizer(absFcn, upar, GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations()));
-  else{
+  if(GlobalEnv::instance()->parser()->mode()=="pwa") 
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+  else if (GlobalEnv::instance()->parser()->mode()=="evo") 
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new EvoMinimizer(absFcn, upar, 
+	  GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations()));
+  else {
     Alert << "fitNonServerMode only the options pwa or evo are supported for the fitNonServerMode" << endmsg;
     Alert << "thus " << GlobalEnv::instance()->parser()->mode() << " is not supported" << endmsg;
     exit(1);  
@@ -792,8 +802,8 @@ void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams)
 
   const std::string datFile=GlobalEnv::instance()->Channel(channelID)->parser()->dataFile();
   const std::string mcFile=GlobalEnv::instance()->Channel(channelID)->parser()->mcFile();
-  InfoMsg << "data file: " << datFile ;  // << endmsg;
-  InfoMsg << "mc file: " << mcFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile << endmsg;
+  InfoMsg << "mc file: " << mcFile << endmsg;
   
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
@@ -804,15 +814,21 @@ void AppBase::fitClientMode(std::shared_ptr<AbsPawianParameters> theStartparams)
   EventList eventsDataClient;
   EventList mcDataClient;
   if(GlobalEnv::instance()->Channel(channelID)->channelType() == AbsChannelEnv::CHANNEL_PIPISCATTERING){
-     readScatteringEvents(eventsDataClient, dataFileNames, channelID, theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+     readScatteringEvents(eventsDataClient, dataFileNames, channelID, theClient.GetEventLimits()[0], 
+			  theClient.GetEventLimits()[1]);
    }
-   else{
-    readEvents(eventsDataClient, dataFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
+  else {
+    readEvents(eventsDataClient, dataFileNames, channelID, 
+	       GlobalEnv::instance()->Channel(channelID)->useDataEvtWeight(), 
+	       theClient.GetEventLimits()[0], theClient.GetEventLimits()[1]);
     
-    readEvents(mcDataClient, mcFileNames, channelID, GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
+    readEvents(mcDataClient, mcFileNames, channelID, 
+	       GlobalEnv::instance()->Channel(channelID)->useMCEvtWeight(), 
+	       theClient.GetEventLimits()[2], theClient.GetEventLimits()[3]);
       }
 
-  std::shared_ptr<EvtDataBaseList> eventListPtr=EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel(channelID));
+  std::shared_ptr<EvtDataBaseList> eventListPtr
+    = EvtDataListFactory::instance()->evtDataListPtr(GlobalEnv::instance()->Channel(channelID));
   eventListPtr->read(eventsDataClient, mcDataClient);
 
   eventsDataClient.removeAndDeleteEvents(0, eventsDataClient.size()-1);
@@ -844,7 +860,8 @@ void AppBase::addChannelEnvs(int argcWoCfgFile, char** argvWoCfgFile){
   loopChannelEnvFactory(argcWCfgFile, argvWCfgFile, pipiScatteringCfgs, AbsChannelEnv::CHANNEL_PIPISCATTERING);
 }
 
-void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, std::vector<std::string>& reactionCfgs, short channelType){
+void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile, 
+				    std::vector<std::string>& reactionCfgs, short channelType){
   for(auto it=reactionCfgs.begin(); it!=reactionCfgs.end();++it){
      argvWCfgFile[1]=(char*)"-c";
      argvWCfgFile[2]=(char*)(*it).c_str();

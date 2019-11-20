@@ -33,26 +33,23 @@
 #include "Examples/Tutorial/LineShapes/VoigtShape.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-int main(int __argc,char *__argv[]){
+int main(int __argc,char *__argv[]) {
   ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+                    || strcmp( __argv[1], "--help" ) == 0 ) ) {
 
     InfoMsg << "\nThis is a test application for histogramming the line shape of an Voigtian\n"
-	 << "The switches are:\n\n"
-         << "-mass (mass of the resonance;default 1.318)\n\n" 
-         << "-width (width of the resonance;default 0.1)\n\n"
-         << "-sigma (resolution)\n\n"
-          << endmsg;
+	    << "The switches are:\n\n"
+	    << "-mass (mass of the resonance;default 1.318)\n\n" 
+	    << "-width (width of the resonance;default 0.1)\n\n"
+	    << "-sigma (resolution)\n\n"
+	    << endmsg;
     return 0;
   }
+
   double mass0=0.782;
   double gamma=0.00849;
-  //  double gamma=0.001;
-  //  double gamma=0.1;
   double sigma=0.01;
-  //  double sigma=0.1;
-  //double sigma=0.000001;
   VoigtShape VoigtShape(mass0, gamma, sigma);
 
   return 0;

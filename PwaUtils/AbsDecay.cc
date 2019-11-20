@@ -149,7 +149,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
     } 
   
     if(fabs(_isospinClebschG)<1.e-8){
-      WarningMsg << "no isospin coupling for decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
+      WarningMsg << "no isospin coupling for decay " << _mother->name() 
+		 << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
       WarningMsg << "Imother: " << Imother << "\tI3mother: " << I3mother << endmsg;
       WarningMsg << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
       WarningMsg << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
@@ -650,7 +651,8 @@ void AbsDecay::enableProdBarrier(){
     exit(1);
   }
   if(!_prodChannelInfo->isProductionChannel()){
-    WarningMsg << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" << endmsg;
+    WarningMsg << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" 
+	       << endmsg;
     return;
   }
   if(!_prodChannelInfo->withProdBarrier()){
@@ -807,8 +809,9 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
 
   std::pair<std::string, std::string > wigDWigDRefPair=IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
   InfoMsg << "name of amplitude: " << _name << "\tnameId: " << _nameId
-       <<"\n_wigDWigDRefId = " << _wigDWigDRefId << "\t_wignerDId = " << _wignerDId 
-       << "\nwith wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " << wigDWigDRefPair.second << endmsg;   
+	  <<"\n_wigDWigDRefId = " << _wigDWigDRefId << "\t_wignerDId = " << _wignerDId 
+	  << "\nwith wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " 
+	  << wigDWigDRefPair.second << endmsg;   
 }
 
  void AbsDecay::setMassParKey(const std::string& newKey){

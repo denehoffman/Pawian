@@ -48,12 +48,12 @@ int main(int __argc,char *__argv[]){
                     || strcmp( __argv[1], "--help" ) == 0 ) ){
 
     InfoMsg << "\nThis is a test application for calculating M and F values for BBUnstable Phasespace Calculation\n"
-	 << "The switches are:\n\n"
-         << "-mRes (parameter mRes of test distribution; default 0.77)\n\n" 
-         << "-wRes (parameter wRes of test distribution; default 0.14)\n\n"
-         << "-m1 (parameter m1 of test distribution; default 0.14)\n\n" 
-         << "-m2 (parameter m2 of test distribution; default 0.14)\n\n"
-         << endmsg;
+	    << "The switches are:\n\n"
+	    << "-mRes (parameter mRes of test distribution; default 0.77)\n\n" 
+	    << "-wRes (parameter wRes of test distribution; default 0.14)\n\n"
+	    << "-m1 (parameter m1 of test distribution; default 0.14)\n\n" 
+	    << "-m2 (parameter m2 of test distribution; default 0.14)\n\n"
+	    << endmsg;
     return 0;
   }
 
@@ -91,8 +91,7 @@ int main(int __argc,char *__argv[]){
       found=true;
     }
     if (!found){
-      WarningMsg << "Unknown switch: " 
-            << __argv[optind] << endmsg;
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;

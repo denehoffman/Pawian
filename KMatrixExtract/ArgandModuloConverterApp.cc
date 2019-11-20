@@ -39,7 +39,7 @@ int main(int __argc,char *__argv[]){
   ErrLogger::instance().setThreshold(logging::log_level::INFO);
 
   if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
-		strcmp( __argv[1], "--help" ) == 0 ) ){
+		strcmp( __argv[1], "--help" ) == 0 ) ) {
 	InfoMsg << "USAGE:" << endmsg;
 	InfoMsg << "--path: path to input root file file" << endmsg;
 	InfoMsg << "--m1: mass of the first particle for the first php factor" << endmsg;

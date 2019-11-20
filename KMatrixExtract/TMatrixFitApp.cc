@@ -173,7 +173,7 @@ int main(int __argc,char *__argv[]){
 
   if(!min.IsValid()) {
     // Try with higher strategy
-    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
+    InfoMsg << "FM is invalid, try with strategy = 2." << endmsg;
     MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
     min = migrad2();
   }
@@ -185,13 +185,13 @@ int main(int __argc,char *__argv[]){
   double errEReal = min.UserState().Error("eReal");
   double errEImag = min.UserState().Error("eImag");
 
-  InfoMsg << "\n\n********************** Final fit parameters *************************\n";
+  InfoMsg << "\n\n********************** Final fit parameters *************************\n" << endmsg;
   InfoMsg << std::setprecision(16) << "final eReal:\t" << final_eReal << " +- " << errEReal << endmsg;
   InfoMsg << std::setprecision(16) << "final eImag:\t" << final_eImag << " +- " << errEImag << endmsg;
 
   InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
   if(min.IsValid()) {
-    InfoMsg << "\n Function minimum is valid.\n";
+    InfoMsg << "\n Function minimum is valid.\n" << endmsg;
   } else {
     InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
   }
@@ -201,7 +201,7 @@ int main(int __argc,char *__argv[]){
     InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
   }
   InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
-  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm()<<endmsg;
+  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm() << endmsg;
   if(!min.HasValidParameters()) {
     InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
   }

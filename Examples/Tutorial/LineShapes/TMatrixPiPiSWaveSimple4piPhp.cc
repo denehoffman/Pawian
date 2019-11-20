@@ -145,13 +145,15 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
     _phpH1Vec.push_back(currentphpH1);
 
     std::string currentdeltaiiKey="delta"+key;
-    TH1F* currentDeltaiiH1=new TH1F(currentdeltaiiKey.c_str(), currentdeltaiiKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    TH1F* currentDeltaiiH1=new TH1F(currentdeltaiiKey.c_str(), currentdeltaiiKey.c_str(), 
+				    _noOfSteps-1, _massMin, _massMax);
     currentDeltaiiH1->SetYTitle("#deltaii/grad");
     currentDeltaiiH1->SetXTitle("mass/GeV");
     _deltaiiVec.push_back(currentDeltaiiH1);
 
     std::string currentdelta1iKey="delta1i"+key;
-    TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    TH1F* currentDelta1iH1=new TH1F(currentdelta1iKey.c_str(), currentdelta1iKey.c_str(), 
+				    _noOfSteps-1, _massMin, _massMax);
     currentDelta1iH1->SetYTitle("#delta1i/grad");
     currentDelta1iH1->SetXTitle("mass/GeV");
     _delta1iVec.push_back(currentDelta1iH1);

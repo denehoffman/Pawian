@@ -31,19 +31,20 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "Examples/Tutorial/DfuncClebschG/DfuncHist.hh"
 
-int main(int __argc,char *__argv[]){
+int main(int __argc,char *__argv[]) {
 
   ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   
   if( __argc>1 && ( strcmp( __argv[1], "-help" ) == 0
-                    || strcmp( __argv[1], "--help" ) == 0 ) ){
+                    || strcmp( __argv[1], "--help" ) == 0 ) ) {
 
-    InfoMsg << "\nThis is a test application histograms the d functions depending on cos(theta) for a specific J lam1 and lam2\n"
-	 << "\nd(J,lam1,lam2)\n"
-         << "-2J   (default 4)\n"
-         << "-2lam1   (default 0)\n"
-         << "-2lam2   (default 0)"
-         << endmsg;
+    InfoMsg << "\nThis is a test application histograms the d functions depending "
+	    << "on cos(theta) for a specific J lam1 and lam2\n"
+	    << "\nd(J,lam1,lam2)\n"
+	    << "-2J   (default 4)\n"
+	    << "-2lam1   (default 0)\n"
+	    << "-2lam2   (default 0)"
+	    << endmsg;
     return 0;
   }
 
@@ -55,29 +56,28 @@ int main(int __argc,char *__argv[]){
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
     bool found=false;
     std::string sw = __argv[optind];
-    if (sw=="-2J"){
+    if (sw=="-2J") {
       optind++;
       twoJStr = __argv[optind];
       found=true;
     }
-    if (sw=="-2lam1"){
+    if (sw=="-2lam1") {
       optind++;
       twolam1Str = __argv[optind];
       found=true;
     }
-    if (sw=="-2lam2"){
+    if (sw=="-2lam2") {
       optind++;
       twolam2Str = __argv[optind];
       found=true;
     }
-    if (!found){
-      WarningMsg << "Unknown switch: " 
-            << __argv[optind] << endmsg;
+    if (!found) {
+      WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
     }
     
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
-    }
+  }
 
   std::stringstream twoJStrStr(twoJStr);
   int twoJ=0;

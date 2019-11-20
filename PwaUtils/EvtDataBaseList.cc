@@ -79,7 +79,7 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
     if (evtCount%500 == 0) {
-      InfoMsg << "4vec calculation for event " << evtCount ;  // << endmsg;
+      InfoMsg << "4vec calculation for event " << evtCount << endmsg;
     }
 
     EvtData* currentEvt=convertEvent(anEvent, startNo+evtCount);
@@ -92,7 +92,7 @@ void EvtDataBaseList::read4Vecs(EventList& evtList, std::vector<EvtData*>& theEv
            << " py: " << V4_all_lab.Py() <<"\t"
            << " pz: " << V4_all_lab.Pz() <<"\t"
            << " e : " << V4_all_lab.E() << "\t"
-           << " m : " << V4_all_lab.M() ;  // << endmsg;
+           << " m : " << V4_all_lab.M() << endmsg;
     }
 
     theEvtList.push_back(currentEvt);
@@ -174,7 +174,7 @@ double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID
 
     if(GlobalEnv::instance()->Channel(channelID)->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING){    
       if (evtCount%500 == 0) {
-	InfoMsg << "4vec calculation for event " << evtCount ;  // << endmsg;
+	InfoMsg << "4vec calculation for event " << evtCount << endmsg;
       }
       
       Vector4<double> V4_all_lab(0.,0.,0.,0.);
@@ -197,7 +197,7 @@ double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID
 		<< " pz: " << V4_all_lab.Pz() <<"\t"
 		<< " e : " << V4_all_lab.E() << "\t"
 		<< " m : " << V4_all_lab.M() <<"\n"
-		<< "weight: " <<  anEvent->Weight();  // << endmsg;
+		<< "weight: " <<  anEvent->Weight() << endmsg;
       }
     }
   }

@@ -42,7 +42,9 @@ const double EvoMinimizer::LHSPREADEXIT = 0.01;
 
 // Constructor takes AbsFcn to minimze, start parameters upar, population and iteration
 // sizes and the output file name suffix
-EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, int population, int iterations) :
+EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, 
+			   std::shared_ptr<AbsPawianParameters> upar, 
+			   int population, int iterations) :
   AbsPawianMinimizer(theAbsFcnPtr, upar)
   ,_population(population)
   , _iterations(iterations)
@@ -227,19 +229,19 @@ void EvoMinimizer::printFitResult(double evtWeightSumData){
 
   double finalLh = (*_absFcn)(_bestPawianParams->Params());
   InfoMsg <<"final result theLh = "<< finalLh << endmsg;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // calculate AIC, BIC criteria and output selected wave contrib
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // calculate AIC, BIC criteria and output selected wave contrib
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   unsigned int noOfFreeFitParams=_bestPawianParams->VariableParameters();
 
-    double BICcriterion=2.*finalLh+noOfFreeFitParams*log(evtWeightSumData);
-    double AICcriterion=2.*finalLh+2.*noOfFreeFitParams;
-    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
-    InfoMsg << "noOfFreeFitParams:\t" <<noOfFreeFitParams;
-    InfoMsg << "evtWeightSumData:\t" <<evtWeightSumData;
-    InfoMsg << "BIC:\t" << BICcriterion << endmsg;
-    InfoMsg << "AIC:\t" << AICcriterion << endmsg;
-    InfoMsg << "AICc:\t" << AICccriterion << endmsg;
+  double BICcriterion=2.*finalLh+noOfFreeFitParams*log(evtWeightSumData);
+  double AICcriterion=2.*finalLh+2.*noOfFreeFitParams;
+  double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)/(evtWeightSumData-noOfFreeFitParams-1);
+  InfoMsg << "noOfFreeFitParams:\t" << noOfFreeFitParams << endmsg;
+  InfoMsg << "evtWeightSumData:\t" << evtWeightSumData << endmsg;
+  InfoMsg << "BIC:\t" << BICcriterion << endmsg;
+  InfoMsg << "AIC:\t" << AICcriterion << endmsg;
+  InfoMsg << "AICc:\t" << AICccriterion << endmsg;
 }
 
 

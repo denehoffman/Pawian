@@ -81,7 +81,8 @@ LSDecAmps::~LSDecAmps()
 {
 }
 
-complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, 
+				       EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   Spin lam1Min=-_Jdaughter1;
@@ -134,15 +135,16 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* gra
 
   if(result.real()!=result.real()){
     InfoMsg << "dyn name: " << _absDyn->name() 
-	 << "\nname(): " << name()
-	 << endmsg;
+	    << "\nname(): " << name()
+	    << endmsg;
     Alert << "result:\t" << result << endmsg;
     exit(0);
   }
   return result;
 }
 
-complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs){
+complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, 
+				  Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs){
  
   complex<double> result(0.,0.);
 
@@ -154,13 +156,15 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
       Spin lambda = lambda1-lambda2;
       if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>_Smax) continue;
 
-      map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& cgPre_LSMap=_cgPreFactor_LamLamLSMap.at(lambda1).at(lambda2);    
+      map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& cgPre_LSMap
+	= _cgPreFactor_LamLamLSMap.at(lambda1).at(lambda2);    
       complex<double> amp(0.,0.);     
       for (it=_LSs.begin(); it!=_LSs.end(); ++it){
 	if( fabs(lambda)>(*it)->S) continue;
 	if (_absDyn->isLdependent()){
 	  //	  amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
-	  amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)*_cachedDynIdLSMap.at(std::this_thread::get_id()).at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
+	  amp += _currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)
+	    * _cachedDynIdLSMap.at(std::this_thread::get_id()).at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
 	}
 	else amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it);
       }
@@ -187,7 +191,8 @@ void LSDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
  std::vector< std::shared_ptr<const LScomb> >::iterator it;
  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
    theMutex.lock();
-   _cachedDynIdLSMap[std::this_thread::get_id()][(*it)->L][_absDyn->grandMaId(grandmaAmp)]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
+   _cachedDynIdLSMap[std::this_thread::get_id()][(*it)->L][_absDyn->grandMaId(grandmaAmp)]
+     = _absDyn->eval(theData, grandmaAmp, (*it)->L);
    theMutex.unlock();
  }
 
@@ -286,6 +291,3 @@ void  LSDecAmps::fillCgPreFactor(){
     }
   }
 }
-
-// void LSDecAmps::retrieveWignerDs(EvtData* theData){
-// }

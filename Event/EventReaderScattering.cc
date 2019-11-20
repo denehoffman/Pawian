@@ -37,7 +37,8 @@ EventReaderScattering::EventReaderScattering() :
   numParticles=1;
 }
 
-EventReaderScattering::EventReaderScattering(const std::vector<std::string>& files, int particles, int skip, bool useWeight):
+EventReaderScattering::EventReaderScattering(const std::vector<std::string>& files, 
+					     int particles, int skip, bool useWeight):
   EventReaderDefault(files, particles, skip, useWeight)
 {
   _order=std::string("Mass Phi PhiErr Eta EtaErr");
@@ -107,7 +108,9 @@ bool EventReaderScattering::fill(EventList& evtList, int evtStart, int evtStop)
       }
     }
     if (currentEvtNo == 0){
-      Alert << "No events have been read in from File: " << *currentFile << " ! \nNo events in massRange? Wrong order of particles? currentEvtNo = " << currentEvtNo;
+      Alert << "No events have been read in from File: " << *currentFile 
+	    << " ! \nNo events in massRange? Wrong order of particles? currentEvtNo = " 
+	    << currentEvtNo << endmsg;
       exit(1);
     }
     currentStream.close();

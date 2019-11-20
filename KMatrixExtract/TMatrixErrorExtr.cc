@@ -33,7 +33,6 @@
 #include <memory>
 #include <algorithm> 
 
-//#include <boost/multi_array.hpp>
 #include "KMatrixExtract/TMatrixErrorExtr.hh"
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
 #include "KMatrixExtract/TMatrixExtrFit.hh"
@@ -218,7 +217,7 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
 
   InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
   if(min.IsValid()) {
-    InfoMsg << "\n Function minimum is valid.\n";
+    InfoMsg << "\n Function minimum is valid.\n" << endmsg;
   } else {
     InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
   }
@@ -228,7 +227,7 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
     InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
   }
   InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
-  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm()<<endmsg;
+  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm() << endmsg;
   if(!min.HasValidParameters()) {
     InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
   }
