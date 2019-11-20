@@ -2,7 +2,7 @@ source /opt/root/6-14.02-SL7-64-gcc9.2.0/bin/thisroot.csh
 
 setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
 setenv extern /data/sleipnir/PANDA/PWA
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${TOP_DIR}/lib:${extern}/libgcc610
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${TOP_DIR}/lib:${extern}/libgcc920
 setenv BOOST_BUILD_PATH /data/sleipnir/PANDA/boost-build
 setenv PATH $BOOST_BUILD_PATH/bin:${TOP_DIR}/bin:${PATH}
 
