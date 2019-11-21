@@ -38,7 +38,6 @@
 #include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
-//#include "PwaUtils/EvtDataBaseList.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "Utils/PawianConstants.hh"
 
@@ -231,7 +230,7 @@ RootHist::~RootHist(){
 void RootHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianParameters> fitParams){
 
   if(0==theLh){
-    Alert <<"AbsLh* is a 0 pointer !!!!" ;  // << endmsg;
+    Alert <<"AbsLh* is a 0 pointer !!!!" << endmsg;
     exit(1);
   }
 
@@ -271,34 +270,15 @@ void RootHist::fillFromLhData(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsP
       ++it;
     }
 
-  //  std::string outputFileName= "qaSummary" + GlobalEnv::instance()->outputFileNameSuffix() + ".dat";
-  //  std::ofstream theQaStream ( outputFileName.c_str(), std::ofstream::out | std::ofstream::app);
-
-  //  double integralDataWoWeight=(double) dataList.size();
-
-  //  InfoMsg <<"No of data events without weight " << integralDataWoWeight ;  // << endmsg;
-  //  theQaStream <<"No of data events without weight " << integralDataWoWeight << "\n";
-  //
-  //  InfoMsg <<"No of data events with weight " << integralDataWWeight ;  // << endmsg;
-  //  theQaStream <<"No of data events with weight " << integralDataWWeight << "\n";
-  //
-  //  InfoMsg <<"No of MC events " << integralMC ;  // << endmsg;
-  //  theQaStream <<"No of MC events " << integralMC << "\n";
-  //
   double scaleFactor = integralDataWWeight/integralMC;
-  //  InfoMsg <<"scaling factor  " << scaleFactor;  // << endmsg;
-  //  theQaStream <<"scaling factor  " << scaleFactor << "\n";  // << endmsg;
-  //
-  //  InfoMsg <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor ;  // << endmsg;
-  //  theQaStream <<"no of fitted events with scaling factor: " << integralFitWeight*scaleFactor << "\n";
 
   std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator itMassMap;
   for(itMassMap= _massFitHistMap.begin(); itMassMap!= _massFitHistMap.end(); ++itMassMap){
     itMassMap->second->Scale(scaleFactor);
-    if (itMassMap == _massFitHistMap.begin()) {
-      //       InfoMsg << "No of fit events: " << itMassMap->second->Integral();
-      //       theQaStream << "No of fit events: " << itMassMap->second->Integral() << "\n";
-    }
+    // if (itMassMap == _massFitHistMap.begin()) {
+    //   InfoMsg << "No of fit events: " << itMassMap->second->Integral();
+    //   theQaStream << "No of fit events: " << itMassMap->second->Integral() << "\n";
+    // }
   }
   //  theQaStream.close();
 
@@ -375,7 +355,8 @@ void RootHist::fillEvt(EvtData* theData, double weight, std::string evtType, int
 }
 
 
-void RootHist::fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >& toFill){
+void RootHist::fillMassHists(EvtData* theData, double weight, std::map<std::shared_ptr<massHistData>, 
+			     TH1F*, pawian::Collection::SharedPtrLess >& toFill){
 
   std::map<std::shared_ptr<massHistData>, TH1F*, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
@@ -393,7 +374,8 @@ void RootHist::fillMassHists(EvtData* theData, double weight, std::map<std::shar
 
 }
 
-void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill, std::string frame){
+void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData>, 
+			      std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& toFill, std::string frame){
 
   std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
@@ -460,7 +442,8 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     }
     else if (frame=="GottfriedJackson"){
       result4Vec=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec);
-      if(nBodyDecay==3) result4Vec2=KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
+      if(nBodyDecay==3) 
+	result4Vec2 = KinUtils::gottfriedJacksonVec(motherRef4Vec, all4Vec, combinedMother4Vec, combinedDec4Vec2);
     }
     else {
       Alert << "transformation into the frame " << frame << " not supported!!!" << endmsg;
@@ -487,7 +470,8 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
 					,combinedMotherHeli4Vec.Px()-result4VecPart1.Px()-result4VecPart2.Px()
 					,combinedMotherHeli4Vec.Py()-result4VecPart1.Py()-result4VecPart2.Py()
 					,combinedMotherHeli4Vec.Pz()-result4VecPart1.Pz()-result4VecPart2.Pz());
-	double theQ=result4VecPart1.E()-result4VecPart1.M()+result4VecPart2.E()-result4VecPart2.M()+result4VecPart3.E()-result4VecPart3.M();
+	double theQ=result4VecPart1.E()-result4VecPart1.M()+result4VecPart2.E() -
+	  result4VecPart2.M()+result4VecPart3.E()-result4VecPart3.M();
 	double lambdaNorm=theQ*theQ*(theQ*theQ/108.+result4VecPart1.M()*theQ/9.+result4VecPart1.M()*result4VecPart1.M()/3.);
 	double lambda=normVec.P()*normVec.P()/lambdaNorm;
 	it->second[2]->Fill( lambda, weight);
@@ -496,7 +480,8 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
   }
 }
 
-void RootHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill){
+void RootHist::fillAngleHists2D(EvtData* theData, double weight, std::map<std::shared_ptr<angleHistData2D>, 
+				std::vector<TH2F*>, pawian::Collection::SharedPtrLess >& toFill){
 
   std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it= toFill.begin(); it!= toFill.end(); ++it){
@@ -614,19 +599,14 @@ void RootHist::scaleFitHists(double scaleFactor){
       }
     }
 
-    // std::map<std::shared_ptr<angleHistData2D>, std::vector<TH2F*>, pawian::Collection::SharedPtrLess >::iterator itAngleMap2D;
-    // for(itAngleMap2D= _angleFitHistMap2D.begin(); itAngleMap2D!=_angleFitHistMap2D.end(); ++itAngleMap2D){
-    //   std::vector<TH2F*>::iterator itTH2F;
-    //   for(itTH2F=itAngleMap2D->second.begin(); itTH2F!=itAngleMap2D->second.end(); ++itTH2F){
-    // 	(*itTH2F)->Scale(scaleFactor);
-    //   }
-    // }
-
   }
 
 }
 
-void RootHist::initAngleHists(std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, pawian::Collection::SharedPtrLess >& theMap, std::shared_ptr<angleHistData> theHistData, std::string dataType, std::string systemType){
+void RootHist::initAngleHists(std::map<std::shared_ptr<angleHistData>, std::vector<TH1F*>, 
+			      pawian::Collection::SharedPtrLess >& theMap, 
+			      std::shared_ptr<angleHistData> theHistData, 
+			      std::string dataType, std::string systemType){
     std::string tmpBaseName= theHistData->_name;
     boost::replace_all(tmpBaseName,"+","p");
     boost::replace_all(tmpBaseName,"-","m");

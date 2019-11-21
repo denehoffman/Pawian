@@ -84,8 +84,7 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
 
   double result=0.;
 
-  //  InfoMsg << "_decAmps.size(): " << _decAmps.size() << endmsg;
-   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
   for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
     (*itDecAll)->calcDynamics(theData);
   }
@@ -103,7 +102,6 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
     Spin lamX=0;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
-      //      InfoMsg << "currentDecAmpX0: " << currentDecAmp << endmsg;
       lamX0Amp+=currentDecAmp;
     }
 
@@ -112,7 +110,6 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
     lamX=2;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
-      //      InfoMsg << "currentDecAmpX2: " << currentDecAmp << endmsg;
       lamXp2Amp+=currentDecAmp;
     }
 
@@ -120,15 +117,17 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
     lamX=-2;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
-      //      InfoMsg << "currentDecAmpX-2: " << currentDecAmp << endmsg;
       lamXm2Amp+=currentDecAmp;
     }
 
    
     if(_useCohPhasespace){
-      lamX0Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
-      lamXp2Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
-      lamXm2Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
+      lamX0Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), 
+			      fitPar->Value(_CohPhasespaceKey+"Phi") );
+      lamXp2Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), 
+			       fitPar->Value(_CohPhasespaceKey+"Phi") );
+      lamXm2Amp += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), 
+			       fitPar->Value(_CohPhasespaceKey+"Phi") );
     }
  
     result += norm(lamX0Amp) + norm(lamXp2Amp) + norm(lamXm2Amp);
@@ -137,7 +136,6 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
   if(_useProdDynamics) result*=fabs(_dyn->eval(theData,0).real());
   result *= fitPar->Value(_channelScaleParam);
-  //  InfoMsg << "result: " << result << endmsg;
   return result;
 }
 
@@ -150,7 +148,8 @@ void  gamgamBaseLh::initialize(){
   std::vector< std::shared_ptr<AbsDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
-    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
+    std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, 
+										   (*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
 
@@ -161,8 +160,6 @@ void  gamgamBaseLh::initialize(){
     std::vector<std::string> additionalStringVecDummy;
     motherFormDec->enableDynamics(dynString, additionalStringVecDummy);
    _dyn=motherFormDec->getDynamics();
-    //retrieve dyn from first amp
-//    _dyn=_decAmps.at(0)->getDyn();  
   }
 }
 
@@ -175,12 +172,4 @@ void gamgamBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   _dyn->updateFitParams(fitPar);
   AbsLh::updateFitParams(fitPar);
 }
-
-//bool gamgamBaseLh::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, 
-//std::shared_ptr<AbsPawianParameters> fitParOld){
-//  bool result=true;
-//  if(!_dyn->checkRecalculation(fitParNew, fitParOld)) result=false;
-//  if(!checkRecalculation(fitParNew, fitParOld)) result=false;
-//  return result;
-//}
 

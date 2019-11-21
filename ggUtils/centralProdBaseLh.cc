@@ -59,13 +59,15 @@ centralProdBaseLh::~centralProdBaseLh()
 }
 
 
-complex<double> centralProdBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData){
+complex<double> centralProdBaseLh::calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, 
+						   EvtData* theData){
    complex<double> result(0.,0.);
    return result;
 }
 
 
-complex<double> centralProdBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
+complex<double> centralProdBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, 
+						   EvtData* theData,
       std::map <std::shared_ptr<const JPCLS>,
       std::vector< std::shared_ptr<AbsXdecAmp> >,
       pawian::Collection::SharedPtrLess > pbarpAmps) {
@@ -79,7 +81,6 @@ double centralProdBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<Ab
 
    double result=0.;
 
-   //  InfoMsg << "_decAmps.size(): " << _decAmps.size() << endmsg;
    std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
    for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
       (*itDecAll)->calcDynamics(theData);
@@ -87,36 +88,34 @@ double centralProdBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<Ab
 
    std::vector< std::vector<Spin> > spinProjections=_fsParticleProjections->spinProjections();
 
-   for (unsigned int projId=0; projId<spinProjections.size(); ++projId){              // BEGIN Outer incoherent sum over spinProjections of FS particles...
-      for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
-         (*itDecAll)->setSpinProjections(projId);
+   // BEGIN Outer incoherent sum over spinProjections of FS particles...
+   for (unsigned int projId=0; projId<spinProjections.size(); ++projId) {
+     for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll) {
+       (*itDecAll)->setSpinProjections(projId);
+     }
+
+     std::vector< complex<double> > lamXPomPomAmps;
+     std::vector< complex<double> > lamXGamPomAmps;
+     
+     std::vector<Spin>::iterator itLamX;
+     for(itLamX=_lamX.begin(); itLamX!=_lamX.end(); ++itLamX) {
+       lamXPomPomAmps.push_back(complex<double>(0.,0.));
+       lamXGamPomAmps.push_back(complex<double>(0.,0.));
+
+       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
+       for( itDec=_pompomAmps.begin(); itDec!=_pompomAmps.end(); ++itDec){
+	 complex<double> currentDecAmp=(*itDec)->XdecAmp((*itLamX), theData);
+	 lamXPomPomAmps.back() += currentDecAmp;
+       }
+
+       for( itDec=_gampomAmps.begin(); itDec!=_gampomAmps.end(); ++itDec){
+	 complex<double> currentDecAmp=(*itDec)->XdecAmp((*itLamX), theData);
+	 lamXGamPomAmps.back() += currentDecAmp;
+       }
+       if(_useCohPhasespace) //coherent phases space only for pompom events
+	 lamXPomPomAmps.back() += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), 
+					      fitPar->Value(_CohPhasespaceKey+"Phi") );
       }
-
-      std::vector< complex<double> > lamXPomPomAmps;
-      std::vector< complex<double> > lamXGamPomAmps;
-
-      std::vector<Spin>::iterator itLamX;
-      for(itLamX=_lamX.begin(); itLamX!=_lamX.end(); ++itLamX) {
-         lamXPomPomAmps.push_back(complex<double>(0.,0.));
-	 lamXGamPomAmps.push_back(complex<double>(0.,0.));
-//         InfoMsg << "itLamX=" << *itLamX << endmsg;
-
-         std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-         for( itDec=_pompomAmps.begin(); itDec!=_pompomAmps.end(); ++itDec){
-            complex<double> currentDecAmp=(*itDec)->XdecAmp((*itLamX), theData);
-//            InfoMsg << "_lamX=" << (*itLamX) << "currentDecAmpX: " << currentDecAmp << endmsg;
-            lamXPomPomAmps.back() += currentDecAmp;
-         }
-
-	 for( itDec=_gampomAmps.begin(); itDec!=_gampomAmps.end(); ++itDec){
-	   complex<double> currentDecAmp=(*itDec)->XdecAmp((*itLamX), theData);
-	   lamXGamPomAmps.back() += currentDecAmp;
-	 }
-         if(_useCohPhasespace) //coherent phases space only for pompom events
-            lamXPomPomAmps.back() += std::polar( fitPar->Value(_CohPhasespaceKey+"Mag"), fitPar->Value(_CohPhasespaceKey+"Phi") );
-      }
-
-   
 
       std::vector< complex<double> >::iterator itLamXAmps;
       for(itLamXAmps=lamXPomPomAmps.begin(); itLamXAmps!=lamXPomPomAmps.end(); ++itLamXAmps) {
@@ -125,12 +124,11 @@ double centralProdBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<Ab
       for(itLamXAmps=lamXGamPomAmps.begin(); itLamXAmps!=lamXGamPomAmps.end(); ++itLamXAmps) {
          result += norm(*itLamXAmps);
       }
-   }                                                                                  // END Outer incoherent sum over spinProjections of FS particles.
+   } // END Outer incoherent sum over spinProjections of FS particles.
 
    if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
    if(_useProdDynamics) result*=fabs(_dyn->eval(theData,0).real());
    result *= fitPar->Value(_channelScaleParam);
-   //  InfoMsg << "result: " << result << endmsg;
    return result;
 }
 
@@ -143,45 +141,38 @@ void  centralProdBaseLh::initialize(){
    std::vector< std::shared_ptr<AbsDecay> >::iterator it;
    int maxJ = 0;
    for (it=theDecs.begin(); it!=theDecs.end(); ++it){
-      InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
-      std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
-      _decAmps.push_back(currentAmp);
-      // bool hasEvenJ=false;
-      // int spinJ=currentAmp->jpcPtr()->J;      
-      // if ( (spinJ%2) ==0 ) hasEvenJ=true;
+     InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
+     std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, 
+										    (*it)->absDecPtr());
+     _decAmps.push_back(currentAmp);
       
-      // bool hasPosParity=false;
-      // if ( currentAmp->jpcPtr()->P == -1)  hasPosParity=true;
-      
-      bool hasPosCparity=false;
-      if ( currentAmp->jpcPtr()->C == -1)  hasPosCparity=true;
-
-
-      if(hasPosCparity) _gampomAmps.push_back(currentAmp);
-      else _pompomAmps.push_back(currentAmp);
- 
-      if(currentAmp->jpcPtr()->J > maxJ) maxJ = currentAmp->jpcPtr()->J;
+     bool hasPosCparity=false;
+     if ( currentAmp->jpcPtr()->C == -1)  hasPosCparity=true;
+     
+     
+     if(hasPosCparity) _gampomAmps.push_back(currentAmp);
+     else _pompomAmps.push_back(currentAmp);
+     
+     if(currentAmp->jpcPtr()->J > maxJ) maxJ = currentAmp->jpcPtr()->J;
    }
    for(int i = (-1*maxJ); i<= maxJ; i++) _lamX.push_back(Spin(i));
-
+   
    std::string dynString=_ggChannelEnv->parser()->productionDynamics();
    if(dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2"){
-      _useProdDynamics=true;
-      std::shared_ptr<FormationDecay> motherFormDec = _ggChannelEnv->reaction()->motherProdDec();
-      std::vector<std::string> additionalStringVecDummy;
-      motherFormDec->enableDynamics(dynString, additionalStringVecDummy);
-      _dyn=motherFormDec->getDynamics();
-      //retrieve dyn from first amp
-      //    _dyn=_decAmps.at(0)->getDyn();  
+     _useProdDynamics=true;
+     std::shared_ptr<FormationDecay> motherFormDec = _ggChannelEnv->reaction()->motherProdDec();
+     std::vector<std::string> additionalStringVecDummy;
+     motherFormDec->enableDynamics(dynString, additionalStringVecDummy);
+     _dyn=motherFormDec->getDynamics();
    }
 }
 
 void centralProdBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-   _dyn->fillDefaultParams(fitPar);
-   AbsLh::fillDefaultParams(fitPar);
+  _dyn->fillDefaultParams(fitPar);
+  AbsLh::fillDefaultParams(fitPar);
 }
 
 void centralProdBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
-   _dyn->updateFitParams(fitPar);
-   AbsLh::updateFitParams(fitPar);
+  _dyn->updateFitParams(fitPar);
+  AbsLh::updateFitParams(fitPar);
 }

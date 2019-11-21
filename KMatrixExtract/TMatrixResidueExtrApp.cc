@@ -1,7 +1,7 @@
 //************************************************************************//
 //									  //
 //  Copyright 2018 Bertram Kopf (bertram@ep1.rub.de)			  //
-//                 Xiaoshuai Qin (xqin@ep1.rub.de)             //
+//                 Xiaoshuai Qin (xqin@ep1.rub.de)                        //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -38,7 +38,6 @@
 #include "ErrLogger/ErrLogger.hh"
 
 int main(int __argc,char *__argv[]){
-  // ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   ErrLogger::instance().setThreshold(logging::log_level::INFO);
 
   if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
@@ -46,7 +45,8 @@ int main(int __argc,char *__argv[]){
 	InfoMsg << "USAGE:" << endmsg;
 	InfoMsg << "--path: path to kmatrix config file" << endmsg;
 	InfoMsg << "--fitparams: path to fit parameter file" << endmsg;
-	InfoMsg << "--sheet: sheet on which the minimization shoud be done (p corresponsds to + and n to - )" << endmsg;
+	InfoMsg << "--sheet: sheet on which the minimization shoud be done "
+		<< "(p corresponsds to + and n to - )" << endmsg;
 	InfoMsg << "--serializationFile: path to serialization file" << endmsg;
 	InfoMsg << "--maxImagMass: max imaginary part of the mass" << endmsg;
 	InfoMsg << "--maxRealMass: max real part of the mass" << endmsg;
@@ -148,22 +148,11 @@ int main(int __argc,char *__argv[]){
 	InfoMsg << "switched to energyStart: " << energyStart << endmsg;
   }
 
-  std::shared_ptr<TMatrixResidueExtr> tMatResidue(new TMatrixResidueExtr(pathToConfigParser, pathToFitParams, sheet, pathToSerialzationFile, energyMin, energyMax, energyStart));
-  //  std::complex<double> polePos = tMatResidue->CalcMassWidth();
-  //  std::complex<double> residue = tMatResidue->CalcResidue();
-  //  InfoMsg << "residue:      " << residue << endmsg;
-
-//  tMatResidue->CalcResidueAll();
+  std::shared_ptr<TMatrixResidueExtr> tMatResidue(new TMatrixResidueExtr(pathToConfigParser, 
+									 pathToFitParams, sheet, 
+									 pathToSerialzationFile, 
+									 energyMin, energyMax, 
+									 energyStart));
   tMatResidue->Calculation();
-  //  tMatResidue->CalcResidueAll1();
-
-  // tMatFit->Calculation();
-  // tMatFit->printErrors();
-  // std::complex<double> error = tMatFit->GetError();
-  // std::complex<double> result = tMatFit->GetResult();
-  // InfoMsg << "      " << endmsg;
-  // InfoMsg << "      " << endmsg;
-  // InfoMsg << "      " << endmsg;
-  // InfoMsg << "result: " << result.real() << " +/- " << error.real() << "\t" << result.imag() << " +/- " << error.imag() << endmsg;
   return 0;
 }

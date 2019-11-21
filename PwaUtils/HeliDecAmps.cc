@@ -67,7 +67,10 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
     for (unsigned int i=0; i<JPClamlamsSize; ++i){
       std::shared_ptr<const JPClamlam> currentJPClamlam=_JPClamlams.at(i);
       if(currentJPClamlam->lam1 == 0 && currentJPClamlam->lam2 == 0) continue; 
-      std::shared_ptr<const JPClamlam> toBeAddedJPClamlam(new JPClamlam(currentJPClamlam, -currentJPClamlam->lam1, -currentJPClamlam->lam2, _parityFactor));
+      std::shared_ptr<const JPClamlam> toBeAddedJPClamlam(new JPClamlam(currentJPClamlam, 
+									-currentJPClamlam->lam1, 
+									-currentJPClamlam->lam2, 
+									_parityFactor));
       _JPClamlams.push_back(toBeAddedJPClamlam);      
     }
   }
@@ -84,7 +87,6 @@ HeliDecAmps::HeliDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID chan
     std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
     for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
       std::shared_ptr<const JPClamlam> currentSym(new JPClamlam(*it, -(*it)->lam1, -(*it)->lam2, _parityFactor));
-      //    std::vector< std::shared_ptr<const JPClamlam> > currentLPClamlamVec=_JPClamlamSymMap[*it];
       _JPClamlamSymMap[*it].push_back(currentSym);
       if(identicalDaughters && ( fabs((*it)->lam1) != fabs((*it)->lam2) ) ){
     	std::shared_ptr<const JPClamlam> currentSymIdPart1(new JPClamlam(*it, (*it)->lam2, (*it)->lam1, (*it)->parityFactor));
@@ -120,11 +122,8 @@ void  HeliDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     double valMag=_factorMag;
     double errMag=_factorMag/2.;
-    // double minMag=0.;
-    // double maxMag=_factorMag+30.*errMag;
 
     fitPar->Add(magName, valMag, errMag);
-    //    fitPar->SetLimits(magName, minMag, maxMag);
 
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
     double valPhi=0.;
@@ -147,13 +146,9 @@ void HeliDecAmps::fillParamNameList(){
     std::string magName=(*itlamlam)->name()+_key+"Mag";
     _paramNameList.push_back(magName);
 
-    //    InfoMsg << "HeliDecAmps add parameter " << magName << " to paramNameList" << endmsg;
-
     //phase
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
     _paramNameList.push_back(phiName);
-
-    //    InfoMsg << "HeliDecAmps add parameter " << phiName << " to paramNameList" << endmsg;
   }
 
 }
@@ -217,7 +212,8 @@ void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
 }
 
 
-complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, 
+					 EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
 
   bool lamFs_daughter1=false;
@@ -245,7 +241,8 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
     double thePhi=_currentParamPhiLamLams[currentJPClamlam];
     complex<double> expi(cos(thePhi), sin(thePhi));
     Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi*conj(theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12));
+    complex<double> amp = currentJPClamlam->parityFactor*theMag*expi *
+      conj(theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12));
     result+=amp;
   }
 
@@ -284,15 +281,10 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 
     unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
 
- //   InfoMsg << "IdJLamXLam12: " << IdJLamXLam12 << "\tlambda1: " << lambda1 << "\tlambda2: " << lambda2 << "\tlambda: " << lambda << endmsg;
- 
-    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first)*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
-    // InfoMsg << "amp: " << amp << endmsg;
-    // InfoMsg << "amp*daughterAmp(lambda1, lambda2, theData, lamFs): " << amp*daughterAmp(lambda1, lambda2, theData, lamFs) << endmsg;
+    complex<double> amp = it->first->parityFactor*_currentParamPreFacMagExpi.at(it->first) *
+      conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) );
     result+=amp*daughterAmp(lambda1, lambda2, theData);
   }
-
-  //  result*=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.);
 
   if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
   //  else result*=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
@@ -300,13 +292,11 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;
-    //    printCurrentAmpParams(lamX, lamFs); 
     exit(0);
   }
 
   if ( _cacheAmps){
     theMutex.lock();
-    //    _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
     theMutex.unlock();
   }

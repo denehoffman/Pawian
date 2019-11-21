@@ -34,14 +34,12 @@ ParamDepEqual::ParamDepEqual(std::istringstream& configLine, std::shared_ptr<Abs
   configLine >> refParameter;
   _idRef = params->Index(refParameter);
   _idRefs.push_back(_idRef);
-//  InfoMsg << "ParamDepEquals called with refParamId=" << _idRefs.at(0) << " and name=" << refParameter << endmsg;
   
   while(configLine) { 
     std::string parNameTarget;
     configLine >> parNameTarget;
     if(parNameTarget!="") {
       targetParameterVec.push_back(parNameTarget);
-//      InfoMsg << "Target params are: " << parNameTarget << endmsg;
     }
   }
 
@@ -56,9 +54,7 @@ void ParamDepEqual::FillDerived(std::istringstream& configLine){
 } 
 
 void ParamDepEqual::Apply(std::shared_ptr<AbsPawianParameters> params){
-
   for(size_t it=0; it< _idsTarget.size(); it++) {
     params->SetValue(_idsTarget.at(it), params->Value(_idRefs.at(0)));
-//    InfoMsg << "Apply: setting _idsTarget.at(" << it << ")=" << _idsTarget.at(it) << " to Value(" << _idRefs.at(0) << ")=" << params->Value(_idRefs.at(0)) << endmsg;
   }
 }

@@ -63,8 +63,10 @@ PwaGen::PwaGen() :
    ,_usePhpDynamics(GlobalEnv::instance()->Channel()->usePhpGenDynamics())
    ,_unitScaleFactor(1.)
    , _maxFitWeight(0.)
-   ,_initial4Vec(EvtVector4R(GlobalEnv::instance()->Channel()->initial4Vec().E(), GlobalEnv::instance()->Channel()->initial4Vec().Px(),
-            GlobalEnv::instance()->Channel()->initial4Vec().Py(), GlobalEnv::instance()->Channel()->initial4Vec().Pz()))
+   ,_initial4Vec(EvtVector4R(GlobalEnv::instance()->Channel()->initial4Vec().E(), 
+			     GlobalEnv::instance()->Channel()->initial4Vec().Px(),
+			     GlobalEnv::instance()->Channel()->initial4Vec().Py(), 
+			     GlobalEnv::instance()->Channel()->initial4Vec().Pz()))
    ,_finalStateParticles(GlobalEnv::instance()->Channel()->finalStateParticles())
 {
    std::ostringstream datFileName;
@@ -122,7 +124,8 @@ PwaGen::~PwaGen()
 
 
 std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
-   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts= GlobalEnv::instance()->Channel()->massRangeCuts();
+   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts = 
+     GlobalEnv::instance()->Channel()->massRangeCuts();
    std::pair<float,float> genRange = GlobalEnv::instance()->Channel()->genRange();
    double genMass = 0.;
 
@@ -148,70 +151,68 @@ std::shared_ptr<EventList> PwaGen::GeneratePspEventList(unsigned int numEvents){
 
       bool acceptEvt=true;
       if(_useMassRange){
-         for (itMassRangeCut=massRangeCuts.begin(); itMassRangeCut!=massRangeCuts.end(); ++itMassRangeCut){
-            EvtVector4R particleSystem(0,0,0,0);
-            std::vector<unsigned int> particleIndices=(*itMassRangeCut)->particleIds();
-            for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
-               particleSystem = particleSystem + p4[*it];
-            }
-            double invMass = particleSystem.mass();
-//            InfoMsg << "invMass: " << invMass << endmsg;
-	    if( !((*itMassRangeCut)->isAntiCut()) ){ 
-	      if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
-		acceptEvt=false;
-		//               InfoMsg << "event not accepted" << endmsg; 
-		break;
-	      }
+	for (itMassRangeCut=massRangeCuts.begin(); itMassRangeCut!=massRangeCuts.end(); ++itMassRangeCut){
+	  EvtVector4R particleSystem(0,0,0,0);
+	  std::vector<unsigned int> particleIndices=(*itMassRangeCut)->particleIds();
+	  for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
+	    particleSystem = particleSystem + p4[*it];
+	  }
+	  double invMass = particleSystem.mass();
+	  if( !((*itMassRangeCut)->isAntiCut()) ){ 
+	    if(invMass < (*itMassRangeCut)->massMin() || invMass > (*itMassRangeCut)->massMax()){
+	      acceptEvt=false;
+	      break;
 	    }
-	    else{
-	      if(invMass > (*itMassRangeCut)->massMin() && invMass < (*itMassRangeCut)->massMax()){
-		acceptEvt=false;
-		//               InfoMsg << "event not accepted" << endmsg; 
-		break;
-	      }
+	  }
+	  else{
+	    if(invMass > (*itMassRangeCut)->massMin() && invMass < (*itMassRangeCut)->massMax()){
+	      acceptEvt=false;
+	      break;
 	    }
-         }
+	  }
+	}
       } 
-
+      
       if(acceptEvt){
-         if(_usePhpDynamics){
-            std::vector< std::shared_ptr<PhpGenDynamics> > phpGenDynamics= GlobalEnv::instance()->Channel()->phpGenDynamics();
-            std::vector< std::shared_ptr<PhpGenDynamics> >::iterator itPhpGenDynamics;
-            for (itPhpGenDynamics=phpGenDynamics.begin(); itPhpGenDynamics!=phpGenDynamics.end(); ++itPhpGenDynamics){
-               double randWeightPhp = EvtRandom::Flat(0., (*itPhpGenDynamics)->maxWeight());
+	if(_usePhpDynamics){
+	  std::vector< std::shared_ptr<PhpGenDynamics> > phpGenDynamics = 
+	    GlobalEnv::instance()->Channel()->phpGenDynamics();
+	  std::vector< std::shared_ptr<PhpGenDynamics> >::iterator itPhpGenDynamics;
+	  for (itPhpGenDynamics=phpGenDynamics.begin(); itPhpGenDynamics!=phpGenDynamics.end(); 
+	       ++itPhpGenDynamics){
+	    double randWeightPhp = EvtRandom::Flat(0., (*itPhpGenDynamics)->maxWeight());
 
-               EvtVector4R decParticleSystem(0,0,0,0);
-               std::vector<unsigned int> particleIndices=(*itPhpGenDynamics)->particleIds();
-               for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
-                  decParticleSystem = decParticleSystem + p4[*it];
-               }
-               double invMass = decParticleSystem.mass();
-               double currentEvtWeight= (*itPhpGenDynamics)->eval(invMass);
-               if (currentEvtWeight < randWeightPhp){
-                  acceptEvt=false;
-                  break;
-               }
-            }
-         }
+	    EvtVector4R decParticleSystem(0,0,0,0);
+	    std::vector<unsigned int> particleIndices=(*itPhpGenDynamics)->particleIds();
+	    for(auto it = particleIndices.begin(); it!=particleIndices.end(); ++it){
+	      decParticleSystem = decParticleSystem + p4[*it];
+	    }
+	    double invMass = decParticleSystem.mass();
+	    double currentEvtWeight= (*itPhpGenDynamics)->eval(invMass);
+	    if (currentEvtWeight < randWeightPhp){
+	      acceptEvt=false;
+	      break;
+	    }
+	  }
+	}
       }
-
-
+      
       if(acceptEvt){
-         InfoMsg << "event no " << i << " accepted" << endmsg;
-         AddEventToEventList(eventList, p4, i);
-
-         inv01MassH1->Fill((p4[0]+p4[1]).mass());
-         if(_finalStateParticles.size()>2){
-            inv02MassH1->Fill((p4[0]+p4[2]).mass());
-            inv12MassH1->Fill((p4[1]+p4[2]).mass());
-         }
+	InfoMsg << "event no " << i << " accepted" << endmsg;
+	AddEventToEventList(eventList, p4, i);
+	
+	inv01MassH1->Fill((p4[0]+p4[1]).mass());
+	if(_finalStateParticles.size()>2){
+	  inv02MassH1->Fill((p4[0]+p4[2]).mass());
+	  inv12MassH1->Fill((p4[1]+p4[2]).mass());
+	}
       }
       else{
-         i--;
+	i--;
       }
       delete[] p4;
    }
-
+   
    eventList->rewind();
    return eventList;
 }
@@ -249,39 +250,40 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianPar
       std::shared_ptr<EvtDataBaseList> eventListPtr(new EvtDataBaseList(0));
 
       while ((anEvent = currentEvtList->nextEvent()) !=0){
-         currentEvtNo++;
-         std::shared_ptr<EvtData> currentEvtData(eventListPtr->convertEvent(anEvent, currentEvtNo));
-
-         if(!_genWithModel){
-            DumpEventToAsciiFile(currentEvtData); 
-            noOfAcceptedEvts++;
-         }
-         else if(_genWithModel && _useDataEvtWeight){
-            double fitWeight= theLh->calcEvtIntensity(currentEvtData.get(), theFitParams);
-            DumpEventToAsciiFile(currentEvtData, fitWeight);
-            noOfAcceptedEvts++;
-         }
-         else if(_genWithModel && !_useDataEvtWeight){
-            double fitWeight= theLh->calcEvtIntensity(currentEvtData.get(), theFitParams);
-            UpdateMaxFitWeight(fitWeight, noOfIterations);
-
-            if(noOfIterations > 1){
-               double randWeight = EvtRandom::Flat(0., _maxFitWeight );
-               if (randWeight < fitWeight){
-                  DumpEventToAsciiFile(currentEvtData);
-                  noOfAcceptedEvts++;
-               }
-            }	 
-         }
-
-         if(noOfAcceptedEvts==noOfEvtsToGenerate){
-            generateEvents=false;
-            break;
-         }
+	currentEvtNo++;
+	std::shared_ptr<EvtData> currentEvtData(eventListPtr->convertEvent(anEvent, currentEvtNo));
+	
+	if(!_genWithModel){
+	  DumpEventToAsciiFile(currentEvtData); 
+	  noOfAcceptedEvts++;
+	}
+	else if(_genWithModel && _useDataEvtWeight){
+	  double fitWeight= theLh->calcEvtIntensity(currentEvtData.get(), theFitParams);
+	  DumpEventToAsciiFile(currentEvtData, fitWeight);
+	  noOfAcceptedEvts++;
+	}
+	else if(_genWithModel && !_useDataEvtWeight){
+	  double fitWeight= theLh->calcEvtIntensity(currentEvtData.get(), theFitParams);
+	  UpdateMaxFitWeight(fitWeight, noOfIterations);
+	  
+	  if(noOfIterations > 1){
+	    double randWeight = EvtRandom::Flat(0., _maxFitWeight );
+	    if (randWeight < fitWeight){
+	      DumpEventToAsciiFile(currentEvtData);
+	      noOfAcceptedEvts++;
+	    }
+	  }	 
+	}
+	
+	if(noOfAcceptedEvts==noOfEvtsToGenerate){
+	  generateEvents=false;
+	  break;
+	}
       }
-
-      InfoMsg << "Iteration " << noOfIterations << " finished. Accepted events:\t" << noOfAcceptedEvts << endmsg;
-
+      
+      InfoMsg << "Iteration " << noOfIterations << " finished. Accepted events:\t" 
+	      << noOfAcceptedEvts << endmsg;
+      
       currentEvtList->rewind();
       currentEvtList->removeAndDeleteEvents(0,currentEvtList->size()); 
    }
@@ -289,63 +291,65 @@ void PwaGen::generate(std::shared_ptr<AbsLh> theLh, std::shared_ptr<AbsPawianPar
 
 
 
-void PwaGen::AddEventToEventList(std::shared_ptr<EventList> evtList, EvtVector4R* evt4Vec4Rs,int evtNumber, double weight){
-   Event* newEvent = new Event();
-   newEvent->addWeight(weight);
-   for(unsigned int t=0; t<_finalStateParticles.size(); ++t){
-      newEvent->addParticle(evt4Vec4Rs[t].get(0), evt4Vec4Rs[t].get(1), evt4Vec4Rs[t].get(2), evt4Vec4Rs[t].get(3));
-   }
-
-   evtList->add(newEvent);
+void PwaGen::AddEventToEventList(std::shared_ptr<EventList> evtList, EvtVector4R* evt4Vec4Rs,
+				 int evtNumber, double weight){
+  Event* newEvent = new Event();
+  newEvent->addWeight(weight);
+  for(unsigned int t=0; t<_finalStateParticles.size(); ++t){
+    newEvent->addParticle(evt4Vec4Rs[t].get(0), evt4Vec4Rs[t].get(1), evt4Vec4Rs[t].get(2), 
+			  evt4Vec4Rs[t].get(3));
+  }
+  
+  evtList->add(newEvent);
 }
 
 
 void PwaGen::DumpEventToAsciiFile(std::shared_ptr<EvtData> evtData, double weight){
 
-   std::vector<Particle* > fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
-   std::vector<Vector4<double>> current4Vecs;
-
-   if(_useDataEvtWeight && _genWithModel){
-      *_stream << weight << std::endl;
-   }
-   else if(_useMcEvtWeight && (!_genWithModel)){
-      *_stream << weight << std::endl;
-   }
-
-   for(auto fspIter = fsParticles.begin(); fspIter != fsParticles.end(); ++fspIter ) {
-      std::string currentName=(*fspIter)->name();
-      Vector4<double> tmp4vec = evtData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
-      current4Vecs.push_back(tmp4vec);
-      if(_energyFirst){
-         *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor  << "\t" 
-            << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" 
-            << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
-      }
-      else{
-         *_stream << std::setprecision(8)  << tmp4vec.Px()*_unitScaleFactor << "\t" 
-            << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" 
-            << tmp4vec.E()*_unitScaleFactor << std::endl;
-      }
-   }
-
-   inv01MassWeightH1->Fill((current4Vecs.at(0)+current4Vecs.at(1)).M(), weight);
-   if(_finalStateParticles.size()>2){
-      inv02MassWeightH1->Fill((current4Vecs.at(0)+current4Vecs.at(2)).M(), weight);
-      inv12MassWeightH1->Fill((current4Vecs.at(1)+current4Vecs.at(2)).M(), weight);
-   }
+  std::vector<Particle* > fsParticles = GlobalEnv::instance()->Channel()->finalStateParticles();
+  std::vector<Vector4<double>> current4Vecs;
+  
+  if(_useDataEvtWeight && _genWithModel){
+    *_stream << weight << std::endl;
+  }
+  else if(_useMcEvtWeight && (!_genWithModel)){
+    *_stream << weight << std::endl;
+  }
+  
+  for(auto fspIter = fsParticles.begin(); fspIter != fsParticles.end(); ++fspIter ) {
+    std::string currentName=(*fspIter)->name();
+    Vector4<double> tmp4vec = evtData->FourVecsId.at(IdStringMapRegistry::instance()->stringId(currentName));
+    current4Vecs.push_back(tmp4vec);
+    if(_energyFirst){
+      *_stream << std::setprecision(8)  << tmp4vec.E()*_unitScaleFactor  << "\t" 
+	       << tmp4vec.Px()*_unitScaleFactor << "\t" << tmp4vec.Py()*_unitScaleFactor << "\t" 
+	       << tmp4vec.Pz()*_unitScaleFactor << "\t" << std::endl;
+    }
+    else{
+      *_stream << std::setprecision(8)  << tmp4vec.Px()*_unitScaleFactor << "\t" 
+	       << tmp4vec.Py()*_unitScaleFactor << "\t" << tmp4vec.Pz()*_unitScaleFactor << "\t" 
+	       << tmp4vec.E()*_unitScaleFactor << std::endl;
+    }
+  }
+  
+  inv01MassWeightH1->Fill((current4Vecs.at(0)+current4Vecs.at(1)).M(), weight);
+  if(_finalStateParticles.size()>2){
+    inv02MassWeightH1->Fill((current4Vecs.at(0)+current4Vecs.at(2)).M(), weight);
+    inv12MassWeightH1->Fill((current4Vecs.at(1)+current4Vecs.at(2)).M(), weight);
+  }
 }
 
 
 
 void PwaGen::UpdateMaxFitWeight(double weight, int currentIteration){
-   if(_maxFitWeight < weight){
-      _maxFitWeight = weight;
-
-      if(currentIteration <= 1){
-         InfoMsg << "Current max weight = " << _maxFitWeight << endmsg;
-      }
-      else{
-         WarningMsg << "Raised max weight to " << _maxFitWeight << " while generating!" << endmsg;
-      }
-   }
+  if(_maxFitWeight < weight){
+    _maxFitWeight = weight;
+    
+    if(currentIteration <= 1){
+      InfoMsg << "Current max weight = " << _maxFitWeight << endmsg;
+    }
+    else{
+      WarningMsg << "Raised max weight to " << _maxFitWeight << " while generating!" << endmsg;
+    }
+  }
 }

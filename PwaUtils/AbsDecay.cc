@@ -49,7 +49,8 @@
 #include "ErrLogger/ErrLogger.hh"
 #include "ConfigParser/ParserBase.hh"
 
-AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, ChannelID channelId, std::string typeName) :
+AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, 
+		   ChannelID channelId, std::string typeName) :
   _typeName(typeName)
   ,_channelId(channelId)
   ,_mother(mother)
@@ -79,7 +80,6 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   ,_preFactor(1.)
    ,_pathParserFile("")
   ,_projectionParticleNames("")
-  //  ,_dynKey(mother->name())
   ,_decPair1stChannel(make_pair(daughter1, daughter2))
    ,_isDaughter1Photon(false)
    ,_isDaughter2Photon(false)
@@ -98,7 +98,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
     _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), 
+				_finalStateParticlesDaughter1.end());
   }
   else{
     _finalStateParticles.push_back(daughter1);
@@ -111,7 +112,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
     _finalStateParticlesDaughter2=_absDecDaughter2->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter2.begin(), _finalStateParticlesDaughter2.end());
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter2.begin(), 
+				_finalStateParticlesDaughter2.end());
   }
   else{
     _finalStateParticles.push_back(daughter2);
@@ -121,9 +123,9 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
-  //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+_motherJPCPtr->name()+FunctionUtils::particleListName(_finalStateParticles);
 
-  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2) +
+    "_"+FunctionUtils::particleListName(_finalStateParticles);
   _refKey=FunctionUtils::particleListName(_finalStateParticles);
   
   _idaughter1=Spin(_daughter1->twoIso(), 2);
@@ -143,8 +145,10 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
 
     //check z-component of the isospin
     if( I3mother != (_i3daughter1+_i3daughter2)){
-      Alert << "electric charge is not conserved for the decay " << _mother->name() << " to " << _daughter1->name() << " " << _daughter2->name() << endmsg;
-      Alert << "I3(mother): " << I3mother << " != " << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  _i3daughter2 << endmsg;
+      Alert << "electric charge is not conserved for the decay " << _mother->name() << " to " 
+	    << _daughter1->name() << " " << _daughter2->name() << endmsg;
+      Alert << "I3(mother): " << I3mother << " != " << "I3(daughter1): " <<  _i3daughter1 
+	    << " + " << "I3(daughter2): " <<  _i3daughter2 << endmsg;
       exit(1); 
     } 
   
@@ -155,12 +159,13 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
       WarningMsg << "idaughter1: " << _idaughter1 << "\ti3daughter1: " << _i3daughter1 << endmsg;
       WarningMsg << "idaughter2: " << _idaughter2 << "\ti3daughter2: " << _i3daughter2 << endmsg;
     }
-    // if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
     
-    if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 && daughter1->mass() < 1.e-6){
+    if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 
+       && daughter1->mass() < 1.e-6){
       _isDaughter1Photon=true;   
     }
-    if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 && daughter1->mass() < 1.e-6){
+    if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 
+       && daughter1->mass() < 1.e-6){
       _isDaughter2Photon=true;   
     }
     
@@ -174,7 +179,8 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2, C
   }
 }
 
-AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, std::string motherName, ChannelID channelId, std::string typeName) :
+AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, 
+		   std::string motherName, ChannelID channelId, std::string typeName) :
   _typeName(typeName)
   ,_channelId(channelId)
   ,_mother(0)
@@ -183,7 +189,9 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(false)
-  ,_motherJPCPtr(std::shared_ptr<const jpcRes>(new jpcRes(motherIGJPCPtr->J, motherIGJPCPtr->P, motherIGJPCPtr->C)) )
+  ,_motherJPCPtr(std::shared_ptr<const jpcRes>(new jpcRes(motherIGJPCPtr->J, 
+							  motherIGJPCPtr->P, 
+							  motherIGJPCPtr->C)) )
   ,_motherIGJPCPtr(motherIGJPCPtr)
   ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
   ,_daughter2IGJPCPtr(0)
@@ -192,7 +200,6 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_name(_motherIGJPCPtr->name()+"To"+daughter1->name())
   ,_nameId(0)
   ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name())
-  // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_massParamId(IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey))
   ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name())
@@ -223,7 +230,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
     _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), 
+				_finalStateParticlesDaughter1.end());
   }
   else if(_daughter1->name() == "GamGam"){
    _daughter1IsStable=true;
@@ -236,7 +244,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   pawian::Collection::PtrLess thePtrLess;
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
 
-  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_" +
+    FunctionUtils::particleListName(_finalStateParticles);
   _refKey=FunctionUtils::particleListName(_finalStateParticles);
  
   _daughter1->print(std::cout);
@@ -252,7 +261,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   }
 }
 
-AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, Particle* daughter2, std::string motherName, ChannelID channelId, std::string typeName) :
+AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, 
+		   Particle* daughter2, std::string motherName, ChannelID channelId, std::string typeName) :
   _typeName(typeName)
   ,_channelId(channelId)
   ,_mother(0)
@@ -261,7 +271,9 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_daughter1IsStable(true)
   ,_daughter2IsStable(true)
   ,_hasMotherPart(false)
-  ,_motherJPCPtr(std::shared_ptr<const jpcRes>(new jpcRes(motherIGJPCPtr->J, motherIGJPCPtr->P, motherIGJPCPtr->C)) )
+  ,_motherJPCPtr(std::shared_ptr<const jpcRes>(new jpcRes(motherIGJPCPtr->J, 
+							  motherIGJPCPtr->P, 
+							  motherIGJPCPtr->C)) )
   ,_motherIGJPCPtr(motherIGJPCPtr)
   ,_daughter1IGJPCPtr(getIGJPCPtr(daughter1))
   ,_daughter2IGJPCPtr(getIGJPCPtr(daughter2))
@@ -270,10 +282,10 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_name(_motherIGJPCPtr->name()+"To"+daughter1->name()+"_"+daughter2->name())
   ,_nameId(0)
   ,_fitParamSuffix(_motherIGJPCPtr->jpcname()+"To"+daughter1->name()+"_"+daughter2->name())
-  // ,_massParamKey(motherIGJPCPtr->name())
   ,_massParamKey(motherIGJPCPtr->jpcname())
   ,_massParamId(IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey))
-  ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To"+daughter1->name()+"_"+daughter2->name())
+  ,_prodParamKey(GlobalEnv::instance()->Channel(channelId)->channelTypeName()+"To" +
+		 daughter1->name()+"_"+daughter2->name())
   ,_wignerDId(0)
   ,_wignerDqNormId(0)
   ,_wignerDRefKey("default")
@@ -302,7 +314,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   if(0 != _absDecDaughter1){
     _daughter1IsStable=false;
     _finalStateParticlesDaughter1=_absDecDaughter1->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), _finalStateParticlesDaughter1.end());
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter1.begin(), 
+				_finalStateParticlesDaughter1.end());
   }
   else{
     _finalStateParticles.push_back(daughter1);
@@ -315,7 +328,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   if(0 != _absDecDaughter2){
     _daughter2IsStable=false;
     _finalStateParticlesDaughter2=_absDecDaughter2->finalStateParticles();
-    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter2.begin(), _finalStateParticlesDaughter2.end());
+    _finalStateParticles.insert(_finalStateParticles.end(), _finalStateParticlesDaughter2.begin(), 
+				_finalStateParticlesDaughter2.end());
   }
   else{
     _finalStateParticles.push_back(daughter2);
@@ -327,7 +341,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   std::sort(_finalStateParticles.begin(), _finalStateParticles.end(), thePtrLess);
 
   //  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+motherName;
-  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_"+FunctionUtils::particleListName(_finalStateParticles);
+  _wignerDKey=FunctionUtils::particleListName(_finalStateParticlesDaughter2)+"_" +
+    FunctionUtils::particleListName(_finalStateParticles);
   _refKey=FunctionUtils::particleListName(_finalStateParticles);
  
   _daughter1->print(std::cout);
@@ -341,32 +356,39 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
 
   if ( GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_PBARP 
        ||  GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM ){
-    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 0); //attention
+    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, 
+			     _i3daughter2, motherIGJPCPtr->I, 0); //attention
     if ( (_i3daughter1+_i3daughter2) != Spin(0) ){
-      Alert << "electric charge is not conserved for the production of the two daughters " << _daughter1->name() << " and " << _daughter2->name() << endmsg;
-      Alert << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  _i3daughter2 << "  !=  0" << endmsg;
+      Alert << "electric charge is not conserved for the production of the two daughters " 
+	    << _daughter1->name() << " and " << _daughter2->name() << endmsg;
+      Alert << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " 
+	    <<  _i3daughter2 << "  !=  0" << endmsg;
       exit(1);
     }
   }
   else if (GlobalEnv::instance()->Channel(channelId)->channelType()==AbsChannelEnv::CHANNEL_GAMMAP){
-    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, motherIGJPCPtr->I, 1./2); //p gamma
+    _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, 
+			     _i3daughter2, motherIGJPCPtr->I, 1./2); //p gamma
     if ( (_i3daughter1+_i3daughter2) != Spin(1./2) ){
-      Alert << "electric charge is not conserved for the production of the two daughters " << _daughter1->name() << " and " << _daughter2->name() << endmsg;
-      Alert << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  _i3daughter2 << "  !=  1/2" << endmsg;
+      Alert << "electric charge is not conserved for the production of the two daughters " 
+	    << _daughter1->name() << " and " << _daughter2->name() << endmsg;
+      Alert << "I3(daughter1): " <<  _i3daughter1 << " + " << "I3(daughter2): " <<  
+	_i3daughter2 << "  !=  1/2" << endmsg;
       exit(1);
     }
   }
   else{
-    Alert << "AbsDecay cannot be set up for channel type " <<  GlobalEnv::instance()->Channel(channelId)->channelType() << endmsg;
+    Alert << "AbsDecay cannot be set up for channel type " 
+	  <<  GlobalEnv::instance()->Channel(channelId)->channelType() << endmsg;
     exit(0);
   }
 
-  //  if( (*daughter1) == *(GlobalEnv::instance()->particleTable()->particle("photon")) || (*daughter2) == *(GlobalEnv::instance()->particleTable()->particle("photon"))) disableIsospin();
-
- if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 && daughter1->mass() < 1.e-6){
+ if(daughter1->twoJ() == 2 && daughter1->theParity() == -1 &&  daughter1->theCParity()==-1 
+    && daughter1->mass() < 1.e-6){
    _isDaughter1Photon=true;   
  }
- if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 && daughter2->mass() < 1.e-6){
+ if(daughter2->twoJ() == 2 && daughter2->theParity() == -1 &&  daughter2->theCParity()==-1 
+    && daughter2->mass() < 1.e-6){
    _isDaughter2Photon=true;   
  }
 
@@ -391,25 +413,30 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   _dynType=dynString;
 
-  if(_dynType=="KMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" || _dynType=="KMatrixPVecIntensity"){
+  if(_dynType=="KMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" 
+     || _dynType=="KMatrixPVecIntensity"){
     std::string prePathKMat=GlobalEnv::instance()->Channel(_channelId)->parser()->prePathKMatrixFiles();
     _pathParserFile=prePathKMat+additionalStringVec[0];
-    if (additionalStringVec.size() == 3) _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);
+    if (additionalStringVec.size() == 3) 
+      _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);
   }
   else if(_dynType=="Flatte"){ //fill second decay channel (Flatte)
     Particle* firstParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[0]);
     if(0==firstParticle){
-      Alert << "particle with name\t" << additionalStringVec[0] << "\tnot available in the particle table" << endmsg;
+      Alert << "particle with name\t" << additionalStringVec[0] 
+	    << "\tnot available in the particle table" << endmsg;
       exit(1);
     }
     Particle* secondParticle=GlobalEnv::instance()->particleTable()->particle(additionalStringVec[1]);
     if(0==secondParticle){
-      Alert << "particle with name\t" << additionalStringVec[1] << "\tnot available in the particle table" << endmsg;
+      Alert << "particle with name\t" << additionalStringVec[1] 
+	    << "\tnot available in the particle table" << endmsg;
       exit(1);
     }
     _decPair2ndChannel=make_pair(firstParticle,secondParticle);
   }
-  else if(_dynType=="BlattWBarrier" || _dynType=="BlattWBarrierTensor" || _dynType=="BreitWignerBlattWRel" || _dynType=="BreitWignerBlattWTensorRel"){
+  else if(_dynType=="BlattWBarrier" || _dynType=="BlattWBarrierTensor" 
+	  || _dynType=="BreitWignerBlattWRel" || _dynType=="BreitWignerBlattWTensorRel"){
     if(additionalStringVec.size()>0){
 
       _qR=stof(additionalStringVec[0]);
@@ -426,17 +453,15 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
 	exit(0);
     }
     _refMassLinearDyn=stof(additionalStringVec.at(0));
-    InfoMsg << "AmpName: " << name() << "  reference mass for linear dynamics = " << _refMassLinearDyn << endmsg;
+    InfoMsg << "AmpName: " << name() << "  reference mass for linear dynamics = " 
+	    << _refMassLinearDyn << endmsg;
   }  
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
   _dynEnabled=true;
 }
 
-void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vector4<double>& prodParticle4Vec, EvtData* evtData){
-  //  int evtNo=evtData->evtNo;
-  //  std::map<int, bool>::const_iterator it = _alreadyFilledMap.find(evtNo);
-  //  if(it!=_alreadyFilledMap.end() &&  it->second) return; //already filled
-
+void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, 
+			    Vector4<double>& prodParticle4Vec, EvtData* evtData){
   std::vector<Particle*>::iterator itP;
   std::map<std::string, Vector4<double> >::iterator itMap;
 
@@ -467,12 +492,6 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
     itMap=fsMap.find((*itP)->name());
     daughter2_4Vec+=itMap->second;
   }
-
-  // InfoMsg << "\nevtData->evtNo: " << evtData->evtNo << endmsg;
-  // // InfoMsg << "all4Vec: " << all4Vec << endmsg;
-  // // InfoMsg << "mother4Vec: " << mother4Vec   << endmsg;
-  // InfoMsg << "daughter1_4Vec: " << daughter1_4Vec << endmsg;
-  // InfoMsg << "daughter2_4Vec: " << daughter2_4Vec << endmsg;
 
   Vector4<double> daughter2HelMother(0.,0.,0.,0.);
   Vector4<double> daughter1HelMother(0.,0.,0.,0.);
@@ -511,7 +530,8 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
       }
     }
     else{
-      Alert << "decay level " << whichDecayLevel() << " is not supported so far!!! Will be changed soon!!!" << endmsg;
+      Alert << "decay level " << whichDecayLevel() 
+	    << " is not supported so far!!! Will be changed soon!!!" << endmsg;
       exit(0); 
     }  
 
@@ -520,18 +540,20 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   }
   else{
     if(whichDecayLevel()!=decayLevel::isProdAmp){
-      Alert << "this amplitude " << name() << " hasn't got a mother and is not a production amplitude!!!" << endmsg;
+      Alert << "this amplitude " << name() 
+	    << " hasn't got a mother and is not a production amplitude!!!" << endmsg;
       exit(1); 
     }
     daughter2HelMother=daughter2_4Vec;
     daughter1HelMother=daughter1_4Vec;
     if( fabs(mother4Vec.P()) > 1.e-6 ){
       Vector4<double> defaultMotherRefVec=Vector4<double>(10., 3., 0., 0.);
-      Vector4<double> defaultRefVec=Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
-       				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
-       				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
-      				   GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
-
+      Vector4<double> defaultRefVec =
+	Vector4<double>(GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().E(),
+			GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Px(),
+			GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Py(),
+			GlobalEnv::instance()->Channel(_channelId)->projectile4Vec().Pz());
+      
       daughter2HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter2_4Vec);
       daughter1HelMother=KinUtils::heliVec(defaultMotherRefVec, defaultRefVec, mother4Vec, daughter1_4Vec);
     }
@@ -556,41 +578,38 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
 
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
-      //if(whichDecayLevel()!=decayLevel::isProdAmp) thePhi=daughter2HelMother.Phi();
       double thePhi=daughter1HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
-      std::map<Id3StringType, complex<double> >::iterator found = evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
+      std::map<Id3StringType, complex<double> >::iterator found = 
+	evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
       if(found != evtData->WignerDIdId3[_wigDWigDRefId].end()){
 	continue;
       }
 
       
-      // if (GlobalEnv::instance()->Channel(_channelId)->channelType()==AbsChannelEnv::CHANNEL_EPEM && whichDecayLevel()==decayLevel::isProdAmp && type()=="IsobarHeliMultipoleDecay"){
-      // 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
-      // 	//	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter2HelMother.Theta(),0,spinMother,lamMother,lam12);
-      // }
+      evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+	Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
       
-      evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]=Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
-      
-      if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real() != evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real()){
+      if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real() != 
+	 evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real()){
 	Alert << "WignerD function of event No: " << evtData->evtNo << " is nan!!! " << endmsg;
 	Alert << "Set it manually to complex<double>(1.e-10, 1.e-10)" << endmsg;
 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12]= complex<double>(1.e-10, 1.e-10);
-	Alert << "daughter1HelMother phi: " << daughter1HelMother.Phi() << "\ttheta: " << daughter1HelMother.Theta() << endmsg;
+	Alert << "daughter1HelMother phi: " << daughter1HelMother.Phi() << "\ttheta: " 
+	      << daughter1HelMother.Theta() << endmsg;
 	Alert << "spinMother: " << spinMother << "\tlam12: " << lam12 << endmsg;
 	Alert << "daughter1HelMother: Mass: " << daughter1HelMother.Mass() 
-		<< "\tE: " << daughter1HelMother.E()
-		<< "\tPx: " << daughter1HelMother.Px()
-		<< "\tPy: " << daughter1HelMother.Py()
-		<< "\tPz: " << daughter1HelMother.Pz()  
-		<< endmsg;
-
+	      << "\tE: " << daughter1HelMother.E()
+	      << "\tPx: " << daughter1HelMother.Px()
+	      << "\tPy: " << daughter1HelMother.Py()
+	      << "\tPz: " << daughter1HelMother.Pz()  
+	      << endmsg;
+	
 	Alert << "motherRefVec: " << motherRefVec << endmsg;
 	Alert << "prodParticle4Vec: " << prodParticle4Vec << endmsg;
 	Alert << "mother4Vec: " << mother4Vec << endmsg;
 	Alert << "daughter1_4Vec: " << daughter1_4Vec << endmsg;
 	Alert << "daughter2_4Vec: " << daughter2_4Vec << endmsg;
-	//	daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
        	exit(1); 
       }
     }
@@ -606,16 +625,17 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap, Vect
   bool fillqVals=false;
   if(_isProdAmp && _useProdBarrier) fillqVals=true;
   else if(0!=_absDynPtr){
-    if(_absDynPtr->type()=="BlattWBarrierDynamics" || _absDynPtr->type()=="BlattWBarrierTensorDynamics") fillqVals=true; 
+    if(_absDynPtr->type()=="BlattWBarrierDynamics" || _absDynPtr->type()=="BlattWBarrierTensorDynamics") 
+      fillqVals=true; 
   }
 
   if(fillqVals){
        double qVal=daughter2HelMother.P();
-    double qValNorm=PawianQFT::breakupMomQDefault(mother4Vec.M(), massSumFsParticlesDec1(), massSumFsParticlesDec2()).real();
+    double qValNorm=PawianQFT::breakupMomQDefault(mother4Vec.M(), massSumFsParticlesDec1(), 
+						  massSumFsParticlesDec2()).real();
     evtData->DoubleMassId[_wignerDqId]=qVal;
     evtData->DoubleMassId[_wignerDqNormId] = qValNorm;
   } 
-  //   _alreadyFilledMap[evtNo]=true;
 }
 
 void AbsDecay::print(std::ostream& os) const{
@@ -651,8 +671,8 @@ void AbsDecay::enableProdBarrier(){
     exit(1);
   }
   if(!_prodChannelInfo->isProductionChannel()){
-    WarningMsg << name() << " is not a production amplitide! Barrier factors for the production can not be enabled!" 
-	       << endmsg;
+    WarningMsg << name() << " is not a production amplitide! Barrier factors for the production "
+	       << "can not be enabled!" << endmsg;
     return;
   }
   if(!_prodChannelInfo->withProdBarrier()){
@@ -720,10 +740,12 @@ void AbsDecay::setDecayLevel(decLevel theLevel){
   InfoMsg << name() << " set decay level to " << _decLevel << endmsg; 
 }
 
-void AbsDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, std::shared_ptr<AbsDecay> prodDecPtr){
+void AbsDecay::setDecayLevelTree(decLevel theLevel, std::shared_ptr<AbsDecay> motherDecPtr, 
+				 std::shared_ptr<AbsDecay> prodDecPtr){
   setDecayLevel(theLevel);
   if(prodDecPtr->whichDecayLevel() != AbsDecay::decayLevel::isProdAmp){
-    Alert << "prodDecPtr with the name " << prodDecPtr->name() << " is not a production amplitude!!!" << endmsg;
+    Alert << "prodDecPtr with the name " << prodDecPtr->name() 
+	  << " is not a production amplitude!!!" << endmsg;
     exit(1);
   }
 
@@ -790,8 +812,6 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   }
   _wignerDRefKey=ref;
 
-  //  InfoMsg << _name << ":\twignerDKey= " << _wignerDKey << "\twignerDRefKey= " << _wignerDRefKey << endmsg;
-
   if (!_daughter1IsStable){
     _absDecDaughter1->setWigDRefKey(_refKey);
   }
@@ -807,7 +827,8 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   _wigDWigDRefId=IdStringMapRegistry::instance()->stringStringId(_wignerDKey, _wignerDRefKey);
   InfoMsg << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
 
-  std::pair<std::string, std::string > wigDWigDRefPair=IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
+  std::pair<std::string, std::string > wigDWigDRefPair =
+    IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
   InfoMsg << "name of amplitude: " << _name << "\tnameId: " << _nameId
 	  <<"\n_wigDWigDRefId = " << _wigDWigDRefId << "\t_wignerDId = " << _wignerDId 
 	  << "\nwith wignerDKey: " << wigDWigDRefPair.first << "\twignerDRefKey: " 
@@ -819,18 +840,3 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
    _massParamId = IdStringMapRegistry::instance()->keyStringId("grandMaAndMassParKey", _massParamKey);
 }
 
-// Vector4<double> AbsDecay::beamVecCollider(Vector4<double>& sqrts, double massBeam){
-//   //assuption sqrts= 4vector in the lab frame
-//   //both beam particles have the same masses (massBeam), such like e+e- or pbar p
-//   //main direction of the beam is in z direction, only minor part goes in x-y direction
-//   //with pbeam1_z = -pbeam2_z
-
-  
-//   double pBeam=0.5*sqrt(sqrts.Mass()*sqrts.Mass()+sqrts.P()*sqrts.P()-4.*massBeam*massBeam);
-//   double pxBeam=0.5*sqrts.Px();
-//   double pyBeam=0.5*sqrts.Py();   
-//   double pzBeam=sqrt(pBeam*pBeam-pxBeam*pxBeam-pyBeam*pyBeam);
-//   double eBeam=sqrt(massBeam*massBeam+pBeam*pBeam);
-//   Vector4<double> result(eBeam, pxBeam, pyBeam, pzBeam);
-//   return result;
-// } 

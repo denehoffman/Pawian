@@ -213,7 +213,7 @@ int main(int __argc,char *__argv[]){
   std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
 
   const std::string datFile=GlobalEnv::instance()->parser()->dataFile();
-  InfoMsg << "data file: " << datFile ;  // << endmsg;
+  InfoMsg << "data file: " << datFile << endmsg;
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
@@ -221,7 +221,7 @@ int main(int __argc,char *__argv[]){
   const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
   std::vector<std::string> mcFileNames;
   if(!isPiPiScatteringChannel) {
-    InfoMsg << "mc file: " << mcFile ;  // << endmsg;
+    InfoMsg << "mc file: " << mcFile << endmsg;
     mcFileNames.push_back(mcFile);
   }
 
@@ -274,12 +274,6 @@ int main(int __argc,char *__argv[]){
 			  0, noOfDataEvents);
     
     int maxMcEvts=eventsData.size()*ratioMcToData;
-    // InfoMsg << "eventsData.size(): " << eventsData.size() << endmsg;
-    // InfoMsg << "ratioMcToData: " << ratioMcToData << endmsg;
-    // InfoMsg << "eventsData.size()*ratioMcToData: " << eventsData.size()*ratioMcToData << endmsg;
-    // InfoMsg << "double(eventsData.size()*ratioMcToData): " << double(eventsData.size()*ratioMcToData) << endmsg;
-    // InfoMsg << "double(eventsData.size())*double(ratioMcToData): " << double(eventsData.size())*double(ratioMcToData) << endmsg;
-    // InfoMsg << "maxMcEvts: " << maxMcEvts << endmsg;
 
     theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
   }
@@ -308,7 +302,7 @@ int main(int __argc,char *__argv[]){
     const std::string truthFile=GlobalEnv::instance()->parser()->truthFile();
     int ratioTruthToMc= GlobalEnv::instance()->parser()->ratioTruthToMc();
     int maxTruthEvts=eventsData.size()*ratioMcToData*ratioTruthToMc;
-    InfoMsg << "truth file: " << truthFile ;  // << endmsg;
+    InfoMsg << "truth file: " << truthFile << endmsg;
     std::vector<std::string> truthFileNames;
     truthFileNames.push_back(truthFile);
     EventList truthData;

@@ -51,7 +51,9 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames) :
+TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, 
+				 Particle* mother, std::string& pathToConfigParser, 
+				 std::string dataType, std::string projectionParticleNames) :
   AbsDynamics(name, fsParticles, mother)
   ,_kMatName("")
   ,_prodProjectionIndex(0)
@@ -71,8 +73,10 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   else if(dataType=="Data") _dataTypeID=4;
   else if(dataType=="PhaseDiff") _dataTypeID=5; //in TMatrixCompareDynamics only
   else if(dataType=="PVecIntensity") _dataTypeID=6; //in KMatrixPVecIntensityDynamics only 
-  else{
-    Alert << "production formalism/data type with the name" << dataType << " is not supported for pi pi scattering fits! \n It is working for: Elasticity, ArgandUnits, Phase or PhaseDiff!!!" << endmsg;
+  else {
+    Alert << "production formalism/data type with the name" << dataType 
+	  << " is not supported for pi pi scattering fits! \n It is working for: "
+	  << "Elasticity, ArgandUnits, Phase or PhaseDiff!!!" << endmsg;
     exit(1); 
   }
 
@@ -95,7 +99,8 @@ TMatrixDynamics::~TMatrixDynamics()
 complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
 
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
-  double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
+  double currentMass =
+    theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
   _tMatr->evalMatrix(currentMass);
 
   if(_dataTypeID==1) evalElasticity(theData, currentMass);   
@@ -212,7 +217,8 @@ void TMatrixDynamics::fillParamNameList(){
   }
 }
 
-bool TMatrixDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+bool TMatrixDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, 
+					 std::shared_ptr<AbsPawianParameters> fitParOld){
   return true;
 }
 
@@ -244,7 +250,6 @@ void TMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
 	  double newVal=fitPar->Value(_bgTermNames.at(i).at(j).at(k));
 	  _currentBgTerms.at(i).at(j).at(k)=newVal;
 	  _kMatr->updateBgTerms(i,j,k,newVal);
-	  //	  InfoMsg << "setting current bg term(" << i << "," << j << ","<< k << ") = " << newVal <<"\tname" << _bgTermNames.at(i).at(j).at(k) << endmsg;
 	}
       }
     }
@@ -260,14 +265,7 @@ void TMatrixDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPa
     _currentRelPhase=fitPar->Value(_paramNameRelPhase);
   }
 
-  // if( _dataTypeID==2  && !_prodIsNotDecChannel){
-  //   //update noOfRotationMap
-  //   _noRotationMap.clear();
-  //   KMatrixFunctions::fillRotationArgandMap(_tMatr, _prodProjectionIndex, _noRotationMap);
-  // }
 }
-
-
 
 void TMatrixDynamics::init(){
   _kMatName=_kMatrixParser->keyName();
@@ -312,7 +310,8 @@ void TMatrixDynamics::init(){
     Particle* firstParticle = GlobalEnv::instance()->particleTable()->particle(firstParticleName);
     Particle* secondParticle = GlobalEnv::instance()->particleTable()->particle(secondParticleName);
     if(0==firstParticle || 0==secondParticle){
-      Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName << " doesn't exist in pdg-table" << endmsg;
+      Alert << "particle with name: " << firstParticleName <<" or " << secondParticleName 
+	    << " doesn't exist in pdg-table" << endmsg;
       exit(0);
     }
 
@@ -323,7 +322,8 @@ void TMatrixDynamics::init(){
     fsParticleMasses.push_back(firstParticle->mass());
     fsParticleMasses.push_back(secondParticle->mass()); 
 
-    std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, fsParticleMasses);
+    std::shared_ptr<AbsPhaseSpace> currentPhp=PhaseSpaceFactory::instance()->getPhpPointer(currentPhpDescription, 
+											   fsParticleMasses);
     _phpVecs.push_back(currentPhp);
 
     std::string gFactorKey=firstParticleName+secondParticleName;    
@@ -352,7 +352,9 @@ void TMatrixDynamics::init(){
     std::vector<double> currentgVector=itgFac->second;
     std::shared_ptr<KPole> currentPole;
     if (_kMatrixParser->useBarrierFactors()){
-      currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), _phpVecs, _kMatrixParser->orbitalMom(), _kMatrixParser->useTruncatedBarrierFactors()));
+      currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), 
+							  _phpVecs, _kMatrixParser->orbitalMom(), 
+							  _kMatrixParser->useTruncatedBarrierFactors()));
     }
     else{
       currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
@@ -428,10 +430,14 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
 
   //note: this is a workaround
   if(_prodProjectionIndex == _decProjectionIndex){
-    SijRel=complex<double>(1.,0.)+2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+    SijRel=complex<double>(1.,0.)+2.*PawianConstants::i *
+      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() *
+	   thePhpVecs[_decProjectionIndex]->factor(currentMass).real()) * currentTijRel;
   }
   else{
-    SijRel=2.*PawianConstants::i*sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()*thePhpVecs[_decProjectionIndex]->factor(currentMass).real())*currentTijRel;
+    SijRel=2.*PawianConstants::i *
+      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() *
+	   thePhpVecs[_decProjectionIndex]->factor(currentMass).real()) * currentTijRel;
   }
   
   //protection against numerical instabilities
@@ -445,59 +451,25 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
   } 
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrt(norm(SijRel));
-  // InfoMsg << "currentMass: " << currentMass << endmsg;
-  // InfoMsg << "sqrt(norm(SijRel)): " << sqrt(norm(SijRel)) << endmsg;
-  // InfoMsg << "SijRel: " << SijRel << endmsg;
-  // InfoMsg << "norm(SijRel): " << norm(SijRel) << endmsg;
 }
 
 
 void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
-  // double deltaRel=KMatrixFunctions::deltaArgandWSigma(_tMatr, _prodProjectionIndex, currentMass, 0.005, 4);
-  // double deltaRel=KMatrixFunctions::deltaArgandWSigma(_tMatr, _prodProjectionIndex, currentMass, 0.001, 4);
-  // while(deltaRel>180.) deltaRel-=180.;
-  // while(deltaRel<0.) deltaRel+=180.;
 
   double deltaRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
   while(deltaRel>180.) deltaRel-=180.;
   while(deltaRel<0.) deltaRel+=180.;
-
-  // InfoMsg << "\ncurrentMass: " << currentMass << "\tdeltaRel: " << deltaRel << "\tdeltaRelNew: " << deltaRelNew << endmsg;
 
   double phiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
 
   while( (phiData-deltaRel) > 90.) deltaRel+=180.;
   while( (deltaRel-phiData) > 90.) deltaRel-=180.;
 
-  // unsigned int noOfRots=noOfRotations(currentMass);
-  // // InfoMsg << "currentMass: " << currentMass << "\tnoOfRots: " << noOfRots << endmsg;  
-  // deltaRel+=noOfRots*180.;
-  
-
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=deltaRel;
 
 }
 
 void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass){
-  // vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
-  // complex<double> currentTiiRel=(*_tMatr)(_prodProjectionIndex, _prodProjectionIndex);
-  // complex<double> currentTjjRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
-
-  // complex<double> currentTiiRel_rho= currentTiiRel*thePhpVecs[_prodProjectionIndex]->factor(currentMass).real();
-  // complex<double> currentTjjRel_rho= currentTjjRel*thePhpVecs[_decProjectionIndex]->factor(currentMass).real();
-
-  // double currentReEiiRel = currentTiiRel_rho.real();
-  // double currentImEiiRel = currentTiiRel_rho.imag() - 0.5;
-  // double deltaiiRel = 0.5*atan2(currentImEiiRel, fabs(currentReEiiRel))*PawianConstants::radToDeg + 45.0;
-
-  // if (currentReEiiRel  < 0.0) {deltaiiRel = 180.0 - deltaiiRel;}
-
-  // double currentReEjjRel = currentTjjRel_rho.real();
-  // double currentImEjjRel = currentTjjRel_rho.imag() - 0.5;
-  // double deltajjRel = 0.5*atan2(currentImEjjRel, fabs(currentReEjjRel))*PawianConstants::radToDeg + 45.0;
-
-  // if (currentReEjjRel  < 0.0) {deltajjRel = 180.0 - deltajjRel;}
-
   double deltaiiRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
   double deltajjRel = KMatrixFunctions::deltaArgand(_tMatr, _decProjectionIndex, currentMass); 
   double phiRelFit=deltaiiRel+deltajjRel+_currentRelPhase;
@@ -515,8 +487,10 @@ void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 
   double sqrTij=0.;
-  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() > 1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass).real() > 1.e-10){
-    sqrTij=(2.*_orbitalL+1.)*norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real())*currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()));
+  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() > 
+      1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass).real() > 1.e-10) {
+    sqrTij=(2.*_orbitalL+1.) * norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()) *
+				    currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()));
   }
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;

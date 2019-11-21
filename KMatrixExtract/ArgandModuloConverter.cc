@@ -37,7 +37,9 @@
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 
 
-ArgandModuloConverter::ArgandModuloConverter(std::string rootFileInName, double mass1, double mass2, double mass3, double mass4) :
+ArgandModuloConverter::ArgandModuloConverter(std::string rootFileInName, 
+					     double mass1, double mass2, 
+					     double mass3, double mass4) :
   _theTFileOut(0)
   ,_theTFileIn(0)
   ,_php1(new PhaseSpaceIsobar(mass1, mass2))
@@ -86,14 +88,10 @@ void ArgandModuloConverter::convertArgandToModulo(){
   int noOfEntries=_dataTree->GetEntries();
   for (int i=0; i<noOfEntries; ++i){
     _dataTree->GetEntry(i);
-    //    InfoMsg << "_massVal: " << _massVal << endmsg;
-    //    InfoMsg << "_dataVal: " << _dataVal << endmsg;
     _argandUnitsDataGraphErr->SetPoint(i, _massVal, _dataVal);
     _argandUnitsDataGraphErr->SetPointError(i, 0., _dataErrVal);
 
-    //double factor=abs(sqrt(_php2->factor(_massVal)));
     double factor=1./norm(sqrt(_php1->factor(_massVal)*_php2->factor(_massVal)));
-    //double factor=1./abs(sqrt(_php1->factor(_massVal)*_php2->factor(_massVal)));
     _moduloDataVal=factor*_dataVal;
     _moduloDataErrVal=factor*_dataErrVal;
     _moduloDataGraphErr->SetPoint(i, _massVal, _moduloDataVal);
@@ -108,9 +106,7 @@ void ArgandModuloConverter::convertArgandToModulo(){
     _fitTree->GetEntry(i);
     _argandUnitsFitGraphErr->SetPoint(i, _massVal, _fitVal);
     _argandUnitsFitGraphErr->SetPointError(i, 0., 0.);
-    //double factor=abs(sqrt(_php2->factor(_massVal)));
     double factor=1./norm(sqrt(_php1->factor(_massVal)*_php2->factor(_massVal)));
-    //double factor=1./abs(sqrt(_php1->factor(_massVal)*_php2->factor(_massVal)));
     _moduloFitVal=factor*_fitVal;
     _moduloFitGraphErr->SetPoint(i, _massVal, _moduloFitVal);
     _moduloFitGraphErr->SetPointError(i, 0., 0.);
