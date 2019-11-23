@@ -1,4 +1,5 @@
 #include "ErrLogger.hh"
+#include <iostream>
 
 ErrLogger* ErrLogger::theErrLogger = NULL;
 std::ostringstream ErrLogger::buffer;

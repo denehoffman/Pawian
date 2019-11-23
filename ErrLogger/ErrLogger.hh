@@ -70,7 +70,7 @@ private:
 
 #define endmsg ErrLogger::endl
 
-#define InfoMsg     ErrLogger::instance().setLevel(logging::log_level::INFO);ErrLogger::instance()<<__FILE__<<" line "<<__LINE__<<": "
+#define InfoMsg     ErrLogger::instance().setLevel(logging::log_level::INFO);ErrLogger::instance()
 #define DebugMsg    ErrLogger::instance().setLevel(logging::log_level::DEBUG);ErrLogger::instance()<<__FILE__<<" line "<<__LINE__<<": "
 #define WarningMsg  ErrLogger::instance().setLevel(logging::log_level::WARN);ErrLogger::instance()<<__FILE__<<" line "<<__LINE__<<": "
 #define ErrMsg      ErrLogger::instance().setLevel(logging::log_level::ERROR);ErrLogger::instance()<<__FILE__<<" line "<<__LINE__<<": "

@@ -79,8 +79,10 @@ namespace logging {
   class std_out_logger : public logger {
    public:
     std_out_logger() = delete;
+    // std_out_logger(const logging_config_t& config) : logger(config), 
+    // 		   levels(config.find("color") != config.end() ? colored : uncolored) {}
     std_out_logger(const logging_config_t& config) : logger(config), 
-		   levels(config.find("color") != config.end() ? colored : uncolored) {}
+    		   levels(config.find("color") != config.end() ? uncolored : uncolored) {}
     virtual void log(const std::string& message, const log_level level) {
       if(level < LOG_LEVEL_CUTOFF)
         return;

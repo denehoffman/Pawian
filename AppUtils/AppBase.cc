@@ -137,7 +137,7 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   eventReader.fill(theEventList, evtStart, evtStop);
 
   unsigned int numOfEvtsInFile=theEventList.size();
-  InfoMsg << "\nFile has " << numOfEvtsInFile << " events." << endmsg;
+  InfoMsg << "File has " << numOfEvtsInFile << " events." << endmsg;
   if (numOfEvtsInFile==0){
     Alert << "0 events in the file; abort!!!" << endmsg;
     exit(1);
@@ -156,13 +156,13 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = theEventList.nextEvent()) != 0 && evtCount < 10) {
-    InfoMsg << "\n";
+    InfoMsg << endmsg;
     for(int i=0; i<noFinalStateParticles; ++i){
-      InfoMsg << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << "\n";
+      InfoMsg << (*anEvent->p4(i)) << "\tm = " << anEvent->p4(i)->Mass() << endmsg;
     }
-    InfoMsg << "\n" << endmsg;
     ++evtCount;
   }
+  InfoMsg << endmsg;
   theEventList.rewind();
 }
 
