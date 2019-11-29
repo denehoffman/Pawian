@@ -99,6 +99,8 @@ protected:
   virtual void evalPhase(EvtData* theData, double currentMass);
   virtual void evalRelativePhase(EvtData* theData, double currentMass);
   virtual void evalArgandUnits(EvtData* theData, double currentMass);
+  virtual void evalTreal(EvtData* theData, double currentMass);
+  virtual void evalTimag(EvtData* theData, double currentMass);
   unsigned int noOfRotations(double currentMass);
 private:
 

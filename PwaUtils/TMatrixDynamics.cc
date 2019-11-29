@@ -72,7 +72,9 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   else if(dataType=="ArgandUnits") _dataTypeID=3;
   else if(dataType=="Data") _dataTypeID=4;
   else if(dataType=="PhaseDiff") _dataTypeID=5; //in TMatrixCompareDynamics only
-  else if(dataType=="PVecIntensity") _dataTypeID=6; //in KMatrixPVecIntensityDynamics only 
+  else if(dataType=="PVecIntensity") _dataTypeID=6; //in KMatrixPVecIntensityDynamics only
+  else if(dataType=="Treal") _dataTypeID=7;
+  else if(dataType=="Timag") _dataTypeID=8; 
   else {
     Alert << "production formalism/data type with the name" << dataType 
 	  << " is not supported for pi pi scattering fits! \n It is working for: "
@@ -110,6 +112,12 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   }
   else if(_dataTypeID==3){
     evalArgandUnits(theData, currentMass);
+  }
+  else if(_dataTypeID==7){
+    evalTreal(theData, currentMass);
+  }
+  else if(_dataTypeID==8){
+    evalTimag(theData, currentMass);
   }
   else{
     Alert << "_dataTypeID = " <<_dataTypeID << " is not supported!!!" << endmsg;
@@ -494,6 +502,16 @@ void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
   }
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;
+}
+
+void TMatrixDynamics::evalTreal(EvtData* theData, double currentMass){
+  complex<double> currentTijRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.real();
+}
+
+void TMatrixDynamics::evalTimag(EvtData* theData, double currentMass){
+  complex<double> currentTijRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.imag();
 }
 
 unsigned int TMatrixDynamics::noOfRotations(double currentMass){

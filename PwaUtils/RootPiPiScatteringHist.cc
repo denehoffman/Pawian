@@ -87,6 +87,18 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
     graphTitleData="#rho_{i} #rho_{j} |T_{ij}|^{2} (data)";                                
     graphTitleFit="#rho_{i} #rho_{j} |T_{ij}|^{2} (fit)"; 
   }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="Treal"){
+    graphNameData="TrealData";
+    graphNameFit="TrealFit";
+    graphTitleData="T_{ij} real (data)";
+    graphTitleFit="T_{ij} real (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="Timag"){
+    graphNameData="TimagData";
+    graphNameFit="TimagFit";
+    graphTitleData="T_{ij} imag (data)";
+    graphTitleFit="T_{ij} imag (fit)";
+  }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
     graphNameData="PhaseDiffData";
     graphNameFit="PhaseDiffFit";

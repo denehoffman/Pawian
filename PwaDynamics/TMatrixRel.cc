@@ -66,7 +66,7 @@ void TMatrixRel::evalMatrixTemplate(const MassType mass){
    }
 
    IdentityMatrix< complex<double> > theIdMatrix(NumRows());
-   Matrix< complex< double > > tmpDenomMatrInv = theIdMatrix-(*_Kmatrix)*ChewMMatrix;
+   Matrix< complex< double > > tmpDenomMatrInv = (theIdMatrix-(*_Kmatrix)*ChewMMatrix);
 
    tmpDenomMatrInv.invert();
 
