@@ -99,6 +99,32 @@ complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1
   return result;
 }
 
+complex<double> PawianQFT::ChewMandelstamDudek(complex<double> s, double massDec1, double massDec2){
+  if(norm(s)<1.e-8) s=complex<double>(1.e-10, 1.e-10);
+  complex<double> m1_2_m_m2_2(massDec1*massDec1-massDec2*massDec2, 0.);
+  complex<double> m1_2_p_m2_2(massDec1*massDec1+massDec2*massDec2, 0.); 
+
+  complex<double> m1_p_m2_2((massDec1+massDec2)*(massDec1+massDec2), 0.);
+  complex<double> m1_m_m2_2((massDec1-massDec2)*(massDec1-massDec2), 0.);
+
+  complex<double> rho(0.,0.);
+  rho += sqrt(complex<double>(1,0)-(m1_p_m2_2/s))*sqrt(complex<double>(1,0)-(m1_m_m2_2/s));
+
+  complex<double> xi(1.,0.);
+  xi -= (m1_p_m2_2/s);
+
+
+  complex<double> term1(1., 0.);
+  term1 *= rho/PawianConstants::pi * log((xi+rho)/(xi-rho));
+
+  complex<double> term2(1., 0.);
+  term2 *= xi/PawianConstants::pi * (massDec2-massDec1)/(massDec1+massDec2) * log(massDec2/massDec1);
+
+
+  complex<double> result = term1 - term2;
+  return result;
+}
+
 complex<double> PawianQFT::phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2){
   complex<double> s=mass*mass;
   complex<double> result=PawianQFT::ChewMandelstamReid(s, massDec1, massDec2).imag();

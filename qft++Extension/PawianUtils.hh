@@ -32,6 +32,7 @@ namespace PawianQFT{
   double rhoiAsner(double s, double massDec1, double massDec2);
   complex<double> ChewMandelstamPennington(complex<double> s, double massDec1, double massDec2);
   complex<double> ChewMandelstamReid(complex<double> s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamDudek(complex<double> s, double massDec1, double massDec2);
   complex<double> phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacReid(double mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacDefault(double mass, double massDec1, double massDec2);
