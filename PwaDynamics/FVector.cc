@@ -89,7 +89,7 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
 
   for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
  
-  Matrix< complex< double > > denomMatrInv=_idMatrix-(*_Kmatrix)*_CMMatrix;
+  Matrix< complex< double > > denomMatrInv=_idMatrix+_cSign*(*_Kmatrix)*_CMMatrix;
   denomMatrInv.invert();
   
   complex <double> result(0.,0.);
