@@ -65,6 +65,8 @@ private:
   TH2F* _CMPenningtonImagHist2;
   TH2F* _CMReidRealHist2;
   TH2F* _CMReidImagHist2;
+  TH2F* _CMDudekRealHist2;
+  TH2F* _CMDudekImagHist2;
 
   TH1F* _CMAsnerRealHist;
   TH1F* _CMAsnerImagHist;
@@ -72,6 +74,8 @@ private:
   TH1F* _CMPenningtonImagHist;
   TH1F* _CMReidRealHist;
   TH1F* _CMReidImagHist;
+  TH1F* _CMDudekRealHist;
+  TH1F* _CMDudekImagHist;
   TH1F* _CMDefaultRealHist;
   TH1F* _CMDefaultImagHist;
   TH1F* _CMDefaultComplRealHist;
@@ -83,6 +87,8 @@ private:
   TH1F* _CMMPenningtonImagHist;
   TH1F* _CMMReidRealHist;
   TH1F* _CMMReidImagHist;
+  TH1F* _CMMDudekRealHist;
+  TH1F* _CMMDudekImagHist;
   TH1F* _CMMDefaultComplRealHist;
   TH1F* _CMMDefaultComplImagHist;
   TH1F* _CMMBBUnstableRhoPiRealHist;

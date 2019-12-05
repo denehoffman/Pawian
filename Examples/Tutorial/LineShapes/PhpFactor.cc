@@ -69,6 +69,13 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   _CMReidImagHist2= new TH2F("_CMReidImagHist2", "CM imag Reid",601, -_massMax, _massMax, 601, -_massMax, _massMax);
   _CMReidImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
   _CMReidImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  
+  _CMDudekRealHist2= new TH2F("_CMDudekRealHist2", "CM real Dudek",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMDudekRealHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMDudekRealHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
+  _CMDudekImagHist2= new TH2F("_CMDudekImagHist2", "CM imag Dudek",601, -_massMax, _massMax, 601, -_massMax, _massMax);
+  _CMDudekImagHist2->GetYaxis()->SetTitle("Im(#sqrt{s})");
+  _CMDudekImagHist2->GetXaxis()->SetTitle("Re(#sqrt{s})");
 
   double massMaxSqr= _massMax* _massMax;  
   _CMAsnerRealHist= new TH1F("_CMAsnerRealHist", "CM real Asner",301, -massMaxSqr, massMaxSqr);
@@ -91,6 +98,13 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   _CMReidImagHist= new TH1F("_CMReidImagHist", "CM imag Reid",301, -massMaxSqr, massMaxSqr);
   _CMReidImagHist->GetYaxis()->SetTitle("Im(CM)");
   _CMReidImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  
+  _CMDudekRealHist= new TH1F("_CMDudekRealHist", "CM real Dudek",301, -massMaxSqr, massMaxSqr);
+  _CMDudekRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMDudekRealHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
+  _CMDudekImagHist= new TH1F("_CMDudekImagHist", "CM imag Dudek",301, -massMaxSqr, massMaxSqr);
+  _CMDudekImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMDudekImagHist->GetXaxis()->SetTitle("s[GeV^{2}/c^{4}]");
 
   _CMDefaultRealHist= new TH1F("_CMDefaultRealHist", "CM real default",301, -massMaxSqr, massMaxSqr);
   _CMDefaultRealHist->GetYaxis()->SetTitle("Re(CM)");
@@ -129,6 +143,13 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
   _CMMReidImagHist= new TH1F("_CMMReidImagHist", "CM imag Reid",301, -massMax, massMax);
   _CMMReidImagHist->GetYaxis()->SetTitle("Im(CM)");
   _CMMReidImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  
+  _CMMDudekRealHist= new TH1F("_CMMDudekRealHist", "CM real Dudek",301, -massMax, massMax);
+  _CMMDudekRealHist->GetYaxis()->SetTitle("Re(CM)");
+  _CMMDudekRealHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
+  _CMMDudekImagHist= new TH1F("_CMMDudekImagHist", "CM imag Dudek",301, -massMax, massMax);
+  _CMMDudekImagHist->GetYaxis()->SetTitle("Im(CM)");
+  _CMMDudekImagHist->GetXaxis()->SetTitle("m[GeV/c^{2}]");
 
   _CMMDefaultComplRealHist= new TH1F("_CMMDefaultComplRealHist", "CM real default",301, -massMax, massMax);
   _CMMDefaultComplRealHist->GetYaxis()->SetTitle("Re(CM)");
@@ -166,6 +187,10 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     complex<double> currentCMReidFac = PawianQFT::ChewMandelstamReid(currentMass*currentMass, _mass1, _mass2);
     _CMMReidRealHist->Fill(massIt, currentCMReidFac.real());
     _CMMReidImagHist->Fill(massIt, currentCMReidFac.imag());
+    
+    complex<double> currentCMDudekFac = PawianQFT::ChewMandelstamDudek(currentMass*currentMass, _mass1, _mass2);
+    _CMMDudekRealHist->Fill(massIt, currentCMDudekFac.real());
+    _CMMDudekImagHist->Fill(massIt, currentCMDudekFac.imag());
 
     InfoMsg << "currentMass: " << massIt << endmsg;
     complex<double> currentCMBBUnstableRhoPiFac = phpBBUnstableRhoPi->ChewM(massIt);
@@ -190,6 +215,10 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
       complex<double> currentCMReidFac = PawianQFT::ChewMandelstamReid(currentMassSqr, _mass1, _mass2);
       _CMReidRealHist2->Fill(massRealIt, massImagIt, currentCMReidFac.real());
       _CMReidImagHist2->Fill(massRealIt, massImagIt, currentCMReidFac.imag());
+      
+      complex<double> currentCMDudekFac = PawianQFT::ChewMandelstamDudek(currentMassSqr, _mass1, _mass2);
+      _CMDudekRealHist2->Fill(massRealIt, massImagIt, currentCMDudekFac.real());
+      _CMDudekImagHist2->Fill(massRealIt, massImagIt, currentCMDudekFac.imag());
     }
   }
 
@@ -222,6 +251,10 @@ PhpFactor::PhpFactor(double mass1, double mass2, double massMax) :
     complex<double> currentReidFac = PawianQFT::ChewMandelstamReid(massSqrItComplCM, _mass1, _mass2);
     _CMReidRealHist->Fill(massSqrItCompl.real(), currentReidFac.real());
     _CMReidImagHist->Fill(massSqrItCompl.real(), currentReidFac.imag());
+    
+    complex<double> currentDudekFac = PawianQFT::ChewMandelstamDudek(massSqrItComplCM, _mass1, _mass2);
+    _CMDudekRealHist->Fill(massSqrItCompl.real(), currentDudekFac.real());
+    _CMDudekImagHist->Fill(massSqrItCompl.real(), currentDudekFac.imag());
 
   }
   delete phpBBUnstableRhoPi; 
