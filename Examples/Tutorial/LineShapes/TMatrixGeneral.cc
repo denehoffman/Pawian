@@ -232,6 +232,8 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
 	_AmpImagH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).imag());	
 	_ImagT11m1H1Vec.at(i)->Fill(mass, -(*tMatrInv)(i,i).imag());
 	
+	//	InfoMsg << "currentRho.real(): " << currentRho.real() << endmsg;
+	
 	_ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), 
 				  currentRho.real()*(*_tMatr)(i,i).imag());
 	double currentphase=180.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;

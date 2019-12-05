@@ -30,6 +30,7 @@
 PhaseSpaceIsobarReid::PhaseSpaceIsobarReid(double mass1, double mass2):
   PhaseSpaceIsobar(mass1, mass2)
 {
+  _name="Reid";
 }
 
 PhaseSpaceIsobarReid::~PhaseSpaceIsobarReid(){

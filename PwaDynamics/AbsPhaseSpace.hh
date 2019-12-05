@@ -67,6 +67,7 @@ public:
   virtual void cacheFactors(const double mass) {return;}
 
   void SetBumImPartSign(double sign){_bumImPartSign = sign;}
+  const std::string name() const {return _name;} 
 
 protected:
   virtual void CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
@@ -77,6 +78,8 @@ protected:
    }
   double _bumImPartSign;
   std::map<int, complex<double> > _CMCache; //resolution 100 keV
+
+  std::string _name;
 
 private:
   //  double _bumImPartSign;

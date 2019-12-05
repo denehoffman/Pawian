@@ -58,7 +58,8 @@ public:
   void SetBumImPartSigns(std::vector<double> signs);
 
 protected:
-  std::shared_ptr<KMatrixBase> _Kmatrix; 
+  std::shared_ptr<KMatrixBase> _Kmatrix;
+  double _cSign; 
 
 };
 //_____________________________________________________________________________

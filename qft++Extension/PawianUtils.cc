@@ -224,7 +224,7 @@ complex<double> PawianQFT::breakupMomQReid(MassType mass, double massDec1, doubl
 
 template<typename MassType>
 complex<double> PawianQFT::breakupMomQDudek(MassType mass, double massDec1, double massDec2){
-  double rho = PawianQFT::ChewMandelstamDudek(mass*mass, massDec1, massDec2).imag();
+  double rho = -PawianQFT::ChewMandelstamDudek(mass*mass, massDec1, massDec2).imag();
   complex<double> result=rho*mass/2.;
   return result;  
 }

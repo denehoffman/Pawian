@@ -31,6 +31,7 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "PwaDynamics/PhaseSpaceIsobarReid.hh"
+#include "PwaDynamics/PhaseSpaceIsobarDudek.hh"
 //#include "PwaDynamics/PhaseSpaceIsobarBBUnstable.hh"
 #include "PwaDynamics/PhaseSpaceIsobarLUT.hh"
 #include "PwaDynamics/PhaseSpaceIsobarAS.hh"
@@ -70,6 +71,9 @@ std::shared_ptr<AbsPhaseSpace> PhaseSpaceFactory::getPhpPointer(std::string type
  }
  else if(type=="Reid"){
 	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarReid(mass1, mass2));
+ }
+ else if(type=="Dudek"){
+	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarDudek(mass1, mass2));
  }
  else if(type=="AS"){
 	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarAS(mass1, mass2));

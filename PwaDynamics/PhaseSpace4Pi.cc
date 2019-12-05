@@ -60,6 +60,7 @@ PhaseSpace4Pi::PhaseSpace4Pi():
   AbsPhaseSpace()
   ,_fourPiFactor1(16.0*PawianConstants::mPiSq)
 {
+  _name="4pi";
 }
 
 PhaseSpace4Pi::~PhaseSpace4Pi(){

@@ -34,12 +34,14 @@ FVector::FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRe
   ,_idMatrix(NumRows())
   ,_CMMatrix(NumRows(),NumRows())
   ,_phpVec(Kmatrix->phaseSpaceVec())
+  ,_cSign(-1.)
  {
    for (int i=0; i<NumRows(); ++i){
      for (int j=0; j<NumRows(); ++j){
        _CMMatrix(i,j)=complex<double> (0.,0.);
      }
    }
+   if (_phpVec.at(0)->name() == "Dudek") _cSign=1.;
  }
 
 FVector::FVector(int numRows) :
@@ -66,7 +68,8 @@ void FVector::evalMatrix(const double mass, Spin OrbMom){
  // for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
   for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
 
-  Matrix< complex< double > > denomMatrComplInv = _idMatrix-(*_Kmatrix)*_CMMatrix;
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix+_cSign*(*_Kmatrix)*_CMMatrix;
+ 
   denomMatrComplInv.invert();
   
   Matrix< complex <double> > currentTMatr=denomMatrComplInv*(*_Pvector);

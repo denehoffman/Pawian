@@ -29,6 +29,7 @@ PhaseSpaceIsobarAS::PhaseSpaceIsobarAS(double mass1, double mass2):
   , _mass1(mass1)
   ,_mass2(mass2)
 {
+  _name="AS";
 }
 
 PhaseSpaceIsobarAS::~PhaseSpaceIsobarAS(){

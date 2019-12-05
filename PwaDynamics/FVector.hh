@@ -65,6 +65,7 @@ protected:
   IdentityMatrix< complex<double> > _idMatrix;
   Matrix< complex<double> > _CMMatrix;
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
+  double _cSign;
 };
 //_____________________________________________________________________________
 

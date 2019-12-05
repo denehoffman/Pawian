@@ -29,6 +29,7 @@
 PhaseSpaceIsobarLUT::PhaseSpaceIsobarLUT(double mass1, double mass2, string type):
   PhaseSpaceIsobar(mass1, mass2)
 {
+  _name="LUT";
   m_nRe = 0;
   m_nIm = 0;
   m_sLow = complex<double>(0.0, 0.0);

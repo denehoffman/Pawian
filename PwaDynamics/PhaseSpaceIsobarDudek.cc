@@ -30,6 +30,7 @@
 PhaseSpaceIsobarDudek::PhaseSpaceIsobarDudek(double mass1, double mass2):
   PhaseSpaceIsobar(mass1, mass2)
 {
+  _name="Dudek";
 }
 
 PhaseSpaceIsobarDudek::~PhaseSpaceIsobarDudek(){
@@ -37,7 +38,7 @@ PhaseSpaceIsobarDudek::~PhaseSpaceIsobarDudek(){
 }
 
 complex<double> PhaseSpaceIsobarDudek::factor(const double mass){
-  complex<double> rho(ChewM(mass).imag(), 0.); 
+  complex<double> rho(-ChewM(mass).imag(), 0.); 
   return rho;
 }
 
@@ -46,7 +47,7 @@ complex<double> PhaseSpaceIsobarDudek::breakUpMom(const double mass){
 }
 
 complex<double> PhaseSpaceIsobarDudek::factor(const complex<double> mass){
-  complex<double> rho(ChewM(mass).imag(), 0.); 
+  complex<double> rho(-ChewM(mass).imag(), 0.); 
   return rho;
 }
 
@@ -64,7 +65,7 @@ complex<double> PhaseSpaceIsobarDudek::ChewM(const double mass){
 complex<double> PhaseSpaceIsobarDudek::ChewM(const complex<double> mass){
   complex<double> s=mass*mass;
   complex<double> result = PawianQFT::ChewMandelstamDudek(s, _mass1, _mass2);
-  complex<double> momDudek = result.imag()*mass/2.;
+  complex<double> momDudek = -result.imag()*mass/2.;
   CorrectCMForChosenSign(momDudek, result);
   return result;
 }
