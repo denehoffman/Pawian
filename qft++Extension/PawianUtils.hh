@@ -44,6 +44,8 @@ namespace PawianQFT{
   template<typename MassType>
   complex<double> breakupMomQReid(MassType mass, double massDec1, double massDec2);
   template<typename MassType>
+  complex<double> breakupMomQDudek(MassType mass, double massDec1, double massDec2);
+  template<typename MassType>
   complex<double> breakupMomQAS(MassType mass, double massDec1, double massDec2);
   template<typename MassType>
   complex<double> breakupMomQDefaultAS(MassType mass, double massDec1, double massDec2);

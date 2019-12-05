@@ -223,6 +223,13 @@ complex<double> PawianQFT::breakupMomQReid(MassType mass, double massDec1, doubl
 }
 
 template<typename MassType>
+complex<double> PawianQFT::breakupMomQDudek(MassType mass, double massDec1, double massDec2){
+  double rho = PawianQFT::ChewMandelstamDudek(mass*mass, massDec1, massDec2).imag();
+  complex<double> result=rho*mass/2.;
+  return result;  
+}
+
+template<typename MassType>
 complex<double> PawianQFT::breakupMomQAS(MassType mass, double massDec1, double massDec2){
   complex<double> result=PawianQFT::phaseSpaceFacAS(mass, massDec1, massDec2)*mass/2.;
   return result;  
@@ -240,6 +247,8 @@ template complex<double> PawianQFT::breakupMomQDefault(double, double, double);
 template complex<double> PawianQFT::breakupMomQDefault(complex<double>, double, double);
 template complex<double> PawianQFT::breakupMomQReid(double, double, double);
 template complex<double> PawianQFT::breakupMomQReid(complex<double>, double, double);
+template complex<double> PawianQFT::breakupMomQDudek(double, double, double);
+template complex<double> PawianQFT::breakupMomQDudek(complex<double>, double, double);
 template complex<double> PawianQFT::breakupMomQAS(double, double, double);
 template complex<double> PawianQFT::breakupMomQAS(complex<double>, double, double);
 template complex<double> PawianQFT::breakupMomQDefaultAS(double, double, double);
