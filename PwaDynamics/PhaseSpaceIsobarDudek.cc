@@ -58,7 +58,7 @@ complex<double> PhaseSpaceIsobarDudek::breakUpMom(const complex<double> mass){
 }
 
 complex<double> PhaseSpaceIsobarDudek::ChewM(const double mass){
-  complex<double> massSqrCompl(mass*mass, 1.e-10); // for real s: expansion to s=0 from 1st quadrant
+  complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
   return PawianQFT::ChewMandelstamDudek(massSqrCompl, _mass1, _mass2);  
 }
 
