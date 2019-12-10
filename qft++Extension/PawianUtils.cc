@@ -107,6 +107,8 @@ complex<double> PawianQFT::ChewMandelstamDudek(complex<double> s, double massDec
   complex<double> m1_p_m2_2((massDec1+massDec2)*(massDec1+massDec2), 0.);
   complex<double> m1_m_m2_2((massDec1-massDec2)*(massDec1-massDec2), 0.);
 
+  if(abs(s - m1_p_m2_2)<1.e-10) return complex<double>(0.,0.);
+
   complex<double> rho(0.,0.);
   rho += sqrt(complex<double>(1,0)-(m1_p_m2_2/s))*sqrt(complex<double>(1,0)-(m1_m_m2_2/s));
 
