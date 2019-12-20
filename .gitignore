@@ -1,0 +1,11 @@
+# Output files
+*.log
+*.out
+
+# Build files
+bin/
+lib/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
