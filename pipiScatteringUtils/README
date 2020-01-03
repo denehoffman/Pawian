@@ -8,7 +8,7 @@ These scattering reaction tools are also embadded in the general PAWIAN PWA fram
 main differences compared to all other reactions are treated by the implementation of 
 specific virtual methods and are as follows:
 1. no production amplitude is required here
-2. exactly one decay channel with the specific intermediate stae and the two final state 
+2. exactly one decay channel with the specific intermediate state and the two final state 
 particles
 3. the T-matrix dynamics is required and part of the decay amplitude
 4. no decay angular distributions required
