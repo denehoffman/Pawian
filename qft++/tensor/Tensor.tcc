@@ -128,18 +128,19 @@ Tensor<_Tp>::Contract(const Tensor<T> &__tensor,int __num_indicies) const {
     nterm = 0;
 
     // loop over summed indicies (only loop needed in this case)
-    while(indSummed.IsValid()){
-      gFactors = g(indSummed[0],indSummed[0 + indSummed.Size()/2]);
+    while(indSummed.IsValid()) {
+      size_t indHalfSize = indSummed.Size()/2;
+      gFactors = g(indSummed[0], indSummed[0 + indHalfSize]);
       
       // get the needed amount of metric tensor factors
-      for(int i = 1; i < indSummed.Size()/2; i++)
-	gFactors *= g(indSummed[i],indSummed[i + indSummed.Size()/2]);
+      for(int i = 1; i < indHalfSize; i++)
+	gFactors *= g(indSummed[i], indSummed[i + indHalfSize]);
       
-      if(gFactors != 0.0){
+      if(gFactors != 0.0) {
 	nterm++;
-	for(int i = 0; i < indSummed.Size()/2 ;i++){
-	  ind1.SetIndex(i,indSummed[i]);
-	  ind2.SetIndex(i,indSummed[i + indSummed.Size()/2]);
+	for(int i = 0; i < indHalfSize; i++){
+	  ind1.SetIndex(i, indSummed[i]);
+	  ind2.SetIndex(i, indSummed[i + indHalfSize]);
 	}
 	element = (this->Element(ind1))*(__tensor(ind2))*gFactors;
 	if(nterm == 1) ret() = element;

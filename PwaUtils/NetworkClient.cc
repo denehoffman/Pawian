@@ -185,7 +185,7 @@ bool NetworkClient::WaitForParams(){
 
    if(serverMessage == NetworkServer::SERVERMESSAGE_CLOSE){
       InfoMsg << "Received goodbye. Exiting." << endmsg;
-      return false;
+      return true;
    }
    else if(serverMessage != NetworkServer::SERVERMESSAGE_PARAMS){
       Alert << "Protocol error WaitForParams() : " << serverMessage << endmsg;
