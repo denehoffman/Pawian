@@ -15,8 +15,6 @@ project :
 	<include>$(ROOTSYS)/include
 	<cxxflags>--std=c++14
 	<cxxflags>-ftemplate-depth=256
-	<cxxflags>-O3
-	<cxxflags>-fopt-info-vec-all
 	<linkflags>$(ROOTLIBS)
 	<linkflags>-lvdt
 	<linkflags>-L$(BOOSTLIBPATH)
