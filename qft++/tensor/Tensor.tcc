@@ -133,12 +133,12 @@ Tensor<_Tp>::Contract(const Tensor<T> &__tensor,int __num_indicies) const {
       gFactors = g(indSummed[0], indSummed[0 + indHalfSize]);
       
       // get the needed amount of metric tensor factors
-      for(int i = 1; i < indHalfSize; i++)
+      for(unsigned int i = 1; i < indHalfSize; i++)
 	gFactors *= g(indSummed[i], indSummed[i + indHalfSize]);
       
       if(gFactors != 0.0) {
 	nterm++;
-	for(int i = 0; i < indHalfSize; i++){
+	for(unsigned int i = 0; i < indHalfSize; i++){
 	  ind1.SetIndex(i, indSummed[i]);
 	  ind2.SetIndex(i, indSummed[i + indHalfSize]);
 	}

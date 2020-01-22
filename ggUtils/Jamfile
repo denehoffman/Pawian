@@ -20,7 +20,8 @@ exe ggStatesApp : ggStatesApp.cc ggUtils
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaUtils//PwaUtils 
-	$(TOP)/Utils//Utils 
+	$(TOP)/Utils//Utils
+	$(TOP)/pbarpUtils//pbarpUtils 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
     	: ;
