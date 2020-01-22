@@ -23,7 +23,7 @@
 // pbarpState class definition file. -*- C++ -*-
 // Copyright 2020 Bertram Kopf
 
-#include "pbarpUtils/pbarpState.hh"
+#include "PwaUtils/pbarpState.hh"
 #include "Utils/MathUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -66,12 +66,14 @@ void pbarpState::extractLSs(){
 	}
       }     
     }
-    if(accept) _pbarpLSs.push_back(LScandidates.at(ls));
-    if( S=Spin(0) ) _isSinglet=true;
-    else if( S=Spin(1) ){
-      _isTriplet=true;
-      if(spinProjection0) _isTriplet0=true;
-      if(spinProjection1) _isTriplet1=true;
+    if(accept){
+      _pbarpLSs.push_back(LScandidates.at(ls));
+      if( S==1 ){
+	_isTriplet=true;
+	if(spinProjection0) _isTriplet0=true;
+	if(spinProjection1) _isTriplet1=true;
+      }
+      else if( S==0 ) _isSinglet=true;
     }        
   }
 }

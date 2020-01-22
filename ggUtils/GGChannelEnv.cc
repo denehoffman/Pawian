@@ -64,7 +64,7 @@ void GGChannelEnv::setupChannel(ChannelID id){
   _ggReaction=std::shared_ptr<ggReaction>(new ggReaction(_prodChannelInfoList, id, _jmax));
   std::string dynTypeDefault="WoDynamics";
   
-  if (_theGGParser->productionFormalism()=="Formation" || _theGGParser->productionFormalism()=="FormationGamGam"){
+  if (_theGGParser->productionFormalism()=="Formation" || _theGGParser->productionFormalism()=="FormationGamGam" || _theGGParser->productionFormalism()=="FormationPbarP"){
     std::vector< std::shared_ptr<FormationDecay> > prodDecs = _ggReaction->formationDecays();
     std::vector< std::shared_ptr<FormationDecay> >::iterator itDec;
 

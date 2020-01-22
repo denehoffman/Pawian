@@ -30,7 +30,7 @@
 #include "ggUtils/pbarpProductionLh.hh"
 #include "ggUtils/ggReaction.hh"
 #include "ggUtils/GGChannelEnv.hh"
-#include "pbarpUtils/pbarpState.hh"
+#include "PwaUtils/pbarpState.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -152,7 +152,6 @@ void pbarpProductionLh::print(std::ostream& os) const{
 void pbarpProductionLh::initialize(){
    std::vector< std::shared_ptr<AbsDecay> > theDecs = _ggChannelEnv->prodDecayList()->getList();
    std::vector< std::shared_ptr<AbsDecay> >::iterator it;
-   int maxJ = 0;
    for (it=theDecs.begin(); it!=theDecs.end(); ++it){
      InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
      std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, 

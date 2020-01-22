@@ -31,6 +31,7 @@
 
 #include "PwaUtils/FormXDecAmps.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
+#include "PwaUtils/pbarpState.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -152,7 +153,25 @@ void FormXDecAmps::fillParamNameList(){
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
       _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
     }
-  } else {
+  }
+ else if(GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() == "FormationPbarP") {
+   pbarpState currentpbarpState(jpcPtr());
+   int lamMin=0;   
+   int lamMax=0;
+   if (currentpbarpState.isTriplet1State() && _J>0){
+     lamMin=-1;
+     lamMax=1;
+   } 
+ 
+   bool withLam0=true;
+   if ( currentpbarpState.isTriplet1State() && !currentpbarpState.isTriplet0State()) withLam0=false; 
+   for(int lamRes= lamMin; lamRes<=lamMax; lamRes++) {
+     if (lamRes==0 && !withLam0) continue; 
+      _paramNameMap[lamRes]=absDec()->name()+"lam"+(std::to_string(abs(lamRes)));
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Mag");
+      _paramNameList.push_back(_paramNameMap.at(lamRes)+"Phi");
+    }
+ } else {
     Alert << "productionFormalism: " << GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() << " is not supported!!!" << endmsg;
     exit(1);
   } 
