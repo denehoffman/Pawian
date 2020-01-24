@@ -18,4 +18,4 @@ It is possible to define complicated decay trees, to choose different spin forma
 
 <b>PAWIAN</b> and all its associated files are licensed under the GNU General Public License v3 (GPLv3), which you can find <a href="https://www.gnu.org/licenses/gpl.txt">here</a> or in the <code>COPYING</code> file in the <b>PAWIAN</b> root directory.
 
-**For information about the dependencies, the installation procedure, and usage, see the [Wiki pages](https://panda-wiki.gsi.de/foswiki/bin/view/PWA/PawianPwaSoftware).**
+**For information about the dependencies, the installation procedure, and usage, see the [Wiki pages](https://panda-wiki.gsi.de/foswiki/bin/view/PWA/PawianPwaSoftware). Issues can be discussed through the [PawianTalk user forum](https://pawiantalk.ep1.rub.de/).**
