@@ -39,9 +39,9 @@
 #include "PwaUtils/KPiSWaveIso12Dynamics.hh"
 #include "PwaUtils/KPiSWaveIso32Dynamics.hh"
 #include "PwaUtils/PiPiSWaveASDynamics.hh"
-#include "PwaUtils/KMatrixDynamics.hh"
-#include "PwaUtils/TMatrixDynamics.hh"
+#include "PwaUtils/FVectorCompareDynamics.hh"
 #include "PwaUtils/TMatrixCompareDynamics.hh"
+#include "PwaUtils/TMatrixDynamics.hh"
 #include "PwaUtils/KMatrixPVecIntensityDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/JohnsonDynamics.hh"
@@ -132,6 +132,13 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
 	result= std::shared_ptr<AbsDynamics>(new TMatrixCompareDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, pathToConfigCompareFile, currentDataType, projectionParticleNames));
+      }
+      else if(theDec->dynType()=="FVectorCompare"){
+	std::string pathToConfigFile=theDec->pathToConfigParser();
+        std::string pathToConfigCompareFile=thePiPiScatteringParser->pathToKMatrixCompareFile();
+	std::string projectionParticleNames = theDec->projectionParticleNames();
+	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
+        result= std::shared_ptr<AbsDynamics>(new FVectorCompareDynamics(theName, fsParticles, theDec->motherPart(), theDec->motherPart(), pathToConfigFile, pathToConfigCompareFile, currentDataType, currentChannelId, projectionParticleNames));
       }
       else if(theDec->dynType()=="KMatrixPVecIntensity"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();

@@ -32,15 +32,15 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/AbsDynamics.hh"
+#include "PwaUtils/KMatrixDynamics.hh"
 
-class KMatrixDynamics;
 class KMatrixParser;
+class FVector;
 
-class FVectorCompareDynamics : public AbsDynamics{
+class FVectorCompareDynamics : public KMatrixDynamics{
 
 public:
-  FVectorCompareDynamics(std::string& name1, std::string& name2, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser1, std::string& pathToConfigParser2, std::string& pathToFVecCompareConfigFile, std::string dataType, ChannelID channelId, std::string projectionParticleNames="");
+  FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string dataType, ChannelID channelId, std::string projectionParticleNames="");
   virtual ~FVectorCompareDynamics();
 
   virtual std::string type() {return "FVectorCompareDynamics";}
@@ -53,11 +53,15 @@ public:
  
 protected:
   int _projectionCompareIndex;
+  std::string _kMatCompareName;
+  std::string _nameOfFVector;
+  std::string _nameOfFVectorCompare;
 
-  std::shared_ptr<KMatrixDynamics> _kMatrDyn1;
-  std::shared_ptr<KMatrixDynamics> _kMatrDyn2;
-  std::shared_ptr<KMatrixParser> _kMatrixParser1;
-  std::shared_ptr<KMatrixParser> _kMatrixParser2;
+  std::shared_ptr<KMatrixDynamics> _kMatrDynComp;
+  std::shared_ptr<KMatrixParser> _kMatrixParserComp;
+  std::shared_ptr<FVector> _FVector;
+  std::shared_ptr<FVector> _FVectorCompare;
+  
 
   virtual void evalPhaseCompare(EvtData* theData, double currentMass);
 

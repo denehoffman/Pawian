@@ -456,3 +456,14 @@ std::shared_ptr<PVectorRel> KMatrixDynamics::makeNewPVec(){
    else thePVector=std::shared_ptr<PVectorRel>(new PVectorRelBg(thePpoles, _phpVecs, _orderPVecBg)); 
    return thePVector;
 }
+
+std::shared_ptr<FVector> KMatrixDynamics::fVector(std::string name){
+
+  std::map<std::string, std::shared_ptr<FVector> >::iterator it = _fVecMap.find(name);
+  if (it != _fVecMap.end()){
+    Alert << "name: " << name << " is not a key of the the F-vector map " << endmsg;
+    exit(1);    
+  }
+
+  return it->second;
+}

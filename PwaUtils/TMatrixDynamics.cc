@@ -71,7 +71,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   else if(dataType=="Phase") _dataTypeID=2;
   else if(dataType=="ArgandUnits") _dataTypeID=3;
   else if(dataType=="Data") _dataTypeID=4;
-  else if(dataType=="PhaseDiff") _dataTypeID=5; //in TMatrixCompareDynamics only
+  else if(dataType=="PhaseDiff") _dataTypeID=5; //in TMatrixCompareDynamics and FVectorCompareDynamics only
   else if(dataType=="PVecIntensity") _dataTypeID=6; //in KMatrixPVecIntensityDynamics only
   else if(dataType=="Treal") _dataTypeID=7;
   else if(dataType=="Timag") _dataTypeID=8; 

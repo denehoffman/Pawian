@@ -413,7 +413,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   _dynType=dynString;
 
-  if(_dynType=="KMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" 
+  if(_dynType=="KMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" || _dynType=="FVectorCompare" 
      || _dynType=="KMatrixPVecIntensity"){
     std::string prePathKMat=GlobalEnv::instance()->Channel(_channelId)->parser()->prePathKMatrixFiles();
     _pathParserFile=prePathKMat+additionalStringVec[0];

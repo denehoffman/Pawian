@@ -29,6 +29,7 @@
 
 #include "PwaUtils/FVectorCompareDynamics.hh"
 #include "PwaUtils/KMatrixDynamics.hh"
+#include "PwaDynamics/FVector.hh"
 #include "ConfigParser/KMatrixParser.hh"
 
 #include "PwaUtils/XdecAmpRegistry.hh"
@@ -53,12 +54,17 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-FVectorCompareDynamics::FVectorCompareDynamics(std::string& name1, std::string& name2, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser1, std::string& pathToConfigParser2,std::string& pathToFVecCompareConfigFile, std::string dataType, ChannelID channelId, std::string projectionParticleNames) :
-AbsDynamics(name1, fsParticles, mother1)
+FVectorCompareDynamics::FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string dataType, ChannelID channelId, std::string projectionParticleNames) :
+KMatrixDynamics(name, fsParticles, mother1, pathToConfigParser, channelId, projectionParticleNames)
   ,_projectionCompareIndex(0)
-  ,_kMatrDyn1(new KMatrixDynamics(name1, fsParticles, mother1, pathToConfigParser1, channelId, projectionParticleNames))
-  ,_kMatrDyn2(new KMatrixDynamics(name2, fsParticles, mother2, pathToConfigParser2, channelId, projectionParticleNames))
+  , _kMatCompareName(name +"Compare")
+  , _nameOfFVector("nameOfFVector")
+  , _nameOfFVectorCompare("nameOfFVectorCompare")
+  ,_kMatrDynComp(new KMatrixDynamics(_kMatCompareName, fsParticles, mother2, pathToConfigParserComp, channelId, projectionParticleNames))
 {
+  addOneGrandMa(_nameOfFVector);
+  _FVector = _fVecMap.at(0);
+  _kMatrDynComp->addOneGrandMa(_nameOfFVectorCompare);
 }
 
 FVectorCompareDynamics::~FVectorCompareDynamics()
@@ -67,18 +73,24 @@ FVectorCompareDynamics::~FVectorCompareDynamics()
 
 complex<double> FVectorCompareDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   complex<double> result(0.,0.);
+
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
+  _FVector->evalMatrix(currentMass);
+  _FVectorCompare->evalMatrix(currentMass);
+  evalPhaseCompare(theData, currentMass);
   return result;
 }
 
 void FVectorCompareDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  _kMatrDyn1->fillDefaultParams(fitPar);
-  _kMatrDyn2->fillDefaultParams(fitPar);
+  KMatrixDynamics::fillDefaultParams(fitPar);
+  _kMatrDynComp->fillDefaultParams(fitPar);
 }
 
 void FVectorCompareDynamics::fillParamNameList(){
   _paramNameList.clear();
-  _kMatrDyn1->fillParamNameList();
-  _kMatrDyn2->fillParamNameList();
+  KMatrixDynamics::fillParamNameList();
+  _kMatrDynComp->fillParamNameList();
 }
 
 bool FVectorCompareDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
@@ -86,16 +98,22 @@ bool FVectorCompareDynamics::checkRecalculation(std::shared_ptr<AbsPawianParamet
 }
 
 void FVectorCompareDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  _kMatrDyn1->updateFitParams(fitPar);
-  _kMatrDyn2->updateFitParams(fitPar);
+  KMatrixDynamics::updateFitParams(fitPar);
+  _kMatrDynComp->updateFitParams(fitPar);
 }
 
 void FVectorCompareDynamics::fillMasses(EvtData* theData){
-  _kMatrDyn1->fillMasses(theData);
-  _kMatrDyn2->fillMasses(theData);
+  KMatrixDynamics::fillMasses(theData);
+  _kMatrDynComp->fillMasses(theData);
 }
 
 void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMass){
+  double currentPhase=std::arg((*_FVector)(_decProjectionIndex, 0));
+  double currentPhaseCompare=std::arg((*_FVectorCompare)(_decProjectionIndex, 0));
+  double currentPhaseDiff=(currentPhase-currentPhaseCompare)*PawianConstants::radToDeg;
+  while(currentPhaseDiff > 180. ) currentPhaseDiff-=180.;
+  while(currentPhaseDiff < -180.) currentPhaseDiff+=180.;
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff;
 }
 
 
