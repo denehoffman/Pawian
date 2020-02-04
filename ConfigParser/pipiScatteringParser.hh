@@ -21,7 +21,7 @@
 //************************************************************************//
 
 // pipiScatteringParser class definition file. -*- C++ -*-
-// Copyright 2017 Bertram Kopf
+// Copyright 2017 Bertram Kopf, 2020 Malte Albrecht
 
 #pragma once
 
@@ -39,11 +39,14 @@ class pipiScatteringParser : public ParserBase
   virtual ~pipiScatteringParser(){;}
 
   const std::string pathToKMatrixCompareFile() const {return _pathToKMatrixCompareFile;}
+  const std::string baseNameFVector() const {return _baseNameFVector;}
+  const std::string baseNameFVectorCompare() const {return _baseNameFVectorCompare;}
 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   std::string _pathToKMatrixCompareFile;
+  std::string _baseNameFVector;
+  std::string _baseNameFVectorCompare;
 };
-
 
 

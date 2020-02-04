@@ -22,7 +22,7 @@
 //************************************************************************//
 
 // pipiScatteringParser class definition file. -*- C++ -*-
-// Copyright 2017 Bertram Kopf
+// Copyright 2017 Bertram Kopf, 2020 Malte Albrecht
 
 
 #include "ConfigParser/pipiScatteringParser.hh"
@@ -37,10 +37,14 @@ using namespace std;
 pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_pathToKMatrixCompareFile("")
+  ,_baseNameFVector("")
+  ,_baseNameFVectorCompare("")
 {
   po::options_description common("Common Options");
   common.add_options()
     ("pathToKMatrixCompareFile", po::value<std::string>(&_pathToKMatrixCompareFile)->default_value(_pathToKMatrixCompareFile),"path to another KMatrix-cfg file for comparison purposes")
+    ("baseNameFVector",po::value<std::string>(&_baseNameFVector)->default_value(_baseNameFVector),"base name of F-vector for comparison")
+    ("baseNameFVectorCompare",po::value<std::string>(&_baseNameFVectorCompare)->default_value(_baseNameFVectorCompare),"base name of second F-vector for comparison")
     ;
   
   _common->add(common);
@@ -58,6 +62,8 @@ bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
   ParserBase::parseCommandLine(argc, argv);
 
   std::cout << "pathToKMatrixCompareFile = " << _pathToKMatrixCompareFile << std::endl;
+  std::cout << "baseNameFVector = " << _baseNameFVector << std::endl;
+  std::cout << "baseNameFVectorCompare = " << _baseNameFVectorCompare << std::endl;
 
   std::cout << std::endl;
 
