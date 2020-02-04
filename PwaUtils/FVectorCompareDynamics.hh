@@ -40,7 +40,7 @@ class FVector;
 class FVectorCompareDynamics : public KMatrixDynamics{
 
 public:
-  FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string dataType, ChannelID channelId, std::string projectionParticleNames="");
+  FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string baseNameFVector, std::string baseNameFVectorCompare, std::string dataType, ChannelID channelId, std::string projectionParticleNames="");
   virtual ~FVectorCompareDynamics();
 
   virtual std::string type() {return "FVectorCompareDynamics";}

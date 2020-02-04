@@ -54,7 +54,7 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-FVectorCompareDynamics::FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string dataType, ChannelID channelId, std::string projectionParticleNames) :
+FVectorCompareDynamics::FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string baseNameFVector, std::string baseNameFVectorCompare, std::string dataType, ChannelID channelId, std::string projectionParticleNames) :
 KMatrixDynamics(name, fsParticles, mother1, pathToConfigParser, channelId, projectionParticleNames)
   ,_projectionCompareIndex(0)
   , _kMatCompareName(name +"Compare")

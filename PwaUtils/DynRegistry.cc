@@ -136,9 +136,11 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       else if(theDec->dynType()=="FVectorCompare"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
         std::string pathToConfigCompareFile=thePiPiScatteringParser->pathToKMatrixCompareFile();
+        std::string baseNameFVector = thePiPiScatteringParser->baseNameFVector();
+        std::string baseNameFVectorCompare = thePiPiScatteringParser->baseNameFVectorCompare();
 	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
-        result= std::shared_ptr<AbsDynamics>(new FVectorCompareDynamics(theName, fsParticles, theDec->motherPart(), theDec->motherPart(), pathToConfigFile, pathToConfigCompareFile, currentDataType, currentChannelId, projectionParticleNames));
+        result= std::shared_ptr<AbsDynamics>(new FVectorCompareDynamics(theName, fsParticles, theDec->motherPart(), theDec->motherPart(), pathToConfigFile, pathToConfigCompareFile, baseNameFVector, baseNameFVectorCompare, currentDataType, currentChannelId, projectionParticleNames));
       }
       else if(theDec->dynType()=="KMatrixPVecIntensity"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
