@@ -92,6 +92,7 @@ void PiPiScatteringXdecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters
 
 void PiPiScatteringXdecAmps::initialize() {
   _absDyn = DynRegistry::instance()->getDynamics(_decay);
-  _absDyn->addGrandMa(_decay);
+  if(!(_decay->dynType() == "FVectorCompare"))
+    _absDyn->addGrandMa(_decay);
   _tMatDyn=std::dynamic_pointer_cast<TMatrixDynamics>(_absDyn);
 }

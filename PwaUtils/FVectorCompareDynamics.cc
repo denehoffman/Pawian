@@ -58,13 +58,14 @@ FVectorCompareDynamics::FVectorCompareDynamics(std::string& name, std::vector<Pa
 KMatrixDynamics(name, fsParticles, mother1, pathToConfigParser, channelId, projectionParticleNames)
   ,_projectionCompareIndex(0)
   , _kMatCompareName(name +"Compare")
-  , _nameOfFVector("nameOfFVector")
-  , _nameOfFVectorCompare("nameOfFVectorCompare")
-  ,_kMatrDynComp(new KMatrixDynamics(_kMatCompareName, fsParticles, mother2, pathToConfigParserComp, channelId, projectionParticleNames))
+  , _nameOfFVector(baseNameFVector)
+  , _nameOfFVectorCompare(baseNameFVectorCompare)
+  ,_kMatrDynComp(new KMatrixDynamics(_kMatCompareName, fsParticles, mother1, pathToConfigParserComp, channelId, projectionParticleNames))
 {
-  addOneGrandMa(_nameOfFVector);
-  _FVector = _fVecMap.at(0);
-  _kMatrDynComp->addOneGrandMa(_nameOfFVectorCompare);
+   std::string nameFVect = addOneGrandMa(_nameOfFVector);
+  _FVector = fVector(nameFVect);
+  std::string nameFVectComp = _kMatrDynComp->addOneGrandMa(_nameOfFVectorCompare);
+  _FVectorCompare = _kMatrDynComp->fVector(nameFVectComp);
 }
 
 FVectorCompareDynamics::~FVectorCompareDynamics()
@@ -111,8 +112,9 @@ void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMa
   double currentPhase=std::arg((*_FVector)(_decProjectionIndex, 0));
   double currentPhaseCompare=std::arg((*_FVectorCompare)(_decProjectionIndex, 0));
   double currentPhaseDiff=(currentPhase-currentPhaseCompare)*PawianConstants::radToDeg;
-  while(currentPhaseDiff > 180. ) currentPhaseDiff-=180.;
-  while(currentPhaseDiff < -180.) currentPhaseDiff+=180.;
+  while(currentPhaseDiff > 360. ) currentPhaseDiff -= 360.;
+  while(currentPhaseDiff < 0.)    currentPhaseDiff += 360.;
+  if(currentPhaseDiff > 180.)     currentPhaseDiff  = 360.-currentPhaseDiff;
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff;
 }
 

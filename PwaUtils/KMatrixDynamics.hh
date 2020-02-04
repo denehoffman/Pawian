@@ -60,7 +60,7 @@ public:
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
  
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec);
-  void addOneGrandMa(std::string theName);
+  std::string addOneGrandMa(std::string theName);
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp);
   virtual const unsigned short grandMaId(AbsXdecAmp* grandmaAmp);
   virtual std::shared_ptr<FVector> fVector(std::string);

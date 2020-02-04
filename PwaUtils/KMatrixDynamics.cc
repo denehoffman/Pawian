@@ -374,13 +374,14 @@ void KMatrixDynamics::addGrandMa(std::shared_ptr<AbsDecay> theDec){
   
   if (it != _fVecMap.end()) return;
 
-  addOneGrandMa(theName);
+  std::string currName = addOneGrandMa(theName);
 
 }
 
-void KMatrixDynamics::addOneGrandMa(std::string theName){
+std::string KMatrixDynamics::addOneGrandMa(std::string theName){
   std::shared_ptr<PVectorRel> currentPVector=makeNewPVec();
   _pVecMap[theName]=currentPVector;
+  std::cout << "theName: " << theName << std::endl;
 
   std::vector< std::string>::iterator poleNameIt;
   for (poleNameIt=_poleNames.begin(); poleNameIt!=_poleNames.end(); ++poleNameIt){  
@@ -419,6 +420,8 @@ void KMatrixDynamics::addOneGrandMa(std::string theName){
   std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
   _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
+
+  return theName;
 }
 
 const std::string& KMatrixDynamics::grandMaKey(AbsXdecAmp* grandmaAmp){
@@ -458,12 +461,5 @@ std::shared_ptr<PVectorRel> KMatrixDynamics::makeNewPVec(){
 }
 
 std::shared_ptr<FVector> KMatrixDynamics::fVector(std::string name){
-
-  std::map<std::string, std::shared_ptr<FVector> >::iterator it = _fVecMap.find(name);
-  if (it != _fVecMap.end()){
-    Alert << "name: " << name << " is not a key of the the F-vector map " << endmsg;
-    exit(1);    
-  }
-
-  return it->second;
+  return _fVecMap.at(name);
 }
