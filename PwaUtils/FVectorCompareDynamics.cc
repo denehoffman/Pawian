@@ -55,15 +55,12 @@
 #include "Utils/PawianConstants.hh"
 
 FVectorCompareDynamics::FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string baseNameFVector, std::string baseNameFVectorCompare, std::string dataType, ChannelID channelId, std::string projectionParticleNames) :
-KMatrixDynamics(name, fsParticles, mother1, pathToConfigParser, channelId, projectionParticleNames)
+FVectorIntensityDynamics(name, fsParticles, mother1, pathToConfigParser,  baseNameFVector, channelId, projectionParticleNames)
   ,_projectionCompareIndex(0)
   , _kMatCompareName(name +"Compare")
-  , _nameOfFVector(baseNameFVector)
   , _nameOfFVectorCompare(baseNameFVectorCompare)
   ,_kMatrDynComp(new KMatrixDynamics(_kMatCompareName, fsParticles, mother1, pathToConfigParserComp, channelId, projectionParticleNames))
 {
-   std::string nameFVect = addOneGrandMa(_nameOfFVector);
-  _FVector = fVector(nameFVect);
   std::string nameFVectComp = _kMatrDynComp->addOneGrandMa(_nameOfFVectorCompare);
   _FVectorCompare = _kMatrDynComp->fVector(nameFVectComp);
 }

@@ -49,6 +49,7 @@ class KMatrixDynamics : public TMatrixDynamics{
 
 public:
   KMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, ChannelID channelID, std::string projectionParticleNames="");
+
   virtual ~KMatrixDynamics();
 
   virtual std::string type() {return "KMatrixDynamics";}

@@ -20,7 +20,7 @@
 //									  //
 //************************************************************************//
 
-// KMatrixPVecIntensityDynamics class definition file. -*- C++ -*-
+// FVectorIntensityDynamics class definition file. -*- C++ -*-
 // Copyright 2019 Bertram Kopf
 
 #pragma once
@@ -34,19 +34,22 @@
 
 #include "PwaUtils/KMatrixDynamics.hh"
 
-class KMatrixPVecIntensityDynamics : public KMatrixDynamics{
+class FVector;
+
+class FVectorIntensityDynamics : public KMatrixDynamics{
 
 public:
-  KMatrixPVecIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  ChannelID channelID, std::string projectionParticleNames="");
-  virtual ~KMatrixPVecIntensityDynamics();
+  FVectorIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  std::string baseNameFVector, ChannelID channelID, std::string projectionParticleNames="");
+  virtual ~FVectorIntensityDynamics();
 
-  virtual std::string type() {return "KMatrixPVecIntensityDynamics";}
+  virtual std::string type() {return "FVectorIntensityDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp=0, Spin OrbMom=0);
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) { return;} //dummy
 protected:
   int _projectionCompareIndex;
   std::string _nameOfFVector;
+  std::shared_ptr<FVector> _FVector;
 
 private:
 

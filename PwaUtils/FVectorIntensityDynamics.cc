@@ -20,14 +20,14 @@
 //									  //
 //************************************************************************//
 
-// KMatrixPVecIntensityDynamics class definition file. -*- C++ -*-
+// FVectorIntensityDynamics class definition file. -*- C++ -*-
 // Copyright 2019 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>
 #include <string>
 
-#include "PwaUtils/KMatrixPVecIntensityDynamics.hh"
+#include "PwaUtils/FVectorIntensityDynamics.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
@@ -52,23 +52,26 @@
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
 
-KMatrixPVecIntensityDynamics::KMatrixPVecIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  ChannelID channelID, std::string projectionParticleNames) :
+FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  std::string baseNameFVector, ChannelID channelID, std::string projectionParticleNames) :
   KMatrixDynamics(name, fsParticles, mother, pathToConfigParser, channelID, projectionParticleNames)
 {
-  _nameOfFVector=_massKey;
+  _nameOfFVector= baseNameFVector;
   addOneGrandMa(_nameOfFVector);
+  _FVector = fVector(_nameOfFVector);
 }
 
-KMatrixPVecIntensityDynamics::~KMatrixPVecIntensityDynamics()
+
+
+FVectorIntensityDynamics::~FVectorIntensityDynamics()
 {
 }
 
-complex<double> KMatrixPVecIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
+complex<double> FVectorIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
 
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
 
-  complex<double> currentAmp=_fVecMap.at(_nameOfFVector)->evalProjMatrix( currentMass, _decProjectionIndex, OrbMom);
+  complex<double> currentAmp=_FVector->evalProjMatrix( currentMass, _decProjectionIndex, OrbMom);
   
   double currentResult = norm(currentAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()) );
   
@@ -76,7 +79,7 @@ complex<double> KMatrixPVecIntensityDynamics::eval(EvtData* theData, AbsXdecAmp*
   return currentAmp;
 }
 
-bool KMatrixPVecIntensityDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
+bool FVectorIntensityDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
   return true;
 }
 

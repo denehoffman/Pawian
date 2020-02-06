@@ -32,12 +32,12 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/KMatrixDynamics.hh"
+#include "PwaUtils/FVectorIntensityDynamics.hh"
 
 class KMatrixParser;
 class FVector;
 
-class FVectorCompareDynamics : public KMatrixDynamics{
+class FVectorCompareDynamics : public FVectorIntensityDynamics{
 
 public:
   FVectorCompareDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother1, Particle* mother2, std::string& pathToConfigParser, std::string& pathToConfigParserComp, std::string baseNameFVector, std::string baseNameFVectorCompare, std::string dataType, ChannelID channelId, std::string projectionParticleNames="");
@@ -54,12 +54,10 @@ public:
 protected:
   int _projectionCompareIndex;
   std::string _kMatCompareName;
-  std::string _nameOfFVector;
   std::string _nameOfFVectorCompare;
 
   std::shared_ptr<KMatrixDynamics> _kMatrDynComp;
   std::shared_ptr<KMatrixParser> _kMatrixParserComp;
-  std::shared_ptr<FVector> _FVector;
   std::shared_ptr<FVector> _FVectorCompare;
   
 

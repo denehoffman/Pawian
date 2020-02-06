@@ -42,7 +42,7 @@
 #include "PwaUtils/FVectorCompareDynamics.hh"
 #include "PwaUtils/TMatrixCompareDynamics.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
-#include "PwaUtils/KMatrixPVecIntensityDynamics.hh"
+#include "PwaUtils/FVectorIntensityDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/JohnsonDynamics.hh"
 #include "PwaUtils/K0star1430LassDynamics.hh"
@@ -142,11 +142,12 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
         result= std::shared_ptr<AbsDynamics>(new FVectorCompareDynamics(theName, fsParticles, theDec->motherPart(), theDec->motherPart(), pathToConfigFile, pathToConfigCompareFile, baseNameFVector, baseNameFVectorCompare, currentDataType, currentChannelId, projectionParticleNames));
       }
-      else if(theDec->dynType()=="KMatrixPVecIntensity"){
+      else if(theDec->dynType()=="FVectorIntensity"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
+	std::string baseNameFVector = thePiPiScatteringParser->baseNameFVector();
 	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
-	result= std::shared_ptr<AbsDynamics>(new KMatrixPVecIntensityDynamics( theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId, projectionParticleNames));
+	result= std::shared_ptr<AbsDynamics>(new FVectorIntensityDynamics( theName, fsParticles, theDec->motherPart(), pathToConfigFile, baseNameFVector, currentChannelId, projectionParticleNames));
 
   }
       else{
