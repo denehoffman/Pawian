@@ -55,8 +55,7 @@
 KMatrixPVecIntensityDynamics::KMatrixPVecIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  ChannelID channelID, std::string projectionParticleNames) :
   KMatrixDynamics(name, fsParticles, mother, pathToConfigParser, channelID, projectionParticleNames)
 {
-  _pVecSuffix += "Intensity";
-  _nameOfFVector=_massKey+"Intensity";
+  _nameOfFVector=_massKey;
   addOneGrandMa(_nameOfFVector);
 }
 
