@@ -109,9 +109,9 @@ void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMa
   double currentPhase=std::arg((*_FVector)(_decProjectionIndex, 0));
   double currentPhaseCompare=std::arg((*_FVectorCompare)(_decProjectionIndex, 0));
   double currentPhaseDiff=(currentPhase-currentPhaseCompare)*PawianConstants::radToDeg;
-  while(currentPhaseDiff > 360. ) currentPhaseDiff -= 360.;
-  while(currentPhaseDiff < 0.)    currentPhaseDiff += 360.;
-  if(currentPhaseDiff > 180.)     currentPhaseDiff  = 360.-currentPhaseDiff;
+  // while(currentPhaseDiff > 360. ) currentPhaseDiff -= 360.;
+  // while(currentPhaseDiff < 0.)    currentPhaseDiff += 360.;
+  // if(currentPhaseDiff > 180.)     currentPhaseDiff  = 360.-currentPhaseDiff;
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff;
 }
 

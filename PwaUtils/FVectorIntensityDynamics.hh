@@ -44,12 +44,20 @@ public:
 
   virtual std::string type() {return "FVectorIntensityDynamics";}
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp=0, Spin OrbMom=0);
-  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
+  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void fillParamNameList();
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar); 
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) { return;} //dummy
+
 protected:
   int _projectionCompareIndex;
   std::string _nameOfFVector;
   std::shared_ptr<FVector> _FVector;
+  std::string _nameOfAmplitudeMag;
+  std::string _nameOfAmplitudePhi;
+  
+  complex<double> _currentAmplitudeVal;
 
 private:
 

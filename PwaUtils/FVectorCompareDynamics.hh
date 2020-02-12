@@ -56,6 +56,7 @@ protected:
   std::string _kMatCompareName;
   std::string _nameOfFVectorCompare;
 
+
   std::shared_ptr<KMatrixDynamics> _kMatrDynComp;
   std::shared_ptr<KMatrixParser> _kMatrixParserComp;
   std::shared_ptr<FVector> _FVectorCompare;
