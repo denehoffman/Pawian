@@ -50,6 +50,7 @@ public:
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar); 
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) { return;} //dummy
 
+  virtual std::shared_ptr<FVector> getFVector() {return _FVector;}
 protected:
   int _projectionCompareIndex;
   std::string _nameOfFVector;

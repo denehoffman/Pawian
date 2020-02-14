@@ -102,8 +102,10 @@ bool FVectorIntensityDynamics::checkRecalculation(std::shared_ptr<AbsPawianParam
 
 void FVectorIntensityDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   KMatrixDynamics::updateFitParams(fitPar);
-  _currentAmplitudeVal = std::polar( fitPar->Value(_nameOfAmplitudeMag), 
-                              fitPar->Value(_nameOfAmplitudePhi) );
+   _currentAmplitudeVal = std::polar( std::abs(fitPar->Value(_nameOfAmplitudeMag)), 
+                               fitPar->Value(_nameOfAmplitudePhi) );
+  // _currentAmplitudeVal = std::polar( fitPar->Value(_nameOfAmplitudeMag), 
+  //                             fitPar->Value(_nameOfAmplitudePhi) );
 }
 
 

@@ -63,6 +63,7 @@ public:
   virtual std::string KMatixName() {return _kMatName;}
   virtual int orbitalL() {return _orbitalL;} 
   virtual void fillMasses(EvtData* theData);
+  virtual int decProjectionIndex() {return _decProjectionIndex;}
  
 protected:
   std::string _kMatName;

@@ -42,7 +42,7 @@ public:
 
   std::string pathToKMatrixParser() {return _pathKMatrixParserFile;}
   virtual std::shared_ptr<AbsHist> CreateHistInstance(std::string additionalSuffix="", bool withTruth=false);
-
+  //  virtual void addPiPiScatteringDynamics();
 protected:
   virtual void setupGlobal(ChannelID id);
   virtual void addDynamics();

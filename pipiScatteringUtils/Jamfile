@@ -1,6 +1,13 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
+install install-bin : FVectorGeneralApp
+	         : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+
 install install-lib : pipiScatteringUtils
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
@@ -23,4 +30,15 @@ lib pipiScatteringUtils :
 	: 
 	: ;
 
-
+exe FVectorGeneralApp : FVectorGeneralApp.cc pipiScatteringUtils
+          $(TOP)/PwaDynamics//PwaDynamics
+          $(TOP)/Particle//Particle
+          $(TOP)/ConfigParser//ConfigParser
+          $(TOP)/PwaUtils//PwaUtils
+          $(TOP)/FitParams//FitParams
+          $(TOP)/Event//Event
+          $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+          $(TOP)/qft++//qft++
+          $(TOP)/Utils//Utils
+          : ;

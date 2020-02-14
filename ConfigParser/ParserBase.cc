@@ -94,6 +94,7 @@ ParserBase::ParserBase(int argc,char **argv)
 
   // Check the command line options. Uses the Boost program options library.
   string strAppName(argv[0]);
+
   size_t found = strAppName.rfind("/")+1;
   if (found != string::npos) strAppName=strAppName.substr(found);
   
