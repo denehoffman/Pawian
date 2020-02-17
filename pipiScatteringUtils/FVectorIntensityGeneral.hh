@@ -41,13 +41,13 @@ class KMatrixParser;
 class AbsPhaseSpace;
 class TMatrixRel;
 class KMatrixRel;
-class KPole;
 class ParticleTable;
 class KMatrixParser;
 class AbsPawianParameters;
 class pipiScatteringParser;
 class FVectorIntensityDynamics;
 class FVector;
+class TGraph;
 
 class FVectorIntensityGeneral {
 
@@ -88,14 +88,11 @@ private:
   ParticleTable* _particleTable;
   
   TFile* _theTFile;
-  TH1F* _MagH1;
-  TH1F* _PhaseH1;
-  TH1F* _IntensityH1;  
-  // std::vector<TH1F*> _AmpRealH1Vec;
-  // std::vector<TH1F*> _AmpImagH1Vec;
-  // std::vector<TH2F*> _ArgandH2Vec;
-  // std::vector<TH1F*> _PhaseH1Vec;
-  // std::vector<TH1F*> _MagH1Vec;
+  std::vector<TH1F*> _MagsH1;
+  std::vector<TH1F*> _PhasesH1;
+  std::vector<TH1F*> _IntensitiesH1;
+  std::vector<TGraph*> _ArgandPlotsTGraph;  
+
 
   std::shared_ptr<AbsPawianParameters> _params;
   std::string _pathToFitParams;

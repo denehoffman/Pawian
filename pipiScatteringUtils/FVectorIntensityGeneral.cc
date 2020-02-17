@@ -31,12 +31,9 @@
 #include "PwaDynamics/TMatrixRel.hh"
 #include "PwaDynamics/TMatrixNonRel.hh"
 #include "PwaDynamics/KMatrixBase.hh"
-#include "PwaDynamics/KPole.hh"
-#include "PwaDynamics/KPoleBarrier.hh"
 #include "PwaDynamics/KMatrixRel.hh"
 #include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
-#include "PwaDynamics/PhaseSpaceFactory.hh"
 #include "PwaDynamics/FVector.hh"
 #include "PwaUtils/FVectorIntensityDynamics.hh"
 #include "PwaUtils/AbsDecayList.hh"
@@ -62,7 +59,7 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
-//#include "TMath.h"
+#include "TGraph.h"
 
 
 #include "ErrLogger/ErrLogger.hh"
@@ -84,21 +81,39 @@ FVectorIntensityGeneral::FVectorIntensityGeneral(pipiScatteringParser* theParser
   std::string rootFileName="./FVectorIntensityGeneral.root";
   _theTFile=new TFile(rootFileName.c_str(),"recreate");
 
-  std::string magKey="Magnitude "+ _pVecName + " to " +_projectionParticleNames;
-  std::string phaseKey="Phase "+ _pVecName + " to " +_projectionParticleNames;
-  std::string intensityKey="Intensity "+ _pVecName + " to " +_projectionParticleNames;
+  std::string magKey="Magnitude "+ _pVecName + " to " + _gFactorNames.at(_decProjectionIndex);
+  std::string phaseKey="Phase "+ _pVecName + " to " + _gFactorNames.at(_decProjectionIndex);
+  std::string intensityKey="Intensity "+ _pVecName + " to " + _gFactorNames.at(_decProjectionIndex);
 
-  _MagH1 = new TH1F(magKey.c_str(), magKey.c_str(), 
-                                  _noOfSteps-1, _massMin, _massMax);
+  std::string currentKey;
+  for(unsigned int i=0; i < _gFactorNames.size(); ++i){
+    currentKey="Magnitude"+ _pVecName + "to" + _gFactorNames.at(i);
+    TH1F* currentMagH1 = new TH1F(currentKey.c_str(), currentKey.c_str(), _noOfSteps-1, _massMin, _massMax);
+    _MagsH1.push_back(currentMagH1);
 
-  _PhaseH1 = new TH1F(phaseKey.c_str(), phaseKey.c_str(), 
+    currentKey="Phase"+ _pVecName + "to" + _gFactorNames.at(i);
+    TH1F* currentPhaseH1 = new TH1F(currentKey.c_str(), currentKey.c_str(), 
                                   _noOfSteps-1, _massMin, _massMax);
+    _PhasesH1.push_back(currentPhaseH1);
 
-  _IntensityH1 = new TH1F(intensityKey.c_str(), intensityKey.c_str(), 
-                                  _noOfSteps-1, _massMin, _massMax);
+    currentKey="Intensity"+ _pVecName + "to" + _gFactorNames.at(i);
+    TH1F* currentIntensityH1 = new TH1F(currentKey.c_str(), currentKey.c_str(),_noOfSteps-1, _massMin, _massMax);
+    _IntensitiesH1.push_back(currentIntensityH1);
+
+    currentKey="Argand"+ _pVecName + "to" + _gFactorNames.at(i);
+    TGraph* currentArgandTGraph = new TGraph();
+    currentArgandTGraph->SetName(currentKey.c_str());
+    currentArgandTGraph->SetTitle(currentKey.c_str());
+
+    _ArgandPlotsTGraph.push_back(currentArgandTGraph);
+    
+  }
 }
 
 FVectorIntensityGeneral::~FVectorIntensityGeneral() {
+  for(unsigned int i=0; i < _gFactorNames.size(); ++i){  
+    _ArgandPlotsTGraph.at(i)->Write();
+  }
   _theTFile->Write();
   _theTFile->Close();
 }
@@ -161,6 +176,8 @@ void FVectorIntensityGeneral::init() {
   _massMin = _phpVecCurrent->thresholdMass()+0.001;
   _stepSize=(_massMax-_massMin)/_noOfSteps;
 
+  _gFactorNames= _fVectorIntensityDynamics->gFactorNames();
+
   std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
   _fVectorIntensityDynamics->fillDefaultParams(params);
 
@@ -187,11 +204,19 @@ void FVectorIntensityGeneral::init() {
 }
 
 void FVectorIntensityGeneral::process(){
+  int pointNr[_gFactorNames.size()];
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
-    complex<double> currentResult=_fVector->evalProjMatrix(mass, _decProjectionIndex, _orbitalL);
-    _MagH1->Fill(mass, std::abs(currentResult));
-    _PhaseH1->Fill(mass, std::arg(currentResult)*PawianConstants::radToDeg);
-    _IntensityH1->Fill(mass, norm( currentResult*sqrt(_phpVecCurrent->factor(mass).real())) );
+    _fVector->evalMatrix(mass, _orbitalL);
+    for(unsigned int i=0; i < _gFactorNames.size(); ++i){
+	complex<double> currentResult = (*_fVector)(i,0);
+	_MagsH1.at(i)->Fill(mass, std::abs(currentResult));
+	_PhasesH1.at(i)->Fill(mass, std::arg(currentResult)*PawianConstants::radToDeg);
+	if(mass>_phpVecs.at(i)->thresholdMass()){
+	  _IntensitiesH1.at(i)->Fill(mass, norm( currentResult*sqrt(_phpVecs.at(i)->factor(mass).real())));
+	  _ArgandPlotsTGraph.at(i)->SetPoint(pointNr[i], currentResult.real(), currentResult.imag());
+	  ++pointNr[i];
+	} 
+    }
   }
 }
 
