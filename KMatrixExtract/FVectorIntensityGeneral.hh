@@ -32,7 +32,7 @@
 #include <memory>
 
 #include "TROOT.h"
-#include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
+#include "KMatrixExtract/TMatrixGeneral.hh"
 
 class TFile;
 class TH1F;
@@ -48,8 +48,9 @@ class pipiScatteringParser;
 class FVectorIntensityDynamics;
 class FVector;
 class TGraph;
+class PiPiScatteringChannelEnv;
 
-class FVectorIntensityGeneral {
+class FVectorIntensityGeneral : public TMatrixGeneral{
 
 public:
 
@@ -61,7 +62,10 @@ public:
 
   /** Destructor */
   virtual ~FVectorIntensityGeneral();
+
+  virtual void fillParams();
   virtual void process();
+  virtual void initHistos();
 
   // Getters:
  
@@ -69,34 +73,14 @@ protected:
 
 
 private:
-  pipiScatteringParser* _pipiScatteringParser;
-  std::shared_ptr<PiPiScatteringChannelEnv> _pipiScatteringChannelEnv; 
   std::shared_ptr<FVectorIntensityDynamics> _fVectorIntensityDynamics;
   std::shared_ptr<FVector> _fVector; 
-  std::string _projectionParticleNames;
-  std::string _motherParticleName;
   std::string _pVecName;
-  int _decProjectionIndex;
-  unsigned int _noOfSteps; 
-  double _massMin;
-  double _massMax;
-  double _stepSize;
 
-  std::vector< std::string> _gFactorNames;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  std::shared_ptr<AbsPhaseSpace> _phpVecCurrent;
-  ParticleTable* _particleTable;
-  
-  TFile* _theTFile;
   std::vector<TH1F*> _MagsH1;
   std::vector<TH1F*> _PhasesH1;
   std::vector<TH1F*> _IntensitiesH1;
   std::vector<TGraph*> _ArgandPlotsTGraph;  
-
-
-  std::shared_ptr<AbsPawianParameters> _params;
-  std::string _pathToFitParams;
-  int _orbitalL;
 
   void init();
 };

@@ -25,8 +25,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "Examples/Tutorial/LineShapes/TMatrixGeneral.hh"
-#include "Examples/Tutorial/LineShapes/RiemannSheetAnalyzer.hh"
+#include "KMatrixExtract/TMatrixGeneral.hh"
+#include "KMatrixExtract/RiemannSheetAnalyzer.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/TMatrixBase.hh"
@@ -47,10 +47,14 @@
 #include "FitParams/AbsPawianParamStreamer.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "Utils/PawianConstants.hh"
+#include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
 
 #include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
+#include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
 #include "FitParams/ParamFactory.hh"
 
 #include "TFile.h"
@@ -61,24 +65,28 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathToFitParams, 
-			       int numStepsForSheetScan, std::vector<double> energyPlaneBorders) :
-  _noOfSteps(500)
+TMatrixGeneral::TMatrixGeneral(pipiScatteringParser* theParser) :
+  _pipiScatteringParser(theParser)
+  ,_pipiScatteringChannelEnv(new PiPiScatteringChannelEnv(theParser))
+  ,_noOfSteps(500)
   ,_stepSize(0.)
   ,_massMin(100000.)
   ,_massMax(0.)
-  ,_kMatrixParser(new KMatrixParser(pathToConfigParser))
-  ,_theTFile(0)
-  ,_pathToFitParams(pathToFitParams)
+  ,_pathToFitParams("")
   ,_orbitalL(0)
-{ 
+  ,_pathToKMatrixParser("") 
+  ,_numStepsForSheetScan(500)
+  ,_theTFile(0)
+{
+  _energyPlaneBorders.resize(4);
   init();
-  std::string rootFileName="./TMatrixGeneral.root";
-  _theTFile=new TFile(rootFileName.c_str(),"recreate");
-
   _massMax+=0.4;
   _stepSize=(_massMax-_massMin)/_noOfSteps;
+}
 
+void TMatrixGeneral::initHistos(){
+  std::string rootFileName="./TMatrixGeneral.root";
+  _theTFile=new TFile(rootFileName.c_str(),"recreate");
   std::string ampRealKey="AmpReal";
   std::string ampImagKey="AmpImag";
   std::string argandKey="Argand";
@@ -199,6 +207,9 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
     currentSpeediiH1->SetXTitle("mass/GeV");
     _speedPlotH1Vec.push_back(currentSpeediiH1);
   }
+}
+
+void TMatrixGeneral::process(){
 
   DebugMsg << "_massMin: "<< _massMin
   	   << "\n_massMax: "<< _massMax
@@ -316,12 +327,12 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   oStream.close();
   oStream_phi.close();
   
-  if(energyPlaneBorders[0] == 0)
-    energyPlaneBorders[0] = _massMin;
-  if(energyPlaneBorders[2] == 0)
-    energyPlaneBorders[2] = _massMax;
+  if(_energyPlaneBorders[0] == 0)
+    _energyPlaneBorders[0] = _massMin;
+  if(_energyPlaneBorders[2] == 0)
+    _energyPlaneBorders[2] = _massMax;
   //minImagMass should be nagative; search projection index
-  if(energyPlaneBorders[1] > 0.) energyPlaneBorders[1]=-energyPlaneBorders[1]; 
+  if(_energyPlaneBorders[1] > 0.) _energyPlaneBorders[1]=-_energyPlaneBorders[1]; 
 
   const std::string porjectionParticleNames=_kMatrixParser->projection();
   std::istringstream projParticles(porjectionParticleNames);
@@ -345,9 +356,9 @@ TMatrixGeneral::TMatrixGeneral(std::string pathToConfigParser, std::string pathT
   }
 
   RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
-   		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
-   		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
-   		       numStepsForSheetScan, 
+   		       std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
+   		       std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),
+   		       _numStepsForSheetScan, 
    		       projectionIndex);
 }
 
@@ -360,38 +371,54 @@ TMatrixGeneral::~TMatrixGeneral() {
 void TMatrixGeneral::init() {
   GlobalEnv::instance()->setup();
   _particleTable=GlobalEnv::instance()->particleTable();
-  std::shared_ptr<TMatrixDynamics> tMatDynPtr = 
-    std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParser));
+  GlobalEnv::instance()->AddEnv(_pipiScatteringChannelEnv, AbsChannelEnv::CHANNEL_PIPISCATTERING);
+  _pipiScatteringChannelEnv->setupChannel(0);
+  
+  _pathToKMatrixParser=_pipiScatteringChannelEnv->pathToKMatrixParser();
+  InfoMsg << "pathToKMatrixParser: " << _pathToKMatrixParser << endmsg;
 
-    std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
-    tMatDynPtr->fillDefaultParams(params);
- 
-    std::ifstream ifs(_pathToFitParams);
-    if(!ifs.good()) 
-      { //file doesn't exist; dum default params
-	WarningMsg << "could not parse " << _pathToFitParams << endmsg;
-	WarningMsg << "dump defaut parameter " << _pathToFitParams << endmsg;
-	std::string defaultparamsname="defaultParams.dat";
-	std::ofstream theStreamDefault ( defaultparamsname );
-	params->print(theStreamDefault);
-	theStreamDefault.close();
-	exit(1);        
-      }   
+  _energyPlaneBorders[0]= _pipiScatteringParser->minRealMass();
+  _energyPlaneBorders[1]= _pipiScatteringParser->minImagMass();
+  _energyPlaneBorders[2]= _pipiScatteringParser->maxRealMass();
+  _energyPlaneBorders[3]= _pipiScatteringParser->maxImagMass();
+
+  _pathToFitParams = _pipiScatteringParser->fitParamFile();
+  InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;
+
+  std::vector<Particle*> _fsParticles = _pipiScatteringChannelEnv->finalStateParticles();
+  std::vector<Particle*>::iterator it;
+  for(it=_fsParticles.begin(); it!=_fsParticles.end(); ++it){
+    InfoMsg << "fsParticle: " << (*it)->name() << endmsg;
+  }
+
+  std::shared_ptr<AbsDecayList> absDecList=_pipiScatteringChannelEnv->absDecayList();
+  std::vector<std::shared_ptr<AbsDecay> > theDecs=absDecList->getList();
+  if(theDecs.size()!=1){
+    Alert << "the decay list contains " << theDecs.size() << " decays" << endmsg;
+    Alert << "exactly one decay is required!!! " << endmsg;
+    exit(1);    
+  }
+
+  std::shared_ptr<AbsDecay> theDec=theDecs.at(0);
+  Particle* _motherParticle=theDec->motherPart();
+  _motherParticleName=_motherParticle->name();
+  InfoMsg << "theMotherParticle: " << _motherParticleName << endmsg;
+
+  _projectionParticleNames= theDec->projectionParticleNames();   
+  InfoMsg << "projectionParticleNames: " << _projectionParticleNames << endmsg;
 
 
-  AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
-  _params = thePawianStreamer.paramList();
 
-  InfoMsg << "The k-Matrix input parameter are: " << endmsg;
-  _params->print(std::cout);
-  if(_pathToFitParams != "") tMatDynPtr->updateFitParams(_params); 
+  _kMatrixParser= std::shared_ptr<KMatrixParser>(new KMatrixParser(_pathToKMatrixParser));
 
-  _kMatr = tMatDynPtr->getKMatix(); 
-  _tMatr = tMatDynPtr->getTMatix();  
+  _tMatrDyn = std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParser));
+
+  _kMatr = _tMatrDyn->getKMatix(); 
+  _tMatr =  _tMatrDyn->getTMatix();  
 
   _phpVecs=_kMatr->phaseSpaceVec();
-  _gFactorNames= tMatDynPtr->gFactorNames();
-  _orbitalL= tMatDynPtr->orbitalL();
+  _gFactorNames= _tMatrDyn->gFactorNames();
+  _orbitalL= _tMatrDyn->orbitalL();
 
   std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
   std::vector<std::string>::iterator itString;
@@ -434,5 +461,31 @@ void TMatrixGeneral::init() {
     if(currentMassSum<_massMin) _massMin=currentMassSum;
   }
 
+}
+
+void TMatrixGeneral::fillParams(){
+
+  std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
+  _tMatrDyn->fillDefaultParams(params);
+ 
+    std::ifstream ifs(_pathToFitParams);
+    if(!ifs.good()) 
+      { //file doesn't exist; dum default params
+	WarningMsg << "could not parse " << _pathToFitParams << endmsg;
+	WarningMsg << "dump default parameter " << _pathToFitParams << endmsg;
+	std::string defaultparamsname="defaultParams.dat";
+	std::ofstream theStreamDefault ( defaultparamsname );
+	params->print(theStreamDefault);
+	theStreamDefault.close();
+	exit(1);        
+      }   
+
+
+  AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
+  _params = thePawianStreamer.paramList();
+
+  InfoMsg << "The k-Matrix input parameter are: " << endmsg;
+  _params->print(std::cout);
+  if(_pathToFitParams != "") _tMatrDyn->updateFitParams(_params); 
 }
 

@@ -41,12 +41,21 @@ class pipiScatteringParser : public ParserBase
   const std::string pathToKMatrixCompareFile() const {return _pathToKMatrixCompareFile;}
   const std::string baseNameFVector() const {return _baseNameFVector;}
   const std::string baseNameFVectorCompare() const {return _baseNameFVectorCompare;}
-
+  const double minImagMass() const {return _minImagMass;}
+  const double maxImagMass() const {return _maxImagMass;}
+  const double minRealMass() const {return _minRealMass;}
+  const double maxRealMass() const {return _maxRealMass;}
+  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   std::string _pathToKMatrixCompareFile;
   std::string _baseNameFVector;
   std::string _baseNameFVectorCompare;
+  double _minImagMass;
+  double _maxImagMass;
+  double _minRealMass;
+  double _maxRealMass;
+  
 };
 
 

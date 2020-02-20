@@ -31,7 +31,7 @@
 
 #include <memory>
 
-#include "Examples/Tutorial/LineShapes/TMatrixPiPiSWaveSimple4piPhp.hh"
+#include "KMatrixExtract/TMatrixPiPiSWaveSimple4piPhp.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 int main(int __argc,char *__argv[]){

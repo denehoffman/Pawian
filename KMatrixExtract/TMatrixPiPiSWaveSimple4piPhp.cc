@@ -26,8 +26,8 @@
 #include <sstream>
 #include <string>
 #include <boost/multi_array.hpp>
-#include "Examples/Tutorial/LineShapes/TMatrixPiPiSWaveSimple4piPhp.hh"
-#include "Examples/Tutorial/LineShapes/RiemannSheetAnalyzer.hh"
+#include "KMatrixExtract/TMatrixPiPiSWaveSimple4piPhp.hh"
+#include "KMatrixExtract/RiemannSheetAnalyzer.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/TMatrixBase.hh"

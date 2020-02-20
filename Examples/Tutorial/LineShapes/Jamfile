@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp PiPiSWaveApp PhpFactorApp LUTPlotApp
+install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp PiPiSWaveApp PhpFactorApp LUTPlotApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -53,27 +53,6 @@ exe TwoPolesApp : TwoPolesApp.cc LineShapes
 	  : ;
 
 exe PiPiSWaveApp : PiPiSWaveApp.cc LineShapes 
-    	  $(TOP)/PwaDynamics//PwaDynamics
-	  $(TOP)/Particle//Particle
-	  $(TOP)/ConfigParser//ConfigParser
-	  $(TOP)/PwaUtils//PwaUtils
-	  $(TOP)/FitParams//FitParams
-	  $(TOP)/qft++Extension//qft++Extension
-          $(TOP)/ErrLogger//ErrLogger
-	  $(TOP)/qft++//qft++
-	  : ;
-
-exe TMatrixGeneralApp : TMatrixGeneralApp.cc LineShapes     	  $(TOP)/PwaDynamics//PwaDynamics
-	  $(TOP)/Particle//Particle
-	  $(TOP)/ConfigParser//ConfigParser
-	  $(TOP)/PwaUtils//PwaUtils
-	  $(TOP)/FitParams//FitParams
-	  $(TOP)/qft++Extension//qft++Extension
-          $(TOP)/ErrLogger//ErrLogger
-	  $(TOP)/qft++//qft++
-	  : ;
-
-exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc LineShapes 
     	  $(TOP)/PwaDynamics//PwaDynamics
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser

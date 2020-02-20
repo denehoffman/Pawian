@@ -40,12 +40,16 @@ class TH1F;
 class TH2F;
 class KMatrixParser;
 class AbsPhaseSpace;
+class TMatrixDynamics;
 class TMatrixRel;
 class KMatrixRel;
 class KPole;
 class ParticleTable;
+class Particle;
 class KMatrixParser;
 class AbsPawianParameters;
+class pipiScatteringParser;
+class PiPiScatteringChannelEnv;
 
 class TMatrixGeneral {
 
@@ -54,30 +58,47 @@ public:
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixGeneral(std::string pathToConfigParser, std::string pathToFitParams, int numStepsForSheetScan, std::vector<double> energyPlaneBorders);
+  TMatrixGeneral(pipiScatteringParser* theParser);
 
 
   /** Destructor */
   virtual ~TMatrixGeneral();
 
+  virtual void fillParams();
+  virtual void process();
+  virtual void initHistos();
+
   // Getters:
  
 protected:
-
-
-private:
-  const int _noOfSteps;
-  double _stepSize;
+  pipiScatteringParser* _pipiScatteringParser;
+  std::shared_ptr<PiPiScatteringChannelEnv> _pipiScatteringChannelEnv; 
+  std::string _projectionParticleNames;
+  std::string _motherParticleName;
+  int _decProjectionIndex;
+  unsigned int _noOfSteps;
+  double _stepSize; 
   double _massMin;
   double _massMax;
-  std::shared_ptr<KMatrixParser> _kMatrixParser;
   std::vector< std::string> _gFactorNames;
   std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
+  std::shared_ptr<AbsPhaseSpace> _phpVecCurrent;
+  ParticleTable* _particleTable;
+  std::shared_ptr<AbsPawianParameters> _params;
+  std::string _pathToFitParams;
+  int _orbitalL;
+  std::string _pathToKMatrixParser;
+  std::shared_ptr<KMatrixParser> _kMatrixParser;
+  std::shared_ptr<TMatrixDynamics> _tMatrDyn;
   std::shared_ptr<TMatrixRel> _tMatr;
   std::shared_ptr<KMatrixRel> _kMatr;
-  ParticleTable* _particleTable;
-  
+  std::vector<double> _energyPlaneBorders;
+  int _numStepsForSheetScan;
+  Particle* _motherParticle;
+  std::vector<Particle*> _fsParticles;
   TFile* _theTFile;
+
+private:
   std::vector<TH1F*> _AmpRealH1Vec;
   std::vector<TH1F*> _AmpImagH1Vec;
   std::vector<TH1F*> _ImagT11m1H1Vec;
@@ -93,10 +114,6 @@ private:
   std::vector<TH1F*> _delta1iVec;
   std::vector<TH1F*> _SqrS1iH1Vec;
   std::vector<TH1F*> _speedPlotH1Vec;
-
-  std::shared_ptr<AbsPawianParameters> _params;
-  std::string _pathToFitParams;
-  int _orbitalL;
 
   void init();
 };

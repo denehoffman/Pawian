@@ -30,7 +30,8 @@
 
 #include <memory>
 
-#include "pipiScatteringUtils/FVectorIntensityGeneral.hh"
+#include "KMatrixExtract/FVectorIntensityGeneral.hh"
+#include "KMatrixExtract/TMatrixGeneral.hh"
 #include "ConfigParser/globalParser.hh"
 #include "ConfigParser/pipiScatteringParser.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -63,14 +64,24 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
-  if (productionFormalism!="PVecIntensity"){
+  if (productionFormalism!="PVecIntensity" && productionFormalism!="Phase" && productionFormalism!="Elasticity" 
+      && productionFormalism!="ArgandUnits"){
     Alert << "production formalism " << productionFormalism << " is not allowed!!!" << endmsg;
-    InfoMsg << "only PVecIntensity is required!!!!" << endmsg;
+    InfoMsg << "It is required to use PVecIntensity, Phase, Elasticity or ArgandUnits !!!!" << endmsg;
     return 0;    
   }
 
-  FVectorIntensityGeneral fVectorIntensityGeneral(theParser); 
-  fVectorIntensityGeneral.process();
+  std::shared_ptr<TMatrixGeneral> tMatrixGeneral;
+  if (productionFormalism =="PVecIntensity"){
+    tMatrixGeneral = std::shared_ptr<TMatrixGeneral> (new FVectorIntensityGeneral(theParser));
+  }
+  else{
+    tMatrixGeneral = std::shared_ptr<TMatrixGeneral> (new TMatrixGeneral(theParser));
+  }
+
+  tMatrixGeneral->initHistos();
+  tMatrixGeneral->fillParams();
+  tMatrixGeneral->process();
   return 0;
 }
 

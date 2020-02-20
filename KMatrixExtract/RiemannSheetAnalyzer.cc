@@ -22,7 +22,7 @@
 //************************************************************************//
 
 
-#include "Examples/Tutorial/LineShapes/RiemannSheetAnalyzer.hh"
+#include "KMatrixExtract/RiemannSheetAnalyzer.hh"
 #include "TH2F.h"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaDynamics/KMatrixBase.hh"

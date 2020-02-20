@@ -24,7 +24,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "pipiScatteringUtils/FVectorIntensityGeneral.hh"
+#include "KMatrixExtract/FVectorIntensityGeneral.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/TMatrixBase.hh"
@@ -42,6 +42,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "ConfigParser/KMatrixParser.hh"
 #include "ConfigParser/pipiScatteringParser.hh"
+#include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/PdtParser.hh"
@@ -65,19 +66,13 @@
 #include "ErrLogger/ErrLogger.hh"
 
 FVectorIntensityGeneral::FVectorIntensityGeneral(pipiScatteringParser* theParser) :
-  _pipiScatteringParser(theParser)
-  ,_pipiScatteringChannelEnv(new PiPiScatteringChannelEnv(theParser))
-  ,_projectionParticleNames("")
-  ,_motherParticleName("")
+  TMatrixGeneral(theParser)
   ,_pVecName("")
-  ,_decProjectionIndex(0)
-  ,_noOfSteps(1000)
-  ,_massMin(1.)
-  ,_massMax(2.)
-  ,_stepSize(0.001)
-  ,_pathToFitParams("") 
 { 
   init();
+}
+
+void FVectorIntensityGeneral::initHistos(){
   std::string rootFileName="./FVectorIntensityGeneral.root";
   _theTFile=new TFile(rootFileName.c_str(),"recreate");
 
@@ -114,70 +109,33 @@ FVectorIntensityGeneral::~FVectorIntensityGeneral() {
   for(unsigned int i=0; i < _gFactorNames.size(); ++i){  
     _ArgandPlotsTGraph.at(i)->Write();
   }
-  _theTFile->Write();
-  _theTFile->Close();
+  // _theTFile->Write();
+  //  _theTFile->Close();
 }
 
 
 void FVectorIntensityGeneral::init() {
-  GlobalEnv::instance()->setup();
-  _particleTable=GlobalEnv::instance()->particleTable();
-  GlobalEnv::instance()->AddEnv(_pipiScatteringChannelEnv, AbsChannelEnv::CHANNEL_PIPISCATTERING);
-  _pipiScatteringChannelEnv->setupChannel(0);
-
-  std::string pathToKMatrixParser=_pipiScatteringChannelEnv->pathToKMatrixParser();
-  InfoMsg << "pathToKMatrixParser: " << pathToKMatrixParser << endmsg;
-
-  _pathToFitParams = _pipiScatteringParser->fitParamFile();
-  InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;
-
-  std::vector<Particle*> fsParticles = _pipiScatteringChannelEnv->finalStateParticles();
-  std::vector<Particle*>::iterator it;
-  for(it=fsParticles.begin(); it!=fsParticles.end(); ++it){
-    InfoMsg << "fsParticle: " << (*it)->name() << endmsg;
-  }
-
-  std::shared_ptr<AbsDecayList> absDecList=_pipiScatteringChannelEnv->absDecayList();
-  std::vector<std::shared_ptr<AbsDecay> > theDecs=absDecList->getList();
-  if(theDecs.size()!=1){
-    Alert << "the decay list contains " << theDecs.size() << " decays" << endmsg;
-    Alert << "exactly one decay is required!!! " << endmsg;
-    exit(1);    
-  }
-
-  std::shared_ptr<AbsDecay> theDec=theDecs.at(0);
-  Particle* theMotherParticle=theDec->motherPart();
-  _motherParticleName=theMotherParticle->name();
-  InfoMsg << "theMotherParticle: " << _motherParticleName << endmsg;
-
-  _projectionParticleNames= theDec->projectionParticleNames();   
-  InfoMsg << "projectionParticleNames: " << _projectionParticleNames << endmsg;
 
   std::string baseNameFVector=_pipiScatteringParser->baseNameFVector();
   InfoMsg << "baseNameFVector: " << baseNameFVector << endmsg;
 
  
   ChannelID channelID(0);
-  std::string decayDynamics=_pipiScatteringParser->decayDynamics().at(0);
-  InfoMsg << "decayDynamics: " << decayDynamics << endmsg; 
-
   _pVecName=baseNameFVector+"b"+_motherParticleName;
-  
+
    std::string dummyName="dummy"; 
   _fVectorIntensityDynamics = 
-    std::shared_ptr<FVectorIntensityDynamics>(new FVectorIntensityDynamics(dummyName, fsParticles, theMotherParticle, pathToKMatrixParser, baseNameFVector, channelID, _projectionParticleNames));
-  _orbitalL= _fVectorIntensityDynamics->orbitalL();
+    std::shared_ptr<FVectorIntensityDynamics>(new FVectorIntensityDynamics(dummyName, _fsParticles, _motherParticle, _pathToKMatrixParser, baseNameFVector, channelID, _projectionParticleNames));
   
-  _phpVecs = _fVectorIntensityDynamics->getKMatix()->phaseSpaceVec();
   _decProjectionIndex = _fVectorIntensityDynamics->decProjectionIndex();
   InfoMsg << "_decProjectionIndex: " << _decProjectionIndex << endmsg;
 
   _phpVecCurrent = _phpVecs.at(_decProjectionIndex);
-  _massMin = _phpVecCurrent->thresholdMass()+0.001;
-  _stepSize=(_massMax-_massMin)/_noOfSteps;
 
-  _gFactorNames= _fVectorIntensityDynamics->gFactorNames();
+  _fVector=_fVectorIntensityDynamics->getFVector();  
+}
 
+void FVectorIntensityGeneral::fillParams(){
   std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
   _fVectorIntensityDynamics->fillDefaultParams(params);
 
@@ -199,8 +157,6 @@ void FVectorIntensityGeneral::init() {
   InfoMsg << "The F-Vector input parameter are: " << endmsg;
   _params->print(std::cout);
   if(_pathToFitParams != "") _fVectorIntensityDynamics->updateFitParams(_params);
-
-  _fVector=_fVectorIntensityDynamics->getFVector();  
 }
 
 void FVectorIntensityGeneral::process(){

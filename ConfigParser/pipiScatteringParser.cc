@@ -39,12 +39,20 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ,_pathToKMatrixCompareFile("")
   ,_baseNameFVector("")
   ,_baseNameFVectorCompare("")
+  ,_minImagMass(-0.4)
+  ,_maxImagMass(-0.01)
+  ,_minRealMass(0.5)
+  ,_maxRealMass(2.0)
 {
   po::options_description common("Common Options");
   common.add_options()
     ("pathToKMatrixCompareFile", po::value<std::string>(&_pathToKMatrixCompareFile)->default_value(_pathToKMatrixCompareFile),"path to another KMatrix-cfg file for comparison purposes")
     ("baseNameFVector",po::value<std::string>(&_baseNameFVector)->default_value(_baseNameFVector),"base name of F-vector for comparison")
     ("baseNameFVectorCompare",po::value<std::string>(&_baseNameFVectorCompare)->default_value(_baseNameFVectorCompare),"base name of second F-vector for comparison")
+  ("minImagMass",po::value<double>(&_minImagMass)->default_value(_minImagMass),"minimal imaginary mass for Rieman scan; must be nagative")
+  ("maxImagMass",po::value<double>(&_maxImagMass)->default_value(_maxImagMass),"maximal imaginary mass for Rieman scan; must be nagative")
+  ("minRealMass",po::value<double>(&_minRealMass)->default_value(_minRealMass),"minimal real mass for Rieman scan")
+  ("maxImagMass",po::value<double>(&_maxImagMass)->default_value(_maxImagMass),"maximal real mass for Rieman scan")
     ;
   
   _common->add(common);
@@ -60,11 +68,16 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
 bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
-
+  if (_minImagMass>0) _minImagMass = -_minImagMass;
+  if (_maxImagMass>0) _maxImagMass = -_maxImagMass;
+  
   std::cout << "pathToKMatrixCompareFile = " << _pathToKMatrixCompareFile << std::endl;
   std::cout << "baseNameFVector = " << _baseNameFVector << std::endl;
   std::cout << "baseNameFVectorCompare = " << _baseNameFVectorCompare << std::endl;
-
+  std::cout << "minImagMass = " << _minImagMass << std::endl;
+  std::cout << "maxImagMass = " << _maxImagMass << std::endl;
+  std::cout << "minRealMass = " << _minRealMass << std::endl;
+  std::cout << "maxRealMass = " << _maxRealMass << std::endl;
   std::cout << std::endl;
 
   return true;

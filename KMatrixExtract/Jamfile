@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : TMatrixFitApp  TMatrixErrorExtrApp TMatrixResidueExtrApp ArgandModuloConverterApp
+install install-bin : TMatrixFitApp  TMatrixErrorExtrApp TMatrixResidueExtrApp ArgandModuloConverterApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -17,12 +17,13 @@ project :
         ;
 
 lib KMatrixExtract : 
-        [ glob *.cc : *App.cc ]  
+        [ glob *.cc : *App.cc ]
 	: <use>$(TOP)//Minuit2  
 	: 
 	: <library>$(TOP)//Minuit2  ;
 
-exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract 
+exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract
+        $(TOP)/pipiScatteringUtils//pipiScatteringUtils 
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
@@ -34,6 +35,7 @@ exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract
 	: ;
 
 exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract
+        $(TOP)/pipiScatteringUtils//pipiScatteringUtils
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
@@ -45,6 +47,7 @@ exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract
 	: ;
 
 exe TMatrixResidueExtrApp : TMatrixResidueExtrApp.cc KMatrixExtract
+        $(TOP)/pipiScatteringUtils//pipiScatteringUtils
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
@@ -56,6 +59,7 @@ exe TMatrixResidueExtrApp : TMatrixResidueExtrApp.cc KMatrixExtract
 	: ;
 
 exe ArgandModuloConverterApp : ArgandModuloConverterApp.cc KMatrixExtract
+        $(TOP)/pipiScatteringUtils//pipiScatteringUtils
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
@@ -65,3 +69,32 @@ exe ArgandModuloConverterApp : ArgandModuloConverterApp.cc KMatrixExtract
         $(TOP)/qft++//qft++
         $(TOP)/ErrLogger//ErrLogger
 	: ;
+
+exe TMatrixGeneralApp : TMatrixGeneralApp.cc KMatrixExtract
+          $(TOP)/pipiScatteringUtils//pipiScatteringUtils
+          $(TOP)/PwaDynamics//PwaDynamics
+          $(TOP)/Particle//Particle
+          $(TOP)/ConfigParser//ConfigParser
+          $(TOP)/PwaUtils//PwaUtils
+          $(TOP)/FitParams//FitParams
+          $(TOP)/Event//Event
+          $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+          $(TOP)/qft++//qft++
+          $(TOP)/Utils//Utils
+          : ;
+
+
+exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc KMatrixExtract
+          $(TOP)/pipiScatteringUtils//pipiScatteringUtils
+          $(TOP)/PwaDynamics//PwaDynamics
+          $(TOP)/Particle//Particle
+          $(TOP)/ConfigParser//ConfigParser
+          $(TOP)/PwaUtils//PwaUtils
+          $(TOP)/FitParams//FitParams
+          $(TOP)/Event//Event
+          $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+          $(TOP)/qft++//qft++
+          $(TOP)/Utils//Utils
+          : ;
