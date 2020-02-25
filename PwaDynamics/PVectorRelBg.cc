@@ -53,20 +53,23 @@ PVectorRelBg::~PVectorRelBg(){
 
 void PVectorRelBg::evalMatrix(const double mass, Spin OrbMom){
 
-  Matrix< complex<double> > thePVector(NumRows(), 1);
   vector<std::shared_ptr<PPole> >::iterator it;
   for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
     (*it)->evalMatrix(mass, OrbMom);
-    thePVector += *(*it);
   }
 
-  for (int i=0; i<thePVector.NumRows(); ++i){
+  for (int i=0; i<NumRows(); ++i){
     complex<double> currentBg(0.,0.);
     for(unsigned int bgOrder=0; bgOrder<=_orderBgP; ++bgOrder) currentBg+=_bgPTerms.at(bgOrder).at(i)*pow(mass*mass,bgOrder);
-    this->operator()(i,0)=thePVector(i,0)+currentBg;  
+
+    complex<double> currentP(0.,0.);
+    for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
+      (*it)->evalMatrix(mass, OrbMom);
+      std::vector< complex<double> > theBarrierFactors=(*it)->barrierFactors();
+      currentP += ((*(*it))(i,0)+currentBg)*theBarrierFactors.at(i);
+    }
+    this->operator()(i,0)=currentP;
   }
-
-
 
 }
 
