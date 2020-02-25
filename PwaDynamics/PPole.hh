@@ -71,8 +71,14 @@ public:
 
   void updateBeta (complex<double> beta) {_beta=beta;}
 
+  virtual std::vector< complex<double> > barrierFactors() {return _barrierFactor;}
   
 protected:
   complex<double> _beta;
+
+  int _orbMom;
+  bool _truncatedBarrier;
+  std::vector< complex<double> > _breakUpM0;
+  std::vector< complex<double> > _barrierFactor;
 };
 //_____________________________________________________________________________

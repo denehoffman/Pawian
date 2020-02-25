@@ -27,14 +27,11 @@
 PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier):
   PPole(beta, g_i, mass_0)
   , _phpVecs(phpVecs)
-  , _orbMom(orbMom)
-  ,_truncatedBarrier(truncatedBarrier)
 {
+  _orbMom=orbMom;
+  _truncatedBarrier=truncatedBarrier;
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
-  // for(unsigned int i=0; i<_phpVecs.size(); ++i){
-  //   _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(_poleMass);
-  // }
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
     _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
   }  
@@ -54,26 +51,15 @@ void PPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
     else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
   							      _breakUpM0.at(i), BarrierFactor::qRDefault);
 
-    //    if(OrbMom==0) _barrierFactor.at(i) = 1.; 
-  }
+   }
 
-  //   if(_truncatedBarrier){
-  //     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  // 								      _breakUpM0.at(i), BarrierFactor::qRDefault);
-  //   }
-  //   else{
-  //     _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMomDefaultAS(mass), 
-  // 							       _breakUpM0.at(i), BarrierFactor::qRDefault);
-  //   }
-  // }
-
-  double denom=_poleMass*_poleMass-mass*mass;
+   double denom=_poleMass*_poleMass-mass*mass;
   if(fabs(denom)<1e-10){
     if(denom<0.) denom=-1e-10; 
     else denom=1e-10;
   }
   for (int i=0; i< int(_g_i.size()); ++i){
-    this->operator()(i,0)= (_beta*_g_i.at(i)*_barrierFactor.at(i))/denom;
+    this->operator()(i,0)= (_beta*_g_i.at(i))/denom;
   }
 }
 

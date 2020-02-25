@@ -27,7 +27,14 @@
 PPole::PPole(complex<double>& beta, vector<double>& g_i, double mass_0):
   KPole(g_i, mass_0, g_i.size(), 1)
   ,_beta(beta)
+  , _orbMom(0)
+  ,_truncatedBarrier(false)
 {
+  _breakUpM0.resize(_g_i.size());
+  _barrierFactor.resize(_g_i.size());
+  for (int i=0; i< int(_g_i.size()); ++i){
+    _barrierFactor.at(i) = complex<double>(1.,0.);
+  }
 }
 
 PPole::~PPole(){
