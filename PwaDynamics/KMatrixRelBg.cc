@@ -66,21 +66,20 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass, Spin OrbMom){
     s_hat=mass*mass/_snormAdler-1.;
   }
 
-  Matrix< complex<double> > theKMatrix(NumRows(), NumRows());
   vector<std::shared_ptr<KPole> >::iterator it;
-  for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-    (*it)->evalMatrix(mass, OrbMom);
-    theKMatrix += *(*it);
-  }
-
   for (int i=0; i<NumRows(); ++i){
     for (int j=i; j<NumRows(); ++j){
       complex<double> currentBg(0.,0.);
       for (unsigned int k=0; k<=_orderBg; ++k){
 	currentBg+=complex<double>(_bgTerms.at(k).at(i).at(j)*pow(s_hat,k));
       }
-      this->operator()(i,j)=theKMatrix(i,j)+currentBg;
-      this->operator()(i,j)*=adlerTerm;
+      complex<double> currentK(0.,0.);
+      for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
+	(*it)->evalMatrix(mass, OrbMom);
+	std::vector< complex<double> > theBarrierFactors=(*it)->barrierFactors();
+	currentK += ((*(*it))(i,j)+currentBg)*theBarrierFactors.at(i)*theBarrierFactors.at(j);
+      }
+      this->operator()(i,j)=adlerTerm*currentK;
       this->operator()(j,i)=this->operator()(i,j);
     }
   }

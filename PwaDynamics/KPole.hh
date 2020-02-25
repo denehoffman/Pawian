@@ -75,11 +75,18 @@ public:
   //  virtual void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
   virtual void updatePoleMass (double newPoleMass);
   virtual void updategFactors (vector<double>& newg_i) {_g_i=newg_i;}
+
+  virtual std::vector< complex<double> > barrierFactors() {return _barrierFactor;}
   
 protected:
   vector<double> _g_i;
   double _poleMass;
   complex<double> _poleMassCompl;
+
+  int _orbMom;
+  std::vector< complex<double> > _breakUpM0;
+  std::vector< complex<double> > _barrierFactor;
+  bool _truncatedBarrier;
 
 private:
 

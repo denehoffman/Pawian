@@ -31,7 +31,14 @@ KPole::KPole(vector<double>& g_i, double mass_0):
   , _g_i(g_i)
   , _poleMass(mass_0)
   ,_poleMassCompl(complex<double>(mass_0, 0.))
+  , _orbMom(0)
+  ,_truncatedBarrier(false)
 {
+  _breakUpM0.resize(_g_i.size());
+  _barrierFactor.resize(_g_i.size());
+  for (int i=0; i< int(_g_i.size()); ++i){
+    _barrierFactor.at(i) = complex<double>(1.,0.);
+  }
 }
 
 KPole::KPole(vector<double>& g_i, double mass_0, int numRow, int numCol):
@@ -39,7 +46,14 @@ KPole::KPole(vector<double>& g_i, double mass_0, int numRow, int numCol):
   , _g_i(g_i)
   , _poleMass(mass_0)
   ,_poleMassCompl(complex<double>(mass_0, 0.))
+  , _orbMom(0)
+  ,_truncatedBarrier(false)
 {
+  _breakUpM0.resize(_g_i.size());
+  _barrierFactor.resize(_g_i.size());
+  for (int i=0; i< int(_g_i.size()); ++i){
+    _barrierFactor.at(i) = complex<double>(1.,0.);
+    }
 }
 
 KPole::~KPole(){

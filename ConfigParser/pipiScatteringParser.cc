@@ -52,7 +52,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ("minImagMass",po::value<double>(&_minImagMass)->default_value(_minImagMass),"minimal imaginary mass for Rieman scan; must be nagative")
   ("maxImagMass",po::value<double>(&_maxImagMass)->default_value(_maxImagMass),"maximal imaginary mass for Rieman scan; must be nagative")
   ("minRealMass",po::value<double>(&_minRealMass)->default_value(_minRealMass),"minimal real mass for Rieman scan")
-  ("maxImagMass",po::value<double>(&_maxImagMass)->default_value(_maxImagMass),"maximal real mass for Rieman scan")
+  ("maxRealMass",po::value<double>(&_maxRealMass)->default_value(_maxRealMass),"maximal real mass for Rieman scan")
     ;
   
   _common->add(common);

@@ -72,10 +72,6 @@ public:
   
 protected:
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  int _orbMom;
-  std::vector< complex<double> > _breakUpM0;
-  std::vector< complex<double> > _barrierFactor;
-  bool _truncatedBarrier;
 
 private:
 };

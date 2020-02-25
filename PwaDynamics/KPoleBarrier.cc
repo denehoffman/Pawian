@@ -29,9 +29,9 @@
 KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier):
   KPole(g_i, mass_0)
   , _phpVecs(phpVecs)
-  , _orbMom(orbMom)
-  ,_truncatedBarrier(truncatedBarrier)
 {
+  _orbMom=orbMom;
+  _truncatedBarrier=truncatedBarrier;
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
@@ -77,7 +77,7 @@ void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
 
   for (int i=0; i< int(_g_i.size()); ++i){
     for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i.at(i)*_barrierFactor.at(i)*_g_i.at(j)*_barrierFactor.at(j))/denom;
+      this->operator()(i,j)= ( _g_i.at(i)*_g_i.at(j))/denom;
      }
    }
 }
