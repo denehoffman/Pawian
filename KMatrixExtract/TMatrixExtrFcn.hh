@@ -33,8 +33,8 @@
 #include <memory>
 #include "Minuit2/FCNBase.h"
 
-class TMatrixExtrFit;
 class TMatrixErrorExtr;
+class TMatrixExtrBase;
 
 namespace ROOT {
 
@@ -45,9 +45,8 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
-  TMatrixExtrFcn(std::shared_ptr<TMatrixExtrFit> tMatFit);
-  TMatrixExtrFcn(std::shared_ptr<TMatrixErrorExtr> tMatErrorExtr);
+  ///Constructor
+  TMatrixExtrFcn(std::shared_ptr<TMatrixExtrBase> tMatExtrBase); 
 
 
   /** Destructor */
@@ -63,8 +62,7 @@ protected:
 
 
 private:
-  std::shared_ptr<TMatrixExtrFit> _tMatFit;
-  std::shared_ptr<TMatrixErrorExtr> _tMatErrorExtr;
+  std::shared_ptr<TMatrixExtrBase> _tMatExtrBase;
 };
 
   }  // namespace Minuit2

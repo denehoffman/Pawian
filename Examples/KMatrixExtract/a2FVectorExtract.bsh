@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$TOP_DIR/bin/TMatrixGeneralApp -c scatteringa2FVectorIntensityPiEta.cfg --paramFile ./benchmarkResult.dat --serializationFile ./serializedOutput.dat  > a2FVectorExtract.log &

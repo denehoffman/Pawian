@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$TOP_DIR/bin/TMatrixErrorExtrApp -c scatteringa2PhasePiEta.cfg --paramFile ./benchmarkResult.dat --serializationFile ./serializedOutput.dat -- startImagMass 0.13  > a21320PoleExtract.log &

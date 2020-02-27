@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$TOP_DIR/bin/TMatrixGeneralApp -c scatteringa2PhasePiEta.cfg --paramFile ./benchmarkResult.dat --minRealMass 0.8 --maxRealMass 2.0 --minImagMass 0.4 --maxImagMass 0.02 !>& a2TMatrixScan.log &

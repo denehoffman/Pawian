@@ -37,6 +37,7 @@
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
 
 #include "ErrLogger/ErrLogger.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
 
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
@@ -50,118 +51,47 @@ int main(int __argc,char *__argv[]){
   // ErrLogger::instance().setThreshold(logging::log_level::DEBUG);
   ErrLogger::instance().setThreshold(logging::log_level::INFO);
 
+
   if( __argc>1 && ( strcmp( __argv[1], "-h" ) == 0 ||
-		strcmp( __argv[1], "--help" ) == 0 ) ){
-	InfoMsg << "USAGE:" << endmsg;
-	InfoMsg << "--path: path to kmatrix config file" << endmsg;
-	InfoMsg << "--fitparams: path to fit parameter file" << endmsg;
-	InfoMsg << "--sheet: sheet on which the minimization shoud be done (p corresponsds to + and n to - )" << endmsg;
-	InfoMsg << "--serializationFile: path to serialization file" << endmsg;
-	InfoMsg << "--maxImagMass: max imaginary part of the mass" << endmsg;
-	InfoMsg << "--maxRealMass: max real part of the mass" << endmsg;
-	InfoMsg << "--minImagMass: min imaginary part of the mass" << endmsg;
-	InfoMsg << "--minRealMass: min reak part of the mass" << endmsg;
-	InfoMsg << "--startRealMass: start real mass value for the minimization" << endmsg;
-	InfoMsg << "--startImagMass: start imag mass value for the minimization" << endmsg;
-	return 0;
+		    strcmp( __argv[1], "--help" ) == 0 ) ){
+    InfoMsg << "USAGE:" << endmsg;
+    InfoMsg << "-c: path to config file" << endmsg;
+    InfoMsg << "additional options are also possible" << endmsg;
+    return 0;
   }
 
-  std::string pathToConfigParser;
-  std::string pathToFitParams="";
-  std::string sheet="";
-  std::string pathToSerialzationFile="";
+  pipiScatteringParser* theParser = new pipiScatteringParser(__argc, __argv);
+  InfoMsg << "pathToKMatrixCompareFile: " << theParser->pathToKMatrixCompareFile() << endmsg;
 
-  std::vector<double> energyPlaneBorders;
-  energyPlaneBorders.resize(4);
-  energyPlaneBorders[0] = 0;    // Re min
-  energyPlaneBorders[1] = 0.2; // Im min
-  energyPlaneBorders[2] = 0;    // Re max
-  energyPlaneBorders[3] = 0.0001;    // Im max
+  std::string productionFormalism=theParser->productionFormalism();
+  const std::vector<std::string> decayDynamicsVec=theParser->decayDynamics();
+  InfoMsg << "decayDynamicsVec.size(): " << decayDynamicsVec.size() << endmsg;
 
-  std::vector<double> energyPlaneStartValue;
-  energyPlaneStartValue.resize(2);
-  energyPlaneStartValue[0]=0.;
-  energyPlaneStartValue[1]=-0.1;  
-
-  for(;optind < (__argc-1); optind++){
-
-	std::string ws = __argv[optind];
-
-	if(ws[0]!='-' && ws[1]!='-'){
-	  continue;
-	}     
-	else if (ws == "--path"){
-	  pathToConfigParser = __argv[optind+1];
-	}
-	else if (ws == "--fitparams"){
-	  pathToFitParams = __argv[optind+1];
-	}
-	else if (ws == "--sheet"){
-	  sheet = __argv[optind+1];
-	}
-	else if (ws == "--serializationFile"){
-	  pathToSerialzationFile = __argv[optind+1];
-	}
-	else if(ws == "--minImagMass"){
-	  std::istringstream stream(__argv[optind+1]);
-	  stream >> energyPlaneBorders[1];
-	}
-	else if(ws == "--maxImagMass"){
-	  std::istringstream stream(__argv[optind+1]);
-	  stream >> energyPlaneBorders[3];
-	}
-	else if(ws == "--minRealMass"){
-	  std::istringstream stream(__argv[optind+1]);
-	  stream >> energyPlaneBorders[0];
-	}
-	else if(ws == "--maxRealMass"){
-	  std::istringstream stream(__argv[optind+1]);
-	  stream >> energyPlaneBorders[2];
-	}
-	else if(ws == "--startRealMass"){
-	  std::istringstream stream(__argv[optind+1]);
-	  stream >> energyPlaneStartValue[0];
-	}
-	else if(ws == "--startImagMass"){
-	  std::istringstream stream(__argv[optind+1]);
-	  stream >> energyPlaneStartValue[1];
-	}
-	else{
-	  Alert << "Unknown switch: " << __argv[optind] << endmsg;
-	  return 0;
-	}
+  if(decayDynamicsVec.size() != 1){
+    Alert << "the number of decay dynamics is " <<  decayDynamicsVec.size() << endmsg;
+    Alert << "the number is required to be exatly 1!!! " << endmsg;
+    return 0;
   }
 
-  std::complex<double> energyMin(energyPlaneBorders[0], -energyPlaneBorders[1]);
-  std::complex<double> energyMax(energyPlaneBorders[2], -energyPlaneBorders[3]);
-  std::complex<double> energyStart(energyPlaneStartValue[0], -energyPlaneStartValue[1]);
+  if (productionFormalism!="PVecIntensity" && productionFormalism!="Phase" && productionFormalism!="Elasticity" 
+      && productionFormalism!="ArgandUnits"){
+    Alert << "production formalism " << productionFormalism << " is not allowed!!!" << endmsg;
+    InfoMsg << "It is required to use PVecIntensity, Phase, Elasticity or ArgandUnits !!!!" << endmsg;
+    return 0;    
+  }  
 
-  InfoMsg << "K-matrix config path: " << pathToConfigParser << endmsg;
-  InfoMsg << "path to fitparams: " << pathToFitParams << endmsg;
-  InfoMsg << "path to serializationFile: " << pathToSerialzationFile << endmsg;
-  InfoMsg << "relevant sheet: " << sheet  << endmsg;
-  InfoMsg << "energyMin: " << energyMin << endmsg;
-  InfoMsg << "energyMax: " << energyMax << endmsg;
-  InfoMsg << "energyStart: " << energyStart << endmsg;
-  if(energyStart.real() < energyMin.real() || energyStart.real() > energyMax.real()){
-	InfoMsg << "energyStart.real() is not inside the energy plane!!!" << endmsg;
-	double newVal= (energyMax.real()+energyMin.real())/2.;
-	energyStart= std::complex<double>(newVal, energyStart.imag()); 
-	InfoMsg << "switched to energyStart: " << energyStart << endmsg;
+  std::shared_ptr<TMatrixErrorExtr> tMatErrExtract;
+  if (productionFormalism =="PVecIntensity"){
+    return 0;
+  }
+  else{
+    tMatErrExtract = std::shared_ptr<TMatrixErrorExtr> (new TMatrixErrorExtr(theParser));
   }
 
-  if(energyStart.imag() < energyMin.imag() || energyStart.imag() > energyMax.imag()){
-	InfoMsg << "energyStart.imag() is not inside the energy plane!!!" << endmsg;
-	double newVal= (energyMax.imag()+energyMin.imag())/2.;
-	energyStart= std::complex<double>(energyStart.real(), newVal); 
-	InfoMsg << "switched to energyStart: " << energyStart << endmsg;
-  }
-
-  std::shared_ptr<TMatrixErrorExtr> tMatFit(new TMatrixErrorExtr(pathToConfigParser, pathToFitParams, sheet, pathToSerialzationFile, energyMin, energyMax, energyStart));
-  tMatFit->Calculation();
-  tMatFit->printErrors();
-  std::complex<double> error = tMatFit->GetError();
-  std::complex<double> result = tMatFit->GetResult();
+  tMatErrExtract->Calculation();
+  tMatErrExtract->printErrors();
+  std::complex<double> error = tMatErrExtract->GetError();
+  std::complex<double> result = tMatErrExtract->GetResult();
   InfoMsg << "      " << endmsg;
   InfoMsg << "      " << endmsg;
   InfoMsg << "      " << endmsg;

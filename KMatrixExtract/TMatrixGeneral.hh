@@ -57,7 +57,8 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
+  ///Constructor
+  TMatrixGeneral(); 
   TMatrixGeneral(pipiScatteringParser* theParser);
 
 
@@ -67,6 +68,7 @@ public:
   virtual void fillParams();
   virtual void process();
   virtual void initHistos();
+  std::vector<std::shared_ptr<AbsPhaseSpace> > getPhps() {return _phpVecs;}
 
   // Getters:
  
@@ -81,6 +83,7 @@ protected:
   double _massMin;
   double _massMax;
   std::vector< std::string> _gFactorNames;
+  std::vector<std::string> _kMatrixParamNames;
   std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
   std::shared_ptr<AbsPhaseSpace> _phpVecCurrent;
   ParticleTable* _particleTable;
@@ -97,6 +100,7 @@ protected:
   Particle* _motherParticle;
   std::vector<Particle*> _fsParticles;
   TFile* _theTFile;
+  bool _histosInit;
 
 private:
   std::vector<TH1F*> _AmpRealH1Vec;

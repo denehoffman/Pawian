@@ -66,7 +66,7 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
 			    numSteps, massMin.imag(), massMax.imag());
 
       tMatrix->SetBumImPartSigns(signs);
-      
+
       for(int i=1;i<=scan->GetNbinsX(); i++){
 	 for(int j=1;j<=scan->GetNbinsY(); j++){
 	    tMatrix->evalMatrix(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), 

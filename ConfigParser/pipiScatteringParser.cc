@@ -43,6 +43,9 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ,_maxImagMass(-0.01)
   ,_minRealMass(0.5)
   ,_maxRealMass(2.0)
+  ,_startRealMass(1.2)
+  ,_startImagMass(0.15)
+  ,_sheet("nn")
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -53,6 +56,9 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ("maxImagMass",po::value<double>(&_maxImagMass)->default_value(_maxImagMass),"maximal imaginary mass for Rieman scan; must be nagative")
   ("minRealMass",po::value<double>(&_minRealMass)->default_value(_minRealMass),"minimal real mass for Rieman scan")
   ("maxRealMass",po::value<double>(&_maxRealMass)->default_value(_maxRealMass),"maximal real mass for Rieman scan")
+   ("startRealMass",po::value<double>(&_startRealMass)->default_value(_startRealMass),"startimg value of real mass for Rieman scan")
+   ("startImagMass",po::value<double>(&_startImagMass)->default_value(_startImagMass),"starting value of imaginary mass for Rieman scan")
+    ("sheet", po::value<std::string>(&_sheet)->default_value(_sheet),"specification of the Rieman sheet for the scan")
     ;
   
   _common->add(common);
@@ -78,6 +84,9 @@ bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
   std::cout << "maxImagMass = " << _maxImagMass << std::endl;
   std::cout << "minRealMass = " << _minRealMass << std::endl;
   std::cout << "maxRealMass = " << _maxRealMass << std::endl;
+  std::cout << "startRealMass = " << _startRealMass << std::endl;
+  std::cout << "startImagMass = " << _startImagMass << std::endl;
+  std::cout << "sheet = " << _sheet << std::endl;
   std::cout << std::endl;
 
   return true;

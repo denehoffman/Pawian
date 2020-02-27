@@ -77,6 +77,7 @@ TMatrixGeneral::TMatrixGeneral(pipiScatteringParser* theParser) :
   ,_pathToKMatrixParser("") 
   ,_numStepsForSheetScan(500)
   ,_theTFile(0)
+  ,_histosInit(false)
 {
   _energyPlaneBorders.resize(4);
   init();
@@ -84,7 +85,11 @@ TMatrixGeneral::TMatrixGeneral(pipiScatteringParser* theParser) :
   _stepSize=(_massMax-_massMin)/_noOfSteps;
 }
 
+TMatrixGeneral::TMatrixGeneral(){
+}
+
 void TMatrixGeneral::initHistos(){
+  _histosInit=true;
   std::string rootFileName="./TMatrixGeneral.root";
   _theTFile=new TFile(rootFileName.c_str(),"recreate");
   std::string ampRealKey="AmpReal";
@@ -363,8 +368,10 @@ void TMatrixGeneral::process(){
 }
 
 TMatrixGeneral::~TMatrixGeneral() {
-  _theTFile->Write();
-  _theTFile->Close();
+  if (_histosInit){
+    _theTFile->Write();
+    _theTFile->Close();
+  }
 }
 
 
@@ -385,11 +392,13 @@ void TMatrixGeneral::init() {
   _pathToFitParams = _pipiScatteringParser->fitParamFile();
   InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;
 
-  std::vector<Particle*> _fsParticles = _pipiScatteringChannelEnv->finalStateParticles();
+  _fsParticles = _pipiScatteringChannelEnv->finalStateParticles();
   std::vector<Particle*>::iterator it;
   for(it=_fsParticles.begin(); it!=_fsParticles.end(); ++it){
     InfoMsg << "fsParticle: " << (*it)->name() << endmsg;
   }
+
+  InfoMsg << "_fsParticles.size(): " << _fsParticles.size() << endmsg;
 
   std::shared_ptr<AbsDecayList> absDecList=_pipiScatteringChannelEnv->absDecayList();
   std::vector<std::shared_ptr<AbsDecay> > theDecs=absDecList->getList();
@@ -400,7 +409,7 @@ void TMatrixGeneral::init() {
   }
 
   std::shared_ptr<AbsDecay> theDec=theDecs.at(0);
-  Particle* _motherParticle=theDec->motherPart();
+  _motherParticle=theDec->motherPart();
   _motherParticleName=_motherParticle->name();
   InfoMsg << "theMotherParticle: " << _motherParticleName << endmsg;
 
@@ -418,7 +427,9 @@ void TMatrixGeneral::init() {
 
   _phpVecs=_kMatr->phaseSpaceVec();
   _gFactorNames= _tMatrDyn->gFactorNames();
+
   _orbitalL= _tMatrDyn->orbitalL();
+  _decProjectionIndex = _tMatrDyn->decProjectionIndex();
 
   std::vector<std::string> poleNameAndMassVecs=_kMatrixParser->poles();
   std::vector<std::string>::iterator itString;
@@ -467,6 +478,7 @@ void TMatrixGeneral::fillParams(){
 
   std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
   _tMatrDyn->fillDefaultParams(params);
+  _tMatrDyn->fillParamNameList();
  
     std::ifstream ifs(_pathToFitParams);
     if(!ifs.good()) 
@@ -486,6 +498,9 @@ void TMatrixGeneral::fillParams(){
 
   InfoMsg << "The k-Matrix input parameter are: " << endmsg;
   _params->print(std::cout);
-  if(_pathToFitParams != "") _tMatrDyn->updateFitParams(_params); 
+  if(_pathToFitParams != "") _tMatrDyn->updateFitParams(_params);
+
+  _kMatrixParamNames = _tMatrDyn->paramNames();
+  InfoMsg << "_kMatrixParamNames.size(): " << _kMatrixParamNames.size() << endmsg; 
 }
 

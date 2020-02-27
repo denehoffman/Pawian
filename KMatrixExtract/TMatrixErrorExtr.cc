@@ -20,7 +20,6 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-
 #include <getopt.h>
 #include <fstream>
 #include <sstream>
@@ -31,11 +30,10 @@
 #include <getopt.h>
 #include <iomanip>      // std::setprecision
 #include <memory>
-#include <algorithm> 
+#include <algorithm>
 
 #include "KMatrixExtract/TMatrixErrorExtr.hh"
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
-#include "KMatrixExtract/TMatrixExtrFit.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/TMatrixBase.hh"
@@ -59,6 +57,8 @@
 #include "Utils/PawianConstants.hh"
 
 #include "ConfigParser/ParserBase.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
+
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
 #include "FitParams/ParamFactory.hh"
@@ -71,32 +71,36 @@
 
 using namespace ROOT::Minuit2;
 
-TMatrixErrorExtr::TMatrixErrorExtr(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet, std::string pathToSerialzationFile, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams): 
-  TMatrixExtrBase(pathToConfigParser, pathToFitParams, sheet)
-  ,_pathToSerialzationFile(pathToSerialzationFile)
-  ,_energyMin(energyBorderMin)
-  ,_energyMax(energyBorderMax)
-  ,_energyStart(energyStartParams)
-  ,_tMatFit(new TMatrixExtrFit(pathToConfigParser, pathToFitParams, sheet, energyBorderMin, energyBorderMax, energyStartParams) )
+TMatrixErrorExtr::TMatrixErrorExtr(pipiScatteringParser* theParser) :
+  TMatrixExtrBase(theParser)
+  ,_pathToSerialzationFile(theParser->serializationFile())
+  ,_energyMin(complex<double>(theParser->minRealMass(), -std::abs(theParser->minImagMass())))
+  ,_energyMax(complex<double>(theParser->maxRealMass(), -std::abs(theParser->maxImagMass())))
+  ,_energyStart(complex<double>(theParser->startRealMass(), -std::abs(theParser->startImagMass())))
+  ,_calcWithErrors(true)
 {
-  //  _tMatFit = new TMatrixExtrFit(pathToConfigParser, pathToFitParams, energyMin, energyMax, energyStart);
 }
+
 
 TMatrixErrorExtr::~TMatrixErrorExtr()
 {
 }
 
-void TMatrixErrorExtr::GetCovMatrix(){
+bool TMatrixErrorExtr::GetCovMatrix(){
+  bool result=true;
   std::ifstream serializationStream(_pathToSerialzationFile.c_str());
 
   if(!serializationStream.is_open()){
-	Alert << "Could not open serialization file." << endmsg;
-	exit(0);
+	InfoMsg << "Could not open serialization file." << endmsg;
+	InfoMsg << "calculation without errors!!!" << endmsg;       
+	result=false;
   }
-  _thePwaCovMatrix = std::shared_ptr<PwaCovMatrix>(new PwaCovMatrix);
-  boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-  boostInputArchive >> *_thePwaCovMatrix;
+  else{
+    _thePwaCovMatrix = std::shared_ptr<PwaCovMatrix>(new PwaCovMatrix);
+    boost::archive::text_iarchive boostInputArchive(serializationStream);
+    boostInputArchive >> *_thePwaCovMatrix;
+  }
+  return result;
 }
 
 void TMatrixErrorExtr::CalcOriginal(){
@@ -104,8 +108,14 @@ void TMatrixErrorExtr::CalcOriginal(){
   return;
 }
 
-
 void TMatrixErrorExtr::Calculation(){
+  _calcWithErrors = GetCovMatrix();
+  if (_calcWithErrors) CalcWithErrrors();
+  else  CalcOriginal();
+  
+}
+
+void TMatrixErrorExtr::CalcWithErrrors(){
   GetCovMatrix();
   CalcOriginal();
   std::complex<double> resultErr=0;
@@ -114,7 +124,6 @@ void TMatrixErrorExtr::Calculation(){
   //  unsigned int nPar = _params->Params().size();
   std::shared_ptr<AbsPawianParameters> newFitParams = std::shared_ptr<AbsPawianParameters>(_params->Clone());
   unsigned int nKMatrixPar = _kMatrixParamNames.size();
-  InfoMsg << "KMatrix Params Size " << nKMatrixPar << endmsg;
 
   for(unsigned int i=0; i<nKMatrixPar; i++) {
 
@@ -155,6 +164,7 @@ void TMatrixErrorExtr::Calculation(){
 
 
 void TMatrixErrorExtr::printErrors(){
+  if(!_calcWithErrors) return;
   InfoMsg << "TMatrixErrorExtr::printErrors " << endmsg;
   InfoMsg << "Derivatives: " << endmsg;
   std::sort(_realDerivatives.begin(), _realDerivatives.end(), TMatrixErrorExtr::cmp );
@@ -164,25 +174,32 @@ void TMatrixErrorExtr::printErrors(){
   std::vector<std::pair<string, double> >::iterator iter;
   unsigned int shift = _realDerivatives.size() > 5 ? 5 : 1; 
   for (iter=_realDerivatives.begin();iter!=_realDerivatives.begin()+shift;iter++) {
-	InfoMsg << "realDerivative " << iter->first << "\t" << iter->second << endmsg;
+   	InfoMsg << "realDerivative " << iter->first << "\t" << iter->second << endmsg;
   }
   for (iter=_imagDerivatives.begin();iter!=_imagDerivatives.begin()+shift;iter++) {
-	InfoMsg << "imagDerivative " << iter->first << "\t" << iter->second << endmsg;
+  	InfoMsg << "imagDerivative " << iter->first << "\t" << iter->second << endmsg;
   }
   for (iter=_realError.begin();iter!=_realError.begin()+shift;iter++) {
-	InfoMsg << "realError " << iter->first << "\t" << iter->second << endmsg;
+  	InfoMsg << "realError " << iter->first << "\t" << iter->second << endmsg;
   }
   for (iter=_imagError.begin();iter!=_imagError.begin()+shift;iter++) {
-	InfoMsg << "imagError " << iter->first << "\t" << iter->second << endmsg;
+  	InfoMsg << "imagError " << iter->first << "\t" << iter->second << endmsg;
   }
 }
 
 std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianParameters> theFitParams) {
-  _tMatFit->updateTMatDy(theFitParams);
-  TMatrixExtrFcn fitFcn(_tMatFit);
+  std::shared_ptr<TMatrixErrorExtr> tmpTMatrixErrorExtr(new TMatrixErrorExtr(_pipiScatteringParser));
+  tmpTMatrixErrorExtr->updateTMatDy(theFitParams);
+  TMatrixExtrFcn fitFcn(tmpTMatrixErrorExtr);
+
+  // updateTMatDy(theFitParams);
+  // TMatrixExtrFcn fitFcn(shared_from_this());
 
   // Set user parameters for MinuitFitFcn
   MnUserParameters upar;
+  InfoMsg << "_energyStart.imag(): " << _energyStart.imag() << endmsg;
+  InfoMsg << "_energyMin.imag(): " << _energyMin.imag() << endmsg;
+  InfoMsg << "_energyMax.imag(): " << _energyMax.imag() << endmsg;
   upar.Add("eReal", _energyStart.real(), 0.001, _energyMin.real(), _energyMax.real());
   upar.Add("eImag", _energyStart.imag(), 0.001, _energyMin.imag(), _energyMax.imag());
 
@@ -190,27 +207,23 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   InfoMsg <<"Start Migrad "<< endmsg;
   FunctionMinimum min = migrad();
 
-  // MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
-  // min = migrad2();
-
-  // MnMigrad migrad3(fitFcn, min.UserState(), MnStrategy(3));
-  // min = migrad3();
-
-  //start second iteration
-  // MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(1));  
-  // min = migrad2();
-
   if(!min.IsValid()) {
     // Try with higher strategy
     InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2b(fitFcn, min.UserState(), MnStrategy(2));
-    min = migrad2b();
+    MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
+    min = migrad2();
   }
 
   //start second iteration
-  //  MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(1));  
-  //  min = migrad2();
-
+  MnMigrad migrad1a(fitFcn, min.UserState(), MnStrategy(1));
+  min = migrad1a();
+  if(!min.IsValid()) {
+    // Try with higher strategy
+    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
+    MnMigrad migrad2a(fitFcn, min.UserState(), MnStrategy(2));
+    min = migrad2a();
+  }
+  
   // Save final fit parameters and their errors in variables
   double final_eReal = min.UserState().Value("eReal");
   double final_eImag = min.UserState().Value("eImag");

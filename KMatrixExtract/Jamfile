@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : TMatrixFitApp  TMatrixErrorExtrApp TMatrixResidueExtrApp ArgandModuloConverterApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp
+install install-bin : TMatrixErrorExtrApp TMatrixResidueExtrApp ArgandModuloConverterApp TMatrixGeneralApp TMatrixPiPiSWaveSimple4piPhpApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -21,18 +21,6 @@ lib KMatrixExtract :
 	: <use>$(TOP)//Minuit2  
 	: 
 	: <library>$(TOP)//Minuit2  ;
-
-exe TMatrixFitApp : TMatrixFitApp.cc KMatrixExtract
-        $(TOP)/pipiScatteringUtils//pipiScatteringUtils 
-	$(TOP)/PwaDynamics//PwaDynamics
-	$(TOP)/ConfigParser//ConfigParser
-	$(TOP)/PwaUtils//PwaUtils
-	$(TOP)/FitParams//FitParams
-	$(TOP)/Particle//Particle
-	$(TOP)/qft++Extension//qft++Extension
-        $(TOP)/qft++//qft++
-        $(TOP)/ErrLogger//ErrLogger
-	: ;
 
 exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract
         $(TOP)/pipiScatteringUtils//pipiScatteringUtils

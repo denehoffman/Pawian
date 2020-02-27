@@ -26,7 +26,7 @@
 #include <string>
 #include <iomanip>  // std::setprecision
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
-#include "KMatrixExtract/TMatrixExtrFit.hh"
+#include "KMatrixExtract/TMatrixExtrBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnMigrad.h"
@@ -35,16 +35,10 @@
 #include "Minuit2/MnStrategy.h"
 
 using namespace ROOT::Minuit2;
-
-TMatrixExtrFcn::TMatrixExtrFcn(std::shared_ptr<TMatrixExtrFit> tMatFit) :
-  _tMatFit(tMatFit)
-{ 
-}
-
-TMatrixExtrFcn::TMatrixExtrFcn(std::shared_ptr<TMatrixErrorExtr> tMatErrorExtr) :
-  _tMatErrorExtr(tMatErrorExtr)
-{ 
-}
+TMatrixExtrFcn::TMatrixExtrFcn(std::shared_ptr<TMatrixExtrBase> tMatExtrBase):
+  _tMatExtrBase(tMatExtrBase)
+{
+} 
 
 TMatrixExtrFcn::~TMatrixExtrFcn()
 {
@@ -52,10 +46,10 @@ TMatrixExtrFcn::~TMatrixExtrFcn()
 
 double TMatrixExtrFcn::operator()(const std::vector<double>& par) const
 {
-  double result=-log(_tMatFit->calcTMatrix(par.at(0), par.at(1)));
+  double result=-log(_tMatExtrBase->calcTMatrix(par.at(0), par.at(1)));
   //double result=1./_tMatFit->calcTMatrix(par.at(0), par.at(1));  
   InfoMsg << "par0: " << par.at(0) << "\tpar1: " << par.at(1) 
-	  << "\tabs(tMat): " << abs(_tMatFit->calcTMatrix(par.at(0), par.at(1)))
+	  << "\tabs(tMat): " << abs(_tMatExtrBase->calcTMatrix(par.at(0), par.at(1)))
 	  << "\tresult: " << result << endmsg;
   return result;
 }

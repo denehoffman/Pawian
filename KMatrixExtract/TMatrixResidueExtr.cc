@@ -37,7 +37,6 @@
 
 #include "KMatrixExtract/TMatrixResidueExtr.hh"
 #include "KMatrixExtract/TMatrixExtrFcn.hh"
-#include "KMatrixExtract/TMatrixExtrFit.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
@@ -51,7 +50,10 @@
 #include "PwaDynamics/KMatrixRelBg.hh"
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceFactory.hh"
+
 #include "ConfigParser/KMatrixParser.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
+
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/PdtParser.hh"
 #include "Particle/Particle.hh"
@@ -74,105 +76,13 @@
 
 using namespace ROOT::Minuit2;
 
-TMatrixResidueExtr::TMatrixResidueExtr(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet, std::string pathToSerialzationFile, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams): 
-  TMatrixExtrBase(pathToConfigParser, pathToFitParams, sheet)
-  ,_pathToSerialzationFile(pathToSerialzationFile)
-  ,_energyMin(energyBorderMin)
-  ,_energyMax(energyBorderMax)
-  ,_energyStart(energyStartParams)
-  ,_tMatFit(new TMatrixExtrFit(pathToConfigParser, pathToFitParams, sheet, energyBorderMin, energyBorderMax, energyStartParams) )
+TMatrixResidueExtr::TMatrixResidueExtr(pipiScatteringParser* theParser) :
+  TMatrixErrorExtr(theParser)
 {
-  _phpVecs=_tMatFit->getPhps();
 }
 
 TMatrixResidueExtr::~TMatrixResidueExtr()
 {
-}
-
-bool TMatrixResidueExtr::GetCovMatrix(){
-  std::ifstream serializationStream(_pathToSerialzationFile.c_str());
-
-  if(!serializationStream.is_open()){
-	Alert << "Could not open serialization file." << endmsg;
-	return false;
-	//	exit(0);
-  }
-  _thePwaCovMatrix = std::shared_ptr<PwaCovMatrix>(new PwaCovMatrix);
-  boost::archive::text_iarchive boostInputArchive(serializationStream);
-
-  boostInputArchive >> *_thePwaCovMatrix;
-  return true;
-}
-
-//std::complex<double> TMatrixResidueExtr::CalcMassWidth(){
-std::complex<double> TMatrixResidueExtr::CalcMassWidth(std::shared_ptr<AbsPawianParameters> theFitParams){
-  _tMatFit->updateTMatDy(theFitParams);
-  TMatrixExtrFcn fitFcn(_tMatFit);
-
-  // Set user parameters for MinuitFitFcn
-  MnUserParameters upar;
-  upar.Add("eReal", _energyStart.real(), 0.001, _energyMin.real(), _energyMax.real());
-  upar.Add("eImag", _energyStart.imag(), 0.001, _energyMin.imag(), _energyMax.imag());
-
-  MnMigrad migrad(fitFcn, upar);
-  InfoMsg <<"Start Migrad "<< endmsg;
-  FunctionMinimum min = migrad();
-
-  // MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
-  // min = migrad2();
-
-  // MnMigrad migrad3(fitFcn, min.UserState(), MnStrategy(3));
-  // min = migrad3();
-
-  if(!min.IsValid()) {
-    // Try with higher strategy
-    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
-    min = migrad2();
-  }
-
-  // Save final fit parameters and their errors in variables
-  double final_eReal = min.UserState().Value("eReal");
-  double final_eImag = min.UserState().Value("eImag");
-
-  InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
-  if(min.IsValid()) {
-    InfoMsg << "\n Function minimum is valid.\n" << endmsg;
-  } else {
-    InfoMsg << "\n WARNING: Function minimum is invalid!" << endmsg;
-  }
-  if(min.HasValidCovariance()) {
-    InfoMsg << "\n Covariance matrix is valid." << endmsg;
-  } else {
-    InfoMsg << "\n WARNING: Covariance matrix is invalid!" << endmsg;
-  }
-  InfoMsg <<" # of function calls: " << min.NFcn() << endmsg;
-  InfoMsg <<" minimum edm: " << std::setprecision(10) << min.Edm() << endmsg;
-  if(!min.HasValidParameters()) {
-    InfoMsg << " hasValidParameters() returned FALSE" << endmsg;
-  }
-  if(!min.HasAccurateCovar()) {
-    InfoMsg << " hasAccurateCovar() returned FALSE" << endmsg;
-  }
-  if(!min.HasPosDefCovar()) {
-    InfoMsg << " hasPosDefCovar() returned FALSE" << endmsg;
-    if(min.HasMadePosDefCovar()) {
-      InfoMsg << " hasMadePosDefCovar() returned TRUE" << endmsg;
-    }
-  }
-  if(!min.HasCovariance()) {
-    InfoMsg << " hasCovariance() returned FALSE" << endmsg;
-  }
-  if(min.HasReachedCallLimit()) {
-    InfoMsg << " hasReachedCallLimit() returned TRUE" << endmsg;
-  }
-  if(min.IsAboveMaxEdm()) {
-    InfoMsg << " isAboveMaxEdm() returned TRUE" << endmsg;
-  }
-  if(min.HesseFailed()) {
-    InfoMsg << " hesseFailed() returned TRUE\n" << endmsg;
-  }
-  return std::complex<double>(final_eReal, final_eImag);
 }
 
 void TMatrixResidueExtr::Calculation(){
@@ -255,19 +165,19 @@ void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
   std::complex<double> polePosEpsilonRealp = polePos + std::complex<double>(epsilon, 0.);
   std::complex<double> polePosEpsilonRealm = polePos + std::complex<double>(-epsilon, 0.);
  
-  std::shared_ptr<TMatrixRel> currentTMatRealp=_tMatFit->getNewTMat();
+  std::shared_ptr<TMatrixRel> currentTMatRealp = getNewTMat();
   //  currentTMatRealp->evalNonRelMatrix(polePosEpsilonRealp);
   currentTMatRealp->evalMatrix(polePosEpsilonRealp);
 
-  std::shared_ptr<TMatrixRel> currentTMatRealm=_tMatFit->getNewTMat();
+  std::shared_ptr<TMatrixRel> currentTMatRealm = getNewTMat();
   //  currentTMatRealm->evalNonRelMatrix(polePosEpsilonRealm);
   currentTMatRealm->evalMatrix(polePosEpsilonRealm);
 
-  std::shared_ptr<TMatrixRel> currentTMatImagp=_tMatFit->getNewTMat();
+  std::shared_ptr<TMatrixRel> currentTMatImagp = getNewTMat();
   //  currentTMatImagp->evalNonRelMatrix(polePosEpsilonImagp);
   currentTMatImagp->evalMatrix(polePosEpsilonImagp);
 
-  std::shared_ptr<TMatrixRel> currentTMatImagm=_tMatFit->getNewTMat();
+  std::shared_ptr<TMatrixRel> currentTMatImagm = getNewTMat();
   //  currentTMatImagm->evalNonRelMatrix(polePosEpsilonImagm);
   currentTMatImagm->evalMatrix(polePosEpsilonImagm);
 

@@ -32,6 +32,8 @@
 #include <map>
 #include <memory>
 
+#include "KMatrixExtract/TMatrixGeneral.hh"
+
 class KMatrixParser;
 class AbsPhaseSpace;
 class TMatrixRel;
@@ -42,42 +44,28 @@ class KMatrixParser;
 class AbsPawianParameters;
 class TMatrixDynamics;
 
-class TMatrixExtrBase {
+class TMatrixExtrBase : public TMatrixGeneral{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixExtrBase(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet);
-
+  TMatrixExtrBase(pipiScatteringParser* theParser);
 
   /** Destructor */
   virtual ~TMatrixExtrBase();
+  virtual double calcTMatrix(double eReal, double eImag);
   void updateTMatDy(std::shared_ptr<AbsPawianParameters> params);
   std::shared_ptr<TMatrixRel> getNewTMat();
-  std::vector<std::shared_ptr<AbsPhaseSpace> > getPhps() {return _phpVecs;}
   // Getters:
 
 protected:
-  std::shared_ptr<KMatrixParser> _kMatrixParser;
-  std::vector< std::string> _gFactorNames;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  std::shared_ptr<TMatrixRel> _tMatr;
-  std::shared_ptr<KMatrixRel> _kMatr;
-  ParticleTable* _particleTable;
- 
-  std::shared_ptr<TMatrixDynamics> _tMatDynPtr;
- 
-  std::shared_ptr<AbsPawianParameters> _params;
-  std::vector<std::string> _kMatrixParamNames;
-  std::string _pathToFitParams;
   std::string _sheet;
-  int _orbitalL;
   std::vector<double> _signs;
 
 private:
-  void init();
+// void init();
 };
 
 

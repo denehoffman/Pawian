@@ -34,11 +34,11 @@
 #include <memory>
 #include "math.h" 
 
-#include "KMatrixExtract/TMatrixExtrBase.hh"
+#include "KMatrixExtract/TMatrixErrorExtr.hh"
 class AbsPawianParameters;
 class AbsPhaseSpace;
 class PwaCovMatrix;
-class TMatrixExtrFit;
+class pipiScatteringParser;
 
 struct ResidueProperties {
   double absR;
@@ -49,25 +49,21 @@ struct ResidueProperties {
   double errGammai;
 };
 
-class TMatrixResidueExtr : public TMatrixExtrBase {
+class TMatrixResidueExtr : public TMatrixErrorExtr {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixResidueExtr(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet, std::string pathToSerialzationFile, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams);
-
+  TMatrixResidueExtr(pipiScatteringParser* theParser);
 
   /** Destructor */
   virtual ~TMatrixResidueExtr();
 
   // Getters:
-  void Calculation();
-  void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
-  //  std::complex<double>  CalcMassWidth();
-  std::complex<double> CalcMassWidth(std::shared_ptr<AbsPawianParameters> currentParameters);
-  bool GetCovMatrix();
+  virtual void Calculation();
+  virtual void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
 
 protected:
 
@@ -75,11 +71,4 @@ protected:
 private:
   void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
 
-  std::string _pathToSerialzationFile;
-  std::complex<double> _energyMin;
-  std::complex<double> _energyMax;
-  std::complex<double> _energyStart;
-  std::shared_ptr<TMatrixExtrFit> _tMatFit;
-  std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
 };

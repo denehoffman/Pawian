@@ -83,6 +83,7 @@ void KMatrixBase::updateBgTerms(unsigned int order, unsigned int row,  unsigned 
 void KMatrixBase::SetBumImPartSigns(std::vector<double> signs){
    if(signs.size() != _phpVecs.size()){
       Alert << "signs.size() != _phpVecs.size()" << endmsg;
+      Alert << signs.size() << " != " <<  _phpVecs.size() << endmsg;      
       exit(EXIT_FAILURE);
    }
 

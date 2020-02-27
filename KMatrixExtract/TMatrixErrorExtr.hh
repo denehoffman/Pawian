@@ -38,36 +38,32 @@
 class PwaCovMatrix;
 class TMatrixExtrFit;
 
-class TMatrixErrorExtr : public TMatrixExtrBase {
+class TMatrixErrorExtr : public TMatrixExtrBase , public std::enable_shared_from_this<TMatrixErrorExtr> {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixErrorExtr(std::string pathToConfigParser, std::string pathToFitParams, std::string sheet, std::string pathToSerialzationFile, std::complex<double> energyBorderMin, std::complex<double> energyBorderMax, std::complex<double> energyStartParams);
-
+  TMatrixErrorExtr(pipiScatteringParser* theParser);
 
   /** Destructor */
   virtual ~TMatrixErrorExtr();
 
   // Getters:
-  void GetCovMatrix();
-  void CalcOriginal();
-  void Calculation();
-  void printErrors();
-  std::complex<double> CalcMassWidth(std::shared_ptr<AbsPawianParameters> currentParameters);
+  virtual bool GetCovMatrix();
+  virtual void CalcOriginal();
+  virtual void CalcWithErrrors();
+  virtual void Calculation();
+  virtual void printErrors();
+  virtual std::complex<double> CalcMassWidth(std::shared_ptr<AbsPawianParameters> currentParameters);
   std::complex<double> GetResult() {return _result;}
   std::complex<double> GetError() {return _error;}
-  double calcTMatrix(double eReal, double eImag);
   std::complex<double> energyMin() {return _energyMin;}
   std::complex<double> energyMax() {return _energyMax;}
   std::complex<double> energyStart() {return _energyStart;}
 
 protected:
-
-
-private:
   static bool cmp(std::pair<std::string,double> const & a, std::pair<std::string,double> const & b) 
   { 
 	return a.second != b.second?  abs(a.second) > abs(b.second) : a.first < b.first;
@@ -76,7 +72,6 @@ private:
   std::complex<double> _energyMin;
   std::complex<double> _energyMax;
   std::complex<double> _energyStart;
-  std::shared_ptr<TMatrixExtrFit> _tMatFit;
   std::complex<double> _result;
   std::complex<double> _error;
   std::shared_ptr<PwaCovMatrix> _thePwaCovMatrix;
@@ -85,4 +80,8 @@ private:
   std::vector< std::pair<std::string, double> > _imagDerivatives;
   std::vector< std::pair<std::string, double> > _realError;
   std::vector< std::pair<std::string, double> > _imagError;
+  bool _calcWithErrors;
+
+private:
+
 };

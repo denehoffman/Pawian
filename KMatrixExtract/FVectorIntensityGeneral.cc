@@ -73,6 +73,7 @@ FVectorIntensityGeneral::FVectorIntensityGeneral(pipiScatteringParser* theParser
 }
 
 void FVectorIntensityGeneral::initHistos(){
+  _histosInit=true;
   std::string rootFileName="./FVectorIntensityGeneral.root";
   _theTFile=new TFile(rootFileName.c_str(),"recreate");
 
@@ -106,11 +107,11 @@ void FVectorIntensityGeneral::initHistos(){
 }
 
 FVectorIntensityGeneral::~FVectorIntensityGeneral() {
-  for(unsigned int i=0; i < _gFactorNames.size(); ++i){  
-    _ArgandPlotsTGraph.at(i)->Write();
+  if(_histosInit){
+    for(unsigned int i=0; i < _gFactorNames.size(); ++i){  
+      _ArgandPlotsTGraph.at(i)->Write();
+    }
   }
-  // _theTFile->Write();
-  //  _theTFile->Close();
 }
 
 
@@ -123,7 +124,15 @@ void FVectorIntensityGeneral::init() {
   ChannelID channelID(0);
   _pVecName=baseNameFVector+"b"+_motherParticleName;
 
-   std::string dummyName="dummy"; 
+   std::string dummyName="dummy";
+
+   InfoMsg << "_fsParticles.size(): " << _fsParticles.size() << endmsg;
+   InfoMsg << "_pathToKMatrixParser: " << _pathToKMatrixParser << endmsg;
+   InfoMsg << "baseNameFVector: " << baseNameFVector << endmsg;
+   InfoMsg << "channelID: " << channelID << endmsg;
+   InfoMsg << "_projectionParticleNames: " << _projectionParticleNames << endmsg;
+   InfoMsg << "_motherParticle->name(): " << _motherParticle->name() << endmsg;
+ 
   _fVectorIntensityDynamics = 
     std::shared_ptr<FVectorIntensityDynamics>(new FVectorIntensityDynamics(dummyName, _fsParticles, _motherParticle, _pathToKMatrixParser, baseNameFVector, channelID, _projectionParticleNames));
   
@@ -160,7 +169,9 @@ void FVectorIntensityGeneral::fillParams(){
 }
 
 void FVectorIntensityGeneral::process(){
-  int pointNr[_gFactorNames.size()];
+  std::vector<int> pointNr;
+  pointNr.resize(_gFactorNames.size());
+
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     _fVector->evalMatrix(mass, _orbitalL);
     for(unsigned int i=0; i < _gFactorNames.size(); ++i){
