@@ -61,6 +61,24 @@ void PVectorRel::evalMatrix(const double mass, Spin OrbMom){
 
 }
 
+
+void PVectorRel::evalMatrix(const complex<double> mass, Spin OrbMom){
+
+  Matrix< complex<double> > thePVector(NumRows(), 1);
+  vector<std::shared_ptr<PPole> >::iterator it;
+  for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
+    (*it)->evalMatrix(mass, OrbMom);
+    thePVector += *(*it);
+  }
+
+  for (int i=0; i<thePVector.NumRows(); ++i){
+      this->operator()(i,0)=thePVector(i,0);
+  }
+
+
+
+}
+
 void PVectorRel::updateBeta(int i, complex<double> beta){
   if ( i<0 || i>=int(_Ppoles.size()) ){
     Alert << "no pole with index " << i << " available!!!" << endmsg;

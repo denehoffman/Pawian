@@ -44,7 +44,7 @@ public:
 
   // create/copy/destroy:
 
-  ///Constructor 
+  ///Constructor
   TMatrixErrorExtr(pipiScatteringParser* theParser);
 
   /** Destructor */

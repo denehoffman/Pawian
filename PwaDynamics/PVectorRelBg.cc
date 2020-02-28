@@ -73,6 +73,28 @@ void PVectorRelBg::evalMatrix(const double mass, Spin OrbMom){
 
 }
 
+void PVectorRelBg::evalMatrix(const complex<double> mass, Spin OrbMom){
+
+  vector<std::shared_ptr<PPole> >::iterator it;
+  for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
+    (*it)->evalMatrix(mass, OrbMom);
+  }
+
+  for (int i=0; i<NumRows(); ++i){
+    complex<double> currentBg(0.,0.);
+    for(unsigned int bgOrder=0; bgOrder<=_orderBgP; ++bgOrder) currentBg+=_bgPTerms.at(bgOrder).at(i)*pow(mass*mass,bgOrder);
+
+    complex<double> currentP(0.,0.);
+    for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
+      (*it)->evalMatrix(mass, OrbMom);
+      std::vector< complex<double> > theBarrierFactors=(*it)->barrierFactors();
+      currentP += ((*(*it))(i,0)+currentBg)*theBarrierFactors.at(i);
+    }
+    this->operator()(i,0)=currentP;
+  }
+
+}
+
 void PVectorRelBg::updateBgTerms(unsigned int order, unsigned int channel, double theVal){
   if(order>_orderBgP){
     Alert << "background parameter for order " << order << " not available!!!" << endmsg;

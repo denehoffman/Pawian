@@ -51,3 +51,10 @@ void PPole::evalMatrix(const double mass, Spin OrbMom){
   }
 }
 
+void PPole::evalMatrix(const complex<double> mass, Spin OrbMom){
+  complex<double> denom=_poleMass*_poleMass-mass*mass;
+  for (int i=0; i< int(_g_i.size()); ++i){
+    this->operator()(i,0)= (_beta*_g_i[i])/denom;
+  }
+}
+

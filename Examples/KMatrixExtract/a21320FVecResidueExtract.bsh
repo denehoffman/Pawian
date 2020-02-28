@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$TOP_DIR/bin/TMatrixResidueExtrApp -c scatteringa2FVectorIntensityPiEta.cfg --paramFile ./benchmarkResult.dat --serializationFile ./serializedOutput.dat  --minImagMass 0.18 --maxImagMass 0.03 --minRealMass 1.29 --maxRealMass 1.33 --startRealMass 1.312272938 --startImagMass 0.0529 > a21320FVecResidueExtract.log &

@@ -55,8 +55,11 @@ public:
   virtual ~FVector();
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
   virtual complex<double> evalProjMatrix(const double mass, int index, Spin OrbMom=0);
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
+  virtual std::shared_ptr<KMatrixBase> pVector(){return _Pvector;}
+  void SetBumImPartSigns(std::vector<double> signs);
 
 protected:
   std::shared_ptr<KMatrixBase> _Kmatrix; 

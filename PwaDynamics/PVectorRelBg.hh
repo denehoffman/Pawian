@@ -52,6 +52,7 @@ public:
   virtual ~PVectorRelBg();
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
   virtual void updateBgTerms(unsigned int order, unsigned int channel, double theVal);
 
 protected:

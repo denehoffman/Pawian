@@ -80,6 +80,26 @@ void FVector::evalMatrix(const double mass, Spin OrbMom){
 
 }
 
+void FVector::evalMatrix(const complex<double> mass, Spin OrbMom){
+
+  _Kmatrix->evalMatrix(mass, OrbMom);
+  _Pvector->evalMatrix(mass, OrbMom);
+
+ // for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
+  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
+
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix+_cSign*(*_Kmatrix)*_CMMatrix;
+ 
+  denomMatrComplInv.invert();
+  
+  Matrix< complex <double> > currentTMatr=denomMatrComplInv*(*_Pvector);
+
+  for (int i=0; i<currentTMatr.NumRows(); ++i){
+    this->operator()(i,0)=currentTMatr(i,0);
+  }
+
+}
+
 complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMom){
   _Kmatrix->evalMatrix(mass, OrbMom);
   _Pvector->evalMatrix(mass, OrbMom);
@@ -110,5 +130,10 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
   }
 
   return result; 
+}
+
+void FVector::SetBumImPartSigns(std::vector<double> signs){
+  _Kmatrix->SetBumImPartSigns(signs);
+  _Pvector->SetBumImPartSigns(signs);
 }
 

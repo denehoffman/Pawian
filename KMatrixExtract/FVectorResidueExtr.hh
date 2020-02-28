@@ -1,6 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2018 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  Copyright 2020 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -19,8 +19,8 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-//TMatrixExtrBase class definition file. -*- C++ -*-
-// Copyright 2018 Bertram Kopf
+//FVectorResidueExtr class definition file. -*- C++ -*-
+// Copyright 2020 Bertram Kopf
 
 #pragma once
 
@@ -31,41 +31,38 @@
 #include <complex>
 #include <map>
 #include <memory>
+#include "math.h" 
 
-#include "KMatrixExtract/TMatrixGeneral.hh"
-
-class KMatrixParser;
-class AbsPhaseSpace;
-class TMatrixRel;
-class KMatrixRel;
-class KPole;
-class ParticleTable;
-class KMatrixParser;
+#include "KMatrixExtract/TMatrixResidueExtr.hh"
 class AbsPawianParameters;
-class TMatrixDynamics;
+class AbsPhaseSpace;
+class PwaCovMatrix;
+class pipiScatteringParser;
+class FVectorIntensityDynamics;
+class FVector;
 
-class TMatrixExtrBase : public TMatrixGeneral{
+class FVectorResidueExtr : public TMatrixResidueExtr {
 
 public:
 
   // create/copy/destroy:
 
-  ///Constructor
-  TMatrixExtrBase(pipiScatteringParser* theParser);
+  ///Constructor 
+  FVectorResidueExtr(pipiScatteringParser* theParser);
 
   /** Destructor */
-  virtual ~TMatrixExtrBase();
-  virtual double calcTMatrix(double eReal, double eImag);
-  void updateTMatDy(std::shared_ptr<AbsPawianParameters> params);
-  std::shared_ptr<TMatrixRel> getNewTMat();
+  virtual ~FVectorResidueExtr();
+
   // Getters:
+  virtual void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
+  virtual void fillParams();
 
 protected:
-  std::string _sheet;
-  std::vector<double> _signs;
+   virtual void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
 
 private:
-// void init();
+  std::shared_ptr<FVectorIntensityDynamics> _fVectorIntensityDynamics;
+  std::shared_ptr<FVector> _fVector; 
+  std::string _pVecName;
+  void init();
 };
-
-

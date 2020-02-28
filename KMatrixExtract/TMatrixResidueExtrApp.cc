@@ -33,7 +33,8 @@
 #include <memory>
 
 #include "FitParams/PwaCovMatrix.hh"
-#include "KMatrixExtract/TMatrixResidueExtr.hh" 
+#include "KMatrixExtract/TMatrixResidueExtr.hh"
+#include "FVectorResidueExtr.hh" 
 #include "ConfigParser/pipiScatteringParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
@@ -71,7 +72,7 @@ int main(int __argc,char *__argv[]){
 
  std::shared_ptr<TMatrixResidueExtr> tMatrixResidueExtr;
   if (productionFormalism =="PVecIntensity"){
-    return 0;
+    tMatrixResidueExtr = std::shared_ptr<FVectorResidueExtr>(new FVectorResidueExtr(theParser));
   }
   else{
     tMatrixResidueExtr = std::shared_ptr<TMatrixResidueExtr> (new TMatrixResidueExtr(theParser));

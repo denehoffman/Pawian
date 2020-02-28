@@ -81,7 +81,6 @@ TMatrixErrorExtr::TMatrixErrorExtr(pipiScatteringParser* theParser) :
 {
 }
 
-
 TMatrixErrorExtr::~TMatrixErrorExtr()
 {
 }

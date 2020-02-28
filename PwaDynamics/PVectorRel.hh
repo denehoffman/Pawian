@@ -55,6 +55,7 @@ public:
   virtual ~PVectorRel();
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
 
   virtual void updateBeta(int i, complex<double> beta);
   virtual void updatePoleMass(int i, double mass);

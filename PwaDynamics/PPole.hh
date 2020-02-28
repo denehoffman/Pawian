@@ -68,6 +68,7 @@ public:
   // functions:
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
 
   void updateBeta (complex<double> beta) {_beta=beta;}
 
