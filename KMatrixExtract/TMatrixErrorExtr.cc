@@ -214,14 +214,14 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   }
 
   //start second iteration
-  MnMigrad migrad1a(fitFcn, min.UserState(), MnStrategy(1));
-  min = migrad1a();
-  if(!min.IsValid()) {
-    // Try with higher strategy
-    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2a(fitFcn, min.UserState(), MnStrategy(2));
-    min = migrad2a();
-  }
+  // MnMigrad migrad1a(fitFcn, min.UserState(), MnStrategy(1));
+  // min = migrad1a();
+  // if(!min.IsValid()) {
+  //   // Try with higher strategy
+  //   InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
+  //   MnMigrad migrad2a(fitFcn, min.UserState(), MnStrategy(2));
+  //   min = migrad2a();
+  // }
   
   // Save final fit parameters and their errors in variables
   double final_eReal = min.UserState().Value("eReal");
