@@ -9,11 +9,11 @@
 
 
 Meson etaMatrix	        etaMatrix               0  0 -1  1  1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
-Meson f2Matrix	 	f_2Matrix  		0  4  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]
+Meson f2Matrix	 	    f_2Matrix  		        0  4  1  1  1   0  0  0  0 	1. 	0.1 	relBW	[PDG no idea]
 Meson h1Matrix          h_1Matrix               0  2  1 -1 -1   0  0  0  0      1.      0.1     relBW   [PDG no idea]  
 Meson f0Matrix          f_0Matrix               0  0  1  1  1   0  0  0  0      1.      0.1     relBW   [PDG no idea]
-Meson eta 		\eta  			0  0 -1  1  1	0  0  0  0 	0.547(+0.01-0.01) 0.0001 relBW	[PDG nonett 1^1S_0]
-Meson sigma 		\sigma  		0  0  1  1  1  	0  0  0  0 	1.000 	0.6000 	relBW	[PDG f_0(400-1200)\pi\pi S-wave]
+Meson eta 		        \eta  			    0  0 -1  1  1	0  0  0  0 	0.547(+0.01-0.01) 0.0001 relBW	[PDG nonett 1^1S_0]
+Meson sigma 		    \sigma  		0  0  1  1  1  	0  0  0  0 	1.000 	0.6000 	relBW	[PDG f_0(400-1200)\pi\pi S-wave]
 Meson omega 		\omega  		0  2 -1 -1 -1   0  0  0  0 	0.7825  0.00849 relBW	[PDG nonett 1^3S_1]
 Meson omegaZ 		\omega  		0  2 -1 -1  0   0  0  0  0 	0.7825  0.00849 relBW	[PDG nonett 1^3S_1]
 Meson xomeg 		\omega^{\prime}  	0  2 -1 -1 -1   0  0  0  0 	0.7825 	0.00849 relBW	[PDG nonett 1^3S_1]
@@ -170,13 +170,13 @@ Meson I12-+(2000)- 	\I12-+(2000)^-  	-3 4 -1  0  -1  2  -2 0  0 	2.000 	0.200  	
 #
 # Start strange mesons
 #
-# type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C      mass    width   dyn.f   comment
-#
-Meson kappa 		\kappa  		0  0  1  0  0   1  0  -1 0 	0.75 	  0.05	  relBW	  [PDG nonett 1^3P_0]
-Meson K0 		K^0  			0  0 -1  0  0   1  -1  1 0  	0.497614  0.0001  relBW	  [PDG nonett 1^1S_0]
-Meson K+ 		K^+  			3  0 -1  0  0   1  1  1  0  	0.49367   0.0001  relBW	  [PDG nonett 1^1S_0]
-Meson K- 		K^-  			-3 0 -1  0  0   1  -1 -1  0  	0.49367 0.0001  relBW	[PDG nonett 1^1S_0]
-Meson Kshort 		K_S  			0  0 -1  0  0   1  0  -1  0  	0.493 	0.0001  relBW	[PDG nonett 1^1S_0]
+# type name             texName    3*Q 2*J P  C  G   2I  2I3 S  C      mass    width   dyn.f   comment
+#  
+Meson kappa 		\kappa  		0   0  1    0  0  1   0  -1 0 	0.75 	  0.05	  relBW	  [PDG nonett 1^3P_0]
+Meson K0 		K^0  			              0   0 -1  0  0    1  -1 -1 0  	0.497614  0.0001  relBW	  [PDG nonett 1^1S_0]
+Meson K+ 		K^+  		     	3   0 -1  0  0   1  1  1  0  	0.49367   0.0001  relBW	  [PDG nonett 1^1S_0]
+Meson K- 		K^-  		       -3   0 -1  0  0   1  -1 -1  0  	0.49367 0.0001  relBW	[PDG nonett 1^1S_0]
+Meson Kshort 	K_S  		    	0   0 -1  0  0   1  1  1  0  	0.493 	0.0001  relBW	[PDG nonett 1^1S_0]
 Meson K* 		K^\ast  		0  2 -1  0  0   1  0  0  0  	0.89581 0.0474  relBW	[PDG nonett 1^3S_1]
 Meson K*+ 		K^{\ast+}  		0  2 -1  0  0   1  1  1  0  	0.8955  0.05081 relBW	[PDG nonett 1^3S_1]
 Meson K*- 		K^{\ast-}  		0  2 -1  0  0   1  -1  -1  0  	0.8955  0.05081 relBW	[PDG nonett 1^3S_1]
@@ -325,8 +325,8 @@ Meson DD-(2+)       	D^{0}D^{-}  	       -3     4    1  0  0   2  -2  0  0  3.74
 #
 # type name             texName               3*Q 2*J P  C  G   I  I3 S  C      mass      width   dyn.f   comment
 #
-Meson etac 		\eta_c  		0  0 -1  1  1  	0  0  0  0 	2.9836 	  0.0322 relBW	[PDG]
-Meson Jpsi 		J/\psi  		0  2 -1 -1 -1   0  0  0  0 	3.096916  0.0929 relBW	[PDG]
+Meson etac 		\eta_c  		               0  0 -1  1  1  	0  0  0  0 	2.9836 	  0.0322 relBW	[PDG]
+Meson Jpsi 		J/\psi  		               0  2 -1 -1 -1   0  0  0  0 	3.096916  0.0000929 relBW	[PDG]
 Meson Chic0 		\chi_{c0}  		0  0  1	 1  1   0  0  0  0 	3414.75	  0.0103	relBW	[PDG]
 Meson Chic1 		\chi_{c1}  		0  2  1	 1  1   0  0  0  0 	3.51066	  0.00086	relBW	[PDG]
 Meson Chic2             \chi_{c2}               0  4  1  1  1   0  0  0  0      3.55562   0.00198       relBW   [PDG]
@@ -351,10 +351,10 @@ Boson photon0 		\gamma_0  		0  2 -1 -1  0   0  0  0  0    	0.0	0.0	undefined	[PD
 #
 # Start Baryons
 #
-# type name             texName               3*Q 2*J P  C  G   2I  2I3 S  C    mass    width   dyn.f   	comment
+# type name             texName            3*Q 2*J P  C  G   2I  2I3 S  C    mass    width   dyn.f   	comment
 #
-Baryon proton		p			3  1  1  0  0	1    1  0  0	0.93827 0.0     undefined	[none]
-Baryon antiproton	\overline{p}	       -3  1 -1  0  0   1   -1  0  0    0.93827 0.0     undefined	[none]
+Baryon proton           p			             3  1  1  0  0	  1   1  0  0	 0.93827 0.0     undefined	[none]
+Baryon antiproton    	\overline{p}	      -3  1 -1  0  0    1  -1  0  0    0.93827 0.0     undefined	[none]
 Baryon DeltaP33++Matrix \DeltaP33^{++}Matrix  	6  3 1   0  0   3    3 	0  0	1.0 	0.1	undefined	[none]
 Baryon Delta++ 		\Delta^{++}  		6  3 1   0  0   3    3 	0  0	1.231 	0.111	relBW	        [PDG]
 Baryon Delta(1600)++ 	\Delta(1600)^{++}  	6  3 1   0  0   3    3 	0  0	1.6 	0.32	relBW	        [PDG]
@@ -363,19 +363,20 @@ Baryon Delta(1700)++ 	\Delta(1700)^{++}  	6  3 -1  0  0   3    3 	0  0	1.7 	0.3	
 Baryon Delta(1750)++ 	\Delta(1750)^{++}  	6  1 1   0  0   3    3 	0  0	1.75 	0.52	relBW	        [PDG]
 Baryon Delta(1910)++ 	\Delta(1910)^{++}  	6  1 1   0  0   3    3 	0  0	1.89 	0.3	relBW	        [PDG]
 Baryon LambdaS01Matrix 	\LambdaS01Matrix  	0  1 -1  0  0   0    0  -1 0	1.       0.1    undefined	[none] 	
-Baryon Lambda_c+ 	\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
-Baryon Lambda 		\Lambda  		0  1 1   0  0   0    0 	-1  0	1.115683 0.0001 relBW	        [PDG]
+Baryon Lambda_c+ 		\Lambda_c^+  		3  1 1   0  0   0    0 	0  1	2.28646 0.0001  relBW	        [PDG]
+Baryon Lambda 			\Lambda  			0  1 1   0  0   0    0 	-1  0	1.115683 0.0001 relBW	        [PDG]
 Baryon Lambda(1405)0 	\Lambda(1405)^0  	0  1 -1  0  0   0    0  -1 0	1.4051  0.05    relBW		[PDG]
 Baryon Lambda(1520)0 	\Lambda(1520)^0  	0  3 -1  0  0   0    0  -1 0	1.5195  0.0156  relBW		[PDG]
-Baryon Lambda(1600)0    \Lambda(1600)^0         0  1 1   0  0   0    0  -1 0    1.600   0.150   relBW           [PDG]
-Baryon Lambda(1670)0    \Lambda(1670)^0         0  1 -1  0  0   0    0  -1 0    1.67    0.035   relBW           [PDG]
-Baryon Lambda(1690)0    \Lambda(1690)^0         0  3 -1  0  0   0    0  -1 0    1.69    0.06    relBW           [PDG]
-Baryon Lambda(1800)0    \Lambda(1800)^0         0  1 -1  0  0   0    0  -1 0    1.8     0.300   relBW           [PDG]
+Baryon Lambda(1600)0    \Lambda(1600)^0     0  1 1   0  0   0    0  -1 0    1.600   0.150   relBW           [PDG]
+Baryon Lambda(1670)0    \Lambda(1670)^0     0  1 -1  0  0   0    0  -1 0    1.67    0.035   relBW           [PDG]
+Baryon Lambda(1690)0    \Lambda(1690)^0     0  3 -1  0  0   0    0  -1 0    1.69    0.06    relBW           [PDG]
+Baryon Lambda(1800)0    \Lambda(1800)^0     0  1 -1  0  0   0    0  -1 0    1.8     0.300   relBW           [PDG]
 Baryon Lambda(1810)0 	\Lambda(1810)^0  	0  1 1   0  0   0    0  -1 0	1.81    0.15    relBW		[PDG]
-Baryon Lambda(1820)0 	\Lambda(1820)^0  	0  5 1   0  0   0    0  -1 0	1.82    0.08    relBW		[PDG]
-Baryon Lambda(1890)0 	\Lambda(1890)^0  	0  3 1   0  0   0    0  -1 0	1.89    0.12    relBW		[PDG]
-Baryon SigmaS110Matrix 	\SigmaS11^0Matrix  	0  1  -1 0  0   2    0  -1 0  	1.      0.1     undefined	[none]
-Baryon Sigma+ 		\Sigma^+  		3  1  1  0  0   2    2  -1 0  	1.18937 0.0001  relBW		[PDG]
+Baryon Lambda(1820)0 	\Lambda(1820)^0  	0  5  1   0  0   0    0  -1 0	1.82    0.08    relBW		[PDG]
+Baryon Lambda(1890)0 	\Lambda(1890)^0  	0  3  1   0  0   0    0  -1 0	1.89    0.12    relBW		[PDG]
+Baryon SigmaS110Matrix 	\SigmaS11^0Matrix  	0  1 -1  0  0   2    0  -1 0  	1.      0.1     undefined	[none]
+Baryon Sigmaplus 		    \Sigma^+  		3  1  1  0  0   2    2  -1 0  	1.18937 0.0001  relBW		[PDG]
+Baryon Sigmabar- 		\bar\Sigma^.  	   -3  1 -1  0  0   2  -2   1 0  	1.18937 0.0001  relBW		[PDG]
 Baryon Sigma(1580)0 	\Sigma(1580)^0  	0  3  -1 0  0   2    0  -1 0  	1.58    0.015    relBW		[PDG]
 Baryon Sigma(1620)0 	\Sigma(1620)^0  	0  1  -1 0  0   2    0  -1 0  	1.62    0.17    relBW		[PDG]
 Baryon Sigma(1660)0     \Sigma(1660)^0          0  1  1  0  0   2    0  -1 0    1.66    0.13    relBW           [PDG]
@@ -383,3 +384,89 @@ Baryon Sigma(1670)0 	\Sigma(1670)^0  	0  3  -1 0  0   2    0  -1 0  	1.67    0.0
 Baryon Sigma(1915)0     \Sigma(1915)^0          0  5  1  0  0   2    0  -1 0    1.915   0.12    relBW           [PDG]
 Baryon Sigma(1940)0     \Sigma(1940)^0          0  3  -1 0  0   2    0  -1 0    1.940   0.2     relBW           [PDG]
 Baryon Lambda_c(2625)+ 	\Lambda_c(2625)^+       3  3  -1 0  0   0    0 	0  1	2.262811 0.01   relBW	        [PDG]
+
+
+
+# Start exited Baryons
+#
+# type name             texName            3*Q 2*J P  C  G   2I  2I3  S  C    mass    width   dyn.f   	comment
+#
+Baryon Sigma(1300)+ 	\Sigma(1300)^+  	3   1 +1  0  0    2   2  -1  0  	1.580 0.100    relBW		[PDG]
+Baryon Sigmabar(1300)- 	\bar\Sigma(1300)^- -3   1 -1  0  0    2  -2   1  0  	1.580 0.100      relBW		[PDG]
+
+Baryon Sigma(1385)+ 	\Sigma(1385)^+  	3   3 +1  0  0    2   2  -1  0  	1.383 0.036     relBW		[PDG]
+Baryon Sigmabar(1385)- 	\bar\Sigma(1385)^- -3   3 -1  0  0    2  -2   1  0  	1.383 0.036      relBW		[PDG]
+
+Baryon Sigma(1580)+ 	\Sigma(1580)^+  	3   3 -1  0  0    2   2  -1  0  	1.580 0.015     relBW		[PDG]
+Baryon Sigmabar(1580)- 	\bar\Sigma(1580)^- -3   3 +1  0  0    2  -2   1  0  	1.580 0.015      relBW		[PDG]
+
+Baryon Sigma(1620)+ 	\Sigma(1620)^+  	3   1 -1  0  0    2   2  -1  0  	1.620 0.1     relBW		[PDG]
+Baryon Sigmabar(1620)- 	\bar\Sigma(1620)^- -3   1 +1  0  0    2  -2   1  0  	1.620 0.1      relBW		[PDG]
+
+Baryon Sigma(1660)+ 	\Sigma(1660)^+  	3   1 +1  0  0    2   2  -1  0  	1.660 0.1     relBW		[PDG]
+Baryon Sigmabar(1660)- 	\bar\Sigma(1660)^- -3   1 -1  0  0    2  -2   1  0  	1.660 0.1      relBW		[PDG]
+
+Baryon Sigma(1670)+ 	\Sigma(1670)^+  	3   3 -1  0  0    2   2  -1  0  	1.670 0.06      relBW		[PDG]
+Baryon Sigmabar(1670)- 	\bar\Sigma(1670)^- -3   3 +1  0  0    2  -2   1  0  	1.670 0.06      relBW		[PDG]
+
+Baryon Sigma(1730)+ 	\Sigma(1730)^+      3   3 +1  0  0    2   2  -1  0  	1.730 0.3      relBW		[PDG]
+Baryon Sigmabar(1730)- 	\bar\Sigma(1730)^- -3   3 -1  0  0    2  -2   1  0  	1.730 0.3      relBW		[PDG]
+
+
+Baryon Sigma(1750)+ 	\Sigma(1750)^+      3   1 -1  0  0    2   2  -1  0  	1.750 0.09      relBW		[PDG]
+Baryon Sigmabar(1750)- 	\bar\Sigma(1750)^- -3   1  1  0  0    2  -2   1  0  	1.750 0.09      relBW		[PDG]
+
+
+Baryon Sigma(1750)+ 	\Sigma(1750)^+      3   1 -1  0  0    2   2  -1  0  	1.750 0.09      relBW		[PDG]
+Baryon Sigmabar(1750)- 	\bar\Sigma(1750)^- -3   1  1  0  0    2  -2   1  0  	1.750 0.09      relBW		[PDG]
+
+Baryon Sigma(1770)+ 	\Sigma(1770)^+      3   1 +1  0  0    2   2  -1  0  	1.775 0.12      relBW		[PDG]
+Baryon Sigmabar(1770)- 	\bar\Sigma(1770)^- -3   1 -1  0  0    2  -2   1  0  	1.775 0.12      relBW		[PDG]
+
+Baryon Sigma(1775)+ 	\Sigma(1775)^+      3   5 -1  0  0    2   2  -1  0  	1.775 0.12      relBW		[PDG]
+Baryon Sigmabar(1775)- 	\bar\Sigma(1775)^- -3   5 +1  0  0    2  -2   1  0  	1.775 0.12      relBW		[PDG]
+
+Baryon Sigma(1880)+ 	\Sigma(1880)^+        3   1  1  0  0    2   2  -1  0  	1.880 0.200      relBW		[PDG]
+Baryon Sigmabar(1880)- 	\bar\Sigma(1880)^- -3   1 -1  0  0    2  -2   1  0  	1.880 0.200     relBW		[PDG]
+
+Baryon Sigma(1840)+   \Sigma(1840)^+        3   1  1  0  0    2  2   -1  0    1.840 0.100     relBW [memo]
+Baryon Sigmabar(1840)- \bar\Sigma(1840)^-  -3   1 -1  0  0    2 -2    1  0    1.840 0.100     relBW [memo]
+
+Baryon Sigma(1900)+ 	\Sigma(1900)^+      3   1 -1  0  0    2   2  -1  0  	1.915 0.12      relBW		[PDG]
+Baryon Sigmabar(1900)- 	\bar\Sigma(1900)^- -3   1 +1  0  0    2  -2   1  0  	1.915 0.12      relBW		[PDG]
+
+Baryon Sigma(1915)+ 	\Sigma(1915)^+      3   5   1  0  0    2   2  -1  0  	1.915 0.12      relBW		[PDG]
+Baryon Sigmabar(1915)- 	\bar\Sigma(1915)^- -3   5 -1  0  0    2  -2   1  0  	1.915 0.12      relBW		[PDG]
+
+Baryon Sigma(1940)+	 \Sigma(1940)^+      3   3 +1  0  0    2   2  -1  0  	1.941 0.4      relBW		[PDG]
+Baryon Sigmabar(1940)- \bar\Sigma(1940)^- -3   3 -1  0  0    2  -2   1  0  	1.941 0.4      relBW		[PDG]
+
+Baryon Sigma(1941)+ 	 \Sigma(1941)^+      3   3  -1  0  0    2   2  -1  0  	1.940 0.22      relBW		[PDG]
+Baryon Sigmabar(1941)- \bar\Sigma(1941)^- -3   3  +1  0  0    2  -2   1  0  	1.940 0.22      relBW		[PDG]
+
+Baryon Sigma(2030)+ 	\Sigma(2030)^+      3   7  1  0  0    2   2  -1  0  	2.025 0.15      relBW		[PDG]
+Baryon Sigmabar(2030)- 	\bar\Sigma(2030)^- -3   7 -1  0  0    2  -2   1  0  	2.025 0.15      relBW		[PDG]
+
+# Start exited Baryons
+#
+# type name             texName            3*Q 2*J P  C  G   2I  2I3  S  C    mass    width   dyn.f   	comment
+#
+Baryon N(1900)+         N(1900)^+           3   3  1  0  0    1   1   0  0      1.920 0.2       relBW       [PDG]
+Baryon N(1900)-         N(1900)^-          -3   3 -1  0  0    1  -1   0  0      1.920 0.2       relBW       [PDG]
+
+Baryon N(1875)+         N(1875)^+           3   3 -1  0  0    1   1   0  0      1.920 0.2       relBW       [PDG]
+Baryon N(1875)-         N(1875)^-          -3   3  1  0  0    1  -1   0  0      1.920 0.2       relBW       [PDG]
+
+Baryon N(1880)+         N(1880)^+           3   1  1  0  0    1   1   0  0      1.880 0.3       relBW       [PDG]
+Baryon N(1880)-         N(1880)^-          -3   1 -1  0  0    1  -1   0  0      1.880 0.3       relBW       [PDG]
+
+Baryon N(2040)+         N(2040)^+           3   3  1  0  0    1   1   0  0      2.040 0.2       relBW       [PDG]
+Baryon N(2040)-         N(2040)^-          -3   3 -1  0  0    1  -1   0  0      2.040 0.2       relBW       [PDG]
+
+Baryon N(2060)+         N(2060)^+           3   5 -1  0  0    1   1   0  0      2.040 0.2       relBW       [PDG]
+Baryon N(2060)-         N(2060)^-          -3   5  1  0  0    1  -1   0  0      2.040 0.2       relBW       [PDG]
+
+Baryon N(1895)+         N(1895)^+           3   1 -1  0  0    1   1   0  0      1.895 0.12       relBW       [PDG]
+Baryon N(1895)-         N(1895)^-          -3   1  1  0  0    1  -1   0  0      1.895 0.12       relBW       [PDG]
+
+Baryon N(1650)+         N(1650)^+               3  1 -1  0  0   1    1  0  0    1.65    0.125   relBW           [none]

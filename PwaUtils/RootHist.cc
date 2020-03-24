@@ -415,16 +415,16 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
 				  GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
 				  GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
 
-    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-4 &&
-	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-4 &&
-	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-4 &&
-	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-4){
+    if( fabs(all4Vec.E()-combinedMother4Vec.E()) < 1.e-6 &&
+	fabs(all4Vec.Px()-combinedMother4Vec.Px()) < 1.e-6 &&
+	fabs(all4Vec.Py()-combinedMother4Vec.Py()) < 1.e-6 &&
+	fabs(all4Vec.Pz()-combinedMother4Vec.Pz()) < 1.e-6){
       //is production vector
       motherRef4Vec=Vector4<double>(10., 3., 0., 0.);
-      Vector4<double> refVec=Vector4<double>(GlobalEnv::instance()->Channel()->projectile4Vec().E(),
-					     GlobalEnv::instance()->Channel()->projectile4Vec().Px(),
-					     GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
-					     GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
+      refVec=Vector4<double>(GlobalEnv::instance()->Channel()->projectile4Vec().E(),
+			     GlobalEnv::instance()->Channel()->projectile4Vec().Px(),
+			     GlobalEnv::instance()->Channel()->projectile4Vec().Py(),
+			     GlobalEnv::instance()->Channel()->projectile4Vec().Pz());
     }
     if (frame=="heli"){
       if(GlobalEnv::instance()->Channel()->channelType()==AbsChannelEnv::CHANNEL_GG){
@@ -451,6 +451,16 @@ void RootHist::fillAngleHists(EvtData* theData, double weight, std::map<std::sha
     }
 
     if(nBodyDecay == 2){
+      if( ! (result4Vec.Phi() == result4Vec.Phi() ) ) { 
+       WarningMsg << "result4Vec.Phi() != result4Vec.Phi(): " << result4Vec.Phi() << endmsg;
+       WarningMsg << "result4Vec.CosTheta(): " << result4Vec.CosTheta() << "\n" << endmsg;
+       WarningMsg << "motherRef4Vec: " << motherRef4Vec << endmsg;
+       WarningMsg << "refVec: " << refVec << endmsg;
+       WarningMsg << "combinedMother4Vec: " << combinedMother4Vec << endmsg;
+       WarningMsg << "combinedDec4Vec: " << combinedDec4Vec << endmsg;
+       WarningMsg << "GlobalEnv::instance()->Channel()->projectile4Vec(): " << GlobalEnv::instance()->Channel()->projectile4Vec() << endmsg;
+      }
+
       it->second[0]->Fill( result4Vec.CosTheta(), weight);
       it->second[1]->Fill( result4Vec.Phi(), weight);
     }
