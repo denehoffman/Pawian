@@ -30,7 +30,7 @@ TMatrixBase::TMatrixBase(std::shared_ptr<KMatrixBase> Kmatrix) :
   , _Kmatrix(Kmatrix)
   ,_cSign(-1.)
  {
-   if (Kmatrix->phaseSpaceVec().at(0)->name() == "Dudek") _cSign=1.;
+   if (Kmatrix->phaseSpaceVec().at(0)->name() == "Dudek" || Kmatrix->phaseSpaceVec().at(0)->name() == "LUT") _cSign=1.;
  }
 
 

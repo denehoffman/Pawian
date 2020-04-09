@@ -41,7 +41,7 @@ FVector::FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRe
        _CMMatrix(i,j)=complex<double> (0.,0.);
      }
    }
-   if (_phpVec.at(0)->name() == "Dudek") _cSign=1.;
+   if (_phpVec.at(0)->name() == "Dudek" || _phpVec.at(0)->name() == "LUT") _cSign=1.;
  }
 
 FVector::FVector(int numRows) :
