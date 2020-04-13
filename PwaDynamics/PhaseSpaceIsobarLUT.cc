@@ -53,7 +53,7 @@ PhaseSpaceIsobarLUT::~PhaseSpaceIsobarLUT(){
 complex<double> PhaseSpaceIsobarLUT::factor(const double mass){
   complex<double> SqrtSCompl(mass, 0.0);
   complex<double> result = getFactor(SqrtSCompl);
-  complex<double> rho(result.imag(), 0.); 
+  complex<double> rho(-result.imag(), 0.); 
   return rho;
 }
 
