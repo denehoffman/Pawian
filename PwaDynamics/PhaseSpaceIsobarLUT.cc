@@ -98,7 +98,7 @@ complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass){
 
 complex<double> PhaseSpaceIsobarLUT::ChewM(const complex<double> mass){
   complex<double> result = getFactor(mass);
-  complex<double> momReid = result.imag()*mass/2.;
+  complex<double> momReid = -result.imag()*mass/2.;
   CorrectCMForChosenSign(momReid, result); 
   return result;
 }
