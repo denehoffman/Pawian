@@ -112,6 +112,17 @@ void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMa
   // while(currentPhaseDiff > 360. ) currentPhaseDiff -= 360.;
   // while(currentPhaseDiff < 0.)    currentPhaseDiff += 360.;
   // if(currentPhaseDiff > 180.)     currentPhaseDiff  = 360.-currentPhaseDiff;
+  double phaseDiffData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
+  double currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+  while(currentPhaseDiffRelDataFit > 360. ){ 
+    currentPhaseDiff += 360.;
+    currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+  }
+  while(currentPhaseDiffRelDataFit < -360. ){
+    currentPhaseDiff -= 360.;
+    currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+  }
+
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff;
 }
 
