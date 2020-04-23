@@ -60,7 +60,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
    ("startRealMass",po::value<double>(&_startRealMass)->default_value(_startRealMass),"startimg value of real mass for Rieman scan")
    ("startImagMass",po::value<double>(&_startImagMass)->default_value(_startImagMass),"starting value of imaginary mass for Rieman scan")
     ("sheet", po::value<std::string>(&_sheet)->default_value(_sheet),"specification of the Rieman sheet for the scan")
-    ("prodMomParams", po::value<std::string>(&_prodMomParamsStr)->default_value(_prodMomParamsStr),"exactly 3 arguments are required with order: L(orbital momentum) s1(mass square from mother or first initial particle) s2(mass square from recoil or second initial particle")
+    ("prodMomParams", po::value<std::string>(&_prodMomParamsStr)->default_value(_prodMomParamsStr),"exactly 3 arguments are required with order: 2L(orbital momentum) s1(mass square from mother or first initial particle) s2(mass square from recoil or second initial particle")
     ;
   
   _common->add(common);
