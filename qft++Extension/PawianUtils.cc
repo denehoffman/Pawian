@@ -210,6 +210,19 @@ complex<double> PawianQFT::phaseSpaceFacAS(complex<double> mass, double massDec1
   return result;
 }
 
+double PawianQFT::breakupMomQDefaultFromS(double s, double s1, double s2){
+  if ((s*s + s1*s1 + s2*s2 - 2. * ( s*s1 + s*s2 + s1*s2)) < 0.){
+    std::cout << "(s*s + s1*s1 + s2*s2 - 2. * ( s*s1 + s*s2 + s1*s2)) = "
+	      << (s*s + s1*s1 + s2*s2 - 2. * ( s*s1 + s*s2 + s1*s2))
+              << " < 0  -> caluclation is not allowed!!!!"
+	      << std::endl;
+    exit(1);
+  }
+  double result = std::sqrt(s*s + s1*s1 + s2*s2 - 2. * ( s*s1 + s*s2 + s1*s2))/std::sqrt(4.*s);
+  return result;
+}
+
+
 template<typename MassType>
 complex<double> PawianQFT::breakupMomQDefault(MassType mass, double massDec1, double massDec2){
   complex<double> result=PawianQFT::phaseSpaceFacDefault(mass, massDec1, massDec2)*mass/2.;

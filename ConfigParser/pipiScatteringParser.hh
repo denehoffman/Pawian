@@ -48,6 +48,7 @@ class pipiScatteringParser : public ParserBase
   const double startRealMass() const {return _startRealMass;}
   const double startImagMass() const {return _startImagMass;}
   const std::string sheet() const {return _sheet;}
+  const std::string prodMomParamsStr() const {return _prodMomParamsStr;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -61,7 +62,7 @@ protected:
   double _startRealMass;
   double _startImagMass;
   std::string _sheet;
-  
+  std::string _prodMomParamsStr;
 };
 
 

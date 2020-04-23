@@ -46,6 +46,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ,_startRealMass(1.2)
   ,_startImagMass(0.15)
   ,_sheet("nn")
+  ,_prodMomParamsStr("0 3.1 0.14")
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -59,6 +60,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
    ("startRealMass",po::value<double>(&_startRealMass)->default_value(_startRealMass),"startimg value of real mass for Rieman scan")
    ("startImagMass",po::value<double>(&_startImagMass)->default_value(_startImagMass),"starting value of imaginary mass for Rieman scan")
     ("sheet", po::value<std::string>(&_sheet)->default_value(_sheet),"specification of the Rieman sheet for the scan")
+    ("prodMomParams", po::value<std::string>(&_prodMomParamsStr)->default_value(_prodMomParamsStr),"exactly 3 arguments are required with order: L(orbital momentum) s1(mass square from mother or first initial particle) s2(mass square from recoil or second initial particle")
     ;
   
   _common->add(common);
@@ -87,6 +89,7 @@ bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
   std::cout << "startRealMass = " << _startRealMass << std::endl;
   std::cout << "startImagMass = " << _startImagMass << std::endl;
   std::cout << "sheet = " << _sheet << std::endl;
+  std::cout << "prodMomParamsStr = " << _prodMomParamsStr << std::endl;
   std::cout << std::endl;
 
   return true;

@@ -51,6 +51,9 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "Utils/IdStringMapRegistry.hh"
 #include "Utils/PawianConstants.hh"
+#include "ConfigParser/ParserBase.hh"
+#include "ConfigParser/pipiScatteringParser.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  std::string baseNameFVector, ChannelID channelID, std::string projectionParticleNames) :
   KMatrixDynamics(name, fsParticles, mother, pathToConfigParser, channelID, projectionParticleNames)
@@ -62,6 +65,33 @@ FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vecto
   _nameOfFVector= baseNameFVector;
   addOneGrandMa(_nameOfFVector);
   _FVector = fVector(_nameOfFVector);
+
+  ParserBase* parserBase=GlobalEnv::instance()->Channel(channelID)->parser();
+  pipiScatteringParser* thePiPiScatteringParser = dynamic_cast<pipiScatteringParser*>(parserBase);
+
+  std::string prodMomParamsStr=thePiPiScatteringParser->prodMomParamsStr();
+  std::stringstream prodMomParamsStringStr;
+  prodMomParamsStringStr << prodMomParamsStr;
+  
+  std::string LprodStr;
+  prodMomParamsStringStr >> LprodStr;
+  _Lprod=atof(LprodStr.c_str());
+
+  std::string s1ProdStr;
+  prodMomParamsStringStr >> s1ProdStr;
+  _s1Prod=atof(s1ProdStr.c_str());
+
+  std::string s2ProdStr;
+  prodMomParamsStringStr >> s2ProdStr;
+  _s2Prod=atof(s2ProdStr.c_str());
+
+  if(_s2Prod > _s1Prod){
+    Alert << "wrong s values for the production particles: _s2Prod = "
+	  << _s2Prod << " > " << "_s1Prod = " << _s1Prod
+	  << endmsg;
+    Alert << "requirement: _s2Prod <= _s1Prod !!!!" << endmsg;
+    exit(1);
+  }
 }
 
 
@@ -76,8 +106,16 @@ complex<double> FVectorIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* gra
   double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
 
   complex<double> currentFAmp=_FVector->evalProjMatrix( currentMass, _decProjectionIndex, OrbMom);
+
+  double momQL=1.;
+  if(_Lprod > 0){
+    double currentMassS=currentMass*currentMass;
+    if(currentMassS > _s1Prod)
+      momQL=pow(PawianQFT::breakupMomQDefaultFromS(currentMassS, _s1Prod, _s2Prod), _Lprod);
+    else momQL=pow(PawianQFT::breakupMomQDefaultFromS(_s1Prod, _s1Prod, _s2Prod), _Lprod);
+  }
   
-  double currentResult = norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()) );
+  double currentResult = norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2.) * momQL );
   
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME)) = currentResult;
   return currentFAmp;
