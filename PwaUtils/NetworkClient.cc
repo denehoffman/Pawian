@@ -151,7 +151,7 @@ bool NetworkClient::SendHeartbeat(){
 	counter++;
 	if (counter>20){
 	  Alert << "Could not send heartbeat last time" << endmsg;
-	  exit(0);
+	  exit(1);
 	}
 	WarningMsg << "Try to send heartbeat again!!!" << endmsg;
       }
@@ -185,6 +185,7 @@ bool NetworkClient::WaitForParams(){
 
    if(serverMessage == NetworkServer::SERVERMESSAGE_CLOSE){
       InfoMsg << "Received goodbye. Exiting." << endmsg;
+      exit(0);
       return true;
    }
    else if(serverMessage != NetworkServer::SERVERMESSAGE_PARAMS){
