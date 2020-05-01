@@ -12,7 +12,7 @@ ErrLogger& ErrLogger::instance() {
 
 ErrLogger::ErrLogger() {
   setLevel(logging::log_level::TRACE);
-  setThreshold(logging::log_level::ERROR);
+  setThreshold(logging::log_level::TRACE);
 }
 
 ErrLogger::~ErrLogger() {
