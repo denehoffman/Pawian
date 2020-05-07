@@ -128,7 +128,7 @@ bool EventReaderDefault::fill(EventList &evtList, int evtStart, int evtStop) {
             currentStream >> px >> py >> pz >> e;
       }
     }
-    if (currentEvtNo == 0) {
+    if (currentEvtNo < 0) {
       Alert << "No events have been read in from File: " << *currentFile
             << " ! \nNo events in massRange? Wrong order of particles? "
                "currentEvtNo = "

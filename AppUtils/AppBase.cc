@@ -144,9 +144,10 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   }
 
   Event* currentNextEvent = theEventList.nextEvent();
-  if (0!=currentNextEvent) { 
+  if (0 != currentNextEvent) {
+    InfoMsg << currentNextEvent << endmsg; 
     InfoMsg << " Each event has "
-	    <<  theEventList.nextEvent()->size() << " final state particles.\n" << endmsg;
+	    <<  currentNextEvent->size() << " final state particles.\n" << endmsg;
   } else {
     WarningMsg << "\n currentNextEvent does not exist.\n" << endmsg;
   }
@@ -725,13 +726,13 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
       std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
 
-    if(noOfWeightedDataEvts<5.){
+    if(noOfWeightedDataEvts<1.){
       Alert << "number of weighted data events too small: " << noOfWeightedDataEvts << endmsg;
       exit(1);
     }
     if(GlobalEnv::instance()->Channel((*it).first->channelID())->channelType() 
-       != AbsChannelEnv::CHANNEL_PIPISCATTERING && noOfMcEvts<10.){
-      if(noOfMcEvts<10.){
+       != AbsChannelEnv::CHANNEL_PIPISCATTERING && noOfMcEvts<1.){
+      if(noOfMcEvts<1.){
 	Alert << "number of weighted Monte Carlo events too small: " << noOfMcEvts << endmsg;
 	exit(1);
       }
@@ -773,12 +774,12 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 
 void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar, 
 			       double evtWeightSumData, double evtWeightSumMc){
-    if(evtWeightSumData<10.){
-      Alert << "number of wieghted data events too small: " << evtWeightSumData << endmsg;
+  if( !(evtWeightSumData > 0.) ){
+      Alert << "number of wighted data events too small: " << evtWeightSumData << endmsg;
       exit(1);
     }
     if( (GlobalEnv::instance()->Channel()->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING) 
-	&& evtWeightSumMc<10.){
+	&& evtWeightSumMc< 1.){
       Alert << "number of weighted Monte Carlo events too small: " << evtWeightSumMc << endmsg;
       exit(1);
     }

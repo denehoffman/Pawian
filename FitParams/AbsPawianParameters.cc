@@ -23,6 +23,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <math.h>
 
 #include "FitParams/AbsPawianParameters.hh"
 #include "FitParams/ParamFactory.hh"
@@ -112,8 +113,9 @@ void AbsPawianParameters::SetAllValues(const std::vector<double>& values){
   }
 
   for(unsigned int i=0; i<values.size(); ++i){
-    if(values.at(i) != values.at(i)) {
-       Alert << "Parameter vector returned from minimization procedure contains NAN! Exiting..." << endmsg;
+    //    if(values.at(i) != values.at(i)) {
+    if( isnan(values.at(i)) || isinf(values.at(i)) ) {
+       Alert << "Parameter vector returned from minimization procedure contains NAN or INF! Exiting..." << endmsg;
        Alert << "The name of the parameter is: " << GetName(i) << endmsg;
        exit(0);
     }

@@ -48,7 +48,8 @@ class pipiScatteringParser : public ParserBase
   const double startRealMass() const {return _startRealMass;}
   const double startImagMass() const {return _startImagMass;}
   const std::string sheet() const {return _sheet;}
-  
+  const std::string prodMomParamsStr() const {return _prodMomParamsStr;}
+  const double sProdExponent() const {return _sProdExp;}
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   std::string _pathToKMatrixCompareFile;
@@ -61,7 +62,8 @@ protected:
   double _startRealMass;
   double _startImagMass;
   std::string _sheet;
-  
+  std::string _prodMomParamsStr;
+  double _sProdExp;
 };
 
 

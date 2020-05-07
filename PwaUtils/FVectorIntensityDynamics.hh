@@ -60,6 +60,10 @@ protected:
   
   complex<double> _currentAmplitudeVal;
 
+  unsigned int _L2prod;
+  double _s1Prod;
+  double _s2Prod;
+  double _sProdExp;
 private:
 
 };

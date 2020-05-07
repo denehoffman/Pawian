@@ -39,6 +39,7 @@ namespace PawianQFT{
   complex<double> phaseSpaceFacDefault(complex<double> mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacAS(double mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacAS(complex<double> mass, double massDec1, double massDec2);
+  double breakupMomQDefaultFromS(double s, double s1, double s2);
   template<typename MassType>
   complex<double> breakupMomQDefault(MassType mass, double massDec1, double massDec2);
   template<typename MassType>
