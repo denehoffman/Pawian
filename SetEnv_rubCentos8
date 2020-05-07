@@ -7,7 +7,7 @@ setenv BOOST_BUILD_PATH /data/sleipnir/PANDA/boost-build
 setenv PATH $BOOST_BUILD_PATH/bin:${TOP_DIR}/bin:${PATH}
 
 rm Jamroot
-ln -s JamrootSL7 Jamroot
+ln -s JamrootCentos8 Jamroot
 rm Event/Jamfile
 ln -s JamfilePython27 Event/Jamfile
 
