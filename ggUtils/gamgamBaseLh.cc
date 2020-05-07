@@ -41,6 +41,10 @@
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "ConfigParser/ParserBase.hh"
+#include "ConfigParser/ggParser.hh"
+#include "Utils/FunctionUtils.hh"
+#include "Utils/IdStringMapRegistry.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 #include <boost/bind.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -50,6 +54,7 @@ gamgamBaseLh::gamgamBaseLh(ChannelID channelID) :
   AbsLh(channelID)
   ,_ggChannelEnv(std::static_pointer_cast<GGChannelEnv> (GlobalEnv::instance()->GGChannel(channelID)))
   ,_useProdDynamics(false)
+  ,_withDecMom(false)
 {
   initialize();
 }
@@ -135,6 +140,11 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
   if(_useProdDynamics) result*=fabs(_dyn->eval(theData,0).real());
+  if(_withDecMom){
+    double currentMass=_dyn->currentMass(theData);
+    double currentBreakupMom=(PawianQFT::breakupMomQDefault(currentMass, _decMass1, _decMass2)).real();
+    result*=currentBreakupMom;
+      }
   result *= fitPar->Value(_channelScaleParam);
   return result;
 }
@@ -161,6 +171,24 @@ void  gamgamBaseLh::initialize(){
     motherFormDec->enableDynamics(dynString, additionalStringVecDummy);
    _dyn=motherFormDec->getDynamics();
   }
+  
+  ggParser* theggParser = dynamic_cast<ggParser*>(_ggChannelEnv->parser());
+  std::string decMomStr=theggParser->decMomParamsStr();
+  std::stringstream decMomParamsStringStr;
+  decMomParamsStringStr << decMomStr;
+  
+  std::string withDecMomStr;
+  decMomParamsStringStr >> withDecMomStr;
+  int withDecMom=atof(withDecMomStr.c_str());
+  if (withDecMom!=0) _withDecMom=true;
+
+  std::string decMass1Str;
+  decMomParamsStringStr >> decMass1Str;
+  _decMass1=atof(decMass1Str.c_str());
+
+  std::string decMass2Str;
+  decMomParamsStringStr >> decMass2Str;
+  _decMass1=atof(decMass2Str.c_str());
 }
 
 void gamgamBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){

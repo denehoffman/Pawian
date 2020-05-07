@@ -40,12 +40,13 @@ class ggParser : public ParserBase
 
   const double cmsMass() {return _cmsMass;}
   const unsigned int jMax() {return _jMax;}
-
+  const std::string decMomParamsStr(){return _decMomStr;}
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
   double _cmsMass;
   unsigned int _jMax;
+  std::string _decMomStr;
 };
 
 

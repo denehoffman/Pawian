@@ -53,6 +53,7 @@ public:
   virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0)=0;
   virtual void cacheAmplitudes();
   virtual void fillMasses(EvtData* theData);
+  virtual double currentMass(EvtData* theData);
   virtual void setMassKey(std::string& theMassKey){_massKey=theMassKey;}
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) {;}
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp){return _grandmaKey;}

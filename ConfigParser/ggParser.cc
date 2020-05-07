@@ -37,6 +37,7 @@ ggParser::ggParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_cmsMass(3.096916)
   ,_jMax(2)
+  ,_decMomStr("0 1.1 1.2")
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -48,6 +49,7 @@ ggParser::ggParser(int argc,char **argv):
   config.add_options()
      ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
     ("jMax", po::value<unsigned int>(&_jMax), "jMax")
+    ("withDecMom", po::value<std::string>(&_decMomStr),"fit with decay momentum: argument1=1/0 argument2=mass1 argument3=mass2")
      ;
   _config->add(config);
   
@@ -60,6 +62,6 @@ bool ggParser::parseCommandLine(int argc, char **argv)
   
   std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
   std::cout << "\njMax:\t" << _jMax << std::endl;
-  
+  std::cout << "\nwithDecMom:\t" << _decMomStr << std::endl;  
    return true;
 }

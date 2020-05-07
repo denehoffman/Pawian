@@ -91,3 +91,6 @@ void AbsDynamics::fillMasses(EvtData* theData){
   }
 }
 
+double AbsDynamics::currentMass(EvtData* theData){
+  return theData->DoubleMassId.at(_dynId);
+}

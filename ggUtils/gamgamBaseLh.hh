@@ -76,6 +76,9 @@ protected:
   const std::shared_ptr<GGChannelEnv> _ggChannelEnv;
   bool _useProdDynamics;
   std::shared_ptr<AbsDynamics> _dyn;
+  bool _withDecMom;
+  double _decMass1;
+  double _decMass2;
 
   virtual void initialize();
 private:
