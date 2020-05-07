@@ -60,7 +60,7 @@ FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vecto
   ,_nameOfAmplitudeMag(baseNameFVector+_pVecSuffix+_kMatName+"AmpMag")
   , _nameOfAmplitudePhi(baseNameFVector+_pVecSuffix+_kMatName+"AmpPhi")
   ,_currentAmplitudeVal(complex<double>(0.,0.))
-
+  ,_sProdExp(0.)
 {
   _nameOfFVector= baseNameFVector;
   addOneGrandMa(_nameOfFVector);
@@ -92,6 +92,8 @@ FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vecto
     Alert << "requirement: _s2Prod <= _s1Prod !!!!" << endmsg;
     exit(1);
   }
+
+  _sProdExp = thePiPiScatteringParser->sProdExponent();
 }
 
 
@@ -114,8 +116,8 @@ complex<double> FVectorIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* gra
       momQ2L=pow(PawianQFT::breakupMomQDefaultFromS(currentMassS, _s1Prod, _s2Prod), _L2prod);
     else momQ2L=pow(PawianQFT::breakupMomQDefaultFromS(_s1Prod, currentMassS, _s2Prod), _L2prod);
   }
-  
-  double currentResult = norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L) );
+
+  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L) );
   
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME)) = currentResult;
   return currentFAmp;
