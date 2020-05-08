@@ -8,6 +8,7 @@
   - git --version
   - pwd
   - g++ --version
+  - env
 
 .fix-cc1plus: &fix-cc1plus |
   export PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/:$PATH
