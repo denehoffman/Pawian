@@ -1,0 +1,28 @@
+.only-default: &only-default
+  only:
+    - merge_requests
+    - master
+
+.print-system-info: &print-system-info
+  - lsb_release -a
+  - git --version
+  - pwd
+  - g++ --version
+
+.fix-cc1plus: &fix-cc1plus |
+  export PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/:$PATH
+
+Empty job:
+  <<: *only-default
+  before_script:
+    - *print-system-info
+  script:
+    - echo "Script stage undefined!"
+
+B2 (bjam):
+  before_script:
+    - *print-system-info
+    - *fix-cc1plus
+    - source SetEnv_rub.sh
+  script:
+    - bjam release -j$(nproc)
