@@ -23,6 +23,7 @@ B2 (bjam):
   before_script:
     - *print-system-info
     - *fix-cc1plus
+    - touch Jamroot
     - source SetEnv_rub.sh
   script:
     - bjam release -j$(nproc)
