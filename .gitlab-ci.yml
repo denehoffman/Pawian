@@ -9,9 +9,6 @@
   - pwd
   - g++ --version
 
-.fix-cc1plus: &fix-cc1plus |
-  export PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/:$PATH
-
 Empty job:
   <<: *only-default
   before_script:
@@ -22,7 +19,6 @@ Empty job:
 B2 (bjam):
   before_script:
     - *print-system-info
-    - *fix-cc1plus
     - touch Jamroot
     - source SetEnv_rub.sh
     - env
