@@ -21,6 +21,5 @@ B2 (bjam):
     - *print-system-info
     - touch Jamroot
     - source SetEnv_rub.sh
-    - env
   script:
     - bjam release -j$(nproc)
