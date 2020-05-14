@@ -55,6 +55,7 @@ gamgamBaseLh::gamgamBaseLh(ChannelID channelID) :
   ,_ggChannelEnv(std::static_pointer_cast<GGChannelEnv> (GlobalEnv::instance()->GGChannel(channelID)))
   ,_useProdDynamics(false)
   ,_withDecMom(false)
+  ,_sProdExp(0.0)
 {
   initialize();
 }
@@ -139,12 +140,16 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   }
   
   if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
-  if(_useProdDynamics) result*=fabs(_dyn->eval(theData,0).real());
-  if(_withDecMom){
+  if(_useProdDynamics){
+    result*=fabs(_dyn->eval(theData,0).real());
     double currentMass=_dyn->currentMass(theData);
-    double currentBreakupMom=(PawianQFT::breakupMomQDefault(currentMass, _decMass1, _decMass2)).real();
-    result*=currentBreakupMom;
-      }
+    result*=pow(currentMass*currentMass,_sProdExp);    
+    if(_withDecMom){
+      double currentMass=_dyn->currentMass(theData);
+      double currentBreakupMom=(PawianQFT::breakupMomQDefault(currentMass, _decMass1, _decMass2)).real();
+      result*=currentBreakupMom;
+    }
+  }
   result *= fitPar->Value(_channelScaleParam);
   return result;
 }
@@ -189,6 +194,8 @@ void  gamgamBaseLh::initialize(){
   std::string decMass2Str;
   decMomParamsStringStr >> decMass2Str;
   _decMass1=atof(decMass2Str.c_str());
+
+  _sProdExp = theggParser->sProdExponent();
 }
 
 void gamgamBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){

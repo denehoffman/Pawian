@@ -79,6 +79,7 @@ protected:
   bool _withDecMom;
   double _decMass1;
   double _decMass2;
+  double _sProdExp;
 
   virtual void initialize();
 private:

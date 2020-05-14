@@ -88,6 +88,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_addChannelScalingId(false)
   ,_minuitStrategyLevel(1)
   ,_singleChannelId(0)
+  ,_sProdExp(0.0)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -189,6 +190,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("projectile4Vec", po::value<string>(&_projectile4VecStr),"4 Vector of the projectile (order: E, px, py, pz")
     ("nllScalingFactor", po::value<double>(&_nllScalingFactor), "NLL scaling factor for individual channels")
     ("addChannelScalingId",po::value<bool>(&_addChannelScalingId), "add Id to parameter name for channel scaling")
+    ("sProdExponent", po::value<double>(&_sProdExp)->default_value(_sProdExp),"exponent for the s dependency in the production (supported for FVectorIntensity and Gamgam fits")
     ;
 
 }
@@ -425,7 +427,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       std::cout << "\ngenerate with model:\t" << _genWithModel << std::endl;
       std::cout << "\nnumber of generated events:\t" << _noOfGenEvts << std::endl;
       std::cout << "\nnumber of data events:\t" << _noOfDataEvts << std::endl;
-
+      std::cout << "sProdExponent =" << _sProdExp << std::endl;
     }
 
   }

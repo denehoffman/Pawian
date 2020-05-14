@@ -130,7 +130,7 @@ public:
   const bool addChannelScalingId() const{return _addChannelScalingId;}
   const unsigned int minuitStrategyLevel() const{return _minuitStrategyLevel;}
   const unsigned int singleChannelId() const{ return _singleChannelId;}
- 
+  const double sProdExponent() const {return _sProdExp;} 
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
@@ -217,4 +217,5 @@ protected:
   bool _addChannelScalingId;
   unsigned int _minuitStrategyLevel;
   unsigned int _singleChannelId;
+  double _sProdExp;
 };
