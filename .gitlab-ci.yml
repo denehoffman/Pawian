@@ -4,7 +4,7 @@
     - master
 
 .print-system-info: &print-system-info
-  - lsb_release -a
+#  - lsb_release -a
   - git --version
   - pwd
   - g++ --version
