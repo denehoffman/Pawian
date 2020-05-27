@@ -18,29 +18,28 @@ BOOSTLIBS =
 
 
 project :
-	requirements <include>./
-	<include>$(TOP)
-	<include>$(BOOSTINCLUDE)
-	<include>$(extern)/include
-	<include>$(ROOTSYS)/include
-	<cxxflags>--std=c++14
-	<cxxflags>-ftemplate-depth=256
+  requirements <include>./
+  <include>$(TOP)
+  <include>$(BOOSTINCLUDE)
+  <include>$(extern)/include
+  <include>$(ROOTSYS)/include
+  <cxxflags>--std=c++14
+  <cxxflags>-ftemplate-depth=256
   <link>static
-	<linkflags>$(ROOTLIBS)
-	<linkflags>-L$(BOOSTLIBPATH)
-	<linkflags>$(BOOSTLIBS)
-	<cxxflags>-fPIC
-	<cxxflags>-Wall
-	;
+  <linkflags>$(ROOTLIBS)
+  <linkflags>-L$(BOOSTLIBPATH)
+  <linkflags>$(BOOSTLIBS)
+  <cxxflags>-fPIC
+  <cxxflags>-Wall
+  ;
 
 actions rootlibs
 {
-	$(ROOTSYS)/bin/root-config --libs
+  $(ROOTSYS)/bin/root-config --libs
 }
 
 lib HepMc : : <file>$(extern)/libgcc920/libHepMC.so : : ;
 lib Minuit2 : : <file>$(extern)/libgcc920/libMinuit2.so : : ;
-
 
 build-project ErrLogger ;
 build-project qft++ ;
@@ -56,7 +55,7 @@ build-project pbarpUtils ;
 build-project epemUtils ;
 build-project resUtils ;
 build-project ggUtils ;
-#build-project gammapUtils ;
+# build-project gammapUtils ;
 build-project pipiScatteringUtils ;
 build-project qaErrorExtract ;
 build-project Particle ;
