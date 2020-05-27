@@ -20,6 +20,6 @@ B2 (bjam):
   before_script:
     - *print-system-info
     - touch Jamroot
-    - source SetEnv_rub.sh
+    - source SetEnv_rubCentos8.sh
   script:
     - bjam release -j$(nproc)
