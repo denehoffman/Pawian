@@ -2,16 +2,17 @@ alias install : install-lib ;
 explicit install ;
 
 install install-lib : Utils
-                 : <location>$(TOP)/lib 
-                   <install-dependencies>on 
+                 : <location>$(TOP)/lib
+                   <install-dependencies>on
                    <install-type>LIB
                    ;
 
-project : 
+project :
 	;
 
-lib Utils : [ glob *.cc : *App.cc ]
-    $(TOP)/ErrLogger//ErrLogger 
-    : 
-    : 
-    : ;
+lib Utils
+  : [ glob *.cc : *App.cc ErrValue.cc ]
+    $(TOP)/ErrLogger//ErrLogger
+  ;
+
+lib Utils_ErrValue : ErrValue.cc ;

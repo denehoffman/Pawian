@@ -3,22 +3,27 @@ explicit install ;
 
 install install-bin : PdtTestApp
                  : <location>$(TOP)/bin
-                   <install-dependencies>on 
+                   <install-dependencies>on
                    <install-type>EXE
                    ;
 
 install install-lib : Particle
-                 : <location>$(TOP)/lib 
-                   <install-dependencies>on 
+                 : <location>$(TOP)/lib
+                   <install-dependencies>on
                    <install-type>LIB
                    ;
 
-project : 
+project :
 	;
 
-lib Particle : [ glob *.cc : *App.cc ] : : : ;
+lib Particle
+  : [ glob *.cc : *App.cc ]
+    $(TOP)/Utils//Utils_ErrValue
+  ;
 
-exe PdtTestApp : PdtTestApp.cc Particle 
-    	       $(TOP)/Utils//Utils 
-	       $(TOP)/ErrLogger//ErrLogger 
-	       : ;
+exe PdtTestApp
+  : PdtTestApp.cc
+    Particle
+    $(TOP)/Utils//Utils_ErrValue
+    $(TOP)/ErrLogger//ErrLogger
+	;
