@@ -4,22 +4,24 @@
     - master
 
 .print-system-info: &print-system-info
-#  - lsb_release -a
+  - lsb_release -a
+  - inxi
   - git --version
   - pwd
   - g++ --version
+  - clang++ --version
 
-Empty job:
+before_script:
+  - *print-system-info
+  - touch Jamroot
+  - source SetEnv_rubCentos8.sh
+
+b2, g++ 9.2.0:
   <<: *only-default
-  before_script:
-    - *print-system-info
-  script:
-    - echo "Script stage undefined!"
-
-B2 (bjam):
-  before_script:
-    - *print-system-info
-    - touch Jamroot
-    - source SetEnv_rubCentos8.sh
   script:
     - bjam release -j$(nproc)
+
+b2, clang 8.0.1:
+  <<: *only-default
+  script:
+    - bjam release toolset=clang -j$(nproc)
