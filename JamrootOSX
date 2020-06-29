@@ -1,18 +1,18 @@
 import os ;
 using darwin ;
 path-constant TOP : . ;
-local ROOTSYS = [ os.environ ROOTSYS ] ; 
+local ROOTSYS = [ os.environ ROOTSYS ] ;
 local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
 ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
 BOOSTLIBS =  -lboost_date_time -lboost_filesystem -lboost_program_options -lboost_regex -lboost_serialization -lboost_system -lboost_test_exec_monitor -lboost_timer -lboost_chrono ;
 
 
 project :
-	requirements <include>./  
+	requirements <include>./
 	<include>$(BOOSTINCLUDE)
 	<include>$(extern)/include
 	<include>$(ROOTSYS)/include
-	<link>static
+	<link>shared
 	<cxxflags>-std=gnu++11
 	<cxxflags>-ftemplate-depth=256
 	<linkflags>$(ROOTLIBS)
@@ -29,7 +29,7 @@ actions rootlibs
 
 lib HepMc : : <file>$(extern)/lib/libHepMC.dylib : : ;
 lib Minuit2 : : <file>$(extern)/lib/libMinuit2.dylib : : ;
- 
+
 build-project qft++ ;
 build-project Utils ;
 build-project ErrLogger ;
