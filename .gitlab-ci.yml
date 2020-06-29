@@ -4,12 +4,12 @@
     - master
 
 .print-system-info: &print-system-info
-  - lsb_release -a
   - inxi
-  - git --version
+  - lsb_release -a
   - pwd
-  - g++ --version
   - clang++ --version
+  - g++ --version
+  - git --version
 
 before_script:
   - *print-system-info

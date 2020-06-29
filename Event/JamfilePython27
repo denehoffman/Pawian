@@ -27,14 +27,25 @@ project :
 project : 
 	;
 
-lib Event : 
-	[ glob *.cc : *App.cc ] 
-	$(TOP)/ErrLogger//ErrLogger $(TOP)/Particle//Particle 
+lib Event
+  : [ glob *.cc : *App.cc ]
+	  $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/Particle//Particle
 	: <use>$(TOP)//HepMc
-	: 
-	: <library>$(TOP)//HepMc ;
+	:
+	: <library>$(TOP)//HepMc
+  ;
 
-exe HepMCEvtReaderTestApp : HepMCEvtReaderTestApp.cc Event 
-    			  $(TOP)/ErrLogger//ErrLogger
-			  $(TOP)/Utils//Utils
-    			  : ;
+exe HepMCEvtReaderTestApp
+  : HepMCEvtReaderTestApp.cc Event
+    $(TOP)/ErrLogger//ErrLogger
+		$(TOP)/Utils//Utils
+  ;
+
+unit-test test_Event
+  : [ glob test/*.cc ]
+    $(TOP)//boost_test
+    $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/Particle//Particle
+    Event
+  ;

@@ -1,4 +1,5 @@
 import os ;
+import testing ;
 
 path-constant TOP : . ;
 local extern = [ os.environ extern ] ;
@@ -14,8 +15,11 @@ BOOSTLIBS =
   -lboost_serialization
   -lboost_system
   -lboost_timer
+  -lboost_unit_test_framework
   -lrt
   ;
+
+lib boost_test : : <name>boost_unit_test_framework ;
 
 project :
   requirements <include>./
