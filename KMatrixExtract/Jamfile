@@ -27,6 +27,7 @@ exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/Event//Event
 	$(TOP)/FitParams//FitParams
 	$(TOP)/Particle//Particle
 	$(TOP)/qft++Extension//qft++Extension
@@ -37,6 +38,7 @@ exe TMatrixErrorExtrApp : TMatrixErrorExtrApp.cc KMatrixExtract
 exe TMatrixResidueExtrApp : TMatrixResidueExtrApp.cc KMatrixExtract
         $(TOP)/pipiScatteringUtils//pipiScatteringUtils
 	$(TOP)/PwaDynamics//PwaDynamics
+	$(TOP)/Event//Event
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/FitParams//FitParams
@@ -51,6 +53,7 @@ exe ArgandModuloConverterApp : ArgandModuloConverterApp.cc KMatrixExtract
 	$(TOP)/PwaDynamics//PwaDynamics
 	$(TOP)/ConfigParser//ConfigParser
 	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/Event//Event
 	$(TOP)/FitParams//FitParams
 	$(TOP)/Particle//Particle
 	$(TOP)/qft++Extension//qft++Extension
@@ -64,6 +67,7 @@ exe TMatrixGeneralApp : TMatrixGeneralApp.cc KMatrixExtract
           $(TOP)/Particle//Particle
           $(TOP)/ConfigParser//ConfigParser
           $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
           $(TOP)/FitParams//FitParams
           $(TOP)/Event//Event
           $(TOP)/qft++Extension//qft++Extension
@@ -79,6 +83,7 @@ exe TMatrixPiPiSWaveSimple4piPhpApp : TMatrixPiPiSWaveSimple4piPhpApp.cc KMatrix
           $(TOP)/Particle//Particle
           $(TOP)/ConfigParser//ConfigParser
           $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
           $(TOP)/FitParams//FitParams
           $(TOP)/Event//Event
           $(TOP)/qft++Extension//qft++Extension

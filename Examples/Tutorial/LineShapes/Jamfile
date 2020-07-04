@@ -24,6 +24,7 @@ exe BwShapeApp : BwShapeApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -35,6 +36,7 @@ exe FlatteShapeApp : FlatteShapeApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -46,6 +48,7 @@ exe TwoPolesApp : TwoPolesApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -57,6 +60,7 @@ exe PiPiSWaveApp : PiPiSWaveApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -68,6 +72,7 @@ exe VoigtShapeApp : VoigtShapeApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -79,6 +84,7 @@ exe BarrierFactorApp : BarrierFactorApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -90,6 +96,7 @@ exe PhpFactorApp : PhpFactorApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger
@@ -101,6 +108,7 @@ exe LUTPlotApp : LUTPlotApp.cc LineShapes
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
 	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
 	  $(TOP)/FitParams//FitParams
 	  $(TOP)/qft++Extension//qft++Extension
           $(TOP)/ErrLogger//ErrLogger

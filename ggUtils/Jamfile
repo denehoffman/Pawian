@@ -21,6 +21,7 @@ exe ggStatesApp : ggStatesApp.cc ggUtils
 	$(TOP)/FitParams//FitParams
 	$(TOP)/PwaUtils//PwaUtils 
 	$(TOP)/Utils//Utils
+	$(TOP)/Event//Event
 	$(TOP)/pbarpUtils//pbarpUtils 
 	$(TOP)/qft++//qft++
 	$(TOP)/ErrLogger//ErrLogger
