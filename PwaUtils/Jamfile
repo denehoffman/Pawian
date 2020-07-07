@@ -22,4 +22,6 @@ lib PwaUtils :
 	$(TOP)/PspGen//PspGen
 	:
 	: 
-	: ;
+	: <library>$(TOP)/qft++Extension//qft++Extension
+	  <library>$(TOP)/ConfigParser//ConfigParser
+	;

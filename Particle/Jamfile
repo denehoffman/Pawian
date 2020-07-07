@@ -19,6 +19,9 @@ project :
 lib Particle
   : [ glob *.cc : *App.cc ]
     $(TOP)/Utils//Utils_ErrValue
+    :
+    :
+    : <library>$(TOP)/Utils//Utils_ErrValue
   ;
 
 exe PdtTestApp

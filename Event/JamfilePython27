@@ -29,17 +29,18 @@ project :
 
 lib Event
   : [ glob *.cc : *App.cc ]
-	  $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/ErrLogger//ErrLogger
     $(TOP)/Particle//Particle
 	: <use>$(TOP)//HepMc
 	:
 	: <library>$(TOP)//HepMc
+	  <library>$(TOP)/Particle//Particle
   ;
 
 exe HepMCEvtReaderTestApp
   : HepMCEvtReaderTestApp.cc Event
+    $(TOP)/Utils//Utils
     $(TOP)/ErrLogger//ErrLogger
-		$(TOP)/Utils//Utils
   ;
 
 unit-test test_Event
