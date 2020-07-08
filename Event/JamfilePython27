@@ -1,12 +1,6 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : HepMCEvtReaderTestApp
-                 : <location>$(TOP)/bin
-                   <install-dependencies>on 
-                   <install-type>EXE
-                   ;
-
 install install-lib : Event 
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
@@ -31,16 +25,9 @@ lib Event
   : [ glob *.cc : *App.cc ]
     $(TOP)/ErrLogger//ErrLogger
     $(TOP)/Particle//Particle
-	: <use>$(TOP)//HepMc
+	: 
 	:
-	: <library>$(TOP)//HepMc
-	  <library>$(TOP)/Particle//Particle
-  ;
-
-exe HepMCEvtReaderTestApp
-  : HepMCEvtReaderTestApp.cc Event
-    $(TOP)/Utils//Utils
-    $(TOP)/ErrLogger//ErrLogger
+	: <library>$(TOP)/Particle//Particle
   ;
 
 unit-test test_Event
