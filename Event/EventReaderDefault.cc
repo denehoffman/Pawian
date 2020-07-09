@@ -56,8 +56,8 @@ bool EventReaderDefault::fill(EventList &evtList, int evtStart, int evtStop) {
 
   while (currentFile != fileNames.end()) {
     currentStream.open(currentFile->c_str());
-    if (!currentStream) {
-      Alert << "can not open " << *currentFile; // << endmsg;
+    if (!currentStream.is_open()) {
+      Alert << "can not open " << *currentFile << endmsg;
       exit(1);
     }
 
