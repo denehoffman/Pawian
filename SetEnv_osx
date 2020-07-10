@@ -5,7 +5,3 @@ export PATH="$PATH:$ROOTSYS/bin"                      # same as above: /usr/loca
 
 rm Jamroot
 ln -s JamrootOSX Jamroot
-rm Event/Jamfile
-ln -s JamfilePython26 Event/Jamfile
-
-echo "ROOTSYS: " $ROOTSYS 

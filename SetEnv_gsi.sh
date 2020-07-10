@@ -8,8 +8,3 @@ export PATH=$ROOTSYS/bin:$TOP_DIR/bin:$PATH
 
 rm Jamroot
 ln -s JamrootSL6_gsi Jamroot
-rm Event/Jamfile
-ln -s JamfilePython27 Event/Jamfile
-
-echo "ROOTSYS: " $ROOTSYS 
-echo "BOOST_BUILD_PATH: " $BOOST_BUILD_PATH  
