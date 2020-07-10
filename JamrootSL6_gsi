@@ -26,7 +26,6 @@ actions rootlibs
 	$(ROOTSYS)/bin/root-config --libs
 }
 
-lib HepMc : : <file>/lustre/nyx/panda/malte/extern/lib/libHepMC.so : : ;
 lib Minuit2 : : <file>/lustre/nyx/panda/malte/extern/lib/libMinuit2.so : : ;
 
 build-project qft++ ;

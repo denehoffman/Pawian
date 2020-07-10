@@ -175,7 +175,7 @@ void pbarpProductionLh::initialize(){
    }
 
    std::string dynString=_ggChannelEnv->parser()->productionDynamics();
-   if(dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2"){
+   if(dynString=="woFormPol" || dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2"){
      _useProdDynamics=true;
      std::shared_ptr<FormationDecay> motherFormDec = _ggChannelEnv->reaction()->motherProdDec();
      std::vector<std::string> additionalStringVecDummy;
@@ -185,11 +185,11 @@ void pbarpProductionLh::initialize(){
 }
 
 void pbarpProductionLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  _dyn->fillDefaultParams(fitPar);
+  if(_useProdDynamics) _dyn->fillDefaultParams(fitPar);
   AbsLh::fillDefaultParams(fitPar);
 }
 
 void pbarpProductionLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  _dyn->updateFitParams(fitPar);
+  if(_useProdDynamics) _dyn->updateFitParams(fitPar);
   AbsLh::updateFitParams(fitPar);
 }

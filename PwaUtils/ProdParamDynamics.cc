@@ -41,7 +41,8 @@ ProdParamDynamics::ProdParamDynamics(std::string& name, std::vector<Particle*>& 
   ,_polOrder(0)
   ,_channelID(channelID)
 {
-  if(type=="FormPol0") _polOrder=0;
+  if(type=="woFormPol") {_polOrder=100; return;}  
+  else if(type=="FormPol0") _polOrder=0;
   else if(type=="FormPol1") _polOrder=1;
   else if(type=="FormPol2") _polOrder=2;
   else{
@@ -58,7 +59,7 @@ ProdParamDynamics::~ProdParamDynamics()
 }
 
 complex<double> ProdParamDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
-  //  int evtNo=theData->evtNo;
+  if(_polOrder==100) return complex<double>(1.,0.);
   if (!_recalculate){
     return _cachedMap[theData->evtNo];
   }
@@ -90,6 +91,7 @@ complex<double> ProdParamDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp
 
 
 void ProdParamDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  if(_polOrder==100) return;
   fillParamNameList();  
   for(unsigned int i=0; i<=_polOrder; ++i){
     //   std::stringstream stringStr;
@@ -112,6 +114,7 @@ void ProdParamDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> f
 
 
 void ProdParamDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  if(_polOrder==100) return;
   for(unsigned int i=0; i<=_polOrder; ++i){
     _currentPolParams.at(i)=fitPar->Value(_fitPolParNames.at(i));
 //    InfoMsg << "updated par " << _fitPolParNames.at(i) << ": " << fitPar->Value(_fitPolParNames.at(i)) << endmsg;
@@ -121,6 +124,7 @@ void ProdParamDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fit
 }
 
 void ProdParamDynamics::fillParamNameList(){
+  if(_polOrder==100) return;
   _paramNameList.clear();
   std::stringstream stringStrChannelId;
     stringStrChannelId << _channelID;

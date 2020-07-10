@@ -4,13 +4,6 @@
 #include "EvtRandomEngine.hh"
 #include "EvtSimpleRandomEngine.hh"
 
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/WeightContainer.h"
-#include "HepMC/Units.h"
-#include "HepMC/IO_GenEvent.h"
-
 #include <TROOT.h>
 #include "TH1F.h"
 #include "TH2F.h"
@@ -40,15 +33,13 @@ int main(int argc, char* argv[])
     cout << "Filename: " << filename << endl;
     cout << endl;
 
-    HepMC::IO_GenEvent hepMC_out(filename,std::ios::out);
-    
     EvtSimpleRandomEngine myRandom(4701+set);
     EvtRandom::setRandomEngine(&myRandom);
     
     // variables for the production e+ e- Psi2s
     double mass_e=0.511e-3;
     double mass_psi2s = 3.68609;
-    double pe_tot=0.5*sqrt(mass_psi2s*mass_psi2s-2.*mass_e);
+    //    double pe_tot=0.5*sqrt(mass_psi2s*mass_psi2s-2.*mass_e);
     
     // variables for the first decay Psi2s->Chi_c0+gamma
     int firstNdaug = 2;
@@ -107,42 +98,6 @@ int main(int argc, char* argv[])
       
       //    dalitz.Fill((p4[0]+p4[1])*(p4[0]+p4[1]), (p4[1]+p4[2])*(p4[1]+p4[2]));
       
-      HepMC::GenEvent* evt = new HepMC::GenEvent( 20, count );
-      evt->use_units(HepMC::Units::GEV, HepMC::Units::MM);
-      
-      // create production vertex
-      HepMC::GenVertex* vtx_prod = new HepMC::GenVertex();
-      evt->add_vertex( vtx_prod );
-      HepMC::GenParticle* eplus_part = new HepMC::GenParticle( HepMC::FourVector(0., 0., pe_tot, sqrt(mass_e*mass_e+pe_tot*pe_tot)), -11, 3 );
-      HepMC::GenParticle* eminus_part = new HepMC::GenParticle( HepMC::FourVector(0., 0., -pe_tot, sqrt(mass_e*mass_e+pe_tot*pe_tot)), 11, 3 );
-      vtx_prod->add_particle_in( eplus_part );
-      vtx_prod->add_particle_in( eminus_part );
-      
-      HepMC::GenParticle* psi2s_part=new HepMC::GenParticle( HepMC::FourVector(0., 0., 0., mass_psi2s), 20443, 999);
-      vtx_prod->add_particle_out(psi2s_part);
-      
-      // create Psi(2S) vertex
-      HepMC::GenVertex* vtx_psi2S = new HepMC::GenVertex();
-      evt->add_vertex( vtx_psi2S );
-      vtx_psi2S->add_particle_in( psi2s_part );
-      HepMC::GenParticle* chi_c0_part = new HepMC::GenParticle(HepMC::FourVector(firstP4[0].get(1), firstP4[0].get(2), firstP4[0].get(3), firstP4[0].get(0)), 10441, 999 );
-      vtx_psi2S->add_particle_out(chi_c0_part);
-      vtx_psi2S->add_particle_out( new HepMC::GenParticle( HepMC::FourVector(firstP4[1].get(1), firstP4[1].get(2), firstP4[1].get(3), firstP4[1].get(0)), 22, 1 ) );
-      
-      
-      // now do the chi_c0 vertex
-      HepMC::GenVertex* vtx_chi_c0 = new HepMC::GenVertex();
-      evt->add_vertex( vtx_chi_c0 );
-      vtx_chi_c0->add_particle_in( chi_c0_part );
-      vtx_chi_c0->add_particle_out( new HepMC::GenParticle( HepMC::FourVector(p4[0].get(1),p4[0].get(2),p4[0].get(3), p4[0].get(0)), 321, 1 ));
-      vtx_chi_c0->add_particle_out( new HepMC::GenParticle( HepMC::FourVector(p4[1].get(1),p4[1].get(2),p4[1].get(3), p4[1].get(0)), -321, 1 ) );
-      vtx_chi_c0->add_particle_out( new HepMC::GenParticle( HepMC::FourVector(p4[2].get(1),p4[2].get(2),p4[2].get(3), p4[2].get(0)), 111, 1 ) );
-      vtx_chi_c0->add_particle_out( new HepMC::GenParticle( HepMC::FourVector(p4[3].get(1),p4[3].get(2),p4[3].get(3), p4[3].get(0)), 111, 1 ) );
-      
-      // evt->print(std::cout);
-      hepMC_out << evt;
-      delete evt;
-
       /*      
       massKpi.Fill( (p4[0]+p4[2]).mass(), 1.);
       massKpi.Fill( (p4[0]+p4[3]).mass(), 1.);
