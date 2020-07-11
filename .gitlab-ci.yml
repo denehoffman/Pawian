@@ -14,7 +14,7 @@
 before_script:
   - *print-system-info
   - touch Jamroot
-  - source SetEnv_rubCentos8.sh
+  - source SetEnv_rub.sh
 
 b2, g++ 9.2.0:
   <<: *only-default
