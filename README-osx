@@ -9,7 +9,7 @@
 /****************************************************************/
 
 1. External depedencies
-  Prerequisite: Please install homebrew (http://brew.sh/) and 
+  Prerequisite: Please install homebrew (http://brew.sh/) and
                 the XCode Framework
 
   1a) Boost-Build
@@ -21,19 +21,15 @@
   1c) Minuit2
       'brew install minuit2'
 
-  1d) libHepMC
-      For this we need a new tap in homebrew. Execute:
-      'brew tap davidchall/hepmc'
-
-   2) ROOT (preferrably version 6.08.02)
-      There is a binary available at: 
+   2) ROOT (preferably version 6.08.02)
+      There is a binary available at:
       https://root.cern.ch/download/root_v6.08.02.macosx64-10.12-clang80.dmg
       From now on, ROOT should be located in /Applications/root_v6.08.02
 
 2. In your PAWIAN main directory, execute:
    'source SetEnv_osx'
 
-3. You need to make sure, that you use the correct Jamroot-file, 
+3. You need to make sure, that you use the correct Jamroot-file,
    until I figured out how to to everything in one Jamfile...
    Execute:
    'mv Jamroot JamrootLinux'

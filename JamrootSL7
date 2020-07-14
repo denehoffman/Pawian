@@ -42,7 +42,6 @@ actions rootlibs
   $(ROOTSYS)/bin/root-config --libs
 }
 
-lib HepMc : : <file>$(extern)/libgcc920/libHepMC.so : : ;
 lib Minuit2 : : <file>$(extern)/libgcc920/libMinuit2.so : : ;
 
 build-project ErrLogger ;

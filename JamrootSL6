@@ -25,7 +25,6 @@ project :
    $(ROOTSYS)/bin/root-config --libs
 }
 
-lib HepMc : : <file>$(extern)/lib/libHepMC.so : : ;
 lib Minuit2 : : <file>$(extern)/lib/libMinuit2.so : : ;
 
 build-project qft++ ;

@@ -1,1 +1,37 @@
-JamfilePython27
+alias install : install-bin install-lib ;
+explicit install ;
+
+install install-lib : Event
+                 : <location>$(TOP)/lib
+                   <install-dependencies>on
+                   <install-type>LIB
+                   ;
+
+project :
+        requirements
+        <include>./
+        <include>$(ROOTSYS)/include
+        <include>$(TOP)/Server
+        <linkflags>$(ROOTLIBS)
+        <linkflags>$(BOOSTLIBS)
+        ;
+
+project :
+	;
+
+lib Event
+  : [ glob *.cc : *App.cc ]
+    $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/Particle//Particle
+	:
+	:
+	: <library>$(TOP)/Particle//Particle
+  ;
+
+unit-test test_Event
+  : [ glob test/*.cc ]
+    $(TOP)//boost_test
+    $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/Particle//Particle
+    Event
+  ;
