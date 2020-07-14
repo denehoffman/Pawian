@@ -55,10 +55,13 @@ KMatrixDynamics::KMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   TMatrixDynamics(name, fsParticles, mother, pathToConfigParser, "Data", projectionParticleNames)
   ,_currentMass(1.)
   ,_pVecSuffix("")
+  ,_useParticleNameForPVecBg(false)
 {
   init();
   _isLdependent=true;
   ParserBase* currentParser=GlobalEnv::instance()->Channel(channelID)->parser();
+
+  _useParticleNameForPVecBg=currentParser->useParticleNameForPVecBg();
   const std::vector<std::string> kMatProdSuffixes=currentParser->addKmatrixProdSuffix();
   std::map<std::string, std::string> kMatKeyProdSuffNames;
 
@@ -411,6 +414,7 @@ std::string KMatrixDynamics::addOneGrandMa(std::string theName){
 	  keyOrderStrStr << i << j;
 	  std::string keyOrder=keyOrderStrStr.str();
 	  std::string currentName="bgPVec"+_pVecSuffix+keyOrder+_kMatName;
+	  if(_useParticleNameForPVecBg) currentName="bgPVec"+_pVecSuffix+keyOrder+theName;
 	  _bgPVecTermNames.at(i).at(j)=currentName;
       }
     }

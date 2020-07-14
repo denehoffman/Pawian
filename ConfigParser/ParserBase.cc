@@ -89,6 +89,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_minuitStrategyLevel(1)
   ,_singleChannelId(0)
   ,_sProdExp(0.0)
+  ,_useParticleNameForPVecBg(false)  
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -191,6 +192,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("nllScalingFactor", po::value<double>(&_nllScalingFactor), "NLL scaling factor for individual channels")
     ("addChannelScalingId",po::value<bool>(&_addChannelScalingId), "add Id to parameter name for channel scaling")
     ("sProdExponent", po::value<double>(&_sProdExp)->default_value(_sProdExp),"exponent for the s dependency in the production (supported for FVectorIntensity and Gamgam fits")
+    ("useParticleNameForPVecBg",po::value<bool>(&_useParticleNameForPVecBg), "yes: (cloned) particle name; no: K-matrix name")
     ;
 
 }
@@ -300,6 +302,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "nllScalingFactor: " << _nllScalingFactor << "\n\n"
 		<< "addChannelScalingId: " <<_addChannelScalingId << "\n\n"
 		<< "minuitStrategyLevel: " << _minuitStrategyLevel << "\n\n"
+	        << "useParticleNameForPVecBg: " << _useParticleNameForPVecBg << "\n\n"
                 << endl;
 
 

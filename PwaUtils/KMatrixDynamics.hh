@@ -82,7 +82,8 @@ protected:
   CacheVector<std::map<std::string, std::map<Spin, complex<float> > > > _cachedStringOrbMap;
   std::map<int, std::map<std::string, bool > > _alreadyCached;
   std::string _pVecSuffix;
-
+  bool _useParticleNameForPVecBg;
+  
   virtual void init();
   std::shared_ptr<PVectorRel> makeNewPVec();
 
