@@ -30,18 +30,12 @@
 // @file TMatrixNonRel.h
 //_____________________________________________________________________________
 
-#include "qft++/matrix/Matrix.hh"
 #include "PwaDynamics/TMatrixBase.hh"
 #include <iostream>
 #include <vector>
 #include <memory>
 
-class KMatrixBase;
 class KMatrixNonRel;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class TMatrixNonRel : public TMatrixBase {
 
@@ -63,6 +57,6 @@ private:
   void evalMatrixTemplate(const MassType mass);
 
 };
-//_____________________________________________________________________________
+
 
 

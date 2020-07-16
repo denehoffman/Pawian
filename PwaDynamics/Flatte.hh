@@ -30,32 +30,25 @@
 // @file Flatte.h
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <vector>
 #include <complex>
-#include <utility>
-#include <memory>
 
 class Particle;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class Flatte {
 
 public:
+  Flatte(std::pair<Particle*, Particle*>& decPair1, std::pair<Particle*,
+	 Particle*>& decPair2); //decPair1: decay particles
+                                //decPair2: second decay channel    
 
-  /// Constructor 
-  Flatte(std::pair<Particle*, Particle*>& decPair1, std::pair<Particle*, Particle*>& decPair2); //decPair1: decay particles
-                                                                                                //decPair2: second decay channel    
-  Flatte(std::pair <const double, const double>& massPair1, std::pair <const double, const double>& massPair2);
- 
-  /// Destructor
+  Flatte(std::pair <const double, const double>& massPair1,
+	 std::pair <const double, const double>& massPair2);
   ~Flatte();
 
-  complex<double> calcFirstChannel(double currentMass, double mass0, double g1, double g2);
-  complex<double> calcSecondChannel(double currentMass, double mass0, double g1, double g2);
+  std::complex<double> calcFirstChannel(double currentMass, double mass0,
+					double g1, double g2);
+  std::complex<double> calcSecondChannel(double currentMass, double mass0,
+					 double g1, double g2);
 
 protected:
   double _mass11;

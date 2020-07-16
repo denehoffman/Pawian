@@ -33,11 +33,14 @@ public:
    BarrierFactor(int l, std::complex<double> q0, double qR);
    std::complex<double> BlattWeisskopfRatio(std::complex<double> q);
    std::complex<double> BlattWeisskopf(std::complex<double> q);
-   static std::complex<double> BlattWeisskopfRatio(int l, std::complex<double> q, std::complex<double> q0, double qR);
-   static std::complex<double> BlattWeisskopfTensorRatio(int l, std::complex<double> q, std::complex<double> q0, double qR);
+   static std::complex<double> BlattWeisskopfRatio(int l, std::complex<double> q,
+						   std::complex<double> q0, double qR);
+  static std::complex<double> BlattWeisskopfTensorRatio(int l, std::complex<double> q,
+							std::complex<double> q0, double qR);
    static std::complex<double> BlattWeisskopf(int l, std::complex<double> q, double qR);
    static std::complex<double> BlattWeisskopf(int l, std::complex<double> z);
-   static std::complex<double> BlattWeisskopfTensor(int l, std::complex<double> q, double qR);
+   static std::complex<double> BlattWeisskopfTensor(int l, std::complex<double> q,
+						    double qR);
    static const double qRDefault;
 
 private:

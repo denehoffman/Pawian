@@ -25,7 +25,6 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <map>
 #include <getopt.h>
 
 #include <memory>
@@ -57,8 +56,8 @@ int main(int __argc,char *__argv[]){
     return 0;
   }
 
-  cout << endl;
-  cout << "___Starting..." << endl;
+  std::cout << std::endl;
+  std::cout << "___Starting..." << std::endl;
 
   // Set default values
   std::string p0Str="0.77";
@@ -125,7 +124,7 @@ int main(int __argc,char *__argv[]){
   upar.Add("F", p1, 0.3*p1, 0.0, 5.0*p1);
 
   MnMigrad migrad(minuitFitFcn, upar);
-  cout << endl;
+  std::cout << std::endl;
   InfoMsg <<"Start Migrad "<< endmsg;
   FunctionMinimum min = migrad();
   
@@ -143,15 +142,15 @@ int main(int __argc,char *__argv[]){
   double final_F = min.UserState().Value("F");
   double eM = min.UserState().Error("M");
   double eF = min.UserState().Error("F");
-  cout << endl;
+  std::cout << std::endl;
   InfoMsg << "final M:\t" << final_M << " +- " << eM << endmsg;
   InfoMsg << "final F:\t" << final_F << " +- " << eF << endmsg;
   InfoMsg << "final MSqr:\t" << final_M*final_M << endmsg;
   InfoMsg << "final FSqr:\t" << final_F*final_F << endmsg;
   
-  cout << endl;
-  cout << "___Finished" << endl;
-  cout << endl;
+  std::cout << std::endl;
+  std::cout << "___Finished" << std::endl;
+  std::cout << std::endl;
 
   return 0;
 

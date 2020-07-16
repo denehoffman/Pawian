@@ -29,29 +29,21 @@
 //_____________________________________________________________________________
 // @file FVector.h
 //_____________________________________________________________________________
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "qft++/matrix/Matrix.hh"
-#include "PwaDynamics/KMatrixBase.hh"
-#include "PwaDynamics/PVectorRel.hh"
-#include <iostream>
 #include <vector>
 #include <memory>
 
-using namespace std;
+#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include "PwaDynamics/PVectorRel.hh"
 
 class AbsPhaseSpace;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+class KMatrixBase;
 
 class FVector : public Matrix< complex<double> > {
 
 public:
 
-  /// Constructor 
   FVector(std::shared_ptr<KMatrixBase> Kmatrix, std::shared_ptr<PVectorRel> Pvector);
   FVector(int numRows); 
-
-  /// Destructor
   virtual ~FVector();
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
@@ -70,6 +62,4 @@ protected:
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVec;
   double _cSign;
 };
-//_____________________________________________________________________________
-
 

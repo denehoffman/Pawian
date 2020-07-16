@@ -20,22 +20,20 @@
 //									  //
 //************************************************************************//
 
-#ifndef _BBUnstableParFitFcn_H
-#define _BBUnstableParFitFcn_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
-//#include <string>
 #include <vector>
 #include <memory>
-//#include <cassert>
+
 #include "Minuit2/FCNBase.h"
 
 class BBUnstableParFit;
 
 namespace ROOT {
+namespace Minuit2 {
 
-   namespace Minuit2 {
 class BBUnstableParFitFcn : public FCNBase {
 
 public:
@@ -50,9 +48,6 @@ public:
 private:
   std::shared_ptr<BBUnstableParFit> _minFitPtr;
 };
-  }  // namespace Minuit2
 
+}  // namespace Minuit2
 }  // namespace ROOT
-
-
-#endif 

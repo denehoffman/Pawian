@@ -29,23 +29,23 @@
 // @file BreitWignerFunction.hh
 //_____________________________________________________________________________
 
-#include <iostream>
 #include <complex>
-#include <utility>
-#include <memory>
 
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "PwaDynamics/BarrierFactor.hh"
 
-//_____________________________________________________________________________
-//_____________________________________________________________________________
-
 namespace BreitWignerFunction { 
-  complex<double> NonRel(double currentMass,double mass0, double width);
-  complex<double> Rel(double currentMass,double mass0, double width, double massA, double massB);
-  complex<double> BlattWRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB, double qR=BarrierFactor::qRDefault);
-  complex<double> BlattWTensorRel(int orbMom, double currentMass,double mass0, double width, double massA, double massB, double qR=BarrierFactor::qRDefault);
+  std::complex<double> NonRel(double currentMass,double mass0, double width);
 
+  std::complex<double> Rel(double currentMass,double mass0, double width, double massA,
+			   double massB);
+
+  std::complex<double> BlattWRel(int orbMom, double currentMass,double mass0, double width,
+				 double massA, double massB,
+				 double qR=BarrierFactor::qRDefault);
+
+  std::complex<double> BlattWTensorRel(int orbMom, double currentMass,double mass0,
+				       double width, double massA, double massB,
+				       double qR=BarrierFactor::qRDefault);
 }; // namespace BreitWignerFunction
 
 

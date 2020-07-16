@@ -36,33 +36,23 @@
 
 #include "Utils/PawianConstants.hh"
 
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
-
 class AbsPhaseSpace {
 
 public:
 
-  /// Constructor 
   AbsPhaseSpace() : _bumImPartSign(1){;} 
-
-  /// Destructor
   virtual ~AbsPhaseSpace(){;}
 
-  // operators:
-
-
-  // functions:
-
-  virtual complex<double> factor(const double mass)=0;
-  virtual complex<double> factor(const complex<double> mass)=0;
-  virtual complex<double> breakUpMom(const double mass)=0;
-  virtual complex<double> breakUpMom(const complex<double> mass)=0;
-  virtual complex<double> breakUpMomDefaultAS(const double mass)=0;
-  virtual complex<double> breakUpMomDefaultAS(const complex<double> mass)=0; 
-  virtual complex<double> ChewM(const double mass) {return PawianConstants::i*factor(mass);}
-  virtual complex<double> ChewM(const complex<double> mass) {return PawianConstants::i*factor(mass);}
+  virtual std::complex<double> factor(const double mass)=0;
+  virtual std::complex<double> factor(const std::complex<double> mass)=0;
+  virtual std::complex<double> breakUpMom(const double mass)=0;
+  virtual std::complex<double> breakUpMom(const std::complex<double> mass)=0;
+  virtual std::complex<double> breakUpMomDefaultAS(const double mass)=0;
+  virtual std::complex<double> breakUpMomDefaultAS(const std::complex<double> mass)=0; 
+  virtual std::complex<double> ChewM(const double mass) {
+    return PawianConstants::i*factor(mass); }
+  virtual std::complex<double> ChewM(const std::complex<double> mass) {
+    return PawianConstants::i*factor(mass); }
   virtual double thresholdMass()=0;
   virtual void cacheFactors(const double mass) {return;}
 
@@ -70,20 +60,20 @@ public:
   const std::string name() const {return _name;} 
 
 protected:
-  virtual void CorrectForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
+  virtual void CorrectForChosenSign(std::complex<double>& breakUpMom,
+				    std::complex<double>& toChange) {
    if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
        (_bumImPartSign < 0 && breakUpMom.imag() > 0)){
       toChange *= -1;
     }
-   }
+  }
+  
   double _bumImPartSign;
-  std::map<int, complex<double> > _CMCache; //resolution 100 keV
-
+  std::map<int, std::complex<double> > _CMCache; //resolution 100 keV
   std::string _name;
 
 private:
-  //  double _bumImPartSign;
 };
-//_____________________________________________________________________________
+
 
 

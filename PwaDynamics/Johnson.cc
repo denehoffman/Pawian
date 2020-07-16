@@ -34,7 +34,7 @@
 
 #include "PwaDynamics/Johnson.hh"
 
-using namespace std;
+#include <cmath>
 
 Johnson::Johnson() {
 }
@@ -42,7 +42,8 @@ Johnson::Johnson() {
 Johnson::~Johnson() {
 }
 
-double Johnson::calc(double currentMass, double mass0, double sigma, double delta, double gamma) {
+double Johnson::calc(double currentMass, double mass0, double sigma,
+		     double delta, double gamma) {
   double result = 0.;
   if ((sigma < 0.) || ( fabs(sigma)<1e-20 ) ) {
     return result;  // Not meant to be for those who want to be thinner than 0

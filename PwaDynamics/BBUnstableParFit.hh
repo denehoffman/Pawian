@@ -20,47 +20,33 @@
 //									  //
 //************************************************************************//
 
-#ifndef _BBUnstableParFit_H
-#define _BBUnstableParFit_H
+#pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
+// #include <iostream>
+// #include <fstream>
+// #include <string>
 #include <vector>
-#include <map>
-#include <cassert>
+// #include <map>
+// #include <cassert>
+// #include <memory>
 
-#include <memory>
-
-#include "TROOT.h"
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-
+// #include "TROOT.h"
+// #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 class BBUnstableParFit {
 
 public:
 
-  //Constructor 
   BBUnstableParFit(double _mRes, double _wRes, double _m1, double _m2);
-
-
-  //Destructor
   virtual ~BBUnstableParFit();
-
 
   double calcNormD(const std::vector<double>& minPar);
   double calcNormDInvNeg(const std::vector<double>& minPar);
  
-protected:
-
-
 private:
   double mRes;
   double wRes;
   double m1;
   double m2;
  
-
 };
-
-#endif
