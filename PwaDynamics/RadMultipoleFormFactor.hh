@@ -29,17 +29,9 @@
 // @file RadMultipoleFormFactor.hh
 //_____________________________________________________________________________
 
-#include <iostream>
 #include <complex>
-#include <utility>
-#include <memory>
-
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+using std::complex;
 
 namespace RadMultipoleFormFactor { 
   complex<double> PureM1(double massA, double currentMassB, double massB0, double Egamma);
-
 }; // namespace RadMultipoleFormFactor

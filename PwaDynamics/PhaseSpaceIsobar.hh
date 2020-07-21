@@ -29,15 +29,11 @@
 // @file PhaseSpaceIsobar.h
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <vector>
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-using namespace std;
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#include <complex>
+using std::complex;
 
 class PhaseSpaceIsobar: public AbsPhaseSpace {
 
@@ -49,17 +45,16 @@ public:
   /// Destructor
   virtual ~PhaseSpaceIsobar();
 
-  // operators:
-
-
-  // functions:
-
   virtual complex<double> factor(const double mass);
   virtual complex<double> breakUpMom(const double mass);
   virtual complex<double> factor(const complex<double> mass);
   virtual complex<double> breakUpMom(const complex<double> mass);
-  virtual complex<double> breakUpMomDefaultAS(const double mass){return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);}
-  virtual complex<double> breakUpMomDefaultAS(const complex<double> mass){return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);} 
+  virtual complex<double> breakUpMomDefaultAS(const double mass) {
+    return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);
+  }
+  virtual complex<double> breakUpMomDefaultAS(const complex<double> mass) {
+    return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);
+  } 
   virtual double thresholdMass();
   virtual double mass1() {return _mass1;}
   virtual double mass2() {return _mass2;}
@@ -68,8 +63,6 @@ protected:
   double _mass1;
   double _mass2;
 
-private:
 };
-//_____________________________________________________________________________
 
 

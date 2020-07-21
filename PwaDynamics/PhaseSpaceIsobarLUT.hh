@@ -22,19 +22,13 @@
 
 #pragma once 
 
-#include <iostream>
-#include <vector>
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
+
 #include <string>
-#include <sstream>
 #include <fstream>
-#include <stdlib.h>
-#include <math.h>
+#include <complex>
+using std::complex;
 
-using namespace std;
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 struct LUTLine {
   complex<double> requested;
   complex<double> cm;
@@ -43,17 +37,11 @@ struct LUTLine {
 class PhaseSpaceIsobarLUT: public PhaseSpaceIsobar {
 
 public:
-  
   /// Constructor
   PhaseSpaceIsobarLUT(double mass1, double mass2, string type); 
 
   /// Destructor
   virtual ~PhaseSpaceIsobarLUT();
-
-  // operators:
-
-
-  // functions:
 
   virtual complex<double> factor(const double mass);
   virtual complex<double> breakUpMom(const double mass);
@@ -62,10 +50,10 @@ public:
   virtual complex<double> ChewM(const double mass);
   virtual complex<double> ChewM(const complex<double> mass);
   virtual void cacheFactors(const double mass);
-  complex<double> sLow(){
+  complex<double> sLow() {
     return m_sLow;
   };
-  complex<double> sHigh(){
+  complex<double> sHigh() {
     return m_sHigh;
   };
 
@@ -87,5 +75,4 @@ private:
   void loadParams();
   bool m_sortedByReS;
 };
-//
 

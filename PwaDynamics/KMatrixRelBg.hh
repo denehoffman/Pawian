@@ -31,29 +31,26 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixRel.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
 
 class KPole;
 class AbsPhaseSpace;
 
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
-
 class KMatrixRelBg : public KMatrixRel {
 
 public:
-
   /// Constructor 
-  KMatrixRelBg(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg, bool withAdler); 
+  KMatrixRelBg(vector<std::shared_ptr<KPole> > Kpoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs,
+	       unsigned int orderBg, bool withAdler); 
 
   /// Destructor
   virtual ~KMatrixRelBg();
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
   virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
+
 protected:
   bool _withAdler;
 
@@ -61,6 +58,6 @@ private:
   template<typename MassType>
   void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 };
-//_____________________________________________________________________________
+
 
 

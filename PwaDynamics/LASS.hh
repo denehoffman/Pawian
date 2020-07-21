@@ -29,18 +29,11 @@
 // @file LASS.hh
 //_____________________________________________________________________________
 
-#include <iostream>
 #include <complex>
-#include <utility>
-#include <memory>
-
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 namespace LASS { 
-  complex<double> K0star_1430(double currentMass, double m0, double gammaM, double aLASS, double rLASS, double BLASS, double phiB, double RLASS, double phiR);
+  complex<double> K0star_1430(double currentMass, double m0, double gammaM, double aLASS,
+			      double rLASS, double BLASS, double phiB, double RLASS, double phiR);
 
 }; // namespace LASS
 

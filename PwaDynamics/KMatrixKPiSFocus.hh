@@ -31,19 +31,10 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixBase.hh"
-#include <iostream>
-#include <vector>
 #include <memory>
 #include <boost/multi_array.hpp>
 
-class KPole;
-class AbsPhaseSpace;
-
 typedef boost::multi_array< double, 2> array_type_2d;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class KMatrixKPiSFocus : public KMatrixBase {
 
@@ -72,6 +63,6 @@ private:
   template<typename MassType>
   void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 };
-//_____________________________________________________________________________
+
 
 

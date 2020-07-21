@@ -31,18 +31,12 @@
 //_____________________________________________________________________________
 
 #include "qft++/matrix/Matrix.hh"
-#include <iostream>
 #include <vector>
 #include <memory>
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
 class KPole;
-
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class KMatrixBase : public Matrix< complex<double> > {
 
@@ -73,6 +67,6 @@ protected:
   double _s0Adler;
   double _snormAdler;
 };
-//_____________________________________________________________________________
+
 
 

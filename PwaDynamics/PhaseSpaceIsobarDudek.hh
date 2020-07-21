@@ -30,14 +30,9 @@
 // @file PhaseSpaceIsobarDudek.h
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <vector>
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 
-using namespace std;
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#include <complex>
 
 class PhaseSpaceIsobarDudek: public PhaseSpaceIsobar {
 
@@ -49,23 +44,16 @@ public:
   /// Destructor
   virtual ~PhaseSpaceIsobarDudek();
 
-  // operators:
-
-
-  // functions:
-
-  virtual complex<double> factor(const double mass);
-  virtual complex<double> breakUpMom(const double mass);
-  virtual complex<double> factor(const complex<double> mass);
-  virtual complex<double> breakUpMom(const complex<double> mass);
-  virtual complex<double> ChewM(const double mass);
-  virtual complex<double> ChewM(const complex<double> mass);
+  virtual std::complex<double> factor(const double mass);
+  virtual std::complex<double> breakUpMom(const double mass);
+  virtual std::complex<double> factor(const std::complex<double> mass);
+  virtual std::complex<double> breakUpMom(const std::complex<double> mass);
+  virtual std::complex<double> ChewM(const double mass);
+  virtual std::complex<double> ChewM(const std::complex<double> mass);
 
 protected:
-  void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
+  void CorrectCMForChosenSign(std::complex<double>& breakUpMom, std::complex<double>& toChange);
 
-private:
 };
-//_____________________________________________________________________________
 
 

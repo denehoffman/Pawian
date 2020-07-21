@@ -31,16 +31,11 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixBase.hh"
-#include <iostream>
 #include <vector>
 #include <memory>
 
 class KPole;
 class AbsPhaseSpace;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class KMatrixNonRel : public KMatrixBase {
 
@@ -60,6 +55,6 @@ private:
   template<typename MassType>
   void evalMatrixTemplate(const MassType mass, Spin OrbMom=0);
 };
-//_____________________________________________________________________________
+
 
 

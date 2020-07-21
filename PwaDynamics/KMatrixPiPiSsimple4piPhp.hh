@@ -40,15 +40,12 @@ class KMatrixPiPiSsimple4piPhp : public KMatrixPiPiS {
 public:
 
   /// Constructor 
- KMatrixPiPiSsimple4piPhp(); 
+  KMatrixPiPiSsimple4piPhp(); 
 
   /// Destructor
   virtual ~KMatrixPiPiSsimple4piPhp();
 
-protected:
-
-private:
 };
-//_____________________________________________________________________________
+
 
 

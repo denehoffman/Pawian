@@ -33,53 +33,33 @@
 #include "qft++/matrix/Matrix.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 #include "PwaDynamics/KPole.hh"
-#include "PwaDynamics/AbsPhaseSpace.hh"
-#include <iostream>
+//#include "PwaDynamics/AbsPhaseSpace.hh"
+
 #include <vector>
 #include <complex>
+using std::complex;
 #include <memory>
-using namespace std;
 
 class AbsPhaseSpace;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class PPole : public KPole {
 
 public:
-
-  // create/copy/destroy:
-
-  /// Default Constructor (rank 0)
-//   PPole() : Matrix<double>::Matrix() {}
-
   /// Constructor 
   PPole(complex<double>& beta, vector<double>& g_i, double mass_0); 
-
-  /// Copy Constructor
-  // PPole(const PPole &theCopy);
 
   /// Destructor
   virtual ~PPole();
 
-  // operators:
-
-
-  // functions:
-
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
   virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
-
   void updateBeta (complex<double> beta) {_beta=beta;}
-
   virtual std::vector< complex<double> > barrierFactors() {return _barrierFactor;}
   
 protected:
   complex<double> _beta;
-
   int _orbMom;
   bool _truncatedBarrier;
   std::vector< complex<double> > _breakUpM0;
   std::vector< complex<double> > _barrierFactor;
 };
-//_____________________________________________________________________________

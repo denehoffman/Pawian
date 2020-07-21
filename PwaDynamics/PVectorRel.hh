@@ -31,22 +31,17 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixBase.hh"
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
+#include <complex>
+using std::complex;
 
 class PPole;
 class AbsPhaseSpace;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
-
 class PVectorRel : public KMatrixBase {
 
 public:
-
   /// Constructor 
   PVectorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs); 
   PVectorRel(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs);
@@ -67,6 +62,5 @@ protected:
   vector<std::shared_ptr<PPole> > _Ppoles;
   unsigned int _nOfChannels;
 };
-//_____________________________________________________________________________
 
 

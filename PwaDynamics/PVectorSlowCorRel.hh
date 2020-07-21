@@ -31,26 +31,22 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/PVectorRel.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
-//#include <boost/multi_array.hpp>
+#include <complex>
+using std::complex;
 
 class PPole;
 class AbsPhaseSpace;
 
-//typedef boost::multi_array< complex<double>, 2> array_type_2dc;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
-
 class PVectorSlowCorRel : public PVectorRel {
 
 public:
-
   /// Constructor 
-  PVectorSlowCorRel(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, std::vector< complex<double> >& fProdVec, double s0prod);
+  PVectorSlowCorRel(vector<std::shared_ptr<PPole> > Ppoles,
+		    vector<std::shared_ptr<AbsPhaseSpace> > phpVecs,
+		    std::vector< complex<double> >& fProdVec, double s0prod);
 
   /// Destructor
   virtual ~PVectorSlowCorRel();
@@ -63,6 +59,5 @@ protected:
   std::vector< complex<double> > _fProdVec;
   double _s0prod; 
 };
-//_____________________________________________________________________________
 
 

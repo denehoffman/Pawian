@@ -32,39 +32,23 @@
 
 #include "qft++/matrix/Matrix.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include <iostream>
+
 #include <vector>
 #include <complex>
 #include <memory>
-using namespace std;
 
 class AbsPhaseSpace;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class KPole : public Matrix< complex<double> > {
 
 public:
 
-  // create/copy/destroy:
-
-  /// Default Constructor (rank 0)
-//   KPole() : Matrix<double>::Matrix() {}
-
   /// Constructor 
   KPole(vector<double>& g_i, double mass_0);
   KPole(vector<double>& g_i, double mass_0, int numRow, int numCol); 
 
-  /// Copy Constructor
-  // KPole(const KPole &theCopy);
-
   /// Destructor
   virtual ~KPole();
-
-  // operators:
-
-
-  // functions:
 
   virtual void evalMatrix(const double mass, Spin OrbMom=0);
   virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
@@ -72,7 +56,6 @@ public:
   virtual double poleMass() {return _poleMass;}
   virtual vector<double> gFactors() {return _g_i;}
 
-  //  virtual void updatePoleMass (double newPoleMass) {_poleMass=newPoleMass;}
   virtual void updatePoleMass (double newPoleMass);
   virtual void updategFactors (vector<double>& newg_i) {_g_i=newg_i;}
 
@@ -91,4 +74,4 @@ protected:
 private:
 
 };
-//_____________________________________________________________________________
+

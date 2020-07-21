@@ -31,27 +31,14 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/PVectorRel.hh"
-#include <iostream>
-#include <vector>
-#include <memory>
-
 #include "PwaDynamics/KMatrixKPiSFocus.hh"
 
-//#include <boost/multi_array.hpp>
-
-class PPole;
-class AbsPhaseSpace;
-
-//typedef boost::multi_array< complex<double>, 2> array_type_2dc;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#include <vector>
+#include <memory>
 
 class PVectorKPiSFocus : public PVectorRel {
 
 public:
-
   /// Constructor 
   PVectorKPiSFocus(std::shared_ptr<KMatrixKPiSFocus> kMatrix);
 
@@ -73,6 +60,5 @@ protected:
   void init2IsoSpin1();
   void init2IsoSpin3();
 };
-//_____________________________________________________________________________
 
 

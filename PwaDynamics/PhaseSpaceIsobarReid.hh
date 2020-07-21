@@ -30,14 +30,10 @@
 // @file PhaseSpaceIsobarReid.h
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <vector>
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 
-using namespace std;
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#include <complex>
+using std::complex;
 
 class PhaseSpaceIsobarReid: public PhaseSpaceIsobar {
 
@@ -49,11 +45,6 @@ public:
   /// Destructor
   virtual ~PhaseSpaceIsobarReid();
 
-  // operators:
-
-
-  // functions:
-
   virtual complex<double> factor(const double mass);
   virtual complex<double> breakUpMom(const double mass);
   virtual complex<double> factor(const complex<double> mass);
@@ -64,8 +55,7 @@ public:
 protected:
   void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
 
-private:
 };
-//_____________________________________________________________________________
+
 
 

@@ -29,16 +29,12 @@
 // @file PhaseSpace4Pi.h
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <vector>
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "Utils/PawianConstants.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-using namespace std;
-
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#include <complex>
+using std::complex;
 
 class PhaseSpace4Pi: public AbsPhaseSpace {
 
@@ -50,24 +46,21 @@ public:
   /// Destructor
   virtual ~PhaseSpace4Pi();
 
-  // operators:
-
-
-  // functions:
-
   virtual complex<double> factor(const double mass);
   virtual complex<double> breakUpMom(const double mass);
   virtual complex<double> factor(const complex<double> mass);
   virtual complex<double> breakUpMom(const complex<double> mass);
-  virtual complex<double> breakUpMomDefaultAS(const double mass){return PawianQFT::breakupMomQDefaultAS(mass, 2.*PawianConstants::mPi, 2.*2.*PawianConstants::mPi);}
-  virtual complex<double> breakUpMomDefaultAS(const complex<double> mass){return PawianQFT::breakupMomQDefaultAS(mass, 2.*PawianConstants::mPi, 2.*2.*PawianConstants::mPi);}
+  virtual complex<double> breakUpMomDefaultAS(const double mass) {
+    return PawianQFT::breakupMomQDefaultAS(mass, 2.*PawianConstants::mPi, 2.*2.*PawianConstants::mPi);
+  }
+  virtual complex<double> breakUpMomDefaultAS(const complex<double> mass) {
+    return PawianQFT::breakupMomQDefaultAS(mass, 2.*PawianConstants::mPi, 2.*2.*PawianConstants::mPi);
+  }
   virtual double thresholdMass();
-
-protected:
 
 private:
   const double _fourPiFactor1;
 };
-//_____________________________________________________________________________
+
 
 

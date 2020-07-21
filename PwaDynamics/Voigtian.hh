@@ -30,20 +30,9 @@
 // @file Voitian.h
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <complex>
-#include <utility>
-#include <memory>
-
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
-
 class Voigtian {
 
 public:
-
   /// Constructor 
   Voigtian(); 
  
@@ -51,8 +40,6 @@ public:
   ~Voigtian();
 
   double calc(double currentMass, double mass0, double gamma, double sigma);
-
-protected:
 };
 
 

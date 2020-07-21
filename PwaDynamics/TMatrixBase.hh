@@ -32,14 +32,11 @@
 
 #include "qft++/matrix/Matrix.hh"
 #include "PwaDynamics/KMatrixBase.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
-
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+#include <complex>
+using std::complex;
 
 class TMatrixBase : public Matrix< complex<double> > {
 
@@ -62,6 +59,5 @@ protected:
   double _cSign; 
 
 };
-//_____________________________________________________________________________
 
 

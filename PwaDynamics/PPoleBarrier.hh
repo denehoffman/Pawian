@@ -32,44 +32,27 @@
 
 #include "qft++/matrix/Matrix.hh"
 #include "PwaDynamics/PPole.hh"
-#include "PwaDynamics/AbsPhaseSpace.hh"
-#include <iostream>
+
 #include <vector>
 #include <complex>
+using std::complex;
 #include <memory>
-using namespace std;
 
 class AbsPhaseSpace;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class PPoleBarrier : public PPole {
 
 public:
-
-  // create/copy/destroy:
-
-  /// Default Constructor (rank 0)
-//   PPoleBarrier() : Matrix<double>::Matrix() {}
-
   /// Constructor 
-  PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier=false); 
-
-  /// Copy Constructor
+  PPoleBarrier(complex<double>& beta, vector<double>& g_i, double mass_0,
+	       vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, int orbMom, bool truncatedBarrier=false); 
 
   /// Destructor
   virtual ~PPoleBarrier();
 
-  // operators:
-
-
-  // functions:
-
   virtual void evalMatrix(const double mass, Spin OrbMom);
-
   virtual void updatePoleMass (double newPoleMass);
   
 protected:
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
 };
-//_____________________________________________________________________________

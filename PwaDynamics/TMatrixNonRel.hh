@@ -31,16 +31,17 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/TMatrixBase.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
+#include <complex>
+using std::complex;
 
 class KMatrixNonRel;
 
 class TMatrixNonRel : public TMatrixBase {
 
 public:
-
   /// Constructor 
   TMatrixNonRel(std::shared_ptr<KMatrixNonRel> Kmatrix); 
 
@@ -49,8 +50,6 @@ public:
 
   virtual void evalMatrix(const double mass);
   virtual void evalMatrix(const complex<double> mass);
-
-protected:
 
 private:
   template<typename MassType>

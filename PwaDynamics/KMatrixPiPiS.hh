@@ -31,24 +31,13 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/KMatrixSlowAdlerCorRel.hh"
-#include <iostream>
-#include <vector>
-#include <memory>
-#include <boost/multi_array.hpp>
-
-
-typedef boost::multi_array< double, 2> array_type_2d;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class KMatrixPiPiS : public KMatrixSlowAdlerCorRel {
 
 public:
 
   /// Constructor 
- KMatrixPiPiS(); 
+  KMatrixPiPiS(); 
 
   /// Destructor
   virtual ~KMatrixPiPiS();
@@ -62,8 +51,8 @@ protected:
   const double _K0Mass;
   const double _etaMass;
   const double _etaprimeMass;
-private:
+
 };
-//_____________________________________________________________________________
+
 
 

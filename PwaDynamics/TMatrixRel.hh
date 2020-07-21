@@ -32,20 +32,17 @@
 
 #include "qft++/matrix/Matrix.hh"
 #include "PwaDynamics/TMatrixBase.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
+#include <complex>
+using std::complex;
 
 class KMatrixBase;
-
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 class TMatrixRel : public TMatrixBase {
 
 public:
-
   /// Constructor 
   TMatrixRel(std::shared_ptr<KMatrixBase> Kmatrix); 
 
@@ -60,6 +57,5 @@ private:
   void evalMatrixTemplate(const MassType mass);
 
 };
-//_____________________________________________________________________________
 
 

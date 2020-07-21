@@ -31,21 +31,22 @@
 //_____________________________________________________________________________
 
 #include "PwaDynamics/PVectorRel.hh"
-#include "qft++/topincludes/relativistic-quantum-mechanics.hh"
-#include <iostream>
+
 #include <vector>
 #include <memory>
+#include <complex>
+using std::complex;
 
-using namespace std;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
+class PPole;
+class AbsPhaseSpace;
 
 class PVectorRelBg : public PVectorRel {
 
 public:
 
   /// Constructor 
-  PVectorRelBg(vector<std::shared_ptr<PPole> > Ppoles, vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg); 
+  PVectorRelBg(vector<std::shared_ptr<PPole> > Ppoles,
+	       vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg); 
   PVectorRelBg(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, unsigned int orderBg);
 
   /// Destructor
@@ -57,8 +58,7 @@ public:
 
 protected:
   unsigned int _orderBgP;
-  vector< vector<double> >  _bgPTerms;
+  vector< vector<double> > _bgPTerms;
 };
-//_____________________________________________________________________________
 
 

@@ -24,9 +24,11 @@
 #include "PwaDynamics/Voigtian.hh"
 #include "Utils/Faddeeva.hh"
 
-Voigtian::Voigtian()
- {
- }
+#include <complex>
+using std::complex;
+
+Voigtian::Voigtian() {
+}
 
 Voigtian::~Voigtian(){
 }
@@ -35,7 +37,7 @@ double Voigtian::calc(double currentMass, double mass0, double gamma, double sig
   double result=0.;
   if ((sigma < 0. || gamma < 0.) || (fabs(sigma)<1e-20 && fabs(gamma)<1.e-20)) {
     return result;  // Not meant to be for those who want to be thinner than 0
-   }
+  }
   if (fabs(sigma) < 1.e-20){
     sigma=1.e-12;
   }

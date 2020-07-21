@@ -25,19 +25,15 @@
 
 #pragma once
 
-#include <iostream>
 #include <string>
-
-// #include <cassert>
+#include <vector>
 #include <memory>
-#include "PwaDynamics/AbsPhaseSpace.hh"
 
 class AbsPhaseSpace;
 
-class PhaseSpaceFactory{
+class PhaseSpaceFactory {
 
 public:
-
   /** Destructor */
   virtual ~PhaseSpaceFactory();
 
@@ -45,11 +41,10 @@ public:
   std::shared_ptr<AbsPhaseSpace> getPhpPointer(std::string type, std::vector<double> masses);
 
 protected:
- ///Constructor 
+  ///Constructor 
   PhaseSpaceFactory();
   static PhaseSpaceFactory* _instance;
 
-private:
 };
 
 

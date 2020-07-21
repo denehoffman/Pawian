@@ -28,27 +28,21 @@
 // @file KMatrixFunctions.hh
 //_____________________________________________________________________________
 
-#include <iostream>
-#include <complex>
-#include <utility>
 #include <memory>
 #include <map>
 
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "PwaDynamics/BarrierFactor.hh"
-
-
 class TMatrixRel;
-//_____________________________________________________________________________
-//_____________________________________________________________________________
 
 namespace KMatrixFunctions { 
   double twoDeltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
   double deltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
-  double deltaArgandWSigma(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass, double sigma, unsigned int noOfPoints=2);
+  double deltaArgandWSigma(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex,
+			   double mass, double sigma, unsigned int noOfPoints=2);
   unsigned int calcNoRots(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
-  unsigned int noOfPhaseRotationsArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
-  void fillRotationArgandMap(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, std::map<unsigned int, double>& toFill, double massMax=4.0);
+  unsigned int noOfPhaseRotationsArgand(std::shared_ptr<TMatrixRel> tMatr,
+					unsigned int projectionIndex, double mass);
+  void fillRotationArgandMap(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex,
+			     std::map<unsigned int, double>& toFill, double massMax=4.0);
 }; // namespace KMatrixFunctions
 
 
