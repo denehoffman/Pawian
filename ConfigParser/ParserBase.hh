@@ -132,6 +132,7 @@ public:
   const unsigned int singleChannelId() const{ return _singleChannelId;}
   const double sProdExponent() const {return _sProdExp;}
   const bool useParticleNameForPVecBg() const {return _useParticleNameForPVecBg;}
+  const bool fixPrimaryChannelScaling() const {return _fixPrimaryChannelScaling;}
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
 
@@ -220,4 +221,5 @@ protected:
   unsigned int _singleChannelId;
   double _sProdExp;
   bool _useParticleNameForPVecBg;
+  bool _fixPrimaryChannelScaling;
 };

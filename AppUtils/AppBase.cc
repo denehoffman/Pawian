@@ -607,11 +607,13 @@ void AppBase::fixParams(std::shared_ptr<AbsPawianParameters> upar,
     upar->SetDependencies( *strIt, depIdVec);
   }
 
-  // Always fix the primary channel's scaling parameters
-  std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam();
-  fixedParams.push_back(fixedScaleParam);
-  InfoMsg << "Fixing scaling parameter " << fixedScaleParam << endmsg;
-
+  // fix the primary channel's scaling parameters
+  if(GlobalEnv::instance()->parser()->fixPrimaryChannelScaling()){
+    std::string fixedScaleParam = GlobalEnv::instance()->Channel()->Lh()->getChannelScaleParam();
+    fixedParams.push_back(fixedScaleParam);
+    InfoMsg << "Fixing scaling parameter " << fixedScaleParam << endmsg;
+  }
+  
   const std::vector<std::string> parNames=upar->ParamNames();
 
   std::vector<std::string>::const_iterator itFix;

@@ -89,7 +89,8 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_minuitStrategyLevel(1)
   ,_singleChannelId(0)
   ,_sProdExp(0.0)
-  ,_useParticleNameForPVecBg(false)  
+  ,_useParticleNameForPVecBg(false)
+  ,_fixPrimaryChannelScaling(true)  
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -193,6 +194,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("addChannelScalingId",po::value<bool>(&_addChannelScalingId), "add Id to parameter name for channel scaling")
     ("sProdExponent", po::value<double>(&_sProdExp)->default_value(_sProdExp),"exponent for the s dependency in the production (supported for FVectorIntensity and Gamgam fits")
     ("useParticleNameForPVecBg",po::value<bool>(&_useParticleNameForPVecBg), "yes: (cloned) particle name; no: K-matrix name")
+    ("fixPrimaryChannelScaling",po::value<bool>(&_fixPrimaryChannelScaling), "fix/release scaling of first channel for coupled channel mode")
     ;
 
 }
