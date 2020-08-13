@@ -1,4 +1,4 @@
-source /opt/root/6-18.04-Centos8-gcc9.2.0/bin/thisroot.csh
+source /opt/root/6-18.04-Centos8-gcc9.2.0-a/bin/thisroot.csh
 
 setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
 setenv extern /data/sleipnir/PANDA/PWA
