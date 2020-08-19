@@ -62,7 +62,8 @@ double BBUnstableParFit::calcNormDInvNeg(const std::vector<double>& minPar){
   std::complex<double> rootS(mRes,-wRes/2.0);
   std::complex<double> S = rootS*rootS;
   std::complex<double> intermediate;
-  intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamReid(mRes, m1, m2));
+  //  intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamReid(mRes, m1, m2));
+  intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamDudek(mRes, m1, m2));
   result = -1.0/norm(intermediate);
   return result;
 }
