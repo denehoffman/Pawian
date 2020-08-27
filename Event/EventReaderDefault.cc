@@ -27,17 +27,18 @@
 #include "Event/EventReaderDefault.hh"
 
 #include "ErrLogger/ErrLogger.hh"
+#include "Utils/PawianConstants.hh"
 #include "Event/Event.hh"
 #include "Event/EventList.hh"
 
 EventReaderDefault::EventReaderDefault()
     : EventReader(false), numParticles(0), linesToSkip(0), _unit("GEV"),
-      _order("Px Py Pz E"), _unitScaleFactor(1.), _energyFirst(false) {}
+      _order("Px Py Pz E"), _unitScaleFactor(1.), _angleScaleFactor(1.), _energyFirst(false) {}
 
 EventReaderDefault::EventReaderDefault(const std::vector<std::string> &files,
                                        int particles, int skip, bool useWeight)
     : EventReader(useWeight), numParticles(particles), linesToSkip(skip),
-      _unit("GEV"), _order("Px Py Pz E"), _unitScaleFactor(1.),
+      _unit("GEV"), _order("Px Py Pz E"), _unitScaleFactor(1.), _angleScaleFactor(1.),
       _energyFirst(false) {
   if (0 == files.size()) {
     Alert << "empty list of event files"; // << endmsg;
@@ -145,10 +146,16 @@ bool EventReaderDefault::fill(EventList &evtList, int evtStart, int evtStop) {
 
 void EventReaderDefault::setUnit(const std::string &theUnit) {
   _unit = theUnit;
-  if (_unit == "GEV") {
+  if (_unit == "GEV" || _unit == "GEVrad") {
     _unitScaleFactor = 1.;
-  } else if (_unit == "MEV") {
+    if (_unit == "GEVrad"){
+    _angleScaleFactor=PawianConstants::pi/180.;
+    }
+  } else if (_unit == "MEV" || _unit == "MEVrad") {
     _unitScaleFactor = 1000.;
+    if (_unit == "MEVrad"){
+    _angleScaleFactor=PawianConstants::pi/180.;
+    }
   } else {
     Alert << "unit " << _unit << " does not exist!!!" << endmsg;
     exit(0);

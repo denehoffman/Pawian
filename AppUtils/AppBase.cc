@@ -182,7 +182,7 @@ void AppBase::readScatteringEvents(EventList& theEventList, std::vector<std::str
   if(GlobalEnv::instance()->Channel(channelID)->useMassRange()){
     evtScatterReader.setMassRange(massRangeCuts);
   }
-
+  evtScatterReader.setUnit(GlobalEnv::instance()->Channel(channelID)->parser()->unitInFile());
   evtScatterReader.fill(theEventList, evtStart, evtStop);
 }
 
