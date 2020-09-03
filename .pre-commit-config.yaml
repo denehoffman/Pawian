@@ -46,3 +46,9 @@ repos:
         language: system
         types:
           - c++
+
+      - id: rstcheck
+        name: rstcheck
+        entry: rstcheck
+        language: system
+        files: \.(inc|rst)$
