@@ -1,16 +1,30 @@
 /Jamroot
 
 # Output files
-*.log
 *.out
+*.root
+htmlcov/
 
 # Temporary files
+.fuse_hidden*
 .ipynb_checkpoints/
+__pycache__/
 
 # Build files
+*.egg-info/
+*.pyc
+.coverage
+.coverage.*
+.eggs/
+__pycache__/
 bin/
 lib/
+version.py
 
-# Visual Studio Code
-.vscode/
-*.code-workspace
+# Virtual environments
+*venv/
+.tox/
+
+# Settings
+.idea/
+**.code-workspace
