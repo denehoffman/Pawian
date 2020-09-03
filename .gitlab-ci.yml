@@ -4,7 +4,6 @@
     - master
 
 .print-system-info: &print-system-info
-  - inxi
   - lsb_release -a
   - pwd
   - clang++ --version
