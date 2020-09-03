@@ -22,10 +22,9 @@ in your editor, it will use the [`.editorconfig`](./.editorconfig) file to
 standardise some simple formatting conventions. This improves line-based
 comparisons.
 
-
 ## Coding conventions
 
 We use [Clang-Format](https://clang.llvm.org/docs/ClangFormat.html) to apply
 formatting conventions to the C++ code. The conventions are defined in the
-[`.clang-format` file](./.clang-format) and are based on the [LLVM coding
-standards](https://llvm.org/docs/CodingStandards.html).
+[`.clang-format` file](./.clang-format) and are based on the
+[LLVM coding standards](https://llvm.org/docs/CodingStandards.html).

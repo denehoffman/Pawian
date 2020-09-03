@@ -2,12 +2,12 @@
 
 $Id: README,v 1.1.1.1 2005/03/29 17:04:19 steinke Exp $
 
-ErrLogger provides an abstract interface (ErrLog, and the ErrMsg macro
-that provides a terse interface to the main use case) to a variety of
-underlying logging facilities. It's meant to be _really_ lightweight,
-in case we put it on top of some other implementation.
+ErrLogger provides an abstract interface (ErrLog, and the ErrMsg macro that
+provides a terse interface to the main use case) to a variety of underlying
+logging facilities. It's meant to be _really_ lightweight, in case we put it on
+top of some other implementation.
 
-Some known implementations are in the FrameLogger, OstErrLogger, and
-QtrErrLog packages.
+Some known implementations are in the FrameLogger, OstErrLogger, and QtrErrLog
+packages.
 
 Bob Jacobsen is package coordinator, gpdf admits to knowing something about it.
