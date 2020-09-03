@@ -1,0 +1,25 @@
+# Data files
+*.dat
+!startparams.dat
+!./epem/MultipoleFit/results/finalResult_epem.dat
+!./epem/MultipoleFit/results/serializedOutput_epem.dat
+!./epem/result/finalResult_epem.dat
+!./epem/result/serializedOutput_epem.dat
+!./epem/TensorFit/results/finalResult_epem.dat
+!./epem/TensorFit/results/serializedOutput_epem.dat
+!./epem/toyDataSignal.dat
+!./epem/toyMC.dat
+!./pbarp/defaultparams.dat
+!./pbarp/result/finalResult.dat
+!./pbarp/result/serializedOutput.dat
+!./pbarp/toyDataMC.dat
+!./pbarp/toyDataModel.dat
+!./res/result/finalResult_res.dat
+!./res/result/serializedOutput_res.dat
+!./res/toyD0decData.dat
+!./res/toyD0decMc.dat
+
+# Log files
+*.client*
+*.log
+*.server

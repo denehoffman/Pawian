@@ -4,6 +4,9 @@
 *.log
 *.out
 
+# Temporary files
+.ipynb_checkpoints/
+
 # Build files
 bin/
 lib/
