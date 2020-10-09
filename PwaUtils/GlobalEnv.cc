@@ -344,8 +344,14 @@ void GlobalEnv::setup(ParserBase* theParser){
    _particleTable = new ParticleTable;
 
    if (!pdtParser.parse(pdtFile, *_particleTable)) {
-      Alert << "can not parse particle table " << pdtFile << endmsg;
-      exit(1);
+     WarningMsg << "can not parse particle table " << pdtFile << "  try it with absolute path" << endmsg;
+     {
+       pdtFile=pdtFileRelPath;
+       if (!pdtParser.parse(pdtFile, *_particleTable)) {
+	 Alert << "can not parse particle table " << pdtFile << endmsg;
+	 exit(1);
+       }
+     }
    }
 
 }
