@@ -33,5 +33,6 @@
 using std::complex;
 
 namespace RadMultipoleFormFactor { 
-  complex<double> PureM1(double massA, double currentMassB, double massB0, double Egamma);
+  complex<double> PureM1Cleo(double massA, double currentMassB, double massB0, double Egamma);
+  complex<double> PureM1KEDR(double massA, double currentMassB, double massB0, double Egamma);
 }; // namespace RadMultipoleFormFactor

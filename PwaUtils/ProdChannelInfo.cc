@@ -102,6 +102,13 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
       _m0decRadM1Production=atof(m0DecStr.c_str());
       }
     }
+    else if(typeStr=="RadM1KEDR"){
+      _prodBarrierType="RadM1KEDR";
+      std::string m0DecStr;
+      if( strStrFromParser >> m0DecStr){
+      _m0decRadM1Production=atof(m0DecStr.c_str());
+      }
+    }
     else if(typeStr=="FormPol2"){
       if(!_isFormation){
 	Alert << "dynamics " << typeStr
@@ -111,7 +118,7 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
     }
     else{
       Alert << "production barrier type: " << typeStr << " doesn't exist for PAWIAN!!!" 
-	    << "\nonly BlattWBarrier, BlattWBarrierTensor and RadM1 are supported" << endmsg;
+	    << "\nonly BlattWBarrier, BlattWBarrierTensor, RadM1 and RadM1KEDR are supported" << endmsg;
       exit(1);
     }
   }
@@ -136,7 +143,7 @@ void ProdChannelInfo::print(std::ostream& os) const{
   if (_withProBarrier){
     os << "prod barrier type: " << _prodBarrierType << std::endl;
     if(_prodBarrierType=="BlattWBarrier" || _prodBarrierType=="BlattWBarrierTensor") os << "with qR = "  << _qRProd << std::endl;
-    else if(_prodBarrierType=="RadM1") os << "with m0decRadM1Production = "  << _m0decRadM1Production << std::endl;
+    else if(_prodBarrierType=="RadM1" || _prodBarrierType=="RadM1KEDR") os << "with m0decRadM1Production = "  << _m0decRadM1Production << std::endl;
   }
 
 }

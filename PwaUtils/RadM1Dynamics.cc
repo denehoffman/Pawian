@@ -37,7 +37,7 @@
 #include "ConfigParser/ParserBase.hh"
 #include "Utils/IdStringMapRegistry.hh"
 
-RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, const std::string& wignerDKey, double qR, double massB0) :
+RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, const std::string& wignerDKey, double qR, double massB0, bool useKedr) :
   AbsDynamics(name, fsParticles, mother)
   ,_fsParticlesDaughter1(fsParticlesDaughter1)
   ,_fsParticlesDaughter2(fsParticlesDaughter2)
@@ -69,6 +69,7 @@ RadM1Dynamics::RadM1Dynamics(std::string& name, std::vector<Particle*>& fsPartic
     WarningMsg << "_qR value of " << _qR << " to high! Set it to 20.!!!" << endmsg;
     _qR=20.;
   }
+  _useKedr = useKedr;
 }
 
 RadM1Dynamics::~RadM1Dynamics()
@@ -89,10 +90,17 @@ complex<double> RadM1Dynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Sp
   double Egamma = theData->DoubleMassId.at(_dynEgammaCMmotherId); // how to access Egamma?
 
   complex<double> result(1.,0.);
-  if(OrbMom==0) result=RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
-  else result = BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) / 
-                BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR) *
-                RadMultipoleFormFactor::PureM1(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+  if(!_useKedr) {
+    if(OrbMom==0) result=RadMultipoleFormFactor::PureM1Cleo(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+    else result = BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) / 
+                  BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR) *
+                  RadMultipoleFormFactor::PureM1Cleo(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+  } else if(_useKedr) {
+    if(OrbMom==0) result=RadMultipoleFormFactor::PureM1KEDR(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+    else result = BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) / 
+                  BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR) *
+                  RadMultipoleFormFactor::PureM1KEDR(theData->DoubleMassId.at(_dynId), massB, _massB0, Egamma);
+  }
 
   if ( _cacheAmps) _cachedMap[theData->evtNo]=result;
 

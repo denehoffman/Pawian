@@ -42,7 +42,7 @@ class AbsPawianParameters;
 class RadM1Dynamics : public AbsDynamics{
 
 public:
-  RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, const std::string& wignerDKey, double qR, double massB=1.);
+  RadM1Dynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, const std::string& wignerDKey, double qR, double massB=1., bool useKedr=false);
   virtual ~RadM1Dynamics();
 
   virtual std::string type() {return "RadM1Dynamics";}
@@ -74,6 +74,7 @@ protected:
   unsigned short _wignerDqNormId;
   double _qR;
   bool _fitqRVals;
+  bool _useKedr;
   std::string _fitqRKey;
 
 private:

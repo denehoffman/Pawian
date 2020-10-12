@@ -687,6 +687,9 @@ void AbsDecay::enableProdBarrier(){
   else if(_prodChannelInfo->prodBarrierType()=="RadM1"){
     _dynType="RadM1";
   }
+  else if(_prodChannelInfo->prodBarrierType()=="RadM1KEDR"){
+    _dynType="RadM1KEDR";
+  }
 
   InfoMsg << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
