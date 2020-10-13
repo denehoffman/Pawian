@@ -33,6 +33,9 @@ namespace PawianQFT{
   complex<double> ChewMandelstamPennington(complex<double> s, double massDec1, double massDec2);
   complex<double> ChewMandelstamReid(complex<double> s, double massDec1, double massDec2);
   complex<double> ChewMandelstamDudek(complex<double> s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamDudekUnstableRhoPi(double s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamDudekUnstableRhoPi(complex<double> s, double massDec1, double massDec2);
+  double evalHelpDudekUnstable(double mass, double mean, double sigma, double kl, double kh);
   complex<double> phaseSpaceFacReid(complex<double> mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacReid(double mass, double massDec1, double massDec2);
   complex<double> phaseSpaceFacDefault(double mass, double massDec1, double massDec2);
