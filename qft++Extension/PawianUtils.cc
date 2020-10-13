@@ -129,13 +129,22 @@ complex<double> PawianQFT::ChewMandelstamDudek(complex<double> s, double massDec
 
 complex<double> PawianQFT::ChewMandelstamDudekUnstableRhoPi(double s, double massDec1, double massDec2){
   double sqrts=sqrt(s);
-  double parImag[17]={-56.9508, 257.776, -499.825, 540.399, 0.510786, 0.417175, 0.091638, -1.28979, 7.27124, -21.048, -352.435, 137.719, -26.7861, 33.0017, -26.5003, 8.37052, 0.279228};
-  double parReal[12]={0.913953, -1.63788, 1.2278, -0.602585, 0.945479, 0.00101412, 0.377936, -0.361194, 0.332049, -0.0618304, 0.00291903, 0.0124467};
+//  double parImag[17]={-56.9508, 257.776, -499.825, 540.399, 0.510786, 0.417175, 0.091638, -1.28979, 7.27124, -21.048, -352.435, 137.719, -26.7861, 33.0017, -26.5003, 8.37052, 0.279228};
+//  double parReal[12]={0.913953, -1.63788, 1.2278, -0.602585, 0.945479, 0.00101412, 0.377936, -0.361194, 0.332049, -0.0618304, 0.00291903, 0.0124467};
 
-     double resultReal=(parReal[0]+parReal[1]*sqrts+parReal[2]*sqrts*sqrts+parReal[3]*pow(sqrts,3))*evalHelpDudekUnstable(sqrt(sqrts), parReal[4], parReal[5], parReal[10], parReal[11])+parReal[6]+parReal[7]*sqrts+parReal[8]*sqrts*sqrts+parReal[9]*pow(sqrts,3.);
+//     double resultReal=(parReal[0]+parReal[1]*sqrts+parReal[2]*sqrts*sqrts+parReal[3]*pow(sqrts,3))*evalHelpDudekUnstable(sqrt(sqrts), parReal[4], parReal[5], parReal[10], parReal[11])+parReal[6]+parReal[7]*sqrts+parReal[8]*sqrts*sqrts+parReal[9]*pow(sqrts,3.);
 
-     double resultImag=(parImag[0]+parImag[1]*sqrts+parImag[2]*sqrts*sqrts+parImag[3]*sqrts*sqrts*sqrts+parImag[10]*sqrts*sqrts*sqrts*sqrts+parImag[11]*pow(sqrts,5.)+parImag[12]*pow(sqrts,6.))*phaseSpaceFacDefault(sqrts, parImag[4], parImag[5]).imag()+parImag[6]+parImag[7]*sqrts+parImag[8]*sqrts*sqrts+parImag[9]*pow(sqrts,3.)+parImag[13]*pow(sqrts,4.)+parImag[14]*pow(sqrts,5.)+parImag[15]*pow(sqrts,6.)+parImag[16]*pow(sqrts,8.);
-     
+//  double resultReal=(parReal[0]+parReal[1]*sqrts+parReal[2]*sqrts*sqrts+parReal[3]*pow(sqrts,3))*evalHelpDudekUnstable(sqrt(sqrts), parReal[4], parReal[5], parReal[10], parReal[11])+parReal[6]+parReal[7]*sqrts+parReal[8]*sqrts*sqrts+parReal[9]*pow(sqrts,3.);
+
+//     double resultImag=(parImag[0]+parImag[1]*sqrts+parImag[2]*sqrts*sqrts+parImag[3]*sqrts*sqrts*sqrts+parImag[10]*sqrts*sqrts*sqrts*sqrts+parImag[11]*pow(sqrts,5.)+parImag[12]*pow(sqrts,6.))*phaseSpaceFacDefault(sqrts, parImag[4], parImag[5]).imag()+parImag[6]+parImag[7]*sqrts+parImag[8]*sqrts*sqrts+parImag[9]*pow(sqrts,3.)+parImag[13]*pow(sqrts,4.)+parImag[14]*pow(sqrts,5.)+parImag[15]*pow(sqrts,6.)+parImag[16]*pow(sqrts,8.);
+
+  double parImag[18]={-56.6276, 260.051, -520.646, 597.028, 0.565151, 0.34564, -2.13766, -30.1122, 56.7708, -98.8307, -426.946, 187.161, -40.143, 110.152, -66.5314, 13.8759, 2.41493, 14.5859};
+  double parReal[14]={1.99358, -2.90444, -0.139078, 1.96132, 0.920773, 0.122025, -2.07969, 5.1232, -3.76659, 1.56354, -0.040303, 0.584085, -1.34951, -0.248779};
+
+  double resultReal=(parReal[0]+parReal[1]*sqrts+parReal[2]*sqrts*sqrts+parReal[3]*pow(sqrts,3)+parReal[12]*pow(sqrts,4))*evalHelpDudekUnstable(sqrt(sqrts), parReal[4], parReal[5], parReal[10], parReal[11])+parReal[6]+parReal[7]*sqrts+parReal[8]*sqrts*sqrts+parReal[9]*pow(sqrts,3.)+parReal[13]*pow(sqrts,4);
+
+double resultImag = (parImag[0]+parImag[1]*sqrts+parImag[2]*sqrts*sqrts+parImag[3]*pow(sqrts,3.)+parImag[10]*pow(sqrts,4.)+parImag[11]*pow(sqrts,5.)+parImag[12]*pow(sqrts,6.))*phaseSpaceFacDefault(sqrts, parImag[4], parImag[5]).imag()+parImag[6]+parImag[7]*sqrts+parImag[8]*sqrts*sqrts+parImag[9]*pow(sqrts,3.)+parImag[13]*pow(sqrts,4.)+parImag[14]*pow(sqrts,5.)+parImag[15]*pow(sqrts,6.)+parImag[16]*pow(sqrts,7.)+parImag[17]*sqrt(sqrts);
+
      complex<double> result(resultReal, -resultImag);
      return result;
 }
