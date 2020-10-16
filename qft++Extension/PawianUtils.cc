@@ -138,8 +138,9 @@ complex<double> PawianQFT::ChewMandelstamDudekUnstableRhoPi(double s, double mas
 
 //     double resultImag=(parImag[0]+parImag[1]*sqrts+parImag[2]*sqrts*sqrts+parImag[3]*sqrts*sqrts*sqrts+parImag[10]*sqrts*sqrts*sqrts*sqrts+parImag[11]*pow(sqrts,5.)+parImag[12]*pow(sqrts,6.))*phaseSpaceFacDefault(sqrts, parImag[4], parImag[5]).imag()+parImag[6]+parImag[7]*sqrts+parImag[8]*sqrts*sqrts+parImag[9]*pow(sqrts,3.)+parImag[13]*pow(sqrts,4.)+parImag[14]*pow(sqrts,5.)+parImag[15]*pow(sqrts,6.)+parImag[16]*pow(sqrts,8.);
 
-  double parImag[18]={-56.6276, 260.051, -520.646, 597.028, 0.565151, 0.34564, -2.13766, -30.1122, 56.7708, -98.8307, -426.946, 187.161, -40.143, 110.152, -66.5314, 13.8759, 2.41493, 14.5859};
-  double parReal[14]={1.99358, -2.90444, -0.139078, 1.96132, 0.920773, 0.122025, -2.07969, 5.1232, -3.76659, 1.56354, -0.040303, 0.584085, -1.34951, -0.248779};
+  double parImag[18]={ -56.62759611094936, 260.0512366895287, -520.6462126261961, 597.0275352864451, 0.5651508581192156, 0.345639612989795, -2.137663230250565, -30.11215274793011, 56.77076445863649, -98.83065949201345, -426.9460849355088, 187.1610397574648, -40.14298412560645, 110.1522287917516, -66.53138741774561, 13.87591536254525, 2.41492594582418, 14.58588929359466};
+  
+  double parReal[14]={1.993577947915189, -2.904436961229936, -0.1390783363995473, 1.96131811547056, 0.9207725124387273, 0.1220254365759813, -2.079685061379917, 5.1232003549247, -3.766588111727992, 1.563541895855885, -0.04030295032523248, 0.5840845557110333, -1.349512674240738, -0.2487791849975481};
 
   double resultReal=(parReal[0]+parReal[1]*sqrts+parReal[2]*sqrts*sqrts+parReal[3]*pow(sqrts,3)+parReal[12]*pow(sqrts,4))*evalHelpDudekUnstable(sqrt(sqrts), parReal[4], parReal[5], parReal[10], parReal[11])+parReal[6]+parReal[7]*sqrts+parReal[8]*sqrts*sqrts+parReal[9]*pow(sqrts,3.)+parReal[13]*pow(sqrts,4);
 
