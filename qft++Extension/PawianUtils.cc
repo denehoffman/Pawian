@@ -144,7 +144,8 @@ complex<double> PawianQFT::ChewMandelstamDudekUnstableRhoPi(double s, double mas
 
   double resultReal=(parReal[0]+parReal[1]*sqrts+parReal[2]*sqrts*sqrts+parReal[3]*pow(sqrts,3)+parReal[12]*pow(sqrts,4))*evalHelpDudekUnstable(sqrt(sqrts), parReal[4], parReal[5], parReal[10], parReal[11])+parReal[6]+parReal[7]*sqrts+parReal[8]*sqrts*sqrts+parReal[9]*pow(sqrts,3.)+parReal[13]*pow(sqrts,4);
 
-double resultImag = (parImag[0]+parImag[1]*sqrts+parImag[2]*sqrts*sqrts+parImag[3]*pow(sqrts,3.)+parImag[10]*pow(sqrts,4.)+parImag[11]*pow(sqrts,5.)+parImag[12]*pow(sqrts,6.))*phaseSpaceFacDefault(sqrts, parImag[4], parImag[5]).imag()+parImag[6]+parImag[7]*sqrts+parImag[8]*sqrts*sqrts+parImag[9]*pow(sqrts,3.)+parImag[13]*pow(sqrts,4.)+parImag[14]*pow(sqrts,5.)+parImag[15]*pow(sqrts,6.)+parImag[16]*pow(sqrts,7.)+parImag[17]*sqrt(sqrts);
+
+double resultImag = (parImag[0]+parImag[1]*sqrts+parImag[2]*sqrts*sqrts+parImag[3]*sqrts*sqrts*sqrts+parImag[10]*sqrts*sqrts*sqrts*sqrts+parImag[11]*pow(sqrts,5.)+parImag[12]*pow(sqrts,6.))*phaseSpaceFacDefault(sqrts, parImag[4], parImag[5]).real()+parImag[6]+parImag[7]*sqrts+parImag[8]*sqrts*sqrts+parImag[9]*pow(sqrts,3.)+parImag[13]*pow(sqrts,4.)+parImag[14]*pow(sqrts,5.)+parImag[15]*pow(sqrts,6.)+parImag[16]*pow(sqrts,7.)+parImag[17]*sqrt(sqrts);
 
      complex<double> result(resultReal, -resultImag);
      return result;

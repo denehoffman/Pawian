@@ -92,7 +92,6 @@ complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass){
     cacheFactors(mass);
     result=_CMCache.at(massInt100keV); 
   }
-
   return result;
 }
 
@@ -165,6 +164,8 @@ complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
     }
     else{
       Alert << "Requested CM out of boundaries in file:" << m_lutfilepath << " - Impossible Calculation. Exiting" << endmsg;
+      Alert << _s.real() << " < " << m_sLow.real() << " " << _s.real() << " > " << m_sHigh.real() << " " << _s.imag() << " < " << m_sHigh.imag() << " " << _s.imag() << " > " << m_sLow.imag() << endmsg;
+
       exit(1);
     }
   }
