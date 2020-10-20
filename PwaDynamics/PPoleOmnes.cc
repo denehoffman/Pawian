@@ -20,55 +20,37 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/KPoleOmnes.hh"
-#include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/PPoleOmnes.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "ErrLogger/ErrLogger.hh"
 
-KPoleOmnes::KPoleOmnes(vector<double>& g_i, double mass_0):
-  KPole(g_i, mass_0)
+PPoleOmnes::PPoleOmnes(complex<double>& beta, vector<double>& g_i, double mass_0):
+  PPole(beta, g_i, mass_0)
 {
 }
 
-KPoleOmnes::KPoleOmnes(vector<double>& g_i, double mass_0, int numRow, int numCol):
-  KPole(g_i, mass_0, numRow, numCol)
-{
+PPoleOmnes::~PPoleOmnes(){
 }
 
-KPoleOmnes::~KPoleOmnes(){
-}
-
-void KPoleOmnes::evalMatrix(const double mass, Spin OrbMom){
-  //   evalMatrixTemplate(mass);
-  double denom = _poleMass*_poleMass*(_poleMass*_poleMass-mass*mass);
-
-  if( std::abs(denom) < 1.e-10){
-      if(denom<0.) denom = -1.e-10;
-      else denom = 1.e-10;
+void PPoleOmnes::evalMatrix(const double mass, Spin OrbMom){
+  double denom=_poleMass*_poleMass-mass*mass;
+  if(fabs(denom)<1.e-10){
+    if(denom<0.) denom=-1.e-10; 
+    else denom=1.e-10;
   }
 
   double s_denom=mass*mass/denom;
-
+  
   for (int i=0; i< int(_g_i.size()); ++i){
-    for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i[i]*s_denom*_g_i[j]);
-     }
+    this->operator()(i,0)= (_beta*s_denom*_g_i[i]);
   }
 }
 
-void KPoleOmnes::evalMatrix(const complex<double> mass, Spin OrbMom){
-
-  complex<double> denom = _poleMass*_poleMass* (_poleMass*_poleMass-mass*mass);
-  if( std::abs(denom) < 1.e-10){
-     denom = complex<double>(1.E-10, 0.);
-  }
-
-  complex<double> s_denom=mass*mass/denom;
+void PPoleOmnes::evalMatrix(const complex<double> mass, Spin OrbMom){
+  complex<double> denom=_poleMass*_poleMass-mass*mass;
+  complex<double> s_denom= mass*mass/denom;
+  
   for (int i=0; i< int(_g_i.size()); ++i){
-    for (int j=0; j< int(_g_i.size()); ++j){
-      this->operator()(i,j)= ( _g_i[i]*s_denom*_g_i[j]);
-     }
+    this->operator()(i,0)= _beta*s_denom*_g_i[i];
   }
 }
-
 
