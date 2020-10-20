@@ -26,8 +26,8 @@
 
 PhaseSpaceList::PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   _phpVecs(phpVecs)
-  ,_omnesMatr(phpVecs.size(), phpVecs.size())
-  ,_selfEnergyMatr(phpVecs.size(), phpVecs.size())
+  ,_omnesMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
+  ,_selfEnergyMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
 {
 }
 

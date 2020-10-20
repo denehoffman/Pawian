@@ -30,6 +30,7 @@
 #include <vector>
 #include <memory>
 #include <complex>
+#include <boost/multi_array.hpp>
 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/AbsComplexFunction.hh"
@@ -49,13 +50,13 @@ public:
   /// Destructor
   virtual ~PhaseSpaceList();
   vector< std::shared_ptr<AbsPhaseSpace> > phpVecs(){return _phpVecs;}
-  Matrix< std::shared_ptr<AbsComplexFunction> > omnesMatrix(){return _omnesMatr;}
-  Matrix< std::shared_ptr<AbsComplexFunction> > selfEnergyMatrix(){return _selfEnergyMatr;}
+  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatrix(){return _omnesMatrix;}
+  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatrix(){return _selfEnergyMatrix;}
   
 protected:
   vector< std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  Matrix< std::shared_ptr<AbsComplexFunction> > _omnesMatr;
-  Matrix< std::shared_ptr<AbsComplexFunction> > _selfEnergyMatr;
+  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> _omnesMatrix;
+  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> _selfEnergyMatrix;
 };
 
 
