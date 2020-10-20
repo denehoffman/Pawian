@@ -23,7 +23,6 @@ rst_prolog = open("global.inc", "r").read()
 
 extensions = [
     "myst_parser",
-    "nbsphinx",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.ifconfig",
     "sphinx.ext.intersphinx",
