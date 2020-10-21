@@ -1,7 +1,7 @@
 //************************************************************************//
 //									  //
 //  Copyright 2020 Bertram Kopf (bertram@ep1.rub.de)			  //
-//          	   - Ruhr-Universit??t Bochum 				  //
+//          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -17,24 +17,41 @@
 //									  //
 //  You should have received a copy of the GNU General Public License     //
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
-//									  //
+//	      							  //
 //************************************************************************//
 
-#include "PwaDynamics/AbsComplexFunction.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+// ZeroComplexFunction class definition file. -*- C++ -*-
+// Copyright 2020 Bertram Kopf
+
+#pragma once 
+//_____________________________________________________________________________
+// @file PhaseSpaceIsobar.h
+//_____________________________________________________________________________
+#include <vector>
+#include <memory>
+#include <complex>
+
+#include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-AbsComplexFunction::AbsComplexFunction()
-{
-}
 
-AbsComplexFunction::~AbsComplexFunction(){
-}
 
-complex<double> AbsComplexFunction::eval(double s){
-  return complex<double>(1.,0.);
-}
+using std::complex;
 
-complex<double> AbsComplexFunction::eval(complex<double> s){
-  return complex<double>(1.,0.);
-}
+class ZeroComplexFunction : public AbsComplexFunction{
+
+public:
+
+  /// Constructor 
+  ZeroComplexFunction(){;} 
+
+  /// Destructor
+  virtual ~ZeroComplexFunction(){;}
+  virtual complex<double> eval(double s) {return complex<double>(1.,0.);}
+  virtual complex<double> eval(complex<double> s) {return complex<double>(1.,0.);}
+  
+protected:
+  
+};
+
+

@@ -23,13 +23,45 @@
 #include "PwaDynamics/PhaseSpaceList.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
+#include "qft++Extension/UnityComplexFunction.hh"
+#include "qft++Extension/ZeroComplexFunction.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 PhaseSpaceList::PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
   _phpVecs(phpVecs)
   ,_omnesMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
   ,_selfEnergyMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
 {
+  for(size_t i=0; i<phpVecs.size(); ++i){
+    for(size_t j=0; j<phpVecs.size(); ++j){
+      if(i==j){
+       	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+      }
+      else{
+	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
+	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
+      }
+    }
+  }
 }
+
+PhaseSpaceList::PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatr, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatr) :
+  _phpVecs(phpVecs)
+  ,_omnesMatrix(omnesMatr)
+  ,_selfEnergyMatrix(selfEnergyMatr)
+{
+  if(_omnesMatrix.num_elements() != phpVecs.size()*phpVecs.size()){
+    Alert << "omnesMatrix number of elements: " << _omnesMatrix.num_elements() << " is not in agreement with phpSize*phpSize: " << phpVecs.size()*phpVecs.size() << endmsg;
+    exit(1);
+  }
+
+    if(_selfEnergyMatrix.num_elements() != phpVecs.size()*phpVecs.size()){
+    Alert << "omnesMatrix number of elements: " << _selfEnergyMatrix.num_elements() << " is not in agreement with phpSize*phpSize: " << phpVecs.size()*phpVecs.size() << endmsg;
+    exit(1);
+  }
+}
+
 
 PhaseSpaceList::~PhaseSpaceList(){
 
