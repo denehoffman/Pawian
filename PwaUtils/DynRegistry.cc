@@ -51,6 +51,7 @@
 #include "PwaUtils/BlattWBarrierTensorDynamics.hh"
 #include "PwaUtils/ProdParamDynamics.hh"
 #include "PwaUtils/LinearDynamics.hh"
+#include "PwaUtils/OmnesDynamics.hh"
 #include "PwaUtils/ProdChannelInfo.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
@@ -178,6 +179,11 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       std::string pathToConfigFile=theDec->pathToConfigParser();
       std::string projectionParticleNames = theDec->projectionParticleNames();
       result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId, projectionParticleNames)); 
+    }
+    else if(theDec->dynType()=="Omnes"){
+      std::string pathToConfigFile=theDec->pathToConfigParser();
+      std::string projectionParticleNames = theDec->projectionParticleNames();
+      result= std::shared_ptr<AbsDynamics>(new OmnesDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId, projectionParticleNames));
     }
     else if(theDec->dynType()=="Flatte")
       result= std::shared_ptr<AbsDynamics>(new FlatteDynamics(theName, fsParticles, theDec->motherPart(), theDec->firstDecayChannel(), theDec->secondDecayChannel()));
