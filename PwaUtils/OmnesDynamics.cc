@@ -60,6 +60,11 @@ OmnesDynamics::OmnesDynamics(std::string& name, std::vector<Particle*>& fsPartic
   KMatrixDynamics(name, fsParticles, mother, pathToConfigParser, channelID, projectionParticleNames)
 {
   init();
+  if(_orderPVecBg<0){
+    Alert << "OmnesDynamics requires P-vector background terms; _orderPVecBg = "
+	  << _orderPVecBg << " is not allowed" << endmsg;
+    exit(1);
+  }
 }
 
 OmnesDynamics::~OmnesDynamics()
@@ -259,7 +264,6 @@ void OmnesDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar)
     }
   }
 }
-
 
 std::string OmnesDynamics::addOneGrandMa(std::string theName){
   std::shared_ptr<PVectorBgOmnes> currentPVector=makeNewPVecOmnes();

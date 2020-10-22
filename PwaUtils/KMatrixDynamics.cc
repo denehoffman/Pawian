@@ -420,11 +420,12 @@ std::string KMatrixDynamics::addOneGrandMa(std::string theName){
     }
   }
 
-
+  //  if(type()=="KMatrixDynamics"){
   std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVector(_kMatr, currentPVector));
   _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
-
+  //  }
+  
   return theName;
 }
 
