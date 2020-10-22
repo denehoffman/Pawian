@@ -54,6 +54,8 @@
 #include "PwaDynamics/FVectorOmnes.hh"
 #include "PwaDynamics/PVectorBgOmnes.hh"
 #include "PwaDynamics/PhaseSpaceList.hh"
+#include "qft++Extension/AbsOmnesMatrix.hh"
+#include "qft++Extension/OmnesMatrixFactory.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
 OmnesDynamics::OmnesDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, ChannelID channelID, std::string projectionParticleNames) :
@@ -304,8 +306,12 @@ std::string OmnesDynamics::addOneGrandMa(std::string theName){
     }
   }
 
-  std::shared_ptr<PhaseSpaceList> phpList(new PhaseSpaceList(_phpVecs));
+  //std::shared_ptr<PhaseSpaceList> phpList(new PhaseSpaceList(_phpVecs));
+  std::string omnesMatrType=_kMatrixParser->omnesMatrixType();
+  std::shared_ptr<AbsOmnesMatrix> onmesMatrPointer=OmnesMatrixFactory::instance()->getOmnesMatrixPointer(omnesMatrType);
+  std::shared_ptr<PhaseSpaceList> phpList(new PhaseSpaceList(_phpVecs, onmesMatrPointer->omnesMatrix(), onmesMatrPointer->selfEnergyMatrix()));
   std::shared_ptr<FVector> currentFVector=std::shared_ptr<FVector>(new FVectorOmnes(_kMatrOmnes, currentPVector, phpList));
+  
   _fVecMap[theName]=currentFVector;
   _recalcMap[theName]=true;
 

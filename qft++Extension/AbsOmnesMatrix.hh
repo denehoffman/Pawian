@@ -20,7 +20,7 @@
 //	      							  //
 //************************************************************************//
 
-// PhaseSpaceList class definition file. -*- C++ -*-
+// AbsOmnesMatrix class definition file. -*- C++ -*-
 // Copyright 2020 Bertram Kopf
 
 #pragma once 
@@ -32,32 +32,27 @@
 #include <complex>
 #include <boost/multi_array.hpp>
 
-#include "PwaDynamics/AbsPhaseSpace.hh"
 #include "qft++Extension/AbsComplexFunction.hh"
-#include "qft++Extension/PawianUtils.hh"
 
 
 
 using std::complex;
 
-class PhaseSpaceList{
+class AbsOmnesMatrix{
 
 public:
 
-  /// Constructor 
-  //  PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs);
-  PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatr, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatr);
+  // Constructor 
+  AbsOmnesMatrix(){;} 
 
   /// Destructor
-  virtual ~PhaseSpaceList();
-  vector< std::shared_ptr<AbsPhaseSpace> > phpVecs(){return _phpVecs;}
-  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatrix(){return _omnesMatrix;}
-  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatrix(){return _selfEnergyMatrix;}
+  virtual ~AbsOmnesMatrix() {;}
+  virtual const std::string name()=0;
+  virtual boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatrix()=0;
+  virtual boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatrix()=0;
   
 protected:
-  vector< std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> _omnesMatrix;
-  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> _selfEnergyMatrix;
+
 };
 
 

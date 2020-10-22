@@ -20,44 +20,43 @@
 //	      							  //
 //************************************************************************//
 
-// PhaseSpaceList class definition file. -*- C++ -*-
+// OmnesMatrixPiPiS5Channel class definition file. -*- C++ -*-
 // Copyright 2020 Bertram Kopf
 
 #pragma once 
 //_____________________________________________________________________________
-// @file PhaseSpaceIsobar.h
+// @file OmnesMatrixPiPiS3Channelwrhorho.h
 //_____________________________________________________________________________
 #include <vector>
 #include <memory>
 #include <complex>
-#include <boost/multi_array.hpp>
 
-#include "PwaDynamics/AbsPhaseSpace.hh"
-#include "qft++Extension/AbsComplexFunction.hh"
-#include "qft++Extension/PawianUtils.hh"
+#include "qft++Extension/AbsOmnesMatrix.hh"
 
 
 
 using std::complex;
 
-class PhaseSpaceList{
+class OmnesMatrixPiPiS3Channelwrhorho : public AbsOmnesMatrix{
 
 public:
 
-  /// Constructor 
-  //  PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs);
-  PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatr, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatr);
+  // Constructor 
+  OmnesMatrixPiPiS3Channelwrhorho(); 
 
   /// Destructor
-  virtual ~PhaseSpaceList();
-  vector< std::shared_ptr<AbsPhaseSpace> > phpVecs(){return _phpVecs;}
-  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatrix(){return _omnesMatrix;}
-  boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatrix(){return _selfEnergyMatrix;}
-  
-protected:
-  vector< std::shared_ptr<AbsPhaseSpace> > _phpVecs;
+  virtual ~OmnesMatrixPiPiS3Channelwrhorho();
+
+  virtual const std::string name() {return "PiPiS3Channelwrhorho";}
+  virtual boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatrix() {return _omnesMatrix;}
+  virtual boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatrix() {return _selfEnergyMatrix;}
+
+
+private:
   boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> _omnesMatrix;
   boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> _selfEnergyMatrix;
+
+
 };
 
 

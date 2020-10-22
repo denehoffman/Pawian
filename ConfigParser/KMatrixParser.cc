@@ -45,6 +45,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ,_useAdler0(false)
       ,_s0Adler(1.)
       ,_snormAdler(1.)
+      ,_omnesMatrixType("PiPiS5Channel")
       ,_config(new po::options_description("Configuration file options"))
      {
     _config->add_options()
@@ -69,6 +70,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("gFactorFixMassPol",po::value< vector<string> >(&_gFactorFixMassPol), "3rd order polynomial to correct the pole mass for fixing g-factor ratios, total widths and total mass")  
       ("gFactorFixWidthPol",po::value< vector<string> >(&_gFactorFixWidthPol), "3rd order polynomial to correct the pole width for fixing g-factor ratios, total widths and total mass")
       ("gFactorFixSeparateScale",po::value< vector<string> >(&_gFactorFixSeparateScale), "g-factors to be scaled separately related to free g-factor")
+      ("omnesMatrixType",po::value<string>(&_omnesMatrixType),"type of the Omnes-matrix")
 	;
     parseCommandLine();
   }

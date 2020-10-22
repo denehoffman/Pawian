@@ -27,24 +27,24 @@
 #include "qft++Extension/ZeroComplexFunction.hh"
 #include "ErrLogger/ErrLogger.hh"
 
-PhaseSpaceList::PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
-  _phpVecs(phpVecs)
-  ,_omnesMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
-  ,_selfEnergyMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
-{
-  for(size_t i=0; i<phpVecs.size(); ++i){
-    for(size_t j=0; j<phpVecs.size(); ++j){
-      if(i==j){
-       	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
-	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
-      }
-      else{
-	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
-	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
-      }
-    }
-  }
-}
+//PhaseSpaceList::PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs) :
+//  _phpVecs(phpVecs)
+//  ,_omnesMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
+//  ,_selfEnergyMatrix(boost::extents[phpVecs.size()][phpVecs.size()])
+//{
+//  for(size_t i=0; i<phpVecs.size(); ++i){
+//    for(size_t j=0; j<phpVecs.size(); ++j){
+//      if(i==j){
+//       	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+//	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+//      }
+//      else{
+//	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
+//	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
+//      }
+//    }
+//  }
+//}
 
 PhaseSpaceList::PhaseSpaceList(vector<std::shared_ptr<AbsPhaseSpace> > phpVecs, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> omnesMatr, boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> selfEnergyMatr) :
   _phpVecs(phpVecs)
