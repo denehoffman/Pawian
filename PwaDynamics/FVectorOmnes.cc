@@ -57,7 +57,7 @@ void FVectorOmnes::evalMatrix(const double mass, Spin OrbMom){
       _SelfEnergyComplDMatrix(i,j) = _phpList->selfEnergyMatrix()[i][j]->eval(mass*mass);
     }
   }
-  Matrix< complex< double > > denomMatrComplInv = _idMatrix+(*_Kmatrix)*_SelfEnergyComplDMatrix;
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix-(*_Kmatrix)*_SelfEnergyComplDMatrix;
  
   denomMatrComplInv.invert();
 
@@ -81,7 +81,7 @@ void FVectorOmnes::evalMatrix(const complex<double> mass, Spin OrbMom){
       _SelfEnergyComplDMatrix(i,j) = _phpList->selfEnergyMatrix()[i][j]->eval(mass*mass);
     }
   }
-  Matrix< complex< double > > denomMatrComplInv = _idMatrix+(*_Kmatrix)*_SelfEnergyComplDMatrix;
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix-(*_Kmatrix)*_SelfEnergyComplDMatrix;
 
   denomMatrComplInv.invert();
 
@@ -105,7 +105,7 @@ complex<double> FVectorOmnes::evalProjMatrix(const double mass, int index, Spin 
     }
   }
 
-  Matrix< complex< double > > denomMatrComplInv = _idMatrix+(*_Kmatrix)*_SelfEnergyComplDMatrix;
+  Matrix< complex< double > > denomMatrComplInv = _idMatrix-(*_Kmatrix)*_SelfEnergyComplDMatrix;
   denomMatrComplInv.invert();
   
   complex <double> result(0.,0.);

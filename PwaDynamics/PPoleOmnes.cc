@@ -50,7 +50,7 @@ void PPoleOmnes::evalMatrix(const complex<double> mass, Spin OrbMom){
   complex<double> s_denom= mass*mass/denom;
   
   for (int i=0; i< int(_g_i.size()); ++i){
-    this->operator()(i,0)= _beta*s_denom*_g_i[i];
+    this->operator()(i,0)= _g_i[i]*s_denom*_beta;
   }
 }
 
