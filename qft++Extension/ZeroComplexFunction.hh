@@ -47,8 +47,8 @@ public:
 
   /// Destructor
   virtual ~ZeroComplexFunction(){;}
-  virtual complex<double> eval(double s) {return complex<double>(1.,0.);}
-  virtual complex<double> eval(complex<double> s) {return complex<double>(1.,0.);}
+  virtual complex<double> eval(double s) {return complex<double>(0.,0.);}
+  virtual complex<double> eval(complex<double> s) {return complex<double>(0.,0.);}
   
 protected:
   
