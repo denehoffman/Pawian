@@ -59,6 +59,5 @@ protected:
   std::string _unit;
   std::string _order;
   double _unitScaleFactor;
-  double _angleScaleFactor;
   bool _energyFirst;
 };

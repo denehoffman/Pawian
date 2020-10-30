@@ -72,8 +72,8 @@ public:
   const int noOfThreads() const {return _noOfThreads;}
   const int noOfClients() const {return _noOfClients;}
   const int serverPort() const {return _serverPort;}
-  const short ratioMcToData() const {return _ratioMcToData;}
-  const short ratioTruthToMc() const {return _ratioTruthToMc;}
+  const double ratioMcToData() const {return _ratioMcToData;}
+  const double ratioTruthToMc() const {return _ratioTruthToMc;}
   const int evoPopulation() const {return _evoPopulation;}
   const int evoIterations() const {return _evoIterations;}
   const double evoRatioOfModParams() const {return _evoRatioOfModParams;}
@@ -157,8 +157,8 @@ protected:
   int _noOfThreads;
   int _noOfClients;
   int _serverPort;
-  short _ratioMcToData;
-  short _ratioTruthToMc;
+  double _ratioMcToData;
+  double _ratioTruthToMc;
   int _evoIterations;
   int _evoPopulation;
   double _evoRatioOfModParams;

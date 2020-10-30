@@ -31,8 +31,8 @@
 #include <memory>
 #include <complex>
 
-#include "PwaDynamics/AbsPhaseSpace.hh"
-#include "qft++Extension/PawianUtils.hh"
+
+#include "qft++Extension/AbsComplexFunction.hh"
 
 
 

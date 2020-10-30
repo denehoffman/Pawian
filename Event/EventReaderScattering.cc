@@ -67,8 +67,6 @@ bool EventReaderScattering::fill(EventList& evtList, int evtStart, int evtStop)
       
       currentStream >> m >> dataPoint >> dataPointErr;
       double scaledMass=m/_unitScaleFactor;
-      dataPoint=dataPoint/_angleScaleFactor;
-      dataPointErr=dataPointErr/_angleScaleFactor;
       newEvent->addParticle(scaledMass, 0., 0., 0.);
       newEvent->addScatterInfo(dataPoint, dataPointErr);
       Vector4<double> tmp = newEvent->p4(0);

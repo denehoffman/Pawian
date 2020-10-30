@@ -1,25 +1,37 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-lib : Event
-                 : <location>$(TOP)/lib
-                   <install-dependencies>on
+install install-bin : HepMCEvtReaderTestApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+install install-lib : Event 
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
                    <install-type>LIB
                    ;
 
-project :
+project :       
         requirements
         <include>./
+        <include>/usr/include/python2.6
         <include>$(ROOTSYS)/include
         <include>$(TOP)/Server
         <linkflags>$(ROOTLIBS)
-        <linkflags>$(BOOSTLIBS)
+        <linkflags>$(BOOSTLIBS) 
+        <linkflags>-lpython2.6
         ;
 
-project :
+project : 
 	;
 
-lib Event :
-	[ glob *.cc : *App.cc ]
-	$(TOP)/ErrLogger//ErrLogger $(TOP)/Particle//Particle
-  ;
+lib Event : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/ErrLogger//ErrLogger $(TOP)/Particle//Particle 
+	: <use>$(TOP)//HepMc
+	: 
+	: <library>$(TOP)//HepMc ;
+
+exe HepMCEvtReaderTestApp : HepMCEvtReaderTestApp.cc Event : ;

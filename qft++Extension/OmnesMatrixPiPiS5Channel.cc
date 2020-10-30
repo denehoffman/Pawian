@@ -23,7 +23,9 @@
 #include "qft++Extension/OmnesMatrixPiPiS5Channel.hh"
 #include "qft++Extension/UnityComplexFunction.hh"
 #include "qft++Extension/ZeroComplexFunction.hh"
-
+#include "qft++Extension/InputOmnesMatrixPiPiS5Channel.hh"
+#include "qft++Extension/InputSelfEnergyMatrixPiPiS5Channel.hh"
+#include "ErrLogger/ErrLogger.hh"
 OmnesMatrixPiPiS5Channel::OmnesMatrixPiPiS5Channel() :
   AbsOmnesMatrix()
   ,_omnesMatrix(boost::extents[5][5])
@@ -33,9 +35,13 @@ OmnesMatrixPiPiS5Channel::OmnesMatrixPiPiS5Channel() :
   // _selfEnergyMatrix=boost::multi_array< std::shared_ptr<AbsComplexFunction> , 2> (boost::extents[5][5]);
   for(size_t i=0; i<5; ++i){
     for(size_t j=0; j<5; ++j){
-      if(i==j){
-        _omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
-        _selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+      if(i<2 && j<2){
+	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new InputOmnesMatrixPiPiS5Channel(i,j));
+        _selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new InputSelfEnergyMatrixPiPiS5Channel(i,j));
+      }
+      else if(i>=2 && j>=2 && i==j){
+	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new InputSelfEnergyMatrixPiPiS5Channel(i,j));
       }
       else{
         _omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());
