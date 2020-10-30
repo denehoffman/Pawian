@@ -40,8 +40,8 @@ OmnesMatrixPiPiS5Channel::OmnesMatrixPiPiS5Channel() :
         _selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new InputSelfEnergyMatrixPiPiS5Channel(i,j));
       }
       else if(i>=2 && j>=2 && i==j){
-	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
-	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new InputSelfEnergyMatrixPiPiS5Channel(i,j));
+      	_omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new UnityComplexFunction());
+      	_selfEnergyMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new InputSelfEnergyMatrixPiPiS5Channel(i,j));
       }
       else{
         _omnesMatrix[i][j] = std::shared_ptr<AbsComplexFunction>(new ZeroComplexFunction());

@@ -41,8 +41,8 @@ protected:
   std::vector<double> realp;
   std::vector<double> imagp;
   int nCalled;
-  int m_1;
-  int m_2;
+  double m_1;
+  double m_2;
   bool useAnalyticForm=false;
 
   double kaellen(double current_s, double m1 , double m2);
