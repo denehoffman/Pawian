@@ -64,7 +64,6 @@ void PVectorRelBg::evalMatrix(const double mass, Spin OrbMom){
 
     complex<double> currentP(0.,0.);
     for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
-      (*it)->evalMatrix(mass, OrbMom);
       std::vector< complex<double> > theBarrierFactors=(*it)->barrierFactors();
       currentP += ((*(*it))(i,0)+currentBg)*theBarrierFactors.at(i);
     }
@@ -86,7 +85,6 @@ void PVectorRelBg::evalMatrix(const complex<double> mass, Spin OrbMom){
 
     complex<double> currentP(0.,0.);
     for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
-      (*it)->evalMatrix(mass, OrbMom);
       std::vector< complex<double> > theBarrierFactors=(*it)->barrierFactors();
       currentP += ((*(*it))(i,0)+currentBg)*theBarrierFactors.at(i);
     }

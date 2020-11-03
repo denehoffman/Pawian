@@ -67,6 +67,10 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass, Spin OrbMom){
   }
 
   vector<std::shared_ptr<KPole> >::iterator it;
+  for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
+    (*it)->evalMatrix(mass, OrbMom);
+  }
+
   for (int i=0; i<NumRows(); ++i){
     for (int j=i; j<NumRows(); ++j){
       complex<double> currentBg(0.,0.);
@@ -75,7 +79,6 @@ void KMatrixRelBg::evalMatrixTemplate(const MassType mass, Spin OrbMom){
       }
       complex<double> currentK(0.,0.);
       for (it =_KPoles.begin(); it != _KPoles.end(); ++it){
-	(*it)->evalMatrix(mass, OrbMom);
 	std::vector< complex<double> > theBarrierFactors=(*it)->barrierFactors();
 	currentK += ((*(*it))(i,j)+currentBg)*theBarrierFactors.at(i)*theBarrierFactors.at(j);
       }
