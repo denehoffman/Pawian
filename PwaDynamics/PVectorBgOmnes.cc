@@ -37,16 +37,11 @@ PVectorBgOmnes::~PVectorBgOmnes(){
 
 void PVectorBgOmnes::evalMatrix(const double mass, Spin OrbMom){
 
-  vector<std::shared_ptr<PPole> >::iterator it;
-  for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
-    (*it)->evalMatrix(mass, OrbMom);
-  }
-
   for (int i=0; i<NumRows(); ++i){
     complex<double> currentBg(0.,0.);
     for(unsigned int bgOrder=0; bgOrder<=_orderBgP; ++bgOrder) currentBg+=_bgPTerms.at(bgOrder).at(i)*pow(mass*mass,bgOrder);
 
-    
+    vector<std::shared_ptr<PPole> >::iterator it;    
     complex<double> currentP(0.,0.);
     for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
       (*it)->evalMatrix(mass, OrbMom);
@@ -59,22 +54,17 @@ void PVectorBgOmnes::evalMatrix(const double mass, Spin OrbMom){
 
 void PVectorBgOmnes::evalMatrix(const complex<double> mass, Spin OrbMom){
 
-  vector<std::shared_ptr<PPole> >::iterator it;
-  for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
-    (*it)->evalMatrix(mass, OrbMom);
-  }
-
   for (int i=0; i<NumRows(); ++i){
     complex<double> currentBg(0.,0.);
     for(unsigned int bgOrder=0; bgOrder<=_orderBgP; ++bgOrder) currentBg+=_bgPTerms.at(bgOrder).at(i)*pow(mass*mass,bgOrder);
 
+    vector<std::shared_ptr<PPole> >::iterator it;
     complex<double> currentP(0.,0.);
     for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
       (*it)->evalMatrix(mass, OrbMom);
       currentP += ((*(*it))(i,0));
     }
-    currentP+currentBg;
-    this->operator()(i,0)=currentP;
+    this->operator()(i,0)=currentP+currentBg;
   }
 
 }
