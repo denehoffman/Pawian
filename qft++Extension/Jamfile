@@ -1,6 +1,12 @@
 alias install : install-lib ;
 explicit install ;
 
+install install-bin : OmnesMatrixGeneralApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
 install install-lib : qft++Extension
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
@@ -16,3 +22,11 @@ lib qft++Extension :
 	:
 	: 
 	: ;
+
+exe OmnesMatrixGeneralApp : OmnesMatrixGeneralApp.cc qft++Extension
+        $(TOP)/ConfigParser//ConfigParser
+        $(TOP)/Particle//Particle
+        $(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+        $(TOP)/ErrLogger//ErrLogger
+        : ;
