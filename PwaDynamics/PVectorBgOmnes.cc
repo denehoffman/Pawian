@@ -51,7 +51,7 @@ void PVectorBgOmnes::evalMatrix(const double mass, Spin OrbMom){
     for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
         currentP += (*(*it))(i,0);
     }
-    this->operator()(i,0)=currentP+currentBg;
+    this->operator()(i,0)=currentBg-currentP;
   }
 
 }
@@ -72,7 +72,7 @@ void PVectorBgOmnes::evalMatrix(const complex<double> mass, Spin OrbMom){
     for (it =_Ppoles.begin(); it != _Ppoles.end(); ++it){
        currentP += ((*(*it))(i,0));
     }
-    this->operator()(i,0)=currentP+currentBg;
+    this->operator()(i,0)=currentBg-currentP;
   }
 
 }
