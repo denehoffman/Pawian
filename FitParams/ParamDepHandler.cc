@@ -25,6 +25,7 @@
 #include "FitParams/ParamDepEqual.hh"
 #include "FitParams/ParamDepGFactorToFixFullWidth.hh"
 #include "FitParams/ParamDepGFacToFixGFacsWidthMass.hh"
+#include "FitParams/ParamDepFixedRatio.hh"
 
 #include "ErrLogger/ErrLogger.hh"
 
@@ -52,6 +53,9 @@ void ParamDepHandler::Fill(const std::vector<std::string>& configLines,
      
      if(type == "equals"){
        newDependency = std::shared_ptr<ParamDep>(new ParamDepEqual(currentStream, params));
+     }
+     else if(type == "fixedRatio"){
+       newDependency = std::shared_ptr<ParamDep>(new ParamDepFixedRatio(currentStream, params));
      }
      else if(type == "gFactorToFixFullWidth"){
 	newDependency = std::shared_ptr<ParamDep>(new ParamDepGFactorToFixFullWidth(currentStream, params));
