@@ -455,7 +455,8 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
     _refMassLinearDyn=stof(additionalStringVec.at(0));
     InfoMsg << "AmpName: " << name() << "  reference mass for linear dynamics = " 
 	    << _refMassLinearDyn << endmsg;
-  }  
+  }
+
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this());
   _dynEnabled=true;
 }
@@ -690,7 +691,10 @@ void AbsDecay::enableProdBarrier(){
   else if(_prodChannelInfo->prodBarrierType()=="RadM1KEDR"){
     _dynType="RadM1KEDR";
   }
-
+  else if(_prodChannelInfo->prodBarrierType()=="SExpDynamics"){
+    _dynType="SExpDynamics";
+  }
+  InfoMsg << "_prodChannelInfo->prodBarrierType(): " << _prodChannelInfo->prodBarrierType() << endmsg;
   InfoMsg << "Barrier factors for production amplitude " << name() << " enabled!" << endmsg;
   _absDynPtr=DynRegistry::instance()->getDynamics(shared_from_this()); 
   _dynEnabled=true;

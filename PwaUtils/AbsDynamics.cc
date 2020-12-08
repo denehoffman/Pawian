@@ -22,7 +22,7 @@
 //************************************************************************//
 
 // AbsDynamics class definition file. -*- C++ -*-
-// Copyright 20123Bertram Kopf
+// Copyright 2013 Bertram Kopf
 
 #include <getopt.h>
 #include <fstream>

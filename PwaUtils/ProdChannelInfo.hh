@@ -46,6 +46,7 @@ public:
   const double qRPod() const {return _qRProd;}
   const double m0decRadM1Prod() const {return _m0decRadM1Production;}
   const std::string formationDynType() const {return _formationDynType;}
+  const std::string additionalFormationDynInfos() const {return _additionalFormationDynInfos;}
   virtual void print(std::ostream& os) const;
 
  protected:
@@ -56,6 +57,7 @@ public:
   bool _withProBarrier;
   std::string _prodBarrierType;
   std::string _formationDynType;
+  std::string _additionalFormationDynInfos;
   double _qRProd;
   double _m0decRadM1Production;
 };

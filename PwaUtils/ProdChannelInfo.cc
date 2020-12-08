@@ -116,6 +116,14 @@ ProdChannelInfo::ProdChannelInfo(std::string& stringFromParser) :
       }
        _formationDynType=typeStr;
     }
+    else if(typeStr=="SExpDynamics"){
+      if(!_isFormation){
+        Alert << "dynamics " << typeStr
+            << "\tis only allowed for the formation process" << endmsg;
+      }
+    _prodBarrierType=typeStr;
+    _formationDynType=typeStr;
+    }
     else{
       Alert << "production barrier type: " << typeStr << " doesn't exist for PAWIAN!!!" 
 	    << "\nonly BlattWBarrier, BlattWBarrierTensor, RadM1 and RadM1KEDR are supported" << endmsg;

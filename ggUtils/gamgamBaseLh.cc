@@ -165,11 +165,12 @@ void  gamgamBaseLh::initialize(){
     InfoMsg << "theDecs->name: " << (*it)->name() << endmsg;
     std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, 
 										   (*it)->absDecPtr());
+    //    currentAmp->enableDynamics(dynString, additionalStringVecDummy);
     _decAmps.push_back(currentAmp);
   }
 
  std::string dynString=_ggChannelEnv->parser()->productionDynamics();
-  if(dynString=="woFormPol" || dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2"){
+  if(dynString=="woFormPol" || dynString=="FormPol0" || dynString=="FormPol1" || dynString=="FormPol2" || dynString=="SExpDynamics"){
     _useProdDynamics=true;
     std::shared_ptr<FormationDecay> motherFormDec = _ggChannelEnv->reaction()->motherProdDec();
     std::vector<std::string> additionalStringVecDummy;
