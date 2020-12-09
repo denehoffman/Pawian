@@ -56,8 +56,10 @@ ggReaction::ggReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChanne
 	currentDec->setProductionAmp();
 	currentDec->setProdChannelInfo( *itProd );
 	currentDec->extractStates();
-	//        std::string currentFormDynType="WoDynamics";
-	//        currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+
+	//	  std::string currentFormDynType="WoDynamics";
+	//	  currentDec->enableDynamics(currentFormDynType, additionalStringVecDummy);
+
 //	std::string currentFormDynType=(*itProd)->formationDynType();
 //	if(currentFormDynType !="non"){
 //	  if(currentFormDynType =="FormPol0" || currentFormDynType =="FormPol1" || currentFormDynType =="FormPol2"){

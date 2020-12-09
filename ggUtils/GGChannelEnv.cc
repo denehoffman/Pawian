@@ -73,7 +73,7 @@ void GGChannelEnv::setupChannel(ChannelID id){
       //      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
       //      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
-
+      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
       // std::string currentDynType=(*itDec)->dynType();
       // if(currentDynType != "SExpDynamics") currentDynType=dynTypeDefault;
       // InfoMsg << "currentDynType : " << currentDynType << endmsg;
