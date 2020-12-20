@@ -54,6 +54,6 @@ public:
   
 protected:
   vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-
+  std::vector<bool> _woBarrier;
 };
 

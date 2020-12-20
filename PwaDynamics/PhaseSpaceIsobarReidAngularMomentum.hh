@@ -1,7 +1,7 @@
 //************************************************************************//
 //									  //
-//  Copyright 2017 Markus Kuhlmann (mkuhlmann@ep1.rub.de)		  //
-//  	      	   - Ruhr-Universität Bochum 				  //
+//  Copyright 2020 Bertram Kopf (bertram@ep1.rub.de)			  //
+//          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
 //									  //
@@ -20,28 +20,29 @@
 //									  //
 //************************************************************************//
 
+// PhaseSpaceIsobarReidAngularMomentum class definition file. -*- C++ -*-
+// Copyright 2020 Bertram Kopf
+// phase space factor which fulfils the analytic continuation and unitarity
+
 #pragma once 
+//_____________________________________________________________________________
+// @file PhaseSpaceIsobarReid.h
+//_____________________________________________________________________________
 
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 
-#include <string>
-#include <fstream>
 #include <complex>
 using std::complex;
 
-struct LUTLine {
-  complex<double> requested;
-  complex<double> cm;
-} ;
-
-class PhaseSpaceIsobarLUT: public PhaseSpaceIsobar {
+class PhaseSpaceIsobarReidAngularMomentum: public PhaseSpaceIsobar {
 
 public:
-  /// Constructor
-  PhaseSpaceIsobarLUT(double mass1, double mass2, string type); 
+
+  /// Constructor 
+  PhaseSpaceIsobarReidAngularMomentum(double mass1, double mass2); 
 
   /// Destructor
-  virtual ~PhaseSpaceIsobarLUT();
+  virtual ~PhaseSpaceIsobarReidAngularMomentum();
 
   virtual complex<double> factor(const double mass);
   virtual complex<double> breakUpMom(const double mass);
@@ -49,30 +50,11 @@ public:
   virtual complex<double> breakUpMom(const complex<double> mass);
   virtual complex<double> ChewM(const double mass, int orbMom=0);
   virtual complex<double> ChewM(const complex<double> mass, int orbMom=0);
-  virtual void cacheFactors(const double mass);
-  complex<double> sLow() {
-    return m_sLow;
-  };
-  complex<double> sHigh() {
-    return m_sHigh;
-  };
 
 protected:
   void CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange);
 
-private:
-  LUTLine readLine(int);
-  complex<double> interpolateCM(LUTLine, LUTLine, LUTLine, LUTLine, complex<double>);
-  complex<double> interpolateCM(LUTLine, LUTLine);
-  std::ifstream m_lutfile;
-  std::string m_lutfilepath;
-  complex<double> getFactor(complex<double>);
-  int m_dSize;
-  int m_nRe;
-  int m_nIm;
-  complex<double> m_sLow;
-  complex<double> m_sHigh;
-  void loadParams();
-  bool m_sortedByReS;
 };
+
+
 

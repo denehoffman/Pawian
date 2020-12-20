@@ -49,9 +49,9 @@ public:
   virtual std::complex<double> breakUpMom(const std::complex<double> mass)=0;
   virtual std::complex<double> breakUpMomDefaultAS(const double mass)=0;
   virtual std::complex<double> breakUpMomDefaultAS(const std::complex<double> mass)=0; 
-  virtual std::complex<double> ChewM(const double mass) {
+  virtual std::complex<double> ChewM(const double mass, int orbMom=0) {
     return PawianConstants::i*factor(mass); }
-  virtual std::complex<double> ChewM(const std::complex<double> mass) {
+  virtual std::complex<double> ChewM(const std::complex<double> mass, int orbMom=0) {
     return PawianConstants::i*factor(mass); }
   virtual double thresholdMass()=0;
   virtual void cacheFactors(const double mass) {return;}

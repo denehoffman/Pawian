@@ -428,6 +428,7 @@ void TMatrixDynamics::init(){
   }
   InfoMsg << _kMatName << ": decay projection index: " << _decProjectionIndex << endmsg;
   _tMatr=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
+  _tMatr->SetOrbMom(_kMatrixParser->orbitalMom());
 
 }
 

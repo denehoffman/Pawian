@@ -60,7 +60,7 @@ void TMatrixRel::evalMatrixTemplate(const MassType mass){
 	 ChewMMatrix(i,j)=complex<double> (0.,0.);
 	 if (i==j){
 	   //	    theRhoMatrix(i,j) = phpVec[j]->factor(mass);
-	   ChewMMatrix(i,j) = phpVec[j]->ChewM(mass);
+	   ChewMMatrix(i,j) = phpVec[j]->ChewM(mass, _orbMom);
 	 }
       }
    }

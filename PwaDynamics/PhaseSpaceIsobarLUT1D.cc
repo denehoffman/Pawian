@@ -75,13 +75,13 @@ complex<double> PhaseSpaceIsobarLUT1D::breakUpMom(const complex<double> mass){
     exit(1);
 }
 
-complex<double> PhaseSpaceIsobarLUT1D::ChewM(const complex<double> mass){
+complex<double> PhaseSpaceIsobarLUT1D::ChewM(const complex<double> mass, int orbMom){
     Alert << "Provided LUT is one dimensional in s. 2D is work in progress. Use LUT instead of LUTRe for now: " << m_lutfilepath << endmsg;
     return complex<double>(0., 0.);
     exit(1);
 }
 
-complex<double> PhaseSpaceIsobarLUT1D::ChewM(const double mass){
+complex<double> PhaseSpaceIsobarLUT1D::ChewM(const double mass, int orbMom){
   complex<double> result(0.,0.);
   int massInt100keV=mass*10000.;
   std::map<int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);

@@ -32,11 +32,14 @@ PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double ma
   , _phpVecs(phpVecs)
 {
   _orbMom=orbMom;
+  _woBarrier.resize(_phpVecs.size());
   _truncatedBarrier=truncatedBarrier;
   _breakUpM0.resize(_phpVecs.size());
   _barrierFactor.resize(_phpVecs.size());
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
     _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
+    _woBarrier.at(i)=false;
+    if(_phpVecs.at(i)->name()=="Reid_AngularMomentum") _woBarrier.at(i)=true;
   }  
 }
 
@@ -46,7 +49,10 @@ PPoleBarrier::~PPoleBarrier() {
 void PPoleBarrier::evalMatrix(const double mass, Spin OrbMom) {
 
   for (int i=0; i< int(_phpVecs.size()); ++i) {
-    if(_truncatedBarrier) {
+    if(_woBarrier.at(i)){
+      _barrierFactor.at(i) = 1.;
+    }
+    else if(_truncatedBarrier) {
       _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfTensorRatio(OrbMom,
 								      _phpVecs.at(i)->breakUpMom(mass), 
 								      _breakUpM0.at(i),

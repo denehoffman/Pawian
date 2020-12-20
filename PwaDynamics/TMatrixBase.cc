@@ -29,6 +29,7 @@ TMatrixBase::TMatrixBase(std::shared_ptr<KMatrixBase> Kmatrix) :
   Matrix< complex<double> >::Matrix(int(Kmatrix->phaseSpaceVec().size()), int(Kmatrix->phaseSpaceVec().size()))
   , _Kmatrix(Kmatrix)
   ,_cSign(-1.)
+  ,_orbMom(0)
  {
    if (Kmatrix->phaseSpaceVec().at(0)->name() == "Dudek" || Kmatrix->phaseSpaceVec().at(0)->name() == "LUT") _cSign=1.;
  }
