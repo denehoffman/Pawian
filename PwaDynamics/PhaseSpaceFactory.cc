@@ -31,6 +31,7 @@
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/PhaseSpaceIsobar.hh"
 #include "PwaDynamics/PhaseSpaceIsobarReid.hh"
+#include "PwaDynamics/PhaseSpaceIsobarReidAngularMomentum.hh"
 #include "PwaDynamics/PhaseSpaceIsobarDudek.hh"
 #include "PwaDynamics/PhaseSpaceIsobarDudekUnstableRhoPi.hh"
 //#include "PwaDynamics/PhaseSpaceIsobarBBUnstable.hh"
@@ -72,6 +73,9 @@ std::shared_ptr<AbsPhaseSpace> PhaseSpaceFactory::getPhpPointer(std::string type
  }
  else if(type=="Reid"){
 	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarReid(mass1, mass2));
+ }
+ else if(type=="ReidAngularMomentum"){
+   result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarReidAngularMomentum(mass1, mass2));
  }
  else if(type=="Dudek"){
 	 result= std::shared_ptr<AbsPhaseSpace>(new PhaseSpaceIsobarDudek(mass1, mass2));

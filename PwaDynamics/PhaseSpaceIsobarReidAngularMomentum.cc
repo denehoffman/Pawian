@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2020 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universit??t Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -22,55 +21,57 @@
 //************************************************************************//
 
 #include "ErrLogger/ErrLogger.hh"
-#include "PwaDynamics/PhaseSpaceIsobarReid.hh"
+#include "PwaDynamics/PhaseSpaceIsobarReidAngularMomentum.hh"
 #include "Utils/PawianConstants.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-PhaseSpaceIsobarReid::PhaseSpaceIsobarReid(double mass1, double mass2):
+PhaseSpaceIsobarReidAngularMomentum::PhaseSpaceIsobarReidAngularMomentum(double mass1, double mass2):
   PhaseSpaceIsobar(mass1, mass2)
 {
-  _name="Reid";
+  _name="Reid_AngularMomentum";
 }
 
-PhaseSpaceIsobarReid::~PhaseSpaceIsobarReid(){
+PhaseSpaceIsobarReidAngularMomentum::~PhaseSpaceIsobarReidAngularMomentum(){
 
 }
 
-complex<double> PhaseSpaceIsobarReid::factor(const double mass){
+complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const double mass){
   complex<double> rho(ChewM(mass).imag(), 0.); 
   return rho;
 }
 
-complex<double> PhaseSpaceIsobarReid::breakUpMom(const double mass){
+complex<double> PhaseSpaceIsobarReidAngularMomentum::breakUpMom(const double mass){
   return PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
 }
 
-complex<double> PhaseSpaceIsobarReid::factor(const complex<double> mass){
+complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const complex<double> mass){
   complex<double> rho(ChewM(mass).imag(), 0.); 
   return rho;
 }
 
-complex<double> PhaseSpaceIsobarReid::breakUpMom(const complex<double> mass){
+complex<double> PhaseSpaceIsobarReidAngularMomentum::breakUpMom(const complex<double> mass){
   complex<double> momReid = PawianQFT::breakupMomQReid(mass, _mass1, _mass2);
   CorrectForChosenSign(momReid, momReid);
   return momReid;
 }
 
-complex<double> PhaseSpaceIsobarReid::ChewM(const double mass, int orbMom){
-  complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
-  return PawianQFT::ChewMandelstamReid(massSqrCompl, _mass1, _mass2);  
+complex<double> PhaseSpaceIsobarReidAngularMomentum::ChewM(const double mass, int orbMom){
+  // complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
+  //  return PawianQFT::ChewMandelstamReid(massSqrCompl, _mass1, _mass2);
+  return complex<double>(0.,0.); //dummy
 }
 
-complex<double> PhaseSpaceIsobarReid::ChewM(const complex<double> mass, int orbMom){
-  complex<double> s=mass*mass;
-  complex<double> result = PawianQFT::ChewMandelstamReid(s, _mass1, _mass2);
-  complex<double> momReid = result.imag()*mass/2.;
-  CorrectCMForChosenSign(momReid, result);
-  return result;
+complex<double> PhaseSpaceIsobarReidAngularMomentum::ChewM(const complex<double> mass, int orbMom){
+  // complex<double> s=mass*mass;
+  // complex<double> result = PawianQFT::ChewMandelstamReid(s, _mass1, _mass2);
+  // complex<double> momReid = result.imag()*mass/2.;
+  // CorrectCMForChosenSign(momReid, result);
+  // return result;
+  return complex<double>(0.,0.); //dummy
 }
 
-void PhaseSpaceIsobarReid::CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
+void PhaseSpaceIsobarReidAngularMomentum::CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
   if((_bumImPartSign > 0 && breakUpMom.imag() < 0) ||
      (_bumImPartSign < 0 && breakUpMom.imag() > 0)){
      toChange = conj(toChange);

@@ -78,7 +78,7 @@ complex<double> PhaseSpaceIsobarLUT::breakUpMom(const complex<double> mass){
   return result;
 }
 
-complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass){
+complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass, int orbMom){
   complex<double> result(0.,0.);
   int massInt100keV=mass*10000.;
   std::map<int, complex<double> >::const_iterator it = _CMCache.find(massInt100keV);
@@ -95,7 +95,7 @@ complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass){
   return result;
 }
 
-complex<double> PhaseSpaceIsobarLUT::ChewM(const complex<double> mass){
+complex<double> PhaseSpaceIsobarLUT::ChewM(const complex<double> mass, int orbMom){
   complex<double> result = getFactor(mass);
   complex<double> momReid = -result.imag()*mass/2.;
   CorrectCMForChosenSign(momReid, result); 

@@ -53,11 +53,11 @@ public:
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 
   void SetBumImPartSigns(std::vector<double> signs);
-
+  void SetOrbMom(int orbMom) {_orbMom=orbMom;}
 protected:
   std::shared_ptr<KMatrixBase> _Kmatrix;
   double _cSign; 
-
+  int _orbMom;
 };
 
 

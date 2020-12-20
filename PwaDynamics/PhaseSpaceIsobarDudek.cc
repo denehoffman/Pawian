@@ -57,12 +57,12 @@ complex<double> PhaseSpaceIsobarDudek::breakUpMom(const complex<double> mass){
   return momDudek;
 }
 
-complex<double> PhaseSpaceIsobarDudek::ChewM(const double mass){
+complex<double> PhaseSpaceIsobarDudek::ChewM(const double mass, int orbMom){
   complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
   return PawianQFT::ChewMandelstamDudek(massSqrCompl, _mass1, _mass2);  
 }
 
-complex<double> PhaseSpaceIsobarDudek::ChewM(const complex<double> mass){
+complex<double> PhaseSpaceIsobarDudek::ChewM(const complex<double> mass, int orbMom){
   complex<double> s=mass*mass;
   complex<double> result = PawianQFT::ChewMandelstamDudek(s, _mass1, _mass2);
   complex<double> momDudek = -result.imag()*mass/2.;

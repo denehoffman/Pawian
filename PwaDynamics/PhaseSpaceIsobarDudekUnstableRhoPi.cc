@@ -56,12 +56,12 @@ complex<double> PhaseSpaceIsobarDudekUnstableRhoPi::breakUpMom(const complex<dou
   return momDudek;
 }
 
-complex<double> PhaseSpaceIsobarDudekUnstableRhoPi::ChewM(const double mass){
+complex<double> PhaseSpaceIsobarDudekUnstableRhoPi::ChewM(const double mass, int orbMom){
   double s=mass*mass;
   return PawianQFT::ChewMandelstamDudekUnstableRhoPi(s, _mass1, _mass2);  
 }
 
-complex<double> PhaseSpaceIsobarDudekUnstableRhoPi::ChewM(const complex<double> mass){
+complex<double> PhaseSpaceIsobarDudekUnstableRhoPi::ChewM(const complex<double> mass, int orbMom){
   complex<double> result(0.,0.); //dummy
   //  complex<double> s=mass*mass;
   //  complex<double> result = PawianQFT::ChewMandelstamDudek(s, _mass1, _mass2);
