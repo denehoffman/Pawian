@@ -24,6 +24,7 @@
 
 #include "qft++Extension/PawianUtils.hh"
 #include "Utils/PawianConstants.hh"
+#include <boost/math/special_functions/factorials.hpp>
 #include <math.h>
 
 vector<LS> PawianQFT::GetValidLSWeak(const Spin &__j, const Spin &__s1, const Spin &__s2){
@@ -97,6 +98,88 @@ complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1
 
   complex<double> result=-2./PawianConstants::pi*(term2-term1-term34);
   return result;
+}
+
+complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s, double massDec1, double massDec2, int Spin){
+
+    // This Chew-Mandelstam Function is based on J. H. Reid, and N. N. Trofimenkoff, Journal of Mathematical Physics 25, 3540 (1984).
+    // Here eq. (3.7) in case of equal masses and eq. (3.15) in case of unequal masses are implemented. 
+    // In the s dependent log-Term the sign in the sqrt had to be changed to fulfill analyticity and unitarity which seemes to be a mistake in the paper.
+    // All output of this function has been checked carefully and fullfils analyticity and unitarity.
+    // Meike
+    
+    double L = Spin/2.;
+
+    if(norm(s)<1.e-8) s=complex<double>(1.e-10, 1.e-10);
+
+    if(abs(massDec1 - massDec2)<1e-8){
+
+        complex<double> k2 = (s-pow(massDec1+massDec2,2.))*(s-pow(massDec1-massDec2,2.))/(4.*s);
+        complex<double> massDec(massDec1,0.);
+        complex<double> lambda = (4.*k2)/s;
+        complex<double> sum (0.,0.);
+
+        for(int j = 0; j<=L; j++){
+            sum+=pow(lambda, L-j)*1./(2.*j+1.);
+        }
+
+        complex<double> CM = 2./PawianConstants::pi*(-pow(lambda, (L+0.5))*log((sqrt(-s+4.*massDec*massDec)+sqrt(-s))/(2.*massDec))+sum);
+
+        complex<double> result = CM;
+        
+        return result;
+    }
+
+    else{
+
+        complex<double> m1_p_m2_2((massDec1+massDec2)*(massDec1+massDec2), 0.);
+        complex<double> m1_m_m2_2((massDec1-massDec2)*(massDec1-massDec2), 0.);
+
+        complex<double> k2 = (s-pow(massDec1+massDec2,2.))*(s-pow(massDec1-massDec2,2.))/(4.*s);
+        complex<double> lambda = (4.*k2)/s;
+        complex<double> mu = pow((m1_p_m2_2-m1_m_m2_2),2.)/(16.*m1_p_m2_2*m1_m_m2_2);
+        complex<double> nu = (m1_p_m2_2+m1_m_m2_2)/(2.*sqrt(m1_p_m2_2*m1_m_m2_2));
+        complex<double> omega = nu - sqrt(m1_p_m2_2*m1_m_m2_2)/s;
+
+        complex<double> sum1 (0.,0.); 
+        complex<double> sum2 (0.,0.);
+        complex<double> sum3 (0.,0.);
+
+        double Omega=0.;
+
+        for(int j = 0; j<=Spin; j++){
+            
+            Omega=pow(-1.,j)*pow(2.,j)*boost::math::double_factorial<double>(2*j-1)/boost::math::factorial<double>(j);
+            sum1 += pow(lambda, Spin-j)*1./(2.*j+1.);
+            sum2 += Omega*pow(lambda, Spin-j)*pow(mu,j);
+        }
+
+        for(int p = 1; p<=Spin; p++){
+
+            complex<double> sumA (0.,0.);
+            complex<double> sumB (0.,0.);
+
+            for(int q = 0; q<=Spin-p; q++){
+                Omega=pow(-1.,q)*pow(2.,q)*boost::math::double_factorial<double>(2*q-1)/boost::math::factorial<double>(q);
+                sumA+=Omega*pow(lambda,Spin-q-p)*pow(mu,q);
+            }
+
+            for(int r = 0; r<=p-1; r++){
+                Omega=pow(-1.,r)*pow(2.,r)*boost::math::double_factorial<double>(2*r-1)/boost::math::factorial<double>(r);
+                sumB+=Omega*pow(mu,r);
+            }
+
+            sum3+=1./p*sumA*sumB;
+
+        }
+
+        complex<double> CM = 1./PawianConstants::pi*(-2.*pow(lambda, (Spin+0.5))*log((sqrt(s-m1_p_m2_2)+sqrt(s-m1_m_m2_2))/(2.*sqrt(massDec1*massDec2)))+sum1 + omega*log(massDec1/massDec2)*sum2+ omega*nu/2.*sum3);
+
+        complex<double> result = CM;
+
+        return result;
+    }
+
 }
 
 complex<double> PawianQFT::ChewMandelstamDudek(complex<double> s, double massDec1, double massDec2){

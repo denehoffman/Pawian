@@ -23,6 +23,7 @@
 #pragma once
 
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
+#include <boost/math/special_functions/factorials.hpp>
 #include <complex>
 
 namespace PawianQFT{
@@ -32,6 +33,7 @@ namespace PawianQFT{
   double rhoiAsner(double s, double massDec1, double massDec2);
   complex<double> ChewMandelstamPennington(complex<double> s, double massDec1, double massDec2);
   complex<double> ChewMandelstamReid(complex<double> s, double massDec1, double massDec2);
+  complex<double> ChewMandelstamReid_AngularMomentum(complex<double> s, double massDec1, double massDec2, int Spin);
   complex<double> ChewMandelstamDudek(complex<double> s, double massDec1, double massDec2);
   complex<double> ChewMandelstamDudekUnstableRhoPi(double s, double massDec1, double massDec2);
   complex<double> ChewMandelstamDudekUnstableRhoPi(complex<double> s, double massDec1, double massDec2);
