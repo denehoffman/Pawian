@@ -110,7 +110,7 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
     
     if(norm(s)<1.e-8) s=complex<double>(1.e-10, 1.e-10);
 
-    if(abs(massDec1 - massDec2)<1e-8){
+    if(abs(massDec1 - massDec2)<1.e-8){
 
         complex<double> k2 = (s-pow(massDec1+massDec2,2.))*(s-pow(massDec1-massDec2,2.))/(4.*s);
         complex<double> massDec(massDec1,0.);
@@ -121,7 +121,7 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
             sum+=pow(lambda, orbMom-j)*1./(2.*j+1.);
         }
 
-        complex<double> CM = 2./PawianConstants::pi*(-pow(lambda, (orbMom+0.5))*log((sqrt(-s+4.*massDec*massDec)+sqrt(-s))/(2.*massDec))+sum);
+        complex<double> CM = 2./PawianConstants::pi*(-pow(lambda, ((double)orbMom+0.5))*log((sqrt(-s+4.*massDec*massDec)+sqrt(-s))/(2.*massDec))+sum);
 
         complex<double> result = CM;
         
@@ -171,7 +171,7 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
 
         }
 
-        complex<double> CM = 1./PawianConstants::pi*(-2.*pow(lambda, (orbMom+0.5))*log((sqrt(s-m1_p_m2_2)+sqrt(s-m1_m_m2_2))/(2.*sqrt(massDec1*massDec2)))+sum1 + omega*log(massDec1/massDec2)*sum2+ omega*nu/2.*sum3);
+        complex<double> CM = 1./PawianConstants::pi*(-2.*pow(lambda, ((double)orbMom+0.5))*log((sqrt(s-m1_p_m2_2)+sqrt(s-m1_m_m2_2))/(2.*sqrt(massDec1*massDec2)))+sum1 + omega*log(massDec1/massDec2)*sum2+ omega*nu/2.*sum3);
 
         complex<double> result = CM;
 

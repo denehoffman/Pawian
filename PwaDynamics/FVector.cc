@@ -86,7 +86,7 @@ void FVector::evalMatrix(const complex<double> mass, Spin OrbMom){
   _Pvector->evalMatrix(mass, OrbMom);
 
  // for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
-  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
+  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass, OrbMom);
 
   Matrix< complex< double > > denomMatrComplInv = _idMatrix+_cSign*(*_Kmatrix)*_CMMatrix;
  
@@ -107,7 +107,7 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
   // _Kmatrix->printElements();
   // _Pvector->printElements();
 
-  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass);
+  for (int i=0; i<NumRows(); ++i) _CMMatrix(i,i) = _phpVec[i]->ChewM(mass, OrbMom);
  
   Matrix< complex< double > > denomMatrInv=_idMatrix+_cSign*(*_Kmatrix)*_CMMatrix;
   denomMatrInv.invert();
