@@ -29,7 +29,7 @@
 PhaseSpaceIsobarReidAngularMomentum::PhaseSpaceIsobarReidAngularMomentum(double mass1, double mass2):
   PhaseSpaceIsobar(mass1, mass2)
 {
-  _name="Reid_AngularMomentum";
+  _name="ReidAngularMomentum";
 }
 
 PhaseSpaceIsobarReidAngularMomentum::~PhaseSpaceIsobarReidAngularMomentum(){
