@@ -37,7 +37,7 @@ PhaseSpaceIsobarReidAngularMomentum::~PhaseSpaceIsobarReidAngularMomentum(){
 }
 
 complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const double mass){
-  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass, _mass1, _mass2, 0).imag(), 0.); 
+  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, 0).imag(), 0.); 
   return rho;
 }
 
@@ -46,7 +46,7 @@ complex<double> PhaseSpaceIsobarReidAngularMomentum::breakUpMom(const double mas
 }
 
 complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const complex<double> mass){
-  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass, _mass1, _mass2, 0).imag(), 0.); 
+  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, 0).imag(), 0.); 
   return rho;
 }
 

@@ -236,7 +236,9 @@ void TMatrixGeneral::process(){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
     _tMatr->evalMatrix(mass);
 
-   std::shared_ptr<TMatrixRel> tMatrInv=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
+    std::shared_ptr<TMatrixDynamics> tMatrDynInv = std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParser));
+    std::shared_ptr<TMatrixRel> tMatrInv=tMatrDynInv->getTMatix();
+    //std::shared_ptr<TMatrixRel> tMatrInv=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
    tMatrInv->evalMatrix(mass);
    tMatrInv->invert();
    double delta1=0.;
