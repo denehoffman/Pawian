@@ -37,7 +37,7 @@ PhaseSpaceIsobarReidAngularMomentum::~PhaseSpaceIsobarReidAngularMomentum(){
 }
 
 complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const double mass){
-  complex<double> rho(ChewM(mass).imag(), 0.); 
+  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass, _mass1, _mass2, 0).imag(), 0.); 
   return rho;
 }
 
@@ -46,7 +46,7 @@ complex<double> PhaseSpaceIsobarReidAngularMomentum::breakUpMom(const double mas
 }
 
 complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const complex<double> mass){
-  complex<double> rho(ChewM(mass).imag(), 0.); 
+  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass, _mass1, _mass2, 0).imag(), 0.); 
   return rho;
 }
 
@@ -57,18 +57,16 @@ complex<double> PhaseSpaceIsobarReidAngularMomentum::breakUpMom(const complex<do
 }
 
 complex<double> PhaseSpaceIsobarReidAngularMomentum::ChewM(const double mass, int orbMom){
-  // complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
-  //  return PawianQFT::ChewMandelstamReid(massSqrCompl, _mass1, _mass2);
-  return complex<double>(0.,0.); //dummy
+  complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
+  return PawianQFT::ChewMandelstamReid_AngularMomentum(massSqrCompl, _mass1, _mass2, orbMom);
 }
 
 complex<double> PhaseSpaceIsobarReidAngularMomentum::ChewM(const complex<double> mass, int orbMom){
-  // complex<double> s=mass*mass;
-  // complex<double> result = PawianQFT::ChewMandelstamReid(s, _mass1, _mass2);
-  // complex<double> momReid = result.imag()*mass/2.;
-  // CorrectCMForChosenSign(momReid, result);
-  // return result;
-  return complex<double>(0.,0.); //dummy
+  complex<double> s=mass*mass;
+  complex<double> result = PawianQFT::ChewMandelstamReid_AngularMomentum(s, _mass1, _mass2, orbMom);
+  complex<double> momReidL = result.imag()*mass/2.;
+  CorrectCMForChosenSign(momReidL, result);
+  return result;
 }
 
 void PhaseSpaceIsobarReidAngularMomentum::CorrectCMForChosenSign(complex<double>& breakUpMom, complex<double>& toChange){
