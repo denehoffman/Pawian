@@ -47,6 +47,7 @@ class pipiScatteringParser : public ParserBase
   const double maxRealMass() const {return _maxRealMass;}
   const double startRealMass() const {return _startRealMass;}
   const double startImagMass() const {return _startImagMass;}
+  const int noOfStepsForScan() {return _noOfStepsForScan;}
   const std::string sheet() const {return _sheet;}
   const std::string prodMomParamsStr() const {return _prodMomParamsStr;}
 
@@ -61,6 +62,7 @@ protected:
   double _maxRealMass;
   double _startRealMass;
   double _startImagMass;
+  int _noOfStepsForScan;
   std::string _sheet;
   std::string _prodMomParamsStr;
 };

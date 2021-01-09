@@ -390,7 +390,8 @@ void TMatrixGeneral::init() {
   _energyPlaneBorders[1]= _pipiScatteringParser->minImagMass();
   _energyPlaneBorders[2]= _pipiScatteringParser->maxRealMass();
   _energyPlaneBorders[3]= _pipiScatteringParser->maxImagMass();
-
+  _noOfSteps=_pipiScatteringParser->noOfStepsForScan();
+  
   _pathToFitParams = _pipiScatteringParser->fitParamFile();
   InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;
 

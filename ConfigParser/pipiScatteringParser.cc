@@ -45,6 +45,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ,_maxRealMass(2.0)
   ,_startRealMass(1.2)
   ,_startImagMass(0.15)
+  ,_noOfStepsForScan(500)
   ,_sheet("nn")
   ,_prodMomParamsStr("0 3.1 0.14")
 {
@@ -59,6 +60,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ("maxRealMass",po::value<double>(&_maxRealMass)->default_value(_maxRealMass),"maximal real mass for Rieman scan")
    ("startRealMass",po::value<double>(&_startRealMass)->default_value(_startRealMass),"startimg value of real mass for Rieman scan")
    ("startImagMass",po::value<double>(&_startImagMass)->default_value(_startImagMass),"starting value of imaginary mass for Rieman scan")
+    ("noOfStepsForScan",po::value<int>(&_noOfStepsForScan),"number of steps for T-matrix scan")
     ("sheet", po::value<std::string>(&_sheet)->default_value(_sheet),"specification of the Rieman sheet for the scan")
     ("prodMomParams", po::value<std::string>(&_prodMomParamsStr)->default_value(_prodMomParamsStr),"exactly 3 arguments are required with order: 2L(orbital momentum) s1(mass square from mother or first initial particle) s2(mass square from recoil or second initial particle")
     ;
@@ -88,6 +90,7 @@ bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
   std::cout << "maxRealMass = " << _maxRealMass << std::endl;
   std::cout << "startRealMass = " << _startRealMass << std::endl;
   std::cout << "startImagMass = " << _startImagMass << std::endl;
+  std::cout << "noOfStepsForScan: " << _noOfStepsForScan << std::endl;
   std::cout << "sheet = " << _sheet << std::endl;
   std::cout << "prodMomParamsStr = " << _prodMomParamsStr << std::endl;
   std::cout << std::endl;

@@ -75,7 +75,7 @@ public:
   std::map<std::string, double> gFactorMap() {return _gFactorMap;} 
   std::map<std::pair<std::string, std::string>, std::string> phpDescriptionMap()& {return _phpDescriptionMap;}
   const std::string omnesMatrixType() { return _omnesMatrixType;}
-  const double stepSizeScan() {return _stepSizeScan;}
+
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
   virtual bool parseCommandLine();
@@ -95,7 +95,6 @@ protected:
   bool _useAdler0;
   double _s0Adler;
   double _snormAdler;
-  double _stepSizeScan;
   
   std::vector<std::string> _gFactorFixPoles;
   std::vector<std::string> _gFactorFixReleaseGFactor;
