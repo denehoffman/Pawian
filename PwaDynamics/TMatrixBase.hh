@@ -48,8 +48,8 @@ public:
   /// Destructor
   virtual ~TMatrixBase();
 
-  virtual void evalMatrix(const double mass);
-  virtual void evalMatrix(const complex<double> mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
   virtual std::shared_ptr<KMatrixBase> kMatrix(){return _Kmatrix;}
 
   void SetBumImPartSigns(std::vector<double> signs);

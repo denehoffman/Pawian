@@ -38,12 +38,12 @@ TMatrixBase::TMatrixBase(std::shared_ptr<KMatrixBase> Kmatrix) :
 TMatrixBase::~TMatrixBase(){
 }
 
-void TMatrixBase::evalMatrix(const double mass){
-  _Kmatrix->evalMatrix(mass);
+void TMatrixBase::evalMatrix(const double mass, Spin OrbMom){
+  _Kmatrix->evalMatrix(mass, OrbMom);
 }
 
-void TMatrixBase::evalMatrix(const complex<double> mass){
-  _Kmatrix->evalMatrix(mass);
+void TMatrixBase::evalMatrix(const complex<double> mass, Spin OrbMom){
+  _Kmatrix->evalMatrix(mass, OrbMom);
 }
 
 void TMatrixBase::SetBumImPartSigns(std::vector<double> signs){

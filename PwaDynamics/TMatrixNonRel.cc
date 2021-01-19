@@ -36,17 +36,17 @@ TMatrixNonRel::TMatrixNonRel(std::shared_ptr<KMatrixNonRel> Kmatrix) :
 TMatrixNonRel::~TMatrixNonRel(){
 }
 
-void TMatrixNonRel::evalMatrix(const double mass){
-   evalMatrixTemplate(mass);
+void TMatrixNonRel::evalMatrix(const double mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
-void TMatrixNonRel::evalMatrix(const complex<double> mass){
-   evalMatrixTemplate(mass);
+void TMatrixNonRel::evalMatrix(const complex<double> mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
 template<typename MassType>
-void TMatrixNonRel::evalMatrixTemplate(const MassType mass){
-  TMatrixBase::evalMatrix(mass);
+void TMatrixNonRel::evalMatrixTemplate(const MassType mass, Spin OrbMom){
+  TMatrixBase::evalMatrix(mass, OrbMom);
 
   complex<double> imagCompl(0.,1.);  
   IdentityMatrix< complex<double> > theIdMatrix(NumRows());
@@ -64,5 +64,5 @@ void TMatrixNonRel::evalMatrixTemplate(const MassType mass){
   }
 }
 
-template void TMatrixNonRel::evalMatrixTemplate(const double mass);
-template void TMatrixNonRel::evalMatrixTemplate(const complex<double> mass);
+template void TMatrixNonRel::evalMatrixTemplate(const double mass, Spin OrbMom);
+template void TMatrixNonRel::evalMatrixTemplate(const complex<double> mass, Spin OrbMom);

@@ -51,10 +51,11 @@ public:
 protected:
   int _projectionCompareIndex;
   double _currentOffset;
+  int _orbitalLCompare;
   std::shared_ptr<TMatrixDynamics> _tMatrDynCompare;
   std::shared_ptr<TMatrixRel> _tMatrCompare;
   std::shared_ptr<KMatrixParser> _kMatrixParserCompare;
-
+  
   virtual void evalPhaseCompare(EvtData* theData, double currentMass);
 
 private:

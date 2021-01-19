@@ -49,12 +49,12 @@ public:
   /// Destructor
   virtual ~TMatrixRel();
 
-  virtual void evalMatrix(const double mass);
-  virtual void evalMatrix(const complex<double> mass);
+  virtual void evalMatrix(const double mass, Spin OrbMom=0);
+  virtual void evalMatrix(const complex<double> mass, Spin OrbMom=0);
 
 private:
   template<typename MassType>
-  void evalMatrixTemplate(const MassType mass);
+  void evalMatrixTemplate(const MassType mass, Spin OrbMom);
 
 };
 

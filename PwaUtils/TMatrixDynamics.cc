@@ -103,7 +103,7 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   double currentMass =
     theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
-  _tMatr->evalMatrix(currentMass);
+  _tMatr->evalMatrix(currentMass, _orbitalL);
 
   if(_dataTypeID==1) evalElasticity(theData, currentMass);   
   else if(_dataTypeID==2){
@@ -454,7 +454,7 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
     WarningMsg << "numerical instability of norm(SijRel) yields to NAN ... redo calculation for mass+0.0001"
 	       << endmsg;
     double newCurrentMass=currentMass+0.0001;
-    _tMatr->evalMatrix(newCurrentMass);
+    _tMatr->evalMatrix(newCurrentMass, _orbitalL);
     evalElasticity(theData, newCurrentMass);
     return;
   } 

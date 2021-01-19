@@ -38,18 +38,18 @@ TMatrixRel::~TMatrixRel(){
 }
 
 
-void TMatrixRel::evalMatrix(const double mass){
-   evalMatrixTemplate(mass);
+void TMatrixRel::evalMatrix(const double mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
-void TMatrixRel::evalMatrix(const complex<double> mass){
-   evalMatrixTemplate(mass);
+void TMatrixRel::evalMatrix(const complex<double> mass, Spin OrbMom){
+  evalMatrixTemplate(mass, OrbMom);
 }
 
 template<typename MassType>
-void TMatrixRel::evalMatrixTemplate(const MassType mass){
+void TMatrixRel::evalMatrixTemplate(const MassType mass, Spin OrbMom){
 
-   TMatrixBase::evalMatrix(mass);
+  TMatrixBase::evalMatrix(mass, OrbMom);
 
    vector<std::shared_ptr<AbsPhaseSpace> > phpVec=_Kmatrix->phaseSpaceVec();
    //   Matrix< complex<double> > theRhoMatrix(NumRows(),NumRows());
@@ -79,5 +79,5 @@ void TMatrixRel::evalMatrixTemplate(const MassType mass){
    }
 }
 
-template void TMatrixRel::evalMatrixTemplate(const double);
-template void TMatrixRel::evalMatrixTemplate(const complex<double>);
+template void TMatrixRel::evalMatrixTemplate(const double, Spin OrbMom);
+template void TMatrixRel::evalMatrixTemplate(const complex<double>, Spin OrbMom);

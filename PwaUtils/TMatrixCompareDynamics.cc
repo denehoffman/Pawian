@@ -59,7 +59,8 @@ TMatrixCompareDynamics::TMatrixCompareDynamics(std::string& name, std::vector<Pa
   _kMatrixParserCompare= std::shared_ptr<KMatrixParser>(new KMatrixParser(pathToKMatrCompareConfigFile));
   _tMatrDynCompare=std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParserCompare));
   _tMatrCompare=_tMatrDynCompare->getTMatix();  
-
+  _orbitalLCompare=_kMatrixParserCompare->orbitalMom();
+  
   std::istringstream projParticles(_projectionParticleNames);
   std::string firstProjParticleName;
   std::string secondProjParticleName;
@@ -89,8 +90,8 @@ complex<double> TMatrixCompareDynamics::eval(EvtData* theData, AbsXdecAmp* grand
 
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
-  _tMatr->evalMatrix(currentMass);
-  _tMatrCompare->evalMatrix(currentMass);
+  _tMatr->evalMatrix(currentMass, _orbitalL);
+  _tMatrCompare->evalMatrix(currentMass, _orbitalLCompare);
   evalPhaseCompare(theData, currentMass);
   return (*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 }
