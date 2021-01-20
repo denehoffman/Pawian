@@ -64,7 +64,7 @@ complex<double> PiPiScatteringXdecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, sh
 
 complex<double> PiPiScatteringXdecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp) {
   complex<double> result(0.,0.);
-  _tMatDyn->eval(theData);
+  _tMatDyn->eval(theData, grandmaAmp, _orbMom);
   return result;
 }
 
@@ -95,4 +95,5 @@ void PiPiScatteringXdecAmps::initialize() {
   if(!(_decay->dynType() == "FVectorCompare"))
     _absDyn->addGrandMa(_decay);
   _tMatDyn=std::dynamic_pointer_cast<TMatrixDynamics>(_absDyn);
+  _orbMom=_tMatDyn->orbitalL();
 }

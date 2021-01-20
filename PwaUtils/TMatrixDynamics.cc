@@ -103,7 +103,7 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   double currentMass =
     theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
-  _tMatr->evalMatrix(currentMass, _orbitalL);
+  _tMatr->evalMatrix(currentMass, OrbMom);
 
   if(_dataTypeID==1) evalElasticity(theData, currentMass);   
   else if(_dataTypeID==2){

@@ -73,6 +73,8 @@ protected:
 
   virtual void initialize();
   std::shared_ptr<TMatrixDynamics> _tMatDyn;
+  int _orbMom;
+  
 private:
 
 

@@ -234,12 +234,12 @@ void TMatrixGeneral::process(){
  
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     Vector4<double> mass4Vec(mass, 0.,0.,0.);
-    _tMatr->evalMatrix(mass);
+    _tMatr->evalMatrix(mass, _orbitalL);
 
     std::shared_ptr<TMatrixDynamics> tMatrDynInv = std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParser));
     std::shared_ptr<TMatrixRel> tMatrInv=tMatrDynInv->getTMatix();
     //std::shared_ptr<TMatrixRel> tMatrInv=std::shared_ptr<TMatrixRel>(new TMatrixRel(_kMatr));
-   tMatrInv->evalMatrix(mass);
+   tMatrInv->evalMatrix(mass, _orbitalL);
    tMatrInv->invert();
    double delta1=0.;
 
@@ -361,7 +361,8 @@ void TMatrixGeneral::process(){
     Alert << "projection index for key " << projKey << " not found" << endmsg;
     exit(0);
   }
-
+  
+  _tMatr->evalMatrix(1.0);
   RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
    		       std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
    		       std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),

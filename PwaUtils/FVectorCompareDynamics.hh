@@ -55,7 +55,7 @@ protected:
   int _projectionCompareIndex;
   std::string _kMatCompareName;
   std::string _nameOfFVectorCompare;
-
+  int _orbMomCompare;
 
   std::shared_ptr<KMatrixDynamics> _kMatrDynComp;
   std::shared_ptr<KMatrixParser> _kMatrixParserComp;

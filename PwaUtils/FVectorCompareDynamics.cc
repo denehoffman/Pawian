@@ -63,6 +63,8 @@ FVectorIntensityDynamics(name, fsParticles, mother1, pathToConfigParser,  baseNa
 {
   std::string nameFVectComp = _kMatrDynComp->addOneGrandMa(_nameOfFVectorCompare);
   _FVectorCompare = _kMatrDynComp->fVector(nameFVectComp);
+  std::shared_ptr<KMatrixParser> kMatrixCompParser(new KMatrixParser(pathToConfigParserComp));
+  _orbMomCompare = kMatrixCompParser->orbitalMom();
 }
 
 FVectorCompareDynamics::~FVectorCompareDynamics()
@@ -74,8 +76,8 @@ complex<double> FVectorCompareDynamics::eval(EvtData* theData, AbsXdecAmp* grand
 
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   double currentMass=theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
-  _FVector->evalMatrix(currentMass);
-  _FVectorCompare->evalMatrix(currentMass);
+  _FVector->evalMatrix(currentMass, OrbMom);
+  _FVectorCompare->evalMatrix(currentMass, _orbMomCompare);
   evalPhaseCompare(theData, currentMass);
   return result;
 }
