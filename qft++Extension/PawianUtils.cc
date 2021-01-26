@@ -100,6 +100,17 @@ complex<double> PawianQFT::ChewMandelstamReid(complex<double> s, double massDec1
   return result;
 }
 
+complex<double> PawianQFT::Power_Lambda(complex<double> s, double massDec1, double massDec2, double Power){
+    complex<double> m1_p_m2_2 ((massDec1+massDec2)*(massDec1+massDec2), 0.);
+    complex<double> m1_m_m2_2 ((massDec1-massDec2)*(massDec1-massDec2), 0.);
+
+    complex<double>Lambda(0.,0.);
+
+    Lambda += pow((m1_p_m2_2-s),Power)*pow((m1_m_m2_2-s),Power)/pow(s*s,Power);
+
+    return Lambda;
+}
+
 complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s, double massDec1, double massDec2, int orbMom){
 
     // This Chew-Mandelstam Function is based on J. H. Reid, and N. N. Trofimenkoff, Journal of Mathematical Physics 25, 3540 (1984).
@@ -129,15 +140,25 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
     }
 
     else{
+        
+        if(norm(s)<1.e-8) s=complex<double>(1.e-10, 1.e-10);
+
+        complex<double> CM (0.,0.);
+
+        if(norm(pow(s,orbMom))<1.e-10) return CM;
 
         complex<double> m1_p_m2_2((massDec1+massDec2)*(massDec1+massDec2), 0.);
         complex<double> m1_m_m2_2((massDec1-massDec2)*(massDec1-massDec2), 0.);
 
-        complex<double> k2 = (s-pow(massDec1+massDec2,2.))*(s-pow(massDec1-massDec2,2.))/(4.*s);
+        complex<double> m1_p_m2_2_m_s = (m1_p_m2_2-s);
+        complex<double> m1_m_m2_2_m_s = (m1_m_m2_2-s);
+
+        complex<double> k2 = (s-m1_p_m2_2)*(s-m1_m_m2_2)/(4.*s);
         complex<double> lambda = (4.*k2)/s;
+        
         complex<double> mu = pow((m1_p_m2_2-m1_m_m2_2),2.)/(16.*m1_p_m2_2*m1_m_m2_2);
         complex<double> nu = (m1_p_m2_2+m1_m_m2_2)/(2.*sqrt(m1_p_m2_2*m1_m_m2_2));
-        complex<double> omega = nu - sqrt(m1_p_m2_2*m1_m_m2_2)/s;
+        //complex<double> omega = (massDec1*massDec1+massDec2*massDec2)/(massDec1*massDec1-massDec2*massDec2)-(massDec1*massDec1-massDec2*massDec2)/s; 
 
         complex<double> sum1 (0.,0.); 
         complex<double> sum2 (0.,0.);
@@ -148,8 +169,8 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
         for(int j = 0; j<=orbMom; j++){
             
             Omega=pow(-1.,j)*pow(2.,j)*boost::math::double_factorial<double>(2*j-1)/boost::math::factorial<double>(j);
-            sum1 += pow(lambda, orbMom-j)*1./(2.*j+1.);
-            sum2 += Omega*pow(lambda, orbMom-j)*pow(mu,j);
+            sum1 += PawianQFT::Power_Lambda(s, massDec1, massDec2, orbMom-j)/(2.*j+1.);
+            sum2 += Omega*PawianQFT::Power_Lambda(s, massDec1, massDec2, orbMom-j)*pow(mu,j);
         }
 
         for(int p = 1; p<=orbMom; p++){
@@ -159,7 +180,7 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
 
             for(int q = 0; q<=orbMom-p; q++){
                 Omega=pow(-1.,q)*pow(2.,q)*boost::math::double_factorial<double>(2*q-1)/boost::math::factorial<double>(q);
-                sumA+=Omega*pow(lambda,orbMom-q-p)*pow(mu,q);
+                sumA+=Omega*Power_Lambda(s, massDec1, massDec2, orbMom-q-p)*pow(mu,q);
             }
 
             for(int r = 0; r<=p-1; r++){
@@ -167,17 +188,37 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
                 sumB+=Omega*pow(mu,r);
             }
 
-            sum3+=1./p*sumA*sumB;
+            sum3+=sumA*sumB*(1./p);
 
         }
 
-        complex<double> CM = 1./PawianConstants::pi*(-2.*pow(lambda, ((double)orbMom+0.5))*log((sqrt(s-m1_p_m2_2)+sqrt(s-m1_m_m2_2))/(2.*sqrt(massDec1*massDec2)))+sum1 + omega*log(massDec1/massDec2)*sum2+ omega*nu/2.*sum3);
+        CM += -2./PawianConstants::pi*(-sqrt(m1_p_m2_2_m_s)*sqrt(m1_m_m2_2_m_s)/s*pow(lambda,orbMom)*log((sqrt(m1_p_m2_2-s)+sqrt(m1_m_m2_2-s))/(2.*sqrt(massDec1*massDec2)))-0.5*sum1 - 0.5*(massDec1*massDec1+massDec2*massDec2)/(massDec1*massDec1-massDec2*massDec2)*log(massDec1/massDec2)*sum2 + 0.5*(massDec1*massDec1-massDec2*massDec2)/s*log(massDec1/massDec2)*sum2 - nu*nu*sum3/4. + sqrt(m1_p_m2_2*m1_m_m2_2)/s*nu*sum3/4.);
 
-        complex<double> result = CM;
-
-        return result;
+        return CM;
     }
 
+}
+
+double PawianQFT::Offset_Dudek_Reid(double massDec1, double massDec2){
+
+    double result = 0.;
+
+    if(abs(massDec1-massDec2)<1e-6){
+        result = (1./PawianConstants::pi*(pow(massDec1,2.)-pow(massDec2,2.) + 2.* massDec1*massDec2*log(massDec1/massDec2)))/(massDec1*massDec1-massDec2*massDec2);
+    } else {
+        result = 2./PawianConstants::pi;
+    }
+
+    return result;
+}
+
+complex<double> PawianQFT::ChewMandelstamDudek_AngularMomentum(complex<double> s, double massDec1, double massDec2, int orbMom){
+
+    complex<double> CM_ReidMom = PawianQFT::ChewMandelstamReid_AngularMomentum(s, massDec1, massDec2, orbMom);
+    double Offset = PawianQFT::Offset_Dudek_Reid(massDec1, massDec2);
+
+    complex<double> result(Offset-CM_ReidMom.real(),-CM_ReidMom.imag());
+    return result;
 }
 
 complex<double> PawianQFT::ChewMandelstamDudek(complex<double> s, double massDec1, double massDec2){
