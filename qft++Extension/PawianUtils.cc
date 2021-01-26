@@ -204,9 +204,9 @@ double PawianQFT::Offset_Dudek_Reid(double massDec1, double massDec2){
     double result = 0.;
 
     if(abs(massDec1-massDec2)<1e-6){
-        result = (1./PawianConstants::pi*(pow(massDec1,2.)-pow(massDec2,2.) + 2.* massDec1*massDec2*log(massDec1/massDec2)))/(massDec1*massDec1-massDec2*massDec2);
-    } else {
         result = 2./PawianConstants::pi;
+    } else {
+        result = (1./PawianConstants::pi*(pow(massDec1,2.)-pow(massDec2,2.) + 2.* massDec1*massDec2*log(massDec1/massDec2)))/(massDec1*massDec1-massDec2*massDec2);
     }
 
     return result;
