@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2021 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,31 +20,34 @@
 //									  //
 //************************************************************************//
 
-#include "PwaDynamics/TMatrixBase.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
+// PhaseSpaceIsobarDudekAngularMomentum class definition file. -*- C++ -*-
+// Copyright 2021 Bertram Kopf
+// phase space factor which fulfils the analytic continuation and unitarity
+
+#pragma once 
+//_____________________________________________________________________________
+// @file PhaseSpaceIsobarDudek.h
+//_____________________________________________________________________________
+
+#include "PwaDynamics/PhaseSpaceIsobarDudek.hh"
+
+#include <complex>
+
+class PhaseSpaceIsobarDudekAngularMomentum: public PhaseSpaceIsobarDudek {
+
+public:
+
+  /// Constructor 
+  PhaseSpaceIsobarDudekAngularMomentum(double mass1, double mass2); 
+
+  /// Destructor
+  virtual ~PhaseSpaceIsobarDudekAngularMomentum();
+
+  virtual std::complex<double> ChewM(const double mass, int orbMom=0);
+  virtual std::complex<double> ChewM(const std::complex<double> mass, int orbMom=0);
+
+protected:
+
+};
 
 
-TMatrixBase::TMatrixBase(std::shared_ptr<KMatrixBase> Kmatrix) :
-  Matrix< complex<double> >::Matrix(int(Kmatrix->phaseSpaceVec().size()), int(Kmatrix->phaseSpaceVec().size()))
-  , _Kmatrix(Kmatrix)
-  ,_cSign(-1.)
-  ,_orbMom(0)
- {
-   if (Kmatrix->phaseSpaceVec().at(0)->name() == "Dudek" || Kmatrix->phaseSpaceVec().at(0)->name() == "DudekAngularMomentum" || Kmatrix->phaseSpaceVec().at(0)->name() == "LUT") _cSign=1.;
- }
-
-
-TMatrixBase::~TMatrixBase(){
-}
-
-void TMatrixBase::evalMatrix(const double mass, Spin OrbMom){
-  _Kmatrix->evalMatrix(mass, OrbMom);
-}
-
-void TMatrixBase::evalMatrix(const complex<double> mass, Spin OrbMom){
-  _Kmatrix->evalMatrix(mass, OrbMom);
-}
-
-void TMatrixBase::SetBumImPartSigns(std::vector<double> signs){
-  _Kmatrix->SetBumImPartSigns(signs);
-}

@@ -39,7 +39,7 @@ PPoleBarrier::PPoleBarrier(complex<double>& beta, vector<double>& g_i, double ma
   for(unsigned int i=0; i<_phpVecs.size(); ++i){
     _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMom(_poleMass);
     _woBarrier.at(i)=false;
-    if(_phpVecs.at(i)->name()=="ReidAngularMomentum") _woBarrier.at(i)=true;
+    if(_phpVecs.at(i)->name()=="ReidAngularMomentum" || _phpVecs.at(i)->name()=="DudekAngularMomentum") _woBarrier.at(i)=true;
   }  
 }
 

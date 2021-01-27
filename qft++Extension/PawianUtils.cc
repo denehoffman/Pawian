@@ -24,8 +24,9 @@
 
 #include "qft++Extension/PawianUtils.hh"
 #include "Utils/PawianConstants.hh"
-#include <boost/math/special_functions/factorials.hpp>
+#include "Utils/MathUtils.hh"
 #include <math.h>
+
 
 vector<LS> PawianQFT::GetValidLSWeak(const Spin &__j, const Spin &__s1, const Spin &__s2){
   vector<LS> valid_ls;
@@ -167,8 +168,7 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
         double Omega=0.;
 
         for(int j = 0; j<=orbMom; j++){
-            
-            Omega=pow(-1.,j)*pow(2.,j)*boost::math::double_factorial<double>(2*j-1)/boost::math::factorial<double>(j);
+	  Omega=pow(-1.,j)*pow(2.,j)*MathUtils::double_factorial(2*j-1)/MathUtils::factorial(j);
             sum1 += PawianQFT::Power_Lambda(s, massDec1, massDec2, orbMom-j)/(2.*j+1.);
             sum2 += Omega*PawianQFT::Power_Lambda(s, massDec1, massDec2, orbMom-j)*pow(mu,j);
         }
@@ -179,12 +179,12 @@ complex<double> PawianQFT::ChewMandelstamReid_AngularMomentum(complex<double> s,
             complex<double> sumB (0.,0.);
 
             for(int q = 0; q<=orbMom-p; q++){
-                Omega=pow(-1.,q)*pow(2.,q)*boost::math::double_factorial<double>(2*q-1)/boost::math::factorial<double>(q);
+	      Omega=pow(-1.,q)*pow(2.,q)*MathUtils::double_factorial(2*q-1)/MathUtils::factorial(q);
                 sumA+=Omega*Power_Lambda(s, massDec1, massDec2, orbMom-q-p)*pow(mu,q);
             }
 
             for(int r = 0; r<=p-1; r++){
-                Omega=pow(-1.,r)*pow(2.,r)*boost::math::double_factorial<double>(2*r-1)/boost::math::factorial<double>(r);
+	      Omega=pow(-1.,r)*pow(2.,r)*MathUtils::double_factorial(2*r-1)/MathUtils::factorial(r);
                 sumB+=Omega*pow(mu,r);
             }
 

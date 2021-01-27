@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cassert>
+#include <math.h>
 
 namespace MathUtils{
 
@@ -21,6 +22,33 @@ namespace MathUtils{
       }
     }
     return f;
+  }
+
+  inline int double_factorial(int n){
+    if (n<-1){
+      std::cerr << std::endl;
+      std::cerr << "factoral value " << n << " must be >=-1 !!! "
+                << std::endl;
+      
+      exit(1);
+    }
+    
+    if (n==-1) return -1;
+    int result = 1;
+    
+    if ( n % 2 == 0){ 
+      for(int i =1; i<=floor(n/2.); i++){
+	result*=2*i;
+      }
+    }
+    
+    if ( n % 2 == 1){ 
+      for(int i =1; i<=floor((n+1.)/2.); i++){
+	result*=2*i-1;
+      }
+    }
+            
+            return result;
   }
 
   inline double pow(double x, int p) {
