@@ -33,7 +33,7 @@ namespace MathUtils{
       exit(1);
     }
     
-    if (n==-1) return -1;
+    if (n==-1) return 1;
     int result = 1;
     
     if ( n % 2 == 0){ 
