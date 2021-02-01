@@ -45,9 +45,9 @@ public:
   /// Destructor
   virtual ~PhaseSpaceIsobar();
 
-  virtual complex<double> factor(const double mass);
+  virtual complex<double> factor(const double mass, int orbMom=0);
   virtual complex<double> breakUpMom(const double mass);
-  virtual complex<double> factor(const complex<double> mass);
+  virtual complex<double> factor(const complex<double> mass, int orbMom=0);
   virtual complex<double> breakUpMom(const complex<double> mass);
   virtual complex<double> breakUpMomDefaultAS(const double mass) {
     return PawianQFT::breakupMomQDefaultAS(mass, _mass1, _mass2);

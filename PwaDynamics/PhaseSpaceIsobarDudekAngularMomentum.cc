@@ -36,6 +36,20 @@ PhaseSpaceIsobarDudekAngularMomentum::~PhaseSpaceIsobarDudekAngularMomentum(){
 
 }
 
+complex<double> PhaseSpaceIsobarDudekAngularMomentum::factor(const double mass, int orbMom){
+  double expL=2.*orbMom+1.;
+  complex<double> cmImag(-PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, orbMom).imag(), 0.);
+  complex<double> rho=std::pow(cmImag, expL); 
+  return rho;
+}
+
+complex<double> PhaseSpaceIsobarDudekAngularMomentum::factor(const complex<double> mass, int orbMom){
+  double expL=2.*orbMom+1.;
+  complex<double> cmImag(-PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, orbMom).imag(), 0);
+  complex<double> rho=std::pow(cmImag, expL); 
+  return rho;
+}
+
 complex<double> PhaseSpaceIsobarDudekAngularMomentum::ChewM(const double mass, int orbMom){
   complex<double> massSqrCompl(mass*mass, 1.e-14); // for real s: expansion to s=0 from 1st quadrant
   return PawianQFT::ChewMandelstamDudek_AngularMomentum(massSqrCompl, _mass1, _mass2, orbMom);  

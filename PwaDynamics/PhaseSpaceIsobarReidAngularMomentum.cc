@@ -36,8 +36,10 @@ PhaseSpaceIsobarReidAngularMomentum::~PhaseSpaceIsobarReidAngularMomentum(){
 
 }
 
-complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const double mass){
-  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, 0).imag(), 0.); 
+complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const double mass, int orbMom){
+  double expL=2.*orbMom+1.;
+  complex<double> cmImag(PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, orbMom).imag(), 0.);
+  complex<double> rho=pow(cmImag, expL); 
   return rho;
 }
 
@@ -45,8 +47,10 @@ complex<double> PhaseSpaceIsobarReidAngularMomentum::breakUpMom(const double mas
   return PawianQFT::breakupMomQReid(mass,_mass1, _mass2);
 }
 
-complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const complex<double> mass){
-  complex<double> rho(PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, 0).imag(), 0.); 
+complex<double> PhaseSpaceIsobarReidAngularMomentum::factor(const complex<double> mass, int orbMom){
+  double expL=2.*orbMom+1.;
+  complex<double> cmImag(PawianQFT::ChewMandelstamReid_AngularMomentum(mass*mass, _mass1, _mass2, orbMom).imag(), 0.);
+  complex<double> rho=pow(cmImag, expL); 
   return rho;
 }
 

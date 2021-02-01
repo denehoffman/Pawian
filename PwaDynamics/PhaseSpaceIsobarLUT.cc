@@ -50,7 +50,7 @@ PhaseSpaceIsobarLUT::~PhaseSpaceIsobarLUT(){
   m_lutfile.close();//
 }
 
-complex<double> PhaseSpaceIsobarLUT::factor(const double mass){
+complex<double> PhaseSpaceIsobarLUT::factor(const double mass, int orbMom){
   complex<double> SqrtSCompl(mass, 0.0);
   complex<double> result = getFactor(SqrtSCompl);
   complex<double> rho(-result.imag(), 0.); 
@@ -63,7 +63,7 @@ complex<double> PhaseSpaceIsobarLUT::breakUpMom(const double mass){
   return result;  
 }
 
-complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass){
+complex<double> PhaseSpaceIsobarLUT::factor(const complex<double> mass, int orbMom){
   complex<double> currentCM=ChewM(mass);
   complex<double> rho(-currentCM.imag(), 0.); 
   return rho;

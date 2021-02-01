@@ -37,7 +37,7 @@ PhaseSpaceIsobarDudek::~PhaseSpaceIsobarDudek(){
 
 }
 
-complex<double> PhaseSpaceIsobarDudek::factor(const double mass){
+complex<double> PhaseSpaceIsobarDudek::factor(const double mass, int orbMom){
   complex<double> rho(-ChewM(mass).imag(), 0.); 
   return rho;
 }
@@ -46,7 +46,7 @@ complex<double> PhaseSpaceIsobarDudek::breakUpMom(const double mass){
   return PawianQFT::breakupMomQDudek(mass,_mass1, _mass2);
 }
 
-complex<double> PhaseSpaceIsobarDudek::factor(const complex<double> mass){
+complex<double> PhaseSpaceIsobarDudek::factor(const complex<double> mass, int orbMom){
   complex<double> rho(-ChewM(mass).imag(), 0.); 
   return rho;
 }

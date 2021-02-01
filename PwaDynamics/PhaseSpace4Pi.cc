@@ -67,7 +67,7 @@ PhaseSpace4Pi::~PhaseSpace4Pi(){
 
 }
 
-complex<double> PhaseSpace4Pi::factor(const double mass){
+complex<double> PhaseSpace4Pi::factor(const double mass, int orbMom){
   double mass_sqr=mass*mass;
   complex<double> result(0.,0.);
 
@@ -87,7 +87,7 @@ complex<double> PhaseSpace4Pi::factor(const double mass){
   return result;
 }
 
-complex<double> PhaseSpace4Pi::factor(const complex<double> mass){
+complex<double> PhaseSpace4Pi::factor(const complex<double> mass, int orbMom){
   complex<double> mass_sqr=mass*mass;
   complex<double> result(0.,0.);
   if( norm(mass_sqr) <= 1. ){

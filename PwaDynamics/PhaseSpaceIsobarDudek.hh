@@ -44,9 +44,9 @@ public:
   /// Destructor
   virtual ~PhaseSpaceIsobarDudek();
 
-  virtual std::complex<double> factor(const double mass);
+  virtual std::complex<double> factor(const double mass, int orbMom=0);
   virtual std::complex<double> breakUpMom(const double mass);
-  virtual std::complex<double> factor(const std::complex<double> mass);
+  virtual std::complex<double> factor(const std::complex<double> mass, int orbMom=0);
   virtual std::complex<double> breakUpMom(const std::complex<double> mass);
   virtual std::complex<double> ChewM(const double mass, int orbMom=0);
   virtual std::complex<double> ChewM(const std::complex<double> mass, int orbMom=0);

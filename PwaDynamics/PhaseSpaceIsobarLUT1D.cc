@@ -50,14 +50,14 @@ PhaseSpaceIsobarLUT1D::~PhaseSpaceIsobarLUT1D(){
   m_lutfile.close();//
 }
 
-complex<double> PhaseSpaceIsobarLUT1D::factor(const double mass){
+complex<double> PhaseSpaceIsobarLUT1D::factor(const double mass, int orbMom){
   double SqrtSCompl = mass;
   complex<double> result = getFactor(SqrtSCompl);
   complex<double> rho(-result.imag(), 0.); 
   return rho;
 }
 
-complex<double> PhaseSpaceIsobarLUT1D::factor(const complex<double> mass){
+complex<double> PhaseSpaceIsobarLUT1D::factor(const complex<double> mass, int orbMom){
     Alert << "Provided LUT is one dimensional in s. 2D is work in progress. Use LUT instead of LUTRe for now: " << m_lutfilepath << endmsg;
     return complex<double>(0., 0.);
     exit(1);

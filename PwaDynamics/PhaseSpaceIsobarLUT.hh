@@ -43,9 +43,9 @@ public:
   /// Destructor
   virtual ~PhaseSpaceIsobarLUT();
 
-  virtual complex<double> factor(const double mass);
+  virtual complex<double> factor(const double mass, int orbMom=0);
   virtual complex<double> breakUpMom(const double mass);
-  virtual complex<double> factor(const complex<double> mass);
+  virtual complex<double> factor(const complex<double> mass, int orbMom=0);
   virtual complex<double> breakUpMom(const complex<double> mass);
   virtual complex<double> ChewM(const double mass, int orbMom=0);
   virtual complex<double> ChewM(const complex<double> mass, int orbMom=0);

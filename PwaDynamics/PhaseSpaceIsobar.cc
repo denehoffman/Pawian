@@ -37,7 +37,7 @@ PhaseSpaceIsobar::~PhaseSpaceIsobar(){
 
 }
 
-complex<double> PhaseSpaceIsobar::factor(const double mass){
+complex<double> PhaseSpaceIsobar::factor(const double mass, int orbMom){
    return PawianQFT::phaseSpaceFacDefault(mass,_mass1, _mass2);
 }
 
@@ -45,7 +45,7 @@ complex<double> PhaseSpaceIsobar::breakUpMom(const double mass){
   return PawianQFT::breakupMomQDefault(mass,_mass1, _mass2);
 }
 
-complex<double> PhaseSpaceIsobar::factor(const complex<double> mass){
+complex<double> PhaseSpaceIsobar::factor(const complex<double> mass, int orbMom){
  //    Calc from the breakup momentum to account for chosen sign
  complex<double> q = PawianQFT::breakupMomQDefault(mass,_mass1, _mass2);
  CorrectForChosenSign(q,q);

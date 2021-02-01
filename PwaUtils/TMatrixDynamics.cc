@@ -440,13 +440,13 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
   //note: this is a workaround
   if(_prodProjectionIndex == _decProjectionIndex){
     SijRel=complex<double>(1.,0.)+2.*PawianConstants::i *
-      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() *
-	   thePhpVecs[_decProjectionIndex]->factor(currentMass).real()) * currentTijRel;
+      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real() *
+	   thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real()) * currentTijRel;
   }
   else{
     SijRel=2.*PawianConstants::i *
-      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() *
-	   thePhpVecs[_decProjectionIndex]->factor(currentMass).real()) * currentTijRel;
+      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real() *
+	   thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real()) * currentTijRel;
   }
   
   //protection against numerical instabilities
@@ -496,10 +496,10 @@ void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 
   double sqrTij=0.;
-  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass).real() > 
-      1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass).real() > 1.e-10) {
-    sqrTij=(2.*_orbitalL+1.) * norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass).real()) *
-				    currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass).real()));
+  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real() > 
+      1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real() > 1.e-10) {
+    sqrTij=(2.*_orbitalL+1.) * norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real()) *
+				    currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real()));
   }
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;
