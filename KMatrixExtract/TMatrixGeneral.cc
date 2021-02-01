@@ -244,7 +244,7 @@ void TMatrixGeneral::process(){
    double delta1=0.;
 
     for(unsigned int i=0; i<_gFactorNames.size(); ++i){
-      complex<double> currentRho=_phpVecs.at(i)->factor(mass);
+      complex<double> currentRho=_phpVecs.at(i)->factor(mass, _orbitalL);
 
 	_AmpRealH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).real());
 	_AmpImagH1Vec.at(i)->Fill(mass, (*_tMatr)(i,i).imag());	
@@ -274,10 +274,10 @@ void TMatrixGeneral::process(){
       _phpH1RealVec.at(i)->Fill(mass, currentRho.real());
       _phpH1ImagVec.at(i)->Fill(mass, currentRho.imag());
 
-      _SqrtT1iH1Vec.at(i)->Fill(mass, sqrt(_phpVecs.at(0)->factor(mass).real()*currentRho.real()) *
+      _SqrtT1iH1Vec.at(i)->Fill(mass, sqrt(_phpVecs.at(0)->factor(mass, _orbitalL).real()*currentRho.real()) *
 				sqrt(norm((*_tMatr)(0,i))) );
 
-      _ArgandUnits1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(0)->factor(mass).real() *
+      _ArgandUnits1iH1Vec.at(i)->Fill(mass, (2.*_orbitalL+1.)*norm(sqrt(_phpVecs.at(0)->factor(mass,_orbitalL).real() *
 									currentRho.real())*(*_tMatr)(0,i)));
 
       complex<double> currentTii=currentRho.real()*(*_tMatr)(i,i);
@@ -292,7 +292,7 @@ void TMatrixGeneral::process(){
       TiiOld[i]=currentTii;
       
       if(currentRho.real()>0.){
-	complex<double> S0iRel=2.*PawianConstants::i*sqrt(_phpVecs.at(0)->factor(mass).real() *
+	complex<double> S0iRel=2.*PawianConstants::i*sqrt(_phpVecs.at(0)->factor(mass, _orbitalL).real() *
 							  currentRho.real())*(*_tMatr)(0,i);
 	if(i==0) S0iRel+=complex<double>(1.,0.);  
 	_SqrS1iH1Vec.at(i)->Fill(mass, norm(S0iRel));
