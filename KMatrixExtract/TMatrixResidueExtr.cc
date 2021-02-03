@@ -167,19 +167,19 @@ void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
  
   std::shared_ptr<TMatrixRel> currentTMatRealp = getNewTMat();
   //  currentTMatRealp->evalNonRelMatrix(polePosEpsilonRealp);
-  currentTMatRealp->evalMatrix(polePosEpsilonRealp);
+  currentTMatRealp->evalMatrix(polePosEpsilonRealp, _orbitalL);
 
   std::shared_ptr<TMatrixRel> currentTMatRealm = getNewTMat();
   //  currentTMatRealm->evalNonRelMatrix(polePosEpsilonRealm);
-  currentTMatRealm->evalMatrix(polePosEpsilonRealm);
+  currentTMatRealm->evalMatrix(polePosEpsilonRealm, _orbitalL);
 
   std::shared_ptr<TMatrixRel> currentTMatImagp = getNewTMat();
   //  currentTMatImagp->evalNonRelMatrix(polePosEpsilonImagp);
-  currentTMatImagp->evalMatrix(polePosEpsilonImagp);
+  currentTMatImagp->evalMatrix(polePosEpsilonImagp, _orbitalL);
 
   std::shared_ptr<TMatrixRel> currentTMatImagm = getNewTMat();
   //  currentTMatImagm->evalNonRelMatrix(polePosEpsilonImagm);
-  currentTMatImagm->evalMatrix(polePosEpsilonImagm);
+  currentTMatImagm->evalMatrix(polePosEpsilonImagm, _orbitalL);
 
   InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
 
@@ -188,17 +188,17 @@ void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
     ResidueProperties  currentResPropImag;
     ResidueProperties  currentResPropAverage;
     
-    std::complex<double> resultEpsilonRealpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos)) *
-						    (*currentTMatRealp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
-    std::complex<double> resultEpsilonRealmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos)) *
-						    (*currentTMatRealm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
+    std::complex<double> resultEpsilonRealpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)) *
+						    (*currentTMatRealp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)));
+    std::complex<double> resultEpsilonRealmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)) *
+						    (*currentTMatRealm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)));
     std::complex<double> resultApproxReal=(resultEpsilonRealpInv-resultEpsilonRealmInv)/(2.*epsilon);
     InfoMsg << "resultApproxRel: " << resultApproxReal << endmsg;
     
-    std::complex<double> resultEpsilonImagpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos)) *
-						    (*currentTMatImagp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
-    std::complex<double> resultEpsilonImagmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos)) *
-						    (*currentTMatImagm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos)));
+    std::complex<double> resultEpsilonImagpInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)) *
+						    (*currentTMatImagp)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)));
+    std::complex<double> resultEpsilonImagmInv= 1./(sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)) *
+						    (*currentTMatImagm)(i,i)*sqrt(_phpVecs.at(i)->factor(polePos, _orbitalL)));
     std::complex<double> resultApproxImag=1./PawianConstants::i *
       (resultEpsilonImagpInv-resultEpsilonImagmInv)/(2.*epsilon);
     InfoMsg << "resultApproxImag: " << resultApproxImag << endmsg;
