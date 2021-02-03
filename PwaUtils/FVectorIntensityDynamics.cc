@@ -117,7 +117,9 @@ complex<double> FVectorIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* gra
     else momQ2L=pow(PawianQFT::breakupMomQDefaultFromS(_s1Prod, currentMassS, _s2Prod), _L2prod);
   }
 
-  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass, _orbitalL).real()*currentMass/2. * momQ2L) );
+  //  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass, _orbitalL).real()*currentMass/2. * momQ2L) );
+  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*curre\
+ntFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L) );
   
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME)) = currentResult;
   return currentFAmp;
