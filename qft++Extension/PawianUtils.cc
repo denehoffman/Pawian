@@ -212,6 +212,11 @@ double PawianQFT::Offset_Dudek_Reid(double massDec1, double massDec2){
     return result;
 }
 
+complex<double> PawianQFT::ChewMandelstamDudek_AngularMomentum(double s, double massDec1, double massDec2, int orbMom){
+  complex<double> scompl(s, 1.e-10);
+  return PawianQFT::ChewMandelstamDudek_AngularMomentum(scompl, massDec1, massDec2, orbMom);
+}
+
 complex<double> PawianQFT::ChewMandelstamDudek_AngularMomentum(complex<double> s, double massDec1, double massDec2, int orbMom){
 
     complex<double> CM_ReidMom = PawianQFT::ChewMandelstamReid_AngularMomentum(s, massDec1, massDec2, orbMom);
