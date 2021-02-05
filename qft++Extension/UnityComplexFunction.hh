@@ -49,7 +49,7 @@ public:
   virtual ~UnityComplexFunction(){;}
   virtual complex<double> eval(double s) {return complex<double>(1.,0.);}
   virtual complex<double> eval(complex<double> s) {return complex<double>(1.,0.);}
-  
+    
 protected:
   
 };

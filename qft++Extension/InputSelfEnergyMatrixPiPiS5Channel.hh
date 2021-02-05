@@ -24,22 +24,20 @@ class InputSelfEnergyMatrixPiPiS5Channel : public AbsComplexFunction{
 public:
 
 /// Constructor 
-InputSelfEnergyMatrixPiPiS5Channel(unsigned int i, unsigned int j){  cacheAmps(i,j); }
+InputSelfEnergyMatrixPiPiS5Channel(unsigned int i, unsigned int j) : AbsComplexFunction() 
+    { cacheAmps(i,j);  }
 
 /// Destructor
 virtual ~InputSelfEnergyMatrixPiPiS5Channel(){;}
-virtual complex<double> eval(double current_s) {return interpolate(current_s);}
-virtual complex<double> eval(complex<double> current_s) {return interpolate(current_s);}
+virtual complex<double> eval(double current_s);
+//virtual complex<double> eval(complex<double> current_s);
   
 protected:
   void cacheAmps(unsigned int i, unsigned int j);
-  complex<double> interpolate(double current_s);
-  complex<double> interpolate(complex<double> current_s);
+
+  virtual complex<double> interpolate(double current_s);
 
   std::ifstream inInputSelfEnergyMatrixPiPiS5Channel;
-  std::vector<double> s;
-  std::vector<double> realp;
-  std::vector<double> imagp;
   int nCalled;
   double m_1;
   double m_2;

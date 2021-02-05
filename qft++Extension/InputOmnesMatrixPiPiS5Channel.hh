@@ -32,13 +32,8 @@ virtual complex<double> eval(complex<double> current_s) {return interpolate(curr
   
 protected:
   void cacheAmps(unsigned int i, unsigned int j);
-  complex<double> interpolate(double current_s);
-  complex<double> interpolate(complex<double> current_s);
 
   std::ifstream inInputOmnesMatrixPiPiS5Channel;
-  std::vector<double> s;
-  std::vector<double> realp;
-  std::vector<double> imagp;
   int nCalled;
 };
 

@@ -20,6 +20,7 @@
 //									  //
 //************************************************************************//
 
+#include <algorithm>
 #include "qft++Extension/AbsComplexFunction.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "qft++Extension/PawianUtils.hh"
@@ -38,3 +39,37 @@ complex<double> AbsComplexFunction::eval(double s){
 complex<double> AbsComplexFunction::eval(complex<double> s){
   return complex<double>(1.,0.);
 }
+
+complex<double> AbsComplexFunction::interpolate(double current_s){
+    std::vector<double>::iterator it;
+    it = std::upper_bound(_s.begin(), _s.end(), current_s);
+    int low = (it-_s.begin())-1;
+    int up = (it-_s.begin());
+    if(up == (int)_s.size()){
+        low -= 1;
+        up -= 1;
+    }
+
+    // get s, real and imag for lower and upper tabulated values
+    double slow = _s.at(low); double sup = _s.at(up);
+    double reallow = _realp.at(low); double realup = _realp.at(up);
+    double imaglow = _imagp.at(low); double imagup = _imagp.at(up);
+
+    // linear interpolation to actual s
+    double m_real = (realup - reallow)/(sup - slow);
+    double b_real = (realup + reallow-m_real*(sup + slow))/2.;
+    double actual_real = m_real * current_s + b_real;
+
+    double m_imag = (imagup - imaglow)/(sup - slow);
+    double b_imag = (imagup + imaglow-m_imag*(sup + slow))/2.;
+    double actual_imag = m_imag * current_s + b_imag;
+
+    complex<double>amp = complex<double>(actual_real,actual_imag);
+    return amp;
+}
+
+
+complex<double> AbsComplexFunction::interpolate(complex<double>current_s){
+  return complex<double>(0,0);
+}
+

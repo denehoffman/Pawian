@@ -51,7 +51,14 @@ public:
   virtual complex<double> eval(complex<double> s);
   
 protected:
-  
+ 
+  virtual complex<double> interpolate(double current_s);
+  virtual complex<double> interpolate(complex<double> current_s);  
+
+  std::vector<double> _s;
+  std::vector<double> _realp;
+  std::vector<double> _imagp;
+
 };
 
 

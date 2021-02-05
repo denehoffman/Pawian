@@ -13,9 +13,9 @@ void InputSelfEnergyMatrixPiPiS5Channel::cacheAmps(unsigned int i, unsigned int 
 		std::stringstream ss;
 		ss << line;
 		ss >> s1 >> s2 >> s3;
-		s.push_back(atof(s1.c_str())*atof(s1.c_str())); //table is in sqrt(s)
-		realp.push_back(atof(s2.c_str()));
-		imagp.push_back(atof(s3.c_str()));
+		_s.push_back(atof(s1.c_str())*atof(s1.c_str())); //table is in sqrt(s)
+		_realp.push_back(atof(s2.c_str()));
+		_imagp.push_back(atof(s3.c_str()));
 		}
 		inInputSelfEnergyMatrixPiPiS5Channel.close();
 		nCalled = -99;
@@ -35,40 +35,15 @@ void InputSelfEnergyMatrixPiPiS5Channel::cacheAmps(unsigned int i, unsigned int 
 complex<double> InputSelfEnergyMatrixPiPiS5Channel::interpolate(double current_s){
 	complex<double>amp=0;
 	if(!useAnalyticForm){
-		std::vector<double>::iterator it;
-		it = std::upper_bound(s.begin(), s.end(), current_s);
-		int low = (it-s.begin())-1;
-		int up = (it-s.begin());	
-		if(up == (int)s.size()){
-			low -= 1;
-			up -= 1;
-		}	
 
-		// get s, real and imag for lower and upper tabulated values
-		double slow = s.at(low); double sup = s.at(up);
-		double reallow = realp.at(low); double realup = realp.at(up);
-		double imaglow = imagp.at(low); double imagup = imagp.at(up);
+        amp = AbsComplexFunction::interpolate(current_s);
 
-		// linear interpolation to actual s
-		double m_real = (realup - reallow)/(sup - slow);
-		double b_real = (realup + reallow-m_real*(sup + slow))/2.;
-		double actual_real = m_real * current_s + b_real;
-
-		double m_imag = (imagup - imaglow)/(sup - slow);
-		double b_imag = (imagup + imaglow-m_imag*(sup + slow))/2.;
-		double actual_imag = m_imag * current_s + b_imag;
-
-		amp = complex<double>(actual_real,actual_imag);
 	}
 	else if(useAnalyticForm){
 		amp = SE4455(current_s,m_1,m_2);
 	}
 
 	return amp;
-}
-
-complex<double> InputSelfEnergyMatrixPiPiS5Channel::interpolate(complex<double> current_s){
-  return complex<double>(0,0);
 }
 
 double InputSelfEnergyMatrixPiPiS5Channel::kaellen(double current_s, double m1, double m2){
@@ -103,4 +78,12 @@ complex<double> InputSelfEnergyMatrixPiPiS5Channel::SE4455(double current_s, dou
 	return out;
 }
 
+complex<double> InputSelfEnergyMatrixPiPiS5Channel::eval(double current_s){
 
+    return interpolate(current_s);
+}
+
+//complex<double> InputSelfEnergyMatrixPiPiS5Channel::eval(complex<double> current_s){
+//    return AbsComplexFunction::interpolate(current_s);
+//    return interpolate(current_s);
+//}
