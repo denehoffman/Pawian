@@ -74,7 +74,7 @@ TMatrixExtrBase::~TMatrixExtrBase()
 
 
 double TMatrixExtrBase::calcTMatrix(double eReal, double eImag){
-  _tMatr->evalMatrix( std::complex<double>(eReal, eImag) );
+  _tMatr->evalMatrix( std::complex<double>(eReal, eImag), _orbitalL );
   return std::abs((*_tMatr)(_decProjectionIndex,_decProjectionIndex));
 }
 

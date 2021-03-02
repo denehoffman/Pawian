@@ -105,19 +105,19 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
     theData->DoubleMassId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::M_PIPISCAT_NAME));
   _tMatr->evalMatrix(currentMass, OrbMom);
 
-  if(_dataTypeID==1) evalElasticity(theData, currentMass);   
+  if(_dataTypeID==1) evalElasticity(theData, currentMass, OrbMom);   
   else if(_dataTypeID==2){
-    if(!_prodIsNotDecChannel) evalPhase(theData, currentMass);
-    else evalRelativePhase(theData, currentMass);
+    if(!_prodIsNotDecChannel) evalPhase(theData, currentMass, OrbMom);
+    else evalRelativePhase(theData, currentMass, OrbMom);
   }
   else if(_dataTypeID==3){
-    evalArgandUnits(theData, currentMass);
+    evalArgandUnits(theData, currentMass, OrbMom);
   }
   else if(_dataTypeID==7){
-    evalTreal(theData, currentMass);
+    evalTreal(theData, currentMass, OrbMom);
   }
   else if(_dataTypeID==8){
-    evalTimag(theData, currentMass);
+    evalTimag(theData, currentMass, OrbMom);
   }
   else{
     Alert << "_dataTypeID = " <<_dataTypeID << " is not supported!!!" << endmsg;
@@ -432,7 +432,7 @@ void TMatrixDynamics::init(){
 
 }
 
-void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
+void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass, Spin OrbMom){
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
   complex<double> SijRel;
@@ -440,13 +440,13 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
   //note: this is a workaround
   if(_prodProjectionIndex == _decProjectionIndex){
     SijRel=complex<double>(1.,0.)+2.*PawianConstants::i *
-      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real() *
-	   thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real()) * currentTijRel;
+      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, OrbMom).real() *
+	   thePhpVecs[_decProjectionIndex]->factor(currentMass, OrbMom).real()) * currentTijRel;
   }
   else{
     SijRel=2.*PawianConstants::i *
-      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real() *
-	   thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real()) * currentTijRel;
+      sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, OrbMom).real() *
+	   thePhpVecs[_decProjectionIndex]->factor(currentMass, OrbMom).real()) * currentTijRel;
   }
   
   //protection against numerical instabilities
@@ -454,8 +454,8 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
     WarningMsg << "numerical instability of norm(SijRel) yields to NAN ... redo calculation for mass+0.0001"
 	       << endmsg;
     double newCurrentMass=currentMass+0.0001;
-    _tMatr->evalMatrix(newCurrentMass, _orbitalL);
-    evalElasticity(theData, newCurrentMass);
+    _tMatr->evalMatrix(newCurrentMass, OrbMom);
+    evalElasticity(theData, newCurrentMass, OrbMom);
     return;
   } 
 
@@ -463,9 +463,9 @@ void TMatrixDynamics::evalElasticity(EvtData* theData, double currentMass){
 }
 
 
-void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
+void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass, Spin OrbMom=0){
 
-  double deltaRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
+  double deltaRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass, OrbMom);
   while(deltaRel>180.) deltaRel-=180.;
   while(deltaRel<0.) deltaRel+=180.;
 
@@ -478,9 +478,9 @@ void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass){
 
 }
 
-void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass){
-  double deltaiiRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass);
-  double deltajjRel = KMatrixFunctions::deltaArgand(_tMatr, _decProjectionIndex, currentMass); 
+void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass, Spin OrbMom){
+  double deltaiiRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass, OrbMom);
+  double deltajjRel = KMatrixFunctions::deltaArgand(_tMatr, _decProjectionIndex, currentMass, OrbMom); 
   double phiRelFit=deltaiiRel+deltajjRel+_currentRelPhase;
 
   double phiRelData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
@@ -491,26 +491,26 @@ void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass){
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=phiRelFit;
 }
 
-void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass){
+void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass, Spin OrbMom){
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
   complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
 
   double sqrTij=0.;
-  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real() > 
-      1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real() > 1.e-10) {
-    sqrTij=(2.*_orbitalL+1.) * norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, _orbitalL).real()) *
-				    currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass, _orbitalL).real()));
+  if( thePhpVecs[_prodProjectionIndex]->factor(currentMass, OrbMom).real() > 
+      1.e-10 && thePhpVecs[_decProjectionIndex]->factor(currentMass, OrbMom).real() > 1.e-10) {
+    sqrTij=(2.*_orbitalL+1.) * norm(sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, OrbMom).real()) *
+				    currentTijRel*sqrt(thePhpVecs[_decProjectionIndex]->factor(currentMass, OrbMom).real()));
   }
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=sqrTij;
 }
 
-void TMatrixDynamics::evalTreal(EvtData* theData, double currentMass){
+void TMatrixDynamics::evalTreal(EvtData* theData, double currentMass, Spin OrbMom){
   complex<double> currentTijRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.real();
 }
 
-void TMatrixDynamics::evalTimag(EvtData* theData, double currentMass){
+void TMatrixDynamics::evalTimag(EvtData* theData, double currentMass, Spin OrbMom){
   complex<double> currentTijRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.imag();
 }

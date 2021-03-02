@@ -34,15 +34,15 @@
 class TMatrixRel;
 
 namespace KMatrixFunctions { 
-  double twoDeltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
-  double deltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
+  double twoDeltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass, int orbMom=0);
+  double deltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass, int orbMom);
   double deltaArgandWSigma(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex,
-			   double mass, double sigma, unsigned int noOfPoints=2);
-  unsigned int calcNoRots(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass);
+			   double mass, double sigma, int orbMom, unsigned int noOfPoints=2);
+  unsigned int calcNoRots(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass, int orbMom);
   unsigned int noOfPhaseRotationsArgand(std::shared_ptr<TMatrixRel> tMatr,
-					unsigned int projectionIndex, double mass);
+					unsigned int projectionIndex, double mass, int orbMom);
   void fillRotationArgandMap(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex,
-			     std::map<unsigned int, double>& toFill, double massMax=4.0);
+			     std::map<unsigned int, double>& toFill, int orbMom, double massMax=4.0);
 }; // namespace KMatrixFunctions
 
 

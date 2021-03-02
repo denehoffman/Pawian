@@ -39,7 +39,7 @@ KPoleBarrier::KPoleBarrier(vector<double>& g_i, double mass_0, vector<std::share
     // _breakUpM0.at(i)=_phpVecs.at(i)->breakUpMomDefaultAS(mass_0);
     _phpVecs.at(i)->breakUpMom(mass_0);
     _woBarrier.at(i)=false;
-    if(_phpVecs.at(i)->name()=="ReidAngularMomentum" || _phpVecs.at(i)->name()=="DudekAngularMomentum") _woBarrier.at(i)=true;
+    //    if(_phpVecs.at(i)->name()=="ReidAngularMomentum" || _phpVecs.at(i)->name()=="DudekAngularMomentum") _woBarrier.at(i)=true;
   }
 }
 

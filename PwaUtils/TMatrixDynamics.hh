@@ -96,12 +96,12 @@ protected:
   std::map<unsigned int, double > _noRotationMap;
   std::string _projectionParticleNames;
   virtual void init();
-  virtual void evalElasticity(EvtData* theData, double currentMass);
-  virtual void evalPhase(EvtData* theData, double currentMass);
-  virtual void evalRelativePhase(EvtData* theData, double currentMass);
-  virtual void evalArgandUnits(EvtData* theData, double currentMass);
-  virtual void evalTreal(EvtData* theData, double currentMass);
-  virtual void evalTimag(EvtData* theData, double currentMass);
+  virtual void evalElasticity(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalPhase(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalRelativePhase(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalArgandUnits(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalTreal(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalTimag(EvtData* theData, double currentMass, Spin OrbMom);
   unsigned int noOfRotations(double currentMass);
 private:
 
