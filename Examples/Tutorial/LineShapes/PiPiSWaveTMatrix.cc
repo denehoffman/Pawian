@@ -34,6 +34,7 @@
 #include "PwaDynamics/TMatrixNonRel.hh"
 #include "PwaDynamics/KMatrixPiPiS.hh"
 #include "PwaDynamics/KPole.hh"
+#include "PwaDynamics/KMatrixFunctions.hh"
 //#include "PwaDynamics/KPoleNonRel.hh"
 #include "PwaDynamics/KMatrixSlowAdlerCorRel.hh"
 #include "PwaDynamics/KMatrixNonRel.hh"
@@ -82,6 +83,7 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
   _argandRelH2->SetXTitle("Re(#rho_{00}#hat{T}_{00})");
   _phaseShiftDegH2=new TH2F("_phaseShiftDegH2", "phase shift deg",301, massMin, massMax, 301, 0., 360.);
   _phaseShiftDegRelH2=new TH2F("_phaseShiftDegRelH2", "phase shift deg rel",301, massMin, massMax, 301, 0., 360.);
+  _phaseShiftFromPOORelH2=new TH2F("_phaseShiftFromPOORelH2", "phase shift from POO deg rel",301, massMin, massMax, 301, 0., 360.);
   _elasticityH1=new TH1F("_elasticityH1", "elasticity", size, massMin, massMax);
 
 
@@ -132,6 +134,7 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
     delta += 180.0*n180Shift;
     _phaseShiftDegH2->Fill(mass, delta);
 
+    
     theTMatrix->evalMatrix(mass);    
     complex<double> currentT00Rel=(*theTMatrix)(0,0);
     complex<double> S00_rel=complex<double>(1.,0.)+2.*complex<double>(0.,1.)*thePhpVecs[0]->factor(mass4Vec.M()).real()*(*theTMatrix)(0,0);
@@ -165,7 +168,11 @@ PiPiSWaveTMatrix::PiPiSWaveTMatrix() :
     deltaRel += 180.0*n180ShiftRel;
     _phaseShiftDegRelH2->Fill(mass, deltaRel);
     oldT00Real=currentT00.real();
-    oldT00RelReal=currentT00Rel_rho.real();     
+    oldT00RelReal=currentT00Rel_rho.real();
+
+    double deltaPOO=std::arg(currentT00Rel_rho)*PawianConstants::radToDeg;
+    deltaPOO += 180.0*n180ShiftRel;
+    _phaseShiftFromPOORelH2->Fill(mass, deltaPOO);
   }
 }
 

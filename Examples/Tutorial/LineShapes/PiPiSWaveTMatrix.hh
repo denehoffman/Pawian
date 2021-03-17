@@ -75,6 +75,7 @@ private:
   TH2F*  _argandRelH2;
   TH2F* _phaseShiftDegH2;
   TH2F* _phaseShiftDegRelH2;
+  TH2F* _phaseShiftFromPOORelH2;
   TH1F* _elasticityH1;
 };
 
