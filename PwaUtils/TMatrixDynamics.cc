@@ -479,14 +479,23 @@ void TMatrixDynamics::evalPhase(EvtData* theData, double currentMass, Spin OrbMo
 }
 
 void TMatrixDynamics::evalRelativePhase(EvtData* theData, double currentMass, Spin OrbMom){
-  double deltaiiRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass, OrbMom);
-  double deltajjRel = KMatrixFunctions::deltaArgand(_tMatr, _decProjectionIndex, currentMass, OrbMom); 
-  double phiRelFit=deltaiiRel+deltajjRel+_currentRelPhase;
-
+  //double deltaiiRel = KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass, OrbMom);
+  //double deltajjRel = KMatrixFunctions::deltaArgand(_tMatr, _decProjectionIndex, currentMass, OrbMom); 
+  //double phiRelFit=deltaiiRel+deltajjRel+_currentRelPhase;
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+  complex<double> SijRel;
+  SijRel=2.*PawianConstants::i *
+    sqrt(thePhpVecs[_prodProjectionIndex]->factor(currentMass, OrbMom).real() *
+	 thePhpVecs[_decProjectionIndex]->factor(currentMass, OrbMom).real()) * currentTijRel;
+ 
+  double phiRelFit=KMatrixFunctions::deltaArgand(_tMatr, _prodProjectionIndex, currentMass, OrbMom);
+  if(thePhpVecs[_decProjectionIndex]->factor(currentMass, OrbMom).real() > 1.e-5) phiRelFit=std::arg(SijRel)*PawianConstants::radToDeg;
+  
   double phiRelData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
 
-  while( (phiRelData-phiRelFit) >  90.) phiRelFit+=180.;
-  while( (phiRelFit-phiRelData) >  90.) phiRelFit-=180.;
+  while( (phiRelData-phiRelFit) >  180.) phiRelFit+=360.;
+  while( (phiRelFit-phiRelData) >  180.) phiRelFit-=360.;
 
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=phiRelFit;
 }

@@ -37,7 +37,7 @@ double KMatrixFunctions::twoDeltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsig
 
 double KMatrixFunctions::deltaArgand(std::shared_ptr<TMatrixRel> tMatr, unsigned int projectionIndex, double mass, int orbMom){
   vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=tMatr->kMatrix()->phaseSpaceVec();
-  tMatr->evalMatrix(mass); 
+  tMatr->evalMatrix(mass, orbMom); 
   complex<double> currentTiiRel_rho=(*tMatr)(projectionIndex, projectionIndex) *
     thePhpVecs.at(projectionIndex)->factor(mass, orbMom).real();
   double currentReERel = currentTiiRel_rho.real();

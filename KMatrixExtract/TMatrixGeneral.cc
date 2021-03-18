@@ -255,7 +255,8 @@ void TMatrixGeneral::process(){
 	
 	_ArgandH2Vec.at(i)->Fill( currentRho.real()*(*_tMatr)(i,i).real(), 
 				  currentRho.real()*(*_tMatr)(i,i).imag());
-	double currentphase=180.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
+	//double currentphase=180.*atan2((*_tMatr)(i,i).imag(),(*_tMatr)(i,i).real()) / 3.1415;
+	double currentphase = std::arg((*_tMatr)(i,i))*PawianConstants::radToDeg;
        	complex<double> SijRel_phi=complex<double>(1.,0.)+2.*PawianConstants::i*currentRho.real() *
 	  (*_tMatr)(i,i);
 	if(i==0) {
