@@ -29,6 +29,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <vector>
 #include <math.h>
 
 #include "TMath.h"
@@ -129,5 +130,59 @@ class IOTools
  
     }
   }
+
+
+  static void setParams(std::string iFileName, std::string oFileName, std::string subStrings, double newParam){
+    std::vector<std::string> subStringsVec=SplitWords(subStrings);
+    
+    std::ifstream inputStream(iFileName.c_str());
+    if(!inputStream.is_open()){
+      std::cout << "Could not open input file: " << iFileName << std::endl;
+      exit(0);
+    }
+
+    std::ofstream oStream(oFileName.c_str());
+
+        while (!inputStream.eof()){
+      std::string currentLine;
+      getline (inputStream, currentLine);
+      std::vector<std::string> stringsInLine=SplitWords(currentLine);
+      //std::string parname=findWord(currentLine);
+      if(stringsInLine.size()>2){
+	 bool found=false;
+	 std::vector<std::string>::iterator itString;
+	 for(itString=subStringsVec.begin(); itString!=subStringsVec.end(); ++itString){
+	   std::size_t  pos1= stringsInLine.at(0).find( *(itString) );
+         if (pos1 != string::npos){
+	   oStream << stringsInLine.at(0) << "\t" << newParam << "\t" << stringsInLine.at(2);
+	   std::cout << stringsInLine.at(0)
+		     << " replaced val " << stringsInLine.at(2) << " by " << newParam << std::endl; 
+	   if(stringsInLine.size()==5){
+	     oStream << "\t" << stringsInLine.at(3) << "\t" << stringsInLine.at(4);
+	   }
+	   oStream << std::endl;
+	   found = true;
+	   break;
+	 }
+	 }
+	 if(!found) oStream << currentLine << std::endl;
+      }
+    }
+	inputStream.close();
+	oStream.close();
+  }
+
+  //private:
+
+ static std::vector<std::string> SplitWords(std::string s)
+{
+    std::istringstream iss (s);
+    std::vector<std::string> v;
+    while(iss >> s)
+    {
+        v.push_back(s);
+    }
+    return v;
+}
 };
 
