@@ -86,6 +86,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_fixAllPhases(false)
   ,_nllScalingFactor(1.)
   ,_addChannelScalingId(false)
+  ,_channelScalingSuffix("")
   ,_minuitStrategyLevel(1)
   ,_singleChannelId(0)
   ,_sProdExp(0.0)
@@ -192,6 +193,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("projectile4Vec", po::value<string>(&_projectile4VecStr),"4 Vector of the projectile (order: E, px, py, pz")
     ("nllScalingFactor", po::value<double>(&_nllScalingFactor), "NLL scaling factor for individual channels")
     ("addChannelScalingId",po::value<bool>(&_addChannelScalingId), "add Id to parameter name for channel scaling")
+    ("channelScalingSuffix",po::value<string>(& _channelScalingSuffix), "suffix for name of channel scling parameter")
     ("sProdExponent", po::value<double>(&_sProdExp)->default_value(_sProdExp),"exponent for the s dependency in the production (supported for FVectorIntensity and Gamgam fits")
     ("useParticleNameForPVecBg",po::value<bool>(&_useParticleNameForPVecBg), "yes: (cloned) particle name; no: K-matrix name")
     ("fixPrimaryChannelScaling",po::value<bool>(&_fixPrimaryChannelScaling), "fix/release scaling of first channel for coupled channel mode")
@@ -303,6 +305,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
     << "singleChannelId: " << _singleChannelId << "\n\n"
 		<< "nllScalingFactor: " << _nllScalingFactor << "\n\n"
 		<< "addChannelScalingId: " <<_addChannelScalingId << "\n\n"
+		<< "channelScalingSuffix: " <<_channelScalingSuffix << "\n\n"
 		<< "minuitStrategyLevel: " << _minuitStrategyLevel << "\n\n"
 	        << "useParticleNameForPVecBg: " << _useParticleNameForPVecBg << "\n\n"
                 << endl;

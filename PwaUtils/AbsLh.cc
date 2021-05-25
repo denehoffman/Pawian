@@ -92,7 +92,7 @@ void AbsLh::initialize(){
     for (itParticle=fsParticles.begin(); itParticle != fsParticles.end(); ++itParticle){
        channelScaleParamStream << (*itParticle)->name();
     }
-    channelScaleParamStream << "Scaling";
+    channelScaleParamStream << "Scaling"+GlobalEnv::instance()->Channel(_channelID)->parser()->channelScalingSuffix();
     if(GlobalEnv::instance()->Channel(_channelID)->parser()->addChannelScalingId()){
       channelScaleParamStream << _channelID;
     }

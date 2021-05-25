@@ -128,6 +128,7 @@ public:
   const bool fixAllPhases() const {return _fixAllPhases;}
   const double nllScalingFactor() const {return _nllScalingFactor;}
   const bool addChannelScalingId() const{return _addChannelScalingId;}
+  const std::string channelScalingSuffix() const {return _channelScalingSuffix;}
   const unsigned int minuitStrategyLevel() const{return _minuitStrategyLevel;}
   const unsigned int singleChannelId() const{ return _singleChannelId;}
   const double sProdExponent() const {return _sProdExp;}
@@ -217,6 +218,7 @@ protected:
   bool _fixAllPhases;
   double _nllScalingFactor;
   bool _addChannelScalingId;
+  std::string _channelScalingSuffix;
   unsigned int _minuitStrategyLevel;
   unsigned int _singleChannelId;
   double _sProdExp;
