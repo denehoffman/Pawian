@@ -193,7 +193,8 @@ void  gamgamBaseLh::initialize(){
 
   std::string decMass2Str;
   decMomParamsStringStr >> decMass2Str;
-  _decMass1=atof(decMass2Str.c_str());
+  //  _decMass1=atof(decMass2Str.c_str());
+  _decMass2=atof(decMass2Str.c_str()); 
 
   _sProdExp = theggParser->sProdExponent();
 }
