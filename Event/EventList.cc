@@ -93,6 +93,12 @@ Event* EventList::nextEvent()
   } else
     return 0;
 }
+
+Event* EventList::event(unsigned int evtNo)
+{
+  if(evtNo>eventList.size()) return 0;
+  return eventList.at(evtNo);
+}
  
 void EventList::rewind()
 {

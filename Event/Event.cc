@@ -23,6 +23,7 @@
 
 #include "Event/Event.hh"
 #include <vector>
+#include <fstream>
 
 Event::Event() : weight(1.),
   evtNo(0)
@@ -96,6 +97,20 @@ void Event::addWeight(double theWeight)
 int Event::size()
 {
   return particles.size();
+}
+
+void Event::dumpEvt(std::ostream& os, bool useMeV){
+  os << weight << std::endl;
+  for(unsigned int i=0; i<particles.size(); ++i){
+    Vector4<float>* p4Vec=p4(i);
+    if(useMeV){
+      os << p4Vec->E()*1000. << "\t" << p4Vec->Px()*1000. << "\t" <<  p4Vec->Py()*1000. << "\t" <<  p4Vec->Pz()*1000. << std::endl;
+    }
+    else{
+    os << p4Vec->E() << "\t" << p4Vec->Px() << "\t" <<	p4Vec->Py() << "\t" <<	p4Vec->Pz() << std::endl;
+    }
+  }
+  
 }
 
 bool Event::operator<(const Event& compare) const{

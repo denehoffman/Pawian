@@ -30,6 +30,7 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/random.hpp>
 
 #include "AppUtils/AppBase.hh"
 
@@ -107,6 +108,38 @@ void AppBase::dumpRandomParams(){
   
   std::shared_ptr<AbsPawianParameters> randomParams=GlobalEnv::instance()->randomPawianParams();
   randomParams->print(theStreamRandom);
+}
+
+void AppBase::dumpBootstrapEvts(EventList& theEventList, int noOfEvts, int noOfFiles, std::string filename, bool useMeV){
+  typedef boost::mt19937 RandomGenerator;
+
+  int dataEvtSize = theEventList.size();
+  boost::random::uniform_int_distribution<> rndNo(0,dataEvtSize-1);
+  for (int fileIndex=1; fileIndex<=noOfFiles; fileIndex++){
+    auto seed = chrono::high_resolution_clock::now().time_since_epoch().count();
+    static RandomGenerator rng(static_cast<unsigned> (seed));
+    std::ostringstream currentFileName;
+    std::stringstream sstreamIndex;
+    sstreamIndex << fileIndex;
+    currentFileName << filename << "_" << sstreamIndex.str() << ".dat";
+    std::ofstream currentStream ( currentFileName.str().c_str() );
+    bool pickOutNextEvt=true;
+    double weightSum=0.;
+    while(pickOutNextEvt){
+      int evtIndex = rndNo(rng);
+      Event* currentEvt=theEventList.event(evtIndex);
+      if(0==currentEvt){
+	Alert << "no event available for index: " << evtIndex << endmsg;
+	exit(1);
+      }
+      currentEvt->dumpEvt(currentStream, useMeV);
+      weightSum+=currentEvt->Weight();
+      if(weightSum>noOfEvts){
+	pickOutNextEvt=false;
+      }
+    }
+    currentStream.close();
+  }
 }
 
 void AppBase::generate(std::shared_ptr<AbsPawianParameters> theParams){

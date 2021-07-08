@@ -40,6 +40,7 @@ public:
   void removeAndDeleteEvents(unsigned int nBegin, unsigned int nEnd);
 
   Event* nextEvent();
+  Event* event(unsigned int evtNo);
   void rewind();
 
   void setParticleType(int num, Particle* partRef);

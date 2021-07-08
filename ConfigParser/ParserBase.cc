@@ -76,6 +76,9 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_genWithModel(true)
   ,_noOfGenEvts(10000)
   ,_noOfDataEvts(1000000)
+  ,_noOfBootstrapEvts(10000)
+  ,_noOfBootstrapFiles(1)
+  ,_boostrapFileName("bootstrapFile")
   ,_tolerance(0.1) 
   ,_noInterScattPoints(0)
   ,_intitial4VecStr("")
@@ -185,6 +188,9 @@ ParserBase::ParserBase(int argc,char **argv)
     ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
     ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
     ("noOfDataEvents",po::value<int>(&_noOfDataEvts),  "number of data events for PWA and qa")
+    ("noOfBootstrapEvts",po::value<int>(&_noOfBootstrapEvts), "number of required bootstrap events")
+    ("noOfBootstrapFiles",po::value<int>(&_noOfBootstrapFiles), "number of bootstrap files")
+    ("boostrapFileName", po::value<string>(&_boostrapFileName), "name of the output files from the bootsrap method")
     ("calcContribution",po::value< vector<string> >(&_calcContribution),  "Calculate contribution of partial wave")
     ("minimumTolerance", po::value<double>(&_tolerance), "Minimum tolerance")
     ("noOfInterpolatedScatteringPoints", po::value<int>(&_noInterScattPoints), "number of interpolated scattering points")
@@ -435,6 +441,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       std::cout << "\ngenerate with model:\t" << _genWithModel << std::endl;
       std::cout << "\nnumber of generated events:\t" << _noOfGenEvts << std::endl;
       std::cout << "\nnumber of data events:\t" << _noOfDataEvts << std::endl;
+      std::cout << "\nnumber of bootstrap events:\t" << _noOfBootstrapEvts << std::endl;
+      std::cout << "\nnumber of bootstrap files:\t" << _noOfBootstrapFiles << std::endl;
+      std::cout << "\nboostrap file name:\t" << _boostrapFileName << std::endl;
       std::cout << "sProdExponent =" << _sProdExp << std::endl;
     }
 

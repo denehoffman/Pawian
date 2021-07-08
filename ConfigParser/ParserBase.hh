@@ -117,6 +117,9 @@ public:
   const bool generateWithModel() const {return _genWithModel;}
   const int noOfGenEvts() const {return _noOfGenEvts;}
   const int noOfDataEvts() const {return _noOfDataEvts;}
+  const int noOfBootstrapEvts() const {return _noOfBootstrapEvts;}
+  const int noOfBootstrapFiles() const {return _noOfBootstrapFiles;}
+  const std::string bootstrapFileName() const {return _boostrapFileName;}
   const double tolerance() const {return _tolerance;}
   const int noOfInterpolatedScattPoints() const {return _noInterScattPoints;}
   const std::vector<std::string>& addKmatrixProdSuffix() const {return _kMatrixProdSuffix;}
@@ -207,6 +210,9 @@ protected:
   bool _genWithModel;
   int _noOfGenEvts;
   int _noOfDataEvts;
+  int _noOfBootstrapEvts;
+  int _noOfBootstrapFiles;
+  std::string _boostrapFileName;
   double _tolerance;
   int _noInterScattPoints;
   std::vector<std::string> _kMatrixProdSuffix;

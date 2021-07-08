@@ -27,6 +27,7 @@
 #include "qft++/tensor/Vector4.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include <vector>
+#include <fstream>
 
 enum pidType {proton, pion, kaon, muon, electron, photon, resonance, maxPid};
 
@@ -67,7 +68,8 @@ public:
   // double Eta() {return eta;}
   // double EtaErr() {return etaErr;}
   double DataPoint() {return dataPoint;}
-  double DataPointErr() {return dataPointErr;} 
+  double DataPointErr() {return dataPointErr;}
+  void dumpEvt(std::ostream& os, bool useMeV=false);
   bool operator<(const Event& compare) const;
 
 private:

@@ -277,7 +277,17 @@ int main(int __argc,char *__argv[]){
 
     theAppBase.readEvents(mcData, mcFileNames, 0, GlobalEnv::instance()->Channel()->useMCEvtWeight(), 0, maxMcEvts-1);
   }
-
+  
+  if (mode=="bootstrap"){
+    bool useMeV=false;
+    if(GlobalEnv::instance()->parser()->unitInFile()=="MEV") useMeV=true;
+    const int noOfBootstrapEvts=GlobalEnv::instance()->parser()->noOfBootstrapEvts();
+    const int noOfBootstrapFiles=GlobalEnv::instance()->parser()->noOfBootstrapFiles();
+    const std::string bootstrapFileNames=GlobalEnv::instance()->parser()->bootstrapFileName();
+    theAppBase.dumpBootstrapEvts(eventsData, noOfBootstrapEvts, noOfBootstrapFiles, bootstrapFileNames, useMeV);
+    return 1;
+  }
+  
   if (mode=="plotMode"){
     theAppBase.plotMode(eventsData, mcData, eventListPtr);
     return 1;
