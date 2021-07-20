@@ -143,6 +143,7 @@ void TMatrixResidueExtr::Calculation(){
     }
   }
   dumpResult(polePos, resPropReal, resPropImag, resPropAverage);
+  printResults(polePos, resPropAverage);
   return;
 }
 
@@ -224,6 +225,18 @@ void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
   }
 }
 
+void TMatrixResidueExtr::printResults(std::complex<double> polePos, std::vector<ResidueProperties> resPropAv){
+  InfoMsg << "******* Summary Residues *******" << endmsg;
+  InfoMsg << "M - i/2 Gamma = " << polePos.real()  << " - i/2 " << -2.*polePos.imag() << endmsg;
+
+  for (unsigned int i=0; i<resPropAv.size(); ++i){
+    InfoMsg << i
+	    << "\t" << resPropAv.at(i).gammai << " +/- " << resPropAv.at(i).errGammai
+	    << "\t" << -resPropAv.at(i).gammai/(2.*polePos.imag()) <<  " +/- " << -resPropAv.at(i).errGammai/(2.*polePos.imag())
+	    << endmsg;
+  }
+}
+
 void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, 
 				    std::vector<ResidueProperties> resPropImag, 
 				    std::vector<ResidueProperties> resPropAv){
@@ -262,3 +275,4 @@ void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
 	    << setw(12) << -sqrt(gammaTotalavError)/(2.*polePos.imag()) 
 	    << std::endl;
 }
+
