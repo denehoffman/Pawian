@@ -110,9 +110,12 @@ void AppBase::dumpRandomParams(){
   randomParams->print(theStreamRandom);
 }
 
-void AppBase::dumpBootstrapEvts(EventList& theEventList, int noOfEvts, int noOfFiles, std::string filename, bool useMeV){
-  typedef boost::mt19937 RandomGenerator;
+void AppBase::dumpBootstrapEvts(EventList& theEventList, int noOfEvts, int noOfFiles, std::string filename, bool useMeV, bool isPiPiScattering){
 
+  typedef boost::normal_distribution<double> NormalDistribution;
+  typedef boost::mt19937 RandomGenerator;
+  typedef boost::variate_generator<RandomGenerator&,   NormalDistribution> GaussianGenerator;
+  
   int dataEvtSize = theEventList.size();
   boost::random::uniform_int_distribution<> rndNo(0,dataEvtSize-1);
   for (int fileIndex=1; fileIndex<=noOfFiles; fileIndex++){
@@ -123,19 +126,35 @@ void AppBase::dumpBootstrapEvts(EventList& theEventList, int noOfEvts, int noOfF
     sstreamIndex << fileIndex;
     currentFileName << filename << "_" << sstreamIndex.str() << ".dat";
     std::ofstream currentStream ( currentFileName.str().c_str() );
-    bool pickOutNextEvt=true;
-    double weightSum=0.;
-    while(pickOutNextEvt){
-      int evtIndex = rndNo(rng);
-      Event* currentEvt=theEventList.event(evtIndex);
-      if(0==currentEvt){
-	Alert << "no event available for index: " << evtIndex << endmsg;
-	exit(1);
+
+    if(!isPiPiScattering){
+       bool pickOutNextEvt=true;
+      double weightSum=0.;
+      while(pickOutNextEvt){
+	int evtIndex = rndNo(rng);
+	Event* currentEvt=theEventList.event(evtIndex);
+	if(0==currentEvt){
+	  Alert << "no event available for index: " << evtIndex << endmsg;
+	  exit(1);
+	}
+	currentEvt->dumpEvt(currentStream, useMeV);
+	weightSum+=currentEvt->Weight();
+	if(weightSum>noOfEvts){
+	  pickOutNextEvt=false;
+	}
       }
-      currentEvt->dumpEvt(currentStream, useMeV);
-      weightSum+=currentEvt->Weight();
-      if(weightSum>noOfEvts){
-	pickOutNextEvt=false;
+    }
+    else{ //is scattering event
+
+      for (int i=0; i<theEventList.size(); ++i){
+	Event* currentEvt=theEventList.event(i);
+	double amplitude=currentEvt->DataPoint();
+	double amplitudeErr=currentEvt->DataPointErr();
+	NormalDistribution gaussian_dist(amplitude, amplitudeErr);
+	GaussianGenerator generator(rng, gaussian_dist);
+	double newVal = generator();
+	InfoMsg << currentEvt->p4(0)->Mass() << "\told: " << amplitude <<"\tnew: " <<newVal << "\t" << amplitudeErr << endmsg;
+	currentStream << currentEvt->p4(0)->Mass() << "\t" <<newVal << "\t" << amplitudeErr << std::endl;
       }
     }
     currentStream.close();

@@ -284,7 +284,7 @@ int main(int __argc,char *__argv[]){
     const int noOfBootstrapEvts=GlobalEnv::instance()->parser()->noOfBootstrapEvts();
     const int noOfBootstrapFiles=GlobalEnv::instance()->parser()->noOfBootstrapFiles();
     const std::string bootstrapFileNames=GlobalEnv::instance()->parser()->bootstrapFileName();
-    theAppBase.dumpBootstrapEvts(eventsData, noOfBootstrapEvts, noOfBootstrapFiles, bootstrapFileNames, useMeV);
+    theAppBase.dumpBootstrapEvts(eventsData, noOfBootstrapEvts, noOfBootstrapFiles, bootstrapFileNames, useMeV, isPiPiScatteringChannel);
     return 1;
   }
   
