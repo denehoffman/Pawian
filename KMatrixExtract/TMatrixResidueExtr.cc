@@ -78,6 +78,7 @@ using namespace ROOT::Minuit2;
 
 TMatrixResidueExtr::TMatrixResidueExtr(pipiScatteringParser* theParser) :
   TMatrixErrorExtr(theParser)
+  ,_extractionMethod("Laurent")
 {
 }
 
@@ -240,7 +241,7 @@ void TMatrixResidueExtr::printResults(std::complex<double> polePos, std::vector<
 void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, 
 				    std::vector<ResidueProperties> resPropImag, 
 				    std::vector<ResidueProperties> resPropAv){
-  std::string oFileName("residues.out");
+  std::string oFileName="residues_"+_extractionMethod+".out";
   std::ofstream theStream(oFileName);
   double gammaTotalr=0.;
   double gammaTotali=0.;

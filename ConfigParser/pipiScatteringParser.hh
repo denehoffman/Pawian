@@ -50,7 +50,8 @@ class pipiScatteringParser : public ParserBase
   const int noOfStepsForScan() {return _noOfStepsForScan;}
   const std::string sheet() const {return _sheet;}
   const std::string prodMomParamsStr() const {return _prodMomParamsStr;}
-
+  const std::string residueExtrMethod() const {return _residueExtrMethod;}
+  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   std::string _pathToKMatrixCompareFile;
@@ -65,6 +66,7 @@ protected:
   int _noOfStepsForScan;
   std::string _sheet;
   std::string _prodMomParamsStr;
+  std::string _residueExtrMethod;
 };
 
 

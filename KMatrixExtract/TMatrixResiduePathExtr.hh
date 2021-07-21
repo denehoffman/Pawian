@@ -1,7 +1,8 @@
 //************************************************************************//
 //									  //
-//  Copyright 2018 Bertram Kopf (bertram@ep1.rub.de)			  //
-//                 Xiaoshuai Qin (xqin@ep1.rub.de)  
+//  Copyright 2021 Meike Kuessner (mkussner@ep1.rub.de)                   //
+//                 Bertram Kopf (bertram@ep1.rub.de)			  //
+//                 Xiaoshuai Qin (xqin@ep1.rub.de)                        //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -20,8 +21,8 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-//TMatrixResidueExtr class definition file. -*- C++ -*-
-// Copyright 2018 Bertram Kopf
+//TMatrixResiduePathExtr class definition file. -*- C++ -*-
+// Copyright 2021 Meike Kuessner, Bertram Kopf
 
 #pragma once
 
@@ -34,41 +35,31 @@
 #include <memory>
 #include "math.h" 
 
-#include "KMatrixExtract/TMatrixErrorExtr.hh"
+#include "KMatrixExtract/TMatrixResidueExtr.hh"
 class AbsPawianParameters;
 class AbsPhaseSpace;
 class PwaCovMatrix;
 class pipiScatteringParser;
 
-struct ResidueProperties {
-  double absR;
-  double theta;
-  double gammai;
-  double errAbsR;
-  double errTheta;
-  double errGammai;
-};
 
-class TMatrixResidueExtr : public TMatrixErrorExtr {
+
+class TMatrixResiduePathExtr : public TMatrixResidueExtr {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  TMatrixResidueExtr(pipiScatteringParser* theParser);
+  TMatrixResiduePathExtr(pipiScatteringParser* theParser);
 
   /** Destructor */
-  virtual ~TMatrixResidueExtr();
+  virtual ~TMatrixResiduePathExtr();
 
   // Getters:
-  virtual void Calculation();
   virtual void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
 
 protected:
-  std::string _extractionMethod;
-  virtual void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
-  virtual void printResults(std::complex<double> polePos, std::vector<ResidueProperties> resPropAv);
+
   
 private:
 
