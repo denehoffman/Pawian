@@ -78,9 +78,9 @@
 using namespace ROOT::Minuit2;
 
 TMatrixResiduePathExtr::TMatrixResiduePathExtr(pipiScatteringParser* theParser) :
-  TMatrixResidueExtr(theParser)
+    TMatrixResidueExtr(theParser)
 {
-  _extractionMethod="Cauchy";
+    _extractionMethod="Cauchy";
 }
 
 TMatrixResiduePathExtr::~TMatrixResiduePathExtr()
@@ -88,9 +88,94 @@ TMatrixResiduePathExtr::~TMatrixResiduePathExtr()
 }
 
 void TMatrixResiduePathExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, 
-					std::complex<double>& polePos, std::vector<ResidueProperties>& resPropReal, 
-					std::vector<ResidueProperties>& resPropImag, 
-					std::vector<ResidueProperties>& resPropAverage){
-  //dummy
-}
+        std::complex<double>& polePos, std::vector<ResidueProperties>& resPropCircle, 
+        std::vector<ResidueProperties>& resPropEllipse, 
+        std::vector<ResidueProperties>& resPropAverage){
 
+    resPropCircle.resize(_phpVecs.size());
+    resPropEllipse.resize(_phpVecs.size());
+    resPropAverage.resize(_phpVecs.size());
+
+    polePos = CalcMassWidth(theFitParams);
+
+    InfoMsg << "\n\nm - i/2. Gamma: " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << endmsg;
+
+    for(unsigned int i=0 ; i<_phpVecs.size(); ++i) {
+
+        ResidueProperties  currentResPropCircle;
+        ResidueProperties  currentResPropEllipse;
+        ResidueProperties  currentResPropAverage;
+
+        // Circle
+        std::complex<double>riemannSum_Circle=std::complex<double> (0.,0.);
+        double theta = 0.;
+        double dTheta = 0.001;
+        double rho = 0.001;
+
+        std::complex<double> functionArgument=std::complex<double>(0.,0.);
+        std::complex<double> normFactor=std::complex<double>(0.,0.);
+        std::complex<double> result_Circle =std::complex<double>(0.,0.);
+
+        while(theta < 2.*3.141592){
+            functionArgument = (polePos+ rho*std::exp(PawianConstants::i *theta));
+            std::shared_ptr<TMatrixRel> currentTMat = getNewTMat();
+            currentTMat->evalMatrix(functionArgument, _orbitalL);
+
+            normFactor = std::exp(-PawianConstants::i * theta);
+            riemannSum_Circle +=  1./(sqrt(_phpVecs.at(i)->factor(functionArgument, _orbitalL)) *
+                    (*currentTMat)(i,i)*sqrt(_phpVecs.at(i)->factor(functionArgument, _orbitalL))) * normFactor * dTheta;
+            theta += dTheta;
+        }
+
+        result_Circle = 1./(2.*3.141592*rho) * riemannSum_Circle;
+        InfoMsg << "Result for circle contour: " << result_Circle << endmsg;
+
+
+        // Ellipse
+
+        std::complex<double>riemannSum_Ellipse=std::complex<double> (0.,0.);
+        normFactor=std::complex<double>(0.,0.);
+        theta = 0.;
+        dTheta = 0.001;
+        double a = 0.001;
+        double b = 0.0011;
+
+        std::complex<double> result_Ellipse =std::complex<double>(0.,0.);
+        functionArgument=std::complex<double>(0.,0.);
+        normFactor = std::complex<double>(0.,0.);
+
+        while(theta < 2.*3.141592){
+            functionArgument = (polePos+ std::complex<double>(a*cos(theta),b*sin(theta)));
+            std::shared_ptr<TMatrixRel> currentTMat = getNewTMat();
+            currentTMat->evalMatrix(functionArgument, _orbitalL);
+            normFactor = 1./std::complex<double>((b*cos(theta)),(a*sin(theta)));
+
+            riemannSum_Ellipse +=  1./(sqrt(_phpVecs.at(i)->factor(functionArgument, _orbitalL)) * 
+                    (*currentTMat)(i,i)*sqrt(_phpVecs.at(i)->factor(functionArgument, _orbitalL))) * normFactor * dTheta;
+
+            theta += dTheta;
+        }
+
+        result_Ellipse = 1./(2.*3.141592) * riemannSum_Ellipse;
+        InfoMsg << "Result for elliptic contour: " << result_Ellipse << endmsg;
+    
+        std::complex<double> resultApprox = (result_Circle+result_Ellipse)/2.; 
+
+        currentResPropCircle.absR=abs(1./result_Circle);
+        currentResPropEllipse.absR=abs(1./result_Ellipse);
+        currentResPropAverage.absR=abs(1./resultApprox);
+
+        currentResPropCircle.theta=atan2(imag(1./result_Circle),real(1./result_Circle));
+        currentResPropEllipse.theta=atan2(imag(1./result_Ellipse),real(1./result_Ellipse));
+        currentResPropAverage.theta=atan2(imag(1./resultApprox),real(1./resultApprox));
+
+        currentResPropCircle.gammai=2.*abs(1./result_Circle);
+        currentResPropEllipse.gammai=2.*abs(1./result_Ellipse);
+        currentResPropAverage.gammai=2.*abs(1./resultApprox);
+
+        resPropCircle.at(i)=currentResPropCircle;
+        resPropEllipse.at(i)=currentResPropEllipse;
+        resPropAverage.at(i)=currentResPropAverage;
+
+    }
+}
