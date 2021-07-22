@@ -35,7 +35,8 @@
 #include "FitParams/PwaCovMatrix.hh"
 #include "KMatrixExtract/TMatrixResidueExtr.hh"
 #include "KMatrixExtract/TMatrixResiduePathExtr.hh"
-#include "FVectorResidueExtr.hh" 
+#include "FVectorResidueExtr.hh"
+#include "KMatrixExtract/FVectorResiduePathExtr.hh"
 #include "ConfigParser/pipiScatteringParser.hh"
 
 #include "ErrLogger/ErrLogger.hh"
@@ -72,9 +73,17 @@ int main(int __argc,char *__argv[]){
   }
 
  std::shared_ptr<TMatrixResidueExtr> tMatrixResidueExtr;
-  if (productionFormalism =="PVecIntensity"){
-    tMatrixResidueExtr = std::shared_ptr<FVectorResidueExtr>(new FVectorResidueExtr(theParser));
-  }
+ if (productionFormalism =="PVecIntensity"){
+     //tMatrixResidueExtr = std::shared_ptr<FVectorResidueExtr>(new FVectorResidueExtr(theParser));
+
+     if(theParser->residueExtrMethod()=="Laurent") tMatrixResidueExtr = std::shared_ptr<FVectorResidueExtr>(new FVectorResidueExtr(theParser));
+     else if(theParser->residueExtrMethod()=="Cauchy") tMatrixResidueExtr = std::shared_ptr<FVectorResidueExtr>(new FVectorResiduePathExtr(theParser));
+     else{
+         Alert << "residue extraction method: " << theParser->residueExtrMethod() << " is not supported!!!!" << endmsg;
+         exit(0);
+     }
+
+ }
   else{
     if(theParser->residueExtrMethod()=="Laurent") tMatrixResidueExtr = std::shared_ptr<TMatrixResidueExtr> (new TMatrixResidueExtr(theParser));
     else if(theParser->residueExtrMethod()=="Cauchy") tMatrixResidueExtr = std::shared_ptr<TMatrixResidueExtr> (new TMatrixResiduePathExtr(theParser));

@@ -83,6 +83,7 @@ using namespace ROOT::Minuit2;
 FVectorResidueExtr::FVectorResidueExtr(pipiScatteringParser* theParser) :
   TMatrixResidueExtr(theParser)
   ,_pVecName("")
+  ,_extractionMethod("Laurent")
 {
   init();
 }
@@ -239,7 +240,7 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
 void FVectorResidueExtr::dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, 
 				    std::vector<ResidueProperties> resPropImag, 
 				    std::vector<ResidueProperties> resPropAv){
-  std::string oFileName("residuesFVector.out");
+  std::string oFileName="residuesFVector_"+_extractionMethod+".out";
   std::ofstream theStream(oFileName);
   double gammaTotalr=0.;
   double gammaTotali=0.;

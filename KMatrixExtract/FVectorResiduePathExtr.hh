@@ -19,7 +19,7 @@
 //  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
 //									  //
 //************************************************************************//
-//FVectorResidueExtr class definition file. -*- C++ -*-
+//FVectorResiduePathExtr class definition file. -*- C++ -*-
 // Copyright 2020 Bertram Kopf
 
 #pragma once
@@ -33,7 +33,7 @@
 #include <memory>
 #include "math.h" 
 
-#include "KMatrixExtract/TMatrixResidueExtr.hh"
+#include "KMatrixExtract/FVectorResidueExtr.hh"
 class AbsPawianParameters;
 class AbsPhaseSpace;
 class PwaCovMatrix;
@@ -41,29 +41,22 @@ class pipiScatteringParser;
 class FVectorIntensityDynamics;
 class FVector;
 
-class FVectorResidueExtr : public TMatrixResidueExtr {
+class FVectorResiduePathExtr : public FVectorResidueExtr {
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor 
-  FVectorResidueExtr(pipiScatteringParser* theParser);
+  FVectorResiduePathExtr(pipiScatteringParser* theParser);
 
   /** Destructor */
-  virtual ~FVectorResidueExtr();
+  virtual ~FVectorResiduePathExtr();
 
   // Getters:
   virtual void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
-  virtual void fillParams();
 
 protected:
-  virtual void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
-  std::shared_ptr<FVectorIntensityDynamics> _fVectorIntensityDynamics;
-  std::shared_ptr<FVector> _fVector; 
-  std::string _pVecName;
-  std::string _extractionMethod;
 
 private:
-  void init();
 };
