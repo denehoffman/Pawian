@@ -92,9 +92,11 @@ int main(int __argc,char *__argv[]){
   tMatErrExtract->printErrors();
   std::complex<double> error = tMatErrExtract->GetError();
   std::complex<double> result = tMatErrExtract->GetResult();
+  double absT=tMatErrExtract->calcTMatrix(result.real(), result.imag());
   InfoMsg << "      " << endmsg;
   InfoMsg << "      " << endmsg;
   InfoMsg << "      " << endmsg;
+  InfoMsg << " abs(T): " << absT << endmsg;
   InfoMsg << "result (M  -i/2 Gamma): " << result.real() << " +/- " << error.real() << "\t" << result.imag() << " +/- " << error.imag() << endmsg;
   InfoMsg << "result (M  Gamma): " << result.real() << " +/- " << error.real() << "\t" << -2.*result.imag() << " +/- " << 2.*error.imag() << endmsg;
   return 0;
