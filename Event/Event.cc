@@ -99,15 +99,18 @@ int Event::size()
   return particles.size();
 }
 
-void Event::dumpEvt(std::ostream& os, bool useMeV){
+void Event::dumpEvt(std::ostream& os, bool useMeV, std::string orderInFile){
   os << weight << std::endl;
   for(unsigned int i=0; i<particles.size(); ++i){
     Vector4<float>* p4Vec=p4(i);
     if(useMeV){
-      os << p4Vec->E()*1000. << "\t" << p4Vec->Px()*1000. << "\t" <<  p4Vec->Py()*1000. << "\t" <<  p4Vec->Pz()*1000. << std::endl;
+      if (orderInFile=="Px Py Pz E") os << p4Vec->Px()*1000. << "\t" <<  p4Vec->Py()*1000. << "\t" <<  p4Vec->Pz()*1000. << "\t" << p4Vec->E()*1000.  << std::endl;
+      else os << p4Vec->E()*1000. << "\t" << p4Vec->Px()*1000. << "\t" <<  p4Vec->Py()*1000. << "\t" <<  p4Vec->Pz()*1000. << std::endl;
     }
     else{
-    os << p4Vec->E() << "\t" << p4Vec->Px() << "\t" <<	p4Vec->Py() << "\t" <<	p4Vec->Pz() << std::endl;
+    if (orderInFile=="Px Py Pz E") os << p4Vec->Px() << "\t" <<  p4Vec->Py() << "\t" <<\
+  p4Vec->Pz() << "\t" << p4Vec->E()  << std::endl;  
+    else os << p4Vec->E() << "\t" << p4Vec->Px() << "\t" <<	p4Vec->Py() << "\t" <<	p4Vec->Pz() << std::endl;
     }
   }
   

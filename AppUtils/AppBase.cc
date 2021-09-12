@@ -137,7 +137,7 @@ void AppBase::dumpBootstrapEvts(EventList& theEventList, int noOfEvts, int noOfF
 	  Alert << "no event available for index: " << evtIndex << endmsg;
 	  exit(1);
 	}
-	currentEvt->dumpEvt(currentStream, useMeV);
+	currentEvt->dumpEvt(currentStream, useMeV, GlobalEnv::instance()->Channel()->parser()->orderInFile());
 	weightSum+=currentEvt->Weight();
 	if(weightSum>noOfEvts){
 	  pickOutNextEvt=false;

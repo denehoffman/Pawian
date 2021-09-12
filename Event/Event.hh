@@ -69,7 +69,7 @@ public:
   // double EtaErr() {return etaErr;}
   double DataPoint() {return dataPoint;}
   double DataPointErr() {return dataPointErr;}
-  void dumpEvt(std::ostream& os, bool useMeV=false);
+  void dumpEvt(std::ostream& os, bool useMeV=false, std::string orderInFile="Px Py Pz E");
   bool operator<(const Event& compare) const;
 
 private:
