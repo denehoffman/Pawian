@@ -57,9 +57,9 @@
 
 FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser,  std::string baseNameFVector, ChannelID channelID, std::string projectionParticleNames) :
   KMatrixDynamics(name, fsParticles, mother, pathToConfigParser, channelID, projectionParticleNames)
-  ,_nameOfAmplitudeMag(baseNameFVector+_pVecSuffix+_kMatName+"AmpMag")
-  , _nameOfAmplitudePhi(baseNameFVector+_pVecSuffix+_kMatName+"AmpPhi")
-  ,_currentAmplitudeVal(complex<double>(0.,0.))
+  //  ,_nameOfAmplitudeMag(baseNameFVector+_pVecSuffix+_kMatName+"AmpMag")
+  //  , _nameOfAmplitudePhi(baseNameFVector+_pVecSuffix+_kMatName+"AmpPhi")
+  //  ,_currentAmplitudeVal(complex<double>(0.,0.))
   ,_sProdExp(0.)
 {
   _nameOfFVector= baseNameFVector;
@@ -118,24 +118,24 @@ complex<double> FVectorIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* gra
   }
 
   //  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass, _orbitalL).real()*currentMass/2. * momQ2L) );
-  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*curre\
-ntFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L) );
-  
+
+  //  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L) );
+  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L));
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME)) = currentResult;
   return currentFAmp;
 }
 
 void FVectorIntensityDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   KMatrixDynamics::fillDefaultParams(fitPar);
-  fitPar->Add(_nameOfAmplitudeMag, 1. , 0.2);
-  fitPar->Add(_nameOfAmplitudePhi, 0. , 0.2);
+  //fitPar->Add(_nameOfAmplitudeMag, 1. , 0.2);
+  //fitPar->Add(_nameOfAmplitudePhi, 0. , 0.2);
 }
 
 void FVectorIntensityDynamics::fillParamNameList(){
   _paramNameList.clear();
   KMatrixDynamics::fillParamNameList();
-  _paramNameList.push_back(_nameOfAmplitudeMag);
-  _paramNameList.push_back(_nameOfAmplitudePhi);
+  //_paramNameList.push_back(_nameOfAmplitudeMag);
+  //_paramNameList.push_back(_nameOfAmplitudePhi);
 }
 
 bool FVectorIntensityDynamics::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld){
@@ -144,8 +144,9 @@ bool FVectorIntensityDynamics::checkRecalculation(std::shared_ptr<AbsPawianParam
 
 void FVectorIntensityDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   KMatrixDynamics::updateFitParams(fitPar);
-   _currentAmplitudeVal = std::polar( std::abs(fitPar->Value(_nameOfAmplitudeMag)), 
-                               fitPar->Value(_nameOfAmplitudePhi) );
+  //_currentAmplitudeVal = std::polar( std::abs(fitPar->Value(_nameOfAmplitudeMag)), 
+  //                             fitPar->Value(_nameOfAmplitudePhi) );
+
   // _currentAmplitudeVal = std::polar( fitPar->Value(_nameOfAmplitudeMag), 
   //                             fitPar->Value(_nameOfAmplitudePhi) );
 }

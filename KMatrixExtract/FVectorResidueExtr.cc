@@ -96,11 +96,10 @@ void FVectorResidueExtr::init() {
 
   std::string baseNameFVector=_pipiScatteringParser->baseNameFVector();
   InfoMsg << "baseNameFVector: " << baseNameFVector << endmsg;
-
- 
+  std::vector<std::string> prodSuffixes= _pipiScatteringParser->addKmatrixProdSuffix();
+  
   ChannelID channelID(0);
-  _pVecName=baseNameFVector+"b"+_motherParticleName;
-
+  
    std::string dummyName="dummy";
 
   _fVectorIntensityDynamics = 
@@ -110,15 +109,16 @@ void FVectorResidueExtr::init() {
   InfoMsg << "_decProjectionIndex: " << _decProjectionIndex << endmsg;
 
   _phpVecCurrent = _phpVecs.at(_decProjectionIndex);
-  _fVector=_fVectorIntensityDynamics->getFVector();
+  //_fVector=_fVectorIntensityDynamics->getFVector();
   fillParams();
+  _fVector=_fVectorIntensityDynamics->getFVector();
   _fVector->SetBumImPartSigns(_signs); 
 }
 
 
 void FVectorResidueExtr::fillParams(){
   std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
-  _fVectorIntensityDynamics->fillDefaultParams(params);
+  //_fVectorIntensityDynamics->fillDefaultParams(params);
 
   std::ifstream ifs(_pathToFitParams);
   if(!ifs.good()) 
@@ -137,7 +137,36 @@ void FVectorResidueExtr::fillParams(){
 
   InfoMsg << "The F-Vector input parameter are: " << endmsg;
   _params->print(std::cout);
-  if(_pathToFitParams != "") _fVectorIntensityDynamics->updateFitParams(_params);
+
+  _fVectorIntensityDynamics->fillParamNameList();
+  //if(_pathToFitParams != "") _fVectorIntensityDynamics->updateFitParams(_params);
+  _fVecParamNames=_fVectorIntensityDynamics->paramNames();
+  for (unsigned int i=0; i<_fVecParamNames.size(); ++i){
+    InfoMsg << "F-Vector ParamNames: " << _fVecParamNames.at(i) << endmsg;
+  }
+  _fVectorIntensityDynamics->fillDefaultParams(params);
+  //if(_pathToFitParams != "") _fVectorIntensityDynamics->updateFitParams(_params);
+}
+
+void FVectorResidueExtr::updateFMatDy(std::shared_ptr<AbsPawianParameters> params) {
+  //updateTMatDy(params);
+  _fVectorIntensityDynamics->updateFitParams(params);
+  return;
+}
+
+void FVectorResidueExtr::Calculation(){
+
+  std::vector<ResidueProperties> resPropAverage;
+  std::vector<ResidueProperties> resPropReal;
+  std::vector<ResidueProperties> resPropImag;
+  std::complex<double> polePos;
+  CalcResidueAll(_params, polePos, resPropReal, resPropImag, resPropAverage);
+  std::vector<std::string> paramNames=_fVecParamNames;
+  InfoMsg << "paramNames.size(): " << paramNames.size() << endmsg;
+  CalculationError(_fVecParamNames, resPropAverage);
+
+  dumpResult(polePos, resPropReal, resPropImag, resPropAverage);
+  printResults(polePos, resPropAverage);
 }
 
 void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, 
@@ -153,6 +182,7 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
 
   std::complex<double> result(0.,0.);
   const double epsilon=0.00001;
+  updateFMatDy(theFitParams);
   polePos = CalcMassWidth(theFitParams);
 
   std::complex<double> polePosEpsilonImagp = polePos + std::complex<double>(0., epsilon);

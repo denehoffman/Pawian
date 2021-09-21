@@ -63,13 +63,13 @@ public:
 
   // Getters:
   virtual void Calculation();
+  virtual void CalculationError(std::vector<std::string>, std::vector<ResidueProperties>&);
   virtual void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
 
 protected:
   std::string _extractionMethod;
   virtual void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
-  virtual void printResults(std::complex<double> polePos, std::vector<ResidueProperties> resPropAv);
-  
+  virtual void printResults(std::complex<double> polePos, std::vector<ResidueProperties> resPropAv);  
 private:
 
 };

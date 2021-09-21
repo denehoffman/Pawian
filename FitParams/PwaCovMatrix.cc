@@ -126,8 +126,8 @@ void PwaCovMatrix::printElements(){
 
   for(it1=_covMatrix.begin(); it1!=_covMatrix.end(); ++it1){
     for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
-      std::cout << std::setw(20) << it1->first << std::setw(45) << it2->first 
-		<< std::setw(20) << it2->second << std::endl;
+      std::cout << it1->first << "\t" << it2->first 
+		<< "\t" << it2->second << std::endl;
     }
   }
 }

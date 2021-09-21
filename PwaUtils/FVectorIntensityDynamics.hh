@@ -55,10 +55,10 @@ protected:
   int _projectionCompareIndex;
   std::string _nameOfFVector;
   std::shared_ptr<FVector> _FVector;
-  std::string _nameOfAmplitudeMag;
-  std::string _nameOfAmplitudePhi;
+  //std::string _nameOfAmplitudeMag;
+  //std::string _nameOfAmplitudePhi;
   
-  complex<double> _currentAmplitudeVal;
+  //complex<double> _currentAmplitudeVal;
 
   unsigned int _L2prod;
   double _s1Prod;

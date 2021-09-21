@@ -54,8 +54,10 @@ public:
   virtual ~FVectorResidueExtr();
 
   // Getters:
+  virtual void Calculation();
   virtual void CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, std::complex<double>& polePos, std::vector<ResidueProperties>& , std::vector<ResidueProperties>&, std::vector<ResidueProperties>&);
   virtual void fillParams();
+  void updateFMatDy(std::shared_ptr<AbsPawianParameters> params);
 
 protected:
   virtual void dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, std::vector<ResidueProperties> resPropImag, std::vector<ResidueProperties> resPropAv);
@@ -63,6 +65,7 @@ protected:
   std::shared_ptr<FVector> _fVector; 
   std::string _pVecName;
   std::string _extractionMethod;
+  std::vector<std::string> _fVecParamNames;
 
 private:
   void init();

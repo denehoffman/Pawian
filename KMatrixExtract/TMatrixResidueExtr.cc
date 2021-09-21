@@ -94,18 +94,27 @@ void TMatrixResidueExtr::Calculation(){
   std::complex<double> polePos;
   CalcResidueAll(_params, polePos, resPropReal, resPropImag, resPropAverage);
 
+  std::vector<std::string> paramNames=_kMatrixParamNames;
+  
+  CalculationError(paramNames, resPropAverage);
+
+  dumpResult(polePos, resPropReal, resPropImag, resPropAverage);
+  printResults(polePos, resPropAverage);
+  return;
+}
+
+void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, std::vector<ResidueProperties>& resPropAverage){
   if (GetCovMatrix() ) {
-    //  unsigned int nPar = _params->Params().size();
     std::shared_ptr<AbsPawianParameters> newFitParams = std::shared_ptr<AbsPawianParameters>(_params->Clone());
-    unsigned int nKMatrixPar = _kMatrixParamNames.size();
-    InfoMsg << "KMatrix Params Size " << nKMatrixPar << endmsg;
+    unsigned int nParams = paramNames.size();
     double stepSize = 0.0001;
     std::vector<ResidueProperties> resPropStep;
     std::vector<ResidueProperties> resPropTemp;
     std::complex<double> polePosStep;
-    std::map< std::string, std::vector<ResidueProperties> > _derivatives;
-    for(unsigned int i=0; i<nKMatrixPar; i++){
-      std::string parName = _kMatrixParamNames[i];
+    std::map< std::string, std::vector<ResidueProperties> > derivatives;
+
+    for(unsigned int i=0; i<nParams; i++){
+      std::string parName = paramNames.at(i);
       unsigned int index = _params->Index(parName);
       double parOrig = _params->Value(index);
       newFitParams->SetValue(index, parOrig + stepSize);
@@ -113,28 +122,29 @@ void TMatrixResidueExtr::Calculation(){
       std::vector<ResidueProperties> resPropDerivative;
       resPropDerivative.resize(_phpVecs.size());
       for (unsigned int i=0; i<resPropStep.size(); ++i){
-	resPropDerivative.at(i).absR = (resPropStep.at(i).absR - resPropAverage.at(i).absR)/stepSize;
-	resPropDerivative.at(i).theta = (fmod((resPropStep.at(i).theta - 
-					       resPropAverage.at(i).theta)+5*M_PI, 2*M_PI) - M_PI)/stepSize;
-	resPropDerivative.at(i).gammai = (resPropStep.at(i).gammai - resPropAverage.at(i).gammai)/stepSize;
+        resPropDerivative.at(i).absR = (resPropStep.at(i).absR - resPropAverage.at(i).absR)/stepSize;
+        resPropDerivative.at(i).theta = (fmod((resPropStep.at(i).theta - 
+                                               resPropAverage.at(i).theta)+5*M_PI, 2*M_PI) - M_PI)/stepSize;
+        resPropDerivative.at(i).gammai = (resPropStep.at(i).gammai - resPropAverage.at(i).gammai)/stepSize;
       }
-      _derivatives.insert(make_pair(parName, resPropDerivative));
+      derivatives.insert(make_pair(parName, resPropDerivative));
       newFitParams->SetValue(index, parOrig);
     }
+
     std::vector<ResidueProperties> resPropError;
     resPropError.resize(_phpVecs.size());
-    for(unsigned int i=0; i<nKMatrixPar; i++){
-      for(unsigned int j=0; j<nKMatrixPar; j++){
-	std::string name1 = _kMatrixParamNames[i];
-	std::string name2 = _kMatrixParamNames[j];
-	for (unsigned int index=0;index!=resPropAverage.size();index++){
-	  resPropError.at(index).absR += (_derivatives[name1].at(index).absR ) * 
-	    _thePwaCovMatrix->GetElement(name1, name2) * (_derivatives[name2].at(index).absR );
-	  resPropError.at(index).theta += (_derivatives[name1].at(index).theta ) * 
-	    _thePwaCovMatrix->GetElement(name1, name2) * (_derivatives[name2].at(index).theta );
-	  resPropError.at(index).gammai += (_derivatives[name1].at(index).gammai ) * 
-	    _thePwaCovMatrix->GetElement(name1, name2) * (_derivatives[name2].at(index).gammai );
-	}
+    for(unsigned int i=0; i<nParams; i++){
+      for(unsigned int j=0; j<nParams; j++){
+        std::string name1 = paramNames.at(i);
+        std::string name2 = paramNames.at(j);
+        for (unsigned int index=0;index!=resPropAverage.size();index++){
+          resPropError.at(index).absR += (derivatives[name1].at(index).absR ) * 
+            _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).absR );
+          resPropError.at(index).theta += (derivatives[name1].at(index).theta ) * 
+            _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).theta );
+          resPropError.at(index).gammai += (derivatives[name1].at(index).gammai ) * 
+            _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammai );
+        }
       }
     }
     for (unsigned int index=0;index!=resPropAverage.size();index++){
@@ -143,9 +153,6 @@ void TMatrixResidueExtr::Calculation(){
       resPropAverage.at(index).errGammai = sqrt(resPropError.at(index).gammai);
     }
   }
-  dumpResult(polePos, resPropReal, resPropImag, resPropAverage);
-  printResults(polePos, resPropAverage);
-  return;
 }
 
 void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> theFitParams, 
