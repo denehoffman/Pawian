@@ -168,19 +168,25 @@ void HeliMultipoleDecNonRefAmps::fillParamNameList(){
 }
 
 void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
-
+  //according to ref arXiv:0910.0046v2 [hep:ex] the transformation between heli and multipole amps
+  //are used. It seems that the transformation is ony working for the magnitudes and not
+  //for the complete complex parts of the amps. Current work-around: Trafo mags of amps form heli to
+  //multipole amps. Phases from heli ampls F_01 -> E1; F_11 -> M2; F_21 -> E3
+  
   for (int i=0; i<_noOfAmps; ++i){
     double theLocalMag=fabs(fitPar->Value(_MagParamNames.at(i)));
     _currentParamLocalMags[i]=theLocalMag;
     double theLocalPhi=fitPar->Value(_PhiParamNames.at(i));
     _currentParamLocalPhis[i]=theLocalPhi;
     
-    complex<double> expiLocal(cos(theLocalPhi), sin(theLocalPhi));
-    _currentParamLocalMagExpi[i]=theLocalMag*expiLocal;
+    // complex<double> expiLocal(cos(theLocalPhi), sin(theLocalPhi));
+    //    _currentParamLocalMagExpi[i]=theLocalMag*expiLocal;
+    _currentParamLocalMagExpi[i]=std::polar(theLocalMag, 0.);
   }
 
   std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
    for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+     int LamLamVsMultiIdx=std::abs((*it)->lam2); //lam2 = lamX; lam1 = lamGamma
      Spin lamGamma=Spin(1);
      Spin lam2=(*it)->lam2;
      if (lam2<0) lam2=-(*it)->lam2;
@@ -189,6 +195,7 @@ void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParame
        _currentParamMagExpi[*it]+= sqrt(2.*_JgammaMap.at(i)+1.)*Clebsch(_JgammaMap.at(i), lamGamma, _JPCPtr->J, lam2-1, _daughter2->J(), lam2)*_currentParamLocalMagExpi.at(i);
      }
 
+     _currentParamMagExpi[*it]=std::polar(_currentParamMagExpi[*it].real(),_currentParamLocalPhis.at(LamLamVsMultiIdx));
      _currentParamPreFacMagExpi[*it]=_preFactor*_currentParamMagExpi[*it];
      _currentParamMagLamLams[*it]=1.; //dummy
      _currentParamPhiLamLams[*it]=0.; //dummy     
