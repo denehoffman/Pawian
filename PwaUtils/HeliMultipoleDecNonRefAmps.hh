@@ -63,16 +63,13 @@ public:
   // virtual void updateFitParams(fitParCol& theParamVal);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
-
+  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  
 protected:
 
-  std::map< int, double> _currentParamMags;
-  std::map< int, double> _currentParamPhis;
   short _noOfAmps;
   std::vector<std::string> _MagParamNames;
   std::vector<std::string> _PhiParamNames;
-  std::vector<double> _currentParamLocalMags;
-  std::vector<double> _currentParamLocalPhis;
   std::vector< complex<double> > _currentParamLocalMagExpi;
   std::map<int, Spin> _JgammaMap;
   std::vector<Spin> _JgammaVec;

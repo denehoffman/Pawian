@@ -61,8 +61,6 @@ HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHel
   Spin JgammaMax=Spin(_JPCPtr->J+_daughter2->J());
   
   _noOfAmps=_JPClamlams.size();
-  _currentParamLocalMags.resize(_noOfAmps);
-  _currentParamLocalPhis.resize(_noOfAmps);
   _currentParamLocalMagExpi.resize(_noOfAmps);
   _MagParamNames.resize(_noOfAmps);
   _PhiParamNames.resize(_noOfAmps);
@@ -109,8 +107,6 @@ HeliMultipoleDecNonRefAmps::HeliMultipoleDecNonRefAmps(std::shared_ptr<AbsDecay>
   Spin JgammaMax=Spin(_JPCPtr->J+_daughter2->J());
   
   _noOfAmps=_JPClamlams.size();
-  _currentParamLocalMags.resize(_noOfAmps);
-  _currentParamLocalPhis.resize(_noOfAmps);
   _currentParamLocalMagExpi.resize(_noOfAmps);
   _MagParamNames.resize(_noOfAmps);
   _PhiParamNames.resize(_noOfAmps);
@@ -168,49 +164,84 @@ void HeliMultipoleDecNonRefAmps::fillParamNameList(){
 }
 
 void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  //according to ref arXiv:0910.0046v2 [hep:ex] the transformation between heli and multipole amps
-  //are used. It seems that the transformation is ony working for the magnitudes and not
-  //for the complete complex parts of the amps. Current work-around: Trafo mags of amps form heli to
-  //multipole amps. Phases from heli ampls F_01 -> E1; F_11 -> M2; F_21 -> E3
   
   for (int i=0; i<_noOfAmps; ++i){
     double theLocalMag=fabs(fitPar->Value(_MagParamNames.at(i)));
-    _currentParamLocalMags[i]=theLocalMag;
     double theLocalPhi=fitPar->Value(_PhiParamNames.at(i));
-    _currentParamLocalPhis[i]=theLocalPhi;
-    
-    // complex<double> expiLocal(cos(theLocalPhi), sin(theLocalPhi));
-    //    _currentParamLocalMagExpi[i]=theLocalMag*expiLocal;
-    _currentParamLocalMagExpi[i]=std::polar(theLocalMag, 0.);
+    _currentParamLocalMagExpi[i]=std::polar(theLocalMag, theLocalPhi);
   }
 
-  std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-   for (it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
-     int LamLamVsMultiIdx=std::abs((*it)->lam2); //lam2 = lamX; lam1 = lamGamma
-     Spin lamGamma=Spin(1);
-     Spin lam2=(*it)->lam2;
-     if (lam2<0) lam2=-(*it)->lam2;
-     _currentParamMagExpi[*it]=complex<double> (0.,0.);
-     for (int i=0; i<_noOfAmps; ++i){
-       _currentParamMagExpi[*it]+= sqrt(2.*_JgammaMap.at(i)+1.)*Clebsch(_JgammaMap.at(i), lamGamma, _JPCPtr->J, lam2-1, _daughter2->J(), lam2)*_currentParamLocalMagExpi.at(i);
-     }
-
-     _currentParamMagExpi[*it]=std::polar(_currentParamMagExpi[*it].real(),_currentParamLocalPhis.at(LamLamVsMultiIdx));
-     _currentParamPreFacMagExpi[*it]=_preFactor*_currentParamMagExpi[*it];
-     _currentParamMagLamLams[*it]=1.; //dummy
-     _currentParamPhiLamLams[*it]=0.; //dummy     
-     std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamVec=_JPClamlamSymMap.at(*it);
-     std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLam;
-     for (itLamLam=currentLPClamlamVec.begin(); itLamLam!=currentLPClamlamVec.end(); ++itLamLam){
-       _currentParamMagExpi[*itLamLam]=_currentParamMagExpi.at(*it);
-       _currentParamPreFacMagExpi[*itLamLam]=_preFactor*_currentParamMagExpi.at(*it);
-       _currentParamMagLamLams[*itLamLam]=1.; //dummy
-       _currentParamPhiLamLams[*itLamLam]=0.; //dummy
-     }
-   }
-
-    _absDyn->updateFitParams(fitPar);
-    if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
+  _absDyn->updateFitParams(fitPar);
+  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
 
+complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+  complex<double> result(0.,0.);
+  if( fabs(lamX) > _JPCPtr->J) return result;
+ 
+
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()), lamX); 
+
+  if (!_recalculate){
+      result=_cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
+      if(result.real()!=result.real()) {
+        DebugMsg << "result:\t" << result << endmsg;
+      }
+      return result;
+    }
+
+  //  std::map< std::shared_ptr<const JPClamlam>, double, pawian::Collection::SharedPtrLess >::iterator it;
+  //  InfoMsg << "_currentParamMagLamLams.size(): " << _currentParamMagLamLams.size() << endmsg;
+  
+  //  for(it=_currentParamMagLamLams.begin(); it!=_currentParamMagLamLams.end(); ++it){
+
+  std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
+  for(it=_JPClamlams.begin(); it!=_JPClamlams.end(); ++it){
+    //Spin lambda1= it->first->lam1;  //gamma
+    //Spin lambda2= it->first->lam2;  //X
+    Spin lambda1= (*it)->lam1;  //gamma                                                         
+    Spin lambda2= (*it)->lam2;  //X 
+    Spin lambda = lambda2-lambda1;
+
+    //if( fabs(lambda) > it->first->J) continue;
+    if( fabs(lambda) > (*it)->J) continue;
+    
+    if(_daughter1IsStable && _lam1MinThreadMap.at(std::this_thread::get_id())!=lambda1) continue;
+    if(_daughter2IsStable && _lam2MinThreadMap.at(std::this_thread::get_id())!=lambda2) continue;
+
+    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+
+    complex<double> currentAmp(0.,0.);
+
+    for (int i=0; i<_noOfAmps; ++i){
+      double parityFactor=_daughter2->theParity();
+      if(int(_JgammaMap.at(i))%2 == 0) parityFactor *= -1.;
+      //InfoMsg << "parityFactor: " << parityFactor << endmsg;
+      //InfoMsg << "Clebsch(" << _JgammaMap.at(i) << "," << -lambda1 << ","
+      //	      << _daughter2->J() << "," << lambda2 << ","
+      //	      << _JPCPtr->J << "," << lambda << endmsg;
+      //InfoMsg << "_currentParamLocalMagExpi.at(" << i << "): " << _currentParamLocalMagExpi.at(i) << endmsg; 
+      currentAmp+=sqrt(2.*_JgammaMap.at(i)+1.)
+	*parityFactor
+	*Clebsch(_JgammaMap.at(i), -lambda1, _daughter2->J(), lambda2, _JPCPtr->J, lambda)
+	*_currentParamLocalMagExpi.at(i);
+  }
+
+    result+=currentAmp*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) )*daughterAmp(lambda1, lambda2, theData);
+  }
+
+  if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
+   else result*=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
+
+  if(result.real()!=result.real()){
+    Alert << "result:\t" << result << endmsg;
+    exit(0);
+  }
+
+  if ( _cacheAmps){
+     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+  }
+
+  return result;
+}
