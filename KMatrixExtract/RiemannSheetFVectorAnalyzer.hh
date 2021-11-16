@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2021 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -23,22 +22,20 @@
 
 #include <complex>
 #include <vector>
-#include "PwaDynamics/TMatrixBase.hh"
 
+#include "KMatrixExtract/RiemannSheetAnalyzer.hh"
+#include "PwaDynamics/TMatrixBase.hh"
+#include "PwaDynamics/FVector.hh"
 class TH2F;
 
-class RiemannSheetAnalyzer
+class RiemannSheetFVectorAnalyzer : public RiemannSheetAnalyzer
 {
 
 public:
-   RiemannSheetAnalyzer(unsigned int noOfChannels, std::shared_ptr<TMatrixBase> tMatrix, 
+   RiemannSheetFVectorAnalyzer(unsigned int noOfChannels, std::shared_ptr<FVector> fVector, 
 			std::complex<double> massMin, std::complex<double> massMax, int numSteps, unsigned int projectionIndex=0);
-  RiemannSheetAnalyzer(){;}
 
-protected:
-   void FindPolePositions(TH2F* histo);
-   std::vector<double> GetSignsFromInteger(unsigned int noOfChannels, unsigned int signCollection);
-
+  RiemannSheetFVectorAnalyzer(){;}
+  
 private:
-
 };

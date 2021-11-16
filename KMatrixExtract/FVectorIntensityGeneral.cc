@@ -25,6 +25,7 @@
 #include <sstream>
 #include <string>
 #include "KMatrixExtract/FVectorIntensityGeneral.hh"
+#include "KMatrixExtract/RiemannSheetFVectorAnalyzer.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
 #include "PwaDynamics/AbsPhaseSpace.hh"
 #include "PwaDynamics/TMatrixBase.hh"
@@ -141,7 +142,7 @@ void FVectorIntensityGeneral::init() {
 
   _phpVecCurrent = _phpVecs.at(_decProjectionIndex);
 
-  _fVector=_fVectorIntensityDynamics->getFVector();  
+  _fVector=_fVectorIntensityDynamics->getFVector();
 }
 
 void FVectorIntensityGeneral::fillParams(){
@@ -185,5 +186,10 @@ void FVectorIntensityGeneral::process(){
 	} 
     }
   }
+  RiemannSheetFVectorAnalyzer(_kMatrixParser->noOfChannels(), _fVector,
+                       std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
+                       std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),
+                       _numStepsForSheetScan,
+                       _decProjectionIndex);
 }
 

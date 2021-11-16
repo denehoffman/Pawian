@@ -398,7 +398,7 @@ Baryon Sigma(1385)+ 	\Sigma(1385)^+  	3   3 +1  0  0    2   2  -1  0  	1.383 0.0
 Baryon Sigmabar(1385)- 	\bar\Sigma(1385)^- -3   3 -1  0  0    2  -2   1  0  	1.383 0.036      relBW		[PDG]
 
 Baryon Sigma(1580)+ 	\Sigma(1580)^+  	3   3 -1  0  0    2   2  -1  0  	1.580 0.015     relBW		[PDG]
-Baryon Sigmabar(1580)- 	\bar\Sigma(1580)^- -3   3 +1  0  0    2  -2   1  0  	1.580 0.015      relBW		[PDG]
+Baryon Sigmabar(1580)- 	\bar\Sigma(1580)^- -3   3 +1  0  0    2  -2   -1  0  	1.580 0.015      relBW		[PDG]
 
 Baryon Sigma(1620)+ 	\Sigma(1620)^+  	3   1 -1  0  0    2   2  -1  0  	1.620 0.1     relBW		[PDG]
 Baryon Sigmabar(1620)- 	\bar\Sigma(1620)^- -3   1 +1  0  0    2  -2   1  0  	1.620 0.1      relBW		[PDG]
