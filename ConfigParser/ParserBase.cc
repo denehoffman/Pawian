@@ -94,7 +94,9 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_singleChannelId(0)
   ,_sProdExp(0.0)
   ,_useParticleNameForPVecBg(false)
-  ,_fixPrimaryChannelScaling(true)  
+  ,_fixPrimaryChannelScaling(true)
+  ,_stepSizeXHist(500)
+  ,_stepSizeYHist(500)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -159,6 +161,8 @@ ParserBase::ParserBase(int argc,char **argv)
     ("fixAllPhases",po::value<bool>(&_fixAllPhases), "option to fix all phases")
     ("singleChannelId",po::value<unsigned int>(&_singleChannelId), "preferred single channel ID e.g. when running QA")
     ("minuitStrategyLevel",po::value<unsigned int>(&_minuitStrategyLevel),  "set strategy level for minuit fit (1 and 2 are supported)")
+    ("stepSizeXHist",po::value<unsigned int>(&_stepSizeXHist),"step size for x-axis in the relevant 2D-histograms")
+    ("stepSizeXHist",po::value<unsigned int>(&_stepSizeYHist),"step size for y-axis in the relevant 2D-histograms")
     ;
   
   _config->add_options()
@@ -314,6 +318,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "channelScalingSuffix: " <<_channelScalingSuffix << "\n\n"
 		<< "minuitStrategyLevel: " << _minuitStrategyLevel << "\n\n"
 	        << "useParticleNameForPVecBg: " << _useParticleNameForPVecBg << "\n\n"
+		<< "stepSizeXHist: " <<_stepSizeXHist <<"\n\n"
+		<< "stepSizeYHist: " <<_stepSizeYHist <<"\n\n"
                 << endl;
 
 

@@ -32,7 +32,8 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
 					   std::shared_ptr<TMatrixBase> tMatrix,
 					   std::complex<double> massMin, 
 					   std::complex<double> massMax,
-					   int numSteps,
+					   int numXSteps,
+					   int numYSteps,
 					   unsigned int projectionIndex)
 {
    unsigned int signCollection = 0;
@@ -62,8 +63,8 @@ RiemannSheetAnalyzer::RiemannSheetAnalyzer(unsigned int noOfChannels,
 
       InfoMsg << "Scanning " << histoname.str() << endmsg;      
       TH2F* scan = new TH2F(histoname.str().c_str(), histoname.str().c_str(), 
-			    numSteps, massMin.real(), massMax.real(), 
-			    numSteps, massMin.imag(), massMax.imag());
+			    numXSteps, massMin.real(), massMax.real(), 
+			    numYSteps, massMin.imag(), massMax.imag());
 
       tMatrix->SetBumImPartSigns(signs);
 

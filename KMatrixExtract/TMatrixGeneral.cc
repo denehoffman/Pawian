@@ -76,7 +76,8 @@ TMatrixGeneral::TMatrixGeneral(pipiScatteringParser* theParser) :
   ,_pathToFitParams("")
   ,_orbitalL(0)
   ,_pathToKMatrixParser("") 
-  ,_numStepsForSheetScan(500)
+  ,_numXStepsForSheetScan(500)
+  ,_numYStepsForSheetScan(500)
   ,_theTFile(0)
   ,_histosInit(false)
 {
@@ -368,7 +369,8 @@ void TMatrixGeneral::process(){
   RiemannSheetAnalyzer(_kMatrixParser->noOfChannels(), _tMatr,
    		       std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
    		       std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),
-   		       _numStepsForSheetScan, 
+   		       _numXStepsForSheetScan,
+		       _numYStepsForSheetScan,
    		       projectionIndex);
 }
 
@@ -394,6 +396,8 @@ void TMatrixGeneral::init() {
   _energyPlaneBorders[2]= _pipiScatteringParser->maxRealMass();
   _energyPlaneBorders[3]= _pipiScatteringParser->maxImagMass();
   _noOfSteps=_pipiScatteringParser->noOfStepsForScan();
+  _numXStepsForSheetScan=_pipiScatteringParser->stepSizeXHist();
+  _numYStepsForSheetScan=_pipiScatteringParser->stepSizeYHist();
   
   _pathToFitParams = _pipiScatteringParser->fitParamFile();
   InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;

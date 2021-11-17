@@ -96,7 +96,8 @@ protected:
   std::shared_ptr<TMatrixRel> _tMatr;
   std::shared_ptr<KMatrixRel> _kMatr;
   std::vector<double> _energyPlaneBorders;
-  int _numStepsForSheetScan;
+  unsigned int _numXStepsForSheetScan;
+  unsigned int _numYStepsForSheetScan;
   Particle* _motherParticle;
   std::vector<Particle*> _fsParticles;
   TFile* _theTFile;

@@ -189,7 +189,7 @@ void FVectorIntensityGeneral::process(){
   RiemannSheetFVectorAnalyzer(_kMatrixParser->noOfChannels(), _fVector,
                        std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
                        std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),
-                       _numStepsForSheetScan,
+                       _numXStepsForSheetScan,
                        _decProjectionIndex);
 }
 

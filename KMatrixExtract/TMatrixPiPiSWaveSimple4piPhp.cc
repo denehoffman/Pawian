@@ -221,7 +221,7 @@ MatrixPiPiSWaveSimple4piPhp::MatrixPiPiSWaveSimple4piPhp(int numStepsForSheetSca
   RiemannSheetAnalyzer(_noOfChannels, _tMatr,
 		       std::complex<double>(energyPlaneBorders[0], energyPlaneBorders[1]),
 		       std::complex<double>(energyPlaneBorders[2], energyPlaneBorders[3]),
-		       numStepsForSheetScan);
+		       numStepsForSheetScan, numStepsForSheetScan);
 }
 
 MatrixPiPiSWaveSimple4piPhp::~MatrixPiPiSWaveSimple4piPhp() {

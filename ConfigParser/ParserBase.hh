@@ -137,9 +137,12 @@ public:
   const double sProdExponent() const {return _sProdExp;}
   const bool useParticleNameForPVecBg() const {return _useParticleNameForPVecBg;}
   const bool fixPrimaryChannelScaling() const {return _fixPrimaryChannelScaling;}
+  const unsigned int stepSizeXHist() const {return _stepSizeXHist;}
+  const unsigned int stepSizeYHist() const {return _stepSizeYHist;}
+  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
-
+  
   std::string _configFile;
   enErrLogMode _errLogMode;
   std::string _dataFile;
@@ -230,4 +233,6 @@ protected:
   double _sProdExp;
   bool _useParticleNameForPVecBg;
   bool _fixPrimaryChannelScaling;
+  unsigned int _stepSizeXHist;
+  unsigned int _stepSizeYHist;
 };

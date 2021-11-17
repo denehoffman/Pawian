@@ -32,7 +32,7 @@ class RiemannSheetAnalyzer
 
 public:
    RiemannSheetAnalyzer(unsigned int noOfChannels, std::shared_ptr<TMatrixBase> tMatrix, 
-			std::complex<double> massMin, std::complex<double> massMax, int numSteps, unsigned int projectionIndex=0);
+			std::complex<double> massMin, std::complex<double> massMax, int numXSteps, int numYSteps, unsigned int projectionIndex=0);
   RiemannSheetAnalyzer(){;}
 
 protected:
