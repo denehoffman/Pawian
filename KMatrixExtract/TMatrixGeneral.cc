@@ -396,8 +396,8 @@ void TMatrixGeneral::init() {
   _energyPlaneBorders[2]= _pipiScatteringParser->maxRealMass();
   _energyPlaneBorders[3]= _pipiScatteringParser->maxImagMass();
   _noOfSteps=_pipiScatteringParser->noOfStepsForScan();
-  _numXStepsForSheetScan=_pipiScatteringParser->stepSizeXHist();
-  _numYStepsForSheetScan=_pipiScatteringParser->stepSizeYHist();
+  _numXStepsForSheetScan=_pipiScatteringParser->noOfXStepsForScan();
+  _numYStepsForSheetScan=_pipiScatteringParser->noOfYStepsForScan();
   
   _pathToFitParams = _pipiScatteringParser->fitParamFile();
   InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;

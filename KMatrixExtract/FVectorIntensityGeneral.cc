@@ -120,10 +120,10 @@ void FVectorIntensityGeneral::init() {
 
   std::string baseNameFVector=_pipiScatteringParser->baseNameFVector();
   InfoMsg << "baseNameFVector: " << baseNameFVector << endmsg;
-
+  std::vector<std::string> prodSuffixes= _pipiScatteringParser->addKmatrixProdSuffix();
  
   ChannelID channelID(0);
-  _pVecName=baseNameFVector+"b"+_motherParticleName;
+  //  _pVecName=baseNameFVector+"b"+_motherParticleName;
 
    std::string dummyName="dummy";
 
@@ -142,12 +142,13 @@ void FVectorIntensityGeneral::init() {
 
   _phpVecCurrent = _phpVecs.at(_decProjectionIndex);
 
+  fillParams();  
   _fVector=_fVectorIntensityDynamics->getFVector();
 }
 
 void FVectorIntensityGeneral::fillParams(){
   std::shared_ptr<AbsPawianParameters> params=ParamFactory::instance()->getParametersPointer("Pawian");
-  _fVectorIntensityDynamics->fillDefaultParams(params);
+  //_fVectorIntensityDynamics->fillDefaultParams(params);
 
   std::ifstream ifs(_pathToFitParams);
   if(!ifs.good()) 
@@ -166,10 +167,21 @@ void FVectorIntensityGeneral::fillParams(){
 
   InfoMsg << "The F-Vector input parameter are: " << endmsg;
   _params->print(std::cout);
-  if(_pathToFitParams != "") _fVectorIntensityDynamics->updateFitParams(_params);
+
+  _fVectorIntensityDynamics->fillParamNameList();
+  //  if(_pathToFitParams != "") _fVectorIntensityDynamics->updateFitParams(_params);
+  std::vector<std::string> fVecParamNames=_fVectorIntensityDynamics->paramNames();
+  for (unsigned int i=0; i<fVecParamNames.size(); ++i){
+    InfoMsg << "F-Vector ParamNames: " << fVecParamNames.at(i) << endmsg;
+  }
+  _fVectorIntensityDynamics->fillDefaultParams(params);
+  //  _fVectorIntensityDynamics->updateFitParams(params);
+  InfoMsg << "The F-Vector input paras are: " << endmsg;
+  params->print(std::cout);
 }
 
 void FVectorIntensityGeneral::process(){
+  _fVectorIntensityDynamics->updateFitParams(_params);
   std::vector<int> pointNr;
   pointNr.resize(_gFactorNames.size());
 
@@ -190,6 +202,7 @@ void FVectorIntensityGeneral::process(){
                        std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
                        std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),
                        _numXStepsForSheetScan,
+		       _numYStepsForSheetScan,
                        _decProjectionIndex);
 }
 

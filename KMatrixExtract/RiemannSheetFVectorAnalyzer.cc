@@ -1,4 +1,4 @@
-/**************************************************************************/
+//**************************************************************************/
 //									  //
 //  Copyright 2021 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
@@ -29,10 +29,11 @@
 
 
 RiemannSheetFVectorAnalyzer::RiemannSheetFVectorAnalyzer(unsigned int noOfChannels, 
-					   std::shared_ptr<FVector> fVector,
-					   std::complex<double> massMin, 
-					   std::complex<double> massMax,
-					   int numSteps,
+							 std::shared_ptr<FVector> fVector,
+							 std::complex<double> massMin, 
+							 std::complex<double> massMax,
+							 int numXSteps,
+							 int numYSteps,
 							 unsigned int projectionIndex)
 {
    unsigned int signCollection = 0;
@@ -62,8 +63,8 @@ RiemannSheetFVectorAnalyzer::RiemannSheetFVectorAnalyzer(unsigned int noOfChanne
 
       InfoMsg << "Scanning " << histoname.str() << endmsg;      
       TH2F* scan = new TH2F(histoname.str().c_str(), histoname.str().c_str(), 
-			    numSteps, massMin.real(), massMax.real(), 
-			    numSteps, massMin.imag(), massMax.imag());
+			    numXSteps, massMin.real(), massMax.real(), 
+			    numYSteps, massMin.imag(), massMax.imag());
 
       fVector->SetBumImPartSigns(signs);
 
@@ -74,8 +75,7 @@ RiemannSheetFVectorAnalyzer::RiemannSheetFVectorAnalyzer(unsigned int noOfChanne
 	    // scan->SetBinContent(i,j, std::abs((*tMatrix)(projectionIndex,projectionIndex)));
 	    complex<double> currentrho
 	      = fVector->kMatrix()->phaseSpaceVec().at(projectionIndex)->factor(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
-	    scan->SetBinContent(i,j, std::abs(sqrt(currentrho)
-					      * (*fVector)(projectionIndex,0)
+	    scan->SetBinContent(i,j, std::abs((*fVector)(projectionIndex,0)
 					      *sqrt(currentrho)));
 	 }
       }
