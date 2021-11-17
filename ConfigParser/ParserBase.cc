@@ -162,7 +162,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("singleChannelId",po::value<unsigned int>(&_singleChannelId), "preferred single channel ID e.g. when running QA")
     ("minuitStrategyLevel",po::value<unsigned int>(&_minuitStrategyLevel),  "set strategy level for minuit fit (1 and 2 are supported)")
     ("stepSizeXHist",po::value<unsigned int>(&_stepSizeXHist),"step size for x-axis in the relevant 2D-histograms")
-    ("stepSizeXHist",po::value<unsigned int>(&_stepSizeYHist),"step size for y-axis in the relevant 2D-histograms")
+    ("stepSizeYHist",po::value<unsigned int>(&_stepSizeYHist),"step size for y-axis in the relevant 2D-histograms")
     ;
   
   _config->add_options()
