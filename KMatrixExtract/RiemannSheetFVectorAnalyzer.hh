@@ -33,7 +33,7 @@ class RiemannSheetFVectorAnalyzer : public RiemannSheetAnalyzer
 
 public:
    RiemannSheetFVectorAnalyzer(unsigned int noOfChannels, std::shared_ptr<FVector> fVector, 
-			       std::complex<double> massMin, std::complex<double> massMax, int numXSteps, int numYSteps, unsigned int projectionIndex=0);
+			       std::complex<double> massMin, std::complex<double> massMax, int numXSteps, int numYSteps, int orbitalL, unsigned int projectionIndex=0);
 
   RiemannSheetFVectorAnalyzer(){;}
   

@@ -34,6 +34,7 @@ RiemannSheetFVectorAnalyzer::RiemannSheetFVectorAnalyzer(unsigned int noOfChanne
 							 std::complex<double> massMax,
 							 int numXSteps,
 							 int numYSteps,
+							 int orbitalL,
 							 unsigned int projectionIndex)
 {
    unsigned int signCollection = 0;
@@ -71,12 +72,13 @@ RiemannSheetFVectorAnalyzer::RiemannSheetFVectorAnalyzer(unsigned int noOfChanne
       for(int i=1;i<=scan->GetNbinsX(); i++){
 	 for(int j=1;j<=scan->GetNbinsY(); j++){
 	    fVector->evalMatrix(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), 
-						     scan->GetYaxis()->GetBinCenter(j)));
+						     scan->GetYaxis()->GetBinCenter(j)), orbitalL);
 	    // scan->SetBinContent(i,j, std::abs((*tMatrix)(projectionIndex,projectionIndex)));
 	    complex<double> currentrho
 	      = fVector->kMatrix()->phaseSpaceVec().at(projectionIndex)->factor(std::complex<double>(scan->GetXaxis()->GetBinCenter(i), scan->GetYaxis()->GetBinCenter(j)));
 	    scan->SetBinContent(i,j, std::abs((*fVector)(projectionIndex,0)
-					      *sqrt(currentrho)));
+	    				      *sqrt(currentrho)));
+	    //	    scan->SetBinContent(i,j, std::abs((*fVector)(projectionIndex,0)));
 	 }
       }
 

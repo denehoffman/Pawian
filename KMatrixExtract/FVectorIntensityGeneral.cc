@@ -174,10 +174,10 @@ void FVectorIntensityGeneral::fillParams(){
   for (unsigned int i=0; i<fVecParamNames.size(); ++i){
     InfoMsg << "F-Vector ParamNames: " << fVecParamNames.at(i) << endmsg;
   }
-  _fVectorIntensityDynamics->fillDefaultParams(params);
+  _fVectorIntensityDynamics->fillDefaultParams(_params);
   //  _fVectorIntensityDynamics->updateFitParams(params);
-  InfoMsg << "The F-Vector input paras are: " << endmsg;
-  params->print(std::cout);
+  //InfoMsg << "The F-Vector input params are: " << endmsg;
+  //params->print(std::cout);
 }
 
 void FVectorIntensityGeneral::process(){
@@ -187,17 +187,19 @@ void FVectorIntensityGeneral::process(){
 
   for (double mass=_massMin+_stepSize/0.5; mass<_massMax; mass+=_stepSize){
     _fVector->evalMatrix(mass, _orbitalL);
-    for(unsigned int i=0; i < _gFactorNames.size(); ++i){
-	complex<double> currentResult = (*_fVector)(i,0);
-	_MagsH1.at(i)->Fill(mass, std::abs(currentResult));
-	_PhasesH1.at(i)->Fill(mass, std::arg(currentResult)*PawianConstants::radToDeg);
-	if(mass>_phpVecs.at(i)->thresholdMass()){
-	  _IntensitiesH1.at(i)->Fill(mass, norm( currentResult*sqrt(_phpVecs.at(i)->factor(mass).real())));
-	  _ArgandPlotsTGraph.at(i)->SetPoint(pointNr[i], currentResult.real(), currentResult.imag());
-	  ++pointNr[i];
-	} 
-    }
+      for(unsigned int i=0; i < _gFactorNames.size(); ++i){
+  	complex<double> currentResult = (*_fVector)(i,0);
+  	_MagsH1.at(i)->Fill(mass, std::abs(currentResult));
+  	_PhasesH1.at(i)->Fill(mass, std::arg(currentResult)*PawianConstants::radToDeg);
+  	if(mass>_phpVecs.at(i)->thresholdMass()){
+  	  _IntensitiesH1.at(i)->Fill(mass, norm( currentResult*sqrt(_phpVecs.at(i)->factor(mass).real())));
+  	  _ArgandPlotsTGraph.at(i)->SetPoint(pointNr[i], currentResult.real(), currentResult.imag());
+  	  ++pointNr[i];
+ 	} 
+     }
   }
+  _fVector->evalMatrix(_massMin);
+ 
   RiemannSheetFVectorAnalyzer(_kMatrixParser->noOfChannels(), _fVector,
                        std::complex<double>(_energyPlaneBorders[0], _energyPlaneBorders[1]),
                        std::complex<double>(_energyPlaneBorders[2], _energyPlaneBorders[3]),
