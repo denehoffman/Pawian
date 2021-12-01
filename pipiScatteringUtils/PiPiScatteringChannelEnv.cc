@@ -102,7 +102,11 @@ void PiPiScatteringChannelEnv::setupGlobal(ChannelID id){
      exit(1);
    }
 
-   _fsParticleProjections = std::shared_ptr<FsParticleProjections>(new FsParticleProjections(_finalStateParticles));
+   if( (_theParser->productionFormalism()!="PVecIntensity")
+          && (_theParser->productionFormalism()!="PhaseDiff") ){
+     InfoMsg << "ProForm: " << _theParser->productionFormalism() << endmsg;
+     _fsParticleProjections = std::shared_ptr<FsParticleProjections>(new FsParticleProjections(_finalStateParticles));
+   }
    
    //decays
    std::vector<std::string> decaySystem= _theParser->decaySystem();
