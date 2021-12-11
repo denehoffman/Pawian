@@ -103,6 +103,16 @@ void ResChannelEnv::setupChannel(ChannelID id){
       _prodDecList->addDecay(*itDec);
     }
   }
+  else if (_theResParser->productionFormalism()=="1DMassFit"){
+    std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _resReaction->productionCanoDecays();
+    std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
+    for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
+      (*itDec)->disableIsospin();
+      if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
+      else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
+      _prodDecList->addDecay(*itDec);
+    }
+  }
   else {
     Alert << "production formalism: " << _theResParser->productionFormalism() 
 	  << " is not supported for res reactions" << endmsg;

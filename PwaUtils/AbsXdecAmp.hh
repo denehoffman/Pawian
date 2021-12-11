@@ -72,7 +72,8 @@ public:
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
   virtual void setSpinProjections(int projId);
   std::shared_ptr<AbsDynamics> getDyn() {return _absDyn;}
-
+  std::shared_ptr<AbsXdecAmp> absXDecAmpDaughter1() {return _decAmpDaughter1;}
+  std::shared_ptr<AbsXdecAmp> absXDecAmpDaughter2() {return _decAmpDaughter2;}
   //  virtual void retrieveWignerDs(EvtData* theData) { return;}
 
 protected:

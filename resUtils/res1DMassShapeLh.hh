@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2021 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,8 +20,8 @@
 //									  //
 //************************************************************************//
 
-// resBaseLh class definition file. -*- C++ -*-
-// Copyright 2012 Bertram Kopf
+// res1DMassShapeLh class definition file. -*- C++ -*-
+// Copyright 2021 Bertram Kopf
 
 #pragma once
 
@@ -36,54 +35,36 @@
 
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh"
 
-#include "PwaUtils/AbsLh.hh"
-#include "PwaUtils/DataUtils.hh"
-#include "PwaUtils/AbsChannelEnv.hh"
+#include "resUtils/resBaseLh.hh"
 
-class AbsXdecAmp;
-class resReaction;
-class LSDecAmps;
-class AbsDynamics;
 
-class resBaseLh : public AbsLh {
+class res1DMassShapeLh : public resBaseLh {
 
 public:
   // resBaseLh(std::shared_ptr<const EvtDataBaseList>);
-  resBaseLh(ChannelID channelID);
+  res1DMassShapeLh(ChannelID channelID);
 
-  virtual ~resBaseLh();
+  virtual ~res1DMassShapeLh();
 
   virtual AbsLh* clone_() const{
-    AbsLh* theClone=new resBaseLh(_channelID);
+    AbsLh* theClone=new res1DMassShapeLh(_channelID);
     theClone->setDataVec(_evtDataVec);
     theClone->setMcVec(_evtMCVec);
     return theClone;
   }
 
   virtual double calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
-  virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
-					  std::map <std::shared_ptr<const JPCLS>,
-					  std::vector< std::shared_ptr<AbsXdecAmp> >,
-					  pawian::Collection::SharedPtrLess > resAmps);
-
-  virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData);
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);  
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
-
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld) {return true;}
+  
   virtual void print(std::ostream& os) const;
 
 
 protected:
-  std::shared_ptr<resReaction> _resReactionPtr;
-  Spin _highestJFsp;
-  bool _isHighestJaPhoton;
-  Spin _Jmother;
-  bool _withPolarization;
-  std::map<Spin, double> _currentPolVec;
-  std::map<Spin, std::string> _polParamNames;
+  std::vector< std::shared_ptr<AbsDynamics> > _dynVecs;
 
 private:
 
-  void initialize();
 };

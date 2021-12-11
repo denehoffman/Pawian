@@ -43,6 +43,7 @@
 #include "ggUtils/pbarpProductionLh.hh"
 #include "ggUtils/centralProdBaseLh.hh"
 #include "resUtils/resBaseLh.hh"
+#include "resUtils/res1DMassShapeLh.hh"
 #include "pipiScatteringUtils/pipiScatteringBaseLh.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -96,7 +97,8 @@ std::shared_ptr<AbsLh> LhFactory::getLh(short channelType, ChannelID id, std::st
     }
   }
   else if( channelType == AbsChannelEnv::CHANNEL_RES){
-    result = std::shared_ptr<AbsLh>(new resBaseLh(id));
+    if(formalism=="1DMassFit") result = std::shared_ptr<AbsLh>(new res1DMassShapeLh(id));
+    else result = std::shared_ptr<AbsLh>(new resBaseLh(id));
   }
   else if( channelType == AbsChannelEnv::CHANNEL_PIPISCATTERING){
     result = std::shared_ptr<AbsLh>(new pipiScatteringBaseLh(id));

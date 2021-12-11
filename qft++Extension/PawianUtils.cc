@@ -322,6 +322,7 @@ complex<double> PawianQFT::phaseSpaceFacDefault(double mass, double massDec1, do
 	       << " very close to 0; not possible to calculate phasespace factor: \n set mass to 1.*e-10 !!!" 
 	       << std::endl;
      mass=1.e-10;
+     std::cout << "massDec1 " << massDec1 << "\tmassDec2 " << massDec2 << std::endl;
   }
 
   double termPlus=(massDec1+massDec2)/mass;
