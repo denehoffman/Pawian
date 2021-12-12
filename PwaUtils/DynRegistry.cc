@@ -34,6 +34,7 @@
 #include "PwaUtils/BreitWignerDynamics.hh"
 #include "PwaUtils/BreitWignerRelDynamics.hh"
 #include "PwaUtils/BreitWignerBlattWRelDynamics.hh"
+#include "PwaUtils/VoigtBlattWRelDynamics.hh"
 #include "PwaUtils/BreitWignerBlattWTensorRelDynamics.hh"
 #include "PwaUtils/FlatteDynamics.hh"
 #include "PwaUtils/KPiSWaveIso12Dynamics.hh"
@@ -168,6 +169,13 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	exit(0);
       }
       result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->barrierqR()));
+    }
+    else if(theDec->dynType()=="VoigtBlattWRel"){
+      if(theDec->isTensorAmp()){
+        Alert << "dynamics VoigtBlattWRel is not allowed for non tensor amplitudes (amp name: " << theDec->name() << endmsg;
+        exit(0);
+      }
+      result= std::shared_ptr<AbsDynamics>(new VoigtBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->barrierqR()));
     }
     else if(theDec->dynType()=="BreitWignerBlattWTensorRel"){
       if(!theDec->isTensorAmp()){
