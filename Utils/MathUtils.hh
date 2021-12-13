@@ -4,6 +4,13 @@
 #include <math.h>
 
 namespace MathUtils{
+   
+    inline double Gauss(double __x, double __mean, double __sigma) {
+        __sigma= std::abs(__sigma) ;
+        double arg = (__x-__mean)/__sigma;
+        double res = exp(-0.5*arg*arg);
+        return res/(2.50662827463100024*__sigma); 
+    }
 
   inline int factorial(int __i) {
     if (__i<0){

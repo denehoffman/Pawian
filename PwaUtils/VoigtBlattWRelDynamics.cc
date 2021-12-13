@@ -33,6 +33,9 @@
 #include "Particle/Particle.hh"
 #include "PwaDynamics/BreitWignerFunction.hh"
 #include "Utils/IdStringMapRegistry.hh"
+#include "Utils/MathUtils.hh"
+#include "Utils/Faddeeva.hh"
+#include "qft++Extension/PawianUtils.hh"
 
 VoigtBlattWRelDynamics::VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double qR) :
   BreitWignerBlattWRelDynamics(name, fsParticles, mother, fsParticlesDaughter1, fsParticlesDaughter2, qR)
@@ -54,7 +57,61 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     return _cachedLMap.at(theData->evtNo).at(orbMom);
   }
   //the convolution with a Gassian must be put in here
-  complex<double> result(std::abs(BreitWignerFunction::BlattWRel(orbMom, theData->DoubleMassId.at(_dynId), _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR)),0.);
+
+//    double massA = theData->DoubleMassId.at(_dynMassIdDaughter1);
+//    double massB = theData->DoubleMassId.at(_dynMassIdDaughter2);
+//    
+//    complex<double> i(0.,1.);
+//    complex<double> rho0=PawianQFT::phaseSpaceFacDefault(_currentMass, massA, massB);
+//    complex<double> rho=PawianQFT::phaseSpaceFacDefault(theData->DoubleMassId.at(_dynId), massA, massB);
+//    complex<double> momQ0=PawianQFT::breakupMomQDefault(_currentMass, massA, massB);
+//    complex<double> momQ=PawianQFT::breakupMomQDefault(theData->DoubleMassId.at(_dynId), massA, massB);
+//
+//    double width = _currentWidth*std::norm(BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, _qR)); 
+//
+//    double temp=0.;
+//    if ((_currentSigma < 0. || width < 0.) || (fabs(_currentSigma)<1e-20 && fabs(width)<1.e-20)) {
+//        return temp;  // Not meant to be for those who want to be thinner than 0
+//    }
+//    if (fabs(_currentSigma) < 1.e-20){
+//        _currentSigma=1.e-12;
+//    }
+//    if (fabs(width) < 1.e-20){
+//        width=1.e-12;
+//    }
+//
+//    double denom=sqrt(2.)*_currentSigma;  
+//    double realZ=(theData->DoubleMassId.at(_dynId)-_currentMass)/denom;
+//    double imagZ=width/(2.*denom);
+//    complex<double> complZ(realZ,imagZ);  
+//
+//    temp=sqrt(2.*M_PI)/4.*_currentWidth*std::abs(BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, _qR))/_currentSigma*Faddeeva::w(complZ).real();
+//
+//    complex<double> result(sqrt(temp), 0.);
+
+    complex<double> result(0.,0.);
+    //int nConv = 100;
+
+    double xMin = theData->DoubleMassId.at(_dynId)-3.*_currentWidth;
+    double xMax = theData->DoubleMassId.at(_dynId)+3.*_currentWidth;
+    
+    int nConv = std::ceil(6.*_currentWidth/0.002);
+    
+    double step = (xMax-xMin)/((double)nConv);
+    double mean = 0.; 
+    
+    
+   for(int i=0; i<nConv; i++){
+        double xx = xMin+i*step;
+
+        double y1 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR)) * MathUtils::Gauss(theData->DoubleMassId.at(_dynId)-xx, mean, _currentSigma);
+
+        xx = xMin+(i+1)*step;
+
+        double y2 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR)) * MathUtils::Gauss(theData->DoubleMassId.at(_dynId)-xx, mean, _currentSigma);
+
+        result+= 0.5*(y2+y1)*step;
+    }
 
   if ( _cacheAmps){
      theMutex.lock();
