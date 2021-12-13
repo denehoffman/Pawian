@@ -92,25 +92,29 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     complex<double> result(0.,0.);
     //int nConv = 100;
 
-    double xMin = theData->DoubleMassId.at(_dynId)-3.*_currentWidth;
-    double xMax = theData->DoubleMassId.at(_dynId)+3.*_currentWidth;
+    double evtMass=theData->DoubleMassId.at(_dynId);
+    double evtMassDaughter1=theData->DoubleMassId.at(_dynMassIdDaughter1);
+    double evtMassDaughter2=theData->DoubleMassId.at(_dynMassIdDaughter2);
+    double xMin = evtMass-3.*_currentWidth;
+    double xMax = evtMass+3.*_currentWidth;
     
     int nConv = std::ceil(6.*_currentWidth/0.002);
     
     double step = (xMax-xMin)/((double)nConv);
     double mean = 0.; 
-    
+
+    double y1 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xMin, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xMin, mean, _currentSigma);
+    double y2=0.;
+    double xx=0.;
     
    for(int i=0; i<nConv; i++){
-        double xx = xMin+i*step;
 
-        double y1 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR)) * MathUtils::Gauss(theData->DoubleMassId.at(_dynId)-xx, mean, _currentSigma);
+     xx = xMin+(i+1)*step;
 
-        xx = xMin+(i+1)*step;
-
-        double y2 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, theData->DoubleMassId.at(_dynMassIdDaughter1), theData->DoubleMassId.at(_dynMassIdDaughter2), _qR)) * MathUtils::Gauss(theData->DoubleMassId.at(_dynId)-xx, mean, _currentSigma);
+     y2 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xx, mean, _currentSigma);
 
         result+= 0.5*(y2+y1)*step;
+	y1=y2;
     }
 
   if ( _cacheAmps){
