@@ -52,11 +52,19 @@ res1DMassShapeLh::res1DMassShapeLh(ChannelID channelID) :
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
   for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
     //InfoMsg << "amp name: " << (*itDecAll)->name() << endmsg;
-    //_dynVecs.push_back((*itDecAll)->getDyn());
+    std::shared_ptr<AbsDynamics> grandMaDyn=(*itDecAll)->getDyn();
     std::shared_ptr<AbsXdecAmp> xDecDaughter1=(*itDecAll)->absXDecAmpDaughter1();
-    if(xDecDaughter1) _dynVecs.push_back(xDecDaughter1->getDyn());
+    if(xDecDaughter1) {
+      std::shared_ptr<AbsDynamics> currentDyn=xDecDaughter1->getDyn();
+      currentDyn->setGrandMaDyn(grandMaDyn);
+      _dynVecs.push_back(currentDyn);
+    }
     std::shared_ptr<AbsXdecAmp> xDecDaughter2=(*itDecAll)->absXDecAmpDaughter2();
-    if(xDecDaughter2) _dynVecs.push_back(xDecDaughter2->getDyn());
+    if(xDecDaughter2) {
+      std::shared_ptr<AbsDynamics> currentDyn=xDecDaughter2->getDyn();
+      currentDyn->setGrandMaDyn(grandMaDyn);
+      _dynVecs.push_back(currentDyn);
+    }
   }
   
   if (_dynVecs.size()>1){

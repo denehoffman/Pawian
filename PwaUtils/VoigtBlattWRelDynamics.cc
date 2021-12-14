@@ -37,10 +37,11 @@
 #include "Utils/Faddeeva.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-VoigtBlattWRelDynamics::VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, double qR) :
+VoigtBlattWRelDynamics::VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, unsigned int prodOrbMom, double qR) :
   BreitWignerBlattWRelDynamics(name, fsParticles, mother, fsParticlesDaughter1, fsParticlesDaughter2, qR)
   ,_massSigmaKey("defaultMassSigmaKey")
   ,_currentSigma(1.)
+  ,_prodOrbMom(prodOrbMom)
 {
   _isLdependent=true;
 }
@@ -91,7 +92,8 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
 
     complex<double> result(0.,0.);
     //int nConv = 100;
-
+    
+    complex<double> currentProdVal=_grandMaDyn->eval(theData, grandmaAmp, _prodOrbMom);    
     double evtMass=theData->DoubleMassId.at(_dynId);
     double evtMassDaughter1=theData->DoubleMassId.at(_dynMassIdDaughter1);
     double evtMassDaughter2=theData->DoubleMassId.at(_dynMassIdDaughter2);
@@ -103,7 +105,7 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     double step = (xMax-xMin)/((double)nConv);
     double mean = 0.; 
 
-    double y1 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xMin, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xMin, mean, _currentSigma);
+    double y1 = std::abs(currentProdVal*BreitWignerFunction::BlattWRel(orbMom, xMin, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xMin, mean, _currentSigma);
     double y2=0.;
     double xx=0.;
     
@@ -111,7 +113,7 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
 
      xx = xMin+(i+1)*step;
 
-     y2 = std::abs(BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xx, mean, _currentSigma);
+     y2 = std::abs(currentProdVal*BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xx, mean, _currentSigma);
 
         result+= 0.5*(y2+y1)*step;
 	y1=y2;

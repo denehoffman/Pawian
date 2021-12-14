@@ -58,6 +58,7 @@ public:
   virtual void addGrandMa(std::shared_ptr<AbsDecay> theDec) {;}
   virtual const std::string& grandMaKey(AbsXdecAmp* grandmaAmp){return _grandmaKey;}
   virtual const unsigned short grandMaId(AbsXdecAmp* grandmaAmp){return _grandmaId;}
+  virtual void setGrandMaDyn(std::shared_ptr<AbsDynamics> grandMaDyn) {_grandMaDyn=grandMaDyn;}
   virtual bool isLdependent() {return _isLdependent;}
 
 protected:
@@ -72,6 +73,7 @@ protected:
   unsigned short _dynId;
   std::string _grandmaKey;
   unsigned short _grandmaId;
+  std::shared_ptr<AbsDynamics> _grandMaDyn;
   bool _isLdependent;
 private:
 

@@ -1,4 +1,3 @@
-
 //************************************************************************//
 //									  //
 //  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
@@ -137,7 +136,7 @@ public:
   const double sProdExponent() const {return _sProdExp;}
   const bool useParticleNameForPVecBg() const {return _useParticleNameForPVecBg;}
   const bool fixPrimaryChannelScaling() const {return _fixPrimaryChannelScaling;}
-  
+  const unsigned int prodOrbMom1DFit() const {return _prodOrbMom1DFit;}
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   
@@ -231,4 +230,5 @@ protected:
   double _sProdExp;
   bool _useParticleNameForPVecBg;
   bool _fixPrimaryChannelScaling;
+  unsigned int _prodOrbMom1DFit;
 };

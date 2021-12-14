@@ -95,6 +95,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_sProdExp(0.0)
   ,_useParticleNameForPVecBg(false)
   ,_fixPrimaryChannelScaling(true)
+  ,_prodOrbMom1DFit(0)  
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -203,6 +204,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("sProdExponent", po::value<double>(&_sProdExp)->default_value(_sProdExp),"exponent for the s dependency in the production (supported for FVectorIntensity and Gamgam fits")
     ("useParticleNameForPVecBg",po::value<bool>(&_useParticleNameForPVecBg), "yes: (cloned) particle name; no: K-matrix name")
     ("fixPrimaryChannelScaling",po::value<bool>(&_fixPrimaryChannelScaling), "fix/release scaling of first channel for coupled channel mode")
+    ("prodOrbMom1DFit",po::value<unsigned int>(&_prodOrbMom1DFit), "production orbital momentum of res1D fit")
     ;
 
 }
@@ -314,7 +316,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "channelScalingSuffix: " <<_channelScalingSuffix << "\n\n"
 		<< "minuitStrategyLevel: " << _minuitStrategyLevel << "\n\n"
 	        << "useParticleNameForPVecBg: " << _useParticleNameForPVecBg << "\n\n"
-                << endl;
+                << "prodOrbMom1DFit: " << _prodOrbMom1DFit << "\n\n"
+		<< endl;
 
 
       std::vector<std::string>::const_iterator it;
