@@ -68,6 +68,7 @@ BlattWBarrierDynamics::~BlattWBarrierDynamics()
 complex<double> BlattWBarrierDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
   complex<double> result(1.,0.);
   if(OrbMom==0) return result;
+
   result=BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqId), _qR) /
     BarrierFactor::BlattWeisskopf(OrbMom, theData->DoubleMassId.at(_wignerDqNormId), _qR);
 

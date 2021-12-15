@@ -137,6 +137,7 @@ public:
   const bool useParticleNameForPVecBg() const {return _useParticleNameForPVecBg;}
   const bool fixPrimaryChannelScaling() const {return _fixPrimaryChannelScaling;}
   const unsigned int prodOrbMom1DFit() const {return _prodOrbMom1DFit;}
+  const unsigned int decOrbMom1DFit() const {return _decOrbMom1DFit;}
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   
@@ -231,4 +232,5 @@ protected:
   bool _useParticleNameForPVecBg;
   bool _fixPrimaryChannelScaling;
   unsigned int _prodOrbMom1DFit;
+  unsigned int _decOrbMom1DFit;
 };

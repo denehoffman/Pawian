@@ -37,11 +37,12 @@
 #include "Utils/Faddeeva.hh"
 #include "qft++Extension/PawianUtils.hh"
 
-VoigtBlattWRelDynamics::VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, unsigned int prodOrbMom, double qR) :
+VoigtBlattWRelDynamics::VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, unsigned int prodOrbMom, unsigned int decOrbMom,double qR) :
   BreitWignerBlattWRelDynamics(name, fsParticles, mother, fsParticlesDaughter1, fsParticlesDaughter2, qR)
   ,_massSigmaKey("defaultMassSigmaKey")
   ,_currentSigma(1.)
   ,_prodOrbMom(prodOrbMom)
+  ,_decOrbMom(decOrbMom)
 {
   _isLdependent=true;
 }
@@ -52,48 +53,11 @@ VoigtBlattWRelDynamics::~VoigtBlattWRelDynamics()
 
 complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom){
 
-  int orbMom(OrbMom);
-
-  if (!_recalculate){
-    return _cachedLMap.at(theData->evtNo).at(orbMom);
-  }
-  //the convolution with a Gassian must be put in here
-
-//    double massA = theData->DoubleMassId.at(_dynMassIdDaughter1);
-//    double massB = theData->DoubleMassId.at(_dynMassIdDaughter2);
-//    
-//    complex<double> i(0.,1.);
-//    complex<double> rho0=PawianQFT::phaseSpaceFacDefault(_currentMass, massA, massB);
-//    complex<double> rho=PawianQFT::phaseSpaceFacDefault(theData->DoubleMassId.at(_dynId), massA, massB);
-//    complex<double> momQ0=PawianQFT::breakupMomQDefault(_currentMass, massA, massB);
-//    complex<double> momQ=PawianQFT::breakupMomQDefault(theData->DoubleMassId.at(_dynId), massA, massB);
-//
-//    double width = _currentWidth*std::norm(BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, _qR)); 
-//
-//    double temp=0.;
-//    if ((_currentSigma < 0. || width < 0.) || (fabs(_currentSigma)<1e-20 && fabs(width)<1.e-20)) {
-//        return temp;  // Not meant to be for those who want to be thinner than 0
-//    }
-//    if (fabs(_currentSigma) < 1.e-20){
-//        _currentSigma=1.e-12;
-//    }
-//    if (fabs(width) < 1.e-20){
-//        width=1.e-12;
-//    }
-//
-//    double denom=sqrt(2.)*_currentSigma;  
-//    double realZ=(theData->DoubleMassId.at(_dynId)-_currentMass)/denom;
-//    double imagZ=width/(2.*denom);
-//    complex<double> complZ(realZ,imagZ);  
-//
-//    temp=sqrt(2.*M_PI)/4.*_currentWidth*std::abs(BarrierFactor::BlattWeisskopfRatio(orbMom, momQ, momQ0, _qR))/_currentSigma*Faddeeva::w(complZ).real();
-//
-//    complex<double> result(sqrt(temp), 0.);
-
     complex<double> result(0.,0.);
     //int nConv = 100;
+
+    complex<double> currentProdVal=_grandMaDyn->eval(theData, grandmaAmp, _prodOrbMom); 
     
-    complex<double> currentProdVal=_grandMaDyn->eval(theData, grandmaAmp, _prodOrbMom);    
     double evtMass=theData->DoubleMassId.at(_dynId);
     double evtMassDaughter1=theData->DoubleMassId.at(_dynMassIdDaughter1);
     double evtMassDaughter2=theData->DoubleMassId.at(_dynMassIdDaughter2);
@@ -105,7 +69,7 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
     double step = (xMax-xMin)/((double)nConv);
     double mean = 0.; 
 
-    double y1 = std::abs(currentProdVal*BreitWignerFunction::BlattWRel(orbMom, xMin, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xMin, mean, _currentSigma);
+    double y1 = std::norm(currentProdVal*BreitWignerFunction::BlattWRel(_decOrbMom, xMin, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xMin, mean, _currentSigma);
     double y2=0.;
     double xx=0.;
     
@@ -113,19 +77,12 @@ complex<double> VoigtBlattWRelDynamics::eval(EvtData* theData, AbsXdecAmp* grand
 
      xx = xMin+(i+1)*step;
 
-     y2 = std::abs(currentProdVal*BreitWignerFunction::BlattWRel(orbMom, xx, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xx, mean, _currentSigma);
-
-        result+= 0.5*(y2+y1)*step;
+     y2 = std::norm(currentProdVal*BreitWignerFunction::BlattWRel(_decOrbMom, xx, _currentMass, _currentWidth, evtMassDaughter1, evtMassDaughter2, _qR)) * MathUtils::Gauss(evtMass-xx, mean, _currentSigma);
+     result+= complex<double>(0.5*(y2+y1)*step,0.);
 	y1=y2;
     }
 
-  if ( _cacheAmps){
-     theMutex.lock();
-     _cachedLMap[theData->evtNo][orbMom]=result;
-     theMutex.unlock();
-  }  
-
-  return result;
+  return std::sqrt(result);
 }
 
 void  VoigtBlattWRelDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){

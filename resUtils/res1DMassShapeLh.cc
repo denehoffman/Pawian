@@ -48,7 +48,6 @@
 res1DMassShapeLh::res1DMassShapeLh(ChannelID channelID) :
   resBaseLh(channelID)
 {
-
   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
   for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
     //InfoMsg << "amp name: " << (*itDecAll)->name() << endmsg;

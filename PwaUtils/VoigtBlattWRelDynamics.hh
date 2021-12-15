@@ -38,7 +38,7 @@
 class VoigtBlattWRelDynamics : public BreitWignerBlattWRelDynamics{
 
 public:
-  VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, unsigned int prodOrbMom, double qR=BarrierFactor::qRDefault);
+  VoigtBlattWRelDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::vector<Particle*>& fsParticlesDaughter1, std::vector<Particle*>& fsParticlesDaughter2, unsigned int prodOrbMom, unsigned int decOrbMom,double qR=BarrierFactor::qRDefault);
   virtual ~VoigtBlattWRelDynamics();
 
   virtual std::string type() {return "VoigtBlattWRelDynamics";}
@@ -53,6 +53,7 @@ protected:
   std::string _massSigmaKey;
   double _currentSigma;
   int _prodOrbMom;
+  int _decOrbMom;
   
 private:
 

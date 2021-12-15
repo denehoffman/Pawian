@@ -175,7 +175,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
         Alert << "dynamics VoigtBlattWRel is not allowed for non tensor amplitudes (amp name: " << theDec->name() << endmsg;
         exit(0);
       }
-      result= std::shared_ptr<AbsDynamics>(new VoigtBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, parserBase->prodOrbMom1DFit(), theDec->barrierqR()));
+      result= std::shared_ptr<AbsDynamics>(new VoigtBlattWRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, parserBase->prodOrbMom1DFit(), parserBase->decOrbMom1DFit(), theDec->barrierqR()));
     }
     else if(theDec->dynType()=="BreitWignerBlattWTensorRel"){
       if(!theDec->isTensorAmp()){
