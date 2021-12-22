@@ -204,10 +204,11 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
     Spin lambda2= (*it)->lam2;  //X
 
     result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
-    lambda1=-lambda1;
-    lambda2=-lambda2;
-    result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
-
+    if(lambda1!=0 || lambda2!=0){
+      lambda1=-lambda1;
+      lambda2=-lambda2;
+      result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
+    }
   }
 
   if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
