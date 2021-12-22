@@ -75,8 +75,9 @@ protected:
   std::vector<Spin> _JgammaVec;
   Particle* _daughterGamma;
   Particle* _daughter2;
-private:
 
+private:
+  complex<double> heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J);
 
 
 

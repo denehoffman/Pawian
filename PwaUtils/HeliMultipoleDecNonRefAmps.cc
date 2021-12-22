@@ -201,34 +201,13 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
     //Spin lambda1= it->first->lam1;  //gamma
     //Spin lambda2= it->first->lam2;  //X
     Spin lambda1= (*it)->lam1;  //gamma                                                         
-    Spin lambda2= (*it)->lam2;  //X 
-    Spin lambda = lambda2-lambda1;
+    Spin lambda2= (*it)->lam2;  //X
 
-    //if( fabs(lambda) > it->first->J) continue;
-    if( fabs(lambda) > (*it)->J) continue;
-    
-    if(_daughter1IsStable && _lam1MinThreadMap.at(std::this_thread::get_id())!=lambda1) continue;
-    if(_daughter2IsStable && _lam2MinThreadMap.at(std::this_thread::get_id())!=lambda2) continue;
+    result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
+    lambda1=-lambda1;
+    lambda2=-lambda2;
+    result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
 
-    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
-
-    complex<double> currentAmp(0.,0.);
-
-    for (int i=0; i<_noOfAmps; ++i){
-      double parityFactor=_daughter2->theParity();
-      if(int(_JgammaMap.at(i))%2 == 0) parityFactor *= -1.;
-      //InfoMsg << "parityFactor: " << parityFactor << endmsg;
-      //InfoMsg << "Clebsch(" << _JgammaMap.at(i) << "," << -lambda1 << ","
-      //	      << _daughter2->J() << "," << lambda2 << ","
-      //	      << _JPCPtr->J << "," << lambda << endmsg;
-      //InfoMsg << "_currentParamLocalMagExpi.at(" << i << "): " << _currentParamLocalMagExpi.at(i) << endmsg; 
-      currentAmp+=sqrt(2.*_JgammaMap.at(i)+1.)
-	*parityFactor
-	*Clebsch(_JgammaMap.at(i), -lambda1, _daughter2->J(), lambda2, _JPCPtr->J, lambda)
-	*_currentParamLocalMagExpi.at(i);
-  }
-
-    result+=currentAmp*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) )*daughterAmp(lambda1, lambda2, theData);
   }
 
   if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
@@ -243,5 +222,29 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
      _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
   }
 
+  return result;
+}
+
+complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J){
+  complex<double> result(0.,0.);
+  Spin lambda = lam2-lam1;
+  bool doCalc=true;
+  if( fabs(lambda) > J) doCalc=false;
+  if(_daughter1IsStable && _lam1MinThreadMap.at(std::this_thread::get_id())!=lam1) doCalc=false;
+  if(_daughter2IsStable && _lam2MinThreadMap.at(std::this_thread::get_id())!=lam2) doCalc=false;
+  if(doCalc){
+   unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
+   complex<double> currentAmp(0.,0.);
+   for (int i=0; i<_noOfAmps; ++i){
+      double parityFactor=_daughter2->theParity();
+      if(int(_JgammaMap.at(i))%2 == 0) parityFactor *= -1.;
+      currentAmp+=sqrt(2.*_JgammaMap.at(i)+1.)
+        *parityFactor
+        *Clebsch(_JgammaMap.at(i), -lam1, _daughter2->J(), lam2, _JPCPtr->J, lambda)
+        *_currentParamLocalMagExpi.at(i);
+  }
+
+    result+=currentAmp*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) )*daughterAmp(lam1, lam2, theData);
+  }
   return result;
 }
