@@ -77,7 +77,7 @@ protected:
   Particle* _daughter2;
 
 private:
-  complex<double> heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J);
+  complex<double> heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym);
 
 
 

@@ -205,11 +205,11 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
     //    InfoMsg << "main: J: " << (*it)->J << " lamX: " << lamX
     //	    << " lam1: " << lambda1
     //	    << " lam2: " << lambda2 << endmsg;
-    result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
+    result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J, false);
     if(lambda1!=0 || lambda2!=0){
       lambda1=-lambda1;
       lambda2=-lambda2;
-      result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
+      result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J, true);
     }
   }
 
@@ -228,7 +228,7 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
   return result;
 }
 
-complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J){
+complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym){
   complex<double> result(0.,0.);
   Spin lambda = lam2-lam1;
   bool doCalc=true;
@@ -242,9 +242,11 @@ complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& 
    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
    complex<double> currentAmp(0.,0.);
    for (int i=0; i<_noOfAmps; ++i){
-      double parityFactor=_daughter2->theParity();
-      //if(int(_JgammaMap.at(i))%2 == 0) parityFactor *= -1.;
-      if(int(_JgammaMap.at(i))%2 == 0 && lam1<0) parityFactor *= -1.; //this is a fix which is needed to be checked
+      double currentParity=_daughter2->theParity();
+      if(int(_JgammaMap.at(i))%2 == 0) currentParity *= -1.;
+      double parityFactor=1.;
+      if(currentParity<0. && isSym) parityFactor=-1.;
+      //if(int(_JgammaMap.at(i))%2 == 0 && lam1<0) parityFactor *= -1.; //this is a fix which is needed to be checked
       currentAmp+=sqrt(2.*_JgammaMap.at(i)+1.)
         *parityFactor
         *Clebsch(_JgammaMap.at(i), -lam1, _daughter2->J(), lam2, _JPCPtr->J, lambda)
