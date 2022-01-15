@@ -115,8 +115,10 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
 
   // _Kmatrix->printElements();
   // _Pvector->printElements();
+  //  InfoMsg << "\nmass: " << mass << endmsg;
   for (int i=0; i<NumRows(); ++i){
     _CMMatrix(i,i) = _phpVec[i]->ChewM(mass, OrbMom);
+    //   InfoMsg << "_CMMatrix(" << i << "," << i << "): " << _CMMatrix(i,i) << endmsg;
   }
  
   Matrix< complex< double > > denomMatrInv=_idMatrix+_cSign*(*_Kmatrix)*_CMMatrix;

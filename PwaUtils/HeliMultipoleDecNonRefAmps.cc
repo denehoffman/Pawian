@@ -202,7 +202,9 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
     //Spin lambda2= it->first->lam2;  //X
     Spin lambda1= (*it)->lam1;  //gamma                                                         
     Spin lambda2= (*it)->lam2;  //X
-
+    //    InfoMsg << "main: J: " << (*it)->J << " lamX: " << lamX
+    //	    << " lam1: " << lambda1
+    //	    << " lam2: " << lambda2 << endmsg;
     result+=heliAmpLoop(theData, lamX, lambda1, lambda2, (*it)->J);
     if(lambda1!=0 || lambda2!=0){
       lambda1=-lambda1;
@@ -231,14 +233,18 @@ complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& 
   Spin lambda = lam2-lam1;
   bool doCalc=true;
   if( fabs(lambda) > J) doCalc=false;
-  if(_daughter1IsStable && _lam1MinThreadMap.at(std::this_thread::get_id())!=lam1) doCalc=false;
-  if(_daughter2IsStable && _lam2MinThreadMap.at(std::this_thread::get_id())!=lam2) doCalc=false;
+  // InfoMsg << "_daughter1IsStable: " << _daughter1IsStable << " _lam1MinThreadMap.at(std::this_thread::get_id()): " << _lam1MinThreadMap.at(std::this_thread::get_id()) << endmsg;
+  
+  if(_daughter1IsStable && (_lam1MinThreadMap.at(std::this_thread::get_id())!=lam1)) doCalc=false;
+  if(_daughter2IsStable && (_lam2MinThreadMap.at(std::this_thread::get_id())!=lam2)) doCalc=false;
+  //  InfoMsg << "J: " << J << " lamX: " << lamX << " lam1: " << lam1 << " lam2: " << lam2 << " lambda: " << lambda << " doCalc: " << doCalc << endmsg;
   if(doCalc){
    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
    complex<double> currentAmp(0.,0.);
    for (int i=0; i<_noOfAmps; ++i){
       double parityFactor=_daughter2->theParity();
-      if(int(_JgammaMap.at(i))%2 == 0) parityFactor *= -1.;
+      //if(int(_JgammaMap.at(i))%2 == 0) parityFactor *= -1.;
+      if(int(_JgammaMap.at(i))%2 == 0 && lam1<0) parityFactor *= -1.; //this is a fix which is needed to be checked
       currentAmp+=sqrt(2.*_JgammaMap.at(i)+1.)
         *parityFactor
         *Clebsch(_JgammaMap.at(i), -lam1, _daughter2->J(), lam2, _JPCPtr->J, lambda)
