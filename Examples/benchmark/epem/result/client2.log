@@ -1,10 +1,10 @@
-INFO: /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
-INFO: --epemFiles
-INFO: /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
-INFO: --mode
-INFO: client
-INFO: !
-INFO: 
+2022/02/09 14:16:50.718423 [INFO] /data/duldul/bertram/NewPawian220123/Pawian/bin/singleChannelApp
+2022/02/09 14:16:50.718465 [INFO] --epemFiles
+2022/02/09 14:16:50.718472 [INFO] /data/duldul/bertram/NewPawian220123/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+2022/02/09 14:16:50.718476 [INFO] --mode
+2022/02/09 14:16:50.718479 [INFO] client
+2022/02/09 14:16:50.718482 [INFO] !
+2022/02/09 14:16:50.718497 [INFO] 
                                        MMMMM
                                       M8NO  +M
                                     NO       M         ,MM
@@ -88,15 +88,18 @@ INFO:
 //************************************************************************//
 
    
-INFO: Compiled Oct 20 2016 16:17:17
+2022/02/09 14:16:50.718509 [INFO] Compiled Jan 31 2022 10:43:54
+2022/02/09 14:16:50.718513 [INFO] Hostname: pc36
 
-Running with the following options using /data/jollyj/bertram/NewPawian161020/Pawian/ConfigParser/global.cfg:
+Running with the following options using /data/duldul/bertram/NewPawian220123/Pawian/ConfigParser/global.cfg:
 
 Error log mode: 1
 
 data file: 
 
 mc file: 
+
+truth file: 
 
 chosen unit in input file: GEV
 
@@ -110,7 +113,9 @@ mode: client
 
 number of threads: 2
 
-ratioMcToData: 100000
+ratioMcToData: 100
+
+ratioTruthToMc: 100
 
 cache amplitudes: 1
 
@@ -118,7 +123,11 @@ use data event weight: 0
 
 use Monte Carlo event weight: 0
 
+use truth event weight: 0
+
 use phase space hyp: 0
+
+use coherent phase space hyp: 0
 
 prefit with free scaling factor: 0
 
@@ -126,8 +135,38 @@ pdg table: /Particle/pdtNew.table
 
 minimumTolerance: 0.1
 
+no of interpolated scattering points: 0
 
-epem channel configuration file: /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+initial 4vector: 
+
+projectile 4vector: 
+
+prePathDataFiles: 
+
+prePathKMatrixFiles: 
+
+scalingWithChannelID: 0
+
+fixAllPhases: 0
+
+singleChannelId: 0
+
+nllScalingFactor: 1
+
+addChannelScalingId: 0
+
+channelScalingSuffix: 
+
+minuitStrategyLevel: 1
+
+useParticleNameForPVecBg: 0
+
+prodOrbMom1DFit: 0
+
+decOrbMom1DFit: 0
+
+
+epem channel configuration file: /data/duldul/bertram/NewPawian220123/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
 
 
 
@@ -145,6 +184,8 @@ replaced prod key
 
 production system:
 
+K-matrix prod suffix:
+
 production formalism:	Cano
 fitqRProduction:	0
 
@@ -153,6 +194,12 @@ histograms inv mass for systems
 histograms decay angles for systems
 
 mass range cuts:
+
+mass range anti-cuts:
+
+generator range:	
+
+php dynamics:
 
 2Dhistogram decay angles for systems
 
@@ -163,27 +210,35 @@ generate with model:	1
 number of generated events:	10000
 
 number of data events:	1000000
-INFO: numReactions: 1
-ERROR: /ParticleGrammar.hh:133: failed parsing at: 
-INFO: __argv[0]: /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
-INFO: __argv[1]: --epemFiles
-INFO: __argv[3]: --mode
-INFO: __argv[4]: client
-INFO: __argv[5]: !
-INFO: argvWCfgFile[0]= /data/jollyj/bertram/NewPawian161020/Pawian/bin/singleChannelApp
-INFO: argvWCfgFile[1]= -c
-INFO: argvWCfgFile[2]= /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
-INFO: argvWCfgFile[3]= --mode
-INFO: argvWCfgFile[4]= client
-INFO: argvWCfgFile[5]= !
 
-Running with the following options using /data/jollyj/bertram/NewPawian161020/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
+number of bootstrap events:	10000
+
+number of bootstrap files:	1
+
+boostrap file name:	bootstrapFile
+sProdExponent =0
+2022/02/09 14:16:50.719796 [INFO] numReactions: 1
+2022/02/09 14:16:50.720970 [INFO] __argv[0]: /data/duldul/bertram/NewPawian220123/Pawian/bin/singleChannelApp
+2022/02/09 14:16:50.721000 [INFO] __argv[1]: --epemFiles
+2022/02/09 14:16:50.721014 [INFO] __argv[3]: --mode
+2022/02/09 14:16:50.721019 [INFO] __argv[4]: client
+2022/02/09 14:16:50.721023 [INFO] __argv[5]: !
+2022/02/09 14:16:50.721035 [INFO] argvWCfgFile[0]= /data/duldul/bertram/NewPawian220123/Pawian/bin/singleChannelApp
+2022/02/09 14:16:50.721040 [INFO] argvWCfgFile[1]= -c
+2022/02/09 14:16:50.721044 [INFO] argvWCfgFile[2]= /data/duldul/bertram/NewPawian220123/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg
+2022/02/09 14:16:50.721048 [INFO] argvWCfgFile[3]= --mode
+2022/02/09 14:16:50.721051 [INFO] argvWCfgFile[4]= client
+2022/02/09 14:16:50.721055 [INFO] argvWCfgFile[5]= !
+
+Running with the following options using /data/duldul/bertram/NewPawian220123/Pawian/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg:
 
 Error log mode: 1
 
 data file: ./toyDataSignal.dat
 
 mc file: ./toyMC.dat
+
+truth file: 
 
 chosen unit in input file: GEV
 
@@ -199,19 +254,55 @@ number of threads: 2
 
 ratioMcToData: 6
 
+ratioTruthToMc: 100
+
 cache amplitudes: 1
 
 use data event weight: 0
 
 use Monte Carlo event weight: 0
 
+use truth event weight: 0
+
 use phase space hyp: 0
+
+use coherent phase space hyp: 0
 
 prefit with free scaling factor: 0
 
 pdg table: /Particle/pdtNew.table
 
 minimumTolerance: 0.1
+
+no of interpolated scattering points: 0
+
+initial 4vector: 3.096916 0.0305 0. 0.
+
+projectile 4vector: 1.548458 0.01525 0. 1.54838281898986474
+
+prePathDataFiles: 
+
+prePathKMatrixFiles: 
+
+scalingWithChannelID: 0
+
+fixAllPhases: 0
+
+singleChannelId: 0
+
+nllScalingFactor: 1
+
+addChannelScalingId: 0
+
+channelScalingSuffix: 
+
+minuitStrategyLevel: 1
+
+useParticleNameForPVecBg: 0
+
+prodOrbMom1DFit: 0
+
+decOrbMom1DFit: 0
 
 
 clone particles: pion+ pion1+
@@ -263,6 +354,8 @@ production system:
 eta(2225) photon BlattWBarrier 0.66
 f2(1910) photon BlattWBarrier 0.66
 
+K-matrix prod suffix:
+
 production formalism:	Heli
 fitqRProduction:	0
 
@@ -283,6 +376,12 @@ mass range cuts:
 0.762 0.802 pion1+ pion1- pion10
 0.762 0.802 pion2+ pion2- pion20
 
+mass range anti-cuts:
+
+generator range:	
+
+php dynamics:
+
 2Dhistogram decay angles for systems
 
 random seed:	44123
@@ -293,43 +392,52 @@ number of generated events:	10000
 
 number of data events:	5000
 
+number of bootstrap events:	10000
+
+number of bootstrap files:	1
+
+boostrap file name:	bootstrapFile
+sProdExponent =0
+
 cms mass:	3.09692
 
 spin density matrix calculation for particles
 
 productionTensorRadType: Default
 
-INFO: Now replace the parser!!!
-ERROR: /ParticleGrammar.hh:133: failed parsing at: 
-INFO: 
+2022/02/09 14:16:50.722977 [INFO] initial4Vec: {Rank = 1 ( 3.09692,0.0305,0,0) } 
+2022/02/09 14:16:50.722997 [INFO] projectile4Vec: {Rank = 1 ( 1.54846,0.01525,0,1.54838) } 
+2022/02/09 14:16:50.723009 [INFO] Now replace the parser!!!
+2022/02/09 14:16:50.723850 [ERROR] PwaApps/singleChannelApp.cc line 126: trying to set channel ID to 0
+2022/02/09 14:16:50.723911 [INFO] 
 The spins of the final state particles are:
-INFO: photon : 1
-INFO: pion1+ : 0
-INFO: pion1- : 0
-INFO: pion10 : 0
-INFO: pion2+ : 0
-INFO: pion2- : 0
-INFO: pion20 : 0
-INFO: 
+2022/02/09 14:16:50.723920 [INFO] photon : 1
+2022/02/09 14:16:50.723924 [INFO] pion1+ : 0
+2022/02/09 14:16:50.723928 [INFO] pion1- : 0
+2022/02/09 14:16:50.723931 [INFO] pion10 : 0
+2022/02/09 14:16:50.723935 [INFO] pion2+ : 0
+2022/02/09 14:16:50.723939 [INFO] pion2- : 0
+2022/02/09 14:16:50.723942 [INFO] pion20 : 0
+2022/02/09 14:16:50.723946 [INFO] 
 current projection is:
-INFO: 0	lambda: -1
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 
+2022/02/09 14:16:50.723952 [INFO] 0	lambda: -1
+2022/02/09 14:16:50.723956 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.723959 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.723963 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.723966 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.723970 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.723974 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.723984 [INFO] 
 current projection is:
-INFO: 1	lambda: 1
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: 0	lambda: 0
-INFO: added decay omega1Topion1+_pion1-_pion10 to decay list
-INFO: added decay omega2Topion2+_pion2-_pion20 to decay list
+2022/02/09 14:16:50.723997 [INFO] 1	lambda: 1
+2022/02/09 14:16:50.724001 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.724005 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.724008 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.724012 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.724024 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.724028 [INFO] 0	lambda: 0
+2022/02/09 14:16:50.724119 [INFO] added decay omega1Topion1+_pion1-_pion10 to decay list
+2022/02/09 14:16:50.724141 [INFO] added decay omega2Topion2+_pion2-_pion20 to decay list
 
 JPCLS amplitudes for decay	eta(2225)Toomega1_omega2:
 suffix for fit parameter name:	eta(2225)Toomega1_omega2
@@ -348,7 +456,7 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 
 
-INFO: added decay eta(2225)Toomega1_omega2 to decay list
+2022/02/09 14:16:50.724179 [INFO] added decay eta(2225)Toomega1_omega2 to decay list
 
 JPCLS amplitudes for decay	f2(1910)Toomega1_omega2:
 suffix for fit parameter name:	f2(1910)Toomega1_omega2
@@ -370,7 +478,7 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 
 
-INFO: added decay f2(1910)Toomega1_omega2 to decay list
+2022/02/09 14:16:50.724215 [INFO] added decay f2(1910)Toomega1_omega2 to decay list
 
 ***ProdChannelInfo***
 ***ProdChannelInfo***
@@ -385,60 +493,60 @@ particle1: f2(1910)	particle2: photon
 with production barrier: 1
 prod barrier type: BlattWBarrier
 with qR = 0.66
-INFO: 
+2022/02/09 14:16:50.724268 [INFO] 
 MassRangeCont:	1.4
-INFO: 
+2022/02/09 14:16:50.724284 [INFO] 
 MassRangeCont:	3.2
-INFO: 
+2022/02/09 14:16:50.724289 [INFO] 
 MassRangeCont:	pion1+
-INFO: 
+2022/02/09 14:16:50.724297 [INFO] 
 MassRangeCont:	pion1-
-INFO: 
+2022/02/09 14:16:50.724302 [INFO] 
 MassRangeCont:	pion10
-INFO: 
+2022/02/09 14:16:50.724307 [INFO] 
 MassRangeCont:	pion2+
-INFO: 
+2022/02/09 14:16:50.724311 [INFO] 
 MassRangeCont:	pion2-
-INFO: 
+2022/02/09 14:16:50.724324 [INFO] 
 MassRangeCont:	pion20
-INFO: mass cut on inv mass of the final state particles:
-INFO: pion1+
-INFO: pion1-
-INFO: pion10
-INFO: pion2+
-INFO: pion2-
-INFO: pion20
-INFO: 	massMin = 1.4	massmax = 3.2
-INFO: 
+2022/02/09 14:16:50.724328 [INFO] mass cut on inv mass of the final state particles:
+2022/02/09 14:16:50.724332 [INFO] pion1+
+2022/02/09 14:16:50.724336 [INFO] pion1-
+2022/02/09 14:16:50.724339 [INFO] pion10
+2022/02/09 14:16:50.724343 [INFO] pion2+
+2022/02/09 14:16:50.724346 [INFO] pion2-
+2022/02/09 14:16:50.724349 [INFO] pion20
+2022/02/09 14:16:50.724360 [INFO] 	massMin = 1.4	massmax = 3.2
+2022/02/09 14:16:50.724370 [INFO] 
 MassRangeCont:	0.762
-INFO: 
+2022/02/09 14:16:50.724376 [INFO] 
 MassRangeCont:	0.802
-INFO: 
+2022/02/09 14:16:50.724380 [INFO] 
 MassRangeCont:	pion1+
-INFO: 
+2022/02/09 14:16:50.724385 [INFO] 
 MassRangeCont:	pion1-
-INFO: 
+2022/02/09 14:16:50.724389 [INFO] 
 MassRangeCont:	pion10
-INFO: mass cut on inv mass of the final state particles:
-INFO: pion1+
-INFO: pion1-
-INFO: pion10
-INFO: 	massMin = 0.762	massmax = 0.802
-INFO: 
+2022/02/09 14:16:50.724393 [INFO] mass cut on inv mass of the final state particles:
+2022/02/09 14:16:50.724397 [INFO] pion1+
+2022/02/09 14:16:50.724401 [INFO] pion1-
+2022/02/09 14:16:50.724404 [INFO] pion10
+2022/02/09 14:16:50.724409 [INFO] 	massMin = 0.762	massmax = 0.802
+2022/02/09 14:16:50.724415 [INFO] 
 MassRangeCont:	0.762
-INFO: 
+2022/02/09 14:16:50.724419 [INFO] 
 MassRangeCont:	0.802
-INFO: 
+2022/02/09 14:16:50.724424 [INFO] 
 MassRangeCont:	pion2+
-INFO: 
+2022/02/09 14:16:50.724428 [INFO] 
 MassRangeCont:	pion2-
-INFO: 
+2022/02/09 14:16:50.724433 [INFO] 
 MassRangeCont:	pion20
-INFO: mass cut on inv mass of the final state particles:
-INFO: pion2+
-INFO: pion2-
-INFO: pion20
-INFO: 	massMin = 0.762	massmax = 0.802
+2022/02/09 14:16:50.724437 [INFO] mass cut on inv mass of the final state particles:
+2022/02/09 14:16:50.724440 [INFO] pion2+
+2022/02/09 14:16:50.724444 [INFO] pion2-
+2022/02/09 14:16:50.724448 [INFO] pion20
+2022/02/09 14:16:50.724452 [INFO] 	massMin = 0.762	massmax = 0.802
 eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 
@@ -493,7 +601,7 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta(2225)	mass=2.23+0-0	width=0.15+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-INFO: daughter2->twoJ()%2 = 0_XisEven: 1  daughter2->theParity(): -1
+2022/02/09 14:16:50.724621 [INFO] daughter2->twoJ()%2 = 0_XisEven: 1  daughter2->theParity(): -1
 
 JPCLS tensor amplitudes for decay	I0G-1J1P-1C-1Tophoton_eta(2225):
 suffix for fit parameter name:	J1P-1C-1Tophoton_eta(2225)
@@ -638,7 +746,7 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 photon	mass=0+0-0	width=0+0-0	3*q=0	2*J=2	P=-1	p=-2	C=-1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 f2(1910)	mass=1.941+0-0	width=0.17+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-INFO: daughter2->twoJ()%2 = 0_XisEven: 1  daughter2->theParity(): 1
+2022/02/09 14:16:50.724827 [INFO] daughter2->twoJ()%2 = 0_XisEven: 1  daughter2->theParity(): 1
 
 JPCLS tensor amplitudes for decay	I0G-1J1P-1C-1Tophoton_f2(1910):
 suffix for fit parameter name:	J1P-1C-1Tophoton_f2(1910)
@@ -732,145 +840,124 @@ suffix for fit parameter name:	omega2Topion2+_pion2-_pion20
 
 
 
-INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Toeta(2225)_photon enabled!
-INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Toeta(2225)_photon
-INFO: add dynamics for I0G-1J1P-1C-1Toeta(2225)_photon
-INFO: Barrier factors for production amplitude I0G-1J1P-1C-1Tof2(1910)_photon enabled!
-INFO: BlattWBarrierDynamics for I0G-1J1P-1C-1Tof2(1910)_photon
-INFO: add dynamics for I0G-1J1P-1C-1Tof2(1910)_photon
-INFO: AmpName: eta(2225)Toomega1_omega2  radius for barrier factor qr= 0.1973
-INFO: BreitWignerRelDynamics for eta(2225)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
-INFO: add dynamics for eta(2225)Toomega1_omega2
-INFO: AmpName: f2(1910)Toomega1_omega2  radius for barrier factor qr= 0.1973
-INFO: BreitWignerRelDynamics for f2(1910)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
-INFO: add dynamics for f2(1910)Toomega1_omega2
-INFO: I0G-1J1P-1C-1Toeta(2225)_photon set decay level to 0
-INFO: eta(2225)Toomega1_omega2 set decay level to 1
-INFO: omega1Topion1+_pion1-_pion10 set decay level to 2
-INFO: omega2Topion2+_pion2-_pion20 set decay level to 2
-INFO: I0G-1J1P-1C-1Tof2(1910)_photon set decay level to 0
-INFO: f2(1910)Toomega1_omega2 set decay level to 1
-INFO: check complete reaction chains
-INFO: paricle name: photon
-INFO: paricle name: pion1+
-INFO: paricle name: pion1-
-INFO: paricle name: pion10
-INFO: paricle name: pion2+
-INFO: paricle name: pion2-
-INFO: paricle name: pion20
-INFO: reaction chains have been successfully checked!!!
-INFO: wigDWigDRefId = 1
-INFO: name of amplitude: omega1Topion1+_pion1-_pion10	nameId: 1
+2022/02/09 14:16:50.724925 [INFO] _prodChannelInfo->prodBarrierType(): BlattWBarrier
+2022/02/09 14:16:50.724930 [INFO] Barrier factors for production amplitude I0G-1J1P-1C-1Toeta(2225)_photon enabled!
+2022/02/09 14:16:50.724953 [INFO] BlattWBarrierDynamics for I0G-1J1P-1C-1Toeta(2225)_photon
+2022/02/09 14:16:50.724960 [INFO] add dynamics for I0G-1J1P-1C-1Toeta(2225)_photon dynType: BlattWBarrier
+2022/02/09 14:16:50.724970 [INFO] _prodChannelInfo->prodBarrierType(): BlattWBarrier
+2022/02/09 14:16:50.724974 [INFO] Barrier factors for production amplitude I0G-1J1P-1C-1Tof2(1910)_photon enabled!
+2022/02/09 14:16:50.724988 [INFO] BlattWBarrierDynamics for I0G-1J1P-1C-1Tof2(1910)_photon
+2022/02/09 14:16:50.724993 [INFO] add dynamics for I0G-1J1P-1C-1Tof2(1910)_photon dynType: BlattWBarrier
+2022/02/09 14:16:50.725011 [INFO] AmpName: eta(2225)Toomega1_omega2  radius for barrier factor qr= 0.1973
+2022/02/09 14:16:50.725027 [INFO] BreitWignerRelDynamics for eta(2225)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
+2022/02/09 14:16:50.725033 [INFO] add dynamics for eta(2225)Toomega1_omega2 dynType: BreitWignerBlattWRel
+2022/02/09 14:16:50.725042 [INFO] AmpName: f2(1910)Toomega1_omega2  radius for barrier factor qr= 0.1973
+2022/02/09 14:16:50.725051 [INFO] BreitWignerRelDynamics for f2(1910)Toomega1_omega2 with  mass key daughter1 pion1+pion1-pion10pion2+pion2-pion20pion1+pion1-pion10 and mass key daughter2 pion1+pion1-pion10pion2+pion2-pion20pion2+pion2-pion20
+2022/02/09 14:16:50.725059 [INFO] add dynamics for f2(1910)Toomega1_omega2 dynType: BreitWignerBlattWRel
+2022/02/09 14:16:50.725067 [INFO] I0G-1J1P-1C-1Toeta(2225)_photon set decay level to 0
+2022/02/09 14:16:50.725072 [INFO] eta(2225)Toomega1_omega2 set decay level to 1
+2022/02/09 14:16:50.725077 [INFO] omega1Topion1+_pion1-_pion10 set decay level to 2
+2022/02/09 14:16:50.725081 [INFO] omega2Topion2+_pion2-_pion20 set decay level to 2
+2022/02/09 14:16:50.725086 [INFO] I0G-1J1P-1C-1Tof2(1910)_photon set decay level to 0
+2022/02/09 14:16:50.725091 [INFO] f2(1910)Toomega1_omega2 set decay level to 1
+2022/02/09 14:16:50.725097 [ERROR] PwaUtils/GlobalEnv.cc line 194: setting up channel 0
+2022/02/09 14:16:50.725101 [INFO] check complete reaction chains
+2022/02/09 14:16:50.725106 [INFO] paricle name: photon
+2022/02/09 14:16:50.725110 [INFO] paricle name: pion1+
+2022/02/09 14:16:50.725114 [INFO] paricle name: pion1-
+2022/02/09 14:16:50.725117 [INFO] paricle name: pion10
+2022/02/09 14:16:50.725121 [INFO] paricle name: pion2+
+2022/02/09 14:16:50.725124 [INFO] paricle name: pion2-
+2022/02/09 14:16:50.725128 [INFO] paricle name: pion20
+2022/02/09 14:16:50.725133 [INFO] reaction chains have been successfully checked!!!
+2022/02/09 14:16:50.725142 [INFO] wigDWigDRefId = 1
+2022/02/09 14:16:50.725154 [INFO] name of amplitude: omega1Topion1+_pion1-_pion10	nameId: 1
 _wigDWigDRefId = 1	_wignerDId = 2
 with wignerDKey: omegaTo3piLS_pion1+pion1-pion10	wignerDRefKey: pion1+pion1-pion10pion2+pion2-pion20
-INFO: wigDWigDRefId = 2
-INFO: name of amplitude: omega2Topion2+_pion2-_pion20	nameId: 3
+2022/02/09 14:16:50.725162 [INFO] wigDWigDRefId = 2
+2022/02/09 14:16:50.725166 [INFO] name of amplitude: omega2Topion2+_pion2-_pion20	nameId: 3
 _wigDWigDRefId = 2	_wignerDId = 4
 with wignerDKey: omegaTo3piLS_pion2+pion2-pion20	wignerDRefKey: pion1+pion1-pion10pion2+pion2-pion20
-INFO: wigDWigDRefId = 3
-INFO: name of amplitude: eta(2225)Toomega1_omega2	nameId: 5
+2022/02/09 14:16:50.725173 [INFO] wigDWigDRefId = 3
+2022/02/09 14:16:50.725178 [INFO] name of amplitude: eta(2225)Toomega1_omega2	nameId: 5
 _wigDWigDRefId = 3	_wignerDId = 6
 with wignerDKey: pion2+pion2-pion20_pion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: photonpion1+pion1-pion10pion2+pion2-pion20
-INFO: wigDWigDRefId = 4
-INFO: name of amplitude: I0G-1J1P-1C-1Toeta(2225)_photon	nameId: 7
+2022/02/09 14:16:50.725183 [INFO] wigDWigDRefId = 4
+2022/02/09 14:16:50.725188 [INFO] name of amplitude: I0G-1J1P-1C-1Toeta(2225)_photon	nameId: 7
 _wigDWigDRefId = 4	_wignerDId = 8
 with wignerDKey: photon_photonpion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: prod
-INFO: wigDWigDRefId = 3
-INFO: name of amplitude: f2(1910)Toomega1_omega2	nameId: 9
+2022/02/09 14:16:50.725194 [INFO] wigDWigDRefId = 3
+2022/02/09 14:16:50.725199 [INFO] name of amplitude: f2(1910)Toomega1_omega2	nameId: 9
 _wigDWigDRefId = 3	_wignerDId = 6
 with wignerDKey: pion2+pion2-pion20_pion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: photonpion1+pion1-pion10pion2+pion2-pion20
-INFO: wigDWigDRefId = 4
-INFO: name of amplitude: I0G-1J1P-1C-1Tof2(1910)_photon	nameId: 10
+2022/02/09 14:16:50.725204 [INFO] wigDWigDRefId = 4
+2022/02/09 14:16:50.725208 [INFO] name of amplitude: I0G-1J1P-1C-1Tof2(1910)_photon	nameId: 10
 _wigDWigDRefId = 4	_wignerDId = 8
 with wignerDKey: photon_photonpion1+pion1-pion10pion2+pion2-pion20	wignerDRefKey: prod
-INFO: Dynamics	I0G-1J1P-1C-1Toeta(2225)_photon	found!!!
-INFO: Dynamics	eta(2225)Toomega1_omega2	found!!!
-WARN: /AbsXdecAmp.cc:83: no dynamics for	omega1Topion1+_pion1-_pion10
-INFO: add dynamics for omega1Topion1+_pion1-_pion10
-INFO: _fsParticleNames.at(0): photon
-INFO: _fsParticleNames.at(1): pion1+
-INFO: _fsParticleNames.at(0): photon
-INFO: _fsParticleNames.at(1): pion1+
-INFO: _fsParticleNames.at(2): pion1-
-INFO: _parityFactor=	-1
-WARN: /AbsXdecAmp.cc:94: no dynamics for	omega2Topion2+_pion2-_pion20
-INFO: add dynamics for omega2Topion2+_pion2-_pion20
-INFO: _fsParticleNames.at(0): photon
-INFO: _fsParticleNames.at(1): pion1+
-INFO: _fsParticleNames.at(2): pion1-
-INFO: _fsParticleNames.at(3): pion10
-INFO: _fsParticleNames.at(4): pion2+
-INFO: _fsParticleNames.at(0): photon
-INFO: _fsParticleNames.at(1): pion1+
-INFO: _fsParticleNames.at(2): pion1-
-INFO: _fsParticleNames.at(3): pion10
-INFO: _fsParticleNames.at(4): pion2+
-INFO: _fsParticleNames.at(5): pion2-
-INFO: _parityFactor=	-1
-INFO: _parityFactor=	1
-INFO: _fsParticleNames.at(0): photon
-INFO: _parityFactor=	-1
-INFO: Dynamics	I0G-1J1P-1C-1Tof2(1910)_photon	found!!!
-INFO: Dynamics	f2(1910)Toomega1_omega2	found!!!
-WARN: /AbsXdecAmp.cc:83: no dynamics for	omega1Topion1+_pion1-_pion10
-WARN: /AbsXdecAmp.cc:94: no dynamics for	omega2Topion2+_pion2-_pion20
-INFO: _parityFactor=	1
-INFO: _fsParticleNames.at(0): photon
-INFO: _parityFactor=	1
-INFO: J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag	1	0.5
-INFO: paramName: J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag	val: 1	err:0.5	min:0	max:-1
-INFO: J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonPhi	0	0.2
-INFO: paramName: J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonPhi	val: 0	err:0.2	min:0	max:-1
-INFO: L1S1_eta(2225)Toomega1_omega2Mag	1	0.5
-INFO: paramName: L1S1_eta(2225)Toomega1_omega2Mag	val: 1	err:0.5	min:0	max:-1
-INFO: L1S1_eta(2225)Toomega1_omega2Phi	0	0.2
-INFO: paramName: L1S1_eta(2225)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
-INFO: eta(2225)Mass	2.15	0.03	2.08	2.38
-INFO: paramName: eta(2225)Mass	val: 2.15	err:0.03	min:2.08	max:2.38
-INFO: eta(2225)Width	0.14	0.03	0	0.3
-INFO: paramName: eta(2225)Width	val: 0.14	err:0.03	min:0	max:0.3
-INFO: L1S0_omega1Topion1+_pion1-_pion10Mag	1	0.5
-INFO: paramName: L1S0_omega1Topion1+_pion1-_pion10Mag	val: 1	err:0.5	min:0	max:-1
-INFO: L1S0_omega1Topion1+_pion1-_pion10Phi	0	0.2
-INFO: paramName: L1S0_omega1Topion1+_pion1-_pion10Phi	val: 0	err:0.2	min:0	max:-1
-INFO: L1S0_omega2Topion2+_pion2-_pion20Mag	1	0.5
-INFO: paramName: L1S0_omega2Topion2+_pion2-_pion20Mag	val: 1	err:0.5	min:0	max:-1
-INFO: L1S0_omega2Topion2+_pion2-_pion20Phi	0	0.2
-INFO: paramName: L1S0_omega2Topion2+_pion2-_pion20Phi	val: 0	err:0.2	min:0	max:-1
-INFO: J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.288675
-INFO: paramName: J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag	val: 0.57735	err:0.288675	min:0	max:-1
-INFO: J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi	0	0.2
-INFO: paramName: J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi	val: 0	err:0.2	min:0	max:-1
-INFO: J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.288675
-INFO: paramName: J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag	val: 0.57735	err:0.288675	min:0	max:-1
-INFO: J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi	0	0.2
-INFO: paramName: J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi	val: 0	err:0.2	min:0	max:-1
-INFO: J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.288675
-INFO: paramName: J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag	val: 0.57735	err:0.288675	min:0	max:-1
-INFO: J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi	0	0.2
-INFO: paramName: J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi	val: 0	err:0.2	min:0	max:-1
-INFO: L2S0_f2(1910)Toomega1_omega2Mag	0.5	0.25
-INFO: paramName: L2S0_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
-INFO: L2S0_f2(1910)Toomega1_omega2Phi	0	0.2
-INFO: paramName: L2S0_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
-INFO: L0S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
-INFO: paramName: L0S2_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
-INFO: L0S2_f2(1910)Toomega1_omega2Phi	0	0.2
-INFO: paramName: L0S2_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
-INFO: L2S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
-INFO: paramName: L2S2_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
-INFO: L2S2_f2(1910)Toomega1_omega2Phi	0	0.2
-INFO: paramName: L2S2_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
-INFO: L4S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
-INFO: paramName: L4S2_f2(1910)Toomega1_omega2Mag	val: 0.5	err:0.25	min:0	max:-1
-INFO: L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
-INFO: paramName: L4S2_f2(1910)Toomega1_omega2Phi	val: 0	err:0.2	min:0	max:-1
-INFO: f2(1910)Mass	1.97	0.03	1.791	2.091
-INFO: paramName: f2(1910)Mass	val: 1.97	err:0.03	min:1.791	max:2.091
-INFO: f2(1910)Width	0.16	0.034	0	0.34
-INFO: paramName: f2(1910)Width	val: 0.16	err:0.034	min:0	max:0.34
-INFO: channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20
-INFO: paramName: channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	val: 1	err:0.01	min:0	max:20
+2022/02/09 14:16:50.725216 [INFO] create likelihood object for channelType 2	 and channelID: 0
+2022/02/09 14:16:50.725247 [INFO] Dynamics	I0G-1J1P-1C-1Toeta(2225)_photon	found!!!
+2022/02/09 14:16:50.725261 [INFO] Dynamics	eta(2225)Toomega1_omega2	found!!!
+2022/02/09 14:16:50.725267 [WARN] PwaUtils/AbsXdecAmp.cc line 91: no dynamics for	omega1Topion1+_pion1-_pion10
+2022/02/09 14:16:50.725285 [INFO] add dynamics for omega1Topion1+_pion1-_pion10 dynType: WoDynamics
+2022/02/09 14:16:50.725293 [INFO] _fsParticleNames.at(0): photon
+2022/02/09 14:16:50.725297 [INFO] _fsParticleNames.at(1): pion1+
+2022/02/09 14:16:50.725301 [INFO] _fsParticleNames.at(0): photon
+2022/02/09 14:16:50.725305 [INFO] _fsParticleNames.at(1): pion1+
+2022/02/09 14:16:50.725308 [INFO] _fsParticleNames.at(2): pion1-
+2022/02/09 14:16:50.725314 [INFO] _parityFactor=	-1
+2022/02/09 14:16:50.725326 [WARN] PwaUtils/AbsXdecAmp.cc line 102: no dynamics for	omega2Topion2+_pion2-_pion20
+2022/02/09 14:16:50.725341 [INFO] add dynamics for omega2Topion2+_pion2-_pion20 dynType: WoDynamics
+2022/02/09 14:16:50.725347 [INFO] _fsParticleNames.at(0): photon
+2022/02/09 14:16:50.725351 [INFO] _fsParticleNames.at(1): pion1+
+2022/02/09 14:16:50.725357 [INFO] _fsParticleNames.at(2): pion1-
+2022/02/09 14:16:50.725361 [INFO] _fsParticleNames.at(3): pion10
+2022/02/09 14:16:50.725365 [INFO] _fsParticleNames.at(4): pion2+
+2022/02/09 14:16:50.725369 [INFO] _fsParticleNames.at(0): photon
+2022/02/09 14:16:50.725372 [INFO] _fsParticleNames.at(1): pion1+
+2022/02/09 14:16:50.725376 [INFO] _fsParticleNames.at(2): pion1-
+2022/02/09 14:16:50.725380 [INFO] _fsParticleNames.at(3): pion10
+2022/02/09 14:16:50.725383 [INFO] _fsParticleNames.at(4): pion2+
+2022/02/09 14:16:50.725387 [INFO] _fsParticleNames.at(5): pion2-
+2022/02/09 14:16:50.725392 [INFO] _parityFactor=	-1
+2022/02/09 14:16:50.725401 [INFO] _parityFactor=	1
+2022/02/09 14:16:50.725427 [INFO] _fsParticleNames.at(0): photon
+2022/02/09 14:16:50.725434 [INFO] _parityFactor=	-1
+2022/02/09 14:16:50.725456 [INFO] Dynamics	I0G-1J1P-1C-1Tof2(1910)_photon	found!!!
+2022/02/09 14:16:50.725469 [INFO] Dynamics	f2(1910)Toomega1_omega2	found!!!
+2022/02/09 14:16:50.725474 [WARN] PwaUtils/AbsXdecAmp.cc line 91: no dynamics for	omega1Topion1+_pion1-_pion10
+2022/02/09 14:16:50.725479 [WARN] PwaUtils/AbsXdecAmp.cc line 102: no dynamics for	omega2Topion2+_pion2-_pion20
+2022/02/09 14:16:50.725484 [INFO] _parityFactor=	1
+2022/02/09 14:16:50.725543 [INFO] _fsParticleNames.at(0): photon
+2022/02/09 14:16:50.725550 [INFO] _parityFactor=	1
+2022/02/09 14:16:50.725578 [INFO] 
+*** The fit parameter replacements are ***
+2022/02/09 14:16:50.725868 [INFO] J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonMag	1	0.5
+2022/02/09 14:16:50.725889 [INFO] J1P-1C-1Lama0Lamb1_J1P-1C-1Toeta(2225)_photonPhi	0	0.2
+2022/02/09 14:16:50.725897 [INFO] L1S1_eta(2225)Toomega1_omega2Mag	1	0.5
+2022/02/09 14:16:50.725903 [INFO] L1S1_eta(2225)Toomega1_omega2Phi	0	0.2
+2022/02/09 14:16:50.725910 [INFO] eta(2225)Mass	2.15	0.03	2.08	2.38
+2022/02/09 14:16:50.725917 [INFO] eta(2225)Width	0.14	0.03	0	0.3
+2022/02/09 14:16:50.725924 [INFO] L1S0_omega1Topion1+_pion1-_pion10Mag	1	0.5
+2022/02/09 14:16:50.725930 [INFO] L1S0_omega1Topion1+_pion1-_pion10Phi	0	0.2
+2022/02/09 14:16:50.725936 [INFO] L1S0_omega2Topion2+_pion2-_pion20Mag	1	0.5
+2022/02/09 14:16:50.725943 [INFO] L1S0_omega2Topion2+_pion2-_pion20Phi	0	0.2
+2022/02/09 14:16:50.725949 [INFO] J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.288675
+2022/02/09 14:16:50.725966 [INFO] J1P-1C-1Lama2Lamb1_J1P-1C-1Tof2(1910)_photonPhi	0	0.2
+2022/02/09 14:16:50.725972 [INFO] J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.288675
+2022/02/09 14:16:50.725997 [INFO] J1P-1C-1Lama1Lamb1_J1P-1C-1Tof2(1910)_photonPhi	0	0.2
+2022/02/09 14:16:50.726003 [INFO] J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonMag	0.57735	0.288675
+2022/02/09 14:16:50.726009 [INFO] J1P-1C-1Lama0Lamb1_J1P-1C-1Tof2(1910)_photonPhi	0	0.2
+2022/02/09 14:16:50.726015 [INFO] L2S0_f2(1910)Toomega1_omega2Mag	0.5	0.25
+2022/02/09 14:16:50.726025 [INFO] L2S0_f2(1910)Toomega1_omega2Phi	0	0.2
+2022/02/09 14:16:50.726032 [INFO] L0S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+2022/02/09 14:16:50.726038 [INFO] L0S2_f2(1910)Toomega1_omega2Phi	0	0.2
+2022/02/09 14:16:50.726044 [INFO] L2S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+2022/02/09 14:16:50.726050 [INFO] L2S2_f2(1910)Toomega1_omega2Phi	0	0.2
+2022/02/09 14:16:50.726056 [INFO] L4S2_f2(1910)Toomega1_omega2Mag	0.5	0.25
+2022/02/09 14:16:50.726063 [INFO] L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
+2022/02/09 14:16:50.726069 [INFO] f2(1910)Mass	1.97	0.03	1.791	2.091
+2022/02/09 14:16:50.726076 [INFO] f2(1910)Width	0.16	0.034	0	0.34
+2022/02/09 14:16:50.726084 [INFO] channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20
 
 
  parameters in pawianParams are: 
@@ -932,423 +1019,225 @@ L4S2_f2(1910)Toomega1_omega2Phi	0	0.2
 f2(1910)Mass	1.97	0.03	1.791	2.091
 f2(1910)Width	0.16	0.034	0	0.34
 channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling	1	0.01	0	20
-INFO: Fixing scaling parameter channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling
-INFO: ************* Client mode ****************
-INFO: Connecting to server localhost:50003
-INFO: Received client id: 0
-INFO: Received channel id: 0
-INFO: Received data event range 0 - 2499
-INFO: Received mc event range 0 - 14999
-INFO: caching amplitudes enabled / disabled:	1
-INFO: data file: ./toyDataSignal.dat
-INFO: mc file: ./toyMC.dat
-INFO: 
-File has 2500 events.
-INFO:  Each event has 7 final state particles.
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.828506,-0.822296,-0.0558318,-0.0844656) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.198786,-0.111887,0.0645689,0.057863) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.531265,0.299653,-0.369917,0.190086) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.313005,-0.0210905,-0.09619,0.264679) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.206927,-0.059017,0.036835,-0.136011) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.297685,0.180724,0.17538,0.0756097) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.721002,0.533913,0.285154,-0.36776) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.645691,-0.404247,0.172397,0.473055) } 	m = 0.000272958
-
-INFO: {Rank = 1 ( 0.387388,0.32432,0.136372,0.0825185) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.325194,0.264189,0.00710824,-0.128161) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.488736,0.223044,-0.0205375,0.412884) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.20516,-0.0743298,-0.109734,0.0710226) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.686987,-0.136551,-0.136737,-0.644304) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.358019,-0.196424,-0.00886753,-0.267015) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.761275,-0.429694,0.525208,-0.34505) } 	m = 0.00025895
-
-INFO: {Rank = 1 ( 0.360562,0.00783304,0.165166,0.288416) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.617786,0.39168,-0.066419,0.452056) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.335633,0.11019,-0.232337,0.168248) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.442473,-0.200412,-0.322696,-0.1789) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.155086,-0.0587153,-0.0228142,-0.0245746) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.42436,0.179118,-0.00610729,-0.360196) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 1.01811,0.94145,0.385188,0.0430919) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.235898,0.133591,-0.0463494,0.127174) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.363953,-0.112548,-0.28359,0.141037) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.212792,-0.0164612,0.140579,-0.0838279) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.283174,-0.0640223,-0.227919,-0.0682768) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.54462,-0.486611,0.182442,-0.084001) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.438624,-0.395398,-0.110351,-0.0751972) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.788139,0.467838,0.472927,-0.422648) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.322321,0.141547,0.251591,0.0328315) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.171038,-0.0618922,0.0024429,0.0770567) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.427869,-0.201533,0.217106,-0.277673) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.309201,-0.222572,-0.0214295,0.161642) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.51764,0.0250003,-0.491286,0.0805261) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.560965,-0.148388,-0.39135,0.348264) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.835868,0.0737384,-0.100785,-0.826487) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.550484,-0.0993631,0.490439,0.18207) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.188646,0.069782,-0.0190354,0.104286) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.447307,0.296999,0.241957,0.187382) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.404659,-0.0224646,-0.376199,-0.0473095) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.437604,-0.152451,-0.224462,0.313676) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.232607,-0.166241,0.0280858,0.0863811) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.915255,-0.756047,0.133869,-0.498161) } 	m = 0.000244141
-
-INFO: {Rank = 1 ( 0.244782,0.0767254,0.0020127,0.18587) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.420405,0.387213,-0.0674337,-0.0527212) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.689473,0.481403,0.162876,0.445955) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.148019,0.0304432,0.0218562,0.0320207) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.328501,-0.129111,0.0600417,-0.261072) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.35074,-0.0906266,-0.273221,0.148108) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.78439,-0.138904,-0.723086,-0.270406) } 	m = 0.000172633
-
-INFO: {Rank = 1 ( 0.253355,0.0107637,0.166106,0.13039) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.316817,0.280133,0.0433157,0.0232974) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.564123,0.25051,-0.163627,0.458788) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.426566,-0.151762,0.229621,-0.294485) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.294245,-0.148214,0.0882671,-0.193241) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.457678,-0.102527,0.399402,0.145656) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.773546,0.554757,0.230454,0.487349) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.291334,-0.156069,-0.110349,-0.169886) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.199374,-0.110986,0.0358131,0.0816689) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.928514,-0.714142,-0.167362,-0.553092) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.509407,0.404456,-0.167142,0.220216) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.242906,0.0610329,0.18849,-0.0164379) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.152092,-0.039048,0.0300953,-0.0498184) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.75222,0.618658,0.400225,-0.151383) } 	m = 0.000167152
-
-INFO: {Rank = 1 ( 0.280949,-0.11035,0.00186224,0.21742) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.460479,-0.343417,0.220537,-0.161213) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.513397,-0.459945,0.0966507,0.156414) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.426754,-0.0835052,-0.375949,-0.119703) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.526625,0.387959,-0.322911,0.0554202) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.136751,-0.00939914,0.0195847,0.00304392) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-File has 15000 events.
-INFO:  Each event has 7 final state particles.
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.993071,-0.988404,0.0716432,-0.0641566) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.284326,-0.144769,-0.137783,-0.146353) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.397285,0.251602,0.0884462,-0.259286) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.176928,-0.00724506,0.0810219,0.0804167) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.351626,0.0993939,0.168634,0.256601) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.310488,0.241348,-0.134964,0.0214179) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.583451,0.548074,-0.0969989,0.11136) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.117567,-0.0991835,-0.0203352,0.0597589) } 	m = 3.41197e-05
-
-INFO: {Rank = 1 ( 0.494739,0.00408478,0.391599,0.26818) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.516193,0.155084,0.433949,-0.186044) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.506754,0.143461,0.373508,0.280162) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.276729,-0.118173,-0.126809,-0.16448) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.952657,-0.191947,-0.912416,-0.136852) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.232536,0.106674,-0.099496,-0.120725) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.933144,-0.367474,0.372375,0.772695) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.515612,0.213951,0.0404016,-0.44606) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.348315,0.261933,0.17291,-0.0577689) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.20993,-0.0181831,0.15614,0.0337736) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.602313,0.144941,-0.560291,-0.0914771) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.156493,-0.0530739,0.0272214,-0.0381107) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.331366,-0.182094,-0.168757,-0.173052) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.93226,0.444729,-0.55871,-0.599307) } 	m = 0.000244141
-
-INFO: {Rank = 1 ( 0.27683,0.138253,0.00175103,0.195034) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.226265,0.0334471,0.0959014,-0.146289) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.519654,0.146582,0.172643,0.447805) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.499261,-0.369723,0.0420622,0.302188) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.313296,-0.217286,0.176438,0.0181982) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.329606,-0.176002,0.109914,-0.21763) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.833679,-0.234453,-0.773007,-0.206184) } 	m = 6.10352e-05
-
-INFO: {Rank = 1 ( 0.291179,0.112338,0.20953,-0.0937169) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.147707,0.0238223,0.00113789,-0.0420554) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.457975,0.0890468,-0.377197,-0.203261) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.180032,-0.0652277,0.0691176,-0.0624484) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.522169,0.164847,0.448008,0.159043) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.664434,-0.0903728,0.46241,0.448623) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.555584,-0.292726,-0.279998,-0.380244) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.25953,-0.065807,0.0702878,-0.196482) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.466722,-0.102672,0.282155,-0.328932) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.355778,-0.201187,-0.240563,-0.100059) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.361322,0.289996,0.13224,0.0974096) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.192185,-0.00358735,0.0915139,0.0952243) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.906053,0.375983,-0.0156352,0.813084) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 0.308593,0.0669855,-0.169051,-0.249328) } 	m = 0.000105716
-
-INFO: {Rank = 1 ( 0.28008,-0.187188,0.0112262,0.154271) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.843288,-0.38738,0.186885,0.711804) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.401656,-0.0422091,0.341979,0.156129) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.387675,0.0846502,0.123427,-0.32926) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.502605,0.289977,-0.16978,-0.346727) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.373277,0.175164,-0.284686,-0.0968886) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 1.04089,0.59529,-0.0751921,-0.850551) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.267242,-0.00808274,-0.0785535,-0.213782) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.379397,-0.244795,0.155947,0.200545) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.308773,-0.256481,-0.0120746,0.105798) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.21485,-0.03079,0.114362,0.112489) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.642715,0.0611649,0.0986406,0.616548) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.243303,-0.116307,-0.16313,0.0289517) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 1.02352,0.549008,0.64665,0.572743) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.208077,-0.0801221,-0.129182,0.0266266) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.322481,0.26025,0.124457,-0.0359765) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.296164,-0.0730944,-0.24903,0.0462019) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.162914,-0.0791197,-0.0222872,0.0174522) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.868299,-0.542027,-0.166731,-0.64255) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.215716,-0.0348955,-0.163877,0.0155034) } 	m = 0.13498
-
-INFO: 
-
-INFO: 
-
-INFO: {Rank = 1 ( 1.12353,-0.500071,0.943047,-0.350577) } 	m = -nan
-
-INFO: {Rank = 1 ( 0.161073,0.0608035,-0.0525926,0.00128989) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.19553,0.00924841,0.0933658,-0.0997474) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.613949,0.395664,-0.35007,0.282162) } 	m = 0.13498
-
-INFO: {Rank = 1 ( 0.250668,0.171869,-0.085621,0.0805265) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.571987,-0.24157,-0.498555,0.0278705) } 	m = 0.13957
-
-INFO: {Rank = 1 ( 0.180439,0.104056,-0.00957404,0.0584758) } 	m = 0.13498
-
-INFO: 
-
-INFO: 4vec calculation for event 0
-INFO: 4vec all in lab system
+2022/02/09 14:16:50.726288 [INFO] Fixing scaling parameter channelType2photonpion1+pion1-pion10pion2+pion2-pion20Scaling
+2022/02/09 14:16:50.726360 [INFO] ************* Client mode ****************
+2022/02/09 14:16:50.726367 [INFO] Connecting to server localhost:50003
+2022/02/09 14:16:50.727585 [INFO] Received client id: 0
+2022/02/09 14:16:50.727594 [INFO] Received channel id: 0
+2022/02/09 14:16:50.727602 [INFO] Received data event range 0 - 2499
+2022/02/09 14:16:50.727607 [INFO] Received mc event range 0 - 14999
+2022/02/09 14:16:50.727677 [INFO] caching amplitudes enabled / disabled:	1
+2022/02/09 14:16:50.727686 [INFO] data file: ./toyDataSignal.dat
+2022/02/09 14:16:50.727690 [INFO] mc file: ./toyMC.dat
+2022/02/09 14:16:50.783601 [INFO] File has 2500 events.
+2022/02/09 14:16:50.783627 [INFO] 0x1798e50
+2022/02/09 14:16:50.783634 [INFO]  Each event has 7 final state particles.
+
+2022/02/09 14:16:50.783638 [INFO] 
+2022/02/09 14:16:50.783662 [INFO] {Rank = 1 ( 0.828506,-0.822296,-0.0558318,-0.0844656) } 	m = -nan
+2022/02/09 14:16:50.783670 [INFO] {Rank = 1 ( 0.198786,-0.111887,0.0645689,0.057863) } 	m = 0.13957
+2022/02/09 14:16:50.783676 [INFO] {Rank = 1 ( 0.531265,0.299653,-0.369917,0.190086) } 	m = 0.13957
+2022/02/09 14:16:50.783683 [INFO] {Rank = 1 ( 0.313005,-0.0210905,-0.09619,0.264679) } 	m = 0.13498
+2022/02/09 14:16:50.783689 [INFO] {Rank = 1 ( 0.206927,-0.059017,0.036835,-0.136011) } 	m = 0.13957
+2022/02/09 14:16:50.783695 [INFO] {Rank = 1 ( 0.297685,0.180724,0.17538,0.0756097) } 	m = 0.13957
+2022/02/09 14:16:50.783701 [INFO] {Rank = 1 ( 0.721002,0.533913,0.285154,-0.36776) } 	m = 0.13498
+2022/02/09 14:16:50.783705 [INFO] 
+2022/02/09 14:16:50.783711 [INFO] {Rank = 1 ( 0.645691,-0.404247,0.172397,0.473055) } 	m = 0.000272958
+2022/02/09 14:16:50.783717 [INFO] {Rank = 1 ( 0.387388,0.32432,0.136372,0.0825185) } 	m = 0.13957
+2022/02/09 14:16:50.783723 [INFO] {Rank = 1 ( 0.325194,0.264189,0.00710824,-0.128161) } 	m = 0.13957
+2022/02/09 14:16:50.783730 [INFO] {Rank = 1 ( 0.488736,0.223044,-0.0205375,0.412884) } 	m = 0.13498
+2022/02/09 14:16:50.783741 [INFO] {Rank = 1 ( 0.20516,-0.0743298,-0.109734,0.0710226) } 	m = 0.13957
+2022/02/09 14:16:50.783748 [INFO] {Rank = 1 ( 0.686987,-0.136551,-0.136737,-0.644304) } 	m = 0.13957
+2022/02/09 14:16:50.783754 [INFO] {Rank = 1 ( 0.358019,-0.196424,-0.00886753,-0.267015) } 	m = 0.13498
+2022/02/09 14:16:50.783758 [INFO] 
+2022/02/09 14:16:50.783764 [INFO] {Rank = 1 ( 0.761275,-0.429694,0.525208,-0.34505) } 	m = 0.00025895
+2022/02/09 14:16:50.783770 [INFO] {Rank = 1 ( 0.360562,0.00783304,0.165166,0.288416) } 	m = 0.13957
+2022/02/09 14:16:50.783776 [INFO] {Rank = 1 ( 0.617786,0.39168,-0.066419,0.452056) } 	m = 0.13957
+2022/02/09 14:16:50.783782 [INFO] {Rank = 1 ( 0.335633,0.11019,-0.232337,0.168248) } 	m = 0.13498
+2022/02/09 14:16:50.783788 [INFO] {Rank = 1 ( 0.442473,-0.200412,-0.322696,-0.1789) } 	m = 0.13957
+2022/02/09 14:16:50.783794 [INFO] {Rank = 1 ( 0.155086,-0.0587153,-0.0228142,-0.0245746) } 	m = 0.13957
+2022/02/09 14:16:50.783800 [INFO] {Rank = 1 ( 0.42436,0.179118,-0.00610729,-0.360196) } 	m = 0.13498
+2022/02/09 14:16:50.783804 [INFO] 
+2022/02/09 14:16:50.783810 [INFO] {Rank = 1 ( 1.01811,0.94145,0.385188,0.0430919) } 	m = -nan
+2022/02/09 14:16:50.783816 [INFO] {Rank = 1 ( 0.235898,0.133591,-0.0463494,0.127174) } 	m = 0.13957
+2022/02/09 14:16:50.783822 [INFO] {Rank = 1 ( 0.363953,-0.112548,-0.28359,0.141037) } 	m = 0.13957
+2022/02/09 14:16:50.783828 [INFO] {Rank = 1 ( 0.212792,-0.0164612,0.140579,-0.0838279) } 	m = 0.13498
+2022/02/09 14:16:50.783834 [INFO] {Rank = 1 ( 0.283174,-0.0640223,-0.227919,-0.0682768) } 	m = 0.13957
+2022/02/09 14:16:50.783840 [INFO] {Rank = 1 ( 0.54462,-0.486611,0.182442,-0.084001) } 	m = 0.13957
+2022/02/09 14:16:50.783847 [INFO] {Rank = 1 ( 0.438624,-0.395398,-0.110351,-0.0751972) } 	m = 0.13498
+2022/02/09 14:16:50.783850 [INFO] 
+2022/02/09 14:16:50.783856 [INFO] {Rank = 1 ( 0.788139,0.467838,0.472927,-0.422648) } 	m = -nan
+2022/02/09 14:16:50.783862 [INFO] {Rank = 1 ( 0.322321,0.141547,0.251591,0.0328315) } 	m = 0.13957
+2022/02/09 14:16:50.783868 [INFO] {Rank = 1 ( 0.171038,-0.0618922,0.0024429,0.0770567) } 	m = 0.13957
+2022/02/09 14:16:50.783874 [INFO] {Rank = 1 ( 0.427869,-0.201533,0.217106,-0.277673) } 	m = 0.13498
+2022/02/09 14:16:50.783880 [INFO] {Rank = 1 ( 0.309201,-0.222572,-0.0214295,0.161642) } 	m = 0.13957
+2022/02/09 14:16:50.783886 [INFO] {Rank = 1 ( 0.51764,0.0250003,-0.491286,0.0805261) } 	m = 0.13957
+2022/02/09 14:16:50.783892 [INFO] {Rank = 1 ( 0.560965,-0.148388,-0.39135,0.348264) } 	m = 0.13498
+2022/02/09 14:16:50.783896 [INFO] 
+2022/02/09 14:16:50.783902 [INFO] {Rank = 1 ( 0.835868,0.0737384,-0.100785,-0.826487) } 	m = -nan
+2022/02/09 14:16:50.783908 [INFO] {Rank = 1 ( 0.550484,-0.0993631,0.490439,0.18207) } 	m = 0.13957
+2022/02/09 14:16:50.783914 [INFO] {Rank = 1 ( 0.188646,0.069782,-0.0190354,0.104286) } 	m = 0.13957
+2022/02/09 14:16:50.783920 [INFO] {Rank = 1 ( 0.447307,0.296999,0.241957,0.187382) } 	m = 0.13498
+2022/02/09 14:16:50.783926 [INFO] {Rank = 1 ( 0.404659,-0.0224646,-0.376199,-0.0473095) } 	m = 0.13957
+2022/02/09 14:16:50.783932 [INFO] {Rank = 1 ( 0.437604,-0.152451,-0.224462,0.313676) } 	m = 0.13957
+2022/02/09 14:16:50.783938 [INFO] {Rank = 1 ( 0.232607,-0.166241,0.0280858,0.0863811) } 	m = 0.13498
+2022/02/09 14:16:50.783941 [INFO] 
+2022/02/09 14:16:50.783947 [INFO] {Rank = 1 ( 0.915255,-0.756047,0.133869,-0.498161) } 	m = 0.000244141
+2022/02/09 14:16:50.783953 [INFO] {Rank = 1 ( 0.244782,0.0767254,0.0020127,0.18587) } 	m = 0.13957
+2022/02/09 14:16:50.783959 [INFO] {Rank = 1 ( 0.420405,0.387213,-0.0674337,-0.0527212) } 	m = 0.13957
+2022/02/09 14:16:50.783974 [INFO] {Rank = 1 ( 0.689473,0.481403,0.162876,0.445955) } 	m = 0.13498
+2022/02/09 14:16:50.783986 [INFO] {Rank = 1 ( 0.148019,0.0304432,0.0218562,0.0320207) } 	m = 0.13957
+2022/02/09 14:16:50.784002 [INFO] {Rank = 1 ( 0.328501,-0.129111,0.0600417,-0.261072) } 	m = 0.13957
+2022/02/09 14:16:50.784017 [INFO] {Rank = 1 ( 0.35074,-0.0906266,-0.273221,0.148108) } 	m = 0.13498
+2022/02/09 14:16:50.784021 [INFO] 
+2022/02/09 14:16:50.784027 [INFO] {Rank = 1 ( 0.78439,-0.138904,-0.723086,-0.270406) } 	m = 0.000172633
+2022/02/09 14:16:50.784044 [INFO] {Rank = 1 ( 0.253355,0.0107637,0.166106,0.13039) } 	m = 0.13957
+2022/02/09 14:16:50.784050 [INFO] {Rank = 1 ( 0.316817,0.280133,0.0433157,0.0232974) } 	m = 0.13957
+2022/02/09 14:16:50.784056 [INFO] {Rank = 1 ( 0.564123,0.25051,-0.163627,0.458788) } 	m = 0.13498
+2022/02/09 14:16:50.784062 [INFO] {Rank = 1 ( 0.426566,-0.151762,0.229621,-0.294485) } 	m = 0.13957
+2022/02/09 14:16:50.784068 [INFO] {Rank = 1 ( 0.294245,-0.148214,0.0882671,-0.193241) } 	m = 0.13957
+2022/02/09 14:16:50.784074 [INFO] {Rank = 1 ( 0.457678,-0.102527,0.399402,0.145656) } 	m = 0.13498
+2022/02/09 14:16:50.784078 [INFO] 
+2022/02/09 14:16:50.784084 [INFO] {Rank = 1 ( 0.773546,0.554757,0.230454,0.487349) } 	m = -nan
+2022/02/09 14:16:50.784090 [INFO] {Rank = 1 ( 0.291334,-0.156069,-0.110349,-0.169886) } 	m = 0.13957
+2022/02/09 14:16:50.784096 [INFO] {Rank = 1 ( 0.199374,-0.110986,0.0358131,0.0816689) } 	m = 0.13957
+2022/02/09 14:16:50.784102 [INFO] {Rank = 1 ( 0.928514,-0.714142,-0.167362,-0.553092) } 	m = 0.13498
+2022/02/09 14:16:50.784108 [INFO] {Rank = 1 ( 0.509407,0.404456,-0.167142,0.220216) } 	m = 0.13957
+2022/02/09 14:16:50.784114 [INFO] {Rank = 1 ( 0.242906,0.0610329,0.18849,-0.0164379) } 	m = 0.13957
+2022/02/09 14:16:50.784120 [INFO] {Rank = 1 ( 0.152092,-0.039048,0.0300953,-0.0498184) } 	m = 0.13498
+2022/02/09 14:16:50.784123 [INFO] 
+2022/02/09 14:16:50.784130 [INFO] {Rank = 1 ( 0.75222,0.618658,0.400225,-0.151383) } 	m = 0.000167152
+2022/02/09 14:16:50.784136 [INFO] {Rank = 1 ( 0.280949,-0.11035,0.00186224,0.21742) } 	m = 0.13957
+2022/02/09 14:16:50.784142 [INFO] {Rank = 1 ( 0.460479,-0.343417,0.220537,-0.161213) } 	m = 0.13957
+2022/02/09 14:16:50.784148 [INFO] {Rank = 1 ( 0.513397,-0.459945,0.0966507,0.156414) } 	m = 0.13498
+2022/02/09 14:16:50.784154 [INFO] {Rank = 1 ( 0.426754,-0.0835052,-0.375949,-0.119703) } 	m = 0.13957
+2022/02/09 14:16:50.784160 [INFO] {Rank = 1 ( 0.526625,0.387959,-0.322911,0.0554202) } 	m = 0.13957
+2022/02/09 14:16:50.784166 [INFO] {Rank = 1 ( 0.136751,-0.00939914,0.0195847,0.00304392) } 	m = 0.13498
+2022/02/09 14:16:50.784169 [INFO] 
+2022/02/09 14:16:51.111336 [INFO] File has 15000 events.
+2022/02/09 14:16:51.162134 [INFO] 0x1a1d5a0
+2022/02/09 14:16:51.162145 [INFO]  Each event has 7 final state particles.
+
+2022/02/09 14:16:51.162149 [INFO] 
+2022/02/09 14:16:51.162162 [INFO] {Rank = 1 ( 0.993071,-0.988404,0.0716432,-0.0641566) } 	m = -nan
+2022/02/09 14:16:51.162168 [INFO] {Rank = 1 ( 0.284326,-0.144769,-0.137783,-0.146353) } 	m = 0.13957
+2022/02/09 14:16:51.162175 [INFO] {Rank = 1 ( 0.397285,0.251602,0.0884462,-0.259286) } 	m = 0.13957
+2022/02/09 14:16:51.162181 [INFO] {Rank = 1 ( 0.176928,-0.00724506,0.0810219,0.0804167) } 	m = 0.13498
+2022/02/09 14:16:51.162187 [INFO] {Rank = 1 ( 0.351626,0.0993939,0.168634,0.256601) } 	m = 0.13957
+2022/02/09 14:16:51.162193 [INFO] {Rank = 1 ( 0.310488,0.241348,-0.134964,0.0214179) } 	m = 0.13957
+2022/02/09 14:16:51.162200 [INFO] {Rank = 1 ( 0.583451,0.548074,-0.0969989,0.11136) } 	m = 0.13498
+2022/02/09 14:16:51.162203 [INFO] 
+2022/02/09 14:16:51.162211 [INFO] {Rank = 1 ( 0.117567,-0.0991835,-0.0203352,0.0597589) } 	m = 3.41197e-05
+2022/02/09 14:16:51.162217 [INFO] {Rank = 1 ( 0.494739,0.00408478,0.391599,0.26818) } 	m = 0.13957
+2022/02/09 14:16:51.162223 [INFO] {Rank = 1 ( 0.516193,0.155084,0.433949,-0.186044) } 	m = 0.13957
+2022/02/09 14:16:51.162229 [INFO] {Rank = 1 ( 0.506754,0.143461,0.373508,0.280162) } 	m = 0.13498
+2022/02/09 14:16:51.162235 [INFO] {Rank = 1 ( 0.276729,-0.118173,-0.126809,-0.16448) } 	m = 0.13957
+2022/02/09 14:16:51.162241 [INFO] {Rank = 1 ( 0.952657,-0.191947,-0.912416,-0.136852) } 	m = 0.13957
+2022/02/09 14:16:51.162247 [INFO] {Rank = 1 ( 0.232536,0.106674,-0.099496,-0.120725) } 	m = 0.13498
+2022/02/09 14:16:51.162251 [INFO] 
+2022/02/09 14:16:51.162257 [INFO] {Rank = 1 ( 0.933144,-0.367474,0.372375,0.772695) } 	m = -nan
+2022/02/09 14:16:51.162263 [INFO] {Rank = 1 ( 0.515612,0.213951,0.0404016,-0.44606) } 	m = 0.13957
+2022/02/09 14:16:51.162269 [INFO] {Rank = 1 ( 0.348315,0.261933,0.17291,-0.0577689) } 	m = 0.13957
+2022/02/09 14:16:51.162280 [INFO] {Rank = 1 ( 0.20993,-0.0181831,0.15614,0.0337736) } 	m = 0.13498
+2022/02/09 14:16:51.162287 [INFO] {Rank = 1 ( 0.602313,0.144941,-0.560291,-0.0914771) } 	m = 0.13957
+2022/02/09 14:16:51.162293 [INFO] {Rank = 1 ( 0.156493,-0.0530739,0.0272214,-0.0381107) } 	m = 0.13957
+2022/02/09 14:16:51.162299 [INFO] {Rank = 1 ( 0.331366,-0.182094,-0.168757,-0.173052) } 	m = 0.13498
+2022/02/09 14:16:51.162303 [INFO] 
+2022/02/09 14:16:51.162309 [INFO] {Rank = 1 ( 0.93226,0.444729,-0.55871,-0.599307) } 	m = 0.000244141
+2022/02/09 14:16:51.162315 [INFO] {Rank = 1 ( 0.27683,0.138253,0.00175103,0.195034) } 	m = 0.13957
+2022/02/09 14:16:51.162321 [INFO] {Rank = 1 ( 0.226265,0.0334471,0.0959014,-0.146289) } 	m = 0.13957
+2022/02/09 14:16:51.162327 [INFO] {Rank = 1 ( 0.519654,0.146582,0.172643,0.447805) } 	m = 0.13498
+2022/02/09 14:16:51.162333 [INFO] {Rank = 1 ( 0.499261,-0.369723,0.0420622,0.302188) } 	m = 0.13957
+2022/02/09 14:16:51.162339 [INFO] {Rank = 1 ( 0.313296,-0.217286,0.176438,0.0181982) } 	m = 0.13957
+2022/02/09 14:16:51.162345 [INFO] {Rank = 1 ( 0.329606,-0.176002,0.109914,-0.21763) } 	m = 0.13498
+2022/02/09 14:16:51.162349 [INFO] 
+2022/02/09 14:16:51.162355 [INFO] {Rank = 1 ( 0.833679,-0.234453,-0.773007,-0.206184) } 	m = 6.10352e-05
+2022/02/09 14:16:51.162361 [INFO] {Rank = 1 ( 0.291179,0.112338,0.20953,-0.0937169) } 	m = 0.13957
+2022/02/09 14:16:51.162367 [INFO] {Rank = 1 ( 0.147707,0.0238223,0.00113789,-0.0420554) } 	m = 0.13957
+2022/02/09 14:16:51.162373 [INFO] {Rank = 1 ( 0.457975,0.0890468,-0.377197,-0.203261) } 	m = 0.13498
+2022/02/09 14:16:51.162379 [INFO] {Rank = 1 ( 0.180032,-0.0652277,0.0691176,-0.0624484) } 	m = 0.13957
+2022/02/09 14:16:51.162385 [INFO] {Rank = 1 ( 0.522169,0.164847,0.448008,0.159043) } 	m = 0.13957
+2022/02/09 14:16:51.162391 [INFO] {Rank = 1 ( 0.664434,-0.0903728,0.46241,0.448623) } 	m = 0.13498
+2022/02/09 14:16:51.162395 [INFO] 
+2022/02/09 14:16:51.162401 [INFO] {Rank = 1 ( 0.555584,-0.292726,-0.279998,-0.380244) } 	m = -nan
+2022/02/09 14:16:51.162407 [INFO] {Rank = 1 ( 0.25953,-0.065807,0.0702878,-0.196482) } 	m = 0.13957
+2022/02/09 14:16:51.162413 [INFO] {Rank = 1 ( 0.466722,-0.102672,0.282155,-0.328932) } 	m = 0.13957
+2022/02/09 14:16:51.162419 [INFO] {Rank = 1 ( 0.355778,-0.201187,-0.240563,-0.100059) } 	m = 0.13498
+2022/02/09 14:16:51.162425 [INFO] {Rank = 1 ( 0.361322,0.289996,0.13224,0.0974096) } 	m = 0.13957
+2022/02/09 14:16:51.162431 [INFO] {Rank = 1 ( 0.192185,-0.00358735,0.0915139,0.0952243) } 	m = 0.13957
+2022/02/09 14:16:51.162437 [INFO] {Rank = 1 ( 0.906053,0.375983,-0.0156352,0.813084) } 	m = 0.13498
+2022/02/09 14:16:51.162441 [INFO] 
+2022/02/09 14:16:51.162447 [INFO] {Rank = 1 ( 0.308593,0.0669855,-0.169051,-0.249328) } 	m = 0.000105716
+2022/02/09 14:16:51.162453 [INFO] {Rank = 1 ( 0.28008,-0.187188,0.0112262,0.154271) } 	m = 0.13957
+2022/02/09 14:16:51.162459 [INFO] {Rank = 1 ( 0.843288,-0.38738,0.186885,0.711804) } 	m = 0.13957
+2022/02/09 14:16:51.162465 [INFO] {Rank = 1 ( 0.401656,-0.0422091,0.341979,0.156129) } 	m = 0.13498
+2022/02/09 14:16:51.162471 [INFO] {Rank = 1 ( 0.387675,0.0846502,0.123427,-0.32926) } 	m = 0.13957
+2022/02/09 14:16:51.162477 [INFO] {Rank = 1 ( 0.502605,0.289977,-0.16978,-0.346727) } 	m = 0.13957
+2022/02/09 14:16:51.162483 [INFO] {Rank = 1 ( 0.373277,0.175164,-0.284686,-0.0968886) } 	m = 0.13498
+2022/02/09 14:16:51.162487 [INFO] 
+2022/02/09 14:16:51.162493 [INFO] {Rank = 1 ( 1.04089,0.59529,-0.0751921,-0.850551) } 	m = -nan
+2022/02/09 14:16:51.162499 [INFO] {Rank = 1 ( 0.267242,-0.00808274,-0.0785535,-0.213782) } 	m = 0.13957
+2022/02/09 14:16:51.162505 [INFO] {Rank = 1 ( 0.379397,-0.244795,0.155947,0.200545) } 	m = 0.13957
+2022/02/09 14:16:51.162511 [INFO] {Rank = 1 ( 0.308773,-0.256481,-0.0120746,0.105798) } 	m = 0.13498
+2022/02/09 14:16:51.162517 [INFO] {Rank = 1 ( 0.21485,-0.03079,0.114362,0.112489) } 	m = 0.13957
+2022/02/09 14:16:51.162523 [INFO] {Rank = 1 ( 0.642715,0.0611649,0.0986406,0.616548) } 	m = 0.13957
+2022/02/09 14:16:51.162529 [INFO] {Rank = 1 ( 0.243303,-0.116307,-0.16313,0.0289517) } 	m = 0.13498
+2022/02/09 14:16:51.162534 [INFO] 
+2022/02/09 14:16:51.162541 [INFO] {Rank = 1 ( 1.02352,0.549008,0.64665,0.572743) } 	m = -nan
+2022/02/09 14:16:51.162547 [INFO] {Rank = 1 ( 0.208077,-0.0801221,-0.129182,0.0266266) } 	m = 0.13957
+2022/02/09 14:16:51.162553 [INFO] {Rank = 1 ( 0.322481,0.26025,0.124457,-0.0359765) } 	m = 0.13957
+2022/02/09 14:16:51.162560 [INFO] {Rank = 1 ( 0.296164,-0.0730944,-0.24903,0.0462019) } 	m = 0.13498
+2022/02/09 14:16:51.162566 [INFO] {Rank = 1 ( 0.162914,-0.0791197,-0.0222872,0.0174522) } 	m = 0.13957
+2022/02/09 14:16:51.162572 [INFO] {Rank = 1 ( 0.868299,-0.542027,-0.166731,-0.64255) } 	m = 0.13957
+2022/02/09 14:16:51.162578 [INFO] {Rank = 1 ( 0.215716,-0.0348955,-0.163877,0.0155034) } 	m = 0.13498
+2022/02/09 14:16:51.162581 [INFO] 
+2022/02/09 14:16:51.162587 [INFO] {Rank = 1 ( 1.12353,-0.500071,0.943047,-0.350577) } 	m = -nan
+2022/02/09 14:16:51.162593 [INFO] {Rank = 1 ( 0.161073,0.0608035,-0.0525926,0.00128989) } 	m = 0.13957
+2022/02/09 14:16:51.162600 [INFO] {Rank = 1 ( 0.19553,0.00924841,0.0933658,-0.0997474) } 	m = 0.13957
+2022/02/09 14:16:51.162606 [INFO] {Rank = 1 ( 0.613949,0.395664,-0.35007,0.282162) } 	m = 0.13498
+2022/02/09 14:16:51.162612 [INFO] {Rank = 1 ( 0.250668,0.171869,-0.085621,0.0805265) } 	m = 0.13957
+2022/02/09 14:16:51.162618 [INFO] {Rank = 1 ( 0.571987,-0.24157,-0.498555,0.0278705) } 	m = 0.13957
+2022/02/09 14:16:51.162624 [INFO] {Rank = 1 ( 0.180439,0.104056,-0.00957404,0.0584758) } 	m = 0.13498
+2022/02/09 14:16:51.162627 [INFO] 
+2022/02/09 14:16:51.162653 [INFO] 4vec calculation for event 0
+2022/02/09 14:16:51.162905 [INFO] 4vec all in lab system
  px: 0	 py: 0.04	 pz: 0	 e : 3.09717	 m : 3.09692
-INFO: 4vec calculation for event 500
-INFO: 4vec calculation for event 1000
-INFO: 4vec calculation for event 1500
-INFO: 4vec calculation for event 2000
-INFO: 4vec calculation for event 0
-INFO: 4vec all in lab system
+2022/02/09 14:16:51.215213 [INFO] 4vec calculation for event 500
+2022/02/09 14:16:51.267380 [INFO] 4vec calculation for event 1000
+2022/02/09 14:16:51.319493 [INFO] 4vec calculation for event 1500
+2022/02/09 14:16:51.371601 [INFO] 4vec calculation for event 2000
+2022/02/09 14:16:51.423691 [INFO] 4vec calculation for event 0
+2022/02/09 14:16:51.423830 [INFO] 4vec all in lab system
  px: 4.51691e-08	 py: 0.04	 pz: 2.98023e-08	 e : 3.09717	 m : 3.09692
-INFO: 4vec calculation for event 500
-INFO: 4vec calculation for event 1000
-INFO: 4vec calculation for event 1500
-INFO: 4vec calculation for event 2000
-INFO: 4vec calculation for event 2500
-INFO: 4vec calculation for event 3000
-INFO: 4vec calculation for event 3500
-INFO: 4vec calculation for event 4000
-INFO: 4vec calculation for event 4500
-INFO: 4vec calculation for event 5000
-INFO: 4vec calculation for event 5500
-INFO: 4vec calculation for event 6000
-INFO: 4vec calculation for event 6500
-INFO: 4vec calculation for event 7000
-INFO: 4vec calculation for event 7500
-INFO: 4vec calculation for event 8000
-INFO: 4vec calculation for event 8500
-INFO: 4vec calculation for event 9000
-INFO: 4vec calculation for event 9500
-INFO: 4vec calculation for event 10000
-INFO: 4vec all in lab system
+2022/02/09 14:16:51.476168 [INFO] 4vec calculation for event 500
+2022/02/09 14:16:51.528855 [INFO] 4vec calculation for event 1000
+2022/02/09 14:16:51.580967 [INFO] 4vec calculation for event 1500
+2022/02/09 14:16:51.633052 [INFO] 4vec calculation for event 2000
+2022/02/09 14:16:51.685172 [INFO] 4vec calculation for event 2500
+2022/02/09 14:16:51.737234 [INFO] 4vec calculation for event 3000
+2022/02/09 14:16:51.789374 [INFO] 4vec calculation for event 3500
+2022/02/09 14:16:51.841477 [INFO] 4vec calculation for event 4000
+2022/02/09 14:16:51.893590 [INFO] 4vec calculation for event 4500
+2022/02/09 14:16:51.945663 [INFO] 4vec calculation for event 5000
+2022/02/09 14:16:51.997780 [INFO] 4vec calculation for event 5500
+2022/02/09 14:16:52.049881 [INFO] 4vec calculation for event 6000
+2022/02/09 14:16:52.102161 [INFO] 4vec calculation for event 6500
+2022/02/09 14:16:52.154281 [INFO] 4vec calculation for event 7000
+2022/02/09 14:16:52.206340 [INFO] 4vec calculation for event 7500
+2022/02/09 14:16:52.258403 [INFO] 4vec calculation for event 8000
+2022/02/09 14:16:52.310499 [INFO] 4vec calculation for event 8500
+2022/02/09 14:16:52.362607 [INFO] 4vec calculation for event 9000
+2022/02/09 14:16:52.414637 [INFO] 4vec calculation for event 9500
+2022/02/09 14:16:52.466813 [INFO] 4vec calculation for event 10000
+2022/02/09 14:16:52.466945 [INFO] 4vec all in lab system
  px: 3.72529e-09	 py: 0.04	 pz: 2.98023e-08	 e : 3.09717	 m : 3.09692
-INFO: 4vec calculation for event 10500
-INFO: 4vec calculation for event 11000
-INFO: 4vec calculation for event 11500
-INFO: 4vec calculation for event 12000
-INFO: 4vec calculation for event 12500
-INFO: 4vec calculation for event 13000
-INFO: 4vec calculation for event 13500
-INFO: 4vec calculation for event 14000
-INFO: 4vec calculation for event 14500
-INFO: Received goodbye. Exiting.
+2022/02/09 14:16:52.519037 [INFO] 4vec calculation for event 10500
+2022/02/09 14:16:52.571134 [INFO] 4vec calculation for event 11000
+2022/02/09 14:16:52.623396 [INFO] 4vec calculation for event 11500
+2022/02/09 14:16:52.675524 [INFO] 4vec calculation for event 12000
+2022/02/09 14:16:52.727600 [INFO] 4vec calculation for event 12500
+2022/02/09 14:16:52.779670 [INFO] 4vec calculation for event 13000
+2022/02/09 14:16:52.831745 [INFO] 4vec calculation for event 13500
+2022/02/09 14:16:52.883898 [INFO] 4vec calculation for event 14000
+2022/02/09 14:16:52.936149 [INFO] 4vec calculation for event 14500
+2022/02/09 14:24:50.810360 [INFO] Received goodbye. Exiting.

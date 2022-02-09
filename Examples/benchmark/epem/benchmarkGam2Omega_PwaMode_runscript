@@ -2,6 +2,6 @@
 
 echo Starting pwa ...
 
-$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode pwa --noOfThreads 4 !>& pwa.log &
+$TOP_DIR/bin/singleChannelApp --epemFiles $TOP_DIR/Examples/benchmark/epem/JpsiGamOmegaOmega.cfg --mode pwa --noOfThreads 1 !>& pwa.log &
 
 echo done

@@ -56,16 +56,15 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
 
   complex<double> result(0.,0.);
   Id1StringType IdLamOmega=FunctionUtils::spin1Index(lamX);
+
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( fabs(lamX) > _JPCPtr->J ) continue;
-    double theMag=_currentParamMags[*it];
-    double thePhi=_currentParamPhis[*it];
-    complex<double> expi(cos(thePhi), sin(thePhi));
 
-        complex<double> amp = theMag*expi*sqrt(2*(*it)->L+1)
-	  *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
-        result+=amp;
+    complex<double> lsAmpCompl=std::polar(_currentParamMags.at(*it), _currentParamPhis.at(*it));
+    complex<double> amp = lsAmpCompl*sqrt(2*(*it)->L+1)
+      *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
+    result+=amp;
   }
   result*=sqrt(theData->DoubleId.at(_decay->wigDWigDRefId()));
   return result;
