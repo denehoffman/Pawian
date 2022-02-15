@@ -45,12 +45,36 @@ LSOmegaTo3PiDecAmps::LSOmegaTo3PiDecAmps(std::shared_ptr<OmegaTo3PiLSDecay> theD
   _LSs=theDec->LSAmps();
   _factorMag=1.;
   if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
+  
+  std::vector< std::shared_ptr<const LScomb> >::iterator it;
+  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+    std::string magName=(*it)->name()+_key+"Mag";
+    _magNamesLSMap[*it]=magName;
+    std::string phiName=(*it)->name()+_key+"Phi";
+    _phiNamesLSMap[*it]=phiName;   
+  }
 }
 
 LSOmegaTo3PiDecAmps::~LSOmegaTo3PiDecAmps()
 {
 }
 
+void LSOmegaTo3PiDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+
+  std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
+  for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
+    //    std::string magName=(*itLS)->name()+_key+"Mag";
+    //    std::string phiName=(*itLS)->name()+_key+"Phi";
+    //    _currentParamMagExpi[*itLS]=std::polar(fabs(fitPar->Value(magName)), fitPar->Value(phiName));
+    _currentParamMagExpi[*itLS]=std::polar(fabs(fitPar->Value(_magNamesLSMap.at(*itLS))),fitPar->Value(_phiNamesLSMap.at(*itLS)));
+  }
+
+   _absDyn->updateFitParams(fitPar);
+
+   // no daughter decays possible for omega->3pi
+   //  if(!_daughter1IsStable) _decAmpDaughter1->updateFitParams(fitPar);
+   //  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
+}
 
 complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs,AbsXdecAmp* grandmaAmp){
 
@@ -60,11 +84,12 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( fabs(lamX) > _JPCPtr->J ) continue;
-
-    complex<double> lsAmpCompl=std::polar(_currentParamMags.at(*it), _currentParamPhis.at(*it));
-    complex<double> amp = lsAmpCompl*sqrt(2*(*it)->L+1)
-      *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
-    result+=amp;
+ 
+    //    complex<double> lsAmpCompl=std::polar(_currentParamMags.at(*it), _currentParamPhis.at(*it));
+    //    complex<double> amp = lsAmpCompl*sqrt(2*(*it)->L+1)
+    //      *conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
+    //result+=amp;
+    result+=sqrt(2*(*it)->L+1)*_currentParamMagExpi.at(*it)*conj(theData->WignerDIdId1.at(_decay->wigDWigDRefId()).at(IdLamOmega));
   }
   result*=sqrt(theData->DoubleId.at(_decay->wigDWigDRefId()));
   return result;

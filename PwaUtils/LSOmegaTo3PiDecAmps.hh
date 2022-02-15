@@ -53,8 +53,9 @@ public:
   virtual ~LSOmegaTo3PiDecAmps();
 
 
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   // Getters:
-
+  
   virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
@@ -64,7 +65,7 @@ public:
 protected:
 
   std::string _lambdaDecKey;
-
+  std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
 private:
 
 
