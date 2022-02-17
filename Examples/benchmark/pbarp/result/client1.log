@@ -1,12 +1,12 @@
-2022/02/15 12:45:20.740116 [INFO] /data/duldul/bertram/NewPawian220123/Pawian/bin/singleChannelApp
-2022/02/15 12:45:20.740158 [INFO] --pbarpFiles
-2022/02/15 12:45:20.740165 [INFO] pbarpReactionDefault.cfg
-2022/02/15 12:45:20.740169 [INFO] --mode
-2022/02/15 12:45:20.740172 [INFO] client
-2022/02/15 12:45:20.740175 [INFO] --paramFile
-2022/02/15 12:45:20.740179 [INFO] defaultparams.dat
-2022/02/15 12:45:20.740182 [INFO] !
-2022/02/15 12:45:20.740197 [INFO] 
+2022/02/17 20:49:13.946700 [INFO] /data/duldul/bertram/NewPawian220217/Pawian/bin/singleChannelApp
+2022/02/17 20:49:13.946742 [INFO] --pbarpFiles
+2022/02/17 20:49:13.946748 [INFO] pbarpReactionDefault.cfg
+2022/02/17 20:49:13.946752 [INFO] --mode
+2022/02/17 20:49:13.946756 [INFO] client
+2022/02/17 20:49:13.946759 [INFO] --paramFile
+2022/02/17 20:49:13.946763 [INFO] defaultparams.dat
+2022/02/17 20:49:13.946766 [INFO] !
+2022/02/17 20:49:13.946780 [INFO] 
                                        MMMMM
                                       M8NO  +M
                                     NO       M         ,MM
@@ -90,10 +90,10 @@
 //************************************************************************//
 
    
-2022/02/15 12:45:20.740208 [INFO] Compiled Feb 14 2022 16:33:02
-2022/02/15 12:45:20.740212 [INFO] Hostname: pc36
+2022/02/17 20:49:13.946791 [INFO] Compiled Feb 17 2022 21:42:08
+2022/02/17 20:49:13.946795 [INFO] Hostname: pc36
 
-Running with the following options using /data/duldul/bertram/NewPawian220123/Pawian/ConfigParser/global.cfg:
+Running with the following options using /data/duldul/bertram/NewPawian220217/Pawian/ConfigParser/global.cfg:
 
 Error log mode: 1
 
@@ -167,6 +167,16 @@ prodOrbMom1DFit: 0
 
 decOrbMom1DFit: 0
 
+stepSizeLhPrint: 1
+
+stepSizeLhDump: 10
+
+stepSizeTimer: 20
+
+stepSizeParamsPrint: 1000
+
+stepSizeParamsDump: 200
+
 
 pbarp channel configuration file: pbarpReactionDefault.cfg
 
@@ -219,22 +229,22 @@ number of bootstrap files:	1
 
 boostrap file name:	bootstrapFile
 sProdExponent =0
-2022/02/15 12:45:20.741504 [INFO] numReactions: 1
-2022/02/15 12:45:20.742785 [INFO] __argv[0]: /data/duldul/bertram/NewPawian220123/Pawian/bin/singleChannelApp
-2022/02/15 12:45:20.742795 [INFO] __argv[1]: --pbarpFiles
-2022/02/15 12:45:20.742800 [INFO] __argv[3]: --mode
-2022/02/15 12:45:20.742804 [INFO] __argv[4]: client
-2022/02/15 12:45:20.742808 [INFO] __argv[5]: --paramFile
-2022/02/15 12:45:20.742812 [INFO] __argv[6]: defaultparams.dat
-2022/02/15 12:45:20.742816 [INFO] __argv[7]: !
-2022/02/15 12:45:20.742829 [INFO] argvWCfgFile[0]= /data/duldul/bertram/NewPawian220123/Pawian/bin/singleChannelApp
-2022/02/15 12:45:20.742834 [INFO] argvWCfgFile[1]= -c
-2022/02/15 12:45:20.742838 [INFO] argvWCfgFile[2]= pbarpReactionDefault.cfg
-2022/02/15 12:45:20.742842 [INFO] argvWCfgFile[3]= --mode
-2022/02/15 12:45:20.742845 [INFO] argvWCfgFile[4]= client
-2022/02/15 12:45:20.742849 [INFO] argvWCfgFile[5]= --paramFile
-2022/02/15 12:45:20.742852 [INFO] argvWCfgFile[6]= defaultparams.dat
-2022/02/15 12:45:20.742856 [INFO] argvWCfgFile[7]= !
+2022/02/17 20:49:13.948087 [INFO] numReactions: 1
+2022/02/17 20:49:13.949238 [INFO] __argv[0]: /data/duldul/bertram/NewPawian220217/Pawian/bin/singleChannelApp
+2022/02/17 20:49:13.949249 [INFO] __argv[1]: --pbarpFiles
+2022/02/17 20:49:13.949253 [INFO] __argv[3]: --mode
+2022/02/17 20:49:13.949258 [INFO] __argv[4]: client
+2022/02/17 20:49:13.949262 [INFO] __argv[5]: --paramFile
+2022/02/17 20:49:13.949266 [INFO] __argv[6]: defaultparams.dat
+2022/02/17 20:49:13.949270 [INFO] __argv[7]: !
+2022/02/17 20:49:13.949286 [INFO] argvWCfgFile[0]= /data/duldul/bertram/NewPawian220217/Pawian/bin/singleChannelApp
+2022/02/17 20:49:13.949296 [INFO] argvWCfgFile[1]= -c
+2022/02/17 20:49:13.949300 [INFO] argvWCfgFile[2]= pbarpReactionDefault.cfg
+2022/02/17 20:49:13.949304 [INFO] argvWCfgFile[3]= --mode
+2022/02/17 20:49:13.949308 [INFO] argvWCfgFile[4]= client
+2022/02/17 20:49:13.949311 [INFO] argvWCfgFile[5]= --paramFile
+2022/02/17 20:49:13.949315 [INFO] argvWCfgFile[6]= defaultparams.dat
+2022/02/17 20:49:13.949319 [INFO] argvWCfgFile[7]= !
 
 Running with the following options using pbarpReactionDefault.cfg:
 
@@ -309,6 +319,16 @@ useParticleNameForPVecBg: 0
 prodOrbMom1DFit: 0
 
 decOrbMom1DFit: 0
+
+stepSizeLhPrint: 10
+
+stepSizeLhDump: 20
+
+stepSizeTimer: 20
+
+stepSizeParamsPrint: 5000
+
+stepSizeParamsDump: 500
 
 
 clone particles: pion0 pion0A
@@ -419,41 +439,41 @@ spin density matrix calculation for particles
 
 drop pbarp L 
 
-2022/02/15 12:45:20.744097 [INFO] initial4Vec: {Rank = 1 ( 2.2384,0,0,0.9) } 
-2022/02/15 12:45:20.744110 [INFO] projectile4Vec: {Rank = 1 ( 1.30013,0,0,0.9) } 
-2022/02/15 12:45:20.744125 [INFO] Now replace the parser!!!
-2022/02/15 12:45:20.744916 [ERROR] PwaApps/singleChannelApp.cc line 126: trying to set channel ID to 0
-2022/02/15 12:45:20.744977 [INFO] 
+2022/02/17 20:49:13.950548 [INFO] initial4Vec: {Rank = 1 ( 2.2384,0,0,0.9) } 
+2022/02/17 20:49:13.950561 [INFO] projectile4Vec: {Rank = 1 ( 1.30013,0,0,0.9) } 
+2022/02/17 20:49:13.950575 [INFO] Now replace the parser!!!
+2022/02/17 20:49:13.951330 [ERROR] PwaApps/singleChannelApp.cc line 126: trying to set channel ID to 0
+2022/02/17 20:49:13.951397 [INFO] 
 The spins of the final state particles are:
-2022/02/15 12:45:20.744989 [INFO] pion0A : 0
-2022/02/15 12:45:20.744994 [INFO] pion0B : 0
-2022/02/15 12:45:20.744998 [INFO] eta : 0
-2022/02/15 12:45:20.745001 [INFO] 
+2022/02/17 20:49:13.951406 [INFO] pion0A : 0
+2022/02/17 20:49:13.951410 [INFO] pion0B : 0
+2022/02/17 20:49:13.951414 [INFO] eta : 0
+2022/02/17 20:49:13.951418 [INFO] 
 current projection is:
-2022/02/15 12:45:20.745006 [INFO] 0	lambda: 0
-2022/02/15 12:45:20.745010 [INFO] 0	lambda: 0
-2022/02/15 12:45:20.745014 [INFO] 0	lambda: 0
+2022/02/17 20:49:13.951423 [INFO] 0	lambda: 0
+2022/02/17 20:49:13.951427 [INFO] 0	lambda: 0
+2022/02/17 20:49:13.951431 [INFO] 0	lambda: 0
 
 JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
 suffix for fit parameter name:	f2(1270)Topion0A_pion0B
 JPC=2++	L,S=2,0	preFactorLS=0
 
 
-2022/02/15 12:45:20.745088 [INFO] added decay f2(1270)Topion0A_pion0B to decay list
+2022/02/17 20:49:13.951528 [INFO] added decay f2(1270)Topion0A_pion0B to decay list
 
 JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
 suffix for fit parameter name:	a2(1320)0ATopion0A_eta
 JPC=2++	L,S=2,0	preFactorLS=0
 
 
-2022/02/15 12:45:20.745111 [INFO] added decay a2(1320)0ATopion0A_eta to decay list
+2022/02/17 20:49:13.951552 [INFO] added decay a2(1320)0ATopion0A_eta to decay list
 
 JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
 suffix for fit parameter name:	a2(1320)0BTopion0B_eta
 JPC=2++	L,S=2,0	preFactorLS=0
 
 
-2022/02/15 12:45:20.745131 [INFO] added decay a2(1320)0BTopion0B_eta to decay list
+2022/02/17 20:49:13.951570 [INFO] added decay a2(1320)0BTopion0B_eta to decay list
 
 ***ProdChannelInfo***
 ***ProdChannelInfo***
@@ -469,12 +489,12 @@ with production barrier: 0
 ***ProdChannelInfo***
 particle1: a2(1320)0A	particle2: pion0B
 with production barrier: 0
-2022/02/15 12:45:20.745192 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=0 S=0 ==> C=1
-2022/02/15 12:45:20.745208 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=1 ==> C=1
-2022/02/15 12:45:20.745218 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=0 S=1 ==> C=-1
-2022/02/15 12:45:20.745235 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=0 ==> C=-1
-2022/02/15 12:45:20.745243 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=1 ==> C=1
-2022/02/15 12:45:20.745253 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=1 ==> C=1
+2022/02/17 20:49:13.951644 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=0 S=0 ==> C=1
+2022/02/17 20:49:13.951664 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=1 ==> C=1
+2022/02/17 20:49:13.951674 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=0 S=1 ==> C=-1
+2022/02/17 20:49:13.951688 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=0 ==> C=-1
+2022/02/17 20:49:13.951696 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=1 ==> C=1
+2022/02/17 20:49:13.951706 [DEBUG] pbarpUtils/pbarpStatesLS.cc line 71: L=1 S=1 ==> C=1
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 
@@ -519,10 +539,10 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745435 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.745441 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.745445 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.745449 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Tof2(1270)_eta
+2022/02/17 20:49:13.951897 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.951904 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.951908 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.951912 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I1G-1J0P-1C1Tof2(1270)_eta:
 suffix for fit parameter name:	J0P-1C1Tof2(1270)_eta
@@ -534,13 +554,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745457 [INFO] Skip amplitude I1G-1J0P-1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.951924 [INFO] Skip amplitude I1G-1J0P-1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745492 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745497 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745501 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745504 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.951961 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.951974 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.951979 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.951987 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I1G-1J0P-1C1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J0P-1C1Toa2(1320)0B_pion0A
@@ -552,13 +572,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745511 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952003 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745540 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745545 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745549 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745552 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952032 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952036 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952041 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952045 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P-1C1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I1G-1J0P-1C1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J0P-1C1Toa2(1320)0A_pion0B
@@ -570,10 +590,10 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745559 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952051 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745589 [INFO] _JPCLSDecAmps.size()==0 for I0G1J0P1C1Tof2(1270)_eta
+2022/02/17 20:49:13.952081 [INFO] _JPCLSDecAmps.size()==0 for I0G1J0P1C1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I0G1J0P1C1Tof2(1270)_eta:
 suffix for fit parameter name:	J0P1C1Tof2(1270)_eta
@@ -585,10 +605,10 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745596 [INFO] Skip amplitude I0G1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+2022/02/17 20:49:13.952088 [INFO] Skip amplitude I0G1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745628 [INFO] _JPCLSDecAmps.size()==0 for I0G1J0P1C1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.952120 [INFO] _JPCLSDecAmps.size()==0 for I0G1J0P1C1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I0G1J0P1C1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J0P1C1Toa2(1320)0B_pion0A
@@ -600,10 +620,10 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745636 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+2022/02/17 20:49:13.952128 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745665 [INFO] _JPCLSDecAmps.size()==0 for I0G1J0P1C1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952156 [INFO] _JPCLSDecAmps.size()==0 for I0G1J0P1C1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I0G1J0P1C1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J0P1C1Toa2(1320)0A_pion0B
@@ -615,13 +635,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745672 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+2022/02/17 20:49:13.952163 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745701 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.745705 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.745709 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.745713 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Tof2(1270)_eta
+2022/02/17 20:49:13.952191 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.952196 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.952200 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.952204 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I1G-1J0P1C1Tof2(1270)_eta:
 suffix for fit parameter name:	J0P1C1Tof2(1270)_eta
@@ -633,13 +653,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745719 [INFO] Skip amplitude I1G-1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952210 [INFO] Skip amplitude I1G-1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745748 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745752 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745756 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745760 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.952238 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952243 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952247 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952251 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I1G-1J0P1C1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J0P1C1Toa2(1320)0B_pion0A
@@ -651,13 +671,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745766 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952257 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745795 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745799 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745805 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.745809 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952287 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952292 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952297 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.952301 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J0P1C1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I1G-1J0P1C1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J0P1C1Toa2(1320)0A_pion0B
@@ -669,13 +689,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745816 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952307 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745848 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745854 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745859 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745863 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Tof2(1270)_eta
+2022/02/17 20:49:13.952338 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952345 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952351 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952355 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I0G-1J1P-1C-1Tof2(1270)_eta:
 suffix for fit parameter name:	J1P-1C-1Tof2(1270)_eta
@@ -687,13 +707,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745869 [INFO] Skip amplitude I0G-1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+2022/02/17 20:49:13.952362 [INFO] Skip amplitude I0G-1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745900 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745906 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745911 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745915 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.952391 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952398 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952404 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952408 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I0G-1J1P-1C-1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J1P-1C-1Toa2(1320)0B_pion0A
@@ -705,13 +725,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745921 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+2022/02/17 20:49:13.952415 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.745951 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745957 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745963 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.745966 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952444 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952450 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952456 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952460 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P-1C-1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I0G-1J1P-1C-1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J1P-1C-1Toa2(1320)0A_pion0B
@@ -723,13 +743,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.745973 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+2022/02/17 20:49:13.952467 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746012 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746018 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746023 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746027 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Tof2(1270)_eta
+2022/02/17 20:49:13.952500 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952506 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952512 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952516 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I1G1J1P-1C-1Tof2(1270)_eta:
 suffix for fit parameter name:	J1P-1C-1Tof2(1270)_eta
@@ -741,13 +761,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746034 [INFO] Skip amplitude I1G1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952523 [INFO] Skip amplitude I1G1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746064 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746070 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746075 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746079 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.952552 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952558 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952564 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952568 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I1G1J1P-1C-1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J1P-1C-1Toa2(1320)0B_pion0A
@@ -759,13 +779,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746085 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952575 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746115 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746121 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746126 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746130 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952604 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952610 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952616 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952620 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P-1C-1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I1G1J1P-1C-1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J1P-1C-1Toa2(1320)0A_pion0B
@@ -777,13 +797,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746136 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952627 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746167 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746173 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746181 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746185 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Tof2(1270)_eta
+2022/02/17 20:49:13.952657 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952666 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952672 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952677 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I0G-1J1P1C-1Tof2(1270)_eta:
 suffix for fit parameter name:	J1P1C-1Tof2(1270)_eta
@@ -795,13 +815,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746191 [INFO] Skip amplitude I0G-1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+2022/02/17 20:49:13.952683 [INFO] Skip amplitude I0G-1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746222 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746228 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746233 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746237 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.952714 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952720 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952726 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952730 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I0G-1J1P1C-1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J1P1C-1Toa2(1320)0B_pion0A
@@ -813,13 +833,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746243 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+2022/02/17 20:49:13.952737 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746281 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746287 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746292 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746296 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952766 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952773 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952778 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952783 [INFO] _JPCLSDecAmps.size()==0 for I0G-1J1P1C-1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I0G-1J1P1C-1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J1P1C-1Toa2(1320)0A_pion0B
@@ -831,13 +851,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746302 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+2022/02/17 20:49:13.952789 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746331 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746337 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746342 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746346 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Tof2(1270)_eta
+2022/02/17 20:49:13.952818 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952825 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952831 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952835 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I1G1J1P1C-1Tof2(1270)_eta:
 suffix for fit parameter name:	J1P1C-1Tof2(1270)_eta
@@ -849,13 +869,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746352 [INFO] Skip amplitude I1G1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952841 [INFO] Skip amplitude I1G1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746384 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746389 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746395 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746398 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.952873 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952880 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952886 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952890 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I1G1J1P1C-1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J1P1C-1Toa2(1320)0B_pion0A
@@ -867,13 +887,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746404 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952896 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746434 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746439 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746444 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
-2022/02/15 12:45:20.746448 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.952926 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952932 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952938 [WARN] PwaUtils/DataUtils.cc line 99: C-Parity not valid for the reaction: JPC= 1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2022/02/17 20:49:13.952942 [INFO] _JPCLSDecAmps.size()==0 for I1G1J1P1C-1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I1G1J1P1C-1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J1P1C-1Toa2(1320)0A_pion0B
@@ -885,7 +905,7 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746454 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.952948 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 
@@ -933,10 +953,10 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746580 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.746585 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.746589 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.746593 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Tof2(1270)_eta
+2022/02/17 20:49:13.953101 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.953106 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.953110 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.953115 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I1G-1J1P1C1Tof2(1270)_eta:
 suffix for fit parameter name:	J1P1C1Tof2(1270)_eta
@@ -948,13 +968,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746599 [INFO] Skip amplitude I1G-1J1P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.953121 [INFO] Skip amplitude I1G-1J1P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746627 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746632 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746635 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746639 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.953149 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953154 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953158 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953162 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I1G-1J1P1C1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J1P1C1Toa2(1320)0B_pion0A
@@ -966,13 +986,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746645 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.953168 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746673 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746677 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746681 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746685 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.953196 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953201 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953205 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953209 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J1P1C1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I1G-1J1P1C1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J1P1C1Toa2(1320)0A_pion0B
@@ -984,7 +1004,7 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746691 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.953215 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 
@@ -1032,10 +1052,10 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
 eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746814 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.746818 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.746822 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
-2022/02/15 12:45:20.746826 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Tof2(1270)_eta
+2022/02/17 20:49:13.953339 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.953344 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.953348 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> 1 * 1 
+2022/02/17 20:49:13.953352 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Tof2(1270)_eta
 
 JPCLS amplitudes for decay	I1G-1J2P1C1Tof2(1270)_eta:
 suffix for fit parameter name:	J2P1C1Tof2(1270)_eta
@@ -1047,13 +1067,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746832 [INFO] Skip amplitude I1G-1J2P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.953359 [INFO] Skip amplitude I1G-1J2P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746860 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746865 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746868 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746872 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Toa2(1320)0B_pion0A
+2022/02/17 20:49:13.953387 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953391 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953395 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953399 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Toa2(1320)0B_pion0A
 
 JPCLS amplitudes for decay	I1G-1J2P1C1Toa2(1320)0B_pion0A:
 suffix for fit parameter name:	J2P1C1Toa2(1320)0B_pion0A
@@ -1065,13 +1085,13 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746878 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.953406 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
 a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
 pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
-2022/02/15 12:45:20.746906 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746910 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746914 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
-2022/02/15 12:45:20.746917 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Toa2(1320)0A_pion0B
+2022/02/17 20:49:13.953433 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953438 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953442 [WARN] PwaUtils/DataUtils.cc line 114: G-Parity not valid for:-1 --> -1 * -1 
+2022/02/17 20:49:13.953446 [INFO] _JPCLSDecAmps.size()==0 for I1G-1J2P1C1Toa2(1320)0A_pion0B
 
 JPCLS amplitudes for decay	I1G-1J2P1C1Toa2(1320)0A_pion0B:
 suffix for fit parameter name:	J2P1C1Toa2(1320)0A_pion0B
@@ -1083,188 +1103,188 @@ JPC=2++	L,S=2,0	preFactorLS=0
 
 
 
-2022/02/15 12:45:20.746923 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
-2022/02/15 12:45:20.746961 [INFO] add dynamics for J0P-1C1 dynType: WoDynamics
-2022/02/15 12:45:20.746977 [INFO] Dynamics	J0P-1C1	found!!!
-2022/02/15 12:45:20.746990 [INFO] Dynamics	J0P-1C1	found!!!
-2022/02/15 12:45:20.747002 [INFO] add dynamics for J1P1C1 dynType: WoDynamics
-2022/02/15 12:45:20.747014 [INFO] Dynamics	J1P1C1	found!!!
-2022/02/15 12:45:20.747021 [INFO] Dynamics	J1P1C1	found!!!
-2022/02/15 12:45:20.747030 [INFO] add dynamics for J2P1C1 dynType: WoDynamics
-2022/02/15 12:45:20.747038 [INFO] Dynamics	J2P1C1	found!!!
-2022/02/15 12:45:20.747045 [INFO] Dynamics	J2P1C1	found!!!
-2022/02/15 12:45:20.747088 [INFO] add dynamics for f2(1270)Topion0A_pion0B dynType: BreitWigner
-2022/02/15 12:45:20.747099 [INFO] add dynamics for a2(1320)0ATopion0A_eta dynType: BreitWigner
-2022/02/15 12:45:20.747111 [INFO] add dynamics for a2(1320)0BTopion0B_eta dynType: BreitWigner
-2022/02/15 12:45:20.747119 [INFO] I0G1J0P-1C1Tof2(1270)_eta set decay level to 0
-2022/02/15 12:45:20.747124 [INFO] f2(1270)Topion0A_pion0B set decay level to 1
-2022/02/15 12:45:20.747128 [INFO] I0G1J0P-1C1Toa2(1320)0B_pion0A set decay level to 0
-2022/02/15 12:45:20.747132 [INFO] a2(1320)0BTopion0B_eta set decay level to 1
-2022/02/15 12:45:20.747136 [INFO] I0G1J0P-1C1Toa2(1320)0A_pion0B set decay level to 0
-2022/02/15 12:45:20.747140 [INFO] a2(1320)0ATopion0A_eta set decay level to 1
-2022/02/15 12:45:20.747144 [INFO] I0G1J1P1C1Tof2(1270)_eta set decay level to 0
-2022/02/15 12:45:20.747148 [INFO] I0G1J1P1C1Toa2(1320)0B_pion0A set decay level to 0
-2022/02/15 12:45:20.747152 [INFO] I0G1J1P1C1Toa2(1320)0A_pion0B set decay level to 0
-2022/02/15 12:45:20.747157 [INFO] I0G1J2P1C1Tof2(1270)_eta set decay level to 0
-2022/02/15 12:45:20.747164 [INFO] I0G1J2P1C1Toa2(1320)0B_pion0A set decay level to 0
-2022/02/15 12:45:20.747169 [INFO] I0G1J2P1C1Toa2(1320)0A_pion0B set decay level to 0
-2022/02/15 12:45:20.747175 [ERROR] PwaUtils/GlobalEnv.cc line 194: setting up channel 0
-2022/02/15 12:45:20.747179 [INFO] check complete reaction chains
-2022/02/15 12:45:20.747184 [INFO] paricle name: pion0A
-2022/02/15 12:45:20.747187 [INFO] paricle name: pion0B
-2022/02/15 12:45:20.747190 [INFO] paricle name: eta
-2022/02/15 12:45:20.747196 [INFO] reaction chains have been successfully checked!!!
-2022/02/15 12:45:20.747206 [INFO] wigDWigDRefId = 1
-2022/02/15 12:45:20.747211 [INFO] name of amplitude: f2(1270)Topion0A_pion0B	nameId: 1
+2022/02/17 20:49:13.953452 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2022/02/17 20:49:13.953495 [INFO] add dynamics for J0P-1C1 dynType: WoDynamics
+2022/02/17 20:49:13.953511 [INFO] Dynamics	J0P-1C1	found!!!
+2022/02/17 20:49:13.953519 [INFO] Dynamics	J0P-1C1	found!!!
+2022/02/17 20:49:13.953530 [INFO] add dynamics for J1P1C1 dynType: WoDynamics
+2022/02/17 20:49:13.953539 [INFO] Dynamics	J1P1C1	found!!!
+2022/02/17 20:49:13.953547 [INFO] Dynamics	J1P1C1	found!!!
+2022/02/17 20:49:13.953557 [INFO] add dynamics for J2P1C1 dynType: WoDynamics
+2022/02/17 20:49:13.953566 [INFO] Dynamics	J2P1C1	found!!!
+2022/02/17 20:49:13.953574 [INFO] Dynamics	J2P1C1	found!!!
+2022/02/17 20:49:13.953622 [INFO] add dynamics for f2(1270)Topion0A_pion0B dynType: BreitWigner
+2022/02/17 20:49:13.953641 [INFO] add dynamics for a2(1320)0ATopion0A_eta dynType: BreitWigner
+2022/02/17 20:49:13.953653 [INFO] add dynamics for a2(1320)0BTopion0B_eta dynType: BreitWigner
+2022/02/17 20:49:13.953662 [INFO] I0G1J0P-1C1Tof2(1270)_eta set decay level to 0
+2022/02/17 20:49:13.953668 [INFO] f2(1270)Topion0A_pion0B set decay level to 1
+2022/02/17 20:49:13.953673 [INFO] I0G1J0P-1C1Toa2(1320)0B_pion0A set decay level to 0
+2022/02/17 20:49:13.953677 [INFO] a2(1320)0BTopion0B_eta set decay level to 1
+2022/02/17 20:49:13.953682 [INFO] I0G1J0P-1C1Toa2(1320)0A_pion0B set decay level to 0
+2022/02/17 20:49:13.953686 [INFO] a2(1320)0ATopion0A_eta set decay level to 1
+2022/02/17 20:49:13.953691 [INFO] I0G1J1P1C1Tof2(1270)_eta set decay level to 0
+2022/02/17 20:49:13.953696 [INFO] I0G1J1P1C1Toa2(1320)0B_pion0A set decay level to 0
+2022/02/17 20:49:13.953701 [INFO] I0G1J1P1C1Toa2(1320)0A_pion0B set decay level to 0
+2022/02/17 20:49:13.953706 [INFO] I0G1J2P1C1Tof2(1270)_eta set decay level to 0
+2022/02/17 20:49:13.953711 [INFO] I0G1J2P1C1Toa2(1320)0B_pion0A set decay level to 0
+2022/02/17 20:49:13.953716 [INFO] I0G1J2P1C1Toa2(1320)0A_pion0B set decay level to 0
+2022/02/17 20:49:13.953723 [ERROR] PwaUtils/GlobalEnv.cc line 194: setting up channel 0
+2022/02/17 20:49:13.953728 [INFO] check complete reaction chains
+2022/02/17 20:49:13.953733 [INFO] paricle name: pion0A
+2022/02/17 20:49:13.953737 [INFO] paricle name: pion0B
+2022/02/17 20:49:13.953740 [INFO] paricle name: eta
+2022/02/17 20:49:13.953747 [INFO] reaction chains have been successfully checked!!!
+2022/02/17 20:49:13.953756 [INFO] wigDWigDRefId = 1
+2022/02/17 20:49:13.953762 [INFO] name of amplitude: f2(1270)Topion0A_pion0B	nameId: 1
 _wigDWigDRefId = 1	_wignerDId = 2
 with wignerDKey: pion0B_pion0Apion0B	wignerDRefKey: etapion0Apion0B
-2022/02/15 12:45:20.747217 [INFO] wigDWigDRefId = 2
-2022/02/15 12:45:20.747222 [INFO] name of amplitude: I0G1J0P-1C1Tof2(1270)_eta	nameId: 3
+2022/02/17 20:49:13.953769 [INFO] wigDWigDRefId = 2
+2022/02/17 20:49:13.953773 [INFO] name of amplitude: I0G1J0P-1C1Tof2(1270)_eta	nameId: 3
 _wigDWigDRefId = 2	_wignerDId = 4
 with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747228 [INFO] wigDWigDRefId = 3
-2022/02/15 12:45:20.747232 [INFO] name of amplitude: a2(1320)0BTopion0B_eta	nameId: 5
+2022/02/17 20:49:13.953780 [INFO] wigDWigDRefId = 3
+2022/02/17 20:49:13.953785 [INFO] name of amplitude: a2(1320)0BTopion0B_eta	nameId: 5
 _wigDWigDRefId = 3	_wignerDId = 6
 with wignerDKey: eta_etapion0B	wignerDRefKey: etapion0Apion0B
-2022/02/15 12:45:20.747238 [INFO] wigDWigDRefId = 4
-2022/02/15 12:45:20.747242 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0B_pion0A	nameId: 7
+2022/02/17 20:49:13.953791 [INFO] wigDWigDRefId = 4
+2022/02/17 20:49:13.953796 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0B_pion0A	nameId: 7
 _wigDWigDRefId = 4	_wignerDId = 8
 with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747249 [INFO] wigDWigDRefId = 5
-2022/02/15 12:45:20.747253 [INFO] name of amplitude: a2(1320)0ATopion0A_eta	nameId: 9
+2022/02/17 20:49:13.953803 [INFO] wigDWigDRefId = 5
+2022/02/17 20:49:13.953807 [INFO] name of amplitude: a2(1320)0ATopion0A_eta	nameId: 9
 _wigDWigDRefId = 5	_wignerDId = 10
 with wignerDKey: eta_etapion0A	wignerDRefKey: etapion0Apion0B
-2022/02/15 12:45:20.747260 [INFO] wigDWigDRefId = 6
-2022/02/15 12:45:20.747264 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0A_pion0B	nameId: 11
+2022/02/17 20:49:13.953815 [INFO] wigDWigDRefId = 6
+2022/02/17 20:49:13.953819 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0A_pion0B	nameId: 11
 _wigDWigDRefId = 6	_wignerDId = 12
 with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747270 [INFO] wigDWigDRefId = 2
-2022/02/15 12:45:20.747274 [INFO] name of amplitude: I0G1J1P1C1Tof2(1270)_eta	nameId: 13
+2022/02/17 20:49:13.953825 [INFO] wigDWigDRefId = 2
+2022/02/17 20:49:13.953832 [INFO] name of amplitude: I0G1J1P1C1Tof2(1270)_eta	nameId: 13
 _wigDWigDRefId = 2	_wignerDId = 4
 with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747280 [INFO] wigDWigDRefId = 4
-2022/02/15 12:45:20.747284 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0B_pion0A	nameId: 14
+2022/02/17 20:49:13.953838 [INFO] wigDWigDRefId = 4
+2022/02/17 20:49:13.953843 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0B_pion0A	nameId: 14
 _wigDWigDRefId = 4	_wignerDId = 8
 with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747290 [INFO] wigDWigDRefId = 6
-2022/02/15 12:45:20.747294 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0A_pion0B	nameId: 15
+2022/02/17 20:49:13.953852 [INFO] wigDWigDRefId = 6
+2022/02/17 20:49:13.953857 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0A_pion0B	nameId: 15
 _wigDWigDRefId = 6	_wignerDId = 12
 with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747302 [INFO] wigDWigDRefId = 2
-2022/02/15 12:45:20.747306 [INFO] name of amplitude: I0G1J2P1C1Tof2(1270)_eta	nameId: 16
+2022/02/17 20:49:13.953862 [INFO] wigDWigDRefId = 2
+2022/02/17 20:49:13.953867 [INFO] name of amplitude: I0G1J2P1C1Tof2(1270)_eta	nameId: 16
 _wigDWigDRefId = 2	_wignerDId = 4
 with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747312 [INFO] wigDWigDRefId = 4
-2022/02/15 12:45:20.747316 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0B_pion0A	nameId: 17
+2022/02/17 20:49:13.953873 [INFO] wigDWigDRefId = 4
+2022/02/17 20:49:13.953877 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0B_pion0A	nameId: 17
 _wigDWigDRefId = 4	_wignerDId = 8
 with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747323 [INFO] wigDWigDRefId = 6
-2022/02/15 12:45:20.747329 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0A_pion0B	nameId: 18
+2022/02/17 20:49:13.953884 [INFO] wigDWigDRefId = 6
+2022/02/17 20:49:13.953888 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0A_pion0B	nameId: 18
 _wigDWigDRefId = 6	_wignerDId = 12
 with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
-2022/02/15 12:45:20.747337 [INFO] create likelihood object for channelType 1	 and channelID: 0
-2022/02/15 12:45:20.747373 [INFO] Dynamics	J0P-1C1	found!!!
-2022/02/15 12:45:20.747386 [INFO] Dynamics	f2(1270)Topion0A_pion0B	found!!!
-2022/02/15 12:45:20.747392 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747396 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747400 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747414 [INFO] _parityFactor=	1
-2022/02/15 12:45:20.747438 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747443 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747446 [INFO] _fsParticleNames.at(2): eta
-2022/02/15 12:45:20.747455 [INFO] _parityFactor=	-1
-2022/02/15 12:45:20.747475 [INFO] Dynamics	J0P-1C1	found!!!
-2022/02/15 12:45:20.747487 [INFO] Dynamics	a2(1320)0BTopion0B_eta	found!!!
-2022/02/15 12:45:20.747492 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747495 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747499 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747502 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747506 [INFO] _fsParticleNames.at(2): eta
-2022/02/15 12:45:20.747513 [INFO] _parityFactor=	1
-2022/02/15 12:45:20.747523 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747534 [INFO] _parityFactor=	-1
-2022/02/15 12:45:20.747551 [INFO] Dynamics	J0P-1C1	found!!!
-2022/02/15 12:45:20.747564 [INFO] Dynamics	a2(1320)0ATopion0A_eta	found!!!
-2022/02/15 12:45:20.747569 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747572 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747576 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747579 [INFO] _fsParticleNames.at(2): eta
-2022/02/15 12:45:20.747587 [INFO] _parityFactor=	1
-2022/02/15 12:45:20.747597 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747601 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747609 [INFO] _parityFactor=	-1
-2022/02/15 12:45:20.747625 [INFO] Dynamics	J1P1C1	found!!!
-2022/02/15 12:45:20.747630 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747634 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747637 [INFO] _fsParticleNames.at(2): eta
-2022/02/15 12:45:20.747649 [INFO] _parityFactor=	1
-2022/02/15 12:45:20.747682 [INFO] Dynamics	J1P1C1	found!!!
-2022/02/15 12:45:20.747689 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747699 [INFO] _parityFactor=	1
-2022/02/15 12:45:20.747724 [INFO] Dynamics	J1P1C1	found!!!
-2022/02/15 12:45:20.747730 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747734 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747744 [INFO] _parityFactor=	1
-2022/02/15 12:45:20.747773 [INFO] Dynamics	J2P1C1	found!!!
-2022/02/15 12:45:20.747779 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747783 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747786 [INFO] _fsParticleNames.at(2): eta
-2022/02/15 12:45:20.747796 [INFO] _parityFactor=	-1
-2022/02/15 12:45:20.747827 [INFO] Dynamics	J2P1C1	found!!!
-2022/02/15 12:45:20.747833 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747843 [INFO] _parityFactor=	-1
-2022/02/15 12:45:20.747873 [INFO] Dynamics	J2P1C1	found!!!
-2022/02/15 12:45:20.747879 [INFO] _fsParticleNames.at(0): pion0A
-2022/02/15 12:45:20.747885 [INFO] _fsParticleNames.at(1): pion0B
-2022/02/15 12:45:20.747895 [INFO] _parityFactor=	-1
-2022/02/15 12:45:20.747931 [INFO] 
+2022/02/17 20:49:13.953897 [INFO] create likelihood object for channelType 1	 and channelID: 0
+2022/02/17 20:49:13.953934 [INFO] Dynamics	J0P-1C1	found!!!
+2022/02/17 20:49:13.953952 [INFO] Dynamics	f2(1270)Topion0A_pion0B	found!!!
+2022/02/17 20:49:13.953959 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.953964 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.953968 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.953993 [INFO] _parityFactor=	1
+2022/02/17 20:49:13.954029 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954034 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954038 [INFO] _fsParticleNames.at(2): eta
+2022/02/17 20:49:13.954046 [INFO] _parityFactor=	-1
+2022/02/17 20:49:13.954066 [INFO] Dynamics	J0P-1C1	found!!!
+2022/02/17 20:49:13.954080 [INFO] Dynamics	a2(1320)0BTopion0B_eta	found!!!
+2022/02/17 20:49:13.954086 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954090 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954094 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954098 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954101 [INFO] _fsParticleNames.at(2): eta
+2022/02/17 20:49:13.954109 [INFO] _parityFactor=	1
+2022/02/17 20:49:13.954120 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954129 [INFO] _parityFactor=	-1
+2022/02/17 20:49:13.954147 [INFO] Dynamics	J0P-1C1	found!!!
+2022/02/17 20:49:13.954160 [INFO] Dynamics	a2(1320)0ATopion0A_eta	found!!!
+2022/02/17 20:49:13.954165 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954169 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954173 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954177 [INFO] _fsParticleNames.at(2): eta
+2022/02/17 20:49:13.954185 [INFO] _parityFactor=	1
+2022/02/17 20:49:13.954195 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954199 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954207 [INFO] _parityFactor=	-1
+2022/02/17 20:49:13.954227 [INFO] Dynamics	J1P1C1	found!!!
+2022/02/17 20:49:13.954233 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954238 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954241 [INFO] _fsParticleNames.at(2): eta
+2022/02/17 20:49:13.954252 [INFO] _parityFactor=	1
+2022/02/17 20:49:13.954279 [INFO] Dynamics	J1P1C1	found!!!
+2022/02/17 20:49:13.954286 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954297 [INFO] _parityFactor=	1
+2022/02/17 20:49:13.954322 [INFO] Dynamics	J1P1C1	found!!!
+2022/02/17 20:49:13.954329 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954334 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954344 [INFO] _parityFactor=	1
+2022/02/17 20:49:13.954369 [INFO] Dynamics	J2P1C1	found!!!
+2022/02/17 20:49:13.954377 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954381 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954385 [INFO] _fsParticleNames.at(2): eta
+2022/02/17 20:49:13.954396 [INFO] _parityFactor=	-1
+2022/02/17 20:49:13.954427 [INFO] Dynamics	J2P1C1	found!!!
+2022/02/17 20:49:13.954434 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954448 [INFO] _parityFactor=	-1
+2022/02/17 20:49:13.954478 [INFO] Dynamics	J2P1C1	found!!!
+2022/02/17 20:49:13.954485 [INFO] _fsParticleNames.at(0): pion0A
+2022/02/17 20:49:13.954489 [INFO] _fsParticleNames.at(1): pion0B
+2022/02/17 20:49:13.954499 [INFO] _parityFactor=	-1
+2022/02/17 20:49:13.954537 [INFO] 
 *** The fit parameter replacements are ***
-2022/02/15 12:45:20.747937 [INFO] J0P-1C1Toa2(1320)0A_pion0B	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
-2022/02/15 12:45:20.747940 [INFO] J0P-1C1Toa2(1320)0B_pion0A	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
-2022/02/15 12:45:20.747944 [INFO] J1P1C1Toa2(1320)0A_pion0B	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
-2022/02/15 12:45:20.747947 [INFO] J1P1C1Toa2(1320)0B_pion0A	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
-2022/02/15 12:45:20.747950 [INFO] J2P1C1Toa2(1320)0A_pion0B	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
-2022/02/15 12:45:20.747954 [INFO] J2P1C1Toa2(1320)0B_pion0A	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
-2022/02/15 12:45:20.747957 [INFO] a2(1320)0ATopion0A_eta	replaced by	a2(1320)0ABTopion0AB_eta
-2022/02/15 12:45:20.747960 [INFO] a2(1320)0BTopion0B_eta	replaced by	a2(1320)0ABTopion0AB_eta
-2022/02/15 12:45:20.748325 [INFO] L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
-2022/02/15 12:45:20.748345 [INFO] L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
-2022/02/15 12:45:20.748352 [INFO] L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
-2022/02/15 12:45:20.748377 [INFO] L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
-2022/02/15 12:45:20.748385 [INFO] f2(1270)Mass	1.275	0.03	1.125	1.425
-2022/02/15 12:45:20.748393 [INFO] f2(1270)Width	0.185	0.037	0	0.37
-2022/02/15 12:45:20.748399 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
-2022/02/15 12:45:20.748405 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
-2022/02/15 12:45:20.748411 [INFO] L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
-2022/02/15 12:45:20.748428 [INFO] L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
-2022/02/15 12:45:20.748443 [INFO] a2(1320)0ABMass	1.318	0.03	1.168	1.468
-2022/02/15 12:45:20.748455 [INFO] a2(1320)0ABWidth	0.107	0.0214	0	0.214
-2022/02/15 12:45:20.748463 [INFO] L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748469 [INFO] L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
-2022/02/15 12:45:20.748475 [INFO] L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748480 [INFO] L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
-2022/02/15 12:45:20.748486 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748496 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
-2022/02/15 12:45:20.748503 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748509 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
-2022/02/15 12:45:20.748514 [INFO] L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748520 [INFO] L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
-2022/02/15 12:45:20.748526 [INFO] L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748532 [INFO] L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
-2022/02/15 12:45:20.748538 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748544 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
-2022/02/15 12:45:20.748550 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
-2022/02/15 12:45:20.748557 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
-2022/02/15 12:45:20.748563 [INFO] channelType1pion0Apion0BetaScaling	1	0.01	0	20
-2022/02/15 12:45:20.748570 [INFO] Iso1J0P-1C1	0	0.5	0	1
-2022/02/15 12:45:20.748577 [INFO] Iso1J1P1C1	0	0.5	0	1
-2022/02/15 12:45:20.748584 [INFO] Iso1J2P1C1	0	0.5	0	1
-2022/02/15 12:45:20.748590 [INFO] J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
-2022/02/15 12:45:20.748600 [INFO] J0P-1C1L0S0pbarpPhi	0	0.2
-2022/02/15 12:45:20.748607 [INFO] J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
-2022/02/15 12:45:20.748613 [INFO] J1P1C1L1S1pbarpPhi	0	0.2
-2022/02/15 12:45:20.748619 [INFO] J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
-2022/02/15 12:45:20.748626 [INFO] J2P1C1L1S1pbarpPhi	0	0.2
+2022/02/17 20:49:13.954542 [INFO] J0P-1C1Toa2(1320)0A_pion0B	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
+2022/02/17 20:49:13.954546 [INFO] J0P-1C1Toa2(1320)0B_pion0A	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
+2022/02/17 20:49:13.954550 [INFO] J1P1C1Toa2(1320)0A_pion0B	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
+2022/02/17 20:49:13.954554 [INFO] J1P1C1Toa2(1320)0B_pion0A	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
+2022/02/17 20:49:13.954557 [INFO] J2P1C1Toa2(1320)0A_pion0B	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
+2022/02/17 20:49:13.954561 [INFO] J2P1C1Toa2(1320)0B_pion0A	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
+2022/02/17 20:49:13.954564 [INFO] a2(1320)0ATopion0A_eta	replaced by	a2(1320)0ABTopion0AB_eta
+2022/02/17 20:49:13.954568 [INFO] a2(1320)0BTopion0B_eta	replaced by	a2(1320)0ABTopion0AB_eta
+2022/02/17 20:49:13.954880 [INFO] L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+2022/02/17 20:49:13.954901 [INFO] L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+2022/02/17 20:49:13.954909 [INFO] L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+2022/02/17 20:49:13.954915 [INFO] L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+2022/02/17 20:49:13.954921 [INFO] f2(1270)Mass	1.275	0.03	1.125	1.425
+2022/02/17 20:49:13.954929 [INFO] f2(1270)Width	0.185	0.037	0	0.37
+2022/02/17 20:49:13.954936 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+2022/02/17 20:49:13.954942 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2022/02/17 20:49:13.954948 [INFO] L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+2022/02/17 20:49:13.954955 [INFO] L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+2022/02/17 20:49:13.954961 [INFO] a2(1320)0ABMass	1.318	0.03	1.168	1.468
+2022/02/17 20:49:13.954968 [INFO] a2(1320)0ABWidth	0.107	0.0214	0	0.214
+2022/02/17 20:49:13.954975 [INFO] L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.954995 [INFO] L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+2022/02/17 20:49:13.955001 [INFO] L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955016 [INFO] L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+2022/02/17 20:49:13.955033 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955051 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2022/02/17 20:49:13.955066 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955072 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2022/02/17 20:49:13.955078 [INFO] L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955084 [INFO] L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+2022/02/17 20:49:13.955090 [INFO] L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955097 [INFO] L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+2022/02/17 20:49:13.955103 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955109 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2022/02/17 20:49:13.955115 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2022/02/17 20:49:13.955122 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2022/02/17 20:49:13.955128 [INFO] channelType1pion0Apion0BetaScaling	1	0.01	0	20
+2022/02/17 20:49:13.955135 [INFO] Iso1J0P-1C1	0	0.5	0	1
+2022/02/17 20:49:13.955142 [INFO] Iso1J1P1C1	0	0.5	0	1
+2022/02/17 20:49:13.955149 [INFO] Iso1J2P1C1	0	0.5	0	1
+2022/02/17 20:49:13.955155 [INFO] J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+2022/02/17 20:49:13.955168 [INFO] J0P-1C1L0S0pbarpPhi	0	0.2
+2022/02/17 20:49:13.955175 [INFO] J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+2022/02/17 20:49:13.955182 [INFO] J1P1C1L1S1pbarpPhi	0	0.2
+2022/02/17 20:49:13.955188 [INFO] J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+2022/02/17 20:49:13.955198 [INFO] J2P1C1L1S1pbarpPhi	0	0.2
 
 
  parameters in pawianParams are: 
@@ -1348,172 +1368,173 @@ J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
 J1P1C1L1S1pbarpPhi	0	0.2
 J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
 J2P1C1L1S1pbarpPhi	0	0.2
-2022/02/15 12:45:20.748954 [INFO] Fixing scaling parameter channelType1pion0Apion0BetaScaling
-2022/02/15 12:45:20.749034 [INFO] ************* Client mode ****************
-2022/02/15 12:45:20.749042 [INFO] Connecting to server localhost:50001
-2022/02/15 12:45:20.750269 [INFO] Received client id: 0
-2022/02/15 12:45:20.750277 [INFO] Received channel id: 0
-2022/02/15 12:45:20.750284 [INFO] Received data event range 0 - 7499
-2022/02/15 12:45:20.750289 [INFO] Received mc event range 0 - 22499
-2022/02/15 12:45:20.750514 [INFO] caching amplitudes enabled / disabled:	1
-2022/02/15 12:45:20.750524 [INFO] data file: ./toyDataModel.dat
-2022/02/15 12:45:20.750528 [INFO] mc file: ./toyDataMC.dat
-2022/02/15 12:45:20.814955 [INFO] File has 7500 events.
-2022/02/15 12:45:20.814969 [INFO] 0xaeba60
-2022/02/15 12:45:20.814977 [INFO]  Each event has 3 final state particles.
+2022/02/17 20:49:13.955519 [INFO] Fixing scaling parameter channelType1pion0Apion0BetaScaling
+2022/02/17 20:49:13.955604 [INFO] ************* Client mode ****************
+2022/02/17 20:49:13.955612 [INFO] Connecting to server localhost:50001
+2022/02/17 20:49:13.957058 [INFO] Received client id: 1
+2022/02/17 20:49:13.957070 [INFO] Received channel id: 0
+2022/02/17 20:49:13.957077 [INFO] Received data event range 7500 - 15000
+2022/02/17 20:49:13.957083 [INFO] Received mc event range 22500 - 44999
+2022/02/17 20:49:13.957142 [INFO] caching amplitudes enabled / disabled:	1
+2022/02/17 20:49:13.957155 [INFO] data file: ./toyDataModel.dat
+2022/02/17 20:49:13.957160 [INFO] mc file: ./toyDataMC.dat
+2022/02/17 20:49:14.016795 [INFO] File has 7501 events.
+2022/02/17 20:49:14.016819 [INFO] 0xe482b0
+2022/02/17 20:49:14.016825 [INFO]  Each event has 3 final state particles.
 
-2022/02/15 12:45:20.814987 [INFO] 
-2022/02/15 12:45:20.815010 [INFO] {Rank = 1 ( 0.895052,0.535594,-0.184738,0.67964) } 	m = 0.13498
-2022/02/15 12:45:20.815017 [INFO] {Rank = 1 ( 0.763445,-0.586035,0.333914,0.3312) } 	m = 0.13498
-2022/02/15 12:45:20.815024 [INFO] {Rank = 1 ( 0.579907,0.0504408,-0.149176,-0.11084) } 	m = 0.547
-2022/02/15 12:45:20.815036 [INFO] 
-2022/02/15 12:45:20.815042 [INFO] {Rank = 1 ( 0.429608,0.174923,-0.366639,-0.036355) } 	m = 0.13498
-2022/02/15 12:45:20.815048 [INFO] {Rank = 1 ( 0.557083,0.198306,-0.439341,0.244492) } 	m = 0.13498
-2022/02/15 12:45:20.815054 [INFO] {Rank = 1 ( 1.25171,-0.373229,0.80598,0.691863) } 	m = 0.547
-2022/02/15 12:45:20.815058 [INFO] 
-2022/02/15 12:45:20.815064 [INFO] {Rank = 1 ( 0.799248,-0.436834,-0.484659,0.441429) } 	m = 0.13498
-2022/02/15 12:45:20.815070 [INFO] {Rank = 1 ( 0.762231,0.546747,0.10392,0.503035) } 	m = 0.13498
-2022/02/15 12:45:20.815076 [INFO] {Rank = 1 ( 0.676926,-0.109913,0.380738,-0.0444645) } 	m = 0.547
-2022/02/15 12:45:20.815079 [INFO] 
-2022/02/15 12:45:20.815085 [INFO] {Rank = 1 ( 1.01013,-0.465964,0.143869,0.874255) } 	m = 0.13498
-2022/02/15 12:45:20.815091 [INFO] {Rank = 1 ( 0.452226,0.241816,0.340827,-0.10794) } 	m = 0.13498
-2022/02/15 12:45:20.815097 [INFO] {Rank = 1 ( 0.776049,0.224147,-0.484696,0.133685) } 	m = 0.547
-2022/02/15 12:45:20.815100 [INFO] 
-2022/02/15 12:45:20.815115 [INFO] {Rank = 1 ( 0.583329,0.277496,0.449596,-0.207153) } 	m = 0.13498
-2022/02/15 12:45:20.815121 [INFO] {Rank = 1 ( 0.580046,-0.482308,-0.102408,0.274091) } 	m = 0.13498
-2022/02/15 12:45:20.815127 [INFO] {Rank = 1 ( 1.07503,0.204812,-0.347188,0.833062) } 	m = 0.547
-2022/02/15 12:45:20.815130 [INFO] 
-2022/02/15 12:45:20.815136 [INFO] {Rank = 1 ( 0.825184,0.628111,0.128596,0.501646) } 	m = 0.13498
-2022/02/15 12:45:20.815142 [INFO] {Rank = 1 ( 0.77505,-0.507307,-0.433073,0.370903) } 	m = 0.13498
-2022/02/15 12:45:20.815148 [INFO] {Rank = 1 ( 0.638171,-0.120803,0.304478,0.0274509) } 	m = 0.547
-2022/02/15 12:45:20.815151 [INFO] 
-2022/02/15 12:45:20.815157 [INFO] {Rank = 1 ( 0.437656,-0.0519944,0.33355,-0.243648) } 	m = 0.13498
-2022/02/15 12:45:20.815163 [INFO] {Rank = 1 ( 0.724147,-0.523439,-0.0351057,0.480571) } 	m = 0.13498
-2022/02/15 12:45:20.815169 [INFO] {Rank = 1 ( 1.0766,0.575433,-0.298444,0.663077) } 	m = 0.547
-2022/02/15 12:45:20.815173 [INFO] 
-2022/02/15 12:45:20.815178 [INFO] {Rank = 1 ( 0.941827,0.312008,0.389387,0.787304) } 	m = 0.13498
-2022/02/15 12:45:20.815184 [INFO] {Rank = 1 ( 0.493924,0.150186,-0.184066,0.411467) } 	m = 0.13498
-2022/02/15 12:45:20.815190 [INFO] {Rank = 1 ( 0.802654,-0.462194,-0.205321,-0.298771) } 	m = 0.547
-2022/02/15 12:45:20.815193 [INFO] 
-2022/02/15 12:45:20.815199 [INFO] {Rank = 1 ( 1.1533,-0.567113,-0.0199579,0.994923) } 	m = 0.134981
-2022/02/15 12:45:20.815205 [INFO] {Rank = 1 ( 0.460378,0.339285,-0.0687907,-0.271812) } 	m = 0.13498
-2022/02/15 12:45:20.815211 [INFO] {Rank = 1 ( 0.624724,0.227827,0.0887486,0.176888) } 	m = 0.547
-2022/02/15 12:45:20.815215 [INFO] 
-2022/02/15 12:45:20.815220 [INFO] {Rank = 1 ( 0.920959,0.407522,0.0172083,0.814601) } 	m = 0.13498
-2022/02/15 12:45:20.815226 [INFO] {Rank = 1 ( 0.539121,-0.205569,-0.411295,-0.247003) } 	m = 0.13498
-2022/02/15 12:45:20.815232 [INFO] {Rank = 1 ( 0.778325,-0.201954,0.394086,0.332402) } 	m = 0.547
-2022/02/15 12:45:20.815236 [INFO] 
-2022/02/15 12:45:21.005988 [INFO] File has 22500 events.
-2022/02/15 12:45:21.006000 [INFO] 0xe8a980
-2022/02/15 12:45:21.006005 [INFO]  Each event has 3 final state particles.
+2022/02/17 20:49:14.016829 [INFO] 
+2022/02/17 20:49:14.016852 [INFO] {Rank = 1 ( 0.440216,0.295847,-0.229975,0.187499) } 	m = 0.13498
+2022/02/17 20:49:14.016859 [INFO] {Rank = 1 ( 0.719234,0.448159,-0.273803,0.472506) } 	m = 0.13498
+2022/02/17 20:49:14.016865 [INFO] {Rank = 1 ( 1.07896,-0.744007,0.503779,0.239995) } 	m = 0.547
+2022/02/17 20:49:14.016869 [INFO] 
+2022/02/17 20:49:14.016875 [INFO] {Rank = 1 ( 0.730839,-0.335232,0.524765,0.357977) } 	m = 0.13498
+2022/02/17 20:49:14.016881 [INFO] {Rank = 1 ( 0.437534,0.0351372,-0.291158,-0.295312) } 	m = 0.13498
+2022/02/17 20:49:14.016888 [INFO] {Rank = 1 ( 1.07003,0.300095,-0.233608,0.837335) } 	m = 0.547
+2022/02/17 20:49:14.016891 [INFO] 
+2022/02/17 20:49:14.016897 [INFO] {Rank = 1 ( 0.567648,-0.0941115,-0.539938,-0.0601203) } 	m = 0.13498
+2022/02/17 20:49:14.016903 [INFO] {Rank = 1 ( 1.02776,0.302029,0.274806,0.933451) } 	m = 0.13498
+2022/02/17 20:49:14.016910 [INFO] {Rank = 1 ( 0.642997,-0.207918,0.265133,0.0266697) } 	m = 0.547
+2022/02/17 20:49:14.016913 [INFO] 
+2022/02/17 20:49:14.016919 [INFO] {Rank = 1 ( 0.617004,0.339992,0.493415,-0.0584962) } 	m = 0.13498
+2022/02/17 20:49:14.016926 [INFO] {Rank = 1 ( 0.92806,-0.179453,-0.104008,0.894458) } 	m = 0.13498
+2022/02/17 20:49:14.016932 [INFO] {Rank = 1 ( 0.69334,-0.16054,-0.389407,0.0640383) } 	m = 0.547
+2022/02/17 20:49:14.016935 [INFO] 
+2022/02/17 20:49:14.016941 [INFO] {Rank = 1 ( 0.625333,-0.549169,0.196691,0.18041) } 	m = 0.13498
+2022/02/17 20:49:14.016947 [INFO] {Rank = 1 ( 0.802923,0.465921,-0.580475,0.269133) } 	m = 0.13498
+2022/02/17 20:49:14.016953 [INFO] {Rank = 1 ( 0.810149,0.0832482,0.383784,0.450457) } 	m = 0.547
+2022/02/17 20:49:14.016957 [INFO] 
+2022/02/17 20:49:14.016963 [INFO] {Rank = 1 ( 0.696139,-0.503302,0.0799964,0.454618) } 	m = 0.13498
+2022/02/17 20:49:14.016969 [INFO] {Rank = 1 ( 0.457974,0.0389682,0.368697,-0.232518) } 	m = 0.13498
+2022/02/17 20:49:14.016975 [INFO] {Rank = 1 ( 1.08429,0.464334,-0.448693,0.677901) } 	m = 0.547
+2022/02/17 20:49:14.016979 [INFO] 
+2022/02/17 20:49:14.017012 [INFO] {Rank = 1 ( 0.542839,-0.525009,-0.0105018,0.0266463) } 	m = 0.13498
+2022/02/17 20:49:14.017018 [INFO] {Rank = 1 ( 0.299735,-0.103713,0.0124202,-0.246396) } 	m = 0.13498
+2022/02/17 20:49:14.017024 [INFO] {Rank = 1 ( 1.39583,0.628722,-0.00191842,1.11975) } 	m = 0.547
+2022/02/17 20:49:14.017028 [INFO] 
+2022/02/17 20:49:14.017034 [INFO] {Rank = 1 ( 0.975047,0.283427,0.0769954,0.919912) } 	m = 0.13498
+2022/02/17 20:49:14.017040 [INFO] {Rank = 1 ( 0.543107,-0.315621,0.303176,-0.291914) } 	m = 0.13498
+2022/02/17 20:49:14.017046 [INFO] {Rank = 1 ( 0.72025,0.0321931,-0.380171,0.272002) } 	m = 0.547
+2022/02/17 20:49:14.017050 [INFO] 
+2022/02/17 20:49:14.017056 [INFO] {Rank = 1 ( 0.875393,0.125718,0.314116,0.796002) } 	m = 0.13498
+2022/02/17 20:49:14.017070 [INFO] {Rank = 1 ( 0.665316,-0.532852,-0.281095,0.247952) } 	m = 0.13498
+2022/02/17 20:49:14.017077 [INFO] {Rank = 1 ( 0.697696,0.407134,-0.0330215,-0.143954) } 	m = 0.547
+2022/02/17 20:49:14.017080 [INFO] 
+2022/02/17 20:49:14.017095 [INFO] {Rank = 1 ( 0.481125,0.344453,0.275421,-0.136955) } 	m = 0.13498
+2022/02/17 20:49:14.017101 [INFO] {Rank = 1 ( 0.908825,-0.482245,0.26735,0.709723) } 	m = 0.13498
+2022/02/17 20:49:14.017107 [INFO] {Rank = 1 ( 0.848456,0.137792,-0.542771,0.327232) } 	m = 0.547
+2022/02/17 20:49:14.017110 [INFO] 
+2022/02/17 20:49:14.192892 [INFO] File has 22500 events.
+2022/02/17 20:49:14.192904 [INFO] 0x11e73c0
+2022/02/17 20:49:14.192909 [INFO]  Each event has 3 final state particles.
 
-2022/02/15 12:45:21.006009 [INFO] 
-2022/02/15 12:45:21.006018 [INFO] {Rank = 1 ( 1.11855,0.359022,0.630611,0.840454) } 	m = 0.134979
-2022/02/15 12:45:21.006024 [INFO] {Rank = 1 ( 0.255622,-0.187835,-0.00603172,-0.108649) } 	m = 0.13498
-2022/02/15 12:45:21.006030 [INFO] {Rank = 1 ( 0.864235,-0.171188,-0.624579,0.168195) } 	m = 0.547
-2022/02/15 12:45:21.006034 [INFO] 
-2022/02/15 12:45:21.006040 [INFO] {Rank = 1 ( 0.801062,0.214112,0.290655,0.702251) } 	m = 0.13498
-2022/02/15 12:45:21.006050 [INFO] {Rank = 1 ( 0.74195,-0.226143,-0.692113,0.0459297) } 	m = 0.13498
-2022/02/15 12:45:21.006057 [INFO] {Rank = 1 ( 0.695393,0.0120315,0.401458,0.151819) } 	m = 0.547
-2022/02/15 12:45:21.006060 [INFO] 
-2022/02/15 12:45:21.006066 [INFO] {Rank = 1 ( 0.496833,0.225355,-0.198797,-0.371912) } 	m = 0.13498
-2022/02/15 12:45:21.006072 [INFO] {Rank = 1 ( 0.255013,-0.0377543,-0.210133,-0.0350812) } 	m = 0.13498
-2022/02/15 12:45:21.006078 [INFO] {Rank = 1 ( 1.48656,-0.187601,0.40893,1.30699) } 	m = 0.547
-2022/02/15 12:45:21.006082 [INFO] 
-2022/02/15 12:45:21.006088 [INFO] {Rank = 1 ( 1.00101,0.477393,0.580764,0.646999) } 	m = 0.13498
-2022/02/15 12:45:21.006093 [INFO] {Rank = 1 ( 0.464263,-0.410962,-0.150165,-0.0766908) } 	m = 0.13498
-2022/02/15 12:45:21.006099 [INFO] {Rank = 1 ( 0.773133,-0.0664313,-0.4306,0.329692) } 	m = 0.547
-2022/02/15 12:45:21.006103 [INFO] 
-2022/02/15 12:45:21.006109 [INFO] {Rank = 1 ( 0.524977,0.11189,0.460829,-0.180271) } 	m = 0.13498
-2022/02/15 12:45:21.006115 [INFO] {Rank = 1 ( 0.372914,-0.260326,-0.20399,-0.107066) } 	m = 0.13498
-2022/02/15 12:45:21.006120 [INFO] {Rank = 1 ( 1.34051,0.148437,-0.256839,1.18734) } 	m = 0.547
-2022/02/15 12:45:21.006124 [INFO] 
-2022/02/15 12:45:21.006130 [INFO] {Rank = 1 ( 0.445075,-0.334981,-0.0974529,0.24117) } 	m = 0.13498
-2022/02/15 12:45:21.006136 [INFO] {Rank = 1 ( 0.659975,0.57336,-0.0527404,-0.292958) } 	m = 0.13498
-2022/02/15 12:45:21.006141 [INFO] {Rank = 1 ( 1.13335,-0.238379,0.150193,0.951788) } 	m = 0.547
-2022/02/15 12:45:21.006145 [INFO] 
-2022/02/15 12:45:21.006151 [INFO] {Rank = 1 ( 0.908149,0.830147,0.022449,0.341857) } 	m = 0.13498
-2022/02/15 12:45:21.006157 [INFO] {Rank = 1 ( 0.408432,-0.383789,-0.0107301,-0.0344602) } 	m = 0.13498
-2022/02/15 12:45:21.006162 [INFO] {Rank = 1 ( 0.921824,-0.446358,-0.0117189,0.592603) } 	m = 0.547
-2022/02/15 12:45:21.006166 [INFO] 
-2022/02/15 12:45:21.006171 [INFO] {Rank = 1 ( 0.454618,0.223414,-0.116074,0.353654) } 	m = 0.13498
-2022/02/15 12:45:21.006177 [INFO] {Rank = 1 ( 0.707416,-0.448299,0.443076,-0.291426) } 	m = 0.13498
-2022/02/15 12:45:21.006183 [INFO] {Rank = 1 ( 1.07637,0.224885,-0.327001,0.837772) } 	m = 0.547
-2022/02/15 12:45:21.006186 [INFO] 
-2022/02/15 12:45:21.006192 [INFO] {Rank = 1 ( 0.756354,0.488329,0.142725,0.543153) } 	m = 0.13498
-2022/02/15 12:45:21.006198 [INFO] {Rank = 1 ( 0.429698,0.232218,0.323399,0.0889319) } 	m = 0.13498
-2022/02/15 12:45:21.006204 [INFO] {Rank = 1 ( 1.05235,-0.720547,-0.466125,0.267915) } 	m = 0.547
-2022/02/15 12:45:21.006207 [INFO] 
-2022/02/15 12:45:21.006213 [INFO] {Rank = 1 ( 0.351295,-0.155668,-0.20349,-0.198866) } 	m = 0.13498
-2022/02/15 12:45:21.006219 [INFO] {Rank = 1 ( 1.14357,0.471915,0.532122,0.885257) } 	m = 0.134981
-2022/02/15 12:45:21.006224 [INFO] {Rank = 1 ( 0.743538,-0.316248,-0.328631,0.213609) } 	m = 0.547
-2022/02/15 12:45:21.006228 [INFO] 
-2022/02/15 12:45:21.006247 [INFO] 4vec calculation for event 0
-2022/02/15 12:45:21.006487 [INFO] 4vec all in lab system
- px: -1.49012e-08	 py: -1.49012e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
-2022/02/15 12:45:21.079521 [INFO] 4vec calculation for event 500
-2022/02/15 12:45:21.152524 [INFO] 4vec calculation for event 1000
-2022/02/15 12:45:21.225459 [INFO] 4vec calculation for event 1500
-2022/02/15 12:45:21.298369 [INFO] 4vec calculation for event 2000
-2022/02/15 12:45:21.371543 [INFO] 4vec calculation for event 2500
-2022/02/15 12:45:21.444601 [INFO] 4vec calculation for event 3000
-2022/02/15 12:45:21.517658 [INFO] 4vec calculation for event 3500
-2022/02/15 12:45:21.590670 [INFO] 4vec calculation for event 4000
-2022/02/15 12:45:21.663767 [INFO] 4vec calculation for event 4500
-2022/02/15 12:45:21.737664 [INFO] 4vec calculation for event 5000
-2022/02/15 12:45:21.811010 [INFO] 4vec calculation for event 5500
-2022/02/15 12:45:21.884034 [INFO] 4vec calculation for event 6000
-2022/02/15 12:45:21.957116 [INFO] 4vec calculation for event 6500
-2022/02/15 12:45:22.030076 [INFO] 4vec calculation for event 7000
-2022/02/15 12:45:22.102908 [INFO] 4vec calculation for event 0
-2022/02/15 12:45:22.103100 [INFO] 4vec all in lab system
- px: -1.49012e-08	 py: 3.63216e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
-2022/02/15 12:45:22.175972 [INFO] 4vec calculation for event 500
-2022/02/15 12:45:22.248995 [INFO] 4vec calculation for event 1000
-2022/02/15 12:45:22.322004 [INFO] 4vec calculation for event 1500
-2022/02/15 12:45:22.395157 [INFO] 4vec calculation for event 2000
-2022/02/15 12:45:22.468062 [INFO] 4vec calculation for event 2500
-2022/02/15 12:45:22.541000 [INFO] 4vec calculation for event 3000
-2022/02/15 12:45:22.614147 [INFO] 4vec calculation for event 3500
-2022/02/15 12:45:22.687130 [INFO] 4vec calculation for event 4000
-2022/02/15 12:45:22.760189 [INFO] 4vec calculation for event 4500
-2022/02/15 12:45:22.833167 [INFO] 4vec calculation for event 5000
-2022/02/15 12:45:22.906016 [INFO] 4vec calculation for event 5500
-2022/02/15 12:45:22.979067 [INFO] 4vec calculation for event 6000
-2022/02/15 12:45:23.052049 [INFO] 4vec calculation for event 6500
-2022/02/15 12:45:23.125025 [INFO] 4vec calculation for event 7000
-2022/02/15 12:45:23.198032 [INFO] 4vec calculation for event 7500
-2022/02/15 12:45:23.271090 [INFO] 4vec calculation for event 8000
-2022/02/15 12:45:23.343981 [INFO] 4vec calculation for event 8500
-2022/02/15 12:45:23.417071 [INFO] 4vec calculation for event 9000
-2022/02/15 12:45:23.489996 [INFO] 4vec calculation for event 9500
-2022/02/15 12:45:23.563022 [INFO] 4vec calculation for event 10000
-2022/02/15 12:45:23.563206 [INFO] 4vec all in lab system
- px: 1.49012e-08	 py: 1.49012e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
-2022/02/15 12:45:23.635917 [INFO] 4vec calculation for event 10500
-2022/02/15 12:45:23.708940 [INFO] 4vec calculation for event 11000
-2022/02/15 12:45:23.781962 [INFO] 4vec calculation for event 11500
-2022/02/15 12:45:23.854928 [INFO] 4vec calculation for event 12000
-2022/02/15 12:45:23.927840 [INFO] 4vec calculation for event 12500
-2022/02/15 12:45:24.000875 [INFO] 4vec calculation for event 13000
-2022/02/15 12:45:24.073913 [INFO] 4vec calculation for event 13500
-2022/02/15 12:45:24.146887 [INFO] 4vec calculation for event 14000
-2022/02/15 12:45:24.219800 [INFO] 4vec calculation for event 14500
-2022/02/15 12:45:24.292844 [INFO] 4vec calculation for event 15000
-2022/02/15 12:45:24.366126 [INFO] 4vec calculation for event 15500
-2022/02/15 12:45:24.439300 [INFO] 4vec calculation for event 16000
-2022/02/15 12:45:24.512491 [INFO] 4vec calculation for event 16500
-2022/02/15 12:45:24.585575 [INFO] 4vec calculation for event 17000
-2022/02/15 12:45:24.662775 [INFO] 4vec calculation for event 17500
-2022/02/15 12:45:24.736117 [INFO] 4vec calculation for event 18000
-2022/02/15 12:45:24.809317 [INFO] 4vec calculation for event 18500
-2022/02/15 12:45:24.882526 [INFO] 4vec calculation for event 19000
-2022/02/15 12:45:24.955637 [INFO] 4vec calculation for event 19500
-2022/02/15 12:45:25.028906 [INFO] 4vec calculation for event 20000
-2022/02/15 12:45:25.029105 [INFO] 4vec all in lab system
+2022/02/17 20:49:14.192912 [INFO] 
+2022/02/17 20:49:14.192921 [INFO] {Rank = 1 ( 0.392228,-0.163627,0.236871,0.229655) } 	m = 0.13498
+2022/02/17 20:49:14.192928 [INFO] {Rank = 1 ( 0.957799,-0.445329,0.0668311,0.834491) } 	m = 0.13498
+2022/02/17 20:49:14.192939 [INFO] {Rank = 1 ( 0.888378,0.608956,-0.303702,-0.164146) } 	m = 0.547
+2022/02/17 20:49:14.192943 [INFO] 
+2022/02/17 20:49:14.192949 [INFO] {Rank = 1 ( 1.00159,0.113645,0.604443,0.778909) } 	m = 0.13498
+2022/02/17 20:49:14.192955 [INFO] {Rank = 1 ( 0.429089,0.0203807,-0.0946642,0.395628) } 	m = 0.13498
+2022/02/17 20:49:14.192962 [INFO] {Rank = 1 ( 0.807724,-0.134025,-0.509779,-0.274537) } 	m = 0.547
+2022/02/17 20:49:14.192965 [INFO] 
+2022/02/17 20:49:14.192971 [INFO] {Rank = 1 ( 0.446868,0.23229,0.135676,0.330311) } 	m = 0.13498
+2022/02/17 20:49:14.192977 [INFO] {Rank = 1 ( 0.630238,0.307069,-0.481656,-0.229558) } 	m = 0.13498
+2022/02/17 20:49:14.192996 [INFO] {Rank = 1 ( 1.1613,-0.539358,0.34598,0.799247) } 	m = 0.547
+2022/02/17 20:49:14.193000 [INFO] 
+2022/02/17 20:49:14.193007 [INFO] {Rank = 1 ( 0.700555,-0.13675,-0.0718325,0.669849) } 	m = 0.13498
+2022/02/17 20:49:14.193013 [INFO] {Rank = 1 ( 0.57895,-0.536142,-0.00566279,-0.171706) } 	m = 0.13498
+2022/02/17 20:49:14.193027 [INFO] {Rank = 1 ( 0.9589,0.672893,0.0774953,0.401857) } 	m = 0.547
+2022/02/17 20:49:14.193031 [INFO] 
+2022/02/17 20:49:14.193037 [INFO] {Rank = 1 ( 0.566699,-0.0757309,-0.0113297,-0.545037) } 	m = 0.13498
+2022/02/17 20:49:14.193043 [INFO] {Rank = 1 ( 0.628943,-0.167026,0.00303118,0.591137) } 	m = 0.13498
+2022/02/17 20:49:14.193049 [INFO] {Rank = 1 ( 1.04276,0.242756,0.00829857,0.8539) } 	m = 0.547
+2022/02/17 20:49:14.193053 [INFO] 
+2022/02/17 20:49:14.193059 [INFO] {Rank = 1 ( 0.710677,0.48785,0.498608,-0.0152983) } 	m = 0.13498
+2022/02/17 20:49:14.193065 [INFO] {Rank = 1 ( 0.500113,0.118957,-0.34852,0.310285) } 	m = 0.13498
+2022/02/17 20:49:14.193071 [INFO] {Rank = 1 ( 1.02761,-0.606807,-0.150088,0.605013) } 	m = 0.547
+2022/02/17 20:49:14.193075 [INFO] 
+2022/02/17 20:49:14.193081 [INFO] {Rank = 1 ( 1.134,0.0883956,-0.124741,1.11551) } 	m = 0.13498
+2022/02/17 20:49:14.193087 [INFO] {Rank = 1 ( 0.50894,-0.0807026,0.252685,-0.412841) } 	m = 0.13498
+2022/02/17 20:49:14.193093 [INFO] {Rank = 1 ( 0.595464,-0.00769301,-0.127944,0.197329) } 	m = 0.547
+2022/02/17 20:49:14.193097 [INFO] 
+2022/02/17 20:49:14.193103 [INFO] {Rank = 1 ( 0.503181,0.0689107,-0.414473,-0.241734) } 	m = 0.13498
+2022/02/17 20:49:14.193109 [INFO] {Rank = 1 ( 0.74792,-0.0810661,0.640996,0.351735) } 	m = 0.13498
+2022/02/17 20:49:14.193115 [INFO] {Rank = 1 ( 0.987303,0.0121554,-0.226523,0.789999) } 	m = 0.547
+2022/02/17 20:49:14.193119 [INFO] 
+2022/02/17 20:49:14.193125 [INFO] {Rank = 1 ( 0.179364,0.117815,0.00192033,-0.00823161) } 	m = 0.13498
+2022/02/17 20:49:14.193131 [INFO] {Rank = 1 ( 0.96726,0.529114,0.583268,0.545169) } 	m = 0.13498
+2022/02/17 20:49:14.193137 [INFO] {Rank = 1 ( 1.09178,-0.646929,-0.585188,0.363063) } 	m = 0.547
+2022/02/17 20:49:14.193141 [INFO] 
+2022/02/17 20:49:14.193147 [INFO] {Rank = 1 ( 0.861819,-0.229699,-0.433192,0.69577) } 	m = 0.13498
+2022/02/17 20:49:14.193153 [INFO] {Rank = 1 ( 0.746567,0.186217,0.707631,0.0610292) } 	m = 0.13498
+2022/02/17 20:49:14.193159 [INFO] {Rank = 1 ( 0.630018,0.0434818,-0.274439,0.143201) } 	m = 0.547
+2022/02/17 20:49:14.193162 [INFO] 
+2022/02/17 20:49:14.193175 [INFO] 4vec calculation for event 0
+2022/02/17 20:49:14.193418 [INFO] 4vec all in lab system
  px: 0	 py: 0	 pz: 0.9	 e : 2.2384	 m : 2.0495
-2022/02/15 12:45:25.102142 [INFO] 4vec calculation for event 20500
-2022/02/15 12:45:25.175359 [INFO] 4vec calculation for event 21000
-2022/02/15 12:45:25.248533 [INFO] 4vec calculation for event 21500
-2022/02/15 12:45:25.321769 [INFO] 4vec calculation for event 22000
-2022/02/15 13:03:31.879284 [INFO] Received goodbye. Exiting.
+2022/02/17 20:49:14.266267 [INFO] 4vec calculation for event 500
+2022/02/17 20:49:14.367538 [INFO] 4vec calculation for event 1000
+2022/02/17 20:49:14.439853 [INFO] 4vec calculation for event 1500
+2022/02/17 20:49:14.512015 [INFO] 4vec calculation for event 2000
+2022/02/17 20:49:14.584306 [INFO] 4vec calculation for event 2500
+2022/02/17 20:49:14.660058 [INFO] 4vec calculation for event 3000
+2022/02/17 20:49:14.732317 [INFO] 4vec calculation for event 3500
+2022/02/17 20:49:14.804362 [INFO] 4vec calculation for event 4000
+2022/02/17 20:49:14.876496 [INFO] 4vec calculation for event 4500
+2022/02/17 20:49:14.948623 [INFO] 4vec calculation for event 5000
+2022/02/17 20:49:15.020776 [INFO] 4vec calculation for event 5500
+2022/02/17 20:49:15.092972 [INFO] 4vec calculation for event 6000
+2022/02/17 20:49:15.165120 [INFO] 4vec calculation for event 6500
+2022/02/17 20:49:15.237226 [INFO] 4vec calculation for event 7000
+2022/02/17 20:49:15.309290 [INFO] 4vec calculation for event 7500
+2022/02/17 20:49:15.309459 [INFO] 4vec calculation for event 0
+2022/02/17 20:49:15.309620 [INFO] 4vec all in lab system
+ px: 0	 py: -7.45058e-09	 pz: 0.9	 e : 2.2384	 m : 2.0495
+2022/02/17 20:49:15.381636 [INFO] 4vec calculation for event 500
+2022/02/17 20:49:15.453711 [INFO] 4vec calculation for event 1000
+2022/02/17 20:49:15.525886 [INFO] 4vec calculation for event 1500
+2022/02/17 20:49:15.598087 [INFO] 4vec calculation for event 2000
+2022/02/17 20:49:15.670180 [INFO] 4vec calculation for event 2500
+2022/02/17 20:49:15.742426 [INFO] 4vec calculation for event 3000
+2022/02/17 20:49:15.814565 [INFO] 4vec calculation for event 3500
+2022/02/17 20:49:15.886698 [INFO] 4vec calculation for event 4000
+2022/02/17 20:49:15.958869 [INFO] 4vec calculation for event 4500
+2022/02/17 20:49:16.031107 [INFO] 4vec calculation for event 5000
+2022/02/17 20:49:16.103258 [INFO] 4vec calculation for event 5500
+2022/02/17 20:49:16.175277 [INFO] 4vec calculation for event 6000
+2022/02/17 20:49:16.247387 [INFO] 4vec calculation for event 6500
+2022/02/17 20:49:16.319567 [INFO] 4vec calculation for event 7000
+2022/02/17 20:49:16.391760 [INFO] 4vec calculation for event 7500
+2022/02/17 20:49:16.463823 [INFO] 4vec calculation for event 8000
+2022/02/17 20:49:16.535915 [INFO] 4vec calculation for event 8500
+2022/02/17 20:49:16.608178 [INFO] 4vec calculation for event 9000
+2022/02/17 20:49:16.680310 [INFO] 4vec calculation for event 9500
+2022/02/17 20:49:16.753797 [INFO] 4vec calculation for event 10000
+2022/02/17 20:49:16.753982 [INFO] 4vec all in lab system
+ px: 0	 py: 1.11759e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
+2022/02/17 20:49:16.826098 [INFO] 4vec calculation for event 10500
+2022/02/17 20:49:16.898351 [INFO] 4vec calculation for event 11000
+2022/02/17 20:49:16.970520 [INFO] 4vec calculation for event 11500
+2022/02/17 20:49:17.042708 [INFO] 4vec calculation for event 12000
+2022/02/17 20:49:17.114862 [INFO] 4vec calculation for event 12500
+2022/02/17 20:49:17.187197 [INFO] 4vec calculation for event 13000
+2022/02/17 20:49:17.259461 [INFO] 4vec calculation for event 13500
+2022/02/17 20:49:17.332171 [INFO] 4vec calculation for event 14000
+2022/02/17 20:49:17.404468 [INFO] 4vec calculation for event 14500
+2022/02/17 20:49:17.476807 [INFO] 4vec calculation for event 15000
+2022/02/17 20:49:17.549004 [INFO] 4vec calculation for event 15500
+2022/02/17 20:49:17.621387 [INFO] 4vec calculation for event 16000
+2022/02/17 20:49:17.693627 [INFO] 4vec calculation for event 16500
+2022/02/17 20:49:17.766001 [INFO] 4vec calculation for event 17000
+2022/02/17 20:49:17.838307 [INFO] 4vec calculation for event 17500
+2022/02/17 20:49:17.910440 [INFO] 4vec calculation for event 18000
+2022/02/17 20:49:17.982832 [INFO] 4vec calculation for event 18500
+2022/02/17 20:49:18.055128 [INFO] 4vec calculation for event 19000
+2022/02/17 20:49:18.127494 [INFO] 4vec calculation for event 19500
+2022/02/17 20:49:18.199834 [INFO] 4vec calculation for event 20000
+2022/02/17 20:49:18.200018 [INFO] 4vec all in lab system
+ px: -1.49012e-08	 py: 0	 pz: 0.9	 e : 2.2384	 m : 2.0495
+2022/02/17 20:49:18.272132 [INFO] 4vec calculation for event 20500
+2022/02/17 20:49:18.344362 [INFO] 4vec calculation for event 21000
+2022/02/17 20:49:18.416668 [INFO] 4vec calculation for event 21500
+2022/02/17 20:49:18.488916 [INFO] 4vec calculation for event 22000
+2022/02/17 21:07:21.058049 [INFO] Received goodbye. Exiting.
