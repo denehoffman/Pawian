@@ -50,9 +50,13 @@ namespace ROOT {
       std::shared_ptr<AbsPawianParameters> _defaultPawianParms;
       std::shared_ptr<AbsPawianParameters> _currentPawianParms;
       std::string _currentResFileName;
+      std::string _currentLHStreamFileName;
+      std::ofstream* _LHStream;
       virtual void printTimer() const;
       virtual void printFitParams(std::shared_ptr<AbsPawianParameters> par) const;
       virtual void dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const;
+      virtual void dumpLhVals(std::string input) const;
+
     private:
     };
   }  // namespace Minuit2

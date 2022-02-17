@@ -31,6 +31,7 @@
 
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 PwaFcnBase::PwaFcnBase() :
@@ -50,14 +51,18 @@ double PwaFcnBase::operator()(const std::vector<double>& par) const
   ParamDepHandler::instance()->ApplyDependencies(_currentPawianParms);
 
   result = GlobalEnv::instance()->Channel()->Lh()->calcLogLh(_currentPawianParms);
-  InfoMsg << "current LH = " << std::setprecision(16) << result << endmsg;
-  
+
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhPrint() == 0){
+    InfoMsg << "current LH = " << std::setprecision(16) << result << endmsg;
+  }
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeTimer() == 0) printTimer();
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsPrint() == 0) printFitParams(_currentPawianParms);
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsDump() == 0) dumpFitParams(_currentPawianParms);
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhDump() == 0){
+    std::string resultString = std::to_string(result);
+    dumpLhVals(resultString);
+  }
   _fcnCounter++;
-
-  if(_fcnCounter%20 == 0) printTimer();
-  printFitParams(_currentPawianParms);
-  dumpFitParams(_currentPawianParms);
-
   return result;
 }
 

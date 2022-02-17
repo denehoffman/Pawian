@@ -32,6 +32,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/NetworkServer.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 using namespace ROOT::Minuit2;
@@ -55,12 +56,16 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
   ParamDepHandler::instance()->ApplyDependencies(_currentPawianParms);
 
   std::map<ChannelID, LHData> theLHDataMap;
+  std::ostringstream output;
+  std::ostringstream outputLHDump;
   _networkServerPtr->BroadcastParams(_currentPawianParms->Params());
   if(!_networkServerPtr->WaitForLH(theLHDataMap))
     result = 0;
   else{
+    if(theLHDataMap.size() > 1){
+      outputLHDump << result << "\t";
+    }
       // Add LLHs of different channels
-      std::ostringstream output;
       output << "current LH = ";
       for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
          (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
@@ -68,20 +73,21 @@ double PwaFcnServer::operator()(const std::vector<double>& par) const
          double channelLH = AbsLh::mergeLogLhData((*it).second, (*it).first);
          result += channelLH;
 	 output << std::setprecision(16) << channelLH << "\t";
+	 outputLHDump << std::setprecision(16) << channelLH << "\t";
       }
       if(theLHDataMap.size() > 1){
          output << "sum = " << result;
       }
-
-      InfoMsg << output.str() << endmsg;
   }
 
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhPrint() == 0){
+    InfoMsg << output.str() << endmsg;
+  }
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeTimer() == 0) printTimer();
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsPrint() == 0) printFitParams(_currentPawianParms);
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsDump() == 0) dumpFitParams(_currentPawianParms);
+  if(_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhDump() == 0) dumpLhVals(outputLHDump.str());
   _fcnCounter++;
-  if(_fcnCounter%20 == 0) printTimer();
-  printFitParams(_currentPawianParms);
-
-  dumpFitParams(_currentPawianParms);
-
   return result;
 }
 

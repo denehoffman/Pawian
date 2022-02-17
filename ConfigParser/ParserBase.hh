@@ -138,6 +138,12 @@ public:
   const bool fixPrimaryChannelScaling() const {return _fixPrimaryChannelScaling;}
   const unsigned int prodOrbMom1DFit() const {return _prodOrbMom1DFit;}
   const unsigned int decOrbMom1DFit() const {return _decOrbMom1DFit;}
+  const unsigned int stepSizeLhPrint() const {return _stepSizeLhPrint;}
+  const	unsigned int stepSizeLhDump() const {return _stepSizeLhDump;}
+  const unsigned int stepSizeTimer() const {return _stepSizeTimer;}
+  const unsigned int stepSizeParamsPrint() const {return _stepSizeParamsPrint;}
+  const unsigned int stepSizeParamsDump() const {return _stepSizeParamsDump;}
+  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   
@@ -233,4 +239,9 @@ protected:
   bool _fixPrimaryChannelScaling;
   unsigned int _prodOrbMom1DFit;
   unsigned int _decOrbMom1DFit;
+  unsigned int _stepSizeLhPrint;
+  unsigned int _stepSizeLhDump;
+  unsigned int _stepSizeTimer;
+  unsigned int _stepSizeParamsPrint;
+  unsigned int _stepSizeParamsDump;
 };

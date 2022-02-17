@@ -39,8 +39,10 @@ boost::timer::cpu_timer theTimer1;
 boost::timer::cpu_timer theTimerAll;
 
 AbsFcn::AbsFcn() :
-    _fcnCounter(0)
+  _fcnCounter(0)
   , _currentResFileName("currentResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
+  ,_currentLHStreamFileName("currentLHVals"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
+  ,_LHStream(new std::ofstream())
 {
 }
 
@@ -70,16 +72,16 @@ void AbsFcn::printTimer() const{
 }
 
 void AbsFcn::printFitParams(std::shared_ptr<AbsPawianParameters> par) const{
-  if (  _fcnCounter%1000 == 0) {
     par->print(std::cout, true);
-  }
 }
 
 void  AbsFcn::dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const{
-  if (  _fcnCounter%200 == 0) {
     std::ofstream theStream (_currentResFileName.c_str());
     par->print(theStream);
-  }
 }
 
-
+void AbsFcn::dumpLhVals(std::string input) const{
+  _LHStream->open(_currentLHStreamFileName, std::ios_base::app);
+  (*_LHStream) << _fcnCounter << "\t" << input << "\n";
+  _LHStream->close();
+}

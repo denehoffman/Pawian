@@ -97,6 +97,11 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_fixPrimaryChannelScaling(true)
   ,_prodOrbMom1DFit(0)
   ,_decOrbMom1DFit(0)
+  ,_stepSizeLhPrint(1)
+  ,_stepSizeLhDump(10)
+  ,_stepSizeTimer(20)
+  ,_stepSizeParamsPrint(1000)
+  ,_stepSizeParamsDump(200)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -207,6 +212,12 @@ ParserBase::ParserBase(int argc,char **argv)
     ("fixPrimaryChannelScaling",po::value<bool>(&_fixPrimaryChannelScaling), "fix/release scaling of first channel for coupled channel mode")
     ("prodOrbMom1DFit",po::value<unsigned int>(&_prodOrbMom1DFit), "production orbital momentum of res1D fit")
     ("decOrbMom1DFit",po::value<unsigned int>(&_decOrbMom1DFit), "decay orbital momentum of res1D fit")
+    ("stepSizeLhPrint",po::value<unsigned int>(&_stepSizeLhPrint), "step size for LH print out in log file")
+  ("stepSizeLhDump",po::value<unsigned int>(&_stepSizeLhDump),  "step size for LH print out in dump file")
+  ("stepSizeTimer",po::value<unsigned int>(&_stepSizeTimer), "step size print out of time infos in log file")
+  ("stepSizeParamsPrint",po::value<unsigned int>(&_stepSizeParamsPrint),"step size for parameter print out in log file")
+  ("stepSizeParamsDump",po::value<unsigned int>(&_stepSizeParamsDump),"step size for parameter print out\
+ in dump file")
     ;
 
 }
@@ -320,6 +331,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 	        << "useParticleNameForPVecBg: " << _useParticleNameForPVecBg << "\n\n"
                 << "prodOrbMom1DFit: " << _prodOrbMom1DFit << "\n\n"
                 << "decOrbMom1DFit: " << _decOrbMom1DFit << "\n\n"
+		<< "stepSizeLhPrint: " << _stepSizeLhPrint << "\n\n"
+		<< "stepSizeLhDump: " << _stepSizeLhDump << "\n\n"
+		<< "stepSizeTimer: " << _stepSizeTimer << "\n\n"
+		<< "stepSizeParamsPrint: " << _stepSizeParamsPrint << "\n\n"
+		<< "stepSizeParamsDump: " << _stepSizeParamsDump << "\n\n"
 		<< endl;
 
 
