@@ -76,7 +76,6 @@ protected:
   std::vector< std::shared_ptr<const LScomb> > _LSs;
   double _factorMag;
   double _parityFactor;
-  std::map< std::shared_ptr<const LScomb>, map<Spin,map<Spin, double > >, pawian::Collection::SharedPtrLess > _cgPreFactor;
   std::map< Spin, map<Spin, map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > > > _cgPreFactor_LamLamLSMap;
 
   std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;

@@ -23,5 +23,7 @@ lib PspGen :
 	: 
 	: ;
 
-exe PspGenTestApp : PspGenTestApp.cc PspGen : ;
+exe PspGenTestApp : PspGenTestApp.cc PspGen
+$(TOP)/ErrLogger//ErrLogger
+: ;
 

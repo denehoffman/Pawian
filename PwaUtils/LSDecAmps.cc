@@ -216,11 +216,8 @@ void  LSDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
     std::string magName=(*itLS)->name()+_key+"Mag";
     double valMag=_factorMag;
     double errMag=_factorMag/2.;
-    //    double minMag=0.;
-    //    double maxMag=_factorMag+30.*errMag;
 
     fitPar->Add(magName, valMag, errMag);
-    //    fitPar->SetLimits(magName, minMag, maxMag);
 
     std::string phiName=(*itLS)->name()+_key+"Phi";
     double valPhi=0.;
@@ -286,10 +283,6 @@ void  LSDecAmps::fillCgPreFactor(){
       for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
-
-	_cgPreFactor[*it][lambda1][lambda2]=sqrt(2.*(*it)->L+1)
-	  *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
-	  *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
 
 	_cgPreFactor_LamLamLSMap[lambda1][lambda2][*it]=sqrt(2.*(*it)->L+1)
 	  *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
