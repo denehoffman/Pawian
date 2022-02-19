@@ -63,9 +63,9 @@ int main(int __argc,char *__argv[]){
   clock_t start, end;
   start= clock();
 
-  for (int i=0; i<__argc ; ++i) {
-    InfoMsg << __argv[i] << endmsg;
-  }
+  //  for (int i=0; i<__argc ; ++i) {
+  //    InfoMsg << __argv[i] << endmsg;
+  //  }
 
   char hostname[1024];
   gethostname(hostname, 1024); 
@@ -75,7 +75,8 @@ int main(int __argc,char *__argv[]){
 
   // Parse the command line
   globalParser* globalAppParams=new globalParser(__argc, __argv);
-
+  setErrLogMode(globalAppParams->getErrLogMode());
+ 
   std::vector<std::string> pbarpCfgs = globalAppParams->pbarpCfgs();
   std::vector<std::string> epemCfgs = globalAppParams->epemCfgs();
   std::vector<std::string> resCfgs = globalAppParams->resCfgs();
@@ -84,19 +85,22 @@ int main(int __argc,char *__argv[]){
   
   //requirement single channel  sum reactionCfgs.size() == 1
   unsigned int numReactions=pbarpCfgs.size()+epemCfgs.size()+resCfgs.size()+ggCfgs.size()+pipiScatteringCfgs.size();
-  InfoMsg << "numReactions: " << numReactions << endmsg;
+  NoticeMsg << "numReactions: " << numReactions << endmsg;
   if (numReactions != 1){
     Alert << "for this single channel app it is required to define exactly 1 reaction!!!"
 	  << "\n number of reactions here: " << numReactions << endmsg;
     exit(1);
   }
-  
+
   GlobalEnv::instance()->setup(globalAppParams);
+
+  // Set the desired error logging mode
+  setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());
   
   char* argvWoCfgFile[__argc];
   int argcWoCfgFile=0;
   for (int i=0; i<__argc ; ++i) {
-    InfoMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
+    NoticeMsg << "__argv[" << i << "]: " <<  __argv[i] << endmsg;
     std::string currentArgv(__argv[i]);
     if(currentArgv =="-c" || currentArgv =="--configFile"){
       Alert << "for the singleCannelApp it is not allowed to use the flag -c !!!" << endmsg;
@@ -123,11 +127,10 @@ int main(int __argc,char *__argv[]){
   std::vector<int> channelIDs; 
   channelIDs.push_back(GlobalEnv::instance()->parser()->singleChannelId());
   
-  Alert << "trying to set channel ID to " << channelIDs[0] << endmsg;
   GlobalEnv::instance()->setupChannelEnvs(channelIDs);
   
   // Set the desired error logging mode
-  setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());
+  // setErrLogMode(GlobalEnv::instance()->parser()->getErrLogMode());
   
   // Get mode
   std::string mode=GlobalEnv::instance()->parser()->mode();
@@ -167,7 +170,7 @@ int main(int __argc,char *__argv[]){
   }
 
   std::cout << "\n\n**************** Fit parameter **************************" << std::endl;
-  startPawianParams->print(std::cout);
+  if (ErrLogger::instance().level()>logging::log_level::NOTICE)  startPawianParams->print(std::cout);
   // for (int i=0; i<int(upar->Params().size()); ++i){
   //   std::cout << upar->Name(i) << "\t" << upar->Value(i) << "\t" << upar->Error(i) << std::endl;
   // }

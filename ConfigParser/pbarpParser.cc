@@ -61,22 +61,22 @@ bool pbarpParser::parseCommandLine(int argc, char **argv)
 {
   ParserBase::parseCommandLine(argc, argv);
 
-  std::cout << "Antiproton momentum in lab frame\t pbarmom = " << _pbarMomentum << std::endl;
-  std::cout << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax <<std::endl;
+  NoticeMsg << "Antiproton momentum in lab frame\t pbarmom = " << _pbarMomentum << endmsg;
+  NoticeMsg << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax << endmsg;
 
   std::vector<std::string>::const_iterator it;
 
-  std::cout << "\nspin density matrix calculation for particles" << std::endl;
+  NoticeMsg << "\nspin density matrix calculation for particles" << endmsg;
   for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
-     std::cout << (*it) << "\n";
+     NoticeMsg << (*it) << "\n";
   }
 
-  std::cout << "\ndrop pbarp L " << std::endl;
+  NoticeMsg << "\ndrop pbarp L " << endmsg;
   for (it=_dropPbarpLForParticle.begin(); it!=_dropPbarpLForParticle.end(); ++it){
-     std::cout << (*it) << "\n";
+     NoticeMsg << (*it) << "\n";
   }
 
-  std::cout << std::endl;
+  NoticeMsg << endmsg;
 
   return true;
 }

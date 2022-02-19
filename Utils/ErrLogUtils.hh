@@ -11,8 +11,8 @@ void setErrLogMode( const ParserBase::enErrLogMode& erlMode ) {
 	case ParserBase::trace :
 		ErrLogger::instance().setThreshold(logging::log_level::INFO);
 		break;
-	case ParserBase::routine :
-		ErrLogger::instance().setThreshold(logging::log_level::INFO);
+	case ParserBase::notice :
+		ErrLogger::instance().setThreshold(logging::log_level::NOTICE);
 		break;
 	case ParserBase::warning :
 		ErrLogger::instance().setThreshold(logging::log_level::WARN);

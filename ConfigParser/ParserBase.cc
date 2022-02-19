@@ -33,7 +33,7 @@ using namespace std;
 
 ParserBase::ParserBase(int argc,char **argv)
   : _configFile("")
-  , _errLogMode(debug)
+  , _errLogMode(notice)
   , _dataFile("")
   , _mcFile("")
   , _truthFile("")
@@ -58,7 +58,7 @@ ParserBase::ParserBase(int argc,char **argv)
   , _cacheAmps(true)
   , _calcContributionError(false)
   , _saveContributionHistos(false)
-  , _strErrLogMode("debug")
+  , _strErrLogMode("notice")
   , _desc(0)
   , _common(new po::options_description("Common Options"))
   , _config(new po::options_description("Configuration file options"))
@@ -277,7 +277,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
     if(_strErrLogMode == "debug") _errLogMode = debug;
     else if(_strErrLogMode == "trace") _errLogMode = trace;
-    else if(_strErrLogMode == "routine") _errLogMode = routine;
+    else if(_strErrLogMode == "notice") _errLogMode = notice;
     else if(_strErrLogMode == "warning") _errLogMode = warning;
     else if(_strErrLogMode == "error")   _errLogMode = error;
     else if(_strErrLogMode == "alert")   _errLogMode = alert;
@@ -293,8 +293,9 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       exit(1);
     }
 
-    if(_verbose){
-      std::cout << "\nRunning with the following options using " << _configFile << ":\n\n"
+    //    if(_verbose){
+    if(_errLogMode == debug || _errLogMode == notice){
+      NoticeMsg << "\nRunning with the following options using " << _configFile << ":\n\n"
                 << "Error log mode: " << _errLogMode <<"\n\n"
                 << "data file: " << _dataFile <<"\n\n"
                 << "mc file: " << _mcFile <<"\n\n"
@@ -323,7 +324,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "prePathKMatrixFiles: " << _prePathKMatrixFiles << "\n\n"
 		<< "scalingWithChannelID: " <<  _scalingWithChannelID << "\n\n"
 		<< "fixAllPhases: " << _fixAllPhases << "\n\n"
-    << "singleChannelId: " << _singleChannelId << "\n\n"
+		<< "singleChannelId: " << _singleChannelId << "\n\n"
 		<< "nllScalingFactor: " << _nllScalingFactor << "\n\n"
 		<< "addChannelScalingId: " <<_addChannelScalingId << "\n\n"
 		<< "channelScalingSuffix: " <<_channelScalingSuffix << "\n\n"
@@ -336,140 +337,139 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "stepSizeTimer: " << _stepSizeTimer << "\n\n"
 		<< "stepSizeParamsPrint: " << _stepSizeParamsPrint << "\n\n"
 		<< "stepSizeParamsDump: " << _stepSizeParamsDump << "\n\n"
-		<< endl;
+		<< endmsg;
 
 
       std::vector<std::string>::const_iterator it;
 
       for (it = _coupledChannelCfgs.begin(); it!=_coupledChannelCfgs.end(); ++it){
-	  std::cout << "Coupled channel configuration file: " << (*it) << "\n";
+	  NoticeMsg << "Coupled channel configuration file: " << (*it) << "\n";
       }
       for (it = _pbarpCfgs.begin(); it!=_pbarpCfgs.end(); ++it){
-         std::cout << "pbarp channel configuration file: " << (*it) << "\n";
+         NoticeMsg << "pbarp channel configuration file: " << (*it) << "\n";
       }
       for (it = _epemCfgs.begin(); it!=_epemCfgs.end(); ++it){
-         std::cout << "epem channel configuration file: " << (*it) << "\n";
+         NoticeMsg << "epem channel configuration file: " << (*it) << "\n";
       }
       for (it = _resCfgs.begin(); it!=_resCfgs.end(); ++it){
-         std::cout << "res channel configuration file: " << (*it) << "\n";
+         NoticeMsg << "res channel configuration file: " << (*it) << "\n";
       }
       for (it = _ggCfgs.begin(); it!=_ggCfgs.end(); ++it){
-         std::cout << "gg channel configuration file: " << (*it) << "\n";
+         NoticeMsg << "gg channel configuration file: " << (*it) << "\n";
       }
       for (it = _pipiScatteringCfgs.begin(); it!=_pipiScatteringCfgs.end(); ++it){
-         std::cout << "pipi scattering channel configuration file: " << (*it) << "\n";
+         NoticeMsg << "pipi scattering channel configuration file: " << (*it) << "\n";
       }
       for (it = _cloneParticle.begin(); it!=_cloneParticle.end(); ++it){
-	  std::cout << "clone particles: " << (*it) << "\n";
+	  NoticeMsg << "clone particles: " << (*it) << "\n";
       }
       for (it = _preFactor.begin(); it!=_preFactor.end(); ++it){
-	  std::cout << "preFactors: " << (*it) << "\n";
+	  NoticeMsg << "preFactors: " << (*it) << "\n";
       }
       for (it=_enabledHyps.begin(); it!=_enabledHyps.end();++it){
-          std::cout << "hypothesis\t" << (*it) << "\t enabled\n";
+          NoticeMsg << "hypothesis\t" << (*it) << "\t enabled\n";
       }
-      std::cout << std::endl;
+      NoticeMsg << endmsg;
 
 
       for (it=_mnParFixs.begin(); it!=_mnParFixs.end();++it){
-          std::cout << "minuit parameter\t" << (*it) << "\t fixed\n";
+          NoticeMsg << "minuit parameter\t" << (*it) << "\t fixed\n";
       }
       std::cout << std::endl;
       for (it=_parameterDependencies.begin(); it!=_parameterDependencies.end();++it){
-	std::cout << "parameter dependencies:\t" << (*it) << "\n";
+	NoticeMsg << "parameter dependencies:\t" << (*it) << "\n";
       }
 
       std::cout << std::endl;
       std::cout << "the final state particles are:" << std::endl;
       //      std::vector<std::string>::const_iterator it;
       for (it=_finalStateParticles.begin(); it!=_finalStateParticles.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\ndecay system:" << std::endl;
       for (it=_decaySystem.begin(); it!=_decaySystem.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\ndecay dynamics:" << std::endl;
       for (it=_dynamics.begin(); it!=_dynamics.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
       for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\nreplaced mass key" << std::endl;
       for (it=_replaceMassKey.begin(); it!=_replaceMassKey.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\nreplaced prod key" << std::endl;
       for (it=_replaceProdKey.begin(); it!=_replaceProdKey.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\nproduction system:" << std::endl;
       for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       std::cout << "\nK-matrix prod suffix:" << std::endl;
       for (it=_kMatrixProdSuffix.begin(); it!=_kMatrixProdSuffix.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nproduction formalism:\t" << _productionFormalism << std::endl;
-      std::cout << "fitqRProduction:\t" << _fitqRProduction << std::endl;
+      NoticeMsg << "\nproduction formalism:\t" << _productionFormalism << endmsg;
+      NoticeMsg << "fitqRProduction:\t" << _fitqRProduction << endmsg;
 
 
-      std::cout << "\nhistograms inv mass for systems" << std::endl;
+      NoticeMsg << "\nhistograms inv mass for systems" << endmsg;
       for (it=_histMass.begin(); it!=_histMass.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nhistograms decay angles for systems" << std::endl;
+      NoticeMsg << "\nhistograms decay angles for systems" << endmsg;
       for (it=_histAngles.begin(); it!=_histAngles.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
 
       // std::cout << "\nmass range" << std::endl;
       // std::cout << _massRange << "\n";
 
-      std::cout << "\nmass range cuts:" << std::endl;
+      NoticeMsg << "\nmass range cuts:" << endmsg;
       for (it = _massRangeCuts.begin(); it!=_massRangeCuts.end(); ++it){
-	  std::cout << (*it) << "\n";
+	  NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nmass range anti-cuts:" << std::endl;
+      NoticeMsg << "\nmass range anti-cuts:" << endmsg;
       for (it = _massRangeAntiCuts.begin(); it!=_massRangeAntiCuts.end(); ++it){
-	  std::cout << (*it) << "\n";
+	  NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\ngenerator range:\t" << _genRange << std::endl;
+      NoticeMsg << "\ngenerator range:\t" << _genRange << endmsg;
 
       std::cout << "\nphp dynamics:" << std::endl;
       for (it = _phpGenDynamics.begin(); it!=_phpGenDynamics.end(); ++it){
-	  std::cout << (*it) << "\n";
+	  NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\n2Dhistogram decay angles for systems" << std::endl;
+      NoticeMsg << "\n2Dhistogram decay angles for systems" << endmsg;
       for (it=_histAngles2D.begin(); it!=_histAngles2D.end();++it){
-	std::cout << (*it) << "\n";
+	NoticeMsg << (*it) << "\n";
       }
-      std::cout << "\nrandom seed:\t" << _randomSeed << std::endl;
-      std::cout << "\ngenerate with model:\t" << _genWithModel << std::endl;
-      std::cout << "\nnumber of generated events:\t" << _noOfGenEvts << std::endl;
-      std::cout << "\nnumber of data events:\t" << _noOfDataEvts << std::endl;
-      std::cout << "\nnumber of bootstrap events:\t" << _noOfBootstrapEvts << std::endl;
-      std::cout << "\nnumber of bootstrap files:\t" << _noOfBootstrapFiles << std::endl;
-      std::cout << "\nboostrap file name:\t" << _boostrapFileName << std::endl;
-      std::cout << "sProdExponent =" << _sProdExp << std::endl;
-    }
-
+      NoticeMsg << "\nrandom seed:\t" << _randomSeed << endmsg;
+      NoticeMsg << "\ngenerate with model:\t" << _genWithModel << endmsg;
+      NoticeMsg << "\nnumber of generated events:\t" << _noOfGenEvts << endmsg;
+      NoticeMsg << "\nnumber of data events:\t" << _noOfDataEvts << endmsg;
+      NoticeMsg << "\nnumber of bootstrap events:\t" << _noOfBootstrapEvts << endmsg;
+      NoticeMsg << "\nnumber of bootstrap files:\t" << _noOfBootstrapFiles << endmsg;
+      NoticeMsg << "\nboostrap file name:\t" << _boostrapFileName << endmsg;
+      NoticeMsg << "sProdExponent =" << _sProdExp << endmsg;
   }
+}
 
 
   catch( std::exception & e )

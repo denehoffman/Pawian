@@ -935,7 +935,7 @@ void AppBase::loopChannelEnvFactory(int argcWCfgFile, char** argvWCfgFile,
      argvWCfgFile[1]=(char*)"-c";
      argvWCfgFile[2]=(char*)(*it).c_str();
      for (int i=0; i<argcWCfgFile ; ++i){
-       InfoMsg << "argvWCfgFile[" << i << "]= " << argvWCfgFile[i] << endmsg;
+       NoticeMsg << "argvWCfgFile[" << i << "]= " << argvWCfgFile[i] << endmsg;
      }
      std::shared_ptr<AbsChannelEnv> channelEnv;
      if(channelType==AbsChannelEnv::CHANNEL_PBARP){

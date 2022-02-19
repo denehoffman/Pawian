@@ -17,18 +17,18 @@ namespace logging {
   //TODO: use macros (again) so __FILE__ __LINE__ could be automatically added to certain error levels?
 
   //the log levels we support
-  enum class log_level : uint8_t { TRACE = 0, DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4 };
+  enum class log_level : uint8_t { TRACE = 0, DEBUG = 1, NOTICE =2, INFO =3, WARN = 4, ERROR = 5 };
   struct enum_hasher { template <typename T> std::size_t operator()(T t) const { 
     return static_cast<std::size_t>(t); } };
   const std::unordered_map<log_level, std::string, enum_hasher> uncolored {
     {log_level::ERROR, " [ERROR] "}, {log_level::WARN, " [WARN] "}, 
-    {log_level::INFO, " [INFO] "}, {log_level::DEBUG, " [DEBUG] "}, 
-    {log_level::TRACE, " [TRACE] "}
+    {log_level::INFO, " [INFO] "}, {log_level::NOTICE, " [NOTICE] "},
+    {log_level::DEBUG, " [DEBUG] "}, {log_level::TRACE, " [TRACE] "}
   };
   const std::unordered_map<log_level, std::string, enum_hasher> colored {
     {log_level::ERROR, " \x1b[31;1m[ERROR]\x1b[0m "}, {log_level::WARN, " \x1b[33;1m[WARN]\x1b[0m "},
-    {log_level::INFO, " \x1b[32;1m[INFO]\x1b[0m "}, {log_level::DEBUG, " \x1b[34;1m[DEBUG]\x1b[0m "},
-    {log_level::TRACE, " \x1b[37;1m[TRACE]\x1b[0m "}
+    {log_level::INFO, " \x1b[32;1m[INFO]\x1b[0m "}, {log_level::NOTICE, " \x1b[32;1m[INFO]\x1b[0m "},
+    {log_level::DEBUG, " \x1b[34;1m[DEBUG]\x1b[0m "}, {log_level::TRACE, " \x1b[37;1m[TRACE]\x1b[0m "}
   };
 
   //all, something in between, none or default to info
@@ -240,6 +240,9 @@ namespace logging {
   };
   inline void INFO(const std::string& message) {
     get_logger().log(message, log_level::INFO);
+  };
+  inline void NOTICE(const std::string& message) {
+    get_logger().log(message, log_level::NOTICE);
   };
   inline void WARN(const std::string& message) {
     get_logger().log(message, log_level::WARN);

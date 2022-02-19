@@ -46,7 +46,7 @@ namespace po = boost::program_options;
 
 class ParserBase {
 public:
-  typedef enum tagerrLogMode { debug, trace, routine, warning, error, alert } enErrLogMode;
+  typedef enum tagerrLogMode { debug, trace, notice, warning, error, alert } enErrLogMode;
 
   ParserBase(int argc,char **argv);
   virtual ~ParserBase(){;}
