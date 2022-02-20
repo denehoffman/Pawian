@@ -50,14 +50,23 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, std::shared_ptr<const jpcR
 {
   // first: check C-parity
   if ( motherRes->C != daughterRes1->C*daughterRes2->C){
-    WarningMsg << "C-Parity not valid for the reaction: JPC= " 
-            << motherRes->J << " " << motherRes->P << " " << motherRes->C
-            << " --> "
-            << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
-            << " and "
-            << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C
-            << endmsg;
-    if( fabs(motherRes->C)==1 && fabs(daughterRes1->C)==1 && fabs(daughterRes2->C)==1) return; 
+    NoticeMsg << "C-Parity not valid for the reaction: JPC= " 
+	       << motherRes->J << " " << motherRes->P << " " << motherRes->C
+	       << " --> "
+	       << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
+	       << " and "
+	       << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C
+	       << endmsg;
+    if( fabs(motherRes->C)==1 && fabs(daughterRes1->C)==1 && fabs(daughterRes2->C)==1){
+      WarningMsg << "C-Parity not valid and no LS amplitudes considered for\n"
+		 << motherRes->J << " " << motherRes->P << " " << motherRes->C
+		 << " --> "
+		 << " JPC= " << daughterRes1->J << " " << daughterRes1->P << " " << daughterRes1->C
+		 << " and "
+		 << " JPC= " << daughterRes2->J << " " << daughterRes2->P << " " << daughterRes2->C
+		 << endmsg;
+      return;
+    }
   }
 
  
@@ -95,8 +104,8 @@ void validJPCLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Pa
 void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Particle* daughter2, std::vector< std::shared_ptr<const LScomb> >& theLSVec, bool useCParity, int gParityMother, bool useIsospin){
   // first: check C-parity
   if (useCParity){
-    if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()) {
-      WarningMsg << "C-Parity not valid for the reaction: JPC= " 
+     if ( motherRes->C != daughter1->theCParity()*daughter2->theCParity()) {
+       NoticeMsg << "C-Parity not valid for the reaction: JPC= " 
 		 << motherRes->J << " " << motherRes->P << " " << motherRes->C
 		 << " --> "
 		 << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " 
@@ -104,20 +113,38 @@ void validLS(std::shared_ptr<const jpcRes> motherRes, Particle* daughter1, Parti
 		 << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " 
 		 << daughter2->theCParity()
 		 << endmsg;
-      if( fabs(motherRes->C)==1 && fabs(daughter1->theCParity())==1 && fabs(daughter2->theCParity())==1) return; 
+       if( fabs(motherRes->C)==1 && fabs(daughter1->theCParity())==1 && fabs(daughter2->theCParity())==1){
+	 WarningMsg << "C-Parity not valid and no LS amplitudes considered for\n"
+		    << motherRes->J << " " << motherRes->P << " " << motherRes->C
+		    << " --> "
+		    << " JPC= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theCParity()
+		    << " and "
+		    << " JPC= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theCParity()
+		    << endmsg;
+	 return;
+       }
     }
   }
 
   if(useIsospin){
     // second: check G-parity
     if (gParityMother != daughter1->theGParity()*daughter2->theGParity() ) {
-      WarningMsg << "G-Parity not valid for:" 
-		 << gParityMother 
-		 << " --> "
-		 << daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
-		 << endmsg;
+      NoticeMsg << "G-Parity not valid for:" 
+		<< gParityMother 
+		<< " --> "
+		<< daughter1->theGParity() << " * " << daughter2->theGParity() << " " 
+		<< endmsg;
       
-      if( fabs(gParityMother)==1 && fabs(daughter1->theGParity())==1 && fabs(daughter2->theGParity())==1) return; 
+      if( fabs(gParityMother)==1 && fabs(daughter1->theGParity())==1 && fabs(daughter2->theGParity())==1){
+	WarningMsg << "G-Parity not valid and no LS amplitudes considered for\n"
+		   << " JPG= " << motherRes->J << " " << motherRes->P << " " << gParityMother
+		   << " --> "
+		   << " JPG= " << daughter1->J() << " " << daughter1->theParity() << " " << daughter1->theGParity()
+		   << " and "
+		   << " JPG= " << daughter2->J() << " " << daughter2->theParity() << " " << daughter2->theGParity()
+		   << endmsg;
+         return;
+      }
     }
   }
 

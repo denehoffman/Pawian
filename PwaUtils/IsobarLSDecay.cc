@@ -75,9 +75,9 @@ void IsobarLSDecay::extractStates(){
   }
 
   if( 0==_JPCLSDecAmps.size()) {
-    InfoMsg << "_JPCLSDecAmps.size()==0 for " << name() << endmsg;
+    NoticeMsg << "_JPCLSDecAmps.size()==0 for " << name() << endmsg;
   }
-  print(std::cout);
+  if (ErrLogger::instance().level()>logging::log_level::NOTICE) print(std::cout);
 }
 
 IsobarLSDecay::~IsobarLSDecay(){

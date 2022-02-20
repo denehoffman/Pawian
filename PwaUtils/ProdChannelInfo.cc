@@ -144,8 +144,7 @@ void ProdChannelInfo::print(std::ostream& os) const{
     os << "\nIt's not a production channel!!!" << endl;
   }
 
-  os << "\n***ProdChannelInfo***\n" 
-     << "particle1: " << _prodPair.first->name() << "\tparticle2: " << _prodPair.second->name()
+  os << "\nparticle1: " << _prodPair.first->name() << "\tparticle2: " << _prodPair.second->name()
      << "\nwith production barrier: " << _withProBarrier << std::endl;
 
   if (_withProBarrier){

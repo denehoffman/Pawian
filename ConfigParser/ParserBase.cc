@@ -375,49 +375,49 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_mnParFixs.begin(); it!=_mnParFixs.end();++it){
           NoticeMsg << "minuit parameter\t" << (*it) << "\t fixed\n";
       }
-      std::cout << std::endl;
+      NoticeMsg << endmsg;
       for (it=_parameterDependencies.begin(); it!=_parameterDependencies.end();++it){
 	NoticeMsg << "parameter dependencies:\t" << (*it) << "\n";
       }
 
-      std::cout << std::endl;
-      std::cout << "the final state particles are:" << std::endl;
+      NoticeMsg << endmsg;
+      NoticeMsg << "the final state particles are:" << endmsg;
       //      std::vector<std::string>::const_iterator it;
       for (it=_finalStateParticles.begin(); it!=_finalStateParticles.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\ndecay system:" << std::endl;
+      NoticeMsg << "\ndecay system:" << endmsg;
       for (it=_decaySystem.begin(); it!=_decaySystem.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\ndecay dynamics:" << std::endl;
+      NoticeMsg << "\ndecay dynamics:" << endmsg;
       for (it=_dynamics.begin(); it!=_dynamics.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nreplaced suffix for fit parameter name" << std::endl;
+      NoticeMsg << "\nreplaced suffix for fit parameter name" << endmsg;
       for (it=_replaceParSuffix.begin(); it!=_replaceParSuffix.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nreplaced mass key" << std::endl;
+      NoticeMsg << "\nreplaced mass key" << endmsg;
       for (it=_replaceMassKey.begin(); it!=_replaceMassKey.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nreplaced prod key" << std::endl;
+      NoticeMsg << "\nreplaced prod key" << endmsg;
       for (it=_replaceProdKey.begin(); it!=_replaceProdKey.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nproduction system:" << std::endl;
+      NoticeMsg << "\nproduction system:" << endmsg;
       for (it=_productionSystem.begin(); it!=_productionSystem.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
 
-      std::cout << "\nK-matrix prod suffix:" << std::endl;
+      NoticeMsg << "\nK-matrix prod suffix:" << endmsg;
       for (it=_kMatrixProdSuffix.begin(); it!=_kMatrixProdSuffix.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
@@ -451,7 +451,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
       NoticeMsg << "\ngenerator range:\t" << _genRange << endmsg;
 
-      std::cout << "\nphp dynamics:" << std::endl;
+      NoticeMsg << "\nphp dynamics:" << endmsg;
       for (it = _phpGenDynamics.begin(); it!=_phpGenDynamics.end(); ++it){
 	  NoticeMsg << (*it) << "\n";
       }

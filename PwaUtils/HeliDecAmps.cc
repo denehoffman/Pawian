@@ -195,7 +195,7 @@ void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
     
     if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
-    it->first->print(std::cout);
+    if (ErrLogger::instance().level()>logging::log_level::INFO) it->first->print(std::cout);
     InfoMsg << " it->first->parityFactor: " << it->first->parityFactor << endmsg;
     InfoMsg << "currentParamPreFacMagExpi: " 
 	    << it->second << endmsg;

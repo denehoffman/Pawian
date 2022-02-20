@@ -58,15 +58,7 @@ void IsobarHeliDecay::extractStates(){
   }
   else validJPClamlam( _motherIGJPCPtr, _daughter1, _daughter2, _JPClamlamDecAmps);
 
-  // InfoMsg << "_JPClamlamDecAmps.size(): " << _JPClamlamDecAmps.size() << endmsg;
-  // std::vector< std::shared_ptr<const JPClamlam> >::iterator it;
-  // for (it=_JPClamlamDecAmps.begin(); it!=_JPClamlamDecAmps.end(); ++it){
-  //   InfoMsg << "JPClamlamDecAmp" << endmsg;
-  //   (*it)->print(std::cout);
-  //   std::cout << std::endl;
-  // }
-
-  print(std::cout);
+  if (ErrLogger::instance().level()>logging::log_level::NOTICE) print(std::cout);
 }
 
 IsobarHeliDecay::~IsobarHeliDecay(){

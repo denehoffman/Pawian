@@ -248,7 +248,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     FunctionUtils::particleListName(_finalStateParticles);
   _refKey=FunctionUtils::particleListName(_finalStateParticles);
  
-  _daughter1->print(std::cout);
+  if (ErrLogger::instance().level()>logging::log_level::NOTICE) _daughter1->print(std::cout);
 
   _idaughter1=Spin(_daughter1->twoIso(), 2);
 
@@ -345,8 +345,8 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
     FunctionUtils::particleListName(_finalStateParticles);
   _refKey=FunctionUtils::particleListName(_finalStateParticles);
  
-  _daughter1->print(std::cout);
-  _daughter2->print(std::cout);
+  if (ErrLogger::instance().level()>logging::log_level::NOTICE) _daughter1->print(std::cout);
+  if (ErrLogger::instance().level()>logging::log_level::NOTICE) _daughter2->print(std::cout);
 
   _idaughter1=Spin(_daughter1->twoIso(), 2);
 
@@ -832,7 +832,7 @@ void  AbsDecay::setWigDRefKey(std::string& ref){
   _wignerDqId=IdStringMapRegistry::instance()->keyStringId(keyForMassList,_wignerDKey); 
   _wignerDqNormId = IdStringMapRegistry::instance()->keyStringId(keyForMassList, wignerDqNormKey);
   _wigDWigDRefId=IdStringMapRegistry::instance()->stringStringId(_wignerDKey, _wignerDRefKey);
-  InfoMsg << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
+  NoticeMsg << "wigDWigDRefId = " << _wigDWigDRefId << endmsg;
 
   std::pair<std::string, std::string > wigDWigDRefPair =
     IdStringMapRegistry::instance()->stringPair(_wigDWigDRefId);
