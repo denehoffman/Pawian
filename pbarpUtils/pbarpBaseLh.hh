@@ -56,7 +56,6 @@ public:
 
   virtual AbsLh* clone_() const =0;
 
-  // virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
   virtual double calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
   
    virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
@@ -67,10 +66,8 @@ public:
   virtual complex<double> calcSpinDensity(Spin M1, Spin M2, std::string& nameDec, EvtData* theData, int J);
   virtual double calcSpinDensityNorm(std::string& nameDec, EvtData* theData, int J);
 
-  // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   
-  // virtual void updateFitParams(fitParCol& theParamVal);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
 
   virtual void print(std::ostream& os) const;
@@ -86,8 +83,7 @@ protected:
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess > _decAmpsTripletm1;
 
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess > _currentParamIsos;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamMags;
-  std::map< std::shared_ptr<const JPCLS>, double, pawian::Collection::SharedPtrLess > _currentParamPhis;
+
   std::map< std::shared_ptr<const JPCLS>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamMagExpi;
 
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess> _currentParamJPCIsos1;
@@ -95,7 +91,7 @@ protected:
 
   std::vector< std::shared_ptr<AbsXdecAmp> > _iso0DecAmps;
   std::vector< std::shared_ptr<AbsXdecAmp> > _iso1DecAmps;
-  //  std::map< std::shared_ptr<AbsXdecAmp>, std::shared_ptr<AbsXdecAmp>, pawian::Collection::SharedPtrLess > _iso0Iso1DecAmpMap;
+
   std::map<std::string, std::pair<std::string, std::string> > _iso0Iso1NameMap;
   int _highestJFsp;
   bool _isHighestJaPhoton;

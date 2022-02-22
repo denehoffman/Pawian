@@ -102,10 +102,10 @@ double pbarpTensorLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawi
 	tmpAmp+= isoFactor*currentDecAmp;
       }
       
-      double theMag=_currentParamMags.at(theJPCLS);
-      double thePhi=_currentParamPhis.at(theJPCLS);
-      complex<double> expi(cos(thePhi), sin(thePhi));
-      tmpAmp*=_pbarpAmpSingletMap.at(theJPCLS)*theMag*expi;
+      //double theMag=_currentParamMags.at(theJPCLS);
+      //double thePhi=_currentParamPhis.at(theJPCLS);
+      //complex<double> expi(cos(thePhi), sin(thePhi));
+      tmpAmp*=_pbarpAmpSingletMap.at(theJPCLS)*_currentParamMagExpi.at(theJPCLS);
       singletAmp+=tmpAmp;
     }
     
@@ -129,10 +129,10 @@ double pbarpTensorLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawi
 	tmpAmp+=isoFactor*currentDecAmp;
       }
       
-      double theMag=_currentParamMags.at(theJPCLS);
-      double thePhi=_currentParamPhis.at(theJPCLS);
-      complex<double> expi(cos(thePhi), sin(thePhi));
-      tmpAmp*=_pbarpAmpTriplet0Map.at(theJPCLS)*theMag*expi;
+      //double theMag=_currentParamMags.at(theJPCLS);
+      //double thePhi=_currentParamPhis.at(theJPCLS);
+      //complex<double> expi(cos(thePhi), sin(thePhi));
+      tmpAmp*=_pbarpAmpTriplet0Map.at(theJPCLS)*_currentParamMagExpi.at(theJPCLS);
       triplet0Amp+=tmpAmp;
     }
     
@@ -161,10 +161,10 @@ double pbarpTensorLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawi
 	tmpAmp+=isoFactor*currentDecAmp;
       }
       
-      double theMag=_currentParamMags.at(theJPCLS);
-      double thePhi=_currentParamPhis.at(theJPCLS);
-      complex<double> expi(cos(thePhi), sin(thePhi));
-      tmpAmp*=_pbarpAmpTripletp1Map.at(theJPCLS)*theMag*expi;
+      //double theMag=_currentParamMags.at(theJPCLS);
+      //double thePhi=_currentParamPhis.at(theJPCLS);
+      //complex<double> expi(cos(thePhi), sin(thePhi));
+      tmpAmp*=_pbarpAmpTripletp1Map.at(theJPCLS)*_currentParamMagExpi.at(theJPCLS);
       tripletp1Amp+=tmpAmp;
     }
     
@@ -192,10 +192,10 @@ double pbarpTensorLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawi
 	tmpAmp+=isoFactor*currentDecAmp;
       }
       
-      double theMag=_currentParamMags.at(theJPCLS);
-      double thePhi=_currentParamPhis.at(theJPCLS);
-      complex<double> expi(cos(thePhi), sin(thePhi));
-      tmpAmp*=_pbarpAmpTripletm1Map.at(theJPCLS)*theMag*expi;
+      //double theMag=_currentParamMags.at(theJPCLS);
+      //double thePhi=_currentParamPhis.at(theJPCLS);
+      //complex<double> expi(cos(thePhi), sin(thePhi));
+      tmpAmp*=_pbarpAmpTripletm1Map.at(theJPCLS)*_currentParamMagExpi.at(theJPCLS);
       tripletm1Amp+=tmpAmp;
     }
     

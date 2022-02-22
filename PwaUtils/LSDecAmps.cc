@@ -50,10 +50,6 @@ LSDecAmps::LSDecAmps(std::shared_ptr<IsobarLSDecay> theDec, ChannelID channelID)
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( (*it)->S > _Smax ) _Smax=(*it)->S;
-    std::string magName=(*it)->name()+_key+"Mag";
-    _magNamesLSMap[*it]=magName;
-    std::string phiName=(*it)->name()+_key+"Phi";
-    _phiNamesLSMap[*it]=phiName;   
   }
 
   if(_LSs.size()>0) _factorMag=1./sqrt(_LSs.size());
@@ -72,10 +68,6 @@ LSDecAmps::LSDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     if( (*it)->S > _Smax ) _Smax=(*it)->S;
-        std::string magName=(*it)->name()+_key+"Mag";
-    _magNamesLSMap[*it]=magName;
-    std::string phiName=(*it)->name()+_key+"Phi";
-    _phiNamesLSMap[*it]=phiName;
   }
 
   Particle* daughter1=_decay->daughter1Part();
@@ -256,17 +248,13 @@ void LSDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
     //fill magnitude
-    //std::string magName=(*itLS)->name()+_key+"Mag";
-    //double theMag= fabs(fitPar->Value(magName));
+    std::string magName=(*itLS)->name()+_key+"Mag";
+    double theMag= std::abs(fitPar->Value(magName));
     
-    //std::string phiName=(*itLS)->name()+_key+"Phi";
-    //double thePhi=fitPar->Value(phiName);
+    std::string phiName=(*itLS)->name()+_key+"Phi";
+    double thePhi=fitPar->Value(phiName);
 
-    //_currentParamMags[*itLS]=theMag;
-    //_currentParamPhis[*itLS]=thePhi;
-    //complex<double> expi(cos(thePhi), sin(thePhi));
-    //_currentParamPreFacMagExpi[*itLS]=_preFactor*_isospinCG*theMag*expi;
-    _currentParamPreFacMagExpi[*itLS]=_preFactor*_isospinCG*std::polar(fabs(fitPar->Value(_magNamesLSMap.at(*itLS))),fitPar->Value(_phiNamesLSMap.at(*itLS)));
+    _currentParamPreFacMagExpi[*itLS]=_preFactor*_isospinCG*std::polar(theMag, thePhi);
   }
 
    _absDyn->updateFitParams(fitPar);

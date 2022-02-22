@@ -70,7 +70,6 @@ public:
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
-  // virtual void retrieveWignerDs(EvtData* theData);
 
 protected:
   std::vector< std::shared_ptr<const LScomb> > _LSs;
@@ -81,11 +80,7 @@ protected:
   std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;
   
   Spin _Smax;
-  //  std::map<std::thread::id, std::map<Spin, complex<double> > > _cachedDynLSMap;
   std::map<std::thread::id, std::map<unsigned short, std::map<Spin, complex<double> > > > _cachedDynIdLSMap;
-
-  std::map< std::shared_ptr<const LScomb>, std::string, pawian::Collection::SharedPtrLess > _magNamesLSMap;
-  std::map< std::shared_ptr<const LScomb>, std::string, pawian::Collection::SharedPtrLess > _phiNamesLSMap;
 
   void  fillCgPreFactor();
   virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs);
