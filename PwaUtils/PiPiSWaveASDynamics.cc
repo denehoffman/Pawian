@@ -74,10 +74,8 @@ complex<double> result(0.,0.);
   if ( _cacheAmps){
     if (!_recalcMap.at(currentKey)) result= _cachedStringMap.at(evtNo).at(currentKey); 
       else{ 
-	theMutex.lock();
 	result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _projectionIndex);
 	_cachedStringMap[evtNo][currentKey]=result; 
-	theMutex.unlock();
       }
   }
   else if (!_cacheAmps) result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _projectionIndex);

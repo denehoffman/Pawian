@@ -46,11 +46,15 @@ AbsLh::AbsLh(std::shared_ptr<AbsLh> theAbsLhPtr):
   ,_evtMCVec(theAbsLhPtr->getMcVec())
   ,_usePhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->usePhaseSpaceHyp())
   ,_useCohPhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->useCohPhaseSpaceHyp())
-  // ,_phasespaceKey("Phasespace")
   ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 {
+  if(_noOfThreads>1){
+    WarningMsg << "multiple threading not supperted anymore; changed noOfTheads from: "
+	       << _noOfThreads << " to: " << 1 << " !!!" << endmsg;
+    _noOfThreads=1;
+  }
    std::stringstream stringStrChannelId;
    stringStrChannelId << _channelID;
    _phasespaceKey="Phasespace"+stringStrChannelId.str();
@@ -68,6 +72,11 @@ AbsLh::AbsLh(ChannelID channelID) :
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 {
+    if(_noOfThreads>1){
+    WarningMsg << "multiple threading not supperted anymore; changed noOfTheads from: "
+               << _noOfThreads << " to: " << 1 << " !!!" << endmsg;
+    _noOfThreads=1;
+  }
   std::stringstream stringStrChannelId;
    stringStrChannelId << _channelID;
    _phasespaceKey="Phasespace"+stringStrChannelId.str();

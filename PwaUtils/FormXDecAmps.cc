@@ -72,7 +72,7 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
 
   //  int evtNo=theData->evtNo;
 
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);
   if (!_recalculate){
     result=_cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
     return result;
@@ -80,9 +80,7 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
 
   Spin absLamX(lamX);
   if(lamX<0) absLamX=-lamX;
-  theMutex.lock();
-  complex<double> currentDyn=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
-  theMutex.unlock();
+  complex<double> currentDyn=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
   result=_currentParamMap.at(absLamX)*_decAmpDaughter1->XdecAmp(lamX, theData, this)*currentDyn;
   //  result=_currentParamMap.at(absLamX)*_decAmpDaughter1->XdecAmp(lamX, theData, this);
   if(result.real()!=result.real()){
@@ -94,18 +92,14 @@ complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* 
   }
 
   if ( _cacheAmps){
-    theMutex.lock();
     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
-    theMutex.unlock();
   }
   return result;
 }
 
 void FormXDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   if(!_recalculate) return;
-  theMutex.lock();
-  _cachedDynIdMap[std::this_thread::get_id()][_absDyn->grandMaId(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
-  theMutex.unlock();
+  _cachedDynIdMap[_absDyn->grandMaId(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
  
   if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
  return;
@@ -220,6 +214,8 @@ void FormXDecAmps::initialize(){
    
   _lam1Min = -_Jdaughter1;
   _lam1Max = _Jdaughter1;
+  _lam1MinProj=_lam1Min;
+  _lam1MaxProj=_lam1Max;
 
   _daughter1Name=_decay->daughter1Part()->name();
 

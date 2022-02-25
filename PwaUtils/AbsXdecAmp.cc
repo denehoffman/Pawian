@@ -113,6 +113,11 @@ void AbsXdecAmp::initialize(){
   _lam2Min = -_Jdaughter2;
   _lam2Max = _Jdaughter2;
 
+  _lam1MinProj=_lam1Min;
+  _lam1MaxProj=_lam1Max;
+  _lam2MinProj=_lam2Min;
+  _lam2MaxProj=_lam2Max;
+  
   _daughter1Name=_decay->daughter1Part()->name();
   _daughter2Name=_decay->daughter2Part()->name();
 
@@ -159,10 +164,7 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   if(!_recalculate) return;
 
   if(!_absDyn->isLdependent()){
-    theMutex.lock();
-    //    _cachedDynMap[std::this_thread::get_id()][_absDyn->grandMaKey(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
-    _cachedDynIdMap[std::this_thread::get_id()][_absDyn->grandMaId(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
-    theMutex.unlock();
+    _cachedDynIdMap[_absDyn->grandMaId(grandmaAmp)] = _absDyn->eval( theData, grandmaAmp);
   }
   if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
 
@@ -173,41 +175,31 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   return;
 }
 
-void AbsXdecAmp::setSpinProjections(int projId){
+void AbsXdecAmp::setSpinProjections(std::vector<Spin>& currentProjection, int projId){
 
- std::vector<Spin> projections = _fsParticleProjections->spinProjection(projId);
-  
-  theMutex.lock();
-  _projIdThreadMap[std::this_thread::get_id()]=projId;
-  _lam1MinThreadMap[std::this_thread::get_id()]=_lam1Min;
-  _lam1MaxThreadMap[std::this_thread::get_id()]=_lam1Max;
-  _lam2MinThreadMap[std::this_thread::get_id()]=_lam2Min;
-  _lam2MaxThreadMap[std::this_thread::get_id()]=_lam2Max;
-  theMutex.unlock();
+  _projId=projId;
+  //_lam1MinProj=_lam1Min;
+  //_lam1MaxProj=_lam1Max;
+  //_lam2MinProj=_lam2Min;
+  //_lam2MaxProj=_lam2Max;
 
   if(_daughter1IsStable){
-    Spin currentProjection=projections.at(_daughter1ProjId);
-    theMutex.lock();
-    _lam1MinThreadMap[std::this_thread::get_id()]=currentProjection;
-    _lam1MaxThreadMap[std::this_thread::get_id()]=currentProjection;
-    DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam1MaxThreadMap[std::this_thread::get_id()] << endmsg;
-    theMutex.unlock();
+    Spin currentProjection1 = currentProjection.at(_daughter1ProjId);
+    _lam1MinProj = currentProjection1;
+    _lam1MaxProj = currentProjection1;
+    DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinProj << " _lam1Max: " << _lam1MinProj << endmsg;
   }
-  else _decAmpDaughter1->setSpinProjections(projId);
-  
-  if(!_isFormationAmp){ 
+  else _decAmpDaughter1->setSpinProjections(currentProjection, projId);
+
+    if(!_isFormationAmp){
     if(_daughter2IsStable){
-      Spin currentProjection=projections.at(_daughter2ProjId);
-      theMutex.lock();
-      _lam2MinThreadMap[std::this_thread::get_id()]=currentProjection;
-      _lam2MaxThreadMap[std::this_thread::get_id()]=currentProjection;
-      DebugMsg << "set spin projection: " << _daughter2Name << " _lam1Min: " << _lam2MinThreadMap[std::this_thread::get_id()] << " _lam1Max: " << _lam2MaxThreadMap[std::this_thread::get_id()] << endmsg;
-      theMutex.unlock();
+      Spin currentProjection2=currentProjection.at(_daughter2ProjId);
+      _lam2MinProj = currentProjection2;
+      _lam2MaxProj = currentProjection2;
+      DebugMsg << "set spin projection: " << _daughter2Name << " _lam2Min: " << _lam2MinProj << " _lam2Max: " << _lam2MaxProj << endmsg;
     }
-    else _decAmpDaughter2->setSpinProjections(projId);
+    else _decAmpDaughter2->setSpinProjections(currentProjection, projId);
   }
-
-  return;
+    return;
 }
-
 

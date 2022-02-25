@@ -80,9 +80,7 @@ complex<double> ProdParamDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp
   result*=exp(_currentExpParam*theData->DoubleMassId.at(_dynId));
  
   if ( _cacheAmps){
-     theMutex.lock();
      _cachedMap[theData->evtNo]=result;
-     theMutex.unlock();
   } 
   
 

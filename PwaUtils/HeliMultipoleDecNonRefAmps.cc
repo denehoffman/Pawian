@@ -181,7 +181,7 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
   if( fabs(lamX) > _JPCPtr->J) return result;
  
 
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()), lamX); 
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId, lamX); 
 
   if (!_recalculate){
       result=_cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
@@ -213,8 +213,8 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
     }
   }
 
-  if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
-   else result*=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
+  if (_absDyn->isLdependent()) result*=_cachedDynL;
+   else result*=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
 
   if(result.real()!=result.real()){
     Alert << "result:\t" << result << endmsg;
@@ -233,10 +233,9 @@ complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& 
   Spin lambda = lam2-lam1;
   bool doCalc=true;
   if( fabs(lambda) > J) doCalc=false;
-  // InfoMsg << "_daughter1IsStable: " << _daughter1IsStable << " _lam1MinThreadMap.at(std::this_thread::get_id()): " << _lam1MinThreadMap.at(std::this_thread::get_id()) << endmsg;
   
-  if(_daughter1IsStable && (_lam1MinThreadMap.at(std::this_thread::get_id())!=lam1)) doCalc=false;
-  if(_daughter2IsStable && (_lam2MinThreadMap.at(std::this_thread::get_id())!=lam2)) doCalc=false;
+  if(_daughter1IsStable && (_lam1MinProj!=lam1)) doCalc=false;
+  if(_daughter2IsStable && (_lam2MinProj!=lam2)) doCalc=false;
   //  InfoMsg << "J: " << J << " lamX: " << lamX << " lam1: " << lam1 << " lam2: " << lam2 << " lambda: " << lambda << " doCalc: " << doCalc << endmsg;
   if(doCalc){
    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);

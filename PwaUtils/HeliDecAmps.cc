@@ -243,8 +243,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
-
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId, lamX);
 
   if (!_recalculate){
     return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
@@ -254,11 +253,10 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
   for(it=_currentParamPreFacMagExpi.begin(); it!=_currentParamPreFacMagExpi.end(); ++it){
 
     Spin lambda1= it->first->lam1;
-    if(_daughter1IsStable && _lam1MinThreadMap.at(std::this_thread::get_id())!=lambda1) continue;
-
+    if(_daughter1IsStable && _lam1MinProj!=lambda1) continue;
     Spin lambda2= it->first->lam2;
-    if(_daughter2IsStable && _lam2MinThreadMap.at(std::this_thread::get_id())!=lambda2) continue;
-
+    if(_daughter2IsStable && _lam2MinProj!=lambda2) continue;
+ 
     Spin lambda = lambda1-lambda2;
     if( fabs(lambda) > it->first->J) continue;
     
@@ -272,8 +270,8 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
 	* daughterAmp(lambda1, lambda2, theData);
   }
 
-  if (_absDyn->isLdependent()) result*=_cachedDynLMap.at(std::this_thread::get_id());
-  else result*=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
+  if (_absDyn->isLdependent()) result*=_cachedDynL;
+  else result*=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
 
       if(result.real()!=result.real()){
         Alert << "result:\t" << result << endmsg;
@@ -281,9 +279,7 @@ complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* g
       }
       
       if ( _cacheAmps){
-	theMutex.lock();
 	_cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
-	theMutex.unlock();
       }
 
   
@@ -298,9 +294,7 @@ void HeliDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
     return;
   }
 
-  theMutex.lock();
-  _cachedDynLMap[std::this_thread::get_id()]=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
-  theMutex.unlock();
+  _cachedDynL=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
 
  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
  if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);

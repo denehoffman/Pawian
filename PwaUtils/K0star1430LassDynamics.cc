@@ -64,9 +64,7 @@ complex<double> K0star1430LassDynamics::eval(EvtData* theData, AbsXdecAmp* grand
 
   
   if ( _cacheAmps){
-      theMutex.lock();
       _cachedMap[theData->evtNo]=result;
-      theMutex.unlock();
   }  
 
   return result;

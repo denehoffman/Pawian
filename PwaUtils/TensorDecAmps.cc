@@ -97,16 +97,16 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp*
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);  
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);  
   
   if (!_recalculate){
     return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
   }
 
-  result=lsLoop(grandmaAmp, lamX, theData, _lam1MinThreadMap.at(std::this_thread::get_id()),
-		_lam1MaxThreadMap.at(std::this_thread::get_id()), 
-		_lam2MinThreadMap.at(std::this_thread::get_id()), 
-		_lam2MaxThreadMap.at(std::this_thread::get_id()), true);
+  result=lsLoop(grandmaAmp, lamX, theData, _lam1MinProj,
+		_lam1MaxProj, 
+		_lam2MinProj, 
+		_lam2MaxProj, true);
 
   if ( _cacheAmps){
      theMutex.lock();
@@ -138,14 +138,12 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
       }
     }
     if (_absDyn->isLdependent()){
-      //      tmpResult*=_cachedDynLSMap.at(std::this_thread::get_id()).at((*it)->L);
-      tmpResult*=_cachedDynIdLSMap.at(std::this_thread::get_id()).at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
+      tmpResult*=_cachedDynIdLSMap.at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
     }
     result+=tmpResult;
   }
   
-  //  if (!_absDyn->isLdependent()) result *=_cachedDynMap.at(std::this_thread::get_id()).at(_absDyn->grandMaKey(grandmaAmp));
-  if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
+  if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
   
   result*=_isospinCG;
   return result;
@@ -256,10 +254,7 @@ void TensorDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 
  std::vector< std::shared_ptr<const LScomb> >::iterator it;
  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-   theMutex.lock();
-   //   _cachedDynLSMap[std::this_thread::get_id()][(*it)->L]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
-   _cachedDynIdLSMap[std::this_thread::get_id()][(*it)->L][_absDyn->grandMaId(grandmaAmp)]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
-   theMutex.unlock();
+   _cachedDynIdLSMap[(*it)->L][_absDyn->grandMaId(grandmaAmp)]=_absDyn->eval(theData, grandmaAmp, (*it)->L);
  }  
 
  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);

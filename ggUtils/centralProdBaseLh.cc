@@ -91,7 +91,9 @@ double centralProdBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<Ab
    // BEGIN Outer incoherent sum over spinProjections of FS particles...
    for (unsigned int projId=0; projId<spinProjections.size(); ++projId) {
      for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll) {
-       (*itDecAll)->setSpinProjections(projId);
+       //(*itDecAll)->setSpinProjections(projId);
+       std::vector<Spin> currentSpinProjection=spinProjections.at(projId);
+      (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
      }
 
      std::vector< complex<double> > lamXPomPomAmps;

@@ -47,7 +47,7 @@ ParserBase::ParserBase(int argc,char **argv)
   , _serverAddress("localhost")
   , _clientNumberWeights("")
   , _verbose(true)
-  , _noOfThreads(16)
+  , _noOfThreads(1)
   , _noOfClients(1)
   , _serverPort(22222)
   , _ratioMcToData(100)
@@ -293,6 +293,11 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       exit(1);
     }
 
+    if(_noOfThreads>1){
+      WarningMsg << "multithreading is not supported anymore!!! Reset noOfThreads from "
+		 << _noOfThreads << " to 1" << endmsg;
+      _noOfThreads=1;
+	}
     //    if(_verbose){
     if(_errLogMode == debug || _errLogMode == notice){
       NoticeMsg << "\nRunning with the following options using " << _configFile << ":\n\n"

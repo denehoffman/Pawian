@@ -83,9 +83,7 @@ complex<double> FlatteDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, S
   complex<double> result=_flattePtr->calcFirstChannel(theData->DoubleMassId.at(_dynId), _currentMass, _currentg11, _currentg22);
   
   if ( _cacheAmps){
-      theMutex.lock();
       _cachedMap[theData->evtNo]=result;
-      theMutex.unlock();
   }  
 
   return result;

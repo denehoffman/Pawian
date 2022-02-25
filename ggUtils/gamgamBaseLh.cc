@@ -99,7 +99,9 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
   
   for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
     for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
-      (*itDecAll)->setSpinProjections(projId);
+      //(*itDecAll)->setSpinProjections(projId);
+      std::vector<Spin> currentSpinProjection=spinProjections.at(projId);
+      (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
     }
     
     complex<double> lamX0Amp(0.,0.);

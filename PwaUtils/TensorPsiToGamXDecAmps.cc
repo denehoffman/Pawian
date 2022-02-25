@@ -117,7 +117,7 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Ab
   if( fabs(lamX) > _JPCPtr->J) return result;
 
   //  int evtNo=theData->evtNo;
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);
   
   if (!_recalculate){
     //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
@@ -126,8 +126,8 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, Ab
     //    return result;
   }
 
-  for(Spin lambda2=_lam2MinThreadMap.at(std::this_thread::get_id()); lambda2<=_lam2MaxThreadMap.at(std::this_thread::get_id()); ++lambda2){
-    Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamX, _lam1MinThreadMap.at(std::this_thread::get_id()), lambda2);
+  for(Spin lambda2=_lam2MinProj; lambda2<=_lam2MaxProj; ++lambda2){
+    Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamX, _lam1MinProj, lambda2);
     complex<double> tmpResult(0.,0.);
     for(int i=0; i<_noOfAmps; ++i){
       // double theMag=_currentParamLocalMags.at(i);

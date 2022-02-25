@@ -60,9 +60,7 @@ complex<double> JohnsonDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   complex<double> result( sqrt( _johnsonPtr->calc(theData->DoubleMassId.at(_dynId), _currentMass0, _currentSigma, _currentDelta, _currentGamma) ), 0.);
   
   if ( _cacheAmps){
-     theMutex.lock();
      _cachedMap[theData->evtNo]=result;
-     theMutex.unlock();
   }  
 
   return result;

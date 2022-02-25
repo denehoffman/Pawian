@@ -78,7 +78,7 @@ protected:
   bool _isWeakDecay;
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;
   std::map< std::shared_ptr<const JPClamlam>, std::vector< std::shared_ptr<const JPClamlam> >, pawian::Collection::SharedPtrLess > _JPClamlamSymMap;
-  std::map<std::thread::id, complex<double> > _cachedDynLMap;
+  complex<double> _cachedDynL;
 
   virtual void printCurrentAmpParams(Spin& lamX, Spin& lamFs);
 

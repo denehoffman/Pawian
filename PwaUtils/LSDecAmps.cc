@@ -119,19 +119,17 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* gra
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projIdThreadMap.at(std::this_thread::get_id()),lamX); 
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId, lamX);
 
   if (!_recalculate){
     return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
   }
 
-  result=lsLoop(grandmaAmp, lamX, theData, _lam1MinThreadMap.at(std::this_thread::get_id()), _lam1MaxThreadMap.at(std::this_thread::get_id()), _lam2MinThreadMap.at(std::this_thread::get_id()), _lam2MaxThreadMap.at(std::this_thread::get_id()), true);
-
+  result=lsLoop(grandmaAmp, lamX, theData, _lam1MinProj, _lam1MaxProj, _lam2MinProj, _lam2MaxProj, true);
+ 
   if ( _cacheAmps){
-     theMutex.lock();
-     _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
-     theMutex.unlock();
-  }
+      _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
+   }
 
   if(result.real()!=result.real()){
     InfoMsg << "dyn name: " << _absDyn->name() 
@@ -163,7 +161,7 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
 	if( fabs(lambda)>(*it)->S) continue;
 	if (_absDyn->isLdependent()){
 	  amp += _currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)
-	    * _cachedDynIdLSMap.at(std::this_thread::get_id()).at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
+	    * _cachedDynIdLSMap.at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
 	}
 	else amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it);
       }
@@ -174,7 +172,7 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
     }
   }
   if (!_absDyn->isLdependent()){
-    result *=_cachedDynIdMap.at(std::this_thread::get_id()).at(_absDyn->grandMaId(grandmaAmp));
+    result *=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
   }
   return result;
 }
@@ -189,10 +187,8 @@ void LSDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 
  std::vector< std::shared_ptr<const LScomb> >::iterator it;
  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-   theMutex.lock();
-   _cachedDynIdLSMap[std::this_thread::get_id()][(*it)->L][_absDyn->grandMaId(grandmaAmp)]
+   _cachedDynIdLSMap[(*it)->L][_absDyn->grandMaId(grandmaAmp)]
      = _absDyn->eval(theData, grandmaAmp, (*it)->L);
-   theMutex.unlock();
  }
 
  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);

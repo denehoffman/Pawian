@@ -80,7 +80,8 @@ protected:
   std::map< std::shared_ptr<const LScomb>, complex<double>, pawian::Collection::SharedPtrLess > _currentParamPreFacMagExpi;
   
   Spin _Smax;
-  std::map<std::thread::id, std::map<unsigned short, std::map<Spin, complex<double> > > > _cachedDynIdLSMap;
+  //  std::map<std::thread::id, std::map<unsigned short, std::map<Spin, complex<double> > > > _cachedDynIdLSMap;
+  std::map<unsigned short, std::map<Spin, complex<double> > > _cachedDynIdLSMap;
 
   void  fillCgPreFactor();
   virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs);

@@ -42,7 +42,7 @@ AbsFcn::AbsFcn() :
   _fcnCounter(0)
   , _currentResFileName("currentResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
   ,_currentLHStreamFileName("currentLHVals"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
-  ,_LHStream(new std::ofstream())
+  ,_LHStream(new std::ofstream(_currentLHStreamFileName, ios::out))
 {
 }
 
@@ -81,7 +81,7 @@ void  AbsFcn::dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const{
 }
 
 void AbsFcn::dumpLhVals(std::string input) const{
-  _LHStream->open(_currentLHStreamFileName, std::ios_base::app);
+  if (!_LHStream->is_open()) _LHStream->open(_currentLHStreamFileName, std::ios_base::app);
   (*_LHStream) << _fcnCounter << "\t" << input << "\n";
   _LHStream->close();
 }

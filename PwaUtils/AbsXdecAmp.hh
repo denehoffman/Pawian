@@ -70,7 +70,7 @@ public:
   virtual void cacheAmplitudes();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
-  virtual void setSpinProjections(int projId);
+  virtual void setSpinProjections(std::vector<Spin>& currentProjection, int projId);
   std::shared_ptr<AbsDynamics> getDyn() {return _absDyn;}
   std::shared_ptr<AbsXdecAmp> absXDecAmpDaughter1() {return _decAmpDaughter1;}
   std::shared_ptr<AbsXdecAmp> absXDecAmpDaughter2() {return _decAmpDaughter2;}
@@ -95,12 +95,18 @@ protected:
   std::string _daughter2Name;
   unsigned int _daughter1ProjId;
   unsigned int _daughter2ProjId;
-  std::map<std::thread::id, unsigned short> _projIdThreadMap;
-  std::map<std::thread::id, Spin> _lam1MinThreadMap;
-  std::map<std::thread::id, Spin> _lam1MaxThreadMap;
-  std::map<std::thread::id, Spin> _lam2MinThreadMap;
-  std::map<std::thread::id, Spin> _lam2MaxThreadMap;
+  //  std::map<std::thread::id, unsigned short> _projIdThreadMap;
+  //  std::map<std::thread::id, Spin> _lam1MinThreadMap;
+  //  std::map<std::thread::id, Spin> _lam1MaxThreadMap;
+  //  std::map<std::thread::id, Spin> _lam2MinThreadMap;
+  //  std::map<std::thread::id, Spin> _lam2MaxThreadMap;
 
+  unsigned short _projId;
+  Spin _lam1MinProj;
+  Spin _lam1MaxProj;
+  Spin _lam2MinProj;
+  Spin _lam2MaxProj;
+  
   bool _isWeakDecay;
   double _isospinCG;
   const double _preFactor;
@@ -124,7 +130,7 @@ protected:
 
   //  intUShortId2StringComplFloatMap _cachedAmpIdMap;
   intUShortShortComplFloatMap _cachedAmpIdMap;
-  std::map<std::thread::id, std::map<unsigned short, complex<float> > > _cachedDynIdMap;
-
+  //  std::map<std::thread::id, std::map<unsigned short, complex<float> > > _cachedDynIdMap;
+  std::map<unsigned short, complex<float> > _cachedDynIdMap;
   virtual void initialize();
 };
