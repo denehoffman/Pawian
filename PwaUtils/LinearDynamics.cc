@@ -57,9 +57,7 @@ complex<double> LinearDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, S
   complex<double> result(complex<double>(1.,0) + std::polar(fSlopeMag, fSlopePhase));
   
   if ( _cacheAmps){
-     theMutex.lock();
      _cachedMap[theData->evtNo]=result;
-     theMutex.unlock();
   }  
 
   return result;

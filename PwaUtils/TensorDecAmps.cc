@@ -109,10 +109,8 @@ complex<double> TensorDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp*
 		_lam2MaxProj, true);
 
   if ( _cacheAmps){
-     theMutex.lock();
      //     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
-     theMutex.unlock();
   }
   return result;
 }

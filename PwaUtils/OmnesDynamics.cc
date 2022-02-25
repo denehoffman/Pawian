@@ -87,7 +87,6 @@ complex<double> result(0.,0.);
   }
   
   else{
-      theMutex.lock();
       //result=_fVecMap.at(currentKey)->evalProjMatrix(theData->DoubleMassId.at(_dynId), _decProjectionIndex, OrbMom);
       std::shared_ptr<FVector> currentFVec=_fVecMap.at(currentKey);
       currentFVec->evalMatrix(theData->DoubleMassId.at(_dynId), OrbMom);
@@ -97,7 +96,6 @@ complex<double> result(0.,0.);
       if ( _cacheAmps){
       	_cachedStringOrbMap[evtNo][currentKey][OrbMom]=result;
       }
-      theMutex.unlock();
   }
   return result;
 }
