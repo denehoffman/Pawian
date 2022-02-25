@@ -67,8 +67,6 @@ AbsLh::AbsLh(ChannelID channelID) :
   , _channelID(channelID)
   ,_usePhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->usePhaseSpaceHyp())
   ,_useCohPhasespace(GlobalEnv::instance()->Channel(_channelID)->parser()->useCohPhaseSpaceHyp())
-  // ,_phasespaceKey("Phasespace")
-  // ,_CohPhasespaceKey("CohPhasespace")
   ,_calcCounter(0)
   ,_noOfThreads(GlobalEnv::instance()->parser()->noOfThreads())
 {
@@ -111,67 +109,19 @@ void AbsLh::initialize(){
 
 
 
-void AbsLh::ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-		    std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
-  for (unsigned int i=minEvent; i<=maxEvent; ++i){
-    addDataToLogLh(_evtDataVec.at(i), fitPar, theLHData);
-  }
-}
-
-void AbsLh::ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			  std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
-  for (unsigned int i=minEvent; i<=maxEvent; ++i){
-     addMcToLogLh(_evtMCVec.at(i), fitPar, theLHData);
-  }
-}
-
 double AbsLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar){
   _calcCounter++;
   if (_cacheAmps && _calcCounter>1) checkRecalculation(fitPar, _oldFitPar);
   updateFitParams(fitPar);
 
   LHData theLHData;
-  theLHData.logLH_data = theLHData.weightSum = theLHData.LH_mc = 0.0;
 
-  int eventStepData = _evtDataVec.size() / _noOfThreads;
-  int eventStepMC = _evtMCVec.size() / _noOfThreads;
-
-  std::vector<std::thread> theThreads;
-  std::vector<LHData> threadDataVec;
-  threadDataVec.resize(_noOfThreads);
-
-  for(int i = 0; i<_noOfThreads;i++){
-
-     int eventMin = i*eventStepData;
-     int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
-
-     theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      fitPar, std::ref(threadDataVec.at(i))));
+  for (unsigned int i=0; i<_evtDataVec.size(); ++i){
+    addDataToLogLh(_evtDataVec.at(i), fitPar, theLHData);
   }
 
-  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
-     (*it).join();
-  }
-
-  theThreads.clear();
-
-  for(int i = 0; i<_noOfThreads;i++){
-
-     int eventMin = i*eventStepMC;
-     int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
-
-     theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-				      fitPar, std::ref(threadDataVec.at(i))));
-  }
-  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
-     (*it).join();
-  }
-
-  for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it){
-     theLHData.logLH_data += (*it).logLH_data;
-     theLHData.weightSum += (*it).weightSum;
-     theLHData.LH_mc  += (*it).LH_mc;
-     theLHData.num_mc += (*it).num_mc; 
+  for (unsigned int i=0; i<_evtMCVec.size(); ++i){
+    addMcToLogLh(_evtMCVec.at(i), fitPar, theLHData);
   }
 
   if(_calcCounter<2) _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
@@ -180,7 +130,6 @@ double AbsLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitPar){
 }
 
 double AbsLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
-  //  extractWignerDs(dataEvt);
   double intensity=calcEvtIntensity(dataEvt, fitPar);
   theLHData.logLH_data+=(dataEvt->evtWeight)*log(intensity);
   theLHData.weightSum+= dataEvt->evtWeight;
@@ -188,7 +137,6 @@ double AbsLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParamete
 }
 
 double AbsLh::addMcToLogLh(EvtData* mcEvt, std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData){
-  //  extractWignerDs(mcEvt);
   double intensity=calcEvtIntensity(mcEvt, fitPar);
   theLHData.LH_mc+=intensity;
   theLHData.num_mc++;
@@ -200,46 +148,12 @@ void AbsLh::calcLogLhDataClient(std::shared_ptr<AbsPawianParameters> fitPar, LHD
   if (_cacheAmps && _calcCounter>1) checkRecalculation(fitPar, _oldFitPar);
   updateFitParams(fitPar);
 
-  int numData = _evtDataVec.size();
-  int numMC = _evtMCVec.size();
-
-  int eventStepData = numData / _noOfThreads;
-  int eventStepMC = numMC / _noOfThreads;
-
-  std::vector<std::thread> theThreads;
-  std::vector<LHData> threadDataVec;
-  threadDataVec.resize(_noOfThreads);
-
-  for(int i = 0; i<_noOfThreads;i++){
-     int eventMin = i*eventStepData;
-     int eventMax = (i==_noOfThreads-1) ? (_evtDataVec.size() - 1) : (i+1)*eventStepData - 1;
-
-     theThreads.push_back(std::thread(&AbsLh::ThreadfuncData, this, eventMin, eventMax,
-				      fitPar, std::ref(threadDataVec.at(i))));
-  }
-  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
-     (*it).join();
+  for (unsigned int i=0; i<_evtDataVec.size(); ++i){
+    addDataToLogLh(_evtDataVec.at(i), fitPar, theLHData);
   }
 
-  theThreads.clear();
-  for(int i = 0; i<_noOfThreads;i++){
-
-    int eventMin = i*eventStepMC;
-    int eventMax = (i==_noOfThreads-1) ? (_evtMCVec.size() - 1) : (i+1)*eventStepMC - 1;
-
-    theThreads.push_back(std::thread(&AbsLh::ThreadfuncMc, this, eventMin, eventMax,
-				     fitPar, std::ref(threadDataVec.at(i))));
-
-  }
-  for(auto it = theThreads.begin(); it != theThreads.end(); ++it){
-     (*it).join();
-  }
-
-  for(auto it = threadDataVec.begin(); it!= threadDataVec.end(); ++it){
-     theLHData.logLH_data += (*it).logLH_data;
-     theLHData.weightSum += (*it).weightSum;
-     theLHData.LH_mc += (*it).LH_mc;
-     theLHData.num_mc += (*it).num_mc;
+  for (unsigned int i=0; i<_evtMCVec.size(); ++i){
+    addMcToLogLh(_evtMCVec.at(i), fitPar, theLHData);
   }
 
    if(_calcCounter<2) _oldFitPar = std::shared_ptr<AbsPawianParameters>(fitPar->Clone());
@@ -324,25 +238,8 @@ bool AbsLh::checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, s
   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
     if(!(*it)->checkRecalculation(fitParNew, fitParOld)) result=false;
   }
-  // for(unsigned int i=0; i<fitParOld->Params().size(); ++i){
-  //   if( fabs(fitParOld->Params().at(i)-fitParNew->Params().at(i))> 1.e-6){
-  //     InfoMsg << "Parameter with the name: " << fitParNew->Name(i) 
-  // 	   << " has been changed from " << fitParOld->Params().at(i) 
-  // 	   << " to " << fitParNew->Params().at(i) << endmsg;
-  //   }
-  // }
   return result;
 }
-
-// bool AbsLh::extractWignerDs(EvtData* theData){
-//   bool result=true;
-//   std::vector< std::shared_ptr<AbsXdecAmp> >::iterator it;
-//   for (it=_decAmps.begin(); it!=_decAmps.end(); ++it){
-//     (*it)->retrieveWignerDs(theData);
-//   }
-
-//   return result;
-// }
 
 void AbsLh::setDataVec(std::vector<EvtData*> theVec) {
   if(_evtDataVec.size()>0){

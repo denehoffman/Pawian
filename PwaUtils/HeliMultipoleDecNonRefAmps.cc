@@ -28,7 +28,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <mutex>
 
 #include "PwaUtils/HeliMultipoleDecNonRefAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"

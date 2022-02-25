@@ -97,12 +97,7 @@ protected:
   std::shared_ptr<AbsPawianParameters> _oldFitPar;
   std::shared_ptr<FsParticleProjections> _fsParticleProjections; 
 
-  //  virtual bool extractWignerDs(EvtData* theData);
   virtual void setHyps( const std::map<const std::string, bool>& theMap,
 			bool& theHyp, std::string& theKey);
 
-  virtual void ThreadfuncData(unsigned int minEvent, unsigned int maxEvent,
-			      std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
-  virtual void ThreadfuncMc(unsigned int minEvent, unsigned int maxEvent,
-			    std::shared_ptr<AbsPawianParameters> fitPar, LHData& theLHData);
 };

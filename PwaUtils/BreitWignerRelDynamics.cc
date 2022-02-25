@@ -27,7 +27,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 
 #include "PwaUtils/BreitWignerRelDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"

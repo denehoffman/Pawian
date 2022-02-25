@@ -91,7 +91,6 @@ double epemBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawian
   
   for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
     for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
-      //(*itDecAll)->setSpinProjections(projId);
       std::vector<Spin> currentSpinProjection=spinProjections.at(projId);
       (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
     }
@@ -101,16 +100,18 @@ double epemBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawian
     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
     Spin lamepem=1;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
-      lamp1Amp+=currentDecAmp;
+      //      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
+      //      lamp1Amp+=currentDecAmp;
+      lamp1Amp+=(*itDec)->XdecAmp(lamepem, theData);
     }
 
 
     complex<double> lamm1Amp(0.,0.);
     lamepem=-1;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
-      lamm1Amp+=currentDecAmp;
+      //complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
+      //lamm1Amp+=currentDecAmp;
+      lamm1Amp+=(*itDec)->XdecAmp(lamepem, theData); 
     }
    
     if(_useCohPhasespace){

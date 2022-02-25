@@ -56,8 +56,11 @@ struct LHData{
    double logLH_data;
    double LH_mc;
 
-  LHData(){
-    weightSum=logLH_data=LH_mc=num_mc=0.0;
+  LHData():
+    weightSum(0.)
+    , num_mc(0.)
+    , logLH_data(0.)
+    , LH_mc(0.){
   }
 };
 

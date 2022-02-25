@@ -27,7 +27,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 #include <boost/algorithm/string.hpp>
 
 #include "PwaUtils/FlatteDynamics.hh"

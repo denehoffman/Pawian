@@ -26,7 +26,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 
 #include "PwaUtils/LinearDynamics.hh"
 #include "ErrLogger/ErrLogger.hh"

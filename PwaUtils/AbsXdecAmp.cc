@@ -178,10 +178,6 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 void AbsXdecAmp::setSpinProjections(std::vector<Spin>& currentProjection, int projId){
 
   _projId=projId;
-  //_lam1MinProj=_lam1Min;
-  //_lam1MaxProj=_lam1Max;
-  //_lam2MinProj=_lam2Min;
-  //_lam2MaxProj=_lam2Max;
 
   if(_daughter1IsStable){
     Spin currentProjection1 = currentProjection.at(_daughter1ProjId);

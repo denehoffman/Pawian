@@ -27,7 +27,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 
 #include "PwaUtils/TensorPsiToGamXDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"

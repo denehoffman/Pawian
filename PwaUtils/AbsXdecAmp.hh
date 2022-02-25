@@ -31,7 +31,6 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <mutex>
 #include <memory>
 #include <boost/unordered_map.hpp>
 #include <thread>
@@ -113,7 +112,6 @@ protected:
   std::string _key;
   const std::string _wignerDKey;
   //  std::string _refKey;
-  std::mutex theMutex;
 
   bool _daughter1IsStable;
   bool _daughter2IsStable;

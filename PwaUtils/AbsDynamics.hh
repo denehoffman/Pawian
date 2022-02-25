@@ -31,7 +31,6 @@
 #include <complex>
 #include <map>
 #include <string>
-#include <mutex>
 #include <memory>
 
 #include "PwaUtils/EvtDataBaseList.hh"
@@ -68,7 +67,6 @@ protected:
   std::vector<Particle*> _fsParticles;
   Particle* _mother;
   CacheVector<complex<float> >  _cachedMap;
-  std::mutex theMutex;
   std::string _dynKey;
   unsigned short _dynId;
   std::string _grandmaKey;

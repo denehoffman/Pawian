@@ -26,7 +26,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 
 #include "PwaUtils/PiPiScatteringXdecAmps.hh"
 #include "PwaUtils/PiPiScatteringDecay.hh"

@@ -27,7 +27,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 
 #include "PwaUtils/LSDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
@@ -182,14 +181,15 @@ void LSDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   if(!_absDyn->isLdependent()){
     AbsXdecAmp::calcDynamics(theData, grandmaAmp);
-    return;
+    //    return;
   }
-
- std::vector< std::shared_ptr<const LScomb> >::iterator it;
- for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-   _cachedDynIdLSMap[(*it)->L][_absDyn->grandMaId(grandmaAmp)]
-     = _absDyn->eval(theData, grandmaAmp, (*it)->L);
- }
+  else{
+    std::vector< std::shared_ptr<const LScomb> >::iterator it;
+    for (it=_LSs.begin(); it!=_LSs.end(); ++it){
+      _cachedDynIdLSMap[(*it)->L][_absDyn->grandMaId(grandmaAmp)]
+	= _absDyn->eval(theData, grandmaAmp, (*it)->L);
+    }
+  }
 
  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
  if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);

@@ -27,7 +27,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <string>
-#include <mutex>
 
 #include "PwaUtils/HeliDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
