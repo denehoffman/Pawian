@@ -145,29 +145,35 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
  
   complex<double> result(0.,0.);
 
-  std::vector< std::shared_ptr<const LScomb> >::iterator it;
-
   std::map<Id3StringType, complex<double> >& currentWignerDMap=theData->WignerDIdId3.at(_decay->wigDWigDRefId());
-  for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-    for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-      Spin lambda = lambda1-lambda2;
-      if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>_Smax) continue;
+  std::map< Spin, std::map<Spin, std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > > >::iterator itLamLamLS;
+  std::map<Spin, std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > >::iterator itLamLS;
+  std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::iterator itLS;
 
-      map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& cgPre_LSMap
-	= _cgPreFactor_LamLamLSMap.at(lambda1).at(lambda2);    
-      complex<double> amp(0.,0.);     
-      for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-	if( fabs(lambda)>(*it)->S) continue;
-	if (_absDyn->isLdependent()){
-	  amp += _currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it)
-	    * _cachedDynIdLSMap.at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
-	}
-	else amp+=_currentParamPreFacMagExpi.at(*it)*cgPre_LSMap.at(*it);
+  for(itLamLamLS=_cgPreFactor_LamLamLSMap.begin(); itLamLamLS!=_cgPreFactor_LamLamLSMap.end(); ++itLamLamLS){
+    Spin lambda1(itLamLamLS->first);
+    if(lambda1<lam1Min || lambda1>lam1Max) continue;
+    std::map<Spin, std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > >& cgPre_lam2LSMap = itLamLamLS->second;
+    for(itLamLS=cgPre_lam2LSMap.begin(); itLamLS!=cgPre_lam2LSMap.end(); ++itLamLS){
+      Spin lambda2(itLamLS->first);
+      if(lambda2<lam2Min || lambda2>lam2Max) continue;
+      Spin lambda(lambda1-lambda2);                                                                  
+      // if( std::abs(lambda)>_JPCPtr->J || std::abs(lambda)>_Smax) continue; already done in LSDecAmps::fillCgPreFactor()
+      complex<double> amp(0.,0.);
+      std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >& cgPre_LSMap = itLamLS->second;
+      for(itLS=cgPre_LSMap.begin(); itLS!=cgPre_LSMap.end(); ++itLS){
+	// if( std::abs(lambda)> itLS->first->S) continue; already done in LSDecAmps::fillCgPreFactor()
+        if (_absDyn->isLdependent()){
+          amp += _currentParamPreFacMagExpi.at(itLS->first)*itLS->second
+            * _cachedDynIdLSMap.at(itLS->first->L).at(_absDyn->grandMaId(grandmaAmp));
+        }
+        else amp+=_currentParamPreFacMagExpi.at(itLS->first)*cgPre_LSMap.at(itLS->first);
       }
+
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
       amp *= conj(currentWignerDMap.at(IdJLamXLam12));
       if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData);
-      result+=amp;    
+      result+=amp;
     }
   }
   if (!_absDyn->isLdependent()){
@@ -267,10 +273,16 @@ void  LSDecAmps::fillCgPreFactor(){
       for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){
 	Spin lambda = lambda1-lambda2;
 	if( fabs(lambda)>_JPCPtr->J || fabs(lambda)>(*it)->S) continue;
+	if( std::abs(lambda)> (*it)->S) continue;
+	double currentResult=sqrt(2.*(*it)->L+1)
+          *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
+          *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
 
-	_cgPreFactor_LamLamLSMap[lambda1][lambda2][*it]=sqrt(2.*(*it)->L+1)
-	  *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
-	  *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
+	if(norm(currentResult)>1.e-10) _cgPreFactor_LamLamLSMap[lambda1][lambda2][*it]=currentResult;
+	
+	//	_cgPreFactor_LamLamLSMap[lambda1][lambda2][*it]=sqrt(2.*(*it)->L+1)
+	//	  *Clebsch((*it)->L, 0, (*it)->S, lambda, _JPCPtr->J, lambda)
+	//	  *Clebsch(_Jdaughter1, lambda1, _Jdaughter2, -lambda2, (*it)->S, lambda  );
       }
     }
   }
