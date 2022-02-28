@@ -88,13 +88,13 @@ double pbarpProductionLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<Ab
       (*itDecAll)->calcDynamics(theData);
    }
 
-   std::vector< std::vector<Spin> > spinProjections=_fsParticleProjections->spinProjections();
+   const std::vector< std::vector<Spin> >& spinProjections=_fsParticleProjections->spinProjections();
 
    // BEGIN Outer incoherent sum over spinProjections of FS particles...
    for (unsigned int projId=0; projId<spinProjections.size(); ++projId) {
      for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll) {
        //(*itDecAll)->setSpinProjections(projId);
-       std::vector<Spin> currentSpinProjection=spinProjections.at(projId);
+       const std::vector<Spin>& currentSpinProjection=spinProjections.at(projId);
       (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
      }
 

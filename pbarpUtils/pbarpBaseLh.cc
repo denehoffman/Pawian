@@ -159,12 +159,12 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
 
   std::map <std::shared_ptr<const JPCLS>, std::vector< std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >::iterator it;
 
-  std::vector< std::vector<Spin> > spinProjections=_fsParticleProjections->spinProjections();
+  const std::vector< std::vector<Spin> >& spinProjections=_fsParticleProjections->spinProjections();
 
   for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
     for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
       //(*itDecAll)->setSpinProjections(projId);
-      std::vector<Spin> currentSpinProjection=spinProjections.at(projId);
+      const std::vector<Spin>& currentSpinProjection=spinProjections.at(projId);
       (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
     }
     

@@ -175,7 +175,7 @@ void AbsXdecAmp::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
   return;
 }
 
-void AbsXdecAmp::setSpinProjections(std::vector<Spin>& currentProjection, int projId){
+void AbsXdecAmp::setSpinProjections(const std::vector<Spin>& currentProjection, int projId){
 
   _projId=projId;
 

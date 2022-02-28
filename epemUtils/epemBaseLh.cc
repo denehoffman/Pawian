@@ -87,11 +87,11 @@ double epemBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawian
     (*itDecAll)->calcDynamics(theData);
   }
 
-  std::vector< std::vector<Spin> > spinProjections=_fsParticleProjections->spinProjections();
+  const std::vector< std::vector<Spin> >& spinProjections=_fsParticleProjections->spinProjections();
   
   for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
     for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
-      std::vector<Spin> currentSpinProjection=spinProjections.at(projId);
+      const std::vector<Spin>& currentSpinProjection=spinProjections.at(projId);
       (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
     }
     

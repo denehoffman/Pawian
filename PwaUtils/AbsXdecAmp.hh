@@ -69,7 +69,7 @@ public:
   virtual void cacheAmplitudes();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
-  virtual void setSpinProjections(std::vector<Spin>& currentProjection, int projId);
+  virtual void setSpinProjections(const std::vector<Spin>& currentProjection, int projId);
   std::shared_ptr<AbsDynamics> getDyn() {return _absDyn;}
   std::shared_ptr<AbsXdecAmp> absXDecAmpDaughter1() {return _decAmpDaughter1;}
   std::shared_ptr<AbsXdecAmp> absXDecAmpDaughter2() {return _decAmpDaughter2;}
