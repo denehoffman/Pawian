@@ -89,7 +89,7 @@ public:
   Spin(){
     _numer = 0;
     _denom = 1;
-  }
+    }
 
   /** Default Constructor (spin = @a numerator/denominator)
    * Note: @a denominator must be either 1 or 2 
@@ -134,13 +134,15 @@ public:
     return  _numer/(double)_denom;
   }
 
-  inline unsigned short ToIndex(){
-    if(_denom*_numer >= 0){
-      return _numer * 4 / _denom;
-    }
-    else{
-      return _numer * (-4) / _denom - 1;
-    }
+  inline const unsigned short ToIndex() const{
+    //if(_denom*_numer >= 0){
+    //   return _numer * 4 / _denom;
+    // }
+    // else{
+    //   return _numer * (-4) / _denom - 1;
+    // }
+
+    return (_denom*_numer >= 0) ? (_numer * 4 / _denom) : (_numer * (-4) / _denom - 1);  
   }
 
   // Setters:

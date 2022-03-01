@@ -15,8 +15,8 @@ typedef uint16_t Id3StringType;
 namespace FunctionUtils {
 
   std::string particleListName(std::vector<Particle*>& particleVec);
-  Id1StringType spin1Index(Spin& spin1);
-  Id2StringType spin2Index(Spin& spin1, Spin& spin2);
-  Id3StringType spin3Index(Spin& spin1, Spin& spin2, Spin& spin3);
-  short spin1IdIndex(unsigned short, Spin& spin1);
+  Id1StringType spin1Index(const Spin& spin1);
+  Id2StringType spin2Index(const Spin& spin1, const Spin& spin2);
+  Id3StringType spin3Index(const Spin& spin1, const Spin& spin2, const Spin& spin3);
+  short spin1IdIndex(unsigned short, const Spin& spin1);
 }

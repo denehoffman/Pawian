@@ -175,7 +175,7 @@ void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParame
 }
 
 
-complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
  
@@ -227,7 +227,7 @@ complex<double> HeliMultipoleDecNonRefAmps::XdecAmp(Spin& lamX, EvtData* theData
   return result;
 }
 
-complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym){
+complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, const Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym){
   complex<double> result(0.,0.);
   Spin lambda = lam2-lam1;
   bool doCalc=true;

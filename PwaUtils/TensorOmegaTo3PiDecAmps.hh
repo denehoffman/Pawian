@@ -58,8 +58,8 @@ public:
 
   // Getters:
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+  virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
 
   virtual void print(std::ostream& os) const;

@@ -202,7 +202,7 @@ void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
 }
 
 
-complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, 
+complex<double> HeliDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr, 
 					 EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
 
@@ -238,7 +238,7 @@ complex<double> HeliDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaug
 }
 
 
-complex<double> HeliDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+complex<double> HeliDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;

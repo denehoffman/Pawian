@@ -63,7 +63,7 @@ public:
   // virtual void updateFitParams(fitParCol& theParamVal);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
   
 protected:
 
@@ -77,7 +77,7 @@ protected:
   Particle* _daughter2;
 
 private:
-  complex<double> heliAmpLoop(EvtData* theData, Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym);
+  complex<double> heliAmpLoop(EvtData* theData, const Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym);
 
 
 

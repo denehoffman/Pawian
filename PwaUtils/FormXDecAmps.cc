@@ -58,14 +58,14 @@ FormXDecAmps::~FormXDecAmps()
 {
 }
 
-complex<double> FormXDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> FormXDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   //dummy
   complex<double> result(0.,0.);
   return result;
 }
 
 
-complex<double> FormXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+complex<double> FormXDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
   complex<double> result(0.,0.);
   if(_J<fabs(lamX)) return result;
 
@@ -221,7 +221,7 @@ void FormXDecAmps::initialize(){
 }
 
 
-complex<double> FormXDecAmps::daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData){
+complex<double> FormXDecAmps::daughterAmp(const Spin& lam1, const Spin& lam2, EvtData* theData){
   complex<double> result(1.,0.);
   result *= _decAmpDaughter1->XdecAmp(lam1, theData, this);
   return result;

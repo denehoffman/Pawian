@@ -74,7 +74,7 @@ TensorPsiToGamXDecAmps::~TensorPsiToGamXDecAmps()
 }
 
 
-complex<double> TensorPsiToGamXDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
+complex<double> TensorPsiToGamXDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
   
   complex<double> result(0.,0.);
   
@@ -110,7 +110,7 @@ complex<double> TensorPsiToGamXDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, sh
 
 
 
-complex<double> TensorPsiToGamXDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+complex<double> TensorPsiToGamXDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
  
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
@@ -207,7 +207,7 @@ void TensorPsiToGamXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters
   if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
-complex<double> TensorPsiToGamXDecAmps::daughterAmp(Spin& lam2, EvtData* theData){
+complex<double> TensorPsiToGamXDecAmps::daughterAmp(const Spin& lam2, EvtData* theData){
   complex<double> result(1.,0.);
   if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, this);
   return result;

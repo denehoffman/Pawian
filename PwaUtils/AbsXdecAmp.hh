@@ -53,11 +53,11 @@ public:
   AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   virtual ~AbsXdecAmp();
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp=0)=0;
-  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+  virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp=0)=0;
+  virtual complex<double> XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr,
                                       EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp=0)=0;
 
-  virtual complex<double> daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData);
+  virtual complex<double> daughterAmp(const Spin& lam1, const Spin& lam2, EvtData* theData);
   virtual void print(std::ostream& os) const=0;
   const std::string name() const {return _name;}
   virtual std::shared_ptr<const jpcRes>& jpcPtr() {return _JPCPtr;}

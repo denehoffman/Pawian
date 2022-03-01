@@ -57,15 +57,15 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+  virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
   virtual void fillParamNameList();
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
 
-  virtual complex<double> daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData);
+  virtual complex<double> daughterAmp(const Spin& lam1, const Spin& lam2, EvtData* theData);
   virtual void cacheAmplitudes();
   virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld);
 

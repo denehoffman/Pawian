@@ -80,7 +80,7 @@ LSDecAmps::~LSDecAmps()
 {
 }
 
-complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, 
+complex<double> LSDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr, 
 				       EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
@@ -113,7 +113,7 @@ complex<double> LSDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaught
   return result;
 }
 
-complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+complex<double> LSDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
@@ -140,7 +140,7 @@ complex<double> LSDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* gra
   return result;
 }
 
-complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, 
+complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, const Spin& lamX, EvtData* theData, 
 				  Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs){
  
   complex<double> result(0.,0.);
@@ -151,11 +151,13 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
   std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess >::iterator itLS;
 
   for(itLamLamLS=_cgPreFactor_LamLamLSMap.begin(); itLamLamLS!=_cgPreFactor_LamLamLSMap.end(); ++itLamLamLS){
-    Spin lambda1(itLamLamLS->first);
+    //Spin lambda1(itLamLamLS->first);
+    const Spin& lambda1=itLamLamLS->first; 
     if(lambda1<lam1Min || lambda1>lam1Max) continue;
     std::map<Spin, std::map<std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > >& cgPre_lam2LSMap = itLamLamLS->second;
     for(itLamLS=cgPre_lam2LSMap.begin(); itLamLS!=cgPre_lam2LSMap.end(); ++itLamLS){
-      Spin lambda2(itLamLS->first);
+      //Spin lambda2(itLamLS->first);
+      const Spin& lambda2=itLamLS->first;
       if(lambda2<lam2Min || lambda2>lam2Max) continue;
       Spin lambda(lambda1-lambda2);                                                                  
       // if( std::abs(lambda)>_JPCPtr->J || std::abs(lambda)>_Smax) continue; already done in LSDecAmps::fillCgPreFactor()
@@ -167,7 +169,7 @@ complex<double> LSDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* t
           amp += _currentParamPreFacMagExpi.at(itLS->first)*itLS->second
             * _cachedDynIdLSMap.at(itLS->first->L).at(_absDyn->grandMaId(grandmaAmp));
         }
-        else amp+=_currentParamPreFacMagExpi.at(itLS->first)*cgPre_LSMap.at(itLS->first);
+        else amp+=_currentParamPreFacMagExpi.at(itLS->first)*itLS->second;
       }
 
       Id3StringType IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);

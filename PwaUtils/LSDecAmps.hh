@@ -60,8 +60,8 @@ public:
   std::vector< std::shared_ptr<const LScomb> >& lsVec() {return _LSs;}
 
   // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
-  virtual complex<double> XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
-  virtual complex<double> XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+  virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  virtual complex<double> XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
@@ -84,7 +84,7 @@ protected:
   std::map<unsigned short, std::map<Spin, complex<double> > > _cachedDynIdLSMap;
 
   void  fillCgPreFactor();
-  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs);
+  virtual complex<double> lsLoop(AbsXdecAmp* grandmaAmp, const Spin& lamX, EvtData* theData, Spin& lam1Min, Spin& lam1Max, Spin& lam2Min, Spin& lam2Max, bool withDecs);
 
 
 private:

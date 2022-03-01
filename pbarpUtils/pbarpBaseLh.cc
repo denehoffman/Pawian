@@ -163,7 +163,6 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
 
   for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
     for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
-      //(*itDecAll)->setSpinProjections(projId);
       const std::vector<Spin>& currentSpinProjection=spinProjections.at(projId);
       (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
     }
@@ -179,13 +178,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	
-	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData);
-
-	double isoFactor=iso0Val;
-	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
-	
-	tmpAmp+= isoFactor*currentDecAmp;
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+= iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
+	else tmpAmp+= iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -203,12 +197,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData);
-
-	double isoFactor=iso0Val;
-	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
-	
-	tmpAmp+=isoFactor*currentDecAmp;
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
+	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -226,12 +216,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData);
-
-	double isoFactor=iso0Val;;
-	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
-	
-	tmpAmp+=isoFactor*currentDecAmp;
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
+	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -249,12 +235,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-  	complex<double> currentDecAmp=(*itDec)->XdecAmp(lampbarp, theData);
-
-        double isoFactor=iso0Val;
-  	if((*itDec)->absDec()->motherIGJPC()->I==1) isoFactor=iso1Val;
-	
-  	tmpAmp+=isoFactor*currentDecAmp;
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
+	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -339,8 +321,8 @@ void pbarpBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
 
   std::vector< std::shared_ptr<const JPCLS> >::iterator it;
   for ( it = _jpclsStates.begin(); it!=_jpclsStates.end(); ++it){
-    std::string magName=(*it)->name()+"pbarp"+"Mag";
-    std::string phiName=(*it)->name()+"pbarp"+"Phi";
+    std::string magName=(*it)->name()+"pbarpMag";
+    std::string phiName=(*it)->name()+"pbarpPhi";
     _currentParamMagExpi[*it]=std::polar(std::abs(fitPar->Value(magName)), fitPar->Value(phiName));
    }
 }

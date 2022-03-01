@@ -128,7 +128,7 @@ void AbsXdecAmp::initialize(){
  
 }
 
-complex<double> AbsXdecAmp::daughterAmp(Spin& lam1, Spin& lam2, EvtData* theData){
+complex<double> AbsXdecAmp::daughterAmp(const Spin& lam1, const Spin& lam2, EvtData* theData){
   complex<double> result(1.,0.);
   if(!_daughter1IsStable) result *= _decAmpDaughter1->XdecAmp(lam1, theData, this);
   if(!_daughter2IsStable) result *= _decAmpDaughter2->XdecAmp(lam2, theData, this);

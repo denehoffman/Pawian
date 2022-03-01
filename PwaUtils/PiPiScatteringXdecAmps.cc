@@ -55,13 +55,13 @@ PiPiScatteringXdecAmps::~PiPiScatteringXdecAmps()
 {
 }
 
-complex<double> PiPiScatteringXdecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr,
+complex<double> PiPiScatteringXdecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr,
 						    EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp) {
   complex<double> result(0.,0.);
   return result;
 }
 
-complex<double> PiPiScatteringXdecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp) {
+complex<double> PiPiScatteringXdecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp) {
   complex<double> result(0.,0.);
   _tMatDyn->eval(theData, grandmaAmp, _orbMom);
   return result;

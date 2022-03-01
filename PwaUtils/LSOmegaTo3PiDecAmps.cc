@@ -67,7 +67,7 @@ void LSOmegaTo3PiDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> f
    //  if(!_daughter2IsStable) _decAmpDaughter2->updateFitParams(fitPar);
 }
 
-complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs,AbsXdecAmp* grandmaAmp){
+complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr, EvtData* theData, Spin& lamFs,AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
   Id1StringType IdLamOmega=FunctionUtils::spin1Index(lamX);
@@ -84,7 +84,7 @@ complex<double> LSOmegaTo3PiDecAmps::XdecPartAmp(Spin& lamX, Spin& lamDec, short
 
 
 
-complex<double> LSOmegaTo3PiDecAmps::XdecAmp(Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
+complex<double> LSOmegaTo3PiDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
 
