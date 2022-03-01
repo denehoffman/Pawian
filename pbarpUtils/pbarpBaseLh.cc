@@ -49,6 +49,9 @@ pbarpBaseLh::pbarpBaseLh(ChannelID channelID) :
   AbsLh(channelID)
   ,_highestJFsp(0)
   ,_isHighestJaPhoton(true)
+  ,_lampbarp0(0)
+  ,_lampbarpm1(-1)
+  ,_lampbarpp1(1)
 {
   initialize();
 }
@@ -168,7 +171,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
     }
     
     complex<double> singletAmp(0.,0.);
-    Spin lampbarp=0;
+    //    Spin lampbarp=0;
     for(it=_decAmpsSinglet.begin(); it!=_decAmpsSinglet.end(); ++it){
       complex<double> tmpAmp(0.,0.);
       const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
@@ -178,8 +181,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+= iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
-	else tmpAmp+= iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+= iso1Val*(*itDec)->XdecAmp(_lampbarp0, theData);
+	else tmpAmp+= iso0Val*(*itDec)->XdecAmp(_lampbarp0, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -187,7 +190,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
     }
 
     complex<double> triplet0Amp(0.,0.);
-    lampbarp=0;
+    //    lampbarp=0;
     for(it=_decAmpsTriplet0.begin(); it!=_decAmpsTriplet0.end(); ++it){
       complex<double> tmpAmp(0.,0.);
       const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
@@ -197,8 +200,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
-	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(_lampbarp0, theData);
+	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(_lampbarp0, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -206,7 +209,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
     }
 
     complex<double> tripletp1Amp(0.,0.);
-    lampbarp=1;
+    //lampbarp=1;
     for(it=_decAmpsTripletp1.begin(); it!=_decAmpsTripletp1.end(); ++it){
       complex<double> tmpAmp(0.,0.);
       const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
@@ -216,8 +219,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
-	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(_lampbarpp1, theData);
+	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(_lampbarpp1, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);
@@ -225,7 +228,7 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
     }
     
     complex<double> tripletm1Amp(0.,0.);
-    lampbarp=-1;
+    //lampbarp=-1;
     for(it=_decAmpsTripletm1.begin(); it!=_decAmpsTripletm1.end(); ++it){
       complex<double> tmpAmp(0.,0.);
       const std::shared_ptr<const JPCLS>& theJPCLS=it->first;
@@ -235,8 +238,8 @@ double pbarpBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawian
       std::vector<std::shared_ptr<AbsXdecAmp> >& decAmps=it->second;
       std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
       for( itDec=decAmps.begin(); itDec!=decAmps.end(); ++itDec){
-	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(lampbarp, theData);
-	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(lampbarp, theData);
+	if((*itDec)->absDec()->motherIGJPC()->I==1) tmpAmp+=iso1Val*(*itDec)->XdecAmp(_lampbarpm1, theData);
+	else tmpAmp+=iso0Val*(*itDec)->XdecAmp(_lampbarpm1, theData);
       }
       
       tmpAmp*=theJPCLS->preFactor*_currentParamMagExpi.at(theJPCLS);

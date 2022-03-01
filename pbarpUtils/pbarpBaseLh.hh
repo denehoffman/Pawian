@@ -95,7 +95,10 @@ protected:
   std::map<std::string, std::pair<std::string, std::string> > _iso0Iso1NameMap;
   int _highestJFsp;
   bool _isHighestJaPhoton;
-
+  const Spin _lampbarp0;
+  const Spin _lampbarpm1;
+  const Spin _lampbarpp1;
+  
   virtual void fillMap(std::vector< std::shared_ptr<const JPCLS> >& pbarpLSs, std::vector<std::shared_ptr<AbsXdecAmp> >& decs, std::map< std::shared_ptr<const JPCLS>, std::vector<std::shared_ptr<AbsXdecAmp> >, pawian::Collection::SharedPtrLess >& toFill);
 
   virtual void fillIsos();

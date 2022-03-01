@@ -76,7 +76,8 @@ public:
 protected:
   //  std::shared_ptr<epemReaction> _epemReactionPtr;
   const std::shared_ptr<EpemChannelEnv> _epemChannelEnv;
-
+  const Spin _lamepemM1;
+  const Spin _lamepemP1;
   virtual void initialize();
 private:
 };

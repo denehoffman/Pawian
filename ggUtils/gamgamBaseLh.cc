@@ -109,23 +109,26 @@ double gamgamBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawi
     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
     Spin lamX=0;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
-      lamX0Amp+=currentDecAmp;
+      //      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
+      //      lamX0Amp+=currentDecAmp;
+      lamX0Amp+=(*itDec)->XdecAmp(lamX, theData);
     }
 
 
     complex<double> lamXp2Amp(0.,0.);
     lamX=2;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
-      lamXp2Amp+=currentDecAmp;
+      //complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
+      //lamXp2Amp+=currentDecAmp;
+      lamXp2Amp+=(*itDec)->XdecAmp(lamX, theData);
     }
 
     complex<double> lamXm2Amp(0.,0.);
     lamX=-2;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
-      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
-      lamXm2Amp+=currentDecAmp;
+      //complex<double> currentDecAmp=(*itDec)->XdecAmp(lamX, theData);
+      //lamXm2Amp+=currentDecAmp;
+      lamXm2Amp+=(*itDec)->XdecAmp(lamX, theData);
     }
 
    

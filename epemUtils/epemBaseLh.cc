@@ -49,6 +49,8 @@
 epemBaseLh::epemBaseLh(ChannelID channelID) :
   AbsLh(channelID)
   ,_epemChannelEnv(std::static_pointer_cast<EpemChannelEnv> (GlobalEnv::instance()->EpemChannel(channelID)))
+  ,_lamepemM1(-1)
+  ,_lamepemP1(1)
 {
 }
 
@@ -98,20 +100,20 @@ double epemBaseLh::calcEvtIntensity( EvtData* theData, std::shared_ptr<AbsPawian
     complex<double> lamp1Amp(0.,0.);
     
     std::vector<std::shared_ptr<AbsXdecAmp> >::iterator itDec;
-    Spin lamepem=1;
+    //Spin lamepem=1;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       //      complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
       //      lamp1Amp+=currentDecAmp;
-      lamp1Amp+=(*itDec)->XdecAmp(lamepem, theData);
+      lamp1Amp+=(*itDec)->XdecAmp(_lamepemP1, theData);
     }
 
 
     complex<double> lamm1Amp(0.,0.);
-    lamepem=-1;
+    //lamepem=-1;
     for( itDec=_decAmps.begin(); itDec!=_decAmps.end(); ++itDec){
       //complex<double> currentDecAmp=(*itDec)->XdecAmp(lamepem, theData);
       //lamm1Amp+=currentDecAmp;
-      lamm1Amp+=(*itDec)->XdecAmp(lamepem, theData); 
+      lamm1Amp+=(*itDec)->XdecAmp(_lamepemM1, theData); 
     }
    
     if(_useCohPhasespace){
