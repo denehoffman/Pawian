@@ -64,7 +64,7 @@ void FVector::evalMatrix(const double mass, Spin OrbMom){
 
   _Kmatrix->evalMatrix(mass, OrbMom);
   _Pvector->evalMatrix(mass, OrbMom);
- // for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
+
   for (int i=0; i<NumRows(); ++i){
     _CMMatrix(i,i) = _phpVec[i]->ChewM(mass, OrbMom);
   }
@@ -76,12 +76,7 @@ void FVector::evalMatrix(const double mass, Spin OrbMom){
   Matrix< complex <double> > currentTMatr=denomMatrComplInv*(*_Pvector);
 
   for (int i=0; i<currentTMatr.NumRows(); ++i){
-    double currentPreFactor=1.;
-    //    if(_phpVec.at(i)->name() == "DudekAngularMomentum" && std::abs(_phpVec[i]->factor(mass).real()) > 1.e-8 && OrbMom>0){
-    //      currentPreFactor=sqrt(_phpVec[i]->factor(mass, OrbMom).real()/_phpVec[i]->factor(mass).real()*pow(mass/2.,2*OrbMom));
-      //      InfoMsg << "prefactor eval: " << currentPreFactor << endmsg;
-    //    }
-      this->operator()(i,0)=currentPreFactor*currentTMatr(i,0);
+      this->operator()(i,0)=currentTMatr(i,0);
   }
 
 }
@@ -91,7 +86,6 @@ void FVector::evalMatrix(const complex<double> mass, Spin OrbMom){
   _Kmatrix->evalMatrix(mass, OrbMom);
   _Pvector->evalMatrix(mass, OrbMom);
 
- // for (int i=0; i<NumRows(); ++i) _rhoMatrix(i,i) = _phpVec[i]->factor(mass);
   for (int i=0; i<NumRows(); ++i){
     _CMMatrix(i,i) = _phpVec[i]->ChewM(mass, OrbMom);
   }
@@ -141,13 +135,7 @@ complex<double> FVector::evalProjMatrix(const double mass, int index, Spin OrbMo
     exit(0);
   }
 
-  double prefactor=1.;
-  //  if(_phpVec.at(index)->name() == "DudekAngularMomentum" && std::abs(_phpVec[index]->factor(mass).real())>1.e-8 && OrbMom>0){
-  //    prefactor=sqrt(_phpVec[index]->factor(mass, OrbMom).real()/_phpVec[index]->factor(mass).real()*pow(mass/2.,2*OrbMom));
-    // InfoMsg << "prefactor evalProj: " <<  prefactor << endmsg;
-  //  }
-
-  return prefactor*result; 
+  return result; 
 }
 
 void FVector::SetBumImPartSigns(std::vector<double> signs){

@@ -187,13 +187,13 @@ void HeliDecAmps::printCurrentAmpParams(Spin& lamX, Spin& lamFs){
   InfoMsg << "Amp name: " << name() << endmsg;
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it=_currentParamPreFacMagExpi.begin(); it!=_currentParamPreFacMagExpi.end(); ++it){
-    Spin lambda1= it->first->lam1;
-    Spin lambda2= it->first->lam2;
-    Spin lambda = lambda1-lambda2;
-    if( fabs(lambda) > it->first->J) continue;
-    
+    Spin lambda1(it->first->lam1);
     if(_enabledlamFsDaughter1 && lamFs!=lambda1) continue;
+    Spin lambda2(it->first->lam2);
     if(_enabledlamFsDaughter2 && lamFs!=lambda2) continue;
+    Spin lambda(lambda1-lambda2);
+    if( fabs(lambda) > it->first->J) continue;
+
     if (ErrLogger::instance().level()>logging::log_level::INFO) it->first->print(std::cout);
     InfoMsg << " it->first->parityFactor: " << it->first->parityFactor << endmsg;
     InfoMsg << "currentParamPreFacMagExpi: " 
@@ -251,12 +251,12 @@ complex<double> HeliDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdec
   std::map< std::shared_ptr<const JPClamlam>, complex<double>, pawian::Collection::SharedPtrLess >::iterator it;
   for(it=_currentParamPreFacMagExpi.begin(); it!=_currentParamPreFacMagExpi.end(); ++it){
 
-    Spin lambda1= it->first->lam1;
+    Spin lambda1(it->first->lam1);
     if(_daughter1IsStable && _lam1MinProj!=lambda1) continue;
-    Spin lambda2= it->first->lam2;
+    Spin lambda2(it->first->lam2);
     if(_daughter2IsStable && _lam2MinProj!=lambda2) continue;
  
-    Spin lambda = lambda1-lambda2;
+    Spin lambda(lambda1-lambda2);
     if( fabs(lambda) > it->first->J) continue;
     
       //      InfoMsg << "_J: " << _J << " lamX: " << lamX << " lambda1: " << lambda1 << " lambda2: " << lambda2
@@ -290,10 +290,9 @@ void HeliDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   if(!_absDyn->isLdependent()){
     AbsXdecAmp::calcDynamics(theData, grandmaAmp);
-    return;
+    //    return;
   }
-
-  _cachedDynL=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
+  else _cachedDynL=_absDyn->eval(theData, grandmaAmp, absDec()->orbMomMin());
 
  if(!_daughter1IsStable) _decAmpDaughter1->calcDynamics(theData, this);
  if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
