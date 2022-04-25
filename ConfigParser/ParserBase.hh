@@ -143,6 +143,7 @@ public:
   const unsigned int stepSizeTimer() const {return _stepSizeTimer;}
   const unsigned int stepSizeParamsPrint() const {return _stepSizeParamsPrint;}
   const unsigned int stepSizeParamsDump() const {return _stepSizeParamsDump;}
+  const bool useAbsPhaseDiff() const {return _useAbsPhaseDiff;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -244,4 +245,5 @@ protected:
   unsigned int _stepSizeTimer;
   unsigned int _stepSizeParamsPrint;
   unsigned int _stepSizeParamsDump;
+  bool _useAbsPhaseDiff;
 };

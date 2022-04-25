@@ -66,6 +66,7 @@ public:
   const bool useAdler() const {return _useAdler0;}
   const double s0Adler() const {return _s0Adler;}
   const double snormAdler() const {return _snormAdler;}
+ 
   const std::vector<std::string> gFactorFixPoles() {return _gFactorFixPoles;}
   const std::vector<std::string> gFactorFixReleaseGFactor() {return _gFactorFixReleaseGFactor;}
   const std::vector<std::string> gFactorFixKeepGRatio() {return _gFactorFixKeepGRatio;}

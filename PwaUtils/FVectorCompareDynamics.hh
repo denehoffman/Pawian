@@ -56,7 +56,8 @@ protected:
   std::string _kMatCompareName;
   std::string _nameOfFVectorCompare;
   int _orbMomCompare;
-
+  bool _useAbsPhaseDiff;
+  
   std::shared_ptr<KMatrixDynamics> _kMatrDynComp;
   std::shared_ptr<KMatrixParser> _kMatrixParserComp;
   std::shared_ptr<FVector> _FVectorCompare;

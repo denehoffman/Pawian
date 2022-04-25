@@ -102,6 +102,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_stepSizeTimer(20)
   ,_stepSizeParamsPrint(1000)
   ,_stepSizeParamsDump(200)
+  ,_useAbsPhaseDiff(false)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -216,8 +217,8 @@ ParserBase::ParserBase(int argc,char **argv)
   ("stepSizeLhDump",po::value<unsigned int>(&_stepSizeLhDump),  "step size for LH print out in dump file")
   ("stepSizeTimer",po::value<unsigned int>(&_stepSizeTimer), "step size print out of time infos in log file")
   ("stepSizeParamsPrint",po::value<unsigned int>(&_stepSizeParamsPrint),"step size for parameter print out in log file")
-  ("stepSizeParamsDump",po::value<unsigned int>(&_stepSizeParamsDump),"step size for parameter print out\
- in dump file")
+  ("stepSizeParamsDump",po::value<unsigned int>(&_stepSizeParamsDump),"step size for parameter print out in dump file")
+    ("useAbsPhaseDiff",po::value<bool>(&_useAbsPhaseDiff), "use absolut value of the phse difference in FVectorCompare mode")
     ;
 
 }
@@ -342,6 +343,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "stepSizeTimer: " << _stepSizeTimer << "\n\n"
 		<< "stepSizeParamsPrint: " << _stepSizeParamsPrint << "\n\n"
 		<< "stepSizeParamsDump: " << _stepSizeParamsDump << "\n\n"
+		<< "useAbsPhaseDiff: " << _useAbsPhaseDiff <<"\n\n"
 		<< endmsg;
 
 

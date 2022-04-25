@@ -31,6 +31,7 @@
 #include "PwaUtils/KMatrixDynamics.hh"
 #include "PwaDynamics/FVector.hh"
 #include "ConfigParser/KMatrixParser.hh"
+#include "ConfigParser/ParserBase.hh"
 
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -65,6 +66,7 @@ FVectorIntensityDynamics(name, fsParticles, mother1, pathToConfigParser,  baseNa
   _FVectorCompare = _kMatrDynComp->fVector(nameFVectComp);
   std::shared_ptr<KMatrixParser> kMatrixCompParser(new KMatrixParser(pathToConfigParserComp));
   _orbMomCompare = kMatrixCompParser->orbitalMom();
+  _useAbsPhaseDiff= GlobalEnv::instance()->parser()->useAbsPhaseDiff();
 }
 
 FVectorCompareDynamics::~FVectorCompareDynamics()
@@ -124,7 +126,7 @@ void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMa
     currentPhaseDiff -= 360.;
     currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
   }
-
+  if(_useAbsPhaseDiff) currentPhaseDiff=std::abs(currentPhaseDiff);
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff;
 }
 
