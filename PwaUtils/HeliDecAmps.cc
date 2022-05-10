@@ -167,9 +167,13 @@ void HeliDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
     std::string phiName=(*itlamlam)->name()+_key+"Phi";
 
     complex<double> heliAmpCompl=std::polar(fabs(fitPar->Value(magName)), fitPar->Value(phiName));
+
     complex<double> currentHeliAmp=_preFactor*_isospinCG*sqrt(2.*_JPCPtr->J+1.)*heliAmpCompl;
+    
     _currentParamPreFacMagExpi[*itlamlam] = currentHeliAmp;
+
     if(!_isWeakDecay){
+      if ((*itlamlam)->lam1 ==0 && (*itlamlam)->lam2 ==0) continue;
       std::vector< std::shared_ptr<const JPClamlam> >& currentLPClamlamSymVec=_JPClamlamSymMap.at(*itlamlam);
       std::vector< std::shared_ptr<const JPClamlam> >::iterator itLamLamSym;
       for (itLamLamSym=currentLPClamlamSymVec.begin(); itLamLamSym!=currentLPClamlamSymVec.end(); ++itLamLamSym){
