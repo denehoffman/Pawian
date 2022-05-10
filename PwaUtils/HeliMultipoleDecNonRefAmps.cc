@@ -251,7 +251,8 @@ complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, const 
         *_currentParamLocalMagExpi.at(i);
   }
 
-    result+=currentAmp*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) )*daughterAmp(lam1, lam2, theData);
+   //    result+=currentAmp*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) )*daughterAmp(lam1, lam2, theData);
+   result+=currentAmp*theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) *daughterAmp(lam1, lam2, theData);
   }
   return result;
 }

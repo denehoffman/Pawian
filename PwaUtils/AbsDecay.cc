@@ -577,9 +577,11 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap,
     }
   }
 
+  double theTheta=daughter1HelMother.Theta();
+  double thePhi=daughter1HelMother.Phi();
+  
   for (Spin lamMother=-lamMotherMax; lamMother<=lamMotherMax; ++lamMother){
     for (Spin lam12=-lam12Max; lam12<=lam12Max; ++lam12){
-      double thePhi=daughter1HelMother.Phi();
       Id3StringType IdSpinMotherLamMotherLam12=FunctionUtils::spin3Index(spinMother, lamMother, lam12);
       std::map<Id3StringType, complex<double> >::iterator found = 
 	evtData->WignerDIdId3[_wigDWigDRefId].find(IdSpinMotherLamMotherLam12);
@@ -587,9 +589,25 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap,
 	continue;
       }
 
-      
-      evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
-	Wigner_D(thePhi,daughter1HelMother.Theta(),0,spinMother,lamMother,lam12);
+      if(type()=="IsobarHeliMultipoleDecay"){
+        //order of the fs particles are fixed here. daughter1 is the photon
+        thePhi=PawianConstants::pi+thePhi;
+        theTheta=PawianConstants::pi-daughter1HelMother.Theta();
+        //double theTheta=daughter1HelMother.Theta();
+        //evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+        //  Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12);
+	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+          Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12);
+      }
+      else if (GlobalEnv::instance()->Channel(_channelId)->parser()->productionFormalism()=="HeliMultipole"){
+	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+	  conj(Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12));
+      }
+      else{
+	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+	  Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12);
+      }
+
       
       if(evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real() != 
 	 evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12].real()){
