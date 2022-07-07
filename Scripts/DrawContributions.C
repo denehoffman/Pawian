@@ -128,7 +128,7 @@ TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);
     TH1F* hresid= (TH1F*) histVec.at(0)->Clone();
     for(int i=0; i<histVec.at(0)->GetNbinsX();i++){ 
           double chisq=0.;
-          if(histVec.at(0)->GetBinError(i)!=0)chisq=(histVec.at(0)->GetBinContent(i)-histVec.at(1)->GetBinContent(i))/sqrt(histVec.at(0)->GetBinError(i)*histVec.at(0)->GetBinError(i)+histVec.at(0)->GetBinError(i)*histVec.at(0)->GetBinError(i));
+          if(histVec.at(0)->GetBinError(i)!=0)chisq=(histVec.at(0)->GetBinContent(i)-histVec.at(1)->GetBinContent(i))/sqrt(histVec.at(0)->GetBinError(i)*histVec.at(0)->GetBinError(i)+histVec.at(1)->GetBinError(i)*histVec.at(1)->GetBinError(i));
           if(histVec.at(0)->GetBinError(i)==0) cout << i << endl;
           if(histVec.at(0)->GetBinContent(i)-histVec.at(1)->GetBinContent(i)==0) cout << i << endl;
           hresid->SetBinContent(i,chisq);
