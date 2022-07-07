@@ -30,11 +30,21 @@
 #include <algorithm>    // std::max
 
 TCanvas* contribCanvas = new TCanvas();
+bool withresid=false;
+bool withData=true;
 
-void DrawContibutions(std::string rootFileNames, std::string name, bool withLegend = false, 
+void DrawContributions(std::string rootFileNameData, std::string rootFileNames, std::string name, bool withLegend = false, std::string legendNames = "");
+
+void DrawContributions(std::string rootFileNames, std::string name, bool withLegend = false,
+		      std::string legendNames = "");
+
+void DrawContrib2Hists(std::string rootFileName1, std::string rootFileName2, std::string name, bool withLegend = false, std::string legendNames = "");   
+
+
+void DrawContributions(std::string rootFileNameData, std::string rootFileNames, std::string name, bool withLegend = false, 
                           std::string legendNames = "") {
-  TH1F* histVec[20];
-  
+ 
+  std::vector<TH1F*> histVec;
   std::stringstream rootFileNamesStrStr(rootFileNames);
   vector<std::string> rootFileNamesVec;
   std::string currentStr;
@@ -58,26 +68,111 @@ void DrawContibutions(std::string rootFileNames, std::string name, bool withLege
       return;
     }
   }
- 
+
+TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);                    
+  pad0->SetFillColor(0);
+  TPad * pad1 = new TPad("pad1","This is pad1",0.0,1.,1.,0.85);                         
+  pad1->SetFillColor(0);                                                                      
+
+  if(withresid){
+  pad0->Draw();
+  pad1->Draw();
+  pad0->cd();
+  }
+
+  double dataScale=1.;
+  if(withData){
+  string namedummy=name.substr(3);
+  namedummy="Data"+namedummy;
+  cout << namedummy << endl;
+  TFile* dataTFile_dummy=new TFile(rootFileNameData.c_str());
+  TH1F* DataHist=(TH1F*) dataTFile_dummy->Get(namedummy.c_str());
+
+  DataHist->SetLineColor(kBlack);
+  DataHist->SetMarkerColor(kBlack);
+  DataHist->SetMarkerStyle(20);
+  DataHist->SetLineWidth(2);
+  //DataHist->Draw("E_SAME");
+  legend->AddEntry(DataHist, "data", "l");
+
+  DataHist->Draw("E");
+  dataScale=DataHist->Integral();
+  }
+  
+  histVec.resize(rootFileNamesVec.size());
   for (unsigned int id = 0; id < rootFileNamesVec.size(); ++id){
     std::string currentFileName = rootFileNamesVec.at(id);
     TFile* currentTFile = new TFile(currentFileName.c_str());
     TH1F* currentHist = (TH1F*)currentTFile->Get(name.c_str());
-    currentHist->SetLineColor(kBlack + id);
+    if(id==0) dataScale=dataScale/currentHist->Integral();
+    currentHist->SetLineColor(kBlack + id +1);
     currentHist->SetLineWidth(2);
     histVec[id] = currentHist;
-    if (0 ==id) 
-        currentHist->Draw(); 
-    else 
+    currentHist->Scale(dataScale);
+    //if (0 ==id) 
+    //    currentHist->Draw(); 
+    //else 
         currentHist->Draw("same");
     currentHist->SetMaximum(1.05*(std::max(currentHist->GetMaximum(), histVec[0]->GetMaximum())));
     if (withLegend) 
-        legend->AddEntry(currentHist, legendNamesVec.at(id).c_str(), "l");
+      legend->AddEntry(currentHist, legendNamesVec.at(id).c_str(), "l");
   }
 
   if (withLegend) {
     legend->SetFillColor(0);
     legend->SetBorderSize(1);
     legend->Draw(); 
-  } 
+  }
+
+  if(withresid){
+    TH1F* hresid= (TH1F*) histVec.at(0)->Clone();
+    for(int i=0; i<histVec.at(0)->GetNbinsX();i++){ 
+          double chisq=0.;
+          if(histVec.at(0)->GetBinError(i)!=0)chisq=(histVec.at(0)->GetBinContent(i)-histVec.at(1)->GetBinContent(i))/sqrt(histVec.at(0)->GetBinError(i)*histVec.at(0)->GetBinError(i)+histVec.at(0)->GetBinError(i)*histVec.at(0)->GetBinError(i));
+          if(histVec.at(0)->GetBinError(i)==0) cout << i << endl;
+          if(histVec.at(0)->GetBinContent(i)-histVec.at(1)->GetBinContent(i)==0) cout << i << endl;
+          hresid->SetBinContent(i,chisq);
+	  hresid->SetBinError(i,0.);
+
+	  pad1->cd();
+    
+    hresid->SetMarkerStyle(20);
+    hresid->SetMarkerSize(1.);
+    TLine *line1 = new TLine(hresid->GetBinLowEdge(1),0,hresid->GetBinLowEdge(hresid->GetNbinsX()+1),0);
+    TLine *line2 = new TLine(hresid->GetBinLowEdge(1),-3,hresid->GetBinLowEdge(hresid->GetNbinsX()+1),-3);
+    TLine *line3 = new TLine(hresid->GetBinLowEdge(1),3.,hresid->GetBinLowEdge(hresid->GetNbinsX()+1),3.);
+    
+    line1->SetLineColor(kRed);  line1->SetLineWidth(2);
+    line2->SetLineColor(kRed);  line2->SetLineWidth(2);
+    line3->SetLineColor(kRed);  line3->SetLineWidth(2);
+    line1->SetLineStyle(7);
+        
+    hresid->SetTitle("");
+    hresid->Draw("Hist P");
+    hresid->GetYaxis()->SetRangeUser(-3.5,3.5);
+    hresid->GetYaxis()->SetTitle("Pull");
+    hresid->GetYaxis()->SetLabelSize(0.1); 
+    hresid->GetYaxis()->SetTitleSize(0.15);
+    hresid->GetYaxis()->SetTitleOffset(0.25);
+    line1->Draw();
+    line2->Draw();
+    line3->Draw();
+    }
+  }
+}
+
+void DrawContributions(std::string rootFileNames, std::string name, bool withLegend,
+		       std::string legendNames){
+  std::stringstream rootFileNamesStrStr(rootFileNames);
+  std::string firstRootFileName;
+  rootFileNamesStrStr >> firstRootFileName;
+  DrawContributions(firstRootFileName, rootFileNames, name, withLegend,legendNames);
+}
+
+
+  void DrawContrib2Hists(std::string rootFileName1, std::string rootFileName2, std::string name, bool withLegend, std::string legendNames){
+  std::string rootFileNames=rootFileName1+" "+rootFileName2;
+  withresid=true;
+  withData=false;
+  DrawContributions(rootFileNames, name, withLegend, legendNames);
 }
