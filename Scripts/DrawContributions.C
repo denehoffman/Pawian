@@ -44,6 +44,8 @@ void DrawContrib2Hists(std::string rootFileName1, std::string rootFileName2, std
 void DrawContributions(std::string rootFileNameData, std::string rootFileNames, std::string name, bool withLegend = false, 
                           std::string legendNames = "") {
  
+  int colors[9] = {861, 902, 800, 825, 869, 877, 814, 808, 862}; 
+
   std::vector<TH1F*> histVec;
   std::stringstream rootFileNamesStrStr(rootFileNames);
   vector<std::string> rootFileNamesVec;
@@ -69,6 +71,7 @@ void DrawContributions(std::string rootFileNameData, std::string rootFileNames, 
     }
   }
 
+
 TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);                    
   pad0->SetFillColor(0);
   TPad * pad1 = new TPad("pad1","This is pad1",0.0,1.,1.,0.85);                         
@@ -81,12 +84,31 @@ TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);
   }
 
   double dataScale=1.;
+  
+  vector<std::string> histoNamesVec;
+
+  std::stringstream histoNamesStrStr(name);
+  while (histoNamesStrStr >> currentStr) histoNamesVec.push_back(currentStr);
+
   if(withData){
-  string namedummy=name.substr(3);
-  namedummy="Data"+namedummy;
-  cout << namedummy << endl;
-  TFile* dataTFile_dummy=new TFile(rootFileNameData.c_str());
-  TH1F* DataHist=(TH1F*) dataTFile_dummy->Get(namedummy.c_str());
+
+  TH1F* DataHist;
+  TFile* dataTFile=new TFile(rootFileNameData.c_str());
+
+  int count = 0;
+
+  for(it=histoNamesVec.begin(); it!=histoNamesVec.end(); ++it){
+
+      string dummy=it->substr(3);
+      dummy="Data"+dummy;
+
+      if(count ==0) DataHist = (TH1F*) dataTFile->Get(dummy.c_str());
+          else{
+              DataHist->Add((TH1F*)dataTFile->Get(dummy.c_str()));
+          }
+       count++;
+  }
+
 
   DataHist->SetLineColor(kBlack);
   DataHist->SetMarkerColor(kBlack);
@@ -100,28 +122,63 @@ TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);
   }
   
   histVec.resize(rootFileNamesVec.size());
+  
+  TH1F* hFit; 
+
   for (unsigned int id = 0; id < rootFileNamesVec.size(); ++id){
     std::string currentFileName = rootFileNamesVec.at(id);
     TFile* currentTFile = new TFile(currentFileName.c_str());
-    TH1F* currentHist = (TH1F*)currentTFile->Get(name.c_str());
+    //TH1F* currentHist = (TH1F*)currentTFile->Get(name.c_str());
+    TH1F* currentHist;
+
+    int count =0;
+
+    for(it=histoNamesVec.begin(); it!=histoNamesVec.end(); ++it){
+
+        if(count ==0) currentHist = (TH1F*) currentTFile->Get(it->c_str());
+        else{
+            currentHist->Add((TH1F*)currentTFile->Get(it->c_str()));
+        }
+        count++;
+
+    }
+    
+    //histVec.push_back(currentHist);
+    
     if(id==0) dataScale=dataScale/currentHist->Integral();
-    currentHist->SetLineColor(kBlack + id +1);
+    if(rootFileNamesVec.size()<9){
+    currentHist->SetLineColor(colors[id]);
+    }else{
+        currentHist->SetLineColor(kBlack + id +1);
+    }
+    if (id==0){ 
+        currentHist->SetLineColor(kRed); 
+        currentHist->SetMarkerColor(kRed); 
+    }
     currentHist->SetLineWidth(2);
     histVec[id] = currentHist;
     currentHist->Scale(dataScale);
     //if (0 ==id) 
     //    currentHist->Draw(); 
     //else 
-        currentHist->Draw("same");
+    currentHist->Draw("E_HIST_SAME");
     currentHist->SetMaximum(1.05*(std::max(currentHist->GetMaximum(), histVec[0]->GetMaximum())));
     if (withLegend) 
       legend->AddEntry(currentHist, legendNamesVec.at(id).c_str(), "l");
   }
 
   if (withLegend) {
-    legend->SetFillColor(0);
-    legend->SetBorderSize(1);
-    legend->Draw(); 
+      legend->SetFillColor(0);
+      legend->SetLineColor(kGray);
+      legend->SetBorderSize(0);
+      legend->SetShadowColor(0);
+      legend->SetCornerRadius(0.05);
+      legend->Draw("ARC");
+      legend->SetFillColor(kWhite);
+
+      //legend->SetFillColor(0);
+      //legend->SetBorderSize(1);
+      //legend->Draw(); 
   }
 
   if(withresid){
