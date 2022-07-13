@@ -32,6 +32,16 @@
 TCanvas* contribCanvas = new TCanvas();
 bool withresid=false;
 bool withData=true;
+int binning=1;
+double x_min=0.;
+double x_max=0.;
+
+void setBinning(int theBinning){binning=theBinning;}
+
+void setXminXmax(double thexMin, double thexMax){
+    x_min=thexMin;
+    x_max=thexMax;
+  }
 
 void DrawContributions(std::string rootFileNameData, std::string rootFileNames, std::string name, bool withLegend = false, std::string legendNames = "");
 
@@ -108,8 +118,9 @@ TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);
           }
        count++;
   }
-
-
+  
+  DataHist->Rebin(binning);
+  if(x_min!=0. && x_max!=0.) DataHist->GetXaxis()->SetRangeUser(x_min, x_max);
   DataHist->SetLineColor(kBlack);
   DataHist->SetMarkerColor(kBlack);
   DataHist->SetMarkerStyle(20);
@@ -142,7 +153,11 @@ TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);
         count++;
 
     }
-    
+    currentHist->Rebin(binning);
+    if(x_min!=0.&&x_max!=0.){
+      currentHist->GetXaxis()->SetRangeUser(x_min, x_max);
+    }
+
     //histVec.push_back(currentHist);
     
     if(id==0) dataScale=dataScale/currentHist->Integral();
