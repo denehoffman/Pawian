@@ -94,18 +94,52 @@ double PwaCovMatrix::GetElement(std::string parameter1, std::string parameter2){
 
    it1 = _covMatrix.find(parameter1);
    if(it1 == _covMatrix.end()) {
-      return 0;
+     WarningMsg << "first element with name " << parameter1 << " not found!!!!" <<endmsg;
+     return 0.;
    }
 
    it2 = (*it1).second.find(parameter2);
    if(it2 == (*it1).second.end()) {
-      return 0;
+     WarningMsg << "second element with name " << parameter2 << " not found!!!!" <<endmsg;
+     return 0.;
    }
 
    return _covMatrix[parameter1][parameter2];
 }
 
+void PwaCovMatrix::SetElement(std::string parameter1, std::string parameter2, double val){
 
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+   std::map<std::string, double>::iterator it2;
+
+   it1 = _covMatrix.find(parameter1);
+   if(it1 == _covMatrix.end()) {
+     WarningMsg << "first element with name " << parameter1 << " not found!!!!" <<endmsg;
+     return;
+     //     exit(1);
+   }
+
+   it2 = (*it1).second.find(parameter2);
+   if(it2 == (*it1).second.end()) {
+      WarningMsg << "second element with name " << parameter1 << " not found!!!!" <<endmsg;
+     return;
+     //     exit(1);
+   }
+
+   _covMatrix[parameter1][parameter2]=val;
+   _covMatrix[parameter2][parameter1]=val;
+}
+
+void PwaCovMatrix::ResetAllElements(){
+std::map<std::string, std::map<std::string, double> >::iterator it1;
+  std::map<std::string, double>::iterator it2;
+
+  for(it1=_covMatrix.begin(); it1!=_covMatrix.end(); ++it1){
+    for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
+    SetElement(it1->first, it2->first, 0.);
+    }
+  }
+}
 
 bool PwaCovMatrix::DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix){
 
@@ -117,6 +151,59 @@ bool PwaCovMatrix::DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMin
 	 result = false;
       }
    }
+   return result;
+}
+
+bool PwaCovMatrix::DiagonalIsValid(){
+
+   bool result = true;
+
+   std::map<std::string, std::map<std::string, double> >::iterator it1;
+   std::map<std::string, double>::iterator it2;
+   
+   for(it1=_covMatrix.begin(); it1!=_covMatrix.end(); ++it1){
+     for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
+       if(it1->first == it2->first){
+	 if(it2->second < 0){
+	   WarningMsg << "Covariance element (" << it1->first << " " << it2->first << ")"
+		      << " = " << it2->second << " < 0" << endmsg;
+	   result = false;
+	 }
+	 else{
+	   InfoMsg << "Covariance element (" << it1->first << " " << it2->first << ")"
+		   << " = " << it2->second << endmsg;
+	 }
+       }
+     }
+   }
+   return result;
+}
+
+bool PwaCovMatrix::CheckCorrelationCoefficients(){
+  bool result = true;
+
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+   std::map<std::string, double>::iterator it2;
+   
+   for(it1=_covMatrix.begin(); it1!=_covMatrix.end(); ++it1){
+     for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
+       if(it1->first != it2->first){
+	 double denom=sqrt( GetElement(it1->first, it1->first) * GetElement(it2->first, it2->first));
+	 if(std::abs(denom)>1.e-18){
+	   double correlationCoeff = GetElement(it1->first, it2->first) / denom;
+	   
+	   if(fabs(correlationCoeff) > 0.999999){
+	     WarningMsg << "Correlation between parameter " << it1->first << " and " << it2->first << " = " << correlationCoeff << " > 0.999999" << endmsg;
+	     result = false;
+	   }
+	   else{
+	      InfoMsg << "Correlation between parameter " << it1->first << " and " << it2->first << " = " << correlationCoeff << endmsg;
+	   }
+	 }
+       }
+     }
+   }
+   
    return result;
 }
 

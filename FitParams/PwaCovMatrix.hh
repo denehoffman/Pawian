@@ -48,8 +48,13 @@ class PwaCovMatrix
    PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
 		const ROOT::Minuit2::MnUserParameters &theMinuitParameters);
    double GetElement(std::string parameter1, std::string parameter2);
+   void SetElement(std::string parameter1, std::string parameter2, double val);
+  void ResetAllElements();
+
    static bool DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix);
-  void printElements();
+  bool DiagonalIsValid();
+  bool CheckCorrelationCoefficients();
+   void printElements();
 
    template<class Archive>
    void serialize(Archive & ar, const unsigned int version){

@@ -117,6 +117,8 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
       std::string parName = paramNames.at(i);
       unsigned int index = _params->Index(parName);
       double parOrig = _params->Value(index);
+      stepSize=sqrt(_thePwaCovMatrix->GetElement(parName, parName))/100000.;
+      if (stepSize<1.e-10) stepSize=1.e-10;
       newFitParams->SetValue(index, parOrig + stepSize);
       CalcResidueAll(newFitParams, polePosStep, resPropTemp, resPropTemp, resPropStep);
       std::vector<ResidueProperties> resPropDerivative;

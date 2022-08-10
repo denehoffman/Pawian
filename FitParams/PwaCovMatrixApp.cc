@@ -69,6 +69,11 @@ int main(int __argc,char *__argv[]){
   boostInputArchive >> *thePwaCovMatrix;
   thePwaCovMatrix->printElements();
 
+  // bool isDiagonalValid=thePwaCovMatrix->DiagonalIsValid();
+  // InfoMsg << "isDiagonalValid: " << isDiagonalValid << endmsg;
+
+  bool checkCorrelationCoefficients=thePwaCovMatrix->CheckCorrelationCoefficients();
+  InfoMsg << "checkCorrelationCoefficients: " << checkCorrelationCoefficients << endmsg;
   return 1;
 }
 
