@@ -259,6 +259,10 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
     currentResPropReal.gammai=2.*abs(1./resultApproxReal);
     currentResPropImag.gammai=2.*abs(1./resultApproxImag);
     currentResPropAverage.gammai=2.*abs(1./resultApprox);    
+
+    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/(-2.*polePos.imag());
+    currentResPropImag.gammaiBRj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/(-2.*polePos.imag());
+    currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
     
     resPropReal.at(i)=currentResPropReal;
     resPropImag.at(i)=currentResPropImag;
@@ -286,7 +290,8 @@ void FVectorResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
 	    << setw(22) << "GammaProd*BR[%](i)" 
 	    << setw(10) << "Theta(av)"
 	    << setw(22) << "GammaProd*Gamma_i(av)"
-	    << setw(22) << "GammaProd*BR[%](av)"  << std::endl;
+	    << setw(22) << "GammaProd*BR[%](av)"
+	    << std::endl;
   
   for (unsigned int i=0; i<resPropReal.size(); ++i){
     theStream << setw(7) << i  
@@ -300,9 +305,8 @@ void FVectorResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
 	      << setw(22) << resPropAv.at(i).gammai*resPropAv.at(i).gammai 
 	      << " +/- "
 	      << setw(8) << 2.*resPropAv.at(i).gammai*resPropAv.at(i).errGammai 
-	      << setw(22) << (resPropAv.at(i).gammai*resPropAv.at(i).gammai)/(-2.*polePos.imag())
-	      <<  " +/- " 
-	      << setw(8) << "0"
+              << setw(22) << resPropAv.at(i).gammaiBRj <<  " +/- "                              
+	      << setw(8) << resPropAv.at(i).errGammaiBRj 
 	      << std::endl;
     gammaTotalr+=resPropReal.at(i).gammai*resPropReal.at(i).gammai;
     gammaTotali+=resPropImag.at(i).gammai*resPropImag.at(i).gammai;
