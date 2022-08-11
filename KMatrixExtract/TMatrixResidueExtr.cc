@@ -150,7 +150,7 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammai );
 	  resPropError.at(index).gammaigammaj += (derivatives[name1].at(index).gammaigammaj ) * 
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaigammaj );
-	  resPropError.at(index).gammaiBRj += (derivatives[name1].at(index).gammai ) *
+	  resPropError.at(index).gammaiBRj += (derivatives[name1].at(index).gammaiBRj ) *
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaiBRj );
         }
       }
@@ -301,7 +301,7 @@ void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
 	BRTotalr+=resPropReal.at(i).gammaiBRj;
 	BRTotali+=resPropImag.at(i).gammaiBRj;
 	BRTotalav+=resPropAv.at(i).gammaiBRj;
-	BRTotalavError+=resPropAv.at(i).errGammaiBRj;	
+	BRTotalavError+=resPropAv.at(i).errGammaiBRj*resPropAv.at(i).errGammaiBRj;	
   }
 
   gammaTotalavError=std::sqrt(gammaTotalavError);
