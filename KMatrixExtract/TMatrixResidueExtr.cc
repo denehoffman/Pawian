@@ -156,11 +156,11 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
       }
     }
     for (unsigned int index=0;index!=resPropAverage.size();index++){
-      resPropAverage.at(index).errAbsR = sqrt(resPropError.at(index).absR);
-      resPropAverage.at(index).errTheta = sqrt(resPropError.at(index).theta);
-      resPropAverage.at(index).errGammai = sqrt(resPropError.at(index).gammai);
-      resPropAverage.at(index).errGammaiGammaj = sqrt(resPropError.at(index).gammaigammaj);
-      resPropAverage.at(index).errGammaiBRj = sqrt(resPropError.at(index).gammaiBRj);
+      resPropAverage.at(index).errAbsR = sqrt(std::abs(resPropError.at(index).absR));
+      resPropAverage.at(index).errTheta = sqrt(std::abs(resPropError.at(index).theta));
+      resPropAverage.at(index).errGammai = sqrt(std::abs(resPropError.at(index).gammai));
+      resPropAverage.at(index).errGammaiGammaj = sqrt(std::abs(resPropError.at(index).gammaigammaj));
+      resPropAverage.at(index).errGammaiBRj = sqrt(std::abs(resPropError.at(index).gammaiBRj));
     }
   }
 }

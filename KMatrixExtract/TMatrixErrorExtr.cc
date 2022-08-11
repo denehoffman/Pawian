@@ -130,7 +130,9 @@ void TMatrixErrorExtr::CalcWithErrrors(){
     unsigned int index = _params->Index(parName);
     double parOrig = _params->Value(index);
 
-    stepSize=sqrt(_thePwaCovMatrix->GetElement(parName, parName))/500.;    
+    stepSize=sqrt(_thePwaCovMatrix->GetElement(parName, parName))/500.;
+    if(stepSize<1.e-10) stepSize=1.e-10;
+    
     newFitParams->SetValue(index, parOrig + stepSize);
     
     std::complex<double> resultDelta = CalcMassWidth(newFitParams);
