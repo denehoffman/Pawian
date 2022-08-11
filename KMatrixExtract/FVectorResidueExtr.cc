@@ -331,7 +331,7 @@ void FVectorResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
 	gammaProdAvr+=resPropReal.at(i).gammai;
 	gammaProdAvi+=resPropImag.at(i).gammai;
 	gammaProdAvav+=resPropAv.at(i).gammai;
-	gammaProdAvavError+=resPropAv.at(i).errGammaiBRj*resPropAv.at(i).errGammai;
+	gammaProdAvavError+=resPropAv.at(i).errGammai*resPropAv.at(i).errGammai;
   }
 
   gammaigammajTotalavError = std::sqrt(gammaigammajTotalavError);
