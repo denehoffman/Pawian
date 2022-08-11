@@ -173,6 +173,14 @@ void TMatrixResiduePathExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters>
         currentResPropEllipse.gammai=2.*abs(1./result_Ellipse);
         currentResPropAverage.gammai=2.*abs(1./resultApprox);
 
+	currentResPropCircle.gammaigammaj=2.*abs(1./result_Circle)*2.*abs(1./result_Circle);
+	currentResPropEllipse.gammaigammaj=2.*abs(1./result_Ellipse)*2.*abs(1./result_Ellipse);
+	currentResPropAverage.gammaigammaj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox);
+    
+	currentResPropCircle.gammaiBRj=2.*abs(1./result_Circle)/(-2.*polePos.imag());
+	currentResPropEllipse.gammaiBRj=2.*abs(1./result_Ellipse)/(-2.*polePos.imag());
+	currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)/(-2.*polePos.imag());
+	
         resPropCircle.at(i)=currentResPropCircle;
         resPropEllipse.at(i)=currentResPropEllipse;
         resPropAverage.at(i)=currentResPropAverage;

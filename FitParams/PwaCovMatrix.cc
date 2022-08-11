@@ -94,13 +94,13 @@ double PwaCovMatrix::GetElement(std::string parameter1, std::string parameter2){
 
    it1 = _covMatrix.find(parameter1);
    if(it1 == _covMatrix.end()) {
-     WarningMsg << "first element with name " << parameter1 << " not found!!!!" <<endmsg;
+     //     WarningMsg << "first element with name " << parameter1 << " not found!!!!" <<endmsg;
      return 0.;
    }
 
    it2 = (*it1).second.find(parameter2);
    if(it2 == (*it1).second.end()) {
-     WarningMsg << "second element with name " << parameter2 << " not found!!!!" <<endmsg;
+     //     WarningMsg << "second element with name " << parameter2 << " not found!!!!" <<endmsg;
      return 0.;
    }
 
