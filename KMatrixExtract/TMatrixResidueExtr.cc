@@ -117,7 +117,7 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
       std::string parName = paramNames.at(i);
       unsigned int index = _params->Index(parName);
       double parOrig = _params->Value(index);
-      stepSize=sqrt(_thePwaCovMatrix->GetElement(parName, parName))/100000.;
+      stepSize=sqrt(_thePwaCovMatrix->GetElement(parName, parName))/500.;
       if (stepSize<1.e-10) stepSize=1.e-10;
       newFitParams->SetValue(index, parOrig + stepSize);
       CalcResidueAll(newFitParams, polePosStep, resPropTemp, resPropTemp, resPropStep);
@@ -128,9 +128,8 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
         resPropDerivative.at(i).theta = (fmod((resPropStep.at(i).theta - 
                                                resPropAverage.at(i).theta)+5*M_PI, 2*M_PI) - M_PI)/stepSize;
         resPropDerivative.at(i).gammai = (resPropStep.at(i).gammai - resPropAverage.at(i).gammai)/stepSize;
+	resPropDerivative.at(i).gammaigammaj = (resPropStep.at(i).gammaigammaj - resPropAverage.at(i).gammaigammaj)/stepSize;
 	resPropDerivative.at(i).gammaiBRj = (resPropStep.at(i).gammaiBRj - resPropAverage.at(i).gammaiBRj)/stepSize;
-
-	resPropDerivative.at(i).gammaProd = (resPropStep.at(i).gammaProd - resPropAverage.at(i).gammaProd)/stepSize;
       }
       derivatives.insert(make_pair(parName, resPropDerivative));
       newFitParams->SetValue(index, parOrig);
@@ -149,10 +148,10 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).theta );
           resPropError.at(index).gammai += (derivatives[name1].at(index).gammai ) * 
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammai );
+	  resPropError.at(index).gammaigammaj += (derivatives[name1].at(index).gammaigammaj ) * 
+            _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaigammaj );
 	  resPropError.at(index).gammaiBRj += (derivatives[name1].at(index).gammai ) *
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaiBRj );
-	  resPropError.at(index).gammaProd += (derivatives[name1].at(index).gammaProd ) *
-            _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaProd );
         }
       }
     }
@@ -160,8 +159,8 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
       resPropAverage.at(index).errAbsR = sqrt(resPropError.at(index).absR);
       resPropAverage.at(index).errTheta = sqrt(resPropError.at(index).theta);
       resPropAverage.at(index).errGammai = sqrt(resPropError.at(index).gammai);
+      resPropAverage.at(index).errGammaiGammaj = sqrt(resPropError.at(index).gammaigammaj);
       resPropAverage.at(index).errGammaiBRj = sqrt(resPropError.at(index).gammaiBRj);
-      resPropAverage.at(index).errGammaProd = sqrt(resPropError.at(index).gammaProd);
     }
   }
 }
@@ -238,9 +237,13 @@ void TMatrixResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
     currentResPropImag.gammai=2.*abs(1./resultApproxImag);
     currentResPropAverage.gammai=2.*abs(1./resultApprox);    
 
-    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/(-2.*polePos.imag());
-    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/(-2.*polePos.imag());
-    currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
+    currentResPropReal.gammaigammaj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal);
+    currentResPropImag.gammaigammaj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag);
+    currentResPropAverage.gammaigammaj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox);
+    
+    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)/(-2.*polePos.imag());
+    currentResPropImag.gammaiBRj=2.*abs(1./resultApproxImag)/(-2.*polePos.imag());
+    currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)/(-2.*polePos.imag());
 
       
     resPropReal.at(i)=currentResPropReal;
@@ -270,35 +273,48 @@ void TMatrixResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
   double gammaTotali=0.;
   double gammaTotalav=0.;
   double gammaTotalavError=0.;
+  double BRTotalr=0.;
+  double BRTotali=0.;
+  double BRTotalav=0.;
+  double BRTotalavError=0.;
+
   theStream << "m - i/2. Gamma = " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << std::endl << std::endl;
-  theStream << setw(7) << "channel" 
-	    << setw(12) << "Theta(r)"  << setw(12) << "Gamma_i(r)" << setw(12) << "BR[%](r)"
-	    << setw(12) << "Theta(i)"  << setw(12) << "Gamma_i(i)" << setw(12) << "BR[%](i)" 
-	    << setw(12) << "Theta(av)" << setw(29) << "Gamma_i(av)" << setw(29) << "BR[%](av)"  << std::endl;
-  
   for (unsigned int i=0; i<resPropReal.size(); ++i){
-    theStream << setw(7) << i  
-	      << setw(12) << resPropReal.at(i).theta*180./M_PI << setw(12) << resPropReal.at(i).gammai 
-	      << setw(12) << -resPropReal.at(i).gammai/(2.*polePos.imag())
-	      << setw(12) << resPropImag.at(i).theta*180./M_PI
-	      << setw(12) << resPropImag.at(i).gammai 
-	      << setw(12) << -resPropImag.at(i).gammai/(2.*polePos.imag())
-	      << setw(12) << resPropAv.at(i).theta*180./M_PI
-	      << setw(12) << resPropAv.at(i).gammai 
-	      << " +/- " << setw(12) << resPropAv.at(i).errGammai 
-    	      << setw(12) << -resPropAv.at(i).gammai/(2.*polePos.imag()) <<  " +/- " 
-     	      << setw(12) << -resPropAv.at(i).errGammai/(2.*polePos.imag())
-	      << std::endl;
-    gammaTotalr+=resPropReal.at(i).gammai;
-    gammaTotali+=resPropImag.at(i).gammai;
-    gammaTotalav+=resPropAv.at(i).gammai; 
-    gammaTotalavError+=resPropAv.at(i).errGammai*resPropAv.at(i).errGammai; 
-  }  
-  theStream << setw(7) << "all" 
-	    << setw(36) << -gammaTotalr/(2.*polePos.imag())
-	    << setw(36) << -gammaTotali/(2.*polePos.imag())
-	    << setw(53) << -gammaTotalav/(2.*polePos.imag()) << " +/- " 
-	    << setw(12) << -sqrt(gammaTotalavError)/(2.*polePos.imag()) 
+    theStream << "\nchannel :              " << i 
+              << "\nTheta_r :              "  << resPropReal.at(i).theta*180./M_PI 
+	      << "\nTheta_i :              "  << resPropImag.at(i).theta*180./M_PI 
+	      << "\nTheta_av:              "  << resPropAv.at(i).theta*180./M_PI 
+              << "\nGamma_i(r) : " << resPropReal.at(i).gammai
+              << "\nGamma_i(i) : " << resPropImag.at(i).gammai
+      	      << "\nGamma_i(av): " << resPropAv.at(i).gammai
+	      << " +/- " << resPropAv.at(i).errGammai
+	      << "\nBR[%]_i(r)   : " << resPropReal.at(i).gammaiBRj 
+	      << "\nBR[%]_i(i)   : " << resPropImag.at(i).gammaiBRj 
+	      << "\nBR[%]_i(av)   : " << resPropAv.at(i).gammaiBRj
+	      <<  " +/- " << resPropAv.at(i).errGammaiBRj
+              << std::endl;
+
+        gammaTotalr+=resPropReal.at(i).gammai;
+	gammaTotali+=resPropImag.at(i).gammai;
+	gammaTotalav+=resPropAv.at(i).gammai;
+	gammaTotalavError+=resPropAv.at(i).errGammai*resPropAv.at(i).errGammai;
+	BRTotalr+=resPropReal.at(i).gammaiBRj;
+	BRTotali+=resPropImag.at(i).gammaiBRj;
+	BRTotalav+=resPropAv.at(i).gammaiBRj;
+	BRTotalavError+=resPropAv.at(i).errGammaiBRj;	
+  }
+
+  gammaTotalavError=std::sqrt(gammaTotalavError);
+  BRTotalavError=std::sqrt(BRTotalavError);  
+  theStream << "\nall" 
+	    << "\nGamma_total(r): " << gammaTotalr
+	    << "\nGamma_total(i): " << gammaTotali
+	    << "\nGamma_total   : " << gammaTotalav
+	    << " +/- " << gammaTotalavError
+	    << "\n\nBR_total(r): " << BRTotalr
+	    << "\nBR_total(i): " << BRTotali
+	    << "\nBR_total   : " << BRTotalav
+	    << " +/- " << BRTotalavError    
 	    << std::endl;
 }
 

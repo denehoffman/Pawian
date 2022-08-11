@@ -44,13 +44,13 @@ struct ResidueProperties {
   double absR;
   double theta;
   double gammai;
+  double gammaigammaj;
   double gammaiBRj;
-  double gammaProd;
   double errAbsR;
   double errTheta;
   double errGammai;
+  double errGammaiGammaj;
   double errGammaiBRj;
-  double errGammaProd;
 };
 
 class TMatrixResidueExtr : public TMatrixErrorExtr {

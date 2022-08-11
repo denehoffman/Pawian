@@ -264,17 +264,17 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
     currentResPropImag.theta=atan2(imag(1./resultApproxImag),real(1./resultApproxImag));
     currentResPropAverage.theta=atan2(imag(1./resultApprox),real(1./resultApprox));
     
-    currentResPropReal.gammai=2.*abs(1./resultApproxReal);
-    currentResPropImag.gammai=2.*abs(1./resultApproxImag);
-    currentResPropAverage.gammai=2.*abs(1./resultApprox);    
+    currentResPropReal.gammaigammaj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal);
+    currentResPropImag.gammaigammaj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag);
+    currentResPropAverage.gammaigammaj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox);    
 
     currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/(-2.*polePos.imag());
     currentResPropImag.gammaiBRj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/(-2.*polePos.imag());
     currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
 
-    currentResPropReal.gammaProd=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/resPropAverageTMat.at(i).gammai;
-    currentResPropImag.gammaProd=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/resPropAverageTMat.at(i).gammai;
-    currentResPropAverage.gammaProd=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/resPropAverageTMat.at(i).gammai;
+    currentResPropReal.gammai=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/resPropAverageTMat.at(i).gammai;
+    currentResPropImag.gammai=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/resPropAverageTMat.at(i).gammai;
+    currentResPropAverage.gammai=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/resPropAverageTMat.at(i).gammai;
 
     
     resPropReal.at(i)=currentResPropReal;
@@ -288,90 +288,71 @@ void FVectorResidueExtr::dumpResult(std::complex<double> polePos, std::vector<Re
                                     std::vector<ResidueProperties> resPropAv){
   std::string oFileName="residuesFVector_"+_extractionMethod+".out";
   std::ofstream theStream(oFileName);
-  double gammaTotalr=0.;
-  double gammaTotali=0.;
-  double gammaTotalav=0.;
-  double gammaTotalavError=0.;
+  double gammaigammajTotalr=0.;
+  double gammaigammajTotali=0.;
+  double gammaigammajTotalav=0.;
+  double gammaigammajTotalavError=0.;
+  double gammaiBRjTotalr=0.;
+  double gammaiBRjTotali=0.;
+  double gammaiBRjTotalav=0.;
+  double gammaiBRjTotalavError=0.;
+  double gammaProdAvr=0.;
+  double gammaProdAvi=0.;
+  double gammaProdAvav=0.;
+  double gammaProdAvavError=0.;
   theStream << "m - i/2. Gamma = " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << std::endl << std::endl;
   for (unsigned int i=0; i<resPropReal.size(); ++i){
-    theStream << "\nchannel :              " << i << std::endl
+    theStream << "\nchannel :              " << i 
               << "\nTheta_r :              "  << resPropReal.at(i).theta*180./M_PI 
 	      << "\nTheta_i :              "  << resPropImag.at(i).theta*180./M_PI 
 	      << "\nTheta_av:              "  << resPropAv.at(i).theta*180./M_PI 
-              << "\nGammaProd*Gamma_i(r) : " << resPropReal.at(i).gammai*resPropReal.at(i).gammai
-              << "\nGammaProd*Gamma_i(i) : " << resPropImag.at(i).gammai*resPropImag.at(i).gammai
-      	      << "\nGammaProd*Gamma_i(av): " << resPropAv.at(i).gammai*resPropAv.at(i).gammai
-	      << " +/- " << 2.*resPropAv.at(i).gammai*resPropAv.at(i).errGammai
-	      << "\nGammaProd*BR[%]_i(r)   : " << resPropReal.at(i).gammaiBRj
-	      << "\nGammaProd*BR[%]_i(i)   : " << resPropImag.at(i).gammaiBRj
+              << "\nGammaProd*Gamma_i(r) : " << resPropReal.at(i).gammaigammaj
+              << "\nGammaProd*Gamma_i(i) : " << resPropImag.at(i).gammaigammaj
+      	      << "\nGammaProd*Gamma_i(av): " << resPropAv.at(i).gammaigammaj
+	      << " +/- " << resPropAv.at(i).errGammaiGammaj
+	      << "\nGammaProd*BR[%]_i(r)   : " << resPropReal.at(i).gammaiBRj 
+	      << "\nGammaProd*BR[%]_i(i)   : " << resPropImag.at(i).gammaiBRj 
 	      << "\nGammaProd*BR[%]_i(av)   : " << resPropAv.at(i).gammaiBRj
 	      <<  " +/- " << resPropAv.at(i).errGammaiBRj
-	      <<"\nGammaProd(r)             : " << resPropReal.at(i).gammaProd
-              <<"\nGammaProd(i)             : "	<< resPropImag.at(i).gammaProd
-      	      <<"\nGammaProd(av)            : " << resPropAv.at(i).gammaProd
-	      <<  " +/- " << resPropAv.at(i).errGammaProd      
+	      <<"\nGammaProd(r)             : " << resPropReal.at(i).gammai
+              <<"\nGammaProd(i)             : "	<< resPropImag.at(i).gammai
+      	      <<"\nGammaProd(av)            : " << resPropAv.at(i).gammai
+	      <<  " +/- " << resPropAv.at(i).errGammai      
               << std::endl;
 
-        gammaTotalr+=resPropReal.at(i).gammai*resPropReal.at(i).gammai;
-    gammaTotali+=resPropImag.at(i).gammai*resPropImag.at(i).gammai;
-    gammaTotalav+=resPropAv.at(i).gammai*resPropAv.at(i).gammai;
+        gammaigammajTotalr+=resPropReal.at(i).gammaigammaj;
+	gammaigammajTotali+=resPropImag.at(i).gammaigammaj;
+	gammaigammajTotalav+=resPropAv.at(i).gammaigammaj;
+	gammaigammajTotalavError+=resPropAv.at(i).errGammaiGammaj*resPropAv.at(i).errGammaiGammaj;
+	gammaiBRjTotalr+=resPropReal.at(i).gammaiBRj;
+	gammaiBRjTotali+=resPropImag.at(i).gammaiBRj;
+	gammaiBRjTotalav+=resPropAv.at(i).gammaiBRj;
+	gammaiBRjTotalavError+=resPropAv.at(i).errGammaiBRj*resPropAv.at(i).errGammaiBRj;
+	gammaProdAvr+=resPropReal.at(i).gammai;
+	gammaProdAvi+=resPropImag.at(i).gammai;
+	gammaProdAvav+=resPropAv.at(i).gammai;
+	gammaProdAvavError+=resPropAv.at(i).errGammaiBRj*resPropAv.at(i).errGammai;
   }
-    theStream << "\nall"
-            << "\ngammaTotalr: " << gammaTotalr
-            << "\ngammaTotalr: " << gammaTotali
-            << "\ngammaTotalav: " << gammaTotalav << " +/- "
-            << "\ngammaTotalError: " << gammaTotalavError
+
+  gammaigammajTotalavError = std::sqrt(gammaigammajTotalavError);
+  gammaiBRjTotalavError = std::sqrt(gammaiBRjTotalavError);
+  gammaProdAvr /= resPropReal.size();    
+  gammaProdAvi /= resPropReal.size();  
+  gammaProdAvav /= resPropReal.size();
+  gammaProdAvavError = std::sqrt(gammaProdAvavError)/resPropReal.size();
+  theStream << "\nall"
+            << "\ngammaigammajTotalr: " << gammaigammajTotalr
+            << "\ngammaigammajTotalr: " << gammaigammajTotali
+            << "\ngammaigammajTotalav: " << gammaigammajTotalav
+	    << " +/- " << gammaigammajTotalavError
+	    << "\n\ngammaiBRjTotalr: " << gammaiBRjTotalr
+            << "\ngammaiBRjTotalr: " << gammaiBRjTotali
+            << "\ngammaiBRjTotalav: " << gammaiBRjTotalav
+	    << " +/- " << gammaiBRjTotalavError
+	    << "\n\ngammaProdAvr: " << gammaProdAvr
+            << "\ngammaProdAvr: " << gammaProdAvi
+            << "\ngammaProdAvav: " << gammaProdAvav
+	    << " +/- " << gammaProdAvavError
             << std::endl;
 }
 
-//void FVectorResidueExtr::dumpResult(std::complex<double> polePos, std::vector<ResidueProperties> resPropReal, 
-//				    std::vector<ResidueProperties> resPropImag, 
-//				    std::vector<ResidueProperties> resPropAv){
-//  std::string oFileName="residuesFVector_"+_extractionMethod+".out";
-//  std::ofstream theStream(oFileName);
-//  double gammaTotalr=0.;
-//  double gammaTotali=0.;
-//  double gammaTotalav=0.;
-//  double gammaTotalavError=0.;
-//  theStream << "m - i/2. Gamma = " << polePos.real()  << " - i/2. " << -2.*polePos.imag() << std::endl << std::endl;
-//  theStream << setw(7) << "channel" 
-//	    << setw(10) << "Theta(r)"
-//	    << setw(22) << "GammaProd*Gamma_i(r)"
-//	    << setw(22) << "GammaProd*BR[%](r)"
-//	    << setw(10) << "Theta(i)"
-//	    << setw(22) << "GammaProd*Gamma_i(i)"
-//	    << setw(22) << "GammaProd*BR[%](i)" 
-//	    << setw(10) << "Theta(av)"
-//	    << setw(22) << "GammaProd*Gamma_i(av)"
-//	    << setw(22) << "GammaProd*BR[%](av)"
-//	    << std::endl;
-  
-//  for (unsigned int i=0; i<resPropReal.size(); ++i){
-//    theStream << setw(7) << i  
-//	      << setw(10) << resPropReal.at(i).theta*180./M_PI
-//	      << setw(22) << resPropReal.at(i).gammai*resPropReal.at(i).gammai 
-//	      << setw(22) << (resPropReal.at(i).gammai*resPropReal.at(i).gammai)/(-2.*polePos.imag())
-//	      << setw(10) << resPropImag.at(i).theta*180./M_PI
-//	      << setw(22) << resPropImag.at(i).gammai*resPropImag.at(i).gammai 
-//	      << setw(22) << (resPropImag.at(i).gammai*resPropImag.at(i).gammai )/(-2.*polePos.imag())
-//	      << setw(10) << resPropAv.at(i).theta*180./M_PI
-//	      << setw(22) << resPropAv.at(i).gammai*resPropAv.at(i).gammai 
-//	      << " +/- "
-//	      << setw(8) << 2.*resPropAv.at(i).gammai*resPropAv.at(i).errGammai 
-//              << setw(22) << resPropAv.at(i).gammaiBRj <<  " +/- "                              
-//	      << setw(8) << resPropAv.at(i).errGammaiBRj
-//                    << setw(22) << resPropAv.at(i).gammaProd <<  " +/- "
-//              << setw(8) << resPropAv.at(i).errGammaProd
-//	      << std::endl;
-//    gammaTotalr+=resPropReal.at(i).gammai*resPropReal.at(i).gammai;
-//    gammaTotali+=resPropImag.at(i).gammai*resPropImag.at(i).gammai;
-//    gammaTotalav+=resPropAv.at(i).gammai*resPropAv.at(i).gammai;
-//  }
-
-//  theStream << setw(7) << "all" 
-//	    << setw(36) << gammaTotalr
-//	    << setw(36) << gammaTotali
-//	    << setw(53) << gammaTotalav << " +/- " 
-//	    << setw(12) << gammaTotalavError 
-//	    << std::endl;
-//}
