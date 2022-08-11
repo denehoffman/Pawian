@@ -129,6 +129,8 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
                                                resPropAverage.at(i).theta)+5*M_PI, 2*M_PI) - M_PI)/stepSize;
         resPropDerivative.at(i).gammai = (resPropStep.at(i).gammai - resPropAverage.at(i).gammai)/stepSize;
 	resPropDerivative.at(i).gammaiBRj = (resPropStep.at(i).gammaiBRj - resPropAverage.at(i).gammaiBRj)/stepSize;
+
+	resPropDerivative.at(i).gammaProd = (resPropStep.at(i).gammaProd - resPropAverage.at(i).gammaProd)/stepSize;
       }
       derivatives.insert(make_pair(parName, resPropDerivative));
       newFitParams->SetValue(index, parOrig);
@@ -149,6 +151,8 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammai );
 	  resPropError.at(index).gammaiBRj += (derivatives[name1].at(index).gammai ) *
             _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaiBRj );
+	  resPropError.at(index).gammaProd += (derivatives[name1].at(index).gammaProd ) *
+            _thePwaCovMatrix->GetElement(name1, name2) * (derivatives[name2].at(index).gammaProd );
         }
       }
     }
@@ -157,6 +161,7 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
       resPropAverage.at(index).errTheta = sqrt(resPropError.at(index).theta);
       resPropAverage.at(index).errGammai = sqrt(resPropError.at(index).gammai);
       resPropAverage.at(index).errGammaiBRj = sqrt(resPropError.at(index).gammaiBRj);
+      resPropAverage.at(index).errGammaProd = sqrt(resPropError.at(index).gammaProd);
     }
   }
 }
