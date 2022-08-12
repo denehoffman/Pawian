@@ -196,7 +196,7 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
   const double epsilon=0.00001;
   updateFMatDy(theFitParams);
   polePos = CalcMassWidth(theFitParams);
-
+  
   std::complex<double> polePosEpsilonImagp = polePos + std::complex<double>(0., epsilon);
   std::complex<double> polePosEpsilonImagm = polePos + std::complex<double>(0., -epsilon);
   std::complex<double> polePosEpsilonRealp = polePos + std::complex<double>(epsilon, 0.);

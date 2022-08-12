@@ -101,6 +101,11 @@ void FVectorResiduePathExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters>
   std::complex<double> polePosTMat;
   TMatrixResidueExtr::CalcResidueAll(theFitParams, polePosTMat, resPropRealTMat, resPropImagTMat, resPropAverageTMat);
 
+  double sumPartialWidths=0.;
+  for(unsigned int i=0 ; i<resPropImagTMat.size(); ++i) {
+    sumPartialWidths+=resPropAverageTMat.at(i).gammai;
+  }
+
   
     resPropCircle.resize(_phpVecs.size());
     resPropEllipse.resize(_phpVecs.size());
@@ -181,10 +186,12 @@ void FVectorResiduePathExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters>
 	currentResPropEllipse.gammaigammaj=2.*abs(1./result_Ellipse)*2.*abs(1./result_Ellipse);
 	currentResPropAverage.gammaigammaj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox);    
 
-	currentResPropCircle.gammaiBRj=2.*abs(1./result_Circle)*2.*abs(1./result_Circle)/(-2.*polePos.imag());
-	currentResPropEllipse.gammaiBRj=2.*abs(1./result_Ellipse)*2.*abs(1./result_Ellipse)/(-2.*polePos.imag());
-	currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
-
+	//	currentResPropCircle.gammaiBRj=2.*abs(1./result_Circle)*2.*abs(1./result_Circle)/(-2.*polePos.imag());
+	//	currentResPropEllipse.gammaiBRj=2.*abs(1./result_Ellipse)*2.*abs(1./result_Ellipse)/(-2.*polePos.imag());
+	//	currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
+        currentResPropCircle.gammaiBRj=2.*abs(1./result_Circle)*2.*abs(1./result_Circle)/sumPartialWidths;
+        currentResPropEllipse.gammaiBRj=2.*abs(1./result_Ellipse)*2.*abs(1./result_Ellipse)/sumPartialWidths;
+        currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/sumPartialWidths;
 	
         currentResPropCircle.gammai=2.*abs(1./result_Circle)*2.*abs(1./result_Circle)/resPropAverageTMat.at(i).gammai;
         currentResPropEllipse.gammai=2.*abs(1./result_Ellipse)*2.*abs(1./result_Ellipse)/resPropAverageTMat.at(i).gammai;
