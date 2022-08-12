@@ -180,6 +180,10 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
   std::complex<double> polePosTMat;
   TMatrixResidueExtr::CalcResidueAll(theFitParams, polePosTMat, resPropRealTMat, resPropImagTMat, resPropAverageTMat);
 
+  double sumPartialWidths=0.;
+  for(unsigned int i=0 ; i<resPropImagTMat.size(); ++i) {
+    sumPartialWidths+=resPropAverageTMat.at(i).gammai;
+  }
   
   //  std::vector<ResidueProperties> resPropReal;
   resPropReal.resize(_phpVecs.size());
@@ -268,13 +272,16 @@ void FVectorResidueExtr::CalcResidueAll(std::shared_ptr<AbsPawianParameters> the
     currentResPropImag.gammaigammaj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag);
     currentResPropAverage.gammaigammaj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox);    
 
-    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/(-2.*polePos.imag());
-    currentResPropImag.gammaiBRj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/(-2.*polePos.imag());
-    currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
-
-    currentResPropReal.gammai=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/resPropAverageTMat.at(i).gammai;
-    currentResPropImag.gammai=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/resPropAverageTMat.at(i).gammai;
-    currentResPropAverage.gammai=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/resPropAverageTMat.at(i).gammai;
+    //    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/(-2.*polePos.imag());
+    //    currentResPropImag.gammaiBRj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/(-2.*polePos.imag());
+    //    currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/(-2.*polePos.imag());
+    currentResPropReal.gammaiBRj=2.*abs(1./resultApproxReal)*2.*abs(1./resultApproxReal)/sumPartialWidths;
+    currentResPropImag.gammaiBRj=2.*abs(1./resultApproxImag)*2.*abs(1./resultApproxImag)/sumPartialWidths;
+    currentResPropAverage.gammaiBRj=2.*abs(1./resultApprox)*2.*abs(1./resultApprox)/sumPartialWidths;
+    
+  currentResPropReal.gammai=2.*std::abs(1./resultApproxReal)*2.*std::abs(1./resultApproxReal)/resPropAverageTMat.at(i).gammai;
+  currentResPropImag.gammai=2.*std::abs(1./resultApproxImag)*2.*std::abs(1./resultApproxImag)/resPropAverageTMat.at(i).gammai;
+  currentResPropAverage.gammai=2.*std::abs(1./resultApprox)*2.*std::abs(1./resultApprox)/resPropAverageTMat.at(i).gammai;
 
     
     resPropReal.at(i)=currentResPropReal;
