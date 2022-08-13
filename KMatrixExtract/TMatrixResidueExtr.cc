@@ -113,8 +113,8 @@ void TMatrixResidueExtr::CalculationError(std::vector<std::string> paramNames, s
     std::complex<double> polePosStep;
     std::map< std::string, std::vector<ResidueProperties> > derivatives;
 
-    for(unsigned int i=0; i<nParams; i++){
-      std::string parName = paramNames.at(i);
+    for(unsigned int k=0; k<nParams; k++){
+      std::string parName = paramNames.at(k);
       unsigned int index = _params->Index(parName);
       double parOrig = _params->Value(index);
       stepSize=sqrt(_thePwaCovMatrix->GetElement(parName, parName))/500.;
