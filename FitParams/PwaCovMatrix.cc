@@ -38,6 +38,20 @@ PwaCovMatrix::PwaCovMatrix(){
 }
 
 
+PwaCovMatrix::PwaCovMatrix(std::map<std::string, std::map<std::string, double> >& theMaps){
+  _n=theMaps.size();
+  std::map<std::string, std::map<std::string, double> >::iterator it1;
+  std::map<std::string, double>::iterator it2;
+  for(it1=theMaps.begin(); it1!=theMaps.end(); ++it1){
+    for(it2 = it1->second.begin(); it2 != it1->second.end(); ++it2){
+      _covMatrix[it1->first][it2->first]=it2->second;
+      if(it2->first != it1->first) _covMatrix[it2->first][it1->first]=it2->second;
+    }
+  }
+  DiagonalIsValid();
+  CheckCorrelationCoefficients();
+}
+
 
 PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
 			   const ROOT::Minuit2::MnUserParameters &theMinuitParameters)

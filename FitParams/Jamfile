@@ -1,7 +1,7 @@
 alias install : install-lib ;
 explicit install ;
 
-install install-bin : StreamerTestApp PwaCovMatrixApp ChangeCovMatrixApp
+install install-bin : StreamerTestApp PwaCovMatrixApp ChangeCovMatrixApp CreateCovMatrixApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -37,6 +37,13 @@ exe PwaCovMatrixApp : PwaCovMatrixApp.cc FitParams
 	: ;
 
 exe ChangeCovMatrixApp : ChangeCovMatrixApp.cc FitParams
+        $(TOP)/ConfigParser//ConfigParser
+        $(TOP)/qft++Extension//qft++Extension
+        $(TOP)/qft++//qft++
+        $(TOP)/ErrLogger//ErrLogger
+        : ;
+
+exe CreateCovMatrixApp : CreateCovMatrixApp.cc FitParams
         $(TOP)/ConfigParser//ConfigParser
         $(TOP)/qft++Extension//qft++Extension
         $(TOP)/qft++//qft++

@@ -45,6 +45,7 @@ class PwaCovMatrix
 
   public:
    PwaCovMatrix();
+  PwaCovMatrix(std::map<std::string, std::map<std::string, double> >& theMaps);
    PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix, 
 		const ROOT::Minuit2::MnUserParameters &theMinuitParameters);
    double GetElement(std::string parameter1, std::string parameter2);
