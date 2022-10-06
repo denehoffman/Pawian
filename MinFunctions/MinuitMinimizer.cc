@@ -129,7 +129,6 @@ void MinuitMinimizer::minimize(){
   if(0!=currentFunctionMinimum) delete currentFunctionMinimum;  
 }
 
-
 void MinuitMinimizer::printFitResult(double evtWeightSumData){
   if(!_minimumReached){
     Alert << "minimum has not been reached!!!" << endmsg;

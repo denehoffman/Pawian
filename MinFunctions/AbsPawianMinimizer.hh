@@ -45,6 +45,7 @@ public:
   virtual std::string type()=0;
   virtual void minimize()=0;
   virtual void printFitResult(double evtWeightSumData)=0;
+  virtual void printFitResultQA(double evtWeightSumData);
   virtual void dumpFitResult();
 
 protected:

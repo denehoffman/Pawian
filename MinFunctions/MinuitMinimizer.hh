@@ -42,6 +42,7 @@ public:
 
   virtual std::string type() {return "MinuitMinimizer";};
   virtual void minimize();
+  //  virtual void printFitResultQA(double evtWeightSumData);
   virtual void printFitResult(double evtWeightSumData);
   virtual void dumpFitResult();
 

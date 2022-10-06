@@ -50,3 +50,23 @@ void AbsPawianMinimizer::dumpFitResult(){
   std::ofstream theStream ( finalResultname.str().c_str() );
   _bestPawianParams->print(theStream);
 }
+
+void AbsPawianMinimizer::printFitResultQA(double evtWeightSumData){
+  //double theLh = _mnFunctionMinimumFinalPtr->Fval();
+    InfoMsg << "\n\n********************** fit parameters *************************" << endmsg;
+    _bestPawianParams->print(std::cout, true);
+    const std::vector<double> theParams=_bestPawianParams->Params();
+    double theLH=(*_absFcn)(theParams);
+    unsigned int noOfFreeFitParams=_bestPawianParams->VariableParameters();
+
+    double BICcriterion=2.*theLH+noOfFreeFitParams*log(evtWeightSumData);
+    double AICcriterion=2.*theLH+2.*noOfFreeFitParams;
+    double AICccriterion=AICcriterion+2.*noOfFreeFitParams*(noOfFreeFitParams+1)
+          / (evtWeightSumData-noOfFreeFitParams-1);
+    InfoMsg << "NLL:\t" << theLH << endmsg;
+    InfoMsg << "noOfFreeFitParams:\t" <<noOfFreeFitParams << endmsg;
+    InfoMsg << "evtWeightSumData:\t" <<evtWeightSumData << endmsg;
+    InfoMsg << "BIC:\t" << BICcriterion << endmsg;
+    InfoMsg << "AIC:\t" << AICcriterion << endmsg;
+    InfoMsg << "AICc:\t" << AICccriterion << endmsg;
+}

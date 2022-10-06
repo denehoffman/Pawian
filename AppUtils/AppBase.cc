@@ -803,6 +803,16 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   theServer->WaitForFirstClientLogin();
 
   std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+  if(GlobalEnv::instance()->parser()->mode()=="serverQA"){
+    //const std::vector<double> theParams=upar->Params();
+    //double theLH= (*absFcn)(theParams);
+    //double theLH=*absFcn(theParams);
+    //InfoMsg << "theLH: " << theLH << endmsg;
+    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr->printFitResultQA(evtWeightSumData);
+    return;
+  }
+  
   if(GlobalEnv::instance()->parser()->mode()=="server") 
     absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
   else if (GlobalEnv::instance()->parser()->mode()=="evoserver") 
