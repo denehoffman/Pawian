@@ -1,7 +1,6 @@
 //************************************************************************//
 //									  //
-//  Copyright 2014 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//  Copyright 2022 Bertram Kopf (bertram@ep1.rub.de)			  //
 //          	   - Ruhr-Universität Bochum 				  //
 //									  //
 //  This file is part of Pawian.					  //
@@ -21,8 +20,8 @@
 //									  //
 //************************************************************************//
 
-// HeliMultipoleDecNonRefAmps class definition file. -*- C++ -*-
-// Copyright 2015 Bertram Kopf
+// HeliMultipoleGeneralDecAmps class definition file. -*- C++ -*-
+// Copyright 2022 Bertram Kopf
 
 #pragma once
 
@@ -36,51 +35,49 @@
 #include <memory>
 #include <thread>
 
-#include "PwaUtils/HeliDecAmps.hh"
+#include "PwaUtils/HeliMultipoleDecNonRefAmps.hh"
 
 class IsobarHeliDecay;
 class AbsDecay;
 class AbsPawianParameters;
 
-class HeliMultipoleDecNonRefAmps : public HeliDecAmps{
+class HeliMultipoleGeneralDecAmps : public HeliMultipoleDecNonRefAmps{
 
 public:
 
   // create/copy/destroy:
 
   ///Constructor
-  HeliMultipoleDecNonRefAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
-  HeliMultipoleDecNonRefAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
+  HeliMultipoleGeneralDecAmps(std::shared_ptr<IsobarHeliDecay> theDec, ChannelID channelID);
+  HeliMultipoleGeneralDecAmps(std::shared_ptr<AbsDecay> theDec, ChannelID channelID);
   /** Destructor */
-  virtual ~HeliMultipoleDecNonRefAmps();
+  virtual ~HeliMultipoleGeneralDecAmps();
 
 
   // Getters:
   // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
-  virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  // virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   //  virtual void print(std::ostream& os) const;
   // virtual bool checkRecalculation(fitParCol& theParamVal);
   // virtual void updateFitParams(fitParCol& theParamVal);
-  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
-  virtual void fillParamNameList();
-  virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
+  // virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  // virtual void fillParamNameList();
+  // virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
   
 protected:
 
-  short _noOfAmps;
-  std::vector<std::string> _MagParamNames;
-  std::vector<std::string> _PhiParamNames;
-  std::vector< complex<double> > _currentParamLocalMagExpi;
-  std::map<int, Spin> _JgammaMap;
-  std::vector<Spin> _JgammaVec;
-  Particle* _daughterGamma;
-  Particle* _daughter2;
+  // short _noOfAmps;
+  // std::vector<std::string> _MagParamNames;
+  // std::vector<std::string> _PhiParamNames;
+  // std::vector< complex<double> > _currentParamLocalMagExpi;
+  // std::map<int, Spin> _JgammaMap;
+  // std::vector<Spin> _JgammaVec;
+  // Particle* _daughterGamma;
+  // Particle* _daughter2;
 
   virtual complex<double> heliAmpLoop(EvtData* theData, const Spin& lamX, Spin& lam1, Spin& lam2, const Spin& J, bool isSym);
 
 private:
-
-
 
 };
 

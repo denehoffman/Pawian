@@ -93,6 +93,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2,
   ,_decLevel(decayLevel::noLevel)
   ,_motherName("")
   ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
+  ,_useMultipoleGeneral(GlobalEnv::instance()->Channel(_channelId)->parser()->useMultipoleGeneral())
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
   if(0 != _absDecDaughter1){
@@ -177,6 +178,7 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2,
   for(itP = _finalStateParticles.begin(); itP != _finalStateParticles.end(); ++itP){
     _massSumFsParticles+=(*itP)->mass();
   }
+
 }
 
 AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daughter1, 
@@ -224,6 +226,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_decLevel(decayLevel::isProdAmp)
   ,_motherName(motherName)
   ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
+  ,_useMultipoleGeneral(GlobalEnv::instance()->Channel(_channelId)->parser()->useMultipoleGeneral())
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -308,6 +311,7 @@ AbsDecay::AbsDecay(std::shared_ptr<const IGJPC> motherIGJPCPtr, Particle* daught
   ,_Lmin(0)
   ,_decLevel(decayLevel::noLevel)
   ,_prodChannelInfo(std::shared_ptr<ProdChannelInfo>(new ProdChannelInfo()))
+  ,_useMultipoleGeneral(GlobalEnv::instance()->Channel(_channelId)->parser()->useMultipoleGeneral())
 {
   _absDecDaughter1=GlobalEnv::instance()->Channel(_channelId)->absDecayList()->decay(_daughter1);
 
@@ -596,9 +600,14 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap,
         //double theTheta=daughter1HelMother.Theta();
         //evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
         //  Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12);
-	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+      	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
           Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12);
       }
+      // if(type()=="IsobarHeliMultipoleDecay"){
+      // 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
+      // 	  conj(Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12));
+      // }
+      
       else if (GlobalEnv::instance()->Channel(_channelId)->parser()->productionFormalism()=="HeliMultipole"){
 	evtData->WignerDIdId3[_wigDWigDRefId][IdSpinMotherLamMotherLam12] =
 	  conj(Wigner_D(thePhi,theTheta,0,spinMother,lamMother,lam12));

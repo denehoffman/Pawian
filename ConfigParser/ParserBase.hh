@@ -144,7 +144,7 @@ public:
   const unsigned int stepSizeParamsPrint() const {return _stepSizeParamsPrint;}
   const unsigned int stepSizeParamsDump() const {return _stepSizeParamsDump;}
   const bool useAbsPhaseDiff() const {return _useAbsPhaseDiff;}
-  
+  const bool useMultipoleGeneral() const {return _useMultipoleGeneral;}  
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
   
@@ -246,4 +246,5 @@ protected:
   unsigned int _stepSizeParamsPrint;
   unsigned int _stepSizeParamsDump;
   bool _useAbsPhaseDiff;
+  bool _useMultipoleGeneral;
 };

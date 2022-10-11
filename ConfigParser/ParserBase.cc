@@ -103,6 +103,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_stepSizeParamsPrint(1000)
   ,_stepSizeParamsDump(200)
   ,_useAbsPhaseDiff(false)
+  ,_useMultipoleGeneral(false)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -219,6 +220,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ("stepSizeParamsPrint",po::value<unsigned int>(&_stepSizeParamsPrint),"step size for parameter print out in log file")
   ("stepSizeParamsDump",po::value<unsigned int>(&_stepSizeParamsDump),"step size for parameter print out in dump file")
     ("useAbsPhaseDiff",po::value<bool>(&_useAbsPhaseDiff), "use absolut value of the phse difference in FVectorCompare mode")
+    ("useMultipoleGeneral",po::value<bool>(&_useMultipoleGeneral), "use moltipoles for the general case")
     ;
 
 }
@@ -344,6 +346,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "stepSizeParamsPrint: " << _stepSizeParamsPrint << "\n\n"
 		<< "stepSizeParamsDump: " << _stepSizeParamsDump << "\n\n"
 		<< "useAbsPhaseDiff: " << _useAbsPhaseDiff <<"\n\n"
+		<< "useMultipoleGeneral: " << _useMultipoleGeneral << "\n\n" 
 		<< endmsg;
 
 

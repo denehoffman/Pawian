@@ -33,6 +33,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/HeliMultipoleDecNonRefAmps.hh"
+#include "PwaUtils/HeliMultipoleGeneralDecAmps.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
 #include "PwaUtils/IsobarTensorPsiToGamXDecay.hh"
 #include "PwaUtils/OmegaTo3PiLSDecay.hh"
@@ -85,7 +86,13 @@ std::shared_ptr<AbsXdecAmp> XdecAmpRegistry::getXdecAmp(short channelID, std::sh
     }
  else if(theAbsDecay->type()=="IsobarHeliMultipoleDecay"){
    std::shared_ptr<IsobarHeliDecay> decLamLam =  std::dynamic_pointer_cast<IsobarHeliDecay>(theAbsDecay);
-   if(theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::isProdAmp || theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::firstLevel) result=std::shared_ptr<AbsXdecAmp>(new HeliMultipoleDecNonRefAmps(decLamLam, channelID));
+   if(theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::isProdAmp || theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::firstLevel){
+     InfoMsg << "theAbsDecay->useMultipoleGeneral(): " << theAbsDecay->useMultipoleGeneral() << endmsg;
+   if(theAbsDecay->useMultipoleGeneral()) result=std::shared_ptr<AbsXdecAmp>(new HeliMultipoleGeneralDecAmps(decLamLam, channelID));
+   else result=std::shared_ptr<AbsXdecAmp>(new HeliMultipoleDecNonRefAmps(decLamLam, channelID)); 
+     }
+   //if(theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::isProdAmp || theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::firstLevel) result=std::shared_ptr<AbsXdecAmp>(new HeliMultipoleDecNonRefAmps(decLamLam, channelID));
+   //   if(theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::isProdAmp || theAbsDecay->whichDecayLevel()==AbsDecay::decayLevel::firstLevel) result=std::shared_ptr<AbsXdecAmp>(new HeliMultipoleGeneralDecAmps(decLamLam, channelID));
    else{
      Alert << "creation HeliMultipoleDecNonRefAmps not supported for non-production amps!!!" << endmsg;
      exit(0); 

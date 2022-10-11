@@ -235,17 +235,14 @@ complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, const 
   
   if(_daughter1IsStable && (_lam1MinProj!=lam1)) doCalc=false;
   if(_daughter2IsStable && (_lam2MinProj!=lam2)) doCalc=false;
-  //  InfoMsg << "J: " << J << " lamX: " << lamX << " lam1: " << lam1 << " lam2: " << lam2 << " lambda: " << lambda << " doCalc: " << doCalc << endmsg;
+  // InfoMsg << "J: " << J << " lamX: " << lamX << " lam1: " << lam1 << " lam2: " << lam2 << " lambda: " << lambda << " doCalc: " << doCalc << endmsg;
   if(doCalc){
    unsigned int IdJLamXLam12=FunctionUtils::spin3Index(_J, lamX, lambda);
    complex<double> currentAmp(0.,0.);
    for (int i=0; i<_noOfAmps; ++i){
-      double currentParity=_daughter2->theParity();
-      if(int(_JgammaMap.at(i))%2 == 0) currentParity *= -1.;
-      double parityFactor=1.;
-      if(currentParity<0. && isSym) parityFactor=-1.;
-      //if(int(_JgammaMap.at(i))%2 == 0 && lam1<0) parityFactor *= -1.; //this is a fix which is needed to be checked
-      currentAmp+=sqrt(2.*_JgammaMap.at(i)+1.)
+     double parityFactor=1.;
+     if(isSym) parityFactor=_daughter2->theParity()*pow(-1,_JgammaMap.at(i)-1);
+     currentAmp+=sqrt((2.*_JgammaMap.at(i)+1.)/(2.*_JPCPtr->J+1.))
         *parityFactor
         *Clebsch(_JgammaMap.at(i), -lam1, _daughter2->J(), lam2, _JPCPtr->J, lambda)
         *_currentParamLocalMagExpi.at(i);
@@ -253,6 +250,9 @@ complex<double> HeliMultipoleDecNonRefAmps::heliAmpLoop(EvtData* theData, const 
 
    //    result+=currentAmp*conj( theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) )*daughterAmp(lam1, lam2, theData);
    result+=currentAmp*theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) *daughterAmp(lam1, lam2, theData);
+   // InfoMsg<< "currentAmp: " << currentAmp << endmsg;
+   // InfoMsg<< "theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12): " << theData->WignerDIdId3.at(_decay->wigDWigDRefId()).at(IdJLamXLam12) << endmsg;
+   // InfoMsg<< "result: " << result << endmsg;
   }
   return result;
 }

@@ -138,6 +138,8 @@ public:
   double massSumFsParticlesDec2();
   int orbMomMin() {return _Lmin;}
   ChannelID channelId() {return _channelId;}
+  const bool useMultipoleGeneral() const {return _useMultipoleGeneral;}
+  
 protected:
   //  virtual Vector4<double> beamVecCollider(Vector4<double>& sqrts, double massBeam); 
   virtual void extractLmin();
@@ -216,4 +218,5 @@ protected:
   decLevel _decLevel;
   std::string _motherName;
   std::shared_ptr<ProdChannelInfo> _prodChannelInfo;
+  bool _useMultipoleGeneral;
 };
