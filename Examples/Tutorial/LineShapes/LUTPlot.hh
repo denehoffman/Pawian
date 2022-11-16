@@ -39,6 +39,8 @@
 class TFile;
 class TH1F;
 class TH2F;
+class TGraph;
+class TGraph2D;
 
 class LUTPlot {
 
@@ -61,11 +63,10 @@ protected:
 private:
   TFile* _theTFile;
   
-  TH2F* _RealPart2D;
-  TH2F* _ImagPart2D;
-
-  TH1F* _RealPart;
-  TH1F* _ImagPart;
+  TGraph* _graphReal;
+  TGraph* _graphImag;
+  TGraph2D* _graph2DReal;
+  TGraph2D* _graph2DImag;
   
   const std::string _LUTFilePath;
   const double _realGranularity;

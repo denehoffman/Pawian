@@ -35,6 +35,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TGraph2D.h"
+#include "TGraph.h"
 #include "TMath.h"
 #include "Utils/PawianConstants.hh"
 #include "PwaDynamics/PhaseSpaceIsobarLUT.hh"
@@ -42,13 +43,15 @@
 #include "ErrLogger/ErrLogger.hh"
 
 LUTPlot::LUTPlot(std::string LUTFilePath, double realGranularity, double imagGranularity) :
-  _theTFile(0)
+  _theTFile(new TFile("LUTPlot.root","recreate"))
+  ,_graphReal(new TGraph())
+  ,_graphImag(new TGraph())
+  ,_graph2DReal(new TGraph2D())
+  ,_graph2DImag(new TGraph2D())
   ,_LUTFilePath(LUTFilePath)
   ,_realGranularity(realGranularity)
   ,_imagGranularity(imagGranularity)
 {
-  _theTFile=new TFile("LUTPlot.root","recreate");
-
   PhaseSpaceIsobarLUT* theFactor = new PhaseSpaceIsobarLUT(0.0, 0.0, _LUTFilePath.c_str()); 
   const std::complex<double> upperLimit = theFactor->sHigh();
   const std::complex<double> lowerLimit = theFactor->sLow();
@@ -56,51 +59,47 @@ LUTPlot::LUTPlot(std::string LUTFilePath, double realGranularity, double imagGra
   const int stepCountReal = abs((int)((upperLimit.real()-lowerLimit.real())/realGranularity));
   const int stepCountImag = abs((int)((lowerLimit.imag()-upperLimit.imag())/imagGranularity));
 
-  _RealPart2D = new TH2F("_RealPart2D", "BBUnstable 2D real part",stepCountReal-1, lowerLimit.real(), upperLimit.real()-0.01, stepCountImag-1, upperLimit.imag()+0.01, lowerLimit.imag()-0.01);
-  _RealPart2D->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _RealPart2D->GetXaxis()->SetTitle("Re(#sqrt{s})");
-  _RealPart2D->GetZaxis()->SetTitle("Re(CM)");
+  _graphReal->SetTitle("BBUnstable real part");
+  _graphImag->SetTitle("BBUnstable imaginary part");
 
-  _ImagPart2D = new TH2F("_ImagPart2D", "BBUnstable 2D imaginary part",stepCountReal-1, lowerLimit.real(), upperLimit.real()-0.01, stepCountImag-1, upperLimit.imag()+0.01, lowerLimit.imag()-0.01);
-  _ImagPart2D->GetYaxis()->SetTitle("Im(#sqrt{s})");
-  _ImagPart2D->GetXaxis()->SetTitle("Re(#sqrt{s})");
-  _ImagPart2D->GetZaxis()->SetTitle("Im(CM)");
-
-  _RealPart = new TH1F("_RealPart", "BBUnstable real part",stepCountReal-1, lowerLimit.real(), upperLimit.real()-0.01);
-  _RealPart->GetYaxis()->SetTitle("Re(CM)");
-  _RealPart->GetXaxis()->SetTitle("Re(#sqrt{s})");
-
-  _ImagPart = new TH1F("_ImagPart", "BBUnstable imaginary part",stepCountReal-1, lowerLimit.real(), upperLimit.real()-0.01);
-  _ImagPart->GetYaxis()->SetTitle("Im(CM)");
-  _ImagPart->GetXaxis()->SetTitle("Re(#sqrt{s})");
-
-
-
+  _graph2DReal->SetTitle("BBUnstable real part 2D");
+  _graph2DImag->SetTitle("BBUnstable imaginary part 2D");
+  
   for(int i = 1; i < stepCountReal; i++){
     complex<double> currentMass(lowerLimit.real()+i*realGranularity,0.0);
+    // if(std::abs(currentMass.real())<2.*0.135) continue;
     complex<double> currentCMBBUnstableFac = theFactor->ChewM(currentMass);
-    _RealPart->Fill(currentMass.real(), currentCMBBUnstableFac.real());
+    _graphReal->SetPoint(i, currentMass.real(), currentCMBBUnstableFac.real());
   }
 
   for(int i = 1; i < stepCountReal; i++){
     complex<double> currentMass(lowerLimit.real()+i*realGranularity,0.0);
+    // if(std::abs(currentMass.real()) < 2.*0.135) continue;
     complex<double> currentCMBBUnstableFac = theFactor->ChewM(currentMass);
-    _ImagPart->Fill(currentMass.real(), currentCMBBUnstableFac.imag());
+    _graphImag->SetPoint(i, currentMass.real(), currentCMBBUnstableFac.imag());
   }
 
+  int counter=1;
   for(int i = 1; i < stepCountReal; i++){
     for(int j = 1; j < stepCountImag; j++){
-      complex<double> currentMass(lowerLimit.real()+i*realGranularity,upperLimit.imag()+j*imagGranularity);
+      complex<double> currentMass(lowerLimit.real()+i*realGranularity,upperLimit.imag()+j*realGranularity);
+      // if(std::abs(currentMass.real())<2.*0.135) continue;
+      // if(std::abs(currentMass.imag())<0.005) continue;
       complex<double> currentCMBBUnstableFac = theFactor->ChewM(currentMass);
-      _RealPart2D->Fill(currentMass.real(), currentMass.imag(), currentCMBBUnstableFac.real());
+      _graph2DReal->SetPoint(counter,currentMass.real(), currentMass.imag(), currentCMBBUnstableFac.real());
+      ++counter;
     }
   }
 
+  counter=1;
   for(int i = 1; i < stepCountReal; i++){
     for(int j = 1; j < stepCountImag; j++){
-      complex<double> currentMass(lowerLimit.real()+i*realGranularity,upperLimit.imag()+j*imagGranularity);
+      complex<double> currentMass(lowerLimit.real()+i*realGranularity,upperLimit.imag()+j*realGranularity);
+      // if(std::abs(currentMass.real())<2.*0.135) continue;
+      // if(std::abs(currentMass.imag())<0.005) continue;
       complex<double> currentCMBBUnstableFac = theFactor->ChewM(currentMass);
-      _ImagPart2D->Fill(currentMass.real(), currentMass.imag(), -currentCMBBUnstableFac.imag());
+      _graph2DImag->SetPoint(counter, currentMass.real(), currentMass.imag(), currentCMBBUnstableFac.imag());
+      ++counter;
     }
   }
   delete theFactor; 
@@ -108,6 +107,10 @@ LUTPlot::LUTPlot(std::string LUTFilePath, double realGranularity, double imagGra
 
 LUTPlot::~LUTPlot()
 {
+  _graphReal->Write();
+  _graphImag->Write();
+  _graph2DReal->Write();
+  _graph2DImag->Write();
    _theTFile->Write();
    _theTFile->Close();
 }
