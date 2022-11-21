@@ -1,0 +1,36 @@
+alias install : install-bin install-lib ;
+explicit install ;
+
+install install-bin : CMIntegrationApp
+                 : <location>$(TOP)/bin
+                   <install-dependencies>on 
+                   <install-type>EXE
+                   ;
+
+install install-lib : gslUtils
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
+project : 
+	;
+
+lib gslUtils : 
+	[ glob *.cc : *App.cc ] 
+	$(TOP)/Utils//Utils
+	$(TOP)/Particle//Particle 
+	$(TOP)/qft++//qft++
+	$(TOP)/qft++Extension//qft++Extension
+	$(TOP)/ErrLogger//ErrLogger
+	: <use>$(TOP)//Minuit2 
+        : 
+        : <library>$(TOP)//Minuit2 ;
+
+exe CMIntegrationApp : CMIntegrationApp.cc gslUtils
+        $(TOP)/Utils//Utils
+        $(TOP)/Particle//Particle
+        $(TOP)/qft++//qft++
+        $(TOP)/qft++Extension//qft++Extension
+        $(TOP)/ErrLogger//ErrLogger
+        : ;
