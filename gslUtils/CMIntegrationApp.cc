@@ -189,6 +189,8 @@ int main(int __argc,char *__argv[]){
     exit(0);
   }
 
+  cmIntegration->setCMparams(theParams);
+  
   for(double sqrtsReal=mRealLow; sqrtsReal<=mRealHigh; sqrtsReal+=stepSizeReal){
     for(double sqrtsImag=mImagHigh; sqrtsImag>=mImagLow; sqrtsImag-=stepSizeImag){
       std::complex<double> currentResult;
