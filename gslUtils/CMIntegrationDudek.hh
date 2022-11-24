@@ -28,51 +28,40 @@
 
 #include <complex>
 #include <stddef.h>
-#include <gsl/gsl_integration.h>
 
-struct CMunstable_params {
-  double _mPole;
-  double _fPole;
-  double _mu;
-  double _m1;
-  double _m2;
+#include "gslUtils/CMIntegration.hh"
 
-  CMunstable_params(double mpole, double fpole, double mu, double m1, double m2) :
-    _mPole(mpole)
-    ,_fPole(fpole)
-    ,_mu(mu)
-    ,_m1(m1)
-    ,_m2(m2){
-  }
-};
 
 //_____________________________________________________________________________
-// @file CMIntegration.hh
+// @file CMIntegrationDudek.hh
 //_____________________________________________________________________________
 
-class CMIntegration {
+class CMIntegrationDudek :  public CMIntegration {
 
 public:
   /// Constructor 
-  CMIntegration(double mpole, double fpole, double mu, double m1, double m2); 
+  CMIntegrationDudek(double mpole, double fpole, double mu, double m1, double m2, std::string offsetMethod); 
  
   /// Destructor
-  ~CMIntegration();
+  ~CMIntegrationDudek();
 
-  virtual void integrate(std::complex<double> s, std::complex<double>& result, std::complex<double>& resulterr)=0;
-  virtual void doFit(gsl_function& F, double& result, double& resulterr, std::string fitName);
-  void setCMparams(CMunstable_params& theParams);
-  
+  virtual void integrate(std::complex<double> s, std::complex<double>& result, std::complex<double>& resulterr);
+
 protected:
-  static CMunstable_params _CMunstable_params;
-  static std::complex<double> _currentS;
-  static bool _calcRealPart;
-  double _epsabs;
-  double _epsrel;
-  size_t _limit;
-  double _integLowerBorder;
-  
-private:  
+
+private:
+  static double FIntWrapperReid(double x, void * params);
+  static double FIntWrapperPi(double x, void * params);
+  static double FIntWrapperOffsetDSigDdPi(double x, void * params);
+  static double FIntWrapperOffsetDSigDdReid(double x, void * params);
+  static std::complex<double> CtildeReid(std::complex<double> s, double sprime);
+  static std::complex<double> CtildePi(std::complex<double> s, double sprime);
+  static double OffsetDSigDdPi(double sprime);
+  static double OffsetDSigDdReid(double sprime);
+  static std::complex<double> Sigma(double sprime, double m1, double m2);
+  static double dsNorm(double sprime, double m1, double m2, double mpole, double fpole);
+  static std::complex<double> _offset;
+  std::string _offsetMethod;
 };
 
 

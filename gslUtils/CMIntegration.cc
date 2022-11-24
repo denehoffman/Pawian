@@ -25,87 +25,53 @@
 #include "Utils/Faddeeva.hh"
 #include "qft++Extension/PawianUtils.hh"
 #include "Utils/PawianConstants.hh"
+#include "ErrLogger/ErrLogger.hh"
 
 #include <complex>
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_errno.h>
 
-CMunstable_params CMIntegration::_CMunstable_params(0.90338253, 0.59405387, 0.1349768, 0.13957, 0.13957);
+CMunstable_params CMIntegration::_CMunstable_params(0.9033435, 0.59399735, 0.13957, 0.1349768, 0.13957);
 bool CMIntegration::_calcRealPart=true;
 std::complex<double> CMIntegration::_currentS(1.,0.);
 
-CMIntegration::CMIntegration(double mpole, double fpole, double mu, double m1, double m2){
+CMIntegration::CMIntegration(double mpole, double fpole, double mu, double m1, double m2):
+  _epsabs(1e-8)
+  ,_epsrel(1e-8)
+  ,_limit(1000){
   //_CMunstable_params._mPole=mpole;
   gsl_set_error_handler_off();
+  _integLowerBorder=(_CMunstable_params._m1+_CMunstable_params._m2)*(_CMunstable_params._m1+_CMunstable_params._m2);
 }
 
 CMIntegration::~CMIntegration(){
 }
 
-std::complex<double> CMIntegration::integrate(std::complex<double> s){
-  _currentS=s;
-  double epsabs = 1e-8;
-  double epsrel = 1e-8;
-  size_t limit = 1000;
+void CMIntegration::setCMparams(CMunstable_params& theParams){
+  _CMunstable_params._mPole=theParams._mPole;
+  _CMunstable_params._fPole=theParams._fPole;
+  _CMunstable_params._mu=theParams._mu;
+  _CMunstable_params._m1=theParams._m1;
+  _CMunstable_params._m2=theParams._m2;
+}
 
-  double intlowerborder=(_CMunstable_params._m1+_CMunstable_params._m2)*(_CMunstable_params._m1+_CMunstable_params._m2);
-  // set gsl function
-  gsl_function F;
-  F.function = &FIntWrapper;
-
+void CMIntegration::doFit(gsl_function& F, double& result, double& resulterr, std::string fitName){
   const size_t n=1000;
   gsl_integration_workspace* wsp1=gsl_integration_workspace_alloc(n);
-
-  _calcRealPart=true;
-  double resultReal, abserrReal;
-  gsl_integration_qagiu(&F, intlowerborder, epsabs, epsrel, limit, wsp1, &resultReal, &abserrReal); 
-
-  //std::cout << "\ns: "<< s << std::endl;
-  //std::cout << "result (real): " << resultReal << std::endl;
-  //std::cout << "abserr (real): " << abserrReal << std::endl;
-
-  _calcRealPart=false;
-  double resultImag, abserrImag;
-  gsl_integration_qagiu(&F, intlowerborder, epsabs, epsrel, limit, wsp1, &resultImag, &abserrImag);
-  //std::cout << "result (imag): " << resultImag << std::endl;
-  //std::cout << "abserr (imag): " << abserrImag << std::endl;
-
-  complex<double> result(resultReal, resultImag);
-  return result;
+  int status = gsl_integration_qagiu(&F, _integLowerBorder, _epsabs, _epsrel, _limit, wsp1, &result, &resulterr);
+  if (status) {
+    InfoMsg << fitName << " status: " << status << endmsg;
+    if(status==GSL_EROUND){
+      double epsabs=1.e-7;
+      double epsrel=1.e-7;
+      status = gsl_integration_qagiu(&F, _integLowerBorder, epsabs, epsrel, _limit, wsp1, &result, &resulterr);
+      InfoMsg << fitName << " status V1: " << status << endmsg;
+      if(status==GSL_EROUND){
+      double epsabs=1.e-6;
+      double epsrel=1.e-6;
+      status = gsl_integration_qagiu(&F, _integLowerBorder, epsabs, epsrel, _limit, wsp1, &result, &resulterr);
+      InfoMsg << fitName << " status V2: " << status << endmsg;      
+      }
+    }
+  }
 }
-
-double CMIntegration::FIntWrapper(double x, void * params){
-  double result=0.;
-  if (_calcRealPart) result=(Ctilde(_currentS,x)).real();
-  else result=(Ctilde(_currentS,x)).imag();
-  return result; 
-}
-
-std::complex<double> CMIntegration::Ctilde(std::complex<double> s, double sprime){
-     std::complex<double> result =
-      -(1./PawianConstants::pi)*pow(_CMunstable_params._fPole,2.)
-	 *(Sigma(sprime, _CMunstable_params._m1,_CMunstable_params._m2)).imag()
-      /dsNorm(sprime, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole)
-       *PawianQFT::ChewMandelstamDudek(s, sqrt(sprime), _CMunstable_params._mu);
-
-   return result;
-  
-}
-
-std::complex<double> CMIntegration::Sigma(double sprime, double m1, double m2){
-  complex<double> sprimecompl(sprime,0.);  
-  std::complex<double> result = (sprime-(m1+m2)*(m1+m2))*PawianQFT::ChewMandelstamDudek(sprimecompl, m1, m2);
-    return result;
-}
-
-double CMIntegration::dsNorm(std::complex<double> s, double m1, double m2, double mpole, double fpole){
-  complex<double> mpolecomplex(mpole,0.);
-  complex<double> fpolecomplex(fpole,0.);
-  complex<double> m1complex(m1,0.);
-  complex<double> m2complex(m2,0.);
-  complex<double> ds=s-mpolecomplex*mpolecomplex
-    +(fpolecomplex*fpolecomplex)*(s-(m1complex+m2complex)*(m1complex+m2complex))
-    *PawianQFT::ChewMandelstamDudek(s, m1, m2);
-  return norm(ds);
-}
-

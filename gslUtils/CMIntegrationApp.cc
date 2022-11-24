@@ -34,6 +34,8 @@
 #include <complex>
 
 #include "gslUtils/CMIntegration.hh"
+#include "gslUtils/CMIntegrationDudek.hh"
+#include "gslUtils/CMIntegrationReid.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -50,6 +52,14 @@ int main(int __argc,char *__argv[]){
             << "-mImagLow (terminal point of imag mass; default -0.4)\n\n"
             << "-mRealHigh (starting point of imag mass ; default 0.0)\n\n"
       	    << "-stepSizeImag (step size imag mass ; default 0.01)\n\n"
+	    << "-dumpErr (dump uncertaities for real and imagianry part of the CM; default false)\n\n"
+	    << "-CMfunction (Dudek or Reid; default Dudek)\n\n"      
+            << "-offsetMethod (offset method for Dudek inegration; default Reid)\n\n"
+	    << "-mPole (default 0.9033435)\n\n"
+	    << "-fPole (default 0.59399735)\n\n"
+            << "-mu (default 0.13957)\n\n"
+            << "-m1 (default 0.1349768)\n\n"
+	    << "-m2 (default 0.13957)\n\n" 
 	    << endmsg;
     return 0;
   }
@@ -61,7 +71,14 @@ int main(int __argc,char *__argv[]){
   double mImagLow=-0.4;
   double  mImagHigh=0.;
   double stepSizeImag=0.01;
-
+  bool dumpWithErrors=false;
+  std::string CMfunction="Dudek";
+  std::string offsetMethod="Reid";
+  double mpole=0.9033435;
+  double fpole=0.59399735;
+  double mu=0.13957;
+  double m1=0.1349768;
+  double m2=0.13957;
 
   // Read arguments and replace default values
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -87,9 +104,43 @@ int main(int __argc,char *__argv[]){
       mImagHigh = atof(__argv[optind]);
       //if(mImagHigh>0) mImagHigh=-mImagHigh;
     }
+    else if (sw=="-dumpErr"){
+      optind++;
+      std::string currentStr = __argv[optind];
+      dumpWithErrors = (currentStr == "1");
+      if(!dumpWithErrors) dumpWithErrors = (currentStr == "true"); 
+    }
     else if (sw=="-stepSizeImag"){
       optind++;
       stepSizeImag = atof(__argv[optind]);
+    }
+    else if (sw=="-offsetMethod"){
+      optind++;
+      offsetMethod = __argv[optind];
+    }
+    else if (sw=="-mPole"){
+      optind++;
+      mpole = atof(__argv[optind]);
+    }
+    else if (sw=="-fPole"){
+      optind++;
+      fpole = atof(__argv[optind]);
+    }
+    else if (sw=="-mu"){
+      optind++;
+      mu = atof(__argv[optind]);
+    }
+    else if (sw=="-m1"){
+      optind++;
+      m1 = atof(__argv[optind]);
+    }
+    else if (sw=="-m2"){
+      optind++;
+      m1 = atof(__argv[optind]);
+    }
+    else if (sw=="-CMfunction"){
+      optind++;
+      CMfunction = __argv[optind];
     }
     else{
       WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
@@ -108,30 +159,49 @@ int main(int __argc,char *__argv[]){
   }
 
   
-  double mpole=0.90338253;
-  double fpole=0.59405387;
-  double mu=0.1349768;
-  double m1=0.13957;
-  double m2=0.13957;
+  // double mpole=0.9033435;
+  // double fpole=0.59399735;
+  // double mu=0.1349768;
+  // double m1=0.13957;
+  // double m2=0.13957;
   std::string oFileName("ChewMandelstaCalc.dat");
   std::ofstream oStream(oFileName.c_str());  
 
   InfoMsg << "...Starting with parameter..." << endmsg;
   InfoMsg << "mRealLow: " << mRealLow <<"\tmRealHigh: " << mRealHigh << "\tstepSizeReal: " << stepSizeReal << endmsg;
   InfoMsg << "mImagLow: " << mImagLow <<"\tmImagHigh: " << mImagHigh << "\tstepSizeImag: " << stepSizeImag << endmsg;
-
+  InfoMsg << "dumpWithErrors: " << dumpWithErrors << endmsg;
+  InfoMsg << "CMfunction: " << CMfunction << endmsg;
+  InfoMsg << "offsetMethod: " << offsetMethod << endmsg;
+  InfoMsg << "mPole: " << mpole << endmsg;
+  InfoMsg << "fPole: " << fpole << endmsg;
+  InfoMsg << "mu: " << mu << endmsg;
+  InfoMsg << "m1: " << m1 << endmsg;
+  InfoMsg << "m2: " << m2 << endmsg;
   
-  CMIntegration cmIntegration(mpole, fpole, mu, m1, m2);
+  CMunstable_params theParams(mpole, fpole, mu, m1, m2);  
+
+  CMIntegration* cmIntegration=0;
+  if (CMfunction=="Dudek") cmIntegration = new CMIntegrationDudek(mpole, fpole, mu, m1, m2, offsetMethod);
+  else if (CMfunction=="Reid") cmIntegration = new CMIntegrationReid(mpole, fpole, mu, m1, m2);
+  else{
+    Alert << "CMfunction with the name " << CMfunction << " is not supported!!!" << endmsg;
+    exit(0);
+  }
 
   for(double sqrtsReal=mRealLow; sqrtsReal<=mRealHigh; sqrtsReal+=stepSizeReal){
     for(double sqrtsImag=mImagHigh; sqrtsImag>=mImagLow; sqrtsImag-=stepSizeImag){
+      std::complex<double> currentResult;
+      std::complex<double> currentResultErr;
       std::complex<double> sqrts(sqrtsReal, sqrtsImag);
-      std::complex<double> result=cmIntegration.integrate(sqrts*sqrts);
-      oStream << sqrtsReal << "\t" << sqrtsImag << "\t" << result.real() << "\t" << result.imag() << std::endl;
-      InfoMsg<<"CM(sqrt(s)=" << sqrts << ") = "<< result << endmsg;
+      //      std::complex<double> result=cmIntegration.integrate(sqrts*sqrts, currentResult, currentResultErr);
+      cmIntegration->integrate(sqrts*sqrts, currentResult, currentResultErr);
+      if(dumpWithErrors) oStream << sqrtsReal << "\t" << sqrtsImag << "\t" << currentResult.real() << "\t" << currentResult.imag() << "\t"<<  currentResultErr.real()  << "\t"<<  currentResultErr.imag() << std::endl;
+      else oStream << sqrtsReal << "\t" << sqrtsImag << "\t" << currentResult.real() << "\t" << currentResult.imag() << std::endl;
+      InfoMsg<<"CM(sqrt(s)=" << sqrts << ") = "<< currentResult << endmsg;
     }
   }
-  oStream.close(); 
+  oStream.close();
   return 0;
 
 }
