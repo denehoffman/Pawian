@@ -87,7 +87,8 @@ complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass, int orbMom){
 	       << "\t cach it now!!!" << endmsg;
     //    exit(1);
     cacheFactors(mass);
-    result=_CMCache.at(massInt100keV); 
+    result=_CMCache.at(massInt100keV);
+    result=conj(result); //sign must be changed on the real axis to be in agreement with the first quadrant
   }
   return result;
 }
@@ -178,12 +179,12 @@ complex<double> PhaseSpaceIsobarLUT::getFactor(complex<double> _s){
   int nIm = round((_s.imag()-m_sLow.imag())/deltaIm);
   if(m_nIm == 1) nIm = 0;
   lineOffset = m_nIm*nRe+nIm;
-  if(nIm == 0 || nIm == m_nIm || nRe == 0 || nRe == m_nRe){
-    if(abs(_s.imag()) > 1.e-15){
-      Alert << "Range error while interpolating" << endmsg;
-      exit(1);
-    }
-  }
+  //if(nIm == 0 || nIm == m_nIm || nRe == 0 || nRe == m_nRe){
+  //  if(abs(_s.imag()) > 1.e-15){
+  //    Alert << "Range error while interpolating" << endmsg;
+  //    exit(1);
+  //  }
+  //}
   LUTLine PointP = readLine(lineOffset);
   if((PointP.requested.real() <= _s.real()) && (PointP.requested.imag() >= _s.imag())){
     P11 = PointP;
