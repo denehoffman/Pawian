@@ -59,7 +59,13 @@ CMIntegrationDudek::CMIntegrationDudek(double mpole, double fpole, double mu, do
   _offset=complex<double>(result, 0.);
   InfoMsg << "integration for pi: obtained value for offset: " << _offset << endmsg;
 
+
+  gsl_function Fnorm;
+  Fnorm.function=FIntWrapperNormCondition;
   
+  std::string fitName="normalizationConstant";
+  doFit(Fnorm, result, abserr, fitName);
+  InfoMsg << "normalization constant: " << result << " +- " << abserr << endmsg;
 }
 
 
@@ -117,6 +123,14 @@ double CMIntegrationDudek::FIntWrapperOffsetDSigDdReid(double x, void * params){
   return result; 
 }
 
+double CMIntegrationDudek::FIntWrapperNormCondition(double x, void * params){
+   double result=-(1./PawianConstants::pi)*dsImag(x, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole)/dsNorm(x, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole);
+  // double result=-(1./PawianConstants::pi)
+  //   *_CMunstable_params._fPole*_CMunstable_params._fPole
+  //   *Sigma(x, _CMunstable_params._m1, _CMunstable_params._m2).imag()/dsNorm(x, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole);
+  return result;
+}
+
 std::complex<double> CMIntegrationDudek::CtildeReid(std::complex<double> s, double sprime){
   std::complex<double> result =
       (1./PawianConstants::pi)*pow(_CMunstable_params._fPole,2.)
@@ -158,7 +172,8 @@ double result = -1./PawianConstants::pi * 1./PawianConstants::pi
 
 std::complex<double> CMIntegrationDudek::Sigma(double sprime, double m1, double m2){
   std::complex<double> sprimecompl(sprime,0.);
-  std::complex<double> result = (sprime-(m1+m2)*(m1+m2))*PawianQFT::ChewMandelstamDudek(sprimecompl, m1, m2);
+  std::complex<double> result = (sprime-(m1+m2)*(m1+m2))
+    *PawianQFT::ChewMandelstamDudek(sprimecompl, m1, m2);
     return result;
 }
 
@@ -172,5 +187,17 @@ double CMIntegrationDudek::dsNorm(double sprime, double m1, double m2, double mp
      +(fpolecomplex*fpolecomplex)*(sprime-(m1complex+m2complex)*(m1complex+m2complex))
      *PawianQFT::ChewMandelstamDudek(sprimecomplex, m1, m2);
   return norm(ds);
+}
+
+double CMIntegrationDudek::dsImag(double sprime, double m1, double m2, double mpole, double fpole){
+  complex<double> sprimecomplex(sprime,0.);
+  complex<double> mpolecomplex(mpole,0.);
+  complex<double> fpolecomplex(fpole,0.);
+  complex<double> m1complex(m1,0.);
+  complex<double> m2complex(m2,0.);
+  complex<double> ds=sprimecomplex-mpolecomplex*mpolecomplex
+     +(fpolecomplex*fpolecomplex)*(sprime-(m1complex+m2complex)*(m1complex+m2complex))
+     *PawianQFT::ChewMandelstamDudek(sprimecomplex, m1, m2);
+  return ds.imag();
 }
 

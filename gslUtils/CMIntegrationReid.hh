@@ -51,9 +51,11 @@ protected:
 
 private:
   static double FIntWrapper(double x, void * params);
+  static double FIntWrapperNormCondition(double x, void * params);
   static std::complex<double> Ctilde(std::complex<double> s, double sprime);
   static std::complex<double> Sigma(double sprime, double m1, double m2);
   static double dsNorm(double sprime, double m1, double m2, double mpole, double fpole);
+  static double dsImag(double sprime, double m1, double m2, double mpole, double fpole);
 };
 
 

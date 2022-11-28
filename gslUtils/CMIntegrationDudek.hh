@@ -54,12 +54,14 @@ private:
   static double FIntWrapperPi(double x, void * params);
   static double FIntWrapperOffsetDSigDdPi(double x, void * params);
   static double FIntWrapperOffsetDSigDdReid(double x, void * params);
+  static double FIntWrapperNormCondition(double x, void * params);
   static std::complex<double> CtildeReid(std::complex<double> s, double sprime);
   static std::complex<double> CtildePi(std::complex<double> s, double sprime);
   static double OffsetDSigDdPi(double sprime);
   static double OffsetDSigDdReid(double sprime);
   static std::complex<double> Sigma(double sprime, double m1, double m2);
   static double dsNorm(double sprime, double m1, double m2, double mpole, double fpole);
+  static double dsImag(double sprime, double m1, double m2, double mpole, double fpole);
   static std::complex<double> _offset;
   std::string _offsetMethod;
 };

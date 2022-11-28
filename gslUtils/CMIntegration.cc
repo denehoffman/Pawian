@@ -75,3 +75,4 @@ void CMIntegration::doFit(gsl_function& F, double& result, double& resulterr, st
     }
   }
 }
+
