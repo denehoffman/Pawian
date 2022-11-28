@@ -91,7 +91,7 @@ int main(int __argc,char *__argv[]){
       optind++;
       mRealHigh = atof(__argv[optind]);
     }
-    else if (sw=="--stepSizeReal"){
+    else if (sw=="-stepSizeReal"){
       optind++;
       stepSizeReal = atof(__argv[optind]);
     }

@@ -74,5 +74,7 @@ void CMIntegration::doFit(gsl_function& F, double& result, double& resulterr, st
       }
     }
   }
+  gsl_integration_workspace_free (wsp1);
+  //delete wsp1;
 }
 
