@@ -106,6 +106,9 @@ int main(int __argc,char *__argv[]){
     //if (counter>0) oStream << "\n";
 
     //oStream << mReal << mImag << cmReal << cmImag << "\n";
+    cmReal*=scalingFactor;
+    cmImag*=scalingFactor;
+    
     oStream.write(reinterpret_cast<char*>(&mReal),sizeof(mReal));
     oStream.write(reinterpret_cast<char*>(&mImag),sizeof(mImag));
     oStream.write(reinterpret_cast<char*>(&cmReal),sizeof(cmReal));
