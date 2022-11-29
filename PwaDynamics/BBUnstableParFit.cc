@@ -32,11 +32,16 @@
 
 #include "ErrLogger/ErrLogger.hh"
 
-BBUnstableParFit::BBUnstableParFit(double _mRes, double _wRes, double _m1, double _m2){
-  mRes = _mRes;
-  wRes = _wRes;
-  m1 = _m1;
-  m2 = _m2;
+BBUnstableParFit::BBUnstableParFit(double _mRes, double _wRes, double _m1, double _m2, std::string CMname) :
+   mRes(_mRes)
+  ,wRes(_wRes)
+  ,m1(_m1)
+  ,m2(_m2)  
+   ,_cmName(CMname){
+  // mRes = _mRes;
+  // wRes = _wRes;
+  // m1 = _m1;
+  // m2 = _m2;
   // Display parameters for test distribution 
 
   cout << endl;
@@ -44,6 +49,12 @@ BBUnstableParFit::BBUnstableParFit(double _mRes, double _wRes, double _m1, doubl
   InfoMsg <<"Set wRes as "<< wRes << endmsg;
   InfoMsg <<"Set m1 as "<< m1 << endmsg;
   InfoMsg <<"Set m1 as "<< m2 << endmsg;
+  InfoMsg <<"CM name: " << _cmName << endmsg;
+  if(_cmName!="Dudek" && _cmName!="Reid"){
+    Alert << "CM name: " << _cmName << " not supported!!!" << endmsg;
+    Alert << "use Dudek or Reid!!!!" << endmsg;
+    exit(1);
+  }
 }
 
 double BBUnstableParFit::calcNormD(const std::vector<double>& minPar){
@@ -51,8 +62,8 @@ double BBUnstableParFit::calcNormD(const std::vector<double>& minPar){
   std::complex<double> rootS(mRes,-wRes/2.0);
   std::complex<double> S = rootS*rootS;
   std::complex<double> intermediate;
-  //intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamReid(mRes, m1, m2));
-  intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamDudek(mRes, m1, m2));
+  if(_cmName=="Reid") intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamReid(mRes, m1, m2));
+  else intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamDudek(mRes, m1, m2));
   result = norm(intermediate);
   return result;
 }
@@ -62,8 +73,8 @@ double BBUnstableParFit::calcNormDInvNeg(const std::vector<double>& minPar){
   std::complex<double> rootS(mRes,-wRes/2.0);
   std::complex<double> S = rootS*rootS;
   std::complex<double> intermediate;
-  //intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamReid(mRes, m1, m2));
-  intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamDudek(mRes, m1, m2));
+  if(_cmName=="Reid") intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamReid(mRes, m1, m2));
+  else intermediate = S-(minPar[0]*minPar[0])+(minPar[1]*minPar[1])*(S-((m1+m2)*(m1+m2)))*conj(PawianQFT::ChewMandelstamDudek(mRes, m1, m2));
   result = -1.0/norm(intermediate);
   return result;
 }

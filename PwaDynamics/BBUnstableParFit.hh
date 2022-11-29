@@ -37,7 +37,7 @@ class BBUnstableParFit {
 
 public:
 
-  BBUnstableParFit(double _mRes, double _wRes, double _m1, double _m2);
+  BBUnstableParFit(double _mRes, double _wRes, double _m1, double _m2, std::string CMname="Dudek");
   virtual ~BBUnstableParFit();
 
   double calcNormD(const std::vector<double>& minPar);
@@ -48,5 +48,5 @@ private:
   double wRes;
   double m1;
   double m2;
- 
+  std::string _cmName;
 };

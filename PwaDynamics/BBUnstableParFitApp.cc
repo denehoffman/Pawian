@@ -52,6 +52,7 @@ int main(int __argc,char *__argv[]){
 	    << "-wRes (parameter wRes of test distribution; default 0.14)\n\n"
 	    << "-m1 (parameter m1 of test distribution; default 0.14)\n\n" 
 	    << "-m2 (parameter m2 of test distribution; default 0.14)\n\n"
+	    << "-cmName (set name of the Chew-Mandelstam function; default Dudek; alternative Reid)\n\n"      
 	    << endmsg;
     return 0;
   }
@@ -64,6 +65,7 @@ int main(int __argc,char *__argv[]){
   std::string p1Str="0.14";
   std::string p2Str="0.14";
   std::string p3Str="0.14";
+  std::string cmName="Dudek";
   
   // Read arguments and replace default values
   while ((optind < (__argc-1) ) && (__argv[optind][0]=='-')) {
@@ -89,6 +91,11 @@ int main(int __argc,char *__argv[]){
       p3Str = __argv[optind];
       found=true;
     }
+    if (sw=="-cmName"){
+      optind++;
+      cmName = __argv[optind];
+      found=true;
+      }
     if (!found){
       WarningMsg << "Unknown switch: " << __argv[optind] << endmsg;
       optind++;
@@ -113,8 +120,16 @@ int main(int __argc,char *__argv[]){
   double p3=0.;
   p3StrStr >> p3;
 
+  InfoMsg << "fitted with following parameter: " << endmsg;
+  InfoMsg << "mRes: " << p0 << endmsg;
+  InfoMsg << "wRes: " << p1 << endmsg;
+  InfoMsg << "m1: " << p2 << endmsg;
+  InfoMsg << "m2: " << p3 << endmsg;
+  InfoMsg << "CM function name: " << cmName << endmsg;
+  
+
   // Generate data distribution
-  std::shared_ptr<BBUnstableParFit> minuitFit(new BBUnstableParFit(p0, p1, p2, p3));
+  std::shared_ptr<BBUnstableParFit> minuitFit(new BBUnstableParFit(p0, p1, p2, p3, cmName));
 
   BBUnstableParFitFcn minuitFitFcn(minuitFit);
 
