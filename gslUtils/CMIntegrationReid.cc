@@ -41,6 +41,10 @@ CMIntegrationReid::CMIntegrationReid(double mpole, double fpole, double mu, doub
   std::string fitName="normalizationConstant";
   doFit(Fnorm, result, abserr, fitName);
   InfoMsg << "normalization constant: " << result << " +- " << abserr << endmsg;
+
+  double superposMassSqr=2.*2.;
+  double superpsoWeight=(1./PawianConstants::pi)*_CMunstable_params._fPole*_CMunstable_params._fPole*(Sigma(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2)).imag()/dsNorm(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole);
+  InfoMsg << "superposition weight at 2 MeV: " << superpsoWeight  << endmsg;
 }
 
 

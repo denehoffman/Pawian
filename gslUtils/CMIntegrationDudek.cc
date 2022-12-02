@@ -44,13 +44,13 @@ CMIntegrationDudek::CMIntegrationDudek(double mpole, double fpole, double mu, do
   std::string fitNameOffset;
   if(_offsetMethod == "Reid"){
     F.function = &FIntWrapperOffsetDSigDdPi;
-    InfoMsg << "use integration method: pi offset" << endmsg;
-    fitNameOffset="Dudek_piOffset";
+    InfoMsg << "use integration method: Reid offset" << endmsg;
+    fitNameOffset="Dudek_ReidOffset";
   }
   else{ //_offsetMethod == "Pi"
     F.function = &FIntWrapperOffsetDSigDdReid;
-    InfoMsg << "use integration method: Reid offset" << endmsg;
-    fitNameOffset="Dudek_ReidOffset";
+    InfoMsg << "use integration method: pi offset" << endmsg;
+    fitNameOffset="Dudek_piOffset";
   }
 
   double result, abserr;
@@ -66,6 +66,10 @@ CMIntegrationDudek::CMIntegrationDudek(double mpole, double fpole, double mu, do
   std::string fitName="normalizationConstant";
   doFit(Fnorm, result, abserr, fitName);
   InfoMsg << "normalization constant: " << result << " +- " << abserr << endmsg;
+
+  double superposMassSqr=2.*2.;
+  double superpsoWeight=(1./PawianConstants::pi)*_CMunstable_params._fPole*_CMunstable_params._fPole*(Sigma(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2)).imag()/dsNorm(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole);
+  InfoMsg << "superposition weight at 2 MeV: " << superpsoWeight  << endmsg;
 }
 
 
