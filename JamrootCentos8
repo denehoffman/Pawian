@@ -27,7 +27,7 @@ project :
   <include>$(BOOSTINCLUDE)
   <include>$(extern)/include
   <include>$(ROOTSYS)/include
-  <cxxflags>--std=c++14
+  <cxxflags>--std=c++17
   <cxxflags>-ftemplate-depth=256
   <link>shared
   <linkflags>$(ROOTLIBS)
