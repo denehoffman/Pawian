@@ -39,16 +39,23 @@ CMIntegrationDudek::CMIntegrationDudek(double mpole, double fpole, double mu, do
     Alert << "offset method: " << _offsetMethod << " no supported!!!! Use Reid or Pi instead" << endmsg;
     exit(1);
   }
- 
-  gsl_function F;
+}
+
+
+
+CMIntegrationDudek::~CMIntegrationDudek(){
+}
+
+void CMIntegrationDudek::setup(){
+ gsl_function F;
   std::string fitNameOffset;
   if(_offsetMethod == "Reid"){
-    F.function = &FIntWrapperOffsetDSigDdPi;
+    F.function = &FIntWrapperOffsetDSigDdReid;
     InfoMsg << "use integration method: Reid offset" << endmsg;
     fitNameOffset="Dudek_ReidOffset";
   }
   else{ //_offsetMethod == "Pi"
-    F.function = &FIntWrapperOffsetDSigDdReid;
+    F.function = &FIntWrapperOffsetDSigDdPi;
     InfoMsg << "use integration method: pi offset" << endmsg;
     fitNameOffset="Dudek_piOffset";
   }
@@ -57,10 +64,9 @@ CMIntegrationDudek::CMIntegrationDudek(double mpole, double fpole, double mu, do
   doFit(F, result, abserr, fitNameOffset);
 
   _offset=complex<double>(result, 0.);
-  InfoMsg << "integration for pi: obtained value for offset: " << _offset << endmsg;
+  InfoMsg << "obtained value for offset: " << _offset << endmsg;
 
-
-  gsl_function Fnorm;
+    gsl_function Fnorm;
   Fnorm.function=FIntWrapperNormCondition;
   
   std::string fitName="normalizationConstant";
@@ -70,11 +76,7 @@ CMIntegrationDudek::CMIntegrationDudek(double mpole, double fpole, double mu, do
   double superposMassSqr=2.*2.;
   double superpsoWeight=(1./PawianConstants::pi)*_CMunstable_params._fPole*_CMunstable_params._fPole*(Sigma(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2)).imag()/dsNorm(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole);
   InfoMsg << "superposition weight at 2 MeV: " << superpsoWeight  << endmsg;
-}
 
-
-
-CMIntegrationDudek::~CMIntegrationDudek(){
 }
 
 
@@ -169,7 +171,7 @@ double result = -1./PawianConstants::pi * 1./PawianConstants::pi
   * pow(_CMunstable_params._fPole,2.)
   *(Sigma(sprime, _CMunstable_params._m1,_CMunstable_params._m2)).imag()
   /dsNorm(sprime, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole)
- *(1.+(2.*sqrt(sprime)*_CMunstable_params._mu*log(sqrt(sprime)/_CMunstable_params._mu))/(sprime-_CMunstable_params._mu*_CMunstable_params._mu));
+  *(1.+(2.*sqrt(sprime)*_CMunstable_params._mu*log(sqrt(sprime)/_CMunstable_params._mu))/(sprime-_CMunstable_params._mu*_CMunstable_params._mu));
   return result;
 }
 

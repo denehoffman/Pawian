@@ -44,7 +44,7 @@ public:
  
   /// Destructor
   ~CMIntegrationDudek();
-
+  virtual void setup();
   virtual void integrate(std::complex<double> s, std::complex<double>& result, std::complex<double>& resulterr);
 
 protected:

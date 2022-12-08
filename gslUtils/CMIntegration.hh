@@ -58,7 +58,7 @@ public:
  
   /// Destructor
   ~CMIntegration();
-
+  virtual void setup()=0;
   virtual void integrate(std::complex<double> s, std::complex<double>& result, std::complex<double>& resulterr)=0;
   virtual void doFit(gsl_function& F, double& result, double& resulterr, std::string fitName);
   void setCMparams(CMunstable_params& theParams);

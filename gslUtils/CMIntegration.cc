@@ -53,6 +53,7 @@ void CMIntegration::setCMparams(CMunstable_params& theParams){
   _CMunstable_params._mu=theParams._mu;
   _CMunstable_params._m1=theParams._m1;
   _CMunstable_params._m2=theParams._m2;
+  _integLowerBorder=(_CMunstable_params._m1+_CMunstable_params._m2)*(_CMunstable_params._m1+_CMunstable_params._m2);
 }
 
 void CMIntegration::doFit(gsl_function& F, double& result, double& resulterr, std::string fitName){

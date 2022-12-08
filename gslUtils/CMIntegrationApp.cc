@@ -136,7 +136,7 @@ int main(int __argc,char *__argv[]){
     }
     else if (sw=="-m2"){
       optind++;
-      m1 = atof(__argv[optind]);
+      m2 = atof(__argv[optind]);
     }
     else if (sw=="-CMfunction"){
       optind++;
@@ -190,6 +190,7 @@ int main(int __argc,char *__argv[]){
   }
 
   cmIntegration->setCMparams(theParams);
+  cmIntegration->setup();
   
   for(double sqrtsReal=mRealLow; sqrtsReal<=mRealHigh; sqrtsReal+=stepSizeReal){
     for(double sqrtsImag=mImagHigh; sqrtsImag>=mImagLow; sqrtsImag-=stepSizeImag){

@@ -33,11 +33,18 @@
 
 CMIntegrationReid::CMIntegrationReid(double mpole, double fpole, double mu, double m1, double m2) :
   CMIntegration(mpole, fpole, mu, m1, m2){
+}
 
-  gsl_function Fnorm;
+
+
+CMIntegrationReid::~CMIntegrationReid(){
+}
+
+void CMIntegrationReid::setup(){
+gsl_function Fnorm;
   Fnorm.function=FIntWrapperNormCondition;
 
-  double result, abserr;  
+  double result, abserr;
   std::string fitName="normalizationConstant";
   doFit(Fnorm, result, abserr, fitName);
   InfoMsg << "normalization constant: " << result << " +- " << abserr << endmsg;
@@ -46,12 +53,6 @@ CMIntegrationReid::CMIntegrationReid(double mpole, double fpole, double mu, doub
   double superpsoWeight=(1./PawianConstants::pi)*_CMunstable_params._fPole*_CMunstable_params._fPole*(Sigma(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2)).imag()/dsNorm(superposMassSqr, _CMunstable_params._m1, _CMunstable_params._m2, _CMunstable_params._mPole, _CMunstable_params._fPole);
   InfoMsg << "superposition weight at 2 MeV: " << superpsoWeight  << endmsg;
 }
-
-
-
-CMIntegrationReid::~CMIntegrationReid(){
-}
-
 
 void CMIntegrationReid::integrate(std::complex<double> s, std::complex<double>& result, std::complex<double>& resulterr){
   _currentS=s;
