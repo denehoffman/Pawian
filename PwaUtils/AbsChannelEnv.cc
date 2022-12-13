@@ -222,7 +222,8 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
     }
 
     else {
-      Alert << "Decay\t" << (*itStr) << "\tnot supported!!!" ;
+      Alert << "Decay\t" << (*itStr) << "\tnot supported!!!";
+      exit(1);
     }
 
     if(!useIsospin) tmpDec->disableIsospin();

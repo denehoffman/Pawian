@@ -93,6 +93,13 @@ void CMIntegrationDudek::integrate(std::complex<double> s, std::complex<double>&
   double resultReal, abserrReal;
   std::string fitName="Dudek real part";
   doFit(F, resultReal, abserrReal, fitName);
+  if(resultReal != resultReal){
+    WarningMsg << "ingegral with s = " << _currentS << " is nan" << endmsg;
+    _currentS+=complex<double>(0.00001, 0.00001);
+    WarningMsg << "try it no with = " << _currentS << endmsg;
+    doFit(F, resultReal, abserrReal, fitName);
+      WarningMsg << "new result: " << resultReal << endmsg;  
+  }
 
   
   _calcRealPart=false;

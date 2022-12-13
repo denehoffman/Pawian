@@ -535,9 +535,38 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap,
       }
     }
     else{
-      Alert << "decay level " << whichDecayLevel() 
-	    << " is not supported so far!!! Will be changed soon!!!" << endmsg;
-      exit(0); 
+      std::vector< std::shared_ptr<AbsDecay> > motherAmpList=motherAmpRefList();
+      if(motherAmpList.size()>1 || motherAmpList.size()==0){
+        Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production amplitudes! Production plane cannot be set properly" << endmsg;
+        Alert << "motherAmpList.size(): " << motherAmpList.size() << endmsg;
+        exit(0);
+      }
+      
+       std::vector< std::shared_ptr<AbsDecay> > motherMotherAmpList=motherAmpList.at(0)->motherAmpRefList();
+      if(motherMotherAmpList.size()>1 || motherMotherAmpList.size()==0){
+        Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production reference amplitudes! Production plane cannot be set properly" << endmsg;
+        Alert << "motherMotherAmpList.size(): " << motherMotherAmpList.size() << endmsg;
+        exit(0);
+      }
+ 
+      Vector4<double> motherRefDaughter1_4Vec;
+      std::vector<Particle*> motherRefDaughter1List=motherMotherAmpList.at(0)->finalStateParticlesDaughter1();
+      for(itP=motherRefDaughter1List.begin(); itP!=motherRefDaughter1List.end(); ++itP){
+	itMap=fsMap.find((*itP)->name());
+	motherRefDaughter1_4Vec+=itMap->second;
+      }
+      
+      //fill daughter2
+      Vector4<double> motherRefDaughter2_4Vec;
+      std::vector<Particle*> motherRefDaughter2List=motherMotherAmpList.at(0)->finalStateParticlesDaughter2();
+      for(itP=motherRefDaughter2List.begin(); itP!=motherRefDaughter2List.end(); ++itP){
+	itMap=fsMap.find((*itP)->name());
+	motherRefDaughter2_4Vec+=itMap->second;
+      }
+      
+      motherRefVec=motherRefDaughter1_4Vec+motherRefDaughter2_4Vec;
+      //InfoMsg << "motherRefVec: " << motherRefVec << endmsg;
+      //InfoMsg << "prodParticle4Vec: " << prodParticle4Vec << endmsg;
     }  
 
     daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
@@ -839,7 +868,7 @@ void AbsDecay::addToFsParticleNameList(const std::string& name){
 void  AbsDecay::setWigDRefKey(std::string& ref){
   if(ref == _wignerDRefKey) return;
   if (_wignerDRefKey != "default"){
-    Alert << "two different reference keys for the WignerD functions not allowed!!!"
+    Alert << "for decay: " << name() <<" two different reference keys for the WignerD functions not allowed!!!"
 	  << "\n which are: " <<  _wignerDRefKey << " and: " << ref 
 	  << "\n clone particle(s) for at least one decay chain" << endmsg;
     exit(1);

@@ -45,7 +45,7 @@ int main(int __argc,char *__argv[]){
 	    << "The switches are:\n\n"
 	    << "-iFile (path to input file; default: ChewMandelstaCalc.dat)\n\n" 
 	    << "-oFile (path to output file ; default: ChewMandelstaCalc.lut)\n\n"
-	    << "-scalingFactor (scaling factor ; default: 1.0)\n\n" 
+	    << "-scalingFactor (scaling factor ; default: 1.0)\n\n"
 	    << endmsg;
     return 0;
   }
@@ -100,12 +100,9 @@ int main(int __argc,char *__argv[]){
   int counter=0;
   while (!iStream.eof()) {
     double mReal, mImag, cmReal, cmRealErr, cmImag, cmImagErr;
-    iStream >> mReal >> mImag >> cmReal >> cmImag >> cmRealErr >> cmImagErr;
-    //oStream << mReal << mImag << cmReal << cmImag << std::endl;
-    //oStream << mReal << mImag << cmReal << cmImag;
-    //if (counter>0) oStream << "\n";
-
-    //oStream << mReal << mImag << cmReal << cmImag << "\n";
+    //iStream >> mReal >> mImag >> cmReal >> cmImag >> cmRealErr >> cmImagErr;
+    iStream >> mReal >> mImag >> cmReal >> cmImag;
+    
     cmReal*=scalingFactor;
     cmImag*=scalingFactor;
     
