@@ -80,7 +80,8 @@ public:
   void addToStringStringMap(const std::string& firstString, const std::string& secondString, std::map<std::string, std::string>& theMap);  
   bool areSuffixMapsIdentical();
   void printFitParameterReplacements();
-
+  std::string topDirPath() const {return _topDirPath;}
+  std::string KMatrixPath() const {return _KMatPath;}  
 private:
   GlobalEnv();
    static GlobalEnv* _instance;
@@ -90,9 +91,12 @@ private:
    ParserBase* _theParser;
    std::string _outputFileNameSuffix;
    std::string _serializationFileName;
+  std::string _topDirPath;
+  std::string _KMatPath;
 
-   ChannelEnvList _channelEnvs;
-   std::shared_ptr<AbsPawianParameters> _startParams;
+   
+  ChannelEnvList _channelEnvs;
+  std::shared_ptr<AbsPawianParameters> _startParams;
   std::map<std::string, std::string> _toBeReplacedSuffixMap;
   std::map<std::string, std::string> _alreadyReplacedSuffixMap;
   std::map<std::string, std::string> _fitParamReplacementMap;

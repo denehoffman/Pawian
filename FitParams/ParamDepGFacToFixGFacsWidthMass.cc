@@ -36,7 +36,21 @@ ParamDepGFacToFixGFacsWidthMass::ParamDepGFacToFixGFacsWidthMass(std::istringstr
   std::vector<std::string> targetParameterVec;
   std::string pathToKMatrixConfig;
   configLine >> pathToKMatrixConfig;
-  _kMatrixParser=std::shared_ptr<KMatrixParser>(new KMatrixParser(pathToKMatrixConfig));
+  std::string kMatStorePath=getenv("KMAT_DIR");
+  std::string completePathToKMatrixConfig=kMatStorePath+"/"+pathToKMatrixConfig;
+  std::ifstream ifs(completePathToKMatrixConfig);
+  if(!ifs.good()){
+    WarningMsg << "file " << completePathToKMatrixConfig << " does not exist. Try now to search in absolute path" << endmsg;
+    completePathToKMatrixConfig=pathToKMatrixConfig;
+    ifs=std::ifstream(completePathToKMatrixConfig);
+    if(!ifs.good()){
+      Alert << "file: " << completePathToKMatrixConfig << " does not exist!!!!" << endmsg;
+      exit(1);
+    }
+  }
+  
+
+  _kMatrixParser=std::shared_ptr<KMatrixParser>(new KMatrixParser(completePathToKMatrixConfig));
   _gFactorStartMap=_kMatrixParser->gFactorMap();
 
   const std::vector<std::string> gFactorFixPoles= _kMatrixParser->gFactorFixPoles();

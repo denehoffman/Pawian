@@ -5,6 +5,7 @@ setenv extern /data/sleipnir/PANDA/PWA
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${TOP_DIR}/lib:${extern}/libgcc920-opt
 setenv BOOST_BUILD_PATH /usr/share/boost-build
 setenv PATH ${TOP_DIR}/bin:${PATH}
+setenv KMAT_DIR /data/duldul/bertram/KMatStore/
 
 rm Jamroot
 ln -s JamrootCentos8 Jamroot

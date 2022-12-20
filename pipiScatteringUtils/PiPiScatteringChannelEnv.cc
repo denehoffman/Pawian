@@ -216,6 +216,21 @@ void PiPiScatteringChannelEnv::addDynamics(){
     exit(0);
   }
 
+  //std::string kMatStorePath=getenv("KMAT_DIR");
+  std::string kMatStorePath=GlobalEnv::instance()->KMatrixPath();
+  std::string completePathToKMatrixConfig=kMatStorePath+"/"+_pathKMatrixParserFile;
+  std::ifstream ifs(completePathToKMatrixConfig);
+  if(!ifs.good()){
+    WarningMsg << "file " << completePathToKMatrixConfig << " does not exist. Try now to search in absolute path" << endmsg;
+    completePathToKMatrixConfig=_pathKMatrixParserFile;
+    ifs=std::ifstream(completePathToKMatrixConfig);
+    if(!ifs.good()){
+      Alert << "file: " << completePathToKMatrixConfig << " does not exist!!!!" << endmsg;
+      exit(1);
+    }
+  }
+  _pathKMatrixParserFile=completePathToKMatrixConfig;
+  
   std::shared_ptr<AbsDecay> theDecay=absDecList.at(0);
 
   theDecay->enableDynamics(dynStr, additionalStringVec);

@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : CMIntegrationApp convertToBinApp
+install install-bin : CMIntegrationApp CMIntegration2DApp convertToBinApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -28,6 +28,14 @@ lib gslUtils :
         : <library>$(TOP)//Minuit2 ;
 
 exe CMIntegrationApp : CMIntegrationApp.cc gslUtils
+        $(TOP)/Utils//Utils
+        $(TOP)/Particle//Particle
+        $(TOP)/qft++//qft++
+        $(TOP)/qft++Extension//qft++Extension
+        $(TOP)/ErrLogger//ErrLogger
+        : ;
+
+exe CMIntegration2DApp : CMIntegration2DApp.cc gslUtils
         $(TOP)/Utils//Utils
         $(TOP)/Particle//Particle
         $(TOP)/qft++//qft++

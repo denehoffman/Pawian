@@ -30,47 +30,33 @@
 #include <stddef.h>
 #include <gsl/gsl_integration.h>
 
-struct CMunstable_params {
-  double _mPole;
-  double _fPole;
-  double _mu;
-  double _m1;
-  double _m2;
+#include "gslUtils/CMIntegration.hh"
 
-  CMunstable_params(double mpole, double fpole, double mu, double m1, double m2) :
-    _mPole(mpole)
-    ,_fPole(fpole)
-    ,_mu(mu)
-    ,_m1(m1)
-    ,_m2(m2){
-  }
-};
 
 //_____________________________________________________________________________
-// @file CMIntegration.hh
+// @file CMIntegration2D.hh
 //_____________________________________________________________________________
 
-class CMIntegration {
+class CMIntegration2D :  public CMIntegration{
 
 public:
   /// Constructor 
-  CMIntegration(double mpole, double fpole, double mu, double m1, double m2); 
+  CMIntegration2D(double mpole1, double fpole1, double m11, double m21,double mpole2, double fpole2, double m12, double m22); 
  
   /// Destructor
-  ~CMIntegration();
-  virtual void setup()=0;
-  virtual void integrate(std::complex<double> s, std::complex<double>& result, std::complex<double>& resulterr)=0;
-  virtual void doFit(gsl_function& F, double& result, double& resulterr, std::string fitName);
-  void setCMparams(CMunstable_params& theParams);
+  ~CMIntegration2D();
+
+  virtual void doFit2(gsl_function& F, double& result, double& resulterr, std::string fitName);
+  void setCMparams2(CMunstable_params& theParams);
   
 protected:
-  static CMunstable_params _CMunstable_params;
-  static std::complex<double> _currentS;
-  static bool _calcRealPart;
-  static double _integLowerBorder;
-  double _epsabs;
-  double _epsrel;
-  size_t _limit;
+  static CMunstable_params _CMunstable_params2;
+  static std::complex<double> _currentS2;
+  static double _currentsprimeprime;
+  static std::complex<double> _currentOuterResult;
+  static std::complex<double> _currentInnerResult;
+  static bool _calcRealPartInner;
+  double _integLowerBorder2;
   
 private:  
 };

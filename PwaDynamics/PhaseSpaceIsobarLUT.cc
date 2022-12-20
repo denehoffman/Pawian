@@ -34,15 +34,39 @@ PhaseSpaceIsobarLUT::PhaseSpaceIsobarLUT(double mass1, double mass2, string type
   m_nIm = 0;
   m_sLow = complex<double>(0.0, 0.0);
   m_sHigh = complex<double>(0.0, 0.0);
-  m_lutfilepath = type.substr(3, type.length());
+  //m_lutfilepath = type.substr(3, type.length());
+  //m_sortedByReS = true;
+  //std::cout << "LUTFile: " << m_lutfilepath << std::endl;
+  //if (FILE *file = fopen(m_lutfilepath.c_str(), "r")) {
+  //  fclose(file);
+  //} else {
+  //  Alert << "file: " << m_lutfilepath << " does not exist!!!!" << endmsg;
+  //  exit(1);  
+  //}
+
+  //m_lutfilepath = type.substr(3, type.length());
+  if(getenv("KMAT_DIR")==NULL){
+    Alert << "environment variable KMAT_DIR not set!!!" << endmsg;
+    exit(1);
+  }
+  std::string kMatStorePath=getenv("KMAT_DIR");
+  m_lutfilepath = kMatStorePath+type;
   m_sortedByReS = true;
   std::cout << "LUTFile: " << m_lutfilepath << std::endl;
   if (FILE *file = fopen(m_lutfilepath.c_str(), "r")) {
     fclose(file);
-  } else {
-    Alert << "file: " << m_lutfilepath << " does not exist!!!!" << endmsg;
-    exit(1);  
-  } 
+  }
+  else {
+    WarningMsg << "file: " << m_lutfilepath << " does not exist! Try to find it with old naming convention LUT+absolute path" << endmsg;
+    m_lutfilepath = type.substr(3, type.length());
+    if (FILE *file = fopen(m_lutfilepath.c_str(), "r")) {
+    fclose(file);
+    }
+    else{
+      Alert << "file: " << m_lutfilepath << " does not exist!!!!" << endmsg;
+      exit(1);
+    }
+  }
   loadParams();
 }
 

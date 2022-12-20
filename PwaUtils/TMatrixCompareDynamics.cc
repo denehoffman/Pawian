@@ -56,7 +56,21 @@ TMatrixCompareDynamics::TMatrixCompareDynamics(std::string& name, std::vector<Pa
   ,_projectionCompareIndex(0)
   ,_currentOffset(0.)
 {
-  _kMatrixParserCompare= std::shared_ptr<KMatrixParser>(new KMatrixParser(pathToKMatrCompareConfigFile));
+  std::string kMatStorePath=GlobalEnv::instance()->KMatrixPath();
+  std::string completePathToComparCfgConfig=kMatStorePath+"/"+pathToKMatrCompareConfigFile;
+  std::ifstream ifs(completePathToComparCfgConfig);
+  if(!ifs.good()){
+    WarningMsg << "file " << completePathToComparCfgConfig << " does not exist. Try now to search in absolute path" << endmsg;
+    completePathToComparCfgConfig=pathToKMatrCompareConfigFile;
+    ifs=std::ifstream(completePathToComparCfgConfig);
+    if(!ifs.good()){
+      Alert << "file: " << completePathToComparCfgConfig << " does not exist!!!!" << endmsg;
+      exit(1);
+    }
+  }
+
+  
+  _kMatrixParserCompare= std::shared_ptr<KMatrixParser>(new KMatrixParser(completePathToComparCfgConfig));
   _tMatrDynCompare=std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParserCompare));
   _tMatrCompare=_tMatrDynCompare->getTMatix();  
   _orbitalLCompare=_kMatrixParserCompare->orbitalMom();

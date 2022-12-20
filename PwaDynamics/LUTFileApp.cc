@@ -72,17 +72,33 @@ int main(int __argc,char *__argv[]){
     while ( (optind < __argc ) && __argv[optind][0]!='-' ) optind++;
     }
 
+  if (getenv("KMAT_DIR")==NULL){
+    Alert << "environment variable KMAT_DIR not set!!!" << endmsg;
+    exit(1);
+  }
+    
+  std::string kMatPath= std::string(getenv("KMAT_DIR"));
+  std::string completeLutfilepath=kMatPath+lutfilepath;
 
-  if (FILE *file = fopen(lutfilepath.c_str(), "r")) {
+  if (FILE *file = fopen(completeLutfilepath.c_str(), "r")) {
     fclose(file);
-    InfoMsg << "input LUT file: " << lutfilepath.c_str() << endmsg;
-  } else {
-    Alert << "file: " << lutfilepath << " does not exist!!!!" << endmsg;
-    exit(1);  
+    InfoMsg << "input LUT file: " << completeLutfilepath.c_str() << endmsg;
+  }
+  else {
+    WarningMsg << "file: " << completeLutfilepath << " does not exist!!!! Try to use absolute path" << endmsg;
+    completeLutfilepath=lutfilepath;
+    if (FILE *file = fopen(completeLutfilepath.c_str(), "r")) {
+      fclose(file);
+      InfoMsg << "input LUT file: " << completeLutfilepath.c_str() << endmsg;
+    }
+    else{
+      Alert << "file: " << completeLutfilepath << " does not exist!!!!" << endmsg;
+      exit(1);
+    }
   }
 
   std::ifstream lutfile;
-  lutfile.open(lutfilepath.c_str(), std::ios::binary | std::ifstream::in);
+  lutfile.open(completeLutfilepath.c_str(), std::ios::binary | std::ifstream::in);
   //lutfile.open(lutfilepath.c_str(), std::ios::in | std::ios::binary);
   if (!lutfile.is_open()){
     Alert << "LUT: file not readable: " << lutfilepath << endmsg;
@@ -104,7 +120,7 @@ int main(int __argc,char *__argv[]){
   double firstIm = 0.0;
   double lastIm = 0.0;
   int dSize = sizeof(lastRe);
-  int m_dSize = dSize;
+  //  int m_dSize = dSize;
   long lines = size/(4*dSize);
   char *memblock = new char [dSize];
   lutfile.read(memblock, dSize);

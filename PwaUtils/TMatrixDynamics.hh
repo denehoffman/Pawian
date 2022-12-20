@@ -95,6 +95,8 @@ protected:
   std::map<std::string, std::vector<std::string> > _paramNameListMap;
   std::map<unsigned int, double > _noRotationMap;
   std::string _projectionParticleNames;
+  std::string _pathToKMatCfgParser;
+  
   virtual void init();
   virtual void evalElasticity(EvtData* theData, double currentMass, Spin OrbMom);
   virtual void evalPhase(EvtData* theData, double currentMass, Spin OrbMom);

@@ -48,7 +48,19 @@ GlobalEnv::GlobalEnv() :
    _alreadySetUp(false) ,
    _channelEnvsAlredySetup(false),
    _theParser(0)
+   //_topDirPath(getenv("TOP_DIR"))
+   //_KMatPath(getenv("KMAT_DIR"))
 {
+  if (getenv("TOP_DIR")==NULL){
+    Alert << "environment variable KMAT_DIR not set!!!" << endmsg;
+    exit(1);
+  }
+  _topDirPath=std::string(getenv("TOP_DIR"));
+  if (getenv("KMAT_DIR")==NULL){
+    Alert << "environment variable KMAT_DIR not set!!!" << endmsg;
+    exit(1);
+  }
+  _KMatPath= std::string(getenv("KMAT_DIR"));
 }
 
 

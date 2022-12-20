@@ -26,6 +26,7 @@
 #include <sstream>
 #include <string>
 #include <boost/multi_array.hpp>
+#include "PwaUtils/GlobalEnv.hh"
 #include "KMatrixExtract/TMatrixPiPiSWaveSimple4piPhp.hh"
 #include "KMatrixExtract/RiemannSheetAnalyzer.hh"
 #include "qft++/topincludes/relativistic-quantum-mechanics.hh" 
@@ -232,7 +233,8 @@ MatrixPiPiSWaveSimple4piPhp::~MatrixPiPiSWaveSimple4piPhp() {
 
 void MatrixPiPiSWaveSimple4piPhp::init() {
    PdtParser pdtParser;
-   std::string theSourcePath=getenv("TOP_DIR");
+   //std::string theSourcePath=getenv("TOP_DIR");
+   std::string theSourcePath=GlobalEnv::instance()->topDirPath();
    std::string pdtFileRelPath="/Particle/pdtNew.table";
    std::string pdtFile(theSourcePath+pdtFileRelPath);
    _particleTable = new ParticleTable;

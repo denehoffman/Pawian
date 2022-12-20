@@ -51,7 +51,8 @@ int main(int __argc,char *__argv[]){
   }
 
   // Set default values
-  double scalingFactor=0.2;
+  // double scalingFactor=0.2;
+  double scalingFactor=1.;
   std::string iFile="./ChewMandelstaCalc.dat";
   std::string oFile="./ChewMandelstaCalc.lut";
 
