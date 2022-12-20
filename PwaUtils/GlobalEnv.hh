@@ -81,7 +81,9 @@ public:
   bool areSuffixMapsIdentical();
   void printFitParameterReplacements();
   std::string topDirPath() const {return _topDirPath;}
-  std::string KMatrixPath() const {return _KMatPath;}  
+  std::string KMatrixStorePath() const {return _KMatStorePath;}
+  std::string evtStorePath() const {return _evtStorePath;}
+  
 private:
   GlobalEnv();
    static GlobalEnv* _instance;
@@ -92,7 +94,8 @@ private:
    std::string _outputFileNameSuffix;
    std::string _serializationFileName;
   std::string _topDirPath;
-  std::string _KMatPath;
+  std::string _KMatStorePath;
+  std::string _evtStorePath;
 
    
   ChannelEnvList _channelEnvs;

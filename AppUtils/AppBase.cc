@@ -31,10 +31,14 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/random.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include "AppUtils/AppBase.hh"
 
 #include "AppUtils/LhFactory.hh"
+
+#include "Utils/PawianIOUtils.hh"
 
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/GlobalEnv.hh"
@@ -77,6 +81,8 @@
 #include "resUtils/ResChannelEnv.hh"
 #include "ggUtils/GGChannelEnv.hh"
 #include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
+
+
 
 AppBase::AppBase()
 {
@@ -172,8 +178,8 @@ void AppBase::readEvents(EventList& theEventList, std::vector<std::string>& file
   std::vector<std::string> completeFileNames;
   std::vector<std::string>::iterator itStr;
   for(itStr=fileNames.begin(); itStr!=fileNames.end(); ++itStr){
-    std::string currentFile=GlobalEnv::instance()->Channel(channelID)->parser()->prePathDataFiles()+(*itStr);
-    completeFileNames.push_back(currentFile);
+    std::string currentPathCfg=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), (*itStr));
+    completeFileNames.push_back(currentPathCfg);
   }
   int noFinalStateParticles=GlobalEnv::instance()->Channel(channelID)->noFinalStateParticles();
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts =
@@ -224,8 +230,8 @@ void AppBase::readScatteringEvents(EventList& theEventList, std::vector<std::str
   std::vector<std::string> completeFileNames;
   std::vector<std::string>::iterator itStr;
   for(itStr=fileNames.begin(); itStr!=fileNames.end(); ++itStr){
-    std::string currentFile=GlobalEnv::instance()->Channel(channelID)->parser()->prePathDataFiles()+(*itStr);
-    completeFileNames.push_back(currentFile);
+    std::string currentPathCfg=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), (*itStr));
+     completeFileNames.push_back(currentPathCfg);
   }
 
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts =
@@ -733,8 +739,8 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   std::map<short, std::tuple<long, double, long> > numEventMap;
 
   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
-    const std::string datFile=(*it).first->parser()->dataFile();
-    const std::string mcFile=(*it).first->parser()->mcFile();
+    const std::string datFile=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), (*it).first->parser()->dataFile());
+    const std::string mcFile=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(),(*it).first->parser()->mcFile());
     InfoMsg << "data file: " << datFile << endmsg;
     InfoMsg << "mc file: " << mcFile << endmsg;
     

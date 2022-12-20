@@ -23,6 +23,7 @@
 // PiPiScatteringChannelEnv class definition file. -*- C++ -*-
 // Copyright 2017 Bertram Kopf
 
+#include "Utils/PawianIOUtils.hh"
 #include "Particle/ParticleTable.hh"
 #include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
 #include "ConfigParser/pipiScatteringParser.hh"
@@ -216,21 +217,8 @@ void PiPiScatteringChannelEnv::addDynamics(){
     exit(0);
   }
 
-  //std::string kMatStorePath=getenv("KMAT_DIR");
-  std::string kMatStorePath=GlobalEnv::instance()->KMatrixPath();
-  std::string completePathToKMatrixConfig=kMatStorePath+"/"+_pathKMatrixParserFile;
-  std::ifstream ifs(completePathToKMatrixConfig);
-  if(!ifs.good()){
-    WarningMsg << "file " << completePathToKMatrixConfig << " does not exist. Try now to search in absolute path" << endmsg;
-    completePathToKMatrixConfig=_pathKMatrixParserFile;
-    ifs=std::ifstream(completePathToKMatrixConfig);
-    if(!ifs.good()){
-      Alert << "file: " << completePathToKMatrixConfig << " does not exist!!!!" << endmsg;
-      exit(1);
-    }
-  }
-  _pathKMatrixParserFile=completePathToKMatrixConfig;
-  
+  _pathKMatrixParserFile=PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(), _pathKMatrixParserFile);
+
   std::shared_ptr<AbsDecay> theDecay=absDecList.at(0);
 
   theDecay->enableDynamics(dynStr, additionalStringVec);

@@ -27,6 +27,7 @@
 #include <fstream>
 #include <string>
 
+#include "Utils/PawianIOUtils.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -66,19 +67,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_currentAdler0(0.)
   ,_projectionParticleNames(projectionParticleNames)
 {
-  std::string kMatStorePath=GlobalEnv::instance()->KMatrixPath();
-  std::string completePathToKMatrixConfig=kMatStorePath+"/"+pathToConfigParser;
-  std::ifstream ifs(completePathToKMatrixConfig);
-  if(!ifs.good()){
-    WarningMsg << "file " << completePathToKMatrixConfig << " does not exist. Try now to search in absolute path" << endmsg;
-    completePathToKMatrixConfig=pathToConfigParser;
-    ifs=std::ifstream(completePathToKMatrixConfig);
-    if(!ifs.good()){
-      Alert << "file: " << completePathToKMatrixConfig << " does not exist!!!!" << endmsg;
-      exit(1);
-    }
-  }
-  _pathToKMatCfgParser=completePathToKMatrixConfig;
+  _pathToKMatCfgParser=PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(), pathToConfigParser);
   _kMatrixParser = std::shared_ptr<KMatrixParser>(new KMatrixParser(_pathToKMatCfgParser));
   
   if(dataType=="Elasticity") _dataTypeID=1;

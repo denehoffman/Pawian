@@ -27,6 +27,7 @@
 #include <fstream>
 #include <string>
 
+#include "Utils/PawianIOUtils.hh"
 #include "PwaUtils/FVectorCompareDynamics.hh"
 #include "PwaUtils/KMatrixDynamics.hh"
 #include "PwaDynamics/FVector.hh"
@@ -65,20 +66,8 @@ FVectorIntensityDynamics(name, fsParticles, mother1, pathToConfigParser,  baseNa
   std::string nameFVectComp = _kMatrDynComp->addOneGrandMa(_nameOfFVectorCompare);
   _FVectorCompare = _kMatrDynComp->fVector(nameFVectComp);
 
-  std::string kMatStorePath=GlobalEnv::instance()->KMatrixPath();
-  std::string completePathToKMatrixConfig=kMatStorePath+"/"+pathToConfigParserComp;
-  std::ifstream ifs(completePathToKMatrixConfig);
-  if(!ifs.good()){
-    WarningMsg << "file " << completePathToKMatrixConfig << " does not exist. Try now to search in absolute path" << endmsg;
-    completePathToKMatrixConfig=pathToConfigParserComp;
-    ifs=std::ifstream(completePathToKMatrixConfig);
-    if(!ifs.good()){
-      Alert << "file: " << completePathToKMatrixConfig << " does not exist!!!!" << endmsg;
-      exit(1);
-    }
-  }
-  
-  //  std::shared_ptr<KMatrixParser> kMatrixCompParser(new KMatrixParser(pathToConfigParserComp));
+  std::string completePathToKMatrixConfig=PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(),pathToConfigParserComp);
+
   std::shared_ptr<KMatrixParser> kMatrixCompParser(new KMatrixParser(completePathToKMatrixConfig));
   _orbMomCompare = kMatrixCompParser->orbitalMom();
   _useAbsPhaseDiff= GlobalEnv::instance()->parser()->useAbsPhaseDiff();

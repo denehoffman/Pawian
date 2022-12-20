@@ -27,6 +27,7 @@
 #include <fstream>
 #include <string>
 
+#include "Utils/PawianIOUtils.hh"
 #include "PwaUtils/TMatrixCompareDynamics.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -56,19 +57,7 @@ TMatrixCompareDynamics::TMatrixCompareDynamics(std::string& name, std::vector<Pa
   ,_projectionCompareIndex(0)
   ,_currentOffset(0.)
 {
-  std::string kMatStorePath=GlobalEnv::instance()->KMatrixPath();
-  std::string completePathToComparCfgConfig=kMatStorePath+"/"+pathToKMatrCompareConfigFile;
-  std::ifstream ifs(completePathToComparCfgConfig);
-  if(!ifs.good()){
-    WarningMsg << "file " << completePathToComparCfgConfig << " does not exist. Try now to search in absolute path" << endmsg;
-    completePathToComparCfgConfig=pathToKMatrCompareConfigFile;
-    ifs=std::ifstream(completePathToComparCfgConfig);
-    if(!ifs.good()){
-      Alert << "file: " << completePathToComparCfgConfig << " does not exist!!!!" << endmsg;
-      exit(1);
-    }
-  }
-
+  std::string completePathToComparCfgConfig=PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(),pathToKMatrCompareConfigFile); 
   
   _kMatrixParserCompare= std::shared_ptr<KMatrixParser>(new KMatrixParser(completePathToComparCfgConfig));
   _tMatrDynCompare=std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParserCompare));

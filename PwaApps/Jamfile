@@ -39,6 +39,7 @@ exe singleChannelApp : singleChannelApp.cc PwaApps
 	$(TOP)/FitParams//FitParams
         $(TOP)/PwaUtils//PwaUtils
 	$(TOP)/AppUtils//AppUtils
+	$(TOP)/Utils//Utils
         $(TOP)/Particle//Particle
         $(TOP)/Event//Event
         $(TOP)/qft++//qft++ 

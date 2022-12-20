@@ -56,11 +56,18 @@ GlobalEnv::GlobalEnv() :
     exit(1);
   }
   _topDirPath=std::string(getenv("TOP_DIR"));
+  
   if (getenv("KMAT_DIR")==NULL){
     Alert << "environment variable KMAT_DIR not set!!!" << endmsg;
     exit(1);
   }
-  _KMatPath= std::string(getenv("KMAT_DIR"));
+  _KMatStorePath= std::string(getenv("KMAT_DIR"));
+  
+  if (getenv("EVT_DIR")==NULL){
+    Alert << "environment variable EVT_DIR not set!!!" << endmsg;
+    exit(1);
+  }
+  _evtStorePath= std::string(getenv("EVT_DIR"));
 }
 
 

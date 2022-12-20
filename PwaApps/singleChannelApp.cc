@@ -33,6 +33,7 @@
 #include <iterator>
 #include <memory>
 
+#include "Utils/PawianIOUtils.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "AppUtils/AppBase.hh"
@@ -215,13 +216,13 @@ int main(int __argc,char *__argv[]){
   // The following modes only need the primary channel data/mc and lh ptr
   std::shared_ptr<AbsLh> theLhPtr = GlobalEnv::instance()->Channel()->Lh();
 
-  const std::string datFile=GlobalEnv::instance()->parser()->dataFile();
+  const std::string datFile=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), GlobalEnv::instance()->parser()->dataFile());
   InfoMsg << "data file: " << datFile << endmsg;
   std::vector<std::string> dataFileNames;
   dataFileNames.push_back(datFile);
 
 
-  const std::string mcFile=GlobalEnv::instance()->parser()->mcFile();
+  const std::string mcFile=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), GlobalEnv::instance()->parser()->mcFile());
   std::vector<std::string> mcFileNames;
   if(!isPiPiScatteringChannel) {
     InfoMsg << "mc file: " << mcFile << endmsg;
@@ -312,7 +313,7 @@ int main(int __argc,char *__argv[]){
 	    << endmsg;
       exit(1);
     }
-    const std::string truthFile=GlobalEnv::instance()->parser()->truthFile();
+    const std::string truthFile=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), GlobalEnv::instance()->parser()->truthFile());
     int ratioTruthToMc= GlobalEnv::instance()->parser()->ratioTruthToMc();
     int maxTruthEvts=eventsData.size()*ratioMcToData*ratioTruthToMc;
     InfoMsg << "truth file: " << truthFile << endmsg;
