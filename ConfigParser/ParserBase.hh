@@ -124,8 +124,6 @@ public:
   const std::vector<std::string>& addKmatrixProdSuffix() const {return _kMatrixProdSuffix;}
   const std::string intitial4Vec() const {return _intitial4VecStr;}
   const std::string projectile4Vec() const {return _projectile4VecStr;}
-  const std::string prePathDataFiles() const {return _prePathDataFiles;}
-  const std::string prePathKMatrixFiles() const {return _prePathKMatrixFiles;}
   const bool scalingWChannelID() const {return _scalingWithChannelID;}
   const bool fixAllPhases() const {return _fixAllPhases;}
   const double nllScalingFactor() const {return _nllScalingFactor;}
@@ -226,8 +224,6 @@ protected:
   std::vector<std::string> _kMatrixProdSuffix;
   std::string _intitial4VecStr;
   std::string _projectile4VecStr;
-  std::string _prePathDataFiles;
-  std::string _prePathKMatrixFiles;
   bool _scalingWithChannelID;
   bool _fixAllPhases;
   double _nllScalingFactor;

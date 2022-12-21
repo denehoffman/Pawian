@@ -419,8 +419,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
 
   if(_dynType=="KMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" || _dynType=="FVectorCompare" 
      || _dynType=="FVectorIntensity" || _dynType=="Omnes"){
-    std::string prePathKMat=GlobalEnv::instance()->Channel(_channelId)->parser()->prePathKMatrixFiles();
-    _pathParserFile=prePathKMat+additionalStringVec[0];
+    _pathParserFile=additionalStringVec[0];
     if (additionalStringVec.size() == 3) 
       _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);
   }

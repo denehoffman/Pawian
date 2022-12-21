@@ -83,8 +83,6 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_noInterScattPoints(0)
   ,_intitial4VecStr("")
   ,_projectile4VecStr("")
-  ,_prePathDataFiles("")
-  ,_prePathKMatrixFiles("")
   ,_scalingWithChannelID(false)
   ,_fixAllPhases(false)
   ,_nllScalingFactor(1.)
@@ -163,8 +161,6 @@ ParserBase::ParserBase(int argc,char **argv)
     ("name",po::value<string>(&_outputFileNameSuffix), "name that is attached to all otuput file names")
     ("pdgTableFile",po::value<string>(&_pdgTableFile), "path of the pdg-table file relative to the top dir")
     ("randomSeed",po::value<int>(&_randomSeed),  "random seed")
-    ("prePathDataFiles",po::value<string>(&_prePathDataFiles), "option to set a pre path to the data files")
-    ("prePathKMatrixFiles",po::value<string>(&_prePathKMatrixFiles), "option to set a pre path to the K-matrix files")
     ("scalingWithChannelID",po::value<bool>(&_scalingWithChannelID), "scaling with suffix for channel IDs")
     ("fixAllPhases",po::value<bool>(&_fixAllPhases), "option to fix all phases")
     ("singleChannelId",po::value<unsigned int>(&_singleChannelId), "preferred single channel ID e.g. when running QA")
@@ -329,8 +325,6 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
                 << "no of interpolated scattering points: " << _noInterScattPoints << "\n\n"
 		<< "initial 4vector: " << _intitial4VecStr << "\n\n"
 		<< "projectile 4vector: " << _projectile4VecStr << "\n\n"
-		<< "prePathDataFiles: " << _prePathDataFiles << "\n\n"
-		<< "prePathKMatrixFiles: " << _prePathKMatrixFiles << "\n\n"
 		<< "scalingWithChannelID: " <<  _scalingWithChannelID << "\n\n"
 		<< "fixAllPhases: " << _fixAllPhases << "\n\n"
 		<< "singleChannelId: " << _singleChannelId << "\n\n"
