@@ -1,0 +1,2014 @@
+2023/01/16 12:39:31.467185 [INFO] 
+                                       MMMMM
+                                      M8NO  +M
+                                    NO       M         ,MM
+                                    MM     ?MN,   D8MMMO  :NMM
+                               :MZ            ZM  MZ            NM,  M
+                              M,          :M   MMN            DMMN M  ~
+                             M        8MMM M  M,    7O: :M, M+     N:
+                            M  =NMZ M     ,M8 M    ,O     MM   :    M
+                            D  DM   M    $8        I= MM  $M   7    M
+                           Z~ M M  O 8   8          M     N MM    DM
+                           8, O    MM    M           :MM8,     ,, MMD
+                           O:       M    87MMO ,  MM~                ,M,
+                           I=O  M   M   M        M                     M
+                           :M   M   N   M N,     M                    M~
+                           :M  ?~  N    8I+  M    MMMMMMMMMMMMMMMOM? 7,
+                            M  ++  M   8MZ7  M     M                MM
+                            M   D  M  N   N   M,    ND          DM8,
+                            M   M  M M~M               DMNM88= 8,
+                            M    8  ?M?       M                 M~
+                            M      N~8       ?$    :             M
+                            NN      M     M  M     M             8:
+                            D M    M   DDM   M     M               M,
+                            D     ,D  D?M    N     M                 ND
+                            M     M  ,O8$   ,7     M    M    M         M~
+                            NN  8IO  M M    I=     =    M    M          ,M
+                                 M  M                   M    M I          M
+                                ~M ?8                 M M    M +M   MM     N
+        N+I8MMM~                MM M ,      M         M D    M   M   MON   ~$
+        M       NM              M8   M      O     D   M Z+  M:    M,  M M   M
+         ,MMMD    88            8M   N     M      M         M      ~M  M M+  M
+               7M, MI          +ZM  M      M      M        I$ $NI    M ,O M8 ?O
+                 ?N M          I:   M      M       8       M     ,    M M     M
+                  M +?         8,          N       M       N    :MMMMM7D M    M
+                   D M         8,                  N,     ,$   M       M 8    8:
+                   N,D,        ?:    =MMMMMZ               D  M         M  M  8ZMM
+                    M ND       :Z=MO,                      N    MM8ZN8  M  M  M+ ,:~MMM 8~
+                     M  DMMMMMNZ             D    ~MM        :MM        M   M MM    MNMM M
+                     $7           DMMZZNOMMNMZ       M     =M       MZ  :7 MM   MM$ M8   N$ M
+                       MO      MMZ        Z                +   ,MMD   +  D M~8  N  M       M
+                          ?I=    D         8                        ,NMMMMO MM M 8  M     ID
+                                  8        D                     MN,     M  ~,  MM       8N
+     ,MNZ,  ,8MM         :~ZMMM,  :8       D                   8         ,M      N
+   88           :M   M+         M  ,D       D                $            M      M
+  M:       M      M ,7           D  8N$     8~             :D             M      M ?M,
+  M    7   M      M M   +MM?     M ,8  D8    D=          ,D              Z?     ,O
+  $I~ ~?  Z8     M  M      M     M 7+  M  :,   D$      8Z  M? M          M$D+M  7M?
+   Z:  MMN       N, M     M?     M D   M          =$~   M :+  D,      NMMMMM OMM  MM          MMM
+   O:           :M $Z    D8      M M   M          M     M O:  N      M     ,O     M M        M   N
+   $~          M:  M  D  DM      O N   M   MM     M    :N M   M     +7      M     M  M       D   D
+   ~=  MNMMMM8    D: $     M    ?Z M   D   M M    M    M  M   M     M M M   7,    M   M     D~   7=
+   ~I     M       N  O     :$   N  M   D   8 Z=   M   M~  M   M     Z   N    M    M   D,    M    Z
+    M     M      M   D     $~   M  M   N   M  M   M   M   Z   M    M         D    M    N    M    M
+    M     M      O   M     M    M  M   M  M     ,M   Z7  N~   N    M  NM     M    N    M    M    M
+ M  M     M     M    M     D    M  M   MMM   M M     M   M    M    N M  N    M   7$     D   M    M
+  MMM7  MN     O$   M     M    N   M          +      M   M    $   N +I  ~+   M   M  ,   M   M    M
+                MMM+      M    M   M       M,        N   M   O=   M M   ~?   M   M M~NN  M  8    M
+                           N  $$   7M      M+       D    8   M    M M   D,   M   M M  M  ,N 8    D
+                            D8:     M      OM      MN    D   M  , M M   M    M   O $  +~  $MZ    D
+                                     :M88DM  N +MM+      MMM$M  N~+~N   D,   M  :8  D  M         N
+                                                                 MMM     M   M  Z=  M  M         D
+
+//************************************************************************//
+//									  //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//          	   - Ruhr-Universität Bochum 				  //
+//									  //
+//  Pawian is free software: you can redistribute it and/or modify	  //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or 	  //
+//  (at your option) any later version.	 	      	  	   	  //
+//									  //
+//  Pawian is distributed in the hope that it will be useful,		  //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
+//  GNU General Public License for more details.	      		  //
+//									  //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
+//									  //
+//************************************************************************//
+
+   
+2023/01/16 12:39:31.467218 [INFO] Compiled Dec 21 2022 13:15:47
+2023/01/16 12:39:31.467223 [INFO] Hostname: pc70
+2023/01/16 12:39:31.468421 [WARN] ConfigParser/ParserBase.cc line 297: multithreading is not supported anymore!!! Reset noOfThreads from 2 to 1
+2023/01/16 12:39:31.471024 [INFO] initial4Vec: {Rank = 1 ( 2.2384,0,0,0.9) } 
+2023/01/16 12:39:31.471035 [INFO] projectile4Vec: {Rank = 1 ( 1.30013,0,0,0.9) } 
+2023/01/16 12:39:31.471860 [INFO] 
+The spins of the final state particles are:
+2023/01/16 12:39:31.471870 [INFO] pion0A : 0
+2023/01/16 12:39:31.471874 [INFO] pion0B : 0
+2023/01/16 12:39:31.471876 [INFO] eta : 0
+2023/01/16 12:39:31.471879 [INFO] 
+current projection is:
+2023/01/16 12:39:31.471883 [INFO] 0	lambda: 0
+2023/01/16 12:39:31.471885 [INFO] 0	lambda: 0
+2023/01/16 12:39:31.471888 [INFO] 0	lambda: 0
+
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+2023/01/16 12:39:31.471971 [INFO] added decay f2(1270)Topion0A_pion0B to decay list
+
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+2023/01/16 12:39:31.471986 [INFO] added decay a2(1320)0ATopion0A_eta to decay list
+
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+2023/01/16 12:39:31.472000 [INFO] added decay a2(1320)0BTopion0B_eta to decay list
+
+***ProdChannelInfo***
+particle1: f2(1270)	particle2: eta
+with production barrier: 0
+
+***ProdChannelInfo***
+particle1: a2(1320)0B	particle2: pion0A
+with production barrier: 0
+
+***ProdChannelInfo***
+particle1: a2(1320)0A	particle2: pion0B
+with production barrier: 0
+2023/01/16 12:39:31.472152 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472158 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472162 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472172 [INFO] Skip amplitude I1G-1J0P-1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472211 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472215 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472219 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472222 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472243 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472247 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472251 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472254 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472275 [INFO] Skip amplitude I0G1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472296 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472316 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472336 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472340 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472344 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472347 [INFO] Skip amplitude I1G-1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472369 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472373 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472377 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472380 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472400 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472404 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472408 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472411 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472432 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472437 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472441 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472444 [INFO] Skip amplitude I0G-1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472465 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472470 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472474 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472477 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472498 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472502 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472506 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472509 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472532 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472537 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472541 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472544 [INFO] Skip amplitude I1G1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472565 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472569 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472573 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472576 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472597 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472601 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472605 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472608 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472629 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472634 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472638 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472641 [INFO] Skip amplitude I0G-1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472664 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472669 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472673 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472676 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472699 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472703 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472708 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472711 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472731 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472736 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472740 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472743 [INFO] Skip amplitude I1G1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472763 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472768 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472772 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472775 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472815 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472832 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472837 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:31.472840 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C1Tof2(1270)_eta
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0B_pion0A
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0A_pion0B
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472941 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472945 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472949 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.472952 [INFO] Skip amplitude I1G-1J1P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.472972 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472976 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472980 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.472983 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.473003 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473007 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473010 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473013 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J2P1C1Tof2(1270)_eta
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0B_pion0A
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0A_pion0B
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.473100 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.473105 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.473108 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:31.473112 [INFO] Skip amplitude I1G-1J2P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.473132 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473136 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473139 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473142 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:31.473162 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473166 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473170 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:31.473173 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2023/01/16 12:39:31.473198 [INFO] add dynamics for J0P-1C1 dynType: WoDynamics
+2023/01/16 12:39:31.473207 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:31.473212 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:31.473220 [INFO] add dynamics for J1P1C1 dynType: WoDynamics
+2023/01/16 12:39:31.473225 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:31.473230 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:31.473235 [INFO] add dynamics for J2P1C1 dynType: WoDynamics
+2023/01/16 12:39:31.473240 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:31.473244 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:31.473282 [INFO] add dynamics for f2(1270)Topion0A_pion0B dynType: BreitWigner
+2023/01/16 12:39:31.473291 [INFO] add dynamics for a2(1320)0ATopion0A_eta dynType: BreitWigner
+2023/01/16 12:39:31.473298 [INFO] add dynamics for a2(1320)0BTopion0B_eta dynType: BreitWigner
+2023/01/16 12:39:31.473303 [INFO] I0G1J0P-1C1Tof2(1270)_eta set decay level to 0
+2023/01/16 12:39:31.473307 [INFO] f2(1270)Topion0A_pion0B set decay level to 1
+2023/01/16 12:39:31.473310 [INFO] I0G1J0P-1C1Toa2(1320)0B_pion0A set decay level to 0
+2023/01/16 12:39:31.473313 [INFO] a2(1320)0BTopion0B_eta set decay level to 1
+2023/01/16 12:39:31.473316 [INFO] I0G1J0P-1C1Toa2(1320)0A_pion0B set decay level to 0
+2023/01/16 12:39:31.473319 [INFO] a2(1320)0ATopion0A_eta set decay level to 1
+2023/01/16 12:39:31.473322 [INFO] I0G1J1P1C1Tof2(1270)_eta set decay level to 0
+2023/01/16 12:39:31.473325 [INFO] I0G1J1P1C1Toa2(1320)0B_pion0A set decay level to 0
+2023/01/16 12:39:31.473328 [INFO] I0G1J1P1C1Toa2(1320)0A_pion0B set decay level to 0
+2023/01/16 12:39:31.473331 [INFO] I0G1J2P1C1Tof2(1270)_eta set decay level to 0
+2023/01/16 12:39:31.473335 [INFO] I0G1J2P1C1Toa2(1320)0B_pion0A set decay level to 0
+2023/01/16 12:39:31.473338 [INFO] I0G1J2P1C1Toa2(1320)0A_pion0B set decay level to 0
+2023/01/16 12:39:31.473342 [ERROR] PwaUtils/GlobalEnv.cc line 213: setting up channel 0
+2023/01/16 12:39:31.473346 [INFO] check complete reaction chains
+2023/01/16 12:39:31.473349 [INFO] paricle name: pion0A
+2023/01/16 12:39:31.473352 [INFO] paricle name: pion0B
+2023/01/16 12:39:31.473354 [INFO] paricle name: eta
+2023/01/16 12:39:31.473359 [INFO] reaction chains have been successfully checked!!!
+2023/01/16 12:39:31.473366 [INFO] name of amplitude: f2(1270)Topion0A_pion0B	nameId: 1
+_wigDWigDRefId = 1	_wignerDId = 2
+with wignerDKey: pion0B_pion0Apion0B	wignerDRefKey: etapion0Apion0B
+2023/01/16 12:39:31.473371 [INFO] name of amplitude: I0G1J0P-1C1Tof2(1270)_eta	nameId: 3
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473376 [INFO] name of amplitude: a2(1320)0BTopion0B_eta	nameId: 5
+_wigDWigDRefId = 3	_wignerDId = 6
+with wignerDKey: eta_etapion0B	wignerDRefKey: etapion0Apion0B
+2023/01/16 12:39:31.473382 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0B_pion0A	nameId: 7
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473387 [INFO] name of amplitude: a2(1320)0ATopion0A_eta	nameId: 9
+_wigDWigDRefId = 5	_wignerDId = 10
+with wignerDKey: eta_etapion0A	wignerDRefKey: etapion0Apion0B
+2023/01/16 12:39:31.473395 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0A_pion0B	nameId: 11
+_wigDWigDRefId = 6	_wignerDId = 12
+with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473400 [INFO] name of amplitude: I0G1J1P1C1Tof2(1270)_eta	nameId: 13
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473404 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0B_pion0A	nameId: 14
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473410 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0A_pion0B	nameId: 15
+_wigDWigDRefId = 6	_wignerDId = 12
+with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473414 [INFO] name of amplitude: I0G1J2P1C1Tof2(1270)_eta	nameId: 16
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473419 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0B_pion0A	nameId: 17
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473426 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0A_pion0B	nameId: 18
+_wigDWigDRefId = 6	_wignerDId = 12
+with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:31.473431 [INFO] create likelihood object for channelType 1	 and channelID: 0
+2023/01/16 12:39:31.473456 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:31.473467 [INFO] Dynamics	f2(1270)Topion0A_pion0B	found!!!
+2023/01/16 12:39:31.473471 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473474 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473477 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473482 [INFO] _parityFactor=	1
+2023/01/16 12:39:31.473494 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473497 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473500 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:31.473503 [INFO] _parityFactor=	-1
+2023/01/16 12:39:31.473514 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:31.473521 [INFO] Dynamics	a2(1320)0BTopion0B_eta	found!!!
+2023/01/16 12:39:31.473524 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473527 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473529 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473532 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473535 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:31.473538 [INFO] _parityFactor=	1
+2023/01/16 12:39:31.473543 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473547 [INFO] _parityFactor=	-1
+2023/01/16 12:39:31.473559 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:31.473565 [INFO] Dynamics	a2(1320)0ATopion0A_eta	found!!!
+2023/01/16 12:39:31.473568 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473571 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473574 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473576 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:31.473579 [INFO] _parityFactor=	1
+2023/01/16 12:39:31.473585 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473589 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473596 [INFO] _parityFactor=	-1
+2023/01/16 12:39:31.473616 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:31.473621 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473624 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473626 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:31.473630 [INFO] _parityFactor=	1
+2023/01/16 12:39:31.473644 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:31.473648 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473651 [INFO] _parityFactor=	1
+2023/01/16 12:39:31.473667 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:31.473670 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473673 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473676 [INFO] _parityFactor=	1
+2023/01/16 12:39:31.473689 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:31.473692 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473695 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473697 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:31.473700 [INFO] _parityFactor=	-1
+2023/01/16 12:39:31.473718 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:31.473722 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473725 [INFO] _parityFactor=	-1
+2023/01/16 12:39:31.473741 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:31.473745 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:31.473748 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:31.473751 [INFO] _parityFactor=	-1
+2023/01/16 12:39:31.473770 [INFO] 
+*** The fit parameter replacements are ***
+2023/01/16 12:39:31.473773 [INFO] J0P-1C1Toa2(1320)0A_pion0B	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:31.473776 [INFO] J0P-1C1Toa2(1320)0B_pion0A	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:31.473782 [INFO] J1P1C1Toa2(1320)0A_pion0B	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:31.473785 [INFO] J1P1C1Toa2(1320)0B_pion0A	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:31.473787 [INFO] J2P1C1Toa2(1320)0A_pion0B	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:31.473808 [INFO] J2P1C1Toa2(1320)0B_pion0A	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:31.473811 [INFO] a2(1320)0ATopion0A_eta	replaced by	a2(1320)0ABTopion0AB_eta
+2023/01/16 12:39:31.473813 [INFO] a2(1320)0BTopion0B_eta	replaced by	a2(1320)0ABTopion0AB_eta
+2023/01/16 12:39:31.475201 [INFO] L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+2023/01/16 12:39:31.475220 [INFO] L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:31.475228 [INFO] L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+2023/01/16 12:39:31.475232 [INFO] L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+2023/01/16 12:39:31.475236 [INFO] f2(1270)Mass	1.275	0.03	1.125	1.425
+2023/01/16 12:39:31.475241 [INFO] f2(1270)Width	0.185	0.037	0	0.37
+2023/01/16 12:39:31.475245 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+2023/01/16 12:39:31.475249 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:31.475252 [INFO] L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+2023/01/16 12:39:31.475256 [INFO] L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+2023/01/16 12:39:31.475260 [INFO] a2(1320)0ABMass	1.318	0.03	1.168	1.468
+2023/01/16 12:39:31.475264 [INFO] a2(1320)0ABWidth	0.107	0.0214	0	0.214
+2023/01/16 12:39:31.475268 [INFO] L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475272 [INFO] L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:31.475276 [INFO] L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475280 [INFO] L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:31.475283 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475290 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:31.475294 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475297 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:31.475301 [INFO] L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475305 [INFO] L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:31.475308 [INFO] L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475312 [INFO] L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:31.475316 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475320 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:31.475323 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:31.475327 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:31.475331 [INFO] channelType1pion0Apion0BetaScaling	1	0.01	0	20
+2023/01/16 12:39:31.475335 [INFO] Iso1J0P-1C1	0	0.5	0	1
+2023/01/16 12:39:31.475340 [INFO] Iso1J1P1C1	0	0.5	0	1
+2023/01/16 12:39:31.475344 [INFO] Iso1J2P1C1	0	0.5	0	1
+2023/01/16 12:39:31.475348 [INFO] J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+2023/01/16 12:39:31.475356 [INFO] J0P-1C1L0S0pbarpPhi	0	0.2
+2023/01/16 12:39:31.475360 [INFO] J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+2023/01/16 12:39:31.475364 [INFO] J1P1C1L1S1pbarpPhi	0	0.2
+2023/01/16 12:39:31.475368 [INFO] J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+2023/01/16 12:39:31.475372 [INFO] J2P1C1L1S1pbarpPhi	0	0.2
+
+
+ parameters in pawianParams are: 
+
+L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+f2(1270)Mass	1.275	0.03	1.125	1.425
+f2(1270)Width	0.185	0.037	0	0.37
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+a2(1320)0ABMass	1.318	0.03	1.168	1.468
+a2(1320)0ABWidth	0.107	0.0214	0	0.214
+L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+channelType1pion0Apion0BetaScaling	1	0.01	0	20
+Iso1J0P-1C1	0	0.5	0	1
+Iso1J1P1C1	0	0.5	0	1
+Iso1J2P1C1	0	0.5	0	1
+J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+J0P-1C1L0S0pbarpPhi	0	0.2
+J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J1P1C1L1S1pbarpPhi	0	0.2
+J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J2P1C1L1S1pbarpPhi	0	0.2
+
+
+**************** Fit parameter **************************
+L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+f2(1270)Mass	1.275	0.03	1.125	1.425
+f2(1270)Width	0.185	0.037	0	0.37
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+a2(1320)0ABMass	1.318	0.03	1.168	1.468
+a2(1320)0ABWidth	0.107	0.0214	0	0.214
+L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+channelType1pion0Apion0BetaScaling	1	0.01	0	20
+Iso1J0P-1C1	0	0.5	0	1
+Iso1J1P1C1	0	0.5	0	1
+Iso1J2P1C1	0	0.5	0	1
+J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+J0P-1C1L0S0pbarpPhi	0	0.2
+J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J1P1C1L1S1pbarpPhi	0	0.2
+J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J2P1C1L1S1pbarpPhi	0	0.2
+2023/01/16 12:39:31.475613 [INFO] Fixing scaling parameter channelType1pion0Apion0BetaScaling
+2023/01/16 12:39:31.478188 [INFO] data file: /data/duldul/bertram/EvtStore/benchmark/pbarp/pi0pi0eta900/toyDataPbarPtoPi0Pi0Eta900.dat
+2023/01/16 12:39:31.478210 [INFO] mc file: /data/duldul/bertram/EvtStore/benchmark/pbarp/pi0pi0eta900/toyMCPbarPtoPi0Pi0Eta900.dat
+2023/01/16 12:39:31.478228 [WARN] Utils/PawianIOUtils.cc line 12: file /data/duldul/bertram/EvtStore//data/duldul/bertram/EvtStore/benchmark/pbarp/pi0pi0eta900/toyDataPbarPtoPi0Pi0Eta900.dat does not exist. Try now to search in absolute path
+2023/01/16 12:39:31.528180 [INFO] File has 15000 events.
+2023/01/16 12:39:31.528194 [INFO] 0x919150
+2023/01/16 12:39:31.528198 [INFO]  Each event has 3 final state particles.
+
+2023/01/16 12:39:31.528202 [INFO] 
+2023/01/16 12:39:31.528214 [INFO] {Rank = 1 ( 1.00582,-0.344109,0.676315,0.646247) } 	m = 0.134981
+2023/01/16 12:39:31.528219 [INFO] {Rank = 1 ( 0.490886,0.268108,-0.365443,-0.131599) } 	m = 0.13498
+2023/01/16 12:39:31.528224 [INFO] {Rank = 1 ( 0.741702,0.0760008,-0.310872,0.385351) } 	m = 0.547
+2023/01/16 12:39:31.528226 [INFO] 
+2023/01/16 12:39:31.528230 [INFO] {Rank = 1 ( 0.40085,0.129409,0.189305,-0.299798) } 	m = 0.13498
+2023/01/16 12:39:31.528235 [INFO] {Rank = 1 ( 0.872603,-0.604205,0.0580979,0.612191) } 	m = 0.13498
+2023/01/16 12:39:31.528239 [INFO] {Rank = 1 ( 0.964951,0.474797,-0.247402,0.587607) } 	m = 0.547
+2023/01/16 12:39:31.528245 [INFO] 
+2023/01/16 12:39:31.528250 [INFO] {Rank = 1 ( 0.41697,0.361025,0.120147,-0.104262) } 	m = 0.13498
+2023/01/16 12:39:31.528254 [INFO] {Rank = 1 ( 1.00759,-0.228811,0.450158,0.861406) } 	m = 0.13498
+2023/01/16 12:39:31.528258 [INFO] {Rank = 1 ( 0.813846,-0.132214,-0.570305,0.142856) } 	m = 0.547
+2023/01/16 12:39:31.528261 [INFO] 
+2023/01/16 12:39:31.528265 [INFO] {Rank = 1 ( 0.597319,0.449585,0.19727,0.312295) } 	m = 0.13498
+2023/01/16 12:39:31.528269 [INFO] {Rank = 1 ( 0.831258,-0.807196,-0.0173714,0.144577) } 	m = 0.13498
+2023/01/16 12:39:31.528273 [INFO] {Rank = 1 ( 0.809827,0.357611,-0.179898,0.443128) } 	m = 0.547
+2023/01/16 12:39:31.528275 [INFO] 
+2023/01/16 12:39:31.528279 [INFO] {Rank = 1 ( 0.740506,0.369645,0.402022,0.481529) } 	m = 0.13498
+2023/01/16 12:39:31.528283 [INFO] {Rank = 1 ( 0.696405,0.21075,-0.478719,0.439515) } 	m = 0.13498
+2023/01/16 12:39:31.528287 [INFO] {Rank = 1 ( 0.801494,-0.580395,0.0766976,-0.0210435) } 	m = 0.547
+2023/01/16 12:39:31.528290 [INFO] 
+2023/01/16 12:39:31.528294 [INFO] {Rank = 1 ( 0.518783,-0.106405,-0.361085,0.330472) } 	m = 0.13498
+2023/01/16 12:39:31.528298 [INFO] {Rank = 1 ( 0.713506,0.00411976,0.668283,-0.210362) } 	m = 0.13498
+2023/01/16 12:39:31.528302 [INFO] {Rank = 1 ( 1.00612,0.102285,-0.307198,0.77989) } 	m = 0.547
+2023/01/16 12:39:31.528304 [INFO] 
+2023/01/16 12:39:31.528308 [INFO] {Rank = 1 ( 0.519458,-0.469949,-0.148326,0.0936219) } 	m = 0.13498
+2023/01/16 12:39:31.528312 [INFO] {Rank = 1 ( 0.584925,-0.41356,-0.0321531,0.389682) } 	m = 0.13498
+2023/01/16 12:39:31.528316 [INFO] {Rank = 1 ( 1.13402,0.883509,0.180479,0.416696) } 	m = 0.547
+2023/01/16 12:39:31.528318 [INFO] 
+2023/01/16 12:39:31.528322 [INFO] {Rank = 1 ( 1.18737,-0.621677,0.0525778,1.00119) } 	m = 0.13498
+2023/01/16 12:39:31.528326 [INFO] {Rank = 1 ( 0.360835,0.22428,-0.0669787,-0.239153) } 	m = 0.13498
+2023/01/16 12:39:31.528330 [INFO] {Rank = 1 ( 0.690198,0.397397,0.0144009,0.137962) } 	m = 0.547
+2023/01/16 12:39:31.528333 [INFO] 
+2023/01/16 12:39:31.528337 [INFO] {Rank = 1 ( 0.581554,-0.521676,-0.0816438,0.202914) } 	m = 0.13498
+2023/01/16 12:39:31.528341 [INFO] {Rank = 1 ( 0.923734,0.523062,0.537356,0.522226) } 	m = 0.13498
+2023/01/16 12:39:31.528345 [INFO] {Rank = 1 ( 0.733117,-0.00138564,-0.455712,0.174861) } 	m = 0.547
+2023/01/16 12:39:31.528347 [INFO] 
+2023/01/16 12:39:31.528351 [INFO] {Rank = 1 ( 0.913937,0.403382,0.749106,0.305261) } 	m = 0.13498
+2023/01/16 12:39:31.528355 [INFO] {Rank = 1 ( 0.503539,-0.29557,-0.36049,0.134229) } 	m = 0.13498
+2023/01/16 12:39:31.528359 [INFO] {Rank = 1 ( 0.820929,-0.107812,-0.388616,0.46051) } 	m = 0.547
+2023/01/16 12:39:31.528361 [INFO] 
+2023/01/16 12:39:31.528539 [INFO] 4vec calculation for event 500
+2023/01/16 12:39:31.528698 [INFO] 4vec calculation for event 1000
+2023/01/16 12:39:31.528890 [INFO] 4vec calculation for event 1500
+2023/01/16 12:39:31.529052 [INFO] 4vec calculation for event 2000
+2023/01/16 12:39:31.529213 [INFO] 4vec calculation for event 2500
+2023/01/16 12:39:31.529371 [INFO] 4vec calculation for event 3000
+2023/01/16 12:39:31.529528 [INFO] 4vec calculation for event 3500
+2023/01/16 12:39:31.529687 [INFO] 4vec calculation for event 4000
+2023/01/16 12:39:31.529847 [INFO] 4vec calculation for event 4500
+2023/01/16 12:39:31.530005 [INFO] 4vec calculation for event 5000
+2023/01/16 12:39:31.530165 [INFO] 4vec calculation for event 5500
+2023/01/16 12:39:31.530324 [INFO] 4vec calculation for event 6000
+2023/01/16 12:39:31.530483 [INFO] 4vec calculation for event 6500
+2023/01/16 12:39:31.530642 [INFO] 4vec calculation for event 7000
+2023/01/16 12:39:31.530802 [INFO] 4vec calculation for event 7500
+2023/01/16 12:39:31.530960 [INFO] 4vec calculation for event 8000
+2023/01/16 12:39:31.531116 [INFO] 4vec calculation for event 8500
+2023/01/16 12:39:31.531272 [INFO] 4vec calculation for event 9000
+2023/01/16 12:39:31.531429 [INFO] 4vec calculation for event 9500
+2023/01/16 12:39:31.531588 [INFO] 4vec calculation for event 10000
+2023/01/16 12:39:31.531597 [INFO] 4vec all in lab system
+ px: 2.42144e-08	 py: 7.45058e-09	 pz: 0.9	 e : 2.2384	 m : 2.0495
+weight: 1
+2023/01/16 12:39:31.531760 [INFO] 4vec calculation for event 10500
+2023/01/16 12:39:31.531919 [INFO] 4vec calculation for event 11000
+2023/01/16 12:39:31.532078 [INFO] 4vec calculation for event 11500
+2023/01/16 12:39:31.532235 [INFO] 4vec calculation for event 12000
+2023/01/16 12:39:31.532393 [INFO] 4vec calculation for event 12500
+2023/01/16 12:39:31.532552 [INFO] 4vec calculation for event 13000
+2023/01/16 12:39:31.532709 [INFO] 4vec calculation for event 13500
+2023/01/16 12:39:31.532897 [INFO] 4vec calculation for event 14000
+2023/01/16 12:39:31.533058 [INFO] 4vec calculation for event 14500
+2023/01/16 12:39:31.533216 [INFO] 4vec calculation for event 15000
+2023/01/16 12:39:31.535367 [WARN] Utils/PawianIOUtils.cc line 12: file /data/duldul/bertram/EvtStore//data/duldul/bertram/EvtStore/benchmark/pbarp/pi0pi0eta900/toyMCPbarPtoPi0Pi0Eta900.dat does not exist. Try now to search in absolute path
+2023/01/16 12:39:31.682246 [INFO] File has 45000 events.
+2023/01/16 12:39:31.682264 [INFO] 0x91c940
+2023/01/16 12:39:31.682268 [INFO]  Each event has 3 final state particles.
+
+2023/01/16 12:39:31.682271 [INFO] 
+2023/01/16 12:39:31.682279 [INFO] {Rank = 1 ( 1.11855,0.359022,0.630611,0.840454) } 	m = 0.134979
+2023/01/16 12:39:31.682284 [INFO] {Rank = 1 ( 0.255622,-0.187835,-0.00603172,-0.108649) } 	m = 0.13498
+2023/01/16 12:39:31.682288 [INFO] {Rank = 1 ( 0.864235,-0.171188,-0.624579,0.168195) } 	m = 0.547
+2023/01/16 12:39:31.682291 [INFO] 
+2023/01/16 12:39:31.682295 [INFO] {Rank = 1 ( 0.801062,0.214112,0.290655,0.702251) } 	m = 0.13498
+2023/01/16 12:39:31.682300 [INFO] {Rank = 1 ( 0.74195,-0.226143,-0.692113,0.0459297) } 	m = 0.13498
+2023/01/16 12:39:31.682304 [INFO] {Rank = 1 ( 0.695393,0.0120315,0.401458,0.151819) } 	m = 0.547
+2023/01/16 12:39:31.682306 [INFO] 
+2023/01/16 12:39:31.682310 [INFO] {Rank = 1 ( 0.496833,0.225355,-0.198797,-0.371912) } 	m = 0.13498
+2023/01/16 12:39:31.682315 [INFO] {Rank = 1 ( 0.255013,-0.0377543,-0.210133,-0.0350812) } 	m = 0.13498
+2023/01/16 12:39:31.682319 [INFO] {Rank = 1 ( 1.48656,-0.187601,0.40893,1.30699) } 	m = 0.547
+2023/01/16 12:39:31.682321 [INFO] 
+2023/01/16 12:39:31.682325 [INFO] {Rank = 1 ( 1.00101,0.477393,0.580764,0.646999) } 	m = 0.13498
+2023/01/16 12:39:31.682330 [INFO] {Rank = 1 ( 0.464263,-0.410962,-0.150165,-0.0766908) } 	m = 0.13498
+2023/01/16 12:39:31.682334 [INFO] {Rank = 1 ( 0.773133,-0.0664313,-0.4306,0.329692) } 	m = 0.547
+2023/01/16 12:39:31.682336 [INFO] 
+2023/01/16 12:39:31.682340 [INFO] {Rank = 1 ( 0.524977,0.11189,0.460829,-0.180271) } 	m = 0.13498
+2023/01/16 12:39:31.682344 [INFO] {Rank = 1 ( 0.372914,-0.260326,-0.20399,-0.107066) } 	m = 0.13498
+2023/01/16 12:39:31.682348 [INFO] {Rank = 1 ( 1.34051,0.148437,-0.256839,1.18734) } 	m = 0.547
+2023/01/16 12:39:31.682351 [INFO] 
+2023/01/16 12:39:31.682355 [INFO] {Rank = 1 ( 0.445075,-0.334981,-0.0974529,0.24117) } 	m = 0.13498
+2023/01/16 12:39:31.682359 [INFO] {Rank = 1 ( 0.659975,0.57336,-0.0527404,-0.292958) } 	m = 0.13498
+2023/01/16 12:39:31.682363 [INFO] {Rank = 1 ( 1.13335,-0.238379,0.150193,0.951788) } 	m = 0.547
+2023/01/16 12:39:31.682365 [INFO] 
+2023/01/16 12:39:31.682369 [INFO] {Rank = 1 ( 0.908149,0.830147,0.022449,0.341857) } 	m = 0.13498
+2023/01/16 12:39:31.682373 [INFO] {Rank = 1 ( 0.408432,-0.383789,-0.0107301,-0.0344602) } 	m = 0.13498
+2023/01/16 12:39:31.682377 [INFO] {Rank = 1 ( 0.921824,-0.446358,-0.0117189,0.592603) } 	m = 0.547
+2023/01/16 12:39:31.682380 [INFO] 
+2023/01/16 12:39:31.682384 [INFO] {Rank = 1 ( 0.454618,0.223414,-0.116074,0.353654) } 	m = 0.13498
+2023/01/16 12:39:31.682388 [INFO] {Rank = 1 ( 0.707416,-0.448299,0.443076,-0.291426) } 	m = 0.13498
+2023/01/16 12:39:31.682392 [INFO] {Rank = 1 ( 1.07637,0.224885,-0.327001,0.837772) } 	m = 0.547
+2023/01/16 12:39:31.682395 [INFO] 
+2023/01/16 12:39:31.682399 [INFO] {Rank = 1 ( 0.756354,0.488329,0.142725,0.543153) } 	m = 0.13498
+2023/01/16 12:39:31.682403 [INFO] {Rank = 1 ( 0.429698,0.232218,0.323399,0.0889319) } 	m = 0.13498
+2023/01/16 12:39:31.682407 [INFO] {Rank = 1 ( 1.05235,-0.720547,-0.466125,0.267915) } 	m = 0.547
+2023/01/16 12:39:31.682414 [INFO] 
+2023/01/16 12:39:31.682418 [INFO] {Rank = 1 ( 0.351295,-0.155668,-0.20349,-0.198866) } 	m = 0.13498
+2023/01/16 12:39:31.682422 [INFO] {Rank = 1 ( 1.14357,0.471915,0.532122,0.885257) } 	m = 0.134981
+2023/01/16 12:39:31.682426 [INFO] {Rank = 1 ( 0.743538,-0.316248,-0.328631,0.213609) } 	m = 0.547
+2023/01/16 12:39:31.682429 [INFO] 
+2023/01/16 12:39:31.682594 [INFO] 4vec calculation for event 500
+2023/01/16 12:39:31.682753 [INFO] 4vec calculation for event 1000
+2023/01/16 12:39:31.682947 [INFO] 4vec calculation for event 1500
+2023/01/16 12:39:31.683110 [INFO] 4vec calculation for event 2000
+2023/01/16 12:39:31.683271 [INFO] 4vec calculation for event 2500
+2023/01/16 12:39:31.683431 [INFO] 4vec calculation for event 3000
+2023/01/16 12:39:31.683588 [INFO] 4vec calculation for event 3500
+2023/01/16 12:39:31.683749 [INFO] 4vec calculation for event 4000
+2023/01/16 12:39:31.683912 [INFO] 4vec calculation for event 4500
+2023/01/16 12:39:31.684072 [INFO] 4vec calculation for event 5000
+2023/01/16 12:39:31.684232 [INFO] 4vec calculation for event 5500
+2023/01/16 12:39:31.684392 [INFO] 4vec calculation for event 6000
+2023/01/16 12:39:31.684550 [INFO] 4vec calculation for event 6500
+2023/01/16 12:39:31.684711 [INFO] 4vec calculation for event 7000
+2023/01/16 12:39:31.684873 [INFO] 4vec calculation for event 7500
+2023/01/16 12:39:31.685034 [INFO] 4vec calculation for event 8000
+2023/01/16 12:39:31.685191 [INFO] 4vec calculation for event 8500
+2023/01/16 12:39:31.685351 [INFO] 4vec calculation for event 9000
+2023/01/16 12:39:31.685511 [INFO] 4vec calculation for event 9500
+2023/01/16 12:39:31.685667 [INFO] 4vec calculation for event 10000
+2023/01/16 12:39:31.685675 [INFO] 4vec all in lab system
+ px: -1.49012e-08	 py: -2.23517e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
+weight: 1
+2023/01/16 12:39:31.685836 [INFO] 4vec calculation for event 10500
+2023/01/16 12:39:31.685996 [INFO] 4vec calculation for event 11000
+2023/01/16 12:39:31.686155 [INFO] 4vec calculation for event 11500
+2023/01/16 12:39:31.686313 [INFO] 4vec calculation for event 12000
+2023/01/16 12:39:31.686473 [INFO] 4vec calculation for event 12500
+2023/01/16 12:39:31.686635 [INFO] 4vec calculation for event 13000
+2023/01/16 12:39:31.686812 [INFO] 4vec calculation for event 13500
+2023/01/16 12:39:31.686986 [INFO] 4vec calculation for event 14000
+2023/01/16 12:39:31.687147 [INFO] 4vec calculation for event 14500
+2023/01/16 12:39:31.687307 [INFO] 4vec calculation for event 15000
+2023/01/16 12:39:31.687468 [INFO] 4vec calculation for event 15500
+2023/01/16 12:39:31.687628 [INFO] 4vec calculation for event 16000
+2023/01/16 12:39:31.687791 [INFO] 4vec calculation for event 16500
+2023/01/16 12:39:31.687949 [INFO] 4vec calculation for event 17000
+2023/01/16 12:39:31.688109 [INFO] 4vec calculation for event 17500
+2023/01/16 12:39:31.688270 [INFO] 4vec calculation for event 18000
+2023/01/16 12:39:31.688430 [INFO] 4vec calculation for event 18500
+2023/01/16 12:39:31.688590 [INFO] 4vec calculation for event 19000
+2023/01/16 12:39:31.688750 [INFO] 4vec calculation for event 19500
+2023/01/16 12:39:31.688913 [INFO] 4vec calculation for event 20000
+2023/01/16 12:39:31.688920 [INFO] 4vec all in lab system
+ px: 1.74623e-10	 py: 0	 pz: 0.9	 e : 2.2384	 m : 2.0495
+weight: 1
+2023/01/16 12:39:31.689079 [INFO] 4vec calculation for event 20500
+2023/01/16 12:39:31.689239 [INFO] 4vec calculation for event 21000
+2023/01/16 12:39:31.689400 [INFO] 4vec calculation for event 21500
+2023/01/16 12:39:31.689560 [INFO] 4vec calculation for event 22000
+2023/01/16 12:39:31.689720 [INFO] 4vec calculation for event 22500
+2023/01/16 12:39:31.689883 [INFO] 4vec calculation for event 23000
+2023/01/16 12:39:31.690044 [INFO] 4vec calculation for event 23500
+2023/01/16 12:39:31.690204 [INFO] 4vec calculation for event 24000
+2023/01/16 12:39:31.690364 [INFO] 4vec calculation for event 24500
+2023/01/16 12:39:31.690524 [INFO] 4vec calculation for event 25000
+2023/01/16 12:39:31.690685 [INFO] 4vec calculation for event 25500
+2023/01/16 12:39:31.690851 [INFO] 4vec calculation for event 26000
+2023/01/16 12:39:31.691013 [INFO] 4vec calculation for event 26500
+2023/01/16 12:39:31.691174 [INFO] 4vec calculation for event 27000
+2023/01/16 12:39:31.691334 [INFO] 4vec calculation for event 27500
+2023/01/16 12:39:31.691494 [INFO] 4vec calculation for event 28000
+2023/01/16 12:39:31.691655 [INFO] 4vec calculation for event 28500
+2023/01/16 12:39:31.691818 [INFO] 4vec calculation for event 29000
+2023/01/16 12:39:31.691978 [INFO] 4vec calculation for event 29500
+2023/01/16 12:39:31.692138 [INFO] 4vec calculation for event 30000
+2023/01/16 12:39:31.692145 [INFO] 4vec all in lab system
+ px: -1.49012e-08	 py: 0	 pz: 0.9	 e : 2.2384	 m : 2.0495
+weight: 1
+2023/01/16 12:39:31.692306 [INFO] 4vec calculation for event 30500
+2023/01/16 12:39:31.692466 [INFO] 4vec calculation for event 31000
+2023/01/16 12:39:31.692627 [INFO] 4vec calculation for event 31500
+2023/01/16 12:39:31.692790 [INFO] 4vec calculation for event 32000
+2023/01/16 12:39:31.692950 [INFO] 4vec calculation for event 32500
+2023/01/16 12:39:31.693107 [INFO] 4vec calculation for event 33000
+2023/01/16 12:39:31.693263 [INFO] 4vec calculation for event 33500
+2023/01/16 12:39:31.693421 [INFO] 4vec calculation for event 34000
+2023/01/16 12:39:31.693581 [INFO] 4vec calculation for event 34500
+2023/01/16 12:39:31.693741 [INFO] 4vec calculation for event 35000
+2023/01/16 12:39:31.693904 [INFO] 4vec calculation for event 35500
+2023/01/16 12:39:31.694064 [INFO] 4vec calculation for event 36000
+2023/01/16 12:39:31.694222 [INFO] 4vec calculation for event 36500
+2023/01/16 12:39:31.694382 [INFO] 4vec calculation for event 37000
+2023/01/16 12:39:31.694539 [INFO] 4vec calculation for event 37500
+2023/01/16 12:39:31.694700 [INFO] 4vec calculation for event 38000
+2023/01/16 12:39:31.694862 [INFO] 4vec calculation for event 38500
+2023/01/16 12:39:31.695023 [INFO] 4vec calculation for event 39000
+2023/01/16 12:39:31.695184 [INFO] 4vec calculation for event 39500
+2023/01/16 12:39:31.695344 [INFO] 4vec calculation for event 40000
+2023/01/16 12:39:31.695350 [INFO] 4vec all in lab system
+ px: 0	 py: -1.49012e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
+weight: 1
+2023/01/16 12:39:31.695508 [INFO] 4vec calculation for event 40500
+2023/01/16 12:39:31.695665 [INFO] 4vec calculation for event 41000
+2023/01/16 12:39:31.695826 [INFO] 4vec calculation for event 41500
+2023/01/16 12:39:31.695986 [INFO] 4vec calculation for event 42000
+2023/01/16 12:39:31.696144 [INFO] 4vec calculation for event 42500
+2023/01/16 12:39:31.696303 [INFO] 4vec calculation for event 43000
+2023/01/16 12:39:31.696464 [INFO] 4vec calculation for event 43500
+2023/01/16 12:39:31.696622 [INFO] 4vec calculation for event 44000
+2023/01/16 12:39:31.696782 [INFO] 4vec calculation for event 44500
+2023/01/16 12:39:31.703281 [INFO] ************* Server mode ****************
+2023/01/16 12:39:31.703287 [INFO] Listening on port 50001
+2023/01/16 12:39:31.703293 [INFO] Number of clients for channel 0 : 4
+2023/01/16 12:39:31.713570 [INFO] Waiting for 4 clients ...
+2023/01/16 12:39:36.485536 [INFO] Client pc70 logged in (ID 0).
+2023/01/16 12:39:36.485838 [INFO] Client pc70 logged in (ID 1).
+2023/01/16 12:39:36.486119 [INFO] Client pc70 logged in (ID 2).
+2023/01/16 12:39:36.486463 [INFO] Client pc70 logged in (ID 3).
+2023/01/16 12:39:36.486694 [INFO] All clients ready.
+2023/01/16 12:39:36.489670 [INFO] start migrad with strategy level 1
+2023/01/16 12:39:38.904034 [INFO] current LH = -2218.040279118386	
+2023/01/16 12:39:38.904058 [INFO] Wall time: 7.43699s User: 0.22s System: 0.01s
+
+2023/01/16 12:39:38.904064 [INFO] Wtotal time: 7.437s User: 0.22s System: 0.01s
+
+  no                                  Name                    Value  type                 Error +-            Low          High
+   0         L2S2_J0P-1C1Tof2(1270)_etaMag                        1  free                      0.5
+   1         L2S2_J0P-1C1Tof2(1270)_etaPhi                        0 fixed
+   2       L2S0_f2(1270)Topion0A_pion0BMag                        1 fixed
+   3       L2S0_f2(1270)Topion0A_pion0BPhi                        0 fixed
+   4                          f2(1270)Mass                    1.275  free                     0.03          1.125          1.425
+   5                         f2(1270)Width                    0.185  free                    0.037              0           0.37
+   6  L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag                        1  free                      0.5
+   7  L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi                        0  free                      0.2
+   8      L2S0_a2(1320)0ABTopion0AB_etaMag                        1 fixed
+   9      L2S0_a2(1320)0ABTopion0AB_etaPhi                        0 fixed
+  10                       a2(1320)0ABMass                    1.318  free                     0.03          1.168          1.468
+  11                      a2(1320)0ABWidth                    0.107  free                   0.0214              0          0.214
+  12          L1S2_J1P1C1Tof2(1270)_etaMag       0.7071067811865475  free       0.3535533905932737
+  13          L1S2_J1P1C1Tof2(1270)_etaPhi                        0  free                      0.2
+  14          L3S2_J1P1C1Tof2(1270)_etaMag       0.7071067811865475  free       0.3535533905932737
+  15          L3S2_J1P1C1Tof2(1270)_etaPhi                        0  free                      0.2
+  16   L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag       0.7071067811865475  free       0.3535533905932737
+  17   L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi                        0  free                      0.2
+  18   L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag       0.7071067811865475  free       0.3535533905932737
+  19   L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi                        0  free                      0.2
+  20          L1S2_J2P1C1Tof2(1270)_etaMag       0.7071067811865475  free       0.3535533905932737
+  21          L1S2_J2P1C1Tof2(1270)_etaPhi                        0  free                      0.2
+  22          L3S2_J2P1C1Tof2(1270)_etaMag       0.7071067811865475  free       0.3535533905932737
+  23          L3S2_J2P1C1Tof2(1270)_etaPhi                        0  free                      0.2
+  24   L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag       0.7071067811865475  free       0.3535533905932737
+  25   L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi                        0 fixed
+  26   L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag       0.7071067811865475  free       0.3535533905932737
+  27   L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi                        0  free                      0.2
+  28    channelType1pion0Apion0BetaScaling                        1 fixed
+  29                           Iso1J0P-1C1                        0 fixed
+  30                            Iso1J1P1C1                        0 fixed
+  31                            Iso1J2P1C1                        0 fixed
+  32                   J0P-1C1L0S0pbarpMag       0.5773502691896258 fixed
+  33                   J0P-1C1L0S0pbarpPhi                        0 fixed
+  34                    J1P1C1L1S1pbarpMag       0.5773502691896258 fixed
+  35                    J1P1C1L1S1pbarpPhi                        0 fixed
+  36                    J2P1C1L1S1pbarpMag       0.5773502691896258 fixed
+  37                    J2P1C1L1S1pbarpPhi                        0 fixed
+2023/01/16 12:39:40.337692 [INFO] current LH = -2213.083671266908	
+2023/01/16 12:39:41.696066 [INFO] current LH = -2218.139969078973	
+2023/01/16 12:39:41.696086 [INFO] Wall time: 2.79202s User: 0.01s System: 0.01s
+
+2023/01/16 12:39:41.696093 [INFO] Wtotal time: 10.229s User: 0.23s System: 0.02s
+
+2023/01/16 12:39:43.571515 [INFO] Client timing information: 
+2023/01/16 12:39:43.571534 [INFO] Client id 3 channel id 0  response time +0 s
+2023/01/16 12:39:43.571540 [INFO] Client id 0 channel id 0  response time +0.000531 s
+2023/01/16 12:39:43.571546 [INFO] Client id 1 channel id 0  response time +0.001662 s
+2023/01/16 12:39:43.571551 [INFO] Client id 2 channel id 0  response time +0.002749 s
+2023/01/16 12:39:43.714942 [INFO] current LH = -2210.336851009371	
+2023/01/16 12:39:46.157868 [INFO] current LH = -2220.348775762688	
+2023/01/16 12:39:46.157889 [INFO] Wall time: 4.461786052s User: 0s System: 0.02s
+
+2023/01/16 12:39:46.157907 [INFO] Wtotal time: 14.69083751s User: 0.23s System: 0.04s
+
+2023/01/16 12:39:47.474748 [INFO] current LH = -2220.924350114766	
+2023/01/16 12:39:48.806891 [INFO] current LH = -2217.890362611363	
+2023/01/16 12:39:48.806911 [INFO] Wall time: 2.648993318s User: 0s System: 0.01s
+
+2023/01/16 12:39:48.806921 [INFO] Wtotal time: 17.33985214s User: 0.23s System: 0.05s
+
+2023/01/16 12:39:50.132443 [INFO] current LH = -2216.731282472765	
+2023/01/16 12:39:51.557213 [INFO] current LH = -2225.938852221394	
+2023/01/16 12:39:51.557234 [INFO] Wall time: 2.750302475s User: 0s System: 0.01s
+
+2023/01/16 12:39:51.557243 [INFO] Wtotal time: 20.09017457s User: 0.23s System: 0.06s
+
+2023/01/16 12:39:52.951947 [INFO] current LH = -2266.197023604286	
+2023/01/16 12:39:54.204461 [INFO] current LH = -2736.601432758145	
+2023/01/16 12:39:54.204481 [INFO] Wall time: 2.647226962s User: 0s System: 0.01s
+
+2023/01/16 12:39:54.204489 [INFO] Wtotal time: 22.7374213s User: 0.23s System: 0.07s
+
+2023/01/16 12:39:56.070522 [INFO] current LH = -2736.165799190358	
+2023/01/16 12:39:57.400687 [INFO] current LH = -2738.013873072307	
+2023/01/16 12:39:57.400707 [INFO] Wall time: 3.196207585s User: 0.01s System: 0.01s
+
+2023/01/16 12:39:57.400715 [INFO] Wtotal time: 25.9336474s User: 0.24s System: 0.08s
+
+2023/01/16 12:39:58.736578 [INFO] current LH = -2737.036750202592	
+2023/01/16 12:40:00.041603 [INFO] current LH = -2737.128990369476	
+2023/01/16 12:40:00.041620 [INFO] Wall time: 2.640896793s User: 0s System: 0.01s
+
+2023/01/16 12:40:00.041627 [INFO] Wtotal time: 28.57455997s User: 0.24s System: 0.09s
+
+2023/01/16 12:40:02.165275 [INFO] current LH = -2738.362867810263	
+2023/01/16 12:40:03.476764 [INFO] current LH = -3104.676440780323	
+2023/01/16 12:40:03.476805 [INFO] Wall time: 3.435152856s User: 0s System: 0.01s
+
+2023/01/16 12:40:03.476812 [INFO] Wtotal time: 32.00974521s User: 0.24s System: 0.1s
+
+2023/01/16 12:40:05.218252 [INFO] current LH = -3104.385406764261	
+2023/01/16 12:40:06.434134 [INFO] current LH = -3103.192644024483	
+2023/01/16 12:40:06.434155 [INFO] Wall time: 2.957334296s User: 0.01s System: 0.01s
+
+2023/01/16 12:40:06.434177 [INFO] Wtotal time: 34.96709612s User: 0.25s System: 0.11s
+
+2023/01/16 12:40:07.773465 [INFO] current LH = -3106.040470863044	
+2023/01/16 12:40:09.081638 [INFO] current LH = -3103.668113628262	
+2023/01/16 12:40:09.081657 [INFO] Wall time: 2.647470374s User: 0s System: 0.01s
+
+2023/01/16 12:40:09.081666 [INFO] Wtotal time: 37.61459774s User: 0.25s System: 0.12s
+
+2023/01/16 12:40:10.438434 [INFO] current LH = -3104.730656241343	
+2023/01/16 12:40:11.751925 [INFO] current LH = -3898.837675115255	
+2023/01/16 12:40:11.751943 [INFO] Wall time: 2.670269229s User: 0s System: 0.01s
+
+2023/01/16 12:40:11.751962 [INFO] Wtotal time: 40.28489515s User: 0.25s System: 0.13s
+
+2023/01/16 12:40:12.996451 [INFO] Client timing information: 
+2023/01/16 12:40:12.996481 [INFO] Client id 3 channel id 0  response time +0 s
+2023/01/16 12:40:12.996485 [INFO] Client id 2 channel id 0  response time +0.000181 s
+2023/01/16 12:40:12.996501 [INFO] Client id 1 channel id 0  response time +0.001843 s
+2023/01/16 12:40:12.996504 [INFO] Client id 0 channel id 0  response time +0.003158 s
+2023/01/16 12:40:13.169328 [INFO] current LH = -3921.777723206591	
+2023/01/16 12:40:14.792465 [INFO] current LH = -3918.556629164439	
+2023/01/16 12:40:14.792508 [INFO] Wall time: 3.04052622s User: 0.01s System: 0.01s
+
+2023/01/16 12:40:14.792514 [INFO] Wtotal time: 43.32544775s User: 0.26s System: 0.14s
+
+2023/01/16 12:40:16.067460 [INFO] current LH = -3918.33671805312	
+2023/01/16 12:40:17.381277 [INFO] current LH = -3916.801454996316	
+2023/01/16 12:40:17.381296 [INFO] Wall time: 2.588773545s User: 0s System: 0.02s
+
+2023/01/16 12:40:17.381305 [INFO] Wtotal time: 45.91423694s User: 0.26s System: 0.16s
+
+2023/01/16 12:40:18.691737 [INFO] current LH = -3918.883839678313	
+2023/01/16 12:40:20.151482 [INFO] current LH = -3917.638409684517	
+2023/01/16 12:40:20.151500 [INFO] Wall time: 2.770186474s User: 0s System: 0.01s
+
+2023/01/16 12:40:20.151506 [INFO] Wtotal time: 48.68443948s User: 0.26s System: 0.17s
+
+2023/01/16 12:40:21.530212 [INFO] current LH = -3943.044513277302	
+2023/01/16 12:40:24.182879 [INFO] current LH = -4233.236376492061	
+2023/01/16 12:40:24.182899 [INFO] Wall time: 4.031379085s User: 0.01s System: 0.01s
+
+2023/01/16 12:40:24.182907 [INFO] Wtotal time: 52.71583941s User: 0.27s System: 0.18s
+
+2023/01/16 12:40:25.831669 [INFO] current LH = -4233.678021691036	
+2023/01/16 12:40:27.128512 [INFO] current LH = -4237.985538900337	
+2023/01/16 12:40:27.128529 [INFO] Wall time: 2.945613562s User: 0s System: 0.01s
+
+2023/01/16 12:40:27.128535 [INFO] Wtotal time: 55.66146829s User: 0.27s System: 0.19s
+
+2023/01/16 12:40:28.481648 [INFO] current LH = -4233.272971677572	
+2023/01/16 12:40:29.834571 [INFO] current LH = -4235.196890805135	
+2023/01/16 12:40:29.834591 [INFO] Wall time: 2.706047683s User: 0.01s System: 0.01s
+
+2023/01/16 12:40:29.834600 [INFO] Wtotal time: 58.36753175s User: 0.28s System: 0.2s
+
+2023/01/16 12:40:31.325303 [INFO] current LH = -4235.067472766888	
+2023/01/16 12:40:32.693143 [INFO] current LH = -4257.598438817784	
+2023/01/16 12:40:32.693161 [INFO] Wall time: 2.858552864s User: 0s System: 0.01s
+
+2023/01/16 12:40:32.693167 [INFO] Wtotal time: 61.22610032s User: 0.28s System: 0.21s
+
+2023/01/16 12:40:34.421716 [INFO] current LH = -4257.157065436966	
+2023/01/16 12:40:35.684565 [INFO] current LH = -4255.040214494803	
+2023/01/16 12:40:35.684582 [INFO] Wall time: 2.991408408s User: 0s System: 0.01s
+
+2023/01/16 12:40:35.684588 [INFO] Wtotal time: 64.21752188s User: 0.28s System: 0.22s
+
+2023/01/16 12:40:37.013942 [INFO] current LH = -4257.198244222132	
+2023/01/16 12:40:38.381155 [INFO] current LH = -4255.780682209979	
+2023/01/16 12:40:38.381174 [INFO] Wall time: 2.696577228s User: 0s System: 0.01s
+
+2023/01/16 12:40:38.381183 [INFO] Wtotal time: 66.91411523s User: 0.28s System: 0.23s
+
+2023/01/16 12:40:40.062900 [INFO] current LH = -4997.284729499412	
+2023/01/16 12:40:41.681197 [INFO] current LH = -4994.233811684744	
+2023/01/16 12:40:41.681216 [INFO] Wall time: 3.300023692s User: 0.01s System: 0.01s
+
+2023/01/16 12:40:41.681225 [INFO] Wtotal time: 70.21415705s User: 0.29s System: 0.24s
+
+2023/01/16 12:40:42.846046 [INFO] Client timing information: 
+2023/01/16 12:40:42.846061 [INFO] Client id 3 channel id 0  response time +0 s
+2023/01/16 12:40:42.846065 [INFO] Client id 1 channel id 0  response time +9.2e-05 s
+2023/01/16 12:40:42.846069 [INFO] Client id 0 channel id 0  response time +0.001283 s
+2023/01/16 12:40:42.846072 [INFO] Client id 2 channel id 0  response time +0.002148 s
+2023/01/16 12:40:43.008934 [INFO] current LH = -4993.875466327848	
+2023/01/16 12:40:44.422751 [INFO] current LH = -4994.532705612743	
+2023/01/16 12:40:44.422773 [INFO] Wall time: 2.741536783s User: 0s System: 0.01s
+
+2023/01/16 12:40:44.422788 [INFO] Wtotal time: 72.95571822s User: 0.29s System: 0.25s
+
+2023/01/16 12:40:46.935745 [INFO] current LH = -4993.04390341436	
+2023/01/16 12:40:48.596040 [INFO] current LH = -5976.508567018199	
+2023/01/16 12:40:48.596057 [INFO] Wall time: 4.173260139s User: 0s System: 0.01s
+
+2023/01/16 12:40:48.596063 [INFO] Wtotal time: 77.12899695s User: 0.29s System: 0.26s
+
+2023/01/16 12:40:50.233832 [INFO] current LH = -5973.900548923244	
+2023/01/16 12:40:51.489068 [INFO] current LH = -5974.713793270148	
+2023/01/16 12:40:51.489087 [INFO] Wall time: 2.893015622s User: 0.01s System: 0.01s
+
+2023/01/16 12:40:51.489096 [INFO] Wtotal time: 80.02202773s User: 0.3s System: 0.27s
+
+2023/01/16 12:40:52.841433 [INFO] current LH = -5974.474682357243	
+2023/01/16 12:40:54.214264 [INFO] current LH = -5974.277515439207	
+2023/01/16 12:40:54.214281 [INFO] Wall time: 2.725177305s User: 0s System: 0.01s
+
+2023/01/16 12:40:54.214288 [INFO] Wtotal time: 82.74722104s User: 0.3s System: 0.28s
+
+2023/01/16 12:40:55.897269 [INFO] current LH = -6070.726523114839	
+2023/01/16 12:40:57.519224 [INFO] current LH = -6069.062406988484	
+2023/01/16 12:40:57.519244 [INFO] Wall time: 3.304947218s User: 0.01s System: 0.02s
+
+2023/01/16 12:40:57.519253 [INFO] Wtotal time: 86.05218463s User: 0.31s System: 0.3s
+
+2023/01/16 12:40:58.810631 [INFO] current LH = -6069.706845775905	
+2023/01/16 12:41:00.133664 [INFO] current LH = -6069.480337139837	
+2023/01/16 12:41:00.133683 [INFO] Wall time: 2.614420063s User: 0s System: 0.01s
+
+2023/01/16 12:41:00.133691 [INFO] Wtotal time: 88.6666229s User: 0.31s System: 0.31s
+
+2023/01/16 12:41:02.288127 [INFO] current LH = -6294.382137833612	
+2023/01/16 12:41:03.791709 [INFO] current LH = -6559.627743174316	
+2023/01/16 12:41:03.791729 [INFO] Wall time: 3.658028189s User: 0s System: 0.01s
+
+2023/01/16 12:41:03.791738 [INFO] Wtotal time: 92.32466923s User: 0.31s System: 0.32s
+
+2023/01/16 12:41:05.455028 [INFO] current LH = -6560.153202294719	
+2023/01/16 12:41:06.754243 [INFO] current LH = -6559.470936008218	
+2023/01/16 12:41:06.754260 [INFO] Wall time: 2.962514627s User: 0s System: 0.01s
+
+2023/01/16 12:41:06.754266 [INFO] Wtotal time: 95.28719949s User: 0.31s System: 0.33s
+
+2023/01/16 12:41:08.086596 [INFO] current LH = -6559.839238300229	
+2023/01/16 12:41:09.690330 [INFO] current LH = -6644.342453524442	
+2023/01/16 12:41:09.690347 [INFO] Wall time: 2.9360744s User: 0.01s System: 0.01s
+
+2023/01/16 12:41:09.690353 [INFO] Wtotal time: 98.22328664s User: 0.32s System: 0.34s
+
+2023/01/16 12:41:11.174520 [INFO] current LH = -6644.523409498976	
+2023/01/16 12:41:12.719678 [INFO] current LH = -6644.757991002594	
+2023/01/16 12:41:12.719697 [INFO] Wall time: 3.02933572s User: 0s System: 0.01s
+
+2023/01/16 12:41:12.719706 [INFO] Wtotal time: 101.2526379s User: 0.32s System: 0.35s
+
+2023/01/16 12:41:13.930394 [INFO] Client timing information: 
+2023/01/16 12:41:13.930410 [INFO] Client id 0 channel id 0  response time +0 s
+2023/01/16 12:41:13.930415 [INFO] Client id 3 channel id 0  response time +0.000261 s
+2023/01/16 12:41:13.930418 [INFO] Client id 1 channel id 0  response time +0.001705 s
+2023/01/16 12:41:13.930422 [INFO] Client id 2 channel id 0  response time +0.003037 s
+2023/01/16 12:41:14.090048 [INFO] current LH = -6644.640763658657	
+2023/01/16 12:41:15.429161 [INFO] current LH = -6644.310062453895	
+2023/01/16 12:41:15.429178 [INFO] Wall time: 2.709464029s User: 0.01s System: 0.01s
+
+2023/01/16 12:41:15.429184 [INFO] Wtotal time: 103.9621176s User: 0.33s System: 0.36s
+
+2023/01/16 12:41:17.068463 [INFO] current LH = -6708.630030752729	
+2023/01/16 12:41:18.674291 [INFO] current LH = -6708.96727306361	
+2023/01/16 12:41:18.674312 [INFO] Wall time: 3.245118604s User: 0s System: 0.01s
+
+2023/01/16 12:41:18.674333 [INFO] Wtotal time: 107.2072649s User: 0.33s System: 0.37s
+
+2023/01/16 12:41:20.094571 [INFO] current LH = -6709.113421044603	
+2023/01/16 12:41:21.425659 [INFO] current LH = -6708.546828188975	
+2023/01/16 12:41:21.425678 [INFO] Wall time: 2.751335962s User: 0.01s System: 0.01s
+
+2023/01/16 12:41:21.425687 [INFO] Wtotal time: 109.9586191s User: 0.34s System: 0.38s
+
+2023/01/16 12:41:23.805174 [INFO] current LH = -6708.875741625787	
+2023/01/16 12:41:25.752156 [INFO] current LH = -6776.040419975581	
+2023/01/16 12:41:25.752174 [INFO] Wall time: 4.326479057s User: 0s System: 0.01s
+
+2023/01/16 12:41:25.752180 [INFO] Wtotal time: 114.2851136s User: 0.34s System: 0.39s
+
+2023/01/16 12:41:27.423214 [INFO] current LH = -6776.005055687684	
+2023/01/16 12:41:28.756955 [INFO] current LH = -6776.589587092524	
+2023/01/16 12:41:28.756975 [INFO] Wall time: 3.004786221s User: 0s System: 0.02s
+
+2023/01/16 12:41:28.756983 [INFO] Wtotal time: 117.2899152s User: 0.34s System: 0.41s
+
+2023/01/16 12:41:30.107310 [INFO] current LH = -6776.153309026357	
+2023/01/16 12:41:31.467324 [INFO] current LH = -6776.088773353439	
+2023/01/16 12:41:31.467343 [INFO] Wall time: 2.710350908s User: 0s System: 0.01s
+
+2023/01/16 12:41:31.467349 [INFO] Wtotal time: 120.0002825s User: 0.34s System: 0.42s
+
+2023/01/16 12:41:33.209502 [INFO] current LH = -6836.005704948765	
+2023/01/16 12:41:34.919304 [INFO] current LH = -6835.936756700921	
+2023/01/16 12:41:34.919337 [INFO] Wall time: 3.451966235s User: 0.01s System: 0.01s
+
+2023/01/16 12:41:34.919346 [INFO] Wtotal time: 123.4522776s User: 0.35s System: 0.43s
+
+2023/01/16 12:41:36.199640 [INFO] current LH = -6835.734069348978	
+2023/01/16 12:41:37.559349 [INFO] current LH = -6836.227004485148	
+2023/01/16 12:41:37.559368 [INFO] Wall time: 2.640012903s User: 0s System: 0.01s
+
+2023/01/16 12:41:37.559377 [INFO] Wtotal time: 126.0923088s User: 0.35s System: 0.44s
+
+2023/01/16 12:41:38.931066 [INFO] current LH = -6836.165645996625	
+2023/01/16 12:41:40.762715 [INFO] current LH = -6915.2792154909	
+2023/01/16 12:41:40.762734 [INFO] Wall time: 3.203347749s User: 0.01s System: 0.01s
+
+2023/01/16 12:41:40.762743 [INFO] Wtotal time: 129.2956754s User: 0.36s System: 0.45s
+
+2023/01/16 12:41:42.720926 [INFO] current LH = -6915.232351890359	
+2023/01/16 12:41:43.978279 [INFO] current LH = -6915.080781520904	
+2023/01/16 12:41:43.978297 [INFO] Wall time: 3.215545811s User: 0s System: 0.01s
+
+2023/01/16 12:41:43.978304 [INFO] Wtotal time: 132.5112372s User: 0.36s System: 0.46s
+
+2023/01/16 12:41:45.218577 [INFO] Client timing information: 
+2023/01/16 12:41:45.218593 [INFO] Client id 2 channel id 0  response time +0 s
+2023/01/16 12:41:45.218598 [INFO] Client id 1 channel id 0  response time +0.000751 s
+2023/01/16 12:41:45.218601 [INFO] Client id 0 channel id 0  response time +0.000878 s
+2023/01/16 12:41:45.218617 [INFO] Client id 3 channel id 0  response time +0.002961 s
+2023/01/16 12:41:45.602030 [INFO] current LH = -6915.327540267334	
+2023/01/16 12:41:47.963318 [INFO] current LH = -6915.255030158127	
+2023/01/16 12:41:47.963335 [INFO] Wall time: 3.985024425s User: 0s System: 0.02s
+
+2023/01/16 12:41:47.963342 [INFO] Wtotal time: 136.4962751s User: 0.36s System: 0.48s
+
+2023/01/16 12:41:49.712042 [INFO] current LH = -7002.466848182902	
+2023/01/16 12:41:51.391984 [INFO] current LH = -7002.207220619264	
+2023/01/16 12:41:51.392027 [INFO] Wall time: 3.428677962s User: 0s System: 0.01s
+
+2023/01/16 12:41:51.392033 [INFO] Wtotal time: 139.9249669s User: 0.36s System: 0.49s
+
+2023/01/16 12:41:52.674611 [INFO] current LH = -7002.646003866127	
+2023/01/16 12:41:53.997247 [INFO] current LH = -7002.448827116682	
+2023/01/16 12:41:53.997264 [INFO] Wall time: 2.605223622s User: 0s System: 0.01s
+
+2023/01/16 12:41:53.997270 [INFO] Wtotal time: 142.5302038s User: 0.36s System: 0.5s
+
+2023/01/16 12:41:55.400443 [INFO] current LH = -7002.443112073753	
+2023/01/16 12:41:57.033629 [INFO] current LH = -7047.490920811901	
+2023/01/16 12:41:57.033649 [INFO] Wall time: 3.036370106s User: 0.01s System: 0.01s
+
+2023/01/16 12:41:57.033658 [INFO] Wtotal time: 145.5665901s User: 0.37s System: 0.51s
+
+2023/01/16 12:41:58.672340 [INFO] current LH = -7047.330837630977	
+2023/01/16 12:41:59.979887 [INFO] current LH = -7047.656651308083	
+2023/01/16 12:41:59.979906 [INFO] Wall time: 2.94622453s User: 0s System: 0.01s
+
+2023/01/16 12:41:59.979914 [INFO] Wtotal time: 148.5128462s User: 0.37s System: 0.52s
+
+2023/01/16 12:42:01.950125 [INFO] current LH = -7047.552916827264	
+2023/01/16 12:42:03.568752 [INFO] current LH = -7076.35141491779	
+2023/01/16 12:42:03.568772 [INFO] Wall time: 3.58884776s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:03.568786 [INFO] Wtotal time: 152.1017124s User: 0.38s System: 0.53s
+
+2023/01/16 12:42:04.968190 [INFO] current LH = -7076.453012350626	
+2023/01/16 12:42:06.628876 [INFO] current LH = -7076.308286504426	
+2023/01/16 12:42:06.628894 [INFO] Wall time: 3.060084915s User: 0s System: 0.01s
+
+2023/01/16 12:42:06.628912 [INFO] Wtotal time: 155.1618329s User: 0.38s System: 0.54s
+
+2023/01/16 12:42:07.961759 [INFO] current LH = -7076.354287824704	
+2023/01/16 12:42:09.294465 [INFO] current LH = -7076.212050963946	
+2023/01/16 12:42:09.294498 [INFO] Wall time: 2.66556544s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:09.294507 [INFO] Wtotal time: 157.8274393s User: 0.39s System: 0.55s
+
+2023/01/16 12:42:11.007659 [INFO] current LH = -7091.66872260738	
+2023/01/16 12:42:12.612091 [INFO] current LH = -7091.605129368254	
+2023/01/16 12:42:12.612109 [INFO] Wall time: 3.317593426s User: 0s System: 0.02s
+
+2023/01/16 12:42:12.612115 [INFO] Wtotal time: 161.1450486s User: 0.39s System: 0.57s
+
+2023/01/16 12:42:14.070386 [INFO] current LH = -7091.654921902721	
+2023/01/16 12:42:15.407011 [INFO] current LH = -7091.561635473828	
+2023/01/16 12:42:15.407036 [INFO] Wall time: 2.794912888s User: 0s System: 0.01s
+
+2023/01/16 12:42:15.407042 [INFO] Wtotal time: 163.9399755s User: 0.39s System: 0.58s
+
+2023/01/16 12:42:16.645134 [INFO] Client timing information: 
+2023/01/16 12:42:16.645150 [INFO] Client id 3 channel id 0  response time +0 s
+2023/01/16 12:42:16.645155 [INFO] Client id 1 channel id 0  response time +0.000664 s
+2023/01/16 12:42:16.645158 [INFO] Client id 0 channel id 0  response time +0.000688 s
+2023/01/16 12:42:16.645161 [INFO] Client id 2 channel id 0  response time +0.001917 s
+2023/01/16 12:42:16.795257 [INFO] current LH = -7091.622667593791	
+2023/01/16 12:42:18.453383 [INFO] current LH = -7101.246523205324	
+2023/01/16 12:42:18.453402 [INFO] Wall time: 3.046350909s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:18.453411 [INFO] Wtotal time: 166.9863431s User: 0.4s System: 0.59s
+
+2023/01/16 12:42:20.099320 [INFO] current LH = -7101.342832694752	
+2023/01/16 12:42:21.372443 [INFO] current LH = -7101.382657349893	
+2023/01/16 12:42:21.372461 [INFO] Wall time: 2.919040977s User: 0s System: 0.01s
+
+2023/01/16 12:42:21.372467 [INFO] Wtotal time: 169.9054003s User: 0.4s System: 0.6s
+
+2023/01/16 12:42:23.787817 [INFO] current LH = -7101.356761603804	
+2023/01/16 12:42:25.757699 [INFO] current LH = -7110.384487217539	
+2023/01/16 12:42:25.757720 [INFO] Wall time: 4.385243534s User: 0s System: 0.02s
+
+2023/01/16 12:42:25.757728 [INFO] Wtotal time: 174.2906602s User: 0.4s System: 0.62s
+
+2023/01/16 12:42:27.170554 [INFO] current LH = -7110.415769469756	
+2023/01/16 12:42:28.804947 [INFO] current LH = -7110.429945977919	
+2023/01/16 12:42:28.804968 [INFO] Wall time: 3.047229015s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:28.804978 [INFO] Wtotal time: 177.3379092s User: 0.41s System: 0.63s
+
+2023/01/16 12:42:30.139261 [INFO] current LH = -7110.327161387774	
+2023/01/16 12:42:31.475170 [INFO] current LH = -7110.447205770995	
+2023/01/16 12:42:31.475190 [INFO] Wall time: 2.670202004s User: 0s System: 0.01s
+
+2023/01/16 12:42:31.475200 [INFO] Wtotal time: 180.0081314s User: 0.41s System: 0.64s
+
+2023/01/16 12:42:33.106436 [INFO] current LH = -7116.705881027098	
+2023/01/16 12:42:34.751654 [INFO] current LH = -7116.677488067926	
+2023/01/16 12:42:34.751674 [INFO] Wall time: 3.276463148s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:34.751683 [INFO] Wtotal time: 183.2846145s User: 0.42s System: 0.65s
+
+2023/01/16 12:42:36.099912 [INFO] current LH = -7116.608497099201	
+2023/01/16 12:42:37.425515 [INFO] current LH = -7116.702645800955	
+2023/01/16 12:42:37.425532 [INFO] Wall time: 2.673841724s User: 0s System: 0.01s
+
+2023/01/16 12:42:37.425538 [INFO] Wtotal time: 185.9584717s User: 0.42s System: 0.66s
+
+2023/01/16 12:42:38.778495 [INFO] current LH = -7116.708001825191	
+2023/01/16 12:42:40.425297 [INFO] current LH = -7120.044913680134	
+2023/01/16 12:42:40.425317 [INFO] Wall time: 2.999771319s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:40.425336 [INFO] Wtotal time: 188.9582697s User: 0.43s System: 0.67s
+
+2023/01/16 12:42:42.125521 [INFO] current LH = -7120.025314471488	
+2023/01/16 12:42:43.390668 [INFO] current LH = -7120.040841555787	
+2023/01/16 12:42:43.390686 [INFO] Wall time: 2.96534251s User: 0s System: 0.01s
+
+2023/01/16 12:42:43.390692 [INFO] Wtotal time: 191.9236256s User: 0.43s System: 0.68s
+
+2023/01/16 12:42:44.720702 [INFO] current LH = -7120.031662616072	
+2023/01/16 12:42:47.583006 [INFO] current LH = -7123.019735897955	
+2023/01/16 12:42:47.583026 [INFO] Wall time: 4.192324969s User: 0s System: 0.02s
+
+2023/01/16 12:42:47.583034 [INFO] Wtotal time: 196.1159663s User: 0.43s System: 0.7s
+
+2023/01/16 12:42:49.072478 [INFO] Client timing information: 
+2023/01/16 12:42:49.072497 [INFO] Client id 2 channel id 0  response time +0 s
+2023/01/16 12:42:49.072504 [INFO] Client id 0 channel id 0  response time +0.000216 s
+2023/01/16 12:42:49.072511 [INFO] Client id 1 channel id 0  response time +0.000439 s
+2023/01/16 12:42:49.072517 [INFO] Client id 3 channel id 0  response time +0.001991 s
+2023/01/16 12:42:49.215647 [INFO] current LH = -7123.041855606352	
+2023/01/16 12:42:50.853639 [INFO] current LH = -7123.073204773578	
+2023/01/16 12:42:50.853665 [INFO] Wall time: 3.270620363s User: 0.01s System: 0s
+
+2023/01/16 12:42:50.853674 [INFO] Wtotal time: 199.3866057s User: 0.44s System: 0.7s
+
+2023/01/16 12:42:52.175674 [INFO] current LH = -7123.077860719155	
+2023/01/16 12:42:53.505563 [INFO] current LH = -7123.067998120488	
+2023/01/16 12:42:53.505581 [INFO] Wall time: 2.651898812s User: 0s System: 0.02s
+
+2023/01/16 12:42:53.505587 [INFO] Wtotal time: 202.0385205s User: 0.44s System: 0.72s
+
+2023/01/16 12:42:55.122322 [INFO] current LH = -7124.72510821579	
+2023/01/16 12:42:56.725693 [INFO] current LH = -7124.727186252726	
+2023/01/16 12:42:56.725711 [INFO] Wall time: 3.220116118s User: 0s System: 0.01s
+
+2023/01/16 12:42:56.725717 [INFO] Wtotal time: 205.2586504s User: 0.44s System: 0.73s
+
+2023/01/16 12:42:58.169904 [INFO] current LH = -7124.783561364412	
+2023/01/16 12:42:59.507867 [INFO] current LH = -7124.756908943752	
+2023/01/16 12:42:59.507887 [INFO] Wall time: 2.782161189s User: 0.01s System: 0.01s
+
+2023/01/16 12:42:59.507896 [INFO] Wtotal time: 208.0408277s User: 0.45s System: 0.74s
+
+2023/01/16 12:43:01.540960 [INFO] current LH = -7124.75651775637	
+2023/01/16 12:43:03.379719 [INFO] current LH = -7126.740020610774	
+2023/01/16 12:43:03.379737 [INFO] Wall time: 3.871833113s User: 0s System: 0.01s
+
+2023/01/16 12:43:03.379743 [INFO] Wtotal time: 211.9126767s User: 0.45s System: 0.75s
+
+2023/01/16 12:43:05.106811 [INFO] current LH = -7126.731908463358	
+2023/01/16 12:43:06.358904 [INFO] current LH = -7126.777433830581	
+2023/01/16 12:43:06.358921 [INFO] Wall time: 2.97917052s User: 0.01s System: 0.01s
+
+2023/01/16 12:43:06.358926 [INFO] Wtotal time: 214.89186s User: 0.46s System: 0.76s
+
+2023/01/16 12:43:07.726531 [INFO] current LH = -7126.751427146744	
+2023/01/16 12:43:09.086304 [INFO] current LH = -7126.754748360469	
+2023/01/16 12:43:09.086321 [INFO] Wall time: 2.727387822s User: 0s System: 0.01s
+
+2023/01/16 12:43:09.086327 [INFO] Wtotal time: 217.6192605s User: 0.46s System: 0.77s
+
+2023/01/16 12:43:10.923386 [INFO] current LH = -7128.390533132302	
+2023/01/16 12:43:12.625051 [INFO] current LH = -7128.390254001727	
+2023/01/16 12:43:12.625069 [INFO] Wall time: 3.538734952s User: 0.01s System: 0.02s
+
+2023/01/16 12:43:12.625075 [INFO] Wtotal time: 221.1580087s User: 0.47s System: 0.79s
+
+2023/01/16 12:43:13.904051 [INFO] current LH = -7128.461617332517	
+2023/01/16 12:43:15.231689 [INFO] current LH = -7128.434417763657	
+2023/01/16 12:43:15.231720 [INFO] Wall time: 2.606637432s User: 0s System: 0.01s
+
+2023/01/16 12:43:15.231726 [INFO] Wtotal time: 223.7646592s User: 0.47s System: 0.8s
+
+2023/01/16 12:43:16.744938 [INFO] current LH = -7128.95978586603	
+2023/01/16 12:43:18.367935 [INFO] current LH = -7130.095621391971	
+2023/01/16 12:43:18.367955 [INFO] Wall time: 3.136220506s User: 0s System: 0.01s
+
+2023/01/16 12:43:18.367964 [INFO] Wtotal time: 226.9008962s User: 0.47s System: 0.81s
+
+2023/01/16 12:43:19.877306 [INFO] Client timing information: 
+2023/01/16 12:43:19.877324 [INFO] Client id 2 channel id 0  response time +0 s
+2023/01/16 12:43:19.877330 [INFO] Client id 0 channel id 0  response time +2.2e-05 s
+2023/01/16 12:43:19.877336 [INFO] Client id 1 channel id 0  response time +0.001047 s
+2023/01/16 12:43:19.877341 [INFO] Client id 3 channel id 0  response time +0.00245 s
+2023/01/16 12:43:20.017744 [INFO] current LH = -7130.115427401424	
+2023/01/16 12:43:21.300399 [INFO] current LH = -7130.096027720607	
+2023/01/16 12:43:21.300418 [INFO] Wall time: 2.932443797s User: 0.01s System: 0.01s
+
+2023/01/16 12:43:21.300426 [INFO] Wtotal time: 229.8333582s User: 0.48s System: 0.82s
+
+2023/01/16 12:43:23.710211 [INFO] current LH = -7130.075350330941	
+2023/01/16 12:43:25.757663 [INFO] current LH = -7131.701993711578	
+2023/01/16 12:43:25.757684 [INFO] Wall time: 4.457247551s User: 0s System: 0.01s
+
+2023/01/16 12:43:25.757693 [INFO] Wtotal time: 234.2906245s User: 0.48s System: 0.83s
+
+2023/01/16 12:43:27.144464 [INFO] current LH = -7131.71154778549	
+2023/01/16 12:43:28.771444 [INFO] current LH = -7131.700299542903	
+2023/01/16 12:43:28.771467 [INFO] Wall time: 3.013765905s User: 0.01s System: 0.01s
+
+2023/01/16 12:43:28.771474 [INFO] Wtotal time: 237.3044073s User: 0.49s System: 0.84s
+
+2023/01/16 12:43:30.125453 [INFO] current LH = -7131.688975893108	
+2023/01/16 12:43:31.472653 [INFO] current LH = -7131.715451331668	
+2023/01/16 12:43:31.472672 [INFO] Wall time: 2.701189824s User: 0s System: 0.01s
+
+2023/01/16 12:43:31.472681 [INFO] Wtotal time: 240.0056128s User: 0.49s System: 0.85s
+
+2023/01/16 12:43:33.381867 [INFO] current LH = -7133.509501566791	
+2023/01/16 12:43:34.944785 [INFO] current LH = -7133.510238826724	
+2023/01/16 12:43:34.944835 [INFO] Wall time: 3.472145952s User: 0.01s System: 0.02s
+
+2023/01/16 12:43:34.944842 [INFO] Wtotal time: 243.4777751s User: 0.5s System: 0.87s
+
+2023/01/16 12:43:36.429340 [INFO] current LH = -7133.427840387367	
+2023/01/16 12:43:37.776770 [INFO] current LH = -7133.504162578141	
+2023/01/16 12:43:37.776814 [INFO] Wall time: 2.831961867s User: 0s System: 0.01s
+
+2023/01/16 12:43:37.776825 [INFO] Wtotal time: 246.3097561s User: 0.5s System: 0.88s
+
+2023/01/16 12:43:39.137017 [INFO] current LH = -7133.532264345504	
+2023/01/16 12:43:40.861592 [INFO] current LH = -7135.414706589707	
+2023/01/16 12:43:40.861610 [INFO] Wall time: 3.084775511s User: 0.01s System: 0.01s
+
+2023/01/16 12:43:40.861616 [INFO] Wtotal time: 249.3945494s User: 0.51s System: 0.89s
+
+2023/01/16 12:43:42.572245 [INFO] current LH = -7135.416260573322	
+2023/01/16 12:43:43.826702 [INFO] current LH = -7135.406461124202	
+2023/01/16 12:43:43.826723 [INFO] Wall time: 2.965097746s User: 0s System: 0.01s
+
+2023/01/16 12:43:43.826732 [INFO] Wtotal time: 252.3596634s User: 0.51s System: 0.9s
+
+2023/01/16 12:43:45.514157 [INFO] current LH = -7135.387553611418	
+2023/01/16 12:43:47.947552 [INFO] current LH = -7137.724920853013	
+2023/01/16 12:43:47.947572 [INFO] Wall time: 4.120830605s User: 0s System: 0.01s
+
+2023/01/16 12:43:47.947581 [INFO] Wtotal time: 256.4805126s User: 0.51s System: 0.91s
+
+2023/01/16 12:43:49.600491 [INFO] current LH = -7138.184489297594	
+2023/01/16 12:43:51.240292 [INFO] current LH = -7138.020643250336	
+2023/01/16 12:43:51.240313 [INFO] Wall time: 3.29272168s User: 0.01s System: 0.01s
+
+2023/01/16 12:43:51.240323 [INFO] Wtotal time: 259.7732539s User: 0.52s System: 0.92s
+
+2023/01/16 12:43:52.409894 [INFO] Client timing information: 
+2023/01/16 12:43:52.409912 [INFO] Client id 1 channel id 0  response time +0 s
+2023/01/16 12:43:52.409918 [INFO] Client id 2 channel id 0  response time +0.000447 s
+2023/01/16 12:43:52.409924 [INFO] Client id 0 channel id 0  response time +0.00071 s
+2023/01/16 12:43:52.409929 [INFO] Client id 3 channel id 0  response time +0.002563 s
+2023/01/16 12:43:52.563668 [INFO] current LH = -7138.227883211346	
+2023/01/16 12:43:53.863711 [INFO] current LH = -7138.157935848566	
+2023/01/16 12:43:53.863730 [INFO] Wall time: 2.623397718s User: 0s System: 0.01s
+
+2023/01/16 12:43:53.863739 [INFO] Wtotal time: 262.3966707s User: 0.52s System: 0.93s
+
+2023/01/16 12:43:55.475360 [INFO] current LH = -7141.937167634612	
+2023/01/16 12:43:57.031394 [INFO] current LH = -7141.878064860158	
+2023/01/16 12:43:57.031412 [INFO] Wall time: 3.167664181s User: 0.01s System: 0.01s
+
+2023/01/16 12:43:57.031417 [INFO] Wtotal time: 265.564351s User: 0.53s System: 0.94s
+
+2023/01/16 12:43:58.711100 [INFO] current LH = -7141.911848808581	
+2023/01/16 12:44:00.056914 [INFO] current LH = -7141.932947282599	
+2023/01/16 12:44:00.056945 [INFO] Wall time: 3.025520455s User: 0s System: 0.02s
+
+2023/01/16 12:44:00.056951 [INFO] Wtotal time: 268.5898842s User: 0.53s System: 0.96s
+
+2023/01/16 12:44:02.079895 [INFO] current LH = -7141.90530102783	
+2023/01/16 12:44:03.900361 [INFO] current LH = -7145.99274213263	
+2023/01/16 12:44:03.900379 [INFO] Wall time: 3.843421098s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:03.900385 [INFO] Wtotal time: 272.4333185s User: 0.54s System: 0.97s
+
+2023/01/16 12:44:05.563256 [INFO] current LH = -7145.979236191872	
+2023/01/16 12:44:06.899944 [INFO] current LH = -7145.9683960652	
+2023/01/16 12:44:06.899961 [INFO] Wall time: 2.999569201s User: 0s System: 0.01s
+
+2023/01/16 12:44:06.899972 [INFO] Wtotal time: 275.4329054s User: 0.54s System: 0.98s
+
+2023/01/16 12:44:08.299872 [INFO] current LH = -7145.955487287213	
+2023/01/16 12:44:09.680653 [INFO] current LH = -7145.976287227391	
+2023/01/16 12:44:09.680673 [INFO] Wall time: 2.780692318s User: 0s System: 0.01s
+
+2023/01/16 12:44:09.680681 [INFO] Wtotal time: 278.2136133s User: 0.54s System: 0.99s
+
+2023/01/16 12:44:11.330229 [INFO] current LH = -7149.115415109299	
+2023/01/16 12:44:12.947611 [INFO] current LH = -7149.102650009356	
+2023/01/16 12:44:12.947632 [INFO] Wall time: 3.266940849s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:12.947641 [INFO] Wtotal time: 281.4805729s User: 0.55s System: 1s
+
+2023/01/16 12:44:14.261242 [INFO] current LH = -7149.135546650959	
+2023/01/16 12:44:15.569969 [INFO] current LH = -7149.058815534704	
+2023/01/16 12:44:15.569986 [INFO] Wall time: 2.622337392s User: 0s System: 0.01s
+
+2023/01/16 12:44:15.569992 [INFO] Wtotal time: 284.1029257s User: 0.55s System: 1.01s
+
+2023/01/16 12:44:17.168430 [INFO] current LH = -7151.360629604058	
+2023/01/16 12:44:18.721948 [INFO] current LH = -7151.388500000854	
+2023/01/16 12:44:18.721969 [INFO] Wall time: 3.151967618s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:18.721979 [INFO] Wtotal time: 287.2549104s User: 0.56s System: 1.02s
+
+2023/01/16 12:44:20.203136 [INFO] current LH = -7151.375690489919	
+2023/01/16 12:44:21.543654 [INFO] current LH = -7151.367490132603	
+2023/01/16 12:44:21.543674 [INFO] Wall time: 2.821684694s User: 0s System: 0.01s
+
+2023/01/16 12:44:21.543683 [INFO] Wtotal time: 290.0766148s User: 0.56s System: 1.03s
+
+2023/01/16 12:44:24.048919 [INFO] Client timing information: 
+2023/01/16 12:44:24.048936 [INFO] Client id 2 channel id 0  response time +0 s
+2023/01/16 12:44:24.048940 [INFO] Client id 3 channel id 0  response time +0.00022 s
+2023/01/16 12:44:24.048944 [INFO] Client id 0 channel id 0  response time +0.000446 s
+2023/01/16 12:44:24.048947 [INFO] Client id 1 channel id 0  response time +0.001307 s
+2023/01/16 12:44:24.205727 [INFO] current LH = -7151.330487849928	
+2023/01/16 12:44:25.849957 [INFO] current LH = -7153.288815961429	
+2023/01/16 12:44:25.849979 [INFO] Wall time: 4.306285486s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:25.849988 [INFO] Wtotal time: 294.3829197s User: 0.57s System: 1.04s
+
+2023/01/16 12:44:27.529742 [INFO] current LH = -7153.251184327088	
+2023/01/16 12:44:28.800648 [INFO] current LH = -7153.281733056719	
+2023/01/16 12:44:28.800667 [INFO] Wall time: 2.950668947s User: 0s System: 0.01s
+
+2023/01/16 12:44:28.800676 [INFO] Wtotal time: 297.3336079s User: 0.57s System: 1.05s
+
+2023/01/16 12:44:30.127982 [INFO] current LH = -7153.288730103649	
+2023/01/16 12:44:31.607888 [INFO] current LH = -7154.204494461479	
+2023/01/16 12:44:31.607905 [INFO] Wall time: 2.807221565s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:31.607911 [INFO] Wtotal time: 300.140845s User: 0.58s System: 1.06s
+
+2023/01/16 12:44:33.086292 [INFO] current LH = -7154.215216409471	
+2023/01/16 12:44:34.632912 [INFO] current LH = -7154.216882656503	
+2023/01/16 12:44:34.632930 [INFO] Wall time: 3.025010926s User: 0s System: 0.01s
+
+2023/01/16 12:44:34.632936 [INFO] Wtotal time: 303.1658694s User: 0.58s System: 1.07s
+
+2023/01/16 12:44:35.989160 [INFO] current LH = -7154.203224285201	
+2023/01/16 12:44:37.325334 [INFO] current LH = -7154.190950275882	
+2023/01/16 12:44:37.325354 [INFO] Wall time: 2.692409566s User: 0s System: 0.01s
+
+2023/01/16 12:44:37.325363 [INFO] Wtotal time: 305.8582949s User: 0.58s System: 1.08s
+
+2023/01/16 12:44:39.077673 [INFO] current LH = -7154.489499538711	
+2023/01/16 12:44:40.782257 [INFO] current LH = -7154.487054370899	
+2023/01/16 12:44:40.782277 [INFO] Wall time: 3.456904232s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:40.782286 [INFO] Wtotal time: 309.3152181s User: 0.59s System: 1.09s
+
+2023/01/16 12:44:42.050582 [INFO] current LH = -7154.483819077803	
+2023/01/16 12:44:43.363203 [INFO] current LH = -7154.485350918382	
+2023/01/16 12:44:43.363224 [INFO] Wall time: 2.580927479s User: 0s System: 0.01s
+
+2023/01/16 12:44:43.363233 [INFO] Wtotal time: 311.8961648s User: 0.59s System: 1.1s
+
+2023/01/16 12:44:46.180686 [INFO] current LH = -7154.626098819282	
+2023/01/16 12:44:47.692644 [INFO] current LH = -7154.709696425659	
+2023/01/16 12:44:47.692662 [INFO] Wall time: 4.329416499s User: 0s System: 0.02s
+
+2023/01/16 12:44:47.692669 [INFO] Wtotal time: 316.2256018s User: 0.59s System: 1.12s
+
+2023/01/16 12:44:49.365714 [INFO] current LH = -7154.708308468389	
+2023/01/16 12:44:50.672686 [INFO] current LH = -7154.711177533061	
+2023/01/16 12:44:50.672706 [INFO] Wall time: 2.980028265s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:50.672715 [INFO] Wtotal time: 319.2056468s User: 0.6s System: 1.13s
+
+2023/01/16 12:44:52.022022 [INFO] current LH = -7154.723544367357	
+2023/01/16 12:44:53.612593 [INFO] current LH = -7155.140899363834	
+2023/01/16 12:44:53.612624 [INFO] Wall time: 2.939900248s User: 0s System: 0.01s
+
+2023/01/16 12:44:53.612630 [INFO] Wtotal time: 322.1455631s User: 0.6s System: 1.14s
+
+2023/01/16 12:44:55.045663 [INFO] Client timing information: 
+2023/01/16 12:44:55.045681 [INFO] Client id 1 channel id 0  response time +0 s
+2023/01/16 12:44:55.045685 [INFO] Client id 0 channel id 0  response time +0.000804 s
+2023/01/16 12:44:55.045689 [INFO] Client id 2 channel id 0  response time +0.00366 s
+2023/01/16 12:44:55.045692 [INFO] Client id 3 channel id 0  response time +0.007033 s
+2023/01/16 12:44:55.266397 [INFO] current LH = -7155.127256279886	
+2023/01/16 12:44:56.670268 [INFO] current LH = -7155.125235604863	
+2023/01/16 12:44:56.670286 [INFO] Wall time: 3.057649303s User: 0s System: 0.01s
+
+2023/01/16 12:44:56.670292 [INFO] Wtotal time: 325.2032258s User: 0.6s System: 1.15s
+
+2023/01/16 12:44:58.026387 [INFO] current LH = -7155.114373397749	
+2023/01/16 12:44:59.401822 [INFO] current LH = -7155.123211472782	
+2023/01/16 12:44:59.401853 [INFO] Wall time: 2.731541055s User: 0.01s System: 0.01s
+
+2023/01/16 12:44:59.401873 [INFO] Wtotal time: 327.934793s User: 0.61s System: 1.16s
+
+2023/01/16 12:45:01.716249 [INFO] current LH = -7155.365585136715	
+2023/01/16 12:45:03.344633 [INFO] current LH = -7155.386197771464	
+2023/01/16 12:45:03.344653 [INFO] Wall time: 3.942770632s User: 0s System: 0.01s
+
+2023/01/16 12:45:03.344661 [INFO] Wtotal time: 331.8775929s User: 0.61s System: 1.17s
+
+2023/01/16 12:45:04.653484 [INFO] current LH = -7155.366530691296	
+2023/01/16 12:45:05.972345 [INFO] current LH = -7155.375657572862	
+2023/01/16 12:45:05.972362 [INFO] Wall time: 2.62769278s User: 0s System: 0.01s
+
+2023/01/16 12:45:05.972367 [INFO] Wtotal time: 334.5053008s User: 0.61s System: 1.18s
+
+2023/01/16 12:45:07.599882 [INFO] current LH = -7155.449935761978	
+2023/01/16 12:45:09.066472 [INFO] current LH = -7155.453277922646	
+2023/01/16 12:45:09.066503 [INFO] Wall time: 3.094115672s User: 0.01s System: 0.02s
+
+2023/01/16 12:45:09.066509 [INFO] Wtotal time: 337.5994424s User: 0.62s System: 1.2s
+
+2023/01/16 12:45:10.634919 [INFO] current LH = -7155.455406720087	
+2023/01/16 12:45:11.962929 [INFO] current LH = -7155.455960859494	
+2023/01/16 12:45:11.962948 [INFO] Wall time: 2.896431415s User: 0s System: 0s
+
+2023/01/16 12:45:11.962957 [INFO] Wtotal time: 340.4958889s User: 0.62s System: 1.2s
+
+2023/01/16 12:45:13.306935 [INFO] current LH = -7155.453836490475	
+2023/01/16 12:45:14.925759 [INFO] current LH = -7155.483473245162	
+2023/01/16 12:45:14.925802 [INFO] Wall time: 2.962814669s User: 0.01s System: 0.01s
+
+2023/01/16 12:45:14.925823 [INFO] Wtotal time: 343.4587424s User: 0.63s System: 1.21s
+
+2023/01/16 12:45:16.667277 [INFO] current LH = -7155.479797513767	
+2023/01/16 12:45:17.916083 [INFO] current LH = -7155.479509208017	
+2023/01/16 12:45:17.916102 [INFO] Wall time: 2.99027009s User: 0.01s System: 0.01s
+
+2023/01/16 12:45:17.916111 [INFO] Wtotal time: 346.4490426s User: 0.64s System: 1.22s
+
+2023/01/16 12:45:19.494420 [INFO] current LH = -7155.480705535205	
+2023/01/16 12:45:21.001714 [INFO] current LH = -7155.49131451718	
+2023/01/16 12:45:21.001734 [INFO] Wall time: 3.085613907s User: 0s System: 0.01s
+
+2023/01/16 12:45:21.001743 [INFO] Wtotal time: 349.5346747s User: 0.64s System: 1.23s
+
+2023/01/16 12:45:23.572627 [INFO] current LH = -7155.493615691556	
+2023/01/16 12:45:25.394733 [INFO] current LH = -7155.497398838402	
+2023/01/16 12:45:25.394753 [INFO] Wall time: 4.392995116s User: 0s System: 0.01s
+
+2023/01/16 12:45:25.394762 [INFO] Wtotal time: 353.9276941s User: 0.64s System: 1.24s
+
+2023/01/16 12:45:26.644059 [INFO] Client timing information: 
+2023/01/16 12:45:26.644075 [INFO] Client id 2 channel id 0  response time +0 s
+2023/01/16 12:45:26.644080 [INFO] Client id 0 channel id 0  response time +0.000379 s
+2023/01/16 12:45:26.644084 [INFO] Client id 3 channel id 0  response time +0.000777 s
+2023/01/16 12:45:26.644087 [INFO] Client id 1 channel id 0  response time +0.001834 s
+2023/01/16 12:45:26.802377 [INFO] current LH = -7155.49546968812	
+2023/01/16 12:45:28.131423 [INFO] current LH = -7155.494367124414	
+2023/01/16 12:45:28.131443 [INFO] Wall time: 2.736670674s User: 0.01s System: 0.02s
+
+2023/01/16 12:45:28.131451 [INFO] Wtotal time: 356.6643832s User: 0.65s System: 1.26s
+
+2023/01/16 12:45:29.738490 [INFO] current LH = -7155.508294833495	
+2023/01/16 12:45:31.335902 [INFO] current LH = -7155.508271938021	
+2023/01/16 12:45:31.335920 [INFO] Wall time: 3.204460475s User: 0s System: 0.01s
+
+2023/01/16 12:45:31.335926 [INFO] Wtotal time: 359.8688593s User: 0.65s System: 1.27s
+
+2023/01/16 12:45:32.763438 [INFO] current LH = -7155.506460856485	
+2023/01/16 12:45:34.097315 [INFO] current LH = -7155.508576963604	
+2023/01/16 12:45:34.097332 [INFO] Wall time: 2.761398916s User: 0s System: 0.01s
+
+2023/01/16 12:45:34.097337 [INFO] Wtotal time: 362.6302711s User: 0.65s System: 1.28s
+
+2023/01/16 12:45:35.493032 [INFO] current LH = -7155.508955482827	
+2023/01/16 12:45:37.149241 [INFO] current LH = -7155.516737504937	
+2023/01/16 12:45:37.149261 [INFO] Wall time: 3.051915026s User: 0.01s System: 0.01s
+
+2023/01/16 12:45:37.149270 [INFO] Wtotal time: 365.6822016s User: 0.66s System: 1.29s
+
+2023/01/16 12:45:38.786574 [INFO] current LH = -7155.516605755321	
+2023/01/16 12:45:40.066072 [INFO] current LH = -7155.516163366097	
+2023/01/16 12:45:40.066089 [INFO] Wall time: 2.91681152s User: 0s System: 0.01s
+
+2023/01/16 12:45:40.066095 [INFO] Wtotal time: 368.5990288s User: 0.66s System: 1.3s
+
+2023/01/16 12:45:41.398437 [INFO] current LH = -7155.516666977934	
+2023/01/16 12:45:43.016143 [INFO] current LH = -7155.519640893203	
+2023/01/16 12:45:43.016173 [INFO] Wall time: 2.950070372s User: 0s System: 0.01s
+
+2023/01/16 12:45:43.016179 [INFO] Wtotal time: 371.5491125s User: 0.66s System: 1.31s
+
+2023/01/16 12:45:44.849611 [INFO] current LH = -7155.519547942549	
+2023/01/16 12:45:47.265773 [INFO] current LH = -7155.519244136979	
+2023/01/16 12:45:47.265814 [INFO] Wall time: 4.249627266s User: 0.01s System: 0.01s
+
+2023/01/16 12:45:47.265821 [INFO] Wtotal time: 375.7987546s User: 0.67s System: 1.32s
+
+2023/01/16 12:45:48.626672 [INFO] current LH = -7155.520242321907	
+2023/01/16 12:45:49.967185 [INFO] current LH = -7155.519435579668	
+2023/01/16 12:45:49.967216 [INFO] Wall time: 2.701387054s User: 0s System: 0.01s
+
+2023/01/16 12:45:49.967222 [INFO] Wtotal time: 378.5001558s User: 0.67s System: 1.33s
+
+2023/01/16 12:45:51.590505 [INFO] current LH = -7155.520116236145	
+2023/01/16 12:45:53.295284 [INFO] current LH = -7155.521087091583	
+2023/01/16 12:45:53.295305 [INFO] Wall time: 3.328074142s User: 0.01s System: 0.01s
+
+2023/01/16 12:45:53.295314 [INFO] Wtotal time: 381.828246s User: 0.68s System: 1.34s
+
+2023/01/16 12:45:54.573699 [INFO] current LH = -7155.520660855816	
+2023/01/16 12:45:55.900649 [INFO] current LH = -7155.520540974847	
+2023/01/16 12:45:55.900668 [INFO] Wall time: 2.605344377s User: 0.01s System: 0.01s
+
+2023/01/16 12:45:55.900676 [INFO] Wtotal time: 384.4336085s User: 0.69s System: 1.35s
+
+2023/01/16 12:45:57.187087 [INFO] Client timing information: 
+2023/01/16 12:45:57.187105 [INFO] Client id 3 channel id 0  response time +0 s
+2023/01/16 12:45:57.187112 [INFO] Client id 1 channel id 0  response time +0.000973 s
+2023/01/16 12:45:57.187119 [INFO] Client id 0 channel id 0  response time +0.001478 s
+2023/01/16 12:45:57.187125 [INFO] Client id 2 channel id 0  response time +0.00684 s
+2023/01/16 12:45:57.439837 [INFO] current LH = -7155.522985704248	
+2023/01/16 12:45:58.945109 [INFO] current LH = -7155.521550468495	
+2023/01/16 12:45:58.945155 [INFO] Wall time: 3.044455543s User: 0s System: 0.01s
+
+2023/01/16 12:45:58.945164 [INFO] Wtotal time: 387.4780958s User: 0.69s System: 1.36s
+
+2023/01/16 12:46:01.013161 [INFO] current LH = -7155.521598504853	
+2023/01/16 12:46:02.563331 [INFO] current LH = -7155.521458940261	
+2023/01/16 12:46:02.563348 [INFO] Wall time: 3.618175831s User: 0s System: 0.01s
+
+2023/01/16 12:46:02.563354 [INFO] Wtotal time: 391.0962876s User: 0.69s System: 1.37s
+
+2023/01/16 12:46:03.911767 [INFO] current LH = -7155.521563463132	
+2023/01/16 12:46:05.874641 [INFO] current LH = -7155.523308571977	
+2023/01/16 12:46:05.874661 [INFO] Wall time: 3.311298558s User: 0.01s System: 0.02s
+
+2023/01/16 12:46:05.874669 [INFO] Wtotal time: 394.4076012s User: 0.7s System: 1.39s
+
+2023/01/16 12:46:07.528544 [INFO] current LH = -7155.521680665072	
+2023/01/16 12:46:09.170681 [INFO] current LH = -7155.521673576533	
+2023/01/16 12:46:09.170700 [INFO] Wall time: 3.296020894s User: 0s System: 0.01s
+
+2023/01/16 12:46:09.170708 [INFO] Wtotal time: 397.7036402s User: 0.7s System: 1.4s
+
+2023/01/16 12:46:10.532273 [INFO] current LH = -7155.521597733292	
+2023/01/16 12:46:11.879152 [INFO] current LH = -7155.521552204989	
+2023/01/16 12:46:11.879170 [INFO] Wall time: 2.708453865s User: 0.01s System: 0.01s
+
+2023/01/16 12:46:11.879189 [INFO] Wtotal time: 400.4121099s User: 0.71s System: 1.41s
+
+2023/01/16 12:46:13.840672 [INFO] current LH = -7155.523252467599	
+2023/01/16 12:46:15.903631 [INFO] current LH = -7155.521659628605	
+2023/01/16 12:46:15.903653 [INFO] Wall time: 4.024454798s User: 0.01s System: 0.01s
+
+2023/01/16 12:46:15.903662 [INFO] Wtotal time: 404.4365939s User: 0.72s System: 1.42s
+
+2023/01/16 12:46:17.609891 [INFO] current LH = -7155.521698390917	
+2023/01/16 12:46:18.863556 [INFO] current LH = -7155.521692973674	
+2023/01/16 12:46:18.863576 [INFO] Wall time: 2.959904027s User: 0s System: 0.01s
+
+2023/01/16 12:46:18.863584 [INFO] Wtotal time: 407.3965162s User: 0.72s System: 1.43s
+
+2023/01/16 12:46:20.225866 [INFO] current LH = -7155.521714638343	
+2023/01/16 12:46:21.617011 [INFO] current LH = -7155.523383152799	
+2023/01/16 12:46:21.617033 [INFO] Wall time: 2.753437822s User: 0s System: 0.01s
+
+2023/01/16 12:46:21.617043 [INFO] Wtotal time: 410.1499739s User: 0.72s System: 1.44s
+
+2023/01/16 12:46:24.288098 [INFO] current LH = -7155.521650772504	
+2023/01/16 12:46:25.936118 [INFO] current LH = -7155.521645629345	
+2023/01/16 12:46:25.936138 [INFO] Wall time: 4.319084655s User: 0.01s System: 0.01s
+
+2023/01/16 12:46:25.936148 [INFO] Wtotal time: 414.4690796s User: 0.73s System: 1.45s
+
+2023/01/16 12:46:27.257300 [INFO] current LH = -7155.521656355391	
+2023/01/16 12:46:28.600541 [INFO] current LH = -7155.521696979148	
+2023/01/16 12:46:28.600562 [INFO] Wall time: 2.664402813s User: 0s System: 0.01s
+
+2023/01/16 12:46:28.600572 [INFO] Wtotal time: 417.1335029s User: 0.73s System: 1.46s
+
+2023/01/16 12:46:29.826226 [INFO] Client timing information: 
+2023/01/16 12:46:29.826243 [INFO] Client id 1 channel id 0  response time +0 s
+2023/01/16 12:46:29.826248 [INFO] Client id 2 channel id 0  response time +0.00013 s
+2023/01/16 12:46:29.826251 [INFO] Client id 0 channel id 0  response time +0.001061 s
+2023/01/16 12:46:29.826254 [INFO] Client id 3 channel id 0  response time +0.001281 s
+2023/01/16 12:46:30.003343 [INFO] current LH = -7155.523321727188	
+2023/01/16 12:46:31.470319 [INFO] current LH = -7155.523377012399	
+2023/01/16 12:46:31.470336 [INFO] Wall time: 2.869755852s User: 0.01s System: 0.01s
+
+2023/01/16 12:46:31.470342 [INFO] Wtotal time: 420.0032754s User: 0.74s System: 1.47s
+
+2023/01/16 12:46:33.179247 [INFO] current LH = -7155.523303893186	
+2023/01/16 12:46:34.665008 [INFO] current LH = -7155.523374676222	
+2023/01/16 12:46:34.665028 [INFO] Wall time: 3.194677096s User: 0s System: 0.01s
+
+2023/01/16 12:46:34.665037 [INFO] Wtotal time: 423.1979683s User: 0.74s System: 1.48s
+
+2023/01/16 12:46:35.953583 [INFO] current LH = -7155.523302749782	
+2023/01/16 12:46:37.278284 [INFO] current LH = -7155.523377795783	
+2023/01/16 12:46:37.278303 [INFO] Wall time: 2.613238707s User: 0s System: 0.01s
+
+2023/01/16 12:46:37.278312 [INFO] Wtotal time: 425.811244s User: 0.74s System: 1.49s
+
+2023/01/16 12:46:38.644225 [INFO] current LH = -7155.52338128637	
+2023/01/16 12:46:40.130727 [INFO] current LH = -7155.519796795508	
+2023/01/16 12:46:40.130747 [INFO] Wall time: 2.852425273s User: 0.01s System: 0.01s
+
+2023/01/16 12:46:40.130756 [INFO] Wtotal time: 428.6636876s User: 0.75s System: 1.5s
+
+2023/01/16 12:46:41.664995 [INFO] current LH = -7155.519693906263	
+2023/01/16 12:46:43.107416 [INFO] current LH = -7155.519459222322	
+2023/01/16 12:46:43.107432 [INFO] Wall time: 2.976668481s User: 0s System: 0.02s
+
+2023/01/16 12:46:43.107438 [INFO] Wtotal time: 431.6403716s User: 0.75s System: 1.52s
+
+2023/01/16 12:46:44.915050 [INFO] current LH = -7155.519262652338	
+2023/01/16 12:46:47.572138 [INFO] current LH = -7155.520296943874	
+2023/01/16 12:46:47.572158 [INFO] Wall time: 4.464712793s User: 0s System: 0.01s
+
+2023/01/16 12:46:47.572164 [INFO] Wtotal time: 436.105098s User: 0.75s System: 1.53s
+
+2023/01/16 12:46:49.048814 [INFO] current LH = -7155.517781174016	
+2023/01/16 12:46:50.683540 [INFO] current LH = -7155.519514140334	
+2023/01/16 12:46:50.683560 [INFO] Wall time: 3.111386718s User: 0s System: 0.01s
+
+2023/01/16 12:46:50.683569 [INFO] Wtotal time: 439.2165008s User: 0.75s System: 1.54s
+
+2023/01/16 12:46:51.999118 [INFO] current LH = -7155.519659276271	
+2023/01/16 12:46:53.541941 [INFO] current LH = -7155.519544241163	
+2023/01/16 12:46:53.541961 [INFO] Wall time: 2.858382082s User: 0s System: 0.01s
+
+2023/01/16 12:46:53.541970 [INFO] Wtotal time: 442.0749016s User: 0.75s System: 1.55s
+
+2023/01/16 12:46:54.915927 [INFO] current LH = -7155.519569503239	
+2023/01/16 12:46:56.377959 [INFO] current LH = -7155.52012781783	
+2023/01/16 12:46:56.377978 [INFO] Wall time: 2.835998822s User: 0.01s System: 0.02s
+
+2023/01/16 12:46:56.377987 [INFO] Wtotal time: 444.910919s User: 0.76s System: 1.57s
+
+2023/01/16 12:46:57.825465 [INFO] current LH = -7155.518750850314	
+2023/01/16 12:46:59.171895 [INFO] current LH = -7155.518161641055	
+2023/01/16 12:46:59.171911 [INFO] Wall time: 2.793916521s User: 0s System: 0.01s
+
+2023/01/16 12:46:59.171918 [INFO] Wtotal time: 447.7048511s User: 0.76s System: 1.58s
+
+2023/01/16 12:47:00.567896 [INFO] Client timing information: 
+2023/01/16 12:47:00.567916 [INFO] Client id 1 channel id 0  response time +0 s
+2023/01/16 12:47:00.567923 [INFO] Client id 2 channel id 0  response time +0.003797 s
+2023/01/16 12:47:00.567929 [INFO] Client id 0 channel id 0  response time +0.008413 s
+2023/01/16 12:47:00.567936 [INFO] Client id 3 channel id 0  response time +0.012612 s
+2023/01/16 12:47:01.014088 [INFO] current LH = -7155.519295494363	
+2023/01/16 12:47:02.634081 [INFO] current LH = -7155.519877743882	
+2023/01/16 12:47:02.634098 [INFO] Wall time: 3.462173792s User: 0.01s System: 0.01s
+
+2023/01/16 12:47:02.634103 [INFO] Wtotal time: 451.1670371s User: 0.77s System: 1.59s
+
+2023/01/16 12:47:04.043356 [INFO] current LH = -7155.519178978499	
+2023/01/16 12:47:05.412443 [INFO] current LH = -7155.519211321841	
+2023/01/16 12:47:05.412462 [INFO] Wall time: 2.778350226s User: 0s System: 0.01s
+
+2023/01/16 12:47:05.412470 [INFO] Wtotal time: 453.9454021s User: 0.77s System: 1.6s
+
+2023/01/16 12:47:06.835659 [INFO] current LH = -7155.519893408797	
+2023/01/16 12:47:08.243111 [INFO] current LH = -7155.51942740119	
+2023/01/16 12:47:08.243130 [INFO] Wall time: 2.830651269s User: 0s System: 0.01s
+
+2023/01/16 12:47:08.243139 [INFO] Wtotal time: 456.7760711s User: 0.77s System: 1.61s
+
+2023/01/16 12:47:09.735421 [INFO] current LH = -7155.520073468289	
+2023/01/16 12:47:11.185928 [INFO] current LH = -7155.519780265328	
+2023/01/16 12:47:11.185946 [INFO] Wall time: 2.942798453s User: 0s System: 0.02s
+
+2023/01/16 12:47:11.185952 [INFO] Wtotal time: 459.7188852s User: 0.77s System: 1.63s
+
+2023/01/16 12:47:12.616527 [INFO] current LH = -7155.518770054876	
+2023/01/16 12:47:14.087594 [INFO] current LH = -7155.518925797944	
+2023/01/16 12:47:14.087612 [INFO] Wall time: 2.901652692s User: 0.01s System: 0.01s
+
+2023/01/16 12:47:14.087618 [INFO] Wtotal time: 462.6205514s User: 0.78s System: 1.64s
+
+2023/01/16 12:47:15.153240 [INFO] start migrad 
+2023/01/16 12:47:15.153264 [INFO] 
+
+********************** Final fit parameters *************************
+  no                                  Name                    Value  type                 Error +-            Low          High
+   0         L2S2_J0P-1C1Tof2(1270)_etaMag       0.9104202232232721  free      0.07841771790331661
+   1         L2S2_J0P-1C1Tof2(1270)_etaPhi                        0 fixed
+   2       L2S0_f2(1270)Topion0A_pion0BMag                        1 fixed
+   3       L2S0_f2(1270)Topion0A_pion0BPhi                        0 fixed
+   4                          f2(1270)Mass        1.283108658161556  free     0.003605151512728888          1.125          1.425
+   5                         f2(1270)Width       0.2000710858233722  free     0.007199037525185276              0           0.37
+   6  L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag        2.427289996193259  free      0.05414956368266026
+   7  L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi       -1.168293142527357  free       0.1096887421028936
+   8      L2S0_a2(1320)0ABTopion0AB_etaMag                        1 fixed
+   9      L2S0_a2(1320)0ABTopion0AB_etaPhi                        0 fixed
+  10                       a2(1320)0ABMass        1.318197256225613  free     0.001177990016482666          1.168          1.468
+  11                      a2(1320)0ABWidth        0.106925242456617  free     0.003043706067677475              0          0.214
+  12          L1S2_J1P1C1Tof2(1270)_etaMag       0.8411994072701734  free      0.03644716114510389
+  13          L1S2_J1P1C1Tof2(1270)_etaPhi        -1.26735225479857  free       0.1164956563731465
+  14          L3S2_J1P1C1Tof2(1270)_etaMag         0.84065770683952  free      0.05026881287584346
+  15          L3S2_J1P1C1Tof2(1270)_etaPhi       -1.658753323918431  free      0.07815951364076976
+  16   L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag       0.5513108130536026  free      0.04757798899788254
+  17   L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi       -4.086401697476386  free      0.08620341386537449
+  18   L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag       0.8487659299975346  free      0.05166869761663809
+  19   L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi        1.311141845741326  free      0.07221400041217559
+  20          L1S2_J2P1C1Tof2(1270)_etaMag        1.021199566916021  free      0.03613095304287303
+  21          L1S2_J2P1C1Tof2(1270)_etaPhi        2.085832199139529  free       0.0965220770810032
+  22          L3S2_J2P1C1Tof2(1270)_etaMag       0.6458749998866062  free      0.03225938096058091
+  23          L3S2_J2P1C1Tof2(1270)_etaPhi        2.019058514933914  free      0.08632894687904774
+  24   L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag       0.9087674697512438  free      0.02877964442848109
+  25   L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi                        0 fixed
+  26   L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag       0.7748074604252495  free      0.03575231747254064
+  27   L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi       0.2154259851054685  free      0.05341161628224118
+  28    channelType1pion0Apion0BetaScaling                        1 fixed
+  29                           Iso1J0P-1C1                        0 fixed
+  30                            Iso1J1P1C1                        0 fixed
+  31                            Iso1J2P1C1                        0 fixed
+  32                   J0P-1C1L0S0pbarpMag       0.5773502691896258 fixed
+  33                   J0P-1C1L0S0pbarpPhi                        0 fixed
+  34                    J1P1C1L1S1pbarpMag       0.5773502691896258 fixed
+  35                    J1P1C1L1S1pbarpPhi                        0 fixed
+  36                    J2P1C1L1S1pbarpMag       0.5773502691896258 fixed
+  37                    J2P1C1L1S1pbarpPhi                        0 fixed
+2023/01/16 12:47:15.154523 [INFO] 
+
+**************** Minuit FunctionMinimum information ******************
+2023/01/16 12:47:15.154532 [INFO] 
+ Function minimum is valid.
+2023/01/16 12:47:15.154535 [INFO] 
+ Covariance matrix is valid.
+2023/01/16 12:47:15.154539 [INFO] 
+ Final LH: -7155.52338
+
+2023/01/16 12:47:15.154541 [INFO]  # of function calls: 2928
+2023/01/16 12:47:15.154545 [INFO]  minimum edm: 2.236921451e-05
+2023/01/16 12:47:15.154550 [INFO] noOfFreeFitParams:	22
+2023/01/16 12:47:15.154554 [INFO] evtWeightSumData:	15000
+2023/01/16 12:47:15.154557 [INFO] BIC:	-14099.49904
+2023/01/16 12:47:15.154560 [INFO] AIC:	-14267.04676
+2023/01/16 12:47:15.154563 [INFO] AICc:	-14266.97919
+2023/01/16 12:47:15.156804 [INFO] Diagonal sqrt(cov) element (0, 0) / param error: 0.0784177179 / 0.0784177179
+2023/01/16 12:47:15.156832 [INFO] Diagonal sqrt(cov) element (4, 4) / param error: 0.003605499707 / 0.003605151513
+2023/01/16 12:47:15.156868 [INFO] Diagonal sqrt(cov) element (5, 5) / param error: 0.007200867809 / 0.007199037525
+2023/01/16 12:47:15.156876 [INFO] Diagonal sqrt(cov) element (6, 6) / param error: 0.05414956368 / 0.05414956368
+2023/01/16 12:47:15.156884 [INFO] Diagonal sqrt(cov) element (7, 7) / param error: 0.1096887421 / 0.1096887421
+2023/01/16 12:47:15.156892 [INFO] Diagonal sqrt(cov) element (10, 10) / param error: 0.001178002125 / 0.001177990016
+2023/01/16 12:47:15.156899 [INFO] Diagonal sqrt(cov) element (11, 11) / param error: 0.003044116695 / 0.003043706068
+2023/01/16 12:47:15.156905 [INFO] Diagonal sqrt(cov) element (12, 12) / param error: 0.03644716115 / 0.03644716115
+2023/01/16 12:47:15.156912 [INFO] Diagonal sqrt(cov) element (13, 13) / param error: 0.1164956564 / 0.1164956564
+2023/01/16 12:47:15.156919 [INFO] Diagonal sqrt(cov) element (14, 14) / param error: 0.05026881288 / 0.05026881288
+2023/01/16 12:47:15.156926 [INFO] Diagonal sqrt(cov) element (15, 15) / param error: 0.07815951364 / 0.07815951364
+2023/01/16 12:47:15.156933 [INFO] Diagonal sqrt(cov) element (16, 16) / param error: 0.047577989 / 0.047577989
+2023/01/16 12:47:15.156939 [INFO] Diagonal sqrt(cov) element (17, 17) / param error: 0.08620341387 / 0.08620341387
+2023/01/16 12:47:15.156946 [INFO] Diagonal sqrt(cov) element (18, 18) / param error: 0.05166869762 / 0.05166869762
+2023/01/16 12:47:15.156953 [INFO] Diagonal sqrt(cov) element (19, 19) / param error: 0.07221400041 / 0.07221400041
+2023/01/16 12:47:15.156960 [INFO] Diagonal sqrt(cov) element (20, 20) / param error: 0.03613095304 / 0.03613095304
+2023/01/16 12:47:15.156967 [INFO] Diagonal sqrt(cov) element (21, 21) / param error: 0.09652207708 / 0.09652207708
+2023/01/16 12:47:15.156973 [INFO] Diagonal sqrt(cov) element (22, 22) / param error: 0.03225938096 / 0.03225938096
+2023/01/16 12:47:15.156980 [INFO] Diagonal sqrt(cov) element (23, 23) / param error: 0.08632894688 / 0.08632894688
+2023/01/16 12:47:15.156987 [INFO] Diagonal sqrt(cov) element (24, 24) / param error: 0.02877964443 / 0.02877964443
+2023/01/16 12:47:15.156994 [INFO] Diagonal sqrt(cov) element (26, 26) / param error: 0.03575231747 / 0.03575231747
+2023/01/16 12:47:15.157000 [INFO] Diagonal sqrt(cov) element (27, 27) / param error: 0.05341161628 / 0.05341161628
+2023/01/16 12:47:15.183150 [INFO] Closing server.

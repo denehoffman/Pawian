@@ -1,0 +1,835 @@
+2023/01/16 12:39:36.476896 [INFO] 
+                                       MMMMM
+                                      M8NO  +M
+                                    NO       M         ,MM
+                                    MM     ?MN,   D8MMMO  :NMM
+                               :MZ            ZM  MZ            NM,  M
+                              M,          :M   MMN            DMMN M  ~
+                             M        8MMM M  M,    7O: :M, M+     N:
+                            M  =NMZ M     ,M8 M    ,O     MM   :    M
+                            D  DM   M    $8        I= MM  $M   7    M
+                           Z~ M M  O 8   8          M     N MM    DM
+                           8, O    MM    M           :MM8,     ,, MMD
+                           O:       M    87MMO ,  MM~                ,M,
+                           I=O  M   M   M        M                     M
+                           :M   M   N   M N,     M                    M~
+                           :M  ?~  N    8I+  M    MMMMMMMMMMMMMMMOM? 7,
+                            M  ++  M   8MZ7  M     M                MM
+                            M   D  M  N   N   M,    ND          DM8,
+                            M   M  M M~M               DMNM88= 8,
+                            M    8  ?M?       M                 M~
+                            M      N~8       ?$    :             M
+                            NN      M     M  M     M             8:
+                            D M    M   DDM   M     M               M,
+                            D     ,D  D?M    N     M                 ND
+                            M     M  ,O8$   ,7     M    M    M         M~
+                            NN  8IO  M M    I=     =    M    M          ,M
+                                 M  M                   M    M I          M
+                                ~M ?8                 M M    M +M   MM     N
+        N+I8MMM~                MM M ,      M         M D    M   M   MON   ~$
+        M       NM              M8   M      O     D   M Z+  M:    M,  M M   M
+         ,MMMD    88            8M   N     M      M         M      ~M  M M+  M
+               7M, MI          +ZM  M      M      M        I$ $NI    M ,O M8 ?O
+                 ?N M          I:   M      M       8       M     ,    M M     M
+                  M +?         8,          N       M       N    :MMMMM7D M    M
+                   D M         8,                  N,     ,$   M       M 8    8:
+                   N,D,        ?:    =MMMMMZ               D  M         M  M  8ZMM
+                    M ND       :Z=MO,                      N    MM8ZN8  M  M  M+ ,:~MMM 8~
+                     M  DMMMMMNZ             D    ~MM        :MM        M   M MM    MNMM M
+                     $7           DMMZZNOMMNMZ       M     =M       MZ  :7 MM   MM$ M8   N$ M
+                       MO      MMZ        Z                +   ,MMD   +  D M~8  N  M       M
+                          ?I=    D         8                        ,NMMMMO MM M 8  M     ID
+                                  8        D                     MN,     M  ~,  MM       8N
+     ,MNZ,  ,8MM         :~ZMMM,  :8       D                   8         ,M      N
+   88           :M   M+         M  ,D       D                $            M      M
+  M:       M      M ,7           D  8N$     8~             :D             M      M ?M,
+  M    7   M      M M   +MM?     M ,8  D8    D=          ,D              Z?     ,O
+  $I~ ~?  Z8     M  M      M     M 7+  M  :,   D$      8Z  M? M          M$D+M  7M?
+   Z:  MMN       N, M     M?     M D   M          =$~   M :+  D,      NMMMMM OMM  MM          MMM
+   O:           :M $Z    D8      M M   M          M     M O:  N      M     ,O     M M        M   N
+   $~          M:  M  D  DM      O N   M   MM     M    :N M   M     +7      M     M  M       D   D
+   ~=  MNMMMM8    D: $     M    ?Z M   D   M M    M    M  M   M     M M M   7,    M   M     D~   7=
+   ~I     M       N  O     :$   N  M   D   8 Z=   M   M~  M   M     Z   N    M    M   D,    M    Z
+    M     M      M   D     $~   M  M   N   M  M   M   M   Z   M    M         D    M    N    M    M
+    M     M      O   M     M    M  M   M  M     ,M   Z7  N~   N    M  NM     M    N    M    M    M
+ M  M     M     M    M     D    M  M   MMM   M M     M   M    M    N M  N    M   7$     D   M    M
+  MMM7  MN     O$   M     M    N   M          +      M   M    $   N +I  ~+   M   M  ,   M   M    M
+                MMM+      M    M   M       M,        N   M   O=   M M   ~?   M   M M~NN  M  8    M
+                           N  $$   7M      M+       D    8   M    M M   D,   M   M M  M  ,N 8    D
+                            D8:     M      OM      MN    D   M  , M M   M    M   O $  +~  $MZ    D
+                                     :M88DM  N +MM+      MMM$M  N~+~N   D,   M  :8  D  M         N
+                                                                 MMM     M   M  Z=  M  M         D
+
+//************************************************************************//
+//									  //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
+//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
+//          	   - Ruhr-Universität Bochum 				  //
+//									  //
+//  Pawian is free software: you can redistribute it and/or modify	  //
+//  it under the terms of the GNU General Public License as published by  //
+//  the Free Software Foundation, either version 3 of the License, or 	  //
+//  (at your option) any later version.	 	      	  	   	  //
+//									  //
+//  Pawian is distributed in the hope that it will be useful,		  //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
+//  GNU General Public License for more details.	      		  //
+//									  //
+//  You should have received a copy of the GNU General Public License     //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
+//									  //
+//************************************************************************//
+
+   
+2023/01/16 12:39:36.476943 [INFO] Compiled Dec 21 2022 13:15:47
+2023/01/16 12:39:36.476948 [INFO] Hostname: pc70
+2023/01/16 12:39:36.477976 [WARN] ConfigParser/ParserBase.cc line 297: multithreading is not supported anymore!!! Reset noOfThreads from 2 to 1
+2023/01/16 12:39:36.480376 [INFO] initial4Vec: {Rank = 1 ( 2.2384,0,0,0.9) } 
+2023/01/16 12:39:36.480389 [INFO] projectile4Vec: {Rank = 1 ( 1.30013,0,0,0.9) } 
+2023/01/16 12:39:36.481175 [INFO] 
+The spins of the final state particles are:
+2023/01/16 12:39:36.481185 [INFO] pion0A : 0
+2023/01/16 12:39:36.481189 [INFO] pion0B : 0
+2023/01/16 12:39:36.481192 [INFO] eta : 0
+2023/01/16 12:39:36.481195 [INFO] 
+current projection is:
+2023/01/16 12:39:36.481200 [INFO] 0	lambda: 0
+2023/01/16 12:39:36.481203 [INFO] 0	lambda: 0
+2023/01/16 12:39:36.481206 [INFO] 0	lambda: 0
+
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+2023/01/16 12:39:36.481303 [INFO] added decay f2(1270)Topion0A_pion0B to decay list
+
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+2023/01/16 12:39:36.481321 [INFO] added decay a2(1320)0ATopion0A_eta to decay list
+
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+2023/01/16 12:39:36.481336 [INFO] added decay a2(1320)0BTopion0B_eta to decay list
+
+***ProdChannelInfo***
+particle1: f2(1270)	particle2: eta
+with production barrier: 0
+
+***ProdChannelInfo***
+particle1: a2(1320)0B	particle2: pion0A
+with production barrier: 0
+
+***ProdChannelInfo***
+particle1: a2(1320)0A	particle2: pion0B
+with production barrier: 0
+2023/01/16 12:39:36.481517 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.481525 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.481529 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.481541 [INFO] Skip amplitude I1G-1J0P-1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481583 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481588 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481592 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481596 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481621 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481625 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481629 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 -1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481633 [INFO] Skip amplitude I1G-1J0P-1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481658 [INFO] Skip amplitude I0G1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481681 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481704 [INFO] Skip amplitude I0G1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481728 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.481732 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.481737 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.481740 [INFO] Skip amplitude I1G-1J0P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481766 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481771 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481775 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481783 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481808 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481812 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481816 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 0 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.481820 [INFO] Skip amplitude I1G-1J0P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481845 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481851 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481855 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481859 [INFO] Skip amplitude I0G-1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481883 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481888 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481893 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481897 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481920 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481925 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481930 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481934 [INFO] Skip amplitude I0G-1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481960 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481965 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481970 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.481974 [INFO] Skip amplitude I1G1J1P-1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.481997 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482003 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482007 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482011 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482034 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482039 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482044 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 -1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482048 [INFO] Skip amplitude I1G1J1P-1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482072 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482077 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482082 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482085 [INFO] Skip amplitude I0G-1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 1
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482113 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482118 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482122 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482126 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482152 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482158 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482162 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482166 [INFO] Skip amplitude I0G-1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): -0.57735
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482190 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482195 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482200 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482203 [INFO] Skip amplitude I1G1J1P1C-1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482227 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482232 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482237 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482240 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482263 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482269 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482273 [WARN] PwaUtils/DataUtils.cc line 117: C-Parity not valid and no LS amplitudes considered for
+1 1 -1 -->  JPC= 2 1 1 and  JPC= 0 -1 1
+2023/01/16 12:39:36.482277 [INFO] Skip amplitude I1G1J1P1C-1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J1P1C1Tof2(1270)_eta
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0B_pion0A
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J1P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J1P1C1Toa2(1320)0A_pion0B
+JPC=1++	L,S=1,2	preFactorLS=0
+JPC=1++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482378 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.482383 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.482387 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.482391 [INFO] Skip amplitude I1G-1J1P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482415 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482419 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482424 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482427 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482450 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482455 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482459 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 1 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482462 [INFO] Skip amplitude I1G-1J1P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Tof2(1270)_eta:
+suffix for fit parameter name:	J2P1C1Tof2(1270)_eta
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	f2(1270)Topion0A_pion0B:
+suffix for fit parameter name:	f2(1270)Topion0A_pion0B
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0B_pion0A:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0B_pion0A
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0BTopion0B_eta:
+suffix for fit parameter name:	a2(1320)0BTopion0B_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+
+JPCLS amplitudes for decay	I0G1J2P1C1Toa2(1320)0A_pion0B:
+suffix for fit parameter name:	J2P1C1Toa2(1320)0A_pion0B
+JPC=2++	L,S=1,2	preFactorLS=0
+JPC=2++	L,S=3,2	preFactorLS=0
+with further decay:
+JPCLS amplitudes for decay	a2(1320)0ATopion0A_eta:
+suffix for fit parameter name:	a2(1320)0ATopion0A_eta
+JPC=2++	L,S=2,0	preFactorLS=0
+
+
+
+
+f2(1270)	mass=1.275+0-0	width=0.185+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+eta	mass=0.547+0.01-0.01	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=1	2*I=0	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482564 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.482569 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.482573 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 1 and  JPG= 0 -1 1
+2023/01/16 12:39:36.482577 [INFO] Skip amplitude I1G-1J2P1C1Tof2(1270)_eta	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0B	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0A	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482600 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482605 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482609 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482612 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0B_pion0A	JPCLSAmps().size(): 0	isospinCG(): 0
+a2(1320)0A	mass=1.318+0-0	width=0.107+0-0	3*q=0	2*J=4	P=1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+pion0B	mass=0.13498+0-0	width=0.0001+0-0	3*q=0	2*J=0	P=-1	p=-2	C=1	c=-2	G=-2	theGParity=-1	2*I=2	2*I3=0	charm=0	strange=0
+2023/01/16 12:39:36.482635 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482640 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482644 [WARN] PwaUtils/DataUtils.cc line 139: G-Parity not valid and no LS amplitudes considered for
+ JPG= 2 1 -1 -->  JPG= 2 1 -1 and  JPG= 0 -1 -1
+2023/01/16 12:39:36.482648 [INFO] Skip amplitude I1G-1J2P1C1Toa2(1320)0A_pion0B	JPCLSAmps().size(): 0	isospinCG(): 0
+2023/01/16 12:39:36.482671 [INFO] add dynamics for J0P-1C1 dynType: WoDynamics
+2023/01/16 12:39:36.482681 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:36.482686 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:36.482695 [INFO] add dynamics for J1P1C1 dynType: WoDynamics
+2023/01/16 12:39:36.482701 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:36.482706 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:36.482712 [INFO] add dynamics for J2P1C1 dynType: WoDynamics
+2023/01/16 12:39:36.482718 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:36.482722 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:36.482764 [INFO] add dynamics for f2(1270)Topion0A_pion0B dynType: BreitWigner
+2023/01/16 12:39:36.482775 [INFO] add dynamics for a2(1320)0ATopion0A_eta dynType: BreitWigner
+2023/01/16 12:39:36.482792 [INFO] add dynamics for a2(1320)0BTopion0B_eta dynType: BreitWigner
+2023/01/16 12:39:36.482798 [INFO] I0G1J0P-1C1Tof2(1270)_eta set decay level to 0
+2023/01/16 12:39:36.482802 [INFO] f2(1270)Topion0A_pion0B set decay level to 1
+2023/01/16 12:39:36.482806 [INFO] I0G1J0P-1C1Toa2(1320)0B_pion0A set decay level to 0
+2023/01/16 12:39:36.482809 [INFO] a2(1320)0BTopion0B_eta set decay level to 1
+2023/01/16 12:39:36.482813 [INFO] I0G1J0P-1C1Toa2(1320)0A_pion0B set decay level to 0
+2023/01/16 12:39:36.482816 [INFO] a2(1320)0ATopion0A_eta set decay level to 1
+2023/01/16 12:39:36.482819 [INFO] I0G1J1P1C1Tof2(1270)_eta set decay level to 0
+2023/01/16 12:39:36.482823 [INFO] I0G1J1P1C1Toa2(1320)0B_pion0A set decay level to 0
+2023/01/16 12:39:36.482827 [INFO] I0G1J1P1C1Toa2(1320)0A_pion0B set decay level to 0
+2023/01/16 12:39:36.482830 [INFO] I0G1J2P1C1Tof2(1270)_eta set decay level to 0
+2023/01/16 12:39:36.482834 [INFO] I0G1J2P1C1Toa2(1320)0B_pion0A set decay level to 0
+2023/01/16 12:39:36.482838 [INFO] I0G1J2P1C1Toa2(1320)0A_pion0B set decay level to 0
+2023/01/16 12:39:36.482843 [ERROR] PwaUtils/GlobalEnv.cc line 213: setting up channel 0
+2023/01/16 12:39:36.482847 [INFO] check complete reaction chains
+2023/01/16 12:39:36.482851 [INFO] paricle name: pion0A
+2023/01/16 12:39:36.482854 [INFO] paricle name: pion0B
+2023/01/16 12:39:36.482857 [INFO] paricle name: eta
+2023/01/16 12:39:36.482862 [INFO] reaction chains have been successfully checked!!!
+2023/01/16 12:39:36.482870 [INFO] name of amplitude: f2(1270)Topion0A_pion0B	nameId: 1
+_wigDWigDRefId = 1	_wignerDId = 2
+with wignerDKey: pion0B_pion0Apion0B	wignerDRefKey: etapion0Apion0B
+2023/01/16 12:39:36.482876 [INFO] name of amplitude: I0G1J0P-1C1Tof2(1270)_eta	nameId: 3
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482881 [INFO] name of amplitude: a2(1320)0BTopion0B_eta	nameId: 5
+_wigDWigDRefId = 3	_wignerDId = 6
+with wignerDKey: eta_etapion0B	wignerDRefKey: etapion0Apion0B
+2023/01/16 12:39:36.482887 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0B_pion0A	nameId: 7
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482893 [INFO] name of amplitude: a2(1320)0ATopion0A_eta	nameId: 9
+_wigDWigDRefId = 5	_wignerDId = 10
+with wignerDKey: eta_etapion0A	wignerDRefKey: etapion0Apion0B
+2023/01/16 12:39:36.482903 [INFO] name of amplitude: I0G1J0P-1C1Toa2(1320)0A_pion0B	nameId: 11
+_wigDWigDRefId = 6	_wignerDId = 12
+with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482908 [INFO] name of amplitude: I0G1J1P1C1Tof2(1270)_eta	nameId: 13
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482913 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0B_pion0A	nameId: 14
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482919 [INFO] name of amplitude: I0G1J1P1C1Toa2(1320)0A_pion0B	nameId: 15
+_wigDWigDRefId = 6	_wignerDId = 12
+with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482924 [INFO] name of amplitude: I0G1J2P1C1Tof2(1270)_eta	nameId: 16
+_wigDWigDRefId = 2	_wignerDId = 4
+with wignerDKey: eta_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482930 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0B_pion0A	nameId: 17
+_wigDWigDRefId = 4	_wignerDId = 8
+with wignerDKey: pion0A_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482938 [INFO] name of amplitude: I0G1J2P1C1Toa2(1320)0A_pion0B	nameId: 18
+_wigDWigDRefId = 6	_wignerDId = 12
+with wignerDKey: pion0B_etapion0Apion0B	wignerDRefKey: prod
+2023/01/16 12:39:36.482944 [INFO] create likelihood object for channelType 1	 and channelID: 0
+2023/01/16 12:39:36.482971 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:36.482983 [INFO] Dynamics	f2(1270)Topion0A_pion0B	found!!!
+2023/01/16 12:39:36.482988 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.482991 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.482994 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.482999 [INFO] _parityFactor=	1
+2023/01/16 12:39:36.483013 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483016 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483019 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:36.483023 [INFO] _parityFactor=	-1
+2023/01/16 12:39:36.483036 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:36.483043 [INFO] Dynamics	a2(1320)0BTopion0B_eta	found!!!
+2023/01/16 12:39:36.483047 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483050 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483053 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483056 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483059 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:36.483063 [INFO] _parityFactor=	1
+2023/01/16 12:39:36.483069 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483073 [INFO] _parityFactor=	-1
+2023/01/16 12:39:36.483086 [INFO] Dynamics	J0P-1C1	found!!!
+2023/01/16 12:39:36.483094 [INFO] Dynamics	a2(1320)0ATopion0A_eta	found!!!
+2023/01/16 12:39:36.483097 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483100 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483103 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483106 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:36.483110 [INFO] _parityFactor=	1
+2023/01/16 12:39:36.483116 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483119 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483123 [INFO] _parityFactor=	-1
+2023/01/16 12:39:36.483135 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:36.483140 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483143 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483146 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:36.483149 [INFO] _parityFactor=	1
+2023/01/16 12:39:36.483165 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:36.483170 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483173 [INFO] _parityFactor=	1
+2023/01/16 12:39:36.483190 [INFO] Dynamics	J1P1C1	found!!!
+2023/01/16 12:39:36.483195 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483198 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483202 [INFO] _parityFactor=	1
+2023/01/16 12:39:36.483216 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:36.483220 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483223 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483226 [INFO] _fsParticleNames.at(2): eta
+2023/01/16 12:39:36.483229 [INFO] _parityFactor=	-1
+2023/01/16 12:39:36.483249 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:36.483254 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483257 [INFO] _parityFactor=	-1
+2023/01/16 12:39:36.483276 [INFO] Dynamics	J2P1C1	found!!!
+2023/01/16 12:39:36.483280 [INFO] _fsParticleNames.at(0): pion0A
+2023/01/16 12:39:36.483283 [INFO] _fsParticleNames.at(1): pion0B
+2023/01/16 12:39:36.483287 [INFO] _parityFactor=	-1
+2023/01/16 12:39:36.483308 [INFO] 
+*** The fit parameter replacements are ***
+2023/01/16 12:39:36.483312 [INFO] J0P-1C1Toa2(1320)0A_pion0B	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:36.483316 [INFO] J0P-1C1Toa2(1320)0B_pion0A	replaced by	J0P-1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:36.483319 [INFO] J1P1C1Toa2(1320)0A_pion0B	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:36.483322 [INFO] J1P1C1Toa2(1320)0B_pion0A	replaced by	J1P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:36.483325 [INFO] J2P1C1Toa2(1320)0A_pion0B	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:36.483332 [INFO] J2P1C1Toa2(1320)0B_pion0A	replaced by	J2P1C1Toa2(1320)0AB_pion0AB
+2023/01/16 12:39:36.483336 [INFO] a2(1320)0ATopion0A_eta	replaced by	a2(1320)0ABTopion0AB_eta
+2023/01/16 12:39:36.483339 [INFO] a2(1320)0BTopion0B_eta	replaced by	a2(1320)0ABTopion0AB_eta
+2023/01/16 12:39:36.484517 [INFO] L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+2023/01/16 12:39:36.484537 [INFO] L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:36.484545 [INFO] L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+2023/01/16 12:39:36.484550 [INFO] L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+2023/01/16 12:39:36.484554 [INFO] f2(1270)Mass	1.275	0.03	1.125	1.425
+2023/01/16 12:39:36.484560 [INFO] f2(1270)Width	0.185	0.037	0	0.37
+2023/01/16 12:39:36.484565 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+2023/01/16 12:39:36.484569 [INFO] L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:36.484573 [INFO] L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+2023/01/16 12:39:36.484578 [INFO] L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+2023/01/16 12:39:36.484582 [INFO] a2(1320)0ABMass	1.318	0.03	1.168	1.468
+2023/01/16 12:39:36.484587 [INFO] a2(1320)0ABWidth	0.107	0.0214	0	0.214
+2023/01/16 12:39:36.484592 [INFO] L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484597 [INFO] L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:36.484601 [INFO] L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484605 [INFO] L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:36.484609 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484617 [INFO] L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:36.484621 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484625 [INFO] L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:36.484629 [INFO] L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484634 [INFO] L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:36.484638 [INFO] L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484642 [INFO] L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+2023/01/16 12:39:36.484646 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484651 [INFO] L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:36.484655 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+2023/01/16 12:39:36.484659 [INFO] L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+2023/01/16 12:39:36.484663 [INFO] channelType1pion0Apion0BetaScaling	1	0.01	0	20
+2023/01/16 12:39:36.484668 [INFO] Iso1J0P-1C1	0	0.5	0	1
+2023/01/16 12:39:36.484674 [INFO] Iso1J1P1C1	0	0.5	0	1
+2023/01/16 12:39:36.484679 [INFO] Iso1J2P1C1	0	0.5	0	1
+2023/01/16 12:39:36.484683 [INFO] J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+2023/01/16 12:39:36.484692 [INFO] J0P-1C1L0S0pbarpPhi	0	0.2
+2023/01/16 12:39:36.484696 [INFO] J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+2023/01/16 12:39:36.484701 [INFO] J1P1C1L1S1pbarpPhi	0	0.2
+2023/01/16 12:39:36.484705 [INFO] J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+2023/01/16 12:39:36.484710 [INFO] J2P1C1L1S1pbarpPhi	0	0.2
+
+
+ parameters in pawianParams are: 
+
+L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+f2(1270)Mass	1.275	0.03	1.125	1.425
+f2(1270)Width	0.185	0.037	0	0.37
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+a2(1320)0ABMass	1.318	0.03	1.168	1.468
+a2(1320)0ABWidth	0.107	0.0214	0	0.214
+L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+channelType1pion0Apion0BetaScaling	1	0.01	0	20
+Iso1J0P-1C1	0	0.5	0	1
+Iso1J1P1C1	0	0.5	0	1
+Iso1J2P1C1	0	0.5	0	1
+J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+J0P-1C1L0S0pbarpPhi	0	0.2
+J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J1P1C1L1S1pbarpPhi	0	0.2
+J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J2P1C1L1S1pbarpPhi	0	0.2
+
+
+**************** Fit parameter **************************
+L2S2_J0P-1C1Tof2(1270)_etaMag	1	0.5
+L2S2_J0P-1C1Tof2(1270)_etaPhi	0	0.2
+L2S0_f2(1270)Topion0A_pion0BMag	1	0.5
+L2S0_f2(1270)Topion0A_pion0BPhi	0	0.2
+f2(1270)Mass	1.275	0.03	1.125	1.425
+f2(1270)Width	0.185	0.037	0	0.37
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABMag	1	0.5
+L2S2_J0P-1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L2S0_a2(1320)0ABTopion0AB_etaMag	1	0.5
+L2S0_a2(1320)0ABTopion0AB_etaPhi	0	0.2
+a2(1320)0ABMass	1.318	0.03	1.168	1.468
+a2(1320)0ABWidth	0.107	0.0214	0	0.214
+L1S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J1P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J1P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L1S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L3S2_J2P1C1Tof2(1270)_etaMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Tof2(1270)_etaPhi	0	0.2
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L1S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABMag	0.7071067811865475	0.3535533905932737
+L3S2_J2P1C1Toa2(1320)0AB_pion0ABPhi	0	0.2
+channelType1pion0Apion0BetaScaling	1	0.01	0	20
+Iso1J0P-1C1	0	0.5	0	1
+Iso1J1P1C1	0	0.5	0	1
+Iso1J2P1C1	0	0.5	0	1
+J0P-1C1L0S0pbarpMag	0.5773502691896258	0.2886751345948129
+J0P-1C1L0S0pbarpPhi	0	0.2
+J1P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J1P1C1L1S1pbarpPhi	0	0.2
+J2P1C1L1S1pbarpMag	0.5773502691896258	0.2886751345948129
+J2P1C1L1S1pbarpPhi	0	0.2
+2023/01/16 12:39:36.484991 [INFO] Fixing scaling parameter channelType1pion0Apion0BetaScaling
+2023/01/16 12:39:36.485054 [INFO] ************* Client mode ****************
+2023/01/16 12:39:36.485060 [INFO] Connecting to server localhost:50001
+2023/01/16 12:39:36.486105 [INFO] Received client id: 1
+2023/01/16 12:39:36.486113 [INFO] Received channel id: 0
+2023/01/16 12:39:36.486118 [INFO] Received data event range 3750 - 7499
+2023/01/16 12:39:36.486123 [INFO] Received mc event range 11250 - 22499
+2023/01/16 12:39:36.486206 [INFO] caching amplitudes enabled / disabled:	1
+2023/01/16 12:39:36.486215 [INFO] data file: benchmark/pbarp/pi0pi0eta900/toyDataPbarPtoPi0Pi0Eta900.dat
+2023/01/16 12:39:36.486221 [INFO] mc file: benchmark/pbarp/pi0pi0eta900/toyMCPbarPtoPi0Pi0Eta900.dat
+2023/01/16 12:39:36.540467 [INFO] File has 3750 events.
+2023/01/16 12:39:36.540479 [INFO] 0x18d5190
+2023/01/16 12:39:36.540484 [INFO]  Each event has 3 final state particles.
+
+2023/01/16 12:39:36.540488 [INFO] 
+2023/01/16 12:39:36.540506 [INFO] {Rank = 1 ( 0.781577,0.349047,0.654258,0.206773) } 	m = 0.13498
+2023/01/16 12:39:36.540512 [INFO] {Rank = 1 ( 0.860031,-0.162597,-0.629739,0.546284) } 	m = 0.13498
+2023/01/16 12:39:36.540517 [INFO] {Rank = 1 ( 0.596797,-0.18645,-0.0245193,0.146943) } 	m = 0.547
+2023/01/16 12:39:36.540520 [INFO] 
+2023/01/16 12:39:36.540526 [INFO] {Rank = 1 ( 0.502762,-0.247375,0.00877206,-0.416267) } 	m = 0.13498
+2023/01/16 12:39:36.540534 [INFO] {Rank = 1 ( 0.921899,-0.132764,0.172754,0.885555) } 	m = 0.13498
+2023/01/16 12:39:36.540539 [INFO] {Rank = 1 ( 0.813744,0.380139,-0.181526,0.430712) } 	m = 0.547
+2023/01/16 12:39:36.540542 [INFO] 
+2023/01/16 12:39:36.540547 [INFO] {Rank = 1 ( 0.726986,0.605022,-0.308685,0.22125) } 	m = 0.13498
+2023/01/16 12:39:36.540552 [INFO] {Rank = 1 ( 0.877974,-0.688377,0.0405654,0.526412) } 	m = 0.13498
+2023/01/16 12:39:36.540556 [INFO] {Rank = 1 ( 0.633445,0.0833554,0.26812,0.152338) } 	m = 0.547
+2023/01/16 12:39:36.540559 [INFO] 
+2023/01/16 12:39:36.540564 [INFO] {Rank = 1 ( 0.98262,-0.635676,-0.0616412,0.734465) } 	m = 0.13498
+2023/01/16 12:39:36.540569 [INFO] {Rank = 1 ( 0.544584,0.425629,0.244147,-0.193867) } 	m = 0.13498
+2023/01/16 12:39:36.540574 [INFO] {Rank = 1 ( 0.7112,0.210046,-0.182505,0.359402) } 	m = 0.547
+2023/01/16 12:39:36.540577 [INFO] 
+2023/01/16 12:39:36.540582 [INFO] {Rank = 1 ( 0.377758,-0.0705862,-0.339238,-0.0664598) } 	m = 0.13498
+2023/01/16 12:39:36.540587 [INFO] {Rank = 1 ( 0.684844,0.119585,-0.52943,0.395216) } 	m = 0.13498
+2023/01/16 12:39:36.540591 [INFO] {Rank = 1 ( 1.1758,-0.0489984,0.868667,0.571244) } 	m = 0.547
+2023/01/16 12:39:36.540594 [INFO] 
+2023/01/16 12:39:36.540600 [INFO] {Rank = 1 ( 1.25838,0.0579928,-0.160717,1.2394) } 	m = 0.13498
+2023/01/16 12:39:36.540605 [INFO] {Rank = 1 ( 0.389796,0.108888,0.260288,-0.232627) } 	m = 0.13498
+2023/01/16 12:39:36.540609 [INFO] {Rank = 1 ( 0.590231,-0.166881,-0.0995705,-0.106769) } 	m = 0.547
+2023/01/16 12:39:36.540612 [INFO] 
+2023/01/16 12:39:36.540617 [INFO] {Rank = 1 ( 0.967239,0.279729,0.726401,0.558055) } 	m = 0.13498
+2023/01/16 12:39:36.540622 [INFO] {Rank = 1 ( 0.672032,-0.109807,-0.615748,0.205435) } 	m = 0.13498
+2023/01/16 12:39:36.540627 [INFO] {Rank = 1 ( 0.599134,-0.169922,-0.110653,0.13651) } 	m = 0.547
+2023/01/16 12:39:36.540630 [INFO] 
+2023/01/16 12:39:36.540635 [INFO] {Rank = 1 ( 0.452845,0.0516111,0.398399,-0.159573) } 	m = 0.13498
+2023/01/16 12:39:36.540639 [INFO] {Rank = 1 ( 0.521784,0.208562,-0.456323,-0.0480702) } 	m = 0.13498
+2023/01/16 12:39:36.540644 [INFO] {Rank = 1 ( 1.26378,-0.260173,0.0579239,1.10764) } 	m = 0.547
+2023/01/16 12:39:36.540647 [INFO] 
+2023/01/16 12:39:36.540652 [INFO] {Rank = 1 ( 0.670958,0.604242,0.199606,0.16436) } 	m = 0.13498
+2023/01/16 12:39:36.540657 [INFO] {Rank = 1 ( 0.885004,-0.401853,0.153791,0.761495) } 	m = 0.13498
+2023/01/16 12:39:36.540661 [INFO] {Rank = 1 ( 0.682443,-0.202389,-0.353397,-0.0258548) } 	m = 0.547
+2023/01/16 12:39:36.540664 [INFO] 
+2023/01/16 12:39:36.540669 [INFO] {Rank = 1 ( 0.50316,0.0837239,-0.351585,-0.322999) } 	m = 0.13498
+2023/01/16 12:39:36.540674 [INFO] {Rank = 1 ( 0.254279,0.0143639,-0.213159,-0.0281985) } 	m = 0.13498
+2023/01/16 12:39:36.540678 [INFO] {Rank = 1 ( 1.48097,-0.0980878,0.564744,1.2512) } 	m = 0.547
+2023/01/16 12:39:36.540681 [INFO] 
+2023/01/16 12:39:36.694136 [INFO] File has 11250 events.
+2023/01/16 12:39:36.694158 [INFO] 0x1aa2ea0
+2023/01/16 12:39:36.694163 [INFO]  Each event has 3 final state particles.
+
+2023/01/16 12:39:36.694166 [INFO] 
+2023/01/16 12:39:36.694176 [INFO] {Rank = 1 ( 0.704853,0.0640292,0.684763,-0.0748209) } 	m = 0.13498
+2023/01/16 12:39:36.694181 [INFO] {Rank = 1 ( 0.592002,0.135054,-0.496911,0.259011) } 	m = 0.13498
+2023/01/16 12:39:36.694187 [INFO] {Rank = 1 ( 0.941549,-0.199083,-0.187852,0.71581) } 	m = 0.547
+2023/01/16 12:39:36.694190 [INFO] 
+2023/01/16 12:39:36.694195 [INFO] {Rank = 1 ( 0.560545,0.116168,0.412018,0.335763) } 	m = 0.13498
+2023/01/16 12:39:36.694200 [INFO] {Rank = 1 ( 0.869415,-0.507093,-0.66557,0.193746) } 	m = 0.13498
+2023/01/16 12:39:36.694204 [INFO] {Rank = 1 ( 0.808445,0.390925,0.253552,0.370491) } 	m = 0.547
+2023/01/16 12:39:36.694208 [INFO] 
+2023/01/16 12:39:36.694212 [INFO] {Rank = 1 ( 0.580598,-0.025399,-0.253038,-0.504183) } 	m = 0.13498
+2023/01/16 12:39:36.694217 [INFO] {Rank = 1 ( 0.625839,0.144425,0.252911,0.537245) } 	m = 0.13498
+2023/01/16 12:39:36.694222 [INFO] {Rank = 1 ( 1.03197,-0.119026,0.000126755,0.866938) } 	m = 0.547
+2023/01/16 12:39:36.694231 [INFO] 
+2023/01/16 12:39:36.694236 [INFO] {Rank = 1 ( 0.251204,-0.0368732,-0.182318,0.101413) } 	m = 0.13498
+2023/01/16 12:39:36.694241 [INFO] {Rank = 1 ( 0.876874,0.0725145,0.856664,0.107499) } 	m = 0.13498
+2023/01/16 12:39:36.694246 [INFO] {Rank = 1 ( 1.11033,-0.0356413,-0.674347,0.691089) } 	m = 0.547
+2023/01/16 12:39:36.694249 [INFO] 
+2023/01/16 12:39:36.694254 [INFO] {Rank = 1 ( 0.915098,-0.17227,0.792188,0.402426) } 	m = 0.13498
+2023/01/16 12:39:36.694258 [INFO] {Rank = 1 ( 0.631186,0.298296,-0.419401,0.339556) } 	m = 0.13498
+2023/01/16 12:39:36.694263 [INFO] {Rank = 1 ( 0.69212,-0.126026,-0.372786,0.158018) } 	m = 0.547
+2023/01/16 12:39:36.694266 [INFO] 
+2023/01/16 12:39:36.694271 [INFO] {Rank = 1 ( 0.666647,0.405104,0.0530415,0.509192) } 	m = 0.13498
+2023/01/16 12:39:36.694275 [INFO] {Rank = 1 ( 0.804792,-0.0771013,0.118517,0.780692) } 	m = 0.13498
+2023/01/16 12:39:36.694280 [INFO] {Rank = 1 ( 0.766966,-0.328002,-0.171558,-0.389884) } 	m = 0.547
+2023/01/16 12:39:36.694283 [INFO] 
+2023/01/16 12:39:36.694288 [INFO] {Rank = 1 ( 0.883685,0.524943,-0.310265,0.625181) } 	m = 0.13498
+2023/01/16 12:39:36.694293 [INFO] {Rank = 1 ( 0.552133,-0.0344007,0.104702,0.523914) } 	m = 0.13498
+2023/01/16 12:39:36.694297 [INFO] {Rank = 1 ( 0.802586,-0.490542,0.205563,-0.249095) } 	m = 0.547
+2023/01/16 12:39:36.694300 [INFO] 
+2023/01/16 12:39:36.694305 [INFO] {Rank = 1 ( 0.416573,0.180659,-0.332727,-0.109398) } 	m = 0.13498
+2023/01/16 12:39:36.694310 [INFO] {Rank = 1 ( 1.1335,0.135905,0.0809721,1.11426) } 	m = 0.13498
+2023/01/16 12:39:36.694315 [INFO] {Rank = 1 ( 0.688331,-0.316564,0.251755,-0.104863) } 	m = 0.547
+2023/01/16 12:39:36.694318 [INFO] 
+2023/01/16 12:39:36.694322 [INFO] {Rank = 1 ( 0.804283,0.258239,-0.482202,0.573974) } 	m = 0.13498
+2023/01/16 12:39:36.694327 [INFO] {Rank = 1 ( 0.756953,-0.462715,0.216092,0.542179) } 	m = 0.13498
+2023/01/16 12:39:36.694332 [INFO] {Rank = 1 ( 0.677168,0.204476,0.26611,-0.216153) } 	m = 0.547
+2023/01/16 12:39:36.694335 [INFO] 
+2023/01/16 12:39:36.694339 [INFO] {Rank = 1 ( 0.585823,0.486933,0.119786,0.27114) } 	m = 0.13498
+2023/01/16 12:39:36.694344 [INFO] {Rank = 1 ( 0.712215,-0.678617,0.158858,-0.0572126) } 	m = 0.13498
+2023/01/16 12:39:36.694349 [INFO] {Rank = 1 ( 0.940367,0.191684,-0.278644,0.686072) } 	m = 0.547
+2023/01/16 12:39:36.694352 [INFO] 
+2023/01/16 12:39:36.694380 [INFO] 4vec calculation for event 0
+2023/01/16 12:39:36.694618 [INFO] 4vec all in lab system
+ px: 0	 py: 9.31323e-09	 pz: 0.9	 e : 2.2384	 m : 2.0495
+2023/01/16 12:39:36.756383 [INFO] 4vec calculation for event 500
+2023/01/16 12:39:36.818252 [INFO] 4vec calculation for event 1000
+2023/01/16 12:39:36.881507 [INFO] 4vec calculation for event 1500
+2023/01/16 12:39:36.944048 [INFO] 4vec calculation for event 2000
+2023/01/16 12:39:37.005870 [INFO] 4vec calculation for event 2500
+2023/01/16 12:39:37.067636 [INFO] 4vec calculation for event 3000
+2023/01/16 12:39:37.129453 [INFO] 4vec calculation for event 3500
+2023/01/16 12:39:37.160404 [INFO] 4vec calculation for event 0
+2023/01/16 12:39:37.160546 [INFO] 4vec all in lab system
+ px: 0	 py: 1.49012e-08	 pz: 0.9	 e : 2.2384	 m : 2.0495
+2023/01/16 12:39:37.222188 [INFO] 4vec calculation for event 500
+2023/01/16 12:39:37.284617 [INFO] 4vec calculation for event 1000
+2023/01/16 12:39:37.347066 [INFO] 4vec calculation for event 1500
+2023/01/16 12:39:37.408882 [INFO] 4vec calculation for event 2000
+2023/01/16 12:39:37.470735 [INFO] 4vec calculation for event 2500
+2023/01/16 12:39:37.532647 [INFO] 4vec calculation for event 3000
+2023/01/16 12:39:37.595249 [INFO] 4vec calculation for event 3500
+2023/01/16 12:39:37.658177 [INFO] 4vec calculation for event 4000
+2023/01/16 12:39:37.720043 [INFO] 4vec calculation for event 4500
+2023/01/16 12:39:37.782009 [INFO] 4vec calculation for event 5000
+2023/01/16 12:39:37.843820 [INFO] 4vec calculation for event 5500
+2023/01/16 12:39:37.905653 [INFO] 4vec calculation for event 6000
+2023/01/16 12:39:37.968066 [INFO] 4vec calculation for event 6500
+2023/01/16 12:39:38.029908 [INFO] 4vec calculation for event 7000
+2023/01/16 12:39:38.091862 [INFO] 4vec calculation for event 7500
+2023/01/16 12:39:38.153686 [INFO] 4vec calculation for event 8000
+2023/01/16 12:39:38.218575 [INFO] 4vec calculation for event 8500
+2023/01/16 12:39:38.280570 [INFO] 4vec calculation for event 9000
+2023/01/16 12:39:38.344751 [INFO] 4vec calculation for event 9500
+2023/01/16 12:39:38.408729 [INFO] 4vec calculation for event 10000
+2023/01/16 12:39:38.408880 [INFO] 4vec all in lab system
+ px: 1.49012e-08	 py: -7.45058e-09	 pz: 0.9	 e : 2.2384	 m : 2.0495
+2023/01/16 12:39:38.472723 [INFO] 4vec calculation for event 10500
+2023/01/16 12:39:38.536652 [INFO] 4vec calculation for event 11000
+2023/01/16 12:47:15.183148 [INFO] Received goodbye. Exiting.

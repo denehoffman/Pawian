@@ -1,0 +1,4 @@
+#!/bin/sh
+
+
+$TOP_DIR/bin/singleChannelApp --pbarpFiles ./pbarpReactionDefault.cfg --mode qaModeSimple --paramFile ./finalResult.dat !>& qa.log &

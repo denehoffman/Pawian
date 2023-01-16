@@ -1,0 +1,50 @@
+This directory provides all scripts needed for performing a PWA-fit of the channel pbar p -> pi0 pi0 eta at a pbar-beam momentum of 900 MeV/c. For this purpose toy data are used with only two intermediate resonances generated with simple Breit-Wigner functions, f2(1270) decaying into pi0 pi0 and a2(1320) with the decay to pi0 eta. The fit procedure and the following qa based on the fit results has to be done as follows:
+
+1. If this has not already been done, you must first set all needed environment variables. If you are working at RUB or at the GSI you can simply move to the top directory of PAWIAN and type:
+
+source SetEnv_rub
+or
+source SetEnv_gsiDebian10.sh
+
+In case that you work on other machines you have to set the environment variables individually, which are:
+
+o environment variables for root
+o TOP_DIR: path to the topdir of PAWIAN
+o extern: path for the location of the external libraries
+o LD_LIBRARY_PATH: extension of LD_LIBRARY_PATH
+o BOOST_BUILD_PATH: path to the boost build system
+o PATH: extension of PATH
+o KMAT_DIR: path to the K-matrix configuration files
+o EVT_DIR: path to the	event store
+
+2. copy the files located in $TOP_DIR/benchmark/pbarpTopi0pi0eta to your own working directory
+
+3. start the fit by running the script ./benchmark_runscript. Here the server/client mode is used with 4 clients in parallel. All needed information are written out into the log-file "server.log".  At the end of the fit, which needs roughly 30 minutes,  the relevant information of the MINUT minimization are available like:
+ "Function minimum is valid.", "Covariance matrix is valid." or the achieve NLL-value "Final LH: -7155.52338". The achieved values of the fit parameters can be also found in finalResult.dat. The generated masses and widths for the two resonances are:
+
+M(a2(1320))     = 1.3177 GeV
+ Gamma(a2(1320)) = 0.1111 GeV
+ M(f2(1270))     = 1.2755 GeV
+ Gamma(f2(1270)) = 0.1867 GeV
+
+and the obtained fit values are:
+
+M(a2(1320))     = 1.3182 +- 0.0012 GeV
+ Gamma(a2(1320)) = 0.1069 +- 0.0030 GeV
+ M(f2(1270))     = 1.2831 +- 0.0036 GeV
+ Gamma(f2(1270)) = 0.2001 +- 0.0072 GeV
+
+4. perform the qa by running the script ./run_qa. The most important information like the NLL-value, number of free parameters, information criteria and contributions of the individual waves can be found the file "qaSummarySimple.dat"
+
+5. histograms with all relevant phase space projections including the individual contributing waves can be visualized with the root-script "drawCrontribs.C". Start root with X-forwarding with "root -l" or without X-forwarding with: "root -b". Load the script
+
+".L $TOP_DIR/Scripts/DrawContributions.C"
+
+and start afterwards:
+
+".x drawCrontribs.C"
+
+A canvas with the histogram will appear or without X-forwarding you can find the relevant output in the file "FitResultHists.jpg"
+
+6. The fit result and the qa-output can be also found in the directory "$TOPDIR/benchmark/pbarpTopi0pi0eta/results"
+

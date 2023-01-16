@@ -127,8 +127,8 @@ TPad * pad0 = new TPad("pad0","This is pad0",0.0,0.95,1.0,0.0);
   DataHist->SetLineWidth(2);
   //DataHist->Draw("E_SAME");
   legend->AddEntry(DataHist, "data", "l");
-
   DataHist->Draw("E");
+  DataHist->SetMinimum(0.);
   dataScale=DataHist->Integral();
   }
   
