@@ -43,7 +43,7 @@ void setXminXmax(double thexMin, double thexMax){
     x_max=thexMax;
   }
 
-void DrawContributions(std::string rootFileNameData, std::string rootFileNames, std::string name, bool withLegend = false, std::string legendNames = "");
+//void DrawContributions(std::string rootFileNameData, std::string rootFileNames, std::string name, bool withLegend = false, std::string legendNames = "");
 
 void DrawContributions(std::string rootFileNames, std::string name, bool withLegend = false,
 		      std::string legendNames = "");

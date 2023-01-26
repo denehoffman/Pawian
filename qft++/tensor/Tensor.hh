@@ -30,6 +30,7 @@
 #include "qft++/topincludes/c++-template-utils.hh"
 #include "qft++/tensor/Tensor_Base.hh"
 #include "qft++/tensor/TensorIndex.hh"
+#include "qft++/tensor/TensorIndexOrder.hh"
 //_____________________________________________________________________________
 /** @file Tensor.h
  *  @brief Tensor template class definition file.
