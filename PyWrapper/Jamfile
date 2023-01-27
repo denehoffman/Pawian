@@ -1,0 +1,22 @@
+import python ;
+alias install : install-lib ;
+explicit install ;
+
+install install-lib : PyWrapper FourVec_py HeliVec_py
+                 : <location>$(TOP)/lib 
+                   <install-dependencies>on 
+                   <install-type>LIB
+                   ;
+
+project : 
+        ;
+
+lib PyWrapper : 
+        [ glob *.cc : *App.cc ]
+	:
+	:
+	: ;
+
+python-extension FourVec_py : FourVec_py.cc ;
+
+python-extension HeliVec_py : HeliVec_py.cc ;

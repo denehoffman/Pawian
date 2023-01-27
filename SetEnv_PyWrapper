@@ -1,0 +1,14 @@
+# source /opt/root/6-18.04-Centos8-gcc9.2.0-a/bin/thisroot.csh
+source /opt/root/6-24.06-gcc11.2.0-a/bin/thisroot.csh
+setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
+setenv extern /data/sleipnir/PANDA/PWA
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${TOP_DIR}/lib:${extern}/libgcc920-opt:/data/duldul/bertram/boost/boostInstall/lib
+setenv PYTHONPATH ${PYTHONPATH}:${TOP_DIR}/lib
+#setenv BOOST_BUILD_PATH /usr/share/boost-build
+setenv BOOST_BUILD_PATH /data/duldul/bertram/boost/boostInstall/
+setenv PATH ${TOP_DIR}/bin:${PATH}
+setenv KMAT_DIR /data/duldul/bertram/KMatStore/
+setenv EVT_DIR /data/duldul/bertram/EvtStore/
+
+rm Jamroot
+ln -s JamrootPyWrapper Jamroot

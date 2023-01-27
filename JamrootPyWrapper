@@ -1,0 +1,79 @@
+import os ;
+import testing ;
+
+path-constant TOP : . ;
+local extern = [ os.environ extern ] ;
+local ROOTSYS = [ os.environ ROOTSYS ] ;
+local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
+ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
+BOOSTLIBS =
+  -lboost_chrono
+  -lboost_date_time
+  -lboost_filesystem
+  -lboost_program_options
+  -lboost_regex
+  -lboost_serialization
+  -lboost_system
+  -lboost_timer
+  -lboost_unit_test_framework
+  -lboost_python36
+  -lrt
+  ;
+
+lib boost_test : : <name>boost_unit_test_framework ;
+
+project :
+  requirements <include>./
+  <include>$(TOP)
+#  <include>$(BOOSTINCLUDE)
+  <include>/data/duldul/bertram/boost/boostInstall/include
+  <include>$(extern)/include
+  <include>$(ROOTSYS)/include
+  <include>/usr/include/python3.6m
+  <cxxflags>--std=c++17
+  <cxxflags>-ftemplate-depth=256
+  <link>shared
+  <linkflags>$(ROOTLIBS)
+#  <linkflags>-L$(BOOSTLIBPATH)
+   <linkflags>-L/data/duldul/bertram/boost/boostInstall/lib
+  <linkflags>$(BOOSTLIBS)
+  <linkflags>-L/usr/lib64/
+  <linkflags>-lpython3.6m
+  <linkflags>-lgsl
+  <linkflags>-lgslcblas
+  <cxxflags>-fPIC
+  <cxxflags>-Wall
+  ;
+
+actions rootlibs
+{
+  $(ROOTSYS)/bin/root-config --libs
+}
+
+lib Minuit2 : : <file>$(extern)/libgcc920/libMinuit2.so : : ;
+
+build-project ErrLogger ;
+build-project qft++ ;
+build-project qft++Extension ;
+build-project ConfigParser ;
+build-project Particle ;
+build-project Utils ;
+build-project Event ;
+build-project FitParams ;
+build-project PwaDynamics ;
+build-project PwaUtils ;
+build-project MinFunctions ;
+build-project AppUtils ;
+build-project pbarpUtils ;
+build-project epemUtils ;
+build-project resUtils ;
+build-project ggUtils ;
+# build-project gammapUtils ;
+build-project pipiScatteringUtils ;
+build-project gslUtils ;
+build-project qaErrorExtract ;
+build-project PspGen ;
+build-project Examples ;
+build-project KMatrixExtract ;
+build-project PwaApps ;
+build-project PyWrapper ;
