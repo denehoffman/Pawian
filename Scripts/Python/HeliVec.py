@@ -3,6 +3,5 @@
 import HeliVec_py as hv
 
 theHelVec = hv.HeliVec_py()
-#theHelVec = hv()
 theHelVec.calcHeliVec()
 

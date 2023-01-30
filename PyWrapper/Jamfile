@@ -8,6 +8,13 @@ install install-lib : PyWrapper FourVec_py HeliVec_py
                    <install-type>LIB
                    ;
 
+project :
+        requirements
+        <include>./
+  	<linkflags>$(BOOSTLIBS)
+	<linkflags>$(TOP)/lib/libPwaUtils.so
+        ;
+	
 project : 
         ;
 

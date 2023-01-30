@@ -35,8 +35,8 @@ void HeliVec_py::calcHeliVec() {
   Vector4<double> refVec4Qft(refVec4.E, refVec4.px, refVec4.py, refVec4.pz);
   Vector4<double> daughterVec4Qft(daughterVec4.E, daughterVec4.px, daughterVec4.py, daughterVec4.pz);
   Vector4<double> motherVec4Qft(motherVec4.E, motherVec4.px, motherVec4.py, motherVec4.pz);
-  //  Vector4<double> daughterHeliVec4Qft = KinUtils::heliVec(motherRefQft, refVec4Qft, motherVec4Qft, daughterVec4Qft);
-  //  std::cout << "daughterHeliVec4Qft: " << daughterHeliVec4Qft << std::endl;
+  Vector4<double> daughterHeliVec4Qft = KinUtils::heliVec(motherRefQft, refVec4Qft, motherVec4Qft, daughterVec4Qft);
+  std::cout << "daughterHeliVec4Qft: " << daughterHeliVec4Qft << std::endl;
 }
 
 
