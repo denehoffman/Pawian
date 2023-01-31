@@ -41,7 +41,7 @@ ParserBase::ParserBase(int argc,char **argv)
   , _orderInFile("Px Py Pz E")
   , _paramFile("")
   , _serializationFile("")
-  , _startHypo("base")
+    //  , _startHypo("base")
   , _mode("plotmode")
   , _outputFileNameSuffix("")
   , _serverAddress("localhost")
@@ -139,7 +139,6 @@ ParserBase::ParserBase(int argc,char **argv)
     ("serializationFile", po::value<string>(&_serializationFile), "serialized pwa i/o file")
     ("serverAddress", po::value<string>(&_serverAddress), "server address for client mode")
     ("clientNumberWeights", po::value<string>(&_clientNumberWeights), "weights to assign client numbers to channels")
-    ("startHypo",po::value<string>(&_startHypo), "choose the hyopthesis to start")
     ("mode",po::value<string>(&_mode), "modes are: pwa, dumpDefaultParams, dumpRandomParams, qaMode, plotmode, spinDensity")
     ("noOfThreads",po::value<int>(&_noOfThreads),  "number of threads for multi threaded mode")
     ("noOfClients",po::value<int>(&_noOfClients),  "number of clients/worker nodes for server mode")
@@ -169,7 +168,6 @@ ParserBase::ParserBase(int argc,char **argv)
   
   _config->add_options()
     ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
-    ("enableHyp",po::value< vector<string> >(&_enabledHyps), "enable hypotheses")
     ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
     ("parameterDependency",po::value< vector<string> >(&_parameterDependencies),  "parameter dependencies")
     ("finalStateParticle",po::value< vector<string> >(&_finalStateParticles),  "name of final state particles")
@@ -308,7 +306,6 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "chosen unit in input file: " << _unitInFile << "\n\n"
 		<< "chosen order in file: " << _orderInFile << "\n\n"
                 << "file with start parameters for fit or qa: " << _paramFile << "\n\n"
-                << "startHypo: " << _startHypo << "\n\n"
                 << "mode: " << _mode << "\n\n"
 		<< "number of threads: " << _noOfThreads  << "\n\n"
 		<< "ratioMcToData: " << _ratioMcToData  << "\n\n"
@@ -370,9 +367,6 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       }
       for (it = _preFactor.begin(); it!=_preFactor.end(); ++it){
 	  NoticeMsg << "preFactors: " << (*it) << "\n";
-      }
-      for (it=_enabledHyps.begin(); it!=_enabledHyps.end();++it){
-          NoticeMsg << "hypothesis\t" << (*it) << "\t enabled\n";
       }
       NoticeMsg << endmsg;
 
@@ -440,9 +434,6 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
       for (it=_histAngles.begin(); it!=_histAngles.end();++it){
 	NoticeMsg << (*it) << "\n";
       }
-
-      // std::cout << "\nmass range" << std::endl;
-      // std::cout << _massRange << "\n";
 
       NoticeMsg << "\nmass range cuts:" << endmsg;
       for (it = _massRangeCuts.begin(); it!=_massRangeCuts.end(); ++it){

@@ -63,8 +63,6 @@ public:
   const std::string outputFileNameSuffix() const {return _outputFileNameSuffix;}
   const std::string serverAddress() const {return _serverAddress;}
   const std::string clientNumberWeights() const {return _clientNumberWeights;}
-  const std::vector<std::string>& enabledHyps() const { return _enabledHyps; }
-  const std::string startHypo() const {return _startHypo;}
   const std::string mode() const {return _mode;}
   const std::vector<std::string>& fixedParams() const { return _mnParFixs; }
   const std::vector<std::string>& parameterDependencies() const { return _parameterDependencies; }
@@ -155,12 +153,10 @@ protected:
   std::string _orderInFile;
   std::string _paramFile;
   std::string _serializationFile;
-  std::string _startHypo;
   std::string _mode;		  
   std::string _outputFileNameSuffix;
   std::string _serverAddress;
   std::string _clientNumberWeights;
-  std::vector<std::string> _enabledHyps;
   std::vector<std::string> _mnParFixs;
   std::vector<std::string> _parameterDependencies;
   bool _verbose;
