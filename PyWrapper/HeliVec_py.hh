@@ -1,23 +1,11 @@
 #include <iostream>
 #include <math.h>
 #include <boost/python.hpp>
+#include "qft++/tensor/Vector4.hh"
+//class Vector4;
 
 using namespace std;
 using namespace boost::python;
-
-struct Vec4_py{
-  double px, py, pz, E;
-
-  void printOut(){
-    std::cout << "(E,px,py,pz) = ("
-	      << E << ","
-	      << px << ","
-	      << py << ","      
-	      << pz << ")"
-	      << std::endl;
-  }
-
-};
 
 class HeliVec_py {
 
@@ -28,11 +16,10 @@ public:
   void calcHeliVec();
 
 private:
-  Vec4_py motherRefVec4;
-  Vec4_py refVec4;
-  Vec4_py motherVec4;
-  Vec4_py daughterVec4;
-
+  Vector4<double> _motherRefQftVec4;
+  Vector4<double> _refQftVec4;
+  Vector4<double> _motherQftVec4;
+  Vector4<double> _daughterQftVec4;
 };
 
 BOOST_PYTHON_MODULE(HeliVec_py)
