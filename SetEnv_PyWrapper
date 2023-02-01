@@ -3,10 +3,10 @@ source /opt/root/6-24.06-gcc11.2.0-a/bin/thisroot.csh
 setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
 setenv extern /data/sleipnir/PANDA/PWA
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${TOP_DIR}/lib:${extern}/libgcc920-opt:/data/duldul/bertram/boost/boostInstall/lib
-setenv PYTHONPATH ${PYTHONPATH}:${TOP_DIR}/lib
+setenv PYTHONPATH ${PYTHONPATH}:${TOP_DIR}/lib::/data/jollyj/mkuessner/Scripts/miniconda3/lib
 #setenv BOOST_BUILD_PATH /usr/share/boost-build
 setenv BOOST_BUILD_PATH /data/duldul/bertram/boost/boostInstall/
-setenv PATH ${TOP_DIR}/bin:${PATH}
+setenv PATH ${TOP_DIR}/bin:${PATH}:/data/jollyj/mkuessner/Scripts/miniconda3/bin
 setenv KMAT_DIR /data/duldul/bertram/KMatStore/
 setenv EVT_DIR /data/duldul/bertram/EvtStore/
 
