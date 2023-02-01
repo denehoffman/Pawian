@@ -2,7 +2,7 @@ import python ;
 alias install : install-lib ;
 explicit install ;
 
-install install-lib : PyWrapper FourVec_py HeliVec_py
+install install-lib : PyWrapper HeliVec_py JPCres_py
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
@@ -24,6 +24,6 @@ lib PyWrapper :
 	:
 	: ;
 
-python-extension FourVec_py : FourVec_py.cc ;
-
 python-extension HeliVec_py : HeliVec_py.cc ;
+
+python-extension JPCres_py : JPCres_py.cc ;
