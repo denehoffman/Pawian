@@ -32,7 +32,7 @@
 #include <map>
 #include <memory>
 
-#include "KMatrixExtract/TMatrixGeneral.hh"
+#include "KMatrixExtract/TMatrixGeneralBase.hh"
 
 class KMatrixParser;
 class AbsPhaseSpace;
@@ -44,7 +44,7 @@ class KMatrixParser;
 class AbsPawianParameters;
 class TMatrixDynamics;
 
-class TMatrixExtrBase : public TMatrixGeneral{
+class TMatrixExtrBase : public TMatrixGeneralBase{
 
 public:
 

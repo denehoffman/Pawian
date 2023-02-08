@@ -34,24 +34,13 @@
 
 #include "TROOT.h"
 
+#include "KMatrixExtract/TMatrixGeneralBase.hh"
 
 class TFile;
 class TH1F;
 class TH2F;
-class KMatrixParser;
-class AbsPhaseSpace;
-class TMatrixDynamics;
-class TMatrixRel;
-class KMatrixRel;
-class KPole;
-class ParticleTable;
-class Particle;
-class KMatrixParser;
-class AbsPawianParameters;
-class pipiScatteringParser;
-class PiPiScatteringChannelEnv;
 
-class TMatrixGeneral {
+class TMatrixGeneral : public TMatrixGeneralBase {
 
 public:
 
@@ -65,41 +54,17 @@ public:
   /** Destructor */
   virtual ~TMatrixGeneral();
 
-  virtual void fillParams();
   virtual void process();
   virtual void initHistos();
-  std::vector<std::shared_ptr<AbsPhaseSpace> > getPhps() {return _phpVecs;}
 
   // Getters:
  
 protected:
-  pipiScatteringParser* _pipiScatteringParser;
-  std::shared_ptr<PiPiScatteringChannelEnv> _pipiScatteringChannelEnv; 
-  std::string _projectionParticleNames;
-  std::string _motherParticleName;
-  int _decProjectionIndex;
   unsigned int _noOfSteps;
   double _stepSize; 
-  double _massMin;
-  double _massMax;
-  std::vector< std::string> _gFactorNames;
-  std::vector<std::string> _kMatrixParamNames;
-  std::vector<std::shared_ptr<AbsPhaseSpace> > _phpVecs;
-  std::shared_ptr<AbsPhaseSpace> _phpVecCurrent;
-  ParticleTable* _particleTable;
-  std::shared_ptr<AbsPawianParameters> _params;
-  std::string _pathToFitParams;
-  int _orbitalL;
-  std::string _pathToKMatrixParser;
-  std::shared_ptr<KMatrixParser> _kMatrixParser;
-  std::shared_ptr<TMatrixDynamics> _tMatrDyn;
-  std::shared_ptr<TMatrixRel> _tMatr;
-  std::shared_ptr<KMatrixRel> _kMatr;
   std::vector<double> _energyPlaneBorders;
   unsigned int _numXStepsForSheetScan;
   unsigned int _numYStepsForSheetScan;
-  Particle* _motherParticle;
-  std::vector<Particle*> _fsParticles;
   TFile* _theTFile;
   bool _histosInit;
 
@@ -119,8 +84,6 @@ private:
   std::vector<TH1F*> _delta1iVec;
   std::vector<TH1F*> _SqrS1iH1Vec;
   std::vector<TH1F*> _speedPlotH1Vec;
-
-  void init();
 };
 
 

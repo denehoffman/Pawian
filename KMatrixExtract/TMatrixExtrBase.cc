@@ -53,7 +53,7 @@
 #include "ErrLogger/ErrLogger.hh"
 
 TMatrixExtrBase::TMatrixExtrBase(pipiScatteringParser* theParser) :
-  TMatrixGeneral(theParser)
+  TMatrixGeneralBase(theParser)
   ,_sheet(theParser->sheet()){
 
   InfoMsg << "_sheet.size(): " << _sheet.size() << endmsg;
