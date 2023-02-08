@@ -2,7 +2,7 @@ import python ;
 alias install : install-lib ;
 explicit install ;
 
-install install-lib : PyWrapper HeliVec_py JPCres_py
+install install-lib : PyWrapper HeliVec_py JPCres_py RiemannSheetAna_py
                  : <location>$(TOP)/lib 
                    <install-dependencies>on 
                    <install-type>LIB
@@ -12,7 +12,10 @@ project :
         requirements
         <include>./
   	<linkflags>$(BOOSTLIBS)
+	<linkflags>$(TOP)/lib/libpipiScatteringUtils.so
+	<linkflags>$(TOP)/lib/libConfigParser.so
 	<linkflags>$(TOP)/lib/libPwaUtils.so
+	<linkflags>$(TOP)/lib/libKMatrixExtract.so
         ;
 	
 project : 
@@ -27,3 +30,5 @@ lib PyWrapper :
 python-extension HeliVec_py : HeliVec_py.cc ;
 
 python-extension JPCres_py : JPCres_py.cc ;
+
+python-extension RiemannSheetAna_py : RiemannSheetAna_py.cc ;
