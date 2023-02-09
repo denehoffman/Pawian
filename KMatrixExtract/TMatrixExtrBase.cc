@@ -93,3 +93,9 @@ std::shared_ptr<TMatrixRel> TMatrixExtrBase::getNewTMat(){
  currentTMat->SetBumImPartSigns(_signs);
  return currentTMat; 
 }
+
+void TMatrixExtrBase::SetParamValue(const std::string & paramName, double paramVal){
+  TMatrixGeneralBase::SetParamValue(paramName, paramVal);
+  //  _params->print(std::cout);
+  updateTMatDy(_params);
+}

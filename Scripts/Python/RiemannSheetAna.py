@@ -11,7 +11,9 @@ from scipy.interpolate import griddata
 import RiemannSheetAna_py as rs
 theRiemannSheetAna = rs.RiemannSheetAna_py()
 
-result = theRiemannSheetAna.calcTMat(1.3, -0.2)
+# result = theRiemannSheetAna.calcTMat(1.3, -0.2)
+
+theRiemannSheetAna.SetParamValue("a21700Mass", 1.4)
 
 colors=['#840000', '#ffab0f', '#b6c406', '#89a203', '#01889f', '#014182', '#9e0168', 'red']
 colorm = LinearSegmentedColormap.from_list('my_map', colors, N=200)
@@ -57,3 +59,7 @@ surf_plot = ax.contour(xi, yi, zi, 10, cmap=colorm, linewidths=(0.5), levels = n
 cbar = fig.colorbar(surf_plotf, fraction=0.046, pad=0.04)
 cbar.ax.set_ylabel("$|T|^2$")
 plt.show()
+
+# theRiemannSheetAna.calcResidue()
+
+# theRiemannSheetAna.calcFVecResidue()

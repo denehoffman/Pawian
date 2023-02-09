@@ -58,6 +58,7 @@ public:
   virtual double calcTMatrix(double eReal, double eImag);
   void updateTMatDy(std::shared_ptr<AbsPawianParameters> params);
   std::shared_ptr<TMatrixRel> getNewTMat();
+  virtual void SetParamValue(const std::string & paramName, double paramVal);
   // Getters:
 
 protected:

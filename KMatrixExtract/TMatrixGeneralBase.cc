@@ -202,3 +202,9 @@ void TMatrixGeneralBase::fillParams(){
   InfoMsg << "_kMatrixParamNames.size(): " << _kMatrixParamNames.size() << endmsg; 
 }
 
+
+void TMatrixGeneralBase::SetParamValue(const std::string & paramName, double paramVal){
+  InfoMsg << "set param: " << paramName << " to " << paramVal << endmsg;
+  _params->SetValue(paramName, paramVal);
+}
+

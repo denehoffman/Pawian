@@ -60,7 +60,7 @@ public:
 
   virtual void fillParams();
   std::vector<std::shared_ptr<AbsPhaseSpace> > getPhps() {return _phpVecs;}
-
+  virtual void SetParamValue(const std::string & paramName, double paramVal);
   // Getters:
  
 protected:
