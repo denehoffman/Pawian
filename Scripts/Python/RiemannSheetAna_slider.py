@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider, Button, RadioButtons
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 from matplotlib import cm
@@ -54,24 +55,45 @@ def plot(x, y, z, _ax):
 
     Norm = cm.colors.Normalize(vmax=max(z), vmin=0.)
     surf_plotf = _ax.contourf(xi, yi, zi, 10, norm = Norm, cmap=colorm, levels = np.arange(0., max(z), 0.02))
-    surf_plot = _ax.contour(xi, yi, zi, 10, cmap=colorm, linewidths=(0.5), levels = np.arange(0., max(z), 0.02), alpha=0.5)
+    #surf_plot = _ax.contour(xi, yi, zi, 10, cmap=colorm, linewidths=(0.5), levels = np.arange(0., max(z), 0.02), alpha=0.5)
 
     # cbar = fig.colorbar(surf_plotf, fraction=0.046, pad=0.04)
     # cbar.ax.set_ylabel("$|T|^2$")
 
     return
 
+fig, ax = plt.subplots(figsize=(10,3))
 
-# fig, ax = plt.subplots(figsize=(10,3))
-fig, (ax, ax1) = plt.subplots(2,1)
+fig.subplots_adjust(bottom=0.25)
 
-x, y, z = fill_arrays()
+init_mass = 1.32
 
-plot(x, y, z, ax)
+ax_mass = fig.add_axes([0.15, 0.1, 0.7, 0.05])
+mass_slider = Slider(
+        ax_mass,
+        label='$M(a_2(1320))$',
+        valmin=1.,
+        valmax=2.,
+        valinit=init_mass
+)
 
-theRiemannSheetAna.SetParamValue("a21700Mass", 1.4)
-x1, y1, z1 = fill_arrays()
-plot(x1,y1,z1, ax1)
+def update(val):
+    theRiemannSheetAna.SetParamValue("a21320Mass", val)
+    x, y, z = fill_arrays()
+    plot(x,y,z, ax)
+    fig.canvas.draw_idle()
+  
+
+mass_slider.on_changed(update)
+
+resetax = fig.add_axes([0.8, 0.01, 0.1, 0.05])
+button = Button(resetax, 'Reset', hovercolor='0.975')
+
+
+def reset(event):
+    mass_slider.reset()
+
+button.on_clicked(reset)
 
 plt.show()
 
