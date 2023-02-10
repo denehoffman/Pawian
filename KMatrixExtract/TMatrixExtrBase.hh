@@ -59,6 +59,7 @@ public:
   void updateTMatDy(std::shared_ptr<AbsPawianParameters> params);
   std::shared_ptr<TMatrixRel> getNewTMat();
   virtual void SetParamValue(const std::string & paramName, double paramVal);
+  void setSheet(std::string newSheet);
   // Getters:
 
 protected:

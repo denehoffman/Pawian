@@ -48,5 +48,9 @@ void RiemannSheetAna_py::SetParamValue(const std::string & paramName, double par
   _tMatrixExtrBasePtr->SetParamValue(paramName, paramVal);
 }
 
+void RiemannSheetAna_py::SetSheet(const std::string & sheetName){
+  _tMatrixExtrBasePtr->setSheet(sheetName);
+}
+
 
 

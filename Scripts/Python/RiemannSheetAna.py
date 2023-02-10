@@ -63,15 +63,31 @@ def plot(x, y, z, _ax):
 
 
 # fig, ax = plt.subplots(figsize=(10,3))
-fig, (ax, ax1) = plt.subplots(2,1)
+
+#fig, (ax, axs2, ax1, ax1s2) = plt.subplots(4,1)
+
+fig, ((ax, axs2),(ax1, ax1s2)) = plt.subplots(2,2)
 
 x, y, z = fill_arrays()
-
+ax.set_title("M(a2(1700))=default, - - ")
 plot(x, y, z, ax)
 
+theRiemannSheetAna.SetSheet("-+");
+xs, ys, zs = fill_arrays()
+axs2.set_title("M(a2(1700))=default, - + ")
+plot(xs, ys, zs, axs2)
+
+
+theRiemannSheetAna.SetSheet("--");
 theRiemannSheetAna.SetParamValue("a21700Mass", 1.4)
 x1, y1, z1 = fill_arrays()
+ax1.set_title("M(a2(1700))=1.4 GeV, - - ")
 plot(x1,y1,z1, ax1)
+
+theRiemannSheetAna.SetSheet("-+");
+x1s, y1s, z1s = fill_arrays()
+ax1s2.set_title("M(a2(1700))=1.4 GeV, - + ")
+plot(x1s,y1s,z1s, ax1s2)
 
 plt.show()
 

@@ -18,6 +18,7 @@ public:
   void calcResidue();
   void calcFVecResidue();
   void SetParamValue(const std::string & paramName, double paramVal);
+  void SetSheet(const std::string & sheetName);
   
 private:
   pipiScatteringParser* _pipiParser;
@@ -34,6 +35,7 @@ BOOST_PYTHON_MODULE(RiemannSheetAna_py)
       .def("calcResidue", &RiemannSheetAna_py::calcResidue)
       .def("calcFVecResidue", &RiemannSheetAna_py::calcFVecResidue)
       .def("SetParamValue", &RiemannSheetAna_py::SetParamValue)
+      .def("SetSheet", &RiemannSheetAna_py::SetSheet)
       ;
 }
 

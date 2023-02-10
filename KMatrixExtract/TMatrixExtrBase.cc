@@ -57,21 +57,41 @@ TMatrixExtrBase::TMatrixExtrBase(pipiScatteringParser* theParser) :
   ,_sheet(theParser->sheet()){
 
   InfoMsg << "_sheet.size(): " << _sheet.size() << endmsg;
-  unsigned int iSize = _sheet.size();
   _signs.resize(_sheet.size());
-  for(unsigned int i = 0; i < iSize; i++) {
-    if(_sheet[i]=='p')  {  _signs[i] = 1;}
-    else _signs[i] = -1; 
-  }
+  //  unsigned int iSize = _sheet.size();
+  setSheet(_sheet);
+  // _signs.resize(_sheet.size());
+  // for(unsigned int i = 0; i < iSize; i++) {
+  //   if(_sheet[i]=='p')  {  _signs[i] = 1;}
+  //   else _signs[i] = -1; 
+  // }
 
   fillParams();
-  _tMatr->SetBumImPartSigns(_signs);
+  setSheet(_sheet);
+  
+  //  _tMatr->SetBumImPartSigns(_signs);
 }
 
 TMatrixExtrBase::~TMatrixExtrBase()
 {
 }
 
+void TMatrixExtrBase::setSheet(std::string newSheet){
+  if(newSheet.size() != _signs.size()){
+    ErrMsg << "size of the new sheet: " << newSheet.size() << " is not in agreement with the size of the T-Matrix: " <<  _signs.size() << endmsg;
+    exit(1);
+  }
+
+  for(unsigned int i = 0; i < _signs.size(); i++) {
+    if(newSheet[i]=='p' || newSheet[i]=='+')  {  _signs[i] = 1;}
+    else if(newSheet[i]=='n' || newSheet[i]=='-') _signs[i] = -1;
+    else{
+      ErrMsg << "sheet with name " << newSheet[i] << " is not supported!!!" << endmsg;
+      exit(1);
+    }
+  }
+  _tMatr->SetBumImPartSigns(_signs);
+}
 
 double TMatrixExtrBase::calcTMatrix(double eReal, double eImag){
   _tMatr->evalMatrix( std::complex<double>(eReal, eImag), _orbitalL );
