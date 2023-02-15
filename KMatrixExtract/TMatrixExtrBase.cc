@@ -67,7 +67,7 @@ TMatrixExtrBase::TMatrixExtrBase(pipiScatteringParser* theParser) :
   // }
 
   fillParams();
-  setSheet(_sheet);
+  //  setSheet(_sheet);
   
   //  _tMatr->SetBumImPartSigns(_signs);
 }

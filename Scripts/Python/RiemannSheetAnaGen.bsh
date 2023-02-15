@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# python3.8 RiemannSheetAnaGen.py $TOP_DIR/bin/TMatrixGeneralApp -c /data/duldul/bertram/PawianPyWrapper/Pawian/Examples/KMatrixExtract/scatteringa2PhasePiEta.cfg --paramFile /data/duldul/bertram/PawianPyWrapper/Pawian/Examples/KMatrixExtract/benchmarkResult.dat --serializationFile /data/duldul/bertram/PawianPyWrapper/Pawian/Examples/KMatrixExtract/serializedOutput.dat
+
+python3.8 RiemannSheetAnaGen.py $TOP_DIR/bin/TMatrixGeneralApp -c /data/duldul/bertram/fits/pbarp/coupled_PiPiEta_PiEtaEta_KKPi/COMPASS_TeraTera/finalV1/Ochs---/finalNewV12bV2/poles/poleExtractFiles/scatteringf2PhasePiPi.cfg --paramFile /data/duldul/bertram/fits/pbarp/coupled_PiPiEta_PiEtaEta_KKPi/COMPASS_TeraTera/finalV1/Ochs---/finalNewV12bV2/finalResultMinTol1.dat --serializationFile /data/duldul/bertram/fits/pbarp/coupled_PiPiEta_PiEtaEta_KKPi/COMPASS_TeraTera/finalV1/Ochs---/finalNewV12bV2/serializedOutputMinTol1.dat --sheet nnnn --maxImagMass 0.06 --minImagMass 0.15 --minRealMass 1.23 --maxRealMass 1.3
+

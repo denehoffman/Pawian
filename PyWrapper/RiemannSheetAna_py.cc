@@ -1,3 +1,4 @@
+#include <vector>
 #include "PyWrapper/RiemannSheetAna_py.hh"
 #include "KMatrixExtract/TMatrixExtrBase.hh"
 #include "KMatrixExtract/TMatrixResidueExtr.hh"
@@ -21,6 +22,19 @@ RiemannSheetAna_py::RiemannSheetAna_py()
   argv[2]=(char*)"/data/duldul/bertram/PawianPyWrapper/Pawian/Examples/KMatrixExtract/scatteringa2FVectorIntensityPiEta.cfg";
 
   _pipiParserFVec = new pipiScatteringParser(7, argv);
+  _fVectorResidueExtrPtr = new FVectorResidueExtr(_pipiParserFVec);
+}
+
+RiemannSheetAna_py::RiemannSheetAna_py(boost::python::list theList){
+  size_t listLengths=boost::python::len(theList);
+  std::cout << "listLengths: " << listLengths << std::endl;
+  char* argv[listLengths-1];
+  for(size_t i=0; i< (listLengths-1) ; ++i){
+    argv[i]=boost::python::extract<char*>(theList[i+1]);
+    std::cout << "argv[" << i << "]: " << argv[i]  << std::endl;
+  }
+
+  _pipiParserFVec = new pipiScatteringParser(listLengths-1, argv);
   _fVectorResidueExtrPtr = new FVectorResidueExtr(_pipiParserFVec);
 }
 
