@@ -62,7 +62,7 @@ public:
   std::vector<std::shared_ptr<AbsPhaseSpace> > getPhps() {return _phpVecs;}
   virtual void SetParamValue(const std::string & paramName, double paramVal);
   // Getters:
- 
+
 protected:
   pipiScatteringParser* _pipiScatteringParser;
   std::shared_ptr<PiPiScatteringChannelEnv> _pipiScatteringChannelEnv; 

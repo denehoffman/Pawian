@@ -58,18 +58,9 @@ TMatrixExtrBase::TMatrixExtrBase(pipiScatteringParser* theParser) :
 
   InfoMsg << "_sheet.size(): " << _sheet.size() << endmsg;
   _signs.resize(_sheet.size());
-  //  unsigned int iSize = _sheet.size();
+  _sheetSize=_signs.size();
   setSheet(_sheet);
-  // _signs.resize(_sheet.size());
-  // for(unsigned int i = 0; i < iSize; i++) {
-  //   if(_sheet[i]=='p')  {  _signs[i] = 1;}
-  //   else _signs[i] = -1; 
-  // }
-
   fillParams();
-  //  setSheet(_sheet);
-  
-  //  _tMatr->SetBumImPartSigns(_signs);
 }
 
 TMatrixExtrBase::~TMatrixExtrBase()
@@ -118,4 +109,8 @@ void TMatrixExtrBase::SetParamValue(const std::string & paramName, double paramV
   TMatrixGeneralBase::SetParamValue(paramName, paramVal);
   //  _params->print(std::cout);
   updateTMatDy(_params);
+}
+
+int TMatrixExtrBase::sheetSize(){
+  return _signs.size();
 }

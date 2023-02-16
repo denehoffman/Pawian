@@ -52,7 +52,6 @@ public:
 
   ///Constructor
   TMatrixExtrBase(pipiScatteringParser* theParser);
-
   /** Destructor */
   virtual ~TMatrixExtrBase();
   virtual double calcTMatrix(double eReal, double eImag);
@@ -60,13 +59,18 @@ public:
   std::shared_ptr<TMatrixRel> getNewTMat();
   virtual void SetParamValue(const std::string & paramName, double paramVal);
   void setSheet(std::string newSheet);
+  int sheetSize();
+  
   // Getters:
-
+  int _sheetSize;
+  
 protected:
   std::string _sheet;
   std::vector<double> _signs;
-
+  //int _sheetSize;
+  
 private:
+  //  int _sheetSize;
 // void init();
 };
 

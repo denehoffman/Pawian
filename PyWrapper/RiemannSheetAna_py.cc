@@ -18,11 +18,6 @@ RiemannSheetAna_py::RiemannSheetAna_py()
   _pipiParser = new pipiScatteringParser(7, argv);
   _tMatrixExtrBasePtr = new TMatrixExtrBase(_pipiParser);
   _tMatrixResidueExtrPtr = new TMatrixResidueExtr(_pipiParser);
-
-  argv[2]=(char*)"/data/duldul/bertram/PawianPyWrapper/Pawian/Examples/KMatrixExtract/scatteringa2FVectorIntensityPiEta.cfg";
-
-  _pipiParserFVec = new pipiScatteringParser(7, argv);
-  _fVectorResidueExtrPtr = new FVectorResidueExtr(_pipiParserFVec);
 }
 
 RiemannSheetAna_py::RiemannSheetAna_py(boost::python::list theList){
@@ -34,16 +29,15 @@ RiemannSheetAna_py::RiemannSheetAna_py(boost::python::list theList){
     std::cout << "argv[" << i << "]: " << argv[i]  << std::endl;
   }
 
-  _pipiParserFVec = new pipiScatteringParser(listLengths-1, argv);
-  _fVectorResidueExtrPtr = new FVectorResidueExtr(_pipiParserFVec);
+  _pipiParser = new pipiScatteringParser(listLengths-1, argv);
+  _tMatrixExtrBasePtr = new TMatrixExtrBase(_pipiParser);
+  _tMatrixResidueExtrPtr = new TMatrixResidueExtr(_pipiParser);
 }
 
 RiemannSheetAna_py::~RiemannSheetAna_py(){
  delete _pipiParser;
- delete _pipiParserFVec;
  delete _tMatrixExtrBasePtr;
  delete _tMatrixResidueExtrPtr;
- delete _fVectorResidueExtrPtr;
 }
 
 double RiemannSheetAna_py::calcTMat(double eReal, double eImag){
@@ -54,16 +48,16 @@ void RiemannSheetAna_py::calcResidue(){
   _tMatrixResidueExtrPtr->Calculation();
 }
 
-void RiemannSheetAna_py::calcFVecResidue(){
-  _fVectorResidueExtrPtr->Calculation();
-}
-
 void RiemannSheetAna_py::SetParamValue(const std::string & paramName, double paramVal){
   _tMatrixExtrBasePtr->SetParamValue(paramName, paramVal);
 }
 
 void RiemannSheetAna_py::SetSheet(const std::string & sheetName){
   _tMatrixExtrBasePtr->setSheet(sheetName);
+}
+
+int RiemannSheetAna_py::sheetSize(){
+  return _tMatrixExtrBasePtr->sheetSize();
 }
 
 
