@@ -127,7 +127,7 @@ void TMatrixCompareDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters
 }
 
 void TMatrixCompareDynamics::fillMasses(EvtData* theData){
-  TMatrixCompareDynamics::fillMasses(theData);
+  TMatrixDynamics::fillMasses(theData);
   _tMatrDynCompare->fillMasses(theData);
 }
 
