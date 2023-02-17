@@ -19,6 +19,7 @@ public:
   double calcTMat(double eReal, double eImag);
   void calcResidue();
   void SetParamValue(const std::string & paramName, double paramVal);
+  double GetParamValue(const std::string & paramName);
   void SetSheet(const std::string & sheetName);
   int sheetSize();
   
@@ -36,6 +37,7 @@ BOOST_PYTHON_MODULE(RiemannSheetAna_py)
     .def("calcTMat", &RiemannSheetAna_py::calcTMat)
     .def("calcResidue", &RiemannSheetAna_py::calcResidue)
     .def("SetParamValue", &RiemannSheetAna_py::SetParamValue)
+    .def("GetParamValue", &RiemannSheetAna_py::GetParamValue)
     .def("SetSheet", &RiemannSheetAna_py::SetSheet)
     .def("sheetSize", &RiemannSheetAna_py::sheetSize)
     ;

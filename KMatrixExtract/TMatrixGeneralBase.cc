@@ -208,3 +208,7 @@ void TMatrixGeneralBase::SetParamValue(const std::string & paramName, double par
   _params->SetValue(paramName, paramVal);
 }
 
+double TMatrixGeneralBase::GetParamValue(const std::string & paramName){
+  return _params->Value(paramName);
+}
+
