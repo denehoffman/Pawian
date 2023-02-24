@@ -53,6 +53,7 @@ class pipiScatteringParser : public ParserBase
   const std::string sheet() const {return _sheet;}
   const std::string prodMomParamsStr() const {return _prodMomParamsStr;}
   const std::string residueExtrMethod() const {return _residueExtrMethod;}
+  const int prodProjectionIndex() {return _prodProjectionIndex;}
   
 protected:
   virtual bool parseCommandLine(int argc,char **argv); 
@@ -71,6 +72,7 @@ protected:
   std::string _sheet;
   std::string _prodMomParamsStr;
   std::string _residueExtrMethod;
+  int _prodProjectionIndex;
 };
 
 

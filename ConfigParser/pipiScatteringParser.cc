@@ -51,6 +51,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
   ,_sheet("nn")
   ,_prodMomParamsStr("0 3.1 0.14")
   ,_residueExtrMethod("Laurent")
+  ,_prodProjectionIndex(-1)
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -69,6 +70,7 @@ pipiScatteringParser::pipiScatteringParser(int argc,char **argv):
     ("sheet", po::value<std::string>(&_sheet)->default_value(_sheet),"specification of the Rieman sheet for the scan")
     ("prodMomParams", po::value<std::string>(&_prodMomParamsStr)->default_value(_prodMomParamsStr),"exactly 3 arguments are required with order: 2L(orbital momentum) s1(mass square from mother or first initial particle) s2(mass square from recoil or second initial particle")
     ("residueExtrMethod", po::value<std::string>(&_residueExtrMethod)->default_value(_residueExtrMethod),"2 different methods supported: Laurent, Cauchy")
+    ("prodProjectionIndex",po::value<int>(&_prodProjectionIndex),"projection index for the production; needed e.g. for T-matrix")
     ;
   
   _common->add(common);
@@ -102,6 +104,7 @@ bool pipiScatteringParser::parseCommandLine(int argc, char **argv)
   std::cout << "sheet = " << _sheet << std::endl;
   std::cout << "prodMomParamsStr = " << _prodMomParamsStr << std::endl;
   std::cout << "residueExtrMethod = " << _residueExtrMethod << std::endl;
+  std::cout << "prodProjectionIndex = " << _prodProjectionIndex << std::endl;
   std::cout << std::endl;
 
   return true;

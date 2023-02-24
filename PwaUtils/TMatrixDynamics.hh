@@ -64,6 +64,8 @@ public:
   virtual int orbitalL() {return _orbitalL;} 
   virtual void fillMasses(EvtData* theData);
   virtual int decProjectionIndex() {return _decProjectionIndex;}
+  int prodProjectionIndex() {return _prodProjectionIndex;}
+  void setProdProjectionIndex(int idx);
  
 protected:
   std::string _kMatName;

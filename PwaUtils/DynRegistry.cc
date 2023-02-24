@@ -123,11 +123,15 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     //special treatment of pipiScattering
     if( theDec->type() =="PiPiScatteringDecay" ){
       pipiScatteringParser* thePiPiScatteringParser = dynamic_cast<pipiScatteringParser*>(parserBase);
-      if(theDec->dynType()=="TMatrix"){
+      int theProdProjectionIndex=thePiPiScatteringParser->prodProjectionIndex();
+  if(theDec->dynType()=="TMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
 	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
-	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
+	TMatrixDynamics* theTMatrixDynamics=new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames);
+	theTMatrixDynamics->setProdProjectionIndex(theProdProjectionIndex);
+	result= std::shared_ptr<AbsDynamics>(theTMatrixDynamics);	
+	//	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
       }
       else if(theDec->dynType()=="TMatrixCompare"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();

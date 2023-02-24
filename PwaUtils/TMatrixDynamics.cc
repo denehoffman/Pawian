@@ -518,12 +518,12 @@ void TMatrixDynamics::evalArgandUnits(EvtData* theData, double currentMass, Spin
 }
 
 void TMatrixDynamics::evalTreal(EvtData* theData, double currentMass, Spin OrbMom){
-  complex<double> currentTijRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.real();
 }
 
 void TMatrixDynamics::evalTimag(EvtData* theData, double currentMass, Spin OrbMom){
-  complex<double> currentTijRel=(*_tMatr)(_decProjectionIndex,_decProjectionIndex);
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.imag();
 }
 
@@ -559,6 +559,16 @@ void TMatrixDynamics::fillMasses(EvtData* theData){
     (*phpIt)->cacheFactors(mass4Vec.Mass());
   }
 
+}
+
+void TMatrixDynamics::setProdProjectionIndex(int idx){
+  if(idx>=0) _prodProjectionIndex=idx;
+  if( _prodProjectionIndex > (int) _phpVecs.size()){
+    ErrMsg << "projection index for the production = " << _prodProjectionIndex << " is too large!!!"
+	   << "\nmust be less than number of channels: " << _phpVecs.size() << endmsg;
+    exit(1);
+      }
+  InfoMsg << " set projection index for the production: " << _prodProjectionIndex << endmsg;  
 }
 
 
