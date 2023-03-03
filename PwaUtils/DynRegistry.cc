@@ -43,6 +43,8 @@
 #include "PwaUtils/FVectorCompareDynamics.hh"
 #include "PwaUtils/TMatrixCompareDynamics.hh"
 #include "PwaUtils/TMatrixDynamics.hh"
+#include "PwaUtils/KMatrixDynamics.hh"
+#include "PwaUtils/FixedKMatrixDynamics.hh"
 #include "PwaUtils/FVectorIntensityDynamics.hh"
 #include "PwaUtils/VoigtDynamics.hh"
 #include "PwaUtils/JohnsonDynamics.hh"
@@ -193,6 +195,12 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
       std::string projectionParticleNames = theDec->projectionParticleNames();
       result= std::shared_ptr<AbsDynamics>(new KMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId, projectionParticleNames)); 
     }
+    else if(theDec->dynType()=="FixedKMatrix"){
+      std::string pathToConfigFile=theDec->pathToConfigParser();
+      std::string projectionParticleNames = theDec->projectionParticleNames();
+      result= std::shared_ptr<AbsDynamics>(new FixedKMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentChannelId, projectionParticleNames)); 
+    }
+    
     else if(theDec->dynType()=="Omnes"){
       std::string pathToConfigFile=theDec->pathToConfigParser();
       std::string projectionParticleNames = theDec->projectionParticleNames();

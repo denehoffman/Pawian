@@ -417,8 +417,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   _dynType=dynString;
 
-  if(_dynType=="KMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" || _dynType=="FVectorCompare" 
-     || _dynType=="FVectorIntensity" || _dynType=="Omnes"){
+  if(_dynType=="KMatrix" ||"FixedKMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" || _dynType=="FVectorCompare" || _dynType=="FVectorIntensity" || _dynType=="Omnes"){
     _pathParserFile=additionalStringVec[0];
     if (additionalStringVec.size() == 3) 
       _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);

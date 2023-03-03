@@ -76,7 +76,7 @@ public:
   std::map<std::string, double> gFactorMap() {return _gFactorMap;} 
   std::map<std::pair<std::string, std::string>, std::string> phpDescriptionMap()& {return _phpDescriptionMap;}
   const std::string omnesMatrixType() { return _omnesMatrixType;}
-
+  const std::string fixedParamFile() const {return _fixedParamFile;}
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
   virtual bool parseCommandLine();
@@ -110,6 +110,7 @@ protected:
   std::map<std::pair<std::string, std::string>, std::string> _phpDescriptionMap;
   std::vector<std::pair<std::string, std::string>> _particlePairs;
   std::string _omnesMatrixType;
+  std::string _fixedParamFile;
   
   po::options_description* _config;
 };
