@@ -47,6 +47,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ,_snormAdler(1.)
       ,_omnesMatrixType("PiPiS5Channel")
       ,_fixedParamFile("")
+      ,_serialFixedParamFile("")
       ,_config(new po::options_description("Configuration file options"))
      {
     _config->add_options()
@@ -73,6 +74,7 @@ KMatrixParser::KMatrixParser(std::string& path)
       ("gFactorFixSeparateScale",po::value< vector<string> >(&_gFactorFixSeparateScale), "g-factors to be scaled separately related to free g-factor")
       ("omnesMatrixType",po::value<string>(&_omnesMatrixType),"type of the Omnes-matrix")
       ("fixedParamFile",po::value<string>(&_fixedParamFile), "file with K-Matrix parameters to be used for a fixed parametrization")
+      ("serialFixedParamFile",po::value<string>(&_serialFixedParamFile), "serialization file for fixed K-Matrix parametrization")
       ;
     parseCommandLine();
   }
@@ -114,6 +116,7 @@ bool KMatrixParser::parseCommandLine()
 	      << "s0Adler: " << _s0Adler << "\n\n"
 	      << "snormAdler: " << _snormAdler << "\n\n"
 	      << "fixedParamFile: " << _fixedParamFile  << "\n\n"
+	      << "serialFixedParamFile: " << _fixedParamFile  << "\n\n"
 	      << endl;
 
     std::cout << "g-factors are defined as follows:" << "size: " << _gFactors.size() << std::endl;

@@ -55,6 +55,7 @@
 #include "FitParams/AbsPawianParameters.hh"
 #include "FitParams/PwaCovMatrix.hh"
 #include "Utils/PawianConstants.hh"
+#include "Utils/PawianIOUtils.hh"
 
 #include "ConfigParser/ParserBase.hh"
 #include "ConfigParser/pipiScatteringParser.hh"
@@ -79,6 +80,9 @@ TMatrixErrorExtr::TMatrixErrorExtr(pipiScatteringParser* theParser) :
   ,_energyStart(complex<double>(theParser->startRealMass(), -std::abs(theParser->startImagMass())))
   ,_calcWithErrors(true)
 {
+  if(_isFixedKMatrixParametrization){
+    _pathToSerialzationFile= PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(), _kMatrixParser->serialFixedParamFile());
+  }
 }
 
 TMatrixErrorExtr::~TMatrixErrorExtr()

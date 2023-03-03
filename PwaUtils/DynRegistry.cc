@@ -126,7 +126,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
     if( theDec->type() =="PiPiScatteringDecay" ){
       pipiScatteringParser* thePiPiScatteringParser = dynamic_cast<pipiScatteringParser*>(parserBase);
       int theProdProjectionIndex=thePiPiScatteringParser->prodProjectionIndex();
-  if(theDec->dynType()=="TMatrix"){
+  if(theDec->dynType()=="TMatrix" || theDec->dynType()=="FixedKMatrix"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
 	std::string projectionParticleNames = theDec->projectionParticleNames();
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
@@ -158,7 +158,7 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
 	result= std::shared_ptr<AbsDynamics>(new FVectorIntensityDynamics( theName, fsParticles, theDec->motherPart(), pathToConfigFile, baseNameFVector, currentChannelId, projectionParticleNames));
 
-  }
+      }
       else{
       	Alert << "Dyn type:\t" << theDec->dynType() << "\tis not supported for pipiScattering!!!" << endmsg;
       	exit(1);

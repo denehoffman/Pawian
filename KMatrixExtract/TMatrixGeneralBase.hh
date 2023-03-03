@@ -89,6 +89,8 @@ protected:
   std::vector<Particle*> _fsParticles;
   double _massMin;
   double _massMax;
+  bool _isFixedKMatrixParametrization;
+  
 private:
   void init();
 };

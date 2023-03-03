@@ -77,6 +77,7 @@ public:
   std::map<std::pair<std::string, std::string>, std::string> phpDescriptionMap()& {return _phpDescriptionMap;}
   const std::string omnesMatrixType() { return _omnesMatrixType;}
   const std::string fixedParamFile() const {return _fixedParamFile;}
+  const std::string serialFixedParamFile() const {return _serialFixedParamFile;}
 protected:
   //  virtual bool parseCommandLine(int argc,char **argv); 
   virtual bool parseCommandLine();
@@ -111,6 +112,7 @@ protected:
   std::vector<std::pair<std::string, std::string>> _particlePairs;
   std::string _omnesMatrixType;
   std::string _fixedParamFile;
+  std::string _serialFixedParamFile;
   
   po::options_description* _config;
 };

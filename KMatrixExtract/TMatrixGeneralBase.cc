@@ -56,7 +56,7 @@
 #include "PwaUtils/AbsDecay.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "FitParams/ParamFactory.hh"
-
+#include "Utils/PawianIOUtils.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 TMatrixGeneralBase::TMatrixGeneralBase(pipiScatteringParser* theParser) :
@@ -66,7 +66,8 @@ TMatrixGeneralBase::TMatrixGeneralBase(pipiScatteringParser* theParser) :
   ,_orbitalL(0)
   ,_pathToKMatrixParser("")
   ,_massMin(100000.)
-  ,_massMax(0.) 
+  ,_massMax(0.)
+  ,_isFixedKMatrixParametrization(false) 
 {
   init();
 }
@@ -88,7 +89,7 @@ void TMatrixGeneralBase::init() {
   InfoMsg << "pathToKMatrixParser: " << _pathToKMatrixParser << endmsg;
 
   _pathToFitParams = _pipiScatteringParser->fitParamFile();
-  InfoMsg << "path th fit parameters: " << _pathToFitParams << endmsg;
+  InfoMsg << "path to fit parameters: " << _pathToFitParams << endmsg;
 
   _fsParticles = _pipiScatteringChannelEnv->finalStateParticles();
   std::vector<Particle*>::iterator it;
@@ -114,9 +115,24 @@ void TMatrixGeneralBase::init() {
   _projectionParticleNames= theDec->projectionParticleNames();   
   InfoMsg << "projectionParticleNames: " << _projectionParticleNames << endmsg;
 
-
-
   _kMatrixParser= std::shared_ptr<KMatrixParser>(new KMatrixParser(_pathToKMatrixParser));
+  if (theDec->dynType()=="FixedKMatrix"){
+    _isFixedKMatrixParametrization=true;
+    _pathToFitParams = PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(), _kMatrixParser->fixedParamFile());
+  }
+  else{
+    _pathToFitParams = _pipiScatteringParser->fitParamFile();
+
+    std::ifstream ifs(_pathToFitParams);
+    if(!ifs.good()) 
+      { //file doesn't exist; dum default params
+	WarningMsg << "could not parse " << _pathToFitParams << endmsg;
+	WarningMsg << "dump default parameter " << _pathToFitParams << endmsg;
+	exit(1);        
+      }
+  }
+
+  InfoMsg << "path to fit parameters: " << _pathToFitParams << endmsg;
 
   _tMatrDyn = std::shared_ptr<TMatrixDynamics>(new TMatrixDynamics(_kMatrixParser));
 
@@ -178,19 +194,6 @@ void TMatrixGeneralBase::fillParams(){
   _tMatrDyn->fillDefaultParams(params);
   _tMatrDyn->fillParamNameList();
  
-    std::ifstream ifs(_pathToFitParams);
-    if(!ifs.good()) 
-      { //file doesn't exist; dum default params
-	WarningMsg << "could not parse " << _pathToFitParams << endmsg;
-	WarningMsg << "dump default parameter " << _pathToFitParams << endmsg;
-	std::string defaultparamsname="defaultParams.dat";
-	std::ofstream theStreamDefault ( defaultparamsname );
-	params->print(theStreamDefault);
-	theStreamDefault.close();
-	exit(1);        
-      }   
-
-
   AbsPawianParamStreamer thePawianStreamer(_pathToFitParams);
   _params = thePawianStreamer.paramList();
 
