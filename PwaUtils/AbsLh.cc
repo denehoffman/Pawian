@@ -133,6 +133,7 @@ double AbsLh::addDataToLogLh(EvtData* dataEvt, std::shared_ptr<AbsPawianParamete
   double intensity=calcEvtIntensity(dataEvt, fitPar);
   theLHData.logLH_data+=(dataEvt->evtWeight)*log(intensity);
   theLHData.weightSum+= dataEvt->evtWeight;
+  theLHData.squaredWeightSum+= dataEvt->evtWeight*dataEvt->evtWeight;
   return intensity;
 }
 
@@ -173,6 +174,7 @@ double AbsLh::mergeLogLhData(LHData& theLHData, ChannelID channelId){
     logLH=0.5*theLHData.weightSum *(theLHData.LH_mc/theLHData.num_mc-1.)*(theLHData.LH_mc/theLHData.num_mc-1.)
       -theLHData.logLH_data
       +theLHData.weightSum*logLH_mc_Norm;
+    logLH=(theLHData.weightSum/theLHData.squaredWeightSum)*logLH;
   }
   return GlobalEnv::instance()->Channel(channelId)->parser()->nllScalingFactor()*logLH;
 }

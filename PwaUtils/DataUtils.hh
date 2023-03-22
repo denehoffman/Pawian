@@ -52,12 +52,14 @@ public:
 
 struct LHData{
    double weightSum;
+   double squaredWeightSum;
    long num_mc;
    double logLH_data;
    double LH_mc;
 
   LHData():
     weightSum(0.)
+    , squaredWeightSum(0.)
     , num_mc(0.)
     , logLH_data(0.)
     , LH_mc(0.){
