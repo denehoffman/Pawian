@@ -27,6 +27,7 @@
 #include <getopt.h>
 #include <string>
 #include <memory>
+#include <utility>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -736,7 +737,7 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 
   double evtWeightSumData=0;
   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
-  std::map<short, std::tuple<long, double, long> > numEventMap;
+  std::map<short, std::tuple<long, double, long, double> > numEventMap;
 
   for(auto it=channelEnvs.begin();it!=channelEnvs.end();++it){
     const std::string datFile=PawianIOUtils::getFileName(GlobalEnv::instance()->evtStorePath(), (*it).first->parser()->dataFile());
@@ -767,10 +768,13 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     }
 
     int noDataEvts=eventsData.size();
-    double noOfWeightedDataEvts=EvtDataBaseList::noOfWeightedEvts(eventsData, 
-								  (*it).first->channelID(), 
-								  noOfDataEvents, 0);
-    evtWeightSumData+=noOfWeightedDataEvts; 
+
+    std::pair<double, double> noOfWeightedAndSquaredWeightedDataEvts=EvtDataBaseList::noOfWeightedAndSquaredWeightedEvts(eventsData, (*it).first->channelID(), noOfDataEvents, 0);  
+
+    double noOfWeightedDataEvts = noOfWeightedAndSquaredWeightedDataEvts.first;
+    evtWeightSumData+=noOfWeightedDataEvts;
+    double evtSquaredWeightSumData = noOfWeightedAndSquaredWeightedDataEvts.second;
+     
     eventsData.removeAndDeleteEvents(0, eventsData.size()-1);        
 
     if(GlobalEnv::instance()->Channel((*it).first->channelID())->channelType() 
@@ -778,12 +782,14 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
       int maxMcEvts=noDataEvts*ratioMcToData;
       
       readEvents(mcData, mcFileNames, (*it).first->channelID(), (*it).first->useMCEvtWeight(), 0, maxMcEvts-1);
-      noOfMcEvts=EvtDataBaseList::noOfWeightedEvts(mcData, (*it).first->channelID(), maxMcEvts-1, 0);    
+
+      std::pair<double, double> noOfWeightedAndSquaredWeightedMCEvts=EvtDataBaseList::noOfWeightedAndSquaredWeightedEvts(mcData, (*it).first->channelID(), maxMcEvts-1, 0);
+      noOfMcEvts=noOfWeightedAndSquaredWeightedMCEvts.first;  
     }
 
 
     numEventMap[(*it).first->channelID()] = 
-      std::tuple<long, double,long>(noDataEvts, noOfWeightedDataEvts, mcData.size());
+      std::tuple<long, double,long, double>(noDataEvts, noOfWeightedDataEvts, mcData.size(), evtSquaredWeightSumData);
     mcData.removeAndDeleteEvents(0, mcData.size()-1);
 
     if(noOfWeightedDataEvts<1.){

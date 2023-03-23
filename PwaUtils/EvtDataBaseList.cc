@@ -162,14 +162,16 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     return evtData;
 }
 
-double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID, int maxEvts, int startNo){
-  double result=0.;
+std::pair<double, double> EvtDataBaseList::noOfWeightedAndSquaredWeightedEvts(EventList& evtList, ChannelID channelID, int maxEvts, int startNo){
+  double weightSum=0.;
+  double squaredWeightSum=0.;
   Event* anEvent;
   int evtCount = 0;
   while ((anEvent = evtList.nextEvent())){
     if (evtCount>= maxEvts) break;
 
-    result += anEvent->Weight();
+    weightSum += anEvent->Weight();
+    squaredWeightSum += anEvent->Weight()*anEvent->Weight();
     ++evtCount;
 
     if(GlobalEnv::instance()->Channel(channelID)->channelType() != AbsChannelEnv::CHANNEL_PIPISCATTERING){    
@@ -201,7 +203,7 @@ double EvtDataBaseList::noOfWeightedEvts(EventList& evtList, ChannelID channelID
       }
     }
   }
-  return result;
+  return std::make_pair(weightSum, squaredWeightSum);
 }
 
 std::string EvtDataBaseList::getName(std::vector<Particle*>& theVec){

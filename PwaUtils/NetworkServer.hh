@@ -44,8 +44,8 @@ public:
   static const short SERVERMESSAGE_CLOSE;
   static const short SERVERMESSAGE_OK;
 
-   NetworkServer(int port, unsigned short noOfClients,  std::map<ChannelID, std::tuple<long, double, long> >& numEventVec, std::string clientNumberWeights);
-  void CalcEventDistribution(std::map<short, std::tuple<long,double,long> >& numEventMap);
+  NetworkServer(int port, unsigned short noOfClients,  std::map<ChannelID, std::tuple<long, double, long, double> >& numEventVec, std::string clientNumberWeights);
+  void CalcEventDistribution(std::map<short, std::tuple<long,double,long, double> >& numEventMap);
   bool WaitForLH(std::map<short, LHData>& theLHDataMap);
   bool WaitForFirstClientLogin();
   void SendParams(std::shared_ptr<tcp::iostream> destinationStream, const std::vector<std::pair<unsigned int, double> >& par);
@@ -55,7 +55,7 @@ public:
   long numMCs(ChannelID channelID) {return std::get<2>(_numEventMap[channelID]);}
   long numData(ChannelID channelID) {return std::get<0>(_numEventMap[channelID]);}
   double weightSum(ChannelID channelID) {return std::get<1>(_numEventMap[channelID]);}
-
+  double squaredWeightSum(ChannelID channelID) {return std::get<3>(_numEventMap[channelID]);}
 private:
 
    unsigned int _port;
@@ -77,7 +77,7 @@ private:
    std::map<short, std::pair<short, boost::posix_time::ptime > > lastLhTimes;
 
    std::map<short, ChannelID> _clientChannelMap;
-   std::map<ChannelID, std::tuple<long, double, long> > _numEventMap;
+  std::map<ChannelID, std::tuple<long, double, long, double> > _numEventMap;
    std::vector<std::pair<ChannelID, std::vector<long> > > _eventDistribution;
    std::vector<double> _cachedParams;
   std::vector<double> _delayTimesClients; //time in seconds

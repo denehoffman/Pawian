@@ -30,6 +30,7 @@
 #include <memory>
 #include <boost/unordered_map.hpp>
 #include <map>
+#include <utility>
 
 #include "Utils/PawianCollectionUtils.hh"
 #include "Utils/FunctionUtils.hh"
@@ -75,11 +76,12 @@ public:
   const std::vector<EvtData*> getMcVecs() const { return _mcDataList; }
 
   double NoOfWeightedDataEvts() const {return _noOfWeightedDataEvts;}
-  double NoOfWeightedMcEvts() const {return _noOfWeightedMcEvts;}
+   double NoOfWeightedMcEvts() const {return _noOfWeightedMcEvts;}
   virtual void read4Vecs(EventList& evtList, std::vector<EvtData*>& theEvtList, double& evtWeightSum, int maxEvts, int startNo);
   virtual EvtData* convertEvent(Event* theEvent, int evtNo=1);
-  static double noOfWeightedEvts(EventList& evtList, ChannelID channelID, int maxEvts, int startNo);
- 
+  static std::pair<double, double> noOfWeightedAndSquaredWeightedEvts(EventList& evtList, ChannelID channelID, int maxEvts, int startNo);
+
+  
 protected:
   ChannelID _channelID;
   std::vector<EvtData*> _evtDataList;
