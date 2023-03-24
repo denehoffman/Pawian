@@ -6,6 +6,8 @@ export extern=/lustre/panda/bkopf/extern/
 export LD_LIBRARY_PATH=$TOP_DIR/lib:$extern/lib:$ROOTSYS/lib
 export BOOST_BUILD_PATH=/lustre/panda/bkopf/extern/boost_1_61_0
 export PATH=$ROOTSYS/bin:$TOP_DIR/bin:$PATH
+export KMAT_DIR=/lustre/panda/bkopf/KMatStore/
+export EVT_DIR=/lustre/panda/bkopf/EvtStore/
 
 rm Jamroot
 ln -s JamrootDebian10_gsi Jamroot
