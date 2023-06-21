@@ -418,6 +418,7 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   _dynType=dynString;
 
   if(_dynType=="KMatrix" ||"FixedKMatrix" || _dynType=="TMatrix" || _dynType=="TMatrixCompare" || _dynType=="FVectorCompare" || _dynType=="FVectorIntensity" || _dynType=="Omnes"){
+
     _pathParserFile=additionalStringVec[0];
     if (additionalStringVec.size() == 3) 
       _projectionParticleNames=additionalStringVec.at(1)+"\t"+additionalStringVec.at(2);
@@ -439,14 +440,16 @@ void AbsDecay::enableDynamics(std::string& dynString, std::vector<std::string>& 
   }
   else if(_dynType=="BlattWBarrier" || _dynType=="BlattWBarrierTensor" 
 	  || _dynType=="BreitWignerBlattWRel" || _dynType=="BreitWignerBlattWTensorRel"){
-    if(additionalStringVec.size()>0){
 
+    if(additionalStringVec.size()>0){
       _qR=stof(additionalStringVec[0]);
+      
       if ( _qR <1.e-5 || _qR > 20.){
 	Alert << "radius for barrier factor too high or too low qr=" << _qR << endmsg;
 	exit(0);
       }
     }
+    
     InfoMsg << "AmpName: " << name() << "  radius for barrier factor qr= " << _qR << endmsg;
   }
   else if(_dynType=="LinearDynamics"){
@@ -534,15 +537,34 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap,
     }
     else{
       std::vector< std::shared_ptr<AbsDecay> > motherAmpList=motherAmpRefList();
-      if(motherAmpList.size()>1 || motherAmpList.size()==0){
-        Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production amplitudes! Production plane cannot be set properly" << endmsg;
-        Alert << "motherAmpList.size(): " << motherAmpList.size() << endmsg;
-        exit(0);
+      if(motherAmpList.size()==0){
+	Alert << "amp: " << _name << "doesn't have any mother amplitude!!!" << endmsg;
+	exit(0);
+      }
+      if(motherAmpList.size()>1){
+	//        Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production amplitudes! Production plane cannot be set properly" << endmsg;
+	//       Alert << "motherAmpList.size(): " << motherAmpList.size() << endmsg;
+	for(size_t i=0; i<motherAmpList.size(); ++i){
+	  //	  Alert << "motherAmpList[ " << i << "]: " << motherAmpList.at(i)->name() << endmsg;
+	  if (motherAmpList.at(0)->wignerDId() != motherAmpList.at(i)->wignerDId()){
+	    Alert << "motherAmps conatin different wignerDIds"
+		  << "\n" <<  motherAmpList.at(0)->name() << ": " << motherAmpList.at(0)->wignerDId()
+                  << "\n" <<  motherAmpList.at(0)->name() << ": " << motherAmpList.at(0)->wignerDId() << endmsg;
+	    exit(0);	    
+	  }
+	  if (motherAmpList.at(0)->wigDWigDRefId() != motherAmpList.at(i)->wigDWigDRefId()){
+	    Alert << "motherAmps conatin different wigDWigDRefId"
+		  << "\n" <<  motherAmpList.at(0)->name() << ": " << motherAmpList.at(0)->wigDWigDRefId()
+                  << "\n" <<  motherAmpList.at(0)->name() << ": " << motherAmpList.at(0)->wigDWigDRefId() << endmsg;
+	    exit(0);
+	  }
+	}
+	//exit(0);
       }
       
        std::vector< std::shared_ptr<AbsDecay> > motherMotherAmpList=motherAmpList.at(0)->motherAmpRefList();
       if(motherMotherAmpList.size()>1 || motherMotherAmpList.size()==0){
-        Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production reference amplitudes! Production plane cannot be set properly" << endmsg;
+        Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production reference amplitude! Production plane cannot be set properly" << endmsg;
         Alert << "motherMotherAmpList.size(): " << motherMotherAmpList.size() << endmsg;
         exit(0);
       }
