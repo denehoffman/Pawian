@@ -167,7 +167,7 @@ void HeliMultipoleDecNonRefAmps::updateFitParams(std::shared_ptr<AbsPawianParame
   for (int i=0; i<_noOfAmps; ++i){
     double theLocalMag=fabs(fitPar->Value(_MagParamNames.at(i)));
     double theLocalPhi=fitPar->Value(_PhiParamNames.at(i));
-    _currentParamLocalMagExpi[i]=std::polar(theLocalMag, theLocalPhi);
+    _currentParamLocalMagExpi[i]=_preFactor*std::polar(theLocalMag, theLocalPhi); //isospin factor not considered here for this radiative decay
   }
 
   _absDyn->updateFitParams(fitPar);
