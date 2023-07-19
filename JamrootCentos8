@@ -3,9 +3,13 @@ import testing ;
 
 path-constant TOP : . ;
 local extern = [ os.environ extern ] ;
-local ROOTSYS = [ os.environ ROOTSYS ] ;
-local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
-ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
+
+# local ROOTSYS = [ os.environ ROOTSYS ] ;
+# local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
+# ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
+
+ROOTLIBS = -L/usr/lib64/root -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -lROOTDataFrame -pthread -lm -ldl -rdynamic ;
+
 BOOSTLIBS =
   -lboost_chrono
   -lboost_date_time
@@ -26,10 +30,12 @@ project :
   <include>$(TOP)
   <include>$(BOOSTINCLUDE)
   <include>$(extern)/include
-  <include>$(ROOTSYS)/include
+  <include>/usr/include/root
   <cxxflags>--std=c++17
   <cxxflags>-ftemplate-depth=256
+  <cxxflags>-DBOOST_BIND_GLOBAL_PLACEHOLDERS
   <link>shared
+  <linkflags>-L$(TOP)/lib
   <linkflags>$(ROOTLIBS)
   <linkflags>-L$(BOOSTLIBPATH)
   <linkflags>$(BOOSTLIBS)

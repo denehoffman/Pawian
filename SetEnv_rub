@@ -1,12 +1,11 @@
-# source /opt/root/6-18.04-Centos8-gcc9.2.0-a/bin/thisroot.csh
-source /opt/root/6-24.06-gcc11.2.0-a/bin/thisroot.csh
+source /opt/root/6-28.04-AL9.2-gcc12.2.0/bin/thisroot.csh
 setenv TOP_DIR `pwd | sed -e 's/\/nfs//'`
 setenv extern /data/sleipnir/PANDA/PWA
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${TOP_DIR}/lib:${extern}/libgcc920-opt
+setenv LD_LIBRARY_PATH ${TOP_DIR}/lib:${extern}/libgcc920-opt
 setenv BOOST_BUILD_PATH /usr/share/boost-build
 setenv PATH ${TOP_DIR}/bin:${PATH}
 setenv KMAT_DIR /data/duldul/bertram/KMatStore/
 setenv EVT_DIR /data/duldul/bertram/EvtStore/
 
 rm Jamroot
-ln -s JamrootCentos8 Jamroot
+ln -s JamrootAL9 Jamroot
