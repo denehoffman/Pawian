@@ -138,6 +138,6 @@ void TMatrixCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMa
   while(currentPhaseDiff > 180. ) currentPhaseDiff-=180.;
   while(currentPhaseDiff < -180.) currentPhaseDiff+=180.;
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff+_currentOffset;
-}
+ }
 
 

@@ -94,7 +94,6 @@ double pipiScatteringBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<
   double dataPointError=theData->DoubleId.at(IdStringMapRegistry::instance()->
 					     stringId(EvtDataScatteringList::DATAERR_PIPISCAT_NAME));
   double fitPoint=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME));
-  
   fitPoint *= fitPar->Value(_channelScaleParam);
   double chi2 = (dataPoint-fitPoint)*(dataPoint-fitPoint)/(dataPointError*dataPointError);
   double result=0.5*chi2;

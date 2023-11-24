@@ -117,20 +117,33 @@ void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMa
   double currentPhase=std::arg((*_FVector)(_decProjectionIndex, 0));
   double currentPhaseCompare=std::arg((*_FVectorCompare)(_decProjectionIndex, 0));
   double currentPhaseDiff=(currentPhase-currentPhaseCompare)*PawianConstants::radToDeg;
-  // while(currentPhaseDiff > 360. ) currentPhaseDiff -= 360.;
-  // while(currentPhaseDiff < 0.)    currentPhaseDiff += 360.;
-  // if(currentPhaseDiff > 180.)     currentPhaseDiff  = 360.-currentPhaseDiff;
+
   double phaseDiffData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
   double currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
-  while(currentPhaseDiffRelDataFit > 180. ){ 
-    currentPhaseDiff += 360.;
-    currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+  if(!_useAbsPhaseDiff){
+    while(currentPhaseDiffRelDataFit > 180. ){ 
+      currentPhaseDiff += 360.;
+      currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+    }
+    while(currentPhaseDiffRelDataFit < -180. ){
+      currentPhaseDiff -= 360.;
+      currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+    }
   }
-  while(currentPhaseDiffRelDataFit < -180. ){
-    currentPhaseDiff -= 360.;
-    currentPhaseDiffRelDataFit=phaseDiffData-currentPhaseDiff;
+
+  //assumption/requirement: abs phase diff of data between 0 and 180 degrees
+  if(_useAbsPhaseDiff){
+    //move in the range between 0 and 180 degrees
+    double currentPhaseDiff1=currentPhaseDiff;
+    while(currentPhaseDiff1 > 360. ) currentPhaseDiff1-=360.;
+    while(currentPhaseDiff1 < 0. ) currentPhaseDiff1+=360.;
+    //2nd solution
+    double currentPhaseDiff2=360.-currentPhaseDiff1;
+    //pick out the one with the shortest distance
+    currentPhaseDiff=currentPhaseDiff1;
+    if (std::abs(phaseDiffData-currentPhaseDiff1) > std::abs(phaseDiffData-currentPhaseDiff2)) currentPhaseDiff=currentPhaseDiff2;
   }
-  if(_useAbsPhaseDiff) currentPhaseDiff=std::abs(currentPhaseDiff);
+
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentPhaseDiff;
 }
 
