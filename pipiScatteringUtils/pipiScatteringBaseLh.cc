@@ -29,6 +29,7 @@
 
 #include "pipiScatteringUtils/pipiScatteringBaseLh.hh"
 #include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -58,7 +59,12 @@ double pipiScatteringBaseLh::calcLogLh(std::shared_ptr<AbsPawianParameters> fitP
   _calcCounter++;
   updateFitParams(fitPar);
 
-  double chi2All=0.;
+  double chi2All=0.; 
+  //workaround for Tcheck
+  if(GlobalEnv::instance()->Channel(_channelID)->parser()->productionFormalism() == "Tcheck"){
+    _PiPiScatteringXdecAmp->doTcheck();
+    return chi2All;
+  }
 
   //loop over all data points
   std::vector<EvtData*>::iterator it;

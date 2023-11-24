@@ -68,7 +68,8 @@ public:
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
   virtual void calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp=0);
-
+  void doTcheck();
+  
 protected:
 
   virtual void initialize();

@@ -67,6 +67,10 @@ complex<double> PiPiScatteringXdecAmps::XdecAmp(const Spin& lamX, EvtData* theDa
   return result;
 }
 
+void PiPiScatteringXdecAmps::doTcheck(){
+  _tMatDyn->doTcheck(_orbMom);
+}
+
 void PiPiScatteringXdecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp) {
   AbsXdecAmp::calcDynamics(theData, grandmaAmp);
  return;

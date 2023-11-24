@@ -66,7 +66,8 @@ public:
   virtual int decProjectionIndex() {return _decProjectionIndex;}
   int prodProjectionIndex() {return _prodProjectionIndex;}
   void setProdProjectionIndex(int idx);
- 
+  void doTcheck(Spin OrbMom);
+  
 protected:
   std::string _kMatName;
   int _prodProjectionIndex;
@@ -107,6 +108,7 @@ protected:
   virtual void evalTreal(EvtData* theData, double currentMass, Spin OrbMom);
   virtual void evalTimag(EvtData* theData, double currentMass, Spin OrbMom);
   unsigned int noOfRotations(double currentMass);
+  
 private:
 
 };

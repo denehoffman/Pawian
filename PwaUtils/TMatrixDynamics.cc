@@ -77,7 +77,8 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   else if(dataType=="PhaseDiff") _dataTypeID=5; //in TMatrixCompareDynamics and FVectorCompareDynamics only
   else if(dataType=="PVecIntensity") _dataTypeID=6; //in FVectorIntensityDynamics only
   else if(dataType=="Treal") _dataTypeID=7;
-  else if(dataType=="Timag") _dataTypeID=8; 
+  else if(dataType=="Timag") _dataTypeID=8;
+  else if(dataType=="Tcheck") _dataTypeID=9;
   else {
     Alert << "production formalism/data type with the name" << dataType 
 	  << " is not supported for pi pi scattering fits! \n It is working for: "
@@ -572,3 +573,30 @@ void TMatrixDynamics::setProdProjectionIndex(int idx){
 }
 
 
+void TMatrixDynamics::doTcheck(Spin OrbMom){
+  complex<double> theMass(1.8, 0.);
+  InfoMsg << "\n\ndoTcheck at m = " << theMass << endmsg;
+  _tMatr->evalMatrix(theMass, OrbMom);
+  InfoMsg << "\nT-matrix:\n" << (*_tMatr) << endmsg;
+
+  InfoMsg << "\nK-matrix:\n" << (*_tMatr->kMatrix()) << endmsg;
+  
+  vector<std::shared_ptr<AbsPhaseSpace> > thePhpVecs=_tMatr->kMatrix()->phaseSpaceVec();
+  InfoMsg << "\nPhp-vec:";
+  for (unsigned int i=0; i<thePhpVecs.size(); ++i){
+    InfoMsg << "\nchannel " << i << ": " << thePhpVecs[i]->factor(theMass, OrbMom);
+  }
+  InfoMsg << endmsg;
+
+  
+  Matrix< complex<double> > SRel=Matrix< complex<double> > (_tMatr->NumRows(), _tMatr->NumCols());
+  for(int i=0; i<_tMatr->NumRows(); ++i){
+    for(int j=0; j<_tMatr->NumCols(); ++j){
+       if (i==j) SRel(i,j)= complex<double>(1.,0.) + 2.*PawianConstants::i * sqrt(thePhpVecs[i]->factor(theMass, OrbMom).real()) * (*_tMatr)(i,j) * sqrt(thePhpVecs[j]->factor(theMass, OrbMom).real());
+      else SRel(i,j)= sqrt(thePhpVecs[i]->factor(theMass, OrbMom).real()) * 2.*PawianConstants::i * (*_tMatr)(i,j) * sqrt(thePhpVecs[j]->factor(theMass, OrbMom).real());       
+    }
+  }
+
+  InfoMsg << "\nSRel:\n" << SRel << endmsg;
+  InfoMsg << "\nSRel*SRel.Adjoint():\n" << SRel*SRel.Adjoint() << endmsg;
+}
