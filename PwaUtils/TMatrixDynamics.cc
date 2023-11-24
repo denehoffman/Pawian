@@ -364,12 +364,12 @@ void TMatrixDynamics::init(){
     std::vector<double> currentgVector=itgFac->second;
     std::shared_ptr<KPole> currentPole;
     if (_kMatrixParser->useBarrierFactors()){
-      currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), 
+       currentPole=std::shared_ptr<KPole>(new KPoleBarrier(currentgVector, _currentPoleMasses.at(itgFac->first), 
 							  _phpVecs, _kMatrixParser->orbitalMom(), 
 							  _kMatrixParser->useTruncatedBarrierFactors()));
     }
     else{
-      currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
+       currentPole=std::shared_ptr<KPole>(new KPole(currentgVector, _currentPoleMasses.at(itgFac->first)));
     }
     _kPoles.push_back(currentPole);
   }
@@ -574,7 +574,8 @@ void TMatrixDynamics::setProdProjectionIndex(int idx){
 
 
 void TMatrixDynamics::doTcheck(Spin OrbMom){
-  complex<double> theMass(1.8, 0.);
+  //complex<double> theMass(1.8, 0.);
+  double theMass=1.8;
   InfoMsg << "\n\ndoTcheck at m = " << theMass << endmsg;
   _tMatr->evalMatrix(theMass, OrbMom);
   InfoMsg << "\nT-matrix:\n" << (*_tMatr) << endmsg;
@@ -588,6 +589,15 @@ void TMatrixDynamics::doTcheck(Spin OrbMom){
   }
   InfoMsg << endmsg;
 
+  vector<std::shared_ptr<KPole> > thePoles= _tMatr->kMatrix()->kpoles();
+  for(unsigned int i=0; i<thePoles.size(); ++i){
+    std::shared_ptr<KPole> currentPole=thePoles.at(i);
+    InfoMsg << "\npole : " << i << endmsg;
+    std::vector< complex<double> > thebarrierFactors=currentPole->barrierFactors();
+    for(unsigned int j=0; j< thebarrierFactors.size(); ++j){
+      InfoMsg<< "\nbarrier " << j << ": " << thebarrierFactors.at(j);
+    }
+  }
   
   Matrix< complex<double> > SRel=Matrix< complex<double> > (_tMatr->NumRows(), _tMatr->NumCols());
   for(int i=0; i<_tMatr->NumRows(); ++i){

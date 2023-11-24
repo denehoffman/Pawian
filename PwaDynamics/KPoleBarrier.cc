@@ -50,7 +50,7 @@ KPoleBarrier::~KPoleBarrier(){
 
 void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
   //  evalMatrixTemplate(mass, OrbMom);
-
+ 
   for (int i=0; i< int(_phpVecs.size()); ++i){
     if(_woBarrier.at(i)){
       _barrierFactor.at(i) = 1.;
@@ -61,7 +61,6 @@ void KPoleBarrier::evalMatrix(const double mass, Spin OrbMom){
     }
     else _barrierFactor.at(i) = BarrierFactor::BlattWeisskopfRatio(OrbMom, _phpVecs.at(i)->breakUpMom(mass), 
   							      _breakUpM0.at(i), BarrierFactor::qRDefault);
-
   }
 
 
