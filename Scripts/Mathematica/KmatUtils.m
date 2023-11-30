@@ -56,7 +56,7 @@ BWBarrier[l_, q_, q0_]:=
 	 ];
 
 (* elasticity *)
-Sii[s_, m1_, m2_, Tii_] := 1. + 2 I Sqrt[Re[rho[s,m1,m2]]] Tii Sqrt[Re[rho[s,m1,m2]]];
+Sii[s_, m1_, m2_, Tii_] := 1. + 2. I Sqrt[Re[rho[s,m1,m2]]] Tii Sqrt[Re[rho[s,m1,m2]]];
 
 
 (* extract delta phase of an Argand plot *)
