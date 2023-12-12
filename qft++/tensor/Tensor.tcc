@@ -303,8 +303,8 @@ void Tensor<_Tp>::Print(std::ostream& __os) const {
     __os << "}";
   }
   else{
-    cout << "<Tensor::Print(ostream&)> Error! Can NOT print a Tensor with "
-	 << " Rank "<< _rank << " > 2." << endl;
+    __os << "<Tensor::Print(ostream&)> Error! Can NOT print a Tensor with "
+	 << " Rank "<< _rank << " > 2.";
   }
 }
 //_____________________________________________________________________________
