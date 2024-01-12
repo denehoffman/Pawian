@@ -31,7 +31,7 @@
 
 #include "PwaUtils/TensorOmegaTo3PiDecAmps.hh"
 #include "qft++/relativistic-quantum-mechanics/Utils.hh"
-#include "PwaUtils/DataUtils.hh"
+//#include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/OmegaTo3PiTensorDecay.hh"
 #include "Utils/FunctionUtils.hh"
 #include "Particle/Particle.hh"
@@ -67,31 +67,34 @@ complex<double> TensorOmegaTo3PiDecAmps::XdecPartAmp(const Spin& lamX, Spin& lam
 
 complex<double> TensorOmegaTo3PiDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
-  complex<double> result(0.,0.);
+  //  complex<double> result(0.,0.);
 
   //  int evtNo=theData->evtNo;
   // Id2StringType currentSpinIndex=FunctionUtils::spin2Index(lamX,lamFs);
   Id1StringType currentSpinIndex=FunctionUtils::spin1Index(lamX);
   
   if (!_recalculate){
-    result=_cachedLocalAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
-    return result;
+    //  result=_cachedLocalAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
+    // return result;
+    return _cachedLocalAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex); 
   }
 
+  complex<double> result(0.,0.);
   Spin motherJ(_JPCPtr->J);
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     Id2StringType IdJLamX=FunctionUtils::spin2Index(motherJ,lamX);
-    complex<double> amp = _currentMagExpi[*it]*theData->Complex2Spin.at(_decay->wignerDId()).at(IdJLamX);
-    result+=amp;
+    //complex<double> amp = _currentMagExpi[*it]*theData->Complex2Spin.at(_decay->wignerDId()).at(IdJLamX);
+    //result+=amp;
+    result+=_currentMagExpi[*it]*theData->Complex2Spin.at(_decay->wignerDId()).at(IdJLamX); 
   }
 
-  result*=100.;
+  result*=100.*_absDyn->eval(theData, grandmaAmp);
   if ( _cacheAmps){
      _cachedLocalAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
   }
 
-  result*=_absDyn->eval(theData, grandmaAmp);
+  // result*=_absDyn->eval(theData, grandmaAmp);
   //  InfoMsg <<"TensorOmegaTo3PiDecAmps result: " << result << endmsg; 
   return result;
 }

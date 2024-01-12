@@ -95,7 +95,7 @@ complex<double> TensorDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short
 complex<double> TensorDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);
-  if( fabs(lamX) > _JPCPtr->J) return result;
+  if( std::abs(lamX) > _JPCPtr->J) return result;
 
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);  
   
@@ -109,7 +109,6 @@ complex<double> TensorDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXd
 		_lam2MaxProj, true);
 
   if ( _cacheAmps){
-     //     _cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
   }
   return result;
@@ -121,59 +120,29 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
   complex<double> result(0.,0.);
 
   map<unsigned short, map<Id3StringType, complex<double> > >& currentLS3SpinMap=theData->ComplexLS3Spin.at(_decay->nameId());
-  std::vector< std::shared_ptr<const LScomb> >::iterator it;
-  for (it=_LSs.begin(); it!=_LSs.end(); ++it){
-    map<Id3StringType, complex<double> >& current3SpinMap = currentLS3SpinMap.at((*it)->idnumberLS);
-    complex<double> theMagExpi=_currentParamMagExpi.at(*it);
+  std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
 
-    complex<double> tmpResult(0.,0.);
-    for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
-      for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamX, lambda1, lambda2);
-	complex<double> amp = theMagExpi*current3SpinMap.at(IdLamXLam1Lam2);
-      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData);
-	tmpResult+=amp;
+  for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; ++lambda1){
+    if(lambda1<lam1Min || lambda1>lam1Max) continue;
+      for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){ 
+      if(lambda2<lam2Min || lambda2>lam2Max) continue;
+      Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamX, lambda1, lambda2);
+      complex<double> amp(0.,0.);
+      for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
+	complex<double> tmpamp=_currentParamMagExpi.at(*itLS)*currentLS3SpinMap.at((*itLS)->idnumberLS).at(IdLamXLam1Lam2);
+	if (_absDyn->isLdependent()){
+          tmpamp *=_cachedDynIdLSMap.at((*itLS)->L).at(_absDyn->grandMaId(grandmaAmp));
+        }
+        amp+=tmpamp;
       }
+      if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData);
+      result+=amp;     
     }
-    if (_absDyn->isLdependent()){
-      tmpResult*=_cachedDynIdLSMap.at((*it)->L).at(_absDyn->grandMaId(grandmaAmp));
-    }
-    result+=tmpResult;
   }
-  
-  if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
   
   result*=_isospinCG;
   return result;
 }
-
-
-// void  TensorDecAmps::getDefaultParams(fitParCol& fitVal, fitParCol& fitErr){
-
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagValMap;
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiValMap;
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentMagErrMap;
-//   std::map< std::shared_ptr<const LScomb>, double, pawian::Collection::SharedPtrLess > currentPhiErrMap;
-
-//   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
-//   for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
-//     currentMagValMap[*itLS]=_factorMag;
-//     currentPhiValMap[*itLS]=0.;
-//     currentMagErrMap[*itLS]=_factorMag/3.;
-//     currentPhiErrMap[*itLS]=0.3;
-//   }
-
-//   fitVal.MagsLS[_key]=currentMagValMap;
-//   fitVal.PhisLS[_key]=currentPhiValMap;
-//   fitErr.MagsLS[_key]=currentMagErrMap;
-//   fitErr.PhisLS[_key]=currentPhiErrMap;
-
-//   _absDyn->getDefaultParams(fitVal, fitErr);
-
-
-//   if(!_daughter1IsStable) _decAmpDaughter1->getDefaultParams(fitVal, fitErr);
-//   if(!_daughter2IsStable) _decAmpDaughter2->getDefaultParams(fitVal, fitErr);
-// }
 
 
 void  TensorDecAmps::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
@@ -226,14 +195,10 @@ void TensorDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar)
     //magnitude
     std::string magName=(*itLS)->name()+_key+"Mag";
     std::string phiName=(*itLS)->name()+_key+"Phi";
-    double theMag=fabs(fitPar->Value(magName));
+    double theMag=std::abs(fitPar->Value(magName));
     double thePhi=fitPar->Value(phiName);
 
-    _currentParamMags[*itLS]=theMag;
-    _currentParamPhis[*itLS]=thePhi;
-    
-    complex<double> expi(cos(thePhi), sin(thePhi));
-    _currentParamMagExpi[*itLS]=theMag*expi;
+    _currentParamMagExpi[*itLS]=std::polar(theMag, thePhi);    
   }
 
   _absDyn->updateFitParams(fitPar);
@@ -259,5 +224,6 @@ void TensorDecAmps::calcDynamics(EvtData* theData, AbsXdecAmp* grandmaAmp){
  if(!_daughter2IsStable) _decAmpDaughter2->calcDynamics(theData, this);
  return;
 }
+
 
 

@@ -67,8 +67,8 @@ public:
   virtual void fillParamNameList();
 
 protected:
-  std::map< int, double> _currentParamMags;
-  std::map< int, double> _currentParamPhis;
+  // std::map< int, double> _currentParamMags;
+  // std::map< int, double> _currentParamPhis;
   short _noOfAmps;
   std::vector<std::string> _MagParamNames;
   std::vector<std::string> _PhiParamNames;

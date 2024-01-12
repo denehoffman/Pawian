@@ -36,7 +36,7 @@
 #include <memory>
 
 #include "PwaUtils/AbsXdecAmp.hh"
-
+#include "PwaUtils/DataUtils.hh"
 class OmegaTo3PiTensorDecay;
 class Particle;
 class AbsPawianParameters;
@@ -80,6 +80,7 @@ protected:
   Particle* _daughter2;
   Particle* _daughter3;
   tensorOmegaTo3PiCachedIdMap _cachedLocalAmpIdMap;
+  
 private:
 
 

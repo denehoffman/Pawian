@@ -119,21 +119,13 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(const Spin& lamX, EvtData* theDa
   short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);
   
   if (!_recalculate){
-    //    result=_cachedAmpMap.at(evtNo).at(_absDyn->grandMaKey(grandmaAmp)).at(currentSpinIndex);
     return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
-    //    result*=_absDyn->eval(theData, grandmaAmp);
-    //    return result;
   }
 
   for(Spin lambda2=_lam2MinProj; lambda2<=_lam2MaxProj; ++lambda2){
     Id3StringType IdLamMotherLamGamLamX=FunctionUtils::spin3Index(lamX, _lam1MinProj, lambda2);
     complex<double> tmpResult(0.,0.);
     for(int i=0; i<_noOfAmps; ++i){
-      // double theMag=_currentParamLocalMags.at(i);
-      // double thePhi=_currentParamLocalPhis.at(i);
-      // complex<double> expi(cos(thePhi), sin(thePhi));
-      // tmpResult+=theMag*expi*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
-      //      tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexDoubleInt3SpinString.at(_name).at(i).at(lamX).at(lamFs).at(lambda2)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
       tmpResult+=_currentParamLocalMagExpi.at(i)*theData->ComplexN3Spin.at(_decay->nameId()).at(i).at(IdLamMotherLamGamLamX)*_absDyn->eval(theData, grandmaAmp,_ampLMap.at(i));
     }
 
@@ -141,7 +133,6 @@ complex<double> TensorPsiToGamXDecAmps::XdecAmp(const Spin& lamX, EvtData* theDa
   }
 
   if ( _cacheAmps){
-     //_cachedAmpMap[evtNo][_absDyn->grandMaKey(grandmaAmp)][currentSpinIndex]=result;
      _cachedAmpIdMap[theData->evtNo][_absDyn->grandMaId(grandmaAmp)][currentSpinIndex]=result;
   }
 
@@ -192,15 +183,11 @@ void TensorPsiToGamXDecAmps::updateFitParams(std::shared_ptr<AbsPawianParameters
 
   for (int i=0; i<_noOfAmps; ++i){
     std::string magName=_MagParamNames.at(i);
-    double theMag=fabs(fitPar->Value(magName));
-    _currentParamLocalMags[i]=theMag;
-
+    double theMag=std::abs(fitPar->Value(magName));
+    
     std::string phiName=_PhiParamNames.at(i);
     double thePhi=fitPar->Value(phiName);
-    _currentParamLocalPhis[i]=thePhi;
-
-    complex<double> expi(cos(thePhi), sin(thePhi));
-    _currentParamLocalMagExpi[i]=theMag*expi;
+    _currentParamLocalMagExpi[i]=std::polar(theMag, thePhi);
   }
 
   _absDyn->updateFitParams(fitPar);
