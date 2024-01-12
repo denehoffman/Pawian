@@ -119,7 +119,8 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
 				      Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs) {
   complex<double> result(0.,0.);
 
-  map<unsigned short, map<Id3StringType, complex<double> > >& currentLS3SpinMap=theData->ComplexLS3Spin.at(_decay->nameId());
+  // map<unsigned short, map<Id3StringType, complex<double> > >& currentLS3SpinMap=theData->ComplexLS3Spin.at(_decay->nameId());
+  map<Id3StringType, map<unsigned short, complex<double> > >& current3SpinLSMap=theData->Complex3SpinLS.at(_decay->nameId());
   std::vector< std::shared_ptr<const LScomb> >::const_iterator itLS;
 
   for(Spin lambda1=-_Jdaughter1; lambda1<=_Jdaughter1; ++lambda1){
@@ -127,9 +128,11 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
       for(Spin lambda2=-_Jdaughter2; lambda2<=_Jdaughter2; ++lambda2){ 
       if(lambda2<lam2Min || lambda2>lam2Max) continue;
       Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamX, lambda1, lambda2);
+      map<unsigned short, complex<double> >& currentLSMap = current3SpinLSMap.at(IdLamXLam1Lam2);
       complex<double> amp(0.,0.);
       for(itLS=_LSs.begin(); itLS!=_LSs.end(); ++itLS){
-	complex<double> tmpamp=_currentParamMagExpi.at(*itLS)*currentLS3SpinMap.at((*itLS)->idnumberLS).at(IdLamXLam1Lam2);
+	//complex<double> tmpamp=_currentParamMagExpi.at(*itLS)*currentLS3SpinMap.at((*itLS)->idnumberLS).at(IdLamXLam1Lam2);
+	complex<double> tmpamp=_currentParamMagExpi.at(*itLS)*currentLSMap.at((*itLS)->idnumberLS);
 	if (_absDyn->isLdependent()){
           tmpamp *=_cachedDynIdLSMap.at((*itLS)->L).at(_absDyn->grandMaId(grandmaAmp));
         }

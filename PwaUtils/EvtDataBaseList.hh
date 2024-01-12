@@ -44,7 +44,7 @@ typedef std::map<unsigned short, double> mapShortDouble;
 typedef std::map<unsigned short, Vector4<double> > mapShort4Vec;
 typedef std::map<unsigned short, map<Id2StringType, complex<double> > > mapShortInt2Complex;
 typedef std::map<unsigned short, map<unsigned short, map<Id3StringType, complex<double> > > > mapShortShortInt3Complex;
-
+typedef std::map<unsigned short, map<Id3StringType, map<unsigned short, complex<double> > > > mapShortInt3ShortComplex;
 
 struct EvtData {
   mapShortInt3Complex WignerDIdId3;
@@ -55,6 +55,7 @@ struct EvtData {
   mapShortInt2Complex Complex2Spin;
   mapShortShortInt3Complex ComplexLS3Spin;
   mapShortShortInt3Complex ComplexN3Spin;
+  mapShortInt3ShortComplex Complex3SpinLS;
   double evtWeight;
   int evtNo;
 };
