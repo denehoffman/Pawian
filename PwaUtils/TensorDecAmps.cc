@@ -139,7 +139,8 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
       result+=amp;     
     }
   }
-  
+
+  if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
   result*=_isospinCG;
   return result;
 }
