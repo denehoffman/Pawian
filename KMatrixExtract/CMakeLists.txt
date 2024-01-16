@@ -1,18 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(KMatrixExtract  
-  ArgandModuloConverter.cc
-  FVectorIntensityGeneral.cc
-  FVectorResidueExtr.cc
-  FVectorResiduePathExtr.cc
-  RiemannSheetAnalyzer.cc
-  RiemannSheetFVectorAnalyzer.cc
-  TMatrixErrorExtr.cc
-  TMatrixExtrBase.cc
-  TMatrixExtrFcn.cc
-  TMatrixGeneral.cc
-  TMatrixGeneralBase.cc
-  TMatrixPiPiSWaveSimple4piPhp.cc  
-  TMatrixResidueExtr.cc  
-  TMatrixResiduePathExtr.cc 
+  ${sourcefiles}
 )
 
 target_include_directories(KMatrixExtract

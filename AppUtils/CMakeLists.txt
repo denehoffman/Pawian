@@ -1,6 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(AppUtils
-  AppBase.cc
-  LhFactory.cc  
+  ${sourcefiles}  
 )
 
 target_include_directories(AppUtils

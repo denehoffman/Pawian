@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sys/types.h>
+#include <cstdint>
 
 class Particle;
 class Spin;

@@ -1,75 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(PwaUtils
-  AbsChannelEnv.cc
-  AbsDecay.cc
-  AbsDecayList.cc
-  AbsDynamics.cc
-  AbsHist.cc
-  AbsLh.cc
-  AbsStates.cc
-  AbsXdecAmp.cc
-  BlattWBarrierDynamics.cc
-  BlattWBarrierTensorDynamics.cc
-  BreitWignerBlattWRelDynamics.cc
-  BreitWignerBlattWTensorRelDynamics.cc
-  BreitWignerDynamics.cc
-  BreitWignerRelDynamics.cc
-  DataUtils.cc
-  DynRegistry.cc
-  EvtDataBaseList.cc
-  EvtDataListFactory.cc
-  EvtDataScatteringList.cc
-  FVectorCompareDynamics.cc
-  FVectorIntensityDynamics.cc
-  FixedKMatrixDynamics.cc
-  FlatteDynamics.cc
-  FormXDecAmps.cc
-  FormationDecay.cc
-  FsParticleProjections.cc
-  GlobalEnv.cc
-  HeliDecAmps.cc
-  HeliMultipoleDecNonRefAmps.cc
-  HeliMultipoleGeneralDecAmps.cc
-  IsobarHeliDecay.cc
-  IsobarLSDecay.cc
-  IsobarTensorDecay.cc
-  IsobarTensorPsiToGamXDecay.cc
-  IsobarTensorReducedRadDecay.cc
-  JohnsonDynamics.cc
-  K0star1430LassDynamics.cc
-  KMatrixDynamics.cc
-  KPiSWaveIso12Dynamics.cc
-  KPiSWaveIso32Dynamics.cc
-  KinUtils.cc
-  LSDecAmps.cc
-  LSOmegaTo3PiDecAmps.cc
-  LinearDynamics.cc
-  NetworkClient.cc
-  NetworkServer.cc
-  OmegaTo3PiDecay.cc
-  OmegaTo3PiLSDecay.cc
-  OmegaTo3PiTensorDecay.cc
-  OmnesDynamics.cc
-  PhpGenDynamics.cc
-  PiPiSWaveASDynamics.cc
-  PiPiScatteringDecay.cc
-  PiPiScatteringXdecAmps.cc
-  ProdChannelInfo.cc
-  ProdParamDynamics.cc
-  PwaGen.cc
-  RadM1Dynamics.cc
-  RootHist.cc
-  RootPiPiScatteringHist.cc
-  SExpDynamics.cc
-  TMatrixCompareDynamics.cc
-  TMatrixDynamics.cc
-  TensorDecAmps.cc
-  TensorOmegaTo3PiDecAmps.cc
-  TensorPsiToGamXDecAmps.cc
-  VoigtBlattWRelDynamics.cc
-  VoigtDynamics.cc
-  WoDynamics.cc
-  XdecAmpRegistry.cc
-  pbarpState.cc
+  ${sourcefiles}
 )
 
 target_include_directories(PwaUtils

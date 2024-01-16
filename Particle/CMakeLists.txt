@@ -1,8 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(Particle  
-  Parity.cc
-  Particle.cc
-  ParticleTable.cc
-  PdtParser.cc  
+  ${sourcefiles}
 )
 
 target_include_directories(Particle

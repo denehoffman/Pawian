@@ -19,6 +19,7 @@ __pycache__/
 __pycache__/
 bin/
 lib/
+build/
 version.py
 
 # Virtual environments

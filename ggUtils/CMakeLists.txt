@@ -1,10 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(ggUtils
-  GGChannelEnv.cc
-  centralProdBaseLh.cc
-  gamgamBaseLh.cc
-  ggReaction.cc
-  ggStates.cc  
-  pbarpProductionLh.cc 
+  ${sourcefiles}
 )
 
 target_include_directories(ggUtils

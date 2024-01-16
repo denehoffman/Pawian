@@ -1,51 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(PwaDynamics  
-  BBUnstableParFit.cc  
-  BBUnstableParFitFcn.cc
-  BarrierFactor.cc
-  BreitWignerFunction.cc
-  FVector.cc
-  FVectorOmnes.cc
-  Flatte.cc
-  Johnson.cc
-  KMatrixBase.cc
-  KMatrixFunctions.cc
-  KMatrixKPiSFocus.cc
-  KMatrixNonRel.cc
-  KMatrixOmnes.cc
-  KMatrixPiPiS.cc
-  KMatrixPiPiSsimple4piPhp.cc
-  KMatrixRel.cc
-  KMatrixRelBg.cc
-  KMatrixSlowAdlerCorRel.cc
-  KPole.cc
-  KPoleBarrier.cc
-  KPoleOmnes.cc
-  LASS.cc  
-  PPole.cc
-  PPoleBarrier.cc
-  PPoleOmnes.cc
-  PVectorBgOmnes.cc
-  PVectorKPiSFocus.cc
-  PVectorRel.cc
-  PVectorRelBg.cc
-  PVectorSlowCorRel.cc
-  PhaseSpace4Pi.cc
-  PhaseSpaceFactory.cc
-  PhaseSpaceIsobar.cc
-  PhaseSpaceIsobarAS.cc
-  PhaseSpaceIsobarDudek.cc
-  PhaseSpaceIsobarDudekAngularMomentum.cc
-  PhaseSpaceIsobarDudekUnstableRhoPi.cc
-  PhaseSpaceIsobarLUT.cc
-  PhaseSpaceIsobarLUT1D.cc
-  PhaseSpaceIsobarReid.cc
-  PhaseSpaceIsobarReidAngularMomentum.cc
-  PhaseSpaceList.cc
-  RadMultipoleFormFactor.cc
-  TMatrixBase.cc
-  TMatrixNonRel.cc
-  TMatrixRel.cc
-  Voigtian.cc
+  ${sourcefiles}
 )
 
 target_include_directories(PwaDynamics

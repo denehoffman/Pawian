@@ -1,12 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(pbarpUtils
-  PbarpChannelEnv.cc
-  pbarpBaseLh.cc
-  pbarpCanoLh.cc
-  pbarpHeliLh.cc
-  pbarpReaction.cc
-  pbarpStatesLS.cc
-  pbarpTensorLh.cc
-  spinDensityHist.cc
+  ${sourcefiles}
 )
 
 target_include_directories(pbarpUtils

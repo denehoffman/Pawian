@@ -1,10 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(epemUtils
-  EpemChannelEnv.cc
-  epemBaseLh.cc
-  epemCanoLh.cc
-  epemHeliLh.cc
-  epemReaction.cc
-  epemTensorLh.cc
+  ${sourcefiles}
 )
 
 target_include_directories(epemUtils

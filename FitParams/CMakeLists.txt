@@ -1,17 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(FitParams
-  AbsParamHandler.cc
-  AbsPawianParameters.cc
-  AbsPawianParamStreamer.cc
-  MnPawianParameters.cc
-  ParamDep.cc
-  ParamDepEqual.cc
-  ParamDepFixedRatio.cc
-  ParamDepGFacToFixGFacsWidthMass.cc
-  ParamDepGFactorToFixFullWidth.cc
-  ParamDepHandler.cc
-  ParamFactory.cc
-  PawianParameters.cc
-  PwaCovMatrix.cc
+  ${sourcefiles}
 )
 
 target_include_directories(FitParams

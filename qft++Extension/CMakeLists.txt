@@ -1,13 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(qft++Extension
-  AbsComplexFunction.cc
-  InputOmnesMatrixPiPiS5Channel.cc
-  InputSelfEnergyMatrixPiPiS5Channel.cc
-  OmnesMatrixFactory.cc
-  OmnesMatrixGeneral.cc
-  OmnesMatrixPiPiS3Channelwrhorho.cc
-  OmnesMatrixPiPiS5Channel.cc
-  PawianUtils.cc
-  SphericalHarmonic.cc
+  ${sourcefiles}
 )
 
 target_include_directories(qft++Extension

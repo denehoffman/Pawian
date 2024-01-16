@@ -1,19 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(PspGen
-  EvtComplex.cc
-  EvtConst.cc
-  EvtGenKine.cc
-  EvtKine.cc
-  EvtMTRandomEngine.cc
-  EvtRandom.cc
-  EvtReport.cc
-  EvtSimpleRandomEngine.cc
-  EvtTensor4C.cc
-  EvtVector3C.cc
-  EvtVector3R.cc
-  EvtVector4C.cc
-  EvtVector4R.cc
-  EvtdFunction.cc
-  EvtdFunctionSingle.cc  
+  ${sourcefiles} 
 )
 
 target_include_directories(PspGen

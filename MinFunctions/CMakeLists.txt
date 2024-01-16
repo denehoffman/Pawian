@@ -1,10 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(MinFunctions
-  AbsFcn.cc
-  AbsPawianMinimizer.cc
-  EvoMinimizer.cc
-  MinuitMinimizer.cc
-  PwaFcnBase.cc
-  PwaFcnServer.cc
+  ${sourcefiles}
 )
 
 target_include_directories(MinFunctions

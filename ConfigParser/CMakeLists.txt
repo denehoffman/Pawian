@@ -1,13 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(ConfigParser  
-  epemParser.cc
-  gammapParser.cc
-  ggParser.cc
-  globalParser.cc
-  KMatrixParser.cc
-  ParserBase.cc
-  pbarpParser.cc
-  pipiScatteringParser.cc
-  resParser.cc  
+  ${sourcefiles}  
 )
 
 target_include_directories(ConfigParser

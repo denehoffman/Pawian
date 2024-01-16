@@ -1,10 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(Event  
-  Event.cc
-  EventList.cc
-  EventReader.cc
-  EventReaderDefault.cc
-  EventReaderScattering.cc
-  MassRangeCut.cc
+  ${sourcefiles}
 )
 
 target_include_directories(Event

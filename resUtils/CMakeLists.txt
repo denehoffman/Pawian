@@ -1,8 +1,12 @@
+file(GLOB sourcefiles *.cc)
+foreach(item IN LISTS sourcefiles)  
+  if(${item} MATCHES "App.cc")
+    list(REMOVE_ITEM sourcefiles ${item})
+  endif()
+endforeach()
+
 add_library(resUtils
-  ResChannelEnv.cc
-  res1DMassShapeLh.cc
-  resBaseLh.cc
-  resReaction.cc 
+  ${sourcefiles} 
 )
 
 target_include_directories(resUtils
