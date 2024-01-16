@@ -130,5 +130,6 @@ protected:
   intUShortShortComplFloatMap _cachedAmpIdMap;
   //  std::map<std::thread::id, std::map<unsigned short, complex<float> > > _cachedDynIdMap;
   std::map<unsigned short, complex<float> > _cachedDynIdMap;
+  bool _withDecayAmps;
   virtual void initialize();
 };

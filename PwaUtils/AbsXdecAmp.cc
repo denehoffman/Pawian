@@ -64,6 +64,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   ,_enabledlamFsDaughter2(false)
   ,_J(theDec->motherJPC()->J)
   ,_isFormationAmp(false)
+  ,_withDecayAmps(true)
 {
   if(theDec->type() =="FormationDecay"){
     _isFormationAmp=true;
@@ -72,6 +73,7 @@ AbsXdecAmp::AbsXdecAmp(std::shared_ptr<AbsDecay> theDec, ChannelID channelID) :
   else{
     _jpcDecsName=_JPCPtr->jpcname()+"To"+theDec->daughter1Part()->name()+"_"+theDec->daughter2Part()->name();
   }
+  if(_daughter1IsStable && _daughter2IsStable) _withDecayAmps=false;
 }
 
 AbsXdecAmp::~AbsXdecAmp()
