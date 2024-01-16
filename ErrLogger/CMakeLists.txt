@@ -1,50 +1,28 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
-
-set(PACKAGE_NAME ErrLogger)
-
-MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
-
-include_directories (
-                    ${TOP_DIR}
-                    ${log4cpp_INCLUDE_DIRS}
-                    ${Boost_INCLUDE_DIRS}
+add_library(ErrLogger
+  ErrLogger.cc
 )
 
-AUX_SOURCE_DIRECTORY("." SRC)
-Set(CCSRC "")
-
-FOREACH (THEFILE ${SRC})
- IF (NOT ${THEFILE} MATCHES "(.*)App(.*)")
-  SET (CCSRC ${CCSRC} ${THEFILE})
- ENDIF()
-ENDFOREACH(THEFILE)
-
-# BUILD_SHARED_LIBS controls the behavior of ADD_LIBRARY if STATIC/SHARED omitted
-IF( PAWIAN_STATIC )
-        ADD_LIBRARY ( ${PACKAGE_NAME} STATIC ${CCSRC} )
-ELSE()
-        ADD_LIBRARY ( ${PACKAGE_NAME} SHARED ${CCSRC} )
-ENDIF( PAWIAN_STATIC )
-
-
-INSTALL (TARGETS ${PACKAGE_NAME} DESTINATION ${CMAKE_BINARY_DIR}/lib)
-
-if(COMMAND cmake_policy)
-   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
-
-SET (EXECUTABLENAME Log4CppTestApp)
-ADD_EXECUTABLE( ${EXECUTABLENAME}
-   Log4CppTestApp.cc
+install(TARGETS ErrLogger
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
 )
-target_link_libraries(${EXECUTABLENAME} ErrLogger)
-target_link_libraries(${EXECUTABLENAME} ${log4cpp_LIBRARIES})
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
 
-SET (EXECUTABLENAME ErrLoggerTestApp)
-ADD_EXECUTABLE( ${EXECUTABLENAME}
-   ErrLoggerTestApp.cc
+add_executable(ErrLoggerTestApp
+  ErrLoggerTestApp.cc
 )
-target_link_libraries(${EXECUTABLENAME} ErrLogger)
-target_link_libraries(${EXECUTABLENAME} ${log4cpp_LIBRARIES})
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
+
+target_link_libraries(ErrLoggerTestApp
+  ErrLogger
+)
+
+add_executable(testLogger
+  TestLogger.cpp
+)
+
+target_link_libraries(testLogger
+  ErrLogger
+)
+
+install(TARGETS ErrLoggerTestApp testLogger
+  RUNTIME DESTINATION bin
+)

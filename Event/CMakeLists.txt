@@ -1,51 +1,53 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
-
-set(PACKAGE_NAME Event)
-
-MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
-
-include_directories (
-                    ${TOP_DIR}
-                    ${log4cpp_INCLUDE_DIRS}
-                    ${Boost_INCLUDE_DIRS}
+add_library(Event  
+  Event.cc
+  EventList.cc
+  EventReader.cc
+  EventReaderDefault.cc
+  EventReaderScattering.cc
+  MassRangeCut.cc
 )
 
-
-
-AUX_SOURCE_DIRECTORY("." SRC)
-Set(CCSRC "")
-
-FOREACH (THEFILE ${SRC})
- IF (NOT ${THEFILE} MATCHES "(.*)App(.*)")
-  SET (CCSRC ${CCSRC} ${THEFILE})
- ENDIF()
-ENDFOREACH(THEFILE)
-
-# BUILD_SHARED_LIBS controls the behavior of ADD_LIBRARY if STATIC/SHARED omitted
-IF( PAWIAN_STATIC )
-        ADD_LIBRARY ( ${PACKAGE_NAME} STATIC ${CCSRC} )
-ELSE()
-        ADD_LIBRARY ( ${PACKAGE_NAME} SHARED ${CCSRC} )
-ENDIF( PAWIAN_STATIC )
-
-
-INSTALL (TARGETS ${PACKAGE_NAME} DESTINATION ${CMAKE_BINARY_DIR}/lib)
-
-if(COMMAND cmake_policy)
-   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
-
-SET (EXECUTABLENAME EvtReaderTestApp)
-ADD_EXECUTABLE( ${EXECUTABLENAME}
-   EvtReaderTestApp.cc
+target_include_directories(Event
+  PRIVATE 
+    ${CMAKE_SOURCE_DIR}
+    ${Boost_INCLUDE_DIRS}
+    ${ROOT_INCLUDE_DIRS}
 )
 
-target_link_libraries(${EXECUTABLENAME} Event)
-target_link_libraries(${EXECUTABLENAME} Particle)
-target_link_libraries(${EXECUTABLENAME} ErrLogger)
-target_link_libraries(${EXECUTABLENAME} Utils)
-target_link_libraries(${EXECUTABLENAME} qft++)
-target_link_libraries(${EXECUTABLENAME} ${log4cpp_LIBRARIES})
+target_link_libraries(Event  
+  ErrLogger
+  Particle
+  ${Boost_LIBRARIES}    
+  ${ROOT_LIBRARIES}      
+)
 
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
+add_executable(test_Event
+  test/TestEventReaderDefault.cc
+)
+
+target_include_directories(test_Event
+  PRIVATE 
+    ${CMAKE_SOURCE_DIR}
+    ${Boost_INCLUDE_DIRS}
+    ${ROOT_INCLUDE_DIRS}
+    ${Boost_UNIT_TEST_FRAMEWORK_INCLUDE_DIRS}
+)
+
+target_link_libraries(test_Event
+  PRIVATE 
+    ErrLogger
+    Particle
+    Event
+    ${Boost_LIBRARIES}
+    ${ROOT_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+)
+
+add_test(NAME test_Event COMMAND test_Event)
+
+install(TARGETS Event
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)
+
 

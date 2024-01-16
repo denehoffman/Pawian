@@ -1,27 +1,19 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
-set(PACKAGE_NAME qft++)
-
-MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
-
-set(INCLUDE_DIRECTORIES ${TOP_DIR})
-
-include_directories( ${INCLUDE_DIRECTORIES})
-
-AUX_SOURCE_DIRECTORY("relativistic-quantum-mechanics" SRC_RQM)
-AUX_SOURCE_DIRECTORY("tensor" SRC_TENSOR)
-
-SET ( PAWIAN_SRCS
-  ${SRC_RQM}
-  ${SRC_TENSOR}
+add_library(qft++
+  relativistic-quantum-mechanics/BlattWeisskopf.cc
+  relativistic-quantum-mechanics/DiracAntiSpinor.cc
+  relativistic-quantum-mechanics/DiracSpinor.cc
+  relativistic-quantum-mechanics/PolVector.cc
+  relativistic-quantum-mechanics/Utils.cc
+  tensor/TensorIndex.cc
+  tensor/TensorIndexOrder.cc  
 )
 
-# BUILD_SHARED_LIBS controls the behavior of ADD_LIBRARY if STATIC/SHARED omitted
-IF( PAWIAN_STATIC )
-        ADD_LIBRARY ( ${PACKAGE_NAME} STATIC ${PAWIAN_SRCS} )
-ELSE()
-        ADD_LIBRARY ( ${PACKAGE_NAME} SHARED ${PAWIAN_SRCS} )
-ENDIF( PAWIAN_STATIC )
+target_include_directories(qft++
+  PRIVATE 
+    ${CMAKE_SOURCE_DIR}/  
+)
 
-INSTALL (TARGETS ${PACKAGE_NAME} DESTINATION ${CMAKE_BINARY_DIR}/lib)
-
-
+install(TARGETS qft++
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)

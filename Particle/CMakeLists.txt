@@ -1,50 +1,40 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3 FATAL_ERROR)
-
-set(PACKAGE_NAME Particle)
-
-MESSAGE("cmake installation for package: " ${PACKAGE_NAME})
-
-set(INCLUDE_DIRECTORIES
-${Boost_INCLUDE_DIRS}
-${log4cpp_INCLUDE_DIRS}
-${TOP_DIR}
+add_library(Particle  
+  Parity.cc
+  Particle.cc
+  ParticleTable.cc
+  PdtParser.cc  
 )
 
-include_directories( ${INCLUDE_DIRECTORIES})
-
-
-AUX_SOURCE_DIRECTORY("." SRC)
-Set(CCSRC "")
-
-FOREACH (THEFILE ${SRC})
- IF (NOT ${THEFILE} MATCHES "(.*)App(.*)")
-  SET (CCSRC ${CCSRC} ${THEFILE})
- ENDIF()
-ENDFOREACH(THEFILE)
-
-# BUILD_SHARED_LIBS controls the behavior of ADD_LIBRARY if STATIC/SHARED omitted
-IF( PAWIAN_STATIC )
-        ADD_LIBRARY ( ${PACKAGE_NAME} STATIC ${CCSRC} )
-ELSE()
-        ADD_LIBRARY ( ${PACKAGE_NAME} SHARED ${CCSRC} )
-ENDIF( PAWIAN_STATIC )
-
-
-INSTALL (TARGETS ${PACKAGE_NAME} DESTINATION ${CMAKE_BINARY_DIR}/lib)
-
-if(COMMAND cmake_policy)
-   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
-
-SET (EXECUTABLENAME PdtTestApp)
-ADD_EXECUTABLE( ${EXECUTABLENAME}
-   PdtTestApp.cc
+target_include_directories(Particle
+  PRIVATE 
+    ${CMAKE_SOURCE_DIR}/  
 )
 
-target_link_libraries(${EXECUTABLENAME} Particle)
-target_link_libraries(${EXECUTABLENAME} ErrLogger)
-target_link_libraries(${EXECUTABLENAME} Utils)
-target_link_libraries(${EXECUTABLENAME} ${log4cpp_LIBRARIES})
+target_link_libraries(Particle  
+  ErrLogger
+  Utils_ErrValue
+)
 
-INSTALL ( TARGETS ${EXECUTABLENAME} DESTINATION bin/${EXECUTABLENAME})
+install(TARGETS Particle
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)
 
+add_executable(PdtTestApp
+  PdtTestApp.cc
+)
+
+target_include_directories(PdtTestApp
+  PRIVATE 
+    ${CMAKE_SOURCE_DIR}/  
+)
+
+target_link_libraries(PdtTestApp
+  Particle
+  Utils_ErrValue
+  ErrLogger  
+)
+
+install(TARGETS PdtTestApp
+  RUNTIME DESTINATION bin  
+)

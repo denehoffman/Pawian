@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ ! -d build ]
+then
+mkdir build
+fi
+
+if [ ! -d bin ]
+then
+mkdir bin
+fi
+
+if [ ! -d lib ]
+then
+mkdir lib
+fi
+
+cd build
+
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DBUILD_SHARED_LIBS=ON
+make
+make install
