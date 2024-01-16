@@ -16,7 +16,7 @@ target_include_directories(ggUtils
 )
 
 target_link_libraries(ggUtils
-  ROOT::Minuit2
+  ${ROOT_LIBRARIES}/libMinuit2.so
 )
 
 install(TARGETS ggUtils

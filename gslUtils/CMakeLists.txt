@@ -22,7 +22,7 @@ target_link_libraries(gslUtils
   qft++
   qft++Extension
   ErrLogger
-  ROOT::Minuit2
+  ${ROOT_LIBRARIES}/libMinuit2.so
   GSL::gsl
   GSL::gslcblas
 )

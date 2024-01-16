@@ -20,7 +20,7 @@ target_link_libraries(PwaDynamics
   qft++
   qft++Extension
   ErrLogger
-  ROOT::Minuit2
+  ${ROOT_LIBRARIES}/libMinuit2.so
 )
 
 install(TARGETS PwaDynamics

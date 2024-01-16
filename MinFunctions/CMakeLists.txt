@@ -25,7 +25,7 @@ target_link_libraries(MinFunctions
   PwaDynamics
   PspGen
   PwaUtils
-  ROOT::Minuit2
+  ${ROOT_LIBRARIES}/libMinuit2.so
   ${Boost_LIBRARIES}
 )
 

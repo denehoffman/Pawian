@@ -16,7 +16,7 @@ target_include_directories(KMatrixExtract
 )
 
 target_link_libraries(KMatrixExtract    
-  ROOT::Minuit2 
+  ${ROOT_LIBRARIES}/libMinuit2.so 
 )
 
 install(TARGETS KMatrixExtract
