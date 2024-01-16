@@ -97,7 +97,7 @@ complex<double> TensorDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXd
   complex<double> result(0.,0.);
   if( fabs(lamX) > _JPCPtr->J) return result;
 
-  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);
+  short currentSpinIndex=FunctionUtils::spin1IdIndex(_projId,lamX);  
   
   if (!_recalculate){
     return _cachedAmpIdMap.at(theData->evtNo).at(_absDyn->grandMaId(grandmaAmp)).at(currentSpinIndex);
@@ -118,21 +118,10 @@ complex<double> TensorDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXd
 
 complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData* theData, Spin lam1Min, 
 				      Spin lam1Max, Spin lam2Min, Spin lam2Max, bool withDecs) {
-
   complex<double> result(0.,0.);
 
   map<unsigned short, map<Id3StringType, complex<double> > >& currentLS3SpinMap=theData->ComplexLS3Spin.at(_decay->nameId());
   std::vector< std::shared_ptr<const LScomb> >::iterator it;
-
-  std::vector<std::vector<complex<double>>> dAmps(lam1Max - lam1Min + 1, std::vector<complex<double>>(lam2Max - lam2Min + 1));
-  if (withDecs){
-    for (Spin l1 = lam1Min; l1<=lam1Max; l1++){
-      for (Spin l2 = lam2Min; l2 <=lam2Max; l2++){
-        dAmps.at(l1 - lam1Min).at(l2 - lam2Min) = daughterAmp(l1, l2, theData);
-      }
-    }
-  }
-
   for (it=_LSs.begin(); it!=_LSs.end(); ++it){
     map<Id3StringType, complex<double> >& current3SpinMap = currentLS3SpinMap.at((*it)->idnumberLS);
     complex<double> theMagExpi=_currentParamMagExpi.at(*it);
@@ -140,10 +129,10 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
     complex<double> tmpResult(0.,0.);
     for(Spin lambda1=lam1Min; lambda1<=lam1Max; ++lambda1){
       for(Spin lambda2=lam2Min; lambda2<=lam2Max; ++lambda2){
-	      Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamX, lambda1, lambda2);
-	      complex<double> amp = theMagExpi*current3SpinMap.at(IdLamXLam1Lam2);
-      	if(withDecs) amp *=dAmps.at(lambda1 - lam1Min).at(lambda2 - lam2Min);
-        tmpResult+=amp;
+	Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamX, lambda1, lambda2);
+	complex<double> amp = theMagExpi*current3SpinMap.at(IdLamXLam1Lam2);
+      	if(withDecs) amp *=daughterAmp(lambda1, lambda2, theData);
+	tmpResult+=amp;
       }
     }
     if (_absDyn->isLdependent()){
@@ -151,7 +140,7 @@ complex<double> TensorDecAmps::lsLoop(AbsXdecAmp* grandmaAmp, Spin lamX, EvtData
     }
     result+=tmpResult;
   }
-
+  
   if (!_absDyn->isLdependent()) result *=_cachedDynIdMap.at(_absDyn->grandMaId(grandmaAmp));
   
   result*=_isospinCG;

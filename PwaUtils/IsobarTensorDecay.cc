@@ -295,8 +295,8 @@ void IsobarTensorDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fs
 	  }
 	  Id3StringType IdLamXLam1Lam2=FunctionUtils::spin3Index(lamMother, lamDaughter1, lamDaughter2);
 	  unsigned short currentLSId=(*itJPCLS)->idnumberLS;
-	  // evtData->ComplexLS3Spin[_nameId][currentLSId][IdLamXLam1Lam2]=result(0);
-          evtData->Complex3SpinLS[_nameId][IdLamXLam1Lam2][currentLSId]=result(0);
+	  evtData->ComplexLS3Spin[_nameId][currentLSId][IdLamXLam1Lam2]=result(0);
+          //evtData->Complex3SpinLS[_nameId][IdLamXLam1Lam2][currentLSId]=result(0);
 	}
       }
     }
