@@ -15,7 +15,7 @@ target_include_directories(FitParams
 )
 
 target_link_libraries(FitParams  
-  ${ROOT_LIBRARIES}/libMinuit2.so
+  ROOT::Minuit2
 )
 
 install(TARGETS FitParams
@@ -38,7 +38,7 @@ target_link_libraries(StreamerTestApp
   ConfigParser
   qft++Extension
   ErrLogger
-  ${ROOT_LIBRARIES}/libMinuit2.so
+  ROOT::Minuit2
 )
 
 add_executable(PwaCovMatrixApp

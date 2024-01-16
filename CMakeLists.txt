@@ -5,19 +5,17 @@ set(CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 
 if(DEFINED ENV{ROOTSYS})  
-  set(ROOT_INCLUDE_DIRS "$ENV{ROOTSYS}/include")
-  set(ROOT_LIBRARIES "$ENV{ROOTSYS}/lib")
-  MESSAGE(STATUS "found env var ROOTSYS")
-  MESSAGE(STATUS "root include path is: ${ROOT_INCLUDE_DIRS}")
-  MESSAGE(STATUS "root lib path is: ${ROOT_LIBRARIES}")
+  MESSAGE(STATUS "ROOTSYS is defined, trying to find package in this directory")
+  find_package(ROOT PATHS $ENV{ROOTSYS} NO_DEFAULT_PATH)
+  MESSAGE(STATUS "${ROOT_INCLUDE_DIRS}")
 else()
   MESSAGE(STATUS "ROOTSYS not defined using find_package(ROOT)")
   find_package(ROOT)
+  MESSAGE(STATUS "${ROOT_INCLUDE_DIRS}")
 endif()
 
 find_package(Boost)
 find_package(Boost COMPONENTS program_options unit_test_framework serialization filesystem timer REQUIRED)
-
 find_package(GSL REQUIRED)
 
 #include_directories(
