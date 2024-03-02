@@ -1,0 +1,28 @@
+#!/bin/bash
+
+_GCC=$(which gcc)
+_GXX=$(which g++)
+
+if [ ! -d build ]
+then
+mkdir build
+fi
+
+if [ ! -d bin ]
+then
+mkdir bin
+fi
+
+if [ ! -d lib ]
+then
+mkdir lib
+fi
+
+cd build
+
+echo "INFO: using $_GCC as C compiler"
+echo "INFO: using $_GXX as C++ compiler"
+
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DBUILD_SHARED_LIBS=ON -DCMAKE_C_COMPILER="$_GCC" -DCMAKE_CXX_COMPILER="$_GXX"
+make
+make install
