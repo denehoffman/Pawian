@@ -56,6 +56,7 @@ double TMatrixExtrFcn::operator()(const std::vector<double>& par) const
 
 double TMatrixExtrFcn::Up() const 
 {
-  return 1.;
+  //  return 1.;
+  return 0.5;
 }
 

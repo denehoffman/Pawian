@@ -213,23 +213,26 @@ std::complex<double> TMatrixErrorExtr::CalcMassWidth(std::shared_ptr<AbsPawianPa
   InfoMsg <<"Start Migrad "<< endmsg;
   FunctionMinimum min = migrad();
 
+  InfoMsg <<"refit with current parameters"<< endmsg;
+  MnUserParameters upar1a;
+  upar1a.Add("eReal", min.UserState().Value("eReal"), 0.001, _energyMin.real(), _energyMax.real());
+  upar1a.Add("eImag", min.UserState().Value("eImag"), 0.001, _energyMin.imag(), _energyMax.imag());
+  MnMigrad migrad1a(fitFcn, upar1a);
+  min = migrad1a();
+
   if(!min.IsValid()) {
-    // Try with higher strategy
-    InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-    MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
-    min = migrad2();
+    // Try again with current params = start params
+    // InfoMsg <<"FM is invalid, try again with strategy = 1. and current parameters"<< endmsg;
+    // MnMigrad migrad1a(fitFcn, min.UserState(), MnStrategy(1));
+    // min = migrad1a();
+    // if(!min.IsValid()) {
+      // Try with higher strategy
+      InfoMsg <<"FM is still invalid, try now with strategy = 2."<< endmsg;
+      MnMigrad migrad2(fitFcn, min.UserState(), MnStrategy(2));
+      min = migrad2();
+      //         }
   }
 
-  //start second iteration
-  // MnMigrad migrad1a(fitFcn, min.UserState(), MnStrategy(1));
-  // min = migrad1a();
-  // if(!min.IsValid()) {
-  //   // Try with higher strategy
-  //   InfoMsg <<"FM is invalid, try with strategy = 2."<< endmsg;
-  //   MnMigrad migrad2a(fitFcn, min.UserState(), MnStrategy(2));
-  //   min = migrad2a();
-  // }
-  
   // Save final fit parameters and their errors in variables
   double final_eReal = min.UserState().Value("eReal");
   double final_eImag = min.UserState().Value("eImag");
