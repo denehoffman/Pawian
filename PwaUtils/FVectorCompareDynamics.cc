@@ -71,6 +71,25 @@ FVectorIntensityDynamics(name, fsParticles, mother1, pathToConfigParser,  baseNa
   std::shared_ptr<KMatrixParser> kMatrixCompParser(new KMatrixParser(completePathToKMatrixConfig));
   _orbMomCompare = kMatrixCompParser->orbitalMom();
   _useAbsPhaseDiff= GlobalEnv::instance()->parser()->useAbsPhaseDiff();
+
+  std::istringstream projParticles(_projectionParticleNames);
+  std::string firstProjParticleName;
+  std::string secondProjParticleName;
+  projParticles >> firstProjParticleName >> secondProjParticleName;
+  std::string projKey=firstProjParticleName+secondProjParticleName; 
+
+  bool found=false;
+  std::vector< std::string>   gFactorNamesCompare=_kMatrDynComp->gFactorNames();
+    for(unsigned int idx=0; idx<gFactorNamesCompare.size();++idx){
+    if(projKey==gFactorNamesCompare.at(idx)){
+      _projectionCompareIndex=idx;
+      found=true;
+    }
+  }
+  if (!found){
+    Alert << "projection index for key " << projKey << " not found in TMatrix compare" << endmsg;
+    exit(0);
+  }
 }
 
 FVectorCompareDynamics::~FVectorCompareDynamics()
@@ -115,7 +134,7 @@ void FVectorCompareDynamics::fillMasses(EvtData* theData){
 
 void FVectorCompareDynamics::evalPhaseCompare(EvtData* theData, double currentMass){
   double currentPhase=std::arg((*_FVector)(_decProjectionIndex, 0));
-  double currentPhaseCompare=std::arg((*_FVectorCompare)(_decProjectionIndex, 0));
+  double currentPhaseCompare=std::arg((*_FVectorCompare)(_projectionCompareIndex, 0));
   double currentPhaseDiff=(currentPhase-currentPhaseCompare)*PawianConstants::radToDeg;
 
   double phaseDiffData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
