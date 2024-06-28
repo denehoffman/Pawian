@@ -144,13 +144,22 @@ AbsDecay::AbsDecay(Particle* mother, Particle* daughter1, Particle* daughter2,
     
     _isospinClebschG=Clebsch(_idaughter1, _i3daughter1, _idaughter2, _i3daughter2, Imother, I3mother);
 
-    //check z-component of the isospin
-    if( I3mother != (_i3daughter1+_i3daughter2)){
+    //check electric charge
+    if( _mother->charge() != (_daughter1->charge()+_daughter2->charge())){
       Alert << "electric charge is not conserved for the decay " << _mother->name() << " to " 
 	    << _daughter1->name() << " " << _daughter2->name() << endmsg;
-      Alert << "I3(mother): " << I3mother << " != " << "I3(daughter1): " <<  _i3daughter1 
-	    << " + " << "I3(daughter2): " <<  _i3daughter2 << endmsg;
+      Alert << "mother->charge(): " << _mother->charge() << " != " << "daughter1->charge(): " <<  _daughter1->charge() 
+	    << " + " << "daughter1->charge(): " <<  _daughter2->charge() << endmsg;
       exit(1); 
+    }
+
+    //check z-component of the isospin
+    if( I3mother != (_i3daughter1+_i3daughter2)){
+      WarningMsg << "electric charge is not conserved for the decay " << _mother->name() << " to " 
+	    << _daughter1->name() << " " << _daughter2->name() << endmsg;
+      WarningMsg << "I3(mother): " << I3mother << " != " << "I3(daughter1): " <<  _i3daughter1 
+	    << " + " << "I3(daughter2): " <<  _i3daughter2 << endmsg;
+      // exit(1); 
     } 
   
     if(fabs(_isospinClebschG)<1.e-8){
