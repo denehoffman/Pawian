@@ -201,7 +201,7 @@ int main(int __argc,char *__argv[]){
   // Disable output buffering
   setvbuf(stdout, NULL, _IONBF, 0);
 
-  if(mode == "server" || mode == "evoserver"){
+  if(mode == "server" || mode == "serverGradientNum" || mode == "evoserver"){
     theAppBase.fitServerMode(startPawianParams);
     return 1;
   }

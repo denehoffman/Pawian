@@ -29,21 +29,22 @@
 #include <string>
 #include <memory>
 
-#include "Minuit2/FCNBase.h"
+//#include "Minuit2/FCNBase.h"
 #include "PwaUtils/DataUtils.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "Minuit2/MnUserParameters.h"
 
 namespace ROOT {
   namespace Minuit2 {
-    class AbsFcn : public FCNBase {
+    template<typename T>
+    class AbsFcn : public T {
 
     public:
       AbsFcn();
       virtual ~AbsFcn();
 
       virtual double operator()(const std::vector<double>& par) const=0;
-      virtual double Up() const;
+       virtual double Up() const;
       std::shared_ptr<AbsPawianParameters> defaultFitParms() {return _defaultPawianParms;}
     protected:
       mutable unsigned int _fcnCounter;
@@ -56,6 +57,7 @@ namespace ROOT {
       virtual void printFitParams(std::shared_ptr<AbsPawianParameters> par) const;
       virtual void dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const;
       virtual void dumpLhVals(std::string input) const;
+      bool CheckGradient() const{return false;}
 
     private:
     };

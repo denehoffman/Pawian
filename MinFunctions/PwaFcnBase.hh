@@ -35,7 +35,8 @@ class AbsLh;
 
 namespace ROOT {
   namespace Minuit2 {
-    class PwaFcnBase : public AbsFcn {
+    template<typename T>
+    class PwaFcnBase : public AbsFcn<T> {
 
     public:
       PwaFcnBase();

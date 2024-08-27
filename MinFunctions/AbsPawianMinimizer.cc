@@ -24,13 +24,16 @@
 
 #include <iostream>
 #include <fstream>
+#include "Minuit2/FCNBase.h"
+#include "Minuit2/FCNGradientBase.h"
 
 #include "MinFunctions/AbsPawianMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
 
-AbsPawianMinimizer::AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
+template<typename T>
+AbsPawianMinimizer<T>::AbsPawianMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
   _absFcn(theAbsFcnPtr)
   ,_startPawianParams(upar)
   ,_bestPawianParams(upar->Clone())
@@ -39,8 +42,13 @@ AbsPawianMinimizer::AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std
 {
 }
 
+template<typename T>
+AbsPawianMinimizer<T>::~AbsPawianMinimizer(){
+}
 
-void AbsPawianMinimizer::dumpFitResult(){
+
+template<typename T>
+void AbsPawianMinimizer<T>::dumpFitResult(){
 
   std::ostringstream finalResultname;
 
@@ -51,7 +59,8 @@ void AbsPawianMinimizer::dumpFitResult(){
   _bestPawianParams->print(theStream);
 }
 
-void AbsPawianMinimizer::printFitResultQA(double evtWeightSumData){
+template<typename T>
+void AbsPawianMinimizer<T>::printFitResultQA(double evtWeightSumData){
   //double theLh = _mnFunctionMinimumFinalPtr->Fval();
     InfoMsg << "\n\n********************** fit parameters *************************" << endmsg;
     _bestPawianParams->print(std::cout, true);
@@ -70,3 +79,8 @@ void AbsPawianMinimizer::printFitResultQA(double evtWeightSumData){
     InfoMsg << "AIC:\t" << AICcriterion << endmsg;
     InfoMsg << "AICc:\t" << AICccriterion << endmsg;
 }
+
+template AbsPawianMinimizer<FCNBase>::AbsPawianMinimizer(std::shared_ptr<AbsFcn<FCNBase>>, std::shared_ptr<AbsPawianParameters>);
+template AbsPawianMinimizer<FCNBase>::~AbsPawianMinimizer();
+template AbsPawianMinimizer<FCNGradientBase>::AbsPawianMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>>, std::shared_ptr<AbsPawianParameters>);
+template AbsPawianMinimizer<FCNGradientBase>::~AbsPawianMinimizer();

@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <memory>
+#include "Minuit2/FCNBase.h"
 
 #include "MinFunctions/AbsFcn.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
@@ -33,10 +34,10 @@
 
 using namespace ROOT::Minuit2;
 
-class EvoMinimizer : public AbsPawianMinimizer
+class EvoMinimizer : public AbsPawianMinimizer<FCNBase>
 {
 public:
-  EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, int iterations, int population);
+  EvoMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, int iterations, int population);
 
   virtual std::string type() {return "EvoMinimizer";};
   virtual void minimize();

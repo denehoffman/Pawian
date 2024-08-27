@@ -42,10 +42,10 @@ const double EvoMinimizer::LHSPREADEXIT = 0.01;
 
 // Constructor takes AbsFcn to minimze, start parameters upar, population and iteration
 // sizes and the output file name suffix
-EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, 
+EvoMinimizer::EvoMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, 
 			   std::shared_ptr<AbsPawianParameters> upar, 
 			   int population, int iterations) :
-  AbsPawianMinimizer(theAbsFcnPtr, upar)
+  AbsPawianMinimizer<FCNBase>(theAbsFcnPtr, upar)
   ,_population(population)
   , _iterations(iterations)
   , _evoRatioOfModParams(GlobalEnv::instance()->parser()->evoRatioOfModParams())

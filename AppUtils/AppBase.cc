@@ -34,6 +34,8 @@
 #include <boost/random.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include "Minuit2/FCNBase.h"
+#include "Minuit2/FCNGradientBase.h"
 
 #include "AppUtils/AppBase.hh"
 
@@ -734,7 +736,6 @@ bool AppBase::calcAndSendClientLh(NetworkClient& theClient,
 }
 
 void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
-
   double evtWeightSumData=0;
   ChannelEnvList channelEnvs=GlobalEnv::instance()->ChannelEnvs();
   std::map<short, std::tuple<long, double, long, double> > numEventMap;
@@ -804,32 +805,32 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
       }
     }
   }
- 
-  std::shared_ptr<AbsFcn> absFcn;
+  if(GlobalEnv::instance()->parser()->mode()=="serverQA" || GlobalEnv::instance()->parser()->mode()=="server"){ 
+  std::shared_ptr<AbsFcn<FCNBase>> absFcn;
   std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), 
 							     GlobalEnv::instance()->parser()->noOfClients(), 
 							     numEventMap, 
 							     GlobalEnv::instance()->parser()->
 							       clientNumberWeights()));
-  absFcn=std::shared_ptr<AbsFcn>(new PwaFcnServer(theServer));
+  absFcn=std::shared_ptr<AbsFcn<FCNBase>>(new PwaFcnServer<FCNBase>(theServer));
   theServer->WaitForFirstClientLogin();
 
-  std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+  std::shared_ptr<AbsPawianMinimizer<FCNBase>> absMinimizerPtr;
   if(GlobalEnv::instance()->parser()->mode()=="serverQA"){
     //const std::vector<double> theParams=upar->Params();
     //double theLH= (*absFcn)(theParams);
     //double theLH=*absFcn(theParams);
     //InfoMsg << "theLH: " << theLH << endmsg;
-    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer(absFcn, upar));
     absMinimizerPtr->printFitResultQA(evtWeightSumData);
     return;
   }
   
   if(GlobalEnv::instance()->parser()->mode()=="server") 
-    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer(absFcn, upar));
   else if (GlobalEnv::instance()->parser()->mode()=="evoserver") 
     absMinimizerPtr =
-      std::shared_ptr<AbsPawianMinimizer>(new EvoMinimizer(absFcn, upar, 
+      std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new EvoMinimizer(absFcn, upar, 
 							   GlobalEnv::instance()->parser()->evoPopulation(), 
 							   GlobalEnv::instance()->parser()->evoIterations()));
   else{
@@ -845,6 +846,28 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 
   theServer->BroadcastClosingMessage();
   InfoMsg << "Closing server." << endmsg;
+  }
+
+  else if(GlobalEnv::instance()->parser()->mode()=="serverGradientNum"){
+    std::shared_ptr<AbsFcn<FCNGradientBase>> absFcn;
+    std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), 
+							     GlobalEnv::instance()->parser()->noOfClients(), 
+							     numEventMap, 
+							     GlobalEnv::instance()->parser()->
+							       clientNumberWeights()));
+    absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServer<FCNGradientBase>(theServer));
+    theServer->WaitForFirstClientLogin();
+    
+    std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
+    absMinimizerPtr->minimize();
+    
+    absMinimizerPtr->printFitResult(evtWeightSumData);
+    absMinimizerPtr->dumpFitResult();
+    
+    theServer->BroadcastClosingMessage();
+    InfoMsg << "Closing server." << endmsg;
+  }
+  
 }
 
 
@@ -859,12 +882,12 @@ void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar,
       Alert << "number of weighted Monte Carlo events too small: " << evtWeightSumMc << endmsg;
       exit(1);
     }
-  std::shared_ptr<AbsFcn> absFcn(new PwaFcnBase());
-  std::shared_ptr<AbsPawianMinimizer> absMinimizerPtr;
+    std::shared_ptr<AbsFcn<FCNBase>> absFcn(new PwaFcnBase<FCNBase>());
+  std::shared_ptr<AbsPawianMinimizer<FCNBase>> absMinimizerPtr;
   if(GlobalEnv::instance()->parser()->mode()=="pwa") 
-    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer(absFcn, upar));
   else if (GlobalEnv::instance()->parser()->mode()=="evo") 
-    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer>(new EvoMinimizer(absFcn, upar, 
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new EvoMinimizer(absFcn, upar, 
 	  GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations()));
   else {
     Alert << "fitNonServerMode only the options pwa or evo are supported for the fitNonServerMode" << endmsg;

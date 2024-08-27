@@ -1,0 +1,19 @@
+#!/bin/sh
+
+echo Starting server ...
+
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode server --paramFile $TOP_DIR/benchmark/pbarpTopi0pi0eta/defaultparams.dat !>& serverFcnBase.log &
+
+sleep 5
+
+echo Starting clients ...
+
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile $TOP_DIR/benchmark/pbarpTopi0pi0eta/defaultparams.dat !>& client1.log &
+
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile $TOP_DIR/benchmark/pbarpTopi0pi0eta/defaultparams.dat !>& client2.log &
+
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile $TOP_DIR/benchmark/pbarpTopi0pi0eta/defaultparams.dat !>& client3.log &
+
+$TOP_DIR/bin/singleChannelApp --pbarpFiles pbarpReactionDefault.cfg --mode client --paramFile $TOP_DIR/benchmark/pbarpTopi0pi0eta/defaultparams.dat !>& client4.log &
+
+echo done

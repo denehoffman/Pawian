@@ -26,6 +26,8 @@
 #include <boost/timer/timer.hpp>
 
 #include "MinFunctions/AbsFcn.hh"
+#include "Minuit2/FCNBase.h"
+#include "Minuit2/FCNGradientBase.h"
 #include "Minuit2/MnUserParameters.h"
 
 #include "PwaUtils/GlobalEnv.hh"
@@ -38,7 +40,8 @@ using namespace ROOT::Minuit2;
 boost::timer::cpu_timer theTimer1;
 boost::timer::cpu_timer theTimerAll;
 
-AbsFcn::AbsFcn() :
+template<typename T>
+AbsFcn<T>::AbsFcn() :
   _fcnCounter(0)
   , _currentResFileName("currentResult"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
   ,_currentLHStreamFileName("currentLHVals"+GlobalEnv::instance()->outputFileNameSuffix()+".dat")
@@ -46,16 +49,19 @@ AbsFcn::AbsFcn() :
 {
 }
 
-AbsFcn::~AbsFcn()
+template<typename T>
+AbsFcn<T>::~AbsFcn()
 {
 }
 
-double AbsFcn::Up() const
+template<typename T>
+double AbsFcn<T>::Up() const
 {
 return .5;
 }
 
-void AbsFcn::printTimer() const{
+template<typename T>
+void AbsFcn<T>::printTimer() const{
 
   theTimer1.stop();
   boost::timer::cpu_times elapsed(theTimer1.elapsed());
@@ -71,17 +77,25 @@ void AbsFcn::printTimer() const{
   theTimer1.start();
 }
 
-void AbsFcn::printFitParams(std::shared_ptr<AbsPawianParameters> par) const{
+template<typename T>
+void AbsFcn<T>::printFitParams(std::shared_ptr<AbsPawianParameters> par) const{
     par->print(std::cout, true);
 }
 
-void  AbsFcn::dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const{
+template<typename T>
+void  AbsFcn<T>::dumpFitParams(std::shared_ptr<AbsPawianParameters> par) const{
     std::ofstream theStream (_currentResFileName.c_str());
     par->print(theStream);
 }
 
-void AbsFcn::dumpLhVals(std::string input) const{
+template<typename T>
+void AbsFcn<T>::dumpLhVals(std::string input) const{
   if (!_LHStream->is_open()) _LHStream->open(_currentLHStreamFileName, std::ios_base::app);
   (*_LHStream) << _fcnCounter << "\t" << input << "\n";
   _LHStream->close();
 }
+
+template AbsFcn<FCNBase>::AbsFcn();
+template AbsFcn<FCNBase>::~AbsFcn();
+template AbsFcn<FCNGradientBase>::AbsFcn();
+template AbsFcn<FCNGradientBase>::~AbsFcn();

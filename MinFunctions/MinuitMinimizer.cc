@@ -35,24 +35,28 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "ConfigParser/ParserBase.hh"
 
+#include "Minuit2/FCNBase.h"
+#include "Minuit2/FCNGradientBase.h"
 #include "Minuit2/MnMigrad.h"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnPrint.h"
 #include "Minuit2/MnUserCovariance.h"
 
-MinuitMinimizer::MinuitMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
-  AbsPawianMinimizer(theAbsFcnPtr, upar)
-  ,_startMnUserParametersPtr(_startPawianParams->mnUserParametersPtr())
+template<typename T>
+MinuitMinimizer<T>::MinuitMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
+  AbsPawianMinimizer<T>(theAbsFcnPtr, upar)
+  ,_startMnUserParametersPtr(this->_startPawianParams->mnUserParametersPtr())
 {
 }
 
 
 // Minimization takes place here
-void MinuitMinimizer::minimize(){
+template<typename T>
+void MinuitMinimizer<T>::minimize(){
   //  MnMigrad migrad(*_absFcn, _startPawianParams->mnUserParameters());
   //  MnUserParameters startMnUserP(*_startMnUserParametersPtr);
   unsigned int stratLevel=GlobalEnv::instance()->parser()->minuitStrategyLevel();
-  MnMigrad migrad(*_absFcn, *_startMnUserParametersPtr);
+  MnMigrad migrad(*this->_absFcn, *_startMnUserParametersPtr);
   FunctionMinimum* currentFunctionMinimum=0;
 
   if(stratLevel==1){
@@ -60,7 +64,7 @@ void MinuitMinimizer::minimize(){
     currentFunctionMinimum= new FunctionMinimum(migrad(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else if(stratLevel==2){
-    MnMigrad migrad2a(*_absFcn, *_startMnUserParametersPtr, MnStrategy(2));
+    MnMigrad migrad2a(*this->_absFcn, *_startMnUserParametersPtr, MnStrategy(2));
     InfoMsg << "start migrad with strategy level " << 2 << endmsg;
     currentFunctionMinimum = new FunctionMinimum(migrad2a(0, GlobalEnv::instance()->parser()->tolerance()));
   }
@@ -76,12 +80,12 @@ void MinuitMinimizer::minimize(){
 
   if(currentFunctionMinimum->IsValid()){
     //     return funcMin;
-    _minimumReached=true;
+    this->_minimumReached=true;
     _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(*currentFunctionMinimum));
     //    _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
-    _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
-    _bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
-    ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);
+    this->_bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
+    this->_bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
+    ParamDepHandler::instance()->ApplyDependencies(this->_bestPawianParams);
     return;
   }
 
@@ -97,21 +101,21 @@ void MinuitMinimizer::minimize(){
     
     if(badCovarianceDiagonal){
       InfoMsg << "bad covariance diagonal matrix: Using default errors" << endmsg;
-      std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
+      std::shared_ptr<MnUserParameters> newMnUserParams = this->_startPawianParams->mnUserParametersPtr();
       for(unsigned int i=0; i< currentFunctionMinimum->UserParameters().Params().size();i++){
 	newMnUserParams->SetValue(i, currentFunctionMinimum->UserParameters().Params().at(i));
       }
-      MnMigrad migrad2(*_absFcn, *newMnUserParams, MnStrategy(2));
+      MnMigrad migrad2(*this->_absFcn, *newMnUserParams, MnStrategy(2));
       if(0!=currentFunctionMinimum) delete currentFunctionMinimum;
       currentFunctionMinimum = new FunctionMinimum(migrad2(0, GlobalEnv::instance()->parser()->tolerance()));
     }
     else{
-      std::shared_ptr<MnUserParameters> newMnUserParams = _startPawianParams->mnUserParametersPtr();
+      std::shared_ptr<MnUserParameters> newMnUserParams = this->_startPawianParams->mnUserParametersPtr();
       for(unsigned int i=0; i< currentFunctionMinimum->UserParameters().Params().size();i++){
 	newMnUserParams->SetValue(i, currentFunctionMinimum->UserParameters().Params().at(i));
 	newMnUserParams->SetError(i, currentFunctionMinimum->UserParameters().Errors().at(i));
       }
-      MnMigrad migrad2(*_absFcn, *newMnUserParams, MnStrategy(2));
+      MnMigrad migrad2(*this->_absFcn, *newMnUserParams, MnStrategy(2));
       if(0!=currentFunctionMinimum) delete currentFunctionMinimum;
       currentFunctionMinimum = new FunctionMinimum(migrad2(0, GlobalEnv::instance()->parser()->tolerance()));
     }
@@ -120,17 +124,18 @@ void MinuitMinimizer::minimize(){
       break;
     }
   }
-  _minimumReached=true;
+  this->_minimumReached=true;
   _mnFunctionMinimumFinalPtr=std::shared_ptr<FunctionMinimum>(new FunctionMinimum(*currentFunctionMinimum));
   //  _bestPawianParams=std::shared_ptr<AbsPawianParameters>(new MnPawianParameters(_mnFunctionMinimumFinalPtr->UserParameters()));
-  _bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
-  _bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
-  ParamDepHandler::instance()->ApplyDependencies(_bestPawianParams);
+  this->_bestPawianParams->SetAllValues(_mnFunctionMinimumFinalPtr->UserParameters().Params());
+  this->_bestPawianParams->SetAllErrors(_mnFunctionMinimumFinalPtr->UserParameters().Errors());
+  ParamDepHandler::instance()->ApplyDependencies(this->_bestPawianParams);
   if(0!=currentFunctionMinimum) delete currentFunctionMinimum;  
 }
 
-void MinuitMinimizer::printFitResult(double evtWeightSumData){
-  if(!_minimumReached){
+template<typename T>
+void MinuitMinimizer<T>::printFitResult(double evtWeightSumData){
+  if(!this->_minimumReached){
     Alert << "minimum has not been reached!!!" << endmsg;
     exit(1);
   }
@@ -138,7 +143,7 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     double theLh = _mnFunctionMinimumFinalPtr->Fval();
 
     InfoMsg << "\n\n********************** Final fit parameters *************************" << endmsg;
-    _bestPawianParams->print(std::cout, true);
+    this->_bestPawianParams->print(std::cout, true);
     InfoMsg << "\n\n**************** Minuit FunctionMinimum information ******************" << endmsg;
     if(_mnFunctionMinimumFinalPtr->IsValid()) {
       InfoMsg << "\n Function minimum is valid." << endmsg;
@@ -182,7 +187,7 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // calculate AIC, BIC criteria and output selected wave contrib
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    unsigned int noOfFreeFitParams=_bestPawianParams->VariableParameters();
+    unsigned int noOfFreeFitParams=this->_bestPawianParams->VariableParameters();
 
     double BICcriterion=2.*theLh+noOfFreeFitParams*log(evtWeightSumData);
     double AICcriterion=2.*theLh+2.*noOfFreeFitParams;
@@ -195,14 +200,15 @@ void MinuitMinimizer::printFitResult(double evtWeightSumData){
     InfoMsg << "AICc:\t" << AICccriterion << endmsg;
 }
 
-void MinuitMinimizer::dumpFitResult(){
+template<typename T>
+void MinuitMinimizer<T>::dumpFitResult(){
 
   std::ostringstream finalResultname;
   std::string outputFileNameSuffix= GlobalEnv::instance()->outputFileNameSuffix();
   finalResultname << "finalResult" << outputFileNameSuffix << ".dat";
   
   std::ofstream theStream ( finalResultname.str().c_str() );
-  _bestPawianParams->print(theStream);
+  this->_bestPawianParams->print(theStream);
 
   //dump covariance matrix
   MnUserCovariance theCovMatrix = _mnFunctionMinimumFinalPtr->UserCovariance();
@@ -216,3 +222,7 @@ void MinuitMinimizer::dumpFitResult(){
     boostOutputArchive << thePwaCovMatrix;
   }
 }
+
+template MinuitMinimizer<FCNBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
+template MinuitMinimizer<FCNGradientBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
+

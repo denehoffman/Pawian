@@ -36,15 +36,18 @@ class NetworkServer;
 
 namespace ROOT {
   namespace Minuit2 {
-    class PwaFcnServer : public AbsFcn {
+    template<typename T>
+    class PwaFcnServer : public AbsFcn<T> {
 
     public:
       PwaFcnServer(std::shared_ptr<NetworkServer> netServer);
       virtual ~PwaFcnServer();
 
       virtual double operator()(const std::vector<double>& par) const;
+      virtual std::vector<double> Gradient(const std::vector<double>& par) const;
 
     protected:
+      virtual double collectLH() const;
       std::shared_ptr<NetworkServer> _networkServerPtr;
     };
   }  // namespace Minuit2

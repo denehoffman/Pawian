@@ -34,13 +34,14 @@
 #include "MinFunctions/AbsFcn.hh"
 #include "FitParams/AbsPawianParameters.hh"
 
+template<typename T>
 class AbsPawianMinimizer {
 
 public:
 
-  AbsPawianMinimizer(std::shared_ptr<AbsFcn> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
+  AbsPawianMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
 
-  ~AbsPawianMinimizer() {}
+  ~AbsPawianMinimizer();
 
   virtual std::string type()=0;
   virtual void minimize()=0;
@@ -49,7 +50,7 @@ public:
   virtual void dumpFitResult();
 
 protected:
-  std::shared_ptr<AbsFcn> _absFcn;
+  std::shared_ptr<AbsFcn<T>> _absFcn;
   std::shared_ptr<AbsPawianParameters> _startPawianParams;
   std::shared_ptr<AbsPawianParameters> _bestPawianParams;
   bool _minimumReached;
