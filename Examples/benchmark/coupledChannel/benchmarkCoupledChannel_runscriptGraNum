@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo Starting server for coupled channel pwa ...
-$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode serverGradientNum !>& log.server &
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode serverGradientNum !>& logGraNum.server &
 
 sleep 15
 

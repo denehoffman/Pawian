@@ -49,6 +49,7 @@ namespace ROOT {
     protected:
       virtual double collectLH() const;
       std::shared_ptr<NetworkServer> _networkServerPtr;
+      const double _numStepSize;
     };
   }  // namespace Minuit2
 }  // namespace ROOT

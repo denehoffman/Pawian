@@ -34,6 +34,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/NetworkServer.hh"
+#include "Utils/PawianConstants.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -43,6 +44,7 @@ template<typename T>
 PwaFcnServer<T>::PwaFcnServer(std::shared_ptr<NetworkServer> netServer) :
   AbsFcn<T>()
   , _networkServerPtr(netServer)
+  , _numStepSize(std::sqrt(std::numeric_limits<double>::epsilon()*150.))
 {
   this->_defaultPawianParms = GlobalEnv::instance()->defaultPawianParams();
   this->_currentPawianParms = GlobalEnv::instance()->startPawianParams();
@@ -60,41 +62,6 @@ double PwaFcnServer<T>::operator()(const std::vector<double>& par) const
   this->_currentPawianParms->SetAllValues(par);
   ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
 
-  // std::map<ChannelID, LHData> theLHDataMap;
-  // std::ostringstream output;
-  // std::ostringstream outputLHDump;
-  // _networkServerPtr->BroadcastParams(this->_currentPawianParms->Params());
-  // if(!_networkServerPtr->WaitForLH(theLHDataMap))
-  //   result = 0;
-  // else{
-  //   if(theLHDataMap.size() > 1){
-  //     outputLHDump << result << "\t";
-  //   }
-  //     // Add LLHs of different channels
-  //     output << "current LH = ";
-  //     for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
-  //        (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
-  // 	 (*it).second.squaredWeightSum = _networkServerPtr->squaredWeightSum((*it).first);
-  //        (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
-  //        double channelLH = AbsLh::mergeLogLhData((*it).second, (*it).first);
-  //        result += channelLH;
-  // 	 output << std::setprecision(16) << channelLH << "\t";
-  // 	 outputLHDump << std::setprecision(16) << channelLH << "\t";
-  //     }
-  //     if(theLHDataMap.size() > 1){
-  //        output << "sum = " << result;
-  //     }
-  // }
-
-  // if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhPrint() == 0){
-  //   InfoMsg << output.str() << endmsg;
-  // }
-  // if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeTimer() == 0) this->printTimer();
-  // if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsPrint() == 0) this->printFitParams(this->_currentPawianParms);
-  // if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsDump() == 0) this->dumpFitParams(this->_currentPawianParms);
-  // if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhDump() == 0) this->dumpLhVals(outputLHDump.str());
-  // this->_fcnCounter++;
-  // return result;
   return collectLH(); 
 }
 
@@ -104,36 +71,42 @@ double PwaFcnServer<T>::collectLH() const{
   std::map<ChannelID, LHData> theLHDataMap;
   std::ostringstream output;
   std::ostringstream outputLHDump;
+  bool lhPrint=false;
+  if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhPrint() == 0) lhPrint=true;
+  bool lhDump=false;
+  if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhDump() == 0) lhDump=true;
+  
   _networkServerPtr->BroadcastParams(this->_currentPawianParms->Params());
   if(!_networkServerPtr->WaitForLH(theLHDataMap))
     result = 0;
   else{
-    if(theLHDataMap.size() > 1){
+    if(lhDump && theLHDataMap.size() > 1){
       outputLHDump << result << "\t";
     }
       // Add LLHs of different channels
-      output << "current LH = ";
+    if(lhPrint) output << "current LH = ";
       for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
          (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
 	 (*it).second.squaredWeightSum = _networkServerPtr->squaredWeightSum((*it).first);
          (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
          double channelLH = AbsLh::mergeLogLhData((*it).second, (*it).first);
          result += channelLH;
-	 output << std::setprecision(16) << channelLH << "\t";
-	 outputLHDump << std::setprecision(16) << channelLH << "\t";
+	 if(lhPrint) output << std::setprecision(16) << channelLH << "\t";
+	 if(lhDump) outputLHDump << std::setprecision(16) << channelLH << "\t";
       }
-      if(theLHDataMap.size() > 1){
+      if(lhPrint && theLHDataMap.size() > 1){
          output << "sum = " << result;
       }
   }
 
-  if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhPrint() == 0){
+  if(lhPrint){
     InfoMsg << output.str() << endmsg;
   }
+  
   if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeTimer() == 0) this->printTimer();
   if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsPrint() == 0) this->printFitParams(this->_currentPawianParms);
   if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeParamsDump() == 0) this->dumpFitParams(this->_currentPawianParms);
-  if(this->_fcnCounter%GlobalEnv::instance()->parser()->stepSizeLhDump() == 0) this->dumpLhVals(outputLHDump.str());
+  if(lhDump) this->dumpLhVals(outputLHDump.str());
   this->_fcnCounter++;
   return result;
 }
@@ -145,41 +118,32 @@ std::vector<double> PwaFcnServer<T>::Gradient(const std::vector<double>& par) co
   this->_currentPawianParms->SetAllValues(par);
   ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
   double LHBase=collectLH();
-  double epsilon=1.e-6;
+  double epsilon;
+
   for(unsigned int i=0; i<par.size(); ++i){
     if(this->_currentPawianParms->IsFixed(i)) resultVec.at(i)=0.;
     else{
       double currentVal=this->_currentPawianParms->Value(i);
+      epsilon=_numStepSize*std::abs(currentVal);
+      if ((this->_currentPawianParms->GetName(i)).substr( (this->_currentPawianParms->GetName(i)).length() - 3 ) == "Phi"){
+	epsilon=_numStepSize*PawianConstants::pi;
+      }
+      else if (std::abs(currentVal)<1.e-10)  epsilon=_numStepSize*1.e-10;
+      double dx=(currentVal+epsilon)-currentVal;
       if(this->_currentPawianParms->HasLimits(i) && std::abs(currentVal-this->_currentPawianParms->UpperLimit(i))<1.e-6){
 	this->_currentPawianParms->SetValue(i, currentVal-epsilon);
         ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
         double currentLH=collectLH();
-        resultVec.at(i)=(LHBase-currentLH)/epsilon;
-	//        InfoMsg << "resultVecLow.at(" << i      << ")= " << resultVec.at(i) << endmsg;
+	resultVec.at(i)=(LHBase-currentLH)/dx;
+	//           InfoMsg << "resultVecLow.at(" << i << ")= " << resultVec.at(i) << endmsg;
       }
       else{
 	this->_currentPawianParms->SetValue(i, currentVal+epsilon);
       	ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
        	double currentLH=collectLH();
-       	resultVec.at(i)=(currentLH-LHBase)/epsilon;
-	//      	InfoMsg << "resultVecHigh.at(" << i << ")= " << resultVec.at(i) << endmsg;
+	resultVec.at(i)=(currentLH-LHBase)/dx;
+	//           InfoMsg << "resultVecHigh.at(" << i << ")= " << resultVec.at(i) << endmsg;
       }
-      //      else{
-      //       	this->_currentPawianParms->SetValue(i, currentVal-1.e-6);
-      //      	ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
-      //	double currentLH=collectLH();
-      //       	resultVec.at(i)=(LHBase-currentLH)/1.e-6;
-      //       	InfoMsg	<< "resultVecLow.at(" << i	<< ")= " << resultVec.at(i) << endmsg;
-      //      }
-      // this->_currentPawianParms->SetValue(i, currentVal+1.e-6);
-      // ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
-      // double currentLHh=collectLH();
-      // this->_currentPawianParms->SetValue(i, currentVal-1.e-6);
-      // ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
-      // double currentLHl=collectLH();
-      // resultVec.at(i)=(currentLHh-currentLHl)/(2.*1.e-6);
-      //InfoMsg << "resultVec.at(" << i << ")= " << resultVec.at(i) << endmsg;
-
       this->_currentPawianParms->SetValue(i, currentVal);
     }
   }
