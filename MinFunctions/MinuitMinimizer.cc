@@ -46,6 +46,16 @@ template<typename T>
 MinuitMinimizer<T>::MinuitMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
   AbsPawianMinimizer<T>(theAbsFcnPtr, upar)
   ,_startMnUserParametersPtr(this->_startPawianParams->mnUserParametersPtr())
+  ,_startWithCovMat(false)
+{
+}
+
+template<typename T>
+MinuitMinimizer<T>::MinuitMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, std::shared_ptr<MnUserCovariance> mnCovMatrix) :
+  AbsPawianMinimizer<T>(theAbsFcnPtr, upar)
+  ,_startMnUserParametersPtr(this->_startPawianParams->mnUserParametersPtr())
+  ,_startMnCovMatrix(mnCovMatrix)
+  ,_startWithCovMat(true)
 {
 }
 
@@ -56,12 +66,15 @@ void MinuitMinimizer<T>::minimize(){
   //  MnMigrad migrad(*_absFcn, _startPawianParams->mnUserParameters());
   //  MnUserParameters startMnUserP(*_startMnUserParametersPtr);
   unsigned int stratLevel=GlobalEnv::instance()->parser()->minuitStrategyLevel();
-  MnMigrad migrad(*this->_absFcn, *_startMnUserParametersPtr);
+  std::shared_ptr<MnMigrad> migrad;
+  if (_startWithCovMat) migrad=std::shared_ptr<MnMigrad>(new MnMigrad(*this->_absFcn, *_startMnUserParametersPtr, *_startMnCovMatrix));
+  else migrad=std::shared_ptr<MnMigrad>(new MnMigrad(*this->_absFcn, *_startMnUserParametersPtr));
+  //  (new MnMigrad(*this->_absFcn, *_startMnUserParametersPtr));
   FunctionMinimum* currentFunctionMinimum=0;
 
   if(stratLevel==1){
     InfoMsg << "start migrad with strategy level " << 1 << endmsg;
-    currentFunctionMinimum= new FunctionMinimum(migrad(0, GlobalEnv::instance()->parser()->tolerance()));
+    currentFunctionMinimum= new FunctionMinimum((*migrad)(0, GlobalEnv::instance()->parser()->tolerance()));
   }
   else if(stratLevel==2){
     MnMigrad migrad2a(*this->_absFcn, *_startMnUserParametersPtr, MnStrategy(2));
@@ -226,3 +239,5 @@ void MinuitMinimizer<T>::dumpFitResult(){
 template MinuitMinimizer<FCNBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
 template MinuitMinimizer<FCNGradientBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
 
+template MinuitMinimizer<FCNBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, std::shared_ptr<MnUserCovariance> mnCovMatrix);
+template MinuitMinimizer<FCNGradientBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, std::shared_ptr<MnUserCovariance> mnCovMatrix);

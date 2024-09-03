@@ -60,7 +60,7 @@ PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix,
 
    _n = theMinuitCovMatrix.Nrow();
    unsigned int _nPar = theMinuitParameters.Params().size();
-  
+     
    int iCov=0;
    int jCov=0;
 
@@ -97,6 +97,18 @@ PwaCovMatrix::PwaCovMatrix(ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix,
      iCov++;
      jCov=0;
    }
+
+   //fill data from minuit cov matrix
+   _dataFromMnCovMatrix=theMinuitCovMatrix.Data();
+   
+   // _dataFromMnCovMatrix.resize(_n*(_n+1)/2);
+
+   //for(unsigned int i=0; i<_nPar; i++){
+   //   for(unsigned int j=i; j<_nPar; j++){
+   //     double covValue = theMinuitCovMatrix(iCov, jCov);
+   //	_dataFromMnCovMatrix.push_back(covValue);
+   //   }
+   //}
 }
 
 

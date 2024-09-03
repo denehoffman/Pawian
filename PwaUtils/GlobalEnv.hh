@@ -35,6 +35,7 @@
 class ParserBase;
 class ParticleTable;
 class AbsPawianParameters;
+class PwaCovMatrix;
 
 typedef std::vector<std::pair<std::shared_ptr<AbsChannelEnv>, short> > ChannelEnvList;
 
@@ -83,7 +84,8 @@ public:
   std::string topDirPath() const {return _topDirPath;}
   std::string KMatrixStorePath() const {return _KMatStorePath;}
   std::string evtStorePath() const {return _evtStorePath;}
-  
+  std::shared_ptr<PwaCovMatrix> pwaCovMatrix() const {return _pwaCovMatrix;}  
+  bool useCovMatrix() const {return _useCovMatrix;}
 private:
   GlobalEnv();
    static GlobalEnv* _instance;
@@ -103,4 +105,6 @@ private:
   std::map<std::string, std::string> _toBeReplacedSuffixMap;
   std::map<std::string, std::string> _alreadyReplacedSuffixMap;
   std::map<std::string, std::string> _fitParamReplacementMap;
+  std::shared_ptr<PwaCovMatrix> _pwaCovMatrix;
+  bool _useCovMatrix;
 };

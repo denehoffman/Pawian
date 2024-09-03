@@ -27,10 +27,12 @@
 #pragma once
 
 #include <map>
+#include <vector>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/map.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "Minuit2/MnUserCovariance.h"
 #include "Minuit2/MnUserParameters.h"
@@ -42,6 +44,7 @@ class PwaCovMatrix
    friend class boost::serialization::access;
    unsigned short _n;
    std::map<std::string, std::map<std::string, double> > _covMatrix;
+   std::vector<double> _dataFromMnCovMatrix;
 
   public:
    PwaCovMatrix();
@@ -55,12 +58,20 @@ class PwaCovMatrix
    static bool DiagonalIsValid(const ROOT::Minuit2::MnUserCovariance &theMinuitCovMatrix);
   bool DiagonalIsValid();
   bool CheckCorrelationCoefficients();
-   void printElements();
+  const std::vector<double>& dataFromMnCovMatrix() const {return _dataFromMnCovMatrix;}
+  const unsigned int nRow() const {return _n;}
+
+  void printElements();
 
    template<class Archive>
    void serialize(Archive & ar, const unsigned int version){
      ar & _n;
      ar & _covMatrix;
+     if(version > 0){
+       ar & _dataFromMnCovMatrix;
+     }
    }
 
 };
+
+BOOST_CLASS_VERSION(PwaCovMatrix, 1)

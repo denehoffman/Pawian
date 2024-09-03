@@ -85,18 +85,18 @@ double PwaFcnServer<T>::collectLH() const{
     }
       // Add LLHs of different channels
     if(lhPrint) output << "current LH = ";
-      for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
-         (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
-	 (*it).second.squaredWeightSum = _networkServerPtr->squaredWeightSum((*it).first);
-         (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
-         double channelLH = AbsLh::mergeLogLhData((*it).second, (*it).first);
-         result += channelLH;
-	 if(lhPrint) output << std::setprecision(16) << channelLH << "\t";
-	 if(lhDump) outputLHDump << std::setprecision(16) << channelLH << "\t";
-      }
-      if(lhPrint && theLHDataMap.size() > 1){
-         output << "sum = " << result;
-      }
+    for(auto it = theLHDataMap.begin(); it!=theLHDataMap.end();++it){
+      (*it).second.weightSum = _networkServerPtr->weightSum((*it).first);
+      (*it).second.squaredWeightSum = _networkServerPtr->squaredWeightSum((*it).first);
+      (*it).second.num_mc = _networkServerPtr->numMCs((*it).first);
+      double channelLH = AbsLh::mergeLogLhData((*it).second, (*it).first);
+      result += channelLH;
+      if(lhPrint) output << std::setprecision(16) << channelLH << "\t";
+      if(lhDump) outputLHDump << std::setprecision(16) << channelLH << "\t";
+    }
+    if(lhPrint && theLHDataMap.size() > 1){
+      output << "sum = " << result;
+    }
   }
 
   if(lhPrint){
@@ -130,7 +130,7 @@ std::vector<double> PwaFcnServer<T>::Gradient(const std::vector<double>& par) co
       }
       else if (std::abs(currentVal)<1.e-10)  epsilon=_numStepSize*1.e-10;
       double dx=(currentVal+epsilon)-currentVal;
-      if(this->_currentPawianParms->HasLimits(i) && std::abs(currentVal-this->_currentPawianParms->UpperLimit(i))<1.e-6){
+      if(this->_currentPawianParms->HasLimits(i) && std::abs(currentVal-this->_currentPawianParms->UpperLimit(i))<epsilon){
 	this->_currentPawianParms->SetValue(i, currentVal-epsilon);
         ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
         double currentLH=collectLH();

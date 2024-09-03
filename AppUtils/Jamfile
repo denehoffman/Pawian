@@ -27,6 +27,6 @@ lib AppUtils :
 	$(TOP)/ggUtils//ggUtils
 	$(TOP)/pipiScatteringUtils//pipiScatteringUtils
 	$(TOP)/qaErrorExtract//qaErrorExtract
-	:
+	: <use>$(TOP)//Minuit2
 	: 
-	: ;
+	: <library>$(TOP)//Minuit2 ;

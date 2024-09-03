@@ -27,6 +27,7 @@
 #include <boost/random.hpp>
 #include <chrono>
 #include "PwaUtils/GlobalEnv.hh"
+#include "FitParams/PwaCovMatrix.hh"
 #include "ConfigParser/ParserBase.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "Particle/PdtParser.hh"
@@ -47,7 +48,8 @@ GlobalEnv* GlobalEnv::instance(){
 GlobalEnv::GlobalEnv() :
    _alreadySetUp(false) ,
    _channelEnvsAlredySetup(false),
-   _theParser(0)
+   _theParser(0),
+   _useCovMatrix(false)
    //_topDirPath(getenv("TOP_DIR"))
    //_KMatPath(getenv("KMAT_DIR"))
 {
@@ -354,6 +356,19 @@ void GlobalEnv::setup(ParserBase* theParser){
    _theParser = theParser;
    _outputFileNameSuffix = theParser->outputFileNameSuffix();
    _serializationFileName = theParser->serializationFile();
+
+   std::ifstream serializationStream(_serializationFileName.c_str());
+   if(!serializationStream.is_open()){
+     InfoMsg << "Could not open serialization file." << endmsg;
+     InfoMsg << "fit/calculation is performed without errors!!!" << endmsg;       
+     _useCovMatrix=false;
+   }
+  else{
+    _pwaCovMatrix = std::shared_ptr<PwaCovMatrix>(new PwaCovMatrix);
+    boost::archive::text_iarchive boostInputArchive(serializationStream);
+    boostInputArchive >> *_pwaCovMatrix;
+    _useCovMatrix=true;
+  }
 
    // pdtTable
    PdtParser pdtParser;

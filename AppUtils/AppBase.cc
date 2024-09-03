@@ -36,6 +36,7 @@
 #include <boost/filesystem/path.hpp>
 #include "Minuit2/FCNBase.h"
 #include "Minuit2/FCNGradientBase.h"
+#include "Minuit2/MnUserCovariance.h"
 
 #include "AppUtils/AppBase.hh"
 
@@ -85,7 +86,7 @@
 #include "ggUtils/GGChannelEnv.hh"
 #include "pipiScatteringUtils/PiPiScatteringChannelEnv.hh"
 
-
+using namespace ROOT::Minuit2;
 
 AppBase::AppBase()
 {
@@ -805,6 +806,18 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
       }
     }
   }
+
+
+  std::shared_ptr<MnUserCovariance> theMnUserCov;
+  if (GlobalEnv::instance()->useCovMatrix()){
+    std::shared_ptr<PwaCovMatrix> theCovMatrix=GlobalEnv::instance()->pwaCovMatrix();
+    const std::vector<double> dataFromMnCovMat=theCovMatrix->dataFromMnCovMatrix();
+    //int nrow=std::sqrt(2.*dataFromMnCovMat.size()+1./4.)-0.5;
+    unsigned int nrow=theCovMatrix->nRow();
+    InfoMsg << "dataFromMnCovMat.size(): " << dataFromMnCovMat.size() << " nrow: " << nrow << endmsg;
+    theMnUserCov = std::shared_ptr<MnUserCovariance>(new MnUserCovariance(dataFromMnCovMat, nrow));
+  }
+  
   if(GlobalEnv::instance()->parser()->mode()=="serverQA" || GlobalEnv::instance()->parser()->mode()=="server"){ 
   std::shared_ptr<AbsFcn<FCNBase>> absFcn;
   std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), 
@@ -825,9 +838,29 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     absMinimizerPtr->printFitResultQA(evtWeightSumData);
     return;
   }
-  
-  if(GlobalEnv::instance()->parser()->mode()=="server") 
-    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer(absFcn, upar));
+
+  // std::shared_ptr<MnUserCovariance> theMnUserCov;
+  // if (GlobalEnv::instance()->useCovMatrix()){
+  //   std::shared_ptr<PwaCovMatrix> theCovMatrix=GlobalEnv::instance()->pwaCovMatrix();
+  //   const std::vector<double> dataFromMnCovMat=theCovMatrix->dataFromMnCovMatrix();
+  //   //int nrow=std::sqrt(2.*dataFromMnCovMat.size()+1./4.)-0.5;
+  //   unsigned int nrow=theCovMatrix->nRow();
+  //   InfoMsg << "dataFromMnCovMat.size(): " << dataFromMnCovMat.size() << " nrow: " << nrow << endmsg;
+  //   theMnUserCov = std::shared_ptr<MnUserCovariance>(new MnUserCovariance(dataFromMnCovMat, nrow));
+  // }
+
+    if(GlobalEnv::instance()->parser()->mode()=="server"){
+    if (GlobalEnv::instance()->useCovMatrix()){
+      // std::shared_ptr<PwaCovMatrix> theCovMatrix=GlobalEnv::instance()->pwaCovMatrix();
+      // const std::vector<double> dataFromMnCovMat=theCovMatrix->dataFromMnCovMatrix();
+      // //int nrow=std::sqrt(2.*dataFromMnCovMat.size()+1./4.)-0.5;
+      // unsigned int nrow=theCovMatrix->nRow();
+      // InfoMsg << "dataFromMnCovMat.size(): " << dataFromMnCovMat.size() << " nrow: " << nrow << endmsg;
+      // std::shared_ptr<MnUserCovariance> theMnUserCov(new MnUserCovariance(dataFromMnCovMat, nrow));
+      absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer<FCNBase>(absFcn, upar, theMnUserCov));
+    }
+    else absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer<FCNBase>(absFcn, upar));
+    }
   else if (GlobalEnv::instance()->parser()->mode()=="evoserver") 
     absMinimizerPtr =
       std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new EvoMinimizer(absFcn, upar, 
@@ -857,8 +890,21 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
 							       clientNumberWeights()));
     absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServer<FCNGradientBase>(theServer));
     theServer->WaitForFirstClientLogin();
+
+    std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr;
+    if (GlobalEnv::instance()->useCovMatrix()){
+      // std::shared_ptr<PwaCovMatrix> theCovMatrix=GlobalEnv::instance()->pwaCovMatrix();
+      // const std::vector<double> dataFromMnCovMat=theCovMatrix->dataFromMnCovMatrix();
+      // //int nrow=std::sqrt(2.*dataFromMnCovMat.size()+1./4.)-0.5;
+      // unsigned int nrow=theCovMatrix->nRow();
+      // InfoMsg << "dataFromMnCovMat.size(): " << dataFromMnCovMat.size() << " nrow: " << nrow << endmsg;
+      // std::shared_ptr<MnUserCovariance> theMnUserCov(new MnUserCovariance(dataFromMnCovMat, nrow));
+      absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new MinuitMinimizer<FCNGradientBase>(absFcn, upar, theMnUserCov));
+    }
+    else absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
+
     
-    std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
+  // std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
     absMinimizerPtr->minimize();
     
     absMinimizerPtr->printFitResult(evtWeightSumData);

@@ -31,6 +31,7 @@
 #include "MinFunctions/AbsPawianMinimizer.hh"
 #include "Minuit2/FunctionMinimum.h"
 #include "Minuit2/MnUserParameters.h"
+#include "Minuit2/MnUserCovariance.h"
 
 #include <boost/random/normal_distribution.hpp>
 
@@ -41,7 +42,8 @@ class MinuitMinimizer : public AbsPawianMinimizer<T>
 {
 public:
   MinuitMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
-
+  MinuitMinimizer(std::shared_ptr<AbsFcn<T>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, std::shared_ptr<MnUserCovariance> mnCovMatrix);
+  
   virtual std::string type() {return "MinuitMinimizer";};
   virtual void minimize();
   //  virtual void printFitResultQA(double evtWeightSumData);
@@ -52,6 +54,9 @@ protected:
 
   std::shared_ptr<FunctionMinimum> _mnFunctionMinimumFinalPtr;
   std::shared_ptr<MnUserParameters> _startMnUserParametersPtr;
+  std::shared_ptr<MnUserCovariance> _startMnCovMatrix;
 
+  bool _startWithCovMat;
+  
 private:
 };
