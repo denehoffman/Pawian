@@ -101,6 +101,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_stepSizeParamsDump(200)
   ,_useAbsPhaseDiff(false)
   ,_useMultipoleGeneral(false)
+  ,_scalingMachinePrecision(1.)
 {
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
@@ -215,6 +216,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ("stepSizeParamsDump",po::value<unsigned int>(&_stepSizeParamsDump),"step size for parameter print out in dump file")
     ("useAbsPhaseDiff",po::value<bool>(&_useAbsPhaseDiff), "use absolut value of the phse difference in FVectorCompare mode")
     ("useMultipoleGeneral",po::value<bool>(&_useMultipoleGeneral), "use moltipoles for the general case")
+    ("scalingMachinePrecision",po::value<double>(&_scalingMachinePrecision), "scaling factor of machine precision for numerical calculations")
     ;
 
 }
@@ -337,7 +339,8 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "stepSizeParamsPrint: " << _stepSizeParamsPrint << "\n\n"
 		<< "stepSizeParamsDump: " << _stepSizeParamsDump << "\n\n"
 		<< "useAbsPhaseDiff: " << _useAbsPhaseDiff <<"\n\n"
-		<< "useMultipoleGeneral: " << _useMultipoleGeneral << "\n\n" 
+		<< "useMultipoleGeneral: " << _useMultipoleGeneral << "\n\n"
+		<< "scalingMachinePrecision: " << _scalingMachinePrecision << "\n\n"
 		<< endmsg;
 
 

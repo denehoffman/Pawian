@@ -44,7 +44,7 @@ template<typename T>
 PwaFcnServer<T>::PwaFcnServer(std::shared_ptr<NetworkServer> netServer) :
   AbsFcn<T>()
   , _networkServerPtr(netServer)
-  , _numStepSize(std::sqrt(std::numeric_limits<double>::epsilon()*150.))
+  , _numStepSize(std::sqrt(std::numeric_limits<double>::epsilon()*GlobalEnv::instance()->parser()->scalingMachinePrecision()))
 {
   this->_defaultPawianParms = GlobalEnv::instance()->defaultPawianParams();
   this->_currentPawianParms = GlobalEnv::instance()->startPawianParams();
@@ -135,14 +135,14 @@ std::vector<double> PwaFcnServer<T>::Gradient(const std::vector<double>& par) co
         ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
         double currentLH=collectLH();
 	resultVec.at(i)=(LHBase-currentLH)/dx;
-	//           InfoMsg << "resultVecLow.at(" << i << ")= " << resultVec.at(i) << endmsg;
+	//InfoMsg << "resultVecLow.at(" << i << ")= " << resultVec.at(i) << endmsg;
       }
       else{
 	this->_currentPawianParms->SetValue(i, currentVal+epsilon);
       	ParamDepHandler::instance()->ApplyDependencies(this->_currentPawianParms);
        	double currentLH=collectLH();
 	resultVec.at(i)=(currentLH-LHBase)/dx;
-	//           InfoMsg << "resultVecHigh.at(" << i << ")= " << resultVec.at(i) << endmsg;
+	//InfoMsg << "resultVecHigh.at(" << i << ")= " << resultVec.at(i) << endmsg;
       }
       this->_currentPawianParms->SetValue(i, currentVal);
     }
