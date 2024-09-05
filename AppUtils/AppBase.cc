@@ -73,6 +73,7 @@
 
 #include "MinFunctions/PwaFcnBase.hh"
 #include "MinFunctions/PwaFcnServer.hh"
+#include "MinFunctions/PwaFcnServerGradNumSlow.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
 #include "MinFunctions/EvoMinimizer.hh"
 #include "MinFunctions/MinuitMinimizer.hh"
@@ -881,14 +882,17 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   InfoMsg << "Closing server." << endmsg;
   }
 
-  else if(GlobalEnv::instance()->parser()->mode()=="serverGradientNum"){
+  else if(GlobalEnv::instance()->parser()->mode()=="serverGradientNum" || GlobalEnv::instance()->parser()->mode()=="serverGradientNumSlow"){
     std::shared_ptr<AbsFcn<FCNGradientBase>> absFcn;
     std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), 
 							     GlobalEnv::instance()->parser()->noOfClients(), 
 							     numEventMap, 
 							     GlobalEnv::instance()->parser()->
 							       clientNumberWeights()));
-    absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServer<FCNGradientBase>(theServer));
+    if (GlobalEnv::instance()->parser()->mode()=="serverGradientNum") absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServer<FCNGradientBase>(theServer));
+    else absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServerGradNumSlow(theServer)); 
+
+      
     theServer->WaitForFirstClientLogin();
 
     std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr;
