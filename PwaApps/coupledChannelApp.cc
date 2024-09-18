@@ -160,7 +160,7 @@ int main(int __argc,char *__argv[]){
   return 1;
  }
 
- if(mode == "server" || mode == "serverGradientNum" || mode == "serverGradientNumSlow" || mode == "evoserver" || mode=="serverQA"){
+ if(mode == "server" || mode == "serverGradientNum" || mode == "serverGradientNumSlow" || mode == "serverAdamNum" || mode == "evoserver" || mode=="serverQA"){
    theAppBase.fitServerMode(startPawianParams);
    return 1;
  }

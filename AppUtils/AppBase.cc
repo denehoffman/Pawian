@@ -76,6 +76,7 @@
 #include "MinFunctions/PwaFcnServerGradNumSlow.hh"
 #include "MinFunctions/AbsPawianMinimizer.hh"
 #include "MinFunctions/EvoMinimizer.hh"
+#include "MinFunctions/AdamMinimizer.hh"
 #include "MinFunctions/MinuitMinimizer.hh"
 
 #include "FitParams/AbsPawianParameters.hh"
@@ -882,31 +883,34 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
   InfoMsg << "Closing server." << endmsg;
   }
 
-  else if(GlobalEnv::instance()->parser()->mode()=="serverGradientNum" || GlobalEnv::instance()->parser()->mode()=="serverGradientNumSlow"){
+  else if(GlobalEnv::instance()->parser()->mode()=="serverGradientNum" || GlobalEnv::instance()->parser()->mode()=="serverGradientNumSlow" || GlobalEnv::instance()->parser()->mode()=="serverAdamNum"){
     std::shared_ptr<AbsFcn<FCNGradientBase>> absFcn;
     std::shared_ptr<NetworkServer> theServer(new NetworkServer(GlobalEnv::instance()->parser()->serverPort(), 
 							     GlobalEnv::instance()->parser()->noOfClients(), 
 							     numEventMap, 
 							     GlobalEnv::instance()->parser()->
 							       clientNumberWeights()));
-    if (GlobalEnv::instance()->parser()->mode()=="serverGradientNum") absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServer<FCNGradientBase>(theServer));
+    if (GlobalEnv::instance()->parser()->mode()=="serverGradientNum" || GlobalEnv::instance()->parser()->mode()=="serverAdamNum") absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServer<FCNGradientBase>(theServer));
     else absFcn=std::shared_ptr<AbsFcn<FCNGradientBase>>(new PwaFcnServerGradNumSlow(theServer)); 
 
       
     theServer->WaitForFirstClientLogin();
-
     std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr;
-    if (GlobalEnv::instance()->useCovMatrix()){
-      // std::shared_ptr<PwaCovMatrix> theCovMatrix=GlobalEnv::instance()->pwaCovMatrix();
-      // const std::vector<double> dataFromMnCovMat=theCovMatrix->dataFromMnCovMatrix();
-      // //int nrow=std::sqrt(2.*dataFromMnCovMat.size()+1./4.)-0.5;
-      // unsigned int nrow=theCovMatrix->nRow();
-      // InfoMsg << "dataFromMnCovMat.size(): " << dataFromMnCovMat.size() << " nrow: " << nrow << endmsg;
-      // std::shared_ptr<MnUserCovariance> theMnUserCov(new MnUserCovariance(dataFromMnCovMat, nrow));
-      absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new MinuitMinimizer<FCNGradientBase>(absFcn, upar, theMnUserCov));
+    if (GlobalEnv::instance()->parser()->mode()=="serverGradientNum" || GlobalEnv::instance()->parser()->mode()=="serverGradientNumSlow"){ 
+       if (GlobalEnv::instance()->useCovMatrix()){
+	// std::shared_ptr<PwaCovMatrix> theCovMatrix=GlobalEnv::instance()->pwaCovMatrix();
+	// const std::vector<double> dataFromMnCovMat=theCovMatrix->dataFromMnCovMatrix();
+	// //int nrow=std::sqrt(2.*dataFromMnCovMat.size()+1./4.)-0.5;
+	// unsigned int nrow=theCovMatrix->nRow();
+	// InfoMsg << "dataFromMnCovMat.size(): " << dataFromMnCovMat.size() << " nrow: " << nrow << endmsg;
+	// std::shared_ptr<MnUserCovariance> theMnUserCov(new MnUserCovariance(dataFromMnCovMat, nrow));
+	absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new MinuitMinimizer<FCNGradientBase>(absFcn, upar, theMnUserCov));
+      }
+      else absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
     }
-    else absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
-
+    else if (GlobalEnv::instance()->parser()->mode()=="serverAdamNum"){
+      absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>>(new AdamMinimizer(absFcn, upar));
+    }
     
   // std::shared_ptr<AbsPawianMinimizer<FCNGradientBase>> absMinimizerPtr(new MinuitMinimizer<FCNGradientBase>(absFcn, upar));
     absMinimizerPtr->minimize();

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+echo Starting server for coupled channel pwa ...
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode serverAdamNum !>& logAdamNum.server &
+
+sleep 15
+
+echo "Starting first client for channel pbar p -> eta eta pi0 ..."
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode client !>& log.client1 &
+
+sleep 5
+
+echo "Starting first client for channel pbar p -> K+ K- pi0 ..."
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode client !>& log.client2 &
+
+sleep 5
+
+echo "Starting first client for channel e+ e- -> J/psi -> chi_c1 gamma -> (K+ K- pi0) gamma ..."
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode client !>& log.client3 &
+
+sleep 5
+
+echo "Starting first client for D0 -> K- pi+ pi0 ..."
+$TOP_DIR/bin/coupledChannelApp -c global.cfg --pbarpFiles pbarpToEtaEtaPiReaction.cfg --pbarpFiles pbarpToKKPiReaction.cfg --epemFiles psiToGamKKpi.cfg --resFiles D0ToKmpippi0.cfg --mode client !>& log.client4 &
+
+echo done
