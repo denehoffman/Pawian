@@ -836,7 +836,7 @@ void AppBase::fitServerMode(std::shared_ptr<AbsPawianParameters> upar){
     //double theLH= (*absFcn)(theParams);
     //double theLH=*absFcn(theParams);
     //InfoMsg << "theLH: " << theLH << endmsg;
-    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr = std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer<FCNBase>(absFcn, upar));
     absMinimizerPtr->printFitResultQA(evtWeightSumData);
     return;
   }
@@ -939,7 +939,7 @@ void AppBase::fitNonServerMode(std::shared_ptr<AbsPawianParameters> upar,
     std::shared_ptr<AbsFcn<FCNBase>> absFcn(new PwaFcnBase<FCNBase>());
   std::shared_ptr<AbsPawianMinimizer<FCNBase>> absMinimizerPtr;
   if(GlobalEnv::instance()->parser()->mode()=="pwa") 
-    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer(absFcn, upar));
+    absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new MinuitMinimizer<FCNBase>(absFcn, upar));
   else if (GlobalEnv::instance()->parser()->mode()=="evo") 
     absMinimizerPtr=std::shared_ptr<AbsPawianMinimizer<FCNBase>>(new EvoMinimizer(absFcn, upar, 
 	  GlobalEnv::instance()->parser()->evoPopulation(), GlobalEnv::instance()->parser()->evoIterations()));
