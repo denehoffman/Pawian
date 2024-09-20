@@ -57,16 +57,19 @@ bool AbsParamHandler::checkRecalculation(std::shared_ptr<AbsPawianParameters> fi
 }
 
 bool AbsParamHandler::CheckDoubleEquality(double a, double b){
+  //return std::fabs(a - b) <= std::numeric_limits<double>::epsilon();
+  double max1ab = std::max( { 1.0, std::fabs(a) , std::fabs(b) } ) ;
+  return std::fabs(a - b) <= std::numeric_limits<double>::epsilon()*max1ab ;
 
-   float diff = fabs(a - b);
-   if (diff <= 10*DBL_EPSILON)
-      return true;
+    // float diff = fabs(a - b);
+   // if (diff <= 10*DBL_EPSILON)
+   //    return true;
 
-   a = fabs(a);
-   b = fabs(b);
-   float largest = (b > a) ? b : a;
+   // a = fabs(a);
+   // b = fabs(b);
+   // float largest = (b > a) ? b : a;
 
-   if (diff <= largest * 2*DBL_EPSILON)
-      return true;
-   return false;
+   // if (diff <= largest * 2*DBL_EPSILON)
+   //    return true;
+   // return false;
 }

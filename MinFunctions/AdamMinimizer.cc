@@ -85,11 +85,11 @@ void AdamMinimizer::updateParameters(std::shared_ptr<AbsPawianParameters> pawian
 
   for(unsigned int i = 0; i < pawianParams->Params().size(); ++i){
     if (pawianParams->IsFixed(i)) continue;
-    _s.at(i) = beta1 * _s.at(i) + (1.0 - beta1) * gradients.at(i);
-    _v.at(i) = beta2 * _v.at(i) + (1.0 - beta2) * gradients.at(i) * gradients.at(i);
+    s.at(i) = beta1 * s.at(i) + (1.0 - beta1) * gradients.at(i);
+    v.at(i) = beta2 * v.at(i) + (1.0 - beta2) * gradients.at(i) * gradients.at(i);
 
-    double s_hat = _s.at(i) / (1.0 - pow(beta1 , (t + 1)));
-    double v_hat = _v.at(i) / (1.0 - pow(beta2 , (t + 1)));
+    double s_hat = s.at(i) / (1.0 - pow(beta1 , (t + 1)));
+    double v_hat = v.at(i) / (1.0 - pow(beta2 , (t + 1)));
 
     double newVal = pawianParams->Value(i) - _learning_rate * s_hat / (std::sqrt(v_hat) + epsilon);
     if(pawianParams->HasLimits(i)){
