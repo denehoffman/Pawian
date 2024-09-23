@@ -69,6 +69,8 @@ bool NetworkClient::Login(){
 
    InfoMsg << "Connecting to server " << _serverAddress << ":" << _port << endmsg;
    _theStream.connect(_serverAddress, _port);
+   _theStream.rdbuf()->set_option(boost::asio::socket_base::keep_alive(true)); // send keep alive msgs, prob not needed
+   _theStream.rdbuf()->set_option(boost::asio::ip::tcp::no_delay(true)); // disable nagels
 
    if(!_theStream){
       Alert << "Error: " << _theStream.error().message() << endmsg;
@@ -90,8 +92,9 @@ bool NetworkClient::Login(){
    InfoMsg << "Received data event range " << _eventLimits[0] << " - " << _eventLimits[1] << endmsg;
    InfoMsg << "Received mc event range " << _eventLimits[2] << " - " << _eventLimits[3] << endmsg;
 
-   std::thread timerthread(&NetworkClient::SendHeartbeat, this);
-   timerthread.detach();
+   //// disable heartbeat
+   //std::thread timerthread(&NetworkClient::SendHeartbeat, this);
+   //timerthread.detach();
 
    return true;
 }
@@ -100,7 +103,8 @@ bool NetworkClient::Login(){
 
 bool NetworkClient::SendLH(double llh_data, double lh_mc){
 
-   _theStream.connect(_serverAddress, _port);
+    //// we want to keep the connection alive, so no need to reconnect all the time
+    //_theStream.connect(_serverAddress, _port);
 
    if(!_theStream){
      //try it serveral times
@@ -108,7 +112,7 @@ bool NetworkClient::SendLH(double llh_data, double lh_mc){
      while(!_theStream){
        WarningMsg << "Could not send LH " << counter << " time!" << endmsg;
        WarningMsg << "current error message " << _theStream.error().message() << endmsg;
-       std::this_thread::sleep_for(  std::chrono::seconds(5));  
+       std::this_thread::sleep_for(  std::chrono::seconds(5));
 
        _theStream.clear();
        _theStream.connect(_serverAddress, _port);
@@ -134,42 +138,42 @@ bool NetworkClient::SendLH(double llh_data, double lh_mc){
 }
 
 
-
-bool NetworkClient::SendHeartbeat(){
-
-   while(true){
-
-      _theHeartbeatStream.connect(_serverAddress, _port);
-
-      int counter=0;
-      while(!_theHeartbeatStream){
-	WarningMsg << "Could not send heartbeat " << counter << " time!" << endmsg; 
-	WarningMsg << "current error message " << _theHeartbeatStream.error().message() << endmsg; 
-	std::this_thread::sleep_for(  std::chrono::seconds(1));	
-	_theHeartbeatStream.clear();
-	_theHeartbeatStream.connect(_serverAddress, _port);
-	counter++;
-	if (counter>20){
-	  Alert << "Could not send heartbeat last time" << endmsg;
-	  exit(1);
-	}
-	WarningMsg << "Try to send heartbeat again!!!" << endmsg;
-      }
-
-      // if(!_theStream){
-      // 	 Alert << "Could not send heartbeat." << endmsg;
-      // 	 return false;
-      // }
-
-      _theHeartbeatStream << NetworkClient::CLIENTMESSAGE_HEARTBEAT << "\n";
-      _theHeartbeatStream << _clientID << "\n";
-      short answer;
-      _theHeartbeatStream >> answer;
-
-      std::this_thread::sleep_for(  std::chrono::seconds(HEARTBEAT_INTERVAL) );
-   }
-
-}
+//// heartbeat disabled (so no need for this)
+//bool NetworkClient::SendHeartbeat(){
+//
+//   while(true){
+//
+//      _theHeartbeatStream.connect(_serverAddress, _port);
+//
+//      int counter=0;
+//      while(!_theHeartbeatStream){
+//	WarningMsg << "Could not send heartbeat " << counter << " time!" << endmsg;
+//	WarningMsg << "current error message " << _theHeartbeatStream.error().message() << endmsg;
+//	std::this_thread::sleep_for(  std::chrono::seconds(1));
+//	_theHeartbeatStream.clear();
+//	_theHeartbeatStream.connect(_serverAddress, _port);
+//	counter++;
+//	if (counter>20){
+//	  Alert << "Could not send heartbeat last time" << endmsg;
+//	  exit(1);
+//	}
+//	WarningMsg << "Try to send heartbeat again!!!" << endmsg;
+//      }
+//
+//      // if(!_theStream){
+//      // 	 Alert << "Could not send heartbeat." << endmsg;
+//      // 	 return false;
+//      // }
+//
+//      _theHeartbeatStream << NetworkClient::CLIENTMESSAGE_HEARTBEAT << "\n";
+//      _theHeartbeatStream << _clientID << "\n";
+//      short answer;
+//      _theHeartbeatStream >> answer;
+//
+//      std::this_thread::sleep_for(  std::chrono::seconds(HEARTBEAT_INTERVAL) );
+//   }
+//
+//}
 
 
 

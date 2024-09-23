@@ -48,7 +48,7 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
    , _clientTimeout(100*NetworkClient::HEARTBEAT_INTERVAL)
    , _globalTimeout(100*NetworkClient::HEARTBEAT_INTERVAL)
    , _noOfClients(noOfClients)
-   , _noOfChannels(numEventMap.size()) 
+   , _noOfChannels(numEventMap.size())
    , _closed(false)
    , _clientParamsInitialized(false)
    , _numBroadcasted(0)
@@ -59,6 +59,8 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
    theIOService = std::shared_ptr<boost::asio::io_service>(new  boost::asio::io_service);
    theAcceptor = std::shared_ptr<tcp::acceptor>(new tcp::acceptor(*theIOService, tcp::endpoint(tcp::v4(), _port)));
    theDeadlineTimer = std::shared_ptr<boost::asio::deadline_timer>(new boost::asio::deadline_timer(*theIOService));
+
+   theAcceptor->set_option(boost::asio::ip::tcp::no_delay(true)); //diable nagels
 
    for(int i=0; i<_noOfClients; i++){
       theStreams.push_back( std::shared_ptr<tcp::iostream>(new tcp::iostream) );
@@ -87,20 +89,22 @@ bool NetworkServer::WaitForFirstClientLogin(){
       short connectionPurpose;
       *theStreams.at(i) >> connectionPurpose;
 
-      if(connectionPurpose == NetworkClient::CLIENTMESSAGE_HEARTBEAT){
-         short clientID;
-         *theStreams.at(i) >> clientID;
-	 *theStreams.at(i) << NetworkServer::SERVERMESSAGE_OK << "\n";
-         theStreams.at(i)->flush();
-         theStreams.at(i)->close();
-	 i--;
-	 continue;
-      }
-      else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
+    //// heartbeats disabled on client side
+    //  if(connectionPurpose == NetworkClient::CLIENTMESSAGE_HEARTBEAT){
+    //     short clientID;
+    //     *theStreams.at(i) >> clientID;
+    // *theStreams.at(i) << NetworkServer::SERVERMESSAGE_OK << "\n";
+    //     theStreams.at(i)->flush();
+    //     theStreams.at(i)->close();
+    // i--;
+    // continue;
+    //  }
+    //  else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
+      if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LOGIN){
          Alert << "ERROR: Client did not login. Message: " << connectionPurpose << endmsg;
-	 SendClosingMessage(theStreams.at(i));
-	 i--;
-	 continue;
+         SendClosingMessage(theStreams.at(i));
+         i--;
+         continue;
       }
 
       std::string nodeName;
@@ -167,23 +171,24 @@ bool NetworkServer::WaitForLH(std::map<ChannelID, LHData>& theLHDataMap){
          i--;
          continue;
       }
-      else if (connectionPurpose == NetworkClient::CLIENTMESSAGE_HEARTBEAT){
-         short clientID;
-         *theStreams.at(i) >> clientID;
+      //// heartbeats diabled on client side
+      //else if (connectionPurpose == NetworkClient::CLIENTMESSAGE_HEARTBEAT){
+      //   short clientID;
+      //   *theStreams.at(i) >> clientID;
 
-         if(!UpdateHeartbeats(clientID)){
-            Timeout(boost::asio::error::timed_out);
-            BroadcastClosingMessage();
-         }
-         else{
-            *theStreams.at(i) << NetworkServer::SERVERMESSAGE_OK << "\n";
-            theStreams.at(i)->flush();
-            theStreams.at(i)->close();
-         }
+      //   if(!UpdateHeartbeats(clientID)){
+      //      Timeout(boost::asio::error::timed_out);
+      //      BroadcastClosingMessage();
+      //   }
+      //   else{
+      //      *theStreams.at(i) << NetworkServer::SERVERMESSAGE_OK << "\n";
+      //      theStreams.at(i)->flush();
+      //      theStreams.at(i)->close();
+      //   }
 
-         i--;
-         continue;
-      }
+      //   i--;
+      //   continue;
+      //}
       else if(connectionPurpose != NetworkClient::CLIENTMESSAGE_LH){
          Alert << "Protocol error in WaitForLH(): i=" << i << " CP " << connectionPurpose << endmsg;
          _closed = true;
@@ -203,7 +208,7 @@ bool NetworkServer::WaitForLH(std::map<ChannelID, LHData>& theLHDataMap){
       lastLhTimes[i] = std::pair<short, boost::posix_time::ptime>(clientID, boost::posix_time::microsec_clock::local_time());
 
       if(_closed)
-	 SendClosingMessage(theStreams.at(i));
+        SendClosingMessage(theStreams.at(i));
    }
 
    EvalClientTiming();
@@ -231,7 +236,7 @@ void NetworkServer::EvalClientTiming(){
       double diffInSeconds=((double)(maxdiff.total_microseconds() - diff.total_microseconds()))/1E6;
 
       InfoMsg << "Client id " << clientID << " channel id " << channelID << " "
-	   << " response time +" 
+	   << " response time +"
 	   << std::setprecision(10) << diffInSeconds << " s" << endmsg;
       _delayTimesClients.at(clientID)+=diffInSeconds;
       _delayTimesChannels.at(channelID)+=diffInSeconds;
@@ -240,24 +245,24 @@ void NetworkServer::EvalClientTiming(){
 }
 
 
-
-bool NetworkServer::UpdateHeartbeats(short clientID){
-
-   boost::posix_time::ptime now(boost::posix_time::second_clock::local_time());
-   lastHeartbeats[clientID] = now;
-
-   for(auto it = lastHeartbeats.begin(); it!= lastHeartbeats.end(); ++it){
-      boost::posix_time::time_duration diff = now - (*it).second;
-
-      if((unsigned)diff.total_seconds() >= _clientTimeout){
-         Alert << "No signal from clientID " << (*it).first << " for "
-               << diff.total_seconds() << " seconds." << endmsg;
-         return false;
-      }
-   }
-
-   return true;
-}
+//// heartbeats disabled
+//bool NetworkServer::UpdateHeartbeats(short clientID){
+//
+//   boost::posix_time::ptime now(boost::posix_time::second_clock::local_time());
+//   lastHeartbeats[clientID] = now;
+//
+//   for(auto it = lastHeartbeats.begin(); it!= lastHeartbeats.end(); ++it){
+//      boost::posix_time::time_duration diff = now - (*it).second;
+//
+//      if((unsigned)diff.total_seconds() >= _clientTimeout){
+//         Alert << "No signal from clientID " << (*it).first << " for "
+//               << diff.total_seconds() << " seconds." << endmsg;
+//         return false;
+//      }
+//   }
+//
+//   return true;
+//}
 
 
 
@@ -272,7 +277,8 @@ void NetworkServer::SendParams(std::shared_ptr<tcp::iostream> destinationStream,
    }
 
    destinationStream->flush();
-   destinationStream->close();
+   //// we want to keep the connection alive, so dont close here
+   //destinationStream->close();
 }
 
 
@@ -386,7 +392,7 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
 	 }
 	 i++;
       }
-      
+
       numClVec.at(minid)++;
       sumCl++;
    }
@@ -396,7 +402,7 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
       if(*it == 0){
 	 // Minimum number is 1
 	 *it = 1;
-	 
+
 	 // Find channel with highest number of clients and decrease by one
 	 short max=0;
 	 short maxid=-1;
@@ -421,7 +427,7 @@ void NetworkServer::CalcEventDistribution(std::map<ChannelID, std::tuple<long,do
    for(unsigned int i=0; i<numClVec.size();i++){
       InfoMsg << "Number of clients for channel " << i << " : " << numClVec.at(i) << endmsg;
    }
-   
+
 
    // Fill event number vector
    int i=0;
@@ -499,12 +505,12 @@ void  NetworkServer::dumpTimeDelays() const{
   theStream << "Channel Id\tdelay time [s]\tdelay time/noClients [s]" << std::endl;
 
   for (unsigned int i=0; i<_delayTimesChannels.size(); ++i){
-    theStream << i << "\t" << std::setprecision(10) << _delayTimesChannels.at(i) << "\t" << std::setprecision(10) << _delayTimesChannels.at(i)/_noOfClientsPerChannel.at(i) << std::endl;   
+    theStream << i << "\t" << std::setprecision(10) << _delayTimesChannels.at(i) << "\t" << std::setprecision(10) << _delayTimesChannels.at(i)/_noOfClientsPerChannel.at(i) << std::endl;
   }
 
   theStream << "\n\nClientId\tdelay time [s] " << std::endl;
   for (unsigned int i=0; i<_delayTimesClients.size(); ++i){
-    theStream << i << "\t" << std::setprecision(10) << _delayTimesClients.at(i) << std::endl;   
+    theStream << i << "\t" << std::setprecision(10) << _delayTimesClients.at(i) << std::endl;
   }
 
   int noOfClientsWoScattering = 0;
@@ -515,7 +521,7 @@ void  NetworkServer::dumpTimeDelays() const{
   for (unsigned int i=0; i<_noOfClientsPerChannel.size(); ++i){
     theStream << _noOfClientsPerChannel.at(i) << " ";
     if (_noOfClientsPerChannel.at(i) > 1){
-      noOfClientsWoScattering+=_noOfClientsPerChannel.at(i); 
+      noOfClientsWoScattering+=_noOfClientsPerChannel.at(i);
       totalDelayTimeWoScattering+=_delayTimesChannels.at(i);
     }
   }
@@ -526,10 +532,9 @@ void  NetworkServer::dumpTimeDelays() const{
   for (unsigned int i=0; i<_noOfClientsPerChannel.size(); ++i){
     double noOfProposedClients(_noOfClientsPerChannel.at(i));
    if (noOfProposedClients > 1.5){
-     noOfProposedClients = _delayTimesChannels.at(i)/totalDelayTimeWoScattering * noOfClientsWoScattering;      
+     noOfProposedClients = _delayTimesChannels.at(i)/totalDelayTimeWoScattering * noOfClientsWoScattering;
    }
    theStream << noOfProposedClients << " ";
   }
  theStream << std::endl;
 }
-

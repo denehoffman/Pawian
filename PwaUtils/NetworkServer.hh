@@ -73,7 +73,8 @@ private:
    std::shared_ptr<boost::asio::deadline_timer> theDeadlineTimer;
    std::shared_ptr<tcp::acceptor> theAcceptor;
    std::vector<std::shared_ptr<tcp::iostream>> theStreams;
-   std::map<short, boost::posix_time::ptime > lastHeartbeats;
+   //// heartbeats disables on client side
+   //std::map<short, boost::posix_time::ptime > lastHeartbeats;
    std::map<short, std::pair<short, boost::posix_time::ptime > > lastLhTimes;
 
    std::map<short, ChannelID> _clientChannelMap;
@@ -82,13 +83,14 @@ private:
    std::vector<double> _cachedParams;
   std::vector<double> _delayTimesClients; //time in seconds
    std::vector<double> _delayTimesChannels; //time in seconds
-  std::vector<int> _noOfClientsPerChannel; 
+  std::vector<int> _noOfClientsPerChannel;
   std::string _currentTimeDelayFileName;
 
    void Timeout(const boost::system::error_code& err);
    void AcceptHandler(const boost::system::error_code& err);
    void EvalClientTiming();
-   bool UpdateHeartbeats(short clientID);
+   //// heartbeats disables on client side
+   //bool UpdateHeartbeats(short clientID);
    bool ReadNumClientsFromConfig(std::vector<short>& numClVec);
   void  dumpTimeDelays() const;
 };

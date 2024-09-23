@@ -42,12 +42,13 @@ class NetworkClient
    static short CLIENTMESSAGE_LOGIN;
    static short CLIENTMESSAGE_LH;
    static short CLIENTMESSAGE_HEARTBEAT;
-   static short HEARTBEAT_INTERVAL;
+   static short HEARTBEAT_INTERVAL; //keep this variable for timeouts
 
    NetworkClient(std::string serverAddress,std::string port);
    bool Login();
    bool SendLH(double llh_data, double lh_mc);
-   bool SendHeartbeat();
+   //// heartbeat disabled
+   //bool SendHeartbeat();
    bool WaitForParams();
    ChannelID channelID();
    std::vector<double>& GetParams(){return _theParams;}
@@ -61,6 +62,7 @@ class NetworkClient
    std::string _port;
    std::string _serverAddress;
    tcp::iostream _theStream;
-   tcp::iostream _theHeartbeatStream;
+   //// heartbeat disabled
+   //tcp::iostream _theHeartbeatStream;
    std::vector<double> _theParams;
 };
