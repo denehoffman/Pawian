@@ -1,3 +1,32 @@
+#### check for existing pawian environment
+NEWTOPDIR=$(realpath "${BASH_SOURCE[0]}")
+NEWTOPDIR="${NEWTOPDIR%/*}"
+if [[ -z "$TOP_DIR" ]]; then
+    TOP_DIR="${NEWTOPDIR}"
+else
+    echo "pawian env already set to ${TOP_DIR}"
+    read -p "setup new env to ${NEWTOPDIR}? (yY/nN): " choice
+    if [[ "$choice" == "y" ]] || [[ "$choice" == "Y" ]]; then
+        LD_LIBRARY_PATH=${LD_LIBRARY_PATH/${MINUIT2_STANDALONE}\/lib:${TOP_DIR}\/lib/}
+        LD_LIBRARY_PATH=${LD_LIBRARY_PATH/::/:}
+        if [[ "${LD_LIBRARY_PATH:0:1}" == ":" ]]; then
+            LD_LIBRARY_PATH=${LD_LIBRARY_PATH:1}
+        fi
+        PATH=${PATH/${TOP_DIR}\/bin/}
+        PATH=${PATH/::/:}
+        if [[ "${PATH: -1}" == ":" ]]; then
+            PATH=${PATH:0: -1}
+        fi
+        TOP_DIR="$NEWTOPDIR"
+    elif [[ "$choice" == "n" ]] || [[ "$choice" == "N" ]]; then
+        echo "NO, pawian env remains to $TOP_DIR"
+        return
+    else
+        echo "invalid input, exiting"
+        return
+    fi
+fi
+
 ############################
 #### user defined variables
 ############################
@@ -14,21 +43,8 @@ EVT_DIR="/data/duldul/bertram/EvtStore/"
 # set Jamfile for bjam/b2 (a symlink Jamroot -> $JAM_FILE will be created)
 JAM_FILE="Jamroot_rub_AL9_mn2standalone"
 
-#### check for existing pawian environment
-if [[ -z "$TOP_DIR" ]]; then
-    TOP_DIR=$(realpath "${BASH_SOURCE[0]}")
-    TOP_DIR="${TOP_DIR%/*}"
-else
-    echo "pawian environment already exists, aborting setup new env"
-    return
-fi
-
-#### setup root (if needed)
-if [[ -z "${ROOTSYS}" ]]; then
-    source ${ROOT_DIR}/bin/thisroot.sh
-else
-    echo "root ${ROOTSYS} already sourced"
-fi
+#### source root
+source ${ROOT_DIR}/bin/thisroot.sh
 
 #### prepend minuit2 and pawian libs to LD_LIBRARY_PATH
 LD_LIBRARY_PATH="${MINUIT2_STANDALONE}/lib:${TOP_DIR}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
