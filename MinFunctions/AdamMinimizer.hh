@@ -61,12 +61,14 @@ protected:
   std::vector<double> _s;
   std::vector<double> _v;
   double _learning_rate;
+  double _initial_lr;
+  double _decay_rate;
   unsigned int _iterations;
   std::shared_ptr<AbsPawianParameters> _currentPawianParams;
-
   double _bestLH;
   std::shared_ptr<AbsPawianParameters> _bestPawianParams;
   unsigned int _noItersWoImprovement;
+  double _patience;
 
   void updateParameters(std::shared_ptr<AbsPawianParameters> pawianParams, std::vector<double>& gradients, std::vector<double>& s, std::vector<double>& v, int t);
 

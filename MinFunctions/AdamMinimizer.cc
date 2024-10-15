@@ -26,79 +26,112 @@
 #include <string>
 #include <math.h>
 #include <iomanip>
-
-
 #include "MinFunctions/AdamMinimizer.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "PwaUtils/GlobalEnv.hh"
 #include "ConfigParser/ParserBase.hh"
 
-AdamMinimizer::AdamMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar) :
-  AbsPawianMinimizer<FCNGradientBase>(theAbsFcnPtr, upar)
-  ,_max_iterations(1000)
-  ,_s(upar->Params().size(),0.)
-  ,_v(upar->Params().size(),0.)
-  ,_learning_rate(0.2)
-  ,_iterations(0)
-  ,_currentPawianParams(std::shared_ptr<AbsPawianParameters>(upar->Clone()))
-  ,_bestLH(1.e20)
-  ,_bestPawianParams(std::shared_ptr<AbsPawianParameters>(upar->Clone()))
-  ,_noItersWoImprovement(0)
-{
+AdamMinimizer::AdamMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar)
+    : AbsPawianMinimizer<FCNGradientBase>(theAbsFcnPtr, upar),
+      _max_iterations(5000),
+      _s(upar->Params().size(), 0.0),
+      _v(upar->Params().size(), 0.0),
+      _learning_rate(0.001),
+      _initial_lr(0.001),
+      _decay_rate(0.01),
+      _iterations(0),
+      _currentPawianParams(std::shared_ptr<AbsPawianParameters>(upar->Clone())),
+      _bestLH(1.e20),
+      _bestPawianParams(std::shared_ptr<AbsPawianParameters>(upar->Clone())),
+      _noItersWoImprovement(0),
+      _patience(10) { 
 }
 
-AdamMinimizer::~AdamMinimizer()
-{
-}
+AdamMinimizer::~AdamMinimizer() {}
 
-void AdamMinimizer::minimize(){
-  if(_iterations==0){
-    double currentLH=_absFcn->operator()(_bestPawianParams->Params());
-    if(currentLH<_bestLH) _bestLH=currentLH;
-    InfoMsg << "best LH: " << _bestLH << "\tnoIters: " << _iterations << "\tnoItersWoImprovement: " << _noItersWoImprovement << endmsg;    
-  }
-    while(_iterations <= _max_iterations && _noItersWoImprovement<100){
-      if(_noItersWoImprovement>0 && _noItersWoImprovement%10 == 0){ //continue with parameters of the best fit
-	_currentPawianParams=std::shared_ptr<AbsPawianParameters>(_bestPawianParams->Clone());
-      }
-      std::vector<double> derivatives = _absFcn->Gradient(_currentPawianParams->Params());
+void AdamMinimizer::minimize() {
+ 
+    const double gradient_tolerance = 1e-8;
 
-      updateParameters(_currentPawianParams, derivatives, _s, _v, _iterations);
-      double currentLH=_absFcn->operator()(_currentPawianParams->Params());
-      if(currentLH<_bestLH){
-	_bestLH=currentLH;
-	_bestPawianParams=std::shared_ptr<AbsPawianParameters>(_currentPawianParams->Clone());
-	_noItersWoImprovement=0;
-      }
-      else ++_noItersWoImprovement;
-      ++_iterations;
-      _learning_rate *= 0.999;
-      InfoMsg << "best LH: " << _bestLH << "\tnoIters: " << _iterations << "\tnoItersWoImprovement: " << _noItersWoImprovement << endmsg;
+    if (_iterations == 0) {
+        double currentLH = _absFcn->operator()(_bestPawianParams->Params());
+        if (currentLH < _bestLH) _bestLH = currentLH;
+        std::cout << "Initial best LH: " << _bestLH << "\tnoIters: " << _iterations << "\tnoItersWoImprovement: " << _noItersWoImprovement << std::endl;
+    }
+
+    while (_iterations <= _max_iterations && _noItersWoImprovement < 1000) {
+        if (_noItersWoImprovement > 0 && _noItersWoImprovement >= _patience) {
+            _currentPawianParams = std::shared_ptr<AbsPawianParameters>(_bestPawianParams->Clone());
+	    _patience = std::min(_patience * 1.05, 30.0);
+	    _noItersWoImprovement = 0;
+        }
+        std::vector<double> derivatives = _absFcn->Gradient(_currentPawianParams->Params());
+
+        updateParameters(_currentPawianParams, derivatives, _s, _v, _iterations);
+
+        double currentLH = _absFcn->operator()(_currentPawianParams->Params());
+
+        if (currentLH < _bestLH) {
+            _bestLH = currentLH;
+            _bestPawianParams = std::shared_ptr<AbsPawianParameters>(_currentPawianParams->Clone());
+            _noItersWoImprovement = 0;
+        } else {
+            ++_noItersWoImprovement;
+        }
+
+        double gradientNorm = 0.0;
+        for (const auto& grad : derivatives) {
+            gradientNorm += grad * grad;
+        }
+        gradientNorm = sqrt(gradientNorm);
+	
+	if (gradientNorm < gradient_tolerance && std::abs(currentLH - _bestLH) / std::abs(_bestLH) < 1e-4) {
+	  std::cout << "Stopping early: Gradient norm below tolerance and no significant likelihood improvement." << std::endl;
+	  break;
+	}
+
+
+        ++_iterations;
+	_learning_rate *= 0.999;
+	std::cout << "best LH: " << _bestLH << "\tnoIters: " << _iterations << "\tnoItersWoImprovement: " << _noItersWoImprovement << std::endl;
     }
 }
 
-void AdamMinimizer::updateParameters(std::shared_ptr<AbsPawianParameters> pawianParams, std::vector<double>& gradients, std::vector<double>& s, std::vector<double>& v, int t){
-  double beta1=0.9;
-  double beta2=0.99; 
-  double epsilon=1.*pow(10., -8);
+void AdamMinimizer::updateParameters(std::shared_ptr<AbsPawianParameters> pawianParams, std::vector<double>& gradients, std::vector<double>& s, std::vector<double>& v, int t) {
+    double beta1 = 0.9;
+    double beta2 = 0.999;
+    double epsilon = 1e-8;
 
-  for(unsigned int i = 0; i < pawianParams->Params().size(); ++i){
-    if (pawianParams->IsFixed(i)) continue;
-    s.at(i) = beta1 * s.at(i) + (1.0 - beta1) * gradients.at(i);
-    v.at(i) = beta2 * v.at(i) + (1.0 - beta2) * gradients.at(i) * gradients.at(i);
+    for (unsigned int i = 0; i < pawianParams->Params().size(); ++i) {
+        if (pawianParams->IsFixed(i)) continue;
+            
+	double clip_value = 0.2 * std::abs(pawianParams->Value(i));
+        gradients[i] = std::min(clip_value, std::max(-clip_value, gradients[i]));
 
-    double s_hat = s.at(i) / (1.0 - pow(beta1 , (t + 1)));
-    double v_hat = v.at(i) / (1.0 - pow(beta2 , (t + 1)));
+        s.at(i) = beta1 * s.at(i) + (1.0 - beta1) * gradients.at(i);
+        v.at(i) = beta2 * v.at(i) + (1.0 - beta2) * gradients.at(i) * gradients.at(i);
 
-    double newVal = pawianParams->Value(i) - _learning_rate * s_hat / (std::sqrt(v_hat) + epsilon);
-    if(pawianParams->HasLimits(i)){
-      if(newVal>pawianParams->UpperLimit(i)) newVal=pawianParams->UpperLimit(i);
-      else if(newVal<pawianParams->LowerLimit(i)) newVal=pawianParams->LowerLimit(i);
+        
+        double s_hat = s.at(i) / (1.0 - pow(beta1, (t + 1)));
+        double v_hat = v.at(i) / (1.0 - pow(beta2, (t + 1)));
+
+
+	//double learning_rate_t = _initial_lr / (1.0 + _decay_rate * t);
+	//double adaptive_lr = learning_rate_t / (std::abs(pawianParams->Value(i)) + epsilon);
+	//double gradient_update = adaptive_lr * s_hat / (std::sqrt(v_hat) + epsilon);
+	double newVal = pawianParams->Value(i) - _learning_rate * s_hat / (std::sqrt(v_hat) + epsilon);
+       
+	
+        if (pawianParams->HasLimits(i)) {
+            if (newVal > pawianParams->UpperLimit(i)) newVal = pawianParams->UpperLimit(i);
+            else if (newVal < pawianParams->LowerLimit(i)) newVal = pawianParams->LowerLimit(i);
+        }
+
+	pawianParams->SetValue(i, newVal);
     }
-    pawianParams->SetValue(i,newVal);
-  }
 }
+
 
 
 void AdamMinimizer::printFitResult(double evtWeightSumData){
