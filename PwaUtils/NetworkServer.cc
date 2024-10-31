@@ -60,7 +60,8 @@ NetworkServer::NetworkServer(int port, unsigned short noOfClients, std::map<Chan
    theAcceptor = std::shared_ptr<tcp::acceptor>(new tcp::acceptor(*theIOService, tcp::endpoint(tcp::v4(), _port)));
    theDeadlineTimer = std::shared_ptr<boost::asio::deadline_timer>(new boost::asio::deadline_timer(*theIOService));
 
-   theAcceptor->set_option(boost::asio::ip::tcp::no_delay(true)); //diable nagels
+   theAcceptor->set_option(boost::asio::socket_base::keep_alive(true));
+   theAcceptor->set_option(boost::asio::ip::tcp::no_delay(true)); //disable nagels
 
    for(int i=0; i<_noOfClients; i++){
       theStreams.push_back( std::shared_ptr<tcp::iostream>(new tcp::iostream) );

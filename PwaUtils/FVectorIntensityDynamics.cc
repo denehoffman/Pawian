@@ -72,7 +72,7 @@ FVectorIntensityDynamics::FVectorIntensityDynamics(std::string& name, std::vecto
   std::string prodMomParamsStr=thePiPiScatteringParser->prodMomParamsStr();
   std::stringstream prodMomParamsStringStr;
   prodMomParamsStringStr << prodMomParamsStr;
-  
+
   std::string L2prodStr;
   prodMomParamsStringStr >> L2prodStr;
   _L2prod=atof(L2prodStr.c_str());
@@ -120,7 +120,7 @@ complex<double> FVectorIntensityDynamics::eval(EvtData* theData, AbsXdecAmp* gra
   //  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass, _orbitalL).real()*currentMass/2. * momQ2L) );
 
   //  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(_currentAmplitudeVal*currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L) );
-  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(currentFAmp*sqrt(thePhpVecs.at(_prodProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L));
+  double currentResult = pow(currentMass*currentMass,_sProdExp)*norm(currentFAmp*sqrt(thePhpVecs.at(_decProjectionIndex)->factor(currentMass).real()*currentMass/2. * momQ2L));
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME)) = currentResult;
   return currentFAmp;
 }
@@ -144,12 +144,9 @@ bool FVectorIntensityDynamics::checkRecalculation(std::shared_ptr<AbsPawianParam
 
 void FVectorIntensityDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
   KMatrixDynamics::updateFitParams(fitPar);
-  //_currentAmplitudeVal = std::polar( std::abs(fitPar->Value(_nameOfAmplitudeMag)), 
+  //_currentAmplitudeVal = std::polar( std::abs(fitPar->Value(_nameOfAmplitudeMag)),
   //                             fitPar->Value(_nameOfAmplitudePhi) );
 
-  // _currentAmplitudeVal = std::polar( fitPar->Value(_nameOfAmplitudeMag), 
+  // _currentAmplitudeVal = std::polar( fitPar->Value(_nameOfAmplitudeMag),
   //                             fitPar->Value(_nameOfAmplitudePhi) );
 }
-
-
-

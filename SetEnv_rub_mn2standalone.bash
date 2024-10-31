@@ -31,7 +31,7 @@ fi
 #### user defined variables
 ############################
 # path to root installation (will only be used if root is not already sourced -> ROOTSYS not set)
-ROOT_DIR="/opt/root/6-32.04-AL9.4-gcc12.2.0"
+ROOT_DIR="/opt/root/6-28.04-AL9.2-gcc12.2.0"
 # path to Minuit2 package
 MINUIT2_STANDALONE="/data/iltschi/pawian_utils/Minuit2/Minuit2-6.33.01_AlmaLinux9.4_gcc12.2.0"
 # path to boost build
