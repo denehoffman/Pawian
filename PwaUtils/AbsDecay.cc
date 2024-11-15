@@ -572,32 +572,21 @@ void AbsDecay::fillWignerDs(std::map<std::string, Vector4<double> >& fsMap,
       }
       
        std::vector< std::shared_ptr<AbsDecay> > motherMotherAmpList=motherAmpList.at(0)->motherAmpRefList();
-      if(motherMotherAmpList.size()>1 || motherMotherAmpList.size()==0){
+       if(motherMotherAmpList.size()>1 || motherMotherAmpList.size()==0){
         Alert << "decay level " << whichDecayLevel() << " for the decay " << name() << " contains 0 or more than 1 production reference amplitude! Production plane cannot be set properly" << endmsg;
         Alert << "motherMotherAmpList.size(): " << motherMotherAmpList.size() << endmsg;
         exit(0);
       }
  
-      Vector4<double> motherRefDaughter1_4Vec;
-      std::vector<Particle*> motherRefDaughter1List=motherMotherAmpList.at(0)->finalStateParticlesDaughter1();
-      for(itP=motherRefDaughter1List.begin(); itP!=motherRefDaughter1List.end(); ++itP){
-	itMap=fsMap.find((*itP)->name());
-	motherRefDaughter1_4Vec+=itMap->second;
+      std::vector<Particle*> motherMotherFStPs=motherMotherAmpList.at(0)->finalStateParticles();
+      motherRefVec=Vector4<double>(0.,0.,0.,0.);
+      for(itP=motherMotherFStPs.begin(); itP!=motherMotherFStPs.end(); ++itP){
+        itMap=fsMap.find((*itP)->name());
+	motherRefVec+=itMap->second;
       }
-      
-      //fill daughter2
-      Vector4<double> motherRefDaughter2_4Vec;
-      std::vector<Particle*> motherRefDaughter2List=motherMotherAmpList.at(0)->finalStateParticlesDaughter2();
-      for(itP=motherRefDaughter2List.begin(); itP!=motherRefDaughter2List.end(); ++itP){
-	itMap=fsMap.find((*itP)->name());
-	motherRefDaughter2_4Vec+=itMap->second;
-      }
-      
-      motherRefVec=motherRefDaughter1_4Vec+motherRefDaughter2_4Vec;
-      //InfoMsg << "motherRefVec: " << motherRefVec << endmsg;
-      //InfoMsg << "prodParticle4Vec: " << prodParticle4Vec << endmsg;
+      // InfoMsg << "motherRefVec: " << motherRefVec << "\tmass: " << motherRefVec.M() << endmsg;
+      // InfoMsg << "prodParticle4Vec: " << prodParticle4Vec << "\tmass: " << prodParticle4Vec.M() << endmsg;
     }  
-
     daughter2HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter2_4Vec);
     daughter1HelMother=KinUtils::heliVec(motherRefVec, prodParticle4Vec, mother4Vec, daughter1_4Vec);
   }
