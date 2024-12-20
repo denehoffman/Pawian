@@ -1,7 +1,7 @@
 alias install : install-bin install-lib ;
 explicit install ;
 
-install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp PiPiSWaveApp PhpFactorApp LUTPlotApp
+install install-bin : BwShapeApp FlatteShapeApp TwoPolesApp PiPiSWaveApp PhpFactorApp LUTPlotApp SigmaParamShapeApp
                  : <location>$(TOP)/bin
                    <install-dependencies>on 
                    <install-type>EXE
@@ -104,6 +104,18 @@ exe PhpFactorApp : PhpFactorApp.cc LineShapes
 	  : ;
 
 exe LUTPlotApp : LUTPlotApp.cc LineShapes 
+    	  $(TOP)/PwaDynamics//PwaDynamics
+	  $(TOP)/Particle//Particle
+	  $(TOP)/ConfigParser//ConfigParser
+	  $(TOP)/PwaUtils//PwaUtils
+	  $(TOP)/Event//Event
+	  $(TOP)/FitParams//FitParams
+	  $(TOP)/qft++Extension//qft++Extension
+          $(TOP)/ErrLogger//ErrLogger
+	  $(TOP)/qft++//qft++
+	  : ;
+
+exe SigmaParamShapeApp : SigmaParamShapeApp.cc LineShapes 
     	  $(TOP)/PwaDynamics//PwaDynamics
 	  $(TOP)/Particle//Particle
 	  $(TOP)/ConfigParser//ConfigParser
