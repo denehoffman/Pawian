@@ -107,6 +107,8 @@ protected:
   virtual void evalArgandUnits(EvtData* theData, double currentMass, Spin OrbMom);
   virtual void evalTreal(EvtData* theData, double currentMass, Spin OrbMom);
   virtual void evalTimag(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalTabs(EvtData* theData, double currentMass, Spin OrbMom);
+  virtual void evalPhasePhi(EvtData* theData, double currentMass, Spin OrbMom);
   unsigned int noOfRotations(double currentMass);
   
 private:

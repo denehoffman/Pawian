@@ -72,8 +72,14 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
   if (GlobalEnv::instance()->parser()->productionFormalism()=="Phase"){
     graphNameData="PhaseData";
     graphNameFit="PhaseFit";
-    graphTitleData="#eta (data)";
-    graphTitleFit="#eta (fit)";
+    graphTitleData="#delta (data)";
+    graphTitleFit="#delta (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="PhasePhi"){
+    graphNameData="PhaseData";
+    graphNameFit="PhaseFit";
+    graphTitleData="#Phi (data)";
+    graphTitleFit="#Phi (fit)";
   }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="Elasticity"){
     graphNameData="ElasticityData";
@@ -98,6 +104,12 @@ RootPiPiScatteringHist::RootPiPiScatteringHist(std::string additionalSuffix, boo
     graphNameFit="TimagFit";
     graphTitleData="T_{ij} imag (data)";
     graphTitleFit="T_{ij} imag (fit)";
+  }
+  else if (GlobalEnv::instance()->parser()->productionFormalism()=="Tabs"){
+    graphNameData="TabsData";
+    graphNameFit="TabsFit";
+    graphTitleData="|T| (data)";
+    graphTitleFit="|T| (fit)";
   }
   else if (GlobalEnv::instance()->parser()->productionFormalism()=="PhaseDiff"){
     graphNameData="PhaseDiffData";

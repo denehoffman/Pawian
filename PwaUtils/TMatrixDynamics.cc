@@ -79,6 +79,8 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   else if(dataType=="Treal") _dataTypeID=7;
   else if(dataType=="Timag") _dataTypeID=8;
   else if(dataType=="Tcheck") _dataTypeID=9;
+  else if(dataType=="Tabs") _dataTypeID=10;
+  else if(dataType=="PhasePhi") _dataTypeID=11;
   else {
     Alert << "production formalism/data type with the name" << dataType 
 	  << " is not supported for pi pi scattering fits! \n It is working for: "
@@ -122,6 +124,12 @@ complex<double> TMatrixDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAmp, 
   }
   else if(_dataTypeID==8){
     evalTimag(theData, currentMass, OrbMom);
+  }
+  else if(_dataTypeID==10){
+    evalTabs(theData, currentMass, OrbMom);
+  }
+  else if(_dataTypeID==11){
+    evalPhasePhi(theData, currentMass, OrbMom);
   }
   else{
     Alert << "_dataTypeID = " <<_dataTypeID << " is not supported!!!" << endmsg;
@@ -528,6 +536,27 @@ void TMatrixDynamics::evalTimag(EvtData* theData, double currentMass, Spin OrbMo
   theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=currentTijRel.imag();
 }
 
+void TMatrixDynamics::evalTabs(EvtData* theData, double currentMass, Spin OrbMom){
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=std::abs(currentTijRel);
+}
+
+void TMatrixDynamics::evalPhasePhi(EvtData* theData, double currentMass, Spin OrbMom=0){
+  complex<double> currentTijRel=(*_tMatr)(_prodProjectionIndex,_decProjectionIndex);
+  double phasePhi = std::arg(currentTijRel)*PawianConstants::radToDeg;
+  while(phasePhi>180.) phasePhi-=360.;
+  while(phasePhi<-180.) phasePhi+=360.;
+  //if (phasePhi<0.) phasePhi+=180.; 
+
+  double phasePhiData=theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::DATA_PIPISCAT_NAME));
+
+  while( (phasePhiData-phasePhi) > 180.) phasePhi+=360.;
+  while( (phasePhi-phasePhiData) > 180.) phasePhi-=360.;
+
+  theData->DoubleId.at(IdStringMapRegistry::instance()->stringId(EvtDataScatteringList::FIT_PIPISCAT_NAME))=phasePhi;
+
+}
+
 unsigned int TMatrixDynamics::noOfRotations(double currentMass){
   unsigned int noOfLoops=0;
   std::map<unsigned int, double >::iterator it;
@@ -564,7 +593,11 @@ void TMatrixDynamics::fillMasses(EvtData* theData){
 
 void TMatrixDynamics::setProdProjectionIndex(int idx){
   if(idx>=0) _prodProjectionIndex=idx;
-  if( _prodProjectionIndex > (int) _phpVecs.size()){
+  // else{
+  //   ErrMsg << "projection index for the production = " << idx << " is negative!!! The index must be between 0 and (number of channels - 1)" << endmsg;
+  //   exit(1);
+  // }
+  if( _prodProjectionIndex > (int) _phpVecs.size()-1){
     ErrMsg << "projection index for the production = " << _prodProjectionIndex << " is too large!!!"
 	   << "\nmust be less than number of channels: " << _phpVecs.size() << endmsg;
     exit(1);
