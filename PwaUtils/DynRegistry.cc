@@ -56,6 +56,8 @@
 #include "PwaUtils/LinearDynamics.hh"
 #include "PwaUtils/OmnesDynamics.hh"
 #include "PwaUtils/SExpDynamics.hh"
+#include "PwaUtils/SigmaParamDynamics.hh"
+
 #include "PwaUtils/ProdChannelInfo.hh"
 
 #include "PwaUtils/GlobalEnv.hh"
@@ -189,6 +191,9 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	exit(0);
       }
       result= std::shared_ptr<AbsDynamics>(new BreitWignerBlattWTensorRelDynamics(theName, fsParticles, theDec->motherPart(), fsParticlesDaughter1, fsParticlesDaughter2, theDec->barrierqR()));
+    }
+    else if(theDec->dynType()=="SigmaParam"){
+      result= std::shared_ptr<AbsDynamics>(new SigmaParamDynamics(theName, fsParticles, theDec->motherPart()));
     }
     else if(theDec->dynType()=="KMatrix"){
       std::string pathToConfigFile=theDec->pathToConfigParser();

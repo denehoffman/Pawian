@@ -73,7 +73,10 @@ complex<double> SigmaParameterization::calc(double currentMass){
   return result;
 }
 
-std::complex<double> SigmaParameterization::php4pi(double currentMass2){
+complex<double> SigmaParameterization::calc(double currentMass, double gSigma){
+  return gSigma*calc(currentMass);
+}
+  std::complex<double> SigmaParameterization::php4pi(double currentMass2){
   // if(currentMass2<16.*PawianConstants::mPiSq){
   // Alert << "current mass^2 must be larger than 16*m_pi^2!!!\n current mass^2: " << currentMass2 <<"\n16*m_pi^2: " << 16.*PawianConstants::mPiSq << endmsg;
   // exit(1);

@@ -45,6 +45,7 @@ public:
   ~SigmaParameterization();
 
   complex<double> calc(double currentMass);
+  complex<double> calc(double currentMass, double gSigma);
   complex<double> calcT(double currentMass);
   
 protected:
