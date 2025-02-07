@@ -60,6 +60,14 @@ SigmaParameterization::SigmaParameterization(double mPole, double g4pi, double b
 SigmaParameterization::~SigmaParameterization(){
 }
 
+void SigmaParameterization::setBarePoleMass(double barePoleMass){
+  _mPole = barePoleMass;
+  _mPoleSqr = barePoleMass*barePoleMass;
+  _g2piDenom = _mPoleSqr-PawianConstants::mPiSq/2.;
+  _rho2pi_mPole = PawianQFT::phaseSpaceFacDefault(barePoleMass,PawianConstants::mPi, PawianConstants::mPi);
+  _rho4pi_mPole = php4pi(barePoleMass*barePoleMass);  
+}
+
 complex<double> SigmaParameterization::calc(double currentMass){
   //complex<double> result(1.,0.);
   double currentM2=currentMass*currentMass;
@@ -73,7 +81,7 @@ complex<double> SigmaParameterization::calc(double currentMass){
   return result;
 }
 
-complex<double> SigmaParameterization::calc(double currentMass, double gSigma){
+complex<double> SigmaParameterization::calc(double currentMass, std::complex<double> gSigma){
   return gSigma*calc(currentMass);
 }
   std::complex<double> SigmaParameterization::php4pi(double currentMass2){

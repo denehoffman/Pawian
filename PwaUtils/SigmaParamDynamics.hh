@@ -52,9 +52,20 @@ public:
   virtual void fillParamNameList();
 protected:
   //  std::string _massKey;
-
-   double _currentStrength;
   std::shared_ptr<SigmaParameterization> _sigmaParamDyn; 
+  complex<double> _currentStrength;
+  double _currentPoleMass;
+  double _currentb1;
+  double _currentb2;
+  double _currenta;
+  double _currentg4pi;
+  const std::string _strenghtNameMag;
+  const std::string _strenghtNamePhi;
+  const std::string _poleMassName;
+  const std::string  _b1Name;
+  const std::string  _b2Name;
+  const std::string  _aName;
+  const std::string  _g4piName;
   
 private:
 

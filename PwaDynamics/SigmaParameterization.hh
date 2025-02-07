@@ -45,8 +45,19 @@ public:
   ~SigmaParameterization();
 
   complex<double> calc(double currentMass);
-  complex<double> calc(double currentMass, double gSigma);
+  complex<double> calc(double currentMass, std::complex<double> gSigma);
   complex<double> calcT(double currentMass);
+
+  const double barePoleMass() const {return _mPole;}
+  void setBarePoleMass(double barePoleMass);
+  const double b1Param() const {return _b1;}
+  void setb1Param(double b1) {_b1=b1;}
+  const double b2Param() const {return _b2;}
+  void setb2Param(double b2) {_b2=b2;}
+  const double aParam() const {return _a;}
+  void setaParam(double a) {_a=a;}
+  const double g4piParam() const {return _g4pi;}
+  void setg4piParam(double g4pi) {_g4pi=g4pi;}
   
 protected:
   std::complex<double> php4pi(double currentMass2);
@@ -56,10 +67,10 @@ protected:
   double _b2;
   double _a;
   const double _sAdler;
-  const double _mPoleSqr;
-  const double _g2piDenom;
-  const std::complex<double> _rho2pi_mPole;
-  const std::complex<double> _rho4pi_mPole;
+  double _mPoleSqr;
+  double _g2piDenom;
+  std::complex<double> _rho2pi_mPole;
+  std::complex<double> _rho4pi_mPole;
 };
 
 

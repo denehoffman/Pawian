@@ -24,6 +24,8 @@
 
 #include <iostream>
 
+const double protonMass=0.93827208816;
+
 class KinematicsTools
 {
  public:
@@ -47,5 +49,16 @@ class KinematicsTools
   static double breakupMom(double mass, double massDec1, double massDec2){
     return phaseSpaceFac(mass, massDec1, massDec2)*mass/2.;
   }
+
+ static double pbarpMassFrompbarp(double pbarMom){
+   TLorentzVector pbarpVec(0.,0.,pbarMom,sqrt(protonMass*protonMass+pbarMom*pbarMom)+protonMass);
+   return pbarpVec.M();  
+  }
+
+  static double pbarMomFrompbarp(double pbarpMass){
+    double pbarpSqr=std::pow((pbarpMass*pbarpMass-2.*protonMass*protonMass)/(2.*protonMass), 2.)-protonMass*protonMass;
+    return sqrt( pbarpSqr);  
+  }
+  
 };
 

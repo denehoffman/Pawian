@@ -34,8 +34,20 @@
 
 SigmaParamDynamics::SigmaParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
   AbsDynamics(name, fsParticles, mother)
-  ,_currentStrength(1.)
   ,_sigmaParamDyn(std::shared_ptr<SigmaParameterization>(new SigmaParameterization))
+  ,_currentStrength(std::complex<double>(1.,0.))  
+  ,_currentPoleMass(_sigmaParamDyn->barePoleMass())
+  ,_currentb1(_sigmaParamDyn->b1Param())
+  ,_currentb2(_sigmaParamDyn->b2Param())
+  ,_currenta(_sigmaParamDyn->aParam())
+  ,_currentg4pi(_sigmaParamDyn->g4piParam())
+  ,_strenghtNameMag(_massKey+"StrengthMag")
+  ,_strenghtNamePhi(_massKey+"StrengthPhi")
+  ,_poleMassName("sigmaPoleBareMass")
+  ,_b1Name("sigmab1")
+  ,_b2Name("sigmab2")
+  ,_aName("sigmaa")
+  ,_g4piName("sigmag4pi")
 {
   _isLdependent=false;
 }
@@ -59,21 +71,52 @@ complex<double> SigmaParamDynamics::eval(EvtData* theData, AbsXdecAmp* grandmaAm
 
 
 void SigmaParamDynamics::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  //fill mass
-  std::string strengthName=_massKey+"Strength";
-  fitPar->Add(strengthName, _currentStrength, 0.1);
-  //  fitPar->SetLimits(massName, minMass, maxMass);
+  //fill production strength mag
+  fitPar->Add(_strenghtNameMag, std::abs(_currentStrength), 0.01);
+  //fill production strength phase
+  fitPar->Add(_strenghtNamePhi, std::arg(_currentStrength), 0.01);
+  //fill pole bare mass
+  fitPar->Add(_poleMassName, _currentPoleMass, 0.01, std::abs(_currentPoleMass-0.2), _currentPoleMass+0.2);
+  //fill b1 param
+  fitPar->Add(_b1Name, _currentb1, 0.01, std::abs(_currentb1-0.2), _currentb1+0.2);
+  //fill b2 param
+  fitPar->Add(_b2Name, _currentb2, 0.01, std::abs(_currentb2-0.2), _currentb2+0.2);
+  //fill a param
+  fitPar->Add(_aName, _currenta, 0.01, std::abs(_currenta-0.2), _currenta+0.2);
+  //fill g4pi param
+  fitPar->Add(_g4piName, _currentg4pi, 0.00001, 0., _currentg4pi+0.0001);
 }
 
 
 void SigmaParamDynamics::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
-  std::string strengthName=_massKey+"Strength";
-  _currentStrength=fitPar->Value(strengthName);
+  double currentStrengthMag = fitPar->Value(_strenghtNameMag);
+  double currentStrengthPhi = fitPar->Value(_strenghtNamePhi);
+  _currentStrength=std::polar(currentStrengthMag,currentStrengthPhi);
+
+  _currentPoleMass = fitPar->Value(_poleMassName);
+  _sigmaParamDyn->setBarePoleMass(_currentPoleMass);
+
+  _currentb1= fitPar->Value(_b1Name);
+  _sigmaParamDyn->setb1Param(_currentb1);
+
+  _currentb2= fitPar->Value(_b2Name);
+  _sigmaParamDyn->setb2Param(_currentb2);
+
+  _currenta= fitPar->Value(_aName);
+  _sigmaParamDyn->setaParam(_currenta);
+
+  _currentg4pi= fitPar->Value(_g4piName);
+  _sigmaParamDyn->setg4piParam(_currentg4pi);  
 }
 
 void SigmaParamDynamics::fillParamNameList(){
   _paramNameList.clear();
   //fill
-  std::string strengthName=_massKey+"Strength";
-  _paramNameList.push_back(strengthName);
+  _paramNameList.push_back(_strenghtNameMag);
+  _paramNameList.push_back(_strenghtNamePhi);
+  _paramNameList.push_back(_poleMassName);
+  _paramNameList.push_back(_b1Name);
+  _paramNameList.push_back(_b2Name);
+  _paramNameList.push_back(_aName);
+  _paramNameList.push_back(_g4piName);
 }
