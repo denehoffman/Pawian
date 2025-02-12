@@ -212,6 +212,7 @@ void PiPiScatteringChannelEnv::addDynamics(){
   InfoMsg << "dynStr: " << dynStr << endmsg;
 
   if(dynStr=="KMatrix" || dynStr=="FixedKMatrix" || dynStr=="TMatrix" || dynStr=="FVectorIntensity"|| dynStr=="TMatrixCompare" || dynStr=="FVectorCompare") _pathKMatrixParserFile=additionalStringVec[0];
+  else if(dynStr=="TMatrixSigmaPar") _pathKMatrixParserFile="";
   else{
     Alert << "dyn type " << dynStr << " is not supported for pipi scattering reactions!!!" << endmsg;
     exit(0);

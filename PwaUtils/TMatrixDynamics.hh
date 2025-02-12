@@ -48,6 +48,7 @@ public:
   TMatrixDynamics(std::shared_ptr<KMatrixParser> kMatrixParser);
   //  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType="Elasticity");
   TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother, std::string& pathToConfigParser, std::string dataType, std::string projectionParticleNames="");
+  TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~TMatrixDynamics();
 
   virtual std::string type() {return "TMatrixDynamics";}

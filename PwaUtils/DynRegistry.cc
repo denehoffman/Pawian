@@ -57,6 +57,7 @@
 #include "PwaUtils/OmnesDynamics.hh"
 #include "PwaUtils/SExpDynamics.hh"
 #include "PwaUtils/SigmaParamDynamics.hh"
+#include "PwaUtils/TMatrixSigmaParDynamics.hh"
 
 #include "PwaUtils/ProdChannelInfo.hh"
 
@@ -137,7 +138,14 @@ std::shared_ptr<AbsDynamics> DynRegistry::getDynamics(std::shared_ptr<AbsDecay> 
 	result= std::shared_ptr<AbsDynamics>(theTMatrixDynamics);	
 	//	result= std::shared_ptr<AbsDynamics>(new TMatrixDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames));
       }
-      else if(theDec->dynType()=="TMatrixCompare"){
+  else if (theDec->dynType()=="TMatrixSigmaPar"){
+    std::string pathToConfigFile="";
+    std::string projectionParticleNames = theDec->projectionParticleNames();
+    std::string currentDataType=GlobalEnv::instance()->Channel(currentChannelId)->parser()->productionFormalism();
+    TMatrixDynamics* theTMatrixDynamics=new TMatrixSigmaParDynamics(theName, fsParticles, theDec->motherPart(), pathToConfigFile, currentDataType, projectionParticleNames);
+    result= std::shared_ptr<AbsDynamics>(theTMatrixDynamics);
+  }
+  else if(theDec->dynType()=="TMatrixCompare"){
 	std::string pathToConfigFile=theDec->pathToConfigParser();
 	std::string pathToConfigCompareFile=thePiPiScatteringParser->pathToKMatrixCompareFile();
 	std::string projectionParticleNames = theDec->projectionParticleNames();

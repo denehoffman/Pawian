@@ -58,6 +58,7 @@ public:
   void setaParam(double a) {_a=a;}
   const double g4piParam() const {return _g4pi;}
   void setg4piParam(double g4pi) {_g4pi=g4pi;}
+  std::complex<double> rho2pi() {return _rho2pi_mPole;}
   
 protected:
   std::complex<double> php4pi(double currentMass2);

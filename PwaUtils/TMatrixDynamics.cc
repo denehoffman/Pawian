@@ -68,6 +68,7 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   ,_projectionParticleNames(projectionParticleNames)
 {
   _pathToKMatCfgParser=PawianIOUtils::getFileName(GlobalEnv::instance()->KMatrixStorePath(), pathToConfigParser);
+
   _kMatrixParser = std::shared_ptr<KMatrixParser>(new KMatrixParser(_pathToKMatCfgParser));
   
   if(dataType=="Elasticity") _dataTypeID=1;
@@ -92,6 +93,12 @@ TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsPa
   if(_prodProjectionIndex != _decProjectionIndex) _prodIsNotDecChannel=true;
   _isLdependent=true;
 }
+
+TMatrixDynamics::TMatrixDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother) :
+  AbsDynamics(name, fsParticles, mother)
+ {
+}
+
 
 TMatrixDynamics::TMatrixDynamics(std::shared_ptr<KMatrixParser> kMatrixParser) :
   AbsDynamics()

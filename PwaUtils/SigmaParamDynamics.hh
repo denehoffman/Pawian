@@ -21,7 +21,7 @@
 //************************************************************************//
 
 // SigmaParamDynamics class definition file. -*- C++ -*-
-// Copyright 2025 Bertram Kopf
+// Copyright 2017 Bertram Kopf
 
 #pragma once
 
@@ -32,40 +32,32 @@
 #include <string>
 #include <memory>
 
-#include "PwaUtils/AbsDynamics.hh"
-#include "FitParams/AbsPawianParameters.hh"
+#include "PwaUtils/TMatrixSigmaParDynamics.hh"
 
+class AbsXdecAmp;
+class AbsPhaseSpace;
+class AbsPawianParameters;
 class SigmaParameterization;
 
-class SigmaParamDynamics : public AbsDynamics{
+class SigmaParamDynamics : public TMatrixSigmaParDynamics{
 
 public:
+  //  SigmaParamDynamics();
   SigmaParamDynamics(std::string& name, std::vector<Particle*>& fsParticles, Particle* mother);
   virtual ~SigmaParamDynamics();
 
   virtual std::string type() {return "SigmaParamDynamics";}
-  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp, Spin OrbMom=0);
-  
+  virtual complex<double> eval(EvtData* theData, AbsXdecAmp* grandmaAmp=0, Spin OrbMom=0);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
-
-  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void fillParamNameList();
+  virtual bool checkRecalculation(std::shared_ptr<AbsPawianParameters> fitParNew, std::shared_ptr<AbsPawianParameters> fitParOld); 
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+
+  
 protected:
-  //  std::string _massKey;
-  std::shared_ptr<SigmaParameterization> _sigmaParamDyn; 
   complex<double> _currentStrength;
-  double _currentPoleMass;
-  double _currentb1;
-  double _currentb2;
-  double _currenta;
-  double _currentg4pi;
   const std::string _strenghtNameMag;
   const std::string _strenghtNamePhi;
-  const std::string _poleMassName;
-  const std::string  _b1Name;
-  const std::string  _b2Name;
-  const std::string  _aName;
-  const std::string  _g4piName;
   
 private:
 
