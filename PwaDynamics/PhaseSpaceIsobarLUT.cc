@@ -111,8 +111,8 @@ complex<double> PhaseSpaceIsobarLUT::ChewM(const double mass, int orbMom){
 	       << "\t cach it now!!!" << endmsg;
     //    exit(1);
     cacheFactors(mass);
-    result=_CMCache.at(massInt100keV);
-    result=conj(result); //sign must be changed on the real axis to be in agreement with the first quadrant
+    result=_CMCache.at(massInt100keV);   
+    //result=conj(result); //sign must be changed on the real axis to be in agreement with the first quadrant
   }
   return result;
 }
@@ -168,6 +168,10 @@ LUTLine PhaseSpaceIsobarLUT::readLine(int _lineOffset){
 complex<double> PhaseSpaceIsobarLUT::interpolateCM(LUTLine _P11, LUTLine _P21, LUTLine _P12, LUTLine _P22, complex<double> _s){
   double resultRe = ((_P22.requested.imag()-_s.imag())/(_P22.requested.imag()-_P11.requested.imag()))*(((_P22.requested.real()-_s.real())/(_P22.requested.real()-_P11.requested.real()))*_P11.cm.real()+((_s.real()-_P11.requested.real())/(_P22.requested.real()-_P11.requested.real()))*_P21.cm.real())+((_s.imag()-_P11.requested.imag())/(_P22.requested.imag()-_P11.requested.imag()))*(((_P22.requested.real()-_s.real())/(_P22.requested.real()-_P11.requested.real()))*_P12.cm.real()+((_s.real()-_P11.requested.real())/(_P22.requested.real()-_P11.requested.real()))*_P22.cm.real());
   double resultIm = ((_P22.requested.imag()-_s.imag())/(_P22.requested.imag()-_P11.requested.imag()))*(((_P22.requested.real()-_s.real())/(_P22.requested.real()-_P11.requested.real()))*_P11.cm.imag()+((_s.real()-_P11.requested.real())/(_P22.requested.real()-_P11.requested.real()))*_P21.cm.imag())+((_s.imag()-_P11.requested.imag())/(_P22.requested.imag()-_P11.requested.imag()))*(((_P22.requested.real()-_s.real())/(_P22.requested.real()-_P11.requested.real()))*_P12.cm.imag()+((_s.real()-_P11.requested.real())/(_P22.requested.real()-_P11.requested.real()))*_P22.cm.imag());
+
+  if(std::abs(resultRe)<1.e-12) resultRe=0.;
+  if(std::abs(resultIm)<1.e-12) resultIm=0.;
+
   complex<double> result = complex<double>(resultRe, resultIm);
   return result;
 }
