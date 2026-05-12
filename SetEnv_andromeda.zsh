@@ -10,11 +10,6 @@ else
     read choice
 
     if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
-        LD_LIBRARY_PATH="${LD_LIBRARY_PATH/${MINUIT2_STANDALONE}\/lib:${TOP_DIR}\/lib/}"
-        LD_LIBRARY_PATH="${LD_LIBRARY_PATH//::/:}"
-        LD_LIBRARY_PATH="${LD_LIBRARY_PATH#:}"
-        LD_LIBRARY_PATH="${LD_LIBRARY_PATH%:}"
-
         PATH="${PATH/${TOP_DIR}\/bin/}"
         PATH="${PATH//::/:}"
         PATH="${PATH#:}"
@@ -35,7 +30,12 @@ fi
 ############################
 ROOT_DIR="/home/dene/opt/root/root_install"
 MINUIT2_STANDALONE="$HOME/.local"
-BOOST_BUILD_PATH="$HOME/opt/boost/1.70/tools/build"
+
+BOOSTROOT="$HOME/opt/boost/1.70"
+BOOSTINCLUDE="$BOOSTROOT/include"
+BOOSTLIBPATH="$BOOSTROOT/lib"
+BOOST_BUILD_PATH="$BOOSTROOT/tools/build"
+
 KMAT_DIR="/data/duldul/bertram/KMatStore/"
 EVT_DIR="/data/duldul/bertram/EvtStore/"
 JAM_FILE="Jamroot_andromeda"
@@ -43,20 +43,26 @@ JAM_FILE="Jamroot_andromeda"
 #### source root
 source "${ROOT_DIR}/bin/thisroot.sh"
 
-#### prepend boost, minuit2, and pawian libs
-LD_LIBRARY_PATH="$HOME/opt/boost/1.70/lib:${MINUIT2_STANDALONE}/lib:${TOP_DIR}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
-
-CPLUS_INCLUDE_PATH="$HOME/opt/boost/1.70/include${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
+#### force boost 1.70, minuit2, and pawian libs/includes
+LD_LIBRARY_PATH="$BOOSTLIBPATH:${MINUIT2_STANDALONE}/lib:${TOP_DIR}/lib"
+CPLUS_INCLUDE_PATH="$BOOSTINCLUDE"
 
 #### append PATH
 PATH="${PATH:+${PATH}:}${TOP_DIR}/bin"
 
 #### export variables
 export TOP_DIR
+export ROOT_DIR
+export ROOTSYS
 export KMAT_DIR
 export EVT_DIR
-export BOOST_BUILD_PATH
 export MINUIT2_STANDALONE
+
+export BOOSTROOT
+export BOOSTINCLUDE
+export BOOSTLIBPATH
+export BOOST_BUILD_PATH
+
 export LD_LIBRARY_PATH
 export CPLUS_INCLUDE_PATH
 export PATH
