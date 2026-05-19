@@ -36,6 +36,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/IsobarHeliDecay.hh"
 #include "PwaUtils/IsobarTensorDecay.hh"
+#include "PwaUtils/ProdChannelInfo.hh"
 #include "ErrLogger/ErrLogger.hh"
 
 
@@ -44,13 +45,15 @@
 
 GammapChannelEnv::GammapChannelEnv(gammapParser* theParser) : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GAMMAP)
   ,_lmax(0)
+  ,_beamPolFraction(0.)
+  ,_beamPolAngle(0.)
   ,_theGamPParser(theParser)
 {
 }
 
-void GammapChannelEnv::setup(ChannelID id){
+void GammapChannelEnv::setupChannel(ChannelID id){
 
-   AbsChannelEnv::setup(id);
+   AbsChannelEnv::setupGlobal(id);
 
    double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
    double gammaMomMax=10.;
@@ -58,6 +61,12 @@ void GammapChannelEnv::setup(ChannelID id){
    
    //Lmax
    _lmax=_theGamPParser->getLMax();
+   _beamPolFraction=_theGamPParser->beamPolFraction();
+   _beamPolAngle=_theGamPParser->beamPolAngle();
+   if(_beamPolFraction < 0. || _beamPolFraction > 1.){
+      Alert << "beamPolFraction must be in [0, 1], got " << _beamPolFraction << endmsg;
+      exit(1);
+   }
 
    // individual Lmax settings
    std::vector<std::string> theDropGammapLForParticles = _theGamPParser->dropGammapLForParticle();
@@ -75,7 +84,7 @@ void GammapChannelEnv::setup(ChannelID id){
 
 
    //gammap reaction
-   _gammapReaction=std::shared_ptr<gammapReaction>(new gammapReaction(_producedParticlePairs, id,_lmax));
+   _gammapReaction=std::shared_ptr<gammapReaction>(new gammapReaction(_prodChannelInfoList, id,_lmax));
 
    //fill prodDecayList
    std::vector<std::string> additionalStringVecDummy;
@@ -85,7 +94,7 @@ void GammapChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarLSDecay> > prodDecs= _gammapReaction->productionDecays();
       std::vector< std::shared_ptr<IsobarLSDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theGamPParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theGamPParser->qRProduction());
+	if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
 	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	_prodDecList->addDecay(*itDec);
       }
@@ -102,7 +111,7 @@ void GammapChannelEnv::setup(ChannelID id){
       std::vector< std::shared_ptr<IsobarHeliDecay> > prodDecs= _gammapReaction->productionHeliDecays();
       std::vector< std::shared_ptr<IsobarHeliDecay> >::iterator itDec;
       for (itDec=prodDecs.begin(); itDec!=prodDecs.end(); ++itDec){
-	if(_theGamPParser->useProductionBarrier()) (*itDec)->enableProdBarrier(_theGamPParser->qRProduction());
+	if((*itDec)->prodChannelInfo()->withProdBarrier()) (*itDec)->enableProdBarrier();
 	else (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
 	_prodDecList->addDecay(*itDec);
       }
@@ -221,7 +230,7 @@ void GammapChannelEnv::setup(ChannelID id){
    std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
    std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
    for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
-     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp);    
+     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, *itProdDecList, *itProdDecList);
    }
    
    // spin density particles

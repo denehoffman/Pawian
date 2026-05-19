@@ -36,10 +36,12 @@ class gammapReaction;
 class GammapChannelEnv : public AbsChannelEnv
 {
 public:
-   void setup(ChannelID id);
+   virtual void setupChannel(ChannelID id);
    GammapChannelEnv(gammapParser* theParser);
   //  const float gammaMomentum() const {return _gammaMomentum;}
    const int lmax() const {return _lmax;}
+   const double beamPolFraction() const {return _beamPolFraction;}
+   const double beamPolAngle() const {return _beamPolAngle;}
 
   std::shared_ptr<gammapReaction> reaction() {return _gammapReaction;}
    std::vector<std::string>& spinDensityNames(){ return _spinDensity;}
@@ -49,6 +51,8 @@ public:
 
 private:
    int _lmax;
+   double _beamPolFraction;
+   double _beamPolAngle;
   //  float _gammaMomentum;
    gammapParser* _theGamPParser;
 

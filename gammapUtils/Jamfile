@@ -27,4 +27,9 @@ lib gammapUtils :
 	: 
 	: ;
 
-exe gammapStatesApp : gammapStatesApp.cc gammapUtils : ;
+exe gammapStatesApp : gammapStatesApp.cc gammapUtils
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/PwaUtils//PwaUtils
+	$(TOP)/Utils//Utils
+	$(TOP)/qft++//qft++
+	: ;

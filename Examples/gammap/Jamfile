@@ -32,5 +32,21 @@ lib gammap :
         : 
         :   ;
 
-exe gammapReactionApp : gammapReactionApp.cc gammap : ;
-exe selectGammapDataApp : selectGammapDataApp.cc gammap : ;
+exe gammapReactionApp : gammapReactionApp.cc gammap
+        $(TOP)/gammapUtils//gammapUtils
+        $(TOP)/AppUtils//AppUtils
+        $(TOP)/MinFunctions//MinFunctions
+        $(TOP)/PwaUtils//PwaUtils
+        $(TOP)/FitParams//FitParams
+        $(TOP)/Event//Event
+        $(TOP)/Particle//Particle
+        $(TOP)/Utils//Utils
+        $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/qft++//qft++
+        : ;
+exe selectGammapDataApp : selectGammapDataApp.cc gammap
+        $(TOP)/Event//Event
+        $(TOP)/Utils//Utils
+        $(TOP)/ErrLogger//ErrLogger
+        $(TOP)/qft++//qft++
+        : ;

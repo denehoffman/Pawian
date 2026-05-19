@@ -43,11 +43,12 @@ class Particle;
 class IsobarLSDecay;
 class IsobarHeliDecay;
 class IsobarTensorDecay;
+class ProdChannelInfo;
 
 class gammapReaction {
 
 public:
-  gammapReaction(std::vector<std::pair<Particle*, Particle*> >& prodPairs, ChannelID channelID, int lmax=3);
+  gammapReaction(std::vector<std::shared_ptr<ProdChannelInfo> > prodChannelInfoList, ChannelID channelID, int lmax=3);
 
   virtual ~gammapReaction();
 

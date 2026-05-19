@@ -39,7 +39,6 @@
 
 #include "PwaUtils/DataUtils.hh"
 #include "Utils/PawianCollectionUtils.hh"
-#include "FitParams/FitParColBase.hh"
 #include "PwaUtils/RootHist.hh"
 
 class gammapHist : public RootHist{
@@ -55,4 +54,3 @@ protected:
 
 private:
 };
-

@@ -36,7 +36,10 @@ using namespace std;
 
 gammapParser::gammapParser(int argc,char **argv):
   ParserBase(argc,argv)
+  ,_lMax(3)
   ,_cmsMass(3.096916)
+  ,_beamPolFraction(0.)
+  ,_beamPolAngle(0.)
 {
   po::options_description common("Common Options");
   common.add_options()
@@ -50,6 +53,8 @@ gammapParser::gammapParser(int argc,char **argv):
     ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
     ("lmax", po::value<unsigned>(&_lMax)->default_value(_lMax),"choose lmax.")
     ("dropGammapLForParticle", po::value< vector<string> >(&_dropGammapLForParticle), "drop l (gammap system) for certain particle")
+    ("beamPolFraction", po::value<double>(&_beamPolFraction)->default_value(_beamPolFraction), "fixed linear photon beam polarization fraction")
+    ("beamPolAngle", po::value<double>(&_beamPolAngle)->default_value(_beamPolAngle), "fixed linear photon beam polarization angle in radians")
     ;
   _config->add(config);
   
@@ -63,6 +68,8 @@ bool gammapParser::parseCommandLine(int argc, char **argv)
   std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
 
   std::cout << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax <<std::endl;
+  std::cout << "Photon beam polarization fraction:\t" << _beamPolFraction << std::endl;
+  std::cout << "Photon beam polarization angle [rad]:\t" << _beamPolAngle << std::endl;
   
   std::vector<std::string>::const_iterator it;
   

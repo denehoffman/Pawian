@@ -39,6 +39,7 @@
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
 #include "PwaUtils/AbsChannelEnv.hh"
+#include "gammapUtils/GammapBeamPolarization.hh"
 
 class AbsXdecAmp;
 class gammapReaction;
@@ -60,7 +61,7 @@ public:
     return theClone;
   }
 
-  // virtual double calcEvtIntensity( EvtData* theData, fitParCol& theParamVal);
+  virtual double calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar);
   virtual complex<double> calcProdPartAmp(Spin lamX, Spin lamDec, std::string nameDec, EvtData* theData,
 					  std::map <std::shared_ptr<const JPCLS>,
 					  std::vector< std::shared_ptr<AbsXdecAmp> >,
@@ -70,6 +71,7 @@ public:
 
   // virtual void getDefaultParams(fitParCol& fitVal, fitParCol& fitErr);
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
   
   // virtual void updateFitParams(fitParCol& theParamVal);
   
@@ -88,6 +90,7 @@ protected:
   std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess> _currentParamJPCIsos32;
   std::vector< std::shared_ptr<AbsXdecAmp> > _iso12DecAmps;
   std::vector< std::shared_ptr<AbsXdecAmp> > _iso32DecAmps;
+  GammapBeamPolarization _beamPolarization;
 
   virtual void fillIsos();
 

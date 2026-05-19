@@ -36,8 +36,10 @@
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/AbsXdecAmp.hh"
 #include "PwaUtils/AbsDecay.hh"
+#include "PwaUtils/AbsDecayList.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
-#include "FitParams/FitParColBase.hh"
+#include "PwaUtils/FsParticleProjections.hh"
+#include "FitParams/AbsPawianParameters.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Particle/Particle.hh"
 #include "ErrLogger/ErrLogger.hh"
@@ -76,6 +78,44 @@ complex<double> gammapBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::strin
    complex<double> resultAmp(0.,0.);
 
    return resultAmp;
+}
+
+double gammapBaseLh::calcEvtIntensity(EvtData* theData, std::shared_ptr<AbsPawianParameters> fitPar){
+  double result=0.;
+
+  std::vector< std::shared_ptr<AbsXdecAmp> >::iterator itDecAll;
+  for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+    (*itDecAll)->calcDynamics(theData);
+  }
+
+  const std::vector< std::vector<Spin> >& spinProjections=_fsParticleProjections->spinProjections();
+  const std::array<Spin, 2> photonHelicities = {Spin(1), Spin(-1)};
+  const std::array<Spin, 2> targetSpinProjections = {Spin(0.5), Spin(-0.5)};
+
+  for (unsigned int projId=0; projId<spinProjections.size(); ++projId){
+    const std::vector<Spin>& currentSpinProjection=spinProjections.at(projId);
+    for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+      (*itDecAll)->setSpinProjections(currentSpinProjection, projId);
+    }
+
+    for(unsigned int targetId=0; targetId<targetSpinProjections.size(); ++targetId){
+      std::array<std::complex<double>, 2> helicityAmps = {std::complex<double>(0., 0.), std::complex<double>(0., 0.)};
+
+      for(unsigned int photonId=0; photonId<photonHelicities.size(); ++photonId){
+        const Spin lamGammap = photonHelicities.at(photonId) + targetSpinProjections.at(targetId);
+        for (itDecAll=_decAmps.begin(); itDecAll!=_decAmps.end(); ++itDecAll){
+          helicityAmps.at(photonId) += (*itDecAll)->XdecAmp(lamGammap, theData);
+        }
+      }
+
+      result += _beamPolarization.intensity(helicityAmps);
+    }
+  }
+
+  if(_usePhasespace) result+=fitPar->Value(_phasespaceKey);
+
+  result *= fitPar->Value(_channelScaleParam);
+  return result;
 }
 
 
@@ -196,15 +236,10 @@ complex<double> gammapBaseLh::calcProdPartAmp(Spin lamX, Spin lamDec, std::strin
 
 void gammapBaseLh::fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar){
   AbsLh::fillDefaultParams(fitPar);
+}
 
-  std::map< std::shared_ptr<const jpcRes>, double, pawian::Collection::SharedPtrLess>::iterator itIso;
-  for(itIso=_currentParamJPCIsos12.begin(); itIso!=_currentParamJPCIsos12.end(); ++itIso){
-    fitPar->Add("Iso12"+(*itIso).first->name(), (*itIso).second, 0.5);
-    fitPar->SetLimits("Iso12"+(*itIso).first->name(), 0., 1.);
-   }
-
-  //  double magFactor=1./sqrt(_jpcToIGJPCMap.size());
-  //attention: missing things have to be added !!!!
+void gammapBaseLh::updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar){
+  AbsLh::updateFitParams(fitPar);
 }
 
 void gammapBaseLh::fillIsos(){
@@ -302,20 +337,19 @@ void  gammapBaseLh::initialize(){
     }
   }
 
-  _gammapReactionPtr =  std::static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel(_channelID))->reaction();
+  std::shared_ptr<GammapChannelEnv> gammapChannelEnv = std::static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel(_channelID));
+  _beamPolarization = GammapBeamPolarization(gammapChannelEnv->beamPolFraction(), gammapChannelEnv->beamPolAngle());
+  _gammapReactionPtr =  gammapChannelEnv->reaction();
   _jpcToIGJPCMap = _gammapReactionPtr->jpcToIGJPCMap();
   _jpcToJPCljMap = _gammapReactionPtr->jpcToJPCljMap();
  
-  std::vector< std::shared_ptr<IsobarLSDecay> > theDecs = _gammapReactionPtr->productionDecays();
-  std::vector< std::shared_ptr<IsobarLSDecay> >::iterator it;
+  std::vector< std::shared_ptr<AbsDecay> > theDecs = gammapChannelEnv->prodDecayList()->getList();
+  std::vector< std::shared_ptr<AbsDecay> >::iterator it;
   for (it=theDecs.begin(); it!=theDecs.end(); ++it){
     std::shared_ptr<AbsXdecAmp> currentAmp=XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
     _decAmps.push_back(currentAmp);
   }
-
-  fillIsos();  
 }
-
 
 
 
