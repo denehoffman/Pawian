@@ -1,125 +1,127 @@
 //************************************************************************//
-//									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
-//									  //
-//  This file is part of Pawian.					  //
-//									  //
-//  Pawian is free software: you can redistribute it and/or modify	  //
+//                                                                        //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
+//               Julian Pychy (julian@ep1.rub.de)                         //
+//               - Ruhr-Universität Bochum                                //
+//                                                                        //
+//  This file is part of Pawian.                                          //
+//                                                                        //
+//  Pawian is free software: you can redistribute it and/or modify        //
 //  it under the terms of the GNU General Public License as published by  //
-//  the Free Software Foundation, either version 3 of the License, or 	  //
-//  (at your option) any later version.	 	      	  	   	  //
-//									  //
-//  Pawian is distributed in the hope that it will be useful,		  //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
-//  GNU General Public License for more details.	      		  //
-//									  //
+//  the Free Software Foundation, either version 3 of the License, or     //
+//  (at your option) any later version.                                   //
+//                                                                        //
+//  Pawian is distributed in the hope that it will be useful,             //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of        //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         //
+//  GNU General Public License for more details.                          //
+//                                                                        //
 //  You should have received a copy of the GNU General Public License     //
-//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
-//									  //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.       //
+//                                                                        //
 //************************************************************************//
 
 // gammapHist class definition file. -*- C++ -*-
 // Copyright 2012 Bertram Kopf
 
-#include <getopt.h>
-#include <fstream>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
+#include <fstream>
+#include <getopt.h>
 
-#include "gammapUtils/gammapHist.hh"
-#include "gammapUtils/GammapChannelEnv.hh"
-#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 #include "ErrLogger/ErrLogger.hh"
 #include "Particle/Particle.hh"
 #include "Particle/ParticleTable.hh"
-#include "Utils/PawianCollectionUtils.hh"
-#include "PwaUtils/KinUtils.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/EvtDataBaseList.hh"
 #include "PwaUtils/GlobalEnv.hh"
+#include "PwaUtils/KinUtils.hh"
+#include "Utils/PawianCollectionUtils.hh"
+#include "gammapUtils/GammapChannelEnv.hh"
+#include "gammapUtils/gammapHist.hh"
+#include "qft++/relativistic-quantum-mechanics/Utils.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TNtuple.h"
-//#include "TMath.h"
+// #include "TMath.h"
 
-gammapHist::gammapHist(std::string additionalSuffix) :
-  RootHist(additionalSuffix)
-{
+gammapHist::gammapHist(std::string additionalSuffix)
+    : RootHist(additionalSuffix) {
   initRootStuff();
 }
 
-
-
-gammapHist::~gammapHist(){
+gammapHist::~gammapHist() {
   // _theTFile->Write();
   // _theTFile->Close();
 }
 
+void gammapHist::initRootStuff() {
+  // double pMass =
+  // GlobalEnv::instance()->particleTable()->particle("proton")->mass(); double
+  // gammaMomMax=10.; _cmMass = sqrt(pow(sqrt(pMass*pMass +
+  // gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
 
-
-void gammapHist::initRootStuff(){
-    // double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
-    // double gammaMomMax=10.;
-    // _cmMass = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
-
-  // std::vector<std::vector<std::string> > histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
+  // std::vector<std::vector<std::string> >
+  // histMassNameVec=GlobalEnv::instance()->Channel()->histMassSystems();
   // std::vector<std::vector<std::string> >::iterator itVecStr;
-  // for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end(); ++itVecStr){
-  //   std::shared_ptr<massHistData> tmpMassHistData(new massHistData(*itVecStr));
-  //   std::string tmpBaseName=tmpMassHistData->_name;
+  // for(itVecStr=histMassNameVec.begin(); itVecStr!=histMassNameVec.end();
+  // ++itVecStr){
+  //   std::shared_ptr<massHistData> tmpMassHistData(new
+  //   massHistData(*itVecStr)); std::string tmpBaseName=tmpMassHistData->_name;
   //   boost::replace_all(tmpBaseName,"+","p");
   //   boost::replace_all(tmpBaseName,"-","m");
   //   std::string histName="Data"+tmpBaseName;
   //   std::string histDescription = "M("+tmpMassHistData->_name+") (data)";
 
-  //   double pMass = GlobalEnv::instance()->particleTable()->particle("proton")->mass();
-    //    double pbarMom = static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel())->pbarMomentum();
-    // double gammaMomMax=10.;
-    // double massMin = 0;
-    // double massMax = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) + pMass, 2) - gammaMomMax*gammaMomMax);
+  //   double pMass =
+  //   GlobalEnv::instance()->particleTable()->particle("proton")->mass();
+  //    double pbarMom =
+  //    static_pointer_cast<GammapChannelEnv>(GlobalEnv::instance()->GammapChannel())->pbarMomentum();
+  // double gammaMomMax=10.;
+  // double massMin = 0;
+  // double massMax = sqrt(pow(sqrt(pMass*pMass + gammaMomMax*gammaMomMax) +
+  // pMass, 2) - gammaMomMax*gammaMomMax);
 
-    // std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
-    // std::vector<Particle*> allFsp = GlobalEnv::instance()->Channel()->finalStateParticles();
-    // std::vector<Particle*>::iterator itAllFsp;
+  // std::vector<std::string> fspNames=tmpMassHistData->_fspNames;
+  // std::vector<Particle*> allFsp =
+  // GlobalEnv::instance()->Channel()->finalStateParticles();
+  // std::vector<Particle*>::iterator itAllFsp;
 
-    // for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
-    //    bool isObserver = true;
-    //    std::vector<std::string>::iterator itStr2;
-    //    for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
-    // 	  if(*itStr2 == (*itAllFsp)->name())
-    // 	     isObserver = false;
-    //    }
-    //    if(isObserver)
-    // 	  massMax -= (*itAllFsp)->mass();
-    //    else
+  // for(itAllFsp = allFsp.begin(); itAllFsp != allFsp.end(); ++itAllFsp){
+  //    bool isObserver = true;
+  //    std::vector<std::string>::iterator itStr2;
+  //    for(itStr2=fspNames.begin(); itStr2!=fspNames.end(); ++itStr2){
+  // 	  if(*itStr2 == (*itAllFsp)->name())
+  // 	     isObserver = false;
+  //    }
+  //    if(isObserver)
+  // 	  massMax -= (*itAllFsp)->mass();
+  //    else
   // 	  massMin += (*itAllFsp)->mass();
   //   }
 
   //   massMax += (massMax - massMin) * 0.02;
   //   massMin -= (massMax - massMin) * 0.02;
 
-  //   TH1F* currentMassDataHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+  //   TH1F* currentMassDataHist=new TH1F(histName.c_str(),
+  //   histDescription.c_str(), 100., massMin, massMax);
   //   currentMassDataHist->Sumw2();
   //   _massDataHistMap[tmpMassHistData]=currentMassDataHist;
 
   //   histName="MC"+tmpBaseName;
   //   histDescription = "M("+tmpMassHistData->_name+") (MC)";
-  //   TH1F* currentMassMcHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+  //   TH1F* currentMassMcHist=new TH1F(histName.c_str(),
+  //   histDescription.c_str(), 100., massMin, massMax);
   //   currentMassMcHist->Sumw2();
   //   _massMcHistMap[tmpMassHistData]=currentMassMcHist;
 
   //   histName="Fit"+tmpBaseName;
   //   histDescription = "M("+tmpMassHistData->_name+") (fit)";
-  //   TH1F* currentMassFitHist=new TH1F(histName.c_str(), histDescription.c_str(), 100., massMin, massMax);
+  //   TH1F* currentMassFitHist=new TH1F(histName.c_str(),
+  //   histDescription.c_str(), 100., massMin, massMax);
   //   currentMassFitHist->Sumw2();
   //   _massFitHistMap[tmpMassHistData]=currentMassFitHist;
   // }
-
 }
-
-

@@ -1,24 +1,24 @@
 //************************************************************************//
-//									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
-//									  //
-//  This file is part of Pawian.					  //
-//									  //
-//  Pawian is free software: you can redistribute it and/or modify	  //
+//                                                                        //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
+//               Julian Pychy (julian@ep1.rub.de)                         //
+//               - Ruhr-Universität Bochum                                //
+//                                                                        //
+//  This file is part of Pawian.                                          //
+//                                                                        //
+//  Pawian is free software: you can redistribute it and/or modify        //
 //  it under the terms of the GNU General Public License as published by  //
-//  the Free Software Foundation, either version 3 of the License, or 	  //
-//  (at your option) any later version.	 	      	  	   	  //
-//									  //
-//  Pawian is distributed in the hope that it will be useful,		  //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
-//  GNU General Public License for more details.	      		  //
-//									  //
+//  the Free Software Foundation, either version 3 of the License, or     //
+//  (at your option) any later version.                                   //
+//                                                                        //
+//  Pawian is distributed in the hope that it will be useful,             //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of        //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         //
+//  GNU General Public License for more details.                          //
+//                                                                        //
 //  You should have received a copy of the GNU General Public License     //
-//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
-//									  //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.       //
+//                                                                        //
 //************************************************************************//
 
 // gammapHist class definition file. -*- C++ -*-
@@ -26,31 +26,28 @@
 
 #pragma once
 
-#include <iostream>
-#include <vector>
 #include <complex>
+#include <iostream>
 #include <map>
-#include <string>
-#include <sstream>
 #include <memory>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "TROOT.h"
 
-
 #include "PwaUtils/DataUtils.hh"
-#include "Utils/PawianCollectionUtils.hh"
 #include "PwaUtils/RootHist.hh"
+#include "Utils/PawianCollectionUtils.hh"
 
-class gammapHist : public RootHist{
+class gammapHist : public RootHist {
 
 public:
-  gammapHist(std::string additionalSuffix="");
+  gammapHist(std::string additionalSuffix = "");
   virtual ~gammapHist();
 
 protected:
-
-
- virtual void initRootStuff();
+  virtual void initRootStuff();
 
 private:
 };

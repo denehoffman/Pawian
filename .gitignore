@@ -3,6 +3,8 @@
 # Output files
 *.out
 *.root
+defaultparams*.dat
+gammapIntensity*.csv
 htmlcov/
 
 # Temporary files

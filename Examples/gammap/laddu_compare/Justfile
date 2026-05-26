@@ -1,0 +1,71 @@
+set shell := ["zsh", "-c"]
+
+root := `cd ../../.. && pwd`
+python := root + "/.venv/bin/python"
+generated := "generated"
+cfg := "../gammapKshortKshort.cfg"
+suffix := "_ksks"
+params := generated + "/ksks_startParams.dat"
+pawian_param_preset := "minimal-j12-minus"
+model := "pawian-ls"
+data_events := "200"
+accmc_events := "1000"
+genmc_events := "1000"
+niters := "3"
+
+default:
+    @just --list
+
+build:
+    cd {{root}} && source SetEnv_andromeda.zsh < /dev/null && b2 Examples/gammap//install
+
+generate:
+    {{python}} generate_laddu_ksks.py \
+      --out-dir {{generated}} \
+      --data-events {{data_events}} \
+      --accmc-events {{accmc_events}} \
+      --genmc-events {{genmc_events}}
+
+translate-data:
+    {{python}} translate_laddu_to_pawian.py \
+      {{generated}}/data.parquet \
+      {{generated}}/ksks_data.txt
+
+translate-mc:
+    {{python}} translate_laddu_to_pawian.py \
+      {{generated}}/accmc.parquet \
+      {{generated}}/ksks_mc.txt
+
+translate: translate-data translate-mc
+
+pawian-params: build
+    cd {{root}} && source SetEnv_andromeda.zsh < /dev/null && \
+      ./bin/gammapReactionApp -c Examples/gammap/gammapKshortKshort.cfg \
+      --mode dumpDefaultParams --name {{suffix}}
+    {{python}} prepare_pawian_params.py \
+      --input {{root}}/defaultparams{{suffix}}.dat \
+      --out {{params}} \
+      --preset {{pawian_param_preset}}
+
+pawian-intensity: pawian-params translate
+    cd {{root}} && source SetEnv_andromeda.zsh < /dev/null && \
+      ./bin/gammapReactionApp -c Examples/gammap/gammapKshortKshort.cfg \
+      --mode dumpIntensity --name {{suffix}}
+
+laddu-intensity:
+    {{python}} dump_laddu_intensity.py \
+      --data {{generated}}/data.parquet \
+      --accmc {{generated}}/accmc.parquet \
+      --out {{generated}}/laddu_intensity_{{model}}.csv
+
+compare-intensity: pawian-intensity laddu-intensity
+    {{python}} compare_intensity_csv.py \
+      --pawian {{root}}/gammapIntensity{{suffix}}.csv \
+      --laddu {{generated}}/laddu_intensity_{{model}}.csv \
+      --out {{generated}}/intensity_ratio_{{model}}.png
+
+laddu-analysis: generate translate compare-intensity
+
+parity: generate compare-intensity
+
+all: parity

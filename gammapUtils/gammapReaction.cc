@@ -1,24 +1,24 @@
 //************************************************************************//
-//									  //
-//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)			  //
-//  	      	   Julian Pychy (julian@ep1.rub.de)			  //
-//          	   - Ruhr-Universität Bochum 				  //
-//									  //
-//  This file is part of Pawian.					  //
-//									  //
-//  Pawian is free software: you can redistribute it and/or modify	  //
+//                                                                        //
+//  Copyright 2013 Bertram Kopf (bertram@ep1.rub.de)                      //
+//               Julian Pychy (julian@ep1.rub.de)                         //
+//               - Ruhr-Universität Bochum                                //
+//                                                                        //
+//  This file is part of Pawian.                                          //
+//                                                                        //
+//  Pawian is free software: you can redistribute it and/or modify        //
 //  it under the terms of the GNU General Public License as published by  //
-//  the Free Software Foundation, either version 3 of the License, or 	  //
-//  (at your option) any later version.	 	      	  	   	  //
-//									  //
-//  Pawian is distributed in the hope that it will be useful,		  //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	  //
-//  GNU General Public License for more details.	      		  //
-//									  //
+//  the Free Software Foundation, either version 3 of the License, or     //
+//  (at your option) any later version.                                   //
+//                                                                        //
+//  Pawian is distributed in the hope that it will be useful,             //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of        //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         //
+//  GNU General Public License for more details.                          //
+//                                                                        //
 //  You should have received a copy of the GNU General Public License     //
-//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.	  //
-//									  //
+//  along with Pawian.  If not, see <http://www.gnu.org/licenses/>.       //
+//                                                                        //
 //************************************************************************//
 
 // gammapReaction class definition file. -*- C++ -*-
@@ -48,21 +48,21 @@ gammapReaction::gammapReaction(
   std::vector<std::shared_ptr<const IGJPC>> gammapIGJPCStatesAll =
       thegammapStates->igjpcStates();
   std::vector<std::shared_ptr<const IGJPC>>::const_iterator itIGJPC;
-  std::vector<std::shared_ptr<const JPCLS>> all_JPCljs =
-      thegammapStates->jpcljStates();
+  std::vector<std::shared_ptr<const JPCLS>> all_JPCLSs =
+      thegammapStates->jpclsStates();
 
   std::vector<std::shared_ptr<const JPCLS>>::const_iterator itJPCLS;
   std::map<std::shared_ptr<const jpcRes>,
            std::vector<std::shared_ptr<const JPCLS>>,
            pawian::Collection::SharedPtrLess>
-      currentjpcToJPCljMap;
-  for (itJPCLS = all_JPCljs.begin(); itJPCLS != all_JPCljs.end(); ++itJPCLS) {
+      currentjpcToJPCLSMap;
+  for (itJPCLS = all_JPCLSs.begin(); itJPCLS != all_JPCLSs.end(); ++itJPCLS) {
     std::shared_ptr<const jpcRes> currentJPC = (*itJPCLS);
 
-    if (std::find(currentjpcToJPCljMap[currentJPC].begin(),
-                  currentjpcToJPCljMap[currentJPC].end(),
-                  (*itJPCLS)) == currentjpcToJPCljMap[currentJPC].end()) {
-      currentjpcToJPCljMap[currentJPC].push_back(*itJPCLS);
+    if (std::find(currentjpcToJPCLSMap[currentJPC].begin(),
+                  currentjpcToJPCLSMap[currentJPC].end(),
+                  (*itJPCLS)) == currentjpcToJPCLSMap[currentJPC].end()) {
+      currentjpcToJPCLSMap[currentJPC].push_back(*itJPCLS);
     }
   }
 
@@ -92,16 +92,16 @@ gammapReaction::gammapReaction(
       }
 
       bool acceptProd = false;
-      for (auto lIt = currentjpcToJPCljMap[*itIGJPC].begin();
-           lIt != currentjpcToJPCljMap[*itIGJPC].end(); ++lIt) {
+      for (auto lIt = currentjpcToJPCLSMap[*itIGJPC].begin();
+           lIt != currentjpcToJPCLSMap[*itIGJPC].end(); ++lIt) {
         if (CheckJPCLSForParticle((std::string &)particlePair.first->name(),
                                   *lIt) &&
             CheckJPCLSForParticle((std::string &)particlePair.second->name(),
                                   *lIt)) {
-          if (std::find(_gammapJPCljs.begin(), _gammapJPCljs.end(), *lIt) ==
-              _gammapJPCljs.end())
-            _gammapJPCljs.push_back(*lIt);
-          _jpcToJPCljMap[currentJPC].push_back(*lIt);
+          if (std::find(_gammapJPCLSs.begin(), _gammapJPCLSs.end(), *lIt) ==
+              _gammapJPCLSs.end())
+            _gammapJPCLSs.push_back(*lIt);
+          _jpcToJPCLSMap[currentJPC].push_back(*lIt);
           acceptProd = true;
         }
       }
@@ -222,8 +222,8 @@ void gammapReaction::print(std::ostream &os) const {
   for (std::map<std::shared_ptr<const jpcRes>,
                 std::vector<std::shared_ptr<const JPCLS>>,
                 pawian::Collection::SharedPtrLess>::const_iterator it =
-           _jpcToJPCljMap.begin();
-       it != _jpcToJPCljMap.end(); ++it) {
+           _jpcToJPCLSMap.begin();
+       it != _jpcToJPCLSMap.end(); ++it) {
     os << "\n JPC:";
     it->first->print(os);
 
