@@ -51,6 +51,12 @@
           nativeBuildInputs = [
             pkgs.cmake
           ];
+
+          cmakeFlags = [
+            "-DCMAKE_BUILD_TYPE=Release"
+            "-DBUILD_SHARED_LIBS=ON"
+            "-DCMAKE_INSTALL_LIBDIR=lib"
+          ];
         };
 
         pawian = pkgs.stdenv.mkDerivation {
@@ -59,7 +65,7 @@
           src = pkgs.lib.cleanSource self;
 
           nativeBuildInputs = [
-            pkgs.cmake
+            pkgs.boost-build
             pkgs.pkg-config
           ];
 
@@ -71,22 +77,68 @@
             pkgs.log4cpp
           ];
 
-          cmakeFlags = [
-            "-DPAWIAN_USE_STANDALONE_MINUIT2=ON"
-            "-DBOOST_ROOT=${boost170}"
-            "-DBoost_NO_BOOST_CMAKE=ON"
-            "-DBoost_NO_SYSTEM_PATHS=ON"
-            "-DBoost_INCLUDE_DIR=${boost170.dev}/include"
-            "-DBoost_LIBRARY_DIR_RELEASE=${boost170.out}/lib"
+          ROOTSYS = pkgs.root;
+
+          BOOSTROOT = boost170;
+          BOOST_ROOT = boost170;
+          BOOST_INCLUDEDIR = "${boost170.dev}/include";
+          BOOST_LIBRARYDIR = "${boost170.out}/lib";
+          BOOSTLIBPATH = "${boost170.out}/lib";
+          BOOSTINCLUDE = "${boost170.dev}/include";
+
+          MINUIT2_STANDALONE = minuit2;
+
+          NIX_CFLAGS_COMPILE = [
+            "-I${boost170.dev}/include"
+            "-I${minuit2}/include"
+            "-I${pkgs.gsl}/include"
+            "-I${pkgs.log4cpp}/include"
           ];
 
-          ROOTSYS = pkgs.root;
+          NIX_LDFLAGS = [
+            "-L${boost170.out}/lib"
+            "-L${minuit2}/lib"
+            "-L${pkgs.gsl}/lib"
+            "-L${pkgs.log4cpp}/lib"
+          ];
+
+          enableParallelBuilding = true;
+          dontConfigure = true;
+      buildPhase = ''
+            runHook preBuild
+
+            ln -sfn Jamroot_andromeda Jamroot
+
+            b2 \
+              -j"$NIX_BUILD_CORES" \
+              variant=release \
+              include="${boost170.dev}/include" \
+              library-path="${boost170.out}/lib"
+
+            runHook postBuild
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir -p "$out"
+
+            b2 \
+              -j"$NIX_BUILD_CORES" \
+              variant=release \
+              install \
+              --prefix="$out" \
+              include="${boost170.dev}/include" \
+              library-path="${boost170.out}/lib"
+
+            runHook postInstall
+          '';
         };
       in
       {
         packages = {
           default = pawian;
-          inherit boost170 minuit2 pawian;
+          inherit pawian boost170 minuit2;
         };
 
         devShells.default = pkgs.mkShell {
@@ -95,13 +147,34 @@
           ];
 
           packages = [
+            pkgs.boost-build
+            pkgs.pkg-config
             pkgs.cmake
             pkgs.ninja
+            pkgs.gdb
           ];
 
           ROOTSYS = pkgs.root;
+
+          BOOSTROOT = boost170;
           BOOST_ROOT = boost170;
+          BOOST_INCLUDEDIR = "${boost170.dev}/include";
+          BOOST_LIBRARYDIR = "${boost170.out}/lib";
+          BOOSTLIBPATH = "${boost170.out}/lib";
+          BOOSTINCLUDE = "${boost170.dev}/include";
+
           MINUIT2_STANDALONE = minuit2;
+
+          shellHook = ''
+            ln -sfn Jamroot_andromeda Jamroot
+            export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+            echo "PAWIAN dev shell"
+            echo "  ROOTSYS=$ROOTSYS"
+            echo "  BOOSTROOT=$BOOSTROOT"
+            echo "  MINUIT2_STANDALONE=$MINUIT2_STANDALONE"
+            echo "  b2=$(command -v b2)"
+          '';
         };
       }
     );

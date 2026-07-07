@@ -1,65 +1,82 @@
 set shell := ["zsh", "-c"]
+export MPLBACKEND := "Agg"
 
-root := `cd ../../.. && pwd`
+root := justfile_directory()
 python := root + "/.venv/bin/python"
-generated := "generated"
-cfg := "../gammapKshortKshort.cfg"
+
+laddu_dir := root + "/Examples/gammap/laddu_compare"
+generated := laddu_dir + "/generated"
+
+cfg := root + "/Examples/gammap/gammapKshortKshort.cfg"
 suffix := "_ksks"
 params := generated + "/ksks_startParams.dat"
+
 pawian_param_preset := "minimal-j12-minus"
 model := "pawian-ls"
+
 data_events := "200"
 accmc_events := "1000"
 genmc_events := "1000"
 niters := "3"
 
+b2_variant := "release"
+b2_jobs := `nproc`
+
 default:
     @just --list
 
-build:
-    cd {{root}} && source SetEnv_andromeda.zsh < /dev/null && b2 Examples/gammap//install
+build target:
+  b2 -j{{b2_jobs}} variant={{b2_variant}} {{target}}
+
+build-debug target:
+    just build {{target}} debug
+
+clean target:
+    b2 --clean {{target}}
+
+build-gammap:
+    just build Examples/gammap//install
 
 generate:
-    {{python}} generate_laddu_ksks.py \
+    {{python}} {{laddu_dir}}/generate_laddu_ksks.py \
       --out-dir {{generated}} \
       --data-events {{data_events}} \
       --accmc-events {{accmc_events}} \
       --genmc-events {{genmc_events}}
 
 translate-data:
-    {{python}} translate_laddu_to_pawian.py \
+    {{python}} {{laddu_dir}}/translate_laddu_to_pawian.py \
       {{generated}}/data.parquet \
       {{generated}}/ksks_data.txt
 
 translate-mc:
-    {{python}} translate_laddu_to_pawian.py \
+    {{python}} {{laddu_dir}}/translate_laddu_to_pawian.py \
       {{generated}}/accmc.parquet \
       {{generated}}/ksks_mc.txt
 
 translate: translate-data translate-mc
 
-pawian-params: build
-    cd {{root}} && source SetEnv_andromeda.zsh < /dev/null && \
-      ./bin/gammapReactionApp -c Examples/gammap/gammapKshortKshort.cfg \
+pawian-params: build-gammap
+    {{root}}/bin/gammapReactionApp -c {{cfg}} \
       --mode dumpDefaultParams --name {{suffix}}
-    {{python}} prepare_pawian_params.py \
+
+    {{python}} {{laddu_dir}}/prepare_pawian_params.py \
       --input {{root}}/defaultparams{{suffix}}.dat \
       --out {{params}} \
       --preset {{pawian_param_preset}}
 
 pawian-intensity: pawian-params translate
-    cd {{root}} && source SetEnv_andromeda.zsh < /dev/null && \
-      ./bin/gammapReactionApp -c Examples/gammap/gammapKshortKshort.cfg \
+    {{root}}/bin/gammapReactionApp -c {{cfg}} \
       --mode dumpIntensity --name {{suffix}}
 
 laddu-intensity:
-    {{python}} dump_laddu_intensity.py \
+    {{python}} {{laddu_dir}}/dump_laddu_intensity.py \
       --data {{generated}}/data.parquet \
       --accmc {{generated}}/accmc.parquet \
       --out {{generated}}/laddu_intensity_{{model}}.csv
 
 compare-intensity: pawian-intensity laddu-intensity
-    {{python}} compare_intensity_csv.py \
+    {{python}} {{laddu_dir}}/compare_intensity_csv.py \
       --pawian {{root}}/gammapIntensity{{suffix}}.csv \
       --laddu {{generated}}/laddu_intensity_{{model}}.csv \
       --out {{generated}}/intensity_ratio_{{model}}.png

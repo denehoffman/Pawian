@@ -31,3 +31,5 @@ version.py
 # Settings
 .idea/
 **.code-workspace
+
+result
