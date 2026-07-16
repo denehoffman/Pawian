@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "amptools-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1757608004,
+        "narHash": "sha256-aDJpuoojpTqHAF9hkpBQGaARicMZte9Sgkis3AZdksI=",
+        "owner": "mashephe",
+        "repo": "AmpTools",
+        "rev": "300bbd40d8f5a7288fcc853f1c621a358906f2c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mashephe",
+        "ref": "v0.15.4",
+        "repo": "AmpTools",
+        "type": "github"
+      }
+    },
     "boost170-src": {
       "flake": false,
       "locked": {
@@ -63,12 +80,30 @@
         "type": "github"
       }
     },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1783224372,
+        "narHash": "sha256-8i/87eeoqiGE4yOTjwSA3Eh/ziJRQEmd/unYU+K27sk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d407951447dcd00442e97087bf374aad70c04cea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "amptools-src": "amptools-src",
         "boost170-src": "boost170-src",
         "flake-utils": "flake-utils",
         "minuit2-src": "minuit2-src",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     },
     "systems": {

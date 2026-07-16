@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from common import PAWIAN_FINAL_STATE, open_dataset
+from common import FINAL_STATE, open_dataset
 
 
 def write_pawian_ascii(input_path: Path, output_path: Path, *, write_weight: bool) -> None:
@@ -17,7 +17,7 @@ def write_pawian_ascii(input_path: Path, output_path: Path, *, write_weight: boo
             fields = []
             if write_weight:
                 fields.append(f'{event.weight:.17g}')
-            for name in PAWIAN_FINAL_STATE:
+            for name in FINAL_STATE:
                 p4 = event.p4(name)
                 fields.extend(
                     [
@@ -29,7 +29,7 @@ def write_pawian_ascii(input_path: Path, output_path: Path, *, write_weight: boo
                 )
             output.write(' '.join(fields))
             output.write('\n')
-    print(f'wrote {output_path} with final-state order: {", ".join(PAWIAN_FINAL_STATE)}')
+    print(f'wrote {output_path} with final-state order: {", ".join(FINAL_STATE)}')
 
 
 def main() -> None:

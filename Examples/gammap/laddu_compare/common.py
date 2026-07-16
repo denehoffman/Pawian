@@ -11,7 +11,7 @@ HERE = Path(__file__).resolve().parent
 PAWIAN_ROOT = HERE.parents[2]
 
 P4_COLUMNS = ['beam', 'target', 'kshort1', 'kshort2', 'recoil']
-PAWIAN_FINAL_STATE = ['recoil', 'kshort1', 'kshort2']
+FINAL_STATE = ['recoil', 'kshort1', 'kshort2']
 AUX_COLUMNS = ['pol_magnitude', 'pol_angle']
 
 MASS_PROTON = 0.938272

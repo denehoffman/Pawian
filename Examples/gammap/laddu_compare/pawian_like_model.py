@@ -150,7 +150,7 @@ def pawian_ls_helicity_amplitude(
                 "L2S0_f2'(1525)ToKshort1_Kshort2Mag",
                 "L2S0_f2'(1525)ToKshort1_Kshort2Phi",
             )
-            for x_projection in range(-2, 3)
+            for x_projection in [-2, -1, 0, 1, 2]
         ]
     )
     return ld.expr_sum(amplitudes)

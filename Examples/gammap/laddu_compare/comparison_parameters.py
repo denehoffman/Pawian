@@ -28,3 +28,7 @@ def parameter_vector(evaluator) -> np.typing.NDArray[np.float64]:
             raise KeyError(msg)
         values.append(PARAMETER_VALUES[parameter.name])
     return np.asarray(values, dtype=float)
+
+
+def reflectivity_parameters() -> dict[str, float]:
+    pass
