@@ -63,6 +63,11 @@ public:
   virtual complex<double> XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp);
   virtual complex<double> XdecPartAmp(const Spin& lamX, Spin& lamDec, short fixDaughterNr,
 				      EvtData* theData, Spin& lamFs, AbsXdecAmp* grandmaAmp);
+  complex<double> productionHelicityComponent(const Spin& totalProjection,
+                                               const Spin& producedProjection,
+                                               const Spin& recoilHelicity,
+                                               EvtData* theData,
+                                               AbsXdecAmp* grandmaAmp=0);
   
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   // virtual bool checkRecalculation(fitParCol& theParamVal);
@@ -93,6 +98,5 @@ private:
 
 
 };
-
 
 

@@ -114,7 +114,11 @@ gammapReaction::gammapReaction(
       if (GlobalEnv::instance()
               ->Channel(_channelID)
               ->parser()
-              ->productionFormalism() == "Cano") {
+              ->productionFormalism() == "Cano" ||
+          GlobalEnv::instance()
+                  ->Channel(_channelID)
+                  ->parser()
+                  ->productionFormalism() == "Reflectivity") {
         _prodLSDecs.push_back(currentDec);
       } else if (GlobalEnv::instance()
                      ->Channel(_channelID)
@@ -238,7 +242,9 @@ void gammapReaction::print(std::ostream &os) const {
   }
 
   os << "\n ***** decay chains *******\n";
-  if (GlobalEnv::instance()->parser()->productionFormalism() == "Cano") {
+  if (GlobalEnv::instance()->parser()->productionFormalism() == "Cano" ||
+      GlobalEnv::instance()->parser()->productionFormalism() ==
+          "Reflectivity") {
     std::vector<std::shared_ptr<IsobarLSDecay>>::const_iterator itIso;
     for (itIso = _prodLSDecs.begin(); itIso != _prodLSDecs.end(); ++itIso) {
       (*itIso)->print(os);

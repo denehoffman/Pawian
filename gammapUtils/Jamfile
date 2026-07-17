@@ -33,3 +33,9 @@ exe gammapStatesApp : gammapStatesApp.cc gammapUtils
 	$(TOP)/Utils//Utils
 	$(TOP)/qft++//qft++
 	: ;
+
+unit-test test_ReflectivityBasis
+  : test/TestReflectivityBasis.cc
+    $(TOP)//boost_test
+    gammapUtils
+  ;

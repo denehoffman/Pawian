@@ -27,9 +27,11 @@
 #include <fstream>
 #include <getopt.h>
 #include <math.h>
+#include <set>
 #include <string>
 
 #include "ErrLogger/ErrLogger.hh"
+#include "ConfigParser/ParserBase.hh"
 #include "FitParams/AbsPawianParameters.hh"
 #include "Particle/Particle.hh"
 #include "PwaUtils/AbsDecay.hh"
@@ -41,6 +43,7 @@
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
+#include "gammapUtils/ReflectivityDecAmps.hh"
 #include "gammapUtils/gammapBaseLh.hh"
 #include "gammapUtils/gammapReaction.hh"
 
@@ -48,7 +51,8 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 
-gammapBaseLh::gammapBaseLh(ChannelID channelID) : AbsLh(channelID) {
+gammapBaseLh::gammapBaseLh(ChannelID channelID)
+    : AbsLh(channelID), _useReflectivity(false) {
   initialize();
 }
 
@@ -103,11 +107,33 @@ gammapBaseLh::calcEvtIntensity(EvtData *theData,
 
       for (unsigned int photonId = 0; photonId < photonHelicities.size();
            ++photonId) {
-        const Spin lamGammap =
-            photonHelicities.at(photonId) + targetSpinProjections.at(targetId);
-        for (itDecAll = _decAmps.begin(); itDecAll != _decAmps.end();
-             ++itDecAll) {
-          helicityAmps.at(photonId) += (*itDecAll)->XdecAmp(lamGammap, theData);
+        if (_useReflectivity) {
+          // The target moves opposite to the beam, so its physical helicity
+          // is the negative of its spin projection on the beam axis.
+          const Spin initialProtonHelicity =
+              -targetSpinProjections.at(targetId);
+          for (itDecAll = _decAmps.begin(); itDecAll != _decAmps.end();
+               ++itDecAll) {
+            std::shared_ptr<ReflectivityDecAmps> reflectivityAmp =
+                std::dynamic_pointer_cast<ReflectivityDecAmps>(*itDecAll);
+            if (!reflectivityAmp) {
+              Alert << "Non-reflectivity production amplitude in a "
+                       "Reflectivity channel"
+                    << endmsg;
+              exit(1);
+            }
+            helicityAmps.at(photonId) += reflectivityAmp->amplitude(
+                photonHelicities.at(photonId), initialProtonHelicity,
+                theData);
+          }
+        } else {
+          const Spin lamGammap = photonHelicities.at(photonId) +
+                                 targetSpinProjections.at(targetId);
+          for (itDecAll = _decAmps.begin(); itDecAll != _decAmps.end();
+               ++itDecAll) {
+            helicityAmps.at(photonId) +=
+                (*itDecAll)->XdecAmp(lamGammap, theData);
+          }
         }
       }
 
@@ -368,6 +394,8 @@ void gammapBaseLh::initialize() {
           GlobalEnv::instance()->GammapChannel(_channelID));
   _beamPolarization = GammapBeamPolarization(
       gammapChannelEnv->beamPolFraction(), gammapChannelEnv->beamPolAngle());
+  _useReflectivity =
+      gammapChannelEnv->parser()->productionFormalism() == "Reflectivity";
   _gammapReactionPtr = gammapChannelEnv->reaction();
   _jpcToIGJPCMap = _gammapReactionPtr->jpcToIGJPCMap();
   _jpcToJPCljMap = _gammapReactionPtr->jpcToJPCLSMap();
@@ -375,9 +403,21 @@ void gammapBaseLh::initialize() {
   std::vector<std::shared_ptr<AbsDecay>> theDecs =
       gammapChannelEnv->prodDecayList()->getList();
   std::vector<std::shared_ptr<AbsDecay>>::iterator it;
+  std::set<std::string> reflectivityProductionChannels;
   for (it = theDecs.begin(); it != theDecs.end(); ++it) {
-    std::shared_ptr<AbsXdecAmp> currentAmp =
-        XdecAmpRegistry::instance()->getXdecAmp(_channelID, (*it)->absDecPtr());
+    std::shared_ptr<AbsXdecAmp> currentAmp;
+    if (_useReflectivity) {
+      const std::string productionChannel =
+          (*it)->daughter1Part()->name() + std::string("_") +
+          (*it)->daughter2Part()->name();
+      if (!reflectivityProductionChannels.insert(productionChannel).second)
+        continue;
+      currentAmp = std::shared_ptr<AbsXdecAmp>(
+          new ReflectivityDecAmps((*it)->absDecPtr(), _channelID));
+    } else {
+      currentAmp = XdecAmpRegistry::instance()->getXdecAmp(
+          _channelID, (*it)->absDecPtr());
+    }
     _decAmps.push_back(currentAmp);
   }
 }

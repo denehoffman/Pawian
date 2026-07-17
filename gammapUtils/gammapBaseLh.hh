@@ -45,6 +45,7 @@ class AbsXdecAmp;
 class gammapReaction;
 class LSDecAmps;
 class AbsPawianParameters;
+class ReflectivityDecAmps;
 
 class gammapBaseLh : public AbsLh {
 
@@ -108,6 +109,7 @@ protected:
   std::vector<std::shared_ptr<AbsXdecAmp>> _iso12DecAmps;
   std::vector<std::shared_ptr<AbsXdecAmp>> _iso32DecAmps;
   GammapBeamPolarization _beamPolarization;
+  bool _useReflectivity;
 
   virtual void fillIsos();
 

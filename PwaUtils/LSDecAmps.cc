@@ -113,6 +113,17 @@ complex<double> LSDecAmps::XdecPartAmp(const Spin& lamX, Spin& lamDec, short fix
   return result;
 }
 
+complex<double> LSDecAmps::productionHelicityComponent(
+    const Spin& totalProjection, const Spin& producedProjection,
+    const Spin& recoilHelicity, EvtData* theData, AbsXdecAmp* grandmaAmp) {
+  Spin producedMin = producedProjection;
+  Spin producedMax = producedProjection;
+  Spin recoilMin = recoilHelicity;
+  Spin recoilMax = recoilHelicity;
+  return lsLoop(grandmaAmp, totalProjection, theData, producedMin, producedMax,
+                recoilMin, recoilMax, false);
+}
+
 complex<double> LSDecAmps::XdecAmp(const Spin& lamX, EvtData* theData, AbsXdecAmp* grandmaAmp){
 
   complex<double> result(0.,0.);

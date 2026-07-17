@@ -94,12 +94,14 @@ void GammapChannelEnv::setupChannel(ChannelID id) {
   std::vector<std::string> additionalStringVecDummy;
   std::string dynTypeDefault = "WoDynamics";
 
-  if (_theGamPParser->productionFormalism() == "Cano") {
+  if (_theGamPParser->productionFormalism() == "Cano" ||
+      _theGamPParser->productionFormalism() == "Reflectivity") {
     std::vector<std::shared_ptr<IsobarLSDecay>> prodDecs =
         _gammapReaction->productionDecays();
     std::vector<std::shared_ptr<IsobarLSDecay>>::iterator itDec;
     for (itDec = prodDecs.begin(); itDec != prodDecs.end(); ++itDec) {
-      if ((*itDec)->prodChannelInfo()->withProdBarrier())
+      if (_theGamPParser->productionFormalism() == "Cano" &&
+          (*itDec)->prodChannelInfo()->withProdBarrier())
         (*itDec)->enableProdBarrier();
       else
         (*itDec)->enableDynamics(dynTypeDefault, additionalStringVecDummy);
