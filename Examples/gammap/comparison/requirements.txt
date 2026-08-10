@@ -1,0 +1,4 @@
+laddu==0.21.0
+matplotlib>=3.9
+numpy>=2
+uproot>=5

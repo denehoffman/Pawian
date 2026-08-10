@@ -3,14 +3,14 @@
 #include "IUAmpTools/AmpToolsInterface.h"
 #include "IUAmpTools/ConfigFileParser.h"
 #include "IUAmpTools/ConfigurationInfo.h"
-#include "IUAmpTools/Kinematics.h"
+#include "MinuitInterface/MinuitMinimizationManager.h"
 
 #include "ROOTDataReader.h"
 #include "Zlm.h"
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    std::cerr << "usage: printIntensity fit.cfg\n";
+    std::cerr << "usage: fitZlm fit.cfg\n";
     return 1;
   }
 
@@ -21,16 +21,8 @@ int main(int argc, char **argv) {
   ConfigurationInfo *cfgInfo = parser.getConfigurationInfo();
 
   AmpToolsInterface ati(cfgInfo);
-
-  unsigned int nEvents = ati.numEvents();
-
-  for (unsigned int i = 0; i < nEvents; ++i) {
-    Kinematics *kin = ati.kinematics(i);
-
-    double intensity = ati.intensity(i);
-
-    std::cout << i << " " << intensity << "\n";
-  }
-
-  return 0;
+  MinuitMinimizationManager *minuit = ati.minuitMinimizationManager();
+  minuit->migradMinimization();
+  ati.finalizeFit();
+  return minuit->status() == 0 ? 0 : 2;
 }

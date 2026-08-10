@@ -33,3 +33,10 @@ version.py
 **.code-workspace
 
 result
+
+*.fit
+*.ni
+*.o
+
+generated/
+fitZlm

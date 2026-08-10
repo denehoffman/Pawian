@@ -1,5 +1,5 @@
 CXX := c++
-TARGET := printAmpToolsIntensity
+TARGET := fitZlm
 SRC := main.cc ROOTDataReader.cc Zlm.cc wignerD.cc
 OBJ := $(SRC:.cc=.o)
 

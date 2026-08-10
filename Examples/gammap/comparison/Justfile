@@ -1,0 +1,72 @@
+set shell := ["zsh", "-c"]
+
+here := justfile_directory()
+repo := here / "../../.."
+python := env_var_or_default("PYTHON", "python3")
+generated := here / "generated"
+data_events := env_var_or_default("DATA_EVENTS", "10000")
+mc_events := env_var_or_default("MC_EVENTS", "100000")
+jobs := env_var_or_default("JOBS", `nproc`)
+
+default:
+    @just --list
+
+# Install laddu 0.21 and the plotting/file-conversion dependencies.
+setup:
+    {{python}} -m pip install -r {{here}}/requirements.txt
+
+# Generate the one common pseudo-data and weighted normalization sample.
+generate:
+    cd {{here}} && {{python}} generate.py \
+      --output {{generated}} \
+      --data-events {{data_events}} \
+      --mc-events {{mc_events}}
+
+# Write PAWIAN ASCII and one AmpTools ROOT tree per mass bin.
+translate: generate
+    cd {{here}} && {{python}} translate.py --output {{generated}}
+
+# Fit every mass bin simultaneously with laddu 0.21.
+laddu: generate
+    cd {{here}} && {{python}} fit_laddu.py \
+      --output {{generated}}/laddu-fit.json \
+      --threads {{jobs}}
+
+amptools-build:
+    cd {{here}} && make fitZlm
+
+amptools-configs: translate
+    cd {{here}} && {{python}} prepare.py amptools \
+      --directory {{generated}}/amptools
+
+# Fit each ROOT mass bin with AmpTools' Zlm amplitude.
+amptools: amptools-build amptools-configs
+    printf '%s\0' {{generated}}/amptools/*.cfg | \
+      xargs -0 -n1 -P {{jobs}} zsh -c \
+      'cd {{generated}}/amptools && {{here}}/fitZlm "$1"' _
+
+pawian-build:
+    cd {{repo}} && b2 -j{{jobs}} variant=release Examples/gammap//install
+
+pawian-configs: translate pawian-build
+    mkdir -p {{generated}}/pawian
+    cd {{generated}}/pawian && {{repo}}/bin/gammapReactionApp \
+      -c {{here}}/pawian.cfg --mode dumpDefaultParams --name _zlm
+    cd {{here}} && {{python}} prepare.py pawian \
+      --defaults {{generated}}/pawian/defaultparams_zlm.dat \
+      --directory {{generated}}/pawian
+
+# Fit each ASCII mass bin with PAWIAN's Reflectivity production formalism.
+pawian: pawian-configs
+    printf '%s\0' {{generated}}/pawian/*.cfg | \
+      xargs -0 -n1 -P {{jobs}} zsh -c \
+      'cfg="$1"; name=${cfg:t:r}; cd {{generated}}/pawian/$name && \
+       {{repo}}/bin/gammapReactionApp -c "$cfg" --mode pwa --name "_$name"' _
+
+all: laddu amptools pawian
+
+# Plot fitted D/S parameters and mass-binned S0+/D2+ projections.
+plots: all
+    cd {{here}} && {{python}} plot_compare.py \
+      --directory {{generated}} \
+      --output {{generated}}/fit-comparison.png
