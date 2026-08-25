@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+repo="$(git rev-parse --show-toplevel)"
+scratch="$(mktemp -d)"
+trap 'rm -rf "$scratch"' EXIT
+
+snapshot() {
+  git -C "$repo" status --porcelain=v1 --untracked-files=all
+  if [[ -L "$repo/Jamroot" ]]; then
+    printf 'Jamroot -> %s\n' "$(readlink "$repo/Jamroot")"
+  elif [[ -e "$repo/Jamroot" ]]; then
+    printf 'Jamroot exists and is not a symlink\n'
+  else
+    printf 'Jamroot absent\n'
+  fi
+
+  if [[ -e "$repo/KMatStore" ]]; then
+    printf 'KMatStore exists\n'
+  else
+    printf 'KMatStore absent\n'
+  fi
+}
+
+snapshot >"$scratch/before"
+nix develop "$repo" --command true
+snapshot >"$scratch/after"
+
+if ! diff -u "$scratch/before" "$scratch/after"; then
+  echo "nix develop modified the checkout" >&2
+  exit 1
+fi
+
+echo "nix develop left the checkout unchanged"
