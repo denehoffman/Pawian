@@ -13,6 +13,7 @@ project :
 lib Utils
   : [ glob *.cc : *App.cc ErrValue.cc ]
     $(TOP)/ErrLogger//ErrLogger
+    $(TOP)/Particle//Particle
   ;
 
 lib Utils_ErrValue : ErrValue.cc ;

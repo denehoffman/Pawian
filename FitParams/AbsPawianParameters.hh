@@ -42,7 +42,7 @@ public:
 
   AbsPawianParameters();
 
-  ~AbsPawianParameters();
+  virtual ~AbsPawianParameters();
 
   virtual AbsPawianParameters& operator=(AbsPawianParameters& par)=0;
   virtual AbsPawianParameters* Clone()=0;
@@ -121,4 +121,3 @@ protected:
 
 private:
 };
-

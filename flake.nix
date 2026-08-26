@@ -53,30 +53,27 @@
           ladduWheel =
             {
               aarch64-darwin = {
-                platform = "macosx_11_0_arm64";
-                hash = "sha256-46XittQBZt/ZCsBm7nAv49sywjw31a69uYaG4cY/S3M=";
+                url = "https://files.pythonhosted.org/packages/aa/b2/3028e9899661d0220c4062ae13660c28bc806f2661033d8a2e0c663cf51b/laddu-0.21.5-cp311-abi3-macosx_11_0_arm64.whl";
+                hash = "sha256-OjndxhVzzmZsSnB8qUeu6hMgIdmIX1fqmSCO7+mXPH8=";
               };
               x86_64-linux = {
-                platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-                hash = "sha256-PswGM281rl+imy2+9qD950BEgKPwXw10aJAjyBPLXaw=";
+                url = "https://files.pythonhosted.org/packages/cb/dd/63c72a64151ba8971bcb1e9bf4af9f96a4e1fcd0902d2dbcebdbbf85b933/laddu-0.21.5-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+                hash = "sha256-cmViAwLD3tqHiVw/Iz3ssVrymTTS6MqQAYWuqhrL1Zw=";
               };
               aarch64-linux = {
-                platform = "manylinux_2_17_aarch64.manylinux2014_aarch64";
-                hash = "sha256-H5OmTZc6d9hXGKcmx0KIg++NCNn2+WZnGh9/Adidxdc=";
+                url = "https://files.pythonhosted.org/packages/ee/cb/3287c12f71903788f7bfa92e2e5d9f133a67df848867f8a984cda1763d6b/laddu-0.21.5-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl";
+                hash = "sha256-6CbOCtdZHuAuI6e6M7Pmex0WynTO6O9vFbvidFv8764=";
               };
             }
             .${system};
 
           laddu = python.pkgs.buildPythonPackage rec {
             pname = "laddu";
-            version = "0.20.0";
+            version = "0.21.5";
             format = "wheel";
 
-            src = python.pkgs.fetchPypi {
-              inherit pname version format;
-              python = "cp312";
-              abi = "cp312";
-              inherit (ladduWheel) platform hash;
+            src = pkgs.fetchurl {
+              inherit (ladduWheel) url hash;
             };
 
             nativeBuildInputs = lib.optionals isLinux [ pkgs.autoPatchelfHook ];
@@ -128,11 +125,32 @@
             version = "unstable-2026-05-03";
             src = minuit2-src;
             nativeBuildInputs = [ pkgs.cmake ];
+            postPatch = ''
+              substituteInPlace src/MnPrintImpl.cxx \
+                --replace-fail \
+                  'const char *label[4] = {"[Error]", "[Warn]", "[Info]", "[Debug]"};' \
+                  'const char *label[5] = {"[Error]", "[Warn]", "[Info]", "[Debug]", "[Trace]"};'
+            '';
             cmakeFlags = [
               "-DCMAKE_BUILD_TYPE=Release"
               "-DBUILD_SHARED_LIBS=ON"
               "-DCMAKE_INSTALL_LIBDIR=lib"
             ];
+            doInstallCheck = true;
+            installCheckPhase = ''
+              runHook preInstallCheck
+              "$CXX" -std=c++17 -x c++ - -o minuit2-trace-smoke \
+                -I"$out/include/Minuit2" -L"$out/lib" -lMinuit2 <<'EOF'
+              #include "Minuit2/MnPrint.h"
+
+              int main() {
+                ROOT::Minuit2::MnPrint print("trace-smoke", 4);
+                print.Trace("trace logging works");
+              }
+              EOF
+              ./minuit2-trace-smoke
+              runHook postInstallCheck
+            '';
           };
 
           amptools = pkgs.stdenv.mkDerivation {
@@ -150,7 +168,7 @@
               runHook preBuild
               export PATH="${root}/bin:$PATH"
               export AMPTOOLS_HOME="$PWD"
-              make -C AmpTools -j"$NIX_BUILD_CORES"
+              make -C AmpTools -j"$NIX_BUILD_CORES" CXX="$CXX"
               runHook postBuild
             '';
 
@@ -158,9 +176,11 @@
               runHook preInstall
               mkdir -p "$out/include" "$out/lib" "$out/share/AmpTools"
               cp -r AmpTools/IUAmpTools "$out/include/"
-              cp -r AmpTools/DataIO "$out/include/"
-              cp -r AmpTools/Amplitude "$out/include/"
-              cp -r AmpTools/Utilities "$out/include/"
+              for optional_headers in DataIO Amplitude Utilities; do
+                if [[ -d "AmpTools/$optional_headers" ]]; then
+                  cp -r "AmpTools/$optional_headers" "$out/include/"
+                fi
+              done
               cp -r AmpTools/lib/. "$out/lib/"
               cp -r AmpTools Makefile.settings "$out/share/AmpTools/"
               runHook postInstall
@@ -221,12 +241,10 @@
               dontConfigure = true;
               buildPhase = ''
                 runHook preBuild
-                Scripts/run-nix-b2 \
+                Scripts/run-pawian-build b2 \
                   -j"$NIX_BUILD_CORES" \
                   variant=release \
-                  gammap-install \
-                  include="${boost170.dev}/include" \
-                  library-path="${boost170.out}/lib"
+                  gammap-install
                 runHook postBuild
               '';
               installPhase = ''
@@ -248,7 +266,7 @@
             development-shell-tools = pkgs.runCommand "development-shell-tools" {
               nativeBuildInputs = [ pythonEnvironment ];
             } ''
-              python -c 'import importlib.metadata; assert importlib.metadata.version("laddu") == "0.20.0"'
+              python -c 'import importlib.metadata; assert importlib.metadata.version("laddu") == "0.21.0"'
               python -c 'import sys; assert sys.version_info[:2] == (3, 12)'
               touch "$out"
             '';
@@ -267,6 +285,7 @@
                 pkgs.ninja
                 pkgs.pkg-config
                 pythonEnvironment
+                amptools
                 root
                 boost170
                 minuit2
@@ -283,12 +302,13 @@
               ];
 
               AMPTOOLS_SRC = amptools-src;
+              AMPTOOLS_PREFIX = amptools;
+              AMPTOOLS_HOME = "${amptools}/share/AmpTools";
               NIX_PYTHON = "${pythonEnvironment}/bin/python";
               UV_NO_MANAGED_PYTHON = 1;
 
               shellHook = ''
                 export TOP_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-                export PAWIAN_JAMROOT="$TOP_DIR/nix/Jamroot.nix"
                 export BOOST_BUILD_PATH="${pkgs.boost-build}/share/boost-build"
                 export PATH="${pythonEnvironment}/bin:$ROOTSYS/bin:$TOP_DIR/bin:$PATH"
                 export PYTHONPATH="${root}/${python.sitePackages}:''${PYTHONPATH:-}"

@@ -80,7 +80,5 @@ void AbsPawianMinimizer<T>::printFitResultQA(double evtWeightSumData){
     InfoMsg << "AICc:\t" << AICccriterion << endmsg;
 }
 
-template AbsPawianMinimizer<FCNBase>::AbsPawianMinimizer(std::shared_ptr<AbsFcn<FCNBase>>, std::shared_ptr<AbsPawianParameters>);
-template AbsPawianMinimizer<FCNBase>::~AbsPawianMinimizer();
-template AbsPawianMinimizer<FCNGradientBase>::AbsPawianMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>>, std::shared_ptr<AbsPawianParameters>);
-template AbsPawianMinimizer<FCNGradientBase>::~AbsPawianMinimizer();
+template class AbsPawianMinimizer<FCNBase>;
+template class AbsPawianMinimizer<FCNGradientBase>;

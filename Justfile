@@ -1,69 +1,80 @@
-set shell := ["zsh", "-c"]
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 
 root := justfile_directory()
-b2_variant := "release"
-b2_jobs := env_var_or_default("JOBS", `getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1`)
-b2_runner := root / "Scripts/run-nix-b2"
+jobs := env_var_or_default("JOBS", num_cpus())
+variant := env_var_or_default("VARIANT", "release")
+pawian_build := root / "Scripts/run-pawian-build"
+amptools_runner := root / "Examples/gammap/comparison/run-amptools-reference"
+comparison_justfile := root / "Examples/gammap/comparison/Justfile"
 
 default:
-    @just --list
+    @just --justfile {{ quote(root / "Justfile") }} --list
 
-build target variant=b2_variant:
-    b2 -j{{ b2_jobs }} variant={{ variant }} {{ target }}
+# Show resolved native dependencies and actionable missing packages.
+[group('environment')]
+doctor:
+    {{ quote(pawian_build) }} doctor
 
+# Prepare the isolated Python comparison environment.
+[group('environment')]
+setup:
+    just --justfile {{ quote(comparison_justfile) }} setup
+
+# Build any Boost.Build target with the portable dependency adapter.
+[group('build')]
+build target variant=variant:
+    {{ quote(pawian_build) }} b2 -j{{ quote(jobs) }} variant={{ quote(variant) }} {{ quote(target) }}
+
+# Build a target with debug symbols.
+[group('build')]
 build-debug target:
-    just build {{ target }} debug
+    {{ quote(pawian_build) }} b2 -j{{ quote(jobs) }} variant=debug {{ quote(target) }}
 
-clean target:
-    b2 --clean {{ target }}
-
+# Build the gamma-proton PAWIAN executable.
+[group('build')]
 build-gammap:
-    just build Examples/gammap//install
+    {{ quote(pawian_build) }} b2 -j{{ quote(jobs) }} variant={{ quote(variant) }} gammap-install
 
-# Build the gamma-proton application with the pinned Nix dependencies.
-nix-build-gammap:
-    {{ b2_runner }} -j{{ b2_jobs }} variant=release gammap-install
-
-# Build both executables needed by the local comparison.
-build-comparison: nix-build-gammap build-amptools
-
-# Build the pinned AmpTools package explicitly, then incrementally link fitZlm.
+# Build the AmpTools comparison and reference executables.
+[group('build')]
 build-amptools:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    amptools_prefix="${AMPTOOLS_PREFIX:-$(nix build .#amptools --no-link --print-out-paths)}"
-    make -C {{ root }}/Examples/gammap/comparison \
-      -j{{ b2_jobs }} \
-      AMPTOOLS_HOME="$amptools_prefix/share/AmpTools"
+    {{ quote(amptools_runner) }} build
 
-# Confirm that entering nix develop does not mutate the checkout.
-check-development-shell:
-    {{ root }}/Scripts/check-development-shell
+# Build the PAWIAN and AmpTools executables used by the comparison.
+[group('build')]
+build-comparison: build-gammap build-amptools
 
-# Run the current comparison workflow with the pinned build environment.
+# Run the fast deterministic workflow tests without compiling PAWIAN.
+[group('test')]
+test:
+    {{ quote(amptools_runner) }} test
+
+# Run the deterministic AmpTools reference end to end.
+[group('test')]
+amptools-reference:
+    {{ quote(amptools_runner) }} run
+
+# Run fast tests, build PAWIAN, and run the reference (which builds AmpTools).
+[group('test')]
+check: test build-gammap amptools-reference
+
+# Run a comparison recipe; defaults to the complete fit workflow.
+[group('comparison')]
+comparison recipe="all":
+    JOBS={{ quote(jobs) }} just --justfile {{ quote(comparison_justfile) }} {{ quote(recipe) }}
+
+# Generate, fit, and plot the full comparison.
+[group('comparison')]
 demo:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    amptools_prefix="${AMPTOOLS_PREFIX:-$(nix build .#amptools --no-link --print-out-paths)}"
-    amptools_home="$amptools_prefix/share/AmpTools"
-    amptools_lib="$amptools_home/AmpTools/lib"
-    JOBS={{ b2_jobs }} \
-      AMPTOOLS_HOME="$amptools_home" \
-      LD_LIBRARY_PATH="$amptools_lib:${LD_LIBRARY_PATH:-}" \
-      DYLD_FALLBACK_LIBRARY_PATH="$amptools_lib:${DYLD_FALLBACK_LIBRARY_PATH:-}" \
-      {{ root }}/Scripts/with-nix-jamroot \
-      just --justfile {{ root }}/Examples/gammap/comparison/Justfile plots
+    JOBS={{ quote(jobs) }} just --justfile {{ quote(comparison_justfile) }} plots
 
-# Delegate to the self-contained laddu/PAWIAN/AmpTools comparison.
-zlm-comparison recipe="all":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    amptools_prefix="${AMPTOOLS_PREFIX:-$(nix build .#amptools --no-link --print-out-paths)}"
-    amptools_home="$amptools_prefix/share/AmpTools"
-    amptools_lib="$amptools_home/AmpTools/lib"
-    JOBS={{ b2_jobs }} \
-      AMPTOOLS_HOME="$amptools_home" \
-      LD_LIBRARY_PATH="$amptools_lib:${LD_LIBRARY_PATH:-}" \
-      DYLD_FALLBACK_LIBRARY_PATH="$amptools_lib:${DYLD_FALLBACK_LIBRARY_PATH:-}" \
-      {{ root }}/Scripts/with-nix-jamroot \
-      just --justfile {{ root }}/Examples/gammap/comparison/Justfile {{ recipe }}
+# Clean one Boost.Build target.
+[group('maintenance')]
+clean target:
+    {{ quote(pawian_build) }} b2 --clean {{ quote(target) }}
+
+# Clean all Boost.Build and local AmpTools executable outputs.
+[group('maintenance')]
+clean-all:
+    {{ quote(pawian_build) }} b2 --clean-all
+    make -C {{ quote(root / "Examples/gammap/comparison") }} clean

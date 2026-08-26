@@ -19,7 +19,7 @@ lib pipiScatteringUtils :
 	$(TOP)/Event//Event
 	$(TOP)/PwaUtils//PwaUtils
 	$(TOP)/Particle//Particle
+	$(TOP)/FitParams//FitParams
 	: 
 	: 
 	: ;
-

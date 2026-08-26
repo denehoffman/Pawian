@@ -3,13 +3,17 @@ import testing ;
 
 path-constant TOP : . ;
 
-local MINUIT2_STANDALONE = [ os.environ MINUIT2_STANDALONE ] ;
-local MINUIT2_LIBRARY = [ os.environ MINUIT2_LIBRARY ] ;
-local ROOTSYS = [ os.environ ROOTSYS ] ;
-local BOOSTINCLUDE = [ os.environ BOOSTINCLUDE ] ;
-local BOOSTLIBPATH = [ os.environ BOOSTLIBPATH ] ;
-local rlibs = [ SHELL "$(ROOTSYS)/bin/root-config --libs" ] ;
-ROOTLIBS = [ MATCH "(.*)[\n]" : $(rlibs) ] ;
+local ROOT_INCLUDE = [ os.environ PAWIAN_ROOT_INCLUDE ] ;
+local BOOST_INCLUDE = [ os.environ PAWIAN_BOOST_INCLUDE ] ;
+local BOOST_LIBRARY = [ os.environ PAWIAN_BOOST_LIBRARY ] ;
+local MINUIT2_INCLUDE = [ os.environ PAWIAN_MINUIT2_INCLUDE ] ;
+local MINUIT2_LIBRARY_FILE = [ os.environ PAWIAN_MINUIT2_LIBRARY ] ;
+local GSL_INCLUDE = [ os.environ PAWIAN_GSL_INCLUDE ] ;
+local GSL_LIBRARY = [ os.environ PAWIAN_GSL_LIBRARY ] ;
+local LOG4CPP_INCLUDE = [ os.environ PAWIAN_LOG4CPP_INCLUDE ] ;
+local LOG4CPP_LIBRARY = [ os.environ PAWIAN_LOG4CPP_LIBRARY ] ;
+local root-libraries = [ SHELL "root-config --libs" ] ;
+ROOTLIBS = [ MATCH "(.*)[\n]" : $(root-libraries) ] ;
 
 BOOSTLIBS =
   -lboost_chrono
@@ -23,35 +27,35 @@ BOOSTLIBS =
   -lboost_unit_test_framework
   ;
 
-lib boost_test : : <name>boost_unit_test_framework ;
+lib boost_test : : <name>boost_unit_test_framework <search>$(BOOST_LIBRARY) ;
+alias Minuit2 ;
 
 project :
   requirements <include>./
   <include>$(TOP)
-  <include>$(BOOSTINCLUDE)
-  <include>$(MINUIT2_STANDALONE)/include/Minuit2
-  <include>$(ROOTSYS)/include
-  <cxxflags>--std=c++17
+  <include>$(ROOT_INCLUDE)
+  <include>$(BOOST_INCLUDE)
+  <include>$(MINUIT2_INCLUDE)
+  <include>$(GSL_INCLUDE)
+  <include>$(LOG4CPP_INCLUDE)
+  <cxxflags>-std=c++17
+  <cxxflags>-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
   <cxxflags>-ftemplate-depth=256
   <cxxflags>-DBOOST_BIND_GLOBAL_PLACEHOLDERS
   <link>shared
   <linkflags>-L$(TOP)/lib
+  <linkflags>$(MINUIT2_LIBRARY_FILE)
   <linkflags>$(ROOTLIBS)
-  <linkflags>-L$(BOOSTLIBPATH)
+  <linkflags>-L$(BOOST_LIBRARY)
   <linkflags>$(BOOSTLIBS)
+  <linkflags>-L$(GSL_LIBRARY)
   <linkflags>-lgsl
   <linkflags>-lgslcblas
+  <linkflags>-L$(LOG4CPP_LIBRARY)
   <linkflags>-llog4cpp
   <cxxflags>-fPIC
   <cxxflags>-Wall
   ;
-
-actions rootlibs
-{
-  $(ROOTSYS)/bin/root-config --libs
-}
-
-lib Minuit2 : : <file>$(MINUIT2_LIBRARY) : : ;
 
 build-project ErrLogger ;
 build-project qft++ ;

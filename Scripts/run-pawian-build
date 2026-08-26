@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:-}"
+if [[ "$mode" != "doctor" && "$mode" != "b2" ]]; then
+  echo "usage: Scripts/run-pawian-build doctor | b2 [B2_ARGUMENT ...]" >&2
+  exit 2
+fi
+if [[ "$mode" == "b2" ]]; then
+  shift
+fi
+
+script_directory="$(cd "$(dirname "$0")" && pwd)"
+repository="$(cd "$script_directory/.." && pwd)"
+failures=""
+compiler="${CXX:-c++}"
+
+if ! command -v "$compiler" >/dev/null 2>&1; then
+  failures+=$'\n  - C++ compiler: set CXX or install c++'
+fi
+
+if ! command -v root-config >/dev/null 2>&1; then
+  failures+=$'\n  - ROOT: root-config is not on PATH'
+else
+  root_prefix="$(root-config --prefix)"
+  root_include="$(root-config --incdir)"
+  root_library="$(root-config --libdir)"
+fi
+
+if ! command -v b2 >/dev/null 2>&1; then
+  failures+=$'\n  - Boost.Build: b2 is not on PATH'
+fi
+if ! command -v pkg-config >/dev/null 2>&1; then
+  failures+=$'\n  - pkg-config is not on PATH'
+fi
+
+boost_include="${BOOST_INCLUDEDIR:-${BOOSTINCLUDE:-}}"
+boost_library="${BOOST_LIBRARYDIR:-${BOOSTLIBPATH:-}}"
+if [[ -z "$boost_include" || -z "$boost_library" ]]; then
+  for boost_prefix in /opt/homebrew/opt/boost /usr/local/opt/boost /usr; do
+    if [[ -f "$boost_prefix/include/boost/version.hpp" ]] &&
+       [[ -n "$(find "$boost_prefix/lib" -maxdepth 1 -name 'libboost_system*' -print -quit 2>/dev/null)" ]]; then
+      boost_include="$boost_prefix/include"
+      boost_library="$boost_prefix/lib"
+      break
+    fi
+  done
+fi
+if [[ -z "$boost_include" && -f /usr/include/boost/version.hpp ]]; then
+  boost_include=/usr/include
+fi
+if [[ -z "$boost_library" && -n "$boost_include" ]] && command -v "$compiler" >/dev/null 2>&1; then
+  boost_system_library="$($compiler -print-file-name=libboost_system.so 2>/dev/null || true)"
+  if [[ -f "$boost_system_library" ]]; then
+    boost_library="$(dirname "$boost_system_library")"
+  fi
+fi
+if [[ -z "$boost_include" || ! -f "$boost_include/boost/version.hpp" || -z "$boost_library" ]]; then
+  failures+=$'\n  - Boost headers and compiled libraries were not found'
+else
+  missing_boost_libraries=""
+  for component in chrono date_time filesystem program_options regex serialization system timer unit_test_framework; do
+    if [[ -z "$(find "$boost_library" -maxdepth 1 -name "libboost_$component*" -print -quit 2>/dev/null)" ]]; then
+      missing_boost_libraries+=" $component"
+    fi
+  done
+  if [[ -n "$missing_boost_libraries" ]]; then
+    failures+=$'\n  - Boost compiled libraries are missing:'"$missing_boost_libraries"
+  fi
+fi
+
+minuit2_include=""
+if [[ -n "${MINUIT2_STANDALONE:-}" ]]; then
+  if [[ -f "$MINUIT2_STANDALONE/include/Minuit2/Minuit2/MnUserParameters.h" ]]; then
+    minuit2_include="$MINUIT2_STANDALONE/include/Minuit2"
+  else
+    minuit2_include="$MINUIT2_STANDALONE/include"
+  fi
+fi
+minuit2_library="${MINUIT2_LIBRARY:-}"
+if [[ -z "$minuit2_include" && -n "${root_include:-}" ]]; then
+  minuit2_include="$root_include"
+fi
+if [[ -z "$minuit2_library" && -n "${root_library:-}" ]]; then
+  for candidate in libMinuit2.dylib libMinuit2.so libMinuit2.a; do
+    if [[ -f "$root_library/$candidate" ]]; then
+      minuit2_library="$root_library/$candidate"
+      break
+    fi
+  done
+fi
+if [[ -z "$minuit2_include" || ! -f "$minuit2_include/Minuit2/MnUserParameters.h" ||
+      -z "$minuit2_library" || ! -f "$minuit2_library" ]]; then
+  failures+=$'\n  - Minuit2 headers and library were not found (ROOT Minuit2 is supported)'
+fi
+
+gsl_include=""
+gsl_library=""
+log4cpp_include=""
+log4cpp_library=""
+if command -v pkg-config >/dev/null 2>&1; then
+  if pkg-config --exists gsl; then
+    gsl_include="$(pkg-config --variable=includedir gsl)"
+    gsl_library="$(pkg-config --variable=libdir gsl)"
+  else
+    failures+=$'\n  - GSL was not found by pkg-config'
+  fi
+  if pkg-config --exists log4cpp; then
+    log4cpp_include="$(pkg-config --variable=includedir log4cpp)"
+    log4cpp_library="$(pkg-config --variable=libdir log4cpp)"
+  else
+    failures+=$'\n  - log4cpp was not found by pkg-config'
+  fi
+fi
+
+if [[ -n "$failures" ]]; then
+  echo "PAWIAN build prerequisites are incomplete:$failures" >&2
+  echo >&2
+  echo "macOS: brew install root boost boost-build gsl log4cpp pkg-config" >&2
+  echo "Linux: install ROOT, Boost + Boost.Build, GSL, log4cpp, and pkg-config" >&2
+  echo "Nix:   nix develop --command just build-comparison" >&2
+  exit 2
+fi
+
+echo "PAWIAN build environment"
+echo "  ROOT:     $root_prefix"
+echo "  Boost:    $boost_include"
+echo "  Minuit2:  $minuit2_library"
+echo "  GSL:      $gsl_library"
+echo "  log4cpp:  $log4cpp_library"
+
+if [[ "$mode" == "doctor" ]]; then
+  exit 0
+fi
+
+jamroot="$repository/Jamroot"
+original_target=""
+if [[ -L "$jamroot" ]]; then
+  original_target="$(readlink "$jamroot")"
+elif [[ -e "$jamroot" ]]; then
+  echo "error: refusing to replace the existing non-symlink Jamroot" >&2
+  exit 2
+fi
+
+restore_jamroot() {
+  if [[ -L "$jamroot" && "$(readlink "$jamroot")" == "build-support/Jamroot.jam" ]]; then
+    rm -f "$jamroot"
+  fi
+  if [[ -n "$original_target" && ! -e "$jamroot" && ! -L "$jamroot" ]]; then
+    ln -s "$original_target" "$jamroot"
+  fi
+}
+trap restore_jamroot EXIT INT TERM
+
+if [[ -L "$jamroot" ]]; then
+  rm -f "$jamroot"
+fi
+ln -s build-support/Jamroot.jam "$jamroot"
+
+export ROOTSYS="$root_prefix"
+export PAWIAN_ROOT_INCLUDE="$root_include"
+export PAWIAN_ROOT_LIBRARY="$root_library"
+export PAWIAN_BOOST_INCLUDE="$boost_include"
+export PAWIAN_BOOST_LIBRARY="$boost_library"
+export PAWIAN_MINUIT2_INCLUDE="$minuit2_include"
+export PAWIAN_MINUIT2_LIBRARY="$minuit2_library"
+export PAWIAN_MINUIT2_LIBRARY_DIRECTORY="$(dirname "$minuit2_library")"
+export PAWIAN_GSL_INCLUDE="$gsl_include"
+export PAWIAN_GSL_LIBRARY="$gsl_library"
+export PAWIAN_LOG4CPP_INCLUDE="$log4cpp_include"
+export PAWIAN_LOG4CPP_LIBRARY="$log4cpp_library"
+
+cd "$repository"
+b2 "$@"

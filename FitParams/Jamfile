@@ -18,9 +18,12 @@ project :
 
 lib FitParams : 
 	[ glob *.cc : *App.cc ] 
-	: <use>$(TOP)//Minuit2
-	: 
-	: <library>$(TOP)//Minuit2 ;
+	$(TOP)/ConfigParser//ConfigParser
+	$(TOP)/ErrLogger//ErrLogger
+	$(TOP)/qft++//qft++
+	$(TOP)/qft++Extension//qft++Extension
+	$(TOP)//Minuit2
+	: ;
 
 exe StreamerTestApp : StreamerTestApp.cc FitParams $(TOP)/qft++//qft++ 
 	$(TOP)/ConfigParser//ConfigParser

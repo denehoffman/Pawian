@@ -236,8 +236,5 @@ void MinuitMinimizer<T>::dumpFitResult(){
   }
 }
 
-template MinuitMinimizer<FCNBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
-template MinuitMinimizer<FCNGradientBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar);
-
-template MinuitMinimizer<FCNBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, std::shared_ptr<MnUserCovariance> mnCovMatrix);
-template MinuitMinimizer<FCNGradientBase>::MinuitMinimizer(std::shared_ptr<AbsFcn<FCNGradientBase>> theAbsFcnPtr, std::shared_ptr<AbsPawianParameters> upar, std::shared_ptr<MnUserCovariance> mnCovMatrix);
+template class MinuitMinimizer<FCNBase>;
+template class MinuitMinimizer<FCNGradientBase>;
