@@ -1,72 +1,89 @@
-set shell := ["zsh", "-c"]
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 
 here := justfile_directory()
 repo := here / "../../.."
-python := env_var_or_default("PYTHON", "python3")
 generated := here / "generated"
+python := env_var_or_default("COMPARISON_PYTHON", env_var_or_default("NIX_PYTHON", generated / "python/bin/python"))
+bootstrap_python := env_var_or_default("PYTHON", "python3")
 data_events := env_var_or_default("DATA_EVENTS", "10000")
 mc_events := env_var_or_default("MC_EVENTS", "100000")
-jobs := env_var_or_default("JOBS", `nproc`)
+jobs := env_var_or_default("JOBS", num_cpus())
 
 default:
-    @just --list
+    @just --justfile {{ quote(here / "Justfile") }} --list
 
-# Install laddu 0.21 and the plotting/file-conversion dependencies.
+# Prepare an isolated Python environment, or validate the one supplied by Nix.
 setup:
-    {{python}} -m pip install -r {{here}}/requirements.txt
+    mkdir -p {{ quote(generated) }}
+    if [[ {{ quote(python) }} == {{ quote(generated / "python/bin/python") }} && ! -x {{ quote(python) }} ]]; then \
+      {{ quote(bootstrap_python) }} -m venv {{ quote(generated / "python") }}; \
+    fi
+    if {{ quote(python) }} -c 'import laddu, matplotlib, numpy, pyarrow, uproot' 2>/dev/null; then \
+      exit 0; \
+    elif [[ {{ quote(python) }} == {{ quote(generated / "python/bin/python") }} ]]; then \
+      {{ quote(python) }} -m pip install -r {{ quote(here / "requirements.txt") }}; \
+    else \
+      echo 'COMPARISON_PYTHON is missing packages from requirements.txt' >&2; \
+      exit 2; \
+    fi
 
 # Generate the one common pseudo-data and weighted normalization sample.
-generate:
-    cd {{here}} && {{python}} generate.py \
-      --output {{generated}} \
-      --data-events {{data_events}} \
-      --mc-events {{mc_events}}
+generate: setup
+    cd {{ quote(here) }} && {{ quote(python) }} generate.py \
+      --output {{ quote(generated) }} \
+      --data-events {{ quote(data_events) }} \
+      --mc-events {{ quote(mc_events) }}
 
 # Write PAWIAN ASCII and one AmpTools ROOT tree per mass bin.
 translate: generate
-    cd {{here}} && {{python}} translate.py --output {{generated}}
+    cd {{ quote(here) }} && {{ quote(python) }} translate.py --output {{ quote(generated) }}
 
-# Fit every mass bin simultaneously with laddu 0.21.
+# Fit each mass bin independently with laddu 0.21.
 laddu: generate
-    cd {{here}} && {{python}} fit_laddu.py \
-      --output {{generated}}/laddu-fit.json \
-      --threads {{jobs}}
+    cd {{ quote(here) }} && {{ quote(python) }} fit_laddu.py \
+      --output {{ quote(generated / "laddu-fit.json") }} \
+      --threads {{ quote(jobs) }}
 
 amptools-build:
-    cd {{here}} && make fitZlm
+    {{ quote(here / "run-amptools-reference") }} build
+
+# Build, evaluate, and validate the deterministic AmpTools reference.
+amptools-reference:
+    {{ quote(here / "run-amptools-reference") }} run
 
 amptools-configs: translate
-    cd {{here}} && {{python}} prepare.py amptools \
-      --directory {{generated}}/amptools
+    cd {{ quote(here) }} && {{ quote(python) }} prepare.py amptools \
+      --directory {{ quote(generated / "amptools") }}
 
 # Fit each ROOT mass bin with AmpTools' Zlm amplitude.
 amptools: amptools-build amptools-configs
-    printf '%s\0' {{generated}}/amptools/*.cfg | \
-      xargs -0 -n1 -P {{jobs}} zsh -c \
-      'cd {{generated}}/amptools && {{here}}/fitZlm "$1"' _
+    printf '%s\0' {{ quote(generated / "amptools") }}/*.cfg | \
+      GENERATED={{ quote(generated / "amptools") }} FIT_ZLM={{ quote(here / "fitZlm") }} \
+      xargs -0 -n1 -P {{ quote(jobs) }} bash -c 'cd "$GENERATED" && "$FIT_ZLM" "$1"' _
 
 pawian-build:
-    cd {{repo}} && b2 -j{{jobs}} variant=release Examples/gammap//install
+    {{ quote(repo / "Scripts/run-pawian-build") }} b2 -j{{ quote(jobs) }} variant=release gammap-install
 
 pawian-configs: translate pawian-build
-    mkdir -p {{generated}}/pawian
-    cd {{generated}}/pawian && {{repo}}/bin/gammapReactionApp \
-      -c {{here}}/pawian.cfg --mode dumpDefaultParams --name _zlm
-    cd {{here}} && {{python}} prepare.py pawian \
-      --defaults {{generated}}/pawian/defaultparams_zlm.dat \
-      --directory {{generated}}/pawian
+    mkdir -p {{ quote(generated / "pawian") }}
+    cd {{ quote(generated / "pawian") }} && {{ quote(repo / "bin/gammapReactionApp") }} \
+      -c {{ quote(here / "pawian.cfg") }} --mode dumpDefaultParams --name _zlm
+    cd {{ quote(here) }} && {{ quote(python) }} prepare.py pawian \
+      --defaults {{ quote(generated / "pawian/defaultparams_zlm.dat") }} \
+      --directory {{ quote(generated / "pawian") }}
 
 # Fit each ASCII mass bin with PAWIAN's Reflectivity production formalism.
 pawian: pawian-configs
-    printf '%s\0' {{generated}}/pawian/*.cfg | \
-      xargs -0 -n1 -P {{jobs}} zsh -c \
-      'cfg="$1"; name=${cfg:t:r}; cd {{generated}}/pawian/$name && \
-       {{repo}}/bin/gammapReactionApp -c "$cfg" --mode pwa --name "_$name"' _
+    printf '%s\0' {{ quote(generated / "pawian") }}/*.cfg | \
+      GENERATED={{ quote(generated / "pawian") }} PAWIAN_APP={{ quote(repo / "bin/gammapReactionApp") }} \
+      xargs -0 -n1 -P {{ quote(jobs) }} bash -c \
+      'cfg="$1"; name=$(basename "$cfg" .cfg); cd "$GENERATED/$name" && \
+       "$PAWIAN_APP" -c "$cfg" --mode pwa --name "_$name"' _
 
 all: laddu amptools pawian
 
 # Plot fitted D/S parameters and mass-binned S0+/D2+ projections.
 plots: all
-    cd {{here}} && {{python}} plot_compare.py \
-      --directory {{generated}} \
-      --output {{generated}}/fit-comparison.png
+    cd {{ quote(here) }} && {{ quote(python) }} plot_compare.py \
+      --directory {{ quote(generated) }} \
+      --output {{ quote(generated / "fit-comparison.png") }}

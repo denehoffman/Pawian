@@ -94,6 +94,14 @@ def read_amptools(directory: Path) -> list[Point]:
         raise FileNotFoundError(message)
     for path in paths:
         parameters = read_amptools_file(path)
+        s_real_name = next(
+            (name for name in parameters if name.endswith('::PosRe::S0+_re')),
+            None,
+        )
+        s_imag_name = next(
+            (name for name in parameters if name.endswith('::PosRe::S0+_im')),
+            None,
+        )
         real_name = next(
             (name for name in parameters if name.endswith('::PosRe::D2+_re')),
             None,
@@ -102,11 +110,23 @@ def read_amptools(directory: Path) -> list[Point]:
             (name for name in parameters if name.endswith('::PosRe::D2+_im')),
             None,
         )
-        if real_name is None or imag_name is None:
-            message = f'{path} is missing the D2+ production coefficient'
+        if None in (s_real_name, s_imag_name, real_name, imag_name):
+            message = f'{path} is missing an S0+ or D2+ production coefficient'
             raise ValueError(message)
-        real, imag = parameters[real_name], parameters[imag_name]
-        points.append(Point('AmpTools', indexed_path(path), math.hypot(real, imag), math.atan2(imag, real)))
+        s = complex(parameters[s_real_name], parameters[s_imag_name])
+        if abs(s) == 0.0:
+            message = f'{path} has a zero S0+ production coefficient'
+            raise ValueError(message)
+        d = complex(parameters[real_name], parameters[imag_name])
+        ratio = d / s
+        points.append(
+            Point(
+                'AmpTools',
+                indexed_path(path),
+                abs(ratio),
+                math.atan2(ratio.imag, ratio.real),
+            )
+        )
     return points
 
 

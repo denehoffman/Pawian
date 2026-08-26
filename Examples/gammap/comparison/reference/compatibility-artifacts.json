@@ -1,0 +1,31 @@
+{
+  "format_version": 1,
+  "reference": {
+    "name": "AmpTools",
+    "release": "v0.15.4",
+    "revision": "300bbd40d8f5a7288fcc853f1c621a358906f2c2",
+    "source_archive": {
+      "url": "https://github.com/mashephe/AmpTools/archive/300bbd40d8f5a7288fcc853f1c621a358906f2c2.tar.gz",
+      "sha256": "cf833c8a1e1ef51f8398b254e48fde228a10a649fffe531f8b2a2a5fe063e67d"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "Examples/gammap/comparison/Zlm.cc",
+      "sha256": "9d91a4794153ccfd8509583012e37262a6a1513a64ced29bc1cc792d366b386d"
+    },
+    {
+      "path": "Examples/gammap/comparison/Zlm.h",
+      "sha256": "f052c4f840179ea956fcba20c51def9199ff6141057ab4a821a7e77a95084744"
+    },
+    {
+      "path": "Examples/gammap/comparison/wignerD.cc",
+      "sha256": "a9f03cbbd6aafd7adc06b19b5e7009dbdf43a73c9bcc7db92324fbbe0525d627"
+    },
+    {
+      "path": "Examples/gammap/comparison/wignerD.h",
+      "sha256": "152b38402d9aacc0813db7644c5e0e94cbf63701a71f4dd5254b888c3fec40cd"
+    }
+  ],
+  "notes": "The local S-wave reference does not use a barrier-factor artifact. Add any future AmpTools barrier-factor source here before using it."
+}

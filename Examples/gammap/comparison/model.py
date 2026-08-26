@@ -1,4 +1,3 @@
-# ruff: noqa: INP001
 """Shared laddu 0.21 channel and Zlm model for the three-way comparison."""
 
 from __future__ import annotations
@@ -106,9 +105,11 @@ def zlm_components(
 def truth_model(reaction: ld.Channel) -> ld.Model:
     """An f0(1500) S wave coherently interfering with an f2(1270) D wave."""
     s_amplitudes, d_amplitudes = truth_wave_amplitudes(reaction)
-    intensity = sum(
-        (s_amplitude + d_amplitude).norm_sqr()
-        for s_amplitude, d_amplitude in zip(s_amplitudes, d_amplitudes, strict=True)
+    intensity = ld.Expr(
+        sum(
+            (s_amplitude + d_amplitude).norm_sqr()
+            for s_amplitude, d_amplitude in zip(s_amplitudes, d_amplitudes, strict=True)
+        )
     )
     return ld.Model(intensity)
 
@@ -144,10 +145,10 @@ def truth_wave_amplitudes(
     )
 
 
-def truth_wave_models(reaction: ld.Channel) -> tuple[ld.Model, ld.Model]:
+def truth_wave_models(reaction: ld.Channel) -> tuple[ld.Model, ...]:
     """Return diagonal S0+ and D2+ intensity models for truth projections."""
     return tuple(
-        ld.Model(sum(amplitude.norm_sqr() for amplitude in amplitudes))
+        ld.Model(ld.Expr(sum(amplitude.norm_sqr() for amplitude in amplitudes)))
         for amplitudes in truth_wave_amplitudes(reaction)
     )
 

@@ -1,5 +1,6 @@
 generated/
 fitZlm
+amptoolsReference
 *.fit
 *.ni
 *.o

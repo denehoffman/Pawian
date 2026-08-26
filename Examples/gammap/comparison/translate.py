@@ -86,10 +86,6 @@ def main() -> None:
 
     for stem, source in (('data', args.data), ('mc', args.mc)):
         p4s, weights = arrays(ld.read_parquet(source))
-        if stem == 'mc':
-            # A global rescaling leaves every normalized likelihood unchanged,
-            # and PAWIAN expects the effective MC count to be event-sized.
-            weights = weights / np.mean(weights)
         write_ascii(args.output / f'{stem}.txt', p4s, weights)
         write_root_bins(args.output, stem, p4s, weights)
     print(f'wrote PAWIAN and AmpTools inputs under {args.output}')

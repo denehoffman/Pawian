@@ -18,7 +18,10 @@ public:
   /**
    * Default constructor for ROOTDataReader
    */
-  ROOTDataReader() : UserDataReader<ROOTDataReader>(), m_inFile(NULL) {}
+  ROOTDataReader()
+      : UserDataReader<ROOTDataReader>(), m_inFile(NULL), m_inTree(NULL),
+        m_eventCounter(0), m_useWeight(false), m_useEventID(false),
+        m_eventID(0) {}
 
   ~ROOTDataReader();
 
@@ -46,7 +49,9 @@ private:
   TTree *m_inTree;
   unsigned int m_eventCounter;
   bool m_useWeight;
+  bool m_useEventID;
 
+  long long m_eventID;
   int m_nPart;
   float m_e[Kinematics::kMaxParticles];
   float m_px[Kinematics::kMaxParticles];

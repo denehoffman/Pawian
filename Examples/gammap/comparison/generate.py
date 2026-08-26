@@ -33,10 +33,11 @@ def main() -> None:
         grow_envelope=True,
         max_proposals=100_000_000,
     )
-    normalization, mc_report = generator.weighted(
+    normalization, mc_report = generator.unweighted(
         args.mc_events,
         execution=execution,
         seed=args.seed + 1,
+        proven_envelope=True,
     )
     data.write_to(ld.ParquetSink(args.output / 'data.parquet'))
     normalization.write_to(ld.ParquetSink(args.output / 'mc.parquet'))

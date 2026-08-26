@@ -32,20 +32,39 @@ def main() -> None:
     data_bins = ld.read_parquet(args.data).bin_by(mass, bins=bins)
     mc_bins = ld.read_parquet(args.mc).bin_by(mass, bins=bins)
 
-    terms = []
+    execution = ld.Execution('jit', threads=args.threads, precision='f64')
+    total_nll = 0.0
+    parameters = {}
     fitted_bins = []
     for observed, normalization in zip(data_bins, mc_bins, strict=True):
         if len(observed.dataset) == 0 or len(normalization.dataset) == 0:
             continue
         prefix = f'bin_{observed.index:02d}'
-        terms.append(
-            ld.NLL(
+        likelihood = ld.Likelihood(
+            [ld.NLL(
                 bin_model(reaction, prefix),
                 data=observed.dataset,
                 accepted_mc=normalization.dataset,
                 name=prefix,
-            )
+            )],
+            execution=execution,
         )
+        fits = [
+            likelihood.fit(
+                initial={
+                    f'{prefix}_d_magnitude': magnitude,
+                    f'{prefix}_d_phase': 0.35,
+                },
+                terminators=[ld.ganesh.MaxSteps(args.max_steps)],
+                observers=[ld.ganesh.DebugObserver()],
+            )
+            for magnitude in (0.15, 0.5)
+        ]
+        fit = min(fits, key=lambda candidate: candidate.fx)
+        names = fit.parameter_names or likelihood.parameter_names
+        bin_parameters = dict(zip(names, np.asarray(fit.x, dtype=float), strict=True))
+        parameters.update(bin_parameters)
+        total_nll += fit.fx
         fitted_bins.append(
             {
                 'index': observed.index,
@@ -53,29 +72,17 @@ def main() -> None:
                 'high': observed.high,
                 'data_events': len(observed.dataset),
                 'mc_events': len(normalization.dataset),
+                'd_magnitude': bin_parameters[f'{prefix}_d_magnitude'],
+                'd_phase': bin_parameters[f'{prefix}_d_phase'],
             }
         )
-
-    execution = ld.Execution('jit', threads=args.threads, precision='f64')
-    likelihood = ld.Likelihood(terms, execution=execution)
-    initial = {name: 0.35 if name.endswith('_phase') else 0.5 for name in likelihood.parameter_names}
-    fit = likelihood.fit(
-        initial=initial,
-        terminators=[ld.ganesh.MaxSteps(args.max_steps)],
-    )
-    names = fit.parameter_names or likelihood.parameter_names
-    parameters = dict(zip(names, np.asarray(fit.x, dtype=float), strict=True))
-    for item in fitted_bins:
-        prefix = f'bin_{item["index"]:02d}'
-        item['d_magnitude'] = parameters[f'{prefix}_d_magnitude']
-        item['d_phase'] = parameters[f'{prefix}_d_phase']
+        print(f'bin {observed.index}: {fit}')
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
-        json.dumps({'nll': fit.fx, 'parameters': parameters, 'bins': fitted_bins}, indent=2) + '\n',
+        json.dumps({'nll': total_nll, 'parameters': parameters, 'bins': fitted_bins}, indent=2) + '\n',
         encoding='utf-8',
     )
-    print(fit)
     print(f'wrote {args.output}')
 
 

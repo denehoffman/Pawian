@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:-run}"
+if [[ "$mode" != "run" && "$mode" != "build" && "$mode" != "test" ]]; then
+  echo "usage: run-amptools-reference [run|build|test]" >&2
+  exit 2
+fi
+
+here="$(cd "$(dirname "$0")" && pwd)"
+generated="$here/generated/amptools-reference"
+dependency_cache="${AMPTOOLS_REFERENCE_CACHE:-$here/generated/amptools-reference-dependencies}"
+manifest="$here/reference/compatibility-artifacts.json"
+python_command="${COMPARISON_PYTHON:-${NIX_PYTHON:-${PYTHON:-python3}}}"
+compiler="${CXX:-c++}"
+jobs="${JOBS:-}"
+
+if ! command -v "$python_command" >/dev/null 2>&1; then
+  echo "error: Python 3 is required (set PYTHON to its executable)" >&2
+  exit 2
+fi
+mkdir -p "$dependency_cache"
+
+if "$python_command" -c 'import numpy, uproot' >/dev/null 2>&1; then
+  reference_python="$python_command"
+else
+  virtual_environment="$dependency_cache/python"
+  if [[ ! -x "$virtual_environment/bin/python" ]]; then
+    echo "Creating the AmpTools reference Python environment..."
+    "$python_command" -m venv "$virtual_environment"
+  fi
+  reference_python="$virtual_environment/bin/python"
+  if ! "$reference_python" -c 'import numpy, uproot' >/dev/null 2>&1; then
+    echo "Installing the pinned AmpTools reference Python dependencies..."
+    "$reference_python" -m pip install \
+      --disable-pip-version-check \
+      numpy==2.4.4 uproot==5.7.5
+  fi
+fi
+
+if [[ "$mode" == "test" ]]; then
+  cd "$here"
+  "$reference_python" -m unittest discover -s tests -p 'test_*.py' -v
+  exit 0
+fi
+
+if ! command -v root-config >/dev/null 2>&1; then
+  echo "error: ROOT is required and root-config must be on PATH" >&2
+  echo "       macOS: brew install root" >&2
+  echo "       Linux: install ROOT and source its thisroot.sh" >&2
+  exit 2
+fi
+if ! command -v make >/dev/null 2>&1; then
+  echo "error: make is required" >&2
+  exit 2
+fi
+if ! command -v "$compiler" >/dev/null 2>&1; then
+  echo "error: C++ compiler '$compiler' was not found (set CXX to override)" >&2
+  exit 2
+fi
+if [[ -z "$jobs" ]]; then
+  jobs="$(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)"
+fi
+
+if [[ -n "${AMPTOOLS_HOME:-}" ]]; then
+  amptools_home="$AMPTOOLS_HOME"
+elif [[ -n "${AMPTOOLS_PREFIX:-}" ]]; then
+  amptools_home="$AMPTOOLS_PREFIX/share/AmpTools"
+else
+  revision="$($reference_python -c 'import json, sys; print(json.load(open(sys.argv[1]))["reference"]["revision"])' "$manifest")"
+  archive_url="$($reference_python -c 'import json, sys; print(json.load(open(sys.argv[1]))["reference"]["source_archive"]["url"])' "$manifest")"
+  archive_sha256="$($reference_python -c 'import json, sys; print(json.load(open(sys.argv[1]))["reference"]["source_archive"]["sha256"])' "$manifest")"
+  archive="$dependency_cache/AmpTools-$revision.tar.gz"
+  amptools_home="$dependency_cache/AmpTools-$revision"
+
+  if [[ ! -f "$archive" ]]; then
+    temporary_archive="$(mktemp "$dependency_cache/.AmpTools-archive.XXXXXX")"
+    trap 'rm -f "$temporary_archive"' EXIT
+    echo "Downloading pinned AmpTools revision $revision..."
+    "$reference_python" -c 'import sys, urllib.request; urllib.request.urlretrieve(sys.argv[1], sys.argv[2])' \
+      "$archive_url" "$temporary_archive"
+    actual_sha256="$($reference_python -c 'import hashlib, sys; print(hashlib.sha256(open(sys.argv[1], "rb").read()).hexdigest())' "$temporary_archive")"
+    if [[ "$actual_sha256" != "$archive_sha256" ]]; then
+      echo "error: AmpTools archive digest mismatch" >&2
+      echo "       expected $archive_sha256" >&2
+      echo "       received $actual_sha256" >&2
+      exit 2
+    fi
+    mv "$temporary_archive" "$archive"
+    trap - EXIT
+  else
+    actual_sha256="$($reference_python -c 'import hashlib, sys; print(hashlib.sha256(open(sys.argv[1], "rb").read()).hexdigest())' "$archive")"
+    if [[ "$actual_sha256" != "$archive_sha256" ]]; then
+      echo "error: cached AmpTools archive digest mismatch: $archive" >&2
+      exit 2
+    fi
+  fi
+
+  if [[ ! -d "$amptools_home/AmpTools" ]]; then
+    temporary_directory="$(mktemp -d "$dependency_cache/.AmpTools-source.XXXXXX")"
+    trap 'rm -rf "$temporary_directory"' EXIT
+    tar -xzf "$archive" -C "$temporary_directory" --strip-components=1
+    mv "$temporary_directory" "$amptools_home"
+    trap - EXIT
+  fi
+
+  if [[ ! -f "$amptools_home/AmpTools/lib/libAmpTools.a" ]]; then
+    echo "Building pinned AmpTools revision $revision..."
+    AMPTOOLS_HOME="$amptools_home" make -C "$amptools_home/AmpTools" \
+      -j"$jobs" CXX="$compiler"
+  fi
+fi
+
+if [[ ! -f "$amptools_home/AmpTools/IUAmpTools/AmpToolsInterface.h" || \
+      ! -f "$amptools_home/AmpTools/lib/libAmpTools.a" ]]; then
+  echo "error: AMPTOOLS_HOME does not contain a built AmpTools tree: $amptools_home" >&2
+  exit 2
+fi
+
+build_stamp="$here/generated/amptools-build-environment"
+current_build_environment="$(
+  printf '%s\n' \
+    "compiler=$(command -v "$compiler")" \
+    "root-config=$(command -v root-config)" \
+    "root-prefix=$(root-config --prefix)" \
+    "root-version=$(root-config --version)" \
+    "amptools-home=$amptools_home" \
+    "pawian-revision=$(git -C "$here" describe --always --dirty)"
+  "$compiler" --version
+  root-config --cflags --libs
+)"
+if [[ ! -f "$build_stamp" || "$(<"$build_stamp")" != "$current_build_environment" ]]; then
+  AMPTOOLS_HOME="$amptools_home" make -C "$here" clean
+  mkdir -p "$(dirname "$build_stamp")"
+  printf '%s\n' "$current_build_environment" > "$build_stamp"
+fi
+
+AMPTOOLS_HOME="$amptools_home" make -C "$here" -j"$jobs" \
+  CXX="$compiler" fitZlm amptoolsReference
+
+if [[ "$mode" == "build" ]]; then
+  echo "AmpTools comparison executables built under $here"
+  exit 0
+fi
+
+cd "$here"
+"$reference_python" amptools_reference.py verify-artifacts
+"$reference_python" amptools_reference.py prepare --output "$generated"
+"$here/amptoolsReference" prepare-norm \
+  "$generated/prepare-normalization.cfg" \
+  "$generated/normalization.ni" \
+  "$generated/normalization-audit.json"
+sample_digest="$("$reference_python" amptools_reference.py sample-digest)"
+"$here/amptoolsReference" evaluate \
+  "$generated/reference.cfg" \
+  "$generated/result.json" \
+  "$sample_digest" \
+  "$generated/normalization-audit.json"
+"$reference_python" amptools_reference.py validate \
+  --result "$generated/result.json"
+
+echo "AmpTools reference completed: $generated/result.json"

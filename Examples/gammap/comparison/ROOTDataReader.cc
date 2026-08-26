@@ -16,7 +16,7 @@ using namespace std;
 
 ROOTDataReader::ROOTDataReader(const vector<string> &args)
     : UserDataReader<ROOTDataReader>(args), m_eventCounter(0),
-      m_useWeight(false) {
+      m_useWeight(false), m_useEventID(false), m_eventID(0) {
   assert(args.size() == 2 || args.size() == 1);
 
   TH1::AddDirectory(kFALSE);
@@ -52,6 +52,11 @@ ROOTDataReader::ROOTDataReader(const vector<string> &args)
 
     m_useWeight = false;
   }
+
+  if (m_inTree->GetBranch("EventID") != NULL) {
+    m_useEventID = true;
+    m_inTree->SetBranchAddress("EventID", &m_eventID);
+  }
 }
 
 ROOTDataReader::~ROOTDataReader() {
@@ -85,7 +90,11 @@ Kinematics *ROOTDataReader::getEvent() {
       particleList.push_back(TLorentzVector(m_px[i], m_py[i], m_pz[i], m_e[i]));
     }
 
-    return new Kinematics(particleList, m_useWeight ? m_weight : 1.0);
+    Kinematics *event =
+        new Kinematics(particleList, m_useWeight ? m_weight : 1.0);
+    if (m_useEventID)
+      event->setEventID(static_cast<int>(m_eventID));
+    return event;
   } else {
 
     return NULL;

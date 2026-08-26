@@ -38,7 +38,9 @@ mass bin.
 - PAWIAN uses `productionFormalism = Reflectivity`. Only
   `Reflectivity_f0(1500)_J0_M0_R+_K0` and
   `Reflectivity_f2(1270)_J2_M2_R+_K0` remain active; every other production
-  coefficient and both decay couplings are fixed.
+  coefficient and both decay couplings are fixed. Its channel normalization
+  floats so that fixing the S-wave reference does not also fix the absolute
+  event yield, and every available normalization-MC event is used in each bin.
 
 ## Running
 
@@ -60,12 +62,64 @@ shows the S0+ and D2+ event projections from each fit and from the generation
 truth. The diagonal wave yields are normalized with the common weighted MC;
 because S0+ and D2+ interfere, their projected counts need not add to the data
 count. Override sample sizes with `DATA_EVENTS` and
-`MC_EVENTS`, the parallel worker count with `JOBS`, and the Python interpreter
-with `PYTHON`. By default Laddu uses its multithreaded JIT backend and the other
-two programs fit independent mass bins in parallel using all available CPUs.
-`setup` installs the released `laddu==0.21.0`; developers may instead install
-the adjacent checkout with `python -m pip install -e ../../../../laddu/python/laddu`.
+`MC_EVENTS`, the parallel worker count with `JOBS`, and the managed Python
+interpreter with `COMPARISON_PYTHON`. By default Laddu uses its multithreaded
+JIT backend, and all three programs fit independent mass bins using all
+available CPUs.
+`setup` creates `generated/python` and installs the released `laddu==0.21.0`;
+inside the Nix shell it validates and uses `NIX_PYTHON` without modifying it.
+Developers may point `COMPARISON_PYTHON` at an environment containing the
+adjacent laddu checkout.
 
 Generated parquet, ROOT, ASCII, configuration, normalization-integral, and fit
-files stay under `generated/`. AmpTools additionally requires `AMPTOOLS_HOME`;
-PAWIAN uses this checkout's normal b2 environment.
+files stay under `generated/`. Without `AMPTOOLS_HOME` or `AMPTOOLS_PREFIX`, the
+AmpTools runner bootstraps its pinned source into the ignored generated cache.
+PAWIAN's portable build adapter resolves the active system or Nix dependencies.
+
+## Frozen AmpTools S-wave reference
+
+Run the smallest compatibility reference from the repository root:
+
+```bash
+just amptools-reference
+```
+
+This command does not invoke Nix. It requires a C++ compiler, Make, Python 3,
+and a ROOT installation whose `root-config` is on `PATH`. On macOS, those
+system prerequisites can be installed with `brew install root python just`.
+On Linux, install ROOT and source its `thisroot.sh` before running the command.
+
+The first run creates an ignored cache under
+`generated/amptools-reference-dependencies/`. It installs the pinned minimal
+Python dependencies there, downloads the SHA-256-protected AmpTools v0.15.4
+source archive, and builds it against the active ROOT installation. Later runs
+reuse that cache. Set `AMPTOOLS_HOME` to use an existing built source tree,
+`AMPTOOLS_PREFIX` to use a packaged AmpTools prefix, or
+`AMPTOOLS_REFERENCE_CACHE` to move the cache.
+
+Nix remains an optional way to provide the prerequisites:
+
+```bash
+nix develop --command just amptools-reference
+```
+
+This verifies recorded SHA-256 digests for `Zlm.cc`, `Zlm.h`, `wignerD.cc`,
+and `wignerD.h`; translates the committed four-event data and six-event
+normalization samples; explicitly writes the AmpTools normalization cache;
+then evaluates a fixed unit-coefficient S0+ amplitude at zero beam
+polarization. The validator requires all intensities to equal AmpTools'
+identical-particle result `1 / (8 pi)` within floating-point tolerance.
+
+Auditable output is retained in `generated/amptools-reference/`:
+
+- `input-metadata.json` records event identifiers, particle ordering, counts,
+  weights, the sample digest, and Pawian/AmpTools revisions.
+- `normalization.ni` is prepared in a separate step before evaluation.
+- `normalization-audit.json` records the exact generated and accepted event
+  identifiers and weights read by AmpTools.
+- `result.json` records per-event kinematic checks and intensities plus
+  normalization and revision metadata.
+
+The compatibility manifest notes that this S-wave reference has no local
+barrier-factor artifact. Any later reference that introduces one must add it
+to the manifest before its result can be accepted.
