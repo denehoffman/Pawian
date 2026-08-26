@@ -34,9 +34,12 @@ public:
 
   double fraction() const { return _fraction; }
   double angle() const { return _angle; }
-  std::complex<double> rho(const Spin &lambda, const Spin &lambdaPrime) const;
-  double
-  intensity(const std::array<std::complex<double>, 2> &helicityAmps) const;
+  std::complex<double> rho(const Spin &lambda, const Spin &lambdaPrime,
+                           double angle) const;
+  double intensity(const std::array<std::complex<double>, 2> &helicityAmps,
+                   double angle) const;
+  double productionPlaneAngle(const Vector4<double> &beam,
+                              const Vector4<double> &recoil) const;
 
   static unsigned int helicityIndex(const Spin &lambda);
 

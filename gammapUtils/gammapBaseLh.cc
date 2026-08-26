@@ -42,6 +42,7 @@
 #include "PwaUtils/GlobalEnv.hh"
 #include "PwaUtils/IsobarLSDecay.hh"
 #include "PwaUtils/XdecAmpRegistry.hh"
+#include "Utils/IdStringMapRegistry.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
 #include "gammapUtils/ReflectivityDecAmps.hh"
 #include "gammapUtils/gammapBaseLh.hh"
@@ -93,6 +94,30 @@ gammapBaseLh::calcEvtIntensity(EvtData *theData,
       _fsParticleProjections->spinProjections();
   const std::array<Spin, 2> photonHelicities = {Spin(1), Spin(-1)};
   const std::array<Spin, 2> targetSpinProjections = {Spin(0.5), Spin(-0.5)};
+  double polarizationAngle = _beamPolarization.angle();
+  if (_useReflectivity) {
+    std::shared_ptr<ReflectivityDecAmps> reflectivityAmp;
+    for (itDecAll = _decAmps.begin(); itDecAll != _decAmps.end();
+         ++itDecAll) {
+      reflectivityAmp =
+          std::dynamic_pointer_cast<ReflectivityDecAmps>(*itDecAll);
+      if (reflectivityAmp)
+        break;
+    }
+    if (!reflectivityAmp) {
+      Alert << "Reflectivity channel has no reflectivity production amplitude"
+            << endmsg;
+      exit(1);
+    }
+    std::string recoilName =
+        reflectivityAmp->absDec()->daughter2Part()->name();
+    const unsigned short recoilId =
+        IdStringMapRegistry::instance()->stringId(recoilName);
+    const Vector4<double> beam =
+        GlobalEnv::instance()->Channel(_channelID)->projectile4Vec();
+    polarizationAngle = _beamPolarization.productionPlaneAngle(
+        beam, theData->FourVecsId.at(recoilId));
+  }
 
   for (unsigned int projId = 0; projId < spinProjections.size(); ++projId) {
     const std::vector<Spin> &currentSpinProjection = spinProjections.at(projId);
@@ -137,7 +162,7 @@ gammapBaseLh::calcEvtIntensity(EvtData *theData,
         }
       }
 
-      result += _beamPolarization.intensity(helicityAmps);
+      result += _beamPolarization.intensity(helicityAmps, polarizationAngle);
     }
   }
 

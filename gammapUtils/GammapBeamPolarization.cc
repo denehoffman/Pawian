@@ -49,12 +49,13 @@ unsigned int GammapBeamPolarization::helicityIndex(const Spin &lambda) {
 //
 // where "f" is the polarization fraction and "a" is the polarization angle
 std::complex<double>
-GammapBeamPolarization::rho(const Spin &lambda, const Spin &lambdaPrime) const {
+GammapBeamPolarization::rho(const Spin &lambda, const Spin &lambdaPrime,
+                            double angle) const {
   if (lambda == lambdaPrime)
     return std::complex<double>(0.5, 0.);
 
   const std::complex<double> offDiagonal =
-      -0.5 * _fraction * std::exp(std::complex<double>(0., -2. * _angle));
+      -0.5 * _fraction * std::exp(std::complex<double>(0., -2. * angle));
   if (lambda == Spin(1) && lambdaPrime == Spin(-1))
     return offDiagonal;
   if (lambda == Spin(-1) && lambdaPrime == Spin(1))
@@ -70,16 +71,55 @@ GammapBeamPolarization::rho(const Spin &lambda, const Spin &lambdaPrime) const {
 //
 // I = 2 * Re[sum_{l,l'} rho_{l,l'} * H_{l} * conj(H_{l'})]
 double GammapBeamPolarization::intensity(
-    const std::array<std::complex<double>, 2> &helicityAmps) const {
+    const std::array<std::complex<double>, 2> &helicityAmps,
+    double angle) const {
   const std::array<Spin, 2> helicities = {Spin(1), Spin(-1)};
   std::complex<double> result(0., 0.);
 
   for (unsigned int i = 0; i < helicities.size(); ++i) {
     for (unsigned int j = 0; j < helicities.size(); ++j) {
-      result += rho(helicities.at(i), helicities.at(j)) * helicityAmps.at(i) *
-                std::conj(helicityAmps.at(j));
+      result += rho(helicities.at(i), helicities.at(j), angle) *
+                helicityAmps.at(i) * std::conj(helicityAmps.at(j));
     }
   }
 
   return 2. * result.real();
+}
+
+double GammapBeamPolarization::productionPlaneAngle(
+    const Vector4<double> &beam, const Vector4<double> &recoil) const {
+  const double beamMagnitude = beam.P();
+  const double recoilMagnitude = recoil.P();
+  if (beamMagnitude == 0. || recoilMagnitude == 0.)
+    return _angle;
+
+  const double beamX = beam.Px() / beamMagnitude;
+  const double beamY = beam.Py() / beamMagnitude;
+  const double beamZ = beam.Pz() / beamMagnitude;
+  const double recoilX = recoil.Px() / recoilMagnitude;
+  const double recoilY = recoil.Py() / recoilMagnitude;
+  const double recoilZ = recoil.Pz() / recoilMagnitude;
+
+  double normalX = beamZ * recoilY - beamY * recoilZ;
+  double normalY = beamX * recoilZ - beamZ * recoilX;
+  double normalZ = beamY * recoilX - beamX * recoilY;
+  const double normalMagnitude =
+      std::sqrt(normalX * normalX + normalY * normalY + normalZ * normalZ);
+  if (normalMagnitude == 0.)
+    return _angle;
+  normalX /= normalMagnitude;
+  normalY /= normalMagnitude;
+  normalZ /= normalMagnitude;
+
+  const double epsilonX = std::cos(_angle);
+  const double epsilonY = std::sin(_angle);
+  const double numerator = normalX * epsilonX + normalY * epsilonY;
+  const double epsilonCrossNormalX = epsilonY * normalZ;
+  const double epsilonCrossNormalY = -epsilonX * normalZ;
+  const double epsilonCrossNormalZ =
+      epsilonX * normalY - epsilonY * normalX;
+  const double denominator = beamX * epsilonCrossNormalX +
+                             beamY * epsilonCrossNormalY +
+                             beamZ * epsilonCrossNormalZ;
+  return std::atan2(numerator, denominator);
 }

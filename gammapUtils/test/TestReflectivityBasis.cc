@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(opposite_reflectivities_do_not_interfere) {
                                                        Spin(1), initial, final),
             ReflectivityBasis::photonHelicityAmplitude(
                 waves, "X", 0, 0, Spin(-1), initial, final)};
-        result += beam.intensity(photonAmplitudes);
+        result += beam.intensity(photonAmplitudes, beam.angle());
       }
     }
     return result;
@@ -113,4 +113,26 @@ BOOST_AUTO_TEST_CASE(opposite_reflectivities_do_not_interfere) {
   BOOST_CHECK_SMALL(intensity(amplitudes) - intensity(negativeOnly) -
                         intensity(positiveOnly),
                     1.e-12);
+}
+
+BOOST_AUTO_TEST_CASE(polarized_s_wave_tracks_the_production_plane) {
+  const double polarization = 0.6;
+  const GammapBeamPolarization beamPolarization(polarization, 0.);
+  const Vector4<double> beam(8., 0., 0., 8.);
+  const std::array<std::complex<double>, 2> positiveReflectivityS = {
+      std::complex<double>(1., 0.), std::complex<double>(-1., 0.)};
+
+  const Vector4<double> recoilInPolarizationPlane(2., 1., 0., 1.);
+  const double parallelAngle = beamPolarization.productionPlaneAngle(
+      beam, recoilInPolarizationPlane);
+  BOOST_CHECK_CLOSE(
+      beamPolarization.intensity(positiveReflectivityS, parallelAngle),
+      2. * (1. + polarization), 1.e-10);
+
+  const Vector4<double> recoilPerpendicularToPolarization(2., 0., 1., 1.);
+  const double perpendicularAngle = beamPolarization.productionPlaneAngle(
+      beam, recoilPerpendicularToPolarization);
+  BOOST_CHECK_CLOSE(
+      beamPolarization.intensity(positiveReflectivityS, perpendicularAngle),
+      2. * (1. - polarization), 1.e-10);
 }
