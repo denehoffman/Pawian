@@ -50,7 +50,7 @@ public:
 
   ParserBase(int argc,char **argv);
   virtual ~ParserBase(){;}
-    
+
   const std::string& getConfigFile() const { return _configFile;}
   const enErrLogMode& getErrLogMode() const { return _errLogMode; }
   const std::string dataFile() const {return _dataFile;}
@@ -79,6 +79,7 @@ public:
   const bool saveContributionHistos() const {return _saveContributionHistos;}
   const bool useDataEvtWeight() const {return _useDataEvtWeight; }
   const bool useMCEvtWeight() const {return _useMCEvtWeight; }
+  const bool usePolarization() const {return _usePolarization; }
   const bool useTruthEvtWeight() const {return _useTruthEvtWeight; }
   const bool usePhaseSpaceHyp() const {return _usePhaseSpaceHyp; }
   const bool useCohPhaseSpaceHyp() const {return _useCohPhaseSpaceHyp; }
@@ -142,10 +143,10 @@ public:
   const bool useAbsPhaseDiff() const {return _useAbsPhaseDiff;}
   const bool useMultipoleGeneral() const {return _useMultipoleGeneral;}
   const double scalingMachinePrecision() const {return _scalingMachinePrecision;}
-  
+
 protected:
-  virtual bool parseCommandLine(int argc,char **argv); 
-  
+  virtual bool parseCommandLine(int argc,char **argv);
+
   std::string _configFile;
   enErrLogMode _errLogMode;
   std::string _dataFile;
@@ -155,7 +156,7 @@ protected:
   std::string _orderInFile;
   std::string _paramFile;
   std::string _serializationFile;
-  std::string _mode;		  
+  std::string _mode;
   std::string _outputFileNameSuffix;
   std::string _serverAddress;
   std::string _clientNumberWeights;
@@ -179,6 +180,7 @@ protected:
   po::options_description* _config;
   bool _useDataEvtWeight;
   bool _useMCEvtWeight;
+  bool _usePolarization;
   bool _useTruthEvtWeight;
   bool _usePhaseSpaceHyp;
   bool _useCohPhaseSpaceHyp;

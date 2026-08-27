@@ -57,6 +57,8 @@ struct EvtData {
   mapShortShortInt3Complex ComplexN3Spin;
   mapShortInt3ShortComplex Complex3SpinLS;
   double evtWeight;
+  double beamPolFraction;
+  double beamPolAngle;
   int evtNo;
 };
 

@@ -41,7 +41,7 @@
 
 GammapChannelEnv::GammapChannelEnv(gammapParser *theParser)
     : AbsChannelEnv(theParser, AbsChannelEnv::CHANNEL_GAMMAP), _lmax(0),
-      _beamPolFraction(0.), _beamPolAngle(0.), _theGamPParser(theParser) {}
+      _theGamPParser(theParser) {}
 
 void GammapChannelEnv::setupChannel(ChannelID id) {
 
@@ -65,13 +65,6 @@ void GammapChannelEnv::setupChannel(ChannelID id) {
 
   // Lmax
   _lmax = _theGamPParser->getLMax();
-  _beamPolFraction = _theGamPParser->beamPolFraction();
-  _beamPolAngle = _theGamPParser->beamPolAngle();
-  if (_beamPolFraction < 0. || _beamPolFraction > 1.) {
-    Alert << "beamPolFraction must be in [0, 1], got " << _beamPolFraction
-          << endmsg;
-    exit(1);
-  }
 
   // individual Lmax settings
   std::vector<std::string> theDropGammapLForParticles =

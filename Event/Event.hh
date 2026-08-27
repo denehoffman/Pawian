@@ -55,6 +55,7 @@ public:
 
   void addParticle(double e, double px, double py, double pz);
   void addScatterInfo(double theDataPoint, double theDataPointErr);
+  void addPolarizationInfo(double thePolMag, double thePolAngle);
   void addWeight(double);
 
   Vector4<float>* p4(unsigned int i);
@@ -62,6 +63,8 @@ public:
 
   int size();
   double Weight(){ return weight; }
+  double beamPolFraction() const {return polMag;}
+  double beamPolAngle() const {return polAngle;}
   int eventNo() const {return evtNo; }
   // double Phase() {return phase;}
   // double PhaseErr() {return phaseErr;}
@@ -75,6 +78,8 @@ public:
 private:
   std::vector<EvtPartData*> particles;
   double weight;
+  double polMag;
+  double polAngle;
   // double phase;
   // double phaseErr;
   // double eta;

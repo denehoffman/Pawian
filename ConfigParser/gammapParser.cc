@@ -38,26 +38,24 @@ gammapParser::gammapParser(int argc,char **argv):
   ParserBase(argc,argv)
   ,_lMax(3)
   ,_cmsMass(3.096916)
-  ,_beamPolFraction(0.)
-  ,_beamPolAngle(0.)
 {
+  _usePolarization = true;
+
   po::options_description common("Common Options");
   common.add_options()
      ;
-  
+
   _common->add(common);
-  
+
   po::options_description config("Configuration file options");
   config.add_options()
-    ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation") 
+    ("spinDensity", po::value< vector<string> >(&_spinDensity), "particles for spin density matrix calculation")
     ("cmsMass", po::value<double>(&_cmsMass), "CMS mass")
     ("lmax", po::value<unsigned>(&_lMax)->default_value(_lMax),"choose lmax.")
     ("dropGammapLForParticle", po::value< vector<string> >(&_dropGammapLForParticle), "drop l (gammap system) for certain particle")
-    ("beamPolFraction", po::value<double>(&_beamPolFraction)->default_value(_beamPolFraction), "fixed linear photon beam polarization fraction")
-    ("beamPolAngle", po::value<double>(&_beamPolAngle)->default_value(_beamPolAngle), "fixed linear photon beam polarization angle in radians")
     ;
   _config->add(config);
-  
+
   parseCommandLine(argc, argv);
 }
 
@@ -68,11 +66,9 @@ bool gammapParser::parseCommandLine(int argc, char **argv)
   std::cout << "\ncms mass:\t" << _cmsMass << std::endl;
 
   std::cout << "Maximum orbital momentum for pbarp system\t Lmax = " << _lMax <<std::endl;
-  std::cout << "Photon beam polarization fraction:\t" << _beamPolFraction << std::endl;
-  std::cout << "Photon beam polarization angle [rad]:\t" << _beamPolAngle << std::endl;
-  
+
   std::vector<std::string>::const_iterator it;
-  
+
   std::cout << "\nspin density matrix calculation for particles" << std::endl;
    for (it=_spinDensity.begin(); it!=_spinDensity.end(); ++it){
       std::cout << (*it) << "\n";
@@ -81,9 +77,9 @@ bool gammapParser::parseCommandLine(int argc, char **argv)
   std::cout << "\ndrop pbarp L " << std::endl;
   for (it=_dropGammapLForParticle.begin(); it!=_dropGammapLForParticle.end(); ++it){
      std::cout << (*it) << "\n";
-  }  
+  }
 
   std::cout << std::endl;
-  
+
   return true;
 }

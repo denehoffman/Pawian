@@ -21,7 +21,7 @@
 //									  //
 //************************************************************************//
 
-#include <algorithm>   
+#include <algorithm>
 
 #include "Event/EventReader.hh"
 

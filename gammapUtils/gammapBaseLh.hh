@@ -39,8 +39,6 @@
 #include "PwaUtils/AbsChannelEnv.hh"
 #include "PwaUtils/AbsLh.hh"
 #include "PwaUtils/DataUtils.hh"
-#include "gammapUtils/GammapBeamPolarization.hh"
-
 class AbsXdecAmp;
 class gammapReaction;
 class LSDecAmps;
@@ -108,7 +106,6 @@ protected:
       _currentParamJPCIsos32;
   std::vector<std::shared_ptr<AbsXdecAmp>> _iso12DecAmps;
   std::vector<std::shared_ptr<AbsXdecAmp>> _iso32DecAmps;
-  GammapBeamPolarization _beamPolarization;
   bool _useReflectivity;
 
   virtual void fillIsos();

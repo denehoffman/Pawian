@@ -44,7 +44,7 @@
 #include "PwaUtils/PhpGenDynamics.hh"
 #include "Particle/Particle.hh"
 #include "Particle/PdtParser.hh"
-#include "FitParams/ParamFactory.hh" 
+#include "FitParams/ParamFactory.hh"
 #include "Event/MassRangeCut.hh"
 #include "ErrLogger/ErrLogger.hh"
 
@@ -79,8 +79,8 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
     Alert << "something is wrong with initial4Vec: energy>momentum"
 	  << "\ncorrect order in the cfg-file is 'E Px Py Pz' "
 	  << endmsg;
-    exit(1); 
-  } 
+    exit(1);
+  }
   std::string projectile4VecStr=theParser->projectile4Vec();
   _projectile4Vec=extract4Vec(projectile4VecStr);
   InfoMsg << "projectile4Vec: " << _projectile4Vec << endmsg;
@@ -88,8 +88,8 @@ AbsChannelEnv::AbsChannelEnv(ParserBase* theParser, short channelType) :
     Alert << "something is wrong with projectile4Vec: energy>momentum"
 	  << "\ncorrect order in the cfg-file is 'E Px Py Pz' "
 	  << endmsg;
-    exit(1); 
-  } 
+    exit(1);
+  }
   _theLh.reset();
 }
 
@@ -118,6 +118,9 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
    _useDataEvtWeight = _theParser->useDataEvtWeight();
    _useMCEvtWeight = _theParser->useMCEvtWeight();
 
+   // Polarization info for beam?
+   _usePolarization = _theParser->usePolarization();
+
    // cloned particles
    const std::vector<std::string> cloneParticle=_theParser->cloneParticle();
    std::vector<std::string>::const_iterator itcP;
@@ -144,7 +147,7 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
    _noFinalStateParticles= (int) _finalStateParticles.size();
 
 
-   _fsParticleProjections = std::shared_ptr<FsParticleProjections>(new FsParticleProjections(_finalStateParticles)); 
+   _fsParticleProjections = std::shared_ptr<FsParticleProjections>(new FsParticleProjections(_finalStateParticles));
   //decays
 
   std::vector<std::string> decaySystem= _theParser->decaySystem();
@@ -309,7 +312,7 @@ void AbsChannelEnv::setupGlobal(ChannelID id){
     std::string currentString=*itStr;
     std::shared_ptr<PhpGenDynamics> currentPhpGenDynamic(new PhpGenDynamics( currentString, _finalStateParticles));
     _phpGenDynamics.push_back(currentPhpGenDynamic);
-  }  
+  }
 
  // hist angles
   std::vector<std::string> theHistAngleNames=_theParser->histAngleNames();
@@ -404,7 +407,7 @@ bool AbsChannelEnv::checkReactionChain(){
       Particle* currentParticlej=_finalStateParticles.at(j);
       if(currentParticlei->name() == currentParticlej->name()){
 	Alert << "Unique names are requested for particles in the final state particle list!!!!"
-	      << "\n there are at least two particles with the name: " << currentParticlei->name() 
+	      << "\n there are at least two particles with the name: " << currentParticlei->name()
 	      << endmsg;
 	exit(1);
       }
@@ -431,7 +434,7 @@ bool AbsChannelEnv::checkReactionChain(){
   for (itParticle=_finalStateParticles.begin(); itParticle!=_finalStateParticles.end(); ++itParticle){
     InfoMsg << "paricle name: " << (*itParticle)->name() << endmsg;
   }
- 
+
   // third check: each production amplitude must finally decay in all final state particles
   std::vector<std::shared_ptr<AbsDecay> > theProdVec=_prodDecList->getList();
   for (it=theProdVec.begin(); it!=theProdVec.end(); ++it){
@@ -530,7 +533,7 @@ void AbsChannelEnv::setDecayLevels(){
    std::vector<std::shared_ptr<AbsDecay> > prodDecList= _prodDecList->getList();
    std::vector<std::shared_ptr<AbsDecay> >::iterator itProdDecList;
    for (itProdDecList=prodDecList.begin(); itProdDecList!=prodDecList.end(); ++itProdDecList){
-     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, *itProdDecList, *itProdDecList);    
+     (*itProdDecList)->setDecayLevelTree(AbsDecay::decayLevel::isProdAmp, *itProdDecList, *itProdDecList);
    }
 }
 
@@ -540,7 +543,7 @@ void AbsChannelEnv::setPrefactors(){
   for(strDoubleIt=_preFactorMap.begin(); strDoubleIt!=_preFactorMap.end(); ++strDoubleIt){
     std::string currentAmplitudeName=strDoubleIt->first;
     double currentPrefactor=strDoubleIt->second;
-    
+
     std::shared_ptr<AbsDecay> currentDec=_prodDecList->decay(currentAmplitudeName);
     if(0!=currentDec){
       currentDec->setPreFactor(currentPrefactor);
@@ -566,16 +569,16 @@ void AbsChannelEnv::setPrefactors(){
 Vector4<double> AbsChannelEnv::extract4Vec(std::string theString){
    std::stringstream stringStr;
   stringStr << theString;
- 
+
   std::string eValStr;
   stringStr >> eValStr;
   double eVal;
   eVal=atof(eValStr.c_str());
- 
+
   std::string pxValStr;
   stringStr >> pxValStr;
   double pxVal;
-  pxVal=atof(pxValStr.c_str()); 
+  pxVal=atof(pxValStr.c_str());
 
   std::string pyValStr;
   stringStr >> pyValStr;
@@ -588,6 +591,5 @@ Vector4<double> AbsChannelEnv::extract4Vec(std::string theString){
   pzVal=atof(pzValStr.c_str());
 
   Vector4<double> result(eVal, pxVal, pyVal, pzVal);
-  return result;   
+  return result;
 }
-

@@ -63,6 +63,7 @@ ParserBase::ParserBase(int argc,char **argv)
   , _config(new po::options_description("Configuration file options"))
   ,_useDataEvtWeight(false)
   ,_useMCEvtWeight(false)
+  ,_usePolarization(false)
   ,_useTruthEvtWeight(false)
   ,_usePhaseSpaceHyp(false)
   ,_useCohPhaseSpaceHyp(false)
@@ -78,7 +79,7 @@ ParserBase::ParserBase(int argc,char **argv)
   ,_noOfBootstrapEvts(10000)
   ,_noOfBootstrapFiles(1)
   ,_boostrapFileName("bootstrapFile")
-  ,_tolerance(0.1) 
+  ,_tolerance(0.1)
   ,_noInterScattPoints(0)
   ,_intitial4VecStr("")
   ,_projectile4VecStr("")
@@ -106,16 +107,16 @@ ParserBase::ParserBase(int argc,char **argv)
   string globalCofigFilePath="/ConfigParser/global.cfg";
   _configFile=getenv("TOP_DIR")+globalCofigFilePath;
 
-  
+
   // Check the command line options. Uses the Boost program options library.
   string strAppName(argv[0]);
 
   size_t found = strAppName.rfind("/")+1;
   if (found != string::npos) strAppName=strAppName.substr(found);
-  
+
   string strDesc="Usage: " + strAppName + " [options]";
   _desc= new po::options_description(strDesc);
-  
+
   _desc->add_options()
     ("help,h", "emit help message")
     ("configFile,c",po::value<std::string>(&_configFile)->default_value(_configFile),
@@ -127,7 +128,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("ggFiles",po::value< vector<string> >(&_ggCfgs),  "Configuration files for single resonance decay channels")
     ("pipiScatteringFiles",po::value< vector<string> >(&_pipiScatteringCfgs),  "Configuration scattering channels")
     ;
-  
+
   _common->add_options()
     ("errLogMode,e", po::value<string>(&_strErrLogMode)->default_value(_strErrLogMode),"choose mode for Error logger.")
     ("datFile",po::value<string>(&_dataFile), "full path of data file")
@@ -153,6 +154,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("saveContributionHistos",po::value<bool>(&_saveContributionHistos),  "creates a histogram root-file for each contribution of Option: calcContribution")
     ("useDataEventWeight",po::value<bool>(&_useDataEvtWeight), "enable/disable input for data event weight")
     ("useMCEventWeight",po::value<bool>(&_useMCEvtWeight), "enable/disable input for Monte Carlo event weight")
+    ("usePolarization",po::value<bool>(&_usePolarization), "enable/disable input for beam polarization information")
     ("useTruthEventWeight",po::value<bool>(&_useTruthEvtWeight), "enable/disable input for truth event weight")
     ("usePhaseSpaceHyp",po::value<bool>(&_usePhaseSpaceHyp), "use hypothesis for phase space")
     ("useCohPhaseSpaceHyp",po::value<bool>(&_useCohPhaseSpaceHyp), "use hypothesis for coherent phase space")
@@ -165,7 +167,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("singleChannelId",po::value<unsigned int>(&_singleChannelId), "preferred single channel ID e.g. when running QA")
     ("minuitStrategyLevel",po::value<unsigned int>(&_minuitStrategyLevel),  "set strategy level for minuit fit (1 and 2 are supported)")
     ;
-  
+
   _config->add_options()
     ("verbose",po::value<bool>(&_verbose)->default_value(true), "Determines whether additional information should be emitted")
     ("mnParFix",po::value< vector<string> >(&_mnParFixs),  "minuit parameters can be fixed here")
@@ -187,7 +189,7 @@ ParserBase::ParserBase(int argc,char **argv)
     ("massRangeCuts", po::value< vector<string> > (&_massRangeCuts), "multiple mass range cuts; order: min max particle1 particle2 ...; only events within min and max are accepted")
     ("massRangeAntiCuts", po::value< vector<string> > (&_massRangeAntiCuts), "multiple mass range anti cuts; order: min max particle1 particle2 ...; events within min and max are rejected")
     ("genRange", po::value<string> (&_genRange), "Range of W for generator (to be used if W<=sqrt(s), e.g. in gamma gamma or central production reactions)")
-    ("phpGenDynamics", po::value< vector<string> > (&_phpGenDynamics), "dynamics for phase space generated events (only BreitWigner supported so far); order: dynType mass0 width0 particle1 particle2 ...") 
+    ("phpGenDynamics", po::value< vector<string> > (&_phpGenDynamics), "dynamics for phase space generated events (only BreitWigner supported so far); order: dynType mass0 width0 particle1 particle2 ...")
     ("histAngles2D",po::value< vector<string> >(&_histAngles2D),  "2D histogram decay angles")
     ("generateWithModel",po::value<bool>(&_genWithModel),  "generate w/ or w/o model")
     ("noOfGenEvents",po::value<int>(&_noOfGenEvts),  "number of generated events")
@@ -314,6 +316,7 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 		<< "cache amplitudes: " << _cacheAmps  << "\n\n"
 		<< "use data event weight: " << _useDataEvtWeight  << "\n\n"
 		<< "use Monte Carlo event weight: " << _useMCEvtWeight  << "\n\n"
+		<< "use polarization info: " << _usePolarization << "\n\n"
 		<< "use truth event weight: " << _useTruthEvtWeight  << "\n\n"
 		<< "use phase space hyp: " << _usePhaseSpaceHyp  << "\n\n"
                 << "use coherent phase space hyp: " << _useCohPhaseSpaceHyp  << "\n\n"
@@ -486,4 +489,3 @@ bool ParserBase::parseCommandLine(int argc, char **argv)
 
   return true;
 }
-

@@ -44,6 +44,7 @@
 #include "PwaUtils/XdecAmpRegistry.hh"
 #include "Utils/IdStringMapRegistry.hh"
 #include "gammapUtils/GammapChannelEnv.hh"
+#include "gammapUtils/GammapBeamPolarization.hh"
 #include "gammapUtils/ReflectivityDecAmps.hh"
 #include "gammapUtils/gammapBaseLh.hh"
 #include "gammapUtils/gammapReaction.hh"
@@ -94,7 +95,9 @@ gammapBaseLh::calcEvtIntensity(EvtData *theData,
       _fsParticleProjections->spinProjections();
   const std::array<Spin, 2> photonHelicities = {Spin(1), Spin(-1)};
   const std::array<Spin, 2> targetSpinProjections = {Spin(0.5), Spin(-0.5)};
-  double polarizationAngle = _beamPolarization.angle();
+  const GammapBeamPolarization beamPolarization(theData->beamPolFraction,
+                                                 theData->beamPolAngle);
+  double polarizationAngle = beamPolarization.angle();
   if (_useReflectivity) {
     std::shared_ptr<ReflectivityDecAmps> reflectivityAmp;
     for (itDecAll = _decAmps.begin(); itDecAll != _decAmps.end();
@@ -115,7 +118,7 @@ gammapBaseLh::calcEvtIntensity(EvtData *theData,
         IdStringMapRegistry::instance()->stringId(recoilName);
     const Vector4<double> beam =
         GlobalEnv::instance()->Channel(_channelID)->projectile4Vec();
-    polarizationAngle = _beamPolarization.productionPlaneAngle(
+    polarizationAngle = beamPolarization.productionPlaneAngle(
         beam, theData->FourVecsId.at(recoilId));
   }
 
@@ -162,7 +165,7 @@ gammapBaseLh::calcEvtIntensity(EvtData *theData,
         }
       }
 
-      result += _beamPolarization.intensity(helicityAmps, polarizationAngle);
+      result += beamPolarization.intensity(helicityAmps, polarizationAngle);
     }
   }
 
@@ -417,8 +420,6 @@ void gammapBaseLh::initialize() {
   std::shared_ptr<GammapChannelEnv> gammapChannelEnv =
       std::static_pointer_cast<GammapChannelEnv>(
           GlobalEnv::instance()->GammapChannel(_channelID));
-  _beamPolarization = GammapBeamPolarization(
-      gammapChannelEnv->beamPolFraction(), gammapChannelEnv->beamPolAngle());
   _useReflectivity =
       gammapChannelEnv->parser()->productionFormalism() == "Reflectivity";
   _gammapReactionPtr = gammapChannelEnv->reaction();

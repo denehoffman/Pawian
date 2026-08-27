@@ -26,10 +26,14 @@
 #include <fstream>
 
 Event::Event() : weight(1.),
+  polMag(0.),
+  polAngle(0.),
   evtNo(0)
 {}
-Event::Event(int evtNumber) : 
+Event::Event(int evtNumber) :
   weight(1.),
+  polMag(0.),
+  polAngle(0.),
   dataPoint(0.),
   dataPointErr(0.),
   // phase(0.),
@@ -44,13 +48,13 @@ Event::~Event()
   for (iter = particles.begin(); iter != particles.end(); ++iter)
     delete *iter;
 }
-  
+
 Vector4<float>* Event::p4(unsigned int i)
 {
   if (particles.size() > i)
     return particles[i]->vector4;
   else {
-    Alert << "accessing " << i << "th of " 
+    Alert << "accessing " << i << "th of "
 	  << particles.size() << " particles" << endmsg;
     exit(1);
   }
@@ -63,7 +67,7 @@ float* Event::pid(unsigned int i)
   if (particles.size() > i)
     return particles[i]->pidVector;
   else {
-    Alert << "accessing pid of " << i << "th of " 
+    Alert << "accessing pid of " << i << "th of "
 	  << particles.size() << " particles" << endmsg;
     exit(1);
   }
@@ -84,6 +88,11 @@ void Event::addParticle(double e, double px, double py, double pz)
 //   etaErr=theEtaErr;
 // }
 
+void Event::addPolarizationInfo(double thePolMag, double thePolAngle) {
+  polMag = thePolMag;
+  polAngle = thePolAngle;
+}
+
 void Event::addScatterInfo(double theDataPoint, double theDataPointErr){
   dataPoint=theDataPoint;
   dataPointErr=theDataPointErr;
@@ -101,6 +110,7 @@ int Event::size()
 
 void Event::dumpEvt(std::ostream& os, bool useMeV, std::string orderInFile){
   os << weight << std::endl;
+  os << "Polarization: "<< polMag * 100. << "%" << "\t" << polAngle << " rad" << std::endl;
   for(unsigned int i=0; i<particles.size(); ++i){
     Vector4<float>* p4Vec=p4(i);
     if(useMeV){
@@ -109,11 +119,11 @@ void Event::dumpEvt(std::ostream& os, bool useMeV, std::string orderInFile){
     }
     else{
     if (orderInFile=="Px Py Pz E") os << p4Vec->Px() << "\t" <<  p4Vec->Py() << "\t" <<\
-  p4Vec->Pz() << "\t" << p4Vec->E()  << std::endl;  
+  p4Vec->Pz() << "\t" << p4Vec->E()  << std::endl;
     else os << p4Vec->E() << "\t" << p4Vec->Px() << "\t" <<	p4Vec->Py() << "\t" <<	p4Vec->Pz() << std::endl;
     }
   }
-  
+
 }
 
 bool Event::operator<(const Event& compare) const{

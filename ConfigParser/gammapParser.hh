@@ -31,7 +31,7 @@
 
 
 
-class gammapParser : public ParserBase 
+class gammapParser : public ParserBase
 {
 
   public:
@@ -43,17 +43,12 @@ class gammapParser : public ParserBase
   const double cmsMass() {return _cmsMass;}
   const unsigned int getLMax() const { return _lMax; }
   const std::vector<std::string>& dropGammapLForParticle() const{ return _dropGammapLForParticle; }
-  const double beamPolFraction() const { return _beamPolFraction; }
-  const double beamPolAngle() const { return _beamPolAngle; }
 
 protected:
-  virtual bool parseCommandLine(int argc,char **argv); 
+  virtual bool parseCommandLine(int argc,char **argv);
   unsigned int _lMax;
   double _cmsMass;
-  double _beamPolFraction;
-  double _beamPolAngle;
   std::vector<std::string> _spinDensity;
   std::vector<std::string> _dropGammapLForParticle;
 };
-
 

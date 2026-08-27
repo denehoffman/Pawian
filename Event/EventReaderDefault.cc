@@ -26,6 +26,8 @@
 
 #include "Event/EventReaderDefault.hh"
 
+#include <cmath>
+
 #include "ErrLogger/ErrLogger.hh"
 #include "Utils/PawianConstants.hh"
 #include "Event/Event.hh"
@@ -33,13 +35,15 @@
 
 EventReaderDefault::EventReaderDefault()
     : EventReader(false), numParticles(0), linesToSkip(0), _unit("GEV"),
-      _order("Px Py Pz E"), _unitScaleFactor(1.), _angleScaleFactor(1.), _energyFirst(false) {}
+      _order("Px Py Pz E"), _unitScaleFactor(1.), _angleScaleFactor(1.),
+      _energyFirst(false), _usePolarization(false) {}
 
 EventReaderDefault::EventReaderDefault(const std::vector<std::string> &files,
-                                       int particles, int skip, bool useWeight)
+                                       int particles, int skip, bool useWeight,
+                                       bool usePolarization)
     : EventReader(useWeight), numParticles(particles), linesToSkip(skip),
       _unit("GEV"), _order("Px Py Pz E"), _unitScaleFactor(1.), _angleScaleFactor(1.),
-      _energyFirst(false) {
+      _energyFirst(false), _usePolarization(usePolarization) {
   if (0 == files.size()) {
     Alert << "empty list of event files"; // << endmsg;
     exit(1);
@@ -72,6 +76,21 @@ bool EventReaderDefault::fill(EventList &evtList, int evtStart, int evtStop) {
         double weight;
         currentStream >> weight;
         newEvent->addWeight(weight);
+      }
+      if (_usePolarization) {
+        double polarizationFraction = 0.;
+        double polarizationAngle = 0.;
+        currentStream >> polarizationFraction >> polarizationAngle;
+        if (!std::isfinite(polarizationFraction) ||
+            polarizationFraction < 0. || polarizationFraction > 1. ||
+            !std::isfinite(polarizationAngle)) {
+          Alert << "invalid beam polarization for event " << currentEvtNo
+                << ": fraction=" << polarizationFraction
+                << ", angle=" << polarizationAngle << endmsg;
+          exit(1);
+        }
+        newEvent->addPolarizationInfo(polarizationFraction,
+                                      polarizationAngle * _angleScaleFactor);
       }
       Vector4<double> fvX(0, 0, 0, 0); // X four-vector
       for (parts = 0; parts < numParticles; parts++) {

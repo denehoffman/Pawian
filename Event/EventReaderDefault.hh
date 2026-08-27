@@ -41,7 +41,8 @@ class EventReaderDefault : public EventReader {
 public:
   EventReaderDefault();
   EventReaderDefault(const std::vector<std::string> &files, int particles,
-                     int skip, bool useWeight = false);
+                     int skip, bool useWeight = false,
+                     bool usePolarization = false);
 
   virtual ~EventReaderDefault();
 
@@ -61,4 +62,5 @@ protected:
   double _unitScaleFactor;
   double _angleScaleFactor;
   bool _energyFirst;
+  bool _usePolarization;
 };

@@ -66,6 +66,7 @@ public:
   const bool usePhpGenDynamics() const {return _usePhpGenDynamics;}
   bool useDataEvtWeight(){return _useDataEvtWeight;}
   bool useMCEvtWeight(){return _useMCEvtWeight;}
+  bool usePolarization(){return _usePolarization;}
   std::vector< std::shared_ptr<MassRangeCut> > massRangeCuts() {return _massRangeCuts;}
   std::vector< std::shared_ptr<PhpGenDynamics> > phpGenDynamics() {return _phpGenDynamics;}
   Vector4<double>&  initial4Vec() {return _initial4Vec;}
@@ -90,13 +91,14 @@ public:
   static short CHANNEL_GAMMAP;
   static short CHANNEL_PIPISCATTERING;
   static short CHANNEL_GG;
-  
+
 protected:
    int _channelID;
    short _channelType;
    bool _alreadySetUp;
    bool _useDataEvtWeight;
   bool _useMCEvtWeight;
+  bool _usePolarization;
   AbsChannelEnv(ParserBase* theParser, short channelType);
   virtual void setupGlobal(ChannelID id);
   virtual void replaceParameterSuffixes();
@@ -113,7 +115,7 @@ protected:
    std::vector<std::vector<std::string> > _histMassSystems;
    std::vector<std::shared_ptr<angleHistData> > _angleHistDataVec;
    std::vector<std::shared_ptr<angleHistData2D> > _angleHistDataVec2D;
-  Vector4<double> extract4Vec(std::string theString);   
+  Vector4<double> extract4Vec(std::string theString);
 
    bool _useMassRange;
   bool _usePhpGenDynamics;

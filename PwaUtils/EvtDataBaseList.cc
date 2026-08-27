@@ -126,6 +126,8 @@ EvtData* EvtDataBaseList::convertEvent(Event* theEvent, int evtNo){
     EvtData* evtData=new EvtData();
     evtData->evtNo=evtNo;
     evtData->evtWeight=theEvent->Weight();
+    evtData->beamPolFraction=theEvent->beamPolFraction();
+    evtData->beamPolAngle=theEvent->beamPolAngle();
 
     std::string allString="all";
     unsigned short fourVecIdAll = IdStringMapRegistry::instance()->stringId(allString); 
