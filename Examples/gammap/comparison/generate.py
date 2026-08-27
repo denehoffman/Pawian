@@ -7,7 +7,7 @@ import argparse
 from pathlib import Path
 
 import laddu as ld
-from model import channel, truth_model
+from model import channel, polarization_sources, truth_model
 
 
 def main() -> None:
@@ -20,7 +20,7 @@ def main() -> None:
 
     args.output.mkdir(parents=True, exist_ok=True)
     reaction = channel()
-    generator = ld.Generator(reaction)
+    generator = ld.Generator(reaction, scalars=polarization_sources())
     execution = ld.Execution('cpu')
 
     data, data_report = generator.unweighted(

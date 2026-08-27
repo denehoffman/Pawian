@@ -182,8 +182,8 @@ def project_waves(points: list[Point], data_path: Path, mc_path: Path) -> list[P
             prefix = f'projection_{point.program.lower()}_{index:02d}'
             fitted = bin_model(reaction, prefix)
             parameters = {
-                f'{prefix}_d_magnitude': point.magnitude,
-                f'{prefix}_d_phase': point.phase,
+                f'{prefix}_d_real': point.magnitude * math.cos(point.phase),
+                f'{prefix}_d_imaginary': point.magnitude * math.sin(point.phase),
             }
             total = weighted_sum(fitted.evaluate(dataset, parameters=parameters, real=True), dataset)
             projections.append(

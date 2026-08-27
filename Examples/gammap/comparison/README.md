@@ -26,21 +26,29 @@ I = |S sqrt(1+P) Re[Y00 exp(-i Phi)]
      + D sqrt(1-P) Im[Y22 exp(-i Phi)]|^2.
 ```
 
-Here `P = 0.3519`, the laboratory polarization angle is zero, and `Phi` is the
-angle to the production plane calculated in `Zlm.cc`. The `S` coefficient is
-fixed to `1 + 0i`; the magnitude and phase of `D` float independently in each
-mass bin.
+Here `P` and the laboratory polarization angle vary event by event, and `Phi`
+is the angle to the production plane calculated in `Zlm.cc`. Laddu samples
+`P` uniformly from `[0.2, 0.4)` and samples the angle in radians from a sparse
+histogram whose four occupied one-degree bins are centered at 0, 45, 90, and
+135 degrees. The `S` coefficient is fixed to `1 + 0i`; the magnitude and phase
+of `D` are reported in each mass bin after fitting its Cartesian real and
+imaginary components.
 
-- `model.py` writes the same expression directly with laddu 0.21.
+- `model.py` writes the same expression directly with laddu 0.21 and reads the
+  generated polarization scalar columns in both generation and fitting.
 - AmpTools uses `Zlm 0 0 +1 +1`/`Zlm 2 2 +1 +1` for the real sum and
   `Zlm 0 0 -1 -1`/`Zlm 2 2 -1 -1` for the imaginary sum. `constrain` shares
-  each production coefficient between the two sums.
+  each production coefficient between the two sums. The ROOT converter stores
+  `P cos(angle)` and `P sin(angle)` in the beam x and y momentum fields consumed
+  by Zlm's eventwise-polarization mode.
 - PAWIAN uses `productionFormalism = Reflectivity`. Only
   `Reflectivity_f0(1500)_J0_M0_R+_K0` and
   `Reflectivity_f2(1270)_J2_M2_R+_K0` remain active; every other production
   coefficient and both decay couplings are fixed. Its channel normalization
   floats so that fixing the S-wave reference does not also fix the absolute
   event yield, and every available normalization-MC event is used in each bin.
+  The ASCII converter writes each event's polarization magnitude and angle
+  immediately after its weight.
 
 ## Running
 
@@ -63,9 +71,14 @@ truth. The diagonal wave yields are normalized with the common weighted MC;
 because S0+ and D2+ interfere, their projected counts need not add to the data
 count. Override sample sizes with `DATA_EVENTS` and
 `MC_EVENTS`, the parallel worker count with `JOBS`, and the managed Python
-interpreter with `COMPARISON_PYTHON`. By default Laddu uses its multithreaded
-JIT backend, and all three programs fit independent mass bins using all
-available CPUs.
+interpreter with `COMPARISON_PYTHON`. All three programs dispatch independent
+mass-bin jobs, with up to `JOBS` processes running concurrently (default: all
+available CPUs). Each Laddu job fits a single bin using one JIT thread;
+the results are combined into `generated/laddu-fit.json` in bin order.
+Fit output is retained under `generated/timings/*.log` instead
+of being streamed to the terminal. At the end of `just plots` or `just demo`, a
+compact table reports each framework's wall-clock time for fitting all ten bins;
+generation, conversion, configuration, and build time are excluded.
 `setup` creates `generated/python` and installs the released `laddu==0.21.0`;
 inside the Nix shell it validates and uses `NIX_PYTHON` without modifying it.
 Developers may point `COMPARISON_PYTHON` at an environment containing the

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import math
 from pathlib import Path
 import sys
 import tempfile
 import types
 import unittest
+from unittest import mock
 
 COMPARISON = Path(__file__).resolve().parents[1]
 
@@ -42,6 +44,56 @@ class ComparisonFitResultsTest(unittest.TestCase):
         sys.modules.setdefault("matplotlib.pyplot", pyplot)
         cls.prepare = load_module("comparison_prepare", "prepare.py")
         cls.plot_compare = load_module("comparison_plot_compare", "plot_compare.py")
+        cls.fit_laddu = load_module("comparison_fit_laddu", "fit_laddu.py")
+
+    def test_laddu_merges_bin_jobs_and_skips_empty_bins(self) -> None:
+        results = [
+            {
+                "nll": 1.5,
+                "parameters": {"bin_00_d_real": 0.2},
+                "bin": {"index": 0, "d_magnitude": 0.2, "d_phase": 0.0},
+            },
+            None,
+            {
+                "nll": 2.5,
+                "parameters": {"bin_02_d_real": 0.4},
+                "bin": {"index": 2, "d_magnitude": 0.4, "d_phase": 0.0},
+            },
+        ]
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "laddu-fit.json"
+            with (
+                mock.patch.object(sys, "argv", ["fit_laddu.py", "--jobs", "2", "--output", str(output)]),
+                mock.patch.object(self.fit_laddu, "ProcessPoolExecutor") as executor,
+            ):
+                pool = executor.return_value.__enter__.return_value
+                pool.map.return_value = iter(results)
+                self.fit_laddu.main()
+
+            worker, indices, arguments = pool.map.call_args.args
+            self.assertIs(worker, self.fit_laddu.fit_bin)
+            self.assertEqual(list(indices), list(range(10)))
+            self.assertEqual(next(arguments).threads, 1)
+            payload = json.loads(output.read_text(encoding="utf-8"))
+            points = self.plot_compare.read_laddu(output)
+
+        self.assertEqual(payload["nll"], 4.0)
+        self.assertEqual(payload["parameters"], {"bin_00_d_real": 0.2, "bin_02_d_real": 0.4})
+        self.assertEqual([item["index"] for item in payload["bins"]], [0, 2])
+        self.assertEqual([point.magnitude for point in points], [0.2, 0.4])
+
+    def test_laddu_does_not_write_partial_results_when_a_worker_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "laddu-fit.json"
+            with (
+                mock.patch.object(sys, "argv", ["fit_laddu.py", "--output", str(output)]),
+                mock.patch.object(self.fit_laddu, "ProcessPoolExecutor") as executor,
+            ):
+                pool = executor.return_value.__enter__.return_value
+                pool.map.side_effect = RuntimeError("bin fit failed")
+                with self.assertRaisesRegex(RuntimeError, "bin fit failed"):
+                    self.fit_laddu.main()
+            self.assertFalse(output.exists())
 
     def test_amptools_floats_the_s_wave_magnitude_as_the_real_reference(self) -> None:
         config = self.prepare.amptools_config(0, Path("generated/amptools"))

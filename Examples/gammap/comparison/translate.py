@@ -9,28 +9,52 @@ from pathlib import Path
 import laddu as ld
 import numpy as np
 import uproot
-from model import MASS_EDGES
+from model import MASS_EDGES, POLARIZATION_ANGLE_COLUMN, POLARIZATION_MAGNITUDE_COLUMN
 
 P4_NAMES = ('beam', 'recoil', 'ks1', 'ks2')
 FINAL_STATE = ('recoil', 'ks1', 'ks2')
 
 
-def arrays(dataset: ld.Dataset) -> tuple[dict[str, np.ndarray], np.ndarray]:
+def arrays(
+    dataset: ld.Dataset,
+) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], np.ndarray]:
     p4s = {}
     for name in P4_NAMES:
         p4 = ld.Vec4.event(name)
         p4s[name] = np.column_stack(
             [dataset.evaluate(component, real=True) for component in (p4.e(), p4.px(), p4.py(), p4.pz())]
         )
-    return p4s, np.asarray(dataset.weights(), dtype=np.float64)
+    polarization = {
+        name: np.asarray(dataset.evaluate(ld.scalar(name), real=True), dtype=np.float64)
+        for name in (POLARIZATION_MAGNITUDE_COLUMN, POLARIZATION_ANGLE_COLUMN)
+    }
+    return p4s, polarization, np.asarray(dataset.weights(), dtype=np.float64)
 
 
-def write_ascii(path: Path, p4s: dict[str, np.ndarray], weights: np.ndarray) -> None:
-    rows = np.column_stack([weights, *(p4s[name][:, [1, 2, 3, 0]] for name in FINAL_STATE)])
+def write_ascii(
+    path: Path,
+    p4s: dict[str, np.ndarray],
+    polarization: dict[str, np.ndarray],
+    weights: np.ndarray,
+) -> None:
+    rows = np.column_stack(
+        [
+            weights,
+            polarization[POLARIZATION_MAGNITUDE_COLUMN],
+            polarization[POLARIZATION_ANGLE_COLUMN],
+            *(p4s[name] for name in FINAL_STATE),
+        ]
+    )
     np.savetxt(path, rows, fmt='%.17g')
 
 
-def write_root_bins(directory: Path, stem: str, p4s: dict[str, np.ndarray], weights: np.ndarray) -> None:
+def write_root_bins(
+    directory: Path,
+    stem: str,
+    p4s: dict[str, np.ndarray],
+    polarization: dict[str, np.ndarray],
+    weights: np.ndarray,
+) -> None:
     mass = np.sqrt(
         np.maximum(
             (p4s['ks1'][:, 0] + p4s['ks2'][:, 0]) ** 2
@@ -45,11 +69,13 @@ def write_root_bins(directory: Path, stem: str, p4s: dict[str, np.ndarray], weig
         selected = (mass >= low) & (mass < high if index + 1 < len(MASS_EDGES) - 1 else mass <= high)
         n_events = int(np.count_nonzero(selected))
         final = [p4s[name][selected] for name in FINAL_STATE]
+        magnitude = polarization[POLARIZATION_MAGNITUDE_COLUMN][selected]
+        angle = polarization[POLARIZATION_ANGLE_COLUMN][selected]
         branches = {
             'NumFinalState': np.full(n_events, len(FINAL_STATE), dtype=np.int32),
             'E_Beam': p4s['beam'][selected, 0].astype(np.float32),
-            'Px_Beam': p4s['beam'][selected, 1].astype(np.float32),
-            'Py_Beam': p4s['beam'][selected, 2].astype(np.float32),
+            'Px_Beam': (magnitude * np.cos(angle)).astype(np.float32),
+            'Py_Beam': (magnitude * np.sin(angle)).astype(np.float32),
             'Pz_Beam': p4s['beam'][selected, 3].astype(np.float32),
             'Weight': weights[selected].astype(np.float32),
             'E_FinalState': np.column_stack([item[:, 0] for item in final]).astype(np.float32),
@@ -85,9 +111,9 @@ def main() -> None:
     args.output.mkdir(parents=True, exist_ok=True)
 
     for stem, source in (('data', args.data), ('mc', args.mc)):
-        p4s, weights = arrays(ld.read_parquet(source))
-        write_ascii(args.output / f'{stem}.txt', p4s, weights)
-        write_root_bins(args.output, stem, p4s, weights)
+        p4s, polarization, weights = arrays(ld.read_parquet(source))
+        write_ascii(args.output / f'{stem}.txt', p4s, polarization, weights)
+        write_root_bins(args.output, stem, p4s, polarization, weights)
     print(f'wrote PAWIAN and AmpTools inputs under {args.output}')
 
 

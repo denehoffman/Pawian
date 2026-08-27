@@ -3,6 +3,7 @@ set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 here := justfile_directory()
 repo := here / "../../.."
 generated := here / "generated"
+timings := generated / "timings"
 python := env_var_or_default("COMPARISON_PYTHON", env_var_or_default("NIX_PYTHON", generated / "python/bin/python"))
 bootstrap_python := env_var_or_default("PYTHON", "python3")
 data_events := env_var_or_default("DATA_EVENTS", "10000")
@@ -38,14 +39,24 @@ generate: setup
 translate: generate
     cd {{ quote(here) }} && {{ quote(python) }} translate.py --output {{ quote(generated) }}
 
-# Fit each mass bin independently with laddu 0.21.
+# Fit independent mass bins in parallel with one Laddu thread per process.
 laddu: generate
-    cd {{ quote(here) }} && {{ quote(python) }} fit_laddu.py \
-      --output {{ quote(generated / "laddu-fit.json") }} \
-      --threads {{ quote(jobs) }}
+    {{ quote(python) }} {{ quote(here / "benchmark.py") }} run \
+      --name Laddu \
+      --output {{ quote(timings / "laddu.json") }} \
+      --log {{ quote(timings / "laddu.log") }} \
+      --cwd {{ quote(here) }} -- \
+      {{ quote(python) }} fit_laddu.py \
+        --output {{ quote(generated / "laddu-fit.json") }} \
+        --jobs {{ quote(jobs) }} --threads 1
 
 amptools-build:
-    {{ quote(here / "run-amptools-reference") }} build
+    mkdir -p {{ quote(timings) }}
+    if ! {{ quote(here / "run-amptools-reference") }} build \
+      > {{ quote(timings / "amptools-build.log") }} 2>&1; then \
+      cat {{ quote(timings / "amptools-build.log") }} >&2; \
+      exit 1; \
+    fi
 
 # Build, evaluate, and validate the deterministic AmpTools reference.
 amptools-reference:
@@ -57,28 +68,42 @@ amptools-configs: translate
 
 # Fit each ROOT mass bin with AmpTools' Zlm amplitude.
 amptools: amptools-build amptools-configs
-    printf '%s\0' {{ quote(generated / "amptools") }}/*.cfg | \
-      GENERATED={{ quote(generated / "amptools") }} FIT_ZLM={{ quote(here / "fitZlm") }} \
-      xargs -0 -n1 -P {{ quote(jobs) }} bash -c 'cd "$GENERATED" && "$FIT_ZLM" "$1"' _
+    GENERATED={{ quote(generated / "amptools") }} FIT_ZLM={{ quote(here / "fitZlm") }} \
+      {{ quote(python) }} {{ quote(here / "benchmark.py") }} run \
+        --name AmpTools \
+        --output {{ quote(timings / "amptools.json") }} \
+        --log {{ quote(timings / "amptools.log") }} -- \
+        bash -c 'printf '\''%s\0'\'' "$GENERATED"/*.cfg | xargs -0 -n1 -P {{ quote(jobs) }} bash -c '\''cd "$GENERATED" && "$FIT_ZLM" "$1"'\'' _'
 
 pawian-build:
-    {{ quote(repo / "Scripts/run-pawian-build") }} b2 -j{{ quote(jobs) }} variant=release gammap-install
+    mkdir -p {{ quote(timings) }}
+    if ! {{ quote(repo / "Scripts/run-pawian-build") }} \
+      b2 -j{{ quote(jobs) }} variant=release gammap-install \
+      > {{ quote(timings / "pawian-build.log") }} 2>&1; then \
+      cat {{ quote(timings / "pawian-build.log") }} >&2; \
+      exit 1; \
+    fi
 
 pawian-configs: translate pawian-build
-    mkdir -p {{ quote(generated / "pawian") }}
-    cd {{ quote(generated / "pawian") }} && {{ quote(repo / "bin/gammapReactionApp") }} \
-      -c {{ quote(here / "pawian.cfg") }} --mode dumpDefaultParams --name _zlm
+    mkdir -p {{ quote(generated / "pawian") }} {{ quote(timings) }}
+    if ! (cd {{ quote(generated / "pawian") }} && {{ quote(repo / "bin/gammapReactionApp") }} \
+      -c {{ quote(here / "pawian.cfg") }} --mode dumpDefaultParams --name _zlm) \
+      > {{ quote(timings / "pawian-config.log") }} 2>&1; then \
+      cat {{ quote(timings / "pawian-config.log") }} >&2; \
+      exit 1; \
+    fi
     cd {{ quote(here) }} && {{ quote(python) }} prepare.py pawian \
       --defaults {{ quote(generated / "pawian/defaultparams_zlm.dat") }} \
       --directory {{ quote(generated / "pawian") }}
 
 # Fit each ASCII mass bin with PAWIAN's Reflectivity production formalism.
 pawian: pawian-configs
-    printf '%s\0' {{ quote(generated / "pawian") }}/*.cfg | \
-      GENERATED={{ quote(generated / "pawian") }} PAWIAN_APP={{ quote(repo / "bin/gammapReactionApp") }} \
-      xargs -0 -n1 -P {{ quote(jobs) }} bash -c \
-      'cfg="$1"; name=$(basename "$cfg" .cfg); cd "$GENERATED/$name" && \
-       "$PAWIAN_APP" -c "$cfg" --mode pwa --name "_$name"' _
+    GENERATED={{ quote(generated / "pawian") }} PAWIAN_APP={{ quote(repo / "bin/gammapReactionApp") }} \
+      {{ quote(python) }} {{ quote(here / "benchmark.py") }} run \
+        --name PAWIAN \
+        --output {{ quote(timings / "pawian.json") }} \
+        --log {{ quote(timings / "pawian.log") }} -- \
+        bash -c 'printf '\''%s\0'\'' "$GENERATED"/*.cfg | xargs -0 -n1 -P {{ quote(jobs) }} bash -c '\''cfg="$1"; name=$(basename "$cfg" .cfg); cd "$GENERATED/$name" && "$PAWIAN_APP" -c "$cfg" --mode pwa --name "_$name"'\'' _'
 
 all: laddu amptools pawian
 
@@ -87,3 +112,7 @@ plots: all
     cd {{ quote(here) }} && {{ quote(python) }} plot_compare.py \
       --directory {{ quote(generated) }} \
       --output {{ quote(generated / "fit-comparison.png") }}
+    {{ quote(python) }} {{ quote(here / "benchmark.py") }} report \
+      {{ quote(timings / "laddu.json") }} \
+      {{ quote(timings / "amptools.json") }} \
+      {{ quote(timings / "pawian.json") }}

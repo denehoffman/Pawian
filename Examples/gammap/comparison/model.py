@@ -6,9 +6,28 @@ import math
 
 import laddu as ld
 
-POLARIZATION = 0.3519
-POLARIZATION_ANGLE = 0.0
+POLARIZATION_MAGNITUDE_COLUMN = 'polarization_magnitude'
+POLARIZATION_ANGLE_COLUMN = 'polarization_angle'
+POLARIZATION_ANGLES_DEGREES = (0, 45, 90, 135)
 MASS_EDGES = tuple(round(1.0 + 0.1 * index, 1) for index in range(11))
+
+
+def polarization_sources() -> dict[str, ld.ScalarSource]:
+    """Return the eventwise beam-polarization proposal used by the toy study."""
+    angle_edges = tuple(
+        math.radians(degrees - 0.5)
+        for degrees in range(POLARIZATION_ANGLES_DEGREES[-1] + 2)
+    )
+    angle_counts = tuple(
+        1.0 if degrees in POLARIZATION_ANGLES_DEGREES else 0.0
+        for degrees in range(POLARIZATION_ANGLES_DEGREES[-1] + 1)
+    )
+    return {
+        POLARIZATION_MAGNITUDE_COLUMN: ld.ScalarSource.uniform(0.2, 0.4),
+        POLARIZATION_ANGLE_COLUMN: ld.ScalarSource.histogram(
+            ld.Histogram(angle_counts, bin_edges=angle_edges)
+        ),
+    }
 
 
 def channel() -> ld.Channel:
@@ -70,11 +89,8 @@ def angles(reaction: ld.Channel) -> tuple[ld.Expr, ld.Expr, ld.Expr]:
     y_hint = beam.cross(-recoil)
     costheta = decay.costheta('ks1', z_axis=z_axis, y_hint=y_hint)
     phi = decay.phi('ks1', z_axis=z_axis, y_hint=y_hint)
-    epsilon = ld.Vec3(
-        math.cos(POLARIZATION_ANGLE),
-        math.sin(POLARIZATION_ANGLE),
-        0.0,
-    )
+    polarization_angle = ld.scalar(POLARIZATION_ANGLE_COLUMN)
+    epsilon = ld.Vec3(polarization_angle.cos(), polarization_angle.sin(), 0.0)
     production_normal = beam.unit().cross(-recoil.unit()).unit()
     big_phi = ld.atan2(
         production_normal.dot(epsilon),
@@ -96,9 +112,10 @@ def zlm_components(
         costheta=costheta,
         phi=phi,
     ) * ld.cis(-big_phi)
+    polarization_magnitude = ld.scalar(POLARIZATION_MAGNITUDE_COLUMN)
     return (
-        math.sqrt(1.0 + POLARIZATION) * rotated.real(),
-        math.sqrt(1.0 - POLARIZATION) * rotated.imag(),
+        (1.0 + polarization_magnitude).sqrt() * rotated.real(),
+        (1.0 - polarization_magnitude).sqrt() * rotated.imag(),
     )
 
 
@@ -165,18 +182,17 @@ def bin_wave_models(reaction: ld.Channel) -> tuple[ld.Model, ld.Model]:
 
 def bin_model(reaction: ld.Channel, prefix: str) -> ld.Model:
     """Mass-independent S0+ + D2+ angular model for one mass bin."""
-    magnitude = ld.parameter(
-        f'{prefix}_d_magnitude',
+    real = ld.parameter(
+        f'{prefix}_d_real',
         initial=0.5,
-        bounds=(0.0, 5.0),
+        bounds=(-5.0, 5.0),
     )
-    phase = ld.parameter(
-        f'{prefix}_d_phase',
+    imaginary = ld.parameter(
+        f'{prefix}_d_imaginary',
         initial=0.0,
-        bounds=(-math.pi, math.pi),
-        periodic=True,
+        bounds=(-5.0, 5.0),
     )
-    coefficient = ld.polar_complex(magnitude, phase)
+    coefficient = ld.complex(real, imaginary)
     s_real, s_imag = zlm_components(reaction, 0, 0)
     d_real, d_imag = zlm_components(reaction, 2, 2)
     intensity = (s_real + coefficient * d_real).norm_sqr()

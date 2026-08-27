@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from model import MASS_EDGES, POLARIZATION, POLARIZATION_ANGLE
+from model import MASS_EDGES
 
 
 def amptools_config(index: int, directory: Path) -> str:
@@ -26,10 +26,10 @@ normintfile ksks {normint}
 # sqrt(1-P) Im[Ye^(-iPhi)] are incoherent sums with shared coefficients.
 sum ksks PosRe
 sum ksks PosIm
-amplitude ksks::PosRe::S0+ Zlm 0 0 1 1 {POLARIZATION_ANGLE} {POLARIZATION}
-amplitude ksks::PosIm::S0+ Zlm 0 0 -1 -1 {POLARIZATION_ANGLE} {POLARIZATION}
-amplitude ksks::PosRe::D2+ Zlm 2 2 1 1 {POLARIZATION_ANGLE} {POLARIZATION}
-amplitude ksks::PosIm::D2+ Zlm 2 2 -1 -1 {POLARIZATION_ANGLE} {POLARIZATION}
+amplitude ksks::PosRe::S0+ Zlm 0 0 1 1
+amplitude ksks::PosIm::S0+ Zlm 0 0 -1 -1
+amplitude ksks::PosRe::D2+ Zlm 2 2 1 1
+amplitude ksks::PosIm::D2+ Zlm 2 2 -1 -1
 
 constrain ksks::PosRe::S0+ ksks::PosIm::S0+
 constrain ksks::PosRe::D2+ ksks::PosIm::D2+
@@ -96,7 +96,7 @@ errLogMode = warning
 datFile = {(common / 'data.txt').resolve()}
 mcFile = {(common / 'mc.txt').resolve()}
 unitInFile = GEV
-orderInFile = Px Py Pz E
+orderInFile = E Px Py Pz
 initial4Vec = 8.9382720813 0.0 0.0 8.0
 projectile4Vec = 8.0 0.0 0.0 8.0
 ratioMcToData = 1000
@@ -106,8 +106,7 @@ paramFile = {parameters.resolve()}
 mode = pwa
 verbose = false
 productionFormalism = Reflectivity
-beamPolFraction = {POLARIZATION}
-beamPolAngle = {POLARIZATION_ANGLE}
+usePolarization = true
 cloneParticle = Kshort Kshort1
 cloneParticle = Kshort Kshort2
 finalStateParticle = proton
