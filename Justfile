@@ -15,6 +15,15 @@ default:
 doctor:
     {{ quote(pawian_build) }} doctor
 
+# Generate build metadata for clangd, CMake Tools, and CTest.
+[group('environment')]
+configure:
+    cmake --fresh -S {{root}} -B {{root}}/build -G Ninja \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBoost_USE_STATIC_LIBS=OFF
+
 # Prepare the isolated Python comparison environment.
 [group('environment')]
 setup:
