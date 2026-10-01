@@ -185,7 +185,9 @@ void AbsXdecAmp::setSpinProjections(const std::vector<Spin>& currentProjection, 
     Spin currentProjection1 = currentProjection.at(_daughter1ProjId);
     _lam1MinProj = currentProjection1;
     _lam1MaxProj = currentProjection1;
-    DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinProj << " _lam1Max: " << _lam1MinProj << endmsg;
+    if (logging::log_level::DEBUG >= ErrLogger::instance().threshold()) {
+      DebugMsg << "set spin projection: " << _daughter1Name << " _lam1Min: " << _lam1MinProj << " _lam1Max: " << _lam1MinProj << endmsg;
+    }
   }
   else _decAmpDaughter1->setSpinProjections(currentProjection, projId);
 
@@ -194,7 +196,9 @@ void AbsXdecAmp::setSpinProjections(const std::vector<Spin>& currentProjection, 
       Spin currentProjection2=currentProjection.at(_daughter2ProjId);
       _lam2MinProj = currentProjection2;
       _lam2MaxProj = currentProjection2;
-      DebugMsg << "set spin projection: " << _daughter2Name << " _lam2Min: " << _lam2MinProj << " _lam2Max: " << _lam2MaxProj << endmsg;
+      if (logging::log_level::DEBUG >= ErrLogger::instance().threshold()) {
+        DebugMsg << "set spin projection: " << _daughter2Name << " _lam2Min: " << _lam2MinProj << " _lam2Max: " << _lam2MaxProj << endmsg;
+      }
     }
     else _decAmpDaughter2->setSpinProjections(currentProjection, projId);
   }

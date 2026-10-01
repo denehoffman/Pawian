@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <complex>
 #include <memory>
 #include <string>
@@ -37,6 +38,9 @@ public:
 
   virtual void fillDefaultParams(std::shared_ptr<AbsPawianParameters> fitPar);
   virtual void updateFitParams(std::shared_ptr<AbsPawianParameters> fitPar);
+  virtual bool checkRecalculation(
+      std::shared_ptr<AbsPawianParameters> fitParNew,
+      std::shared_ptr<AbsPawianParameters> fitParOld);
   virtual void fillParamNameList();
   virtual void print(std::ostream &os) const;
 
@@ -53,4 +57,7 @@ private:
   int _producedSpin;
   std::vector<ReflectivityWaveKey> _waveKeys;
   ReflectivityBasis::AmplitudeMap _currentAmplitudes;
+  // Indexed by photon, initial-proton, and final-proton helicity signs.
+  std::array<std::vector<std::complex<double>>, 8> _helicityCoefficients;
+  bool _refreshDaughterAmplitudes = true;
 };

@@ -39,6 +39,8 @@ ReflectivityDecAmps::ReflectivityDecAmps(std::shared_ptr<AbsDecay> decay,
 
   _producedSystem = _daughter1Name;
   _producedSpin = int(_Jdaughter1);
+  for (auto &coefficients : _helicityCoefficients)
+    coefficients.resize(2 * _producedSpin + 1);
   fillParamNameList();
 }
 
@@ -102,11 +104,40 @@ void ReflectivityDecAmps::updateFitParams(
         _preFactor * _isospinCG * std::polar(magnitude, phase);
   }
 
+  const std::array<Spin, 2> photonHelicities = {Spin(-1), Spin(1)};
+  const std::array<Spin, 2> protonHelicities = {Spin(-0.5), Spin(0.5)};
+  for (unsigned int photon = 0; photon < 2; ++photon) {
+    for (unsigned int initial = 0; initial < 2; ++initial) {
+      for (unsigned int final = 0; final < 2; ++final) {
+        auto &coefficients =
+            _helicityCoefficients[4 * photon + 2 * initial + final];
+        for (int M = -_producedSpin; M <= _producedSpin; ++M) {
+          coefficients[M + _producedSpin] = photonHelicityComponent(
+              M, photonHelicities[photon], protonHelicities[initial],
+              protonHelicities[final]);
+        }
+      }
+    }
+  }
+
   _absDyn->updateFitParams(fitPar);
   if (!_daughter1IsStable)
     _decAmpDaughter1->updateFitParams(fitPar);
   if (!_daughter2IsStable)
     _decAmpDaughter2->updateFitParams(fitPar);
+}
+
+bool ReflectivityDecAmps::checkRecalculation(
+    std::shared_ptr<AbsPawianParameters> fitParNew,
+    std::shared_ptr<AbsPawianParameters> fitParOld) {
+  const bool recalculate =
+      AbsXdecAmp::checkRecalculation(fitParNew, fitParOld);
+  // Fill every daughter spin component when its cached values change, even
+  // when its current production coefficient is zero. It may become nonzero
+  // at a later fit point without another daughter-parameter change.
+  _refreshDaughterAmplitudes =
+      _decAmpDaughter1->checkRecalculation(fitParNew, fitParOld);
+  return recalculate;
 }
 
 // This is the amplitude A([R],L,M;k), see ReflectivityBasis.cc
@@ -137,10 +168,23 @@ ReflectivityDecAmps::amplitude(const Spin &photonHelicity,
                                const Spin &initialProtonHelicity,
                                EvtData *data) {
   const Spin finalProtonHelicity = _lam2MinProj;
+  if (photonHelicity != Spin(1) && photonHelicity != Spin(-1)) {
+    Alert << "Photon helicity must be +/-1, got " << photonHelicity << endmsg;
+    exit(1);
+  }
+  ReflectivityBasis::sector(initialProtonHelicity, finalProtonHelicity);
+  const unsigned int photon = photonHelicity == Spin(1);
+  const unsigned int initial = initialProtonHelicity == Spin(0.5);
+  const unsigned int final = finalProtonHelicity == Spin(0.5);
+  const auto &coefficients =
+      _helicityCoefficients[4 * photon + 2 * initial + final];
   std::complex<double> result(0., 0.);
   for (int M = -_producedSpin; M <= _producedSpin; ++M) {
-    result += photonHelicityComponent(M, photonHelicity, initialProtonHelicity,
-                                      finalProtonHelicity) *
+    const auto &coefficient = coefficients[M + _producedSpin];
+    if (coefficient == std::complex<double>(0., 0.) &&
+        !_refreshDaughterAmplitudes)
+      continue;
+    result += coefficient *
               daughterAmp(Spin(M), finalProtonHelicity, data);
   }
   return result * productionDynamics();
